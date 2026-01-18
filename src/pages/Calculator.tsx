@@ -248,9 +248,12 @@ const Calculator = () => {
         )}
       </main>
 
-      {/* Fixed Bottom Navigation */}
-      <div className="border-t border-border px-6 py-4 bg-background">
-        <div className="flex items-center justify-between gap-4">
+      {/* Fixed Bottom Navigation - Pinned to Viewport */}
+      <div 
+        className="fixed bottom-0 left-0 right-0 px-6 py-4 bg-background z-40"
+        style={{ borderTop: '1px solid #333333' }}
+      >
+        <div className="flex items-center justify-between gap-4 max-w-screen-lg mx-auto">
           <Button
             onClick={prevStep}
             disabled={currentStep === 1}
@@ -272,6 +275,9 @@ const Calculator = () => {
           )}
         </div>
       </div>
+      
+      {/* Spacer for fixed footer */}
+      <div className="h-20" />
     </div>
   );
 };
