@@ -96,29 +96,24 @@ const WizardStep3 = ({
             borderBottom: showResiduals ? '1px solid #333333' : 'none'
           }}
         >
-        <div className="flex items-center gap-3">
+          {/* LEFT GROUP */}
+          <div className="flex items-center gap-3">
             <h2 className="font-bebas text-xl tracking-wider uppercase" style={{ color: '#D4AF37' }}>
               3A | GUILD RESIDUALS
             </h2>
-          </div>
-          {/* MASTER TOGGLE */}
-          <div className="flex items-center gap-4">
             <button 
               onClick={() => setActiveModal('guildResiduals')}
               className="text-zinc-500 hover:text-[#D4AF37] transition-colors"
             >
               <Info className="w-4 h-4" />
             </button>
-            <span className="text-zinc-600">|</span>
-            <span className="text-zinc-500 text-xs font-mono uppercase tracking-wide">
-              Paying Residuals?
-            </span>
-            <Switch 
-              checked={showResiduals} 
-              onCheckedChange={handleResidualsToggle} 
-              className="data-[state=checked]:bg-[#D4AF37]"
-            />
           </div>
+          {/* RIGHT GROUP - Toggle only */}
+          <Switch 
+            checked={showResiduals} 
+            onCheckedChange={handleResidualsToggle} 
+            className="data-[state=checked]:bg-[#D4AF37]"
+          />
         </div>
 
         {/* Body Area - Circuit Breaker */}
@@ -181,7 +176,8 @@ const WizardStep3 = ({
           className="py-4 px-6 flex items-center justify-between border-b border-[#333333]"
           style={{ backgroundColor: '#111111' }}
         >
-          <div className="flex items-center gap-2">
+          {/* LEFT GROUP */}
+          <div className="flex items-center gap-3">
             <h2 className="font-bebas text-xl tracking-wider uppercase" style={{ color: '#D4AF37' }}>
               3B | DISTRIBUTION COSTS
             </h2>
@@ -201,7 +197,7 @@ const WizardStep3 = ({
           <div>
             <div className="flex items-center gap-2 mb-3">
               <span className="text-white font-bold text-sm tracking-wide uppercase">
-                Sales Agent Fee (%)
+                Sales Agent Fee
               </span>
             </div>
             <div className="relative">
@@ -230,7 +226,7 @@ const WizardStep3 = ({
           <div>
             <div className="flex items-center gap-2 mb-3">
               <span className="text-white font-bold text-sm tracking-wide uppercase">
-                Marketing Expenses (Cap)
+                Marketing Cap
               </span>
             </div>
             <div className="relative">
