@@ -69,22 +69,25 @@ const Index = () => {
         
         {/* ACTION STACK */}
         <div className="w-full max-w-xs space-y-4">
-          {/* Primary Button - Gold with Highlight Glow */}
+          {/* Primary Button - Inviting Gold with Soft Glow */}
           <Button 
             onClick={() => navigate("/auth")}
-            className="w-full h-14 text-lg font-black tracking-widest rounded-sm transition-all duration-300 border animate-pulse-gold"
+            className="w-full h-14 text-lg font-black tracking-widest rounded-sm transition-all duration-500 ease-out border group hover:scale-[1.02] hover:-translate-y-1"
             style={{ 
               backgroundColor: '#D4AF37', 
               color: '#000000',
               borderColor: '#D4AF37',
+              boxShadow: '0 0 25px rgba(249, 224, 118, 0.35), 0 4px 20px rgba(0,0,0,0.3)',
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.backgroundColor = '#F9E076';
               e.currentTarget.style.borderColor = '#F9E076';
+              e.currentTarget.style.boxShadow = '0 0 40px rgba(249, 224, 118, 0.6), 0 8px 30px rgba(0,0,0,0.4)';
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.backgroundColor = '#D4AF37';
               e.currentTarget.style.borderColor = '#D4AF37';
+              e.currentTarget.style.boxShadow = '0 0 25px rgba(249, 224, 118, 0.35), 0 4px 20px rgba(0,0,0,0.3)';
             }}
           >
             ACCESS TERMINAL
