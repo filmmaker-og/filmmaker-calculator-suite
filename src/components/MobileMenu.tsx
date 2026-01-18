@@ -155,15 +155,18 @@ const MobileMenu = ({ onOpenLegal, onSignOut }: MobileMenuProps) => {
           </div>
 
           {/* Footer */}
-          <div className="pb-12 text-center">
+          <div className="pb-12 text-center space-y-2">
             <a
               href="https://www.instagram.com/filmmaker.og"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-muted-foreground hover:text-gold transition-colors text-sm tracking-widest"
+              className="text-muted-foreground hover:text-gold transition-colors text-sm tracking-widest block"
             >
-              @filmmaker.og
+              @filmmaker.og (IG)
             </a>
+            <span className="text-muted-foreground text-sm tracking-widest block">
+              thefilmmaker.og@gmail.com
+            </span>
           </div>
         </div>
       )}
