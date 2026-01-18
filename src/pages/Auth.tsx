@@ -195,6 +195,15 @@ const Auth = () => {
         <p className="text-center text-xs mt-8 tracking-wide" style={{ color: '#888888' }}>
           No passwords required. Bank-grade security.
         </p>
+
+        {/* Demo Access Link */}
+        <button
+          onClick={() => navigate("/calculator")}
+          className="block mx-auto mt-4 text-[11px] tracking-wide transition-colors hover:underline"
+          style={{ color: '#555555' }}
+        >
+          Demo Access
+        </button>
       </div>
     </div>
   );
