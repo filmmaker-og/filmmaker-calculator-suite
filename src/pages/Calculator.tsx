@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { LogOut, ChevronLeft, ChevronRight } from "lucide-react";
+import { LogOut, ChevronLeft, ChevronRight, Home } from "lucide-react";
 import { User } from "@supabase/supabase-js";
 import WizardStep1 from "@/components/calculator/WizardStep1";
 import WizardStep2 from "@/components/calculator/WizardStep2";
@@ -167,6 +167,14 @@ const Calculator = () => {
       <header className="border-b border-border px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
+            <Button
+              onClick={() => navigate("/")}
+              variant="ghost"
+              size="sm"
+              className="text-muted-foreground hover:text-gold p-2"
+            >
+              <Home className="w-4 h-4" />
+            </Button>
             <span className="font-bebas text-xl text-foreground tracking-wider">
               WATERFALL TERMINAL
             </span>
