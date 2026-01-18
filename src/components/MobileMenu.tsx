@@ -38,10 +38,10 @@ const MobileMenu = ({ onOpenLegal }: MobileMenuProps) => {
       {/* Floating Hamburger Button - Top Right */}
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed top-6 right-6 z-40 w-12 h-12 flex items-center justify-center text-foreground hover:text-gold transition-colors"
+        className="fixed top-6 right-6 z-40 w-12 h-12 flex items-center justify-center text-gold hover:text-gold/80 transition-colors"
         aria-label="Open menu"
       >
-        <Menu className="w-6 h-6" />
+        <Menu className="w-7 h-7" />
       </button>
 
       {/* Full-screen Black Overlay Menu */}
