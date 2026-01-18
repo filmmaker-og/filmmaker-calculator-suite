@@ -34,7 +34,8 @@ const MobileMenu = ({ onOpenLegal }: MobileMenuProps) => {
   const menuLinks = [
     { label: "ABOUT", href: "#about", onClick: handleAboutClick },
     { label: "SERVICES", href: "/store" },
-    { label: "CONTACT", href: "mailto:support@filmmaker.og" },
+    { label: "CONTACT", href: "mailto:thefilmmaker.og@gmail.com" },
+    { label: "DM", href: "https://www.instagram.com/filmmaker.og", external: true },
   ];
 
   const legalText = "Educational disclaimer: For educational purposes only. This calculator is a simplified model and is not legal, tax, accounting, or investment advice. This assumes a bankable sales agent and commercially viable cast. Deal outcomes vary by contract definitions (e.g., gross vs adjusted gross), corridor fees, reserves/holdbacks, timing of cashflows, collection account management, audit results, chargebacks, and other negotiated terms. Consult a qualified entertainment attorney and financial advisor.";
@@ -89,23 +90,17 @@ const MobileMenu = ({ onOpenLegal }: MobileMenuProps) => {
                   >
                     {link.label}
                   </Link>
-                ) : link.href.startsWith("mailto:") ? (
+                ) : (
                   <a
                     key={link.label}
                     href={link.href}
                     onClick={() => setIsOpen(false)}
+                    target={link.href.startsWith("http") ? "_blank" : undefined}
+                    rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
                     className="font-bebas text-4xl text-foreground hover:text-gold transition-colors tracking-wider"
                   >
                     {link.label}
                   </a>
-                ) : (
-                  <button
-                    key={link.label}
-                    onClick={() => setIsOpen(false)}
-                    className="font-bebas text-4xl text-foreground hover:text-gold transition-colors tracking-wider"
-                  >
-                    {link.label}
-                  </button>
                 )
               ))}
               
