@@ -1,118 +1,228 @@
-import { WaterfallResult, formatCurrency, formatPercent } from "@/lib/waterfall";
+import { useState } from "react";
+import { WaterfallResult, WaterfallInputs, formatCurrency, formatPercent } from "@/lib/waterfall";
+import { Info, CheckCircle2, AlertTriangle } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 
 interface WizardStep5Props {
   result: WaterfallResult;
+  inputs: WaterfallInputs;
 }
 
-const WizardStep5 = ({ result }: WizardStep5Props) => {
+const WizardStep5 = ({ result, inputs }: WizardStep5Props) => {
+  const [showInfoModal, setShowInfoModal] = useState(false);
+
+  // Calculate ROI: (Total Distributions / Total Cash Invested)
+  const totalInvested = inputs.debt + inputs.equity;
+  const totalDistributed = result.recouped + result.profitPool;
+  const roi = totalInvested > 0 ? (totalDistributed / totalInvested) * 100 : 0;
+
+  // Net Profit (Loss)
+  const netProfit = result.profitPool;
+
+  // Breakeven Point (the total hurdle amount)
+  const breakevenPoint = result.totalHurdle;
+
+  // Calculate category amounts for the flow
+  const firstMoneyOut = result.cam + result.salesFee + result.guilds + result.marketing;
+  const debtService = result.ledger.find(l => l.name === "Senior Debt")?.amount || 0;
+  const equityPrem = result.ledger.find(l => l.name === "Equity")?.amount || 0;
+  const netProfitPool = result.profitPool;
+
+  // Calculate what was actually paid based on waterfall logic
+  const revenue = inputs.revenue;
+  let remaining = revenue;
+
+  // First Money Out
+  const firstMoneyPaid = Math.min(remaining, firstMoneyOut);
+  remaining = Math.max(0, remaining - firstMoneyOut);
+  const firstMoneyStatus = firstMoneyPaid >= firstMoneyOut ? 'paid' : firstMoneyPaid > 0 ? 'partial' : 'unpaid';
+
+  // Debt Service
+  const debtPaid = Math.min(remaining, debtService);
+  remaining = Math.max(0, remaining - debtService);
+  const debtStatus = debtPaid >= debtService ? 'paid' : debtPaid > 0 ? 'partial' : 'unpaid';
+
+  // Equity & Premium
+  const equityPaid = Math.min(remaining, equityPrem);
+  remaining = Math.max(0, remaining - equityPrem);
+  const equityStatus = equityPaid >= equityPrem ? 'paid' : equityPaid > 0 ? 'partial' : 'unpaid';
+
+  // Net Profit Pool (whatever remains)
+  const profitStatus = remaining > 0 ? 'paid' : 'unpaid';
+
+  const StatusBadge = ({ status }: { status: 'paid' | 'partial' | 'unpaid' }) => {
+    if (status === 'paid') {
+      return (
+        <span className="flex items-center gap-1 text-emerald-400 text-xs font-mono">
+          <CheckCircle2 size={12} />
+          PAID
+        </span>
+      );
+    }
+    return (
+      <span className="flex items-center gap-1 text-red-400 text-xs font-mono">
+        <AlertTriangle size={12} />
+        {status === 'partial' ? 'PARTIAL' : 'UNPAID'}
+      </span>
+    );
+  };
+
   return (
     <div className="animate-fade-in space-y-6">
-      {/* Recoupment Status Card */}
+      {/* CARD 5A: THE VERDICT - Performance Scoreboard */}
       <div className="rounded-sm border border-[#D4AF37] overflow-hidden">
         {/* Header Strip */}
-        <div className="py-4 px-6 border-b border-[#333333]" style={{ backgroundColor: '#111111' }}>
+        <div className="py-4 px-6 border-b border-[#333333] flex items-center justify-between" style={{ backgroundColor: '#111111' }}>
           <h2 className="font-bebas text-xl tracking-wider uppercase" style={{ color: '#D4AF37' }}>
-            05 | RECOUPMENT STATUS
+            05A | PERFORMANCE METRICS
           </h2>
+          <button
+            onClick={() => setShowInfoModal(true)}
+            className="p-1 rounded-sm transition-colors hover:bg-zinc-800"
+            aria-label="Performance info"
+          >
+            <Info size={18} className="text-[#D4AF37]" />
+          </button>
         </div>
 
         {/* Body Area */}
-        <div className="p-6" style={{ backgroundColor: '#000000' }}>
-          <div className="flex items-center justify-between mb-4">
-            <span className="text-zinc-400 text-xs tracking-widest uppercase">Progress</span>
-            <span className={`font-mono text-2xl ${result.recoupPct >= 100 ? 'text-[#D4AF37]' : 'text-red-500'}`}>
-              {formatPercent(result.recoupPct)}
-            </span>
+        <div className="p-6 text-center" style={{ backgroundColor: '#000000' }}>
+          {/* Primary Metric: ROI */}
+          <div className="mb-6">
+            <p className="text-zinc-500 text-xs tracking-widest uppercase mb-2">Return on Investment</p>
+            <p className="font-bebas text-5xl" style={{ color: '#D4AF37' }}>
+              {formatPercent(roi)}
+            </p>
           </div>
-          <div className="h-3 rounded-sm overflow-hidden" style={{ backgroundColor: '#1a1a1a' }}>
-            <div 
-              className="h-full transition-all duration-500 rounded-sm"
-              style={{ 
-                width: `${Math.min(result.recoupPct, 100)}%`,
-                backgroundColor: '#D4AF37'
-              }}
-            />
+
+          {/* Secondary Metric: Net Profit */}
+          <div className="mb-6 pb-6 border-b border-zinc-800">
+            <p className="text-zinc-500 text-xs tracking-widest uppercase mb-2">Net Profit (Loss)</p>
+            <p className={`font-mono text-2xl ${netProfit >= 0 ? 'text-white' : 'text-red-400'}`}>
+              {netProfit >= 0 ? '+' : ''}{formatCurrency(netProfit)}
+            </p>
           </div>
-          <div className="flex items-center justify-between text-sm mt-4">
-            <span className="text-zinc-500">Total Hurdles: <span className="font-mono text-zinc-300">{formatCurrency(result.totalHurdle)}</span></span>
-            <span className="text-zinc-500">Revenue: <span className="font-mono text-[#D4AF37]">{formatCurrency(result.recouped + result.profitPool)}</span></span>
+
+          {/* Tertiary Metric: Breakeven Point */}
+          <div>
+            <p className="text-zinc-500 text-xs tracking-widest uppercase mb-2">Breakeven Point</p>
+            <p className="font-mono text-lg text-zinc-400">
+              {formatCurrency(breakevenPoint)}
+            </p>
           </div>
         </div>
       </div>
 
-      {/* Payment Waterfall Card */}
+      {/* CARD 5B: THE PAYMENT LEDGER - The Flow */}
       <div className="rounded-sm border border-[#D4AF37] overflow-hidden">
         {/* Header Strip */}
-        <div className="py-4 px-6 border-b border-[#333333]" style={{ backgroundColor: '#111111' }}>
+        <div className="py-4 px-6 border-b border-[#333333] flex items-center justify-between" style={{ backgroundColor: '#111111' }}>
           <h2 className="font-bebas text-xl tracking-wider uppercase" style={{ color: '#D4AF37' }}>
-            PAYMENT WATERFALL
+            05B | PRIORITY OF PAYMENTS
           </h2>
-          <p className="text-zinc-500 text-sm mt-1">Priority order of distribution</p>
+          <button
+            onClick={() => setShowInfoModal(true)}
+            className="p-1 rounded-sm transition-colors hover:bg-zinc-800"
+            aria-label="Priority info"
+          >
+            <Info size={18} className="text-[#D4AF37]" />
+          </button>
         </div>
 
-        {/* Body Area */}
+        {/* Vertical Flow List */}
         <div style={{ backgroundColor: '#000000' }}>
-          {/* Desktop Table */}
-          <div className="hidden md:block">
-            <table className="w-full">
-              <thead>
-                <tr className="text-left text-xs tracking-widest uppercase text-zinc-500 border-b border-zinc-800">
-                  <th className="px-6 py-4">Position</th>
-                  <th className="px-6 py-4">Detail</th>
-                  <th className="px-6 py-4 text-right">Amount</th>
-                </tr>
-              </thead>
-              <tbody>
-                {result.ledger.map((item, index) => (
-                  <tr key={index} className="border-b border-zinc-800">
-                    <td className="px-6 py-4">
-                      <span className="text-[#D4AF37] font-mono text-sm mr-3">{String(index + 1).padStart(2, '0')}</span>
-                      <span className="text-white font-medium">{item.name}</span>
-                    </td>
-                    <td className="px-6 py-4 text-zinc-500 text-sm">{item.detail}</td>
-                    <td className="px-6 py-4 text-right font-mono text-white">
-                      {formatCurrency(item.amount)}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-              <tfoot className="border-t-2 border-[#D4AF37]">
-                <tr style={{ backgroundColor: '#0a0a0a' }}>
-                  <td className="px-6 py-4 font-bebas text-[#D4AF37]">TOTAL HURDLES</td>
-                  <td className="px-6 py-4"></td>
-                  <td className="px-6 py-4 text-right font-mono text-[#D4AF37] text-lg">
-                    {formatCurrency(result.totalHurdle)}
-                  </td>
-                </tr>
-              </tfoot>
-            </table>
+          {/* Row 1: First Money Out */}
+          <div className="p-4 border-b border-zinc-800 flex items-center justify-between">
+            <div>
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-[#D4AF37] font-mono text-xs">01</span>
+                <span className="text-white font-medium text-sm">FIRST MONEY OUT</span>
+              </div>
+              <p className="text-zinc-500 text-xs">Guilds / Sales Fees / Expenses</p>
+            </div>
+            <div className="text-right">
+              <p className="font-mono text-white text-sm mb-1">{formatCurrency(firstMoneyPaid)}</p>
+              <StatusBadge status={firstMoneyStatus} />
+            </div>
           </div>
 
-          {/* Mobile Stacked Cards */}
-          <div className="md:hidden divide-y divide-zinc-800">
-            {result.ledger.map((item, index) => (
-              <div key={index} className="p-4">
-                <div className="flex items-start justify-between mb-2">
-                  <div className="flex items-center gap-2">
-                    <span className="text-[#D4AF37] font-mono text-xs">{String(index + 1).padStart(2, '0')}</span>
-                    <span className="text-white font-medium text-sm">{item.name}</span>
-                  </div>
-                  <span className="font-mono text-white text-sm">
-                    {formatCurrency(item.amount)}
-                  </span>
-                </div>
-                <p className="text-zinc-500 text-xs">{item.detail}</p>
+          {/* Row 2: Debt Service */}
+          <div className="p-4 border-b border-zinc-800 flex items-center justify-between">
+            <div>
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-[#D4AF37] font-mono text-xs">02</span>
+                <span className="text-white font-medium text-sm">DEBT SERVICE</span>
               </div>
-            ))}
-            <div className="p-4" style={{ backgroundColor: '#0a0a0a' }}>
-              <div className="flex items-center justify-between">
-                <span className="font-bebas text-[#D4AF37] text-sm">TOTAL HURDLES</span>
-                <span className="font-mono text-[#D4AF37]">{formatCurrency(result.totalHurdle)}</span>
+              <p className="text-zinc-500 text-xs">Senior + Gap + Interest</p>
+            </div>
+            <div className="text-right">
+              <p className="font-mono text-white text-sm mb-1">{formatCurrency(debtPaid)}</p>
+              <StatusBadge status={debtStatus} />
+            </div>
+          </div>
+
+          {/* Row 3: Equity & Premium */}
+          <div className="p-4 border-b border-zinc-800 flex items-center justify-between">
+            <div>
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-[#D4AF37] font-mono text-xs">03</span>
+                <span className="text-white font-medium text-sm">EQUITY & PREM.</span>
               </div>
+              <p className="text-zinc-500 text-xs">Capital + Preferred Return</p>
+            </div>
+            <div className="text-right">
+              <p className="font-mono text-white text-sm mb-1">{formatCurrency(equityPaid)}</p>
+              <StatusBadge status={equityStatus} />
+            </div>
+          </div>
+
+          {/* Row 4: Net Profit Pool */}
+          <div className="p-4 flex items-center justify-between" style={{ backgroundColor: '#0a0a0a' }}>
+            <div>
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-[#D4AF37] font-mono text-xs">04</span>
+                <span className="text-[#D4AF37] font-bebas text-sm tracking-wider">NET PROFIT POOL</span>
+              </div>
+              <p className="text-zinc-500 text-xs">Remaining Funds</p>
+            </div>
+            <div className="text-right">
+              <p className="font-mono text-[#D4AF37] text-lg">{formatCurrency(remaining)}</p>
+              <StatusBadge status={profitStatus} />
             </div>
           </div>
         </div>
       </div>
+
+      {/* Info Modal */}
+      <Dialog open={showInfoModal} onOpenChange={setShowInfoModal}>
+        <DialogContent className="bg-[#111111] border-[#D4AF37] text-white max-w-md">
+          <DialogHeader>
+            <DialogTitle className="font-bebas text-2xl tracking-wider text-[#D4AF37]">
+              WATERFALL DEFINITIONS
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 mt-4">
+            <div>
+              <h3 className="font-bebas text-lg text-[#D4AF37] mb-1">ROI (RETURN ON INVESTMENT)</h3>
+              <DialogDescription className="text-zinc-400 text-sm leading-relaxed">
+                Calculated as (Total Distributions / Total Cash Invested). A figure above 100% indicates profit.
+              </DialogDescription>
+            </div>
+            <div className="border-t border-zinc-800 pt-4">
+              <h3 className="font-bebas text-lg text-[#D4AF37] mb-1">PRIORITY OF PAYMENTS</h3>
+              <DialogDescription className="text-zinc-400 text-sm leading-relaxed">
+                Funds are distributed in strict order. Senior Debt pays before Gap; Gap pays before Equity. If the waterfall stops at Debt, Equity gets zero.
+              </DialogDescription>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

@@ -236,7 +236,7 @@ const Calculator = () => {
           />
         )}
         {currentStep === 5 && result && (
-          <WizardStep5 result={result} />
+          <WizardStep5 result={result} inputs={inputs} />
         )}
         {currentStep === 6 && result && (
           <WizardStep6 
