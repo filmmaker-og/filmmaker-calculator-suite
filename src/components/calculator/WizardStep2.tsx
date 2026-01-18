@@ -99,76 +99,83 @@ const WizardStep2 = ({ inputs, onUpdate }: WizardStep2Props) => {
 
   return (
     <div className="animate-fade-in space-y-6">
-      {/* CARD 2A: TAX INCENTIVES */}
+      {/* CARD 2A: TAX INCENTIVES - Collapsible */}
       <div className="rounded-sm border border-[#D4AF37] overflow-hidden">
-        <div className="py-4 px-6 border-b border-[#333333] flex items-center justify-between" style={{ backgroundColor: '#111111' }}>
-          <h2 className="font-bebas text-xl tracking-wider uppercase" style={{ color: '#D4AF37' }}>
-            2A | TAX INCENTIVES
-          </h2>
-          <button
-            onClick={() => setActiveModal('taxIncentives')}
-            className="w-8 h-8 flex items-center justify-center rounded-sm text-zinc-500 hover:text-[#D4AF37] transition-colors"
-          >
-            <Info className="w-5 h-5" />
-          </button>
-        </div>
-        <div className="p-6" style={{ backgroundColor: '#000000' }}>
-          {/* Toggle */}
-          <div className="flex items-center justify-between mb-5">
-            <span className="text-zinc-400 text-sm tracking-wide uppercase">
-              APPLY TAX CREDITS?
-            </span>
-            <Switch
-              checked={showTaxCredits}
-              onCheckedChange={handleTaxToggle}
-              className="data-[state=checked]:bg-[#D4AF37] data-[state=unchecked]:bg-zinc-700"
-            />
+        <div 
+          className="py-4 px-6 flex items-center justify-between"
+          style={{ 
+            backgroundColor: '#111111',
+            borderBottom: showTaxCredits ? '1px solid #333333' : 'none'
+          }}
+        >
+          <div className="flex items-center gap-3">
+            <h2 className="font-bebas text-xl tracking-wider uppercase" style={{ color: '#D4AF37' }}>
+              2A | TAX INCENTIVES
+            </h2>
+            <button
+              onClick={() => setActiveModal('taxIncentives')}
+              className="text-zinc-500 hover:text-[#D4AF37] transition-colors"
+            >
+              <Info className="w-4 h-4" />
+            </button>
           </div>
-
-          {/* Input - Conditional */}
-          {showTaxCredits && (
-            <div>
-              <div className="mb-3">
-                <span className="text-white font-bold text-sm tracking-wide uppercase">
-                  ESTIMATED TAX CREDIT
-                </span>
-              </div>
-              <div className="relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 font-mono text-lg text-zinc-600">
-                  $
-                </span>
-                <Input
-                  type="text"
-                  inputMode="decimal"
-                  pattern="[0-9]*"
-                  value={formatValue(inputs.credits)}
-                  onChange={(e) => onUpdate('credits', parseValue(e.target.value))}
-                  placeholder="0"
-                  className="pl-10 py-5 text-2xl font-mono text-white text-right rounded-sm border-zinc-800 focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37] transition-colors"
-                  style={{ backgroundColor: '#0a0a0a' }}
-                  onFocus={(e) => e.target.select()}
-                />
-              </div>
+          <Switch
+            checked={showTaxCredits}
+            onCheckedChange={handleTaxToggle}
+            className="scale-110 data-[state=checked]:bg-[#D4AF37] data-[state=unchecked]:bg-zinc-700"
+          />
+        </div>
+        
+        {/* Collapsible Body */}
+        <div 
+          className={`transition-all duration-300 ease-in-out overflow-hidden ${
+            showTaxCredits ? 'max-h-48 opacity-100' : 'max-h-0 opacity-0'
+          }`}
+          style={{ backgroundColor: '#000000' }}
+        >
+          <div className="p-6">
+            <div className="mb-3">
+              <span className="text-white font-bold text-sm tracking-wide uppercase">
+                ESTIMATED TAX CREDIT
+              </span>
             </div>
-          )}
+            <div className="relative">
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 font-mono text-lg text-zinc-600">
+                $
+              </span>
+              <Input
+                type="text"
+                inputMode="decimal"
+                pattern="[0-9]*"
+                value={formatValue(inputs.credits)}
+                onChange={(e) => onUpdate('credits', parseValue(e.target.value))}
+                placeholder="0"
+                className="pl-10 py-5 text-2xl font-mono text-white text-right rounded-sm border-zinc-800 focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37] transition-colors"
+                style={{ backgroundColor: '#0a0a0a' }}
+                onFocus={(e) => e.target.select()}
+              />
+            </div>
+          </div>
         </div>
       </div>
 
       {/* CARD 2B: DEBT SERVICE */}
       <div className="rounded-sm border border-[#D4AF37] overflow-hidden">
         <div className="py-4 px-6 border-b border-[#333333] flex items-center justify-between" style={{ backgroundColor: '#111111' }}>
-          <h2 className="font-bebas text-xl tracking-wider uppercase" style={{ color: '#D4AF37' }}>
-            2B | DEBT SERVICE
-          </h2>
-          <button
-            onClick={() => setActiveModal('debtService')}
-            className="w-8 h-8 flex items-center justify-center rounded-sm text-zinc-500 hover:text-[#D4AF37] transition-colors"
-          >
-            <Info className="w-5 h-5" />
-          </button>
+          <div className="flex items-center gap-3">
+            <h2 className="font-bebas text-xl tracking-wider uppercase" style={{ color: '#D4AF37' }}>
+              2B | DEBT SERVICE
+            </h2>
+            <button
+              onClick={() => setActiveModal('debtService')}
+              className="text-zinc-500 hover:text-[#D4AF37] transition-colors"
+            >
+              <Info className="w-4 h-4" />
+            </button>
+          </div>
         </div>
         <div className="p-6" style={{ backgroundColor: '#000000' }}>
-          {/* Senior Loan Amount */}
+          {/* Senior Loan Amount - Always Visible */}
           <div className="mb-4">
             <div className="mb-3">
               <span className="text-white font-bold text-sm tracking-wide uppercase">
@@ -218,90 +225,94 @@ const WizardStep2 = ({ inputs, onUpdate }: WizardStep2Props) => {
             </div>
           </div>
 
-          {/* Gold Dashed Divider */}
-          <div className="my-6 border-b border-dashed border-[#D4AF37]/30" />
-
-          {/* Gap Toggle */}
-          <div className="flex items-center justify-between mb-5">
-            <span className="text-zinc-400 text-sm tracking-wide uppercase">
-              INCLUDE GAP / BRIDGE LOAN?
+          {/* Gap Sub-Header Bar */}
+          <div 
+            className="mt-6 -mx-6 px-6 h-12 flex items-center justify-between border-t border-zinc-800"
+            style={{ backgroundColor: '#0d0d0d' }}
+          >
+            <span className="text-zinc-400 text-sm font-bold tracking-wide uppercase">
+              GAP / BRIDGE LOAN
             </span>
             <Switch
               checked={showGapLoan}
               onCheckedChange={handleGapToggle}
-              className="data-[state=checked]:bg-[#D4AF37] data-[state=unchecked]:bg-zinc-700"
+              className="scale-110 data-[state=checked]:bg-[#D4AF37] data-[state=unchecked]:bg-zinc-700"
             />
           </div>
 
-          {/* Gap Inputs - Conditional */}
-          {showGapLoan && (
-            <>
-              {/* Gap / Bridge Loan */}
-              <div className="mb-4">
-                <div className="mb-3">
-                  <span className="text-white font-bold text-sm tracking-wide uppercase">
-                    GAP / BRIDGE LOAN
-                  </span>
-                </div>
-                <div className="relative">
-                  <span className="absolute left-4 top-1/2 -translate-y-1/2 font-mono text-lg text-zinc-600">
-                    $
-                  </span>
-                  <Input
-                    type="text"
-                    inputMode="decimal"
-                    pattern="[0-9]*"
-                    value={formatValue(inputs.mezzanineDebt)}
-                    onChange={(e) => onUpdate('mezzanineDebt', parseValue(e.target.value))}
-                    placeholder="0"
-                    className="pl-10 py-5 text-2xl font-mono text-white text-right rounded-sm border-zinc-800 focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37] transition-colors"
-                    style={{ backgroundColor: '#0a0a0a' }}
-                    onFocus={(e) => e.target.select()}
-                  />
-                </div>
+          {/* Gap Inputs - Collapsible */}
+          <div 
+            className={`transition-all duration-300 ease-in-out overflow-hidden ${
+              showGapLoan ? 'max-h-96 opacity-100 mt-6' : 'max-h-0 opacity-0 mt-0'
+            }`}
+          >
+            {/* Gap / Bridge Loan */}
+            <div className="mb-4">
+              <div className="mb-3">
+                <span className="text-white font-bold text-sm tracking-wide uppercase">
+                  LOAN AMOUNT
+                </span>
               </div>
+              <div className="relative">
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 font-mono text-lg text-zinc-600">
+                  $
+                </span>
+                <Input
+                  type="text"
+                  inputMode="decimal"
+                  pattern="[0-9]*"
+                  value={formatValue(inputs.mezzanineDebt)}
+                  onChange={(e) => onUpdate('mezzanineDebt', parseValue(e.target.value))}
+                  placeholder="0"
+                  className="pl-10 py-5 text-2xl font-mono text-white text-right rounded-sm border-zinc-800 focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37] transition-colors"
+                  style={{ backgroundColor: '#0a0a0a' }}
+                  onFocus={(e) => e.target.select()}
+                />
+              </div>
+            </div>
 
-              {/* Gap Rate & Fees */}
-              <div>
-                <div className="mb-3">
-                  <span className="text-white font-bold text-sm tracking-wide uppercase">
-                    RATE & FEES
-                  </span>
-                </div>
-                <div className="relative">
-                  <Input
-                    type="text"
-                    inputMode="decimal"
-                    pattern="[0-9]*"
-                    value={formatValue(inputs.mezzanineRate)}
-                    onChange={(e) => onUpdate('mezzanineRate', parseValue(e.target.value, true))}
-                    placeholder="0"
-                    className="pl-4 pr-10 py-5 text-2xl font-mono text-white text-right rounded-sm border-zinc-800 focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37] transition-colors"
-                    style={{ backgroundColor: '#0a0a0a' }}
-                    onFocus={(e) => e.target.select()}
-                  />
-                  <span className="absolute right-4 top-1/2 -translate-y-1/2 font-mono text-lg text-zinc-600">
-                    %
-                  </span>
-                </div>
+            {/* Gap Rate & Fees */}
+            <div>
+              <div className="mb-3">
+                <span className="text-white font-bold text-sm tracking-wide uppercase">
+                  RATE & FEES
+                </span>
               </div>
-            </>
-          )}
+              <div className="relative">
+                <Input
+                  type="text"
+                  inputMode="decimal"
+                  pattern="[0-9]*"
+                  value={formatValue(inputs.mezzanineRate)}
+                  onChange={(e) => onUpdate('mezzanineRate', parseValue(e.target.value, true))}
+                  placeholder="0"
+                  className="pl-4 pr-10 py-5 text-2xl font-mono text-white text-right rounded-sm border-zinc-800 focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37] transition-colors"
+                  style={{ backgroundColor: '#0a0a0a' }}
+                  onFocus={(e) => e.target.select()}
+                />
+                <span className="absolute right-4 top-1/2 -translate-y-1/2 font-mono text-lg text-zinc-600">
+                  %
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
       {/* CARD 2C: INVESTOR EQUITY */}
       <div className="rounded-sm border border-[#D4AF37] overflow-hidden">
         <div className="py-4 px-6 border-b border-[#333333] flex items-center justify-between" style={{ backgroundColor: '#111111' }}>
-          <h2 className="font-bebas text-xl tracking-wider uppercase" style={{ color: '#D4AF37' }}>
-            2C | INVESTOR EQUITY
-          </h2>
-          <button
-            onClick={() => setActiveModal('investorEquity')}
-            className="w-8 h-8 flex items-center justify-center rounded-sm text-zinc-500 hover:text-[#D4AF37] transition-colors"
-          >
-            <Info className="w-5 h-5" />
-          </button>
+          <div className="flex items-center gap-3">
+            <h2 className="font-bebas text-xl tracking-wider uppercase" style={{ color: '#D4AF37' }}>
+              2C | INVESTOR EQUITY
+            </h2>
+            <button
+              onClick={() => setActiveModal('investorEquity')}
+              className="text-zinc-500 hover:text-[#D4AF37] transition-colors"
+            >
+              <Info className="w-4 h-4" />
+            </button>
+          </div>
         </div>
         <div className="p-6 space-y-6" style={{ backgroundColor: '#000000' }}>
           {/* Net Equity Needed */}
