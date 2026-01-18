@@ -5,16 +5,18 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Mail, Loader2, ShieldCheck, Home } from "lucide-react";
+import { Mail, Loader2, ShieldCheck, Home, User } from "lucide-react";
 import { z } from "zod";
 import brandIconF from "@/assets/brand-icon-f.jpg";
 import MobileMenu from "@/components/MobileMenu";
 
 const emailSchema = z.string().email("Please enter a valid email address");
+const nameSchema = z.string().min(1, "First name is required").max(50, "Name must be less than 50 characters");
 
 const Auth = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [firstName, setFirstName] = useState("");
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [magicLinkSent, setMagicLinkSent] = useState(false);
@@ -39,11 +41,23 @@ const Auth = () => {
   const handleMagicLink = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    const result = emailSchema.safeParse(email);
-    if (!result.success) {
+    // Validate first name
+    const nameResult = nameSchema.safeParse(firstName.trim());
+    if (!nameResult.success) {
+      toast({
+        title: "Invalid Name",
+        description: nameResult.error.errors[0].message,
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Validate email
+    const emailResult = emailSchema.safeParse(email);
+    if (!emailResult.success) {
       toast({
         title: "Invalid Email",
-        description: result.error.errors[0].message,
+        description: emailResult.error.errors[0].message,
         variant: "destructive",
       });
       return;
@@ -56,6 +70,9 @@ const Auth = () => {
         email: email.trim(),
         options: {
           emailRedirectTo: redirectUrl,
+          data: {
+            first_name: firstName.trim(),
+          },
         },
       });
       if (error) throw error;
@@ -135,10 +152,32 @@ const Auth = () => {
               {!magicLinkSent ? (
                 <>
                   {/* Magic Link Form */}
-                  <form onSubmit={handleMagicLink} className="space-y-6">
+                  <form onSubmit={handleMagicLink} className="space-y-5">
+                    {/* First Name Input */}
+                    <div className="space-y-3">
+                      <Label htmlFor="firstName" className="text-sm tracking-[0.2em] uppercase font-mono" style={{ color: '#D4AF37' }}>
+                        First Name
+                      </Label>
+                      <div className="relative">
+                        <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5" fill="rgba(212, 175, 55, 0.6)" style={{ color: 'rgba(212, 175, 55, 0.6)' }} />
+                        <Input
+                          id="firstName"
+                          type="text"
+                          placeholder="Your first name"
+                          value={firstName}
+                          onChange={(e) => setFirstName(e.target.value)}
+                          className="pl-12 py-5 rounded-sm text-white placeholder:text-[#666666] font-mono tracking-wide touch-input focus:ring-1 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors"
+                          style={{ backgroundColor: '#070707', borderColor: '#333333' }}
+                          required
+                          tabIndex={1}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Email Input */}
                     <div className="space-y-3">
                       <Label htmlFor="email" className="text-sm tracking-[0.2em] uppercase font-mono" style={{ color: '#D4AF37' }}>
-                        Enter Email
+                        Email
                       </Label>
                       <div className="relative">
                         <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5" style={{ color: 'rgba(212, 175, 55, 0.6)' }} />
@@ -152,22 +191,24 @@ const Auth = () => {
                           className="pl-12 py-5 rounded-sm text-white placeholder:text-[#666666] font-mono tracking-wide touch-input focus:ring-1 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors"
                           style={{ backgroundColor: '#070707', borderColor: '#333333' }}
                           required
+                          tabIndex={2}
                         />
                       </div>
                     </div>
                     <Button
                       type="submit"
-                      disabled={loading}
-                      className="w-full h-14 rounded-sm font-bebas text-xl tracking-wider text-black transition-colors"
+                      disabled={loading || !firstName.trim()}
+                      className="w-full h-14 rounded-sm font-bebas text-xl tracking-wider text-black transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                       style={{ backgroundColor: '#D4AF37' }}
-                      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#F9E076'}
+                      onMouseEnter={(e) => !loading && firstName.trim() && (e.currentTarget.style.backgroundColor = '#F9E076')}
                       onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#D4AF37'}
                       size="lg"
+                      tabIndex={3}
                     >
                       {loading ? (
                         <Loader2 className="w-5 h-5 animate-spin" />
                       ) : (
-                        "REQUEST SECURE ACCESS KEY"
+                        "REQUEST SECURE ACCESS LINK"
                       )}
                     </Button>
                   </form>
@@ -200,7 +241,7 @@ const Auth = () => {
 
           {/* Instructional Text - Outside Card */}
           <p className="text-center text-sm mt-6 text-zinc-400">
-            A one-time access key will be sent to your email.
+            A secure access link will be sent to your email.
           </p>
           <p className="text-center text-[10px] uppercase tracking-widest mt-2 font-bold text-zinc-600">
             NO PASSWORDS REQUIRED • BANK-GRADE SECURITY
