@@ -96,19 +96,20 @@ const WizardStep3 = ({
             borderBottom: showResiduals ? '1px solid #333333' : 'none'
           }}
         >
-          <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
             <h2 className="font-bebas text-xl tracking-wider uppercase" style={{ color: '#D4AF37' }}>
               3A | GUILD RESIDUALS
             </h2>
+          </div>
+          {/* MASTER TOGGLE */}
+          <div className="flex items-center gap-4">
             <button 
               onClick={() => setActiveModal('guildResiduals')}
               className="text-zinc-500 hover:text-[#D4AF37] transition-colors"
             >
               <Info className="w-4 h-4" />
             </button>
-          </div>
-          {/* MASTER TOGGLE */}
-          <div className="flex items-center gap-3">
+            <span className="text-zinc-600">|</span>
             <span className="text-zinc-500 text-xs font-mono uppercase tracking-wide">
               Paying Residuals?
             </span>
