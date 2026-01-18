@@ -47,7 +47,7 @@ const Index = () => {
 
         {/* 3. THE UTILITY (Brand Gold #D4AF37) */}
         <p 
-          className="text-[10px] md:text-xs tracking-[0.3em] uppercase mb-16"
+          className="text-xs md:text-sm tracking-[0.3em] uppercase mb-16"
           style={{ color: '#D4AF37' }}
         >
           STREAMER ACQUISITION CALCULATOR
