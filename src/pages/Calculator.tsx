@@ -253,12 +253,12 @@ const Calculator = () => {
         className="fixed bottom-0 left-0 right-0 px-6 py-4 bg-background z-40"
         style={{ borderTop: '1px solid #333333' }}
       >
-        <div className="flex items-center justify-between gap-4 max-w-screen-lg mx-auto">
+        <div className="flex items-center justify-between gap-6 max-w-screen-lg mx-auto">
           <Button
             onClick={prevStep}
             disabled={currentStep === 1}
             variant="ghost"
-            className="text-muted-foreground hover:text-foreground disabled:opacity-30 flex-1 py-4"
+            className="text-zinc-400 hover:text-white disabled:opacity-30 flex-1 py-4"
           >
             <ChevronLeft className="w-5 h-5 mr-1" />
             Previous
