@@ -160,9 +160,6 @@ const Calculator = () => {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      {/* Mobile Menu */}
-      <MobileMenu />
-
       {/* Header - Minimal */}
       <header className="border-b border-border px-6 py-4">
         <div className="flex items-center justify-between">
@@ -179,20 +176,24 @@ const Calculator = () => {
               WATERFALL TERMINAL
             </span>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             {user && (
               <span className="text-muted-foreground text-xs hidden sm:block truncate max-w-32">
                 {user.email}
               </span>
             )}
-            <Button
-              onClick={handleSignOut}
-              variant="ghost"
-              size="sm"
-              className="text-muted-foreground hover:text-gold p-2"
-            >
-              <LogOut className="w-4 h-4" />
-            </Button>
+            {user && (
+              <Button
+                onClick={handleSignOut}
+                variant="ghost"
+                size="sm"
+                className="text-muted-foreground hover:text-gold p-2"
+              >
+                <LogOut className="w-4 h-4" />
+              </Button>
+            )}
+            {/* Mobile Menu - Inline */}
+            <MobileMenu inline />
           </div>
         </div>
       </header>
