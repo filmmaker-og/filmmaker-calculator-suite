@@ -47,11 +47,11 @@ const WizardStep1 = ({ budget, onUpdate }: WizardStep1Props) => {
           {/* Label Row */}
           <div className="flex items-center gap-2 mb-4">
             <span className="text-white font-bold text-sm tracking-wide">
-              NEGATIVE COST (PRODUCTION BUDGET)
+              NEGATIVE COST
             </span>
             <button
               onClick={() => setInfoOpen(true)}
-              className="transition-colors hover:opacity-80"
+              className="p-3 -m-3 transition-colors hover:opacity-80"
               aria-label="More information"
             >
               <Info className="w-4 h-4" style={{ color: '#D4AF37' }} />
@@ -61,8 +61,7 @@ const WizardStep1 = ({ budget, onUpdate }: WizardStep1Props) => {
           {/* Input Box */}
           <div className="relative">
             <span 
-              className="absolute left-4 top-1/2 -translate-y-1/2 font-mono text-xl"
-              style={{ color: '#D4AF37' }}
+              className="absolute left-4 top-1/2 -translate-y-1/2 font-mono text-xl text-zinc-600"
             >
               $
             </span>
