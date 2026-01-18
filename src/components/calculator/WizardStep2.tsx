@@ -132,8 +132,8 @@ const WizardStep2 = ({ inputs, onUpdate }: WizardStep2Props) => {
             <h2 className="font-bebas text-xl tracking-wider uppercase" style={{ color: '#D4AF37' }}>
               2A | TAX INCENTIVES
             </h2>
-            <button onClick={() => setActiveModal('taxIncentives')} className="text-zinc-500 hover:text-[#D4AF37] transition-colors">
-              <Info className="w-4 h-4" />
+            <button onClick={() => setActiveModal('taxIncentives')} className="hover:opacity-80 transition-colors">
+              <Info className="w-4 h-4" style={{ color: '#D4AF37' }} />
             </button>
           </div>
           {/* MASTER TOGGLE */}
@@ -186,8 +186,8 @@ const WizardStep2 = ({ inputs, onUpdate }: WizardStep2Props) => {
             <h2 className="font-bebas text-xl tracking-wider uppercase" style={{ color: '#D4AF37' }}>
               2B | DEBT SERVICE
             </h2>
-            <button onClick={() => setActiveModal('debtService')} className="text-zinc-500 hover:text-[#D4AF37] transition-colors">
-              <Info className="w-4 h-4" />
+            <button onClick={() => setActiveModal('debtService')} className="hover:opacity-80 transition-colors">
+              <Info className="w-4 h-4" style={{ color: '#D4AF37' }} />
             </button>
           </div>
           {/* MASTER TOGGLE FOR DEBT */}
@@ -322,8 +322,8 @@ const WizardStep2 = ({ inputs, onUpdate }: WizardStep2Props) => {
             <h2 className="font-bebas text-xl tracking-wider uppercase" style={{ color: '#D4AF37' }}>
               2C | INVESTOR EQUITY
             </h2>
-            <button onClick={() => setActiveModal('investorEquity')} className="text-zinc-500 hover:text-[#D4AF37] transition-colors">
-              <Info className="w-4 h-4" />
+            <button onClick={() => setActiveModal('investorEquity')} className="hover:opacity-80 transition-colors">
+              <Info className="w-4 h-4" style={{ color: '#D4AF37' }} />
             </button>
           </div>
           {/* MASTER TOGGLE FOR EQUITY */}

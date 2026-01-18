@@ -21,26 +21,28 @@ const WizardStep4 = ({ revenue, onUpdate }: WizardStep4Props) => {
       {/* Terminal Card */}
       <div className="rounded-sm border border-[#D4AF37] overflow-hidden">
         {/* Header Strip */}
-        <div className="py-4 px-6 border-b border-[#333333]" style={{ backgroundColor: '#111111' }}>
-          <h2 className="font-bebas text-xl tracking-wider uppercase" style={{ color: '#D4AF37' }}>
-            04 | PROJECTED REVENUE
-          </h2>
+        <div className="py-4 px-6 border-b border-[#333333] flex items-center justify-between" style={{ backgroundColor: '#111111' }}>
+          <div className="flex items-center gap-3">
+            <h2 className="font-bebas text-xl tracking-wider uppercase" style={{ color: '#D4AF37' }}>
+              04 | STREAMER BUYOUT
+            </h2>
+            <button
+              onClick={() => setInfoOpen(true)}
+              className="transition-colors hover:opacity-80"
+              aria-label="More information"
+            >
+              <Info className="w-4 h-4" style={{ color: '#D4AF37' }} />
+            </button>
+          </div>
         </div>
 
         {/* Body Area */}
         <div className="p-6" style={{ backgroundColor: '#000000' }}>
           {/* Label Row */}
-          <div className="flex items-center gap-2 mb-4">
+          <div className="mb-4">
             <span className="text-white font-bold text-sm tracking-wide uppercase">
-              GROSS REVENUE
+              TOTAL ACQUISITION PRICE
             </span>
-            <button
-              onClick={() => setInfoOpen(true)}
-              className="p-3 -m-3 transition-colors hover:opacity-80"
-              aria-label="More information"
-            >
-              <Info className="w-4 h-4" style={{ color: '#D4AF37' }} />
-            </button>
           </div>
 
           {/* Input Box */}
@@ -66,8 +68,10 @@ const WizardStep4 = ({ revenue, onUpdate }: WizardStep4Props) => {
 
           {/* Tip */}
           <p className="text-zinc-500 text-sm mt-4 leading-relaxed">
-            <span style={{ color: '#D4AF37' }} className="font-semibold">Tip:</span> Consider all revenue windows including 
-            theatrical, streaming licenses, SVOD, AVOD, international presales, and ancillary rights.
+            <span style={{ color: '#D4AF37' }} className="font-semibold">THE COST-PLUS MODEL:</span> For illustration purposes, this assumes a standard Streamer Cost-Plus deal. Enter the total negotiated purchase price.
+          </p>
+          <p className="text-zinc-600 text-xs mt-2 italic">
+            (Typically Negative Cost + 15-30% Premium)
           </p>
         </div>
       </div>
@@ -83,7 +87,7 @@ const WizardStep4 = ({ revenue, onUpdate }: WizardStep4Props) => {
         >
           <DialogHeader>
             <DialogTitle className="font-bebas text-2xl tracking-wider" style={{ color: '#D4AF37' }}>
-              GROSS REVENUE
+              STREAMER ACQUISITION
             </DialogTitle>
           </DialogHeader>
           
@@ -91,26 +95,17 @@ const WizardStep4 = ({ revenue, onUpdate }: WizardStep4Props) => {
             <div>
               <h4 className="text-white font-bold text-sm mb-2">DEFINITION</h4>
               <p className="text-sm leading-relaxed" style={{ color: '#999999' }}>
-                The total money received from all distribution windows before any deductions. 
-                This includes theatrical box office, streaming platform licenses, VOD sales, 
-                international presales, and ancillary rights.
+                In a Cost-Plus buyout (Netflix/Amazon/Apple), the streamer purchases 100% of the 
+                copyright for a fixed price. This fee usually covers the Negative Cost plus a 
+                negotiated Premium (Profit).
               </p>
             </div>
 
             <div>
-              <h4 className="text-white font-bold text-sm mb-2">REVENUE STREAMS</h4>
+              <h4 className="text-white font-bold text-sm mb-2">THE GOAL</h4>
               <p className="text-sm leading-relaxed" style={{ color: '#999999' }}>
-                Theatrical (Domestic & International), SVOD/AVOD Licenses, TVOD/EST Sales, 
-                Pay TV Windows, Free TV Syndication, Airline/Hotel Rights, Merchandise, and 
-                any other exploitation rights.
-              </p>
-            </div>
-
-            <div>
-              <h4 className="text-white font-bold text-sm mb-2">THE BOTTOM LINE</h4>
-              <p className="text-sm leading-relaxed" style={{ color: '#999999' }}>
-                This is your "Top Line" number. All distribution fees, sales expenses, guild residuals, 
-                and investor recoupment will be deducted from this amount in the waterfall.
+                This number is the "Gross Receipts" for the purpose of the waterfall. It is the 
+                single pot of money from which all debts and equity must be repaid.
               </p>
             </div>
           </div>
