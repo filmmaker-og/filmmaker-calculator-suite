@@ -18,7 +18,8 @@ const MobileMenu = ({ onOpenLegal }: MobileMenuProps) => {
   const [showLegalModal, setShowLegalModal] = useState(false);
   const [showAboutModal, setShowAboutModal] = useState(false);
   const [showContactModal, setShowContactModal] = useState(false);
-  const [copied, setCopied] = useState(false);
+  const [copiedEmail, setCopiedEmail] = useState(false);
+  const [copiedInsta, setCopiedInsta] = useState(false);
 
   const handleLegalClick = () => {
     setIsOpen(false);
@@ -41,8 +42,14 @@ const MobileMenu = ({ onOpenLegal }: MobileMenuProps) => {
 
   const handleCopyEmail = async () => {
     await navigator.clipboard.writeText("thefilmmaker.og@gmail.com");
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    setCopiedEmail(true);
+    setTimeout(() => setCopiedEmail(false), 2000);
+  };
+
+  const handleCopyInsta = async () => {
+    await navigator.clipboard.writeText("www.instagram.com/filmmaker.og");
+    setCopiedInsta(true);
+    setTimeout(() => setCopiedInsta(false), 2000);
   };
 
   const menuLinks = [
@@ -197,18 +204,27 @@ const MobileMenu = ({ onOpenLegal }: MobileMenuProps) => {
                 onClick={handleCopyEmail}
                 className="text-gold hover:text-gold/80 hover:bg-transparent p-2"
               >
-                {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                {copiedEmail ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
               </Button>
             </div>
-            <a
-              href="https://www.instagram.com/filmmaker.og"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-between bg-black/50 border border-zinc-800 rounded px-4 py-3 hover:border-gold/50 transition-colors"
-            >
-              <span className="text-zinc-300 text-sm">@filmmaker.og</span>
-              <span className="text-gold text-sm">→</span>
-            </a>
+            <div className="flex items-center justify-between bg-black/50 border border-zinc-800 rounded px-4 py-3">
+              <a
+                href="https://www.instagram.com/filmmaker.og"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-zinc-300 text-sm hover:text-gold transition-colors"
+              >
+                www.instagram.com/filmmaker.og
+              </a>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleCopyInsta}
+                className="text-gold hover:text-gold/80 hover:bg-transparent p-2"
+              >
+                {copiedInsta ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+              </Button>
+            </div>
           </div>
         </DialogContent>
       </Dialog>
