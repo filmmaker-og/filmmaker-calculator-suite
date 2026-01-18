@@ -1,5 +1,4 @@
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { WaterfallInputs } from "@/lib/waterfall";
 
 interface WizardStep2Props {
@@ -17,32 +16,17 @@ const WizardStep2 = ({ inputs, onUpdate }: WizardStep2Props) => {
 
   return (
     <div className="animate-fade-in">
-      {/* Folder Tab Card */}
-      <div 
-        className="overflow-hidden"
-        style={{ 
-          border: '1px solid #D4AF37',
-          borderRadius: '8px'
-        }}
-      >
+      {/* Terminal Card */}
+      <div className="rounded-sm border border-[#D4AF37] overflow-hidden">
         {/* Header Strip */}
-        <div 
-          className="px-6 py-4"
-          style={{ backgroundColor: '#111111' }}
-        >
-          <h2 
-            className="font-bebas text-xl tracking-wider"
-            style={{ color: '#D4AF37' }}
-          >
+        <div className="py-4 px-6 border-b border-[#333333]" style={{ backgroundColor: '#111111' }}>
+          <h2 className="font-bebas text-xl tracking-wider uppercase" style={{ color: '#D4AF37' }}>
             02 | CAPITAL STACK
           </h2>
         </div>
 
-        {/* Card Body */}
-        <div 
-          className="p-6 space-y-6"
-          style={{ backgroundColor: '#000000' }}
-        >
+        {/* Body Area */}
+        <div className="p-6 space-y-6" style={{ backgroundColor: '#000000' }}>
           {fields.map((field) => (
             <div key={field.key}>
               {/* Label */}
@@ -55,7 +39,7 @@ const WizardStep2 = ({ inputs, onUpdate }: WizardStep2Props) => {
               {/* Input Box */}
               <div className="relative">
                 {!field.isPercent && (
-                  <span className="absolute left-4 top-1/2 -translate-y-1/2 font-mono text-lg text-zinc-500">
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 font-mono text-lg text-zinc-600">
                     $
                   </span>
                 )}
@@ -70,23 +54,12 @@ const WizardStep2 = ({ inputs, onUpdate }: WizardStep2Props) => {
                     onUpdate(field.key, field.isPercent ? Math.min(value, 100) : value);
                   }}
                   placeholder="0"
-                  className={`${!field.isPercent ? 'pl-10' : 'pl-4'} ${field.isPercent ? 'pr-10' : ''} py-5 text-xl font-mono text-white text-right rounded-md transition-colors`}
-                  style={{ 
-                    backgroundColor: '#0a0a0a',
-                    border: '1px solid #333333',
-                  }}
-                  onFocus={(e) => {
-                    e.target.select();
-                    e.currentTarget.style.borderColor = '#D4AF37';
-                    e.currentTarget.style.boxShadow = '0 0 0 1px #D4AF37';
-                  }}
-                  onBlur={(e) => {
-                    e.currentTarget.style.borderColor = '#333333';
-                    e.currentTarget.style.boxShadow = 'none';
-                  }}
+                  className={`${!field.isPercent ? 'pl-10' : 'pl-4'} ${field.isPercent ? 'pr-10' : ''} py-5 text-xl font-mono text-white text-right rounded-sm border-zinc-800 focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37] transition-colors`}
+                  style={{ backgroundColor: '#0a0a0a' }}
+                  onFocus={(e) => e.target.select()}
                 />
                 {field.isPercent && (
-                  <span className="absolute right-4 top-1/2 -translate-y-1/2 font-mono text-lg text-zinc-500">
+                  <span className="absolute right-4 top-1/2 -translate-y-1/2 font-mono text-lg text-zinc-600">
                     %
                   </span>
                 )}

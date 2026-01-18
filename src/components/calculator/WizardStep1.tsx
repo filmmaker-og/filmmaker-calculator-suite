@@ -18,35 +18,20 @@ const WizardStep1 = ({ budget, onUpdate }: WizardStep1Props) => {
 
   return (
     <div className="animate-fade-in">
-      {/* Folder Tab Card */}
-      <div 
-        className="overflow-hidden"
-        style={{ 
-          border: '1px solid #D4AF37',
-          borderRadius: '8px'
-        }}
-      >
+      {/* Terminal Card */}
+      <div className="rounded-sm border border-[#D4AF37] overflow-hidden">
         {/* Header Strip */}
-        <div 
-          className="px-6 py-4"
-          style={{ backgroundColor: '#111111' }}
-        >
-          <h2 
-            className="font-bebas text-xl tracking-wider"
-            style={{ color: '#D4AF37' }}
-          >
+        <div className="py-4 px-6 border-b border-[#333333]" style={{ backgroundColor: '#111111' }}>
+          <h2 className="font-bebas text-xl tracking-wider uppercase" style={{ color: '#D4AF37' }}>
             01 | PROJECT BASIS
           </h2>
         </div>
 
-        {/* Card Body */}
-        <div 
-          className="p-6"
-          style={{ backgroundColor: '#000000' }}
-        >
+        {/* Body Area */}
+        <div className="p-6" style={{ backgroundColor: '#000000' }}>
           {/* Label Row */}
           <div className="flex items-center gap-2 mb-4">
-            <span className="text-white font-bold text-sm tracking-wide">
+            <span className="text-white font-bold text-sm tracking-wide uppercase">
               NEGATIVE COST
             </span>
             <button
@@ -60,9 +45,7 @@ const WizardStep1 = ({ budget, onUpdate }: WizardStep1Props) => {
 
           {/* Input Box */}
           <div className="relative">
-            <span 
-              className="absolute left-4 top-1/2 -translate-y-1/2 font-mono text-xl text-zinc-600"
-            >
+            <span className="absolute left-4 top-1/2 -translate-y-1/2 font-mono text-xl text-zinc-600">
               $
             </span>
             <Input
@@ -75,20 +58,9 @@ const WizardStep1 = ({ budget, onUpdate }: WizardStep1Props) => {
                 onUpdate(value);
               }}
               placeholder="0"
-              className="pl-10 py-6 text-2xl font-mono text-white text-right rounded-md transition-colors"
-              style={{ 
-                backgroundColor: '#0a0a0a',
-                border: '1px solid #333333',
-              }}
-              onFocus={(e) => {
-                e.target.select();
-                e.currentTarget.style.borderColor = '#D4AF37';
-                e.currentTarget.style.boxShadow = '0 0 0 1px #D4AF37';
-              }}
-              onBlur={(e) => {
-                e.currentTarget.style.borderColor = '#333333';
-                e.currentTarget.style.boxShadow = 'none';
-              }}
+              className="pl-10 py-6 text-2xl font-mono text-white text-right rounded-sm border-zinc-800 focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37] transition-colors"
+              style={{ backgroundColor: '#0a0a0a' }}
+              onFocus={(e) => e.target.select()}
             />
           </div>
         </div>
@@ -97,23 +69,19 @@ const WizardStep1 = ({ budget, onUpdate }: WizardStep1Props) => {
       {/* Info Modal */}
       <Dialog open={infoOpen} onOpenChange={setInfoOpen}>
         <DialogContent 
-          className="max-w-md"
+          className="max-w-md rounded-sm"
           style={{ 
             backgroundColor: '#111111',
             border: '1px solid #D4AF37'
           }}
         >
           <DialogHeader>
-            <DialogTitle 
-              className="font-bebas text-2xl tracking-wider"
-              style={{ color: '#D4AF37' }}
-            >
+            <DialogTitle className="font-bebas text-2xl tracking-wider" style={{ color: '#D4AF37' }}>
               NEGATIVE COST
             </DialogTitle>
           </DialogHeader>
           
           <div className="space-y-6 mt-4">
-            {/* Definition */}
             <div>
               <h4 className="text-white font-bold text-sm mb-2">DEFINITION</h4>
               <p className="text-sm leading-relaxed" style={{ color: '#999999' }}>
@@ -123,7 +91,6 @@ const WizardStep1 = ({ budget, onUpdate }: WizardStep1Props) => {
               </p>
             </div>
 
-            {/* The Streamer Reality */}
             <div>
               <h4 className="text-white font-bold text-sm mb-2">THE STREAMER REALITY</h4>
               <p className="text-sm leading-relaxed" style={{ color: '#999999' }}>
@@ -133,7 +100,6 @@ const WizardStep1 = ({ budget, onUpdate }: WizardStep1Props) => {
               </p>
             </div>
 
-            {/* The Bottom Line */}
             <div>
               <h4 className="text-white font-bold text-sm mb-2">THE BOTTOM LINE</h4>
               <p className="text-sm leading-relaxed" style={{ color: '#999999' }}>
