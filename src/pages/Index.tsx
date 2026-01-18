@@ -87,12 +87,9 @@ const Index = () => {
 
       {/* LEGAL MODAL */}
       <Dialog open={showLegalModal} onOpenChange={setShowLegalModal}>
-        <DialogContent className="bg-zinc-900 border-zinc-800 max-w-md">
+        <DialogContent className="bg-surface border-border max-w-md">
           <DialogHeader>
-            <DialogTitle 
-              className="font-bebas text-2xl tracking-wider"
-              style={{ color: '#D4AF37' }}
-            >
+            <DialogTitle className="font-bebas text-2xl text-gold tracking-wider">
               LEGAL DISCLAIMER
             </DialogTitle>
           </DialogHeader>
