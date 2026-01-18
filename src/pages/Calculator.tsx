@@ -182,25 +182,24 @@ const Calculator = () => {
 
       {/* Status Bar - Terminal Plate Style */}
       <div 
-        className="px-6 py-4"
-        style={{ 
-          backgroundColor: '#111111',
-          borderTop: '1px solid #333333',
-          borderBottom: '1px solid #333333'
-        }}
+        className="px-6 py-4 border-b border-[#333333]"
+        style={{ backgroundColor: '#111111' }}
       >
         <div className="flex items-center justify-between mb-2">
-          <span className="text-xs uppercase tracking-widest" style={{ color: '#888888' }}>
+          <span className="text-xs uppercase tracking-widest text-zinc-500">
             Step {currentStep} of 6
           </span>
           <span className="text-xs font-mono" style={{ color: '#D4AF37' }}>
             {Math.round((currentStep / 6) * 100)}%
           </span>
         </div>
-        <div className="progress-gold h-1">
+        <div className="h-1 rounded-sm overflow-hidden" style={{ backgroundColor: '#1a1a1a' }}>
           <div 
-            className="progress-gold-fill h-full"
-            style={{ width: `${(currentStep / 6) * 100}%` }}
+            className="h-full transition-all duration-300 rounded-sm"
+            style={{ 
+              width: `${(currentStep / 6) * 100}%`,
+              backgroundColor: '#D4AF37'
+            }}
           />
         </div>
       </div>

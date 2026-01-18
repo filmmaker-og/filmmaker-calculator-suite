@@ -27,43 +27,28 @@ const WizardStep3 = ({
 }: WizardStep3Props) => {
   return (
     <div className="animate-fade-in space-y-6">
-      {/* Guild Toggles Card */}
-      <div 
-        className="overflow-hidden"
-        style={{ 
-          border: '1px solid #D4AF37',
-          borderRadius: '8px'
-        }}
-      >
+      {/* Guild Participations Card */}
+      <div className="rounded-sm border border-[#D4AF37] overflow-hidden">
         {/* Header Strip */}
-        <div 
-          className="px-6 py-4"
-          style={{ backgroundColor: '#111111' }}
-        >
-          <h2 
-            className="font-bebas text-xl tracking-wider"
-            style={{ color: '#D4AF37' }}
-          >
+        <div className="py-4 px-6 border-b border-[#333333]" style={{ backgroundColor: '#111111' }}>
+          <h2 className="font-bebas text-xl tracking-wider uppercase" style={{ color: '#D4AF37' }}>
             03 | GUILD PARTICIPATIONS
           </h2>
         </div>
 
-        {/* Card Body */}
-        <div 
-          className="p-6"
-          style={{ backgroundColor: '#000000' }}
-        >
-          <div className="grid grid-cols-1 gap-4">
+        {/* Body Area */}
+        <div className="p-6" style={{ backgroundColor: '#000000' }}>
+          <div className="space-y-3">
             {guildInfo.map((guild) => (
               <button
                 key={guild.key}
                 onClick={() => onToggleGuild(guild.key)}
-                className="p-4 text-left transition-all duration-300 rounded-md"
-                style={{
-                  backgroundColor: '#0a0a0a',
-                  border: guilds[guild.key] ? '1px solid #D4AF37' : '1px solid #333333',
-                  boxShadow: guilds[guild.key] ? '0 0 20px rgba(212, 175, 55, 0.2)' : 'none'
-                }}
+                className={`w-full p-4 text-left transition-all duration-300 rounded-sm border ${
+                  guilds[guild.key] 
+                    ? 'border-[#D4AF37] shadow-[0_0_20px_rgba(212,175,55,0.15)]' 
+                    : 'border-zinc-800 hover:border-zinc-700'
+                }`}
+                style={{ backgroundColor: '#0a0a0a' }}
               >
                 <div className="flex items-center justify-between">
                   <div>
@@ -75,11 +60,11 @@ const WizardStep3 = ({
                   <div className="flex items-center gap-4">
                     <span className="font-mono text-zinc-400">{guild.rate}</span>
                     <div 
-                      className="w-6 h-6 flex items-center justify-center transition-all rounded"
-                      style={{
-                        border: guilds[guild.key] ? '1px solid #D4AF37' : '1px solid #444444',
-                        backgroundColor: guilds[guild.key] ? '#D4AF37' : 'transparent'
-                      }}
+                      className={`w-6 h-6 flex items-center justify-center transition-all rounded-sm border ${
+                        guilds[guild.key] 
+                          ? 'border-[#D4AF37] bg-[#D4AF37]' 
+                          : 'border-zinc-700'
+                      }`}
                     >
                       {guilds[guild.key] && <Check className="w-4 h-4 text-black" />}
                     </div>
@@ -92,31 +77,16 @@ const WizardStep3 = ({
       </div>
 
       {/* Distribution Costs Card */}
-      <div 
-        className="overflow-hidden"
-        style={{ 
-          border: '1px solid #D4AF37',
-          borderRadius: '8px'
-        }}
-      >
+      <div className="rounded-sm border border-[#D4AF37] overflow-hidden">
         {/* Header Strip */}
-        <div 
-          className="px-6 py-4"
-          style={{ backgroundColor: '#111111' }}
-        >
-          <h2 
-            className="font-bebas text-xl tracking-wider"
-            style={{ color: '#D4AF37' }}
-          >
+        <div className="py-4 px-6 border-b border-[#333333]" style={{ backgroundColor: '#111111' }}>
+          <h2 className="font-bebas text-xl tracking-wider uppercase" style={{ color: '#D4AF37' }}>
             DISTRIBUTION COSTS
           </h2>
         </div>
 
-        {/* Card Body */}
-        <div 
-          className="p-6 space-y-6"
-          style={{ backgroundColor: '#000000' }}
-        >
+        {/* Body Area */}
+        <div className="p-6 space-y-6" style={{ backgroundColor: '#000000' }}>
           {/* Sales Agent Fee */}
           <div>
             <div className="flex items-center gap-2 mb-3">
@@ -136,22 +106,11 @@ const WizardStep3 = ({
                   onUpdateSalesFee(Math.min(value, 100));
                 }}
                 placeholder="0"
-                className="py-5 text-xl font-mono text-white text-right pr-10 rounded-md transition-colors"
-                style={{ 
-                  backgroundColor: '#0a0a0a',
-                  border: '1px solid #333333',
-                }}
-                onFocus={(e) => {
-                  e.target.select();
-                  e.currentTarget.style.borderColor = '#D4AF37';
-                  e.currentTarget.style.boxShadow = '0 0 0 1px #D4AF37';
-                }}
-                onBlur={(e) => {
-                  e.currentTarget.style.borderColor = '#333333';
-                  e.currentTarget.style.boxShadow = 'none';
-                }}
+                className="py-5 text-xl font-mono text-white text-right pr-10 rounded-sm border-zinc-800 focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37] transition-colors"
+                style={{ backgroundColor: '#0a0a0a' }}
+                onFocus={(e) => e.target.select()}
               />
-              <span className="absolute right-4 top-1/2 -translate-y-1/2 font-mono text-lg text-zinc-500">
+              <span className="absolute right-4 top-1/2 -translate-y-1/2 font-mono text-lg text-zinc-600">
                 %
               </span>
             </div>
@@ -165,7 +124,7 @@ const WizardStep3 = ({
               </span>
             </div>
             <div className="relative">
-              <span className="absolute left-4 top-1/2 -translate-y-1/2 font-mono text-lg text-zinc-500">
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 font-mono text-lg text-zinc-600">
                 $
               </span>
               <Input
@@ -179,20 +138,9 @@ const WizardStep3 = ({
                   onUpdateSalesExp(value);
                 }}
                 placeholder="0"
-                className="pl-10 py-5 text-xl font-mono text-white text-right rounded-md transition-colors"
-                style={{ 
-                  backgroundColor: '#0a0a0a',
-                  border: '1px solid #333333',
-                }}
-                onFocus={(e) => {
-                  e.target.select();
-                  e.currentTarget.style.borderColor = '#D4AF37';
-                  e.currentTarget.style.boxShadow = '0 0 0 1px #D4AF37';
-                }}
-                onBlur={(e) => {
-                  e.currentTarget.style.borderColor = '#333333';
-                  e.currentTarget.style.boxShadow = 'none';
-                }}
+                className="pl-10 py-5 text-xl font-mono text-white text-right rounded-sm border-zinc-800 focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37] transition-colors"
+                style={{ backgroundColor: '#0a0a0a' }}
+                onFocus={(e) => e.target.select()}
               />
             </div>
           </div>
