@@ -63,7 +63,7 @@ const Index = () => {
             onClick={() => navigate("/auth")}
             className="w-full h-14 text-sm font-black tracking-[0.2em] rounded-sm bg-[#D4AF37] text-black hover:bg-[#F9E076] transition-colors duration-300 border border-[#D4AF37]"
           >
-            ACCESS TERMINAL
+            ACCESS CALCULATOR
           </Button>
           
           {/* Secondary: Silver Text for better readability on Void Black */}
