@@ -1,6 +1,5 @@
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { GuildState, formatCurrency } from "@/lib/waterfall";
+import { GuildState } from "@/lib/waterfall";
 import { Check } from "lucide-react";
 
 interface WizardStep3Props {
@@ -27,107 +26,173 @@ const WizardStep3 = ({
   onUpdateSalesExp 
 }: WizardStep3Props) => {
   return (
-    <div className="animate-fade-in">
-      <div className="mb-8">
-        <span className="text-gold text-xs tracking-[0.3em] uppercase">Step 3</span>
-        <h2 className="font-display text-4xl md:text-5xl text-foreground mt-2">
-          THE LEVERS
-        </h2>
-        <p className="text-dim mt-3 max-w-xl">
-          Select applicable guild participations and distribution costs.
-        </p>
-      </div>
+    <div className="animate-fade-in space-y-6">
+      {/* Guild Toggles Card */}
+      <div 
+        className="overflow-hidden"
+        style={{ 
+          border: '1px solid #D4AF37',
+          borderRadius: '8px'
+        }}
+      >
+        {/* Header Strip */}
+        <div 
+          className="px-6 py-4"
+          style={{ backgroundColor: '#111111' }}
+        >
+          <h2 
+            className="font-bebas text-xl tracking-wider"
+            style={{ color: '#D4AF37' }}
+          >
+            03 | GUILD PARTICIPATIONS
+          </h2>
+        </div>
 
-      {/* Guild Toggles */}
-      <div className="mb-8">
-        <Label className="text-mid text-xs tracking-widest uppercase block mb-4">
-          Guild Participations
-        </Label>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {guildInfo.map((guild) => (
-            <button
-              key={guild.key}
-              onClick={() => onToggleGuild(guild.key)}
-              className={`glass-card p-6 text-left transition-all duration-300 ${
-                guilds[guild.key] 
-                  ? 'border-gold shadow-[0_0_20px_hsl(43_66%_52%/0.2)]' 
-                  : 'hover:border-dim'
-              }`}
-            >
-              <div className="flex items-start justify-between">
-                <div>
-                  <h3 className="font-display text-xl text-foreground mb-1">
-                    {guild.name}
-                  </h3>
-                  <p className="text-dim text-sm">{guild.desc}</p>
+        {/* Card Body */}
+        <div 
+          className="p-6"
+          style={{ backgroundColor: '#000000' }}
+        >
+          <div className="grid grid-cols-1 gap-4">
+            {guildInfo.map((guild) => (
+              <button
+                key={guild.key}
+                onClick={() => onToggleGuild(guild.key)}
+                className="p-4 text-left transition-all duration-300 rounded-md"
+                style={{
+                  backgroundColor: '#0a0a0a',
+                  border: guilds[guild.key] ? '1px solid #D4AF37' : '1px solid #333333',
+                  boxShadow: guilds[guild.key] ? '0 0 20px rgba(212, 175, 55, 0.2)' : 'none'
+                }}
+              >
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="font-bebas text-lg text-white mb-1">
+                      {guild.name}
+                    </h3>
+                    <p className="text-zinc-500 text-sm">{guild.desc}</p>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <span className="font-mono text-zinc-400">{guild.rate}</span>
+                    <div 
+                      className="w-6 h-6 flex items-center justify-center transition-all rounded"
+                      style={{
+                        border: guilds[guild.key] ? '1px solid #D4AF37' : '1px solid #444444',
+                        backgroundColor: guilds[guild.key] ? '#D4AF37' : 'transparent'
+                      }}
+                    >
+                      {guilds[guild.key] && <Check className="w-4 h-4 text-black" />}
+                    </div>
+                  </div>
                 </div>
-                <div className={`w-6 h-6 border flex items-center justify-center transition-all ${
-                  guilds[guild.key] 
-                    ? 'border-gold bg-gold' 
-                    : 'border-border'
-                }`}>
-                  {guilds[guild.key] && <Check className="w-4 h-4 text-background" />}
-                </div>
-              </div>
-              <div className="mt-4 pt-4 border-t border-border">
-                <span className="font-mono text-gold text-lg">{guild.rate}</span>
-              </div>
-            </button>
-          ))}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
-      {/* Sales Fee & Marketing */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="glass-card p-6">
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <Label htmlFor="salesFee" className="text-mid text-xs tracking-widest uppercase">
+      {/* Distribution Costs Card */}
+      <div 
+        className="overflow-hidden"
+        style={{ 
+          border: '1px solid #D4AF37',
+          borderRadius: '8px'
+        }}
+      >
+        {/* Header Strip */}
+        <div 
+          className="px-6 py-4"
+          style={{ backgroundColor: '#111111' }}
+        >
+          <h2 
+            className="font-bebas text-xl tracking-wider"
+            style={{ color: '#D4AF37' }}
+          >
+            DISTRIBUTION COSTS
+          </h2>
+        </div>
+
+        {/* Card Body */}
+        <div 
+          className="p-6 space-y-6"
+          style={{ backgroundColor: '#000000' }}
+        >
+          {/* Sales Agent Fee */}
+          <div>
+            <div className="flex items-center gap-2 mb-3">
+              <span className="text-white font-bold text-sm tracking-wide uppercase">
                 Sales Agent Fee
-              </Label>
-              <span className="text-dim text-xs font-mono">Default: 15%</span>
+              </span>
             </div>
             <div className="relative">
               <Input
                 id="salesFee"
-                type="tel"
-                inputMode="numeric"
-                value={salesFee}
+                type="text"
+                inputMode="decimal"
+                pattern="[0-9]*"
+                value={salesFee === 0 ? '' : salesFee}
                 onChange={(e) => {
                   const value = parseInt(e.target.value.replace(/[^0-9]/g, '')) || 0;
                   onUpdateSalesFee(Math.min(value, 100));
                 }}
-                className="py-6 text-xl font-mono bg-background border-border rounded-none text-foreground gold-glow-focus text-right pr-10"
+                placeholder="0"
+                className="py-5 text-xl font-mono text-white text-right pr-10 rounded-md transition-colors"
+                style={{ 
+                  backgroundColor: '#0a0a0a',
+                  border: '1px solid #333333',
+                }}
+                onFocus={(e) => {
+                  e.target.select();
+                  e.currentTarget.style.borderColor = '#D4AF37';
+                  e.currentTarget.style.boxShadow = '0 0 0 1px #D4AF37';
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.borderColor = '#333333';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
               />
-              <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gold font-mono text-lg">
+              <span className="absolute right-4 top-1/2 -translate-y-1/2 font-mono text-lg text-zinc-500">
                 %
               </span>
             </div>
           </div>
-        </div>
 
-        <div className="glass-card p-6">
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <Label htmlFor="salesExp" className="text-mid text-xs tracking-widest uppercase">
+          {/* Marketing Cap */}
+          <div>
+            <div className="flex items-center gap-2 mb-3">
+              <span className="text-white font-bold text-sm tracking-wide uppercase">
                 Marketing Cap
-              </Label>
-              <span className="text-dim text-xs font-mono">Default: {formatCurrency(75000)}</span>
+              </span>
             </div>
             <div className="relative">
-              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gold font-mono text-lg">
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 font-mono text-lg text-zinc-500">
                 $
               </span>
               <Input
                 id="salesExp"
-                type="tel"
-                inputMode="numeric"
-                value={salesExp.toLocaleString()}
+                type="text"
+                inputMode="decimal"
+                pattern="[0-9]*"
+                value={salesExp === 0 ? '' : salesExp.toLocaleString()}
                 onChange={(e) => {
                   const value = parseInt(e.target.value.replace(/[^0-9]/g, '')) || 0;
                   onUpdateSalesExp(value);
                 }}
-                className="pl-10 py-6 text-xl font-mono bg-background border-border rounded-none text-foreground gold-glow-focus text-right"
+                placeholder="0"
+                className="pl-10 py-5 text-xl font-mono text-white text-right rounded-md transition-colors"
+                style={{ 
+                  backgroundColor: '#0a0a0a',
+                  border: '1px solid #333333',
+                }}
+                onFocus={(e) => {
+                  e.target.select();
+                  e.currentTarget.style.borderColor = '#D4AF37';
+                  e.currentTarget.style.boxShadow = '0 0 0 1px #D4AF37';
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.borderColor = '#333333';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
               />
             </div>
           </div>

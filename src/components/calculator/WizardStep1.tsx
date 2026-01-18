@@ -66,8 +66,9 @@ const WizardStep1 = ({ budget, onUpdate }: WizardStep1Props) => {
               $
             </span>
             <Input
-              type="tel"
-              inputMode="numeric"
+              type="text"
+              inputMode="decimal"
+              pattern="[0-9]*"
               value={budget === 0 ? '' : budget.toLocaleString()}
               onChange={(e) => {
                 const value = parseInt(e.target.value.replace(/[^0-9]/g, '')) || 0;
@@ -80,6 +81,7 @@ const WizardStep1 = ({ budget, onUpdate }: WizardStep1Props) => {
                 border: '1px solid #333333',
               }}
               onFocus={(e) => {
+                e.target.select();
                 e.currentTarget.style.borderColor = '#D4AF37';
                 e.currentTarget.style.boxShadow = '0 0 0 1px #D4AF37';
               }}
