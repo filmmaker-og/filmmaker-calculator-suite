@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Menu, X, Copy, Check } from "lucide-react";
+import { Menu, X, Copy, Check, LogOut } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -11,9 +11,10 @@ import { Button } from "@/components/ui/button";
 
 interface MobileMenuProps {
   onOpenLegal?: () => void;
+  onSignOut?: () => void;
 }
 
-const MobileMenu = ({ onOpenLegal }: MobileMenuProps) => {
+const MobileMenu = ({ onOpenLegal, onSignOut }: MobileMenuProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [showLegalModal, setShowLegalModal] = useState(false);
   const [showAboutModal, setShowAboutModal] = useState(false);
@@ -131,6 +132,25 @@ const MobileMenu = ({ onOpenLegal }: MobileMenuProps) => {
               >
                 LEGAL
               </button>
+
+              {/* Sign Out - Only show if handler provided */}
+              {onSignOut && (
+                <button
+                  onClick={() => {
+                    setIsOpen(false);
+                    onSignOut();
+                  }}
+                  className="font-bebas text-4xl tracking-wider transition-colors mt-8"
+                  style={{ color: '#666666' }}
+                  onMouseEnter={(e) => e.currentTarget.style.color = '#aa4444'}
+                  onMouseLeave={(e) => e.currentTarget.style.color = '#666666'}
+                >
+                  <span className="flex items-center gap-3">
+                    <LogOut className="w-6 h-6" />
+                    SIGN OUT
+                  </span>
+                </button>
+              )}
             </nav>
           </div>
 
