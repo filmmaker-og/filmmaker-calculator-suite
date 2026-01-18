@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Copy, Check } from "lucide-react";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 interface MobileMenuProps {
   onOpenLegal?: () => void;
@@ -16,6 +17,8 @@ const MobileMenu = ({ onOpenLegal }: MobileMenuProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [showLegalModal, setShowLegalModal] = useState(false);
   const [showAboutModal, setShowAboutModal] = useState(false);
+  const [showContactModal, setShowContactModal] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   const handleLegalClick = () => {
     setIsOpen(false);
@@ -31,10 +34,21 @@ const MobileMenu = ({ onOpenLegal }: MobileMenuProps) => {
     setShowAboutModal(true);
   };
 
+  const handleContactClick = () => {
+    setIsOpen(false);
+    setShowContactModal(true);
+  };
+
+  const handleCopyEmail = async () => {
+    await navigator.clipboard.writeText("thefilmmaker.og@gmail.com");
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   const menuLinks = [
     { label: "ABOUT", href: "#about", onClick: handleAboutClick },
     { label: "SERVICES", href: "/store" },
-    { label: "CONTACT", href: "mailto:thefilmmaker.og@gmail.com" },
+    { label: "CONTACT", href: "#contact", onClick: handleContactClick },
     { label: "DM", href: "https://www.instagram.com/filmmaker.og", external: true },
   ];
 
@@ -163,6 +177,38 @@ const MobileMenu = ({ onOpenLegal }: MobileMenuProps) => {
             <p>
               This is the business intelligence required to treat independent film as an asset class.
             </p>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Contact Modal */}
+      <Dialog open={showContactModal} onOpenChange={setShowContactModal}>
+        <DialogContent className="bg-surface border-border max-w-md">
+          <DialogHeader>
+            <DialogTitle className="font-bebas text-2xl text-gold tracking-wider">
+              CONTACT
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between bg-black/50 border border-zinc-800 rounded px-4 py-3">
+              <span className="text-zinc-300 text-sm">thefilmmaker.og@gmail.com</span>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleCopyEmail}
+                className="text-gold hover:text-gold/80 hover:bg-transparent p-2"
+              >
+                {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+              </Button>
+            </div>
+            <a
+              href="https://www.instagram.com/filmmaker.og"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-2 text-zinc-400 hover:text-gold transition-colors text-sm"
+            >
+              DM on Instagram → @filmmaker.og
+            </a>
           </div>
         </DialogContent>
       </Dialog>
