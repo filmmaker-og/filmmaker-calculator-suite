@@ -144,8 +144,8 @@ const Auth = () => {
               className="flex items-center gap-2 py-4 px-6"
               style={{ backgroundColor: '#111111', borderBottom: '1px solid #333333' }}
             >
-              <ShieldCheck className="w-4 h-4" fill="#D4AF37" style={{ color: '#D4AF37' }} />
-              <span className="font-bebas text-sm tracking-wide" style={{ color: '#D4AF37' }}>
+              <ShieldCheck className="w-5 h-5" fill="#D4AF37" style={{ color: '#D4AF37' }} />
+              <span className="font-bebas text-lg tracking-wide" style={{ color: '#D4AF37' }}>
                 SECURE ACCESS CALCULATOR
               </span>
             </div>
