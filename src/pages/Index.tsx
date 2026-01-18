@@ -8,6 +8,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import brandIconF from "@/assets/brand-icon-f.jpg";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ const Index = () => {
       <div 
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: 'radial-gradient(ellipse at center, rgba(30,30,30,0.4) 0%, rgba(0,0,0,0) 70%)'
+          background: 'radial-gradient(ellipse at center, rgba(38,38,38,0.4) 0%, rgba(0,0,0,0) 60%, rgba(0,0,0,1) 100%)'
         }}
       />
 
@@ -32,48 +33,70 @@ const Index = () => {
         <MobileMenu onOpenLegal={() => setShowLegalModal(true)} />
       </div>
       
-      {/* Main Content */}
+      {/* Main Content - Centered Stack */}
       <div className="flex-1 flex flex-col items-center justify-center text-center px-6 py-12 relative z-10">
         
-        {/* MASTHEAD: Logo + Text */}
-        <div className="flex items-center justify-center gap-4 md:gap-6 mb-8">
-          {/* Brand Icon (Styled F) */}
-          <div className="w-14 h-14 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-sm border-2 border-gold shadow-[0_0_20px_rgba(212,175,55,0.3)] flex-shrink-0 flex items-center justify-center bg-black">
-            <span className="font-bebas text-gold text-4xl md:text-5xl lg:text-6xl">F</span>
-          </div>
+        {/* MASTHEAD: Centered Stack - Icon on top, Text below */}
+        <div className="flex flex-col items-center justify-center mb-8">
+          {/* Brand Icon (F) */}
+          <img 
+            src={brandIconF} 
+            alt="Filmmaker.OG Brand Icon" 
+            className="w-24 h-24 md:w-32 md:h-32 lg:w-40 lg:h-40 object-contain mb-4"
+          />
           
-          <h1 className="font-bebas text-6xl md:text-8xl lg:text-[10rem] text-white tracking-tighter leading-none">
+          {/* Brand Text */}
+          <h1 className="font-bebas text-5xl md:text-6xl lg:text-7xl text-white tracking-tighter leading-none">
             FILMMAKER.OG
           </h1>
         </div>
         
-        {/* THE TOOL */}
-        <p className="text-gold text-xs md:text-sm tracking-[0.3em] uppercase mb-6">
-          STREAMER ACQUISITION CALCULATOR
-        </p>
-        
-        {/* THE MISSION */}
-        <h2 className="font-black text-xl md:text-2xl lg:text-3xl text-white leading-tight max-w-2xl mb-16">
-          DEMOCRATIZING THE BUSINESS OF FILM
-        </h2>
+        {/* THE HERO */}
+        <div className="mb-12">
+          {/* Label */}
+          <p 
+            className="text-xs md:text-sm tracking-[0.3em] uppercase mb-4"
+            style={{ color: '#D4AF37' }}
+          >
+            STREAMER ACQUISITION CALCULATOR
+          </p>
+          
+          {/* Headline */}
+          <h2 className="font-bebas text-2xl md:text-3xl lg:text-4xl text-white leading-tight max-w-2xl">
+            DEMOCRATIZING THE BUSINESS OF FILM
+          </h2>
+        </div>
         
         {/* ACTION STACK */}
         <div className="w-full max-w-xs space-y-4">
-          {/* Primary Button - Gold Pulse */}
+          {/* Primary Button - Gold with Highlight Glow */}
           <Button 
             onClick={() => navigate("/auth")}
-            className="w-full h-14 text-lg font-black tracking-widest rounded-sm bg-gold text-black hover:bg-white hover:text-black transition-all duration-300 border border-gold shadow-[0_0_20px_rgba(212,175,55,0.4)] animate-pulse-gold"
+            className="w-full h-14 text-lg font-black tracking-widest rounded-sm transition-all duration-300 border animate-pulse-gold"
+            style={{ 
+              backgroundColor: '#D4AF37', 
+              color: '#000000',
+              borderColor: '#D4AF37',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = '#F9E076';
+              e.currentTarget.style.borderColor = '#F9E076';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = '#D4AF37';
+              e.currentTarget.style.borderColor = '#D4AF37';
+            }}
           >
             ACCESS TERMINAL
           </Button>
           
-          {/* Secondary Button */}
+          {/* Secondary Button - Ghost */}
           <Link to="/store" className="block">
             <Button 
               variant="ghost"
-              className="w-full h-12 text-sm tracking-widest text-zinc-400 hover:text-white hover:bg-transparent transition-colors"
+              className="w-full h-12 text-sm tracking-widest text-white hover:text-white hover:bg-transparent transition-colors border border-transparent hover:border-zinc-700"
             >
-              Skip to Services
+              SKIP TO SERVICES
             </Button>
           </Link>
         </div>
@@ -85,7 +108,7 @@ const Index = () => {
           onClick={() => setShowLegalModal(true)}
           className="text-[10px] uppercase tracking-widest text-zinc-600 hover:text-zinc-400 transition-colors cursor-pointer"
         >
-          Educational Purposes Only
+          For educational/information purposes only.
         </button>
       </footer>
 
@@ -93,7 +116,10 @@ const Index = () => {
       <Dialog open={showLegalModal} onOpenChange={setShowLegalModal}>
         <DialogContent className="bg-zinc-900 border-zinc-800 max-w-md">
           <DialogHeader>
-            <DialogTitle className="font-bebas text-2xl text-gold tracking-wider">
+            <DialogTitle 
+              className="font-bebas text-2xl tracking-wider"
+              style={{ color: '#D4AF37' }}
+            >
               LEGAL DISCLAIMER
             </DialogTitle>
           </DialogHeader>
