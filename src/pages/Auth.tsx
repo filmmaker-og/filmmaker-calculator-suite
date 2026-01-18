@@ -5,9 +5,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Mail, ArrowLeft, Loader2, Shield } from "lucide-react";
+import { Mail, Loader2, ShieldCheck, Home } from "lucide-react";
 import { z } from "zod";
 import brandIconF from "@/assets/brand-icon-f.jpg";
+import MobileMenu from "@/components/MobileMenu";
 
 const emailSchema = z.string().email("Please enter a valid email address");
 
@@ -76,134 +77,143 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-6 py-12" style={{ backgroundColor: '#000000' }}>
-      {/* Back Button */}
-      <button
-        onClick={() => navigate("/")}
-        className="absolute top-6 left-6 text-[#888888] hover:text-[#D4AF37] flex items-center gap-2 text-sm tracking-widest uppercase transition-colors"
-      >
-        <ArrowLeft className="w-4 h-4" />
-        Back
-      </button>
-
-      {/* Gold Line Accent */}
-      <div className="absolute top-0 left-0 right-0 h-[1px]" style={{ background: 'linear-gradient(to right, transparent, #D4AF37, transparent)' }} />
-
-      <div className="w-full max-w-md">
-        {/* Brand Seal - The "F" Crest */}
-        <div className="text-center mb-10">
-          <div className="w-20 h-20 mx-auto mb-6 border-2 overflow-hidden" style={{ borderColor: '#D4AF37' }}>
-            <img 
-              src={brandIconF} 
-              alt="Brand Seal" 
-              className="w-full h-full object-contain"
-            />
-          </div>
-          <h1 className="font-bebas text-4xl md:text-5xl text-white mb-3">
-            VAULT ACCESS
-          </h1>
-          <p className="text-[#888888] text-sm tracking-wide">
-            Secure authentication required
-          </p>
-        </div>
-
-        {/* Auth Card - Terminal Structure */}
-        <div className="border-2 overflow-hidden" style={{ borderColor: '#D4AF37' }}>
-          {/* Terminal Header Strip - Matte Carbon */}
-          <div 
-            className="flex items-center gap-2 py-4 px-6"
-            style={{ backgroundColor: '#111111', borderBottom: '1px solid #333333' }}
-          >
-            <Shield className="w-4 h-4" style={{ color: '#D4AF37' }} />
-            <span className="text-xs tracking-[0.3em] uppercase font-mono" style={{ color: '#D4AF37' }}>
-              Secure Access Terminal
-            </span>
-          </div>
-
-          {/* Vault Body - Void Black */}
-          <div className="p-8" style={{ backgroundColor: '#000000' }}>
-            {!magicLinkSent ? (
-              <>
-                {/* Magic Link Form */}
-                <form onSubmit={handleMagicLink} className="space-y-6">
-                  <div className="space-y-3">
-                    <Label htmlFor="email" className="text-xs tracking-[0.2em] uppercase font-mono" style={{ color: '#D4AF37' }}>
-                      Enter Authorized Email
-                    </Label>
-                    <div className="relative">
-                      <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5" style={{ color: 'rgba(212, 175, 55, 0.6)' }} />
-                      <Input
-                        id="email"
-                        type="email"
-                        placeholder="you@company.com"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        inputMode="email"
-                        className="pl-12 py-5 rounded-sm text-white placeholder:text-[#666666] font-mono tracking-wide touch-input focus:ring-1 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors"
-                        style={{ backgroundColor: '#070707', borderColor: '#333333' }}
-                        required
-                      />
-                    </div>
-                  </div>
-                  <Button
-                    type="submit"
-                    disabled={loading}
-                    className="w-full h-14 rounded-sm font-inter tracking-widest text-black transition-colors"
-                    style={{ backgroundColor: '#D4AF37' }}
-                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#F9E076'}
-                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#D4AF37'}
-                    size="lg"
-                  >
-                    {loading ? (
-                      <Loader2 className="w-5 h-5 animate-spin" />
-                    ) : (
-                      "REQUEST SECURE ACCESS KEY"
-                    )}
-                  </Button>
-                </form>
-
-                <p className="text-[10px] text-center tracking-wide font-mono mt-6" style={{ color: 'rgba(136, 136, 136, 0.6)' }}>
-                  A one-time access key will be sent to your email
-                </p>
-              </>
-            ) : (
-              <div className="text-center py-8">
-                <div className="w-16 h-16 border-2 flex items-center justify-center mx-auto mb-6 animate-pulse" style={{ borderColor: '#D4AF37' }}>
-                  <Mail className="w-8 h-8" style={{ color: '#D4AF37' }} />
-                </div>
-                <h2 className="font-bebas text-2xl text-white mb-3">
-                  CHECK YOUR EMAIL
-                </h2>
-                <p className="text-[#888888] text-sm mb-6">
-                  We've sent a secure login link to<br />
-                  <span className="text-white font-medium">{email}</span>
-                </p>
-                <button
-                  onClick={() => setMagicLinkSent(false)}
-                  className="text-sm tracking-widest uppercase transition-colors"
-                  style={{ color: '#D4AF37' }}
-                  onMouseEnter={(e) => e.currentTarget.style.color = '#F9E076'}
-                  onMouseLeave={(e) => e.currentTarget.style.color = '#D4AF37'}
-                >
-                  Try a different email
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
-
-        <p className="text-center text-xs mt-8 tracking-wide" style={{ color: '#888888' }}>
-          No passwords required. Bank-grade security.
-        </p>
-
-        {/* Demo Access Link */}
+    <div className="min-h-screen flex flex-col" style={{ backgroundColor: '#000000' }}>
+      {/* Global Command Bar - Fixed Header */}
+      <header className="fixed top-0 left-0 right-0 h-14 z-50 flex items-center px-6 border-b border-zinc-900" style={{ backgroundColor: '#000000' }}>
+        {/* Left: Home Icon */}
         <button
-          onClick={() => navigate("/calculator?reset=true")}
-          className="block mx-auto mt-4 text-[11px] tracking-wide transition-colors hover:underline"
-          style={{ color: '#555555' }}
+          onClick={() => navigate("/")}
+          className="w-10 h-10 flex items-center justify-center hover:opacity-80 transition-opacity"
         >
-          Demo Access
+          <Home className="w-5 h-5" style={{ color: '#D4AF37' }} />
         </button>
+        
+        {/* Center: Brand Title */}
+        <span className="flex-1 text-center font-bebas text-xl tracking-widest" style={{ color: '#D4AF37' }}>
+          FILMMAKER.OG
+        </span>
+        
+        {/* Right: Hamburger Menu */}
+        <MobileMenu />
+      </header>
+
+      {/* Main Content - Centered with padding for header */}
+      <div className="flex-1 flex flex-col items-center justify-center px-6 py-12 pt-20">
+        <div className="w-full max-w-md">
+          {/* Brand Seal - The "F" Crest */}
+          <div className="text-center mb-10">
+            <div className="w-20 h-20 mx-auto mb-6 border-2 overflow-hidden" style={{ borderColor: '#D4AF37' }}>
+              <img 
+                src={brandIconF} 
+                alt="Brand Seal" 
+                className="w-full h-full object-contain"
+              />
+            </div>
+            <h1 className="font-bebas text-4xl md:text-5xl text-white mb-3">
+              VAULT ACCESS
+            </h1>
+            <p className="text-[#888888] text-sm tracking-wide">
+              Secure authentication required
+            </p>
+          </div>
+
+          {/* Auth Card - Terminal Structure */}
+          <div className="border-2 overflow-hidden" style={{ borderColor: '#D4AF37' }}>
+            {/* Terminal Header Strip - Matte Carbon */}
+            <div 
+              className="flex items-center gap-2 py-4 px-6"
+              style={{ backgroundColor: '#111111', borderBottom: '1px solid #333333' }}
+            >
+              <ShieldCheck className="w-4 h-4" fill="#D4AF37" style={{ color: '#D4AF37' }} />
+              <span className="text-xs tracking-[0.3em] uppercase font-mono" style={{ color: '#D4AF37' }}>
+                Secure Access Terminal
+              </span>
+            </div>
+
+            {/* Vault Body - Void Black */}
+            <div className="p-8" style={{ backgroundColor: '#000000' }}>
+              {!magicLinkSent ? (
+                <>
+                  {/* Magic Link Form */}
+                  <form onSubmit={handleMagicLink} className="space-y-6">
+                    <div className="space-y-3">
+                      <Label htmlFor="email" className="text-xs tracking-[0.2em] uppercase font-mono" style={{ color: '#D4AF37' }}>
+                        Enter Authorized Email
+                      </Label>
+                      <div className="relative">
+                        <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5" style={{ color: 'rgba(212, 175, 55, 0.6)' }} />
+                        <Input
+                          id="email"
+                          type="email"
+                          placeholder="you@company.com"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          inputMode="email"
+                          className="pl-12 py-5 rounded-sm text-white placeholder:text-[#666666] font-mono tracking-wide touch-input focus:ring-1 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors"
+                          style={{ backgroundColor: '#070707', borderColor: '#333333' }}
+                          required
+                        />
+                      </div>
+                    </div>
+                    <Button
+                      type="submit"
+                      disabled={loading}
+                      className="w-full h-14 rounded-sm font-inter tracking-widest text-black transition-colors"
+                      style={{ backgroundColor: '#D4AF37' }}
+                      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#F9E076'}
+                      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#D4AF37'}
+                      size="lg"
+                    >
+                      {loading ? (
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                      ) : (
+                        "REQUEST SECURE ACCESS KEY"
+                      )}
+                    </Button>
+                  </form>
+
+                  <p className="text-[10px] text-center tracking-wide font-mono mt-6" style={{ color: 'rgba(136, 136, 136, 0.6)' }}>
+                    A one-time access key will be sent to your email
+                  </p>
+                </>
+              ) : (
+                <div className="text-center py-8">
+                  <div className="w-16 h-16 border-2 flex items-center justify-center mx-auto mb-6 animate-pulse" style={{ borderColor: '#D4AF37' }}>
+                    <Mail className="w-8 h-8" style={{ color: '#D4AF37' }} />
+                  </div>
+                  <h2 className="font-bebas text-2xl text-white mb-3">
+                    CHECK YOUR EMAIL
+                  </h2>
+                  <p className="text-[#888888] text-sm mb-6">
+                    We've sent a secure login link to<br />
+                    <span className="text-white font-medium">{email}</span>
+                  </p>
+                  <button
+                    onClick={() => setMagicLinkSent(false)}
+                    className="text-sm tracking-widest uppercase transition-colors"
+                    style={{ color: '#D4AF37' }}
+                    onMouseEnter={(e) => e.currentTarget.style.color = '#F9E076'}
+                    onMouseLeave={(e) => e.currentTarget.style.color = '#D4AF37'}
+                  >
+                    Try a different email
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <p className="text-center text-xs mt-8 tracking-wide" style={{ color: '#888888' }}>
+            No passwords required. Bank-grade security.
+          </p>
+
+          {/* Demo Access Link - Subtle */}
+          <button
+            onClick={() => navigate("/calculator?reset=true")}
+            className="block mx-auto mt-4 text-[10px] tracking-wide transition-colors hover:underline text-zinc-800 hover:text-zinc-600"
+          >
+            Demo Access
+          </button>
+        </div>
       </div>
     </div>
   );
