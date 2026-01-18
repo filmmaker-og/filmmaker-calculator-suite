@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
@@ -35,6 +35,7 @@ const defaultGuilds: GuildState = {
 
 const Calculator = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { toast } = useToast();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
@@ -44,8 +45,20 @@ const Calculator = () => {
   const [guilds, setGuilds] = useState<GuildState>(defaultGuilds);
   const [result, setResult] = useState<WaterfallResult | null>(null);
 
-  // Load saved inputs from localStorage
+  // Check for reset parameter (demo mode entry)
   useEffect(() => {
+    if (searchParams.get("reset") === "true") {
+      localStorage.removeItem(STORAGE_KEY);
+      setCurrentStep(1);
+      setInputs(defaultInputs);
+      setGuilds(defaultGuilds);
+    }
+  }, [searchParams]);
+
+  // Load saved inputs from localStorage (only if not resetting)
+  useEffect(() => {
+    if (searchParams.get("reset") === "true") return;
+    
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
       try {
@@ -57,7 +70,7 @@ const Calculator = () => {
         console.error("Failed to load saved inputs");
       }
     }
-  }, []);
+  }, [searchParams]);
 
   // Save to localStorage on change
   useEffect(() => {

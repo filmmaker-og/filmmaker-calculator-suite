@@ -198,7 +198,7 @@ const Auth = () => {
 
         {/* Demo Access Link */}
         <button
-          onClick={() => navigate("/calculator")}
+          onClick={() => navigate("/calculator?reset=true")}
           className="block mx-auto mt-4 text-[11px] tracking-wide transition-colors hover:underline"
           style={{ color: '#555555' }}
         >
