@@ -5,10 +5,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Lock, Mail, ArrowLeft, Loader2 } from "lucide-react";
+import { Lock, Mail, ArrowLeft, Loader2, Play } from "lucide-react";
 import { z } from "zod";
 
 const emailSchema = z.string().email("Please enter a valid email address");
+
+// Demo mode flag - set to true for testing without auth
+const DEMO_MODE_ENABLED = true;
 
 const Auth = () => {
   const navigate = useNavigate();
@@ -127,8 +130,31 @@ const Auth = () => {
 
         {/* Auth Card */}
         <div className="glass-card p-8 space-y-6">
-          {!magicLinkSent ? (
+        {!magicLinkSent ? (
             <>
+              {/* Demo Mode Bypass */}
+              {DEMO_MODE_ENABLED && (
+                <div className="mb-6">
+                  <Button
+                    onClick={() => navigate("/calculator")}
+                    className="w-full py-6 rounded-none btn-vault"
+                    size="lg"
+                  >
+                    <Play className="w-5 h-5 mr-3" />
+                    ENTER DEMO MODE
+                  </Button>
+                  <p className="text-dim text-xs text-center mt-2">
+                    Skip authentication for testing
+                  </p>
+                  
+                  <div className="flex items-center gap-4 my-6">
+                    <div className="flex-1 h-[1px] bg-border" />
+                    <span className="text-dim text-xs uppercase tracking-widest">or authenticate</span>
+                    <div className="flex-1 h-[1px] bg-border" />
+                  </div>
+                </div>
+              )}
+              
               {/* Google OAuth - Primary for Mobile */}
               <Button
                 onClick={handleGoogleSignIn}
