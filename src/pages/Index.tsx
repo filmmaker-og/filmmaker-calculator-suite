@@ -46,23 +46,23 @@ const Index = () => {
           />
           
           {/* Brand Text */}
-          <h1 className="font-bebas text-5xl md:text-6xl lg:text-7xl text-white tracking-tighter leading-none">
+          <h1 className="font-bebas text-7xl md:text-8xl lg:text-[10rem] text-white tracking-tighter leading-none">
             FILMMAKER.OG
           </h1>
         </div>
         
         {/* THE HERO */}
         <div className="mb-12">
-          {/* Label */}
+          {/* Label - Single Line */}
           <p 
-            className="text-xs md:text-sm tracking-[0.3em] uppercase mb-4"
+            className="text-[10px] md:text-xs tracking-[0.3em] uppercase mb-6 whitespace-nowrap"
             style={{ color: '#D4AF37' }}
           >
             STREAMER ACQUISITION CALCULATOR
           </p>
           
-          {/* Headline */}
-          <h2 className="font-bebas text-2xl md:text-3xl lg:text-4xl text-white leading-tight max-w-2xl">
+          {/* Headline - Multiple Lines */}
+          <h2 className="font-bebas text-3xl md:text-4xl lg:text-5xl text-white leading-tight max-w-[280px] md:max-w-xs mx-auto">
             DEMOCRATIZING THE BUSINESS OF FILM
           </h2>
         </div>
