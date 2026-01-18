@@ -1,16 +1,37 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
-const MobileMenu = () => {
+interface MobileMenuProps {
+  onOpenLegal?: () => void;
+}
+
+const MobileMenu = ({ onOpenLegal }: MobileMenuProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [showLegalModal, setShowLegalModal] = useState(false);
+
+  const handleLegalClick = () => {
+    setIsOpen(false);
+    if (onOpenLegal) {
+      onOpenLegal();
+    } else {
+      setShowLegalModal(true);
+    }
+  };
 
   const menuLinks = [
     { label: "ABOUT", href: "#about" },
     { label: "SERVICES", href: "/store" },
     { label: "CONTACT", href: "mailto:support@filmmaker.og" },
-    { label: "LEGAL", href: "#legal" },
   ];
+
+  const legalText = "Educational disclaimer: For educational purposes only. This calculator is a simplified model and is not legal, tax, accounting, or investment advice. This assumes a bankable sales agent and commercially viable cast. Deal outcomes vary by contract definitions (e.g., gross vs adjusted gross), corridor fees, reserves/holdbacks, timing of cashflows, collection account management, audit results, chargebacks, and other negotiated terms. Consult a qualified entertainment attorney and financial advisor.";
 
   return (
     <>
@@ -73,6 +94,14 @@ const MobileMenu = () => {
                   </button>
                 )
               ))}
+              
+              {/* Legal Button */}
+              <button
+                onClick={handleLegalClick}
+                className="font-bebas text-4xl text-foreground hover:text-gold transition-colors tracking-wider"
+              >
+                LEGAL
+              </button>
             </nav>
           </div>
 
@@ -89,6 +118,20 @@ const MobileMenu = () => {
           </div>
         </div>
       )}
+
+      {/* Legal Modal */}
+      <Dialog open={showLegalModal} onOpenChange={setShowLegalModal}>
+        <DialogContent className="bg-surface border-border max-w-md">
+          <DialogHeader>
+            <DialogTitle className="font-bebas text-2xl text-gold tracking-wider">
+              LEGAL DISCLAIMER
+            </DialogTitle>
+          </DialogHeader>
+          <p className="text-muted-foreground text-sm leading-relaxed">
+            {legalText}
+          </p>
+        </DialogContent>
+      </Dialog>
     </>
   );
 };
