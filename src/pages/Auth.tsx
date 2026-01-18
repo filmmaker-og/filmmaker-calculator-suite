@@ -5,13 +5,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Lock, Mail, ArrowLeft, Loader2, Play, Shield } from "lucide-react";
+import { Mail, ArrowLeft, Loader2, Shield } from "lucide-react";
 import { z } from "zod";
+import brandIconF from "@/assets/brand-icon-f.jpg";
 
 const emailSchema = z.string().email("Please enter a valid email address");
-
-// Demo mode flag - set to false to hide demo button
-const DEMO_MODE_ENABLED = false;
 
 const Auth = () => {
   const navigate = useNavigate();
@@ -78,74 +76,55 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col items-center justify-center px-6 py-12">
+    <div className="min-h-screen flex flex-col items-center justify-center px-6 py-12" style={{ backgroundColor: '#000000' }}>
       {/* Back Button */}
       <button
         onClick={() => navigate("/")}
-        className="absolute top-6 left-6 text-muted-foreground hover:text-gold flex items-center gap-2 text-sm tracking-widest uppercase transition-colors"
+        className="absolute top-6 left-6 text-[#888888] hover:text-[#D4AF37] flex items-center gap-2 text-sm tracking-widest uppercase transition-colors"
       >
         <ArrowLeft className="w-4 h-4" />
         Back
       </button>
 
       {/* Gold Line Accent */}
-      <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-gold to-transparent" />
+      <div className="absolute top-0 left-0 right-0 h-[1px]" style={{ background: 'linear-gradient(to right, transparent, #D4AF37, transparent)' }} />
 
       <div className="w-full max-w-md">
-        {/* Header */}
+        {/* Header - Brand Seal */}
         <div className="text-center mb-10">
-          <div className="w-16 h-16 border border-gold flex items-center justify-center mx-auto mb-6">
-            <Lock className="w-8 h-8 text-gold" />
+          <div className="w-16 h-16 mx-auto mb-6 border-2 overflow-hidden" style={{ borderColor: '#D4AF37' }}>
+            <img 
+              src={brandIconF} 
+              alt="Brand Seal" 
+              className="w-full h-full object-contain"
+            />
           </div>
-          <h1 className="font-bebas text-4xl md:text-5xl text-foreground mb-3">
+          <h1 className="font-bebas text-4xl md:text-5xl text-white mb-3">
             VAULT ACCESS
           </h1>
-          <p className="text-muted-foreground text-sm tracking-wide">
+          <p className="text-[#888888] text-sm tracking-wide">
             Secure authentication required
           </p>
         </div>
 
-        {/* Auth Card */}
-        <div className="glass-card p-6 space-y-6 border-gold/30">
+        {/* Auth Card - Monolith Style */}
+        <div className="p-6 space-y-6 border-2" style={{ backgroundColor: '#070707', borderColor: '#D4AF37' }}>
           {/* Terminal Header */}
-          <div className="flex items-center gap-2 pb-4 border-b border-border">
-            <Shield className="w-4 h-4 text-gold" />
-            <span className="text-gold text-xs tracking-[0.3em] uppercase font-mono">Secure Access Terminal</span>
+          <div className="flex items-center gap-2 pb-4" style={{ borderBottom: '1px solid #333333' }}>
+            <Shield className="w-4 h-4" style={{ color: '#D4AF37' }} />
+            <span className="text-xs tracking-[0.3em] uppercase font-mono" style={{ color: '#D4AF37' }}>Secure Access Terminal</span>
           </div>
 
           {!magicLinkSent ? (
             <>
-              {/* Demo Mode Bypass */}
-              {DEMO_MODE_ENABLED && (
-                <div className="mb-6">
-                  <Button
-                    onClick={() => navigate("/calculator")}
-                    className="w-full py-5 btn-vault"
-                    size="lg"
-                  >
-                    <Play className="w-5 h-5 mr-3" />
-                    ENTER DEMO MODE
-                  </Button>
-                  <p className="text-muted-foreground text-xs text-center mt-2">
-                    Skip authentication for testing
-                  </p>
-                  
-                  <div className="flex items-center gap-4 my-6">
-                    <div className="flex-1 h-[1px] bg-border" />
-                    <span className="text-muted-foreground text-xs uppercase tracking-widest">or authenticate</span>
-                    <div className="flex-1 h-[1px] bg-border" />
-                  </div>
-                </div>
-              )}
-
               {/* Magic Link Form */}
               <form onSubmit={handleMagicLink} className="space-y-5">
                 <div className="space-y-3">
-                  <Label htmlFor="email" className="text-gold text-xs tracking-[0.2em] uppercase font-mono">
+                  <Label htmlFor="email" className="text-xs tracking-[0.2em] uppercase font-mono" style={{ color: '#D4AF37' }}>
                     Enter Authorized Email
                   </Label>
                   <div className="relative">
-                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gold/60" />
+                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5" style={{ color: 'rgba(212, 175, 55, 0.6)' }} />
                     <Input
                       id="email"
                       type="email"
@@ -153,7 +132,8 @@ const Auth = () => {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       inputMode="email"
-                      className="pl-12 py-5 bg-surface border-border rounded-md text-foreground placeholder:text-muted-foreground/50 gold-glow-focus font-mono tracking-wide touch-input"
+                      className="pl-12 py-5 rounded-sm text-white placeholder:text-[#666666] font-mono tracking-wide touch-input focus:ring-1 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors"
+                      style={{ backgroundColor: '#070707', borderColor: '#333333' }}
                       required
                     />
                   </div>
@@ -161,39 +141,38 @@ const Auth = () => {
                 <Button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-5 btn-vault group"
+                  className="w-full h-14 rounded-sm font-inter tracking-widest text-black hover:opacity-90 transition-opacity"
+                  style={{ backgroundColor: '#D4AF37' }}
                   size="lg"
                 >
                   {loading ? (
                     <Loader2 className="w-5 h-5 animate-spin" />
                   ) : (
-                    <>
-                      <Lock className="w-4 h-4 mr-3" />
-                      REQUEST SECURE ACCESS KEY
-                    </>
+                    "REQUEST SECURE ACCESS KEY"
                   )}
                 </Button>
               </form>
 
-              <p className="text-muted-foreground/60 text-[10px] text-center tracking-wide font-mono">
+              <p className="text-[10px] text-center tracking-wide font-mono" style={{ color: 'rgba(136, 136, 136, 0.6)' }}>
                 A one-time access key will be sent to your email
               </p>
             </>
           ) : (
             <div className="text-center py-8">
-              <div className="w-16 h-16 border border-gold flex items-center justify-center mx-auto mb-6 animate-pulse-gold">
-                <Mail className="w-8 h-8 text-gold" />
+              <div className="w-16 h-16 border-2 flex items-center justify-center mx-auto mb-6 animate-pulse" style={{ borderColor: '#D4AF37' }}>
+                <Mail className="w-8 h-8" style={{ color: '#D4AF37' }} />
               </div>
-              <h2 className="font-bebas text-2xl text-foreground mb-3">
+              <h2 className="font-bebas text-2xl text-white mb-3">
                 CHECK YOUR EMAIL
               </h2>
-              <p className="text-muted-foreground text-sm mb-6">
+              <p className="text-[#888888] text-sm mb-6">
                 We've sent a secure login link to<br />
-                <span className="text-foreground font-medium">{email}</span>
+                <span className="text-white font-medium">{email}</span>
               </p>
               <button
                 onClick={() => setMagicLinkSent(false)}
-                className="text-gold text-sm tracking-widest uppercase hover:underline"
+                className="text-sm tracking-widest uppercase hover:underline"
+                style={{ color: '#D4AF37' }}
               >
                 Try a different email
               </button>
@@ -201,7 +180,7 @@ const Auth = () => {
           )}
         </div>
 
-        <p className="text-center text-muted-foreground text-xs mt-8 tracking-wide">
+        <p className="text-center text-xs mt-8 tracking-wide" style={{ color: '#888888' }}>
           No passwords required. Bank-grade security.
         </p>
       </div>
