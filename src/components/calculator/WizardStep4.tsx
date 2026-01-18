@@ -65,14 +65,6 @@ const WizardStep4 = ({ revenue, onUpdate }: WizardStep4Props) => {
               onFocus={(e) => e.target.select()}
             />
           </div>
-
-          {/* Tip */}
-          <p className="text-zinc-500 text-sm mt-4 leading-relaxed">
-            <span style={{ color: '#D4AF37' }} className="font-semibold">THE COST-PLUS MODEL:</span> For illustration purposes, this assumes a standard Streamer Cost-Plus deal. Enter the total negotiated purchase price.
-          </p>
-          <p className="text-zinc-600 text-xs mt-2 italic">
-            (Typically Negative Cost + 15-30% Premium)
-          </p>
         </div>
       </div>
 
