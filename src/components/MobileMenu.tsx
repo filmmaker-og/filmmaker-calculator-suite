@@ -15,6 +15,7 @@ interface MobileMenuProps {
 const MobileMenu = ({ onOpenLegal }: MobileMenuProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [showLegalModal, setShowLegalModal] = useState(false);
+  const [showAboutModal, setShowAboutModal] = useState(false);
 
   const handleLegalClick = () => {
     setIsOpen(false);
@@ -25,8 +26,13 @@ const MobileMenu = ({ onOpenLegal }: MobileMenuProps) => {
     }
   };
 
+  const handleAboutClick = () => {
+    setIsOpen(false);
+    setShowAboutModal(true);
+  };
+
   const menuLinks = [
-    { label: "ABOUT", href: "#about" },
+    { label: "ABOUT", href: "#about", onClick: handleAboutClick },
     { label: "SERVICES", href: "/store" },
     { label: "CONTACT", href: "mailto:support@filmmaker.og" },
   ];
@@ -66,7 +72,15 @@ const MobileMenu = ({ onOpenLegal }: MobileMenuProps) => {
             {/* Navigation Links */}
             <nav className="flex flex-col items-center gap-8">
               {menuLinks.map((link) => (
-                link.href.startsWith("/") ? (
+                link.onClick ? (
+                  <button
+                    key={link.label}
+                    onClick={link.onClick}
+                    className="font-bebas text-4xl text-foreground hover:text-gold transition-colors tracking-wider"
+                  >
+                    {link.label}
+                  </button>
+                ) : link.href.startsWith("/") ? (
                   <Link
                     key={link.label}
                     to={link.href}
@@ -130,6 +144,31 @@ const MobileMenu = ({ onOpenLegal }: MobileMenuProps) => {
           <p className="text-muted-foreground text-sm leading-relaxed">
             {legalText}
           </p>
+        </DialogContent>
+      </Dialog>
+
+      {/* About Modal */}
+      <Dialog open={showAboutModal} onOpenChange={setShowAboutModal}>
+        <DialogContent className="bg-surface border-border max-w-lg">
+          <DialogHeader>
+            <DialogTitle className="font-bebas text-2xl text-gold tracking-wider">
+              DEMOCRATIZING THE BUSINESS OF FILM
+            </DialogTitle>
+          </DialogHeader>
+          <div className="text-zinc-400 text-sm leading-relaxed space-y-4">
+            <p>
+              We provide institutional-grade film finance intelligence to producers operating in the $1M–$10M budget range.
+            </p>
+            <p>
+              <span className="font-bold text-white">THE PEDIGREE</span> Second-generation filmmaker. Festival winner. Former Major Agency client. We teach Cost-Plus buyout structures, all-rights valuation, platform negotiation strategies, and SPV structuring—the frameworks that determine whether your film gets financed or dies in development.
+            </p>
+            <p>
+              <span className="font-bold text-white">THE SHADOW MANDATE</span> We operate without attribution. This allows us to teach the actual mechanics—what moves Netflix deals, when Amazon pays premiums, how to price perpetual rights—without the political constraints that force industry insiders to soften the truth.
+            </p>
+            <p>
+              This is the business intelligence required to treat independent film as an asset class.
+            </p>
+          </div>
         </DialogContent>
       </Dialog>
     </>
