@@ -48,15 +48,16 @@ const Calculator = () => {
   const [guilds, setGuilds] = useState<GuildState>(defaultGuilds);
   const [result, setResult] = useState<WaterfallResult | null>(null);
 
-  // Check for reset parameter (demo mode entry)
+  // Check for reset parameter (demo mode entry) - only run once on mount
   useEffect(() => {
     if (searchParams.get("reset") === "true") {
       localStorage.removeItem(STORAGE_KEY);
-      setCurrentStep(1);
       setInputs(defaultInputs);
       setGuilds(defaultGuilds);
+      // Don't reset step - allow user to navigate freely
     }
-  }, [searchParams]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Load saved inputs from localStorage (only if not resetting)
   useEffect(() => {
