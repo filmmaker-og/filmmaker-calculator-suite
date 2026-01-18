@@ -7,7 +7,7 @@ export default {
   theme: {
     container: {
       center: true,
-      padding: "2rem",
+      padding: "1.5rem",
       screens: {
         "2xl": "1400px",
       },
@@ -19,10 +19,12 @@ export default {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
-        // Custom Palette
+        // PRD Custom Palette
         gold: "hsl(var(--gold))",
-        mid: "hsl(var(--mid))",
-        dim: "hsl(var(--dim))",
+        surface: "hsl(var(--surface))",
+        "text-high": "hsl(var(--text-high))",
+        "text-muted": "hsl(var(--text-muted))",
+        "border-subtle": "hsl(var(--border-subtle))",
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
@@ -54,7 +56,7 @@ export default {
       },
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
-        display: ['Bebas Neue', 'Impact', 'sans-serif'],
+        bebas: ['Bebas Neue', 'Impact', 'sans-serif'],
         mono: ['Roboto Mono', 'monospace'],
       },
       borderRadius: {
@@ -83,6 +85,14 @@ export default {
           "0%, 100%": { boxShadow: "0 0 20px hsl(43 66% 52% / 0.3)" },
           "50%": { boxShadow: "0 0 40px hsl(43 66% 52% / 0.6)" },
         },
+        "slide-in-right": {
+          from: { transform: "translateX(100%)", opacity: "0" },
+          to: { transform: "translateX(0)", opacity: "1" },
+        },
+        "slide-out-right": {
+          from: { transform: "translateX(0)", opacity: "1" },
+          to: { transform: "translateX(100%)", opacity: "0" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -90,6 +100,8 @@ export default {
         "fade-in": "fade-in 0.5s ease-out forwards",
         "scale-in": "scale-in 0.3s ease-out forwards",
         "pulse-gold": "pulse-gold 2s ease-in-out infinite",
+        "slide-in-right": "slide-in-right 0.3s ease-out forwards",
+        "slide-out-right": "slide-out-right 0.3s ease-out forwards",
       },
     },
   },

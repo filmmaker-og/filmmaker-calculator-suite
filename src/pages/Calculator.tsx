@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { LogOut, Save, Loader2 } from "lucide-react";
+import { LogOut, ChevronLeft, ChevronRight } from "lucide-react";
 import { User } from "@supabase/supabase-js";
 import WizardStep1 from "@/components/calculator/WizardStep1";
 import WizardStep2 from "@/components/calculator/WizardStep2";
@@ -11,6 +11,7 @@ import WizardStep3 from "@/components/calculator/WizardStep3";
 import WizardStep4 from "@/components/calculator/WizardStep4";
 import WizardStep5 from "@/components/calculator/WizardStep5";
 import WizardStep6 from "@/components/calculator/WizardStep6";
+import MobileMenu from "@/components/MobileMenu";
 import { calculateWaterfall, WaterfallInputs, WaterfallResult, GuildState } from "@/lib/waterfall";
 
 const STORAGE_KEY = "filmmaker_og_inputs";
@@ -74,7 +75,6 @@ const Calculator = () => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       setUser(session?.user ?? null);
       setLoading(false);
-      // Allow access even without auth for demo mode
     });
 
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -100,7 +100,13 @@ const Calculator = () => {
   }, []);
 
   const handleSaveCalculation = async () => {
-    if (!user) return;
+    if (!user) {
+      toast({
+        title: "Success",
+        description: "Calculation saved to local storage (demo mode).",
+      });
+      return;
+    }
     
     setSaving(true);
     try {
@@ -115,7 +121,7 @@ const Calculator = () => {
 
       toast({
         title: "Calculation Saved",
-        description: "Your waterfall model has been saved to your vault.",
+        description: "Your waterfall model has been saved to your dashboard.",
       });
     } catch (error: any) {
       toast({
@@ -140,25 +146,29 @@ const Calculator = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
+    <div className="min-h-screen bg-background flex flex-col">
+      {/* Mobile Menu */}
+      <MobileMenu />
+
+      {/* Header - Minimal */}
       <header className="border-b border-border px-6 py-4">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
+        <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 border border-gold flex items-center justify-center">
-              <span className="font-display text-gold text-sm">F</span>
-            </div>
-            <span className="font-display text-mid tracking-[0.2em] text-xs hidden sm:block">
+            <span className="font-bebas text-xl text-foreground tracking-wider">
               WATERFALL TERMINAL
             </span>
           </div>
-          <div className="flex items-center gap-4">
-            <span className="text-dim text-xs hidden sm:block">{user?.email}</span>
+          <div className="flex items-center gap-3">
+            {user && (
+              <span className="text-muted-foreground text-xs hidden sm:block truncate max-w-32">
+                {user.email}
+              </span>
+            )}
             <Button
               onClick={handleSignOut}
               variant="ghost"
               size="sm"
-              className="text-dim hover:text-gold"
+              className="text-muted-foreground hover:text-gold p-2"
             >
               <LogOut className="w-4 h-4" />
             </Button>
@@ -167,27 +177,25 @@ const Calculator = () => {
       </header>
 
       {/* Progress Bar */}
-      <div className="border-b border-border">
-        <div className="max-w-6xl mx-auto px-6 py-4">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-dim text-xs uppercase tracking-widest">
-              Step {currentStep} of 6
-            </span>
-            <span className="text-gold text-xs font-mono">
-              {Math.round((currentStep / 6) * 100)}%
-            </span>
-          </div>
-          <div className="progress-gold h-1">
-            <div 
-              className="progress-gold-fill h-full"
-              style={{ width: `${(currentStep / 6) * 100}%` }}
-            />
-          </div>
+      <div className="border-b border-border px-6 py-3">
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-muted-foreground text-xs uppercase tracking-widest">
+            Step {currentStep} of 6
+          </span>
+          <span className="text-gold text-xs font-mono">
+            {Math.round((currentStep / 6) * 100)}%
+          </span>
+        </div>
+        <div className="progress-gold h-1">
+          <div 
+            className="progress-gold-fill h-full"
+            style={{ width: `${(currentStep / 6) * 100}%` }}
+          />
         </div>
       </div>
 
       {/* Step Content */}
-      <main className="max-w-4xl mx-auto px-6 py-8">
+      <main className="flex-1 px-6 py-6 overflow-y-auto">
         {currentStep === 1 && (
           <WizardStep1 
             budget={inputs.budget} 
@@ -227,41 +235,32 @@ const Calculator = () => {
             saving={saving}
           />
         )}
+      </main>
 
-        {/* Navigation */}
-        <div className="flex items-center justify-between mt-12 pt-8 border-t border-border">
+      {/* Fixed Bottom Navigation */}
+      <div className="border-t border-border px-6 py-4 bg-background">
+        <div className="flex items-center justify-between gap-4">
           <Button
             onClick={prevStep}
             disabled={currentStep === 1}
             variant="ghost"
-            className="text-dim hover:text-foreground disabled:opacity-30"
+            className="text-muted-foreground hover:text-foreground disabled:opacity-30 flex-1 py-4"
           >
-            ← Previous
+            <ChevronLeft className="w-5 h-5 mr-1" />
+            Previous
           </Button>
           
-          {currentStep < 6 ? (
+          {currentStep < 6 && (
             <Button
               onClick={nextStep}
-              className="btn-vault px-8 py-4 rounded-none"
+              className="btn-vault flex-1 py-4"
             >
-              Continue →
-            </Button>
-          ) : (
-            <Button
-              onClick={handleSaveCalculation}
-              disabled={saving}
-              className="btn-vault px-8 py-4 rounded-none"
-            >
-              {saving ? (
-                <Loader2 className="w-4 h-4 animate-spin mr-2" />
-              ) : (
-                <Save className="w-4 h-4 mr-2" />
-              )}
-              SAVE TO VAULT
+              NEXT STEP
+              <ChevronRight className="w-5 h-5 ml-1" />
             </Button>
           )}
         </div>
-      </main>
+      </div>
     </div>
   );
 };

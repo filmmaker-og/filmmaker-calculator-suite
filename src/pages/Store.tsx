@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ArrowLeft, Check, Volume2 } from "lucide-react";
+import MobileMenu from "@/components/MobileMenu";
 
 const packages = [
   {
@@ -16,7 +17,7 @@ const packages = [
       "Term Sheet Templates",
       "Distribution Waterfall Guides",
     ],
-    stripeLink: "#", // Replace with actual Stripe Payment Link
+    stripeLink: "#",
   },
   {
     id: "institutional",
@@ -31,7 +32,7 @@ const packages = [
       "Gap Financing Analysis",
       "60-min Strategy Call",
     ],
-    stripeLink: "#", // Replace with actual Stripe Payment Link
+    stripeLink: "#",
   },
   {
     id: "bespoke",
@@ -45,7 +46,7 @@ const packages = [
       "Investor Presentation Review",
       "Ongoing Support (30 days)",
     ],
-    stripeLink: "#", // Replace with actual Stripe Payment Link
+    stripeLink: "#",
   },
 ];
 
@@ -59,51 +60,50 @@ const Store = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      {/* Mobile Menu */}
+      <MobileMenu />
+
       {/* Header */}
       <header className="border-b border-border px-6 py-4">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
+        <div className="flex items-center justify-between">
           <Link to="/" className="flex items-center gap-3">
-            <div className="w-8 h-8 border border-gold flex items-center justify-center">
-              <span className="font-display text-gold text-sm">F</span>
-            </div>
-            <span className="font-display text-mid tracking-[0.2em] text-xs hidden sm:block">
+            <span className="font-bebas text-foreground tracking-wider text-xl">
               FILMMAKER.OG
             </span>
           </Link>
-          <Link to="/" className="text-dim hover:text-gold text-sm flex items-center gap-2 transition-colors">
+          <Link to="/" className="text-muted-foreground hover:text-gold text-sm flex items-center gap-2 transition-colors">
             <ArrowLeft className="w-4 h-4" />
             Back
           </Link>
         </div>
       </header>
 
-      <main className="max-w-6xl mx-auto px-6 py-12">
+      <main className="px-6 py-8">
         {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="font-display text-5xl md:text-6xl text-foreground mb-4">
+        <div className="text-center mb-10">
+          <h1 className="font-bebas text-4xl md:text-5xl text-foreground mb-3">
             SERVICES
           </h1>
-          <p className="text-dim text-lg max-w-2xl mx-auto">
+          <p className="text-muted-foreground text-sm max-w-md mx-auto">
             Professional film finance consulting for serious producers
           </p>
         </div>
 
         {/* Trust Bridge - Audio Player Placeholder */}
-        <div className="glass-card p-8 mb-12">
-          <div className="flex items-center gap-6">
-            <button className="w-16 h-16 border border-gold flex items-center justify-center hover:bg-gold/10 transition-colors">
-              <Volume2 className="w-8 h-8 text-gold" />
+        <div className="glass-card p-6 mb-8">
+          <div className="flex items-center gap-4">
+            <button className="w-12 h-12 border border-gold flex items-center justify-center hover:bg-gold/10 transition-colors flex-shrink-0">
+              <Volume2 className="w-6 h-6 text-gold" />
             </button>
-            <div className="flex-1">
+            <div className="flex-1 min-w-0">
               <span className="text-gold text-xs tracking-[0.2em] uppercase block mb-2">
                 Listen to the Process
               </span>
-              {/* Waveform Placeholder */}
-              <div className="flex items-center gap-1 h-8">
-                {Array.from({ length: 40 }).map((_, i) => (
+              <div className="flex items-center gap-0.5 h-6 overflow-hidden">
+                {Array.from({ length: 30 }).map((_, i) => (
                   <div
                     key={i}
-                    className="bg-gold/30 w-1 rounded-full"
+                    className="bg-gold/30 w-1 rounded-full flex-shrink-0"
                     style={{ 
                       height: `${Math.random() * 100}%`,
                       minHeight: '4px'
@@ -115,42 +115,41 @@ const Store = () => {
           </div>
         </div>
 
-        {/* Pricing Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Pricing Cards - Stacked on Mobile */}
+        <div className="space-y-6">
           {packages.map((pkg) => (
             <div
               key={pkg.id}
-              className={`glass-card p-8 flex flex-col ${
-                pkg.featured ? 'border-gold md:scale-105 md:-my-4' : ''
-              }`}
+              className={`glass-card p-6 ${pkg.featured ? 'border-gold' : ''}`}
             >
               {pkg.featured && (
-                <span className="text-gold text-xs tracking-[0.3em] uppercase mb-4">
+                <span className="text-gold text-xs tracking-[0.3em] uppercase mb-3 block">
                   Most Popular
                 </span>
               )}
               
-              <h3 className="font-display text-2xl text-foreground mb-2">
-                {pkg.name.toUpperCase()}
-              </h3>
-              <p className="text-dim text-sm mb-6">{pkg.description}</p>
-              
-              <div className="mb-6">
-                <span className="font-mono text-4xl text-gold">
+              <div className="flex items-start justify-between mb-4">
+                <div>
+                  <h3 className="font-bebas text-xl text-foreground">
+                    {pkg.name.toUpperCase()}
+                  </h3>
+                  <p className="text-muted-foreground text-xs">{pkg.description}</p>
+                </div>
+                <span className="font-mono text-2xl text-gold">
                   ${pkg.price.toLocaleString()}
                 </span>
               </div>
 
-              <ul className="space-y-3 mb-8 flex-1">
+              <ul className="space-y-2 mb-6">
                 {pkg.features.map((feature, index) => (
-                  <li key={index} className="flex items-start gap-3">
-                    <Check className="w-4 h-4 text-gold mt-1 flex-shrink-0" />
-                    <span className="text-mid text-sm">{feature}</span>
+                  <li key={index} className="flex items-start gap-2">
+                    <Check className="w-4 h-4 text-gold mt-0.5 flex-shrink-0" />
+                    <span className="text-foreground text-sm">{feature}</span>
                   </li>
                 ))}
               </ul>
 
-              <div className="space-y-4">
+              <div className="space-y-3">
                 <div className="flex items-start gap-3">
                   <Checkbox
                     id={`terms-${pkg.id}`}
@@ -162,7 +161,7 @@ const Store = () => {
                   />
                   <label 
                     htmlFor={`terms-${pkg.id}`} 
-                    className="text-dim text-xs cursor-pointer leading-relaxed"
+                    className="text-muted-foreground text-xs cursor-pointer leading-relaxed"
                   >
                     I agree this is a non-refundable consulting service
                   </label>
@@ -171,11 +170,7 @@ const Store = () => {
                 <Button
                   onClick={() => handlePurchase(pkg.id, pkg.stripeLink)}
                   disabled={!agreedTerms[pkg.id]}
-                  className={`w-full py-5 rounded-none ${
-                    pkg.featured 
-                      ? 'btn-vault' 
-                      : 'btn-ghost-gold disabled:opacity-30'
-                  }`}
+                  className={`w-full py-4 ${pkg.featured ? 'btn-vault' : 'btn-ghost-gold disabled:opacity-30'}`}
                 >
                   {agreedTerms[pkg.id] ? 'PURCHASE' : 'AGREE TO TERMS'}
                 </Button>
@@ -186,10 +181,10 @@ const Store = () => {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-border py-8 mt-12">
-        <div className="max-w-6xl mx-auto px-6 text-center">
-          <p className="text-dim text-xs tracking-wide">
-            Educational Purposes Only. Not Financial Advice.
+      <footer className="border-t border-border py-8 mt-8">
+        <div className="px-6 text-center">
+          <p className="text-muted-foreground text-xs tracking-wide leading-relaxed max-w-md mx-auto">
+            Educational disclaimer: For educational purposes only. This is not legal, tax, accounting, or investment advice. Consult a qualified entertainment attorney and financial advisor.
           </p>
         </div>
       </footer>
