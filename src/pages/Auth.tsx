@@ -170,6 +170,7 @@ const Auth = () => {
                           style={{ backgroundColor: '#070707', borderColor: '#333333' }}
                           required
                           tabIndex={1}
+                          autoFocus
                         />
                       </div>
                     </div>
