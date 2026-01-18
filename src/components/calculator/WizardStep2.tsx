@@ -182,7 +182,7 @@ const WizardStep2 = ({ inputs, onUpdate }: WizardStep2Props) => {
             borderBottom: showDebt ? '1px solid #333333' : 'none'
           }}
         >
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             <h2 className="font-bebas text-xl tracking-wider uppercase" style={{ color: '#D4AF37' }}>
               2B | DEBT SERVICE
             </h2>
@@ -190,6 +190,7 @@ const WizardStep2 = ({ inputs, onUpdate }: WizardStep2Props) => {
               <Info className="w-4 h-4" />
             </button>
           </div>
+          {/* MASTER TOGGLE FOR DEBT */}
           <Switch 
             checked={showDebt} 
             onCheckedChange={handleDebtToggle} 
@@ -317,7 +318,7 @@ const WizardStep2 = ({ inputs, onUpdate }: WizardStep2Props) => {
             borderBottom: showEquity ? '1px solid #333333' : 'none'
           }}
         >
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             <h2 className="font-bebas text-xl tracking-wider uppercase" style={{ color: '#D4AF37' }}>
               2C | INVESTOR EQUITY
             </h2>
@@ -325,6 +326,7 @@ const WizardStep2 = ({ inputs, onUpdate }: WizardStep2Props) => {
               <Info className="w-4 h-4" />
             </button>
           </div>
+          {/* MASTER TOGGLE FOR EQUITY */}
           <Switch 
             checked={showEquity} 
             onCheckedChange={handleEquityToggle} 
