@@ -5,6 +5,9 @@ export interface WaterfallInputs {
   budget: number;
   credits: number;
   debt: number;
+  seniorDebtRate: number;
+  mezzanineDebt: number;
+  mezzanineRate: number;
   equity: number;
   premium: number;
   salesFee: number;
