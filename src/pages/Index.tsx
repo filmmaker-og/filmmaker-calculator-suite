@@ -24,7 +24,7 @@ const Index = () => {
       />
 
       {/* HEADER: Logo Left, Menu Right */}
-      <header className="relative z-50 px-6 py-4 flex items-center justify-between">
+      <header className="relative z-50 px-6 py-4 flex items-center justify-between" style={{ borderBottom: '1px solid #D4AF37' }}>
         <span className="font-bebas text-xl tracking-widest" style={{ color: '#D4AF37' }}>
           FILMMAKER.OG
         </span>
