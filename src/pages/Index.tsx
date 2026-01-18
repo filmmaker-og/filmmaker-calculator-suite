@@ -8,7 +8,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import filmmakerLogo from "@/assets/filmmaker-logo.jpg";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -17,49 +16,53 @@ const Index = () => {
   const legalText = "Educational disclaimer: For educational purposes only. This calculator is a simplified model and is not legal, tax, accounting, or investment advice. This assumes a bankable sales agent and commercially viable cast. Deal outcomes vary by contract definitions (e.g., gross vs adjusted gross), corridor fees, reserves/holdbacks, timing of cashflows, collection account management, audit results, chargebacks, and other negotiated terms. Consult a qualified entertainment attorney and financial advisor.";
 
   return (
-    <div className="min-h-screen flex flex-col bg-background px-6">
-      {/* Floating Menu */}
-      <MobileMenu onOpenLegal={() => setShowLegalModal(true)} />
+    // THE VOID: Hardcoded black background with radial spotlight
+    <div className="min-h-screen flex flex-col relative overflow-hidden" style={{ backgroundColor: '#000000' }}>
       
-      {/* Main Content - Magazine Cover Layout */}
-      <div className="flex-1 flex flex-col items-center justify-center text-center py-12">
+      {/* VIGNETTE: Subtle center spotlight */}
+      <div 
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background: 'radial-gradient(ellipse at center, rgba(30,30,30,0.4) 0%, rgba(0,0,0,0) 70%)'
+        }}
+      />
+
+      {/* Floating Menu */}
+      <div className="relative z-50">
+        <MobileMenu onOpenLegal={() => setShowLegalModal(true)} />
+      </div>
+      
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col items-center justify-center text-center px-6 py-12 relative z-10">
         
-        {/* Element 1: Main Header - Logo + Masthead Inline */}
+        {/* MASTHEAD: Logo + Text */}
         <div className="flex items-center justify-center gap-4 md:gap-6 mb-8">
-          {/* Brand Icon */}
-          <div className="w-14 h-14 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-sm overflow-hidden border-2 border-gold shadow-[0_0_20px_rgba(212,175,55,0.3)] flex-shrink-0">
-            <img 
-              src={filmmakerLogo} 
-              alt="Filmmaker.OG" 
-              className="w-full h-full object-cover"
-            />
+          {/* Brand Icon (Styled F) */}
+          <div className="w-14 h-14 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-sm border-2 border-gold shadow-[0_0_20px_rgba(212,175,55,0.3)] flex-shrink-0 flex items-center justify-center bg-black">
+            <span className="font-bebas text-gold text-4xl md:text-5xl lg:text-6xl">F</span>
           </div>
           
-          {/* The Masthead */}
-          <h1 className="font-bebas text-6xl md:text-8xl lg:text-[10rem] text-foreground tracking-tighter leading-none">
+          <h1 className="font-bebas text-6xl md:text-8xl lg:text-[10rem] text-white tracking-tighter leading-none">
             FILMMAKER.OG
           </h1>
         </div>
         
-        {/* Element 2: The Tool */}
+        {/* THE TOOL */}
         <p className="text-gold text-xs md:text-sm tracking-[0.3em] uppercase mb-6">
           STREAMER ACQUISITION CALCULATOR
         </p>
         
-        {/* Element 3: The Mission / Hero */}
-        <h2 className="font-inter-black text-xl md:text-2xl lg:text-3xl text-foreground leading-tight max-w-2xl mb-16">
+        {/* THE MISSION */}
+        <h2 className="font-black text-xl md:text-2xl lg:text-3xl text-white leading-tight max-w-2xl mb-16">
           DEMOCRATIZING THE BUSINESS OF FILM
         </h2>
         
-        {/* Element 4: Action Stack */}
+        {/* ACTION STACK */}
         <div className="w-full max-w-xs space-y-4">
-          {/* Primary Button - Glowing */}
+          {/* Primary Button - Gold Pulse */}
           <Button 
             onClick={() => navigate("/auth")}
-            className="w-full py-6 text-base font-inter-black tracking-widest rounded-none bg-gold text-background hover:bg-gold/90 transition-all duration-300 border-2 border-gold animate-[glow_2s_ease-in-out_infinite]"
-            style={{
-              animation: 'glow 2s ease-in-out infinite',
-            }}
+            className="w-full h-14 text-lg font-black tracking-widest rounded-sm bg-gold text-black hover:bg-white hover:text-black transition-all duration-300 border border-gold shadow-[0_0_20px_rgba(212,175,55,0.4)] animate-pulse-gold"
           >
             ACCESS TERMINAL
           </Button>
@@ -67,34 +70,34 @@ const Index = () => {
           {/* Secondary Button */}
           <Link to="/store" className="block">
             <Button 
-              variant="outline"
-              className="w-full py-6 text-base font-inter-black tracking-widest rounded-none border border-gold/60 text-foreground bg-transparent hover:bg-gold/10 transition-all duration-300"
+              variant="ghost"
+              className="w-full h-12 text-sm tracking-widest text-zinc-400 hover:text-white hover:bg-transparent transition-colors"
             >
-              SKIP TO SERVICES
+              Skip to Services
             </Button>
           </Link>
         </div>
       </div>
       
-      {/* Element 6: Minimal Legal Footer */}
-      <footer className="py-8 text-center">
+      {/* FOOTER: Minimal Link */}
+      <footer className="py-8 text-center relative z-10">
         <button
           onClick={() => setShowLegalModal(true)}
-          className="text-xs text-muted-foreground/60 underline underline-offset-2 hover:text-muted-foreground transition-colors cursor-pointer"
+          className="text-[10px] uppercase tracking-widest text-zinc-600 hover:text-zinc-400 transition-colors cursor-pointer"
         >
-          For educational/information purposes only.
+          Educational Purposes Only
         </button>
       </footer>
 
-      {/* Legal Modal */}
+      {/* LEGAL MODAL */}
       <Dialog open={showLegalModal} onOpenChange={setShowLegalModal}>
-        <DialogContent className="bg-surface border-border max-w-md">
+        <DialogContent className="bg-zinc-900 border-zinc-800 max-w-md">
           <DialogHeader>
             <DialogTitle className="font-bebas text-2xl text-gold tracking-wider">
               LEGAL DISCLAIMER
             </DialogTitle>
           </DialogHeader>
-          <p className="text-muted-foreground text-sm leading-relaxed">
+          <p className="text-zinc-400 text-sm leading-relaxed">
             {legalText}
           </p>
         </DialogContent>
