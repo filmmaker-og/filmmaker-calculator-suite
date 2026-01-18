@@ -63,13 +63,13 @@ const MobileMenu = ({ onOpenLegal, onSignOut }: MobileMenuProps) => {
 
   return (
     <>
-      {/* Floating Hamburger Button - Aligned with Header */}
+      {/* Hamburger Button - Inline for use in Command Bar */}
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed top-3 right-4 z-40 w-12 h-12 flex items-center justify-center text-gold hover:text-gold/80 transition-colors"
+        className="w-10 h-10 flex items-center justify-center hover:opacity-80 transition-opacity"
         aria-label="Open menu"
       >
-        <Menu className="w-6 h-6" />
+        <Menu className="w-5 h-5" style={{ color: '#D4AF37' }} />
       </button>
 
       {/* Full-screen Black Overlay Menu */}

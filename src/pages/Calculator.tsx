@@ -163,25 +163,22 @@ const Calculator = () => {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      {/* Mobile Menu */}
-      <MobileMenu onSignOut={handleSignOut} />
-
-      {/* Header - Minimal */}
-      <header className="border-b border-border px-6 py-4 pr-16">
-        <div className="flex items-center gap-3">
-          <Button
-            onClick={() => navigate("/")}
-            variant="ghost"
-            size="sm"
-            className="text-muted-foreground hover:text-gold p-2"
-          >
-            <Home className="w-4 h-4" />
-          </Button>
-          <span className="font-bebas text-xl tracking-wider" style={{ color: '#D4AF37' }}>
-            WATERFALL TERMINAL
-          </span>
-        </div>
+      {/* Command Bar - Fixed Sticky Header */}
+      <header className="fixed top-0 left-0 right-0 h-14 z-50 flex items-center justify-between px-6 border-b border-zinc-900" style={{ backgroundColor: '#000000' }}>
+        <button
+          onClick={() => navigate("/")}
+          className="w-10 h-10 flex items-center justify-center hover:opacity-80 transition-opacity"
+        >
+          <Home className="w-5 h-5" style={{ color: '#D4AF37' }} />
+        </button>
+        <span className="font-bebas text-xl tracking-widest" style={{ color: '#D4AF37' }}>
+          WATERFALL TERMINAL
+        </span>
+        <MobileMenu onSignOut={handleSignOut} />
       </header>
+
+      {/* Spacer for fixed header */}
+      <div className="h-14" />
 
       {/* Status Bar - Terminal Plate Style */}
       <div 
