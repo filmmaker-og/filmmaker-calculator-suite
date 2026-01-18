@@ -166,8 +166,8 @@ const Auth = () => {
                           placeholder="Your first name"
                           value={firstName}
                           onChange={(e) => setFirstName(e.target.value)}
-                          className="pl-12 py-5 rounded-sm text-white placeholder:text-[#666666] font-mono tracking-wide touch-input focus:ring-1 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors"
-                          style={{ backgroundColor: '#070707', borderColor: '#333333' }}
+                          className="pl-12 h-14 text-lg rounded-sm text-white placeholder:text-[#666666] font-mono tracking-wide touch-input focus:ring-1 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors"
+                          style={{ backgroundColor: '#0a0a0a', borderColor: '#333333' }}
                           required
                           tabIndex={1}
                           autoFocus
@@ -189,8 +189,8 @@ const Auth = () => {
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
                           inputMode="email"
-                          className="pl-12 py-5 rounded-sm text-white placeholder:text-[#666666] font-mono tracking-wide touch-input focus:ring-1 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors"
-                          style={{ backgroundColor: '#070707', borderColor: '#333333' }}
+                          className="pl-12 h-14 text-lg rounded-sm text-white placeholder:text-[#666666] font-mono tracking-wide touch-input focus:ring-1 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors"
+                          style={{ backgroundColor: '#0a0a0a', borderColor: '#333333' }}
                           required
                           tabIndex={2}
                         />
@@ -199,15 +199,23 @@ const Auth = () => {
                     <Button
                       type="submit"
                       disabled={loading || !firstName.trim()}
-                      className="w-full h-14 rounded-sm font-bebas text-xl tracking-wider text-black transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                      style={{ backgroundColor: '#D4AF37' }}
-                      onMouseEnter={(e) => !loading && firstName.trim() && (e.currentTarget.style.backgroundColor = '#F9E076')}
+                      className="w-full h-14 rounded-sm font-bebas text-xl tracking-wider transition-colors disabled:cursor-not-allowed"
+                      style={{ 
+                        backgroundColor: '#D4AF37', 
+                        color: '#000000',
+                        opacity: loading || !firstName.trim() ? 0.5 : 1 
+                      }}
+                      onMouseEnter={(e) => {
+                        if (!loading && firstName.trim()) {
+                          e.currentTarget.style.backgroundColor = '#F9E076';
+                        }
+                      }}
                       onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#D4AF37'}
                       size="lg"
                       tabIndex={3}
                     >
                       {loading ? (
-                        <Loader2 className="w-5 h-5 animate-spin" />
+                        <Loader2 className="w-5 h-5 animate-spin text-black" />
                       ) : (
                         "REQUEST SECURE ACCESS LINK"
                       )}
