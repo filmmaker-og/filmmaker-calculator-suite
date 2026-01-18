@@ -69,22 +69,17 @@ const Calculator = () => {
     setResult(calculated);
   }, [inputs, guilds]);
 
-  // Auth check
+  // Auth check - allow demo mode
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       setUser(session?.user ?? null);
       setLoading(false);
-      if (!session?.user) {
-        navigate("/auth");
-      }
+      // Allow access even without auth for demo mode
     });
 
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
       setLoading(false);
-      if (!session?.user) {
-        navigate("/auth");
-      }
     });
 
     return () => subscription.unsubscribe();
