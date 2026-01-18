@@ -10,8 +10,8 @@ import { z } from "zod";
 
 const emailSchema = z.string().email("Please enter a valid email address");
 
-// Demo mode flag - set to true for testing without auth
-const DEMO_MODE_ENABLED = true;
+// Demo mode flag - set to false to hide demo button
+const DEMO_MODE_ENABLED = false;
 
 const Auth = () => {
   const navigate = useNavigate();
