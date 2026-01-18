@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { LogOut, ChevronLeft, ChevronRight, Home } from "lucide-react";
+import { ChevronLeft, ChevronRight, Home } from "lucide-react";
 import { User } from "@supabase/supabase-js";
 import WizardStep1 from "@/components/calculator/WizardStep1";
 import WizardStep2 from "@/components/calculator/WizardStep2";
@@ -161,49 +161,39 @@ const Calculator = () => {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       {/* Mobile Menu */}
-      <MobileMenu />
+      <MobileMenu onSignOut={handleSignOut} />
 
       {/* Header - Minimal */}
       <header className="border-b border-border px-6 py-4 pr-20">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Button
-              onClick={() => navigate("/")}
-              variant="ghost"
-              size="sm"
-              className="text-muted-foreground hover:text-gold p-2"
-            >
-              <Home className="w-4 h-4" />
-            </Button>
-            <span className="font-bebas text-xl text-foreground tracking-wider">
-              WATERFALL TERMINAL
-            </span>
-          </div>
-          <div className="flex items-center gap-3">
-            {user && (
-              <span className="text-muted-foreground text-xs hidden sm:block truncate max-w-32">
-                {user.email}
-              </span>
-            )}
-            <Button
-              onClick={handleSignOut}
-              variant="ghost"
-              size="sm"
-              className="text-muted-foreground hover:text-gold p-2"
-            >
-              <LogOut className="w-4 h-4" />
-            </Button>
-          </div>
+        <div className="flex items-center gap-3">
+          <Button
+            onClick={() => navigate("/")}
+            variant="ghost"
+            size="sm"
+            className="text-muted-foreground hover:text-gold p-2"
+          >
+            <Home className="w-4 h-4" />
+          </Button>
+          <span className="font-bebas text-xl tracking-wider" style={{ color: '#D4AF37' }}>
+            WATERFALL TERMINAL
+          </span>
         </div>
       </header>
 
-      {/* Progress Bar */}
-      <div className="border-b border-border px-6 py-3">
+      {/* Status Bar - Terminal Plate Style */}
+      <div 
+        className="px-6 py-4"
+        style={{ 
+          backgroundColor: '#111111',
+          borderTop: '1px solid #333333',
+          borderBottom: '1px solid #333333'
+        }}
+      >
         <div className="flex items-center justify-between mb-2">
-          <span className="text-muted-foreground text-xs uppercase tracking-widest">
+          <span className="text-xs uppercase tracking-widest" style={{ color: '#888888' }}>
             Step {currentStep} of 6
           </span>
-          <span className="text-gold text-xs font-mono">
+          <span className="text-xs font-mono" style={{ color: '#D4AF37' }}>
             {Math.round((currentStep / 6) * 100)}%
           </span>
         </div>
