@@ -24,36 +24,39 @@ const Index = () => {
       {/* Main Content - Magazine Cover Layout */}
       <div className="flex-1 flex flex-col items-center justify-center text-center py-12">
         
-        {/* Element 1: Brand Icon */}
-        <div className="w-16 h-16 mb-6 rounded-sm overflow-hidden border-2 border-gold shadow-[0_0_20px_rgba(212,175,55,0.3)]">
-          <img 
-            src={filmmakerLogo} 
-            alt="Filmmaker.OG" 
-            className="w-full h-full object-cover"
-          />
+        {/* Element 1: Main Header - Logo + Masthead Inline */}
+        <div className="flex items-center justify-center gap-4 md:gap-6 mb-8">
+          {/* Brand Icon */}
+          <div className="w-14 h-14 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-sm overflow-hidden border-2 border-gold shadow-[0_0_20px_rgba(212,175,55,0.3)] flex-shrink-0">
+            <img 
+              src={filmmakerLogo} 
+              alt="Filmmaker.OG" 
+              className="w-full h-full object-cover"
+            />
+          </div>
+          
+          {/* The Masthead */}
+          <h1 className="font-bebas text-6xl md:text-8xl lg:text-[10rem] text-foreground tracking-tighter leading-none">
+            FILMMAKER.OG
+          </h1>
         </div>
         
-        {/* Element 2: The Masthead */}
-        <h1 className="font-bebas text-5xl md:text-7xl lg:text-9xl text-foreground tracking-tighter leading-none">
-          FILMMAKER.OG
-        </h1>
-        
-        {/* Element 3: The Tool */}
-        <p className="text-gold text-xs md:text-sm tracking-[0.3em] uppercase mt-4 mb-10">
+        {/* Element 2: The Tool */}
+        <p className="text-gold text-xs md:text-sm tracking-[0.3em] uppercase mb-6">
           STREAMER ACQUISITION CALCULATOR
         </p>
         
-        {/* Element 4: The Mission / Hero */}
+        {/* Element 3: The Mission / Hero */}
         <h2 className="font-inter-black text-xl md:text-2xl lg:text-3xl text-foreground leading-tight max-w-2xl mb-16">
           DEMOCRATIZING THE BUSINESS OF FILM
         </h2>
         
-        {/* Element 5: Action Stack */}
+        {/* Element 4: Action Stack */}
         <div className="w-full max-w-xs space-y-4">
-          {/* Primary Button */}
+          {/* Primary Button - Pulsing */}
           <Button 
             onClick={() => navigate("/auth")}
-            className="w-full py-5 text-base font-inter-black tracking-widest btn-vault"
+            className="w-full py-6 text-base font-inter-black tracking-widest rounded-none bg-gold text-background hover:bg-gold/90 shadow-[0_0_30px_rgba(212,175,55,0.4)] animate-pulse hover:animate-none transition-all duration-300 border-2 border-gold"
           >
             ACCESS TERMINAL
           </Button>
@@ -62,7 +65,7 @@ const Index = () => {
           <Link to="/store" className="block">
             <Button 
               variant="outline"
-              className="w-full py-5 text-base btn-ghost-gold"
+              className="w-full py-6 text-base font-inter-black tracking-widest rounded-none border-2 border-gold text-gold bg-transparent hover:bg-gold/10 transition-all duration-300"
             >
               SKIP TO SERVICES
             </Button>
