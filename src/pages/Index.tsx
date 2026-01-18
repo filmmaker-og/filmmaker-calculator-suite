@@ -2,116 +2,86 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import MobileMenu from "@/components/MobileMenu";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import brandIconF from "@/assets/brand-icon-f.jpg";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import brandIconF from "@/assets/brand-icon-f.jpg"; 
 
 const Index = () => {
   const navigate = useNavigate();
   const [showLegalModal, setShowLegalModal] = useState(false);
 
-  const legalText = "Educational disclaimer: For educational purposes only. This calculator is a simplified model and is not legal, tax, accounting, or investment advice. This assumes a bankable sales agent and commercially viable cast. Deal outcomes vary by contract definitions (e.g., gross vs adjusted gross), corridor fees, reserves/holdbacks, timing of cashflows, collection account management, audit results, chargebacks, and other negotiated terms. Consult a qualified entertainment attorney and financial advisor.";
+  const legalText = "Educational disclaimer: For educational purposes only. This calculator is a simplified model and is not legal, tax, accounting, or investment advice. Consult a qualified entertainment attorney.";
 
   return (
-    // THE VOID: Hardcoded black background with radial spotlight
+    // THE VOID: Pure Black (Brand Guide #000000)
     <div className="min-h-screen flex flex-col relative overflow-hidden" style={{ backgroundColor: '#000000' }}>
       
-      {/* VIGNETTE: Subtle center spotlight */}
+      {/* VIGNETTE: Subtle depth, no color pollution */}
       <div 
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: 'radial-gradient(ellipse at center, rgba(38,38,38,0.4) 0%, rgba(0,0,0,0) 60%, rgba(0,0,0,1) 100%)'
+          background: 'radial-gradient(ellipse at center, rgba(30,30,30,0.3) 0%, rgba(0,0,0,0) 50%, rgba(0,0,0,1) 100%)'
         }}
       />
 
-      {/* Floating Menu */}
+      {/* MENU: Top Right */}
       <div className="relative z-50">
         <MobileMenu onOpenLegal={() => setShowLegalModal(true)} />
       </div>
       
-      {/* Main Content - Centered Stack */}
+      {/* CONTENT: Absolute Center */}
       <div className="flex-1 flex flex-col items-center justify-center text-center px-6 py-12 relative z-10">
         
-        {/* MASTHEAD: Centered Stack - Icon on top, Text below */}
-        <div className="flex flex-col items-center justify-center mb-8">
-          {/* Brand Icon (F) */}
+        {/* 1. THE TOTEM (Icon) */}
+        <div className="mb-4">
           <img 
             src={brandIconF} 
-            alt="Filmmaker.OG Brand Icon" 
-            className="w-24 h-24 md:w-32 md:h-32 lg:w-40 lg:h-40 object-contain mb-4"
+            alt="Filmmaker.OG" 
+            className="w-24 h-24 md:w-32 md:h-32 object-contain"
           />
-          
-          {/* Brand Text */}
-          <h1 className="font-bebas text-7xl md:text-8xl lg:text-[10rem] text-white tracking-tighter leading-none">
-            FILMMAKER.OG
-          </h1>
         </div>
         
-        {/* THE HERO */}
-        <div className="mb-12">
-          {/* Label - Single Line */}
-          <p 
-            className="text-[10px] md:text-xs tracking-[0.3em] uppercase mb-6 whitespace-nowrap"
-            style={{ color: '#D4AF37' }}
-          >
-            STREAMER ACQUISITION CALCULATOR
-          </p>
-          
-          {/* Headline - Multiple Lines */}
-          <h2 className="font-bebas text-3xl md:text-4xl lg:text-5xl text-white leading-tight max-w-[280px] md:max-w-xs mx-auto">
-            DEMOCRATIZING THE BUSINESS OF FILM
-          </h2>
-        </div>
+        {/* 2. THE BRAND (Logotype) */}
+        <h1 className="font-bebas text-6xl md:text-7xl lg:text-8xl text-white tracking-tight leading-none mb-8">
+          FILMMAKER.OG
+        </h1>
+
+        {/* 3. THE UTILITY (Brand Gold #D4AF37) */}
+        <p 
+          className="text-[10px] md:text-xs tracking-[0.3em] uppercase mb-16"
+          style={{ color: '#D4AF37' }}
+        >
+          STREAMER ACQUISITION CALCULATOR
+        </p>
         
-        {/* ACTION STACK */}
+        {/* 4. THE ACTION (Solid, Confident) */}
         <div className="w-full max-w-xs space-y-4">
-          {/* Primary Button - Inviting Gold with Soft Glow */}
+          {/* Primary: Base #D4AF37 -> Hover #F9E076 (Bright Gold) */}
           <Button 
             onClick={() => navigate("/auth")}
-            className="w-full h-14 text-lg font-black tracking-widest rounded-sm transition-all duration-500 ease-out border group hover:scale-[1.02] hover:-translate-y-1"
-            style={{ 
-              backgroundColor: '#D4AF37', 
-              color: '#000000',
-              borderColor: '#D4AF37',
-              boxShadow: '0 0 25px rgba(249, 224, 118, 0.35), 0 4px 20px rgba(0,0,0,0.3)',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = '#F9E076';
-              e.currentTarget.style.borderColor = '#F9E076';
-              e.currentTarget.style.boxShadow = '0 0 40px rgba(249, 224, 118, 0.6), 0 8px 30px rgba(0,0,0,0.4)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = '#D4AF37';
-              e.currentTarget.style.borderColor = '#D4AF37';
-              e.currentTarget.style.boxShadow = '0 0 25px rgba(249, 224, 118, 0.35), 0 4px 20px rgba(0,0,0,0.3)';
-            }}
+            className="w-full h-14 text-sm font-black tracking-[0.2em] rounded-sm bg-[#D4AF37] text-black hover:bg-[#F9E076] transition-colors duration-300 border border-[#D4AF37]"
           >
             ACCESS TERMINAL
           </Button>
           
-          {/* Secondary Button - Ghost */}
+          {/* Secondary: Silver Text for better readability on Void Black */}
           <Link to="/store" className="block">
             <Button 
               variant="ghost"
-              className="w-full h-12 text-sm tracking-widest text-white hover:text-white hover:bg-transparent transition-colors border border-transparent hover:border-zinc-700"
+              className="w-full h-12 text-xs tracking-widest text-zinc-400 hover:text-white hover:bg-transparent transition-colors"
             >
-              SKIP TO SERVICES
+              Skip to Services
             </Button>
           </Link>
         </div>
       </div>
       
-      {/* FOOTER: Minimal Link */}
-      <footer className="py-8 text-center relative z-10">
+      {/* FOOTER: Subtle Legal Link */}
+      <footer className="py-6 text-center relative z-10">
         <button
           onClick={() => setShowLegalModal(true)}
-          className="text-[10px] uppercase tracking-widest text-zinc-600 hover:text-zinc-400 transition-colors cursor-pointer"
+          className="text-[9px] uppercase tracking-widest text-zinc-700 hover:text-zinc-500 transition-colors"
         >
-          For educational/information purposes only.
+          Educational Purposes Only
         </button>
       </footer>
 
