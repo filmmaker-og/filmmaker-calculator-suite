@@ -259,15 +259,16 @@ const Calculator = () => {
         style={{ borderTop: '1px solid #333333' }}
       >
         <div className="flex items-center justify-between gap-6 max-w-screen-lg mx-auto">
-          <Button
-            onClick={prevStep}
-            disabled={currentStep === 1}
-            variant="ghost"
-            className="text-zinc-400 hover:text-white disabled:opacity-30 flex-1 py-4"
-          >
-            <ChevronLeft className="w-5 h-5 mr-1" />
-            Previous
-          </Button>
+          {currentStep > 1 && (
+            <Button
+              onClick={prevStep}
+              variant="ghost"
+              className="text-zinc-400 hover:text-white flex-1 py-4"
+            >
+              <ChevronLeft className="w-5 h-5 mr-1" />
+              Previous
+            </Button>
+          )}
           
           {currentStep < 6 && (
             <Button
