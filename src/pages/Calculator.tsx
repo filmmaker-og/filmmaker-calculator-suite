@@ -164,7 +164,7 @@ const Calculator = () => {
       <MobileMenu onSignOut={handleSignOut} />
 
       {/* Header - Minimal */}
-      <header className="border-b border-border px-6 py-4 pr-20">
+      <header className="border-b border-border px-6 py-4 pr-16">
         <div className="flex items-center gap-3">
           <Button
             onClick={() => navigate("/")}
