@@ -11,9 +11,10 @@ import { Button } from "@/components/ui/button";
 
 interface MobileMenuProps {
   onOpenLegal?: () => void;
+  inline?: boolean; // When true, renders trigger inline instead of fixed position
 }
 
-const MobileMenu = ({ onOpenLegal }: MobileMenuProps) => {
+const MobileMenu = ({ onOpenLegal, inline = false }: MobileMenuProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [showLegalModal, setShowLegalModal] = useState(false);
   const [showAboutModal, setShowAboutModal] = useState(false);
@@ -60,16 +61,20 @@ const MobileMenu = ({ onOpenLegal }: MobileMenuProps) => {
 
   const legalText = "Educational disclaimer: For educational purposes only. This calculator is a simplified model and is not legal, tax, accounting, or investment advice. This assumes a bankable sales agent and commercially viable cast. Deal outcomes vary by contract definitions (e.g., gross vs adjusted gross), corridor fees, reserves/holdbacks, timing of cashflows, collection account management, audit results, chargebacks, and other negotiated terms. Consult a qualified entertainment attorney and financial advisor.";
 
+  const triggerButton = (
+    <button
+      onClick={() => setIsOpen(true)}
+      className={`${inline ? '' : 'fixed top-6 right-6 z-40'} w-10 h-10 flex items-center justify-center text-gold hover:text-gold/80 transition-colors`}
+      aria-label="Open menu"
+    >
+      <Menu className="w-6 h-6" />
+    </button>
+  );
+
   return (
     <>
-      {/* Floating Hamburger Button - Top Right */}
-      <button
-        onClick={() => setIsOpen(true)}
-        className="fixed top-6 right-6 z-40 w-12 h-12 flex items-center justify-center text-gold hover:text-gold/80 transition-colors"
-        aria-label="Open menu"
-      >
-        <Menu className="w-7 h-7" />
-      </button>
+      {/* Hamburger Button */}
+      {triggerButton}
 
       {/* Full-screen Black Overlay Menu */}
       {isOpen && (
