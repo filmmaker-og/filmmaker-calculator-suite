@@ -171,10 +171,6 @@ const Auth = () => {
                       )}
                     </Button>
                   </form>
-
-                  <p className="text-[10px] text-center tracking-wide font-mono mt-6" style={{ color: 'rgba(136, 136, 136, 0.6)' }}>
-                    A one-time access key will be sent to your email
-                  </p>
                 </>
               ) : (
                 <div className="text-center py-8">
@@ -202,8 +198,12 @@ const Auth = () => {
             </div>
           </div>
 
-          <p className="text-center text-xs mt-8 tracking-wide" style={{ color: '#888888' }}>
-            No passwords required. Bank-grade security.
+          {/* Instructional Text - Outside Card */}
+          <p className="text-center text-sm mt-6 text-zinc-400">
+            A one-time access key will be sent to your email.
+          </p>
+          <p className="text-center text-[10px] uppercase tracking-widest mt-2 font-bold text-zinc-600">
+            NO PASSWORDS REQUIRED • BANK-GRADE SECURITY
           </p>
 
           {/* Demo Access Link - Subtle */}
