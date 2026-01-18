@@ -53,10 +53,13 @@ const Index = () => {
         
         {/* Element 4: Action Stack */}
         <div className="w-full max-w-xs space-y-4">
-          {/* Primary Button - Slow Pulsing */}
+          {/* Primary Button - Glowing */}
           <Button 
             onClick={() => navigate("/auth")}
-            className="w-full py-6 text-base font-inter-black tracking-widest rounded-none bg-gold text-background hover:bg-gold/90 shadow-[0_0_30px_rgba(212,175,55,0.4)] animate-[pulse_3s_ease-in-out_infinite] hover:animate-none transition-all duration-300 border-2 border-gold"
+            className="w-full py-6 text-base font-inter-black tracking-widest rounded-none bg-gold text-background hover:bg-gold/90 transition-all duration-300 border-2 border-gold animate-[glow_2s_ease-in-out_infinite]"
+            style={{
+              animation: 'glow 2s ease-in-out infinite',
+            }}
           >
             ACCESS TERMINAL
           </Button>
@@ -65,7 +68,7 @@ const Index = () => {
           <Link to="/store" className="block">
             <Button 
               variant="outline"
-              className="w-full py-6 text-base font-inter-black tracking-widest rounded-none border border-gold/60 text-gold bg-transparent hover:bg-gold/10 transition-all duration-300"
+              className="w-full py-6 text-base font-inter-black tracking-widest rounded-none border border-gold/60 text-foreground bg-transparent hover:bg-gold/10 transition-all duration-300"
             >
               SKIP TO SERVICES
             </Button>
