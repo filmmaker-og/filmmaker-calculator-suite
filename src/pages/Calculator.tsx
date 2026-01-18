@@ -205,7 +205,7 @@ const Calculator = () => {
       </div>
 
       {/* Step Content */}
-      <main className="flex-1 px-6 py-6 overflow-y-auto">
+      <main className="flex-1 px-6 py-6 pb-24 overflow-y-auto">
         {currentStep === 1 && (
           <WizardStep1 
             budget={inputs.budget} 
