@@ -29,8 +29,9 @@ const WizardStep2 = ({ inputs, onUpdate }: WizardStep2Props) => {
     }
   };
 
-  const formatValue = (value: number) => {
-    return value === 0 ? '' : value.toLocaleString();
+  const formatValue = (value: number | undefined) => {
+    if (value === undefined || value === 0) return '';
+    return value.toLocaleString();
   };
 
   const parseValue = (str: string, isPercent: boolean = false) => {
