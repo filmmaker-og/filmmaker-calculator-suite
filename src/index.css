@@ -1,96 +1,60 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500;600&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Filmmaker.OG Design System - "Shadow Authority" Theme */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
+    /* Core Palette - Exact PRD Tokens */
+    --bg: 0 0% 0%;
+    --card: 0 0% 3%;
+    --gold: 43 66% 52%;
+    --gold-glow: 43 70% 45%;
+    --text: 0 0% 100%;
+    --mid: 0 0% 81%;
+    --dim: 0 0% 54%;
+    --border: 0 0% 10%;
+    --error: 0 84% 60%;
+    
+    /* Mapped to Shadcn Variables */
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+    
+    --card: 0 0% 3%;
+    --card-foreground: 0 0% 100%;
+    
+    --popover: 0 0% 3%;
+    --popover-foreground: 0 0% 100%;
+    
+    --primary: 43 66% 52%;
+    --primary-foreground: 0 0% 0%;
+    
+    --secondary: 0 0% 10%;
+    --secondary-foreground: 0 0% 100%;
+    
+    --muted: 0 0% 10%;
+    --muted-foreground: 0 0% 54%;
+    
+    --accent: 43 66% 52%;
+    --accent-foreground: 0 0% 0%;
+    
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    
+    --border: 0 0% 10%;
+    --input: 0 0% 10%;
+    --ring: 43 66% 52%;
+    
     --radius: 0.5rem;
-
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
-
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    
+    /* Custom Effects */
+    --gold-gradient: linear-gradient(135deg, hsl(43 66% 52%), hsl(43 80% 65%));
+    --gold-shadow: 0 0 20px hsl(43 66% 52% / 0.3);
+    --card-glass: rgba(7, 7, 7, 0.8);
+    --border-glow: 0 0 10px hsl(43 66% 52% / 0.5);
   }
 }
 
@@ -98,8 +62,128 @@ All colors MUST be HSL.
   * {
     @apply border-border;
   }
-
+  
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', sans-serif;
   }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Bebas Neue', Impact, sans-serif;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  
+  /* Tabular Numbers for Financial Data */
+  .font-mono, .tabular-nums {
+    font-family: 'Roboto Mono', monospace;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@layer components {
+  /* Gold Glow Effect for Focus States */
+  .gold-glow-focus {
+    @apply transition-all duration-300;
+  }
+  
+  .gold-glow-focus:focus {
+    box-shadow: var(--border-glow);
+    border-color: hsl(var(--gold));
+  }
+  
+  /* Glassmorphism Card */
+  .glass-card {
+    background: var(--card-glass);
+    backdrop-filter: blur(12px);
+    border: 1px solid hsl(var(--border));
+  }
+  
+  /* Gold Gradient Text */
+  .gold-gradient-text {
+    background: var(--gold-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  /* Skeleton Loader with Gold Pulse */
+  .skeleton-gold {
+    @apply animate-pulse;
+    background: linear-gradient(
+      90deg,
+      hsl(var(--card)) 0%,
+      hsl(43 66% 52% / 0.1) 50%,
+      hsl(var(--card)) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 2s ease-in-out infinite;
+  }
+  
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+  
+  /* Vault Button - Primary Gold */
+  .btn-vault {
+    @apply relative overflow-hidden font-bold tracking-wider uppercase;
+    background: var(--gold-gradient);
+    color: hsl(0 0% 0%);
+    box-shadow: var(--gold-shadow);
+    transition: all 0.3s ease;
+  }
+  
+  .btn-vault:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 30px hsl(43 66% 52% / 0.5);
+  }
+  
+  .btn-vault:active {
+    transform: translateY(0);
+  }
+  
+  /* Ghost Button with Gold Border */
+  .btn-ghost-gold {
+    @apply border font-bold tracking-wider uppercase;
+    border-color: hsl(var(--gold));
+    color: hsl(var(--gold));
+    background: transparent;
+    transition: all 0.3s ease;
+  }
+  
+  .btn-ghost-gold:hover {
+    background: hsl(43 66% 52% / 0.1);
+    box-shadow: var(--border-glow);
+  }
+  
+  /* Progress Bar Gold */
+  .progress-gold {
+    @apply overflow-hidden rounded-full;
+    background: hsl(var(--border));
+  }
+  
+  .progress-gold-fill {
+    background: var(--gold-gradient);
+    transition: width 0.5s ease-out;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--bg));
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--dim));
 }
