@@ -23,10 +23,13 @@ const Index = () => {
         }}
       />
 
-      {/* MENU: Top Right */}
-      <div className="relative z-50">
+      {/* HEADER: Logo Left, Menu Right */}
+      <header className="relative z-50 px-6 py-4 flex items-center justify-between">
+        <span className="font-bebas text-xl tracking-widest" style={{ color: '#D4AF37' }}>
+          FILMMAKER.OG
+        </span>
         <MobileMenu onOpenLegal={() => setShowLegalModal(true)} />
-      </div>
+      </header>
       
       {/* CONTENT: Absolute Center */}
       <div className="flex-1 flex flex-col items-center justify-center text-center px-6 py-12 relative z-10">
