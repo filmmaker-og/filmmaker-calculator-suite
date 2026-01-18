@@ -49,7 +49,6 @@ const MobileMenu = ({ onOpenLegal }: MobileMenuProps) => {
     { label: "ABOUT", href: "#about", onClick: handleAboutClick },
     { label: "SERVICES", href: "/store" },
     { label: "CONTACT", href: "#contact", onClick: handleContactClick },
-    { label: "DM", href: "https://www.instagram.com/filmmaker.og", external: true },
   ];
 
   const legalText = "Educational disclaimer: For educational purposes only. This calculator is a simplified model and is not legal, tax, accounting, or investment advice. This assumes a bankable sales agent and commercially viable cast. Deal outcomes vary by contract definitions (e.g., gross vs adjusted gross), corridor fees, reserves/holdbacks, timing of cashflows, collection account management, audit results, chargebacks, and other negotiated terms. Consult a qualified entertainment attorney and financial advisor.";
@@ -205,9 +204,10 @@ const MobileMenu = ({ onOpenLegal }: MobileMenuProps) => {
               href="https://www.instagram.com/filmmaker.og"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2 text-zinc-400 hover:text-gold transition-colors text-sm"
+              className="flex items-center justify-between bg-black/50 border border-zinc-800 rounded px-4 py-3 hover:border-gold/50 transition-colors"
             >
-              DM on Instagram → @filmmaker.og
+              <span className="text-zinc-300 text-sm">@filmmaker.og</span>
+              <span className="text-gold text-sm">→</span>
             </a>
           </div>
         </DialogContent>
