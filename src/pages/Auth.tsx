@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -110,8 +110,17 @@ const Auth = () => {
           FILMMAKER.OG
         </span>
         
-        {/* Right: Hamburger Menu */}
-        <MobileMenu />
+        {/* Right: Services Link + Hamburger Menu */}
+        <div className="flex items-center">
+          <Link 
+            to="/store" 
+            className="hidden sm:block text-xs font-mono tracking-widest mr-4 hover:opacity-80 transition-opacity"
+            style={{ color: '#D4AF37' }}
+          >
+            SERVICES
+          </Link>
+          <MobileMenu />
+        </div>
       </header>
 
       {/* Main Content - Centered with padding for header */}

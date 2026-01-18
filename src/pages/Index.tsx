@@ -28,7 +28,16 @@ const Index = () => {
         <span className="font-bebas text-xl tracking-widest" style={{ color: '#D4AF37' }}>
           FILMMAKER.OG
         </span>
-        <MobileMenu onOpenLegal={() => setShowLegalModal(true)} />
+        <div className="flex items-center">
+          <Link 
+            to="/store" 
+            className="hidden sm:block text-xs font-mono tracking-widest mr-4 hover:opacity-80 transition-opacity"
+            style={{ color: '#D4AF37' }}
+          >
+            SERVICES
+          </Link>
+          <MobileMenu onOpenLegal={() => setShowLegalModal(true)} />
+        </div>
       </header>
       
       {/* CONTENT: Absolute Center */}
@@ -66,15 +75,6 @@ const Index = () => {
             ACCESS CALCULATOR
           </Button>
           
-          {/* Secondary: Silver Text for better readability on Void Black */}
-          <Link to="/store" className="block">
-            <Button 
-              variant="ghost"
-              className="w-full h-12 text-xs tracking-widest text-zinc-400 hover:text-white hover:bg-transparent transition-colors"
-            >
-              Skip to Services
-            </Button>
-          </Link>
         </div>
       </div>
       

@@ -54,8 +54,8 @@ const MobileMenu = ({ onOpenLegal, onSignOut }: MobileMenuProps) => {
   };
 
   const menuLinks = [
+    { label: "PRODUCER'S SERVICES", href: "/store", isHighlighted: true },
     { label: "ABOUT", href: "#about", onClick: handleAboutClick },
-    { label: "SERVICES", href: "/store" },
     { label: "CONTACT", href: "#contact", onClick: handleContactClick },
   ];
 
@@ -93,12 +93,18 @@ const MobileMenu = ({ onOpenLegal, onSignOut }: MobileMenuProps) => {
 
             {/* Navigation Links */}
             <nav className="flex flex-col items-center gap-8">
-              {menuLinks.map((link) => (
-                link.onClick ? (
+              {menuLinks.map((link) => {
+                const linkClass = link.isHighlighted 
+                  ? "font-bebas text-4xl font-bold tracking-wider transition-colors"
+                  : "font-bebas text-4xl text-foreground hover:text-gold transition-colors tracking-wider";
+                const linkStyle = link.isHighlighted ? { color: '#D4AF37' } : undefined;
+                
+                return link.onClick ? (
                   <button
                     key={link.label}
                     onClick={link.onClick}
-                    className="font-bebas text-4xl text-foreground hover:text-gold transition-colors tracking-wider"
+                    className={linkClass}
+                    style={linkStyle}
                   >
                     {link.label}
                   </button>
@@ -107,7 +113,8 @@ const MobileMenu = ({ onOpenLegal, onSignOut }: MobileMenuProps) => {
                     key={link.label}
                     to={link.href}
                     onClick={() => setIsOpen(false)}
-                    className="font-bebas text-4xl text-foreground hover:text-gold transition-colors tracking-wider"
+                    className={linkClass}
+                    style={linkStyle}
                   >
                     {link.label}
                   </Link>
@@ -118,12 +125,13 @@ const MobileMenu = ({ onOpenLegal, onSignOut }: MobileMenuProps) => {
                     onClick={() => setIsOpen(false)}
                     target={link.href.startsWith("http") ? "_blank" : undefined}
                     rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                    className="font-bebas text-4xl text-foreground hover:text-gold transition-colors tracking-wider"
+                    className={linkClass}
+                    style={linkStyle}
                   >
                     {link.label}
                   </a>
-                )
-              ))}
+                );
+              })}
               
               {/* Legal Button */}
               <button
