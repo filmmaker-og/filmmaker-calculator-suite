@@ -118,20 +118,14 @@ const Auth = () => {
       <div className="flex-1 flex flex-col items-center justify-center px-6 py-12 pt-20">
         <div className="w-full max-w-md">
           {/* Brand Seal - The "F" Crest */}
-          <div className="text-center mb-10">
-            <div className="w-20 h-20 mx-auto mb-6 border-2 overflow-hidden" style={{ borderColor: '#D4AF37' }}>
+          <div className="text-center mb-6">
+            <div className="w-20 h-20 mx-auto border-2 overflow-hidden" style={{ borderColor: '#D4AF37' }}>
               <img 
                 src={brandIconF} 
                 alt="Brand Seal" 
                 className="w-full h-full object-contain"
               />
             </div>
-            <h1 className="font-bebas text-4xl md:text-5xl text-white mb-3">
-              VAULT ACCESS
-            </h1>
-            <p className="text-[#888888] text-sm tracking-wide">
-              Secure authentication required
-            </p>
           </div>
 
           {/* Auth Card - Terminal Structure */}
@@ -155,7 +149,7 @@ const Auth = () => {
                   <form onSubmit={handleMagicLink} className="space-y-5">
                     {/* First Name Input */}
                     <div className="space-y-3">
-                      <Label htmlFor="firstName" className="text-sm tracking-[0.2em] uppercase font-mono" style={{ color: '#D4AF37' }}>
+                      <Label htmlFor="firstName" className="text-sm tracking-[0.2em] uppercase font-mono text-zinc-500">
                         First Name
                       </Label>
                       <div className="relative">
@@ -177,7 +171,7 @@ const Auth = () => {
 
                     {/* Email Input */}
                     <div className="space-y-3">
-                      <Label htmlFor="email" className="text-sm tracking-[0.2em] uppercase font-mono" style={{ color: '#D4AF37' }}>
+                      <Label htmlFor="email" className="text-sm tracking-[0.2em] uppercase font-mono text-zinc-500">
                         Email
                       </Label>
                       <div className="relative">
