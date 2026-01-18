@@ -21,26 +21,28 @@ const WizardStep1 = ({ budget, onUpdate }: WizardStep1Props) => {
       {/* Terminal Card */}
       <div className="rounded-sm border border-[#D4AF37] overflow-hidden">
         {/* Header Strip */}
-        <div className="py-4 px-6 border-b border-[#333333]" style={{ backgroundColor: '#111111' }}>
-          <h2 className="font-bebas text-xl tracking-wider uppercase" style={{ color: '#D4AF37' }}>
-            01 | PROJECT BASIS
-          </h2>
+        <div className="py-4 px-6 border-b border-[#333333] flex items-center justify-between" style={{ backgroundColor: '#111111' }}>
+          <div className="flex items-center gap-3">
+            <h2 className="font-bebas text-xl tracking-wider uppercase" style={{ color: '#D4AF37' }}>
+              01 | PROJECT BASIS
+            </h2>
+            <button
+              onClick={() => setInfoOpen(true)}
+              className="transition-colors hover:opacity-80"
+              aria-label="More information"
+            >
+              <Info className="w-4 h-4" style={{ color: '#D4AF37' }} />
+            </button>
+          </div>
         </div>
 
         {/* Body Area */}
         <div className="p-6" style={{ backgroundColor: '#000000' }}>
           {/* Label Row */}
-          <div className="flex items-center gap-2 mb-4">
+          <div className="mb-4">
             <span className="text-white font-bold text-sm tracking-wide uppercase">
               NEGATIVE COST
             </span>
-            <button
-              onClick={() => setInfoOpen(true)}
-              className="p-3 -m-3 transition-colors hover:opacity-80"
-              aria-label="More information"
-            >
-              <Info className="w-4 h-4" style={{ color: '#D4AF37' }} />
-            </button>
           </div>
 
           {/* Input Box */}
