@@ -19,8 +19,12 @@ export default {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
-        // PRD Custom Palette
-        gold: "hsl(var(--gold))",
+        // BRAND GUIDE STRICT PALETTE
+        gold: {
+          DEFAULT: "#D4AF37",      // Primary Gold
+          highlight: "#F9E076",    // Highlight Gold (Glow/Hover)
+          shadow: "#7A5C12",       // Shadow Gold (Gradients/Depth)
+        },
         surface: "hsl(var(--surface))",
         "text-high": "hsl(var(--text-high))",
         "text-muted": "hsl(var(--text-muted))",
@@ -82,8 +86,8 @@ export default {
           to: { opacity: "1", transform: "scale(1)" },
         },
         "pulse-gold": {
-          "0%, 100%": { boxShadow: "0 0 20px hsl(43 66% 52% / 0.3)" },
-          "50%": { boxShadow: "0 0 40px hsl(43 66% 52% / 0.6)" },
+          "0%, 100%": { boxShadow: "0 0 20px rgba(249, 224, 118, 0.4)" },
+          "50%": { boxShadow: "0 0 40px rgba(249, 224, 118, 0.7), 0 0 60px rgba(249, 224, 118, 0.3)" },
         },
         "slide-in-right": {
           from: { transform: "translateX(100%)", opacity: "0" },
