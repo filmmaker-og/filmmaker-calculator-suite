@@ -79,7 +79,7 @@ const Auth = () => {
   return (
     <div className="min-h-screen flex flex-col" style={{ backgroundColor: '#000000' }}>
       {/* Global Command Bar - Fixed Header */}
-      <header className="fixed top-0 left-0 right-0 h-14 z-50 flex items-center px-6 border-b border-zinc-900" style={{ backgroundColor: '#000000' }}>
+      <header className="fixed top-0 left-0 right-0 h-14 z-50 flex items-center px-6" style={{ backgroundColor: '#000000', borderBottom: '1px solid #D4AF37' }}>
         {/* Left: Home Icon */}
         <button
           onClick={() => navigate("/")}
@@ -125,8 +125,8 @@ const Auth = () => {
               style={{ backgroundColor: '#111111', borderBottom: '1px solid #333333' }}
             >
               <ShieldCheck className="w-4 h-4" fill="#D4AF37" style={{ color: '#D4AF37' }} />
-              <span className="text-xs tracking-[0.3em] uppercase font-mono" style={{ color: '#D4AF37' }}>
-                Secure Access Terminal
+              <span className="font-bebas text-sm tracking-wide" style={{ color: '#D4AF37' }}>
+                SECURE ACCESS CALCULATOR
               </span>
             </div>
 
@@ -158,7 +158,7 @@ const Auth = () => {
                     <Button
                       type="submit"
                       disabled={loading}
-                      className="w-full h-14 rounded-sm font-inter tracking-widest text-black transition-colors"
+                      className="w-full h-14 rounded-sm font-bebas text-xl tracking-wider text-black transition-colors"
                       style={{ backgroundColor: '#D4AF37' }}
                       onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#F9E076'}
                       onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#D4AF37'}
