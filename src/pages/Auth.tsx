@@ -137,7 +137,7 @@ const Auth = () => {
                   {/* Magic Link Form */}
                   <form onSubmit={handleMagicLink} className="space-y-6">
                     <div className="space-y-3">
-                      <Label htmlFor="email" className="text-xs tracking-[0.2em] uppercase font-mono" style={{ color: '#D4AF37' }}>
+                      <Label htmlFor="email" className="text-sm tracking-[0.2em] uppercase font-mono" style={{ color: '#D4AF37' }}>
                         Enter Email
                       </Label>
                       <div className="relative">
