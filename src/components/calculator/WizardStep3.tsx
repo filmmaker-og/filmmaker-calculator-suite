@@ -64,9 +64,12 @@ const WizardStep3 = ({
           </div>
           <div className="my-3 border-b border-dashed border-zinc-700" />
           <div>
-            <span className="text-white font-bold">MARKETING CAP</span>
-            <p className="mt-1">Maximum amount allocated for prints & advertising (P&A). Often recoupable from gross revenues before profit participation.</p>
+            <span className="text-white font-bold">MARKETING CAP (SALES EXPENSES)</span>
+            <p className="mt-1">The hard cap on expenses the Sales Agent can deduct for taking the film to market. This covers costs for film markets (Cannes, AFM, EFM), promotional materials, legal deliverables, and screenings.</p>
           </div>
+          <p className="text-zinc-400 text-xs italic mt-3">
+            Note: This is distinct from Distributor P&A. These are the costs required to find a buyer, not to release the film.
+          </p>
         </div>
       )
     }
