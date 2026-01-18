@@ -164,17 +164,22 @@ const Calculator = () => {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      {/* Command Bar - Fixed Sticky Header */}
-      <header className="fixed top-0 left-0 right-0 h-14 z-50 flex items-center justify-between px-6 border-b border-zinc-900" style={{ backgroundColor: '#000000' }}>
+      {/* Command Bar - Fixed Sticky Header: Home Left, Title Center, Menu Right */}
+      <header className="fixed top-0 left-0 right-0 h-14 z-50 flex items-center px-6 border-b border-zinc-900" style={{ backgroundColor: '#000000' }}>
+        {/* Left: Home Icon */}
         <button
           onClick={() => navigate("/")}
           className="w-10 h-10 flex items-center justify-center hover:opacity-80 transition-opacity"
         >
           <Home className="w-5 h-5" style={{ color: '#D4AF37' }} />
         </button>
-        <span className="font-bebas text-xl tracking-widest" style={{ color: '#D4AF37' }}>
+        
+        {/* Center: Title (flex-1 to take remaining space, text-center) */}
+        <span className="flex-1 text-center font-bebas text-xl tracking-widest" style={{ color: '#D4AF37' }}>
           WATERFALL TERMINAL
         </span>
+        
+        {/* Right: Hamburger Menu */}
         <MobileMenu onSignOut={handleSignOut} />
       </header>
 
