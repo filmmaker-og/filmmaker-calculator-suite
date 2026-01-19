@@ -63,10 +63,10 @@ const MobileMenu = ({ onOpenLegal, onSignOut }: MobileMenuProps) => {
 
   return (
     <>
-      {/* Hamburger Button - Consistent w-6 h-6 size */}
+      {/* Hamburger Button - Touch-friendly sizing */}
       <button
         onClick={() => setIsOpen(true)}
-        className="w-10 h-10 flex items-center justify-center hover:opacity-80 transition-opacity"
+        className="w-12 h-12 flex items-center justify-center hover:opacity-80 transition-all duration-100 active:scale-95 -mr-1"
         aria-label="Open menu"
       >
         <Menu className="w-6 h-6" style={{ color: '#D4AF37' }} />
@@ -74,14 +74,14 @@ const MobileMenu = ({ onOpenLegal, onSignOut }: MobileMenuProps) => {
 
       {/* Full-screen Black Overlay Menu */}
       {isOpen && (
-        <div className="fixed inset-0 z-50 bg-background flex flex-col animate-fade-in">
-          {/* Close Button */}
+        <div className="fixed inset-0 z-50 bg-background flex flex-col animate-fade-in safe-top">
+          {/* Close Button - Touch-friendly */}
           <button
             onClick={() => setIsOpen(false)}
-            className="absolute top-6 right-6 w-12 h-12 flex items-center justify-center text-foreground hover:text-gold transition-colors"
+            className="absolute top-6 right-4 w-14 h-14 flex items-center justify-center text-foreground hover:text-gold transition-all duration-100 active:scale-95"
             aria-label="Close menu"
           >
-            <X className="w-6 h-6" />
+            <X className="w-7 h-7" />
           </button>
 
           {/* Menu Content */}
@@ -91,8 +91,8 @@ const MobileMenu = ({ onOpenLegal, onSignOut }: MobileMenuProps) => {
               FILMMAKER.OG
             </span>
 
-            {/* Navigation Links */}
-            <nav className="flex flex-col items-center gap-8">
+            {/* Navigation Links - Increased gap for better touch targets */}
+            <nav className="flex flex-col items-center gap-10">
               {menuLinks.map((link) => {
                 const linkClass = link.isHighlighted 
                   ? "font-bebas text-4xl font-bold tracking-wider transition-colors"
@@ -162,17 +162,17 @@ const MobileMenu = ({ onOpenLegal, onSignOut }: MobileMenuProps) => {
             </nav>
           </div>
 
-          {/* Footer */}
-          <div className="pb-12 text-center space-y-2">
+          {/* Footer - With safe area padding */}
+          <div className="pb-12 text-center space-y-3 safe-bottom">
             <a
               href="https://www.instagram.com/filmmaker.og"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-muted-foreground hover:text-gold transition-colors text-sm tracking-widest block"
+              className="text-muted-foreground hover:text-gold transition-colors text-sm tracking-widest block py-2"
             >
               @filmmaker.og (IG)
             </a>
-            <span className="text-muted-foreground text-sm tracking-widest block">
+            <span className="text-muted-foreground text-sm tracking-widest block py-1">
               thefilmmaker.og@gmail.com
             </span>
           </div>

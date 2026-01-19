@@ -165,17 +165,17 @@ const Calculator = () => {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       {/* Command Bar - Fixed Sticky Header: Home Left, Title Center, Menu Right */}
-      <header className="fixed top-0 left-0 right-0 h-14 z-50 flex items-center px-6 border-b border-zinc-900" style={{ backgroundColor: '#000000' }}>
+      <header className="fixed top-0 left-0 right-0 h-14 z-50 flex items-center px-6 border-b border-zinc-900 safe-top" style={{ backgroundColor: '#000000' }}>
         {/* Left: Home Icon */}
         <button
           onClick={() => navigate("/")}
-          className="w-10 h-10 flex items-center justify-center hover:opacity-80 transition-opacity"
+          className="w-12 h-12 flex items-center justify-center hover:opacity-80 transition-opacity touch-feedback -ml-1"
         >
           <Home className="w-5 h-5" style={{ color: '#D4AF37' }} />
         </button>
         
         {/* Center: Title (flex-1 to take remaining space, text-center) */}
-        <span className="flex-1 text-center font-bebas text-xl tracking-widest" style={{ color: '#D4AF37' }}>
+        <span className="flex-1 text-center font-bebas text-lg sm:text-xl tracking-widest" style={{ color: '#D4AF37' }}>
           WATERFALL TERMINAL
         </span>
         
@@ -253,17 +253,17 @@ const Calculator = () => {
         )}
       </main>
 
-      {/* Fixed Bottom Navigation - Pinned to Viewport */}
+      {/* Fixed Bottom Navigation - Pinned to Viewport with Safe Area */}
       <div 
-        className="fixed bottom-0 left-0 right-0 px-6 py-4 bg-background z-40"
+        className="fixed bottom-0 left-0 right-0 px-6 pt-4 pb-4 bg-background z-40 safe-bottom"
         style={{ borderTop: '1px solid #333333' }}
       >
-        <div className="flex items-center justify-between gap-6 max-w-screen-lg mx-auto">
+        <div className="flex items-center justify-between gap-4 max-w-screen-lg mx-auto">
           {currentStep > 1 && (
             <Button
               onClick={prevStep}
               variant="ghost"
-              className="text-zinc-400 hover:text-white flex-1 py-4"
+              className="text-zinc-400 hover:text-white flex-1 py-5 touch-feedback min-h-[52px]"
             >
               <ChevronLeft className="w-5 h-5 mr-1" />
               Previous
@@ -273,7 +273,7 @@ const Calculator = () => {
           {currentStep < 6 && (
             <Button
               onClick={nextStep}
-              className="btn-vault flex-1 py-4"
+              className="btn-vault flex-1 py-5 touch-feedback min-h-[52px]"
             >
               NEXT STEP
               <ChevronRight className="w-5 h-5 ml-1" />
@@ -283,7 +283,7 @@ const Calculator = () => {
       </div>
       
       {/* Spacer for fixed footer */}
-      <div className="h-20" />
+      <div className="h-24" />
     </div>
   );
 };

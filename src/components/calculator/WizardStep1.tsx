@@ -28,10 +28,10 @@ const WizardStep1 = ({ budget, onUpdate }: WizardStep1Props) => {
             </h2>
             <button
               onClick={() => setInfoOpen(true)}
-              className="transition-colors hover:opacity-80"
+              className="transition-all duration-100 hover:opacity-80 active:scale-95 p-2 -m-2"
               aria-label="More information"
             >
-              <Info className="w-4 h-4" style={{ color: '#D4AF37' }} />
+              <Info className="w-5 h-5" style={{ color: '#D4AF37' }} />
             </button>
           </div>
         </div>
@@ -52,7 +52,7 @@ const WizardStep1 = ({ budget, onUpdate }: WizardStep1Props) => {
             </span>
             <Input
               type="text"
-              inputMode="decimal"
+              inputMode="numeric"
               pattern="[0-9]*"
               value={budget === 0 ? '' : budget.toLocaleString()}
               onChange={(e) => {
@@ -60,7 +60,7 @@ const WizardStep1 = ({ budget, onUpdate }: WizardStep1Props) => {
                 onUpdate(value);
               }}
               placeholder="0"
-              className="pl-10 py-6 text-2xl font-mono text-white text-right rounded-sm border-zinc-800 focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37] transition-colors"
+              className="pl-10 py-6 text-2xl font-mono text-white text-right rounded-sm border-zinc-800 focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37] transition-all focus:scale-[1.01] min-h-[60px]"
               style={{ backgroundColor: '#0a0a0a' }}
               onFocus={(e) => e.target.select()}
             />
