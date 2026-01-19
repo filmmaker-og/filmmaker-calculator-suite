@@ -95,18 +95,18 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen flex flex-col" style={{ backgroundColor: '#000000' }}>
-      {/* Global Command Bar - Fixed Header */}
-      <header className="fixed top-0 left-0 right-0 h-14 z-50 flex items-center px-6" style={{ backgroundColor: '#000000', borderBottom: '1px solid #D4AF37' }}>
-        {/* Left: Home Icon */}
+      {/* Global Command Bar - Fixed Header with Safe Area */}
+      <header className="fixed top-0 left-0 right-0 h-14 z-50 flex items-center px-6 safe-top" style={{ backgroundColor: '#000000', borderBottom: '1px solid #D4AF37' }}>
+        {/* Left: Home Icon - Touch-friendly */}
         <button
           onClick={() => navigate("/")}
-          className="w-10 h-10 flex items-center justify-center hover:opacity-80 transition-opacity"
+          className="w-12 h-12 flex items-center justify-center hover:opacity-80 transition-all duration-100 active:scale-95 -ml-1"
         >
           <Home className="w-5 h-5" style={{ color: '#D4AF37' }} />
         </button>
         
         {/* Center: Brand Title */}
-        <span className="flex-1 text-center font-bebas text-xl tracking-widest" style={{ color: '#D4AF37' }}>
+        <span className="flex-1 text-center font-bebas text-lg sm:text-xl tracking-widest" style={{ color: '#D4AF37' }}>
           FILMMAKER.OG
         </span>
         
@@ -202,7 +202,7 @@ const Auth = () => {
                     <Button
                       type="submit"
                       disabled={loading || !firstName.trim()}
-                      className="w-full h-14 rounded-sm font-bebas text-xl tracking-wider transition-colors disabled:cursor-not-allowed"
+                      className="w-full h-14 rounded-sm font-bebas text-xl tracking-wider transition-all duration-100 active:scale-[0.98] disabled:cursor-not-allowed min-h-[56px]"
                       style={{ 
                         backgroundColor: '#D4AF37', 
                         color: '#000000',
@@ -259,10 +259,10 @@ const Auth = () => {
             NO PASSWORDS REQUIRED • BANK-GRADE SECURITY
           </p>
 
-          {/* Demo Access Link - Subtle */}
+          {/* Demo Access Link - Improved touch target */}
           <button
             onClick={() => navigate("/calculator?reset=true")}
-            className="block mx-auto mt-4 text-[10px] tracking-wide transition-colors hover:underline text-zinc-800 hover:text-zinc-600"
+            className="block mx-auto mt-4 text-xs tracking-wide transition-colors hover:underline text-zinc-600 hover:text-zinc-400 py-3 px-4"
           >
             Demo Access
           </button>
