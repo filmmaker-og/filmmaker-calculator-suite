@@ -40,9 +40,8 @@ const Calculator = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { toast } = useToast();
-  const [user, setUser] = useState<User | null>(null);
+const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
   const [inputs, setInputs] = useState<WaterfallInputs>(defaultInputs);
   const [guilds, setGuilds] = useState<GuildState>(defaultGuilds);
@@ -115,41 +114,6 @@ const Calculator = () => {
   const toggleGuild = useCallback((guild: keyof GuildState) => {
     setGuilds(prev => ({ ...prev, [guild]: !prev[guild] }));
   }, []);
-
-  const handleSaveCalculation = async () => {
-    if (!user) {
-      toast({
-        title: "Success",
-        description: "Calculation saved to local storage (demo mode).",
-      });
-      return;
-    }
-    
-    setSaving(true);
-    try {
-      const { error } = await supabase
-        .from("saved_calculations")
-        .insert([{
-          user_id: user.id,
-          inputs: JSON.parse(JSON.stringify({ ...inputs, guilds })),
-        }]);
-
-      if (error) throw error;
-
-      toast({
-        title: "Calculation Saved",
-        description: "Your waterfall model has been saved to your dashboard.",
-      });
-    } catch (error: any) {
-      toast({
-        title: "Error",
-        description: error.message || "Failed to save calculation",
-        variant: "destructive",
-      });
-    } finally {
-      setSaving(false);
-    }
-  };
 
   const nextStep = () => setCurrentStep(prev => Math.min(prev + 1, 6));
   const prevStep = () => setCurrentStep(prev => Math.max(prev - 1, 1));
@@ -247,8 +211,6 @@ const Calculator = () => {
           <WizardStep6 
             result={result}
             equity={inputs.equity}
-            onSave={handleSaveCalculation}
-            saving={saving}
           />
         )}
       </main>

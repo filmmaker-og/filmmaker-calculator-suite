@@ -1,17 +1,15 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { WaterfallResult, formatCurrency, formatMultiple } from "@/lib/waterfall";
-import { Save, Loader2, Download, AlertTriangle } from "lucide-react";
+import { Download, AlertTriangle } from "lucide-react";
 import RestrictedAccessModal from "@/components/RestrictedAccessModal";
 
 interface WizardStep6Props {
   result: WaterfallResult;
   equity: number;
-  onSave: () => void;
-  saving: boolean;
 }
 
-const WizardStep6 = ({ result, equity, onSave, saving }: WizardStep6Props) => {
+const WizardStep6 = ({ result, equity }: WizardStep6Props) => {
   const [showRestrictedModal, setShowRestrictedModal] = useState(false);
   const isUnderperforming = result.multiple < 1.2;
   const breakEvenRevenue = result.totalHurdle;
@@ -138,31 +136,15 @@ const WizardStep6 = ({ result, equity, onSave, saving }: WizardStep6Props) => {
         </div>
       )}
 
-      {/* Action Buttons */}
-      <div className="space-y-3">
-        <Button
-          onClick={onSave}
-          disabled={saving}
-          variant="outline"
-          className="w-full py-5 rounded-sm border-zinc-700 text-zinc-300 hover:text-white hover:border-zinc-500"
-        >
-          {saving ? (
-            <Loader2 className="w-5 h-5 animate-spin mr-2" />
-          ) : (
-            <Save className="w-5 h-5 mr-2" />
-          )}
-          {saving ? "SAVING..." : "SAVE TO DASHBOARD"}
-        </Button>
-
-        <Button
-          onClick={() => setShowRestrictedModal(true)}
-          className="w-full py-5 rounded-sm font-bebas tracking-wider"
-          style={{ backgroundColor: '#D4AF37', color: '#000000' }}
-        >
-          <Download className="w-5 h-5 mr-2" />
-          DOWNLOAD INVESTOR DECK
-        </Button>
-      </div>
+      {/* Action Button */}
+      <Button
+        onClick={() => setShowRestrictedModal(true)}
+        className="w-full py-5 rounded-sm font-bebas tracking-wider min-h-[56px]"
+        style={{ backgroundColor: '#D4AF37', color: '#000000' }}
+      >
+        <Download className="w-5 h-5 mr-2" />
+        DOWNLOAD INVESTOR DECK
+      </Button>
 
       {/* Restricted Access Modal */}
       <RestrictedAccessModal 
