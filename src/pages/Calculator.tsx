@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -11,6 +11,7 @@ import WizardStep3 from "@/components/calculator/WizardStep3";
 import WizardStep4 from "@/components/calculator/WizardStep4";
 import WizardStep5 from "@/components/calculator/WizardStep5";
 import WizardStep6 from "@/components/calculator/WizardStep6";
+import StepIndicator from "@/components/calculator/StepIndicator";
 import MobileMenu from "@/components/MobileMenu";
 import { calculateWaterfall, WaterfallInputs, WaterfallResult, GuildState } from "@/lib/waterfall";
 
@@ -118,10 +119,23 @@ const [user, setUser] = useState<User | null>(null);
   const nextStep = () => setCurrentStep(prev => Math.min(prev + 1, 6));
   const prevStep = () => setCurrentStep(prev => Math.max(prev - 1, 1));
 
+  // Loading skeleton that matches final layout to prevent jumping
   if (loading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="skeleton-gold w-16 h-16 rounded-full" />
+      <div className="min-h-screen bg-background flex flex-col">
+        {/* Header skeleton - same dimensions as real header */}
+        <header className="fixed top-0 left-0 right-0 h-14 z-50 flex items-center px-6 border-b border-zinc-900 safe-top" style={{ backgroundColor: '#000000' }}>
+          <div className="w-12 h-12" />
+          <span className="flex-1 text-center font-bebas text-lg tracking-widest" style={{ color: '#D4AF37' }}>
+            WATERFALL TERMINAL
+          </span>
+          <div className="w-12 h-12" />
+        </header>
+        <div className="header-spacer" />
+        {/* Content skeleton */}
+        <div className="flex-1 flex items-center justify-center">
+          <div className="skeleton-gold w-16 h-16 rounded-full" />
+        </div>
       </div>
     );
   }
@@ -147,22 +161,25 @@ const [user, setUser] = useState<User | null>(null);
         <MobileMenu onSignOut={handleSignOut} />
       </header>
 
-      {/* Spacer for fixed header */}
-      <div className="h-14" />
+      {/* Spacer for fixed header - accounts for safe area */}
+      <div className="header-spacer" />
 
-      {/* Status Bar - Terminal Plate Style */}
+      {/* Status Bar - Terminal Plate Style with tappable step indicators */}
       <div 
         className="px-6 py-4 border-b border-[#333333]"
         style={{ backgroundColor: '#111111' }}
       >
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-xs uppercase tracking-widest text-zinc-500">
-            Step {currentStep} of 6
-          </span>
-          <span className="text-xs font-mono" style={{ color: '#D4AF37' }}>
+        {/* Tappable step indicator pills */}
+        <div className="flex items-center justify-between mb-3">
+          <StepIndicator 
+            currentStep={currentStep} 
+            onStepClick={setCurrentStep} 
+          />
+          <span className="text-xs font-mono ml-4" style={{ color: '#D4AF37' }}>
             {Math.round((currentStep / 6) * 100)}%
           </span>
         </div>
+        {/* Progress bar */}
         <div className="h-1 rounded-sm overflow-hidden" style={{ backgroundColor: '#1a1a1a' }}>
           <div 
             className="h-full transition-all duration-300 rounded-sm"
@@ -174,8 +191,8 @@ const [user, setUser] = useState<User | null>(null);
         </div>
       </div>
 
-      {/* Step Content */}
-      <main className="flex-1 px-6 py-6 pb-24 overflow-y-auto">
+      {/* Step Content with fade animation */}
+      <main className="flex-1 px-6 py-6 pb-24 overflow-y-auto animate-page-in" key={currentStep}>
         {currentStep === 1 && (
           <WizardStep1 
             budget={inputs.budget} 
@@ -215,32 +232,38 @@ const [user, setUser] = useState<User | null>(null);
         )}
       </main>
 
-      {/* Fixed Bottom Navigation - Pinned to Viewport with Safe Area */}
+      {/* Fixed Bottom Navigation - Consistent layout */}
       <div 
         className="fixed bottom-0 left-0 right-0 px-6 pt-4 pb-4 bg-background z-40 safe-bottom"
         style={{ borderTop: '1px solid #333333' }}
       >
-        <div className="flex items-center justify-between gap-4 max-w-screen-lg mx-auto">
-          {currentStep > 1 && (
-            <Button
-              onClick={prevStep}
-              variant="ghost"
-              className="text-zinc-400 hover:text-white flex-1 py-5 touch-feedback min-h-[52px]"
-            >
-              <ChevronLeft className="w-5 h-5 mr-1" />
-              Previous
-            </Button>
-          )}
+        <div className="flex items-center gap-4 max-w-screen-lg mx-auto">
+          {/* Previous button - only show after step 1, otherwise invisible spacer */}
+          <div className="flex-1">
+            {currentStep > 1 && (
+              <Button
+                onClick={prevStep}
+                variant="ghost"
+                className="w-full text-zinc-400 hover:text-white py-5 touch-feedback min-h-[52px]"
+              >
+                <ChevronLeft className="w-5 h-5 mr-1" />
+                Previous
+              </Button>
+            )}
+          </div>
           
-          {currentStep < 6 && (
-            <Button
-              onClick={nextStep}
-              className="btn-vault flex-1 py-5 touch-feedback min-h-[52px]"
-            >
-              NEXT STEP
-              <ChevronRight className="w-5 h-5 ml-1" />
-            </Button>
-          )}
+          {/* Next button - always visible until step 6, centered when alone */}
+          <div className="flex-1">
+            {currentStep < 6 && (
+              <Button
+                onClick={nextStep}
+                className="w-full btn-vault py-5 touch-feedback min-h-[52px]"
+              >
+                NEXT STEP
+                <ChevronRight className="w-5 h-5 ml-1" />
+              </Button>
+            )}
+          </div>
         </div>
       </div>
       
