@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ArrowLeft, Check, Volume2 } from "lucide-react";
+import { Check, Volume2, Home } from "lucide-react";
 import MobileMenu from "@/components/MobileMenu";
 
 const packages = [
@@ -51,6 +51,7 @@ const packages = [
 ];
 
 const Store = () => {
+  const navigate = useNavigate();
   const [agreedTerms, setAgreedTerms] = useState<Record<string, boolean>>({});
 
   const handlePurchase = (packageId: string, stripeLink: string) => {
@@ -59,30 +60,34 @@ const Store = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Mobile Menu */}
-      <MobileMenu />
-
-      {/* Header */}
-      <header className="border-b border-border px-6 py-4">
-        <div className="flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-3">
-            <span className="font-bebas text-foreground tracking-wider text-xl">
-              FILMMAKER.OG
-            </span>
-          </Link>
-          <Link to="/" className="text-muted-foreground hover:text-gold text-sm flex items-center gap-2 transition-colors">
-            <ArrowLeft className="w-4 h-4" />
-            Back
-          </Link>
-        </div>
+    <div className="min-h-screen bg-background flex flex-col">
+      {/* Command Bar - Fixed Header matching other pages */}
+      <header className="fixed top-0 left-0 right-0 h-14 z-50 flex items-center px-6 safe-top" style={{ backgroundColor: '#000000', borderBottom: '1px solid #D4AF37' }}>
+        {/* Left: Home Icon */}
+        <button
+          onClick={() => navigate("/")}
+          className="w-12 h-12 flex items-center justify-center hover:opacity-80 transition-opacity touch-feedback -ml-1"
+        >
+          <Home className="w-5 h-5" style={{ color: '#D4AF37' }} />
+        </button>
+        
+        {/* Center: Title */}
+        <span className="flex-1 text-center font-bebas text-lg sm:text-xl tracking-widest" style={{ color: '#D4AF37' }}>
+          SERVICES
+        </span>
+        
+        {/* Right: Menu */}
+        <MobileMenu />
       </header>
 
-      <main className="px-6 py-8">
+      {/* Spacer for fixed header */}
+      <div className="header-spacer" />
+
+      <main className="flex-1 px-6 py-8 animate-page-in">
         {/* Header */}
         <div className="text-center mb-10">
           <h1 className="font-bebas text-4xl md:text-5xl text-foreground mb-3">
-            SERVICES
+            PRODUCER SERVICES
           </h1>
           <p className="text-muted-foreground text-sm max-w-md mx-auto">
             Professional film finance consulting for serious producers
@@ -92,7 +97,7 @@ const Store = () => {
         {/* Trust Bridge - Audio Player Placeholder */}
         <div className="glass-card p-6 mb-8">
           <div className="flex items-center gap-4">
-            <button className="w-12 h-12 border border-gold flex items-center justify-center hover:bg-gold/10 transition-colors flex-shrink-0">
+            <button className="w-12 h-12 border border-gold flex items-center justify-center hover:bg-gold/10 transition-colors flex-shrink-0 touch-feedback min-h-[48px]">
               <Volume2 className="w-6 h-6 text-gold" />
             </button>
             <div className="flex-1 min-w-0">
@@ -115,8 +120,8 @@ const Store = () => {
           </div>
         </div>
 
-        {/* Pricing Cards - Stacked on Mobile */}
-        <div className="space-y-6">
+        {/* Pricing Cards - Stacked on Mobile with better spacing */}
+        <div className="space-y-6 pb-8">
           {packages.map((pkg) => (
             <div
               key={pkg.id}
@@ -150,14 +155,14 @@ const Store = () => {
               </ul>
 
               <div className="space-y-3">
-                <div className="flex items-start gap-3">
+                <div className="flex items-start gap-3 min-h-[44px] py-2">
                   <Checkbox
                     id={`terms-${pkg.id}`}
                     checked={agreedTerms[pkg.id] || false}
                     onCheckedChange={(checked) => 
                       setAgreedTerms(prev => ({ ...prev, [pkg.id]: !!checked }))
                     }
-                    className="mt-0.5 border-border data-[state=checked]:bg-gold data-[state=checked]:border-gold"
+                    className="mt-0.5 border-border data-[state=checked]:bg-gold data-[state=checked]:border-gold w-5 h-5"
                   />
                   <label 
                     htmlFor={`terms-${pkg.id}`} 
@@ -170,7 +175,7 @@ const Store = () => {
                 <Button
                   onClick={() => handlePurchase(pkg.id, pkg.stripeLink)}
                   disabled={!agreedTerms[pkg.id]}
-                  className={`w-full py-4 ${pkg.featured ? 'btn-vault' : 'btn-ghost-gold disabled:opacity-30'}`}
+                  className={`w-full py-4 min-h-[52px] touch-feedback ${pkg.featured ? 'btn-vault' : 'btn-ghost-gold disabled:opacity-30'}`}
                 >
                   {agreedTerms[pkg.id] ? 'PURCHASE' : 'AGREE TO TERMS'}
                 </Button>
@@ -181,7 +186,7 @@ const Store = () => {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-border py-8 mt-8">
+      <footer className="border-t border-border py-8 mt-auto">
         <div className="px-6 text-center">
           <p className="text-muted-foreground text-xs tracking-wide leading-relaxed max-w-md mx-auto">
             Educational disclaimer: For educational purposes only. This is not legal, tax, accounting, or investment advice. Consult a qualified entertainment attorney and financial advisor.

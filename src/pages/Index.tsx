@@ -23,8 +23,8 @@ const Index = () => {
         }}
       />
 
-      {/* HEADER: Logo Left, Menu Right */}
-      <header className="relative z-50 px-6 py-4 flex items-center justify-between" style={{ borderBottom: '1px solid #D4AF37' }}>
+      {/* HEADER: Logo Left, Menu Right - with safe area for notched devices */}
+      <header className="relative z-50 px-6 py-4 flex items-center justify-between safe-top" style={{ borderBottom: '1px solid #D4AF37' }}>
         <span className="font-bebas text-xl tracking-widest" style={{ color: '#D4AF37' }}>
           FILMMAKER.OG
         </span>
@@ -40,8 +40,8 @@ const Index = () => {
         </div>
       </header>
       
-      {/* CONTENT: Absolute Center */}
-      <div className="flex-1 flex flex-col items-center justify-center text-center px-6 py-12 relative z-10">
+      {/* CONTENT: Absolute Center with fade-in animation */}
+      <div className="flex-1 flex flex-col items-center justify-center text-center px-6 py-12 relative z-10 animate-page-in">
         
         {/* 1. THE TOTEM (Icon) */}
         <div className="mb-4">
@@ -78,11 +78,11 @@ const Index = () => {
         </div>
       </div>
       
-      {/* FOOTER: Subtle Legal Link */}
-      <footer className="py-6 text-center relative z-10">
+      {/* FOOTER: Improved touch target for legal link */}
+      <footer className="py-4 text-center relative z-10">
         <button
           onClick={() => setShowLegalModal(true)}
-          className="text-[9px] uppercase tracking-widest text-zinc-700 hover:text-zinc-500 transition-colors"
+          className="text-xs uppercase tracking-widest text-zinc-600 hover:text-zinc-400 transition-colors py-3 px-4 min-h-[44px]"
         >
           Educational Purposes Only
         </button>
