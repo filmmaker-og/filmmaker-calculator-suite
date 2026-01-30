@@ -10,14 +10,13 @@ import { User } from "@supabase/supabase-js";
 import WizardStep1 from "@/components/calculator/WizardStep1";
 import WizardStep2 from "@/components/calculator/WizardStep2";
 import WizardStep3 from "@/components/calculator/WizardStep3";
-import WizardStep4 from "@/components/calculator/WizardStep4";
-import WizardStep5 from "@/components/calculator/WizardStep5";
-import WizardStep6 from "@/components/calculator/WizardStep6";
+import ResultsDashboard from "@/components/calculator/ResultsDashboard";
 import StepIndicator from "@/components/calculator/StepIndicator";
 import MobileMenu from "@/components/MobileMenu";
 import { calculateWaterfall, WaterfallInputs, WaterfallResult, GuildState } from "@/lib/waterfall";
 
 const STORAGE_KEY = "filmmaker_og_inputs";
+const TOTAL_STEPS = 4;
 
 const defaultInputs: WaterfallInputs = {
   revenue: 3500000,
@@ -57,7 +56,6 @@ const Calculator = () => {
       localStorage.removeItem(STORAGE_KEY);
       setInputs(defaultInputs);
       setGuilds(defaultGuilds);
-      // Don't reset step - allow user to navigate freely
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -72,7 +70,11 @@ const Calculator = () => {
         const parsed = JSON.parse(saved);
         if (parsed.inputs) setInputs(parsed.inputs);
         if (parsed.guilds) setGuilds(parsed.guilds);
-        if (parsed.currentStep) setCurrentStep(parsed.currentStep);
+        // Map old 6-step to new 4-step (steps 5,6 become step 4)
+        if (parsed.currentStep) {
+          const mappedStep = parsed.currentStep >= 5 ? 4 : Math.min(parsed.currentStep, 4);
+          setCurrentStep(mappedStep);
+        }
       } catch (e) {
         console.error("Failed to load saved inputs");
       }
@@ -122,7 +124,7 @@ const Calculator = () => {
 
   const nextStep = useCallback(() => {
     haptics.step();
-    setCurrentStep(prev => Math.min(prev + 1, 6));
+    setCurrentStep(prev => Math.min(prev + 1, TOTAL_STEPS));
   }, [haptics]);
   
   const prevStep = useCallback(() => {
@@ -132,7 +134,7 @@ const Calculator = () => {
 
   // Swipe gesture handlers with visual feedback
   const { handlers: swipeHandlers, state: swipeState } = useSwipe({
-    onSwipeLeft: () => currentStep < 6 && nextStep(),
+    onSwipeLeft: () => currentStep < TOTAL_STEPS && nextStep(),
     onSwipeRight: () => currentStep > 1 && prevStep(),
     threshold: 50,
     rubberBand: true,
@@ -143,7 +145,6 @@ const Calculator = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex flex-col">
-        {/* Header skeleton - same dimensions as real header */}
         <header className="fixed top-0 left-0 right-0 h-14 z-50 flex items-center px-6 border-b border-zinc-900 safe-top" style={{ backgroundColor: '#000000' }}>
           <div className="w-12 h-12" />
           <span className="flex-1 text-center font-bebas text-lg tracking-widest" style={{ color: '#D4AF37' }}>
@@ -152,7 +153,6 @@ const Calculator = () => {
           <div className="w-12 h-12" />
         </header>
         <div className="header-spacer" />
-        {/* Content skeleton */}
         <div className="flex-1 flex items-center justify-center">
           <div className="skeleton-gold w-16 h-16 rounded-full" />
         </div>
@@ -162,9 +162,8 @@ const Calculator = () => {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      {/* Command Bar - Fixed Sticky Header: Home Left, Title Center, Menu Right */}
+      {/* Command Bar - Fixed Sticky Header */}
       <header className="fixed top-0 left-0 right-0 h-14 z-50 flex items-center px-6 border-b border-zinc-900 safe-top" style={{ backgroundColor: '#000000' }}>
-        {/* Left: Home Icon */}
         <button
           onClick={() => navigate("/")}
           className="w-12 h-12 flex items-center justify-center hover:opacity-80 transition-opacity touch-feedback -ml-1"
@@ -172,47 +171,43 @@ const Calculator = () => {
           <Home className="w-5 h-5" style={{ color: '#D4AF37' }} />
         </button>
         
-        {/* Center: Title (flex-1 to take remaining space, text-center) */}
         <span className="flex-1 text-center font-bebas text-lg sm:text-xl tracking-widest" style={{ color: '#D4AF37' }}>
           WATERFALL TERMINAL
         </span>
         
-        {/* Right: Hamburger Menu */}
         <MobileMenu onSignOut={handleSignOut} />
       </header>
 
-      {/* Spacer for fixed header - accounts for safe area */}
       <div className="header-spacer" />
 
-      {/* Status Bar - Terminal Plate Style with tappable step indicators */}
+      {/* Status Bar */}
       <div 
         className="px-6 py-4 border-b border-[#333333]"
         style={{ backgroundColor: '#111111' }}
       >
-        {/* Tappable step indicator pills with swipe offset */}
         <div className="flex items-center justify-between mb-3">
           <StepIndicator 
             currentStep={currentStep} 
+            totalSteps={TOTAL_STEPS}
             onStepClick={setCurrentStep}
             swipeOffset={swipeState.offset}
           />
           <span className="text-xs font-mono ml-4" style={{ color: '#D4AF37' }}>
-            {Math.round((currentStep / 6) * 100)}%
+            {Math.round((currentStep / TOTAL_STEPS) * 100)}%
           </span>
         </div>
-        {/* Progress bar */}
         <div className="h-1 rounded-sm overflow-hidden" style={{ backgroundColor: '#1a1a1a' }}>
           <div 
             className="h-full transition-all duration-300 rounded-sm"
             style={{ 
-              width: `${(currentStep / 6) * 100}%`,
+              width: `${(currentStep / TOTAL_STEPS) * 100}%`,
               backgroundColor: '#D4AF37'
             }}
           />
         </div>
       </div>
 
-      {/* Step Content with swipe visual feedback and step transitions */}
+      {/* Step Content */}
       <main 
         className={`flex-1 px-6 py-6 pb-24 overflow-y-auto swipe-content ${swipeState.isSwiping ? 'swiping' : ''}`}
         key={currentStep}
@@ -224,8 +219,10 @@ const Calculator = () => {
       >
         {currentStep === 1 && (
           <WizardStep1 
-            budget={inputs.budget} 
-            onUpdate={(val) => updateInput("budget", val)} 
+            budget={inputs.budget}
+            revenue={inputs.revenue}
+            onUpdateBudget={(val) => updateInput("budget", val)}
+            onUpdateRevenue={(val) => updateInput("revenue", val)}
           />
         )}
         {currentStep === 2 && (
@@ -244,30 +241,21 @@ const Calculator = () => {
             onUpdateSalesExp={(val) => updateInput("salesExp", val)}
           />
         )}
-        {currentStep === 4 && (
-          <WizardStep4 
-            revenue={inputs.revenue} 
-            onUpdate={(val) => updateInput("revenue", val)} 
-          />
-        )}
-        {currentStep === 5 && result && (
-          <WizardStep5 result={result} inputs={inputs} />
-        )}
-        {currentStep === 6 && result && (
-          <WizardStep6 
+        {currentStep === 4 && result && (
+          <ResultsDashboard 
             result={result}
+            inputs={inputs}
             equity={inputs.equity}
           />
         )}
       </main>
 
-      {/* Fixed Bottom Navigation - Consistent layout */}
+      {/* Fixed Bottom Navigation */}
       <div 
         className="fixed bottom-0 left-0 right-0 px-6 pt-4 pb-4 bg-background z-40 safe-bottom"
         style={{ borderTop: '1px solid #333333' }}
       >
         <div className="flex items-center gap-4 max-w-screen-lg mx-auto">
-          {/* Previous button - only show after step 1, otherwise invisible spacer */}
           <div className="flex-1">
             {currentStep > 1 && (
               <Button
@@ -281,14 +269,13 @@ const Calculator = () => {
             )}
           </div>
           
-          {/* Next button - always visible until step 6, centered when alone */}
           <div className="flex-1">
-            {currentStep < 6 && (
+            {currentStep < TOTAL_STEPS && (
               <Button
                 onClick={nextStep}
                 className="w-full btn-vault py-5 touch-feedback min-h-[52px]"
               >
-                NEXT STEP
+                {currentStep === 3 ? 'VIEW RESULTS' : 'NEXT STEP'}
                 <ChevronRight className="w-5 h-5 ml-1" />
               </Button>
             )}
@@ -296,7 +283,6 @@ const Calculator = () => {
         </div>
       </div>
       
-      {/* Spacer for fixed footer */}
       <div className="h-24" />
     </div>
   );
