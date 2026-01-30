@@ -1,8 +1,9 @@
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import { useSwipe } from "@/hooks/use-swipe";
 import { ChevronLeft, ChevronRight, Home } from "lucide-react";
 import { User } from "@supabase/supabase-js";
 import WizardStep1 from "@/components/calculator/WizardStep1";
@@ -116,8 +117,15 @@ const [user, setUser] = useState<User | null>(null);
     setGuilds(prev => ({ ...prev, [guild]: !prev[guild] }));
   }, []);
 
-  const nextStep = () => setCurrentStep(prev => Math.min(prev + 1, 6));
-  const prevStep = () => setCurrentStep(prev => Math.max(prev - 1, 1));
+  const nextStep = useCallback(() => setCurrentStep(prev => Math.min(prev + 1, 6)), []);
+  const prevStep = useCallback(() => setCurrentStep(prev => Math.max(prev - 1, 1)), []);
+
+  // Swipe gesture handlers
+  const swipeHandlers = useSwipe({
+    onSwipeLeft: nextStep,
+    onSwipeRight: prevStep,
+    threshold: 50,
+  });
 
   // Loading skeleton that matches final layout to prevent jumping
   if (loading) {
@@ -192,7 +200,11 @@ const [user, setUser] = useState<User | null>(null);
       </div>
 
       {/* Step Content with fade animation */}
-      <main className="flex-1 px-6 py-6 pb-24 overflow-y-auto animate-page-in" key={currentStep}>
+      <main 
+        className="flex-1 px-6 py-6 pb-24 overflow-y-auto animate-page-in" 
+        key={currentStep}
+        {...swipeHandlers}
+      >
         {currentStep === 1 && (
           <WizardStep1 
             budget={inputs.budget} 
