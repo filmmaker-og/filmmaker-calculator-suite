@@ -27,35 +27,40 @@ const ResultsDashboard = forwardRef<HTMLDivElement, ResultsDashboardProps>(({ re
   const [displayedROI, setDisplayedROI] = useState(0);
   const [hasAnimated, setHasAnimated] = useState(false);
 
-  // Calculate ROI
+  // Calculate metrics
   const totalInvested = inputs.debt + inputs.equity;
   const totalDistributed = result.recouped + result.profitPool;
   const roi = totalInvested > 0 ? (totalDistributed / totalInvested) * 100 : 0;
-  const isProfitable = roi >= 100;
+  const isProfitable = result.profitPool > 0;
   const isUnderperforming = result.multiple < 1.2;
+  const netProfit = result.profitPool;
 
-  // Animated count-up for ROI
+  // Animated count-up for Net Profit (hero)
+  const [displayedProfit, setDisplayedProfit] = useState(0);
+  
   useEffect(() => {
     if (hasAnimated) return;
     
     const duration = 1200;
     const steps = 40;
-    const increment = roi / steps;
+    const increment = netProfit / steps;
     let current = 0;
     
     const timer = setInterval(() => {
       current += increment;
-      if (current >= roi) {
+      if (current >= netProfit) {
+        setDisplayedProfit(netProfit);
         setDisplayedROI(roi);
         clearInterval(timer);
         setHasAnimated(true);
       } else {
-        setDisplayedROI(current);
+        setDisplayedProfit(current);
+        setDisplayedROI((current / netProfit) * roi);
       }
     }, duration / steps);
 
     return () => clearInterval(timer);
-  }, [roi, hasAnimated]);
+  }, [netProfit, roi, hasAnimated]);
 
   // Waterfall flow calculations
   const firstMoneyOut = result.cam + result.salesFee + result.guilds + result.marketing;
@@ -116,7 +121,7 @@ const ResultsDashboard = forwardRef<HTMLDivElement, ResultsDashboardProps>(({ re
         <div className="h-px flex-1 bg-zinc-800" />
       </div>
 
-      {/* HERO ROI CARD with Glow */}
+      {/* HERO NET PROFIT CARD with Glow */}
       <div 
         className="relative p-6 rounded-sm text-center overflow-hidden hero-glow"
         style={{ 
@@ -136,18 +141,18 @@ const ResultsDashboard = forwardRef<HTMLDivElement, ResultsDashboardProps>(({ re
         
         <div className="relative z-10">
           <div className="flex items-center justify-center gap-2 mb-3">
-            <TrendingUp size={18} style={{ color: isProfitable ? '#D4AF37' : '#ef4444' }} />
-            <span className="text-xs uppercase tracking-widest text-zinc-400">Return on Investment</span>
+            <DollarSign size={18} style={{ color: isProfitable ? '#D4AF37' : '#ef4444' }} />
+            <span className="text-xs uppercase tracking-widest text-zinc-400">Net Profit</span>
           </div>
           
           <p 
-            className="font-bebas text-6xl mb-3 tabular-nums" 
+            className="font-bebas text-5xl sm:text-6xl mb-3 tabular-nums" 
             style={{ 
               color: isProfitable ? '#D4AF37' : '#ef4444',
               textShadow: isProfitable ? '0 0 30px hsl(43 74% 52% / 0.5)' : '0 0 20px hsl(0 84% 60% / 0.4)'
             }}
           >
-            {formatPercent(displayedROI)}
+            {isProfitable ? '+' : ''}{formatCompactCurrency(displayedProfit)}
           </p>
           
           <span 
@@ -158,18 +163,18 @@ const ResultsDashboard = forwardRef<HTMLDivElement, ResultsDashboardProps>(({ re
             }`}
           >
             {isProfitable ? <CheckCircle2 size={12} /> : <AlertTriangle size={12} />}
-            {isProfitable ? 'PROFITABLE' : 'UNPROFITABLE'}
+            {isProfitable ? 'PROFITABLE' : 'LOSS'}
           </span>
         </div>
       </div>
 
-      {/* QUICK STATS ROW */}
+      {/* QUICK STATS ROW - ROI, Breakeven, Multiple */}
       <div className="grid grid-cols-3 gap-2">
         <div className="p-3 rounded-sm text-center" style={{ backgroundColor: '#0a0a0a', border: '1px solid #1a1a1a' }}>
-          <DollarSign size={12} className={`mx-auto mb-1 ${result.profitPool >= 0 ? 'text-emerald-400' : 'text-red-400'}`} />
-          <p className="text-[9px] text-zinc-500 uppercase mb-0.5">Net Profit</p>
-          <p className={`font-mono text-sm ${result.profitPool >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
-            {formatCompactCurrency(result.profitPool)}
+          <TrendingUp size={12} className={`mx-auto mb-1 ${roi >= 100 ? 'text-emerald-400' : 'text-red-400'}`} />
+          <p className="text-[9px] text-zinc-500 uppercase mb-0.5">ROI</p>
+          <p className={`font-mono text-sm ${roi >= 100 ? 'text-emerald-400' : 'text-red-400'}`}>
+            {formatPercent(displayedROI)}
           </p>
         </div>
         <div className="p-3 rounded-sm text-center" style={{ backgroundColor: '#0a0a0a', border: '1px solid #1a1a1a' }}>
