@@ -10,7 +10,7 @@ interface StepIndicatorProps {
 
 const StepIndicator = ({ 
   currentStep, 
-  totalSteps = 6, 
+  totalSteps = 4, // Fixed: Default to 4 steps as per actual wizard flow
   onStepClick,
   swipeOffset = 0 
 }: StepIndicatorProps) => {
@@ -47,6 +47,12 @@ const StepIndicator = ({
             } ${isClickable ? 'cursor-pointer' : 'cursor-default'}`}
             style={{
               transform: pillOffset !== 0 ? `translateX(${pillOffset}px)` : undefined,
+              // Larger touch target
+              minWidth: '44px',
+              minHeight: '44px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
             }}
             aria-label={`${isCompleted ? 'Completed: ' : isCurrent ? 'Current: ' : ''}Step ${step}`}
             aria-current={isCurrent ? 'step' : undefined}

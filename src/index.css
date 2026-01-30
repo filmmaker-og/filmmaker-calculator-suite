@@ -416,13 +416,39 @@
   animation: fadeSlideIn 0.3s ease-out forwards;
 }
 
-/* Intro line animation */
-@keyframes introLineExpand {
+/* ===== CINEMATIC INTRO ANIMATIONS ===== */
+
+/* Gold particle floating effect */
+@keyframes floatParticle {
+  0% { 
+    transform: translateY(100vh) rotate(0deg); 
+    opacity: 0; 
+  }
+  10% { opacity: 0.8; }
+  90% { opacity: 0.8; }
+  100% { 
+    transform: translateY(-20vh) rotate(360deg); 
+    opacity: 0; 
+  }
+}
+
+.gold-particle {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: hsl(var(--gold));
+  border-radius: 50%;
+  animation: floatParticle 3s ease-out forwards;
+  box-shadow: 0 0 6px hsl(var(--gold)), 0 0 12px hsl(var(--gold) / 0.5);
+}
+
+/* Line draw animation */
+@keyframes lineDraw {
   0% { 
     width: 0; 
     opacity: 0;
   }
-  20% {
+  30% {
     opacity: 1;
   }
   100% { 
@@ -431,11 +457,68 @@
   }
 }
 
-.animate-intro-line {
-  animation: introLineExpand 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+.animate-line-draw {
+  animation: lineDraw 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* Step indicator pills */
+/* Letter-by-letter reveal */
+@keyframes letterReveal {
+  0% { 
+    opacity: 0; 
+    transform: translateY(20px); 
+  }
+  100% { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+.letter-reveal span {
+  display: inline-block;
+  opacity: 0;
+  animation: letterReveal 0.3s ease-out forwards;
+}
+
+/* ===== AUTH PAGE STYLES ===== */
+
+/* Auth input wrapper focus effect */
+.auth-input-wrapper:focus-within {
+  transform: scale(1.02);
+}
+
+.auth-input-wrapper {
+  transition: transform 0.2s ease;
+}
+
+/* Auth CTA button with dramatic glow */
+.auth-cta-button {
+  transition: all 0.3s ease;
+}
+
+.auth-cta-button:hover:not(:disabled) {
+  box-shadow: 0 0 40px hsl(var(--gold) / 0.5), 0 0 80px hsl(var(--gold) / 0.2) !important;
+  transform: translateY(-2px);
+}
+
+.auth-cta-button:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Auth success pulse */
+@keyframes successPulse {
+  0%, 100% { 
+    box-shadow: 0 0 0 0 hsl(var(--gold) / 0.4); 
+  }
+  50% { 
+    box-shadow: 0 0 0 15px hsl(var(--gold) / 0); 
+  }
+}
+
+.auth-success-pulse {
+  animation: successPulse 2s ease-in-out infinite;
+}
+
+/* Step indicator pills - Enhanced touch target */
 .step-pill {
   width: 10px;
   height: 10px;
@@ -457,6 +540,89 @@
 
 .step-pill.upcoming { 
   background: hsl(var(--border)); 
+}
+
+/* ===== SWIPE HINTS ===== */
+
+@keyframes swipeHintLeft {
+  0%, 100% { 
+    opacity: 0.3; 
+    transform: translateX(0); 
+  }
+  50% { 
+    opacity: 1; 
+    transform: translateX(-8px); 
+  }
+}
+
+@keyframes swipeHintRight {
+  0%, 100% { 
+    opacity: 0.3; 
+    transform: translateX(0); 
+  }
+  50% { 
+    opacity: 1; 
+    transform: translateX(8px); 
+  }
+}
+
+.swipe-hint-left {
+  animation: swipeHintLeft 1.5s ease-in-out infinite;
+}
+
+.swipe-hint-right {
+  animation: swipeHintRight 1.5s ease-in-out infinite;
+}
+
+/* Carousel dot pulse for active state */
+@keyframes dotPulse {
+  0%, 100% { box-shadow: 0 0 0 0 hsl(var(--gold) / 0.4); }
+  50% { box-shadow: 0 0 0 4px hsl(var(--gold) / 0); }
+}
+
+.carousel-dot-pulse {
+  animation: dotPulse 2s ease-in-out infinite;
+}
+
+/* ===== AUTH CARD EFFECTS ===== */
+
+/* Auth card breathing glow */
+.auth-card-glow {
+  animation: cardPulse 3s ease-in-out infinite;
+}
+
+@keyframes cardPulse {
+  0%, 100% { box-shadow: 0 0 0px rgba(212, 175, 55, 0); }
+  50% { box-shadow: 0 0 25px rgba(212, 175, 55, 0.2); }
+}
+
+/* Enhanced input focus with gold left accent */
+.input-gold-accent {
+  border-left: 3px solid transparent;
+  transition: border-color 0.2s ease;
+}
+
+.input-gold-accent:focus-within {
+  border-left-color: hsl(var(--gold));
+}
+
+/* Auth icon subtle pulse */
+.auth-icon-pulse {
+  animation: iconPulse 2s ease-in-out infinite;
+}
+
+@keyframes iconPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* ===== MOBILE OPTIMIZATIONS ===== */
+
+/* iOS keyboard handling - prevent zoom on input focus */
+@media screen and (max-width: 768px) {
+  input, textarea, select {
+    font-size: 16px !important;
+  }
 }
 
 /* Custom Scrollbar */
@@ -490,47 +656,5 @@ html, body {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
-  }
-}
-
-/* Auth card breathing glow */
-.auth-card-glow {
-  animation: cardPulse 3s ease-in-out infinite;
-}
-
-@keyframes cardPulse {
-  0%, 100% { box-shadow: 0 0 0px rgba(212, 175, 55, 0); }
-  50% { box-shadow: 0 0 25px rgba(212, 175, 55, 0.2); }
-}
-
-/* Enhanced input focus with gold left accent */
-.input-gold-accent {
-  border-left: 3px solid transparent;
-  transition: border-color 0.2s ease;
-}
-
-.input-gold-accent:focus-within {
-  border-left-color: #D4AF37;
-}
-
-/* Auth icon subtle pulse */
-.auth-icon-pulse {
-  animation: iconPulse 2s ease-in-out infinite;
-}
-
-@keyframes iconPulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.7; }
-}
-
-/* Auth CTA button glow on hover */
-.auth-cta-glow {
-  transition: box-shadow 0.3s ease, background-color 0.2s ease;
-}
-
-/* iOS keyboard handling - prevent zoom on input focus */
-@media screen and (max-width: 768px) {
-  input, textarea, select {
-    font-size: 16px !important;
   }
 }

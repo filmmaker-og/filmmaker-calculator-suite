@@ -3,10 +3,9 @@ import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { useHaptics } from "@/hooks/use-haptics";
-import { Mail, Loader2, ShieldCheck, Home, User } from "lucide-react";
+import { Mail, Loader2, Home, User, Sparkles } from "lucide-react";
 import { z } from "zod";
 import brandIconF from "@/assets/brand-icon-f.jpg";
 import MobileMenu from "@/components/MobileMenu";
@@ -101,28 +100,24 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col" style={{ backgroundColor: '#000000' }}>
-      {/* Global Command Bar - Fixed Header with Safe Area */}
-      <header className="fixed top-0 left-0 right-0 h-14 z-50 flex items-center px-6 safe-top" style={{ backgroundColor: '#000000', borderBottom: '1px solid #D4AF37' }}>
-        {/* Left: Home Icon - Touch-friendly */}
+    <div className="min-h-screen flex flex-col bg-background">
+      {/* Header - Consistent gold border */}
+      <header className="fixed top-0 left-0 right-0 h-14 z-50 flex items-center px-6 safe-top bg-background" style={{ borderBottom: '1px solid hsl(var(--gold))' }}>
         <button
           onClick={() => { haptics.light(); navigate("/"); }}
           className="w-12 h-12 flex items-center justify-center hover:opacity-80 transition-all duration-100 touch-press -ml-1"
         >
-          <Home className="w-5 h-5" style={{ color: '#D4AF37' }} />
+          <Home className="w-5 h-5 text-gold" />
         </button>
         
-        {/* Center: Brand Title */}
-        <span className="flex-1 text-center font-bebas text-lg sm:text-xl tracking-widest" style={{ color: '#D4AF37' }}>
+        <span className="flex-1 text-center font-bebas text-lg sm:text-xl tracking-widest text-gold">
           FILMMAKER.OG
         </span>
         
-        {/* Right: Services Link + Hamburger Menu */}
         <div className="flex items-center">
           <Link 
             to="/store" 
-            className="hidden sm:block text-xs font-mono tracking-widest mr-4 hover:opacity-80 transition-opacity"
-            style={{ color: '#D4AF37' }}
+            className="hidden sm:block text-xs font-mono tracking-widest mr-4 hover:opacity-80 transition-opacity text-gold"
           >
             SERVICES
           </Link>
@@ -130,155 +125,147 @@ const Auth = () => {
         </div>
       </header>
 
-      {/* Main Content - Centered with padding for header */}
+      {/* Main Content - Full-bleed elegant experience */}
       <div className="flex-1 flex flex-col items-center justify-center px-6 py-12 pt-20">
-        <div className="w-full max-w-md">
-          {/* Brand Seal - The "F" Crest - No border, matching homepage */}
-          <div className="text-center mb-6">
-            <img 
-              src={brandIconF} 
-              alt="Brand Seal" 
-              className="w-24 h-24 mx-auto object-contain"
+        <div className="w-full max-w-sm">
+          
+          {/* Brand Icon with glow */}
+          <div className="text-center mb-8 relative">
+            <div className="relative inline-block">
+              <img 
+                src={brandIconF} 
+                alt="Brand Seal" 
+                className="w-20 h-20 mx-auto object-contain"
+              />
+              {/* Subtle glow */}
+              <div 
+                className="absolute inset-0 -z-10 blur-2xl opacity-40"
+                style={{ backgroundColor: 'hsl(var(--gold))' }}
+              />
+            </div>
+          </div>
+
+          {/* Gold decorative line */}
+          <div className="flex justify-center mb-8">
+            <div 
+              className="w-24 h-[1px]"
+              style={{ 
+                background: 'linear-gradient(90deg, transparent, hsl(var(--gold)), transparent)',
+                boxShadow: '0 0 20px hsl(var(--gold) / 0.5)'
+              }}
             />
           </div>
 
-          {/* Auth Card - Terminal Structure with Breathing Glow */}
-          <div className="border-2 overflow-hidden auth-card-glow" style={{ borderColor: '#D4AF37' }}>
-            {/* Terminal Header Strip - Enhanced with Gold Accent */}
-            <div 
-              className="flex items-center gap-2 py-4 px-6"
-              style={{ 
-                backgroundColor: '#111111', 
-                borderBottom: '1px solid #333333',
-                borderLeft: '3px solid #D4AF37'
-              }}
-            >
-              <ShieldCheck className="w-5 h-5 auth-icon-pulse" fill="#D4AF37" style={{ color: '#D4AF37' }} />
-              <span className="font-bebas text-lg tracking-wide" style={{ color: '#D4AF37' }}>
-                SECURE ACCESS CALCULATOR
-              </span>
-            </div>
+          {/* Title */}
+          <h1 className="font-bebas text-2xl sm:text-3xl text-center tracking-[0.15em] text-foreground mb-8">
+            ACCESS YOUR TERMINAL
+          </h1>
 
-            {/* Vault Body - Void Black */}
-            <div className="p-8" style={{ backgroundColor: '#000000' }}>
-              {!magicLinkSent ? (
-                <>
-                  {/* Magic Link Form */}
-                  <form onSubmit={handleMagicLink} className="space-y-5">
-                    {/* First Name Input */}
-                    <div className="space-y-3">
-                      <Label htmlFor="firstName" className="text-sm tracking-[0.2em] uppercase font-mono text-zinc-500">
-                        First Name
-                      </Label>
-                      <div className="relative input-gold-accent rounded-sm overflow-hidden">
-                        <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 z-10" fill="rgba(212, 175, 55, 0.6)" style={{ color: 'rgba(212, 175, 55, 0.6)' }} />
-                        <Input
-                          id="firstName"
-                          type="text"
-                          placeholder="Your first name"
-                          value={firstName}
-                          onChange={(e) => setFirstName(e.target.value)}
-                          className="pl-12 h-14 text-lg rounded-sm text-white placeholder:text-[#666666] font-mono tracking-wide touch-input premium-input focus:ring-1 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-all border-l-0"
-                          style={{ backgroundColor: '#0a0a0a', borderColor: '#333333' }}
-                          required
-                          tabIndex={1}
-                          autoFocus
-                        />
-                      </div>
-                    </div>
-
-                    {/* Email Input */}
-                    <div className="space-y-3">
-                      <Label htmlFor="email" className="text-sm tracking-[0.2em] uppercase font-mono text-zinc-500">
-                        Email
-                      </Label>
-                      <div className="relative input-gold-accent rounded-sm overflow-hidden">
-                        <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 z-10" style={{ color: 'rgba(212, 175, 55, 0.6)' }} />
-                        <Input
-                          id="email"
-                          type="email"
-                          placeholder="you@company.com"
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          inputMode="email"
-                          className="pl-12 h-14 text-lg rounded-sm text-white placeholder:text-[#666666] font-mono tracking-wide touch-input premium-input focus:ring-1 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-all border-l-0"
-                          style={{ backgroundColor: '#0a0a0a', borderColor: '#333333' }}
-                          required
-                          tabIndex={2}
-                        />
-                      </div>
-                    </div>
-                    <Button
-                      type="submit"
-                      disabled={loading || !firstName.trim()}
-                      className="w-full h-14 rounded-sm font-bebas text-xl tracking-wider transition-all duration-200 active:scale-[0.98] disabled:cursor-not-allowed min-h-[56px] auth-cta-glow"
-                      style={{ 
-                        backgroundColor: '#D4AF37', 
-                        color: '#000000',
-                        opacity: loading || !firstName.trim() ? 0.5 : 1 
-                      }}
-                      onMouseEnter={(e) => {
-                        if (!loading && firstName.trim()) {
-                          e.currentTarget.style.backgroundColor = '#F9E076';
-                          e.currentTarget.style.boxShadow = '0 0 30px rgba(212, 175, 55, 0.5)';
-                        }
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = '#D4AF37';
-                        e.currentTarget.style.boxShadow = '';
-                      }}
-                      size="lg"
-                      tabIndex={3}
-                    >
-                      {loading ? (
-                        <Loader2 className="w-5 h-5 animate-spin text-black" />
-                      ) : (
-                        "REQUEST SECURE ACCESS LINK"
-                      )}
-                    </Button>
-                  </form>
-                </>
-              ) : (
-                <div className="text-center py-8">
-                  <div className="w-16 h-16 border-2 flex items-center justify-center mx-auto mb-6 animate-pulse" style={{ borderColor: '#D4AF37' }}>
-                    <Mail className="w-8 h-8" style={{ color: '#D4AF37' }} />
-                  </div>
-                  <h2 className="font-bebas text-2xl text-white mb-3">
-                    CHECK YOUR EMAIL
-                  </h2>
-                  <p className="text-[#888888] text-sm mb-6">
-                    We've sent a secure login link to<br />
-                    <span className="text-white font-medium">{email}</span>
-                  </p>
-                  <button
-                    onClick={() => setMagicLinkSent(false)}
-                    className="text-sm tracking-widest uppercase transition-colors"
-                    style={{ color: '#D4AF37' }}
-                    onMouseEnter={(e) => e.currentTarget.style.color = '#F9E076'}
-                    onMouseLeave={(e) => e.currentTarget.style.color = '#D4AF37'}
-                  >
-                    Try a different email
-                  </button>
+          {!magicLinkSent ? (
+            <form onSubmit={handleMagicLink} className="space-y-6">
+              {/* First Name Input - Premium styling */}
+              <div className="space-y-2">
+                <label htmlFor="firstName" className="text-[10px] tracking-[0.25em] uppercase font-mono text-muted-foreground block text-center">
+                  First Name
+                </label>
+                <div className="relative auth-input-wrapper">
+                  <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 z-10 text-gold/60" />
+                  <Input
+                    id="firstName"
+                    type="text"
+                    placeholder="Your first name"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    className="pl-12 h-14 text-lg text-center rounded-sm text-foreground placeholder:text-muted-foreground/50 font-mono tracking-wide bg-card border-2 border-border focus:border-gold focus:ring-0 transition-all"
+                    required
+                    tabIndex={1}
+                    autoFocus
+                  />
                 </div>
-              )}
+              </div>
+
+              {/* Email Input */}
+              <div className="space-y-2">
+                <label htmlFor="email" className="text-[10px] tracking-[0.25em] uppercase font-mono text-muted-foreground block text-center">
+                  Email Address
+                </label>
+                <div className="relative auth-input-wrapper">
+                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 z-10 text-gold/60" />
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="you@company.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    inputMode="email"
+                    className="pl-12 h-14 text-lg text-center rounded-sm text-foreground placeholder:text-muted-foreground/50 font-mono tracking-wide bg-card border-2 border-border focus:border-gold focus:ring-0 transition-all"
+                    required
+                    tabIndex={2}
+                  />
+                </div>
+              </div>
+
+              {/* CTA Button - Dramatic gold glow */}
+              <div className="pt-4">
+                <Button
+                  type="submit"
+                  disabled={loading || !firstName.trim()}
+                  className="w-full h-14 rounded-sm font-bebas text-xl tracking-[0.15em] transition-all duration-300 disabled:cursor-not-allowed min-h-[56px] bg-gold text-primary-foreground hover:bg-gold-highlight touch-press auth-cta-button"
+                  style={{ 
+                    boxShadow: loading || !firstName.trim() ? 'none' : '0 0 30px hsl(var(--gold) / 0.4)'
+                  }}
+                  size="lg"
+                  tabIndex={3}
+                >
+                  {loading ? (
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                  ) : (
+                    <>
+                      <Sparkles className="w-4 h-4 mr-2" />
+                      REQUEST ACCESS
+                    </>
+                  )}
+                </Button>
+              </div>
+            </form>
+          ) : (
+            /* Success State */
+            <div className="text-center py-8">
+              <div className="w-16 h-16 border-2 border-gold flex items-center justify-center mx-auto mb-6 rounded-sm auth-success-pulse">
+                <Mail className="w-8 h-8 text-gold" />
+              </div>
+              <h2 className="font-bebas text-2xl text-foreground mb-3">
+                CHECK YOUR EMAIL
+              </h2>
+              <p className="text-muted-foreground text-sm mb-6">
+                We've sent a secure login link to<br />
+                <span className="text-foreground font-medium">{email}</span>
+              </p>
+              <button
+                onClick={() => setMagicLinkSent(false)}
+                className="text-sm tracking-widest uppercase transition-colors text-gold hover:text-gold-highlight"
+              >
+                Try a different email
+              </button>
             </div>
-          </div>
+          )}
 
-          {/* Instructional Text - Outside Card */}
-          <p className="text-center text-sm mt-6 text-zinc-400">
-            A secure access link will be sent to your email.
-          </p>
-          <p className="text-center text-[10px] uppercase tracking-widest mt-2 font-bold text-zinc-600">
-            NO PASSWORDS REQUIRED • BANK-GRADE SECURITY
-          </p>
-
-          {/* Demo Access Link - Improved touch target */}
-          <button
-            onClick={() => navigate("/calculator?reset=true")}
-            className="block mx-auto mt-4 text-xs tracking-wide transition-colors hover:underline text-zinc-600 hover:text-zinc-400 py-3 px-4"
-          >
-            Demo Access
-          </button>
+          {/* Trust indicators */}
+          {!magicLinkSent && (
+            <div className="mt-8 text-center space-y-3">
+              <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+                No passwords • Bank-grade security
+              </p>
+              
+              {/* Demo Access - More prominent */}
+              <button
+                onClick={() => navigate("/calculator?reset=true")}
+                className="text-xs tracking-widest uppercase transition-all text-gold/70 hover:text-gold py-2 px-4 border border-border hover:border-gold/50 rounded-sm"
+              >
+                Demo Access →
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>
