@@ -4,7 +4,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* FILMMAKER.OG Design System - Mobile-First PRD Tokens */
+/* FILMMAKER.OG Design System - Premium Mobile-First */
 
 @layer base {
   :root {
@@ -12,8 +12,8 @@
     --bg: 0 0% 0%;                    /* #000000 Void Black */
     --surface: 0 0% 3%;               /* #070707 Off-Black */
     --gold: 43 74% 52%;               /* #D4AF37 Primary Gold */
-    --gold-highlight: 49 93% 72%;     /* #F9E076 Highlight Gold (Glow/Hover) */
-    --gold-shadow: 43 76% 27%;        /* #7A5C12 Shadow Gold (Gradients/Depth) */
+    --gold-highlight: 49 93% 72%;     /* #F9E076 Highlight Gold */
+    --gold-shadow: 43 76% 27%;        /* #7A5C12 Shadow Gold */
     --text-high: 0 0% 100%;           /* #FFFFFF White */
     --text-muted: 0 0% 54%;           /* #8A8A8A Legal/Footer */
     --border-subtle: 0 0% 10%;        /* #1A1A1A Subtle */
@@ -50,7 +50,7 @@
     
     --radius: 0.375rem;
     
-    /* Custom Effects - Using Brand Guide Colors */
+    /* Custom Effects */
     --gold-gradient: linear-gradient(135deg, hsl(43 74% 52%), hsl(49 93% 72%));
     --gold-shadow-effect: 0 0 20px hsl(49 93% 72% / 0.4);
     --card-glass: rgba(7, 7, 7, 0.8);
@@ -112,60 +112,63 @@
 }
 
 @layer components {
-  /* Gold Glow Effect for Focus States */
-  .gold-glow-focus {
-    @apply transition-all duration-300;
+  /* ===== TYPOGRAPHY SCALE UTILITIES ===== */
+  .panel-header {
+    @apply font-bebas text-sm tracking-widest uppercase text-gold;
   }
   
-  .gold-glow-focus:focus {
-    box-shadow: var(--border-glow);
-    border-color: hsl(var(--gold));
+  .input-label {
+    @apply text-xs tracking-wider uppercase font-semibold text-foreground;
   }
   
-  /* Glassmorphism Card */
-  .glass-card {
-    background: var(--card-glass);
-    backdrop-filter: blur(12px);
-    border: 1px solid hsl(var(--border));
+  .input-value {
+    @apply font-mono text-xl text-foreground;
   }
   
-  /* Gold Gradient Text */
-  .gold-gradient-text {
-    background: var(--gold-gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  
-  /* Skeleton Loader with Gold Pulse */
-  .skeleton-gold {
-    @apply animate-pulse;
-    background: linear-gradient(
-      90deg,
-      hsl(var(--card)) 0%,
-      hsl(43 66% 52% / 0.1) 50%,
-      hsl(var(--card)) 100%
-    );
-    background-size: 200% 100%;
-    animation: shimmer 2s ease-in-out infinite;
-  }
-  
-  @keyframes shimmer {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
+  .input-symbol {
+    @apply font-mono text-lg text-muted-foreground;
   }
 
-  /* Glow animation for CTA button */
-  @keyframes glow {
-    0%, 100% { 
-      box-shadow: 0 0 20px hsl(43 66% 52% / 0.4);
+  /* ===== INTRO ANIMATION - MASSIVE, Authority-First ===== */
+  
+  /* Splash line expand - BIGGER, 200px */
+  @keyframes splashLineExpand {
+    0% { 
+      width: 0; 
+      opacity: 0;
     }
-    50% { 
-      box-shadow: 0 0 40px hsl(43 66% 52% / 0.7), 0 0 60px hsl(43 66% 52% / 0.3);
+    20% {
+      opacity: 1;
+    }
+    100% { 
+      width: 200px; 
+      opacity: 1;
     }
   }
   
-  /* Vault Button - Primary Gold (Sharp Industrial) */
+  .splash-line-expand {
+    animation: splashLineExpand 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  /* Brand reveal - clean fade */
+  @keyframes brandReveal {
+    from { 
+      opacity: 0; 
+      transform: translateY(8px); 
+    }
+    to { 
+      opacity: 1; 
+      transform: translateY(0); 
+    }
+  }
+  
+  .brand-reveal {
+    animation: brandReveal 0.5s ease-out forwards;
+  }
+
+  /* ===== BUTTON SYSTEM ===== */
+  
+  /* Vault Button - Primary Gold */
   .btn-vault {
     @apply relative overflow-hidden tracking-wider uppercase rounded-none;
     font-family: 'Inter', sans-serif;
@@ -185,7 +188,7 @@
     transform: translateY(0) scale(0.98);
   }
   
-  /* Ghost Button with Gold Border (Sharp Industrial) */
+  /* Ghost Button with Gold Border */
   .btn-ghost-gold {
     @apply border tracking-wider uppercase rounded-none;
     font-family: 'Inter', sans-serif;
@@ -199,36 +202,39 @@
   .btn-ghost-gold:hover {
     background: hsl(43 66% 52% / 0.1);
   }
+
+  /* Auth CTA glow - subtle hover effect */
+  .auth-cta-glow:hover:not(:disabled) {
+    box-shadow: 0 4px 30px hsl(var(--gold) / 0.45);
+  }
+
+  /* ===== CARD & INPUT STYLING ===== */
   
-  /* Progress Bar Gold */
-  .progress-gold {
-    @apply overflow-hidden rounded-full;
-    background: hsl(var(--border));
+  /* Skeleton Loader with Gold Pulse */
+  .skeleton-gold {
+    @apply animate-pulse;
+    background: linear-gradient(
+      90deg,
+      hsl(var(--card)) 0%,
+      hsl(43 66% 52% / 0.1) 50%,
+      hsl(var(--card)) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 2s ease-in-out infinite;
   }
   
-  .progress-gold-fill {
-    background: var(--gold-gradient);
-    transition: width 0.3s ease-out;
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
   }
 
-  /* Input Card Styling - Touch Friendly */
-  .input-card {
-    background: hsl(var(--surface));
-    border: 1px solid hsl(var(--border-subtle));
-    transition: border-color 0.15s ease;
-  }
-
-  .input-card:focus-within {
-    border-color: hsl(var(--gold));
-  }
-
-  /* Touch-friendly inputs (min 48px height) */
+  /* Touch-friendly inputs */
   .touch-input {
     min-height: 48px;
-    @apply rounded-md;
+    @apply rounded-sm;
   }
   
-  /* Touch feedback for buttons - Fast, snappy */
+  /* Touch feedback - Fast, snappy (150ms) */
   .touch-feedback {
     transition: transform 0.1s ease;
   }
@@ -237,7 +243,7 @@
     transform: scale(0.97);
   }
   
-  /* Touch press - Depth effect for buttons */
+  /* Touch press - Depth effect */
   .touch-press {
     transition: transform 0.1s ease;
   }
@@ -245,28 +251,10 @@
   .touch-press:active {
     transform: scale(0.98);
   }
+
+  /* ===== STEP ANIMATIONS ===== */
   
-  /* Icon bounce on tap */
-  .icon-bounce:active {
-    animation: iconBounce 0.1s ease-out;
-  }
-  
-  @keyframes iconBounce {
-    0% { transform: scale(1); }
-    50% { transform: scale(0.9); }
-    100% { transform: scale(1); }
-  }
-
-  /* Premium Input Styling - Clean gold border */
-  .premium-input {
-    transition: border-color 0.15s ease;
-  }
-
-  .premium-input:focus {
-    border-color: hsl(var(--gold)) !important;
-  }
-
-  /* Step enter animation for smooth transitions */
+  /* Step enter - snappy (150ms) */
   @keyframes stepEnter {
     from { 
       opacity: 0; 
@@ -282,80 +270,19 @@
     animation: stepEnter 0.15s ease-out forwards;
   }
 
-  /* Value change animation */
-  .value-change {
-    animation: valuePop 0.15s ease-out;
+  /* ===== CAROUSEL ===== */
+  
+  /* Hide scrollbar utility */
+  .scrollbar-hide::-webkit-scrollbar { 
+    display: none; 
   }
-
-  @keyframes valuePop {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.01); }
-    100% { transform: scale(1); }
-  }
-
-  /* Success checkmark draw-in animation */
-  .check-animate {
-    stroke-dasharray: 20;
-    stroke-dashoffset: 20;
-    animation: drawCheck 0.2s ease-out forwards;
-  }
-
-  @keyframes drawCheck {
-    0% { stroke-dashoffset: 20; }
-    100% { stroke-dashoffset: 0; }
-  }
-
-  /* Gold shimmer for loading states */
-  .loading-shimmer {
-    position: relative;
-    overflow: hidden;
-  }
-
-  .loading-shimmer::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(
-      90deg, 
-      transparent 0%, 
-      hsl(43 74% 52% / 0.15) 50%, 
-      transparent 100%
-    );
-    background-size: 200% 100%;
-    animation: goldShimmer 1.5s ease-in-out infinite;
-  }
-
-  @keyframes goldShimmer {
-    0% { background-position: -200% 0; }
-    100% { background-position: 200% 0; }
-  }
-
-  /* Horizontal snap carousel for results */
-  .results-carousel {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    gap: 12px;
-    padding-bottom: 8px;
+  
+  .scrollbar-hide {
+    -ms-overflow-style: none;
     scrollbar-width: none;
   }
 
-  .results-carousel::-webkit-scrollbar { 
-    display: none; 
-  }
-
-  .results-card {
-    scroll-snap-align: center;
-    flex-shrink: 0;
-    width: 260px;
-    border-radius: 4px;
-  }
-
-  /* Swipe content container - follows finger */
+  /* Swipe content container */
   .swipe-content {
     transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.15s ease;
     will-change: transform, opacity;
@@ -365,7 +292,8 @@
     transition: none;
   }
   
-  /* Safe area utilities */
+  /* ===== SAFE AREA UTILITIES ===== */
+  
   .safe-top {
     padding-top: var(--safe-area-top);
   }
@@ -380,12 +308,12 @@
   }
 }
 
-/* Header spacer that accounts for safe area */
+/* Header spacer accounting for safe area */
 .header-spacer {
   height: calc(56px + var(--safe-area-top));
 }
 
-/* Smooth page entrance animation */
+/* Smooth page entrance */
 @keyframes fadeSlideIn {
   from { 
     opacity: 0; 
@@ -401,71 +329,19 @@
   animation: fadeSlideIn 0.2s ease-out forwards;
 }
 
-/* ===== INTRO ANIMATION - Clean, Authority-First ===== */
-
-/* Line expand animation - single, deliberate line */
-@keyframes lineExpand {
-  0% { 
-    width: 0; 
-    opacity: 0;
-  }
-  30% {
-    opacity: 1;
-  }
-  100% { 
-    width: 120px; 
-    opacity: 1;
-  }
+/* Fade in utility */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
-.line-expand {
-  animation: lineExpand 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-/* Brand reveal - clean fade in */
-@keyframes brandReveal {
-  from { 
-    opacity: 0; 
-    transform: translateY(8px); 
-  }
-  to { 
-    opacity: 1; 
-    transform: translateY(0); 
-  }
-}
-
-.brand-reveal {
-  animation: brandReveal 0.5s ease-out forwards;
-}
-
-/* ===== STEP INDICATOR ===== */
-
-/* Step indicator pills - Enhanced touch target */
-.step-pill {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  transition: all 0.15s ease;
-  border: none;
-  padding: 0;
-}
-
-.step-pill.completed { 
-  background: hsl(var(--gold)); 
-}
-
-.step-pill.current { 
-  background: hsl(var(--gold)); 
-  transform: scale(1.2);
-}
-
-.step-pill.upcoming { 
-  background: hsl(var(--border)); 
+.animate-fade-in {
+  animation: fadeIn 0.2s ease-out forwards;
 }
 
 /* ===== MOBILE OPTIMIZATIONS ===== */
 
-/* iOS keyboard handling - prevent zoom on input focus */
+/* iOS keyboard handling - prevent zoom */
 @media screen and (max-width: 768px) {
   input, textarea, select {
     font-size: 16px !important;

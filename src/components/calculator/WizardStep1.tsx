@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
-import { Info, ArrowDown } from "lucide-react";
+import { Info, DollarSign, TrendingUp } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -19,7 +19,6 @@ const WizardStep1 = ({ budget, revenue, onUpdateBudget, onUpdateRevenue }: Wizar
   const [infoBudgetOpen, setInfoBudgetOpen] = useState(false);
   const [infoRevenueOpen, setInfoRevenueOpen] = useState(false);
 
-  // Quick visual indicator of profit/loss
   const delta = revenue - budget;
   const isProfitable = delta > 0;
 
@@ -31,41 +30,37 @@ const WizardStep1 = ({ budget, revenue, onUpdateBudget, onUpdateRevenue }: Wizar
           <span className="text-gold font-bebas text-sm">1</span>
         </div>
         <div>
-          <h2 className="font-bebas text-xl text-foreground tracking-wide">CORE FINANCIALS</h2>
+          <h2 className="font-bebas text-lg text-foreground tracking-wide">CORE FINANCIALS</h2>
           <p className="text-xs text-muted-foreground">Enter your budget and acquisition price</p>
         </div>
       </div>
 
-      {/* Terminal Card - Budget */}
-      <div className="rounded-sm border border-gold overflow-hidden">
+      {/* Card A: Production Budget - Left accent only */}
+      <div className="rounded-sm border border-border overflow-hidden" style={{ borderLeft: '3px solid hsl(var(--gold))' }}>
         {/* Header Strip */}
-        <div className="py-3 px-4 border-b border-border flex items-center justify-between bg-card">
-          <div className="flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-gold" />
-            <h3 className="font-bebas text-base tracking-wider uppercase text-gold">
+        <div className="py-3 px-4 flex items-center justify-between bg-card">
+          <div className="flex items-center gap-3">
+            <DollarSign className="w-4 h-4 text-gold" />
+            <h3 className="font-bebas text-sm tracking-widest uppercase text-gold">
               PRODUCTION BUDGET
             </h3>
           </div>
           <button
             onClick={() => setInfoBudgetOpen(true)}
-            className="transition-all duration-100 hover:opacity-80 active:scale-95 p-1.5 -m-1.5"
+            className="w-11 h-11 flex items-center justify-center rounded-full hover:bg-gold/10 transition-colors -mr-2"
             aria-label="More information"
           >
-            <Info className="w-4 h-4 text-gold" />
+            <Info className="w-4 h-4 text-muted-foreground hover:text-gold transition-colors" />
           </button>
         </div>
 
-        {/* Body Area */}
+        {/* Body */}
         <div className="p-5 bg-background">
-          {/* Label Row */}
-          <div className="mb-3 flex items-center justify-between">
-            <span className="text-foreground font-semibold text-xs tracking-wide uppercase">
+          <div className="mb-3">
+            <span className="text-xs tracking-wider uppercase font-semibold text-foreground">
               NEGATIVE COST
             </span>
-            <span className="text-muted-foreground text-xs">Total production spend</span>
           </div>
-
-          {/* Input Box */}
           <div className="relative">
             <span className="absolute left-4 top-1/2 -translate-y-1/2 font-mono text-lg text-muted-foreground">
               $
@@ -80,50 +75,39 @@ const WizardStep1 = ({ budget, revenue, onUpdateBudget, onUpdateRevenue }: Wizar
                 onUpdateBudget(value);
               }}
               placeholder="0"
-              className="pl-9 py-5 text-xl font-mono text-foreground text-right rounded-sm border-border focus:border-gold focus:ring-1 focus:ring-gold transition-all bg-card min-h-[52px]"
+              className="pl-9 h-14 text-xl font-mono text-foreground text-right rounded-sm border-border focus:border-gold focus:ring-1 focus:ring-gold transition-all bg-card"
               onFocus={(e) => e.target.select()}
             />
           </div>
         </div>
       </div>
 
-      {/* Flow Arrow */}
-      <div className="flex items-center justify-center py-2">
-        <div className="w-10 h-10 rounded-full border border-border bg-card flex items-center justify-center shadow-sm">
-          <ArrowDown className="w-4 h-4 text-muted-foreground" />
-        </div>
-      </div>
-
-      {/* Terminal Card - Revenue */}
-      <div className="rounded-sm border border-gold overflow-hidden">
+      {/* Card B: Streamer Buyout - Left accent only */}
+      <div className="rounded-sm border border-border overflow-hidden" style={{ borderLeft: '3px solid hsl(142.1 76.2% 36.3%)' }}>
         {/* Header Strip */}
-        <div className="py-3 px-4 border-b border-border flex items-center justify-between bg-card">
-          <div className="flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-emerald-500" />
-            <h3 className="font-bebas text-base tracking-wider uppercase text-gold">
+        <div className="py-3 px-4 flex items-center justify-between bg-card">
+          <div className="flex items-center gap-3">
+            <TrendingUp className="w-4 h-4 text-emerald-500" />
+            <h3 className="font-bebas text-sm tracking-widest uppercase text-gold">
               STREAMER BUYOUT
             </h3>
           </div>
           <button
             onClick={() => setInfoRevenueOpen(true)}
-            className="transition-all duration-100 hover:opacity-80 active:scale-95 p-1.5 -m-1.5"
+            className="w-11 h-11 flex items-center justify-center rounded-full hover:bg-gold/10 transition-colors -mr-2"
             aria-label="More information"
           >
-            <Info className="w-4 h-4 text-gold" />
+            <Info className="w-4 h-4 text-muted-foreground hover:text-gold transition-colors" />
           </button>
         </div>
 
-        {/* Body Area */}
+        {/* Body */}
         <div className="p-5 bg-background">
-          {/* Label Row */}
-          <div className="mb-3 flex items-center justify-between">
-            <span className="text-foreground font-semibold text-xs tracking-wide uppercase">
+          <div className="mb-3">
+            <span className="text-xs tracking-wider uppercase font-semibold text-foreground">
               ACQUISITION PRICE
             </span>
-            <span className="text-muted-foreground text-xs">Streamer's offer</span>
           </div>
-
-          {/* Input Box */}
           <div className="relative">
             <span className="absolute left-4 top-1/2 -translate-y-1/2 font-mono text-lg text-muted-foreground">
               $
@@ -138,7 +122,7 @@ const WizardStep1 = ({ budget, revenue, onUpdateBudget, onUpdateRevenue }: Wizar
                 onUpdateRevenue(value);
               }}
               placeholder="0"
-              className="pl-9 py-5 text-xl font-mono text-foreground text-right rounded-sm border-border focus:border-gold focus:ring-1 focus:ring-gold transition-all bg-card min-h-[52px]"
+              className="pl-9 h-14 text-xl font-mono text-foreground text-right rounded-sm border-border focus:border-gold focus:ring-1 focus:ring-gold transition-all bg-card"
               onFocus={(e) => e.target.select()}
             />
           </div>
@@ -163,7 +147,7 @@ const WizardStep1 = ({ budget, revenue, onUpdateBudget, onUpdateRevenue }: Wizar
 
       {/* Budget Info Modal */}
       <Dialog open={infoBudgetOpen} onOpenChange={setInfoBudgetOpen}>
-        <DialogContent className="max-w-md rounded-sm bg-card border-gold">
+        <DialogContent className="max-w-md rounded-sm bg-card border-border">
           <DialogHeader>
             <DialogTitle className="font-bebas text-2xl tracking-wider text-gold">
               NEGATIVE COST
@@ -193,7 +177,7 @@ const WizardStep1 = ({ budget, revenue, onUpdateBudget, onUpdateRevenue }: Wizar
 
       {/* Revenue Info Modal */}
       <Dialog open={infoRevenueOpen} onOpenChange={setInfoRevenueOpen}>
-        <DialogContent className="max-w-md rounded-sm bg-card border-gold">
+        <DialogContent className="max-w-md rounded-sm bg-card border-border">
           <DialogHeader>
             <DialogTitle className="font-bebas text-2xl tracking-wider text-gold">
               STREAMER ACQUISITION

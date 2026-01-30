@@ -13,13 +13,11 @@ interface WizardStep2Props {
 const WizardStep2 = ({ inputs, onUpdate }: WizardStep2Props) => {
   const [activeModal, setActiveModal] = useState<string | null>(null);
 
-  // Initialize toggles based on whether data exists
   const [showTaxCredits, setShowTaxCredits] = useState(inputs.credits > 0);
   const [showDebt, setShowDebt] = useState(inputs.debt > 0 || inputs.mezzanineDebt > 0);
   const [showGapLoan, setShowGapLoan] = useState(inputs.mezzanineDebt > 0);
   const [showEquity, setShowEquity] = useState(true);
 
-  // --- HANDLERS ---
   const handleTaxToggle = (checked: boolean) => {
     setShowTaxCredits(checked);
     if (!checked) onUpdate('credits', 0);
@@ -52,7 +50,6 @@ const WizardStep2 = ({ inputs, onUpdate }: WizardStep2Props) => {
     }
   };
 
-  // --- UTILS ---
   const formatValue = (value: number | undefined) => {
     if (value === undefined || value === 0) return '';
     return value.toLocaleString();
@@ -118,40 +115,39 @@ const WizardStep2 = ({ inputs, onUpdate }: WizardStep2Props) => {
           <span className="text-gold font-bebas text-sm">2</span>
         </div>
         <div>
-          <h2 className="font-bebas text-xl text-foreground tracking-wide">CAPITAL STRUCTURE</h2>
+          <h2 className="font-bebas text-lg text-foreground tracking-wide">CAPITAL STRUCTURE</h2>
           <p className="text-xs text-muted-foreground">Configure your financing sources</p>
         </div>
       </div>
       
-      {/* --- CARD 2A: TAX INCENTIVES --- */}
-      <div className="rounded-sm border border-gold overflow-hidden">
-        <div 
-          className={`py-4 px-5 flex items-center justify-between bg-card ${showTaxCredits ? 'border-b border-border' : ''}`}
-        >
+      {/* Card 2A: Tax Incentives - Unified left accent */}
+      <div className="rounded-sm border border-border overflow-hidden" style={{ borderLeft: '3px solid hsl(var(--gold))' }}>
+        <div className={`py-3 px-4 flex items-center justify-between bg-card ${showTaxCredits ? 'border-b border-border' : ''}`}>
           <div className="flex items-center gap-3">
             <CreditCard className="w-4 h-4 text-gold" />
-            <h3 className="font-bebas text-base tracking-wider uppercase text-gold">
+            <h3 className="font-bebas text-sm tracking-widest uppercase text-gold">
               TAX INCENTIVES
             </h3>
-            <button onClick={() => setActiveModal('taxIncentives')} className="hover:opacity-80 transition-colors">
-              <Info className="w-3.5 h-3.5 text-muted-foreground hover:text-gold" />
-            </button>
           </div>
-          <Switch 
-            checked={showTaxCredits} 
-            onCheckedChange={handleTaxToggle} 
-            className="data-[state=checked]:bg-gold" 
-          />
+          <div className="flex items-center gap-2">
+            <button 
+              onClick={() => setActiveModal('taxIncentives')} 
+              className="w-11 h-11 flex items-center justify-center rounded-full hover:bg-gold/10 transition-colors"
+            >
+              <Info className="w-4 h-4 text-muted-foreground hover:text-gold transition-colors" />
+            </button>
+            <Switch 
+              checked={showTaxCredits} 
+              onCheckedChange={handleTaxToggle} 
+              className="data-[state=checked]:bg-gold" 
+            />
+          </div>
         </div>
         
-        <div 
-          className={`transition-all duration-300 ease-in-out overflow-hidden ${
-            showTaxCredits ? 'max-h-48 opacity-100' : 'max-h-0 opacity-0'
-          }`}
-        >
+        <div className={`transition-all duration-200 ease-out overflow-hidden ${showTaxCredits ? 'max-h-48 opacity-100' : 'max-h-0 opacity-0'}`}>
           <div className="p-5 bg-background">
             <div className="mb-3">
-              <span className="text-foreground font-semibold text-xs tracking-wide uppercase">ESTIMATED TAX CREDIT</span>
+              <span className="text-xs tracking-wider uppercase font-semibold text-foreground">ESTIMATED TAX CREDIT</span>
             </div>
             <div className="relative">
               <span className="absolute left-4 top-1/2 -translate-y-1/2 font-mono text-lg text-muted-foreground">$</span>
@@ -162,7 +158,7 @@ const WizardStep2 = ({ inputs, onUpdate }: WizardStep2Props) => {
                 value={formatValue(inputs.credits)} 
                 onChange={(e) => onUpdate('credits', parseValue(e.target.value))} 
                 placeholder="0" 
-                className="pl-10 py-5 text-xl font-mono text-foreground text-right rounded-sm border-border focus:border-gold focus:ring-1 focus:ring-gold transition-colors bg-card" 
+                className="pl-10 h-14 text-xl font-mono text-foreground text-right rounded-sm border-border focus:border-gold focus:ring-1 focus:ring-gold transition-colors bg-card" 
                 onFocus={(e) => e.target.select()} 
               />
             </div>
@@ -170,37 +166,35 @@ const WizardStep2 = ({ inputs, onUpdate }: WizardStep2Props) => {
         </div>
       </div>
 
-      {/* --- CARD 2B: DEBT FINANCING --- */}
-      <div className="rounded-sm border border-gold overflow-hidden">
-        <div 
-          className={`py-4 px-5 flex items-center justify-between bg-card ${showDebt ? 'border-b border-border' : ''}`}
-        >
+      {/* Card 2B: Debt Financing */}
+      <div className="rounded-sm border border-border overflow-hidden" style={{ borderLeft: '3px solid hsl(var(--gold))' }}>
+        <div className={`py-3 px-4 flex items-center justify-between bg-card ${showDebt ? 'border-b border-border' : ''}`}>
           <div className="flex items-center gap-3">
             <Building className="w-4 h-4 text-gold" />
-            <h3 className="font-bebas text-base tracking-wider uppercase text-gold">
+            <h3 className="font-bebas text-sm tracking-widest uppercase text-gold">
               DEBT FINANCING
             </h3>
-            <button onClick={() => setActiveModal('debtService')} className="hover:opacity-80 transition-colors">
-              <Info className="w-3.5 h-3.5 text-muted-foreground hover:text-gold" />
-            </button>
           </div>
-          <Switch 
-            checked={showDebt} 
-            onCheckedChange={handleDebtToggle} 
-            className="data-[state=checked]:bg-gold" 
-          />
+          <div className="flex items-center gap-2">
+            <button 
+              onClick={() => setActiveModal('debtService')} 
+              className="w-11 h-11 flex items-center justify-center rounded-full hover:bg-gold/10 transition-colors"
+            >
+              <Info className="w-4 h-4 text-muted-foreground hover:text-gold transition-colors" />
+            </button>
+            <Switch 
+              checked={showDebt} 
+              onCheckedChange={handleDebtToggle} 
+              className="data-[state=checked]:bg-gold" 
+            />
+          </div>
         </div>
 
-        <div 
-          className={`transition-all duration-300 ease-in-out overflow-hidden ${
-            showDebt ? 'max-h-[600px] opacity-100' : 'max-h-0 opacity-0'
-          }`}
-        >
+        <div className={`transition-all duration-200 ease-out overflow-hidden ${showDebt ? 'max-h-[600px] opacity-100' : 'max-h-0 opacity-0'}`}>
           <div className="p-5 bg-background space-y-5">
-            {/* Senior Debt */}
             <div>
               <div className="mb-3">
-                <span className="text-foreground font-semibold text-xs tracking-wide uppercase">SENIOR LOAN AMOUNT</span>
+                <span className="text-xs tracking-wider uppercase font-semibold text-foreground">SENIOR LOAN AMOUNT</span>
               </div>
               <div className="relative">
                 <span className="absolute left-4 top-1/2 -translate-y-1/2 font-mono text-lg text-muted-foreground">$</span>
@@ -211,7 +205,7 @@ const WizardStep2 = ({ inputs, onUpdate }: WizardStep2Props) => {
                   value={formatValue(inputs.debt)} 
                   onChange={(e) => onUpdate('debt', parseValue(e.target.value))} 
                   placeholder="0" 
-                  className="pl-10 py-5 text-xl font-mono text-foreground text-right rounded-sm border-border focus:border-gold bg-card" 
+                  className="pl-10 h-14 text-xl font-mono text-foreground text-right rounded-sm border-border focus:border-gold bg-card" 
                   onFocus={(e) => e.target.select()} 
                 />
               </div>
@@ -219,7 +213,7 @@ const WizardStep2 = ({ inputs, onUpdate }: WizardStep2Props) => {
 
             <div>
               <div className="mb-3">
-                <span className="text-foreground font-semibold text-xs tracking-wide uppercase">RATE & FEES</span>
+                <span className="text-xs tracking-wider uppercase font-semibold text-foreground">RATE & FEES</span>
               </div>
               <div className="relative">
                 <Input 
@@ -229,7 +223,7 @@ const WizardStep2 = ({ inputs, onUpdate }: WizardStep2Props) => {
                   value={formatValue(inputs.seniorDebtRate)} 
                   onChange={(e) => onUpdate('seniorDebtRate', parseValue(e.target.value, true))} 
                   placeholder="0" 
-                  className="pl-4 pr-10 py-5 text-xl font-mono text-foreground text-right rounded-sm border-border focus:border-gold bg-card" 
+                  className="pl-4 pr-10 h-14 text-xl font-mono text-foreground text-right rounded-sm border-border focus:border-gold bg-card" 
                   onFocus={(e) => e.target.select()} 
                 />
                 <span className="absolute right-4 top-1/2 -translate-y-1/2 font-mono text-lg text-muted-foreground">%</span>
@@ -238,8 +232,8 @@ const WizardStep2 = ({ inputs, onUpdate }: WizardStep2Props) => {
 
             {/* Gap Loan Toggle */}
             <div className="pt-4 border-t border-border">
-              <div className="flex items-center justify-between">
-                <span className="text-muted-foreground text-sm font-semibold tracking-wide uppercase">GAP / BRIDGE LOAN</span>
+              <div className="flex items-center justify-between min-h-[44px]">
+                <span className="text-muted-foreground text-xs font-semibold tracking-wider uppercase">GAP / BRIDGE LOAN</span>
                 <Switch 
                   checked={showGapLoan} 
                   onCheckedChange={handleGapToggle} 
@@ -248,16 +242,11 @@ const WizardStep2 = ({ inputs, onUpdate }: WizardStep2Props) => {
               </div>
             </div>
 
-            {/* Gap Inputs */}
-            <div 
-              className={`transition-all duration-300 ease-in-out overflow-hidden ${
-                showGapLoan ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-              }`}
-            >
+            <div className={`transition-all duration-200 ease-out overflow-hidden ${showGapLoan ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
               <div className="space-y-5 pt-4">
                 <div>
                   <div className="mb-3">
-                    <span className="text-foreground font-semibold text-xs tracking-wide uppercase">LOAN AMOUNT</span>
+                    <span className="text-xs tracking-wider uppercase font-semibold text-foreground">LOAN AMOUNT</span>
                   </div>
                   <div className="relative">
                     <span className="absolute left-4 top-1/2 -translate-y-1/2 font-mono text-lg text-muted-foreground">$</span>
@@ -268,7 +257,7 @@ const WizardStep2 = ({ inputs, onUpdate }: WizardStep2Props) => {
                       value={formatValue(inputs.mezzanineDebt)} 
                       onChange={(e) => onUpdate('mezzanineDebt', parseValue(e.target.value))} 
                       placeholder="0" 
-                      className="pl-10 py-5 text-xl font-mono text-foreground text-right rounded-sm border-border focus:border-gold bg-card" 
+                      className="pl-10 h-14 text-xl font-mono text-foreground text-right rounded-sm border-border focus:border-gold bg-card" 
                       onFocus={(e) => e.target.select()} 
                     />
                   </div>
@@ -276,7 +265,7 @@ const WizardStep2 = ({ inputs, onUpdate }: WizardStep2Props) => {
 
                 <div>
                   <div className="mb-3">
-                    <span className="text-foreground font-semibold text-xs tracking-wide uppercase">RATE & FEES</span>
+                    <span className="text-xs tracking-wider uppercase font-semibold text-foreground">RATE & FEES</span>
                   </div>
                   <div className="relative">
                     <Input 
@@ -286,7 +275,7 @@ const WizardStep2 = ({ inputs, onUpdate }: WizardStep2Props) => {
                       value={formatValue(inputs.mezzanineRate)} 
                       onChange={(e) => onUpdate('mezzanineRate', parseValue(e.target.value, true))} 
                       placeholder="0" 
-                      className="pl-4 pr-10 py-5 text-xl font-mono text-foreground text-right rounded-sm border-border focus:border-gold bg-card" 
+                      className="pl-4 pr-10 h-14 text-xl font-mono text-foreground text-right rounded-sm border-border focus:border-gold bg-card" 
                       onFocus={(e) => e.target.select()} 
                     />
                     <span className="absolute right-4 top-1/2 -translate-y-1/2 font-mono text-lg text-muted-foreground">%</span>
@@ -298,36 +287,35 @@ const WizardStep2 = ({ inputs, onUpdate }: WizardStep2Props) => {
         </div>
       </div>
 
-      {/* --- CARD 2C: EQUITY --- */}
-      <div className="rounded-sm border border-gold overflow-hidden">
-        <div 
-          className={`py-4 px-5 flex items-center justify-between bg-card ${showEquity ? 'border-b border-border' : ''}`}
-        >
+      {/* Card 2C: Equity */}
+      <div className="rounded-sm border border-border overflow-hidden" style={{ borderLeft: '3px solid hsl(var(--gold))' }}>
+        <div className={`py-3 px-4 flex items-center justify-between bg-card ${showEquity ? 'border-b border-border' : ''}`}>
           <div className="flex items-center gap-3">
             <Users className="w-4 h-4 text-gold" />
-            <h3 className="font-bebas text-base tracking-wider uppercase text-gold">
+            <h3 className="font-bebas text-sm tracking-widest uppercase text-gold">
               INVESTOR EQUITY
             </h3>
-            <button onClick={() => setActiveModal('investorEquity')} className="hover:opacity-80 transition-colors">
-              <Info className="w-3.5 h-3.5 text-muted-foreground hover:text-gold" />
-            </button>
           </div>
-          <Switch 
-            checked={showEquity} 
-            onCheckedChange={handleEquityToggle} 
-            className="data-[state=checked]:bg-gold" 
-          />
+          <div className="flex items-center gap-2">
+            <button 
+              onClick={() => setActiveModal('investorEquity')} 
+              className="w-11 h-11 flex items-center justify-center rounded-full hover:bg-gold/10 transition-colors"
+            >
+              <Info className="w-4 h-4 text-muted-foreground hover:text-gold transition-colors" />
+            </button>
+            <Switch 
+              checked={showEquity} 
+              onCheckedChange={handleEquityToggle} 
+              className="data-[state=checked]:bg-gold" 
+            />
+          </div>
         </div>
 
-        <div 
-          className={`transition-all duration-300 ease-in-out overflow-hidden ${
-            showEquity ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-          }`}
-        >
+        <div className={`transition-all duration-200 ease-out overflow-hidden ${showEquity ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
           <div className="p-5 bg-background space-y-5">
             <div>
               <div className="mb-3">
-                <span className="text-foreground font-semibold text-xs tracking-wide uppercase">NET EQUITY NEEDED</span>
+                <span className="text-xs tracking-wider uppercase font-semibold text-foreground">NET EQUITY NEEDED</span>
               </div>
               <div className="relative">
                 <span className="absolute left-4 top-1/2 -translate-y-1/2 font-mono text-lg text-muted-foreground">$</span>
@@ -338,7 +326,7 @@ const WizardStep2 = ({ inputs, onUpdate }: WizardStep2Props) => {
                   value={formatValue(inputs.equity)} 
                   onChange={(e) => onUpdate('equity', parseValue(e.target.value))} 
                   placeholder="0" 
-                  className="pl-10 py-5 text-xl font-mono text-foreground text-right rounded-sm border-border focus:border-gold bg-card" 
+                  className="pl-10 h-14 text-xl font-mono text-foreground text-right rounded-sm border-border focus:border-gold bg-card" 
                   onFocus={(e) => e.target.select()} 
                 />
               </div>
@@ -346,7 +334,7 @@ const WizardStep2 = ({ inputs, onUpdate }: WizardStep2Props) => {
 
             <div>
               <div className="mb-3">
-                <span className="text-foreground font-semibold text-xs tracking-wide uppercase">PREFERRED RETURN</span>
+                <span className="text-xs tracking-wider uppercase font-semibold text-foreground">PREFERRED RETURN</span>
               </div>
               <div className="relative">
                 <Input 
@@ -356,7 +344,7 @@ const WizardStep2 = ({ inputs, onUpdate }: WizardStep2Props) => {
                   value={formatValue(inputs.premium)} 
                   onChange={(e) => onUpdate('premium', parseValue(e.target.value, true))} 
                   placeholder="0" 
-                  className="pl-4 pr-10 py-5 text-xl font-mono text-foreground text-right rounded-sm border-border focus:border-gold bg-card" 
+                  className="pl-4 pr-10 h-14 text-xl font-mono text-foreground text-right rounded-sm border-border focus:border-gold bg-card" 
                   onFocus={(e) => e.target.select()} 
                 />
                 <span className="absolute right-4 top-1/2 -translate-y-1/2 font-mono text-lg text-muted-foreground">%</span>
@@ -366,10 +354,10 @@ const WizardStep2 = ({ inputs, onUpdate }: WizardStep2Props) => {
         </div>
       </div>
 
-      {/* --- MODALS --- */}
+      {/* Modals */}
       {Object.entries(modals).map(([key, modal]) => (
         <Dialog key={key} open={activeModal === key} onOpenChange={(open) => !open && setActiveModal(null)}>
-          <DialogContent className="rounded-sm border-gold max-w-md bg-card">
+          <DialogContent className="rounded-sm border-border max-w-md bg-card">
             <DialogHeader>
               <DialogTitle className="font-bebas text-xl tracking-wider text-gold">
                 {modal.title}
