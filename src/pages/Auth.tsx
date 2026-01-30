@@ -142,14 +142,18 @@ const Auth = () => {
             />
           </div>
 
-          {/* Auth Card - Terminal Structure */}
-          <div className="border-2 overflow-hidden" style={{ borderColor: '#D4AF37' }}>
-            {/* Terminal Header Strip - Matte Carbon */}
+          {/* Auth Card - Terminal Structure with Breathing Glow */}
+          <div className="border-2 overflow-hidden auth-card-glow" style={{ borderColor: '#D4AF37' }}>
+            {/* Terminal Header Strip - Enhanced with Gold Accent */}
             <div 
               className="flex items-center gap-2 py-4 px-6"
-              style={{ backgroundColor: '#111111', borderBottom: '1px solid #333333' }}
+              style={{ 
+                backgroundColor: '#111111', 
+                borderBottom: '1px solid #333333',
+                borderLeft: '3px solid #D4AF37'
+              }}
             >
-              <ShieldCheck className="w-5 h-5" fill="#D4AF37" style={{ color: '#D4AF37' }} />
+              <ShieldCheck className="w-5 h-5 auth-icon-pulse" fill="#D4AF37" style={{ color: '#D4AF37' }} />
               <span className="font-bebas text-lg tracking-wide" style={{ color: '#D4AF37' }}>
                 SECURE ACCESS CALCULATOR
               </span>
@@ -166,15 +170,15 @@ const Auth = () => {
                       <Label htmlFor="firstName" className="text-sm tracking-[0.2em] uppercase font-mono text-zinc-500">
                         First Name
                       </Label>
-                      <div className="relative">
-                        <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5" fill="rgba(212, 175, 55, 0.6)" style={{ color: 'rgba(212, 175, 55, 0.6)' }} />
+                      <div className="relative input-gold-accent rounded-sm overflow-hidden">
+                        <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 z-10" fill="rgba(212, 175, 55, 0.6)" style={{ color: 'rgba(212, 175, 55, 0.6)' }} />
                         <Input
                           id="firstName"
                           type="text"
                           placeholder="Your first name"
                           value={firstName}
                           onChange={(e) => setFirstName(e.target.value)}
-                          className="pl-12 h-14 text-lg rounded-sm text-white placeholder:text-[#666666] font-mono tracking-wide touch-input premium-input focus:ring-1 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors"
+                          className="pl-12 h-14 text-lg rounded-sm text-white placeholder:text-[#666666] font-mono tracking-wide touch-input premium-input focus:ring-1 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-all border-l-0"
                           style={{ backgroundColor: '#0a0a0a', borderColor: '#333333' }}
                           required
                           tabIndex={1}
@@ -188,8 +192,8 @@ const Auth = () => {
                       <Label htmlFor="email" className="text-sm tracking-[0.2em] uppercase font-mono text-zinc-500">
                         Email
                       </Label>
-                      <div className="relative">
-                        <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5" style={{ color: 'rgba(212, 175, 55, 0.6)' }} />
+                      <div className="relative input-gold-accent rounded-sm overflow-hidden">
+                        <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 z-10" style={{ color: 'rgba(212, 175, 55, 0.6)' }} />
                         <Input
                           id="email"
                           type="email"
@@ -197,7 +201,7 @@ const Auth = () => {
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
                           inputMode="email"
-                          className="pl-12 h-14 text-lg rounded-sm text-white placeholder:text-[#666666] font-mono tracking-wide touch-input premium-input focus:ring-1 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors"
+                          className="pl-12 h-14 text-lg rounded-sm text-white placeholder:text-[#666666] font-mono tracking-wide touch-input premium-input focus:ring-1 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-all border-l-0"
                           style={{ backgroundColor: '#0a0a0a', borderColor: '#333333' }}
                           required
                           tabIndex={2}
@@ -207,7 +211,7 @@ const Auth = () => {
                     <Button
                       type="submit"
                       disabled={loading || !firstName.trim()}
-                      className="w-full h-14 rounded-sm font-bebas text-xl tracking-wider transition-all duration-100 active:scale-[0.98] disabled:cursor-not-allowed min-h-[56px]"
+                      className="w-full h-14 rounded-sm font-bebas text-xl tracking-wider transition-all duration-200 active:scale-[0.98] disabled:cursor-not-allowed min-h-[56px] auth-cta-glow"
                       style={{ 
                         backgroundColor: '#D4AF37', 
                         color: '#000000',
@@ -216,9 +220,13 @@ const Auth = () => {
                       onMouseEnter={(e) => {
                         if (!loading && firstName.trim()) {
                           e.currentTarget.style.backgroundColor = '#F9E076';
+                          e.currentTarget.style.boxShadow = '0 0 30px rgba(212, 175, 55, 0.5)';
                         }
                       }}
-                      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#D4AF37'}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = '#D4AF37';
+                        e.currentTarget.style.boxShadow = '';
+                      }}
                       size="lg"
                       tabIndex={3}
                     >
