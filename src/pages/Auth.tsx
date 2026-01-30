@@ -133,15 +133,13 @@ const Auth = () => {
       {/* Main Content - Centered with padding for header */}
       <div className="flex-1 flex flex-col items-center justify-center px-6 py-12 pt-20">
         <div className="w-full max-w-md">
-          {/* Brand Seal - The "F" Crest */}
+          {/* Brand Seal - The "F" Crest - No border, matching homepage */}
           <div className="text-center mb-6">
-            <div className="w-20 h-20 mx-auto border-2 overflow-hidden" style={{ borderColor: '#D4AF37' }}>
-              <img 
-                src={brandIconF} 
-                alt="Brand Seal" 
-                className="w-full h-full object-contain"
-              />
-            </div>
+            <img 
+              src={brandIconF} 
+              alt="Brand Seal" 
+              className="w-24 h-24 mx-auto object-contain"
+            />
           </div>
 
           {/* Auth Card - Terminal Structure */}
