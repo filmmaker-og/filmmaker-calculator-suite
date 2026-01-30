@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { WaterfallResult, WaterfallInputs, formatCurrency, formatPercent } from "@/lib/waterfall";
+import { WaterfallResult, WaterfallInputs, formatCompactCurrency, formatPercent } from "@/lib/waterfall";
 import { Info, CheckCircle2, AlertTriangle, TrendingUp, Target, DollarSign } from "lucide-react";
 import {
   Dialog,
@@ -21,6 +21,7 @@ const WizardStep5 = ({ result, inputs }: WizardStep5Props) => {
   const totalInvested = inputs.debt + inputs.equity;
   const totalDistributed = result.recouped + result.profitPool;
   const roi = totalInvested > 0 ? (totalDistributed / totalInvested) * 100 : 0;
+  const isProfitable = roi >= 100;
 
   // Net Profit (Loss)
   const netProfit = result.profitPool;
@@ -58,63 +59,86 @@ const WizardStep5 = ({ result, inputs }: WizardStep5Props) => {
   const StatusBadge = ({ status }: { status: 'paid' | 'partial' | 'unpaid' }) => {
     if (status === 'paid') {
       return (
-        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-sm bg-emerald-500/20 text-emerald-400 text-[10px] font-mono uppercase tracking-wider">
-          <CheckCircle2 size={10} />
-          Paid
-        </span>
+        <CheckCircle2 size={14} className="text-emerald-400 flex-shrink-0" />
+      );
+    }
+    if (status === 'partial') {
+      return (
+        <AlertTriangle size={14} className="text-amber-400 flex-shrink-0" />
       );
     }
     return (
-      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-sm bg-red-500/20 text-red-400 text-[10px] font-mono uppercase tracking-wider">
-        <AlertTriangle size={10} />
-        {status === 'partial' ? 'Partial' : 'Unpaid'}
-      </span>
+      <AlertTriangle size={14} className="text-red-400 flex-shrink-0" />
     );
   };
 
   return (
-    <div className="animate-fade-in space-y-5">
-      {/* HERO METRICS - Three Key Numbers */}
-      <div className="grid grid-cols-3 gap-3">
-        {/* ROI */}
-        <div className="p-4 rounded-sm text-center" style={{ backgroundColor: '#111111', border: '1px solid #1a1a1a' }}>
-          <div className="w-8 h-8 mx-auto mb-2 rounded-full flex items-center justify-center" style={{ backgroundColor: '#D4AF37' }}>
-            <TrendingUp size={16} className="text-black" />
-          </div>
-          <p className="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">ROI</p>
-          <p className="font-bebas text-2xl" style={{ color: '#D4AF37' }}>
-            {formatPercent(roi)}
-          </p>
-        </div>
+    <div className="step-enter space-y-4">
+      {/* RESULTS DIVIDER */}
+      <div className="flex items-center gap-3 mb-2">
+        <div className="h-px flex-1 bg-zinc-800" />
+        <span className="text-[10px] uppercase tracking-widest text-zinc-500">
+          RESULTS
+        </span>
+        <div className="h-px flex-1 bg-zinc-800" />
+      </div>
 
+      {/* HERO METRIC - ROI with Status */}
+      <div 
+        className="p-5 rounded-sm text-center" 
+        style={{ 
+          backgroundColor: '#111111', 
+          border: `1px solid ${isProfitable ? '#D4AF37' : '#7f1d1d'}` 
+        }}
+      >
+        <div className="flex items-center justify-center gap-2 mb-2">
+          <TrendingUp size={20} style={{ color: isProfitable ? '#D4AF37' : '#ef4444' }} />
+          <span className="text-xs uppercase tracking-widest text-zinc-400">Return on Investment</span>
+        </div>
+        <p 
+          className="font-bebas text-5xl mb-2" 
+          style={{ color: isProfitable ? '#D4AF37' : '#ef4444' }}
+        >
+          {formatPercent(roi)}
+        </p>
+        <span 
+          className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-sm text-[10px] font-mono uppercase tracking-wider ${
+            isProfitable 
+              ? 'bg-emerald-500/20 text-emerald-400' 
+              : 'bg-red-500/20 text-red-400'
+          }`}
+        >
+          {isProfitable ? <CheckCircle2 size={10} /> : <AlertTriangle size={10} />}
+          {isProfitable ? 'PROFITABLE' : 'UNPROFITABLE'}
+        </span>
+      </div>
+
+      {/* SECONDARY METRICS - 2 Column Grid */}
+      <div className="grid grid-cols-2 gap-3">
         {/* Net Profit */}
         <div className="p-4 rounded-sm text-center" style={{ backgroundColor: '#111111', border: '1px solid #1a1a1a' }}>
-          <div className={`w-8 h-8 mx-auto mb-2 rounded-full flex items-center justify-center ${netProfit >= 0 ? 'bg-emerald-500' : 'bg-red-500'}`}>
-            <DollarSign size={16} className="text-black" />
-          </div>
+          <DollarSign size={14} className={`mx-auto mb-1 ${netProfit >= 0 ? 'text-emerald-400' : 'text-red-400'}`} />
           <p className="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Net Profit</p>
           <p className={`font-mono text-lg ${netProfit >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
-            {netProfit >= 0 ? '+' : ''}{formatCurrency(netProfit)}
+            {netProfit >= 0 ? '+' : ''}{formatCompactCurrency(netProfit)}
           </p>
         </div>
 
         {/* Breakeven */}
         <div className="p-4 rounded-sm text-center" style={{ backgroundColor: '#111111', border: '1px solid #1a1a1a' }}>
-          <div className="w-8 h-8 mx-auto mb-2 rounded-full flex items-center justify-center bg-zinc-700">
-            <Target size={16} className="text-white" />
-          </div>
+          <Target size={14} className="mx-auto mb-1 text-zinc-500" />
           <p className="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Breakeven</p>
           <p className="font-mono text-lg text-zinc-300">
-            {formatCurrency(breakevenPoint)}
+            {formatCompactCurrency(breakevenPoint)}
           </p>
         </div>
       </div>
 
       {/* WATERFALL FLOW - Clean Vertical List */}
-      <div className="rounded-sm overflow-hidden" style={{ border: '1px solid #D4AF37' }}>
+      <div className="rounded-sm overflow-hidden" style={{ border: '1px solid #333' }}>
         {/* Header */}
-        <div className="py-3 px-4 flex items-center justify-between" style={{ backgroundColor: '#111111', borderBottom: '1px solid #333333' }}>
-          <h2 className="font-bebas text-base tracking-wider uppercase" style={{ color: '#D4AF37' }}>
+        <div className="py-3 px-4 flex items-center justify-between" style={{ backgroundColor: '#111111', borderBottom: '1px solid #222' }}>
+          <h2 className="font-bebas text-sm tracking-wider uppercase text-zinc-300">
             Priority of Payments
           </h2>
           <button
@@ -127,72 +151,60 @@ const WizardStep5 = ({ result, inputs }: WizardStep5Props) => {
         </div>
 
         {/* Flow Items */}
-        <div style={{ backgroundColor: '#000000' }}>
+        <div style={{ backgroundColor: '#0a0a0a' }}>
           {/* Item 1 */}
-          <div className="px-4 py-3 flex items-center gap-3 border-b border-zinc-800/50">
-            <div className="w-6 h-6 rounded-full bg-zinc-800 flex items-center justify-center flex-shrink-0">
-              <span className="text-[10px] font-mono text-zinc-400">1</span>
+          <div className="px-4 py-3 flex items-center gap-3 border-b border-zinc-900">
+            <div className="w-5 h-5 rounded-full bg-zinc-800 flex items-center justify-center flex-shrink-0">
+              <span className="text-[9px] font-mono text-zinc-500">1</span>
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm text-white font-medium truncate">First Money Out</p>
-              <p className="text-[10px] text-zinc-500 truncate">Guilds / Sales / CAM</p>
+              <p className="text-sm text-white">First Money Out</p>
             </div>
-            <div className="text-right flex-shrink-0">
-              <p className="font-mono text-sm text-white">{formatCurrency(firstMoneyPaid)}</p>
-              <StatusBadge status={firstMoneyStatus} />
-            </div>
+            <p className="font-mono text-sm text-white">{formatCompactCurrency(firstMoneyPaid)}</p>
+            <StatusBadge status={firstMoneyStatus} />
           </div>
 
           {/* Item 2 */}
-          <div className="px-4 py-3 flex items-center gap-3 border-b border-zinc-800/50">
-            <div className="w-6 h-6 rounded-full bg-zinc-800 flex items-center justify-center flex-shrink-0">
-              <span className="text-[10px] font-mono text-zinc-400">2</span>
+          <div className="px-4 py-3 flex items-center gap-3 border-b border-zinc-900">
+            <div className="w-5 h-5 rounded-full bg-zinc-800 flex items-center justify-center flex-shrink-0">
+              <span className="text-[9px] font-mono text-zinc-500">2</span>
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm text-white font-medium truncate">Debt Service</p>
-              <p className="text-[10px] text-zinc-500 truncate">Senior + Gap + Interest</p>
+              <p className="text-sm text-white">Debt Service</p>
             </div>
-            <div className="text-right flex-shrink-0">
-              <p className="font-mono text-sm text-white">{formatCurrency(debtPaid)}</p>
-              <StatusBadge status={debtStatus} />
-            </div>
+            <p className="font-mono text-sm text-white">{formatCompactCurrency(debtPaid)}</p>
+            <StatusBadge status={debtStatus} />
           </div>
 
           {/* Item 3 */}
-          <div className="px-4 py-3 flex items-center gap-3 border-b border-zinc-800/50">
-            <div className="w-6 h-6 rounded-full bg-zinc-800 flex items-center justify-center flex-shrink-0">
-              <span className="text-[10px] font-mono text-zinc-400">3</span>
+          <div className="px-4 py-3 flex items-center gap-3 border-b border-zinc-900">
+            <div className="w-5 h-5 rounded-full bg-zinc-800 flex items-center justify-center flex-shrink-0">
+              <span className="text-[9px] font-mono text-zinc-500">3</span>
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm text-white font-medium truncate">Equity & Premium</p>
-              <p className="text-[10px] text-zinc-500 truncate">Capital + Preferred Return</p>
+              <p className="text-sm text-white">Equity & Premium</p>
             </div>
-            <div className="text-right flex-shrink-0">
-              <p className="font-mono text-sm text-white">{formatCurrency(equityPaid)}</p>
-              <StatusBadge status={equityStatus} />
-            </div>
+            <p className="font-mono text-sm text-white">{formatCompactCurrency(equityPaid)}</p>
+            <StatusBadge status={equityStatus} />
           </div>
 
           {/* Item 4 - Highlighted */}
-          <div className="px-4 py-4 flex items-center gap-3" style={{ backgroundColor: 'rgba(212, 175, 55, 0.05)' }}>
-            <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#D4AF37' }}>
-              <span className="text-[10px] font-mono text-black font-bold">4</span>
+          <div className="px-4 py-3 flex items-center gap-3" style={{ backgroundColor: 'rgba(212, 175, 55, 0.08)' }}>
+            <div className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#D4AF37' }}>
+              <span className="text-[9px] font-mono text-black font-bold">4</span>
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium truncate" style={{ color: '#D4AF37' }}>Net Profit Pool</p>
-              <p className="text-[10px] text-zinc-500 truncate">Available for Distribution</p>
+              <p className="text-sm font-medium" style={{ color: '#D4AF37' }}>Net Profit Pool</p>
             </div>
-            <div className="text-right flex-shrink-0">
-              <p className="font-mono text-lg" style={{ color: '#D4AF37' }}>{formatCurrency(remaining)}</p>
-              <StatusBadge status={profitStatus} />
-            </div>
+            <p className="font-mono text-sm" style={{ color: '#D4AF37' }}>{formatCompactCurrency(remaining)}</p>
+            <StatusBadge status={profitStatus} />
           </div>
         </div>
       </div>
 
       {/* Info Modal */}
       <Dialog open={showInfoModal} onOpenChange={setShowInfoModal}>
-        <DialogContent className="bg-[#111111] border-[#D4AF37] text-white max-w-md">
+        <DialogContent className="bg-[#111111] border-[#333] text-white max-w-md">
           <DialogHeader>
             <DialogTitle className="font-bebas text-2xl tracking-wider text-[#D4AF37]">
               WATERFALL DEFINITIONS
