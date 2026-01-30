@@ -1,265 +1,212 @@
 
 
-# Mobile UX Overhaul: Fix Visual Issues + App-Like Improvements
+# Tighter App Experience + Stunning Outputs
 
-## Issues Identified
+## Current State Analysis
 
-### 1. Data Overlapping & Cut-off Content
-**Root Cause Analysis:**
-- **WizardStep5 (Output - Priority of Payments)**: The 3-column hero metrics grid (`grid-cols-3`) is too cramped on small mobile screens, causing text to overlap
-- **Currency values in the flow items** are displayed with `text-lg` which combined with the status badge creates horizontal overflow
-- The `truncate` class is hiding important data instead of wrapping it properly
+### Step Structure (6 steps currently)
+1. **Step 1**: Negative Cost (single input - budget)
+2. **Step 2**: Capital Stack (Tax Credits, Debt, Equity - 3 collapsible cards)
+3. **Step 3**: Deductions (Guild Residuals, Distribution Costs - 2 cards)
+4. **Step 4**: Streamer Buyout (single input - revenue)
+5. **Step 5**: Performance Metrics (ROI, Priority of Payments)
+6. **Step 6**: Settlement (Producer vs Investor split)
 
-### 2. "Weird Haze" Effect
-**Root Cause Analysis:**
-- The **vignette gradient** on the Index page (`radial-gradient(ellipse at center, rgba(30,30,30,0.3) 0%, rgba(0,0,0,0) 50%, rgba(0,0,0,1) 100%)`) creates a grey haze in the center of the screen
-- The `premium-input` focus styles (`box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15)`) combined with the dark backgrounds create visual noise
-- Multiple overlapping opacity effects during swipe (`opacity: 1 - Math.abs(swipeState.offset) / 300`) create transparency issues
-
-### 3. App-Like Functionality Gaps
-**Current Issues:**
-- **No clear visual separation** between input steps (1-4) and output steps (5-6)
-- **Step transitions are jerky** - content just appears without smooth animation
-- **Console warnings** about refs on WizardStep6 and RestrictedAccessModal (need forwardRef)
-- **No bottom sheet pattern** for the output summary - feels like a web page not an app
-- **Currency formatting** at larger numbers gets cut off on mobile
+### Problems Identified
+- **Step 1 and Step 4 are nearly identical** - single input fields that feel redundant
+- **Too much vertical scrolling** - 6 steps with lots of whitespace
+- **Outputs are functional but not "stunning"** - no visual drama or hierarchy
+- **No clear visual separation** between "what you put in" vs "what you get out"
 
 ---
 
-## Solution Plan
+## Proposed Restructure: 4 Steps
 
-### Phase 1: Fix Critical Visual Bugs
+Consolidate from 6 steps to 4 for a tighter, app-like flow:
 
-#### 1.1 Fix WizardStep5 Layout (Priority of Payments)
-**Problem**: 3-column grid causes overlap on small screens
-
-**Solution**:
-- Change hero metrics from `grid-cols-3` to a stacked vertical layout on mobile
-- Make ROI the hero metric (large, prominent) 
-- Stack Net Profit and Breakeven below as secondary metrics
-- Reduce font sizes for better fit
-- Remove `truncate` in favor of allowing natural wrapping
-
-**Changes to `WizardStep5.tsx`**:
-```tsx
-// BEFORE: grid-cols-3 gap-3
-// AFTER: Single column stack with ROI as hero
-
-{/* HERO METRIC - ROI only */}
-<div className="p-5 rounded-sm text-center" style={{ ... }}>
-  <p className="font-bebas text-4xl">{formatPercent(roi)}</p>
-</div>
-
-{/* SECONDARY METRICS - 2 column grid */}
-<div className="grid grid-cols-2 gap-3">
-  {/* Net Profit + Breakeven side by side */}
-</div>
+### NEW STEP 1: "THE DEAL" (Combines old Steps 1 + 4)
+Two stacked input cards on ONE screen:
 ```
-
-#### 1.2 Fix Currency Display Overflow
-**Problem**: Long dollar amounts like `$1,200,000` overflow containers
-
-**Solution**:
-- Use responsive font sizing (`text-sm sm:text-base` instead of fixed `text-lg`)
-- Add `overflow-hidden text-ellipsis` with proper min-width
-- Shorten large numbers to `$1.2M` format when over 1 million
-
-**New Utility Function**:
-```typescript
-const formatCompactCurrency = (value: number) => {
-  if (Math.abs(value) >= 1000000) {
-    return `$${(value / 1000000).toFixed(1)}M`;
-  }
-  return formatCurrency(value);
-};
+┌─────────────────────────────────────┐
+│  PRODUCTION BUDGET                  │
+│  $  ___________________________     │
+│     Negative Cost                   │
+└─────────────────────────────────────┘
+           ↓  (visual arrow/divider)
+┌─────────────────────────────────────┐
+│  STREAMER BUYOUT                    │
+│  $  ___________________________     │
+│     Acquisition Price               │
+└─────────────────────────────────────┘
 ```
+- Immediate visual of "cost vs price" on one screen
+- Users instantly see the core economic tension
+- No scrolling needed for basic scenario
 
-#### 1.3 Remove/Fix the "Haze" Effect
-**Problem**: Vignette creates grey haze making content hard to read
+### NEW STEP 2: "CAPITAL STACK" (Old Step 2)
+- Keep as-is with smart-rack toggles
+- Already works well
 
-**Solution**:
-- Remove the vignette radial gradient from Index page entirely
-- Keep the pure black background for maximum contrast
-- Reduce the intensity of focus glow effects on inputs
+### NEW STEP 3: "DEDUCTIONS" (Old Step 3)
+- Keep as-is
+- Guild residuals + distribution costs
 
-**Changes to `Index.tsx`**:
-```tsx
-// REMOVE this entire block:
-<div 
-  className="absolute inset-0 pointer-events-none"
-  style={{
-    background: 'radial-gradient(ellipse at center, rgba(30,30,30,0.3) 0%, rgba(0,0,0,0) 50%, rgba(0,0,0,1) 100%)'
-  }}
-/>
-```
-
-**Changes to `index.css`**:
-```css
-/* Reduce premium-input glow intensity */
-.premium-input:focus {
-  transform: scale(1.01);
-  box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.1); /* Reduced from 3px/0.15 */
-  border-color: hsl(var(--gold)) !important;
-}
-```
+### NEW STEP 4: "RESULTS" (Combines old Steps 5 + 6)
+Premium dashboard with two sections:
+1. **Hero ROI Card** with animated number reveal
+2. **Horizontal swipeable cards** for Settlement (Producer | Investor | Waterfall)
 
 ---
 
-### Phase 2: Improve Output Data Presentation
+## Stunning Output Redesign (New Step 4)
 
-#### 2.1 Redesign WizardStep5 (Performance Metrics)
-**Goal**: Make output data scannable and clear on mobile
-
-**New Layout**:
+### Visual Hierarchy
 ```
-┌────────────────────────────────┐
-│         🏆 ROI: 218%           │  ← Hero metric, large gold text
-│       ■■■■■■■■■□□ PROFITABLE   │  ← Visual status indicator
-└────────────────────────────────┘
+┌─────────────────────────────────────┐
+│          ★  YOUR RETURN  ★          │
+│                                     │
+│        ┌─────────────────┐          │
+│        │     218.5%      │ ← Animated count-up
+│        │   ROI MULTIPLE  │    Gold text, glow effect
+│        └─────────────────┘          │
+│                                     │
+│    ● PROFITABLE   Net: +$520K       │
+└─────────────────────────────────────┘
 
-┌──────────────┬──────────────┐
-│ Net Profit   │  Breakeven   │
-│  +$520,000   │   $2.98M     │
-└──────────────┴──────────────┘
+     ← SWIPE FOR DETAILS →
 
-┌────────────────────────────────┐
-│ PRIORITY OF PAYMENTS       ⓘ  │
-├────────────────────────────────┤
-│ 1. First Money Out    $485K ✓ │
-│ 2. Debt Service       $660K ✓ │
-│ 3. Equity + Premium   $1.2M ✓ │
-│ 4. Net Profit Pool    $520K ✓ │  ← Gold highlight
-└────────────────────────────────┘
+┌─────────┐ ┌─────────┐ ┌─────────┐
+│PRODUCER │ │INVESTOR │ │WATERFALL│  ← Horizontal snap scroll
+│ $260K   │ │ $1.46M  │ │ FLOW    │
+└─────────┘ └─────────┘ └─────────┘
 ```
 
-**Key Changes**:
-- Single prominent ROI hero metric
-- Status badge shows "PROFITABLE" or "UNPROFITABLE"
-- Compact currency format for large numbers
-- Vertical list with clear paid/unpaid status
-- Remove accordion, show all items by default
-
-#### 2.2 Redesign WizardStep6 (Settlement)
-**Goal**: Clear investor vs producer breakdown
-
-**New Layout**:
-```
-┌────────────────────────────────┐
-│         SETTLEMENT             │
-├────────────────────────────────┤
-│ ┌────────────────────────────┐ │
-│ │ 👤 PRODUCER POOL           │ │
-│ │    $260,000                │ │
-│ └────────────────────────────┘ │
-│ ┌────────────────────────────┐ │
-│ │ 💼 INVESTOR NET            │ │  ← Gold border
-│ │    $1,460,000              │ │
-│ └────────────────────────────┘ │
-└────────────────────────────────┘
-
-┌────────────────────────────────┐
-│ ⓘ KEY METRICS                  │
-│ Breakeven: $2.98M | ROI: 1.3x  │
-│ Profit Pool: $520K | Recoup: ✓ │
-└────────────────────────────────┘
-```
-
-**Key Changes**:
-- Stacked cards instead of side-by-side
-- Larger, more readable currency values
-- Horizontal scrollable metric pills for secondary data
-- Warning card only appears if ROI < 1.2x
+### Design Elements for "Stunning"
+1. **Animated number reveal** - ROI counts up from 0 on entry
+2. **Glowing hero metric** - Pulsing gold shadow behind the number
+3. **Horizontal card carousel** - Native iOS-style snap scrolling
+4. **Circular progress rings** - For recoupment visualization
+5. **Status badges with micro-animations** - Check marks that draw in
 
 ---
 
-### Phase 3: App-Like Polish
+## Technical Implementation
 
-#### 3.1 Fix React Ref Warnings
-**Problem**: Console warns about refs on WizardStep6 and RestrictedAccessModal
-
-**Solution**: Wrap components with `forwardRef` or remove ref dependencies
-
-```tsx
-// RestrictedAccessModal.tsx
-const RestrictedAccessModal = forwardRef<HTMLDivElement, Props>(({ isOpen, onClose }, ref) => {
-  // ...
-});
-```
-
-#### 3.2 Smoother Step Transitions
-**Current**: Content just appears/disappears
-**Improved**: Add slide + fade animation between steps
-
-**Changes to Calculator.tsx**:
-```tsx
-// Add transition wrapper with direction awareness
-<main 
-  className="step-content"
-  key={currentStep}
-  style={{
-    animation: 'stepEnter 0.25s ease-out'
-  }}
->
-```
-
-**New CSS**:
-```css
-@keyframes stepEnter {
-  from { 
-    opacity: 0; 
-    transform: translateX(20px); 
-  }
-  to { 
-    opacity: 1; 
-    transform: translateX(0); 
-  }
-}
-```
-
-#### 3.3 Visual Step Type Indicator
-**Improvement**: Show users they're entering "Results" mode
-
-**Add a divider before Step 5**:
-```tsx
-{currentStep === 5 && (
-  <div className="mb-4 flex items-center gap-3">
-    <div className="h-px flex-1 bg-zinc-800" />
-    <span className="text-[10px] uppercase tracking-widest text-zinc-500">
-      RESULTS
-    </span>
-    <div className="h-px flex-1 bg-zinc-800" />
-  </div>
-)}
-```
-
-#### 3.4 Consistent Touch Feedback
-**Improvement**: Ensure all interactive elements have haptic + visual feedback
-
-- Add `touch-press` class to all buttons universally (already done in button.tsx)
-- Add subtle scale on press to step indicator pills
-- Add haptic pulse when entering results (Step 5)
-
----
-
-## Implementation Summary
+### Files to Modify
 
 | File | Changes |
 |------|---------|
-| `src/index.css` | Remove haze effect, reduce glow intensity, add step animations |
-| `src/pages/Index.tsx` | Remove vignette gradient |
-| `src/components/calculator/WizardStep5.tsx` | Complete redesign - vertical layout, compact currencies, cleaner data presentation |
-| `src/components/calculator/WizardStep6.tsx` | Stacked cards, horizontal metric pills, cleaner layout |
-| `src/lib/waterfall.ts` | Add `formatCompactCurrency()` helper |
-| `src/pages/Calculator.tsx` | Add step transition animations, results divider |
-| `src/components/RestrictedAccessModal.tsx` | Add forwardRef to fix console warning |
+| `src/pages/Calculator.tsx` | Reduce to 4 steps, update step logic |
+| `src/components/calculator/WizardStep1.tsx` | Combine with Step 4 - dual input |
+| `src/components/calculator/WizardStep4.tsx` | **DELETE** - merged into Step 1 |
+| `src/components/calculator/WizardStep5.tsx` | **DELETE** - merged into new Step 4 |
+| `src/components/calculator/WizardStep6.tsx` | Rename to WizardStep4, redesign as "Results Dashboard" |
+| `src/components/calculator/StepIndicator.tsx` | Update totalSteps default to 4 |
+| `src/index.css` | Add count-up animation, carousel styles, glowing hero |
+
+### New Component: ResultsDashboard
+
+The new Step 4 will be a complete redesign with:
+
+1. **Hero Metric Section**
+   - Large animated ROI with count-up effect
+   - Dynamic color (gold = profitable, red = loss)
+   - Pulsing glow animation for emphasis
+
+2. **Quick Stats Row** (Below hero)
+   - 3 compact pills: Net Profit | Breakeven | Multiple
+   - All visible at once, no scrolling
+
+3. **Horizontal Card Carousel**
+   - Card 1: Producer Pool (with icon + amount)
+   - Card 2: Investor Net (gold highlighted)
+   - Card 3: Waterfall Flow (priority list)
+   - Native snap-scroll behavior
+   - Dot indicators below
+
+4. **Action Footer**
+   - Download Investor Deck CTA
+   - Warning banner if underperforming (< 1.2x)
+
+### New CSS Additions
+
+```css
+/* Count-up animation for numbers */
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Pulsing glow for hero metric */
+@keyframes heroGlow {
+  0%, 100% { box-shadow: 0 0 30px hsl(43 74% 52% / 0.3); }
+  50% { box-shadow: 0 0 50px hsl(43 74% 52% / 0.6); }
+}
+
+/* Horizontal snap carousel */
+.results-carousel {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  gap: 12px;
+  padding: 0 24px;
+  scrollbar-width: none;
+}
+
+.results-carousel::-webkit-scrollbar { display: none; }
+
+.results-card {
+  scroll-snap-align: center;
+  flex-shrink: 0;
+  width: 280px;
+}
+```
 
 ---
 
-## Expected Outcomes
+## Additional App-Like Improvements
 
-1. **No more overlapping data** - Vertical stacking and responsive font sizes prevent overflow
-2. **No more haze** - Pure black backgrounds with minimal glow effects
-3. **Clear data hierarchy** - ROI is the hero, supporting metrics are secondary
-4. **Feels like an app** - Smooth transitions, haptic feedback, visual polish
-5. **No console warnings** - Clean React component structure
+### 1. Sticky Summary Bar (Optional Future Enhancement)
+A mini-bar at bottom showing key metrics that persists during input steps.
+
+### 2. Input Step Animation
+When entering values, the number should "pop" with a subtle scale effect + haptic.
+
+### 3. Transition Between Inputs and Results
+Special visual divider animation when moving from Step 3 to Step 4.
+
+### 4. Circular Progress Visualization
+For recoupment percentage, show as an animated ring that fills:
+```
+    ┌───────┐
+   /    87%  \    ← Ring fills with gold
+  │  RECOUP  │
+   \        /
+    └───────┘
+```
+
+---
+
+## Summary of UX Benefits
+
+| Before | After |
+|--------|-------|
+| 6 steps | 4 steps |
+| Scrolly and redundant | Tight and purposeful |
+| Outputs are lists | Outputs are visual dashboards |
+| Static numbers | Animated reveals |
+| Vertical waterfall | Horizontal card carousel |
+| Web-like | Native app-like |
+
+---
+
+## Implementation Priority
+
+1. **First**: Merge Step 1 + Step 4 into new dual-input "The Deal" step
+2. **Second**: Merge Step 5 + Step 6 into stunning "Results Dashboard"  
+3. **Third**: Update Calculator.tsx routing for 4 steps
+4. **Fourth**: Add animations and polish (count-up, carousel, glow)
+
+This reduces cognitive load, eliminates redundant navigation, and makes the output feel like a premium data visualization rather than a form result.
 
