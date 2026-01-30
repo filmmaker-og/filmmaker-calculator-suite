@@ -76,17 +76,17 @@ const Index = () => {
       {/* CONTENT: Moved up with less bottom padding */}
       <div 
         className={`flex-1 flex flex-col items-center justify-center text-center px-6 py-6 relative z-10 transition-all duration-700 ${introComplete ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
-        style={{ marginTop: '-2rem' }}
+        style={{ marginTop: '-4rem' }}
       >
         
-        {/* 1. THE TOTEM (Icon) - with staggered fade */}
+        {/* 1. THE TOTEM (Icon) - Larger, no border, matching Auth page style */}
         <div 
-          className={`mb-3 transition-all duration-500 delay-100 ${introComplete ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
+          className={`mb-4 transition-all duration-500 delay-100 ${introComplete ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
         >
           <img 
             src={brandIconF} 
             alt="Filmmaker.OG" 
-            className="w-20 h-20 md:w-28 md:h-28 object-contain"
+            className="w-28 h-28 md:w-36 md:h-36 object-contain"
           />
         </div>
         
