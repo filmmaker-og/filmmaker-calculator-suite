@@ -1,220 +1,274 @@
 
 
-## Mobile UI/UX Enhancement Plan
+# 5 Premium Mobile UI/UX Improvements + Haptics
 
-### Issues Identified
-
-#### 1. **"Jumping Around" Bug on Calculator Access**
-The issue is caused by multiple factors:
-- **Layout shift during auth check**: The Calculator page shows a loading spinner while checking auth state, then renders the full page. This causes a visible "jump" as the layout changes.
-- **No smooth page transition**: Navigation from Index → Auth → Calculator has no transition, causing abrupt shifts.
-- **Fixed header + spacer mismatch**: The `h-14` spacer assumes header height is always 14, but safe area padding (`safe-top`) can add additional height on notched devices, causing content to jump.
-- **localStorage hydration flash**: When loading saved state from localStorage, multiple `setInputs`/`setGuilds`/`setCurrentStep` calls cause re-renders.
-
-#### 2. **Index Page Mobile Issues**
-- Header lacks safe area padding for notched phones
-- "SERVICES" link hidden on mobile without clear alternative
-- Legal footer button has tiny touch target (`text-[9px]`)
-- No loading state when navigating
-
-#### 3. **Auth Page Mobile Issues**
-- Form inputs could benefit from better visual feedback
-- Magic link sent state has no clear "back to home" action
-- Demo Access link is subtle (intentional but could be more discoverable)
-
-#### 4. **Calculator Mobile Issues**
-- Progress bar step indicator is text-only, not tappable
-- No visual indication of which steps are complete
-- Step transitions are abrupt (no animation between steps)
-- Bottom nav buttons don't have consistent width when "Previous" appears/disappears
-- No pull-to-refresh or gesture navigation
-
-#### 5. **Store Page Mobile Issues**
-- MobileMenu is rendered but positioned incorrectly (not in header)
-- No fixed header for navigation consistency
-- Cards could benefit from better spacing on small screens
+## Overview
+These enhancements will transform the app from a functional mobile experience to a **premium, native-feeling** application with tactile feedback and seamless interactions.
 
 ---
 
-### Implementation Plan
+## 1. Haptic Feedback System
 
-#### Phase 1: Fix the "Jumping" Bug (Critical)
+Add haptic feedback for all interactive elements to create a tactile, premium feel.
 
-**1.1 Add CSS for smooth page transitions**
-- Add `animate-fade-in` class to main content wrappers
-- Ensure consistent initial state before hydration
+**What it does:**
+- Light tap on buttons and toggles
+- Medium impact on step changes
+- Success vibration on form submissions
+- Subtle buzz on swipe gestures
 
-**1.2 Fix Calculator loading state**
-- Use a full-page skeleton that matches the final layout dimensions
-- Prevent layout shift by maintaining header/footer structure during load
+**Technical Implementation:**
+Create a `use-haptics.ts` hook that wraps the Vibration API with fallbacks:
 
-**1.3 Fix safe-area spacer calculation**
-- Replace static `h-14` spacer with CSS calc that includes safe area
-- Create a new utility class `header-spacer` that accounts for both
+```typescript
+// src/hooks/use-haptics.ts
+export const useHaptics = () => {
+  const vibrate = (pattern: number | number[]) => {
+    if ('vibrate' in navigator) {
+      navigator.vibrate(pattern);
+    }
+  };
 
-**1.4 Batch localStorage hydration**
-- Load all values at once before rendering to prevent multiple re-renders
+  return {
+    light: () => vibrate(10),      // Quick tap
+    medium: () => vibrate(25),     // Button press
+    heavy: () => vibrate(50),      // Important action
+    success: () => vibrate([30, 50, 30]), // Success pattern
+    error: () => vibrate([50, 30, 50, 30, 50]), // Error pattern
+  };
+};
+```
 
----
-
-#### Phase 2: Index Page Mobile Improvements
-
-**2.1 Add safe area to header**
-- Add `safe-top` class to header
-- Increase header height to accommodate
-
-**2.2 Improve legal footer touch target**
-- Increase font size from `text-[9px]` to `text-xs`
-- Add padding for 44px touch target
-
-**2.3 Add page transition**
-- Wrap content in `animate-fade-in` for smooth entrance
-
----
-
-#### Phase 3: Calculator Page Mobile Improvements
-
-**3.1 Create tappable step indicators**
-- Replace text "Step 1 of 6" with visual dots/pills
-- Allow direct navigation to completed steps
-- Visual distinction for current, completed, and upcoming steps
-
-**3.2 Improve bottom navigation consistency**
-- When on Step 1 (no "Previous" button), center the "NEXT STEP" button
-- Use consistent button sizing regardless of step
-
-**3.3 Add step transition animations**
-- Fade out current step, fade in next step
-- Or horizontal slide animation for forward/back navigation
-
-**3.4 Fix header spacer for safe areas**
-- Dynamic spacer that includes `var(--safe-area-top)`
+**Where to apply:**
+- Step indicator pill taps
+- Next/Previous button presses
+- Swipe gesture completion
+- Form submissions (magic link sent)
+- Guild toggles in Step 3
+- CTA button presses
 
 ---
 
-#### Phase 4: Store Page Mobile Fixes
+## 2. Smooth Page Transitions with Shared Element Animation
 
-**4.1 Implement proper header layout**
-- Match the command bar pattern from other pages
-- Move MobileMenu to header right side
-- Add safe area support
+Replace abrupt page changes with fluid, iOS-style transitions.
 
-**4.2 Improve card spacing**
-- Better padding on mobile for thumb-friendly interactions
+**What it does:**
+- Fade + slide transitions between routes
+- Shared element morphing (brand logo animates between pages)
+- Hardware-accelerated animations
+
+**Technical Implementation:**
+Create a transition wrapper component:
+
+```css
+/* New animation keyframes */
+@keyframes slideInFromRight {
+  from { transform: translateX(30px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideOutToLeft {
+  from { transform: translateX(0); opacity: 1; }
+  to { transform: translateX(-30px); opacity: 0; }
+}
+
+.page-enter { animation: slideInFromRight 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+.page-exit { animation: slideOutToLeft 0.2s cubic-bezier(0.4, 0, 1, 1); }
+```
+
+**Files to modify:**
+- `src/index.css` - Add new keyframes
+- `src/App.tsx` - Wrap routes with AnimatePresence-like logic
+- All page components - Add transition classes
 
 ---
 
-### Technical Implementation Details
+## 3. Premium Input Interactions
 
-#### File Changes Summary
+Upgrade all form inputs with micro-interactions that feel responsive and polished.
+
+**What it does:**
+- Inputs gently scale up on focus (1.01x)
+- Floating labels that animate into position
+- Subtle glow effect on focus
+- Number inputs with increment/decrement gestures
+- Value changes animate smoothly
+
+**Technical Implementation:**
+
+```css
+/* Enhanced input styling */
+.premium-input {
+  transition: transform 0.15s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.premium-input:focus {
+  transform: scale(1.01);
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15), 0 0 20px rgba(212, 175, 55, 0.1);
+  border-color: #D4AF37;
+}
+
+/* Number value animation */
+.value-change {
+  animation: valuePop 0.2s ease-out;
+}
+
+@keyframes valuePop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.03); color: #F9E076; }
+  100% { transform: scale(1); }
+}
+```
+
+**Files to modify:**
+- `src/index.css` - Add premium input classes
+- `src/components/calculator/WizardStep1.tsx` through `WizardStep4.tsx` - Apply new classes
+- Add haptic feedback on value changes
+
+---
+
+## 4. Gesture-Enhanced Navigation with Visual Feedback
+
+Upgrade the swipe navigation to show real-time visual feedback during gestures.
+
+**What it does:**
+- Content follows your finger during swipe
+- Opacity fades as you swipe away
+- Rubber-band effect at boundaries (can't go past step 1 or 6)
+- Step indicator pills animate in the direction of swipe
+- Haptic pulse when completing a swipe
+
+**Technical Implementation:**
+
+Upgrade `use-swipe.ts` to track position and expose progress:
+
+```typescript
+interface UseSwipeOptions {
+  onSwipeLeft?: () => void;
+  onSwipeRight?: () => void;
+  onProgress?: (progress: number, direction: 'left' | 'right') => void;
+  threshold?: number;
+}
+```
+
+Add visual feedback component:
+
+```tsx
+// In Calculator.tsx
+<main 
+  style={{
+    transform: `translateX(${swipeProgress}px)`,
+    opacity: 1 - Math.abs(swipeProgress) / 300,
+    transition: swiping ? 'none' : 'transform 0.3s ease-out, opacity 0.3s ease-out',
+  }}
+>
+```
+
+**Files to modify:**
+- `src/hooks/use-swipe.ts` - Add progress tracking
+- `src/pages/Calculator.tsx` - Apply transform styles during swipe
+- `src/components/calculator/StepIndicator.tsx` - Animate pills during swipe
+
+---
+
+## 5. Refined Touch Feedback & Micro-animations
+
+Add subtle but impactful micro-animations throughout the app.
+
+**What it does:**
+- Buttons have subtle press-down effect (not just scale)
+- Cards have depth shadow on press
+- Success states animate (checkmarks draw in)
+- Loading states feel alive (gold shimmer pulse)
+- Icons have subtle bounce on tap
+
+**Technical Implementation:**
+
+```css
+/* Button press depth effect */
+.touch-press {
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.touch-press:active {
+  transform: scale(0.97) translateY(2px);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+/* Icon bounce on tap */
+.icon-bounce:active {
+  animation: iconBounce 0.15s ease-out;
+}
+
+@keyframes iconBounce {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.85); }
+  100% { transform: scale(1); }
+}
+
+/* Success checkmark draw-in */
+@keyframes drawCheck {
+  0% { stroke-dashoffset: 20; }
+  100% { stroke-dashoffset: 0; }
+}
+
+.check-animate {
+  stroke-dasharray: 20;
+  stroke-dashoffset: 20;
+  animation: drawCheck 0.3s ease-out forwards;
+}
+
+/* Gold shimmer for loading states */
+@keyframes goldShimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.loading-shimmer {
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba(212, 175, 55, 0.3) 50%, 
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: goldShimmer 1.5s ease-in-out infinite;
+}
+```
+
+**Files to modify:**
+- `src/index.css` - Add all micro-animation classes
+- `src/components/ui/button.tsx` - Add touch-press class by default
+- `src/components/calculator/WizardStep5.tsx` - Animate status badges
+- Loading skeletons throughout
+
+---
+
+## Implementation Summary
 
 | File | Changes |
 |------|---------|
-| `src/index.css` | Add `.header-spacer`, improve `animate-fade-in`, add step indicator styles |
-| `src/pages/Index.tsx` | Add safe area to header, improve legal footer touch target |
-| `src/pages/Calculator.tsx` | Fix loading skeleton, add tappable step indicators, fix spacer, improve nav consistency |
-| `src/pages/Auth.tsx` | Minor polish, ensure consistent transitions |
-| `src/pages/Store.tsx` | Proper header structure with MobileMenu, safe areas |
+| `src/hooks/use-haptics.ts` | **NEW** - Haptic feedback hook |
+| `src/hooks/use-swipe.ts` | Add progress tracking for visual feedback |
+| `src/index.css` | Add all animation classes and micro-interactions |
+| `src/pages/Calculator.tsx` | Integrate haptics + swipe visual feedback |
+| `src/pages/Index.tsx` | Add page transitions + button haptics |
+| `src/pages/Auth.tsx` | Add input animations + haptics on submit |
+| `src/components/calculator/StepIndicator.tsx` | Add haptic on tap + swipe animation |
+| `src/components/calculator/WizardStep1-6.tsx` | Premium input classes + haptics |
+| `src/components/ui/button.tsx` | Add touch-press class by default |
+| `src/components/MobileMenu.tsx` | Add haptics on menu open/close + link taps |
 
 ---
 
-### Detailed Code Changes
+## Expected Premium Mobile Experience
 
-#### 1. `src/index.css` - New Utilities
-```css
-/* Header spacer that accounts for safe area */
-.header-spacer {
-  height: calc(56px + var(--safe-area-top));
-}
+1. **Tap a button** → Feel a light vibration, see it press down with depth
+2. **Swipe between steps** → Content follows your finger, haptic pulse on complete
+3. **Focus an input** → Subtle scale + glow, feels responsive
+4. **Change a value** → Number animates, light haptic confirmation
+5. **Complete the calculator** → Success vibration pattern, checkmarks animate in
+6. **Navigate between pages** → Smooth slide transitions, no jarring cuts
 
-/* Smooth page entrance */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.animate-fade-in {
-  animation: fadeIn 0.3s ease-out forwards;
-}
-
-/* Step indicator pills */
-.step-pill {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  transition: all 0.2s ease;
-}
-
-.step-pill.completed { background: #D4AF37; }
-.step-pill.current { background: #D4AF37; box-shadow: 0 0 8px rgba(212, 175, 55, 0.5); }
-.step-pill.upcoming { background: #333; }
-```
-
-#### 2. `src/pages/Calculator.tsx` - Loading & Step Indicators
-- Replace current loading state with skeleton that maintains layout
-- Add step indicator component with dots that are tappable for completed steps
-- Fix spacer height to use CSS variable
-- Ensure bottom nav has consistent layout
-
-**Loading Skeleton Structure:**
-```tsx
-if (loading) {
-  return (
-    <div className="min-h-screen bg-background flex flex-col">
-      {/* Header skeleton - same dimensions as real header */}
-      <header className="fixed top-0 left-0 right-0 h-14 z-50 flex items-center px-6 border-b border-zinc-900 safe-top" style={{ backgroundColor: '#000000' }}>
-        <div className="w-12 h-12" /> {/* Home placeholder */}
-        <span className="flex-1 text-center font-bebas text-lg tracking-widest text-gold">
-          WATERFALL TERMINAL
-        </span>
-        <div className="w-12 h-12" /> {/* Menu placeholder */}
-      </header>
-      <div className="header-spacer" />
-      {/* Content skeleton */}
-      <div className="flex-1 flex items-center justify-center">
-        <div className="skeleton-gold w-16 h-16 rounded-full" />
-      </div>
-    </div>
-  );
-}
-```
-
-**Step Indicator Component:**
-```tsx
-const StepIndicator = ({ currentStep, onStepClick }: { currentStep: number; onStepClick: (step: number) => void }) => (
-  <div className="flex items-center justify-center gap-3">
-    {[1, 2, 3, 4, 5, 6].map((step) => (
-      <button
-        key={step}
-        onClick={() => step <= currentStep && onStepClick(step)}
-        disabled={step > currentStep}
-        className={`step-pill ${
-          step < currentStep ? 'completed' : 
-          step === currentStep ? 'current' : 'upcoming'
-        } ${step <= currentStep ? 'cursor-pointer' : 'cursor-default'}`}
-        aria-label={`Go to step ${step}`}
-      />
-    ))}
-  </div>
-);
-```
-
-#### 3. `src/pages/Index.tsx` - Safe Areas & Touch Targets
-- Add `safe-top` to header
-- Increase legal footer touch target size
-
-#### 4. `src/pages/Store.tsx` - Proper Header
-- Restructure header to match command bar pattern
-- Move MobileMenu to proper position
-- Add safe area support
-
----
-
-### Expected Outcomes
-
-1. **No more jumping**: Layout remains stable during auth check and page transitions
-2. **Better navigation**: Users can tap step indicators to jump to completed steps
-3. **Consistent experience**: All pages have matching header patterns and safe areas
-4. **Smoother transitions**: Fade animations make navigation feel polished
-5. **Improved touch targets**: All interactive elements meet 44px minimum
+This transforms the app from "good mobile site" to "feels like a native app."
 
