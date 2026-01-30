@@ -180,11 +180,8 @@ const Calculator = () => {
 
       <div className="header-spacer" />
 
-      {/* Status Bar */}
-      <div 
-        className="px-6 py-4 border-b border-[#333333]"
-        style={{ backgroundColor: '#111111' }}
-      >
+      {/* Status Bar - Enhanced */}
+      <div className="px-6 py-4 border-b border-border bg-card">
         <div className="flex items-center justify-between mb-3">
           <StepIndicator 
             currentStep={currentStep} 
@@ -192,17 +189,14 @@ const Calculator = () => {
             onStepClick={setCurrentStep}
             swipeOffset={swipeState.offset}
           />
-          <span className="text-xs font-mono ml-4" style={{ color: '#D4AF37' }}>
+          <span className="text-xs font-mono ml-4 text-gold">
             {Math.round((currentStep / TOTAL_STEPS) * 100)}%
           </span>
         </div>
-        <div className="h-1 rounded-sm overflow-hidden" style={{ backgroundColor: '#1a1a1a' }}>
+        <div className="h-1.5 rounded-full overflow-hidden bg-border">
           <div 
-            className="h-full transition-all duration-300 rounded-sm"
-            style={{ 
-              width: `${(currentStep / TOTAL_STEPS) * 100}%`,
-              backgroundColor: '#D4AF37'
-            }}
+            className="h-full transition-all duration-300 rounded-full bg-gold"
+            style={{ width: `${(currentStep / TOTAL_STEPS) * 100}%` }}
           />
         </div>
       </div>

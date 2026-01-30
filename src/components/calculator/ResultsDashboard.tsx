@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { WaterfallResult, WaterfallInputs, formatCompactCurrency, formatPercent, formatMultiple } from "@/lib/waterfall";
 import { 
   Download, AlertTriangle, Users, Briefcase, Target, TrendingUp, 
-  CheckCircle2, DollarSign, ChevronLeft, ChevronRight, Info
+  CheckCircle2, DollarSign, Info, Zap
 } from "lucide-react";
 import RestrictedAccessModal from "@/components/RestrictedAccessModal";
 import {
@@ -82,9 +82,9 @@ const ResultsDashboard = forwardRef<HTMLDivElement, ResultsDashboardProps>(({ re
   const profitStatus = remaining > 0 ? 'paid' : 'unpaid';
 
   const StatusBadge = ({ status }: { status: 'paid' | 'partial' | 'unpaid' }) => {
-    if (status === 'paid') return <CheckCircle2 size={12} className="text-emerald-400" />;
-    if (status === 'partial') return <AlertTriangle size={12} className="text-amber-400" />;
-    return <AlertTriangle size={12} className="text-red-400" />;
+    if (status === 'paid') return <CheckCircle2 size={14} className="text-emerald-400" />;
+    if (status === 'partial') return <AlertTriangle size={14} className="text-amber-400" />;
+    return <AlertTriangle size={14} className="text-red-400" />;
   };
 
   const cards = [
@@ -94,7 +94,8 @@ const ResultsDashboard = forwardRef<HTMLDivElement, ResultsDashboardProps>(({ re
       label: 'Producer Pool',
       value: result.producer,
       subtitle: '50% profit share',
-      color: '#666'
+      color: 'text-muted-foreground',
+      bgColor: 'bg-muted/50'
     },
     {
       id: 'investor',
@@ -102,7 +103,8 @@ const ResultsDashboard = forwardRef<HTMLDivElement, ResultsDashboardProps>(({ re
       label: 'Investor Net',
       value: result.investor,
       subtitle: 'Recoupment + 50%',
-      color: '#D4AF37'
+      color: 'text-gold',
+      bgColor: 'bg-gold/10'
     },
     {
       id: 'waterfall',
@@ -113,79 +115,83 @@ const ResultsDashboard = forwardRef<HTMLDivElement, ResultsDashboardProps>(({ re
   ];
 
   return (
-    <div ref={ref} className="step-enter space-y-4">
-      {/* RESULTS HEADER */}
-      <div className="flex items-center gap-3">
-        <div className="h-px flex-1 bg-zinc-800" />
-        <span className="text-[10px] uppercase tracking-widest text-zinc-500">YOUR RESULTS</span>
-        <div className="h-px flex-1 bg-zinc-800" />
+    <div ref={ref} className="step-enter space-y-5">
+      {/* Section Header */}
+      <div className="flex items-center gap-3 mb-6">
+        <div className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center">
+          <Zap className="w-4 h-4 text-gold" />
+        </div>
+        <div>
+          <h2 className="font-bebas text-xl text-foreground tracking-wide">YOUR RESULTS</h2>
+          <p className="text-xs text-muted-foreground">Waterfall analysis complete</p>
+        </div>
       </div>
 
-      {/* HERO NET PROFIT CARD with Glow */}
+      {/* HERO NET PROFIT CARD */}
       <div 
-        className="relative p-6 rounded-sm text-center overflow-hidden hero-glow"
+        className="relative p-6 rounded-sm text-center overflow-hidden border-2"
         style={{ 
-          backgroundColor: '#111111', 
-          border: `2px solid ${isProfitable ? '#D4AF37' : '#7f1d1d'}` 
+          backgroundColor: 'hsl(var(--card))',
+          borderColor: isProfitable ? 'hsl(var(--gold))' : 'hsl(0 84% 40%)'
         }}
       >
         {/* Glow Effect */}
         <div 
-          className="absolute inset-0 pointer-events-none"
+          className="absolute inset-0 pointer-events-none hero-glow"
           style={{
             background: isProfitable 
-              ? 'radial-gradient(circle at center, hsl(43 74% 52% / 0.15) 0%, transparent 70%)'
-              : 'radial-gradient(circle at center, hsl(0 84% 60% / 0.1) 0%, transparent 70%)'
+              ? 'radial-gradient(circle at center, hsl(43 74% 52% / 0.12) 0%, transparent 70%)'
+              : 'radial-gradient(circle at center, hsl(0 84% 60% / 0.08) 0%, transparent 70%)'
           }}
         />
         
         <div className="relative z-10">
-          <div className="flex items-center justify-center gap-2 mb-3">
-            <DollarSign size={18} style={{ color: isProfitable ? '#D4AF37' : '#ef4444' }} />
-            <span className="text-xs uppercase tracking-widest text-zinc-400">Net Profit</span>
+          <div className="flex items-center justify-center gap-2 mb-4">
+            <DollarSign size={20} className={isProfitable ? 'text-gold' : 'text-destructive'} />
+            <span className="text-xs uppercase tracking-[0.2em] text-muted-foreground font-semibold">Net Profit</span>
           </div>
           
           <p 
-            className="font-bebas text-5xl sm:text-6xl mb-3 tabular-nums" 
+            className="font-bebas text-5xl sm:text-6xl mb-4 tabular-nums" 
             style={{ 
-              color: isProfitable ? '#D4AF37' : '#ef4444',
-              textShadow: isProfitable ? '0 0 30px hsl(43 74% 52% / 0.5)' : '0 0 20px hsl(0 84% 60% / 0.4)'
+              color: isProfitable ? 'hsl(var(--gold))' : 'hsl(var(--destructive))',
+              textShadow: isProfitable ? '0 0 40px hsl(43 74% 52% / 0.4)' : '0 0 30px hsl(0 84% 60% / 0.3)'
             }}
           >
             {isProfitable ? '+' : ''}{formatCompactCurrency(displayedProfit)}
           </p>
           
           <span 
-            className={`inline-flex items-center gap-1.5 px-4 py-1.5 rounded-sm text-xs font-mono uppercase tracking-wider ${
+            className={`inline-flex items-center gap-2 px-5 py-2 rounded-sm text-xs font-mono uppercase tracking-wider ${
               isProfitable 
-                ? 'bg-emerald-500/20 text-emerald-400' 
-                : 'bg-red-500/20 text-red-400'
+                ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30' 
+                : 'bg-red-500/15 text-red-400 border border-red-500/30'
             }`}
           >
-            {isProfitable ? <CheckCircle2 size={12} /> : <AlertTriangle size={12} />}
+            {isProfitable ? <CheckCircle2 size={14} /> : <AlertTriangle size={14} />}
             {isProfitable ? 'PROFITABLE' : 'LOSS'}
           </span>
         </div>
       </div>
 
-      {/* QUICK STATS ROW - ROI, Breakeven, Multiple */}
-      <div className="grid grid-cols-3 gap-2">
-        <div className="p-3 rounded-sm text-center" style={{ backgroundColor: '#0a0a0a', border: '1px solid #1a1a1a' }}>
-          <TrendingUp size={12} className={`mx-auto mb-1 ${roi >= 100 ? 'text-emerald-400' : 'text-red-400'}`} />
-          <p className="text-[9px] text-zinc-500 uppercase mb-0.5">ROI</p>
-          <p className={`font-mono text-sm ${roi >= 100 ? 'text-emerald-400' : 'text-red-400'}`}>
+      {/* QUICK STATS ROW */}
+      <div className="grid grid-cols-3 gap-3">
+        <div className="p-4 rounded-sm text-center bg-card border border-border">
+          <TrendingUp size={14} className={`mx-auto mb-2 ${roi >= 100 ? 'text-emerald-400' : 'text-red-400'}`} />
+          <p className="text-[10px] text-muted-foreground uppercase mb-1 font-semibold tracking-wide">ROI</p>
+          <p className={`font-mono text-base font-semibold ${roi >= 100 ? 'text-emerald-400' : 'text-red-400'}`}>
             {formatPercent(displayedROI)}
           </p>
         </div>
-        <div className="p-3 rounded-sm text-center" style={{ backgroundColor: '#0a0a0a', border: '1px solid #1a1a1a' }}>
-          <Target size={12} className="mx-auto mb-1 text-zinc-500" />
-          <p className="text-[9px] text-zinc-500 uppercase mb-0.5">Breakeven</p>
-          <p className="font-mono text-sm text-zinc-300">{formatCompactCurrency(result.totalHurdle)}</p>
+        <div className="p-4 rounded-sm text-center bg-card border border-border">
+          <Target size={14} className="mx-auto mb-2 text-muted-foreground" />
+          <p className="text-[10px] text-muted-foreground uppercase mb-1 font-semibold tracking-wide">Breakeven</p>
+          <p className="font-mono text-base text-foreground">{formatCompactCurrency(result.totalHurdle)}</p>
         </div>
-        <div className="p-3 rounded-sm text-center" style={{ backgroundColor: '#0a0a0a', border: '1px solid #1a1a1a' }}>
-          <TrendingUp size={12} className={`mx-auto mb-1 ${result.multiple >= 1.2 ? 'text-[#D4AF37]' : 'text-zinc-500'}`} />
-          <p className="text-[9px] text-zinc-500 uppercase mb-0.5">Multiple</p>
-          <p className={`font-mono text-sm ${result.multiple >= 1.2 ? 'text-[#D4AF37]' : 'text-zinc-300'}`}>
+        <div className="p-4 rounded-sm text-center bg-card border border-border">
+          <TrendingUp size={14} className={`mx-auto mb-2 ${result.multiple >= 1.2 ? 'text-gold' : 'text-muted-foreground'}`} />
+          <p className="text-[10px] text-muted-foreground uppercase mb-1 font-semibold tracking-wide">Multiple</p>
+          <p className={`font-mono text-base font-semibold ${result.multiple >= 1.2 ? 'text-gold' : 'text-foreground'}`}>
             {formatMultiple(result.multiple)}
           </p>
         </div>
@@ -193,15 +199,15 @@ const ResultsDashboard = forwardRef<HTMLDivElement, ResultsDashboardProps>(({ re
 
       {/* HORIZONTAL CARD CAROUSEL */}
       <div className="relative">
-        <div className="flex items-center justify-between mb-2 px-1">
-          <span className="text-[10px] uppercase tracking-widest text-zinc-500">Settlement Details</span>
-          <div className="flex gap-1">
+        <div className="flex items-center justify-between mb-3 px-1">
+          <span className="text-xs uppercase tracking-widest text-muted-foreground font-semibold">Settlement Details</span>
+          <div className="flex gap-1.5">
             {cards.map((_, i) => (
               <button
                 key={i}
                 onClick={() => setActiveCard(i)}
                 className={`w-2 h-2 rounded-full transition-all ${
-                  i === activeCard ? 'bg-[#D4AF37] scale-110' : 'bg-zinc-700'
+                  i === activeCard ? 'bg-gold scale-125' : 'bg-border'
                 }`}
               />
             ))}
@@ -209,53 +215,50 @@ const ResultsDashboard = forwardRef<HTMLDivElement, ResultsDashboardProps>(({ re
         </div>
 
         <div className="results-carousel">
-          {cards.map((card, i) => (
+          {cards.map((card) => (
             <div 
               key={card.id}
-              className="results-card"
+              className="results-card bg-card border border-border"
               style={{ 
-                backgroundColor: '#0a0a0a', 
-                borderLeft: `3px solid ${card.color || '#333'}`,
-                border: '1px solid #1a1a1a',
                 borderLeftWidth: '3px',
-                borderLeftColor: card.color || '#333'
+                borderLeftColor: card.id === 'investor' ? 'hsl(var(--gold))' : card.id === 'waterfall' ? 'hsl(var(--primary))' : 'hsl(var(--muted-foreground))'
               }}
             >
               {card.isWaterfall ? (
                 // Waterfall Flow Card
-                <div className="p-4">
-                  <div className="flex items-center justify-between mb-3">
-                    <h3 className="font-bebas text-sm tracking-wider text-zinc-300">Priority Flow</h3>
-                    <button onClick={() => setShowInfoModal(true)} className="p-1">
-                      <Info size={12} className="text-[#D4AF37]" />
+                <div className="p-5">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="font-bebas text-sm tracking-wider text-foreground">Priority Flow</h3>
+                    <button onClick={() => setShowInfoModal(true)} className="p-1 hover:opacity-80">
+                      <Info size={14} className="text-gold" />
                     </button>
                   </div>
-                  <div className="space-y-2">
+                  <div className="space-y-3">
                     <div className="flex items-center justify-between text-xs">
-                      <span className="text-zinc-400">1. First Money</span>
+                      <span className="text-muted-foreground">1. First Money</span>
                       <div className="flex items-center gap-2">
-                        <span className="font-mono text-white">{formatCompactCurrency(firstMoneyPaid)}</span>
+                        <span className="font-mono text-foreground">{formatCompactCurrency(firstMoneyPaid)}</span>
                         <StatusBadge status={firstMoneyStatus} />
                       </div>
                     </div>
                     <div className="flex items-center justify-between text-xs">
-                      <span className="text-zinc-400">2. Debt Service</span>
+                      <span className="text-muted-foreground">2. Debt Service</span>
                       <div className="flex items-center gap-2">
-                        <span className="font-mono text-white">{formatCompactCurrency(debtPaid)}</span>
+                        <span className="font-mono text-foreground">{formatCompactCurrency(debtPaid)}</span>
                         <StatusBadge status={debtStatus} />
                       </div>
                     </div>
                     <div className="flex items-center justify-between text-xs">
-                      <span className="text-zinc-400">3. Equity + Prem</span>
+                      <span className="text-muted-foreground">3. Equity + Prem</span>
                       <div className="flex items-center gap-2">
-                        <span className="font-mono text-white">{formatCompactCurrency(equityPaid)}</span>
+                        <span className="font-mono text-foreground">{formatCompactCurrency(equityPaid)}</span>
                         <StatusBadge status={equityStatus} />
                       </div>
                     </div>
-                    <div className="flex items-center justify-between text-xs pt-1 border-t border-zinc-800">
-                      <span style={{ color: '#D4AF37' }}>4. Profit Pool</span>
+                    <div className="flex items-center justify-between text-xs pt-2 border-t border-border">
+                      <span className="text-gold font-semibold">4. Profit Pool</span>
                       <div className="flex items-center gap-2">
-                        <span className="font-mono" style={{ color: '#D4AF37' }}>{formatCompactCurrency(remaining)}</span>
+                        <span className="font-mono text-gold font-semibold">{formatCompactCurrency(remaining)}</span>
                         <StatusBadge status={profitStatus} />
                       </div>
                     </div>
@@ -263,24 +266,23 @@ const ResultsDashboard = forwardRef<HTMLDivElement, ResultsDashboardProps>(({ re
                 </div>
               ) : (
                 // Settlement Card
-                <div className="p-4">
-                  <div className="flex items-center gap-3">
+                <div className="p-5">
+                  <div className="flex items-center gap-4">
                     <div 
-                      className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
-                      style={{ backgroundColor: card.color === '#D4AF37' ? '#D4AF37' : '#222' }}
+                      className={`w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0 ${card.bgColor}`}
                     >
-                      <card.icon size={18} className={card.color === '#D4AF37' ? 'text-black' : 'text-zinc-400'} />
+                      <card.icon size={20} className={card.color} />
                     </div>
                     <div>
-                      <p className="text-xs uppercase tracking-wider mb-0.5" style={{ color: card.color }}>
+                      <p className={`text-xs uppercase tracking-wider mb-1 font-semibold ${card.color}`}>
                         {card.label}
                       </p>
-                      <p className="font-mono text-2xl" style={{ color: card.color === '#D4AF37' ? '#D4AF37' : 'white' }}>
+                      <p className={`font-mono text-2xl font-semibold ${card.color}`}>
                         {formatCompactCurrency(card.value || 0)}
                       </p>
                     </div>
                   </div>
-                  <p className="text-[10px] text-zinc-600 mt-3">{card.subtitle}</p>
+                  <p className="text-[11px] text-muted-foreground mt-4">{card.subtitle}</p>
                 </div>
               )}
             </div>
@@ -288,18 +290,18 @@ const ResultsDashboard = forwardRef<HTMLDivElement, ResultsDashboardProps>(({ re
         </div>
       </div>
 
-      {/* Warning Banner - Conditional */}
+      {/* Warning Banner */}
       {isUnderperforming && (
-        <div className="p-3 rounded-sm flex items-center gap-3" style={{ backgroundColor: '#0a0a0a', border: '1px solid #7f1d1d' }}>
-          <AlertTriangle size={16} className="text-red-400 flex-shrink-0" />
+        <div className="p-4 rounded-sm flex items-center gap-3 bg-destructive/10 border border-destructive/30">
+          <AlertTriangle size={18} className="text-destructive flex-shrink-0" />
           <div className="flex-1">
-            <p className="text-xs text-white">
+            <p className="text-sm text-foreground font-medium">
               ROI of {formatMultiple(result.multiple)} is below 1.2x threshold
             </p>
           </div>
           <button 
             onClick={() => setShowRestrictedModal(true)}
-            className="text-[10px] text-[#D4AF37] uppercase tracking-wider whitespace-nowrap"
+            className="text-xs text-gold uppercase tracking-wider whitespace-nowrap font-semibold hover:underline"
           >
             Fix →
           </button>
@@ -309,8 +311,7 @@ const ResultsDashboard = forwardRef<HTMLDivElement, ResultsDashboardProps>(({ re
       {/* Action Button */}
       <Button
         onClick={() => setShowRestrictedModal(true)}
-        className="w-full py-5 rounded-sm font-bebas tracking-wider min-h-[56px] touch-press"
-        style={{ backgroundColor: '#D4AF37', color: '#000000' }}
+        className="w-full py-5 rounded-sm font-bebas tracking-wider min-h-[56px] touch-press bg-gold text-primary-foreground hover:bg-gold-highlight"
       >
         <Download className="w-5 h-5 mr-2" />
         DOWNLOAD INVESTOR DECK
@@ -318,16 +319,16 @@ const ResultsDashboard = forwardRef<HTMLDivElement, ResultsDashboardProps>(({ re
 
       {/* Info Modal */}
       <Dialog open={showInfoModal} onOpenChange={setShowInfoModal}>
-        <DialogContent className="bg-[#111111] border-[#333] text-white max-w-md">
+        <DialogContent className="bg-card border-border text-foreground max-w-md">
           <DialogHeader>
-            <DialogTitle className="font-bebas text-2xl tracking-wider text-[#D4AF37]">
+            <DialogTitle className="font-bebas text-2xl tracking-wider text-gold">
               WATERFALL DEFINITIONS
             </DialogTitle>
           </DialogHeader>
           <div className="space-y-4 mt-4">
             <div>
-              <h3 className="font-bebas text-lg text-[#D4AF37] mb-1">PRIORITY OF PAYMENTS</h3>
-              <DialogDescription className="text-zinc-400 text-sm leading-relaxed">
+              <h3 className="font-bebas text-lg text-gold mb-1">PRIORITY OF PAYMENTS</h3>
+              <DialogDescription className="text-muted-foreground text-sm leading-relaxed">
                 Funds are distributed in strict order. First Money Out covers CAM fees, sales, and guild residuals. Then senior debt is repaid, followed by equity with premium. Any remainder flows to the profit pool.
               </DialogDescription>
             </div>
