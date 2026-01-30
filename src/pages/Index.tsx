@@ -3,13 +3,20 @@ import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import MobileMenu from "@/components/MobileMenu";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { useHaptics } from "@/hooks/use-haptics";
 import brandIconF from "@/assets/brand-icon-f.jpg"; 
 
 const Index = () => {
   const navigate = useNavigate();
+  const haptics = useHaptics();
   const [showLegalModal, setShowLegalModal] = useState(false);
 
   const legalText = "Educational disclaimer: For educational purposes only. This calculator is a simplified model and is not legal, tax, accounting, or investment advice. Consult a qualified entertainment attorney.";
+
+  const handleAccessClick = () => {
+    haptics.medium();
+    navigate("/auth");
+  };
 
   return (
     // THE VOID: Pure Black (Brand Guide #000000)
@@ -69,8 +76,8 @@ const Index = () => {
         <div className="w-full max-w-xs space-y-4">
           {/* Primary: Base #D4AF37 -> Hover #F9E076 (Bright Gold) */}
           <Button 
-            onClick={() => navigate("/auth")}
-            className="w-full h-14 text-sm font-black tracking-[0.2em] rounded-sm bg-[#D4AF37] text-black hover:bg-[#F9E076] transition-colors duration-300 border border-[#D4AF37]"
+            onClick={handleAccessClick}
+            className="w-full h-14 text-sm font-black tracking-[0.2em] rounded-sm bg-[#D4AF37] text-black hover:bg-[#F9E076] transition-colors duration-300 border border-[#D4AF37] touch-press"
           >
             ACCESS CALCULATOR
           </Button>

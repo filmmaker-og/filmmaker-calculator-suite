@@ -8,6 +8,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { useHaptics } from "@/hooks/use-haptics";
 
 interface MobileMenuProps {
   onOpenLegal?: () => void;
@@ -21,8 +22,20 @@ const MobileMenu = ({ onOpenLegal, onSignOut }: MobileMenuProps) => {
   const [showContactModal, setShowContactModal] = useState(false);
   const [copiedEmail, setCopiedEmail] = useState(false);
   const [copiedInsta, setCopiedInsta] = useState(false);
+  const haptics = useHaptics();
+
+  const handleOpenMenu = () => {
+    haptics.medium();
+    setIsOpen(true);
+  };
+
+  const handleCloseMenu = () => {
+    haptics.light();
+    setIsOpen(false);
+  };
 
   const handleLegalClick = () => {
+    haptics.light();
     setIsOpen(false);
     if (onOpenLegal) {
       onOpenLegal();
@@ -32,22 +45,26 @@ const MobileMenu = ({ onOpenLegal, onSignOut }: MobileMenuProps) => {
   };
 
   const handleAboutClick = () => {
+    haptics.light();
     setIsOpen(false);
     setShowAboutModal(true);
   };
 
   const handleContactClick = () => {
+    haptics.light();
     setIsOpen(false);
     setShowContactModal(true);
   };
 
   const handleCopyEmail = async () => {
+    haptics.success();
     await navigator.clipboard.writeText("thefilmmaker.og@gmail.com");
     setCopiedEmail(true);
     setTimeout(() => setCopiedEmail(false), 2000);
   };
 
   const handleCopyInsta = async () => {
+    haptics.success();
     await navigator.clipboard.writeText("www.instagram.com/filmmaker.og");
     setCopiedInsta(true);
     setTimeout(() => setCopiedInsta(false), 2000);
@@ -65,11 +82,11 @@ const MobileMenu = ({ onOpenLegal, onSignOut }: MobileMenuProps) => {
     <>
       {/* Hamburger Button - Touch-friendly sizing */}
       <button
-        onClick={() => setIsOpen(true)}
-        className="w-12 h-12 flex items-center justify-center hover:opacity-80 transition-all duration-100 active:scale-95 -mr-1"
+        onClick={handleOpenMenu}
+        className="w-12 h-12 flex items-center justify-center hover:opacity-80 transition-all duration-100 touch-press -mr-1"
         aria-label="Open menu"
       >
-        <Menu className="w-6 h-6" style={{ color: '#D4AF37' }} />
+        <Menu className="w-6 h-6 icon-bounce" style={{ color: '#D4AF37' }} />
       </button>
 
       {/* Full-screen Black Overlay Menu */}
@@ -77,8 +94,8 @@ const MobileMenu = ({ onOpenLegal, onSignOut }: MobileMenuProps) => {
         <div className="fixed inset-0 z-50 bg-background flex flex-col animate-fade-in safe-top">
           {/* Close Button - Touch-friendly */}
           <button
-            onClick={() => setIsOpen(false)}
-            className="absolute top-6 right-4 w-14 h-14 flex items-center justify-center text-foreground hover:text-gold transition-all duration-100 active:scale-95"
+            onClick={handleCloseMenu}
+            className="absolute top-6 right-4 w-14 h-14 flex items-center justify-center text-foreground hover:text-gold transition-all duration-100 touch-press"
             aria-label="Close menu"
           >
             <X className="w-7 h-7" />
@@ -95,14 +112,23 @@ const MobileMenu = ({ onOpenLegal, onSignOut }: MobileMenuProps) => {
             <nav className="flex flex-col items-center gap-10">
               {menuLinks.map((link) => {
                 const linkClass = link.isHighlighted 
-                  ? "font-bebas text-4xl font-bold tracking-wider transition-colors"
-                  : "font-bebas text-4xl text-foreground hover:text-gold transition-colors tracking-wider";
+                  ? "font-bebas text-4xl font-bold tracking-wider transition-colors touch-press"
+                  : "font-bebas text-4xl text-foreground hover:text-gold transition-colors tracking-wider touch-press";
                 const linkStyle = link.isHighlighted ? { color: '#D4AF37' } : undefined;
+                
+                const handleLinkClick = () => {
+                  haptics.light();
+                  if (link.onClick) {
+                    link.onClick();
+                  } else {
+                    setIsOpen(false);
+                  }
+                };
                 
                 return link.onClick ? (
                   <button
                     key={link.label}
-                    onClick={link.onClick}
+                    onClick={handleLinkClick}
                     className={linkClass}
                     style={linkStyle}
                   >
@@ -112,7 +138,7 @@ const MobileMenu = ({ onOpenLegal, onSignOut }: MobileMenuProps) => {
                   <Link
                     key={link.label}
                     to={link.href}
-                    onClick={() => setIsOpen(false)}
+                    onClick={handleLinkClick}
                     className={linkClass}
                     style={linkStyle}
                   >
@@ -122,7 +148,7 @@ const MobileMenu = ({ onOpenLegal, onSignOut }: MobileMenuProps) => {
                   <a
                     key={link.label}
                     href={link.href}
-                    onClick={() => setIsOpen(false)}
+                    onClick={handleLinkClick}
                     target={link.href.startsWith("http") ? "_blank" : undefined}
                     rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
                     className={linkClass}

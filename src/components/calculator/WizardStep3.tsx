@@ -4,6 +4,7 @@ import { Switch } from "@/components/ui/switch";
 import { GuildState } from "@/lib/waterfall";
 import { Info } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { useHaptics } from "@/hooks/use-haptics";
 
 interface WizardStep3Props {
   guilds: GuildState;
@@ -23,6 +24,7 @@ const WizardStep3 = ({
   onUpdateSalesExp 
 }: WizardStep3Props) => {
   const [activeModal, setActiveModal] = useState<string | null>(null);
+  const haptics = useHaptics();
   
   // Master toggle - default OFF, check if any guild is active
   const hasAnyGuildActive = guilds.sag || guilds.wga || guilds.dga;
@@ -30,6 +32,7 @@ const WizardStep3 = ({
 
   // Circuit breaker handler
   const handleResidualsToggle = (checked: boolean) => {
+    haptics.light();
     setShowResiduals(checked);
     if (!checked) {
       // Turn off all guilds when master toggle is OFF
@@ -215,7 +218,7 @@ const WizardStep3 = ({
                   onUpdateSalesFee(Math.min(value, 100));
                 }}
                 placeholder="0"
-                className="pl-4 pr-10 py-5 text-2xl font-mono text-white text-right rounded-sm border-zinc-800 focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37] transition-colors"
+                className="pl-4 pr-10 py-5 text-2xl font-mono text-white text-right rounded-sm border-zinc-800 premium-input focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37] transition-colors"
                 style={{ backgroundColor: '#0a0a0a' }}
                 onFocus={(e) => e.target.select()}
               />
@@ -247,7 +250,7 @@ const WizardStep3 = ({
                   onUpdateSalesExp(value);
                 }}
                 placeholder="0"
-                className="pl-10 py-5 text-2xl font-mono text-white text-right rounded-sm border-zinc-800 focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37] transition-colors"
+                className="pl-10 py-5 text-2xl font-mono text-white text-right rounded-sm border-zinc-800 premium-input focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37] transition-colors"
                 style={{ backgroundColor: '#0a0a0a' }}
                 onFocus={(e) => e.target.select()}
               />
