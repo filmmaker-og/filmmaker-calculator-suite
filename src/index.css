@@ -493,6 +493,41 @@ html, body {
   }
 }
 
+/* Auth card breathing glow */
+.auth-card-glow {
+  animation: cardPulse 3s ease-in-out infinite;
+}
+
+@keyframes cardPulse {
+  0%, 100% { box-shadow: 0 0 0px rgba(212, 175, 55, 0); }
+  50% { box-shadow: 0 0 25px rgba(212, 175, 55, 0.2); }
+}
+
+/* Enhanced input focus with gold left accent */
+.input-gold-accent {
+  border-left: 3px solid transparent;
+  transition: border-color 0.2s ease;
+}
+
+.input-gold-accent:focus-within {
+  border-left-color: #D4AF37;
+}
+
+/* Auth icon subtle pulse */
+.auth-icon-pulse {
+  animation: iconPulse 2s ease-in-out infinite;
+}
+
+@keyframes iconPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* Auth CTA button glow on hover */
+.auth-cta-glow {
+  transition: box-shadow 0.3s ease, background-color 0.2s ease;
+}
+
 /* iOS keyboard handling - prevent zoom on input focus */
 @media screen and (max-width: 768px) {
   input, textarea, select {

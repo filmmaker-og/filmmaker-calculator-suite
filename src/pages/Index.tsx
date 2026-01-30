@@ -66,6 +66,16 @@ const Index = () => {
           <MobileMenu onOpenLegal={() => setShowLegalModal(true)} />
         </div>
       </header>
+
+      {/* Context Strip - Matching Auth page pattern */}
+      <div 
+        className="flex items-center justify-center gap-2 py-3 relative z-50"
+        style={{ backgroundColor: '#111111', borderBottom: '1px solid #333333' }}
+      >
+        <span className="text-xs uppercase tracking-widest text-zinc-400">
+          STREAMER ACQUISITION CALCULATOR
+        </span>
+      </div>
       
       {/* CONTENT: Moved up with less bottom padding */}
       <div 

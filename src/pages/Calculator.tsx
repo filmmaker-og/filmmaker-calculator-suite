@@ -145,7 +145,7 @@ const Calculator = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex flex-col">
-        <header className="fixed top-0 left-0 right-0 h-14 z-50 flex items-center px-6 border-b border-zinc-900 safe-top" style={{ backgroundColor: '#000000' }}>
+        <header className="fixed top-0 left-0 right-0 h-14 z-50 flex items-center px-6 safe-top" style={{ backgroundColor: '#000000', borderBottom: '1px solid #D4AF37' }}>
           <div className="w-12 h-12" />
           <span className="flex-1 text-center font-bebas text-lg tracking-widest" style={{ color: '#D4AF37' }}>
             WATERFALL TERMINAL
@@ -163,7 +163,7 @@ const Calculator = () => {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       {/* Command Bar - Fixed Sticky Header */}
-      <header className="fixed top-0 left-0 right-0 h-14 z-50 flex items-center px-6 border-b border-zinc-900 safe-top" style={{ backgroundColor: '#000000' }}>
+      <header className="fixed top-0 left-0 right-0 h-14 z-50 flex items-center px-6 safe-top" style={{ backgroundColor: '#000000', borderBottom: '1px solid #D4AF37' }}>
         <button
           onClick={() => navigate("/")}
           className="w-12 h-12 flex items-center justify-center hover:opacity-80 transition-opacity touch-feedback -ml-1"
