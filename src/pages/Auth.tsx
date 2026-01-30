@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
+import { useHaptics } from "@/hooks/use-haptics";
 import { Mail, Loader2, ShieldCheck, Home, User } from "lucide-react";
 import { z } from "zod";
 import brandIconF from "@/assets/brand-icon-f.jpg";
@@ -16,6 +17,7 @@ const nameSchema = z.string().min(1, "First name is required").max(50, "Name mus
 const Auth = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const haptics = useHaptics();
   const [firstName, setFirstName] = useState("");
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
@@ -44,6 +46,7 @@ const Auth = () => {
     // Validate first name
     const nameResult = nameSchema.safeParse(firstName.trim());
     if (!nameResult.success) {
+      haptics.error();
       toast({
         title: "Invalid Name",
         description: nameResult.error.errors[0].message,
@@ -55,6 +58,7 @@ const Auth = () => {
     // Validate email
     const emailResult = emailSchema.safeParse(email);
     if (!emailResult.success) {
+      haptics.error();
       toast({
         title: "Invalid Email",
         description: emailResult.error.errors[0].message,
@@ -63,6 +67,7 @@ const Auth = () => {
       return;
     }
 
+    haptics.medium();
     setLoading(true);
     try {
       const redirectUrl = `${window.location.origin}/calculator`;
@@ -77,12 +82,14 @@ const Auth = () => {
       });
       if (error) throw error;
       
+      haptics.success();
       setMagicLinkSent(true);
       toast({
         title: "Check Your Email",
         description: "We've sent you a secure login link.",
       });
     } catch (error: any) {
+      haptics.error();
       toast({
         title: "Error",
         description: error.message || "Failed to send magic link",
@@ -99,8 +106,8 @@ const Auth = () => {
       <header className="fixed top-0 left-0 right-0 h-14 z-50 flex items-center px-6 safe-top" style={{ backgroundColor: '#000000', borderBottom: '1px solid #D4AF37' }}>
         {/* Left: Home Icon - Touch-friendly */}
         <button
-          onClick={() => navigate("/")}
-          className="w-12 h-12 flex items-center justify-center hover:opacity-80 transition-all duration-100 active:scale-95 -ml-1"
+          onClick={() => { haptics.light(); navigate("/"); }}
+          className="w-12 h-12 flex items-center justify-center hover:opacity-80 transition-all duration-100 touch-press -ml-1"
         >
           <Home className="w-5 h-5" style={{ color: '#D4AF37' }} />
         </button>
@@ -169,7 +176,7 @@ const Auth = () => {
                           placeholder="Your first name"
                           value={firstName}
                           onChange={(e) => setFirstName(e.target.value)}
-                          className="pl-12 h-14 text-lg rounded-sm text-white placeholder:text-[#666666] font-mono tracking-wide touch-input focus:ring-1 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors"
+                          className="pl-12 h-14 text-lg rounded-sm text-white placeholder:text-[#666666] font-mono tracking-wide touch-input premium-input focus:ring-1 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors"
                           style={{ backgroundColor: '#0a0a0a', borderColor: '#333333' }}
                           required
                           tabIndex={1}
@@ -192,7 +199,7 @@ const Auth = () => {
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
                           inputMode="email"
-                          className="pl-12 h-14 text-lg rounded-sm text-white placeholder:text-[#666666] font-mono tracking-wide touch-input focus:ring-1 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors"
+                          className="pl-12 h-14 text-lg rounded-sm text-white placeholder:text-[#666666] font-mono tracking-wide touch-input premium-input focus:ring-1 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors"
                           style={{ backgroundColor: '#0a0a0a', borderColor: '#333333' }}
                           required
                           tabIndex={2}

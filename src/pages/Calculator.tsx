@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { useSwipe } from "@/hooks/use-swipe";
+import { useHaptics } from "@/hooks/use-haptics";
 import { ChevronLeft, ChevronRight, Home } from "lucide-react";
 import { User } from "@supabase/supabase-js";
 import WizardStep1 from "@/components/calculator/WizardStep1";
@@ -42,7 +43,8 @@ const Calculator = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { toast } = useToast();
-const [user, setUser] = useState<User | null>(null);
+  const haptics = useHaptics();
+  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [currentStep, setCurrentStep] = useState(1);
   const [inputs, setInputs] = useState<WaterfallInputs>(defaultInputs);
@@ -114,17 +116,27 @@ const [user, setUser] = useState<User | null>(null);
   }, []);
 
   const toggleGuild = useCallback((guild: keyof GuildState) => {
+    haptics.light();
     setGuilds(prev => ({ ...prev, [guild]: !prev[guild] }));
-  }, []);
+  }, [haptics]);
 
-  const nextStep = useCallback(() => setCurrentStep(prev => Math.min(prev + 1, 6)), []);
-  const prevStep = useCallback(() => setCurrentStep(prev => Math.max(prev - 1, 1)), []);
+  const nextStep = useCallback(() => {
+    haptics.step();
+    setCurrentStep(prev => Math.min(prev + 1, 6));
+  }, [haptics]);
+  
+  const prevStep = useCallback(() => {
+    haptics.step();
+    setCurrentStep(prev => Math.max(prev - 1, 1));
+  }, [haptics]);
 
-  // Swipe gesture handlers
-  const swipeHandlers = useSwipe({
-    onSwipeLeft: nextStep,
-    onSwipeRight: prevStep,
+  // Swipe gesture handlers with visual feedback
+  const { handlers: swipeHandlers, state: swipeState } = useSwipe({
+    onSwipeLeft: () => currentStep < 6 && nextStep(),
+    onSwipeRight: () => currentStep > 1 && prevStep(),
     threshold: 50,
+    rubberBand: true,
+    maxOffset: 120,
   });
 
   // Loading skeleton that matches final layout to prevent jumping
@@ -177,11 +189,12 @@ const [user, setUser] = useState<User | null>(null);
         className="px-6 py-4 border-b border-[#333333]"
         style={{ backgroundColor: '#111111' }}
       >
-        {/* Tappable step indicator pills */}
+        {/* Tappable step indicator pills with swipe offset */}
         <div className="flex items-center justify-between mb-3">
           <StepIndicator 
             currentStep={currentStep} 
-            onStepClick={setCurrentStep} 
+            onStepClick={setCurrentStep}
+            swipeOffset={swipeState.offset}
           />
           <span className="text-xs font-mono ml-4" style={{ color: '#D4AF37' }}>
             {Math.round((currentStep / 6) * 100)}%
@@ -199,10 +212,14 @@ const [user, setUser] = useState<User | null>(null);
         </div>
       </div>
 
-      {/* Step Content with fade animation */}
+      {/* Step Content with swipe visual feedback */}
       <main 
-        className="flex-1 px-6 py-6 pb-24 overflow-y-auto animate-page-in" 
+        className={`flex-1 px-6 py-6 pb-24 overflow-y-auto swipe-content ${swipeState.isSwiping ? 'swiping' : ''}`}
         key={currentStep}
+        style={{
+          transform: swipeState.isSwiping ? `translateX(${swipeState.offset}px)` : undefined,
+          opacity: swipeState.isSwiping ? 1 - Math.abs(swipeState.offset) / 300 : 1,
+        }}
         {...swipeHandlers}
       >
         {currentStep === 1 && (
