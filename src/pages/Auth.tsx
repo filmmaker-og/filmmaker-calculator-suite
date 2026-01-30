@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { useHaptics } from "@/hooks/use-haptics";
-import { Mail, Loader2, Home, User, Sparkles } from "lucide-react";
+import { Mail, Loader2, Home, User, ArrowRight } from "lucide-react";
 import { z } from "zod";
 import brandIconF from "@/assets/brand-icon-f.jpg";
 import MobileMenu from "@/components/MobileMenu";
@@ -129,46 +129,28 @@ const Auth = () => {
       <div className="flex-1 flex flex-col items-center justify-center px-6 py-12 pt-20">
         <div className="w-full max-w-sm">
           
-          {/* Brand Icon with glow */}
-          <div className="text-center mb-8 relative">
-            <div className="relative inline-block">
-              <img 
-                src={brandIconF} 
-                alt="Brand Seal" 
-                className="w-20 h-20 mx-auto object-contain"
-              />
-              {/* Subtle glow */}
-              <div 
-                className="absolute inset-0 -z-10 blur-2xl opacity-40"
-                style={{ backgroundColor: 'hsl(var(--gold))' }}
-              />
-            </div>
-          </div>
-
-          {/* Gold decorative line */}
-          <div className="flex justify-center mb-8">
-            <div 
-              className="w-24 h-[1px]"
-              style={{ 
-                background: 'linear-gradient(90deg, transparent, hsl(var(--gold)), transparent)',
-                boxShadow: '0 0 20px hsl(var(--gold) / 0.5)'
-              }}
+          {/* Brand Icon - no glow, professional */}
+          <div className="text-center mb-8">
+            <img 
+              src={brandIconF} 
+              alt="Brand Seal" 
+              className="w-20 h-20 mx-auto object-contain"
             />
           </div>
 
-          {/* Title */}
+          {/* Title - Authority-focused */}
           <h1 className="font-bebas text-2xl sm:text-3xl text-center tracking-[0.15em] text-foreground mb-8">
-            ACCESS YOUR TERMINAL
+            PRODUCER ACCESS
           </h1>
 
           {!magicLinkSent ? (
             <form onSubmit={handleMagicLink} className="space-y-6">
-              {/* First Name Input - Premium styling */}
+              {/* First Name Input - Clean styling */}
               <div className="space-y-2">
                 <label htmlFor="firstName" className="text-[10px] tracking-[0.25em] uppercase font-mono text-muted-foreground block text-center">
                   First Name
                 </label>
-                <div className="relative auth-input-wrapper">
+                <div className="relative">
                   <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 z-10 text-gold/60" />
                   <Input
                     id="firstName"
@@ -176,7 +158,7 @@ const Auth = () => {
                     placeholder="Your first name"
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
-                    className="pl-12 h-14 text-lg text-center rounded-sm text-foreground placeholder:text-muted-foreground/50 font-mono tracking-wide bg-card border-2 border-border focus:border-gold focus:ring-0 transition-all"
+                    className="pl-12 h-14 text-lg text-center rounded-sm text-foreground placeholder:text-muted-foreground/50 font-mono tracking-wide bg-card border-2 border-border focus:border-gold focus:ring-0 transition-colors"
                     required
                     tabIndex={1}
                     autoFocus
@@ -189,7 +171,7 @@ const Auth = () => {
                 <label htmlFor="email" className="text-[10px] tracking-[0.25em] uppercase font-mono text-muted-foreground block text-center">
                   Email Address
                 </label>
-                <div className="relative auth-input-wrapper">
+                <div className="relative">
                   <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 z-10 text-gold/60" />
                   <Input
                     id="email"
@@ -198,21 +180,21 @@ const Auth = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     inputMode="email"
-                    className="pl-12 h-14 text-lg text-center rounded-sm text-foreground placeholder:text-muted-foreground/50 font-mono tracking-wide bg-card border-2 border-border focus:border-gold focus:ring-0 transition-all"
+                    className="pl-12 h-14 text-lg text-center rounded-sm text-foreground placeholder:text-muted-foreground/50 font-mono tracking-wide bg-card border-2 border-border focus:border-gold focus:ring-0 transition-colors"
                     required
                     tabIndex={2}
                   />
                 </div>
               </div>
 
-              {/* CTA Button - Dramatic gold glow */}
+              {/* CTA Button - Clean, no sparkles */}
               <div className="pt-4">
                 <Button
                   type="submit"
                   disabled={loading || !firstName.trim()}
-                  className="w-full h-14 rounded-sm font-bebas text-xl tracking-[0.15em] transition-all duration-300 disabled:cursor-not-allowed min-h-[56px] bg-gold text-primary-foreground hover:bg-gold-highlight touch-press auth-cta-button"
+                  className="w-full h-14 rounded-sm font-bebas text-xl tracking-[0.15em] transition-all duration-200 disabled:cursor-not-allowed min-h-[56px] bg-gold text-primary-foreground hover:bg-gold-highlight touch-press"
                   style={{ 
-                    boxShadow: loading || !firstName.trim() ? 'none' : '0 0 30px hsl(var(--gold) / 0.4)'
+                    boxShadow: loading || !firstName.trim() ? 'none' : '0 4px 20px hsl(var(--gold) / 0.3)'
                   }}
                   size="lg"
                   tabIndex={3}
@@ -221,8 +203,8 @@ const Auth = () => {
                     <Loader2 className="w-5 h-5 animate-spin" />
                   ) : (
                     <>
-                      <Sparkles className="w-4 h-4 mr-2" />
-                      REQUEST ACCESS
+                      SEND LOGIN LINK
+                      <ArrowRight className="w-4 h-4 ml-2" />
                     </>
                   )}
                 </Button>
@@ -231,7 +213,7 @@ const Auth = () => {
           ) : (
             /* Success State */
             <div className="text-center py-8">
-              <div className="w-16 h-16 border-2 border-gold flex items-center justify-center mx-auto mb-6 rounded-sm auth-success-pulse">
+              <div className="w-16 h-16 border-2 border-gold flex items-center justify-center mx-auto mb-6 rounded-sm">
                 <Mail className="w-8 h-8 text-gold" />
               </div>
               <h2 className="font-bebas text-2xl text-foreground mb-3">
@@ -252,15 +234,15 @@ const Auth = () => {
 
           {/* Trust indicators */}
           {!magicLinkSent && (
-            <div className="mt-8 text-center space-y-3">
+            <div className="mt-8 text-center space-y-4">
               <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                No passwords • Bank-grade security
+                Used by independent producers • No passwords • Bank-grade security
               </p>
               
-              {/* Demo Access - More prominent */}
+              {/* Demo Access */}
               <button
                 onClick={() => navigate("/calculator?reset=true")}
-                className="text-xs tracking-widest uppercase transition-all text-gold/70 hover:text-gold py-2 px-4 border border-border hover:border-gold/50 rounded-sm"
+                className="text-xs tracking-widest uppercase transition-colors text-gold/70 hover:text-gold py-2 px-4"
               >
                 Demo Access →
               </button>

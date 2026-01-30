@@ -1,9 +1,9 @@
-import { useState, useEffect, forwardRef } from "react";
+import { useState, forwardRef } from "react";
 import { Button } from "@/components/ui/button";
 import { WaterfallResult, WaterfallInputs, formatCompactCurrency, formatPercent, formatMultiple } from "@/lib/waterfall";
 import { 
   Download, AlertTriangle, Users, Briefcase, Target, TrendingUp, 
-  CheckCircle2, DollarSign, Info, Zap, ChevronLeft, ChevronRight
+  CheckCircle2, DollarSign, Info, ChevronLeft, ChevronRight
 } from "lucide-react";
 import RestrictedAccessModal from "@/components/RestrictedAccessModal";
 import {
@@ -24,8 +24,6 @@ const ResultsDashboard = forwardRef<HTMLDivElement, ResultsDashboardProps>(({ re
   const [showRestrictedModal, setShowRestrictedModal] = useState(false);
   const [showInfoModal, setShowInfoModal] = useState(false);
   const [activeCard, setActiveCard] = useState(0);
-  const [displayedROI, setDisplayedROI] = useState(0);
-  const [hasAnimated, setHasAnimated] = useState(false);
   const [showSwipeHint, setShowSwipeHint] = useState(true);
 
   // Hide swipe hint after first scroll
@@ -40,33 +38,6 @@ const ResultsDashboard = forwardRef<HTMLDivElement, ResultsDashboardProps>(({ re
   const isProfitable = result.profitPool > 0;
   const isUnderperforming = result.multiple < 1.2;
   const netProfit = result.profitPool;
-
-  // Animated count-up for Net Profit (hero)
-  const [displayedProfit, setDisplayedProfit] = useState(0);
-  
-  useEffect(() => {
-    if (hasAnimated) return;
-    
-    const duration = 1200;
-    const steps = 40;
-    const increment = netProfit / steps;
-    let current = 0;
-    
-    const timer = setInterval(() => {
-      current += increment;
-      if (current >= netProfit) {
-        setDisplayedProfit(netProfit);
-        setDisplayedROI(roi);
-        clearInterval(timer);
-        setHasAnimated(true);
-      } else {
-        setDisplayedProfit(current);
-        setDisplayedROI((current / netProfit) * roi);
-      }
-    }, duration / steps);
-
-    return () => clearInterval(timer);
-  }, [netProfit, roi, hasAnimated]);
 
   // Waterfall flow calculations
   const firstMoneyOut = result.cam + result.salesFee + result.guilds + result.marketing;
@@ -122,10 +93,10 @@ const ResultsDashboard = forwardRef<HTMLDivElement, ResultsDashboardProps>(({ re
 
   return (
     <div ref={ref} className="step-enter space-y-5">
-      {/* Section Header */}
+      {/* Section Header - Number 4 badge for consistency */}
       <div className="flex items-center gap-3 mb-6">
         <div className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center">
-          <Zap className="w-4 h-4 text-gold" />
+          <span className="text-gold font-bebas text-sm">4</span>
         </div>
         <div>
           <h2 className="font-bebas text-xl text-foreground tracking-wide">YOUR RESULTS</h2>
@@ -133,7 +104,7 @@ const ResultsDashboard = forwardRef<HTMLDivElement, ResultsDashboardProps>(({ re
         </div>
       </div>
 
-      {/* HERO NET PROFIT CARD */}
+      {/* HERO NET PROFIT CARD - Instant display, no count-up */}
       <div 
         className="relative p-6 rounded-sm text-center overflow-hidden border-2"
         style={{ 
@@ -141,16 +112,6 @@ const ResultsDashboard = forwardRef<HTMLDivElement, ResultsDashboardProps>(({ re
           borderColor: isProfitable ? 'hsl(var(--gold))' : 'hsl(0 84% 40%)'
         }}
       >
-        {/* Glow Effect */}
-        <div 
-          className="absolute inset-0 pointer-events-none hero-glow"
-          style={{
-            background: isProfitable 
-              ? 'radial-gradient(circle at center, hsl(43 74% 52% / 0.12) 0%, transparent 70%)'
-              : 'radial-gradient(circle at center, hsl(0 84% 60% / 0.08) 0%, transparent 70%)'
-          }}
-        />
-        
         <div className="relative z-10">
           <div className="flex items-center justify-center gap-2 mb-4">
             <DollarSign size={20} className={isProfitable ? 'text-gold' : 'text-destructive'} />
@@ -160,11 +121,10 @@ const ResultsDashboard = forwardRef<HTMLDivElement, ResultsDashboardProps>(({ re
           <p 
             className="font-bebas text-5xl sm:text-6xl mb-4 tabular-nums" 
             style={{ 
-              color: isProfitable ? 'hsl(var(--gold))' : 'hsl(var(--destructive))',
-              textShadow: isProfitable ? '0 0 40px hsl(43 74% 52% / 0.4)' : '0 0 30px hsl(0 84% 60% / 0.3)'
+              color: isProfitable ? 'hsl(var(--gold))' : 'hsl(var(--destructive))'
             }}
           >
-            {isProfitable ? '+' : ''}{formatCompactCurrency(displayedProfit)}
+            {isProfitable ? '+' : ''}{formatCompactCurrency(netProfit)}
           </p>
           
           <span 
@@ -180,13 +140,13 @@ const ResultsDashboard = forwardRef<HTMLDivElement, ResultsDashboardProps>(({ re
         </div>
       </div>
 
-      {/* QUICK STATS ROW */}
+      {/* QUICK STATS ROW - Instant display */}
       <div className="grid grid-cols-3 gap-3">
         <div className="p-4 rounded-sm text-center bg-card border border-border min-h-[80px] flex flex-col justify-center">
           <TrendingUp size={14} className={`mx-auto mb-2 ${roi >= 100 ? 'text-emerald-400' : 'text-red-400'}`} />
           <p className="text-[10px] text-muted-foreground uppercase mb-1 font-semibold tracking-wide">ROI</p>
           <p className={`font-mono text-base font-semibold ${roi >= 100 ? 'text-emerald-400' : 'text-red-400'}`}>
-            {formatPercent(displayedROI)}
+            {formatPercent(roi)}
           </p>
         </div>
         <div className="p-4 rounded-sm text-center bg-card border border-border min-h-[80px] flex flex-col justify-center">
@@ -203,7 +163,7 @@ const ResultsDashboard = forwardRef<HTMLDivElement, ResultsDashboardProps>(({ re
         </div>
       </div>
 
-      {/* HORIZONTAL CARD CAROUSEL */}
+      {/* HORIZONTAL CARD CAROUSEL - Static dots */}
       <div className="relative">
         <div className="flex items-center justify-between mb-3 px-1">
           <span className="text-xs uppercase tracking-widest text-muted-foreground font-semibold">Settlement Details</span>
@@ -213,21 +173,18 @@ const ResultsDashboard = forwardRef<HTMLDivElement, ResultsDashboardProps>(({ re
                 key={i}
                 onClick={() => setActiveCard(i)}
                 className={`w-2.5 h-2.5 rounded-full transition-all ${
-                  i === activeCard ? 'bg-gold scale-125 carousel-dot-pulse' : 'bg-border'
+                  i === activeCard ? 'bg-gold scale-125' : 'bg-border'
                 }`}
               />
             ))}
           </div>
         </div>
 
-        {/* Swipe Hint */}
+        {/* Swipe Hint - Subtle edge chevrons only */}
         {showSwipeHint && (
-          <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
-            <div className="flex items-center gap-2 text-muted-foreground text-xs bg-background/80 px-4 py-2 rounded-full">
-              <ChevronLeft size={16} className="swipe-hint-left" />
-              <span>Swipe</span>
-              <ChevronRight size={16} className="swipe-hint-right" />
-            </div>
+          <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 z-10 flex justify-between pointer-events-none px-1">
+            <ChevronLeft size={20} className="text-muted-foreground/50 animate-pulse" />
+            <ChevronRight size={20} className="text-muted-foreground/50 animate-pulse" />
           </div>
         )}
 

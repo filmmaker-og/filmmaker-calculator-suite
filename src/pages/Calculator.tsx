@@ -180,24 +180,33 @@ const Calculator = () => {
 
       <div className="header-spacer" />
 
-      {/* Status Bar - Enhanced */}
+      {/* Status Bar - Simplified with step labels */}
       <div className="px-6 py-4 border-b border-border bg-card">
-        <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center gap-1 text-[10px] tracking-wider">
+            {['DEAL', 'CAPITAL', 'DEDUCTIONS', 'RESULTS'].map((label, i) => (
+              <span 
+                key={label} 
+                className={`${i + 1 === currentStep ? 'text-gold font-semibold' : 'text-muted-foreground'} ${i > 0 ? 'before:content-["•"] before:mx-1.5 before:text-border' : ''}`}
+              >
+                {label}
+              </span>
+            ))}
+          </div>
+        </div>
+        <div className="flex items-center gap-3">
           <StepIndicator 
             currentStep={currentStep} 
             totalSteps={TOTAL_STEPS}
             onStepClick={setCurrentStep}
             swipeOffset={swipeState.offset}
           />
-          <span className="text-xs font-mono ml-4 text-gold">
-            {Math.round((currentStep / TOTAL_STEPS) * 100)}%
-          </span>
-        </div>
-        <div className="h-1.5 rounded-full overflow-hidden bg-border">
-          <div 
-            className="h-full transition-all duration-300 rounded-full bg-gold"
-            style={{ width: `${(currentStep / TOTAL_STEPS) * 100}%` }}
-          />
+          <div className="flex-1 h-1 rounded-full overflow-hidden bg-border">
+            <div 
+              className="h-full transition-all duration-300 rounded-full bg-gold"
+              style={{ width: `${(currentStep / TOTAL_STEPS) * 100}%` }}
+            />
+          </div>
         </div>
       </div>
 
@@ -244,10 +253,13 @@ const Calculator = () => {
         )}
       </main>
 
-      {/* Fixed Bottom Navigation */}
+      {/* Fixed Bottom Navigation - Enhanced with shadow */}
       <div 
         className="fixed bottom-0 left-0 right-0 px-6 pt-4 pb-4 bg-background z-40 safe-bottom"
-        style={{ borderTop: '1px solid #333333' }}
+        style={{ 
+          borderTop: '1px solid hsl(var(--border))',
+          boxShadow: '0 -4px 20px rgba(0, 0, 0, 0.3)'
+        }}
       >
         <div className="flex items-center gap-4 max-w-screen-lg mx-auto">
           <div className="flex-1">
