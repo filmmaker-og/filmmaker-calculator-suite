@@ -368,6 +368,25 @@
   animation: fadeSlideIn 0.3s ease-out forwards;
 }
 
+/* Intro line animation */
+@keyframes introLineExpand {
+  0% { 
+    width: 0; 
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% { 
+    width: 200px; 
+    opacity: 1;
+  }
+}
+
+.animate-intro-line {
+  animation: introLineExpand 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
 /* Step indicator pills */
 .step-pill {
   width: 10px;
