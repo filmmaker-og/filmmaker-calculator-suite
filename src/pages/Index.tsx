@@ -48,13 +48,7 @@ const Index = () => {
         </div>
       </div>
 
-      {/* VIGNETTE: Subtle depth */}
-      <div 
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background: 'radial-gradient(ellipse at center, rgba(30,30,30,0.3) 0%, rgba(0,0,0,0) 50%, rgba(0,0,0,1) 100%)'
-        }}
-      />
+      {/* Pure black background - no vignette haze */}
 
       {/* HEADER */}
       <header className="relative z-50 px-6 py-4 flex items-center justify-between safe-top" style={{ borderBottom: '1px solid #D4AF37' }}>

@@ -212,13 +212,13 @@ const Calculator = () => {
         </div>
       </div>
 
-      {/* Step Content with swipe visual feedback */}
+      {/* Step Content with swipe visual feedback and step transitions */}
       <main 
         className={`flex-1 px-6 py-6 pb-24 overflow-y-auto swipe-content ${swipeState.isSwiping ? 'swiping' : ''}`}
         key={currentStep}
         style={{
           transform: swipeState.isSwiping ? `translateX(${swipeState.offset}px)` : undefined,
-          opacity: swipeState.isSwiping ? 1 - Math.abs(swipeState.offset) / 300 : 1,
+          opacity: swipeState.isSwiping ? 1 - Math.abs(swipeState.offset) / 500 : 1,
         }}
         {...swipeHandlers}
       >

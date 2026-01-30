@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, forwardRef } from "react";
 import { Button } from "@/components/ui/button";
-import { WaterfallResult, formatCurrency, formatMultiple } from "@/lib/waterfall";
-import { Download, AlertTriangle, Users, Briefcase, TrendingUp, Target, PieChart, CheckCircle } from "lucide-react";
+import { WaterfallResult, formatCompactCurrency, formatMultiple } from "@/lib/waterfall";
+import { Download, AlertTriangle, Users, Briefcase, Target, TrendingUp, PieChart, CheckCircle } from "lucide-react";
 import RestrictedAccessModal from "@/components/RestrictedAccessModal";
 
 interface WizardStep6Props {
@@ -9,80 +9,93 @@ interface WizardStep6Props {
   equity: number;
 }
 
-const WizardStep6 = ({ result, equity }: WizardStep6Props) => {
+const WizardStep6 = forwardRef<HTMLDivElement, WizardStep6Props>(({ result, equity }, ref) => {
   const [showRestrictedModal, setShowRestrictedModal] = useState(false);
   const isUnderperforming = result.multiple < 1.2;
   const breakEvenRevenue = result.totalHurdle;
 
   return (
-    <div className="animate-fade-in space-y-5">
-      {/* SETTLEMENT SPLIT - Producer vs Investor */}
-      <div className="rounded-sm overflow-hidden" style={{ border: '1px solid #D4AF37' }}>
-        <div className="py-3 px-4" style={{ backgroundColor: '#111111', borderBottom: '1px solid #333333' }}>
-          <h2 className="font-bebas text-base tracking-wider uppercase" style={{ color: '#D4AF37' }}>
-            Settlement
-          </h2>
-        </div>
+    <div ref={ref} className="step-enter space-y-4">
+      {/* SETTLEMENT HEADER */}
+      <div className="flex items-center gap-3 mb-2">
+        <div className="h-px flex-1 bg-zinc-800" />
+        <span className="text-[10px] uppercase tracking-widest text-zinc-500">
+          SETTLEMENT
+        </span>
+        <div className="h-px flex-1 bg-zinc-800" />
+      </div>
 
-        <div className="p-4 space-y-3" style={{ backgroundColor: '#000000' }}>
-          {/* Producer Pool */}
-          <div className="flex items-center gap-3 p-3 rounded-sm" style={{ backgroundColor: '#0a0a0a', borderLeft: '3px solid #666' }}>
+      {/* STACKED SETTLEMENT CARDS */}
+      <div className="space-y-3">
+        {/* Producer Pool Card */}
+        <div 
+          className="p-4 rounded-sm" 
+          style={{ backgroundColor: '#0a0a0a', borderLeft: '3px solid #666' }}
+        >
+          <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-zinc-800 flex items-center justify-center flex-shrink-0">
               <Users size={18} className="text-zinc-400" />
             </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm text-white font-medium">Producer Pool</p>
-              <p className="text-[10px] text-zinc-500">50% profit participation</p>
-            </div>
-            <div className="font-mono text-xl text-white">
-              {formatCurrency(result.producer)}
+            <div className="flex-1">
+              <p className="text-xs text-zinc-500 uppercase tracking-wider mb-0.5">Producer Pool</p>
+              <p className="font-mono text-2xl text-white">
+                {formatCompactCurrency(result.producer)}
+              </p>
             </div>
           </div>
+          <p className="text-[10px] text-zinc-600 mt-2 ml-13">50% profit participation</p>
+        </div>
 
-          {/* Investor Net */}
-          <div className="flex items-center gap-3 p-3 rounded-sm" style={{ backgroundColor: '#0a0a0a', borderLeft: '3px solid #D4AF37' }}>
+        {/* Investor Net Card - Gold Highlight */}
+        <div 
+          className="p-4 rounded-sm" 
+          style={{ backgroundColor: '#0a0a0a', borderLeft: '3px solid #D4AF37' }}
+        >
+          <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#D4AF37' }}>
               <Briefcase size={18} className="text-black" />
             </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium" style={{ color: '#D4AF37' }}>Investor Net</p>
-              <p className="text-[10px] text-zinc-500">Recoupment + 50% profit</p>
-            </div>
-            <div className="font-mono text-xl" style={{ color: '#D4AF37' }}>
-              {formatCurrency(result.investor)}
+            <div className="flex-1">
+              <p className="text-xs uppercase tracking-wider mb-0.5" style={{ color: '#D4AF37' }}>Investor Net</p>
+              <p className="font-mono text-2xl" style={{ color: '#D4AF37' }}>
+                {formatCompactCurrency(result.investor)}
+              </p>
             </div>
           </div>
+          <p className="text-[10px] text-zinc-600 mt-2 ml-13">Recoupment + 50% profit</p>
         </div>
       </div>
 
-      {/* KEY METRICS GRID - Compact 2x2 */}
-      <div className="grid grid-cols-2 gap-3">
-        <div className="p-4 rounded-sm text-center" style={{ backgroundColor: '#111111', border: '1px solid #1a1a1a' }}>
-          <Target size={16} className="mx-auto mb-2 text-zinc-500" />
-          <p className="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Breakeven</p>
-          <p className="font-mono text-base text-white">{formatCurrency(breakEvenRevenue)}</p>
-        </div>
-
-        <div className="p-4 rounded-sm text-center" style={{ backgroundColor: '#111111', border: '1px solid #1a1a1a' }}>
-          <TrendingUp size={16} className={`mx-auto mb-2 ${result.multiple >= 1.2 ? 'text-[#D4AF37]' : 'text-red-400'}`} />
-          <p className="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">ROI Multiple</p>
-          <p className={`font-mono text-base ${result.multiple >= 1.2 ? 'text-[#D4AF37]' : 'text-red-400'}`}>
-            {formatMultiple(result.multiple)}
-          </p>
-        </div>
-
-        <div className="p-4 rounded-sm text-center" style={{ backgroundColor: '#111111', border: '1px solid #1a1a1a' }}>
-          <PieChart size={16} className="mx-auto mb-2 text-zinc-500" />
-          <p className="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Profit Pool</p>
-          <p className="font-mono text-base text-white">{formatCurrency(result.profitPool)}</p>
-        </div>
-
-        <div className="p-4 rounded-sm text-center" style={{ backgroundColor: '#111111', border: '1px solid #1a1a1a' }}>
-          <CheckCircle size={16} className={`mx-auto mb-2 ${result.recoupPct >= 100 ? 'text-emerald-400' : 'text-zinc-500'}`} />
-          <p className="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Recoupment</p>
-          <p className={`font-mono text-base ${result.recoupPct >= 100 ? 'text-emerald-400' : 'text-white'}`}>
-            {result.recoupPct.toFixed(0)}%
-          </p>
+      {/* KEY METRICS - Horizontal Scrollable Pills */}
+      <div className="overflow-x-auto -mx-6 px-6">
+        <div className="flex gap-2 min-w-max pb-2">
+          <div className="flex items-center gap-2 px-3 py-2 rounded-sm bg-zinc-900 border border-zinc-800">
+            <Target size={12} className="text-zinc-500" />
+            <span className="text-[10px] text-zinc-500 uppercase">Breakeven</span>
+            <span className="font-mono text-xs text-white">{formatCompactCurrency(breakEvenRevenue)}</span>
+          </div>
+          
+          <div className="flex items-center gap-2 px-3 py-2 rounded-sm bg-zinc-900 border border-zinc-800">
+            <TrendingUp size={12} className={result.multiple >= 1.2 ? 'text-[#D4AF37]' : 'text-red-400'} />
+            <span className="text-[10px] text-zinc-500 uppercase">Multiple</span>
+            <span className={`font-mono text-xs ${result.multiple >= 1.2 ? 'text-[#D4AF37]' : 'text-red-400'}`}>
+              {formatMultiple(result.multiple)}
+            </span>
+          </div>
+          
+          <div className="flex items-center gap-2 px-3 py-2 rounded-sm bg-zinc-900 border border-zinc-800">
+            <PieChart size={12} className="text-zinc-500" />
+            <span className="text-[10px] text-zinc-500 uppercase">Profit Pool</span>
+            <span className="font-mono text-xs text-white">{formatCompactCurrency(result.profitPool)}</span>
+          </div>
+          
+          <div className="flex items-center gap-2 px-3 py-2 rounded-sm bg-zinc-900 border border-zinc-800">
+            <CheckCircle size={12} className={result.recoupPct >= 100 ? 'text-emerald-400' : 'text-zinc-500'} />
+            <span className="text-[10px] text-zinc-500 uppercase">Recoup</span>
+            <span className={`font-mono text-xs ${result.recoupPct >= 100 ? 'text-emerald-400' : 'text-white'}`}>
+              {result.recoupPct.toFixed(0)}%
+            </span>
+          </div>
         </div>
       </div>
 
@@ -114,7 +127,7 @@ const WizardStep6 = ({ result, equity }: WizardStep6Props) => {
       {/* Action Button */}
       <Button
         onClick={() => setShowRestrictedModal(true)}
-        className="w-full py-5 rounded-sm font-bebas tracking-wider min-h-[56px]"
+        className="w-full py-5 rounded-sm font-bebas tracking-wider min-h-[56px] touch-press"
         style={{ backgroundColor: '#D4AF37', color: '#000000' }}
       >
         <Download className="w-5 h-5 mr-2" />
@@ -128,6 +141,8 @@ const WizardStep6 = ({ result, equity }: WizardStep6Props) => {
       />
     </div>
   );
-};
+});
+
+WizardStep6.displayName = 'WizardStep6';
 
 export default WizardStep6;

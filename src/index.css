@@ -260,15 +260,31 @@
     100% { transform: scale(1); }
   }
 
-  /* Premium Input Styling */
+  /* Premium Input Styling - Reduced glow for clarity */
   .premium-input {
     transition: transform 0.15s ease, box-shadow 0.2s ease, border-color 0.2s ease;
   }
 
   .premium-input:focus {
     transform: scale(1.01);
-    box-shadow: 0 0 0 3px hsl(43 74% 52% / 0.15), 0 0 20px hsl(43 74% 52% / 0.1);
+    box-shadow: 0 0 0 2px hsl(43 74% 52% / 0.1);
     border-color: hsl(var(--gold)) !important;
+  }
+
+  /* Step enter animation for smooth transitions */
+  @keyframes stepEnter {
+    from { 
+      opacity: 0; 
+      transform: translateX(20px); 
+    }
+    to { 
+      opacity: 1; 
+      transform: translateX(0); 
+    }
+  }
+
+  .step-enter {
+    animation: stepEnter 0.25s ease-out forwards;
   }
 
   /* Value change animation */
