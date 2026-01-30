@@ -28,7 +28,7 @@ const WizardStep3 = ({
   
   const hasAnyGuildActive = guilds.sag || guilds.wga || guilds.dga;
   const [showResiduals, setShowResiduals] = useState(hasAnyGuildActive);
-  const [showDistribution, setShowDistribution] = useState(true); // Default ON
+  const [showDistribution, setShowDistribution] = useState(true);
 
   const handleResidualsToggle = (checked: boolean) => {
     haptics.light();
@@ -90,16 +90,16 @@ const WizardStep3 = ({
           <span className="text-gold font-bebas text-sm">3</span>
         </div>
         <div>
-          <h2 className="font-bebas text-xl text-foreground tracking-wide">DEDUCTIONS</h2>
+          <h2 className="font-bebas text-lg text-foreground tracking-wide">DEDUCTIONS</h2>
           <p className="text-xs text-muted-foreground">Configure residuals and distribution costs</p>
         </div>
       </div>
 
       {/* Modal */}
       <Dialog open={activeModal !== null} onOpenChange={() => setActiveModal(null)}>
-        <DialogContent className="border-gold max-w-md bg-card">
+        <DialogContent className="border-border max-w-md bg-card">
           <DialogHeader>
-            <DialogTitle className="font-bebas text-2xl tracking-wider text-gold">
+            <DialogTitle className="font-bebas text-xl tracking-wider text-gold">
               {activeModal && modals[activeModal as keyof typeof modals]?.title}
             </DialogTitle>
           </DialogHeader>
@@ -107,28 +107,28 @@ const WizardStep3 = ({
         </DialogContent>
       </Dialog>
 
-      {/* CARD 3A: GUILD RESIDUALS - Consistent pattern with toggle */}
-      <div className="rounded-sm border border-gold overflow-hidden">
-        <div 
-          className={`py-4 px-5 flex items-center justify-between bg-card ${showResiduals ? 'border-b border-border' : ''}`}
-        >
+      {/* Card 3A: Guild Residuals - Left accent */}
+      <div className="rounded-sm border border-border overflow-hidden" style={{ borderLeft: '3px solid hsl(var(--gold))' }}>
+        <div className={`py-3 px-4 flex items-center justify-between bg-card ${showResiduals ? 'border-b border-border' : ''}`}>
           <div className="flex items-center gap-3">
             <Film className="w-4 h-4 text-gold" />
-            <h3 className="font-bebas text-base tracking-wider uppercase text-gold">
+            <h3 className="font-bebas text-sm tracking-widest uppercase text-gold">
               GUILD RESIDUALS
             </h3>
+          </div>
+          <div className="flex items-center gap-2">
             <button 
               onClick={() => setActiveModal('guildResiduals')}
-              className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gold/10 transition-colors -ml-1"
+              className="w-11 h-11 flex items-center justify-center rounded-full hover:bg-gold/10 transition-colors"
             >
               <Info className="w-4 h-4 text-muted-foreground hover:text-gold transition-colors" />
             </button>
+            <Switch 
+              checked={showResiduals} 
+              onCheckedChange={handleResidualsToggle} 
+              className="data-[state=checked]:bg-gold"
+            />
           </div>
-          <Switch 
-            checked={showResiduals} 
-            onCheckedChange={handleResidualsToggle} 
-            className="data-[state=checked]:bg-gold"
-          />
         </div>
 
         {showResiduals && (
@@ -137,7 +137,7 @@ const WizardStep3 = ({
               {/* SAG-AFTRA Row */}
               <div className="flex items-center justify-between py-4 border-b border-border min-h-[56px]">
                 <div className="flex items-center gap-3">
-                  <span className="font-bebas text-base text-foreground">SAG-AFTRA</span>
+                  <span className="font-bebas text-sm text-foreground">SAG-AFTRA</span>
                   <span className="font-mono text-xs text-muted-foreground">(4.5%)</span>
                 </div>
                 <Switch 
@@ -150,7 +150,7 @@ const WizardStep3 = ({
               {/* WGA Row */}
               <div className="flex items-center justify-between py-4 border-b border-border min-h-[56px]">
                 <div className="flex items-center gap-3">
-                  <span className="font-bebas text-base text-foreground">WGA</span>
+                  <span className="font-bebas text-sm text-foreground">WGA</span>
                   <span className="font-mono text-xs text-muted-foreground">(1.2%)</span>
                 </div>
                 <Switch 
@@ -163,7 +163,7 @@ const WizardStep3 = ({
               {/* DGA Row */}
               <div className="flex items-center justify-between py-4 min-h-[56px]">
                 <div className="flex items-center gap-3">
-                  <span className="font-bebas text-base text-foreground">DGA</span>
+                  <span className="font-bebas text-sm text-foreground">DGA</span>
                   <span className="font-mono text-xs text-muted-foreground">(1.2%)</span>
                 </div>
                 <Switch 
@@ -177,34 +177,36 @@ const WizardStep3 = ({
         )}
       </div>
 
-      {/* CARD 3B: DISTRIBUTION COSTS - Now with toggle for consistency */}
-      <div className="rounded-sm border border-gold overflow-hidden">
-        <div className={`py-4 px-5 flex items-center justify-between bg-card ${showDistribution ? 'border-b border-border' : ''}`}>
+      {/* Card 3B: Distribution Costs - Left accent */}
+      <div className="rounded-sm border border-border overflow-hidden" style={{ borderLeft: '3px solid hsl(var(--gold))' }}>
+        <div className={`py-3 px-4 flex items-center justify-between bg-card ${showDistribution ? 'border-b border-border' : ''}`}>
           <div className="flex items-center gap-3">
             <Megaphone className="w-4 h-4 text-gold" />
-            <h3 className="font-bebas text-base tracking-wider uppercase text-gold">
+            <h3 className="font-bebas text-sm tracking-widest uppercase text-gold">
               DISTRIBUTION COSTS
             </h3>
+          </div>
+          <div className="flex items-center gap-2">
             <button 
               onClick={() => setActiveModal('distributionCosts')}
-              className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gold/10 transition-colors -ml-1"
+              className="w-11 h-11 flex items-center justify-center rounded-full hover:bg-gold/10 transition-colors"
             >
               <Info className="w-4 h-4 text-muted-foreground hover:text-gold transition-colors" />
             </button>
+            <Switch 
+              checked={showDistribution} 
+              onCheckedChange={handleDistributionToggle} 
+              className="data-[state=checked]:bg-gold"
+            />
           </div>
-          <Switch 
-            checked={showDistribution} 
-            onCheckedChange={handleDistributionToggle} 
-            className="data-[state=checked]:bg-gold"
-          />
         </div>
 
         {showDistribution && (
           <div className="p-5 space-y-5 bg-background">
             {/* Sales Agent Fee */}
             <div>
-              <div className="flex items-center gap-2 mb-3">
-                <span className="text-foreground font-semibold text-xs tracking-wide uppercase">
+              <div className="mb-3">
+                <span className="text-xs tracking-wider uppercase font-semibold text-foreground">
                   Sales Agent Fee
                 </span>
               </div>
@@ -220,7 +222,7 @@ const WizardStep3 = ({
                     onUpdateSalesFee(Math.min(value, 100));
                   }}
                   placeholder="0"
-                  className="pl-4 pr-10 py-5 text-xl font-mono text-foreground text-right rounded-sm border-border focus:border-gold focus:ring-1 focus:ring-gold transition-colors bg-card min-h-[56px]"
+                  className="pl-4 pr-10 h-14 text-xl font-mono text-foreground text-right rounded-sm border-border focus:border-gold focus:ring-1 focus:ring-gold transition-colors bg-card"
                   onFocus={(e) => e.target.select()}
                 />
                 <span className="absolute right-4 top-1/2 -translate-y-1/2 font-mono text-lg text-muted-foreground">
@@ -231,8 +233,8 @@ const WizardStep3 = ({
 
             {/* Marketing Cap */}
             <div>
-              <div className="flex items-center gap-2 mb-3">
-                <span className="text-foreground font-semibold text-xs tracking-wide uppercase">
+              <div className="mb-3">
+                <span className="text-xs tracking-wider uppercase font-semibold text-foreground">
                   Marketing Cap
                 </span>
               </div>
@@ -251,7 +253,7 @@ const WizardStep3 = ({
                     onUpdateSalesExp(value);
                   }}
                   placeholder="0"
-                  className="pl-10 py-5 text-xl font-mono text-foreground text-right rounded-sm border-border focus:border-gold focus:ring-1 focus:ring-gold transition-colors bg-card min-h-[56px]"
+                  className="pl-10 h-14 text-xl font-mono text-foreground text-right rounded-sm border-border focus:border-gold focus:ring-1 focus:ring-gold transition-colors bg-card"
                   onFocus={(e) => e.target.select()}
                 />
               </div>

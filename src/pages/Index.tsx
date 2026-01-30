@@ -15,11 +15,11 @@ const Index = () => {
   const legalText = "Educational disclaimer: For educational purposes only. This calculator is a simplified model and is not legal, tax, accounting, or investment advice. Consult a qualified entertainment attorney.";
 
   useEffect(() => {
-    // Clean 4-phase sequence - deliberate, confident timing
+    // Clean 4-phase sequence - MASSIVE, deliberate, confident timing
     const timers = [
       setTimeout(() => setSplashPhase('line'), 400),
       setTimeout(() => setSplashPhase('brand'), 1200),
-      setTimeout(() => setSplashPhase('complete'), 2200),
+      setTimeout(() => setSplashPhase('complete'), 2400), // Slightly longer to let it breathe
     ];
     return () => timers.forEach(clearTimeout);
   }, []);
@@ -34,36 +34,47 @@ const Index = () => {
   return (
     <div className="min-h-screen flex flex-col relative overflow-hidden bg-background">
       
-      {/* CINEMATIC SPLASH OVERLAY - Clean, authority-first */}
+      {/* CINEMATIC SPLASH OVERLAY - MASSIVE, Authority-First */}
       <div 
         className={`fixed inset-0 z-[100] flex flex-col items-center justify-center transition-all duration-700 ${
           showSplash ? 'opacity-100' : 'opacity-0 pointer-events-none'
         }`}
         style={{ backgroundColor: '#000000' }}
       >
-        {/* Single gold line - expands from center */}
+        {/* Ambient Glow Behind Brand */}
         <div 
-          className={`h-[1px] transition-all ease-out ${
-            splashPhase !== 'black' ? 'line-expand opacity-100' : 'w-0 opacity-0'
+          className={`absolute w-80 h-80 rounded-full transition-opacity duration-1000 ${
+            splashPhase === 'brand' ? 'opacity-100' : 'opacity-0'
           }`}
-          style={{ 
-            backgroundColor: '#D4AF37',
-            boxShadow: '0 0 20px rgba(212, 175, 55, 0.6)'
+          style={{
+            background: 'radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, transparent 70%)',
+            filter: 'blur(60px)',
           }}
         />
         
-        {/* Brand Name - fades in as a unit */}
+        {/* Single gold line - BIGGER, expands from center */}
+        <div 
+          className={`h-[2px] transition-all ease-out ${
+            splashPhase !== 'black' ? 'splash-line-expand opacity-100' : 'w-0 opacity-0'
+          }`}
+          style={{ 
+            backgroundColor: '#D4AF37',
+            boxShadow: '0 0 30px rgba(212, 175, 55, 0.8), 0 0 60px rgba(212, 175, 55, 0.4)'
+          }}
+        />
+        
+        {/* Brand Name - MASSIVE, fades in as a unit */}
         <h1 
-          className={`font-bebas text-4xl sm:text-5xl tracking-[0.3em] text-white mt-6 mb-3 transition-all duration-500 ${
-            splashPhase === 'brand' ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
+          className={`font-bebas text-6xl sm:text-7xl md:text-8xl tracking-[0.3em] text-white mt-8 mb-4 transition-all duration-600 relative z-10 ${
+            splashPhase === 'brand' ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-3'
           }`}
         >
           FILMMAKER.OG
         </h1>
         
-        {/* Tagline - slides up with delay */}
+        {/* Tagline - Larger, premium tracking */}
         <p 
-          className={`text-xs sm:text-sm tracking-[0.4em] uppercase transition-all duration-500 delay-200 ${
+          className={`text-sm sm:text-base tracking-[0.5em] uppercase transition-all duration-500 delay-200 relative z-10 ${
             splashPhase === 'brand' ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
           }`}
           style={{ color: '#D4AF37' }}
@@ -100,7 +111,7 @@ const Index = () => {
         </div>
       </header>
       
-      {/* MAIN CONTENT */}
+      {/* MAIN CONTENT - Scales down from splash intentionally */}
       <main 
         className={`flex-1 flex flex-col items-center justify-center text-center px-6 py-8 relative z-10 transition-all duration-700 ${
           showSplash ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
@@ -108,39 +119,44 @@ const Index = () => {
       >
         
         {/* Hero Section */}
-        <div className="max-w-md w-full space-y-8">
+        <div className="max-w-md w-full space-y-6">
           
-          {/* Brand Icon - Large and centered, no glow */}
+          {/* Brand Icon - Prominent but not competing with splash */}
           <div className="flex justify-center">
             <img 
               src={brandIconF} 
               alt="Filmmaker.OG" 
-              className="w-32 h-32 md:w-40 md:h-40 object-contain"
+              className="w-24 h-24 md:w-28 md:h-28 object-contain"
             />
           </div>
+
+          {/* Gold Divider - Echoes the splash */}
+          <div className="flex justify-center">
+            <div className="w-12 h-[2px] bg-gold" style={{ boxShadow: '0 0 10px rgba(212, 175, 55, 0.5)' }} />
+          </div>
           
-          {/* Title Block */}
-          <div className="space-y-3">
-            <h1 className="font-bebas text-5xl md:text-6xl lg:text-7xl text-foreground tracking-tight leading-none">
+          {/* Title Block - Slightly smaller than splash */}
+          <div className="space-y-2">
+            <h1 className="font-bebas text-4xl md:text-5xl text-foreground tracking-wide leading-none">
               FILMMAKER.OG
             </h1>
-            <p className="text-sm md:text-base tracking-[0.25em] uppercase text-gold">
+            <p className="text-xs md:text-sm tracking-[0.3em] uppercase text-gold">
               STREAMER ACQUISITION CALCULATOR
             </p>
           </div>
           
-          {/* Value Proposition - Authority-focused */}
-          <p className="text-muted-foreground text-sm leading-relaxed max-w-sm mx-auto">
+          {/* Value Proposition */}
+          <p className="text-muted-foreground text-sm leading-relaxed max-w-xs mx-auto">
             The industry-standard waterfall calculator for streamer acquisitions.
           </p>
           
           {/* CTA Button */}
-          <div className="pt-4">
+          <div className="pt-2">
             <Button 
               onClick={handleAccessClick}
-              className="w-full max-w-xs h-14 text-sm font-black tracking-[0.2em] rounded-sm bg-gold text-primary-foreground hover:bg-gold-highlight transition-all duration-300 border-0 touch-press shadow-lg"
+              className="w-full max-w-xs h-14 text-sm font-black tracking-[0.2em] rounded-sm bg-gold text-primary-foreground hover:bg-gold-highlight transition-all duration-150 border-0 touch-press"
               style={{
-                boxShadow: '0 4px 24px rgba(212, 175, 55, 0.3)'
+                boxShadow: '0 4px 24px rgba(212, 175, 55, 0.35)'
               }}
             >
               ACCESS CALCULATOR
@@ -148,7 +164,7 @@ const Index = () => {
           </div>
           
           {/* Trust Indicators */}
-          <div className="flex items-center justify-center gap-6 pt-4">
+          <div className="flex items-center justify-center gap-6 pt-2">
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-emerald-500" />
               <span className="text-xs text-muted-foreground">Free to Use</span>
