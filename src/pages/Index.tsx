@@ -10,18 +10,32 @@ const Index = () => {
   const navigate = useNavigate();
   const haptics = useHaptics();
   const [showLegalModal, setShowLegalModal] = useState(false);
-  const [splashPhase, setSplashPhase] = useState<'brand' | 'tagline' | 'complete'>('brand');
+  const [splashPhase, setSplashPhase] = useState<'black' | 'particles' | 'line' | 'text' | 'tagline' | 'complete'>('black');
+  const [particles, setParticles] = useState<Array<{ id: number; left: number; delay: number; duration: number }>>([]);
 
   const legalText = "Educational disclaimer: For educational purposes only. This calculator is a simplified model and is not legal, tax, accounting, or investment advice. Consult a qualified entertainment attorney.";
 
+  // Generate gold particles
   useEffect(() => {
-    // Splash animation sequence
-    const timer1 = setTimeout(() => setSplashPhase('tagline'), 800);
-    const timer2 = setTimeout(() => setSplashPhase('complete'), 2000);
-    return () => {
-      clearTimeout(timer1);
-      clearTimeout(timer2);
-    };
+    const newParticles = Array.from({ length: 20 }, (_, i) => ({
+      id: i,
+      left: Math.random() * 100,
+      delay: Math.random() * 0.5,
+      duration: 2 + Math.random() * 1.5
+    }));
+    setParticles(newParticles);
+  }, []);
+
+  useEffect(() => {
+    // Cinematic 5-phase sequence
+    const timers = [
+      setTimeout(() => setSplashPhase('particles'), 300),
+      setTimeout(() => setSplashPhase('line'), 700),
+      setTimeout(() => setSplashPhase('text'), 1300),
+      setTimeout(() => setSplashPhase('tagline'), 2000),
+      setTimeout(() => setSplashPhase('complete'), 2800),
+    ];
+    return () => timers.forEach(clearTimeout);
   }, []);
 
   const handleAccessClick = () => {
@@ -30,40 +44,72 @@ const Index = () => {
   };
 
   const showSplash = splashPhase !== 'complete';
+  const brandText = "FILMMAKER.OG";
 
   return (
     <div className="min-h-screen flex flex-col relative overflow-hidden bg-background">
       
-      {/* BRANDED SPLASH OVERLAY */}
+      {/* CINEMATIC SPLASH OVERLAY */}
       <div 
         className={`fixed inset-0 z-[100] flex flex-col items-center justify-center transition-all duration-700 ${
           showSplash ? 'opacity-100' : 'opacity-0 pointer-events-none'
         }`}
         style={{ backgroundColor: '#000000' }}
       >
-        {/* Gold horizontal line */}
+        {/* Gold Particles - Rising dust effect */}
+        {splashPhase !== 'black' && splashPhase !== 'complete' && (
+          <div className="absolute inset-0 overflow-hidden">
+            {particles.map((p) => (
+              <div
+                key={p.id}
+                className="gold-particle"
+                style={{
+                  left: `${p.left}%`,
+                  animationDelay: `${p.delay}s`,
+                  animationDuration: `${p.duration}s`
+                }}
+              />
+            ))}
+          </div>
+        )}
+
+        {/* Gold line draws from center */}
         <div 
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[1px] transition-all duration-700 ease-out"
+          className={`h-[1px] transition-all ease-out ${
+            splashPhase === 'line' || splashPhase === 'text' || splashPhase === 'tagline' 
+              ? 'animate-line-draw opacity-100' 
+              : 'w-0 opacity-0'
+          }`}
           style={{ 
-            width: splashPhase === 'brand' ? '0px' : '120px',
             backgroundColor: '#D4AF37',
-            boxShadow: '0 0 20px rgba(212, 175, 55, 0.6)'
+            boxShadow: '0 0 30px rgba(212, 175, 55, 0.8), 0 0 60px rgba(212, 175, 55, 0.4)'
           }}
         />
         
-        {/* Brand Name */}
+        {/* Brand Name - Letter by letter reveal */}
         <h1 
-          className={`font-bebas text-4xl sm:text-5xl tracking-[0.3em] text-white mb-2 transition-all duration-500 ${
-            splashPhase !== 'brand' ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+          className={`font-bebas text-4xl sm:text-5xl tracking-[0.3em] text-white mt-6 mb-3 overflow-hidden ${
+            splashPhase === 'text' || splashPhase === 'tagline' ? 'opacity-100' : 'opacity-0'
           }`}
         >
-          FILMMAKER.OG
+          {splashPhase === 'text' || splashPhase === 'tagline' ? (
+            <span className="letter-reveal">
+              {brandText.split('').map((char, i) => (
+                <span 
+                  key={i} 
+                  style={{ animationDelay: `${i * 0.04}s` }}
+                >
+                  {char}
+                </span>
+              ))}
+            </span>
+          ) : brandText}
         </h1>
         
-        {/* Tagline */}
+        {/* Tagline - Slides up */}
         <p 
-          className={`text-xs sm:text-sm tracking-[0.4em] uppercase transition-all duration-500 delay-300 ${
-            splashPhase === 'tagline' ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
+          className={`text-xs sm:text-sm tracking-[0.4em] uppercase transition-all duration-500 ${
+            splashPhase === 'tagline' ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
           }`}
           style={{ color: '#D4AF37' }}
         >
@@ -71,7 +117,7 @@ const Index = () => {
         </p>
       </div>
 
-      {/* HEADER - Modern app-like */}
+      {/* HEADER */}
       <header 
         className={`relative z-50 px-6 py-4 flex items-center justify-between safe-top transition-opacity duration-500 ${
           showSplash ? 'opacity-0' : 'opacity-100'

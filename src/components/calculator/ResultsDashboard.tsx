@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { WaterfallResult, WaterfallInputs, formatCompactCurrency, formatPercent, formatMultiple } from "@/lib/waterfall";
 import { 
   Download, AlertTriangle, Users, Briefcase, Target, TrendingUp, 
-  CheckCircle2, DollarSign, Info, Zap
+  CheckCircle2, DollarSign, Info, Zap, ChevronLeft, ChevronRight
 } from "lucide-react";
 import RestrictedAccessModal from "@/components/RestrictedAccessModal";
 import {
@@ -26,6 +26,12 @@ const ResultsDashboard = forwardRef<HTMLDivElement, ResultsDashboardProps>(({ re
   const [activeCard, setActiveCard] = useState(0);
   const [displayedROI, setDisplayedROI] = useState(0);
   const [hasAnimated, setHasAnimated] = useState(false);
+  const [showSwipeHint, setShowSwipeHint] = useState(true);
+
+  // Hide swipe hint after first scroll
+  const handleCarouselScroll = () => {
+    if (showSwipeHint) setShowSwipeHint(false);
+  };
 
   // Calculate metrics
   const totalInvested = inputs.debt + inputs.equity;
@@ -176,19 +182,19 @@ const ResultsDashboard = forwardRef<HTMLDivElement, ResultsDashboardProps>(({ re
 
       {/* QUICK STATS ROW */}
       <div className="grid grid-cols-3 gap-3">
-        <div className="p-4 rounded-sm text-center bg-card border border-border">
+        <div className="p-4 rounded-sm text-center bg-card border border-border min-h-[80px] flex flex-col justify-center">
           <TrendingUp size={14} className={`mx-auto mb-2 ${roi >= 100 ? 'text-emerald-400' : 'text-red-400'}`} />
           <p className="text-[10px] text-muted-foreground uppercase mb-1 font-semibold tracking-wide">ROI</p>
           <p className={`font-mono text-base font-semibold ${roi >= 100 ? 'text-emerald-400' : 'text-red-400'}`}>
             {formatPercent(displayedROI)}
           </p>
         </div>
-        <div className="p-4 rounded-sm text-center bg-card border border-border">
+        <div className="p-4 rounded-sm text-center bg-card border border-border min-h-[80px] flex flex-col justify-center">
           <Target size={14} className="mx-auto mb-2 text-muted-foreground" />
           <p className="text-[10px] text-muted-foreground uppercase mb-1 font-semibold tracking-wide">Breakeven</p>
           <p className="font-mono text-base text-foreground">{formatCompactCurrency(result.totalHurdle)}</p>
         </div>
-        <div className="p-4 rounded-sm text-center bg-card border border-border">
+        <div className="p-4 rounded-sm text-center bg-card border border-border min-h-[80px] flex flex-col justify-center">
           <TrendingUp size={14} className={`mx-auto mb-2 ${result.multiple >= 1.2 ? 'text-gold' : 'text-muted-foreground'}`} />
           <p className="text-[10px] text-muted-foreground uppercase mb-1 font-semibold tracking-wide">Multiple</p>
           <p className={`font-mono text-base font-semibold ${result.multiple >= 1.2 ? 'text-gold' : 'text-foreground'}`}>
@@ -206,15 +212,26 @@ const ResultsDashboard = forwardRef<HTMLDivElement, ResultsDashboardProps>(({ re
               <button
                 key={i}
                 onClick={() => setActiveCard(i)}
-                className={`w-2 h-2 rounded-full transition-all ${
-                  i === activeCard ? 'bg-gold scale-125' : 'bg-border'
+                className={`w-2.5 h-2.5 rounded-full transition-all ${
+                  i === activeCard ? 'bg-gold scale-125 carousel-dot-pulse' : 'bg-border'
                 }`}
               />
             ))}
           </div>
         </div>
 
-        <div className="results-carousel">
+        {/* Swipe Hint */}
+        {showSwipeHint && (
+          <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
+            <div className="flex items-center gap-2 text-muted-foreground text-xs bg-background/80 px-4 py-2 rounded-full">
+              <ChevronLeft size={16} className="swipe-hint-left" />
+              <span>Swipe</span>
+              <ChevronRight size={16} className="swipe-hint-right" />
+            </div>
+          </div>
+        )}
+
+        <div className="results-carousel" onScroll={handleCarouselScroll}>
           {cards.map((card) => (
             <div 
               key={card.id}
@@ -229,33 +246,36 @@ const ResultsDashboard = forwardRef<HTMLDivElement, ResultsDashboardProps>(({ re
                 <div className="p-5">
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="font-bebas text-sm tracking-wider text-foreground">Priority Flow</h3>
-                    <button onClick={() => setShowInfoModal(true)} className="p-1 hover:opacity-80">
+                    <button 
+                      onClick={() => setShowInfoModal(true)} 
+                      className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gold/10 transition-colors"
+                    >
                       <Info size={14} className="text-gold" />
                     </button>
                   </div>
                   <div className="space-y-3">
-                    <div className="flex items-center justify-between text-xs">
+                    <div className="flex items-center justify-between text-xs min-h-[32px]">
                       <span className="text-muted-foreground">1. First Money</span>
                       <div className="flex items-center gap-2">
                         <span className="font-mono text-foreground">{formatCompactCurrency(firstMoneyPaid)}</span>
                         <StatusBadge status={firstMoneyStatus} />
                       </div>
                     </div>
-                    <div className="flex items-center justify-between text-xs">
+                    <div className="flex items-center justify-between text-xs min-h-[32px]">
                       <span className="text-muted-foreground">2. Debt Service</span>
                       <div className="flex items-center gap-2">
                         <span className="font-mono text-foreground">{formatCompactCurrency(debtPaid)}</span>
                         <StatusBadge status={debtStatus} />
                       </div>
                     </div>
-                    <div className="flex items-center justify-between text-xs">
+                    <div className="flex items-center justify-between text-xs min-h-[32px]">
                       <span className="text-muted-foreground">3. Equity + Prem</span>
                       <div className="flex items-center gap-2">
                         <span className="font-mono text-foreground">{formatCompactCurrency(equityPaid)}</span>
                         <StatusBadge status={equityStatus} />
                       </div>
                     </div>
-                    <div className="flex items-center justify-between text-xs pt-2 border-t border-border">
+                    <div className="flex items-center justify-between text-xs pt-2 border-t border-border min-h-[32px]">
                       <span className="text-gold font-semibold">4. Profit Pool</span>
                       <div className="flex items-center gap-2">
                         <span className="font-mono text-gold font-semibold">{formatCompactCurrency(remaining)}</span>
@@ -292,7 +312,7 @@ const ResultsDashboard = forwardRef<HTMLDivElement, ResultsDashboardProps>(({ re
 
       {/* Warning Banner */}
       {isUnderperforming && (
-        <div className="p-4 rounded-sm flex items-center gap-3 bg-destructive/10 border border-destructive/30">
+        <div className="p-4 rounded-sm flex items-center gap-3 bg-destructive/10 border border-destructive/30 min-h-[56px]">
           <AlertTriangle size={18} className="text-destructive flex-shrink-0" />
           <div className="flex-1">
             <p className="text-sm text-foreground font-medium">
@@ -301,7 +321,7 @@ const ResultsDashboard = forwardRef<HTMLDivElement, ResultsDashboardProps>(({ re
           </div>
           <button 
             onClick={() => setShowRestrictedModal(true)}
-            className="text-xs text-gold uppercase tracking-wider whitespace-nowrap font-semibold hover:underline"
+            className="text-xs text-gold uppercase tracking-wider whitespace-nowrap font-semibold hover:underline min-h-[44px] px-2"
           >
             Fix →
           </button>
