@@ -1,246 +1,243 @@
 
 
-# 5 Premium Mobile UI/UX Improvements + Haptics
+# Mobile UX Overhaul: Fix Visual Issues + App-Like Improvements
 
-## Overview
-These enhancements will transform the app from a functional mobile experience to a **premium, native-feeling** application with tactile feedback and seamless interactions.
+## Issues Identified
+
+### 1. Data Overlapping & Cut-off Content
+**Root Cause Analysis:**
+- **WizardStep5 (Output - Priority of Payments)**: The 3-column hero metrics grid (`grid-cols-3`) is too cramped on small mobile screens, causing text to overlap
+- **Currency values in the flow items** are displayed with `text-lg` which combined with the status badge creates horizontal overflow
+- The `truncate` class is hiding important data instead of wrapping it properly
+
+### 2. "Weird Haze" Effect
+**Root Cause Analysis:**
+- The **vignette gradient** on the Index page (`radial-gradient(ellipse at center, rgba(30,30,30,0.3) 0%, rgba(0,0,0,0) 50%, rgba(0,0,0,1) 100%)`) creates a grey haze in the center of the screen
+- The `premium-input` focus styles (`box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15)`) combined with the dark backgrounds create visual noise
+- Multiple overlapping opacity effects during swipe (`opacity: 1 - Math.abs(swipeState.offset) / 300`) create transparency issues
+
+### 3. App-Like Functionality Gaps
+**Current Issues:**
+- **No clear visual separation** between input steps (1-4) and output steps (5-6)
+- **Step transitions are jerky** - content just appears without smooth animation
+- **Console warnings** about refs on WizardStep6 and RestrictedAccessModal (need forwardRef)
+- **No bottom sheet pattern** for the output summary - feels like a web page not an app
+- **Currency formatting** at larger numbers gets cut off on mobile
 
 ---
 
-## 1. Haptic Feedback System
+## Solution Plan
 
-Add haptic feedback for all interactive elements to create a tactile, premium feel.
+### Phase 1: Fix Critical Visual Bugs
 
-**What it does:**
-- Light tap on buttons and toggles
-- Medium impact on step changes
-- Success vibration on form submissions
-- Subtle buzz on swipe gestures
+#### 1.1 Fix WizardStep5 Layout (Priority of Payments)
+**Problem**: 3-column grid causes overlap on small screens
 
-**Technical Implementation:**
-Create a `use-haptics.ts` hook that wraps the Vibration API with fallbacks:
+**Solution**:
+- Change hero metrics from `grid-cols-3` to a stacked vertical layout on mobile
+- Make ROI the hero metric (large, prominent) 
+- Stack Net Profit and Breakeven below as secondary metrics
+- Reduce font sizes for better fit
+- Remove `truncate` in favor of allowing natural wrapping
 
+**Changes to `WizardStep5.tsx`**:
+```tsx
+// BEFORE: grid-cols-3 gap-3
+// AFTER: Single column stack with ROI as hero
+
+{/* HERO METRIC - ROI only */}
+<div className="p-5 rounded-sm text-center" style={{ ... }}>
+  <p className="font-bebas text-4xl">{formatPercent(roi)}</p>
+</div>
+
+{/* SECONDARY METRICS - 2 column grid */}
+<div className="grid grid-cols-2 gap-3">
+  {/* Net Profit + Breakeven side by side */}
+</div>
+```
+
+#### 1.2 Fix Currency Display Overflow
+**Problem**: Long dollar amounts like `$1,200,000` overflow containers
+
+**Solution**:
+- Use responsive font sizing (`text-sm sm:text-base` instead of fixed `text-lg`)
+- Add `overflow-hidden text-ellipsis` with proper min-width
+- Shorten large numbers to `$1.2M` format when over 1 million
+
+**New Utility Function**:
 ```typescript
-// src/hooks/use-haptics.ts
-export const useHaptics = () => {
-  const vibrate = (pattern: number | number[]) => {
-    if ('vibrate' in navigator) {
-      navigator.vibrate(pattern);
-    }
-  };
-
-  return {
-    light: () => vibrate(10),      // Quick tap
-    medium: () => vibrate(25),     // Button press
-    heavy: () => vibrate(50),      // Important action
-    success: () => vibrate([30, 50, 30]), // Success pattern
-    error: () => vibrate([50, 30, 50, 30, 50]), // Error pattern
-  };
+const formatCompactCurrency = (value: number) => {
+  if (Math.abs(value) >= 1000000) {
+    return `$${(value / 1000000).toFixed(1)}M`;
+  }
+  return formatCurrency(value);
 };
 ```
 
-**Where to apply:**
-- Step indicator pill taps
-- Next/Previous button presses
-- Swipe gesture completion
-- Form submissions (magic link sent)
-- Guild toggles in Step 3
-- CTA button presses
+#### 1.3 Remove/Fix the "Haze" Effect
+**Problem**: Vignette creates grey haze making content hard to read
 
----
+**Solution**:
+- Remove the vignette radial gradient from Index page entirely
+- Keep the pure black background for maximum contrast
+- Reduce the intensity of focus glow effects on inputs
 
-## 2. Smooth Page Transitions with Shared Element Animation
-
-Replace abrupt page changes with fluid, iOS-style transitions.
-
-**What it does:**
-- Fade + slide transitions between routes
-- Shared element morphing (brand logo animates between pages)
-- Hardware-accelerated animations
-
-**Technical Implementation:**
-Create a transition wrapper component:
-
-```css
-/* New animation keyframes */
-@keyframes slideInFromRight {
-  from { transform: translateX(30px); opacity: 0; }
-  to { transform: translateX(0); opacity: 1; }
-}
-
-@keyframes slideOutToLeft {
-  from { transform: translateX(0); opacity: 1; }
-  to { transform: translateX(-30px); opacity: 0; }
-}
-
-.page-enter { animation: slideInFromRight 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
-.page-exit { animation: slideOutToLeft 0.2s cubic-bezier(0.4, 0, 1, 1); }
+**Changes to `Index.tsx`**:
+```tsx
+// REMOVE this entire block:
+<div 
+  className="absolute inset-0 pointer-events-none"
+  style={{
+    background: 'radial-gradient(ellipse at center, rgba(30,30,30,0.3) 0%, rgba(0,0,0,0) 50%, rgba(0,0,0,1) 100%)'
+  }}
+/>
 ```
 
-**Files to modify:**
-- `src/index.css` - Add new keyframes
-- `src/App.tsx` - Wrap routes with AnimatePresence-like logic
-- All page components - Add transition classes
-
----
-
-## 3. Premium Input Interactions
-
-Upgrade all form inputs with micro-interactions that feel responsive and polished.
-
-**What it does:**
-- Inputs gently scale up on focus (1.01x)
-- Floating labels that animate into position
-- Subtle glow effect on focus
-- Number inputs with increment/decrement gestures
-- Value changes animate smoothly
-
-**Technical Implementation:**
-
+**Changes to `index.css`**:
 ```css
-/* Enhanced input styling */
-.premium-input {
-  transition: transform 0.15s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-}
-
+/* Reduce premium-input glow intensity */
 .premium-input:focus {
   transform: scale(1.01);
-  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15), 0 0 20px rgba(212, 175, 55, 0.1);
-  border-color: #D4AF37;
-}
-
-/* Number value animation */
-.value-change {
-  animation: valuePop 0.2s ease-out;
-}
-
-@keyframes valuePop {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.03); color: #F9E076; }
-  100% { transform: scale(1); }
+  box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.1); /* Reduced from 3px/0.15 */
+  border-color: hsl(var(--gold)) !important;
 }
 ```
-
-**Files to modify:**
-- `src/index.css` - Add premium input classes
-- `src/components/calculator/WizardStep1.tsx` through `WizardStep4.tsx` - Apply new classes
-- Add haptic feedback on value changes
 
 ---
 
-## 4. Gesture-Enhanced Navigation with Visual Feedback
+### Phase 2: Improve Output Data Presentation
 
-Upgrade the swipe navigation to show real-time visual feedback during gestures.
+#### 2.1 Redesign WizardStep5 (Performance Metrics)
+**Goal**: Make output data scannable and clear on mobile
 
-**What it does:**
-- Content follows your finger during swipe
-- Opacity fades as you swipe away
-- Rubber-band effect at boundaries (can't go past step 1 or 6)
-- Step indicator pills animate in the direction of swipe
-- Haptic pulse when completing a swipe
+**New Layout**:
+```
+┌────────────────────────────────┐
+│         🏆 ROI: 218%           │  ← Hero metric, large gold text
+│       ■■■■■■■■■□□ PROFITABLE   │  ← Visual status indicator
+└────────────────────────────────┘
 
-**Technical Implementation:**
+┌──────────────┬──────────────┐
+│ Net Profit   │  Breakeven   │
+│  +$520,000   │   $2.98M     │
+└──────────────┴──────────────┘
 
-Upgrade `use-swipe.ts` to track position and expose progress:
-
-```typescript
-interface UseSwipeOptions {
-  onSwipeLeft?: () => void;
-  onSwipeRight?: () => void;
-  onProgress?: (progress: number, direction: 'left' | 'right') => void;
-  threshold?: number;
-}
+┌────────────────────────────────┐
+│ PRIORITY OF PAYMENTS       ⓘ  │
+├────────────────────────────────┤
+│ 1. First Money Out    $485K ✓ │
+│ 2. Debt Service       $660K ✓ │
+│ 3. Equity + Premium   $1.2M ✓ │
+│ 4. Net Profit Pool    $520K ✓ │  ← Gold highlight
+└────────────────────────────────┘
 ```
 
-Add visual feedback component:
+**Key Changes**:
+- Single prominent ROI hero metric
+- Status badge shows "PROFITABLE" or "UNPROFITABLE"
+- Compact currency format for large numbers
+- Vertical list with clear paid/unpaid status
+- Remove accordion, show all items by default
+
+#### 2.2 Redesign WizardStep6 (Settlement)
+**Goal**: Clear investor vs producer breakdown
+
+**New Layout**:
+```
+┌────────────────────────────────┐
+│         SETTLEMENT             │
+├────────────────────────────────┤
+│ ┌────────────────────────────┐ │
+│ │ 👤 PRODUCER POOL           │ │
+│ │    $260,000                │ │
+│ └────────────────────────────┘ │
+│ ┌────────────────────────────┐ │
+│ │ 💼 INVESTOR NET            │ │  ← Gold border
+│ │    $1,460,000              │ │
+│ └────────────────────────────┘ │
+└────────────────────────────────┘
+
+┌────────────────────────────────┐
+│ ⓘ KEY METRICS                  │
+│ Breakeven: $2.98M | ROI: 1.3x  │
+│ Profit Pool: $520K | Recoup: ✓ │
+└────────────────────────────────┘
+```
+
+**Key Changes**:
+- Stacked cards instead of side-by-side
+- Larger, more readable currency values
+- Horizontal scrollable metric pills for secondary data
+- Warning card only appears if ROI < 1.2x
+
+---
+
+### Phase 3: App-Like Polish
+
+#### 3.1 Fix React Ref Warnings
+**Problem**: Console warns about refs on WizardStep6 and RestrictedAccessModal
+
+**Solution**: Wrap components with `forwardRef` or remove ref dependencies
 
 ```tsx
-// In Calculator.tsx
+// RestrictedAccessModal.tsx
+const RestrictedAccessModal = forwardRef<HTMLDivElement, Props>(({ isOpen, onClose }, ref) => {
+  // ...
+});
+```
+
+#### 3.2 Smoother Step Transitions
+**Current**: Content just appears/disappears
+**Improved**: Add slide + fade animation between steps
+
+**Changes to Calculator.tsx**:
+```tsx
+// Add transition wrapper with direction awareness
 <main 
+  className="step-content"
+  key={currentStep}
   style={{
-    transform: `translateX(${swipeProgress}px)`,
-    opacity: 1 - Math.abs(swipeProgress) / 300,
-    transition: swiping ? 'none' : 'transform 0.3s ease-out, opacity 0.3s ease-out',
+    animation: 'stepEnter 0.25s ease-out'
   }}
 >
 ```
 
-**Files to modify:**
-- `src/hooks/use-swipe.ts` - Add progress tracking
-- `src/pages/Calculator.tsx` - Apply transform styles during swipe
-- `src/components/calculator/StepIndicator.tsx` - Animate pills during swipe
-
----
-
-## 5. Refined Touch Feedback & Micro-animations
-
-Add subtle but impactful micro-animations throughout the app.
-
-**What it does:**
-- Buttons have subtle press-down effect (not just scale)
-- Cards have depth shadow on press
-- Success states animate (checkmarks draw in)
-- Loading states feel alive (gold shimmer pulse)
-- Icons have subtle bounce on tap
-
-**Technical Implementation:**
-
+**New CSS**:
 ```css
-/* Button press depth effect */
-.touch-press {
-  transition: transform 0.1s ease, box-shadow 0.1s ease;
-}
-
-.touch-press:active {
-  transform: scale(0.97) translateY(2px);
-  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
-}
-
-/* Icon bounce on tap */
-.icon-bounce:active {
-  animation: iconBounce 0.15s ease-out;
-}
-
-@keyframes iconBounce {
-  0% { transform: scale(1); }
-  50% { transform: scale(0.85); }
-  100% { transform: scale(1); }
-}
-
-/* Success checkmark draw-in */
-@keyframes drawCheck {
-  0% { stroke-dashoffset: 20; }
-  100% { stroke-dashoffset: 0; }
-}
-
-.check-animate {
-  stroke-dasharray: 20;
-  stroke-dashoffset: 20;
-  animation: drawCheck 0.3s ease-out forwards;
-}
-
-/* Gold shimmer for loading states */
-@keyframes goldShimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-}
-
-.loading-shimmer {
-  background: linear-gradient(90deg, 
-    transparent 0%, 
-    rgba(212, 175, 55, 0.3) 50%, 
-    transparent 100%
-  );
-  background-size: 200% 100%;
-  animation: goldShimmer 1.5s ease-in-out infinite;
+@keyframes stepEnter {
+  from { 
+    opacity: 0; 
+    transform: translateX(20px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateX(0); 
+  }
 }
 ```
 
-**Files to modify:**
-- `src/index.css` - Add all micro-animation classes
-- `src/components/ui/button.tsx` - Add touch-press class by default
-- `src/components/calculator/WizardStep5.tsx` - Animate status badges
-- Loading skeletons throughout
+#### 3.3 Visual Step Type Indicator
+**Improvement**: Show users they're entering "Results" mode
+
+**Add a divider before Step 5**:
+```tsx
+{currentStep === 5 && (
+  <div className="mb-4 flex items-center gap-3">
+    <div className="h-px flex-1 bg-zinc-800" />
+    <span className="text-[10px] uppercase tracking-widest text-zinc-500">
+      RESULTS
+    </span>
+    <div className="h-px flex-1 bg-zinc-800" />
+  </div>
+)}
+```
+
+#### 3.4 Consistent Touch Feedback
+**Improvement**: Ensure all interactive elements have haptic + visual feedback
+
+- Add `touch-press` class to all buttons universally (already done in button.tsx)
+- Add subtle scale on press to step indicator pills
+- Add haptic pulse when entering results (Step 5)
 
 ---
 
@@ -248,27 +245,21 @@ Add subtle but impactful micro-animations throughout the app.
 
 | File | Changes |
 |------|---------|
-| `src/hooks/use-haptics.ts` | **NEW** - Haptic feedback hook |
-| `src/hooks/use-swipe.ts` | Add progress tracking for visual feedback |
-| `src/index.css` | Add all animation classes and micro-interactions |
-| `src/pages/Calculator.tsx` | Integrate haptics + swipe visual feedback |
-| `src/pages/Index.tsx` | Add page transitions + button haptics |
-| `src/pages/Auth.tsx` | Add input animations + haptics on submit |
-| `src/components/calculator/StepIndicator.tsx` | Add haptic on tap + swipe animation |
-| `src/components/calculator/WizardStep1-6.tsx` | Premium input classes + haptics |
-| `src/components/ui/button.tsx` | Add touch-press class by default |
-| `src/components/MobileMenu.tsx` | Add haptics on menu open/close + link taps |
+| `src/index.css` | Remove haze effect, reduce glow intensity, add step animations |
+| `src/pages/Index.tsx` | Remove vignette gradient |
+| `src/components/calculator/WizardStep5.tsx` | Complete redesign - vertical layout, compact currencies, cleaner data presentation |
+| `src/components/calculator/WizardStep6.tsx` | Stacked cards, horizontal metric pills, cleaner layout |
+| `src/lib/waterfall.ts` | Add `formatCompactCurrency()` helper |
+| `src/pages/Calculator.tsx` | Add step transition animations, results divider |
+| `src/components/RestrictedAccessModal.tsx` | Add forwardRef to fix console warning |
 
 ---
 
-## Expected Premium Mobile Experience
+## Expected Outcomes
 
-1. **Tap a button** → Feel a light vibration, see it press down with depth
-2. **Swipe between steps** → Content follows your finger, haptic pulse on complete
-3. **Focus an input** → Subtle scale + glow, feels responsive
-4. **Change a value** → Number animates, light haptic confirmation
-5. **Complete the calculator** → Success vibration pattern, checkmarks animate in
-6. **Navigate between pages** → Smooth slide transitions, no jarring cuts
-
-This transforms the app from "good mobile site" to "feels like a native app."
+1. **No more overlapping data** - Vertical stacking and responsive font sizes prevent overflow
+2. **No more haze** - Pure black backgrounds with minimal glow effects
+3. **Clear data hierarchy** - ROI is the hero, supporting metrics are secondary
+4. **Feels like an app** - Smooth transitions, haptic feedback, visual polish
+5. **No console warnings** - Clean React component structure
 
