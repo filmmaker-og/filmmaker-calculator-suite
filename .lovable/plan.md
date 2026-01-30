@@ -1,212 +1,171 @@
 
+# Visual Consistency + Auth Page "Pop" Improvements
 
-# Tighter App Experience + Stunning Outputs
+## Current Issues Identified
 
-## Current State Analysis
+### 1. Header Inconsistency
+The headers across pages have inconsistent styling:
+- **Index/Auth/Store**: Use gold (`#D4AF37`) bottom border
+- **Calculator**: Uses grey (`border-zinc-900`) bottom border - inconsistent
 
-### Step Structure (6 steps currently)
-1. **Step 1**: Negative Cost (single input - budget)
-2. **Step 2**: Capital Stack (Tax Credits, Debt, Equity - 3 collapsible cards)
-3. **Step 3**: Deductions (Guild Residuals, Distribution Costs - 2 cards)
-4. **Step 4**: Streamer Buyout (single input - revenue)
-5. **Step 5**: Performance Metrics (ROI, Priority of Payments)
-6. **Step 6**: Settlement (Producer vs Investor split)
+### 2. Missing Context Strip
+The Auth page has a grey "SECURE ACCESS CALCULATOR" status strip (`#111111` background) below the header. This visual element:
+- Provides helpful context about what the user is doing
+- Creates visual hierarchy
+- Is **missing from the homepage and other pages**
 
-### Problems Identified
-- **Step 1 and Step 4 are nearly identical** - single input fields that feel redundant
-- **Too much vertical scrolling** - 6 steps with lots of whitespace
-- **Outputs are functional but not "stunning"** - no visual drama or hierarchy
-- **No clear visual separation** between "what you put in" vs "what you get out"
-
----
-
-## Proposed Restructure: 4 Steps
-
-Consolidate from 6 steps to 4 for a tighter, app-like flow:
-
-### NEW STEP 1: "THE DEAL" (Combines old Steps 1 + 4)
-Two stacked input cards on ONE screen:
-```
-┌─────────────────────────────────────┐
-│  PRODUCTION BUDGET                  │
-│  $  ___________________________     │
-│     Negative Cost                   │
-└─────────────────────────────────────┘
-           ↓  (visual arrow/divider)
-┌─────────────────────────────────────┐
-│  STREAMER BUYOUT                    │
-│  $  ___________________________     │
-│     Acquisition Price               │
-└─────────────────────────────────────┘
-```
-- Immediate visual of "cost vs price" on one screen
-- Users instantly see the core economic tension
-- No scrolling needed for basic scenario
-
-### NEW STEP 2: "CAPITAL STACK" (Old Step 2)
-- Keep as-is with smart-rack toggles
-- Already works well
-
-### NEW STEP 3: "DEDUCTIONS" (Old Step 3)
-- Keep as-is
-- Guild residuals + distribution costs
-
-### NEW STEP 4: "RESULTS" (Combines old Steps 5 + 6)
-Premium dashboard with two sections:
-1. **Hero ROI Card** with animated number reveal
-2. **Horizontal swipeable cards** for Settlement (Producer | Investor | Waterfall)
+### 3. Auth Page Feels Muted
+The Auth page lacks visual energy because:
+- Input fields have muted grey borders (`#333333`)
+- No gold accents on the form elements
+- The card body is pure void black with no depth
+- No animated or glowing elements to draw the eye
+- The "SECURE ACCESS CALCULATOR" strip is dull grey instead of commanding attention
 
 ---
 
-## Stunning Output Redesign (New Step 4)
+## Solution: Unified Header + Context Strip System
 
-### Visual Hierarchy
+### Add Context Strip to Homepage
+Add a matching grey status strip below the header on the homepage:
 ```
 ┌─────────────────────────────────────┐
-│          ★  YOUR RETURN  ★          │
-│                                     │
-│        ┌─────────────────┐          │
-│        │     218.5%      │ ← Animated count-up
-│        │   ROI MULTIPLE  │    Gold text, glow effect
-│        └─────────────────┘          │
-│                                     │
-│    ● PROFITABLE   Net: +$520K       │
+│ FILMMAKER.OG            [SERVICES]  │  ← Gold header bar
+├─────────────────────────────────────┤
+│  ★  STREAMER ACQUISITION CALCULATOR │  ← Grey context strip (#111111)
 └─────────────────────────────────────┘
-
-     ← SWIPE FOR DETAILS →
-
-┌─────────┐ ┌─────────┐ ┌─────────┐
-│PRODUCER │ │INVESTOR │ │WATERFALL│  ← Horizontal snap scroll
-│ $260K   │ │ $1.46M  │ │ FLOW    │
-└─────────┘ └─────────┘ └─────────┘
 ```
 
-### Design Elements for "Stunning"
-1. **Animated number reveal** - ROI counts up from 0 on entry
-2. **Glowing hero metric** - Pulsing gold shadow behind the number
-3. **Horizontal card carousel** - Native iOS-style snap scrolling
-4. **Circular progress rings** - For recoupment visualization
-5. **Status badges with micro-animations** - Check marks that draw in
+### Unify Calculator Header
+Change Calculator header border from `border-zinc-900` to gold (`#D4AF37`) for consistency.
 
 ---
 
-## Technical Implementation
+## Make Auth Page "Pop"
+
+### 1. Enhanced Terminal Header Strip
+Add subtle gold glow and icon animation:
+- Current: Flat grey strip with static icon
+- Improved: Subtle gold left border accent, gentle pulse on the shield icon
+
+### 2. Gold-Accented Input Fields
+Add gold left border indicator to focused inputs:
+```
+┌─────────────────────────────────────┐
+│  [User Icon]  Your first name       │
+│ ▌                                   │  ← Gold left accent bar on focus
+└─────────────────────────────────────┘
+```
+
+### 3. Animated Card Border
+Add a subtle breathing glow effect to the main auth card:
+```css
+@keyframes cardPulse {
+  0%, 100% { box-shadow: 0 0 0px rgba(212, 175, 55, 0); }
+  50% { box-shadow: 0 0 20px rgba(212, 175, 55, 0.15); }
+}
+```
+
+### 4. Enhanced CTA Button
+Add the same gold glow treatment as the Results Dashboard hero:
+- Subtle pulsing shadow on hover
+- More dramatic color shift on hover
+
+### 5. Visual Depth on Terminal Header
+Add a subtle gold left border to the "SECURE ACCESS CALCULATOR" strip:
+```
+┌─────────────────────────────────────┐
+┃  🛡 SECURE ACCESS CALCULATOR        │  ← Gold left border accent
+└─────────────────────────────────────┘
+```
+
+---
+
+## Implementation Details
 
 ### Files to Modify
 
 | File | Changes |
 |------|---------|
-| `src/pages/Calculator.tsx` | Reduce to 4 steps, update step logic |
-| `src/components/calculator/WizardStep1.tsx` | Combine with Step 4 - dual input |
-| `src/components/calculator/WizardStep4.tsx` | **DELETE** - merged into Step 1 |
-| `src/components/calculator/WizardStep5.tsx` | **DELETE** - merged into new Step 4 |
-| `src/components/calculator/WizardStep6.tsx` | Rename to WizardStep4, redesign as "Results Dashboard" |
-| `src/components/calculator/StepIndicator.tsx` | Update totalSteps default to 4 |
-| `src/index.css` | Add count-up animation, carousel styles, glowing hero |
+| `src/pages/Index.tsx` | Add grey context strip below header matching Auth page pattern |
+| `src/pages/Auth.tsx` | Add gold accents, breathing glow on card, enhanced terminal strip |
+| `src/pages/Calculator.tsx` | Change header border to gold for consistency |
+| `src/index.css` | Add `@keyframes cardPulse` animation, `.auth-card-glow` class |
 
-### New Component: ResultsDashboard
+### Index.tsx Changes
+Add context strip after header:
+```tsx
+{/* Context Strip - Matching Auth page pattern */}
+<div 
+  className="flex items-center justify-center gap-2 py-3"
+  style={{ backgroundColor: '#111111', borderBottom: '1px solid #333333' }}
+>
+  <span className="text-xs uppercase tracking-widest text-zinc-400">
+    STREAMER ACQUISITION CALCULATOR
+  </span>
+</div>
+```
 
-The new Step 4 will be a complete redesign with:
+### Auth.tsx Changes
+1. Add gold left border to terminal header:
+```tsx
+<div 
+  className="flex items-center gap-2 py-4 px-6"
+  style={{ 
+    backgroundColor: '#111111', 
+    borderBottom: '1px solid #333333',
+    borderLeft: '3px solid #D4AF37'  // Gold accent
+  }}
+>
+```
 
-1. **Hero Metric Section**
-   - Large animated ROI with count-up effect
-   - Dynamic color (gold = profitable, red = loss)
-   - Pulsing glow animation for emphasis
+2. Add breathing glow to auth card:
+```tsx
+<div className="border-2 overflow-hidden auth-card-glow" style={{ borderColor: '#D4AF37' }}>
+```
 
-2. **Quick Stats Row** (Below hero)
-   - 3 compact pills: Net Profit | Breakeven | Multiple
-   - All visible at once, no scrolling
+3. Enhance input field focus states with gold left indicator
 
-3. **Horizontal Card Carousel**
-   - Card 1: Producer Pool (with icon + amount)
-   - Card 2: Investor Net (gold highlighted)
-   - Card 3: Waterfall Flow (priority list)
-   - Native snap-scroll behavior
-   - Dot indicators below
+### Calculator.tsx Changes
+Update header border from grey to gold:
+```tsx
+<header 
+  className="fixed top-0 left-0 right-0 h-14 z-50 flex items-center px-6 safe-top" 
+  style={{ backgroundColor: '#000000', borderBottom: '1px solid #D4AF37' }}
+>
+```
 
-4. **Action Footer**
-   - Download Investor Deck CTA
-   - Warning banner if underperforming (< 1.2x)
-
-### New CSS Additions
-
+### New CSS in index.css
 ```css
-/* Count-up animation for numbers */
-@keyframes countUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+/* Auth card breathing glow */
+.auth-card-glow {
+  animation: cardPulse 3s ease-in-out infinite;
 }
 
-/* Pulsing glow for hero metric */
-@keyframes heroGlow {
-  0%, 100% { box-shadow: 0 0 30px hsl(43 74% 52% / 0.3); }
-  50% { box-shadow: 0 0 50px hsl(43 74% 52% / 0.6); }
+@keyframes cardPulse {
+  0%, 100% { box-shadow: 0 0 0px rgba(212, 175, 55, 0); }
+  50% { box-shadow: 0 0 25px rgba(212, 175, 55, 0.2); }
 }
 
-/* Horizontal snap carousel */
-.results-carousel {
-  display: flex;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  gap: 12px;
-  padding: 0 24px;
-  scrollbar-width: none;
-}
-
-.results-carousel::-webkit-scrollbar { display: none; }
-
-.results-card {
-  scroll-snap-align: center;
-  flex-shrink: 0;
-  width: 280px;
+/* Enhanced input focus with gold left accent */
+.input-gold-accent:focus-within {
+  border-left: 3px solid #D4AF37;
 }
 ```
 
 ---
 
-## Additional App-Like Improvements
+## Expected Visual Result
 
-### 1. Sticky Summary Bar (Optional Future Enhancement)
-A mini-bar at bottom showing key metrics that persists during input steps.
+### Before (Muted)
+- Flat grey elements
+- No visual hierarchy
+- Static, lifeless appearance
+- Inconsistent headers
 
-### 2. Input Step Animation
-When entering values, the number should "pop" with a subtle scale effect + haptic.
-
-### 3. Transition Between Inputs and Results
-Special visual divider animation when moving from Step 3 to Step 4.
-
-### 4. Circular Progress Visualization
-For recoupment percentage, show as an animated ring that fills:
-```
-    ┌───────┐
-   /    87%  \    ← Ring fills with gold
-  │  RECOUP  │
-   \        /
-    └───────┘
-```
-
----
-
-## Summary of UX Benefits
-
-| Before | After |
-|--------|-------|
-| 6 steps | 4 steps |
-| Scrolly and redundant | Tight and purposeful |
-| Outputs are lists | Outputs are visual dashboards |
-| Static numbers | Animated reveals |
-| Vertical waterfall | Horizontal card carousel |
-| Web-like | Native app-like |
-
----
-
-## Implementation Priority
-
-1. **First**: Merge Step 1 + Step 4 into new dual-input "The Deal" step
-2. **Second**: Merge Step 5 + Step 6 into stunning "Results Dashboard"  
-3. **Third**: Update Calculator.tsx routing for 4 steps
-4. **Fourth**: Add animations and polish (count-up, carousel, glow)
-
-This reduces cognitive load, eliminates redundant navigation, and makes the output feel like a premium data visualization rather than a form result.
-
+### After (Premium)
+- Consistent gold header borders across all pages
+- Breathing glow on auth card draws the eye
+- Gold accent borders on terminal strips and focused inputs
+- Unified context strip pattern (grey #111111)
+- Dynamic, app-like premium feel
