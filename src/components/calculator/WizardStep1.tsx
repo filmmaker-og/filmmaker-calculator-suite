@@ -19,9 +19,6 @@ const WizardStep1 = ({ budget, revenue, onUpdateBudget, onUpdateRevenue }: Wizar
   const [infoBudgetOpen, setInfoBudgetOpen] = useState(false);
   const [infoRevenueOpen, setInfoRevenueOpen] = useState(false);
 
-  const delta = revenue - budget;
-  const isProfitable = delta > 0;
-
   return (
     <div className="step-enter space-y-5">
       {/* Section Header */}
@@ -37,10 +34,9 @@ const WizardStep1 = ({ budget, revenue, onUpdateBudget, onUpdateRevenue }: Wizar
         </div>
       </div>
 
-      {/* Card A: Production Budget - Left accent only */}
+      {/* Card A: Production Budget */}
       <div className="rounded-sm border border-border overflow-hidden" style={{ borderLeft: '3px solid hsl(var(--gold))' }}>
-        {/* Header Strip */}
-        <div className="py-3 px-4 flex items-center justify-between bg-card">
+        <div className="py-3 px-4 flex items-center justify-between bg-card border-b border-border">
           <div className="flex items-center gap-3">
             <DollarSign className="w-4 h-4 text-gold" />
             <h3 className="font-bebas text-sm tracking-widest uppercase text-gold">
@@ -49,19 +45,21 @@ const WizardStep1 = ({ budget, revenue, onUpdateBudget, onUpdateRevenue }: Wizar
           </div>
           <button
             onClick={() => setInfoBudgetOpen(true)}
-            className="w-11 h-11 flex items-center justify-center rounded-full hover:bg-gold/10 transition-colors -mr-2"
+            className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-gold/10 transition-colors"
             aria-label="More information"
           >
             <Info className="w-4 h-4 text-muted-foreground hover:text-gold transition-colors" />
           </button>
         </div>
 
-        {/* Body */}
         <div className="p-5 bg-background">
-          <div className="mb-3">
+          <div className="mb-2">
             <span className="text-xs tracking-wider uppercase font-semibold text-foreground">
               NEGATIVE COST
             </span>
+            <p className="text-[10px] text-muted-foreground mt-0.5">
+              Total cost to produce and deliver (excl. marketing)
+            </p>
           </div>
           <div className="relative">
             <span className="absolute left-4 top-1/2 -translate-y-1/2 font-mono text-lg text-muted-foreground">
@@ -76,18 +74,17 @@ const WizardStep1 = ({ budget, revenue, onUpdateBudget, onUpdateRevenue }: Wizar
                 const value = parseInt(e.target.value.replace(/[^0-9]/g, '')) || 0;
                 onUpdateBudget(value);
               }}
-              placeholder="0"
-              className="pl-9 h-14 text-xl font-mono text-foreground text-right rounded-sm border-border focus:border-gold focus:ring-1 focus:ring-gold transition-all bg-card"
+              placeholder="2,000,000"
+              className="pl-10 h-14 text-xl font-mono text-foreground text-right rounded-sm border-border focus:border-gold focus:ring-1 focus:ring-gold transition-all bg-card"
               onFocus={(e) => e.target.select()}
             />
           </div>
         </div>
       </div>
 
-      {/* Card B: Streamer Buyout - Gold accent (consistent) */}
+      {/* Card B: Streamer Buyout */}
       <div className="rounded-sm border border-border overflow-hidden" style={{ borderLeft: '3px solid hsl(var(--gold))' }}>
-        {/* Header Strip */}
-        <div className="py-3 px-4 flex items-center justify-between bg-card">
+        <div className="py-3 px-4 flex items-center justify-between bg-card border-b border-border">
           <div className="flex items-center gap-3">
             <TrendingUp className="w-4 h-4 text-gold" />
             <h3 className="font-bebas text-sm tracking-widest uppercase text-gold">
@@ -96,19 +93,21 @@ const WizardStep1 = ({ budget, revenue, onUpdateBudget, onUpdateRevenue }: Wizar
           </div>
           <button
             onClick={() => setInfoRevenueOpen(true)}
-            className="w-11 h-11 flex items-center justify-center rounded-full hover:bg-gold/10 transition-colors -mr-2"
+            className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-gold/10 transition-colors"
             aria-label="More information"
           >
             <Info className="w-4 h-4 text-muted-foreground hover:text-gold transition-colors" />
           </button>
         </div>
 
-        {/* Body */}
         <div className="p-5 bg-background">
-          <div className="mb-3">
+          <div className="mb-2">
             <span className="text-xs tracking-wider uppercase font-semibold text-foreground">
               ACQUISITION PRICE
             </span>
+            <p className="text-[10px] text-muted-foreground mt-0.5">
+              Netflix/Amazon typically pay 100-120% of budget
+            </p>
           </div>
           <div className="relative">
             <span className="absolute left-4 top-1/2 -translate-y-1/2 font-mono text-lg text-muted-foreground">
@@ -123,29 +122,21 @@ const WizardStep1 = ({ budget, revenue, onUpdateBudget, onUpdateRevenue }: Wizar
                 const value = parseInt(e.target.value.replace(/[^0-9]/g, '')) || 0;
                 onUpdateRevenue(value);
               }}
-              placeholder="0"
-              className="pl-9 h-14 text-xl font-mono text-foreground text-right rounded-sm border-border focus:border-gold focus:ring-1 focus:ring-gold transition-all bg-card"
+              placeholder="3,500,000"
+              className="pl-10 h-14 text-xl font-mono text-foreground text-right rounded-sm border-border focus:border-gold focus:ring-1 focus:ring-gold transition-all bg-card"
               onFocus={(e) => e.target.select()}
             />
           </div>
         </div>
       </div>
 
-      {/* Quick Delta Indicator */}
-      {budget > 0 && revenue > 0 && (
-        <div 
-          className="p-4 rounded-sm text-center border"
-          style={{ 
-            backgroundColor: isProfitable ? 'rgba(16, 185, 129, 0.08)' : 'rgba(239, 68, 68, 0.08)',
-            borderColor: isProfitable ? 'rgba(16, 185, 129, 0.3)' : 'rgba(239, 68, 68, 0.3)'
-          }}
-        >
-          <span className="text-xs uppercase tracking-widest text-muted-foreground mr-2">Gross Spread:</span>
-          <span className={`font-mono text-base font-semibold ${isProfitable ? 'text-emerald-400' : 'text-red-400'}`}>
-            {isProfitable ? '+' : ''}{delta.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 })}
-          </span>
-        </div>
-      )}
+      {/* Hint Card */}
+      <div className="p-4 rounded-sm bg-card/50 border border-border/50">
+        <p className="text-[11px] text-muted-foreground leading-relaxed">
+          <span className="text-gold font-semibold">TIP:</span> In a Cost-Plus deal, the streamer pays a fixed buyout price for 100% of the rights.
+          This acquisition price is your total revenue — all waterfall distributions come from this pot.
+        </p>
+      </div>
 
       {/* Budget Info Modal */}
       <Dialog open={infoBudgetOpen} onOpenChange={setInfoBudgetOpen}>
@@ -155,13 +146,13 @@ const WizardStep1 = ({ budget, revenue, onUpdateBudget, onUpdateRevenue }: Wizar
               NEGATIVE COST
             </DialogTitle>
           </DialogHeader>
-          
+
           <div className="space-y-5 mt-4">
             <div>
               <h4 className="text-foreground font-bold text-sm mb-2">DEFINITION</h4>
               <p className="text-sm leading-relaxed text-muted-foreground">
-                The total capital required to produce the master and deliver to distributors. 
-                Includes all Above-the-Line (Talent) and Below-the-Line (Crew/Locations) expenses. 
+                The total capital required to produce the master and deliver to distributors.
+                Includes all Above-the-Line (Talent) and Below-the-Line (Crew/Locations) expenses.
                 Excludes marketing (P&A), sales fees, and financing costs.
               </p>
             </div>
@@ -169,7 +160,7 @@ const WizardStep1 = ({ budget, revenue, onUpdateBudget, onUpdateRevenue }: Wizar
             <div>
               <h4 className="text-foreground font-bold text-sm mb-2">THE BOTTOM LINE</h4>
               <p className="text-sm leading-relaxed text-muted-foreground">
-                This is your "Cost Basis." This number must be fully recouped from the Buyout Price 
+                This is your "Cost Basis." This number must be fully recouped from the Buyout Price
                 before Net Profits are calculated.
               </p>
             </div>
@@ -185,13 +176,13 @@ const WizardStep1 = ({ budget, revenue, onUpdateBudget, onUpdateRevenue }: Wizar
               STREAMER ACQUISITION
             </DialogTitle>
           </DialogHeader>
-          
+
           <div className="space-y-5 mt-4">
             <div>
               <h4 className="text-foreground font-bold text-sm mb-2">DEFINITION</h4>
               <p className="text-sm leading-relaxed text-muted-foreground">
-                In a Cost-Plus buyout (Netflix/Amazon/Apple), the streamer purchases 100% of the 
-                copyright for a fixed price. This fee usually covers the Negative Cost plus a 
+                In a Cost-Plus buyout (Netflix/Amazon/Apple), the streamer purchases 100% of the
+                copyright for a fixed price. This fee usually covers the Negative Cost plus a
                 negotiated Premium (Profit).
               </p>
             </div>
@@ -199,7 +190,7 @@ const WizardStep1 = ({ budget, revenue, onUpdateBudget, onUpdateRevenue }: Wizar
             <div>
               <h4 className="text-foreground font-bold text-sm mb-2">THE GOAL</h4>
               <p className="text-sm leading-relaxed text-muted-foreground">
-                This number is the "Gross Receipts" for the purpose of the waterfall. It is the 
+                This number is the "Gross Receipts" for the purpose of the waterfall. It is the
                 single pot of money from which all debts and equity must be repaid.
               </p>
             </div>

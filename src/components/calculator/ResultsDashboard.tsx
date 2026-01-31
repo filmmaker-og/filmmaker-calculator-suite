@@ -1,11 +1,12 @@
-import { useState, forwardRef, useRef, useEffect } from "react";
-import { Button } from "@/components/ui/button";
+import { useState, forwardRef } from "react";
 import { WaterfallResult, WaterfallInputs, formatCompactCurrency, formatPercent, formatMultiple } from "@/lib/waterfall";
-import { 
-  Download, AlertTriangle, Users, Briefcase, Target, TrendingUp, 
-  CheckCircle2, DollarSign, Info, ChevronLeft, ChevronRight
+import {
+  AlertTriangle, Users, Briefcase, Target, TrendingUp,
+  CheckCircle2, DollarSign, Info
 } from "lucide-react";
 import RestrictedAccessModal from "@/components/RestrictedAccessModal";
+import WaterfallChart from "./WaterfallChart";
+import DeckPreview from "./DeckPreview";
 import {
   Dialog,
   DialogContent,
@@ -23,314 +24,172 @@ interface ResultsDashboardProps {
 const ResultsDashboard = forwardRef<HTMLDivElement, ResultsDashboardProps>(({ result, inputs, equity }, ref) => {
   const [showRestrictedModal, setShowRestrictedModal] = useState(false);
   const [showInfoModal, setShowInfoModal] = useState(false);
-  const [activeCard, setActiveCard] = useState(0);
-  const [showSwipeHint, setShowSwipeHint] = useState(true);
-  const carouselRef = useRef<HTMLDivElement>(null);
 
-  // Track scroll to update active card and hide hint
-  const handleCarouselScroll = () => {
-    if (showSwipeHint) setShowSwipeHint(false);
-    
-    if (carouselRef.current) {
-      const scrollLeft = carouselRef.current.scrollLeft;
-      const cardWidth = carouselRef.current.offsetWidth * 0.85 + 12; // 85% + gap
-      const newActive = Math.round(scrollLeft / cardWidth);
-      setActiveCard(Math.min(newActive, 2));
-    }
-  };
-
-  // Scroll to card on dot click
-  const scrollToCard = (index: number) => {
-    if (carouselRef.current) {
-      const cardWidth = carouselRef.current.offsetWidth * 0.85 + 12;
-      carouselRef.current.scrollTo({ left: index * cardWidth, behavior: 'smooth' });
-    }
-  };
-
-  const totalInvested = inputs.debt + inputs.equity;
+  const totalInvested = inputs.debt + inputs.mezzanineDebt + inputs.equity;
   const totalDistributed = result.recouped + result.profitPool;
   const roi = totalInvested > 0 ? (totalDistributed / totalInvested) * 100 : 0;
   const isProfitable = result.profitPool > 0;
-  const isUnderperforming = result.multiple < 1.2;
+  const isUnderperforming = result.multiple < 1.2 && inputs.equity > 0;
   const netProfit = result.profitPool;
 
+  // Calculate waterfall tier amounts
   const firstMoneyOut = result.cam + result.salesFee + result.guilds + result.marketing;
   const seniorDebt = result.ledger.find(l => l.name === "Senior Debt")?.amount || 0;
   const mezzDebt = result.ledger.find(l => l.name === "Gap/Mezz Debt")?.amount || 0;
   const debtService = seniorDebt + mezzDebt;
   const equityPrem = result.ledger.find(l => l.name === "Equity")?.amount || 0;
 
-  let remaining = inputs.revenue;
-  const firstMoneyPaid = Math.min(remaining, firstMoneyOut);
-  remaining = Math.max(0, remaining - firstMoneyOut);
-  const firstMoneyStatus = firstMoneyPaid >= firstMoneyOut ? 'paid' : firstMoneyPaid > 0 ? 'partial' : 'unpaid';
-
-  const debtPaid = Math.min(remaining, debtService);
-  remaining = Math.max(0, remaining - debtService);
-  const debtStatus = debtPaid >= debtService ? 'paid' : debtPaid > 0 ? 'partial' : 'unpaid';
-
-  const equityPaid = Math.min(remaining, equityPrem);
-  remaining = Math.max(0, remaining - equityPrem);
-  const equityStatus = equityPaid >= equityPrem ? 'paid' : equityPaid > 0 ? 'partial' : 'unpaid';
-  const profitStatus = remaining > 0 ? 'paid' : 'unpaid';
-
-  const StatusBadge = ({ status }: { status: 'paid' | 'partial' | 'unpaid' }) => {
-    if (status === 'paid') return <CheckCircle2 size={14} className="text-emerald-400" />;
-    if (status === 'partial') return <AlertTriangle size={14} className="text-amber-400" />;
-    return <AlertTriangle size={14} className="text-red-400" />;
-  };
-
-  const cards = [
-    {
-      id: 'producer',
-      icon: Users,
-      label: 'Producer Pool',
-      value: result.producer,
-      subtitle: '50% profit share',
-      color: 'text-muted-foreground',
-      bgColor: 'bg-muted/50',
-      accentColor: 'hsl(var(--muted-foreground))'
-    },
-    {
-      id: 'investor',
-      icon: Briefcase,
-      label: 'Investor Net',
-      value: result.investor,
-      subtitle: 'Recoupment + 50%',
-      color: 'text-gold',
-      bgColor: 'bg-gold/10',
-      accentColor: 'hsl(var(--gold))'
-    },
-    {
-      id: 'waterfall',
-      icon: TrendingUp,
-      label: 'Waterfall',
-      isWaterfall: true,
-      accentColor: 'hsl(var(--gold))'
-    }
-  ];
-
   return (
-    <div ref={ref} className="step-enter space-y-5">
-      {/* Section Header - Output emphasis */}
-      <div className="flex items-center gap-3 mb-6">
-        <div className="w-8 h-8 rounded-full bg-gold flex items-center justify-center">
-          <span className="text-primary-foreground font-bebas text-sm">✓</span>
+    <div ref={ref} className="step-enter space-y-6">
+      {/* Section Header */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-full bg-gold flex items-center justify-center">
+            <CheckCircle2 size={16} className="text-primary-foreground" />
+          </div>
+          <div>
+            <h2 className="font-bebas text-lg text-foreground tracking-wide">YOUR WATERFALL</h2>
+            <p className="text-[11px] text-muted-foreground">
+              Here's how your {formatCompactCurrency(inputs.revenue)} flows
+            </p>
+          </div>
         </div>
-        <div>
-          <h2 className="font-bebas text-lg text-foreground tracking-wide">WATERFALL ANALYSIS</h2>
-          <p className="text-xs text-muted-foreground">
-            Based on your inputs, here's how the money flows
-          </p>
-        </div>
+        <button
+          onClick={() => setShowInfoModal(true)}
+          className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-gold/10 transition-colors"
+        >
+          <Info size={18} className="text-muted-foreground hover:text-gold transition-colors" />
+        </button>
       </div>
 
-      {/* Hero Net Profit Card - Premium styling */}
+      {/* Hero Profit Card */}
       <div
-        className="relative p-6 rounded-sm text-center overflow-hidden border"
+        className="relative p-6 rounded-sm text-center overflow-hidden"
         style={{
           backgroundColor: 'hsl(var(--card))',
-          borderColor: isProfitable ? 'hsl(var(--gold))' : 'hsl(0 84% 40%)',
-          borderLeftWidth: '3px'
+          border: `2px solid ${isProfitable ? 'hsl(var(--gold))' : 'hsl(0 84% 40%)'}`,
         }}
       >
-        {/* Subtle background glow */}
         {isProfitable && (
-          <div className="absolute inset-0 bg-gradient-to-b from-gold/5 to-transparent pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-b from-gold/10 via-gold/5 to-transparent pointer-events-none" />
         )}
 
         <div className="relative z-10">
-          <div className="flex items-center justify-center gap-2 mb-3">
-            <DollarSign size={16} className={isProfitable ? 'text-gold' : 'text-destructive'} />
-            <span className="text-[10px] uppercase tracking-[0.25em] text-muted-foreground font-semibold">
-              Net Profit Pool
-            </span>
-          </div>
+          <p className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground font-semibold mb-3">
+            Net Profit Pool
+          </p>
 
           <p
-            className="font-bebas text-5xl sm:text-6xl mb-1 tabular-nums"
+            className="font-bebas text-5xl sm:text-6xl mb-2 tabular-nums leading-none"
             style={{ color: isProfitable ? 'hsl(var(--gold))' : 'hsl(var(--destructive))' }}
           >
             {isProfitable ? '+' : ''}{formatCompactCurrency(netProfit)}
           </p>
 
-          <p className="text-[10px] text-muted-foreground mb-4">
-            Available for 50/50 split between producers & investors
+          <p className="text-xs text-muted-foreground mb-4">
+            Split 50/50 between you and your investors
           </p>
 
-          <span
-            className={`inline-flex items-center gap-2 px-4 py-2 rounded-sm text-xs font-mono uppercase tracking-wider ${
-              isProfitable
-                ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'
-                : 'bg-red-500/15 text-red-400 border border-red-500/30'
-            }`}
-          >
-            {isProfitable ? <CheckCircle2 size={14} /> : <AlertTriangle size={14} />}
-            {isProfitable ? 'PROFITABLE DEAL' : 'SHORTFALL'}
-          </span>
+          <div className="flex items-center justify-center gap-2">
+            <span
+              className={`inline-flex items-center gap-2 px-4 py-2 rounded-sm text-xs font-mono uppercase tracking-wider ${isProfitable
+                  ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'
+                  : 'bg-red-500/15 text-red-400 border border-red-500/30'
+                }`}
+            >
+              {isProfitable ? <CheckCircle2 size={14} /> : <AlertTriangle size={14} />}
+              {isProfitable ? 'PROFITABLE' : 'SHORTFALL'}
+            </span>
+          </div>
         </div>
       </div>
 
-      {/* Quick Stats Row - Key metrics */}
-      <div className="grid grid-cols-3 gap-2.5">
-        <div className="p-3 rounded-sm text-center bg-card border border-border min-h-[80px] flex flex-col justify-center">
-          <TrendingUp size={14} className={`mx-auto mb-1.5 ${roi >= 100 ? 'text-emerald-400' : 'text-red-400'}`} />
-          <p className="text-[9px] text-muted-foreground uppercase mb-1 font-semibold tracking-wider">Return %</p>
-          <p className={`font-mono text-base font-semibold ${roi >= 100 ? 'text-emerald-400' : 'text-red-400'}`}>
+      {/* Key Metrics Row */}
+      <div className="grid grid-cols-2 gap-3">
+        <div className="p-4 rounded-sm bg-card border border-border">
+          <div className="flex items-center gap-2 mb-2">
+            <Users size={14} className="text-muted-foreground" />
+            <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">Your Share</span>
+          </div>
+          <p className="font-mono text-xl text-foreground">{formatCompactCurrency(result.producer)}</p>
+          <p className="text-[10px] text-muted-foreground mt-1">Producer's 50%</p>
+        </div>
+        <div className="p-4 rounded-sm bg-card border border-border">
+          <div className="flex items-center gap-2 mb-2">
+            <Briefcase size={14} className="text-gold" />
+            <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">Investor Gets</span>
+          </div>
+          <p className="font-mono text-xl text-gold">{formatCompactCurrency(result.investor)}</p>
+          <p className="text-[10px] text-muted-foreground mt-1">Recoup + 50% profit</p>
+        </div>
+      </div>
+
+      {/* Stats Row */}
+      <div className="grid grid-cols-3 gap-2">
+        <div className="p-3 rounded-sm text-center bg-card border border-border">
+          <TrendingUp size={14} className={`mx-auto mb-1 ${roi >= 100 ? 'text-emerald-400' : 'text-red-400'}`} />
+          <p className="text-[9px] text-muted-foreground uppercase tracking-wider mb-0.5">Return</p>
+          <p className={`font-mono text-sm font-semibold ${roi >= 100 ? 'text-emerald-400' : 'text-red-400'}`}>
             {formatPercent(roi)}
           </p>
         </div>
-        <div className="p-3 rounded-sm text-center bg-card border border-border min-h-[80px] flex flex-col justify-center">
-          <Target size={14} className="mx-auto mb-1.5 text-muted-foreground" />
-          <p className="text-[9px] text-muted-foreground uppercase mb-1 font-semibold tracking-wider">Breakeven</p>
-          <p className="font-mono text-base text-foreground">{formatCompactCurrency(result.totalHurdle)}</p>
+        <div className="p-3 rounded-sm text-center bg-card border border-border">
+          <Target size={14} className="mx-auto mb-1 text-muted-foreground" />
+          <p className="text-[9px] text-muted-foreground uppercase tracking-wider mb-0.5">Breakeven</p>
+          <p className="font-mono text-sm text-foreground">{formatCompactCurrency(result.totalHurdle)}</p>
         </div>
-        <div className="p-3 rounded-sm text-center bg-card border border-border min-h-[80px] flex flex-col justify-center relative overflow-hidden">
+        <div className="p-3 rounded-sm text-center bg-card border border-border relative overflow-hidden">
           {result.multiple >= 1.2 && (
             <div className="absolute inset-0 bg-gradient-to-b from-gold/10 to-transparent pointer-events-none" />
           )}
-          <TrendingUp size={14} className={`mx-auto mb-1.5 relative z-10 ${result.multiple >= 1.2 ? 'text-gold' : 'text-muted-foreground'}`} />
-          <p className="text-[9px] text-muted-foreground uppercase mb-1 font-semibold tracking-wider relative z-10">Multiple</p>
-          <p className={`font-mono text-base font-semibold relative z-10 ${result.multiple >= 1.2 ? 'text-gold' : 'text-foreground'}`}>
+          <DollarSign size={14} className={`mx-auto mb-1 relative z-10 ${result.multiple >= 1.2 ? 'text-gold' : 'text-muted-foreground'}`} />
+          <p className="text-[9px] text-muted-foreground uppercase tracking-wider mb-0.5 relative z-10">Multiple</p>
+          <p className={`font-mono text-sm font-semibold relative z-10 ${result.multiple >= 1.2 ? 'text-gold' : 'text-foreground'}`}>
             {formatMultiple(result.multiple)}
           </p>
         </div>
       </div>
 
-      {/* Card Carousel - 85% width with peek */}
-      <div className="relative">
-        <div className="flex items-center justify-between mb-3 px-1">
-          <span className="text-xs uppercase tracking-widest text-muted-foreground font-semibold">Settlement Details</span>
-          <div className="flex gap-1.5">
-            {cards.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => scrollToCard(i)}
-                className={`w-2 h-2 rounded-full transition-all ${
-                  i === activeCard ? 'bg-gold' : 'bg-border'
-                }`}
-              />
-            ))}
-          </div>
-        </div>
-
-        {/* Swipe Hint - Subtle edge chevrons */}
-        {showSwipeHint && (
-          <div className="absolute left-0 right-0 top-1/2 translate-y-4 z-10 flex justify-between pointer-events-none px-1">
-            <ChevronLeft size={18} className="text-muted-foreground/40 animate-pulse" />
-            <ChevronRight size={18} className="text-muted-foreground/40 animate-pulse" />
-          </div>
-        )}
-
-        <div 
-          ref={carouselRef}
-          className="flex overflow-x-auto snap-x snap-mandatory gap-3 pb-2 scrollbar-hide"
-          onScroll={handleCarouselScroll}
-          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-        >
-          {cards.map((card) => (
-            <div 
-              key={card.id}
-              className="snap-center flex-shrink-0 bg-card border border-border rounded-sm"
-              style={{ 
-                width: '85%',
-                borderLeftWidth: '3px',
-                borderLeftColor: card.accentColor
-              }}
-            >
-              {card.isWaterfall ? (
-                <div className="p-5">
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="font-bebas text-sm tracking-wider text-foreground">Priority Flow</h3>
-                    <button 
-                      onClick={() => setShowInfoModal(true)} 
-                      className="w-11 h-11 flex items-center justify-center rounded-full hover:bg-gold/10 transition-colors -mr-2"
-                    >
-                      <Info size={16} className="text-gold" />
-                    </button>
-                  </div>
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between text-sm min-h-[36px]">
-                      <span className="text-muted-foreground">1. First Money</span>
-                      <div className="flex items-center gap-2">
-                        <span className="font-mono text-foreground">{formatCompactCurrency(firstMoneyPaid)}</span>
-                        <StatusBadge status={firstMoneyStatus} />
-                      </div>
-                    </div>
-                    <div className="flex items-center justify-between text-sm min-h-[36px]">
-                      <span className="text-muted-foreground">2. Debt Service</span>
-                      <div className="flex items-center gap-2">
-                        <span className="font-mono text-foreground">{formatCompactCurrency(debtPaid)}</span>
-                        <StatusBadge status={debtStatus} />
-                      </div>
-                    </div>
-                    <div className="flex items-center justify-between text-sm min-h-[36px]">
-                      <span className="text-muted-foreground">3. Equity + Prem</span>
-                      <div className="flex items-center gap-2">
-                        <span className="font-mono text-foreground">{formatCompactCurrency(equityPaid)}</span>
-                        <StatusBadge status={equityStatus} />
-                      </div>
-                    </div>
-                    <div className="flex items-center justify-between text-sm pt-3 border-t border-border min-h-[36px]">
-                      <span className="text-gold font-semibold">4. Profit Pool</span>
-                      <div className="flex items-center gap-2">
-                        <span className="font-mono text-gold font-semibold">{formatCompactCurrency(remaining)}</span>
-                        <StatusBadge status={profitStatus} />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <div className="p-5">
-                  <div className="flex items-center gap-4">
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${card.bgColor}`}>
-                      <card.icon size={18} className={card.color} />
-                    </div>
-                    <div>
-                      <p className={`text-xs uppercase tracking-wider mb-1 font-semibold ${card.color}`}>
-                        {card.label}
-                      </p>
-                      <p className={`font-mono text-2xl font-semibold ${card.color}`}>
-                        {formatCompactCurrency(card.value || 0)}
-                      </p>
-                    </div>
-                  </div>
-                  <p className="text-[11px] text-muted-foreground mt-4">{card.subtitle}</p>
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
+      {/* Waterfall Chart */}
+      <div className="p-5 rounded-sm bg-card border border-border" style={{ borderLeft: '3px solid hsl(var(--gold))' }}>
+        <WaterfallChart
+          revenue={inputs.revenue}
+          offTheTop={firstMoneyOut}
+          debtService={debtService}
+          equityPremium={equityPrem}
+          profitPool={result.profitPool}
+        />
       </div>
 
       {/* Warning Banner */}
       {isUnderperforming && (
-        <div className="p-4 rounded-sm flex items-center gap-3 bg-destructive/10 border border-destructive/30 min-h-[56px]">
-          <AlertTriangle size={16} className="text-destructive flex-shrink-0" />
-          <div className="flex-1">
-            <p className="text-sm text-foreground font-medium">
-              ROI of {formatMultiple(result.multiple)} is below 1.2x threshold
+        <div className="p-4 rounded-sm flex items-start gap-3 bg-amber-500/10 border border-amber-500/30">
+          <AlertTriangle size={18} className="text-amber-400 flex-shrink-0 mt-0.5" />
+          <div>
+            <p className="text-sm text-foreground font-medium mb-1">
+              Investor multiple is {formatMultiple(result.multiple)}
+            </p>
+            <p className="text-xs text-muted-foreground">
+              Most institutional investors expect 1.2x minimum. Consider adjusting your capital structure.
             </p>
           </div>
-          <button 
-            onClick={() => setShowRestrictedModal(true)}
-            className="text-xs text-gold uppercase tracking-wider whitespace-nowrap font-semibold hover:underline min-h-[44px] px-2"
-          >
-            Fix →
-          </button>
         </div>
       )}
 
-      {/* Action Button */}
-      <Button
-        onClick={() => setShowRestrictedModal(true)}
-        className="w-full py-5 rounded-sm font-bebas tracking-wider min-h-[56px] touch-press bg-gold text-primary-foreground hover:bg-gold-highlight"
-      >
-        <Download className="w-5 h-5 mr-2" />
-        DOWNLOAD INVESTOR DECK
-      </Button>
+      {/* Blurred Deck Preview - The Trap */}
+      <div className="pt-2">
+        <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground font-semibold mb-3 text-center">
+          Your personalized deliverable
+        </p>
+        <DeckPreview
+          onUnlock={() => setShowRestrictedModal(true)}
+          producerShare={result.producer}
+          investorReturn={result.investor}
+          multiple={result.multiple}
+        />
+      </div>
 
-      {/* Info Modal - Comprehensive explanation for new users */}
+      {/* Info Modal */}
       <Dialog open={showInfoModal} onOpenChange={setShowInfoModal}>
         <DialogContent className="bg-card border-border text-foreground max-w-md">
           <DialogHeader>
@@ -340,36 +199,44 @@ const ResultsDashboard = forwardRef<HTMLDivElement, ResultsDashboardProps>(({ re
           </DialogHeader>
           <div className="space-y-5 mt-4">
             <DialogDescription className="text-muted-foreground text-sm leading-relaxed">
-              Revenue flows through each tier in order. Only after one tier is fully paid does money flow to the next.
+              Film revenue flows through each tier in strict order. Only after one tier is fully paid does money flow to the next.
             </DialogDescription>
 
             <div className="space-y-3">
               <div className="flex gap-3 items-start">
-                <span className="w-5 h-5 rounded-full bg-muted-foreground/20 flex items-center justify-center flex-shrink-0 text-[10px] font-mono text-muted-foreground">1</span>
+                <div className="w-6 h-6 rounded-full bg-zinc-700 flex items-center justify-center flex-shrink-0">
+                  <span className="text-[10px] font-mono text-zinc-300">1</span>
+                </div>
                 <div>
                   <p className="text-foreground font-medium text-sm">First Money Out</p>
-                  <p className="text-muted-foreground text-xs">CAM fees, sales agent commission, guild residuals, marketing</p>
+                  <p className="text-muted-foreground text-xs">CAM (1%), sales agent fee, guild residuals, marketing costs</p>
                 </div>
               </div>
               <div className="flex gap-3 items-start">
-                <span className="w-5 h-5 rounded-full bg-muted-foreground/20 flex items-center justify-center flex-shrink-0 text-[10px] font-mono text-muted-foreground">2</span>
+                <div className="w-6 h-6 rounded-full bg-red-900/70 flex items-center justify-center flex-shrink-0">
+                  <span className="text-[10px] font-mono text-red-300">2</span>
+                </div>
                 <div>
                   <p className="text-foreground font-medium text-sm">Debt Service</p>
-                  <p className="text-muted-foreground text-xs">Senior and mezzanine lenders repaid with interest</p>
+                  <p className="text-muted-foreground text-xs">Senior lenders and gap/mezz financing repaid with interest</p>
                 </div>
               </div>
               <div className="flex gap-3 items-start">
-                <span className="w-5 h-5 rounded-full bg-muted-foreground/20 flex items-center justify-center flex-shrink-0 text-[10px] font-mono text-muted-foreground">3</span>
+                <div className="w-6 h-6 rounded-full bg-blue-900/70 flex items-center justify-center flex-shrink-0">
+                  <span className="text-[10px] font-mono text-blue-300">3</span>
+                </div>
                 <div>
                   <p className="text-foreground font-medium text-sm">Equity + Premium</p>
-                  <p className="text-muted-foreground text-xs">Investors receive principal plus preferred return</p>
+                  <p className="text-muted-foreground text-xs">Investors receive their principal plus preferred return</p>
                 </div>
               </div>
               <div className="flex gap-3 items-start">
-                <span className="w-5 h-5 rounded-full bg-gold/30 flex items-center justify-center flex-shrink-0 text-[10px] font-mono text-gold">4</span>
+                <div className="w-6 h-6 rounded-full bg-emerald-600 flex items-center justify-center flex-shrink-0">
+                  <span className="text-[10px] font-mono text-emerald-100">4</span>
+                </div>
                 <div>
-                  <p className="text-gold font-medium text-sm">Profit Pool</p>
-                  <p className="text-muted-foreground text-xs">Split 50/50 between producers and investors</p>
+                  <p className="text-emerald-400 font-medium text-sm">Profit Pool</p>
+                  <p className="text-muted-foreground text-xs">Whatever remains is split 50/50 between producers and investors</p>
                 </div>
               </div>
             </div>
@@ -377,9 +244,9 @@ const ResultsDashboard = forwardRef<HTMLDivElement, ResultsDashboardProps>(({ re
         </DialogContent>
       </Dialog>
 
-      <RestrictedAccessModal 
-        isOpen={showRestrictedModal} 
-        onClose={() => setShowRestrictedModal(false)} 
+      <RestrictedAccessModal
+        isOpen={showRestrictedModal}
+        onClose={() => setShowRestrictedModal(false)}
       />
     </div>
   );

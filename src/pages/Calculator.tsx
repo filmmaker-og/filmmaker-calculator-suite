@@ -256,10 +256,11 @@ const Calculator = () => {
           />
         )}
         {currentStep === 3 && (
-          <WizardStep3 
+          <WizardStep3
             guilds={guilds}
             salesFee={inputs.salesFee}
             salesExp={inputs.salesExp}
+            revenue={inputs.revenue}
             onToggleGuild={toggleGuild}
             onUpdateSalesFee={(val) => updateInput("salesFee", val)}
             onUpdateSalesExp={(val) => updateInput("salesExp", val)}
