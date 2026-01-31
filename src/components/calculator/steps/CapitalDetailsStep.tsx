@@ -74,11 +74,13 @@ const CapitalDetailsStep = ({ inputs, selections, onUpdateInput }: CapitalDetail
     <div className="step-enter">
       {/* Step Header */}
       <div className="text-center mb-8">
-        <h2 className="font-bebas text-2xl tracking-[0.15em] text-gold mb-2">
-          CAPITAL DETAILS
+        <h2 className="font-bebas text-2xl tracking-[0.1em] text-foreground mb-2">
+          Everyone who put money in
+          <br />
+          <span className="text-gold">gets paid back first</span>
         </h2>
-        <p className="text-white/50 text-sm">
-          Enter the amounts for each financing source
+        <p className="text-muted-foreground text-sm">
+          With interest. Before you.
         </p>
       </div>
 

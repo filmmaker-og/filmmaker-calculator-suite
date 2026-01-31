@@ -7,19 +7,39 @@ import { ArrowLeft, RotateCcw, ChevronRight, ChevronLeft } from "lucide-react";
 import { User } from "@supabase/supabase-js";
 import { calculateWaterfall, WaterfallInputs, WaterfallResult, GuildState } from "@/lib/waterfall";
 
-// Step Components
-import DealStep from "@/components/calculator/steps/DealStep";
+// Step Components - Anxiety First Flow
+import BudgetStep from "@/components/calculator/steps/BudgetStep";
+import SalesAgentStep from "@/components/calculator/steps/SalesAgentStep";
+import CamFeeStep from "@/components/calculator/steps/CamFeeStep";
+import MarketingStep from "@/components/calculator/steps/MarketingStep";
+import GuildsStep from "@/components/calculator/steps/GuildsStep";
+import OffTopTotalStep from "@/components/calculator/steps/OffTopTotalStep";
 import CapitalSelectStep, { CapitalSelections } from "@/components/calculator/steps/CapitalSelectStep";
 import CapitalDetailsStep from "@/components/calculator/steps/CapitalDetailsStep";
-import DeductionsStep from "@/components/calculator/steps/DeductionsStep";
+import BreakevenStep from "@/components/calculator/steps/BreakevenStep";
+import AcquisitionStep from "@/components/calculator/steps/AcquisitionStep";
 import RevealStep from "@/components/calculator/steps/RevealStep";
 import WaterfallStep from "@/components/calculator/steps/WaterfallStep";
 import StepIndicator from "@/components/calculator/StepIndicator";
 
 const STORAGE_KEY = "filmmaker_og_inputs";
-const TOTAL_STEPS = 6;
+const TOTAL_STEPS = 12;
 
-const STEP_LABELS = ['DEAL', 'CAPITAL', 'DETAILS', 'COSTS', 'REVEAL', 'WATERFALL'];
+// Step labels for the indicator - grouped into phases
+const STEP_LABELS = [
+  'BUDGET',      // 1
+  'SALES',       // 2
+  'CAM',         // 3
+  'MARKETING',   // 4
+  'GUILDS',      // 5
+  'OFF-TOP',     // 6
+  'FUNDING',     // 7
+  'DETAILS',     // 8
+  'BREAKEVEN',   // 9
+  'OFFER',       // 10
+  'REVEAL',      // 11
+  'WATERFALL',   // 12
+];
 
 const defaultInputs: WaterfallInputs = {
   revenue: 0,
@@ -176,30 +196,71 @@ const Calculator = () => {
   // Can proceed to next step?
   const canProceed = () => {
     switch (currentStep) {
-      case 1: // Deal
-        return inputs.budget > 0 && inputs.revenue > 0;
-      case 2: // Capital Select
+      case 1: // Budget
+        return inputs.budget > 0;
+      case 2: // Sales Agent
+        return true; // 0% is valid
+      case 3: // CAM Fee
+        return true; // Fixed, always proceed
+      case 4: // Marketing
+        return true; // 0 is valid
+      case 5: // Guilds
+        return true; // No selection is valid
+      case 6: // Off-Top Total
+        return true; // Display only
+      case 7: // Capital Stack Selection
         return Object.values(capitalSelections).some(Boolean);
-      case 3: // Capital Details
-        return true; // Allow proceeding with any values
-      case 4: // Deductions
-        return true;
-      case 5: // Reveal
+      case 8: // Capital Details
+        return true; // Any values work
+      case 9: // Breakeven
+        return true; // Display only
+      case 10: // Acquisition Price
+        return inputs.revenue > 0;
+      case 11: // Reveal
         return true;
       default:
         return true;
     }
   };
 
+  // Get step phase/title
   const getStepTitle = () => {
     switch (currentStep) {
-      case 1: return 'THE DEAL';
-      case 2: return 'CAPITAL STACK';
-      case 3: return 'CAPITAL DETAILS';
-      case 4: return 'DEDUCTIONS';
-      case 5: return 'YOUR PROFIT';
-      case 6: return 'THE WATERFALL';
+      case 1: return 'THE BUDGET';
+      case 2: return 'SALES AGENT';
+      case 3: return 'CAM FEE';
+      case 4: return 'MARKETING';
+      case 5: return 'GUILDS';
+      case 6: return 'OFF-THE-TOP';
+      case 7: return 'CAPITAL STACK';
+      case 8: return 'CAPITAL DETAILS';
+      case 9: return 'THE RECKONING';
+      case 10: return 'THE OFFER';
+      case 11: return 'YOUR PROFIT';
+      case 12: return 'THE WATERFALL';
       default: return 'WATERFALL TERMINAL';
+    }
+  };
+
+  // Get phase label for header
+  const getPhaseLabel = () => {
+    if (currentStep <= 6) return 'PHASE 1: THE AWAKENING';
+    if (currentStep <= 9) return 'PHASE 2: THE INVESTORS';
+    if (currentStep <= 10) return 'PHASE 3: THE OFFER';
+    return 'PHASE 4: THE REVEAL';
+  };
+
+  // Get CTA text
+  const getCtaText = () => {
+    switch (currentStep) {
+      case 1: return 'WHO GETS PAID FIRST?';
+      case 5: return 'ADD IT UP';
+      case 6: return 'CONTINUE';
+      case 8: return 'THE RECKONING';
+      case 9: return 'NOW THE DEAL';
+      case 10: return 'SEE RESULTS';
+      case 11: return 'SEE BREAKDOWN';
+      default: return 'CONTINUE';
     }
   };
 
@@ -248,14 +309,17 @@ const Calculator = () => {
       {/* Spacer for fixed header */}
       <div className="h-14" />
 
-      {/* Step Indicator */}
-      <div className="border-b border-border bg-card/50">
-        <StepIndicator
-          currentStep={currentStep}
-          totalSteps={TOTAL_STEPS}
-          stepLabels={STEP_LABELS}
-          onStepClick={goToStep}
-        />
+      {/* Step Counter (simplified - showing step X of 12) */}
+      <div className="border-b border-border bg-card/50 py-2">
+        <div className="flex items-center justify-center gap-2">
+          <span className="text-[10px] uppercase tracking-widest text-muted-foreground">
+            {getPhaseLabel()}
+          </span>
+          <span className="text-muted-foreground/50">•</span>
+          <span className="text-[10px] font-mono text-muted-foreground">
+            {currentStep}/{TOTAL_STEPS}
+          </span>
+        </div>
       </div>
 
       {/* Main Content */}
@@ -264,43 +328,40 @@ const Calculator = () => {
         className="flex-1 px-5 py-6 pb-32 overflow-y-auto"
       >
         {currentStep === 1 && (
-          <DealStep
-            inputs={inputs}
-            onUpdateInput={updateInput}
-          />
+          <BudgetStep inputs={inputs} onUpdateInput={updateInput} />
         )}
         {currentStep === 2 && (
-          <CapitalSelectStep
-            selections={capitalSelections}
-            onToggle={toggleCapitalSelection}
-          />
+          <SalesAgentStep inputs={inputs} onUpdateInput={updateInput} />
         )}
         {currentStep === 3 && (
-          <CapitalDetailsStep
-            inputs={inputs}
-            selections={capitalSelections}
-            onUpdateInput={updateInput}
-          />
+          <CamFeeStep inputs={inputs} />
         )}
         {currentStep === 4 && (
-          <DeductionsStep
-            inputs={inputs}
-            guilds={guilds}
-            onUpdateInput={updateInput}
-            onToggleGuild={toggleGuild}
-          />
+          <MarketingStep inputs={inputs} onUpdateInput={updateInput} />
         )}
-        {currentStep === 5 && result && (
-          <RevealStep
-            result={result}
-            equity={inputs.equity}
-          />
+        {currentStep === 5 && (
+          <GuildsStep inputs={inputs} guilds={guilds} onToggleGuild={toggleGuild} />
         )}
-        {currentStep === 6 && result && (
-          <WaterfallStep
-            result={result}
-            inputs={inputs}
-          />
+        {currentStep === 6 && (
+          <OffTopTotalStep inputs={inputs} guilds={guilds} />
+        )}
+        {currentStep === 7 && (
+          <CapitalSelectStep selections={capitalSelections} onToggle={toggleCapitalSelection} />
+        )}
+        {currentStep === 8 && (
+          <CapitalDetailsStep inputs={inputs} selections={capitalSelections} onUpdateInput={updateInput} />
+        )}
+        {currentStep === 9 && (
+          <BreakevenStep inputs={inputs} guilds={guilds} selections={capitalSelections} />
+        )}
+        {currentStep === 10 && (
+          <AcquisitionStep inputs={inputs} guilds={guilds} selections={capitalSelections} onUpdateInput={updateInput} />
+        )}
+        {currentStep === 11 && result && (
+          <RevealStep result={result} equity={inputs.equity} />
+        )}
+        {currentStep === 12 && result && (
+          <WaterfallStep result={result} inputs={inputs} />
         )}
       </main>
 
@@ -332,7 +393,7 @@ const Calculator = () => {
               }}
             >
               <span className="flex items-center justify-center gap-3">
-                {currentStep === 5 ? 'SEE BREAKDOWN' : 'CONTINUE'}
+                {getCtaText()}
                 <ChevronRight className="w-5 h-5" />
               </span>
             </Button>
