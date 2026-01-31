@@ -5,9 +5,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { useHaptics } from "@/hooks/use-haptics";
-import { ArrowLeft, ArrowRight, Loader2, Mail, CheckCircle, Lock, Users, Shield } from "lucide-react";
+import { ArrowRight, Loader2, Mail, CheckCircle, Lock, Shield } from "lucide-react";
 import { z } from "zod";
 import filmmakerLogo from "@/assets/filmmaker-logo.jpg";
+import Header from "@/components/Header";
 
 const emailSchema = z.string().email("Please enter a valid email address");
 
@@ -78,93 +79,73 @@ const Auth = () => {
   return (
     <div className="min-h-screen min-h-[100dvh] bg-black flex flex-col">
 
-      {/* Header */}
-      <header className="flex-shrink-0 flex items-center justify-between px-4 py-4 border-b border-border">
-        <button
-          onClick={() => navigate("/")}
-          className="w-12 h-12 flex items-center justify-center rounded-full hover:bg-white/5 transition-colors -ml-2"
-          aria-label="Go back"
-        >
-          <ArrowLeft className="w-5 h-5 text-white/60" />
-        </button>
-
-        <span className="font-bebas text-base tracking-widest text-gold">
-          PRODUCER ACCESS
-        </span>
-
-        <div className="w-12" />
-      </header>
+      {/* Header with hamburger menu */}
+      <Header title="SIGN IN" />
 
       {/* Main Content */}
-      <main className="flex-1 flex flex-col px-6 pt-8 pb-6">
+      <main className="flex-1 flex flex-col px-6 pt-6 pb-6">
 
         {step === 'email' ? (
           <div className="flex-1 flex flex-col">
             {/* Logo + Copy */}
-            <div className="text-center mb-10">
+            <div className="text-center mb-8">
               <div className="relative inline-block mb-6">
                 <div
                   className="absolute"
                   style={{
-                    width: '120px',
-                    height: '120px',
+                    width: '160px',
+                    height: '160px',
                     left: '50%',
                     top: '50%',
                     transform: 'translate(-50%, -50%)',
-                    background: 'radial-gradient(circle, rgba(212, 175, 55, 0.2) 0%, transparent 70%)',
-                    filter: 'blur(20px)',
+                    background: 'radial-gradient(circle, rgba(212, 175, 55, 0.25) 0%, transparent 70%)',
+                    filter: 'blur(25px)',
                   }}
                 />
                 <img
                   src={filmmakerLogo}
                   alt="Filmmaker.OG"
-                  className="w-20 h-20 object-contain relative z-10"
+                  className="w-24 h-24 object-contain relative z-10"
                   style={{
-                    filter: 'drop-shadow(0 0 25px rgba(212, 175, 55, 0.4))',
+                    filter: 'drop-shadow(0 0 30px rgba(212, 175, 55, 0.5))',
                   }}
                 />
               </div>
 
               {/* Gold divider */}
-              <div className="w-12 h-[2px] bg-gold mx-auto mb-6" style={{ boxShadow: '0 0 10px rgba(212, 175, 55, 0.5)' }} />
+              <div className="w-16 h-[2px] bg-gold mx-auto mb-6" style={{ boxShadow: '0 0 15px rgba(212, 175, 55, 0.6)' }} />
 
-              <h1 className="font-bebas text-2xl tracking-[0.1em] text-white mb-3">
-                UNLOCK YOUR RESULTS
+              <h1 className="font-bebas text-3xl tracking-[0.1em] text-white mb-4">
+                SAVE YOUR RESULTS
               </h1>
-              <p className="text-white/50 text-sm leading-relaxed max-w-xs mx-auto">
-                Before you sign that term sheet, see exactly how much
-                <span className="text-gold font-semibold"> you'll actually take home</span>.
+              <p className="text-white/60 text-base leading-relaxed max-w-xs mx-auto">
+                Enter your email to save calculations and
+                <span className="text-gold font-semibold"> get your investor deck</span>.
               </p>
             </div>
 
-            {/* Trust Badges */}
-            <div className="flex items-center justify-center gap-6 mb-8">
+            {/* Trust Badges - NO FAKE USER COUNT */}
+            <div className="flex items-center justify-center gap-8 mb-8">
               <div className="flex flex-col items-center gap-2">
-                <div className="w-10 h-10 border border-border flex items-center justify-center">
-                  <Lock className="w-4 h-4 text-gold" />
+                <div className="w-12 h-12 border border-gold/30 flex items-center justify-center bg-gold/5">
+                  <Lock className="w-5 h-5 text-gold" />
                 </div>
-                <span className="text-[9px] text-white/40 uppercase tracking-wider">Encrypted</span>
+                <span className="text-[10px] text-white/50 uppercase tracking-wider">Encrypted</span>
               </div>
               <div className="flex flex-col items-center gap-2">
-                <div className="w-10 h-10 border border-border flex items-center justify-center">
-                  <Users className="w-4 h-4 text-gold" />
+                <div className="w-12 h-12 border border-gold/30 flex items-center justify-center bg-gold/5">
+                  <Shield className="w-5 h-5 text-gold" />
                 </div>
-                <span className="text-[9px] text-white/40 uppercase tracking-wider">1,200+ Users</span>
-              </div>
-              <div className="flex flex-col items-center gap-2">
-                <div className="w-10 h-10 border border-border flex items-center justify-center">
-                  <Shield className="w-4 h-4 text-gold" />
-                </div>
-                <span className="text-[9px] text-white/40 uppercase tracking-wider">Private</span>
+                <span className="text-[10px] text-white/50 uppercase tracking-wider">Private</span>
               </div>
             </div>
 
             {/* Form */}
             <form onSubmit={handleSubmit} className="space-y-5">
-              <div className="space-y-2">
+              <div className="space-y-3">
                 <label
                   htmlFor="email"
-                  className="block text-[11px] tracking-[0.2em] uppercase text-white/50 font-medium"
+                  className="block text-xs tracking-[0.2em] uppercase text-white/60 font-medium"
                 >
                   Email Address
                 </label>
@@ -179,7 +160,7 @@ const Auth = () => {
                   placeholder="you@company.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="h-14 text-lg rounded-none bg-card border-2 border-border text-white placeholder:text-white/25 font-mono pl-4 pr-4 focus:border-gold focus:ring-0 input-focus-glow transition-colors text-left"
+                  className="h-16 text-lg rounded-none bg-zinc-900 border-2 border-zinc-700 text-white placeholder:text-white/30 font-mono pl-4 pr-4 focus:border-gold focus:ring-0 input-focus-glow transition-colors"
                   required
                 />
               </div>
@@ -187,17 +168,17 @@ const Auth = () => {
               <Button
                 type="submit"
                 disabled={loading || !email}
-                className="w-full h-14 rounded-none font-black text-base tracking-[0.1em] bg-gold text-black hover:bg-gold-highlight disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200 auth-cta-glow"
+                className="w-full h-16 rounded-none font-black text-lg tracking-[0.1em] bg-gold text-black hover:bg-gold-highlight disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200"
                 style={{
-                  boxShadow: email ? '0 0 30px rgba(212, 175, 55, 0.3)' : 'none',
+                  boxShadow: email ? '0 0 40px rgba(212, 175, 55, 0.4)' : 'none',
                 }}
               >
                 {loading ? (
-                  <Loader2 className="w-5 h-5 animate-spin" />
+                  <Loader2 className="w-6 h-6 animate-spin" />
                 ) : (
-                  <span className="flex items-center justify-center gap-2">
+                  <span className="flex items-center justify-center gap-3">
                     GET ACCESS
-                    <ArrowRight className="w-4 h-4" />
+                    <ArrowRight className="w-5 h-5" />
                   </span>
                 )}
               </Button>
@@ -208,12 +189,12 @@ const Auth = () => {
               <Button
                 onClick={() => navigate("/calculator?skip=true")}
                 variant="outline"
-                className="w-full h-12 rounded-none border-border text-white/60 hover:text-white hover:border-gold/50 hover:bg-transparent text-sm font-semibold tracking-wider"
+                className="w-full h-14 rounded-none border-zinc-700 text-white/60 hover:text-white hover:border-gold/50 hover:bg-transparent text-base font-semibold tracking-wider"
               >
-                TRY DEMO WITHOUT SAVING
+                TRY WITHOUT SAVING
               </Button>
-              <p className="text-white/30 text-[10px] text-center mt-3">
-                Demo mode — your calculations won't be saved
+              <p className="text-white/30 text-xs text-center mt-4">
+                Your calculations won't be saved
               </p>
             </div>
           </div>
@@ -224,45 +205,45 @@ const Auth = () => {
               <div
                 className="absolute"
                 style={{
-                  width: '120px',
-                  height: '120px',
+                  width: '140px',
+                  height: '140px',
                   left: '50%',
                   top: '50%',
                   transform: 'translate(-50%, -50%)',
-                  background: 'radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, transparent 70%)',
-                  filter: 'blur(20px)',
+                  background: 'radial-gradient(circle, rgba(212, 175, 55, 0.2) 0%, transparent 70%)',
+                  filter: 'blur(25px)',
                 }}
               />
-              <div className="w-20 h-20 border-2 border-gold flex items-center justify-center relative z-10">
-                <Mail className="w-8 h-8 text-gold" />
+              <div className="w-24 h-24 border-2 border-gold flex items-center justify-center relative z-10">
+                <Mail className="w-10 h-10 text-gold" />
               </div>
-              <div className="absolute -bottom-1 -right-1 w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center z-20">
-                <CheckCircle className="w-5 h-5 text-white" />
+              <div className="absolute -bottom-2 -right-2 w-10 h-10 bg-emerald-500 rounded-full flex items-center justify-center z-20">
+                <CheckCircle className="w-6 h-6 text-white" />
               </div>
             </div>
 
-            <h2 className="font-bebas text-2xl tracking-[0.1em] text-white mb-3">
+            <h2 className="font-bebas text-3xl tracking-[0.1em] text-white mb-4">
               CHECK YOUR EMAIL
             </h2>
 
-            <p className="text-white/50 text-sm leading-relaxed mb-2">
+            <p className="text-white/60 text-base leading-relaxed mb-2">
               We sent a secure link to
             </p>
-            <p className="font-mono text-gold text-base mb-8">
+            <p className="font-mono text-gold text-lg mb-10">
               {email}
             </p>
 
-            <div className="space-y-4 text-sm text-white/50">
+            <div className="space-y-4 text-base text-white/50">
               <p>Click the link in your email to continue.</p>
-              <p className="text-white/30 text-xs">
+              <p className="text-white/30 text-sm">
                 Can't find it? Check your spam folder.
               </p>
             </div>
 
-            <div className="mt-10 space-y-4">
+            <div className="mt-12 space-y-4">
               <button
                 onClick={() => setStep('email')}
-                className="text-gold hover:text-gold-highlight text-sm transition-colors"
+                className="text-gold hover:text-gold-highlight text-base font-semibold transition-colors"
               >
                 Use a different email
               </button>
@@ -270,7 +251,7 @@ const Auth = () => {
               <div className="pt-4">
                 <button
                   onClick={() => navigate("/calculator?skip=true")}
-                  className="text-white/30 hover:text-white/50 text-xs transition-colors"
+                  className="text-white/40 hover:text-white/60 text-sm transition-colors"
                 >
                   Continue without saving →
                 </button>
