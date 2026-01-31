@@ -226,34 +226,34 @@ const ResultsDashboard = forwardRef<HTMLDivElement, ResultsDashboardProps>(({ re
                     <h3 className="font-bebas text-sm tracking-wider text-foreground">Priority Flow</h3>
                     <button 
                       onClick={() => setShowInfoModal(true)} 
-                      className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-gold/10 transition-colors -mr-2"
+                      className="w-11 h-11 flex items-center justify-center rounded-full hover:bg-gold/10 transition-colors -mr-2"
                     >
-                      <Info size={14} className="text-gold" />
+                      <Info size={16} className="text-gold" />
                     </button>
                   </div>
-                  <div className="space-y-2.5">
-                    <div className="flex items-center justify-between text-xs min-h-[28px]">
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between text-sm min-h-[36px]">
                       <span className="text-muted-foreground">1. First Money</span>
                       <div className="flex items-center gap-2">
                         <span className="font-mono text-foreground">{formatCompactCurrency(firstMoneyPaid)}</span>
                         <StatusBadge status={firstMoneyStatus} />
                       </div>
                     </div>
-                    <div className="flex items-center justify-between text-xs min-h-[28px]">
+                    <div className="flex items-center justify-between text-sm min-h-[36px]">
                       <span className="text-muted-foreground">2. Debt Service</span>
                       <div className="flex items-center gap-2">
                         <span className="font-mono text-foreground">{formatCompactCurrency(debtPaid)}</span>
                         <StatusBadge status={debtStatus} />
                       </div>
                     </div>
-                    <div className="flex items-center justify-between text-xs min-h-[28px]">
+                    <div className="flex items-center justify-between text-sm min-h-[36px]">
                       <span className="text-muted-foreground">3. Equity + Prem</span>
                       <div className="flex items-center gap-2">
                         <span className="font-mono text-foreground">{formatCompactCurrency(equityPaid)}</span>
                         <StatusBadge status={equityStatus} />
                       </div>
                     </div>
-                    <div className="flex items-center justify-between text-xs pt-2 border-t border-border min-h-[28px]">
+                    <div className="flex items-center justify-between text-sm pt-3 border-t border-border min-h-[36px]">
                       <span className="text-gold font-semibold">4. Profit Pool</span>
                       <div className="flex items-center gap-2">
                         <span className="font-mono text-gold font-semibold">{formatCompactCurrency(remaining)}</span>
