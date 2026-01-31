@@ -43,38 +43,47 @@ export interface WaterfallResult {
 
 export function calculateWaterfall(inputs: WaterfallInputs, guilds: GuildState): WaterfallResult {
   // Constants
-  const DEBT_MULT = 1.10;
   const CAM_PCT = 0.01;
   const SAG_PCT = 0.045;
   const WGA_PCT = 0.012;
   const DGA_PCT = 0.012;
 
-  // Extract inputs
-  const { revenue, debt, equity, premium, salesFee, salesExp } = inputs;
+  // Extract inputs with safety guards (ensure non-negative)
+  const revenue = Math.max(0, inputs.revenue || 0);
+  const debt = Math.max(0, inputs.debt || 0);
+  const seniorDebtRate = Math.max(0, Math.min(100, inputs.seniorDebtRate || 0));
+  const mezzanineDebt = Math.max(0, inputs.mezzanineDebt || 0);
+  const mezzanineRate = Math.max(0, Math.min(100, inputs.mezzanineRate || 0));
+  const equity = Math.max(0, inputs.equity || 0);
+  const premium = Math.max(0, Math.min(100, inputs.premium || 0));
+  const salesFee = Math.max(0, Math.min(100, inputs.salesFee || 0));
+  const salesExp = Math.max(0, inputs.salesExp || 0);
 
   // 1. Off-the-Top
   const salesFeeAmount = revenue * (salesFee / 100);
   const cam = revenue * CAM_PCT;
   const marketing = salesExp;
-  
+
   // 2. Guilds
-  const guildPct = (guilds.sag ? SAG_PCT : 0) + 
-                   (guilds.wga ? WGA_PCT : 0) + 
+  const guildPct = (guilds.sag ? SAG_PCT : 0) +
+                   (guilds.wga ? WGA_PCT : 0) +
                    (guilds.dga ? DGA_PCT : 0);
   const guildsCost = revenue * guildPct;
 
-  // 3. Hurdles
+  // 3. Hurdles - Now using actual user-input rates
   const offTop = cam + guildsCost + salesFeeAmount + marketing;
-  const debtHurdle = debt * DEBT_MULT;
+  const seniorDebtHurdle = debt * (1 + (seniorDebtRate / 100));
+  const mezzDebtHurdle = mezzanineDebt * (1 + (mezzanineRate / 100));
+  const totalDebtHurdle = seniorDebtHurdle + mezzDebtHurdle;
   const equityHurdle = equity * (1 + (premium / 100));
-  const totalHurdle = offTop + debtHurdle + equityHurdle;
+  const totalHurdle = offTop + totalDebtHurdle + equityHurdle;
 
   // 4. Distribution
   const profitPool = Math.max(0, revenue - totalHurdle);
   const recouped = Math.min(revenue, totalHurdle);
   const recoupPct = totalHurdle > 0 ? Math.min(100, (revenue / totalHurdle) * 100) : 0;
-  
-  const investorRecoup = Math.min(equityHurdle, Math.max(0, revenue - offTop - debtHurdle));
+
+  const investorRecoup = Math.min(equityHurdle, Math.max(0, revenue - offTop - totalDebtHurdle));
   const investorTotal = investorRecoup + (profitPool * 0.5);
   const producerShare = profitPool * 0.5;
   const multiple = equity > 0 ? investorTotal / equity : 0;
@@ -85,7 +94,8 @@ export function calculateWaterfall(inputs: WaterfallInputs, guilds: GuildState):
     { name: "Marketing / Delivery", detail: "FIXED ASSUMPTION", amount: marketing },
     { name: "Sales Agent", detail: `${salesFee}% COMMISSION`, amount: salesFeeAmount },
     { name: "Unions", detail: "GUILD RESIDUALS / P&H", amount: guildsCost },
-    { name: "Senior Debt", detail: "110% PAYBACK MULTIPLE", amount: debtHurdle },
+    { name: "Senior Debt", detail: `${seniorDebtRate}% INTEREST`, amount: seniorDebtHurdle },
+    ...(mezzanineDebt > 0 ? [{ name: "Gap/Mezz Debt", detail: `${mezzanineRate}% INTEREST`, amount: mezzDebtHurdle }] : []),
     { name: "Equity", detail: `PRINCIPAL + ${premium}% PREF`, amount: equityHurdle }
   ];
 
@@ -106,6 +116,8 @@ export function calculateWaterfall(inputs: WaterfallInputs, guilds: GuildState):
 }
 
 export function formatCurrency(value: number): string {
+  // Guard against NaN/Infinity
+  if (!Number.isFinite(value)) return '$0';
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
@@ -115,6 +127,9 @@ export function formatCurrency(value: number): string {
 }
 
 export function formatCompactCurrency(value: number): string {
+  // Guard against NaN/Infinity
+  if (!Number.isFinite(value)) return '$0';
+
   if (Math.abs(value) >= 1000000) {
     return `$${(value / 1000000).toFixed(1)}M`;
   }
@@ -125,9 +140,13 @@ export function formatCompactCurrency(value: number): string {
 }
 
 export function formatPercent(value: number): string {
+  // Guard against NaN/Infinity
+  if (!Number.isFinite(value)) return '0.0%';
   return `${value.toFixed(1)}%`;
 }
 
 export function formatMultiple(value: number): string {
+  // Guard against NaN/Infinity
+  if (!Number.isFinite(value)) return '0.00x';
   return `${value.toFixed(2)}x`;
 }
