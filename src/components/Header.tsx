@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Menu, X, Home, Calculator, Mail, Info } from "lucide-react";
-import filmmakerLogo from "@/assets/filmmaker-logo.jpg";
 
 interface HeaderProps {
   title?: string;
@@ -33,20 +32,12 @@ const Header = ({ title, showBack = false, onBack }: HeaderProps) => {
         style={{ backgroundColor: "#0A0A0A" }}
       >
         <div className="flex items-center justify-between px-4 h-14">
-          {/* Left: Logo (clickable to home) */}
+          {/* Left: Logo Text (clickable to home) */}
           <button
             onClick={handleLogoClick}
             className="flex items-center gap-2.5 hover:opacity-80 transition-opacity"
           >
-            <img
-              src={filmmakerLogo}
-              alt="F"
-              className="w-8 h-8 object-contain"
-              style={{
-                filter: "drop-shadow(0 0 8px rgba(212, 175, 55, 0.3))",
-              }}
-            />
-            <span className="font-bebas text-base tracking-[0.12em] text-white/80 hidden sm:inline">
+            <span className="font-bebas text-lg tracking-[0.12em] text-white/90">
               FILMMAKER.OG
             </span>
           </button>
