@@ -99,26 +99,23 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
-      {/* Header - Context strip pattern */}
-      <header 
-        className="fixed top-0 left-0 right-0 h-14 z-50 flex items-center px-6 safe-top bg-card"
-        style={{ borderBottom: '1px solid hsl(var(--gold))', borderLeft: '3px solid hsl(var(--gold))' }}
-      >
+      {/* Header - Clean, simple (NO context strip) */}
+      <header className="fixed top-0 left-0 right-0 h-14 z-50 flex items-center px-6 safe-top bg-background border-b border-border">
         <button
           onClick={() => { haptics.light(); navigate("/"); }}
           className="w-12 h-12 flex items-center justify-center hover:opacity-80 transition-all duration-100 touch-press -ml-1"
         >
-          <Home className="w-5 h-5 text-gold" />
+          <Home className="w-5 h-5 text-muted-foreground" />
         </button>
         
-        <span className="flex-1 text-center font-bebas text-lg tracking-widest text-gold">
+        <span className="flex-1 text-center font-bebas text-lg tracking-wide text-foreground">
           FILMMAKER.OG
         </span>
         
         <div className="flex items-center">
           <Link 
             to="/store" 
-            className="hidden sm:block text-xs font-mono tracking-widest mr-4 hover:opacity-80 transition-opacity text-gold"
+            className="hidden sm:block text-xs font-mono tracking-widest mr-4 hover:opacity-80 transition-opacity text-muted-foreground"
           >
             SERVICES
           </Link>
@@ -126,45 +123,45 @@ const Auth = () => {
         </div>
       </header>
 
-      {/* Main Content - Luxury entry experience */}
+      {/* Main Content */}
       <div className="flex-1 flex flex-col items-center justify-center px-6 py-12 pt-24">
         <div className="w-full max-w-sm">
           
-          {/* Brand Seal - Larger, professional */}
+          {/* Brand Icon */}
           <div className="text-center mb-6">
             <img 
               src={brandIconF} 
               alt="Brand Seal" 
-              className="w-24 h-24 mx-auto object-contain"
+              className="w-20 h-20 mx-auto object-contain"
             />
           </div>
 
-          {/* Gold Divider - Echoes homepage */}
+          {/* Gold Divider */}
           <div className="flex justify-center mb-6">
-            <div className="w-10 h-[2px] bg-gold opacity-60" />
+            <div className="w-12 h-[1px] bg-gold opacity-60" />
           </div>
 
-          {/* Title - Authority-focused, larger */}
-          <h1 className="font-bebas text-3xl text-center tracking-[0.2em] text-foreground mb-8">
+          {/* Title */}
+          <h1 className="font-bebas text-2xl text-center tracking-wide text-foreground mb-8">
             PRODUCER ACCESS
           </h1>
 
           {!magicLinkSent ? (
             <form onSubmit={handleMagicLink} className="space-y-5">
-              {/* First Name Input - Premium container styling */}
+              {/* First Name Input */}
               <div className="space-y-2">
-                <label htmlFor="firstName" className="text-xs tracking-[0.2em] uppercase text-muted-foreground block text-center font-semibold">
+                <label htmlFor="firstName" className="input-label block">
                   First Name
                 </label>
-                <div className="relative bg-card/50 rounded-sm p-1">
-                  <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 z-10 text-gold/60" />
+                <div className="relative">
+                  <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                   <Input
                     id="firstName"
                     type="text"
                     placeholder="Your first name"
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
-                    className="pl-12 h-14 text-base text-center rounded-sm text-foreground placeholder:text-muted-foreground/50 font-mono tracking-wide bg-transparent border-2 border-border focus:border-gold focus:ring-0 transition-colors"
+                    className="pl-11 h-14 text-base rounded-sm text-foreground placeholder:text-muted-foreground/50 font-mono bg-card border border-border focus:border-gold focus:ring-1 focus:ring-gold transition-colors text-left"
                     required
                     tabIndex={1}
                     autoFocus
@@ -172,13 +169,13 @@ const Auth = () => {
                 </div>
               </div>
 
-              {/* Email Input - Matching style */}
+              {/* Email Input */}
               <div className="space-y-2">
-                <label htmlFor="email" className="text-xs tracking-[0.2em] uppercase text-muted-foreground block text-center font-semibold">
+                <label htmlFor="email" className="input-label block">
                   Email Address
                 </label>
-                <div className="relative bg-card/50 rounded-sm p-1">
-                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 z-10 text-gold/60" />
+                <div className="relative">
+                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                   <Input
                     id="email"
                     type="email"
@@ -186,21 +183,21 @@ const Auth = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     inputMode="email"
-                    className="pl-12 h-14 text-base text-center rounded-sm text-foreground placeholder:text-muted-foreground/50 font-mono tracking-wide bg-transparent border-2 border-border focus:border-gold focus:ring-0 transition-colors"
+                    className="pl-11 h-14 text-base rounded-sm text-foreground placeholder:text-muted-foreground/50 font-mono bg-card border border-border focus:border-gold focus:ring-1 focus:ring-gold transition-colors text-left"
                     required
                     tabIndex={2}
                   />
                 </div>
               </div>
 
-              {/* CTA Button - Commanding, larger text */}
+              {/* CTA Button */}
               <div className="pt-4">
                 <Button
                   type="submit"
                   disabled={loading || !firstName.trim()}
-                  className="w-full h-14 rounded-sm font-bebas text-lg tracking-[0.15em] transition-all duration-150 disabled:cursor-not-allowed min-h-[56px] bg-gold text-primary-foreground hover:bg-gold-highlight touch-press auth-cta-glow"
+                  className="w-full h-14 rounded-sm font-bebas text-lg tracking-wide transition-all duration-150 disabled:cursor-not-allowed min-h-[56px] bg-gold text-primary-foreground hover:bg-gold-highlight touch-press"
                   style={{ 
-                    boxShadow: loading || !firstName.trim() ? 'none' : '0 4px 24px hsl(var(--gold) / 0.35)'
+                    boxShadow: loading || !firstName.trim() ? 'none' : '0 4px 20px hsl(var(--gold) / 0.3)'
                   }}
                   size="lg"
                   tabIndex={3}
@@ -219,10 +216,10 @@ const Auth = () => {
           ) : (
             /* Success State */
             <div className="text-center py-8">
-              <div className="w-16 h-16 border-2 border-gold flex items-center justify-center mx-auto mb-6 rounded-sm">
-                <Mail className="w-8 h-8 text-gold" />
+              <div className="w-16 h-16 border border-gold flex items-center justify-center mx-auto mb-6 rounded-sm">
+                <Mail className="w-7 h-7 text-gold" />
               </div>
-              <h2 className="font-bebas text-2xl text-foreground mb-3 tracking-wide">
+              <h2 className="font-bebas text-xl text-foreground mb-3 tracking-wide">
                 CHECK YOUR EMAIL
               </h2>
               <p className="text-muted-foreground text-sm mb-6">
@@ -231,39 +228,40 @@ const Auth = () => {
               </p>
               <button
                 onClick={() => setMagicLinkSent(false)}
-                className="text-sm tracking-widest uppercase transition-colors text-gold hover:text-gold-highlight"
+                className="text-sm tracking-wide uppercase transition-colors text-gold hover:text-gold-highlight"
               >
                 Try a different email
               </button>
             </div>
           )}
 
-          {/* Trust indicators - Badges of authority */}
+          {/* Trust Badges & Demo - More prominent */}
           {!magicLinkSent && (
-            <div className="mt-10 text-center space-y-5">
-              {/* Authority Badges */}
-              <div className="flex items-center justify-center gap-6">
-                <div className="flex items-center gap-2">
-                  <Users className="w-3.5 h-3.5 text-muted-foreground" />
-                  <span className="text-[10px] uppercase tracking-wider text-muted-foreground">500+ producers</span>
+            <div className="mt-10 text-center space-y-6">
+              {/* Trust Badges - Larger, readable */}
+              <div className="flex items-center justify-center gap-8">
+                <div className="flex flex-col items-center gap-1.5">
+                  <Users className="w-5 h-5 text-muted-foreground" />
+                  <span className="text-xs text-muted-foreground">500+ producers</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Lock className="w-3.5 h-3.5 text-muted-foreground" />
-                  <span className="text-[10px] uppercase tracking-wider text-muted-foreground">No passwords</span>
+                <div className="flex flex-col items-center gap-1.5">
+                  <Lock className="w-5 h-5 text-muted-foreground" />
+                  <span className="text-xs text-muted-foreground">No passwords</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Shield className="w-3.5 h-3.5 text-muted-foreground" />
-                  <span className="text-[10px] uppercase tracking-wider text-muted-foreground">Bank-grade</span>
+                <div className="flex flex-col items-center gap-1.5">
+                  <Shield className="w-5 h-5 text-muted-foreground" />
+                  <span className="text-xs text-muted-foreground">Bank-grade</span>
                 </div>
               </div>
               
               {/* Demo Access - More prominent */}
-              <button
+              <Button
+                variant="ghost"
                 onClick={() => navigate("/calculator?reset=true")}
-                className="text-xs tracking-widest uppercase transition-colors text-gold hover:text-gold-highlight py-3 px-6 border border-gold/30 rounded-sm hover:border-gold/60"
+                className="text-sm tracking-wide text-gold hover:text-gold-highlight hover:bg-gold/10 py-3 px-6"
               >
-                Demo Access →
-              </button>
+                Try Demo Access →
+              </Button>
             </div>
           )}
         </div>

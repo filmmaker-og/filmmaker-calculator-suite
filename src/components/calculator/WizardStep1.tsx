@@ -82,12 +82,12 @@ const WizardStep1 = ({ budget, revenue, onUpdateBudget, onUpdateRevenue }: Wizar
         </div>
       </div>
 
-      {/* Card B: Streamer Buyout - Left accent only */}
-      <div className="rounded-sm border border-border overflow-hidden" style={{ borderLeft: '3px solid hsl(142.1 76.2% 36.3%)' }}>
+      {/* Card B: Streamer Buyout - Gold accent (consistent) */}
+      <div className="rounded-sm border border-border overflow-hidden" style={{ borderLeft: '3px solid hsl(var(--gold))' }}>
         {/* Header Strip */}
         <div className="py-3 px-4 flex items-center justify-between bg-card">
           <div className="flex items-center gap-3">
-            <TrendingUp className="w-4 h-4 text-emerald-500" />
+            <TrendingUp className="w-4 h-4 text-gold" />
             <h3 className="font-bebas text-sm tracking-widest uppercase text-gold">
               STREAMER BUYOUT
             </h3>

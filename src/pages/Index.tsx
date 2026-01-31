@@ -10,16 +10,16 @@ const Index = () => {
   const navigate = useNavigate();
   const haptics = useHaptics();
   const [showLegalModal, setShowLegalModal] = useState(false);
-  const [splashPhase, setSplashPhase] = useState<'black' | 'line' | 'brand' | 'complete'>('black');
+  const [splashPhase, setSplashPhase] = useState<'black' | 'brand' | 'line' | 'complete'>('black');
 
   const legalText = "Educational disclaimer: For educational purposes only. This calculator is a simplified model and is not legal, tax, accounting, or investment advice. Consult a qualified entertainment attorney.";
 
   useEffect(() => {
-    // Clean 4-phase sequence - MASSIVE, deliberate, confident timing
+    // FIXED SEQUENCE: Brand first, then line underneath - faster 1.6s total
     const timers = [
-      setTimeout(() => setSplashPhase('line'), 400),
-      setTimeout(() => setSplashPhase('brand'), 1200),
-      setTimeout(() => setSplashPhase('complete'), 2400), // Slightly longer to let it breathe
+      setTimeout(() => setSplashPhase('brand'), 300),    // Brand fades in first
+      setTimeout(() => setSplashPhase('line'), 800),     // Line draws under brand
+      setTimeout(() => setSplashPhase('complete'), 1600), // Transition out
     ];
     return () => timers.forEach(clearTimeout);
   }, []);
@@ -34,48 +34,48 @@ const Index = () => {
   return (
     <div className="min-h-screen flex flex-col relative overflow-hidden bg-background">
       
-      {/* CINEMATIC SPLASH OVERLAY - MASSIVE, Authority-First */}
+      {/* CINEMATIC SPLASH - Brand first, line after */}
       <div 
-        className={`fixed inset-0 z-[100] flex flex-col items-center justify-center transition-all duration-700 ${
+        className={`fixed inset-0 z-[100] flex flex-col items-center justify-center transition-opacity duration-500 ${
           showSplash ? 'opacity-100' : 'opacity-0 pointer-events-none'
         }`}
         style={{ backgroundColor: '#000000' }}
       >
-        {/* Ambient Glow Behind Brand */}
+        {/* Ambient Glow - Sharp, intentional */}
         <div 
-          className={`absolute w-80 h-80 rounded-full transition-opacity duration-1000 ${
-            splashPhase === 'brand' ? 'opacity-100' : 'opacity-0'
+          className={`absolute w-64 h-64 rounded-full transition-opacity duration-700 ${
+            splashPhase !== 'black' ? 'opacity-100' : 'opacity-0'
           }`}
           style={{
-            background: 'radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, transparent 70%)',
-            filter: 'blur(60px)',
+            background: 'radial-gradient(circle, rgba(212, 175, 55, 0.2) 0%, transparent 60%)',
+            filter: 'blur(40px)',
           }}
         />
         
-        {/* Single gold line - BIGGER, expands from center */}
-        <div 
-          className={`h-[2px] transition-all ease-out ${
-            splashPhase !== 'black' ? 'splash-line-expand opacity-100' : 'w-0 opacity-0'
-          }`}
-          style={{ 
-            backgroundColor: '#D4AF37',
-            boxShadow: '0 0 30px rgba(212, 175, 55, 0.8), 0 0 60px rgba(212, 175, 55, 0.4)'
-          }}
-        />
-        
-        {/* Brand Name - MASSIVE, fades in as a unit */}
+        {/* Brand Name - Fades in FIRST, NO letter-spacing (readable!) */}
         <h1 
-          className={`font-bebas text-6xl sm:text-7xl md:text-8xl tracking-[0.3em] text-white mt-8 mb-4 transition-all duration-600 relative z-10 ${
-            splashPhase === 'brand' ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-3'
+          className={`font-bebas text-5xl sm:text-6xl md:text-7xl text-white mb-4 transition-all duration-500 relative z-10 ${
+            splashPhase !== 'black' ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
           }`}
         >
           FILMMAKER.OG
         </h1>
         
-        {/* Tagline - Larger, premium tracking */}
+        {/* Gold Line - Draws SECOND, underneath brand */}
+        <div 
+          className={`h-[2px] transition-all duration-700 ease-out ${
+            splashPhase === 'line' || splashPhase === 'complete' ? 'w-48 opacity-100' : 'w-0 opacity-0'
+          }`}
+          style={{ 
+            backgroundColor: '#D4AF37',
+            boxShadow: '0 0 20px rgba(212, 175, 55, 0.6)'
+          }}
+        />
+        
+        {/* Tagline - Fades in with line */}
         <p 
-          className={`text-sm sm:text-base tracking-[0.5em] uppercase transition-all duration-500 delay-200 relative z-10 ${
-            splashPhase === 'brand' ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+          className={`text-sm tracking-[0.3em] uppercase mt-6 transition-all duration-500 delay-100 relative z-10 ${
+            splashPhase === 'line' || splashPhase === 'complete' ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
           }`}
           style={{ color: '#D4AF37' }}
         >
@@ -88,7 +88,7 @@ const Index = () => {
         className={`relative z-50 px-6 py-4 flex items-center justify-between safe-top transition-opacity duration-500 ${
           showSplash ? 'opacity-0' : 'opacity-100'
         }`} 
-        style={{ borderBottom: '1px solid #D4AF37' }}
+        style={{ borderBottom: '1px solid hsl(var(--border))' }}
       >
         <div className="flex items-center gap-3">
           <img 
@@ -96,14 +96,14 @@ const Index = () => {
             alt="F" 
             className="w-8 h-8 object-contain"
           />
-          <span className="font-bebas text-lg tracking-widest text-gold">
+          <span className="font-bebas text-lg tracking-wide text-foreground">
             FILMMAKER.OG
           </span>
         </div>
         <div className="flex items-center gap-4">
           <Link 
             to="/store" 
-            className="hidden sm:block text-xs font-mono tracking-widest text-gold hover:text-gold-highlight transition-colors"
+            className="hidden sm:block text-xs font-mono tracking-widest text-muted-foreground hover:text-foreground transition-colors"
           >
             SERVICES
           </Link>
@@ -111,57 +111,47 @@ const Index = () => {
         </div>
       </header>
       
-      {/* MAIN CONTENT - Scales down from splash intentionally */}
+      {/* MAIN CONTENT */}
       <main 
-        className={`flex-1 flex flex-col items-center justify-center text-center px-6 py-8 relative z-10 transition-all duration-700 ${
-          showSplash ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
+        className={`flex-1 flex flex-col items-center justify-center text-center px-6 py-8 relative z-10 transition-all duration-500 ${
+          showSplash ? 'opacity-0' : 'opacity-100'
         }`}
       >
         
-        {/* Hero Section */}
-        <div className="max-w-md w-full space-y-6">
+        <div className="max-w-md w-full space-y-8">
           
-          {/* Brand Icon - Prominent but not competing with splash */}
+          {/* Brand Icon */}
           <div className="flex justify-center">
             <img 
               src={brandIconF} 
               alt="Filmmaker.OG" 
-              className="w-24 h-24 md:w-28 md:h-28 object-contain"
+              className="w-20 h-20 object-contain"
             />
           </div>
-
-          {/* Gold Divider - Echoes the splash */}
-          <div className="flex justify-center">
-            <div className="w-12 h-[2px] bg-gold" style={{ boxShadow: '0 0 10px rgba(212, 175, 55, 0.5)' }} />
-          </div>
           
-          {/* Title Block - Slightly smaller than splash */}
-          <div className="space-y-2">
-            <h1 className="font-bebas text-4xl md:text-5xl text-foreground tracking-wide leading-none">
+          {/* Title Block */}
+          <div className="space-y-3">
+            <h1 className="font-bebas text-4xl md:text-5xl text-foreground leading-none">
               FILMMAKER.OG
             </h1>
-            <p className="text-xs md:text-sm tracking-[0.3em] uppercase text-gold">
+            <p className="text-xs tracking-[0.2em] uppercase text-gold">
               STREAMER ACQUISITION CALCULATOR
             </p>
           </div>
           
-          {/* Value Proposition */}
+          {/* Value Prop */}
           <p className="text-muted-foreground text-sm leading-relaxed max-w-xs mx-auto">
             The industry-standard waterfall calculator for streamer acquisitions.
           </p>
           
           {/* CTA Button */}
-          <div className="pt-2">
-            <Button 
-              onClick={handleAccessClick}
-              className="w-full max-w-xs h-14 text-sm font-black tracking-[0.2em] rounded-sm bg-gold text-primary-foreground hover:bg-gold-highlight transition-all duration-150 border-0 touch-press"
-              style={{
-                boxShadow: '0 4px 24px rgba(212, 175, 55, 0.35)'
-              }}
-            >
-              ACCESS CALCULATOR
-            </Button>
-          </div>
+          <Button 
+            onClick={handleAccessClick}
+            className="w-full max-w-xs h-14 text-sm font-black tracking-[0.15em] rounded-sm bg-gold text-primary-foreground hover:bg-gold-highlight transition-all duration-150 touch-press mx-auto"
+            style={{ boxShadow: '0 4px 20px rgba(212, 175, 55, 0.3)' }}
+          >
+            ACCESS CALCULATOR
+          </Button>
           
           {/* Trust Indicators */}
           <div className="flex items-center justify-center gap-6 pt-2">
@@ -191,7 +181,7 @@ const Index = () => {
       <Dialog open={showLegalModal} onOpenChange={setShowLegalModal}>
         <DialogContent className="bg-card border-border max-w-md">
           <DialogHeader>
-            <DialogTitle className="font-bebas text-2xl text-gold tracking-wider">
+            <DialogTitle className="font-bebas text-2xl text-gold tracking-wide">
               LEGAL DISCLAIMER
             </DialogTitle>
           </DialogHeader>

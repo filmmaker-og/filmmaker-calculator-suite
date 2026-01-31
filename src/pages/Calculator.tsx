@@ -269,8 +269,9 @@ const Calculator = () => {
         }}
       >
         <div className="flex items-center gap-3 max-w-screen-lg mx-auto">
+          {/* Left button: Previous OR empty spacer on step 1 */}
           <div className="flex-1">
-            {currentStep > 1 ? (
+            {currentStep > 1 && (
               <Button
                 onClick={prevStep}
                 variant="ghost"
@@ -279,20 +280,12 @@ const Calculator = () => {
                 <ChevronLeft className="w-4 h-4 mr-1" />
                 Previous
               </Button>
-            ) : currentStep === 4 ? (
-              <Button
-                onClick={handleStartOver}
-                variant="ghost"
-                className="w-full text-muted-foreground hover:text-foreground py-5 touch-feedback min-h-[52px] border border-border hover:border-gold/30"
-              >
-                <RotateCcw className="w-4 h-4 mr-1" />
-                Start Over
-              </Button>
-            ) : null}
+            )}
           </div>
           
+          {/* Right button: Next OR Start Over on final step */}
           <div className="flex-1">
-            {currentStep < TOTAL_STEPS && (
+            {currentStep < TOTAL_STEPS ? (
               <Button
                 onClick={nextStep}
                 className="w-full btn-vault py-5 touch-feedback min-h-[52px]"
@@ -300,12 +293,10 @@ const Calculator = () => {
                 {currentStep === 3 ? 'VIEW RESULTS' : 'NEXT STEP'}
                 <ChevronRight className="w-4 h-4 ml-1" />
               </Button>
-            )}
-            {currentStep === 4 && (
+            ) : (
               <Button
                 onClick={handleStartOver}
-                variant="ghost"
-                className="w-full text-muted-foreground hover:text-foreground py-5 touch-feedback min-h-[52px] border border-border hover:border-gold/30"
+                className="w-full btn-vault py-5 touch-feedback min-h-[52px]"
               >
                 <RotateCcw className="w-4 h-4 mr-1" />
                 Start Over
