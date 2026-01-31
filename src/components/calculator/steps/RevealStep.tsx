@@ -1,5 +1,6 @@
 import { WaterfallResult, formatCompactCurrency, formatMultiple } from "@/lib/waterfall";
 import { TrendingUp, TrendingDown, AlertTriangle } from "lucide-react";
+import { useEffect, useState, useRef } from "react";
 
 interface RevealStepProps {
   result: WaterfallResult;
@@ -7,9 +8,45 @@ interface RevealStepProps {
 }
 
 const RevealStep = ({ result, equity }: RevealStepProps) => {
+  const [displayProfit, setDisplayProfit] = useState(0);
+  const [displayProducer, setDisplayProducer] = useState(0);
+  const [displayInvestor, setDisplayInvestor] = useState(0);
+  const [animationComplete, setAnimationComplete] = useState(false);
+  const hasAnimated = useRef(false);
+
   const isProfitable = result.profitPool > 0;
   const isStrong = result.multiple >= 1.2;
   const isUnderperforming = result.multiple < 1.2 && equity > 0;
+
+  // Animated count-up effect
+  useEffect(() => {
+    if (hasAnimated.current) return;
+    hasAnimated.current = true;
+
+    const duration = 1200;
+    const startTime = Date.now();
+
+    const animate = () => {
+      const elapsed = Date.now() - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3); // Ease-out cubic
+
+      setDisplayProfit(result.profitPool * eased);
+      setDisplayProducer(result.producer * eased);
+      setDisplayInvestor(result.investor * eased);
+
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      } else {
+        setAnimationComplete(true);
+      }
+    };
+
+    // Delay start for dramatic effect
+    setTimeout(() => {
+      requestAnimationFrame(animate);
+    }, 300);
+  }, [result.profitPool, result.producer, result.investor]);
 
   return (
     <div className="step-enter min-h-[60vh] flex flex-col items-center justify-center text-center px-4">
@@ -36,17 +73,18 @@ const RevealStep = ({ result, equity }: RevealStepProps) => {
           Your Profit Pool
         </p>
         
-        {/* The Number */}
+        {/* The Number - Animated */}
         <p
-          className="font-bebas text-7xl sm:text-8xl tabular-nums leading-none relative z-10"
+          className="font-bebas text-7xl sm:text-8xl tabular-nums leading-none relative z-10 transition-transform"
           style={{
             color: isProfitable ? 'hsl(var(--gold))' : 'hsl(0 70% 60%)',
             textShadow: isProfitable 
               ? '0 0 60px rgba(212, 175, 55, 0.4)'
               : '0 0 40px rgba(239, 68, 68, 0.3)',
+            transform: animationComplete ? 'scale(1)' : 'scale(1.02)',
           }}
         >
-          {isProfitable ? '+' : ''}{formatCompactCurrency(result.profitPool)}
+          {isProfitable ? '+' : ''}{formatCompactCurrency(displayProfit)}
         </p>
       </div>
 
@@ -54,18 +92,20 @@ const RevealStep = ({ result, equity }: RevealStepProps) => {
       <div className="flex items-center justify-center gap-8 mb-8">
         <div className="text-center">
           <p className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1">You Take</p>
-          <p className="font-mono text-xl text-foreground">{formatCompactCurrency(result.producer)}</p>
+          <p className="font-mono text-xl text-foreground">{formatCompactCurrency(displayProducer)}</p>
         </div>
         <div className="w-px h-12 bg-border" />
         <div className="text-center">
           <p className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1">Investors</p>
-          <p className="font-mono text-xl text-gold">{formatCompactCurrency(result.investor)}</p>
+          <p className="font-mono text-xl text-gold">{formatCompactCurrency(displayInvestor)}</p>
         </div>
       </div>
 
       {/* Investor Multiple */}
       {equity > 0 && (
-        <div className={`inline-flex items-center gap-2 px-5 py-3 border ${
+        <div className={`inline-flex items-center gap-2 px-5 py-3 border transition-all duration-500 ${
+          animationComplete ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+        } ${
           isStrong 
             ? 'border-gold bg-gold/10' 
             : isUnderperforming 
@@ -77,13 +117,13 @@ const RevealStep = ({ result, equity }: RevealStepProps) => {
           ) : isUnderperforming ? (
             <AlertTriangle className="w-5 h-5 text-amber-400" />
           ) : (
-            <TrendingDown className="w-5 h-5 text-red-400" />
+            <TrendingDown className="w-5 h-5 text-destructive" />
           )}
           <span className="text-sm text-foreground">
             Investor Multiple: 
           </span>
           <span className={`font-mono text-lg font-semibold ${
-            isStrong ? 'text-gold' : isUnderperforming ? 'text-amber-400' : 'text-red-400'
+            isStrong ? 'text-gold' : isUnderperforming ? 'text-amber-400' : 'text-destructive'
           }`}>
             {formatMultiple(result.multiple)}
           </span>
@@ -91,7 +131,9 @@ const RevealStep = ({ result, equity }: RevealStepProps) => {
       )}
 
       {/* Interpretation */}
-      <div className="mt-8 max-w-xs">
+      <div className={`mt-8 max-w-xs transition-all duration-500 delay-300 ${
+        animationComplete ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+      }`}>
         {isProfitable && isStrong ? (
           <p className="text-sm text-muted-foreground leading-relaxed">
             <span className="text-gold font-semibold">Strong deal.</span> This return profile 
@@ -104,7 +146,7 @@ const RevealStep = ({ result, equity }: RevealStepProps) => {
           </p>
         ) : !isProfitable ? (
           <p className="text-sm text-muted-foreground leading-relaxed">
-            <span className="text-red-400 font-semibold">Underwater deal.</span> The acquisition 
+            <span className="text-destructive font-semibold">Underwater deal.</span> The acquisition 
             price doesn't cover all costs. Review your capital structure.
           </p>
         ) : null}

@@ -1,8 +1,8 @@
-import { Input } from "@/components/ui/input";
+import { PremiumInput } from "@/components/ui/premium-input";
 import { WaterfallInputs, GuildState, formatCompactCurrency } from "@/lib/waterfall";
 import { CapitalSelections } from "./CapitalSelectStep";
 import { Info, TrendingUp, TrendingDown } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 interface AcquisitionStepProps {
@@ -14,6 +14,8 @@ interface AcquisitionStepProps {
 
 const AcquisitionStep = ({ inputs, guilds, selections, onUpdateInput }: AcquisitionStepProps) => {
   const [showHelp, setShowHelp] = useState(false);
+  const [displayValue, setDisplayValue] = useState(0);
+  const prevRevenue = useRef(inputs.revenue);
 
   const formatValue = (value: number | undefined) => {
     if (value === undefined || value === 0) return '';
@@ -45,6 +47,33 @@ const AcquisitionStep = ({ inputs, guilds, selections, onUpdateInput }: Acquisit
   const cushion = inputs.revenue - breakeven;
   const isAboveBreakeven = cushion > 0;
 
+  // Animate cushion value when revenue changes
+  useEffect(() => {
+    if (prevRevenue.current !== inputs.revenue) {
+      const start = displayValue;
+      const end = Math.abs(cushion);
+      const duration = 500;
+      const startTime = Date.now();
+
+      const animate = () => {
+        const elapsed = Date.now() - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3); // Ease-out cubic
+        const current = start + (end - start) * eased;
+        setDisplayValue(current);
+
+        if (progress < 1) {
+          requestAnimationFrame(animate);
+        }
+      };
+
+      requestAnimationFrame(animate);
+      prevRevenue.current = inputs.revenue;
+    }
+  }, [inputs.revenue, cushion, displayValue]);
+
+  const isCompleted = inputs.revenue > 0;
+
   return (
     <div className="step-enter">
       {/* The Question */}
@@ -59,20 +88,21 @@ const AcquisitionStep = ({ inputs, guilds, selections, onUpdateInput }: Acquisit
         </p>
       </div>
 
-      {/* The Input */}
+      {/* The Input - Premium */}
       <div className="space-y-6">
-        <div className="relative">
-          <span className="absolute left-5 top-1/2 -translate-y-1/2 font-mono text-2xl text-muted-foreground">$</span>
-          <Input
-            type="text"
-            inputMode="numeric"
-            value={formatValue(inputs.revenue)}
-            onChange={(e) => onUpdateInput('revenue', parseValue(e.target.value))}
-            placeholder="3,500,000"
-            className="pl-14 h-20 text-3xl font-mono text-foreground text-right rounded-none border-border focus:border-gold focus:ring-0 bg-card"
-            onFocus={(e) => e.target.select()}
-          />
-        </div>
+        <PremiumInput
+          type="text"
+          inputMode="numeric"
+          value={formatValue(inputs.revenue)}
+          onChange={(e) => onUpdateInput('revenue', parseValue(e.target.value))}
+          placeholder="3,500,000"
+          showCurrency
+          label="Acquisition Price"
+          example="$3,500,000"
+          isCompleted={isCompleted}
+          isNext={!isCompleted}
+          containerClassName="py-2"
+        />
 
         {/* Breakeven Reminder */}
         <div className="p-4 bg-card border border-border">
@@ -81,10 +111,10 @@ const AcquisitionStep = ({ inputs, guilds, selections, onUpdateInput }: Acquisit
             <span className="font-mono text-lg text-gold">{formatCompactCurrency(breakeven)}</span>
           </div>
 
-          {/* Status Indicator */}
+          {/* Status Indicator with Animation */}
           {inputs.revenue > 0 && (
             <div 
-              className={`p-4 border ${
+              className={`p-4 border transition-all duration-300 ${
                 isAboveBreakeven 
                   ? 'bg-emerald-500/10 border-emerald-500/30' 
                   : 'bg-red-500/10 border-red-500/30'
@@ -101,10 +131,12 @@ const AcquisitionStep = ({ inputs, guilds, selections, onUpdateInput }: Acquisit
                     {isAboveBreakeven ? 'ABOVE BREAKEVEN' : 'BELOW BREAKEVEN'}
                   </p>
                   <p className="text-xs text-muted-foreground">
-                    {isAboveBreakeven 
-                      ? `+${formatCompactCurrency(cushion)} cushion` 
-                      : `${formatCompactCurrency(cushion)} shortfall`
-                    }
+                    <span className="font-mono animate-count-up">
+                      {isAboveBreakeven 
+                        ? `+${formatCompactCurrency(displayValue)} cushion` 
+                        : `${formatCompactCurrency(-displayValue)} shortfall`
+                      }
+                    </span>
                   </p>
                 </div>
               </div>

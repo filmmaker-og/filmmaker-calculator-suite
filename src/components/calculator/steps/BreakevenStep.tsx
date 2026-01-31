@@ -10,6 +10,7 @@ interface BreakevenStepProps {
 
 const BreakevenStep = ({ inputs, guilds, selections }: BreakevenStepProps) => {
   const [visibleLines, setVisibleLines] = useState(0);
+  const [displayBreakeven, setDisplayBreakeven] = useState(0);
 
   // Calculate all costs
   // Off-the-top (based on budget as proxy, will be adjusted with actual revenue)
@@ -58,6 +59,27 @@ const BreakevenStep = ({ inputs, guilds, selections }: BreakevenStepProps) => {
     return () => clearInterval(timer);
   }, [lines.length]);
 
+  // Animate breakeven counting up
+  useEffect(() => {
+    if (visibleLines >= lines.length) {
+      const duration = 800;
+      const startTime = Date.now();
+      
+      const animate = () => {
+        const elapsed = Date.now() - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        setDisplayBreakeven(breakeven * eased);
+        
+        if (progress < 1) {
+          requestAnimationFrame(animate);
+        }
+      };
+      
+      setTimeout(() => requestAnimationFrame(animate), 400);
+    }
+  }, [visibleLines, lines.length, breakeven]);
+
   return (
     <div className="step-enter min-h-[60vh] flex flex-col justify-center">
       {/* The Header */}
@@ -92,7 +114,7 @@ const BreakevenStep = ({ inputs, guilds, selections }: BreakevenStepProps) => {
           style={{ transitionDelay: `${lines.length * 100 + 200}ms`, transformOrigin: 'left' }}
         />
 
-        {/* Breakeven Total */}
+        {/* Breakeven Total - Animated Count */}
         <div 
           className={`text-center py-4 transition-all duration-500 ${
             visibleLines >= lines.length ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
@@ -108,7 +130,7 @@ const BreakevenStep = ({ inputs, guilds, selections }: BreakevenStepProps) => {
               textShadow: '0 0 40px rgba(212, 175, 55, 0.3)',
             }}
           >
-            {formatCompactCurrency(breakeven)}
+            {formatCompactCurrency(displayBreakeven)}
           </p>
         </div>
       </div>

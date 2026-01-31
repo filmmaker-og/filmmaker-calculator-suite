@@ -1,4 +1,4 @@
-import { Input } from "@/components/ui/input";
+import { PremiumInput } from "@/components/ui/premium-input";
 import { WaterfallInputs } from "@/lib/waterfall";
 import { Info } from "lucide-react";
 import { useState } from "react";
@@ -21,6 +21,8 @@ const BudgetStep = ({ inputs, onUpdateInput }: BudgetStepProps) => {
     return parseInt(str.replace(/[^0-9]/g, '')) || 0;
   };
 
+  const isCompleted = inputs.budget > 0;
+
   return (
     <div className="step-enter min-h-[50vh] flex flex-col justify-center">
       {/* The Question */}
@@ -35,20 +37,21 @@ const BudgetStep = ({ inputs, onUpdateInput }: BudgetStepProps) => {
         </p>
       </div>
 
-      {/* The Input */}
+      {/* The Input - Premium Style */}
       <div className="space-y-4">
-        <div className="relative">
-          <span className="absolute left-5 top-1/2 -translate-y-1/2 font-mono text-2xl text-muted-foreground">$</span>
-          <Input
-            type="text"
-            inputMode="numeric"
-            value={formatValue(inputs.budget)}
-            onChange={(e) => onUpdateInput('budget', parseValue(e.target.value))}
-            placeholder="2,000,000"
-            className="pl-14 h-20 text-3xl font-mono text-foreground text-right rounded-none border-border focus:border-gold focus:ring-0 bg-card"
-            onFocus={(e) => e.target.select()}
-          />
-        </div>
+        <PremiumInput
+          type="text"
+          inputMode="numeric"
+          value={formatValue(inputs.budget)}
+          onChange={(e) => onUpdateInput('budget', parseValue(e.target.value))}
+          placeholder="2,000,000"
+          showCurrency
+          label="Negative Cost"
+          example="$2,000,000"
+          isCompleted={isCompleted}
+          isNext={!isCompleted}
+          containerClassName="py-2"
+        />
 
         {/* Inline Helper */}
         <Collapsible open={showHelp} onOpenChange={setShowHelp}>

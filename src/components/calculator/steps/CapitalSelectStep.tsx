@@ -1,5 +1,7 @@
-import { Check } from "lucide-react";
+import { Check, Sparkles } from "lucide-react";
 import { useHaptics } from "@/hooks/use-haptics";
+import { cn } from "@/lib/utils";
+import { useState } from "react";
 
 export interface CapitalSelections {
   taxCredits: boolean;
@@ -15,6 +17,7 @@ interface CapitalSelectStepProps {
 
 const CapitalSelectStep = ({ selections, onToggle }: CapitalSelectStepProps) => {
   const haptics = useHaptics();
+  const [justToggled, setJustToggled] = useState<string | null>(null);
 
   const options = [
     {
@@ -47,7 +50,9 @@ const CapitalSelectStep = ({ selections, onToggle }: CapitalSelectStepProps) => 
 
   const handleToggle = (key: keyof CapitalSelections) => {
     haptics.light();
+    setJustToggled(key);
     onToggle(key);
+    setTimeout(() => setJustToggled(null), 200);
   };
 
   return (
@@ -66,20 +71,27 @@ const CapitalSelectStep = ({ selections, onToggle }: CapitalSelectStepProps) => 
       <div className="space-y-3">
         {options.map((option) => {
           const isSelected = selections[option.key];
+          const wasJustToggled = justToggled === option.key;
+          
           return (
             <button
               key={option.key}
               onClick={() => handleToggle(option.key)}
-              className={`w-full p-5 border text-left transition-all touch-feedback ${
+              className={cn(
+                "w-full p-5 border-2 text-left transition-all duration-200 touch-feedback",
                 isSelected
-                  ? 'bg-gold/10 border-gold'
-                  : 'bg-card border-border hover:border-gold/50'
-              }`}
+                  ? 'bg-gold/10 border-gold shadow-[0_0_20px_rgba(212,175,55,0.2)]'
+                  : 'bg-card border-border hover:border-gold/50',
+                wasJustToggled && 'scale-[1.02]'
+              )}
             >
               <div className="flex items-start justify-between gap-4">
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-1">
-                    <span className={`text-base font-semibold ${isSelected ? 'text-gold' : 'text-foreground'}`}>
+                    <span className={cn(
+                      "text-base font-semibold transition-colors",
+                      isSelected ? 'text-gold' : 'text-foreground'
+                    )}>
                       {option.title}
                     </span>
                     <span className="text-xs text-muted-foreground">
@@ -90,12 +102,15 @@ const CapitalSelectStep = ({ selections, onToggle }: CapitalSelectStepProps) => 
                     {option.description}
                   </p>
                 </div>
-                <div className={`w-8 h-8 flex items-center justify-center border transition-all ${
+                <div className={cn(
+                  "w-8 h-8 flex items-center justify-center border-2 transition-all duration-200",
                   isSelected
-                    ? 'bg-gold border-gold'
+                    ? 'bg-gold border-gold scale-110'
                     : 'bg-transparent border-border'
-                }`}>
-                  {isSelected && <Check className="w-5 h-5 text-black" />}
+                )}>
+                  {isSelected && (
+                    <Check className="w-5 h-5 text-black animate-scale-in" />
+                  )}
                 </div>
               </div>
             </button>
@@ -107,9 +122,14 @@ const CapitalSelectStep = ({ selections, onToggle }: CapitalSelectStepProps) => 
       <div className="mt-6 text-center">
         <p className="text-sm text-muted-foreground">
           {selectedCount === 0 ? (
-            <span className="text-amber-400">Select at least one financing source</span>
+            <span className="text-amber-400 flex items-center justify-center gap-2">
+              <Sparkles className="w-4 h-4" />
+              Select at least one financing source
+            </span>
           ) : (
-            <span>{selectedCount} source{selectedCount !== 1 ? 's' : ''} selected</span>
+            <span className="text-gold">
+              {selectedCount} source{selectedCount !== 1 ? 's' : ''} selected ✓
+            </span>
           )}
         </p>
       </div>

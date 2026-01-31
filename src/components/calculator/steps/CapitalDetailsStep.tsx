@@ -1,4 +1,5 @@
-import { Input } from "@/components/ui/input";
+import { PremiumInput } from "@/components/ui/premium-input";
+import { PercentStepper } from "@/components/ui/percent-stepper";
 import { WaterfallInputs } from "@/lib/waterfall";
 import { Info } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -13,6 +14,7 @@ interface CapitalDetailsStepProps {
 
 const CapitalDetailsStep = ({ inputs, selections, onUpdateInput }: CapitalDetailsStepProps) => {
   const [activeModal, setActiveModal] = useState<string | null>(null);
+  const [activeField, setActiveField] = useState<number>(-1);
 
   const formatValue = (value: number | undefined) => {
     if (value === undefined || value === 0) return '';
@@ -63,12 +65,8 @@ const CapitalDetailsStep = ({ inputs, selections, onUpdateInput }: CapitalDetail
     }
   };
 
-  // Count how many sections we're showing
-  const sections = [];
-  if (selections.taxCredits) sections.push('taxCredits');
-  if (selections.seniorDebt) sections.push('seniorDebt');
-  if (selections.gapLoan) sections.push('gapLoan');
-  if (selections.equity) sections.push('equity');
+  // Track field indices for spotlight effect
+  let fieldIndex = 0;
 
   return (
     <div className="step-enter">
@@ -88,7 +86,11 @@ const CapitalDetailsStep = ({ inputs, selections, onUpdateInput }: CapitalDetail
       <div className="space-y-4">
         {/* Tax Credits */}
         {selections.taxCredits && (
-          <div className="bg-card border border-border p-5 space-y-4">
+          <div 
+            className={`bg-card border border-border p-5 space-y-4 transition-all duration-300 ${
+              activeField >= 0 && activeField !== fieldIndex ? 'opacity-40 blur-[0.5px]' : ''
+            }`}
+          >
             <div className="flex items-center justify-between">
               <h3 className="font-bebas text-base tracking-wider text-foreground">TAX CREDITS</h3>
               <button
@@ -98,24 +100,30 @@ const CapitalDetailsStep = ({ inputs, selections, onUpdateInput }: CapitalDetail
                 <Info className="w-4 h-4 text-gold" />
               </button>
             </div>
-            <div className="relative">
-              <span className="absolute left-4 top-1/2 -translate-y-1/2 font-mono text-lg text-muted-foreground">$</span>
-              <Input
-                type="text"
-                inputMode="numeric"
-                value={formatValue(inputs.credits)}
-                onChange={(e) => onUpdateInput('credits', parseValue(e.target.value))}
-                placeholder="400,000"
-                className="pl-10 h-14 text-xl font-mono text-foreground text-right rounded-none border-border focus:border-gold bg-background"
-                onFocus={(e) => e.target.select()}
-              />
-            </div>
+            <PremiumInput
+              type="text"
+              inputMode="numeric"
+              value={formatValue(inputs.credits)}
+              onChange={(e) => onUpdateInput('credits', parseValue(e.target.value))}
+              placeholder="400,000"
+              showCurrency
+              example="$400,000"
+              isCompleted={inputs.credits > 0}
+              isNext={inputs.credits === 0}
+              onFocus={() => setActiveField(fieldIndex)}
+              onBlur={() => setActiveField(-1)}
+            />
           </div>
         )}
+        {selections.taxCredits && fieldIndex++}
 
         {/* Senior Debt */}
         {selections.seniorDebt && (
-          <div className="bg-card border border-border p-5 space-y-4">
+          <div 
+            className={`bg-card border border-border p-5 space-y-4 transition-all duration-300 ${
+              activeField >= 0 && activeField !== fieldIndex && activeField !== fieldIndex + 1 ? 'opacity-40 blur-[0.5px]' : ''
+            }`}
+          >
             <div className="flex items-center justify-between">
               <h3 className="font-bebas text-base tracking-wider text-foreground">SENIOR DEBT</h3>
               <button
@@ -126,40 +134,43 @@ const CapitalDetailsStep = ({ inputs, selections, onUpdateInput }: CapitalDetail
               </button>
             </div>
             <div className="space-y-3">
-              <div className="relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 font-mono text-lg text-muted-foreground">$</span>
-                <Input
-                  type="text"
-                  inputMode="numeric"
-                  value={formatValue(inputs.debt)}
-                  onChange={(e) => onUpdateInput('debt', parseValue(e.target.value))}
-                  placeholder="600,000"
-                  className="pl-10 h-14 text-xl font-mono text-foreground text-right rounded-none border-border focus:border-gold bg-background"
-                  onFocus={(e) => e.target.select()}
-                />
-              </div>
-              <div className="flex items-center gap-3">
-                <span className="text-xs text-muted-foreground whitespace-nowrap">Interest + Fees</span>
-                <div className="relative flex-1">
-                  <Input
-                    type="text"
-                    inputMode="numeric"
-                    value={formatValue(inputs.seniorDebtRate)}
-                    onChange={(e) => onUpdateInput('seniorDebtRate', parseValue(e.target.value, true))}
-                    placeholder="10"
-                    className="pr-10 h-12 text-lg font-mono text-foreground text-right rounded-none border-border focus:border-gold bg-background"
-                    onFocus={(e) => e.target.select()}
-                  />
-                  <span className="absolute right-4 top-1/2 -translate-y-1/2 font-mono text-lg text-muted-foreground">%</span>
-                </div>
-              </div>
+              <PremiumInput
+                type="text"
+                inputMode="numeric"
+                value={formatValue(inputs.debt)}
+                onChange={(e) => onUpdateInput('debt', parseValue(e.target.value))}
+                placeholder="600,000"
+                showCurrency
+                label="Principal Amount"
+                example="$600,000"
+                isCompleted={inputs.debt > 0}
+                isNext={inputs.debt === 0}
+                onFocus={() => setActiveField(fieldIndex)}
+                onBlur={() => setActiveField(-1)}
+              />
+              <PercentStepper
+                value={inputs.seniorDebtRate}
+                onChange={(value) => onUpdateInput('seniorDebtRate', value)}
+                min={5}
+                max={20}
+                step={1}
+                label="Interest + Fees"
+                standardValue={10}
+                standardLabel="typical bank rate"
+                isCompleted={true}
+              />
             </div>
           </div>
         )}
+        {selections.seniorDebt && (fieldIndex += 2)}
 
         {/* Gap Loan */}
         {selections.gapLoan && (
-          <div className="bg-card border border-border p-5 space-y-4">
+          <div 
+            className={`bg-card border border-border p-5 space-y-4 transition-all duration-300 ${
+              activeField >= 0 && activeField !== fieldIndex && activeField !== fieldIndex + 1 ? 'opacity-40 blur-[0.5px]' : ''
+            }`}
+          >
             <div className="flex items-center justify-between">
               <h3 className="font-bebas text-base tracking-wider text-foreground">GAP / BRIDGE LOAN</h3>
               <button
@@ -170,40 +181,43 @@ const CapitalDetailsStep = ({ inputs, selections, onUpdateInput }: CapitalDetail
               </button>
             </div>
             <div className="space-y-3">
-              <div className="relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 font-mono text-lg text-muted-foreground">$</span>
-                <Input
-                  type="text"
-                  inputMode="numeric"
-                  value={formatValue(inputs.mezzanineDebt)}
-                  onChange={(e) => onUpdateInput('mezzanineDebt', parseValue(e.target.value))}
-                  placeholder="200,000"
-                  className="pl-10 h-14 text-xl font-mono text-foreground text-right rounded-none border-border focus:border-gold bg-background"
-                  onFocus={(e) => e.target.select()}
-                />
-              </div>
-              <div className="flex items-center gap-3">
-                <span className="text-xs text-muted-foreground whitespace-nowrap">Interest + Fees</span>
-                <div className="relative flex-1">
-                  <Input
-                    type="text"
-                    inputMode="numeric"
-                    value={formatValue(inputs.mezzanineRate)}
-                    onChange={(e) => onUpdateInput('mezzanineRate', parseValue(e.target.value, true))}
-                    placeholder="18"
-                    className="pr-10 h-12 text-lg font-mono text-foreground text-right rounded-none border-border focus:border-gold bg-background"
-                    onFocus={(e) => e.target.select()}
-                  />
-                  <span className="absolute right-4 top-1/2 -translate-y-1/2 font-mono text-lg text-muted-foreground">%</span>
-                </div>
-              </div>
+              <PremiumInput
+                type="text"
+                inputMode="numeric"
+                value={formatValue(inputs.mezzanineDebt)}
+                onChange={(e) => onUpdateInput('mezzanineDebt', parseValue(e.target.value))}
+                placeholder="200,000"
+                showCurrency
+                label="Principal Amount"
+                example="$200,000"
+                isCompleted={inputs.mezzanineDebt > 0}
+                isNext={inputs.mezzanineDebt === 0}
+                onFocus={() => setActiveField(fieldIndex)}
+                onBlur={() => setActiveField(-1)}
+              />
+              <PercentStepper
+                value={inputs.mezzanineRate}
+                onChange={(value) => onUpdateInput('mezzanineRate', value)}
+                min={10}
+                max={25}
+                step={1}
+                label="Interest + Fees"
+                standardValue={18}
+                standardLabel="typical gap rate"
+                isCompleted={true}
+              />
             </div>
           </div>
         )}
+        {selections.gapLoan && (fieldIndex += 2)}
 
         {/* Equity */}
         {selections.equity && (
-          <div className="bg-card border border-border p-5 space-y-4">
+          <div 
+            className={`bg-card border border-border p-5 space-y-4 transition-all duration-300 ${
+              activeField >= 0 && activeField !== fieldIndex && activeField !== fieldIndex + 1 ? 'opacity-40 blur-[0.5px]' : ''
+            }`}
+          >
             <div className="flex items-center justify-between">
               <h3 className="font-bebas text-base tracking-wider text-foreground">EQUITY INVESTMENT</h3>
               <button
@@ -214,33 +228,31 @@ const CapitalDetailsStep = ({ inputs, selections, onUpdateInput }: CapitalDetail
               </button>
             </div>
             <div className="space-y-3">
-              <div className="relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 font-mono text-lg text-muted-foreground">$</span>
-                <Input
-                  type="text"
-                  inputMode="numeric"
-                  value={formatValue(inputs.equity)}
-                  onChange={(e) => onUpdateInput('equity', parseValue(e.target.value))}
-                  placeholder="1,000,000"
-                  className="pl-10 h-14 text-xl font-mono text-foreground text-right rounded-none border-border focus:border-gold bg-background"
-                  onFocus={(e) => e.target.select()}
-                />
-              </div>
-              <div className="flex items-center gap-3">
-                <span className="text-xs text-muted-foreground whitespace-nowrap">Preferred Return</span>
-                <div className="relative flex-1">
-                  <Input
-                    type="text"
-                    inputMode="numeric"
-                    value={formatValue(inputs.premium)}
-                    onChange={(e) => onUpdateInput('premium', parseValue(e.target.value, true))}
-                    placeholder="20"
-                    className="pr-10 h-12 text-lg font-mono text-foreground text-right rounded-none border-border focus:border-gold bg-background"
-                    onFocus={(e) => e.target.select()}
-                  />
-                  <span className="absolute right-4 top-1/2 -translate-y-1/2 font-mono text-lg text-muted-foreground">%</span>
-                </div>
-              </div>
+              <PremiumInput
+                type="text"
+                inputMode="numeric"
+                value={formatValue(inputs.equity)}
+                onChange={(e) => onUpdateInput('equity', parseValue(e.target.value))}
+                placeholder="1,000,000"
+                showCurrency
+                label="Net Equity"
+                example="$1,000,000"
+                isCompleted={inputs.equity > 0}
+                isNext={inputs.equity === 0}
+                onFocus={() => setActiveField(fieldIndex)}
+                onBlur={() => setActiveField(-1)}
+              />
+              <PercentStepper
+                value={inputs.premium}
+                onChange={(value) => onUpdateInput('premium', value)}
+                min={10}
+                max={40}
+                step={5}
+                label="Preferred Return"
+                standardValue={20}
+                standardLabel="industry standard"
+                isCompleted={true}
+              />
             </div>
           </div>
         )}
