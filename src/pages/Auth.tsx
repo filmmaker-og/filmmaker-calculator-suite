@@ -5,8 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { useHaptics } from "@/hooks/use-haptics";
-import { ArrowLeft, ArrowRight, Loader2, Mail, CheckCircle, HelpCircle } from "lucide-react";
+import { ArrowLeft, ArrowRight, Loader2, Mail, CheckCircle, Lock, Users, Shield } from "lucide-react";
 import { z } from "zod";
+import filmmakerLogo from "@/assets/filmmaker-logo.jpg";
 
 const emailSchema = z.string().email("Please enter a valid email address");
 
@@ -17,7 +18,6 @@ const Auth = () => {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState<'email' | 'sent'>('email');
-  const [showHelp, setShowHelp] = useState(false);
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
@@ -78,104 +78,116 @@ const Auth = () => {
   return (
     <div className="min-h-screen min-h-[100dvh] bg-black flex flex-col">
 
-      {/* ═══════════════════════════════════════════════════════════════════
-          FIXED HEADER - Always visible, back navigation
-          ═══════════════════════════════════════════════════════════════════ */}
-      <header className="flex-shrink-0 flex items-center justify-between px-4 py-4">
+      {/* Header */}
+      <header className="flex-shrink-0 flex items-center justify-between px-4 py-4 border-b border-border">
         <button
-          onClick={() => navigate(-1)}
+          onClick={() => navigate("/")}
           className="w-12 h-12 flex items-center justify-center rounded-full hover:bg-white/5 transition-colors -ml-2"
           aria-label="Go back"
         >
           <ArrowLeft className="w-5 h-5 text-white/60" />
         </button>
 
-        {/* Step indicator */}
-        <div className="flex items-center gap-2">
-          <div className={`w-8 h-1 rounded-full transition-colors ${step === 'email' ? 'bg-gold' : 'bg-gold'}`} />
-          <div className={`w-8 h-1 rounded-full transition-colors ${step === 'sent' ? 'bg-gold' : 'bg-white/20'}`} />
-        </div>
+        <span className="font-bebas text-base tracking-widest text-gold">
+          PRODUCER ACCESS
+        </span>
 
-        <div className="w-12" /> {/* Spacer for centering */}
+        <div className="w-12" />
       </header>
 
-      {/* ═══════════════════════════════════════════════════════════════════
-          MAIN CONTENT - Positioned to stay above keyboard
-          ═══════════════════════════════════════════════════════════════════ */}
+      {/* Main Content */}
       <main className="flex-1 flex flex-col px-6 pt-8 pb-6">
 
         {step === 'email' ? (
-          /* ─────────────────────────────────────────────────────────────────
-             STEP 1: Email Entry
-             ───────────────────────────────────────────────────────────────── */
           <div className="flex-1 flex flex-col">
-            {/* Top section - Logo + Copy */}
+            {/* Logo + Copy */}
             <div className="text-center mb-10">
-              {/* Small F logo */}
               <div className="relative inline-block mb-6">
                 <div
                   className="absolute"
                   style={{
-                    width: '80px',
-                    height: '80px',
+                    width: '120px',
+                    height: '120px',
                     left: '50%',
                     top: '50%',
                     transform: 'translate(-50%, -50%)',
                     background: 'radial-gradient(circle, rgba(212, 175, 55, 0.2) 0%, transparent 70%)',
-                    filter: 'blur(15px)',
+                    filter: 'blur(20px)',
                   }}
                 />
-                <span
-                  className="font-bebas text-5xl relative z-10"
+                <img
+                  src={filmmakerLogo}
+                  alt="Filmmaker.OG"
+                  className="w-20 h-20 object-contain relative z-10"
                   style={{
-                    color: '#FFFFFF',
-                    textShadow: '0 0 30px rgba(212, 175, 55, 0.4)',
+                    filter: 'drop-shadow(0 0 25px rgba(212, 175, 55, 0.4))',
                   }}
-                >
-                  F
-                </span>
+                />
               </div>
 
+              {/* Gold divider */}
+              <div className="w-12 h-[2px] bg-gold mx-auto mb-6" style={{ boxShadow: '0 0 10px rgba(212, 175, 55, 0.5)' }} />
+
               <h1 className="font-bebas text-2xl tracking-[0.1em] text-white mb-3">
-                SAVE YOUR RESULTS
+                UNLOCK YOUR RESULTS
               </h1>
               <p className="text-white/50 text-sm leading-relaxed max-w-xs mx-auto">
-                Enter your email to save your calculations
-                and get your investor deck.
+                Before you sign that term sheet, see exactly how much
+                <span className="text-gold font-semibold"> you'll actually take home</span>.
               </p>
             </div>
 
-            {/* Form - stays in upper portion for keyboard */}
+            {/* Trust Badges */}
+            <div className="flex items-center justify-center gap-6 mb-8">
+              <div className="flex flex-col items-center gap-2">
+                <div className="w-10 h-10 border border-border flex items-center justify-center">
+                  <Lock className="w-4 h-4 text-gold" />
+                </div>
+                <span className="text-[9px] text-white/40 uppercase tracking-wider">Encrypted</span>
+              </div>
+              <div className="flex flex-col items-center gap-2">
+                <div className="w-10 h-10 border border-border flex items-center justify-center">
+                  <Users className="w-4 h-4 text-gold" />
+                </div>
+                <span className="text-[9px] text-white/40 uppercase tracking-wider">1,200+ Users</span>
+              </div>
+              <div className="flex flex-col items-center gap-2">
+                <div className="w-10 h-10 border border-border flex items-center justify-center">
+                  <Shield className="w-4 h-4 text-gold" />
+                </div>
+                <span className="text-[9px] text-white/40 uppercase tracking-wider">Private</span>
+              </div>
+            </div>
+
+            {/* Form */}
             <form onSubmit={handleSubmit} className="space-y-5">
               <div className="space-y-2">
                 <label
                   htmlFor="email"
-                  className="block text-[11px] tracking-[0.2em] uppercase text-white/40 font-medium"
+                  className="block text-[11px] tracking-[0.2em] uppercase text-white/50 font-medium"
                 >
                   Email Address
                 </label>
-                <div className="relative">
-                  <Input
-                    id="email"
-                    type="email"
-                    inputMode="email"
-                    autoComplete="email"
-                    autoCapitalize="none"
-                    autoCorrect="off"
-                    spellCheck="false"
-                    placeholder="you@company.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="h-14 text-lg rounded-none bg-zinc-900 border-2 border-zinc-700 text-white placeholder:text-white/25 font-mono pl-4 pr-4 focus:border-gold focus:ring-0 input-focus-glow transition-colors"
-                    required
-                  />
-                </div>
+                <Input
+                  id="email"
+                  type="email"
+                  inputMode="email"
+                  autoComplete="email"
+                  autoCapitalize="none"
+                  autoCorrect="off"
+                  spellCheck="false"
+                  placeholder="you@company.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="h-14 text-lg rounded-none bg-card border-2 border-border text-white placeholder:text-white/25 font-mono pl-4 pr-4 focus:border-gold focus:ring-0 input-focus-glow transition-colors text-left"
+                  required
+                />
               </div>
 
               <Button
                 type="submit"
                 disabled={loading || !email}
-                className="w-full h-14 rounded-none font-black text-base tracking-[0.1em] bg-gold text-black hover:bg-gold-highlight disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200"
+                className="w-full h-14 rounded-none font-black text-base tracking-[0.1em] bg-gold text-black hover:bg-gold-highlight disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200 auth-cta-glow"
                 style={{
                   boxShadow: email ? '0 0 30px rgba(212, 175, 55, 0.3)' : 'none',
                 }}
@@ -184,61 +196,30 @@ const Auth = () => {
                   <Loader2 className="w-5 h-5 animate-spin" />
                 ) : (
                   <span className="flex items-center justify-center gap-2">
-                    CONTINUE
+                    GET ACCESS
                     <ArrowRight className="w-4 h-4" />
                   </span>
                 )}
               </Button>
             </form>
 
-            {/* Help toggle */}
-            <div className="mt-6">
-              <button
-                onClick={() => setShowHelp(!showHelp)}
-                className="flex items-center gap-2 text-white/30 hover:text-white/50 transition-colors mx-auto"
+            {/* Demo Access */}
+            <div className="mt-8">
+              <Button
+                onClick={() => navigate("/calculator?skip=true")}
+                variant="outline"
+                className="w-full h-12 rounded-none border-border text-white/60 hover:text-white hover:border-gold/50 hover:bg-transparent text-sm font-semibold tracking-wider"
               >
-                <HelpCircle className="w-4 h-4" />
-                <span className="text-xs tracking-wide">Why do we need this?</span>
-              </button>
-
-              {showHelp && (
-                <div className="mt-4 p-4 bg-zinc-900/50 border border-zinc-800 text-white/50 text-xs leading-relaxed">
-                  <p className="mb-2">
-                    <strong className="text-white/70">Your email lets us:</strong>
-                  </p>
-                  <ul className="space-y-1 pl-4">
-                    <li>• Save your calculations for later</li>
-                    <li>• Send your personalized investor deck</li>
-                    <li>• Keep you updated on new features</li>
-                  </ul>
-                  <p className="mt-3 text-white/30">
-                    We never spam. Unsubscribe anytime.
-                  </p>
-                </div>
-              )}
-            </div>
-
-            {/* Skip option - pushed to bottom */}
-            <div className="mt-auto pt-8">
-              <div className="border-t border-zinc-800 pt-6 text-center">
-                <button
-                  onClick={() => navigate("/calculator?skip=true")}
-                  className="text-white/30 hover:text-white/50 text-sm transition-colors"
-                >
-                  Skip for now
-                </button>
-                <p className="text-white/15 text-[10px] mt-2">
-                  You won't be able to save your results
-                </p>
-              </div>
+                TRY DEMO WITHOUT SAVING
+              </Button>
+              <p className="text-white/30 text-[10px] text-center mt-3">
+                Demo mode — your calculations won't be saved
+              </p>
             </div>
           </div>
         ) : (
-          /* ─────────────────────────────────────────────────────────────────
-             STEP 2: Email Sent Confirmation
-             ───────────────────────────────────────────────────────────────── */
+          /* Email Sent Confirmation */
           <div className="flex-1 flex flex-col items-center justify-center text-center">
-            {/* Success icon */}
             <div className="relative mb-8">
               <div
                 className="absolute"
@@ -271,9 +252,9 @@ const Auth = () => {
               {email}
             </p>
 
-            <div className="space-y-4 text-sm text-white/40">
+            <div className="space-y-4 text-sm text-white/50">
               <p>Click the link in your email to continue.</p>
-              <p className="text-white/25 text-xs">
+              <p className="text-white/30 text-xs">
                 Can't find it? Check your spam folder.
               </p>
             </div>
@@ -289,7 +270,7 @@ const Auth = () => {
               <div className="pt-4">
                 <button
                   onClick={() => navigate("/calculator?skip=true")}
-                  className="text-white/25 hover:text-white/40 text-xs transition-colors"
+                  className="text-white/30 hover:text-white/50 text-xs transition-colors"
                 >
                   Continue without saving →
                 </button>
