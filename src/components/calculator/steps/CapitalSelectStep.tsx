@@ -54,11 +54,11 @@ const CapitalSelectStep = ({ selections, onToggle }: CapitalSelectStepProps) => 
     <div className="step-enter">
       {/* Step Header */}
       <div className="text-center mb-8">
-        <h2 className="font-bebas text-2xl tracking-[0.15em] text-gold mb-2">
-          CAPITAL STACK
+        <h2 className="font-bebas text-2xl tracking-[0.1em] text-foreground mb-2">
+          How did you <span className="text-gold">fund this</span>?
         </h2>
-        <p className="text-white/50 text-sm">
-          Which financing sources are in your deal?
+        <p className="text-muted-foreground text-sm">
+          Everyone who put money in gets paid back. With interest. Before you.
         </p>
       </div>
 
