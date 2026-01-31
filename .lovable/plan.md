@@ -1,272 +1,327 @@
 
+# Complete Overhaul Plan: Logic Flow, Authentication & Header
 
-# The Definitive Premium Overhaul: From "Almost There" to "Wow"
-
-## Honest Assessment: What's Wrong Right Now
-
-After reviewing every file in detail, I can see the application has **good bones** but is suffering from **death by a thousand cuts** - small inconsistencies that collectively make it feel unfinished.
-
----
-
-## PROBLEM 1: Intro Animation is Weak & Small
-
-**Current State:**
-- The splash is sized at `text-4xl sm:text-5xl` for brand name
-- The gold line is only `120px` wide - tiny on a full screen
-- The timing is okay but the visual impact is underwhelming
-- When splash fades, the homepage has a LARGER brand icon (`w-32`) and LARGER text (`text-5xl md:text-6xl`) - **the intro shrinks to the homepage, which feels backwards**
-
-**The Fix:**
-- Make the intro animation BIGGER than the homepage - it should be the HERO moment
-- Brand name in intro: `text-6xl sm:text-7xl md:text-8xl`
-- Gold line: `200px` minimum, with thicker stroke (`h-[2px]`)
-- Add subtle ambient glow behind the text
-- When it transitions to homepage, the scaling down feels intentional
+This plan addresses three critical areas that need fixing:
+1. **Calculator Logic Flow** - Fix the broken math and restructure steps
+2. **Authentication Page** - Magic link with proper name + email capture
+3. **Header Design** - Replace logo icon with text, matte charcoal with gold line
 
 ---
 
-## PROBLEM 2: Auth Page is Flat & Uninspired
+## Current State Analysis
 
-**Current State:**
-- Small brand icon (`w-20`) - feels timid
-- "PRODUCER ACCESS" heading is fine but the whole page lacks drama
-- Input fields are functional but not premium
-- The form feels like a standard login, not an "entry to an exclusive tool"
-- Trust indicators are too small and forgettable
-- The page lacks visual hierarchy - everything is the same weight
+### What's Wrong
 
-**The Fix:**
-- Larger brand presence (icon + decorative element)
-- Create a "luxury entry" feel with a gold horizontal divider like the homepage
-- Input fields need more visual weight - larger labels, more prominent icons
-- The CTA button needs to COMMAND the screen
-- Add a subtle pattern or texture to differentiate from plain black
-- Trust indicators should feel like badges of authority, not footnotes
+**Calculator Logic (Critical):**
+- `BreakevenStep.tsx` and `AcquisitionStep.tsx` use `budget * 1.2` as fake revenue - this makes the math meaningless
+- `OffTopTotalStep.tsx` shows dollar amounts based on hypothetical revenue that doesn't exist yet
+- `CapitalDetailsStep.tsx` shows all financing cards at once, violating one-card-per-screen principle
+- The breakeven should be calculated algebraically, not with placeholder numbers
 
----
+**Authentication (Missing Features):**
+- Current flow only captures email, but you need NAME + EMAIL for lead capture
+- Magic link (OTP) is implemented but needs a name field added
+- Need to store the name in the user's profile data
 
-## PROBLEM 3: Card System is Inconsistent
-
-**Analysis of current cards:**
-
-| Step 1 | Step 2 | Step 3 |
-|--------|--------|--------|
-| `border border-gold` full card | `border border-gold` full card | `border border-gold` full card |
-| `bg-card` header | `bg-card` header | `bg-card` header |
-| `bg-background` body | `bg-background` body | `bg-background` body |
-| No toggle (always visible) | Toggle pattern | Toggle pattern |
-| Gold dot indicator | Icon in gold | Icon in gold |
-| Info button (different style) | Info button (inline) | Info button (larger touch target) |
-
-**Issues:**
-1. Step 1 uses a gold dot + text in header; Steps 2-3 use icon + text
-2. Info button sizing is inconsistent (Step 1: `w-4 h-4`, Step 3: `w-8 h-8` wrapper)
-3. The cards work but they're TOO BOXY - large gold borders everywhere make it feel heavy
-4. Input fields have slight styling variations between steps
-
-**The Fix - Unified "Smart Panel" System:**
-- Remove gold border from entire card - use it ONLY on the left edge (accent strip)
-- Consistent header pattern: Icon + Title + Info + (Toggle if collapsible)
-- Info buttons: All 44px touch target, same icon size
-- Input styling: Standardize to exact same specs across all steps
+**Header (Design Issues):**
+- Uses `filmmaker-logo.jpg` image in the header (should be text only)
+- Missing the matte charcoal (#0A0A0A) background
+- The gold line exists but header uses the logo icon
 
 ---
 
-## PROBLEM 4: Typography Hierarchy is Muddy
+## Part 1: Fix Calculator Logic Flow
 
-**Current problems:**
-- Section headers use different sizes (`text-xl` in some places, `text-base` in others)
-- Labels vary between `text-xs`, `text-[10px]`, `text-[11px]`
-- Some labels are `uppercase` with tracking, others aren't
-- Financial values mix `text-xl`, `text-lg`, `text-2xl`, `text-base`
+### Phase 1A: Fix the Breakeven Calculation
 
-**The Fix - Strict Type Scale:**
+The core math problem is that we're using `budget * 1.2` as a proxy revenue. Instead, we need to calculate the true algebraic breakeven.
+
+**The correct formula:**
+
+```text
+Breakeven X = (DebtRepayment + EquityRepayment - Credits + MarketingCap) / (1 - salesFee% - CAM% - guilds%)
 ```
-Step Headers:     font-bebas text-lg (18px) tracking-wide
-Card Titles:      font-bebas text-sm (14px) tracking-widest uppercase
-Input Labels:     font-sans text-xs (12px) uppercase tracking-wider font-semibold
-Input Values:     font-mono text-xl (20px)
-Helper Text:      font-sans text-xs (12px) text-muted-foreground
+
+This solves for the minimum revenue needed where all obligations are met.
+
+**Changes to `src/lib/waterfall.ts`:**
+- Add new function `calculateBreakeven()` that takes inputs, guilds, and capital selections
+- Returns the exact breakeven revenue point
+
+**Changes to `src/components/calculator/steps/BreakevenStep.tsx`:**
+- Remove the fake `hypotheticalRevenue = inputs.budget * 1.2`
+- Use the new `calculateBreakeven()` function
+- Show the actual breakeven number based on real math
+
+**Changes to `src/components/calculator/steps/AcquisitionStep.tsx`:**
+- Use the same `calculateBreakeven()` function for consistency
+- Remove duplicate calculation logic
+
+### Phase 1B: Fix Off-Top Display
+
+**Changes to `src/components/calculator/steps/OffTopTotalStep.tsx`:**
+- Instead of showing dollar amounts based on fake revenue, show PERCENTAGES
+- Display: "22.9% of whatever the streamer pays goes to these parties first"
+- Show the marketing cap as a fixed dollar amount (it's not percentage-based)
+
+New display format:
+```text
+Sales Agent     15%
+CAM Fee          1%
+Guild Residuals  6.9%
+────────────────────
+OFF-TOP RATE   22.9%
+
+Plus: Marketing Cap $75K
 ```
+
+### Phase 1C: Split Capital Details Into Individual Steps (Dynamic)
+
+Currently `CapitalDetailsStep.tsx` shows all selected financing cards at once. This needs to be one card per screen.
+
+**New component files to create:**
+- `src/components/calculator/steps/TaxCreditsStep.tsx`
+- `src/components/calculator/steps/SeniorDebtStep.tsx`
+- `src/components/calculator/steps/GapLoanStep.tsx`
+- `src/components/calculator/steps/EquityStep.tsx`
+
+**Changes to `src/pages/Calculator.tsx`:**
+- Dynamic step count based on capital selections
+- After "Capital Selection" step, show individual steps only for selected sources
+- Base flow: 8 steps minimum (Budget through Waterfall)
+- Add 1 step for each selected financing source (0-4 additional)
+
+New step sequence:
+```text
+1. Budget
+2. Sales Agent
+3. CAM Fee
+4. Marketing
+5. Guilds
+6. Off-Top Total (shows percentages)
+7. Capital Selection (toggles)
+8. [Dynamic] Tax Credits Details (if selected)
+9. [Dynamic] Senior Debt Details (if selected)
+10. [Dynamic] Gap Loan Details (if selected)
+11. [Dynamic] Equity Details (if selected)
+12. Breakeven (real math)
+13. Acquisition Price
+14. Reveal
+15. Waterfall
+```
+
+**Delete:** `src/components/calculator/steps/CapitalDetailsStep.tsx`
 
 ---
 
-## PROBLEM 5: The Calculator Status Bar is Cramped
+## Part 2: Fix Authentication with Name + Email
 
-**Current State:**
-- Step labels (`DEAL • CAPITAL • DEDUCTIONS • RESULTS`) in `text-[10px]` - too small
-- Combines pills AND progress bar - redundant
-- The active step label has a different color but it's hard to see
+### Phase 2A: Add Name Field to Auth Flow
 
-**The Fix:**
-- Remove the pills entirely - the labels ARE the navigation
-- Make labels larger and tappable (min 44px height)
-- Use a single progress bar below
-- Active step gets gold underline or background, not just color change
+**Changes to `src/pages/Auth.tsx`:**
+
+Current state captures only email. Need to add:
+1. Name input field (required)
+2. Store name in user metadata when sending magic link
+3. Update form validation to require both fields
+
+The magic link flow with Supabase OTP supports passing user metadata:
+
+```typescript
+await supabase.auth.signInWithOtp({
+  email: email.trim(),
+  options: {
+    emailRedirectTo: redirectUrl,
+    data: {
+      full_name: name.trim(),
+    }
+  },
+});
+```
+
+**New form layout:**
+```text
+YOUR NAME
+[____________________]
+
+EMAIL ADDRESS  
+[____________________]
+
+[GET ACCESS →]
+```
+
+### Phase 2B: Create Profiles Table for User Data
+
+**Database migration needed:**
+
+```sql
+CREATE TABLE public.profiles (
+    id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE PRIMARY KEY,
+    full_name TEXT,
+    email TEXT,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
+    updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
+);
+
+ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Users can view own profile" 
+ON public.profiles FOR SELECT 
+USING (auth.uid() = id);
+
+CREATE POLICY "Users can update own profile" 
+ON public.profiles FOR UPDATE 
+USING (auth.uid() = id);
+
+-- Trigger to auto-create profile on signup
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS TRIGGER AS $$
+BEGIN
+  INSERT INTO public.profiles (id, full_name, email)
+  VALUES (
+    NEW.id, 
+    NEW.raw_user_meta_data->>'full_name',
+    NEW.email
+  );
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE TRIGGER on_auth_user_created
+  AFTER INSERT ON auth.users
+  FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
+```
+
+### Phase 2C: Verify Magic Link Works
+
+The current implementation uses `signInWithOtp` which is correct. Key points:
+- Redirect URL goes to `/calculator`
+- Auth state listener in `Calculator.tsx` already handles session
+- Need to ensure email confirmation is working (check Supabase auth settings)
 
 ---
 
-## PROBLEM 6: Results Dashboard Card Carousel is Clunky
+## Part 3: Fix Header Design
 
-**Current Issues:**
-- Cards are `width: 260px` fixed - works but feels arbitrary
-- The swipe hint with pulsing chevrons on edges is still too subtle
-- The dots above carousel have inconsistent styling from rest of app
+### Phase 3A: Remove Logo Icon, Add Text
 
-**The Fix:**
-- Make cards nearly full-width with peek (shows ~15% of next card)
-- One swipe = one card (full snap)
-- Remove the dots - the cards themselves show progress
-- Simpler visual: the active card could have a slightly elevated state
+**Changes to `src/components/Header.tsx`:**
+
+Current header shows the `filmmaker-logo.jpg` image. Replace with:
+- Text only: "FILMMAKER.OG" in Bebas font
+- Matte charcoal background (#0A0A0A)
+- Gold gradient line underneath
+- Keep hamburger menu on right
+
+New header structure:
+```text
+┌─────────────────────────────────────┐
+│ FILMMAKER.OG                    ☰   │  ← #0A0A0A bg
+├─────────────────────────────────────┤  ← Gold gradient line
+```
+
+**Specific changes:**
+1. Remove `<img src={filmmakerLogo}` from header
+2. Replace with `<span className="font-bebas">FILMMAKER.OG</span>`
+3. Ensure background is `#0A0A0A` (matte charcoal)
+4. Gold line already exists (keep it)
+5. Remove conditional `hidden sm:inline` - always show text
+
+### Phase 3B: Update Calculator Header
+
+The calculator has its own inline header in `Calculator.tsx`. Update it to match:
+- Same matte charcoal background
+- "FILMMAKER.OG" text on left
+- Step title in center
+- Gold line underneath
 
 ---
 
-## PROBLEM 7: Bottom Navigation Needs Polish
+## Implementation Order
 
-**Current State:**
-- Buttons are functional but "Previous" feels weak
-- The `btn-vault` class is used but the visual isn't commanding
-- On Step 4 (Results), there's no "NEXT" button - the space is empty/unbalanced
+### Batch 1 (Logic & Math)
+1. Add `calculateBreakeven()` to `src/lib/waterfall.ts`
+2. Update `OffTopTotalStep.tsx` to show percentages
+3. Update `BreakevenStep.tsx` with real calculation
+4. Update `AcquisitionStep.tsx` with real calculation
 
-**The Fix:**
-- "Previous" should be a clear ghost button with border
-- "NEXT STEP" should be the dominant visual - larger, more glow
-- On final step, add a "START OVER" or "SHARE" action to balance
+### Batch 2 (Dynamic Capital Steps)
+5. Create `TaxCreditsStep.tsx`
+6. Create `SeniorDebtStep.tsx`
+7. Create `GapLoanStep.tsx`
+8. Create `EquityStep.tsx`
+9. Update `Calculator.tsx` with dynamic step logic
+10. Delete `CapitalDetailsStep.tsx`
 
----
+### Batch 3 (Authentication)
+11. Database migration for profiles table
+12. Update `Auth.tsx` with name field
+13. Test magic link flow end-to-end
 
-## PROBLEM 8: Mobile Input Sizing Feels Off
-
-**Current State:**
-- Inputs are `min-h-[52px]` or `min-h-[56px]` - inconsistent
-- The `text-xl` for values is good but some feel cramped
-
-**The Fix:**
-- Standardize ALL inputs to `h-14` (56px) with consistent padding
-- All financial values: `text-xl` right-aligned, `font-mono`
-- Currency/percent symbols: `text-lg text-muted-foreground`
-
----
-
-## Implementation Plan
-
-### Phase 1: Intro Animation - Make it MASSIVE
-
-**File: `src/pages/Index.tsx`**
-```
-Changes:
-- Splash brand name: text-6xl sm:text-7xl md:text-8xl
-- Gold line: h-[2px] with width 200px (animate from 0)
-- Add ambient glow behind brand during splash
-- Tagline: text-sm sm:text-base tracking-[0.5em]
-- Slow down final fade-out (700ms)
-```
-
-### Phase 2: Auth Page - Create Elegance
-
-**File: `src/pages/Auth.tsx`**
-```
-Changes:
-- Larger brand icon: w-24 h-24
-- Add horizontal gold divider below icon (40px wide, subtle)
-- Heading: "PRODUCER ACCESS" → Keep but make text-3xl
-- Input containers: add subtle background (bg-card/50)
-- Labels: text-xs tracking-[0.25em] text-muted-foreground
-- Input fields: h-14 uniform, border-2 on focus
-- CTA button: text-lg, add subtle shadow pulse animation
-- Trust indicators: space out more, add icons (Lock, Users, Zap)
-- Demo link: more prominent, add "→" arrow
-```
-
-### Phase 3: Unified Card System
-
-**File: `src/components/calculator/WizardStep1.tsx`**
-```
-Changes:
-- Remove full gold border, add border-l-2 border-l-gold accent only
-- Header: standardize to Icon + Title + Info pattern
-- Remove the arrow flow indicator between cards (unnecessary)
-- Input styling: exact match to Step 2/3
-- Info button: 44px touch target
-```
-
-**File: `src/components/calculator/WizardStep2.tsx`**
-```
-Changes:
-- Already good pattern, just align exact sizes
-- Info button: ensure 44px touch target
-- Standardize label sizes
-```
-
-**File: `src/components/calculator/WizardStep3.tsx`**
-```
-Changes:
-- Same as Step 2 - ensure consistency
-- Guild toggles: increase row height for touch
-```
-
-### Phase 4: Calculator Chrome Polish
-
-**File: `src/pages/Calculator.tsx`**
-```
-Changes:
-- Status bar: Make step labels larger (text-xs), tappable
-- Remove StepIndicator pills - use labels as nav
-- Progress bar: Keep, make thinner (h-0.5)
-- Footer: Add action on Step 4 (Start Over button)
-```
-
-### Phase 5: Results Dashboard Refinement
-
-**File: `src/components/calculator/ResultsDashboard.tsx`**
-```
-Changes:
-- Hero card: Keep but refine border to 1px
-- Quick stats: Increase padding, make icons consistent
-- Carousel: Cards 85% width with peek
-- Remove dot navigation
-- Simpler swipe hint that disappears after first interaction
-```
-
-### Phase 6: CSS Type Scale & Standards
-
-**File: `src/index.css`**
-```
-Add:
-- .panel-header { @apply font-bebas text-sm tracking-widest uppercase text-gold }
-- .input-label { @apply text-xs tracking-wider uppercase font-semibold text-foreground }
-- .input-value { @apply font-mono text-xl text-foreground }
-- .input-symbol { @apply font-mono text-lg text-muted-foreground }
-```
+### Batch 4 (Header)
+14. Update `Header.tsx` - remove logo, add text
+15. Update calculator header in `Calculator.tsx`
+16. Ensure consistent styling across all pages
 
 ---
 
-## Summary Table
+## Files to Modify
 
-| Element | Before | After |
-|---------|--------|-------|
-| Splash brand | text-4xl | text-6xl sm:text-7xl |
-| Splash line | 120px, 1px | 200px, 2px |
-| Auth icon | w-20 | w-24 |
-| Auth inputs | varied heights | h-14 uniform |
-| Card borders | Full gold border | Left accent only |
-| Step labels | text-[10px] | text-xs, tappable |
-| Info buttons | varied | 44px uniform |
-| Input labels | text-xs / text-[10px] | text-xs uniform |
-| Carousel cards | 260px fixed | 85% width + peek |
+| File | Action | Batch |
+|------|--------|-------|
+| `src/lib/waterfall.ts` | Add calculateBreakeven() | 1 |
+| `src/components/calculator/steps/OffTopTotalStep.tsx` | Show percentages | 1 |
+| `src/components/calculator/steps/BreakevenStep.tsx` | Use real calculation | 1 |
+| `src/components/calculator/steps/AcquisitionStep.tsx` | Use real calculation | 1 |
+| `src/components/calculator/steps/TaxCreditsStep.tsx` | CREATE | 2 |
+| `src/components/calculator/steps/SeniorDebtStep.tsx` | CREATE | 2 |
+| `src/components/calculator/steps/GapLoanStep.tsx` | CREATE | 2 |
+| `src/components/calculator/steps/EquityStep.tsx` | CREATE | 2 |
+| `src/pages/Calculator.tsx` | Dynamic step logic | 2 |
+| `src/components/calculator/steps/CapitalDetailsStep.tsx` | DELETE | 2 |
+| Database migration | CREATE profiles table | 3 |
+| `src/pages/Auth.tsx` | Add name field | 3 |
+| `src/components/Header.tsx` | Text instead of logo | 4 |
+| `src/pages/Calculator.tsx` | Update header styling | 4 |
 
 ---
 
-## The "App-Like" Philosophy
+## Technical Notes
 
-Every change follows these principles:
+### Breakeven Formula Explained
 
-1. **Touch-first**: All interactive elements 44-56px minimum
-2. **Snappy transitions**: 150ms or less for state changes
-3. **Visual hierarchy**: One hero element per screen, clear secondary/tertiary
-4. **Breathing room**: More padding, less cramped
-5. **Consistency**: Same pattern repeated = professional feel
-6. **Premium but minimal**: Gold accents, not gold everything
+The breakeven X must satisfy:
+```
+X = OffTop(X) + DebtRepayment + EquityRepayment - Credits + Marketing
+```
 
-This plan addresses every inconsistency while maintaining the good bones. The result will feel like a native mobile app from a serious financial tool company - authoritative, premium, and polished.
+Where `OffTop(X) = X * (salesFee% + CAM% + guildsPct)`
 
+Solving:
+```
+X = X * offTopRate + fixedCosts
+X - X * offTopRate = fixedCosts
+X * (1 - offTopRate) = fixedCosts
+X = fixedCosts / (1 - offTopRate)
+```
+
+This gives the exact revenue needed to cover all obligations.
+
+### Dynamic Steps Logic
+
+```typescript
+const getSteps = () => {
+  const baseSteps = ['budget', 'sales', 'cam', 'marketing', 'guilds', 'offtop', 'capitalSelect'];
+  const capitalSteps = [];
+  if (selections.taxCredits) capitalSteps.push('taxCredits');
+  if (selections.seniorDebt) capitalSteps.push('seniorDebt');
+  if (selections.gapLoan) capitalSteps.push('gapLoan');
+  if (selections.equity) capitalSteps.push('equity');
+  const endSteps = ['breakeven', 'acquisition', 'reveal', 'waterfall'];
+  return [...baseSteps, ...capitalSteps, ...endSteps];
+};
+```
+
+### Demo Access
+
+The "TRY WITHOUT SAVING" button stays - it's for your testing. It navigates to `/calculator?skip=true` which bypasses auth. This remains unchanged.
