@@ -1,5 +1,4 @@
-import { Input } from "@/components/ui/input";
-import { Slider } from "@/components/ui/slider";
+import { PercentStepper } from "@/components/ui/percent-stepper";
 import { WaterfallInputs, formatCompactCurrency } from "@/lib/waterfall";
 import { Info } from "lucide-react";
 import { useState } from "react";
@@ -36,26 +35,18 @@ const SalesAgentStep = ({ inputs, onUpdateInput }: SalesAgentStepProps) => {
           </p>
         </div>
 
-        {/* Rate Slider */}
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <span className="text-xs uppercase tracking-wider text-muted-foreground">Your rate</span>
-            <span className="font-mono text-2xl text-gold">{inputs.salesFee}%</span>
-          </div>
-          <Slider
-            value={[inputs.salesFee]}
-            onValueChange={(value) => onUpdateInput('salesFee', value[0])}
-            min={0}
-            max={25}
-            step={1}
-            className="py-2"
-          />
-          <div className="flex justify-between text-xs text-muted-foreground">
-            <span>0%</span>
-            <span className="text-muted-foreground/50">Industry: 10-20%</span>
-            <span>25%</span>
-          </div>
-        </div>
+        {/* Rate Stepper - Premium */}
+        <PercentStepper
+          value={inputs.salesFee}
+          onChange={(value) => onUpdateInput('salesFee', value)}
+          min={0}
+          max={30}
+          step={5}
+          label="Your Rate"
+          standardValue={15}
+          standardLabel="industry average"
+          isCompleted={true}
+        />
 
         {/* Impact Display */}
         {inputs.budget > 0 && (

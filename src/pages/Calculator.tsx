@@ -3,9 +3,11 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { useHaptics } from "@/hooks/use-haptics";
+import { useSwipe } from "@/hooks/use-swipe";
 import { ArrowLeft, RotateCcw, ChevronRight, ChevronLeft } from "lucide-react";
 import { User } from "@supabase/supabase-js";
 import { calculateWaterfall, WaterfallInputs, WaterfallResult, GuildState } from "@/lib/waterfall";
+import { cn } from "@/lib/utils";
 
 // Step Components - Anxiety First Flow
 import BudgetStep from "@/components/calculator/steps/BudgetStep";
@@ -20,7 +22,7 @@ import BreakevenStep from "@/components/calculator/steps/BreakevenStep";
 import AcquisitionStep from "@/components/calculator/steps/AcquisitionStep";
 import RevealStep from "@/components/calculator/steps/RevealStep";
 import WaterfallStep from "@/components/calculator/steps/WaterfallStep";
-import StepIndicator from "@/components/calculator/StepIndicator";
+import ProgressBar from "@/components/calculator/ProgressBar";
 
 const STORAGE_KEY = "filmmaker_og_inputs";
 const TOTAL_STEPS = 12;
@@ -81,6 +83,8 @@ const Calculator = () => {
   const [guilds, setGuilds] = useState<GuildState>(defaultGuilds);
   const [capitalSelections, setCapitalSelections] = useState<CapitalSelections>(defaultCapitalSelections);
   const [result, setResult] = useState<WaterfallResult | null>(null);
+  const [isButtonPressed, setIsButtonPressed] = useState(false);
+  const [shakeButton, setShakeButton] = useState(false);
 
   // Reset on ?reset=true
   useEffect(() => {
@@ -172,29 +176,8 @@ const Calculator = () => {
     setCapitalSelections(prev => ({ ...prev, [key]: !prev[key] }));
   }, []);
 
-  const nextStep = () => {
-    haptics.medium();
-    if (currentStep < TOTAL_STEPS) {
-      setCurrentStep(prev => prev + 1);
-    }
-  };
-
-  const prevStep = () => {
-    haptics.light();
-    if (currentStep > 1) {
-      setCurrentStep(prev => prev - 1);
-    }
-  };
-
-  const goToStep = (step: number) => {
-    if (step >= 1 && step < currentStep) {
-      haptics.light();
-      setCurrentStep(step);
-    }
-  };
-
   // Can proceed to next step?
-  const canProceed = () => {
+  const canProceed = useCallback(() => {
     switch (currentStep) {
       case 1: // Budget
         return inputs.budget > 0;
@@ -221,7 +204,52 @@ const Calculator = () => {
       default:
         return true;
     }
-  };
+  }, [currentStep, inputs.budget, inputs.revenue, capitalSelections]);
+
+  const nextStep = useCallback(() => {
+    if (!canProceed()) {
+      // Shake the button to indicate invalid
+      setShakeButton(true);
+      haptics.error();
+      setTimeout(() => setShakeButton(false), 300);
+      return;
+    }
+    
+    haptics.step();
+    if (currentStep < TOTAL_STEPS) {
+      setCurrentStep(prev => prev + 1);
+    }
+  }, [canProceed, currentStep, haptics]);
+
+  const prevStep = useCallback(() => {
+    haptics.light();
+    if (currentStep > 1) {
+      setCurrentStep(prev => prev - 1);
+    }
+  }, [currentStep, haptics]);
+
+  const goToStep = useCallback((step: number) => {
+    if (step >= 1 && step < currentStep) {
+      haptics.light();
+      setCurrentStep(step);
+    }
+  }, [currentStep, haptics]);
+
+  // Swipe navigation
+  const { handlers: swipeHandlers, state: swipeState } = useSwipe({
+    onSwipeLeft: () => {
+      if (canProceed() && currentStep < TOTAL_STEPS) {
+        nextStep();
+      }
+    },
+    onSwipeRight: () => {
+      if (currentStep > 1) {
+        prevStep();
+      }
+    },
+    threshold: 50,
+    rubberBand: true,
+  });
 
   // Get step phase/title
   const getStepTitle = () => {
@@ -283,7 +311,7 @@ const Calculator = () => {
       <header className="fixed top-0 left-0 right-0 h-14 z-50 flex items-center px-4 bg-background border-b border-border">
         <button
           onClick={() => currentStep > 1 ? prevStep() : navigate("/")}
-          className="w-10 h-10 flex items-center justify-center hover:opacity-80 transition-opacity"
+          className="w-10 h-10 flex items-center justify-center hover:opacity-80 transition-opacity touch-feedback"
         >
           <ArrowLeft className="w-5 h-5 text-muted-foreground" />
         </button>
@@ -298,7 +326,7 @@ const Calculator = () => {
           {currentStep > 1 && (
             <button
               onClick={handleStartOver}
-              className="w-10 h-10 flex items-center justify-center hover:opacity-80"
+              className="w-10 h-10 flex items-center justify-center hover:opacity-80 touch-feedback"
             >
               <RotateCcw className="w-4 h-4 text-muted-foreground" />
             </button>
@@ -309,59 +337,89 @@ const Calculator = () => {
       {/* Spacer for fixed header */}
       <div className="h-14" />
 
-      {/* Step Counter (simplified - showing step X of 12) */}
-      <div className="border-b border-border bg-card/50 py-2">
-        <div className="flex items-center justify-center gap-2">
-          <span className="text-[10px] uppercase tracking-widest text-muted-foreground">
-            {getPhaseLabel()}
-          </span>
-          <span className="text-muted-foreground/50">•</span>
-          <span className="text-[10px] font-mono text-muted-foreground">
-            {currentStep}/{TOTAL_STEPS}
-          </span>
-        </div>
-      </div>
+      {/* Progress Bar - Sticky */}
+      <ProgressBar
+        currentStep={currentStep}
+        totalSteps={TOTAL_STEPS}
+        stepLabels={STEP_LABELS}
+        onStepClick={goToStep}
+      />
 
-      {/* Main Content */}
+      {/* Main Content with Swipe */}
       <main
         ref={mainRef}
         className="flex-1 px-5 py-6 pb-32 overflow-y-auto"
+        {...swipeHandlers}
       >
-        {currentStep === 1 && (
-          <BudgetStep inputs={inputs} onUpdateInput={updateInput} />
+        {/* Swipe offset transform */}
+        <div
+          className={cn(
+            "transition-transform",
+            swipeState.isSwiping ? "duration-0" : "duration-200 ease-out"
+          )}
+          style={{
+            transform: swipeState.isSwiping ? `translateX(${swipeState.offset * 0.3}px)` : undefined,
+            opacity: swipeState.isSwiping ? 1 - Math.abs(swipeState.offset) / 400 : 1,
+          }}
+        >
+          {currentStep === 1 && (
+            <BudgetStep inputs={inputs} onUpdateInput={updateInput} />
+          )}
+          {currentStep === 2 && (
+            <SalesAgentStep inputs={inputs} onUpdateInput={updateInput} />
+          )}
+          {currentStep === 3 && (
+            <CamFeeStep inputs={inputs} />
+          )}
+          {currentStep === 4 && (
+            <MarketingStep inputs={inputs} onUpdateInput={updateInput} />
+          )}
+          {currentStep === 5 && (
+            <GuildsStep inputs={inputs} guilds={guilds} onToggleGuild={toggleGuild} />
+          )}
+          {currentStep === 6 && (
+            <OffTopTotalStep inputs={inputs} guilds={guilds} />
+          )}
+          {currentStep === 7 && (
+            <CapitalSelectStep selections={capitalSelections} onToggle={toggleCapitalSelection} />
+          )}
+          {currentStep === 8 && (
+            <CapitalDetailsStep inputs={inputs} selections={capitalSelections} onUpdateInput={updateInput} />
+          )}
+          {currentStep === 9 && (
+            <BreakevenStep inputs={inputs} guilds={guilds} selections={capitalSelections} />
+          )}
+          {currentStep === 10 && (
+            <AcquisitionStep inputs={inputs} guilds={guilds} selections={capitalSelections} onUpdateInput={updateInput} />
+          )}
+          {currentStep === 11 && result && (
+            <RevealStep result={result} equity={inputs.equity} />
+          )}
+          {currentStep === 12 && result && (
+            <WaterfallStep result={result} inputs={inputs} />
+          )}
+        </div>
+
+        {/* Swipe edge hints */}
+        {currentStep > 1 && (
+          <div
+            className={cn(
+              "fixed left-2 top-1/2 -translate-y-1/2 text-gold/30 transition-opacity",
+              swipeState.direction === 'right' ? 'opacity-100' : 'opacity-0'
+            )}
+          >
+            <ChevronLeft className="w-6 h-6" />
+          </div>
         )}
-        {currentStep === 2 && (
-          <SalesAgentStep inputs={inputs} onUpdateInput={updateInput} />
-        )}
-        {currentStep === 3 && (
-          <CamFeeStep inputs={inputs} />
-        )}
-        {currentStep === 4 && (
-          <MarketingStep inputs={inputs} onUpdateInput={updateInput} />
-        )}
-        {currentStep === 5 && (
-          <GuildsStep inputs={inputs} guilds={guilds} onToggleGuild={toggleGuild} />
-        )}
-        {currentStep === 6 && (
-          <OffTopTotalStep inputs={inputs} guilds={guilds} />
-        )}
-        {currentStep === 7 && (
-          <CapitalSelectStep selections={capitalSelections} onToggle={toggleCapitalSelection} />
-        )}
-        {currentStep === 8 && (
-          <CapitalDetailsStep inputs={inputs} selections={capitalSelections} onUpdateInput={updateInput} />
-        )}
-        {currentStep === 9 && (
-          <BreakevenStep inputs={inputs} guilds={guilds} selections={capitalSelections} />
-        )}
-        {currentStep === 10 && (
-          <AcquisitionStep inputs={inputs} guilds={guilds} selections={capitalSelections} onUpdateInput={updateInput} />
-        )}
-        {currentStep === 11 && result && (
-          <RevealStep result={result} equity={inputs.equity} />
-        )}
-        {currentStep === 12 && result && (
-          <WaterfallStep result={result} inputs={inputs} />
+        {currentStep < TOTAL_STEPS && canProceed() && (
+          <div
+            className={cn(
+              "fixed right-2 top-1/2 -translate-y-1/2 text-gold/30 transition-opacity",
+              swipeState.direction === 'left' ? 'opacity-100' : 'opacity-0'
+            )}
+          >
+            <ChevronRight className="w-6 h-6" />
+          </div>
         )}
       </main>
 
@@ -379,15 +437,24 @@ const Calculator = () => {
               <Button
                 onClick={prevStep}
                 variant="outline"
-                className="h-14 px-6 text-sm font-semibold tracking-wider rounded-none border-border hover:border-gold/50 hover:bg-transparent"
+                className="h-14 px-6 text-sm font-semibold tracking-wider rounded-none border-border hover:border-gold/50 hover:bg-transparent touch-feedback active:scale-95 transition-transform"
               >
                 <ChevronLeft className="w-4 h-4" />
               </Button>
             )}
             <Button
               onClick={nextStep}
-              disabled={!canProceed()}
-              className="flex-1 h-14 text-base font-black tracking-[0.15em] rounded-none bg-gold text-black hover:bg-gold-highlight disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+              onTouchStart={() => setIsButtonPressed(true)}
+              onTouchEnd={() => setIsButtonPressed(false)}
+              onMouseDown={() => setIsButtonPressed(true)}
+              onMouseUp={() => setIsButtonPressed(false)}
+              onMouseLeave={() => setIsButtonPressed(false)}
+              className={cn(
+                "flex-1 h-14 text-base font-black tracking-[0.15em] rounded-none bg-gold text-black hover:bg-gold-highlight transition-all",
+                isButtonPressed && "scale-[0.97]",
+                shakeButton && "animate-shake",
+                !canProceed() && "opacity-40 cursor-not-allowed"
+              )}
               style={{
                 boxShadow: canProceed() ? '0 0 30px rgba(212, 175, 55, 0.3)' : 'none',
               }}
@@ -403,14 +470,14 @@ const Calculator = () => {
             <Button
               onClick={prevStep}
               variant="outline"
-              className="h-14 px-6 text-sm font-semibold tracking-wider rounded-none border-border hover:border-gold/50 hover:bg-transparent"
+              className="h-14 px-6 text-sm font-semibold tracking-wider rounded-none border-border hover:border-gold/50 hover:bg-transparent touch-feedback active:scale-95"
             >
               <ChevronLeft className="w-4 h-4" />
             </Button>
             <Button
               onClick={handleStartOver}
               variant="outline"
-              className="flex-1 h-14 text-sm font-semibold tracking-wider rounded-none border-border hover:border-gold/50 hover:bg-transparent"
+              className="flex-1 h-14 text-sm font-semibold tracking-wider rounded-none border-border hover:border-gold/50 hover:bg-transparent touch-feedback active:scale-95"
             >
               <RotateCcw className="w-4 h-4 mr-2" />
               START OVER

@@ -89,6 +89,10 @@ export default {
           "0%, 100%": { boxShadow: "0 0 15px rgba(249, 224, 118, 0.3)" },
           "50%": { boxShadow: "0 0 35px rgba(249, 224, 118, 0.6), 0 0 50px rgba(249, 224, 118, 0.2)" },
         },
+        "pulse-border": {
+          "0%, 100%": { borderColor: "rgba(212, 175, 55, 0.3)" },
+          "50%": { borderColor: "rgba(212, 175, 55, 0.7)" },
+        },
         "slide-in-right": {
           from: { transform: "translateX(100%)", opacity: "0" },
           to: { transform: "translateX(0)", opacity: "1" },
@@ -97,6 +101,20 @@ export default {
           from: { transform: "translateX(0)", opacity: "1" },
           to: { transform: "translateX(100%)", opacity: "0" },
         },
+        "shake": {
+          "0%, 100%": { transform: "translateX(0)" },
+          "10%, 30%, 50%, 70%, 90%": { transform: "translateX(-4px)" },
+          "20%, 40%, 60%, 80%": { transform: "translateX(4px)" },
+        },
+        "count-up": {
+          from: { opacity: "0", transform: "translateY(10px)" },
+          to: { opacity: "1", transform: "translateY(0)" },
+        },
+        "number-pop": {
+          "0%": { transform: "scale(1)" },
+          "50%": { transform: "scale(1.15)" },
+          "100%": { transform: "scale(1)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -104,8 +122,12 @@ export default {
         "fade-in": "fade-in 0.5s ease-out forwards",
         "scale-in": "scale-in 0.3s ease-out forwards",
         "pulse-gold": "pulse-gold 4s ease-in-out infinite",
+        "pulse-border": "pulse-border 1.5s ease-in-out 3",
         "slide-in-right": "slide-in-right 0.3s ease-out forwards",
         "slide-out-right": "slide-out-right 0.3s ease-out forwards",
+        "shake": "shake 0.3s ease-in-out",
+        "count-up": "count-up 0.3s ease-out forwards",
+        "number-pop": "number-pop 0.15s ease-out",
       },
     },
   },

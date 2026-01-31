@@ -8,6 +8,7 @@ interface OffTopTotalStepProps {
 
 const OffTopTotalStep = ({ inputs, guilds }: OffTopTotalStepProps) => {
   const [visibleLines, setVisibleLines] = useState(0);
+  const [displayTotal, setDisplayTotal] = useState(0);
 
   // Calculate based on hypothetical 1.2x deal for context
   const hypotheticalRevenue = inputs.budget * 1.2;
@@ -30,13 +31,39 @@ const OffTopTotalStep = ({ inputs, guilds }: OffTopTotalStepProps) => {
 
   // Animate lines appearing
   useEffect(() => {
-    if (visibleLines < lines.length) {
-      const timer = setTimeout(() => {
-        setVisibleLines(prev => prev + 1);
-      }, 300);
-      return () => clearTimeout(timer);
+    setVisibleLines(0);
+    const timer = setInterval(() => {
+      setVisibleLines(prev => {
+        if (prev >= lines.length) {
+          clearInterval(timer);
+          return prev;
+        }
+        return prev + 1;
+      });
+    }, 300);
+    return () => clearInterval(timer);
+  }, [lines.length]);
+
+  // Animate total counting up
+  useEffect(() => {
+    if (visibleLines >= lines.length) {
+      const duration = 600;
+      const startTime = Date.now();
+      
+      const animate = () => {
+        const elapsed = Date.now() - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        setDisplayTotal(totalOffTop * eased);
+        
+        if (progress < 1) {
+          requestAnimationFrame(animate);
+        }
+      };
+      
+      setTimeout(() => requestAnimationFrame(animate), 400);
     }
-  }, [visibleLines, lines.length]);
+  }, [visibleLines, lines.length, totalOffTop]);
 
   return (
     <div className="step-enter min-h-[60vh] flex flex-col justify-center">
@@ -63,7 +90,7 @@ const OffTopTotalStep = ({ inputs, guilds }: OffTopTotalStepProps) => {
             style={{ transitionDelay: `${index * 100}ms` }}
           >
             <span className="text-foreground text-sm">{line.label}</span>
-            <span className="font-mono text-lg text-red-400">
+            <span className="font-mono text-lg text-destructive">
               -{formatCompactCurrency(line.amount)}
             </span>
           </div>
@@ -77,7 +104,7 @@ const OffTopTotalStep = ({ inputs, guilds }: OffTopTotalStepProps) => {
           style={{ transitionDelay: `${lines.length * 100 + 200}ms` }}
         />
 
-        {/* Total */}
+        {/* Total - Animated Count */}
         <div 
           className={`flex items-center justify-between transition-all duration-500 ${
             visibleLines >= lines.length ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
@@ -87,8 +114,8 @@ const OffTopTotalStep = ({ inputs, guilds }: OffTopTotalStepProps) => {
           <span className="text-xs uppercase tracking-widest text-muted-foreground">
             Total Off-The-Top
           </span>
-          <span className="font-mono text-3xl text-red-400 font-bold">
-            -{formatCompactCurrency(totalOffTop)}
+          <span className="font-mono text-3xl text-destructive font-bold">
+            -{formatCompactCurrency(displayTotal)}
           </span>
         </div>
       </div>

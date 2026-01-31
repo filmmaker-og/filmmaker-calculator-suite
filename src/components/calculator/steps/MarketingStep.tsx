@@ -1,4 +1,4 @@
-import { Input } from "@/components/ui/input";
+import { PremiumInput } from "@/components/ui/premium-input";
 import { WaterfallInputs, formatCompactCurrency } from "@/lib/waterfall";
 import { Info, Megaphone } from "lucide-react";
 import { useState } from "react";
@@ -21,6 +21,8 @@ const MarketingStep = ({ inputs, onUpdateInput }: MarketingStepProps) => {
     return parseInt(str.replace(/[^0-9]/g, '')) || 0;
   };
 
+  const isCompleted = inputs.salesExp > 0;
+
   return (
     <div className="step-enter">
       {/* The Card */}
@@ -37,27 +39,24 @@ const MarketingStep = ({ inputs, onUpdateInput }: MarketingStepProps) => {
           </div>
         </div>
 
-        {/* Input */}
-        <div className="space-y-3">
-          <label className="text-xs uppercase tracking-wider text-muted-foreground">
-            Marketing cap
-          </label>
-          <div className="relative">
-            <span className="absolute left-4 top-1/2 -translate-y-1/2 font-mono text-xl text-muted-foreground">$</span>
-            <Input
-              type="text"
-              inputMode="numeric"
-              value={formatValue(inputs.salesExp)}
-              onChange={(e) => onUpdateInput('salesExp', parseValue(e.target.value))}
-              placeholder="75,000"
-              className="pl-12 h-16 text-2xl font-mono text-foreground text-right rounded-none border-border focus:border-gold focus:ring-0 bg-background"
-              onFocus={(e) => e.target.select()}
-            />
-          </div>
-          <p className="text-xs text-muted-foreground/70">
-            This comes off before anyone sees profit.
-          </p>
-        </div>
+        {/* Premium Input */}
+        <PremiumInput
+          type="text"
+          inputMode="numeric"
+          value={formatValue(inputs.salesExp)}
+          onChange={(e) => onUpdateInput('salesExp', parseValue(e.target.value))}
+          placeholder="75,000"
+          showCurrency
+          label="Marketing Cap"
+          example="$75,000"
+          isCompleted={isCompleted}
+          isNext={!isCompleted}
+          hint={
+            <p className="text-xs text-muted-foreground/70">
+              This comes off before anyone sees profit.
+            </p>
+          }
+        />
 
         {/* Impact Display */}
         {inputs.salesExp > 0 && (

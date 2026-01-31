@@ -1,8 +1,9 @@
 import { WaterfallInputs, GuildState, formatCompactCurrency } from "@/lib/waterfall";
-import { Info, Users } from "lucide-react";
+import { Info, Users, Check } from "lucide-react";
 import { useState } from "react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { useHaptics } from "@/hooks/use-haptics";
+import { cn } from "@/lib/utils";
 
 interface GuildsStepProps {
   inputs: WaterfallInputs;
@@ -13,6 +14,7 @@ interface GuildsStepProps {
 const GuildsStep = ({ inputs, guilds, onToggleGuild }: GuildsStepProps) => {
   const haptics = useHaptics();
   const [showHelp, setShowHelp] = useState(false);
+  const [justToggled, setJustToggled] = useState<string | null>(null);
 
   // Calculate impact based on a hypothetical 1.2x deal
   const hypotheticalRevenue = inputs.budget * 1.2;
@@ -27,8 +29,16 @@ const GuildsStep = ({ inputs, guilds, onToggleGuild }: GuildsStepProps) => {
 
   const handleToggle = (guild: keyof GuildState) => {
     haptics.light();
+    setJustToggled(guild);
     onToggleGuild(guild);
+    setTimeout(() => setJustToggled(null), 200);
   };
+
+  const guildOptions = [
+    { key: 'sag' as keyof GuildState, name: 'SAG-AFTRA', subtitle: 'Actors', rate: '4.5%', amount: sagAmount },
+    { key: 'wga' as keyof GuildState, name: 'WGA', subtitle: 'Writers', rate: '1.2%', amount: wgaAmount },
+    { key: 'dga' as keyof GuildState, name: 'DGA', subtitle: 'Directors', rate: '1.2%', amount: dgaAmount },
+  ];
 
   return (
     <div className="step-enter">
@@ -46,90 +56,67 @@ const GuildsStep = ({ inputs, guilds, onToggleGuild }: GuildsStepProps) => {
           </div>
         </div>
 
-        {/* Guild Toggles */}
+        {/* Guild Toggles - Enhanced */}
         <div className="space-y-3">
-          {/* SAG */}
-          <button
-            onClick={() => handleToggle('sag')}
-            className={`w-full p-4 border flex items-center justify-between transition-all touch-feedback ${
-              guilds.sag
-                ? 'bg-gold/10 border-gold'
-                : 'bg-background border-border hover:border-gold/50'
-            }`}
-          >
-            <div className="text-left">
-              <span className={`font-semibold ${guilds.sag ? 'text-gold' : 'text-foreground'}`}>
-                SAG-AFTRA
-              </span>
-              <span className="text-xs text-muted-foreground ml-2">Actors</span>
-            </div>
-            <div className="text-right">
-              <span className="font-mono text-sm text-muted-foreground">4.5%</span>
-              {inputs.budget > 0 && guilds.sag && (
-                <span className="font-mono text-sm text-red-400 ml-2">
-                  -{formatCompactCurrency(sagAmount)}
-                </span>
-              )}
-            </div>
-          </button>
-
-          {/* WGA */}
-          <button
-            onClick={() => handleToggle('wga')}
-            className={`w-full p-4 border flex items-center justify-between transition-all touch-feedback ${
-              guilds.wga
-                ? 'bg-gold/10 border-gold'
-                : 'bg-background border-border hover:border-gold/50'
-            }`}
-          >
-            <div className="text-left">
-              <span className={`font-semibold ${guilds.wga ? 'text-gold' : 'text-foreground'}`}>
-                WGA
-              </span>
-              <span className="text-xs text-muted-foreground ml-2">Writers</span>
-            </div>
-            <div className="text-right">
-              <span className="font-mono text-sm text-muted-foreground">1.2%</span>
-              {inputs.budget > 0 && guilds.wga && (
-                <span className="font-mono text-sm text-red-400 ml-2">
-                  -{formatCompactCurrency(wgaAmount)}
-                </span>
-              )}
-            </div>
-          </button>
-
-          {/* DGA */}
-          <button
-            onClick={() => handleToggle('dga')}
-            className={`w-full p-4 border flex items-center justify-between transition-all touch-feedback ${
-              guilds.dga
-                ? 'bg-gold/10 border-gold'
-                : 'bg-background border-border hover:border-gold/50'
-            }`}
-          >
-            <div className="text-left">
-              <span className={`font-semibold ${guilds.dga ? 'text-gold' : 'text-foreground'}`}>
-                DGA
-              </span>
-              <span className="text-xs text-muted-foreground ml-2">Directors</span>
-            </div>
-            <div className="text-right">
-              <span className="font-mono text-sm text-muted-foreground">1.2%</span>
-              {inputs.budget > 0 && guilds.dga && (
-                <span className="font-mono text-sm text-red-400 ml-2">
-                  -{formatCompactCurrency(dgaAmount)}
-                </span>
-              )}
-            </div>
-          </button>
+          {guildOptions.map((guild) => {
+            const isSelected = guilds[guild.key];
+            const wasJustToggled = justToggled === guild.key;
+            
+            return (
+              <button
+                key={guild.key}
+                onClick={() => handleToggle(guild.key)}
+                className={cn(
+                  "w-full p-4 border-2 flex items-center justify-between transition-all duration-200 toggle-ripple",
+                  isSelected
+                    ? 'bg-gold/10 border-gold shadow-[0_0_16px_rgba(212,175,55,0.2)]'
+                    : 'bg-background border-border hover:border-gold/50',
+                  wasJustToggled && 'scale-[1.02]'
+                )}
+              >
+                <div className="flex items-center gap-3">
+                  {/* Checkbox */}
+                  <div className={cn(
+                    "w-7 h-7 flex items-center justify-center border-2 transition-all duration-200",
+                    isSelected
+                      ? 'bg-gold border-gold'
+                      : 'bg-transparent border-border'
+                  )}>
+                    {isSelected && (
+                      <Check className="w-4 h-4 text-black animate-scale-in" />
+                    )}
+                  </div>
+                  
+                  <div className="text-left">
+                    <span className={cn(
+                      "font-semibold transition-colors",
+                      isSelected ? 'text-gold' : 'text-foreground'
+                    )}>
+                      {guild.name}
+                    </span>
+                    <span className="text-xs text-muted-foreground ml-2">{guild.subtitle}</span>
+                  </div>
+                </div>
+                
+                <div className="text-right">
+                  <span className="font-mono text-sm text-muted-foreground">{guild.rate}</span>
+                  {inputs.budget > 0 && isSelected && (
+                    <span className="font-mono text-sm text-destructive ml-2">
+                      -{formatCompactCurrency(guild.amount)}
+                    </span>
+                  )}
+                </div>
+              </button>
+            );
+          })}
         </div>
 
-        {/* Total Impact */}
+        {/* Total Impact - Animated */}
         {totalGuildsCost > 0 && (
-          <div className="pt-4 border-t border-border">
+          <div className="pt-4 border-t border-border animate-fade-in">
             <div className="flex items-center justify-between">
               <span className="text-sm text-muted-foreground">Total guild residuals:</span>
-              <span className="font-mono text-xl text-red-400">
+              <span className="font-mono text-xl text-destructive">
                 -{formatCompactCurrency(totalGuildsCost)}
               </span>
             </div>
@@ -157,7 +144,7 @@ const GuildsStep = ({ inputs, guilds, onToggleGuild }: GuildsStepProps) => {
 
       {/* No guilds selected hint */}
       {!guilds.sag && !guilds.wga && !guilds.dga && (
-        <div className="mt-4 text-center">
+        <div className="mt-4 text-center animate-fade-in">
           <p className="text-xs text-muted-foreground/50">
             No guild residuals? That helps your position.
           </p>
