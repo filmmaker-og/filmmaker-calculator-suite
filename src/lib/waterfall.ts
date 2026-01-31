@@ -41,6 +41,76 @@ export interface WaterfallResult {
   ledger: LedgerItem[];
 }
 
+// Calculate the algebraic breakeven point
+export interface CapitalSelections {
+  taxCredits: boolean;
+  seniorDebt: boolean;
+  gapLoan: boolean;
+  equity: boolean;
+}
+
+export function calculateBreakeven(inputs: WaterfallInputs, guilds: GuildState, selections: CapitalSelections): number {
+  // Constants
+  const CAM_PCT = 0.01;
+  const SAG_PCT = 0.045;
+  const WGA_PCT = 0.012;
+  const DGA_PCT = 0.012;
+
+  // Calculate off-top percentage (variable costs based on revenue)
+  const salesFeePct = Math.max(0, Math.min(100, inputs.salesFee || 0)) / 100;
+  const guildsPct = (guilds.sag ? SAG_PCT : 0) +
+                    (guilds.wga ? WGA_PCT : 0) +
+                    (guilds.dga ? DGA_PCT : 0);
+  
+  const offTopRate = salesFeePct + CAM_PCT + guildsPct;
+
+  // Calculate fixed costs (not dependent on revenue)
+  const marketingCap = Math.max(0, inputs.salesExp || 0);
+  
+  // Debt repayment
+  const seniorDebtRepay = selections.seniorDebt 
+    ? Math.max(0, inputs.debt || 0) * (1 + Math.max(0, inputs.seniorDebtRate || 0) / 100)
+    : 0;
+  const mezzDebtRepay = selections.gapLoan 
+    ? Math.max(0, inputs.mezzanineDebt || 0) * (1 + Math.max(0, inputs.mezzanineRate || 0) / 100)
+    : 0;
+  
+  // Equity + premium
+  const equityRepay = selections.equity 
+    ? Math.max(0, inputs.equity || 0) * (1 + Math.max(0, inputs.premium || 0) / 100)
+    : 0;
+  
+  // Tax credits offset (reduces what you need)
+  const creditsOffset = selections.taxCredits ? Math.max(0, inputs.credits || 0) : 0;
+
+  // Fixed costs = Debt + Equity - Credits + Marketing
+  const fixedCosts = seniorDebtRepay + mezzDebtRepay + equityRepay - creditsOffset + marketingCap;
+
+  // Breakeven X = fixedCosts / (1 - offTopRate)
+  // Guard against division by zero (if offTopRate >= 100%)
+  if (offTopRate >= 1) {
+    return Infinity; // Impossible to break even
+  }
+
+  const breakeven = fixedCosts / (1 - offTopRate);
+  return Math.max(0, breakeven);
+}
+
+// Get off-top rate as a percentage (for display)
+export function getOffTopRate(inputs: WaterfallInputs, guilds: GuildState): number {
+  const CAM_PCT = 0.01;
+  const SAG_PCT = 0.045;
+  const WGA_PCT = 0.012;
+  const DGA_PCT = 0.012;
+
+  const salesFeePct = Math.max(0, Math.min(100, inputs.salesFee || 0)) / 100;
+  const guildsPct = (guilds.sag ? SAG_PCT : 0) +
+                    (guilds.wga ? WGA_PCT : 0) +
+                    (guilds.dga ? DGA_PCT : 0);
+  
+  return (salesFeePct + CAM_PCT + guildsPct) * 100;
+}
+
 export function calculateWaterfall(inputs: WaterfallInputs, guilds: GuildState): WaterfallResult {
   // Constants
   const CAM_PCT = 0.01;

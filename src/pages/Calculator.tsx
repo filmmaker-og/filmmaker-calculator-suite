@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -17,7 +17,10 @@ import MarketingStep from "@/components/calculator/steps/MarketingStep";
 import GuildsStep from "@/components/calculator/steps/GuildsStep";
 import OffTopTotalStep from "@/components/calculator/steps/OffTopTotalStep";
 import CapitalSelectStep, { CapitalSelections } from "@/components/calculator/steps/CapitalSelectStep";
-import CapitalDetailsStep from "@/components/calculator/steps/CapitalDetailsStep";
+import TaxCreditsStep from "@/components/calculator/steps/TaxCreditsStep";
+import SeniorDebtStep from "@/components/calculator/steps/SeniorDebtStep";
+import GapLoanStep from "@/components/calculator/steps/GapLoanStep";
+import EquityStep from "@/components/calculator/steps/EquityStep";
 import BreakevenStep from "@/components/calculator/steps/BreakevenStep";
 import AcquisitionStep from "@/components/calculator/steps/AcquisitionStep";
 import RevealStep from "@/components/calculator/steps/RevealStep";
@@ -25,23 +28,6 @@ import WaterfallStep from "@/components/calculator/steps/WaterfallStep";
 import ProgressBar from "@/components/calculator/ProgressBar";
 
 const STORAGE_KEY = "filmmaker_og_inputs";
-const TOTAL_STEPS = 12;
-
-// Step labels for the indicator - grouped into phases
-const STEP_LABELS = [
-  'BUDGET',      // 1
-  'SALES',       // 2
-  'CAM',         // 3
-  'MARKETING',   // 4
-  'GUILDS',      // 5
-  'OFF-TOP',     // 6
-  'FUNDING',     // 7
-  'DETAILS',     // 8
-  'BREAKEVEN',   // 9
-  'OFFER',       // 10
-  'REVEAL',      // 11
-  'WATERFALL',   // 12
-];
 
 const defaultInputs: WaterfallInputs = {
   revenue: 0,
@@ -70,6 +56,24 @@ const defaultCapitalSelections: CapitalSelections = {
   equity: true,
 };
 
+// Step types for dynamic flow
+type StepType = 
+  | 'budget' 
+  | 'sales' 
+  | 'cam' 
+  | 'marketing' 
+  | 'guilds' 
+  | 'offtop' 
+  | 'capitalSelect'
+  | 'taxCredits'
+  | 'seniorDebt'
+  | 'gapLoan'
+  | 'equity'
+  | 'breakeven'
+  | 'acquisition'
+  | 'reveal'
+  | 'waterfall';
+
 const Calculator = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -78,13 +82,56 @@ const Calculator = () => {
 
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  const [currentStep, setCurrentStep] = useState(1);
+  const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [inputs, setInputs] = useState<WaterfallInputs>(defaultInputs);
   const [guilds, setGuilds] = useState<GuildState>(defaultGuilds);
   const [capitalSelections, setCapitalSelections] = useState<CapitalSelections>(defaultCapitalSelections);
   const [result, setResult] = useState<WaterfallResult | null>(null);
   const [isButtonPressed, setIsButtonPressed] = useState(false);
   const [shakeButton, setShakeButton] = useState(false);
+
+  // Build dynamic step list based on capital selections
+  const steps = useMemo((): StepType[] => {
+    const baseSteps: StepType[] = ['budget', 'sales', 'cam', 'marketing', 'guilds', 'offtop', 'capitalSelect'];
+    
+    // Add capital detail steps based on selections
+    const capitalSteps: StepType[] = [];
+    if (capitalSelections.taxCredits) capitalSteps.push('taxCredits');
+    if (capitalSelections.seniorDebt) capitalSteps.push('seniorDebt');
+    if (capitalSelections.gapLoan) capitalSteps.push('gapLoan');
+    if (capitalSelections.equity) capitalSteps.push('equity');
+    
+    const endSteps: StepType[] = ['breakeven', 'acquisition', 'reveal', 'waterfall'];
+    
+    return [...baseSteps, ...capitalSteps, ...endSteps];
+  }, [capitalSelections]);
+
+  const totalSteps = steps.length;
+  const currentStep = steps[currentStepIndex];
+
+  // Build step labels for progress bar
+  const stepLabels = useMemo(() => {
+    return steps.map(step => {
+      switch (step) {
+        case 'budget': return 'BUDGET';
+        case 'sales': return 'SALES';
+        case 'cam': return 'CAM';
+        case 'marketing': return 'MKTG';
+        case 'guilds': return 'GUILDS';
+        case 'offtop': return 'OFF-TOP';
+        case 'capitalSelect': return 'FUNDING';
+        case 'taxCredits': return 'TAX CR';
+        case 'seniorDebt': return 'DEBT';
+        case 'gapLoan': return 'GAP';
+        case 'equity': return 'EQUITY';
+        case 'breakeven': return 'B/E';
+        case 'acquisition': return 'OFFER';
+        case 'reveal': return 'REVEAL';
+        case 'waterfall': return 'RESULTS';
+        default: return '';
+      }
+    });
+  }, [steps]);
 
   // Reset on ?reset=true
   useEffect(() => {
@@ -93,7 +140,7 @@ const Calculator = () => {
       setInputs(defaultInputs);
       setGuilds(defaultGuilds);
       setCapitalSelections(defaultCapitalSelections);
-      setCurrentStep(1);
+      setCurrentStepIndex(0);
     }
   }, [searchParams]);
 
@@ -108,7 +155,7 @@ const Calculator = () => {
         if (parsed.inputs) setInputs(parsed.inputs);
         if (parsed.guilds) setGuilds(parsed.guilds);
         if (parsed.capitalSelections) setCapitalSelections(parsed.capitalSelections);
-        if (parsed.currentStep) setCurrentStep(parsed.currentStep);
+        if (typeof parsed.currentStepIndex === 'number') setCurrentStepIndex(parsed.currentStepIndex);
       } catch (e) {
         console.error("Failed to load saved inputs");
       }
@@ -121,9 +168,9 @@ const Calculator = () => {
       inputs, 
       guilds, 
       capitalSelections,
-      currentStep 
+      currentStepIndex 
     }));
-  }, [inputs, guilds, capitalSelections, currentStep]);
+  }, [inputs, guilds, capitalSelections, currentStepIndex]);
 
   // Calculate on input change
   useEffect(() => {
@@ -152,7 +199,7 @@ const Calculator = () => {
     if (mainRef.current) {
       mainRef.current.scrollTop = 0;
     }
-  }, [currentStep]);
+  }, [currentStepIndex]);
 
   const handleStartOver = () => {
     haptics.medium();
@@ -160,7 +207,7 @@ const Calculator = () => {
     setInputs(defaultInputs);
     setGuilds(defaultGuilds);
     setCapitalSelections(defaultCapitalSelections);
-    setCurrentStep(1);
+    setCurrentStepIndex(0);
   };
 
   const updateInput = useCallback((key: keyof WaterfallInputs, value: number) => {
@@ -179,28 +226,12 @@ const Calculator = () => {
   // Can proceed to next step?
   const canProceed = useCallback(() => {
     switch (currentStep) {
-      case 1: // Budget
+      case 'budget':
         return inputs.budget > 0;
-      case 2: // Sales Agent
-        return true; // 0% is valid
-      case 3: // CAM Fee
-        return true; // Fixed, always proceed
-      case 4: // Marketing
-        return true; // 0 is valid
-      case 5: // Guilds
-        return true; // No selection is valid
-      case 6: // Off-Top Total
-        return true; // Display only
-      case 7: // Capital Stack Selection
+      case 'capitalSelect':
         return Object.values(capitalSelections).some(Boolean);
-      case 8: // Capital Details
-        return true; // Any values work
-      case 9: // Breakeven
-        return true; // Display only
-      case 10: // Acquisition Price
+      case 'acquisition':
         return inputs.revenue > 0;
-      case 11: // Reveal
-        return true;
       default:
         return true;
     }
@@ -208,7 +239,6 @@ const Calculator = () => {
 
   const nextStep = useCallback(() => {
     if (!canProceed()) {
-      // Shake the button to indicate invalid
       setShakeButton(true);
       haptics.error();
       setTimeout(() => setShakeButton(false), 300);
@@ -216,34 +246,34 @@ const Calculator = () => {
     }
     
     haptics.step();
-    if (currentStep < TOTAL_STEPS) {
-      setCurrentStep(prev => prev + 1);
+    if (currentStepIndex < totalSteps - 1) {
+      setCurrentStepIndex(prev => prev + 1);
     }
-  }, [canProceed, currentStep, haptics]);
+  }, [canProceed, currentStepIndex, totalSteps, haptics]);
 
   const prevStep = useCallback(() => {
     haptics.light();
-    if (currentStep > 1) {
-      setCurrentStep(prev => prev - 1);
+    if (currentStepIndex > 0) {
+      setCurrentStepIndex(prev => prev - 1);
     }
-  }, [currentStep, haptics]);
+  }, [currentStepIndex, haptics]);
 
-  const goToStep = useCallback((step: number) => {
-    if (step >= 1 && step < currentStep) {
+  const goToStep = useCallback((stepIndex: number) => {
+    if (stepIndex >= 0 && stepIndex < currentStepIndex) {
       haptics.light();
-      setCurrentStep(step);
+      setCurrentStepIndex(stepIndex);
     }
-  }, [currentStep, haptics]);
+  }, [currentStepIndex, haptics]);
 
   // Swipe navigation
   const { handlers: swipeHandlers, state: swipeState } = useSwipe({
     onSwipeLeft: () => {
-      if (canProceed() && currentStep < TOTAL_STEPS) {
+      if (canProceed() && currentStepIndex < totalSteps - 1) {
         nextStep();
       }
     },
     onSwipeRight: () => {
-      if (currentStep > 1) {
+      if (currentStepIndex > 0) {
         prevStep();
       }
     },
@@ -251,44 +281,78 @@ const Calculator = () => {
     rubberBand: true,
   });
 
-  // Get step phase/title
+  // Get step title
   const getStepTitle = () => {
     switch (currentStep) {
-      case 1: return 'THE BUDGET';
-      case 2: return 'SALES AGENT';
-      case 3: return 'CAM FEE';
-      case 4: return 'MARKETING';
-      case 5: return 'GUILDS';
-      case 6: return 'OFF-THE-TOP';
-      case 7: return 'CAPITAL STACK';
-      case 8: return 'CAPITAL DETAILS';
-      case 9: return 'THE RECKONING';
-      case 10: return 'THE OFFER';
-      case 11: return 'YOUR PROFIT';
-      case 12: return 'THE WATERFALL';
+      case 'budget': return 'THE BUDGET';
+      case 'sales': return 'SALES AGENT';
+      case 'cam': return 'CAM FEE';
+      case 'marketing': return 'MARKETING';
+      case 'guilds': return 'GUILDS';
+      case 'offtop': return 'OFF-THE-TOP';
+      case 'capitalSelect': return 'CAPITAL STACK';
+      case 'taxCredits': return 'TAX CREDITS';
+      case 'seniorDebt': return 'SENIOR DEBT';
+      case 'gapLoan': return 'GAP LOAN';
+      case 'equity': return 'EQUITY';
+      case 'breakeven': return 'THE RECKONING';
+      case 'acquisition': return 'THE OFFER';
+      case 'reveal': return 'YOUR PROFIT';
+      case 'waterfall': return 'THE WATERFALL';
       default: return 'WATERFALL TERMINAL';
     }
-  };
-
-  // Get phase label for header
-  const getPhaseLabel = () => {
-    if (currentStep <= 6) return 'PHASE 1: THE AWAKENING';
-    if (currentStep <= 9) return 'PHASE 2: THE INVESTORS';
-    if (currentStep <= 10) return 'PHASE 3: THE OFFER';
-    return 'PHASE 4: THE REVEAL';
   };
 
   // Get CTA text
   const getCtaText = () => {
     switch (currentStep) {
-      case 1: return 'WHO GETS PAID FIRST?';
-      case 5: return 'ADD IT UP';
-      case 6: return 'CONTINUE';
-      case 8: return 'THE RECKONING';
-      case 9: return 'NOW THE DEAL';
-      case 10: return 'SEE RESULTS';
-      case 11: return 'SEE BREAKDOWN';
+      case 'budget': return 'WHO GETS PAID FIRST?';
+      case 'guilds': return 'ADD IT UP';
+      case 'offtop': return 'NOW THE INVESTORS';
+      case 'capitalSelect': return 'ENTER DETAILS';
+      case 'equity': return 'THE RECKONING';
+      case 'breakeven': return 'NOW THE DEAL';
+      case 'acquisition': return 'SEE RESULTS';
+      case 'reveal': return 'SEE BREAKDOWN';
       default: return 'CONTINUE';
+    }
+  };
+
+  // Render current step
+  const renderStep = () => {
+    switch (currentStep) {
+      case 'budget':
+        return <BudgetStep inputs={inputs} onUpdateInput={updateInput} />;
+      case 'sales':
+        return <SalesAgentStep inputs={inputs} onUpdateInput={updateInput} />;
+      case 'cam':
+        return <CamFeeStep inputs={inputs} />;
+      case 'marketing':
+        return <MarketingStep inputs={inputs} onUpdateInput={updateInput} />;
+      case 'guilds':
+        return <GuildsStep inputs={inputs} guilds={guilds} onToggleGuild={toggleGuild} />;
+      case 'offtop':
+        return <OffTopTotalStep inputs={inputs} guilds={guilds} />;
+      case 'capitalSelect':
+        return <CapitalSelectStep selections={capitalSelections} onToggle={toggleCapitalSelection} />;
+      case 'taxCredits':
+        return <TaxCreditsStep inputs={inputs} onUpdateInput={updateInput} />;
+      case 'seniorDebt':
+        return <SeniorDebtStep inputs={inputs} onUpdateInput={updateInput} />;
+      case 'gapLoan':
+        return <GapLoanStep inputs={inputs} onUpdateInput={updateInput} />;
+      case 'equity':
+        return <EquityStep inputs={inputs} onUpdateInput={updateInput} />;
+      case 'breakeven':
+        return <BreakevenStep inputs={inputs} guilds={guilds} selections={capitalSelections} />;
+      case 'acquisition':
+        return <AcquisitionStep inputs={inputs} guilds={guilds} selections={capitalSelections} onUpdateInput={updateInput} />;
+      case 'reveal':
+        return result ? <RevealStep result={result} equity={inputs.equity} /> : null;
+      case 'waterfall':
+        return result ? <WaterfallStep result={result} inputs={inputs} /> : null;
+      default:
+        return null;
     }
   };
 
@@ -308,9 +372,12 @@ const Calculator = () => {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       {/* Header */}
-      <header className="fixed top-0 left-0 right-0 h-14 z-50 flex items-center px-4 bg-background border-b border-border">
+      <header 
+        className="fixed top-0 left-0 right-0 h-14 z-50 flex items-center px-4"
+        style={{ backgroundColor: '#0A0A0A' }}
+      >
         <button
-          onClick={() => currentStep > 1 ? prevStep() : navigate("/")}
+          onClick={() => currentStepIndex > 0 ? prevStep() : navigate("/")}
           className="w-10 h-10 flex items-center justify-center hover:opacity-80 transition-opacity touch-feedback"
         >
           <ArrowLeft className="w-5 h-5 text-muted-foreground" />
@@ -323,7 +390,7 @@ const Calculator = () => {
         </div>
 
         <div className="w-10 h-10 flex items-center justify-center">
-          {currentStep > 1 && (
+          {currentStepIndex > 0 && (
             <button
               onClick={handleStartOver}
               className="w-10 h-10 flex items-center justify-center hover:opacity-80 touch-feedback"
@@ -334,15 +401,23 @@ const Calculator = () => {
         </div>
       </header>
 
+      {/* Gold line separator */}
+      <div
+        className="fixed top-14 left-0 right-0 h-[1px] z-50"
+        style={{
+          background: "linear-gradient(90deg, transparent 0%, rgba(212, 175, 55, 0.5) 20%, rgba(212, 175, 55, 0.5) 80%, transparent 100%)",
+        }}
+      />
+
       {/* Spacer for fixed header */}
       <div className="h-14" />
 
       {/* Progress Bar - Sticky */}
       <ProgressBar
-        currentStep={currentStep}
-        totalSteps={TOTAL_STEPS}
-        stepLabels={STEP_LABELS}
-        onStepClick={goToStep}
+        currentStep={currentStepIndex + 1}
+        totalSteps={totalSteps}
+        stepLabels={stepLabels}
+        onStepClick={(step) => goToStep(step - 1)}
       />
 
       {/* Main Content with Swipe */}
@@ -362,46 +437,11 @@ const Calculator = () => {
             opacity: swipeState.isSwiping ? 1 - Math.abs(swipeState.offset) / 400 : 1,
           }}
         >
-          {currentStep === 1 && (
-            <BudgetStep inputs={inputs} onUpdateInput={updateInput} />
-          )}
-          {currentStep === 2 && (
-            <SalesAgentStep inputs={inputs} onUpdateInput={updateInput} />
-          )}
-          {currentStep === 3 && (
-            <CamFeeStep inputs={inputs} />
-          )}
-          {currentStep === 4 && (
-            <MarketingStep inputs={inputs} onUpdateInput={updateInput} />
-          )}
-          {currentStep === 5 && (
-            <GuildsStep inputs={inputs} guilds={guilds} onToggleGuild={toggleGuild} />
-          )}
-          {currentStep === 6 && (
-            <OffTopTotalStep inputs={inputs} guilds={guilds} />
-          )}
-          {currentStep === 7 && (
-            <CapitalSelectStep selections={capitalSelections} onToggle={toggleCapitalSelection} />
-          )}
-          {currentStep === 8 && (
-            <CapitalDetailsStep inputs={inputs} selections={capitalSelections} onUpdateInput={updateInput} />
-          )}
-          {currentStep === 9 && (
-            <BreakevenStep inputs={inputs} guilds={guilds} selections={capitalSelections} />
-          )}
-          {currentStep === 10 && (
-            <AcquisitionStep inputs={inputs} guilds={guilds} selections={capitalSelections} onUpdateInput={updateInput} />
-          )}
-          {currentStep === 11 && result && (
-            <RevealStep result={result} equity={inputs.equity} />
-          )}
-          {currentStep === 12 && result && (
-            <WaterfallStep result={result} inputs={inputs} />
-          )}
+          {renderStep()}
         </div>
 
         {/* Swipe edge hints */}
-        {currentStep > 1 && (
+        {currentStepIndex > 0 && (
           <div
             className={cn(
               "fixed left-2 top-1/2 -translate-y-1/2 text-gold/30 transition-opacity",
@@ -411,7 +451,7 @@ const Calculator = () => {
             <ChevronLeft className="w-6 h-6" />
           </div>
         )}
-        {currentStep < TOTAL_STEPS && canProceed() && (
+        {currentStepIndex < totalSteps - 1 && canProceed() && (
           <div
             className={cn(
               "fixed right-2 top-1/2 -translate-y-1/2 text-gold/30 transition-opacity",
@@ -431,9 +471,9 @@ const Calculator = () => {
           paddingBottom: 'max(1rem, env(safe-area-inset-bottom))'
         }}
       >
-        {currentStep < TOTAL_STEPS ? (
+        {currentStepIndex < totalSteps - 1 ? (
           <div className="flex gap-3">
-            {currentStep > 1 && (
+            {currentStepIndex > 0 && (
               <Button
                 onClick={prevStep}
                 variant="outline"

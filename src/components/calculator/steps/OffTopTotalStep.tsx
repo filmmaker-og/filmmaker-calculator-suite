@@ -1,4 +1,4 @@
-import { WaterfallInputs, GuildState, formatCompactCurrency } from "@/lib/waterfall";
+import { WaterfallInputs, GuildState, formatCompactCurrency, getOffTopRate } from "@/lib/waterfall";
 import { useEffect, useState } from "react";
 
 interface OffTopTotalStepProps {
@@ -8,25 +8,20 @@ interface OffTopTotalStepProps {
 
 const OffTopTotalStep = ({ inputs, guilds }: OffTopTotalStepProps) => {
   const [visibleLines, setVisibleLines] = useState(0);
-  const [displayTotal, setDisplayTotal] = useState(0);
+  const [displayRate, setDisplayRate] = useState(0);
 
-  // Calculate based on hypothetical 1.2x deal for context
-  const hypotheticalRevenue = inputs.budget * 1.2;
-  
-  const salesFeeAmount = hypotheticalRevenue * (inputs.salesFee / 100);
-  const camAmount = hypotheticalRevenue * 0.01;
-  const marketingAmount = inputs.salesExp;
-  
-  const guildsPct = (guilds.sag ? 0.045 : 0) + (guilds.wga ? 0.012 : 0) + (guilds.dga ? 0.012 : 0);
-  const guildsAmount = hypotheticalRevenue * guildsPct;
+  // Calculate percentages (not dollar amounts)
+  const salesFeePct = inputs.salesFee || 0;
+  const camPct = 1; // Fixed 1%
+  const guildsPct = (guilds.sag ? 4.5 : 0) + (guilds.wga ? 1.2 : 0) + (guilds.dga ? 1.2 : 0);
+  const marketingCap = inputs.salesExp || 0;
 
-  const totalOffTop = salesFeeAmount + camAmount + marketingAmount + guildsAmount;
+  const totalOffTopRate = getOffTopRate(inputs, guilds);
 
   const lines = [
-    { label: `Sales Agent (${inputs.salesFee}%)`, amount: salesFeeAmount, show: inputs.salesFee > 0 },
-    { label: 'CAM Fee (1%)', amount: camAmount, show: true },
-    { label: 'Marketing Cap', amount: marketingAmount, show: marketingAmount > 0 },
-    { label: 'Guild Residuals', amount: guildsAmount, show: guildsAmount > 0 },
+    { label: 'Sales Agent', value: `${salesFeePct}%`, show: salesFeePct > 0 },
+    { label: 'CAM Fee', value: `${camPct}%`, show: true },
+    { label: 'Guild Residuals', value: `${guildsPct.toFixed(1)}%`, show: guildsPct > 0 },
   ].filter(l => l.show);
 
   // Animate lines appearing
@@ -44,7 +39,7 @@ const OffTopTotalStep = ({ inputs, guilds }: OffTopTotalStepProps) => {
     return () => clearInterval(timer);
   }, [lines.length]);
 
-  // Animate total counting up
+  // Animate rate counting up
   useEffect(() => {
     if (visibleLines >= lines.length) {
       const duration = 600;
@@ -54,7 +49,7 @@ const OffTopTotalStep = ({ inputs, guilds }: OffTopTotalStepProps) => {
         const elapsed = Date.now() - startTime;
         const progress = Math.min(elapsed / duration, 1);
         const eased = 1 - Math.pow(1 - progress, 3);
-        setDisplayTotal(totalOffTop * eased);
+        setDisplayRate(totalOffTopRate * eased);
         
         if (progress < 1) {
           requestAnimationFrame(animate);
@@ -63,7 +58,7 @@ const OffTopTotalStep = ({ inputs, guilds }: OffTopTotalStepProps) => {
       
       setTimeout(() => requestAnimationFrame(animate), 400);
     }
-  }, [visibleLines, lines.length, totalOffTop]);
+  }, [visibleLines, lines.length, totalOffTopRate]);
 
   return (
     <div className="step-enter min-h-[60vh] flex flex-col justify-center">
@@ -91,7 +86,7 @@ const OffTopTotalStep = ({ inputs, guilds }: OffTopTotalStepProps) => {
           >
             <span className="text-foreground text-sm">{line.label}</span>
             <span className="font-mono text-lg text-destructive">
-              -{formatCompactCurrency(line.amount)}
+              -{line.value}
             </span>
           </div>
         ))}
@@ -104,7 +99,7 @@ const OffTopTotalStep = ({ inputs, guilds }: OffTopTotalStepProps) => {
           style={{ transitionDelay: `${lines.length * 100 + 200}ms` }}
         />
 
-        {/* Total - Animated Count */}
+        {/* Total Rate - Animated */}
         <div 
           className={`flex items-center justify-between transition-all duration-500 ${
             visibleLines >= lines.length ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
@@ -112,22 +107,52 @@ const OffTopTotalStep = ({ inputs, guilds }: OffTopTotalStepProps) => {
           style={{ transitionDelay: `${lines.length * 100 + 400}ms` }}
         >
           <span className="text-xs uppercase tracking-widest text-muted-foreground">
-            Total Off-The-Top
+            Off-The-Top Rate
           </span>
           <span className="font-mono text-3xl text-destructive font-bold">
-            -{formatCompactCurrency(displayTotal)}
+            -{displayRate.toFixed(1)}%
           </span>
         </div>
+
+        {/* Marketing Cap - Fixed Amount */}
+        {marketingCap > 0 && (
+          <div 
+            className={`flex items-center justify-between pt-4 border-t border-border/50 transition-all duration-500 ${
+              visibleLines >= lines.length ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+            }`}
+            style={{ transitionDelay: `${lines.length * 100 + 500}ms` }}
+          >
+            <span className="text-xs uppercase tracking-widest text-muted-foreground">
+              Plus: Marketing Cap
+            </span>
+            <span className="font-mono text-lg text-destructive">
+              -{formatCompactCurrency(marketingCap)}
+            </span>
+          </div>
+        )}
       </div>
 
-      {/* Ominous Message */}
+      {/* Explanation */}
       <div 
         className={`mt-8 text-center transition-all duration-500 ${
           visibleLines >= lines.length ? 'opacity-100' : 'opacity-0'
         }`}
         style={{ transitionDelay: `${lines.length * 100 + 600}ms` }}
       >
-        <p className="text-muted-foreground text-sm italic">
+        <p className="text-muted-foreground text-sm leading-relaxed max-w-xs mx-auto">
+          <span className="text-gold font-semibold">{displayRate.toFixed(1)}%</span> of whatever the streamer pays goes to these parties first
+          {marketingCap > 0 && <>, plus <span className="text-gold font-semibold">{formatCompactCurrency(marketingCap)}</span> in marketing</>}.
+        </p>
+      </div>
+
+      {/* Ominous Message */}
+      <div 
+        className={`mt-6 text-center transition-all duration-500 ${
+          visibleLines >= lines.length ? 'opacity-100' : 'opacity-0'
+        }`}
+        style={{ transitionDelay: `${lines.length * 100 + 800}ms` }}
+      >
+        <p className="text-muted-foreground/60 text-xs italic">
           "And we haven't even talked about your <span className="text-gold">investors</span> yet."
         </p>
       </div>

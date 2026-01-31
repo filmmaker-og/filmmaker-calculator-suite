@@ -1,4 +1,4 @@
-import { WaterfallInputs, GuildState, formatCompactCurrency } from "@/lib/waterfall";
+import { WaterfallInputs, GuildState, formatCompactCurrency, calculateBreakeven } from "@/lib/waterfall";
 import { CapitalSelections } from "./CapitalSelectStep";
 import { useEffect, useState } from "react";
 
@@ -12,33 +12,24 @@ const BreakevenStep = ({ inputs, guilds, selections }: BreakevenStepProps) => {
   const [visibleLines, setVisibleLines] = useState(0);
   const [displayBreakeven, setDisplayBreakeven] = useState(0);
 
-  // Calculate all costs
-  // Off-the-top (based on budget as proxy, will be adjusted with actual revenue)
-  const hypotheticalRevenue = inputs.budget * 1.2;
-  
-  const salesFeeAmount = hypotheticalRevenue * (inputs.salesFee / 100);
-  const camAmount = hypotheticalRevenue * 0.01;
-  const marketingAmount = inputs.salesExp;
-  const guildsPct = (guilds.sag ? 0.045 : 0) + (guilds.wga ? 0.012 : 0) + (guilds.dga ? 0.012 : 0);
-  const guildsAmount = hypotheticalRevenue * guildsPct;
-  const offTopTotal = salesFeeAmount + camAmount + marketingAmount + guildsAmount;
+  // Use the algebraic breakeven calculation
+  const breakeven = calculateBreakeven(inputs, guilds, selections);
 
-  // Debt repayment
+  // Calculate individual components for display
+  const offTopRate = (inputs.salesFee / 100) + 0.01 + 
+    (guilds.sag ? 0.045 : 0) + (guilds.wga ? 0.012 : 0) + (guilds.dga ? 0.012 : 0);
+  const offTopPct = (offTopRate * 100).toFixed(1);
+
   const seniorDebtRepay = selections.seniorDebt ? inputs.debt * (1 + inputs.seniorDebtRate / 100) : 0;
   const mezzDebtRepay = selections.gapLoan ? inputs.mezzanineDebt * (1 + inputs.mezzanineRate / 100) : 0;
   const totalDebtRepay = seniorDebtRepay + mezzDebtRepay;
-
-  // Equity + premium
   const equityRepay = selections.equity ? inputs.equity * (1 + inputs.premium / 100) : 0;
-
-  // Credits offset (reduces what you need)
   const creditsOffset = selections.taxCredits ? inputs.credits : 0;
-
-  // Breakeven calculation
-  const breakeven = offTopTotal + totalDebtRepay + equityRepay - creditsOffset;
+  const marketingCap = inputs.salesExp || 0;
 
   const lines = [
-    { label: 'Off-the-top expenses', amount: offTopTotal, show: offTopTotal > 0 },
+    { label: `Off-the-top (${offTopPct}% of revenue)`, amount: null, isRate: true, show: offTopRate > 0 },
+    { label: 'Marketing cap', amount: marketingCap, show: marketingCap > 0 },
     { label: 'Debt repayment', amount: totalDebtRepay, show: totalDebtRepay > 0 },
     { label: 'Equity + premium', amount: equityRepay, show: equityRepay > 0 },
     { label: 'Tax credits (offset)', amount: -creditsOffset, show: creditsOffset > 0, isOffset: true },
@@ -61,7 +52,7 @@ const BreakevenStep = ({ inputs, guilds, selections }: BreakevenStepProps) => {
 
   // Animate breakeven counting up
   useEffect(() => {
-    if (visibleLines >= lines.length) {
+    if (visibleLines >= lines.length && Number.isFinite(breakeven)) {
       const duration = 800;
       const startTime = Date.now();
       
@@ -100,8 +91,8 @@ const BreakevenStep = ({ inputs, guilds, selections }: BreakevenStepProps) => {
             style={{ transitionDelay: `${index * 100}ms` }}
           >
             <span className="text-foreground text-sm">{line.label}</span>
-            <span className={`font-mono text-lg ${line.isOffset ? 'text-emerald-400' : 'text-foreground'}`}>
-              {line.isOffset ? '+' : ''}{formatCompactCurrency(Math.abs(line.amount))}
+            <span className={`font-mono text-lg ${line.isOffset ? 'text-emerald-400' : line.isRate ? 'text-muted-foreground italic' : 'text-foreground'}`}>
+              {line.isRate ? '(variable)' : line.isOffset ? `+${formatCompactCurrency(Math.abs(line.amount!))}` : formatCompactCurrency(line.amount!)}
             </span>
           </div>
         ))}
@@ -130,7 +121,7 @@ const BreakevenStep = ({ inputs, guilds, selections }: BreakevenStepProps) => {
               textShadow: '0 0 40px rgba(212, 175, 55, 0.3)',
             }}
           >
-            {formatCompactCurrency(displayBreakeven)}
+            {Number.isFinite(breakeven) ? formatCompactCurrency(displayBreakeven) : '∞'}
           </p>
         </div>
       </div>
@@ -143,7 +134,7 @@ const BreakevenStep = ({ inputs, guilds, selections }: BreakevenStepProps) => {
         style={{ transitionDelay: `${lines.length * 100 + 600}ms` }}
       >
         <p className="text-muted-foreground text-sm leading-relaxed max-w-xs mx-auto">
-          You need to sell for at least <span className="text-gold font-semibold">{formatCompactCurrency(breakeven)}</span> just to break even.
+          You need to sell for at least <span className="text-gold font-semibold">{Number.isFinite(breakeven) ? formatCompactCurrency(breakeven) : '∞'}</span> just to break even.
         </p>
         <p className="text-muted-foreground/60 text-xs mt-2">
           Anything less = investors don't get fully repaid.

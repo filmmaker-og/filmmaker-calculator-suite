@@ -1,5 +1,5 @@
 import { PremiumInput } from "@/components/ui/premium-input";
-import { WaterfallInputs, GuildState, formatCompactCurrency } from "@/lib/waterfall";
+import { WaterfallInputs, GuildState, formatCompactCurrency, calculateBreakeven } from "@/lib/waterfall";
 import { CapitalSelections } from "./CapitalSelectStep";
 import { Info, TrendingUp, TrendingDown } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
@@ -26,22 +26,8 @@ const AcquisitionStep = ({ inputs, guilds, selections, onUpdateInput }: Acquisit
     return parseInt(str.replace(/[^0-9]/g, '')) || 0;
   };
 
-  // Calculate breakeven (same logic as BreakevenStep)
-  const hypotheticalRevenue = inputs.budget * 1.2;
-  const salesFeeAmount = hypotheticalRevenue * (inputs.salesFee / 100);
-  const camAmount = hypotheticalRevenue * 0.01;
-  const marketingAmount = inputs.salesExp;
-  const guildsPct = (guilds.sag ? 0.045 : 0) + (guilds.wga ? 0.012 : 0) + (guilds.dga ? 0.012 : 0);
-  const guildsAmount = hypotheticalRevenue * guildsPct;
-  const offTopTotal = salesFeeAmount + camAmount + marketingAmount + guildsAmount;
-
-  const seniorDebtRepay = selections.seniorDebt ? inputs.debt * (1 + inputs.seniorDebtRate / 100) : 0;
-  const mezzDebtRepay = selections.gapLoan ? inputs.mezzanineDebt * (1 + inputs.mezzanineRate / 100) : 0;
-  const totalDebtRepay = seniorDebtRepay + mezzDebtRepay;
-  const equityRepay = selections.equity ? inputs.equity * (1 + inputs.premium / 100) : 0;
-  const creditsOffset = selections.taxCredits ? inputs.credits : 0;
-
-  const breakeven = offTopTotal + totalDebtRepay + equityRepay - creditsOffset;
+  // Use the algebraic breakeven calculation
+  const breakeven = calculateBreakeven(inputs, guilds, selections);
   
   // Calculate cushion
   const cushion = inputs.revenue - breakeven;
@@ -108,11 +94,13 @@ const AcquisitionStep = ({ inputs, guilds, selections, onUpdateInput }: Acquisit
         <div className="p-4 bg-card border border-border">
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs uppercase tracking-wider text-muted-foreground">Your breakeven</span>
-            <span className="font-mono text-lg text-gold">{formatCompactCurrency(breakeven)}</span>
+            <span className="font-mono text-lg text-gold">
+              {Number.isFinite(breakeven) ? formatCompactCurrency(breakeven) : '∞'}
+            </span>
           </div>
 
           {/* Status Indicator with Animation */}
-          {inputs.revenue > 0 && (
+          {inputs.revenue > 0 && Number.isFinite(breakeven) && (
             <div 
               className={`p-4 border transition-all duration-300 ${
                 isAboveBreakeven 
