@@ -11,11 +11,13 @@ import filmmakerLogo from "@/assets/filmmaker-logo.jpg";
 import Header from "@/components/Header";
 
 const emailSchema = z.string().email("Please enter a valid email address");
+const nameSchema = z.string().min(1, "Name is required").max(100, "Name must be less than 100 characters");
 
 const Auth = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const haptics = useHaptics();
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState<'email' | 'sent'>('email');
@@ -39,6 +41,19 @@ const Auth = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Validate name
+    const nameResult = nameSchema.safeParse(name.trim());
+    if (!nameResult.success) {
+      haptics.error();
+      toast({
+        title: "Name Required",
+        description: nameResult.error.errors[0].message,
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Validate email
     const emailResult = emailSchema.safeParse(email);
     if (!emailResult.success) {
       haptics.error();
@@ -58,6 +73,9 @@ const Auth = () => {
         email: email.trim(),
         options: {
           emailRedirectTo: redirectUrl,
+          data: {
+            full_name: name.trim(),
+          }
         },
       });
       if (error) throw error;
@@ -119,12 +137,12 @@ const Auth = () => {
                 SAVE YOUR RESULTS
               </h1>
               <p className="text-white/60 text-base leading-relaxed max-w-xs mx-auto">
-                Enter your email to save calculations and
+                Enter your name and email to save calculations and
                 <span className="text-gold font-semibold"> get your investor deck</span>.
               </p>
             </div>
 
-            {/* Trust Badges - NO FAKE USER COUNT */}
+            {/* Trust Badges */}
             <div className="flex items-center justify-center gap-8 mb-8">
               <div className="flex flex-col items-center gap-2">
                 <div className="w-12 h-12 border border-gold/30 flex items-center justify-center bg-gold/5">
@@ -142,6 +160,28 @@ const Auth = () => {
 
             {/* Form */}
             <form onSubmit={handleSubmit} className="space-y-5">
+              {/* Name Field */}
+              <div className="space-y-3">
+                <label
+                  htmlFor="name"
+                  className="block text-xs tracking-[0.2em] uppercase text-white/60 font-medium"
+                >
+                  Your Name
+                </label>
+                <Input
+                  id="name"
+                  type="text"
+                  autoComplete="name"
+                  autoCapitalize="words"
+                  placeholder="John Producer"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="h-16 text-lg rounded-none bg-zinc-900 border-2 border-zinc-700 text-white placeholder:text-white/30 pl-4 pr-4 focus:border-gold focus:ring-0 input-focus-glow transition-colors"
+                  required
+                />
+              </div>
+
+              {/* Email Field */}
               <div className="space-y-3">
                 <label
                   htmlFor="email"
@@ -167,10 +207,10 @@ const Auth = () => {
 
               <Button
                 type="submit"
-                disabled={loading || !email}
+                disabled={loading || !email || !name.trim()}
                 className="w-full h-16 rounded-none font-black text-lg tracking-[0.1em] bg-gold text-black hover:bg-gold-highlight disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200"
                 style={{
-                  boxShadow: email ? '0 0 40px rgba(212, 175, 55, 0.4)' : 'none',
+                  boxShadow: email && name.trim() ? '0 0 40px rgba(212, 175, 55, 0.4)' : 'none',
                 }}
               >
                 {loading ? (
