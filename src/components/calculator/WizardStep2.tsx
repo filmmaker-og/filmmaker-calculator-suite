@@ -116,7 +116,9 @@ const WizardStep2 = ({ inputs, onUpdate }: WizardStep2Props) => {
         </div>
         <div>
           <h2 className="font-bebas text-lg text-foreground tracking-wide">CAPITAL STRUCTURE</h2>
-          <p className="text-xs text-muted-foreground">Configure your financing sources</p>
+          <p className="text-xs text-muted-foreground">
+            Where does the money come from? Tax credits, loans, or investors?
+          </p>
         </div>
       </div>
       

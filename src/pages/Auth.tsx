@@ -127,24 +127,32 @@ const Auth = () => {
       <div className="flex-1 flex flex-col items-center justify-center px-6 py-12 pt-24">
         <div className="w-full max-w-sm">
           
-          {/* Brand Icon */}
-          <div className="text-center mb-6">
-            <img 
-              src={brandIconF} 
-              alt="Brand Seal" 
-              className="w-20 h-20 mx-auto object-contain"
-            />
+          {/* Brand Icon with glow */}
+          <div className="text-center mb-5">
+            <div className="relative inline-block">
+              <div className="absolute inset-0 bg-gold/15 rounded-full blur-xl scale-150" />
+              <img
+                src={brandIconF}
+                alt="Brand Seal"
+                className="w-16 h-16 mx-auto object-contain relative z-10"
+              />
+            </div>
           </div>
 
           {/* Gold Divider */}
-          <div className="flex justify-center mb-6">
-            <div className="w-12 h-[1px] bg-gold opacity-60" />
+          <div className="flex justify-center mb-5">
+            <div className="w-16 h-[1px] bg-gradient-to-r from-transparent via-gold to-transparent" />
           </div>
 
-          {/* Title */}
-          <h1 className="font-bebas text-2xl text-center tracking-wide text-foreground mb-8">
-            PRODUCER ACCESS
-          </h1>
+          {/* Title & Subtitle */}
+          <div className="text-center mb-6">
+            <h1 className="font-bebas text-2xl tracking-wide text-foreground mb-2">
+              PRODUCER ACCESS
+            </h1>
+            <p className="text-xs text-muted-foreground">
+              Enter your details to access the waterfall calculator
+            </p>
+          </div>
 
           {!magicLinkSent ? (
             <form onSubmit={handleMagicLink} className="space-y-5">
@@ -237,31 +245,49 @@ const Auth = () => {
 
           {/* Trust Badges & Demo - More prominent */}
           {!magicLinkSent && (
-            <div className="mt-10 text-center space-y-6">
-              {/* Trust Badges - Larger, readable */}
-              <div className="flex items-center justify-center gap-8">
-                <div className="flex flex-col items-center gap-1.5">
-                  <Users className="w-5 h-5 text-muted-foreground" />
-                  <span className="text-xs text-muted-foreground">500+ producers</span>
+            <div className="mt-8 text-center space-y-6">
+              {/* Trust Badges - Premium styling */}
+              <div className="flex items-center justify-center gap-6">
+                <div className="flex flex-col items-center gap-2 px-3 py-2">
+                  <div className="w-8 h-8 rounded-full bg-card border border-border flex items-center justify-center">
+                    <Users className="w-4 h-4 text-muted-foreground" />
+                  </div>
+                  <span className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium">500+ Producers</span>
                 </div>
-                <div className="flex flex-col items-center gap-1.5">
-                  <Lock className="w-5 h-5 text-muted-foreground" />
-                  <span className="text-xs text-muted-foreground">No passwords</span>
+                <div className="flex flex-col items-center gap-2 px-3 py-2">
+                  <div className="w-8 h-8 rounded-full bg-card border border-border flex items-center justify-center">
+                    <Lock className="w-4 h-4 text-muted-foreground" />
+                  </div>
+                  <span className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium">Passwordless</span>
                 </div>
-                <div className="flex flex-col items-center gap-1.5">
-                  <Shield className="w-5 h-5 text-muted-foreground" />
-                  <span className="text-xs text-muted-foreground">Bank-grade</span>
+                <div className="flex flex-col items-center gap-2 px-3 py-2">
+                  <div className="w-8 h-8 rounded-full bg-card border border-border flex items-center justify-center">
+                    <Shield className="w-4 h-4 text-muted-foreground" />
+                  </div>
+                  <span className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium">Secure</span>
                 </div>
               </div>
-              
-              {/* Demo Access - More prominent */}
-              <Button
-                variant="ghost"
-                onClick={() => navigate("/calculator?reset=true")}
-                className="text-sm tracking-wide text-gold hover:text-gold-highlight hover:bg-gold/10 py-3 px-6"
-              >
-                Try Demo Access →
-              </Button>
+
+              {/* Divider */}
+              <div className="flex items-center gap-4">
+                <div className="flex-1 h-[1px] bg-border" />
+                <span className="text-[10px] text-muted-foreground uppercase tracking-wider">or</span>
+                <div className="flex-1 h-[1px] bg-border" />
+              </div>
+
+              {/* Demo Access - Clearer what it does */}
+              <div className="space-y-2">
+                <Button
+                  variant="ghost"
+                  onClick={() => navigate("/calculator?reset=true")}
+                  className="text-sm tracking-wide text-gold hover:text-gold-highlight hover:bg-gold/10 py-3 px-6 border border-gold/30 hover:border-gold/50 transition-all"
+                >
+                  Try Demo Mode
+                </Button>
+                <p className="text-[10px] text-muted-foreground/70">
+                  Explore with sample data — no account needed
+                </p>
+              </div>
             </div>
           )}
         </div>

@@ -30,8 +30,10 @@ const WizardStep1 = ({ budget, revenue, onUpdateBudget, onUpdateRevenue }: Wizar
           <span className="text-gold font-bebas text-sm">1</span>
         </div>
         <div>
-          <h2 className="font-bebas text-lg text-foreground tracking-wide">CORE FINANCIALS</h2>
-          <p className="text-xs text-muted-foreground">Enter your budget and acquisition price</p>
+          <h2 className="font-bebas text-lg text-foreground tracking-wide">THE DEAL</h2>
+          <p className="text-xs text-muted-foreground">
+            How much does it cost to make? How much will the streamer pay?
+          </p>
         </div>
       </div>
 

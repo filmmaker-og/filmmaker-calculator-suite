@@ -55,7 +55,9 @@ const ResultsDashboard = forwardRef<HTMLDivElement, ResultsDashboardProps>(({ re
   const netProfit = result.profitPool;
 
   const firstMoneyOut = result.cam + result.salesFee + result.guilds + result.marketing;
-  const debtService = result.ledger.find(l => l.name === "Senior Debt")?.amount || 0;
+  const seniorDebt = result.ledger.find(l => l.name === "Senior Debt")?.amount || 0;
+  const mezzDebt = result.ledger.find(l => l.name === "Gap/Mezz Debt")?.amount || 0;
+  const debtService = seniorDebt + mezzDebt;
   const equityPrem = result.ledger.find(l => l.name === "Equity")?.amount || 0;
 
   let remaining = inputs.revenue;
@@ -110,70 +112,86 @@ const ResultsDashboard = forwardRef<HTMLDivElement, ResultsDashboardProps>(({ re
 
   return (
     <div ref={ref} className="step-enter space-y-5">
-      {/* Section Header - Number 4 badge */}
+      {/* Section Header - Output emphasis */}
       <div className="flex items-center gap-3 mb-6">
-        <div className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center">
-          <span className="text-gold font-bebas text-sm">4</span>
+        <div className="w-8 h-8 rounded-full bg-gold flex items-center justify-center">
+          <span className="text-primary-foreground font-bebas text-sm">✓</span>
         </div>
         <div>
-          <h2 className="font-bebas text-lg text-foreground tracking-wide">YOUR RESULTS</h2>
-          <p className="text-xs text-muted-foreground">Waterfall analysis complete</p>
+          <h2 className="font-bebas text-lg text-foreground tracking-wide">WATERFALL ANALYSIS</h2>
+          <p className="text-xs text-muted-foreground">
+            Based on your inputs, here's how the money flows
+          </p>
         </div>
       </div>
 
-      {/* Hero Net Profit Card - Instant display */}
-      <div 
+      {/* Hero Net Profit Card - Premium styling */}
+      <div
         className="relative p-6 rounded-sm text-center overflow-hidden border"
-        style={{ 
+        style={{
           backgroundColor: 'hsl(var(--card))',
           borderColor: isProfitable ? 'hsl(var(--gold))' : 'hsl(0 84% 40%)',
           borderLeftWidth: '3px'
         }}
       >
+        {/* Subtle background glow */}
+        {isProfitable && (
+          <div className="absolute inset-0 bg-gradient-to-b from-gold/5 to-transparent pointer-events-none" />
+        )}
+
         <div className="relative z-10">
-          <div className="flex items-center justify-center gap-2 mb-4">
-            <DollarSign size={18} className={isProfitable ? 'text-gold' : 'text-destructive'} />
-            <span className="text-xs uppercase tracking-[0.2em] text-muted-foreground font-semibold">Net Profit</span>
+          <div className="flex items-center justify-center gap-2 mb-3">
+            <DollarSign size={16} className={isProfitable ? 'text-gold' : 'text-destructive'} />
+            <span className="text-[10px] uppercase tracking-[0.25em] text-muted-foreground font-semibold">
+              Net Profit Pool
+            </span>
           </div>
-          
-          <p 
-            className="font-bebas text-5xl sm:text-6xl mb-4 tabular-nums" 
+
+          <p
+            className="font-bebas text-5xl sm:text-6xl mb-1 tabular-nums"
             style={{ color: isProfitable ? 'hsl(var(--gold))' : 'hsl(var(--destructive))' }}
           >
             {isProfitable ? '+' : ''}{formatCompactCurrency(netProfit)}
           </p>
-          
-          <span 
+
+          <p className="text-[10px] text-muted-foreground mb-4">
+            Available for 50/50 split between producers & investors
+          </p>
+
+          <span
             className={`inline-flex items-center gap-2 px-4 py-2 rounded-sm text-xs font-mono uppercase tracking-wider ${
-              isProfitable 
-                ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30' 
+              isProfitable
+                ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'
                 : 'bg-red-500/15 text-red-400 border border-red-500/30'
             }`}
           >
             {isProfitable ? <CheckCircle2 size={14} /> : <AlertTriangle size={14} />}
-            {isProfitable ? 'PROFITABLE' : 'LOSS'}
+            {isProfitable ? 'PROFITABLE DEAL' : 'SHORTFALL'}
           </span>
         </div>
       </div>
 
-      {/* Quick Stats Row */}
-      <div className="grid grid-cols-3 gap-3">
-        <div className="p-3 rounded-sm text-center bg-card border border-border min-h-[72px] flex flex-col justify-center">
+      {/* Quick Stats Row - Key metrics */}
+      <div className="grid grid-cols-3 gap-2.5">
+        <div className="p-3 rounded-sm text-center bg-card border border-border min-h-[80px] flex flex-col justify-center">
           <TrendingUp size={14} className={`mx-auto mb-1.5 ${roi >= 100 ? 'text-emerald-400' : 'text-red-400'}`} />
-          <p className="text-[10px] text-muted-foreground uppercase mb-0.5 font-semibold tracking-wide">ROI</p>
-          <p className={`font-mono text-sm font-semibold ${roi >= 100 ? 'text-emerald-400' : 'text-red-400'}`}>
+          <p className="text-[9px] text-muted-foreground uppercase mb-1 font-semibold tracking-wider">Return %</p>
+          <p className={`font-mono text-base font-semibold ${roi >= 100 ? 'text-emerald-400' : 'text-red-400'}`}>
             {formatPercent(roi)}
           </p>
         </div>
-        <div className="p-3 rounded-sm text-center bg-card border border-border min-h-[72px] flex flex-col justify-center">
+        <div className="p-3 rounded-sm text-center bg-card border border-border min-h-[80px] flex flex-col justify-center">
           <Target size={14} className="mx-auto mb-1.5 text-muted-foreground" />
-          <p className="text-[10px] text-muted-foreground uppercase mb-0.5 font-semibold tracking-wide">Breakeven</p>
-          <p className="font-mono text-sm text-foreground">{formatCompactCurrency(result.totalHurdle)}</p>
+          <p className="text-[9px] text-muted-foreground uppercase mb-1 font-semibold tracking-wider">Breakeven</p>
+          <p className="font-mono text-base text-foreground">{formatCompactCurrency(result.totalHurdle)}</p>
         </div>
-        <div className="p-3 rounded-sm text-center bg-card border border-border min-h-[72px] flex flex-col justify-center">
-          <TrendingUp size={14} className={`mx-auto mb-1.5 ${result.multiple >= 1.2 ? 'text-gold' : 'text-muted-foreground'}`} />
-          <p className="text-[10px] text-muted-foreground uppercase mb-0.5 font-semibold tracking-wide">Multiple</p>
-          <p className={`font-mono text-sm font-semibold ${result.multiple >= 1.2 ? 'text-gold' : 'text-foreground'}`}>
+        <div className="p-3 rounded-sm text-center bg-card border border-border min-h-[80px] flex flex-col justify-center relative overflow-hidden">
+          {result.multiple >= 1.2 && (
+            <div className="absolute inset-0 bg-gradient-to-b from-gold/10 to-transparent pointer-events-none" />
+          )}
+          <TrendingUp size={14} className={`mx-auto mb-1.5 relative z-10 ${result.multiple >= 1.2 ? 'text-gold' : 'text-muted-foreground'}`} />
+          <p className="text-[9px] text-muted-foreground uppercase mb-1 font-semibold tracking-wider relative z-10">Multiple</p>
+          <p className={`font-mono text-base font-semibold relative z-10 ${result.multiple >= 1.2 ? 'text-gold' : 'text-foreground'}`}>
             {formatMultiple(result.multiple)}
           </p>
         </div>
@@ -312,20 +330,48 @@ const ResultsDashboard = forwardRef<HTMLDivElement, ResultsDashboardProps>(({ re
         DOWNLOAD INVESTOR DECK
       </Button>
 
-      {/* Info Modal */}
+      {/* Info Modal - Comprehensive explanation for new users */}
       <Dialog open={showInfoModal} onOpenChange={setShowInfoModal}>
         <DialogContent className="bg-card border-border text-foreground max-w-md">
           <DialogHeader>
             <DialogTitle className="font-bebas text-xl tracking-wider text-gold">
-              WATERFALL DEFINITIONS
+              HOW THE WATERFALL WORKS
             </DialogTitle>
           </DialogHeader>
-          <div className="space-y-4 mt-4">
-            <div>
-              <h3 className="font-bebas text-lg text-gold mb-1">PRIORITY OF PAYMENTS</h3>
-              <DialogDescription className="text-muted-foreground text-sm leading-relaxed">
-                Funds are distributed in strict order. First Money Out covers CAM fees, sales, and guild residuals. Then senior debt is repaid, followed by equity with premium. Any remainder flows to the profit pool.
-              </DialogDescription>
+          <div className="space-y-5 mt-4">
+            <DialogDescription className="text-muted-foreground text-sm leading-relaxed">
+              Revenue flows through each tier in order. Only after one tier is fully paid does money flow to the next.
+            </DialogDescription>
+
+            <div className="space-y-3">
+              <div className="flex gap-3 items-start">
+                <span className="w-5 h-5 rounded-full bg-muted-foreground/20 flex items-center justify-center flex-shrink-0 text-[10px] font-mono text-muted-foreground">1</span>
+                <div>
+                  <p className="text-foreground font-medium text-sm">First Money Out</p>
+                  <p className="text-muted-foreground text-xs">CAM fees, sales agent commission, guild residuals, marketing</p>
+                </div>
+              </div>
+              <div className="flex gap-3 items-start">
+                <span className="w-5 h-5 rounded-full bg-muted-foreground/20 flex items-center justify-center flex-shrink-0 text-[10px] font-mono text-muted-foreground">2</span>
+                <div>
+                  <p className="text-foreground font-medium text-sm">Debt Service</p>
+                  <p className="text-muted-foreground text-xs">Senior and mezzanine lenders repaid with interest</p>
+                </div>
+              </div>
+              <div className="flex gap-3 items-start">
+                <span className="w-5 h-5 rounded-full bg-muted-foreground/20 flex items-center justify-center flex-shrink-0 text-[10px] font-mono text-muted-foreground">3</span>
+                <div>
+                  <p className="text-foreground font-medium text-sm">Equity + Premium</p>
+                  <p className="text-muted-foreground text-xs">Investors receive principal plus preferred return</p>
+                </div>
+              </div>
+              <div className="flex gap-3 items-start">
+                <span className="w-5 h-5 rounded-full bg-gold/30 flex items-center justify-center flex-shrink-0 text-[10px] font-mono text-gold">4</span>
+                <div>
+                  <p className="text-gold font-medium text-sm">Profit Pool</p>
+                  <p className="text-muted-foreground text-xs">Split 50/50 between producers and investors</p>
+                </div>
+              </div>
             </div>
           </div>
         </DialogContent>

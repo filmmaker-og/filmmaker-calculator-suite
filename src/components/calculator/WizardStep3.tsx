@@ -90,8 +90,10 @@ const WizardStep3 = ({
           <span className="text-gold font-bebas text-sm">3</span>
         </div>
         <div>
-          <h2 className="font-bebas text-lg text-foreground tracking-wide">DEDUCTIONS</h2>
-          <p className="text-xs text-muted-foreground">Configure residuals and distribution costs</p>
+          <h2 className="font-bebas text-lg text-foreground tracking-wide">OFF-THE-TOP COSTS</h2>
+          <p className="text-xs text-muted-foreground">
+            What gets deducted before anyone gets paid? Sales fees, guild residuals.
+          </p>
         </div>
       </div>
 

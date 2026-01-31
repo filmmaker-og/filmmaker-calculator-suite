@@ -16,7 +16,8 @@ import { calculateWaterfall, WaterfallInputs, WaterfallResult, GuildState } from
 
 const STORAGE_KEY = "filmmaker_og_inputs";
 const TOTAL_STEPS = 4;
-const STEP_LABELS = ['DEAL', 'CAPITAL', 'DEDUCTIONS', 'RESULTS'];
+const STEP_LABELS = ['DEAL', 'CAPITAL', 'COSTS', 'RESULTS'];
+const STEP_TYPES: ('input' | 'output')[] = ['input', 'input', 'input', 'output'];
 
 const defaultInputs: WaterfallInputs = {
   revenue: 3500000,
@@ -187,18 +188,31 @@ const Calculator = () => {
 
       <div className="header-spacer" />
 
-      {/* Status Bar - Tappable step labels */}
+      {/* Status Bar - Tappable step labels with INPUT/OUTPUT indicator */}
       <div className="px-6 py-3 border-b border-border bg-card">
+        {/* Step Type Indicator */}
+        <div className="flex items-center justify-center mb-2">
+          <span
+            className={`text-[9px] uppercase tracking-[0.2em] font-semibold px-3 py-1 rounded-full transition-all duration-200 ${
+              currentStep === 4
+                ? 'bg-gold/20 text-gold'
+                : 'bg-card border border-border text-muted-foreground'
+            }`}
+          >
+            {currentStep === 4 ? '◆ OUTPUT' : `INPUT ${currentStep}/3`}
+          </span>
+        </div>
+
         <div className="flex items-center justify-center gap-0 mb-3">
           {STEP_LABELS.map((label, i) => (
-            <button 
+            <button
               key={label}
               onClick={() => goToStep(i + 1)}
               className={`text-xs tracking-wider py-2 px-2 min-h-[44px] transition-all duration-150 ${
-                i + 1 === currentStep 
-                  ? 'text-gold font-semibold' 
-                  : i + 1 < currentStep 
-                    ? 'text-muted-foreground hover:text-gold/70' 
+                i + 1 === currentStep
+                  ? 'text-gold font-semibold'
+                  : i + 1 < currentStep
+                    ? 'text-muted-foreground hover:text-gold/70'
                     : 'text-muted-foreground/50'
               }`}
             >
@@ -207,10 +221,10 @@ const Calculator = () => {
             </button>
           ))}
         </div>
-        
+
         {/* Progress bar - thinner, subtle */}
         <div className="h-0.5 rounded-full overflow-hidden bg-border">
-          <div 
+          <div
             className="h-full transition-all duration-200 rounded-full bg-gold"
             style={{ width: `${(currentStep / TOTAL_STEPS) * 100}%` }}
           />
@@ -260,12 +274,12 @@ const Calculator = () => {
         )}
       </main>
 
-      {/* Fixed Bottom Navigation - Balanced with actions on both sides */}
-      <div 
-        className="fixed bottom-0 left-0 right-0 px-6 pt-4 pb-4 bg-background z-40 safe-bottom"
-        style={{ 
+      {/* Fixed Bottom Navigation - Premium styling */}
+      <div
+        className="fixed bottom-0 left-0 right-0 px-6 pt-4 pb-4 bg-background/95 backdrop-blur-sm z-40 safe-bottom"
+        style={{
           borderTop: '1px solid hsl(var(--border))',
-          boxShadow: '0 -8px 24px rgba(0, 0, 0, 0.4)'
+          boxShadow: '0 -12px 40px rgba(0, 0, 0, 0.5)'
         }}
       >
         <div className="flex items-center gap-3 max-w-screen-lg mx-auto">
@@ -275,31 +289,35 @@ const Calculator = () => {
               <Button
                 onClick={prevStep}
                 variant="ghost"
-                className="w-full text-muted-foreground hover:text-foreground py-5 touch-feedback min-h-[52px] border border-border hover:border-gold/30"
+                className="w-full text-muted-foreground hover:text-foreground py-5 touch-feedback min-h-[52px] border border-border hover:border-gold/30 transition-all duration-150"
               >
-                <ChevronLeft className="w-4 h-4 mr-1" />
-                Previous
+                <ChevronLeft className="w-4 h-4 mr-1.5" />
+                Back
               </Button>
             )}
           </div>
-          
+
           {/* Right button: Next OR Start Over on final step */}
           <div className="flex-1">
             {currentStep < TOTAL_STEPS ? (
               <Button
                 onClick={nextStep}
-                className="w-full btn-vault py-5 touch-feedback min-h-[52px]"
+                className="w-full btn-vault py-5 touch-feedback min-h-[52px] relative overflow-hidden group"
               >
-                {currentStep === 3 ? 'VIEW RESULTS' : 'NEXT STEP'}
-                <ChevronRight className="w-4 h-4 ml-1" />
+                <span className="relative z-10 flex items-center justify-center">
+                  {currentStep === 3 ? 'VIEW RESULTS' : 'CONTINUE'}
+                  <ChevronRight className="w-4 h-4 ml-1.5" />
+                </span>
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-500" />
               </Button>
             ) : (
               <Button
                 onClick={handleStartOver}
-                className="w-full btn-vault py-5 touch-feedback min-h-[52px]"
+                variant="ghost"
+                className="w-full py-5 touch-feedback min-h-[52px] border border-border hover:border-gold/30 text-muted-foreground hover:text-foreground transition-all duration-150"
               >
-                <RotateCcw className="w-4 h-4 mr-1" />
-                Start Over
+                <RotateCcw className="w-4 h-4 mr-1.5" />
+                New Scenario
               </Button>
             )}
           </div>
