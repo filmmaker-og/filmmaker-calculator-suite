@@ -2,13 +2,10 @@ import { Check, Sparkles, Landmark, Receipt, CreditCard, Users, ChevronRight } f
 import { useHaptics } from "@/hooks/use-haptics";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
+import { CapitalSelections } from "@/lib/waterfall";
 
-export interface CapitalSelections {
-  taxCredits: boolean;
-  seniorDebt: boolean;
-  gapLoan: boolean;
-  equity: boolean;
-}
+// Re-export for convenience
+export type { CapitalSelections } from "@/lib/waterfall";
 
 interface CapitalSelectStepProps {
   selections: CapitalSelections;
