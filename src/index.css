@@ -546,6 +546,286 @@ html, body {
   100% { transform: scale(1); }
 }
 
+/* ===== PREMIUM LUXURIOUS ANIMATIONS ===== */
+
+/* Continuous attention glow - for inputs that need filling */
+@keyframes attentionGlow {
+  0%, 100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+}
+
+.animate-attention-glow {
+  animation: attentionGlow 2s ease-in-out infinite;
+}
+
+/* Continuous border glow - more prominent than the old pulse */
+@keyframes borderGlow {
+  0%, 100% {
+    border-color: rgba(212, 175, 55, 0.4);
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.1);
+  }
+  50% {
+    border-color: rgba(249, 224, 118, 0.8);
+    box-shadow: 0 0 35px rgba(249, 224, 118, 0.25);
+  }
+}
+
+.animate-border-glow {
+  animation: borderGlow 2s ease-in-out infinite;
+}
+
+/* Ambient pulse for containers */
+@keyframes ambientPulse {
+  0%, 100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+.animate-ambient-pulse {
+  animation: ambientPulse 3s ease-in-out infinite;
+}
+
+/* Bouncing arrow for action hints */
+@keyframes bounceRight {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(4px);
+  }
+}
+
+.animate-bounce-right {
+  animation: bounceRight 1s ease-in-out infinite;
+}
+
+/* Shimmer effect for focused inputs */
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s ease-in-out infinite;
+}
+
+/* Slower shimmer for buttons */
+.animate-shimmer-slow {
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+/* Slow pulse for decorative elements */
+.animate-pulse-slow {
+  animation: pulseSlow 3s ease-in-out infinite;
+}
+
+/* Glow pulse for enabled CTAs */
+@keyframes glowPulse {
+  0%, 100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.animate-glow-pulse {
+  animation: glowPulse 2s ease-in-out infinite;
+}
+
+/* Selection card hover effect */
+@keyframes cardSelect {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.animate-card-select {
+  animation: cardSelect 0.3s ease-out;
+}
+
+/* Success checkmark pop */
+@keyframes checkPop {
+  0% {
+    transform: scale(0) rotate(-45deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2) rotate(0deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+.animate-check-pop {
+  animation: checkPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Floating effect for hero elements */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Reveal animation for results */
+@keyframes revealUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-reveal-up {
+  animation: revealUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Staggered reveal for list items */
+.stagger-reveal > * {
+  opacity: 0;
+  animation: revealUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.stagger-reveal > *:nth-child(1) { animation-delay: 0.05s; }
+.stagger-reveal > *:nth-child(2) { animation-delay: 0.1s; }
+.stagger-reveal > *:nth-child(3) { animation-delay: 0.15s; }
+.stagger-reveal > *:nth-child(4) { animation-delay: 0.2s; }
+.stagger-reveal > *:nth-child(5) { animation-delay: 0.25s; }
+.stagger-reveal > *:nth-child(6) { animation-delay: 0.3s; }
+
+/* Elegant underline animation */
+@keyframes underlineExpand {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.animate-underline {
+  animation: underlineExpand 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  transform-origin: left center;
+}
+
+/* Premium glass card styling */
+.glass-card {
+  background: linear-gradient(135deg, rgba(13, 13, 13, 0.9) 0%, rgba(8, 8, 8, 0.95) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.02);
+}
+
+.glass-card-gold {
+  background: linear-gradient(135deg, rgba(15, 14, 10, 0.9) 0%, rgba(10, 9, 8, 0.95) 100%);
+  border: 1px solid rgba(212, 175, 55, 0.15);
+  backdrop-filter: blur(10px);
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.3),
+    0 0 40px rgba(212, 175, 55, 0.05),
+    inset 0 1px 0 rgba(212, 175, 55, 0.05);
+}
+
+/* Matte section containers */
+.matte-section {
+  background: linear-gradient(180deg, #0D0D0D 0%, #080808 100%);
+  border: 1px solid #1A1A1A;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.02),
+    0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.matte-section-header {
+  background: rgba(10, 10, 10, 0.8);
+  border-bottom: 1px solid #1A1A1A;
+}
+
+/* Gold accent bar */
+.gold-accent-left {
+  position: relative;
+}
+
+.gold-accent-left::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(180deg, #D4AF37 0%, #D4AF37 80%, transparent 100%);
+}
+
+/* Selection highlight effect */
+.selection-highlight {
+  position: relative;
+  overflow: hidden;
+}
+
+.selection-highlight::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.selection-highlight:hover::after,
+.selection-highlight.active::after {
+  opacity: 1;
+}
+
+/* Premium divider */
+.premium-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, #2A2A2A 20%, #2A2A2A 80%, transparent 100%);
+}
+
+.premium-divider-gold {
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(212, 175, 55, 0.4) 20%, rgba(212, 175, 55, 0.4) 80%, transparent 100%);
+}
+
+/* Step progress connector */
+.step-connector {
+  width: 1px;
+  background: linear-gradient(180deg, rgba(212, 175, 55, 0.5) 0%, rgba(212, 175, 55, 0.1) 100%);
+}
+
 /* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

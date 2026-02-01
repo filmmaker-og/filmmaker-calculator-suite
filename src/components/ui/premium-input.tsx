@@ -1,11 +1,12 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
-import { Check } from "lucide-react";
+import { Check, ChevronRight } from "lucide-react";
+import { useHaptics } from "@/hooks/use-haptics";
 
 interface PremiumInputProps extends React.ComponentProps<"input"> {
   /** Field has a valid value */
   isCompleted?: boolean;
-  /** Field is the next one to fill */
+  /** Field is the next one to fill (triggers attention animation) */
   isNext?: boolean;
   /** Field is currently focused */
   isActive?: boolean;
@@ -17,14 +18,27 @@ interface PremiumInputProps extends React.ComponentProps<"input"> {
   containerClassName?: string;
   /** Label text */
   label?: string;
+  /** Step number for multi-input steps */
+  stepNumber?: number;
   /** Example text shown when empty */
   example?: string;
+  /** Hint text that shows what to enter */
+  actionHint?: string;
   /** Validation hint shown below input */
   hint?: React.ReactNode;
-  /** Info button click handler */
-  onInfoClick?: () => void;
+  /** Make this a "hero" input with extra prominence */
+  isHero?: boolean;
 }
 
+/**
+ * Premium Input Component
+ *
+ * Luxurious input field with:
+ * - Continuous pulsing glow when needs attention
+ * - Clear visual states (empty, focused, completed)
+ * - Elegant micro-interactions
+ * - Action hints guiding the user
+ */
 const PremiumInput = React.forwardRef<HTMLInputElement, PremiumInputProps>(
   (
     {
@@ -37,9 +51,11 @@ const PremiumInput = React.forwardRef<HTMLInputElement, PremiumInputProps>(
       showCurrency = false,
       showPercent = false,
       label,
+      stepNumber,
       example,
+      actionHint,
       hint,
-      onInfoClick,
+      isHero = false,
       onFocus,
       onBlur,
       value,
@@ -47,12 +63,15 @@ const PremiumInput = React.forwardRef<HTMLInputElement, PremiumInputProps>(
     },
     ref
   ) => {
+    const haptics = useHaptics();
     const [focused, setFocused] = React.useState(false);
     const localActive = isActive || focused;
     const isEmpty = !value || value === "" || value === "0";
+    const needsAttention = isNext && isEmpty && !localActive;
 
     const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
       setFocused(true);
+      haptics.light();
       e.target.select();
       onFocus?.(e);
     };
@@ -65,91 +84,206 @@ const PremiumInput = React.forwardRef<HTMLInputElement, PremiumInputProps>(
     return (
       <div
         className={cn(
-          // Base container
-          "relative transition-all duration-200 ease-out",
-          // Background gradient for premium feel
-          "bg-gradient-to-b from-background to-[hsl(0_0%_3%)]",
-          // Border states
-          "border-2",
-          localActive
-            ? "border-gold-highlight shadow-[0_0_24px_rgba(249,224,118,0.4)] scale-[1.02] bg-[rgba(249,224,118,0.06)]"
-            : isCompleted
-            ? "border-gold/70"
-            : isNext
-            ? "border-gold/50 animate-pulse-border"
-            : "border-border",
-          // Completed state
-          isCompleted && !localActive && "bg-[rgba(212,175,55,0.04)]",
+          "relative group",
           containerClassName
         )}
       >
-        {/* Label row */}
-        {label && (
-          <div className="flex items-center justify-between px-4 pt-3 pb-1">
-            <label className="text-xs uppercase tracking-wider text-muted-foreground font-semibold">
-              {label}
-            </label>
-            {isCompleted && !localActive && (
-              <div className="w-5 h-5 bg-gold flex items-center justify-center animate-scale-in">
-                <Check className="w-3 h-3 text-black" />
+        {/* Ambient glow for attention state - CONTINUOUS */}
+        {needsAttention && (
+          <div
+            className="absolute -inset-3 pointer-events-none animate-attention-glow rounded-sm"
+            style={{
+              background: 'radial-gradient(ellipse at center, rgba(249, 224, 118, 0.15) 0%, transparent 70%)',
+            }}
+          />
+        )}
+
+        {/* Hero glow effect */}
+        {isHero && !isEmpty && (
+          <div
+            className="absolute -inset-4 pointer-events-none"
+            style={{
+              background: 'radial-gradient(ellipse at center, rgba(212, 175, 55, 0.12) 0%, transparent 60%)',
+              filter: 'blur(20px)',
+            }}
+          />
+        )}
+
+        {/* Main input container */}
+        <div
+          className={cn(
+            "relative overflow-hidden transition-all duration-300 ease-out",
+            // Base styling
+            "bg-gradient-to-b from-[#0F0F0F] to-[#0A0A0A]",
+            // Border states with clear hierarchy
+            "border-2",
+            localActive
+              ? "border-gold-highlight shadow-[0_0_30px_rgba(249,224,118,0.35),inset_0_0_20px_rgba(249,224,118,0.05)] scale-[1.02]"
+              : isCompleted
+              ? "border-gold/60 bg-gradient-to-b from-[#0F0E0A] to-[#0A0908]"
+              : needsAttention
+              ? "border-gold/50 animate-border-glow"
+              : "border-[#1A1A1A] hover:border-[#2A2A2A]",
+            // Hero styling
+            isHero && "border-gold/40 shadow-[0_0_60px_rgba(212,175,55,0.15)]",
+            isHero && isCompleted && "shadow-[0_0_80px_rgba(212,175,55,0.25)]"
+          )}
+        >
+          {/* Shimmer effect on focus */}
+          {localActive && (
+            <div
+              className="absolute inset-0 pointer-events-none animate-shimmer"
+              style={{
+                background: 'linear-gradient(90deg, transparent 0%, rgba(249, 224, 118, 0.03) 50%, transparent 100%)',
+                backgroundSize: '200% 100%',
+              }}
+            />
+          )}
+
+          {/* Label row */}
+          <div className="flex items-center justify-between px-4 pt-4 pb-2">
+            <div className="flex items-center gap-3">
+              {/* Step number badge */}
+              {stepNumber && (
+                <div
+                  className={cn(
+                    "w-6 h-6 flex items-center justify-center text-xs font-mono font-bold transition-colors",
+                    isCompleted
+                      ? "bg-gold text-black"
+                      : needsAttention
+                      ? "bg-gold/20 text-gold border border-gold/50"
+                      : "bg-[#1A1A1A] text-white/50 border border-[#2A2A2A]"
+                  )}
+                >
+                  {isCompleted ? <Check className="w-3.5 h-3.5" /> : stepNumber}
+                </div>
+              )}
+
+              {/* Label */}
+              {label && (
+                <label
+                  className={cn(
+                    "text-xs uppercase tracking-[0.2em] font-semibold transition-colors",
+                    localActive
+                      ? "text-gold"
+                      : isCompleted
+                      ? "text-gold/80"
+                      : "text-white/50"
+                  )}
+                >
+                  {label}
+                </label>
+              )}
+            </div>
+
+            {/* Completion indicator (if no step number) */}
+            {!stepNumber && isCompleted && !localActive && (
+              <div className="w-6 h-6 bg-gold flex items-center justify-center animate-scale-in">
+                <Check className="w-3.5 h-3.5 text-black" />
               </div>
             )}
           </div>
-        )}
 
-        {/* Input row */}
-        <div className="relative flex items-center px-4 pb-3">
-          {showCurrency && (
-            <span className="font-mono text-xl text-muted-foreground mr-2 flex-shrink-0">
-              $
-            </span>
-          )}
-          <input
-            type={type}
-            className={cn(
-              "flex-1 bg-transparent border-0 outline-none",
-              "h-12 text-xl font-mono text-foreground text-right",
-              "placeholder:text-muted-foreground/40",
-              "focus:outline-none focus:ring-0",
-              className
+          {/* Input row */}
+          <div className="relative flex items-center px-4 pb-4">
+            {showCurrency && (
+              <span
+                className={cn(
+                  "font-mono text-2xl mr-3 flex-shrink-0 transition-colors",
+                  localActive
+                    ? "text-gold"
+                    : isCompleted
+                    ? "text-gold/70"
+                    : "text-white/30"
+                )}
+              >
+                $
+              </span>
             )}
-            ref={ref}
-            value={value}
-            onFocus={handleFocus}
-            onBlur={handleBlur}
-            {...props}
-          />
-          {showPercent && (
-            <span className="font-mono text-xl text-muted-foreground ml-2 flex-shrink-0">
-              %
-            </span>
+
+            <input
+              type={type}
+              className={cn(
+                "flex-1 bg-transparent border-0 outline-none",
+                "h-12 font-mono text-right transition-all",
+                localActive
+                  ? "text-white text-2xl"
+                  : isCompleted
+                  ? "text-white text-2xl"
+                  : "text-white/60 text-xl",
+                "placeholder:text-white/20",
+                "focus:outline-none focus:ring-0",
+                isHero && "text-3xl",
+                className
+              )}
+              ref={ref}
+              value={value}
+              onFocus={handleFocus}
+              onBlur={handleBlur}
+              {...props}
+            />
+
+            {showPercent && (
+              <span
+                className={cn(
+                  "font-mono text-2xl ml-3 flex-shrink-0 transition-colors",
+                  localActive
+                    ? "text-gold"
+                    : isCompleted
+                    ? "text-gold/70"
+                    : "text-white/30"
+                )}
+              >
+                %
+              </span>
+            )}
+          </div>
+
+          {/* Action hint - shows what to do */}
+          {needsAttention && (
+            <div className="px-4 pb-4 animate-fade-in">
+              <div className="flex items-center gap-2 text-gold">
+                <ChevronRight className="w-4 h-4 animate-bounce-right" />
+                <span className="text-xs font-medium tracking-wide">
+                  {actionHint || `Enter ${label?.toLowerCase() || 'value'} to continue`}
+                </span>
+              </div>
+            </div>
+          )}
+
+          {/* Example hint - shows format */}
+          {isEmpty && example && !needsAttention && !localActive && (
+            <div className="px-4 pb-4">
+              <span className="text-xs text-white/25">
+                e.g., {example}
+              </span>
+            </div>
+          )}
+
+          {/* Validation/contextual hint */}
+          {hint && localActive && (
+            <div className="px-4 pb-4 animate-fade-in">
+              {hint}
+            </div>
+          )}
+
+          {/* Completed state left accent bar */}
+          {isCompleted && !localActive && (
+            <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-gold via-gold to-gold/50" />
           )}
         </div>
 
-        {/* Example hint */}
-        {isEmpty && example && !localActive && (
-          <div className="px-4 pb-3 animate-fade-in">
-            <span className="text-xs text-muted-foreground/50">
-              e.g., {example}
-            </span>
-          </div>
-        )}
-
-        {/* Validation hint */}
-        {hint && localActive && (
-          <div className="px-4 pb-3 animate-fade-in">{hint}</div>
-        )}
-
-        {/* Completed checkmark (if no label) */}
-        {!label && isCompleted && !localActive && (
-          <div className="absolute top-2 right-2 w-5 h-5 bg-gold flex items-center justify-center animate-scale-in">
-            <Check className="w-3 h-3 text-black" />
+        {/* Bottom connector line for visual flow */}
+        {needsAttention && (
+          <div className="flex justify-center mt-3">
+            <div className="w-px h-6 bg-gradient-to-b from-gold/50 to-transparent animate-pulse-slow" />
           </div>
         )}
       </div>
     );
   }
 );
+
 PremiumInput.displayName = "PremiumInput";
 
 export { PremiumInput };

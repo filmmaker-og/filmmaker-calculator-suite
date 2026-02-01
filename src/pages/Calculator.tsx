@@ -463,67 +463,97 @@ const Calculator = () => {
         )}
       </main>
 
-      {/* Fixed Bottom CTA */}
+      {/* Fixed Bottom CTA - Premium styling */}
       <div
-        className="fixed bottom-0 left-0 right-0 px-5 py-4 bg-background z-40"
+        className="fixed bottom-0 left-0 right-0 z-40"
         style={{
-          borderTop: '1px solid hsl(var(--border))',
+          background: 'linear-gradient(to top, #000000 0%, #000000 85%, transparent 100%)',
           paddingBottom: 'max(1rem, env(safe-area-inset-bottom))'
         }}
       >
-        {currentStepIndex < totalSteps - 1 ? (
-          <div className="flex gap-3">
-            {currentStepIndex > 0 && (
-              <Button
-                onClick={prevStep}
-                variant="outline"
-                className="h-14 px-6 text-sm font-semibold tracking-wider rounded-none border-border hover:border-gold/50 hover:bg-transparent touch-feedback active:scale-95 transition-transform"
-              >
-                <ChevronLeft className="w-4 h-4" />
-              </Button>
-            )}
-            <Button
-              onClick={nextStep}
-              onTouchStart={() => setIsButtonPressed(true)}
-              onTouchEnd={() => setIsButtonPressed(false)}
-              onMouseDown={() => setIsButtonPressed(true)}
-              onMouseUp={() => setIsButtonPressed(false)}
-              onMouseLeave={() => setIsButtonPressed(false)}
-              className={cn(
-                "flex-1 h-14 text-base font-black tracking-[0.15em] rounded-none bg-gold text-black hover:bg-gold-highlight transition-all",
-                isButtonPressed && "scale-[0.97]",
-                shakeButton && "animate-shake",
-                !canProceed() && "opacity-40 cursor-not-allowed"
+        {/* Top fade line */}
+        <div className="h-px bg-gradient-to-r from-transparent via-[#2A2A2A] to-transparent" />
+
+        <div className="px-5 pt-4 pb-2">
+          {currentStepIndex < totalSteps - 1 ? (
+            <>
+              {/* Requirement hint when button is disabled */}
+              {!canProceed() && (
+                <div className="mb-3 py-2 px-4 bg-[#0A0A0A] border border-[#1A1A1A] flex items-center justify-center gap-2 animate-fade-in">
+                  <div className="w-2 h-2 bg-gold/50 rounded-full animate-pulse" />
+                  <span className="text-xs text-white/50 tracking-wide">
+                    {currentStep === 'budget' && 'Enter your budget to continue'}
+                    {currentStep === 'capitalSelect' && 'Select at least one funding source'}
+                    {currentStep === 'acquisition' && 'Enter the acquisition price'}
+                  </span>
+                </div>
               )}
-              style={{
-                boxShadow: canProceed() ? '0 0 30px rgba(212, 175, 55, 0.3)' : 'none',
-              }}
-            >
-              <span className="flex items-center justify-center gap-3">
-                {getCtaText()}
-                <ChevronRight className="w-5 h-5" />
-              </span>
-            </Button>
-          </div>
-        ) : (
-          <div className="flex gap-3">
-            <Button
-              onClick={prevStep}
-              variant="outline"
-              className="h-14 px-6 text-sm font-semibold tracking-wider rounded-none border-border hover:border-gold/50 hover:bg-transparent touch-feedback active:scale-95"
-            >
-              <ChevronLeft className="w-4 h-4" />
-            </Button>
-            <Button
-              onClick={handleStartOver}
-              variant="outline"
-              className="flex-1 h-14 text-sm font-semibold tracking-wider rounded-none border-border hover:border-gold/50 hover:bg-transparent touch-feedback active:scale-95"
-            >
-              <RotateCcw className="w-4 h-4 mr-2" />
-              START OVER
-            </Button>
-          </div>
-        )}
+
+              <div className="flex gap-3">
+                {currentStepIndex > 0 && (
+                  <button
+                    onClick={prevStep}
+                    className="h-14 px-5 flex items-center justify-center bg-[#0A0A0A] border border-[#2A2A2A] text-white/60 hover:text-white hover:border-[#3A3A3A] transition-all active:scale-95"
+                  >
+                    <ChevronLeft className="w-5 h-5" />
+                  </button>
+                )}
+                <button
+                  onClick={nextStep}
+                  onTouchStart={() => setIsButtonPressed(true)}
+                  onTouchEnd={() => setIsButtonPressed(false)}
+                  onMouseDown={() => setIsButtonPressed(true)}
+                  onMouseUp={() => setIsButtonPressed(false)}
+                  onMouseLeave={() => setIsButtonPressed(false)}
+                  className={cn(
+                    "flex-1 h-14 relative overflow-hidden font-black text-sm tracking-[0.15em] uppercase transition-all duration-200",
+                    isButtonPressed && canProceed() && "scale-[0.98]",
+                    shakeButton && "animate-shake",
+                    canProceed()
+                      ? "bg-gold text-black hover:bg-gold-highlight"
+                      : "bg-[#1A1A1A] text-white/30 cursor-not-allowed"
+                  )}
+                  style={{
+                    boxShadow: canProceed()
+                      ? '0 0 40px rgba(212, 175, 55, 0.3), 0 4px 20px rgba(0, 0, 0, 0.3)'
+                      : 'none',
+                  }}
+                >
+                  {/* Shimmer effect when enabled */}
+                  {canProceed() && (
+                    <div
+                      className="absolute inset-0 pointer-events-none animate-shimmer-slow"
+                      style={{
+                        background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.1) 50%, transparent 100%)',
+                        backgroundSize: '200% 100%',
+                      }}
+                    />
+                  )}
+                  <span className="relative flex items-center justify-center gap-3">
+                    {getCtaText()}
+                    <ChevronRight className="w-5 h-5" />
+                  </span>
+                </button>
+              </div>
+            </>
+          ) : (
+            <div className="flex gap-3">
+              <button
+                onClick={prevStep}
+                className="h-14 px-5 flex items-center justify-center bg-[#0A0A0A] border border-[#2A2A2A] text-white/60 hover:text-white hover:border-[#3A3A3A] transition-all active:scale-95"
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+              <button
+                onClick={handleStartOver}
+                className="flex-1 h-14 flex items-center justify-center gap-2 bg-[#0A0A0A] border border-[#2A2A2A] text-white/70 hover:text-white hover:border-gold/30 text-sm font-semibold tracking-wider transition-all active:scale-95"
+              >
+                <RotateCcw className="w-4 h-4" />
+                START OVER
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
