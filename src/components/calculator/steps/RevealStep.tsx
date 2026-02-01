@@ -1,10 +1,22 @@
 import { WaterfallResult, formatCompactCurrency, formatMultiple } from "@/lib/waterfall";
-import { TrendingUp, TrendingDown, AlertTriangle } from "lucide-react";
+import { TrendingUp, TrendingDown, AlertTriangle, Sparkles } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
 
 interface RevealStepProps {
   result: WaterfallResult;
   equity: number;
+}
+
+type VerdictState = 'underwater' | 'marginal' | 'profit' | 'strong';
+
+interface VerdictConfig {
+  state: VerdictState;
+  label: string;
+  color: string;
+  glowColor: string;
+  bgClass: string;
+  Icon: typeof TrendingUp;
+  message: string;
 }
 
 const RevealStep = ({ result, equity }: RevealStepProps) => {
@@ -14,9 +26,54 @@ const RevealStep = ({ result, equity }: RevealStepProps) => {
   const [animationComplete, setAnimationComplete] = useState(false);
   const hasAnimated = useRef(false);
 
-  const isProfitable = result.profitPool > 0;
-  const isStrong = result.multiple >= 1.2;
-  const isUnderperforming = result.multiple < 1.2 && equity > 0;
+  // Determine verdict state
+  const getVerdictConfig = (): VerdictConfig => {
+    if (result.profitPool < 0) {
+      return {
+        state: 'underwater',
+        label: 'UNDERWATER',
+        color: 'text-red-400',
+        glowColor: 'rgba(239, 68, 68, 0.3)',
+        bgClass: 'verdict-underwater',
+        Icon: TrendingDown,
+        message: "This deal loses money. The acquisition price doesn't cover all costs."
+      };
+    }
+    if (result.multiple >= 1.2) {
+      return {
+        state: 'strong',
+        label: 'STRONG DEAL',
+        color: 'text-gold',
+        glowColor: 'rgba(212, 175, 55, 0.4)',
+        bgClass: 'verdict-strong',
+        Icon: Sparkles,
+        message: 'This return profile should attract institutional capital.'
+      };
+    }
+    if (result.multiple >= 1.0 && equity > 0) {
+      return {
+        state: 'profit',
+        label: 'PROFIT',
+        color: 'text-emerald-400',
+        glowColor: 'rgba(34, 197, 94, 0.3)',
+        bgClass: 'verdict-profit',
+        Icon: TrendingUp,
+        message: "There's profit to share, but investors typically expect 1.2x minimum."
+      };
+    }
+    return {
+      state: 'marginal',
+      label: 'MARGINAL',
+      color: 'text-amber-400',
+      glowColor: 'rgba(245, 158, 11, 0.3)',
+      bgClass: 'verdict-marginal',
+      Icon: AlertTriangle,
+      message: 'Barely covers obligations. Consider renegotiating terms.'
+    };
+  };
+
+  const verdict = getVerdictConfig();
+  const VerdictIcon = verdict.Icon;
 
   // Animated count-up effect
   useEffect(() => {
@@ -50,6 +107,16 @@ const RevealStep = ({ result, equity }: RevealStepProps) => {
 
   return (
     <div className="step-enter min-h-[60vh] flex flex-col items-center justify-center text-center px-4">
+      {/* Verdict Label */}
+      <div 
+        className={`mb-6 inline-flex items-center gap-2 px-4 py-2 ${verdict.bgClass}`}
+      >
+        <VerdictIcon className={`w-4 h-4 ${verdict.color}`} />
+        <span className={`font-bebas text-sm tracking-[0.2em] ${verdict.color}`}>
+          {verdict.label}
+        </span>
+      </div>
+
       {/* The Big Reveal */}
       <div className="relative mb-8">
         {/* Glow effect */}
@@ -61,9 +128,7 @@ const RevealStep = ({ result, equity }: RevealStepProps) => {
             left: '50%',
             top: '50%',
             transform: 'translate(-50%, -50%)',
-            background: isProfitable 
-              ? 'radial-gradient(circle, rgba(212, 175, 55, 0.2) 0%, rgba(212, 175, 55, 0.05) 50%, transparent 70%)'
-              : 'radial-gradient(circle, rgba(239, 68, 68, 0.15) 0%, transparent 60%)',
+            background: `radial-gradient(circle, ${verdict.glowColor} 0%, transparent 60%)`,
             filter: 'blur(40px)',
           }}
         />
@@ -75,81 +140,50 @@ const RevealStep = ({ result, equity }: RevealStepProps) => {
         
         {/* The Number - Animated */}
         <p
-          className="font-bebas text-7xl sm:text-8xl tabular-nums leading-none relative z-10 transition-transform"
+          className={`font-bebas text-7xl sm:text-8xl tabular-nums leading-none relative z-10 transition-transform ${verdict.color}`}
           style={{
-            color: isProfitable ? 'hsl(var(--gold))' : 'hsl(0 70% 60%)',
-            textShadow: isProfitable 
-              ? '0 0 60px rgba(212, 175, 55, 0.4)'
-              : '0 0 40px rgba(239, 68, 68, 0.3)',
+            textShadow: `0 0 60px ${verdict.glowColor}`,
             transform: animationComplete ? 'scale(1)' : 'scale(1.02)',
           }}
         >
-          {isProfitable ? '+' : ''}{formatCompactCurrency(displayProfit)}
+          {result.profitPool >= 0 ? '+' : ''}{formatCompactCurrency(displayProfit)}
         </p>
       </div>
 
-      {/* Secondary Stats */}
-      <div className="flex items-center justify-center gap-8 mb-8">
-        <div className="text-center">
-          <p className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1">You Take</p>
+      {/* Secondary Stats - Split Cards */}
+      <div className="flex items-stretch justify-center gap-4 mb-8 w-full max-w-xs">
+        <div className="flex-1 p-4 matte-card text-center">
+          <p className="text-[10px] uppercase tracking-wider text-muted-foreground mb-2">You Take</p>
           <p className="font-mono text-xl text-foreground">{formatCompactCurrency(displayProducer)}</p>
         </div>
-        <div className="w-px h-12 bg-border" />
-        <div className="text-center">
-          <p className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1">Investors</p>
+        <div className="flex-1 p-4 matte-card-gold text-center">
+          <p className="text-[10px] uppercase tracking-wider text-gold/70 mb-2">Investors</p>
           <p className="font-mono text-xl text-gold">{formatCompactCurrency(displayInvestor)}</p>
         </div>
       </div>
 
       {/* Investor Multiple */}
       {equity > 0 && (
-        <div className={`inline-flex items-center gap-2 px-5 py-3 border transition-all duration-500 ${
+        <div className={`inline-flex items-center gap-3 px-5 py-3 ${verdict.bgClass} transition-all duration-500 ${
           animationComplete ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-        } ${
-          isStrong 
-            ? 'border-gold bg-gold/10' 
-            : isUnderperforming 
-              ? 'border-amber-500/50 bg-amber-500/10' 
-              : 'border-border bg-card'
         }`}>
-          {isStrong ? (
-            <TrendingUp className="w-5 h-5 text-gold" />
-          ) : isUnderperforming ? (
-            <AlertTriangle className="w-5 h-5 text-amber-400" />
-          ) : (
-            <TrendingDown className="w-5 h-5 text-destructive" />
-          )}
           <span className="text-sm text-foreground">
-            Investor Multiple: 
+            Investor Multiple:
           </span>
-          <span className={`font-mono text-lg font-semibold ${
-            isStrong ? 'text-gold' : isUnderperforming ? 'text-amber-400' : 'text-destructive'
-          }`}>
+          <span className={`font-mono text-xl font-semibold ${verdict.color}`}>
             {formatMultiple(result.multiple)}
           </span>
         </div>
       )}
 
-      {/* Interpretation */}
-      <div className={`mt-8 max-w-xs transition-all duration-500 delay-300 ${
+      {/* Human Interpretation */}
+      <div className={`mt-8 max-w-sm transition-all duration-500 delay-300 ${
         animationComplete ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
       }`}>
-        {isProfitable && isStrong ? (
-          <p className="text-sm text-muted-foreground leading-relaxed">
-            <span className="text-gold font-semibold">Strong deal.</span> This return profile 
-            should attract institutional capital.
-          </p>
-        ) : isProfitable && isUnderperforming ? (
-          <p className="text-sm text-muted-foreground leading-relaxed">
-            <span className="text-amber-400 font-semibold">Marginal returns.</span> Investors 
-            typically expect 1.2x+ multiples. Consider renegotiating terms.
-          </p>
-        ) : !isProfitable ? (
-          <p className="text-sm text-muted-foreground leading-relaxed">
-            <span className="text-destructive font-semibold">Underwater deal.</span> The acquisition 
-            price doesn't cover all costs. Review your capital structure.
-          </p>
-        ) : null}
+        <p className="text-sm text-muted-foreground leading-relaxed">
+          <span className={`font-semibold ${verdict.color}`}>{verdict.label}.</span>{' '}
+          {verdict.message}
+        </p>
       </div>
     </div>
   );

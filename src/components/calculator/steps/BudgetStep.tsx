@@ -103,7 +103,7 @@ const BudgetStep = ({ inputs, onUpdateInput }: BudgetStepProps) => {
         <Collapsible open={showHelp} onOpenChange={setShowHelp}>
           <CollapsibleTrigger className="w-full flex items-center justify-center gap-2 text-sm text-gold/70 hover:text-gold transition-colors py-3">
             <Info className="w-4 h-4" />
-            <span>What's "Negative Cost"?</span>
+            <span>What should I include?</span>
           </CollapsibleTrigger>
           <CollapsibleContent className="mt-4">
             <div className="glass-card-gold p-5 animate-reveal-up">

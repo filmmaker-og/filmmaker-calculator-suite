@@ -24,14 +24,18 @@ const SalesAgentStep = ({ inputs, onUpdateInput }: SalesAgentStepProps) => {
         <h2 className="font-bebas text-2xl tracking-[0.1em] text-foreground">
           These people <span className="text-gold">get paid first</span>
         </h2>
+        <p className="text-xs text-muted-foreground/60 mt-2 uppercase tracking-wider">
+          First hand in the pot
+        </p>
       </div>
 
       {/* The Card */}
-      <div className="bg-card border border-border p-6 space-y-6">
+      <div className="matte-card p-6 space-y-6">
         <div>
-          <h3 className="font-bebas text-xl tracking-wider text-gold mb-2">SALES AGENT</h3>
+          <h3 className="font-bebas text-xl tracking-wider text-gold mb-1">THE SALES AGENT</h3>
+          <p className="text-xs text-muted-foreground/70 italic mb-3">They found your buyer. Now they take their cut.</p>
           <p className="text-muted-foreground text-sm leading-relaxed">
-            The middleman who finds your buyer. They take a percentage off the top of <span className="text-foreground">all revenue</span>.
+            Your sales agent takes a percentage off the top of <span className="text-foreground font-medium">all revenue</span> before anyone else sees a dime.
           </p>
         </div>
 
@@ -53,7 +57,7 @@ const SalesAgentStep = ({ inputs, onUpdateInput }: SalesAgentStepProps) => {
           <div className="pt-4 border-t border-border">
             <div className="flex items-center justify-between">
               <span className="text-sm text-muted-foreground">On a typical 1.2x deal:</span>
-              <span className="font-mono text-xl text-red-400">
+              <span className="font-mono text-xl text-destructive">
                 -{formatCompactCurrency(salesFeeAmount)}
               </span>
             </div>
