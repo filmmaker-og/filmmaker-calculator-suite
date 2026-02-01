@@ -1,4 +1,5 @@
 // Waterfall Calculation Logic - Source of Truth from PRD
+// Last updated: 2026-02-01
 
 export interface WaterfallInputs {
   revenue: number;
@@ -42,6 +43,7 @@ export interface WaterfallResult {
 }
 
 // Calculate the algebraic breakeven point
+// CapitalSelections interface - used for breakeven calculations
 export interface CapitalSelections {
   taxCredits: boolean;
   seniorDebt: boolean;
