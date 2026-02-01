@@ -42,16 +42,26 @@ const GuildsStep = ({ inputs, guilds, onToggleGuild }: GuildsStepProps) => {
 
   return (
     <div className="step-enter">
+      {/* The Header */}
+      <div className="text-center mb-6">
+        <h2 className="font-bebas text-2xl tracking-[0.1em] text-foreground mb-2">
+          The unions <span className="text-gold">get their piece</span>
+        </h2>
+        <p className="text-xs text-muted-foreground/70">
+          If you're signatory, residuals come off the top. Every time.
+        </p>
+      </div>
+
       {/* The Card */}
-      <div className="bg-card border border-border p-6 space-y-6">
+      <div className="matte-card p-6 space-y-6">
         <div className="flex items-start gap-4">
           <div className="w-12 h-12 bg-muted flex items-center justify-center flex-shrink-0">
             <Users className="w-6 h-6 text-muted-foreground" />
           </div>
           <div>
-            <h3 className="font-bebas text-xl tracking-wider text-gold mb-2">GUILD RESIDUALS</h3>
+            <h3 className="font-bebas text-xl tracking-wider text-gold mb-1">GUILD RESIDUALS</h3>
             <p className="text-muted-foreground text-sm leading-relaxed">
-              Are you <span className="text-foreground font-semibold">signatory</span> to any guilds? These residuals come off the top. Every time.
+              Are you <span className="text-foreground font-semibold">signatory</span> to any guilds?
             </p>
           </div>
         </div>

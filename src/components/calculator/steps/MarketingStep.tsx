@@ -25,16 +25,24 @@ const MarketingStep = ({ inputs, onUpdateInput }: MarketingStepProps) => {
 
   return (
     <div className="step-enter">
+      {/* Tension builder */}
+      <div className="text-center mb-6">
+        <p className="text-xs text-muted-foreground/60 uppercase tracking-widest">
+          Another hand in the pot
+        </p>
+      </div>
+
       {/* The Card */}
-      <div className="bg-card border border-border p-6 space-y-6">
+      <div className="matte-card p-6 space-y-6">
         <div className="flex items-start gap-4">
           <div className="w-12 h-12 bg-muted flex items-center justify-center flex-shrink-0">
             <Megaphone className="w-6 h-6 text-muted-foreground" />
           </div>
           <div>
-            <h3 className="font-bebas text-xl tracking-wider text-gold mb-2">MARKETING & DELIVERY</h3>
+            <h3 className="font-bebas text-xl tracking-wider text-gold mb-1">MARKETING & DELIVERY</h3>
+            <p className="text-xs text-muted-foreground/70 italic mb-3">You'll spend this getting buyers to watch</p>
             <p className="text-muted-foreground text-sm leading-relaxed">
-              Festivals. Markets. Posters. Deliverables. <span className="text-foreground">It adds up fast.</span>
+              Festivals. Markets. Posters. Deliverables. <span className="text-foreground font-medium">It adds up fast.</span>
             </p>
           </div>
         </div>
@@ -63,7 +71,7 @@ const MarketingStep = ({ inputs, onUpdateInput }: MarketingStepProps) => {
           <div className="pt-4 border-t border-border">
             <div className="flex items-center justify-between">
               <span className="text-sm text-muted-foreground">Deducted before profit:</span>
-              <span className="font-mono text-xl text-red-400">
+              <span className="font-mono text-xl text-destructive">
                 -{formatCompactCurrency(inputs.salesExp)}
               </span>
             </div>

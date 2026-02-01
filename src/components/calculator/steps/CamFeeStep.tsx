@@ -16,16 +16,24 @@ const CamFeeStep = ({ inputs }: CamFeeStepProps) => {
 
   return (
     <div className="step-enter">
+      {/* Tension builder */}
+      <div className="text-center mb-6">
+        <p className="text-xs text-muted-foreground/60 uppercase tracking-widest">
+          And that's not all...
+        </p>
+      </div>
+
       {/* The Card */}
-      <div className="bg-card border border-border p-6 space-y-6">
+      <div className="matte-card p-6 space-y-6">
         <div className="flex items-start gap-4">
           <div className="w-12 h-12 bg-muted flex items-center justify-center flex-shrink-0">
             <Building2 className="w-6 h-6 text-muted-foreground" />
           </div>
           <div>
-            <h3 className="font-bebas text-xl tracking-wider text-gold mb-2">CAM FEE</h3>
+            <h3 className="font-bebas text-xl tracking-wider text-gold mb-1">CAM FEE</h3>
+            <p className="text-xs text-muted-foreground/70 italic mb-3">The bank holding your money takes 1%</p>
             <p className="text-muted-foreground text-sm leading-relaxed">
-              <span className="text-foreground font-semibold">Collection Account Management.</span> The bank that holds your money takes their cut first. 
+              <span className="text-foreground font-semibold">Collection Account Management.</span> A neutral third party ensuring everyone gets paid correctly.
             </p>
           </div>
         </div>
@@ -43,9 +51,9 @@ const CamFeeStep = ({ inputs }: CamFeeStepProps) => {
         {/* Impact Display */}
         {inputs.budget > 0 && (
           <div className="pt-4 border-t border-border">
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-muted-foreground">On a typical 1.2x deal:</span>
-              <span className="font-mono text-xl text-red-400">
+          <div className="flex items-center justify-between">
+            <span className="text-sm text-muted-foreground">On a typical 1.2x deal:</span>
+            <span className="font-mono text-xl text-destructive">
                 -{formatCompactCurrency(camFeeAmount)}
               </span>
             </div>
