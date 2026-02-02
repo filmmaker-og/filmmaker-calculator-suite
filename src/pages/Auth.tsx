@@ -160,34 +160,55 @@ const Auth = () => {
 
             {/* Form */}
             <form onSubmit={handleSubmit} className="space-y-5">
-              {/* Name Field */}
-              <div className="space-y-3">
+              {/* Name Field - Primary attention grabber */}
+              <div
+                className={`p-4 transition-all duration-300 ${
+                  !name.trim()
+                    ? 'matte-card-glow animate-border-glow'
+                    : name.trim()
+                      ? 'matte-card-gold'
+                      : 'matte-card'
+                }`}
+              >
                 <label
                   htmlFor="name"
-                  className="block text-xs tracking-[0.2em] uppercase text-white/60 font-medium"
+                  className={`block text-xs tracking-[0.2em] uppercase font-semibold mb-3 transition-colors ${
+                    !name.trim() ? 'text-gold' : 'text-white/60'
+                  }`}
                 >
-                  Your Name
+                  Your Name {!name.trim() && <span className="text-gold animate-pulse">← Start here</span>}
                 </label>
                 <Input
                   id="name"
                   type="text"
                   autoComplete="name"
                   autoCapitalize="words"
+                  autoFocus
                   placeholder="John Producer"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="h-16 text-lg rounded-none bg-zinc-900 border-2 border-zinc-700 text-white placeholder:text-white/30 pl-4 pr-4 focus:border-gold focus:ring-0 input-focus-glow transition-colors"
+                  className="h-14 text-lg rounded-none bg-transparent border-0 border-b-2 border-white/20 text-white placeholder:text-white/30 pl-0 pr-0 focus:border-gold focus:ring-0 transition-colors"
                   required
                 />
               </div>
 
               {/* Email Field */}
-              <div className="space-y-3">
+              <div
+                className={`p-4 transition-all duration-300 ${
+                  name.trim() && !email
+                    ? 'matte-card-glow animate-border-glow'
+                    : email
+                      ? 'matte-card-gold'
+                      : 'matte-card'
+                }`}
+              >
                 <label
                   htmlFor="email"
-                  className="block text-xs tracking-[0.2em] uppercase text-white/60 font-medium"
+                  className={`block text-xs tracking-[0.2em] uppercase font-semibold mb-3 transition-colors ${
+                    name.trim() && !email ? 'text-gold' : 'text-white/60'
+                  }`}
                 >
-                  Email Address
+                  Email Address {name.trim() && !email && <span className="text-gold animate-pulse">← Now this</span>}
                 </label>
                 <Input
                   id="email"
@@ -200,7 +221,7 @@ const Auth = () => {
                   placeholder="you@company.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="h-16 text-lg rounded-none bg-zinc-900 border-2 border-zinc-700 text-white placeholder:text-white/30 font-mono pl-4 pr-4 focus:border-gold focus:ring-0 input-focus-glow transition-colors"
+                  className="h-14 text-lg rounded-none bg-transparent border-0 border-b-2 border-white/20 text-white placeholder:text-white/30 font-mono pl-0 pr-0 focus:border-gold focus:ring-0 transition-colors"
                   required
                 />
               </div>

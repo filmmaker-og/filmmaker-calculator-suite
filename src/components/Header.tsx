@@ -28,7 +28,7 @@ const Header = ({ title, showBack = false, onBack }: HeaderProps) => {
     <>
       {/* Header Bar - Matte Charcoal */}
       <header
-        className="fixed top-0 left-0 right-0 z-50"
+        className="fixed top-0 left-0 right-0 z-[150]"
         style={{ backgroundColor: "#0A0A0A" }}
       >
         <div className="flex items-center justify-between px-4 h-14">
@@ -52,10 +52,10 @@ const Header = ({ title, showBack = false, onBack }: HeaderProps) => {
           {/* Right: Hamburger Menu */}
           <button
             onClick={() => setMenuOpen(true)}
-            className="w-11 h-11 flex items-center justify-center hover:bg-white/5 rounded-sm transition-colors"
+            className="w-12 h-12 flex items-center justify-center hover:bg-gold/10 transition-colors"
             aria-label="Open menu"
           >
-            <Menu className="w-5 h-5 text-white/70" />
+            <Menu className="w-6 h-6 text-gold" />
           </button>
         </div>
 
