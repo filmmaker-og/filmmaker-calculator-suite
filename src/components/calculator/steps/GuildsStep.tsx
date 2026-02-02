@@ -52,6 +52,19 @@ const GuildsStep = ({ inputs, guilds, onToggleGuild }: GuildsStepProps) => {
         </p>
       </div>
 
+      {/* Important Guidance Banner */}
+      <div className="mb-5 p-4 bg-amber-500/5 border border-amber-500/20">
+        <div className="flex items-start gap-3">
+          <Info className="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" />
+          <div>
+            <p className="text-sm text-white font-medium mb-1">Streamer Deals</p>
+            <p className="text-xs text-white/60 leading-relaxed">
+              In most SVOD buyouts, the <span className="text-gold">platform becomes signatory</span>—meaning you may not owe residuals directly. Check your deal terms.
+            </p>
+          </div>
+        </div>
+      </div>
+
       {/* The Card */}
       <div className="matte-card p-6 space-y-6">
         <div className="flex items-start gap-4">

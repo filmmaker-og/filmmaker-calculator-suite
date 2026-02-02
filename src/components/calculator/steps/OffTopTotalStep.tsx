@@ -1,5 +1,6 @@
 import { WaterfallInputs, GuildState, formatCompactCurrency, getOffTopRate } from "@/lib/waterfall";
 import { useEffect, useState } from "react";
+import { Percent, DollarSign } from "lucide-react";
 
 interface OffTopTotalStepProps {
   inputs: WaterfallInputs;
@@ -18,18 +19,26 @@ const OffTopTotalStep = ({ inputs, guilds }: OffTopTotalStepProps) => {
 
   const totalOffTopRate = getOffTopRate(inputs, guilds);
 
-  const lines = [
-    { label: 'Sales Agent', value: `${salesFeePct}%`, show: salesFeePct > 0 },
-    { label: 'CAM Fee', value: `${camPct}%`, show: true },
-    { label: 'Guild Residuals', value: `${guildsPct.toFixed(1)}%`, show: guildsPct > 0 },
+  // Percentage-based lines (variable costs)
+  const percentageLines = [
+    { label: 'Sales Agent Commission', value: `${salesFeePct}%`, show: salesFeePct > 0, icon: Percent },
+    { label: 'Collection Account (CAM)', value: `${camPct}%`, show: true, icon: Percent },
+    { label: 'Guild Residuals', value: `${guildsPct.toFixed(1)}%`, show: guildsPct > 0, icon: Percent },
   ].filter(l => l.show);
+
+  // Fixed dollar lines
+  const fixedLines = [
+    { label: 'Marketing Cap', value: formatCompactCurrency(marketingCap), show: marketingCap > 0, icon: DollarSign },
+  ].filter(l => l.show);
+
+  const allLines = [...percentageLines, ...fixedLines];
 
   // Animate lines appearing
   useEffect(() => {
     setVisibleLines(0);
     const timer = setInterval(() => {
       setVisibleLines(prev => {
-        if (prev >= lines.length) {
+        if (prev >= allLines.length) {
           clearInterval(timer);
           return prev;
         }
@@ -37,11 +46,11 @@ const OffTopTotalStep = ({ inputs, guilds }: OffTopTotalStepProps) => {
       });
     }, 300);
     return () => clearInterval(timer);
-  }, [lines.length]);
+  }, [allLines.length]);
 
   // Animate rate counting up
   useEffect(() => {
-    if (visibleLines >= lines.length) {
+    if (visibleLines >= allLines.length) {
       const duration = 600;
       const startTime = Date.now();
       
@@ -58,7 +67,7 @@ const OffTopTotalStep = ({ inputs, guilds }: OffTopTotalStepProps) => {
       
       setTimeout(() => requestAnimationFrame(animate), 400);
     }
-  }, [visibleLines, lines.length, totalOffTopRate]);
+  }, [visibleLines, allLines.length, totalOffTopRate]);
 
   return (
     <div className="step-enter min-h-[60vh] flex flex-col justify-center">
@@ -75,69 +84,101 @@ const OffTopTotalStep = ({ inputs, guilds }: OffTopTotalStepProps) => {
       </div>
 
       {/* The Ledger - Animated */}
-      <div className="bg-card border border-border p-6 space-y-4">
-        {lines.map((line, index) => (
-          <div
-            key={line.label}
-            className={`flex items-center justify-between py-3 border-b border-border/50 last:border-0 transition-all duration-300 ${
-              index < visibleLines ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
-            }`}
-            style={{ transitionDelay: `${index * 100}ms` }}
-          >
-            <span className="text-foreground text-sm">{line.label}</span>
-            <span className="font-mono text-lg text-destructive">
-              -{line.value}
-            </span>
+      <div className="bg-card border border-border p-6 space-y-2">
+        {/* Section: Variable Costs */}
+        <div className="pb-2">
+          <p className="text-[9px] uppercase tracking-widest text-muted-foreground/50 mb-3">
+            Variable (% of gross)
+          </p>
+          {percentageLines.map((line, index) => {
+            const Icon = line.icon;
+            return (
+              <div
+                key={line.label}
+                className={`flex items-center justify-between py-3 border-b border-border/30 last:border-0 transition-all duration-300 ${
+                  index < visibleLines ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
+                }`}
+                style={{ transitionDelay: `${index * 100}ms` }}
+              >
+                <div className="flex items-center gap-2">
+                  <Icon className="w-3.5 h-3.5 text-muted-foreground/50" />
+                  <span className="text-foreground text-sm">{line.label}</span>
+                </div>
+                <span className="font-mono text-base text-destructive font-medium">
+                  -{line.value}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Section: Fixed Costs */}
+        {fixedLines.length > 0 && (
+          <div className="pt-3 border-t border-border/50">
+            <p className="text-[9px] uppercase tracking-widest text-muted-foreground/50 mb-3">
+              Fixed Amount
+            </p>
+            {fixedLines.map((line, index) => {
+              const Icon = line.icon;
+              const globalIndex = percentageLines.length + index;
+              return (
+                <div
+                  key={line.label}
+                  className={`flex items-center justify-between py-3 transition-all duration-300 ${
+                    globalIndex < visibleLines ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
+                  }`}
+                  style={{ transitionDelay: `${globalIndex * 100}ms` }}
+                >
+                  <div className="flex items-center gap-2">
+                    <Icon className="w-3.5 h-3.5 text-muted-foreground/50" />
+                    <span className="text-foreground text-sm">{line.label}</span>
+                  </div>
+                  <span className="font-mono text-base text-destructive font-medium">
+                    -{line.value}
+                  </span>
+                </div>
+              );
+            })}
           </div>
-        ))}
+        )}
 
         {/* Divider */}
         <div 
           className={`h-px bg-gold/50 my-4 transition-all duration-500 ${
-            visibleLines >= lines.length ? 'opacity-100 scale-x-100' : 'opacity-0 scale-x-0'
+            visibleLines >= allLines.length ? 'opacity-100 scale-x-100' : 'opacity-0 scale-x-0'
           }`}
-          style={{ transitionDelay: `${lines.length * 100 + 200}ms` }}
+          style={{ transitionDelay: `${allLines.length * 100 + 200}ms`, transformOrigin: 'left' }}
         />
 
         {/* Total Rate - Animated */}
         <div 
           className={`flex items-center justify-between transition-all duration-500 ${
-            visibleLines >= lines.length ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+            visibleLines >= allLines.length ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
           }`}
-          style={{ transitionDelay: `${lines.length * 100 + 400}ms` }}
+          style={{ transitionDelay: `${allLines.length * 100 + 400}ms` }}
         >
-          <span className="text-xs uppercase tracking-widest text-muted-foreground">
-            Off-The-Top Rate
-          </span>
+          <div>
+            <span className="text-xs uppercase tracking-widest text-muted-foreground block">
+              Combined Off-Top Rate
+            </span>
+            {marketingCap > 0 && (
+              <span className="text-[10px] text-muted-foreground/50">
+                + {formatCompactCurrency(marketingCap)} fixed marketing
+              </span>
+            )}
+          </div>
           <span className="font-mono text-3xl text-destructive font-bold">
             -{displayRate.toFixed(1)}%
           </span>
         </div>
-
-        {/* Marketing Cap - Fixed Amount */}
-        {marketingCap > 0 && (
-          <div 
-            className={`flex items-center justify-between pt-4 border-t border-border/50 transition-all duration-500 ${
-              visibleLines >= lines.length ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-            }`}
-            style={{ transitionDelay: `${lines.length * 100 + 500}ms` }}
-          >
-            <span className="text-xs uppercase tracking-widest text-muted-foreground">
-              Plus: Marketing Cap
-            </span>
-            <span className="font-mono text-lg text-destructive">
-              -{formatCompactCurrency(marketingCap)}
-            </span>
-          </div>
-        )}
       </div>
 
       {/* Explanation */}
       <div 
         className={`mt-8 text-center transition-all duration-500 ${
-          visibleLines >= lines.length ? 'opacity-100' : 'opacity-0'
+          visibleLines >= allLines.length ? 'opacity-100' : 'opacity-0'
         }`}
-        style={{ transitionDelay: `${lines.length * 100 + 600}ms` }}
+        style={{ transitionDelay: `${allLines.length * 100 + 600}ms` }}
       >
         <p className="text-muted-foreground text-sm leading-relaxed max-w-xs mx-auto">
           <span className="text-gold font-semibold">{displayRate.toFixed(1)}%</span> of whatever the streamer pays goes to these parties first
@@ -148,9 +189,9 @@ const OffTopTotalStep = ({ inputs, guilds }: OffTopTotalStepProps) => {
       {/* Ominous Message */}
       <div 
         className={`mt-6 text-center transition-all duration-500 ${
-          visibleLines >= lines.length ? 'opacity-100' : 'opacity-0'
+          visibleLines >= allLines.length ? 'opacity-100' : 'opacity-0'
         }`}
-        style={{ transitionDelay: `${lines.length * 100 + 800}ms` }}
+        style={{ transitionDelay: `${allLines.length * 100 + 800}ms` }}
       >
         <p className="text-muted-foreground/60 text-xs italic">
           "And we haven't even talked about your <span className="text-gold">investors</span> yet."
