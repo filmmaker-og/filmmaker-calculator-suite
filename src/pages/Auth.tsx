@@ -160,7 +160,7 @@ const Auth = () => {
 
             {/* Form */}
             <form onSubmit={handleSubmit} className="space-y-5">
-              {/* Name Field */}
+              {/* Name Field - Pulsating border to grab attention */}
               <div className="space-y-3">
                 <label
                   htmlFor="name"
@@ -168,17 +168,19 @@ const Auth = () => {
                 >
                   Your Name
                 </label>
-                <Input
-                  id="name"
-                  type="text"
-                  autoComplete="name"
-                  autoCapitalize="words"
-                  placeholder="John Producer"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="h-16 text-lg rounded-none bg-zinc-900 border-2 border-zinc-700 text-white placeholder:text-white/30 pl-4 pr-4 focus:border-gold focus:ring-0 input-focus-glow transition-colors"
-                  required
-                />
+                <div className={`auth-input-box rounded-sm ${!name.trim() ? 'input-pulsate' : ''}`}>
+                  <Input
+                    id="name"
+                    type="text"
+                    autoComplete="name"
+                    autoCapitalize="words"
+                    placeholder="John Producer"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="h-16 text-lg rounded-sm bg-transparent border-0 text-white placeholder:text-white/30 pl-4 pr-4 focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+                    required
+                  />
+                </div>
               </div>
 
               {/* Email Field */}
@@ -189,20 +191,22 @@ const Auth = () => {
                 >
                   Email Address
                 </label>
-                <Input
-                  id="email"
-                  type="email"
-                  inputMode="email"
-                  autoComplete="email"
-                  autoCapitalize="none"
-                  autoCorrect="off"
-                  spellCheck="false"
-                  placeholder="you@company.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="h-16 text-lg rounded-none bg-zinc-900 border-2 border-zinc-700 text-white placeholder:text-white/30 font-mono pl-4 pr-4 focus:border-gold focus:ring-0 input-focus-glow transition-colors"
-                  required
-                />
+                <div className="auth-input-box rounded-sm">
+                  <Input
+                    id="email"
+                    type="email"
+                    inputMode="email"
+                    autoComplete="email"
+                    autoCapitalize="none"
+                    autoCorrect="off"
+                    spellCheck="false"
+                    placeholder="you@company.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="h-16 text-lg rounded-sm bg-transparent border-0 text-white placeholder:text-white/30 font-mono pl-4 pr-4 focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+                    required
+                  />
+                </div>
               </div>
 
               <Button
