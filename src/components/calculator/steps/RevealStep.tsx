@@ -6,7 +6,6 @@ import {
   AlertTriangle,
   Award,
   Sparkles,
-  ArrowRight,
   FileText,
   Users,
   GraduationCap,
