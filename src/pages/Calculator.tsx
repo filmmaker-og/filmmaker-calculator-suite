@@ -26,6 +26,7 @@ import AcquisitionStep from "@/components/calculator/steps/AcquisitionStep";
 import RevealStep from "@/components/calculator/steps/RevealStep";
 import WaterfallStep from "@/components/calculator/steps/WaterfallStep";
 import ProgressBar from "@/components/calculator/ProgressBar";
+import MobileMenu from "@/components/MobileMenu";
 
 const STORAGE_KEY = "filmmaker_og_inputs";
 
@@ -389,16 +390,8 @@ const Calculator = () => {
           </span>
         </div>
 
-        <div className="w-10 h-10 flex items-center justify-center">
-          {currentStepIndex > 0 && (
-            <button
-              onClick={handleStartOver}
-              className="w-10 h-10 flex items-center justify-center hover:opacity-80 touch-feedback"
-            >
-              <RotateCcw className="w-4 h-4 text-muted-foreground" />
-            </button>
-          )}
-        </div>
+        {/* Right: Hamburger Menu */}
+        <MobileMenu />
       </header>
 
       {/* Gold line separator */}
