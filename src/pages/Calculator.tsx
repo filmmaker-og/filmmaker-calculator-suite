@@ -52,9 +52,9 @@ const defaultGuilds: GuildState = {
 
 const defaultCapitalSelections: CapitalSelections = {
   taxCredits: false,
-  seniorDebt: true,
+  seniorDebt: false,
   gapLoan: false,
-  equity: true,
+  equity: false,
 };
 
 // Step types for dynamic flow

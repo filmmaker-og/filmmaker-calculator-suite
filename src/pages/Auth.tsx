@@ -187,6 +187,12 @@ const Auth = () => {
                   placeholder="John Producer"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && name.trim()) {
+                      e.preventDefault();
+                      document.getElementById('email')?.focus();
+                    }
+                  }}
                   className="h-14 text-lg rounded-none bg-transparent border-0 border-b-2 border-white/20 text-white placeholder:text-white/30 pl-0 pr-0 focus:border-gold focus:ring-0 transition-colors"
                   required
                 />
@@ -221,6 +227,12 @@ const Auth = () => {
                   placeholder="you@company.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && email && name.trim()) {
+                      e.preventDefault();
+                      handleSubmit(e as any);
+                    }
+                  }}
                   className="h-14 text-lg rounded-none bg-transparent border-0 border-b-2 border-white/20 text-white placeholder:text-white/30 font-mono pl-0 pr-0 focus:border-gold focus:ring-0 transition-colors"
                   required
                 />
