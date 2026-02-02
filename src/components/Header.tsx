@@ -28,7 +28,7 @@ const Header = ({ title, showBack = false, onBack }: HeaderProps) => {
     <>
       {/* Header Bar - Matte Charcoal */}
       <header
-        className="fixed top-0 left-0 right-0 z-50"
+        className="fixed top-0 left-0 right-0 z-[150]"
         style={{ backgroundColor: "#0A0A0A" }}
       >
         <div className="flex items-center justify-between px-4 h-14">
