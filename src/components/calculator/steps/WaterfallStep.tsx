@@ -28,6 +28,7 @@ import {
 import { LedgerRow } from "@/components/ui/matte-card";
 import { cn } from "@/lib/utils";
 import { colors } from "@/lib/design-system";
+import WaterfallVisual from "@/components/calculator/WaterfallVisual";
 
 interface WaterfallStepProps {
   result: WaterfallResult;
@@ -175,7 +176,7 @@ const WaterfallStep = ({ result, inputs }: WaterfallStepProps) => {
         </div>
       )}
 
-      {/* WATERFALL VISUALIZATION - Ledger Style */}
+      {/* WATERFALL VISUALIZATION - Visual "Pouring" Chart */}
       <div className="matte-section overflow-hidden mb-6">
         <button
           onClick={() =>
@@ -209,36 +210,14 @@ const WaterfallStep = ({ result, inputs }: WaterfallStepProps) => {
         </button>
 
         {expandedSection === "waterfall" && (
-          <div className="divide-y divide-[#1A1A1A]">
-            {/* Revenue tiers */}
-            {waterfallTiers.map((tier, index) => (
-              <div key={index} className="px-5">
-                <LedgerRow
-                  label={tier.label}
-                  value={tier.value}
-                  percentage={tier.percentage}
-                  color={tier.color}
-                />
-              </div>
-            ))}
-
-            {/* Profit Pool - Special styling */}
-            <div
-              className={cn(
-                "px-5 py-1",
-                isProfitable
-                  ? "bg-gradient-to-r from-emerald-500/10 to-transparent"
-                  : "bg-gradient-to-r from-red-500/10 to-transparent"
-              )}
-            >
-              <LedgerRow
-                label="Profit Pool"
-                value={formatCompactCurrency(result.profitPool)}
-                percentage={profitPercent}
-                color={isProfitable ? "#10B981" : "#EF4444"}
-                isTotal
-              />
-            </div>
+          <div className="px-5 py-4">
+            <WaterfallVisual
+              revenue={inputs.revenue}
+              offTheTop={firstMoneyOut}
+              debtService={debtService}
+              equityPremium={equityPrem}
+              profitPool={result.profitPool}
+            />
           </div>
         )}
       </div>
