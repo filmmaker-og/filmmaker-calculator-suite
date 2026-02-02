@@ -537,20 +537,37 @@ const Calculator = () => {
               </div>
             </>
           ) : (
-            <div className="flex gap-3">
-              <button
-                onClick={prevStep}
-                className="h-14 px-5 flex items-center justify-center bg-[#0A0A0A] border border-[#2A2A2A] text-white/60 hover:text-white hover:border-[#3A3A3A] transition-all active:scale-95"
+            <div className="space-y-3">
+              {/* Primary CTA - Get Custom Model */}
+              <a
+                href="https://filmmaker.og/store"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 h-14 flex items-center justify-center gap-2 bg-gold text-black font-black text-sm tracking-[0.15em] uppercase transition-all active:scale-95 hover:bg-gold-highlight"
+                style={{
+                  boxShadow: '0 0 40px rgba(212, 175, 55, 0.3), 0 4px 20px rgba(0, 0, 0, 0.3)',
+                }}
               >
-                <ChevronLeft className="w-5 h-5" />
-              </button>
-              <button
-                onClick={handleStartOver}
-                className="flex-1 h-14 flex items-center justify-center gap-2 bg-[#0A0A0A] border border-[#2A2A2A] text-white/70 hover:text-white hover:border-gold/30 text-sm font-semibold tracking-wider transition-all active:scale-95"
-              >
-                <RotateCcw className="w-4 h-4" />
-                START OVER
-              </button>
+                GET YOUR CUSTOM MODEL
+                <ChevronRight className="w-5 h-5" />
+              </a>
+
+              {/* Secondary actions */}
+              <div className="flex gap-3">
+                <button
+                  onClick={prevStep}
+                  className="h-12 px-5 flex items-center justify-center bg-[#0A0A0A] border border-[#2A2A2A] text-white/60 hover:text-white hover:border-[#3A3A3A] transition-all active:scale-95"
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </button>
+                <button
+                  onClick={handleStartOver}
+                  className="flex-1 h-12 flex items-center justify-center gap-2 bg-[#0A0A0A] border border-[#2A2A2A] text-white/50 hover:text-white hover:border-[#3A3A3A] text-xs font-semibold tracking-wider transition-all active:scale-95"
+                >
+                  <RotateCcw className="w-4 h-4" />
+                  TRY DIFFERENT NUMBERS
+                </button>
+              </div>
             </div>
           )}
         </div>
