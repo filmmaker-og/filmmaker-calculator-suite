@@ -220,6 +220,85 @@ const RevealStep = ({ result, equity }: RevealStepProps) => {
           </p>
         </div>
 
+        {/* SIMPLIFIED WATERFALL - Where did the money go? */}
+        <div className="matte-section overflow-hidden mb-8">
+          <div className="matte-section-header px-5 py-3">
+            <span className="text-xs uppercase tracking-[0.2em] text-white/40 font-medium">
+              Where Did The Money Go?
+            </span>
+          </div>
+
+          <div className="divide-y divide-[#1A1A1A]">
+            {/* Off-the-top fees */}
+            {(result.cam + result.salesFee + result.guilds + result.marketing) > 0 && (
+              <div className="p-4 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-3 h-3 rounded-full bg-zinc-500" />
+                  <span className="text-sm text-white/60">Off-the-Top Fees</span>
+                </div>
+                <span className="font-mono text-sm text-white/70">
+                  -{formatCompactCurrency(result.cam + result.salesFee + result.guilds + result.marketing)}
+                </span>
+              </div>
+            )}
+
+            {/* Debt Repayment */}
+            {result.ledger.some(l => l.name === "Senior Debt" || l.name === "Gap/Mezz Debt") && (
+              <div className="p-4 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-3 h-3 rounded-full bg-red-500" />
+                  <span className="text-sm text-white/60">Debt Repayment</span>
+                </div>
+                <span className="font-mono text-sm text-white/70">
+                  -{formatCompactCurrency(
+                    result.ledger
+                      .filter(l => l.name === "Senior Debt" || l.name === "Gap/Mezz Debt")
+                      .reduce((sum, l) => sum + l.amount, 0)
+                  )}
+                </span>
+              </div>
+            )}
+
+            {/* Equity + Premium */}
+            {result.ledger.some(l => l.name === "Equity") && (
+              <div className="p-4 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-3 h-3 rounded-full bg-blue-500" />
+                  <span className="text-sm text-white/60">Equity + Premium</span>
+                </div>
+                <span className="font-mono text-sm text-white/70">
+                  -{formatCompactCurrency(
+                    result.ledger.find(l => l.name === "Equity")?.amount || 0
+                  )}
+                </span>
+              </div>
+            )}
+
+            {/* Profit Pool - highlighted */}
+            <div className={`p-4 flex items-center justify-between ${
+              isProfitable
+                ? 'bg-gradient-to-r from-emerald-500/10 to-transparent'
+                : 'bg-gradient-to-r from-red-500/10 to-transparent'
+            }`}>
+              <div className="flex items-center gap-3">
+                <div className={`w-3 h-3 rounded-full ${isProfitable ? 'bg-emerald-500' : 'bg-red-500'}`} />
+                <span className={`text-sm font-semibold ${isProfitable ? 'text-emerald-400' : 'text-red-400'}`}>
+                  Profit Pool
+                </span>
+              </div>
+              <span className={`font-mono text-sm font-semibold ${isProfitable ? 'text-emerald-400' : 'text-red-400'}`}>
+                {isProfitable ? '+' : ''}{formatCompactCurrency(result.profitPool)}
+              </span>
+            </div>
+          </div>
+
+          <div className="px-5 py-3 border-t border-[#1A1A1A]">
+            <p className="text-[10px] text-white/30 text-center">
+              Swipe right for the full waterfall breakdown
+            </p>
+          </div>
+        </div>
+
         {/* CONVERSION CTAs - The money shot */}
         <div className="space-y-3">
           <p className="text-xs text-white/30 uppercase tracking-wider text-center mb-4">
