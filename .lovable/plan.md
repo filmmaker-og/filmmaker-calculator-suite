@@ -1,193 +1,194 @@
 
+# Calculator Improvement Plan Based on Brand Guidelines
 
-# Complete Rebuild Plan: Critical Bugs + UI/UX Overhaul
+## Build Error Fix (Immediate)
+The calculator has a TypeScript error on line 254 where `AcquisitionStep` receives `selections={{}}` instead of a properly typed `CapitalSelections` object with all four required boolean properties: `taxCredits`, `seniorDebt`, `gapLoan`, and `equity`.
 
-## Critical Bug #1: Duplicate $75K Marketing Expenses
+**Fix:** Add `capitalSelections` state to Calculator.tsx and pass it correctly to AcquisitionStep.
 
-### The Problem
-The field `salesExp` is being used for TWO different purposes:
+---
 
-1. **SalesAgentStep.tsx (lines 80-100)**: Shows "Sales Expenses (CAP)" with value `inputs.salesExp` = $75K
-2. **MarketingStep.tsx (lines 69-82)**: Shows "Expense Cap" with value `inputs.salesExp` = $75K
+## Brand Guideline Analysis Summary
 
-Both steps are displaying and/or modifying the SAME field (`salesExp`). This is a **data model error** - you're seeing $75K twice because the same variable is used in two places.
+After reviewing the 46-page brand guidelines, here are the key requirements and how the calculator currently measures up:
 
-### The Fix
-Create a separate field for marketing expenses:
+### What's Working Well
+- Black background (#000000)
+- Gold color usage (#D4AF37 for metallic, #F9E076 for CTAs)
+- Bebas Neue for headers, Roboto Mono for numbers
+- Mobile-first design approach
+- Off-top deduction logic (CAM, Sales Agent, Marketing, Guilds)
+- Waterfall flow visualization
+
+### Areas Needing Improvement
+
+---
+
+## 1. Color System Violations
+
+**Issue:** The WaterfallStep uses `red-400`, `emerald-400`, and `blue` colors for status indicators, violating the brand's strict gold-only palette.
+
+**Brand Rule (Section 3.1):**
+- Only Black, White, Metallic Gold (#D4AF37), and Bright Gold (#F9E076)
+- No red, green, or blue
+
+**Fix:**
+- Replace `text-red-400` → `text-gold/50` (underperforming)
+- Replace `text-emerald-400` → `text-gold` (positive status)
+- Replace semantic gradient colors → gold intensity variations
+- Status indicators should use gold opacity levels (gold/30, gold/50, gold/80, gold)
+
+---
+
+## 2. Missing Legal Disclaimer
+
+**Issue:** No liability disclaimer present on the calculator.
+
+**Brand Rule (Section 6.3):**
+- Disclaimer required: "Educational model only. Not financial, legal, or investment advice. Consult qualified entertainment counsel and financial advisor."
+- Must appear in footer of calculator AND on results display
+
+**Fix:** Add disclaimer component to the results step and footer.
+
+---
+
+## 3. Step Flow Simplification Incomplete
+
+**Issue:** The calculator was simplified to 5 steps but the Capital step currently only shows Tax Credits, missing Senior Debt, Gap Loan, and Equity inputs.
+
+**Current Flow:**
+1. Costs (Budget only)
+2. Guilds
+3. Capital (only Tax Credits showing)
+4. Acquisition
+5. Results
+
+**Brand Strategy:** The "Anxiety-First" narrative requires users to understand the full capital stack hierarchy (who gets paid first) before seeing the verdict.
+
+**Fix:** The Capital step should either:
+- Include all capital inputs (Tax Credits, Senior Debt, Gap Loan, Equity) on one screen
+- Or restore the multi-step capital flow with proper selections
+
+---
+
+## 4. Implementation Gap Not Enforced
+
+**Issue:** The calculator results give away too much without driving conversion.
+
+**Brand Rule (Section 6.3):**
+- Calculator shows WHAT and WHY (free)
+- Execution details reserved for paid products
+
+**Fix:**
+- Lock the Investor Deck behind email capture
+- Add "Get Custom Model" CTA that drives to paid products
+- Add "Producer Services" bypass path for high-intent users
+
+---
+
+## 5. Typography Consistency
+
+**Issue:** Some steps use inconsistent text sizes and weights.
+
+**Brand Rule (Section 3.1):**
+- Body text: 16-18px minimum
+- Numerical data: Roboto Mono
+- Brand elements: Bebas Neue
+- UI text: Inter
+
+**Fix:** Ensure all numerical displays use `font-mono`, all headers use `font-bebas`, and body text meets 16px minimum.
+
+---
+
+## 6. Missing "Skim Test" Compliance
+
+**Issue:** Landing and results pages don't pass the "skim test" where users should understand the offer by reading only H1s, H2s, and Buttons.
+
+**Brand Rule (Section 7.1):**
+- Users must grasp value proposition from headings alone
+
+**Fix:** Review results step hierarchy - ensure key metrics (Profit Pool, Breakeven, Multiple) are prominently displayed with clear labels.
+
+---
+
+## Technical Implementation Plan
+
+### Phase 1: Critical Fixes
 
 ```text
-Current data model:
-  - salesExp: $75,000 (used for BOTH sales agent AND marketing)
-
-Fixed data model:
-  - salesExp: $75,000 (Sales Agent expenses only)
-  - marketingExp: $75,000 (Marketing expenses - NEW FIELD)
+┌─────────────────────────────────────────┐
+│  Step 1: Fix Build Error                │
+│  - Add capitalSelections state          │
+│  - Pass proper object to AcquisitionStep│
+└─────────────────────────────────────────┘
+         │
+         ▼
+┌─────────────────────────────────────────┐
+│  Step 2: Fix Color Violations           │
+│  - WaterfallStep: remove red/emerald    │
+│  - GuildsStep: remove red for impact    │
+│  - TaxCreditsStep: remove emerald       │
+│  - Use gold intensity only              │
+└─────────────────────────────────────────┘
+         │
+         ▼
+┌─────────────────────────────────────────┐
+│  Step 3: Add Legal Disclaimer           │
+│  - Create DisclaimerFooter component    │
+│  - Add to WaterfallStep results         │
+│  - Ensure presence on any export        │
+└─────────────────────────────────────────┘
 ```
 
-**Files to modify:**
-- `src/lib/waterfall.ts` - Add `marketingExp` to WaterfallInputs interface
-- `src/pages/Calculator.tsx` - Add default value for `marketingExp`
-- `src/components/calculator/steps/MarketingStep.tsx` - Use `marketingExp` instead of `salesExp`
-- `src/components/calculator/steps/OffTopTotalStep.tsx` - Use both fields correctly
+### Phase 2: Capital Stack Restoration
 
----
+The Capital step needs to include all four capital sources:
+1. Tax Credits (reduces cost)
+2. Senior Debt (paid 1st)
+3. Gap/Mezz Loan (paid 2nd)
+4. Equity Investment (paid last)
 
-## Critical Bug #2: Auth Page Matte Gray Still Not Visible
+Users should be able to:
+- Select which sources apply to their deal
+- Enter amounts and rates for each
+- See the priority hierarchy clearly
 
-### The Problem
-The CSS was updated to use `#111111` (per brand guide), but this is extremely close to the black background (`#000000`). The contrast is only 7% - almost invisible.
+### Phase 3: Conversion Optimization
 
-### The Fix
-For the Auth page specifically, use a more visible gray that creates actual contrast:
+1. **Email Gate for Results Export**
+   - Free viewing of on-screen results
+   - Paid/email-gated PDF export
 
-```css
-/* Auth page input containers need higher contrast */
-background: #1A1A1A; /* 10% gray - visible against black */
-```
+2. **Clear CTAs**
+   - Primary: "GET YOUR CUSTOM MODEL" (bright gold)
+   - Secondary: "TRY DIFFERENT NUMBERS" (matte styling)
 
-And apply this directly to the Auth page input container divs.
-
----
-
-## UI/UX Assessment: Current State
-
-### Homepage: B+
-- Splash animation works
-- Menu now functional
-- CTA glows appropriately
-
-### Auth Page: D
-- Input boxes blend into background (nearly invisible)
-- Return key issues on mobile
-- Lacks visual hierarchy
-- "Start here" guidance is confusing
-
-### Calculator Steps: C-
-The issues are pervasive:
-
-| Step | Grade | Issues |
-|------|-------|--------|
-| Budget | B | Works, but input styling inconsistent |
-| CAM Fee | B- | Good info, but no input - just display |
-| Sales Agent | C | Has DUPLICATE $75K field that should only be here |
-| Marketing | F | Using WRONG field (salesExp instead of marketingExp) |
-| Guilds | B | Toggle styling could be cleaner |
-| Off-Top | C | Shows both expenses but uses same field |
-| Capital Select | B- | Works but toggle cards are cluttered |
-| Breakeven | B | Clear display |
-| Acquisition | B | Works |
-| Reveal | B | Animation works |
-| Waterfall | B | New visual added |
-
----
-
-## Strategy: Page-by-Page Systematic Rebuild
-
-Given the mess, I recommend a **strict page-by-page approach**:
-
-### Phase 1: Data Model Fix (Immediate)
-Fix the duplicate `$75K` bug first. This is a logic error that makes the calculator wrong.
-
-### Phase 2: Auth Page Complete Overhaul
-Make the entry point institutional-grade:
-- Higher contrast containers (visible matte gray)
-- Proper focus states
-- Mobile keyboard navigation working
-- Clean visual hierarchy
-
-### Phase 3: Calculator Step-by-Step Polish
-Go through each calculator step and standardize:
-- Consistent matte section styling
-- Consistent input components
-- Consistent spacing/typography
-- Each step follows same visual pattern
-
----
-
-## Immediate Implementation Plan
-
-### Part 1: Fix Data Model (salesExp vs marketingExp)
-
-**File: `src/lib/waterfall.ts`**
-Add new field to interface:
-```typescript
-export interface WaterfallInputs {
-  // ... existing fields
-  salesExp: number;      // Sales Agent expenses
-  marketingExp: number;  // Marketing expenses (NEW)
-}
-```
-
-Update calculation functions to use `marketingExp`.
-
-**File: `src/pages/Calculator.tsx`**
-Add default value:
-```typescript
-const defaultInputs: WaterfallInputs = {
-  // ... existing
-  salesExp: 75000,
-  marketingExp: 75000, // NEW
-};
-```
-
-**File: `src/components/calculator/steps/MarketingStep.tsx`**
-Change from `salesExp` to `marketingExp`.
-
-**File: `src/components/calculator/steps/OffTopTotalStep.tsx`**
-Show both expenses separately in the ledger.
-
----
-
-### Part 2: Auth Page Visual Overhaul
-
-**File: `src/pages/Auth.tsx`**
-Update input containers with visible styling:
-```tsx
-<div className="p-4 bg-[#1A1A1A] border border-[#2A2A2A]">
-  {/* Input content */}
-</div>
-```
-
-Key changes:
-- Use `bg-[#1A1A1A]` (10% gray) instead of relying on CSS classes
-- Add visible border `border-[#2A2A2A]`
-- Remove `matte-card-glow` animation when not active
-- Simplify focus states
-
----
-
-### Part 3: Standardize Calculator Step Containers
-
-Create a consistent pattern every step follows:
-```text
-Step Layout:
-1. Icon + Header (centered, gold accents)
-2. Matte Section Card (bg-[#111111], border-[#1A1A1A])
-   - Section header (darker strip)
-   - Input area (consistent padding)
-   - Impact display (if applicable)
-3. Helper collapsible (gold text)
-```
+3. **Implementation Gap Signals**
+   - Show what calculator reveals
+   - Hint at what requires expertise
 
 ---
 
 ## Files to Modify
 
-| Priority | File | Changes |
-|----------|------|---------|
-| P0 | `src/lib/waterfall.ts` | Add `marketingExp` field, update calculations |
-| P0 | `src/pages/Calculator.tsx` | Add default for `marketingExp` |
-| P0 | `src/components/calculator/steps/MarketingStep.tsx` | Use `marketingExp` |
-| P0 | `src/components/calculator/steps/OffTopTotalStep.tsx` | Use both expense fields |
-| P1 | `src/pages/Auth.tsx` | Visual overhaul with visible containers |
-| P2 | All step components | Standardize styling |
+| File | Changes |
+|------|---------|
+| `Calculator.tsx` | Fix CapitalSelections state, restore capital flow |
+| `WaterfallStep.tsx` | Remove red/emerald/blue colors, add disclaimer |
+| `GuildsStep.tsx` | Remove red for impact amounts |
+| `TaxCreditsStep.tsx` | Remove emerald color |
+| `AcquisitionStep.tsx` | Fix props, remove semantic colors |
+| New: `DisclaimerFooter.tsx` | Legal disclaimer component |
 
 ---
 
-## Expected Results After Implementation
+## Summary
 
-1. **No more duplicate $75K** - Sales expenses and marketing expenses are separate fields
-2. **Auth page has visible input boxes** - Clear matte gray containers against black
-3. **Mobile return key works** - Already added `enterKeyHint`, verify it functions
-4. **Consistent visual language** - Every step follows same pattern
+The calculator is structurally sound but violates several brand guidelines:
 
+1. **Color palette** - Using red, emerald, blue instead of gold-only
+2. **Legal compliance** - Missing required disclaimer
+3. **Capital flow** - Incomplete capital stack experience
+4. **Conversion mechanics** - Not enforcing Implementation Gap
+
+These fixes will align the calculator with the institutional-grade, premium aesthetic defined in the brand guidelines while maintaining the educational diagnostic function that drives conversions.
