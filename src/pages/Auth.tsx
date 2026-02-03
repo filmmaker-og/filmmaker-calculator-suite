@@ -162,12 +162,10 @@ const Auth = () => {
             <form onSubmit={handleSubmit} className="space-y-5">
               {/* Name Field - Primary attention grabber */}
               <div
-                className={`p-4 bg-[#0D0D0D] transition-all duration-300 ${
+                className={`p-4 transition-all duration-300 ${
                   !name.trim()
                     ? 'matte-card-glow animate-border-glow'
-                    : name.trim()
-                      ? 'matte-card-gold'
-                      : 'matte-card'
+                    : 'matte-card-gold'
                 }`}
               >
                 <label
@@ -196,17 +194,15 @@ const Auth = () => {
                   }}
                   className="h-14 text-lg rounded-none bg-transparent border-0 border-b-2 border-white/20 text-white placeholder:text-white/30 pl-0 pr-0 focus:border-gold focus:ring-0 transition-colors"
                   required
-                />
+              />
               </div>
 
               {/* Email Field */}
               <div
-                className={`p-4 bg-[#0D0D0D] transition-all duration-300 ${
+                className={`p-4 transition-all duration-300 ${
                   name.trim() && !email
                     ? 'matte-card-glow animate-border-glow'
-                    : email
-                      ? 'matte-card-gold'
-                      : 'matte-card'
+                    : 'matte-card-gold'
                 }`}
               >
                 <label
