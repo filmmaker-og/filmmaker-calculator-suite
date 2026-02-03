@@ -29,6 +29,7 @@ import { LedgerRow } from "@/components/ui/matte-card";
 import { cn } from "@/lib/utils";
 import { colors } from "@/lib/design-system";
 import WaterfallVisual from "@/components/calculator/WaterfallVisual";
+import DisclaimerFooter from "@/components/calculator/DisclaimerFooter";
 
 interface WaterfallStepProps {
   result: WaterfallResult;
@@ -60,7 +61,7 @@ const WaterfallStep = ({ result, inputs }: WaterfallStepProps) => {
   const equityPercent = (equityPrem / totalRevenue) * 100;
   const profitPercent = Math.max(0, (result.profitPool / totalRevenue) * 100);
 
-  // Waterfall tiers with colors
+  // Waterfall tiers with gold-only colors
   const waterfallTiers = [
     {
       label: "Gross Revenue",
@@ -73,21 +74,21 @@ const WaterfallStep = ({ result, inputs }: WaterfallStepProps) => {
       label: "Off-the-Top Fees",
       value: `-${formatCompactCurrency(firstMoneyOut)}`,
       percentage: offTopPercent,
-      color: "#6B7280", // Gray
+      color: "#3A3A3A", // Matte gray
       isTotal: false,
     },
     {
       label: "Debt Repayment",
       value: `-${formatCompactCurrency(debtService)}`,
       percentage: debtPercent,
-      color: "#EF4444", // Red
+      color: "rgba(212, 175, 55, 0.4)", // Gold at 40%
       isTotal: false,
     },
     {
       label: "Equity + Premium",
       value: `-${formatCompactCurrency(equityPrem)}`,
       percentage: equityPercent,
-      color: "#3B82F6", // Blue
+      color: "rgba(212, 175, 55, 0.6)", // Gold at 60%
       isTotal: false,
     },
   ];
@@ -128,7 +129,7 @@ const WaterfallStep = ({ result, inputs }: WaterfallStepProps) => {
           <p
             className={cn(
               "font-mono text-base font-semibold",
-              isProfitable ? "text-gold" : "text-red-400"
+              isProfitable ? "text-gold" : "text-gold/50"
             )}
           >
             {formatCompactCurrency(result.profitPool)}
@@ -153,7 +154,7 @@ const WaterfallStep = ({ result, inputs }: WaterfallStepProps) => {
                 ? "text-gold"
                 : result.multiple >= 1
                   ? "text-white"
-                  : "text-red-400"
+                  : "text-gold/50"
             )}
           >
             {formatMultiple(result.multiple)}
@@ -161,10 +162,10 @@ const WaterfallStep = ({ result, inputs }: WaterfallStepProps) => {
         </div>
       </div>
 
-      {/* Warning Banner */}
+      {/* Warning Banner - Gold-only palette */}
       {isUnderperforming && (
-        <div className="mb-6 p-4 flex items-start gap-3 bg-amber-500/10 border border-amber-500/30">
-          <AlertTriangle className="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" />
+        <div className="mb-6 p-4 flex items-start gap-3 bg-gold/10 border border-gold/30">
+          <AlertTriangle className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
           <div>
             <p className="text-sm text-white font-medium">
               Multiple is {formatMultiple(result.multiple)}
@@ -329,6 +330,9 @@ const WaterfallStep = ({ result, inputs }: WaterfallStepProps) => {
         </a>
       </div>
 
+      {/* Legal Disclaimer */}
+      <DisclaimerFooter />
+
       {/* Info Modal */}
       <Dialog open={showInfoModal} onOpenChange={setShowInfoModal}>
         <DialogContent className="bg-[#0A0A0A] border-[#1A1A1A] max-w-md rounded-none">
@@ -352,29 +356,29 @@ const WaterfallStep = ({ result, inputs }: WaterfallStepProps) => {
               },
               {
                 num: "2",
-                color: "bg-zinc-700",
-                textColor: "text-zinc-300",
+                color: "bg-[#3A3A3A]",
+                textColor: "text-white/70",
                 title: "Off-the-Top",
                 desc: "CAM (1%), sales agent fee, guild residuals, marketing",
               },
               {
                 num: "3",
-                color: "bg-red-900/70",
-                textColor: "text-red-300",
+                color: "bg-gold/40",
+                textColor: "text-gold/80",
                 title: "Debt Service",
                 desc: "Senior and mezzanine lenders repaid with interest",
               },
               {
                 num: "4",
-                color: "bg-blue-900/70",
-                textColor: "text-blue-300",
+                color: "bg-gold/60",
+                textColor: "text-gold",
                 title: "Equity + Premium",
                 desc: "Investors receive principal plus preferred return",
               },
               {
                 num: "5",
-                color: "bg-emerald-600",
-                textColor: "text-white",
+                color: "bg-gold",
+                textColor: "text-black",
                 title: "Profit Pool",
                 desc: "Whatever remains is split 50/50",
                 isProfit: true,
@@ -395,7 +399,7 @@ const WaterfallStep = ({ result, inputs }: WaterfallStepProps) => {
                   <p
                     className={cn(
                       "font-medium text-sm",
-                      item.isProfit ? "text-emerald-400" : "text-white"
+                      item.isProfit ? "text-gold" : "text-white"
                     )}
                   >
                     {item.title}

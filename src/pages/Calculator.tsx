@@ -16,6 +16,7 @@ import CamFeeStep from "@/components/calculator/steps/CamFeeStep";
 import GuildsStep from "@/components/calculator/steps/GuildsStep";
 import OffTopTotalStep from "@/components/calculator/steps/OffTopTotalStep";
 import CapitalSelectStep, { CapitalSelections } from "@/components/calculator/steps/CapitalSelectStep";
+import CapitalStep from "@/components/calculator/steps/CapitalStep";
 import TaxCreditsStep from "@/components/calculator/steps/TaxCreditsStep";
 import SeniorDebtStep from "@/components/calculator/steps/SeniorDebtStep";
 import GapLoanStep from "@/components/calculator/steps/GapLoanStep";
@@ -69,8 +70,14 @@ const Calculator = () => {
   const [inputs, setInputs] = useState<WaterfallInputs>(defaultInputs);
   const [guilds, setGuilds] = useState<GuildState>(defaultGuilds);
   const [result, setResult] = useState<WaterfallResult | null>(null);
-  const [isButtonPressed, setIsButtonPressed] = useState(false);
+const [isButtonPressed, setIsButtonPressed] = useState(false);
   const [shakeButton, setShakeButton] = useState(false);
+  const [capitalSelections, setCapitalSelections] = useState<CapitalSelections>({
+    taxCredits: false,
+    seniorDebt: false,
+    gapLoan: false,
+    equity: false,
+  });
 
   // SIMPLIFIED: Static 5-step flow - no dynamic branching
   const steps: StepType[] = ['costs', 'guilds', 'capital', 'acquisition', 'results'];
@@ -249,9 +256,9 @@ const Calculator = () => {
       case 'guilds':
         return <GuildsStep inputs={inputs} guilds={guilds} onToggleGuild={toggleGuild} />;
       case 'capital':
-        return <TaxCreditsStep inputs={inputs} onUpdateInput={updateInput} />;
+        return <CapitalStep inputs={inputs} onUpdateInput={updateInput} />;
       case 'acquisition':
-        return <AcquisitionStep inputs={inputs} guilds={guilds} selections={{}} onUpdateInput={updateInput} />;
+        return <AcquisitionStep inputs={inputs} guilds={guilds} selections={capitalSelections} onUpdateInput={updateInput} />;
       case 'results':
         return result ? <WaterfallStep result={result} inputs={inputs} /> : null;
       default:

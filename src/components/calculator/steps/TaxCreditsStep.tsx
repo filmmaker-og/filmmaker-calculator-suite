@@ -61,7 +61,7 @@ const TaxCreditsStep = ({ inputs, onUpdateInput }: TaxCreditsStepProps) => {
             Tax Credit Value
           </span>
           {isCompleted && (
-            <span className="text-xs text-emerald-400 font-mono">
+            <span className="text-xs text-gold font-mono">
               ENTERED
             </span>
           )}
@@ -88,10 +88,10 @@ const TaxCreditsStep = ({ inputs, onUpdateInput }: TaxCreditsStepProps) => {
         <div className="border-t border-[#1A1A1A] bg-[#0A0A0A]/50">
           <div className="p-5">
             <div className="flex items-start gap-3">
-              <span className="text-emerald-400 font-bold text-lg">+</span>
+              <span className="text-gold font-bold text-lg">+</span>
               <p className="text-sm text-white/60 leading-relaxed">
                 This amount offsets your capital requirements,
-                <span className="text-emerald-400 font-medium"> reducing what investors need to recoup</span>.
+                <span className="text-gold font-medium"> reducing what investors need to recoup</span>.
               </p>
             </div>
           </div>
