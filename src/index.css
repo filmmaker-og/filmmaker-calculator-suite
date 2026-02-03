@@ -872,18 +872,19 @@ html, body {
 }
 
 /* ===== MATTE CARD SYSTEM ===== */
+/* Visible matte gray backgrounds - NOT pure black */
 .matte-card {
-  background: #070707;
+  background: #0D0D0D;
   border: 1px solid #1A1A1A;
 }
 
 .matte-card-gold {
-  background: #070707;
+  background: #0D0D0D;
   border: 1px solid rgba(212, 175, 55, 0.3);
 }
 
 .matte-card-glow {
-  background: #070707;
+  background: #0D0D0D;
   border: 1px solid #D4AF37;
   box-shadow: 0 0 30px rgba(212, 175, 55, 0.15);
 }
