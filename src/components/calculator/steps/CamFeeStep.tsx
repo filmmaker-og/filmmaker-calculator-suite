@@ -16,74 +16,106 @@ const CamFeeStep = ({ inputs }: CamFeeStepProps) => {
 
   return (
     <div className="step-enter">
-      {/* Tension builder */}
-      <div className="text-center mb-6">
-        <p className="text-xs text-muted-foreground/60 uppercase tracking-widest">
-          And that's not all...
+      {/* Step Header with icon */}
+      <div className="text-center mb-8">
+        <div className="relative inline-block mb-4">
+          <div
+            className="absolute inset-0"
+            style={{
+              background: 'radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, transparent 70%)',
+              filter: 'blur(15px)',
+              transform: 'scale(2)',
+            }}
+          />
+          <div className="relative w-14 h-14 border border-gold/30 bg-gold/5 flex items-center justify-center">
+            <Building2 className="w-7 h-7 text-gold" />
+          </div>
+        </div>
+
+        <p className="text-white/40 text-xs mb-2 uppercase tracking-widest">And that's not all...</p>
+        <h2 className="font-bebas text-3xl tracking-[0.08em] text-white mb-2">
+          The <span className="text-gold">CAM Fee</span>
+        </h2>
+        <p className="text-white/50 text-sm max-w-xs mx-auto">
+          The bank holding your money takes 1%. Non-negotiable.
         </p>
       </div>
 
-      {/* The Card */}
-      <div className="matte-card p-6 space-y-6">
-        <div className="flex items-start gap-4">
-          <div className="w-12 h-12 bg-muted flex items-center justify-center flex-shrink-0">
-            <Building2 className="w-6 h-6 text-muted-foreground" />
-          </div>
-          <div>
-            <h3 className="font-bebas text-xl tracking-wider text-gold mb-1">CAM FEE</h3>
-            <p className="text-xs text-muted-foreground/70 italic mb-3">The bank holding your money takes 1%</p>
-            <p className="text-muted-foreground text-sm leading-relaxed">
-              <span className="text-foreground font-semibold">Collection Account Management.</span> A neutral third party ensuring everyone gets paid correctly.
-            </p>
-          </div>
+      {/* The Card with matte styling */}
+      <div className="matte-section overflow-hidden">
+        {/* Section header */}
+        <div className="matte-section-header px-5 py-3">
+          <span className="text-xs uppercase tracking-[0.2em] text-white/40 font-medium">
+            Collection Account Management
+          </span>
         </div>
 
         {/* Fixed Rate Display */}
-        <div className="flex items-center justify-between py-4 border-y border-border">
-          <span className="text-muted-foreground">Fixed rate</span>
-          <span className="font-mono text-2xl text-foreground">1%</span>
+        <div className="p-5 border-b border-[#1A1A1A]">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-white/60">Fixed industry rate</p>
+              <p className="text-xs text-white/30 mt-1">Applied to all revenue</p>
+            </div>
+            <div className="text-right">
+              <span className="font-mono text-4xl text-gold font-semibold">1%</span>
+            </div>
+          </div>
         </div>
 
-        <p className="text-xs text-muted-foreground/70">
-          Non-negotiable. Industry standard for escrow and payment administration.
-        </p>
+        {/* Context */}
+        <div className="p-5 border-b border-[#1A1A1A]">
+          <p className="text-sm text-white/50 leading-relaxed">
+            A neutral third party ensures everyone—lenders, investors, talent—gets paid correctly according to the waterfall.
+          </p>
+        </div>
 
         {/* Impact Display */}
         {inputs.budget > 0 && (
-          <div className="pt-4 border-t border-border">
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-muted-foreground">On a typical 1.2x deal:</span>
-            <span className="font-mono text-xl text-destructive">
-                -{formatCompactCurrency(camFeeAmount)}
-              </span>
+          <div className="bg-[#0A0A0A]/50">
+            <div className="p-5">
+              <p className="text-xs text-white/30 uppercase tracking-wider mb-3">
+                Impact on a typical 1.2x deal
+              </p>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-white/40">CAM fee (1%)</span>
+                <span className="font-mono text-xl text-red-400 font-semibold">
+                  -{formatCompactCurrency(camFeeAmount)}
+                </span>
+              </div>
             </div>
           </div>
         )}
+
+        {/* Info */}
+        <div className="px-5 pb-5">
+          <div className="flex items-center justify-between py-3 border-t border-[#1A1A1A]">
+            <span className="text-xs text-white/30">Common CAMs</span>
+            <span className="text-xs text-white/50">Freeway, Fintage House</span>
+          </div>
+        </div>
       </div>
 
       {/* Inline Helper */}
-      <div className="mt-4">
+      <div className="mt-6">
         <Collapsible open={showHelp} onOpenChange={setShowHelp}>
-          <CollapsibleTrigger className="flex items-center gap-2 text-sm text-gold hover:text-gold-highlight transition-colors">
+          <CollapsibleTrigger className="w-full flex items-center justify-center gap-2 text-sm text-gold/70 hover:text-gold transition-colors py-3">
             <Info className="w-4 h-4" />
             <span>Why does the bank get paid first?</span>
           </CollapsibleTrigger>
-          <CollapsibleContent className="mt-4 p-4 bg-card border border-border text-sm text-muted-foreground leading-relaxed animate-fade-in">
-            <p>
-              The Collection Account Manager (CAM) is a neutral third party that receives all revenue and distributes it according to the waterfall. They ensure lenders, investors, and talent get paid correctly.
-            </p>
-            <p className="mt-2 text-xs text-muted-foreground/70">
-              Common CAMs include Freeway Entertainment, Fintage House, and major banks with entertainment divisions.
-            </p>
+          <CollapsibleContent className="mt-4">
+            <div className="glass-card-gold p-5 animate-reveal-up">
+              <p className="text-sm text-white/70 mb-3 leading-relaxed">
+                The Collection Account Manager (CAM) receives
+                <span className="text-gold font-semibold"> all revenue first</span> and distributes it according to the waterfall.
+              </p>
+              <div className="premium-divider mb-3" />
+              <p className="text-xs text-white/50">
+                They ensure lenders, investors, and talent get paid correctly—a neutral referee for your deal.
+              </p>
+            </div>
           </CollapsibleContent>
         </Collapsible>
-      </div>
-
-      {/* Running Total Hint */}
-      <div className="mt-6 text-center">
-        <p className="text-xs text-muted-foreground/50 uppercase tracking-widest">
-          And that's not all...
-        </p>
       </div>
     </div>
   );
