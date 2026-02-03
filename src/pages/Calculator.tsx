@@ -134,9 +134,9 @@ const Calculator = () => {
     });
   }, [steps]);
 
-  // Reset on ?reset=true
+  // Reset on ?reset=true or ?skip=true (demo mode)
   useEffect(() => {
-    if (searchParams.get("reset") === "true") {
+    if (searchParams.get("reset") === "true" || searchParams.get("skip") === "true") {
       localStorage.removeItem(STORAGE_KEY);
       setInputs(defaultInputs);
       setGuilds(defaultGuilds);
@@ -147,7 +147,7 @@ const Calculator = () => {
 
   // Load saved state
   useEffect(() => {
-    if (searchParams.get("reset") === "true") return;
+    if (searchParams.get("reset") === "true" || searchParams.get("skip") === "true") return;
 
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {

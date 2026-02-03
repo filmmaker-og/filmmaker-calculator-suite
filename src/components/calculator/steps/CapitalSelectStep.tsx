@@ -1,4 +1,4 @@
-import { Check, Sparkles, Landmark, Receipt, CreditCard, Users, ChevronRight } from "lucide-react";
+import { Check, Sparkles, Landmark, Receipt, Coins, Users2, ChevronRight, Layers } from "lucide-react";
 import { useHaptics } from "@/hooks/use-haptics";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
@@ -24,6 +24,8 @@ const CapitalSelectStep = ({ selections, onToggle }: CapitalSelectStepProps) => 
       description: 'UK, Georgia, New Mexico, etc.',
       icon: Receipt,
       recommended: false,
+      priority: 1,
+      priorityLabel: "Reduces cost",
     },
     {
       key: 'seniorDebt' as keyof CapitalSelections,
@@ -32,22 +34,28 @@ const CapitalSelectStep = ({ selections, onToggle }: CapitalSelectStepProps) => 
       description: 'First position, secured against presales',
       icon: Landmark,
       recommended: true,
+      priority: 2,
+      priorityLabel: "Paid 1st",
     },
     {
       key: 'gapLoan' as keyof CapitalSelections,
       title: 'Gap / Bridge Loan',
       subtitle: 'Mezzanine financing',
       description: 'Higher risk, subordinate to senior',
-      icon: CreditCard,
+      icon: Coins,
       recommended: false,
+      priority: 3,
+      priorityLabel: "Paid 2nd",
     },
     {
       key: 'equity' as keyof CapitalSelections,
       title: 'Equity Investment',
       subtitle: 'Private investors',
       description: 'Last in, first out after debt',
-      icon: Users,
+      icon: Users2,
       recommended: true,
+      priority: 4,
+      priorityLabel: "Paid last",
     },
   ];
 
@@ -75,12 +83,12 @@ const CapitalSelectStep = ({ selections, onToggle }: CapitalSelectStepProps) => 
             }}
           />
           <div className="relative w-14 h-14 border border-gold/30 bg-gold/5 flex items-center justify-center">
-            <Sparkles className="w-7 h-7 text-gold" />
+            <Layers className="w-7 h-7 text-gold" />
           </div>
         </div>
 
         <h2 className="font-bebas text-3xl tracking-[0.08em] text-white mb-2">
-          How did you <span className="text-gold">fund this</span>?
+          Build your <span className="text-gold">capital stack</span>
         </h2>
         <p className="text-white/50 text-sm max-w-xs mx-auto">
           Everyone who put money in gets paid back. With interest. Before you.
@@ -182,9 +190,17 @@ const CapitalSelectStep = ({ selections, onToggle }: CapitalSelectStepProps) => 
                         </span>
                       )}
                     </div>
-                    <p className="text-xs text-white/40 truncate">
-                      {option.description}
-                    </p>
+                    <div className="flex items-center gap-2">
+                      <p className="text-xs text-white/40 truncate flex-1">
+                        {option.description}
+                      </p>
+                      <span className={cn(
+                        "text-[9px] px-1.5 py-0.5 uppercase tracking-wider flex-shrink-0",
+                        isSelected ? "bg-gold/20 text-gold/80" : "bg-zinc-800 text-white/30"
+                      )}>
+                        {option.priorityLabel}
+                      </span>
+                    </div>
                   </div>
 
                   {/* Checkbox */}

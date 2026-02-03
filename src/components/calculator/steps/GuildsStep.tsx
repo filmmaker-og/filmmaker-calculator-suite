@@ -22,9 +22,9 @@ const GuildsStep = ({ inputs, guilds, onToggleGuild }: GuildsStepProps) => {
   const wgaAmount = hypotheticalRevenue * 0.012;
   const dgaAmount = hypotheticalRevenue * 0.012;
 
-  const totalGuildsCost = 
-    (guilds.sag ? sagAmount : 0) + 
-    (guilds.wga ? wgaAmount : 0) + 
+  const totalGuildsCost =
+    (guilds.sag ? sagAmount : 0) +
+    (guilds.wga ? wgaAmount : 0) +
     (guilds.dga ? dgaAmount : 0);
 
   const handleToggle = (guild: keyof GuildState) => {
@@ -85,7 +85,7 @@ const GuildsStep = ({ inputs, guilds, onToggleGuild }: GuildsStepProps) => {
           {guildOptions.map((guild) => {
             const isSelected = guilds[guild.key];
             const wasJustToggled = justToggled === guild.key;
-            
+
             return (
               <button
                 key={guild.key}
@@ -110,7 +110,7 @@ const GuildsStep = ({ inputs, guilds, onToggleGuild }: GuildsStepProps) => {
                       <Check className="w-4 h-4 text-black animate-scale-in" />
                     )}
                   </div>
-                  
+
                   <div className="text-left">
                     <span className={cn(
                       "font-semibold transition-colors",
@@ -121,7 +121,7 @@ const GuildsStep = ({ inputs, guilds, onToggleGuild }: GuildsStepProps) => {
                     <span className="text-xs text-muted-foreground ml-2">{guild.subtitle}</span>
                   </div>
                 </div>
-                
+
                 <div className="text-right">
                   <span className="font-mono text-sm text-muted-foreground">{guild.rate}</span>
                   {inputs.budget > 0 && isSelected && (
