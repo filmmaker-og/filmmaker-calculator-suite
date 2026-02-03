@@ -35,9 +35,9 @@ const SalesAgentStep = ({ inputs, onUpdateInput }: SalesAgentStepProps) => {
           </div>
         </div>
 
-        <p className="text-white/40 text-xs mb-2 uppercase tracking-widest">Before you see a dime...</p>
+        <p className="text-white/40 text-xs mb-2 uppercase tracking-widest">After the CAM fee...</p>
         <h2 className="font-bebas text-3xl tracking-[0.08em] text-white mb-2">
-          The Sales Agent <span className="text-gold">gets paid first</span>
+          The Sales Agent <span className="text-gold">takes their cut</span>
         </h2>
         <p className="text-white/50 text-sm max-w-xs mx-auto">
           They found your buyer. Now they take their cut off the top.

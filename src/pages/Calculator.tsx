@@ -93,7 +93,7 @@ const Calculator = () => {
 
   // Build dynamic step list based on capital selections
   const steps = useMemo((): StepType[] => {
-    const baseSteps: StepType[] = ['budget', 'sales', 'cam', 'marketing', 'guilds', 'offtop', 'capitalSelect'];
+    const baseSteps: StepType[] = ['budget', 'cam', 'sales', 'marketing', 'guilds', 'offtop', 'capitalSelect'];
     
     // Add capital detail steps based on selections
     const capitalSteps: StepType[] = [];
@@ -307,7 +307,7 @@ const Calculator = () => {
   // Get CTA text
   const getCtaText = () => {
     switch (currentStep) {
-      case 'budget': return 'WHO GETS PAID FIRST?';
+      case 'budget': return 'WHERE DOES MONEY GO?';
       case 'guilds': return 'ADD IT UP';
       case 'offtop': return 'NOW THE INVESTORS';
       case 'capitalSelect': return 'ENTER DETAILS';

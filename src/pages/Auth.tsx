@@ -162,7 +162,7 @@ const Auth = () => {
             <form onSubmit={handleSubmit} className="space-y-5">
               {/* Name Field - Primary attention grabber */}
               <div
-                className={`p-4 transition-all duration-300 ${
+                className={`p-4 bg-[#0D0D0D] transition-all duration-300 ${
                   !name.trim()
                     ? 'matte-card-glow animate-border-glow'
                     : name.trim()
@@ -183,6 +183,7 @@ const Auth = () => {
                   type="text"
                   autoComplete="name"
                   autoCapitalize="words"
+                  enterKeyHint="next"
                   autoFocus
                   placeholder="John Producer"
                   value={name}
@@ -200,7 +201,7 @@ const Auth = () => {
 
               {/* Email Field */}
               <div
-                className={`p-4 transition-all duration-300 ${
+                className={`p-4 bg-[#0D0D0D] transition-all duration-300 ${
                   name.trim() && !email
                     ? 'matte-card-glow animate-border-glow'
                     : email
@@ -224,6 +225,7 @@ const Auth = () => {
                   autoCapitalize="none"
                   autoCorrect="off"
                   spellCheck="false"
+                  enterKeyHint="send"
                   placeholder="you@company.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
