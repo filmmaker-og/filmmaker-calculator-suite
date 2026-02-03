@@ -1,5 +1,4 @@
 import { PremiumInput } from "@/components/ui/premium-input";
-import { StepContainer } from "@/components/ui/step-container";
 import { WaterfallInputs } from "@/lib/waterfall";
 import { Info, Film, DollarSign } from "lucide-react";
 import { useState } from "react";
@@ -25,10 +24,10 @@ const BudgetStep = ({ inputs, onUpdateInput }: BudgetStepProps) => {
   const isCompleted = inputs.budget > 0;
 
   return (
-    <div className="min-h-[60vh] flex flex-col justify-center">
+    <div className="step-enter min-h-[60vh] flex flex-col justify-center">
       {/* Hero question - Big and bold */}
       <div className="text-center mb-8">
-        {/* Icon with glow */}
+        {/* Icon with glow - STANDARDIZED */}
         <div className="relative inline-block mb-6">
           <div
             className="absolute inset-0 animate-pulse-slow"
@@ -43,7 +42,8 @@ const BudgetStep = ({ inputs, onUpdateInput }: BudgetStepProps) => {
           </div>
         </div>
 
-        <h2 className="font-bebas text-4xl tracking-[0.08em] text-white mb-4 leading-tight">
+        <p className="text-white/40 text-xs mb-2 uppercase tracking-widest">First things first...</p>
+        <h2 className="font-bebas text-3xl tracking-[0.08em] text-white mb-2 leading-tight">
           What did it cost
           <br />
           <span className="text-gold">to make your film?</span>
@@ -57,7 +57,7 @@ const BudgetStep = ({ inputs, onUpdateInput }: BudgetStepProps) => {
 
       {/* The premium input card */}
       <div className="matte-section">
-        {/* Section header */}
+        {/* Section header - STANDARDIZED */}
         <div className="matte-section-header px-5 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <DollarSign className="w-4 h-4 text-gold/60" />
@@ -67,7 +67,7 @@ const BudgetStep = ({ inputs, onUpdateInput }: BudgetStepProps) => {
           </div>
           {isCompleted && (
             <span className="text-xs text-gold font-mono">
-              ENTERED
+              ✓ ENTERED
             </span>
           )}
         </div>
@@ -89,7 +89,7 @@ const BudgetStep = ({ inputs, onUpdateInput }: BudgetStepProps) => {
           />
         </div>
 
-        {/* Quick reference */}
+        {/* Quick reference - STANDARDIZED */}
         <div className="px-5 pb-5">
           <div className="flex items-center justify-between py-3 border-t border-[#1A1A1A]">
             <span className="text-xs text-white/30">Typical indie range</span>
@@ -111,7 +111,7 @@ const BudgetStep = ({ inputs, onUpdateInput }: BudgetStepProps) => {
                 <span className="text-gold font-semibold">Negative Cost</span> is the total capital
                 required to produce the master and deliver to distributors.
               </p>
-              <div className="premium-divider mb-3" />
+              <div className="premium-divider-gold mb-3" />
               <div className="space-y-2 text-xs text-white/40">
                 <p className="flex items-start gap-2">
                   <span className="text-gold">+</span>

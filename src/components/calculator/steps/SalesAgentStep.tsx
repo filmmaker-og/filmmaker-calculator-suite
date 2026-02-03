@@ -3,6 +3,7 @@ import { WaterfallInputs, formatCompactCurrency } from "@/lib/waterfall";
 import { Info, Briefcase } from "lucide-react";
 import { useState } from "react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { useHaptics } from "@/hooks/use-haptics";
 
 interface SalesAgentStepProps {
   inputs: WaterfallInputs;
@@ -10,6 +11,7 @@ interface SalesAgentStepProps {
 }
 
 const SalesAgentStep = ({ inputs, onUpdateInput }: SalesAgentStepProps) => {
+  const haptics = useHaptics();
   const [showHelp, setShowHelp] = useState(false);
 
   // Calculate impact based on a hypothetical 1.2x deal
@@ -17,21 +19,23 @@ const SalesAgentStep = ({ inputs, onUpdateInput }: SalesAgentStepProps) => {
   const salesFeeAmount = hypotheticalRevenue * (inputs.salesFee / 100);
   const totalSalesCost = salesFeeAmount + inputs.salesExp;
 
+  const isCompleted = inputs.salesFee > 0;
+
   return (
-    <div className="step-enter">
-      {/* Step Header with icon */}
+    <div className="step-enter min-h-[60vh] flex flex-col justify-center">
+      {/* Step Header with icon - STANDARDIZED */}
       <div className="text-center mb-8">
         <div className="relative inline-block mb-4">
           <div
-            className="absolute inset-0"
+            className="absolute inset-0 animate-pulse-slow"
             style={{
-              background: 'radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, transparent 70%)',
-              filter: 'blur(15px)',
+              background: 'radial-gradient(circle, rgba(212, 175, 55, 0.2) 0%, transparent 70%)',
+              filter: 'blur(20px)',
               transform: 'scale(2)',
             }}
           />
-          <div className="relative w-14 h-14 border border-gold/30 bg-gold/5 flex items-center justify-center">
-            <Briefcase className="w-7 h-7 text-gold" />
+          <div className="relative w-16 h-16 border border-gold/30 bg-gold/5 flex items-center justify-center">
+            <Briefcase className="w-8 h-8 text-gold" />
           </div>
         </div>
 
@@ -46,11 +50,16 @@ const SalesAgentStep = ({ inputs, onUpdateInput }: SalesAgentStepProps) => {
 
       {/* The Card with matte styling */}
       <div className="matte-section overflow-hidden">
-        {/* Section header */}
-        <div className="matte-section-header px-5 py-3">
+        {/* Section header - STANDARDIZED */}
+        <div className="matte-section-header px-5 py-3 flex items-center justify-between">
           <span className="text-xs uppercase tracking-[0.2em] text-white/40 font-medium">
             Sales Agent Terms
           </span>
+          {isCompleted && (
+            <span className="text-xs text-gold font-mono">
+              ✓ ENTERED
+            </span>
+          )}
         </div>
 
         {/* Rate Stepper */}
@@ -66,7 +75,10 @@ const SalesAgentStep = ({ inputs, onUpdateInput }: SalesAgentStepProps) => {
 
           <PercentStepper
             value={inputs.salesFee}
-            onChange={(value) => onUpdateInput('salesFee', value)}
+            onChange={(value) => {
+              haptics.light();
+              onUpdateInput('salesFee', value);
+            }}
             min={0}
             max={30}
             step={5}
@@ -76,27 +88,32 @@ const SalesAgentStep = ({ inputs, onUpdateInput }: SalesAgentStepProps) => {
           />
         </div>
 
-        {/* Sales & Marketing Expense Display */}
+        {/* Sales & Marketing Expense Display - NOW WITH $75K CAP EXPLANATION */}
         <div className="p-5 border-b border-[#1A1A1A]">
           <div className="flex items-center gap-3 mb-3">
             <div className="w-6 h-6 flex items-center justify-center text-xs font-mono font-bold bg-gold text-black">
               2
             </div>
             <span className="text-xs uppercase tracking-[0.2em] text-gold/80 font-semibold">
-              Sales & Marketing (CAP)
+              Sales & Marketing Cap
             </span>
           </div>
 
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-white/60">AFM, markets, deliverables, P&A</p>
-              <p className="text-xs text-white/30 mt-1">Capped at this amount</p>
+          <div className="bg-[#0A0A0A]/50 p-4 border border-gold/20">
+            <div className="flex items-center justify-between mb-2">
+              <div>
+                <p className="text-sm text-white/60">AFM, markets, deliverables, P&A</p>
+                <p className="text-xs text-gold/70 mt-1 font-semibold">Industry standard cap: $75,000</p>
+              </div>
+              <div className="text-right">
+                <span className="font-mono text-2xl text-white font-semibold">
+                  $75K
+                </span>
+              </div>
             </div>
-            <div className="text-right">
-              <span className="font-mono text-2xl text-white font-semibold">
-                {formatCompactCurrency(inputs.salesExp)}
-              </span>
-            </div>
+            <p className="text-xs text-white/40 leading-relaxed mt-2">
+              This is the maximum amount the sales agent can recoup for marketing and sales expenses before commission.
+            </p>
           </div>
         </div>
 
@@ -114,13 +131,13 @@ const SalesAgentStep = ({ inputs, onUpdateInput }: SalesAgentStepProps) => {
                 </div>
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-white/40">Sales & Marketing cap</span>
-                  <span className="font-mono text-red-400">-{formatCompactCurrency(inputs.salesExp)}</span>
+                  <span className="font-mono text-red-400">-$75K</span>
                 </div>
                 <div className="premium-divider-gold" />
                 <div className="flex items-center justify-between">
                   <span className="text-xs uppercase tracking-wider text-white/50 font-semibold">Total Off-Top</span>
                   <span className="font-mono text-xl text-red-400 font-semibold">
-                    -{formatCompactCurrency(totalSalesCost)}
+                    -{formatCompactCurrency(salesFeeAmount + 75000)}
                   </span>
                 </div>
               </div>
@@ -128,7 +145,7 @@ const SalesAgentStep = ({ inputs, onUpdateInput }: SalesAgentStepProps) => {
           </div>
         )}
 
-        {/* Typical Range Helper */}
+        {/* Typical Range Helper - STANDARDIZED */}
         <div className="px-5 pb-5">
           <div className="flex items-center justify-between py-3 border-t border-[#1A1A1A]">
             <span className="text-xs text-white/30">Typical commission range</span>
@@ -150,7 +167,7 @@ const SalesAgentStep = ({ inputs, onUpdateInput }: SalesAgentStepProps) => {
                 Sales agents represent your film at markets (AFM, Cannes, Berlin) and negotiate with
                 <span className="text-gold font-semibold"> distributors worldwide</span>.
               </p>
-              <div className="premium-divider mb-3" />
+              <div className="premium-divider-gold mb-3" />
               <div className="grid grid-cols-2 gap-4 text-xs">
                 <div>
                   <span className="text-white/30 block mb-1">Domestic rate</span>
