@@ -32,9 +32,9 @@ const CamFeeStep = ({ inputs }: CamFeeStepProps) => {
           </div>
         </div>
 
-        <p className="text-white/40 text-xs mb-2 uppercase tracking-widest">And that's not all...</p>
+        <p className="text-white/40 text-xs mb-2 uppercase tracking-widest">Before anyone else...</p>
         <h2 className="font-bebas text-3xl tracking-[0.08em] text-white mb-2">
-          The <span className="text-gold">CAM Fee</span>
+          The CAM <span className="text-gold">gets paid FIRST</span>
         </h2>
         <p className="text-white/50 text-sm max-w-xs mx-auto">
           The bank holding your money takes 1%. Non-negotiable.
