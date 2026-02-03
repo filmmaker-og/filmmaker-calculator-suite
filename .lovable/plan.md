@@ -1,67 +1,79 @@
 
-# Batch 1: Critical Bug Fixes
 
-## Overview
-Three critical bugs need to be fixed to ensure basic functionality works correctly.
+# Fix: Homepage Hamburger Menu - The Real Problem
 
----
+## Root Cause Analysis
 
-## Fix 1: Homepage Hamburger Menu Z-Index
+The Header component itself is correctly set to `z-[150]`. However, **in Index.tsx**, the Header is wrapped in a div that causes z-index stacking context issues:
 
-### Problem
-The hamburger menu button on the homepage is clickable but when it opens, the menu overlay is hidden behind the cinematic splash animation. This happens because:
-- The splash animation has `z-[100]` (Index.tsx line 44)
-- The Header component itself has `z-50` (Header.tsx line 31)
-- Even though the menu overlay has `z-[200]`, the Header's button at `z-50` means clicks are intercepted by elements above it
+```tsx
+// Line 125-132 in Index.tsx
+<div
+  className={`relative z-[200] transition-all duration-500 ${
+    animationPhase === 'complete' ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'
+  }`}
+  style={{ transitionDelay: animationPhase === 'complete' ? '100ms' : '0ms' }}
+>
+  <Header />
+</div>
+```
 
-### Solution
-Increase the Header's z-index to be above the splash animation:
-
-**File: `src/components/Header.tsx`**
-- Change the header element from `z-50` to `z-[150]` so it sits above the splash (`z-[100]`) but below the menu overlay (`z-[200]`)
-
----
-
-## Fix 2: "Try Without Saving" Jumps to Wrong Step
-
-### Problem
-When clicking "TRY WITHOUT SAVING" on the Auth page, it navigates to `/calculator?skip=true`, but the calculator loads saved state from localStorage, causing it to jump to a random step from a previous session.
-
-### Solution
-Add a check for `skip=true` to reset state, similar to how `reset=true` works.
-
-**File: `src/pages/Calculator.tsx`**
-- Add handling for `skip=true` parameter alongside the existing `reset=true` logic
-- When `skip=true` is detected, clear localStorage and reset to step 0
-- This ensures a fresh start for demo users
+### Problems:
+1. **During animation** (before 'complete'): The wrapper is invisible (`opacity-0`) but still captures mouse events - blocking clicks to anything behind it
+2. **Stacking context conflict**: The wrapper has `relative z-[200]` but the Header inside has `fixed z-[150]`. The fixed element's z-index is relative to the viewport, not the parent, causing unpredictable behavior
+3. **The wrapper doesn't need to exist** since the Header already handles its own positioning
 
 ---
 
-## Fix 3: Capital Stack Pre-Selected
+## Solution
 
-### Problem
-The Capital Stack selection step comes with "Senior Debt" and "Equity" already selected, which is confusing and doesn't allow users to make their own choices from scratch.
+Remove the wrapper div entirely and let the Header manage its own visibility through props or internal state. The Header is already `fixed` positioned, so it doesn't need a wrapper for layout.
 
-### Solution
-Change the default capital selections to all `false`.
+### File: `src/pages/Index.tsx`
 
-**File: `src/pages/Calculator.tsx`**
-- Change `defaultCapitalSelections` (lines 53-58) to have all values set to `false`
+**Before:**
+```tsx
+<div
+  className={`relative z-[200] transition-all duration-500 ${
+    animationPhase === 'complete' ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'
+  }`}
+  style={{ transitionDelay: animationPhase === 'complete' ? '100ms' : '0ms' }}
+>
+  <Header />
+</div>
+```
+
+**After:**
+```tsx
+{animationPhase === 'complete' && <Header />}
+```
+
+This simply waits until the animation is complete before rendering the Header at all, eliminating all z-index conflicts.
 
 ---
 
-## Implementation Summary
+## Why This Works
+
+1. **No invisible blocking elements** - The Header only renders when it should be visible
+2. **No stacking context conflicts** - The Header's `fixed z-[150]` works directly against the viewport
+3. **Clean and simple** - No wrapper divs with competing z-index values
+4. **The splash overlay (`z-[100]`)** will be below the Header (`z-[150]`) which is below the menu overlay (`z-[200]`)
+
+---
+
+## Z-Index Hierarchy (Final)
+
+| Element | Z-Index | Notes |
+|---------|---------|-------|
+| Splash animation | `z-[100]` | Fades out when complete |
+| Header bar | `z-[150]` | Fixed, only renders after animation |
+| Menu overlay | `z-[200]` | Opens above everything |
+
+---
+
+## Files to Modify
 
 | File | Change |
 |------|--------|
-| `src/components/Header.tsx` | Change `z-50` to `z-[150]` on header element |
-| `src/pages/Calculator.tsx` | Add `skip=true` handling to reset state |
-| `src/pages/Calculator.tsx` | Set all `defaultCapitalSelections` to `false` |
+| `src/pages/Index.tsx` | Remove wrapper div, conditionally render Header |
 
----
-
-## Expected Results
-
-1. **Menu Fix**: Hamburger menu on homepage will open and be fully visible above all other content
-2. **Skip Fix**: "Try Without Saving" will always start at step 1 (Budget) with clean slate
-3. **Capital Fix**: Capital Stack step will show all options unselected, requiring user to make explicit choices
