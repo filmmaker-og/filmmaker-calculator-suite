@@ -22,9 +22,9 @@ const GuildsStep = ({ inputs, guilds, onToggleGuild }: GuildsStepProps) => {
   const wgaAmount = hypotheticalRevenue * 0.012;
   const dgaAmount = hypotheticalRevenue * 0.012;
 
-  const totalGuildsCost = 
-    (guilds.sag ? sagAmount : 0) + 
-    (guilds.wga ? wgaAmount : 0) + 
+  const totalGuildsCost =
+    (guilds.sag ? sagAmount : 0) +
+    (guilds.wga ? wgaAmount : 0) +
     (guilds.dga ? dgaAmount : 0);
 
   const handleToggle = (guild: keyof GuildState) => {
@@ -52,14 +52,15 @@ const GuildsStep = ({ inputs, guilds, onToggleGuild }: GuildsStepProps) => {
         </p>
       </div>
 
-      {/* Important Guidance Banner */}
-      <div className="mb-5 p-4 bg-amber-500/5 border border-amber-500/20">
+      {/* SVOD Context Banner */}
+      <div className="mb-6 p-4 bg-gold/5 border border-gold/20">
         <div className="flex items-start gap-3">
-          <Info className="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" />
+          <Info className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
           <div>
-            <p className="text-sm text-white font-medium mb-1">Streamer Deals</p>
-            <p className="text-xs text-white/60 leading-relaxed">
-              In most SVOD buyouts, the <span className="text-gold">platform becomes signatory</span>—meaning you may not owe residuals directly. Check your deal terms.
+            <p className="text-sm text-white/80 font-medium">Most SVOD deals are non-union</p>
+            <p className="text-xs text-white/50 mt-1">
+              If your film is being acquired by a streamer, they typically handle residuals.
+              Skip these unless you <span className="text-gold">know</span> you're the signatory.
             </p>
           </div>
         </div>
@@ -84,7 +85,7 @@ const GuildsStep = ({ inputs, guilds, onToggleGuild }: GuildsStepProps) => {
           {guildOptions.map((guild) => {
             const isSelected = guilds[guild.key];
             const wasJustToggled = justToggled === guild.key;
-            
+
             return (
               <button
                 key={guild.key}
@@ -109,7 +110,7 @@ const GuildsStep = ({ inputs, guilds, onToggleGuild }: GuildsStepProps) => {
                       <Check className="w-4 h-4 text-black animate-scale-in" />
                     )}
                   </div>
-                  
+
                   <div className="text-left">
                     <span className={cn(
                       "font-semibold transition-colors",
@@ -120,7 +121,7 @@ const GuildsStep = ({ inputs, guilds, onToggleGuild }: GuildsStepProps) => {
                     <span className="text-xs text-muted-foreground ml-2">{guild.subtitle}</span>
                   </div>
                 </div>
-                
+
                 <div className="text-right">
                   <span className="font-mono text-sm text-muted-foreground">{guild.rate}</span>
                   {inputs.budget > 0 && isSelected && (

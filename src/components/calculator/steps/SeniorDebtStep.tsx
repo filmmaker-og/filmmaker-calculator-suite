@@ -133,6 +133,19 @@ const SeniorDebtStep = ({ inputs, onUpdateInput }: SeniorDebtStepProps) => {
             </div>
           </div>
         )}
+
+        {/* Typical Range Helper */}
+        <div className="px-5 pb-5">
+          <div className="flex items-center justify-between py-3 border-t border-[#1A1A1A]">
+            <span className="text-xs text-white/30">Typical senior debt range</span>
+            <span className="text-xs font-mono text-white/50">
+              {inputs.budget > 0
+                ? `${formatCompactCurrency(Math.round(inputs.budget * 0.2))} - ${formatCompactCurrency(Math.round(inputs.budget * 0.4))}`
+                : '20-40% of budget'
+              }
+            </span>
+          </div>
+        </div>
       </div>
 
       {/* Inline Helper */}

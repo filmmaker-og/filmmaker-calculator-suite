@@ -205,15 +205,15 @@ const PremiumInput = React.forwardRef<HTMLInputElement, PremiumInputProps>(
               type={type}
               className={cn(
                 "flex-1 bg-transparent border-0 outline-none",
-                "h-12 font-mono text-right transition-all",
+                "font-mono text-right transition-all",
+                isHero ? "h-16" : "h-12",
                 localActive
-                  ? "text-white text-2xl"
+                  ? isHero ? "text-white text-4xl" : "text-white text-2xl"
                   : isCompleted
-                  ? "text-white text-2xl"
-                  : "text-white/60 text-xl",
+                  ? isHero ? "text-white text-4xl" : "text-white text-2xl"
+                  : isHero ? "text-white/60 text-3xl" : "text-white/60 text-xl",
                 "placeholder:text-white/20",
                 "focus:outline-none focus:ring-0",
-                isHero && "text-3xl",
                 className
               )}
               ref={ref}
