@@ -276,7 +276,7 @@ const WaterfallStep = ({ result, inputs }: WaterfallStepProps) => {
             </p>
             <Button
               onClick={() => setShowRestrictedModal(true)}
-              className="w-full h-12 text-sm font-black tracking-wider rounded-none bg-gold text-black hover:bg-gold-highlight"
+              className="w-full h-12 text-sm font-black tracking-wider rounded-none bg-gold-cta text-black hover:brightness-110"
               style={{
                 boxShadow: "0 0 30px rgba(212, 175, 55, 0.25)",
               }}

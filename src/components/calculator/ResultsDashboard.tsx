@@ -162,7 +162,7 @@ const ResultsDashboard = ({ result, inputs, equity }: ResultsDashboardProps) => 
             </div>
             <Button
               onClick={() => setShowRestrictedModal(true)}
-              className="w-full h-12 text-sm font-semibold tracking-wider rounded-none bg-gold text-black hover:bg-gold-highlight"
+              className="w-full h-12 text-sm font-semibold tracking-wider rounded-none bg-gold-cta text-black hover:brightness-110"
             >
               UNLOCK DECK
             </Button>

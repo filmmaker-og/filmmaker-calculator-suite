@@ -117,7 +117,7 @@ const SmartCTA = ({
             showShake && "animate-shake",
             isPressed && canProceed && "scale-[0.98]",
             canProceed
-              ? "bg-gold text-black hover:bg-gold-highlight"
+              ? "bg-gold-cta text-black hover:brightness-110"
               : "bg-[#1A1A1A] text-white/30 cursor-not-allowed"
           )}
           style={{
