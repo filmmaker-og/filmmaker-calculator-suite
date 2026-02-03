@@ -135,7 +135,7 @@ const GuildsStep = ({ inputs, guilds, onToggleGuild }: GuildsStepProps) => {
                 <div className="text-right">
                   <span className="font-mono text-sm text-white/50">{guild.rate}</span>
                   {inputs.budget > 0 && isSelected && (
-                    <span className="font-mono text-sm text-red-400 ml-2">
+                    <span className="font-mono text-sm text-gold/70 ml-2">
                       -{formatCompactCurrency(guild.amount)}
                     </span>
                   )}
@@ -150,7 +150,7 @@ const GuildsStep = ({ inputs, guilds, onToggleGuild }: GuildsStepProps) => {
           <div className="border-t border-[#1A1A1A] bg-[#0A0A0A]/50">
             <div className="p-5 flex items-center justify-between">
               <span className="text-sm text-white/40">Total guild residuals:</span>
-              <span className="font-mono text-xl text-red-400 font-semibold">
+              <span className="font-mono text-xl text-gold font-semibold">
                 -{formatCompactCurrency(totalGuildsCost)}
               </span>
             </div>
