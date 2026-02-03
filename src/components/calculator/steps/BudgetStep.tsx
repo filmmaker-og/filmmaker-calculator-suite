@@ -3,6 +3,7 @@ import { WaterfallInputs } from "@/lib/waterfall";
 import { Info, Film, DollarSign } from "lucide-react";
 import { useState } from "react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import StandardStepLayout from "../StandardStepLayout";
 
 interface BudgetStepProps {
   inputs: WaterfallInputs;
@@ -24,82 +25,21 @@ const BudgetStep = ({ inputs, onUpdateInput }: BudgetStepProps) => {
   const isCompleted = inputs.budget > 0;
 
   return (
-    <div className="step-enter min-h-[60vh] flex flex-col justify-center">
-      {/* Hero question - Big and bold */}
-      <div className="text-center mb-8">
-        {/* Icon with glow - STANDARDIZED */}
-        <div className="relative inline-block mb-6">
-          <div
-            className="absolute inset-0 animate-pulse-slow"
-            style={{
-              background: 'radial-gradient(circle, rgba(212, 175, 55, 0.2) 0%, transparent 70%)',
-              filter: 'blur(20px)',
-              transform: 'scale(2)',
-            }}
-          />
-          <div className="relative w-16 h-16 border border-gold/30 bg-gold/5 flex items-center justify-center">
-            <Film className="w-8 h-8 text-gold" />
-          </div>
+    <StandardStepLayout
+      icon={Film}
+      title="What did it cost"
+      titleHighlight="to make your film?"
+      subtitle="All-in production cost. Development through delivery. The whole thing."
+      sectionLabel="Production Budget"
+      sectionIcon={DollarSign}
+      isCompleted={isCompleted}
+      quickReference={
+        <div className="flex items-center justify-between py-3 px-5 bg-[#0A0A0A] border border-[#1A1A1A]">
+          <span className="text-xs text-white/30">Typical indie range</span>
+          <span className="text-xs font-mono text-white/50">$500K - $10M</span>
         </div>
-
-        <p className="text-white/40 text-xs mb-2 uppercase tracking-widest">First things first...</p>
-        <h2 className="font-bebas text-3xl tracking-[0.08em] text-white mb-2 leading-tight">
-          What did it cost
-          <br />
-          <span className="text-gold">to make your film?</span>
-        </h2>
-
-        <p className="text-white/50 text-sm max-w-xs mx-auto leading-relaxed">
-          All-in production cost. Development through delivery.
-          The whole thing.
-        </p>
-      </div>
-
-      {/* The premium input card */}
-      <div className="matte-section">
-        {/* Section header - STANDARDIZED */}
-        <div className="matte-section-header px-5 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <DollarSign className="w-4 h-4 text-gold/60" />
-            <span className="text-xs uppercase tracking-[0.2em] text-white/40 font-medium">
-              Production Budget
-            </span>
-          </div>
-          {isCompleted && (
-            <span className="text-xs text-gold font-mono">
-              ✓ ENTERED
-            </span>
-          )}
-        </div>
-
-        {/* Input area */}
-        <div className="p-5">
-          <PremiumInput
-            type="text"
-            inputMode="numeric"
-            value={formatValue(inputs.budget)}
-            onChange={(e) => onUpdateInput('budget', parseValue(e.target.value))}
-            placeholder="2,000,000"
-            showCurrency
-            label="Negative Cost"
-            example="$2,000,000"
-            actionHint="Enter your film's total budget"
-            isCompleted={isCompleted}
-            isNext={!isCompleted}
-          />
-        </div>
-
-        {/* Quick reference - STANDARDIZED */}
-        <div className="px-5 pb-5">
-          <div className="flex items-center justify-between py-3 border-t border-[#1A1A1A]">
-            <span className="text-xs text-white/30">Typical indie range</span>
-            <span className="text-xs font-mono text-white/50">$500K - $10M</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Inline Helper - Collapsed by default */}
-      <div className="mt-6">
+      }
+      helpContent={
         <Collapsible open={showHelp} onOpenChange={setShowHelp}>
           <CollapsibleTrigger className="w-full flex items-center justify-center gap-2 text-sm text-gold/70 hover:text-gold transition-colors py-3">
             <Info className="w-4 h-4" />
@@ -133,8 +73,22 @@ const BudgetStep = ({ inputs, onUpdateInput }: BudgetStepProps) => {
             </div>
           </CollapsibleContent>
         </Collapsible>
-      </div>
-    </div>
+      }
+    >
+      <PremiumInput
+        type="text"
+        inputMode="numeric"
+        value={formatValue(inputs.budget)}
+        onChange={(e) => onUpdateInput('budget', parseValue(e.target.value))}
+        placeholder="2,000,000"
+        showCurrency
+        label="Negative Cost"
+        example="$2,000,000"
+        actionHint="Enter your film's total budget"
+        isCompleted={isCompleted}
+        isNext={!isCompleted}
+      />
+    </StandardStepLayout>
   );
 };
 
