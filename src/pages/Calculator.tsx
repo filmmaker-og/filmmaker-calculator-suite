@@ -41,7 +41,8 @@ const defaultInputs: WaterfallInputs = {
   equity: 0,
   premium: 20,
   salesFee: 15,
-  salesExp: 75000,
+  salesExp: 75000,      // Sales Agent expenses cap
+  marketingExp: 75000,  // Marketing/delivery expenses (separate field)
 };
 
 const defaultGuilds: GuildState = {

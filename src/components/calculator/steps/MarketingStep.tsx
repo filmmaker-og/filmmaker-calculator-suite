@@ -21,7 +21,7 @@ const MarketingStep = ({ inputs, onUpdateInput }: MarketingStepProps) => {
     return parseInt(str.replace(/[^0-9]/g, '')) || 0;
   };
 
-  const isCompleted = inputs.salesExp > 0;
+  const isCompleted = inputs.marketingExp > 0;
 
   return (
     <div className="step-enter">
@@ -69,11 +69,11 @@ const MarketingStep = ({ inputs, onUpdateInput }: MarketingStepProps) => {
           <PremiumInput
             type="text"
             inputMode="numeric"
-            value={formatValue(inputs.salesExp)}
-            onChange={(e) => onUpdateInput('salesExp', parseValue(e.target.value))}
+            value={formatValue(inputs.marketingExp)}
+            onChange={(e) => onUpdateInput('marketingExp', parseValue(e.target.value))}
             placeholder="75,000"
             showCurrency
-            label="Expense Cap"
+            label="Marketing & Delivery Cap"
             example="$75,000"
             actionHint="Maximum marketing spend capped at this amount"
             isCompleted={isCompleted}
@@ -82,13 +82,13 @@ const MarketingStep = ({ inputs, onUpdateInput }: MarketingStepProps) => {
         </div>
 
         {/* Impact Display */}
-        {inputs.salesExp > 0 && (
+        {inputs.marketingExp > 0 && (
           <div className="border-t border-[#1A1A1A] bg-[#0A0A0A]/50">
             <div className="p-5">
               <div className="flex items-center justify-between">
                 <span className="text-sm text-white/40">Deducted before profit:</span>
                 <span className="font-mono text-xl text-red-400 font-semibold">
-                  -{formatCompactCurrency(inputs.salesExp)}
+                  -{formatCompactCurrency(inputs.marketingExp)}
                 </span>
               </div>
             </div>
