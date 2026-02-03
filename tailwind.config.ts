@@ -20,11 +20,14 @@ export default {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         // BRAND GUIDE STRICT PALETTE
+        // Rule: If NOT clickable → gold (#D4AF37). If CLICKABLE → gold-cta (#F9E076)
         gold: {
-          DEFAULT: "#D4AF37",      // Primary Gold
-          highlight: "#F9E076",    // Highlight Gold (Glow/Hover)
+          DEFAULT: "#D4AF37",      // Metallic Gold - icons, borders, dividers (NON-CLICKABLE)
+          highlight: "#F9E076",    // Highlight Gold (Glow effects)
           shadow: "#7A5C12",       // Shadow Gold (Gradients/Depth)
         },
+        "gold-cta": "#F9E076",     // Bright Gold - BUTTONS ONLY (CLICKABLE)
+        panel: "#111111",          // Section panels, secondary backgrounds
         surface: "hsl(var(--surface))",
         "text-high": "hsl(var(--text-high))",
         "text-muted": "hsl(var(--text-muted))",

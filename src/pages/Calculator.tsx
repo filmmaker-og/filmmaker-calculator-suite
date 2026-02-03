@@ -503,7 +503,7 @@ const Calculator = () => {
                     isButtonPressed && canProceed() && "scale-[0.98]",
                     shakeButton && "animate-shake",
                     canProceed()
-                      ? "bg-gold text-black hover:bg-gold-highlight"
+                      ? "bg-gold-cta text-black hover:brightness-110"
                       : "bg-[#1A1A1A] text-white/30 cursor-not-allowed"
                   )}
                   style={{
@@ -536,7 +536,7 @@ const Calculator = () => {
                 href="https://filmmaker.og/store"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-1 h-14 flex items-center justify-center gap-2 bg-gold text-black font-black text-sm tracking-[0.15em] uppercase transition-all active:scale-95 hover:bg-gold-highlight"
+                className="flex-1 h-14 flex items-center justify-center gap-2 bg-gold-cta text-black font-black text-sm tracking-[0.15em] uppercase transition-all active:scale-95 hover:brightness-110"
                 style={{
                   boxShadow: '0 0 40px rgba(212, 175, 55, 0.3), 0 4px 20px rgba(0, 0, 0, 0.3)',
                 }}

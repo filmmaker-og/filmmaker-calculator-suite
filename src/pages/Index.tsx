@@ -190,7 +190,7 @@ const Index = () => {
           {/* CTA - WITH GLOW */}
           <Button
             onClick={handleStartClick}
-            className="w-full max-w-xs h-16 text-lg font-black tracking-[0.12em] rounded-none bg-gold text-black hover:bg-gold-highlight transition-all duration-200 touch-press group"
+            className="w-full max-w-xs h-16 text-lg font-black tracking-[0.12em] rounded-none bg-gold-cta text-black hover:brightness-110 transition-all duration-200 touch-press group"
             style={{
               boxShadow: '0 0 50px rgba(212, 175, 55, 0.45), 0 0 100px rgba(212, 175, 55, 0.2)',
             }}

@@ -9,24 +9,25 @@
 @layer base {
   :root {
     /* BRAND GUIDE STRICT COLOR PALETTE */
-    --bg: 0 0% 0%;                    /* #000000 Void Black */
-    --surface: 0 0% 3%;               /* #070707 Off-Black */
-    --gold: 43 74% 52%;               /* #D4AF37 Primary Gold */
+    --bg: 0 0% 0%;                    /* #000000 Void Black - page background */
+    --surface: 0 0% 7%;               /* #111111 Dark Grey - panels, cards */
+    --gold: 43 74% 52%;               /* #D4AF37 Metallic Gold - NON-CLICKABLE */
+    --gold-cta: 49 93% 72%;           /* #F9E076 Bright Gold - CLICKABLE ONLY */
     --gold-highlight: 49 93% 72%;     /* #F9E076 Highlight Gold */
     --gold-shadow: 43 76% 27%;        /* #7A5C12 Shadow Gold */
     --text-high: 0 0% 100%;           /* #FFFFFF White */
     --text-muted: 0 0% 54%;           /* #8A8A8A Legal/Footer */
     --border-subtle: 0 0% 10%;        /* #1A1A1A Subtle */
     --error: 0 84% 60%;
-    
+
     /* Mapped to Shadcn Variables */
     --background: 0 0% 0%;
     --foreground: 0 0% 100%;
-    
-    --card: 0 0% 3%;
+
+    --card: 0 0% 7%;                  /* #111111 - Updated per brand guide */
     --card-foreground: 0 0% 100%;
     
-    --popover: 0 0% 3%;
+    --popover: 0 0% 7%;              /* #111111 */
     --popover-foreground: 0 0% 100%;
     
     --primary: 43 74% 52%;
@@ -805,9 +806,9 @@ html, body {
     inset 0 1px 0 rgba(212, 175, 55, 0.05);
 }
 
-/* Matte section containers */
+/* Matte section containers - BRAND: #111111 panel color */
 .matte-section {
-  background: linear-gradient(180deg, #0D0D0D 0%, #080808 100%);
+  background: #111111;
   border: 1px solid #1A1A1A;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.02),
@@ -815,7 +816,7 @@ html, body {
 }
 
 .matte-section-header {
-  background: rgba(10, 10, 10, 0.8);
+  background: rgba(17, 17, 17, 0.9);
   border-bottom: 1px solid #1A1A1A;
 }
 
@@ -871,20 +872,19 @@ html, body {
   background: linear-gradient(180deg, rgba(212, 175, 55, 0.5) 0%, rgba(212, 175, 55, 0.1) 100%);
 }
 
-/* ===== MATTE CARD SYSTEM ===== */
-/* Visible matte gray backgrounds - NOT pure black */
+/* ===== MATTE CARD SYSTEM - BRAND: #111111 panel color ===== */
 .matte-card {
-  background: #0D0D0D;
+  background: #111111;
   border: 1px solid #1A1A1A;
 }
 
 .matte-card-gold {
-  background: #0D0D0D;
+  background: #111111;
   border: 1px solid rgba(212, 175, 55, 0.3);
 }
 
 .matte-card-glow {
-  background: #0D0D0D;
+  background: #111111;
   border: 1px solid #D4AF37;
   box-shadow: 0 0 30px rgba(212, 175, 55, 0.15);
 }

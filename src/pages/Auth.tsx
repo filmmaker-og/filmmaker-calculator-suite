@@ -239,7 +239,7 @@ const Auth = () => {
               <Button
                 type="submit"
                 disabled={loading || !email || !name.trim()}
-                className="w-full h-16 rounded-none font-black text-lg tracking-[0.1em] bg-gold text-black hover:bg-gold-highlight disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200"
+                className="w-full h-16 rounded-none font-black text-lg tracking-[0.1em] bg-gold-cta text-black hover:brightness-110 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200"
                 style={{
                   boxShadow: email && name.trim() ? '0 0 40px rgba(212, 175, 55, 0.4)' : 'none',
                 }}
