@@ -9,6 +9,8 @@ import Calculator from "./pages/Calculator";
 import Store from "./pages/Store";
 import NotFound from "./pages/NotFound";
 
+// sync-bump: trigger GitHub sync (no functional change)
+
 const queryClient = new QueryClient();
 
 const App = () => (
