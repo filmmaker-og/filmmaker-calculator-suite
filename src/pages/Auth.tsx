@@ -162,10 +162,10 @@ const Auth = () => {
             <form onSubmit={handleSubmit} className="space-y-5">
               {/* Name Field - Primary attention grabber */}
               <div
-                className={`p-4 transition-all duration-300 ${
+                className={`p-5 transition-all duration-300 border ${
                   !name.trim()
-                    ? 'matte-card-glow animate-border-glow'
-                    : 'matte-card-gold'
+                    ? 'bg-[#1A1A1A] border-gold/50 shadow-[0_0_20px_rgba(212,175,55,0.15)]'
+                    : 'bg-[#141414] border-[#2A2A2A]'
                 }`}
               >
                 <label
@@ -174,7 +174,7 @@ const Auth = () => {
                     !name.trim() ? 'text-gold' : 'text-white/60'
                   }`}
                 >
-                  Your Name {!name.trim() && <span className="text-gold animate-pulse">← Start here</span>}
+                  Your Name {!name.trim() && <span className="text-gold animate-pulse ml-2">← Start here</span>}
                 </label>
                 <Input
                   id="name"
@@ -192,17 +192,17 @@ const Auth = () => {
                       document.getElementById('email')?.focus();
                     }
                   }}
-                  className="h-14 text-lg rounded-none bg-transparent border-0 border-b-2 border-white/20 text-white placeholder:text-white/30 pl-0 pr-0 focus:border-gold focus:ring-0 transition-colors"
+                  className="h-14 text-lg rounded-none bg-transparent border-0 border-b-2 border-white/30 text-white placeholder:text-white/40 pl-0 pr-0 focus:border-gold focus:ring-0 transition-colors"
                   required
-              />
+                />
               </div>
 
               {/* Email Field */}
               <div
-                className={`p-4 transition-all duration-300 ${
+                className={`p-5 transition-all duration-300 border ${
                   name.trim() && !email
-                    ? 'matte-card-glow animate-border-glow'
-                    : 'matte-card-gold'
+                    ? 'bg-[#1A1A1A] border-gold/50 shadow-[0_0_20px_rgba(212,175,55,0.15)]'
+                    : 'bg-[#141414] border-[#2A2A2A]'
                 }`}
               >
                 <label
@@ -211,7 +211,7 @@ const Auth = () => {
                     name.trim() && !email ? 'text-gold' : 'text-white/60'
                   }`}
                 >
-                  Email Address {name.trim() && !email && <span className="text-gold animate-pulse">← Now this</span>}
+                  Email Address {name.trim() && !email && <span className="text-gold animate-pulse ml-2">← Now this</span>}
                 </label>
                 <Input
                   id="email"
@@ -231,7 +231,7 @@ const Auth = () => {
                       handleSubmit(e as any);
                     }
                   }}
-                  className="h-14 text-lg rounded-none bg-transparent border-0 border-b-2 border-white/20 text-white placeholder:text-white/30 font-mono pl-0 pr-0 focus:border-gold focus:ring-0 transition-colors"
+                  className="h-14 text-lg rounded-none bg-transparent border-0 border-b-2 border-white/30 text-white placeholder:text-white/40 font-mono pl-0 pr-0 focus:border-gold focus:ring-0 transition-colors"
                   required
                 />
               </div>

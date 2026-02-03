@@ -12,7 +12,8 @@ export interface WaterfallInputs {
   equity: number;
   premium: number;
   salesFee: number;
-  salesExp: number;
+  salesExp: number;      // Sales Agent expenses cap
+  marketingExp: number;  // Marketing/delivery expenses cap (NEW)
 }
 
 export interface GuildState {
@@ -67,7 +68,7 @@ export function calculateBreakeven(inputs: WaterfallInputs, guilds: GuildState, 
   const offTopRate = salesFeePct + CAM_PCT + guildsPct;
 
   // Calculate fixed costs (not dependent on revenue)
-  const marketingCap = Math.max(0, inputs.salesExp || 0);
+  const marketingCap = Math.max(0, inputs.marketingExp || 0);
   
   // Debt repayment
   const seniorDebtRepay = selections.seniorDebt 
@@ -130,11 +131,12 @@ export function calculateWaterfall(inputs: WaterfallInputs, guilds: GuildState):
   const premium = Math.max(0, Math.min(100, inputs.premium || 0));
   const salesFee = Math.max(0, Math.min(100, inputs.salesFee || 0));
   const salesExp = Math.max(0, inputs.salesExp || 0);
+  const marketingExp = Math.max(0, inputs.marketingExp || 0);
 
   // 1. Off-the-Top
   const salesFeeAmount = revenue * (salesFee / 100);
   const cam = revenue * CAM_PCT;
-  const marketing = salesExp;
+  const marketing = marketingExp; // Now uses separate marketing field
 
   // 2. Guilds
   const guildPct = (guilds.sag ? SAG_PCT : 0) +
