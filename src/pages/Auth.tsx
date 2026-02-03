@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { useHaptics } from "@/hooks/use-haptics";
-import { ArrowRight, Loader2, Mail, CheckCircle, Lock, Shield } from "lucide-react";
+import { ArrowRight, Loader2, Mail } from "lucide-react";
 import { z } from "zod";
 import filmmakerLogo from "@/assets/filmmaker-logo.jpg";
 import Header from "@/components/Header";
@@ -96,240 +96,178 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen min-h-[100dvh] bg-black flex flex-col">
-
+      
       {/* Header with hamburger menu */}
       <Header title="SIGN IN" />
 
-      {/* Main Content */}
-      <main className="flex-1 flex flex-col px-6 pt-6 pb-6">
+      {/* Main Content - Centered */}
+      <main className="flex-1 flex items-center justify-center px-6 py-12">
+        <div className="w-full max-w-md">
 
-        {step === 'email' ? (
-          <div className="flex-1 flex flex-col">
-            {/* Logo + Copy */}
-            <div className="text-center mb-8">
-              <div className="relative inline-block mb-6">
-                <div
-                  className="absolute"
-                  style={{
-                    width: '160px',
-                    height: '160px',
-                    left: '50%',
-                    top: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    background: 'radial-gradient(circle, rgba(212, 175, 55, 0.25) 0%, transparent 70%)',
-                    filter: 'blur(25px)',
-                  }}
-                />
+          {step === 'email' ? (
+            <>
+              {/* Logo + Heading */}
+              <div className="text-center mb-10">
                 <img
                   src={filmmakerLogo}
                   alt="Filmmaker.OG"
-                  className="w-24 h-24 object-contain relative z-10"
-                  style={{
-                    filter: 'drop-shadow(0 0 30px rgba(212, 175, 55, 0.5))',
-                  }}
+                  className="w-16 h-16 object-contain mx-auto mb-6 opacity-90"
                 />
+                
+                <h1 className="font-bebas text-3xl tracking-[0.12em] text-white mb-3">
+                  SAVE YOUR WATERFALL
+                </h1>
+                <p className="text-white/50 text-sm leading-relaxed">
+                  We'll email you a link. No password needed.
+                </p>
               </div>
 
-              {/* Gold divider */}
-              <div className="w-16 h-[2px] bg-gold mx-auto mb-6" style={{ boxShadow: '0 0 15px rgba(212, 175, 55, 0.6)' }} />
+              {/* Form - Consistent with calculator design */}
+              <form onSubmit={handleSubmit} className="matte-section overflow-hidden">
+                <div className="p-6 space-y-6">
+                  
+                  {/* Name Field */}
+                  <div>
+                    <label
+                      htmlFor="name"
+                      className="block text-xs uppercase tracking-[0.2em] text-white/40 font-medium mb-3"
+                    >
+                      Name
+                    </label>
+                    <Input
+                      id="name"
+                      type="text"
+                      autoComplete="name"
+                      autoCapitalize="words"
+                      enterKeyHint="next"
+                      autoFocus
+                      placeholder="John Producer"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' && name.trim()) {
+                          e.preventDefault();
+                          document.getElementById('email')?.focus();
+                        }
+                      }}
+                      className="h-12 bg-[#1A1A1A] border border-[#2A2A2A] text-white placeholder:text-white/30 focus:border-gold focus:ring-0 focus:ring-offset-0 transition-colors rounded-none"
+                      required
+                    />
+                  </div>
 
-              <h1 className="font-bebas text-3xl tracking-[0.1em] text-white mb-4">
-                SAVE YOUR RESULTS
-              </h1>
-              <p className="text-white/60 text-base leading-relaxed max-w-xs mx-auto">
-                Enter your name and email to save calculations and
-                <span className="text-gold font-semibold"> get your investor deck</span>.
-              </p>
-            </div>
+                  {/* Email Field */}
+                  <div>
+                    <label
+                      htmlFor="email"
+                      className="block text-xs uppercase tracking-[0.2em] text-white/40 font-medium mb-3"
+                    >
+                      Email
+                    </label>
+                    <Input
+                      id="email"
+                      type="email"
+                      inputMode="email"
+                      autoComplete="email"
+                      autoCapitalize="none"
+                      autoCorrect="off"
+                      spellCheck="false"
+                      enterKeyHint="send"
+                      placeholder="you@company.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' && email && name.trim()) {
+                          e.preventDefault();
+                          handleSubmit(e as any);
+                        }
+                      }}
+                      className="h-12 bg-[#1A1A1A] border border-[#2A2A2A] text-white placeholder:text-white/30 font-mono focus:border-gold focus:ring-0 focus:ring-offset-0 transition-colors rounded-none"
+                      required
+                    />
+                  </div>
 
-            {/* Trust Badges */}
-            <div className="flex items-center justify-center gap-8 mb-8">
-              <div className="flex flex-col items-center gap-2">
-                <div className="w-12 h-12 border border-gold/30 flex items-center justify-center bg-gold/5">
-                  <Lock className="w-5 h-5 text-gold" />
+                  {/* Primary CTA */}
+                  <Button
+                    type="submit"
+                    disabled={loading || !email || !name.trim()}
+                    className="w-full h-14 rounded-none font-black text-base tracking-[0.12em] bg-gold-cta text-black hover:brightness-110 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200"
+                  >
+                    {loading ? (
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                    ) : (
+                      <span className="flex items-center justify-center gap-3">
+                        SEND LINK
+                        <ArrowRight className="w-5 h-5" />
+                      </span>
+                    )}
+                  </Button>
+
                 </div>
-                <span className="text-[10px] text-white/50 uppercase tracking-wider">Encrypted</span>
-              </div>
-              <div className="flex flex-col items-center gap-2">
-                <div className="w-12 h-12 border border-gold/30 flex items-center justify-center bg-gold/5">
-                  <Shield className="w-5 h-5 text-gold" />
-                </div>
-                <span className="text-[10px] text-white/50 uppercase tracking-wider">Private</span>
-              </div>
-            </div>
+              </form>
 
-            {/* Form */}
-            <form onSubmit={handleSubmit} className="space-y-5">
-              {/* Name Field - Primary attention grabber */}
-              <div
-                className={`p-5 transition-all duration-300 border ${
-                  !name.trim()
-                    ? 'bg-[#1A1A1A] border-gold/50 shadow-[0_0_20px_rgba(212,175,55,0.15)]'
-                    : 'bg-[#141414] border-[#2A2A2A]'
-                }`}
-              >
-                <label
-                  htmlFor="name"
-                  className={`block text-xs tracking-[0.2em] uppercase font-semibold mb-3 transition-colors ${
-                    !name.trim() ? 'text-gold' : 'text-white/60'
-                  }`}
-                >
-                  Your Name {!name.trim() && <span className="text-gold animate-pulse ml-2">← Start here</span>}
-                </label>
-                <Input
-                  id="name"
-                  type="text"
-                  autoComplete="name"
-                  autoCapitalize="words"
-                  enterKeyHint="next"
-                  autoFocus
-                  placeholder="John Producer"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' && name.trim()) {
-                      e.preventDefault();
-                      document.getElementById('email')?.focus();
-                    }
-                  }}
-                  className="h-14 text-lg rounded-none bg-transparent border-0 border-b-2 border-white/30 text-white placeholder:text-white/40 pl-0 pr-0 focus:border-gold focus:ring-0 transition-colors"
-                  required
-                />
-              </div>
-
-              {/* Email Field */}
-              <div
-                className={`p-5 transition-all duration-300 border ${
-                  name.trim() && !email
-                    ? 'bg-[#1A1A1A] border-gold/50 shadow-[0_0_20px_rgba(212,175,55,0.15)]'
-                    : 'bg-[#141414] border-[#2A2A2A]'
-                }`}
-              >
-                <label
-                  htmlFor="email"
-                  className={`block text-xs tracking-[0.2em] uppercase font-semibold mb-3 transition-colors ${
-                    name.trim() && !email ? 'text-gold' : 'text-white/60'
-                  }`}
-                >
-                  Email Address {name.trim() && !email && <span className="text-gold animate-pulse ml-2">← Now this</span>}
-                </label>
-                <Input
-                  id="email"
-                  type="email"
-                  inputMode="email"
-                  autoComplete="email"
-                  autoCapitalize="none"
-                  autoCorrect="off"
-                  spellCheck="false"
-                  enterKeyHint="send"
-                  placeholder="you@company.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' && email && name.trim()) {
-                      e.preventDefault();
-                      handleSubmit(e as any);
-                    }
-                  }}
-                  className="h-14 text-lg rounded-none bg-transparent border-0 border-b-2 border-white/30 text-white placeholder:text-white/40 font-mono pl-0 pr-0 focus:border-gold focus:ring-0 transition-colors"
-                  required
-                />
-              </div>
-
-              <Button
-                type="submit"
-                disabled={loading || !email || !name.trim()}
-                className="w-full h-16 rounded-none font-black text-lg tracking-[0.1em] bg-gold-cta text-black hover:brightness-110 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200"
-                style={{
-                  boxShadow: email && name.trim() ? '0 0 40px rgba(212, 175, 55, 0.4)' : 'none',
-                }}
-              >
-                {loading ? (
-                  <Loader2 className="w-6 h-6 animate-spin" />
-                ) : (
-                  <span className="flex items-center justify-center gap-3">
-                    GET ACCESS
-                    <ArrowRight className="w-5 h-5" />
-                  </span>
-                )}
-              </Button>
-            </form>
-
-            {/* Demo Access */}
-            <div className="mt-8">
-              <Button
-                onClick={() => navigate("/calculator?skip=true")}
-                variant="outline"
-                className="w-full h-14 rounded-none border-zinc-700 text-white/60 hover:text-white hover:border-gold/50 hover:bg-transparent text-base font-semibold tracking-wider"
-              >
-                TRY WITHOUT SAVING
-              </Button>
-              <p className="text-white/30 text-xs text-center mt-4">
-                Your calculations won't be saved
-              </p>
-            </div>
-          </div>
-        ) : (
-          /* Email Sent Confirmation */
-          <div className="flex-1 flex flex-col items-center justify-center text-center">
-            <div className="relative mb-8">
-              <div
-                className="absolute"
-                style={{
-                  width: '140px',
-                  height: '140px',
-                  left: '50%',
-                  top: '50%',
-                  transform: 'translate(-50%, -50%)',
-                  background: 'radial-gradient(circle, rgba(212, 175, 55, 0.2) 0%, transparent 70%)',
-                  filter: 'blur(25px)',
-                }}
-              />
-              <div className="w-24 h-24 border-2 border-gold flex items-center justify-center relative z-10">
-                <Mail className="w-10 h-10 text-gold" />
-              </div>
-              <div className="absolute -bottom-2 -right-2 w-10 h-10 bg-emerald-500 rounded-full flex items-center justify-center z-20">
-                <CheckCircle className="w-6 h-6 text-white" />
-              </div>
-            </div>
-
-            <h2 className="font-bebas text-3xl tracking-[0.1em] text-white mb-4">
-              CHECK YOUR EMAIL
-            </h2>
-
-            <p className="text-white/60 text-base leading-relaxed mb-2">
-              We sent a secure link to
-            </p>
-            <p className="font-mono text-gold text-lg mb-10">
-              {email}
-            </p>
-
-            <div className="space-y-4 text-base text-white/50">
-              <p>Click the link in your email to continue.</p>
-              <p className="text-white/30 text-sm">
-                Can't find it? Check your spam folder.
-              </p>
-            </div>
-
-            <div className="mt-12 space-y-4">
-              <button
-                onClick={() => setStep('email')}
-                className="text-gold hover:text-gold-highlight text-base font-semibold transition-colors"
-              >
-                Use a different email
-              </button>
-
-              <div className="pt-4">
+              {/* Skip Option - Prominent and Neutral */}
+              <div className="mt-8 text-center space-y-3">
                 <button
                   onClick={() => navigate("/calculator?skip=true")}
-                  className="text-white/40 hover:text-white/60 text-sm transition-colors"
+                  className="text-white/60 hover:text-white text-base font-semibold transition-colors"
                 >
                   Continue without saving →
                 </button>
+                <p className="text-white/30 text-xs">
+                  Your work won't be saved
+                </p>
+              </div>
+            </>
+          ) : (
+            /* Email Sent Confirmation - Simplified */
+            <div className="matte-section p-8">
+              <div className="text-center">
+                
+                {/* Icon - Single, clean */}
+                <div className="w-16 h-16 border-2 border-gold/50 flex items-center justify-center mx-auto mb-8">
+                  <Mail className="w-8 h-8 text-gold" />
+                </div>
+
+                {/* Heading */}
+                <h2 className="font-bebas text-2xl tracking-[0.12em] text-white mb-4">
+                  CHECK YOUR EMAIL
+                </h2>
+
+                {/* Email Display */}
+                <p className="text-white/50 text-sm mb-2">
+                  We sent a link to
+                </p>
+                <p className="font-mono text-gold text-base mb-10">
+                  {email}
+                </p>
+
+                {/* Divider */}
+                <div className="w-12 h-[1px] bg-gold/30 mx-auto mb-10" />
+
+                {/* Actions */}
+                <div className="space-y-6">
+                  <button
+                    onClick={() => setStep('email')}
+                    className="text-white/50 hover:text-gold text-sm font-medium transition-colors"
+                  >
+                    Use different email
+                  </button>
+
+                  <div>
+                    <button
+                      onClick={() => navigate("/calculator?skip=true")}
+                      className="text-white/40 hover:text-white/60 text-sm transition-colors"
+                    >
+                      Continue without saving →
+                    </button>
+                  </div>
+                </div>
+
               </div>
             </div>
-          </div>
-        )}
+          )}
+
+        </div>
       </main>
     </div>
   );
