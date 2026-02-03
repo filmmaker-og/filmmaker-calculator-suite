@@ -15,8 +15,7 @@ const OffTopTotalStep = ({ inputs, guilds }: OffTopTotalStepProps) => {
   const salesFeePct = inputs.salesFee || 0;
   const camPct = 1; // Fixed 1%
   const guildsPct = (guilds.sag ? 4.5 : 0) + (guilds.wga ? 1.2 : 0) + (guilds.dga ? 1.2 : 0);
-  const salesExpCap = inputs.salesExp || 0;
-  const marketingCap = inputs.marketingExp || 0;
+  const salesMarketingCap = inputs.salesExp || 0;
 
   const totalOffTopRate = getOffTopRate(inputs, guilds);
 
@@ -27,10 +26,9 @@ const OffTopTotalStep = ({ inputs, guilds }: OffTopTotalStepProps) => {
     { label: 'Guild Residuals', value: `${guildsPct.toFixed(1)}%`, show: guildsPct > 0, icon: Percent },
   ].filter(l => l.show);
 
-  // Fixed dollar lines (sales expenses + marketing are now separate)
+  // Fixed dollar lines (single Sales & Marketing cap)
   const fixedLines = [
-    { label: 'Sales Expenses', value: formatCompactCurrency(salesExpCap), show: salesExpCap > 0, icon: DollarSign },
-    { label: 'Marketing & Delivery', value: formatCompactCurrency(marketingCap), show: marketingCap > 0, icon: DollarSign },
+    { label: 'Sales & Marketing', value: formatCompactCurrency(salesMarketingCap), show: salesMarketingCap > 0, icon: DollarSign },
   ].filter(l => l.show);
 
   const allLines = [...percentageLines, ...fixedLines];
@@ -180,9 +178,9 @@ const OffTopTotalStep = ({ inputs, guilds }: OffTopTotalStepProps) => {
               <span className="text-xs uppercase tracking-widest text-white/40 block">
                 Combined Off-Top Rate
               </span>
-              {(salesExpCap > 0 || marketingCap > 0) && (
+              {salesMarketingCap > 0 && (
                 <span className="text-[10px] text-white/30">
-                  + {formatCompactCurrency(salesExpCap + marketingCap)} fixed costs
+                  + {formatCompactCurrency(salesMarketingCap)} fixed
                 </span>
               )}
             </div>
@@ -202,7 +200,7 @@ const OffTopTotalStep = ({ inputs, guilds }: OffTopTotalStepProps) => {
       >
         <p className="text-white/50 text-sm leading-relaxed max-w-xs mx-auto">
           <span className="text-gold font-semibold">{displayRate.toFixed(1)}%</span> of whatever the streamer pays goes to these parties first
-          {(salesExpCap > 0 || marketingCap > 0) && <>, plus <span className="text-gold font-semibold">{formatCompactCurrency(salesExpCap + marketingCap)}</span> in fixed costs</>}.
+          {salesMarketingCap > 0 && <>, plus <span className="text-gold font-semibold">{formatCompactCurrency(salesMarketingCap)}</span> in fixed costs</>}.
         </p>
       </div>
 

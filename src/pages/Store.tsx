@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Check, Volume2, Home } from "lucide-react";
-import MobileMenu from "@/components/MobileMenu";
+import { Check, Volume2 } from "lucide-react";
+import Header from "@/components/Header";
 
 const packages = [
   {
@@ -61,27 +61,8 @@ const Store = () => {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      {/* Command Bar - Fixed Header matching other pages */}
-      <header className="fixed top-0 left-0 right-0 h-14 z-50 flex items-center px-6 safe-top" style={{ backgroundColor: '#000000', borderBottom: '1px solid #D4AF37' }}>
-        {/* Left: Home Icon */}
-        <button
-          onClick={() => navigate("/")}
-          className="w-12 h-12 flex items-center justify-center hover:opacity-80 transition-opacity touch-feedback -ml-1"
-        >
-          <Home className="w-5 h-5" style={{ color: '#D4AF37' }} />
-        </button>
-        
-        {/* Center: Title */}
-        <span className="flex-1 text-center font-bebas text-lg sm:text-xl tracking-widest" style={{ color: '#D4AF37' }}>
-          SERVICES
-        </span>
-        
-        {/* Right: Menu */}
-        <MobileMenu />
-      </header>
-
-      {/* Spacer for fixed header */}
-      <div className="header-spacer" />
+      {/* Header with consistent menu */}
+      <Header title="SERVICES" />
 
       <main className="flex-1 px-6 py-8 animate-page-in">
         {/* Header */}
