@@ -76,20 +76,20 @@ const SalesAgentStep = ({ inputs, onUpdateInput }: SalesAgentStepProps) => {
           />
         </div>
 
-        {/* Sales Expense Display */}
+        {/* Sales & Marketing Expense Display */}
         <div className="p-5 border-b border-[#1A1A1A]">
           <div className="flex items-center gap-3 mb-3">
             <div className="w-6 h-6 flex items-center justify-center text-xs font-mono font-bold bg-gold text-black">
               2
             </div>
             <span className="text-xs uppercase tracking-[0.2em] text-gold/80 font-semibold">
-              Sales Expenses (CAP)
+              Sales & Marketing (CAP)
             </span>
           </div>
 
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-white/60">Market fees, deliverables, travel</p>
+              <p className="text-sm text-white/60">AFM, markets, deliverables, P&A</p>
               <p className="text-xs text-white/30 mt-1">Capped at this amount</p>
             </div>
             <div className="text-right">
@@ -113,7 +113,7 @@ const SalesAgentStep = ({ inputs, onUpdateInput }: SalesAgentStepProps) => {
                   <span className="font-mono text-red-400">-{formatCompactCurrency(salesFeeAmount)}</span>
                 </div>
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-white/40">Expenses cap</span>
+                  <span className="text-white/40">Sales & Marketing cap</span>
                   <span className="font-mono text-red-400">-{formatCompactCurrency(inputs.salesExp)}</span>
                 </div>
                 <div className="premium-divider-gold" />

@@ -13,7 +13,6 @@ import { cn } from "@/lib/utils";
 import BudgetStep from "@/components/calculator/steps/BudgetStep";
 import SalesAgentStep from "@/components/calculator/steps/SalesAgentStep";
 import CamFeeStep from "@/components/calculator/steps/CamFeeStep";
-import MarketingStep from "@/components/calculator/steps/MarketingStep";
 import GuildsStep from "@/components/calculator/steps/GuildsStep";
 import OffTopTotalStep from "@/components/calculator/steps/OffTopTotalStep";
 import CapitalSelectStep, { CapitalSelections } from "@/components/calculator/steps/CapitalSelectStep";
@@ -41,8 +40,7 @@ const defaultInputs: WaterfallInputs = {
   equity: 0,
   premium: 20,
   salesFee: 15,
-  salesExp: 75000,      // Sales Agent expenses cap
-  marketingExp: 75000,  // Marketing/delivery expenses (separate field)
+  salesExp: 75000,  // Sales & Marketing expenses cap
 };
 
 const defaultGuilds: GuildState = {
@@ -63,7 +61,6 @@ type StepType =
   | 'budget' 
   | 'sales' 
   | 'cam' 
-  | 'marketing' 
   | 'guilds' 
   | 'offtop' 
   | 'capitalSelect'
@@ -94,7 +91,7 @@ const Calculator = () => {
 
   // Build dynamic step list based on capital selections
   const steps = useMemo((): StepType[] => {
-    const baseSteps: StepType[] = ['budget', 'cam', 'sales', 'marketing', 'guilds', 'offtop', 'capitalSelect'];
+    const baseSteps: StepType[] = ['budget', 'cam', 'sales', 'guilds', 'offtop', 'capitalSelect'];
     
     // Add capital detail steps based on selections
     const capitalSteps: StepType[] = [];
@@ -118,7 +115,6 @@ const Calculator = () => {
         case 'budget': return 'BUDGET';
         case 'sales': return 'SALES';
         case 'cam': return 'CAM';
-        case 'marketing': return 'MKTG';
         case 'guilds': return 'GUILDS';
         case 'offtop': return 'OFF-TOP';
         case 'capitalSelect': return 'FUNDING';
@@ -289,7 +285,6 @@ const Calculator = () => {
       case 'budget': return 'THE BUDGET';
       case 'sales': return 'SALES AGENT';
       case 'cam': return 'CAM FEE';
-      case 'marketing': return 'MARKETING';
       case 'guilds': return 'GUILDS';
       case 'offtop': return 'OFF-THE-TOP';
       case 'capitalSelect': return 'CAPITAL STACK';
@@ -329,8 +324,6 @@ const Calculator = () => {
         return <SalesAgentStep inputs={inputs} onUpdateInput={updateInput} />;
       case 'cam':
         return <CamFeeStep inputs={inputs} />;
-      case 'marketing':
-        return <MarketingStep inputs={inputs} onUpdateInput={updateInput} />;
       case 'guilds':
         return <GuildsStep inputs={inputs} guilds={guilds} onToggleGuild={toggleGuild} />;
       case 'offtop':
