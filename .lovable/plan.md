@@ -1,163 +1,193 @@
 
 
-# Comprehensive Fix Plan: Auth Page, Payment Order & UI Consistency
+# Complete Rebuild Plan: Critical Bugs + UI/UX Overhaul
 
-## Current Issues Assessment
+## Critical Bug #1: Duplicate $75K Marketing Expenses
 
-### Issue 1: Auth Page - Input Styling Needs Matte Gray Background
-**Current State:** The name input box uses `matte-card-glow` which has a pure black background (`#070707`) with gold border/glow. The container lacks visible matte gray styling.
+### The Problem
+The field `salesExp` is being used for TWO different purposes:
 
-**Problem:** You want the input containers to have a visible matte gray background rather than blending into the black page background.
+1. **SalesAgentStep.tsx (lines 80-100)**: Shows "Sales Expenses (CAP)" with value `inputs.salesExp` = $75K
+2. **MarketingStep.tsx (lines 69-82)**: Shows "Expense Cap" with value `inputs.salesExp` = $75K
 
-**Fix:** Add matte gray fill (`#0A0A0A` or `#0D0D0D`) to the input containers so they visually stand out as distinct boxes.
+Both steps are displaying and/or modifying the SAME field (`salesExp`). This is a **data model error** - you're seeing $75K twice because the same variable is used in two places.
 
----
+### The Fix
+Create a separate field for marketing expenses:
 
-### Issue 2: Auth Page - Return Key Not Working on Mobile
-**Current State:** The name input has `onKeyDown` handler (lines 190-195) that checks for `Enter` key and focuses email field:
-```tsx
-onKeyDown={(e) => {
-  if (e.key === 'Enter' && name.trim()) {
-    e.preventDefault();
-    document.getElementById('email')?.focus();
-  }
-}}
+```text
+Current data model:
+  - salesExp: $75,000 (used for BOTH sales agent AND marketing)
+
+Fixed data model:
+  - salesExp: $75,000 (Sales Agent expenses only)
+  - marketingExp: $75,000 (Marketing expenses - NEW FIELD)
 ```
 
-**Problem:** On mobile iOS, the "Return" key sends `Enter` but the virtual keyboard may intercept it. Also, `type="text"` inputs with `autoCapitalize` might not trigger the event correctly.
-
-**Fix:** 
-1. Add `enterKeyHint="next"` attribute to the name input to tell mobile browsers to show "Next" button
-2. Add `enterKeyHint="send"` to email input
-3. Use `inputMode="text"` explicitly for better mobile handling
+**Files to modify:**
+- `src/lib/waterfall.ts` - Add `marketingExp` to WaterfallInputs interface
+- `src/pages/Calculator.tsx` - Add default value for `marketingExp`
+- `src/components/calculator/steps/MarketingStep.tsx` - Use `marketingExp` instead of `salesExp`
+- `src/components/calculator/steps/OffTopTotalStep.tsx` - Use both fields correctly
 
 ---
 
-### Issue 3: Payment Order is Wrong - CAM Should Come First
-**Current State:** The calculator flow is:
+## Critical Bug #2: Auth Page Matte Gray Still Not Visible
+
+### The Problem
+The CSS was updated to use `#111111` (per brand guide), but this is extremely close to the black background (`#000000`). The contrast is only 7% - almost invisible.
+
+### The Fix
+For the Auth page specifically, use a more visible gray that creates actual contrast:
+
+```css
+/* Auth page input containers need higher contrast */
+background: #1A1A1A; /* 10% gray - visible against black */
 ```
-budget → sales → cam → marketing → guilds → offtop → ...
+
+And apply this directly to the Auth page input container divs.
+
+---
+
+## UI/UX Assessment: Current State
+
+### Homepage: B+
+- Splash animation works
+- Menu now functional
+- CTA glows appropriately
+
+### Auth Page: D
+- Input boxes blend into background (nearly invisible)
+- Return key issues on mobile
+- Lacks visual hierarchy
+- "Start here" guidance is confusing
+
+### Calculator Steps: C-
+The issues are pervasive:
+
+| Step | Grade | Issues |
+|------|-------|--------|
+| Budget | B | Works, but input styling inconsistent |
+| CAM Fee | B- | Good info, but no input - just display |
+| Sales Agent | C | Has DUPLICATE $75K field that should only be here |
+| Marketing | F | Using WRONG field (salesExp instead of marketingExp) |
+| Guilds | B | Toggle styling could be cleaner |
+| Off-Top | C | Shows both expenses but uses same field |
+| Capital Select | B- | Works but toggle cards are cluttered |
+| Breakeven | B | Clear display |
+| Acquisition | B | Works |
+| Reveal | B | Animation works |
+| Waterfall | B | New visual added |
+
+---
+
+## Strategy: Page-by-Page Systematic Rebuild
+
+Given the mess, I recommend a **strict page-by-page approach**:
+
+### Phase 1: Data Model Fix (Immediate)
+Fix the duplicate `$75K` bug first. This is a logic error that makes the calculator wrong.
+
+### Phase 2: Auth Page Complete Overhaul
+Make the entry point institutional-grade:
+- Higher contrast containers (visible matte gray)
+- Proper focus states
+- Mobile keyboard navigation working
+- Clean visual hierarchy
+
+### Phase 3: Calculator Step-by-Step Polish
+Go through each calculator step and standardize:
+- Consistent matte section styling
+- Consistent input components
+- Consistent spacing/typography
+- Each step follows same visual pattern
+
+---
+
+## Immediate Implementation Plan
+
+### Part 1: Fix Data Model (salesExp vs marketingExp)
+
+**File: `src/lib/waterfall.ts`**
+Add new field to interface:
+```typescript
+export interface WaterfallInputs {
+  // ... existing fields
+  salesExp: number;      // Sales Agent expenses
+  marketingExp: number;  // Marketing expenses (NEW)
+}
 ```
 
-The Sales Agent step says "gets paid first" (line 40 in SalesAgentStep.tsx), but this is factually incorrect.
-
-**Reality:** The CAM (Collection Account Manager) receives ALL revenue first and distributes it. They are the neutral party that ensures everyone gets paid according to the waterfall. The CAM fee comes off the very top, then Sales Agent, then Marketing, then Guilds.
-
-**Fix:** 
-1. Swap the order in Calculator.tsx: `budget → cam → sales → marketing → guilds → offtop`
-2. Update CamFeeStep.tsx header to say "gets paid first"
-3. Update SalesAgentStep.tsx to remove "gets paid first" - change to "gets paid second" or similar
-4. Update the CTA button text in Calculator.tsx from "WHO GETS PAID FIRST?" to "THE MONEY FLOWS..."
-
----
-
-## Overall Assessment (Grades)
-
-| Section | Grade | Issues |
-|---------|-------|--------|
-| **Homepage** | B+ | Menu z-index fixed, splash animation works, CTA clear |
-| **Auth Page** | C | Input boxes invisible, return key broken, styling inconsistent |
-| **Budget Step** | B | Clean, works well, inputs styled correctly |
-| **Sales Agent** | D | Wrong order (should be 2nd not 1st), claims "paid first" |
-| **CAM Fee** | B- | Correct info but wrong position in flow |
-| **Marketing** | B | Works, consistent styling |
-| **Guilds** | B+ | Info banner added, guidance clear |
-| **Off-Top Summary** | B | Improved in Batch 3, sections clearer |
-| **Capital Stack** | B | Icons/labels improved in Batch 3 |
-| **Breakeven** | B | Clear typography, works |
-| **Acquisition** | B | Clear input, works |
-| **Results/Waterfall** | B | Visual added in Batch 3 |
-
----
-
-## Strategy: Fix Element-by-Element Across Flow
-
-Rather than going page-by-page (which caused circular fixes), I recommend:
-
-1. **Fix critical logic first** - Payment order is wrong and misleading users
-2. **Fix auth page completely** - It's the entry point and currently broken
-3. **Then sweep through for styling consistency**
-
----
-
-## Implementation Plan
-
-### Part 1: Fix Payment Order (Calculator.tsx + Step Components)
+Update calculation functions to use `marketingExp`.
 
 **File: `src/pages/Calculator.tsx`**
-- Line 96: Change step order from `['budget', 'sales', 'cam', ...]` to `['budget', 'cam', 'sales', ...]`
-- Line 310: Change CTA text from "WHO GETS PAID FIRST?" to "WHERE DOES MONEY GO?"
+Add default value:
+```typescript
+const defaultInputs: WaterfallInputs = {
+  // ... existing
+  salesExp: 75000,
+  marketingExp: 75000, // NEW
+};
+```
 
-**File: `src/components/calculator/steps/CamFeeStep.tsx`**
-- Update header to say "gets paid FIRST" instead of current neutral text
-- Change subtitle from "And that's not all..." to "Before anyone else..."
+**File: `src/components/calculator/steps/MarketingStep.tsx`**
+Change from `salesExp` to `marketingExp`.
 
-**File: `src/components/calculator/steps/SalesAgentStep.tsx`**
-- Line 40: Change "gets paid first" to "takes their cut"
-- Line 38: Change "Before you see a dime..." to "After the CAM fee..."
+**File: `src/components/calculator/steps/OffTopTotalStep.tsx`**
+Show both expenses separately in the ledger.
 
 ---
 
-### Part 2: Fix Auth Page (Auth.tsx + CSS)
+### Part 2: Auth Page Visual Overhaul
 
 **File: `src/pages/Auth.tsx`**
-
-1. **Add matte gray background to input containers** (lines 164-199):
-   - Add explicit background color `bg-[#0D0D0D]` to the input wrapper divs
-   - This makes them visually distinct from the black page
-
-2. **Fix mobile return key handling** (lines 181-195):
-   - Add `enterKeyHint="next"` to name input
-   - Add `enterKeyHint="send"` to email input
-   - These attributes tell mobile browsers what the return key should do
-
-**Before (Name Input):**
+Update input containers with visible styling:
 ```tsx
-<Input
-  id="name"
-  type="text"
-  autoComplete="name"
-  autoCapitalize="words"
-  autoFocus
-  // ...
-/>
+<div className="p-4 bg-[#1A1A1A] border border-[#2A2A2A]">
+  {/* Input content */}
+</div>
 ```
 
-**After:**
-```tsx
-<Input
-  id="name"
-  type="text"
-  autoComplete="name"
-  autoCapitalize="words"
-  enterKeyHint="next"
-  autoFocus
-  // ...
-/>
-```
+Key changes:
+- Use `bg-[#1A1A1A]` (10% gray) instead of relying on CSS classes
+- Add visible border `border-[#2A2A2A]`
+- Remove `matte-card-glow` animation when not active
+- Simplify focus states
 
-3. **Update input container styling**:
-   - Change the conditional classes to include matte gray background
-   - Current: `matte-card-glow` (black bg)
-   - New: `matte-card-glow bg-[#0D0D0D]` (visible matte gray)
+---
+
+### Part 3: Standardize Calculator Step Containers
+
+Create a consistent pattern every step follows:
+```text
+Step Layout:
+1. Icon + Header (centered, gold accents)
+2. Matte Section Card (bg-[#111111], border-[#1A1A1A])
+   - Section header (darker strip)
+   - Input area (consistent padding)
+   - Impact display (if applicable)
+3. Helper collapsible (gold text)
+```
 
 ---
 
 ## Files to Modify
 
-| File | Changes |
-|------|---------|
-| `src/pages/Calculator.tsx` | Swap cam/sales order, update CTA text |
-| `src/components/calculator/steps/CamFeeStep.tsx` | Update to "paid first" messaging |
-| `src/components/calculator/steps/SalesAgentStep.tsx` | Remove "paid first" claim |
-| `src/pages/Auth.tsx` | Add matte gray backgrounds, add enterKeyHint attributes |
+| Priority | File | Changes |
+|----------|------|---------|
+| P0 | `src/lib/waterfall.ts` | Add `marketingExp` field, update calculations |
+| P0 | `src/pages/Calculator.tsx` | Add default for `marketingExp` |
+| P0 | `src/components/calculator/steps/MarketingStep.tsx` | Use `marketingExp` |
+| P0 | `src/components/calculator/steps/OffTopTotalStep.tsx` | Use both expense fields |
+| P1 | `src/pages/Auth.tsx` | Visual overhaul with visible containers |
+| P2 | All step components | Standardize styling |
 
 ---
 
-## Expected Results
+## Expected Results After Implementation
 
-1. **Payment Order Fixed**: CAM → Sales → Marketing → Guilds (correct waterfall order)
-2. **Auth Page Styling**: Input boxes visually distinct with matte gray fill
-3. **Mobile Return Key**: Pressing "Return" on name input advances to email field
-4. **Consistent Messaging**: Each step accurately describes its position in payment hierarchy
+1. **No more duplicate $75K** - Sales expenses and marketing expenses are separate fields
+2. **Auth page has visible input boxes** - Clear matte gray containers against black
+3. **Mobile return key works** - Already added `enterKeyHint`, verify it functions
+4. **Consistent visual language** - Every step follows same pattern
 
