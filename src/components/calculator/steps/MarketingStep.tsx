@@ -25,74 +25,113 @@ const MarketingStep = ({ inputs, onUpdateInput }: MarketingStepProps) => {
 
   return (
     <div className="step-enter">
-      {/* Tension builder */}
-      <div className="text-center mb-6">
-        <p className="text-xs text-muted-foreground/60 uppercase tracking-widest">
-          Another hand in the pot
-        </p>
-      </div>
-
-      {/* The Card */}
-      <div className="matte-card p-6 space-y-6">
-        <div className="flex items-start gap-4">
-          <div className="w-12 h-12 bg-muted flex items-center justify-center flex-shrink-0">
-            <Megaphone className="w-6 h-6 text-muted-foreground" />
-          </div>
-          <div>
-            <h3 className="font-bebas text-xl tracking-wider text-gold mb-1">MARKETING & DELIVERY</h3>
-            <p className="text-xs text-muted-foreground/70 italic mb-3">You'll spend this getting buyers to watch</p>
-            <p className="text-muted-foreground text-sm leading-relaxed">
-              Festivals. Markets. Posters. Deliverables. <span className="text-foreground font-medium">It adds up fast.</span>
-            </p>
+      {/* Step Header with icon */}
+      <div className="text-center mb-8">
+        <div className="relative inline-block mb-4">
+          <div
+            className="absolute inset-0"
+            style={{
+              background: 'radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, transparent 70%)',
+              filter: 'blur(15px)',
+              transform: 'scale(2)',
+            }}
+          />
+          <div className="relative w-14 h-14 border border-gold/30 bg-gold/5 flex items-center justify-center">
+            <Megaphone className="w-7 h-7 text-gold" />
           </div>
         </div>
 
-        {/* Premium Input */}
-        <PremiumInput
-          type="text"
-          inputMode="numeric"
-          value={formatValue(inputs.salesExp)}
-          onChange={(e) => onUpdateInput('salesExp', parseValue(e.target.value))}
-          placeholder="75,000"
-          showCurrency
-          label="Marketing Cap"
-          example="$75,000"
-          isCompleted={isCompleted}
-          isNext={!isCompleted}
-          hint={
-            <p className="text-xs text-muted-foreground/70">
-              This comes off before anyone sees profit.
-            </p>
-          }
-        />
+        <p className="text-white/40 text-xs mb-2 uppercase tracking-widest">Another hand in the pot</p>
+        <h2 className="font-bebas text-3xl tracking-[0.08em] text-white mb-2">
+          Marketing & <span className="text-gold">Delivery</span>
+        </h2>
+        <p className="text-white/50 text-sm max-w-xs mx-auto">
+          Festivals. Markets. Posters. Deliverables. It adds up fast.
+        </p>
+      </div>
+
+      {/* The Card with matte styling */}
+      <div className="matte-section overflow-hidden">
+        {/* Section header */}
+        <div className="matte-section-header px-5 py-3 flex items-center justify-between">
+          <span className="text-xs uppercase tracking-[0.2em] text-white/40 font-medium">
+            Marketing Cap
+          </span>
+          {isCompleted && (
+            <span className="text-xs text-gold font-mono">
+              ENTERED
+            </span>
+          )}
+        </div>
+
+        {/* Input area */}
+        <div className="p-5">
+          <PremiumInput
+            type="text"
+            inputMode="numeric"
+            value={formatValue(inputs.salesExp)}
+            onChange={(e) => onUpdateInput('salesExp', parseValue(e.target.value))}
+            placeholder="75,000"
+            showCurrency
+            label="Expense Cap"
+            example="$75,000"
+            actionHint="Maximum marketing spend capped at this amount"
+            isCompleted={isCompleted}
+            isNext={!isCompleted}
+          />
+        </div>
 
         {/* Impact Display */}
         {inputs.salesExp > 0 && (
-          <div className="pt-4 border-t border-border">
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-muted-foreground">Deducted before profit:</span>
-              <span className="font-mono text-xl text-destructive">
-                -{formatCompactCurrency(inputs.salesExp)}
-              </span>
+          <div className="border-t border-[#1A1A1A] bg-[#0A0A0A]/50">
+            <div className="p-5">
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-white/40">Deducted before profit:</span>
+                <span className="font-mono text-xl text-red-400 font-semibold">
+                  -{formatCompactCurrency(inputs.salesExp)}
+                </span>
+              </div>
             </div>
           </div>
         )}
+
+        {/* Typical Range Helper */}
+        <div className="px-5 pb-5">
+          <div className="flex items-center justify-between py-3 border-t border-[#1A1A1A]">
+            <span className="text-xs text-white/30">Typical range</span>
+            <span className="text-xs font-mono text-white/50">$50K - $150K</span>
+          </div>
+        </div>
       </div>
 
       {/* Inline Helper */}
-      <div className="mt-4">
+      <div className="mt-6">
         <Collapsible open={showHelp} onOpenChange={setShowHelp}>
-          <CollapsibleTrigger className="flex items-center gap-2 text-sm text-gold hover:text-gold-highlight transition-colors">
+          <CollapsibleTrigger className="w-full flex items-center justify-center gap-2 text-sm text-gold/70 hover:text-gold transition-colors py-3">
             <Info className="w-4 h-4" />
             <span>What counts as marketing expenses?</span>
           </CollapsibleTrigger>
-          <CollapsibleContent className="mt-4 p-4 bg-card border border-border text-sm text-muted-foreground leading-relaxed animate-fade-in">
-            <ul className="space-y-2">
-              <li>• <span className="text-foreground">Festival fees</span> - Sundance, SXSW, Toronto submissions</li>
-              <li>• <span className="text-foreground">Market attendance</span> - AFM, Cannes, Berlin booths</li>
-              <li>• <span className="text-foreground">Deliverables</span> - DCP, HDR master, M&E tracks</li>
-              <li>• <span className="text-foreground">Promo materials</span> - Posters, trailers, screeners</li>
-            </ul>
+          <CollapsibleContent className="mt-4">
+            <div className="glass-card-gold p-5 animate-reveal-up">
+              <div className="grid grid-cols-2 gap-3 text-xs">
+                <div>
+                  <span className="text-gold/70 block mb-1">Festival fees</span>
+                  <span className="text-white/60">Sundance, SXSW, Toronto</span>
+                </div>
+                <div>
+                  <span className="text-gold/70 block mb-1">Market attendance</span>
+                  <span className="text-white/60">AFM, Cannes, Berlin</span>
+                </div>
+                <div>
+                  <span className="text-gold/70 block mb-1">Deliverables</span>
+                  <span className="text-white/60">DCP, HDR, M&E</span>
+                </div>
+                <div>
+                  <span className="text-gold/70 block mb-1">Promo materials</span>
+                  <span className="text-white/60">Posters, trailers</span>
+                </div>
+              </div>
+            </div>
           </CollapsibleContent>
         </Collapsible>
       </div>
