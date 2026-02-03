@@ -122,14 +122,7 @@ const Index = () => {
       {/* ═══════════════════════════════════════════════════════════════════
           HEADER - With hamburger menu (z-[200] to stay above splash)
           ═══════════════════════════════════════════════════════════════════ */}
-      <div
-        className={`relative z-[200] transition-all duration-500 ${
-          animationPhase === 'complete' ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'
-        }`}
-        style={{ transitionDelay: animationPhase === 'complete' ? '100ms' : '0ms' }}
-      >
-        <Header />
-      </div>
+      {animationPhase === 'complete' && <Header />}
 
       {/* ═══════════════════════════════════════════════════════════════════
           HERO
