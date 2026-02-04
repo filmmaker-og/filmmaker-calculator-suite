@@ -83,6 +83,7 @@ const MobileMenu = ({ onOpenLegal, onSignOut }: MobileMenuProps) => {
       <button
         onClick={handleOpenMenu}
         className="w-12 h-12 flex items-center justify-center hover:opacity-80 transition-all duration-100 -mr-1"
+        style={{ touchAction: 'manipulation' }}
         aria-label="Open menu"
       >
         <Menu className="w-6 h-6 text-gold" />
