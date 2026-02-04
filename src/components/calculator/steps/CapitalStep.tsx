@@ -1,8 +1,16 @@
 import { PremiumInput } from "@/components/ui/premium-input";
 import { WaterfallInputs, formatCompactCurrency } from "@/lib/waterfall";
-import { Info, Coins, TrendingDown, TrendingUp, Users } from "lucide-react";
+import { Info, Coins, TrendingDown, TrendingUp, Users, HelpCircle, Minus, Plus } from "lucide-react";
 import { useState } from "react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { useHaptics } from "@/hooks/use-haptics";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 
 interface CapitalStepProps {
   inputs: WaterfallInputs;
@@ -10,7 +18,10 @@ interface CapitalStepProps {
 }
 
 const CapitalStep = ({ inputs, onUpdateInput }: CapitalStepProps) => {
+  const haptics = useHaptics();
   const [showHelp, setShowHelp] = useState(false);
+  const [showDebtHelp, setShowDebtHelp] = useState(false);
+  const [showEquityHelp, setShowEquityHelp] = useState(false);
 
   const formatValue = (value: number | undefined) => {
     if (value === undefined || value === 0) return '';
@@ -19,6 +30,14 @@ const CapitalStep = ({ inputs, onUpdateInput }: CapitalStepProps) => {
 
   const parseValue = (str: string) => {
     return parseInt(str.replace(/[^0-9]/g, '')) || 0;
+  };
+
+  // Rate stepper handlers
+  const adjustRate = (field: 'seniorDebtRate' | 'mezzanineRate' | 'premium', delta: number, min: number, max: number) => {
+    haptics.light();
+    const current = inputs[field] || 0;
+    const newValue = Math.min(max, Math.max(min, current + delta));
+    onUpdateInput(field, newValue);
   };
 
   // Calculate total capital raised
@@ -93,12 +112,18 @@ const CapitalStep = ({ inputs, onUpdateInput }: CapitalStepProps) => {
             <span className="text-xs uppercase tracking-[0.2em] text-white/40 font-medium">
               Senior Debt
             </span>
+            <button
+              onClick={() => setShowDebtHelp(true)}
+              className="w-4 h-4 rounded-full bg-gold/10 border border-gold/30 flex items-center justify-center hover:bg-gold/20 transition-colors"
+            >
+              <HelpCircle className="w-2.5 h-2.5 text-gold" />
+            </button>
           </div>
           {inputs.debt > 0 && (
             <span className="text-xs text-gold font-mono">✓</span>
           )}
         </div>
-        <div className="p-5">
+        <div className="p-5 space-y-4">
           <PremiumInput
             type="text"
             inputMode="numeric"
@@ -111,9 +136,36 @@ const CapitalStep = ({ inputs, onUpdateInput }: CapitalStepProps) => {
             actionHint="First-position lender (if applicable)"
             isCompleted={inputs.debt > 0}
           />
-          <p className="text-xs text-white/30 mt-2">
-            Typically 6-8% interest, repaid before equity
-          </p>
+
+          {/* Interest Rate Stepper */}
+          {inputs.debt > 0 && (
+            <div className="bg-[#0A0A0A] border border-[#1A1A1A] p-4 animate-reveal-up">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-xs uppercase tracking-wider text-white/40">Interest Rate</span>
+                <span className="text-xs text-white/30">6-12% typical</span>
+              </div>
+              <div className="flex items-center justify-center gap-4">
+                <button
+                  onClick={() => adjustRate('seniorDebtRate', -1, 0, 20)}
+                  className="w-10 h-10 flex items-center justify-center border border-[#2A2A2A] text-white/60 hover:border-gold hover:text-gold transition-all active:scale-95"
+                >
+                  <Minus className="w-4 h-4" />
+                </button>
+                <span className={`font-mono text-2xl tabular-nums min-w-[60px] text-center ${inputs.seniorDebtRate === 10 ? 'text-gold' : 'text-white'}`}>
+                  {inputs.seniorDebtRate}%
+                </span>
+                <button
+                  onClick={() => adjustRate('seniorDebtRate', 1, 0, 20)}
+                  className="w-10 h-10 flex items-center justify-center border border-[#2A2A2A] text-white/60 hover:border-gold hover:text-gold transition-all active:scale-95"
+                >
+                  <Plus className="w-4 h-4" />
+                </button>
+              </div>
+              {inputs.seniorDebtRate === 10 && (
+                <p className="text-[10px] text-gold/70 mt-2 text-center">✓ standard rate</p>
+              )}
+            </div>
+          )}
         </div>
       </div>
 
@@ -125,12 +177,18 @@ const CapitalStep = ({ inputs, onUpdateInput }: CapitalStepProps) => {
             <span className="text-xs uppercase tracking-[0.2em] text-white/40 font-medium">
               Gap / Mezzanine Debt
             </span>
+            <button
+              onClick={() => setShowDebtHelp(true)}
+              className="w-4 h-4 rounded-full bg-gold/10 border border-gold/30 flex items-center justify-center hover:bg-gold/20 transition-colors"
+            >
+              <HelpCircle className="w-2.5 h-2.5 text-gold" />
+            </button>
           </div>
           {inputs.mezzanineDebt > 0 && (
             <span className="text-xs text-gold font-mono">✓</span>
           )}
         </div>
-        <div className="p-5">
+        <div className="p-5 space-y-4">
           <PremiumInput
             type="text"
             inputMode="numeric"
@@ -143,9 +201,36 @@ const CapitalStep = ({ inputs, onUpdateInput }: CapitalStepProps) => {
             actionHint="Subordinated debt (if applicable)"
             isCompleted={inputs.mezzanineDebt > 0}
           />
-          <p className="text-xs text-white/30 mt-2">
-            Typically 10-15% interest, higher risk
-          </p>
+
+          {/* Interest Rate Stepper */}
+          {inputs.mezzanineDebt > 0 && (
+            <div className="bg-[#0A0A0A] border border-[#1A1A1A] p-4 animate-reveal-up">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-xs uppercase tracking-wider text-white/40">Interest Rate</span>
+                <span className="text-xs text-white/30">10-18% typical</span>
+              </div>
+              <div className="flex items-center justify-center gap-4">
+                <button
+                  onClick={() => adjustRate('mezzanineRate', -1, 0, 30)}
+                  className="w-10 h-10 flex items-center justify-center border border-[#2A2A2A] text-white/60 hover:border-gold hover:text-gold transition-all active:scale-95"
+                >
+                  <Minus className="w-4 h-4" />
+                </button>
+                <span className={`font-mono text-2xl tabular-nums min-w-[60px] text-center ${inputs.mezzanineRate === 15 ? 'text-gold' : 'text-white'}`}>
+                  {inputs.mezzanineRate}%
+                </span>
+                <button
+                  onClick={() => adjustRate('mezzanineRate', 1, 0, 30)}
+                  className="w-10 h-10 flex items-center justify-center border border-[#2A2A2A] text-white/60 hover:border-gold hover:text-gold transition-all active:scale-95"
+                >
+                  <Plus className="w-4 h-4" />
+                </button>
+              </div>
+              {inputs.mezzanineRate === 15 && (
+                <p className="text-[10px] text-gold/70 mt-2 text-center">✓ standard rate</p>
+              )}
+            </div>
+          )}
         </div>
       </div>
 
@@ -157,12 +242,18 @@ const CapitalStep = ({ inputs, onUpdateInput }: CapitalStepProps) => {
             <span className="text-xs uppercase tracking-[0.2em] text-white/40 font-medium">
               Equity Investment
             </span>
+            <button
+              onClick={() => setShowEquityHelp(true)}
+              className="w-4 h-4 rounded-full bg-gold/10 border border-gold/30 flex items-center justify-center hover:bg-gold/20 transition-colors"
+            >
+              <HelpCircle className="w-2.5 h-2.5 text-gold" />
+            </button>
           </div>
           {inputs.equity > 0 && (
             <span className="text-xs text-gold font-mono">✓</span>
           )}
         </div>
-        <div className="p-5">
+        <div className="p-5 space-y-4">
           <PremiumInput
             type="text"
             inputMode="numeric"
@@ -175,9 +266,39 @@ const CapitalStep = ({ inputs, onUpdateInput }: CapitalStepProps) => {
             actionHint="Equity capital raised (if applicable)"
             isCompleted={inputs.equity > 0}
           />
-          <p className="text-xs text-white/30 mt-2">
-            Institutional equity typically expects 1.2x minimum return
-          </p>
+
+          {/* Premium Stepper */}
+          {inputs.equity > 0 && (
+            <div className="bg-[#0A0A0A] border border-[#1A1A1A] p-4 animate-reveal-up">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-xs uppercase tracking-wider text-white/40">Equity Premium</span>
+                <span className="text-xs text-white/30">15-25% typical</span>
+              </div>
+              <div className="flex items-center justify-center gap-4">
+                <button
+                  onClick={() => adjustRate('premium', -5, 0, 50)}
+                  className="w-10 h-10 flex items-center justify-center border border-[#2A2A2A] text-white/60 hover:border-gold hover:text-gold transition-all active:scale-95"
+                >
+                  <Minus className="w-4 h-4" />
+                </button>
+                <span className={`font-mono text-2xl tabular-nums min-w-[60px] text-center ${inputs.premium === 20 ? 'text-gold' : 'text-white'}`}>
+                  {inputs.premium}%
+                </span>
+                <button
+                  onClick={() => adjustRate('premium', 5, 0, 50)}
+                  className="w-10 h-10 flex items-center justify-center border border-[#2A2A2A] text-white/60 hover:border-gold hover:text-gold transition-all active:scale-95"
+                >
+                  <Plus className="w-4 h-4" />
+                </button>
+              </div>
+              {inputs.premium === 20 && (
+                <p className="text-[10px] text-gold/70 mt-2 text-center">✓ industry standard</p>
+              )}
+              <p className="text-xs text-white/30 mt-3 text-center">
+                Principal + {inputs.premium}% = {formatCompactCurrency(inputs.equity * (1 + inputs.premium / 100))} hurdle
+              </p>
+            </div>
+          )}
         </div>
       </div>
 
@@ -250,6 +371,74 @@ const CapitalStep = ({ inputs, onUpdateInput }: CapitalStepProps) => {
           </CollapsibleContent>
         </Collapsible>
       </div>
+
+      {/* Help Dialog - Debt */}
+      <Dialog open={showDebtHelp} onOpenChange={setShowDebtHelp}>
+        <DialogContent className="bg-[#0A0A0A] border-[#1A1A1A] max-w-sm">
+          <DialogHeader>
+            <DialogTitle className="font-bebas text-xl tracking-wider text-gold flex items-center gap-2">
+              <Info className="w-5 h-5" />
+              FILM DEBT FINANCING
+            </DialogTitle>
+          </DialogHeader>
+          <DialogDescription className="text-white/60 text-sm leading-relaxed">
+            Debt is repaid before equity investors see any returns.
+          </DialogDescription>
+          <div className="mt-4 space-y-4">
+            <div>
+              <p className="text-xs text-gold/70 uppercase tracking-wider mb-2">Senior Debt</p>
+              <p className="text-sm text-white/60 leading-relaxed">
+                First-position loans against distribution contracts or tax credits. Lower risk = lower interest (6-12%).
+              </p>
+            </div>
+            <div className="pt-3 border-t border-[#1A1A1A]">
+              <p className="text-xs text-gold/70 uppercase tracking-wider mb-2">Gap / Mezzanine Debt</p>
+              <p className="text-sm text-white/60 leading-relaxed">
+                Subordinated loans that fill the "gap" between senior debt and equity. Higher risk = higher interest (12-18%).
+              </p>
+            </div>
+            <div className="pt-3 border-t border-[#1A1A1A]">
+              <p className="text-xs text-white/40">
+                All debt must be repaid in full (principal + interest) before equity investors receive anything.
+              </p>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Help Dialog - Equity */}
+      <Dialog open={showEquityHelp} onOpenChange={setShowEquityHelp}>
+        <DialogContent className="bg-[#0A0A0A] border-[#1A1A1A] max-w-sm">
+          <DialogHeader>
+            <DialogTitle className="font-bebas text-xl tracking-wider text-gold flex items-center gap-2">
+              <Info className="w-5 h-5" />
+              EQUITY & PREMIUM
+            </DialogTitle>
+          </DialogHeader>
+          <DialogDescription className="text-white/60 text-sm leading-relaxed">
+            Equity investors provide cash in exchange for ownership and profit participation.
+          </DialogDescription>
+          <div className="mt-4 space-y-4">
+            <div>
+              <p className="text-xs text-gold/70 uppercase tracking-wider mb-2">What is premium?</p>
+              <p className="text-sm text-white/60 leading-relaxed">
+                The "premium" or "preferred return" guarantees investors get their money back PLUS a bonus percentage before anyone else sees profit.
+              </p>
+            </div>
+            <div className="pt-3 border-t border-[#1A1A1A]">
+              <p className="text-xs text-gold/70 uppercase tracking-wider mb-2">Example</p>
+              <p className="text-sm text-white/60 leading-relaxed">
+                $500K equity + 20% premium = $600K hurdle that must be paid before the profit pool opens.
+              </p>
+            </div>
+            <div className="pt-3 border-t border-[#1A1A1A]">
+              <p className="text-xs text-white/40">
+                After the hurdle, remaining profits are typically split 50/50 between producer and investors.
+              </p>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
