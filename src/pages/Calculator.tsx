@@ -184,6 +184,9 @@ const [isButtonPressed, setIsButtonPressed] = useState(false);
     }
   }, [currentStep, inputs.budget, inputs.revenue]);
 
+  // Check for skip=true URL param (admin/testing bypass)
+  const isAdminMode = searchParams.get("skip") === "true";
+
   const nextStep = useCallback(() => {
     if (!canProceed()) {
       setShakeButton(true);
@@ -192,8 +195,9 @@ const [isButtonPressed, setIsButtonPressed] = useState(false);
       return;
     }
 
-    // Email gate: show after guilds step (index 1) if not authenticated and not already captured
-    if (currentStepIndex === 1 && !user && !emailCaptured) {
+    // Email gate: show before results (index 3 → 4) if not authenticated and not already captured
+    // This is the FINAL gate - right before they see their waterfall
+    if (currentStepIndex === 3 && !user && !emailCaptured && !isAdminMode) {
       setShowEmailGate(true);
       return;
     }
@@ -202,7 +206,7 @@ const [isButtonPressed, setIsButtonPressed] = useState(false);
     if (currentStepIndex < totalSteps - 1) {
       setCurrentStepIndex(prev => prev + 1);
     }
-  }, [canProceed, currentStepIndex, totalSteps, haptics, user, emailCaptured]);
+  }, [canProceed, currentStepIndex, totalSteps, haptics, user, emailCaptured, isAdminMode]);
 
   const prevStep = useCallback(() => {
     haptics.light();
@@ -497,12 +501,13 @@ const [isButtonPressed, setIsButtonPressed] = useState(false);
         </div>
       </div>
 
-      {/* Email Gate Modal */}
+      {/* Email Gate Modal - IRONCLAD, no bypass unless admin mode */}
       <EmailGateModal
         isOpen={showEmailGate}
-        onClose={() => setShowEmailGate(false)}
+        onClose={() => {}} // Can't close without submitting
         onSuccess={handleEmailSuccess}
         onSkip={handleEmailSkip}
+        allowSkip={isAdminMode}
       />
     </div>
   );
