@@ -281,10 +281,14 @@ const [isButtonPressed, setIsButtonPressed] = useState(false);
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      {/* Header */}
-      <header 
+      {/* Header - Frosted Glass */}
+      <header
         className="fixed top-0 left-0 right-0 h-14 z-50 flex items-center px-4"
-        style={{ backgroundColor: '#0A0A0A' }}
+        style={{
+          backgroundColor: 'rgba(10, 10, 10, 0.85)',
+          backdropFilter: 'blur(14px)',
+          WebkitBackdropFilter: 'blur(14px)',
+        }}
       >
         <button
           onClick={() => currentStepIndex > 0 ? prevStep() : navigate("/")}
