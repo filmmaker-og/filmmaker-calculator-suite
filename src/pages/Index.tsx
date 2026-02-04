@@ -32,50 +32,54 @@ const Index = () => {
   const isComplete = animationPhase === 'complete';
 
   return (
-    <div className="min-h-screen flex flex-col relative overflow-hidden bg-black">
-
-      {/* CINEMATIC SPLASH - Clean, minimal */}
-      <div
-        className={`fixed inset-0 z-[100] flex items-center justify-center transition-all duration-500 ${
-          isComplete ? 'opacity-0 pointer-events-none' : 'opacity-100'
-        }`}
-        style={{ backgroundColor: '#000000' }}
-      >
-        <div className="flex flex-col items-center">
-          {/* Logo - simple fade in */}
-          <div
-            className={`transition-all duration-500 ${
-              showLogo ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
-            }`}
-          >
-            <img
-              src={filmmakerLogo}
-              alt="Filmmaker.OG"
-              className="w-24 h-24 object-contain"
-            />
-          </div>
-
-          {/* Gold line */}
-          <div
-            className={`mt-5 h-[1px] bg-gold transition-all duration-500 ${
-              showLogo ? 'w-32 opacity-100' : 'w-0 opacity-0'
-            }`}
-          />
-
-          {/* Tagline */}
-          <p
-            className={`mt-5 text-xs tracking-[0.3em] uppercase transition-all duration-400 ${
-              showTagline ? 'opacity-100' : 'opacity-0'
-            }`}
-            style={{ color: '#D4AF37' }}
-          >
-            Know your numbers
-          </p>
-        </div>
-      </div>
-
-      {/* HEADER */}
+    <>
+      {/* HEADER - Outside overflow container for iOS Safari touch target fix */}
       {isComplete && <Header />}
+
+      <div className="min-h-screen flex flex-col relative overflow-hidden bg-black">
+
+        {/* CINEMATIC SPLASH - Clean, minimal */}
+        <div
+          className={`fixed inset-0 z-[100] flex items-center justify-center transition-all duration-500 ${
+            isComplete ? 'opacity-0' : 'opacity-100'
+          }`}
+          style={{ 
+            backgroundColor: '#000000',
+            pointerEvents: isComplete ? 'none' : 'auto',
+          }}
+        >
+          <div className="flex flex-col items-center">
+            {/* Logo - simple fade in */}
+            <div
+              className={`transition-all duration-500 ${
+                showLogo ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+              }`}
+            >
+              <img
+                src={filmmakerLogo}
+                alt="Filmmaker.OG"
+                className="w-24 h-24 object-contain"
+              />
+            </div>
+
+            {/* Gold line */}
+            <div
+              className={`mt-5 h-[1px] bg-gold transition-all duration-500 ${
+                showLogo ? 'w-32 opacity-100' : 'w-0 opacity-0'
+              }`}
+            />
+
+            {/* Tagline */}
+            <p
+              className={`mt-5 text-xs tracking-[0.3em] uppercase transition-all duration-400 ${
+                showTagline ? 'opacity-100' : 'opacity-0'
+              }`}
+              style={{ color: '#D4AF37' }}
+            >
+              Know your numbers
+            </p>
+          </div>
+        </div>
 
       {/* HERO - Clean and focused */}
       <main
@@ -147,8 +151,9 @@ const Index = () => {
         <p className="text-[10px] tracking-wider text-white/20">
           Educational purposes only
         </p>
-      </footer>
-    </div>
+        </footer>
+      </div>
+    </>
   );
 };
 
