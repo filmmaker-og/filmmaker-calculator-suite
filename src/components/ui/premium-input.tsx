@@ -189,13 +189,16 @@ const PremiumInput = React.forwardRef<HTMLInputElement, PremiumInputProps>(
             {showCurrency && (
               <span
                 className={cn(
-                  "font-mono text-2xl mr-3 flex-shrink-0 transition-colors",
+                  "font-mono text-2xl mr-3 flex-shrink-0 transition-all duration-300",
                   localActive
-                    ? "text-gold"
+                    ? "text-gold scale-110"
                     : isCompleted
                     ? "text-gold/70"
                     : "text-white/30"
                 )}
+                style={{
+                  textShadow: localActive ? '0 0 20px rgba(212, 175, 55, 0.5)' : 'none',
+                }}
               >
                 $
               </span>
@@ -205,7 +208,7 @@ const PremiumInput = React.forwardRef<HTMLInputElement, PremiumInputProps>(
               type={type}
               className={cn(
                 "flex-1 bg-transparent border-0 outline-none",
-                "font-mono text-right transition-all",
+                "font-mono text-right transition-all tabular-nums",
                 isHero ? "h-16" : "h-12",
                 localActive
                   ? isHero ? "text-white text-4xl" : "text-white text-2xl"
@@ -216,6 +219,10 @@ const PremiumInput = React.forwardRef<HTMLInputElement, PremiumInputProps>(
                 "focus:outline-none focus:ring-0",
                 className
               )}
+              style={{
+                fontVariantNumeric: 'tabular-nums',
+                fontFeatureSettings: '"tnum" 1',
+              }}
               ref={ref}
               value={value}
               onFocus={handleFocus}
@@ -226,13 +233,16 @@ const PremiumInput = React.forwardRef<HTMLInputElement, PremiumInputProps>(
             {showPercent && (
               <span
                 className={cn(
-                  "font-mono text-2xl ml-3 flex-shrink-0 transition-colors",
+                  "font-mono text-2xl ml-3 flex-shrink-0 transition-all duration-300",
                   localActive
-                    ? "text-gold"
+                    ? "text-gold scale-110"
                     : isCompleted
                     ? "text-gold/70"
                     : "text-white/30"
                 )}
+                style={{
+                  textShadow: localActive ? '0 0 20px rgba(212, 175, 55, 0.5)' : 'none',
+                }}
               >
                 %
               </span>

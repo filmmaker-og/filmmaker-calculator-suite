@@ -8,18 +8,59 @@
 
 @layer base {
   :root {
-    /* BRAND GUIDE STRICT COLOR PALETTE */
-    --bg: 0 0% 0%;                    /* #000000 Void Black - page background */
-    --surface: 0 0% 7%;               /* #111111 Dark Grey - panels, cards */
-    --gold: 43 74% 52%;               /* #D4AF37 Metallic Gold - NON-CLICKABLE */
-    --gold-cta: 49 93% 72%;           /* #F9E076 Bright Gold - CLICKABLE ONLY */
-    --gold-highlight: 49 93% 72%;     /* #F9E076 Highlight Gold */
+    /* ═══════════════════════════════════════════════════════════════════
+       SHADCN/UI REQUIRED CSS VARIABLES - True Black Theme
+       ═══════════════════════════════════════════════════════════════════ */
+    --background: 0 0% 0%;              /* #000000 - True Black */
+    --foreground: 0 0% 100%;            /* #FFFFFF - White text */
+
+    --card: 0 0% 0%;                    /* #000000 - Cards same as bg */
+    --card-foreground: 0 0% 100%;       /* White text on cards */
+
+    --popover: 0 0% 4%;                 /* #0A0A0A - Slight lift for modals */
+    --popover-foreground: 0 0% 100%;
+
+    --primary: 43 74% 52%;              /* #D4AF37 - Gold */
+    --primary-foreground: 0 0% 0%;      /* Black text on gold */
+
+    --secondary: 0 0% 7%;               /* #111111 - Dark grey */
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 0 0% 10%;                  /* #1A1A1A - Muted backgrounds */
+    --muted-foreground: 0 0% 50%;       /* 50% white text */
+
+    --accent: 43 74% 52%;               /* Gold accent */
+    --accent-foreground: 0 0% 0%;
+
+    --destructive: 0 62% 30%;           /* Muted red (rarely used) */
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 0 0% 10%;                 /* #1A1A1A - Subtle borders */
+    --input: 0 0% 10%;                  /* Input backgrounds */
+    --ring: 43 74% 52%;                 /* Gold focus ring */
+
+    --radius: 0px;                      /* No border radius - sharp edges */
+
+    /* ═══════════════════════════════════════════════════════════════════
+       BRAND GUIDE STRICT COLOR PALETTE
+       ═══════════════════════════════════════════════════════════════════ */
+    --bg: 0 0% 0%;                      /* #000000 Void Black */
+    --surface: 0 0% 7%;                 /* #111111 Dark Grey */
+    --gold: 43 74% 52%;                 /* #D4AF37 Metallic Gold */
+    --gold-cta: 49 93% 72%;             /* #F9E076 Bright Gold - CTAs ONLY */
+    --gold-highlight: 49 93% 72%;       /* #F9E076 Highlight Gold */
 
     /* MOTION TOKENS */
     --timing-fast: 120ms;
     --timing-medium: 220ms;
     --timing-slow: 360ms;
     --easing: cubic-bezier(.2,.8,.2,1);
+  }
+
+  /* Force true black on html and body */
+  html, body {
+    background-color: #000000;
+    color: #FFFFFF;
   }
 
   /* Entrance animation utility (transform + opacity only for GPU acceleration) */
@@ -49,5 +90,183 @@
 /* existing styles retained below (truncated here intentionally) */
 
 @layer components {
-  /* keep existing component styles */
+  /* ═══════════════════════════════════════════════════════════════════
+     MATTE SECTION - Premium card container
+     ═══════════════════════════════════════════════════════════════════ */
+  .matte-section {
+    background: linear-gradient(180deg, #0D0D0D 0%, #080808 100%);
+    border: 1px solid #1A1A1A;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
+    transition: all 0.3s ease;
+  }
+
+  .matte-section-header {
+    background: linear-gradient(180deg, #0F0F0F 0%, #0A0A0A 100%);
+    border-bottom: 1px solid #1A1A1A;
+  }
+
+  /* Active state - Gold cascade effect */
+  .matte-section.is-active {
+    border-color: #D4AF37;
+    background: linear-gradient(180deg, #0F0E0A 0%, #0A0908 100%);
+    box-shadow:
+      inset 0 1px 0 rgba(212, 175, 55, 0.1),
+      0 0 20px rgba(212, 175, 55, 0.08),
+      0 0 40px rgba(212, 175, 55, 0.04);
+  }
+
+  .matte-section.is-active .matte-section-header {
+    background: linear-gradient(180deg, rgba(212, 175, 55, 0.08) 0%, transparent 100%);
+    border-color: rgba(212, 175, 55, 0.2);
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════
+     GLASS CARDS - Premium translucent surfaces
+     ═══════════════════════════════════════════════════════════════════ */
+  .glass-card-gold {
+    background: linear-gradient(180deg, rgba(212, 175, 55, 0.08) 0%, rgba(212, 175, 55, 0.02) 100%);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════
+     PREMIUM DIVIDERS
+     ═══════════════════════════════════════════════════════════════════ */
+  .premium-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, #D4AF37 50%, transparent 100%);
+    opacity: 0.3;
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════
+     TOUCH FEEDBACK - Mobile interaction states
+     ═══════════════════════════════════════════════════════════════════ */
+  .touch-feedback {
+    transition: transform 0.1s ease, opacity 0.1s ease;
+  }
+
+  .touch-feedback:active {
+    transform: scale(0.97);
+    opacity: 0.9;
+  }
+
+  .touch-press:active {
+    transform: scale(0.98);
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════
+     STEP ANIMATIONS
+     ═══════════════════════════════════════════════════════════════════ */
+  .step-enter {
+    animation: stepEnter 0.4s ease-out forwards;
+  }
+
+  @keyframes stepEnter {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-reveal-up {
+    animation: revealUp 0.3s ease-out forwards;
+  }
+
+  @keyframes revealUp {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════
+     ATTENTION ANIMATIONS - Premium pulsing effects
+     ═══════════════════════════════════════════════════════════════════ */
+  .animate-attention-glow {
+    animation: attentionGlow 2s ease-in-out infinite;
+  }
+
+  @keyframes attentionGlow {
+    0%, 100% {
+      opacity: 0.5;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.05);
+    }
+  }
+
+  .animate-border-glow {
+    animation: borderGlow 1.5s ease-in-out infinite;
+  }
+
+  @keyframes borderGlow {
+    0%, 100% {
+      border-color: rgba(212, 175, 55, 0.3);
+    }
+    50% {
+      border-color: rgba(212, 175, 55, 0.7);
+    }
+  }
+
+  .animate-shimmer {
+    animation: shimmer 2s linear infinite;
+  }
+
+  .animate-shimmer-slow {
+    animation: shimmer 3s linear infinite;
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
+  }
+
+  .animate-pulse-slow {
+    animation: pulseSlow 3s ease-in-out infinite;
+  }
+
+  @keyframes pulseSlow {
+    0%, 100% {
+      opacity: 0.6;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+
+  .animate-bounce-right {
+    animation: bounceRight 1s ease-in-out infinite;
+  }
+
+  @keyframes bounceRight {
+    0%, 100% {
+      transform: translateX(0);
+    }
+    50% {
+      transform: translateX(4px);
+    }
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════
+     NUMBER FORMATTING - Tabular figures for proper alignment
+     ═══════════════════════════════════════════════════════════════════ */
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1;
+  }
 }

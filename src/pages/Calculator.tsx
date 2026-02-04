@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef, useMemo } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -16,6 +16,7 @@ import CamFeeStep from "@/components/calculator/steps/CamFeeStep";
 import GuildsStep from "@/components/calculator/steps/GuildsStep";
 import OffTopTotalStep from "@/components/calculator/steps/OffTopTotalStep";
 import CapitalSelectStep, { CapitalSelections } from "@/components/calculator/steps/CapitalSelectStep";
+import CapitalStep from "@/components/calculator/steps/CapitalStep";
 import TaxCreditsStep from "@/components/calculator/steps/TaxCreditsStep";
 import SeniorDebtStep from "@/components/calculator/steps/SeniorDebtStep";
 import GapLoanStep from "@/components/calculator/steps/GapLoanStep";
@@ -26,6 +27,7 @@ import RevealStep from "@/components/calculator/steps/RevealStep";
 import WaterfallStep from "@/components/calculator/steps/WaterfallStep";
 import ProgressBar from "@/components/calculator/ProgressBar";
 import MobileMenu from "@/components/MobileMenu";
+import EmailGateModal from "@/components/EmailGateModal";
 
 const STORAGE_KEY = "filmmaker_og_inputs";
 
@@ -49,29 +51,13 @@ const defaultGuilds: GuildState = {
   dga: false,
 };
 
-const defaultCapitalSelections: CapitalSelections = {
-  taxCredits: false,
-  seniorDebt: false,
-  gapLoan: false,
-  equity: false,
-};
-
-// Step types for dynamic flow
+// SIMPLIFIED: 5 static steps instead of 14 dynamic steps
 type StepType = 
-  | 'budget' 
-  | 'sales' 
-  | 'cam' 
-  | 'guilds' 
-  | 'offtop' 
-  | 'capitalSelect'
-  | 'taxCredits'
-  | 'seniorDebt'
-  | 'gapLoan'
-  | 'equity'
-  | 'breakeven'
-  | 'acquisition'
-  | 'reveal'
-  | 'waterfall';
+  | 'costs'        // Budget + CAM + Sales combined
+  | 'guilds'       // Guild toggles
+  | 'capital'      // All capital inputs on one screen
+  | 'acquisition'  // Acquisition offer
+  | 'results';     // Waterfall + profit summary
 
 const Calculator = () => {
   const navigate = useNavigate();
@@ -84,52 +70,25 @@ const Calculator = () => {
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [inputs, setInputs] = useState<WaterfallInputs>(defaultInputs);
   const [guilds, setGuilds] = useState<GuildState>(defaultGuilds);
-  const [capitalSelections, setCapitalSelections] = useState<CapitalSelections>(defaultCapitalSelections);
   const [result, setResult] = useState<WaterfallResult | null>(null);
-  const [isButtonPressed, setIsButtonPressed] = useState(false);
+const [isButtonPressed, setIsButtonPressed] = useState(false);
   const [shakeButton, setShakeButton] = useState(false);
+  const [showEmailGate, setShowEmailGate] = useState(false);
+  const [emailCaptured, setEmailCaptured] = useState(false);
+  const [capitalSelections, setCapitalSelections] = useState<CapitalSelections>({
+    taxCredits: false,
+    seniorDebt: false,
+    gapLoan: false,
+    equity: false,
+  });
 
-  // Build dynamic step list based on capital selections
-  const steps = useMemo((): StepType[] => {
-    const baseSteps: StepType[] = ['budget', 'cam', 'sales', 'guilds', 'offtop', 'capitalSelect'];
-    
-    // Add capital detail steps based on selections
-    const capitalSteps: StepType[] = [];
-    if (capitalSelections.taxCredits) capitalSteps.push('taxCredits');
-    if (capitalSelections.seniorDebt) capitalSteps.push('seniorDebt');
-    if (capitalSelections.gapLoan) capitalSteps.push('gapLoan');
-    if (capitalSelections.equity) capitalSteps.push('equity');
-    
-    const endSteps: StepType[] = ['breakeven', 'acquisition', 'reveal', 'waterfall'];
-    
-    return [...baseSteps, ...capitalSteps, ...endSteps];
-  }, [capitalSelections]);
-
+  // SIMPLIFIED: Static 5-step flow - no dynamic branching
+  const steps: StepType[] = ['costs', 'guilds', 'capital', 'acquisition', 'results'];
   const totalSteps = steps.length;
   const currentStep = steps[currentStepIndex];
 
-  // Build step labels for progress bar
-  const stepLabels = useMemo(() => {
-    return steps.map(step => {
-      switch (step) {
-        case 'budget': return 'BUDGET';
-        case 'sales': return 'SALES';
-        case 'cam': return 'CAM';
-        case 'guilds': return 'GUILDS';
-        case 'offtop': return 'OFF-TOP';
-        case 'capitalSelect': return 'FUNDING';
-        case 'taxCredits': return 'TAX CR';
-        case 'seniorDebt': return 'DEBT';
-        case 'gapLoan': return 'GAP';
-        case 'equity': return 'EQUITY';
-        case 'breakeven': return 'B/E';
-        case 'acquisition': return 'OFFER';
-        case 'reveal': return 'REVEAL';
-        case 'waterfall': return 'RESULTS';
-        default: return '';
-      }
-    });
-  }, [steps]);
+  // SIMPLIFIED: Static step labels
+  const stepLabels = ['COSTS', 'GUILDS', 'CAPITAL', 'OFFER', 'RESULTS'];
 
   // Reset on ?reset=true or ?skip=true (demo mode)
   useEffect(() => {
@@ -137,7 +96,6 @@ const Calculator = () => {
       localStorage.removeItem(STORAGE_KEY);
       setInputs(defaultInputs);
       setGuilds(defaultGuilds);
-      setCapitalSelections(defaultCapitalSelections);
       setCurrentStepIndex(0);
     }
   }, [searchParams]);
@@ -152,7 +110,6 @@ const Calculator = () => {
         const parsed = JSON.parse(saved);
         if (parsed.inputs) setInputs(parsed.inputs);
         if (parsed.guilds) setGuilds(parsed.guilds);
-        if (parsed.capitalSelections) setCapitalSelections(parsed.capitalSelections);
         if (typeof parsed.currentStepIndex === 'number') setCurrentStepIndex(parsed.currentStepIndex);
       } catch (e) {
         console.error("Failed to load saved inputs");
@@ -165,10 +122,9 @@ const Calculator = () => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify({ 
       inputs, 
       guilds, 
-      capitalSelections,
       currentStepIndex 
     }));
-  }, [inputs, guilds, capitalSelections, currentStepIndex]);
+  }, [inputs, guilds, currentStepIndex]);
 
   // Calculate on input change
   useEffect(() => {
@@ -204,7 +160,6 @@ const Calculator = () => {
     localStorage.removeItem(STORAGE_KEY);
     setInputs(defaultInputs);
     setGuilds(defaultGuilds);
-    setCapitalSelections(defaultCapitalSelections);
     setCurrentStepIndex(0);
   };
 
@@ -217,23 +172,17 @@ const Calculator = () => {
     setGuilds(prev => ({ ...prev, [guild]: !prev[guild] }));
   }, [haptics]);
 
-  const toggleCapitalSelection = useCallback((key: keyof CapitalSelections) => {
-    setCapitalSelections(prev => ({ ...prev, [key]: !prev[key] }));
-  }, []);
-
-  // Can proceed to next step?
+  // SIMPLIFIED: Can proceed to next step?
   const canProceed = useCallback(() => {
     switch (currentStep) {
-      case 'budget':
+      case 'costs':
         return inputs.budget > 0;
-      case 'capitalSelect':
-        return Object.values(capitalSelections).some(Boolean);
       case 'acquisition':
         return inputs.revenue > 0;
       default:
         return true;
     }
-  }, [currentStep, inputs.budget, inputs.revenue, capitalSelections]);
+  }, [currentStep, inputs.budget, inputs.revenue]);
 
   const nextStep = useCallback(() => {
     if (!canProceed()) {
@@ -242,12 +191,18 @@ const Calculator = () => {
       setTimeout(() => setShakeButton(false), 300);
       return;
     }
-    
+
+    // Email gate: show after guilds step (index 1) if not authenticated and not already captured
+    if (currentStepIndex === 1 && !user && !emailCaptured) {
+      setShowEmailGate(true);
+      return;
+    }
+
     haptics.step();
     if (currentStepIndex < totalSteps - 1) {
       setCurrentStepIndex(prev => prev + 1);
     }
-  }, [canProceed, currentStepIndex, totalSteps, haptics]);
+  }, [canProceed, currentStepIndex, totalSteps, haptics, user, emailCaptured]);
 
   const prevStep = useCallback(() => {
     haptics.light();
@@ -282,35 +237,43 @@ const Calculator = () => {
   // Get step title
   const getStepTitle = () => {
     switch (currentStep) {
-      case 'budget': return 'THE BUDGET';
-      case 'sales': return 'SALES AGENT';
-      case 'cam': return 'CAM FEE';
+      case 'costs': return 'PRODUCTION COSTS';
       case 'guilds': return 'GUILDS';
-      case 'offtop': return 'OFF-THE-TOP';
-      case 'capitalSelect': return 'CAPITAL STACK';
-      case 'taxCredits': return 'TAX CREDITS';
-      case 'seniorDebt': return 'SENIOR DEBT';
-      case 'gapLoan': return 'GAP LOAN';
-      case 'equity': return 'EQUITY';
-      case 'breakeven': return 'THE RECKONING';
+      case 'capital': return 'CAPITAL STACK';
       case 'acquisition': return 'THE OFFER';
-      case 'reveal': return 'YOUR PROFIT';
-      case 'waterfall': return 'THE WATERFALL';
+      case 'results': return 'THE WATERFALL';
       default: return 'WATERFALL TERMINAL';
+    }
+  };
+
+  // Email gate handlers
+  const handleEmailSuccess = () => {
+    setEmailCaptured(true);
+    setShowEmailGate(false);
+    // Auto-advance after email captured
+    setTimeout(() => {
+      if (currentStepIndex < totalSteps - 1) {
+        setCurrentStepIndex(prev => prev + 1);
+      }
+    }, 500);
+  };
+
+  const handleEmailSkip = () => {
+    setEmailCaptured(true); // Mark as "handled" so we don't ask again
+    setShowEmailGate(false);
+    // Advance to next step
+    if (currentStepIndex < totalSteps - 1) {
+      setCurrentStepIndex(prev => prev + 1);
     }
   };
 
   // Get CTA text
   const getCtaText = () => {
     switch (currentStep) {
-      case 'budget': return 'WHERE DOES MONEY GO?';
-      case 'guilds': return 'ADD IT UP';
-      case 'offtop': return 'NOW THE INVESTORS';
-      case 'capitalSelect': return 'ENTER DETAILS';
-      case 'equity': return 'THE RECKONING';
-      case 'breakeven': return 'NOW THE DEAL';
+      case 'costs': return 'ADD GUILDS';
+      case 'guilds': return 'ADD CAPITAL';
+      case 'capital': return 'ENTER THE OFFER';
       case 'acquisition': return 'SEE RESULTS';
-      case 'reveal': return 'SEE BREAKDOWN';
       default: return 'CONTINUE';
     }
   };
@@ -318,33 +281,15 @@ const Calculator = () => {
   // Render current step
   const renderStep = () => {
     switch (currentStep) {
-      case 'budget':
+      case 'costs':
         return <BudgetStep inputs={inputs} onUpdateInput={updateInput} />;
-      case 'sales':
-        return <SalesAgentStep inputs={inputs} onUpdateInput={updateInput} />;
-      case 'cam':
-        return <CamFeeStep inputs={inputs} />;
       case 'guilds':
         return <GuildsStep inputs={inputs} guilds={guilds} onToggleGuild={toggleGuild} />;
-      case 'offtop':
-        return <OffTopTotalStep inputs={inputs} guilds={guilds} />;
-      case 'capitalSelect':
-        return <CapitalSelectStep selections={capitalSelections} onToggle={toggleCapitalSelection} />;
-      case 'taxCredits':
-        return <TaxCreditsStep inputs={inputs} onUpdateInput={updateInput} />;
-      case 'seniorDebt':
-        return <SeniorDebtStep inputs={inputs} onUpdateInput={updateInput} />;
-      case 'gapLoan':
-        return <GapLoanStep inputs={inputs} onUpdateInput={updateInput} />;
-      case 'equity':
-        return <EquityStep inputs={inputs} onUpdateInput={updateInput} />;
-      case 'breakeven':
-        return <BreakevenStep inputs={inputs} guilds={guilds} selections={capitalSelections} />;
+      case 'capital':
+        return <CapitalStep inputs={inputs} onUpdateInput={updateInput} />;
       case 'acquisition':
         return <AcquisitionStep inputs={inputs} guilds={guilds} selections={capitalSelections} onUpdateInput={updateInput} />;
-      case 'reveal':
-        return result ? <RevealStep result={result} equity={inputs.equity} /> : null;
-      case 'waterfall':
+      case 'results':
         return result ? <WaterfallStep result={result} inputs={inputs} /> : null;
       default:
         return null;
@@ -366,10 +311,14 @@ const Calculator = () => {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      {/* Header */}
-      <header 
+      {/* Header - Frosted Glass */}
+      <header
         className="fixed top-0 left-0 right-0 h-14 z-50 flex items-center px-4"
-        style={{ backgroundColor: '#0A0A0A' }}
+        style={{
+          backgroundColor: 'rgba(10, 10, 10, 0.85)',
+          backdropFilter: 'blur(14px)',
+          WebkitBackdropFilter: 'blur(14px)',
+        }}
       >
         <button
           onClick={() => currentStepIndex > 0 ? prevStep() : navigate("/")}
@@ -403,7 +352,6 @@ const Calculator = () => {
       <ProgressBar
         currentStep={currentStepIndex + 1}
         totalSteps={totalSteps}
-        stepLabels={stepLabels}
         onStepClick={(step) => goToStep(step - 1)}
       />
 
@@ -427,25 +375,25 @@ const Calculator = () => {
           {renderStep()}
         </div>
 
-        {/* Swipe edge hints */}
+        {/* Swipe edge hints - visible with subtle pulse */}
         {currentStepIndex > 0 && (
           <div
             className={cn(
-              "fixed left-2 top-1/2 -translate-y-1/2 text-gold/30 transition-opacity",
-              swipeState.direction === 'right' ? 'opacity-100' : 'opacity-0'
+              "fixed left-2 top-1/2 -translate-y-1/2 text-gold/20 transition-opacity duration-300",
+              swipeState.direction === 'right' ? 'opacity-60' : 'opacity-20'
             )}
           >
-            <ChevronLeft className="w-6 h-6" />
+            <ChevronLeft className="w-5 h-5" />
           </div>
         )}
         {currentStepIndex < totalSteps - 1 && canProceed() && (
           <div
             className={cn(
-              "fixed right-2 top-1/2 -translate-y-1/2 text-gold/30 transition-opacity",
-              swipeState.direction === 'left' ? 'opacity-100' : 'opacity-0'
+              "fixed right-2 top-1/2 -translate-y-1/2 text-gold/20 transition-opacity duration-300",
+              swipeState.direction === 'left' ? 'opacity-60' : 'opacity-20'
             )}
           >
-            <ChevronRight className="w-6 h-6" />
+            <ChevronRight className="w-5 h-5" />
           </div>
         )}
       </main>
@@ -469,8 +417,7 @@ const Calculator = () => {
                 <div className="mb-3 py-2 px-4 bg-[#0A0A0A] border border-[#1A1A1A] flex items-center justify-center gap-2 animate-fade-in">
                   <div className="w-2 h-2 bg-gold/50 rounded-full animate-pulse" />
                   <span className="text-xs text-white/50 tracking-wide">
-                    {currentStep === 'budget' && 'Enter your budget to continue'}
-                    {currentStep === 'capitalSelect' && 'Select at least one funding source'}
+                    {currentStep === 'costs' && 'Enter your budget to continue'}
                     {currentStep === 'acquisition' && 'Enter the acquisition price'}
                   </span>
                 </div>
@@ -506,16 +453,6 @@ const Calculator = () => {
                       : 'none',
                   }}
                 >
-                  {/* Shimmer effect when enabled */}
-                  {canProceed() && (
-                    <div
-                      className="absolute inset-0 pointer-events-none animate-shimmer-slow"
-                      style={{
-                        background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.1) 50%, transparent 100%)',
-                        backgroundSize: '200% 100%',
-                      }}
-                    />
-                  )}
                   <span className="relative flex items-center justify-center gap-3">
                     {getCtaText()}
                     <ChevronRight className="w-5 h-5" />
@@ -559,6 +496,14 @@ const Calculator = () => {
           )}
         </div>
       </div>
+
+      {/* Email Gate Modal */}
+      <EmailGateModal
+        isOpen={showEmailGate}
+        onClose={() => setShowEmailGate(false)}
+        onSuccess={handleEmailSuccess}
+        onSkip={handleEmailSkip}
+      />
     </div>
   );
 };

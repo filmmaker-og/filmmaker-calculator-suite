@@ -1,4 +1,4 @@
-import { Check, Sparkles, Landmark, Receipt, Coins, Users2, ChevronRight, Layers } from "lucide-react";
+import { Check, Landmark, Receipt, Coins, Users2 } from "lucide-react";
 import { useHaptics } from "@/hooks/use-haptics";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
@@ -20,47 +20,38 @@ const CapitalSelectStep = ({ selections, onToggle }: CapitalSelectStepProps) => 
     {
       key: 'taxCredits' as keyof CapitalSelections,
       title: 'Tax Credits',
-      subtitle: 'Government incentives',
       description: 'UK, Georgia, New Mexico, etc.',
       icon: Receipt,
       recommended: false,
-      priority: 1,
       priorityLabel: "Reduces cost",
     },
     {
       key: 'seniorDebt' as keyof CapitalSelections,
       title: 'Senior Debt',
-      subtitle: 'Bank/presale loan',
-      description: 'First position, secured against presales',
+      description: 'Bank/presale loan - first position',
       icon: Landmark,
       recommended: true,
-      priority: 2,
       priorityLabel: "Paid 1st",
     },
     {
       key: 'gapLoan' as keyof CapitalSelections,
       title: 'Gap / Bridge Loan',
-      subtitle: 'Mezzanine financing',
       description: 'Higher risk, subordinate to senior',
       icon: Coins,
       recommended: false,
-      priority: 3,
       priorityLabel: "Paid 2nd",
     },
     {
       key: 'equity' as keyof CapitalSelections,
       title: 'Equity Investment',
-      subtitle: 'Private investors',
-      description: 'Last in, first out after debt',
+      description: 'Private investors - last in',
       icon: Users2,
       recommended: true,
-      priority: 4,
       priorityLabel: "Paid last",
     },
   ];
 
   const selectedCount = Object.values(selections).filter(Boolean).length;
-  const hasSelection = selectedCount > 0;
 
   const handleToggle = (key: keyof CapitalSelections) => {
     haptics.light();
@@ -70,70 +61,28 @@ const CapitalSelectStep = ({ selections, onToggle }: CapitalSelectStepProps) => 
   };
 
   return (
-    <div className="step-enter">
-      {/* Step Header with icon */}
-      <div className="text-center mb-6">
-        <div className="relative inline-block mb-4">
-          <div
-            className="absolute inset-0"
-            style={{
-              background: 'radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, transparent 70%)',
-              filter: 'blur(15px)',
-              transform: 'scale(2)',
-            }}
-          />
-          <div className="relative w-14 h-14 border border-gold/30 bg-gold/5 flex items-center justify-center">
-            <Layers className="w-7 h-7 text-gold" />
-          </div>
-        </div>
-
+    <div className="min-h-[60vh] flex flex-col justify-center">
+      {/* Hero question - minimal */}
+      <div className="text-center mb-8">
         <h2 className="font-bebas text-3xl tracking-[0.08em] text-white mb-2">
-          Build your <span className="text-gold">capital stack</span>
+          Capital Stack
         </h2>
-        <p className="text-white/50 text-sm max-w-xs mx-auto">
-          Everyone who put money in gets paid back. With interest. Before you.
+        <p className="text-white/40 text-sm">
+          Select your funding sources
         </p>
       </div>
 
-      {/* Instruction banner */}
-      <div className={cn(
-        "mb-5 py-3 px-4 border flex items-center justify-center gap-2 transition-all duration-300",
-        hasSelection
-          ? "bg-gold/5 border-gold/30"
-          : "bg-[#0A0A0A] border-[#1A1A1A] animate-border-glow"
-      )}>
-        {hasSelection ? (
-          <>
-            <Check className="w-4 h-4 text-gold" />
-            <span className="text-xs text-gold tracking-wide font-medium">
-              {selectedCount} source{selectedCount !== 1 ? 's' : ''} selected
-            </span>
-          </>
-        ) : (
-          <>
-            <ChevronRight className="w-4 h-4 text-gold/50 animate-bounce-right" />
-            <span className="text-xs text-white/50 tracking-wide">
-              Tap to select your funding sources
-            </span>
-          </>
-        )}
-      </div>
-
       {/* Selection cards */}
-      <div className="matte-section overflow-hidden">
-        {/* Section header */}
-        <div className="matte-section-header px-5 py-3 flex items-center justify-between">
-          <span className="text-xs uppercase tracking-[0.2em] text-white/40 font-medium">
-            Capital Stack
-          </span>
-          <span className="text-[10px] text-white/30">
-            SELECT ALL THAT APPLY
-          </span>
+      <div className="bg-black border border-[#1A1A1A]">
+        <div className="p-4 border-b border-[#1A1A1A] flex items-center justify-between">
+          <span className="text-xs uppercase tracking-wider text-white/40">Select all that apply</span>
+          {selectedCount > 0 && (
+            <span className="text-xs text-white/30">{selectedCount} selected</span>
+          )}
         </div>
 
-        {/* Options */}
         <div className="divide-y divide-[#1A1A1A]">
-          {options.map((option, index) => {
+          {options.map((option) => {
             const isSelected = selections[option.key];
             const wasJustToggled = justToggled === option.key;
             const Icon = option.icon;
@@ -143,32 +92,25 @@ const CapitalSelectStep = ({ selections, onToggle }: CapitalSelectStepProps) => 
                 key={option.key}
                 onClick={() => handleToggle(option.key)}
                 className={cn(
-                  "w-full p-5 text-left transition-all duration-200 relative overflow-hidden",
-                  isSelected
-                    ? "bg-gradient-to-r from-gold/10 to-transparent"
-                    : "bg-transparent hover:bg-[#0D0D0D]",
+                  "w-full p-4 text-left transition-all duration-150",
+                  isSelected ? "bg-white/5" : "bg-transparent hover:bg-white/[0.02]",
                   wasJustToggled && "scale-[1.01]"
                 )}
               >
-                {/* Selected left accent */}
-                {isSelected && (
-                  <div className="absolute left-0 top-0 bottom-0 w-1 bg-gold" />
-                )}
-
                 <div className="flex items-center gap-4">
                   {/* Icon */}
                   <div
                     className={cn(
-                      "w-12 h-12 flex items-center justify-center border transition-all",
+                      "w-10 h-10 flex items-center justify-center border transition-all",
                       isSelected
-                        ? "border-gold/50 bg-gold/10"
-                        : "border-[#2A2A2A] bg-[#0A0A0A]"
+                        ? "border-white/20 bg-white/5"
+                        : "border-[#2A2A2A] bg-black"
                     )}
                   >
                     <Icon
                       className={cn(
                         "w-5 h-5 transition-colors",
-                        isSelected ? "text-gold" : "text-white/40"
+                        isSelected ? "text-white/70" : "text-white/30"
                       )}
                     />
                   </div>
@@ -178,14 +120,14 @@ const CapitalSelectStep = ({ selections, onToggle }: CapitalSelectStepProps) => 
                     <div className="flex items-center gap-2 mb-0.5">
                       <span
                         className={cn(
-                          "text-base font-semibold transition-colors",
-                          isSelected ? "text-gold" : "text-white"
+                          "text-sm font-medium transition-colors",
+                          isSelected ? "text-white" : "text-white/70"
                         )}
                       >
                         {option.title}
                       </span>
                       {option.recommended && !isSelected && (
-                        <span className="text-[10px] px-1.5 py-0.5 bg-gold/10 text-gold/70 uppercase tracking-wider">
+                        <span className="text-[9px] px-1.5 py-0.5 bg-white/5 text-white/40 uppercase tracking-wider">
                           Common
                         </span>
                       )}
@@ -196,7 +138,7 @@ const CapitalSelectStep = ({ selections, onToggle }: CapitalSelectStepProps) => 
                       </p>
                       <span className={cn(
                         "text-[9px] px-1.5 py-0.5 uppercase tracking-wider flex-shrink-0",
-                        isSelected ? "bg-gold/20 text-gold/80" : "bg-zinc-800 text-white/30"
+                        isSelected ? "bg-white/10 text-white/50" : "bg-[#1A1A1A] text-white/30"
                       )}>
                         {option.priorityLabel}
                       </span>
@@ -206,14 +148,14 @@ const CapitalSelectStep = ({ selections, onToggle }: CapitalSelectStepProps) => 
                   {/* Checkbox */}
                   <div
                     className={cn(
-                      "w-7 h-7 flex items-center justify-center border-2 transition-all duration-200",
+                      "w-5 h-5 flex items-center justify-center border transition-all duration-150",
                       isSelected
                         ? "bg-gold border-gold"
                         : "bg-transparent border-[#3A3A3A]"
                     )}
                   >
                     {isSelected && (
-                      <Check className="w-4 h-4 text-black animate-check-pop" />
+                      <Check className="w-3 h-3 text-black" />
                     )}
                   </div>
                 </div>
@@ -223,21 +165,10 @@ const CapitalSelectStep = ({ selections, onToggle }: CapitalSelectStepProps) => 
         </div>
       </div>
 
-      {/* Pro tip */}
-      <div className="mt-6 glass-card-gold p-4">
-        <div className="flex items-start gap-3">
-          <div className="w-8 h-8 flex items-center justify-center bg-gold/10 border border-gold/20 flex-shrink-0">
-            <Sparkles className="w-4 h-4 text-gold/70" />
-          </div>
-          <div>
-            <p className="text-xs text-gold/80 font-semibold mb-1">PRO TIP</p>
-            <p className="text-xs text-white/50 leading-relaxed">
-              Most indie films use <span className="text-white/70">Senior Debt + Equity</span>.
-              Add Tax Credits if shooting in an incentive state. Gap loans fill budget shortfalls.
-            </p>
-          </div>
-        </div>
-      </div>
+      {/* Hint text */}
+      <p className="mt-4 text-center text-xs text-white/30">
+        Most indie films use Senior Debt + Equity
+      </p>
     </div>
   );
 };

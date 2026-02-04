@@ -1,193 +1,106 @@
 
+# Fix: Homepage Menu Accessibility Issue
 
-# Complete Rebuild Plan: Critical Bugs + UI/UX Overhaul
+## Problem Identified
 
-## Critical Bug #1: Duplicate $75K Marketing Expenses
+The hamburger menu on the homepage is intermittently inaccessible. After analyzing the code, I found a potential z-index and pointer-events timing conflict.
 
-### The Problem
-The field `salesExp` is being used for TWO different purposes:
+## Root Cause Analysis
 
-1. **SalesAgentStep.tsx (lines 80-100)**: Shows "Sales Expenses (CAP)" with value `inputs.salesExp` = $75K
-2. **MarketingStep.tsx (lines 69-82)**: Shows "Expense Cap" with value `inputs.salesExp` = $75K
+Looking at the z-index layers in `Index.tsx`:
 
-Both steps are displaying and/or modifying the SAME field (`salesExp`). This is a **data model error** - you're seeing $75K twice because the same variable is used in two places.
+| Element | Z-Index | Notes |
+|---------|---------|-------|
+| Cinematic Splash | `z-[100]` | Gets `opacity-0 pointer-events-none` when complete |
+| Header | `z-[150]` | Only mounts after animation completes |
+| Mobile Menu Overlay | `z-[200]` | Opens on top of everything |
 
-### The Fix
-Create a separate field for marketing expenses:
+**The Issue:** The cinematic splash overlay at `z-[100]` is positioned **below** the header at `z-[150]`, BUT:
 
-```text
-Current data model:
-  - salesExp: $75,000 (used for BOTH sales agent AND marketing)
+1. The splash has `fixed inset-0` which covers the entire viewport
+2. When `isComplete` becomes true, `pointer-events-none` is applied
+3. However, the opacity transition takes 500ms to complete
+4. On some mobile browsers, the stacking context can cause touch events to be swallowed during this transition
 
-Fixed data model:
-  - salesExp: $75,000 (Sales Agent expenses only)
-  - marketingExp: $75,000 (Marketing expenses - NEW FIELD)
-```
+**Secondary Issue:** The parent container has `overflow-hidden` which can interfere with fixed-position touch targets on iOS Safari.
 
-**Files to modify:**
-- `src/lib/waterfall.ts` - Add `marketingExp` to WaterfallInputs interface
-- `src/pages/Calculator.tsx` - Add default value for `marketingExp`
-- `src/components/calculator/steps/MarketingStep.tsx` - Use `marketingExp` instead of `salesExp`
-- `src/components/calculator/steps/OffTopTotalStep.tsx` - Use both fields correctly
+## Solution
 
----
+### Fix 1: Ensure Splash is Fully Non-Interactive Immediately
 
-## Critical Bug #2: Auth Page Matte Gray Still Not Visible
+Update the cinematic splash to guarantee no pointer events block the header:
 
-### The Problem
-The CSS was updated to use `#111111` (per brand guide), but this is extremely close to the black background (`#000000`). The contrast is only 7% - almost invisible.
-
-### The Fix
-For the Auth page specifically, use a more visible gray that creates actual contrast:
-
-```css
-/* Auth page input containers need higher contrast */
-background: #1A1A1A; /* 10% gray - visible against black */
-```
-
-And apply this directly to the Auth page input container divs.
-
----
-
-## UI/UX Assessment: Current State
-
-### Homepage: B+
-- Splash animation works
-- Menu now functional
-- CTA glows appropriately
-
-### Auth Page: D
-- Input boxes blend into background (nearly invisible)
-- Return key issues on mobile
-- Lacks visual hierarchy
-- "Start here" guidance is confusing
-
-### Calculator Steps: C-
-The issues are pervasive:
-
-| Step | Grade | Issues |
-|------|-------|--------|
-| Budget | B | Works, but input styling inconsistent |
-| CAM Fee | B- | Good info, but no input - just display |
-| Sales Agent | C | Has DUPLICATE $75K field that should only be here |
-| Marketing | F | Using WRONG field (salesExp instead of marketingExp) |
-| Guilds | B | Toggle styling could be cleaner |
-| Off-Top | C | Shows both expenses but uses same field |
-| Capital Select | B- | Works but toggle cards are cluttered |
-| Breakeven | B | Clear display |
-| Acquisition | B | Works |
-| Reveal | B | Animation works |
-| Waterfall | B | New visual added |
-
----
-
-## Strategy: Page-by-Page Systematic Rebuild
-
-Given the mess, I recommend a **strict page-by-page approach**:
-
-### Phase 1: Data Model Fix (Immediate)
-Fix the duplicate `$75K` bug first. This is a logic error that makes the calculator wrong.
-
-### Phase 2: Auth Page Complete Overhaul
-Make the entry point institutional-grade:
-- Higher contrast containers (visible matte gray)
-- Proper focus states
-- Mobile keyboard navigation working
-- Clean visual hierarchy
-
-### Phase 3: Calculator Step-by-Step Polish
-Go through each calculator step and standardize:
-- Consistent matte section styling
-- Consistent input components
-- Consistent spacing/typography
-- Each step follows same visual pattern
-
----
-
-## Immediate Implementation Plan
-
-### Part 1: Fix Data Model (salesExp vs marketingExp)
-
-**File: `src/lib/waterfall.ts`**
-Add new field to interface:
-```typescript
-export interface WaterfallInputs {
-  // ... existing fields
-  salesExp: number;      // Sales Agent expenses
-  marketingExp: number;  // Marketing expenses (NEW)
-}
-```
-
-Update calculation functions to use `marketingExp`.
-
-**File: `src/pages/Calculator.tsx`**
-Add default value:
-```typescript
-const defaultInputs: WaterfallInputs = {
-  // ... existing
-  salesExp: 75000,
-  marketingExp: 75000, // NEW
-};
-```
-
-**File: `src/components/calculator/steps/MarketingStep.tsx`**
-Change from `salesExp` to `marketingExp`.
-
-**File: `src/components/calculator/steps/OffTopTotalStep.tsx`**
-Show both expenses separately in the ledger.
-
----
-
-### Part 2: Auth Page Visual Overhaul
-
-**File: `src/pages/Auth.tsx`**
-Update input containers with visible styling:
 ```tsx
-<div className="p-4 bg-[#1A1A1A] border border-[#2A2A2A]">
-  {/* Input content */}
+// In Index.tsx - Line 38-41
+<div
+  className={`fixed inset-0 z-[100] flex items-center justify-center transition-all duration-500 ${
+    isComplete ? 'opacity-0' : 'opacity-100'
+  }`}
+  style={{ 
+    backgroundColor: '#000000',
+    pointerEvents: isComplete ? 'none' : 'auto',  // Inline style for immediate effect
+  }}
+>
+```
+
+This uses inline `pointerEvents` style instead of Tailwind class to ensure it takes effect immediately with no CSS transition delay.
+
+### Fix 2: Move Header Outside the Overflow Container
+
+Restructure the page so the Header renders outside the `overflow-hidden` container:
+
+```tsx
+// Current structure (problematic):
+<div className="min-h-screen ... overflow-hidden">
+  {/* Splash */}
+  {isComplete && <Header />}  // Inside overflow container
+  <main>...</main>
 </div>
+
+// Fixed structure:
+<>
+  {isComplete && <Header />}  // Outside, at root level
+  <div className="min-h-screen ... overflow-hidden">
+    {/* Splash */}
+    <main>...</main>
+  </div>
+</>
 ```
 
-Key changes:
-- Use `bg-[#1A1A1A]` (10% gray) instead of relying on CSS classes
-- Add visible border `border-[#2A2A2A]`
-- Remove `matte-card-glow` animation when not active
-- Simplify focus states
+This prevents iOS Safari from potentially clipping touch targets on the fixed header.
 
----
+### Fix 3: Add Explicit Touch Target Styling
 
-### Part 3: Standardize Calculator Step Containers
+Ensure the hamburger button has proper touch handling:
 
-Create a consistent pattern every step follows:
-```text
-Step Layout:
-1. Icon + Header (centered, gold accents)
-2. Matte Section Card (bg-[#111111], border-[#1A1A1A])
-   - Section header (darker strip)
-   - Input area (consistent padding)
-   - Impact display (if applicable)
-3. Helper collapsible (gold text)
+```tsx
+// In MobileMenu.tsx - Hamburger button
+<button
+  onClick={handleOpenMenu}
+  className="w-12 h-12 flex items-center justify-center hover:opacity-80 transition-all duration-100 -mr-1 relative z-10"
+  style={{ touchAction: 'manipulation' }}  // Prevents touch delay
+  aria-label="Open menu"
+>
 ```
-
----
 
 ## Files to Modify
 
-| Priority | File | Changes |
-|----------|------|---------|
-| P0 | `src/lib/waterfall.ts` | Add `marketingExp` field, update calculations |
-| P0 | `src/pages/Calculator.tsx` | Add default for `marketingExp` |
-| P0 | `src/components/calculator/steps/MarketingStep.tsx` | Use `marketingExp` |
-| P0 | `src/components/calculator/steps/OffTopTotalStep.tsx` | Use both expense fields |
-| P1 | `src/pages/Auth.tsx` | Visual overhaul with visible containers |
-| P2 | All step components | Standardize styling |
+| File | Change |
+|------|--------|
+| `src/pages/Index.tsx` | Move Header outside overflow container, use inline pointerEvents |
+| `src/components/MobileMenu.tsx` | Add `touchAction: 'manipulation'` to button |
 
----
+## Technical Notes
 
-## Expected Results After Implementation
+- The `touchAction: 'manipulation'` CSS property eliminates the 300ms tap delay on mobile browsers
+- Using inline `pointerEvents` style ensures immediate effect without waiting for CSS transition
+- Moving the Header outside `overflow-hidden` prevents iOS Safari's aggressive touch target optimization from interfering
 
-1. **No more duplicate $75K** - Sales expenses and marketing expenses are separate fields
-2. **Auth page has visible input boxes** - Clear matte gray containers against black
-3. **Mobile return key works** - Already added `enterKeyHint`, verify it functions
-4. **Consistent visual language** - Every step follows same pattern
+## Testing Checklist
 
+After implementation:
+1. Load homepage on mobile
+2. Wait for splash animation to complete
+3. Tap hamburger menu immediately - should open
+4. Tap close button - should close
+5. Navigate to Calculator and back - menu should still work
