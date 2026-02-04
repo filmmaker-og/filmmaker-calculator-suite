@@ -91,9 +91,17 @@ const MobileMenu = ({ onOpenLegal, onSignOut }: MobileMenuProps) => {
       {/* Full-screen Menu Overlay */}
       {isOpen && (
         <div
-          className="fixed inset-0 z-[200] flex flex-col"
+          className="flex flex-col"
           style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            width: '100vw',
+            height: '100vh',
             backgroundColor: '#000000',
+            zIndex: 9999,
             paddingTop: 'env(safe-area-inset-top)',
           }}
         >
