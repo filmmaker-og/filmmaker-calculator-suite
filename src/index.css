@@ -8,18 +8,59 @@
 
 @layer base {
   :root {
-    /* BRAND GUIDE STRICT COLOR PALETTE */
-    --bg: 0 0% 0%;                    /* #000000 Void Black - page background */
-    --surface: 0 0% 7%;               /* #111111 Dark Grey - panels, cards */
-    --gold: 43 74% 52%;               /* #D4AF37 Metallic Gold - NON-CLICKABLE */
-    --gold-cta: 49 93% 72%;           /* #F9E076 Bright Gold - CLICKABLE ONLY */
-    --gold-highlight: 49 93% 72%;     /* #F9E076 Highlight Gold */
+    /* ═══════════════════════════════════════════════════════════════════
+       SHADCN/UI REQUIRED CSS VARIABLES - True Black Theme
+       ═══════════════════════════════════════════════════════════════════ */
+    --background: 0 0% 0%;              /* #000000 - True Black */
+    --foreground: 0 0% 100%;            /* #FFFFFF - White text */
+
+    --card: 0 0% 0%;                    /* #000000 - Cards same as bg */
+    --card-foreground: 0 0% 100%;       /* White text on cards */
+
+    --popover: 0 0% 4%;                 /* #0A0A0A - Slight lift for modals */
+    --popover-foreground: 0 0% 100%;
+
+    --primary: 43 74% 52%;              /* #D4AF37 - Gold */
+    --primary-foreground: 0 0% 0%;      /* Black text on gold */
+
+    --secondary: 0 0% 7%;               /* #111111 - Dark grey */
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 0 0% 10%;                  /* #1A1A1A - Muted backgrounds */
+    --muted-foreground: 0 0% 50%;       /* 50% white text */
+
+    --accent: 43 74% 52%;               /* Gold accent */
+    --accent-foreground: 0 0% 0%;
+
+    --destructive: 0 62% 30%;           /* Muted red (rarely used) */
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 0 0% 10%;                 /* #1A1A1A - Subtle borders */
+    --input: 0 0% 10%;                  /* Input backgrounds */
+    --ring: 43 74% 52%;                 /* Gold focus ring */
+
+    --radius: 0px;                      /* No border radius - sharp edges */
+
+    /* ═══════════════════════════════════════════════════════════════════
+       BRAND GUIDE STRICT COLOR PALETTE
+       ═══════════════════════════════════════════════════════════════════ */
+    --bg: 0 0% 0%;                      /* #000000 Void Black */
+    --surface: 0 0% 7%;                 /* #111111 Dark Grey */
+    --gold: 43 74% 52%;                 /* #D4AF37 Metallic Gold */
+    --gold-cta: 49 93% 72%;             /* #F9E076 Bright Gold - CTAs ONLY */
+    --gold-highlight: 49 93% 72%;       /* #F9E076 Highlight Gold */
 
     /* MOTION TOKENS */
     --timing-fast: 120ms;
     --timing-medium: 220ms;
     --timing-slow: 360ms;
     --easing: cubic-bezier(.2,.8,.2,1);
+  }
+
+  /* Force true black on html and body */
+  html, body {
+    background-color: #000000;
+    color: #FFFFFF;
   }
 
   /* Entrance animation utility (transform + opacity only for GPU acceleration) */
