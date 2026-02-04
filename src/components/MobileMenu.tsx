@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import { Link } from "react-router-dom";
 import { Menu, X, Copy, Check, LogOut } from "lucide-react";
 import {
@@ -88,8 +89,8 @@ const MobileMenu = ({ onOpenLegal, onSignOut }: MobileMenuProps) => {
         <Menu className="w-6 h-6 text-gold" />
       </button>
 
-      {/* Full-screen Menu Overlay */}
-      {isOpen && (
+      {/* Full-screen Menu Overlay - Portal to body */}
+      {isOpen && createPortal(
         <div
           className="flex flex-col"
           style={{
@@ -211,7 +212,8 @@ const MobileMenu = ({ onOpenLegal, onSignOut }: MobileMenuProps) => {
               thefilmmaker.og@gmail.com
             </span>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* Legal Modal */}
