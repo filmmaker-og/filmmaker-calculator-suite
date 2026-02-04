@@ -352,7 +352,6 @@ const [isButtonPressed, setIsButtonPressed] = useState(false);
       <ProgressBar
         currentStep={currentStepIndex + 1}
         totalSteps={totalSteps}
-        stepLabels={stepLabels}
         onStepClick={(step) => goToStep(step - 1)}
       />
 

@@ -89,19 +89,12 @@ const Index = () => {
       >
         <div className="w-full max-w-sm flex flex-col items-center text-center">
 
-          {/* Logo - subtle glow only */}
-          <div className="relative mb-8">
-            <div
-              className="absolute inset-0 -m-8"
-              style={{
-                background: 'radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, transparent 70%)',
-                filter: 'blur(30px)',
-              }}
-            />
+          {/* Logo */}
+          <div className="mb-8">
             <img
               src={filmmakerLogo}
               alt="Filmmaker.OG"
-              className="w-24 h-24 object-contain relative z-10"
+              className="w-24 h-24 object-contain"
             />
           </div>
 
