@@ -92,26 +92,29 @@ const MobileMenu = ({ onOpenLegal, onSignOut }: MobileMenuProps) => {
       {isOpen && (
         <div
           className="fixed inset-0 z-[200] flex flex-col"
-          style={{ backgroundColor: '#000000' }}
+          style={{
+            backgroundColor: '#000000',
+            paddingTop: 'env(safe-area-inset-top)',
+          }}
         >
-          {/* Close Button */}
-          <button
-            onClick={handleCloseMenu}
-            className="absolute top-6 right-4 w-14 h-14 flex items-center justify-center text-white hover:text-gold transition-colors"
-            aria-label="Close menu"
-          >
-            <X className="w-7 h-7" />
-          </button>
+          {/* Header with close button */}
+          <div className="flex items-center justify-between px-4 py-4">
+            <span className="font-bebas text-gold text-lg tracking-[0.2em]">
+              FILMMAKER.OG
+            </span>
+            <button
+              onClick={handleCloseMenu}
+              className="w-12 h-12 flex items-center justify-center text-white hover:text-gold transition-colors"
+              aria-label="Close menu"
+            >
+              <X className="w-6 h-6" />
+            </button>
+          </div>
 
           {/* Menu Content */}
           <div className="flex-1 flex flex-col items-center justify-center px-6">
-            {/* Logo */}
-            <span className="font-bebas text-gold text-2xl tracking-[0.3em] mb-16">
-              FILMMAKER.OG
-            </span>
-
             {/* Navigation Links */}
-            <nav className="flex flex-col items-center gap-10">
+            <nav className="flex flex-col items-center gap-8">
               {menuLinks.map((link) => {
                 const handleLinkClick = () => {
                   haptics.light();
@@ -126,7 +129,7 @@ const MobileMenu = ({ onOpenLegal, onSignOut }: MobileMenuProps) => {
                   <button
                     key={link.label}
                     onClick={handleLinkClick}
-                    className={`font-bebas text-4xl tracking-wider transition-colors ${
+                    className={`font-bebas text-2xl tracking-[0.15em] transition-colors ${
                       link.isHighlighted ? 'text-gold' : 'text-white hover:text-gold'
                     }`}
                   >
@@ -137,7 +140,7 @@ const MobileMenu = ({ onOpenLegal, onSignOut }: MobileMenuProps) => {
                     key={link.label}
                     to={link.href}
                     onClick={handleLinkClick}
-                    className={`font-bebas text-4xl tracking-wider transition-colors ${
+                    className={`font-bebas text-2xl tracking-[0.15em] transition-colors ${
                       link.isHighlighted ? 'text-gold' : 'text-white hover:text-gold'
                     }`}
                   >
@@ -150,7 +153,7 @@ const MobileMenu = ({ onOpenLegal, onSignOut }: MobileMenuProps) => {
                     onClick={handleLinkClick}
                     target={link.href.startsWith("http") ? "_blank" : undefined}
                     rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                    className={`font-bebas text-4xl tracking-wider transition-colors ${
+                    className={`font-bebas text-2xl tracking-[0.15em] transition-colors ${
                       link.isHighlighted ? 'text-gold' : 'text-white hover:text-gold'
                     }`}
                   >
@@ -162,7 +165,7 @@ const MobileMenu = ({ onOpenLegal, onSignOut }: MobileMenuProps) => {
               {/* Legal Button */}
               <button
                 onClick={handleLegalClick}
-                className="font-bebas text-4xl text-white hover:text-gold transition-colors tracking-wider"
+                className="font-bebas text-2xl text-white/60 hover:text-white transition-colors tracking-[0.15em]"
               >
                 LEGAL
               </button>
@@ -174,9 +177,9 @@ const MobileMenu = ({ onOpenLegal, onSignOut }: MobileMenuProps) => {
                     setIsOpen(false);
                     onSignOut();
                   }}
-                  className="font-bebas text-4xl tracking-wider text-white/40 hover:text-white/60 transition-colors mt-8 flex items-center gap-3"
+                  className="font-bebas text-xl tracking-[0.15em] text-white/30 hover:text-white/50 transition-colors mt-6 flex items-center gap-2"
                 >
-                  <LogOut className="w-6 h-6" />
+                  <LogOut className="w-5 h-5" />
                   SIGN OUT
                 </button>
               )}
@@ -185,18 +188,18 @@ const MobileMenu = ({ onOpenLegal, onSignOut }: MobileMenuProps) => {
 
           {/* Footer */}
           <div
-            className="pb-12 text-center space-y-3"
-            style={{ paddingBottom: 'max(3rem, env(safe-area-inset-bottom))' }}
+            className="py-6 text-center space-y-2"
+            style={{ paddingBottom: 'max(1.5rem, env(safe-area-inset-bottom))' }}
           >
             <a
               href="https://www.instagram.com/filmmaker.og"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-white/40 hover:text-gold transition-colors text-sm tracking-widest block py-2"
+              className="text-white/30 hover:text-gold transition-colors text-xs tracking-widest block py-1"
             >
               @filmmaker.og
             </a>
-            <span className="text-white/30 text-sm tracking-widest block py-1">
+            <span className="text-white/20 text-xs tracking-widest block">
               thefilmmaker.og@gmail.com
             </span>
           </div>
