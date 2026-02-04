@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Button } from "@/components/ui/button";
 import { useHaptics } from "@/hooks/use-haptics";
 import { useSwipe } from "@/hooks/use-swipe";
 import { ArrowLeft, RotateCcw, ChevronRight, ChevronLeft } from "lucide-react";
@@ -9,21 +8,11 @@ import { User } from "@supabase/supabase-js";
 import { calculateWaterfall, WaterfallInputs, WaterfallResult, GuildState } from "@/lib/waterfall";
 import { cn } from "@/lib/utils";
 
-// Step Components - Anxiety First Flow
+// Step Components - 5 clean steps
 import BudgetStep from "@/components/calculator/steps/BudgetStep";
-import SalesAgentStep from "@/components/calculator/steps/SalesAgentStep";
-import CamFeeStep from "@/components/calculator/steps/CamFeeStep";
 import GuildsStep from "@/components/calculator/steps/GuildsStep";
-import OffTopTotalStep from "@/components/calculator/steps/OffTopTotalStep";
-import CapitalSelectStep, { CapitalSelections } from "@/components/calculator/steps/CapitalSelectStep";
 import CapitalStep from "@/components/calculator/steps/CapitalStep";
-import TaxCreditsStep from "@/components/calculator/steps/TaxCreditsStep";
-import SeniorDebtStep from "@/components/calculator/steps/SeniorDebtStep";
-import GapLoanStep from "@/components/calculator/steps/GapLoanStep";
-import EquityStep from "@/components/calculator/steps/EquityStep";
-import BreakevenStep from "@/components/calculator/steps/BreakevenStep";
 import AcquisitionStep from "@/components/calculator/steps/AcquisitionStep";
-import RevealStep from "@/components/calculator/steps/RevealStep";
 import WaterfallStep from "@/components/calculator/steps/WaterfallStep";
 import ProgressBar from "@/components/calculator/ProgressBar";
 import MobileMenu from "@/components/MobileMenu";
@@ -51,13 +40,13 @@ const defaultGuilds: GuildState = {
   dga: false,
 };
 
-// SIMPLIFIED: 5 static steps instead of 14 dynamic steps
-type StepType = 
-  | 'costs'        // Budget + CAM + Sales combined
-  | 'guilds'       // Guild toggles
-  | 'capital'      // All capital inputs on one screen
-  | 'acquisition'  // Acquisition offer
-  | 'results';     // Waterfall + profit summary
+// 5 clean steps - one purpose each
+type StepType =
+  | 'budget'      // Just the budget
+  | 'guilds'      // Guild toggles
+  | 'capital'     // All capital inputs
+  | 'offer'       // Acquisition price
+  | 'results';    // Waterfall results
 
 const Calculator = () => {
   const navigate = useNavigate();
@@ -75,20 +64,11 @@ const [isButtonPressed, setIsButtonPressed] = useState(false);
   const [shakeButton, setShakeButton] = useState(false);
   const [showEmailGate, setShowEmailGate] = useState(false);
   const [emailCaptured, setEmailCaptured] = useState(false);
-  const [capitalSelections, setCapitalSelections] = useState<CapitalSelections>({
-    taxCredits: false,
-    seniorDebt: false,
-    gapLoan: false,
-    equity: false,
-  });
 
-  // SIMPLIFIED: Static 5-step flow - no dynamic branching
-  const steps: StepType[] = ['costs', 'guilds', 'capital', 'acquisition', 'results'];
+  // 5 clean steps
+  const steps: StepType[] = ['budget', 'guilds', 'capital', 'offer', 'results'];
   const totalSteps = steps.length;
   const currentStep = steps[currentStepIndex];
-
-  // SIMPLIFIED: Static step labels
-  const stepLabels = ['COSTS', 'GUILDS', 'CAPITAL', 'OFFER', 'RESULTS'];
 
   // Reset on ?reset=true or ?skip=true (demo mode)
   useEffect(() => {
@@ -172,12 +152,12 @@ const [isButtonPressed, setIsButtonPressed] = useState(false);
     setGuilds(prev => ({ ...prev, [guild]: !prev[guild] }));
   }, [haptics]);
 
-  // SIMPLIFIED: Can proceed to next step?
+  // Can proceed to next step?
   const canProceed = useCallback(() => {
     switch (currentStep) {
-      case 'costs':
+      case 'budget':
         return inputs.budget > 0;
-      case 'acquisition':
+      case 'offer':
         return inputs.revenue > 0;
       default:
         return true;
@@ -241,12 +221,12 @@ const [isButtonPressed, setIsButtonPressed] = useState(false);
   // Get step title
   const getStepTitle = () => {
     switch (currentStep) {
-      case 'costs': return 'PRODUCTION COSTS';
+      case 'budget': return 'BUDGET';
       case 'guilds': return 'GUILDS';
-      case 'capital': return 'CAPITAL STACK';
-      case 'acquisition': return 'THE OFFER';
-      case 'results': return 'THE WATERFALL';
-      default: return 'WATERFALL TERMINAL';
+      case 'capital': return 'CAPITAL';
+      case 'offer': return 'THE OFFER';
+      case 'results': return 'RESULTS';
+      default: return 'CALCULATOR';
     }
   };
 
@@ -274,10 +254,10 @@ const [isButtonPressed, setIsButtonPressed] = useState(false);
   // Get CTA text
   const getCtaText = () => {
     switch (currentStep) {
-      case 'costs': return 'ADD GUILDS';
-      case 'guilds': return 'ADD CAPITAL';
-      case 'capital': return 'ENTER THE OFFER';
-      case 'acquisition': return 'SEE RESULTS';
+      case 'budget': return 'NEXT';
+      case 'guilds': return 'NEXT';
+      case 'capital': return 'NEXT';
+      case 'offer': return 'SEE RESULTS';
       default: return 'CONTINUE';
     }
   };
@@ -285,14 +265,14 @@ const [isButtonPressed, setIsButtonPressed] = useState(false);
   // Render current step
   const renderStep = () => {
     switch (currentStep) {
-      case 'costs':
+      case 'budget':
         return <BudgetStep inputs={inputs} onUpdateInput={updateInput} />;
       case 'guilds':
         return <GuildsStep inputs={inputs} guilds={guilds} onToggleGuild={toggleGuild} />;
       case 'capital':
         return <CapitalStep inputs={inputs} onUpdateInput={updateInput} />;
-      case 'acquisition':
-        return <AcquisitionStep inputs={inputs} guilds={guilds} selections={capitalSelections} onUpdateInput={updateInput} />;
+      case 'offer':
+        return <AcquisitionStep inputs={inputs} guilds={guilds} onUpdateInput={updateInput} />;
       case 'results':
         return result ? <WaterfallStep result={result} inputs={inputs} /> : null;
       default:
@@ -421,8 +401,8 @@ const [isButtonPressed, setIsButtonPressed] = useState(false);
                 <div className="mb-3 py-2 px-4 bg-[#0A0A0A] border border-[#1A1A1A] flex items-center justify-center gap-2 animate-fade-in">
                   <div className="w-2 h-2 bg-gold/50 rounded-full animate-pulse" />
                   <span className="text-xs text-white/50 tracking-wide">
-                    {currentStep === 'costs' && 'Enter your budget to continue'}
-                    {currentStep === 'acquisition' && 'Enter the acquisition price'}
+                    {currentStep === 'budget' && 'Enter your budget to continue'}
+                    {currentStep === 'offer' && 'Enter the acquisition price'}
                   </span>
                 </div>
               )}
