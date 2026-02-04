@@ -1,11 +1,6 @@
-import { PremiumInput } from "@/components/ui/premium-input";
 import { WaterfallInputs, GuildState, formatCompactCurrency, calculateBreakeven } from "@/lib/waterfall";
 import { CapitalSelections } from "./CapitalSelectStep";
-import { Info, Target, TrendingUp, DollarSign } from "lucide-react";
 import { useState } from "react";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { StandardStepIcon } from "../StandardStepIcon";
-import { StandardSectionHeader } from "../StandardSectionHeader";
 
 interface AcquisitionStepProps {
   inputs: WaterfallInputs;
@@ -15,7 +10,7 @@ interface AcquisitionStepProps {
 }
 
 const AcquisitionStep = ({ inputs, guilds, selections, onUpdateInput }: AcquisitionStepProps) => {
-  const [showHelp, setShowHelp] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
 
   const formatValue = (value: number | undefined) => {
     if (value === undefined || value === 0) return '';
@@ -38,142 +33,95 @@ const AcquisitionStep = ({ inputs, guilds, selections, onUpdateInput }: Acquisit
 
   return (
     <div className="min-h-[60vh] flex flex-col justify-center">
-      {/* Hero Header - STANDARDIZED */}
+      {/* Hero question - minimal */}
       <div className="text-center mb-8">
-        {/* STANDARDIZED ICON (no custom size) */}
-        <StandardStepIcon icon={Target} label="The moment of truth" />
-
-        {/* STANDARDIZED HEADER SIZE (text-3xl) */}
-        <h2 className="font-bebas text-3xl tracking-[0.08em] text-white mb-2 leading-tight">
-          What's the streamer
-          <br />
-          <span className="text-gold">offering you?</span>
+        <h2 className="font-bebas text-3xl tracking-[0.08em] text-white mb-2">
+          What's the offer?
         </h2>
-
-        <p className="text-white/50 text-sm max-w-xs mx-auto">
-          Enter the total acquisition price to see if it covers your break-even.
+        <p className="text-white/40 text-sm">
+          Enter the acquisition price to see your position
         </p>
       </div>
 
-      {/* Breakeven context - Simplified */}
-      <div className="mb-6 glass-card-gold p-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <TrendingUp className="w-5 h-5 text-gold" />
-            <div>
-              <span className="text-xs uppercase tracking-wider text-gold/70 block">Your breakeven</span>
-              <span className="font-mono text-lg text-gold font-semibold">
-                {Number.isFinite(breakeven) ? formatCompactCurrency(breakeven) : 'Calculating...'}
-              </span>
-            </div>
-          </div>
-          <div className="text-right">
-            <span className="text-xs text-white/30 block">Minimum to recoup</span>
-            <span className="text-xs text-white/50">all costs + returns</span>
-          </div>
+      {/* Breakeven context */}
+      <div className="mb-4 p-4 bg-black border border-[#1A1A1A] flex items-center justify-between">
+        <div>
+          <span className="text-xs uppercase tracking-wider text-white/40 block">Your breakeven</span>
+          <span className="font-mono text-lg text-white">
+            {Number.isFinite(breakeven) ? formatCompactCurrency(breakeven) : '—'}
+          </span>
+        </div>
+        <div className="text-right">
+          <span className="text-xs text-white/30 block">Minimum to recoup</span>
+          <span className="text-xs text-white/40">all costs + returns</span>
         </div>
       </div>
 
-      {/* THE INPUT - STANDARDIZED */}
-      <div className="matte-section">
-        {/* STANDARDIZED SECTION HEADER (no gradient, no pulsing dot) */}
-        <StandardSectionHeader 
-          icon={DollarSign}
-          label="The Offer"
-          isCompleted={isCompleted}
-        />
-
-        {/* Input area */}
-        <div className="p-5">
-          <PremiumInput
-            type="text"
-            inputMode="numeric"
-            value={formatValue(inputs.revenue)}
-            onChange={(e) => onUpdateInput('revenue', parseValue(e.target.value))}
-            placeholder="3,500,000"
-            showCurrency
-            label="Acquisition Price"
-            example="$3,500,000"
-            actionHint="Enter the total offer amount"
-            isCompleted={isCompleted}
-            isNext={!isCompleted}
-          />
+      {/* Acquisition Input Card */}
+      <div className="bg-black border border-[#1A1A1A]">
+        <div className="p-4 border-b border-[#1A1A1A]">
+          <span className="text-xs uppercase tracking-wider text-white/40">Acquisition Price</span>
         </div>
 
-        {/* SIMPLIFIED status indicator (no animations, single color) */}
+        <div className="p-5">
+          <div
+            className={`flex items-center bg-black border transition-colors ${
+              isFocused ? 'border-white/40' : 'border-[#2A2A2A]'
+            }`}
+          >
+            <span className="pl-4 pr-2 font-mono text-xl text-white/40">$</span>
+            <input
+              type="text"
+              inputMode="numeric"
+              value={formatValue(inputs.revenue)}
+              onChange={(e) => onUpdateInput('revenue', parseValue(e.target.value))}
+              onFocus={() => setIsFocused(true)}
+              onBlur={() => setIsFocused(false)}
+              placeholder="3,500,000"
+              className="flex-1 bg-transparent py-4 pr-4 outline-none font-mono text-xl text-white text-right placeholder:text-white/20 tabular-nums"
+            />
+          </div>
+        </div>
+
+        {/* Status indicator */}
         {inputs.revenue > 0 && Number.isFinite(breakeven) && (
-          <div className="border-t border-[#1A1A1A] px-5 py-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs text-white/40 mb-1">
-                  {isAboveBreakeven ? 'Above breakeven' : 'Below breakeven'}
-                </p>
-                <p className="text-sm font-mono text-gold">
-                  {isAboveBreakeven
-                    ? `+${formatCompactCurrency(Math.abs(cushion))} cushion`
-                    : `${formatCompactCurrency(Math.abs(cushion))} shortfall`}
-                </p>
-              </div>
-              {isAboveBreakeven && percentAbove > 0 && (
-                <span className="text-2xl text-gold/70">
-                  +{percentAbove.toFixed(0)}%
-                </span>
-              )}
+          <div className="border-t border-[#1A1A1A] p-4 flex items-center justify-between">
+            <div>
+              <p className="text-xs text-white/40 mb-1">
+                {isAboveBreakeven ? 'Above breakeven' : 'Below breakeven'}
+              </p>
+              <p className="text-sm font-mono text-white">
+                {isAboveBreakeven
+                  ? `+${formatCompactCurrency(Math.abs(cushion))} cushion`
+                  : `${formatCompactCurrency(Math.abs(cushion))} shortfall`}
+              </p>
             </div>
+            {isAboveBreakeven && percentAbove > 0 && (
+              <span className="text-xl font-mono text-white/60">
+                +{percentAbove.toFixed(0)}%
+              </span>
+            )}
           </div>
         )}
       </div>
 
-      {/* Quick reference - STANDARDIZED */}
-      <div className="mt-6 py-4 px-5 bg-[#0A0A0A] border border-[#1A1A1A]">
-        <p className="text-xs text-white/40 text-center mb-3">Typical acquisition ranges</p>
+      {/* Quick reference */}
+      <div className="mt-4 p-4 bg-black border border-[#1A1A1A]">
+        <p className="text-xs text-white/30 text-center mb-3">Typical acquisition ranges</p>
         <div className="grid grid-cols-3 gap-3 text-center">
           <div>
             <span className="text-xs text-white/50 font-mono block">100-110%</span>
             <span className="text-[10px] text-white/30">baseline</span>
           </div>
           <div className="border-x border-[#1A1A1A] px-2">
-            <span className="text-xs text-gold/70 font-mono block">115-130%</span>
-            <span className="text-[10px] text-gold/50">strong</span>
+            <span className="text-xs text-white/60 font-mono block">115-130%</span>
+            <span className="text-[10px] text-white/40">strong</span>
           </div>
           <div>
-            <span className="text-xs text-gold/90 font-mono block">130%+</span>
-            <span className="text-[10px] text-gold/60">exceptional</span>
+            <span className="text-xs text-white/70 font-mono block">130%+</span>
+            <span className="text-[10px] text-white/50">exceptional</span>
           </div>
         </div>
-      </div>
-
-      {/* Inline Helper */}
-      <div className="mt-4">
-        <Collapsible open={showHelp} onOpenChange={setShowHelp}>
-          <CollapsibleTrigger className="w-full flex items-center justify-center gap-2 text-sm text-gold/70 hover:text-gold transition-colors py-3">
-            <Info className="w-4 h-4" />
-            <span>What's a typical acquisition price?</span>
-          </CollapsibleTrigger>
-          <CollapsibleContent className="mt-4">
-            <div className="glass-card-gold p-5 animate-reveal-up">
-              <p className="text-sm text-white/70 mb-3 leading-relaxed">
-                In streamer buyouts (Netflix, Amazon, Apple), the acquisition is typically
-                expressed as a <span className="text-gold font-semibold">multiple of budget</span>.
-              </p>
-              <div className="premium-divider mb-3" />
-              <div className="space-y-2 text-xs">
-                <div className="flex justify-between">
-                  <span className="text-white/40">Budget x 1.0-1.1</span>
-                  <span className="text-white/60">Baseline deal</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gold/70">Budget x 1.15-1.3</span>
-                  <span className="text-gold/60">Strong deal</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gold/90">Budget x 1.3+</span>
-                  <span className="text-gold/70">Bidding war</span>
-                </div>
-              </div>
-            </div>
-          </CollapsibleContent>
-        </Collapsible>
       </div>
     </div>
   );
