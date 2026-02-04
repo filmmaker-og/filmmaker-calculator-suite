@@ -27,6 +27,7 @@ import RevealStep from "@/components/calculator/steps/RevealStep";
 import WaterfallStep from "@/components/calculator/steps/WaterfallStep";
 import ProgressBar from "@/components/calculator/ProgressBar";
 import MobileMenu from "@/components/MobileMenu";
+import EmailGateModal from "@/components/EmailGateModal";
 
 const STORAGE_KEY = "filmmaker_og_inputs";
 
@@ -72,6 +73,8 @@ const Calculator = () => {
   const [result, setResult] = useState<WaterfallResult | null>(null);
 const [isButtonPressed, setIsButtonPressed] = useState(false);
   const [shakeButton, setShakeButton] = useState(false);
+  const [showEmailGate, setShowEmailGate] = useState(false);
+  const [emailCaptured, setEmailCaptured] = useState(false);
   const [capitalSelections, setCapitalSelections] = useState<CapitalSelections>({
     taxCredits: false,
     seniorDebt: false,
@@ -188,12 +191,18 @@ const [isButtonPressed, setIsButtonPressed] = useState(false);
       setTimeout(() => setShakeButton(false), 300);
       return;
     }
-    
+
+    // Email gate: show after guilds step (index 1) if not authenticated and not already captured
+    if (currentStepIndex === 1 && !user && !emailCaptured) {
+      setShowEmailGate(true);
+      return;
+    }
+
     haptics.step();
     if (currentStepIndex < totalSteps - 1) {
       setCurrentStepIndex(prev => prev + 1);
     }
-  }, [canProceed, currentStepIndex, totalSteps, haptics]);
+  }, [canProceed, currentStepIndex, totalSteps, haptics, user, emailCaptured]);
 
   const prevStep = useCallback(() => {
     haptics.light();
@@ -234,6 +243,27 @@ const [isButtonPressed, setIsButtonPressed] = useState(false);
       case 'acquisition': return 'THE OFFER';
       case 'results': return 'THE WATERFALL';
       default: return 'WATERFALL TERMINAL';
+    }
+  };
+
+  // Email gate handlers
+  const handleEmailSuccess = () => {
+    setEmailCaptured(true);
+    setShowEmailGate(false);
+    // Auto-advance after email captured
+    setTimeout(() => {
+      if (currentStepIndex < totalSteps - 1) {
+        setCurrentStepIndex(prev => prev + 1);
+      }
+    }, 500);
+  };
+
+  const handleEmailSkip = () => {
+    setEmailCaptured(true); // Mark as "handled" so we don't ask again
+    setShowEmailGate(false);
+    // Advance to next step
+    if (currentStepIndex < totalSteps - 1) {
+      setCurrentStepIndex(prev => prev + 1);
     }
   };
 
@@ -346,25 +376,25 @@ const [isButtonPressed, setIsButtonPressed] = useState(false);
           {renderStep()}
         </div>
 
-        {/* Swipe edge hints */}
+        {/* Swipe edge hints - visible with subtle pulse */}
         {currentStepIndex > 0 && (
           <div
             className={cn(
-              "fixed left-2 top-1/2 -translate-y-1/2 text-gold/30 transition-opacity",
-              swipeState.direction === 'right' ? 'opacity-100' : 'opacity-0'
+              "fixed left-2 top-1/2 -translate-y-1/2 text-gold/20 transition-opacity duration-300",
+              swipeState.direction === 'right' ? 'opacity-60' : 'opacity-20'
             )}
           >
-            <ChevronLeft className="w-6 h-6" />
+            <ChevronLeft className="w-5 h-5" />
           </div>
         )}
         {currentStepIndex < totalSteps - 1 && canProceed() && (
           <div
             className={cn(
-              "fixed right-2 top-1/2 -translate-y-1/2 text-gold/30 transition-opacity",
-              swipeState.direction === 'left' ? 'opacity-100' : 'opacity-0'
+              "fixed right-2 top-1/2 -translate-y-1/2 text-gold/20 transition-opacity duration-300",
+              swipeState.direction === 'left' ? 'opacity-60' : 'opacity-20'
             )}
           >
-            <ChevronRight className="w-6 h-6" />
+            <ChevronRight className="w-5 h-5" />
           </div>
         )}
       </main>
@@ -424,16 +454,6 @@ const [isButtonPressed, setIsButtonPressed] = useState(false);
                       : 'none',
                   }}
                 >
-                  {/* Shimmer effect when enabled */}
-                  {canProceed() && (
-                    <div
-                      className="absolute inset-0 pointer-events-none animate-shimmer-slow"
-                      style={{
-                        background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.1) 50%, transparent 100%)',
-                        backgroundSize: '200% 100%',
-                      }}
-                    />
-                  )}
                   <span className="relative flex items-center justify-center gap-3">
                     {getCtaText()}
                     <ChevronRight className="w-5 h-5" />
@@ -477,6 +497,14 @@ const [isButtonPressed, setIsButtonPressed] = useState(false);
           )}
         </div>
       </div>
+
+      {/* Email Gate Modal */}
+      <EmailGateModal
+        isOpen={showEmailGate}
+        onClose={() => setShowEmailGate(false)}
+        onSuccess={handleEmailSuccess}
+        onSkip={handleEmailSkip}
+      />
     </div>
   );
 };
