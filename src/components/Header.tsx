@@ -16,10 +16,14 @@ const Header = ({ title }: HeaderProps) => {
 
   return (
     <>
-      {/* Header Bar - Matte Charcoal */}
+      {/* Header Bar - Frosted Glass */}
       <header
         className="fixed top-0 left-0 right-0 z-[150]"
-        style={{ backgroundColor: "#0A0A0A" }}
+        style={{
+          backgroundColor: "rgba(10, 10, 10, 0.85)",
+          backdropFilter: "blur(14px)",
+          WebkitBackdropFilter: "blur(14px)",
+        }}
       >
         <div className="flex items-center justify-between px-4 h-14">
           {/* Left: Logo Text (clickable to home) */}
