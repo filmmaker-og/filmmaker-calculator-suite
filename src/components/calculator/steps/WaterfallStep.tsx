@@ -263,69 +263,110 @@ const WaterfallStep = ({ result, inputs }: WaterfallStepProps) => {
         )}
       </div>
 
-      {/* INVESTOR DECK CTA */}
-      <div className="glass-card-gold p-5 mb-6">
-        <div className="flex items-start gap-4">
-          <div className="w-12 h-12 bg-gold/10 border border-gold/30 flex items-center justify-center flex-shrink-0">
-            <Lock className="w-5 h-5 text-gold" />
+      {/* WHAT YOU JUST MODELED - Complexity Summary */}
+      <div className="matte-section p-5 mb-6">
+        <p className="text-[9px] uppercase tracking-[0.2em] text-gold/60 mb-4 text-center">
+          What you just modeled
+        </p>
+        <div className="grid grid-cols-2 gap-3">
+          {[
+            { label: "Revenue Tiers", value: "4 phases" },
+            { label: "Fee Structures", value: "CAM + Sales + Guilds" },
+            { label: "Capital Stack", value: `${(inputs.debt > 0 ? 1 : 0) + (inputs.mezzanineDebt > 0 ? 1 : 0) + (inputs.equity > 0 ? 1 : 0)} tranches` },
+            { label: "Return Calc", value: "Pref + 50/50 split" },
+          ].map((item) => (
+            <div key={item.label} className="text-center p-3 bg-[#0A0A0A] border border-[#1A1A1A]">
+              <p className="text-[9px] text-white/40 uppercase tracking-wider mb-1">{item.label}</p>
+              <p className="text-xs text-white font-medium">{item.value}</p>
+            </div>
+          ))}
+        </div>
+        <p className="text-[10px] text-white/30 text-center mt-4 leading-relaxed">
+          This is how agencies and studios model deals.
+          <br />
+          <span className="text-gold/60">Now imagine explaining this to investors.</span>
+        </p>
+      </div>
+
+      {/* THE TRAP - Implementation Gap CTA */}
+      <div className="relative mb-6">
+        {/* Glow effect */}
+        <div
+          className="absolute -inset-4 pointer-events-none"
+          style={{
+            background: 'radial-gradient(ellipse at center, rgba(212, 175, 55, 0.15) 0%, transparent 70%)',
+            filter: 'blur(30px)',
+          }}
+        />
+
+        <div className="relative glass-card-gold p-6 border-gold/40">
+          <div className="text-center mb-5">
+            <Lock className="w-8 h-8 text-gold mx-auto mb-3" />
+            <h3 className="font-bebas text-2xl tracking-[0.1em] text-white mb-2">
+              YOU HAVE THE <span className="text-gold">NUMBERS</span>
+            </h3>
+            <p className="text-sm text-white/60 leading-relaxed max-w-xs mx-auto">
+              But can you walk investors through a 4-tier waterfall with preferred returns and profit participation?
+            </p>
           </div>
-          <div className="flex-1">
-            <h4 className="font-semibold text-white mb-1">Investor Deck</h4>
-            <p className="text-xs text-white/50 mb-4 leading-relaxed">
-              Get a professional PDF with your deal summary, waterfall
-              breakdown, and return projections.
-            </p>
-            <Button
-              onClick={() => setShowRestrictedModal(true)}
-              className="w-full h-12 text-sm font-black tracking-wider rounded-none bg-gold-cta text-black hover:brightness-110"
-              style={{
-                boxShadow: "0 0 30px rgba(212, 175, 55, 0.25)",
-              }}
-            >
-              UNLOCK YOUR DECK
-            </Button>
-            <p className="text-[9px] text-white/30 text-center mt-2">
-              Free with email &middot; No credit card
-            </p>
+
+          <Button
+            onClick={() => setShowRestrictedModal(true)}
+            className="w-full h-14 text-base font-black tracking-[0.15em] rounded-none bg-gold-cta text-black hover:brightness-110 transition-all active:scale-[0.98]"
+            style={{
+              boxShadow: '0 0 50px rgba(212, 175, 55, 0.4), 0 4px 20px rgba(0, 0, 0, 0.3)',
+            }}
+          >
+            GET THE INVESTOR DECK
+          </Button>
+
+          <div className="flex items-center justify-center gap-4 mt-4">
+            <span className="text-[9px] text-white/30 uppercase tracking-wider">Templates</span>
+            <span className="w-1 h-1 bg-white/20 rounded-full" />
+            <span className="text-[9px] text-white/30 uppercase tracking-wider">Models</span>
+            <span className="w-1 h-1 bg-white/20 rounded-full" />
+            <span className="text-[9px] text-white/30 uppercase tracking-wider">Strategy</span>
           </div>
         </div>
       </div>
 
-      {/* Additional Resources */}
-      <div className="space-y-3">
-        <p className="text-xs text-white/30 uppercase tracking-wider text-center">
-          Go deeper
-        </p>
-
+      {/* Secondary CTAs */}
+      <div className="space-y-3 mb-6">
         <a
           href="https://filmmaker.og/store"
           target="_blank"
           rel="noopener noreferrer"
-          className="block p-4 bg-[#0A0A0A] border border-[#1A1A1A] hover:border-[#2A2A2A] transition-colors"
+          className="block p-4 bg-[#0A0A0A] border border-[#1A1A1A] hover:border-gold/30 hover:bg-gold/5 transition-all group"
         >
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <FileText className="w-5 h-5 text-gold/60" />
-              <span className="text-sm text-white/70">
-                Download Full Excel Model
-              </span>
+              <div className="w-10 h-10 bg-gold/10 border border-gold/20 flex items-center justify-center group-hover:border-gold/40 transition-colors">
+                <FileText className="w-5 h-5 text-gold/60 group-hover:text-gold transition-colors" />
+              </div>
+              <div>
+                <span className="text-sm text-white font-medium block">Full Excel Model</span>
+                <span className="text-[10px] text-white/40">Editable financials</span>
+              </div>
             </div>
-            <ExternalLink className="w-4 h-4 text-white/30" />
+            <ExternalLink className="w-4 h-4 text-white/30 group-hover:text-gold/60 transition-colors" />
           </div>
         </a>
 
         <a
-          href="mailto:thefilmmaker.og@gmail.com?subject=Deal%20Review%20Request"
-          className="block p-4 bg-[#0A0A0A] border border-[#1A1A1A] hover:border-[#2A2A2A] transition-colors"
+          href="mailto:thefilmmaker.og@gmail.com?subject=Deal%20Review%20Request&body=I%20just%20modeled%20a%20deal%20and%20would%20like%20professional%20review."
+          className="block p-4 bg-[#0A0A0A] border border-[#1A1A1A] hover:border-gold/30 hover:bg-gold/5 transition-all group"
         >
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <TrendingUp className="w-5 h-5 text-gold/60" />
-              <span className="text-sm text-white/70">
-                Get Professional Deal Review
-              </span>
+              <div className="w-10 h-10 bg-gold/10 border border-gold/20 flex items-center justify-center group-hover:border-gold/40 transition-colors">
+                <TrendingUp className="w-5 h-5 text-gold/60 group-hover:text-gold transition-colors" />
+              </div>
+              <div>
+                <span className="text-sm text-white font-medium block">1-on-1 Deal Review</span>
+                <span className="text-[10px] text-white/40">Expert consultation</span>
+              </div>
             </div>
-            <ExternalLink className="w-4 h-4 text-white/30" />
+            <ExternalLink className="w-4 h-4 text-white/30 group-hover:text-gold/60 transition-colors" />
           </div>
         </a>
       </div>
