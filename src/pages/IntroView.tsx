@@ -1,34 +1,37 @@
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, ArrowLeft, ShieldCheck, TrendingUp, Lightbulb, FileText, ChevronDown } from 'lucide-react';
+import { ArrowRight, ArrowLeft, ShieldCheck, TrendingUp, Lightbulb, FileText, ChevronDown, Zap, Folder } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import Header from "@/components/Header";
 import { cn } from "@/lib/utils";
 
-/* ═══════════════════════════════════════════════════════════════════════════
+/* ═══════════════════════════════════════════════════════════════════════════════
    PRODUCT BIBLE v2.0 TOKENS
-   ═══════════════════════════════════════════════════════════════════════════ */
+   ═══════════════════════════════════════════════════════════════════════════════ */
 const tokens = {
-  // Backgrounds
+  // Backgrounds - MORE GRAY CONTRAST
   bgVoid: '#000000',
-  bgCard: '#070707',
-  bgSurface: '#141414',
-  bgElevated: '#111111',
+  bgCard: '#0D0D0D',       // Lighter gray for card pop
+  bgSurface: '#161616',    // Even more visible
+  bgElevated: '#1A1A1A',   // Headers stand out more
   
   // Gold System
   gold: '#FFD700',
   goldMuted: 'rgba(255, 215, 0, 0.45)',
   goldSubtle: 'rgba(255, 215, 0, 0.12)',
   goldGlow: 'rgba(255, 215, 0, 0.3)',
+  goldSolid: 'rgba(255, 215, 0, 0.85)',  // For readable buttons
   
   // Borders
   borderDefault: '#2A2A2A',
   borderGold: 'rgba(255, 215, 0, 0.45)',
+  borderLight: '#333333',  // More visible borders
   
   // Text
   textPrimary: '#FFFFFF',
   textMid: '#CFCFCF',
   textDim: '#8A8A8A',
+  textDark: '#1A1A1A',  // For gold backgrounds
   
   // Radius
   radiusSm: '8px',
@@ -102,9 +105,9 @@ const IntroView = () => {
       >
         <div className="max-w-3xl mx-auto space-y-6">
           
-          {/* ═══════════════════════════════════════════════════════════════════
+          {/* ═══════════════════════════════════════════════════════════════════════
               HEADER - Documentation Style
-              ═══════════════════════════════════════════════════════════════════ */}
+              ═══════════════════════════════════════════════════════════════════════ */}
           <div className="space-y-4 pb-6 animate-fade-in">
             {/* Breadcrumb */}
             <div 
@@ -138,23 +141,23 @@ const IntroView = () => {
             />
           </div>
 
-          {/* ═══════════════════════════════════════════════════════════════════
-              MAIN CONTENT CARD - Chapter Style
-              ═══════════════════════════════════════════════════════════════════ */}
+          {/* ═══════════════════════════════════════════════════════════════════════
+              MAIN CONTENT CARD - Chapter Style (MORE GRAY)
+              ═══════════════════════════════════════════════════════════════════════ */}
           <div 
             className="overflow-hidden animate-fade-in"
             style={{ 
               background: tokens.bgCard,
-              border: `1px solid ${tokens.borderDefault}`,
+              border: `1px solid ${tokens.borderLight}`,
               borderRadius: tokens.radiusLg,
             }}
           >
-            {/* Card Header - Elevated */}
+            {/* Card Header - Elevated with more contrast */}
             <div 
               className="flex items-center gap-4 px-5 py-4"
               style={{ 
                 background: tokens.bgElevated,
-                borderBottom: `1px solid ${tokens.borderDefault}`,
+                borderBottom: `1px solid ${tokens.borderLight}`,
               }}
             >
               {/* Chapter Number */}
@@ -209,7 +212,7 @@ const IntroView = () => {
                   </h3>
                   <p 
                     className="text-sm leading-relaxed"
-                    style={{ color: tokens.textDim }}
+                    style={{ color: tokens.textMid }}
                   >
                     Most filmmakers guess their numbers. You won't. This calculator models the flow of money from acquisition sale to your pocket—accounting for sales agent fees, distributor commissions, and investor recoupment. Whether you're selling to Netflix, Amazon, Tubi, or an independent buyer, you need to know where the money goes before you promise anyone a return.
                   </p>
@@ -240,7 +243,7 @@ const IntroView = () => {
                   </h3>
                   <p 
                     className="text-sm leading-relaxed"
-                    style={{ color: tokens.textDim }}
+                    style={{ color: tokens.textMid }}
                   >
                     Investors back producers who understand the risks. When you can walk someone through off-the-tops, collection fees, and recoupment positions, you're speaking their language. A clear waterfall demonstrates competence—and competence closes deals.
                   </p>
@@ -271,7 +274,7 @@ const IntroView = () => {
                   </h3>
                   <p 
                     className="text-sm leading-relaxed"
-                    style={{ color: tokens.textDim }}
+                    style={{ color: tokens.textMid }}
                   >
                     If parts of this feel unfamiliar, that's expected. Film finance is deliberately complex—it protects the people who understand it. The terminology exists for a reason, and learning it is how you stop leaving money on the table.
                   </p>
@@ -280,59 +283,107 @@ const IntroView = () => {
             </div>
           </div>
 
-          {/* ═══════════════════════════════════════════════════════════════════
-              PRO TIP CALLOUT
-              ═══════════════════════════════════════════════════════════════════ */}
+          {/* ═══════════════════════════════════════════════════════════════════════
+              PRO TIP CALLOUT - Lightning bolt + Gold gradient edge
+              ═══════════════════════════════════════════════════════════════════════ */}
           <div 
-            className="flex items-start gap-3 p-4 animate-fade-in"
+            className="relative flex items-start gap-4 p-4 animate-fade-in overflow-hidden"
             style={{ 
-              background: tokens.goldSubtle,
-              borderLeft: `3px solid ${tokens.gold}`,
-              borderRadius: `0 ${tokens.radiusMd} ${tokens.radiusMd} 0`,
+              background: tokens.bgCard,
+              border: `1px solid ${tokens.borderLight}`,
+              borderRadius: tokens.radiusLg,
             }}
           >
-            <span 
-              className="text-xs font-bold uppercase tracking-wide flex-shrink-0"
-              style={{ color: tokens.gold }}
+            {/* Gold gradient left edge */}
+            <div 
+              className="absolute left-0 top-0 bottom-0 w-1"
+              style={{
+                background: `linear-gradient(180deg, ${tokens.gold} 0%, ${tokens.goldMuted} 50%, ${tokens.goldSubtle} 100%)`,
+              }}
+            />
+            
+            {/* Lightning bolt icon container */}
+            <div 
+              className="p-2 flex-shrink-0 ml-2"
+              style={{
+                background: `linear-gradient(135deg, ${tokens.goldSubtle} 0%, rgba(255, 215, 0, 0.25) 100%)`,
+                border: `1px solid ${tokens.goldMuted}`,
+                borderRadius: tokens.radiusMd,
+              }}
             >
-              Tip
-            </span>
-            <p 
-              className="text-sm leading-relaxed"
-              style={{ color: tokens.textMid }}
-            >
-              Don't let unfamiliar terminology stop you. Look for the 
+              <Zap className="w-5 h-5" style={{ color: tokens.gold }} />
+            </div>
+            
+            <div>
               <span 
-                className="inline-flex items-center justify-center w-5 h-5 mx-1 text-xs font-bold rounded-full"
-                style={{ 
-                  color: tokens.gold, 
-                  border: `1px solid ${tokens.goldMuted}`,
-                  background: tokens.goldSubtle,
-                }}
-              >i</span>
-              icons throughout the calculator for quick definitions.
-            </p>
+                className="text-xs font-bold uppercase tracking-wide block mb-1"
+                style={{ color: tokens.gold }}
+              >
+                Pro Tip
+              </span>
+              <p 
+                className="text-sm leading-relaxed"
+                style={{ color: tokens.textMid }}
+              >
+                Don't let unfamiliar terminology stop you. Look for the 
+                <span 
+                  className="inline-flex items-center justify-center w-5 h-5 mx-1 text-xs font-bold rounded-full"
+                  style={{ 
+                    color: tokens.gold, 
+                    border: `1px solid ${tokens.goldMuted}`,
+                    background: tokens.goldSubtle,
+                  }}
+                >i</span>
+                icons throughout the calculator for quick definitions.
+              </p>
+            </div>
           </div>
 
-          {/* ═══════════════════════════════════════════════════════════════════
-              FAQ CARD - Chapter Style
-              ═══════════════════════════════════════════════════════════════════ */}
+          {/* ═══════════════════════════════════════════════════════════════════════
+              FAQ CARD - Folder Containment Header
+              ═══════════════════════════════════════════════════════════════════════ */}
           <div 
             className="overflow-hidden animate-fade-in"
             style={{ 
               background: tokens.bgCard,
-              border: `1px solid ${tokens.borderDefault}`,
+              border: `1px solid ${tokens.borderLight}`,
               borderRadius: tokens.radiusLg,
             }}
           >
-            {/* Card Header */}
+            {/* Folder-style Header */}
             <div 
               className="flex items-center gap-4 px-5 py-4"
               style={{ 
                 background: tokens.bgElevated,
-                borderBottom: `1px solid ${tokens.borderDefault}`,
+                borderBottom: `1px solid ${tokens.borderLight}`,
               }}
             >
+              {/* Folder Icon Container */}
+              <div 
+                className="w-10 h-10 flex items-center justify-center"
+                style={{
+                  background: tokens.goldSubtle,
+                  border: `1px solid ${tokens.goldMuted}`,
+                  borderRadius: tokens.radiusMd,
+                }}
+              >
+                <Folder className="w-5 h-5" style={{ color: tokens.gold }} />
+              </div>
+              <div className="flex-1">
+                <h2 
+                  className="font-bold text-sm uppercase tracking-wide"
+                  style={{ color: tokens.textPrimary }}
+                >
+                  Frequently Asked Questions
+                </h2>
+                <p 
+                  className="text-xs"
+                  style={{ color: tokens.textDim }}
+                >
+                  {faqItems.length} items • Quick answers before you start
+                </p>
+              </div>
+              {/* Chapter badge */}
               <div 
                 className="w-10 h-10 flex items-center justify-center font-bebas text-lg"
                 style={{
@@ -343,20 +394,6 @@ const IntroView = () => {
                 }}
               >
                 02
-              </div>
-              <div>
-                <h2 
-                  className="font-bold text-sm uppercase tracking-wide"
-                  style={{ color: tokens.textPrimary }}
-                >
-                  Common Questions
-                </h2>
-                <p 
-                  className="text-xs"
-                  style={{ color: tokens.textDim }}
-                >
-                  Quick answers before you start
-                </p>
               </div>
             </div>
             
@@ -415,7 +452,7 @@ const IntroView = () => {
                     <div 
                       className="px-4 pb-4 text-sm leading-relaxed"
                       style={{ 
-                        color: tokens.textDim,
+                        color: tokens.textMid,
                         marginLeft: '44px',
                         borderLeft: `2px solid ${tokens.goldMuted}`,
                         paddingLeft: '16px',
@@ -429,9 +466,9 @@ const IntroView = () => {
             </div>
           </div>
 
-          {/* ═══════════════════════════════════════════════════════════════════
-              CTA SECTION
-              ═══════════════════════════════════════════════════════════════════ */}
+          {/* ═══════════════════════════════════════════════════════════════════════
+              CTA SECTION - READABLE BUTTON
+              ═══════════════════════════════════════════════════════════════════════ */}
           <div className="pt-6 flex flex-col items-center gap-5 animate-fade-in">
             {/* Divider */}
             <div 
@@ -441,20 +478,20 @@ const IntroView = () => {
               }}
             />
             
-            {/* CTA Button - Product Bible Style */}
+            {/* CTA Button - SOLID GOLD for readability */}
             <Button 
               onClick={handleInitialize}
-              className="group px-8 py-6 text-xs font-black uppercase tracking-widest transition-all duration-200"
+              className="group px-10 py-7 text-sm font-black uppercase tracking-widest transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
               style={{
-                background: tokens.goldSubtle,
-                border: `1px solid ${tokens.goldMuted}`,
+                background: `linear-gradient(135deg, ${tokens.gold} 0%, #E5C100 100%)`,
+                border: 'none',
                 borderRadius: tokens.radiusMd,
-                color: tokens.gold,
-                boxShadow: `0 10px 26px rgba(255, 215, 0, 0.18)`,
+                color: '#000000',
+                boxShadow: `0 10px 30px rgba(255, 215, 0, 0.35), 0 4px 12px rgba(255, 215, 0, 0.2)`,
               }}
             >
               Initialize Simulation
-              <ArrowRight className="ml-3 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="ml-3 w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Button>
             
             {/* Version */}

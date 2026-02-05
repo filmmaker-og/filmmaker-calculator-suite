@@ -50,9 +50,9 @@ const Index = () => {
 
       <div className="min-h-screen flex flex-col relative overflow-hidden bg-black">
 
-        {/* ═══════════════════════════════════════════════════════════════════
+        {/* ═══════════════════════════════════════════════════════════════════════
             CINEMATIC INTRO - Theatrical Spotlight (Enhanced)
-            ═══════════════════════════════════════════════════════════════════ */}
+            ═══════════════════════════════════════════════════════════════════════ */}
         <div
           className={cn(
             "fixed inset-0 z-[100] flex items-center justify-center transition-opacity duration-1000",
@@ -208,9 +208,9 @@ const Index = () => {
           </div>
         </div>
 
-        {/* ═══════════════════════════════════════════════════════════════════
-            HOMEPAGE - With Ambient Spotlight
-            ═══════════════════════════════════════════════════════════════════ */}
+        {/* ═══════════════════════════════════════════════════════════════════════
+            HOMEPAGE - With Ambient Spotlight at TOP
+            ═══════════════════════════════════════════════════════════════════════ */}
         <main
           className={cn(
             "flex-1 flex flex-col items-center justify-center px-6 pb-24 transition-all duration-700",
@@ -220,40 +220,59 @@ const Index = () => {
           {/* Cinematic Vignette */}
           <div className="vignette" />
           
-          {/* Ambient spotlight glow from above */}
+          {/* ─── TOP SPOTLIGHT GLOW (Always visible on homepage) ─── */}
           <div
-            className="fixed top-0 left-1/2 -translate-x-1/2 pointer-events-none animate-spotlight-pulse"
+            className="fixed top-0 left-1/2 -translate-x-1/2 pointer-events-none"
             style={{
               width: '100vw',
-              height: '75vh',
+              height: '60vh',
               background: `
                 radial-gradient(
-                  ellipse 50% 40% at 50% 10%,
-                  rgba(255, 215, 0, 0.1) 0%,
-                  rgba(255, 215, 0, 0.04) 40%,
+                  ellipse 60% 50% at 50% 0%,
+                  rgba(255, 215, 0, 0.12) 0%,
+                  rgba(255, 215, 0, 0.06) 30%,
+                  rgba(255, 215, 0, 0.02) 50%,
                   transparent 70%
                 )
               `,
             }}
           />
+          
+          {/* Secondary subtle cone beam */}
+          <div
+            className="fixed top-0 left-1/2 -translate-x-1/2 pointer-events-none"
+            style={{
+              width: '100vw',
+              height: '80vh',
+              background: `
+                linear-gradient(
+                  180deg,
+                  rgba(255, 255, 255, 0.04) 0%,
+                  rgba(255, 255, 255, 0.01) 30%,
+                  transparent 60%
+                )
+              `,
+              clipPath: 'polygon(35% 0%, 65% 0%, 85% 100%, 15% 100%)',
+            }}
+          />
 
           <div className="w-full max-w-sm flex flex-col items-center text-center relative">
 
-            {/* Logo with aura */}
+            {/* Logo with aura - NOW SAME SIZE AS INTRO (w-32 h-32) */}
             <div className="mb-6 relative z-10">
               <div
-                className="absolute inset-0 -m-6"
+                className="absolute inset-0 -m-8"
                 style={{
-                  background: 'radial-gradient(circle, rgba(255, 215, 0, 0.2) 0%, transparent 70%)',
-                  filter: 'blur(12px)',
+                  background: 'radial-gradient(circle, rgba(255, 215, 0, 0.25) 0%, transparent 70%)',
+                  filter: 'blur(20px)',
                 }}
               />
               <img
                 src={filmmakerLogo}
                 alt="Filmmaker.OG"
-                className="relative w-24 h-24 object-contain rounded-lg"
+                className="relative w-32 h-32 object-contain rounded-lg"
                 style={{
-                  filter: 'brightness(1.15) drop-shadow(0 0 25px rgba(255, 215, 0, 0.45))',
+                  filter: 'brightness(1.15) drop-shadow(0 0 30px rgba(255, 215, 0, 0.5))',
                 }}
               />
             </div>
