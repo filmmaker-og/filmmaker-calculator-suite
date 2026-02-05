@@ -1,6 +1,6 @@
 import { WaterfallInputs, GuildState, formatCompactCurrency, calculateBreakeven } from "@/lib/waterfall";
 import { CapitalSelections } from "../steps/CapitalSelectStep";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import ChapterCard from "../ChapterCard";
 import GlossaryTrigger, { GLOSSARY } from "../GlossaryTrigger";
@@ -10,10 +10,19 @@ interface DealTabProps {
   guilds: GuildState;
   selections: CapitalSelections;
   onUpdateInput: (key: keyof WaterfallInputs, value: number) => void;
+  onAdvance?: () => void;
 }
 
-const DealTab = ({ inputs, guilds, selections, onUpdateInput }: DealTabProps) => {
+const DealTab = ({ inputs, guilds, selections, onUpdateInput, onAdvance }: DealTabProps) => {
   const [isFocused, setIsFocused] = useState(false);
+  const revenueInputRef = useRef<HTMLInputElement>(null);
+
+  // Auto-focus on mount if revenue not entered
+  useEffect(() => {
+    if (inputs.revenue === 0) {
+      revenueInputRef.current?.focus();
+    }
+  }, []);
 
   const formatValue = (value: number | undefined) => {
     if (value === undefined || value === 0) return '';
@@ -22,6 +31,17 @@ const DealTab = ({ inputs, guilds, selections, onUpdateInput }: DealTabProps) =>
 
   const parseValue = (str: string) => {
     return parseInt(str.replace(/[^0-9]/g, '')) || 0;
+  };
+
+  // Handle Enter key to advance
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      revenueInputRef.current?.blur();
+      if (inputs.revenue > 0 && onAdvance) {
+        setTimeout(() => onAdvance(), 100);
+      }
+    }
   };
 
   // Use the algebraic breakeven calculation
@@ -71,24 +91,31 @@ const DealTab = ({ inputs, guilds, selections, onUpdateInput }: DealTabProps) =>
             className={cn(
               "flex items-center transition-all",
               "bg-bg-surface border",
-              isFocused ? "border-border-active shadow-focus" : "border-border-default"
+              isFocused ? "border-border-active shadow-focus" : inputs.revenue > 0 ? "border-gold-muted" : "border-border-default"
             )}
             style={{ borderRadius: 'var(--radius-md)' }}
           >
             <span className="pl-4 pr-2 font-mono text-xl text-text-dim">$</span>
             <input
+              ref={revenueInputRef}
               type="text"
               inputMode="numeric"
               value={formatValue(inputs.revenue)}
               onChange={(e) => onUpdateInput('revenue', parseValue(e.target.value))}
               onFocus={() => setIsFocused(true)}
               onBlur={() => setIsFocused(false)}
+              onKeyDown={handleKeyDown}
               placeholder="3,500,000"
               className="flex-1 bg-transparent py-4 pr-4 outline-none font-mono text-[22px] text-text-primary text-right placeholder:text-text-dim tabular-nums"
             />
+            {inputs.revenue > 0 && (
+              <span className="pr-4 text-gold text-lg">✓</span>
+            )}
           </div>
           <p className="mt-2 text-xs text-text-dim">
-            Enter the acquisition price to see your position
+            {inputs.revenue > 0
+              ? "Acquisition price entered. Press Enter or click Next to see the waterfall."
+              : "Enter the acquisition price to see your position"}
           </p>
         </div>
 
