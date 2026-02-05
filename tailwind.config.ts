@@ -19,19 +19,43 @@ export default {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
-        // BRAND GUIDE STRICT PALETTE
-        // Rule: If NOT clickable → gold (#D4AF37). If CLICKABLE → gold-cta (#F9E076)
+
+        /* ═══════════════════════════════════════════════════════════════════
+           FILMMAKER.OG DESIGN SYSTEM v2.0 - Electric Gold
+           ═══════════════════════════════════════════════════════════════════ */
+
+        // BACKGROUND LAYERS
+        "bg-void": "var(--bg-void)",
+        "bg-card": "var(--bg-card)",
+        "bg-surface": "var(--bg-surface)",
+        "bg-elevated": "var(--bg-elevated)",
+
+        // GOLD SYSTEM (Electric)
         gold: {
-          DEFAULT: "#D4AF37",      // Metallic Gold - icons, borders, dividers (NON-CLICKABLE)
-          highlight: "#F9E076",    // Highlight Gold (Glow effects)
-          shadow: "#7A5C12",       // Shadow Gold (Gradients/Depth)
+          DEFAULT: "#FFD700",           // Electric Gold - primary accent
+          muted: "rgba(255, 215, 0, 0.45)",
+          subtle: "rgba(255, 215, 0, 0.12)",
+          glow: "rgba(255, 215, 0, 0.3)",
         },
-        "gold-cta": "#F9E076",     // Bright Gold - BUTTONS ONLY (CLICKABLE)
-        panel: "#111111",          // Section panels, secondary backgrounds
-        surface: "hsl(var(--surface))",
-        "text-high": "hsl(var(--text-high))",
-        "text-muted": "hsl(var(--text-muted))",
-        "border-subtle": "hsl(var(--border-subtle))",
+
+        // TEXT HIERARCHY
+        "text-primary": "var(--text-primary)",
+        "text-mid": "var(--text-mid)",
+        "text-dim": "var(--text-dim)",
+
+        // BORDERS
+        "border-default": "var(--border-default)",
+        "border-subtle": "var(--border-subtle)",
+        "border-active": "var(--border-active)",
+
+        // STATUS
+        "status-success": "var(--status-success)",
+        "status-warning": "var(--status-warning)",
+        "status-danger": "var(--status-danger)",
+
+        // Legacy compatibility
+        panel: "#111111",
+        surface: "var(--bg-surface)",
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
@@ -67,9 +91,28 @@ export default {
         mono: ['Roboto Mono', 'monospace'],
       },
       borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+        none: "var(--radius-none)",
+        sm: "var(--radius-sm)",         // 8px - Status badges, small elements
+        md: "var(--radius-md)",         // 12px - Buttons, inputs, KPI cards
+        lg: "var(--radius-lg)",         // 14px - Cards, sections, containers
+        xl: "var(--radius-xl)",         // 18px - Modals, sheets
+        full: "var(--radius-full)",     // 999px - Pills, circular icons
+      },
+      spacing: {
+        "xs": "var(--space-xs)",        // 4px
+        "sm": "var(--space-sm)",        // 8px
+        "md": "var(--space-md)",        // 12px
+        "lg": "var(--space-lg)",        // 16px
+        "xl": "var(--space-xl)",        // 24px
+        "2xl": "var(--space-2xl)",      // 32px
+        "appbar": "var(--appbar-h)",    // 56px
+        "tabbar": "var(--tabbar-h)",    // 62px
+      },
+      boxShadow: {
+        "focus": "var(--shadow-focus)",
+        "card-active": "var(--shadow-card-active)",
+        "button": "var(--shadow-button)",
+        "modal": "var(--shadow-modal)",
       },
       keyframes: {
         "accordion-down": {
@@ -89,12 +132,12 @@ export default {
           to: { opacity: "1", transform: "scale(1)" },
         },
         "pulse-gold": {
-          "0%, 100%": { boxShadow: "0 0 15px rgba(249, 224, 118, 0.3)" },
-          "50%": { boxShadow: "0 0 35px rgba(249, 224, 118, 0.6), 0 0 50px rgba(249, 224, 118, 0.2)" },
+          "0%, 100%": { boxShadow: "0 0 15px rgba(255, 215, 0, 0.3)" },
+          "50%": { boxShadow: "0 0 35px rgba(255, 215, 0, 0.6), 0 0 50px rgba(255, 215, 0, 0.2)" },
         },
         "pulse-border": {
-          "0%, 100%": { borderColor: "rgba(212, 175, 55, 0.3)" },
-          "50%": { borderColor: "rgba(212, 175, 55, 0.7)" },
+          "0%, 100%": { borderColor: "rgba(255, 215, 0, 0.3)" },
+          "50%": { borderColor: "rgba(255, 215, 0, 0.7)" },
         },
         "slide-in-right": {
           from: { transform: "translateX(100%)", opacity: "0" },
