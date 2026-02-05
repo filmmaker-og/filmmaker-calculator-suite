@@ -16,15 +16,14 @@ const Header = ({ title }: HeaderProps) => {
 
   return (
     <>
-      {/* Header Bar - Matches menu header exactly */}
+      {/* Header Bar */}
       <header
         className="fixed top-0 left-0 right-0 z-[150]"
         style={{
           backgroundColor: '#1A1A1A',
-          height: 'var(--appbar-h)',
         }}
       >
-        <div className="flex items-center justify-between px-4 h-full">
+        <div className="flex items-center justify-between px-4" style={{ height: 'var(--appbar-h)' }}>
           {/* Left: Logo Text (clickable to home) */}
           <button
             onClick={handleLogoClick}
@@ -45,6 +44,14 @@ const Header = ({ title }: HeaderProps) => {
           {/* Right: Hamburger Menu - Uses unified MobileMenu */}
           <MobileMenu />
         </div>
+
+        {/* Gold line separator */}
+        <div
+          className="h-[1px] w-full"
+          style={{
+            background: "linear-gradient(90deg, transparent 0%, rgba(255, 215, 0, 0.45) 20%, rgba(255, 215, 0, 0.45) 80%, transparent 100%)",
+          }}
+        />
       </header>
 
       {/* Spacer for fixed header */}
