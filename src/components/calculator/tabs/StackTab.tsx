@@ -43,12 +43,24 @@ interface StackTabProps {
  * 9  = DefermentsWiki
  * 10 = DefermentsInput
  * 11 = StackSummary
+ * 
+ * Smart Start: If any capital data exists, skip to summary.
  */
 const StackTab = ({ inputs, onUpdateInput, onAdvance }: StackTabProps) => {
   const haptics = useHaptics();
   
-  // Single piece of state: which step are we on?
-  const [currentStep, setCurrentStep] = useState(0);
+  // Smart start: Check if user has any capital stack data
+  const hasStackData = 
+    inputs.credits > 0 || 
+    inputs.debt > 0 || 
+    inputs.mezzanineDebt > 0 || 
+    inputs.equity > 0 || 
+    inputs.deferments > 0;
+  
+  // If user has data, start at summary (step 11); otherwise start at overview (step 0)
+  const [currentStep, setCurrentStep] = useState(() => {
+    return hasStackData ? 11 : 0;
+  });
 
   // Navigation helpers
   const goToStep = useCallback((step: number) => {
