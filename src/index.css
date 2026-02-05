@@ -9,52 +9,96 @@
 @layer base {
   :root {
     /* ═══════════════════════════════════════════════════════════════════
-       SHADCN/UI REQUIRED CSS VARIABLES - True Black Theme
+       FILMMAKER.OG DESIGN SYSTEM v2.0 - Electric Gold
        ═══════════════════════════════════════════════════════════════════ */
-    --background: 0 0% 0%;              /* #000000 - True Black */
-    --foreground: 0 0% 100%;            /* #FFFFFF - White text */
 
-    --card: 0 0% 0%;                    /* #000000 - Cards same as bg */
-    --card-foreground: 0 0% 100%;       /* White text on cards */
+    /* BACKGROUND LAYERS (The Layered System)
+       Rule: Content always lives on --bg-card, never directly on --bg-void */
+    --bg-void: #000000;                 /* Page background. The void. Never changes. */
+    --bg-card: #070707;                 /* Card surfaces. Floats on the void. */
+    --bg-surface: #141414;              /* Input fields, interactive areas. */
+    --bg-elevated: #111111;             /* Headers, section dividers within cards. */
 
-    --popover: 0 0% 4%;                 /* #0A0A0A - Slight lift for modals */
-    --popover-foreground: 0 0% 100%;
+    /* THE GOLD SYSTEM (Electric)
+       Rule: Gold = Attention. Use sparingly. If everything is gold, nothing is. */
+    --gold: #FFD700;                    /* Primary accent. Chapter numbers, active states, icons. */
+    --gold-muted: rgba(255, 215, 0, 0.45);   /* Borders on interactive elements. */
+    --gold-subtle: rgba(255, 215, 0, 0.12);  /* Backgrounds on hover/active states. */
+    --gold-glow: rgba(255, 215, 0, 0.3);     /* Box-shadows on focused/active elements. */
 
-    --primary: 43 74% 52%;              /* #D4AF37 - Gold */
-    --primary-foreground: 0 0% 0%;      /* Black text on gold */
+    /* TEXT HIERARCHY */
+    --text-primary: #FFFFFF;            /* Primary content, headings, numbers. */
+    --text-mid: #CFCFCF;                /* Secondary content, descriptions. */
+    --text-dim: #8A8A8A;                /* Labels, helper text, phase markers. */
 
-    --secondary: 0 0% 7%;               /* #111111 - Dark grey */
-    --secondary-foreground: 0 0% 100%;
+    /* BORDERS */
+    --border-default: #2A2A2A;          /* Card borders, dividers. */
+    --border-subtle: #1A1A1A;           /* Inner dividers, low-emphasis separation. */
+    --border-active: rgba(255, 215, 0, 0.5); /* Active/focused input borders. */
 
-    --muted: 0 0% 10%;                  /* #1A1A1A - Muted backgrounds */
-    --muted-foreground: 0 0% 50%;       /* 50% white text */
+    /* STATUS COLORS */
+    --status-success: #00FF64;          /* Checkmarks, positive states. */
+    --status-warning: #FFD700;          /* Caution, attention needed. */
+    --status-danger: #FF5252;           /* Errors, destructive actions. */
 
-    --accent: 43 74% 52%;               /* Gold accent */
-    --accent-foreground: 0 0% 0%;
+    /* SPACING (Base unit: 4px) */
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 12px;
+    --space-lg: 16px;
+    --space-xl: 24px;
+    --space-2xl: 32px;
 
-    --destructive: 0 62% 30%;           /* Muted red (rarely used) */
-    --destructive-foreground: 0 0% 100%;
+    /* BORDER RADIUS
+       Rule: Radius increases with container size. */
+    --radius-none: 0px;
+    --radius-sm: 8px;                   /* Status badges, small elements. */
+    --radius-md: 12px;                  /* Buttons, inputs, KPI cards. */
+    --radius-lg: 14px;                  /* Cards, sections, containers. */
+    --radius-xl: 18px;                  /* Modals, sheets. */
+    --radius-full: 999px;               /* Pills, circular icons, progress bars. */
 
-    --border: 0 0% 10%;                 /* #1A1A1A - Subtle borders */
-    --input: 0 0% 10%;                  /* Input backgrounds */
-    --ring: 43 74% 52%;                 /* Gold focus ring */
+    /* SHADOWS & ELEVATION */
+    --shadow-none: none;
+    --shadow-focus: 0 0 0 1px rgba(255, 215, 0, 0.16);
+    --shadow-card-active: 0 0 20px rgba(255, 215, 0, 0.08);
+    --shadow-button: 0 10px 26px rgba(255, 215, 0, 0.18);
+    --shadow-modal: 0 20px 50px rgba(0, 0, 0, 0.8);
 
-    --radius: 0px;                      /* No border radius - sharp edges */
-
-    /* ═══════════════════════════════════════════════════════════════════
-       BRAND GUIDE STRICT COLOR PALETTE
-       ═══════════════════════════════════════════════════════════════════ */
-    --bg: 0 0% 0%;                      /* #000000 Void Black */
-    --surface: 0 0% 7%;                 /* #111111 Dark Grey */
-    --gold: 43 74% 52%;                 /* #D4AF37 Metallic Gold */
-    --gold-cta: 49 93% 72%;             /* #F9E076 Bright Gold - CTAs ONLY */
-    --gold-highlight: 49 93% 72%;       /* #F9E076 Highlight Gold */
+    /* LAYOUT */
+    --appbar-h: 56px;
+    --tabbar-h: 62px;
+    --container-max: 460px;
 
     /* MOTION TOKENS */
-    --timing-fast: 120ms;
-    --timing-medium: 220ms;
-    --timing-slow: 360ms;
+    --timing-fast: 100ms;
+    --timing-medium: 150ms;
+    --timing-slow: 200ms;
     --easing: cubic-bezier(.2,.8,.2,1);
+
+    /* ═══════════════════════════════════════════════════════════════════
+       SHADCN/UI COMPATIBILITY LAYER
+       ═══════════════════════════════════════════════════════════════════ */
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+    --card: 0 0% 2.7%;                  /* #070707 */
+    --card-foreground: 0 0% 100%;
+    --popover: 0 0% 3.5%;               /* #090909 */
+    --popover-foreground: 0 0% 100%;
+    --primary: 51 100% 50%;             /* #FFD700 Electric Gold */
+    --primary-foreground: 0 0% 0%;
+    --secondary: 0 0% 7%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 0 0% 8%;
+    --muted-foreground: 0 0% 54%;       /* #8A8A8A */
+    --accent: 51 100% 50%;
+    --accent-foreground: 0 0% 0%;
+    --destructive: 0 72% 51%;           /* #FF5252 */
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 16%;                 /* #2A2A2A */
+    --input: 0 0% 8%;
+    --ring: 51 100% 50%;
+    --radius: 14px;                     /* Default to --radius-lg */
   }
 
   /* Force true black on html and body */
@@ -91,41 +135,95 @@
 
 @layer components {
   /* ═══════════════════════════════════════════════════════════════════
-     MATTE SECTION - Premium card container
+     CHAPTER CARD - The primary content container (Design System v2.0)
+     ═══════════════════════════════════════════════════════════════════ */
+  .chapter-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+
+  .chapter-card-header {
+    display: grid;
+    grid-template-columns: 60px 1fr auto;
+    align-items: center;
+    height: 66px;
+    background: var(--bg-elevated);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .chapter-card-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    border-right: 1px solid #222;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px;
+    letter-spacing: 1px;
+    color: #444;
+    transition: all var(--timing-medium) ease;
+  }
+
+  .chapter-card-title {
+    padding: 0 var(--space-md);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-primary);
+  }
+
+  .chapter-card-body {
+    padding: var(--space-lg);
+  }
+
+  /* Active state - Electric Gold */
+  .chapter-card.is-active .chapter-card-header {
+    background: linear-gradient(90deg, var(--gold-subtle) 0%, transparent 100%);
+    border-bottom-color: var(--gold-muted);
+  }
+
+  .chapter-card.is-active .chapter-card-number {
+    color: var(--gold);
+    border-right-color: var(--gold);
+    text-shadow: 0 0 10px var(--gold-glow);
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════
+     MATTE SECTION - Legacy support (being phased out)
      ═══════════════════════════════════════════════════════════════════ */
   .matte-section {
-    background: linear-gradient(180deg, #0D0D0D 0%, #080808 100%);
-    border: 1px solid #1A1A1A;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
-    transition: all 0.3s ease;
+    background: var(--bg-card);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    transition: all var(--timing-medium) ease;
   }
 
   .matte-section-header {
-    background: linear-gradient(180deg, #0F0F0F 0%, #0A0A0A 100%);
-    border-bottom: 1px solid #1A1A1A;
+    background: var(--bg-elevated);
+    border-bottom: 1px solid var(--border-subtle);
   }
 
-  /* Active state - Gold cascade effect */
+  /* Active state - Electric Gold */
   .matte-section.is-active {
-    border-color: #D4AF37;
-    background: linear-gradient(180deg, #0F0E0A 0%, #0A0908 100%);
-    box-shadow:
-      inset 0 1px 0 rgba(212, 175, 55, 0.1),
-      0 0 20px rgba(212, 175, 55, 0.08),
-      0 0 40px rgba(212, 175, 55, 0.04);
+    border-color: var(--gold);
+    box-shadow: var(--shadow-card-active);
   }
 
   .matte-section.is-active .matte-section-header {
-    background: linear-gradient(180deg, rgba(212, 175, 55, 0.08) 0%, transparent 100%);
-    border-color: rgba(212, 175, 55, 0.2);
+    background: linear-gradient(90deg, var(--gold-subtle) 0%, transparent 100%);
+    border-color: var(--gold-muted);
   }
 
   /* ═══════════════════════════════════════════════════════════════════
      GLASS CARDS - Premium translucent surfaces
      ═══════════════════════════════════════════════════════════════════ */
   .glass-card-gold {
-    background: linear-gradient(180deg, rgba(212, 175, 55, 0.08) 0%, rgba(212, 175, 55, 0.02) 100%);
-    border: 1px solid rgba(212, 175, 55, 0.2);
+    background: linear-gradient(180deg, var(--gold-subtle) 0%, rgba(255, 215, 0, 0.02) 100%);
+    border: 1px solid var(--gold-muted);
+    border-radius: var(--radius-lg);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
   }
@@ -135,8 +233,202 @@
      ═══════════════════════════════════════════════════════════════════ */
   .premium-divider {
     height: 1px;
-    background: linear-gradient(90deg, transparent 0%, #D4AF37 50%, transparent 100%);
+    background: linear-gradient(90deg, transparent 0%, var(--gold) 50%, transparent 100%);
     opacity: 0.3;
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════
+     TAB BAR - Fixed bottom navigation
+     ═══════════════════════════════════════════════════════════════════ */
+  .tab-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: var(--tabbar-h);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    background: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-top: 1px solid var(--border-subtle);
+    padding: 0 var(--space-sm);
+    padding-bottom: env(safe-area-inset-bottom);
+    z-index: 50;
+  }
+
+  .tab-bar-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-xs);
+    padding: var(--space-sm) 0;
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-dim);
+    transition: all var(--timing-fast) ease;
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+  }
+
+  .tab-bar-item:active {
+    transform: scale(0.95);
+  }
+
+  .tab-bar-item.is-active {
+    color: var(--gold);
+    background: var(--gold-subtle);
+  }
+
+  .tab-bar-item .tab-icon {
+    width: 20px;
+    height: 20px;
+    opacity: 0.6;
+  }
+
+  .tab-bar-item.is-active .tab-icon {
+    opacity: 1;
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════
+     GLOSSARY TRIGGER - The (i) info button
+     ═══════════════════════════════════════════════════════════════════ */
+  .glossary-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border: 1px solid #333;
+    border-radius: var(--radius-full);
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 900;
+    color: var(--text-dim);
+    background: transparent;
+    cursor: pointer;
+    transition: all var(--timing-fast) ease;
+  }
+
+  .glossary-trigger:hover,
+  .glossary-trigger:active {
+    background: var(--gold-subtle);
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+
+  .glossary-trigger-lg {
+    width: 36px;
+    height: 36px;
+    font-size: 11px;
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════
+     INPUT FIELD - Design System v2.0
+     ═══════════════════════════════════════════════════════════════════ */
+  .input-field {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-md);
+    padding: var(--space-md);
+    font-family: 'Roboto Mono', monospace;
+    font-size: 22px;
+    font-weight: 500;
+    text-align: right;
+    color: var(--text-primary);
+    width: 100%;
+    transition: all var(--timing-fast) ease;
+  }
+
+  .input-field:focus {
+    outline: none;
+    border-color: var(--border-active);
+    background: rgba(255, 215, 0, 0.06);
+    box-shadow: var(--shadow-focus);
+  }
+
+  .input-field::placeholder {
+    color: var(--text-dim);
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════
+     FIELD LABEL - Design System v2.0
+     ═══════════════════════════════════════════════════════════════════ */
+  .field-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-sm);
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-dim);
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════
+     PRIMARY BUTTON (CTA) - Design System v2.0
+     ═══════════════════════════════════════════════════════════════════ */
+  .btn-primary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 52px;
+    padding: var(--space-md) var(--space-lg);
+    background: var(--gold-subtle);
+    border: 1px solid var(--gold-muted);
+    border-radius: var(--radius-md);
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--gold);
+    cursor: pointer;
+    transition: all var(--timing-fast) ease;
+    box-shadow: var(--shadow-button);
+  }
+
+  .btn-primary:active {
+    transform: scale(0.92);
+  }
+
+  .btn-primary:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════
+     SECONDARY BUTTON - Design System v2.0
+     ═══════════════════════════════════════════════════════════════════ */
+  .btn-secondary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 52px;
+    padding: var(--space-md) var(--space-lg);
+    background: transparent;
+    border: 1px solid #222;
+    border-radius: var(--radius-md);
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all var(--timing-fast) ease;
+  }
+
+  .btn-secondary:active {
+    transform: scale(0.92);
   }
 
   /* ═══════════════════════════════════════════════════════════════════
@@ -212,10 +504,10 @@
 
   @keyframes borderGlow {
     0%, 100% {
-      border-color: rgba(212, 175, 55, 0.3);
+      border-color: rgba(255, 215, 0, 0.3);
     }
     50% {
-      border-color: rgba(212, 175, 55, 0.7);
+      border-color: rgba(255, 215, 0, 0.7);
     }
   }
 
