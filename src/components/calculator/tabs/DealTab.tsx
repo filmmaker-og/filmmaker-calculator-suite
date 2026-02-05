@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import ChapterCard from "../ChapterCard";
 import GlossaryTrigger, { GLOSSARY } from "../GlossaryTrigger";
+import { DollarSign } from "lucide-react";
 
 interface DealTabProps {
   inputs: WaterfallInputs;
@@ -51,13 +52,35 @@ const DealTab = ({ inputs, guilds, selections, onUpdateInput, onAdvance }: DealT
   const cushion = inputs.revenue - breakeven;
   const isAboveBreakeven = cushion > 0;
   const percentAbove = breakeven > 0 ? ((inputs.revenue - breakeven) / breakeven) * 100 : 0;
+  const hasRevenue = inputs.revenue > 0;
 
   return (
-    <div className="space-y-4 pb-8">
+    <div className="space-y-6 pb-8">
+      {/* Onboarding Card - Shows only when revenue not entered */}
+      {!hasRevenue && (
+        <div
+          className="p-5 border border-gold/30 bg-gold/[0.03] animate-fade-in"
+          style={{ borderRadius: 'var(--radius-lg)' }}
+        >
+          <div className="flex items-start gap-3 mb-3">
+            <DollarSign className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+            <h3 className="text-base font-bold text-gold">
+              Time to model the deal.
+            </h3>
+          </div>
+          <p className="text-sm text-text-primary leading-relaxed mb-3">
+            This is where you test what happens when a distributor offers to buy your film. The <span className="text-white font-medium">acquisition price</span> is what they'll pay upfront for distribution rights.
+          </p>
+          <p className="text-sm text-text-mid leading-relaxed">
+            We've already calculated your <span className="text-white font-medium">breakeven</span>—the minimum amount needed to pay back all investors. Now see if the deal makes everyone whole.
+          </p>
+        </div>
+      )}
+
       <ChapterCard
         chapter="03"
         title="DEAL"
-        isActive={inputs.revenue > 0}
+        isActive={true}
         glossaryTrigger={
           <GlossaryTrigger {...GLOSSARY.acquisition} />
         }
@@ -84,14 +107,17 @@ const DealTab = ({ inputs, guilds, selections, onUpdateInput, onAdvance }: DealT
 
         {/* Acquisition Input */}
         <div className="mb-6">
-          <div className="field-label">
-            <span>Acquisition Price</span>
+          <div className="mb-3">
+            <div className="flex items-baseline gap-2">
+              <span className="text-sm font-semibold text-text-primary uppercase tracking-wide">Acquisition Price</span>
+              <span className="text-xs text-text-dim italic">what the distributor pays</span>
+            </div>
           </div>
           <div
             className={cn(
               "flex items-center transition-all",
               "bg-bg-surface border",
-              isFocused ? "border-border-active shadow-focus" : inputs.revenue > 0 ? "border-gold-muted" : "border-border-default"
+              isFocused ? "border-border-active shadow-focus" : hasRevenue ? "border-gold/50" : "border-border-default"
             )}
             style={{ borderRadius: 'var(--radius-md)' }}
           >
@@ -108,22 +134,19 @@ const DealTab = ({ inputs, guilds, selections, onUpdateInput, onAdvance }: DealT
               placeholder="3,500,000"
               className="flex-1 bg-transparent py-4 pr-4 outline-none font-mono text-[22px] text-text-primary text-right placeholder:text-text-dim tabular-nums"
             />
-            {inputs.revenue > 0 && (
-              <span className="pr-4 text-xl">✅</span>
-            )}
           </div>
           <p className="mt-2 text-xs text-text-dim">
-            {inputs.revenue > 0
-              ? "Acquisition price entered. Press Enter or click Next to see the waterfall."
-              : "Enter the acquisition price to see your position"}
+            {hasRevenue
+              ? "Press Enter or click Next to see the waterfall."
+              : "Enter an acquisition price to see your position"}
           </p>
         </div>
 
         {/* Status indicator */}
-        {inputs.revenue > 0 && Number.isFinite(breakeven) && (
+        {hasRevenue && Number.isFinite(breakeven) && (
           <div
             className={cn(
-              "p-4 border flex items-center justify-between",
+              "p-4 border flex items-center justify-between mb-6",
               isAboveBreakeven
                 ? "border-status-success bg-[rgba(0,255,100,0.08)]"
                 : "border-status-danger bg-[rgba(255,82,82,0.08)]"
@@ -153,22 +176,22 @@ const DealTab = ({ inputs, guilds, selections, onUpdateInput, onAdvance }: DealT
 
         {/* Quick reference */}
         <div
-          className="mt-6 p-4 border border-border-default bg-bg-surface"
+          className="p-4 border border-border-default bg-bg-surface"
           style={{ borderRadius: 'var(--radius-md)' }}
         >
           <p className="text-xs text-text-dim text-center mb-4 font-bold uppercase tracking-wider">
             Typical acquisition ranges
           </p>
           <div className="grid grid-cols-3 gap-3 text-center">
-            <div className="p-3 border border-border-subtle rounded-md">
+            <div className="p-3 border border-border-subtle" style={{ borderRadius: 'var(--radius-md)' }}>
               <span className="text-sm text-text-mid font-mono block">100-110%</span>
               <span className="text-[10px] text-text-dim">baseline</span>
             </div>
-            <div className="p-3 border border-gold-muted bg-gold-subtle rounded-md">
+            <div className="p-3 border border-gold/30 bg-gold/5" style={{ borderRadius: 'var(--radius-md)' }}>
               <span className="text-sm text-gold font-mono block">115-130%</span>
               <span className="text-[10px] text-text-dim">strong</span>
             </div>
-            <div className="p-3 border border-border-subtle rounded-md">
+            <div className="p-3 border border-border-subtle" style={{ borderRadius: 'var(--radius-md)' }}>
               <span className="text-sm text-text-mid font-mono block">130%+</span>
               <span className="text-[10px] text-text-dim">exceptional</span>
             </div>
