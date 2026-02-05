@@ -108,11 +108,17 @@ const MobileMenu = ({ onOpenLegal, onSignOut }: MobileMenuProps) => {
             paddingTop: 'env(safe-area-inset-top)',
           }}
         >
-          {/* Header with close button */}
-          <div className="flex items-center justify-between px-4 py-4">
-            <span className="font-bebas text-gold text-lg tracking-[0.2em]">
-              FILMMAKER.OG
-            </span>
+           {/* Matte grey header */}
+           <div
+             className="flex items-center justify-between px-4"
+             style={{
+               height: 'var(--appbar-h)',
+               backgroundColor: '#1A1A1A',
+             }}
+           >
+             <span className="font-bebas text-gold text-lg tracking-[0.2em]">
+               FILMMAKER.OG
+             </span>
             <button
               onClick={handleCloseMenu}
               className="w-12 h-12 flex items-center justify-center text-white hover:text-gold transition-colors"
@@ -120,7 +126,15 @@ const MobileMenu = ({ onOpenLegal, onSignOut }: MobileMenuProps) => {
             >
               <X className="w-6 h-6" />
             </button>
-          </div>
+           </div>
+ 
+           {/* Gold separator line */}
+           <div
+             className="h-[1px]"
+             style={{
+               background: "linear-gradient(90deg, transparent 0%, rgba(255, 215, 0, 0.45) 20%, rgba(255, 215, 0, 0.45) 80%, transparent 100%)",
+             }}
+           />
 
           {/* Menu Content */}
           <div className="flex-1 flex flex-col items-center justify-center px-6">
