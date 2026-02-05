@@ -1,31 +1,16 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Button } from "@/components/ui/button";
 import { useHaptics } from "@/hooks/use-haptics";
-import { useSwipe } from "@/hooks/use-swipe";
-import { ArrowLeft, RotateCcw, ChevronRight, ChevronLeft } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { User } from "@supabase/supabase-js";
 import { calculateWaterfall, WaterfallInputs, WaterfallResult, GuildState } from "@/lib/waterfall";
 import { cn } from "@/lib/utils";
 
-// Step Components - Anxiety First Flow
-import BudgetStep from "@/components/calculator/steps/BudgetStep";
-import SalesAgentStep from "@/components/calculator/steps/SalesAgentStep";
-import CamFeeStep from "@/components/calculator/steps/CamFeeStep";
-import GuildsStep from "@/components/calculator/steps/GuildsStep";
-import OffTopTotalStep from "@/components/calculator/steps/OffTopTotalStep";
-import CapitalSelectStep, { CapitalSelections } from "@/components/calculator/steps/CapitalSelectStep";
-import CapitalStep from "@/components/calculator/steps/CapitalStep";
-import TaxCreditsStep from "@/components/calculator/steps/TaxCreditsStep";
-import SeniorDebtStep from "@/components/calculator/steps/SeniorDebtStep";
-import GapLoanStep from "@/components/calculator/steps/GapLoanStep";
-import EquityStep from "@/components/calculator/steps/EquityStep";
-import BreakevenStep from "@/components/calculator/steps/BreakevenStep";
-import AcquisitionStep from "@/components/calculator/steps/AcquisitionStep";
-import RevealStep from "@/components/calculator/steps/RevealStep";
-import WaterfallStep from "@/components/calculator/steps/WaterfallStep";
-import ProgressBar from "@/components/calculator/ProgressBar";
+// New Tab Components
+import TabBar, { TabId } from "@/components/calculator/TabBar";
+import { BudgetTab, StackTab, DealTab, WaterfallTab } from "@/components/calculator/tabs";
+import { CapitalSelections } from "@/components/calculator/steps/CapitalSelectStep";
 import MobileMenu from "@/components/MobileMenu";
 import EmailGateModal from "@/components/EmailGateModal";
 
@@ -42,7 +27,7 @@ const defaultInputs: WaterfallInputs = {
   equity: 0,
   premium: 20,
   salesFee: 15,
-  salesExp: 75000,  // Sales & Marketing expenses cap
+  salesExp: 75000,
 };
 
 const defaultGuilds: GuildState = {
@@ -51,13 +36,13 @@ const defaultGuilds: GuildState = {
   dga: false,
 };
 
-// SIMPLIFIED: 5 static steps instead of 14 dynamic steps
-type StepType = 
-  | 'costs'        // Budget + CAM + Sales combined
-  | 'guilds'       // Guild toggles
-  | 'capital'      // All capital inputs on one screen
-  | 'acquisition'  // Acquisition offer
-  | 'results';     // Waterfall + profit summary
+// Tab configuration
+const TAB_CONFIG: { id: TabId; label: string; chapter: string }[] = [
+  { id: 'budget', label: 'BUDGET', chapter: '01' },
+  { id: 'stack', label: 'STACK', chapter: '02' },
+  { id: 'deal', label: 'DEAL', chapter: '03' },
+  { id: 'waterfall', label: 'WATERFALL', chapter: '04' },
+];
 
 const Calculator = () => {
   const navigate = useNavigate();
@@ -67,28 +52,18 @@ const Calculator = () => {
 
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  const [currentStepIndex, setCurrentStepIndex] = useState(0);
+  const [activeTab, setActiveTab] = useState<TabId>('budget');
   const [inputs, setInputs] = useState<WaterfallInputs>(defaultInputs);
   const [guilds, setGuilds] = useState<GuildState>(defaultGuilds);
   const [result, setResult] = useState<WaterfallResult | null>(null);
-const [isButtonPressed, setIsButtonPressed] = useState(false);
-  const [shakeButton, setShakeButton] = useState(false);
   const [showEmailGate, setShowEmailGate] = useState(false);
   const [emailCaptured, setEmailCaptured] = useState(false);
-  const [capitalSelections, setCapitalSelections] = useState<CapitalSelections>({
+  const [capitalSelections] = useState<CapitalSelections>({
     taxCredits: false,
     seniorDebt: false,
     gapLoan: false,
     equity: false,
   });
-
-  // SIMPLIFIED: Static 5-step flow - no dynamic branching
-  const steps: StepType[] = ['costs', 'guilds', 'capital', 'acquisition', 'results'];
-  const totalSteps = steps.length;
-  const currentStep = steps[currentStepIndex];
-
-  // SIMPLIFIED: Static step labels
-  const stepLabels = ['COSTS', 'GUILDS', 'CAPITAL', 'OFFER', 'RESULTS'];
 
   // Reset on ?reset=true or ?skip=true (demo mode)
   useEffect(() => {
@@ -96,7 +71,7 @@ const [isButtonPressed, setIsButtonPressed] = useState(false);
       localStorage.removeItem(STORAGE_KEY);
       setInputs(defaultInputs);
       setGuilds(defaultGuilds);
-      setCurrentStepIndex(0);
+      setActiveTab('budget');
     }
   }, [searchParams]);
 
@@ -110,7 +85,7 @@ const [isButtonPressed, setIsButtonPressed] = useState(false);
         const parsed = JSON.parse(saved);
         if (parsed.inputs) setInputs(parsed.inputs);
         if (parsed.guilds) setGuilds(parsed.guilds);
-        if (typeof parsed.currentStepIndex === 'number') setCurrentStepIndex(parsed.currentStepIndex);
+        if (parsed.activeTab) setActiveTab(parsed.activeTab);
       } catch (e) {
         console.error("Failed to load saved inputs");
       }
@@ -119,12 +94,12 @@ const [isButtonPressed, setIsButtonPressed] = useState(false);
 
   // Save state
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ 
-      inputs, 
-      guilds, 
-      currentStepIndex 
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({
+      inputs,
+      guilds,
+      activeTab
     }));
-  }, [inputs, guilds, currentStepIndex]);
+  }, [inputs, guilds, activeTab]);
 
   // Calculate on input change
   useEffect(() => {
@@ -147,21 +122,13 @@ const [isButtonPressed, setIsButtonPressed] = useState(false);
     return () => subscription.unsubscribe();
   }, []);
 
-  // Scroll to top when switching steps
+  // Scroll to top when switching tabs
   useEffect(() => {
     window.scrollTo(0, 0);
     if (mainRef.current) {
       mainRef.current.scrollTop = 0;
     }
-  }, [currentStepIndex]);
-
-  const handleStartOver = () => {
-    haptics.medium();
-    localStorage.removeItem(STORAGE_KEY);
-    setInputs(defaultInputs);
-    setGuilds(defaultGuilds);
-    setCurrentStepIndex(0);
-  };
+  }, [activeTab]);
 
   const updateInput = useCallback((key: keyof WaterfallInputs, value: number) => {
     setInputs(prev => ({ ...prev, [key]: value }));
@@ -172,125 +139,89 @@ const [isButtonPressed, setIsButtonPressed] = useState(false);
     setGuilds(prev => ({ ...prev, [guild]: !prev[guild] }));
   }, [haptics]);
 
-  // SIMPLIFIED: Can proceed to next step?
-  const canProceed = useCallback(() => {
-    switch (currentStep) {
-      case 'costs':
-        return inputs.budget > 0;
-      case 'acquisition':
-        return inputs.revenue > 0;
-      default:
-        return true;
-    }
-  }, [currentStep, inputs.budget, inputs.revenue]);
-
-  const nextStep = useCallback(() => {
-    if (!canProceed()) {
-      setShakeButton(true);
-      haptics.error();
-      setTimeout(() => setShakeButton(false), 300);
-      return;
-    }
-
-    // Email gate: show after guilds step (index 1) if not authenticated and not already captured
-    if (currentStepIndex === 1 && !user && !emailCaptured) {
+  // Handle tab change with validation
+  const handleTabChange = useCallback((tab: TabId) => {
+    // Email gate: show after budget tab if not authenticated and not already captured
+    if (activeTab === 'budget' && tab !== 'budget' && !user && !emailCaptured) {
       setShowEmailGate(true);
       return;
     }
 
-    haptics.step();
-    if (currentStepIndex < totalSteps - 1) {
-      setCurrentStepIndex(prev => prev + 1);
-    }
-  }, [canProceed, currentStepIndex, totalSteps, haptics, user, emailCaptured]);
-
-  const prevStep = useCallback(() => {
     haptics.light();
-    if (currentStepIndex > 0) {
-      setCurrentStepIndex(prev => prev - 1);
-    }
-  }, [currentStepIndex, haptics]);
-
-  const goToStep = useCallback((stepIndex: number) => {
-    if (stepIndex >= 0 && stepIndex < currentStepIndex) {
-      haptics.light();
-      setCurrentStepIndex(stepIndex);
-    }
-  }, [currentStepIndex, haptics]);
-
-  // Swipe navigation
-  const { handlers: swipeHandlers, state: swipeState } = useSwipe({
-    onSwipeLeft: () => {
-      if (canProceed() && currentStepIndex < totalSteps - 1) {
-        nextStep();
-      }
-    },
-    onSwipeRight: () => {
-      if (currentStepIndex > 0) {
-        prevStep();
-      }
-    },
-    threshold: 50,
-    rubberBand: true,
-  });
-
-  // Get step title
-  const getStepTitle = () => {
-    switch (currentStep) {
-      case 'costs': return 'PRODUCTION COSTS';
-      case 'guilds': return 'GUILDS';
-      case 'capital': return 'CAPITAL STACK';
-      case 'acquisition': return 'THE OFFER';
-      case 'results': return 'THE WATERFALL';
-      default: return 'WATERFALL TERMINAL';
-    }
-  };
+    setActiveTab(tab);
+  }, [activeTab, user, emailCaptured, haptics]);
 
   // Email gate handlers
   const handleEmailSuccess = () => {
     setEmailCaptured(true);
     setShowEmailGate(false);
-    // Auto-advance after email captured
-    setTimeout(() => {
-      if (currentStepIndex < totalSteps - 1) {
-        setCurrentStepIndex(prev => prev + 1);
-      }
-    }, 500);
   };
 
   const handleEmailSkip = () => {
-    setEmailCaptured(true); // Mark as "handled" so we don't ask again
+    setEmailCaptured(true);
     setShowEmailGate(false);
-    // Advance to next step
-    if (currentStepIndex < totalSteps - 1) {
-      setCurrentStepIndex(prev => prev + 1);
-    }
   };
 
-  // Get CTA text
-  const getCtaText = () => {
-    switch (currentStep) {
-      case 'costs': return 'ADD GUILDS';
-      case 'guilds': return 'ADD CAPITAL';
-      case 'capital': return 'ENTER THE OFFER';
-      case 'acquisition': return 'SEE RESULTS';
-      default: return 'CONTINUE';
+  // Get current tab config
+  const currentTabConfig = TAB_CONFIG.find(t => t.id === activeTab);
+
+  // Determine which tabs are completed
+  const getCompletedTabs = (): TabId[] => {
+    const completed: TabId[] = [];
+    if (inputs.budget > 0) completed.push('budget');
+    if (inputs.credits > 0 || inputs.debt > 0 || inputs.mezzanineDebt > 0 || inputs.equity > 0) {
+      completed.push('stack');
     }
+    if (inputs.revenue > 0) completed.push('deal');
+    if (inputs.revenue > 0 && inputs.budget > 0) completed.push('waterfall');
+    return completed;
   };
 
-  // Render current step
-  const renderStep = () => {
-    switch (currentStep) {
-      case 'costs':
-        return <BudgetStep inputs={inputs} onUpdateInput={updateInput} />;
-      case 'guilds':
-        return <GuildsStep inputs={inputs} guilds={guilds} onToggleGuild={toggleGuild} />;
-      case 'capital':
-        return <CapitalStep inputs={inputs} onUpdateInput={updateInput} />;
-      case 'acquisition':
-        return <AcquisitionStep inputs={inputs} guilds={guilds} selections={capitalSelections} onUpdateInput={updateInput} />;
-      case 'results':
-        return result ? <WaterfallStep result={result} inputs={inputs} /> : null;
+  // Determine which tabs are disabled
+  const getDisabledTabs = (): TabId[] => {
+    const disabled: TabId[] = [];
+    // Waterfall requires both budget and revenue
+    if (inputs.budget === 0 || inputs.revenue === 0) {
+      disabled.push('waterfall');
+    }
+    return disabled;
+  };
+
+  // Render current tab content
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case 'budget':
+        return (
+          <BudgetTab
+            inputs={inputs}
+            guilds={guilds}
+            onUpdateInput={updateInput}
+            onToggleGuild={toggleGuild}
+          />
+        );
+      case 'stack':
+        return (
+          <StackTab
+            inputs={inputs}
+            onUpdateInput={updateInput}
+          />
+        );
+      case 'deal':
+        return (
+          <DealTab
+            inputs={inputs}
+            guilds={guilds}
+            selections={capitalSelections}
+            onUpdateInput={updateInput}
+          />
+        );
+      case 'waterfall':
+        return result ? (
+          <WaterfallTab
+            result={result}
+            inputs={inputs}
+          />
+        ) : null;
       default:
         return null;
     }
@@ -298,8 +229,8 @@ const [isButtonPressed, setIsButtonPressed] = useState(false);
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background flex flex-col">
-        <header className="h-14 flex items-center justify-center border-b border-border">
+      <div className="min-h-screen bg-bg-void flex flex-col">
+        <header className="h-14 flex items-center justify-center border-b border-border-default">
           <span className="font-bebas text-lg tracking-widest text-gold">WATERFALL TERMINAL</span>
         </header>
         <div className="flex-1 flex items-center justify-center">
@@ -310,192 +241,70 @@ const [isButtonPressed, setIsButtonPressed] = useState(false);
   }
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-screen bg-bg-void flex flex-col">
       {/* Header - Frosted Glass */}
       <header
-        className="fixed top-0 left-0 right-0 h-14 z-50 flex items-center px-4"
+        className="fixed top-0 left-0 right-0 z-50 flex items-center px-4"
         style={{
-          backgroundColor: 'rgba(10, 10, 10, 0.85)',
+          height: 'var(--appbar-h)',
+          backgroundColor: 'rgba(0, 0, 0, 0.9)',
           backdropFilter: 'blur(14px)',
           WebkitBackdropFilter: 'blur(14px)',
         }}
       >
         <button
-          onClick={() => currentStepIndex > 0 ? prevStep() : navigate("/")}
+          onClick={() => navigate("/")}
           className="w-10 h-10 flex items-center justify-center hover:opacity-80 transition-opacity touch-feedback"
         >
-          <ArrowLeft className="w-5 h-5 text-muted-foreground" />
+          <ArrowLeft className="w-5 h-5 text-text-dim" />
         </button>
 
         <div className="flex-1 text-center">
           <span className="font-bebas text-base tracking-widest text-gold">
-            {getStepTitle()}
+            {currentTabConfig?.chapter} {currentTabConfig?.label}
           </span>
         </div>
 
-        {/* Right: Hamburger Menu */}
         <MobileMenu />
       </header>
 
       {/* Gold line separator */}
       <div
-        className="fixed top-14 left-0 right-0 h-[1px] z-50"
+        className="fixed left-0 right-0 h-[1px] z-50"
         style={{
-          background: "linear-gradient(90deg, transparent 0%, rgba(212, 175, 55, 0.5) 20%, rgba(212, 175, 55, 0.5) 80%, transparent 100%)",
+          top: 'var(--appbar-h)',
+          background: "linear-gradient(90deg, transparent 0%, var(--gold-muted) 20%, var(--gold-muted) 80%, transparent 100%)",
         }}
       />
 
       {/* Spacer for fixed header */}
-      <div className="h-14" />
+      <div style={{ height: 'var(--appbar-h)' }} />
 
-      {/* Progress Bar - Sticky */}
-      <ProgressBar
-        currentStep={currentStepIndex + 1}
-        totalSteps={totalSteps}
-        onStepClick={(step) => goToStep(step - 1)}
-      />
-
-      {/* Main Content with Swipe */}
+      {/* Main Content */}
       <main
         ref={mainRef}
-        className="flex-1 px-5 py-6 pb-32 overflow-y-auto"
-        {...swipeHandlers}
-      >
-        {/* Swipe offset transform */}
-        <div
-          className={cn(
-            "transition-transform",
-            swipeState.isSwiping ? "duration-0" : "duration-200 ease-out"
-          )}
-          style={{
-            transform: swipeState.isSwiping ? `translateX(${swipeState.offset * 0.3}px)` : undefined,
-            opacity: swipeState.isSwiping ? 1 - Math.abs(swipeState.offset) / 400 : 1,
-          }}
-        >
-          {renderStep()}
-        </div>
-
-        {/* Swipe edge hints - visible with subtle pulse */}
-        {currentStepIndex > 0 && (
-          <div
-            className={cn(
-              "fixed left-2 top-1/2 -translate-y-1/2 text-gold/20 transition-opacity duration-300",
-              swipeState.direction === 'right' ? 'opacity-60' : 'opacity-20'
-            )}
-          >
-            <ChevronLeft className="w-5 h-5" />
-          </div>
-        )}
-        {currentStepIndex < totalSteps - 1 && canProceed() && (
-          <div
-            className={cn(
-              "fixed right-2 top-1/2 -translate-y-1/2 text-gold/20 transition-opacity duration-300",
-              swipeState.direction === 'left' ? 'opacity-60' : 'opacity-20'
-            )}
-          >
-            <ChevronRight className="w-5 h-5" />
-          </div>
-        )}
-      </main>
-
-      {/* Fixed Bottom CTA - Premium styling */}
-      <div
-        className="fixed bottom-0 left-0 right-0 z-40"
+        className="flex-1 px-4 py-6 overflow-y-auto"
         style={{
-          background: 'linear-gradient(to top, #000000 0%, #000000 85%, transparent 100%)',
-          paddingBottom: 'max(1rem, env(safe-area-inset-bottom))'
+          paddingBottom: 'calc(var(--tabbar-h) + 24px + env(safe-area-inset-bottom))',
         }}
       >
-        {/* Top fade line */}
-        <div className="h-px bg-gradient-to-r from-transparent via-[#2A2A2A] to-transparent" />
-
-        <div className="px-5 pt-4 pb-2">
-          {currentStepIndex < totalSteps - 1 ? (
-            <>
-              {/* Requirement hint when button is disabled */}
-              {!canProceed() && (
-                <div className="mb-3 py-2 px-4 bg-[#0A0A0A] border border-[#1A1A1A] flex items-center justify-center gap-2 animate-fade-in">
-                  <div className="w-2 h-2 bg-gold/50 rounded-full animate-pulse" />
-                  <span className="text-xs text-white/50 tracking-wide">
-                    {currentStep === 'costs' && 'Enter your budget to continue'}
-                    {currentStep === 'acquisition' && 'Enter the acquisition price'}
-                  </span>
-                </div>
-              )}
-
-              <div className="flex gap-3">
-                {currentStepIndex > 0 && (
-                  <button
-                    onClick={prevStep}
-                    className="h-14 px-5 flex items-center justify-center bg-[#0A0A0A] border border-[#2A2A2A] text-white/60 hover:text-white hover:border-[#3A3A3A] transition-all active:scale-95"
-                  >
-                    <ChevronLeft className="w-5 h-5" />
-                  </button>
-                )}
-                <button
-                  onClick={nextStep}
-                  onTouchStart={() => setIsButtonPressed(true)}
-                  onTouchEnd={() => setIsButtonPressed(false)}
-                  onMouseDown={() => setIsButtonPressed(true)}
-                  onMouseUp={() => setIsButtonPressed(false)}
-                  onMouseLeave={() => setIsButtonPressed(false)}
-                  className={cn(
-                    "flex-1 h-14 relative overflow-hidden font-black text-sm tracking-[0.15em] uppercase transition-all duration-200",
-                    isButtonPressed && canProceed() && "scale-[0.98]",
-                    shakeButton && "animate-shake",
-                    canProceed()
-                      ? "bg-gold-cta text-black hover:brightness-110"
-                      : "bg-[#1A1A1A] text-white/30 cursor-not-allowed"
-                  )}
-                  style={{
-                    boxShadow: canProceed()
-                      ? '0 0 40px rgba(212, 175, 55, 0.3), 0 4px 20px rgba(0, 0, 0, 0.3)'
-                      : 'none',
-                  }}
-                >
-                  <span className="relative flex items-center justify-center gap-3">
-                    {getCtaText()}
-                    <ChevronRight className="w-5 h-5" />
-                  </span>
-                </button>
-              </div>
-            </>
-          ) : (
-            <div className="space-y-3">
-              {/* Primary CTA - Get Custom Model */}
-              <a
-                href="https://filmmaker.og/store"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex-1 h-14 flex items-center justify-center gap-2 bg-gold-cta text-black font-black text-sm tracking-[0.15em] uppercase transition-all active:scale-95 hover:brightness-110"
-                style={{
-                  boxShadow: '0 0 40px rgba(212, 175, 55, 0.3), 0 4px 20px rgba(0, 0, 0, 0.3)',
-                }}
-              >
-                GET YOUR CUSTOM MODEL
-                <ChevronRight className="w-5 h-5" />
-              </a>
-
-              {/* Secondary actions */}
-              <div className="flex gap-3">
-                <button
-                  onClick={prevStep}
-                  className="h-12 px-5 flex items-center justify-center bg-[#0A0A0A] border border-[#2A2A2A] text-white/60 hover:text-white hover:border-[#3A3A3A] transition-all active:scale-95"
-                >
-                  <ChevronLeft className="w-5 h-5" />
-                </button>
-                <button
-                  onClick={handleStartOver}
-                  className="flex-1 h-12 flex items-center justify-center gap-2 bg-[#0A0A0A] border border-[#2A2A2A] text-white/50 hover:text-white hover:border-[#3A3A3A] text-xs font-semibold tracking-wider transition-all active:scale-95"
-                >
-                  <RotateCcw className="w-4 h-4" />
-                  TRY DIFFERENT NUMBERS
-                </button>
-              </div>
-            </div>
+        <div
+          className={cn(
+            "max-w-[460px] mx-auto",
+            "animate-fade-in"
           )}
+        >
+          {renderTabContent()}
         </div>
-      </div>
+      </main>
+
+      {/* Tab Bar - Fixed Bottom */}
+      <TabBar
+        activeTab={activeTab}
+        onTabChange={handleTabChange}
+        completedTabs={getCompletedTabs()}
+        disabledTabs={getDisabledTabs()}
+      />
 
       {/* Email Gate Modal */}
       <EmailGateModal
