@@ -21,12 +21,12 @@ export default {
       fontFamily: {
         bebas: ["Bebas Neue", "sans-serif"],
         sans: ["Inter", "sans-serif"],
-        mono: ["JetBrains Mono", "monospace"],
+        mono: ["Roboto Mono", "monospace"], // Fixed: was JetBrains Mono
       },
       colors: {
         border: {
           default: "rgba(255, 255, 255, 0.1)",
-          active: "rgba(212, 175, 55, 0.5)",
+          active: "rgba(255, 215, 0, 0.5)", // Updated to match Electric Gold
           subtle: "rgba(255, 255, 255, 0.05)",
         },
         bg: {
@@ -41,13 +41,13 @@ export default {
           dim: "rgba(255, 255, 255, 0.4)",
         },
         gold: {
-          DEFAULT: "#D4AF37", // METALLIC GOLD - Primary Brand Color
-          bright: "#FFD700", // Electric Gold - Accents/Hovers only
-          muted: "rgba(212, 175, 55, 0.3)",
-          subtle: "rgba(212, 175, 55, 0.05)",
+          DEFAULT: "#FFD700", // ELECTRIC GOLD - Unified Primary Brand Color
+          bright: "#FFD700", // Same as default (unified)
+          muted: "rgba(255, 215, 0, 0.45)",
+          subtle: "rgba(255, 215, 0, 0.12)",
         },
         status: {
-          success: "#D4AF37", // Using Gold for success instead of Green
+          success: "#FFD700", // Using Electric Gold for success
           error: "#CF6679",
           warning: "#F0E68C",
         },

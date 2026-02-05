@@ -3,6 +3,8 @@
  *
  * Premium mobile-first design tokens matching reference calculator
  * All values are standardized for consistency across the app
+ * 
+ * UNIFIED GOLD: #FFD700 (Electric Gold) - Aligned with index.css
  */
 
 // ===== COLOR PALETTE =====
@@ -19,11 +21,11 @@ export const colors = {
   borderMedium: '#2A2A2A', // Medium borders
   borderStrong: '#3A3A3A', // Strong borders (active states)
 
-  // Gold palette
-  gold: '#D4AF37',        // Primary gold
-  goldHighlight: '#F9E076', // Highlight/glow gold
-  goldShadow: '#7A5C12',  // Shadow gold (depth)
-  goldMuted: 'rgba(212, 175, 55, 0.7)', // Muted gold
+  // Gold palette - UNIFIED to Electric Gold #FFD700
+  gold: '#FFD700',        // Primary gold (Electric Gold)
+  goldHighlight: '#FFE44D', // Highlight/glow gold (lighter)
+  goldShadow: '#B8960B',  // Shadow gold (depth)
+  goldMuted: 'rgba(255, 215, 0, 0.45)', // Muted gold
 
   // Text
   textPrimary: '#FFFFFF',
@@ -69,18 +71,18 @@ export const shadows = {
   subtle: '0 2px 8px rgba(0, 0, 0, 0.3)',
   card: '0 4px 16px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.02)',
   elevated: '0 8px 32px rgba(0, 0, 0, 0.4)',
-  goldGlow: '0 0 20px rgba(212, 175, 55, 0.3)',
-  goldGlowStrong: '0 0 40px rgba(212, 175, 55, 0.5), 0 0 80px rgba(212, 175, 55, 0.2)',
-  inputFocus: '0 0 0 3px rgba(212, 175, 55, 0.15), 0 0 20px rgba(212, 175, 55, 0.1)',
+  goldGlow: '0 0 20px rgba(255, 215, 0, 0.3)',
+  goldGlowStrong: '0 0 40px rgba(255, 215, 0, 0.5), 0 0 80px rgba(255, 215, 0, 0.2)',
+  inputFocus: '0 0 0 3px rgba(255, 215, 0, 0.15), 0 0 20px rgba(255, 215, 0, 0.1)',
 } as const;
 
 // ===== GRADIENTS =====
 export const gradients = {
-  gold: 'linear-gradient(135deg, #D4AF37 0%, #F9E076 100%)',
-  goldSubtle: 'linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(249, 224, 118, 0.05) 100%)',
+  gold: 'linear-gradient(135deg, #FFD700 0%, #FFE44D 100%)',
+  goldSubtle: 'linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(255, 228, 77, 0.05) 100%)',
   matteCard: 'linear-gradient(180deg, #0D0D0D 0%, #080808 100%)',
   divider: 'linear-gradient(90deg, transparent 0%, #2A2A2A 20%, #2A2A2A 80%, transparent 100%)',
-  dividerGold: 'linear-gradient(90deg, transparent 0%, rgba(212, 175, 55, 0.5) 20%, rgba(212, 175, 55, 0.5) 80%, transparent 100%)',
+  dividerGold: 'linear-gradient(90deg, transparent 0%, rgba(255, 215, 0, 0.5) 20%, rgba(255, 215, 0, 0.5) 80%, transparent 100%)',
   fadeBottom: 'linear-gradient(to top, #000000 0%, #000000 85%, transparent 100%)',
   successFill: 'linear-gradient(90deg, #10B981 0%, #34D399 100%)',
   errorFill: 'linear-gradient(90deg, #EF4444 0%, #F87171 100%)',
@@ -121,7 +123,7 @@ export const buttons = {
     background: 'transparent',
     border: `1px solid ${colors.gold}`,
     color: colors.gold,
-    hoverBackground: 'rgba(212, 175, 55, 0.1)',
+    hoverBackground: 'rgba(255, 215, 0, 0.1)',
   },
   disabled: {
     background: colors.border,
@@ -159,7 +161,7 @@ export const typography = {
     fontFamily: "'Inter', sans-serif",
     fontWeight: 600,
   },
-  // Roboto Mono - Financial numbers
+  // Roboto Mono - Financial numbers (unified with index.css)
   mono: {
     fontFamily: "'Roboto Mono', monospace",
     fontWeight: 500,
@@ -204,7 +206,7 @@ export const verdictStatus = {
   good: {
     label: 'SOLID DEAL',
     color: colors.gold,
-    bgColor: 'rgba(212, 175, 55, 0.15)',
+    bgColor: 'rgba(255, 215, 0, 0.15)',
     description: 'Healthy returns for all parties involved.',
   },
   marginal: {
