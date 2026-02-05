@@ -11,10 +11,20 @@ const Index = () => {
   const haptics = useHaptics();
   const [phase, setPhase] = useState<
     'dark' | 'beam' | 'logo' | 'pulse' | 'tagline' | 'complete'
-  >('dark');
+  >('complete'); // Start at complete if returning
 
   useEffect(() => {
-    // Cinematic spotlight sequence - theatrical reveal
+    // Check if this is first visit (no calculator data saved)
+    const hasVisited = localStorage.getItem('filmmaker_og_inputs');
+
+    // Skip animation if user has already used the calculator
+    if (hasVisited) {
+      setPhase('complete');
+      return;
+    }
+
+    // First time visitor - show animation
+    setPhase('dark');
     const timers = [
       setTimeout(() => setPhase('beam'), 300),        // Spotlight beam fans open
       setTimeout(() => setPhase('logo'), 900),        // Logo fades up into light

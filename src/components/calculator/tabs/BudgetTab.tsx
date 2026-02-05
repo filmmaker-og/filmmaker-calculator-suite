@@ -107,9 +107,10 @@ const BudgetTab = ({ inputs, onUpdateInput, onAdvance }: BudgetTabProps) => {
                     onUpdateInput('budget', 0);
                     setTimeout(() => budgetInputRef.current?.focus(), 100);
                   }}
-                  className="text-[10px] text-text-dim hover:text-gold transition-colors uppercase tracking-wider font-bold"
+                  className="text-xs text-text-dim hover:text-gold transition-colors px-2 py-1 border border-border-default rounded"
+                  style={{ borderRadius: 'var(--radius-sm)' }}
                 >
-                  Clear
+                  Reset
                 </button>
               )}
             </div>
@@ -133,10 +134,10 @@ const BudgetTab = ({ inputs, onUpdateInput, onAdvance }: BudgetTabProps) => {
               onBlur={() => setIsFocused(false)}
               onKeyDown={handleKeyDown}
               placeholder="750,000"
-              className="flex-1 bg-transparent py-4 pr-4 outline-none font-mono text-[22px] text-text-primary text-right placeholder:text-text-dim placeholder:text-base tabular-nums"
+              className="flex-1 bg-transparent py-4 outline-none font-mono text-[22px] text-text-primary text-right placeholder:text-text-dim placeholder:text-base tabular-nums"
             />
             {isCompleted && (
-              <span className="pr-4 text-xl">✅</span>
+              <span className="pl-3 pr-4 text-xl flex items-center">✅</span>
             )}
           </div>
           <p className="mt-2 text-sm text-text-dim">
