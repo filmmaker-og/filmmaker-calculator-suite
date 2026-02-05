@@ -50,18 +50,9 @@ const BudgetStep = ({ inputs, onUpdateInput }: BudgetStepProps) => {
       sectionLabel="Negative Cost"
       sectionIcon={Calculator}
       isCompleted={isCompleted}
-      helpContent={
-        <div className="bg-[#0A0A0A] border border-white/10 p-4 rounded-lg space-y-3">
-          <h4 className="font-bebas text-lg text-white tracking-wide">Negative Cost Definition</h4>
-          <p className="text-white/50 text-sm leading-relaxed">
-            The total amount spent to produce a finished master copy of your film.
-          </p>
-          <div className="text-sm text-white/50">
-            <p><span className="text-white/70">Includes:</span> Talent, crew, equipment, locations, post-production</p>
-            <p><span className="text-white/70">Excludes:</span> Marketing, sales fees, financing costs</p>
-          </div>
-        </div>
-      }
+      // REMOVED redundant helpContent about "What is Negative Cost"
+      // since IntroView explains the basics.
+      // Keeping quickReference for fees as that's calculator-specific logic.
       quickReference={
         isCompleted ? (
           <div className="mt-4">
