@@ -43,7 +43,7 @@ const GlossaryTrigger = ({
 
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent
-          className="bg-bg-card border-border-default rounded-xl max-w-sm"
+          className="bg-bg-card border-border-default rounded-xl max-w-sm font-sans"
           style={{ borderRadius: 'var(--radius-xl)' }}
         >
           <DialogHeader>
@@ -51,11 +51,11 @@ const GlossaryTrigger = ({
               {title}
             </DialogTitle>
           </DialogHeader>
-          <DialogDescription className="text-text-mid text-sm leading-relaxed">
+          <DialogDescription className="font-sans text-text-mid text-sm leading-relaxed">
             {description}
           </DialogDescription>
           {details && (
-            <div className="mt-4 space-y-3 text-sm text-text-mid">
+            <div className="mt-4 space-y-3 text-sm text-text-mid font-sans">
               {details}
             </div>
           )}
