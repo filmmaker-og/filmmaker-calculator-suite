@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useHaptics } from "@/hooks/use-haptics";
 import { ArrowRight } from "lucide-react";
 import filmmakerLogo from "@/assets/filmmaker-logo.jpg";
@@ -8,12 +8,19 @@ import { cn } from "@/lib/utils";
 
 const Index = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const haptics = useHaptics();
+  
+  // Check if we should skip intro based on URL param
+  const shouldSkip = searchParams.get("skipIntro") === "true";
+  
   const [phase, setPhase] = useState<
     'dark' | 'beam' | 'logo' | 'pulse' | 'tagline' | 'complete'
-  >('dark');
+  >(shouldSkip ? 'complete' : 'dark');
 
   useEffect(() => {
+    if (shouldSkip) return;
+
     // Cinematic spotlight sequence - theatrical reveal
     const timers = [
       setTimeout(() => setPhase('beam'), 300),        // Spotlight beam fans open
@@ -24,7 +31,7 @@ const Index = () => {
     ];
 
     return () => timers.forEach(clearTimeout);
-  }, []);
+  }, [shouldSkip]);
 
   const handleStartClick = () => {
     haptics.medium();
@@ -32,10 +39,10 @@ const Index = () => {
   };
 
   const isComplete = phase === 'complete';
-  const showBeam = phase !== 'dark';
-  const showLogo = phase !== 'dark' && phase !== 'beam';
-  const isPulsed = ['pulse', 'tagline', 'complete'].includes(phase);
-  const showTagline = ['tagline', 'complete'].includes(phase);
+  const showBeam = phase !== 'dark' && !shouldSkip;
+  const showLogo = (phase !== 'dark' && phase !== 'beam') || shouldSkip;
+  const isPulsed = ['pulse', 'tagline', 'complete'].includes(phase) || shouldSkip;
+  const showTagline = ['tagline', 'complete'].includes(phase) || shouldSkip;
 
   return (
     <>
@@ -147,11 +154,11 @@ const Index = () => {
               <div
                 className={cn(
                   "h-full bg-gold rounded-full",
-                  showTagline && "animate-progress-draw"
+                  showTagline && !shouldSkip && "animate-progress-draw"
                 )}
                 style={{
                   boxShadow: '0 0 12px rgba(255, 215, 0, 0.6)',
-                  width: showTagline ? undefined : '0%',
+                  width: shouldSkip ? '100%' : (showTagline ? undefined : '0%'),
                 }}
               />
             </div>
