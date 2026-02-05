@@ -16,17 +16,15 @@ const Header = ({ title }: HeaderProps) => {
 
   return (
     <>
-      {/* Header Bar - Matte Grey with Gold Tint */}
+      {/* Header Bar - Matches menu header exactly */}
       <header
         className="fixed top-0 left-0 right-0 z-[150]"
         style={{
-          background: "linear-gradient(180deg, rgba(255, 215, 0, 0.08) 0%, rgba(26, 26, 26, 0.95) 100%)",
-          backgroundColor: "#1A1A1A",
-          backdropFilter: "blur(14px)",
-          WebkitBackdropFilter: "blur(14px)",
+          backgroundColor: '#1A1A1A',
+          height: 'var(--appbar-h)',
         }}
       >
-        <div className="flex items-center justify-between px-4 h-14">
+        <div className="flex items-center justify-between px-4 h-full">
           {/* Left: Logo Text (clickable to home) */}
           <button
             onClick={handleLogoClick}
@@ -47,18 +45,10 @@ const Header = ({ title }: HeaderProps) => {
           {/* Right: Hamburger Menu - Uses unified MobileMenu */}
           <MobileMenu />
         </div>
-
-        {/* Gold line separator */}
-        <div
-          className="h-[1px] w-full"
-          style={{
-            background: "linear-gradient(90deg, transparent 0%, rgba(255, 215, 0, 0.45) 20%, rgba(255, 215, 0, 0.45) 80%, transparent 100%)",
-          }}
-        />
       </header>
 
       {/* Spacer for fixed header */}
-      <div className="h-14 flex-shrink-0" />
+      <div style={{ height: 'var(--appbar-h)' }} className="flex-shrink-0" />
     </>
   );
 };
