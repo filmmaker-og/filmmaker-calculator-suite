@@ -31,10 +31,10 @@ const ProgressBar = ({
         left: 0,
         right: 0,
         zIndex: 40,
-        backgroundColor: '#1A1A1A',
+        backgroundColor: '#000000',
       }}
     >
-      <div className="px-6 py-3">
+      <div className="px-6 py-4">
         {/* Badge row */}
         <div className="relative flex items-center justify-between">
           {/* Connection line */}
@@ -63,7 +63,7 @@ const ProgressBar = ({
                 className={cn(
                   "relative z-10 w-6 h-6 rounded-full flex items-center justify-center font-mono text-[10px] font-medium transition-all duration-150",
                   isActive && "bg-gold text-bg-void",
-                  isCompleted && "bg-[#1A1A1A] border border-gold text-gold hover:bg-gold/10 cursor-pointer",
+                  isCompleted && "bg-black border border-gold text-gold hover:bg-gold/10 cursor-pointer",
                   isFuture && "bg-black border border-[#2A2A2A] text-white/30"
                 )}
               >
