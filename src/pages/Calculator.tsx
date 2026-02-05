@@ -250,11 +250,14 @@ const Calculator = () => {
     );
   }
 
+  // Calculate progress percentage
+  const progressPercent = TAB_TO_STEP[activeTab] * 25;
+
   return (
     <div className="min-h-screen bg-bg-void flex flex-col">
       {/* Header - Matte Grey */}
       <header
-        className="fixed top-0 left-0 right-0 z-50 flex items-center px-4"
+        className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4"
         style={{
           height: 'var(--appbar-h)',
           backgroundColor: '#1A1A1A',
@@ -262,20 +265,59 @@ const Calculator = () => {
           WebkitBackdropFilter: 'blur(14px)',
         }}
       >
+        {/* Left: Logo */}
         <button
           onClick={() => navigate("/")}
-          className="w-10 h-10 flex items-center justify-center hover:opacity-80 transition-opacity touch-feedback"
+          className="hover:opacity-80 transition-opacity"
         >
-          <ArrowLeft className="w-5 h-5 text-text-dim" />
+          <span className="font-bebas text-base tracking-[0.12em] text-white/90">
+            FILMMAKER.OG
+          </span>
         </button>
 
-        <div className="flex-1 text-center">
-          <span className="font-bebas text-base tracking-widest text-gold">
+        {/* Center: Tab title - BIGGER */}
+        <div className="absolute left-1/2 -translate-x-1/2">
+          <span className="font-bebas text-xl tracking-widest text-gold">
             {currentTabConfig?.chapter} {currentTabConfig?.label}
           </span>
         </div>
 
-        <MobileMenu />
+        {/* Right: Circular progress indicator */}
+        <div className="flex items-center gap-3">
+          <div className="relative w-10 h-10 flex items-center justify-center">
+            {/* Background circle */}
+            <svg className="absolute w-10 h-10 -rotate-90">
+              <circle
+                cx="20"
+                cy="20"
+                r="16"
+                fill="none"
+                stroke="#333"
+                strokeWidth="2"
+              />
+              {/* Progress arc */}
+              <circle
+                cx="20"
+                cy="20"
+                r="16"
+                fill="none"
+                stroke="#FFD700"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeDasharray={`${progressPercent} 100`}
+                className="transition-all duration-500 ease-out"
+                style={{
+                  filter: 'drop-shadow(0 0 4px rgba(255, 215, 0, 0.5))',
+                }}
+              />
+            </svg>
+            {/* Percentage text */}
+            <span className="relative z-10 font-mono text-[10px] font-bold text-gold">
+              {progressPercent}%
+            </span>
+          </div>
+          <MobileMenu />
+        </div>
       </header>
 
       {/* Gold line separator - Electric Gold */}
@@ -287,19 +329,8 @@ const Calculator = () => {
         }}
       />
 
-      {/* Progress line - fills as you advance through tabs */}
-      <div
-        className="fixed left-0 h-[2px] z-50 transition-all duration-500 ease-out"
-        style={{
-          top: 'calc(var(--appbar-h) + 1px)',
-          width: `${TAB_TO_STEP[activeTab] * 25}%`,
-          background: 'linear-gradient(90deg, rgba(255, 215, 0, 0.8) 0%, rgba(255, 215, 0, 0.4) 100%)',
-          boxShadow: '0 0 8px rgba(255, 215, 0, 0.3)',
-        }}
-      />
-
-       {/* Spacer for fixed header */}
-       <div style={{ height: 'var(--appbar-h)' }} />
+      {/* Spacer for fixed header */}
+      <div style={{ height: 'var(--appbar-h)' }} />
 
       {/* Main Content */}
       <main

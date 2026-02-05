@@ -74,7 +74,7 @@ const BudgetTab = ({ inputs, onUpdateInput }: BudgetTabProps) => {
               onFocus={handleFocus}
               onBlur={() => setIsFocused(false)}
               onKeyDown={handleKeyDown}
-              placeholder="Enter your budget"
+              placeholder="750,000"
               className="flex-1 bg-transparent py-4 pr-4 outline-none font-mono text-[22px] text-text-primary text-right placeholder:text-text-dim placeholder:text-base tabular-nums"
             />
           </div>
