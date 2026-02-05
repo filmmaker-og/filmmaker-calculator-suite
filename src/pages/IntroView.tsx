@@ -86,7 +86,7 @@ const IntroView = () => {
             <h3 className="text-2xl font-bebas text-white">Frequently Asked Questions</h3>
             <Accordion type="single" collapsible className="w-full">
               <AccordionItem value="item-1" className="border-border-default">
-                <AccordionTrigger className="text-text-primary hover:text-gold hover:no-underline">
+                <AccordionTrigger className="text-left text-text-primary hover:text-gold hover:no-underline">
                   Is this legal financial advice?
                 </AccordionTrigger>
                 <AccordionContent className="text-text-dim">
@@ -94,7 +94,7 @@ const IntroView = () => {
                 </AccordionContent>
               </AccordionItem>
               <AccordionItem value="item-2" className="border-border-default">
-                <AccordionTrigger className="text-text-primary hover:text-gold hover:no-underline">
+                <AccordionTrigger className="text-left text-text-primary hover:text-gold hover:no-underline">
                   Can I save my results?
                 </AccordionTrigger>
                 <AccordionContent className="text-text-dim">
@@ -102,7 +102,7 @@ const IntroView = () => {
                 </AccordionContent>
               </AccordionItem>
               <AccordionItem value="item-3" className="border-border-default">
-                <AccordionTrigger className="text-text-primary hover:text-gold hover:no-underline">
+                <AccordionTrigger className="text-left text-text-primary hover:text-gold hover:no-underline">
                   Is this for theatrical releases?
                 </AccordionTrigger>
                 <AccordionContent className="text-text-dim">
@@ -110,7 +110,7 @@ const IntroView = () => {
                 </AccordionContent>
               </AccordionItem>
               <AccordionItem value="item-4" className="border-border-default">
-                <AccordionTrigger className="text-text-primary hover:text-gold hover:no-underline">
+                <AccordionTrigger className="text-left text-text-primary hover:text-gold hover:no-underline">
                   I don't understand all the terms yet. Should I wait?
                 </AccordionTrigger>
                 <AccordionContent className="text-text-dim">
@@ -118,7 +118,7 @@ const IntroView = () => {
                 </AccordionContent>
               </AccordionItem>
               <AccordionItem value="item-5" className="border-border-default">
-                <AccordionTrigger className="text-text-primary hover:text-gold hover:no-underline">
+                <AccordionTrigger className="text-left text-text-primary hover:text-gold hover:no-underline">
                   How accurate is this compared to real deals?
                 </AccordionTrigger>
                 <AccordionContent className="text-text-dim">
@@ -126,11 +126,16 @@ const IntroView = () => {
                 </AccordionContent>
               </AccordionItem>
               <AccordionItem value="item-6" className="border-border-default">
-                <AccordionTrigger className="text-text-primary hover:text-gold hover:no-underline">
+                <AccordionTrigger className="text-left text-text-primary hover:text-gold hover:no-underline">
                   I'm new to this. Where do I start?
                 </AccordionTrigger>
                 <AccordionContent className="text-text-dim">
-                  Just follow the steps. The waterfall process is broken into <span className="text-white font-medium">4 stages</span>. If you get stuck, look for the quick tips inside the calculator.
+                  <p className="mb-3">
+                    Just follow the steps. The waterfall process is broken into <span className="text-white font-medium">4 stages</span>. If you get stuck, look for the quick tips inside the calculator.
+                  </p>
+                  <p className="text-gold font-medium flex items-center gap-2">
+                    👇 Start below
+                  </p>
                 </AccordionContent>
               </AccordionItem>
             </Accordion>

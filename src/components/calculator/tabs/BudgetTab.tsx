@@ -3,7 +3,7 @@ import { useState, useRef, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import ChapterCard from "../ChapterCard";
 import GlossaryTrigger, { GLOSSARY } from "../GlossaryTrigger";
-import { Check } from "lucide-react"; // Import the proper icon
+import { Check, Sparkles } from "lucide-react";
 
 interface BudgetTabProps {
   inputs: WaterfallInputs;
@@ -54,10 +54,23 @@ const BudgetTab = ({ inputs, onUpdateInput, onAdvance }: BudgetTabProps) => {
 
   return (
     <div className="space-y-6 pb-8">
-      {/*
-         FIX 1: We removed the conditional "Start Here" block from the top.
-         Now the ChapterCard is always the first thing the user sees.
-      */}
+      {/* Onboarding Card - Shows only when budget is empty */}
+      {!isCompleted && (
+        <div
+          className="p-5 border border-gold/30 bg-gold/[0.03] animate-fade-in"
+          style={{ borderRadius: 'var(--radius-lg)' }}
+        >
+          <div className="flex items-start gap-3 mb-3">
+            <Sparkles className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+            <h3 className="text-base font-bold text-gold">
+              This is where your journey begins.
+            </h3>
+          </div>
+          <p className="text-sm text-text-primary leading-relaxed">
+            The first step is understanding your budget. All you have to do here is enter your <span className="text-white font-medium">total negative cost</span>—that's your full production budget from development through final delivery—then hit Next.
+          </p>
+        </div>
+      )}
 
       <ChapterCard
         chapter="01"
@@ -76,12 +89,12 @@ const BudgetTab = ({ inputs, onUpdateInput, onAdvance }: BudgetTabProps) => {
 
           <div
             className={cn(
-              "flex items-center rounded-md transition-all relative", // Added relative for icon positioning
+              "flex items-center rounded-md transition-all relative",
               "bg-bg-surface border",
               isFocused
                 ? "border-border-active shadow-focus"
                 : isCompleted
-                  ? "border-gold/50" // FIX 2: Softer gold border when done
+                  ? "border-gold/50"
                   : "border-border-default"
             )}
             style={{ borderRadius: 'var(--radius-md)' }}
@@ -98,10 +111,9 @@ const BudgetTab = ({ inputs, onUpdateInput, onAdvance }: BudgetTabProps) => {
               onBlur={() => setIsFocused(false)}
               onKeyDown={handleKeyDown}
               placeholder="750,000"
-              className="flex-1 bg-transparent py-4 outline-none font-mono text-[22px] text-text-primary text-right placeholder:text-text-dim placeholder:text-base tabular-nums pr-12" // Added pr-12 to prevent text hitting the icon
+              className="flex-1 bg-transparent py-4 outline-none font-mono text-[22px] text-text-primary text-right placeholder:text-text-dim placeholder:text-base tabular-nums pr-12"
             />
 
-            {/* FIX 3: Replaced Emoji with Lucide Icon */}
             <div className={cn(
               "absolute right-4 transition-all duration-300 transform",
               isCompleted ? "opacity-100 scale-100" : "opacity-0 scale-50"
@@ -115,10 +127,7 @@ const BudgetTab = ({ inputs, onUpdateInput, onAdvance }: BudgetTabProps) => {
           </p>
         </div>
 
-        {/*
-           FIX 4: Moved "Start Here" instructions BELOW the input.
-           This prevents the input from jumping around when you type.
-        */}
+        {/* Quick Tip - Shows below input when empty */}
         {!isCompleted && (
           <div
             className="mt-8 p-5 border border-gold/20 bg-gold/5 animate-fade-in"

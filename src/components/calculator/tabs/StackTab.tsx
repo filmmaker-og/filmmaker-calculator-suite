@@ -1,5 +1,5 @@
 import { WaterfallInputs, formatCompactCurrency } from "@/lib/waterfall";
-import { Minus, Plus, Wallet, Coins, Building2, Banknote, Landmark } from "lucide-react";
+import { Minus, Plus, Wallet, Coins, Building2, Banknote, Landmark, Layers } from "lucide-react";
 import { useHaptics } from "@/hooks/use-haptics";
 import { cn } from "@/lib/utils";
 import StandardStepLayout from "../StandardStepLayout";
@@ -38,6 +38,7 @@ const StackTab = ({ inputs, onUpdateInput }: StackTabProps) => {
   const totalCapital = inputs.credits + inputs.debt + inputs.mezzanineDebt + inputs.equity;
   const gapPercent = inputs.budget > 0 ? (totalCapital / inputs.budget) * 100 : 0;
   const isCompleted = totalCapital >= inputs.budget && inputs.budget > 0;
+  const hasAnyCapital = totalCapital > 0;
 
   // Helper component for capital source cards
   const CapitalSourceCard = ({
@@ -209,6 +210,45 @@ const StackTab = ({ inputs, onUpdateInput }: StackTabProps) => {
         ) : null
       }
     >
+      {/* Onboarding Card - Shows only when no capital entered */}
+      {!hasAnyCapital && (
+        <div
+          className="mb-6 p-5 border border-gold/30 bg-gold/[0.03] animate-fade-in"
+          style={{ borderRadius: 'var(--radius-lg)' }}
+        >
+          <div className="flex items-start gap-3 mb-3">
+            <Layers className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+            <h3 className="text-base font-bold text-gold">
+              Your Capital Stack
+            </h3>
+          </div>
+          <p className="text-sm text-text-primary leading-relaxed mb-3">
+            This is how your film gets funded. Most indie films use a combination of these sources:
+          </p>
+          <ul className="text-sm text-text-mid space-y-1.5 ml-1">
+            <li className="flex items-start gap-2">
+              <span className="text-gold">•</span>
+              <span><span className="text-white font-medium">Tax Credits</span> — Government incentives (usually 20-40%)</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-gold">•</span>
+              <span><span className="text-white font-medium">Senior Debt</span> — Bank loans secured by pre-sales</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-gold">•</span>
+              <span><span className="text-white font-medium">Gap/Mezz</span> — Bridge financing at higher rates</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-gold">•</span>
+              <span><span className="text-white font-medium">Equity</span> — Investor capital with premium returns</span>
+            </li>
+          </ul>
+          <p className="text-xs text-text-dim mt-4">
+            Tap each source below to add amounts. Leave blank if not used.
+          </p>
+        </div>
+      )}
+
       <div className="space-y-3">
         {/* Tax Credits */}
         <CapitalSourceCard
