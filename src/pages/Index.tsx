@@ -21,13 +21,13 @@ const Index = () => {
   useEffect(() => {
     if (shouldSkip) return;
 
-    // Cinematic spotlight sequence - theatrical reveal
+    // Cinematic spotlight sequence - theatrical reveal (slowed for drama)
     const timers = [
-      setTimeout(() => setPhase('beam'), 300),        // Spotlight beam fans open
-      setTimeout(() => setPhase('logo'), 900),        // Logo fades up into light
-      setTimeout(() => setPhase('pulse'), 1600),      // Light intensifies
-      setTimeout(() => setPhase('tagline'), 2200),    // Tagline + progress bar
-      setTimeout(() => setPhase('complete'), 3200),   // Fade to homepage
+      setTimeout(() => setPhase('beam'), 400),        // Spotlight beam fans open
+      setTimeout(() => setPhase('logo'), 1200),       // Logo fades up into light
+      setTimeout(() => setPhase('pulse'), 2000),      // Light intensifies
+      setTimeout(() => setPhase('tagline'), 2800),    // Tagline + progress bar
+      setTimeout(() => setPhase('complete'), 4000),   // Fade to homepage
     ];
 
     return () => timers.forEach(clearTimeout);
@@ -35,7 +35,7 @@ const Index = () => {
 
   const handleStartClick = () => {
     haptics.medium();
-    navigate("/intro"); // CHANGED FROM /calculator
+    navigate("/intro");
   };
 
   const isComplete = phase === 'complete';
@@ -51,89 +51,129 @@ const Index = () => {
       <div className="min-h-screen flex flex-col relative overflow-hidden bg-black">
 
         {/* ═══════════════════════════════════════════════════════════════════
-            CINEMATIC INTRO - Theatrical Spotlight
+            CINEMATIC INTRO - Theatrical Spotlight (Enhanced)
             ═══════════════════════════════════════════════════════════════════ */}
         <div
           className={cn(
-            "fixed inset-0 z-[100] flex items-center justify-center transition-opacity duration-700",
-            isComplete ? "opacity-0" : "opacity-100"
+            "fixed inset-0 z-[100] flex items-center justify-center transition-opacity duration-1000",
+            isComplete ? "opacity-0 pointer-events-none" : "opacity-100"
           )}
           style={{ 
             backgroundColor: '#000000',
-            pointerEvents: isComplete ? 'none' : 'auto',
           }}
         >
-
-          {/* ─── SPOTLIGHT CONE BEAM ─── */}
+          {/* ─── OUTER SPOTLIGHT CONE BEAM (Wide, Gold-tinged) ─── */}
           <div
             className={cn(
-              "absolute inset-0 pointer-events-none",
-              showBeam ? "animate-spotlight-beam" : "opacity-0"
+              "absolute inset-0 pointer-events-none transition-all duration-1000",
+              showBeam ? "opacity-100" : "opacity-0"
             )}
             style={{
               background: `
                 radial-gradient(
-                 ellipse 60% 50% at 50% 0%,
-                 rgba(255, 255, 255, 0.18) 0%,
-                 rgba(255, 255, 255, 0.08) 30%,
-                 rgba(255, 255, 255, 0.02) 50%,
-                 transparent 70%
+                  ellipse 70% 60% at 50% 0%,
+                  rgba(255, 215, 0, 0.08) 0%,
+                  rgba(255, 255, 255, 0.12) 20%,
+                  rgba(255, 255, 255, 0.05) 40%,
+                  rgba(255, 255, 255, 0.01) 60%,
+                  transparent 80%
                 )
               `,
-              clipPath: 'polygon(30% 0%, 70% 0%, 90% 100%, 10% 100%)',
+              clipPath: showBeam ? 'polygon(25% 0%, 75% 0%, 95% 100%, 5% 100%)' : 'polygon(48% 0%, 52% 0%, 52% 30%, 48% 30%)',
+              transition: 'clip-path 1.2s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.8s ease',
             }}
           />
 
-         {/* ─── BRIGHT CORE BEAM ─── */}
-         <div
-           className={cn(
-             "absolute inset-0 pointer-events-none",
-             showBeam ? "animate-spotlight-beam" : "opacity-0"
-           )}
-           style={{
-             background: `
-               radial-gradient(
-                 ellipse 25% 35% at 50% 0%,
-                 rgba(255, 255, 255, 0.25) 0%,
-                 rgba(255, 255, 255, 0.1) 40%,
-                 transparent 60%
-               )
-             `,
-             clipPath: 'polygon(40% 0%, 60% 0%, 75% 100%, 25% 100%)',
-           }}
-         />
-
-          {/* ─── FOCAL POOL (where light lands) ─── */}
+          {/* ─── BRIGHT CORE BEAM (Center, Intense) ─── */}
           <div
             className={cn(
-             "absolute left-1/2 top-1/2 w-[350px] h-[350px] pointer-events-none transition-all duration-700",
-              showLogo ? "opacity-100" : "opacity-0",
-              isPulsed && "animate-focal-pulse"
+              "absolute inset-0 pointer-events-none transition-all duration-1000",
+              showBeam ? "opacity-100" : "opacity-0"
             )}
             style={{
-             background: 'radial-gradient(circle, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.04) 40%, transparent 70%)',
+              background: `
+                radial-gradient(
+                  ellipse 30% 45% at 50% 0%,
+                  rgba(255, 255, 255, 0.35) 0%,
+                  rgba(255, 255, 255, 0.15) 30%,
+                  rgba(255, 215, 0, 0.05) 50%,
+                  transparent 70%
+                )
+              `,
+              clipPath: showBeam ? 'polygon(38% 0%, 62% 0%, 78% 100%, 22% 100%)' : 'polygon(48% 0%, 52% 0%, 52% 30%, 48% 30%)',
+              transition: 'clip-path 1s cubic-bezier(0.22, 1, 0.36, 1) 0.1s, opacity 0.8s ease',
+            }}
+          />
+
+          {/* ─── DUST PARTICLES / ATMOSPHERE ─── */}
+          <div
+            className={cn(
+              "absolute inset-0 pointer-events-none transition-opacity duration-1500",
+              showBeam ? "opacity-100" : "opacity-0"
+            )}
+            style={{
+              background: `
+                radial-gradient(
+                  ellipse 80% 100% at 50% 0%,
+                  rgba(255, 215, 0, 0.02) 0%,
+                  transparent 60%
+                )
+              `,
+            }}
+          />
+
+          {/* ─── FOCAL POOL (where light lands - Enhanced) ─── */}
+          <div
+            className={cn(
+              "absolute left-1/2 top-1/2 w-[400px] h-[400px] pointer-events-none transition-all duration-700",
+              showLogo ? "opacity-100" : "opacity-0"
+            )}
+            style={{
+              background: `
+                radial-gradient(
+                  circle,
+                  rgba(255, 215, 0, 0.12) 0%,
+                  rgba(255, 255, 255, 0.08) 30%,
+                  rgba(255, 255, 255, 0.03) 50%,
+                  transparent 70%
+                )
+              `,
               transform: 'translate(-50%, -50%)',
-             filter: 'blur(30px)',
+              filter: 'blur(40px)',
+              animation: isPulsed ? 'focal-pulse 3s ease-in-out infinite' : 'none',
             }}
           />
 
           {/* ─── CENTER CONTENT ─── */}
           <div className="relative z-10 flex flex-col items-center">
 
-            {/* Logo - emerges and scales */}
+            {/* Logo - emerges dramatically */}
             <div
               className={cn(
-                "relative transition-all duration-700 ease-out",
-                showLogo ? "opacity-100 scale-100 translate-y-0" : "opacity-0 scale-90 translate-y-4"
+                "relative transition-all duration-1000 ease-out",
+                showLogo ? "opacity-100 scale-100 translate-y-0" : "opacity-0 scale-90 translate-y-6"
               )}
             >
+              {/* Logo glow */}
+              <div
+                className={cn(
+                  "absolute inset-0 -m-4 transition-opacity duration-700",
+                  isPulsed ? "opacity-100" : "opacity-0"
+                )}
+                style={{
+                  background: 'radial-gradient(circle, rgba(255, 215, 0, 0.3) 0%, transparent 70%)',
+                  filter: 'blur(15px)',
+                }}
+              />
               <img
                 src={filmmakerLogo}
                 alt="Filmmaker.OG"
-                className="w-28 h-28 object-contain rounded-lg"
+                className="w-32 h-32 object-contain rounded-lg relative"
                 style={{
-                  filter: isPulsed ? 'brightness(1.15) drop-shadow(0 0 20px rgba(255, 215, 0, 0.4))' : 'brightness(1)',
-                  transition: 'filter 0.5s ease',
+                  filter: isPulsed 
+                    ? 'brightness(1.2) drop-shadow(0 0 30px rgba(255, 215, 0, 0.5))' 
+                    : 'brightness(0.9)',
+                  transition: 'filter 0.7s ease',
                 }}
               />
             </div>
@@ -141,23 +181,26 @@ const Index = () => {
             {/* Tagline */}
             <p
               className={cn(
-                "mt-6 text-xs tracking-[0.35em] uppercase font-semibold transition-all duration-500",
-                showTagline ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
+                "mt-8 text-sm tracking-[0.4em] uppercase font-semibold transition-all duration-700",
+                showTagline ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
               )}
-              style={{ color: '#FFD700' }}
+              style={{ 
+                color: '#FFD700',
+                textShadow: '0 0 20px rgba(255, 215, 0, 0.4)',
+              }}
             >
               Know Your Numbers
             </p>
 
             {/* Animated Progress Line */}
-            <div className="mt-5 w-28 h-[2px] overflow-hidden bg-white/10 rounded-full">
+            <div className="mt-6 w-32 h-[2px] overflow-hidden bg-white/10 rounded-full">
               <div
                 className={cn(
-                  "h-full bg-gold rounded-full",
-                  showTagline && !shouldSkip && "animate-progress-draw"
+                  "h-full bg-gold rounded-full transition-all",
+                  showTagline && !shouldSkip ? "animate-progress-draw" : ""
                 )}
                 style={{
-                  boxShadow: '0 0 12px rgba(255, 215, 0, 0.6)',
+                  boxShadow: '0 0 15px rgba(255, 215, 0, 0.7)',
                   width: shouldSkip ? '100%' : (showTagline ? undefined : '0%'),
                 }}
               />
@@ -166,24 +209,28 @@ const Index = () => {
         </div>
 
         {/* ═══════════════════════════════════════════════════════════════════
-            HOMEPAGE - With Spotlight
+            HOMEPAGE - With Ambient Spotlight
             ═══════════════════════════════════════════════════════════════════ */}
         <main
-          className={`flex-1 flex flex-col items-center justify-center px-6 pb-24 transition-all duration-700 ${
-            isComplete ? 'opacity-100' : 'opacity-0'
-          }`}
+          className={cn(
+            "flex-1 flex flex-col items-center justify-center px-6 pb-24 transition-all duration-700",
+            isComplete ? "opacity-100" : "opacity-0"
+          )}
         >
-          {/* Spotlight glow from above */}
+          {/* Cinematic Vignette */}
+          <div className="vignette" />
+          
+          {/* Ambient spotlight glow from above */}
           <div
-            className="fixed top-0 left-1/2 -translate-x-1/2 pointer-events-none"
+            className="fixed top-0 left-1/2 -translate-x-1/2 pointer-events-none animate-spotlight-pulse"
             style={{
               width: '100vw',
-              height: '70vh',
+              height: '75vh',
               background: `
                 radial-gradient(
-                  ellipse 45% 35% at 50% 15%,
-                  rgba(255, 215, 0, 0.08) 0%,
-                  rgba(255, 215, 0, 0.03) 40%,
+                  ellipse 50% 40% at 50% 10%,
+                  rgba(255, 215, 0, 0.1) 0%,
+                  rgba(255, 215, 0, 0.04) 40%,
                   transparent 70%
                 )
               `,
@@ -192,14 +239,13 @@ const Index = () => {
 
           <div className="w-full max-w-sm flex flex-col items-center text-center relative">
 
-            {/* Logo */}
+            {/* Logo with aura */}
             <div className="mb-6 relative z-10">
-              {/* Radial aura behind logo */}
               <div
-                className="absolute inset-0 -m-4"
+                className="absolute inset-0 -m-6"
                 style={{
-                  background: 'radial-gradient(circle, rgba(255, 215, 0, 0.15) 0%, transparent 70%)',
-                  filter: 'blur(8px)',
+                  background: 'radial-gradient(circle, rgba(255, 215, 0, 0.2) 0%, transparent 70%)',
+                  filter: 'blur(12px)',
                 }}
               />
               <img
@@ -207,7 +253,7 @@ const Index = () => {
                 alt="Filmmaker.OG"
                 className="relative w-24 h-24 object-contain rounded-lg"
                 style={{
-                  filter: 'brightness(1.15) drop-shadow(0 0 20px rgba(255, 215, 0, 0.4))',
+                  filter: 'brightness(1.15) drop-shadow(0 0 25px rgba(255, 215, 0, 0.45))',
                 }}
               />
             </div>
@@ -234,7 +280,7 @@ const Index = () => {
                 backgroundColor: 'rgba(255, 215, 0, 0.12)',
                 border: '1px solid rgba(255, 215, 0, 0.45)',
                 color: '#FFD700',
-                boxShadow: '0 10px 40px rgba(255, 215, 0, 0.2)',
+                boxShadow: '0 10px 40px rgba(255, 215, 0, 0.25)',
               }}
             >
               <span className="flex items-center justify-center gap-2">
@@ -252,9 +298,10 @@ const Index = () => {
 
         {/* Footer */}
         <footer
-          className={`py-4 text-center transition-all duration-500 ${
-            isComplete ? 'opacity-100' : 'opacity-0'
-          }`}
+          className={cn(
+            "py-4 text-center transition-all duration-500",
+            isComplete ? "opacity-100" : "opacity-0"
+          )}
           style={{
             paddingBottom: 'max(1rem, env(safe-area-inset-bottom))',
           }}
