@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { createPortal } from "react-dom";
 import { Link } from "react-router-dom";
-import { Menu, X, Copy, Check, LogOut } from "lucide-react";
+import { Menu, X, Copy, Check, LogOut, BookOpen } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -21,6 +21,7 @@ const MobileMenu = ({ onOpenLegal, onSignOut }: MobileMenuProps) => {
   const [showLegalModal, setShowLegalModal] = useState(false);
   const [showAboutModal, setShowAboutModal] = useState(false);
   const [showContactModal, setShowContactModal] = useState(false);
+  const [showGlossaryModal, setShowGlossaryModal] = useState(false);
   const [copiedEmail, setCopiedEmail] = useState(false);
   const [copiedInsta, setCopiedInsta] = useState(false);
   const haptics = useHaptics();
@@ -57,6 +58,12 @@ const MobileMenu = ({ onOpenLegal, onSignOut }: MobileMenuProps) => {
     setShowContactModal(true);
   };
 
+  const handleGlossaryClick = () => {
+    haptics.light();
+    setIsOpen(false);
+    setShowGlossaryModal(true);
+  };
+
   const handleCopyEmail = async () => {
     haptics.success();
     await navigator.clipboard.writeText("thefilmmaker.og@gmail.com");
@@ -73,6 +80,7 @@ const MobileMenu = ({ onOpenLegal, onSignOut }: MobileMenuProps) => {
 
   const menuLinks = [
     { label: "PRODUCER'S SERVICES", href: "/store", isHighlighted: true },
+    { label: "LEARN", href: "/intro", isHighlighted: false },
     { label: "ABOUT", href: "#about", onClick: handleAboutClick },
     { label: "CONTACT", href: "#contact", onClick: handleContactClick },
   ];
@@ -207,6 +215,16 @@ const MobileMenu = ({ onOpenLegal, onSignOut }: MobileMenuProps) => {
                 );
               })}
 
+              {/* Glossary Button - Coming Soon */}
+              <button
+                onClick={handleGlossaryClick}
+                className="font-bebas text-2xl text-white/40 hover:text-white/60 transition-colors tracking-[0.15em] flex items-center gap-2"
+              >
+                <BookOpen className="w-5 h-5" />
+                GLOSSARY
+                <span className="text-xs text-white/30 font-sans">(Soon)</span>
+              </button>
+
               {/* Legal Button */}
               <button
                 onClick={handleLegalClick}
@@ -325,6 +343,29 @@ const MobileMenu = ({ onOpenLegal, onSignOut }: MobileMenuProps) => {
                 {copiedInsta ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
               </button>
             </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Glossary Coming Soon Modal */}
+      <Dialog open={showGlossaryModal} onOpenChange={setShowGlossaryModal}>
+        <DialogContent className="bg-[#0A0A0A] border-[#1A1A1A] max-w-md">
+          <DialogHeader>
+            <DialogTitle className="font-bebas text-2xl text-gold tracking-wider flex items-center gap-3">
+              <BookOpen className="w-6 h-6" />
+              GLOSSARY
+            </DialogTitle>
+          </DialogHeader>
+          <div className="text-white/50 text-sm leading-relaxed space-y-4">
+            <p>
+              A comprehensive glossary of film finance terminology is currently in development.
+            </p>
+            <p>
+              In the meantime, look for the <span className="text-gold">ℹ️</span> icons throughout the calculator for quick definitions of key terms like <span className="text-white">negative cost</span>, <span className="text-white">recoupment</span>, <span className="text-white">off-the-tops</span>, and more.
+            </p>
+            <p className="text-white/30 text-xs">
+              Need clarification on a specific term? Reach out via the Contact page.
+            </p>
           </div>
         </DialogContent>
       </Dialog>

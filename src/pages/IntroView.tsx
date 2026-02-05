@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, ShieldCheck, TrendingUp, FileText, Info } from 'lucide-react';
+import { ArrowRight, ArrowLeft, ShieldCheck, TrendingUp, Lightbulb, FileText, Info } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Accordion,
@@ -28,11 +28,11 @@ const IntroView = () => {
               Filmmaker <span className="text-gold">Waterfall</span> Protocol
             </h1>
             <p className="text-xl text-text-mid leading-relaxed max-w-2xl">
-              You are about to enter a professional financial simulation. This tool is designed to arm you with the clarity needed to close investors and protect your backend.
+              You're about to enter a professional financial simulation. This tool is designed to arm you with the clarity needed to close investors and protect your backend.
             </p>
           </div>
 
-          {/* The "Why" - GitHub Readme Style Box */}
+          {/* Section 1: Why This Exists */}
           <div className="bg-bg-surface border border-border-default rounded-lg p-6 md:p-8 space-y-6">
             <div className="flex items-start space-x-4">
               <div className="p-2 bg-gold/10 rounded-md">
@@ -41,11 +41,12 @@ const IntroView = () => {
               <div>
                 <h3 className="text-lg font-bold text-white mb-1">Why this exists</h3>
                 <p className="text-text-dim text-sm leading-relaxed">
-                  Most filmmakers guess their numbers. You won't. This calculator models the complex flow of money from box office to your pocket, accounting for distributor fees, sales agent commissions, and investor recoupment.
+                  Most filmmakers guess their numbers. You won't. This calculator models the flow of money from acquisition sale to your pocket—accounting for sales agent fees, distributor commissions, and investor recoupment. Whether you're selling to Netflix, Amazon, Tubi, or an independent buyer, you need to know where the money goes before you promise anyone a return.
                 </p>
               </div>
             </div>
 
+            {/* Section 2: The Investor Advantage */}
             <div className="flex items-start space-x-4">
               <div className="p-2 bg-gold/10 rounded-md">
                 <TrendingUp className="w-6 h-6 text-gold" />
@@ -53,7 +54,23 @@ const IntroView = () => {
               <div>
                 <h3 className="text-lg font-bold text-white mb-1">The Investor Advantage</h3>
                 <p className="text-text-dim text-sm leading-relaxed">
-                  Investors trust producers who understand the risks. By presenting a clear waterfall, you demonstrate competence and transparency, placing you in a rarefied group of closers.
+                  Investors back producers who understand the risks. When you can walk someone through off-the-tops, collection fees, and recoupment positions, you're speaking their language. A clear waterfall demonstrates competence—and competence closes deals.
+                </p>
+              </div>
+            </div>
+
+            {/* Section 3: The Learning Curve Is The Point */}
+            <div className="flex items-start space-x-4">
+              <div className="p-2 bg-gold/10 rounded-md">
+                <Lightbulb className="w-6 h-6 text-gold" />
+              </div>
+              <div>
+                <h3 className="text-lg font-bold text-white mb-1">The Learning Curve Is The Point</h3>
+                <p className="text-text-dim text-sm leading-relaxed">
+                  If parts of this feel unfamiliar, that's expected. Film finance is deliberately complex—it protects the people who understand it. The terminology exists for a reason, and learning it is how you stop leaving money on the table.
+                </p>
+                <p className="text-text-dim text-sm leading-relaxed mt-2">
+                  Use the <span className="text-white font-semibold">Glossary</span> (coming soon) for any terms you don't recognize, or reach out directly. We're happy to walk you through the mechanics.
                 </p>
               </div>
             </div>
@@ -63,7 +80,7 @@ const IntroView = () => {
           <div className="bg-blue-900/10 border-l-4 border-blue-500/50 p-4 rounded-r-md flex items-start space-x-3">
             <Info className="w-5 h-5 text-blue-400 mt-0.5 flex-shrink-0" />
             <div className="text-sm text-blue-200/80">
-              <span className="font-bold text-blue-200">Pro Tip:</span> Don't worry if you see terms you don't recognize. You can access the <span className="text-white font-semibold">Glossary</span> at any time via the menu in the top right corner.
+              <span className="font-bold text-blue-200">Pro Tip:</span> Don't let unfamiliar terminology stop you. A <span className="text-white font-semibold">Glossary</span> is in development—for now, look for the <span className="text-blue-300">ℹ️</span> icons throughout the calculator for quick definitions.
             </div>
           </div>
 
@@ -84,15 +101,39 @@ const IntroView = () => {
                   Can I save my results?
                 </AccordionTrigger>
                 <AccordionContent className="text-text-dim">
-                  Yes. At the end of the simulation, you will have options to export or view a summary of your waterfall model.
+                  Yes. At the end of the simulation, you'll have options to export or view a summary of your waterfall model.
                 </AccordionContent>
               </AccordionItem>
               <AccordionItem value="item-3" className="border-border-default">
                 <AccordionTrigger className="text-text-primary hover:text-gold hover:no-underline">
+                  Is this for theatrical releases?
+                </AccordionTrigger>
+                <AccordionContent className="text-text-dim">
+                  No. This calculator is built for <span className="text-white font-medium">streamer acquisition and direct sales</span>—the dominant path for indie films today. It models what happens when you sell your finished film to Netflix, Amazon, Hulu, Tubi, or an independent buyer. That's where most indie deals close.
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="item-4" className="border-border-default">
+                <AccordionTrigger className="text-text-primary hover:text-gold hover:no-underline">
+                  I don't understand all the terms yet. Should I wait?
+                </AccordionTrigger>
+                <AccordionContent className="text-text-dim">
+                  No. The best way to learn recoupment is to interact with a working model. Start with a simple scenario and adjust as you go. If you get stuck, use the in-app definitions or reach out—we'll walk you through it.
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="item-5" className="border-border-default">
+                <AccordionTrigger className="text-text-primary hover:text-gold hover:no-underline">
+                  How accurate is this compared to real deals?
+                </AccordionTrigger>
+                <AccordionContent className="text-text-dim">
+                  This calculator uses the same waterfall logic found in actual Operating Agreements and distribution contracts. The math is institutional-grade. What varies deal-to-deal are specific fee percentages, expense caps, and waterfall positions—but the structural mechanics are universal. If you're modeling a real deal, adjust the inputs to match your term sheet.
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="item-6" className="border-border-default">
+                <AccordionTrigger className="text-text-primary hover:text-gold hover:no-underline">
                   I'm new to this. Where do I start?
                 </AccordionTrigger>
                 <AccordionContent className="text-text-dim">
-                  Just follow the steps. We've broken the complex waterfall process into 4 simple stages. If you get stuck, look for the "Quick Tips" inside the calculator.
+                  Just follow the steps. The waterfall process is broken into 4 stages. If you get stuck, look for the quick tips inside the calculator.
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
@@ -100,16 +141,28 @@ const IntroView = () => {
 
           {/* Action Area */}
           <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 border-t border-border-default">
-            <div className="text-text-dim text-sm font-mono">
-              v2.0.4-stable
-            </div>
-            <Button 
-              onClick={() => navigate('/calculator')}
-              className="w-full md:w-auto bg-gold hover:bg-gold-bright text-black font-bold text-lg px-8 py-6 rounded-md shadow-[0_0_20px_rgba(212,175,55,0.2)] hover:shadow-[0_0_30px_rgba(212,175,55,0.4)] transition-all duration-300 group"
+            {/* Back Button */}
+            <button
+              onClick={() => navigate('/')}
+              className="flex items-center gap-2 text-text-dim hover:text-white transition-colors text-sm"
             >
-              Initialize Simulation
-              <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </Button>
+              <ArrowLeft className="w-4 h-4" />
+              <span>Back to Home</span>
+            </button>
+
+            {/* Version + CTA */}
+            <div className="flex items-center gap-6">
+              <div className="text-text-dim text-sm font-mono">
+                v2.0.4-stable
+              </div>
+              <Button 
+                onClick={() => navigate('/calculator')}
+                className="bg-gold hover:bg-gold-bright text-black font-bold text-lg px-8 py-6 rounded-md shadow-[0_0_20px_rgba(212,175,55,0.2)] hover:shadow-[0_0_30px_rgba(212,175,55,0.4)] transition-all duration-300 group"
+              >
+                Initialize Simulation
+                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </Button>
+            </div>
           </div>
 
         </div>
