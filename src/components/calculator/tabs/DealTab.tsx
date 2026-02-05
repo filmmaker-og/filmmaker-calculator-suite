@@ -24,12 +24,13 @@ interface DealTabProps {
  * 0 = DealOverviewWiki (intro to acquisition/breakeven concepts)
  * 1 = DealInput (enter revenue + see breakeven status)
  * 
+ * Smart Start: Skips wiki if revenue already entered.
  * On completion, advances to Waterfall tab.
  */
 const DealTab = ({ inputs, guilds, selections, onUpdateInput, onAdvance }: DealTabProps) => {
   const haptics = useHaptics();
   
-  // Start at step 0 if no revenue, otherwise show input
+  // Smart start: Skip wiki if revenue already entered
   const [currentStep, setCurrentStep] = useState(() => {
     return inputs.revenue > 0 ? 1 : 0;
   });
@@ -43,6 +44,10 @@ const DealTab = ({ inputs, guilds, selections, onUpdateInput, onAdvance }: DealT
 
   const nextStep = useCallback(() => {
     goToStep(currentStep + 1);
+  }, [currentStep, goToStep]);
+
+  const prevStep = useCallback(() => {
+    goToStep(Math.max(0, currentStep - 1));
   }, [currentStep, goToStep]);
 
   // Handle completion - advance to Waterfall tab
@@ -68,6 +73,7 @@ const DealTab = ({ inputs, guilds, selections, onUpdateInput, onAdvance }: DealT
             guilds={guilds}
             selections={selections}
             onUpdateInput={onUpdateInput}
+            onBack={prevStep}
             onNext={handleComplete}
           />
         );

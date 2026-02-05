@@ -23,12 +23,13 @@ interface BudgetTabProps {
  * 0 = BudgetOverviewWiki (intro to negative cost concept)
  * 1 = BudgetInput (enter budget + quick amounts)
  * 
+ * Smart Start: Skips wiki if budget already entered.
  * On completion, advances to Stack tab.
  */
 const BudgetTab = ({ inputs, onUpdateInput, onAdvance }: BudgetTabProps) => {
   const haptics = useHaptics();
   
-  // Start at step 0 if no budget, otherwise show input
+  // Smart start: Skip wiki if budget already entered
   const [currentStep, setCurrentStep] = useState(() => {
     return inputs.budget > 0 ? 1 : 0;
   });
@@ -42,6 +43,10 @@ const BudgetTab = ({ inputs, onUpdateInput, onAdvance }: BudgetTabProps) => {
 
   const nextStep = useCallback(() => {
     goToStep(currentStep + 1);
+  }, [currentStep, goToStep]);
+
+  const prevStep = useCallback(() => {
+    goToStep(Math.max(0, currentStep - 1));
   }, [currentStep, goToStep]);
 
   // Handle completion - advance to Stack tab
@@ -65,6 +70,7 @@ const BudgetTab = ({ inputs, onUpdateInput, onAdvance }: BudgetTabProps) => {
           <BudgetInput
             inputs={inputs}
             onUpdateInput={onUpdateInput}
+            onBack={prevStep}
             onNext={handleComplete}
           />
         );
