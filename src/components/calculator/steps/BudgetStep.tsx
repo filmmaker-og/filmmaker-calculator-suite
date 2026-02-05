@@ -133,12 +133,12 @@ const BudgetStep = ({ inputs, onUpdateInput }: BudgetStepProps) => {
                   <div className="flex items-center bg-black border border-[#2A2A2A]">
                     <span className="pl-4 pr-2 font-mono text-white/40">$</span>
                     <input
-                      type=\"text\"
-                      inputMode=\"numeric\"
+                      type="text"
+                      inputMode="numeric"
                       value={formatValue(inputs.salesExp)}
                       onChange={(e) => onUpdateInput('salesExp', parseValue(e.target.value))}
-                      placeholder=\"75,000\"
-                      className=\"flex-1 bg-transparent py-3 pr-4 outline-none font-mono text-white text-right placeholder:text-white/20 tabular-nums\"
+                      placeholder="75,000"
+                      className="flex-1 bg-transparent py-3 pr-4 outline-none font-mono text-white text-right placeholder:text-white/20 tabular-nums"
                     />
                   </div>
                 </div>

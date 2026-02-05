@@ -2,7 +2,7 @@ import { WaterfallInputs, formatCompactCurrency } from "@/lib/waterfall";
 import { Minus, Plus, Wallet, Coins, Building2, Banknote, Landmark } from "lucide-react";
 import { useHaptics } from "@/hooks/use-haptics";
 import { cn } from "@/lib/utils";
-import StandardStepLayout from "../../StandardStepLayout";
+import StandardStepLayout from "../StandardStepLayout";
 import {
   Collapsible,
   CollapsibleContent,
