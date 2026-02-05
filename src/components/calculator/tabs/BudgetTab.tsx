@@ -56,6 +56,25 @@ const BudgetTab = ({ inputs, onUpdateInput, onAdvance }: BudgetTabProps) => {
 
   return (
     <div className="space-y-4 pb-8">
+      {/* Clear instruction box for first-time users */}
+      {!isCompleted && (
+        <div
+          className="p-4 border border-gold/30 bg-gold/5"
+          style={{ borderRadius: 'var(--radius-lg)' }}
+        >
+          <h3 className="text-sm font-bold text-gold mb-2 uppercase tracking-wider">
+            👉 Start Here
+          </h3>
+          <p className="text-sm text-text-primary leading-relaxed">
+            Enter your film's total production budget in the field below.
+            This is your "negative cost" — the full amount needed to produce the film.
+          </p>
+          <p className="text-xs text-text-dim mt-2">
+            Example: For a $750,000 indie film, enter <span className="font-mono text-text-mid">750000</span> or <span className="font-mono text-text-mid">750,000</span>
+          </p>
+        </div>
+      )}
+
       {/* Production Budget Section */}
       <ChapterCard
         chapter="01"
@@ -68,7 +87,7 @@ const BudgetTab = ({ inputs, onUpdateInput, onAdvance }: BudgetTabProps) => {
         {/* Budget Input */}
         <div>
           <div className="field-label">
-            <span>Negative Cost</span>
+            <span>Production Budget</span>
           </div>
           <div
             className={cn(
@@ -95,10 +114,10 @@ const BudgetTab = ({ inputs, onUpdateInput, onAdvance }: BudgetTabProps) => {
               <span className="pr-4 text-gold text-lg">✓</span>
             )}
           </div>
-          <p className="mt-2 text-xs text-text-dim">
+          <p className="mt-2 text-sm text-text-primary font-medium">
             {isCompleted
-              ? "Budget entered. Press Enter or click Next to continue."
-              : "Enter your total production cost (e.g., 750,000)"}
+              ? "✓ Budget saved. Click the Next button below to continue to financing."
+              : "Enter your full independent film budget. When finished, click Next below."}
           </p>
         </div>
       </ChapterCard>
