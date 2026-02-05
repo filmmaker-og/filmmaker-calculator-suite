@@ -13,7 +13,6 @@ import { BudgetTab, StackTab, DealTab, WaterfallTab } from "@/components/calcula
 import { CapitalSelections } from "@/components/calculator/steps/CapitalSelectStep";
 import MobileMenu from "@/components/MobileMenu";
 import EmailGateModal from "@/components/EmailGateModal";
-import ProgressBar from "@/components/calculator/ProgressBar";
 
 const STORAGE_KEY = "filmmaker_og_inputs";
 
@@ -288,23 +287,8 @@ const Calculator = () => {
         }}
       />
 
-      {/* Spacer for fixed header */}
-      <div style={{ height: 'var(--appbar-h)' }} />
-
-      {/* Progress Bar - Fixed below header */}
-      <ProgressBar
-        currentStep={TAB_TO_STEP[activeTab]}
-        totalSteps={4}
-        onStepClick={(step) => {
-          const targetTab = STEP_TO_TAB[step - 1];
-          if (targetTab) {
-            handleTabChange(targetTab);
-          }
-        }}
-      />
-
-      {/* Spacer for fixed progress bar */}
-      <div style={{ height: '48px' }} />
+       {/* Spacer for fixed header */}
+       <div style={{ height: 'var(--appbar-h)' }} />
 
       {/* Main Content */}
       <main
