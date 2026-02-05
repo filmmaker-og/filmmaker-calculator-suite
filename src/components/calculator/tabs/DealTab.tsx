@@ -109,7 +109,7 @@ const DealTab = ({ inputs, guilds, selections, onUpdateInput, onAdvance }: DealT
               className="flex-1 bg-transparent py-4 pr-4 outline-none font-mono text-[22px] text-text-primary text-right placeholder:text-text-dim tabular-nums"
             />
             {inputs.revenue > 0 && (
-              <span className="pr-4 text-gold text-lg">✓</span>
+              <span className="pr-4 text-xl">✅</span>
             )}
           </div>
           <p className="mt-2 text-xs text-text-dim">
