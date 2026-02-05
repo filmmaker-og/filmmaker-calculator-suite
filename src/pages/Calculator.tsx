@@ -287,6 +287,17 @@ const Calculator = () => {
         }}
       />
 
+      {/* Progress line - fills as you advance through tabs */}
+      <div
+        className="fixed left-0 h-[2px] z-50 transition-all duration-500 ease-out"
+        style={{
+          top: 'calc(var(--appbar-h) + 1px)',
+          width: `${TAB_TO_STEP[activeTab] * 25}%`,
+          background: 'linear-gradient(90deg, rgba(255, 215, 0, 0.8) 0%, rgba(255, 215, 0, 0.4) 100%)',
+          boxShadow: '0 0 8px rgba(255, 215, 0, 0.3)',
+        }}
+      />
+
        {/* Spacer for fixed header */}
        <div style={{ height: 'var(--appbar-h)' }} />
 
