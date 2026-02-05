@@ -45,7 +45,12 @@ const StackTab = ({ inputs, onUpdateInput }: StackTabProps) => {
     rateDelta,
   }: {
     label: string;
-    glossary: typeof GLOSSARY.seniorDebt;
+   glossary: {
+     term: string;
+     title: string;
+     description: string;
+     details?: React.ReactNode;
+   };
     value: number;
     field: keyof WaterfallInputs;
     rateField?: 'seniorDebtRate' | 'mezzanineRate' | 'premium';
