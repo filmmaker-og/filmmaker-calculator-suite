@@ -33,7 +33,7 @@
     --text-dim: #8A8A8A;                /* Labels, helper text, phase markers. */
 
     /* BORDERS */
-    --border-default: #404040;          /* Card borders, dividers. More visible for depth. */
+    --border-default: rgba(255, 215, 0, 0.25);  /* Card borders - subtle gold for definition. */
     --border-subtle: #252525;           /* Inner dividers, low-emphasis separation. */
     --border-active: rgba(255, 215, 0, 0.5); /* Active/focused input borders. */
 
