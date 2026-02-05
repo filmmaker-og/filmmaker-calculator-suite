@@ -1,9 +1,14 @@
 import { WaterfallInputs, formatCompactCurrency } from "@/lib/waterfall";
-import { Minus, Plus } from "lucide-react";
+import { Minus, Plus, Wallet, Coins, Building2, Banknote, Landmark } from "lucide-react";
 import { useHaptics } from "@/hooks/use-haptics";
 import { cn } from "@/lib/utils";
-import ChapterCard from "../ChapterCard";
-import GlossaryTrigger, { GLOSSARY } from "../GlossaryTrigger";
+import StandardStepLayout from "../../StandardStepLayout";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import { useState } from "react";
 
 interface StackTabProps {
   inputs: WaterfallInputs;
@@ -12,6 +17,7 @@ interface StackTabProps {
 
 const StackTab = ({ inputs, onUpdateInput }: StackTabProps) => {
   const haptics = useHaptics();
+  const [activeAccordion, setActiveAccordion] = useState<string | null>(null);
 
   const formatValue = (value: number | undefined) => {
     if (value === undefined || value === 0) return '';
@@ -31,11 +37,13 @@ const StackTab = ({ inputs, onUpdateInput }: StackTabProps) => {
 
   const totalCapital = inputs.credits + inputs.debt + inputs.mezzanineDebt + inputs.equity;
   const gapPercent = inputs.budget > 0 ? (totalCapital / inputs.budget) * 100 : 0;
+  const isCompleted = totalCapital >= inputs.budget && inputs.budget > 0;
 
   // Helper component for capital source cards
   const CapitalSourceCard = ({
     label,
-    glossary,
+    icon: Icon,
+    description,
     value,
     field,
     rateField,
@@ -43,14 +51,11 @@ const StackTab = ({ inputs, onUpdateInput }: StackTabProps) => {
     rateMin,
     rateMax,
     rateDelta,
+    accordionId
   }: {
     label: string;
-   glossary: {
-     term: string;
-     title: string;
-     description: string;
-     details?: React.ReactNode;
-   };
+    icon: any;
+    description: string;
     value: number;
     field: keyof WaterfallInputs;
     rateField?: 'seniorDebtRate' | 'mezzanineRate' | 'premium';
@@ -58,173 +63,209 @@ const StackTab = ({ inputs, onUpdateInput }: StackTabProps) => {
     rateMin?: number;
     rateMax?: number;
     rateDelta?: number;
+    accordionId: string;
   }) => {
     const hasValue = value > 0;
     const rateValue = rateField ? inputs[rateField] : 0;
+    const isActive = activeAccordion === accordionId;
 
     return (
       <div
         className={cn(
-          "border overflow-hidden transition-all",
-          hasValue ? "border-gold-muted bg-gold-subtle" : "border-border-default bg-bg-card"
+          "border transition-all duration-300",
+          hasValue 
+            ? "border-gold/30 bg-gold/5" 
+            : isActive
+              ? "border-gold/20 bg-gold/[0.02]"
+              : "border-[#1A1A1A] bg-black hover:border-[#2A2A2A]"
         )}
-        style={{ borderRadius: 'var(--radius-lg)' }}
       >
-        <div className="p-4 flex items-center justify-between border-b border-border-subtle">
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-bold uppercase tracking-wider text-text-dim">{label}</span>
-            <GlossaryTrigger {...glossary} />
-          </div>
-          {hasValue && <span className="text-xs text-gold">✓</span>}
-        </div>
-
-        <div className="p-4 space-y-4">
-          <div
-            className={cn(
-              "flex items-center border transition-all",
-              hasValue ? "bg-bg-surface border-border-active" : "bg-bg-surface border-border-default"
-            )}
-            style={{ borderRadius: 'var(--radius-md)' }}
-          >
-            <span className="pl-4 pr-2 font-mono text-text-dim">$</span>
-            <input
-              type="text"
-              inputMode="numeric"
-              value={formatValue(value)}
-              onChange={(e) => onUpdateInput(field, parseValue(e.target.value))}
-              placeholder="0"
-              className="flex-1 bg-transparent py-3 pr-4 outline-none font-mono text-[22px] text-text-primary text-right placeholder:text-text-dim tabular-nums"
-            />
-          </div>
-
-          {/* Rate adjuster - only show when value > 0 */}
-          {hasValue && rateField && (
-            <div className="flex items-center justify-between pt-2">
-              <span className="text-xs text-text-dim">{rateLabel}</span>
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => adjustRate(rateField, -(rateDelta || 1), rateMin || 0, rateMax || 50)}
-                  disabled={(rateValue as number) <= (rateMin || 0)}
-                  className="w-8 h-8 flex items-center justify-center border border-border-default rounded-md text-text-dim hover:text-text-primary transition-colors disabled:opacity-30"
-                >
-                  <Minus className="w-3 h-3" />
-                </button>
-                <span className="font-mono text-sm text-text-primary w-12 text-center tabular-nums">
-                  {rateValue}%
-                </span>
-                <button
-                  onClick={() => adjustRate(rateField, rateDelta || 1, rateMin || 0, rateMax || 50)}
-                  disabled={(rateValue as number) >= (rateMax || 50)}
-                  className="w-8 h-8 flex items-center justify-center border border-border-default rounded-md text-text-dim hover:text-text-primary transition-colors disabled:opacity-30"
-                >
-                  <Plus className="w-3 h-3" />
-                </button>
-              </div>
+        <button
+          onClick={() => setActiveAccordion(isActive ? null : accordionId)}
+          className="w-full p-4 flex items-center justify-between"
+        >
+          <div className="flex items-center gap-3">
+            <div className={cn(
+              "w-8 h-8 flex items-center justify-center border transition-colors",
+              hasValue ? "border-gold/30 text-gold" : "border-white/10 text-white/30"
+            )}>
+              <Icon className="w-4 h-4" />
             </div>
-          )}
-        </div>
+            <div className="text-left">
+              <div className="text-sm font-bold tracking-wider text-white uppercase">{label}</div>
+              {hasValue && (
+                <div className="text-xs text-gold font-mono mt-0.5">
+                  {formatCompactCurrency(value)}
+                  {rateField && ` @ ${rateValue}%`}
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="text-white/20">
+            {isActive ? <Minus className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
+          </div>
+        </button>
+
+        <Collapsible open={isActive}>
+          <CollapsibleContent>
+            <div className="px-4 pb-4 pt-0 space-y-4">
+              <p className="text-xs text-white/40 leading-relaxed border-l-2 border-white/10 pl-3">
+                {description}
+              </p>
+
+              <div
+                className={cn(
+                  "flex items-center border transition-all",
+                  isCompleted ? "border-gold/30" : "border-[#2A2A2A]"
+                )}
+              >
+                <span className="pl-4 pr-2 font-mono text-white/40">$</span>
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  value={formatValue(value)}
+                  onChange={(e) => onUpdateInput(field, parseValue(e.target.value))}
+                  placeholder="0"
+                  className="flex-1 bg-transparent py-3 pr-4 outline-none font-mono text-xl text-white text-right placeholder:text-white/20 tabular-nums"
+                />
+              </div>
+
+              {/* Rate adjuster */}
+              {rateField && (
+                <div className="flex items-center justify-between pt-2 border-t border-white/5">
+                  <span className="text-xs text-white/50 uppercase tracking-wider">{rateLabel}</span>
+                  <div className="flex items-center gap-3">
+                    <button
+                      onClick={() => adjustRate(rateField, -(rateDelta || 1), rateMin || 0, rateMax || 50)}
+                      disabled={(rateValue as number) <= (rateMin || 0)}
+                      className="w-8 h-8 flex items-center justify-center border border-[#2A2A2A] text-white/40 hover:text-white hover:border-white/30 transition-colors disabled:opacity-30"
+                    >
+                      <Minus className="w-3 h-3" />
+                    </button>
+                    <span className="font-mono text-sm text-white w-12 text-center tabular-nums">
+                      {rateValue}%
+                    </span>
+                    <button
+                      onClick={() => adjustRate(rateField, rateDelta || 1, rateMin || 0, rateMax || 50)}
+                      disabled={(rateValue as number) >= (rateMax || 50)}
+                      className="w-8 h-8 flex items-center justify-center border border-[#2A2A2A] text-white/40 hover:text-white hover:border-white/30 transition-colors disabled:opacity-30"
+                    >
+                      <Plus className="w-3 h-3" />
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </CollapsibleContent>
+        </Collapsible>
       </div>
     );
   };
 
   return (
-    <div className="space-y-4 pb-8">
-      <ChapterCard
-        chapter="02"
-        title="STACK"
-        isActive={totalCapital > 0}
-        glossaryTrigger={
-          <GlossaryTrigger {...GLOSSARY.capitalStack} />
-        }
-      >
-        <p className="text-sm text-text-dim mb-6">
-          Enter all financing sources. Leave blank if not used.
-        </p>
-
-        <div className="space-y-3">
-          {/* Tax Credits */}
-          <CapitalSourceCard
-            label="Tax Credits"
-            glossary={{
-              term: "Tax Credits",
-              title: "TAX CREDITS",
-              description: "Government incentives that reduce the cost of production. Usually the first source of capital, secured against the budget.",
-              details: (
-                <p>Tax credits vary by location (20-40% of qualified spend). They're typically discounted and borrowed against, not paid directly.</p>
-              ),
-            }}
-            value={inputs.credits}
-            field="credits"
-          />
-
-          {/* Senior Debt */}
-          <CapitalSourceCard
-            label="Senior Debt"
-            glossary={GLOSSARY.seniorDebt}
-            value={inputs.debt}
-            field="debt"
-            rateField="seniorDebtRate"
-            rateLabel="Interest"
-            rateMin={0}
-            rateMax={20}
-            rateDelta={1}
-          />
-
-          {/* Gap / Mezz Debt */}
-          <CapitalSourceCard
-            label="Gap / Mezz Debt"
-            glossary={GLOSSARY.mezzanineDebt}
-            value={inputs.mezzanineDebt}
-            field="mezzanineDebt"
-            rateField="mezzanineRate"
-            rateLabel="Interest"
-            rateMin={0}
-            rateMax={30}
-            rateDelta={1}
-          />
-
-          {/* Equity */}
-          <CapitalSourceCard
-            label="Equity"
-            glossary={GLOSSARY.equity}
-            value={inputs.equity}
-            field="equity"
-            rateField="premium"
-            rateLabel="Premium"
-            rateMin={0}
-            rateMax={50}
-            rateDelta={5}
-          />
-        </div>
-
-        {/* Summary - only if capital entered and budget exists */}
-        {totalCapital > 0 && inputs.budget > 0 && (
-          <div
-            className="mt-6 p-4 border border-gold-muted bg-gold-subtle"
-            style={{ borderRadius: 'var(--radius-md)' }}
-          >
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase tracking-wider text-text-dim">Total Capital</span>
+    <StandardStepLayout
+      icon={Wallet}
+      title="Build Your"
+      titleHighlight="Capital Stack"
+      subtitle="Define how your budget is funded"
+      sectionLabel="Sources of Funds"
+      sectionIcon={Coins}
+      isCompleted={isCompleted}
+      quickReference={
+        inputs.budget > 0 ? (
+          <div className="mt-6 p-4 border border-gold/20 bg-gold/[0.02]">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-xs font-bold uppercase tracking-wider text-white/50">Total Capital</span>
               <span className="font-mono text-xl text-gold">{formatCompactCurrency(totalCapital)}</span>
             </div>
-            <div className="flex items-center justify-between mt-2">
-              <span className="text-xs text-text-dim">Budget Coverage</span>
+            
+            {/* Progress Bar */}
+            <div className="h-1.5 w-full bg-white/10 rounded-full overflow-hidden mb-2">
+              <div 
+                className={cn(
+                  "h-full transition-all duration-500",
+                  gapPercent >= 100 ? "bg-gold" : "bg-gold/50"
+                )}
+                style={{ width: `${Math.min(gapPercent, 100)}%` }}
+              />
+            </div>
+
+            <div className="flex items-center justify-between">
+              <span className="text-xs text-white/30">Budget: {formatCompactCurrency(inputs.budget)}</span>
               <span className={cn(
-                "font-mono text-sm",
-                gapPercent >= 100 ? "text-status-success" : "text-status-warning"
+                "font-mono text-xs font-bold",
+                gapPercent >= 100 ? "text-gold" : "text-white/50"
               )}>
-                {gapPercent.toFixed(0)}%
+                {gapPercent.toFixed(0)}% Funded
               </span>
             </div>
+            
             {gapPercent < 100 && (
-              <p className="text-xs text-status-warning mt-2">
-                Gap: {formatCompactCurrency(inputs.budget - totalCapital)} uncovered
+              <p className="text-xs text-white/40 mt-3 text-right">
+                Gap: <span className="text-white/70">{formatCompactCurrency(inputs.budget - totalCapital)}</span>
               </p>
             )}
           </div>
-        )}
-      </ChapterCard>
-    </div>
+        ) : null
+      }
+    >
+      <div className="space-y-3">
+        {/* Tax Credits */}
+        <CapitalSourceCard
+          label="Tax Credits"
+          icon={Building2}
+          description="Government incentives (20-40% of spend). Usually the first money in, secured against production spend."
+          value={inputs.credits}
+          field="credits"
+          accordionId="tax"
+        />
+
+        {/* Senior Debt */}
+        <CapitalSourceCard
+          label="Senior Debt"
+          icon={Banknote}
+          description="Bank loans secured by pre-sales or tax credits. Lowest risk, lowest return."
+          value={inputs.debt}
+          field="debt"
+          rateField="seniorDebtRate"
+          rateLabel="Interest"
+          rateMin={0}
+          rateMax={20}
+          rateDelta={1}
+          accordionId="senior"
+        />
+
+        {/* Gap / Mezz Debt */}
+        <CapitalSourceCard
+          label="Gap / Mezz Debt"
+          icon={Landmark}
+          description="Higher risk loans bridging the gap between senior debt and equity. Higher interest rates."
+          value={inputs.mezzanineDebt}
+          field="mezzanineDebt"
+          rateField="mezzanineRate"
+          rateLabel="Interest"
+          rateMin={0}
+          rateMax={30}
+          rateDelta={1}
+          accordionId="mezz"
+        />
+
+        {/* Equity */}
+        <CapitalSourceCard
+          label="Equity"
+          icon={Coins}
+          description="Investor capital. Highest risk, highest reward (usually 120% premium + 50% profits)."
+          value={inputs.equity}
+          field="equity"
+          rateField="premium"
+          rateLabel="Premium"
+          rateMin={0}
+          rateMax={50}
+          rateDelta={5}
+          accordionId="equity"
+        />
+      </div>
+    </StandardStepLayout>
   );
 };
 
