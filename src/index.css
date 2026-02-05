@@ -18,6 +18,7 @@
     --bg-card: #070707;                 /* Card surfaces. Floats on the void. */
     --bg-surface: #141414;              /* Input fields, interactive areas. */
     --bg-elevated: #111111;             /* Headers, section dividers within cards. */
+    --bg-header: #1A1A1A;               /* App bar and tab bar. Matte grey. */
 
     /* THE GOLD SYSTEM (Electric)
        Rule: Gold = Attention. Use sparingly. If everything is gold, nothing is. */
@@ -248,10 +249,10 @@
     height: var(--tabbar-h);
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    background: rgba(0, 0, 0, 0.9);
+    background: var(--bg-header);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
-    border-top: 1px solid var(--border-subtle);
+    border-top: 1px solid var(--gold-muted);
     padding: 0 var(--space-sm);
     padding-bottom: env(safe-area-inset-bottom);
     z-index: 50;

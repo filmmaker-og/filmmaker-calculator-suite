@@ -16,7 +16,7 @@ const Header = ({ title }: HeaderProps) => {
 
   return (
     <>
-      {/* Header Bar - Frosted Glass */}
+      {/* Header Bar - Matte Grey */}
       <header
         className="fixed top-0 left-0 right-0 z-[150]"
         style={{
@@ -51,7 +51,7 @@ const Header = ({ title }: HeaderProps) => {
         <div
           className="h-[1px] w-full"
           style={{
-            background: "linear-gradient(90deg, transparent 0%, rgba(212, 175, 55, 0.5) 20%, rgba(212, 175, 55, 0.5) 80%, transparent 100%)",
+            background: "linear-gradient(90deg, transparent 0%, rgba(255, 215, 0, 0.45) 20%, rgba(255, 215, 0, 0.45) 80%, transparent 100%)",
           }}
         />
       </header>
