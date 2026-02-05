@@ -1,9 +1,40 @@
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, ArrowLeft, ShieldCheck, TrendingUp, Lightbulb, FileText, Zap, ChevronDown } from 'lucide-react';
+import { ArrowRight, ArrowLeft, ShieldCheck, TrendingUp, Lightbulb, FileText, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import Header from "@/components/Header";
 import { cn } from "@/lib/utils";
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PRODUCT BIBLE v2.0 TOKENS
+   ═══════════════════════════════════════════════════════════════════════════ */
+const tokens = {
+  // Backgrounds
+  bgVoid: '#000000',
+  bgCard: '#070707',
+  bgSurface: '#141414',
+  bgElevated: '#111111',
+  
+  // Gold System
+  gold: '#FFD700',
+  goldMuted: 'rgba(255, 215, 0, 0.45)',
+  goldSubtle: 'rgba(255, 215, 0, 0.12)',
+  goldGlow: 'rgba(255, 215, 0, 0.3)',
+  
+  // Borders
+  borderDefault: '#2A2A2A',
+  borderGold: 'rgba(255, 215, 0, 0.45)',
+  
+  // Text
+  textPrimary: '#FFFFFF',
+  textMid: '#CFCFCF',
+  textDim: '#8A8A8A',
+  
+  // Radius
+  radiusSm: '8px',
+  radiusMd: '12px',
+  radiusLg: '14px',
+};
 
 interface FAQItem {
   question: string;
@@ -58,7 +89,6 @@ const IntroView = () => {
   };
 
   const handleInitialize = () => {
-    // Smooth transition to calculator
     navigate('/calculator');
   };
 
@@ -66,138 +96,183 @@ const IntroView = () => {
     <>
       <Header />
       
-      {/* Cinematic Vignette Overlay */}
-      <div className="vignette" />
-      
-      <div className="min-h-screen bg-bg-void text-text-primary pt-16 pb-12 px-4 md:px-8 font-sans relative">
-        
-        {/* Subtle top spotlight glow */}
-        <div
-          className="fixed top-0 left-1/2 -translate-x-1/2 pointer-events-none z-0"
-          style={{
-            width: '100vw',
-            height: '50vh',
-            background: `
-              radial-gradient(
-                ellipse 50% 40% at 50% 0%,
-                rgba(255, 215, 0, 0.04) 0%,
-                rgba(255, 215, 0, 0.01) 50%,
-                transparent 80%
-              )
-            `,
-          }}
-        />
-        
-        <div className="max-w-3xl mx-auto space-y-8 relative z-10">
+      <div 
+        className="min-h-screen text-white pt-16 pb-12 px-4 md:px-8 font-sans"
+        style={{ background: tokens.bgVoid }}
+      >
+        <div className="max-w-3xl mx-auto space-y-6">
           
           {/* ═══════════════════════════════════════════════════════════════════
-              HEADER SECTION - Documentation Style
+              HEADER - Documentation Style
               ═══════════════════════════════════════════════════════════════════ */}
-          <div 
-            className="space-y-4 pb-8 animate-fade-in"
-            style={{ animationDelay: '0.1s' }}
-          >
-            <div className="flex items-center space-x-2 text-gold/80 text-sm font-mono uppercase tracking-widest">
+          <div className="space-y-4 pb-6 animate-fade-in">
+            {/* Breadcrumb */}
+            <div 
+              className="flex items-center space-x-2 text-xs font-mono uppercase tracking-widest"
+              style={{ color: tokens.gold }}
+            >
               <FileText className="w-4 h-4" />
-              <span>Documentation / Readme.md</span>
+              <span>Protocol / Overview</span>
             </div>
             
-            <h1 className="text-4xl md:text-5xl font-bebas text-white tracking-wide leading-tight">
-              Filmmaker <span className="text-gold">Waterfall</span> Protocol
+            {/* Title */}
+            <h1 className="text-4xl md:text-5xl font-bebas tracking-wide leading-tight">
+              Filmmaker <span style={{ color: tokens.gold }}>Waterfall</span> Protocol
             </h1>
             
-            <p className="text-lg text-text-mid leading-relaxed max-w-2xl">
-              This is how money moves through a film deal—from acquisition to your pocket. Most producers don't see this math until they've already signed away their upside.
+            {/* Subtitle */}
+            <p 
+              className="text-base leading-relaxed max-w-2xl"
+              style={{ color: tokens.textMid }}
+            >
+              This is how money moves through a film deal—from acquisition to your pocket. 
+              Most producers don't see this math until they've already signed away their upside.
             </p>
             
-            {/* Premium divider */}
-            <div className="premium-divider mt-6" />
+            {/* Divider */}
+            <div 
+              className="h-px w-full mt-4"
+              style={{ 
+                background: `linear-gradient(90deg, ${tokens.goldMuted}, transparent 60%)` 
+              }}
+            />
           </div>
 
           {/* ═══════════════════════════════════════════════════════════════════
-              MAIN CONTENT CARD - Deep Matte Black Treatment
+              MAIN CONTENT CARD - Chapter Style
               ═══════════════════════════════════════════════════════════════════ */}
           <div 
-            className="relative overflow-hidden animate-fade-in"
+            className="overflow-hidden animate-fade-in"
             style={{ 
-              animationDelay: '0.2s',
-              background: 'linear-gradient(180deg, #0A0A0A 0%, #080808 100%)',
-              border: '1px solid rgba(255, 215, 0, 0.10)',
-              borderRadius: 'var(--radius-lg)',
-              boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.02), 0 4px 24px rgba(0, 0, 0, 0.6)',
+              background: tokens.bgCard,
+              border: `1px solid ${tokens.borderDefault}`,
+              borderRadius: tokens.radiusLg,
             }}
           >
-            {/* Subtle gold glow at top */}
+            {/* Card Header - Elevated */}
             <div 
-              className="absolute top-0 left-0 right-0 h-px"
-              style={{
-                background: 'linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.25), transparent)',
+              className="flex items-center gap-4 px-5 py-4"
+              style={{ 
+                background: tokens.bgElevated,
+                borderBottom: `1px solid ${tokens.borderDefault}`,
               }}
-            />
+            >
+              {/* Chapter Number */}
+              <div 
+                className="w-10 h-10 flex items-center justify-center font-bebas text-lg"
+                style={{
+                  background: tokens.goldSubtle,
+                  border: `1px solid ${tokens.goldMuted}`,
+                  borderRadius: tokens.radiusMd,
+                  color: tokens.gold,
+                }}
+              >
+                01
+              </div>
+              <div>
+                <h2 
+                  className="font-bold text-sm uppercase tracking-wide"
+                  style={{ color: tokens.textPrimary }}
+                >
+                  Before You Begin
+                </h2>
+                <p 
+                  className="text-xs"
+                  style={{ color: tokens.textDim }}
+                >
+                  Understanding the waterfall
+                </p>
+              </div>
+            </div>
             
-            <div className="p-6 md:p-8 space-y-6">
+            {/* Card Body */}
+            <div className="p-5 space-y-5">
               
-              {/* Section 1: Why This Exists */}
-              <div className="flex items-start space-x-4">
+              {/* Section 1 */}
+              <div className="flex items-start gap-4">
                 <div 
                   className="p-2.5 flex-shrink-0"
                   style={{
-                    background: 'rgba(255, 215, 0, 0.06)',
-                    border: '1px solid rgba(255, 215, 0, 0.15)',
-                    borderRadius: 'var(--radius-md)',
+                    background: tokens.goldSubtle,
+                    border: `1px solid ${tokens.goldMuted}`,
+                    borderRadius: tokens.radiusMd,
                   }}
                 >
-                  <ShieldCheck className="w-5 h-5 text-gold" />
+                  <ShieldCheck className="w-5 h-5" style={{ color: tokens.gold }} />
                 </div>
                 <div>
-                  <h3 className="text-base font-bold text-white mb-2">Why this exists</h3>
-                  <p className="text-text-dim text-sm leading-relaxed">
+                  <h3 
+                    className="text-sm font-bold mb-1.5"
+                    style={{ color: tokens.textPrimary }}
+                  >
+                    Why this exists
+                  </h3>
+                  <p 
+                    className="text-sm leading-relaxed"
+                    style={{ color: tokens.textDim }}
+                  >
                     Most filmmakers guess their numbers. You won't. This calculator models the flow of money from acquisition sale to your pocket—accounting for sales agent fees, distributor commissions, and investor recoupment. Whether you're selling to Netflix, Amazon, Tubi, or an independent buyer, you need to know where the money goes before you promise anyone a return.
                   </p>
                 </div>
               </div>
 
-              {/* Subtle divider */}
-              <div className="border-t border-white/5" />
+              {/* Divider */}
+              <div style={{ borderTop: `1px solid ${tokens.borderDefault}` }} />
 
-              {/* Section 2: The Investor Advantage */}
-              <div className="flex items-start space-x-4">
+              {/* Section 2 */}
+              <div className="flex items-start gap-4">
                 <div 
                   className="p-2.5 flex-shrink-0"
                   style={{
-                    background: 'rgba(255, 215, 0, 0.06)',
-                    border: '1px solid rgba(255, 215, 0, 0.15)',
-                    borderRadius: 'var(--radius-md)',
+                    background: tokens.goldSubtle,
+                    border: `1px solid ${tokens.goldMuted}`,
+                    borderRadius: tokens.radiusMd,
                   }}
                 >
-                  <TrendingUp className="w-5 h-5 text-gold" />
+                  <TrendingUp className="w-5 h-5" style={{ color: tokens.gold }} />
                 </div>
                 <div>
-                  <h3 className="text-base font-bold text-white mb-2">The Investor Advantage</h3>
-                  <p className="text-text-dim text-sm leading-relaxed">
+                  <h3 
+                    className="text-sm font-bold mb-1.5"
+                    style={{ color: tokens.textPrimary }}
+                  >
+                    The Investor Advantage
+                  </h3>
+                  <p 
+                    className="text-sm leading-relaxed"
+                    style={{ color: tokens.textDim }}
+                  >
                     Investors back producers who understand the risks. When you can walk someone through off-the-tops, collection fees, and recoupment positions, you're speaking their language. A clear waterfall demonstrates competence—and competence closes deals.
                   </p>
                 </div>
               </div>
 
-              {/* Subtle divider */}
-              <div className="border-t border-white/5" />
+              {/* Divider */}
+              <div style={{ borderTop: `1px solid ${tokens.borderDefault}` }} />
 
-              {/* Section 3: The Learning Curve Is The Point */}
-              <div className="flex items-start space-x-4">
+              {/* Section 3 */}
+              <div className="flex items-start gap-4">
                 <div 
                   className="p-2.5 flex-shrink-0"
                   style={{
-                    background: 'rgba(255, 215, 0, 0.06)',
-                    border: '1px solid rgba(255, 215, 0, 0.15)',
-                    borderRadius: 'var(--radius-md)',
+                    background: tokens.goldSubtle,
+                    border: `1px solid ${tokens.goldMuted}`,
+                    borderRadius: tokens.radiusMd,
                   }}
                 >
-                  <Lightbulb className="w-5 h-5 text-gold" />
+                  <Lightbulb className="w-5 h-5" style={{ color: tokens.gold }} />
                 </div>
                 <div>
-                  <h3 className="text-base font-bold text-white mb-2">The Learning Curve Is The Point</h3>
-                  <p className="text-text-dim text-sm leading-relaxed">
+                  <h3 
+                    className="text-sm font-bold mb-1.5"
+                    style={{ color: tokens.textPrimary }}
+                  >
+                    The Learning Curve Is The Point
+                  </h3>
+                  <p 
+                    className="text-sm leading-relaxed"
+                    style={{ color: tokens.textDim }}
+                  >
                     If parts of this feel unfamiliar, that's expected. Film finance is deliberately complex—it protects the people who understand it. The terminology exists for a reason, and learning it is how you stop leaving money on the table.
                   </p>
                 </div>
@@ -206,166 +281,199 @@ const IntroView = () => {
           </div>
 
           {/* ═══════════════════════════════════════════════════════════════════
-              PRO TIP - GOLD THEME (Brand Consistent)
+              PRO TIP CALLOUT
               ═══════════════════════════════════════════════════════════════════ */}
           <div 
-            className="relative overflow-hidden animate-fade-in"
+            className="flex items-start gap-3 p-4 animate-fade-in"
             style={{ 
-              animationDelay: '0.3s',
-              background: 'linear-gradient(135deg, rgba(255, 215, 0, 0.08) 0%, rgba(255, 215, 0, 0.02) 100%)',
-              borderLeft: '4px solid rgba(255, 215, 0, 0.6)',
-              borderRadius: '0 var(--radius-md) var(--radius-md) 0',
-              boxShadow: 'inset 0 0 30px rgba(255, 215, 0, 0.03)',
+              background: tokens.goldSubtle,
+              borderLeft: `3px solid ${tokens.gold}`,
+              borderRadius: `0 ${tokens.radiusMd} ${tokens.radiusMd} 0`,
             }}
           >
-            <div className="p-4 flex items-start space-x-3">
-              <Zap className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
-              <div className="text-sm leading-relaxed">
-                <span className="font-bold text-gold">Pro Tip:</span>
-                <span className="text-white/80 ml-1">
-                  Don't let unfamiliar terminology stop you. A <span className="text-white font-semibold">Glossary</span> is in development—for now, look for the 
-                </span>
-                <span className="inline-flex items-center justify-center w-5 h-5 mx-1 text-xs font-bold text-gold border border-gold/40 rounded-full bg-gold/10">i</span>
-                <span className="text-white/80">icons throughout the calculator for quick definitions.</span>
-              </div>
-            </div>
+            <span 
+              className="text-xs font-bold uppercase tracking-wide flex-shrink-0"
+              style={{ color: tokens.gold }}
+            >
+              Tip
+            </span>
+            <p 
+              className="text-sm leading-relaxed"
+              style={{ color: tokens.textMid }}
+            >
+              Don't let unfamiliar terminology stop you. Look for the 
+              <span 
+                className="inline-flex items-center justify-center w-5 h-5 mx-1 text-xs font-bold rounded-full"
+                style={{ 
+                  color: tokens.gold, 
+                  border: `1px solid ${tokens.goldMuted}`,
+                  background: tokens.goldSubtle,
+                }}
+              >i</span>
+              icons throughout the calculator for quick definitions.
+            </p>
           </div>
 
           {/* ═══════════════════════════════════════════════════════════════════
-              FAQ SECTION - Wrapped in Matte Gray Container
+              FAQ CARD - Chapter Style
               ═══════════════════════════════════════════════════════════════════ */}
           <div 
-            className="animate-fade-in"
-            style={{ animationDelay: '0.4s' }}
+            className="overflow-hidden animate-fade-in"
+            style={{ 
+              background: tokens.bgCard,
+              border: `1px solid ${tokens.borderDefault}`,
+              borderRadius: tokens.radiusLg,
+            }}
           >
-            {/* FAQ Container Card - Matte Gray */}
-            <div
-              style={{
-                background: '#111111',
-                border: '1px solid rgba(255, 255, 255, 0.06)',
-                borderRadius: 'var(--radius-lg)',
-                padding: '1.5rem',
-                boxShadow: '0 4px 24px rgba(0, 0, 0, 0.4)',
+            {/* Card Header */}
+            <div 
+              className="flex items-center gap-4 px-5 py-4"
+              style={{ 
+                background: tokens.bgElevated,
+                borderBottom: `1px solid ${tokens.borderDefault}`,
               }}
             >
-              {/* FAQ Header */}
-              <h3 className="text-2xl font-bebas text-white tracking-wide mb-4">
-                Frequently Asked <span className="text-gold">Questions</span>
-              </h3>
-              
-              {/* FAQ Accordion */}
               <div 
-                className="overflow-hidden"
+                className="w-10 h-10 flex items-center justify-center font-bebas text-lg"
                 style={{
-                  background: '#0A0A0A',
-                  border: '1px solid rgba(255, 255, 255, 0.04)',
-                  borderRadius: 'var(--radius-md)',
+                  background: tokens.goldSubtle,
+                  border: `1px solid ${tokens.goldMuted}`,
+                  borderRadius: tokens.radiusMd,
+                  color: tokens.gold,
                 }}
               >
-                {faqItems.map((item, index) => (
-                  <div 
-                    key={index}
+                02
+              </div>
+              <div>
+                <h2 
+                  className="font-bold text-sm uppercase tracking-wide"
+                  style={{ color: tokens.textPrimary }}
+                >
+                  Common Questions
+                </h2>
+                <p 
+                  className="text-xs"
+                  style={{ color: tokens.textDim }}
+                >
+                  Quick answers before you start
+                </p>
+              </div>
+            </div>
+            
+            {/* FAQ Accordion */}
+            <div className="divide-y" style={{ borderColor: tokens.borderDefault }}>
+              {faqItems.map((item, index) => (
+                <div 
+                  key={index}
+                  style={{ borderColor: tokens.borderDefault }}
+                >
+                  <button
+                    onClick={() => toggleFAQ(index)}
+                    className="w-full flex items-center gap-4 p-4 text-left transition-all duration-150"
+                    style={{
+                      background: openFAQ === index ? tokens.goldSubtle : 'transparent',
+                    }}
+                  >
+                    {/* Number Badge */}
+                    <div 
+                      className="w-7 h-7 flex items-center justify-center flex-shrink-0 font-mono text-xs font-bold"
+                      style={{
+                        background: openFAQ === index ? tokens.goldSubtle : tokens.bgSurface,
+                        border: `1px solid ${openFAQ === index ? tokens.goldMuted : tokens.borderDefault}`,
+                        borderRadius: tokens.radiusSm,
+                        color: openFAQ === index ? tokens.gold : tokens.textDim,
+                      }}
+                    >
+                      {String(index + 1).padStart(2, '0')}
+                    </div>
+                    
+                    {/* Question */}
+                    <span 
+                      className="flex-1 text-sm font-medium"
+                      style={{ color: openFAQ === index ? tokens.textPrimary : tokens.textMid }}
+                    >
+                      {item.question}
+                    </span>
+                    
+                    {/* Chevron */}
+                    <ChevronDown 
+                      className={cn(
+                        "w-4 h-4 flex-shrink-0 transition-transform duration-200",
+                        openFAQ === index && "rotate-180"
+                      )}
+                      style={{ color: openFAQ === index ? tokens.gold : tokens.textDim }}
+                    />
+                  </button>
+                  
+                  {/* Answer */}
+                  <div
                     className={cn(
-                      "transition-all duration-200",
-                      index !== faqItems.length - 1 && "border-b border-white/5"
+                      "overflow-hidden transition-all duration-200",
+                      openFAQ === index ? "max-h-48 opacity-100" : "max-h-0 opacity-0"
                     )}
                   >
-                    <button
-                      onClick={() => toggleFAQ(index)}
-                      className={cn(
-                        "w-full flex items-center gap-4 p-4 text-left transition-all duration-200",
-                        "hover:bg-white/[0.02]",
-                        openFAQ === index && "bg-gold/[0.03]"
-                      )}
+                    <div 
+                      className="px-4 pb-4 text-sm leading-relaxed"
+                      style={{ 
+                        color: tokens.textDim,
+                        marginLeft: '44px',
+                        borderLeft: `2px solid ${tokens.goldMuted}`,
+                        paddingLeft: '16px',
+                      }}
                     >
-                      {/* Chapter Number */}
-                      <div 
-                        className={cn(
-                          "w-7 h-7 flex items-center justify-center flex-shrink-0 font-mono text-xs font-bold transition-colors duration-200",
-                          openFAQ === index ? "text-gold" : "text-text-dim"
-                        )}
-                        style={{
-                          background: openFAQ === index ? 'rgba(255, 215, 0, 0.1)' : 'rgba(255, 255, 255, 0.03)',
-                          border: openFAQ === index ? '1px solid rgba(255, 215, 0, 0.3)' : '1px solid rgba(255, 255, 255, 0.08)',
-                          borderRadius: 'var(--radius-sm)',
-                        }}
-                      >
-                        {String(index + 1).padStart(2, '0')}
-                      </div>
-                      
-                      {/* Question */}
-                      <span className={cn(
-                        "flex-1 text-sm font-medium transition-colors duration-200",
-                        openFAQ === index ? "text-white" : "text-text-mid"
-                      )}>
-                        {item.question}
-                      </span>
-                      
-                      {/* Chevron */}
-                      <ChevronDown 
-                        className={cn(
-                          "w-4 h-4 flex-shrink-0 transition-all duration-200",
-                          openFAQ === index ? "text-gold rotate-180" : "text-text-dim"
-                        )}
-                      />
-                    </button>
-                    
-                    {/* Answer - Collapsible */}
-                    <div
-                      className={cn(
-                        "overflow-hidden transition-all duration-300 ease-out",
-                        openFAQ === index ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
-                      )}
-                    >
-                      <div 
-                        className="px-4 pb-4 pl-[60px] text-sm text-text-dim leading-relaxed"
-                        style={{
-                          borderLeft: '2px solid rgba(255, 215, 0, 0.15)',
-                          marginLeft: '18px',
-                        }}
-                      >
-                        {item.answer}
-                      </div>
+                      {item.answer}
                     </div>
                   </div>
-                ))}
-              </div>
+                </div>
+              ))}
             </div>
           </div>
 
           {/* ═══════════════════════════════════════════════════════════════════
-              ACTION AREA - CTA
+              CTA SECTION
               ═══════════════════════════════════════════════════════════════════ */}
-          <div 
-            className="pt-8 flex flex-col items-center gap-4 animate-fade-in"
-            style={{ animationDelay: '0.5s' }}
-          >
-            <div className="premium-divider w-full mb-4" />
+          <div className="pt-6 flex flex-col items-center gap-5 animate-fade-in">
+            {/* Divider */}
+            <div 
+              className="h-px w-full"
+              style={{ 
+                background: `linear-gradient(90deg, transparent, ${tokens.goldMuted}, transparent)` 
+              }}
+            />
             
+            {/* CTA Button - Product Bible Style */}
             <Button 
               onClick={handleInitialize}
-              className="bg-gold hover:bg-gold-bright text-black font-bold text-base px-10 py-6 rounded-md transition-all duration-300 group"
+              className="group px-8 py-6 text-xs font-black uppercase tracking-widest transition-all duration-200"
               style={{
-                boxShadow: '0 0 30px rgba(255, 215, 0, 0.25), 0 10px 40px rgba(0, 0, 0, 0.3)',
+                background: tokens.goldSubtle,
+                border: `1px solid ${tokens.goldMuted}`,
+                borderRadius: tokens.radiusMd,
+                color: tokens.gold,
+                boxShadow: `0 10px 26px rgba(255, 215, 0, 0.18)`,
               }}
             >
               Initialize Simulation
-              <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="ml-3 w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Button>
             
-            <div className="text-text-dim text-xs font-mono tracking-wider">
+            {/* Version */}
+            <div 
+              className="text-xs font-mono tracking-wider"
+              style={{ color: tokens.textDim }}
+            >
               v2.0.5-stable
             </div>
           </div>
 
           {/* Back Link */}
-          <div 
-            className="pt-4 flex justify-center animate-fade-in"
-            style={{ animationDelay: '0.6s' }}
-          >
+          <div className="pt-2 flex justify-center animate-fade-in">
             <button
               onClick={() => navigate('/')}
-              className="flex items-center gap-2 text-text-dim hover:text-gold transition-colors text-sm"
+              className="flex items-center gap-2 text-sm transition-colors"
+              style={{ color: tokens.textDim }}
+              onMouseEnter={(e) => e.currentTarget.style.color = tokens.gold}
+              onMouseLeave={(e) => e.currentTarget.style.color = tokens.textDim}
             >
               <ArrowLeft className="w-4 h-4" />
               <span>Back to Home</span>
