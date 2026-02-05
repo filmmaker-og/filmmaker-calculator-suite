@@ -13,6 +13,10 @@ import {
   TrendingUp,
   ExternalLink,
   BarChart3,
+  Droplets,
+  Layers,
+  Users,
+  Info,
 } from "lucide-react";
 import RestrictedAccessModal from "@/components/RestrictedAccessModal";
 import { cn } from "@/lib/utils";
@@ -30,6 +34,7 @@ const WaterfallTab = ({ result, inputs }: WaterfallTabProps) => {
   const [showRestrictedModal, setShowRestrictedModal] = useState(false);
   const [showWaterfall, setShowWaterfall] = useState(true);
   const [showLedger, setShowLedger] = useState(false);
+  const [showGuide, setShowGuide] = useState(true);
 
   const isProfitable = result.profitPool > 0;
   const isUnderperforming = result.multiple < 1.2 && inputs.equity > 0;
@@ -47,23 +52,96 @@ const WaterfallTab = ({ result, inputs }: WaterfallTabProps) => {
 
   return (
     <div className="space-y-6 pb-8">
-      {/* Onboarding Card */}
-      <div
-        className="p-5 border border-gold/30 bg-gold/[0.03] animate-fade-in"
-        style={{ borderRadius: 'var(--radius-lg)' }}
-      >
-        <div className="flex items-start gap-3 mb-3">
-          <BarChart3 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-          <h3 className="text-base font-bold text-gold">
-            Here's how the money flows.
-          </h3>
+      {/* Wiki-Style Onboarding Guide - Collapsible */}
+      <div className="space-y-4 animate-fade-in">
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-2 text-gold/80 text-xs font-mono uppercase tracking-widest">
+            <FileText className="w-3 h-3" />
+            <span>Step 4 of 4 / Waterfall Results</span>
+          </div>
+          <button
+            onClick={() => setShowGuide(!showGuide)}
+            className="text-xs text-text-dim hover:text-white transition-colors"
+          >
+            {showGuide ? 'Hide guide' : 'Show guide'}
+          </button>
         </div>
-        <p className="text-sm text-text-primary leading-relaxed mb-3">
-          The <span className="text-white font-medium">waterfall</span> shows exactly who gets paid, in what order. Revenue flows from top to bottom—each tier must be fully paid before the next tier sees a dollar.
-        </p>
-        <p className="text-xs text-text-dim leading-relaxed">
-          This is how agencies and studios model every deal. Now you can too.
-        </p>
+
+        {/* Main Guide Card - Collapsible */}
+        {showGuide && (
+          <div
+            className="bg-bg-surface border border-border-default p-5 space-y-5"
+            style={{ borderRadius: 'var(--radius-lg)' }}
+          >
+            {/* Section 1: What This Shows */}
+            <div className="flex items-start space-x-4">
+              <div className="p-2 bg-gold/10" style={{ borderRadius: 'var(--radius-md)' }}>
+                <Droplets className="w-5 h-5 text-gold" />
+              </div>
+              <div>
+                <h3 className="text-sm font-bold text-white mb-1">What is a "Waterfall"?</h3>
+                <p className="text-xs text-text-dim leading-relaxed">
+                  A waterfall is the <span className="text-white font-medium">exact order in which money flows</span> from your acquisition sale through each stakeholder. Like water cascading down steps, revenue flows from top to bottom—each tier must be completely filled before the next tier receives anything.
+                </p>
+              </div>
+            </div>
+
+            {/* Section 2: The Tiers */}
+            <div className="flex items-start space-x-4">
+              <div className="p-2 bg-gold/10" style={{ borderRadius: 'var(--radius-md)' }}>
+                <Layers className="w-5 h-5 text-gold" />
+              </div>
+              <div>
+                <h3 className="text-sm font-bold text-white mb-1">Understanding the tiers</h3>
+                <p className="text-xs text-text-dim leading-relaxed mb-3">
+                  Your waterfall has <span className="text-white font-medium">four main tiers</span>:
+                </p>
+                <div className="space-y-2 text-xs">
+                  <div className="flex items-start gap-2">
+                    <span className="text-gold font-mono">1.</span>
+                    <span className="text-text-dim"><span className="text-white">Off-the-Top</span> — Sales agent fees, CAM fees, guild residuals, marketing. Non-negotiable costs.</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <span className="text-gold font-mono">2.</span>
+                    <span className="text-text-dim"><span className="text-white">Debt Service</span> — Senior loans and mezzanine debt principal + interest.</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <span className="text-gold font-mono">3.</span>
+                    <span className="text-text-dim"><span className="text-white">Equity Recoupment</span> — Investor principal returned plus their premium (usually 120%).</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <span className="text-gold font-mono">4.</span>
+                    <span className="text-text-dim"><span className="text-white">Profit Pool</span> — What's left after everyone is paid. Split 50/50 between investors and producers.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Section 3: What It Means For You */}
+            <div className="flex items-start space-x-4">
+              <div className="p-2 bg-gold/10" style={{ borderRadius: 'var(--radius-md)' }}>
+                <Users className="w-5 h-5 text-gold" />
+              </div>
+              <div>
+                <h3 className="text-sm font-bold text-white mb-1">What to look for</h3>
+                <p className="text-xs text-text-dim leading-relaxed">
+                  <span className="text-white font-medium">Multiple</span> tells you total investor return (1.2x = 120% back). <span className="text-white font-medium">Profit pool</span> is what you split with investors. If multiple is below 1.2x, institutional investors may walk. If profit pool is zero, you're just making investors whole—no backend for you.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Pro Tip Callout */}
+        {showGuide && (
+          <div className="bg-blue-900/10 border-l-4 border-blue-500/50 p-4 flex items-start space-x-3" style={{ borderRadius: '0 var(--radius-md) var(--radius-md) 0' }}>
+            <Info className="w-4 h-4 text-blue-400 mt-0.5 flex-shrink-0" />
+            <div className="text-xs text-blue-200/80 leading-relaxed">
+              <span className="font-bold text-blue-200">Pro Tip:</span> This is how agencies and studios model every deal. If you can walk an investor through a 4-tier waterfall with preferred returns, you're speaking their language—and that closes deals.
+            </div>
+          </div>
+        )}
       </div>
 
       <ChapterCard

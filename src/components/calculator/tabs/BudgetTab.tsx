@@ -3,7 +3,7 @@ import { useState, useRef, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import ChapterCard from "../ChapterCard";
 import GlossaryTrigger, { GLOSSARY } from "../GlossaryTrigger";
-import { Sparkles, X } from "lucide-react";
+import { Sparkles, X, DollarSign, FileText, Lightbulb, Info } from "lucide-react";
 
 interface BudgetTabProps {
   inputs: WaterfallInputs;
@@ -61,21 +61,67 @@ const BudgetTab = ({ inputs, onUpdateInput, onAdvance }: BudgetTabProps) => {
 
   return (
     <div className="space-y-6 pb-8">
-      {/* Onboarding Card - Shows only when budget is empty */}
+      {/* Wiki-Style Onboarding Guide - Shows only when budget is empty */}
       {!isCompleted && (
-        <div
-          className="p-5 border border-gold/30 bg-gold/[0.03] animate-fade-in"
-          style={{ borderRadius: 'var(--radius-lg)' }}
-        >
-          <div className="flex items-start gap-3 mb-3">
-            <Sparkles className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-            <h3 className="text-base font-bold text-gold">
-              This is where your journey begins.
-            </h3>
+        <div className="space-y-4 animate-fade-in">
+          {/* Header */}
+          <div className="flex items-center space-x-2 text-gold/80 text-xs font-mono uppercase tracking-widest">
+            <FileText className="w-3 h-3" />
+            <span>Step 1 of 4 / Budget</span>
           </div>
-          <p className="text-sm text-text-primary leading-relaxed">
-            The first step is understanding your budget. All you have to do here is enter your <span className="text-white font-medium">total negative cost</span>—that's your full production budget from development through final delivery—then hit Next.
-          </p>
+
+          {/* Main Guide Card */}
+          <div
+            className="bg-bg-surface border border-border-default p-5 space-y-5"
+            style={{ borderRadius: 'var(--radius-lg)' }}
+          >
+            {/* Section 1: What This Is */}
+            <div className="flex items-start space-x-4">
+              <div className="p-2 bg-gold/10" style={{ borderRadius: 'var(--radius-md)' }}>
+                <DollarSign className="w-5 h-5 text-gold" />
+              </div>
+              <div>
+                <h3 className="text-sm font-bold text-white mb-1">What is the "Negative Cost"?</h3>
+                <p className="text-xs text-text-dim leading-relaxed">
+                  The negative cost is your <span className="text-white font-medium">total production budget</span>—every dollar it takes to get your film from development through final delivery. It's called "negative" because it's the cost to create the negative (the original print). This number is the foundation of every financial projection.
+                </p>
+              </div>
+            </div>
+
+            {/* Section 2: What's Included */}
+            <div className="flex items-start space-x-4">
+              <div className="p-2 bg-gold/10" style={{ borderRadius: 'var(--radius-md)' }}>
+                <Sparkles className="w-5 h-5 text-gold" />
+              </div>
+              <div>
+                <h3 className="text-sm font-bold text-white mb-1">What's typically included</h3>
+                <p className="text-xs text-text-dim leading-relaxed">
+                  Development, pre-production, principal photography, post-production, music licensing, deliverables, insurance, legal, and contingency. <span className="text-white font-medium">It does NOT include marketing or distribution costs</span>—those come later.
+                </p>
+              </div>
+            </div>
+
+            {/* Section 3: Why It Matters */}
+            <div className="flex items-start space-x-4">
+              <div className="p-2 bg-gold/10" style={{ borderRadius: 'var(--radius-md)' }}>
+                <Lightbulb className="w-5 h-5 text-gold" />
+              </div>
+              <div>
+                <h3 className="text-sm font-bold text-white mb-1">Why investors care</h3>
+                <p className="text-xs text-text-dim leading-relaxed">
+                  Your budget determines your <span className="text-white font-medium">breakeven point</span>—the minimum sale price needed to pay everyone back. A lower budget means a lower bar to clear. Investors want to know you can make a sellable film at a price the market will pay.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Pro Tip Callout */}
+          <div className="bg-blue-900/10 border-l-4 border-blue-500/50 p-4 flex items-start space-x-3" style={{ borderRadius: '0 var(--radius-md) var(--radius-md) 0' }}>
+            <Info className="w-4 h-4 text-blue-400 mt-0.5 flex-shrink-0" />
+            <div className="text-xs text-blue-200/80 leading-relaxed">
+              <span className="font-bold text-blue-200">Pro Tip:</span> If you don't have a locked budget yet, use a realistic estimate. You can always adjust—the goal here is to understand how the math works at different budget levels.
+            </div>
+          </div>
         </div>
       )}
 
@@ -202,21 +248,6 @@ const BudgetTab = ({ inputs, onUpdateInput, onAdvance }: BudgetTabProps) => {
             </button>
           </div>
         </div>
-
-        {/* Quick Tip - Shows only when empty */}
-        {!isCompleted && (
-          <div
-            className="mt-6 p-4 border border-white/10 bg-white/[0.02]"
-            style={{ borderRadius: 'var(--radius-lg)' }}
-          >
-            <h3 className="text-xs font-bold text-text-mid mb-2 uppercase tracking-wide flex items-center gap-2">
-              👉 Quick Tip
-            </h3>
-            <p className="text-sm text-text-dim leading-relaxed">
-              This is your "negative cost." It's the total amount of money it takes to get the film "in the can" and finished—from development through final delivery.
-            </p>
-          </div>
-        )}
       </ChapterCard>
     </div>
   );

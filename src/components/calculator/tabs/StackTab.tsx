@@ -1,5 +1,5 @@
 import { WaterfallInputs, formatCompactCurrency } from "@/lib/waterfall";
-import { Minus, Plus, Coins, Building2, Banknote, Landmark, Layers, Clock } from "lucide-react";
+import { Minus, Plus, Coins, Building2, Banknote, Landmark, Layers, Clock, FileText, TrendingUp, Shield, Info } from "lucide-react";
 import { useHaptics } from "@/hooks/use-haptics";
 import { cn } from "@/lib/utils";
 import ChapterCard from "../ChapterCard";
@@ -280,32 +280,90 @@ const StackTab = ({ inputs, onUpdateInput }: StackTabProps) => {
 
   return (
     <div className="space-y-6 pb-8">
-      {/* Onboarding Card - Shows only when no capital entered */}
+      {/* Wiki-Style Onboarding Guide - Shows only when no capital entered */}
       {!hasAnyCapital && (
-        <div
-          className="p-5 border border-gold/30 bg-gold/[0.03] animate-fade-in"
-          style={{ borderRadius: 'var(--radius-lg)' }}
-        >
-          <div className="flex items-start gap-3 mb-3">
-            <Layers className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-            <h3 className="text-base font-bold text-gold">
-              Now let's fund your film.
-            </h3>
+        <div className="space-y-4 animate-fade-in">
+          {/* Header */}
+          <div className="flex items-center space-x-2 text-gold/80 text-xs font-mono uppercase tracking-widest">
+            <FileText className="w-3 h-3" />
+            <span>Step 2 of 4 / Capital Stack</span>
           </div>
-          <p className="text-sm text-text-primary leading-relaxed mb-4">
-            The <span className="text-white font-medium">capital stack</span> is how your budget gets funded. It's the combination of money sources—each with different risk levels, costs, and repayment priorities.
-          </p>
-          <p className="text-sm text-text-mid leading-relaxed mb-4">
-            Why does this matter? Because <span className="text-white font-medium">whoever puts money in first gets paid back first</span>. This "waterfall" of repayment determines who takes the most risk—and who gets the biggest reward.
-          </p>
-          <div className="p-3 bg-white/[0.02] border border-white/10 mb-4" style={{ borderRadius: 'var(--radius-md)' }}>
-            <p className="text-xs text-text-dim leading-relaxed">
-              <span className="text-gold font-medium">Typical indie structure:</span> Tax credits (safest) → Senior debt → Gap/mezz debt → Equity (riskiest, but highest upside)
-            </p>
+
+          {/* Main Guide Card */}
+          <div
+            className="bg-bg-surface border border-border-default p-5 space-y-5"
+            style={{ borderRadius: 'var(--radius-lg)' }}
+          >
+            {/* Section 1: What This Is */}
+            <div className="flex items-start space-x-4">
+              <div className="p-2 bg-gold/10" style={{ borderRadius: 'var(--radius-md)' }}>
+                <Layers className="w-5 h-5 text-gold" />
+              </div>
+              <div>
+                <h3 className="text-sm font-bold text-white mb-1">What is a "Capital Stack"?</h3>
+                <p className="text-xs text-text-dim leading-relaxed">
+                  The capital stack is <span className="text-white font-medium">how your budget gets funded</span>—the combination of different money sources stacked on top of each other. Each layer has different risk, cost, and repayment priority. Think of it like a layer cake where the bottom layer gets served first.
+                </p>
+              </div>
+            </div>
+
+            {/* Section 2: The Waterfall Logic */}
+            <div className="flex items-start space-x-4">
+              <div className="p-2 bg-gold/10" style={{ borderRadius: 'var(--radius-md)' }}>
+                <TrendingUp className="w-5 h-5 text-gold" />
+              </div>
+              <div>
+                <h3 className="text-sm font-bold text-white mb-1">How repayment works</h3>
+                <p className="text-xs text-text-dim leading-relaxed">
+                  When your film sells, money flows through the stack <span className="text-white font-medium">from top to bottom</span>. Tax credits get repaid first (lowest risk), then senior debt, then mezzanine debt, and finally equity investors. Each tier must be fully paid before the next tier sees a dollar.
+                </p>
+              </div>
+            </div>
+
+            {/* Section 3: Risk vs Reward */}
+            <div className="flex items-start space-x-4">
+              <div className="p-2 bg-gold/10" style={{ borderRadius: 'var(--radius-md)' }}>
+                <Shield className="w-5 h-5 text-gold" />
+              </div>
+              <div>
+                <h3 className="text-sm font-bold text-white mb-1">Risk vs. reward</h3>
+                <p className="text-xs text-text-dim leading-relaxed">
+                  Higher risk = higher reward. Tax credits take almost no risk, so they get no upside. Equity investors take the <span className="text-white font-medium">most risk</span> (they only get paid if everyone above them is made whole), but they also get a premium (usually 120%) plus a share of profits.
+                </p>
+              </div>
+            </div>
+
+            {/* Visual Stack Reference */}
+            <div className="p-4 bg-black/50 border border-white/10" style={{ borderRadius: 'var(--radius-md)' }}>
+              <p className="text-[10px] text-text-dim uppercase tracking-wider mb-3 text-center font-bold">Typical repayment order</p>
+              <div className="space-y-1 text-xs font-mono">
+                <div className="flex justify-between items-center p-2 bg-white/5 border-l-2 border-emerald-500">
+                  <span className="text-emerald-400">1. Tax Credits</span>
+                  <span className="text-text-dim">Lowest risk</span>
+                </div>
+                <div className="flex justify-between items-center p-2 bg-white/5 border-l-2 border-blue-500">
+                  <span className="text-blue-400">2. Senior Debt</span>
+                  <span className="text-text-dim">Secured loans</span>
+                </div>
+                <div className="flex justify-between items-center p-2 bg-white/5 border-l-2 border-purple-500">
+                  <span className="text-purple-400">3. Gap/Mezz Debt</span>
+                  <span className="text-text-dim">Higher interest</span>
+                </div>
+                <div className="flex justify-between items-center p-2 bg-white/5 border-l-2 border-gold">
+                  <span className="text-gold">4. Equity</span>
+                  <span className="text-text-dim">Highest risk + reward</span>
+                </div>
+              </div>
+            </div>
           </div>
-          <p className="text-xs text-text-dim">
-            Tap each source below to add amounts. Leave blank if not applicable.
-          </p>
+
+          {/* Pro Tip Callout */}
+          <div className="bg-blue-900/10 border-l-4 border-blue-500/50 p-4 flex items-start space-x-3" style={{ borderRadius: '0 var(--radius-md) var(--radius-md) 0' }}>
+            <Info className="w-4 h-4 text-blue-400 mt-0.5 flex-shrink-0" />
+            <div className="text-xs text-blue-200/80 leading-relaxed">
+              <span className="font-bold text-blue-200">Pro Tip:</span> Most indie films use 2-3 capital sources. You don't need all of them—tap each source below and only fill in what applies to your deal. Leave the rest blank.
+            </div>
+          </div>
         </div>
       )}
 

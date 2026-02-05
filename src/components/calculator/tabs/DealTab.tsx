@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import ChapterCard from "../ChapterCard";
 import GlossaryTrigger, { GLOSSARY } from "../GlossaryTrigger";
-import { DollarSign } from "lucide-react";
+import { DollarSign, FileText, Target, TrendingUp, Handshake, Info } from "lucide-react";
 
 interface DealTabProps {
   inputs: WaterfallInputs;
@@ -56,24 +56,80 @@ const DealTab = ({ inputs, guilds, selections, onUpdateInput, onAdvance }: DealT
 
   return (
     <div className="space-y-6 pb-8">
-      {/* Onboarding Card - Shows only when revenue not entered */}
+      {/* Wiki-Style Onboarding Guide - Shows only when revenue not entered */}
       {!hasRevenue && (
-        <div
-          className="p-5 border border-gold/30 bg-gold/[0.03] animate-fade-in"
-          style={{ borderRadius: 'var(--radius-lg)' }}
-        >
-          <div className="flex items-start gap-3 mb-3">
-            <DollarSign className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-            <h3 className="text-base font-bold text-gold">
-              Time to model the deal.
-            </h3>
+        <div className="space-y-4 animate-fade-in">
+          {/* Header */}
+          <div className="flex items-center space-x-2 text-gold/80 text-xs font-mono uppercase tracking-widest">
+            <FileText className="w-3 h-3" />
+            <span>Step 3 of 4 / Deal Modeling</span>
           </div>
-          <p className="text-sm text-text-primary leading-relaxed mb-3">
-            This is where you test what happens when a distributor offers to buy your film. The <span className="text-white font-medium">acquisition price</span> is what they'll pay upfront for distribution rights.
-          </p>
-          <p className="text-sm text-text-mid leading-relaxed">
-            We've already calculated your <span className="text-white font-medium">breakeven</span>—the minimum amount needed to pay back all investors. Now see if the deal makes everyone whole.
-          </p>
+
+          {/* Main Guide Card */}
+          <div
+            className="bg-bg-surface border border-border-default p-5 space-y-5"
+            style={{ borderRadius: 'var(--radius-lg)' }}
+          >
+            {/* Section 1: What This Is */}
+            <div className="flex items-start space-x-4">
+              <div className="p-2 bg-gold/10" style={{ borderRadius: 'var(--radius-md)' }}>
+                <DollarSign className="w-5 h-5 text-gold" />
+              </div>
+              <div>
+                <h3 className="text-sm font-bold text-white mb-1">What is the "Acquisition Price"?</h3>
+                <p className="text-xs text-text-dim leading-relaxed">
+                  When a streamer or distributor buys your film, they pay an <span className="text-white font-medium">acquisition price</span>—a flat fee for distribution rights. This is the number that determines whether your investors get paid, and whether you see any backend.
+                </p>
+              </div>
+            </div>
+
+            {/* Section 2: What's Your Breakeven */}
+            <div className="flex items-start space-x-4">
+              <div className="p-2 bg-gold/10" style={{ borderRadius: 'var(--radius-md)' }}>
+                <Target className="w-5 h-5 text-gold" />
+              </div>
+              <div>
+                <h3 className="text-sm font-bold text-white mb-1">Understanding breakeven</h3>
+                <p className="text-xs text-text-dim leading-relaxed">
+                  Your <span className="text-white font-medium">breakeven</span> is the minimum sale price needed to pay back all costs: sales fees, guild residuals, marketing expenses, debt service, and investor returns. We've already calculated this based on your capital stack. The question is: will the market pay enough?
+                </p>
+              </div>
+            </div>
+
+            {/* Section 3: The Distributor's Perspective */}
+            <div className="flex items-start space-x-4">
+              <div className="p-2 bg-gold/10" style={{ borderRadius: 'var(--radius-md)' }}>
+                <TrendingUp className="w-5 h-5 text-gold" />
+              </div>
+              <div>
+                <h3 className="text-sm font-bold text-white mb-1">How distributors think</h3>
+                <p className="text-xs text-text-dim leading-relaxed">
+                  Distributors buy films they believe will generate more than they pay. They're assessing <span className="text-white font-medium">genre, cast, festival buzz, and comparable titles</span>. A $1.5M acquisition for a $1M film is great for you—but only if the distributor believes they'll make $3M+ in revenue.
+                </p>
+              </div>
+            </div>
+
+            {/* Section 4: What You'll Do */}
+            <div className="flex items-start space-x-4">
+              <div className="p-2 bg-gold/10" style={{ borderRadius: 'var(--radius-md)' }}>
+                <Handshake className="w-5 h-5 text-gold" />
+              </div>
+              <div>
+                <h3 className="text-sm font-bold text-white mb-1">Test different scenarios</h3>
+                <p className="text-xs text-text-dim leading-relaxed">
+                  Enter an acquisition price to see if it clears your breakeven. Try different numbers to understand your negotiating position. <span className="text-white font-medium">What's the minimum you can accept? What's your dream scenario?</span>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Pro Tip Callout */}
+          <div className="bg-blue-900/10 border-l-4 border-blue-500/50 p-4 flex items-start space-x-3" style={{ borderRadius: '0 var(--radius-md) var(--radius-md) 0' }}>
+            <Info className="w-4 h-4 text-blue-400 mt-0.5 flex-shrink-0" />
+            <div className="text-xs text-blue-200/80 leading-relaxed">
+              <span className="font-bold text-blue-200">Pro Tip:</span> Most indie deals close between 100-130% of budget. Exceptional films with festival buzz or star power can command more. If your breakeven requires 150%+ of budget, you may need to restructure your capital stack.
+            </div>
+          </div>
         </div>
       )}
 
