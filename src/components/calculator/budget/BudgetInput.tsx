@@ -1,11 +1,12 @@
 import { useState, useRef, useEffect } from "react";
-import { DollarSign, ArrowRight, Check, X } from "lucide-react";
+import { DollarSign, ArrowRight, ArrowLeft, Check, X } from "lucide-react";
 import { WaterfallInputs } from "@/lib/waterfall";
 import { cn } from "@/lib/utils";
 
 interface BudgetInputProps {
   inputs: WaterfallInputs;
   onUpdateInput: (key: keyof WaterfallInputs, value: number) => void;
+  onBack?: () => void;
   onNext: () => void;
 }
 
@@ -15,7 +16,7 @@ interface BudgetInputProps {
  * Step 1 of Budget Tab: Collect the production budget
  * with quick amount buttons and validation.
  */
-const BudgetInput = ({ inputs, onUpdateInput, onNext }: BudgetInputProps) => {
+const BudgetInput = ({ inputs, onUpdateInput, onBack, onNext }: BudgetInputProps) => {
   const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -75,6 +76,24 @@ const BudgetInput = ({ inputs, onUpdateInput, onNext }: BudgetInputProps) => {
 
   return (
     <div className="space-y-6 animate-fade-in">
+      {/* Step Label + Back Button */}
+      <div className="flex items-center justify-between">
+        {onBack ? (
+          <button
+            onClick={onBack}
+            className="flex items-center gap-1.5 text-xs text-text-dim hover:text-white transition-colors"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            <span>Back</span>
+          </button>
+        ) : (
+          <div />
+        )}
+        <span className="text-xs font-mono text-gold/70 uppercase tracking-widest">
+          Step 1 of 2 • Budget
+        </span>
+      </div>
+
       {/* Hero Header */}
       <div className="text-center mb-6">
         <div className="relative inline-block mb-4">
@@ -87,10 +106,10 @@ const BudgetInput = ({ inputs, onUpdateInput, onNext }: BudgetInputProps) => {
             }}
           />
           <div 
-            className="relative w-14 h-14 border border-gold/30 bg-gold/5 flex items-center justify-center" 
+            className="relative w-16 h-16 border border-gold/30 bg-gold/5 flex items-center justify-center" 
             style={{ borderRadius: 'var(--radius-md)' }}
           >
-            <DollarSign className="w-7 h-7 text-gold" />
+            <DollarSign className="w-8 h-8 text-gold" />
           </div>
         </div>
 
