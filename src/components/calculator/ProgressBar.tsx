@@ -1,5 +1,4 @@
-import { cn } from "@/lib/utils";
-import { Check } from "lucide-react";
+ import { cn } from "@/lib/utils";
 
 interface ProgressBarProps {
   currentStep: number;
@@ -35,8 +34,8 @@ const ProgressBar = ({
       }}
     >
       <div className="px-6 py-4">
-        {/* Badge row */}
-        <div className="relative flex items-center justify-between">
+       {/* Dot row */}
+       <div className="relative flex items-center justify-between py-2">
           {/* Dashed gold connection line */}
           <div
             className="absolute left-3 right-3 top-1/2 -translate-y-1/2"
@@ -47,42 +46,36 @@ const ProgressBar = ({
             }}
           />
 
-          {/* Progress fill - solid gold over dashes */}
-          <div
-            className="absolute left-3 top-1/2 -translate-y-1/2 transition-all duration-300 ease-out"
-            style={{
-              height: '1px',
-              width: `calc(${progress}% * (100% - 24px) / 100%)`,
-              backgroundImage: 'repeating-linear-gradient(90deg, hsl(var(--gold)) 0px, hsl(var(--gold)) 4px, transparent 4px, transparent 10px)',
-            }}
-          />
-
-          {/* Badges */}
+         {/* Dots */}
           {Array.from({ length: totalSteps }, (_, index) => {
             const stepNum = index + 1;
             const isActive = stepNum === currentStep;
             const isCompleted = stepNum < currentStep;
             const isFuture = stepNum > currentStep;
 
-            return (
-              <button
-                key={stepNum}
-                onClick={() => isCompleted && onStepClick?.(stepNum)}
-                disabled={!isCompleted}
-                className={cn(
-                  "relative z-10 w-6 h-6 rounded-full flex items-center justify-center font-mono text-[10px] font-medium transition-all duration-150",
-                  isActive && "bg-gold text-bg-void",
-                  isCompleted && "bg-black border border-gold text-gold hover:bg-gold/10 cursor-pointer",
-                  isFuture && "bg-black border border-[#2A2A2A] text-white/30"
-                )}
-              >
-                {isCompleted ? (
-                  <Check className="w-3 h-3" />
-                ) : (
-                  stepNum
-                )}
-              </button>
-            );
+             return (
+               <button
+                 key={stepNum}
+                 onClick={() => isCompleted && onStepClick?.(stepNum)}
+                 disabled={!isCompleted}
+                 className={cn(
+                   "relative z-10 flex items-center justify-center",
+                   "w-11 h-11", // 44px touch target
+                   "transition-all duration-200",
+                   isCompleted && "cursor-pointer"
+                 )}
+               >
+                 <span
+                   className={cn(
+                     "w-2 h-2 rounded-full transition-all duration-200",
+                     isCompleted && "bg-gold",
+                     isActive && "border-2 border-gold scale-125",
+                     isActive && "shadow-[0_0_8px_rgba(212,175,55,0.5)]",
+                     isFuture && "border border-white/20"
+                   )}
+                 />
+               </button>
+             );
           })}
         </div>
       </div>
