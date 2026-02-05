@@ -1,48 +1,76 @@
 
+# Minimal Dots Progress Bar
 
-# Implement Progress Bar + Glowing Menu Logo
+## Design
 
-## What We're Building
+Replace the numbered badges with clean 8px dots that feel native and premium:
 
-1. **Progress Bar** - Fixed below the calculator header showing 4 step badges with a connecting gold line
-2. **Glowing F Logo** - Add the logo icon with gold glow above "PRODUCER'S SERVICES" in the mobile menu
+```text
+    ●────────○────────○────────○
+ completed  current  future   future
+  (gold)   (ring)   (dim)    (dim)
+```
 
----
+### Dot States
+- **Completed**: Solid gold fill (8px)
+- **Current**: Gold ring/outline with slight glow (8px)
+- **Future**: Dim grey outline (8px)
 
-## Changes
-
-### 1. Calculator Page (`src/pages/Calculator.tsx`)
-
-- Import `ProgressBar` component
-- Add it below the header spacer
-- Create tab-to-step mapping (budget=1, stack=2, deal=3, waterfall=4)
-- Wire up `onStepClick` to allow tapping completed steps to navigate back
-- Add spacer for the fixed progress bar height
-
-### 2. Progress Bar (`src/components/calculator/ProgressBar.tsx`)
-
-- Make it fixed-position at `top: var(--appbar-h)`
-- Change background to matte grey (`#1A1A1A`)
-- Set `z-index: 40` (below header)
-- Keep the existing badge + line logic
-
-### 3. Mobile Menu (`src/components/MobileMenu.tsx`)
-
-- Import `filmmakerLogo` from assets
-- Add logo image (72x72px) above the navigation links
-- Apply gold glow filter:
-  ```
-  filter: brightness(1.15) drop-shadow(0 0 20px rgba(255, 215, 0, 0.4))
-  ```
-- Add subtle radial aura gradient behind it
+### Connection Line
+- Thin 1px line connecting dots
+- Uses same gold dash pattern at 30% opacity
+- No animated fill needed (dots tell the story)
 
 ---
 
-## Files to Modify
+## Technical Changes
 
-| File | Changes |
-|------|---------|
-| `src/pages/Calculator.tsx` | Add ProgressBar below header, wire up navigation |
-| `src/components/calculator/ProgressBar.tsx` | Fixed position, matte grey background |
-| `src/components/MobileMenu.tsx` | Add glowing F logo above nav links |
+### `src/components/calculator/ProgressBar.tsx`
 
+| Change | Details |
+|--------|---------|
+| Dot size | Reduce from `w-6 h-6` (24px) to `w-2 h-2` (8px) |
+| Remove numbers | No text inside dots |
+| Remove checkmarks | Just solid fill for completed |
+| Completed state | `bg-gold` solid fill |
+| Current state | `border border-gold` ring + subtle `box-shadow` glow |
+| Future state | `border border-white/20` dim ring |
+| Line adjustment | Align to smaller dots, keep dashed pattern |
+| Touch target | Wrap dots in larger invisible button for accessibility (44px) |
+| Animation | Add `scale(1.25)` on current dot for emphasis |
+
+---
+
+## Code Preview
+
+```tsx
+// Dot instead of numbered badge
+<button
+  className={cn(
+    "relative z-10 flex items-center justify-center",
+    "w-11 h-11", // 44px touch target
+    "transition-all duration-200"
+  )}
+  onClick={() => isCompleted && onStepClick?.(stepNum)}
+  disabled={!isCompleted}
+>
+  <span
+    className={cn(
+      "w-2 h-2 rounded-full transition-all duration-200",
+      isActive && "border-2 border-gold scale-125",
+      isActive && "shadow-[0_0_8px_rgba(212,175,55,0.5)]",
+      isCompleted && "bg-gold",
+      isFuture && "border border-white/20"
+    )}
+  />
+</button>
+```
+
+---
+
+## Visual Result
+
+- Ultra-clean, minimal iOS-style navigation
+- Current step has subtle glow + scale for emphasis
+- No text clutter - just dots
+- Maintains accessibility with proper touch targets
