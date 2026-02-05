@@ -360,13 +360,18 @@ const Calculator = () => {
           backgroundColor: '#0A0A0A',
         }}
       >
-        {/* Back button */}
+        {/* Back button - same style as Next */}
         <button
           onClick={handleBack}
-          className="flex items-center gap-2 text-text-dim hover:text-white transition-colors"
+          className={cn(
+            "flex items-center gap-2 px-4 py-2 rounded-md transition-all",
+            "border border-gold-muted bg-gold-subtle text-gold",
+            "hover:bg-gold hover:text-black",
+            "active:scale-95"
+          )}
         >
-          <ArrowLeft className="w-5 h-5" />
-          <span className="text-xs font-medium uppercase tracking-wider">Back</span>
+          <ArrowLeft className="w-4 h-4" />
+          <span className="text-xs font-bold uppercase tracking-wider">Back</span>
         </button>
 
         {/* Circular progress indicator */}
@@ -403,7 +408,7 @@ const Calculator = () => {
           </span>
         </div>
 
-        {/* Next button - show when current section is complete and there's a next tab */}
+        {/* Next button - pulsing when available */}
         {getNextTab() && isCurrentSectionComplete() && (
           <button
             onClick={handleNext}
@@ -411,7 +416,7 @@ const Calculator = () => {
               "flex items-center gap-2 px-4 py-2 rounded-md transition-all",
               "border border-gold-muted bg-gold-subtle text-gold",
               "hover:bg-gold hover:text-black",
-              "active:scale-95 animate-fade-in"
+              "active:scale-95 animate-pulse-subtle"
             )}
           >
             <span className="text-xs font-bold uppercase tracking-wider">Next</span>

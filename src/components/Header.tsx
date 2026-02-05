@@ -30,9 +30,13 @@ const Header = ({ title }: HeaderProps) => {
           {/* Left: Logo Text (clickable to home) */}
           <button
             onClick={handleLogoClick}
-            className="flex items-center gap-2.5 hover:opacity-80 transition-opacity"
+            className="flex items-center gap-2.5 hover:opacity-90 transition-opacity px-3 py-1.5"
+            style={{
+              background: 'linear-gradient(135deg, rgba(255, 215, 0, 0.15) 0%, rgba(255, 215, 0, 0.08) 100%)',
+              borderRadius: '4px',
+            }}
           >
-            <span className="font-bebas text-lg tracking-[0.12em] text-white/90">
+            <span className="font-bebas text-lg tracking-[0.12em] text-white">
               FILMMAKER.OG
             </span>
           </button>
