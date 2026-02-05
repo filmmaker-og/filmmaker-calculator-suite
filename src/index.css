@@ -563,100 +563,6 @@
   }
 
   /* ═══════════════════════════════════════════════════════════════════
-     CINEMATIC INTRO - Movie Studio Logo Sequence
-     ═══════════════════════════════════════════════════════════════════ */
-
-  /* Searching spotlight - sweeps from left to center */
-  .spotlight-searching {
-    animation: spotlightSearch 1.5s ease-out forwards;
-  }
-
-  @keyframes spotlightSearch {
-    0% {
-      transform: translateX(-200%);
-      opacity: 0.3;
-    }
-    20% {
-      opacity: 0.8;
-    }
-    100% {
-      transform: translateX(-50%);
-      opacity: 1;
-    }
-  }
-
-  /* Spotlight found - locked on position */
-  .spotlight-found {
-    transform: translateX(-50%);
-    opacity: 1;
-  }
-
-  /* Spark particles - burst outward radially from center */
-  .spark-particle {
-    position: absolute;
-    top: 45%;
-    left: 50%;
-    width: var(--size, 3px);
-    height: var(--size, 3px);
-    background: #FFD700;
-    border-radius: 50%;
-    box-shadow:
-      0 0 6px #FFD700,
-      0 0 12px rgba(255, 215, 0, 0.6),
-      0 0 20px rgba(255, 215, 0, 0.3);
-    animation: sparkBurst 1s ease-out forwards;
-    animation-delay: var(--delay, 0s);
-  }
-
-  @keyframes sparkBurst {
-    0% {
-      transform: translate(-50%, -50%) rotate(var(--angle)) translateY(0) scale(1);
-      opacity: 1;
-    }
-    60% {
-      opacity: 0.8;
-    }
-    100% {
-      transform: translate(-50%, -50%) rotate(var(--angle)) translateY(var(--distance)) scale(0);
-      opacity: 0;
-    }
-  }
-
-  /* Ambient particles - floating gently in spotlight */
-  .ambient-particle {
-    position: absolute;
-    top: 20%;
-    width: 3px;
-    height: 3px;
-    background: rgba(255, 215, 0, 0.8);
-    border-radius: 50%;
-    box-shadow: 0 0 4px rgba(255, 215, 0, 0.5);
-    animation: ambientFloat 6s ease-in-out infinite;
-  }
-
-  @keyframes ambientFloat {
-    0% {
-      transform: translateY(0) translateX(0) scale(0);
-      opacity: 0;
-    }
-    15% {
-      opacity: 0.9;
-      transform: translateY(5vh) scale(1);
-    }
-    50% {
-      transform: translateY(25vh) translateX(15px);
-      opacity: 0.6;
-    }
-    85% {
-      opacity: 0.2;
-    }
-    100% {
-      transform: translateY(50vh) translateX(-10px) scale(0.3);
-      opacity: 0;
-    }
-  }
-
-  /* ═══════════════════════════════════════════════════════════════════
      HOMEPAGE SPOTLIGHT
      ═══════════════════════════════════════════════════════════════════ */
 
@@ -667,28 +573,12 @@
 
   @keyframes spotlightPulse {
     0%, 100% {
-      opacity: 0.5;
+      opacity: 0.7;
       transform: translateX(-50%) scale(1);
     }
     50% {
-      opacity: 0.9;
-      transform: translateX(-50%) scale(1.15);
-    }
-  }
-
-  /* Breathing glow effect */
-  .animate-breathe {
-    animation: breathe 4s ease-in-out infinite;
-  }
-
-  @keyframes breathe {
-    0%, 100% {
-      transform: scale(1);
-      opacity: 0.6;
-    }
-    50% {
-      transform: scale(1.15);
       opacity: 1;
+      transform: translateX(-50%) scale(1.05);
     }
   }
 
