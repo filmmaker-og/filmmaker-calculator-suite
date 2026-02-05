@@ -16,10 +16,11 @@ const Header = ({ title }: HeaderProps) => {
 
   return (
     <>
-      {/* Header Bar - Matte Grey */}
+      {/* Header Bar - Matte Grey with Gold Tint */}
       <header
         className="fixed top-0 left-0 right-0 z-[150]"
         style={{
+          background: "linear-gradient(180deg, rgba(255, 215, 0, 0.08) 0%, rgba(26, 26, 26, 0.95) 100%)",
           backgroundColor: "#1A1A1A",
           backdropFilter: "blur(14px)",
           WebkitBackdropFilter: "blur(14px)",

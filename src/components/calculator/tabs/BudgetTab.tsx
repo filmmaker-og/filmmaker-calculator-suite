@@ -86,8 +86,8 @@ const BudgetTab = ({ inputs, onUpdateInput, onAdvance }: BudgetTabProps) => {
       >
         {/* Budget Input */}
         <div>
-          <div className="field-label">
-            <span>Production Budget</span>
+          <div className="field-label flex items-center gap-2">
+            <span>Production Budget <span className="text-text-dim text-xs">(Negative Cost)</span></span>
           </div>
           <div
             className={cn(
@@ -114,10 +114,8 @@ const BudgetTab = ({ inputs, onUpdateInput, onAdvance }: BudgetTabProps) => {
               <span className="pr-4 text-gold text-lg">✓</span>
             )}
           </div>
-          <p className="mt-2 text-sm text-text-primary font-medium">
-            {isCompleted
-              ? "✓ Budget saved. Click the Next button below to continue to financing."
-              : "Enter your full independent film budget. When finished, click Next below."}
+          <p className="mt-2 text-sm text-text-dim">
+            Enter your full production budget and hit Next
           </p>
         </div>
       </ChapterCard>
