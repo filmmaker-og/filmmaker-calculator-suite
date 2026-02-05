@@ -365,7 +365,7 @@ const Calculator = () => {
           onClick={handleBack}
           className={cn(
             "flex items-center gap-2 px-4 py-2 rounded-md transition-all",
-            "border border-gold-muted bg-gold-subtle text-gold",
+            "border border-gold-muted bg-gold-subtle text-white",
             "hover:bg-gold hover:text-black",
             "active:scale-95"
           )}
@@ -414,7 +414,7 @@ const Calculator = () => {
             onClick={handleNext}
             className={cn(
               "flex items-center gap-2 px-4 py-2 rounded-md transition-all",
-              "border border-gold-muted bg-gold-subtle text-gold",
+              "border border-gold-muted bg-gold-subtle text-white",
               "hover:bg-gold hover:text-black",
               "active:scale-95 animate-pulse-subtle"
             )}
