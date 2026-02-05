@@ -119,7 +119,7 @@ const TaxCreditsStep = ({ inputs, onUpdateInput }: TaxCreditsStepProps) => {
             <span>What are typical tax credit rates?</span>
           </CollapsibleTrigger>
           <CollapsibleContent className="mt-4">
-            <div className="glass-card-gold p-5 animate-reveal-up">
+            <div className="glass-card-gold p-5 animate-reveal-up mx-2">
               <p className="text-sm text-white/70 mb-3 leading-relaxed">
                 Government incentives vary by location:
               </p>

@@ -156,7 +156,7 @@ const SeniorDebtStep = ({ inputs, onUpdateInput }: SeniorDebtStepProps) => {
             <span>What is senior debt?</span>
           </CollapsibleTrigger>
           <CollapsibleContent className="mt-4">
-            <div className="glass-card-gold p-5 animate-reveal-up">
+            <div className="glass-card-gold p-5 animate-reveal-up mx-2">
               <p className="text-sm text-white/70 mb-3 leading-relaxed">
                 Senior debt is secured against pre-sales or tax credit receivables.
                 It's the <span className="text-gold font-semibold">safest position</span> in the capital stack.
