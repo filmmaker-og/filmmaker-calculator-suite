@@ -10,7 +10,7 @@ interface ProgressBarProps {
 
 /**
  * Minimal Progress Bar
- * - Compact badges without labels on mobile
+ * - Fixed position below header
  * - Active badge: gold fill
  * - Completed badge: gold outline + check
  * - Future badge: muted border
@@ -23,12 +23,22 @@ const ProgressBar = ({
   const progress = ((currentStep - 1) / (totalSteps - 1)) * 100;
 
   return (
-    <div className="w-full bg-black border-b border-[#1A1A1A]">
-      <div className="px-4 py-3">
+    <div
+      className="w-full border-b border-border-default"
+      style={{
+        position: 'fixed',
+        top: 'var(--appbar-h)',
+        left: 0,
+        right: 0,
+        zIndex: 40,
+        backgroundColor: '#1A1A1A',
+      }}
+    >
+      <div className="px-6 py-3">
         {/* Badge row */}
         <div className="relative flex items-center justify-between">
           {/* Connection line */}
-          <div className="absolute left-3 right-3 top-1/2 h-[1px] bg-[#1A1A1A] -translate-y-1/2" />
+          <div className="absolute left-3 right-3 top-1/2 h-[1px] bg-[#2A2A2A] -translate-y-1/2" />
 
           {/* Progress fill */}
           <div
@@ -52,8 +62,8 @@ const ProgressBar = ({
                 disabled={!isCompleted}
                 className={cn(
                   "relative z-10 w-6 h-6 rounded-full flex items-center justify-center font-mono text-[10px] font-medium transition-all duration-150",
-                  isActive && "bg-gold text-black",
-                  isCompleted && "bg-black border border-gold text-gold hover:bg-gold/10 cursor-pointer",
+                  isActive && "bg-gold text-bg-void",
+                  isCompleted && "bg-[#1A1A1A] border border-gold text-gold hover:bg-gold/10 cursor-pointer",
                   isFuture && "bg-black border border-[#2A2A2A] text-white/30"
                 )}
               >

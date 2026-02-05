@@ -9,6 +9,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useHaptics } from "@/hooks/use-haptics";
+import filmmakerLogo from "@/assets/filmmaker-logo.jpg";
 
 interface MobileMenuProps {
   onOpenLegal?: () => void;
@@ -123,6 +124,26 @@ const MobileMenu = ({ onOpenLegal, onSignOut }: MobileMenuProps) => {
 
           {/* Menu Content */}
           <div className="flex-1 flex flex-col items-center justify-center px-6">
+            {/* Glowing F Logo */}
+            <div className="relative mb-10">
+              {/* Radial aura behind logo */}
+              <div
+                className="absolute inset-0 -m-4 rounded-full"
+                style={{
+                  background: 'radial-gradient(circle, rgba(255, 215, 0, 0.15) 0%, transparent 70%)',
+                  filter: 'blur(8px)',
+                }}
+              />
+              <img
+                src={filmmakerLogo}
+                alt="Filmmaker Logo"
+                className="relative w-[72px] h-[72px] rounded-lg"
+                style={{
+                  filter: 'brightness(1.15) drop-shadow(0 0 20px rgba(255, 215, 0, 0.4))',
+                }}
+              />
+            </div>
+
             {/* Navigation Links */}
             <nav className="flex flex-col items-center gap-8">
               {menuLinks.map((link) => {
