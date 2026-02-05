@@ -57,6 +57,11 @@ const IntroView = () => {
     setOpenFAQ(openFAQ === index ? null : index);
   };
 
+  const handleInitialize = () => {
+    // Smooth transition to calculator
+    navigate('/calculator');
+  };
+
   return (
     <>
       <Header />
@@ -110,23 +115,23 @@ const IntroView = () => {
           </div>
 
           {/* ═══════════════════════════════════════════════════════════════════
-              MAIN CONTENT CARD - Premium Matte Treatment
+              MAIN CONTENT CARD - Deep Matte Black Treatment
               ═══════════════════════════════════════════════════════════════════ */}
           <div 
             className="relative overflow-hidden animate-fade-in"
             style={{ 
               animationDelay: '0.2s',
-              background: 'linear-gradient(180deg, #0D0D0D 0%, #0A0A0A 100%)',
-              border: '1px solid rgba(255, 215, 0, 0.15)',
+              background: 'linear-gradient(180deg, #0A0A0A 0%, #080808 100%)',
+              border: '1px solid rgba(255, 215, 0, 0.10)',
               borderRadius: 'var(--radius-lg)',
-              boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.03), 0 4px 20px rgba(0, 0, 0, 0.5)',
+              boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.02), 0 4px 24px rgba(0, 0, 0, 0.6)',
             }}
           >
             {/* Subtle gold glow at top */}
             <div 
               className="absolute top-0 left-0 right-0 h-px"
               style={{
-                background: 'linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.3), transparent)',
+                background: 'linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.25), transparent)',
               }}
             />
             
@@ -137,8 +142,8 @@ const IntroView = () => {
                 <div 
                   className="p-2.5 flex-shrink-0"
                   style={{
-                    background: 'rgba(255, 215, 0, 0.08)',
-                    border: '1px solid rgba(255, 215, 0, 0.2)',
+                    background: 'rgba(255, 215, 0, 0.06)',
+                    border: '1px solid rgba(255, 215, 0, 0.15)',
                     borderRadius: 'var(--radius-md)',
                   }}
                 >
@@ -160,8 +165,8 @@ const IntroView = () => {
                 <div 
                   className="p-2.5 flex-shrink-0"
                   style={{
-                    background: 'rgba(255, 215, 0, 0.08)',
-                    border: '1px solid rgba(255, 215, 0, 0.2)',
+                    background: 'rgba(255, 215, 0, 0.06)',
+                    border: '1px solid rgba(255, 215, 0, 0.15)',
                     borderRadius: 'var(--radius-md)',
                   }}
                 >
@@ -183,8 +188,8 @@ const IntroView = () => {
                 <div 
                   className="p-2.5 flex-shrink-0"
                   style={{
-                    background: 'rgba(255, 215, 0, 0.08)',
-                    border: '1px solid rgba(255, 215, 0, 0.2)',
+                    background: 'rgba(255, 215, 0, 0.06)',
+                    border: '1px solid rgba(255, 215, 0, 0.15)',
                     borderRadius: 'var(--radius-md)',
                   }}
                 >
@@ -227,91 +232,104 @@ const IntroView = () => {
           </div>
 
           {/* ═══════════════════════════════════════════════════════════════════
-              FAQ SECTION - Premium Chapter Style
+              FAQ SECTION - Wrapped in Matte Gray Container
               ═══════════════════════════════════════════════════════════════════ */}
           <div 
-            className="space-y-4 pt-4 animate-fade-in"
+            className="animate-fade-in"
             style={{ animationDelay: '0.4s' }}
           >
-            <h3 className="text-2xl font-bebas text-white tracking-wide">
-              Frequently Asked <span className="text-gold">Questions</span>
-            </h3>
-            
-            <div 
-              className="overflow-hidden"
+            {/* FAQ Container Card - Matte Gray */}
+            <div
               style={{
-                background: '#0A0A0A',
-                border: '1px solid rgba(255, 215, 0, 0.12)',
+                background: '#111111',
+                border: '1px solid rgba(255, 255, 255, 0.06)',
                 borderRadius: 'var(--radius-lg)',
+                padding: '1.5rem',
+                boxShadow: '0 4px 24px rgba(0, 0, 0, 0.4)',
               }}
             >
-              {faqItems.map((item, index) => (
-                <div 
-                  key={index}
-                  className={cn(
-                    "transition-all duration-200",
-                    index !== faqItems.length - 1 && "border-b border-white/5"
-                  )}
-                >
-                  <button
-                    onClick={() => toggleFAQ(index)}
+              {/* FAQ Header */}
+              <h3 className="text-2xl font-bebas text-white tracking-wide mb-4">
+                Frequently Asked <span className="text-gold">Questions</span>
+              </h3>
+              
+              {/* FAQ Accordion */}
+              <div 
+                className="overflow-hidden"
+                style={{
+                  background: '#0A0A0A',
+                  border: '1px solid rgba(255, 255, 255, 0.04)',
+                  borderRadius: 'var(--radius-md)',
+                }}
+              >
+                {faqItems.map((item, index) => (
+                  <div 
+                    key={index}
                     className={cn(
-                      "w-full flex items-center gap-4 p-4 text-left transition-all duration-200",
-                      "hover:bg-white/[0.02]",
-                      openFAQ === index && "bg-gold/[0.03]"
+                      "transition-all duration-200",
+                      index !== faqItems.length - 1 && "border-b border-white/5"
                     )}
                   >
-                    {/* Chapter Number */}
-                    <div 
+                    <button
+                      onClick={() => toggleFAQ(index)}
                       className={cn(
-                        "w-7 h-7 flex items-center justify-center flex-shrink-0 font-mono text-xs font-bold transition-colors duration-200",
-                        openFAQ === index ? "text-gold" : "text-text-dim"
+                        "w-full flex items-center gap-4 p-4 text-left transition-all duration-200",
+                        "hover:bg-white/[0.02]",
+                        openFAQ === index && "bg-gold/[0.03]"
                       )}
-                      style={{
-                        background: openFAQ === index ? 'rgba(255, 215, 0, 0.1)' : 'rgba(255, 255, 255, 0.03)',
-                        border: openFAQ === index ? '1px solid rgba(255, 215, 0, 0.3)' : '1px solid rgba(255, 255, 255, 0.08)',
-                        borderRadius: 'var(--radius-sm)',
-                      }}
                     >
-                      {String(index + 1).padStart(2, '0')}
-                    </div>
+                      {/* Chapter Number */}
+                      <div 
+                        className={cn(
+                          "w-7 h-7 flex items-center justify-center flex-shrink-0 font-mono text-xs font-bold transition-colors duration-200",
+                          openFAQ === index ? "text-gold" : "text-text-dim"
+                        )}
+                        style={{
+                          background: openFAQ === index ? 'rgba(255, 215, 0, 0.1)' : 'rgba(255, 255, 255, 0.03)',
+                          border: openFAQ === index ? '1px solid rgba(255, 215, 0, 0.3)' : '1px solid rgba(255, 255, 255, 0.08)',
+                          borderRadius: 'var(--radius-sm)',
+                        }}
+                      >
+                        {String(index + 1).padStart(2, '0')}
+                      </div>
+                      
+                      {/* Question */}
+                      <span className={cn(
+                        "flex-1 text-sm font-medium transition-colors duration-200",
+                        openFAQ === index ? "text-white" : "text-text-mid"
+                      )}>
+                        {item.question}
+                      </span>
+                      
+                      {/* Chevron */}
+                      <ChevronDown 
+                        className={cn(
+                          "w-4 h-4 flex-shrink-0 transition-all duration-200",
+                          openFAQ === index ? "text-gold rotate-180" : "text-text-dim"
+                        )}
+                      />
+                    </button>
                     
-                    {/* Question */}
-                    <span className={cn(
-                      "flex-1 text-sm font-medium transition-colors duration-200",
-                      openFAQ === index ? "text-white" : "text-text-mid"
-                    )}>
-                      {item.question}
-                    </span>
-                    
-                    {/* Chevron */}
-                    <ChevronDown 
+                    {/* Answer - Collapsible */}
+                    <div
                       className={cn(
-                        "w-4 h-4 flex-shrink-0 transition-all duration-200",
-                        openFAQ === index ? "text-gold rotate-180" : "text-text-dim"
+                        "overflow-hidden transition-all duration-300 ease-out",
+                        openFAQ === index ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
                       )}
-                    />
-                  </button>
-                  
-                  {/* Answer - Collapsible */}
-                  <div
-                    className={cn(
-                      "overflow-hidden transition-all duration-300 ease-out",
-                      openFAQ === index ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
-                    )}
-                  >
-                    <div 
-                      className="px-4 pb-4 pl-[60px] text-sm text-text-dim leading-relaxed"
-                      style={{
-                        borderLeft: '2px solid rgba(255, 215, 0, 0.15)',
-                        marginLeft: '18px',
-                      }}
                     >
-                      {item.answer}
+                      <div 
+                        className="px-4 pb-4 pl-[60px] text-sm text-text-dim leading-relaxed"
+                        style={{
+                          borderLeft: '2px solid rgba(255, 215, 0, 0.15)',
+                          marginLeft: '18px',
+                        }}
+                      >
+                        {item.answer}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
 
@@ -325,7 +343,7 @@ const IntroView = () => {
             <div className="premium-divider w-full mb-4" />
             
             <Button 
-              onClick={() => navigate('/calculator')}
+              onClick={handleInitialize}
               className="bg-gold hover:bg-gold-bright text-black font-bold text-base px-10 py-6 rounded-md transition-all duration-300 group"
               style={{
                 boxShadow: '0 0 30px rgba(255, 215, 0, 0.25), 0 10px 40px rgba(0, 0, 0, 0.3)',
@@ -336,7 +354,7 @@ const IntroView = () => {
             </Button>
             
             <div className="text-text-dim text-xs font-mono tracking-wider">
-              v2.0.4-stable
+              v2.0.5-stable
             </div>
           </div>
 
