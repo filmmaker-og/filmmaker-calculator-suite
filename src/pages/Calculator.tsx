@@ -242,12 +242,12 @@ const Calculator = () => {
 
   return (
     <div className="min-h-screen bg-bg-void flex flex-col">
-      {/* Header - Frosted Glass */}
+      {/* Header - Matte Grey */}
       <header
         className="fixed top-0 left-0 right-0 z-50 flex items-center px-4"
         style={{
           height: 'var(--appbar-h)',
-          backgroundColor: 'rgba(0, 0, 0, 0.9)',
+          backgroundColor: '#1A1A1A',
           backdropFilter: 'blur(14px)',
           WebkitBackdropFilter: 'blur(14px)',
         }}
@@ -268,12 +268,12 @@ const Calculator = () => {
         <MobileMenu />
       </header>
 
-      {/* Gold line separator */}
+      {/* Gold line separator - Electric Gold */}
       <div
         className="fixed left-0 right-0 h-[1px] z-50"
         style={{
           top: 'var(--appbar-h)',
-          background: "linear-gradient(90deg, transparent 0%, var(--gold-muted) 20%, var(--gold-muted) 80%, transparent 100%)",
+          background: "linear-gradient(90deg, transparent 0%, rgba(255, 215, 0, 0.45) 20%, rgba(255, 215, 0, 0.45) 80%, transparent 100%)",
         }}
       />
 
