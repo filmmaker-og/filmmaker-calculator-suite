@@ -79,7 +79,7 @@ const BudgetTab = ({ inputs, onUpdateInput }: BudgetTabProps) => {
             />
           </div>
           <p className="mt-2 text-xs text-text-dim">
-            Total production cost, development through delivery
+            Enter your total production cost
           </p>
         </div>
       </ChapterCard>

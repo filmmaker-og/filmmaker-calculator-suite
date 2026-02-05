@@ -1,6 +1,5 @@
 import { cn } from "@/lib/utils";
-import { DollarSign, Layers, Handshake, ArrowDownUp, ArrowLeft } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { DollarSign, Layers, Handshake, ArrowDownUp } from "lucide-react";
 
 export type TabId = 'budget' | 'stack' | 'deal' | 'waterfall';
 
@@ -25,21 +24,8 @@ interface TabBarProps {
 }
 
 const TabBar = ({ activeTab, onTabChange, completedTabs = [], disabledTabs = [] }: TabBarProps) => {
-  const navigate = useNavigate();
-
   return (
     <nav className="tab-bar">
-      {/* Back button */}
-      <button
-        onClick={() => navigate("/")}
-        className="tab-bar-item"
-      >
-        <span className="tab-icon text-text-dim">
-          <ArrowLeft className="w-5 h-5" />
-        </span>
-        <span>BACK</span>
-      </button>
-
       {tabs.map((tab) => {
         const isActive = activeTab === tab.id;
         const isCompleted = completedTabs.includes(tab.id);

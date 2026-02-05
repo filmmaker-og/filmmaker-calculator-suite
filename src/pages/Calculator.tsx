@@ -255,7 +255,7 @@ const Calculator = () => {
 
   return (
     <div className="min-h-screen bg-bg-void flex flex-col">
-      {/* Header - Matte Grey */}
+      {/* Header - Matte Grey - Just logo and menu */}
       <header
         className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4"
         style={{
@@ -270,54 +270,13 @@ const Calculator = () => {
           onClick={() => navigate("/")}
           className="hover:opacity-80 transition-opacity"
         >
-          <span className="font-bebas text-base tracking-[0.12em] text-white/90">
+          <span className="font-bebas text-lg tracking-[0.12em] text-white/90">
             FILMMAKER.OG
           </span>
         </button>
 
-        {/* Center: Tab title - BIGGER */}
-        <div className="absolute left-1/2 -translate-x-1/2">
-          <span className="font-bebas text-xl tracking-widest text-gold">
-            {currentTabConfig?.chapter} {currentTabConfig?.label}
-          </span>
-        </div>
-
-        {/* Right: Circular progress indicator */}
-        <div className="flex items-center gap-3">
-          <div className="relative w-10 h-10 flex items-center justify-center">
-            {/* Background circle */}
-            <svg className="absolute w-10 h-10 -rotate-90">
-              <circle
-                cx="20"
-                cy="20"
-                r="16"
-                fill="none"
-                stroke="#333"
-                strokeWidth="2"
-              />
-              {/* Progress arc */}
-              <circle
-                cx="20"
-                cy="20"
-                r="16"
-                fill="none"
-                stroke="#FFD700"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeDasharray={`${progressPercent} 100`}
-                className="transition-all duration-500 ease-out"
-                style={{
-                  filter: 'drop-shadow(0 0 4px rgba(255, 215, 0, 0.5))',
-                }}
-              />
-            </svg>
-            {/* Percentage text */}
-            <span className="relative z-10 font-mono text-[10px] font-bold text-gold">
-              {progressPercent}%
-            </span>
-          </div>
-          <MobileMenu />
-        </div>
+        {/* Right: Menu only */}
+        <MobileMenu />
       </header>
 
       {/* Gold line separator - Electric Gold */}
@@ -337,7 +296,7 @@ const Calculator = () => {
         ref={mainRef}
         className="flex-1 px-4 py-6 overflow-y-auto"
         style={{
-          paddingBottom: 'calc(var(--tabbar-h) + 24px + env(safe-area-inset-bottom))',
+          paddingBottom: 'calc(var(--tabbar-h) + 60px + env(safe-area-inset-bottom))',
         }}
       >
         <div
@@ -349,6 +308,58 @@ const Calculator = () => {
           {renderTabContent()}
         </div>
       </main>
+
+      {/* Floating bar above tab bar - Back + Progress */}
+      <div
+        className="fixed left-0 right-0 z-40 flex items-center justify-between px-4 py-2"
+        style={{
+          bottom: 'calc(var(--tabbar-h) + env(safe-area-inset-bottom))',
+          backgroundColor: '#0A0A0A',
+        }}
+      >
+        {/* Back button */}
+        <button
+          onClick={() => navigate("/")}
+          className="flex items-center gap-2 text-text-dim hover:text-white transition-colors"
+        >
+          <ArrowLeft className="w-5 h-5" />
+          <span className="text-xs font-medium uppercase tracking-wider">Back</span>
+        </button>
+
+        {/* Circular progress indicator */}
+        <div className="relative w-11 h-11 flex items-center justify-center">
+          {/* Background circle */}
+          <svg className="absolute w-11 h-11 -rotate-90">
+            <circle
+              cx="22"
+              cy="22"
+              r="18"
+              fill="none"
+              stroke="#333"
+              strokeWidth="2"
+            />
+            {/* Progress arc */}
+            <circle
+              cx="22"
+              cy="22"
+              r="18"
+              fill="none"
+              stroke="#FFD700"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeDasharray={`${progressPercent * 1.13} 113`}
+              className="transition-all duration-500 ease-out"
+              style={{
+                filter: 'drop-shadow(0 0 4px rgba(255, 215, 0, 0.5))',
+              }}
+            />
+          </svg>
+          {/* Percentage text */}
+          <span className="relative z-10 font-mono text-[11px] font-bold text-gold">
+            {progressPercent}%
+          </span>
+        </div>
+      </div>
 
       {/* Tab Bar - Fixed Bottom */}
       <TabBar
