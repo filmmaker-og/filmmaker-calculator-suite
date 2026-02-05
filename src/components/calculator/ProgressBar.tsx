@@ -24,7 +24,7 @@ const ProgressBar = ({
 
   return (
     <div
-      className="w-full border-b border-border-default"
+      className="w-full"
       style={{
         position: 'fixed',
         top: 'var(--appbar-h)',
@@ -37,14 +37,23 @@ const ProgressBar = ({
       <div className="px-6 py-4">
         {/* Badge row */}
         <div className="relative flex items-center justify-between">
-          {/* Connection line */}
-          <div className="absolute left-3 right-3 top-1/2 h-[1px] bg-[#2A2A2A] -translate-y-1/2" />
-
-          {/* Progress fill */}
+          {/* Dashed gold connection line */}
           <div
-            className="absolute left-3 top-1/2 h-[1px] -translate-y-1/2 transition-all duration-300 ease-out bg-gold"
+            className="absolute left-3 right-3 top-1/2 -translate-y-1/2"
             style={{
+              height: '1px',
+              backgroundImage: 'repeating-linear-gradient(90deg, hsl(var(--gold)) 0px, hsl(var(--gold)) 4px, transparent 4px, transparent 10px)',
+              opacity: 0.4,
+            }}
+          />
+
+          {/* Progress fill - solid gold over dashes */}
+          <div
+            className="absolute left-3 top-1/2 -translate-y-1/2 transition-all duration-300 ease-out"
+            style={{
+              height: '1px',
               width: `calc(${progress}% * (100% - 24px) / 100%)`,
+              backgroundImage: 'repeating-linear-gradient(90deg, hsl(var(--gold)) 0px, hsl(var(--gold)) 4px, transparent 4px, transparent 10px)',
             }}
           />
 
