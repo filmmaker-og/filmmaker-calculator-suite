@@ -18,6 +18,9 @@ const BudgetStep = ({ inputs, onUpdateInput }: BudgetStepProps) => {
   const haptics = useHaptics();
   const [isFocused, setIsFocused] = useState(false);
   const [showFeeDetails, setShowFeeDetails] = useState(false);
+  
+  // Track raw input value while focused to prevent cursor jumping
+  const [rawBudgetValue, setRawBudgetValue] = useState('');
 
   const formatValue = (value: number | undefined) => {
     if (value === undefined || value === 0) return '';
@@ -34,12 +37,35 @@ const BudgetStep = ({ inputs, onUpdateInput }: BudgetStepProps) => {
     return `$${value}`;
   };
 
-  const isCompleted = inputs.budget > 0;
+  const hasBudget = inputs.budget > 0;
 
   // Calculate off-the-top total for display
   const offTopTotal = inputs.budget > 0
     ? (inputs.budget * 0.01) + (inputs.budget * (inputs.salesFee / 100)) + inputs.salesExp
     : 0;
+
+  // Handle budget input focus
+  const handleBudgetFocus = () => {
+    setIsFocused(true);
+    // Show raw number without commas when focused
+    setRawBudgetValue(inputs.budget > 0 ? inputs.budget.toString() : '');
+  };
+
+  // Handle budget input blur
+  const handleBudgetBlur = () => {
+    setIsFocused(false);
+    setRawBudgetValue('');
+  };
+
+  // Handle budget input change
+  const handleBudgetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const raw = e.target.value.replace(/[^0-9]/g, '');
+    setRawBudgetValue(raw);
+    onUpdateInput('budget', parseInt(raw) || 0);
+  };
+
+  // Display value: raw while focused, formatted when blurred
+  const displayBudgetValue = isFocused ? rawBudgetValue : formatValue(inputs.budget);
 
   return (
     <StandardStepLayout
@@ -49,12 +75,9 @@ const BudgetStep = ({ inputs, onUpdateInput }: BudgetStepProps) => {
       subtitle="Total production cost, development through delivery"
       sectionLabel="Negative Cost"
       sectionIcon={Calculator}
-      isCompleted={isCompleted}
-      // REMOVED redundant helpContent about "What is Negative Cost"
-      // since IntroView explains the basics.
-      // Keeping quickReference for fees as that's calculator-specific logic.
+      isCompleted={false}
       quickReference={
-        isCompleted ? (
+        hasBudget ? (
           <div className="mt-4">
             <button
               onClick={() => {
@@ -139,6 +162,11 @@ const BudgetStep = ({ inputs, onUpdateInput }: BudgetStepProps) => {
         ) : null
       }
     >
+      {/* Quick Tip */}
+      <p className="text-xs text-white/40 mb-3">
+        Include all costs through final delivery
+      </p>
+
       {/* Main Budget Input */}
       <div
         className={`flex items-center bg-black border transition-colors ${
@@ -149,10 +177,10 @@ const BudgetStep = ({ inputs, onUpdateInput }: BudgetStepProps) => {
         <input
           type="text"
           inputMode="numeric"
-          value={formatValue(inputs.budget)}
-          onChange={(e) => onUpdateInput('budget', parseValue(e.target.value))}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
+          value={displayBudgetValue}
+          onChange={handleBudgetChange}
+          onFocus={handleBudgetFocus}
+          onBlur={handleBudgetBlur}
           placeholder="2,000,000"
           className="flex-1 bg-transparent py-4 pr-4 outline-none font-mono text-xl text-white text-right placeholder:text-white/20 tabular-nums"
         />
