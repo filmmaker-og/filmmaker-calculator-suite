@@ -11,8 +11,9 @@ import { cn } from "@/lib/utils";
 import TabBar, { TabId } from "@/components/calculator/TabBar";
 import { BudgetTab, StackTab, DealTab, WaterfallTab } from "@/components/calculator/tabs";
 import { CapitalSelections } from "@/components/calculator/steps/CapitalSelectStep";
-import MobileMenu from "@/components/MobileMenu";
 import EmailGateModal from "@/components/EmailGateModal";
+import Header from "@/components/Header"; // Import shared Header
+import IntroOverlay from "@/components/calculator/IntroOverlay"; // Import IntroOverlay
 
 const STORAGE_KEY = "filmmaker_og_inputs";
 
@@ -68,6 +69,7 @@ const Calculator = () => {
   const [result, setResult] = useState<WaterfallResult | null>(null);
   const [showEmailGate, setShowEmailGate] = useState(false);
   const [emailCaptured, setEmailCaptured] = useState(false);
+  const [showIntro, setShowIntro] = useState(true); // Default to showing intro
   const [capitalSelections] = useState<CapitalSelections>({
     taxCredits: false,
     seniorDebt: false,
@@ -107,6 +109,14 @@ const Calculator = () => {
         }
         if (parsed.guilds) setGuilds(parsed.guilds);
         if (parsed.activeTab) setActiveTab(parsed.activeTab);
+        
+        // If we have saved data, maybe skip intro? 
+        // Let's keep it for now unless explicitly dismissed previously (not implemented yet)
+        // or if inputs are populated.
+        if (parsed.inputs && parsed.inputs.budget > 0) {
+             setShowIntro(false);
+        }
+
       } catch (e) {
         console.error("Failed to load saved inputs");
       }
@@ -225,8 +235,8 @@ const Calculator = () => {
   const handleBack = () => {
     const currentIndex = STEP_TO_TAB.indexOf(activeTab);
     if (currentIndex === 0) {
-      // If on first tab, go back to home
-      navigate("/");
+      // If on first tab, go back to home, skipping intro
+      navigate("/?skipIntro=true");
     } else {
       // Go to previous tab
       const prevTab = STEP_TO_TAB[currentIndex - 1];
@@ -294,9 +304,7 @@ const Calculator = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-bg-void flex flex-col">
-        <header className="h-14 flex items-center justify-center border-b border-border-default">
-          <span className="font-bebas text-lg tracking-widest text-gold">WATERFALL TERMINAL</span>
-        </header>
+        <Header />
         <div className="flex-1 flex items-center justify-center">
           <div className="w-8 h-8 border-2 border-gold border-t-transparent rounded-full animate-spin" />
         </div>
@@ -309,41 +317,8 @@ const Calculator = () => {
 
   return (
     <div className="min-h-screen bg-bg-void flex flex-col">
-      {/* Header - Matte Grey - Just logo and menu */}
-      <header
-        className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4"
-        style={{
-          height: 'var(--appbar-h)',
-          backgroundColor: '#1A1A1A',
-          backdropFilter: 'blur(14px)',
-          WebkitBackdropFilter: 'blur(14px)',
-        }}
-      >
-        {/* Left: Logo */}
-        <button
-          onClick={() => navigate("/")}
-          className="hover:opacity-80 transition-opacity"
-        >
-          <span className="font-bebas text-lg tracking-[0.12em] text-white/90">
-            FILMMAKER.OG
-          </span>
-        </button>
-
-        {/* Right: Menu only */}
-        <MobileMenu />
-      </header>
-
-      {/* Gold line separator - Electric Gold */}
-      <div
-        className="fixed left-0 right-0 h-[1px] z-50"
-        style={{
-          top: 'var(--appbar-h)',
-          background: "linear-gradient(90deg, transparent 0%, rgba(255, 215, 0, 0.45) 20%, rgba(255, 215, 0, 0.45) 80%, transparent 100%)",
-        }}
-      />
-
-      {/* Spacer for fixed header */}
-      <div style={{ height: 'var(--appbar-h)' }} />
+      {/* Shared Header - Fixes logo color and consistency */}
+      <Header />
 
       {/* Main Content */}
       <main
@@ -442,6 +417,12 @@ const Calculator = () => {
         onTabChange={handleTabChange}
         completedTabs={getCompletedTabs()}
         disabledTabs={getDisabledTabs()}
+      />
+
+      {/* Intro Overlay */}
+      <IntroOverlay 
+        isOpen={showIntro} 
+        onClose={() => setShowIntro(false)} 
       />
 
       {/* Email Gate Modal */}
