@@ -59,19 +59,28 @@ const BudgetTab = ({ inputs, onUpdateInput, onAdvance }: BudgetTabProps) => {
       {/* Clear instruction box for first-time users */}
       {!isCompleted && (
         <div
-          className="p-4 border border-gold/30 bg-gold/5"
+          className="p-5 border border-gold/40 bg-gold/5"
           style={{ borderRadius: 'var(--radius-lg)' }}
         >
-          <h3 className="text-sm font-bold text-gold mb-2 uppercase tracking-wider">
+          <h3 className="text-base font-bold text-gold mb-3 uppercase tracking-wide">
             👉 Start Here
           </h3>
-          <p className="text-sm text-text-primary leading-relaxed">
-            Enter your film's total production budget in the field below.
-            This is your "negative cost" — the full amount needed to produce the film.
+          <p className="text-sm text-text-primary leading-relaxed mb-3">
+            Enter your film's total production budget below.
           </p>
-          <p className="text-xs text-text-dim mt-2">
-            Example: For a $750,000 indie film, enter <span className="font-mono text-text-mid">750000</span> or <span className="font-mono text-text-mid">750,000</span>
+          <p className="text-sm text-text-mid mb-2">
+            This is called your <span className="text-gold font-semibold">"negative cost"</span> in the industry.
           </p>
+          <div className="mt-4 pt-3 border-t border-gold/20">
+            <p className="text-xs text-text-dim mb-1">
+              Example amounts:
+            </p>
+            <div className="flex gap-3 flex-wrap">
+              <span className="font-mono text-xs text-text-mid bg-bg-surface px-2 py-1 rounded">$250,000</span>
+              <span className="font-mono text-xs text-text-mid bg-bg-surface px-2 py-1 rounded">$750,000</span>
+              <span className="font-mono text-xs text-text-mid bg-bg-surface px-2 py-1 rounded">$2,500,000</span>
+            </div>
+          </div>
         </div>
       )}
 
@@ -86,19 +95,24 @@ const BudgetTab = ({ inputs, onUpdateInput, onAdvance }: BudgetTabProps) => {
       >
         {/* Budget Input */}
         <div>
-          <div className="field-label flex items-center justify-between">
-            <span>Production Budget <span className="text-text-dim text-xs">(Negative Cost)</span></span>
-            {isCompleted && (
-              <button
-                onClick={() => {
-                  onUpdateInput('budget', 0);
-                  setTimeout(() => budgetInputRef.current?.focus(), 100);
-                }}
-                className="text-xs text-text-dim hover:text-gold transition-colors uppercase tracking-wider"
-              >
-                Clear
-              </button>
-            )}
+          <div className="mb-3">
+            <div className="flex items-center justify-between mb-1">
+              <div className="flex items-baseline gap-2">
+                <span className="text-sm font-semibold text-text-primary uppercase tracking-wide">Production Budget</span>
+                <span className="text-xs text-text-dim italic">aka "Negative Cost"</span>
+              </div>
+              {isCompleted && (
+                <button
+                  onClick={() => {
+                    onUpdateInput('budget', 0);
+                    setTimeout(() => budgetInputRef.current?.focus(), 100);
+                  }}
+                  className="text-[10px] text-text-dim hover:text-gold transition-colors uppercase tracking-wider font-bold"
+                >
+                  Clear
+                </button>
+              )}
+            </div>
           </div>
           <div
             className={cn(
@@ -122,7 +136,7 @@ const BudgetTab = ({ inputs, onUpdateInput, onAdvance }: BudgetTabProps) => {
               className="flex-1 bg-transparent py-4 pr-4 outline-none font-mono text-[22px] text-text-primary text-right placeholder:text-text-dim placeholder:text-base tabular-nums"
             />
             {isCompleted && (
-              <span className="pr-4 text-gold text-lg">✓</span>
+              <span className="pr-4 text-xl">✅</span>
             )}
           </div>
           <p className="mt-2 text-sm text-text-dim">
