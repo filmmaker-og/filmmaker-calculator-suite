@@ -130,11 +130,8 @@ const IntroView = () => {
                   I'm new to this. Where do I start?
                 </AccordionTrigger>
                 <AccordionContent className="text-text-dim">
-                  <p className="mb-3">
-                    Just follow the steps. The waterfall process is broken into <span className="text-white font-medium">4 stages</span>. If you get stuck, look for the quick tips inside the calculator.
-                  </p>
-                  <p className="text-gold font-medium flex items-center gap-2">
-                    👇 Start below
+                  <p>
+                    Just follow the steps. The waterfall process is broken into <span className="text-white font-medium">4 stages</span>. If you get stuck, look for the quick tips inside the calculator. 👇
                   </p>
                 </AccordionContent>
               </AccordionItem>
