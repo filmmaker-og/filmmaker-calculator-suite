@@ -43,7 +43,7 @@ const GlossaryTrigger = ({
 
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent
-          className="bg-bg-card border-border-default rounded-xl max-w-sm mx-4 font-sans"
+          className="bg-bg-card border-border-default rounded-xl max-w-sm w-[calc(100vw-2rem)] font-sans"
           style={{ borderRadius: 'var(--radius-xl)' }}
         >
           <DialogHeader>
