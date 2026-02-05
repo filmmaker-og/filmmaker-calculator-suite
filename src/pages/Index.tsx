@@ -200,6 +200,9 @@ const Index = () => {
                 src={filmmakerLogo}
                 alt="Filmmaker.OG"
                 className="w-24 h-24 object-contain"
+                style={{
+                  filter: 'brightness(1.15) drop-shadow(0 0 20px rgba(255, 215, 0, 0.4))',
+                }}
               />
             </div>
 
