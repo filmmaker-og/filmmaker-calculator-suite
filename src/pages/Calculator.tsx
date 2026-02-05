@@ -13,7 +13,6 @@ import { BudgetTab, StackTab, DealTab, WaterfallTab } from "@/components/calcula
 import { CapitalSelections } from "@/components/calculator/steps/CapitalSelectStep";
 import EmailGateModal from "@/components/EmailGateModal";
 import Header from "@/components/Header"; // Import shared Header
-import IntroOverlay from "@/components/calculator/IntroOverlay"; // Import IntroOverlay
 
 const STORAGE_KEY = "filmmaker_og_inputs";
 
@@ -69,7 +68,7 @@ const Calculator = () => {
   const [result, setResult] = useState<WaterfallResult | null>(null);
   const [showEmailGate, setShowEmailGate] = useState(false);
   const [emailCaptured, setEmailCaptured] = useState(false);
-  const [showIntro, setShowIntro] = useState(true); // Default to showing intro
+  
   const [capitalSelections] = useState<CapitalSelections>({
     taxCredits: false,
     seniorDebt: false,
@@ -109,14 +108,6 @@ const Calculator = () => {
         }
         if (parsed.guilds) setGuilds(parsed.guilds);
         if (parsed.activeTab) setActiveTab(parsed.activeTab);
-        
-        // If we have saved data, maybe skip intro? 
-        // Let's keep it for now unless explicitly dismissed previously (not implemented yet)
-        // or if inputs are populated.
-        if (parsed.inputs && parsed.inputs.budget > 0) {
-             setShowIntro(false);
-        }
-
       } catch (e) {
         console.error("Failed to load saved inputs");
       }
@@ -172,8 +163,9 @@ const Calculator = () => {
 
   // Handle tab change with validation
   const handleTabChange = useCallback((tab: TabId) => {
-    // Email gate: show after budget tab if not authenticated and not already captured
-    if (activeTab === 'budget' && tab !== 'budget' && !user && !emailCaptured) {
+    // Email gate: show when trying to view waterfall (tab 4) if not authenticated
+    // Trigger only if we are advancing to 'waterfall' for the first time
+    if (tab === 'waterfall' && !user && !emailCaptured) {
       setShowEmailGate(true);
       return;
     }
@@ -186,11 +178,13 @@ const Calculator = () => {
   const handleEmailSuccess = () => {
     setEmailCaptured(true);
     setShowEmailGate(false);
+    handleTabChange('waterfall'); // Continue to waterfall after success
   };
 
   const handleEmailSkip = () => {
     setEmailCaptured(true);
     setShowEmailGate(false);
+    handleTabChange('waterfall'); // Continue even on skip (demo mode)
   };
 
   // Get current tab config
@@ -419,13 +413,7 @@ const Calculator = () => {
         disabledTabs={getDisabledTabs()}
       />
 
-      {/* Intro Overlay */}
-      <IntroOverlay 
-        isOpen={showIntro} 
-        onClose={() => setShowIntro(false)} 
-      />
-
-      {/* Email Gate Modal */}
+      {/* Email Gate Modal - Removed IntroOverlay */}
       <EmailGateModal
         isOpen={showEmailGate}
         onClose={() => setShowEmailGate(false)}
