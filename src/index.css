@@ -102,10 +102,11 @@
     --radius: 14px;                     /* Default to --radius-lg */
   }
 
-  /* Force true black on html and body */
+  /* Force true black on html and body + base font */
   html, body {
     background-color: #000000;
     color: #FFFFFF;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   }
 
   /* Entrance animation utility (transform + opacity only for GPU acceleration) */
