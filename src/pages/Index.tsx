@@ -66,11 +66,11 @@ const Index = () => {
             style={{
               background: `
                 radial-gradient(
-                 ellipse 70% 60% at 50% 0%,
-                 rgba(255, 215, 0, 0.5) 0%,
-                 rgba(255, 215, 0, 0.25) 20%,
-                 rgba(255, 215, 0, 0.1) 45%,
-                 transparent 65%
+                 ellipse 60% 50% at 50% 0%,
+                 rgba(255, 255, 255, 0.18) 0%,
+                 rgba(255, 255, 255, 0.08) 30%,
+                 rgba(255, 255, 255, 0.02) 50%,
+                 transparent 70%
                 )
               `,
               clipPath: 'polygon(30% 0%, 70% 0%, 90% 100%, 10% 100%)',
@@ -86,9 +86,9 @@ const Index = () => {
            style={{
              background: `
                radial-gradient(
-                 ellipse 30% 40% at 50% 0%,
-                 rgba(255, 235, 150, 0.6) 0%,
-                 rgba(255, 215, 0, 0.3) 30%,
+                 ellipse 25% 35% at 50% 0%,
+                 rgba(255, 255, 255, 0.25) 0%,
+                 rgba(255, 255, 255, 0.1) 40%,
                  transparent 60%
                )
              `,
@@ -99,14 +99,14 @@ const Index = () => {
           {/* ─── FOCAL POOL (where light lands) ─── */}
           <div
             className={cn(
-             "absolute left-1/2 top-1/2 w-[400px] h-[400px] pointer-events-none transition-all duration-700",
+             "absolute left-1/2 top-1/2 w-[350px] h-[350px] pointer-events-none transition-all duration-700",
               showLogo ? "opacity-100" : "opacity-0",
               isPulsed && "animate-focal-pulse"
             )}
             style={{
-             background: 'radial-gradient(circle, rgba(255, 235, 150, 0.35) 0%, rgba(255, 215, 0, 0.15) 35%, transparent 70%)',
+             background: 'radial-gradient(circle, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.04) 40%, transparent 70%)',
               transform: 'translate(-50%, -50%)',
-             filter: 'blur(40px)',
+             filter: 'blur(30px)',
             }}
           />
 

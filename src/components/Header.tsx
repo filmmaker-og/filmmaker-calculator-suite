@@ -20,7 +20,7 @@ const Header = ({ title }: HeaderProps) => {
       <header
         className="fixed top-0 left-0 right-0 z-[150]"
         style={{
-          backgroundColor: "rgba(10, 10, 10, 0.85)",
+          backgroundColor: "#1A1A1A",
           backdropFilter: "blur(14px)",
           WebkitBackdropFilter: "blur(14px)",
         }}
