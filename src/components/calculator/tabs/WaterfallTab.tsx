@@ -12,6 +12,7 @@ import {
   FileText,
   TrendingUp,
   ExternalLink,
+  BarChart3,
 } from "lucide-react";
 import RestrictedAccessModal from "@/components/RestrictedAccessModal";
 import { cn } from "@/lib/utils";
@@ -42,9 +43,29 @@ const WaterfallTab = ({ result, inputs }: WaterfallTabProps) => {
     result.ledger.find((l) => l.name === "Gap/Mezz Debt")?.amount || 0;
   const debtService = seniorDebt + mezzDebt;
   const equityPrem = result.ledger.find((l) => l.name === "Equity")?.amount || 0;
+  const deferments = result.deferments || 0;
 
   return (
-    <div className="pb-8">
+    <div className="space-y-6 pb-8">
+      {/* Onboarding Card */}
+      <div
+        className="p-5 border border-gold/30 bg-gold/[0.03] animate-fade-in"
+        style={{ borderRadius: 'var(--radius-lg)' }}
+      >
+        <div className="flex items-start gap-3 mb-3">
+          <BarChart3 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+          <h3 className="text-base font-bold text-gold">
+            Here's how the money flows.
+          </h3>
+        </div>
+        <p className="text-sm text-text-primary leading-relaxed mb-3">
+          The <span className="text-white font-medium">waterfall</span> shows exactly who gets paid, in what order. Revenue flows from top to bottom—each tier must be fully paid before the next tier sees a dollar.
+        </p>
+        <p className="text-xs text-text-dim leading-relaxed">
+          This is how agencies and studios model every deal. Now you can too.
+        </p>
+      </div>
+
       <ChapterCard
         chapter="04"
         title="WATERFALL"
@@ -146,6 +167,7 @@ const WaterfallTab = ({ result, inputs }: WaterfallTabProps) => {
                 offTheTop={firstMoneyOut}
                 debtService={debtService}
                 equityPremium={equityPrem}
+                deferments={deferments}
                 profitPool={result.profitPool}
               />
             </div>
