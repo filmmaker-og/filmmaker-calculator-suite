@@ -7,6 +7,7 @@ interface WaterfallVisualProps {
   offTheTop: number;
   debtService: number;
   equityPremium: number;
+  deferments: number;
   profitPool: number;
 }
 
@@ -26,6 +27,7 @@ const WaterfallVisual = ({
   offTheTop,
   debtService,
   equityPremium,
+  deferments,
   profitPool,
 }: WaterfallVisualProps) => {
   const [revealCount, setRevealCount] = useState(0);
@@ -34,29 +36,32 @@ const WaterfallVisual = ({
   let remaining = revenue;
 
   const tiers: LedgerTier[] = [];
+  let phaseNum = 1;
 
   // Phase 1: Off-the-Top
   const offTopPaid = Math.min(offTheTop, remaining);
   remaining -= offTopPaid;
   tiers.push({
-    phase: "PHASE 1",
+    phase: `PHASE ${phaseNum}`,
     label: "Off-the-Top",
     amount: offTheTop,
     paid: offTopPaid,
     status: offTopPaid >= offTheTop ? "filled" : offTopPaid > 0 ? "partial" : "empty",
   });
+  phaseNum++;
 
   // Phase 2: Debt Service
   if (debtService > 0) {
     const debtPaid = Math.min(debtService, remaining);
     remaining -= debtPaid;
     tiers.push({
-      phase: "PHASE 2",
+      phase: `PHASE ${phaseNum}`,
       label: "Debt Service",
       amount: debtService,
       paid: debtPaid,
       status: debtPaid >= debtService ? "filled" : debtPaid > 0 ? "partial" : "empty",
     });
+    phaseNum++;
   }
 
   // Phase 3: Equity + Premium
@@ -64,18 +69,32 @@ const WaterfallVisual = ({
     const equityPaid = Math.min(equityPremium, remaining);
     remaining -= equityPaid;
     tiers.push({
-      phase: debtService > 0 ? "PHASE 3" : "PHASE 2",
+      phase: `PHASE ${phaseNum}`,
       label: "Equity + Premium",
       amount: equityPremium,
       paid: equityPaid,
       status: equityPaid >= equityPremium ? "filled" : equityPaid > 0 ? "partial" : "empty",
     });
+    phaseNum++;
+  }
+
+  // Phase 4: Deferments (after equity, before profit split)
+  if (deferments > 0) {
+    const defermentsPaid = Math.min(deferments, remaining);
+    remaining -= defermentsPaid;
+    tiers.push({
+      phase: `PHASE ${phaseNum}`,
+      label: "Deferments",
+      amount: deferments,
+      paid: defermentsPaid,
+      status: defermentsPaid >= deferments ? "filled" : defermentsPaid > 0 ? "partial" : "empty",
+    });
+    phaseNum++;
   }
 
   // Profit Pool
-  const lastPhase = tiers.length + 1;
   tiers.push({
-    phase: `PHASE ${lastPhase}`,
+    phase: `PHASE ${phaseNum}`,
     label: "Profit Pool",
     amount: Math.max(0, profitPool),
     paid: Math.max(0, profitPool),
@@ -95,7 +114,7 @@ const WaterfallVisual = ({
       });
     }, 200);
     return () => clearInterval(timer);
-  }, [revenue, offTheTop, debtService, equityPremium, profitPool]);
+  }, [revenue, offTheTop, debtService, equityPremium, deferments, profitPool]);
 
   const getPercentage = (tier: LedgerTier) => {
     if (tier.amount <= 0) return 0;

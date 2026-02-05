@@ -1,5 +1,5 @@
 import { WaterfallInputs, formatCompactCurrency } from "@/lib/waterfall";
-import { Minus, Plus, Wallet, Coins, Building2, Banknote, Landmark, Layers } from "lucide-react";
+import { Minus, Plus, Wallet, Coins, Building2, Banknote, Landmark, Layers, Clock } from "lucide-react";
 import { useHaptics } from "@/hooks/use-haptics";
 import { cn } from "@/lib/utils";
 import StandardStepLayout from "../StandardStepLayout";
@@ -163,6 +163,81 @@ const StackTab = ({ inputs, onUpdateInput }: StackTabProps) => {
     );
   };
 
+  // Simple card for deferments (no rate adjuster)
+  const DefermentCard = () => {
+    const hasValue = inputs.deferments > 0;
+    const isActive = activeAccordion === 'deferments';
+
+    return (
+      <div
+        className={cn(
+          "border transition-all duration-300",
+          hasValue 
+            ? "border-gold/30 bg-gold/5" 
+            : isActive
+              ? "border-gold/20 bg-gold/[0.02]"
+              : "border-[#1A1A1A] bg-black hover:border-[#2A2A2A]"
+        )}
+      >
+        <button
+          onClick={() => setActiveAccordion(isActive ? null : 'deferments')}
+          className="w-full p-4 flex items-center justify-between"
+        >
+          <div className="flex items-center gap-3">
+            <div className={cn(
+              "w-8 h-8 flex items-center justify-center border transition-colors",
+              hasValue ? "border-gold/30 text-gold" : "border-white/10 text-white/30"
+            )}>
+              <Clock className="w-4 h-4" />
+            </div>
+            <div className="text-left">
+              <div className="text-sm font-bold tracking-wider text-white uppercase">Deferments</div>
+              {hasValue && (
+                <div className="text-xs text-gold font-mono mt-0.5">
+                  {formatCompactCurrency(inputs.deferments)}
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="text-white/20">
+            {isActive ? <Minus className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
+          </div>
+        </button>
+
+        <Collapsible open={isActive}>
+          <CollapsibleContent>
+            <div className="px-4 pb-4 pt-0 space-y-4">
+              <p className="text-xs text-white/40 leading-relaxed border-l-2 border-white/10 pl-3">
+                Deferred compensation paid after investors recoup. Typically producer fees, director fees, or talent participation.
+              </p>
+
+              <div
+                className={cn(
+                  "flex items-center border transition-all",
+                  hasValue ? "border-gold/30" : "border-[#2A2A2A]"
+                )}
+              >
+                <span className="pl-4 pr-2 font-mono text-white/40">$</span>
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  value={formatValue(inputs.deferments)}
+                  onChange={(e) => onUpdateInput('deferments', parseValue(e.target.value))}
+                  placeholder="0"
+                  className="flex-1 bg-transparent py-3 pr-4 outline-none font-mono text-xl text-white text-right placeholder:text-white/20 tabular-nums"
+                />
+              </div>
+
+              <p className="text-[10px] text-white/30 leading-relaxed">
+                Deferments are paid after equity investors recoup their principal + premium, but before the 50/50 profit split.
+              </p>
+            </div>
+          </CollapsibleContent>
+        </Collapsible>
+      </div>
+    );
+  };
+
   return (
     <StandardStepLayout
       icon={Wallet}
@@ -242,6 +317,10 @@ const StackTab = ({ inputs, onUpdateInput }: StackTabProps) => {
               <span className="text-gold">•</span>
               <span><span className="text-white font-medium">Equity</span> — Investor capital with premium returns</span>
             </li>
+            <li className="flex items-start gap-2">
+              <span className="text-gold">•</span>
+              <span><span className="text-white font-medium">Deferments</span> — Deferred fees paid after recoupment</span>
+            </li>
           </ul>
           <p className="text-xs text-text-dim mt-4">
             Tap each source below to add amounts. Leave blank if not used.
@@ -304,6 +383,9 @@ const StackTab = ({ inputs, onUpdateInput }: StackTabProps) => {
           rateDelta={5}
           accordionId="equity"
         />
+
+        {/* Deferments */}
+        <DefermentCard />
       </div>
     </StandardStepLayout>
   );

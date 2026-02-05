@@ -1,5 +1,5 @@
 // Waterfall Calculation Logic - Source of Truth from PRD
-// Last updated: 2026-02-01
+// Last updated: 2026-02-05
 
 export interface WaterfallInputs {
   revenue: number;
@@ -13,6 +13,7 @@ export interface WaterfallInputs {
   premium: number;
   salesFee: number;
   salesExp: number;  // Sales & Marketing expenses cap (AFM, markets, deliverables)
+  deferments: number; // Deferred compensation (producer fees, talent, etc.)
 }
 
 export interface GuildState {
@@ -34,6 +35,7 @@ export interface WaterfallResult {
   salesFee: number;
   guilds: number;
   marketing: number;
+  deferments: number;
   recouped: number;
   recoupPct: number;
   investor: number;
@@ -68,6 +70,7 @@ export function calculateBreakeven(inputs: WaterfallInputs, guilds: GuildState, 
 
   // Calculate fixed costs (not dependent on revenue)
   const marketingCap = Math.max(0, inputs.salesExp || 0);
+  const defermentsCost = Math.max(0, inputs.deferments || 0);
   
   // Debt repayment
   const seniorDebtRepay = selections.seniorDebt 
@@ -85,8 +88,8 @@ export function calculateBreakeven(inputs: WaterfallInputs, guilds: GuildState, 
   // Tax credits offset (reduces what you need)
   const creditsOffset = selections.taxCredits ? Math.max(0, inputs.credits || 0) : 0;
 
-  // Fixed costs = Debt + Equity - Credits + Marketing
-  const fixedCosts = seniorDebtRepay + mezzDebtRepay + equityRepay - creditsOffset + marketingCap;
+  // Fixed costs = Debt + Equity + Deferments - Credits + Marketing
+  const fixedCosts = seniorDebtRepay + mezzDebtRepay + equityRepay + defermentsCost - creditsOffset + marketingCap;
 
   // Breakeven X = fixedCosts / (1 - offTopRate)
   // Guard against division by zero (if offTopRate >= 100%)
@@ -130,6 +133,7 @@ export function calculateWaterfall(inputs: WaterfallInputs, guilds: GuildState):
   const premium = Math.max(0, Math.min(100, inputs.premium || 0));
   const salesFee = Math.max(0, Math.min(100, inputs.salesFee || 0));
   const salesExp = Math.max(0, inputs.salesExp || 0);
+  const deferments = Math.max(0, inputs.deferments || 0);
 
   // 1. Off-the-Top
   const salesFeeAmount = revenue * (salesFee / 100);
@@ -148,7 +152,9 @@ export function calculateWaterfall(inputs: WaterfallInputs, guilds: GuildState):
   const mezzDebtHurdle = mezzanineDebt * (1 + (mezzanineRate / 100));
   const totalDebtHurdle = seniorDebtHurdle + mezzDebtHurdle;
   const equityHurdle = equity * (1 + (premium / 100));
-  const totalHurdle = offTop + totalDebtHurdle + equityHurdle;
+  
+  // Total hurdle now includes deferments
+  const totalHurdle = offTop + totalDebtHurdle + equityHurdle + deferments;
 
   // 4. Distribution
   const profitPool = Math.max(0, revenue - totalHurdle);
@@ -168,7 +174,8 @@ export function calculateWaterfall(inputs: WaterfallInputs, guilds: GuildState):
     { name: "Unions", detail: "GUILD RESIDUALS / P&H", amount: guildsCost },
     { name: "Senior Debt", detail: `${seniorDebtRate}% INTEREST`, amount: seniorDebtHurdle },
     ...(mezzanineDebt > 0 ? [{ name: "Gap/Mezz Debt", detail: `${mezzanineRate}% INTEREST`, amount: mezzDebtHurdle }] : []),
-    { name: "Equity", detail: `PRINCIPAL + ${premium}% PREF`, amount: equityHurdle }
+    { name: "Equity", detail: `PRINCIPAL + ${premium}% PREF`, amount: equityHurdle },
+    ...(deferments > 0 ? [{ name: "Deferments", detail: "DEFERRED COMPENSATION", amount: deferments }] : []),
   ];
 
   return {
@@ -178,6 +185,7 @@ export function calculateWaterfall(inputs: WaterfallInputs, guilds: GuildState):
     salesFee: salesFeeAmount,
     guilds: guildsCost,
     marketing,
+    deferments,
     recouped,
     recoupPct,
     investor: investorTotal,

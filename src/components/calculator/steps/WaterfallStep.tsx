@@ -41,6 +41,7 @@ const WaterfallStep = ({ result, inputs }: WaterfallStepProps) => {
     result.ledger.find((l) => l.name === "Gap/Mezz Debt")?.amount || 0;
   const debtService = seniorDebt + mezzDebt;
   const equityPrem = result.ledger.find((l) => l.name === "Equity")?.amount || 0;
+  const deferments = result.ledger.find((l) => l.name === "Deferments")?.amount || 0;
 
   return (
     <div className="pb-8">
@@ -126,6 +127,7 @@ const WaterfallStep = ({ result, inputs }: WaterfallStepProps) => {
               offTheTop={firstMoneyOut}
               debtService={debtService}
               equityPremium={equityPrem}
+              deferments={deferments}
               profitPool={result.profitPool}
             />
           </div>
@@ -177,7 +179,7 @@ const WaterfallStep = ({ result, inputs }: WaterfallStepProps) => {
         </p>
         <div className="grid grid-cols-2 gap-3">
           {[
-            { label: "Revenue Tiers", value: "4 phases" },
+            { label: "Revenue Tiers", value: `${4 + (deferments > 0 ? 1 : 0)} phases` },
             { label: "Fee Structures", value: "CAM + Sales + Guilds" },
             { label: "Capital Stack", value: `${(inputs.debt > 0 ? 1 : 0) + (inputs.mezzanineDebt > 0 ? 1 : 0) + (inputs.equity > 0 ? 1 : 0)} tranches` },
             { label: "Return Calc", value: "Pref + 50/50 split" },
