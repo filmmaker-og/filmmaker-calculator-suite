@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useHaptics } from "@/hooks/use-haptics";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import { User } from "@supabase/supabase-js";
 import { calculateWaterfall, WaterfallInputs, WaterfallResult, GuildState } from "@/lib/waterfall";
 import { cn } from "@/lib/utils";
@@ -197,6 +197,47 @@ const Calculator = () => {
     return disabled;
   };
 
+  // Get next available tab
+  const getNextTab = (): TabId | null => {
+    const currentIndex = STEP_TO_TAB.indexOf(activeTab);
+    // Find next tab that's not disabled
+    for (let i = currentIndex + 1; i < STEP_TO_TAB.length; i++) {
+      const nextTab = STEP_TO_TAB[i];
+      if (!getDisabledTabs().includes(nextTab)) {
+        return nextTab;
+      }
+    }
+    return null;
+  };
+
+  // Get previous tab or home
+  const handleBack = () => {
+    const currentIndex = STEP_TO_TAB.indexOf(activeTab);
+    if (currentIndex === 0) {
+      // If on first tab, go back to home
+      navigate("/");
+    } else {
+      // Go to previous tab
+      const prevTab = STEP_TO_TAB[currentIndex - 1];
+      haptics.light();
+      setActiveTab(prevTab);
+    }
+  };
+
+  // Handle Next button
+  const handleNext = () => {
+    const nextTab = getNextTab();
+    if (nextTab) {
+      handleTabChange(nextTab);
+    }
+  };
+
+  // Check if current section is completed
+  const isCurrentSectionComplete = (): boolean => {
+    const completed = getCompletedTabs();
+    return completed.includes(activeTab);
+  };
+
   // Render current tab content
   const renderTabContent = () => {
     switch (activeTab) {
@@ -207,6 +248,7 @@ const Calculator = () => {
             guilds={guilds}
             onUpdateInput={updateInput}
             onToggleGuild={toggleGuild}
+            onAdvance={handleNext}
           />
         );
       case 'stack':
@@ -223,6 +265,7 @@ const Calculator = () => {
             guilds={guilds}
             selections={capitalSelections}
             onUpdateInput={updateInput}
+            onAdvance={handleNext}
           />
         );
       case 'waterfall':
@@ -309,7 +352,7 @@ const Calculator = () => {
         </div>
       </main>
 
-      {/* Floating bar above tab bar - Back + Progress */}
+      {/* Floating bar above tab bar - Back + Progress + Next */}
       <div
         className="fixed left-0 right-0 z-40 flex items-center justify-between px-4 py-2"
         style={{
@@ -319,7 +362,7 @@ const Calculator = () => {
       >
         {/* Back button */}
         <button
-          onClick={() => navigate("/")}
+          onClick={handleBack}
           className="flex items-center gap-2 text-text-dim hover:text-white transition-colors"
         >
           <ArrowLeft className="w-5 h-5" />
@@ -359,6 +402,22 @@ const Calculator = () => {
             {progressPercent}%
           </span>
         </div>
+
+        {/* Next button - show when current section is complete and there's a next tab */}
+        {getNextTab() && isCurrentSectionComplete() && (
+          <button
+            onClick={handleNext}
+            className={cn(
+              "flex items-center gap-2 px-4 py-2 rounded-md transition-all",
+              "border border-gold-muted bg-gold-subtle text-gold",
+              "hover:bg-gold hover:text-black",
+              "active:scale-95 animate-fade-in"
+            )}
+          >
+            <span className="text-xs font-bold uppercase tracking-wider">Next</span>
+            <ArrowRight className="w-4 h-4" />
+          </button>
+        )}
       </div>
 
       {/* Tab Bar - Fixed Bottom */}
