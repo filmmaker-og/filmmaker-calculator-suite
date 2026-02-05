@@ -86,8 +86,19 @@ const BudgetTab = ({ inputs, onUpdateInput, onAdvance }: BudgetTabProps) => {
       >
         {/* Budget Input */}
         <div>
-          <div className="field-label flex items-center gap-2">
+          <div className="field-label flex items-center justify-between">
             <span>Production Budget <span className="text-text-dim text-xs">(Negative Cost)</span></span>
+            {isCompleted && (
+              <button
+                onClick={() => {
+                  onUpdateInput('budget', 0);
+                  setTimeout(() => budgetInputRef.current?.focus(), 100);
+                }}
+                className="text-xs text-text-dim hover:text-gold transition-colors uppercase tracking-wider"
+              >
+                Clear
+              </button>
+            )}
           </div>
           <div
             className={cn(
