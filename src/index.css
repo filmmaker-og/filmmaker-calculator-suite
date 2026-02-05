@@ -133,8 +133,6 @@
   }
 }
 
-/* existing styles retained below (truncated here intentionally) */
-
 @layer components {
   /* ═══════════════════════════════════════════════════════════════════
      CHAPTER CARD - The primary content container (Design System v2.0)
@@ -451,7 +449,6 @@
 
   /* ═══════════════════════════════════════════════════════════════════
      STEP ANIMATIONS
-
      ═══════════════════════════════════════════════════════════════════ */
   
   .step-enter {
@@ -614,6 +611,7 @@
       transparent 50%,
       rgba(0, 0, 0, 0.4) 100%
     );
+    z-index: 1;
   }
 
   /* ═══════════════════════════════════════════════════════════════════
@@ -630,6 +628,18 @@
     100% {
       clip-path: polygon(30% 0%, 70% 0%, 90% 100%, 10% 100%);
       opacity: 1;
+    }
+  }
+
+  /* Focal pulse - used for center glow pulsing */
+  @keyframes focal-pulse {
+    0%, 100% {
+      opacity: 0.6;
+      transform: translate(-50%, -50%) scale(1);
+    }
+    50% {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1.08);
     }
   }
 
