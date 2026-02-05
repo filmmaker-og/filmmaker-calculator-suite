@@ -173,7 +173,7 @@ const Calculator = () => {
 
     haptics.light();
     setActiveTab(tab);
-  }, [activeTab, user, emailCaptured, haptics]);
+  }, [user, emailCaptured, haptics]);
 
   // Email gate handlers
   const handleEmailSuccess = () => {
@@ -241,12 +241,12 @@ const Calculator = () => {
   };
 
   // Handle Next button
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     const nextTab = getNextTab();
     if (nextTab) {
       handleTabChange(nextTab);
     }
-  };
+  }, [handleTabChange]);
 
   // Check if current section is completed
   const isCurrentSectionComplete = (): boolean => {
@@ -272,6 +272,7 @@ const Calculator = () => {
           <StackTab
             inputs={inputs}
             onUpdateInput={updateInput}
+            onAdvance={handleNext}
           />
         );
       case 'deal':

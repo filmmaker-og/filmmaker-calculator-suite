@@ -21,6 +21,7 @@ import {
 interface StackTabProps {
   inputs: WaterfallInputs;
   onUpdateInput: (key: keyof WaterfallInputs, value: number) => void;
+  onAdvance?: () => void; // Called when user completes Stack and wants to go to Deal
 }
 
 /**
@@ -43,7 +44,7 @@ interface StackTabProps {
  * 10 = DefermentsInput
  * 11 = StackSummary
  */
-const StackTab = ({ inputs, onUpdateInput }: StackTabProps) => {
+const StackTab = ({ inputs, onUpdateInput, onAdvance }: StackTabProps) => {
   const haptics = useHaptics();
   
   // Single piece of state: which step are we on?
@@ -73,6 +74,14 @@ const StackTab = ({ inputs, onUpdateInput }: StackTabProps) => {
     const nextWikiStep = currentStep + 1;
     goToStep(Math.min(11, nextWikiStep));
   }, [currentStep, goToStep]);
+
+  // Handle completion - advance to Deal tab
+  const handleComplete = useCallback(() => {
+    haptics.medium();
+    if (onAdvance) {
+      onAdvance();
+    }
+  }, [haptics, onAdvance]);
 
   // Render the current step
   const renderStep = () => {
@@ -157,10 +166,7 @@ const StackTab = ({ inputs, onUpdateInput }: StackTabProps) => {
           <StackSummary
             inputs={inputs}
             onEdit={goToStep}
-            onComplete={() => {
-              // This will be handled by parent - for now just stay on summary
-              // Future: trigger tab advance to Deal
-            }}
+            onComplete={handleComplete}
           />
         );
 
