@@ -15,7 +15,7 @@ const IntroView = () => {
   return (
     <>
       <Header />
-      <div className="min-h-screen bg-bg-void text-text-primary pt-24 pb-12 px-4 md:px-8 font-sans">
+      <div className="min-h-screen bg-bg-void text-text-primary pt-16 pb-12 px-4 md:px-8 font-sans">
         <div className="max-w-3xl mx-auto space-y-8 animate-fade-in">
           
           {/* Header Section - Notion/Wiki Style */}
@@ -28,7 +28,7 @@ const IntroView = () => {
               Filmmaker <span className="text-gold">Waterfall</span> Protocol
             </h1>
             <p className="text-xl text-text-mid leading-relaxed max-w-2xl">
-              You're about to enter a professional financial simulation. This tool is designed to arm you with the clarity needed to close investors and protect your backend.
+              This is how money moves through a film deal—from acquisition to your pocket. Most producers don't see this math until they've already signed away their upside.
             </p>
           </div>
 
@@ -68,9 +68,6 @@ const IntroView = () => {
                 <h3 className="text-lg font-bold text-white mb-1">The Learning Curve Is The Point</h3>
                 <p className="text-text-dim text-sm leading-relaxed">
                   If parts of this feel unfamiliar, that's expected. Film finance is deliberately complex—it protects the people who understand it. The terminology exists for a reason, and learning it is how you stop leaving money on the table.
-                </p>
-                <p className="text-text-dim text-sm leading-relaxed mt-2">
-                  Use the <span className="text-white font-semibold">Glossary</span> (coming soon) for any terms you don't recognize, or reach out directly. We're happy to walk you through the mechanics.
                 </p>
               </div>
             </div>
@@ -117,7 +114,7 @@ const IntroView = () => {
                   I don't understand all the terms yet. Should I wait?
                 </AccordionTrigger>
                 <AccordionContent className="text-text-dim">
-                  No. The best way to learn recoupment is to interact with a working model. Start with a simple scenario and adjust as you go. If you get stuck, use the in-app definitions or reach out—we'll walk you through it.
+                  No. The best way to learn recoupment is to <span className="text-white font-medium">interact with a working model</span>. Start with a simple scenario and adjust as you go. If you get stuck, use the in-app definitions or reach out—we'll walk you through it.
                 </AccordionContent>
               </AccordionItem>
               <AccordionItem value="item-5" className="border-border-default">
@@ -125,7 +122,7 @@ const IntroView = () => {
                   How accurate is this compared to real deals?
                 </AccordionTrigger>
                 <AccordionContent className="text-text-dim">
-                  This calculator uses the same waterfall logic found in actual Operating Agreements and distribution contracts. The math is institutional-grade. What varies deal-to-deal are specific fee percentages, expense caps, and waterfall positions—but the structural mechanics are universal. If you're modeling a real deal, adjust the inputs to match your term sheet.
+                  This calculator uses the same waterfall logic found in actual Operating Agreements and distribution contracts. The math is <span className="text-white font-medium">institutional-grade</span>. What varies deal-to-deal are specific fee percentages, expense caps, and waterfall positions—but the structural mechanics are universal. If you're modeling a real deal, adjust the inputs to match your term sheet.
                 </AccordionContent>
               </AccordionItem>
               <AccordionItem value="item-6" className="border-border-default">
@@ -133,36 +130,35 @@ const IntroView = () => {
                   I'm new to this. Where do I start?
                 </AccordionTrigger>
                 <AccordionContent className="text-text-dim">
-                  Just follow the steps. The waterfall process is broken into 4 stages. If you get stuck, look for the quick tips inside the calculator.
+                  Just follow the steps. The waterfall process is broken into <span className="text-white font-medium">4 stages</span>. If you get stuck, look for the quick tips inside the calculator.
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
           </div>
 
-          {/* Action Area */}
-          <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 border-t border-border-default">
-            {/* Back Button */}
+          {/* Action Area - Centered CTA */}
+          <div className="pt-8 flex flex-col items-center gap-4 border-t border-border-default">
+            <Button 
+              onClick={() => navigate('/calculator')}
+              className="bg-gold hover:bg-gold-bright text-black font-bold text-lg px-10 py-6 rounded-md shadow-[0_0_20px_rgba(212,175,55,0.2)] hover:shadow-[0_0_30px_rgba(212,175,55,0.4)] transition-all duration-300 group"
+            >
+              Initialize Simulation
+              <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </Button>
+            <div className="text-text-dim text-xs font-mono">
+              v2.0.4-stable
+            </div>
+          </div>
+
+          {/* Back Link - Bottom */}
+          <div className="pt-4 flex justify-center">
             <button
-              onClick={() => navigate('/')}
+              onClick={() => navigate('/home')}
               className="flex items-center gap-2 text-text-dim hover:text-white transition-colors text-sm"
             >
               <ArrowLeft className="w-4 h-4" />
               <span>Back to Home</span>
             </button>
-
-            {/* Version + CTA */}
-            <div className="flex items-center gap-6">
-              <div className="text-text-dim text-sm font-mono">
-                v2.0.4-stable
-              </div>
-              <Button 
-                onClick={() => navigate('/calculator')}
-                className="bg-gold hover:bg-gold-bright text-black font-bold text-lg px-8 py-6 rounded-md shadow-[0_0_20px_rgba(212,175,55,0.2)] hover:shadow-[0_0_30px_rgba(212,175,55,0.4)] transition-all duration-300 group"
-              >
-                Initialize Simulation
-                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </Button>
-            </div>
           </div>
 
         </div>
