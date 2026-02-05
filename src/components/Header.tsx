@@ -27,10 +27,11 @@ const Header = ({ title }: HeaderProps) => {
           {/* Left: Logo Text (clickable to home) */}
           <button
             onClick={handleLogoClick}
-            className="flex items-center gap-2.5 hover:opacity-80 transition-opacity"
+            className="flex items-center gap-2.5 hover:opacity-80 transition-opacity group"
           >
-            <span className="font-bebas text-lg tracking-[0.2em] text-gold">
-              FILMMAKER.OG
+            {/* FORCE GOLD LOGO COLOR */}
+            <span className="font-bebas text-lg tracking-[0.2em] text-[#D4AF37] group-hover:text-white transition-colors duration-300">
+              FILMMAKER<span className="text-white group-hover:text-[#D4AF37] transition-colors duration-300">.OG</span>
             </span>
           </button>
 
