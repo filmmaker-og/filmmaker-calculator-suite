@@ -3,7 +3,7 @@ import { useState, useRef, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import ChapterCard from "../ChapterCard";
 import GlossaryTrigger, { GLOSSARY } from "../GlossaryTrigger";
-import { Check, Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
 
 interface BudgetTabProps {
   inputs: WaterfallInputs;
@@ -111,15 +111,8 @@ const BudgetTab = ({ inputs, onUpdateInput, onAdvance }: BudgetTabProps) => {
               onBlur={() => setIsFocused(false)}
               onKeyDown={handleKeyDown}
               placeholder="750,000"
-              className="flex-1 bg-transparent py-4 outline-none font-mono text-[22px] text-text-primary text-right placeholder:text-text-dim placeholder:text-base tabular-nums pr-12"
+              className="flex-1 bg-transparent py-4 outline-none font-mono text-[22px] text-text-primary text-right placeholder:text-text-dim placeholder:text-base tabular-nums pr-4"
             />
-
-            <div className={cn(
-              "absolute right-4 transition-all duration-300 transform",
-              isCompleted ? "opacity-100 scale-100" : "opacity-0 scale-50"
-            )}>
-              <Check className="w-6 h-6 text-gold" />
-            </div>
           </div>
 
           <p className="mt-2 text-sm text-text-dim">
