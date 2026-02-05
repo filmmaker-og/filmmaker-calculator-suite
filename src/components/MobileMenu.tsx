@@ -151,7 +151,7 @@ const MobileMenu = ({ onOpenLegal, onSignOut }: MobileMenuProps) => {
               <img
                 src={filmmakerLogo}
                 alt="Filmmaker Logo"
-                className="relative w-[72px] h-[72px] rounded-lg"
+                className="relative w-24 h-24 rounded-lg"
                 style={{
                   filter: 'brightness(1.15) drop-shadow(0 0 20px rgba(255, 215, 0, 0.4))',
                 }}

@@ -11,20 +11,10 @@ const Index = () => {
   const haptics = useHaptics();
   const [phase, setPhase] = useState<
     'dark' | 'beam' | 'logo' | 'pulse' | 'tagline' | 'complete'
-  >('complete'); // Start at complete if returning
+  >('dark');
 
   useEffect(() => {
-    // Check if this is first visit (no calculator data saved)
-    const hasVisited = localStorage.getItem('filmmaker_og_inputs');
-
-    // Skip animation if user has already used the calculator
-    if (hasVisited) {
-      setPhase('complete');
-      return;
-    }
-
-    // First time visitor - show animation
-    setPhase('dark');
+    // Cinematic spotlight sequence - theatrical reveal
     const timers = [
       setTimeout(() => setPhase('beam'), 300),        // Spotlight beam fans open
       setTimeout(() => setPhase('logo'), 900),        // Logo fades up into light
@@ -133,7 +123,7 @@ const Index = () => {
               <img
                 src={filmmakerLogo}
                 alt="Filmmaker.OG"
-                className="w-28 h-28 object-contain"
+                className="w-28 h-28 object-contain rounded-lg"
                 style={{
                   filter: isPulsed ? 'brightness(1.15) drop-shadow(0 0 20px rgba(255, 215, 0, 0.4))' : 'brightness(1)',
                   transition: 'filter 0.5s ease',
@@ -195,21 +185,20 @@ const Index = () => {
 
           <div className="w-full max-w-sm flex flex-col items-center text-center relative">
 
-            {/* Logo aura glow */}
-            <div
-              className="absolute -top-4 left-1/2 -translate-x-1/2 w-40 h-40 pointer-events-none"
-              style={{
-                background: 'radial-gradient(circle at center, rgba(255, 215, 0, 0.12) 0%, transparent 65%)',
-                filter: 'blur(25px)',
-              }}
-            />
-
             {/* Logo */}
             <div className="mb-6 relative z-10">
+              {/* Radial aura behind logo */}
+              <div
+                className="absolute inset-0 -m-4"
+                style={{
+                  background: 'radial-gradient(circle, rgba(255, 215, 0, 0.15) 0%, transparent 70%)',
+                  filter: 'blur(8px)',
+                }}
+              />
               <img
                 src={filmmakerLogo}
                 alt="Filmmaker.OG"
-                className="w-24 h-24 object-contain"
+                className="relative w-24 h-24 object-contain rounded-lg"
                 style={{
                   filter: 'brightness(1.15) drop-shadow(0 0 20px rgba(255, 215, 0, 0.4))',
                 }}

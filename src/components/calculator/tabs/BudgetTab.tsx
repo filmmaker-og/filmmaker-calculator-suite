@@ -96,23 +96,9 @@ const BudgetTab = ({ inputs, onUpdateInput, onAdvance }: BudgetTabProps) => {
         {/* Budget Input */}
         <div>
           <div className="mb-3">
-            <div className="flex items-center justify-between mb-1">
-              <div className="flex items-baseline gap-2">
-                <span className="text-sm font-semibold text-text-primary uppercase tracking-wide">Production Budget</span>
-                <span className="text-xs text-text-dim italic">aka "Negative Cost"</span>
-              </div>
-              {isCompleted && (
-                <button
-                  onClick={() => {
-                    onUpdateInput('budget', 0);
-                    setTimeout(() => budgetInputRef.current?.focus(), 100);
-                  }}
-                  className="text-xs text-text-dim hover:text-gold transition-colors px-2 py-1 border border-border-default rounded"
-                  style={{ borderRadius: 'var(--radius-sm)' }}
-                >
-                  Reset
-                </button>
-              )}
+            <div className="flex items-baseline gap-2">
+              <span className="text-sm font-semibold text-text-primary uppercase tracking-wide">Production Budget</span>
+              <span className="text-xs text-text-dim italic">aka "Negative Cost"</span>
             </div>
           </div>
           <div
@@ -137,7 +123,7 @@ const BudgetTab = ({ inputs, onUpdateInput, onAdvance }: BudgetTabProps) => {
               className="flex-1 bg-transparent py-4 outline-none font-mono text-[22px] text-text-primary text-right placeholder:text-text-dim placeholder:text-base tabular-nums"
             />
             {isCompleted && (
-              <span className="pl-3 pr-4 text-xl flex items-center">✅</span>
+              <span className="pr-4 text-xl">✅</span>
             )}
           </div>
           <p className="mt-2 text-sm text-text-dim">

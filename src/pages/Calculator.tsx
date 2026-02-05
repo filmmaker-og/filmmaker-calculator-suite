@@ -93,7 +93,18 @@ const Calculator = () => {
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
-        if (parsed.inputs) setInputs(parsed.inputs);
+        if (parsed.inputs) {
+          // Validate and clean inputs - remove suspicious test values
+          const cleanInputs = { ...parsed.inputs };
+          // Clear values that look like test data (999, 9999, etc)
+          if (cleanInputs.budget && cleanInputs.budget < 10000) {
+            cleanInputs.budget = 0;
+          }
+          if (cleanInputs.revenue && cleanInputs.revenue < 10000) {
+            cleanInputs.revenue = 0;
+          }
+          setInputs(cleanInputs);
+        }
         if (parsed.guilds) setGuilds(parsed.guilds);
         if (parsed.activeTab) setActiveTab(parsed.activeTab);
       } catch (e) {
@@ -339,7 +350,7 @@ const Calculator = () => {
         ref={mainRef}
         className="flex-1 px-4 py-6 overflow-y-auto"
         style={{
-          paddingBottom: 'calc(var(--tabbar-h) + 60px + env(safe-area-inset-bottom))',
+          paddingBottom: 'calc(var(--tabbar-h) + 100px + env(safe-area-inset-bottom))',
         }}
       >
         <div
