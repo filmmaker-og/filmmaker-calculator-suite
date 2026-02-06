@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, ShieldCheck, TrendingUp, FileText, Info, Lock, Eye } from 'lucide-react';
+import { ArrowRight, ShieldCheck, TrendingUp, FileText, Info, Lock, Eye, BookOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Accordion,
@@ -33,7 +33,6 @@ const IntroView = () => {
           </div>
 
           {/* The Manifesto: "Shadow Authority" */}
-          {/* UPDATED: Changed bg-bg-card to bg-bg-surface to match cards below */}
           <div className="relative bg-bg-surface border border-gold/20 p-8 rounded-lg overflow-hidden">
             {/* Ambient background glow - made subtler for matte look */}
             <div className="absolute top-0 right-0 w-64 h-64 bg-gold/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
@@ -153,19 +152,28 @@ const IntroView = () => {
             </Accordion>
           </div>
 
-          {/* Action Area */}
-          <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 border-t border-border-default">
-            <div className="text-text-dim text-sm font-mono flex items-center gap-2">
-              <Lock className="w-3 h-3" />
-              v2.0.4-stable
-            </div>
+          {/* Action Area - NOW WITH DUAL BUTTONS */}
+          <div className="pt-8 border-t border-border-default space-y-4 md:space-y-0 md:flex md:items-center md:gap-4">
             <Button 
               onClick={() => navigate('/calculator')}
-              className="w-full md:w-auto bg-gold hover:bg-gold-bright text-black font-bold text-lg px-8 py-6 rounded-md shadow-[0_0_20px_rgba(212,175,55,0.2)] hover:shadow-[0_0_30px_rgba(212,175,55,0.4)] transition-all duration-300 group"
+              className="w-full md:flex-1 bg-gold hover:bg-gold-bright text-black font-bold text-lg px-8 py-6 rounded-md shadow-[0_0_20px_rgba(212,175,55,0.2)] hover:shadow-[0_0_30px_rgba(212,175,55,0.4)] transition-all duration-300 group"
             >
               Initialize Simulation
               <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Button>
+
+            <Button 
+              onClick={() => navigate('/waterfall-info')}
+              className="w-full md:w-auto border border-border-subtle bg-bg-surface hover:bg-bg-elevated text-text-mid hover:text-white font-medium text-lg px-8 py-6 rounded-md transition-all duration-300 group"
+            >
+              <BookOpen className="mr-2 w-5 h-5 text-gold group-hover:scale-110 transition-transform" />
+              Read Protocol
+            </Button>
+          </div>
+          
+          <div className="text-center md:text-left text-text-dim text-sm font-mono flex items-center justify-center md:justify-start gap-2">
+              <Lock className="w-3 h-3" />
+              v2.0.5-stable
           </div>
 
         </div>
