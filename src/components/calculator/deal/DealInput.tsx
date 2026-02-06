@@ -1,9 +1,10 @@
 import { useState, useRef, useEffect } from "react";
-import { Check, Target, TrendingUp, TrendingDown } from "lucide-react";
+import { Check, Target, TrendingUp, TrendingDown, Info } from "lucide-react";
 import { WaterfallInputs, GuildState, CapitalSelections, formatCompactCurrency, calculateBreakeven } from "@/lib/waterfall";
 import { cn } from "@/lib/utils";
 import { useMobileKeyboardScroll } from "@/hooks/use-mobile-keyboard";
 import StandardStepLayout from "../StandardStepLayout";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface DealInputProps {
   inputs: WaterfallInputs;
@@ -122,9 +123,21 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext }: DealIn
         {/* Input Card - Inner Matte Look */}
         <div className="bg-bg-elevated border border-border-default rounded-lg p-5 transition-all focus-within:border-gold/50 focus-within:shadow-focus focus-within:bg-bg-surface">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-xs uppercase tracking-widest text-text-dim font-bold">
-              Acquisition Amount
-            </span>
+            <div className="flex items-center gap-2">
+              <span className="text-xs uppercase tracking-widest text-text-dim font-bold">
+                Acquisition Amount
+              </span>
+               <TooltipProvider>
+                <Tooltip delayDuration={0}>
+                  <TooltipTrigger asChild>
+                    <Info className="w-3.5 h-3.5 text-text-dim/50 hover:text-gold cursor-pointer transition-colors" />
+                  </TooltipTrigger>
+                  <TooltipContent side="right" className="max-w-[200px] bg-bg-card border-gold/30 text-xs">
+                    <p>The gross purchase price paid by a distributor (before they take their fee).</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
             {hasRevenue && (
               <span className="text-xs text-gold font-mono flex items-center gap-1">
                 <Check className="w-3 h-3" />
