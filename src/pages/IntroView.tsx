@@ -33,8 +33,9 @@ const IntroView = () => {
           </div>
 
           {/* The Manifesto: "Shadow Authority" */}
-          <div className="relative bg-bg-card border border-gold/20 p-8 rounded-lg overflow-hidden">
-            {/* Ambient background glow */}
+          {/* UPDATED: Changed bg-bg-card to bg-bg-surface to match cards below */}
+          <div className="relative bg-bg-surface border border-gold/20 p-8 rounded-lg overflow-hidden">
+            {/* Ambient background glow - made subtler for matte look */}
             <div className="absolute top-0 right-0 w-64 h-64 bg-gold/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
             
             <div className="relative z-10 space-y-4">
