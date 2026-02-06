@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, ArrowLeft, ChevronDown } from 'lucide-react';
+import { ArrowRight, ArrowLeft, ChevronDown, DollarSign, Layers, Percent, GitBranch } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import Header from "@/components/Header";
@@ -18,17 +18,20 @@ const tokens = {
   bgMatte: '#0D0D0D',      // Primary card surface
   bgHeader: '#111111',     // Header bars
   bgSurface: '#141414',    // Elevated surfaces
+  bgElevated: '#1A1A1A',   // Even more elevated
   
-  // Gold System — Use sparingly
+  // Gold System — Radiant but controlled
   gold: '#FFD700',
   goldMuted: 'rgba(255, 215, 0, 0.45)',
   goldSubtle: 'rgba(255, 215, 0, 0.08)',
   goldGlow: 'rgba(255, 215, 0, 0.25)',
-  goldFill: 'rgba(255, 215, 0, 0.12)',  // New: Chapter number box fill
+  goldFill: 'rgba(255, 215, 0, 0.12)',
+  goldRadiant: 'rgba(255, 215, 0, 0.18)',  // For header glow effect
   
   // Borders
   borderMatte: '#1A1A1A',
   borderSubtle: '#222222',
+  borderGold: 'rgba(255, 215, 0, 0.3)',
   
   // Text
   textPrimary: '#FFFFFF',
@@ -38,6 +41,7 @@ const tokens = {
   // Radius
   radiusMd: '12px',
   radiusLg: '14px',
+  radiusSm: '8px',
 };
 
 interface FAQItem {
@@ -65,7 +69,7 @@ const faqItems: FAQItem[] = [
 ];
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   SECTION HEADER COMPONENT — Gold Left Border Accent (Signature Element)
+   SECTION HEADER COMPONENT — Radiant Gold Left Border + Matte Gray Surface
    ═══════════════════════════════════════════════════════════════════════════ */
 interface SectionHeaderProps {
   number: string;
@@ -76,17 +80,20 @@ const SectionHeader = ({ number, title }: SectionHeaderProps) => (
   <div 
     className="flex items-stretch"
     style={{ 
-      background: tokens.bgHeader,
+      background: `linear-gradient(90deg, ${tokens.goldRadiant} 0%, ${tokens.bgHeader} 15%, ${tokens.bgHeader} 100%)`,
       borderBottom: `1px solid ${tokens.borderMatte}`,
     }}
   >
-    {/* Gold Left Border Accent — THE signature element */}
+    {/* Radiant Gold Left Border Accent */}
     <div 
       className="w-1 flex-shrink-0"
-      style={{ background: tokens.gold }}
+      style={{ 
+        background: `linear-gradient(180deg, ${tokens.gold} 0%, ${tokens.goldMuted} 100%)`,
+        boxShadow: `0 0 12px ${tokens.goldGlow}`,
+      }}
     />
     
-    {/* Chapter Number Box — Now with gold fill background */}
+    {/* Chapter Number Box with Gold Fill */}
     <div 
       className="flex items-center justify-center px-4 py-4"
       style={{ 
@@ -116,34 +123,140 @@ const SectionHeader = ({ number, title }: SectionHeaderProps) => (
 );
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   PILLAR CARD COMPONENT — Numbered cards for visual hierarchy
+   MINI-WIKI PREVIEW CARD — Shows actual content preview, clickable
    ═══════════════════════════════════════════════════════════════════════════ */
-interface PillarCardProps {
+interface MiniWikiPreviewProps {
   number: string;
   title: string;
-  description: string;
+  icon: React.ReactNode;
+  previewContent: {
+    label: string;
+    value: string;
+  }[];
+  exampleNote?: string;
+  onClick: () => void;
 }
 
-const PillarCard = ({ number, title, description }: PillarCardProps) => (
-  <div 
-    className="p-4"
+const MiniWikiPreview = ({ number, title, icon, previewContent, exampleNote, onClick }: MiniWikiPreviewProps) => (
+  <button
+    onClick={onClick}
+    className="w-full text-left group transition-all duration-200 hover:scale-[1.01]"
     style={{ 
-      background: tokens.bgSurface,
-      borderRadius: tokens.radiusMd,
-      borderLeft: `2px solid ${tokens.goldMuted}`,
+      background: tokens.bgMatte,
+      border: `1px solid ${tokens.borderMatte}`,
+      borderRadius: tokens.radiusLg,
+      overflow: 'hidden',
     }}
   >
-    <span 
-      className="font-bebas text-xs tracking-wide"
-      style={{ color: tokens.goldMuted }}
+    {/* Mini Header with Gold Accent */}
+    <div 
+      className="flex items-stretch"
+      style={{ 
+        background: `linear-gradient(90deg, ${tokens.goldRadiant} 0%, ${tokens.bgHeader} 20%, ${tokens.bgHeader} 100%)`,
+        borderBottom: `1px solid ${tokens.borderMatte}`,
+      }}
     >
-      {number}
-    </span>
-    <p className="text-sm font-semibold text-white mb-1 mt-1">{title}</p>
-    <p className="text-xs leading-relaxed" style={{ color: tokens.textDim }}>
-      {description}
-    </p>
-  </div>
+      {/* Gold Left Border */}
+      <div 
+        className="w-1 flex-shrink-0"
+        style={{ 
+          background: tokens.gold,
+          boxShadow: `0 0 8px ${tokens.goldGlow}`,
+        }}
+      />
+      
+      {/* Number Box */}
+      <div 
+        className="flex items-center justify-center px-3 py-3"
+        style={{ 
+          borderRight: `1px solid ${tokens.borderSubtle}`,
+          minWidth: '44px',
+          background: tokens.goldFill,
+        }}
+      >
+        <span 
+          className="font-bebas text-base tracking-wide"
+          style={{ color: tokens.gold }}
+        >
+          {number}
+        </span>
+      </div>
+      
+      {/* Icon + Title */}
+      <div className="flex items-center gap-2 px-3 py-3">
+        <span style={{ color: tokens.goldMuted }}>{icon}</span>
+        <h3 
+          className="font-bold text-xs uppercase tracking-widest"
+          style={{ color: tokens.textPrimary }}
+        >
+          {title}
+        </h3>
+      </div>
+      
+      {/* Arrow on hover */}
+      <div className="ml-auto flex items-center pr-3">
+        <ArrowRight 
+          className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity"
+          style={{ color: tokens.gold }}
+        />
+      </div>
+    </div>
+    
+    {/* Preview Content — Example of what they'll see */}
+    <div className="p-4 space-y-3">
+      {/* Example Label */}
+      <div 
+        className="text-[10px] uppercase tracking-widest font-medium"
+        style={{ color: tokens.goldMuted }}
+      >
+        Preview
+      </div>
+      
+      {/* Preview Items */}
+      <div className="space-y-2">
+        {previewContent.map((item, idx) => (
+          <div 
+            key={idx}
+            className="flex justify-between items-center py-2 px-3"
+            style={{ 
+              background: tokens.bgSurface,
+              borderRadius: tokens.radiusSm,
+              border: `1px solid ${tokens.borderSubtle}`,
+            }}
+          >
+            <span className="text-xs" style={{ color: tokens.textMid }}>
+              {item.label}
+            </span>
+            <span 
+              className="text-xs font-mono font-semibold"
+              style={{ color: tokens.textPrimary }}
+            >
+              {item.value}
+            </span>
+          </div>
+        ))}
+      </div>
+      
+      {/* Example Note */}
+      {exampleNote && (
+        <p 
+          className="text-[11px] italic pt-1"
+          style={{ color: tokens.textDim }}
+        >
+          {exampleNote}
+        </p>
+      )}
+      
+      {/* Learn More Link */}
+      <div 
+        className="flex items-center gap-1 pt-2 text-xs font-medium group-hover:gap-2 transition-all"
+        style={{ color: tokens.gold }}
+      >
+        <span>Learn more</span>
+        <ArrowRight className="w-3 h-3" />
+      </div>
+    </div>
+  </button>
 );
 
 const IntroView = () => {
@@ -154,8 +267,8 @@ const IntroView = () => {
     setOpenFAQ(openFAQ === index ? null : index);
   };
 
-  const handleInitialize = () => {
-    navigate('/calculator');
+  const handleStartSimulation = () => {
+    navigate('/budget-info');
   };
 
   return (
@@ -193,7 +306,7 @@ const IntroView = () => {
           </div>
 
           {/* ═══════════════════════════════════════════════════════════════
-              SECTION 01 — WHAT YOU'LL MODEL (Comprehensive)
+              SECTION 01 — WHAT'S YOUR MODEL? (Mini-Wiki Previews)
               ═══════════════════════════════════════════════════════════════ */}
           <div 
             className="overflow-hidden animate-fade-in"
@@ -203,7 +316,7 @@ const IntroView = () => {
               borderRadius: tokens.radiusLg,
             }}
           >
-            <SectionHeader number="01" title="What You'll Model" />
+            <SectionHeader number="01" title="What's Your Model?" />
             
             <div className="p-5 space-y-5">
               {/* Intro Context */}
@@ -211,36 +324,69 @@ const IntroView = () => {
                 className="text-sm leading-relaxed"
                 style={{ color: tokens.textMid }}
               >
-                This simulator walks you through the four pillars of independent film finance. 
-                Each section builds on the last, creating a complete picture of how revenue 
-                flows from acquisition to final profit splits.
+                Here's an example of what you'll model. Each section below previews the actual 
+                content—click any to dive deeper before starting your simulation.
               </p>
               
-              {/* The Four Pillars — 2×2 Grid on desktop, single column on mobile */}
+              {/* Mini-Wiki Previews — 2×2 Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <PillarCard 
+                
+                {/* PRODUCTION BUDGET Preview */}
+                <MiniWikiPreview
                   number="01"
                   title="Production Budget"
-                  description="Your total cost to produce the film. This becomes the baseline for everything else—capital requirements, recoupment thresholds, and profit calculations."
+                  icon={<DollarSign className="w-4 h-4" />}
+                  previewContent={[
+                    { label: "Negative Cost", value: "$850,000" },
+                    { label: "Above-the-Line", value: "$127,500" },
+                    { label: "Contingency", value: "$42,500" },
+                  ]}
+                  exampleNote="This is what it costs to make the film."
+                  onClick={() => navigate('/budget-info')}
                 />
                 
-                <PillarCard 
+                {/* CAPITAL STACK Preview */}
+                <MiniWikiPreview
                   number="02"
                   title="Capital Stack"
-                  description="How you're funding production. The mix of equity, debt, and deferrals determines who gets paid first and at what rates. Senior debt always recoup before equity sees a dime."
+                  icon={<Layers className="w-4 h-4" />}
+                  previewContent={[
+                    { label: "Senior Debt", value: "$340,000" },
+                    { label: "Equity", value: "$425,000" },
+                    { label: "Deferrals", value: "$85,000" },
+                  ]}
+                  exampleNote="How production is funded."
+                  onClick={() => navigate('/capital-info')}
                 />
                 
-                <PillarCard 
+                {/* DISTRIBUTION FEES Preview */}
+                <MiniWikiPreview
                   number="03"
                   title="Distribution Fees"
-                  description="What comes off the top before anyone gets paid. Collection agents, sales agents, and distributors each take their cut from gross revenue, leaving Net Receipts for the waterfall."
+                  icon={<Percent className="w-4 h-4" />}
+                  previewContent={[
+                    { label: "Sales Agent", value: "10%" },
+                    { label: "Collection Agent", value: "5%" },
+                    { label: "Net to Waterfall", value: "85%" },
+                  ]}
+                  exampleNote="What comes off the top first."
+                  onClick={() => navigate('/fees-info')}
                 />
                 
-                <PillarCard 
+                {/* RECOUPMENT WATERFALL Preview */}
+                <MiniWikiPreview
                   number="04"
                   title="Recoupment Waterfall"
-                  description="The contractual order of who gets paid back. Each position must fully recoup before the next tier sees money. This is where deals are won or lost."
+                  icon={<GitBranch className="w-4 h-4" />}
+                  previewContent={[
+                    { label: "Position 1", value: "Senior Debt" },
+                    { label: "Position 2", value: "Equity" },
+                    { label: "Position 3", value: "Profit Split" },
+                  ]}
+                  exampleNote="The order money flows out."
+                  onClick={() => navigate('/waterfall-info')}
                 />
+                
               </div>
             </div>
           </div>
@@ -295,7 +441,7 @@ const IntroView = () => {
           </div>
 
           {/* ═══════════════════════════════════════════════════════════════
-              SECTION 03 — FAQ (Restored name)
+              SECTION 03 — FAQ
               ═══════════════════════════════════════════════════════════════ */}
           <div 
             className="overflow-hidden animate-fade-in"
@@ -367,9 +513,9 @@ const IntroView = () => {
               }}
             />
             
-            {/* CTA Button — Solid Gold */}
+            {/* CTA Button — Routes to /budget-info (first wiki page) */}
             <Button 
-              onClick={handleInitialize}
+              onClick={handleStartSimulation}
               className="group px-10 py-6 text-sm font-black uppercase tracking-widest transition-all duration-200 hover:scale-[1.02]"
               style={{
                 background: `linear-gradient(135deg, ${tokens.gold} 0%, #E6C200 100%)`,
