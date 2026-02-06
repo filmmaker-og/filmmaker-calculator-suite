@@ -112,10 +112,10 @@ const CapitalSelect = ({ selections, onToggle, onNext }: CapitalSelectProps) => 
             }}
           />
           <div
-            className="relative w-14 h-14 border border-gold/30 bg-gold/5 flex items-center justify-center"
+            className="relative w-16 h-16 border border-gold/30 bg-gold/5 flex items-center justify-center"
             style={{ borderRadius: 'var(--radius-md)' }}
           >
-            <Coins className="w-7 h-7 text-gold" />
+            <Coins className="w-8 h-8 text-gold" />
           </div>
         </div>
 
