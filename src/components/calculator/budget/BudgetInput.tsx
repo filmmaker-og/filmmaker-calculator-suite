@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from "react";
-import { DollarSign, ArrowRight, Check, X } from "lucide-react";
+import { Check, X } from "lucide-react";
 import { WaterfallInputs } from "@/lib/waterfall";
 import { cn } from "@/lib/utils";
+import StandardStepLayout from "../StandardStepLayout";
 
 interface BudgetInputProps {
   inputs: WaterfallInputs;
@@ -16,7 +17,8 @@ interface BudgetInputProps {
  * Step 1 of Budget Tab: Collect the production budget
  * with quick amount buttons and validation.
  */
-const BudgetInput = ({ inputs, onUpdateInput, onNext }: BudgetInputProps) => {\n  const [isFocused, setIsFocused] = useState(false);
+const BudgetInput = ({ inputs, onUpdateInput, onNext }: BudgetInputProps) => {
+  const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   // Auto-focus on mount
@@ -74,64 +76,30 @@ const BudgetInput = ({ inputs, onUpdateInput, onNext }: BudgetInputProps) => {\n
   ];
 
   return (
-    <div className="space-y-6 animate-fade-in">
-      {/* Hero Header */}
-      <div className="text-center mb-6 pt-4">
-        <div className="relative inline-block mb-4">
-          <div
-            className="absolute inset-0"
-            style={{
-              background: 'radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, transparent 70%)',
-              filter: 'blur(15px)',
-              transform: 'scale(2)',
-            }}
-          />
-          <div 
-            className="relative w-14 h-14 border border-gold/30 bg-gold/5 flex items-center justify-center"
-            style={{ borderRadius: 'var(--radius-md)' }}
-          >
-            <DollarSign className="w-7 h-7 text-gold" />
-          </div>
-        </div>
-
-        <h2 className="font-bebas text-3xl tracking-[0.08em] text-text-primary mb-1">
-          Production Budget
-        </h2>
-        <p className="text-text-dim text-xs max-w-xs mx-auto">
-          Enter your total negative cost
-        </p>
-      </div>
-
-      {/* Main Input Card */}
-      <div className="matte-section overflow-hidden">
-        {/* Section header */}
-        <div className="matte-section-header px-5 py-3 flex items-center justify-between">
-          <span className="text-xs uppercase tracking-widest text-text-dim font-bold">
-            Total Budget
-          </span>
-          {isCompleted && (
-            <span className="text-xs text-gold font-mono flex items-center gap-1">
-              <Check className="w-3 h-3" />
+    <StandardStepLayout
+      chapter="01"
+      title="Production Budget"
+      subtitle="Enter your total negative cost"
+      isComplete={isCompleted}
+      onNext={onNext}
+      nextLabel="Continue to Capital Stack"
+    >
+      <div className="space-y-6">
+        {/* Input Card - Inner Matte Look */}
+        <div className="bg-bg-elevated border border-border-default rounded-lg p-5 transition-all focus-within:border-gold/50 focus-within:shadow-focus focus-within:bg-bg-surface">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs uppercase tracking-widest text-text-dim font-bold">
+              Total Budget
             </span>
-          )}
-        </div>
-
-        {/* Budget Input */}
-        <div className="p-5">
-          <div
-            className={cn(
-              "flex items-center transition-all relative",
-              "bg-bg-surface border",
-              isFocused
-                ? "border-border-active shadow-focus"
-                : isCompleted
-                  ? "border-gold/50"
-                  : "border-border-default"
+            {isCompleted && (
+              <span className="text-xs text-gold font-mono flex items-center gap-1">
+                <Check className="w-3 h-3" />
+              </span>
             )}
-            style={{ borderRadius: 'var(--radius-md)' }}
-          >
-            <span className="pl-4 pr-2 font-mono text-xl text-text-dim">$</span>
+          </div>
 
+          <div className="flex items-center relative">
+            <span className="font-mono text-xl text-text-dim mr-2">$</span>
             <input
               ref={inputRef}
               type="text"
@@ -142,72 +110,46 @@ const BudgetInput = ({ inputs, onUpdateInput, onNext }: BudgetInputProps) => {\n
               onBlur={() => setIsFocused(false)}
               onKeyDown={handleKeyDown}
               placeholder="750,000"
-              className="flex-1 bg-transparent py-4 outline-none font-mono text-[22px] text-text-primary text-right placeholder:text-text-dim placeholder:text-base tabular-nums pr-2"
+              className="flex-1 bg-transparent outline-none font-mono text-[22px] text-text-primary text-right placeholder:text-text-dim placeholder:text-base tabular-nums"
             />
-
             {/* Clear button */}
             {isCompleted && (
               <button
                 onClick={handleClear}
-                className="mr-3 p-1.5 text-text-dim hover:text-text-primary hover:bg-bg-elevated rounded transition-colors"
+                className="absolute right-0 top-1/2 -translate-y-1/2 ml-2 p-1 text-text-dim hover:text-text-primary hover:bg-white/10 rounded transition-colors"
+                style={{ right: '-32px' }}
                 aria-label="Clear budget"
               >
                 <X className="w-4 h-4" />
               </button>
             )}
           </div>
-
-          <p className="mt-2 text-xs text-text-dim text-center">
-            Enter your full production budget
-          </p>
         </div>
 
         {/* Quick Amounts */}
-        <div className="px-5 pb-5">
-          <div
-            className="p-4 border border-gold/20 bg-gold/[0.03]"
-            style={{ borderRadius: 'var(--radius-lg)' }}
-          >
-            <p className="text-xs text-text-dim mb-3 uppercase tracking-wide font-medium text-center">
-              Quick amounts
-            </p>
-            <div className="flex gap-2 flex-wrap justify-center">
-              {quickAmounts.map((qa) => (
-                <button
-                  key={qa.value}
-                  onClick={() => handleQuickAmount(qa.value)}
-                  className={cn(
-                    "font-mono text-xs px-3 py-2 rounded transition-colors border",
-                    inputs.budget === qa.value
-                      ? "bg-gold/20 border-gold text-gold"
-                      : "bg-bg-void border-border-subtle text-text-mid hover:border-gold/50"
-                  )}
-                >
-                  {qa.label}
-                </button>
-              ))}
-            </div>
+        <div className="p-4 border border-gold/20 bg-gold/[0.03] rounded-lg">
+          <p className="text-xs text-text-dim mb-3 uppercase tracking-wide font-medium text-center">
+            Quick amounts
+          </p>
+          <div className="flex gap-2 flex-wrap justify-center">
+            {quickAmounts.map((qa) => (
+              <button
+                key={qa.value}
+                onClick={() => handleQuickAmount(qa.value)}
+                className={cn(
+                  "font-mono text-xs px-3 py-2 rounded transition-colors border",
+                  inputs.budget === qa.value
+                    ? "bg-gold/20 border-gold text-gold"
+                    : "bg-bg-void border-border-subtle text-text-mid hover:border-gold/50"
+                )}
+              >
+                {qa.label}
+              </button>
+            ))}
           </div>
         </div>
       </div>
-
-      {/* Continue Button */}
-      {isCompleted && (
-        <button
-          onClick={onNext}
-          className={cn(
-            "w-full py-4 flex items-center justify-center gap-3",
-            "bg-gold-cta-subtle border border-gold-cta-muted text-gold-cta",
-            "hover:bg-gold-cta-subtle hover:border-gold-cta transition-all",
-            "active:scale-[0.98]"
-          )}
-          style={{ borderRadius: 'var(--radius-md)' }}
-        >
-          <span className="text-sm font-bold uppercase tracking-wider">Continue to Capital Stack</span>
-          <ArrowRight className="w-4 h-4" />
-        </button>
-      )}
-    </div>
+    </StandardStepLayout>
   );
 };
 
