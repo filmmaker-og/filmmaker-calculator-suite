@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { DollarSign, ArrowRight, ArrowLeft, Check, X } from "lucide-react";
+import { DollarSign, ArrowRight, Check, X } from "lucide-react";
 import { WaterfallInputs } from "@/lib/waterfall";
 import { cn } from "@/lib/utils";
 
@@ -16,8 +16,7 @@ interface BudgetInputProps {
  * Step 1 of Budget Tab: Collect the production budget
  * with quick amount buttons and validation.
  */
-const BudgetInput = ({ inputs, onUpdateInput, onBack, onNext }: BudgetInputProps) => {
-  const [isFocused, setIsFocused] = useState(false);
+const BudgetInput = ({ inputs, onUpdateInput, onNext }: BudgetInputProps) => {\n  const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   // Auto-focus on mount
@@ -76,26 +75,8 @@ const BudgetInput = ({ inputs, onUpdateInput, onBack, onNext }: BudgetInputProps
 
   return (
     <div className="space-y-6 animate-fade-in">
-      {/* Step Label + Back Button */}
-      <div className="flex items-center justify-between">
-        {onBack ? (
-          <button
-            onClick={onBack}
-            className="flex items-center gap-1.5 text-xs text-text-dim hover:text-text-primary transition-colors"
-          >
-            <ArrowLeft className="w-3.5 h-3.5" />
-            <span>Back</span>
-          </button>
-        ) : (
-          <div />
-        )}
-        <span className="text-xs font-mono text-gold/70 uppercase tracking-widest">
-          Budget
-        </span>
-      </div>
-
       {/* Hero Header */}
-      <div className="text-center mb-6">
+      <div className="text-center mb-6 pt-4">
         <div className="relative inline-block mb-4">
           <div
             className="absolute inset-0"
