@@ -212,7 +212,8 @@ const Calculator = () => {
     }
     if (inputs.revenue > 0) completed.push('deal');
     if (inputs.revenue > 0 && inputs.budget > 0) completed.push('waterfall');
-    return completed;\n  };
+    return completed;
+  };
 
   // Determine which tabs are disabled
   const getDisabledTabs = (): TabId[] => {
@@ -221,14 +222,16 @@ const Calculator = () => {
     if (inputs.budget === 0 || inputs.revenue === 0) {
       disabled.push('waterfall');
     }
-    return disabled;\n  };
+    return disabled;
+  };
 
   // Get next available tab
   const getNextTab = (): TabId | null => {
     const currentIndex = STEP_TO_TAB.indexOf(activeTab);
     // Find next tab that's not disabled
     for (let i = currentIndex + 1; i < STEP_TO_TAB.length; i++) {
-      const nextTab = STEP_TO_TAB[i];\n      if (!getDisabledTabs().includes(nextTab)) {
+      const nextTab = STEP_TO_TAB[i];
+      if (!getDisabledTabs().includes(nextTab)) {
         return nextTab;
       }
     }
@@ -312,37 +315,40 @@ const Calculator = () => {
         ) : null;
       default:
         return null;
-    }\n  };
+    }
+  };
 
   if (loading) {
     return (
-      <div className=\"min-h-screen bg-bg-void flex flex-col\">
+      <div className="min-h-screen bg-bg-void flex flex-col">
         <Header />
-        <div className=\"flex-1 flex items-center justify-center\">
-          <div className=\"w-8 h-8 border-2 border-gold border-t-transparent rounded-full animate-spin\" />\n        </div>
+        <div className="flex-1 flex items-center justify-center">
+          <div className="w-8 h-8 border-2 border-gold border-t-transparent rounded-full animate-spin" />
+        </div>
       </div>
-    );\n  }
+    );
+  }
 
   // Calculate progress percentage
   const progressPercent = TAB_TO_STEP[activeTab] * 25;
 
   return (
-    <div className=\"min-h-screen bg-bg-void flex flex-col\">
+    <div className="min-h-screen bg-bg-void flex flex-col">
       {/* Shared Header - Fixes logo color and consistency */}
       <Header />
 
       {/* Main Content */}
       <main
         ref={mainRef}
-        className=\"flex-1 px-4 py-6 overflow-y-auto\"
+        className="flex-1 px-4 py-6 overflow-y-auto"
         style={{
           paddingBottom: 'calc(var(--tabbar-h) + 100px + env(safe-area-inset-bottom))',
         }}
       >
         <div
           className={cn(
-            \"max-w-[460px] mx-auto\",
-            \"animate-fade-in\"
+            "max-w-[460px] mx-auto",
+            "animate-fade-in"
           )}
         >
           {renderTabContent()}
@@ -351,7 +357,7 @@ const Calculator = () => {
 
       {/* Floating bar above tab bar - Back + Progress + Next */}
       <div
-        className=\"fixed left-0 right-0 z-40 flex items-center justify-between px-4 py-2\"
+        className="fixed left-0 right-0 z-40 flex items-center justify-between px-4 py-2"
         style={{
           bottom: 'calc(var(--tabbar-h) + env(safe-area-inset-bottom))',
           backgroundColor: 'var(--bg-card)',
@@ -361,46 +367,48 @@ const Calculator = () => {
         <button
           onClick={handleBack}
           className={cn(
-            \"flex items-center gap-2 px-4 py-2 rounded-md transition-all\",
-            \"border border-gold-muted bg-gold-subtle text-white\",
-            \"hover:bg-gold hover:text-black\",
-            \"active:scale-95\"
+            "flex items-center gap-2 px-4 py-2 rounded-md transition-all",
+            "border border-gold-muted bg-gold-subtle text-white",
+            "hover:bg-gold hover:text-black",
+            "active:scale-95"
           )}
         >
-          <ArrowLeft className=\"w-4 h-4\" />
-          <span className=\"text-xs font-bold uppercase tracking-wider\">Back</span>
+          <ArrowLeft className="w-4 h-4" />
+          <span className="text-xs font-bold uppercase tracking-wider">Back</span>
         </button>
 
         {/* Circular progress indicator */}
-        <div className=\"relative w-11 h-11 flex items-center justify-center\">
+        <div className="relative w-11 h-11 flex items-center justify-center">
           {/* Background circle */}
-          <svg className=\"absolute w-11 h-11 -rotate-90\">
+          <svg className="absolute w-11 h-11 -rotate-90">
             <circle
-              cx=\"22\"
-              cy=\"22\"
-              r=\"18\"
-              fill=\"none\"
-              stroke=\"var(--border-subtle)\"
-              strokeWidth=\"2\"
+              cx="22"
+              cy="22"
+              r="18"
+              fill="none"
+              stroke="var(--border-subtle)"
+              strokeWidth="2"
             />
             {/* Progress arc */}
             <circle
-              cx=\"22\"
-              cy=\"22\"
-              r=\"18\"
-              fill=\"none\"
-              stroke=\"var(--gold)\"
-              strokeWidth=\"2\"
-              strokeLinecap=\"round\"
+              cx="22"
+              cy="22"
+              r="18"
+              fill="none"
+              stroke="var(--gold)"
+              strokeWidth="2"
+              strokeLinecap="round"
               strokeDasharray={`${progressPercent * 1.13} 113`}
-              className=\"transition-all duration-500 ease-out\"
+              className="transition-all duration-500 ease-out"
               style={{
                 filter: 'drop-shadow(0 0 4px rgba(212, 175, 55, 0.5))',
               }}
-            />\n          </svg>
+            />
+          </svg>
           {/* Percentage text */}
-          <span className=\"relative z-10 font-mono text-[11px] font-bold text-gold\">
-            {progressPercent}%\n          </span>
+          <span className="relative z-10 font-mono text-[11px] font-bold text-gold">
+            {progressPercent}%
+          </span>
         </div>
 
         {/* Next button - pulsing when available */}
@@ -408,13 +416,14 @@ const Calculator = () => {
           <button
             onClick={handleNext}
             className={cn(
-              \"flex items-center gap-2 px-4 py-2 rounded-md transition-all\",
-              \"border border-gold-muted bg-gold-subtle text-white\",\n              \"hover:bg-gold hover:text-black\",
-              \"active:scale-95 animate-pulse-subtle\"
+              "flex items-center gap-2 px-4 py-2 rounded-md transition-all",
+              "border border-gold-muted bg-gold-subtle text-white",
+              "hover:bg-gold hover:text-black",
+              "active:scale-95 animate-pulse-subtle"
             )}
           >
-            <span className=\"text-xs font-bold uppercase tracking-wider\">Next</span>
-            <ArrowRight className=\"w-4 h-4\" />
+            <span className="text-xs font-bold uppercase tracking-wider">Next</span>
+            <ArrowRight className="w-4 h-4" />
           </button>
         )}
       </div>
@@ -435,6 +444,7 @@ const Calculator = () => {
         onSkip={handleEmailSkip}
       />
     </div>
-  );\n};
+  );
+};
 
 export default Calculator;
