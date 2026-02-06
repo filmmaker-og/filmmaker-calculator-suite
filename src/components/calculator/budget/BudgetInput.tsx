@@ -81,7 +81,7 @@ const BudgetInput = ({ inputs, onUpdateInput, onBack, onNext }: BudgetInputProps
         {onBack ? (
           <button
             onClick={onBack}
-            className="flex items-center gap-1.5 text-xs text-text-dim hover:text-white transition-colors"
+            className="flex items-center gap-1.5 text-xs text-text-dim hover:text-text-primary transition-colors"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>Back</span>
@@ -113,7 +113,7 @@ const BudgetInput = ({ inputs, onUpdateInput, onBack, onNext }: BudgetInputProps
           </div>
         </div>
 
-        <h2 className="font-bebas text-3xl tracking-[0.08em] text-white mb-1">
+        <h2 className="font-bebas text-3xl tracking-[0.08em] text-text-primary mb-1">
           Production Budget
         </h2>
         <p className="text-text-dim text-xs max-w-xs mx-auto">
@@ -168,7 +168,7 @@ const BudgetInput = ({ inputs, onUpdateInput, onBack, onNext }: BudgetInputProps
             {isCompleted && (
               <button
                 onClick={handleClear}
-                className="mr-3 p-1.5 text-text-dim hover:text-white hover:bg-bg-elevated rounded transition-colors"
+                className="mr-3 p-1.5 text-text-dim hover:text-text-primary hover:bg-bg-elevated rounded transition-colors"
                 aria-label="Clear budget"
               >
                 <X className="w-4 h-4" />

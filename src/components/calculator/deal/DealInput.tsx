@@ -81,7 +81,7 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onBack, onNext }
         {onBack ? (
           <button
             onClick={onBack}
-            className="flex items-center gap-1.5 text-xs text-text-dim hover:text-white transition-colors"
+            className="flex items-center gap-1.5 text-xs text-text-dim hover:text-text-primary transition-colors"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>Back</span>
@@ -113,7 +113,7 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onBack, onNext }
           </div>
         </div>
 
-        <h2 className="font-bebas text-3xl tracking-[0.08em] text-white mb-1">
+        <h2 className="font-bebas text-3xl tracking-[0.08em] text-text-primary mb-1">
           Acquisition Price
         </h2>
         <p className="text-text-dim text-xs max-w-xs mx-auto">
@@ -124,14 +124,25 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onBack, onNext }
       {/* Breakeven Context Card */}
       {Number.isFinite(breakeven) && breakeven > 0 && (
         <div
-          className="p-4 border border-border-default bg-bg-surface flex items-center justify-between"
+          className="relative p-4 border border-gold/20 bg-gold-subtle flex items-center justify-between overflow-hidden"
           style={{ borderRadius: 'var(--radius-md)' }}
         >
-          <div className="flex items-center gap-3">
-            <Target className="w-5 h-5 text-gold/60" />
+          {/* Subtle gold accent bar */}
+          <div
+            className="absolute left-0 top-0 bottom-0 w-1"
+            style={{
+              background: 'linear-gradient(180deg, #D4AF37 0%, rgba(212,175,55,0.3) 100%)',
+              boxShadow: '0 0 8px rgba(212,175,55,0.2)',
+            }}
+          />
+          <div className="flex items-center gap-3 pl-2">
+            <Target className="w-5 h-5 text-gold" />
             <div>
               <span className="text-xs font-bold uppercase tracking-wider text-text-dim block">Your Breakeven</span>
-              <span className="font-mono text-lg text-text-primary">
+              <span
+                className="font-mono text-lg font-bold text-text-primary"
+                style={{ textShadow: '0 0 8px rgba(255,255,255,0.1)' }}
+              >
                 {formatCompactCurrency(breakeven)}
               </span>
             </div>
@@ -196,14 +207,21 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onBack, onNext }
         {hasRevenue && Number.isFinite(breakeven) && (
           <div
             className={cn(
-              "mx-5 mb-5 p-4 border flex items-center justify-between",
+              "relative mx-5 mb-5 p-4 border flex items-center justify-between overflow-hidden",
               isAboveBreakeven
                 ? "border-gold/50 bg-gold/[0.08]"
                 : "border-gold/30 bg-gold/[0.04]"
             )}
             style={{ borderRadius: 'var(--radius-md)' }}
           >
-            <div className="flex items-center gap-3">
+            {/* Radial gold glow behind percentage */}
+            {isAboveBreakeven && (
+              <div
+                className="absolute right-0 top-0 bottom-0 w-32 pointer-events-none"
+                style={{ background: 'radial-gradient(ellipse at right center, rgba(212,175,55,0.15) 0%, transparent 70%)' }}
+              />
+            )}
+            <div className="relative flex items-center gap-3">
               {isAboveBreakeven ? (
                 <TrendingUp className="w-5 h-5 text-gold" />
               ) : (
@@ -216,7 +234,13 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onBack, onNext }
                 )}>
                   {isAboveBreakeven ? 'Above Breakeven' : 'Below Breakeven'}
                 </p>
-                <p className="text-sm font-mono text-text-primary">
+                <p
+                  className={cn(
+                    "text-sm font-mono font-bold",
+                    isAboveBreakeven ? "text-text-primary" : "text-text-mid"
+                  )}
+                  style={isAboveBreakeven ? { textShadow: '0 0 8px rgba(255,255,255,0.15)' } : undefined}
+                >
                   {isAboveBreakeven
                     ? `+${formatCompactCurrency(Math.abs(cushion))} cushion`
                     : `${formatCompactCurrency(Math.abs(cushion))} shortfall`}
@@ -224,7 +248,10 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onBack, onNext }
               </div>
             </div>
             {isAboveBreakeven && percentAbove > 0 && (
-              <span className="text-2xl font-mono text-gold">
+              <span
+                className="relative text-2xl font-mono font-bold text-gold"
+                style={{ textShadow: '0 0 16px rgba(212,175,55,0.5)' }}
+              >
                 +{percentAbove.toFixed(0)}%
               </span>
             )}
@@ -252,7 +279,7 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onBack, onNext }
                       "text-center p-2 rounded transition-colors border",
                       isSelected
                         ? "bg-gold/20 border-gold"
-                        : "bg-bg-void border-white/10 hover:border-gold/50"
+                        : "bg-bg-void border-border-subtle hover:border-gold/50"
                     )}
                   >
                     <span className={cn(
@@ -270,14 +297,14 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onBack, onNext }
         </div>
       </div>
 
-      {/* Continue Button */}
+      {/* Continue Button — CTA Gold for clickable */}
       {hasRevenue && (
         <button
           onClick={onNext}
           className={cn(
             "w-full py-4 flex items-center justify-center gap-3",
-            "bg-gold/10 border border-gold/30 text-gold",
-            "hover:bg-gold/20 hover:border-gold/50 transition-all",
+            "bg-gold-cta-subtle border border-gold-cta-muted text-gold-cta",
+            "hover:bg-gold-cta-subtle hover:border-gold-cta transition-all",
             "active:scale-[0.98]"
           )}
           style={{ borderRadius: 'var(--radius-md)' }}

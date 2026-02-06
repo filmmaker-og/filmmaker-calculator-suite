@@ -105,7 +105,7 @@ const StackInputCard = ({
           </div>
         </div>
 
-        <h2 className="font-bebas text-3xl tracking-[0.08em] text-white mb-1">
+        <h2 className="font-bebas text-3xl tracking-[0.08em] text-text-primary mb-1">
           {title}
         </h2>
         <p className="text-text-dim text-xs max-w-xs mx-auto">
@@ -218,7 +218,7 @@ const StackInputCard = ({
           className={cn(
             "flex-1 py-3 flex items-center justify-center gap-2",
             "border border-border-subtle text-text-mid",
-            "hover:border-white/30 hover:text-white transition-all",
+            "hover:border-text-dim hover:text-text-primary transition-all",
             "active:scale-[0.98]"
           )}
           style={{ borderRadius: 'var(--radius-md)' }}

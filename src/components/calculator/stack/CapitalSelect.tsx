@@ -119,7 +119,7 @@ const CapitalSelect = ({ selections, onToggle, onNext }: CapitalSelectProps) => 
           </div>
         </div>
 
-        <h2 className="font-bebas text-3xl tracking-[0.08em] text-white mb-1">
+        <h2 className="font-bebas text-3xl tracking-[0.08em] text-text-primary mb-1">
           Capital Stack
         </h2>
         <p className="text-text-dim text-xs max-w-xs mx-auto">

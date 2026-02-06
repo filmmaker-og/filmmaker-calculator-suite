@@ -170,11 +170,18 @@
 
   .chapter-card-header {
     display: grid;
-    grid-template-columns: 60px 1fr auto;
+    grid-template-columns: 4px 60px 1fr auto;
     align-items: center;
     height: 66px;
-    background: var(--bg-elevated);
+    background: linear-gradient(90deg, var(--gold-glow) 0%, var(--bg-elevated) 15%, var(--bg-elevated) 100%);
     border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .chapter-card-gold-bar {
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(180deg, var(--gold) 0%, var(--gold-muted) 100%);
+    box-shadow: 0 0 12px var(--gold-glow);
   }
 
   .chapter-card-number {
@@ -186,7 +193,9 @@
     font-family: 'Bebas Neue', sans-serif;
     font-size: 24px;
     letter-spacing: 1px;
-    color: var(--text-dim);
+    color: var(--gold);
+    background: var(--gold-subtle);
+    text-shadow: 0 0 10px var(--gold-glow);
     transition: all var(--timing-medium) ease;
   }
 
@@ -205,14 +214,14 @@
 
   /* Active state — Metallic Gold */
   .chapter-card.is-active .chapter-card-header {
-    background: linear-gradient(90deg, var(--gold-subtle) 0%, transparent 100%);
+    background: linear-gradient(90deg, var(--gold-glow) 0%, var(--gold-subtle) 8%, var(--bg-elevated) 20%, var(--bg-elevated) 100%);
     border-bottom-color: var(--gold-muted);
   }
 
   .chapter-card.is-active .chapter-card-number {
     color: var(--gold);
     border-right-color: var(--gold);
-    text-shadow: 0 0 10px var(--gold-glow);
+    text-shadow: 0 0 16px var(--gold-glow);
   }
 
   /* ═══════════════════════════════════════════════════════════════════
