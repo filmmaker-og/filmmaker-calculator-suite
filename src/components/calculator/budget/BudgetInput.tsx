@@ -84,7 +84,7 @@ const BudgetInput = ({ inputs, onUpdateInput, onNext }: BudgetInputProps) => {
           <div
             className="absolute inset-0"
             style={{
-              background: 'radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, transparent 70%)',
+              background: 'radial-gradient(circle, var(--gold-glow) 0%, transparent 70%)',
               filter: 'blur(15px)',
               transform: 'scale(2)',
             }}
@@ -100,7 +100,7 @@ const BudgetInput = ({ inputs, onUpdateInput, onNext }: BudgetInputProps) => {
         <h2 className="font-bebas text-2xl tracking-[0.08em] text-white mb-1">
           Production Budget
         </h2>
-        <p className="text-white/50 text-xs max-w-xs mx-auto">
+        <p className="text-text-dim text-xs max-w-xs mx-auto">
           Enter your total negative cost
         </p>
       </div>
@@ -109,7 +109,7 @@ const BudgetInput = ({ inputs, onUpdateInput, onNext }: BudgetInputProps) => {
       <div ref={mobileRef} className="matte-section overflow-hidden">
         {/* Section header */}
         <div className="matte-section-header px-5 py-3 flex items-center justify-between">
-          <span className="text-xs uppercase tracking-[0.2em] text-white/40 font-medium">
+          <span className="text-xs uppercase tracking-[0.2em] text-text-dim font-medium">
             Total Budget
           </span>
           {isCompleted && (
