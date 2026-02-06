@@ -1,371 +1,96 @@
 import { useState } from "react";
-import { createPortal } from "react-dom";
-import { Link } from "react-router-dom";
-import { Menu, X, Copy, Check, LogOut, BookOpen } from "lucide-react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { useHaptics } from "@/hooks/use-haptics";
-import filmmakerLogo from "@/assets/filmmaker-logo.jpg";
+import { Link, useNavigate } from "react-router-dom";
+import { Menu, X, Home, Calculator, BookOpen, Book } from "lucide-react";
+import { cn } from "@/lib/utils";
 
-interface MobileMenuProps {
-  onOpenLegal?: () => void;
-  onSignOut?: () => void;
-}
-
-const MobileMenu = ({ onOpenLegal, onSignOut }: MobileMenuProps) => {
+const MobileMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [showLegalModal, setShowLegalModal] = useState(false);
-  const [showAboutModal, setShowAboutModal] = useState(false);
-  const [showContactModal, setShowContactModal] = useState(false);
-  const [showGlossaryModal, setShowGlossaryModal] = useState(false);
-  const [copiedEmail, setCopiedEmail] = useState(false);
-  const [copiedInsta, setCopiedInsta] = useState(false);
-  const haptics = useHaptics();
+  const navigate = useNavigate();
 
-  const handleOpenMenu = () => {
-    haptics.medium();
-    setIsOpen(true);
-  };
-
-  const handleCloseMenu = () => {
-    haptics.light();
+  const handleNavigate = (path: string) => {
     setIsOpen(false);
+    navigate(path);
   };
-
-  const handleLegalClick = () => {
-    haptics.light();
-    setIsOpen(false);
-    if (onOpenLegal) {
-      onOpenLegal();
-    } else {
-      setShowLegalModal(true);
-    }
-  };
-
-  const handleAboutClick = () => {
-    haptics.light();
-    setIsOpen(false);
-    setShowAboutModal(true);
-  };
-
-  const handleContactClick = () => {
-    haptics.light();
-    setIsOpen(false);
-    setShowContactModal(true);
-  };
-
-  const handleGlossaryClick = () => {
-    haptics.light();
-    setIsOpen(false);
-    setShowGlossaryModal(true);
-  };
-
-  const handleCopyEmail = async () => {
-    haptics.success();
-    await navigator.clipboard.writeText("thefilmmaker.og@gmail.com");
-    setCopiedEmail(true);
-    setTimeout(() => setCopiedEmail(false), 2000);
-  };
-
-  const handleCopyInsta = async () => {
-    haptics.success();
-    await navigator.clipboard.writeText("www.instagram.com/filmmaker.og");
-    setCopiedInsta(true);
-    setTimeout(() => setCopiedInsta(false), 2000);
-  };
-
-  const menuLinks = [
-    { label: "PRODUCER'S SERVICES", href: "/store", isHighlighted: true },
-    { label: "LEARN", href: "/intro", isHighlighted: false },
-    { label: "ABOUT", href: "#about", onClick: handleAboutClick },
-    { label: "CONTACT", href: "#contact", onClick: handleContactClick },
-  ];
-
-  const legalText = "Educational disclaimer: For educational purposes only. This calculator is a simplified model and is not legal, tax, accounting, or investment advice. This assumes a bankable sales agent and commercially viable cast. Deal outcomes vary by contract definitions (e.g., gross vs adjusted gross), corridor fees, reserves/holdbacks, timing of cashflows, collection account management, audit results, chargebacks, and other negotiated terms. Consult a qualified entertainment attorney and financial advisor.";
 
   return (
     <>
-      {/* Hamburger Button */}
       <button
-        onClick={handleOpenMenu}
-        className="w-12 h-12 flex items-center justify-center hover:opacity-80 transition-all duration-100 -mr-1"
-        style={{ touchAction: 'manipulation' }}
-        aria-label="Open menu"
+        onClick={() => setIsOpen(true)}
+        className="p-2 text-gold hover:bg-gold/10 rounded-full transition-colors"
       >
-        <Menu className="w-6 h-6 text-gold" />
+        <Menu className="w-6 h-6" />
       </button>
 
-      {/* Full-screen Menu Overlay - Portal to body */}
-      {isOpen && createPortal(
+      {/* Overlay */}
+      {isOpen && (
         <div
-          className="flex flex-col"
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            width: '100vw',
-            height: '100vh',
-            backgroundColor: '#000000',
-            zIndex: 9999,
-            paddingTop: 'env(safe-area-inset-top)',
-          }}
-        >
-           {/* Matte header */}
-           <div
-             className="flex items-center justify-between px-4 bg-bg-header"
-             style={{ height: 'var(--appbar-h)' }}
-           >
-             <span className="font-bebas text-gold text-lg tracking-[0.2em]">
-               FILMMAKER.OG
-             </span>
-            <button
-              onClick={handleCloseMenu}
-              className="w-12 h-12 flex items-center justify-center text-text-mid hover:text-gold transition-colors"
-              aria-label="Close menu"
-            >
-              <X className="w-6 h-6" />
-            </button>
-           </div>
-
-           {/* Gold separator line */}
-           <div
-             className="h-[1px]"
-             style={{
-               background: "linear-gradient(90deg, transparent 0%, rgba(212, 175, 55, 0.45) 20%, rgba(212, 175, 55, 0.45) 80%, transparent 100%)",
-             }}
-           />
-
-          {/* Menu Content */}
-          <div className="flex-1 flex flex-col items-center justify-center px-6">
-            {/* Glowing F Logo */}
-            <div className="relative mb-10">
-              {/* Radial aura behind logo */}
-              <div
-                className="absolute inset-0 -m-4 rounded-full"
-                style={{
-                  background: 'radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, transparent 70%)',
-                  filter: 'blur(8px)',
-                }}
-              />
-              <img
-                src={filmmakerLogo}
-                alt="Filmmaker Logo"
-                className="relative w-24 h-24 rounded-lg"
-                style={{
-                  filter: 'brightness(1.15) drop-shadow(0 0 20px rgba(212, 175, 55, 0.4))',
-                }}
-              />
-            </div>
-
-            {/* Navigation Links */}
-            <nav className="flex flex-col items-center gap-8">
-              {menuLinks.map((link) => {
-                const handleLinkClick = () => {
-                  haptics.light();
-                  if (link.onClick) {
-                    link.onClick();
-                  } else {
-                    setIsOpen(false);
-                  }
-                };
-
-                return link.onClick ? (
-                  <button
-                    key={link.label}
-                    onClick={handleLinkClick}
-                    className={`font-bebas text-2xl tracking-[0.15em] transition-colors ${
-                      link.isHighlighted ? 'text-gold-cta' : 'text-text-primary hover:text-gold'
-                    }`}
-                  >
-                    {link.label}
-                  </button>
-                ) : link.href.startsWith("/") ? (
-                  <Link
-                    key={link.label}
-                    to={link.href}
-                    onClick={handleLinkClick}
-                    className={`font-bebas text-2xl tracking-[0.15em] transition-colors ${
-                      link.isHighlighted ? 'text-gold-cta' : 'text-text-primary hover:text-gold'
-                    }`}
-                  >
-                    {link.label}
-                  </Link>
-                ) : (
-                  <a
-                    key={link.label}
-                    href={link.href}
-                    onClick={handleLinkClick}
-                    target={link.href.startsWith("http") ? "_blank" : undefined}
-                    rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                    className={`font-bebas text-2xl tracking-[0.15em] transition-colors ${
-                      link.isHighlighted ? 'text-gold-cta' : 'text-text-primary hover:text-gold'
-                    }`}
-                  >
-                    {link.label}
-                  </a>
-                );
-              })}
-
-              {/* Glossary Button - Coming Soon */}
-              <button
-                onClick={handleGlossaryClick}
-                className="font-bebas text-2xl text-text-dim hover:text-text-mid transition-colors tracking-[0.15em] flex items-center gap-2"
-              >
-                <BookOpen className="w-5 h-5" />
-                GLOSSARY
-                <span className="text-xs text-text-dim font-sans">(Soon)</span>
-              </button>
-
-              {/* Legal Button */}
-              <button
-                onClick={handleLegalClick}
-                className="font-bebas text-2xl text-text-dim hover:text-text-primary transition-colors tracking-[0.15em]"
-              >
-                LEGAL
-              </button>
-
-              {/* Sign Out */}
-              {onSignOut && (
-                <button
-                  onClick={() => {
-                    setIsOpen(false);
-                    onSignOut();
-                  }}
-                  className="font-bebas text-xl tracking-[0.15em] text-text-dim hover:text-text-mid transition-colors mt-6 flex items-center gap-2"
-                >
-                  <LogOut className="w-5 h-5" />
-                  SIGN OUT
-                </button>
-              )}
-            </nav>
-          </div>
-
-          {/* Footer */}
-          <div
-            className="py-6 text-center space-y-2"
-            style={{ paddingBottom: 'max(1.5rem, env(safe-area-inset-bottom))' }}
-          >
-            <a
-              href="https://www.instagram.com/filmmaker.og"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-text-dim hover:text-gold transition-colors text-xs tracking-widest block py-1"
-            >
-              @filmmaker.og
-            </a>
-            <span className="text-text-dim text-xs tracking-widest block">
-              thefilmmaker.og@gmail.com
-            </span>
-          </div>
-        </div>,
-        document.body
+          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[200] animate-fade-in"
+          onClick={() => setIsOpen(false)}
+        />
       )}
 
-      {/* Legal Modal */}
-      <Dialog open={showLegalModal} onOpenChange={setShowLegalModal}>
-        <DialogContent className="bg-bg-header border-border-subtle max-w-md">
-          <DialogHeader>
-            <DialogTitle className="font-bebas text-2xl text-gold tracking-wider">
-              LEGAL DISCLAIMER
-            </DialogTitle>
-          </DialogHeader>
-          <p className="text-text-dim text-sm leading-relaxed">
-            {legalText}
-          </p>
-        </DialogContent>
-      </Dialog>
+      {/* Drawer */}
+      <div
+        className={cn(
+          "fixed top-0 right-0 bottom-0 w-[280px] bg-bg-card border-l border-border-default z-[201] p-6 shadow-modal transition-transform duration-300 ease-out",
+          isOpen ? "translate-x-0" : "translate-x-full"
+        )}
+      >
+        <div className="flex justify-end mb-8">
+          <button
+            onClick={() => setIsOpen(false)}
+            className="p-2 text-text-dim hover:text-white rounded-full hover:bg-white/5 transition-colors"
+          >
+            <X className="w-6 h-6" />
+          </button>
+        </div>
 
-      {/* About Modal */}
-      <Dialog open={showAboutModal} onOpenChange={setShowAboutModal}>
-        <DialogContent className="bg-bg-header border-border-subtle max-w-lg">
-          <DialogHeader>
-            <DialogTitle className="font-bebas text-2xl text-gold tracking-wider">
-              DEMOCRATIZING THE BUSINESS OF FILM
-            </DialogTitle>
-          </DialogHeader>
-          <div className="text-text-dim text-sm leading-relaxed space-y-4">
-            <p>
-              We provide institutional-grade film finance intelligence to producers operating in the $1M–$10M budget range.
-            </p>
-            <p>
-              <span className="font-bold text-text-primary">THE PEDIGREE</span> Second-generation filmmaker. Festival winner. Former Major Agency client. We teach Cost-Plus buyout structures, all-rights valuation, platform negotiation strategies, and SPV structuring—the frameworks that determine whether your film gets financed or dies in development.
-            </p>
-            <p>
-              <span className="font-bold text-text-primary">THE SHADOW MANDATE</span> We operate without attribution. This allows us to teach the actual mechanics—what moves Netflix deals, when Amazon pays premiums, how to price perpetual rights—without the political constraints that force industry insiders to soften the truth.
-            </p>
-            <p>
-              This is the business intelligence required to treat independent film as an asset class.
+        <div className="space-y-6">
+          <div className="space-y-2">
+            <h3 className="text-xs font-bold text-text-dim uppercase tracking-widest pl-3">Menu</h3>
+            
+            <button
+              onClick={() => handleNavigate('/')}
+              className="w-full flex items-center gap-3 p-3 rounded-lg text-text-primary hover:bg-bg-elevated transition-colors text-left group"
+            >
+              <Home className="w-5 h-5 text-gold/70 group-hover:text-gold" />
+              <span className="font-medium">Home</span>
+            </button>
+
+            <button
+              onClick={() => handleNavigate('/calculator')}
+              className="w-full flex items-center gap-3 p-3 rounded-lg text-text-primary hover:bg-bg-elevated transition-colors text-left group"
+            >
+              <Calculator className="w-5 h-5 text-gold/70 group-hover:text-gold" />
+              <span className="font-medium">Calculator</span>
+            </button>
+
+            <button
+              onClick={() => handleNavigate('/waterfall-info')}
+              className="w-full flex items-center gap-3 p-3 rounded-lg text-text-primary hover:bg-bg-elevated transition-colors text-left group"
+            >
+              <BookOpen className="w-5 h-5 text-gold/70 group-hover:text-gold" />
+              <span className="font-medium">Waterfall Protocol</span>
+            </button>
+
+            <button
+              onClick={() => handleNavigate('/glossary')}
+              className="w-full flex items-center gap-3 p-3 rounded-lg text-text-primary hover:bg-bg-elevated transition-colors text-left group"
+            >
+              <Book className="w-5 h-5 text-gold/70 group-hover:text-gold" />
+              <span className="font-medium">Glossary</span>
+            </button>
+          </div>
+
+          <div className="pt-6 border-t border-border-default">
+            <p className="text-xs text-text-dim px-3">
+              FILMMAKER.OG v2.0.5
+              <br />
+              <span className="opacity-50">Build: {new Date().toLocaleDateString()}</span>
             </p>
           </div>
-        </DialogContent>
-      </Dialog>
-
-      {/* Contact Modal */}
-      <Dialog open={showContactModal} onOpenChange={setShowContactModal}>
-        <DialogContent className="bg-bg-header border-border-subtle max-w-md">
-          <DialogHeader>
-            <DialogTitle className="font-bebas text-2xl text-gold tracking-wider">
-              CONTACT
-            </DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <div className="flex items-center justify-between bg-bg-void border border-border-subtle px-4 py-3">
-              <span className="text-text-mid text-sm">thefilmmaker.og@gmail.com</span>
-              <button
-                onClick={handleCopyEmail}
-                className="text-gold-cta hover:text-gold p-2 transition-colors"
-              >
-                {copiedEmail ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-              </button>
-            </div>
-            <div className="flex items-center justify-between bg-bg-void border border-border-subtle px-4 py-3">
-              <a
-                href="https://www.instagram.com/filmmaker.og"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-text-mid text-sm hover:text-gold-cta transition-colors"
-              >
-                www.instagram.com/filmmaker.og
-              </a>
-              <button
-                onClick={handleCopyInsta}
-                className="text-gold-cta hover:text-gold p-2 transition-colors"
-              >
-                {copiedInsta ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-              </button>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
-
-      {/* Glossary Coming Soon Modal */}
-      <Dialog open={showGlossaryModal} onOpenChange={setShowGlossaryModal}>
-        <DialogContent className="bg-bg-header border-border-subtle max-w-md">
-          <DialogHeader>
-            <DialogTitle className="font-bebas text-2xl text-gold tracking-wider flex items-center gap-3">
-              <BookOpen className="w-6 h-6" />
-              GLOSSARY
-            </DialogTitle>
-          </DialogHeader>
-          <div className="text-text-dim text-sm leading-relaxed space-y-4">
-            <p>
-              A comprehensive glossary of film finance terminology is currently in development.
-            </p>
-            <p>
-              In the meantime, look for the <span className="text-gold">i</span> icons throughout the calculator for quick definitions of key terms like <span className="text-text-primary">negative cost</span>, <span className="text-text-primary">recoupment</span>, <span className="text-text-primary">off-the-tops</span>, and more.
-            </p>
-            <p className="text-text-dim text-xs">
-              Need clarification on a specific term? Reach out via the Contact page.
-            </p>
-          </div>
-        </DialogContent>
-      </Dialog>
+        </div>
+      </div>
     </>
   );
 };
