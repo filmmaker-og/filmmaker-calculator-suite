@@ -1,5 +1,5 @@
 import { WaterfallResult, WaterfallInputs, formatCompactCurrency } from "@/lib/waterfall";
-import { ArrowRight, Lock } from "lucide-react";
+import { ArrowRight, Lock, BookOpen } from "lucide-react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import StandardStepLayout from "../StandardStepLayout";
@@ -67,20 +67,30 @@ const WaterfallTab = ({ result, inputs }: WaterfallTabProps) => {
           </div>
         </div>
 
-        {/* Action Link to Full Breakdown */}
+        {/* Action Link to Full Breakdown - NOW A PROMINENT BUTTON */}
         <Link 
           to="/waterfall-info"
-          className="flex items-center justify-between p-4 bg-bg-surface border border-border-default rounded-md hover:border-gold-muted hover:bg-bg-card transition-all group"
+          className="flex items-center justify-between p-5 bg-bg-elevated border border-gold/30 hover:border-gold rounded-lg transition-all group shadow-[0_4px_14px_rgba(0,0,0,0.5)] hover:shadow-[0_0_20px_rgba(212,175,55,0.15)] relative overflow-hidden"
         >
-          <div className="flex flex-col">
-            <span className="text-sm font-bold text-text-primary group-hover:text-gold transition-colors">
-              View Full Protocol Breakdown
-            </span>
-            <span className="text-xs text-text-dim">
-              See line-by-line distribution logic
-            </span>
-          </div>
-          <ArrowRight className="w-4 h-4 text-text-dim group-hover:text-gold transition-colors" />
+           <div className="absolute inset-0 bg-gold/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+           
+           <div className="flex items-center gap-4 relative z-10">
+              <div className="p-2 bg-gold/10 rounded-md border border-gold/20 text-gold group-hover:text-gold-bright transition-colors">
+                <BookOpen className="w-5 h-5" />
+              </div>
+              <div className="flex flex-col">
+                <span className="text-base font-bold text-white group-hover:text-gold transition-colors">
+                  View Full Protocol Breakdown
+                </span>
+                <span className="text-xs text-text-dim group-hover:text-text-mid transition-colors">
+                  See the line-by-line distribution logic
+                </span>
+              </div>
+           </div>
+           
+           <div className="relative z-10 p-1 rounded-full border border-transparent group-hover:border-gold/30 transition-colors">
+             <ArrowRight className="w-5 h-5 text-text-dim group-hover:text-gold transition-colors" />
+           </div>
         </Link>
       </div>
     </StandardStepLayout>

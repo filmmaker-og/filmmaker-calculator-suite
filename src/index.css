@@ -39,12 +39,12 @@
 
     /* TEXT HIERARCHY */
     --text-primary: #FFFFFF;
-    --text-mid: #CFCFCF;
-    --text-dim: #8A8A8A;
+    --text-mid: #D4D4D4;  /* INCREASED FROM #CFCFCF for legibility */
+    --text-dim: #999999;  /* INCREASED FROM #8A8A8A for legibility */
 
     /* BORDERS */
     --border-default: rgba(212, 175, 55, 0.20);
-    --border-subtle: #1A1A1A;
+    --border-subtle: #222222; /* INCREASED FROM #1A1A1A for visibility */
     --border-active: rgba(212, 175, 55, 0.50);
 
     /* SPACING (Base unit: 4px) */
@@ -166,6 +166,7 @@
     border: 1px solid var(--border-default);
     border-radius: var(--radius-lg);
     overflow: hidden;
+    min-height: 400px; /* STABILITY FIX: Prevent skipping by forcing min-height */
   }
 
   .chapter-card-header {
@@ -323,8 +324,7 @@
   }
 
   .tab-bar-item.is-active .tab-icon {
-    opacity: 1;
-  }
+    opacity: 1;\n  }
 
   /* ═══════════════════════════════════════════════════════════════════
      GLOSSARY TRIGGER — (i) info button
@@ -339,15 +339,13 @@
     border-radius: var(--radius-full);
     font-family: 'Inter', sans-serif;
     font-size: 11px;
-    font-weight: 900;
-    color: rgba(212, 175, 55, 0.7);
+    font-weight: 900;\n    color: rgba(212, 175, 55, 0.7);
     background: rgba(212, 175, 55, 0.05);
     cursor: pointer;
     transition: all var(--timing-fast) ease;
   }
 
-  .glossary-trigger:hover,
-  .glossary-trigger:active {
+  .glossary-trigger:hover,\n  .glossary-trigger:active {
     background: var(--gold-subtle);
     border-color: var(--gold);
     color: var(--gold);
@@ -403,12 +401,10 @@
     color: var(--text-dim);
   }
 
-  /* ═══════════════════════════════════════════════════════════════════
-     PRIMARY BUTTON (CTA) — Uses CTA Gold exclusively
+  /* ═══════════════════════════════════════════════════════════════════\n     PRIMARY BUTTON (CTA) — Uses CTA Gold exclusively
      ═══════════════════════════════════════════════════════════════════ */
   .btn-primary {
-    display: flex;
-    align-items: center;
+    display: flex;\n    align-items: center;
     justify-content: center;
     width: 100%;
     min-height: 52px;
@@ -480,8 +476,7 @@
   }
 
   /* ═══════════════════════════════════════════════════════════════════
-     STEP ANIMATIONS
-     ═══════════════════════════════════════════════════════════════════ */
+     STEP ANIMATIONS\n     ═══════════════════════════════════════════════════════════════════ */
   .step-enter {
     animation: stepEnter 0.4s ease-out forwards;
   }

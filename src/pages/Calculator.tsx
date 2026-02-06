@@ -212,8 +212,7 @@ const Calculator = () => {
     }
     if (inputs.revenue > 0) completed.push('deal');
     if (inputs.revenue > 0 && inputs.budget > 0) completed.push('waterfall');
-    return completed;
-  };
+    return completed;\n  };
 
   // Determine which tabs are disabled
   const getDisabledTabs = (): TabId[] => {
@@ -222,34 +221,39 @@ const Calculator = () => {
     if (inputs.budget === 0 || inputs.revenue === 0) {
       disabled.push('waterfall');
     }
-    return disabled;
-  };
+    return disabled;\n  };
 
   // Get next available tab
   const getNextTab = (): TabId | null => {
     const currentIndex = STEP_TO_TAB.indexOf(activeTab);
     // Find next tab that's not disabled
     for (let i = currentIndex + 1; i < STEP_TO_TAB.length; i++) {
-      const nextTab = STEP_TO_TAB[i];
-      if (!getDisabledTabs().includes(nextTab)) {
+      const nextTab = STEP_TO_TAB[i];\n      if (!getDisabledTabs().includes(nextTab)) {
         return nextTab;
       }
     }
     return null;
   };
 
-  // Get previous tab or home
+  // Stack Tab Internal State Handling (Step within Step)
+  // We need to know if we are "deep" inside the Stack Wizard to know if Back should go to previous stack step or previous TAB
+  // This is a limitation of the current architecture where StackTab manages its own internal state
+  // ideally, this state should be lifted up, but for now we will rely on the TAB navigation.
+  
+  // FIX: handleBack Logic
   const handleBack = () => {
     const currentIndex = STEP_TO_TAB.indexOf(activeTab);
+    
+    // 1. If we are on the first tab (Budget), go to Home (Intro)
     if (currentIndex === 0) {
-      // If on first tab, go back to home, skipping intro
-      navigate("/?skipIntro=true");
-    } else {
-      // Go to previous tab
-      const prevTab = STEP_TO_TAB[currentIndex - 1];
-      haptics.light();
-      setActiveTab(prevTab);
-    }
+      navigate("/"); // Go to root (Intro), NOT /?skipIntro=true which skips the intro
+      return;
+    } 
+
+    // 2. Otherwise, simply go to the previous TAB
+    const prevTab = STEP_TO_TAB[currentIndex - 1];
+    haptics.light();
+    setActiveTab(prevTab);
   };
 
   // Handle Next button
@@ -308,40 +312,37 @@ const Calculator = () => {
         ) : null;
       default:
         return null;
-    }
-  };
+    }\n  };
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-bg-void flex flex-col">
+      <div className=\"min-h-screen bg-bg-void flex flex-col\">
         <Header />
-        <div className="flex-1 flex items-center justify-center">
-          <div className="w-8 h-8 border-2 border-gold border-t-transparent rounded-full animate-spin" />
-        </div>
+        <div className=\"flex-1 flex items-center justify-center\">
+          <div className=\"w-8 h-8 border-2 border-gold border-t-transparent rounded-full animate-spin\" />\n        </div>
       </div>
-    );
-  }
+    );\n  }
 
   // Calculate progress percentage
   const progressPercent = TAB_TO_STEP[activeTab] * 25;
 
   return (
-    <div className="min-h-screen bg-bg-void flex flex-col">
+    <div className=\"min-h-screen bg-bg-void flex flex-col\">
       {/* Shared Header - Fixes logo color and consistency */}
       <Header />
 
       {/* Main Content */}
       <main
         ref={mainRef}
-        className="flex-1 px-4 py-6 overflow-y-auto"
+        className=\"flex-1 px-4 py-6 overflow-y-auto\"
         style={{
           paddingBottom: 'calc(var(--tabbar-h) + 100px + env(safe-area-inset-bottom))',
         }}
       >
         <div
           className={cn(
-            "max-w-[460px] mx-auto",
-            "animate-fade-in"
+            \"max-w-[460px] mx-auto\",
+            \"animate-fade-in\"
           )}
         >
           {renderTabContent()}
@@ -350,7 +351,7 @@ const Calculator = () => {
 
       {/* Floating bar above tab bar - Back + Progress + Next */}
       <div
-        className="fixed left-0 right-0 z-40 flex items-center justify-between px-4 py-2"
+        className=\"fixed left-0 right-0 z-40 flex items-center justify-between px-4 py-2\"
         style={{
           bottom: 'calc(var(--tabbar-h) + env(safe-area-inset-bottom))',
           backgroundColor: 'var(--bg-card)',
@@ -360,48 +361,46 @@ const Calculator = () => {
         <button
           onClick={handleBack}
           className={cn(
-            "flex items-center gap-2 px-4 py-2 rounded-md transition-all",
-            "border border-gold-muted bg-gold-subtle text-white",
-            "hover:bg-gold hover:text-black",
-            "active:scale-95"
+            \"flex items-center gap-2 px-4 py-2 rounded-md transition-all\",
+            \"border border-gold-muted bg-gold-subtle text-white\",
+            \"hover:bg-gold hover:text-black\",
+            \"active:scale-95\"
           )}
         >
-          <ArrowLeft className="w-4 h-4" />
-          <span className="text-xs font-bold uppercase tracking-wider">Back</span>
+          <ArrowLeft className=\"w-4 h-4\" />
+          <span className=\"text-xs font-bold uppercase tracking-wider\">Back</span>
         </button>
 
         {/* Circular progress indicator */}
-        <div className="relative w-11 h-11 flex items-center justify-center">
+        <div className=\"relative w-11 h-11 flex items-center justify-center\">
           {/* Background circle */}
-          <svg className="absolute w-11 h-11 -rotate-90">
+          <svg className=\"absolute w-11 h-11 -rotate-90\">
             <circle
-              cx="22"
-              cy="22"
-              r="18"
-              fill="none"
-              stroke="var(--border-subtle)"
-              strokeWidth="2"
+              cx=\"22\"
+              cy=\"22\"
+              r=\"18\"
+              fill=\"none\"
+              stroke=\"var(--border-subtle)\"
+              strokeWidth=\"2\"
             />
             {/* Progress arc */}
             <circle
-              cx="22"
-              cy="22"
-              r="18"
-              fill="none"
-              stroke="var(--gold)"
-              strokeWidth="2"
-              strokeLinecap="round"
+              cx=\"22\"
+              cy=\"22\"
+              r=\"18\"
+              fill=\"none\"
+              stroke=\"var(--gold)\"
+              strokeWidth=\"2\"
+              strokeLinecap=\"round\"
               strokeDasharray={`${progressPercent * 1.13} 113`}
-              className="transition-all duration-500 ease-out"
+              className=\"transition-all duration-500 ease-out\"
               style={{
                 filter: 'drop-shadow(0 0 4px rgba(212, 175, 55, 0.5))',
               }}
-            />
-          </svg>
+            />\n          </svg>
           {/* Percentage text */}
-          <span className="relative z-10 font-mono text-[11px] font-bold text-gold">
-            {progressPercent}%
-          </span>
+          <span className=\"relative z-10 font-mono text-[11px] font-bold text-gold\">
+            {progressPercent}%\n          </span>
         </div>
 
         {/* Next button - pulsing when available */}
@@ -409,14 +408,13 @@ const Calculator = () => {
           <button
             onClick={handleNext}
             className={cn(
-              "flex items-center gap-2 px-4 py-2 rounded-md transition-all",
-              "border border-gold-muted bg-gold-subtle text-white",
-              "hover:bg-gold hover:text-black",
-              "active:scale-95 animate-pulse-subtle"
+              \"flex items-center gap-2 px-4 py-2 rounded-md transition-all\",
+              \"border border-gold-muted bg-gold-subtle text-white\",\n              \"hover:bg-gold hover:text-black\",
+              \"active:scale-95 animate-pulse-subtle\"
             )}
           >
-            <span className="text-xs font-bold uppercase tracking-wider">Next</span>
-            <ArrowRight className="w-4 h-4" />
+            <span className=\"text-xs font-bold uppercase tracking-wider\">Next</span>
+            <ArrowRight className=\"w-4 h-4\" />
           </button>
         )}
       </div>
@@ -437,7 +435,6 @@ const Calculator = () => {
         onSkip={handleEmailSkip}
       />
     </div>
-  );
-};
+  );\n};
 
 export default Calculator;
