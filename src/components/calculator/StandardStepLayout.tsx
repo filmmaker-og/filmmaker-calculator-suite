@@ -23,7 +23,7 @@ interface StandardStepLayoutProps {
  * Structure:
  * - ChapterCard Container
  *   - Header (Built-in to ChapterCard)
- *   - Body
+ *   - Body (NOW LIGHTER: bg-bg-elevated)
  *     - Subtitle (Optional)
  *     - Children (Input fields, etc)
  *     - Action Button (Continue)
@@ -44,7 +44,7 @@ const StandardStepLayout = ({
         chapter={chapter}
         title={title}
         isActive={true}
-        className="overflow-visible min-h-[500px]" // FIXED HEIGHT: Prevents layout jumping
+        className="overflow-visible min-h-[500px]" 
       >
         <div className="flex flex-col h-full justify-between space-y-6">
           {/* Top Content */}
@@ -56,8 +56,9 @@ const StandardStepLayout = ({
               </p>
             )}
 
-            {/* Main Content (Inputs) */}
-            <div className="space-y-6">
+            {/* Main Content (Inputs) - WRAPPED IN ELEVATED SURFACE */}
+            {/* This fixes the "too black" issue by giving inputs a defined surface to sit on */}
+            <div className="bg-bg-elevated border border-border-subtle rounded-lg p-5 space-y-6 shadow-sm">
               {children}
             </div>
           </div>
