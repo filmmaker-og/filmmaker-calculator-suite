@@ -9,6 +9,7 @@ import BudgetInfo from "./pages/BudgetInfo";
 import CapitalInfo from "./pages/CapitalInfo";
 import FeesInfo from "./pages/FeesInfo";
 import WaterfallInfo from "./pages/WaterfallInfo";
+import Glossary from "./pages/Glossary"; // Import new page
 import Auth from "./pages/Auth";
 import Calculator from "./pages/Calculator";
 import Store from "./pages/Store";
@@ -29,6 +30,7 @@ const App = () => (
           <Route path="/capital-info" element={<CapitalInfo />} />
           <Route path="/fees-info" element={<FeesInfo />} />
           <Route path="/waterfall-info" element={<WaterfallInfo />} />
+          <Route path="/glossary" element={<Glossary />} /> {/* New Route */}
           <Route path="/auth" element={<Auth />} />
           <Route path="/calculator" element={<Calculator />} />
           <Route path="/store" element={<Store />} />
