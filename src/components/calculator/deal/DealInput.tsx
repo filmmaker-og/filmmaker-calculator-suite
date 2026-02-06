@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { Handshake, ArrowRight, ArrowLeft, Check, Target, TrendingUp, TrendingDown } from "lucide-react";
+import { Handshake, ArrowRight, Check, Target, TrendingUp, TrendingDown } from "lucide-react";
 import { WaterfallInputs, GuildState, CapitalSelections, formatCompactCurrency, calculateBreakeven } from "@/lib/waterfall";
 import { cn } from "@/lib/utils";
 import { useMobileKeyboardScroll } from "@/hooks/use-mobile-keyboard";
@@ -19,8 +19,7 @@ interface DealInputProps {
  * Step 1 of Deal Tab: Collect acquisition/revenue projection
  * with breakeven context and status indicator.
  */
-const DealInput = ({ inputs, guilds, selections, onUpdateInput, onBack, onNext }: DealInputProps) => {
-  const [isFocused, setIsFocused] = useState(false);
+const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext }: DealInputProps) => {\n  const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   
   // Mobile keyboard scroll handling
@@ -76,26 +75,8 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onBack, onNext }
 
   return (
     <div className="space-y-6 animate-fade-in">
-      {/* Step Label + Back Button */}
-      <div className="flex items-center justify-between">
-        {onBack ? (
-          <button
-            onClick={onBack}
-            className="flex items-center gap-1.5 text-xs text-text-dim hover:text-text-primary transition-colors"
-          >
-            <ArrowLeft className="w-3.5 h-3.5" />
-            <span>Back</span>
-          </button>
-        ) : (
-          <div />
-        )}
-        <span className="text-xs font-mono text-gold/70 uppercase tracking-widest">
-          Step 1 of 2 • Deal
-        </span>
-      </div>
-
       {/* Hero Header */}
-      <div className="text-center mb-6">
+      <div className="text-center mb-6 pt-4">
         <div className="relative inline-block mb-4">
           <div
             className="absolute inset-0"
