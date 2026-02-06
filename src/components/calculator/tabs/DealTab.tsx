@@ -1,6 +1,5 @@
 import { useCallback } from "react";
-import { WaterfallInputs, GuildState } from "@/lib/waterfall";
-import { CapitalSelections } from "../steps/CapitalSelectStep";
+import { WaterfallInputs, GuildState, CapitalSelections } from "@/lib/waterfall";
 import { useHaptics } from "@/hooks/use-haptics";
 
 // Import deal input component

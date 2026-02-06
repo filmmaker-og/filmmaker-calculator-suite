@@ -10,7 +10,8 @@ import { cn } from "@/lib/utils";
 // New Tab Components
 import TabBar, { TabId } from "@/components/calculator/TabBar";
 import { BudgetTab, StackTab, DealTab, WaterfallTab } from "@/components/calculator/tabs";
-import { CapitalSelections } from "@/components/calculator/steps/CapitalSelectStep";
+import { CapitalSelections } from "@/lib/waterfall";
+import { CapitalSourceSelections, defaultSelections } from "@/components/calculator/stack/CapitalSelect";
 import EmailGateModal from "@/components/EmailGateModal";
 import Header from "@/components/Header"; // Import shared Header
 
@@ -69,15 +70,19 @@ const Calculator = () => {
   const [result, setResult] = useState<WaterfallResult | null>(null);
   const [showEmailGate, setShowEmailGate] = useState(false);
   const [emailCaptured, setEmailCaptured] = useState(false);
-  
-  // Derive capital selections from actual input values
-  // If a user entered a value, that funding source is "selected"
+  const [sourceSelections, setSourceSelections] = useState<CapitalSourceSelections>(defaultSelections);
+
+  // Derive capital selections for breakeven calc (from explicit toggle state)
   const capitalSelections: CapitalSelections = {
-    taxCredits: (inputs.credits || 0) > 0,
-    seniorDebt: (inputs.debt || 0) > 0,
-    gapLoan: (inputs.mezzanineDebt || 0) > 0,
-    equity: (inputs.equity || 0) > 0,
+    taxCredits: sourceSelections.taxCredits,
+    seniorDebt: sourceSelections.seniorDebt,
+    gapLoan: sourceSelections.gapLoan,
+    equity: sourceSelections.equity,
   };
+
+  const toggleSourceSelection = useCallback((key: keyof CapitalSourceSelections) => {
+    setSourceSelections(prev => ({ ...prev, [key]: !prev[key] }));
+  }, []);
 
   // Reset on ?reset=true or ?skip=true (demo mode)
   useEffect(() => {
@@ -101,6 +106,7 @@ const Calculator = () => {
           setInputs(parsed.inputs);
         }
         if (parsed.guilds) setGuilds(parsed.guilds);
+        if (parsed.sourceSelections) setSourceSelections(parsed.sourceSelections);
         // Only restore saved tab if no explicit ?tab= param was provided
         const tabParam = searchParams.get("tab") as TabId | null;
         if (tabParam && STEP_TO_TAB.includes(tabParam)) {
@@ -125,9 +131,10 @@ const Calculator = () => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify({
       inputs,
       guilds,
-      activeTab
+      activeTab,
+      sourceSelections,
     }));
-  }, [inputs, guilds, activeTab]);
+  }, [inputs, guilds, activeTab, sourceSelections]);
 
   // Calculate on input change
   useEffect(() => {
@@ -278,6 +285,8 @@ const Calculator = () => {
             inputs={inputs}
             onUpdateInput={updateInput}
             onAdvance={handleNext}
+            selections={sourceSelections}
+            onToggleSelection={toggleSourceSelection}
           />
         );
       case 'deal':
@@ -344,7 +353,7 @@ const Calculator = () => {
         className="fixed left-0 right-0 z-40 flex items-center justify-between px-4 py-2"
         style={{
           bottom: 'calc(var(--tabbar-h) + env(safe-area-inset-bottom))',
-          backgroundColor: '#0A0A0A',
+          backgroundColor: 'var(--bg-card)',
         }}
       >
         {/* Back button - same style as Next */}
@@ -370,7 +379,7 @@ const Calculator = () => {
               cy="22"
               r="18"
               fill="none"
-              stroke="#333"
+              stroke="var(--border-subtle)"
               strokeWidth="2"
             />
             {/* Progress arc */}
@@ -379,7 +388,7 @@ const Calculator = () => {
               cy="22"
               r="18"
               fill="none"
-              stroke="#FFD700"
+              stroke="var(--gold)"
               strokeWidth="2"
               strokeLinecap="round"
               strokeDasharray={`${progressPercent * 1.13} 113`}
