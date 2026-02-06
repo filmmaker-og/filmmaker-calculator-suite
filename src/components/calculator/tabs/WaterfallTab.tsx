@@ -31,8 +31,8 @@ const WaterfallTab = ({ result, inputs }: WaterfallTabProps) => {
   }
 
   // Calculate producer's net share percentage
-  const producerNetPercent = result.producerPool.net > 0 
-    ? (result.producerPool.net / result.distributor.gross) * 100 
+  const producerNetPercent = result.producer > 0 && inputs.revenue > 0
+    ? (result.producer / inputs.revenue) * 100 
     : 0;
 
   return (
@@ -55,7 +55,7 @@ const WaterfallTab = ({ result, inputs }: WaterfallTabProps) => {
               </span>
               <div className="flex items-baseline gap-2 mt-2">
                 <span className="text-4xl font-mono font-bold text-gold">
-                  {formatCompactCurrency(result.producerPool.net)}
+                  {formatCompactCurrency(result.producer)}
                 </span>
                 <span className="text-sm font-mono text-gold-bright">
                   ({producerNetPercent.toFixed(1)}%)
