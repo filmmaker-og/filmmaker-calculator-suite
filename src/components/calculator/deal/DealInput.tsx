@@ -3,6 +3,7 @@ import { Handshake, ArrowRight, ArrowLeft, Check, Target, TrendingUp, TrendingDo
 import { WaterfallInputs, GuildState, formatCompactCurrency, calculateBreakeven } from "@/lib/waterfall";
 import { CapitalSelections } from "../steps/CapitalSelectStep";
 import { cn } from "@/lib/utils";
+import { useMobileKeyboardScroll } from "@/hooks/use-mobile-keyboard";
 
 interface DealInputProps {
   inputs: WaterfallInputs;
@@ -22,6 +23,9 @@ interface DealInputProps {
 const DealInput = ({ inputs, guilds, selections, onUpdateInput, onBack, onNext }: DealInputProps) => {
   const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  
+  // Mobile keyboard scroll handling
+  const { ref: mobileRef, scrollIntoView } = useMobileKeyboardScroll<HTMLDivElement>();
 
   // Auto-focus on mount
   useEffect(() => {
@@ -47,6 +51,12 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onBack, onNext }
         setTimeout(() => onNext(), 100);
       }
     }
+  };
+
+  const handleFocus = () => {
+    setIsFocused(true);
+    // Scroll input into view on mobile when keyboard opens
+    scrollIntoView();
   };
 
   // Calculate breakeven
@@ -135,7 +145,7 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onBack, onNext }
       )}
 
       {/* Main Input Card */}
-      <div className="matte-section overflow-hidden">
+      <div ref={mobileRef} className="matte-section overflow-hidden">
         {/* Section header */}
         <div className="matte-section-header px-5 py-3 flex items-center justify-between">
           <span className="text-xs uppercase tracking-[0.2em] text-white/40 font-medium">
@@ -170,7 +180,7 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onBack, onNext }
               inputMode="numeric"
               value={formatValue(inputs.revenue)}
               onChange={(e) => onUpdateInput('revenue', parseValue(e.target.value))}
-              onFocus={() => setIsFocused(true)}
+              onFocus={handleFocus}
               onBlur={() => setIsFocused(false)}
               onKeyDown={handleKeyDown}
               placeholder="3,500,000"
