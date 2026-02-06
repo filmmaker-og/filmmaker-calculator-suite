@@ -1,7 +1,8 @@
-import { Check, Receipt, Landmark, CreditCard, Users, Clock, ArrowRight, Edit2, Layers } from "lucide-react";
+import { Receipt, Landmark, CreditCard, Users, Clock, Edit2 } from "lucide-react";
 import { WaterfallInputs, formatCompactCurrency } from "@/lib/waterfall";
 import { CapitalSourceSelections } from "./CapitalSelect";
 import { cn } from "@/lib/utils";
+import StandardStepLayout from "../StandardStepLayout";
 
 interface StackSummaryProps {
   inputs: WaterfallInputs;
@@ -40,178 +41,134 @@ const StackSummary = ({ inputs, selections, onEdit, onComplete }: StackSummaryPr
   ];
   const stackItems = allItems.filter(item => item.selected);
 
+  const title = isFullyFunded ? 'Stack Complete' : 'Review Your Stack';
+  const subtitle = isFullyFunded
+    ? 'Your capital stack covers the budget. Ready to proceed.'
+    : `You're ${formatCompactCurrency(fundingGap)} short of your ${formatCompactCurrency(inputs.budget)} budget.`;
+
   return (
-    <div className="space-y-6 animate-fade-in">
-      {/* Header */}
-      <div className="text-center mb-6">
-        <div className="relative inline-block mb-4">
-          <div
-            className="absolute inset-0"
-            style={{
-              background: isFullyFunded
-                ? 'radial-gradient(circle, rgba(212, 175, 55, 0.35) 0%, transparent 70%)'
-                : 'radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, transparent 70%)',
-              filter: 'blur(20px)',
-              transform: 'scale(2.5)',
-            }}
-          />
+    <StandardStepLayout
+      chapter="02"
+      title={title}
+      subtitle={subtitle}
+      onNext={onComplete}
+      nextLabel="Continue to Deal Terms"
+      isComplete={true} // Always allow continue, even if underfunded (per logic)
+    >
+      <div className="space-y-6">
+        
+        {/* Progress Bar */}
+        {inputs.budget > 0 && (
           <div
             className={cn(
-              "relative w-16 h-16 flex items-center justify-center",
-              isFullyFunded
-                ? "border-2 border-gold bg-gold/10"
-                : "border-2 border-gold/30 bg-gold/5"
+              "relative p-4 border overflow-hidden",
+              isFullyFunded ? "border-gold/30 bg-gold-subtle" : "border-border-default bg-bg-surface"
             )}
-            style={{
-              borderRadius: 'var(--radius-md)',
-              ...(isFullyFunded ? { boxShadow: '0 0 20px rgba(212,175,55,0.25)' } : {}),
-            }}
+            style={{ borderRadius: 'var(--radius-md)' }}
           >
-            {isFullyFunded ? (
-              <Check className="w-8 h-8 text-gold" />
-            ) : (
-              <Layers className="w-8 h-8 text-gold" />
+            {isFullyFunded && (
+              <div
+                className="absolute inset-0 pointer-events-none"
+                style={{ background: 'radial-gradient(ellipse at right center, rgba(212,175,55,0.12) 0%, transparent 60%)' }}
+              />
             )}
+            <div className="relative flex items-center justify-between mb-2">
+              <span className="text-xs font-bold uppercase tracking-wider text-text-dim">Total Capital</span>
+              <span
+                className="font-mono text-lg font-bold text-gold"
+                style={isFullyFunded ? { textShadow: '0 0 12px rgba(212,175,55,0.4)' } : undefined}
+              >
+                {formatCompactCurrency(totalCapital)}
+              </span>
+            </div>
+
+            <div className="relative h-3 w-full bg-bg-elevated overflow-hidden mb-2" style={{ borderRadius: 'var(--radius-sm)' }}>
+              <div
+                className={cn(
+                  "h-full transition-all duration-500",
+                  gapPercent >= 100 ? "bg-gold" : "bg-gold/50"
+                )}
+                style={{
+                  width: `${Math.min(gapPercent, 100)}%`,
+                  ...(gapPercent >= 100 ? { boxShadow: '0 0 10px rgba(212,175,55,0.35)' } : {}),
+                }}
+              />
+            </div>
+
+            <div className="relative flex items-center justify-between">
+              <span className="text-xs text-text-dim">Budget: {formatCompactCurrency(inputs.budget)}</span>
+              <span className={cn(
+                "font-mono text-xs font-bold",
+                gapPercent >= 100 ? "text-gold" : "text-gold/60"
+              )}>
+                {gapPercent.toFixed(0)}% Funded
+              </span>
+            </div>
           </div>
-        </div>
+        )}
 
-        <h2 className="font-bebas text-3xl tracking-[0.08em] text-text-primary mb-1">
-          {isFullyFunded ? 'Stack Complete' : 'Review Your Stack'}
-        </h2>
-        <p className="text-text-dim text-sm max-w-xs mx-auto">
-          {isFullyFunded
-            ? 'Your capital stack covers the budget. Ready to proceed.'
-            : `You're ${formatCompactCurrency(fundingGap)} short of your ${formatCompactCurrency(inputs.budget)} budget.`
-          }
-        </p>
-      </div>
-
-      {/* Progress Bar */}
-      {inputs.budget > 0 && (
-        <div
-          className={cn(
-            "relative p-4 border overflow-hidden",
-            isFullyFunded ? "border-gold/30 bg-gold-subtle" : "border-border-default bg-bg-surface"
-          )}
-          style={{ borderRadius: 'var(--radius-md)' }}
-        >
-          {isFullyFunded && (
-            <div
-              className="absolute inset-0 pointer-events-none"
-              style={{ background: 'radial-gradient(ellipse at right center, rgba(212,175,55,0.12) 0%, transparent 60%)' }}
-            />
-          )}
-          <div className="relative flex items-center justify-between mb-2">
-            <span className="text-xs font-bold uppercase tracking-wider text-text-dim">Total Capital</span>
-            <span
-              className="font-mono text-lg font-bold text-gold"
-              style={isFullyFunded ? { textShadow: '0 0 12px rgba(212,175,55,0.4)' } : undefined}
-            >
-              {formatCompactCurrency(totalCapital)}
+        {/* Stack Breakdown - Matte Look */}
+        <div className="bg-bg-elevated border border-border-default rounded-lg overflow-hidden">
+          <div className="px-5 py-3 border-b border-border-subtle bg-bg-surface/50">
+            <span className="text-xs uppercase tracking-widest text-text-dim font-bold">
+              Capital Sources
             </span>
           </div>
 
-          <div className="relative h-3 w-full bg-bg-elevated overflow-hidden mb-2" style={{ borderRadius: 'var(--radius-sm)' }}>
-            <div
-              className={cn(
-                "h-full transition-all duration-500",
-                gapPercent >= 100 ? "bg-gold" : "bg-gold/50"
-              )}
-              style={{
-                width: `${Math.min(gapPercent, 100)}%`,
-                ...(gapPercent >= 100 ? { boxShadow: '0 0 10px rgba(212,175,55,0.35)' } : {}),
-              }}
-            />
-          </div>
-
-          <div className="relative flex items-center justify-between">
-            <span className="text-xs text-text-dim">Budget: {formatCompactCurrency(inputs.budget)}</span>
-            <span className={cn(
-              "font-mono text-xs font-bold",
-              gapPercent >= 100 ? "text-gold" : "text-gold/60"
-            )}>
-              {gapPercent.toFixed(0)}% Funded
-            </span>
-          </div>
-        </div>
-      )}
-
-      {/* Stack Breakdown */}
-      <div className="matte-section overflow-hidden">
-        <div className="matte-section-header px-5 py-3">
-          <span className="text-xs uppercase tracking-widest text-text-dim font-bold">
-            Capital Sources
-          </span>
-        </div>
-
-        <div className="divide-y divide-border-subtle">
-          {stackItems.length > 0 ? (
-            stackItems.map((item) => {
-              const Icon = item.icon;
-              return (
-                <div 
-                  key={item.label}
-                  className="px-5 py-4 flex items-center justify-between hover:bg-bg-elevated transition-colors"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className={cn("w-1 h-8 rounded-full", item.color)} />
-                    <Icon className="w-4 h-4 text-text-dim" />
-                    <div>
-                      <span className="text-sm text-text-primary font-medium">{item.label}</span>
-                      {item.rate !== undefined && (
-                        <span className="text-xs text-text-dim ml-2">@ {item.rate}% {item.rateLabel}</span>
-                      )}
+          <div className="divide-y divide-border-subtle">
+            {stackItems.length > 0 ? (
+              stackItems.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <div 
+                    key={item.label}
+                    className="px-5 py-4 flex items-center justify-between hover:bg-bg-elevated transition-colors"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className={cn("w-1 h-8 rounded-full", item.color)} />
+                      <Icon className="w-4 h-4 text-text-dim" />
+                      <div>
+                        <span className="text-sm text-text-primary font-medium">{item.label}</span>
+                        {item.rate !== undefined && (
+                          <span className="text-xs text-text-dim ml-2">@ {item.rate}% {item.rateLabel}</span>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <span className="font-mono text-gold">{formatCompactCurrency(item.amount)}</span>
+                      <button
+                        onClick={() => onEdit(item.sourceKey)}
+                        className="p-1.5 text-text-dim hover:text-text-mid transition-colors"
+                      >
+                        <Edit2 className="w-3.5 h-3.5" />
+                      </button>
                     </div>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <span className="font-mono text-gold">{formatCompactCurrency(item.amount)}</span>
-                    <button
-                      onClick={() => onEdit(item.sourceKey)}
-                      className="p-1.5 text-text-dim hover:text-text-mid transition-colors"
-                    >
-                      <Edit2 className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
-                </div>
-              );
-            })
-          ) : (
-            <div className="px-5 py-8 text-center">
-              <p className="text-text-dim text-sm">No capital sources added yet.</p>
-              <p className="text-text-dim text-xs mt-1">Go back to add funding sources.</p>
-            </div>
-          )}
+                );
+              })
+            ) : (
+              <div className="px-5 py-8 text-center">
+                <p className="text-text-dim text-sm">No capital sources added yet.</p>
+                <p className="text-text-dim text-xs mt-1">Go back to add funding sources.</p>
+              </div>
+            )}
+          </div>
         </div>
-      </div>
 
-      {/* Warning if underfunded */}
-      {!isFullyFunded && inputs.budget > 0 && totalCapital > 0 && (
-        <div 
-          className="bg-gold/[0.06] border-l-4 border-gold/40 p-4"
-          style={{ borderRadius: '0 var(--radius-md) var(--radius-md) 0' }}
-        >
-          <p className="text-xs text-text-mid leading-relaxed">
-            <span className="font-bold text-gold">Note:</span> Your stack doesn't fully cover the budget. 
-            You can still proceed, but you may need additional financing.
-          </p>
-        </div>
-      )}
-
-      {/* Complete Button */}
-      <button
-        onClick={onComplete}
-        className={cn(
-          "w-full py-4 flex items-center justify-center gap-3",
-          "bg-gold-cta-subtle border border-gold-cta-muted text-gold-cta",
-          "hover:bg-gold-cta-subtle hover:border-gold-cta transition-all",
-          "active:scale-[0.98]"
+        {/* Warning if underfunded */}
+        {!isFullyFunded && inputs.budget > 0 && totalCapital > 0 && (
+          <div 
+            className="bg-gold/[0.06] border-l-4 border-gold/40 p-4"
+            style={{ borderRadius: '0 var(--radius-md) var(--radius-md) 0' }}
+          >
+            <p className="text-xs text-text-mid leading-relaxed">
+              <span className="font-bold text-gold">Note:</span> Your stack doesn't fully cover the budget. 
+              You can still proceed, but you may need additional financing.
+            </p>
+          </div>
         )}
-        style={{ borderRadius: 'var(--radius-md)' }}
-      >
-        <span className="text-sm font-bold uppercase tracking-wider">Continue to Deal Terms</span>
-        <ArrowRight className="w-4 h-4" />
-      </button>
-    </div>
+      </div>
+    </StandardStepLayout>
   );
 };
 
