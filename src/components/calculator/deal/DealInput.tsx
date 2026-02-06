@@ -19,7 +19,8 @@ interface DealInputProps {
  * Step 1 of Deal Tab: Collect acquisition/revenue projection
  * with breakeven context and status indicator.
  */
-const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext }: DealInputProps) => {\n  const [isFocused, setIsFocused] = useState(false);
+const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext }: DealInputProps) => {
+  const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   
   // Mobile keyboard scroll handling
