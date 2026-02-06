@@ -4,6 +4,7 @@ import { PremiumInput } from "@/components/ui/premium-input";
 import { PercentStepper } from "@/components/ui/percent-stepper";
 import { cn } from "@/lib/utils";
 import { useRef } from "react";
+import StandardStepLayout from "../StandardStepLayout";
 
 interface RateConfig {
   field: 'seniorDebtRate' | 'mezzanineRate' | 'premium';
@@ -88,177 +89,160 @@ const StackInputCard = ({
   };
 
   return (
-    <div className="space-y-6 animate-fade-in">
-      {/* Hero Header */}
-      <div className="text-center mb-6">
-        <div className="relative inline-block mb-4">
-          <div
-            className="absolute inset-0"
-            style={{
-              background: 'radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, transparent 70%)',
-              filter: 'blur(15px)',
-              transform: 'scale(2)',
-            }}
-          />
-          <div className="relative w-14 h-14 border border-gold/30 bg-gold/5 flex items-center justify-center" style={{ borderRadius: 'var(--radius-md)' }}>
-            <Icon className="w-7 h-7 text-gold" />
-          </div>
-        </div>
-
-        <h2 className="font-bebas text-3xl tracking-[0.08em] text-text-primary mb-1">
-          {title}
-        </h2>
-        <p className="text-text-dim text-xs max-w-xs mx-auto">
-          {subtitle}
-        </p>
-      </div>
-
-      {/* Main Input Card */}
-      <div className="matte-section overflow-hidden">
-        {/* Section header */}
-        <div className="matte-section-header px-5 py-3 flex items-center justify-between">
-          <span className="text-xs uppercase tracking-widest text-text-dim font-bold">
-            {amountLabel}
-          </span>
-          {hasAmount && (
-            <span className="text-xs text-gold font-mono flex items-center gap-1">
-              <Check className="w-3 h-3" />
+    <StandardStepLayout
+      chapter="02"
+      title={title}
+      subtitle={subtitle}
+    >
+      <div className="space-y-6">
+        
+        {/* Main Input Card - Matte Look */}
+        <div className="bg-bg-elevated border border-border-default rounded-lg transition-all focus-within:border-gold/50 focus-within:shadow-focus focus-within:bg-bg-surface overflow-hidden">
+          {/* Section header */}
+          <div className="px-5 py-3 border-b border-border-subtle flex items-center justify-between bg-bg-surface/50">
+            <span className="text-xs uppercase tracking-widest text-text-dim font-bold">
+              {amountLabel}
             </span>
-          )}
-        </div>
-
-        {/* Amount Input */}
-        <div className="p-5">
-          <PremiumInput
-            ref={inputRef}
-            type="text"
-            inputMode="numeric"
-            value={formatValue(amount)}
-            onChange={(e) => onUpdateInput(amountField, parseValue(e.target.value))}
-            onKeyDown={handleKeyDown}
-            placeholder={amountPlaceholder}
-            showCurrency
-            actionHint={amountHint}
-            isCompleted={hasAmount}
-            isNext={!hasAmount}
-          />
-        </div>
-
-        {/* Rate Stepper (if applicable) */}
-        {rateConfig && hasAmount && (
-          <div className="p-5 border-t border-border-subtle">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-6 h-6 flex items-center justify-center text-xs font-mono font-bold bg-gold text-black">
-                2
-              </div>
-              <span className="text-xs uppercase tracking-widest text-gold font-bold">
-                {rateConfig.label}
+            {hasAmount && (
+              <span className="text-xs text-gold font-mono flex items-center gap-1">
+                <Check className="w-3 h-3" />
               </span>
-            </div>
+            )}
+          </div>
 
-            <PercentStepper
-              value={rateValue}
-              onChange={(value) => onUpdateInput(rateConfig.field, value)}
-              min={rateConfig.min}
-              max={rateConfig.max}
-              step={rateConfig.step}
-              standardValue={rateConfig.standardValue}
-              standardLabel={rateConfig.standardLabel}
-              isCompleted={true}
+          {/* Amount Input */}
+          <div className="p-5">
+            <PremiumInput
+              ref={inputRef}
+              type="text"
+              inputMode="numeric"
+              value={formatValue(amount)}
+              onChange={(e) => onUpdateInput(amountField, parseValue(e.target.value))}
+              onKeyDown={handleKeyDown}
+              placeholder={amountPlaceholder}
+              showCurrency
+              actionHint={amountHint}
+              isCompleted={hasAmount}
+              isNext={!hasAmount}
             />
           </div>
-        )}
 
-        {/* Calculation Result */}
-        {hasAmount && rateConfig && (
-          <div className="border-t border-border-subtle bg-bg-void/50">
-            <div className="p-5">
-              <div className="space-y-3">
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-text-dim">Principal</span>
-                  <span className="font-mono text-text-mid">{formatCompactCurrency(amount)}</span>
+          {/* Rate Stepper (if applicable) */}
+          {rateConfig && hasAmount && (
+            <div className="p-5 border-t border-border-subtle bg-bg-surface/30">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-6 h-6 flex items-center justify-center text-xs font-mono font-bold bg-gold text-black rounded-sm">
+                  %
                 </div>
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-text-dim">+ {rateConfig.label} ({rateValue}%)</span>
-                  <span className="font-mono text-text-mid">{formatCompactCurrency(interestAmount)}</span>
-                </div>
-                <div className="h-px bg-gold/20" />
-                <div className="flex items-center justify-between">
-                  <span className="text-xs uppercase tracking-wider text-gold font-semibold">Total Repayment</span>
-                  <span className="font-mono text-xl text-gold font-semibold">{formatCompactCurrency(totalRepayment)}</span>
+                <span className="text-xs uppercase tracking-widest text-gold font-bold">
+                  {rateConfig.label}
+                </span>
+              </div>
+
+              <PercentStepper
+                value={rateValue}
+                onChange={(value) => onUpdateInput(rateConfig.field, value)}
+                min={rateConfig.min}
+                max={rateConfig.max}
+                step={rateConfig.step}
+                standardValue={rateConfig.standardValue}
+                standardLabel={rateConfig.standardLabel}
+                isCompleted={true}
+              />
+            </div>
+          )}
+
+          {/* Calculation Result */}
+          {hasAmount && rateConfig && (
+            <div className="border-t border-border-subtle bg-bg-void/30">
+              <div className="p-5">
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-text-dim">Principal</span>
+                    <span className="font-mono text-text-mid">{formatCompactCurrency(amount)}</span>
+                  </div>
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-text-dim">+ {rateConfig.label} ({rateValue}%)</span>
+                    <span className="font-mono text-text-mid">{formatCompactCurrency(interestAmount)}</span>
+                  </div>
+                  <div className="h-px bg-gold/20" />
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs uppercase tracking-wider text-gold font-semibold">Total Repayment</span>
+                    <span className="font-mono text-xl text-gold font-semibold">{formatCompactCurrency(totalRepayment)}</span>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        )}
-
-        {/* Typical Range */}
-        {typicalRangeLabel && (
-          <div className="px-5 pb-5">
-            <div className="flex items-center justify-between py-3 border-t border-border-subtle">
-              <span className="text-xs text-text-dim">Typical range</span>
-              <span className="text-xs font-mono text-text-mid">{typicalRangeLabel}</span>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Help Text */}
-      {helpText && (
-        <p className="text-xs text-text-dim leading-relaxed text-center px-4">
-          {helpText}
-        </p>
-      )}
-
-      {/* Navigation */}
-      <div className="flex items-center gap-3">
-        {/* Back */}
-        <button
-          onClick={onBack}
-          className={cn(
-            "flex-1 py-3 flex items-center justify-center gap-2",
-            "border border-border-subtle text-text-mid",
-            "hover:border-text-dim hover:text-text-primary transition-all",
-            "active:scale-[0.98]"
           )}
-          style={{ borderRadius: 'var(--radius-md)' }}
-        >
-          <ArrowLeft className="w-4 h-4" />
-          <span className="text-xs font-bold uppercase tracking-wider">Back</span>
-        </button>
 
-        {/* Skip (if no value) or Next (if has value) */}
-        {hasAmount ? (
+          {/* Typical Range */}
+          {typicalRangeLabel && (
+            <div className="px-5 py-3 border-t border-border-subtle bg-bg-surface/20">
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-text-dim">Typical range</span>
+                <span className="text-xs font-mono text-text-mid">{typicalRangeLabel}</span>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Help Text */}
+        {helpText && (
+          <p className="text-xs text-text-dim leading-relaxed text-center px-4">
+            {helpText}
+          </p>
+        )}
+
+        {/* Navigation Buttons (Custom) */}
+        <div className="flex items-center gap-3 pt-2">
+          {/* Back */}
           <button
-            onClick={onNext}
+            onClick={onBack}
             className={cn(
-              "flex-[2] py-3 flex items-center justify-center gap-2",
-              "bg-gold/10 border border-gold/30 text-gold",
-              "hover:bg-gold/20 hover:border-gold/50 transition-all",
-              "active:scale-[0.98]"
+              "flex-1 py-3 flex items-center justify-center gap-2",
+              "border border-border-subtle text-text-mid",
+              "hover:border-text-dim hover:text-text-primary transition-all",
+              "active:scale-[0.98]",
+              "rounded-md"
             )}
-            style={{ borderRadius: 'var(--radius-md)' }}
           >
-            <span className="text-xs font-bold uppercase tracking-wider">Continue</span>
-            <ArrowRight className="w-4 h-4" />
+            <ArrowLeft className="w-4 h-4" />
+            <span className="text-xs font-bold uppercase tracking-wider">Back</span>
           </button>
-        ) : showSkip && onSkip ? (
-          <button
-            onClick={onSkip}
-            className={cn(
-              "flex-[2] py-3 flex items-center justify-center gap-2",
-              "border border-border-subtle text-text-dim",
-              "hover:border-white/20 hover:text-text-mid transition-all",
-              "active:scale-[0.98]"
-            )}
-            style={{ borderRadius: 'var(--radius-md)' }}
-          >
-            <span className="text-xs font-medium uppercase tracking-wider">Skip This</span>
-            <SkipForward className="w-4 h-4" />
-          </button>
-        ) : null}
+
+          {/* Skip (if no value) or Next (if has value) */}
+          {hasAmount ? (
+            <button
+              onClick={onNext}
+              className={cn(
+                "flex-[2] py-3 flex items-center justify-center gap-2",
+                "bg-gold-cta-subtle border border-gold-cta-muted text-gold-cta",
+                "hover:bg-gold-cta-subtle hover:border-gold-cta transition-all",
+                "active:scale-[0.98]",
+                "rounded-md shadow-button"
+              )}
+            >
+              <span className="text-xs font-bold uppercase tracking-wider">Continue</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          ) : showSkip && onSkip ? (
+            <button
+              onClick={onSkip}
+              className={cn(
+                "flex-[2] py-3 flex items-center justify-center gap-2",
+                "border border-border-subtle text-text-dim",
+                "hover:border-white/20 hover:text-text-mid transition-all",
+                "active:scale-[0.98]",
+                "rounded-md"
+              )}
+            >
+              <span className="text-xs font-medium uppercase tracking-wider">Skip This</span>
+              <SkipForward className="w-4 h-4" />
+            </button>
+          ) : null}
+        </div>
       </div>
-    </div>
+    </StandardStepLayout>
   );
 };
 
