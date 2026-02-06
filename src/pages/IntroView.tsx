@@ -183,8 +183,8 @@ const IntroView = () => {
                 flows from acquisition to final profit splits.
               </p>
               
-              {/* The Four Pillars */}
-              <div className="space-y-4">
+              {/* The Four Pillars — 2×2 Grid on desktop, single column on mobile */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div 
                   className="p-4"
                   style={{ 
