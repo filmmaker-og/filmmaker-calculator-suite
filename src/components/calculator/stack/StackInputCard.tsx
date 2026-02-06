@@ -1,10 +1,11 @@
-import { LucideIcon, ArrowLeft, ArrowRight, Check, SkipForward } from "lucide-react";
+import { LucideIcon, ArrowLeft, ArrowRight, Check, SkipForward, Info } from "lucide-react";
 import { WaterfallInputs, formatCompactCurrency } from "@/lib/waterfall";
 import { PremiumInput } from "@/components/ui/premium-input";
 import { PercentStepper } from "@/components/ui/percent-stepper";
 import { cn } from "@/lib/utils";
 import { useRef } from "react";
 import StandardStepLayout from "../StandardStepLayout";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface RateConfig {
   field: 'seniorDebtRate' | 'mezzanineRate' | 'premium';
@@ -100,9 +101,23 @@ const StackInputCard = ({
         <div className="bg-bg-elevated border border-border-default rounded-lg transition-all focus-within:border-gold/50 focus-within:shadow-focus focus-within:bg-bg-surface overflow-hidden">
           {/* Section header */}
           <div className="px-5 py-3 border-b border-border-subtle flex items-center justify-between bg-bg-surface/50">
-            <span className="text-xs uppercase tracking-widest text-text-dim font-bold">
-              {amountLabel}
-            </span>
+            <div className="flex items-center gap-2">
+              <span className="text-xs uppercase tracking-widest text-text-dim font-bold">
+                {amountLabel}
+              </span>
+              {helpText && (
+                <TooltipProvider>
+                  <Tooltip delayDuration={0}>
+                    <TooltipTrigger asChild>
+                      <Info className="w-3.5 h-3.5 text-text-dim/50 hover:text-gold cursor-pointer transition-colors" />
+                    </TooltipTrigger>
+                    <TooltipContent side="right" className="max-w-[200px] bg-bg-card border-gold/30 text-xs">
+                      <p>{helpText}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              )}
+            </div>
             {hasAmount && (
               <span className="text-xs text-gold font-mono flex items-center gap-1">
                 <Check className="w-3 h-3" />
@@ -186,13 +201,7 @@ const StackInputCard = ({
           )}
         </div>
 
-        {/* Help Text */}
-        {helpText && (
-          <p className="text-xs text-text-dim leading-relaxed text-center px-4">
-            {helpText}
-          </p>
-        )}
-
+        {/* HELP TEXT REMOVED FROM BOTTOM - Now in Tooltip */}
         {/* Navigation Buttons (Custom) */}
         <div className="flex items-center gap-3 pt-2">
           {/* Back */}
