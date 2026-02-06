@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, ShieldCheck, TrendingUp, FileText, Info } from 'lucide-react';
+import { ArrowRight, ShieldCheck, TrendingUp, FileText, Info, Lock, Eye } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Accordion,
@@ -16,7 +16,7 @@ const IntroView = () => {
     <>
       <Header />
       <div className="min-h-screen bg-bg-void text-text-primary pt-24 pb-12 px-4 md:px-8 font-sans">
-        <div className="max-w-3xl mx-auto space-y-8 animate-fade-in">
+        <div className="max-w-3xl mx-auto space-y-12 animate-fade-in">
           
           {/* Header Section - Notion/Wiki Style */}
           <div className="space-y-4 border-b border-border-default pb-8">
@@ -32,30 +32,62 @@ const IntroView = () => {
             </p>
           </div>
 
-          {/* The "Why" - GitHub Readme Style Box */}
-          <div className="bg-bg-surface border border-border-default rounded-lg p-6 md:p-8 space-y-6">
-            <div className="flex items-start space-x-4">
-              <div className="p-2 bg-gold/10 rounded-md">
-                <ShieldCheck className="w-6 h-6 text-gold" />
+          {/* The Manifesto: "Shadow Authority" */}
+          <div className="relative bg-bg-card border border-gold/20 p-8 rounded-lg overflow-hidden">
+            {/* Ambient background glow */}
+            <div className="absolute top-0 right-0 w-64 h-64 bg-gold/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+            
+            <div className="relative z-10 space-y-4">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="p-2 bg-gold/10 rounded-full border border-gold/20">
+                  <Eye className="w-5 h-5 text-gold" />
+                </div>
+                <h3 className="text-sm font-mono uppercase tracking-widest text-gold">Mission Statement</h3>
               </div>
-              <div>
-                <h3 className="text-lg font-bold text-white mb-1">Why this exists</h3>
-                <p className="text-text-dim text-sm leading-relaxed">
-                  Most filmmakers guess their numbers. You won't. This calculator models the complex flow of money from box office to your pocket.
+              
+              <h2 className="text-2xl font-bold text-white font-bebas tracking-wide">
+                Democratizing the Business of Film
+              </h2>
+              
+              <div className="space-y-4 text-text-mid leading-relaxed text-sm md:text-base">
+                <p>
+                  For too long, the mechanics of film finance have been obscured by gatekeepers. 
+                  Agencies, distributors, and studios thrive on information asymmetry. They know the numbers; you don't.
+                </p>
+                <p>
+                  <span className="text-white font-medium">We built this protocol to level the playing field.</span>
+                </p>
+                <p>
+                  We operate in the shadows so you can stand in the light. This tool extracts the proprietary logic 
+                  used by top-tier entertainment lawyers and sales agents, putting institutional-grade modeling 
+                  directly into your hands. No fees. No middlemen. Just the math.
                 </p>
               </div>
             </div>
+          </div>
 
-            <div className="flex items-start space-x-4">
-              <div className="p-2 bg-gold/10 rounded-md">
-                <TrendingUp className="w-6 h-6 text-gold" />
+          {/* The "Why" - Tactical Value */}
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="bg-bg-surface border border-border-default rounded-lg p-6 space-y-3 hover:border-gold/30 transition-colors">
+              <div className="p-2 w-fit bg-gold/10 rounded-md">
+                <ShieldCheck className="w-5 h-5 text-gold" />
               </div>
-              <div>
-                <h3 className="text-lg font-bold text-white mb-1">The Investor Advantage</h3>
-                <p className="text-text-dim text-sm leading-relaxed">
-                  Investors trust producers who understand the risks. By presenting a clear waterfall, you demonstrate competence and transparency.
-                </p>
+              <h3 className="text-lg font-bold text-white">Protect Your Backend</h3>
+              <p className="text-text-dim text-sm leading-relaxed">
+                Most filmmakers sign deals that guarantee they never see a dollar. This protocol reveals exactly 
+                how money trickles down, so you can spot the leaks before you sign.
+              </p>
+            </div>
+
+            <div className="bg-bg-surface border border-border-default rounded-lg p-6 space-y-3 hover:border-gold/30 transition-colors">
+              <div className="p-2 w-fit bg-gold/10 rounded-md">
+                <TrendingUp className="w-5 h-5 text-gold" />
               </div>
+              <h3 className="text-lg font-bold text-white">Close Investors</h3>
+              <p className="text-text-dim text-sm leading-relaxed">
+                Confidence closes deals. When you present a clear, mathematical path to recoupment (ROI), 
+                you shift the conversation from "artistic risk" to "financial opportunity."
+              </p>
             </div>
           </div>
 
@@ -67,34 +99,50 @@ const IntroView = () => {
             </div>
           </div>
 
-          {/* FAQ Section - Accordion */}
-          <div className="space-y-4 pt-4">
-            <h3 className="text-2xl font-bebas text-white">Frequently Asked Questions</h3>
+          {/* FAQ Section - Expanded */}
+          <div className="space-y-6 pt-4">
+            <h3 className="text-2xl font-bebas text-white border-b border-border-default pb-2">Protocol FAQ</h3>
             <Accordion type="single" collapsible className="w-full">
               <AccordionItem value="item-1" className="border-border-default">
-                <AccordionTrigger className="text-text-primary hover:text-gold hover:no-underline">
+                <AccordionTrigger className="text-text-primary hover:text-gold hover:no-underline font-medium">
+                  Who is this tool for?
+                </AccordionTrigger>
+                <AccordionContent className="text-text-dim leading-relaxed">
+                  This protocol is built for <span className="text-white">Independent Producers</span>, <span className="text-white">Directors</span>, and <span className="text-white">Investors</span>. 
+                  Whether you are raising $50k or $5M, the mechanics of recoupment remain the same. If you intend to sell your film for profit, you need this.
+                </AccordionContent>
+              </AccordionItem>
+              
+              <AccordionItem value="item-2" className="border-border-default">
+                <AccordionTrigger className="text-text-primary hover:text-gold hover:no-underline font-medium">
+                  How do I use these results?
+                </AccordionTrigger>
+                <AccordionContent className="text-text-dim leading-relaxed">
+                  <ul className="list-disc list-inside space-y-1">
+                    <li><strong>Pitch Decks:</strong> Screenshot the "Waterfall" chart to show ROI potential.</li>
+                    <li><strong>Deal Memos:</strong> Use the "Net Producer Share" as your baseline for negotiation.</li>
+                    <li><strong>Financing:</strong> Show investors exactly where they sit in the "Capital Stack" priority.</li>
+                  </ul>
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="item-3" className="border-border-default">
+                <AccordionTrigger className="text-text-primary hover:text-gold hover:no-underline font-medium">
                   Is this legal financial advice?
                 </AccordionTrigger>
                 <AccordionContent className="text-text-dim">
                   No. This is a simulation tool for estimation and planning purposes only. Always consult with a qualified entertainment attorney or accountant for final deal structures.
                 </AccordionContent>
               </AccordionItem>
-              <AccordionItem value="item-2" className="border-border-default">
-                <AccordionTrigger className="text-text-primary hover:text-gold hover:no-underline">
-                  Can I save my results?
-                </AccordionTrigger>
-                <AccordionContent className="text-text-dim">
-                  Yes. At the end of the simulation, you will have options to export or view a summary of your waterfall model.
-                </AccordionContent>
-              </AccordionItem>
-              <AccordionItem value="item-3" className="border-border-default">
-                <AccordionTrigger className="text-text-primary hover:text-gold hover:no-underline">
+              
+              <AccordionItem value="item-4" className="border-border-default">
+                <AccordionTrigger className="text-text-primary hover:text-gold hover:no-underline font-medium">
                   What is a "Waterfall"?
                 </AccordionTrigger>
                 <AccordionContent className="text-text-dim">
                   A waterfall is the priority order in which revenue is distributed. 
                   <span 
-                    className="text-gold cursor-pointer hover:underline ml-1"
+                    className="text-gold cursor-pointer hover:underline ml-1 font-medium"
                     onClick={() => navigate('/waterfall-info')}
                   >
                     Read the full breakdown here →
@@ -106,7 +154,8 @@ const IntroView = () => {
 
           {/* Action Area */}
           <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 border-t border-border-default">
-            <div className="text-text-dim text-sm font-mono">
+            <div className="text-text-dim text-sm font-mono flex items-center gap-2">
+              <Lock className="w-3 h-3" />
               v2.0.4-stable
             </div>
             <Button 
