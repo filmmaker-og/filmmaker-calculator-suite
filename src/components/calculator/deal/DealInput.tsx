@@ -1,16 +1,17 @@
 import { useState, useRef, useEffect } from "react";
-import { Handshake, ArrowRight, ArrowLeft, Check, Target, TrendingUp, TrendingDown } from "lucide-react";
+import { Handshake, ArrowRight, Target, TrendingUp, TrendingDown, Briefcase } from "lucide-react";
 import { WaterfallInputs, GuildState, formatCompactCurrency, calculateBreakeven } from "@/lib/waterfall";
 import { CapitalSelections } from "../steps/CapitalSelectStep";
 import { cn } from "@/lib/utils";
 import { useMobileKeyboardScroll } from "@/hooks/use-mobile-keyboard";
+import { PercentStepper } from "@/components/ui/percent-stepper";
+import { useHaptics } from "@/hooks/use-haptics";
 
 interface DealInputProps {
   inputs: WaterfallInputs;
   guilds: GuildState;
   selections: CapitalSelections;
   onUpdateInput: (key: keyof WaterfallInputs, value: number) => void;
-  onBack?: () => void;
   onNext: () => void;
 }
 
@@ -20,9 +21,11 @@ interface DealInputProps {
  * Step 1 of Deal Tab: Collect acquisition/revenue projection
  * with breakeven context and status indicator.
  */
-const DealInput = ({ inputs, guilds, selections, onUpdateInput, onBack, onNext }: DealInputProps) => {
+const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext }: DealInputProps) => {
   const [isFocused, setIsFocused] = useState(false);
+  const [marketingFocused, setMarketingFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const haptics = useHaptics();
   
   // Mobile keyboard scroll handling
   const { ref: mobileRef, scrollIntoView } = useMobileKeyboardScroll<HTMLDivElement>();
@@ -77,48 +80,30 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onBack, onNext }
 
   return (
     <div className="space-y-6 animate-fade-in">
-      {/* Step Label + Back Button */}
-      <div className="flex items-center justify-between">
-        {onBack ? (
-          <button
-            onClick={onBack}
-            className="flex items-center gap-1.5 text-xs text-text-dim hover:text-white transition-colors"
-          >
-            <ArrowLeft className="w-3.5 h-3.5" />
-            <span>Back</span>
-          </button>
-        ) : (
-          <div />
-        )}
-        <span className="text-xs font-mono text-gold/70 uppercase tracking-widest">
-          Step 1 of 2 • Deal
-        </span>
-      </div>
-
       {/* Hero Header */}
-      <div className="text-center mb-6">
+      <div className="text-center pt-2">
         <div className="relative inline-block mb-4">
           <div
             className="absolute inset-0"
             style={{
-              background: 'radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, transparent 70%)',
+              background: 'radial-gradient(circle, rgba(255, 215, 0, 0.12) 0%, transparent 70%)',
               filter: 'blur(15px)',
               transform: 'scale(2)',
             }}
           />
-          <div 
-            className="relative w-16 h-16 border border-gold/30 bg-gold/5 flex items-center justify-center" 
+          <div
+            className="relative w-14 h-14 border border-gold/25 bg-gold/5 flex items-center justify-center"
             style={{ borderRadius: 'var(--radius-md)' }}
           >
-            <Handshake className="w-8 h-8 text-gold" />
+            <Handshake className="w-7 h-7 text-gold" />
           </div>
         </div>
 
         <h2 className="font-bebas text-2xl tracking-[0.08em] text-white mb-1">
-          Acquisition Price
+          Deal Terms
         </h2>
-        <p className="text-white/50 text-xs max-w-xs mx-auto">
-          What the distributor pays for your film
+        <p className="text-white/40 text-xs max-w-xs mx-auto">
+          Acquisition price and sales agent fees
         </p>
       </div>
 
@@ -147,15 +132,10 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onBack, onNext }
       {/* Main Input Card */}
       <div ref={mobileRef} className="matte-section overflow-hidden">
         {/* Section header */}
-        <div className="matte-section-header px-5 py-3 flex items-center justify-between">
+        <div className="matte-section-header px-5 py-3">
           <span className="text-xs uppercase tracking-[0.2em] text-white/40 font-medium">
             Acquisition Amount
           </span>
-          {hasRevenue && (
-            <span className="text-xs text-gold font-mono flex items-center gap-1">
-              <Check className="w-3 h-3" />
-            </span>
-          )}
         </div>
 
         {/* Revenue Input */}
@@ -271,19 +251,126 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onBack, onNext }
         </div>
       </div>
 
+      {/* Sales Agent Fees */}
+      <div className="matte-section overflow-hidden">
+        {/* Section header */}
+        <div className="matte-section-header px-5 py-3 flex items-center gap-3">
+          <Briefcase className="w-4 h-4 text-gold/60" />
+          <span className="text-xs uppercase tracking-[0.2em] text-white/40 font-medium">
+            Sales Agent Fees
+          </span>
+        </div>
+
+        {/* Commission Rate Stepper */}
+        <div className="p-5 border-b border-[#1A1A1A]">
+          <p className="text-xs uppercase tracking-widest text-gold/70 font-semibold mb-3">
+            Commission Rate
+          </p>
+          <PercentStepper
+            value={inputs.salesFee}
+            onChange={(value) => {
+              haptics.light();
+              onUpdateInput('salesFee', value);
+            }}
+            min={0}
+            max={30}
+            step={5}
+            standardValue={15}
+            standardLabel="industry average"
+            isCompleted={true}
+          />
+        </div>
+
+        {/* Marketing / Distribution Fee — Toggleable */}
+        <div className="p-5">
+          <div className="flex items-center justify-between mb-3">
+            <p className="text-xs uppercase tracking-widest text-gold/70 font-semibold">
+              Marketing & Distribution Fee
+            </p>
+            {/* Toggle */}
+            <button
+              onClick={() => {
+                haptics.light();
+                if (inputs.salesExp > 0) {
+                  onUpdateInput('salesExp', 0);
+                } else {
+                  onUpdateInput('salesExp', 75000);
+                }
+              }}
+              className={cn(
+                "relative w-10 h-5 rounded-full transition-colors",
+                inputs.salesExp > 0
+                  ? "bg-gold/40"
+                  : "bg-white/10"
+              )}
+            >
+              <div
+                className={cn(
+                  "absolute top-0.5 w-4 h-4 rounded-full transition-all",
+                  inputs.salesExp > 0
+                    ? "left-5 bg-gold"
+                    : "left-0.5 bg-white/40"
+                )}
+              />
+            </button>
+          </div>
+
+          {inputs.salesExp > 0 ? (
+            <div>
+              <div
+                className={cn(
+                  "flex items-center transition-all",
+                  "bg-bg-surface border",
+                  marketingFocused ? "border-border-active" : "border-border-default"
+                )}
+                style={{ borderRadius: 'var(--radius-md)' }}
+              >
+                <span className="pl-4 pr-2 font-mono text-lg text-text-dim">$</span>
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  value={inputs.salesExp > 0 ? inputs.salesExp.toLocaleString() : ''}
+                  onChange={(e) => {
+                    const val = parseInt(e.target.value.replace(/[^0-9]/g, '')) || 0;
+                    onUpdateInput('salesExp', val);
+                  }}
+                  onFocus={() => setMarketingFocused(true)}
+                  onBlur={() => setMarketingFocused(false)}
+                  placeholder="75,000"
+                  className="flex-1 bg-transparent py-3 pr-4 outline-none font-mono text-lg text-text-primary text-right placeholder:text-text-dim tabular-nums"
+                />
+              </div>
+              <p className="mt-2 text-xs text-text-dim leading-relaxed">
+                Hardcapped recoupable fee for festival markets, screeners, buyer presentations.
+                Comes off the top — separate from delivery costs.
+              </p>
+            </div>
+          ) : (
+            <p className="text-xs text-text-dim leading-relaxed">
+              No marketing/distribution fee. Toggle on to add a hardcapped sales agent expense
+              (industry standard: $75K).
+            </p>
+          )}
+        </div>
+      </div>
+
       {/* Continue Button */}
       {hasRevenue && (
         <button
           onClick={onNext}
           className={cn(
             "w-full py-4 flex items-center justify-center gap-3",
-            "bg-gold/10 border border-gold/30 text-gold",
-            "hover:bg-gold/20 hover:border-gold/50 transition-all",
+            "border border-gold/40 text-black font-bold",
+            "hover:brightness-110 transition-all",
             "active:scale-[0.98]"
           )}
-          style={{ borderRadius: 'var(--radius-md)' }}
+          style={{
+            borderRadius: 'var(--radius-md)',
+            background: 'linear-gradient(135deg, #FFD700 0%, #E6C200 100%)',
+            boxShadow: '0 4px 16px rgba(255, 215, 0, 0.2)',
+          }}
         >
-          <span className="text-sm font-bold uppercase tracking-wider">See the Waterfall</span>
+          <span className="text-sm font-black uppercase tracking-wider">See the Waterfall</span>
           <ArrowRight className="w-4 h-4" />
         </button>
       )}
