@@ -168,7 +168,7 @@ const BudgetInput = ({ inputs, onUpdateInput, onBack, onNext }: BudgetInputProps
             {isCompleted && (
               <button
                 onClick={handleClear}
-                className="mr-3 p-1.5 text-text-dim hover:text-white hover:bg-white/10 rounded transition-colors"
+                className="mr-3 p-1.5 text-text-dim hover:text-white hover:bg-bg-elevated rounded transition-colors"
                 aria-label="Clear budget"
               >
                 <X className="w-4 h-4" />
@@ -199,7 +199,7 @@ const BudgetInput = ({ inputs, onUpdateInput, onBack, onNext }: BudgetInputProps
                     "font-mono text-xs px-3 py-2 rounded transition-colors border",
                     inputs.budget === qa.value
                       ? "bg-gold/20 border-gold text-gold"
-                      : "bg-bg-void border-white/10 text-text-mid hover:border-gold/50"
+                      : "bg-bg-void border-border-subtle text-text-mid hover:border-gold/50"
                   )}
                 >
                   {qa.label}
@@ -216,8 +216,8 @@ const BudgetInput = ({ inputs, onUpdateInput, onBack, onNext }: BudgetInputProps
           onClick={onNext}
           className={cn(
             "w-full py-4 flex items-center justify-center gap-3",
-            "bg-gold/10 border border-gold/30 text-gold",
-            "hover:bg-gold/20 hover:border-gold/50 transition-all",
+            "bg-gold-cta-subtle border border-gold-cta-muted text-gold-cta",
+            "hover:bg-gold-cta-subtle hover:border-gold-cta transition-all",
             "active:scale-[0.98]"
           )}
           style={{ borderRadius: 'var(--radius-md)' }}

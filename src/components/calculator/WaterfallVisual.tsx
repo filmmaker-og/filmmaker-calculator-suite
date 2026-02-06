@@ -126,7 +126,7 @@ const WaterfallVisual = ({
       {/* Gross Revenue Header */}
       <div
         className={cn(
-          "flex items-center justify-between p-4 bg-white/5 border border-border-subtle transition-all duration-300",
+          "flex items-center justify-between p-4 bg-gold-subtle border border-border-subtle transition-all duration-300",
           revealCount > 0 ? "opacity-100" : "opacity-0"
         )}
       >
@@ -134,9 +134,9 @@ const WaterfallVisual = ({
           <p className="text-[9px] uppercase tracking-wider text-text-dim mb-1">
             GROSS REVENUE
           </p>
-          <p className="text-sm text-white">Acquisition Price</p>
+          <p className="text-sm text-text-primary">Acquisition Price</p>
         </div>
-        <p className="font-mono text-xl text-white font-medium tabular-nums">
+        <p className="font-mono text-xl text-text-primary font-medium tabular-nums">
           {formatCompactCurrency(revenue)}
         </p>
       </div>
@@ -158,15 +158,15 @@ const WaterfallVisual = ({
             <div
               className={cn(
                 "relative p-4 border transition-colors",
-                tier.status === "filled" && "bg-white/5 border-white/20",
-                tier.status === "partial" && "bg-white/[0.02] border-border-subtle",
-                tier.status === "empty" && "bg-black border-border-subtle",
-                isProfit && tier.paid > 0 && "bg-white/5 border-white/20"
+                tier.status === "filled" && "bg-gold-subtle border-gold/20",
+                tier.status === "partial" && "bg-bg-elevated border-border-subtle",
+                tier.status === "empty" && "bg-bg-void border-border-subtle",
+                isProfit && tier.paid > 0 && "bg-gold-subtle border-gold/20"
               )}
             >
               {/* Progress Fill */}
               <div
-                className="absolute inset-0 bg-white/5 transition-all duration-500"
+                className="absolute inset-0 bg-gold-subtle transition-all duration-500"
                 style={{ width: `${percentage}%` }}
               />
 
@@ -177,8 +177,8 @@ const WaterfallVisual = ({
                   <div
                     className={cn(
                       "w-7 h-7 flex items-center justify-center text-[9px] font-mono font-medium",
-                      tier.status === "filled" && "bg-white text-black",
-                      tier.status === "partial" && "bg-white/20 text-white border border-white/20",
+                      tier.status === "filled" && "bg-gold text-black",
+                      tier.status === "partial" && "bg-gold/20 text-text-primary border border-gold/20",
                       tier.status === "empty" && "bg-bg-header text-text-dim border border-border-subtle"
                     )}
                   >
@@ -193,7 +193,7 @@ const WaterfallVisual = ({
                     <p
                       className={cn(
                         "text-sm font-medium",
-                        tier.status === "filled" && "text-white",
+                        tier.status === "filled" && "text-text-primary",
                         tier.status === "partial" && "text-text-mid",
                         tier.status === "empty" && "text-text-dim"
                       )}
@@ -209,7 +209,7 @@ const WaterfallVisual = ({
                     className={cn(
                       "font-mono text-base font-medium tabular-nums",
                       isProfit && tier.paid > 0 && "text-gold",
-                      !isProfit && tier.status === "filled" && "text-white",
+                      !isProfit && tier.status === "filled" && "text-text-primary",
                       !isProfit && tier.status === "partial" && "text-text-mid",
                       tier.status === "empty" && "text-text-dim"
                     )}
@@ -229,7 +229,7 @@ const WaterfallVisual = ({
                 <div
                   className={cn(
                     "h-full transition-all duration-500",
-                    isProfit ? "bg-gold" : "bg-white/40"
+                    isProfit ? "bg-gold" : "bg-gold-muted"
                   )}
                   style={{ width: `${percentage}%` }}
                 />

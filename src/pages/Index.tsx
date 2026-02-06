@@ -10,10 +10,10 @@ const Index = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const haptics = useHaptics();
-  
+
   // Check if we should skip intro based on URL param
   const shouldSkip = searchParams.get("skipIntro") === "true";
-  
+
   const [phase, setPhase] = useState<
     'dark' | 'beam' | 'logo' | 'pulse' | 'tagline' | 'complete'
   >(shouldSkip ? 'complete' : 'dark');
@@ -58,7 +58,7 @@ const Index = () => {
             "fixed inset-0 z-[100] flex items-center justify-center transition-opacity duration-1000",
             isComplete ? "opacity-0 pointer-events-none" : "opacity-100"
           )}
-          style={{ 
+          style={{
             backgroundColor: '#000000',
           }}
         >
@@ -72,7 +72,7 @@ const Index = () => {
               background: `
                 radial-gradient(
                   ellipse 70% 60% at 50% 0%,
-                  rgba(255, 215, 0, 0.08) 0%,
+                  rgba(212, 175, 55, 0.08) 0%,
                   rgba(255, 255, 255, 0.12) 20%,
                   rgba(255, 255, 255, 0.05) 40%,
                   rgba(255, 255, 255, 0.01) 60%,
@@ -96,7 +96,7 @@ const Index = () => {
                   ellipse 30% 45% at 50% 0%,
                   rgba(255, 255, 255, 0.35) 0%,
                   rgba(255, 255, 255, 0.15) 30%,
-                  rgba(255, 215, 0, 0.05) 50%,
+                  rgba(212, 175, 55, 0.05) 50%,
                   transparent 70%
                 )
               `,
@@ -115,7 +115,7 @@ const Index = () => {
               background: `
                 radial-gradient(
                   ellipse 80% 100% at 50% 0%,
-                  rgba(255, 215, 0, 0.02) 0%,
+                  rgba(212, 175, 55, 0.02) 0%,
                   transparent 60%
                 )
               `,
@@ -132,7 +132,7 @@ const Index = () => {
               background: `
                 radial-gradient(
                   circle,
-                  rgba(255, 215, 0, 0.12) 0%,
+                  rgba(212, 175, 55, 0.12) 0%,
                   rgba(255, 255, 255, 0.08) 30%,
                   rgba(255, 255, 255, 0.03) 50%,
                   transparent 70%
@@ -161,7 +161,7 @@ const Index = () => {
                   isPulsed ? "opacity-100" : "opacity-0"
                 )}
                 style={{
-                  background: 'radial-gradient(circle, rgba(255, 215, 0, 0.3) 0%, transparent 70%)',
+                  background: 'radial-gradient(circle, rgba(212, 175, 55, 0.3) 0%, transparent 70%)',
                   filter: 'blur(15px)',
                 }}
               />
@@ -170,8 +170,8 @@ const Index = () => {
                 alt="Filmmaker.OG"
                 className="w-32 h-32 object-contain rounded-lg relative"
                 style={{
-                  filter: isPulsed 
-                    ? 'brightness(1.2) drop-shadow(0 0 30px rgba(255, 215, 0, 0.5))' 
+                  filter: isPulsed
+                    ? 'brightness(1.2) drop-shadow(0 0 30px rgba(212, 175, 55, 0.5))'
                     : 'brightness(0.9)',
                   transition: 'filter 0.7s ease',
                 }}
@@ -184,23 +184,23 @@ const Index = () => {
                 "mt-8 text-sm tracking-[0.4em] uppercase font-semibold transition-all duration-700",
                 showTagline ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
               )}
-              style={{ 
-                color: '#FFD700',
-                textShadow: '0 0 20px rgba(255, 215, 0, 0.4)',
+              style={{
+                color: '#D4AF37',
+                textShadow: '0 0 20px rgba(212, 175, 55, 0.4)',
               }}
             >
               Know Your Numbers
             </p>
 
             {/* Animated Progress Line */}
-            <div className="mt-6 w-32 h-[2px] overflow-hidden bg-white/10 rounded-full">
+            <div className="mt-6 w-32 h-[2px] overflow-hidden bg-border-subtle rounded-full">
               <div
                 className={cn(
                   "h-full bg-gold rounded-full transition-all",
                   showTagline && !shouldSkip ? "animate-progress-draw" : ""
                 )}
                 style={{
-                  boxShadow: '0 0 15px rgba(255, 215, 0, 0.7)',
+                  boxShadow: '0 0 15px rgba(212, 175, 55, 0.7)',
                   width: shouldSkip ? '100%' : (showTagline ? undefined : '0%'),
                 }}
               />
@@ -219,7 +219,7 @@ const Index = () => {
         >
           {/* Cinematic Vignette */}
           <div className="vignette" />
-          
+
           {/* Ambient spotlight glow from above */}
           <div
             className="fixed top-0 left-1/2 -translate-x-1/2 pointer-events-none animate-spotlight-pulse"
@@ -229,8 +229,8 @@ const Index = () => {
               background: `
                 radial-gradient(
                   ellipse 50% 40% at 50% 10%,
-                  rgba(255, 215, 0, 0.1) 0%,
-                  rgba(255, 215, 0, 0.04) 40%,
+                  rgba(212, 175, 55, 0.1) 0%,
+                  rgba(212, 175, 55, 0.04) 40%,
                   transparent 70%
                 )
               `,
@@ -244,7 +244,7 @@ const Index = () => {
               <div
                 className="absolute inset-0 -m-6"
                 style={{
-                  background: 'radial-gradient(circle, rgba(255, 215, 0, 0.2) 0%, transparent 70%)',
+                  background: 'radial-gradient(circle, rgba(212, 175, 55, 0.2) 0%, transparent 70%)',
                   filter: 'blur(12px)',
                 }}
               />
@@ -253,13 +253,13 @@ const Index = () => {
                 alt="Filmmaker.OG"
                 className="relative w-24 h-24 object-contain rounded-lg"
                 style={{
-                  filter: 'brightness(1.15) drop-shadow(0 0 25px rgba(255, 215, 0, 0.45))',
+                  filter: 'brightness(1.15) drop-shadow(0 0 25px rgba(212, 175, 55, 0.45))',
                 }}
               />
             </div>
 
             {/* Title */}
-            <h1 className="font-bebas text-3xl tracking-[0.08em] text-white mb-4 leading-tight relative z-10">
+            <h1 className="font-bebas text-3xl tracking-[0.08em] text-text-primary mb-4 leading-tight relative z-10">
               STREAMER ACQUISITION
               <br />
               <span className="text-gold">CALCULATOR</span>
@@ -277,10 +277,10 @@ const Index = () => {
               onClick={handleStartClick}
               className="w-full max-w-[280px] h-14 text-sm font-black tracking-[0.12em] transition-all active:scale-[0.96] relative z-10 rounded-md"
               style={{
-                backgroundColor: 'rgba(255, 215, 0, 0.12)',
-                border: '1px solid rgba(255, 215, 0, 0.45)',
-                color: '#FFD700',
-                boxShadow: '0 10px 40px rgba(255, 215, 0, 0.25)',
+                backgroundColor: 'rgba(249, 224, 118, 0.12)',
+                border: '1px solid rgba(249, 224, 118, 0.45)',
+                color: '#F9E076',
+                boxShadow: '0 10px 40px rgba(249, 224, 118, 0.25)',
               }}
             >
               <span className="flex items-center justify-center gap-2">

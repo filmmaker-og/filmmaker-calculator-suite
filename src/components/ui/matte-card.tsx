@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
 import { ReactNode } from "react";
+import { colors, verdictStatus } from "@/lib/design-system";
 
 /**
  * Matte Card - Premium section container
@@ -81,7 +82,7 @@ export const MatteCardFooter = ({
   return (
     <div
       className={cn(
-        "border-t border-[#1A1A1A] bg-[#0A0A0A]/50 p-5",
+        "border-t border-border-subtle bg-bg-header/50 p-5",
         className
       )}
     >
@@ -92,6 +93,7 @@ export const MatteCardFooter = ({
 
 /**
  * Status Badge - For verdict displays
+ * Uses gold-intensity only (no green/red)
  */
 interface StatusBadgeProps {
   status: "excellent" | "good" | "marginal" | "underwater";
@@ -129,6 +131,7 @@ export const StatusBadge = ({
 
 /**
  * Verdict Card - Dramatic result display
+ * Uses verdictStatus from design-system for gold-intensity colors (no green/red)
  */
 interface VerdictCardProps {
   title: string;
@@ -145,18 +148,11 @@ export const VerdictCard = ({
   subtitle,
   className,
 }: VerdictCardProps) => {
-  const statusColors = {
-    excellent: "#FFD700",
-    good: "#FFD700",
-    marginal: "rgba(255, 215, 0, 0.6)",
-    underwater: "rgba(255, 215, 0, 0.3)",
-  };
-
   const glowColors = {
-    excellent: "rgba(255, 215, 0, 0.4)",
-    good: "rgba(255, 215, 0, 0.4)",
-    marginal: "rgba(255, 215, 0, 0.25)",
-    underwater: "rgba(255, 215, 0, 0.15)",
+    excellent: "rgba(212, 175, 55, 0.4)",
+    good: "rgba(212, 175, 55, 0.4)",
+    marginal: "rgba(212, 175, 55, 0.25)",
+    underwater: "rgba(212, 175, 55, 0.15)",
   };
 
   return (
@@ -180,7 +176,7 @@ export const VerdictCard = ({
       <p
         className="font-bebas text-7xl sm:text-8xl tabular-nums leading-none relative z-10"
         style={{
-          color: statusColors[status],
+          color: verdictStatus[status].color,
           textShadow: `0 0 60px ${glowColors[status]}`,
         }}
       >
@@ -211,7 +207,7 @@ export const LedgerRow = ({
   label,
   value,
   percentage,
-  color = "#FFD700",
+  color = colors.gold,
   isTotal,
   className,
 }: LedgerRowProps) => {
@@ -227,7 +223,7 @@ export const LedgerRow = ({
         <span
           className={cn(
             "text-sm",
-            isTotal ? "text-white font-semibold" : "text-text-mid"
+            isTotal ? "text-text-primary font-semibold" : "text-text-mid"
           )}
         >
           {label}
@@ -244,7 +240,7 @@ export const LedgerRow = ({
 
       {/* Fill bar (only for non-totals with percentage) */}
       {percentage !== undefined && !isTotal && (
-        <div className="h-1.5 bg-[#1A1A1A] overflow-hidden">
+        <div className="h-1.5 bg-bg-surface overflow-hidden">
           <div
             className="h-full transition-all duration-700 ease-out"
             style={{
@@ -291,7 +287,7 @@ export const CtaCard = ({
         "p-5 border transition-all duration-200 cursor-pointer group",
         isPrimary
           ? "bg-gradient-to-r from-gold/10 to-transparent border-gold/30 hover:border-gold/50"
-          : "bg-[#0A0A0A] border-[#1A1A1A] hover:border-[#2A2A2A]",
+          : "bg-bg-header border-border-subtle hover:border-gold/20",
         className
       )}
       onClick={onClick}
@@ -303,7 +299,7 @@ export const CtaCard = ({
             "w-12 h-12 flex items-center justify-center flex-shrink-0 border",
             isPrimary
               ? "bg-gold/10 border-gold/30"
-              : "bg-[#0D0D0D] border-[#2A2A2A]"
+              : "bg-bg-elevated border-border-subtle"
           )}
         >
           {icon}
@@ -314,7 +310,7 @@ export const CtaCard = ({
           <h4
             className={cn(
               "font-semibold mb-1",
-              isPrimary ? "text-gold" : "text-white"
+              isPrimary ? "text-gold" : "text-text-primary"
             )}
           >
             {title}
@@ -327,7 +323,7 @@ export const CtaCard = ({
               "text-xs font-semibold uppercase tracking-wider transition-colors",
               isPrimary
                 ? "text-gold group-hover:text-gold-highlight"
-                : "text-text-mid group-hover:text-white"
+                : "text-text-mid group-hover:text-text-primary"
             )}
           >
             {ctaText} &rarr;

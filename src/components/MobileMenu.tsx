@@ -116,31 +116,28 @@ const MobileMenu = ({ onOpenLegal, onSignOut }: MobileMenuProps) => {
             paddingTop: 'env(safe-area-inset-top)',
           }}
         >
-           {/* Matte grey header */}
+           {/* Matte header */}
            <div
-             className="flex items-center justify-between px-4"
-             style={{
-               height: 'var(--appbar-h)',
-               backgroundColor: '#1A1A1A',
-             }}
+             className="flex items-center justify-between px-4 bg-bg-header"
+             style={{ height: 'var(--appbar-h)' }}
            >
              <span className="font-bebas text-gold text-lg tracking-[0.2em]">
                FILMMAKER.OG
              </span>
             <button
               onClick={handleCloseMenu}
-              className="w-12 h-12 flex items-center justify-center text-white hover:text-gold transition-colors"
+              className="w-12 h-12 flex items-center justify-center text-text-mid hover:text-gold transition-colors"
               aria-label="Close menu"
             >
               <X className="w-6 h-6" />
             </button>
            </div>
- 
+
            {/* Gold separator line */}
            <div
              className="h-[1px]"
              style={{
-               background: "linear-gradient(90deg, transparent 0%, rgba(255, 215, 0, 0.45) 20%, rgba(255, 215, 0, 0.45) 80%, transparent 100%)",
+               background: "linear-gradient(90deg, transparent 0%, rgba(212, 175, 55, 0.45) 20%, rgba(212, 175, 55, 0.45) 80%, transparent 100%)",
              }}
            />
 
@@ -152,7 +149,7 @@ const MobileMenu = ({ onOpenLegal, onSignOut }: MobileMenuProps) => {
               <div
                 className="absolute inset-0 -m-4 rounded-full"
                 style={{
-                  background: 'radial-gradient(circle, rgba(255, 215, 0, 0.15) 0%, transparent 70%)',
+                  background: 'radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, transparent 70%)',
                   filter: 'blur(8px)',
                 }}
               />
@@ -161,7 +158,7 @@ const MobileMenu = ({ onOpenLegal, onSignOut }: MobileMenuProps) => {
                 alt="Filmmaker Logo"
                 className="relative w-24 h-24 rounded-lg"
                 style={{
-                  filter: 'brightness(1.15) drop-shadow(0 0 20px rgba(255, 215, 0, 0.4))',
+                  filter: 'brightness(1.15) drop-shadow(0 0 20px rgba(212, 175, 55, 0.4))',
                 }}
               />
             </div>
@@ -183,7 +180,7 @@ const MobileMenu = ({ onOpenLegal, onSignOut }: MobileMenuProps) => {
                     key={link.label}
                     onClick={handleLinkClick}
                     className={`font-bebas text-2xl tracking-[0.15em] transition-colors ${
-                      link.isHighlighted ? 'text-gold' : 'text-white hover:text-gold'
+                      link.isHighlighted ? 'text-gold-cta' : 'text-text-primary hover:text-gold'
                     }`}
                   >
                     {link.label}
@@ -194,7 +191,7 @@ const MobileMenu = ({ onOpenLegal, onSignOut }: MobileMenuProps) => {
                     to={link.href}
                     onClick={handleLinkClick}
                     className={`font-bebas text-2xl tracking-[0.15em] transition-colors ${
-                      link.isHighlighted ? 'text-gold' : 'text-white hover:text-gold'
+                      link.isHighlighted ? 'text-gold-cta' : 'text-text-primary hover:text-gold'
                     }`}
                   >
                     {link.label}
@@ -207,7 +204,7 @@ const MobileMenu = ({ onOpenLegal, onSignOut }: MobileMenuProps) => {
                     target={link.href.startsWith("http") ? "_blank" : undefined}
                     rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
                     className={`font-bebas text-2xl tracking-[0.15em] transition-colors ${
-                      link.isHighlighted ? 'text-gold' : 'text-white hover:text-gold'
+                      link.isHighlighted ? 'text-gold-cta' : 'text-text-primary hover:text-gold'
                     }`}
                   >
                     {link.label}
@@ -218,17 +215,17 @@ const MobileMenu = ({ onOpenLegal, onSignOut }: MobileMenuProps) => {
               {/* Glossary Button - Coming Soon */}
               <button
                 onClick={handleGlossaryClick}
-                className="font-bebas text-2xl text-white/40 hover:text-white/60 transition-colors tracking-[0.15em] flex items-center gap-2"
+                className="font-bebas text-2xl text-text-dim hover:text-text-mid transition-colors tracking-[0.15em] flex items-center gap-2"
               >
                 <BookOpen className="w-5 h-5" />
                 GLOSSARY
-                <span className="text-xs text-white/30 font-sans">(Soon)</span>
+                <span className="text-xs text-text-dim font-sans">(Soon)</span>
               </button>
 
               {/* Legal Button */}
               <button
                 onClick={handleLegalClick}
-                className="font-bebas text-2xl text-white/60 hover:text-white transition-colors tracking-[0.15em]"
+                className="font-bebas text-2xl text-text-dim hover:text-text-primary transition-colors tracking-[0.15em]"
               >
                 LEGAL
               </button>
@@ -240,7 +237,7 @@ const MobileMenu = ({ onOpenLegal, onSignOut }: MobileMenuProps) => {
                     setIsOpen(false);
                     onSignOut();
                   }}
-                  className="font-bebas text-xl tracking-[0.15em] text-white/30 hover:text-white/50 transition-colors mt-6 flex items-center gap-2"
+                  className="font-bebas text-xl tracking-[0.15em] text-text-dim hover:text-text-mid transition-colors mt-6 flex items-center gap-2"
                 >
                   <LogOut className="w-5 h-5" />
                   SIGN OUT
@@ -258,11 +255,11 @@ const MobileMenu = ({ onOpenLegal, onSignOut }: MobileMenuProps) => {
               href="https://www.instagram.com/filmmaker.og"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-white/30 hover:text-gold transition-colors text-xs tracking-widest block py-1"
+              className="text-text-dim hover:text-gold transition-colors text-xs tracking-widest block py-1"
             >
               @filmmaker.og
             </a>
-            <span className="text-white/20 text-xs tracking-widest block">
+            <span className="text-text-dim text-xs tracking-widest block">
               thefilmmaker.og@gmail.com
             </span>
           </div>
@@ -272,13 +269,13 @@ const MobileMenu = ({ onOpenLegal, onSignOut }: MobileMenuProps) => {
 
       {/* Legal Modal */}
       <Dialog open={showLegalModal} onOpenChange={setShowLegalModal}>
-        <DialogContent className="bg-[#0A0A0A] border-[#1A1A1A] max-w-md">
+        <DialogContent className="bg-bg-header border-border-subtle max-w-md">
           <DialogHeader>
             <DialogTitle className="font-bebas text-2xl text-gold tracking-wider">
               LEGAL DISCLAIMER
             </DialogTitle>
           </DialogHeader>
-          <p className="text-white/50 text-sm leading-relaxed">
+          <p className="text-text-dim text-sm leading-relaxed">
             {legalText}
           </p>
         </DialogContent>
@@ -286,21 +283,21 @@ const MobileMenu = ({ onOpenLegal, onSignOut }: MobileMenuProps) => {
 
       {/* About Modal */}
       <Dialog open={showAboutModal} onOpenChange={setShowAboutModal}>
-        <DialogContent className="bg-[#0A0A0A] border-[#1A1A1A] max-w-lg">
+        <DialogContent className="bg-bg-header border-border-subtle max-w-lg">
           <DialogHeader>
             <DialogTitle className="font-bebas text-2xl text-gold tracking-wider">
               DEMOCRATIZING THE BUSINESS OF FILM
             </DialogTitle>
           </DialogHeader>
-          <div className="text-white/50 text-sm leading-relaxed space-y-4">
+          <div className="text-text-dim text-sm leading-relaxed space-y-4">
             <p>
               We provide institutional-grade film finance intelligence to producers operating in the $1M–$10M budget range.
             </p>
             <p>
-              <span className="font-bold text-white">THE PEDIGREE</span> Second-generation filmmaker. Festival winner. Former Major Agency client. We teach Cost-Plus buyout structures, all-rights valuation, platform negotiation strategies, and SPV structuring—the frameworks that determine whether your film gets financed or dies in development.
+              <span className="font-bold text-text-primary">THE PEDIGREE</span> Second-generation filmmaker. Festival winner. Former Major Agency client. We teach Cost-Plus buyout structures, all-rights valuation, platform negotiation strategies, and SPV structuring—the frameworks that determine whether your film gets financed or dies in development.
             </p>
             <p>
-              <span className="font-bold text-white">THE SHADOW MANDATE</span> We operate without attribution. This allows us to teach the actual mechanics—what moves Netflix deals, when Amazon pays premiums, how to price perpetual rights—without the political constraints that force industry insiders to soften the truth.
+              <span className="font-bold text-text-primary">THE SHADOW MANDATE</span> We operate without attribution. This allows us to teach the actual mechanics—what moves Netflix deals, when Amazon pays premiums, how to price perpetual rights—without the political constraints that force industry insiders to soften the truth.
             </p>
             <p>
               This is the business intelligence required to treat independent film as an asset class.
@@ -311,34 +308,34 @@ const MobileMenu = ({ onOpenLegal, onSignOut }: MobileMenuProps) => {
 
       {/* Contact Modal */}
       <Dialog open={showContactModal} onOpenChange={setShowContactModal}>
-        <DialogContent className="bg-[#0A0A0A] border-[#1A1A1A] max-w-md">
+        <DialogContent className="bg-bg-header border-border-subtle max-w-md">
           <DialogHeader>
             <DialogTitle className="font-bebas text-2xl text-gold tracking-wider">
               CONTACT
             </DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
-            <div className="flex items-center justify-between bg-black border border-[#1A1A1A] px-4 py-3">
-              <span className="text-white/70 text-sm">thefilmmaker.og@gmail.com</span>
+            <div className="flex items-center justify-between bg-bg-void border border-border-subtle px-4 py-3">
+              <span className="text-text-mid text-sm">thefilmmaker.og@gmail.com</span>
               <button
                 onClick={handleCopyEmail}
-                className="text-gold hover:text-gold/80 p-2 transition-colors"
+                className="text-gold-cta hover:text-gold p-2 transition-colors"
               >
                 {copiedEmail ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
               </button>
             </div>
-            <div className="flex items-center justify-between bg-black border border-[#1A1A1A] px-4 py-3">
+            <div className="flex items-center justify-between bg-bg-void border border-border-subtle px-4 py-3">
               <a
                 href="https://www.instagram.com/filmmaker.og"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-white/70 text-sm hover:text-gold transition-colors"
+                className="text-text-mid text-sm hover:text-gold-cta transition-colors"
               >
                 www.instagram.com/filmmaker.og
               </a>
               <button
                 onClick={handleCopyInsta}
-                className="text-gold hover:text-gold/80 p-2 transition-colors"
+                className="text-gold-cta hover:text-gold p-2 transition-colors"
               >
                 {copiedInsta ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
               </button>
@@ -349,21 +346,21 @@ const MobileMenu = ({ onOpenLegal, onSignOut }: MobileMenuProps) => {
 
       {/* Glossary Coming Soon Modal */}
       <Dialog open={showGlossaryModal} onOpenChange={setShowGlossaryModal}>
-        <DialogContent className="bg-[#0A0A0A] border-[#1A1A1A] max-w-md">
+        <DialogContent className="bg-bg-header border-border-subtle max-w-md">
           <DialogHeader>
             <DialogTitle className="font-bebas text-2xl text-gold tracking-wider flex items-center gap-3">
               <BookOpen className="w-6 h-6" />
               GLOSSARY
             </DialogTitle>
           </DialogHeader>
-          <div className="text-white/50 text-sm leading-relaxed space-y-4">
+          <div className="text-text-dim text-sm leading-relaxed space-y-4">
             <p>
               A comprehensive glossary of film finance terminology is currently in development.
             </p>
             <p>
-              In the meantime, look for the <span className="text-gold">ℹ️</span> icons throughout the calculator for quick definitions of key terms like <span className="text-white">negative cost</span>, <span className="text-white">recoupment</span>, <span className="text-white">off-the-tops</span>, and more.
+              In the meantime, look for the <span className="text-gold">i</span> icons throughout the calculator for quick definitions of key terms like <span className="text-text-primary">negative cost</span>, <span className="text-text-primary">recoupment</span>, <span className="text-text-primary">off-the-tops</span>, and more.
             </p>
-            <p className="text-white/30 text-xs">
+            <p className="text-text-dim text-xs">
               Need clarification on a specific term? Reach out via the Contact page.
             </p>
           </div>

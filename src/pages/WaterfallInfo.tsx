@@ -419,10 +419,10 @@ const WaterfallInfo = () => {
               <SplitBar
                 segments={[
                   { label: 'Equity Investors', percentage: 50, color: tokens.gold },
-                  { label: 'Producers', percentage: 25, color: 'rgba(255,215,0,0.7)' },
-                  { label: 'Talent Deferrals', percentage: 15, color: 'rgba(255,215,0,0.5)' },
-                  { label: 'Director', percentage: 5, color: 'rgba(255,215,0,0.3)' },
-                  { label: 'Writer', percentage: 5, color: 'rgba(255,215,0,0.15)' },
+                  { label: 'Producers', percentage: 25, color: 'rgba(212,175,55,0.7)' },
+                  { label: 'Talent Deferrals', percentage: 15, color: 'rgba(212,175,55,0.5)' },
+                  { label: 'Director', percentage: 5, color: 'rgba(212,175,55,0.3)' },
+                  { label: 'Writer', percentage: 5, color: 'rgba(212,175,55,0.15)' },
                 ]}
               />
 

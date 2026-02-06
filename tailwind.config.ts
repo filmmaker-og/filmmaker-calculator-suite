@@ -21,39 +21,36 @@ export default {
       fontFamily: {
         bebas: ["Bebas Neue", "sans-serif"],
         sans: ["Inter", "sans-serif"],
-        mono: ["Roboto Mono", "monospace"], // Fixed: was JetBrains Mono
+        mono: ["Roboto Mono", "monospace"],
       },
       colors: {
-        // Aligned to index.css (single source of truth)
+        // Two-Gold System: Metallic #D4AF37 + CTA #F9E076
         border: {
-          default: "rgba(255, 215, 0, 0.25)",  // --border-default
-          active: "rgba(255, 215, 0, 0.5)",     // --border-active
-          subtle: "#252525",                      // --border-subtle
+          default: "rgba(212, 175, 55, 0.20)",   // --border-default
+          active: "rgba(212, 175, 55, 0.50)",     // --border-active
+          subtle: "#1A1A1A",                       // --border-subtle
         },
         bg: {
-          void: "#000000",    // --bg-void
-          card: "#070707",    // --bg-card
-          surface: "#141414", // --bg-surface
-          elevated: "#111111",// --bg-elevated
-          header: "#1A1A1A",  // --bg-header
+          void: "#000000",
+          card: "#070707",
+          surface: "#111111",
+          elevated: "#0D0D0D",
+          header: "#0A0A0A",
           overlay: "rgba(0, 0, 0, 0.85)",
         },
         text: {
-          primary: "#FFFFFF", // --text-primary
-          mid: "#CFCFCF",     // --text-mid
-          dim: "#8A8A8A",     // --text-dim
+          primary: "#FFFFFF",
+          mid: "#CFCFCF",
+          dim: "#8A8A8A",
         },
         gold: {
-          DEFAULT: "#FFD700",                    // --gold
-          bright: "#FFD700",
-          muted: "rgba(255, 215, 0, 0.45)",     // --gold-muted
-          subtle: "rgba(255, 215, 0, 0.12)",     // --gold-subtle
-          glow: "rgba(255, 215, 0, 0.3)",        // --gold-glow
-        },
-        status: {
-          success: "#00FF64", // --status-success
-          error: "#FF5252",   // --status-danger
-          warning: "#FFD700", // --status-warning (gold)
+          DEFAULT: "#D4AF37",                      // Metallic (non-interactive)
+          muted: "rgba(212, 175, 55, 0.45)",
+          subtle: "rgba(212, 175, 55, 0.10)",
+          glow: "rgba(212, 175, 55, 0.25)",
+          cta: "#F9E076",                          // CTA (clickable ONLY)
+          "cta-muted": "rgba(249, 224, 118, 0.45)",
+          "cta-subtle": "rgba(249, 224, 118, 0.12)",
         },
       },
       borderRadius: {

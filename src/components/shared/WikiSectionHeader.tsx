@@ -43,7 +43,7 @@ const WikiSectionHeader = ({
   <div
     className={cn(
       "flex items-stretch",
-      isClickable && "cursor-pointer hover:bg-white/[0.02] transition-colors"
+      isClickable && "cursor-pointer hover:bg-gold-subtle transition-colors"
     )}
     style={{
       background: `linear-gradient(90deg, ${tokens.goldRadiant} 0%, ${tokens.bgHeader} 15%, ${tokens.bgHeader} 100%)`,

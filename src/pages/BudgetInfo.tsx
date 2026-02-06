@@ -36,9 +36,9 @@ const tokens = {
    Full gold -> muted gold -> subtle gold (replacing green/yellow/red)
    ═══════════════════════════════════════════════════════════════════════════ */
 const tierAccents = {
-  low: '#FFD700',                // 100% gold
-  mid: 'rgba(255, 215, 0, 0.6)', // 60% gold
-  high: 'rgba(255, 215, 0, 0.3)', // 30% gold
+  low: '#D4AF37',                // 100% metallic gold
+  mid: 'rgba(212, 175, 55, 0.6)', // 60% metallic gold
+  high: 'rgba(212, 175, 55, 0.3)', // 30% metallic gold
 };
 
 /* ═══════════════════════════════════════════════════════════════════════════

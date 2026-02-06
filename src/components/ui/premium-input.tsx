@@ -128,16 +128,16 @@ const PremiumInput = React.forwardRef<HTMLInputElement, PremiumInputProps>(
           className={cn(
             "relative overflow-hidden transition-all duration-300 ease-out",
             // Base styling
-            "bg-gradient-to-b from-[#0F0F0F] to-[#0A0A0A]",
+            "bg-gradient-to-b from-bg-elevated to-bg-header",
             // Border states with clear hierarchy
             "border-2",
             localActive
               ? "border-gold-highlight shadow-[0_0_30px_rgba(249,224,118,0.35),inset_0_0_20px_rgba(249,224,118,0.05)] scale-[1.02]"
               : isCompleted
-              ? "border-gold/60 bg-gradient-to-b from-[#0F0E0A] to-[#0A0908]"
+              ? "border-gold/60 bg-gradient-to-b from-bg-elevated to-bg-header"
               : needsAttention
               ? "border-gold/50 animate-border-glow"
-              : "border-[#1A1A1A] hover:border-[#2A2A2A]",
+              : "border-border-subtle hover:border-border-default",
             // Hero styling
             isHero && "border-gold/40 shadow-[0_0_60px_rgba(212,175,55,0.15)]",
             isHero && isCompleted && "shadow-[0_0_80px_rgba(212,175,55,0.25)]"
@@ -166,7 +166,7 @@ const PremiumInput = React.forwardRef<HTMLInputElement, PremiumInputProps>(
                       ? "bg-gold text-black"
                       : needsAttention
                       ? "bg-gold/20 text-gold border border-gold/50"
-                      : "bg-[#1A1A1A] text-white/50 border border-[#2A2A2A]"
+                      : "bg-bg-surface text-text-dim border border-border-subtle"
                   )}
                 >
                   {isCompleted ? <Check className="w-3.5 h-3.5" /> : stepNumber}
@@ -182,7 +182,7 @@ const PremiumInput = React.forwardRef<HTMLInputElement, PremiumInputProps>(
                       ? "text-gold"
                       : isCompleted
                       ? "text-gold/80"
-                      : "text-white/50"
+                      : "text-text-dim"
                   )}
                 >
                   {label}
@@ -208,7 +208,7 @@ const PremiumInput = React.forwardRef<HTMLInputElement, PremiumInputProps>(
                     ? "text-gold scale-110"
                     : isCompleted
                     ? "text-gold/70"
-                    : "text-white/30"
+                    : "text-text-dim"
                 )}
                 style={{
                   textShadow: localActive ? '0 0 20px rgba(212, 175, 55, 0.5)' : 'none',
@@ -225,11 +225,11 @@ const PremiumInput = React.forwardRef<HTMLInputElement, PremiumInputProps>(
                 "font-mono text-right transition-all tabular-nums",
                 isHero ? "h-16" : "h-12",
                 localActive
-                  ? isHero ? "text-white text-4xl" : "text-white text-2xl"
+                  ? isHero ? "text-text-primary text-4xl" : "text-text-primary text-2xl"
                   : isCompleted
-                  ? isHero ? "text-white text-4xl" : "text-white text-2xl"
-                  : isHero ? "text-white/60 text-3xl" : "text-white/60 text-xl",
-                "placeholder:text-white/20",
+                  ? isHero ? "text-text-primary text-4xl" : "text-text-primary text-2xl"
+                  : isHero ? "text-text-dim text-3xl" : "text-text-dim text-xl",
+                "placeholder:text-text-dim",
                 "focus:outline-none focus:ring-0",
                 className
               )}
@@ -252,7 +252,7 @@ const PremiumInput = React.forwardRef<HTMLInputElement, PremiumInputProps>(
                     ? "text-gold scale-110"
                     : isCompleted
                     ? "text-gold/70"
-                    : "text-white/30"
+                    : "text-text-dim"
                 )}
                 style={{
                   textShadow: localActive ? '0 0 20px rgba(212, 175, 55, 0.5)' : 'none',
@@ -278,7 +278,7 @@ const PremiumInput = React.forwardRef<HTMLInputElement, PremiumInputProps>(
           {/* Example hint - shows format */}
           {isEmpty && example && !needsAttention && !localActive && (
             <div className="px-4 pb-4">
-              <span className="text-xs text-white/25">
+              <span className="text-xs text-text-dim">
                 e.g., {example}
               </span>
             </div>

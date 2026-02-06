@@ -2,7 +2,7 @@ import { AlertTriangle } from "lucide-react";
 
 const DisclaimerFooter = () => {
   return (
-    <div className="mt-8 py-4 border-t border-[#1A1A1A]">
+    <div className="mt-8 py-4 border-t border-border-subtle">
       <div className="flex items-start gap-3">
         <AlertTriangle className="w-4 h-4 text-gold/40 flex-shrink-0 mt-0.5" />
         <p className="text-[10px] text-text-dim leading-relaxed">

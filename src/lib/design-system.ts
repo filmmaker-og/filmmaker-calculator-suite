@@ -5,7 +5,9 @@
  * These TS constants exist for components that need inline styles.
  * For Tailwind classes, use the CSS custom properties directly.
  *
- * UNIFIED GOLD: #FFD700 (Electric Gold)
+ * TWO-GOLD SYSTEM:
+ *   Metallic Gold #D4AF37 — borders, icons, dividers, brand elements (non-interactive)
+ *   CTA Gold #F9E076 — EXCLUSIVELY for clickable elements (buttons, links, CTAs)
  */
 
 // ===== COLOR PALETTE (matches index.css exactly) =====
@@ -13,30 +15,30 @@ export const colors = {
   // Backgrounds (layered system)
   void: '#000000',           // --bg-void
   card: '#070707',           // --bg-card
-  surface: '#141414',        // --bg-surface
-  elevated: '#111111',       // --bg-elevated
-  header: '#1A1A1A',         // --bg-header
+  surface: '#111111',        // --bg-surface
+  elevated: '#0D0D0D',       // --bg-elevated
+  header: '#0A0A0A',         // --bg-header
 
   // Borders
-  borderDefault: 'rgba(255, 215, 0, 0.25)',  // --border-default
-  borderSubtle: '#252525',                     // --border-subtle
-  borderActive: 'rgba(255, 215, 0, 0.5)',     // --border-active
+  borderDefault: 'rgba(212, 175, 55, 0.20)',  // --border-default (metallic gold 20%)
+  borderSubtle: '#1A1A1A',                     // --border-subtle
+  borderActive: 'rgba(212, 175, 55, 0.50)',    // --border-active
 
-  // Gold palette
-  gold: '#FFD700',                             // --gold
-  goldMuted: 'rgba(255, 215, 0, 0.45)',       // --gold-muted
-  goldSubtle: 'rgba(255, 215, 0, 0.12)',      // --gold-subtle
-  goldGlow: 'rgba(255, 215, 0, 0.3)',         // --gold-glow
+  // Gold palette — Metallic (non-interactive brand elements)
+  gold: '#D4AF37',                             // --gold (metallic)
+  goldMuted: 'rgba(212, 175, 55, 0.45)',       // --gold-muted
+  goldSubtle: 'rgba(212, 175, 55, 0.10)',      // --gold-subtle
+  goldGlow: 'rgba(212, 175, 55, 0.25)',        // --gold-glow
+
+  // CTA Gold — EXCLUSIVELY for clickable elements
+  goldCta: '#F9E076',                          // --gold-cta (bright, warm)
+  goldCtaMuted: 'rgba(249, 224, 118, 0.45)',   // --gold-cta-muted
+  goldCtaSubtle: 'rgba(249, 224, 118, 0.12)',  // --gold-cta-subtle
 
   // Text hierarchy
   textPrimary: '#FFFFFF',    // --text-primary
   textMid: '#CFCFCF',        // --text-mid
   textDim: '#8A8A8A',        // --text-dim
-
-  // Status colors
-  success: '#00FF64',        // --status-success
-  warning: '#FFD700',        // --status-warning
-  error: '#FF5252',          // --status-danger
 } as const;
 
 // ===== SPACING (matches index.css) =====
@@ -61,18 +63,19 @@ export const radius = {
 
 // ===== SHADOWS (matches index.css) =====
 export const shadows = {
-  none: 'none',                                  // --shadow-none
-  focus: '0 0 0 1px rgba(255, 215, 0, 0.16)',   // --shadow-focus
-  cardActive: '0 0 20px rgba(255, 215, 0, 0.08)', // --shadow-card-active
-  button: '0 10px 26px rgba(255, 215, 0, 0.18)', // --shadow-button
-  modal: '0 20px 50px rgba(0, 0, 0, 0.8)',       // --shadow-modal
+  none: 'none',                                      // --shadow-none
+  focus: '0 0 0 1px rgba(212, 175, 55, 0.16)',      // --shadow-focus
+  cardActive: '0 0 20px rgba(212, 175, 55, 0.08)',  // --shadow-card-active
+  button: '0 10px 26px rgba(249, 224, 118, 0.15)',  // --shadow-button (CTA glow)
+  modal: '0 20px 50px rgba(0, 0, 0, 0.8)',          // --shadow-modal
 } as const;
 
 // ===== GRADIENTS =====
 export const gradients = {
-  gold: 'linear-gradient(135deg, #FFD700 0%, #FFE44D 100%)',
-  goldSubtle: 'linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(255, 228, 77, 0.05) 100%)',
-  dividerGold: 'linear-gradient(90deg, transparent 0%, rgba(255, 215, 0, 0.5) 20%, rgba(255, 215, 0, 0.5) 80%, transparent 100%)',
+  gold: 'linear-gradient(135deg, #D4AF37 0%, #E6C84A 100%)',
+  goldCta: 'linear-gradient(135deg, #F9E076 0%, #F5D55A 100%)',
+  goldSubtle: 'linear-gradient(135deg, rgba(212, 175, 55, 0.08) 0%, rgba(212, 175, 55, 0.02) 100%)',
+  dividerGold: 'linear-gradient(90deg, transparent 0%, rgba(212, 175, 55, 0.4) 20%, rgba(212, 175, 55, 0.4) 80%, transparent 100%)',
   fadeBottom: 'linear-gradient(to top, #000000 0%, #000000 85%, transparent 100%)',
 } as const;
 
@@ -124,30 +127,30 @@ export const transitions = {
   spring: '0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
 } as const;
 
-// ===== VERDICT STATUS =====
+// ===== VERDICT STATUS (gold-intensity only — no green/red) =====
 export const verdictStatus = {
   excellent: {
     label: 'EXCELLENT DEAL',
-    color: colors.success,
-    bgColor: 'rgba(0, 255, 100, 0.15)',
+    color: colors.gold,
+    bgColor: 'rgba(212, 175, 55, 0.15)',
     description: 'This return profile will attract institutional capital.',
   },
   good: {
     label: 'SOLID DEAL',
     color: colors.gold,
-    bgColor: 'rgba(255, 215, 0, 0.15)',
+    bgColor: 'rgba(212, 175, 55, 0.10)',
     description: 'Healthy returns for all parties involved.',
   },
   marginal: {
     label: 'MARGINAL',
-    color: colors.warning,
-    bgColor: 'rgba(255, 215, 0, 0.15)',
+    color: colors.goldMuted,
+    bgColor: 'rgba(212, 175, 55, 0.06)',
     description: 'Consider renegotiating terms for better returns.',
   },
   underwater: {
     label: 'UNDERWATER',
-    color: colors.error,
-    bgColor: 'rgba(255, 82, 82, 0.15)',
+    color: colors.textDim,
+    bgColor: 'rgba(255, 255, 255, 0.04)',
     description: 'The acquisition price doesn\'t cover all costs.',
   },
 } as const;

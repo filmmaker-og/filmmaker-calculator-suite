@@ -95,7 +95,7 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen min-h-[100dvh] bg-black flex flex-col">
+    <div className="min-h-screen min-h-[100dvh] bg-bg-void flex flex-col">
       
       {/* Header with hamburger menu */}
       <Header title="SIGN IN" />
@@ -114,10 +114,10 @@ const Auth = () => {
                   className="w-16 h-16 object-contain mx-auto mb-6 opacity-90"
                 />
                 
-                <h1 className="font-bebas text-3xl tracking-[0.12em] text-white mb-3">
+                <h1 className="font-bebas text-3xl tracking-[0.12em] text-text-primary mb-3">
                   SAVE YOUR WATERFALL
                 </h1>
-                <p className="text-white/50 text-sm leading-relaxed">
+                <p className="text-text-dim text-sm leading-relaxed">
                   We'll email you a link. No password needed.
                 </p>
               </div>
@@ -130,7 +130,7 @@ const Auth = () => {
                   <div>
                     <label
                       htmlFor="name"
-                      className="block text-xs uppercase tracking-[0.2em] text-white/40 font-medium mb-3"
+                      className="block text-xs uppercase tracking-[0.2em] text-text-dim font-medium mb-3"
                     >
                       Name
                     </label>
@@ -150,7 +150,7 @@ const Auth = () => {
                           document.getElementById('email')?.focus();
                         }
                       }}
-                      className="h-12 bg-[#1A1A1A] border border-[#2A2A2A] text-white placeholder:text-white/30 focus:border-gold focus:ring-0 focus:ring-offset-0 transition-colors rounded-none"
+                      className="h-12 bg-bg-surface border border-border-subtle text-text-primary placeholder:text-text-dim focus:border-gold focus:ring-0 focus:ring-offset-0 transition-colors rounded-none"
                       required
                     />
                   </div>
@@ -159,7 +159,7 @@ const Auth = () => {
                   <div>
                     <label
                       htmlFor="email"
-                      className="block text-xs uppercase tracking-[0.2em] text-white/40 font-medium mb-3"
+                      className="block text-xs uppercase tracking-[0.2em] text-text-dim font-medium mb-3"
                     >
                       Email
                     </label>
@@ -181,7 +181,7 @@ const Auth = () => {
                           handleSubmit(e as any);
                         }
                       }}
-                      className="h-12 bg-[#1A1A1A] border border-[#2A2A2A] text-white placeholder:text-white/30 font-mono focus:border-gold focus:ring-0 focus:ring-offset-0 transition-colors rounded-none"
+                      className="h-12 bg-bg-surface border border-border-subtle text-text-primary placeholder:text-text-dim font-mono focus:border-gold focus:ring-0 focus:ring-offset-0 transition-colors rounded-none"
                       required
                     />
                   </div>
@@ -209,11 +209,11 @@ const Auth = () => {
               <div className="mt-8 text-center space-y-3">
                 <button
                   onClick={() => navigate("/calculator?skip=true")}
-                  className="text-white/60 hover:text-white text-base font-semibold transition-colors"
+                  className="text-text-dim hover:text-text-primary text-base font-semibold transition-colors"
                 >
                   Continue without saving →
                 </button>
-                <p className="text-white/30 text-xs">
+                <p className="text-text-dim text-xs">
                   Your work won't be saved
                 </p>
               </div>
@@ -229,12 +229,12 @@ const Auth = () => {
                 </div>
 
                 {/* Heading */}
-                <h2 className="font-bebas text-2xl tracking-[0.12em] text-white mb-4">
+                <h2 className="font-bebas text-2xl tracking-[0.12em] text-text-primary mb-4">
                   CHECK YOUR EMAIL
                 </h2>
 
                 {/* Email Display */}
-                <p className="text-white/50 text-sm mb-2">
+                <p className="text-text-dim text-sm mb-2">
                   We sent a link to
                 </p>
                 <p className="font-mono text-gold text-base mb-10">
@@ -248,7 +248,7 @@ const Auth = () => {
                 <div className="space-y-6">
                   <button
                     onClick={() => setStep('email')}
-                    className="text-white/50 hover:text-gold text-sm font-medium transition-colors"
+                    className="text-text-dim hover:text-gold text-sm font-medium transition-colors"
                   >
                     Use different email
                   </button>
@@ -256,7 +256,7 @@ const Auth = () => {
                   <div>
                     <button
                       onClick={() => navigate("/calculator?skip=true")}
-                      className="text-white/40 hover:text-white/60 text-sm transition-colors"
+                      className="text-text-dim hover:text-text-mid text-sm transition-colors"
                     >
                       Continue without saving →
                     </button>

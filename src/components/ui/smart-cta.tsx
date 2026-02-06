@@ -68,11 +68,11 @@ const SmartCTA = ({
       {/* Requirement hint when disabled */}
       {!canProceed && requirement && (
         <div className="mb-4 animate-fade-in">
-          <div className="flex items-center justify-center gap-2 py-3 px-4 bg-[#0D0D0D] border border-[#1A1A1A] text-center">
+          <div className="flex items-center justify-center gap-2 py-3 px-4 bg-bg-elevated border border-border-subtle text-center">
             <div className="w-5 h-5 rounded-full border border-gold/50 flex items-center justify-center animate-pulse-slow">
               <AlertCircle className="w-3 h-3 text-gold" />
             </div>
-            <span className="text-xs text-white/60 tracking-wide">
+            <span className="text-xs text-text-dim tracking-wide">
               {requirement}
             </span>
           </div>
@@ -92,8 +92,8 @@ const SmartCTA = ({
             onClick={handleBack}
             className={cn(
               "h-14 px-5 flex items-center justify-center",
-              "bg-[#0A0A0A] border border-[#2A2A2A]",
-              "text-white/60 hover:text-white hover:border-[#3A3A3A]",
+              "bg-bg-header border border-border-subtle",
+              "text-text-dim hover:text-text-primary hover:border-border-default",
               "transition-all duration-200",
               "active:scale-95"
             )}
@@ -118,7 +118,7 @@ const SmartCTA = ({
             isPressed && canProceed && "scale-[0.98]",
             canProceed
               ? "bg-gold-cta text-black hover:brightness-110"
-              : "bg-[#1A1A1A] text-white/30 cursor-not-allowed"
+              : "bg-bg-surface text-text-dim cursor-not-allowed"
           )}
           style={{
             boxShadow: canProceed
