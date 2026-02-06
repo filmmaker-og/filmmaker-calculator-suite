@@ -80,7 +80,7 @@ const BreakevenStep = ({ inputs, guilds, selections }: BreakevenStepProps) => {
           <div
             className="absolute inset-0"
             style={{
-              background: 'radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, transparent 70%)',
+              background: 'radial-gradient(circle, rgba(255, 215, 0, 0.15) 0%, transparent 70%)',
               filter: 'blur(15px)',
               transform: 'scale(2)',
             }}
@@ -156,7 +156,7 @@ const BreakevenStep = ({ inputs, guilds, selections }: BreakevenStepProps) => {
           <p
             className="font-bebas text-5xl sm:text-6xl text-gold"
             style={{
-              textShadow: '0 0 40px rgba(212, 175, 55, 0.3)',
+              textShadow: '0 0 40px rgba(255, 215, 0, 0.3)',
             }}
           >
             {Number.isFinite(breakeven) ? formatCompactCurrency(displayBreakeven) : '∞'}

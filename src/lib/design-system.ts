@@ -1,158 +1,89 @@
 /**
  * FILMMAKER.OG Design System Constants
  *
- * Premium mobile-first design tokens matching reference calculator
- * All values are standardized for consistency across the app
- * 
- * UNIFIED GOLD: #FFD700 (Electric Gold) - Aligned with index.css
+ * Aligned to index.css (single source of truth)
+ * These TS constants exist for components that need inline styles.
+ * For Tailwind classes, use the CSS custom properties directly.
+ *
+ * UNIFIED GOLD: #FFD700 (Electric Gold)
  */
 
-// ===== COLOR PALETTE =====
+// ===== COLOR PALETTE (matches index.css exactly) =====
 export const colors = {
-  // Backgrounds
-  void: '#000000',        // Pure black - page background
-  surface: '#070707',     // Off-black - elevated surfaces
-  matte: '#0A0A0A',       // Matte black - headers, cards
-  card: '#0D0D0D',        // Card background
-  cardElevated: '#111111', // Elevated card (hover states)
+  // Backgrounds (layered system)
+  void: '#000000',           // --bg-void
+  card: '#070707',           // --bg-card
+  surface: '#141414',        // --bg-surface
+  elevated: '#111111',       // --bg-elevated
+  header: '#1A1A1A',         // --bg-header
 
   // Borders
-  border: '#1A1A1A',      // Subtle borders
-  borderMedium: '#2A2A2A', // Medium borders
-  borderStrong: '#3A3A3A', // Strong borders (active states)
+  borderDefault: 'rgba(255, 215, 0, 0.25)',  // --border-default
+  borderSubtle: '#252525',                     // --border-subtle
+  borderActive: 'rgba(255, 215, 0, 0.5)',     // --border-active
 
-  // Gold palette - UNIFIED to Electric Gold #FFD700
-  gold: '#FFD700',        // Primary gold (Electric Gold)
-  goldHighlight: '#FFE44D', // Highlight/glow gold (lighter)
-  goldShadow: '#B8960B',  // Shadow gold (depth)
-  goldMuted: 'rgba(255, 215, 0, 0.45)', // Muted gold
+  // Gold palette
+  gold: '#FFD700',                             // --gold
+  goldMuted: 'rgba(255, 215, 0, 0.45)',       // --gold-muted
+  goldSubtle: 'rgba(255, 215, 0, 0.12)',      // --gold-subtle
+  goldGlow: 'rgba(255, 215, 0, 0.3)',         // --gold-glow
 
-  // Text
-  textPrimary: '#FFFFFF',
-  textSecondary: 'rgba(255, 255, 255, 0.7)',
-  textMuted: 'rgba(255, 255, 255, 0.5)',
-  textSubtle: 'rgba(255, 255, 255, 0.3)',
-  textDisabled: 'rgba(255, 255, 255, 0.2)',
+  // Text hierarchy
+  textPrimary: '#FFFFFF',    // --text-primary
+  textMid: '#CFCFCF',        // --text-mid
+  textDim: '#8A8A8A',        // --text-dim
 
   // Status colors
-  success: '#10B981',      // Emerald
-  successMuted: 'rgba(16, 185, 129, 0.2)',
-  warning: '#F59E0B',      // Amber
-  warningMuted: 'rgba(245, 158, 11, 0.2)',
-  error: '#EF4444',        // Red
-  errorMuted: 'rgba(239, 68, 68, 0.2)',
+  success: '#00FF64',        // --status-success
+  warning: '#FFD700',        // --status-warning
+  error: '#FF5252',          // --status-danger
 } as const;
 
-// ===== SPACING =====
+// ===== SPACING (matches index.css) =====
 export const spacing = {
-  xs: '4px',
-  sm: '8px',
-  md: '12px',
-  lg: '16px',
-  xl: '20px',
-  '2xl': '24px',
-  '3xl': '32px',
-  '4xl': '48px',
+  xs: '4px',     // --space-xs
+  sm: '8px',     // --space-sm
+  md: '12px',    // --space-md
+  lg: '16px',    // --space-lg
+  xl: '24px',    // --space-xl
+  '2xl': '32px', // --space-2xl
 } as const;
 
-// ===== BORDER RADIUS =====
+// ===== BORDER RADIUS (matches index.css) =====
 export const radius = {
-  none: '0px',
-  sm: '2px',
-  md: '4px',
-  lg: '8px',
-  xl: '12px',  // Match reference calculator
-  full: '9999px',
+  none: '0px',    // --radius-none
+  sm: '8px',      // --radius-sm
+  md: '12px',     // --radius-md
+  lg: '14px',     // --radius-lg
+  xl: '18px',     // --radius-xl
+  full: '999px',  // --radius-full
 } as const;
 
-// ===== SHADOWS =====
+// ===== SHADOWS (matches index.css) =====
 export const shadows = {
-  none: 'none',
-  subtle: '0 2px 8px rgba(0, 0, 0, 0.3)',
-  card: '0 4px 16px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.02)',
-  elevated: '0 8px 32px rgba(0, 0, 0, 0.4)',
-  goldGlow: '0 0 20px rgba(255, 215, 0, 0.3)',
-  goldGlowStrong: '0 0 40px rgba(255, 215, 0, 0.5), 0 0 80px rgba(255, 215, 0, 0.2)',
-  inputFocus: '0 0 0 3px rgba(255, 215, 0, 0.15), 0 0 20px rgba(255, 215, 0, 0.1)',
+  none: 'none',                                  // --shadow-none
+  focus: '0 0 0 1px rgba(255, 215, 0, 0.16)',   // --shadow-focus
+  cardActive: '0 0 20px rgba(255, 215, 0, 0.08)', // --shadow-card-active
+  button: '0 10px 26px rgba(255, 215, 0, 0.18)', // --shadow-button
+  modal: '0 20px 50px rgba(0, 0, 0, 0.8)',       // --shadow-modal
 } as const;
 
 // ===== GRADIENTS =====
 export const gradients = {
   gold: 'linear-gradient(135deg, #FFD700 0%, #FFE44D 100%)',
   goldSubtle: 'linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(255, 228, 77, 0.05) 100%)',
-  matteCard: 'linear-gradient(180deg, #0D0D0D 0%, #080808 100%)',
-  divider: 'linear-gradient(90deg, transparent 0%, #2A2A2A 20%, #2A2A2A 80%, transparent 100%)',
   dividerGold: 'linear-gradient(90deg, transparent 0%, rgba(255, 215, 0, 0.5) 20%, rgba(255, 215, 0, 0.5) 80%, transparent 100%)',
   fadeBottom: 'linear-gradient(to top, #000000 0%, #000000 85%, transparent 100%)',
-  successFill: 'linear-gradient(90deg, #10B981 0%, #34D399 100%)',
-  errorFill: 'linear-gradient(90deg, #EF4444 0%, #F87171 100%)',
-} as const;
-
-// ===== MATTE CARD STYLES =====
-// These match the reference calculator styling
-export const matteCard = {
-  background: gradients.matteCard,
-  border: `1px solid ${colors.border}`,
-  borderRadius: radius.none, // Sharp corners for premium feel
-  boxShadow: shadows.card,
-} as const;
-
-export const matteCardHeader = {
-  background: 'rgba(10, 10, 10, 0.8)',
-  borderBottom: `1px solid ${colors.border}`,
-  padding: `${spacing.md} ${spacing.xl}`,
-} as const;
-
-// ===== BUTTON STYLES =====
-export const buttons = {
-  primary: {
-    background: colors.gold,
-    color: '#000000',
-    fontWeight: 900,
-    boxShadow: `${shadows.goldGlow}, 0 4px 20px rgba(0, 0, 0, 0.3)`,
-    hoverBackground: colors.goldHighlight,
-  },
-  secondary: {
-    background: colors.matte,
-    border: `1px solid ${colors.borderMedium}`,
-    color: 'rgba(255, 255, 255, 0.7)',
-    hoverBorder: colors.borderStrong,
-    hoverColor: colors.textPrimary,
-  },
-  ghost: {
-    background: 'transparent',
-    border: `1px solid ${colors.gold}`,
-    color: colors.gold,
-    hoverBackground: 'rgba(255, 215, 0, 0.1)',
-  },
-  disabled: {
-    background: colors.border,
-    color: 'rgba(255, 255, 255, 0.3)',
-    boxShadow: 'none',
-  },
-} as const;
-
-// ===== INPUT STYLES =====
-export const inputs = {
-  background: 'transparent',
-  border: `1px solid ${colors.borderMedium}`,
-  borderRadius: radius.none,
-  focusBorder: colors.goldHighlight,
-  focusShadow: shadows.inputFocus,
-  placeholderColor: 'rgba(255, 255, 255, 0.2)',
-  minHeight: '48px', // Touch-friendly
 } as const;
 
 // ===== TYPOGRAPHY =====
 export const typography = {
-  // Bebas Neue - Headlines
   headline: {
     fontFamily: "'Bebas Neue', Impact, sans-serif",
     fontWeight: 400,
     letterSpacing: '0.05em',
     textTransform: 'uppercase' as const,
   },
-  // Inter - Body text
   body: {
     fontFamily: "'Inter', sans-serif",
     fontWeight: 400,
@@ -161,18 +92,16 @@ export const typography = {
     fontFamily: "'Inter', sans-serif",
     fontWeight: 600,
   },
-  // Roboto Mono - Financial numbers (unified with index.css)
   mono: {
     fontFamily: "'Roboto Mono', monospace",
     fontWeight: 500,
     fontVariantNumeric: 'tabular-nums',
   },
-  // Label styles
   label: {
     fontSize: '10px',
     letterSpacing: '0.2em',
     textTransform: 'uppercase' as const,
-    color: colors.textMuted,
+    color: colors.textDim,
   },
 } as const;
 
@@ -200,7 +129,7 @@ export const verdictStatus = {
   excellent: {
     label: 'EXCELLENT DEAL',
     color: colors.success,
-    bgColor: colors.successMuted,
+    bgColor: 'rgba(0, 255, 100, 0.15)',
     description: 'This return profile will attract institutional capital.',
   },
   good: {
@@ -212,13 +141,13 @@ export const verdictStatus = {
   marginal: {
     label: 'MARGINAL',
     color: colors.warning,
-    bgColor: colors.warningMuted,
+    bgColor: 'rgba(255, 215, 0, 0.15)',
     description: 'Consider renegotiating terms for better returns.',
   },
   underwater: {
     label: 'UNDERWATER',
     color: colors.error,
-    bgColor: colors.errorMuted,
+    bgColor: 'rgba(255, 82, 82, 0.15)',
     description: 'The acquisition price doesn\'t cover all costs.',
   },
 } as const;

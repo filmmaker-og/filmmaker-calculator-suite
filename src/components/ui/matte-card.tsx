@@ -147,14 +147,14 @@ export const VerdictCard = ({
 }: VerdictCardProps) => {
   const statusColors = {
     excellent: "#10B981",
-    good: "#D4AF37",
+    good: "#FFD700",
     marginal: "#F59E0B",
     underwater: "#EF4444",
   };
 
   const glowColors = {
     excellent: "rgba(16, 185, 129, 0.4)",
-    good: "rgba(212, 175, 55, 0.4)",
+    good: "rgba(255, 215, 0, 0.4)",
     marginal: "rgba(245, 158, 11, 0.3)",
     underwater: "rgba(239, 68, 68, 0.3)",
   };
@@ -211,7 +211,7 @@ export const LedgerRow = ({
   label,
   value,
   percentage,
-  color = "#D4AF37",
+  color = "#FFD700",
   isTotal,
   className,
 }: LedgerRowProps) => {

@@ -70,12 +70,14 @@ const Calculator = () => {
   const [showEmailGate, setShowEmailGate] = useState(false);
   const [emailCaptured, setEmailCaptured] = useState(false);
   
-  const [capitalSelections] = useState<CapitalSelections>({
-    taxCredits: false,
-    seniorDebt: false,
-    gapLoan: false,
-    equity: false,
-  });
+  // Derive capital selections from actual input values
+  // If a user entered a value, that funding source is "selected"
+  const capitalSelections: CapitalSelections = {
+    taxCredits: (inputs.credits || 0) > 0,
+    seniorDebt: (inputs.debt || 0) > 0,
+    gapLoan: (inputs.mezzanineDebt || 0) > 0,
+    equity: (inputs.equity || 0) > 0,
+  };
 
   // Reset on ?reset=true or ?skip=true (demo mode)
   useEffect(() => {
@@ -96,16 +98,7 @@ const Calculator = () => {
       try {
         const parsed = JSON.parse(saved);
         if (parsed.inputs) {
-          // Validate and clean inputs - remove suspicious test values
-          const cleanInputs = { ...parsed.inputs };
-          // Clear values that look like test data (999, 9999, etc)
-          if (cleanInputs.budget && cleanInputs.budget < 10000) {
-            cleanInputs.budget = 0;
-          }
-          if (cleanInputs.revenue && cleanInputs.revenue < 10000) {
-            cleanInputs.revenue = 0;
-          }
-          setInputs(cleanInputs);
+          setInputs(parsed.inputs);
         }
         if (parsed.guilds) setGuilds(parsed.guilds);
         if (parsed.activeTab) setActiveTab(parsed.activeTab);
@@ -246,7 +239,7 @@ const Calculator = () => {
     if (nextTab) {
       handleTabChange(nextTab);
     }
-  }, [handleTabChange]);
+  }, [handleTabChange, activeTab, inputs]);
 
   // Check if current section is completed
   const isCurrentSectionComplete = (): boolean => {

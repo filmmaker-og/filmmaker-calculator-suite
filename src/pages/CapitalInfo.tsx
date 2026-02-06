@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import Header from "@/components/Header";
+import { colors, radius } from "@/lib/design-system";
 
 /* ═══════════════════════════════════════════════════════════════════════════
    MINI WIKI: CAPITAL STACK
@@ -9,28 +10,25 @@ import Header from "@/components/Header";
    WIKI CONTAINMENT: This mini wiki can ONLY link back to /intro
    Secondary exit: Subtle "Start Simulation" text link at bottom
    ═══════════════════════════════════════════════════════════════════════════ */
+// Sourced from design-system.ts (aligned to index.css)
 const tokens = {
-  bgVoid: '#000000',
-  bgMatte: '#0D0D0D',
-  bgHeader: '#111111',
-  bgSurface: '#141414',
-  
-  gold: '#FFD700',
-  goldMuted: 'rgba(255, 215, 0, 0.45)',
-  goldSubtle: 'rgba(255, 215, 0, 0.08)',
-  goldGlow: 'rgba(255, 215, 0, 0.25)',
-  goldFill: 'rgba(255, 215, 0, 0.12)',
-  goldRadiant: 'rgba(255, 215, 0, 0.18)',
-  
-  borderMatte: '#1A1A1A',
-  borderSubtle: '#222222',
-  
-  textPrimary: '#FFFFFF',
-  textMid: '#B0B0B0',
-  textDim: '#6B6B6B',
-  
-  radiusMd: '12px',
-  radiusLg: '14px',
+  bgVoid: colors.void,
+  bgMatte: colors.card,
+  bgHeader: colors.elevated,
+  bgSurface: colors.surface,
+  gold: colors.gold,
+  goldMuted: colors.goldMuted,
+  goldSubtle: colors.goldSubtle,
+  goldGlow: colors.goldGlow,
+  goldFill: colors.goldSubtle,
+  goldRadiant: colors.goldGlow,
+  borderMatte: colors.borderSubtle,
+  borderSubtle: colors.borderSubtle,
+  textPrimary: colors.textPrimary,
+  textMid: colors.textMid,
+  textDim: colors.textDim,
+  radiusMd: radius.md,
+  radiusLg: radius.lg,
 };
 
 /* ═══════════════════════════════════════════════════════════════════════════
