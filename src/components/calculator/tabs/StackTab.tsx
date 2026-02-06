@@ -2,47 +2,32 @@ import { useState, useCallback } from "react";
 import { WaterfallInputs } from "@/lib/waterfall";
 import { useHaptics } from "@/hooks/use-haptics";
 
-// Import all stack mini-app components
-import {
-  StackOverviewWiki,
-  TaxCreditsWiki,
-  TaxCreditsInput,
-  SeniorDebtWiki,
-  SeniorDebtInput,
-  GapMezzWiki,
-  GapMezzInput,
-  EquityWiki,
-  EquityInput,
-  DefermentsWiki,
-  DefermentsInput,
-  StackSummary,
-} from "../stack";
+// Import stack input components (no wikis)
+import TaxCreditsInput from "../stack/TaxCreditsInput";
+import SeniorDebtInput from "../stack/SeniorDebtInput";
+import GapMezzInput from "../stack/GapMezzInput";
+import EquityInput from "../stack/EquityInput";
+import DefermentsInput from "../stack/DefermentsInput";
+import StackSummary from "../stack/StackSummary";
 
 interface StackTabProps {
   inputs: WaterfallInputs;
   onUpdateInput: (key: keyof WaterfallInputs, value: number) => void;
-  onAdvance?: () => void; // Called when user completes Stack and wants to go to Deal
+  onAdvance?: () => void;
 }
 
 /**
- * StackTab - Step Router (Mini-App Architecture)
+ * StackTab - Pure Action Zone (No Wiki Steps)
  * 
- * This tab manages navigation between isolated mini-app screens.
- * Each screen has ONE job: educate (Wiki) or collect data (Input).
+ * Education lives in /intro. This tab is all about input collection.
  * 
- * Step Map:
- * 0  = StackOverviewWiki (intro to capital stack concept)
- * 1  = TaxCreditsWiki
- * 2  = TaxCreditsInput
- * 3  = SeniorDebtWiki
- * 4  = SeniorDebtInput
- * 5  = GapMezzWiki
- * 6  = GapMezzInput
- * 7  = EquityWiki
- * 8  = EquityInput
- * 9  = DefermentsWiki
- * 10 = DefermentsInput
- * 11 = StackSummary
+ * Step Map (inputs only):
+ * 0 = TaxCreditsInput
+ * 1 = SeniorDebtInput
+ * 2 = GapMezzInput
+ * 3 = EquityInput
+ * 4 = DefermentsInput
+ * 5 = StackSummary
  * 
  * Smart Start: If any capital data exists, skip to summary.
  */
@@ -57,16 +42,15 @@ const StackTab = ({ inputs, onUpdateInput, onAdvance }: StackTabProps) => {
     inputs.equity > 0 || 
     inputs.deferments > 0;
   
-  // If user has data, start at summary (step 11); otherwise start at overview (step 0)
+  // If user has data, start at summary (step 5); otherwise start at first input (step 0)
   const [currentStep, setCurrentStep] = useState(() => {
-    return hasStackData ? 11 : 0;
+    return hasStackData ? 5 : 0;
   });
 
   // Navigation helpers
   const goToStep = useCallback((step: number) => {
     haptics.light();
     setCurrentStep(step);
-    // Scroll to top
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [haptics]);
 
@@ -78,13 +62,9 @@ const StackTab = ({ inputs, onUpdateInput, onAdvance }: StackTabProps) => {
     goToStep(Math.max(0, currentStep - 1));
   }, [currentStep, goToStep]);
 
-  // Skip = advance by 2 (skip input, go to next wiki)
+  // Skip = advance to next input
   const skipToNextSection = useCallback(() => {
-    // From input step, skip to next wiki (or summary if at end)
-    // Input steps are even: 2, 4, 6, 8, 10
-    // Next wiki is +1: 3, 5, 7, 9, 11
-    const nextWikiStep = currentStep + 1;
-    goToStep(Math.min(11, nextWikiStep));
+    goToStep(Math.min(5, currentStep + 1));
   }, [currentStep, goToStep]);
 
   // Handle completion - advance to Deal tab
@@ -95,17 +75,29 @@ const StackTab = ({ inputs, onUpdateInput, onAdvance }: StackTabProps) => {
     }
   }, [haptics, onAdvance]);
 
+  // Map from summary edit step to new step numbers
+  // Old step numbers -> New step numbers:
+  // 2 (TaxCredits) -> 0
+  // 4 (SeniorDebt) -> 1
+  // 6 (GapMezz) -> 2
+  // 8 (Equity) -> 3
+  // 10 (Deferments) -> 4
+  const mapOldStepToNew = (oldStep: number): number => {
+    const mapping: Record<number, number> = {
+      2: 0,   // TaxCredits
+      4: 1,   // SeniorDebt
+      6: 2,   // GapMezz
+      8: 3,   // Equity
+      10: 4,  // Deferments
+    };
+    return mapping[oldStep] ?? 0;
+  };
+
   // Render the current step
   const renderStep = () => {
     switch (currentStep) {
-      // Step 0: Overview Wiki
+      // Step 0: Tax Credits Input
       case 0:
-        return <StackOverviewWiki onContinue={nextStep} />;
-
-      // Steps 1-2: Tax Credits
-      case 1:
-        return <TaxCreditsWiki onContinue={nextStep} />;
-      case 2:
         return (
           <TaxCreditsInput
             inputs={inputs}
@@ -116,10 +108,8 @@ const StackTab = ({ inputs, onUpdateInput, onAdvance }: StackTabProps) => {
           />
         );
 
-      // Steps 3-4: Senior Debt
-      case 3:
-        return <SeniorDebtWiki onContinue={nextStep} />;
-      case 4:
+      // Step 1: Senior Debt Input
+      case 1:
         return (
           <SeniorDebtInput
             inputs={inputs}
@@ -130,10 +120,8 @@ const StackTab = ({ inputs, onUpdateInput, onAdvance }: StackTabProps) => {
           />
         );
 
-      // Steps 5-6: Gap/Mezz
-      case 5:
-        return <GapMezzWiki onContinue={nextStep} />;
-      case 6:
+      // Step 2: Gap/Mezz Input
+      case 2:
         return (
           <GapMezzInput
             inputs={inputs}
@@ -144,10 +132,8 @@ const StackTab = ({ inputs, onUpdateInput, onAdvance }: StackTabProps) => {
           />
         );
 
-      // Steps 7-8: Equity
-      case 7:
-        return <EquityWiki onContinue={nextStep} />;
-      case 8:
+      // Step 3: Equity Input
+      case 3:
         return (
           <EquityInput
             inputs={inputs}
@@ -158,10 +144,8 @@ const StackTab = ({ inputs, onUpdateInput, onAdvance }: StackTabProps) => {
           />
         );
 
-      // Steps 9-10: Deferments
-      case 9:
-        return <DefermentsWiki onContinue={nextStep} />;
-      case 10:
+      // Step 4: Deferments Input
+      case 4:
         return (
           <DefermentsInput
             inputs={inputs}
@@ -172,18 +156,26 @@ const StackTab = ({ inputs, onUpdateInput, onAdvance }: StackTabProps) => {
           />
         );
 
-      // Step 11: Summary
-      case 11:
+      // Step 5: Summary
+      case 5:
         return (
           <StackSummary
             inputs={inputs}
-            onEdit={goToStep}
+            onEdit={(oldStep) => goToStep(mapOldStepToNew(oldStep))}
             onComplete={handleComplete}
           />
         );
 
       default:
-        return <StackOverviewWiki onContinue={nextStep} />;
+        return (
+          <TaxCreditsInput
+            inputs={inputs}
+            onUpdateInput={onUpdateInput}
+            onBack={prevStep}
+            onNext={nextStep}
+            onSkip={skipToNextSection}
+          />
+        );
     }
   };
 

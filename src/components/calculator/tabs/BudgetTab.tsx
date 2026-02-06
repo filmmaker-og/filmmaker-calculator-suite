@@ -1,53 +1,28 @@
-import { useState, useCallback } from "react";
+import { useCallback } from "react";
 import { WaterfallInputs, GuildState } from "@/lib/waterfall";
 import { useHaptics } from "@/hooks/use-haptics";
 
-// Import budget mini-app components
-import { BudgetOverviewWiki, BudgetInput } from "../budget";
+// Import budget input component
+import BudgetInput from "../budget/BudgetInput";
 
 interface BudgetTabProps {
   inputs: WaterfallInputs;
   guilds: GuildState;
   onUpdateInput: (key: keyof WaterfallInputs, value: number) => void;
   onToggleGuild: (guild: keyof GuildState) => void;
-  onAdvance?: () => void; // Called when user completes Budget and wants to go to Stack
+  onAdvance?: () => void;
 }
 
 /**
- * BudgetTab - Step Router (Mini-App Architecture)
+ * BudgetTab - Pure Action Zone
  * 
- * This tab manages navigation between isolated mini-app screens.
- * Each screen has ONE job: educate (Wiki) or collect data (Input).
+ * No wiki screens - education lives in /intro.
+ * This tab goes straight to input collection.
  * 
- * Step Map:
- * 0 = BudgetOverviewWiki (intro to negative cost concept)
- * 1 = BudgetInput (enter budget + quick amounts)
- * 
- * Smart Start: Skips wiki if budget already entered.
  * On completion, advances to Stack tab.
  */
 const BudgetTab = ({ inputs, onUpdateInput, onAdvance }: BudgetTabProps) => {
   const haptics = useHaptics();
-  
-  // Smart start: Skip wiki if budget already entered
-  const [currentStep, setCurrentStep] = useState(() => {
-    return inputs.budget > 0 ? 1 : 0;
-  });
-
-  // Navigation helpers
-  const goToStep = useCallback((step: number) => {
-    haptics.light();
-    setCurrentStep(step);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [haptics]);
-
-  const nextStep = useCallback(() => {
-    goToStep(currentStep + 1);
-  }, [currentStep, goToStep]);
-
-  const prevStep = useCallback(() => {
-    goToStep(Math.max(0, currentStep - 1));
-  }, [currentStep, goToStep]);
 
   // Handle completion - advance to Stack tab
   const handleComplete = useCallback(() => {
@@ -57,32 +32,13 @@ const BudgetTab = ({ inputs, onUpdateInput, onAdvance }: BudgetTabProps) => {
     }
   }, [haptics, onAdvance]);
 
-  // Render the current step
-  const renderStep = () => {
-    switch (currentStep) {
-      // Step 0: Overview Wiki
-      case 0:
-        return <BudgetOverviewWiki onContinue={nextStep} />;
-
-      // Step 1: Budget Input
-      case 1:
-        return (
-          <BudgetInput
-            inputs={inputs}
-            onUpdateInput={onUpdateInput}
-            onBack={prevStep}
-            onNext={handleComplete}
-          />
-        );
-
-      default:
-        return <BudgetOverviewWiki onContinue={nextStep} />;
-    }
-  };
-
   return (
     <div className="pb-8">
-      {renderStep()}
+      <BudgetInput
+        inputs={inputs}
+        onUpdateInput={onUpdateInput}
+        onNext={handleComplete}
+      />
     </div>
   );
 };
