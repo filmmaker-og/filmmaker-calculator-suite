@@ -1,12 +1,11 @@
 import { useState, useRef, useEffect } from "react";
-import { DollarSign, ArrowRight, ArrowLeft, Check, X } from "lucide-react";
+import { DollarSign, Check, X } from "lucide-react";
 import { WaterfallInputs } from "@/lib/waterfall";
 import { cn } from "@/lib/utils";
 
 interface BudgetInputProps {
   inputs: WaterfallInputs;
   onUpdateInput: (key: keyof WaterfallInputs, value: number) => void;
-  onBack?: () => void;
   onNext: () => void;
 }
 
@@ -16,7 +15,7 @@ interface BudgetInputProps {
  * Step 1 of Budget Tab: Collect the production budget
  * with quick amount buttons and validation.
  */
-const BudgetInput = ({ inputs, onUpdateInput, onBack, onNext }: BudgetInputProps) => {
+const BudgetInput = ({ inputs, onUpdateInput, onNext }: BudgetInputProps) => {
   const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -76,24 +75,6 @@ const BudgetInput = ({ inputs, onUpdateInput, onBack, onNext }: BudgetInputProps
 
   return (
     <div className="space-y-6 animate-fade-in">
-      {/* Step Label + Back Button */}
-      <div className="flex items-center justify-between">
-        {onBack ? (
-          <button
-            onClick={onBack}
-            className="flex items-center gap-1.5 text-xs text-text-dim hover:text-white transition-colors"
-          >
-            <ArrowLeft className="w-3.5 h-3.5" />
-            <span>Back</span>
-          </button>
-        ) : (
-          <div />
-        )}
-        <span className="text-xs font-mono text-gold/70 uppercase tracking-widest">
-          Budget
-        </span>
-      </div>
-
       {/* Hero Header */}
       <div className="text-center mb-6">
         <div className="relative inline-block mb-4">
@@ -210,22 +191,6 @@ const BudgetInput = ({ inputs, onUpdateInput, onBack, onNext }: BudgetInputProps
         </div>
       </div>
 
-      {/* Continue Button */}
-      {isCompleted && (
-        <button
-          onClick={onNext}
-          className={cn(
-            "w-full py-4 flex items-center justify-center gap-3",
-            "bg-gold/10 border border-gold/30 text-gold",
-            "hover:bg-gold/20 hover:border-gold/50 transition-all",
-            "active:scale-[0.98]"
-          )}
-          style={{ borderRadius: 'var(--radius-md)' }}
-        >
-          <span className="text-sm font-bold uppercase tracking-wider">Continue to Capital Stack</span>
-          <ArrowRight className="w-4 h-4" />
-        </button>
-      )}
     </div>
   );
 };
