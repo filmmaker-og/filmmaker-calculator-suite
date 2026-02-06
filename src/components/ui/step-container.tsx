@@ -63,9 +63,9 @@ const StepContainer = React.forwardRef<HTMLDivElement, StepContainerProps>(
           className={cn(
             "relative overflow-hidden",
             // Base styling - matte grey with subtle depth
-            "bg-gradient-to-b from-[#0D0D0D] to-[#080808]",
+            "bg-gradient-to-b from-bg-elevated to-bg-card",
             // Border treatment
-            "border border-[#1A1A1A]",
+            "border border-border-subtle",
             // Subtle inner shadow for depth
             "shadow-[inset_0_1px_0_rgba(255,255,255,0.02)]",
             // Outer shadow for lift
@@ -78,14 +78,14 @@ const StepContainer = React.forwardRef<HTMLDivElement, StepContainerProps>(
           <div
             className={cn(
               "absolute top-0 left-0 right-0 h-[1px]",
-              "bg-gradient-to-r from-transparent via-[#2A2A2A] to-transparent",
+              "bg-gradient-to-r from-transparent via-border-subtle to-transparent",
               needsAttention && "via-gold/40"
             )}
           />
 
           {/* Step indicator bar */}
           {(stepNumber || title) && (
-            <div className="relative px-5 py-4 border-b border-[#1A1A1A] bg-[#0A0A0A]/50">
+            <div className="relative px-5 py-4 border-b border-border-subtle bg-bg-header/50">
               <div className="flex items-center justify-between">
                 {/* Title area */}
                 <div className="flex-1">
@@ -128,7 +128,7 @@ const StepContainer = React.forwardRef<HTMLDivElement, StepContainerProps>(
 
           {/* Bottom accent line */}
           <div
-            className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#1A1A1A] to-transparent"
+            className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-border-subtle to-transparent"
           />
         </div>
       </div>

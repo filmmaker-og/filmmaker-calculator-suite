@@ -135,7 +135,7 @@ const WaterfallTab = ({ result, inputs }: WaterfallTabProps) => {
 
         {/* Pro Tip Callout */}
         {showGuide && (
-          <div className="p-4 flex items-start space-x-3" style={{ borderRadius: 'var(--radius-md)', background: 'rgba(255, 215, 0, 0.06)', border: '1px solid rgba(255, 215, 0, 0.25)' }}>
+          <div className="p-4 flex items-start space-x-3" style={{ borderRadius: 'var(--radius-md)', background: 'rgba(212, 175, 55, 0.06)', border: '1px solid rgba(212, 175, 55, 0.25)' }}>
             <Info className="w-4 h-4 text-gold mt-0.5 flex-shrink-0" />
             <div className="text-xs text-text-mid leading-relaxed">
               <span className="font-bold text-gold">Pro Tip:</span> This is how agencies and studios model every deal. If you can walk an investor through a 4-tier waterfall with preferred returns, you're speaking their language—and that closes deals.

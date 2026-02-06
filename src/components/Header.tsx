@@ -16,10 +16,7 @@ const Header = ({ title }: HeaderProps) => {
     <>
       {/* Header Bar */}
       <header
-        className="fixed top-0 left-0 right-0 z-[150]"
-        style={{
-          backgroundColor: '#1A1A1A',
-        }}
+        className="fixed top-0 left-0 right-0 z-[150] bg-bg-header"
       >
         <div className="flex items-center justify-between px-4" style={{ height: 'var(--appbar-h)' }}>
           {/* Left: Logo Text (clickable to home) */}
@@ -27,9 +24,8 @@ const Header = ({ title }: HeaderProps) => {
             onClick={handleLogoClick}
             className="flex items-center gap-2.5 hover:opacity-80 transition-opacity group"
           >
-            {/* FORCE GOLD LOGO COLOR */}
-            <span className="font-bebas text-lg tracking-[0.2em] text-gold group-hover:text-white transition-colors duration-300">
-              FILMMAKER<span className="text-white group-hover:text-gold transition-colors duration-300">.OG</span>
+            <span className="font-bebas text-lg tracking-[0.2em] text-gold group-hover:text-white transition-colors duration-200">
+              FILMMAKER<span className="text-white group-hover:text-gold transition-colors duration-200">.OG</span>
             </span>
           </button>
 
@@ -40,7 +36,7 @@ const Header = ({ title }: HeaderProps) => {
             </span>
           )}
 
-          {/* Right: Hamburger Menu - Uses unified MobileMenu */}
+          {/* Right: Hamburger Menu */}
           <MobileMenu />
         </div>
 
@@ -48,7 +44,7 @@ const Header = ({ title }: HeaderProps) => {
         <div
           className="h-[1px] w-full"
           style={{
-            background: "linear-gradient(90deg, transparent 0%, rgba(255, 215, 0, 0.45) 20%, rgba(255, 215, 0, 0.45) 80%, transparent 100%)",
+            background: "linear-gradient(90deg, transparent 0%, rgba(212, 175, 55, 0.45) 20%, rgba(212, 175, 55, 0.45) 80%, transparent 100%)",
           }}
         />
       </header>

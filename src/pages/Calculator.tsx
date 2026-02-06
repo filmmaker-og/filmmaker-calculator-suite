@@ -394,7 +394,7 @@ const Calculator = () => {
               strokeDasharray={`${progressPercent * 1.13} 113`}
               className="transition-all duration-500 ease-out"
               style={{
-                filter: 'drop-shadow(0 0 4px rgba(255, 215, 0, 0.5))',
+                filter: 'drop-shadow(0 0 4px rgba(212, 175, 55, 0.5))',
               }}
             />
           </svg>

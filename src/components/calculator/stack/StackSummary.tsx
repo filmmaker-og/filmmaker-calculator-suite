@@ -91,7 +91,7 @@ const StackSummary = ({ inputs, selections, onEdit, onComplete }: StackSummaryPr
             <span className="font-mono text-lg text-gold">{formatCompactCurrency(totalCapital)}</span>
           </div>
           
-          <div className="h-3 w-full bg-white/10 overflow-hidden mb-2" style={{ borderRadius: 'var(--radius-sm)' }}>
+          <div className="h-3 w-full bg-bg-elevated overflow-hidden mb-2" style={{ borderRadius: 'var(--radius-sm)' }}>
             <div 
               className={cn(
                 "h-full transition-all duration-500",
@@ -128,7 +128,7 @@ const StackSummary = ({ inputs, selections, onEdit, onComplete }: StackSummaryPr
               return (
                 <div 
                   key={item.label}
-                  className="px-5 py-4 flex items-center justify-between hover:bg-white/[0.02] transition-colors"
+                  className="px-5 py-4 flex items-center justify-between hover:bg-bg-elevated transition-colors"
                 >
                   <div className="flex items-center gap-3">
                     <div className={cn("w-1 h-8 rounded-full", item.color)} />
@@ -179,8 +179,8 @@ const StackSummary = ({ inputs, selections, onEdit, onComplete }: StackSummaryPr
         onClick={onComplete}
         className={cn(
           "w-full py-4 flex items-center justify-center gap-3",
-          "bg-gold/10 border border-gold/30 text-gold",
-          "hover:bg-gold/20 hover:border-gold/50 transition-all",
+          "bg-gold-cta-subtle border border-gold-cta-muted text-gold-cta",
+          "hover:bg-gold-cta-subtle hover:border-gold-cta transition-all",
           "active:scale-[0.98]"
         )}
         style={{ borderRadius: 'var(--radius-md)' }}

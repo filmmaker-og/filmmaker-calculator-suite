@@ -150,7 +150,7 @@ const CapitalSelect = ({ selections, onToggle, onNext }: CapitalSelectProps) => 
                 onClick={() => handleToggle(option.key)}
                 className={cn(
                   "w-full p-4 text-left transition-all duration-150",
-                  isSelected ? "bg-white/5" : "bg-transparent hover:bg-white/[0.02]",
+                  isSelected ? "bg-gold-subtle" : "bg-transparent hover:bg-bg-elevated",
                   wasJustToggled && "scale-[1.01]"
                 )}
               >
@@ -185,7 +185,7 @@ const CapitalSelect = ({ selections, onToggle, onNext }: CapitalSelectProps) => 
                         {option.title}
                       </span>
                       {option.recommended && !isSelected && (
-                        <span className="text-[9px] px-1.5 py-0.5 bg-white/5 text-text-dim uppercase tracking-wider">
+                        <span className="text-[9px] px-1.5 py-0.5 bg-gold-subtle text-text-dim uppercase tracking-wider">
                           Common
                         </span>
                       )}
@@ -235,8 +235,8 @@ const CapitalSelect = ({ selections, onToggle, onNext }: CapitalSelectProps) => 
           onClick={onNext}
           className={cn(
             "w-full py-4 flex items-center justify-center gap-3",
-            "bg-gold/10 border border-gold/30 text-gold",
-            "hover:bg-gold/20 hover:border-gold/50 transition-all",
+            "bg-gold-cta-subtle border border-gold-cta-muted text-gold-cta",
+            "hover:bg-gold-cta-subtle hover:border-gold-cta transition-all",
             "active:scale-[0.98]"
           )}
           style={{ borderRadius: 'var(--radius-md)' }}
