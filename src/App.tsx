@@ -5,12 +5,11 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import IntroView from "./pages/IntroView";
+import BudgetInfo from "./pages/BudgetInfo";
 import Auth from "./pages/Auth";
 import Calculator from "./pages/Calculator";
 import Store from "./pages/Store";
 import NotFound from "./pages/NotFound";
-
-// sync-bump: trigger GitHub sync (no functional change)
 
 const queryClient = new QueryClient();
 
@@ -23,6 +22,7 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/intro" element={<IntroView />} />
+          <Route path="/budget-info" element={<BudgetInfo />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/calculator" element={<Calculator />} />
           <Route path="/store" element={<Store />} />
