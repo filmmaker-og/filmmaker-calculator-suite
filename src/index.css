@@ -109,6 +109,33 @@
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   }
 
+  /* ═══════════════════════════════════════════════════════════════════
+     MOBILE KEYBOARD HANDLING
+     Use dvh (dynamic viewport height) for better mobile keyboard support
+     ═══════════════════════════════════════════════════════════════════ */
+  
+  /* Full height container that accounts for keyboard */
+  .mobile-safe-height {
+    min-height: 100vh;
+    min-height: 100dvh; /* Dynamic viewport height - shrinks when keyboard opens */
+  }
+
+  /* Scrollable container that adjusts for keyboard */
+  .keyboard-aware-scroll {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+
+  /* Prevent iOS zoom on input focus */
+  input[type="text"],
+  input[type="number"],
+  input[type="email"],
+  input[type="tel"],
+  textarea {
+    font-size: 16px; /* Prevents iOS zoom on focus */
+  }
+
   /* Entrance animation utility (transform + opacity only for GPU acceleration) */
   .entrance {
     transform: translateY(8px);

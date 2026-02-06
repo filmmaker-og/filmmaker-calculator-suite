@@ -2,6 +2,7 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 import { Check, ChevronRight } from "lucide-react";
 import { useHaptics } from "@/hooks/use-haptics";
+import { useMobileKeyboardScroll } from "@/hooks/use-mobile-keyboard";
 
 interface PremiumInputProps extends React.ComponentProps<"input"> {
   /** Field has a valid value */
@@ -38,6 +39,7 @@ interface PremiumInputProps extends React.ComponentProps<"input"> {
  * - Clear visual states (empty, focused, completed)
  * - Elegant micro-interactions
  * - Action hints guiding the user
+ * - Mobile keyboard scroll-into-view handling
  */
 const PremiumInput = React.forwardRef<HTMLInputElement, PremiumInputProps>(
   (
@@ -69,10 +71,21 @@ const PremiumInput = React.forwardRef<HTMLInputElement, PremiumInputProps>(
     const isEmpty = !value || value === "" || value === "0";
     const needsAttention = isNext && isEmpty && !localActive;
 
+    // Mobile keyboard scroll handling
+    const { ref: mobileRef, scrollIntoView } = useMobileKeyboardScroll<HTMLDivElement>();
+
+    // Merge refs: forward ref and our container ref
+    const inputRef = React.useRef<HTMLInputElement>(null);
+    React.useImperativeHandle(ref, () => inputRef.current as HTMLInputElement);
+
     const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
       setFocused(true);
       haptics.light();
       e.target.select();
+      
+      // Scroll input into view on mobile when keyboard opens
+      scrollIntoView();
+      
       onFocus?.(e);
     };
 
@@ -83,6 +96,7 @@ const PremiumInput = React.forwardRef<HTMLInputElement, PremiumInputProps>(
 
     return (
       <div
+        ref={mobileRef}
         className={cn(
           "relative group",
           containerClassName
@@ -223,7 +237,7 @@ const PremiumInput = React.forwardRef<HTMLInputElement, PremiumInputProps>(
                 fontVariantNumeric: 'tabular-nums',
                 fontFeatureSettings: '"tnum" 1',
               }}
-              ref={ref}
+              ref={inputRef}
               value={value}
               onFocus={handleFocus}
               onBlur={handleBlur}
