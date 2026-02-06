@@ -1,8 +1,8 @@
 import { WaterfallResult, WaterfallInputs, formatCompactCurrency } from "@/lib/waterfall";
 import { ArrowRight, Lock } from "lucide-react";
 import { Link } from "react-router-dom";
-import ChapterCard from "../ChapterCard";
 import { cn } from "@/lib/utils";
+import StandardStepLayout from "../StandardStepLayout";
 
 interface WaterfallTabProps {
   result: WaterfallResult;
@@ -36,55 +36,54 @@ const WaterfallTab = ({ result, inputs }: WaterfallTabProps) => {
     : 0;
 
   return (
-    <div className="space-y-6 pb-24">
-      <ChapterCard
-        chapter="04"
-        title="WATERFALL"
-        isActive={true}
-      >
-        <div className="space-y-6">
-          {/* Top Level Summary Card */}
-          <div className="bg-bg-card border border-gold-muted rounded-lg p-6 relative overflow-hidden group">
-            <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-              <span className="font-bebas text-6xl text-gold">NET</span>
-            </div>
-            
-            <div className="relative z-10">
-              <span className="text-xs font-bold uppercase tracking-widest text-text-dim">
-                Producer's Net Position
-              </span>
-              <div className="flex items-baseline gap-2 mt-2">
-                <span className="text-4xl font-mono font-bold text-gold">
-                  {formatCompactCurrency(result.producer)}
-                </span>
-                <span className="text-sm font-mono text-gold-bright">
-                  ({producerNetPercent.toFixed(1)}%)
-                </span>
-              </div>
-              <p className="text-xs text-text-dim mt-2">
-                After all fees, expenses, and investor recoupment.
-              </p>
-            </div>
+    <StandardStepLayout
+      chapter="04"
+      title="WATERFALL"
+      subtitle="Final position and net distribution"
+      className="pb-24"
+    >
+      <div className="space-y-6">
+        {/* Top Level Summary Card */}
+        <div className="bg-bg-card border border-gold-muted rounded-lg p-6 relative overflow-hidden group">
+          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+            <span className="font-bebas text-6xl text-gold">NET</span>
           </div>
-
-          {/* Action Link to Full Breakdown */}
-          <Link 
-            to="/waterfall-info"
-            className="flex items-center justify-between p-4 bg-bg-surface border border-border-default rounded-md hover:border-gold-muted hover:bg-bg-card transition-all group"
-          >
-            <div className="flex flex-col">
-              <span className="text-sm font-bold text-text-primary group-hover:text-gold transition-colors">
-                View Full Protocol Breakdown
+          
+          <div className="relative z-10">
+            <span className="text-xs font-bold uppercase tracking-widest text-text-dim">
+              Producer's Net Position
+            </span>
+            <div className="flex items-baseline gap-2 mt-2">
+              <span className="text-4xl font-mono font-bold text-gold">
+                {formatCompactCurrency(result.producer)}
               </span>
-              <span className="text-xs text-text-dim">
-                See line-by-line distribution logic
+              <span className="text-sm font-mono text-gold-bright">
+                ({producerNetPercent.toFixed(1)}%)
               </span>
             </div>
-            <ArrowRight className="w-4 h-4 text-text-dim group-hover:text-gold transition-colors" />
-          </Link>
+            <p className="text-xs text-text-dim mt-2">
+              After all fees, expenses, and investor recoupment.
+            </p>
+          </div>
         </div>
-      </ChapterCard>
-    </div>
+
+        {/* Action Link to Full Breakdown */}
+        <Link 
+          to="/waterfall-info"
+          className="flex items-center justify-between p-4 bg-bg-surface border border-border-default rounded-md hover:border-gold-muted hover:bg-bg-card transition-all group"
+        >
+          <div className="flex flex-col">
+            <span className="text-sm font-bold text-text-primary group-hover:text-gold transition-colors">
+              View Full Protocol Breakdown
+            </span>
+            <span className="text-xs text-text-dim">
+              See line-by-line distribution logic
+            </span>
+          </div>
+          <ArrowRight className="w-4 h-4 text-text-dim group-hover:text-gold transition-colors" />
+        </Link>
+      </div>
+    </StandardStepLayout>
   );
 };
 
