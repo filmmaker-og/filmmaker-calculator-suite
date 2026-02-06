@@ -7,6 +7,7 @@ import Header from "@/components/Header";
    Deep-dive on fees that come off the top before anyone gets paid.
    
    WIKI CONTAINMENT: This mini wiki can ONLY link back to /intro
+   Secondary exit: Subtle "Start Simulation" text link at bottom
    ═══════════════════════════════════════════════════════════════════════════ */
 const tokens = {
   bgVoid: '#000000',
@@ -88,6 +89,11 @@ const FeesInfo = () => {
 
   const handleBackToOverview = () => {
     navigate('/intro');
+    window.scrollTo(0, 0);
+  };
+
+  const handleStartSimulation = () => {
+    navigate('/calculator');
     window.scrollTo(0, 0);
   };
 
@@ -421,8 +427,8 @@ const FeesInfo = () => {
             </div>
           </div>
 
-          {/* FOOTER — Back to Overview only */}
-          <div className="pt-6 flex flex-col items-center gap-6 animate-fade-in">
+          {/* FOOTER — Back to Overview + subtle Start Simulation link */}
+          <div className="pt-6 flex flex-col items-center gap-4 animate-fade-in">
             <div 
               className="h-px w-full"
               style={{ 
@@ -430,6 +436,7 @@ const FeesInfo = () => {
               }}
             />
             
+            {/* Primary: Back to Overview */}
             <button
               onClick={handleBackToOverview}
               className="flex items-center gap-2 text-sm transition-colors"
@@ -439,6 +446,17 @@ const FeesInfo = () => {
             >
               <ArrowLeft className="w-4 h-4" />
               <span>Back to Overview</span>
+            </button>
+            
+            {/* Secondary: Subtle exit to calculator */}
+            <button
+              onClick={handleStartSimulation}
+              className="text-xs transition-colors"
+              style={{ color: tokens.textDim }}
+              onMouseEnter={(e) => e.currentTarget.style.color = tokens.gold}
+              onMouseLeave={(e) => e.currentTarget.style.color = tokens.textDim}
+            >
+              Ready to run the numbers? Start Simulation →
             </button>
           </div>
 

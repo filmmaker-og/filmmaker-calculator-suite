@@ -10,6 +10,7 @@ import Header from "@/components/Header";
    - Apps: Gold left border accent, dark matte surfaces, premium sparse gold
    
    WIKI CONTAINMENT: This mini wiki can ONLY link back to /intro
+   Secondary exit: Subtle "Start Simulation" text link at bottom
    ═══════════════════════════════════════════════════════════════════════════ */
 const tokens = {
   // Backgrounds - Matte surfaces
@@ -203,6 +204,11 @@ const BudgetInfo = () => {
 
   const handleBackToOverview = () => {
     navigate('/intro');
+    window.scrollTo(0, 0);
+  };
+
+  const handleStartSimulation = () => {
+    navigate('/calculator');
     window.scrollTo(0, 0);
   };
 
@@ -421,9 +427,9 @@ const BudgetInfo = () => {
           </div>
 
           {/* ═══════════════════════════════════════════════════════════════
-              FOOTER — Back to Overview only
+              FOOTER — Back to Overview + subtle Start Simulation link
               ═══════════════════════════════════════════════════════════════ */}
-          <div className="pt-6 flex flex-col items-center gap-6 animate-fade-in">
+          <div className="pt-6 flex flex-col items-center gap-4 animate-fade-in">
             {/* Gold Gradient Divider */}
             <div 
               className="h-px w-full"
@@ -432,7 +438,7 @@ const BudgetInfo = () => {
               }}
             />
             
-            {/* Back Link — ONLY navigation allowed */}
+            {/* Primary: Back to Overview */}
             <button
               onClick={handleBackToOverview}
               className="flex items-center gap-2 text-sm transition-colors"
@@ -442,6 +448,17 @@ const BudgetInfo = () => {
             >
               <ArrowLeft className="w-4 h-4" />
               <span>Back to Overview</span>
+            </button>
+            
+            {/* Secondary: Subtle exit to calculator */}
+            <button
+              onClick={handleStartSimulation}
+              className="text-xs transition-colors"
+              style={{ color: tokens.textDim }}
+              onMouseEnter={(e) => e.currentTarget.style.color = tokens.gold}
+              onMouseLeave={(e) => e.currentTarget.style.color = tokens.textDim}
+            >
+              Ready to run the numbers? Start Simulation →
             </button>
           </div>
 
