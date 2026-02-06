@@ -24,6 +24,7 @@ const tokens = {
   goldMuted: 'rgba(255, 215, 0, 0.45)',
   goldSubtle: 'rgba(255, 215, 0, 0.08)',
   goldGlow: 'rgba(255, 215, 0, 0.25)',
+  goldFill: 'rgba(255, 215, 0, 0.12)',  // New: Chapter number box fill
   
   // Borders
   borderMatte: '#1A1A1A',
@@ -85,12 +86,13 @@ const SectionHeader = ({ number, title }: SectionHeaderProps) => (
       style={{ background: tokens.gold }}
     />
     
-    {/* Chapter Number Box */}
+    {/* Chapter Number Box — Now with gold fill background */}
     <div 
       className="flex items-center justify-center px-4 py-4"
       style={{ 
         borderRight: `1px solid ${tokens.borderSubtle}`,
         minWidth: '56px',
+        background: tokens.goldFill,
       }}
     >
       <span 
@@ -110,6 +112,37 @@ const SectionHeader = ({ number, title }: SectionHeaderProps) => (
         {title}
       </h2>
     </div>
+  </div>
+);
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PILLAR CARD COMPONENT — Numbered cards for visual hierarchy
+   ═══════════════════════════════════════════════════════════════════════════ */
+interface PillarCardProps {
+  number: string;
+  title: string;
+  description: string;
+}
+
+const PillarCard = ({ number, title, description }: PillarCardProps) => (
+  <div 
+    className="p-4"
+    style={{ 
+      background: tokens.bgSurface,
+      borderRadius: tokens.radiusMd,
+      borderLeft: `2px solid ${tokens.goldMuted}`,
+    }}
+  >
+    <span 
+      className="font-bebas text-xs tracking-wide"
+      style={{ color: tokens.goldMuted }}
+    >
+      {number}
+    </span>
+    <p className="text-sm font-semibold text-white mb-1 mt-1">{title}</p>
+    <p className="text-xs leading-relaxed" style={{ color: tokens.textDim }}>
+      {description}
+    </p>
   </div>
 );
 
@@ -185,67 +218,29 @@ const IntroView = () => {
               
               {/* The Four Pillars — 2×2 Grid on desktop, single column on mobile */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div 
-                  className="p-4"
-                  style={{ 
-                    background: tokens.bgSurface,
-                    borderRadius: tokens.radiusMd,
-                    borderLeft: `2px solid ${tokens.goldMuted}`,
-                  }}
-                >
-                  <p className="text-sm font-semibold text-white mb-1">Production Budget</p>
-                  <p className="text-xs leading-relaxed" style={{ color: tokens.textDim }}>
-                    Your total cost to produce the film. This becomes the baseline for 
-                    everything else—capital requirements, recoupment thresholds, and profit calculations.
-                  </p>
-                </div>
+                <PillarCard 
+                  number="01"
+                  title="Production Budget"
+                  description="Your total cost to produce the film. This becomes the baseline for everything else—capital requirements, recoupment thresholds, and profit calculations."
+                />
                 
-                <div 
-                  className="p-4"
-                  style={{ 
-                    background: tokens.bgSurface,
-                    borderRadius: tokens.radiusMd,
-                    borderLeft: `2px solid ${tokens.goldMuted}`,
-                  }}
-                >
-                  <p className="text-sm font-semibold text-white mb-1">Capital Stack</p>
-                  <p className="text-xs leading-relaxed" style={{ color: tokens.textDim }}>
-                    How you're funding production. The mix of equity, debt, and deferrals 
-                    determines who gets paid first and at what rates. Senior debt always 
-                    recoup before equity sees a dime.
-                  </p>
-                </div>
+                <PillarCard 
+                  number="02"
+                  title="Capital Stack"
+                  description="How you're funding production. The mix of equity, debt, and deferrals determines who gets paid first and at what rates. Senior debt always recoup before equity sees a dime."
+                />
                 
-                <div 
-                  className="p-4"
-                  style={{ 
-                    background: tokens.bgSurface,
-                    borderRadius: tokens.radiusMd,
-                    borderLeft: `2px solid ${tokens.goldMuted}`,
-                  }}
-                >
-                  <p className="text-sm font-semibold text-white mb-1">Distribution Fees</p>
-                  <p className="text-xs leading-relaxed" style={{ color: tokens.textDim }}>
-                    What comes off the top before anyone gets paid. Collection agents, 
-                    sales agents, and distributors each take their cut from gross revenue, 
-                    leaving Net Receipts for the waterfall.
-                  </p>
-                </div>
+                <PillarCard 
+                  number="03"
+                  title="Distribution Fees"
+                  description="What comes off the top before anyone gets paid. Collection agents, sales agents, and distributors each take their cut from gross revenue, leaving Net Receipts for the waterfall."
+                />
                 
-                <div 
-                  className="p-4"
-                  style={{ 
-                    background: tokens.bgSurface,
-                    borderRadius: tokens.radiusMd,
-                    borderLeft: `2px solid ${tokens.goldMuted}`,
-                  }}
-                >
-                  <p className="text-sm font-semibold text-white mb-1">Recoupment Waterfall</p>
-                  <p className="text-xs leading-relaxed" style={{ color: tokens.textDim }}>
-                    The contractual order of who gets paid back. Each position must fully 
-                    recoup before the next tier sees money. This is where deals are won or lost.
-                  </p>
-                </div>
+                <PillarCard 
+                  number="04"
+                  title="Recoupment Waterfall"
+                  description="The contractual order of who gets paid back. Each position must fully recoup before the next tier sees money. This is where deals are won or lost."
+                />
               </div>
             </div>
           </div>
