@@ -202,16 +202,16 @@ const pillars: PillarData[] = [
     overview: "When a streamer acquires your film, the license fee doesn't flow directly into your waterfall. Distribution fees are deducted first — before senior debt, before equity recoupment, before anyone in your Operating Agreement sees a cent. For SVOD-only deals, the fee structure is simpler than theatrical (no exhibitor splits or P&A recoupment), but the percentages still add up fast. On a $2M SVOD acquisition, fees can easily total 15–25%, meaning $300K–$500K disappears before your capital providers receive anything. These are contractual obligations to the entities who sold, delivered, and collected on your film.",
     keyPoints: [
       {
-        label: "Sales agent (10–20%)",
-        detail: "Represents your film to streamers and international buyers. Commissions are taken off gross revenues. Agents may also charge recoupable market expenses ($20K–$50K) for festival attendance, screeners, and marketing materials. For SVOD-focused deals, commissions tend toward the lower end since less territory-by-territory work is required."
+        label: "Sales agent (10–20% + marketing fee)",
+        detail: "Represents your film to streamers and international buyers. The commission (10–20%) comes off gross revenues. On top of that, most agents charge a separate hardcapped marketing & distribution fee ($20K–$75K) for festival attendance, screeners, market presentations, and travel. Both the commission and the marketing fee are recoupable off the top."
       },
       {
         label: "Collection agent / CAM (1–5%)",
         detail: "A neutral third party (like Fintage House or FilmChain) who receives all revenues, applies the waterfall, and distributes payments to each party. Budget $8K–$15K for setup plus 1–2% of revenues. Most institutional financiers and senior lenders require a CAM before funding."
       },
       {
-        label: "Delivery & recoupable expenses",
-        detail: "Streamers require complete delivery packages — technical masters, audio stems, subtitles, closed captions, artwork, and legal chain-of-title documentation. These costs ($7K–$30K+) are typically recoupable from revenues, meaning they come off the top alongside distribution fees."
+        label: "Delivery costs ($7K–$30K+)",
+        detail: "Separate from the sales agent's marketing fee — this covers technical deliverables the streamer requires: Dolby Vision masters, M&E audio stems, closed captions, artwork, and chain-of-title documentation. These costs are also recoupable from revenues."
       },
     ],
     learnMorePath: "/fees-info",

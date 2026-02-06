@@ -418,7 +418,7 @@ const BudgetInfo = () => {
               
               <MistakeCard
                 title="Ignoring Delivery Requirements"
-                description="Streamers require specific technical deliverables: Dolby Vision masters (Netflix), M&E audio stems, closed captions, artwork packages, and legal chain-of-title documentation. Budget $7K–$30K+ depending on platform specs."
+                description="Streamers require specific technical deliverables: Dolby Vision masters (Netflix), M&E audio stems, closed captions, artwork packages, and chain-of-title documentation. Budget $7K–$30K+ for delivery depending on platform specs. This is separate from your sales agent's marketing/distribution fee, which is hardcapped at $20K–$75K and recouped off the top."
               />
             </div>
           </div>

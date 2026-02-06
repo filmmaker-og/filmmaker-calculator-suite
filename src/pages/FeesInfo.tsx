@@ -233,9 +233,14 @@ const FeesInfo = () => {
               </ul>
               
               <p className="text-sm leading-relaxed" style={{ color: tokens.textMid }}>
-                Some sales agents also charge <strong style={{ color: tokens.textPrimary }}>
-                market fees</strong> for attending festivals and markets, plus <strong style={{ color: tokens.textPrimary }}>
-                recoupable expenses</strong> for marketing materials, screeners, and travel.
+                On top of their commission, most international sales agents charge a separate
+                <strong style={{ color: tokens.textPrimary }}> marketing & distribution fee</strong> —
+                sometimes called a "market expenses" cap. This is a hardcapped amount
+                (typically <strong style={{ color: tokens.textPrimary }}>$20K–$75K</strong>)
+                that covers festival attendance, screener creation, marketing materials, buyer
+                presentations, and travel to markets like Cannes, AFM, and Berlin. This fee is
+                recoupable from gross revenues — meaning it comes off the top before your
+                waterfall begins, separate from delivery costs.
               </p>
             </div>
           </div>
