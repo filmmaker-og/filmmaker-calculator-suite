@@ -61,7 +61,7 @@ const faqItems: FAQItem[] = [
   },
   {
     question: "I'm new to film finance. Where do I start?",
-    answer: "Just follow the steps. Each input has an info icon with context. Start with your budget, then we'll walk you through capital structure, fees, and recoupment."
+    answer: "Just follow the steps. Each input has an info icon with context. Start with your budget, then we'll walk you through capital stack, fees, and recoupment."
   }
 ];
 
@@ -71,15 +71,22 @@ const faqItems: FAQItem[] = [
 interface SectionHeaderProps {
   number: string;
   title: string;
+  isExpanded?: boolean;
+  onClick?: () => void;
+  isClickable?: boolean;
 }
 
-const SectionHeader = ({ number, title }: SectionHeaderProps) => (
+const SectionHeader = ({ number, title, isExpanded, onClick, isClickable = false }: SectionHeaderProps) => (
   <div 
-    className="flex items-stretch"
+    className={cn(
+      "flex items-stretch",
+      isClickable && "cursor-pointer hover:bg-white/[0.02] transition-colors"
+    )}
     style={{ 
       background: `linear-gradient(90deg, ${tokens.goldRadiant} 0%, ${tokens.bgHeader} 15%, ${tokens.bgHeader} 100%)`,
-      borderBottom: `1px solid ${tokens.borderMatte}`,
+      borderBottom: isExpanded ? `1px solid ${tokens.borderMatte}` : 'none',
     }}
+    onClick={onClick}
   >
     <div 
       className="w-1 flex-shrink-0"
@@ -105,33 +112,79 @@ const SectionHeader = ({ number, title }: SectionHeaderProps) => (
       </span>
     </div>
     
-    <div className="flex items-center px-4 py-4">
+    <div className="flex items-center flex-1 px-4 py-4 justify-between">
       <h2 
         className="font-bold text-xs uppercase tracking-widest"
         style={{ color: tokens.textPrimary }}
       >
         {title}
       </h2>
+      
+      {isClickable && (
+        <ChevronDown 
+          className={cn(
+            "w-4 h-4 flex-shrink-0 transition-transform duration-200",
+            isExpanded && "rotate-180"
+          )}
+          style={{ color: isExpanded ? tokens.gold : tokens.textDim }}
+        />
+      )}
     </div>
   </div>
 );
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   PILLAR SECTION — Each pillar gets its own containment header
-   Deep dive links navigate to mini wikis and scroll to top
+   PILLAR DATA — Content for each accordion section
    ═══════════════════════════════════════════════════════════════════════════ */
-interface PillarSectionProps {
+interface PillarData {
   number: string;
   title: string;
-  children: React.ReactNode;
+  summary: string;
   learnMorePath: string;
 }
 
-const PillarSection = ({ number, title, children, learnMorePath }: PillarSectionProps) => {
+const pillars: PillarData[] = [
+  {
+    number: "01",
+    title: "Production Budget",
+    summary: "Also called Negative Cost—the total amount required to produce your film. Your budget isn't just a number—it's the foundation of your entire deal structure.",
+    learnMorePath: "/budget-info",
+  },
+  {
+    number: "02",
+    title: "Capital Stack",
+    summary: "How your production gets funded. Most films combine equity, senior debt, gap financing, and tax incentives. The structure directly determines your waterfall.",
+    learnMorePath: "/capital-info",
+  },
+  {
+    number: "03",
+    title: "Distribution Fees",
+    summary: "Before anyone sees a dollar, fees come off the top. Sales agents take 10-20%, collection agents 1-5%. A $2M acquisition might net $1.6M or less.",
+    learnMorePath: "/fees-info",
+  },
+  {
+    number: "04",
+    title: "Recoupment Waterfall",
+    summary: "The contractual order in which revenues are distributed. Each position must be satisfied before the next receives anything. Your position determines when you get paid.",
+    learnMorePath: "/waterfall-info",
+  },
+];
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PILLAR ACCORDION — Collapsed by default, condensed on expand
+   ═══════════════════════════════════════════════════════════════════════════ */
+interface PillarAccordionProps {
+  pillar: PillarData;
+  isExpanded: boolean;
+  onToggle: () => void;
+}
+
+const PillarAccordion = ({ pillar, isExpanded, onToggle }: PillarAccordionProps) => {
   const navigate = useNavigate();
   
-  const handleDeepDive = () => {
-    navigate(learnMorePath);
+  const handleDeepDive = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    navigate(pillar.learnMorePath);
     window.scrollTo(0, 0);
   };
   
@@ -144,19 +197,34 @@ const PillarSection = ({ number, title, children, learnMorePath }: PillarSection
         borderRadius: tokens.radiusLg,
       }}
     >
-      <SectionHeader number={number} title={title} />
+      <SectionHeader 
+        number={pillar.number} 
+        title={pillar.title} 
+        isExpanded={isExpanded}
+        onClick={onToggle}
+        isClickable={true}
+      />
       
-      <div className="p-5 space-y-4">
-        {children}
-        
-        <button
-          onClick={handleDeepDive}
-          className="flex items-center gap-2 text-sm font-medium transition-all hover:gap-3"
-          style={{ color: tokens.gold }}
-        >
-          <span>Deep dive</span>
-          <ArrowRight className="w-4 h-4" />
-        </button>
+      <div
+        className={cn(
+          "overflow-hidden transition-all duration-300 ease-out",
+          isExpanded ? "max-h-48 opacity-100" : "max-h-0 opacity-0"
+        )}
+      >
+        <div className="p-5 space-y-4">
+          <p className="text-sm leading-relaxed" style={{ color: tokens.textMid }}>
+            {pillar.summary}
+          </p>
+          
+          <button
+            onClick={handleDeepDive}
+            className="flex items-center gap-2 text-sm font-medium transition-all hover:gap-3"
+            style={{ color: tokens.gold }}
+          >
+            <span>Deep dive</span>
+            <ArrowRight className="w-4 h-4" />
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -164,7 +232,12 @@ const PillarSection = ({ number, title, children, learnMorePath }: PillarSection
 
 const IntroView = () => {
   const navigate = useNavigate();
+  const [expandedPillar, setExpandedPillar] = useState<number | null>(null);
   const [openFAQ, setOpenFAQ] = useState<number | null>(null);
+
+  const togglePillar = (index: number) => {
+    setExpandedPillar(expandedPillar === index ? null : index);
+  };
 
   const toggleFAQ = (index: number) => {
     setOpenFAQ(openFAQ === index ? null : index);
@@ -208,93 +281,16 @@ const IntroView = () => {
           </div>
 
           {/* ═══════════════════════════════════════════════════════════════
-              PILLAR 01 — PRODUCTION BUDGET
+              PILLARS 01-04 — Accordion Pattern (All collapsed by default)
               ═══════════════════════════════════════════════════════════════ */}
-          <PillarSection
-            number="01"
-            title="Production Budget"
-            learnMorePath="/budget-info"
-          >
-            <p className="text-sm leading-relaxed" style={{ color: tokens.textMid }}>
-              Also called <strong style={{ color: tokens.textPrimary }}>Negative Cost</strong>—the 
-              total amount required to produce your film. This includes everything from script 
-              development through final delivery: above-the-line talent, crew, equipment, 
-              locations, post-production, and contingency.
-            </p>
-            
-            <p className="text-sm leading-relaxed" style={{ color: tokens.textMid }}>
-              Your budget isn't just a number—it's the foundation of your entire deal structure. 
-              It determines how much capital you need to raise, what your realistic sales 
-              expectations should be, and ultimately how the waterfall will flow.
-            </p>
-          </PillarSection>
-
-          {/* ═══════════════════════════════════════════════════════════════
-              PILLAR 02 — CAPITAL STACK
-              ═══════════════════════════════════════════════════════════════ */}
-          <PillarSection
-            number="02"
-            title="Capital Stack"
-            learnMorePath="/capital-info"
-          >
-            <p className="text-sm leading-relaxed" style={{ color: tokens.textMid }}>
-              The <strong style={{ color: tokens.textPrimary }}>capital stack</strong> is how 
-              your production gets funded. Most independent films combine multiple sources: 
-              equity investors who own a piece of the upside, senior debt that gets repaid 
-              first, gap financing against unsold territories, and sometimes tax incentives 
-              or soft money.
-            </p>
-            
-            <p className="text-sm leading-relaxed" style={{ color: tokens.textMid }}>
-              The structure of your capital stack directly determines your waterfall. Whoever 
-              provides the riskiest money typically demands the most favorable recoupment 
-              position. Understanding this relationship is essential before you sign anything.
-            </p>
-          </PillarSection>
-
-          {/* ═══════════════════════════════════════════════════════════════
-              PILLAR 03 — DISTRIBUTION FEES
-              ═══════════════════════════════════════════════════════════════ */}
-          <PillarSection
-            number="03"
-            title="Distribution Fees"
-            learnMorePath="/fees-info"
-          >
-            <p className="text-sm leading-relaxed" style={{ color: tokens.textMid }}>
-              Before anyone in your waterfall sees a dollar, <strong style={{ color: tokens.textPrimary }}>
-              distribution fees come off the top</strong>. Sales agents typically take 10-20%, 
-              collection agents take 1-5%, and there may be additional market fees, delivery 
-              costs, and recoupable expenses.
-            </p>
-            
-            <p className="text-sm leading-relaxed" style={{ color: tokens.textMid }}>
-              A $2M acquisition doesn't mean $2M flows to your waterfall. After fees, you 
-              might see $1.6M or less. This is why understanding the fee stack is critical 
-              before celebrating any sale.
-            </p>
-          </PillarSection>
-
-          {/* ═══════════════════════════════════════════════════════════════
-              PILLAR 04 — RECOUPMENT WATERFALL
-              ═══════════════════════════════════════════════════════════════ */}
-          <PillarSection
-            number="04"
-            title="Recoupment Waterfall"
-            learnMorePath="/waterfall-info"
-          >
-            <p className="text-sm leading-relaxed" style={{ color: tokens.textMid }}>
-              The <strong style={{ color: tokens.textPrimary }}>waterfall</strong> is the 
-              contractual order in which revenues are distributed. Each position must be 
-              fully satisfied before the next position receives anything. Senior debt typically 
-              sits first, followed by equity recoupment, then profit participation.
-            </p>
-            
-            <p className="text-sm leading-relaxed" style={{ color: tokens.textMid }}>
-              Your position in the waterfall determines when—and if—you get paid. A producer 
-              with a 50% backend sounds great, but if that backend only triggers after $5M 
-              in prior positions are satisfied, the reality might be very different.
-            </p>
-          </PillarSection>
+          {pillars.map((pillar, index) => (
+            <PillarAccordion
+              key={pillar.number}
+              pillar={pillar}
+              isExpanded={expandedPillar === index}
+              onToggle={() => togglePillar(index)}
+            />
+          ))}
 
           {/* ═══════════════════════════════════════════════════════════════
               WHY THIS MATTERS
