@@ -16,7 +16,8 @@ interface BudgetInputProps {
  * Step 1 of Budget Tab: Collect the production budget
  * with quick amount buttons and validation.
  */
-const BudgetInput = ({ inputs, onUpdateInput, onNext }: BudgetInputProps) => {\n  const [isFocused, setIsFocused] = useState(false);
+const BudgetInput = ({ inputs, onUpdateInput, onNext }: BudgetInputProps) => {
+  const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   // Auto-focus on mount
