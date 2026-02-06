@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { DollarSign, Check, X } from "lucide-react";
 import { WaterfallInputs } from "@/lib/waterfall";
 import { cn } from "@/lib/utils";
+import { useMobileKeyboardScroll } from "@/hooks/use-mobile-keyboard";
 
 interface BudgetInputProps {
   inputs: WaterfallInputs;
@@ -18,6 +19,7 @@ interface BudgetInputProps {
 const BudgetInput = ({ inputs, onUpdateInput, onNext }: BudgetInputProps) => {
   const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const { ref: mobileRef, scrollIntoView } = useMobileKeyboardScroll<HTMLDivElement>();
 
   // Auto-focus on mount
   useEffect(() => {
@@ -37,6 +39,7 @@ const BudgetInput = ({ inputs, onUpdateInput, onNext }: BudgetInputProps) => {
 
   const handleFocus = () => {
     setIsFocused(true);
+    scrollIntoView();
     setTimeout(() => {
       inputRef.current?.select();
     }, 0);
@@ -103,7 +106,7 @@ const BudgetInput = ({ inputs, onUpdateInput, onNext }: BudgetInputProps) => {
       </div>
 
       {/* Main Input Card */}
-      <div className="matte-section overflow-hidden">
+      <div ref={mobileRef} className="matte-section overflow-hidden">
         {/* Section header */}
         <div className="matte-section-header px-5 py-3 flex items-center justify-between">
           <span className="text-xs uppercase tracking-[0.2em] text-white/40 font-medium">
