@@ -20,8 +20,11 @@ const ChapterCard = ({
 }: ChapterCardProps) => {
   return (
     <section className={cn("chapter-card", isActive && "is-active", className)}>
-      {/* Header with 3-column grid */}
+      {/* Header with 4-column grid: gold bar + number + title + glossary */}
       <header className="chapter-card-header">
+        {/* Gold accent bar */}
+        <div className="chapter-card-gold-bar" />
+
         {/* Chapter number */}
         <div className="chapter-card-number">
           {chapter}

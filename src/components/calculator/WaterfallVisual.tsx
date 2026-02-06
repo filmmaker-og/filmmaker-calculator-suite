@@ -126,17 +126,26 @@ const WaterfallVisual = ({
       {/* Gross Revenue Header */}
       <div
         className={cn(
-          "flex items-center justify-between p-4 bg-gold-subtle border border-border-subtle transition-all duration-300",
+          "relative flex items-center justify-between p-4 border transition-all duration-300 overflow-hidden",
+          "bg-gold-subtle border-gold/20",
           revealCount > 0 ? "opacity-100" : "opacity-0"
         )}
       >
-        <div>
+        {/* Gold left accent */}
+        <div
+          className="absolute left-0 top-0 bottom-0 w-1"
+          style={{
+            background: 'linear-gradient(180deg, #D4AF37 0%, rgba(212,175,55,0.45) 100%)',
+            boxShadow: '0 0 12px rgba(212,175,55,0.25)',
+          }}
+        />
+        <div className="pl-3">
           <p className="text-[9px] uppercase tracking-wider text-text-dim mb-1">
             GROSS REVENUE
           </p>
-          <p className="text-sm text-text-primary">Acquisition Price</p>
+          <p className="text-sm text-text-primary font-medium">Acquisition Price</p>
         </div>
-        <p className="font-mono text-xl text-text-primary font-medium tabular-nums">
+        <p className="font-mono text-xl text-text-primary font-bold tabular-nums">
           {formatCompactCurrency(revenue)}
         </p>
       </div>
@@ -176,11 +185,12 @@ const WaterfallVisual = ({
                   {/* Phase Badge */}
                   <div
                     className={cn(
-                      "w-7 h-7 flex items-center justify-center text-[9px] font-mono font-medium",
+                      "w-7 h-7 flex items-center justify-center text-[9px] font-mono font-bold",
                       tier.status === "filled" && "bg-gold text-black",
                       tier.status === "partial" && "bg-gold/20 text-text-primary border border-gold/20",
                       tier.status === "empty" && "bg-bg-header text-text-dim border border-border-subtle"
                     )}
+                    style={tier.status === "filled" ? { boxShadow: '0 0 10px rgba(212,175,55,0.35)' } : undefined}
                   >
                     {index + 1}
                   </div>
@@ -239,16 +249,25 @@ const WaterfallVisual = ({
         );
       })}
 
-      {/* Summary Footer */}
+      {/* Summary Footer — The Big Number */}
       <div
         className={cn(
-          "mt-4 pt-4 border-t border-border-subtle transition-opacity duration-300",
+          "relative mt-4 pt-5 pb-2 border-t border-border-subtle transition-opacity duration-300",
           revealCount > tiers.length ? "opacity-100" : "opacity-0"
         )}
       >
-        <div className="flex items-center justify-between">
+        {/* Radial gold glow behind profit number */}
+        {profitPool > 0 && (
+          <div
+            className="absolute right-0 top-0 bottom-0 w-48 pointer-events-none"
+            style={{
+              background: 'radial-gradient(ellipse at right center, rgba(212,175,55,0.12) 0%, transparent 70%)',
+            }}
+          />
+        )}
+        <div className="relative flex items-center justify-between">
           <div>
-            <p className="text-[9px] uppercase tracking-wider text-text-dim mb-1">
+            <p className="text-[9px] uppercase tracking-wider text-text-dim mb-1 font-bold">
               REMAINING FOR SPLIT
             </p>
             <p className="text-xs text-text-dim">
@@ -257,9 +276,10 @@ const WaterfallVisual = ({
           </div>
           <p
             className={cn(
-              "font-mono text-2xl font-medium tabular-nums",
+              "font-mono text-2xl font-bold tabular-nums",
               profitPool > 0 ? "text-gold" : "text-text-dim"
             )}
+            style={profitPool > 0 ? { textShadow: '0 0 20px rgba(212,175,55,0.4)' } : undefined}
           >
             {profitPool >= 0 ? "+" : ""}{formatCompactCurrency(profitPool)}
           </p>

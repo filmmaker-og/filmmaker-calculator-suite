@@ -49,20 +49,23 @@ const StackSummary = ({ inputs, selections, onEdit, onComplete }: StackSummaryPr
             className="absolute inset-0"
             style={{
               background: isFullyFunded
-                ? 'radial-gradient(circle, rgba(212, 175, 55, 0.25) 0%, transparent 70%)'
+                ? 'radial-gradient(circle, rgba(212, 175, 55, 0.35) 0%, transparent 70%)'
                 : 'radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, transparent 70%)',
-              filter: 'blur(15px)',
-              transform: 'scale(2)',
+              filter: 'blur(20px)',
+              transform: 'scale(2.5)',
             }}
           />
-          <div 
+          <div
             className={cn(
               "relative w-16 h-16 flex items-center justify-center",
-              isFullyFunded 
+              isFullyFunded
                 ? "border-2 border-gold bg-gold/10"
                 : "border-2 border-gold/30 bg-gold/5"
             )}
-            style={{ borderRadius: 'var(--radius-md)' }}
+            style={{
+              borderRadius: 'var(--radius-md)',
+              ...(isFullyFunded ? { boxShadow: '0 0 20px rgba(212,175,55,0.25)' } : {}),
+            }}
           >
             {isFullyFunded ? (
               <Check className="w-8 h-8 text-gold" />
@@ -72,11 +75,11 @@ const StackSummary = ({ inputs, selections, onEdit, onComplete }: StackSummaryPr
           </div>
         </div>
 
-        <h2 className="font-bebas text-3xl tracking-[0.08em] text-white mb-1">
+        <h2 className="font-bebas text-3xl tracking-[0.08em] text-text-primary mb-1">
           {isFullyFunded ? 'Stack Complete' : 'Review Your Stack'}
         </h2>
         <p className="text-text-dim text-sm max-w-xs mx-auto">
-          {isFullyFunded 
+          {isFullyFunded
             ? 'Your capital stack covers the budget. Ready to proceed.'
             : `You're ${formatCompactCurrency(fundingGap)} short of your ${formatCompactCurrency(inputs.budget)} budget.`
           }
@@ -85,23 +88,43 @@ const StackSummary = ({ inputs, selections, onEdit, onComplete }: StackSummaryPr
 
       {/* Progress Bar */}
       {inputs.budget > 0 && (
-        <div className="p-4 border border-border-default bg-bg-surface" style={{ borderRadius: 'var(--radius-md)' }}>
-          <div className="flex items-center justify-between mb-2">
+        <div
+          className={cn(
+            "relative p-4 border overflow-hidden",
+            isFullyFunded ? "border-gold/30 bg-gold-subtle" : "border-border-default bg-bg-surface"
+          )}
+          style={{ borderRadius: 'var(--radius-md)' }}
+        >
+          {isFullyFunded && (
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{ background: 'radial-gradient(ellipse at right center, rgba(212,175,55,0.12) 0%, transparent 60%)' }}
+            />
+          )}
+          <div className="relative flex items-center justify-between mb-2">
             <span className="text-xs font-bold uppercase tracking-wider text-text-dim">Total Capital</span>
-            <span className="font-mono text-lg text-gold">{formatCompactCurrency(totalCapital)}</span>
+            <span
+              className="font-mono text-lg font-bold text-gold"
+              style={isFullyFunded ? { textShadow: '0 0 12px rgba(212,175,55,0.4)' } : undefined}
+            >
+              {formatCompactCurrency(totalCapital)}
+            </span>
           </div>
-          
-          <div className="h-3 w-full bg-bg-elevated overflow-hidden mb-2" style={{ borderRadius: 'var(--radius-sm)' }}>
-            <div 
+
+          <div className="relative h-3 w-full bg-bg-elevated overflow-hidden mb-2" style={{ borderRadius: 'var(--radius-sm)' }}>
+            <div
               className={cn(
                 "h-full transition-all duration-500",
                 gapPercent >= 100 ? "bg-gold" : "bg-gold/50"
               )}
-              style={{ width: `${Math.min(gapPercent, 100)}%` }}
+              style={{
+                width: `${Math.min(gapPercent, 100)}%`,
+                ...(gapPercent >= 100 ? { boxShadow: '0 0 10px rgba(212,175,55,0.35)' } : {}),
+              }}
             />
           </div>
 
-          <div className="flex items-center justify-between">
+          <div className="relative flex items-center justify-between">
             <span className="text-xs text-text-dim">Budget: {formatCompactCurrency(inputs.budget)}</span>
             <span className={cn(
               "font-mono text-xs font-bold",
@@ -134,7 +157,7 @@ const StackSummary = ({ inputs, selections, onEdit, onComplete }: StackSummaryPr
                     <div className={cn("w-1 h-8 rounded-full", item.color)} />
                     <Icon className="w-4 h-4 text-text-dim" />
                     <div>
-                      <span className="text-sm text-white font-medium">{item.label}</span>
+                      <span className="text-sm text-text-primary font-medium">{item.label}</span>
                       {item.rate !== undefined && (
                         <span className="text-xs text-text-dim ml-2">@ {item.rate}% {item.rateLabel}</span>
                       )}
