@@ -145,14 +145,14 @@ const BudgetInput = ({ inputs, onUpdateInput, onNext }: BudgetInputProps) => {
               onBlur={() => setIsFocused(false)}
               onKeyDown={handleKeyDown}
               placeholder="750,000"
-              className="flex-1 bg-transparent py-4 outline-none font-mono text-[22px] text-text-primary text-right placeholder:text-text-dim placeholder:text-base tabular-nums pr-2"
+              className="flex-1 bg-transparent py-4 outline-none font-mono text-[22px] text-text-primary text-right placeholder:text-text-dim tabular-nums pr-2"
             />
 
             {/* Clear button */}
             {isCompleted && (
               <button
                 onClick={handleClear}
-                className="mr-3 p-1.5 text-text-dim hover:text-white hover:bg-white/10 rounded transition-colors"
+                className="mr-3 p-1.5 text-text-dim hover:text-white hover:bg-white/10 rounded-lg transition-colors"
                 aria-label="Clear budget"
               >
                 <X className="w-4 h-4" />
@@ -180,7 +180,7 @@ const BudgetInput = ({ inputs, onUpdateInput, onNext }: BudgetInputProps) => {
                   key={qa.value}
                   onClick={() => handleQuickAmount(qa.value)}
                   className={cn(
-                    "font-mono text-xs px-3 py-2 rounded transition-colors border",
+                    "font-mono text-xs px-3 py-2 rounded-lg transition-colors border",
                     inputs.budget === qa.value
                       ? "bg-gold/20 border-gold text-gold"
                       : "bg-bg-void border-white/10 text-text-mid hover:border-gold/50"
