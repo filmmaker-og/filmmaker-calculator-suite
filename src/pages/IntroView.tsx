@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, ArrowLeft, ChevronDown, DollarSign, Layers, Percent, GitBranch } from 'lucide-react';
+import { ArrowRight, ArrowLeft, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import Header from "@/components/Header";
@@ -13,35 +13,27 @@ import { cn } from "@/lib/utils";
    - Apps: Gold left border accent, dark matte surfaces, premium sparse gold
    ═══════════════════════════════════════════════════════════════════════════ */
 const tokens = {
-  // Backgrounds - Matte surfaces
   bgVoid: '#000000',
-  bgMatte: '#0D0D0D',      // Primary card surface
-  bgHeader: '#111111',     // Header bars
-  bgSurface: '#141414',    // Elevated surfaces
-  bgElevated: '#1A1A1A',   // Even more elevated
+  bgMatte: '#0D0D0D',
+  bgHeader: '#111111',
+  bgSurface: '#141414',
   
-  // Gold System — Radiant but controlled
   gold: '#FFD700',
   goldMuted: 'rgba(255, 215, 0, 0.45)',
   goldSubtle: 'rgba(255, 215, 0, 0.08)',
   goldGlow: 'rgba(255, 215, 0, 0.25)',
   goldFill: 'rgba(255, 215, 0, 0.12)',
-  goldRadiant: 'rgba(255, 215, 0, 0.18)',  // For header glow effect
+  goldRadiant: 'rgba(255, 215, 0, 0.18)',
   
-  // Borders
   borderMatte: '#1A1A1A',
   borderSubtle: '#222222',
-  borderGold: 'rgba(255, 215, 0, 0.3)',
   
-  // Text
   textPrimary: '#FFFFFF',
   textMid: '#B0B0B0',
   textDim: '#6B6B6B',
   
-  // Radius
   radiusMd: '12px',
   radiusLg: '14px',
-  radiusSm: '8px',
 };
 
 interface FAQItem {
@@ -69,7 +61,7 @@ const faqItems: FAQItem[] = [
 ];
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   SECTION HEADER COMPONENT — Radiant Gold Left Border + Matte Gray Surface
+   SECTION HEADER — Radiant Gold Left Border + Matte Gray Surface
    ═══════════════════════════════════════════════════════════════════════════ */
 interface SectionHeaderProps {
   number: string;
@@ -84,7 +76,6 @@ const SectionHeader = ({ number, title }: SectionHeaderProps) => (
       borderBottom: `1px solid ${tokens.borderMatte}`,
     }}
   >
-    {/* Radiant Gold Left Border Accent */}
     <div 
       className="w-1 flex-shrink-0"
       style={{ 
@@ -93,7 +84,6 @@ const SectionHeader = ({ number, title }: SectionHeaderProps) => (
       }}
     />
     
-    {/* Chapter Number Box with Gold Fill */}
     <div 
       className="flex items-center justify-center px-4 py-4"
       style={{ 
@@ -110,7 +100,6 @@ const SectionHeader = ({ number, title }: SectionHeaderProps) => (
       </span>
     </div>
     
-    {/* Title */}
     <div className="flex items-center px-4 py-4">
       <h2 
         className="font-bold text-xs uppercase tracking-widest"
@@ -123,141 +112,44 @@ const SectionHeader = ({ number, title }: SectionHeaderProps) => (
 );
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   MINI-WIKI PREVIEW CARD — Shows actual content preview, clickable
+   PILLAR SECTION — Each pillar gets its own containment header
    ═══════════════════════════════════════════════════════════════════════════ */
-interface MiniWikiPreviewProps {
+interface PillarSectionProps {
   number: string;
   title: string;
-  icon: React.ReactNode;
-  previewContent: {
-    label: string;
-    value: string;
-  }[];
-  exampleNote?: string;
-  onClick: () => void;
+  children: React.ReactNode;
+  learnMorePath: string;
 }
 
-const MiniWikiPreview = ({ number, title, icon, previewContent, exampleNote, onClick }: MiniWikiPreviewProps) => (
-  <button
-    onClick={onClick}
-    className="w-full text-left group transition-all duration-200 hover:scale-[1.01]"
-    style={{ 
-      background: tokens.bgMatte,
-      border: `1px solid ${tokens.borderMatte}`,
-      borderRadius: tokens.radiusLg,
-      overflow: 'hidden',
-    }}
-  >
-    {/* Mini Header with Gold Accent */}
+const PillarSection = ({ number, title, children, learnMorePath }: PillarSectionProps) => {
+  const navigate = useNavigate();
+  
+  return (
     <div 
-      className="flex items-stretch"
+      className="overflow-hidden animate-fade-in"
       style={{ 
-        background: `linear-gradient(90deg, ${tokens.goldRadiant} 0%, ${tokens.bgHeader} 20%, ${tokens.bgHeader} 100%)`,
-        borderBottom: `1px solid ${tokens.borderMatte}`,
+        background: tokens.bgMatte,
+        border: `1px solid ${tokens.borderMatte}`,
+        borderRadius: tokens.radiusLg,
       }}
     >
-      {/* Gold Left Border */}
-      <div 
-        className="w-1 flex-shrink-0"
-        style={{ 
-          background: tokens.gold,
-          boxShadow: `0 0 8px ${tokens.goldGlow}`,
-        }}
-      />
+      <SectionHeader number={number} title={title} />
       
-      {/* Number Box */}
-      <div 
-        className="flex items-center justify-center px-3 py-3"
-        style={{ 
-          borderRight: `1px solid ${tokens.borderSubtle}`,
-          minWidth: '44px',
-          background: tokens.goldFill,
-        }}
-      >
-        <span 
-          className="font-bebas text-base tracking-wide"
+      <div className="p-5 space-y-4">
+        {children}
+        
+        <button
+          onClick={() => navigate(learnMorePath)}
+          className="flex items-center gap-2 text-sm font-medium transition-all hover:gap-3"
           style={{ color: tokens.gold }}
         >
-          {number}
-        </span>
-      </div>
-      
-      {/* Icon + Title */}
-      <div className="flex items-center gap-2 px-3 py-3">
-        <span style={{ color: tokens.goldMuted }}>{icon}</span>
-        <h3 
-          className="font-bold text-xs uppercase tracking-widest"
-          style={{ color: tokens.textPrimary }}
-        >
-          {title}
-        </h3>
-      </div>
-      
-      {/* Arrow on hover */}
-      <div className="ml-auto flex items-center pr-3">
-        <ArrowRight 
-          className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity"
-          style={{ color: tokens.gold }}
-        />
+          <span>Deep dive</span>
+          <ArrowRight className="w-4 h-4" />
+        </button>
       </div>
     </div>
-    
-    {/* Preview Content — Example of what they'll see */}
-    <div className="p-4 space-y-3">
-      {/* Example Label */}
-      <div 
-        className="text-[10px] uppercase tracking-widest font-medium"
-        style={{ color: tokens.goldMuted }}
-      >
-        Preview
-      </div>
-      
-      {/* Preview Items */}
-      <div className="space-y-2">
-        {previewContent.map((item, idx) => (
-          <div 
-            key={idx}
-            className="flex justify-between items-center py-2 px-3"
-            style={{ 
-              background: tokens.bgSurface,
-              borderRadius: tokens.radiusSm,
-              border: `1px solid ${tokens.borderSubtle}`,
-            }}
-          >
-            <span className="text-xs" style={{ color: tokens.textMid }}>
-              {item.label}
-            </span>
-            <span 
-              className="text-xs font-mono font-semibold"
-              style={{ color: tokens.textPrimary }}
-            >
-              {item.value}
-            </span>
-          </div>
-        ))}
-      </div>
-      
-      {/* Example Note */}
-      {exampleNote && (
-        <p 
-          className="text-[11px] italic pt-1"
-          style={{ color: tokens.textDim }}
-        >
-          {exampleNote}
-        </p>
-      )}
-      
-      {/* Learn More Link */}
-      <div 
-        className="flex items-center gap-1 pt-2 text-xs font-medium group-hover:gap-2 transition-all"
-        style={{ color: tokens.gold }}
-      >
-        <span>Learn more</span>
-        <ArrowRight className="w-3 h-3" />
-      </div>
-    </div>
-  </button>
-);
+  );
+};
 
 const IntroView = () => {
   const navigate = useNavigate();
@@ -268,7 +160,7 @@ const IntroView = () => {
   };
 
   const handleStartSimulation = () => {
-    navigate('/budget-info');
+    navigate('/calculator');
   };
 
   return (
@@ -296,7 +188,6 @@ const IntroView = () => {
               How money moves through a film deal—from acquisition to your pocket.
             </p>
             
-            {/* Gold Gradient Divider */}
             <div 
               className="h-px w-full"
               style={{ 
@@ -306,93 +197,96 @@ const IntroView = () => {
           </div>
 
           {/* ═══════════════════════════════════════════════════════════════
-              SECTION 01 — WHAT'S YOUR MODEL? (Mini-Wiki Previews)
+              PILLAR 01 — PRODUCTION BUDGET
               ═══════════════════════════════════════════════════════════════ */}
-          <div 
-            className="overflow-hidden animate-fade-in"
-            style={{ 
-              background: tokens.bgMatte,
-              border: `1px solid ${tokens.borderMatte}`,
-              borderRadius: tokens.radiusLg,
-            }}
+          <PillarSection
+            number="01"
+            title="Production Budget"
+            learnMorePath="/budget-info"
           >
-            <SectionHeader number="01" title="What's Your Model?" />
+            <p className="text-sm leading-relaxed" style={{ color: tokens.textMid }}>
+              Also called <strong style={{ color: tokens.textPrimary }}>Negative Cost</strong>—the 
+              total amount required to produce your film. This includes everything from script 
+              development through final delivery: above-the-line talent, crew, equipment, 
+              locations, post-production, and contingency.
+            </p>
             
-            <div className="p-5 space-y-5">
-              {/* Intro Context */}
-              <p 
-                className="text-sm leading-relaxed"
-                style={{ color: tokens.textMid }}
-              >
-                Here's an example of what you'll model. Each section below previews the actual 
-                content—click any to dive deeper before starting your simulation.
-              </p>
-              
-              {/* Mini-Wiki Previews — 2×2 Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                
-                {/* PRODUCTION BUDGET Preview */}
-                <MiniWikiPreview
-                  number="01"
-                  title="Production Budget"
-                  icon={<DollarSign className="w-4 h-4" />}
-                  previewContent={[
-                    { label: "Negative Cost", value: "$850,000" },
-                    { label: "Above-the-Line", value: "$127,500" },
-                    { label: "Contingency", value: "$42,500" },
-                  ]}
-                  exampleNote="This is what it costs to make the film."
-                  onClick={() => navigate('/budget-info')}
-                />
-                
-                {/* CAPITAL STACK Preview */}
-                <MiniWikiPreview
-                  number="02"
-                  title="Capital Stack"
-                  icon={<Layers className="w-4 h-4" />}
-                  previewContent={[
-                    { label: "Senior Debt", value: "$340,000" },
-                    { label: "Equity", value: "$425,000" },
-                    { label: "Deferrals", value: "$85,000" },
-                  ]}
-                  exampleNote="How production is funded."
-                  onClick={() => navigate('/capital-info')}
-                />
-                
-                {/* DISTRIBUTION FEES Preview */}
-                <MiniWikiPreview
-                  number="03"
-                  title="Distribution Fees"
-                  icon={<Percent className="w-4 h-4" />}
-                  previewContent={[
-                    { label: "Sales Agent", value: "10%" },
-                    { label: "Collection Agent", value: "5%" },
-                    { label: "Net to Waterfall", value: "85%" },
-                  ]}
-                  exampleNote="What comes off the top first."
-                  onClick={() => navigate('/fees-info')}
-                />
-                
-                {/* RECOUPMENT WATERFALL Preview */}
-                <MiniWikiPreview
-                  number="04"
-                  title="Recoupment Waterfall"
-                  icon={<GitBranch className="w-4 h-4" />}
-                  previewContent={[
-                    { label: "Position 1", value: "Senior Debt" },
-                    { label: "Position 2", value: "Equity" },
-                    { label: "Position 3", value: "Profit Split" },
-                  ]}
-                  exampleNote="The order money flows out."
-                  onClick={() => navigate('/waterfall-info')}
-                />
-                
-              </div>
-            </div>
-          </div>
+            <p className="text-sm leading-relaxed" style={{ color: tokens.textMid }}>
+              Your budget isn't just a number—it's the foundation of your entire deal structure. 
+              It determines how much capital you need to raise, what your realistic sales 
+              expectations should be, and ultimately how the waterfall will flow.
+            </p>
+          </PillarSection>
 
           {/* ═══════════════════════════════════════════════════════════════
-              SECTION 02 — WHY THIS MATTERS
+              PILLAR 02 — CAPITAL STACK
+              ═══════════════════════════════════════════════════════════════ */}
+          <PillarSection
+            number="02"
+            title="Capital Stack"
+            learnMorePath="/capital-info"
+          >
+            <p className="text-sm leading-relaxed" style={{ color: tokens.textMid }}>
+              The <strong style={{ color: tokens.textPrimary }}>capital stack</strong> is how 
+              your production gets funded. Most independent films combine multiple sources: 
+              equity investors who own a piece of the upside, senior debt that gets repaid 
+              first, gap financing against unsold territories, and sometimes tax incentives 
+              or soft money.
+            </p>
+            
+            <p className="text-sm leading-relaxed" style={{ color: tokens.textMid }}>
+              The structure of your capital stack directly determines your waterfall. Whoever 
+              provides the riskiest money typically demands the most favorable recoupment 
+              position. Understanding this relationship is essential before you sign anything.
+            </p>
+          </PillarSection>
+
+          {/* ═══════════════════════════════════════════════════════════════
+              PILLAR 03 — DISTRIBUTION FEES
+              ═══════════════════════════════════════════════════════════════ */}
+          <PillarSection
+            number="03"
+            title="Distribution Fees"
+            learnMorePath="/fees-info"
+          >
+            <p className="text-sm leading-relaxed" style={{ color: tokens.textMid }}>
+              Before anyone in your waterfall sees a dollar, <strong style={{ color: tokens.textPrimary }}>
+              distribution fees come off the top</strong>. Sales agents typically take 10-20%, 
+              collection agents take 1-5%, and there may be additional market fees, delivery 
+              costs, and recoupable expenses.
+            </p>
+            
+            <p className="text-sm leading-relaxed" style={{ color: tokens.textMid }}>
+              A $2M acquisition doesn't mean $2M flows to your waterfall. After fees, you 
+              might see $1.6M or less. This is why understanding the fee stack is critical 
+              before celebrating any sale.
+            </p>
+          </PillarSection>
+
+          {/* ═══════════════════════════════════════════════════════════════
+              PILLAR 04 — RECOUPMENT WATERFALL
+              ═══════════════════════════════════════════════════════════════ */}
+          <PillarSection
+            number="04"
+            title="Recoupment Waterfall"
+            learnMorePath="/waterfall-info"
+          >
+            <p className="text-sm leading-relaxed" style={{ color: tokens.textMid }}>
+              The <strong style={{ color: tokens.textPrimary }}>waterfall</strong> is the 
+              contractual order in which revenues are distributed. Each position must be 
+              fully satisfied before the next position receives anything. Senior debt typically 
+              sits first, followed by equity recoupment, then profit participation.
+            </p>
+            
+            <p className="text-sm leading-relaxed" style={{ color: tokens.textMid }}>
+              Your position in the waterfall determines when—and if—you get paid. A producer 
+              with a 50% backend sounds great, but if that backend only triggers after $5M 
+              in prior positions are satisfied, the reality might be very different.
+            </p>
+          </PillarSection>
+
+          {/* ═══════════════════════════════════════════════════════════════
+              WHY THIS MATTERS
               ═══════════════════════════════════════════════════════════════ */}
           <div 
             className="overflow-hidden animate-fade-in"
@@ -402,7 +296,7 @@ const IntroView = () => {
               borderRadius: tokens.radiusLg,
             }}
           >
-            <SectionHeader number="02" title="Why This Matters" />
+            <SectionHeader number="05" title="Why This Matters" />
             
             <div className="p-5 space-y-4">
               <p className="text-sm leading-relaxed" style={{ color: tokens.textMid }}>
@@ -418,7 +312,7 @@ const IntroView = () => {
               </p>
               
               <div 
-                className="p-4 mt-4"
+                className="p-4 mt-2"
                 style={{ 
                   background: tokens.goldSubtle,
                   borderRadius: tokens.radiusMd,
@@ -441,7 +335,7 @@ const IntroView = () => {
           </div>
 
           {/* ═══════════════════════════════════════════════════════════════
-              SECTION 03 — FAQ
+              FAQ
               ═══════════════════════════════════════════════════════════════ */}
           <div 
             className="overflow-hidden animate-fade-in"
@@ -451,9 +345,8 @@ const IntroView = () => {
               borderRadius: tokens.radiusLg,
             }}
           >
-            <SectionHeader number="03" title="FAQ" />
+            <SectionHeader number="06" title="FAQ" />
             
-            {/* FAQ Accordion — Notion-style toggles */}
             <div>
               {faqItems.map((item, index) => (
                 <div 
@@ -505,7 +398,6 @@ const IntroView = () => {
               CTA SECTION
               ═══════════════════════════════════════════════════════════════ */}
           <div className="pt-6 flex flex-col items-center gap-6 animate-fade-in">
-            {/* Gold Gradient Divider */}
             <div 
               className="h-px w-full"
               style={{ 
@@ -513,7 +405,6 @@ const IntroView = () => {
               }}
             />
             
-            {/* CTA Button — Routes to /budget-info (first wiki page) */}
             <Button 
               onClick={handleStartSimulation}
               className="group px-10 py-6 text-sm font-black uppercase tracking-widest transition-all duration-200 hover:scale-[1.02]"
@@ -529,7 +420,6 @@ const IntroView = () => {
               <ArrowRight className="ml-3 w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Button>
             
-            {/* Back Link */}
             <button
               onClick={() => navigate('/')}
               className="flex items-center gap-2 text-sm transition-colors"
