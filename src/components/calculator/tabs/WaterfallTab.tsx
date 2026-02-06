@@ -56,7 +56,7 @@ const WaterfallTab = ({ result, inputs }: WaterfallTabProps) => {
       <div className="space-y-4 animate-fade-in">
         {/* Header */}
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2 text-gold/80 text-xs font-mono uppercase tracking-widest">
+          <div className="flex items-center space-x-2 text-gold text-xs font-mono uppercase tracking-widest">
             <FileText className="w-3 h-3" />
             <span>Waterfall Results</span>
           </div>
@@ -71,7 +71,7 @@ const WaterfallTab = ({ result, inputs }: WaterfallTabProps) => {
         {/* Main Guide Card - Collapsible */}
         {showGuide && (
           <div
-            className="bg-bg-surface border border-border-default p-5 space-y-5"
+            className="bg-bg-card border border-border-default p-5 space-y-5"
             style={{ borderRadius: 'var(--radius-lg)' }}
           >
             {/* Section 1: What This Shows */}
@@ -135,10 +135,10 @@ const WaterfallTab = ({ result, inputs }: WaterfallTabProps) => {
 
         {/* Pro Tip Callout */}
         {showGuide && (
-          <div className="bg-gold/[0.06] border-l-4 border-gold/40 p-4 flex items-start space-x-3" style={{ borderRadius: '0 var(--radius-md) var(--radius-md) 0' }}>
-            <Info className="w-4 h-4 text-gold/70 mt-0.5 flex-shrink-0" />
-            <div className="text-xs text-white/60 leading-relaxed">
-              <span className="font-bold text-gold/90">Pro Tip:</span> This is how agencies and studios model every deal. If you can walk an investor through a 4-tier waterfall with preferred returns, you're speaking their language—and that closes deals.
+          <div className="p-4 flex items-start space-x-3" style={{ borderRadius: 'var(--radius-md)', background: 'rgba(255, 215, 0, 0.06)', border: '1px solid rgba(255, 215, 0, 0.25)' }}>
+            <Info className="w-4 h-4 text-gold mt-0.5 flex-shrink-0" />
+            <div className="text-xs text-text-mid leading-relaxed">
+              <span className="font-bold text-gold">Pro Tip:</span> This is how agencies and studios model every deal. If you can walk an investor through a 4-tier waterfall with preferred returns, you're speaking their language—and that closes deals.
             </div>
           </div>
         )}
@@ -166,7 +166,7 @@ const WaterfallTab = ({ result, inputs }: WaterfallTabProps) => {
             </div>
             <p className={cn(
               "font-mono text-base font-medium",
-              isProfitable ? "text-status-success" : "text-text-dim"
+              isProfitable ? "text-gold" : "text-text-dim"
             )}>
               {formatCompactCurrency(result.profitPool)}
             </p>
@@ -204,10 +204,10 @@ const WaterfallTab = ({ result, inputs }: WaterfallTabProps) => {
         {/* Warning Banner */}
         {isUnderperforming && (
           <div
-            className="mb-6 p-4 flex items-start gap-3 border border-status-warning bg-[rgba(255,215,0,0.08)]"
+            className="mb-6 p-4 flex items-start gap-3 border border-gold/30 bg-gold/[0.06]"
             style={{ borderRadius: 'var(--radius-md)' }}
           >
-            <div className="w-5 h-5 flex items-center justify-center flex-shrink-0 mt-0.5 text-status-warning font-bold">!</div>
+            <div className="w-5 h-5 flex items-center justify-center flex-shrink-0 mt-0.5 text-gold font-bold">!</div>
             <div>
               <p className="text-sm text-text-primary font-medium">
                 Multiple is {formatMultiple(result.multiple)}

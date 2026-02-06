@@ -131,7 +131,7 @@ const WaterfallVisual = ({
         )}
       >
         <div>
-          <p className="text-[9px] uppercase tracking-wider text-white/40 mb-1">
+          <p className="text-[9px] uppercase tracking-wider text-text-dim mb-1">
             GROSS REVENUE
           </p>
           <p className="text-sm text-white">Acquisition Price</p>
@@ -179,7 +179,7 @@ const WaterfallVisual = ({
                       "w-7 h-7 flex items-center justify-center text-[9px] font-mono font-medium",
                       tier.status === "filled" && "bg-white text-black",
                       tier.status === "partial" && "bg-white/20 text-white border border-white/20",
-                      tier.status === "empty" && "bg-bg-header text-white/30 border border-border-subtle"
+                      tier.status === "empty" && "bg-bg-header text-text-dim border border-border-subtle"
                     )}
                   >
                     {index + 1}
@@ -187,15 +187,15 @@ const WaterfallVisual = ({
 
                   {/* Labels */}
                   <div>
-                    <p className="text-[9px] uppercase tracking-wider text-white/40 mb-0.5">
+                    <p className="text-[9px] uppercase tracking-wider text-text-dim mb-0.5">
                       {tier.phase}
                     </p>
                     <p
                       className={cn(
                         "text-sm font-medium",
                         tier.status === "filled" && "text-white",
-                        tier.status === "partial" && "text-white/80",
-                        tier.status === "empty" && "text-white/50"
+                        tier.status === "partial" && "text-text-mid",
+                        tier.status === "empty" && "text-text-dim"
                       )}
                     >
                       {tier.label}
@@ -210,14 +210,14 @@ const WaterfallVisual = ({
                       "font-mono text-base font-medium tabular-nums",
                       isProfit && tier.paid > 0 && "text-gold",
                       !isProfit && tier.status === "filled" && "text-white",
-                      !isProfit && tier.status === "partial" && "text-white/70",
-                      tier.status === "empty" && "text-white/30"
+                      !isProfit && tier.status === "partial" && "text-text-mid",
+                      tier.status === "empty" && "text-text-dim"
                     )}
                   >
                     {isProfit ? "+" : "-"}{formatCompactCurrency(tier.paid)}
                   </p>
                   {tier.status === "partial" && (
-                    <p className="text-[9px] text-white/30 font-mono">
+                    <p className="text-[9px] text-text-dim font-mono">
                       of {formatCompactCurrency(tier.amount)}
                     </p>
                   )}
@@ -248,17 +248,17 @@ const WaterfallVisual = ({
       >
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-[9px] uppercase tracking-wider text-white/40 mb-1">
+            <p className="text-[9px] uppercase tracking-wider text-text-dim mb-1">
               REMAINING FOR SPLIT
             </p>
-            <p className="text-xs text-white/40">
+            <p className="text-xs text-text-dim">
               50% Producer / 50% Investor
             </p>
           </div>
           <p
             className={cn(
               "font-mono text-2xl font-medium tabular-nums",
-              profitPool > 0 ? "text-gold" : "text-white/30"
+              profitPool > 0 ? "text-gold" : "text-text-dim"
             )}
           >
             {profitPool >= 0 ? "+" : ""}{formatCompactCurrency(profitPool)}

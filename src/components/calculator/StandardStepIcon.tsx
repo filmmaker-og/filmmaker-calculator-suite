@@ -15,7 +15,7 @@ export const StandardStepIcon = ({ icon: Icon, label }: StandardStepIconProps) =
         <Icon className="w-5 h-5 text-gold" />
       </div>
       {label && (
-        <p className="text-white/30 text-[10px] mt-2 uppercase tracking-widest text-center">
+        <p className="text-text-dim text-[10px] mt-2 uppercase tracking-widest text-center">
           {label}
         </p>
       )}

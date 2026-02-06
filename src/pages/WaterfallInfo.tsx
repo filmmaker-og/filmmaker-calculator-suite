@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Droplets, ChevronDown, Shield, Target, Calculator, FileCheck } from 'lucide-react';
 import Header from "@/components/Header";
 import { colors, radius } from "@/lib/design-system";
+import { WikiSectionHeader, WikiCard, WikiCallout } from "@/components/shared";
 
 /* ═══════════════════════════════════════════════════════════════════════════
    MINI WIKI: RECOUPMENT WATERFALL
@@ -16,16 +17,11 @@ import { colors, radius } from "@/lib/design-system";
 // Sourced from design-system.ts (aligned to index.css)
 const tokens = {
   bgVoid: colors.void,
-  bgMatte: colors.card,
-  bgHeader: colors.elevated,
   bgSurface: colors.surface,
   gold: colors.gold,
   goldMuted: colors.goldMuted,
   goldSubtle: colors.goldSubtle,
   goldGlow: colors.goldGlow,
-  goldFill: colors.goldSubtle,
-  goldRadiant: colors.goldGlow,
-  borderMatte: colors.borderSubtle,
   borderSubtle: colors.borderSubtle,
   textPrimary: colors.textPrimary,
   textMid: colors.textMid,
@@ -35,58 +31,8 @@ const tokens = {
 };
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   SECTION HEADER — Radiant Gold Left Border
-   ═══════════════════════════════════════════════════════════════════════════ */
-interface SectionHeaderProps {
-  number: string;
-  title: string;
-}
-
-const SectionHeader = ({ number, title }: SectionHeaderProps) => (
-  <div
-    className="flex items-stretch"
-    style={{
-      background: `linear-gradient(90deg, ${tokens.goldRadiant} 0%, ${tokens.bgHeader} 15%, ${tokens.bgHeader} 100%)`,
-      borderBottom: `1px solid ${tokens.borderMatte}`,
-    }}
-  >
-    <div
-      className="w-1 flex-shrink-0"
-      style={{
-        background: `linear-gradient(180deg, ${tokens.gold} 0%, ${tokens.goldMuted} 100%)`,
-        boxShadow: `0 0 12px ${tokens.goldGlow}`,
-      }}
-    />
-
-    <div
-      className="flex items-center justify-center px-4 py-4"
-      style={{
-        borderRight: `1px solid ${tokens.borderSubtle}`,
-        minWidth: '56px',
-        background: tokens.goldFill,
-      }}
-    >
-      <span
-        className="font-bebas text-xl tracking-wide"
-        style={{ color: tokens.gold }}
-      >
-        {number}
-      </span>
-    </div>
-
-    <div className="flex items-center px-4 py-4">
-      <h2
-        className="font-bold text-xs uppercase tracking-widest"
-        style={{ color: tokens.textPrimary }}
-      >
-        {title}
-      </h2>
-    </div>
-  </div>
-);
-
-/* ═══════════════════════════════════════════════════════════════════════════
    FLOW TIER — Vertical pipeline step for Section 02
+   All accent colors are gold intensity variations (no rainbow).
    ═══════════════════════════════════════════════════════════════════════════ */
 interface FlowTierProps {
   position: number;
@@ -127,22 +73,22 @@ const FlowTier = ({ position, label, sublabel, accentColor, isLast }: FlowTierPr
 );
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   POSITION CARD — Risk-colored card for Section 03
+   POSITION CARD — Gold-accented card for Section 03
+   All cards use gold borderTop; risk labels use goldSubtle/goldMuted/gold.
    ═══════════════════════════════════════════════════════════════════════════ */
 interface PositionCardProps {
   title: string;
   riskLabel: string;
   description: string;
-  accentColor: string;
 }
 
-const PositionCard = ({ title, riskLabel, description, accentColor }: PositionCardProps) => (
+const PositionCard = ({ title, riskLabel, description }: PositionCardProps) => (
   <div
     className="p-4 flex-1"
     style={{
       background: tokens.bgSurface,
       borderRadius: tokens.radiusMd,
-      borderTop: `3px solid ${accentColor}`,
+      borderTop: `3px solid ${tokens.gold}`,
     }}
   >
     <div className="flex items-center justify-between mb-2">
@@ -152,9 +98,9 @@ const PositionCard = ({ title, riskLabel, description, accentColor }: PositionCa
       <span
         className="text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded-full"
         style={{
-          background: `${accentColor}18`,
-          color: accentColor,
-          border: `1px solid ${accentColor}40`,
+          background: tokens.goldSubtle,
+          color: tokens.gold,
+          border: `1px solid ${tokens.goldMuted}`,
         }}
       >
         {riskLabel}
@@ -168,6 +114,7 @@ const PositionCard = ({ title, riskLabel, description, accentColor }: PositionCa
 
 /* ═══════════════════════════════════════════════════════════════════════════
    SPLIT BAR — Visual proportional bar for Section 04
+   Segments use gold at varying opacities (no rainbow).
    ═══════════════════════════════════════════════════════════════════════════ */
 interface SplitSegment {
   label: string;
@@ -311,41 +258,19 @@ const WaterfallInfo = () => {
               SECTION 01 — WHAT IS A WATERFALL?
               Layout: Definition callout aside + supporting context
               ═══════════════════════════════════════════════════════════════ */}
-          <div
-            className="overflow-hidden animate-fade-in"
-            style={{
-              background: tokens.bgMatte,
-              border: `1px solid ${tokens.borderMatte}`,
-              borderRadius: tokens.radiusLg,
-            }}
-          >
-            <SectionHeader number="01" title="What Is a Waterfall?" />
+          <WikiCard>
+            <WikiSectionHeader number="01" title="What Is a Waterfall?" />
 
             <div className="p-5 space-y-4">
               {/* Key definition callout */}
-              <div
-                className="flex gap-3 p-4"
-                style={{
-                  background: tokens.goldSubtle,
-                  borderRadius: tokens.radiusMd,
-                  border: `1px solid ${tokens.goldMuted}`,
-                }}
+              <WikiCallout
+                label="Key Concept"
+                icon={<Droplets className="w-5 h-5" style={{ color: tokens.gold }} />}
               >
-                <Droplets className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: tokens.gold }} />
-                <div>
-                  <p
-                    className="text-xs font-semibold uppercase tracking-wide mb-1.5"
-                    style={{ color: tokens.gold }}
-                  >
-                    Key Concept
-                  </p>
-                  <p className="text-sm leading-relaxed" style={{ color: tokens.textPrimary }}>
-                    The <strong>recoupment waterfall</strong> is the contractual hierarchy that determines
-                    how revenues flow through a film deal. Like water flowing down a series of pools,
-                    money fills each "position" completely before spilling over to the next.
-                  </p>
-                </div>
-              </div>
+                The <strong>recoupment waterfall</strong> is the contractual hierarchy that determines
+                how revenues flow through a film deal. Like water flowing down a series of pools,
+                money fills each "position" completely before spilling over to the next.
+              </WikiCallout>
 
               {/* Supporting context — visually distinct from the callout */}
               <div
@@ -366,21 +291,14 @@ const WaterfallInfo = () => {
                 </p>
               </div>
             </div>
-          </div>
+          </WikiCard>
 
           {/* ═══════════════════════════════════════════════════════════════
               SECTION 02 — TYPICAL WATERFALL ORDER
-              Layout: Vertical connected pipeline with colored phase nodes
+              Layout: Vertical connected pipeline with gold phase nodes
               ═══════════════════════════════════════════════════════════════ */}
-          <div
-            className="overflow-hidden animate-fade-in"
-            style={{
-              background: tokens.bgMatte,
-              border: `1px solid ${tokens.borderMatte}`,
-              borderRadius: tokens.radiusLg,
-            }}
-          >
-            <SectionHeader number="02" title="Typical Waterfall Order" />
+          <WikiCard>
+            <WikiSectionHeader number="02" title="Typical Waterfall Order" />
 
             <div className="p-5 space-y-4">
               <p className="text-sm leading-relaxed" style={{ color: tokens.textMid }}>
@@ -400,31 +318,31 @@ const WaterfallInfo = () => {
                   position={1}
                   label="Distribution Fees"
                   sublabel="Sales agent, collection agent, market expenses"
-                  accentColor="#EF4444"
+                  accentColor={tokens.gold}
                 />
                 <FlowTier
                   position={2}
                   label="Delivery Costs"
                   sublabel="Technical masters, materials, recoupable expenses"
-                  accentColor="#F97316"
+                  accentColor={tokens.goldMuted}
                 />
                 <FlowTier
                   position={3}
                   label="Senior Debt"
                   sublabel="Bank loans, tax credit advances (principal + interest)"
-                  accentColor="#EAB308"
+                  accentColor={tokens.gold}
                 />
                 <FlowTier
                   position={4}
                   label="Gap Financing"
                   sublabel="Gap loans (principal + interest + fees)"
-                  accentColor="#A3E635"
+                  accentColor={tokens.goldMuted}
                 />
                 <FlowTier
                   position={5}
                   label="Equity Recoupment"
                   sublabel="Investor principal + negotiated premium (10-25%)"
-                  accentColor="#22D3EE"
+                  accentColor={tokens.gold}
                 />
                 <FlowTier
                   position={6}
@@ -442,21 +360,14 @@ const WaterfallInfo = () => {
                 </p>
               </div>
             </div>
-          </div>
+          </WikiCard>
 
           {/* ═══════════════════════════════════════════════════════════════
               SECTION 03 — RECOUPMENT POSITIONS
-              Layout: Grid of risk-colored position cards
+              Layout: Grid of gold-accented position cards
               ═══════════════════════════════════════════════════════════════ */}
-          <div
-            className="overflow-hidden animate-fade-in"
-            style={{
-              background: tokens.bgMatte,
-              border: `1px solid ${tokens.borderMatte}`,
-              borderRadius: tokens.radiusLg,
-            }}
-          >
-            <SectionHeader number="03" title="Recoupment Positions" />
+          <WikiCard>
+            <WikiSectionHeader number="03" title="Recoupment Positions" />
 
             <div className="p-5 space-y-4">
               <p className="text-sm leading-relaxed" style={{ color: tokens.textMid }}>
@@ -470,43 +381,32 @@ const WaterfallInfo = () => {
                   title="First Dollar"
                   riskLabel="Lowest Risk"
                   description="The earliest position after fees. Safest for investors — you get paid before almost everyone else."
-                  accentColor="#4ADE80"
                 />
                 <PositionCard
                   title="Pari Passu"
                   riskLabel="Shared Risk"
                   description="Multiple parties sharing the same position proportionally. Common when two equity sources co-invest."
-                  accentColor="#22D3EE"
                 />
                 <PositionCard
                   title="Subordinated"
                   riskLabel="Higher Risk"
                   description="Only triggers after higher positions are fully satisfied. More upside potential, less certainty."
-                  accentColor="#FBBF24"
                 />
                 <PositionCard
                   title="Last Money In"
                   riskLabel="Negotiated"
                   description="Sometimes the final investor gets first recoupment as an incentive to close the financing gap."
-                  accentColor="#C084FC"
                 />
               </div>
             </div>
-          </div>
+          </WikiCard>
 
           {/* ═══════════════════════════════════════════════════════════════
               SECTION 04 — PROFIT CORRIDORS
               Layout: Visual split bar + monospace table
               ═══════════════════════════════════════════════════════════════ */}
-          <div
-            className="overflow-hidden animate-fade-in"
-            style={{
-              background: tokens.bgMatte,
-              border: `1px solid ${tokens.borderMatte}`,
-              borderRadius: tokens.radiusLg,
-            }}
-          >
-            <SectionHeader number="04" title="Profit Corridors" />
+          <WikiCard>
+            <WikiSectionHeader number="04" title="Profit Corridors" />
 
             <div className="p-5 space-y-4">
               <p className="text-sm leading-relaxed" style={{ color: tokens.textMid }}>
@@ -515,14 +415,14 @@ const WaterfallInfo = () => {
                 just pile up—it gets split according to the Operating Agreement.
               </p>
 
-              {/* Visual proportional bar */}
+              {/* Visual proportional bar — gold opacity gradient */}
               <SplitBar
                 segments={[
-                  { label: 'Equity Investors', percentage: 50, color: '#22D3EE' },
-                  { label: 'Producers', percentage: 25, color: tokens.gold },
-                  { label: 'Talent Deferrals', percentage: 15, color: '#C084FC' },
-                  { label: 'Director', percentage: 5, color: '#4ADE80' },
-                  { label: 'Writer', percentage: 5, color: '#F97316' },
+                  { label: 'Equity Investors', percentage: 50, color: tokens.gold },
+                  { label: 'Producers', percentage: 25, color: 'rgba(255,215,0,0.7)' },
+                  { label: 'Talent Deferrals', percentage: 15, color: 'rgba(255,215,0,0.5)' },
+                  { label: 'Director', percentage: 5, color: 'rgba(255,215,0,0.3)' },
+                  { label: 'Writer', percentage: 5, color: 'rgba(255,215,0,0.15)' },
                 ]}
               />
 
@@ -571,21 +471,14 @@ const WaterfallInfo = () => {
                 the split might shift to favor producers more heavily.
               </p>
             </div>
-          </div>
+          </WikiCard>
 
           {/* ═══════════════════════════════════════════════════════════════
               SECTION 05 — THE HARSH REALITY
               Layout: Step-down draindown ledger showing money disappearing
               ═══════════════════════════════════════════════════════════════ */}
-          <div
-            className="overflow-hidden animate-fade-in"
-            style={{
-              background: tokens.bgMatte,
-              border: `1px solid ${tokens.borderMatte}`,
-              borderRadius: tokens.radiusLg,
-            }}
-          >
-            <SectionHeader number="05" title="The Harsh Reality" />
+          <WikiCard>
+            <WikiSectionHeader number="05" title="The Harsh Reality" />
 
             <div className="p-5 space-y-4">
               <p className="text-sm leading-relaxed" style={{ color: tokens.textMid }}>
@@ -593,7 +486,7 @@ const WaterfallInfo = () => {
                 reaches profit participation. Here's what a $1M film selling for $1.5M actually looks like:
               </p>
 
-              {/* Draindown ledger — like FeesInfo "The Real Math" */}
+              {/* Draindown ledger — negative numbers use goldMuted instead of red */}
               <div
                 className="p-4 font-mono text-xs space-y-1"
                 style={{
@@ -609,15 +502,15 @@ const WaterfallInfo = () => {
                 </div>
                 <div className="flex justify-between">
                   <span>Distribution Fees (20%)</span>
-                  <span style={{ color: '#EF4444' }}>− $300,000</span>
+                  <span style={{ color: tokens.goldMuted }}>− $300,000</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Delivery Costs</span>
-                  <span style={{ color: '#EF4444' }}>− $50,000</span>
+                  <span style={{ color: tokens.goldMuted }}>− $50,000</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Capital Recoupment</span>
-                  <span style={{ color: '#EF4444' }}>− $1,000,000</span>
+                  <span style={{ color: tokens.goldMuted }}>− $1,000,000</span>
                 </div>
                 <div
                   className="pt-2 mt-2 flex justify-between font-semibold"
@@ -628,7 +521,7 @@ const WaterfallInfo = () => {
                 </div>
               </div>
 
-              {/* Visual progress: how much survives */}
+              {/* Visual progress: how much survives — already gold, kept as-is */}
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="text-xs" style={{ color: tokens.textDim }}>Revenue survival rate</span>
@@ -656,41 +549,20 @@ const WaterfallInfo = () => {
                 </p>
               </div>
 
-              <div
-                className="p-4"
-                style={{
-                  background: 'rgba(239, 68, 68, 0.08)',
-                  borderRadius: tokens.radiusMd,
-                  border: '1px solid rgba(239, 68, 68, 0.25)',
-                }}
-              >
-                <p
-                  className="text-xs font-semibold uppercase tracking-wide mb-1.5"
-                  style={{ color: '#EF4444' }}
-                >
-                  Bottom Line
-                </p>
-                <p className="text-sm leading-relaxed" style={{ color: tokens.textPrimary }}>
-                  A "generous" backend that triggers after $3M in prior positions might never pay out
-                  on a film that's realistic about its sales potential. Understand the math before you sign.
-                </p>
-              </div>
+              {/* "Bottom Line" warning — gold style instead of red */}
+              <WikiCallout label="Bottom Line">
+                A "generous" backend that triggers after $3M in prior positions might never pay out
+                on a film that's realistic about its sales potential. Understand the math before you sign.
+              </WikiCallout>
             </div>
-          </div>
+          </WikiCard>
 
           {/* ═══════════════════════════════════════════════════════════════
               SECTION 06 — PROTECTING YOURSELF
               Layout: 2x2 grid of icon-accented strategy cards
               ═══════════════════════════════════════════════════════════════ */}
-          <div
-            className="overflow-hidden animate-fade-in"
-            style={{
-              background: tokens.bgMatte,
-              border: `1px solid ${tokens.borderMatte}`,
-              borderRadius: tokens.radiusLg,
-            }}
-          >
-            <SectionHeader number="06" title="Protecting Yourself" />
+          <WikiCard>
+            <WikiSectionHeader number="06" title="Protecting Yourself" />
 
             <div className="p-5 space-y-4">
               <p className="text-sm leading-relaxed" style={{ color: tokens.textMid }}>
@@ -720,21 +592,12 @@ const WaterfallInfo = () => {
                 />
               </div>
 
-              <div
-                className="p-4"
-                style={{
-                  background: tokens.goldSubtle,
-                  borderRadius: tokens.radiusMd,
-                  border: `1px solid ${tokens.goldMuted}`,
-                }}
-              >
-                <p className="text-sm leading-relaxed" style={{ color: tokens.textPrimary }}>
-                  Most importantly: have an entertainment attorney review your Operating Agreement
-                  before signing. The waterfall is where your deal is won or lost.
-                </p>
-              </div>
+              <WikiCallout label="Remember">
+                Most importantly: have an entertainment attorney review your Operating Agreement
+                before signing. The waterfall is where your deal is won or lost.
+              </WikiCallout>
             </div>
-          </div>
+          </WikiCard>
 
           {/* FOOTER — Back to Overview + subtle Start Simulation link */}
           <div className="pt-6 flex flex-col items-center gap-4 animate-fade-in">

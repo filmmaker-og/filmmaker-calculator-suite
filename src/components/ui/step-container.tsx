@@ -90,12 +90,12 @@ const StepContainer = React.forwardRef<HTMLDivElement, StepContainerProps>(
                 {/* Title area */}
                 <div className="flex-1">
                   {title && (
-                    <h2 className="font-bebas text-lg tracking-[0.15em] text-white/90">
+                    <h2 className="font-bebas text-lg tracking-[0.15em] text-text-primary">
                       {title}
                     </h2>
                   )}
                   {subtitle && (
-                    <p className="text-xs text-white/40 mt-0.5 tracking-wide">
+                    <p className="text-xs text-text-dim mt-0.5 tracking-wide">
                       {subtitle}
                     </p>
                   )}
@@ -111,7 +111,7 @@ const StepContainer = React.forwardRef<HTMLDivElement, StepContainerProps>(
                       <span className="font-mono text-sm text-gold font-semibold">
                         {stepNumber}
                       </span>
-                      <span className="font-mono text-xs text-white/30">
+                      <span className="font-mono text-xs text-text-dim">
                         /{totalSteps}
                       </span>
                     </div>
