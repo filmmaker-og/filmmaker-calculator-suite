@@ -24,32 +24,36 @@ export default {
         mono: ["Roboto Mono", "monospace"], // Fixed: was JetBrains Mono
       },
       colors: {
+        // Aligned to index.css (single source of truth)
         border: {
-          default: "rgba(255, 255, 255, 0.1)",
-          active: "rgba(255, 215, 0, 0.5)", // Updated to match Electric Gold
-          subtle: "rgba(255, 255, 255, 0.05)",
+          default: "rgba(255, 215, 0, 0.25)",  // --border-default
+          active: "rgba(255, 215, 0, 0.5)",     // --border-active
+          subtle: "#252525",                      // --border-subtle
         },
         bg: {
-          void: "#000000",
-          surface: "#0A0A0A",
-          card: "#121212",
+          void: "#000000",    // --bg-void
+          card: "#070707",    // --bg-card
+          surface: "#141414", // --bg-surface
+          elevated: "#111111",// --bg-elevated
+          header: "#1A1A1A",  // --bg-header
           overlay: "rgba(0, 0, 0, 0.85)",
         },
         text: {
-          primary: "#FFFFFF",
-          mid: "rgba(255, 255, 255, 0.7)",
-          dim: "rgba(255, 255, 255, 0.4)",
+          primary: "#FFFFFF", // --text-primary
+          mid: "#CFCFCF",     // --text-mid
+          dim: "#8A8A8A",     // --text-dim
         },
         gold: {
-          DEFAULT: "#FFD700", // ELECTRIC GOLD - Unified Primary Brand Color
-          bright: "#FFD700", // Same as default (unified)
-          muted: "rgba(255, 215, 0, 0.45)",
-          subtle: "rgba(255, 215, 0, 0.12)",
+          DEFAULT: "#FFD700",                    // --gold
+          bright: "#FFD700",
+          muted: "rgba(255, 215, 0, 0.45)",     // --gold-muted
+          subtle: "rgba(255, 215, 0, 0.12)",     // --gold-subtle
+          glow: "rgba(255, 215, 0, 0.3)",        // --gold-glow
         },
         status: {
-          success: "#FFD700", // Using Electric Gold for success
-          error: "#CF6679",
-          warning: "#F0E68C",
+          success: "#00FF64", // --status-success
+          error: "#FF5252",   // --status-danger
+          warning: "#FFD700", // --status-warning (gold)
         },
       },
       borderRadius: {

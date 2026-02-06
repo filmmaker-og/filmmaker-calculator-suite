@@ -18,7 +18,7 @@ const RestrictedAccessModal = ({ isOpen, onClose }: RestrictedAccessModalProps) 
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="w-[calc(100%-2rem)] max-w-sm sm:max-w-md mx-auto bg-card border-border overflow-hidden p-0">
         {/* Premium gold accent bar at top */}
-        <div className="h-1.5 w-full bg-gradient-to-r from-[#D4AF37] via-[#F5E6A3] to-[#D4AF37]" />
+        <div className="h-1.5 w-full bg-gradient-to-r from-gold via-[#FFE44D] to-gold" />
 
         <div className="p-6 pt-8">
           <DialogHeader className="mb-3">

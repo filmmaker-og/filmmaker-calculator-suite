@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import Header from "@/components/Header";
 import { cn } from "@/lib/utils";
+import { colors, radius } from "@/lib/design-system";
 
 /* ═══════════════════════════════════════════════════════════════════════════
    PRODUCT BIBLE v2.0 — NOTION MEETS APPS
@@ -17,28 +18,25 @@ import { cn } from "@/lib/utils";
    - Mini wikis can ONLY link back to /intro (no cross-wiki navigation)
    - Only "Start Simulation" exits to calculator
    ═══════════════════════════════════════════════════════════════════════════ */
+// Sourced from design-system.ts (aligned to index.css)
 const tokens = {
-  bgVoid: '#000000',
-  bgMatte: '#0D0D0D',
-  bgHeader: '#111111',
-  bgSurface: '#141414',
-  
-  gold: '#FFD700',
-  goldMuted: 'rgba(255, 215, 0, 0.45)',
-  goldSubtle: 'rgba(255, 215, 0, 0.08)',
-  goldGlow: 'rgba(255, 215, 0, 0.25)',
-  goldFill: 'rgba(255, 215, 0, 0.12)',
-  goldRadiant: 'rgba(255, 215, 0, 0.18)',
-  
-  borderMatte: '#1A1A1A',
-  borderSubtle: '#222222',
-  
-  textPrimary: '#FFFFFF',
-  textMid: '#B0B0B0',
-  textDim: '#6B6B6B',
-  
-  radiusMd: '12px',
-  radiusLg: '14px',
+  bgVoid: colors.void,
+  bgMatte: colors.card,
+  bgHeader: colors.elevated,
+  bgSurface: colors.surface,
+  gold: colors.gold,
+  goldMuted: colors.goldMuted,
+  goldSubtle: colors.goldSubtle,
+  goldGlow: colors.goldGlow,
+  goldFill: colors.goldSubtle,
+  goldRadiant: colors.goldGlow,
+  borderMatte: colors.borderSubtle,
+  borderSubtle: colors.borderSubtle,
+  textPrimary: colors.textPrimary,
+  textMid: colors.textMid,
+  textDim: colors.textDim,
+  radiusMd: radius.md,
+  radiusLg: radius.lg,
 };
 
 interface FAQItem {
@@ -147,25 +145,25 @@ const pillars: PillarData[] = [
   {
     number: "01",
     title: "Production Budget",
-    summary: "Also called Negative Cost—the total amount required to produce your film. Your budget isn't just a number—it's the foundation of your entire deal structure.",
+    summary: "Also called Negative Cost—the total amount required to produce your film. Your budget isn't just a number—it's the foundation of your entire deal structure. It determines how much capital you need to raise, what financing options are available to you, and what acquisition price you need to break even. Independent budgets typically range from $100K to $15M, with each tier opening different doors for crew, talent, and distribution. Getting this number right is the first step to building a deal that actually works.",
     learnMorePath: "/budget-info",
   },
   {
     number: "02",
     title: "Capital Stack",
-    summary: "How your production gets funded. Most films combine equity, senior debt, gap financing, and tax incentives. The structure directly determines your waterfall.",
+    summary: "How your production gets funded. Most indie films can't be financed by a single source—producers piece together a stack from equity investors, senior lenders, gap financiers, and tax incentives. Each source sits in a specific position in the repayment hierarchy, and that position determines when (and if) each party gets their money back. Equity is the riskiest capital and demands the highest returns. Senior debt gets paid first but charges interest. Understanding how these layers interact is essential to structuring a deal that attracts investors and still leaves room for your producer backend.",
     learnMorePath: "/capital-info",
   },
   {
     number: "03",
     title: "Distribution Fees",
-    summary: "Before anyone sees a dollar, fees come off the top. Sales agents take 10-20%, collection agents 1-5%. A $2M acquisition might net $1.6M or less.",
+    summary: "Before anyone in your waterfall sees a dollar, fees come off the top. Sales agents typically take 10–20% for representing your film to buyers at markets like Cannes and AFM. Collection agents take another 1–5% for managing the flow of funds. Then there are market expenses, delivery costs, and recoupable charges. On a $2M acquisition, these fees can easily total 20–30%—meaning $400K–$600K disappears before your senior lenders, equity investors, or profit participants receive anything. These aren't optional costs—they're contractual obligations built into every deal.",
     learnMorePath: "/fees-info",
   },
   {
     number: "04",
     title: "Recoupment Waterfall",
-    summary: "The contractual order in which revenues are distributed. Each position must be satisfied before the next receives anything. Your position determines when you get paid.",
+    summary: "The contractual order in which revenues are distributed after fees are paid. Like water flowing down a series of pools, money fills each position completely before spilling over to the next: senior debt first, then gap financing, then equity investors recover their principal plus a negotiated premium. Only after all of those positions are satisfied does any money reach the profit pool—where producers, talent deferrals, and backend participants finally get paid. On most independent films, the waterfall never reaches profit participation. This tool shows you exactly where the money goes so you can negotiate from a position of knowledge.",
     learnMorePath: "/waterfall-info",
   },
 ];
@@ -208,7 +206,7 @@ const PillarAccordion = ({ pillar, isExpanded, onToggle }: PillarAccordionProps)
       <div
         className={cn(
           "overflow-hidden transition-all duration-300 ease-out",
-          isExpanded ? "max-h-48 opacity-100" : "max-h-0 opacity-0"
+          isExpanded ? "max-h-[400px] opacity-100" : "max-h-0 opacity-0"
         )}
       >
         <div className="p-5 space-y-4">
@@ -244,7 +242,7 @@ const IntroView = () => {
   };
 
   const handleStartSimulation = () => {
-    navigate('/calculator');
+    navigate('/calculator?tab=budget');
   };
 
   return (
