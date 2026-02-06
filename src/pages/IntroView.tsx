@@ -11,6 +11,11 @@ import { cn } from "@/lib/utils";
    Design DNA:
    - Notion: Clean hierarchy, toggle sections, database-level organization
    - Apps: Gold left border accent, dark matte surfaces, premium sparse gold
+   
+   WIKI ARCHITECTURE:
+   - Main Wiki (/intro) with collapsible pillar sections + deep dive links
+   - Mini wikis can ONLY link back to /intro (no cross-wiki navigation)
+   - Only "Start Simulation" exits to calculator
    ═══════════════════════════════════════════════════════════════════════════ */
 const tokens = {
   bgVoid: '#000000',
@@ -113,6 +118,7 @@ const SectionHeader = ({ number, title }: SectionHeaderProps) => (
 
 /* ═══════════════════════════════════════════════════════════════════════════
    PILLAR SECTION — Each pillar gets its own containment header
+   Deep dive links navigate to mini wikis and scroll to top
    ═══════════════════════════════════════════════════════════════════════════ */
 interface PillarSectionProps {
   number: string;
@@ -123,6 +129,11 @@ interface PillarSectionProps {
 
 const PillarSection = ({ number, title, children, learnMorePath }: PillarSectionProps) => {
   const navigate = useNavigate();
+  
+  const handleDeepDive = () => {
+    navigate(learnMorePath);
+    window.scrollTo(0, 0);
+  };
   
   return (
     <div 
@@ -139,7 +150,7 @@ const PillarSection = ({ number, title, children, learnMorePath }: PillarSection
         {children}
         
         <button
-          onClick={() => navigate(learnMorePath)}
+          onClick={handleDeepDive}
           className="flex items-center gap-2 text-sm font-medium transition-all hover:gap-3"
           style={{ color: tokens.gold }}
         >
