@@ -44,37 +44,42 @@ const StandardStepLayout = ({
         chapter={chapter}
         title={title}
         isActive={true}
-        className="overflow-visible" // Allow dropdowns/tooltips to escape if needed
+        className="overflow-visible min-h-[500px]" // FIXED HEIGHT: Prevents layout jumping
       >
-        <div className="space-y-6">
-          {/* Context / Subtitle */}
-          {subtitle && (
-            <p className="text-sm text-text-dim border-b border-border-subtle pb-4">
-              {subtitle}
-            </p>
-          )}
-
-          {/* Main Content (Inputs) */}
+        <div className="flex flex-col h-full justify-between space-y-6">
+          {/* Top Content */}
           <div className="space-y-6">
-            {children}
+            {/* Context / Subtitle */}
+            {subtitle && (
+              <p className="text-sm text-text-dim border-b border-border-subtle pb-4 leading-relaxed">
+                {subtitle}
+              </p>
+            )}
+
+            {/* Main Content (Inputs) */}
+            <div className="space-y-6">
+              {children}
+            </div>
           </div>
 
-          {/* Action Button */}
+          {/* Action Button - Pinned to bottom of content flow, but stable */}
           {onNext && isComplete && (
-            <button
-              onClick={onNext}
-              className={cn(
-                "w-full py-4 flex items-center justify-center gap-3 mt-6",
-                "bg-gold-cta-subtle border border-gold-cta-muted text-gold-cta",
-                "hover:bg-gold-cta-subtle hover:border-gold-cta transition-all",
-                "active:scale-[0.98]",
-                "shadow-button"
-              )}
-              style={{ borderRadius: 'var(--radius-md)' }}
-            >
-              <span className="text-sm font-bold uppercase tracking-wider">{nextLabel}</span>
-              <ArrowRight className="w-4 h-4" />
-            </button>
+            <div className="pt-4">
+              <button
+                onClick={onNext}
+                className={cn(
+                  "w-full py-4 flex items-center justify-center gap-3",
+                  "bg-gold-cta-subtle border border-gold-cta-muted text-gold-cta",
+                  "hover:bg-gold-cta-subtle hover:border-gold-cta transition-all",
+                  "active:scale-[0.98]",
+                  "shadow-button"
+                )}
+                style={{ borderRadius: 'var(--radius-md)' }}
+              >
+                <span className="text-sm font-bold uppercase tracking-wider">{nextLabel}</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
           )}
         </div>
       </ChapterCard>
