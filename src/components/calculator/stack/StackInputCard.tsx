@@ -146,7 +146,7 @@ const StackInputCard = ({
 
         {/* Rate Stepper (if applicable) */}
         {rateConfig && hasAmount && (
-          <div className="p-5 border-t border-[#1A1A1A]">
+          <div className="p-5 border-t border-border-subtle">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-6 h-6 flex items-center justify-center text-xs font-mono font-bold bg-gold text-black">
                 2
@@ -171,7 +171,7 @@ const StackInputCard = ({
 
         {/* Calculation Result */}
         {hasAmount && rateConfig && (
-          <div className="border-t border-[#1A1A1A] bg-[#0A0A0A]/50">
+          <div className="border-t border-border-subtle bg-bg-void/50">
             <div className="p-5">
               <div className="space-y-3">
                 <div className="flex items-center justify-between text-sm">
@@ -195,7 +195,7 @@ const StackInputCard = ({
         {/* Typical Range */}
         {typicalRangeLabel && (
           <div className="px-5 pb-5">
-            <div className="flex items-center justify-between py-3 border-t border-[#1A1A1A]">
+            <div className="flex items-center justify-between py-3 border-t border-border-subtle">
               <span className="text-xs text-white/30">Typical range</span>
               <span className="text-xs font-mono text-white/50">{typicalRangeLabel}</span>
             </div>
@@ -217,7 +217,7 @@ const StackInputCard = ({
           onClick={onBack}
           className={cn(
             "flex-1 py-3 flex items-center justify-center gap-2",
-            "border border-[#2A2A2A] text-white/60",
+            "border border-border-subtle text-white/60",
             "hover:border-white/30 hover:text-white transition-all",
             "active:scale-[0.98]"
           )}
@@ -247,7 +247,7 @@ const StackInputCard = ({
             onClick={onSkip}
             className={cn(
               "flex-[2] py-3 flex items-center justify-center gap-2",
-              "border border-[#2A2A2A] text-white/40",
+              "border border-border-subtle text-white/40",
               "hover:border-white/20 hover:text-white/60 transition-all",
               "active:scale-[0.98]"
             )}

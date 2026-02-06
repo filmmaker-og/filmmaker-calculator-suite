@@ -58,7 +58,7 @@ const WaterfallTab = ({ result, inputs }: WaterfallTabProps) => {
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2 text-gold/80 text-xs font-mono uppercase tracking-widest">
             <FileText className="w-3 h-3" />
-            <span>Step 4 of 4 / Waterfall Results</span>
+            <span>Waterfall Results</span>
           </div>
           <button
             onClick={() => setShowGuide(!showGuide)}
@@ -135,10 +135,10 @@ const WaterfallTab = ({ result, inputs }: WaterfallTabProps) => {
 
         {/* Pro Tip Callout */}
         {showGuide && (
-          <div className="bg-blue-900/10 border-l-4 border-blue-500/50 p-4 flex items-start space-x-3" style={{ borderRadius: '0 var(--radius-md) var(--radius-md) 0' }}>
-            <Info className="w-4 h-4 text-blue-400 mt-0.5 flex-shrink-0" />
-            <div className="text-xs text-blue-200/80 leading-relaxed">
-              <span className="font-bold text-blue-200">Pro Tip:</span> This is how agencies and studios model every deal. If you can walk an investor through a 4-tier waterfall with preferred returns, you're speaking their language—and that closes deals.
+          <div className="bg-gold/[0.06] border-l-4 border-gold/40 p-4 flex items-start space-x-3" style={{ borderRadius: '0 var(--radius-md) var(--radius-md) 0' }}>
+            <Info className="w-4 h-4 text-gold/70 mt-0.5 flex-shrink-0" />
+            <div className="text-xs text-white/60 leading-relaxed">
+              <span className="font-bold text-gold/90">Pro Tip:</span> This is how agencies and studios model every deal. If you can walk an investor through a 4-tier waterfall with preferred returns, you're speaking their language—and that closes deals.
             </div>
           </div>
         )}

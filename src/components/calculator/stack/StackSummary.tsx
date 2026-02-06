@@ -1,10 +1,12 @@
 import { Check, Receipt, Landmark, CreditCard, Users, Clock, ArrowRight, Edit2, Layers } from "lucide-react";
 import { WaterfallInputs, formatCompactCurrency } from "@/lib/waterfall";
+import { CapitalSourceSelections } from "./CapitalSelect";
 import { cn } from "@/lib/utils";
 
 interface StackSummaryProps {
   inputs: WaterfallInputs;
-  onEdit: (step: number) => void;
+  selections: CapitalSourceSelections;
+  onEdit: (sourceKey: string) => void;
   onComplete: () => void;
 }
 
@@ -14,28 +16,29 @@ interface StackItem {
   amount: number;
   rate?: number;
   rateLabel?: string;
-  step: number;
+  sourceKey: string;
   color: string;
 }
 
 /**
  * StackSummary - Review and confirm capital stack
- * 
- * Final step: Show summary of all capital sources, allow edits, confirm to proceed.
+ *
+ * Shows selected sources with amounts. Edit routes by source key.
  */
-const StackSummary = ({ inputs, onEdit, onComplete }: StackSummaryProps) => {
+const StackSummary = ({ inputs, selections, onEdit, onComplete }: StackSummaryProps) => {
   const totalCapital = inputs.credits + inputs.debt + inputs.mezzanineDebt + inputs.equity;
   const gapPercent = inputs.budget > 0 ? (totalCapital / inputs.budget) * 100 : 0;
   const isFullyFunded = gapPercent >= 100;
   const fundingGap = inputs.budget - totalCapital;
 
-  const stackItems: StackItem[] = [
-    { icon: Receipt, label: 'Tax Credits', amount: inputs.credits, step: 2, color: 'border-emerald-500' },
-    { icon: Landmark, label: 'Senior Debt', amount: inputs.debt, rate: inputs.seniorDebtRate, rateLabel: 'interest', step: 4, color: 'border-blue-500' },
-    { icon: CreditCard, label: 'Gap / Mezz', amount: inputs.mezzanineDebt, rate: inputs.mezzanineRate, rateLabel: 'interest', step: 6, color: 'border-purple-500' },
-    { icon: Users, label: 'Equity', amount: inputs.equity, rate: inputs.premium, rateLabel: 'pref', step: 8, color: 'border-gold' },
-    { icon: Clock, label: 'Deferments', amount: inputs.deferments, step: 10, color: 'border-orange-500' },
-  ].filter(item => item.amount > 0);
+  const allItems: (StackItem & { selected: boolean })[] = [
+    { icon: Receipt, label: 'Tax Credits', amount: inputs.credits, sourceKey: 'taxCredits', color: 'border-gold', selected: selections.taxCredits },
+    { icon: Landmark, label: 'Senior Debt', amount: inputs.debt, rate: inputs.seniorDebtRate, rateLabel: 'interest', sourceKey: 'seniorDebt', color: 'border-gold', selected: selections.seniorDebt },
+    { icon: CreditCard, label: 'Gap / Mezz', amount: inputs.mezzanineDebt, rate: inputs.mezzanineRate, rateLabel: 'interest', sourceKey: 'gapLoan', color: 'border-gold', selected: selections.gapLoan },
+    { icon: Users, label: 'Equity', amount: inputs.equity, rate: inputs.premium, rateLabel: 'pref', sourceKey: 'equity', color: 'border-gold', selected: selections.equity },
+    { icon: Clock, label: 'Deferments', amount: inputs.deferments, sourceKey: 'deferments', color: 'border-gold', selected: selections.deferments },
+  ];
+  const stackItems = allItems.filter(item => item.selected);
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -140,7 +143,7 @@ const StackSummary = ({ inputs, onEdit, onComplete }: StackSummaryProps) => {
                   <div className="flex items-center gap-3">
                     <span className="font-mono text-gold">{formatCompactCurrency(item.amount)}</span>
                     <button
-                      onClick={() => onEdit(item.step)}
+                      onClick={() => onEdit(item.sourceKey)}
                       className="p-1.5 text-white/30 hover:text-white/60 transition-colors"
                     >
                       <Edit2 className="w-3.5 h-3.5" />

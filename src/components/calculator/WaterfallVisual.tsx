@@ -126,7 +126,7 @@ const WaterfallVisual = ({
       {/* Gross Revenue Header */}
       <div
         className={cn(
-          "flex items-center justify-between p-4 bg-white/5 border border-[#1A1A1A] transition-all duration-300",
+          "flex items-center justify-between p-4 bg-white/5 border border-border-subtle transition-all duration-300",
           revealCount > 0 ? "opacity-100" : "opacity-0"
         )}
       >
@@ -159,8 +159,8 @@ const WaterfallVisual = ({
               className={cn(
                 "relative p-4 border transition-colors",
                 tier.status === "filled" && "bg-white/5 border-white/20",
-                tier.status === "partial" && "bg-white/[0.02] border-[#1A1A1A]",
-                tier.status === "empty" && "bg-black border-[#1A1A1A]",
+                tier.status === "partial" && "bg-white/[0.02] border-border-subtle",
+                tier.status === "empty" && "bg-black border-border-subtle",
                 isProfit && tier.paid > 0 && "bg-white/5 border-white/20"
               )}
             >
@@ -179,7 +179,7 @@ const WaterfallVisual = ({
                       "w-7 h-7 flex items-center justify-center text-[9px] font-mono font-medium",
                       tier.status === "filled" && "bg-white text-black",
                       tier.status === "partial" && "bg-white/20 text-white border border-white/20",
-                      tier.status === "empty" && "bg-[#1A1A1A] text-white/30 border border-[#2A2A2A]"
+                      tier.status === "empty" && "bg-bg-header text-white/30 border border-border-subtle"
                     )}
                   >
                     {index + 1}
@@ -225,7 +225,7 @@ const WaterfallVisual = ({
               </div>
 
               {/* Progress Bar */}
-              <div className="relative mt-3 h-[2px] bg-[#1A1A1A] overflow-hidden">
+              <div className="relative mt-3 h-[2px] bg-bg-header overflow-hidden">
                 <div
                   className={cn(
                     "h-full transition-all duration-500",
@@ -242,7 +242,7 @@ const WaterfallVisual = ({
       {/* Summary Footer */}
       <div
         className={cn(
-          "mt-4 pt-4 border-t border-[#1A1A1A] transition-opacity duration-300",
+          "mt-4 pt-4 border-t border-border-subtle transition-opacity duration-300",
           revealCount > tiers.length ? "opacity-100" : "opacity-0"
         )}
       >

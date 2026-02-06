@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { Handshake, ArrowRight, ArrowLeft, Check, Target, TrendingUp, TrendingDown } from "lucide-react";
-import { WaterfallInputs, GuildState, formatCompactCurrency, calculateBreakeven } from "@/lib/waterfall";
-import { CapitalSelections } from "../steps/CapitalSelectStep";
+import { WaterfallInputs, GuildState, CapitalSelections, formatCompactCurrency, calculateBreakeven } from "@/lib/waterfall";
 import { cn } from "@/lib/utils";
 import { useMobileKeyboardScroll } from "@/hooks/use-mobile-keyboard";
 

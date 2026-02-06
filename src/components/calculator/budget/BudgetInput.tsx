@@ -90,7 +90,7 @@ const BudgetInput = ({ inputs, onUpdateInput, onBack, onNext }: BudgetInputProps
           <div />
         )}
         <span className="text-xs font-mono text-gold/70 uppercase tracking-widest">
-          Step 1 of 2 • Budget
+          Budget
         </span>
       </div>
 
