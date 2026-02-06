@@ -101,9 +101,21 @@ const Calculator = () => {
           setInputs(parsed.inputs);
         }
         if (parsed.guilds) setGuilds(parsed.guilds);
-        if (parsed.activeTab) setActiveTab(parsed.activeTab);
+        // Only restore saved tab if no explicit ?tab= param was provided
+        const tabParam = searchParams.get("tab") as TabId | null;
+        if (tabParam && STEP_TO_TAB.includes(tabParam)) {
+          setActiveTab(tabParam);
+        } else if (parsed.activeTab) {
+          setActiveTab(parsed.activeTab);
+        }
       } catch (e) {
         console.error("Failed to load saved inputs");
+      }
+    } else {
+      // No saved state — still respect ?tab= param
+      const tabParam = searchParams.get("tab") as TabId | null;
+      if (tabParam && STEP_TO_TAB.includes(tabParam)) {
+        setActiveTab(tabParam);
       }
     }
   }, [searchParams]);

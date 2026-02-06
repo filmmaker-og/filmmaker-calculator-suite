@@ -201,7 +201,7 @@ const BudgetInfo = () => {
   };
 
   const handleStartSimulation = () => {
-    navigate('/calculator');
+    navigate('/calculator?tab=budget');
     window.scrollTo(0, 0);
   };
 

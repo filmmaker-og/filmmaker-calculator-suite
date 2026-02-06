@@ -91,7 +91,7 @@ const CapitalInfo = () => {
   };
 
   const handleStartSimulation = () => {
-    navigate('/calculator');
+    navigate('/calculator?tab=stack');
     window.scrollTo(0, 0);
   };
 

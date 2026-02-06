@@ -91,7 +91,7 @@ const WaterfallInfo = () => {
   };
 
   const handleStartSimulation = () => {
-    navigate('/calculator');
+    navigate('/calculator?tab=waterfall');
     window.scrollTo(0, 0);
   };
 

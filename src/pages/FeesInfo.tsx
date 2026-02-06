@@ -91,7 +91,7 @@ const FeesInfo = () => {
   };
 
   const handleStartSimulation = () => {
-    navigate('/calculator');
+    navigate('/calculator?tab=deal');
     window.scrollTo(0, 0);
   };
 
