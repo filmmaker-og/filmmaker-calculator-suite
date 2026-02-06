@@ -1,15 +1,26 @@
 import { useEffect } from "react";
 import Header from "@/components/Header";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { ArrowLeft, Share2, Printer, Lock, AlertTriangle, ShieldAlert, BadgeDollarSign } from "lucide-react";
-import { Link } from "react-router-dom";
+import { ArrowLeft, Share2, Printer, Lock, AlertTriangle, ShieldAlert, BadgeDollarSign, Calculator, ArrowRight } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
 const WaterfallInfo = () => {
+  const navigate = useNavigate();
+
   // Fix scroll position on mount
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  const handleReturnToCalculator = () => {
+    // Navigate to calculator. If they have data, it will show their last state.
+    navigate('/calculator?tab=waterfall'); 
+  };
+
+  const handleStartFresh = () => {
+    navigate('/calculator?reset=true');
+  };
 
   return (
     <>
@@ -17,14 +28,34 @@ const WaterfallInfo = () => {
       <div className="min-h-screen bg-bg-void text-text-primary pt-24 pb-12 px-4 md:px-8 font-sans">
         <div className="max-w-4xl mx-auto space-y-12 animate-fade-in">
           
-          {/* Breadcrumb / Nav */}
-          <div className="flex items-center gap-4 text-sm text-text-dim">
-            <Link to="/intro" className="flex items-center gap-1 hover:text-gold transition-colors">
-              <ArrowLeft className="w-4 h-4" />
-              <span>Back to Documentation</span>
-            </Link>
-            <span className="text-border-default">/</span>
-            <span className="text-gold">Protocol 04: Waterfall</span>
+          {/* Breadcrumb / Nav Actions - IMPROVED */}
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-border-subtle pb-4">
+            {/* Back Link */}
+            <button 
+              onClick={() => navigate(-1)} 
+              className="flex items-center gap-2 text-sm text-text-dim hover:text-gold transition-colors group"
+            >
+              <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+              <span>Back</span>
+            </button>
+
+            {/* Direct Calculator Access */}
+            <div className="flex items-center gap-3">
+               <Button 
+                onClick={handleStartFresh}
+                variant="ghost" 
+                className="text-xs text-text-dim hover:text-white h-8"
+              >
+                Start Fresh
+              </Button>
+              <Button 
+                onClick={handleReturnToCalculator}
+                className="bg-gold hover:bg-gold-bright text-black font-bold h-9 text-xs uppercase tracking-wider"
+              >
+                <Calculator className="w-3 h-3 mr-2" />
+                Open Calculator
+              </Button>
+            </div>
           </div>
 
           {/* Title Section */}
@@ -189,13 +220,24 @@ const WaterfallInfo = () => {
           </div>
 
           {/* Action Footer */}
-          <div className="pt-8 border-t border-border-default flex justify-center">
+          <div className="pt-8 border-t border-border-default flex flex-col items-center gap-4">
+            <p className="text-text-dim text-sm max-w-md text-center">
+              Now that you understand the rules, use the calculator to see if your deal actually makes money.
+            </p>
+            <Button 
+              onClick={handleReturnToCalculator}
+              className="bg-gold hover:bg-gold-bright text-black font-bold h-12 px-8 w-full max-w-xs text-sm uppercase tracking-wider shadow-[0_0_20px_rgba(212,175,55,0.2)]"
+            >
+              Open Calculator
+              <ArrowRight className="ml-2 w-4 h-4" />
+            </Button>
+            
             <Button 
               onClick={() => window.print()}
-              variant="outline"
-              className="border-gold/30 text-gold hover:bg-gold/10 gap-2"
+              variant="link"
+              className="text-text-dim hover:text-gold gap-2"
             >
-              <Printer className="w-4 h-4" />
+              <Printer className="w-3 h-3" />
               Print Protocol
             </Button>
           </div>
