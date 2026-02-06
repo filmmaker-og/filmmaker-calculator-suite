@@ -1,8 +1,9 @@
 import { useState, useRef, useEffect } from "react";
-import { Check, X } from "lucide-react";
+import { Check, X, Info } from "lucide-react";
 import { WaterfallInputs } from "@/lib/waterfall";
 import { cn } from "@/lib/utils";
 import StandardStepLayout from "../StandardStepLayout";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface BudgetInputProps {
   inputs: WaterfallInputs;
@@ -21,12 +22,12 @@ const BudgetInput = ({ inputs, onUpdateInput, onNext }: BudgetInputProps) => {
   const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Auto-focus on mount
-  useEffect(() => {
-    setTimeout(() => {
-      inputRef.current?.focus();
-    }, 100);
-  }, []);
+  // REMOVED: Auto-focus on mount caused keyboard to pop up immediately.
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     inputRef.current?.focus();
+  //   }, 100);
+  // }, []);
 
   const formatValue = (value: number | undefined) => {
     if (value === undefined || value === 0) return '';
@@ -88,9 +89,21 @@ const BudgetInput = ({ inputs, onUpdateInput, onNext }: BudgetInputProps) => {
         {/* Input Card - Inner Matte Look */}
         <div className="bg-bg-elevated border border-border-default rounded-lg p-5 transition-all focus-within:border-gold/50 focus-within:shadow-focus focus-within:bg-bg-surface">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-xs uppercase tracking-widest text-text-dim font-bold">
-              Total Budget
-            </span>
+            <div className="flex items-center gap-2">
+              <span className="text-xs uppercase tracking-widest text-text-dim font-bold">
+                Total Budget
+              </span>
+              <TooltipProvider>
+                <Tooltip delayDuration={0}>
+                  <TooltipTrigger asChild>
+                    <Info className="w-3.5 h-3.5 text-text-dim/50 hover:text-gold cursor-pointer transition-colors" />
+                  </TooltipTrigger>
+                  <TooltipContent side="right" className="max-w-[200px] bg-bg-card border-gold/30 text-xs">
+                    <p>The total cost to produce your film (Negative Cost).</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
             {isCompleted && (
               <span className="text-xs text-gold font-mono flex items-center gap-1">
                 <Check className="w-3 h-3" />
