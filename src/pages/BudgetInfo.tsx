@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, ArrowLeft, DollarSign, Film, AlertTriangle, TrendingUp } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { ArrowLeft, DollarSign, AlertTriangle } from 'lucide-react';
 import Header from "@/components/Header";
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -9,6 +8,8 @@ import Header from "@/components/Header";
    Design DNA:
    - Notion: Clean hierarchy, toggle sections, database-level organization
    - Apps: Gold left border accent, dark matte surfaces, premium sparse gold
+   
+   WIKI CONTAINMENT: This mini wiki can ONLY link back to /intro
    ═══════════════════════════════════════════════════════════════════════════ */
 const tokens = {
   // Backgrounds - Matte surfaces
@@ -200,6 +201,11 @@ const MistakeCard = ({ title, description }: MistakeCardProps) => (
 const BudgetInfo = () => {
   const navigate = useNavigate();
 
+  const handleBackToOverview = () => {
+    navigate('/intro');
+    window.scrollTo(0, 0);
+  };
+
   return (
     <>
       <Header />
@@ -214,6 +220,18 @@ const BudgetInfo = () => {
               PAGE HEADER
               ═══════════════════════════════════════════════════════════════ */}
           <div className="space-y-4 pt-6 animate-fade-in">
+            {/* Back to Overview — ONLY navigation link allowed */}
+            <button
+              onClick={handleBackToOverview}
+              className="flex items-center gap-2 text-sm transition-colors mb-4"
+              style={{ color: tokens.textDim }}
+              onMouseEnter={(e) => e.currentTarget.style.color = tokens.gold}
+              onMouseLeave={(e) => e.currentTarget.style.color = tokens.textDim}
+            >
+              <ArrowLeft className="w-4 h-4" />
+              <span>Back to Overview</span>
+            </button>
+            
             <div className="flex items-center gap-3">
               <div 
                 className="p-2 rounded-lg"
@@ -403,7 +421,7 @@ const BudgetInfo = () => {
           </div>
 
           {/* ═══════════════════════════════════════════════════════════════
-              CTA SECTION
+              FOOTER — Back to Overview only
               ═══════════════════════════════════════════════════════════════ */}
           <div className="pt-6 flex flex-col items-center gap-6 animate-fade-in">
             {/* Gold Gradient Divider */}
@@ -414,41 +432,9 @@ const BudgetInfo = () => {
               }}
             />
             
-            {/* Next Chapter Preview */}
-            <div className="text-center space-y-2">
-              <p 
-                className="text-xs uppercase tracking-widest"
-                style={{ color: tokens.textDim }}
-              >
-                Next: Chapter 02
-              </p>
-              <p 
-                className="text-lg font-semibold"
-                style={{ color: tokens.textMid }}
-              >
-                Capital Structure & Financing
-              </p>
-            </div>
-            
-            {/* CTA Button — Solid Gold */}
-            <Button 
-              onClick={() => navigate('/capital-info')}
-              className="group px-10 py-6 text-sm font-black uppercase tracking-widest transition-all duration-200 hover:scale-[1.02]"
-              style={{
-                background: `linear-gradient(135deg, ${tokens.gold} 0%, #E6C200 100%)`,
-                border: 'none',
-                borderRadius: tokens.radiusMd,
-                color: '#000000',
-                boxShadow: `0 8px 24px ${tokens.goldGlow}`,
-              }}
-            >
-              Continue to Capital
-              <ArrowRight className="ml-3 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </Button>
-            
-            {/* Back Link */}
+            {/* Back Link — ONLY navigation allowed */}
             <button
-              onClick={() => navigate('/intro')}
+              onClick={handleBackToOverview}
               className="flex items-center gap-2 text-sm transition-colors"
               style={{ color: tokens.textDim }}
               onMouseEnter={(e) => e.currentTarget.style.color = tokens.gold}

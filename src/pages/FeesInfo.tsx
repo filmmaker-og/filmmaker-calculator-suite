@@ -1,11 +1,12 @@
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { ArrowLeft } from 'lucide-react';
 import Header from "@/components/Header";
 
 /* ═══════════════════════════════════════════════════════════════════════════
    MINI WIKI: DISTRIBUTION FEES
    Deep-dive on fees that come off the top before anyone gets paid.
+   
+   WIKI CONTAINMENT: This mini wiki can ONLY link back to /intro
    ═══════════════════════════════════════════════════════════════════════════ */
 const tokens = {
   bgVoid: '#000000',
@@ -85,6 +86,11 @@ const SectionHeader = ({ number, title }: SectionHeaderProps) => (
 const FeesInfo = () => {
   const navigate = useNavigate();
 
+  const handleBackToOverview = () => {
+    navigate('/intro');
+    window.scrollTo(0, 0);
+  };
+
   return (
     <>
       <Header />
@@ -98,7 +104,7 @@ const FeesInfo = () => {
           {/* PAGE HEADER */}
           <div className="space-y-4 pt-6 animate-fade-in">
             <button
-              onClick={() => navigate('/intro')}
+              onClick={handleBackToOverview}
               className="flex items-center gap-2 text-sm transition-colors mb-4"
               style={{ color: tokens.textDim }}
               onMouseEnter={(e) => e.currentTarget.style.color = tokens.gold}
@@ -415,7 +421,7 @@ const FeesInfo = () => {
             </div>
           </div>
 
-          {/* CTA SECTION */}
+          {/* FOOTER — Back to Overview only */}
           <div className="pt-6 flex flex-col items-center gap-6 animate-fade-in">
             <div 
               className="h-px w-full"
@@ -424,44 +430,16 @@ const FeesInfo = () => {
               }}
             />
             
-            <Button 
-              onClick={() => navigate('/calculator')}
-              className="group px-10 py-6 text-sm font-black uppercase tracking-widest transition-all duration-200 hover:scale-[1.02]"
-              style={{
-                background: `linear-gradient(135deg, ${tokens.gold} 0%, #E6C200 100%)`,
-                border: 'none',
-                borderRadius: tokens.radiusMd,
-                color: '#000000',
-                boxShadow: `0 8px 24px ${tokens.goldGlow}`,
-              }}
+            <button
+              onClick={handleBackToOverview}
+              className="flex items-center gap-2 text-sm transition-colors"
+              style={{ color: tokens.textDim }}
+              onMouseEnter={(e) => e.currentTarget.style.color = tokens.gold}
+              onMouseLeave={(e) => e.currentTarget.style.color = tokens.textDim}
             >
-              Model Your Fees
-              <ArrowRight className="ml-3 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </Button>
-            
-            <div className="flex items-center gap-6">
-              <button
-                onClick={() => navigate('/capital-info')}
-                className="flex items-center gap-2 text-sm transition-colors"
-                style={{ color: tokens.textDim }}
-                onMouseEnter={(e) => e.currentTarget.style.color = tokens.gold}
-                onMouseLeave={(e) => e.currentTarget.style.color = tokens.textDim}
-              >
-                <ArrowLeft className="w-4 h-4" />
-                <span>Capital Stack</span>
-              </button>
-              
-              <button
-                onClick={() => navigate('/waterfall-info')}
-                className="flex items-center gap-2 text-sm transition-colors"
-                style={{ color: tokens.textDim }}
-                onMouseEnter={(e) => e.currentTarget.style.color = tokens.gold}
-                onMouseLeave={(e) => e.currentTarget.style.color = tokens.textDim}
-              >
-                <span>Recoupment</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
-            </div>
+              <ArrowLeft className="w-4 h-4" />
+              <span>Back to Overview</span>
+            </button>
           </div>
 
         </div>
