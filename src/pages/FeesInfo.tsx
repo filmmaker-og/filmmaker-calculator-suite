@@ -127,6 +127,7 @@ const FeesInfo = () => {
               style={{ color: tokens.textMid }}
             >
               The money that comes off the top before your waterfall even begins.
+              In an SVOD deal, fees are simpler than theatrical — but they still add up fast.
             </p>
             
             <div 
@@ -150,10 +151,12 @@ const FeesInfo = () => {
             
             <div className="p-5 space-y-4">
               <p className="text-sm leading-relaxed" style={{ color: tokens.textMid }}>
-                When a streamer or buyer acquires your film for $2 million, that $2 million 
+                When a streamer acquires your film for $2 million, that $2 million
                 doesn't flow directly into your waterfall. <strong style={{ color: tokens.textPrimary }}>
-                Distribution fees come off the top first</strong>—before senior debt, before 
+                Distribution fees come off the top first</strong> — before senior debt, before
                 equity recoupment, before anyone in your Operating Agreement sees a cent.
+                For SVOD-only deals, the fee structure is simpler than theatrical (no exhibitor
+                splits or P&A recoupment), but the percentages still compound.
               </p>
               
               <p className="text-sm leading-relaxed" style={{ color: tokens.textMid }}>
@@ -177,8 +180,10 @@ const FeesInfo = () => {
                   Reality Check
                 </p>
                 <p className="text-sm leading-relaxed" style={{ color: tokens.textPrimary }}>
-                  On a $2M acquisition, fees can easily total 20-30%. That means $400K-$600K 
-                  comes off before anyone in your waterfall gets paid.
+                  On a $2M SVOD acquisition, fees can easily total 15–25%. That means $300K–$500K
+                  comes off before anyone in your waterfall gets paid. Unlike theatrical deals,
+                  there's no exhibitor split or P&A recoupment — but the sales agent, CAM, and
+                  delivery costs are unavoidable.
                 </p>
               </div>
             </div>
@@ -197,10 +202,11 @@ const FeesInfo = () => {
             
             <div className="p-5 space-y-4">
               <p className="text-sm leading-relaxed" style={{ color: tokens.textMid }}>
-                The <strong style={{ color: tokens.textPrimary }}>sales agent</strong> represents 
-                your film to international buyers and domestic distributors. They attend markets 
-                (Cannes, AFM, Berlin), pitch to acquisitions executives, negotiate deals, and 
-                sometimes advance marketing costs.
+                The <strong style={{ color: tokens.textPrimary }}>sales agent</strong> represents
+                your film to streamers, international buyers, and domestic distributors. They attend
+                markets (Cannes, AFM, Berlin), pitch to acquisitions executives, negotiate licensing
+                deals, and sometimes advance marketing costs. For SVOD-focused deals, less
+                territory-by-territory work is required, so commissions tend toward the lower end.
               </p>
               
               <p className="text-sm leading-relaxed" style={{ color: tokens.textMid }}>
@@ -254,8 +260,9 @@ const FeesInfo = () => {
               
               <p className="text-sm leading-relaxed" style={{ color: tokens.textMid }}>
                 Collection agent fees typically range from <strong style={{ color: tokens.textPrimary }}>
-                1-5%</strong> of gross revenues. Common CAMs include Fintage House, Freeway, and 
-                Film Finances. While the percentage seems small, it comes off before anything else.
+                1–5%</strong> of gross revenues, plus a setup fee of $8K–$15K. Common CAMs include
+                Fintage House, FilmChain, and Freeway. While the percentage seems small, the CAM
+                fee is the very first deduction — it comes off before even the sales agent gets paid.
               </p>
               
               <p className="text-sm leading-relaxed" style={{ color: tokens.textMid }}>
@@ -302,9 +309,11 @@ const FeesInfo = () => {
               </p>
               
               <p className="text-sm leading-relaxed" style={{ color: tokens.textMid }}>
-                Delivery costs vary significantly but can range from $25,000 to $150,000+ depending 
-                on the buyer's requirements. Streamers like Netflix have particularly detailed 
-                technical specifications.
+                Delivery costs for SVOD deals typically range from <strong style={{ color: tokens.textPrimary }}>
+                $7,000 to $30,000+</strong> depending on the platform's specifications. Netflix requires
+                Dolby Vision–graded masters (not HDR10), native frame rates, full M&E audio stems for
+                dubbing, and extensive closed caption compliance. Amazon Prime Video Direct has lower
+                technical requirements but still mandates ADA-compliant captions for all US titles.
               </p>
               
               <p className="text-sm leading-relaxed" style={{ color: tokens.textMid }}>
@@ -358,21 +367,22 @@ const FeesInfo = () => {
                 </div>
                 <div className="flex justify-between">
                   <span>Delivery Costs</span>
-                  <span style={{ color: '#EF4444' }}>− $75,000</span>
+                  <span style={{ color: '#EF4444' }}>− $25,000</span>
                 </div>
                 <div 
                   className="pt-2 mt-2 flex justify-between font-semibold"
                   style={{ borderTop: `1px solid ${tokens.borderSubtle}` }}
                 >
                   <span style={{ color: tokens.gold }}>Net to Waterfall</span>
-                  <span style={{ color: tokens.gold }}>$1,525,000</span>
+                  <span style={{ color: tokens.gold }}>$1,575,000</span>
                 </div>
               </div>
               
               <p className="text-sm leading-relaxed" style={{ color: tokens.textMid }}>
-                That's nearly <strong style={{ color: tokens.textPrimary }}>24% gone</strong> before 
-                your senior debt, equity investors, or profit participants see anything. And this 
-                is just one territory—international sales may have additional layers of fees.
+                That's over <strong style={{ color: tokens.textPrimary }}>21% gone</strong> before
+                your senior debt, equity investors, or profit participants see anything. In an
+                SVOD deal, this is simpler than theatrical (no exhibitor split or P&A recoupment),
+                but the math is still sobering.
               </p>
             </div>
           </div>

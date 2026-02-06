@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { DollarSign, ArrowRight, ArrowLeft, Check, X } from "lucide-react";
+import { DollarSign, ArrowRight, X } from "lucide-react";
 import { WaterfallInputs } from "@/lib/waterfall";
 import { cn } from "@/lib/utils";
 
@@ -10,17 +10,10 @@ interface BudgetInputProps {
   onNext: () => void;
 }
 
-/**
- * BudgetInput - Budget data collection screen
- * 
- * Step 1 of Budget Tab: Collect the production budget
- * with quick amount buttons and validation.
- */
 const BudgetInput = ({ inputs, onUpdateInput, onBack, onNext }: BudgetInputProps) => {
   const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Auto-focus on mount
   useEffect(() => {
     setTimeout(() => {
       inputRef.current?.focus();
@@ -76,67 +69,44 @@ const BudgetInput = ({ inputs, onUpdateInput, onBack, onNext }: BudgetInputProps
 
   return (
     <div className="space-y-6 animate-fade-in">
-      {/* Step Label + Back Button */}
-      <div className="flex items-center justify-between">
-        {onBack ? (
-          <button
-            onClick={onBack}
-            className="flex items-center gap-1.5 text-xs text-text-dim hover:text-white transition-colors"
-          >
-            <ArrowLeft className="w-3.5 h-3.5" />
-            <span>Back</span>
-          </button>
-        ) : (
-          <div />
-        )}
-        <span className="text-xs font-mono text-gold/70 uppercase tracking-widest">
-          Step 1 of 2 • Budget
-        </span>
-      </div>
-
       {/* Hero Header */}
-      <div className="text-center mb-6">
+      <div className="text-center pt-2">
         <div className="relative inline-block mb-4">
           <div
             className="absolute inset-0"
             style={{
-              background: 'radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, transparent 70%)',
+              background: 'radial-gradient(circle, rgba(255, 215, 0, 0.12) 0%, transparent 70%)',
               filter: 'blur(15px)',
               transform: 'scale(2)',
             }}
           />
-          <div 
-            className="relative w-16 h-16 border border-gold/30 bg-gold/5 flex items-center justify-center" 
+          <div
+            className="relative w-14 h-14 border border-gold/25 bg-gold/5 flex items-center justify-center"
             style={{ borderRadius: 'var(--radius-md)' }}
           >
-            <DollarSign className="w-8 h-8 text-gold" />
+            <DollarSign className="w-7 h-7 text-gold" />
           </div>
         </div>
 
         <h2 className="font-bebas text-2xl tracking-[0.08em] text-white mb-1">
           Production Budget
         </h2>
-        <p className="text-white/50 text-xs max-w-xs mx-auto">
-          Enter your total negative cost
+        <p className="text-white/40 text-xs max-w-xs mx-auto">
+          Your total negative cost — the foundation of every deal
         </p>
       </div>
 
       {/* Main Input Card */}
       <div className="matte-section overflow-hidden">
         {/* Section header */}
-        <div className="matte-section-header px-5 py-3 flex items-center justify-between">
+        <div className="matte-section-header px-5 py-3">
           <span className="text-xs uppercase tracking-[0.2em] text-white/40 font-medium">
             Total Budget
           </span>
-          {isCompleted && (
-            <span className="text-xs text-gold font-mono flex items-center gap-1">
-              <Check className="w-3 h-3" />
-            </span>
-          )}
         </div>
 
         {/* Budget Input */}
-        <div className="p-5">
+        <div className="p-5 pb-4">
           <div
             className={cn(
               "flex items-center transition-all relative",
@@ -144,7 +114,7 @@ const BudgetInput = ({ inputs, onUpdateInput, onBack, onNext }: BudgetInputProps
               isFocused
                 ? "border-border-active shadow-focus"
                 : isCompleted
-                  ? "border-gold/50"
+                  ? "border-gold/40"
                   : "border-border-default"
             )}
             style={{ borderRadius: 'var(--radius-md)' }}
@@ -164,7 +134,6 @@ const BudgetInput = ({ inputs, onUpdateInput, onBack, onNext }: BudgetInputProps
               className="flex-1 bg-transparent py-4 outline-none font-mono text-[22px] text-text-primary text-right placeholder:text-text-dim placeholder:text-base tabular-nums pr-2"
             />
 
-            {/* Clear button */}
             {isCompleted && (
               <button
                 onClick={handleClear}
@@ -175,37 +144,29 @@ const BudgetInput = ({ inputs, onUpdateInput, onBack, onNext }: BudgetInputProps
               </button>
             )}
           </div>
-
-          <p className="mt-2 text-xs text-text-dim text-center">
-            Enter your full production budget
-          </p>
         </div>
 
-        {/* Quick Amounts */}
+        {/* Quick Amounts — integrated directly */}
         <div className="px-5 pb-5">
-          <div
-            className="p-4 border border-gold/20 bg-gold/[0.03]"
-            style={{ borderRadius: 'var(--radius-lg)' }}
-          >
-            <p className="text-xs text-text-dim mb-3 uppercase tracking-wide font-medium text-center">
-              Quick amounts
-            </p>
-            <div className="flex gap-2 flex-wrap justify-center">
-              {quickAmounts.map((qa) => (
-                <button
-                  key={qa.value}
-                  onClick={() => handleQuickAmount(qa.value)}
-                  className={cn(
-                    "font-mono text-xs px-3 py-2 rounded transition-colors border",
-                    inputs.budget === qa.value
-                      ? "bg-gold/20 border-gold text-gold"
-                      : "bg-bg-void border-white/10 text-text-mid hover:border-gold/50"
-                  )}
-                >
-                  {qa.label}
-                </button>
-              ))}
-            </div>
+          <p className="text-[10px] text-text-dim mb-2.5 uppercase tracking-widest font-medium text-center">
+            Quick amounts
+          </p>
+          <div className="flex gap-2 justify-center">
+            {quickAmounts.map((qa) => (
+              <button
+                key={qa.value}
+                onClick={() => handleQuickAmount(qa.value)}
+                className={cn(
+                  "font-mono text-xs px-3 py-2 transition-all border",
+                  inputs.budget === qa.value
+                    ? "bg-gold/15 border-gold/60 text-gold"
+                    : "bg-transparent border-white/8 text-text-mid hover:border-gold/30 hover:text-text-primary"
+                )}
+                style={{ borderRadius: 'var(--radius-sm, 8px)' }}
+              >
+                {qa.label}
+              </button>
+            ))}
           </div>
         </div>
       </div>
@@ -216,13 +177,17 @@ const BudgetInput = ({ inputs, onUpdateInput, onBack, onNext }: BudgetInputProps
           onClick={onNext}
           className={cn(
             "w-full py-4 flex items-center justify-center gap-3",
-            "bg-gold/10 border border-gold/30 text-gold",
-            "hover:bg-gold/20 hover:border-gold/50 transition-all",
+            "border border-gold/40 text-black font-bold",
+            "hover:brightness-110 transition-all",
             "active:scale-[0.98]"
           )}
-          style={{ borderRadius: 'var(--radius-md)' }}
+          style={{
+            borderRadius: 'var(--radius-md)',
+            background: 'linear-gradient(135deg, #FFD700 0%, #E6C200 100%)',
+            boxShadow: '0 4px 16px rgba(255, 215, 0, 0.2)',
+          }}
         >
-          <span className="text-sm font-bold uppercase tracking-wider">Continue to Capital Stack</span>
+          <span className="text-sm font-black uppercase tracking-wider">Continue to Capital Stack</span>
           <ArrowRight className="w-4 h-4" />
         </button>
       )}

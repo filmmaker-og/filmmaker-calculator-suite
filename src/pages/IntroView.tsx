@@ -8,17 +8,17 @@ import { colors, radius } from "@/lib/design-system";
 
 /* ═══════════════════════════════════════════════════════════════════════════
    PRODUCT BIBLE v2.0 — NOTION MEETS APPS
-   
+
    Design DNA:
    - Notion: Clean hierarchy, toggle sections, database-level organization
    - Apps: Gold left border accent, dark matte surfaces, premium sparse gold
-   
+
    WIKI ARCHITECTURE:
    - Main Wiki (/intro) with collapsible pillar sections + deep dive links
    - Mini wikis can ONLY link back to /intro (no cross-wiki navigation)
    - Only "Start Simulation" exits to calculator
+   - All content is SVOD-only (streamer acquisitions, not theatrical)
    ═══════════════════════════════════════════════════════════════════════════ */
-// Sourced from design-system.ts (aligned to index.css)
 const tokens = {
   bgVoid: colors.void,
   bgMatte: colors.card,
@@ -47,19 +47,23 @@ interface FAQItem {
 const faqItems: FAQItem[] = [
   {
     question: "Is this legal financial advice?",
-    answer: "No. This is an educational planning tool only. Always consult an entertainment attorney before finalizing any deal structures or operating agreements."
+    answer: "No. This is an educational planning tool designed to help you understand waterfall mechanics before entering real negotiations. Every deal is unique. Always consult an entertainment attorney before finalizing any deal structures, operating agreements, or interparty agreements."
   },
   {
-    question: "Is this for theatrical releases?",
-    answer: "No. This models streamer acquisitions and direct sales—Netflix, Amazon, Tubi, or independent buyers. Theatrical P&A waterfalls are significantly more complex."
+    question: "What types of deals does this model?",
+    answer: "This tool models SVOD (streaming) acquisitions — deals where a platform like Netflix, Amazon, Apple TV+, or a FAST channel acquires your completed film for a license fee. It does not model theatrical P&A waterfalls, which involve exhibitor splits, prints & advertising recoupment, and significantly more complexity."
   },
   {
-    question: "How accurate is this?",
-    answer: "The waterfall logic matches real Operating Agreements used in independent film finance. Specific percentages vary by deal, but the mechanics and recoupment order are universal."
+    question: "How accurate are the calculations?",
+    answer: "The waterfall logic mirrors real Operating Agreements used in independent film finance. The recoupment order, fee structures, and profit split mechanics are based on current industry standards. Specific percentages will vary by deal, but the underlying math is the same whether your film costs $250K or $10M."
   },
   {
-    question: "I'm new to film finance. Where do I start?",
-    answer: "Just follow the steps. Each input has an info icon with context. Start with your budget, then we'll walk you through capital stack, fees, and recoupment."
+    question: "I'm new to film finance. Where should I start?",
+    answer: "Start by reading through the four pillars below — Budget, Capital Stack, Fees, and Waterfall. Each one builds on the last. Once you understand the concepts, hit Start Simulation and the calculator will walk you through entering your own deal. Every input includes context so you're never guessing."
+  },
+  {
+    question: "Why do I need to enter my email?",
+    answer: "We ask for your email right before the waterfall reveal — the final step where your full deal breakdown is calculated. This gives you access to the complete simulation results. We occasionally share insights on film finance, but we never spam and you can unsubscribe anytime."
   }
 ];
 
@@ -75,51 +79,51 @@ interface SectionHeaderProps {
 }
 
 const SectionHeader = ({ number, title, isExpanded, onClick, isClickable = false }: SectionHeaderProps) => (
-  <div 
+  <div
     className={cn(
       "flex items-stretch",
       isClickable && "cursor-pointer hover:bg-white/[0.02] transition-colors"
     )}
-    style={{ 
+    style={{
       background: `linear-gradient(90deg, ${tokens.goldRadiant} 0%, ${tokens.bgHeader} 15%, ${tokens.bgHeader} 100%)`,
       borderBottom: isExpanded ? `1px solid ${tokens.borderMatte}` : 'none',
     }}
     onClick={onClick}
   >
-    <div 
+    <div
       className="w-1 flex-shrink-0"
-      style={{ 
+      style={{
         background: `linear-gradient(180deg, ${tokens.gold} 0%, ${tokens.goldMuted} 100%)`,
         boxShadow: `0 0 12px ${tokens.goldGlow}`,
       }}
     />
-    
-    <div 
+
+    <div
       className="flex items-center justify-center px-4 py-4"
-      style={{ 
+      style={{
         borderRight: `1px solid ${tokens.borderSubtle}`,
         minWidth: '56px',
         background: tokens.goldFill,
       }}
     >
-      <span 
+      <span
         className="font-bebas text-xl tracking-wide"
         style={{ color: tokens.gold }}
       >
         {number}
       </span>
     </div>
-    
+
     <div className="flex items-center flex-1 px-4 py-4 justify-between">
-      <h2 
+      <h2
         className="font-bold text-xs uppercase tracking-widest"
         style={{ color: tokens.textPrimary }}
       >
         {title}
       </h2>
-      
+
       {isClickable && (
-        <ChevronDown 
+        <ChevronDown
           className={cn(
             "w-4 h-4 flex-shrink-0 transition-transform duration-200",
             isExpanded && "rotate-180"
@@ -132,12 +136,19 @@ const SectionHeader = ({ number, title, isExpanded, onClick, isClickable = false
 );
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   PILLAR DATA — Content for each accordion section
+   PILLAR DATA — Structured content for each accordion section
    ═══════════════════════════════════════════════════════════════════════════ */
+interface KeyPoint {
+  label: string;
+  detail: string;
+}
+
 interface PillarData {
   number: string;
   title: string;
-  summary: string;
+  subtitle: string;
+  overview: string;
+  keyPoints: KeyPoint[];
   learnMorePath: string;
 }
 
@@ -145,31 +156,91 @@ const pillars: PillarData[] = [
   {
     number: "01",
     title: "Production Budget",
-    summary: "Also called Negative Cost—the total amount required to produce your film. Your budget isn't just a number—it's the foundation of your entire deal structure. It determines how much capital you need to raise, what financing options are available to you, and what acquisition price you need to break even. Independent budgets typically range from $100K to $15M, with each tier opening different doors for crew, talent, and distribution. Getting this number right is the first step to building a deal that actually works.",
+    subtitle: "Your negative cost — the number everything else is built on",
+    overview: "The production budget (also called negative cost) is the total amount required to produce your film from development through delivery. In an SVOD deal, your budget is the single most important variable — it determines how much capital you need to raise, what financing structures are available, and what license fee a streamer needs to pay for the deal to make economic sense. Independent films typically range from $100K to $15M, with each tier opening different doors for cast, crew, distribution, and investor appetite. A $500K micro-budget has a very different capital stack and break-even profile than a $5M film with name talent.",
+    keyPoints: [
+      {
+        label: "SVOD license fees",
+        detail: "Streamers base acquisition prices on your budget, genre, cast, and market demand. For first-time producers, realistic license fees typically range from 0.8x to 1.5x your production budget. Established track records can push this to 2x–3x."
+      },
+      {
+        label: "Budget composition",
+        detail: "A professional budget breaks into above-the-line (writer, director, producers, cast — 20–35%), below-the-line (crew, equipment, locations — 45–60%), post-production (edit, VFX, sound, color — 10–15%), and contingency plus insurance (10–12%)."
+      },
+      {
+        label: "Delivery costs matter",
+        detail: "Streamers require specific technical deliverables — Dolby Vision masters, M&E tracks, closed captions, artwork packages. Budget $7K–$30K+ for delivery depending on platform specs. Netflix has the most demanding technical requirements."
+      },
+    ],
     learnMorePath: "/budget-info",
   },
   {
     number: "02",
     title: "Capital Stack",
-    summary: "How your production gets funded. Most indie films can't be financed by a single source—producers piece together a stack from equity investors, senior lenders, gap financiers, and tax incentives. Each source sits in a specific position in the repayment hierarchy, and that position determines when (and if) each party gets their money back. Equity is the riskiest capital and demands the highest returns. Senior debt gets paid first but charges interest. Understanding how these layers interact is essential to structuring a deal that attracts investors and still leaves room for your producer backend.",
+    subtitle: "How your film gets funded — and who gets paid back first",
+    overview: "The capital stack is the combination of all funding sources used to finance your production. Most independent films can't be financed from a single source — producers piece together a layered stack from equity investors, senior lenders, gap financiers, and tax incentives. Each capital source occupies a specific position in the repayment hierarchy, and that position determines when (and if) each party gets their money back. Understanding how these layers interact is essential because the capital stack directly defines your waterfall — who recoups first, at what rate, and how much is left for profit participation.",
+    keyPoints: [
+      {
+        label: "Senior debt (8–12% interest)",
+        detail: "The safest position in the stack — senior lenders get repaid first. These loans are typically secured against tax credits, pre-sales, or minimum guarantees. Common sources include entertainment banks (City National, Comerica, East West Bank) and specialty lenders."
+      },
+      {
+        label: "Gap financing (12–20% interest)",
+        detail: "Bridges the gap between your secured collateral and total budget — typically covering 10–25% of production costs. Gap lenders take real risk by betting that unsold territories or uncommitted platforms will eventually buy. Higher interest rates and sometimes equity kickers reflect this risk."
+      },
+      {
+        label: "Equity (10–20% premium + profit split)",
+        detail: "The riskiest capital — equity investors fund the remaining budget in exchange for priority recoupment of their principal plus a negotiated premium (typically 110–120% of investment), followed by a share of net profits. The standard structure is '120 and 50' — investors recoup 120%, then profits split 50/50 between investor and producer pools."
+      },
+    ],
     learnMorePath: "/capital-info",
   },
   {
     number: "03",
     title: "Distribution Fees",
-    summary: "Before anyone in your waterfall sees a dollar, fees come off the top. Sales agents typically take 10–20% for representing your film to buyers at markets like Cannes and AFM. Collection agents take another 1–5% for managing the flow of funds. Then there are market expenses, delivery costs, and recoupable charges. On a $2M acquisition, these fees can easily total 20–30%—meaning $400K–$600K disappears before your senior lenders, equity investors, or profit participants receive anything. These aren't optional costs—they're contractual obligations built into every deal.",
+    subtitle: "What comes off the top before your waterfall begins",
+    overview: "When a streamer acquires your film, the license fee doesn't flow directly into your waterfall. Distribution fees are deducted first — before senior debt, before equity recoupment, before anyone in your Operating Agreement sees a cent. For SVOD-only deals, the fee structure is simpler than theatrical (no exhibitor splits or P&A recoupment), but the percentages still add up fast. On a $2M SVOD acquisition, fees can easily total 15–25%, meaning $300K–$500K disappears before your capital providers receive anything. These are contractual obligations to the entities who sold, delivered, and collected on your film.",
+    keyPoints: [
+      {
+        label: "Sales agent (10–20%)",
+        detail: "Represents your film to streamers and international buyers. Commissions are taken off gross revenues. Agents may also charge recoupable market expenses ($20K–$50K) for festival attendance, screeners, and marketing materials. For SVOD-focused deals, commissions tend toward the lower end since less territory-by-territory work is required."
+      },
+      {
+        label: "Collection agent / CAM (1–5%)",
+        detail: "A neutral third party (like Fintage House or FilmChain) who receives all revenues, applies the waterfall, and distributes payments to each party. Budget $8K–$15K for setup plus 1–2% of revenues. Most institutional financiers and senior lenders require a CAM before funding."
+      },
+      {
+        label: "Delivery & recoupable expenses",
+        detail: "Streamers require complete delivery packages — technical masters, audio stems, subtitles, closed captions, artwork, and legal chain-of-title documentation. These costs ($7K–$30K+) are typically recoupable from revenues, meaning they come off the top alongside distribution fees."
+      },
+    ],
     learnMorePath: "/fees-info",
   },
   {
     number: "04",
     title: "Recoupment Waterfall",
-    summary: "The contractual order in which revenues are distributed after fees are paid. Like water flowing down a series of pools, money fills each position completely before spilling over to the next: senior debt first, then gap financing, then equity investors recover their principal plus a negotiated premium. Only after all of those positions are satisfied does any money reach the profit pool—where producers, talent deferrals, and backend participants finally get paid. On most independent films, the waterfall never reaches profit participation. This tool shows you exactly where the money goes so you can negotiate from a position of knowledge.",
+    subtitle: "The legally binding order that determines who gets paid",
+    overview: "The recoupment waterfall is the contractual hierarchy that determines how every dollar of revenue flows through your deal. Defined in the Operating Agreement or Interparty Agreement, it's a legally binding document — not a guideline. Like water flowing through a series of pools, money fills each position completely before spilling over to the next. For SVOD acquisitions, the waterfall is more compressed than theatrical (no exhibitor split, no P&A recoupment), but the fundamental mechanics are identical: fees come off first, then debt service, then equity recovery, and only after all senior positions are satisfied does any money reach the profit pool.",
+    keyPoints: [
+      {
+        label: "Standard SVOD waterfall order",
+        detail: "1) Collection agent fee → 2) Sales agent fee + recoupable expenses → 3) Delivery costs → 4) Senior debt (principal + interest) → 5) Gap financing (principal + interest + fees) → 6) Equity recoupment (principal + 10–20% premium) → 7) Profit participation (typically 50/50 investor/producer split)."
+      },
+      {
+        label: "The harsh math",
+        detail: "On most independent films, the waterfall never reaches profit participation. A $1.5M film that sells for $2M might look profitable — but after 20% in fees ($400K), $30K in delivery, and $1.5M in capital recoupment with premiums, there's almost nothing left for the profit pool."
+      },
+      {
+        label: "Protecting your position",
+        detail: "As a producer, negotiate a fixed producer fee in the budget (paid regardless of performance), consider a first-position profit corridor, and always model your waterfall against realistic SVOD acquisition prices before signing your Operating Agreement. This tool does exactly that."
+      },
+    ],
     learnMorePath: "/waterfall-info",
   },
 ];
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   PILLAR ACCORDION — Collapsed by default, condensed on expand
+   PILLAR ACCORDION — Expanded shows structured content
    ═══════════════════════════════════════════════════════════════════════════ */
 interface PillarAccordionProps {
   pillar: PillarData;
@@ -179,47 +250,84 @@ interface PillarAccordionProps {
 
 const PillarAccordion = ({ pillar, isExpanded, onToggle }: PillarAccordionProps) => {
   const navigate = useNavigate();
-  
+
   const handleDeepDive = (e: React.MouseEvent) => {
     e.stopPropagation();
     navigate(pillar.learnMorePath);
     window.scrollTo(0, 0);
   };
-  
+
   return (
-    <div 
+    <div
       className="overflow-hidden animate-fade-in"
-      style={{ 
+      style={{
         background: tokens.bgMatte,
         border: `1px solid ${tokens.borderMatte}`,
         borderRadius: tokens.radiusLg,
       }}
     >
-      <SectionHeader 
-        number={pillar.number} 
-        title={pillar.title} 
+      <SectionHeader
+        number={pillar.number}
+        title={pillar.title}
         isExpanded={isExpanded}
         onClick={onToggle}
         isClickable={true}
       />
-      
+
       <div
         className={cn(
           "overflow-hidden transition-all duration-300 ease-out",
-          isExpanded ? "max-h-[400px] opacity-100" : "max-h-0 opacity-0"
+          isExpanded ? "max-h-[800px] opacity-100" : "max-h-0 opacity-0"
         )}
       >
         <div className="p-5 space-y-4">
-          <p className="text-sm leading-relaxed" style={{ color: tokens.textMid }}>
-            {pillar.summary}
+          {/* Subtitle */}
+          <p
+            className="text-xs uppercase tracking-widest font-medium"
+            style={{ color: tokens.goldMuted }}
+          >
+            {pillar.subtitle}
           </p>
-          
+
+          {/* Overview */}
+          <p className="text-sm leading-relaxed" style={{ color: tokens.textMid }}>
+            {pillar.overview}
+          </p>
+
+          {/* Key Points */}
+          <div className="space-y-3 pt-1">
+            {pillar.keyPoints.map((point, i) => (
+              <div
+                key={i}
+                className="pl-4"
+                style={{
+                  borderLeft: `2px solid ${tokens.goldMuted}`,
+                }}
+              >
+                <p
+                  className="text-xs font-bold uppercase tracking-wide mb-1"
+                  style={{ color: tokens.gold }}
+                >
+                  {point.label}
+                </p>
+                <p className="text-sm leading-relaxed" style={{ color: tokens.textMid }}>
+                  {point.detail}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          {/* Divider + Deep dive link */}
+          <div
+            className="h-px w-full"
+            style={{ background: tokens.borderSubtle }}
+          />
           <button
             onClick={handleDeepDive}
             className="flex items-center gap-2 text-sm font-medium transition-all hover:gap-3"
             style={{ color: tokens.gold }}
           >
-            <span>Deep dive</span>
+            <span>Read the full chapter</span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </div>
@@ -248,38 +356,58 @@ const IntroView = () => {
   return (
     <>
       <Header />
-      
-      <div 
+
+      <div
         className="min-h-screen text-white pt-16 pb-12 px-4 md:px-8 font-sans"
         style={{ background: tokens.bgVoid }}
       >
         <div className="max-w-2xl mx-auto space-y-6">
-          
+
           {/* ═══════════════════════════════════════════════════════════════
-              PAGE HEADER
+              PAGE HEADER — Premium hero section
               ═══════════════════════════════════════════════════════════════ */}
-          <div className="space-y-4 pt-6 animate-fade-in">
-            <h1 className="text-4xl md:text-5xl font-bebas tracking-wide leading-tight">
-              Waterfall <span style={{ color: tokens.gold }}>Protocol</span>
-            </h1>
-            
-            <p 
-              className="text-base leading-relaxed max-w-lg"
+          <div className="space-y-5 pt-8 animate-fade-in">
+            <div>
+              <p
+                className="text-xs font-bold uppercase tracking-[0.25em] mb-3"
+                style={{ color: tokens.goldMuted }}
+              >
+                Film Finance Knowledge Base
+              </p>
+              <h1 className="text-4xl md:text-5xl font-bebas tracking-wide leading-tight">
+                The Waterfall <span style={{ color: tokens.gold }}>Protocol</span>
+              </h1>
+            </div>
+
+            <p
+              className="text-base leading-relaxed max-w-xl"
               style={{ color: tokens.textMid }}
             >
-              How money moves through a film deal—from acquisition to your pocket.
+              A complete guide to how money moves through an independent film deal —
+              from SVOD acquisition to your pocket. Built for producers who want to
+              understand the math before they sign.
             </p>
-            
-            <div 
+
+            <p
+              className="text-sm leading-relaxed max-w-xl"
+              style={{ color: tokens.textDim }}
+            >
+              Every dollar your film earns follows a strict contractual path:
+              fees come off the top, then debt gets serviced, then investors recoup,
+              and only then — if anything remains — do profits get split. Most first-time
+              producers don't see this math until they've already signed. This changes that.
+            </p>
+
+            <div
               className="h-px w-full"
-              style={{ 
-                background: `linear-gradient(90deg, ${tokens.gold}, ${tokens.goldMuted} 40%, transparent 80%)` 
+              style={{
+                background: `linear-gradient(90deg, ${tokens.gold}, ${tokens.goldMuted} 40%, transparent 80%)`
               }}
             />
           </div>
 
           {/* ═══════════════════════════════════════════════════════════════
-              PILLARS 01-04 — Accordion Pattern (All collapsed by default)
+              PILLARS 01-04 — Accordion Pattern
               ═══════════════════════════════════════════════════════════════ */}
           {pillars.map((pillar, index) => (
             <PillarAccordion
@@ -293,47 +421,52 @@ const IntroView = () => {
           {/* ═══════════════════════════════════════════════════════════════
               WHY THIS MATTERS
               ═══════════════════════════════════════════════════════════════ */}
-          <div 
+          <div
             className="overflow-hidden animate-fade-in"
-            style={{ 
+            style={{
               background: tokens.bgMatte,
               border: `1px solid ${tokens.borderMatte}`,
               borderRadius: tokens.radiusLg,
             }}
           >
             <SectionHeader number="05" title="Why This Matters" />
-            
+
             <div className="p-5 space-y-4">
               <p className="text-sm leading-relaxed" style={{ color: tokens.textMid }}>
-                Most filmmakers don't see this math until they've already signed. 
-                By then, the deal terms are locked—and the surprises aren't pleasant.
+                The streaming acquisition market has shifted dramatically. Streamers are buying
+                fewer independent films, favoring originals over volume-based pickups. License
+                fees have compressed — pay-one window values are roughly a third of what they
+                were just a few years ago. In this environment, understanding your waterfall
+                isn't just helpful — it's the difference between building a sustainable career
+                and signing deals that leave you with nothing.
               </p>
-              
+
               <p className="text-sm leading-relaxed" style={{ color: tokens.textMid }}>
-                Understanding the waterfall before you negotiate changes the conversation. 
-                Investors back producers who can walk through collection fees, recoupment 
-                positions, and profit corridors with confidence. You're not just pitching 
-                a film—you're demonstrating you understand the business.
+                Investors back producers who can walk through collection fees, recoupment
+                positions, and profit corridors with confidence. When you sit across the
+                table from a financier and model exactly how their money flows back to them,
+                you're not just pitching a film — you're demonstrating you understand the business.
               </p>
-              
-              <div 
+
+              <div
                 className="p-4 mt-2"
-                style={{ 
+                style={{
                   background: tokens.goldSubtle,
                   borderRadius: tokens.radiusMd,
                   border: `1px solid ${tokens.goldMuted}`,
                 }}
               >
-                <p 
+                <p
                   className="text-xs font-semibold uppercase tracking-wide mb-2"
                   style={{ color: tokens.gold }}
                 >
-                  Key Insight
+                  The Reality
                 </p>
                 <p className="text-sm leading-relaxed" style={{ color: tokens.textPrimary }}>
-                  A $2M acquisition doesn't mean $2M in your pocket. After fees and recoupment, 
-                  that number can shrink dramatically. This tool shows you exactly where the 
-                  money goes—before you sign anything.
+                  A $2M SVOD acquisition doesn't mean $2M in your pocket. After 15–25% in
+                  distribution fees, delivery costs, and full capital recoupment with premiums,
+                  that number can shrink to almost nothing. This tool shows you exactly where
+                  every dollar goes — before you sign anything.
                 </p>
               </div>
             </div>
@@ -342,19 +475,19 @@ const IntroView = () => {
           {/* ═══════════════════════════════════════════════════════════════
               FAQ
               ═══════════════════════════════════════════════════════════════ */}
-          <div 
+          <div
             className="overflow-hidden animate-fade-in"
-            style={{ 
+            style={{
               background: tokens.bgMatte,
               border: `1px solid ${tokens.borderMatte}`,
               borderRadius: tokens.radiusLg,
             }}
           >
             <SectionHeader number="06" title="FAQ" />
-            
+
             <div>
               {faqItems.map((item, index) => (
-                <div 
+                <div
                   key={index}
                   style={{ borderTop: index > 0 ? `1px solid ${tokens.borderMatte}` : 'none' }}
                 >
@@ -365,14 +498,14 @@ const IntroView = () => {
                       background: openFAQ === index ? tokens.goldSubtle : 'transparent',
                     }}
                   >
-                    <span 
+                    <span
                       className="text-sm font-medium pr-4"
                       style={{ color: openFAQ === index ? tokens.textPrimary : tokens.textMid }}
                     >
                       {item.question}
                     </span>
-                    
-                    <ChevronDown 
+
+                    <ChevronDown
                       className={cn(
                         "w-4 h-4 flex-shrink-0 transition-transform duration-200",
                         openFAQ === index && "rotate-180"
@@ -380,14 +513,14 @@ const IntroView = () => {
                       style={{ color: openFAQ === index ? tokens.gold : tokens.textDim }}
                     />
                   </button>
-                  
+
                   <div
                     className={cn(
                       "overflow-hidden transition-all duration-200",
-                      openFAQ === index ? "max-h-40 opacity-100" : "max-h-0 opacity-0"
+                      openFAQ === index ? "max-h-48 opacity-100" : "max-h-0 opacity-0"
                     )}
                   >
-                    <div 
+                    <div
                       className="px-4 pb-4 text-sm leading-relaxed"
                       style={{ color: tokens.textDim }}
                     >
@@ -402,15 +535,23 @@ const IntroView = () => {
           {/* ═══════════════════════════════════════════════════════════════
               CTA SECTION
               ═══════════════════════════════════════════════════════════════ */}
-          <div className="pt-6 flex flex-col items-center gap-6 animate-fade-in">
-            <div 
+          <div className="pt-8 flex flex-col items-center gap-6 animate-fade-in">
+            <div
               className="h-px w-full"
-              style={{ 
-                background: `linear-gradient(90deg, transparent 10%, ${tokens.goldMuted} 50%, transparent 90%)` 
+              style={{
+                background: `linear-gradient(90deg, transparent 10%, ${tokens.goldMuted} 50%, transparent 90%)`
               }}
             />
-            
-            <Button 
+
+            <p
+              className="text-sm text-center max-w-sm leading-relaxed"
+              style={{ color: tokens.textDim }}
+            >
+              Ready to model your deal? Enter your numbers and see exactly
+              how the waterfall plays out.
+            </p>
+
+            <Button
               onClick={handleStartSimulation}
               className="group px-10 py-6 text-sm font-black uppercase tracking-widest transition-all duration-200 hover:scale-[1.02]"
               style={{
@@ -424,7 +565,7 @@ const IntroView = () => {
               Start Simulation
               <ArrowRight className="ml-3 w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Button>
-            
+
             <button
               onClick={() => navigate('/')}
               className="flex items-center gap-2 text-sm transition-colors"

@@ -126,7 +126,8 @@ const CapitalInfo = () => {
               className="text-base leading-relaxed max-w-lg"
               style={{ color: tokens.textMid }}
             >
-              Understanding how independent films are financed—and who gets paid back first.
+              Understanding how independent films are financed — and who gets paid back first.
+              The capital stack defines your waterfall.
             </p>
             
             <div 
@@ -196,8 +197,8 @@ const CapitalInfo = () => {
                 </li>
                 <li className="flex items-start gap-2">
                   <span style={{ color: tokens.gold }}>•</span>
-                  <span><strong style={{ color: tokens.textPrimary }}>Premium</strong> — 
-                  a percentage on top of their investment (typically 10-25%) before profits split</span>
+                  <span><strong style={{ color: tokens.textPrimary }}>Premium</strong> —
+                  a percentage on top of their investment (typically 10–20%) before profits split. The most common indie structure is "120 and 50" — investors recoup 120% of capital, then profits split 50/50</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span style={{ color: tokens.gold }}>•</span>
@@ -221,10 +222,11 @@ const CapitalInfo = () => {
             
             <div className="p-5 space-y-4">
               <p className="text-sm leading-relaxed" style={{ color: tokens.textMid }}>
-                <strong style={{ color: tokens.textPrimary }}>Senior debt</strong> is the 
-                safest position in the stack. Senior lenders get repaid first, before anyone 
-                else sees a dollar. Because of this priority position, senior debt charges 
-                lower rates than equity demands—but it must be repaid regardless of the film's success.
+                <strong style={{ color: tokens.textPrimary }}>Senior debt</strong> is the
+                safest position in the stack. Senior lenders get repaid first, before anyone
+                else sees a dollar. Because of this priority position, senior debt charges
+                lower rates than equity demands — typically <strong style={{ color: tokens.textPrimary }}>8–12% interest</strong> — but
+                it must be repaid regardless of the film's success.
               </p>
               
               <p className="text-sm leading-relaxed" style={{ color: tokens.textMid }}>
@@ -234,8 +236,8 @@ const CapitalInfo = () => {
               <ul className="text-sm space-y-2 pl-4" style={{ color: tokens.textMid }}>
                 <li className="flex items-start gap-2">
                   <span style={{ color: tokens.gold }}>•</span>
-                  <span><strong style={{ color: tokens.textPrimary }}>Bank loans</strong> — 
-                  secured against pre-sales, tax credits, or minimum guarantees</span>
+                  <span><strong style={{ color: tokens.textPrimary }}>Bank loans</strong> —
+                  secured against pre-sales, tax credits, or minimum guarantees. Common lenders include City National, Comerica, and East West Bank entertainment divisions</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span style={{ color: tokens.gold }}>•</span>
@@ -285,15 +287,18 @@ const CapitalInfo = () => {
             
             <div className="p-5 space-y-4">
               <p className="text-sm leading-relaxed" style={{ color: tokens.textMid }}>
-                <strong style={{ color: tokens.textPrimary }}>Gap financing</strong> fills the 
-                space between your secured capital (pre-sales, tax credits) and your total budget. 
-                It's called "gap" because it bridges the gap—typically 15-25% of budget.
+                <strong style={{ color: tokens.textPrimary }}>Gap financing</strong> fills the
+                space between your secured capital (pre-sales, tax credits) and your total budget.
+                It's called "gap" because it bridges the gap — typically covering 10–25% of production costs.
               </p>
               
               <p className="text-sm leading-relaxed" style={{ color: tokens.textMid }}>
-                Gap lenders take real risk. They're betting that your unsold territories will 
-                eventually sell for enough to cover their loan. Because of this risk, gap financing 
-                is more expensive than senior debt—expect interest rates of 12-18% plus fees.
+                Gap lenders take real risk. They're betting that your unsold territories or
+                uncommitted platforms will eventually buy for enough to cover their loan. Because
+                of this risk, gap financing is significantly more expensive than senior debt — expect
+                interest rates of <strong style={{ color: tokens.textPrimary }}>12–20%</strong> plus
+                arrangement fees of 2–5%. Some gap lenders also require an equity kicker (a small
+                percentage of net profits) on top of their interest.
               </p>
               
               <p className="text-sm leading-relaxed" style={{ color: tokens.textMid }}>

@@ -126,7 +126,8 @@ const WaterfallInfo = () => {
               className="text-base leading-relaxed max-w-lg"
               style={{ color: tokens.textMid }}
             >
-              The contractual order that determines who gets paid—and when.
+              The contractual order that determines who gets paid — and when.
+              For SVOD deals, the waterfall is more compressed than theatrical, but the mechanics are identical.
             </p>
             
             <div 
@@ -157,10 +158,10 @@ const WaterfallInfo = () => {
               </p>
               
               <p className="text-sm leading-relaxed" style={{ color: tokens.textMid }}>
-                This isn't a metaphor—it's a legally binding document, typically defined in the 
-                <strong style={{ color: tokens.textPrimary }}> Operating Agreement</strong> or 
-                <strong style={{ color: tokens.textPrimary }}> Interparty Agreement</strong> that 
-                governs your production. Every dollar of revenue follows this exact path.
+                This isn't a metaphor — it's a legally binding document, typically defined in the
+                <strong style={{ color: tokens.textPrimary }}> Operating Agreement</strong> or
+                <strong style={{ color: tokens.textPrimary }}> Interparty Agreement</strong> that
+                governs your production. Every dollar of SVOD license fee revenue follows this exact path.
               </p>
               
               <p className="text-sm leading-relaxed" style={{ color: tokens.textMid }}>
@@ -405,9 +406,11 @@ const WaterfallInfo = () => {
             
             <div className="p-5 space-y-4">
               <p className="text-sm leading-relaxed" style={{ color: tokens.textMid }}>
-                Here's what nobody tells you: on most independent films, the waterfall never 
-                reaches profit participation. The combination of distribution fees, delivery 
-                costs, and capital recoupment often exceeds what the film earns.
+                Here's what nobody tells you: on most independent films, the waterfall never
+                reaches profit participation. The combination of distribution fees, delivery
+                costs, and capital recoupment often exceeds what the film earns. The streaming
+                market has compressed license fees significantly — pay-one window values are
+                roughly a third of what they were just a few years ago.
               </p>
               
               <div 
@@ -425,9 +428,11 @@ const WaterfallInfo = () => {
                   Industry Reality
                 </p>
                 <p className="text-sm leading-relaxed" style={{ color: tokens.textPrimary }}>
-                  A $1M film that sells for $1.5M might look profitable on paper. But after 
-                  20% in fees ($300K), $50K in delivery, and $1M in capital recoupment, only 
-                  $150K reaches profit—and that still needs to be split among multiple parties.
+                  A $1.5M film that sells for $2M to a streamer might look profitable on paper.
+                  But after 20% in distribution fees ($400K), $25K in delivery costs, and $1.5M
+                  in capital recoupment with a 20% equity premium ($1.8M total), the deal is
+                  actually underwater by $225K. This is why modeling the math before you sign
+                  is not optional.
                 </p>
               </div>
               
@@ -468,8 +473,8 @@ const WaterfallInfo = () => {
                 </li>
                 <li className="flex items-start gap-2">
                   <span style={{ color: tokens.gold }}>•</span>
-                  <span><strong style={{ color: tokens.textPrimary }}>Run the math</strong> — 
-                  model your waterfall against realistic sales to see what you'll actually receive</span>
+                  <span><strong style={{ color: tokens.textPrimary }}>Run the math</strong> —
+                  model your waterfall against realistic SVOD acquisition prices to see what you'll actually receive. This tool does exactly that</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span style={{ color: tokens.gold }}>•</span>

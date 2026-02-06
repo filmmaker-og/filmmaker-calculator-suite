@@ -251,12 +251,14 @@ const BudgetInfo = () => {
               </div>
             </div>
             
-            <p 
+            <p
               className="text-base leading-relaxed max-w-lg"
               style={{ color: tokens.textMid }}
             >
-              Your budget isn't just a number—it's the foundation of your entire deal structure.
-              Everything flows from here: capital requirements, investor returns, and your ultimate profit position.
+              Your budget isn't just a number — it's the foundation of your entire deal structure.
+              In an SVOD acquisition, the production budget directly determines how much capital you need
+              to raise, what financing structures are available, and what license fee a streamer needs to
+              pay for your deal to break even. Everything flows from here.
             </p>
             
             {/* Gold Gradient Divider */}
@@ -282,34 +284,36 @@ const BudgetInfo = () => {
             <SectionHeader number="01" title="Budget Range Benchmarks" />
             
             <div className="p-5 space-y-5">
-              <p 
+              <p
                 className="text-sm leading-relaxed"
                 style={{ color: tokens.textMid }}
               >
-                Independent films operate across a wide spectrum. Where you land determines 
-                your financing options, crew expectations, and realistic sales projections.
+                Independent films operate across a wide spectrum. Where your budget lands
+                determines your financing options, crew expectations, and — critically — what
+                SVOD platforms will realistically pay. Streamers base license fees on a combination
+                of your production budget, genre, cast attachments, and market demand.
               </p>
               
               {/* Three-tier budget cards */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <BudgetTierCard 
+                <BudgetTierCard
                   tier="Micro/Low"
                   range="$100K – $1M"
-                  description="Lean crews, deferred pay, limited locations. Often self-financed or angel-backed. Streamers pay $250K–$800K."
+                  description="Lean crews, deferred pay, limited locations. Often self-financed or angel-backed. SVOD license fees: $40K–$800K. FAST channels (Tubi, Roku) may offer revenue-share instead of flat fees."
                   accentColor={tokens.tierLow}
                 />
-                
-                <BudgetTierCard 
+
+                <BudgetTierCard
                   tier="Mid-Budget"
                   range="$1M – $5M"
-                  description="Union or hybrid crews, modest talent attachments. Typical equity + gap financing. Sales potential $1M–$3M."
+                  description="Union or hybrid crews, recognizable talent attachments. Typical equity + gap financing structure. SVOD license fees: $1M–$5M with the right cast and genre."
                   accentColor={tokens.tierMid}
                 />
-                
-                <BudgetTierCard 
+
+                <BudgetTierCard
                   tier="Elevated Indie"
                   range="$5M – $15M"
-                  description="Name cast required, full union, complex financing. Presales often mandatory. Territory-by-territory deals common."
+                  description="Name cast required, full union, complex multi-source financing. Streamers like Netflix and Amazon are the primary buyers at this level. License fees: $5M–$20M+ with festival buzz."
                   accentColor={tokens.tierHigh}
                 />
               </div>
@@ -412,9 +416,9 @@ const BudgetInfo = () => {
                 description="Things go wrong. Weather, talent issues, equipment failures. A 10% contingency isn't padding—it's survival. Investors expect to see it."
               />
               
-              <MistakeCard 
+              <MistakeCard
                 title="Ignoring Delivery Requirements"
-                description="Distributors require specific deliverables: M&E tracks, DCP, closed captions, marketing materials. Budget $30K–$75K for delivery alone."
+                description="Streamers require specific technical deliverables: Dolby Vision masters (Netflix), M&E audio stems, closed captions, artwork packages, and legal chain-of-title documentation. Budget $7K–$30K+ depending on platform specs."
               />
             </div>
           </div>
