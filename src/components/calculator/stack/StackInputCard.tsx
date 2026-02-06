@@ -105,10 +105,10 @@ const StackInputCard = ({
           </div>
         </div>
 
-        <h2 className="font-bebas text-2xl tracking-[0.08em] text-white mb-1">
+        <h2 className="font-bebas text-3xl tracking-[0.08em] text-white mb-1">
           {title}
         </h2>
-        <p className="text-white/50 text-xs max-w-xs mx-auto">
+        <p className="text-text-dim text-xs max-w-xs mx-auto">
           {subtitle}
         </p>
       </div>
@@ -117,7 +117,7 @@ const StackInputCard = ({
       <div className="matte-section overflow-hidden">
         {/* Section header */}
         <div className="matte-section-header px-5 py-3 flex items-center justify-between">
-          <span className="text-xs uppercase tracking-[0.2em] text-white/40 font-medium">
+          <span className="text-xs uppercase tracking-widest text-text-dim font-bold">
             {amountLabel}
           </span>
           {hasAmount && (
@@ -151,7 +151,7 @@ const StackInputCard = ({
               <div className="w-6 h-6 flex items-center justify-center text-xs font-mono font-bold bg-gold text-black">
                 2
               </div>
-              <span className="text-xs uppercase tracking-[0.2em] text-gold/80 font-semibold">
+              <span className="text-xs uppercase tracking-widest text-gold font-bold">
                 {rateConfig.label}
               </span>
             </div>
@@ -175,16 +175,16 @@ const StackInputCard = ({
             <div className="p-5">
               <div className="space-y-3">
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-white/40">Principal</span>
-                  <span className="font-mono text-white/60">{formatCompactCurrency(amount)}</span>
+                  <span className="text-text-dim">Principal</span>
+                  <span className="font-mono text-text-mid">{formatCompactCurrency(amount)}</span>
                 </div>
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-white/40">+ {rateConfig.label} ({rateValue}%)</span>
-                  <span className="font-mono text-white/60">{formatCompactCurrency(interestAmount)}</span>
+                  <span className="text-text-dim">+ {rateConfig.label} ({rateValue}%)</span>
+                  <span className="font-mono text-text-mid">{formatCompactCurrency(interestAmount)}</span>
                 </div>
                 <div className="h-px bg-gold/20" />
                 <div className="flex items-center justify-between">
-                  <span className="text-xs uppercase tracking-wider text-gold/70 font-semibold">Total Repayment</span>
+                  <span className="text-xs uppercase tracking-wider text-gold font-semibold">Total Repayment</span>
                   <span className="font-mono text-xl text-gold font-semibold">{formatCompactCurrency(totalRepayment)}</span>
                 </div>
               </div>
@@ -196,8 +196,8 @@ const StackInputCard = ({
         {typicalRangeLabel && (
           <div className="px-5 pb-5">
             <div className="flex items-center justify-between py-3 border-t border-border-subtle">
-              <span className="text-xs text-white/30">Typical range</span>
-              <span className="text-xs font-mono text-white/50">{typicalRangeLabel}</span>
+              <span className="text-xs text-text-dim">Typical range</span>
+              <span className="text-xs font-mono text-text-mid">{typicalRangeLabel}</span>
             </div>
           </div>
         )}
@@ -205,7 +205,7 @@ const StackInputCard = ({
 
       {/* Help Text */}
       {helpText && (
-        <p className="text-xs text-white/40 leading-relaxed text-center px-4">
+        <p className="text-xs text-text-dim leading-relaxed text-center px-4">
           {helpText}
         </p>
       )}
@@ -217,7 +217,7 @@ const StackInputCard = ({
           onClick={onBack}
           className={cn(
             "flex-1 py-3 flex items-center justify-center gap-2",
-            "border border-border-subtle text-white/60",
+            "border border-border-subtle text-text-mid",
             "hover:border-white/30 hover:text-white transition-all",
             "active:scale-[0.98]"
           )}
@@ -247,8 +247,8 @@ const StackInputCard = ({
             onClick={onSkip}
             className={cn(
               "flex-[2] py-3 flex items-center justify-center gap-2",
-              "border border-border-subtle text-white/40",
-              "hover:border-white/20 hover:text-white/60 transition-all",
+              "border border-border-subtle text-text-dim",
+              "hover:border-white/20 hover:text-text-mid transition-all",
               "active:scale-[0.98]"
             )}
             style={{ borderRadius: 'var(--radius-md)' }}

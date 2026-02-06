@@ -73,7 +73,7 @@ const StandardStepLayout = ({
           <span className="text-gold">{titleHighlight}</span>
         </h2>
 
-        <p className="text-white/50 text-sm max-w-xs mx-auto leading-relaxed">
+        <p className="text-text-dim text-sm max-w-xs mx-auto leading-relaxed">
           {subtitle}
         </p>
       </div>
@@ -91,7 +91,7 @@ const StandardStepLayout = ({
         <div className="matte-section-header px-5 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
             {SectionIcon && <SectionIcon className="w-4 h-4 text-gold/60" />}
-            <span className="text-xs uppercase tracking-wider text-white/40">
+            <span className="text-xs uppercase tracking-wider text-text-dim">
               {sectionLabel}
             </span>
           </div>

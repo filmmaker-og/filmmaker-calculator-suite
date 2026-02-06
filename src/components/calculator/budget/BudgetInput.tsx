@@ -106,17 +106,17 @@ const BudgetInput = ({ inputs, onUpdateInput, onBack, onNext }: BudgetInputProps
             }}
           />
           <div 
-            className="relative w-16 h-16 border border-gold/30 bg-gold/5 flex items-center justify-center" 
+            className="relative w-14 h-14 border border-gold/30 bg-gold/5 flex items-center justify-center"
             style={{ borderRadius: 'var(--radius-md)' }}
           >
-            <DollarSign className="w-8 h-8 text-gold" />
+            <DollarSign className="w-7 h-7 text-gold" />
           </div>
         </div>
 
-        <h2 className="font-bebas text-2xl tracking-[0.08em] text-white mb-1">
+        <h2 className="font-bebas text-3xl tracking-[0.08em] text-white mb-1">
           Production Budget
         </h2>
-        <p className="text-white/50 text-xs max-w-xs mx-auto">
+        <p className="text-text-dim text-xs max-w-xs mx-auto">
           Enter your total negative cost
         </p>
       </div>
@@ -125,7 +125,7 @@ const BudgetInput = ({ inputs, onUpdateInput, onBack, onNext }: BudgetInputProps
       <div className="matte-section overflow-hidden">
         {/* Section header */}
         <div className="matte-section-header px-5 py-3 flex items-center justify-between">
-          <span className="text-xs uppercase tracking-[0.2em] text-white/40 font-medium">
+          <span className="text-xs uppercase tracking-widest text-text-dim font-bold">
             Total Budget
           </span>
           {isCompleted && (

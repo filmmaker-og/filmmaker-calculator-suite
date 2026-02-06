@@ -119,7 +119,7 @@ const CapitalSelect = ({ selections, onToggle, onNext }: CapitalSelectProps) => 
           </div>
         </div>
 
-        <h2 className="font-bebas text-2xl tracking-[0.08em] text-white mb-1">
+        <h2 className="font-bebas text-3xl tracking-[0.08em] text-white mb-1">
           Capital Stack
         </h2>
         <p className="text-text-dim text-xs max-w-xs mx-auto">
@@ -130,7 +130,7 @@ const CapitalSelect = ({ selections, onToggle, onNext }: CapitalSelectProps) => 
       {/* Selection cards */}
       <div className="matte-section overflow-hidden">
         <div className="matte-section-header px-5 py-3 flex items-center justify-between">
-          <span className="text-xs uppercase tracking-[0.2em] text-text-dim font-medium">
+          <span className="text-xs uppercase tracking-widest text-text-dim font-bold">
             Select all that apply
           </span>
           {selectedCount > 0 && (

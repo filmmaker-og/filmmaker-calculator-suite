@@ -106,17 +106,17 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onBack, onNext }
             }}
           />
           <div 
-            className="relative w-16 h-16 border border-gold/30 bg-gold/5 flex items-center justify-center" 
+            className="relative w-14 h-14 border border-gold/30 bg-gold/5 flex items-center justify-center"
             style={{ borderRadius: 'var(--radius-md)' }}
           >
-            <Handshake className="w-8 h-8 text-gold" />
+            <Handshake className="w-7 h-7 text-gold" />
           </div>
         </div>
 
-        <h2 className="font-bebas text-2xl tracking-[0.08em] text-white mb-1">
+        <h2 className="font-bebas text-3xl tracking-[0.08em] text-white mb-1">
           Acquisition Price
         </h2>
-        <p className="text-white/50 text-xs max-w-xs mx-auto">
+        <p className="text-text-dim text-xs max-w-xs mx-auto">
           What the distributor pays for your film
         </p>
       </div>
@@ -147,7 +147,7 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onBack, onNext }
       <div ref={mobileRef} className="matte-section overflow-hidden">
         {/* Section header */}
         <div className="matte-section-header px-5 py-3 flex items-center justify-between">
-          <span className="text-xs uppercase tracking-[0.2em] text-white/40 font-medium">
+          <span className="text-xs uppercase tracking-widest text-text-dim font-bold">
             Acquisition Amount
           </span>
           {hasRevenue && (
@@ -198,21 +198,21 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onBack, onNext }
             className={cn(
               "mx-5 mb-5 p-4 border flex items-center justify-between",
               isAboveBreakeven
-                ? "border-status-success bg-[rgba(0,255,100,0.08)]"
-                : "border-status-danger bg-[rgba(255,82,82,0.08)]"
+                ? "border-gold/50 bg-gold/[0.08]"
+                : "border-gold/30 bg-gold/[0.04]"
             )}
             style={{ borderRadius: 'var(--radius-md)' }}
           >
             <div className="flex items-center gap-3">
               {isAboveBreakeven ? (
-                <TrendingUp className="w-5 h-5 text-status-success" />
+                <TrendingUp className="w-5 h-5 text-gold" />
               ) : (
-                <TrendingDown className="w-5 h-5 text-status-danger" />
+                <TrendingDown className="w-5 h-5 text-text-dim" />
               )}
               <div>
                 <p className={cn(
                   "text-xs font-bold uppercase tracking-wider mb-0.5",
-                  isAboveBreakeven ? "text-status-success" : "text-status-danger"
+                  isAboveBreakeven ? "text-gold" : "text-text-dim"
                 )}>
                   {isAboveBreakeven ? 'Above Breakeven' : 'Below Breakeven'}
                 </p>
@@ -224,7 +224,7 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onBack, onNext }
               </div>
             </div>
             {isAboveBreakeven && percentAbove > 0 && (
-              <span className="text-2xl font-mono text-status-success">
+              <span className="text-2xl font-mono text-gold">
                 +{percentAbove.toFixed(0)}%
               </span>
             )}

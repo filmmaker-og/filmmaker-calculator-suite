@@ -50,7 +50,7 @@ const StackSummary = ({ inputs, selections, onEdit, onComplete }: StackSummaryPr
             style={{
               background: isFullyFunded
                 ? 'radial-gradient(circle, rgba(212, 175, 55, 0.25) 0%, transparent 70%)'
-                : 'radial-gradient(circle, rgba(255, 150, 50, 0.15) 0%, transparent 70%)',
+                : 'radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, transparent 70%)',
               filter: 'blur(15px)',
               transform: 'scale(2)',
             }}
@@ -59,15 +59,15 @@ const StackSummary = ({ inputs, selections, onEdit, onComplete }: StackSummaryPr
             className={cn(
               "relative w-16 h-16 flex items-center justify-center",
               isFullyFunded 
-                ? "border-2 border-gold bg-gold/10" 
-                : "border-2 border-orange-500/50 bg-orange-500/10"
+                ? "border-2 border-gold bg-gold/10"
+                : "border-2 border-gold/30 bg-gold/5"
             )}
             style={{ borderRadius: 'var(--radius-md)' }}
           >
             {isFullyFunded ? (
               <Check className="w-8 h-8 text-gold" />
             ) : (
-              <Layers className="w-8 h-8 text-orange-400" />
+              <Layers className="w-8 h-8 text-gold" />
             )}
           </div>
         </div>
@@ -75,7 +75,7 @@ const StackSummary = ({ inputs, selections, onEdit, onComplete }: StackSummaryPr
         <h2 className="font-bebas text-3xl tracking-[0.08em] text-white mb-1">
           {isFullyFunded ? 'Stack Complete' : 'Review Your Stack'}
         </h2>
-        <p className="text-white/50 text-sm max-w-xs mx-auto">
+        <p className="text-text-dim text-sm max-w-xs mx-auto">
           {isFullyFunded 
             ? 'Your capital stack covers the budget. Ready to proceed.'
             : `You're ${formatCompactCurrency(fundingGap)} short of your ${formatCompactCurrency(inputs.budget)} budget.`
@@ -105,7 +105,7 @@ const StackSummary = ({ inputs, selections, onEdit, onComplete }: StackSummaryPr
             <span className="text-xs text-text-dim">Budget: {formatCompactCurrency(inputs.budget)}</span>
             <span className={cn(
               "font-mono text-xs font-bold",
-              gapPercent >= 100 ? "text-gold" : "text-orange-400"
+              gapPercent >= 100 ? "text-gold" : "text-gold/60"
             )}>
               {gapPercent.toFixed(0)}% Funded
             </span>
@@ -116,12 +116,12 @@ const StackSummary = ({ inputs, selections, onEdit, onComplete }: StackSummaryPr
       {/* Stack Breakdown */}
       <div className="matte-section overflow-hidden">
         <div className="matte-section-header px-5 py-3">
-          <span className="text-xs uppercase tracking-[0.2em] text-white/40 font-medium">
+          <span className="text-xs uppercase tracking-widest text-text-dim font-bold">
             Capital Sources
           </span>
         </div>
 
-        <div className="divide-y divide-[#1A1A1A]">
+        <div className="divide-y divide-border-subtle">
           {stackItems.length > 0 ? (
             stackItems.map((item) => {
               const Icon = item.icon;
@@ -132,11 +132,11 @@ const StackSummary = ({ inputs, selections, onEdit, onComplete }: StackSummaryPr
                 >
                   <div className="flex items-center gap-3">
                     <div className={cn("w-1 h-8 rounded-full", item.color)} />
-                    <Icon className="w-4 h-4 text-white/40" />
+                    <Icon className="w-4 h-4 text-text-dim" />
                     <div>
                       <span className="text-sm text-white font-medium">{item.label}</span>
                       {item.rate !== undefined && (
-                        <span className="text-xs text-white/40 ml-2">@ {item.rate}% {item.rateLabel}</span>
+                        <span className="text-xs text-text-dim ml-2">@ {item.rate}% {item.rateLabel}</span>
                       )}
                     </div>
                   </div>
@@ -144,7 +144,7 @@ const StackSummary = ({ inputs, selections, onEdit, onComplete }: StackSummaryPr
                     <span className="font-mono text-gold">{formatCompactCurrency(item.amount)}</span>
                     <button
                       onClick={() => onEdit(item.sourceKey)}
-                      className="p-1.5 text-white/30 hover:text-white/60 transition-colors"
+                      className="p-1.5 text-text-dim hover:text-text-mid transition-colors"
                     >
                       <Edit2 className="w-3.5 h-3.5" />
                     </button>
@@ -154,8 +154,8 @@ const StackSummary = ({ inputs, selections, onEdit, onComplete }: StackSummaryPr
             })
           ) : (
             <div className="px-5 py-8 text-center">
-              <p className="text-white/40 text-sm">No capital sources added yet.</p>
-              <p className="text-white/30 text-xs mt-1">Go back to add funding sources.</p>
+              <p className="text-text-dim text-sm">No capital sources added yet.</p>
+              <p className="text-text-dim text-xs mt-1">Go back to add funding sources.</p>
             </div>
           )}
         </div>
@@ -164,11 +164,11 @@ const StackSummary = ({ inputs, selections, onEdit, onComplete }: StackSummaryPr
       {/* Warning if underfunded */}
       {!isFullyFunded && inputs.budget > 0 && totalCapital > 0 && (
         <div 
-          className="bg-orange-900/10 border-l-4 border-orange-500/50 p-4"
+          className="bg-gold/[0.06] border-l-4 border-gold/40 p-4"
           style={{ borderRadius: '0 var(--radius-md) var(--radius-md) 0' }}
         >
-          <p className="text-xs text-orange-200/80 leading-relaxed">
-            <span className="font-bold text-orange-200">Note:</span> Your stack doesn't fully cover the budget. 
+          <p className="text-xs text-text-mid leading-relaxed">
+            <span className="font-bold text-gold">Note:</span> Your stack doesn't fully cover the budget. 
             You can still proceed, but you may need additional financing.
           </p>
         </div>

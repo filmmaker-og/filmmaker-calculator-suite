@@ -5,33 +5,16 @@ import { useState } from 'react';
 import Header from "@/components/Header";
 import { cn } from "@/lib/utils";
 import { colors, radius } from "@/lib/design-system";
+import { WikiSectionHeader, WikiCard, WikiCallout } from "@/components/shared";
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   PRODUCT BIBLE v2.0 — NOTION MEETS APPS
-   
-   Design DNA:
-   - Notion: Clean hierarchy, toggle sections, database-level organization
-   - Apps: Gold left border accent, dark matte surfaces, premium sparse gold
-   
-   WIKI ARCHITECTURE:
-   - Main Wiki (/intro) with collapsible pillar sections + deep dive links
-   - Mini wikis can ONLY link back to /intro (no cross-wiki navigation)
-   - Only "Start Simulation" exits to calculator
-   ═══════════════════════════════════════════════════════════════════════════ */
-// Sourced from design-system.ts (aligned to index.css)
 const tokens = {
   bgVoid: colors.void,
   bgMatte: colors.card,
-  bgHeader: colors.elevated,
-  bgSurface: colors.surface,
   gold: colors.gold,
   goldMuted: colors.goldMuted,
   goldSubtle: colors.goldSubtle,
   goldGlow: colors.goldGlow,
-  goldFill: colors.goldSubtle,
-  goldRadiant: colors.goldGlow,
   borderMatte: colors.borderSubtle,
-  borderSubtle: colors.borderSubtle,
   textPrimary: colors.textPrimary,
   textMid: colors.textMid,
   textDim: colors.textDim,
@@ -63,77 +46,6 @@ const faqItems: FAQItem[] = [
   }
 ];
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   SECTION HEADER — Radiant Gold Left Border + Matte Gray Surface
-   ═══════════════════════════════════════════════════════════════════════════ */
-interface SectionHeaderProps {
-  number: string;
-  title: string;
-  isExpanded?: boolean;
-  onClick?: () => void;
-  isClickable?: boolean;
-}
-
-const SectionHeader = ({ number, title, isExpanded, onClick, isClickable = false }: SectionHeaderProps) => (
-  <div 
-    className={cn(
-      "flex items-stretch",
-      isClickable && "cursor-pointer hover:bg-white/[0.02] transition-colors"
-    )}
-    style={{ 
-      background: `linear-gradient(90deg, ${tokens.goldRadiant} 0%, ${tokens.bgHeader} 15%, ${tokens.bgHeader} 100%)`,
-      borderBottom: isExpanded ? `1px solid ${tokens.borderMatte}` : 'none',
-    }}
-    onClick={onClick}
-  >
-    <div 
-      className="w-1 flex-shrink-0"
-      style={{ 
-        background: `linear-gradient(180deg, ${tokens.gold} 0%, ${tokens.goldMuted} 100%)`,
-        boxShadow: `0 0 12px ${tokens.goldGlow}`,
-      }}
-    />
-    
-    <div 
-      className="flex items-center justify-center px-4 py-4"
-      style={{ 
-        borderRight: `1px solid ${tokens.borderSubtle}`,
-        minWidth: '56px',
-        background: tokens.goldFill,
-      }}
-    >
-      <span 
-        className="font-bebas text-xl tracking-wide"
-        style={{ color: tokens.gold }}
-      >
-        {number}
-      </span>
-    </div>
-    
-    <div className="flex items-center flex-1 px-4 py-4 justify-between">
-      <h2 
-        className="font-bold text-xs uppercase tracking-widest"
-        style={{ color: tokens.textPrimary }}
-      >
-        {title}
-      </h2>
-      
-      {isClickable && (
-        <ChevronDown 
-          className={cn(
-            "w-4 h-4 flex-shrink-0 transition-transform duration-200",
-            isExpanded && "rotate-180"
-          )}
-          style={{ color: isExpanded ? tokens.gold : tokens.textDim }}
-        />
-      )}
-    </div>
-  </div>
-);
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   PILLAR DATA — Content for each accordion section
-   ═══════════════════════════════════════════════════════════════════════════ */
 interface PillarData {
   number: string;
   title: string;
@@ -168,9 +80,6 @@ const pillars: PillarData[] = [
   },
 ];
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   PILLAR ACCORDION — Collapsed by default, condensed on expand
-   ═══════════════════════════════════════════════════════════════════════════ */
 interface PillarAccordionProps {
   pillar: PillarData;
   isExpanded: boolean;
@@ -179,30 +88,23 @@ interface PillarAccordionProps {
 
 const PillarAccordion = ({ pillar, isExpanded, onToggle }: PillarAccordionProps) => {
   const navigate = useNavigate();
-  
+
   const handleDeepDive = (e: React.MouseEvent) => {
     e.stopPropagation();
     navigate(pillar.learnMorePath);
     window.scrollTo(0, 0);
   };
-  
+
   return (
-    <div 
-      className="overflow-hidden animate-fade-in"
-      style={{ 
-        background: tokens.bgMatte,
-        border: `1px solid ${tokens.borderMatte}`,
-        borderRadius: tokens.radiusLg,
-      }}
-    >
-      <SectionHeader 
-        number={pillar.number} 
-        title={pillar.title} 
+    <WikiCard>
+      <WikiSectionHeader
+        number={pillar.number}
+        title={pillar.title}
         isExpanded={isExpanded}
         onClick={onToggle}
         isClickable={true}
       />
-      
+
       <div
         className={cn(
           "overflow-hidden transition-all duration-300 ease-out",
@@ -213,7 +115,7 @@ const PillarAccordion = ({ pillar, isExpanded, onToggle }: PillarAccordionProps)
           <p className="text-sm leading-relaxed" style={{ color: tokens.textMid }}>
             {pillar.summary}
           </p>
-          
+
           <button
             onClick={handleDeepDive}
             className="flex items-center gap-2 text-sm font-medium transition-all hover:gap-3"
@@ -224,7 +126,7 @@ const PillarAccordion = ({ pillar, isExpanded, onToggle }: PillarAccordionProps)
           </button>
         </div>
       </div>
-    </div>
+    </WikiCard>
   );
 };
 
@@ -248,39 +150,35 @@ const IntroView = () => {
   return (
     <>
       <Header />
-      
-      <div 
+
+      <div
         className="min-h-screen text-white pt-16 pb-12 px-4 md:px-8 font-sans"
         style={{ background: tokens.bgVoid }}
       >
         <div className="max-w-2xl mx-auto space-y-6">
-          
-          {/* ═══════════════════════════════════════════════════════════════
-              PAGE HEADER
-              ═══════════════════════════════════════════════════════════════ */}
+
+          {/* PAGE HEADER */}
           <div className="space-y-4 pt-6 animate-fade-in">
             <h1 className="text-4xl md:text-5xl font-bebas tracking-wide leading-tight">
               Waterfall <span style={{ color: tokens.gold }}>Protocol</span>
             </h1>
-            
-            <p 
+
+            <p
               className="text-base leading-relaxed max-w-lg"
               style={{ color: tokens.textMid }}
             >
               How money moves through a film deal—from acquisition to your pocket.
             </p>
-            
-            <div 
+
+            <div
               className="h-px w-full"
-              style={{ 
-                background: `linear-gradient(90deg, ${tokens.gold}, ${tokens.goldMuted} 40%, transparent 80%)` 
+              style={{
+                background: `linear-gradient(90deg, ${tokens.gold}, ${tokens.goldMuted} 40%, transparent 80%)`
               }}
             />
           </div>
 
-          {/* ═══════════════════════════════════════════════════════════════
-              PILLARS 01-04 — Accordion Pattern (All collapsed by default)
-              ═══════════════════════════════════════════════════════════════ */}
+          {/* PILLARS 01-04 */}
           {pillars.map((pillar, index) => (
             <PillarAccordion
               key={pillar.number}
@@ -290,71 +188,38 @@ const IntroView = () => {
             />
           ))}
 
-          {/* ═══════════════════════════════════════════════════════════════
-              WHY THIS MATTERS
-              ═══════════════════════════════════════════════════════════════ */}
-          <div 
-            className="overflow-hidden animate-fade-in"
-            style={{ 
-              background: tokens.bgMatte,
-              border: `1px solid ${tokens.borderMatte}`,
-              borderRadius: tokens.radiusLg,
-            }}
-          >
-            <SectionHeader number="05" title="Why This Matters" />
-            
+          {/* WHY THIS MATTERS */}
+          <WikiCard>
+            <WikiSectionHeader number="05" title="Why This Matters" />
+
             <div className="p-5 space-y-4">
               <p className="text-sm leading-relaxed" style={{ color: tokens.textMid }}>
-                Most filmmakers don't see this math until they've already signed. 
+                Most filmmakers don't see this math until they've already signed.
                 By then, the deal terms are locked—and the surprises aren't pleasant.
               </p>
-              
+
               <p className="text-sm leading-relaxed" style={{ color: tokens.textMid }}>
-                Understanding the waterfall before you negotiate changes the conversation. 
-                Investors back producers who can walk through collection fees, recoupment 
-                positions, and profit corridors with confidence. You're not just pitching 
+                Understanding the waterfall before you negotiate changes the conversation.
+                Investors back producers who can walk through collection fees, recoupment
+                positions, and profit corridors with confidence. You're not just pitching
                 a film—you're demonstrating you understand the business.
               </p>
-              
-              <div 
-                className="p-4 mt-2"
-                style={{ 
-                  background: tokens.goldSubtle,
-                  borderRadius: tokens.radiusMd,
-                  border: `1px solid ${tokens.goldMuted}`,
-                }}
-              >
-                <p 
-                  className="text-xs font-semibold uppercase tracking-wide mb-2"
-                  style={{ color: tokens.gold }}
-                >
-                  Key Insight
-                </p>
-                <p className="text-sm leading-relaxed" style={{ color: tokens.textPrimary }}>
-                  A $2M acquisition doesn't mean $2M in your pocket. After fees and recoupment, 
-                  that number can shrink dramatically. This tool shows you exactly where the 
-                  money goes—before you sign anything.
-                </p>
-              </div>
-            </div>
-          </div>
 
-          {/* ═══════════════════════════════════════════════════════════════
-              FAQ
-              ═══════════════════════════════════════════════════════════════ */}
-          <div 
-            className="overflow-hidden animate-fade-in"
-            style={{ 
-              background: tokens.bgMatte,
-              border: `1px solid ${tokens.borderMatte}`,
-              borderRadius: tokens.radiusLg,
-            }}
-          >
-            <SectionHeader number="06" title="FAQ" />
-            
+              <WikiCallout label="Key Insight">
+                A $2M acquisition doesn't mean $2M in your pocket. After fees and recoupment,
+                that number can shrink dramatically. This tool shows you exactly where the
+                money goes—before you sign anything.
+              </WikiCallout>
+            </div>
+          </WikiCard>
+
+          {/* FAQ */}
+          <WikiCard>
+            <WikiSectionHeader number="06" title="FAQ" />
+
             <div>
               {faqItems.map((item, index) => (
-                <div 
+                <div
                   key={index}
                   style={{ borderTop: index > 0 ? `1px solid ${tokens.borderMatte}` : 'none' }}
                 >
@@ -365,14 +230,14 @@ const IntroView = () => {
                       background: openFAQ === index ? tokens.goldSubtle : 'transparent',
                     }}
                   >
-                    <span 
+                    <span
                       className="text-sm font-medium pr-4"
                       style={{ color: openFAQ === index ? tokens.textPrimary : tokens.textMid }}
                     >
                       {item.question}
                     </span>
-                    
-                    <ChevronDown 
+
+                    <ChevronDown
                       className={cn(
                         "w-4 h-4 flex-shrink-0 transition-transform duration-200",
                         openFAQ === index && "rotate-180"
@@ -380,14 +245,14 @@ const IntroView = () => {
                       style={{ color: openFAQ === index ? tokens.gold : tokens.textDim }}
                     />
                   </button>
-                  
+
                   <div
                     className={cn(
                       "overflow-hidden transition-all duration-200",
                       openFAQ === index ? "max-h-40 opacity-100" : "max-h-0 opacity-0"
                     )}
                   >
-                    <div 
+                    <div
                       className="px-4 pb-4 text-sm leading-relaxed"
                       style={{ color: tokens.textDim }}
                     >
@@ -397,20 +262,18 @@ const IntroView = () => {
                 </div>
               ))}
             </div>
-          </div>
+          </WikiCard>
 
-          {/* ═══════════════════════════════════════════════════════════════
-              CTA SECTION
-              ═══════════════════════════════════════════════════════════════ */}
+          {/* CTA */}
           <div className="pt-6 flex flex-col items-center gap-6 animate-fade-in">
-            <div 
+            <div
               className="h-px w-full"
-              style={{ 
-                background: `linear-gradient(90deg, transparent 10%, ${tokens.goldMuted} 50%, transparent 90%)` 
+              style={{
+                background: `linear-gradient(90deg, transparent 10%, ${tokens.goldMuted} 50%, transparent 90%)`
               }}
             />
-            
-            <Button 
+
+            <Button
               onClick={handleStartSimulation}
               className="group px-10 py-6 text-sm font-black uppercase tracking-widest transition-all duration-200 hover:scale-[1.02]"
               style={{
@@ -424,7 +287,7 @@ const IntroView = () => {
               Start Simulation
               <ArrowRight className="ml-3 w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Button>
-            
+
             <button
               onClick={() => navigate('/')}
               className="flex items-center gap-2 text-sm transition-colors"

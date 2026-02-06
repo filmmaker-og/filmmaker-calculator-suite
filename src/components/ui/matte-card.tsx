@@ -49,7 +49,7 @@ export const MatteCardHeader = ({
         className
       )}
     >
-      <span className="text-xs uppercase tracking-[0.2em] text-white/40 font-medium">
+      <span className="text-xs uppercase tracking-widest text-text-dim font-bold">
         {children}
       </span>
       {rightElement}
@@ -107,10 +107,10 @@ export const StatusBadge = ({
   className,
 }: StatusBadgeProps) => {
   const statusStyles = {
-    excellent: "bg-emerald-500/15 border-emerald-500/50 text-emerald-400",
-    good: "bg-gold/15 border-gold/50 text-gold",
-    marginal: "bg-amber-500/15 border-amber-500/50 text-amber-400",
-    underwater: "bg-red-500/15 border-red-500/50 text-red-400",
+    excellent: "bg-gold/15 border-gold/50 text-gold",
+    good: "bg-gold/10 border-gold/40 text-gold",
+    marginal: "bg-gold/[0.06] border-gold/30 text-gold/80",
+    underwater: "bg-gold/[0.04] border-gold/20 text-text-dim",
   };
 
   return (
@@ -146,17 +146,17 @@ export const VerdictCard = ({
   className,
 }: VerdictCardProps) => {
   const statusColors = {
-    excellent: "#10B981",
+    excellent: "#FFD700",
     good: "#FFD700",
-    marginal: "#F59E0B",
-    underwater: "#EF4444",
+    marginal: "rgba(255, 215, 0, 0.6)",
+    underwater: "rgba(255, 215, 0, 0.3)",
   };
 
   const glowColors = {
-    excellent: "rgba(16, 185, 129, 0.4)",
+    excellent: "rgba(255, 215, 0, 0.4)",
     good: "rgba(255, 215, 0, 0.4)",
-    marginal: "rgba(245, 158, 11, 0.3)",
-    underwater: "rgba(239, 68, 68, 0.3)",
+    marginal: "rgba(255, 215, 0, 0.25)",
+    underwater: "rgba(255, 215, 0, 0.15)",
   };
 
   return (
@@ -172,7 +172,7 @@ export const VerdictCard = ({
       />
 
       {/* Label */}
-      <p className="text-[11px] uppercase tracking-[0.4em] text-white/50 font-semibold mb-4 relative z-10">
+      <p className="text-[11px] uppercase tracking-[0.4em] text-text-dim font-semibold mb-4 relative z-10">
         {title}
       </p>
 
@@ -189,7 +189,7 @@ export const VerdictCard = ({
 
       {/* Subtitle */}
       {subtitle && (
-        <p className="text-xs text-white/40 mt-3 relative z-10">{subtitle}</p>
+        <p className="text-xs text-text-dim mt-3 relative z-10">{subtitle}</p>
       )}
     </div>
   );
@@ -227,7 +227,7 @@ export const LedgerRow = ({
         <span
           className={cn(
             "text-sm",
-            isTotal ? "text-white font-semibold" : "text-white/60"
+            isTotal ? "text-white font-semibold" : "text-text-mid"
           )}
         >
           {label}
@@ -235,7 +235,7 @@ export const LedgerRow = ({
         <span
           className={cn(
             "font-mono",
-            isTotal ? "text-xl text-gold font-bold" : "text-base text-white/80"
+            isTotal ? "text-xl text-gold font-bold" : "text-base text-text-mid"
           )}
         >
           {value}
@@ -319,7 +319,7 @@ export const CtaCard = ({
           >
             {title}
           </h4>
-          <p className="text-xs text-white/50 mb-3 leading-relaxed">
+          <p className="text-xs text-text-dim mb-3 leading-relaxed">
             {description}
           </p>
           <span
@@ -327,7 +327,7 @@ export const CtaCard = ({
               "text-xs font-semibold uppercase tracking-wider transition-colors",
               isPrimary
                 ? "text-gold group-hover:text-gold-highlight"
-                : "text-white/60 group-hover:text-white"
+                : "text-text-mid group-hover:text-white"
             )}
           >
             {ctaText} &rarr;

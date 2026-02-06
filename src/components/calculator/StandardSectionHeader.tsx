@@ -21,7 +21,7 @@ export const StandardSectionHeader = ({
     <div className="matte-section-header px-5 py-3 flex items-center justify-between">
       <div className="flex items-center gap-3">
         <Icon className="w-4 h-4 text-gold/60" />
-        <span className="text-xs uppercase tracking-[0.2em] text-white/40 font-medium">
+        <span className="text-xs uppercase tracking-widest text-text-dim font-bold">
           {label}
         </span>
       </div>
