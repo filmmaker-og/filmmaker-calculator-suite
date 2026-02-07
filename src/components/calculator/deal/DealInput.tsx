@@ -152,9 +152,9 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext }: DealIn
            <div className="bg-bg-surface border border-border-subtle rounded-lg p-4 flex items-center justify-between">
               <div className="flex flex-col gap-1">
                  <span className="text-xs uppercase tracking-wide text-text-dim font-bold flex items-center gap-2">
-                   Marketing & Delivery <DollarSign className="w-3 h-3 text-text-dim/50" />
+                   Sales Agent Marketing <DollarSign className="w-3 h-3 text-text-dim/50" />
                  </span>
-                 <span className="text-[10px] text-text-dim/70">Deductible Expenses (Caps)</span>
+                 <span className="text-[10px] text-text-dim/70">Expense Cap (Standard $75k)</span>
               </div>
               <div className="w-32">
                 <input
@@ -170,7 +170,7 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext }: DealIn
         </div>
 
         {/* 3. LIVE ASSUMPTIONS BLOCK (New) */}
-        {/* This mirrors the Netlify app's live feedback on what's being deducted */}
+        {/* This mirrors the Netlify logic */}
         {hasRevenue && (
           <div className="space-y-3 pt-2">
              <div className="flex items-center gap-2">
@@ -193,7 +193,7 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext }: DealIn
                 
                 {/* Marketing */}
                 <div className="flex items-center justify-between p-3 text-xs">
-                   <span className="text-text-dim">Marketing Cap</span>
+                   <span className="text-text-dim">Sales Agent Marketing</span>
                    <span className="font-mono text-text-mid">{formatCompactCurrency(inputs.marketingExpenses)}</span>
                 </div>
                 
