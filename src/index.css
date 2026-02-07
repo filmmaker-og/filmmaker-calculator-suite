@@ -159,14 +159,25 @@
 
 @layer components {
   /* ═══════════════════════════════════════════════════════════════════
-     CHAPTER CARD — Primary content container
+     CHAPTER CARD — THE "RADIANT GOLD" WRAPPER (Updated)
+     Matches Wiki Style: bg-elevated, border-gold-muted, shadow-gold-glow
      ═══════════════════════════════════════════════════════════════════ */
   .chapter-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border-default);
+    background: var(--bg-card); /* Fallback */
+    /* Radiant Gold Border */
+    border: 1px solid rgba(212, 175, 55, 0.3); 
     border-radius: var(--radius-lg);
     overflow: hidden;
-    min-height: 400px; /* STABILITY FIX: Prevent skipping by forcing min-height */
+    min-height: 400px;
+    /* Subtle Inner Glow */
+    box-shadow: inset 0 0 20px rgba(212, 175, 55, 0.05); 
+    position: relative;
+  }
+
+  /* The "Active" state is now the default visual language for the calculator steps */
+  .chapter-card.is-active {
+    border-color: var(--gold-muted);
+    box-shadow: 0 0 25px rgba(212, 175, 55, 0.1), inset 0 0 20px rgba(212, 175, 55, 0.05);
   }
 
   .chapter-card-header {
@@ -174,7 +185,7 @@
     grid-template-columns: 4px 60px 1fr auto;
     align-items: center;
     height: 66px;
-    background: linear-gradient(90deg, var(--gold-glow) 0%, var(--bg-elevated) 15%, var(--bg-elevated) 100%);
+    background: linear-gradient(90deg, rgba(212, 175, 55, 0.15) 0%, var(--bg-elevated) 20%, var(--bg-elevated) 100%);
     border-bottom: 1px solid var(--border-subtle);
   }
 
@@ -204,50 +215,12 @@
     padding: 0 var(--space-md);
     font-family: 'Bebas Neue', sans-serif;
     font-size: 22px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--text-primary);
-  }
+    letter-spacing: 1.5px;\n    text-transform: uppercase;\n    color: var(--text-primary);\n  }
 
   .chapter-card-body {
     padding: var(--space-lg);
-  }
-
-  /* Active state — Metallic Gold */
-  .chapter-card.is-active .chapter-card-header {
-    background: linear-gradient(90deg, var(--gold-glow) 0%, var(--gold-subtle) 8%, var(--bg-elevated) 20%, var(--bg-elevated) 100%);
-    border-bottom-color: var(--gold-muted);
-  }
-
-  .chapter-card.is-active .chapter-card-number {
-    color: var(--gold);
-    border-right-color: var(--gold);
-    text-shadow: 0 0 16px var(--gold-glow);
-  }
-
-  /* ═══════════════════════════════════════════════════════════════════
-     MATTE SECTION
-     ═══════════════════════════════════════════════════════════════════ */
-  .matte-section {
-    background: var(--bg-card);
-    border: 1px solid var(--border-default);
-    border-radius: var(--radius-lg);
-    transition: all var(--timing-medium) ease;
-  }
-
-  .matte-section-header {
-    background: var(--bg-elevated);
-    border-bottom: 1px solid var(--border-subtle);
-  }
-
-  .matte-section.is-active {
-    border-color: var(--gold);
-    box-shadow: var(--shadow-card-active);
-  }
-
-  .matte-section.is-active .matte-section-header {
-    background: linear-gradient(90deg, var(--gold-subtle) 0%, transparent 100%);
-    border-color: var(--gold-muted);
+    /* Ensure the body matches the "elevated" grey look */
+    background: var(--bg-elevated); 
   }
 
   /* ═══════════════════════════════════════════════════════════════════
@@ -256,10 +229,7 @@
   .glass-card-gold {
     background: linear-gradient(180deg, var(--gold-subtle) 0%, rgba(212, 175, 55, 0.02) 100%);
     border: 1px solid var(--gold-muted);
-    border-radius: var(--radius-lg);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-  }
+    border-radius: var(--radius-lg);\n    backdrop-filter: blur(10px);\n    -webkit-backdrop-filter: blur(10px);\n  }
 
   /* ═══════════════════════════════════════════════════════════════════
      PREMIUM DIVIDERS
@@ -324,7 +294,8 @@
   }
 
   .tab-bar-item.is-active .tab-icon {
-    opacity: 1;\n  }
+    opacity: 1;
+  }
 
   /* ═══════════════════════════════════════════════════════════════════
      GLOSSARY TRIGGER — (i) info button
@@ -339,17 +310,14 @@
     border-radius: var(--radius-full);
     font-family: 'Inter', sans-serif;
     font-size: 11px;
-    font-weight: 900;\n    color: rgba(212, 175, 55, 0.7);
+    font-weight: 900;
+    color: rgba(212, 175, 55, 0.7);
     background: rgba(212, 175, 55, 0.05);
     cursor: pointer;
     transition: all var(--timing-fast) ease;
   }
 
-  .glossary-trigger:hover,\n  .glossary-trigger:active {
-    background: var(--gold-subtle);
-    border-color: var(--gold);
-    color: var(--gold);
-  }
+  .glossary-trigger:hover,\n  .glossary-trigger:active {\n    background: var(--gold-subtle);\n    border-color: var(--gold);\n    color: var(--gold);\n  }
 
   .glossary-trigger-lg {
     width: 36px;
@@ -359,8 +327,7 @@
 
   /* ═══════════════════════════════════════════════════════════════════
      INPUT FIELD
-     ═══════════════════════════════════════════════════════════════════ */
-  .input-field {
+     ═══════════════════════════════════════════════════════════════════ */\n  .input-field {
     background: var(--bg-surface);
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-md);
@@ -385,10 +352,7 @@
     color: var(--text-dim);
   }
 
-  /* ═══════════════════════════════════════════════════════════════════
-     FIELD LABEL
-     ═══════════════════════════════════════════════════════════════════ */
-  .field-label {
+  /* ═══════════════════════════════════════════════════════════════════\n     FIELD LABEL\n     ═══════════════════════════════════════════════════════════════════ */\n  .field-label {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -401,10 +365,9 @@
     color: var(--text-dim);
   }
 
-  /* ═══════════════════════════════════════════════════════════════════\n     PRIMARY BUTTON (CTA) — Uses CTA Gold exclusively
-     ═══════════════════════════════════════════════════════════════════ */
-  .btn-primary {
-    display: flex;\n    align-items: center;
+  /* ═══════════════════════════════════════════════════════════════════\n     PRIMARY BUTTON (CTA) — Uses CTA Gold exclusively\n     ═══════════════════════════════════════════════════════════════════ */\n  .btn-primary {
+    display: flex;
+    align-items: center;
     justify-content: center;
     width: 100%;
     min-height: 52px;
@@ -413,15 +376,7 @@
     border: 1px solid var(--gold-cta-muted);
     border-radius: var(--radius-md);
     font-family: 'Inter', sans-serif;
-    font-size: 11px;
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: var(--gold-cta);
-    cursor: pointer;
-    transition: all var(--timing-fast) ease;
-    box-shadow: var(--shadow-button);
-  }
+    font-size: 11px;\n    font-weight: 900;\n    text-transform: uppercase;\n    letter-spacing: 1px;\n    color: var(--gold-cta);\n    cursor: pointer;\n    transition: all var(--timing-fast) ease;\n    box-shadow: var(--shadow-button);\n  }
 
   .btn-primary:active {
     transform: scale(0.92);
@@ -432,10 +387,7 @@
     cursor: not-allowed;
   }
 
-  /* ═══════════════════════════════════════════════════════════════════
-     SECONDARY BUTTON
-     ═══════════════════════════════════════════════════════════════════ */
-  .btn-secondary {
+  /* ═══════════════════════════════════════════════════════════════════\n     SECONDARY BUTTON\n     ═══════════════════════════════════════════════════════════════════ */\n  .btn-secondary {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -459,10 +411,7 @@
     transform: scale(0.92);
   }
 
-  /* ═══════════════════════════════════════════════════════════════════
-     TOUCH FEEDBACK
-     ═══════════════════════════════════════════════════════════════════ */
-  .touch-feedback {
+  /* ═══════════════════════════════════════════════════════════════════\n     TOUCH FEEDBACK\n     ═══════════════════════════════════════════════════════════════════ */\n  .touch-feedback {
     transition: transform 0.1s ease, opacity 0.1s ease;
   }
 
@@ -475,9 +424,7 @@
     transform: scale(0.98);
   }
 
-  /* ═══════════════════════════════════════════════════════════════════
-     STEP ANIMATIONS\n     ═══════════════════════════════════════════════════════════════════ */
-  .step-enter {
+  /* ═══════════════════════════════════════════════════════════════════\n     STEP ANIMATIONS\n     ═══════════════════════════════════════════════════════════════════ */\n  .step-enter {
     animation: stepEnter 0.4s ease-out forwards;
   }
 
@@ -495,10 +442,7 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
-  /* ═══════════════════════════════════════════════════════════════════
-     ATTENTION ANIMATIONS
-     ═══════════════════════════════════════════════════════════════════ */
-  .animate-attention-glow {
+  /* ═══════════════════════════════════════════════════════════════════\n     ATTENTION ANIMATIONS\n     ═══════════════════════════════════════════════════════════════════ */\n  .animate-attention-glow {
     animation: attentionGlow 2s ease-in-out infinite;
   }
 
@@ -556,18 +500,12 @@
     50% { transform: translateX(4px); }
   }
 
-  /* ═══════════════════════════════════════════════════════════════════
-     NUMBER FORMATTING
-     ═══════════════════════════════════════════════════════════════════ */
-  .tabular-nums {
+  /* ═══════════════════════════════════════════════════════════════════\n     NUMBER FORMATTING\n     ═══════════════════════════════════════════════════════════════════ */\n  .tabular-nums {
     font-variant-numeric: tabular-nums;
     font-feature-settings: "tnum" 1;
   }
 
-  /* ═══════════════════════════════════════════════════════════════════
-     HOMEPAGE SPOTLIGHT
-     ═══════════════════════════════════════════════════════════════════ */
-  .animate-spotlight-pulse {
+  /* ═══════════════════════════════════════════════════════════════════\n     HOMEPAGE SPOTLIGHT\n     ═══════════════════════════════════════════════════════════════════ */\n  .animate-spotlight-pulse {
     animation: spotlightPulse 4s ease-in-out infinite;
   }
 
@@ -576,10 +514,7 @@
     50% { opacity: 1; transform: translateX(-50%) scale(1.05); }
   }
 
-  /* ═══════════════════════════════════════════════════════════════════
-     CINEMATIC VIGNETTE
-     ═══════════════════════════════════════════════════════════════════ */
-  .vignette {
+  /* ═══════════════════════════════════════════════════════════════════\n     CINEMATIC VIGNETTE\n     ═══════════════════════════════════════════════════════════════════ */\n  .vignette {
     position: fixed;
     inset: 0;
     pointer-events: none;
@@ -587,10 +522,7 @@
     z-index: 1;
   }
 
-  /* ═══════════════════════════════════════════════════════════════════
-     SPOTLIGHT INTRO ANIMATIONS
-     ═══════════════════════════════════════════════════════════════════ */
-  @keyframes spotlight-beam-expand {
+  /* ═══════════════════════════════════════════════════════════════════\n     SPOTLIGHT INTRO ANIMATIONS\n     ═══════════════════════════════════════════════════════════════════ */\n  @keyframes spotlight-beam-expand {
     0% { clip-path: polygon(48% 0%, 52% 0%, 52% 30%, 48% 30%); opacity: 0; }
     50% { opacity: 1; }
     100% { clip-path: polygon(30% 0%, 70% 0%, 90% 100%, 10% 100%); opacity: 1; }
