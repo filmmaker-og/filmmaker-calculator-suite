@@ -159,14 +159,25 @@
 
 @layer components {
   /* ═══════════════════════════════════════════════════════════════════
-     CHAPTER CARD — Primary content container
+     CHAPTER CARD — THE "RADIANT GOLD" WRAPPER (Updated)
+     Matches Wiki Style: bg-elevated, border-gold-muted, shadow-gold-glow
      ═══════════════════════════════════════════════════════════════════ */
   .chapter-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border-default);
+    background: var(--bg-card); /* Fallback */
+    /* Radiant Gold Border */
+    border: 1px solid rgba(212, 175, 55, 0.3); 
     border-radius: var(--radius-lg);
     overflow: hidden;
-    min-height: 400px; /* STABILITY FIX: Prevent skipping by forcing min-height */
+    min-height: 400px;
+    /* Subtle Inner Glow */
+    box-shadow: inset 0 0 20px rgba(212, 175, 55, 0.05); 
+    position: relative;
+  }
+
+  /* The "Active" state is now the default visual language for the calculator steps */
+  .chapter-card.is-active {
+    border-color: var(--gold-muted);
+    box-shadow: 0 0 25px rgba(212, 175, 55, 0.1), inset 0 0 20px rgba(212, 175, 55, 0.05);
   }
 
   .chapter-card-header {
@@ -174,7 +185,7 @@
     grid-template-columns: 4px 60px 1fr auto;
     align-items: center;
     height: 66px;
-    background: linear-gradient(90deg, var(--gold-glow) 0%, var(--bg-elevated) 15%, var(--bg-elevated) 100%);
+    background: linear-gradient(90deg, rgba(212, 175, 55, 0.15) 0%, var(--bg-elevated) 20%, var(--bg-elevated) 100%);
     border-bottom: 1px solid var(--border-subtle);
   }
 
@@ -211,43 +222,8 @@
 
   .chapter-card-body {
     padding: var(--space-lg);
-  }
-
-  /* Active state — Metallic Gold */
-  .chapter-card.is-active .chapter-card-header {
-    background: linear-gradient(90deg, var(--gold-glow) 0%, var(--gold-subtle) 8%, var(--bg-elevated) 20%, var(--bg-elevated) 100%);
-    border-bottom-color: var(--gold-muted);
-  }
-
-  .chapter-card.is-active .chapter-card-number {
-    color: var(--gold);
-    border-right-color: var(--gold);
-    text-shadow: 0 0 16px var(--gold-glow);
-  }
-
-  /* ═══════════════════════════════════════════════════════════════════
-     MATTE SECTION
-     ═══════════════════════════════════════════════════════════════════ */
-  .matte-section {
-    background: var(--bg-card);
-    border: 1px solid var(--border-default);
-    border-radius: var(--radius-lg);
-    transition: all var(--timing-medium) ease;
-  }
-
-  .matte-section-header {
-    background: var(--bg-elevated);
-    border-bottom: 1px solid var(--border-subtle);
-  }
-
-  .matte-section.is-active {
-    border-color: var(--gold);
-    box-shadow: var(--shadow-card-active);
-  }
-
-  .matte-section.is-active .matte-section-header {
-    background: linear-gradient(90deg, var(--gold-subtle) 0%, transparent 100%);
-    border-color: var(--gold-muted);
+    /* Ensure the body matches the "elevated" grey look */
+    background: var(--bg-elevated); 
   }
 
   /* ═══════════════════════════════════════════════════════════════════
@@ -481,7 +457,8 @@
   }
 
   /* ═══════════════════════════════════════════════════════════════════
-     STEP ANIMATIONS\n     ═══════════════════════════════════════════════════════════════════ */
+     STEP ANIMATIONS
+     ═══════════════════════════════════════════════════════════════════ */
   .step-enter {
     animation: stepEnter 0.4s ease-out forwards;
   }

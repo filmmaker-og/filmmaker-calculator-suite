@@ -15,15 +15,15 @@ interface StandardStepLayoutProps {
 }
 
 /**
- * StandardStepLayout - The "Gold Standard" container for all calculator steps.
+ * StandardStepLayout - The "Radiant Gold" container for all calculator steps.
  * 
  * Replaces the inconsistent "Hero Header" + "Matte Section" pattern.
  * Uses ChapterCard for the premium gold-gradient header.
  * 
  * Structure:
- * - ChapterCard Container
+ * - ChapterCard Container (Radiant Border + Glow)
  *   - Header (Built-in to ChapterCard)
- *   - Body (NOW LIGHTER: bg-bg-elevated)
+ *   - Body (bg-elevated to match Wiki style)
  *     - Subtitle (Optional)
  *     - Children (Input fields, etc)
  *     - Action Button (Continue)
@@ -56,9 +56,8 @@ const StandardStepLayout = ({
               </p>
             )}
 
-            {/* Main Content (Inputs) - WRAPPED IN ELEVATED SURFACE */}
-            {/* This fixes the "too black" issue by giving inputs a defined surface to sit on */}
-            <div className="bg-bg-elevated border border-border-subtle rounded-lg p-5 space-y-6 shadow-sm">
+            {/* Main Content - Direct placement (no inner card needed anymore as ChapterCard body is now bg-elevated) */}
+            <div className="space-y-6">
               {children}
             </div>
           </div>
