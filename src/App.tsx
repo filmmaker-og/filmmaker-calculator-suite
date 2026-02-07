@@ -12,6 +12,8 @@ import Glossary from "./pages/Glossary";
 import Auth from "./pages/Auth";
 import Calculator from "./pages/Calculator";
 import Store from "./pages/Store";
+import StorePackage from "./pages/StorePackage";
+import StoreCompare from "./pages/StoreCompare";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -32,6 +34,8 @@ const App = () => (
           <Route path="/auth" element={<Auth />} />
           <Route path="/calculator" element={<Calculator />} />
           <Route path="/store" element={<Store />} />
+          <Route path="/store/compare" element={<StoreCompare />} />
+          <Route path="/store/:slug" element={<StorePackage />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
