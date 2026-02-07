@@ -2,7 +2,6 @@ import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useHaptics } from "@/hooks/use-haptics";
 import {
-  ArrowRight,
   RotateCcw,
   DollarSign,
   Layers,
@@ -44,7 +43,7 @@ import { cn } from "@/lib/utils";
 import { formatCompactCurrency } from "@/lib/waterfall";
 
 const STORAGE_KEY = "filmmaker_og_inputs";
-const INTRO_SEEN_KEY = "filmmaker_og_intro_seen";
+const CINEMATIC_SEEN_KEY = "filmmaker_og_intro_seen";
 const SHARE_URL = "https://filmmaker.og";
 const SHARE_TEXT = "Free film finance simulator — model your deal structure, capital stack, and revenue waterfall. See where every dollar goes before you sign.";
 const SHARE_TITLE = "FILMMAKER.OG — See Where Every Dollar Goes";
@@ -136,13 +135,13 @@ const SectionHeader = ({ eyebrow, title, subtitle, icon: Icon }: {
   eyebrow: string; title: string; subtitle?: string;
   icon?: React.ComponentType<{ className?: string }>;
 }) => (
-  <div className="text-center mb-6">
+  <div className="text-center mb-8">
     <div className="flex items-center gap-2 justify-center mb-3">
       {Icon && <Icon className="w-4 h-4 text-gold" />}
-      <p className="text-gold text-[10px] tracking-[0.3em] uppercase font-semibold">{eyebrow}</p>
+      <p className="text-gold text-xs tracking-[0.3em] uppercase font-semibold">{eyebrow}</p>
     </div>
-    <h2 className="font-bebas text-2xl md:text-3xl tracking-[0.08em] text-text-primary">{title}</h2>
-    {subtitle && <p className="text-text-mid text-sm text-center max-w-lg mx-auto mt-3 leading-relaxed">{subtitle}</p>}
+    <h2 className="font-bebas text-3xl md:text-4xl tracking-[0.08em] text-text-primary">{title}</h2>
+    {subtitle && <p className="text-text-mid text-[15px] text-center max-w-lg mx-auto mt-3 leading-relaxed">{subtitle}</p>}
   </div>
 );
 
@@ -182,8 +181,11 @@ const SectionFrame = ({ id, children, className }: {
   id: string; children: React.ReactNode; className?: string;
 }) => (
   <section id={id} className="snap-section px-4 py-6">
-    <div className={cn("bg-bg-elevated border border-white/[0.06] rounded-2xl overflow-hidden p-6 md:p-8", className)}>
-      {children}
+    <div className={cn("bg-bg-elevated border border-white/[0.06] rounded-2xl overflow-hidden", className)}>
+      <div className="h-[2px] bg-gradient-to-r from-transparent via-gold/25 to-transparent" />
+      <div className="p-6 md:p-8">
+        {children}
+      </div>
     </div>
   </section>
 );
@@ -256,7 +258,7 @@ const Index = () => {
   const isReturningUser = savedState !== null;
 
   const hasSeenIntro = useMemo(() => {
-    try { return localStorage.getItem(INTRO_SEEN_KEY) === "true"; } catch { return false; }
+    try { return localStorage.getItem(CINEMATIC_SEEN_KEY) === "true"; } catch { return false; }
   }, []);
 
   const shouldSkip = searchParams.get("skipIntro") === "true" || hasSeenIntro;
@@ -277,7 +279,7 @@ const Index = () => {
 
   useEffect(() => {
     if (phase === 'complete' && !hasSeenIntro) {
-      try { localStorage.setItem(INTRO_SEEN_KEY, "true"); } catch { /* ignore */ }
+      try { localStorage.setItem(CINEMATIC_SEEN_KEY, "true"); } catch { /* ignore */ }
     }
   }, [phase, hasSeenIntro]);
 
@@ -363,11 +365,11 @@ const Index = () => {
                 <img src={filmmakerLogo} alt="Filmmaker.OG" className="relative w-28 h-28 object-contain rounded-lg"
                   style={{ filter: 'brightness(1.15) drop-shadow(0 0 25px rgba(212,175,55,0.45))' }} />
               </div>
-              <p className="text-gold text-[10px] tracking-[0.35em] uppercase mb-4 font-semibold">Free Film Finance Simulator</p>
+              <p className="text-gold text-xs tracking-[0.35em] uppercase mb-4 font-semibold">Free Film Finance Simulator</p>
               <h1 className="font-bebas text-[clamp(2.2rem,8vw,3.6rem)] leading-[1.05] text-text-primary mb-4">
                 SEE WHERE EVERY<br />DOLLAR <span className="text-gold">GOES</span>
               </h1>
-              <p className="text-text-mid text-sm leading-relaxed max-w-md mx-auto mb-8">
+              <p className="text-text-mid text-base leading-relaxed max-w-md mx-auto mb-8">
                 Model your film's deal structure, capital stack, and revenue waterfall — the same analysis
                 the industry gatekeepers use. Free to simulate. Takes 2 minutes.
               </p>
@@ -375,22 +377,22 @@ const Index = () => {
               {isReturningUser ? (
                 <div className="w-full max-w-[320px] mx-auto space-y-3">
                   <button onClick={handleContinueClick}
-                    className="w-full h-14 text-sm font-black tracking-[0.12em] transition-all active:scale-[0.96] rounded-md bg-gold-cta-subtle border border-gold-cta-muted text-gold-cta shadow-button hover:border-gold-cta">
-                    <span className="flex items-center justify-center gap-2">CONTINUE SIMULATION <ArrowRight size={18} /></span>
+                    className="w-full h-16 text-base font-black tracking-[0.12em] transition-all active:scale-[0.96] rounded-md bg-gold-cta-subtle border border-gold-cta-muted text-gold-cta shadow-button hover:border-gold-cta">
+                    CONTINUE SIMULATION
                   </button>
-                  <p className="text-text-dim text-[11px] tracking-wider text-center">{formatCompactCurrency(savedState!.budget)} budget in progress</p>
+                  <p className="text-text-dim text-xs tracking-wider text-center">{formatCompactCurrency(savedState!.budget)} budget in progress</p>
                   <button onClick={handleStartFresh}
-                    className="w-full flex items-center justify-center gap-1.5 text-[11px] tracking-wider text-text-dim hover:text-text-mid transition-colors py-2">
+                    className="w-full flex items-center justify-center gap-1.5 text-xs tracking-wider text-text-dim hover:text-text-mid transition-colors py-2">
                     <RotateCcw className="w-3 h-3" /> Start fresh
                   </button>
                 </div>
               ) : (
                 <div className="w-full max-w-[320px] mx-auto">
                   <button onClick={handleStartClick}
-                    className="w-full h-14 text-sm font-black tracking-[0.12em] transition-all active:scale-[0.96] rounded-md bg-gold-cta-subtle border border-gold-cta-muted text-gold-cta shadow-button hover:border-gold-cta">
-                    <span className="flex items-center justify-center gap-2">RUN THE NUMBERS <ArrowRight size={18} /></span>
+                    className="w-full h-16 text-base font-black tracking-[0.12em] transition-all active:scale-[0.96] rounded-md bg-gold-cta-subtle border border-gold-cta-muted text-gold-cta shadow-button hover:border-gold-cta">
+                    RUN THE NUMBERS
                   </button>
-                  <p className="text-text-dim text-[11px] tracking-wider mt-3">No account required</p>
+                  <p className="text-text-dim text-xs tracking-wider mt-3">No account required</p>
                 </div>
               )}
 
@@ -409,20 +411,20 @@ const Index = () => {
                     <div key={item.label} className={cn("bg-bg-card border border-border-subtle rounded-xl p-4 relative overflow-hidden", staggerChild(fade2.visible))} style={staggerDelay(i, fade2.visible)}>
                       <div className="absolute top-0 right-0 w-16 h-16 bg-gold/[0.03] rounded-full blur-2xl translate-x-4 -translate-y-4" />
                       <div className="relative">
-                        <div className="w-8 h-8 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center mb-3">
-                          <Icon className="w-3.5 h-3.5 text-gold" />
+                        <div className="w-9 h-9 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center mb-3">
+                          <Icon className="w-4 h-4 text-gold" />
                         </div>
-                        <p className="font-mono text-lg md:text-xl font-bold text-text-primary line-through decoration-text-dim/30 mb-0.5">{item.cost}</p>
-                        <p className="text-text-dim text-[10px] tracking-wider uppercase">{item.label}</p>
-                        <p className="text-text-dim text-[10px] mt-1">{item.note}</p>
+                        <p className="font-mono text-xl md:text-2xl font-bold text-text-primary line-through decoration-text-dim/30 mb-0.5">{item.cost}</p>
+                        <p className="text-text-dim text-xs tracking-wider uppercase">{item.label}</p>
+                        <p className="text-text-dim text-xs mt-1">{item.note}</p>
                       </div>
                     </div>
                   );
                 })}
               </div>
               <div className="text-center mt-2">
-                <p className="font-bebas text-3xl md:text-4xl tracking-[0.1em] text-gold-cta">FREE</p>
-                <p className="text-text-dim text-[11px] tracking-wider mt-1">The same analysis. Zero cost.</p>
+                <p className="font-bebas text-4xl md:text-5xl tracking-[0.1em] text-gold-cta">FREE</p>
+                <p className="text-text-dim text-sm tracking-wider mt-1">The same analysis. Zero cost.</p>
               </div>
             </div>
             <SectionChevron nextId="deliverables" />
@@ -442,11 +444,11 @@ const Index = () => {
                   const Icon = item.icon;
                   return (
                     <div key={item.title} className={cn("bg-bg-card border border-border-subtle hover:border-gold/20 rounded-xl p-4 transition-colors", staggerChild(fade3.visible))} style={staggerDelay(i, fade3.visible)}>
-                      <div className="w-8 h-8 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center mb-3">
-                        <Icon className="w-3.5 h-3.5 text-gold" />
+                      <div className="w-9 h-9 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center mb-3">
+                        <Icon className="w-4 h-4 text-gold" />
                       </div>
-                      <h3 className="text-text-primary text-sm font-semibold mb-1.5">{item.title}</h3>
-                      <p className="text-text-dim text-[11px] leading-relaxed">{item.desc}</p>
+                      <h3 className="text-text-primary text-base font-semibold mb-1.5">{item.title}</h3>
+                      <p className="text-text-dim text-sm leading-relaxed">{item.desc}</p>
                     </div>
                   );
                 })}
@@ -457,8 +459,8 @@ const Index = () => {
 
           {/* ── HOW IT WORKS ── */}
           <SectionFrame id="how-it-works">
-            <div ref={fade4.ref} className={cn(fade4.className, "max-w-3xl mx-auto")}>
-              <SectionHeader eyebrow="How It Works" title="FOUR STEPS TO CLARITY" />
+            <div ref={fade4.ref} className={cn(fade4.className, "max-w-2xl mx-auto")}>
+              <SectionHeader icon={Layers} eyebrow="How It Works" title="FOUR STEPS TO CLARITY" />
               <div className="space-y-4">
                 {steps.map((step, i) => {
                   const Icon = step.icon;
@@ -470,15 +472,15 @@ const Index = () => {
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-1">
-                            <span className="font-mono text-[10px] text-text-dim tracking-wider">{step.num}</span>
-                            <h3 className="text-text-primary text-sm font-semibold">{step.title}</h3>
+                            <span className="font-mono text-xs text-text-dim tracking-wider">{step.num}</span>
+                            <h3 className="text-text-primary text-base font-semibold">{step.title}</h3>
                           </div>
-                          <p className="text-text-dim text-xs leading-relaxed">{step.desc}</p>
+                          <p className="text-text-dim text-sm leading-relaxed">{step.desc}</p>
                         </div>
                       </div>
                       {step.callout && (
-                        <div className="mt-2 mx-4 px-4 py-2.5 border-l-2 border-gold/30 bg-gold/[0.03] rounded-r-lg">
-                          <p className="text-gold/80 text-[11px] leading-relaxed italic">{step.callout}</p>
+                        <div className="mt-3 px-4 py-3 bg-gold/[0.04] border border-gold/15 rounded-xl">
+                          <p className="text-gold/80 text-sm leading-relaxed italic">{step.callout}</p>
                         </div>
                       )}
                     </div>
@@ -491,8 +493,8 @@ const Index = () => {
 
           {/* ── WHEN TO USE THIS ── */}
           <SectionFrame id="use-cases">
-            <div ref={fade5.ref} className={cn(fade5.className, "max-w-3xl mx-auto")}>
-              <SectionHeader eyebrow="When To Use This" title="THREE MOMENTS THAT DEFINE YOUR DEAL" />
+            <div ref={fade5.ref} className={cn(fade5.className, "max-w-2xl mx-auto")}>
+              <SectionHeader icon={Target} eyebrow="When To Use This" title="THREE MOMENTS THAT DEFINE YOUR DEAL" />
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {useCases.map((uc, i) => {
                   const Icon = uc.icon;
@@ -501,8 +503,8 @@ const Index = () => {
                       <div className="w-9 h-9 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center mb-3">
                         <Icon className="w-4 h-4 text-gold" />
                       </div>
-                      <h3 className="text-text-primary text-sm font-semibold mb-2">{uc.title}</h3>
-                      <p className="text-text-dim text-xs leading-relaxed">{uc.desc}</p>
+                      <h3 className="text-text-primary text-base font-semibold mb-2">{uc.title}</h3>
+                      <p className="text-text-dim text-sm leading-relaxed">{uc.desc}</p>
                     </div>
                   );
                 })}
@@ -513,8 +515,8 @@ const Index = () => {
 
           {/* ── THE PROBLEM ── */}
           <SectionFrame id="problem">
-            <div ref={fade6.ref} className={cn(fade6.className, "max-w-3xl mx-auto")}>
-              <SectionHeader eyebrow="The Problem" title="WHY MOST INDIE FILMS LOSE MONEY" subtitle="It's not because the films are bad. It's because filmmakers sign deals they don't understand." />
+            <div ref={fade6.ref} className={cn(fade6.className, "max-w-2xl mx-auto")}>
+              <SectionHeader icon={EyeOff} eyebrow="The Problem" title="WHY MOST INDIE FILMS LOSE MONEY" subtitle="It's not because the films are bad. It's because filmmakers sign deals they don't understand." />
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {problemCards.map((card, i) => {
                   const Icon = card.icon;
@@ -523,8 +525,8 @@ const Index = () => {
                       <div className="w-9 h-9 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center mb-3">
                         <Icon className="w-4 h-4 text-gold" />
                       </div>
-                      <h3 className="text-text-primary text-sm font-semibold mb-2">{card.title}</h3>
-                      <p className="text-text-dim text-xs leading-relaxed">{card.body}</p>
+                      <h3 className="text-text-primary text-base font-semibold mb-2">{card.title}</h3>
+                      <p className="text-text-dim text-sm leading-relaxed">{card.body}</p>
                     </div>
                   );
                 })}
@@ -539,16 +541,10 @@ const Index = () => {
               <div className="relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-gold/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
                 <div className="relative z-10">
-                  <div className="flex items-center gap-3 mb-5">
-                    <div className="w-9 h-9 rounded-lg bg-gold/10 border border-border-default flex items-center justify-center">
-                      <Eye className="w-4 h-4 text-gold" />
-                    </div>
-                    <p className="text-gold text-[10px] tracking-[0.3em] uppercase font-semibold">Our Mission</p>
-                  </div>
-                  <h2 className="font-bebas text-2xl md:text-3xl tracking-[0.08em] text-text-primary mb-4">DEMOCRATIZING THE BUSINESS OF FILM</h2>
-                  <div className="space-y-3 text-text-mid text-sm leading-relaxed">
+                  <SectionHeader icon={Eye} eyebrow="Our Mission" title="DEMOCRATIZING THE BUSINESS OF FILM" />
+                  <div className="space-y-4 text-text-mid text-[15px] leading-relaxed text-center">
                     <p>For too long, the mechanics of film finance have been obscured by gatekeepers. Agencies, distributors, and studios thrive on information asymmetry. They know the numbers; you don't.</p>
-                    <p className="text-text-primary font-medium">We built this tool to level the playing field.</p>
+                    <p className="text-text-primary font-medium text-base">We built this tool to level the playing field.</p>
                     <p>This tool extracts the proprietary logic used by top-tier entertainment lawyers and sales agents, putting institutional-grade modeling directly into your hands. Free simulation. Just the math.</p>
                   </div>
                 </div>
@@ -558,9 +554,9 @@ const Index = () => {
           </SectionFrame>
 
           {/* ── CHATBOT ── */}
-          <section id="chatbot" className="snap-section px-4 py-6">
-            <div ref={fade8.ref} className={cn(fade8.className, "bg-bg-elevated border border-white/[0.06] rounded-2xl overflow-hidden p-6 pb-3")}>
-              <div className="max-w-3xl mx-auto mb-5">
+          <SectionFrame id="chatbot">
+            <div ref={fade8.ref} className={fade8.className}>
+              <div className="max-w-2xl mx-auto mb-5">
                 <SectionHeader icon={Bot} eyebrow="AI-Powered Guidance" title="ASK OUR CHATBOT"
                   subtitle="Have a question about your deal? Copy a prompt or ask your own." />
               </div>
@@ -568,17 +564,17 @@ const Index = () => {
               <div ref={carouselRef} className="flex gap-3 overflow-x-auto snap-x snap-mandatory px-1 pb-4 scrollbar-hide"
                 style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
                 {scenarioPrompts.map((item, i) => (
-                  <div key={i} className="flex-shrink-0 w-[250px] snap-center bg-bg-card border border-border-subtle rounded-xl p-4 text-left hover:border-border-default transition-colors group">
+                  <div key={i} className="flex-shrink-0 w-[260px] snap-center bg-bg-card border border-border-subtle rounded-xl p-5 text-left hover:border-gold/20 transition-colors group">
                     <div className="flex items-start gap-3 mb-3">
-                      <div className="w-6 h-6 rounded-full bg-bg-elevated border border-border-subtle flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <MessageCircle className="w-3 h-3 text-gold" />
+                      <div className="w-7 h-7 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <MessageCircle className="w-3.5 h-3.5 text-gold" />
                       </div>
                       <p className="text-text-primary text-sm font-medium leading-snug">{item.prompt}</p>
                     </div>
-                    <p className="text-text-dim text-[11px] leading-relaxed mb-3 pl-9">{item.context}</p>
-                    <div className="flex items-center justify-between pl-9">
+                    <p className="text-text-dim text-xs leading-relaxed mb-3 pl-10">{item.context}</p>
+                    <div className="flex items-center justify-between pl-10">
                       <button onClick={(e) => { e.stopPropagation(); handleCopyPrompt(item.prompt, i); }}
-                        className="flex items-center gap-1.5 text-[11px] tracking-wider font-semibold transition-colors">
+                        className="flex items-center gap-1.5 text-xs tracking-wider font-semibold transition-colors">
                         {copiedIndex === i ? (
                           <span className="text-green-400 flex items-center gap-1.5"><Check className="w-3 h-3" /> Copied</span>
                         ) : (
@@ -596,26 +592,26 @@ const Index = () => {
                 ))}
               </div>
 
-              {/* Get started signpost — not clickable yet */}
+              {/* Get started signpost */}
               <div className="text-center mt-3 mb-2">
-                <div className="inline-flex items-center gap-2 text-text-dim text-[11px] tracking-wider">
+                <div className="inline-flex items-center gap-2 text-text-dim text-xs tracking-wider">
                   <Bot className="w-3.5 h-3.5 text-gold/50" />
                   <span>Not sure where to start? Ask our chatbot.</span>
                 </div>
               </div>
             </div>
             <SectionChevron nextId="faq" />
-          </section>
+          </SectionFrame>
 
           {/* ── FAQ ── */}
           <SectionFrame id="faq">
-            <div ref={fade9.ref} className={cn(fade9.className, "max-w-xl mx-auto")}>
+            <div ref={fade9.ref} className={cn(fade9.className, "max-w-2xl mx-auto")}>
               <SectionHeader icon={MessageCircle} eyebrow="Common Questions" title="WHAT FILMMAKERS ASK" />
               <div className="bg-bg-card border border-border-subtle rounded-xl px-5">
                 <Accordion type="single" collapsible className="w-full">
                   {faqs.map((faq, i) => (
                     <AccordionItem key={faq.q} value={`faq-${i}`} className="border-border-subtle">
-                      <AccordionTrigger className="text-text-primary hover:text-text-mid hover:no-underline text-sm font-medium text-left">
+                      <AccordionTrigger className="text-text-primary hover:text-text-mid hover:no-underline text-base font-medium text-left">
                         {faq.q}
                       </AccordionTrigger>
                       <AccordionContent className="text-text-dim text-sm leading-relaxed">
@@ -629,17 +625,21 @@ const Index = () => {
           </SectionFrame>
 
           {/* ── FINAL CTA ── */}
-          <section id="final-cta" className="snap-section py-10 flex flex-col justify-center relative px-4 overflow-hidden">
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none"
-              style={{ width: '100vw', height: '100%', background: `radial-gradient(ellipse 60% 60% at 50% 0%, rgba(212,175,55,0.06) 0%, transparent 70%)` }} />
-            <div className="relative max-w-md mx-auto text-center">
-              <img src={filmmakerLogo} alt="Filmmaker.OG" className="w-16 h-16 object-contain rounded-lg mx-auto mb-6"
-                style={{ filter: 'brightness(1.1) drop-shadow(0 0 15px rgba(212,175,55,0.3))' }} />
-              <button onClick={handleStartClick}
-                className="w-full max-w-[320px] h-14 text-sm font-black tracking-[0.12em] transition-all active:scale-[0.96] rounded-md bg-gold-cta-subtle border border-gold-cta-muted text-gold-cta shadow-button hover:border-gold-cta">
-                <span className="flex items-center justify-center gap-2">START FREE SIMULATION <ArrowRight size={18} /></span>
-              </button>
-              <p className="text-text-dim text-[11px] tracking-wider mt-4">No account required. No credit card. Just clarity.</p>
+          <section id="final-cta" className="snap-section py-8 px-4">
+            <div className="bg-bg-elevated border border-white/[0.06] rounded-2xl overflow-hidden relative">
+              <div className="h-[2px] bg-gradient-to-r from-transparent via-gold/25 to-transparent" />
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none"
+                style={{ width: '100%', height: '100%', background: `radial-gradient(ellipse 60% 60% at 50% 10%, rgba(212,175,55,0.08) 0%, transparent 70%)` }} />
+              <div className="relative p-8 md:p-12 max-w-md mx-auto text-center">
+                <img src={filmmakerLogo} alt="Filmmaker.OG" className="w-20 h-20 object-contain rounded-lg mx-auto mb-6"
+                  style={{ filter: 'brightness(1.1) drop-shadow(0 0 15px rgba(212,175,55,0.3))' }} />
+                <p className="text-gold text-xs tracking-[0.3em] uppercase font-semibold mb-4">Ready?</p>
+                <button onClick={handleStartClick}
+                  className="w-full max-w-[320px] h-16 text-base font-black tracking-[0.12em] transition-all active:scale-[0.96] rounded-md bg-gold-cta-subtle border border-gold-cta-muted text-gold-cta shadow-button hover:border-gold-cta">
+                  SEE YOUR WATERFALL
+                </button>
+                <p className="text-text-dim text-sm tracking-wider mt-4">No account required. No credit card. Just clarity.</p>
+              </div>
             </div>
           </section>
 
@@ -648,33 +648,33 @@ const Index = () => {
             <div className="max-w-md mx-auto">
               <div className="flex items-center justify-center gap-2 mb-5">
                 <a href="mailto:thefilmmaker.og@gmail.com"
-                  className="flex items-center gap-1 text-[10px] tracking-wider text-gold/70 hover:text-gold transition-colors py-1.5 px-2.5 rounded-full border border-white/[0.06] hover:border-gold/30">
+                  className="flex items-center gap-1 text-[11px] tracking-wider text-gold/70 hover:text-gold transition-colors py-1.5 px-2.5 rounded-full border border-white/[0.06] hover:border-gold/30">
                   <Mail className="w-3 h-3" /><span>Email</span>
                 </a>
                 <a href="https://www.instagram.com/filmmaker.og" target="_blank" rel="noopener noreferrer"
-                  className="flex items-center gap-1 text-[10px] tracking-wider text-gold/70 hover:text-gold transition-colors py-1.5 px-2.5 rounded-full border border-white/[0.06] hover:border-gold/30">
+                  className="flex items-center gap-1 text-[11px] tracking-wider text-gold/70 hover:text-gold transition-colors py-1.5 px-2.5 rounded-full border border-white/[0.06] hover:border-gold/30">
                   <Instagram className="w-3 h-3" /><span>Instagram</span>
                 </a>
                 <button onClick={handleShare}
-                  className="flex items-center gap-1 text-[10px] tracking-wider text-gold/70 hover:text-gold transition-colors py-1.5 px-2.5 rounded-full border border-white/[0.06] hover:border-gold/30">
+                  className="flex items-center gap-1 text-[11px] tracking-wider text-gold/70 hover:text-gold transition-colors py-1.5 px-2.5 rounded-full border border-white/[0.06] hover:border-gold/30">
                   <Share2 className="w-3 h-3" /><span>Share</span>
                 </button>
                 <button onClick={handleCopyLink}
-                  className="flex items-center gap-1 text-[10px] tracking-wider py-1.5 px-2.5 rounded-full border border-white/[0.06] hover:border-gold/30 transition-colors">
+                  className="flex items-center gap-1 text-[11px] tracking-wider text-gold/70 hover:text-gold py-1.5 px-2.5 rounded-full border border-white/[0.06] hover:border-gold/30 transition-colors">
                   {linkCopied ? (
                     <><Check className="w-3 h-3 text-green-400" /><span className="text-green-400">Copied!</span></>
                   ) : (
-                    <><Link2 className="w-3 h-3 text-gold/70" /><span className="text-gold/70">Copy URL</span></>
+                    <><Link2 className="w-3 h-3" /><span>Copy URL</span></>
                   )}
                 </button>
               </div>
 
-              <p className="text-text-dim text-[10px] tracking-wide leading-relaxed text-center mb-3">
+              <p className="text-text-dim text-[11px] tracking-wide leading-relaxed text-center mb-3">
                 This tool is for educational and informational purposes only.
                 It does not constitute legal, tax, accounting, or investment advice.
                 Consult a qualified entertainment attorney before making any investment or financing decisions.
               </p>
-              <p className="text-text-dim text-[10px] tracking-wider text-center uppercase">
+              <p className="text-text-dim text-[11px] tracking-wider text-center uppercase">
                 FILMMAKER.OG &middot; BETA
               </p>
             </div>
