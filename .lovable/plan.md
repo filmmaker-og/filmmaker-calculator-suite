@@ -1,279 +1,329 @@
 
-
-# Stripe Store & Excel Export Implementation Plan
+# Store Redesign: Premium Wiki-Style Product Pages
 
 ## Overview
 
-This plan implements a complete payment and export system for Filmmaker.OG, including:
-- Stripe Checkout integration with 4 tiered products
-- Professional Excel report generation (6 sheets)
-- Purchase-gated export functionality
-- Updated Store page with new product structure
+Transform the current plain-text Store into a **two-level premium experience** that matches your institutional-grade Wiki aesthetic and properly justifies the $197–$4,997 price points.
+
+**Current Problem**: The Store is a simple list with bullet points. At these price points, users need narrative-driven value propositions, visual hierarchy, and detailed explanations of why each package matters.
+
+**Solution**: Create a Store Hub with teaser cards that link to individual product detail pages, each using the established Wiki pattern (WikiCard, WikiSectionHeader, WikiCallout components).
 
 ---
 
-## Phase 1: Enable Stripe & Configure Secrets
+## New Page Architecture
 
-### Step 1.1: Enable Stripe Integration
-First, I'll enable the Stripe integration which will prompt you to enter your Stripe secret key. You'll need:
-- **Stripe Secret Key** (starts with `sk_live_` or `sk_test_`)
-- **Stripe Publishable Key** (starts with `pk_live_` or `pk_test_`)
-
-After you provide these, I'll also need to set up a webhook secret for payment confirmations.
-
-### Step 1.2: Install Dependencies
-Add required packages:
-- `exceljs` - Browser-side Excel generation with styling
-- `file-saver` - Triggers browser file downloads
-- `@stripe/stripe-js` - Stripe.js for checkout redirects
-- `@types/file-saver` - TypeScript types
-
----
-
-## Phase 2: Database Setup
-
-### Step 2.1: Create `purchases` Table
 ```text
-Table: purchases
-- id (UUID, primary key)
-- user_id (UUID, references auth.users, nullable for guest purchases)
-- email (text, required)
-- stripe_session_id (text, unique)
-- stripe_payment_intent (text)
-- product_id (text)
-- product_name (text)
-- amount_paid (integer, cents)
-- currency (text, default 'usd')
-- status (text, default 'pending')
-- access_expires_at (timestamptz)
-- created_at (timestamptz)
-- updated_at (timestamptz)
+Current:
+  /store → Simple list of all products
+
+Redesigned:
+  /store                  → Store Hub (teaser cards, each clickable)
+  /store/snapshot         → The Snapshot detail page
+  /store/blueprint        → The Blueprint detail page  
+  /store/investor-kit     → The Investor Kit detail page (featured)
+  /store/greenlight       → The Greenlight Package detail page
 ```
 
-### Step 2.2: Create `exports` Table
+---
+
+## Store Hub Design
+
+The main `/store` page becomes an attractive "menu" of products using the Wiki card aesthetic:
+
 ```text
-Table: exports
-- id (UUID, primary key)
-- purchase_id (UUID, references purchases)
-- user_id (UUID, references auth.users)
-- export_type (text)
-- calculator_inputs (JSONB)
-- created_at (timestamptz)
+┌─────────────────────────────────────────────────────────────┐
+│  HEADER                                                      │
+├─────────────────────────────────────────────────────────────┤
+│                                                              │
+│  PRODUCER'S SERVICES                                         │
+│  Professional film finance tools for serious producers       │
+│  ───────────────────────────────────── (gold divider)        │
+│                                                              │
+│  [ Founders Pricing Badge ]                                  │
+│                                                              │
+│  ┌───────────────────────────────────────────────────────┐   │
+│  │ │ 01 │ THE SNAPSHOT                          $197   > │   │
+│  │       Your Deal at a Glance                           │   │
+│  │       6-Sheet Excel • Executive Summary • 30 Days     │   │
+│  └───────────────────────────────────────────────────────┘   │
+│                                                              │
+│  ┌───────────────────────────────────────────────────────┐   │
+│  │ │ 02 │ THE BLUEPRINT                         $997   > │   │
+│  │       Multi-Scenario Analysis                         │   │
+│  │       3 Scenarios • Sensitivity Charts • 60 Days      │   │
+│  └───────────────────────────────────────────────────────┘   │
+│                                                              │
+│  ┌───────────────────────────────────────────────────────┐   │
+│  │ │ 03 │ THE INVESTOR KIT ★               ~~$2,997~~    │   │ (gold border)
+│  │       Complete Investor Package           $1,997    > │   │
+│  │       Comp Database • Pitch Deck • Strategy Call      │   │
+│  │                                    MOST POPULAR       │   │
+│  └───────────────────────────────────────────────────────┘   │
+│                                                              │
+│  ┌───────────────────────────────────────────────────────┐   │
+│  │ │ 04 │ THE GREENLIGHT PACKAGE              $4,997   > │   │
+│  │       White-Glove Service                             │   │
+│  │       Custom Model • Dedicated Strategist • 1 Year    │   │
+│  └───────────────────────────────────────────────────────┘   │
+│                                                              │
+│  FOOTER (disclaimer)                                         │
+└─────────────────────────────────────────────────────────────┘
 ```
 
-### Step 2.3: RLS Policies
-- Users can view their own purchases
-- Users can create/view their own exports
-- Service role can manage all purchases (for webhooks)
+**Each card is clickable and navigates to the detailed product page.**
 
 ---
 
-## Phase 3: Backend Functions
+## Product Detail Page Structure
 
-### Step 3.1: Create `create-checkout` Edge Function
-Handles Stripe Checkout session creation:
-- Accepts: `productId`, `email`, `userId`
-- Creates Stripe Checkout session with product details
-- Returns checkout URL for redirect
-- Includes proper CORS headers
+Each product page follows the established Wiki pattern with sections that tell the story:
 
-**Products Configuration:**
-| Product | Price | Access Period |
-|---------|-------|---------------|
-| The Snapshot | $197 | 30 days |
-| The Blueprint | $997 | 60 days |
-| The Investor Kit | $1,997 | 6 months |
-| The Greenlight Package | $4,997 | 12 months |
-
-### Step 3.2: Create `stripe-webhook` Edge Function
-Handles Stripe webhook events:
-- Validates webhook signature
-- On `checkout.session.completed`:
-  - Creates purchase record in database
-  - Sets access expiration date
-  - Updates status to "completed"
-
----
-
-## Phase 4: Rewrite Store Page
-
-### Step 4.1: New Product Data Structure
-Replace current packages with 4 new products:
-- **The Snapshot** ($197) - Quick export with 6-sheet Excel
-- **The Blueprint** ($997) - 3 scenario comparison + 60 days
-- **The Investor Kit** ($1,997, featured) - Most popular, includes comps + investor docs
-- **The Greenlight Package** ($4,997) - Full package with white-label
-
-### Step 4.2: UI Components
-- Header: Use existing `Header` component
-- Title: "CHOOSE YOUR PACKAGE" in Bebas Neue
-- Cards: Stacked vertically, using `glass-card` styling
-- Featured card (Investor Kit): Gold border + "MOST POPULAR" badge
-- Founders pricing: Show strikethrough original price
-- Terms checkbox: Required before purchase
-- CTA buttons: `btn-vault` for featured, ghost style for others
-
-### Step 4.3: Stripe Integration
-- Load Stripe.js on component mount
-- `handlePurchase` function:
-  1. Check terms agreement
-  2. Get user email (from auth or prompt)
-  3. Call `create-checkout` edge function
-  4. Redirect to Stripe Checkout
-
-### Step 4.4: Success State
-When returning from Stripe with `?success=true`:
-- Display success message with gold checkmark
-- Show "Download Your Report" button
-- Link to calculator with export enabled
-
----
-
-## Phase 5: Excel Export Engine
-
-### Step 5.1: Create `src/lib/excel-export.ts`
-Core export functionality using ExcelJS:
-
-**Sheet 1: Executive Summary**
-- Title: "FILMMAKER.OG FINANCIAL SNAPSHOT"
-- Three big numbers: Budget, Acquisition Price, Producer Net Profit
-- Breakeven status with cushion/shortfall
-- Investor summary with multiple
-- Recoupment status
-
-**Sheet 2: Budget & Financing**
-- Production budget
-- Guild commitments (only active guilds)
-- Capital stack table with sources, amounts, terms
-- Funding gap calculation
-
-**Sheet 3: The Deal**
-- Acquisition price
-- Breakeven calculation breakdown
-- Cushion/shortfall analysis
-- Plain-language deal summary
-
-**Sheet 4: Waterfall Distribution**
-- Full ledger table with all tiers
-- Columns: Priority, Line Item, Detail, Amount, Running Total, % of Revenue
-- Color-banded rows by tier type
-- Producer/Investor profit split
-
-**Sheet 5: Who Gets Paid**
-- Investor returns breakdown
-- Multiple calculation
-- Producer profit share
-- Plain-English summaries
-
-**Sheet 6: Glossary**
-- 15 key terms with definitions
-- Terms: Waterfall, CAM, Senior Debt, Gap/Mezz, Equity, Premium, Deferments, Recoupment, Profit Pool, Multiple, Guild Reserves, Breakeven, Off-the-Top, Sales Agent Fee, Acquisition Price
-
-### Step 5.2: Excel Styling
-Following brand guidelines:
-- Black backgrounds (ARGB format)
-- Gold (#D4AF37) for headers and accents
-- White text for primary content
-- Roboto Mono for numbers
-- No green/red colors
-- Print-ready formatting
+```text
+┌─────────────────────────────────────────────────────────────┐
+│  HEADER                                                      │
+├─────────────────────────────────────────────────────────────┤
+│                                                              │
+│  ← Back to Packages                                          │
+│                                                              │
+│  THE INVESTOR KIT                                            │
+│  Complete Investor Package                                   │
+│  ───────────────────────────────────── (gold divider)        │
+│                                                              │
+│  ┌───────────────────────────────────────────────────────┐   │
+│  │ 01 │ WHAT YOU GET                                     │   │
+│  ├───────────────────────────────────────────────────────┤   │
+│  │ Feature grid with icons and detailed descriptions     │   │
+│  │ - Comparable Films Report (5 titles)                  │   │
+│  │ - Investor One-Pager (PDF)                            │   │
+│  │ - Investor Memo (3-5 pages)                           │   │
+│  │ - "What Investors Ask" Guide                          │   │
+│  └───────────────────────────────────────────────────────┘   │
+│                                                              │
+│  ┌───────────────────────────────────────────────────────┐   │
+│  │ 02 │ WHY IT MATTERS                                   │   │
+│  ├───────────────────────────────────────────────────────┤   │
+│  │ Narrative value proposition explaining the "why"      │   │
+│  │                                                       │   │
+│  │ [CALLOUT: Pro Tip]                                    │   │
+│  │ This is the single most valuable data...              │   │
+│  └───────────────────────────────────────────────────────┘   │
+│                                                              │
+│  ┌───────────────────────────────────────────────────────┐   │
+│  │ 03 │ WHO IT'S FOR                                     │   │
+│  ├───────────────────────────────────────────────────────┤   │
+│  │ Ideal customer profiles and use cases                 │   │
+│  │ • Producers raising $500K+                            │   │
+│  │ • Projects seeking institutional investment           │   │
+│  └───────────────────────────────────────────────────────┘   │
+│                                                              │
+│  ┌───────────────────────────────────────────────────────┐   │
+│  │ 04 │ WHAT'S INCLUDED FROM LOWER TIERS                 │   │
+│  ├───────────────────────────────────────────────────────┤   │
+│  │ Visual showing everything from Blueprint + Snapshot   │   │
+│  └───────────────────────────────────────────────────────┘   │
+│                                                              │
+├─────────────────────────────────────────────────────────────┤
+│                                                              │
+│  ┌─────────────────────────────────────────────────────┐    │
+│  │  ~~$2,997~~  $1,997  FOUNDERS PRICE                 │    │
+│  │                                                      │    │
+│  │  [ Email input if guest ]                           │    │
+│  │  ☐ I agree to terms of service                      │    │
+│  │                                                      │    │
+│  │  [ PURCHASE NOW ]                                   │    │
+│  └─────────────────────────────────────────────────────┘    │
+│                                                              │
+│  FOOTER (disclaimer)                                         │
+└─────────────────────────────────────────────────────────────┘
+```
 
 ---
 
-## Phase 6: Purchase Access Hook
+## Detailed Product Content
 
-### Step 6.1: Create `src/hooks/usePurchaseAccess.ts`
-Hook to check if user has active purchase:
-- Query purchases table for current user
-- Check if access hasn't expired
-- Return: `hasAccess`, `productId`, `expiresAt`, `loading`
+### The Snapshot ($197)
 
----
+**Headline**: "Your Deal at a Glance"
 
-## Phase 7: Export Button Integration
+**Section 01 - What You Get**:
+- 6-sheet professional Excel workbook
+- Executive Summary dashboard with key metrics
+- Full waterfall breakdown showing every payment tier
+- Investor-ready formatting matching industry standards
 
-### Step 7.1: Modify WaterfallTab
-Add export button at bottom of waterfall results:
-- Check purchase access with hook
-- If access: Show "EXPORT YOUR REPORT" button
-- If no access: Show "GET YOUR PROFESSIONAL REPORT" button that links to Store
-- Use Download icon from Lucide
+**Section 02 - Why It Matters**:
+"When you walk into an investor meeting with a professionally formatted financial report, you're no longer just a filmmaker asking for money — you're a business partner who understands the numbers. The Snapshot transforms your calculator inputs into a document that speaks the language of finance."
 
----
+**Section 03 - Who It's For**:
+- Producers with a single deal ready to present
+- First-time filmmakers building credibility
+- Anyone who needs a quick, professional export
 
-## Phase 8: Define Missing CSS Classes
-
-### Step 8.1: Add Button Classes to index.css
-The Store page uses `btn-vault` and `btn-ghost-gold` classes that need definitions:
-
-**btn-vault** (filled gold CTA):
-- Background: gold-cta
-- Text: black
-- Shadow and glow effects
-
-**btn-ghost-gold** (outlined):
-- Transparent background
-- Gold border
-- Gold text
-- Hover: subtle gold fill
-
-**glass-card** (standard matte card):
-- Dark background (#1A1A1A)
-- Subtle border
-- No radius (sharp edges per brand guidelines)
+**Buyer's internal math**: "That's less than Final Draft. And I actually need this to raise money."
 
 ---
 
-## File Summary
+### The Blueprint ($997)
 
-| File | Action | Purpose |
-|------|--------|---------|
-| `src/pages/Store.tsx` | REWRITE | New 4-product pricing grid with Stripe |
-| `src/lib/excel-export.ts` | CREATE | 6-sheet Excel generation engine |
-| `src/hooks/usePurchaseAccess.ts` | CREATE | Check active purchase status |
-| `supabase/functions/create-checkout/index.ts` | CREATE | Stripe session creation |
-| `supabase/functions/stripe-webhook/index.ts` | CREATE | Payment confirmation handler |
-| `src/components/calculator/tabs/WaterfallTab.tsx` | MODIFY | Add export button |
-| `src/index.css` | MODIFY | Add btn-vault, btn-ghost-gold, glass-card classes |
+**Headline**: "Present With Confidence"
 
----
+**Section 01 - What You Get** (in addition to Snapshot):
+- 3-scenario comparison tool (Best/Base/Worst case)
+- Sensitivity analysis charts showing range of outcomes
+- "How to Read Your Blueprint" guide
+- 60-day platform access
+- Priority email support
 
-## Technical Considerations
+**Section 02 - Why It Matters**:
+"Sophisticated investors don't just ask 'What if it works?' They ask 'What if it doesn't?' The Blueprint lets you present multiple scenarios side-by-side, demonstrating that you've thought through the range of outcomes. This is how institutional money evaluates deals."
 
-### Data Flow
-1. User selects package on Store page
-2. Clicks purchase (after agreeing to terms)
-3. Edge function creates Stripe session
-4. User completes payment on Stripe
-5. Webhook writes purchase to database
-6. User returns to Store with success message
-7. Export button becomes active in Calculator
-8. Export reads from localStorage, generates Excel
+**Section 03 - Who It's For**:
+- Producers actively raising equity
+- Projects with multiple financing structures to evaluate
+- Experienced filmmakers who need scenario modeling
 
-### Security
-- RLS policies protect purchase data
-- Webhook validates Stripe signature
-- Access expiration enforced server-side
-- No sensitive data stored client-side
-
-### Brand Compliance
-- Two-gold system maintained
-- No green/red colors
-- Bebas Neue for headlines
-- Roboto Mono for numbers
-- Sharp edges on cards
-- 48px touch targets on mobile
+**Buyer's internal math**: "$997 to look like I've done this before? My film costs $1.5M to make. This is a rounding error."
 
 ---
 
-## Next Steps After Approval
+### The Investor Kit ($1,997) — Featured Tier
 
-1. Enable Stripe integration (you'll enter your API key)
-2. Create database tables with migrations
-3. Build edge functions
-4. Rewrite Store page
-5. Create Excel export engine
-6. Add purchase access hook
-7. Integrate export button
-8. Test end-to-end flow
+**Headline**: "Complete Investor Package"
+
+**Section 01 - What You Get** (in addition to Blueprint):
+- Comparable Films Report (5 real titles matched by budget/genre)
+- Investor One-Pager (PDF) — fill form, template populates
+- Investor Memo (3-5 page PDF) — narrative document
+- "What Investors Actually Ask" guide with 15 Q&As
+- 6-month platform access
+- 1-on-1 strategy call (30 minutes)
+
+**Section 02 - Why It Matters**:
+"This is the complete toolkit for closing serious capital. The pitch deck template has been refined through dozens of successful raises. The comp data is what sales agents charge 10-15% commissions for — and we hand it to you for the first time. The strategy call gives you direct access to expertise that would cost thousands in consulting fees."
+
+[CALLOUT - Pro Insight]:
+"The Comparable Films Report is the single most valuable item in the entire product line. An aspiring filmmaker literally cannot access this data without knowing someone. We hand it to them for the first time."
+
+**Section 03 - Who It's For**:
+- Producers raising $500K+
+- Projects seeking institutional or family office investment
+- Filmmakers who want professional-grade materials without hiring a consultant
+
+**Buyer's internal math**: "A producer's rep would cost $50K–$150K in commissions. A consultant would charge $15K. This gives me 80% of what they'd deliver for $2K."
+
+---
+
+### The Greenlight Package ($4,997)
+
+**Headline**: "White-Glove Service"
+
+**Section 01 - What You Get** (in addition to Investor Kit):
+- Deep Comp Analysis (10 titles + 3-year trends + territory breakdowns)
+- Custom Financial Model Build (tailored to your specific deal)
+- White-Label Everything (your logo, your branding)
+- Term Sheet Outline (framework for lawyers)
+- Distribution Strategy Brief
+- 12-month platform access
+- Dedicated Strategist (3 calls over project lifecycle)
+- Ongoing Support Channel
+
+**Section 02 - Why It Matters**:
+"For projects with complex financing structures — multiple territories, co-productions, tax incentive stacking — you need more than a template. The Greenlight Package gives you a dedicated professional who builds your model from scratch and stays with you through closing."
+
+**Section 03 - Who It's For**:
+- Productions with budgets over $2M
+- International co-productions
+- Projects with complex tax incentive strategies
+- Producers who want a financial partner, not just a tool
+
+**Buyer's internal math**: "$5K for everything I need? My lawyer alone will cost more — and I don't even have one yet."
+
+---
+
+## Technical Implementation
+
+### Files to Create
+
+1. **`src/data/products.ts`**
+   - Centralized product data with all content, features, pricing, value propositions
+   - Single source of truth for both Hub and Detail pages
+
+2. **`src/pages/store/StoreHub.tsx`**
+   - The overview page at `/store`
+   - Uses WikiCard pattern for teaser cards
+   - Each card clickable, navigates to detail page
+
+3. **`src/pages/store/ProductDetail.tsx`**
+   - Reusable template component for all product pages
+   - Receives product data as props
+   - Handles purchase flow (email input, terms checkbox, Stripe redirect)
+
+4. **`src/pages/store/SnapshotDetail.tsx`** — route component for `/store/snapshot`
+5. **`src/pages/store/BlueprintDetail.tsx`** — route component for `/store/blueprint`
+6. **`src/pages/store/InvestorKitDetail.tsx`** — route component for `/store/investor-kit`
+7. **`src/pages/store/GreenlightDetail.tsx`** — route component for `/store/greenlight`
+
+### Files to Update
+
+1. **`src/App.tsx`**
+   - Add new routes for `/store/:productId` pattern
+   - Update Store import to StoreHub
+
+2. **`src/pages/Store.tsx`**
+   - Either rename to StoreHub or refactor entirely
+   - Success view can remain here or move to separate component
+
+### Components to Reuse
+
+- `WikiSectionHeader` — Gold-accented section headers
+- `WikiCard` — Matte card containers
+- `WikiCallout` — Pro tips and key insights
+- `Header` — Standard navigation
+- Design tokens from `design-system.ts`
+- Existing Stripe checkout integration
+
+### Design System Alignment
+
+- Background: `colors.void` (#000000)
+- Cards: `colors.card` (#070707) with `colors.borderSubtle` borders
+- Gold accents: `colors.gold` (#D4AF37) for non-interactive, `colors.goldCta` (#F9E076) for CTAs
+- Typography: Bebas Neue for headers, Roboto Mono for prices, Inter for body
+- No border-radius per design constraints
+- Mobile-first with 44px touch targets
+
+---
+
+## User Flow
+
+1. User clicks "Producer's Services" in menu
+2. Lands on `/store` — sees 4 attractive Wiki-style product cards
+3. Clicks a product card → navigates to `/store/investor-kit` (for example)
+4. Reads detailed value proposition in Wiki sections (What You Get, Why It Matters, Who It's For)
+5. Scrolls to sticky purchase section at bottom
+6. Enters email (if not logged in), agrees to terms checkbox
+7. Clicks "PURCHASE" → Stripe checkout opens
+8. Returns with `?success=true` → success confirmation view
+
+---
+
+## Mobile Considerations
+
+- All content within `w-[calc(100vw-2rem)]` to maintain edge gutter
+- Touch targets minimum 48px
+- Sticky purchase section at bottom of detail pages
+- Back navigation via text link (not header arrow per design system)
+- Smooth scroll between sections
+
+---
+
+## Implementation Order
+
+1. Create `src/data/products.ts` with all product content
+2. Build `StoreHub.tsx` with clickable teaser cards
+3. Build `ProductDetail.tsx` reusable template
+4. Create individual route components for each product
+5. Update `App.tsx` with new routes
+6. Test purchase flow end-to-end
+7. Verify mobile responsiveness
 
