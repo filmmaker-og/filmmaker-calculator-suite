@@ -47,14 +47,14 @@ const MobileMenu = () => {
 
         <div className="space-y-6 flex-1">
           <div className="space-y-2">
-            <h3 className="text-xs font-bold text-text-dim uppercase tracking-widest pl-3">Menu</h3>
+            <h3 className="font-bebas text-xs text-text-dim uppercase tracking-[0.2em] pl-3">Menu</h3>
             
             <button
               onClick={() => handleNavigate('/store')}
               className="w-full flex items-center gap-3 p-3 rounded-lg text-text-primary hover:bg-bg-elevated transition-colors text-left group"
             >
               <Briefcase className="w-5 h-5 text-gold group-hover:text-gold" />
-              <span className="font-bold text-gold">Producer's Services</span>
+              <span className="font-bebas text-base tracking-wide text-gold">Producer's Services</span>
             </button>
 
             <button
@@ -62,7 +62,7 @@ const MobileMenu = () => {
               className="w-full flex items-center gap-3 p-3 rounded-lg text-text-primary hover:bg-bg-elevated transition-colors text-left group"
             >
               <Home className="w-5 h-5 text-gold/70 group-hover:text-gold" />
-              <span className="font-medium">Home</span>
+              <span className="font-bebas text-base tracking-wide">Home</span>
             </button>
 
             <button
@@ -70,7 +70,7 @@ const MobileMenu = () => {
               className="w-full flex items-center gap-3 p-3 rounded-lg text-text-primary hover:bg-bg-elevated transition-colors text-left group"
             >
               <Calculator className="w-5 h-5 text-gold/70 group-hover:text-gold" />
-              <span className="font-medium">Calculator</span>
+              <span className="font-bebas text-base tracking-wide">Calculator</span>
             </button>
 
             <button
@@ -78,7 +78,7 @@ const MobileMenu = () => {
               className="w-full flex items-center gap-3 p-3 rounded-lg text-text-primary hover:bg-bg-elevated transition-colors text-left group"
             >
               <BookOpen className="w-5 h-5 text-gold/70 group-hover:text-gold" />
-              <span className="font-medium">Waterfall Protocol</span>
+              <span className="font-bebas text-base tracking-wide">Waterfall Protocol</span>
             </button>
 
             <button
@@ -86,19 +86,19 @@ const MobileMenu = () => {
               className="w-full flex items-center gap-3 p-3 rounded-lg text-text-primary hover:bg-bg-elevated transition-colors text-left group"
             >
               <Book className="w-5 h-5 text-gold/70 group-hover:text-gold" />
-              <span className="font-medium">Glossary</span>
+              <span className="font-bebas text-base tracking-wide">Glossary</span>
             </button>
           </div>
 
           <div className="space-y-2 pt-6 border-t border-border-subtle">
-            <h3 className="text-xs font-bold text-text-dim uppercase tracking-widest pl-3">Contact</h3>
+            <h3 className="font-bebas text-xs text-text-dim uppercase tracking-[0.2em] pl-3">Contact</h3>
             
             <a
               href="mailto:thefilmmaker.og@gmail.com"
               className="w-full flex items-center gap-3 p-3 rounded-lg text-text-primary hover:bg-bg-elevated transition-colors text-left group"
             >
               <Mail className="w-5 h-5 text-gold/70 group-hover:text-gold" />
-              <span className="font-medium text-sm">thefilmmaker.og@gmail.com</span>
+              <span className="font-bebas text-sm tracking-wide">thefilmmaker.og@gmail.com</span>
             </a>
 
             <a
@@ -108,13 +108,13 @@ const MobileMenu = () => {
               className="w-full flex items-center gap-3 p-3 rounded-lg text-text-primary hover:bg-bg-elevated transition-colors text-left group"
             >
               <Instagram className="w-5 h-5 text-gold/70 group-hover:text-gold" />
-              <span className="font-medium text-sm">@filmmaker.og</span>
+              <span className="font-bebas text-sm tracking-wide">@filmmaker.og</span>
             </a>
           </div>
         </div>
 
         <div className="pt-6 border-t border-border-default">
-          <p className="text-xs text-text-dim px-3">
+          <p className="font-bebas text-xs text-text-dim tracking-[0.1em] px-3">
             FILMMAKER.OG v2.1.0
           </p>
         </div>
