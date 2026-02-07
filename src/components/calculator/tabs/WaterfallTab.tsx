@@ -1,5 +1,5 @@
-import { WaterfallResult, WaterfallInputs, formatCurrency, formatCompactCurrency, calculateWaterfall } from "@/lib/waterfall";
-import { ArrowRight, Lock, BookOpen, AlertTriangle, ChevronDown, ChevronUp, Play } from "lucide-react";
+import { WaterfallResult, WaterfallInputs, calculateWaterfall } from "@/lib/waterfall";
+import { Lock, AlertTriangle, ChevronDown, ChevronUp, Play } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import StandardStepLayout from "../StandardStepLayout";
@@ -113,24 +113,6 @@ const WaterfallTab = ({ result: initialResult, inputs: initialInputs }: Waterfal
     );
   }
 
-  // Derived metrics for visuals
-  const offTheTop = activeResult.ledger.find(i => i.name === "Sales Fees")?.amount || 0; 
-  // Simplified mapping for the Visual Component
-  // Note: WaterfallVisual expects specific buckets. We aggregate result.ledger to match.
-  // This is a simplification; for production, we might want exact matching.
-  
-  const debtService = activeResult.ledger
-    .filter(i => i.name.includes("Debt") || i.name.includes("Loan") || i.name.includes("Interest"))
-    .reduce((acc, curr) => acc + curr.amount, 0);
-
-  const equityReturn = activeResult.ledger
-    .filter(i => i.name.includes("Equity"))
-    .reduce((acc, curr) => acc + curr.amount, 0);
-
-  const deferments = activeResult.ledger
-    .filter(i => i.name.includes("Deferment"))
-    .reduce((acc, curr) => acc + curr.amount, 0);
-
   return (
     <StandardStepLayout
       chapter="04"
@@ -139,7 +121,7 @@ const WaterfallTab = ({ result: initialResult, inputs: initialInputs }: Waterfal
       className="pb-24"
     >
       <div className="space-y-6">
-        
+
         {/* CALCULATING STATE */}
         {isCalculating && (
           <div className="h-[400px] bg-bg-card border border-border-default rounded-lg flex flex-col items-center justify-center space-y-6 animate-pulse-subtle">
@@ -157,18 +139,17 @@ const WaterfallTab = ({ result: initialResult, inputs: initialInputs }: Waterfal
           </div>
         )}
 
-        {/* RESULT STATE - NOW USING WATERFALL VISUAL */}
+        {/* RESULT STATE - Uses engine's pre-computed phase totals (single source of truth) */}
         {!isCalculating && showResult && (
           <div className="animate-reveal-up space-y-6">
-            
-            {/* THE NEW VISUAL COMPONENT */}
-            <WaterfallVisual 
+
+            <WaterfallVisual
               revenue={activeInputs.revenue}
-              offTheTop={activeInputs.salesFee * activeInputs.revenue / 100 + activeInputs.salesExp} // approx
-              debtService={debtService}
-              equityPremium={equityReturn}
-              deferments={deferments}
-              profitPool={activeResult.producer + activeResult.investor}
+              offTheTop={activeResult.offTopTotal}
+              debtService={activeResult.debtTotal}
+              equityPremium={activeResult.equityHurdle}
+              deferments={activeResult.deferments}
+              profitPool={activeResult.profitPool}
             />
 
             {/* Disclaimer */}
