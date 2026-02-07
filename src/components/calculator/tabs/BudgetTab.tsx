@@ -111,6 +111,11 @@ const BudgetTab = ({ inputs, guilds, onUpdateInput, onToggleGuild, onAdvance }: 
             </span>
           </button>
         </div>
+        
+        {/* SVOD Sub-note */}
+        <p className="text-[10px] leading-snug text-text-dim/80 uppercase tracking-wider">
+          SVOD acquisition deals: most indie filmmakers are not guild signatories. Stress-test by unchecking guilds to see how much your break-even moves.
+        </p>
       </div>
     </div>
   );
