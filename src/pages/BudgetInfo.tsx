@@ -6,7 +6,7 @@ import Header from "@/components/Header";
    MINI WIKI: PRODUCTION BUDGET
    Full educational deep-dive on budget ranges, composition, and pitfalls.
 
-   WIKI CONTAINMENT: This mini wiki can ONLY link back to /intro
+   WIKI CONTAINMENT: This mini wiki can ONLY link back to /
    Secondary exit: Subtle "Start Simulation" text link at bottom
    ═══════════════════════════════════════════════════════════════════════════ */
 import { WikiSectionHeader, WikiCard, WikiCallout } from "@/components/shared";

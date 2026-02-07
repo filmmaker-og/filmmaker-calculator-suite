@@ -34,6 +34,12 @@ import {
 } from "lucide-react";
 import filmmakerLogo from "@/assets/filmmaker-logo.jpg";
 import Header from "@/components/Header";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
 import { formatCompactCurrency } from "@/lib/waterfall";
 
@@ -120,26 +126,8 @@ const useCases = [
 const problemCards = [
   { icon: Receipt, title: "Hidden Fee Structures", body: "Distribution fees, marketing expenses, and producer's reps can eat 50–70% of revenue before anyone gets paid. Most filmmakers don't see this until it's too late." },
   { icon: EyeOff, title: "No Waterfall Visibility", body: "You signed the deal, but do you know who gets paid first? Second? Last? If you can't map the waterfall, you can't protect your backend." },
-  { icon: Scale, title: "Information Asymmetry", body: "Agencies, studios, and distributors thrive on you not knowing the numbers. The less you understand, the better their deal — and the worse yours." },
+  { icon: Scale, title: "Information Asymmetry", body: "The other side of the table always knows the numbers. The less you understand about your own deal, the more leverage they have — and the worse your outcome." },
 ];
-
-/* ═══════════════════════════════════════════════════════════════════
-   FAQ ITEM COMPONENT
-   ═══════════════════════════════════════════════════════════════════ */
-const FaqItem = ({ q, a }: { q: string; a: string }) => {
-  const [open, setOpen] = useState(false);
-  return (
-    <div className="border-b border-border-subtle last:border-b-0">
-      <button onClick={() => setOpen(!open)} className="w-full flex items-center justify-between py-4 text-left group">
-        <span className="text-text-primary text-sm font-medium pr-4 group-hover:text-text-mid transition-colors">{q}</span>
-        <ChevronDown className={cn("w-4 h-4 text-gold flex-shrink-0 transition-transform duration-200", open && "rotate-180")} />
-      </button>
-      <div className={cn("overflow-hidden transition-all duration-200", open ? "max-h-40 pb-4" : "max-h-0")}>
-        <p className="text-text-dim text-sm leading-relaxed">{a}</p>
-      </div>
-    </div>
-  );
-};
 
 /* ═══════════════════════════════════════════════════════════════════
    SECTION HEADER
@@ -193,8 +181,8 @@ const SectionChevron = ({ nextId, large }: { nextId?: string; large?: boolean })
 const SectionFrame = ({ id, children, className }: {
   id: string; children: React.ReactNode; className?: string;
 }) => (
-  <section id={id} className="snap-section px-4 py-4">
-    <div className={cn("bg-bg-elevated border border-white/[0.06] rounded-2xl overflow-hidden p-6", className)}>
+  <section id={id} className="snap-section px-4 py-6">
+    <div className={cn("bg-bg-elevated border border-white/[0.06] rounded-2xl overflow-hidden p-6 md:p-8", className)}>
       {children}
     </div>
   </section>
@@ -218,8 +206,21 @@ const useFadeIn = () => {
     return () => observer.disconnect();
   }, []);
 
-  return { ref, className: cn("transition-all duration-500 ease-out", visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4") };
+  return {
+    ref,
+    visible,
+    className: cn("transition-all duration-500 ease-out", visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"),
+  };
 };
+
+/** Stagger delay style for children within a visible section */
+const staggerDelay = (index: number, visible: boolean): React.CSSProperties => ({
+  transitionDelay: visible ? `${index * 80}ms` : "0ms",
+});
+
+/** Class for stagger-animated child items */
+const staggerChild = (visible: boolean) =>
+  cn("transition-all duration-500 ease-out", visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3");
 
 /* ═══════════════════════════════════════════════════════════════════
    MAIN INDEX COMPONENT
@@ -233,7 +234,6 @@ const Index = () => {
   const [linkCopied, setLinkCopied] = useState(false);
 
   // Fade-in refs for each section
-  const fade1 = useFadeIn();
   const fade2 = useFadeIn();
   const fade3 = useFadeIn();
   const fade4 = useFadeIn();
@@ -402,11 +402,11 @@ const Index = () => {
           <SectionFrame id="industry-charges">
             <div ref={fade2.ref} className={cn(fade2.className, "max-w-2xl mx-auto")}>
               <SectionHeader icon={Gavel} eyebrow="The Industry Standard" title="WHAT OTHERS CHARGE FOR THIS ANALYSIS" subtitle="Modeled on real deal structures. Built by working producers. Institutional-grade financial modeling — this is the cost of understanding your own deal. Until now." />
-              <div className="grid grid-cols-2 gap-3 mb-4">
-                {industryCosts.map((item) => {
+              <div className="grid grid-cols-2 gap-4 mb-4">
+                {industryCosts.map((item, i) => {
                   const Icon = item.icon;
                   return (
-                    <div key={item.label} className="bg-bg-card border border-border-subtle rounded-xl p-4 relative overflow-hidden">
+                    <div key={item.label} className={cn("bg-bg-card border border-border-subtle rounded-xl p-4 relative overflow-hidden", staggerChild(fade2.visible))} style={staggerDelay(i, fade2.visible)}>
                       <div className="absolute top-0 right-0 w-16 h-16 bg-gold/[0.03] rounded-full blur-2xl translate-x-4 -translate-y-4" />
                       <div className="relative">
                         <div className="w-8 h-8 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center mb-3">
@@ -432,16 +432,16 @@ const Index = () => {
           <SectionFrame id="deliverables">
             <div ref={fade3.ref} className={cn(fade3.className, "max-w-2xl mx-auto")}>
               <SectionHeader icon={FileSpreadsheet} eyebrow="What You Get" title="PROFESSIONAL FINANCIAL DOCUMENTS" subtitle="Designed so anyone — your investor, your business partner, your family — can understand your film's financials at a glance." />
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-4">
                 {[
                   { icon: FileSpreadsheet, title: "6-Sheet Excel Workbook", desc: "Executive summary, full waterfall ledger, capital stack breakdown, investor return summary, and plain-English glossary." },
                   { icon: Presentation, title: "Presentation-Ready PDF", desc: "A polished document you can email, print, or hand to an investor. Clear visuals, plain language, zero jargon." },
-                  { icon: BookOpen, title: "Plain-English Glossary", desc: "Every financial term explained in language a first-time filmmaker can understand. No MBA required." },
                   { icon: BarChart3, title: "Visual Waterfall Chart", desc: "A clear breakdown of who gets paid, in what order, and how much. The most important chart in film finance." },
-                ].map((item) => {
+                  { icon: BookOpen, title: "Plain-English Glossary", desc: "Every financial term explained in language a first-time filmmaker can understand. No MBA required." },
+                ].map((item, i) => {
                   const Icon = item.icon;
                   return (
-                    <div key={item.title} className="bg-bg-card border border-border-subtle rounded-xl p-4">
+                    <div key={item.title} className={cn("bg-bg-card border border-border-subtle hover:border-gold/20 rounded-xl p-4 transition-colors", staggerChild(fade3.visible))} style={staggerDelay(i, fade3.visible)}>
                       <div className="w-8 h-8 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center mb-3">
                         <Icon className="w-3.5 h-3.5 text-gold" />
                       </div>
@@ -459,12 +459,12 @@ const Index = () => {
           <SectionFrame id="how-it-works">
             <div ref={fade4.ref} className={cn(fade4.className, "max-w-3xl mx-auto")}>
               <SectionHeader eyebrow="How It Works" title="FOUR STEPS TO CLARITY" />
-              <div className="space-y-3">
-                {steps.map((step) => {
+              <div className="space-y-4">
+                {steps.map((step, i) => {
                   const Icon = step.icon;
                   return (
-                    <div key={step.num}>
-                      <div className="flex items-start gap-4 bg-bg-card border border-border-subtle rounded-xl p-4">
+                    <div key={step.num} className={staggerChild(fade4.visible)} style={staggerDelay(i, fade4.visible)}>
+                      <div className="flex items-start gap-4 bg-bg-card border border-border-subtle hover:border-gold/20 rounded-xl p-4 transition-colors">
                         <div className="flex-shrink-0 w-9 h-9 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center">
                           <Icon className="w-4 h-4 text-gold" />
                         </div>
@@ -493,11 +493,11 @@ const Index = () => {
           <SectionFrame id="use-cases">
             <div ref={fade5.ref} className={cn(fade5.className, "max-w-3xl mx-auto")}>
               <SectionHeader eyebrow="When To Use This" title="THREE MOMENTS THAT DEFINE YOUR DEAL" />
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                {useCases.map((uc) => {
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {useCases.map((uc, i) => {
                   const Icon = uc.icon;
                   return (
-                    <div key={uc.title} className="bg-bg-card border border-border-subtle rounded-xl p-4">
+                    <div key={uc.title} className={cn("bg-bg-card border border-border-subtle hover:border-gold/20 rounded-xl p-4 transition-colors", staggerChild(fade5.visible))} style={staggerDelay(i, fade5.visible)}>
                       <div className="w-9 h-9 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center mb-3">
                         <Icon className="w-4 h-4 text-gold" />
                       </div>
@@ -515,11 +515,11 @@ const Index = () => {
           <SectionFrame id="problem">
             <div ref={fade6.ref} className={cn(fade6.className, "max-w-3xl mx-auto")}>
               <SectionHeader eyebrow="The Problem" title="WHY MOST INDIE FILMS LOSE MONEY" subtitle="It's not because the films are bad. It's because filmmakers sign deals they don't understand." />
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                {problemCards.map((card) => {
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {problemCards.map((card, i) => {
                   const Icon = card.icon;
                   return (
-                    <div key={card.title} className="bg-bg-card border border-border-subtle rounded-xl p-4">
+                    <div key={card.title} className={cn("bg-bg-card border border-border-subtle hover:border-gold/20 rounded-xl p-4 transition-colors", staggerChild(fade6.visible))} style={staggerDelay(i, fade6.visible)}>
                       <div className="w-9 h-9 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center mb-3">
                         <Icon className="w-4 h-4 text-gold" />
                       </div>
@@ -558,7 +558,7 @@ const Index = () => {
           </SectionFrame>
 
           {/* ── CHATBOT ── */}
-          <section id="chatbot" className="snap-section px-4 py-4">
+          <section id="chatbot" className="snap-section px-4 py-6">
             <div ref={fade8.ref} className={cn(fade8.className, "bg-bg-elevated border border-white/[0.06] rounded-2xl overflow-hidden p-6 pb-3")}>
               <div className="max-w-3xl mx-auto mb-5">
                 <SectionHeader icon={Bot} eyebrow="AI-Powered Guidance" title="ASK OUR CHATBOT"
@@ -612,17 +612,20 @@ const Index = () => {
             <div ref={fade9.ref} className={cn(fade9.className, "max-w-xl mx-auto")}>
               <SectionHeader icon={MessageCircle} eyebrow="Common Questions" title="WHAT FILMMAKERS ASK" />
               <div className="bg-bg-card border border-border-subtle rounded-xl px-5">
-                {faqs.map((faq) => <FaqItem key={faq.q} q={faq.q} a={faq.a} />)}
-              </div>
-              <div className="text-center mt-5">
-                <button onClick={() => navigate("/intro")}
-                  className="inline-flex items-center gap-2 text-gold-cta hover:text-gold text-xs tracking-wider font-semibold transition-colors py-2 px-4 rounded-lg border border-gold-cta/20 hover:border-gold/40 bg-gold-cta-subtle">
-                  <BookOpen className="w-3.5 h-3.5" />
-                  Read the full protocol documentation
-                </button>
+                <Accordion type="single" collapsible className="w-full">
+                  {faqs.map((faq, i) => (
+                    <AccordionItem key={faq.q} value={`faq-${i}`} className="border-border-subtle">
+                      <AccordionTrigger className="text-text-primary hover:text-text-mid hover:no-underline text-sm font-medium text-left">
+                        {faq.q}
+                      </AccordionTrigger>
+                      <AccordionContent className="text-text-dim text-sm leading-relaxed">
+                        {faq.a}
+                      </AccordionContent>
+                    </AccordionItem>
+                  ))}
+                </Accordion>
               </div>
             </div>
-            <SectionChevron nextId="final-cta" />
           </SectionFrame>
 
           {/* ── FINAL CTA ── */}

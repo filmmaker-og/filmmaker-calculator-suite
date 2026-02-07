@@ -282,7 +282,7 @@ All animations respect `prefers-reduced-motion: reduce` — transitions disabled
 ## 7. Canonical User Journey
 
 ```
-LAND (/ or /intro)
+LAND (/)
   → BUDGET (tab 1): Enter production budget + guild toggles
     → STACK (tab 2): Select capital sources → input amounts
       → DEAL (tab 3): Acquisition price + distribution fees
