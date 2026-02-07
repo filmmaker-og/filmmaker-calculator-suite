@@ -194,7 +194,8 @@ const Calculator = () => {
     setEmailCaptured(true);
     setShowEmailGate(false);
     handleTabChange('waterfall'); // Continue to waterfall after success
-  };\n
+  };
+
   const handleEmailSkip = () => {
     setEmailCaptured(true);
     setShowEmailGate(false);
@@ -210,10 +211,12 @@ const Calculator = () => {
     if (inputs.budget > 0) completed.push('budget');
     if (inputs.credits > 0 || inputs.debt > 0 || inputs.mezzanineDebt > 0 || inputs.equity > 0) {
       completed.push('stack');
-    }\n    if (inputs.revenue > 0) completed.push('deal');
+    }
+    if (inputs.revenue > 0) completed.push('deal');
     if (inputs.revenue > 0 && inputs.budget > 0) completed.push('waterfall');
     return completed;
-  };\n
+  };
+
   // Determine which tabs are disabled
   const getDisabledTabs = (): TabId[] => {
     const disabled: TabId[] = [];
@@ -221,7 +224,8 @@ const Calculator = () => {
     if (inputs.budget === 0 || inputs.revenue === 0) {
       disabled.push('waterfall');
     }
-    return disabled;\n  };
+    return disabled;
+  };
 
   // Get next available tab
   const getNextTab = (): TabId | null => {
@@ -234,11 +238,14 @@ const Calculator = () => {
       }
     }
     return null;
-  };\n
+  };
+
   // Stack Tab Internal State Handling (Step within Step)
   // We need to know if we are "deep" inside the Stack Wizard to know if Back should go to previous stack step or previous TAB
   // This is a limitation of the current architecture where StackTab manages its own internal state
-  // ideally, this state should be lifted up, but for now we will rely on the TAB navigation.\n  \n  // FIX: handleBack Logic
+  // ideally, this state should be lifted up, but for now we will rely on the TAB navigation.
+  
+  // FIX: handleBack Logic
   const handleBack = () => {
     const currentIndex = STEP_TO_TAB.indexOf(activeTab);
     
@@ -252,7 +259,8 @@ const Calculator = () => {
     const prevTab = STEP_TO_TAB[currentIndex - 1];
     haptics.light();
     setActiveTab(prevTab);
-  };\n
+  };
+
   // Handle Next button
   const handleNext = useCallback(() => {
     const nextTab = getNextTab();
@@ -264,12 +272,14 @@ const Calculator = () => {
   // Check if current section is completed
   const isCurrentSectionComplete = (): boolean => {
     const completed = getCompletedTabs();
-    return completed.includes(activeTab);\n  };
+    return completed.includes(activeTab);
+  };
 
   // Render current tab content
   const renderTabContent = () => {
     switch (activeTab) {
-      case 'budget':\n        return (
+      case 'budget':
+        return (
           <BudgetTab
             inputs={inputs}
             guilds={guilds}
@@ -361,12 +371,14 @@ const Calculator = () => {
           onClick={handleBack}
           className={cn(
             "flex items-center gap-2 px-4 py-2 rounded-md transition-all",
-            "border border-gold-muted bg-gold-subtle text-white",\n            "hover:bg-gold hover:text-black",
+            "border border-gold-muted bg-gold-subtle text-white",
+            "hover:bg-gold hover:text-black",
             "active:scale-95"
           )}
         >
           <ArrowLeft className="w-4 h-4" />
-          <span className="text-xs font-bold uppercase tracking-wider">Back</span>\n        </button>
+          <span className="text-xs font-bold uppercase tracking-wider">Back</span>
+        </button>
 
         {/* Circular progress indicator */}
         <div className="relative w-11 h-11 flex items-center justify-center">
@@ -383,7 +395,8 @@ const Calculator = () => {
             {/* Progress arc */}
             <circle
               cx="22"
-              cy=\"22\"\n              r=\"18\"
+              cy="22"
+              r="18"
               fill="none"
               stroke="var(--gold)"
               strokeWidth="2"
