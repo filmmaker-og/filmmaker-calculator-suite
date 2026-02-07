@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
 import { Check, Download, Sparkles } from "lucide-react";
 import Header from "@/components/Header";
 import { supabase } from "@/integrations/supabase/client";
@@ -79,29 +80,44 @@ const Store = () => {
   const [agreedTerms, setAgreedTerms] = useState<Record<string, boolean>>({});
   const [loading, setLoading] = useState<string | null>(null);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [guestEmail, setGuestEmail] = useState("");
+  const [userEmail, setUserEmail] = useState<string | null>(null);
 
   useEffect(() => {
     if (searchParams.get("success") === "true") {
       setShowSuccess(true);
     }
+    
+    // Check if user is logged in
+    const checkUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user?.email) {
+        setUserEmail(user.email);
+      }
+    };
+    checkUser();
   }, [searchParams]);
+
+  const getEmail = () => userEmail || guestEmail;
+  const isEmailValid = () => {
+    const email = getEmail();
+    return email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
 
   const handlePurchase = async (product: typeof products[0]) => {
     if (!agreedTerms[product.id]) return;
+    if (!isEmailValid()) {
+      toast.error("Please enter a valid email address");
+      return;
+    }
     
     setLoading(product.id);
     
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      
       const { data, error } = await supabase.functions.invoke("create-checkout", {
         body: {
           productId: product.id,
-          productName: product.name,
-          price: product.price,
-          accessDays: product.accessDays,
-          userEmail: user?.email,
-          userId: user?.id,
+          email: getEmail(),
         },
       });
 
@@ -167,6 +183,22 @@ const Store = () => {
           </div>
         </div>
 
+        {/* Email input for guests */}
+        {!userEmail && (
+          <div className="max-w-md mx-auto mb-8">
+            <label className="text-sm text-muted-foreground block mb-2">
+              Enter your email to continue
+            </label>
+            <Input
+              type="email"
+              placeholder="your@email.com"
+              value={guestEmail}
+              onChange={(e) => setGuestEmail(e.target.value)}
+              className="bg-bg-elevated border-border-default text-foreground"
+            />
+          </div>
+        )}
+
         {/* Pricing Cards */}
         <div className="space-y-6 pb-8 max-w-2xl mx-auto">
           {products.map((product) => (
@@ -226,14 +258,16 @@ const Store = () => {
 
                 <Button
                   onClick={() => handlePurchase(product)}
-                  disabled={!agreedTerms[product.id] || loading === product.id}
+                  disabled={!agreedTerms[product.id] || !isEmailValid() || loading === product.id}
                   className={`w-full py-4 min-h-[52px] touch-feedback ${product.featured ? 'btn-vault' : 'btn-ghost-gold disabled:opacity-30'}`}
                 >
                   {loading === product.id 
                     ? 'LOADING...' 
-                    : agreedTerms[product.id] 
-                      ? 'PURCHASE' 
-                      : 'AGREE TO TERMS'
+                    : !isEmailValid()
+                      ? 'ENTER EMAIL'
+                      : agreedTerms[product.id] 
+                        ? 'PURCHASE' 
+                        : 'AGREE TO TERMS'
                   }
                 </Button>
               </div>
