@@ -143,7 +143,7 @@ const SectionHeader = ({ eyebrow, title, subtitle, icon: Icon }: {
     </div>
     <h2 className="font-bebas text-3xl md:text-4xl tracking-[0.08em] text-text-primary">{title}</h2>
     {subtitle && (
-      <p className="text-text-mid text-[15px] text-center max-w-lg mx-auto mt-4 leading-relaxed px-4 py-2.5 rounded-xl bg-gold/[0.04] border border-gold/10">
+      <p className="text-text-mid text-[15px] text-center max-w-lg mx-auto mt-4 leading-relaxed px-4 py-2.5 rounded-xl bg-gold/[0.06] border border-gold/20">
         {subtitle}
       </p>
     )}
@@ -427,8 +427,8 @@ const Index = () => {
                   );
                 })}
               </div>
-              <div className="text-center mt-2">
-                <p className="font-bebas text-4xl md:text-5xl tracking-[0.1em] text-gold-cta">FREE</p>
+              <div className="text-center mt-4 px-6 py-5 rounded-xl bg-gold/[0.06] border border-gold/20 max-w-xs mx-auto">
+                <p className="font-bebas text-4xl md:text-5xl tracking-[0.1em] text-gold">FREE</p>
                 <p className="text-text-dim text-sm tracking-wider mt-1">The same analysis. Zero cost.</p>
               </div>
             </div>
@@ -566,18 +566,20 @@ const Index = () => {
                   subtitle="Have a question about your deal? Copy a prompt or ask your own." />
               </div>
 
+              <div className="relative">
+              <div className="absolute right-0 top-0 bottom-4 w-12 bg-gradient-to-l from-bg-elevated to-transparent z-10 pointer-events-none rounded-r-xl" />
               <div ref={carouselRef} className="flex gap-3 overflow-x-auto snap-x snap-mandatory px-1 pb-4 scrollbar-hide"
                 style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
                 {scenarioPrompts.map((item, i) => (
                   <div key={i} className="flex-shrink-0 w-[260px] snap-center bg-bg-card border border-border-subtle rounded-xl p-5 text-left hover:border-gold/20 transition-colors group">
                     <div className="flex items-start gap-3 mb-3">
-                      <div className="w-7 h-7 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <MessageCircle className="w-3.5 h-3.5 text-gold" />
+                      <div className="w-9 h-9 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center flex-shrink-0">
+                        <MessageCircle className="w-4 h-4 text-gold" />
                       </div>
                       <p className="text-text-primary text-sm font-medium leading-snug">{item.prompt}</p>
                     </div>
-                    <p className="text-text-dim text-xs leading-relaxed mb-3 pl-10">{item.context}</p>
-                    <div className="flex items-center justify-between pl-10">
+                    <p className="text-text-dim text-xs leading-relaxed mb-3 pl-12">{item.context}</p>
+                    <div className="flex items-center justify-between pl-12">
                       <button onClick={(e) => { e.stopPropagation(); handleCopyPrompt(item.prompt, i); }}
                         className="flex items-center gap-1.5 text-xs tracking-wider font-semibold transition-colors">
                         {copiedIndex === i ? (
@@ -595,6 +597,7 @@ const Index = () => {
                     </div>
                   </div>
                 ))}
+              </div>
               </div>
 
               {/* Get started signpost */}
@@ -649,7 +652,8 @@ const Index = () => {
           </section>
 
           {/* ── FOOTER ── */}
-          <footer className="border-t border-border-subtle py-8 px-6">
+          <footer className="py-8 px-6">
+            <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/20 to-transparent mb-8" />
             <div className="max-w-md mx-auto">
               <div className="flex items-center justify-center gap-2 mb-5">
                 <a href="mailto:thefilmmaker.og@gmail.com"
