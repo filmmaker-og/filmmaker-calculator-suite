@@ -32,22 +32,6 @@ const defaultInputs: WaterfallInputs = {
   deferments: 0,
 };
 
-// DEMO DATA - Auto-injected if user deep-links to waterfall with no data
-const DEMO_INPUTS: WaterfallInputs = {
-  revenue: 2500000,
-  budget: 1000000,
-  credits: 0,
-  debt: 500000,
-  seniorDebtRate: 10,
-  mezzanineDebt: 0,
-  mezzanineRate: 0,
-  equity: 500000,
-  premium: 20,
-  salesFee: 10,
-  salesExp: 50000,
-  deferments: 0,
-};
-
 const defaultGuilds: GuildState = {
   sag: false,
   wga: false,
@@ -109,7 +93,7 @@ const Calculator = () => {
     }
   }, [searchParams]);
 
-  // Load saved state + Handle Deep Linking
+  // Load saved state + Handle Deep Linking Redirection
   useEffect(() => {
     if (searchParams.get("reset") === "true" || searchParams.get("skip") === "true") return;
 
@@ -117,6 +101,7 @@ const Calculator = () => {
     const tabParam = searchParams.get("tab") as TabId | null;
     
     let loadedInputs = defaultInputs;
+    let targetTab: TabId = 'budget'; // Default to Budget
 
     if (saved) {
       try {
@@ -127,30 +112,30 @@ const Calculator = () => {
         
         // Restore tab priority: URL > Saved > Default
         if (tabParam && STEP_TO_TAB.includes(tabParam)) {
-          setActiveTab(tabParam);
+          targetTab = tabParam;
         } else if (parsed.activeTab) {
-          setActiveTab(parsed.activeTab);
+          targetTab = parsed.activeTab;
         }
       } catch (e) {
         console.error("Failed to load saved inputs");
       }
     } else {
-      // No saved state — still respect ?tab= param
+      // No saved state — still look at URL
       if (tabParam && STEP_TO_TAB.includes(tabParam)) {
-        setActiveTab(tabParam);
+        targetTab = tabParam;
       }
     }
 
-    // SILVER BULLET FIX: 
-    // If user deep-links to 'waterfall' BUT has no data (inputs.revenue == 0),
-    // AUTO-POPULATE with DEMO_INPUTS so they see the result immediately.
-    // This fixes the "nothing happens" / "locked" screen issue from Wiki links.
-    if (tabParam === 'waterfall' && loadedInputs.revenue === 0) {
-      console.log("Deep link to waterfall with no data: Injecting Demo Inputs");
-      setInputs(DEMO_INPUTS);
-    } else {
-      setInputs(loadedInputs);
+    // REDIRECT FIX:
+    // If user tries to go to 'waterfall' (Step 4) via link/cache BUT has no valid data,
+    // FORCE them back to 'budget' (Step 1).
+    if (targetTab === 'waterfall' && (loadedInputs.budget === 0 || loadedInputs.revenue === 0)) {
+      console.log("Deep link to waterfall with missing data: Redirecting to Budget (Step 1)");
+      targetTab = 'budget';
     }
+
+    setInputs(loadedInputs);
+    setActiveTab(targetTab);
 
   }, [searchParams]);
 
@@ -238,9 +223,7 @@ const Calculator = () => {
   // Determine which tabs are disabled
   const getDisabledTabs = (): TabId[] => {
     const disabled: TabId[] = [];
-    // Only disable waterfall if we are NOT currently on it (prevents locking user out if they deep linked)
-    // and if we have no data.
-    if (activeTab !== 'waterfall' && (inputs.budget === 0 || inputs.revenue === 0)) {
+    if (inputs.budget === 0 || inputs.revenue === 0) {
       disabled.push('waterfall');
     }
     return disabled;
