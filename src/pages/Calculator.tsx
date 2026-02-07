@@ -157,13 +157,15 @@ const Calculator = () => {
   const toggleGuild = useCallback((guild: keyof GuildState) => {
     haptics.light();
     setGuilds(prev => ({ ...prev, [guild]: !prev[guild] }));
-  }, [haptics]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Handle tab change — no gate, let them see their results freely
   const handleTabChange = useCallback((tab: TabId) => {
     haptics.light();
     setActiveTab(tab);
-  }, [haptics]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleEmailSuccess = () => {
     setEmailCaptured(true);
@@ -323,8 +325,8 @@ const Calculator = () => {
           onClick={handleBack}
           className={cn(
             "flex items-center gap-2 px-4 py-2 rounded-md transition-all",
-            "border border-gold-muted bg-gold-subtle text-white",
-            "hover:bg-gold hover:text-black",
+            "border border-border-subtle text-text-mid",
+            "hover:border-text-dim hover:text-text-primary",
             "active:scale-95"
           )}
         >
@@ -358,9 +360,9 @@ const Calculator = () => {
             onClick={handleNext}
             className={cn(
               "flex items-center gap-2 px-4 py-2 rounded-md transition-all",
-              "border border-gold-muted bg-gold-subtle text-white",
-              "hover:bg-gold hover:text-black",
-              "active:scale-95 animate-pulse-subtle"
+              "bg-gold-cta-subtle border border-gold-cta-muted text-gold-cta",
+              "hover:border-gold-cta",
+              "active:scale-95 shadow-button"
             )}
           >
             <span className="text-xs font-bold uppercase tracking-wider">Next</span>

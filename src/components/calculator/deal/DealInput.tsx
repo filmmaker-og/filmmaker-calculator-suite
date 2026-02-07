@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useRef } from "react";
 import { Info, Percent, DollarSign, Calculator } from "lucide-react";
 import { WaterfallInputs, GuildState, CapitalSelections, formatCompactCurrency, CAM_PCT, SAG_PCT, WGA_PCT, DGA_PCT } from "@/lib/waterfall";
 import { useMobileKeyboardScroll } from "@/hooks/use-mobile-keyboard";
@@ -27,12 +27,8 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext }: DealIn
   // Mobile keyboard scroll handling
   const { ref: mobileRef, scrollIntoView } = useMobileKeyboardScroll<HTMLDivElement>();
 
-  // Auto-focus on mount
-  useEffect(() => {
-    setTimeout(() => {
-      inputRef.current?.focus();
-    }, 100);
-  }, []);
+  // REMOVED: Auto-focus on mount caused keyboard to pop up on mobile.
+  // Let user tap to focus instead.
 
   const formatValue = (value: number | undefined) => {
     if (value === undefined || value === 0) return '';
