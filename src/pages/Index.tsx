@@ -27,6 +27,7 @@ import {
   Calculator,
   UserCheck,
   Briefcase,
+  Share2,
 } from "lucide-react";
 import filmmakerLogo from "@/assets/filmmaker-logo.jpg";
 import Header from "@/components/Header";
@@ -35,6 +36,25 @@ import { formatCompactCurrency } from "@/lib/waterfall";
 
 const STORAGE_KEY = "filmmaker_og_inputs";
 const INTRO_SEEN_KEY = "filmmaker_og_intro_seen";
+const SHARE_URL = "https://filmmaker.og";
+const SHARE_TEXT = "Free film finance simulator — model your deal structure, capital stack, and revenue waterfall. See where every dollar goes before you sign.";
+const SHARE_TITLE = "FILMMAKER.OG — See Where Every Dollar Goes";
+
+/* ═══════════════════════════════════════════════════════════════════
+   SECTION IDS — for snap scroll + chevron navigation
+   ═══════════════════════════════════════════════════════════════════ */
+const SECTION_IDS = [
+  "hero",
+  "mission",
+  "industry-charges",
+  "deliverables",
+  "how-it-works",
+  "use-cases",
+  "problem",
+  "chatbot",
+  "faq",
+  "final-cta",
+] as const;
 
 /* ═══════════════════════════════════════════════════════════════════
    SCENARIO PROMPTS — Future chatbot bridge (with copy)
@@ -232,13 +252,6 @@ const FaqItem = ({ q, a }: { q: string; a: string }) => {
 };
 
 /* ═══════════════════════════════════════════════════════════════════
-   GOLD SECTION DIVIDER
-   ═══════════════════════════════════════════════════════════════════ */
-const GoldDivider = () => (
-  <div className="gold-section-divider" />
-);
-
-/* ═══════════════════════════════════════════════════════════════════
    SECTION HEADER (eyebrow + title)
    ═══════════════════════════════════════════════════════════════════ */
 const SectionHeader = ({
@@ -271,6 +284,64 @@ const SectionHeader = ({
 );
 
 /* ═══════════════════════════════════════════════════════════════════
+   SECTION CHEVRON — bigger, clickable, scrolls to next section
+   ═══════════════════════════════════════════════════════════════════ */
+const SectionChevron = ({ nextId }: { nextId?: string }) => {
+  const handleClick = useCallback(() => {
+    if (!nextId) return;
+    const el = document.getElementById(nextId);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [nextId]);
+
+  if (!nextId) return null;
+
+  return (
+    <button
+      onClick={handleClick}
+      className="flex items-center justify-center w-10 h-10 mx-auto mt-4 rounded-full border border-white/10 hover:border-gold/40 transition-all group"
+      aria-label="Scroll to next section"
+    >
+      <ChevronDown className="w-5 h-5 text-text-dim group-hover:text-gold animate-bounce-chevron transition-colors" />
+    </button>
+  );
+};
+
+/* ═══════════════════════════════════════════════════════════════════
+   SECTION FRAME — wraps each section in a visible card container
+   ═══════════════════════════════════════════════════════════════════ */
+const SectionFrame = ({
+  id,
+  children,
+  className,
+  noPadding,
+}: {
+  id: string;
+  children: React.ReactNode;
+  className?: string;
+  noPadding?: boolean;
+}) => (
+  <section
+    id={id}
+    className={cn(
+      "snap-section min-h-[85vh] flex flex-col justify-center",
+      !noPadding && "px-4"
+    )}
+  >
+    <div
+      className={cn(
+        "bg-bg-elevated border border-white/[0.06] rounded-2xl overflow-hidden",
+        !noPadding && "p-6",
+        className
+      )}
+    >
+      {children}
+    </div>
+  </section>
+);
+
+/* ═══════════════════════════════════════════════════════════════════
    MAIN INDEX COMPONENT
    ═══════════════════════════════════════════════════════════════════ */
 const Index = () => {
@@ -279,6 +350,7 @@ const Index = () => {
   const haptics = useHaptics();
   const carouselRef = useRef<HTMLDivElement>(null);
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
+  const [shareState, setShareState] = useState<"idle" | "copied">("idle");
 
   // Detect returning user with saved data
   const savedState = useMemo(() => {
@@ -354,6 +426,32 @@ const Index = () => {
     }).catch(() => { /* fallback: do nothing */ });
   }, []);
 
+  const handleShare = useCallback(async () => {
+    // Try native Web Share API first (Android share sheet, iOS share sheet)
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: SHARE_TITLE,
+          text: SHARE_TEXT,
+          url: SHARE_URL,
+        });
+        return;
+      } catch {
+        // User cancelled or API failed — fall through to clipboard
+      }
+    }
+
+    // Fallback: copy link + text to clipboard
+    const shareContent = `${SHARE_TEXT}\n\n${SHARE_URL}`;
+    try {
+      await navigator.clipboard.writeText(shareContent);
+      setShareState("copied");
+      setTimeout(() => setShareState("idle"), 2000);
+    } catch {
+      // Last resort: do nothing
+    }
+  }, []);
+
   const isComplete = phase === 'complete';
   const showBeam = phase !== 'dark' && !shouldSkip;
   const showLogo = (phase !== 'dark' && phase !== 'beam') || shouldSkip;
@@ -403,22 +501,48 @@ const Index = () => {
         )}
 
         {/* ═══════════════════════════════════════════════════════════════════
-            LANDING PAGE
+            LANDING PAGE — snap scroll container
             ═══════════════════════════════════════════════════════════════════ */}
-        <main className={cn("flex-1 flex flex-col transition-all duration-700", isComplete ? "opacity-100" : "opacity-0")}>
+        <main
+          className={cn(
+            "flex-1 flex flex-col transition-all duration-700 snap-container",
+            isComplete ? "opacity-100" : "opacity-0"
+          )}
+        >
           <div className="vignette" />
 
           {/* ── SECTION 1: HERO ── */}
-          <section className="relative overflow-hidden">
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none animate-spotlight-pulse"
-              style={{ width: '100vw', height: '75vh', background: `radial-gradient(ellipse 50% 40% at 50% 10%, rgba(212,175,55,0.1) 0%, rgba(212,175,55,0.04) 40%, transparent 70%)` }} />
-            <div className="relative px-6 pt-24 pb-16 max-w-xl mx-auto text-center">
+          <section
+            id="hero"
+            className="snap-section min-h-screen flex flex-col justify-center relative overflow-hidden"
+          >
+            <div
+              className="absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none animate-spotlight-pulse"
+              style={{
+                width: '100vw',
+                height: '75vh',
+                background: `radial-gradient(ellipse 50% 40% at 50% 10%, rgba(212,175,55,0.1) 0%, rgba(212,175,55,0.04) 40%, transparent 70%)`,
+              }}
+            />
+            <div className="relative px-6 pt-20 pb-10 max-w-xl mx-auto text-center">
               <div className="mb-8 relative inline-block">
-                <div className="absolute inset-0 -m-8" style={{ background: 'radial-gradient(circle, rgba(212,175,55,0.2) 0%, transparent 70%)', filter: 'blur(16px)' }} />
-                <img src={filmmakerLogo} alt="Filmmaker.OG" className="relative w-32 h-32 object-contain rounded-lg"
-                  style={{ filter: 'brightness(1.15) drop-shadow(0 0 25px rgba(212,175,55,0.45))' }} />
+                <div
+                  className="absolute inset-0 -m-8"
+                  style={{
+                    background: 'radial-gradient(circle, rgba(212,175,55,0.2) 0%, transparent 70%)',
+                    filter: 'blur(16px)',
+                  }}
+                />
+                <img
+                  src={filmmakerLogo}
+                  alt="Filmmaker.OG"
+                  className="relative w-32 h-32 object-contain rounded-lg"
+                  style={{ filter: 'brightness(1.15) drop-shadow(0 0 25px rgba(212,175,55,0.45))' }}
+                />
               </div>
-              <p className="text-gold text-[10px] tracking-[0.35em] uppercase mb-5 font-semibold">Free Film Finance Simulator</p>
+              <p className="text-gold text-[10px] tracking-[0.35em] uppercase mb-5 font-semibold">
+                Free Film Finance Simulator
+              </p>
               <h1 className="font-bebas text-[clamp(2.4rem,9vw,3.8rem)] leading-[1.05] text-text-primary mb-5">
                 SEE WHERE EVERY<br />DOLLAR <span className="text-gold">GOES</span>
               </h1>
@@ -426,34 +550,99 @@ const Index = () => {
                 Model your film's deal structure, capital stack, and revenue waterfall — the same analysis
                 the industry gatekeepers use. Free to simulate. Takes 2 minutes.
               </p>
+
               {isReturningUser ? (
                 <div className="w-full max-w-[320px] mx-auto space-y-3">
-                  <button onClick={handleContinueClick} className="w-full h-14 text-sm font-black tracking-[0.12em] transition-all active:scale-[0.96] rounded-md bg-gold-cta-subtle border border-gold-cta-muted text-gold-cta shadow-button hover:border-gold-cta">
-                    <span className="flex items-center justify-center gap-2">CONTINUE SIMULATION <ArrowRight size={18} /></span>
+                  <button
+                    onClick={handleContinueClick}
+                    className="w-full h-14 text-sm font-black tracking-[0.12em] transition-all active:scale-[0.96] rounded-md bg-gold-cta-subtle border border-gold-cta-muted text-gold-cta shadow-button hover:border-gold-cta"
+                  >
+                    <span className="flex items-center justify-center gap-2">
+                      CONTINUE SIMULATION <ArrowRight size={18} />
+                    </span>
                   </button>
-                  <p className="text-text-dim text-[11px] tracking-wider text-center">{formatCompactCurrency(savedState!.budget)} budget in progress</p>
-                  <button onClick={handleStartFresh} className="w-full flex items-center justify-center gap-1.5 text-[11px] tracking-wider text-text-dim hover:text-text-mid transition-colors py-2">
+                  <p className="text-text-dim text-[11px] tracking-wider text-center">
+                    {formatCompactCurrency(savedState!.budget)} budget in progress
+                  </p>
+                  <button
+                    onClick={handleStartFresh}
+                    className="w-full flex items-center justify-center gap-1.5 text-[11px] tracking-wider text-text-dim hover:text-text-mid transition-colors py-2"
+                  >
                     <RotateCcw className="w-3 h-3" /> Start fresh
                   </button>
                 </div>
               ) : (
                 <div className="w-full max-w-[320px] mx-auto">
-                  <button onClick={handleStartClick} className="w-full h-14 text-sm font-black tracking-[0.12em] transition-all active:scale-[0.96] rounded-md bg-gold-cta-subtle border border-gold-cta-muted text-gold-cta shadow-button hover:border-gold-cta">
-                    <span className="flex items-center justify-center gap-2">RUN THE NUMBERS <ArrowRight size={18} /></span>
+                  <button
+                    onClick={handleStartClick}
+                    className="w-full h-14 text-sm font-black tracking-[0.12em] transition-all active:scale-[0.96] rounded-md bg-gold-cta-subtle border border-gold-cta-muted text-gold-cta shadow-button hover:border-gold-cta"
+                  >
+                    <span className="flex items-center justify-center gap-2">
+                      RUN THE NUMBERS <ArrowRight size={18} />
+                    </span>
                   </button>
                   <p className="text-text-dim text-[11px] tracking-wider mt-4">No account required</p>
                 </div>
               )}
-              <div className="mt-10 animate-pulse-slow">
-                <ChevronDown className="w-5 h-5 text-text-dim mx-auto" />
-              </div>
+
+              {/* Share button */}
+              <button
+                onClick={handleShare}
+                className="mt-6 inline-flex items-center gap-2 text-[11px] tracking-wider text-text-dim hover:text-gold transition-colors py-2 px-4 rounded-full border border-white/[0.06] hover:border-gold/30"
+              >
+                {shareState === "copied" ? (
+                  <>
+                    <Check className="w-3.5 h-3.5 text-green-400" />
+                    <span className="text-green-400">Link copied!</span>
+                  </>
+                ) : (
+                  <>
+                    <Share2 className="w-3.5 h-3.5" />
+                    <span>Share this tool</span>
+                  </>
+                )}
+              </button>
+
+              <SectionChevron nextId="mission" />
             </div>
           </section>
 
-          <GoldDivider />
+          {/* ── SECTION 2: MISSION / DEMOCRATIZATION ── */}
+          <SectionFrame id="mission">
+            <div className="max-w-2xl mx-auto">
+              <div className="relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-gold/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+                <div className="relative z-10">
+                  <div className="flex items-center gap-3 mb-5">
+                    <div className="w-9 h-9 rounded-lg bg-gold/10 border border-border-default flex items-center justify-center">
+                      <Eye className="w-4 h-4 text-gold" />
+                    </div>
+                    <p className="text-gold text-[10px] tracking-[0.3em] uppercase font-semibold">Our Mission</p>
+                  </div>
+                  <h2 className="font-bebas text-2xl md:text-3xl tracking-[0.08em] text-text-primary mb-4">
+                    DEMOCRATIZING THE BUSINESS OF FILM
+                  </h2>
+                  <div className="space-y-3 text-text-mid text-sm leading-relaxed">
+                    <p>
+                      For too long, the mechanics of film finance have been obscured by gatekeepers.
+                      Agencies, distributors, and studios thrive on information asymmetry. They know the numbers; you don't.
+                    </p>
+                    <p className="text-text-primary font-medium">
+                      We built this tool to level the playing field.
+                    </p>
+                    <p>
+                      This tool extracts the proprietary logic used by top-tier entertainment lawyers and sales agents,
+                      putting institutional-grade modeling directly into your hands. Free simulation. Just the math.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <SectionChevron nextId="industry-charges" />
+          </SectionFrame>
 
-          {/* ── SECTION 2: WHAT THE INDUSTRY CHARGES (redesigned) ── */}
-          <section className="px-6 py-14">
+          {/* ── SECTION 3: WHAT THE INDUSTRY CHARGES ── */}
+          <SectionFrame id="industry-charges">
             <div className="max-w-2xl mx-auto">
               <SectionHeader
                 icon={Gavel}
@@ -466,10 +655,13 @@ const Index = () => {
                 {industryCosts.map((item) => {
                   const Icon = item.icon;
                   return (
-                    <div key={item.label} className="bg-bg-elevated border border-border-subtle rounded-xl p-4 relative overflow-hidden">
+                    <div
+                      key={item.label}
+                      className="bg-bg-card border border-border-subtle rounded-xl p-4 relative overflow-hidden"
+                    >
                       <div className="absolute top-0 right-0 w-16 h-16 bg-gold/[0.03] rounded-full blur-2xl translate-x-4 -translate-y-4" />
                       <div className="relative">
-                        <div className="w-8 h-8 rounded-lg bg-bg-card border border-border-subtle flex items-center justify-center mb-3">
+                        <div className="w-8 h-8 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center mb-3">
                           <Icon className="w-3.5 h-3.5 text-gold" />
                         </div>
                         <p className="font-mono text-lg md:text-xl font-bold text-text-primary line-through decoration-text-dim/30 mb-0.5">
@@ -502,89 +694,44 @@ const Index = () => {
                 </div>
               </div>
             </div>
-          </section>
+            <SectionChevron nextId="deliverables" />
+          </SectionFrame>
 
-          <GoldDivider />
-
-          {/* ── SECTION 3: WHEN TO USE THIS ── */}
-          <section className="px-6 py-14">
-            <div className="max-w-3xl mx-auto">
-              <SectionHeader eyebrow="When To Use This" title="THREE MOMENTS THAT DEFINE YOUR DEAL" />
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {useCases.map((uc) => {
-                  const Icon = uc.icon;
-                  return (
-                    <div key={uc.title} className="bg-bg-elevated border border-border-subtle rounded-xl p-5">
-                      <div className="w-9 h-9 rounded-lg bg-bg-card border border-border-subtle flex items-center justify-center mb-3">
-                        <Icon className="w-4 h-4 text-gold" />
-                      </div>
-                      <h3 className="text-text-primary text-sm font-semibold mb-2">{uc.title}</h3>
-                      <p className="text-text-dim text-xs leading-relaxed">{uc.desc}</p>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          </section>
-
-          <GoldDivider />
-
-          {/* ── SECTION 4: THE PROBLEM ── */}
-          <section className="px-6 py-14">
-            <div className="max-w-3xl mx-auto">
+          {/* ── SECTION 4: WHAT YOU GET (moved up, right after industry charges) ── */}
+          <SectionFrame id="deliverables">
+            <div className="max-w-2xl mx-auto">
               <SectionHeader
-                eyebrow="The Problem"
-                title="WHY MOST INDIE FILMS LOSE MONEY"
-                subtitle="It's not because the films are bad. It's because filmmakers sign deals they don't understand."
+                icon={FileSpreadsheet}
+                eyebrow="What You Get"
+                title="PROFESSIONAL FINANCIAL DOCUMENTS"
+                subtitle="Designed so anyone — your investor, your business partner, your family — can understand your film's financials at a glance."
               />
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {problemCards.map((card) => {
-                  const Icon = card.icon;
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {[
+                  { icon: FileSpreadsheet, title: "6-Sheet Excel Workbook", desc: "Executive summary, full waterfall ledger, capital stack breakdown, investor return summary, and plain-English glossary." },
+                  { icon: Presentation, title: "Presentation-Ready PDF", desc: "A polished document you can email, print, or hand to an investor. Clear visuals, plain language, zero jargon." },
+                  { icon: BookOpen, title: "Plain-English Glossary", desc: "Every financial term explained in language a first-time filmmaker can understand. No MBA required." },
+                  { icon: BarChart3, title: "Visual Waterfall Chart", desc: "A clear breakdown of who gets paid, in what order, and how much. The most important chart in film finance." },
+                ].map((item) => {
+                  const Icon = item.icon;
                   return (
-                    <div key={card.title} className="bg-bg-elevated border border-border-subtle rounded-xl p-5">
-                      <div className="w-9 h-9 rounded-lg bg-bg-card border border-border-subtle flex items-center justify-center mb-3">
+                    <div key={item.title} className="bg-bg-card border border-border-subtle rounded-xl p-5">
+                      <div className="w-9 h-9 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center mb-3">
                         <Icon className="w-4 h-4 text-gold" />
                       </div>
-                      <h3 className="text-text-primary text-sm font-semibold mb-2">{card.title}</h3>
-                      <p className="text-text-dim text-xs leading-relaxed">{card.body}</p>
+                      <h3 className="text-text-primary text-sm font-semibold mb-2">{item.title}</h3>
+                      <p className="text-text-dim text-xs leading-relaxed">{item.desc}</p>
                     </div>
                   );
                 })}
               </div>
             </div>
-          </section>
+            <SectionChevron nextId="how-it-works" />
+          </SectionFrame>
 
-          <GoldDivider />
-
-          {/* ── SECTION 5: DEMOCRATIZATION ── */}
-          <section className="px-6 py-14">
-            <div className="max-w-2xl mx-auto">
-              <div className="bg-bg-elevated border border-border-default rounded-xl p-7 md:p-8 relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-gold/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-                <div className="relative z-10">
-                  <div className="flex items-center gap-3 mb-5">
-                    <div className="w-9 h-9 rounded-lg bg-gold/10 border border-border-default flex items-center justify-center">
-                      <Eye className="w-4 h-4 text-gold" />
-                    </div>
-                    <p className="text-gold text-[10px] tracking-[0.3em] uppercase font-semibold">Our Mission</p>
-                  </div>
-                  <h2 className="font-bebas text-2xl md:text-3xl tracking-[0.08em] text-text-primary mb-4">DEMOCRATIZING THE BUSINESS OF FILM</h2>
-                  <div className="space-y-3 text-text-mid text-sm leading-relaxed">
-                    <p>For too long, the mechanics of film finance have been obscured by gatekeepers. Agencies, distributors, and studios thrive on information asymmetry. They know the numbers; you don't.</p>
-                    <p className="text-text-primary font-medium">We built this tool to level the playing field.</p>
-                    <p>This tool extracts the proprietary logic used by top-tier entertainment lawyers and sales agents, putting institutional-grade modeling directly into your hands. Free simulation. Just the math.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <GoldDivider />
-
-          {/* ── SECTION 6: HOW IT WORKS ── */}
-          <section className="px-6 py-14 bg-bg-elevated">
+          {/* ── SECTION 5: HOW IT WORKS ── */}
+          <SectionFrame id="how-it-works">
             <div className="max-w-3xl mx-auto">
               <SectionHeader eyebrow="How It Works" title="FOUR STEPS TO CLARITY" />
 
@@ -608,141 +755,193 @@ const Index = () => {
                 })}
               </div>
             </div>
-          </section>
+            <SectionChevron nextId="use-cases" />
+          </SectionFrame>
 
-          <GoldDivider />
+          {/* ── SECTION 6: WHEN TO USE THIS ── */}
+          <SectionFrame id="use-cases">
+            <div className="max-w-3xl mx-auto">
+              <SectionHeader eyebrow="When To Use This" title="THREE MOMENTS THAT DEFINE YOUR DEAL" />
 
-          {/* ── SECTION 7: WHAT YOU GET ── */}
-          <section className="px-6 py-14">
-            <div className="max-w-2xl mx-auto">
-              <SectionHeader
-                icon={FileSpreadsheet}
-                eyebrow="What You Walk Away With"
-                title="PROFESSIONAL FINANCIAL DOCUMENTS"
-                subtitle="Designed so anyone — your investor, your business partner, your family — can understand your film's financials at a glance."
-              />
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {[
-                  { icon: FileSpreadsheet, title: "6-Sheet Excel Workbook", desc: "Executive summary, full waterfall ledger, capital stack breakdown, investor return summary, and plain-English glossary." },
-                  { icon: Presentation, title: "Presentation-Ready PDF", desc: "A polished document you can email, print, or hand to an investor. Clear visuals, plain language, zero jargon." },
-                  { icon: BookOpen, title: "Plain-English Glossary", desc: "Every financial term explained in language a first-time filmmaker can understand. No MBA required." },
-                  { icon: BarChart3, title: "Visual Waterfall Chart", desc: "A clear breakdown of who gets paid, in what order, and how much. The most important chart in film finance." },
-                ].map((item) => {
-                  const Icon = item.icon;
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {useCases.map((uc) => {
+                  const Icon = uc.icon;
                   return (
-                    <div key={item.title} className="bg-bg-elevated border border-border-subtle rounded-xl p-5">
-                      <div className="w-9 h-9 rounded-lg bg-bg-card border border-border-subtle flex items-center justify-center mb-3">
+                    <div key={uc.title} className="bg-bg-card border border-border-subtle rounded-xl p-5">
+                      <div className="w-9 h-9 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center mb-3">
                         <Icon className="w-4 h-4 text-gold" />
                       </div>
-                      <h3 className="text-text-primary text-sm font-semibold mb-2">{item.title}</h3>
-                      <p className="text-text-dim text-xs leading-relaxed">{item.desc}</p>
+                      <h3 className="text-text-primary text-sm font-semibold mb-2">{uc.title}</h3>
+                      <p className="text-text-dim text-xs leading-relaxed">{uc.desc}</p>
                     </div>
                   );
                 })}
               </div>
             </div>
-          </section>
+            <SectionChevron nextId="problem" />
+          </SectionFrame>
 
-          <GoldDivider />
-
-          {/* ── SECTION 8: SCENARIO PROMPTS (with copy) ── */}
-          <section className="py-14">
-            <div className="max-w-3xl mx-auto px-6 mb-6">
+          {/* ── SECTION 7: THE PROBLEM ── */}
+          <SectionFrame id="problem">
+            <div className="max-w-3xl mx-auto">
               <SectionHeader
-                icon={MessageCircle}
-                eyebrow="Try a Scenario"
-                title="WHAT FILMMAKERS ASK"
-                subtitle="Real scenarios indie filmmakers face. Tap copy to save a prompt."
+                eyebrow="The Problem"
+                title="WHY MOST INDIE FILMS LOSE MONEY"
+                subtitle="It's not because the films are bad. It's because filmmakers sign deals they don't understand."
               />
-            </div>
 
-            <div
-              ref={carouselRef}
-              className="flex gap-4 overflow-x-auto snap-x snap-mandatory px-6 pb-4 scrollbar-hide"
-              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-            >
-              <div className="flex-shrink-0 w-[max(0px,calc((100vw-768px)/2-1.5rem))]" />
-
-              {scenarioPrompts.map((item, i) => (
-                <div
-                  key={i}
-                  className="flex-shrink-0 w-[280px] snap-center bg-bg-elevated border border-border-subtle rounded-xl p-5 text-left hover:border-border-default transition-colors group"
-                >
-                  <div className="flex items-start gap-3 mb-3">
-                    <div className="w-6 h-6 rounded-full bg-bg-card border border-border-subtle flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <MessageCircle className="w-3 h-3 text-gold" />
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {problemCards.map((card) => {
+                  const Icon = card.icon;
+                  return (
+                    <div key={card.title} className="bg-bg-card border border-border-subtle rounded-xl p-5">
+                      <div className="w-9 h-9 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center mb-3">
+                        <Icon className="w-4 h-4 text-gold" />
+                      </div>
+                      <h3 className="text-text-primary text-sm font-semibold mb-2">{card.title}</h3>
+                      <p className="text-text-dim text-xs leading-relaxed">{card.body}</p>
                     </div>
-                    <p className="text-text-primary text-sm font-medium leading-snug">
-                      {item.prompt}
-                    </p>
-                  </div>
-                  <p className="text-text-dim text-[11px] leading-relaxed mb-4 pl-9">
-                    {item.context}
-                  </p>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleCopyPrompt(item.prompt, i);
-                    }}
-                    className="flex items-center gap-1.5 text-[11px] tracking-wider font-semibold pl-9 transition-colors"
-                  >
-                    {copiedIndex === i ? (
-                      <span className="text-green-400 flex items-center gap-1.5">
-                        <Check className="w-3 h-3" /> Copied
-                      </span>
-                    ) : (
-                      <span className="text-gold-cta flex items-center gap-1.5">
-                        <Copy className="w-3 h-3" /> Copy prompt
-                      </span>
-                    )}
-                  </button>
-                </div>
-              ))}
+                  );
+                })}
+              </div>
+            </div>
+            <SectionChevron nextId="chatbot" />
+          </SectionFrame>
 
-              <div className="flex-shrink-0 w-[max(0px,calc((100vw-768px)/2-1.5rem))]" />
+          {/* ── SECTION 8: ASK OUR FRIENDLY CHATBOT (with copy) ── */}
+          <section
+            id="chatbot"
+            className="snap-section min-h-[85vh] flex flex-col justify-center"
+          >
+            <div className="bg-bg-elevated border border-white/[0.06] rounded-2xl overflow-hidden mx-4 p-6 pb-2">
+              <div className="max-w-3xl mx-auto mb-6">
+                <SectionHeader
+                  icon={MessageCircle}
+                  eyebrow="AI-Powered Guidance"
+                  title="ASK OUR FRIENDLY CHATBOT"
+                  subtitle="Copy any prompt below and get instant answers about your deal. Coming soon."
+                />
+              </div>
+
+              <div
+                ref={carouselRef}
+                className="flex gap-4 overflow-x-auto snap-x snap-mandatory px-2 pb-4 scrollbar-hide"
+                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+              >
+                {scenarioPrompts.map((item, i) => (
+                  <div
+                    key={i}
+                    className="flex-shrink-0 w-[260px] snap-center bg-bg-card border border-border-subtle rounded-xl p-5 text-left hover:border-border-default transition-colors group"
+                  >
+                    <div className="flex items-start gap-3 mb-3">
+                      <div className="w-6 h-6 rounded-full bg-bg-elevated border border-border-subtle flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <MessageCircle className="w-3 h-3 text-gold" />
+                      </div>
+                      <p className="text-text-primary text-sm font-medium leading-snug">
+                        {item.prompt}
+                      </p>
+                    </div>
+                    <p className="text-text-dim text-[11px] leading-relaxed mb-4 pl-9">
+                      {item.context}
+                    </p>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleCopyPrompt(item.prompt, i);
+                      }}
+                      className="flex items-center gap-1.5 text-[11px] tracking-wider font-semibold pl-9 transition-colors"
+                    >
+                      {copiedIndex === i ? (
+                        <span className="text-green-400 flex items-center gap-1.5">
+                          <Check className="w-3 h-3" /> Copied
+                        </span>
+                      ) : (
+                        <span className="text-gold-cta flex items-center gap-1.5">
+                          <Copy className="w-3 h-3" /> Copy prompt
+                        </span>
+                      )}
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="px-4">
+              <SectionChevron nextId="faq" />
             </div>
           </section>
-
-          <GoldDivider />
 
           {/* ── SECTION 9: FAQ ── */}
-          <section className="px-6 py-14">
+          <SectionFrame id="faq">
             <div className="max-w-xl mx-auto">
               <h2 className="font-bebas text-2xl tracking-[0.08em] text-text-primary text-center mb-6">
-                FREQUENTLY ASKED QUESTIONS
+                WHAT FILMMAKERS ASK
               </h2>
-              <div className="bg-bg-elevated border border-border-subtle rounded-xl px-5">
+              <div className="bg-bg-card border border-border-subtle rounded-xl px-5">
                 {faqs.map((faq) => (
                   <FaqItem key={faq.q} q={faq.q} a={faq.a} />
                 ))}
               </div>
               <div className="text-center mt-5">
-                <button onClick={() => navigate("/intro")} className="text-text-dim hover:text-text-mid text-[11px] tracking-wider transition-colors">
+                <button
+                  onClick={() => navigate("/intro")}
+                  className="text-text-dim hover:text-text-mid text-[11px] tracking-wider transition-colors"
+                >
                   Read the full protocol documentation →
                 </button>
               </div>
             </div>
-          </section>
+            <SectionChevron nextId="final-cta" />
+          </SectionFrame>
 
-          <GoldDivider />
-
-          {/* ── SECTION 10: FINAL CTA ── */}
-          <section className="relative px-6 py-20 overflow-hidden">
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none"
-              style={{ width: '100vw', height: '100%', background: `radial-gradient(ellipse 60% 60% at 50% 0%, rgba(212,175,55,0.06) 0%, transparent 70%)` }} />
+          {/* ── SECTION 10: FINAL CTA — clean and simple ── */}
+          <section
+            id="final-cta"
+            className="snap-section min-h-[70vh] flex flex-col justify-center relative px-4 overflow-hidden"
+          >
+            <div
+              className="absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none"
+              style={{
+                width: '100vw',
+                height: '100%',
+                background: `radial-gradient(ellipse 60% 60% at 50% 0%, rgba(212,175,55,0.06) 0%, transparent 70%)`,
+              }}
+            />
             <div className="relative max-w-md mx-auto text-center">
-              <Shield className="w-6 h-6 text-gold mx-auto mb-4" />
-              <h2 className="font-bebas text-[clamp(1.8rem,6vw,2.5rem)] leading-[1.1] text-text-primary mb-4">
-                KNOW YOUR NUMBERS<br /><span className="text-gold">BEFORE YOU SIGN</span>
-              </h2>
-              <p className="text-text-mid text-sm leading-relaxed mb-8 max-w-sm mx-auto">
-                Don't walk into an investor meeting, distributor negotiation, or signing without understanding your deal.
-              </p>
-              <button onClick={handleStartClick} className="w-full max-w-[320px] h-14 text-sm font-black tracking-[0.12em] transition-all active:scale-[0.96] rounded-md bg-gold-cta-subtle border border-gold-cta-muted text-gold-cta shadow-button hover:border-gold-cta">
-                <span className="flex items-center justify-center gap-2">START FREE SIMULATION <ArrowRight size={18} /></span>
+              <img
+                src={filmmakerLogo}
+                alt="Filmmaker.OG"
+                className="w-16 h-16 object-contain rounded-lg mx-auto mb-6"
+                style={{ filter: 'brightness(1.1) drop-shadow(0 0 15px rgba(212,175,55,0.3))' }}
+              />
+              <button
+                onClick={handleStartClick}
+                className="w-full max-w-[320px] h-14 text-sm font-black tracking-[0.12em] transition-all active:scale-[0.96] rounded-md bg-gold-cta-subtle border border-gold-cta-muted text-gold-cta shadow-button hover:border-gold-cta"
+              >
+                <span className="flex items-center justify-center gap-2">
+                  START FREE SIMULATION <ArrowRight size={18} />
+                </span>
               </button>
-              <p className="text-text-dim text-[11px] tracking-wider mt-4">No account required · Takes 2 minutes</p>
+              <p className="text-text-dim text-[11px] tracking-wider mt-4">
+                No account required. No credit card. Just clarity.
+              </p>
+
+              {/* Share button */}
+              <button
+                onClick={handleShare}
+                className="mt-5 inline-flex items-center gap-2 text-[11px] tracking-wider text-text-dim hover:text-gold transition-colors py-2 px-4 rounded-full border border-white/[0.06] hover:border-gold/30"
+              >
+                {shareState === "copied" ? (
+                  <>
+                    <Check className="w-3.5 h-3.5 text-green-400" />
+                    <span className="text-green-400">Link copied!</span>
+                  </>
+                ) : (
+                  <>
+                    <Share2 className="w-3.5 h-3.5" />
+                    <span>Share this tool</span>
+                  </>
+                )}
+              </button>
             </div>
           </section>
 
