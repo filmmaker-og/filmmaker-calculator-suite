@@ -9,7 +9,6 @@ import {
   Handshake,
   BarChart3,
   ChevronDown,
-  Shield,
   MessageCircle,
   Eye,
   FileSpreadsheet,
@@ -43,16 +42,6 @@ const INTRO_SEEN_KEY = "filmmaker_og_intro_seen";
 const SHARE_URL = "https://filmmaker.og";
 const SHARE_TEXT = "Free film finance simulator — model your deal structure, capital stack, and revenue waterfall. See where every dollar goes before you sign.";
 const SHARE_TITLE = "FILMMAKER.OG — See Where Every Dollar Goes";
-
-/* ═══════════════════════════════════════════════════════════════════
-   TRUST BAR STATEMENTS
-   ═══════════════════════════════════════════════════════════════════ */
-const trustStatements = [
-  "Modeled on real independent film deal structures",
-  "Built by working producers",
-  "Institutional-grade financial modeling",
-  "No account required",
-];
 
 /* ═══════════════════════════════════════════════════════════════════
    SCENARIO PROMPTS — Chatbot bridge (with copy)
@@ -204,7 +193,7 @@ const SectionChevron = ({ nextId, large }: { nextId?: string; large?: boolean })
 const SectionFrame = ({ id, children, className }: {
   id: string; children: React.ReactNode; className?: string;
 }) => (
-  <section id={id} className="snap-section px-4 py-2">
+  <section id={id} className="snap-section px-4 py-4">
     <div className={cn("bg-bg-elevated border border-white/[0.06] rounded-2xl overflow-hidden p-6", className)}>
       {children}
     </div>
@@ -405,28 +394,14 @@ const Index = () => {
                 </div>
               )}
 
-              <SectionChevron nextId="trust-bar" large />
-            </div>
-          </section>
-
-          {/* ── TRUST BAR ── */}
-          <section id="trust-bar" className="snap-section px-6 py-2">
-            <div ref={fade1.ref} className={fade1.className}>
-              <div className="flex items-center justify-center gap-2 flex-wrap">
-                {trustStatements.map((s, i) => (
-                  <span key={i} className="flex items-center gap-2">
-                    {i > 0 && <span className="text-gold/40 text-[8px]">&#9670;</span>}
-                    <span className="text-text-dim text-[10px] tracking-wider uppercase whitespace-nowrap">{s}</span>
-                  </span>
-                ))}
-              </div>
+              <SectionChevron nextId="industry-charges" large />
             </div>
           </section>
 
           {/* ── INDUSTRY CHARGES ── */}
           <SectionFrame id="industry-charges">
             <div ref={fade2.ref} className={cn(fade2.className, "max-w-2xl mx-auto")}>
-              <SectionHeader icon={Gavel} eyebrow="The Industry Standard" title="WHAT OTHERS CHARGE FOR THIS ANALYSIS" subtitle="This is the cost of understanding your own deal. Until now." />
+              <SectionHeader icon={Gavel} eyebrow="The Industry Standard" title="WHAT OTHERS CHARGE FOR THIS ANALYSIS" subtitle="Modeled on real deal structures. Built by working producers. Institutional-grade financial modeling — this is the cost of understanding your own deal. Until now." />
               <div className="grid grid-cols-2 gap-3 mb-4">
                 {industryCosts.map((item) => {
                   const Icon = item.icon;
@@ -445,20 +420,9 @@ const Index = () => {
                   );
                 })}
               </div>
-              <div className="bg-gold/[0.06] border border-gold/30 rounded-xl p-5 relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-r from-gold/[0.04] via-transparent to-gold/[0.04]" />
-                <div className="relative flex items-center justify-between">
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-lg bg-gold/10 border border-gold/30 flex items-center justify-center">
-                      <Shield className="w-4 h-4 text-gold" />
-                    </div>
-                    <div>
-                      <p className="text-text-primary text-sm font-semibold">Filmmaker.OG</p>
-                      <p className="text-text-dim text-[10px] tracking-wider uppercase">The same analysis. Free.</p>
-                    </div>
-                  </div>
-                  <p className="font-mono text-2xl md:text-3xl font-bold text-gold-cta">Free</p>
-                </div>
+              <div className="text-center mt-2">
+                <p className="font-bebas text-3xl md:text-4xl tracking-[0.1em] text-gold-cta">FREE</p>
+                <p className="text-text-dim text-[11px] tracking-wider mt-1">The same analysis. Zero cost.</p>
               </div>
             </div>
             <SectionChevron nextId="deliverables" />
@@ -594,7 +558,7 @@ const Index = () => {
           </SectionFrame>
 
           {/* ── CHATBOT ── */}
-          <section id="chatbot" className="snap-section px-4 py-2">
+          <section id="chatbot" className="snap-section px-4 py-4">
             <div ref={fade8.ref} className={cn(fade8.className, "bg-bg-elevated border border-white/[0.06] rounded-2xl overflow-hidden p-6 pb-3")}>
               <div className="max-w-3xl mx-auto mb-5">
                 <SectionHeader icon={Bot} eyebrow="AI-Powered Guidance" title="ASK OUR CHATBOT"
@@ -679,25 +643,25 @@ const Index = () => {
           {/* ── FOOTER ── */}
           <footer className="border-t border-border-subtle py-8 px-6">
             <div className="max-w-md mx-auto">
-              <div className="flex items-center justify-center gap-3 mb-5 flex-wrap">
+              <div className="flex items-center justify-center gap-2 mb-5">
                 <a href="mailto:thefilmmaker.og@gmail.com"
-                  className="flex items-center gap-1.5 text-[11px] tracking-wider text-gold/70 hover:text-gold transition-colors py-2 px-3 rounded-full border border-white/[0.06] hover:border-gold/30">
-                  <Mail className="w-3.5 h-3.5" /><span>Email</span>
+                  className="flex items-center gap-1 text-[10px] tracking-wider text-gold/70 hover:text-gold transition-colors py-1.5 px-2.5 rounded-full border border-white/[0.06] hover:border-gold/30">
+                  <Mail className="w-3 h-3" /><span>Email</span>
                 </a>
                 <a href="https://www.instagram.com/filmmaker.og" target="_blank" rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 text-[11px] tracking-wider text-gold/70 hover:text-gold transition-colors py-2 px-3 rounded-full border border-white/[0.06] hover:border-gold/30">
-                  <Instagram className="w-3.5 h-3.5" /><span>Instagram</span>
+                  className="flex items-center gap-1 text-[10px] tracking-wider text-gold/70 hover:text-gold transition-colors py-1.5 px-2.5 rounded-full border border-white/[0.06] hover:border-gold/30">
+                  <Instagram className="w-3 h-3" /><span>Instagram</span>
                 </a>
                 <button onClick={handleShare}
-                  className="flex items-center gap-1.5 text-[11px] tracking-wider text-gold/70 hover:text-gold transition-colors py-2 px-3 rounded-full border border-white/[0.06] hover:border-gold/30">
-                  <Share2 className="w-3.5 h-3.5" /><span>Share</span>
+                  className="flex items-center gap-1 text-[10px] tracking-wider text-gold/70 hover:text-gold transition-colors py-1.5 px-2.5 rounded-full border border-white/[0.06] hover:border-gold/30">
+                  <Share2 className="w-3 h-3" /><span>Share</span>
                 </button>
                 <button onClick={handleCopyLink}
-                  className="flex items-center gap-1.5 text-[11px] tracking-wider py-2 px-3 rounded-full border border-white/[0.06] hover:border-gold/30 transition-colors">
+                  className="flex items-center gap-1 text-[10px] tracking-wider py-1.5 px-2.5 rounded-full border border-white/[0.06] hover:border-gold/30 transition-colors">
                   {linkCopied ? (
-                    <><Check className="w-3.5 h-3.5 text-green-400" /><span className="text-green-400">Copied!</span></>
+                    <><Check className="w-3 h-3 text-green-400" /><span className="text-green-400">Copied!</span></>
                   ) : (
-                    <><Link2 className="w-3.5 h-3.5 text-gold/70" /><span className="text-gold/70 hover:text-gold">Copy URL</span></>
+                    <><Link2 className="w-3 h-3 text-gold/70" /><span className="text-gold/70">Copy URL</span></>
                   )}
                 </button>
               </div>
