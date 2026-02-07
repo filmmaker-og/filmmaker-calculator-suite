@@ -198,7 +198,7 @@ const MobileMenu = () => {
 
         <div className="pt-6 border-t border-border-default">
           <p className="font-bebas text-xs text-text-dim tracking-[0.1em] px-3">
-            FILMMAKER.OG v2.1.0
+            FILMMAKER.OG &middot; BETA
           </p>
         </div>
       </div>
