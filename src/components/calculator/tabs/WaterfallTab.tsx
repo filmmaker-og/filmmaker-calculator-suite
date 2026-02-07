@@ -97,13 +97,13 @@ const WaterfallTab = ({ result: initialResult, inputs: initialInputs, onExport }
             </p>
           </div>
           
-          {/* DEMO BUTTON - The fix for "Nothing happens" */}
+          {/* DEMO BUTTON - Primary CTA pattern */}
           <button
             onClick={handleRunDemo}
-            className="flex items-center gap-2 px-6 py-3 bg-gold text-black font-bold rounded-lg shadow-[0_0_20px_rgba(212,175,55,0.4)] hover:scale-105 transition-transform animate-pulse-subtle"
+            className="flex items-center gap-2 px-6 py-3 bg-gold-cta-subtle border border-gold-cta-muted text-gold-cta rounded-md shadow-button hover:border-gold-cta transition-all active:scale-[0.98]"
           >
             <Play className="w-4 h-4 fill-current" />
-            <span>RUN DEMO SIMULATION</span>
+            <span className="text-sm font-bold uppercase tracking-wider">Run Demo Simulation</span>
           </button>
         </div>
       </StandardStepLayout>
@@ -142,7 +142,7 @@ const WaterfallTab = ({ result: initialResult, inputs: initialInputs, onExport }
 
             {/* Demo mode exit banner */}
             {isDemoMode && (
-              <div className="flex items-center justify-between p-3 border border-gold/30 bg-gold/[0.06] rounded-lg">
+              <div className="flex items-center justify-between p-3 border border-border-default bg-gold/[0.04] rounded-lg">
                 <span className="text-xs text-gold uppercase tracking-wider font-bold">Demo Mode</span>
                 <button
                   onClick={() => setIsDemoMode(false)}
@@ -199,7 +199,7 @@ const WaterfallTab = ({ result: initialResult, inputs: initialInputs, onExport }
 
             {/* ═══ EXPORT CTA — The bridge to the store ═══ */}
             {!isDemoMode && (
-              <div className="border border-gold/30 bg-gold/[0.04] rounded-lg p-5 space-y-4">
+              <div className="border border-border-default bg-gold/[0.04] rounded-lg p-5 space-y-4">
                 <div className="flex items-center gap-2">
                   <Sparkles className="w-4 h-4 text-gold" />
                   <span className="text-[10px] uppercase tracking-[0.2em] text-gold font-bold">
@@ -235,10 +235,10 @@ const WaterfallTab = ({ result: initialResult, inputs: initialInputs, onExport }
                </CollapsibleContent>
             </Collapsible>
 
-            {/* Back to Wiki */}
+            {/* Back to Wiki — text link pattern */}
             <Link
               to="/waterfall-info"
-              className="block p-4 text-center text-xs text-gold/70 hover:text-gold hover:underline"
+              className="block p-4 text-center text-[11px] tracking-wider text-text-dim hover:text-text-mid transition-colors"
             >
               Return to Wiki Documentation
             </Link>
