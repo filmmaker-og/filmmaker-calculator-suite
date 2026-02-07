@@ -35,7 +35,7 @@ const Index = () => {
 
   const handleStartClick = () => {
     haptics.medium();
-    navigate("/calculator");
+    navigate("/calculator?tab=budget");
   };
 
   const isComplete = phase === 'complete';
