@@ -215,7 +215,10 @@
     padding: 0 var(--space-md);
     font-family: 'Bebas Neue', sans-serif;
     font-size: 22px;
-    letter-spacing: 1.5px;\n    text-transform: uppercase;\n    color: var(--text-primary);\n  }
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-primary);
+  }
 
   .chapter-card-body {
     padding: var(--space-lg);
@@ -229,7 +232,10 @@
   .glass-card-gold {
     background: linear-gradient(180deg, var(--gold-subtle) 0%, rgba(212, 175, 55, 0.02) 100%);
     border: 1px solid var(--gold-muted);
-    border-radius: var(--radius-lg);\n    backdrop-filter: blur(10px);\n    -webkit-backdrop-filter: blur(10px);\n  }
+    border-radius: var(--radius-lg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
 
   /* ═══════════════════════════════════════════════════════════════════
      PREMIUM DIVIDERS
@@ -317,7 +323,12 @@
     transition: all var(--timing-fast) ease;
   }
 
-  .glossary-trigger:hover,\n  .glossary-trigger:active {\n    background: var(--gold-subtle);\n    border-color: var(--gold);\n    color: var(--gold);\n  }
+  .glossary-trigger:hover,
+  .glossary-trigger:active {
+    background: var(--gold-subtle);
+    border-color: var(--gold);
+    color: var(--gold);
+  }
 
   .glossary-trigger-lg {
     width: 36px;
@@ -327,7 +338,8 @@
 
   /* ═══════════════════════════════════════════════════════════════════
      INPUT FIELD
-     ═══════════════════════════════════════════════════════════════════ */\n  .input-field {
+     ═══════════════════════════════════════════════════════════════════ */
+  .input-field {
     background: var(--bg-surface);
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-md);
@@ -352,7 +364,10 @@
     color: var(--text-dim);
   }
 
-  /* ═══════════════════════════════════════════════════════════════════\n     FIELD LABEL\n     ═══════════════════════════════════════════════════════════════════ */\n  .field-label {
+  /* ═══════════════════════════════════════════════════════════════════
+     FIELD LABEL
+     ═══════════════════════════════════════════════════════════════════ */
+  .field-label {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -365,7 +380,10 @@
     color: var(--text-dim);
   }
 
-  /* ═══════════════════════════════════════════════════════════════════\n     PRIMARY BUTTON (CTA) — Uses CTA Gold exclusively\n     ═══════════════════════════════════════════════════════════════════ */\n  .btn-primary {
+  /* ═══════════════════════════════════════════════════════════════════
+     PRIMARY BUTTON (CTA) — Uses CTA Gold exclusively
+     ═══════════════════════════════════════════════════════════════════ */
+  .btn-primary {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -376,7 +394,15 @@
     border: 1px solid var(--gold-cta-muted);
     border-radius: var(--radius-md);
     font-family: 'Inter', sans-serif;
-    font-size: 11px;\n    font-weight: 900;\n    text-transform: uppercase;\n    letter-spacing: 1px;\n    color: var(--gold-cta);\n    cursor: pointer;\n    transition: all var(--timing-fast) ease;\n    box-shadow: var(--shadow-button);\n  }
+    font-size: 11px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--gold-cta);
+    cursor: pointer;
+    transition: all var(--timing-fast) ease;
+    box-shadow: var(--shadow-button);
+  }
 
   .btn-primary:active {
     transform: scale(0.92);
@@ -387,7 +413,10 @@
     cursor: not-allowed;
   }
 
-  /* ═══════════════════════════════════════════════════════════════════\n     SECONDARY BUTTON\n     ═══════════════════════════════════════════════════════════════════ */\n  .btn-secondary {
+  /* ═══════════════════════════════════════════════════════════════════
+     SECONDARY BUTTON
+     ═══════════════════════════════════════════════════════════════════ */
+  .btn-secondary {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -411,7 +440,10 @@
     transform: scale(0.92);
   }
 
-  /* ═══════════════════════════════════════════════════════════════════\n     TOUCH FEEDBACK\n     ═══════════════════════════════════════════════════════════════════ */\n  .touch-feedback {
+  /* ═══════════════════════════════════════════════════════════════════
+     TOUCH FEEDBACK
+     ═══════════════════════════════════════════════════════════════════ */
+  .touch-feedback {
     transition: transform 0.1s ease, opacity 0.1s ease;
   }
 
@@ -424,7 +456,10 @@
     transform: scale(0.98);
   }
 
-  /* ═══════════════════════════════════════════════════════════════════\n     STEP ANIMATIONS\n     ═══════════════════════════════════════════════════════════════════ */\n  .step-enter {
+  /* ═══════════════════════════════════════════════════════════════════
+     STEP ANIMATIONS
+     ═══════════════════════════════════════════════════════════════════ */
+  .step-enter {
     animation: stepEnter 0.4s ease-out forwards;
   }
 
@@ -442,7 +477,10 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
-  /* ═══════════════════════════════════════════════════════════════════\n     ATTENTION ANIMATIONS\n     ═══════════════════════════════════════════════════════════════════ */\n  .animate-attention-glow {
+  /* ═══════════════════════════════════════════════════════════════════
+     ATTENTION ANIMATIONS
+     ═══════════════════════════════════════════════════════════════════ */
+  .animate-attention-glow {
     animation: attentionGlow 2s ease-in-out infinite;
   }
 
@@ -500,12 +538,18 @@
     50% { transform: translateX(4px); }
   }
 
-  /* ═══════════════════════════════════════════════════════════════════\n     NUMBER FORMATTING\n     ═══════════════════════════════════════════════════════════════════ */\n  .tabular-nums {
+  /* ═══════════════════════════════════════════════════════════════════
+     NUMBER FORMATTING
+     ═══════════════════════════════════════════════════════════════════ */
+  .tabular-nums {
     font-variant-numeric: tabular-nums;
     font-feature-settings: "tnum" 1;
   }
 
-  /* ═══════════════════════════════════════════════════════════════════\n     HOMEPAGE SPOTLIGHT\n     ═══════════════════════════════════════════════════════════════════ */\n  .animate-spotlight-pulse {
+  /* ═══════════════════════════════════════════════════════════════════
+     HOMEPAGE SPOTLIGHT
+     ═══════════════════════════════════════════════════════════════════ */
+  .animate-spotlight-pulse {
     animation: spotlightPulse 4s ease-in-out infinite;
   }
 
@@ -514,7 +558,10 @@
     50% { opacity: 1; transform: translateX(-50%) scale(1.05); }
   }
 
-  /* ═══════════════════════════════════════════════════════════════════\n     CINEMATIC VIGNETTE\n     ═══════════════════════════════════════════════════════════════════ */\n  .vignette {
+  /* ═══════════════════════════════════════════════════════════════════
+     CINEMATIC VIGNETTE
+     ═══════════════════════════════════════════════════════════════════ */
+  .vignette {
     position: fixed;
     inset: 0;
     pointer-events: none;
@@ -522,7 +569,10 @@
     z-index: 1;
   }
 
-  /* ═══════════════════════════════════════════════════════════════════\n     SPOTLIGHT INTRO ANIMATIONS\n     ═══════════════════════════════════════════════════════════════════ */\n  @keyframes spotlight-beam-expand {
+  /* ═══════════════════════════════════════════════════════════════════
+     SPOTLIGHT INTRO ANIMATIONS
+     ═══════════════════════════════════════════════════════════════════ */
+  @keyframes spotlight-beam-expand {
     0% { clip-path: polygon(48% 0%, 52% 0%, 52% 30%, 48% 30%); opacity: 0; }
     50% { opacity: 1; }
     100% { clip-path: polygon(30% 0%, 70% 0%, 90% 100%, 10% 100%); opacity: 1; }
