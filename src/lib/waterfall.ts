@@ -215,11 +215,14 @@ export function formatCompactCurrency(value: number): string {
   // Guard against NaN/Infinity
   if (!Number.isFinite(value)) return '$0';
 
-  if (Math.abs(value) >= 1000000) {
-    return `$${(value / 1000000).toFixed(1)}M`;
+  const sign = value < 0 ? '-' : '';
+  const abs = Math.abs(value);
+
+  if (abs >= 1000000) {
+    return `${sign}$${(abs / 1000000).toFixed(1)}M`;
   }
-  if (Math.abs(value) >= 1000) {
-    return `$${(value / 1000).toFixed(0)}K`;
+  if (abs >= 1000) {
+    return `${sign}$${(abs / 1000).toFixed(0)}K`;
   }
   return formatCurrency(value);
 }

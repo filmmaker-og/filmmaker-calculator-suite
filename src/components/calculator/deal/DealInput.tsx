@@ -1,7 +1,6 @@
-import { useState, useRef, useEffect } from "react";
+import { useRef, useEffect } from "react";
 import { Info, Percent, DollarSign, Calculator } from "lucide-react";
 import { WaterfallInputs, GuildState, CapitalSelections, formatCompactCurrency, CAM_PCT, SAG_PCT, WGA_PCT, DGA_PCT } from "@/lib/waterfall";
-import { cn } from "@/lib/utils";
 import { useMobileKeyboardScroll } from "@/hooks/use-mobile-keyboard";
 import StandardStepLayout from "../StandardStepLayout";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
@@ -23,9 +22,8 @@ interface DealInputProps {
  * NOW INCLUDES: "Live Assumptions" block to mirror the Netlify app.
  */
 const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext }: DealInputProps) => {
-  const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
-  
+
   // Mobile keyboard scroll handling
   const { ref: mobileRef, scrollIntoView } = useMobileKeyboardScroll<HTMLDivElement>();
 
@@ -43,11 +41,6 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext }: DealIn
 
   const parseValue = (str: string) => {
     return parseInt(str.replace(/[^0-9]/g, '')) || 0;
-  };
-
-  const handleFocus = () => {
-    setIsFocused(true);
-    scrollIntoView();
   };
 
   const hasRevenue = inputs.revenue > 0;
@@ -102,8 +95,7 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext }: DealIn
               inputMode="numeric"
               value={formatValue(inputs.revenue)}
               onChange={(e) => onUpdateInput('revenue', parseValue(e.target.value))}
-              onFocus={handleFocus}
-              onBlur={() => setIsFocused(false)}
+              onFocus={scrollIntoView}
               placeholder="0"
               className="flex-1 bg-transparent outline-none font-mono text-[22px] text-text-primary text-right placeholder:text-text-dim placeholder:text-base tabular-nums"
             />

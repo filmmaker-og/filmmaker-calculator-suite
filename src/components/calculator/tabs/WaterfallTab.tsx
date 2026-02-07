@@ -1,12 +1,11 @@
 import { WaterfallResult, WaterfallInputs, calculateWaterfall } from "@/lib/waterfall";
 import { Lock, AlertTriangle, ChevronDown, ChevronUp, Play } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
-import { cn } from "@/lib/utils";
+import { Link } from "react-router-dom";
 import StandardStepLayout from "../StandardStepLayout";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useHaptics } from "@/hooks/use-haptics";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import WaterfallVisual from "../WaterfallVisual"; // IMPORTED THE MISSING COMPONENT
+import WaterfallVisual from "../WaterfallVisual";
 
 interface WaterfallTabProps {
   result: WaterfallResult;
@@ -31,8 +30,7 @@ const DEMO_INPUTS: WaterfallInputs = {
 
 const WaterfallTab = ({ result: initialResult, inputs: initialInputs }: WaterfallTabProps) => {
   const haptics = useHaptics();
-  const location = useLocation();
-  
+
   // State for Demo Mode (if real inputs are empty)
   const isEmpty = initialInputs.budget === 0 || initialInputs.revenue === 0;
   const [isDemoMode, setIsDemoMode] = useState(false);
@@ -51,8 +49,6 @@ const WaterfallTab = ({ result: initialResult, inputs: initialInputs }: Waterfal
   const [showResult, setShowResult] = useState(false);
   const [showDisclaimer, setShowDisclaimer] = useState(false);
   
-  const hasRevealedRef = useRef(false);
-
   // Trigger Animation on Load or Demo Toggle
   useEffect(() => {
     if (isLocked) {
@@ -68,7 +64,6 @@ const WaterfallTab = ({ result: initialResult, inputs: initialInputs }: Waterfal
       setIsCalculating(false);
       haptics.success();
       setShowResult(true);
-      hasRevealedRef.current = true;
     }, 1200);
 
     return () => clearTimeout(timer);
