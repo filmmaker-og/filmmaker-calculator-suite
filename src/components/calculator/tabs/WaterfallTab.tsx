@@ -1,9 +1,9 @@
 import { WaterfallResult, WaterfallInputs, formatCurrency, formatCompactCurrency, formatPercent } from "@/lib/waterfall";
 import { ArrowRight, Lock, BookOpen, Ticket, Coins, RefreshCw, AlertTriangle, ChevronDown, ChevronUp } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import StandardStepLayout from "../StandardStepLayout";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useHaptics } from "@/hooks/use-haptics";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
@@ -14,29 +14,40 @@ interface WaterfallTabProps {
 
 const WaterfallTab = ({ result, inputs }: WaterfallTabProps) => {
   const haptics = useHaptics();
+  const location = useLocation();
   const isLocked = inputs.budget === 0 || inputs.revenue === 0;
   
   // Animation states
   const [isCalculating, setIsCalculating] = useState(true);
   const [showResult, setShowResult] = useState(false);
   const [showDisclaimer, setShowDisclaimer] = useState(false);
+  
+  // Ref to track if we've already done the initial reveal to prevent loops
+  const hasRevealedRef = useRef(false);
 
+  // Effect: Reset animation when location changes (navigating back from Wiki) OR when lock state changes
   useEffect(() => {
-    if (!isLocked) {
-      // Reset animation on mount
-      setIsCalculating(true);
+    if (isLocked) {
       setShowResult(false);
-
-      // Sequence: Calculating -> Show
-      const timer1 = setTimeout(() => {
-        setIsCalculating(false);
-        haptics.success(); // Tactile feedback on reveal
-        setShowResult(true);
-      }, 1500); // 1.5s suspense
-
-      return () => clearTimeout(timer1);
+      setIsCalculating(true);
+      hasRevealedRef.current = false;
+      return;
     }
-  }, [isLocked, haptics]);
+
+    // If we're coming back to this tab, or inputs unlocked it, trigger the sequence
+    setIsCalculating(true);
+    setShowResult(false);
+
+    const timer1 = setTimeout(() => {
+      setIsCalculating(false);
+      haptics.success(); // Tactile feedback on reveal
+      setShowResult(true);
+      hasRevealedRef.current = true;
+    }, 1200); // Slightly faster 1.2s suspense
+
+    return () => clearTimeout(timer1);
+  }, [location.pathname, isLocked, haptics, inputs.revenue, inputs.budget]); 
+  // Added inputs dependencies so if user changes numbers, it re-runs the "protocol" visual
 
   if (isLocked) {
     return (
@@ -111,10 +122,10 @@ const WaterfallTab = ({ result, inputs }: WaterfallTabProps) => {
                 ? "border-red-500/50 shadow-red-500/10" 
                 : "border-gold shadow-[0_0_40px_rgba(212,175,55,0.15)]"
             )}>
-              {/* Background FX */}
+              {/* Background FX - Toned down gold usage here too per "sparing" rule */}
               <div className="absolute inset-0 bg-gradient-to-br from-bg-elevated via-bg-card to-black" />
               <div className={cn(
-                "absolute top-0 right-0 w-64 h-64 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 opacity-20",
+                "absolute top-0 right-0 w-64 h-64 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 opacity-10", // Reduced opacity
                 isUnderwater ? "bg-red-500" : "bg-gold"
               )} />
               
@@ -126,8 +137,7 @@ const WaterfallTab = ({ result, inputs }: WaterfallTabProps) => {
                   "flex items-center gap-2 mb-2",
                   isUnderwater ? "text-red-400" : "text-gold/70"
                 )}>
-                  {isUnderwater ? <AlertTriangle className="w-4 h-4" /> : <Ticket className="w-4 h-4" />}
-                  <span className="text-xs font-bold uppercase tracking-[0.2em]">
+                  {isUnderwater ? <AlertTriangle className="w-4 h-4" /> : <Ticket className="w-4 h-4" />}\n                  <span className="text-xs font-bold uppercase tracking-[0.2em]">
                     {isUnderwater ? "Recoupment Shortfall" : "Producer Net Profit"}
                   </span>
                 </div>
@@ -233,8 +243,7 @@ const WaterfallTab = ({ result, inputs }: WaterfallTabProps) => {
              
               <div className="bg-bg-card border border-border-default rounded-lg overflow-hidden p-4 space-y-4">
                  <div className="grid grid-cols-3 gap-2 text-[10px] font-bold text-text-dim uppercase border-b border-border-subtle pb-2">
-                    <div>Source</div>
-                    <div className="text-right">Principal</div>
+                    <div>Source</div>\n                    <div className="text-right">Principal</div>
                     <div className="text-right">Cost (Int/Pref)</div>
                  </div>
                  
@@ -249,8 +258,7 @@ const WaterfallTab = ({ result, inputs }: WaterfallTabProps) => {
                  {inputs.mezzanineDebt > 0 && (
                    <div className="grid grid-cols-3 gap-2 text-sm">
                       <span className="text-text-primary">Gap Loan</span>
-                      <span className="text-right font-mono text-text-mid">{formatCompactCurrency(inputs.mezzanineDebt)}</span>
-                      <span className="text-right font-mono text-red-400">{formatCompactCurrency(mezzInterest)}</span>
+                      <span className="text-right font-mono text-text-mid">{formatCompactCurrency(inputs.mezzanineDebt)}</span>\n                      <span className="text-right font-mono text-red-400">{formatCompactCurrency(mezzInterest)}</span>
                    </div>
                  )}
                  
@@ -271,8 +279,7 @@ const WaterfallTab = ({ result, inputs }: WaterfallTabProps) => {
                <CollapsibleTrigger className="flex items-center justify-between w-full p-4 hover:bg-bg-elevated transition-colors">
                   <div className="flex items-center gap-2 text-text-dim">
                      <AlertTriangle className="w-4 h-4" />
-                     <span className="text-xs font-bold uppercase tracking-widest">Legal Disclaimer & Assumptions</span>
-                  </div>
+                     <span className="text-xs font-bold uppercase tracking-widest">Legal Disclaimer & Assumptions</span>\n                  </div>
                   {showDisclaimer ? <ChevronUp className="w-4 h-4 text-text-dim" /> : <ChevronDown className="w-4 h-4 text-text-dim" />}
                </CollapsibleTrigger>
                <CollapsibleContent className="p-4 pt-0 text-xs text-text-dim space-y-2 border-t border-border-subtle bg-bg-void/50">
@@ -281,11 +288,9 @@ const WaterfallTab = ({ result, inputs }: WaterfallTabProps) => {
                      <li><strong>Territory Splits:</strong> This model assumes a single "Worldwide" deal. In reality, rights are often sold territory-by-territory.</li>
                      <li><strong>Cross-Collateralization:</strong> We assume "Single Picture Accounting." If your deal is cross-collateralized, your profits may be zeroed out by other films' losses.</li>
                      <li><strong>Tax Credits:</strong> We treat tax credits as a source of funds (reducing the gap), not as revenue.</li>
-                     <li><strong>Interest Accrual:</strong> Interest is estimated as a flat fee. In reality, it accrues daily and compounds.</li>
-                  </ul>
+                     <li><strong>Interest Accrual:</strong> Interest is estimated as a flat fee. In reality, it accrues daily and compounds.</li>\n                  </ul>
                   <p className="font-bold text-red-400 mt-2">Consult a qualified entertainment attorney before signing any financing or distribution agreement.</p>
-               </CollapsibleContent>
-            </Collapsible>
+               </CollapsibleContent>\n            </Collapsible>
 
             {/* Action Link to Full Breakdown */}
             <Link 
@@ -304,8 +309,7 @@ const WaterfallTab = ({ result, inputs }: WaterfallTabProps) => {
                     </span>
                     <span className="text-xs text-text-dim group-hover:text-text-mid transition-colors">
                       Deep dive into the protocol logic
-                    </span>
-                  </div>
+                    </span>\n                  </div>
               </div>
               
               <div className="relative z-10 p-1 rounded-full border border-transparent group-hover:border-gold/30 transition-colors">

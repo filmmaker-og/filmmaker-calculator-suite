@@ -110,7 +110,7 @@ const CapitalSelect = ({ selections, onToggle, onNext }: CapitalSelectProps) => 
     >
       <div className="space-y-6">
         
-        {/* Selection cards - Matte Look */}
+        {/* Selection cards - Matte Look with Sparing Gold */}
         <div className="bg-bg-elevated border border-border-default rounded-lg overflow-hidden">
           <div className="px-5 py-3 border-b border-border-subtle flex items-center justify-between bg-bg-surface/50">
             <span className="text-xs uppercase tracking-widest text-text-dim font-bold">
@@ -132,28 +132,25 @@ const CapitalSelect = ({ selections, onToggle, onNext }: CapitalSelectProps) => 
                   key={option.key}
                   onClick={() => handleToggle(option.key)}
                   className={cn(
-                    "w-full p-4 text-left transition-all duration-150",
-                    isSelected ? "bg-gold-subtle" : "bg-transparent hover:bg-bg-elevated",
+                    "w-full p-4 text-left transition-all duration-150 group",
+                    isSelected 
+                      ? "bg-bg-surface" // REMOVED: gold background
+                      : "bg-transparent hover:bg-bg-elevated",
                     wasJustToggled && "scale-[1.01]"
                   )}
                 >
                   <div className="flex items-center gap-4">
-                    {/* Icon */}
+                    {/* Icon - Gold Only When Selected */}
                     <div
                       className={cn(
                         "w-10 h-10 flex items-center justify-center border transition-all",
                         isSelected
-                          ? "border-gold/30 bg-gold/5"
-                          : "border-border-subtle bg-bg-void"
+                          ? "border-gold text-gold bg-gold/5" // Subtle gold tint
+                          : "border-border-subtle bg-bg-void text-text-dim group-hover:text-text-mid"
                       )}
                       style={{ borderRadius: 'var(--radius-sm)' }}
                     >
-                      <Icon
-                        className={cn(
-                          "w-5 h-5 transition-colors",
-                          isSelected ? "text-gold" : "text-text-dim"
-                        )}
-                      />
+                      <Icon className="w-5 h-5 transition-colors" />
                     </div>
 
                     {/* Text content */}
@@ -162,13 +159,13 @@ const CapitalSelect = ({ selections, onToggle, onNext }: CapitalSelectProps) => 
                         <span
                           className={cn(
                             "text-sm font-medium transition-colors",
-                            isSelected ? "text-text-primary" : "text-text-mid"
+                            isSelected ? "text-gold" : "text-text-mid" // Text turns gold when selected
                           )}
                         >
                           {option.title}
                         </span>
                         {option.recommended && !isSelected && (
-                          <span className="text-[9px] px-1.5 py-0.5 bg-gold-subtle text-text-dim uppercase tracking-wider">
+                          <span className="text-[9px] px-1.5 py-0.5 bg-bg-elevated border border-border-subtle text-text-dim uppercase tracking-wider rounded">
                             Common
                           </span>
                         )}
@@ -178,7 +175,7 @@ const CapitalSelect = ({ selections, onToggle, onNext }: CapitalSelectProps) => 
                           {option.description}
                         </p>
                         <span className={cn(
-                          "text-[9px] px-1.5 py-0.5 uppercase tracking-wider flex-shrink-0",
+                          "text-[9px] px-1.5 py-0.5 uppercase tracking-wider flex-shrink-0 rounded",
                           isSelected ? "bg-gold/10 text-gold/70" : "bg-bg-elevated text-text-dim"
                         )}>
                           {option.priorityLabel}
@@ -189,12 +186,11 @@ const CapitalSelect = ({ selections, onToggle, onNext }: CapitalSelectProps) => 
                     {/* Checkbox */}
                     <div
                       className={cn(
-                        "w-5 h-5 flex items-center justify-center border transition-all duration-150",
+                        "w-5 h-5 flex items-center justify-center border transition-all duration-150 rounded-sm",
                         isSelected
                           ? "bg-gold border-gold"
-                          : "bg-transparent border-border-subtle"
+                          : "bg-transparent border-border-subtle group-hover:border-text-dim"
                       )}
-                      style={{ borderRadius: '4px' }}
                     >
                       {isSelected && (
                         <Check className="w-3 h-3 text-black" />
