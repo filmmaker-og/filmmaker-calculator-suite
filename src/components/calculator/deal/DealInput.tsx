@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { Info, Percent, DollarSign, Calculator } from "lucide-react";
-import { WaterfallInputs, GuildState, CapitalSelections, formatCompactCurrency, calculateBreakeven } from "@/lib/waterfall";
+import { WaterfallInputs, GuildState, CapitalSelections, formatCompactCurrency, CAM_PCT, SAG_PCT, WGA_PCT, DGA_PCT } from "@/lib/waterfall";
 import { cn } from "@/lib/utils";
 import { useMobileKeyboardScroll } from "@/hooks/use-mobile-keyboard";
 import StandardStepLayout from "../StandardStepLayout";
@@ -53,16 +53,9 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext }: DealIn
   const hasRevenue = inputs.revenue > 0;
 
   // --- LIVE ASSUMPTIONS CALCULATIONS ---
-  // Matches Netlify logic: CAM = 1%, Guilds based on revenue
-  const CAM_RATE = 0.01;
-  const camFee = inputs.revenue * CAM_RATE;
-  
+  // Uses shared constants from waterfall.ts (single source of truth)
+  const camFee = inputs.revenue * CAM_PCT;
   const salesAgentFee = inputs.revenue * (inputs.salesFee / 100);
-  
-  // Guild calculation (simplified approximation for the UI preview)
-  const SAG_PCT = 0.045;
-  const WGA_PCT = 0.012;
-  const DGA_PCT = 0.012;
   const guildRate = (guilds.sag ? SAG_PCT : 0) + (guilds.wga ? WGA_PCT : 0) + (guilds.dga ? DGA_PCT : 0);
   const guildFee = inputs.revenue * guildRate;
 
