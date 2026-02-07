@@ -69,7 +69,8 @@ const WaterfallTab = ({ result: initialResult, inputs: initialInputs }: Waterfal
     }, 1200);
 
     return () => clearTimeout(timer);
-  }, [isLocked, isDemoMode, haptics]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLocked, isDemoMode]);
 
   // Handler for "Run Demo" button on Locked Screen
   const handleRunDemo = () => {
