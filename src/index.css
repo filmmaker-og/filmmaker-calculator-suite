@@ -4,6 +4,9 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Scrollbar hide utility for carousels */
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+
 /* FILMMAKER.OG Design System — Premium Mobile-First
    TWO-GOLD SYSTEM:
      Metallic #D4AF37 — borders, icons, dividers, brand elements
