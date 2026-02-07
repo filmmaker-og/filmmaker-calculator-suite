@@ -91,7 +91,7 @@ const BudgetInput = ({ inputs, onUpdateInput, onNext }: BudgetInputProps) => {
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">
               <span className="text-xs uppercase tracking-widest text-text-dim font-bold">
-                Total Budget
+                Total Budget (Negative Cost)
               </span>
               <TooltipProvider>
                 <Tooltip delayDuration={0}>
@@ -99,7 +99,7 @@ const BudgetInput = ({ inputs, onUpdateInput, onNext }: BudgetInputProps) => {
                     <Info className="w-3.5 h-3.5 text-text-dim/50 hover:text-gold cursor-pointer transition-colors" />
                   </TooltipTrigger>
                   <TooltipContent side="right" className="max-w-[200px] bg-bg-card border-gold/30 text-xs">
-                    <p>The total cost to produce your film (Negative Cost).</p>
+                    <p>$2M negative cost (all-in budget).</p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
