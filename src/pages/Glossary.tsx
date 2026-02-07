@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Header from "@/components/Header";
-import { ArrowLeft, Search, Book, Mail } from "lucide-react";
+import { ArrowLeft, Search, Book, Mail, Home } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 
@@ -80,7 +80,7 @@ const RAW_TERMS: Term[] = [
   { term: "Finance Plan", def: "The document showing exactly where every dollar of the budget is coming from (Tax Credits, Presales, Equity, Gap).", category: "Finance" },
   { term: "First Dollar Gross", def: "The most advantageous participation. You get paid from the very first dollar of revenue, before *any* deductions.", category: "The Math" },
   { term: "First Look Deal", def: "A contract giving a studio the first right to finance/distribute a producer's next project.", category: "Legal" },
-  { term: "Force Majeure", def: "'Act of God.' A clause allowing cancellation of a contract due to unforeseen events (War, Pandemic).", category: "Legal" },
+  { term: "Force Majeure", def: " 'Act of God.' A clause allowing cancellation of a contract due to unforeseen events (War, Pandemic).", category: "Legal" },
   { term: "Foreign Sales Agent", def: "Represents the film to distributors outside the domestic territory.", category: "Roles" },
   { term: "Four-Wall", def: "Renting a theater yourself to show your film. You keep 100% of the box office (minus rental).", category: "Distribution" },
   { term: "Fringes", def: "The payroll taxes and union benefits added on top of a crew member's salary (usually +20-30%).", category: "Finance" },
@@ -111,14 +111,14 @@ const RAW_TERMS: Term[] = [
   { term: "LLC (Limited Liability Company)", def: "The standard corporate structure for a single film (Single Purpose Vehicle) to protect the producers personally.", category: "Legal" },
 
   // M
-  { term: "Marketing Cap", def: "The maximum amount a distributor is allowed to spend (and deduct) on P&A.", category: "Legal" },
+  { term: "Marketing Cap", def: "The maximum amount a distributor is allowed to spend (and deduct) on P&A. Also known as Sales Agent Marketing expenses.", category: "Legal" },
   { term: "Master", def: "The highest quality final version of the film.", category: "Production" },
   { term: "Minimum Guarantee (MG)", def: "Cash advance from a distributor.", category: "Finance" },
   { term: "Mezzanine Financing", def: "See *Gap Financing*.", category: "Finance" },
   { term: "Moral Rights", def: "The right of an author to protect the integrity of their work (harder to waive in Europe than the US).", category: "Legal" },
 
   // N
-  { term: "Negative Cost", def: "The actual cost to produce the finished film (master), excluding marketing/distribution.", category: "Finance" },
+  { term: "Negative Cost", def: "The actual cost to produce the finished film (master), excluding marketing/distribution. $2M negative cost (all-in budget).", category: "Finance" },
   { term: "Net Profit", def: "Money remaining after *everyone* (Distributor, Lenders, Investors) has been paid.", category: "The Math" },
   { term: "Net Receipts", def: "Gross Receipts minus Distributor Fees and Expenses. This flows to the Producer.", category: "The Math" },
   { term: "Non-Recourse Loan", def: "A loan secured *only* by the film's potential revenue, not the producer's personal assets.", category: "Finance" },
@@ -132,7 +132,7 @@ const RAW_TERMS: Term[] = [
   // P
   { term: "P&A (Prints & Advertising)", def: "Marketing and distribution costs.", category: "Finance" },
   { term: "Package", def: "The combination of Script, Director, and Cast presented to financiers.", category: "Production" },
-  { term: "Pari Passu", def: "'On Equal Footing.' Investors in the same tier get paid back simultaneously.", category: "The Math" },
+  { term: "Pari Passu", def: " 'On Equal Footing.' Investors in the same tier get paid back simultaneously.", category: "The Math" },
   { term: "Pay or Play", def: "A guarantee that talent gets paid even if the film is cancelled.", category: "Legal" },
   { term: "Pay-1 / Pay-2", def: "The first and second windows for Premium Cable/Streaming release.", category: "Distribution" },
   { term: "Points", def: "Percentage ownership of the backend.", category: "Legal" },
@@ -157,6 +157,7 @@ const RAW_TERMS: Term[] = [
   // S
   { term: "SAG-AFTRA", def: "Screen Actors Guild.", category: "Roles" },
   { term: "Sales Agent", def: "Broker who sells rights internationally.", category: "Roles" },
+  { term: "Sales Agent Marketing", def: "Expenses incurred by the sales agent (travel, markets, posters) to sell the film, usually capped (e.g., $75k). Deducted from gross receipts.", category: "Finance" },
   { term: "Sales Estimates", def: "Projected revenue numbers (High/Low/Take) provided by a Sales Agent to help value the film.", category: "Finance" },
   { term: "Senior Debt", def: "First-position bank loans.", category: "Finance" },
   { term: "Single Picture Accounting", def: "Accounting for one film only, preventing cross-collateralization.", category: "Legal" },
@@ -295,11 +296,11 @@ const Glossary = () => {
 
             <div className="flex justify-center pt-4">
               <button 
-                onClick={() => navigate(-1)} 
+                onClick={() => navigate('/')} 
                 className="flex items-center gap-2 text-text-dim hover:text-gold transition-colors uppercase tracking-widest text-xs font-bold"
               >
-                <ArrowLeft className="w-4 h-4" />
-                Return
+                <Home className="w-4 h-4" />
+                Return to Home
               </button>
             </div>
           </div>
