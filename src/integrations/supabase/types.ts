@@ -14,6 +14,41 @@ export type Database = {
   }
   public: {
     Tables: {
+      exports: {
+        Row: {
+          calculator_inputs: Json
+          created_at: string | null
+          export_type: string
+          id: string
+          purchase_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          calculator_inputs: Json
+          created_at?: string | null
+          export_type: string
+          id?: string
+          purchase_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          calculator_inputs?: Json
+          created_at?: string | null
+          export_type?: string
+          id?: string
+          purchase_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "exports_purchase_id_fkey"
+            columns: ["purchase_id"]
+            isOneToOne: false
+            referencedRelation: "purchases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           created_at: string
@@ -35,6 +70,54 @@ export type Database = {
           full_name?: string | null
           id?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      purchases: {
+        Row: {
+          access_expires_at: string | null
+          amount_paid: number
+          created_at: string | null
+          currency: string | null
+          email: string
+          id: string
+          product_id: string
+          product_name: string
+          status: string | null
+          stripe_payment_intent: string | null
+          stripe_session_id: string
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          access_expires_at?: string | null
+          amount_paid: number
+          created_at?: string | null
+          currency?: string | null
+          email: string
+          id?: string
+          product_id: string
+          product_name: string
+          status?: string | null
+          stripe_payment_intent?: string | null
+          stripe_session_id: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          access_expires_at?: string | null
+          amount_paid?: number
+          created_at?: string | null
+          currency?: string | null
+          email?: string
+          id?: string
+          product_id?: string
+          product_name?: string
+          status?: string | null
+          stripe_payment_intent?: string | null
+          stripe_session_id?: string
+          updated_at?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }
