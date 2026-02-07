@@ -10,6 +10,7 @@ import {
   ChevronDown,
   MessageCircle,
   Eye,
+  HelpCircle,
   FileSpreadsheet,
   Presentation,
   BookOpen,
@@ -141,7 +142,11 @@ const SectionHeader = ({ eyebrow, title, subtitle, icon: Icon }: {
       <p className="text-gold text-xs tracking-[0.3em] uppercase font-semibold">{eyebrow}</p>
     </div>
     <h2 className="font-bebas text-3xl md:text-4xl tracking-[0.08em] text-text-primary">{title}</h2>
-    {subtitle && <p className="text-text-mid text-[15px] text-center max-w-lg mx-auto mt-3 leading-relaxed">{subtitle}</p>}
+    {subtitle && (
+      <p className="text-text-mid text-[15px] text-center max-w-lg mx-auto mt-4 leading-relaxed px-4 py-2.5 rounded-xl bg-gold/[0.04] border border-gold/10">
+        {subtitle}
+      </p>
+    )}
   </div>
 );
 
@@ -257,11 +262,11 @@ const Index = () => {
 
   const isReturningUser = savedState !== null;
 
-  const hasSeenIntro = useMemo(() => {
+  const hasSeenCinematic = useMemo(() => {
     try { return localStorage.getItem(CINEMATIC_SEEN_KEY) === "true"; } catch { return false; }
   }, []);
 
-  const shouldSkip = searchParams.get("skipIntro") === "true" || hasSeenIntro;
+  const shouldSkip = searchParams.get("skipIntro") === "true" || hasSeenCinematic;
 
   const [phase, setPhase] = useState<'dark' | 'beam' | 'logo' | 'pulse' | 'tagline' | 'complete'>(shouldSkip ? 'complete' : 'dark');
 
@@ -278,10 +283,10 @@ const Index = () => {
   }, [shouldSkip]);
 
   useEffect(() => {
-    if (phase === 'complete' && !hasSeenIntro) {
+    if (phase === 'complete' && !hasSeenCinematic) {
       try { localStorage.setItem(CINEMATIC_SEEN_KEY, "true"); } catch { /* ignore */ }
     }
-  }, [phase, hasSeenIntro]);
+  }, [phase, hasSeenCinematic]);
 
   const handleStartClick = () => { haptics.medium(); navigate("/calculator?tab=budget"); };
   const handleContinueClick = () => { haptics.medium(); navigate("/calculator"); };
@@ -408,7 +413,7 @@ const Index = () => {
                 {industryCosts.map((item, i) => {
                   const Icon = item.icon;
                   return (
-                    <div key={item.label} className={cn("bg-bg-card border border-border-subtle rounded-xl p-4 relative overflow-hidden", staggerChild(fade2.visible))} style={staggerDelay(i, fade2.visible)}>
+                    <div key={item.label} className={cn("bg-bg-card border border-border-subtle hover:border-gold/20 rounded-xl p-5 relative overflow-hidden transition-colors", staggerChild(fade2.visible))} style={staggerDelay(i, fade2.visible)}>
                       <div className="absolute top-0 right-0 w-16 h-16 bg-gold/[0.03] rounded-full blur-2xl translate-x-4 -translate-y-4" />
                       <div className="relative">
                         <div className="w-9 h-9 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center mb-3">
@@ -443,7 +448,7 @@ const Index = () => {
                 ].map((item, i) => {
                   const Icon = item.icon;
                   return (
-                    <div key={item.title} className={cn("bg-bg-card border border-border-subtle hover:border-gold/20 rounded-xl p-4 transition-colors", staggerChild(fade3.visible))} style={staggerDelay(i, fade3.visible)}>
+                    <div key={item.title} className={cn("bg-bg-card border border-border-subtle hover:border-gold/20 rounded-xl p-5 transition-colors", staggerChild(fade3.visible))} style={staggerDelay(i, fade3.visible)}>
                       <div className="w-9 h-9 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center mb-3">
                         <Icon className="w-4 h-4 text-gold" />
                       </div>
@@ -460,13 +465,13 @@ const Index = () => {
           {/* ── HOW IT WORKS ── */}
           <SectionFrame id="how-it-works">
             <div ref={fade4.ref} className={cn(fade4.className, "max-w-2xl mx-auto")}>
-              <SectionHeader icon={Layers} eyebrow="How It Works" title="FOUR STEPS TO CLARITY" />
+              <SectionHeader icon={Layers} eyebrow="How It Works" title="FOUR STEPS TO CLARITY" subtitle="From budget to waterfall in four steps. No financial background required." />
               <div className="space-y-4">
                 {steps.map((step, i) => {
                   const Icon = step.icon;
                   return (
                     <div key={step.num} className={staggerChild(fade4.visible)} style={staggerDelay(i, fade4.visible)}>
-                      <div className="flex items-start gap-4 bg-bg-card border border-border-subtle hover:border-gold/20 rounded-xl p-4 transition-colors">
+                      <div className="flex items-start gap-4 bg-bg-card border border-border-subtle hover:border-gold/20 rounded-xl p-5 transition-colors">
                         <div className="flex-shrink-0 w-9 h-9 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center">
                           <Icon className="w-4 h-4 text-gold" />
                         </div>
@@ -494,12 +499,12 @@ const Index = () => {
           {/* ── WHEN TO USE THIS ── */}
           <SectionFrame id="use-cases">
             <div ref={fade5.ref} className={cn(fade5.className, "max-w-2xl mx-auto")}>
-              <SectionHeader icon={Target} eyebrow="When To Use This" title="THREE MOMENTS THAT DEFINE YOUR DEAL" />
+              <SectionHeader icon={Target} eyebrow="When To Use This" title="THREE MOMENTS THAT DEFINE YOUR DEAL" subtitle="The three moments where knowing your numbers changes everything." />
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {useCases.map((uc, i) => {
                   const Icon = uc.icon;
                   return (
-                    <div key={uc.title} className={cn("bg-bg-card border border-border-subtle hover:border-gold/20 rounded-xl p-4 transition-colors", staggerChild(fade5.visible))} style={staggerDelay(i, fade5.visible)}>
+                    <div key={uc.title} className={cn("bg-bg-card border border-border-subtle hover:border-gold/20 rounded-xl p-5 transition-colors", staggerChild(fade5.visible))} style={staggerDelay(i, fade5.visible)}>
                       <div className="w-9 h-9 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center mb-3">
                         <Icon className="w-4 h-4 text-gold" />
                       </div>
@@ -521,7 +526,7 @@ const Index = () => {
                 {problemCards.map((card, i) => {
                   const Icon = card.icon;
                   return (
-                    <div key={card.title} className={cn("bg-bg-card border border-border-subtle hover:border-gold/20 rounded-xl p-4 transition-colors", staggerChild(fade6.visible))} style={staggerDelay(i, fade6.visible)}>
+                    <div key={card.title} className={cn("bg-bg-card border border-border-subtle hover:border-gold/20 rounded-xl p-5 transition-colors", staggerChild(fade6.visible))} style={staggerDelay(i, fade6.visible)}>
                       <div className="w-9 h-9 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center mb-3">
                         <Icon className="w-4 h-4 text-gold" />
                       </div>
@@ -606,7 +611,7 @@ const Index = () => {
           {/* ── FAQ ── */}
           <SectionFrame id="faq">
             <div ref={fade9.ref} className={cn(fade9.className, "max-w-2xl mx-auto")}>
-              <SectionHeader icon={MessageCircle} eyebrow="Common Questions" title="WHAT FILMMAKERS ASK" />
+              <SectionHeader icon={HelpCircle} eyebrow="Common Questions" title="WHAT FILMMAKERS ASK" subtitle="Quick answers to the questions we hear most." />
               <div className="bg-bg-card border border-border-subtle rounded-xl px-5">
                 <Accordion type="single" collapsible className="w-full">
                   {faqs.map((faq, i) => (
@@ -638,7 +643,7 @@ const Index = () => {
                   className="w-full max-w-[320px] h-16 text-base font-black tracking-[0.12em] transition-all active:scale-[0.96] rounded-md bg-gold-cta-subtle border border-gold-cta-muted text-gold-cta shadow-button hover:border-gold-cta">
                   SEE YOUR WATERFALL
                 </button>
-                <p className="text-text-dim text-sm tracking-wider mt-4">No account required. No credit card. Just clarity.</p>
+                <p className="text-text-dim text-sm tracking-wider mt-4">No account required. No credit card.</p>
               </div>
             </div>
           </section>
