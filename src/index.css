@@ -7,6 +7,23 @@
 /* Scrollbar hide utility for carousels */
 .scrollbar-hide::-webkit-scrollbar { display: none; }
 
+/* ═══════════════════════════════════════════════════════════════════
+   SNAP SCROLL — proximity-based section snapping (mobile-first)
+   ═══════════════════════════════════════════════════════════════════ */
+.snap-container {
+  scroll-snap-type: y proximity;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+.snap-section {
+  scroll-snap-align: start;
+  scroll-margin-top: 56px; /* account for header height */
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
 /* FILMMAKER.OG Design System — Premium Mobile-First
    TWO-GOLD SYSTEM:
      Metallic #D4AF37 — borders, icons, dividers, brand elements
@@ -700,6 +717,15 @@
   @keyframes bounceRight {
     0%, 100% { transform: translateX(0); }
     50% { transform: translateX(4px); }
+  }
+
+  .animate-bounce-chevron {
+    animation: bounceChevron 2s ease-in-out infinite;
+  }
+
+  @keyframes bounceChevron {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(4px); }
   }
 
   /* ═══════════════════════════════════════════════════════════════════
