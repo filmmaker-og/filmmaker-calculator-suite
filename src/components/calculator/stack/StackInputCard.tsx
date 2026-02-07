@@ -111,7 +111,7 @@ const StackInputCard = ({
                     <TooltipTrigger asChild>
                       <Info className="w-3.5 h-3.5 text-text-dim/50 hover:text-gold cursor-pointer transition-colors" />
                     </TooltipTrigger>
-                    <TooltipContent side="right" className="max-w-[200px] bg-bg-card border-gold/30 text-xs">
+                    <TooltipContent side="right" className="max-w-[200px] bg-bg-card border-border-subtle text-xs">
                       <p>{helpText}</p>
                     </TooltipContent>
                   </Tooltip>

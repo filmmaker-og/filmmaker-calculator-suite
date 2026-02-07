@@ -60,7 +60,7 @@ const IntroView = () => {
                 <p>
                   We operate in the shadows so you can stand in the light. This tool extracts the proprietary logic 
                   used by top-tier entertainment lawyers and sales agents, putting institutional-grade modeling 
-                  directly into your hands. No fees. No middlemen. Just the math.
+                  directly into your hands. Free simulation. Professional exports available. Just the math.
                 </p>
               </div>
             </div>

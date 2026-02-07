@@ -97,8 +97,8 @@ const CapitalSelect = ({ selections, onToggle, onNext }: CapitalSelectProps) => 
       title="Capital Selection"
       subtitle="Select the funding sources in your deal"
       onNext={onNext}
-      nextLabel="Continue"
-      isComplete={selectedCount > 0}
+      nextLabel={selectedCount > 0 ? "Continue" : "Skip — Self-Financed"}
+      isComplete={true}
     >
       <div className="space-y-6">
         

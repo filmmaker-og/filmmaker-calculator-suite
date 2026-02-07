@@ -79,7 +79,7 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext }: DealIn
                   <TooltipTrigger asChild>
                     <Info className="w-3.5 h-3.5 text-text-dim/50 hover:text-gold cursor-pointer transition-colors" />
                   </TooltipTrigger>
-                  <TooltipContent side="right" className="max-w-[200px] bg-bg-card border-gold/30 text-xs">
+                  <TooltipContent side="right" className="max-w-[200px] bg-bg-card border-border-subtle text-xs">
                     <p>The total amount the distributor pays for the film.</p>
                   </TooltipContent>
                 </Tooltip>
@@ -96,10 +96,14 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext }: DealIn
               value={formatValue(inputs.revenue)}
               onChange={(e) => onUpdateInput('revenue', parseValue(e.target.value))}
               onFocus={scrollIntoView}
-              placeholder="0"
+              placeholder="2,000,000"
               className="flex-1 bg-transparent outline-none font-mono text-[22px] text-text-primary text-right placeholder:text-text-dim placeholder:text-base tabular-nums"
             />
           </div>
+          <p className="text-[10px] text-text-dim mt-2 leading-relaxed">
+            What would a streamer or buyer pay for your film? Typical indie range: $500K–$5M.
+            Not sure? Start with 2× your budget as a baseline.
+          </p>
         </div>
 
         {/* 2. THE "FIRES" (Deductions Inputs) */}

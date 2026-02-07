@@ -1,7 +1,7 @@
 import { WaterfallResult, WaterfallInputs, calculateWaterfall, formatCompactCurrency, formatMultiple } from "@/lib/waterfall";
 import { getVerdictStatus } from "@/lib/design-system";
 import { Lock, AlertTriangle, ChevronDown, ChevronUp, Play, X, FileSpreadsheet, Sparkles } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import StandardStepLayout from "../StandardStepLayout";
 import { useEffect, useState } from "react";
 import { useHaptics } from "@/hooks/use-haptics";
@@ -11,6 +11,7 @@ import WaterfallVisual from "../WaterfallVisual";
 interface WaterfallTabProps {
   result: WaterfallResult;
   inputs: WaterfallInputs;
+  onExport?: () => void;
 }
 
 // Demo inputs for when the user lands from Wiki with no data
@@ -29,10 +30,8 @@ const DEMO_INPUTS: WaterfallInputs = {
   deferments: 0,
 };
 
-const WaterfallTab = ({ result: initialResult, inputs: initialInputs }: WaterfallTabProps) => {
+const WaterfallTab = ({ result: initialResult, inputs: initialInputs, onExport }: WaterfallTabProps) => {
   const haptics = useHaptics();
-  const navigate = useNavigate();
-
   // State for Demo Mode (if real inputs are empty)
   const isEmpty = initialInputs.budget === 0 || initialInputs.revenue === 0;
   const [isDemoMode, setIsDemoMode] = useState(false);
@@ -212,7 +211,7 @@ const WaterfallTab = ({ result: initialResult, inputs: initialInputs }: Waterfal
                   Beautifully designed. Presentation-grade. Starting at $197.
                 </p>
                 <button
-                  onClick={() => navigate('/store')}
+                  onClick={onExport}
                   className="btn-vault w-full"
                 >
                   <FileSpreadsheet className="w-4 h-4 mr-2" />
