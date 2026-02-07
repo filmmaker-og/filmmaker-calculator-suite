@@ -408,7 +408,7 @@ const Index = () => {
           {/* ── INDUSTRY CHARGES ── */}
           <SectionFrame id="industry-charges">
             <div ref={fade2.ref} className={cn(fade2.className, "max-w-2xl mx-auto")}>
-              <SectionHeader icon={Gavel} eyebrow="The Industry Standard" title="WHAT OTHERS CHARGE FOR THIS ANALYSIS" subtitle="Modeled on real deal structures. Built by working producers. Institutional-grade financial modeling — this is the cost of understanding your own deal. Until now." />
+              <SectionHeader icon={Gavel} eyebrow="The Industry Standard" title="WHAT OTHERS CHARGE FOR THIS ANALYSIS" subtitle="This is what it costs to understand your own deal. Until now." />
               <div className="grid grid-cols-2 gap-4 mb-4">
                 {industryCosts.map((item, i) => {
                   const Icon = item.icon;
@@ -484,7 +484,7 @@ const Index = () => {
                         </div>
                       </div>
                       {step.callout && (
-                        <div className="mt-3 px-4 py-3 bg-gold/[0.04] border border-gold/15 rounded-xl">
+                        <div className="mt-3 px-4 py-3 bg-gold/[0.08] border border-gold/25 rounded-xl">
                           <p className="text-gold/80 text-sm leading-relaxed italic">{step.callout}</p>
                         </div>
                       )}
@@ -546,7 +546,7 @@ const Index = () => {
               <div className="relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-gold/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
                 <div className="relative z-10">
-                  <SectionHeader icon={Eye} eyebrow="Our Mission" title="DEMOCRATIZING THE BUSINESS OF FILM" />
+                  <SectionHeader icon={Eye} eyebrow="Our Mission" title="DEMOCRATIZING THE BUSINESS OF FILM" subtitle="The tools they use. Now in your hands." />
                   <div className="space-y-4 text-text-mid text-[15px] leading-relaxed text-center">
                     <p>For too long, the mechanics of film finance have been obscured by gatekeepers. Agencies, distributors, and studios thrive on information asymmetry. They know the numbers; you don't.</p>
                     <p className="text-text-primary font-medium text-base">We built this tool to level the playing field.</p>
@@ -683,9 +683,14 @@ const Index = () => {
                 It does not constitute legal, tax, accounting, or investment advice.
                 Consult a qualified entertainment attorney before making any investment or financing decisions.
               </p>
-              <p className="text-text-dim text-[11px] tracking-wider text-center uppercase">
-                FILMMAKER.OG &middot; BETA
-              </p>
+              <div className="flex items-center justify-center gap-2.5">
+                <span className="font-bebas text-lg tracking-[0.2em] text-gold">
+                  FILMMAKER<span className="text-white">.OG</span>
+                </span>
+                <span className="text-[8px] font-bold tracking-[0.15em] text-gold border border-gold/40 rounded-full px-1.5 py-0.5 leading-none uppercase">
+                  BETA
+                </span>
+              </div>
             </div>
           </footer>
         </main>
