@@ -1,114 +1,180 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Check, Volume2 } from "lucide-react";
+import { Check, Download, Sparkles } from "lucide-react";
 import Header from "@/components/Header";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
-const packages = [
+const products = [
   {
-    id: "producer",
-    name: "Producer Package",
+    id: "snapshot",
+    name: "The Snapshot",
+    price: 197,
+    originalPrice: 297,
+    accessDays: 30,
+    description: "Your Deal at a Glance",
+    features: [
+      "6-Sheet Professional Excel Export",
+      "Executive Summary Dashboard",
+      "Full Waterfall Breakdown",
+      "Investor-Ready Formatting",
+    ],
+  },
+  {
+    id: "blueprint",
+    name: "The Blueprint",
     price: 997,
-    description: "Templates & Decks",
+    originalPrice: 1497,
+    accessDays: 60,
+    description: "Multi-Scenario Analysis",
     features: [
-      "Film Finance Model Templates",
-      "Investor Pitch Deck Framework",
-      "Term Sheet Templates",
-      "Distribution Waterfall Guides",
+      "Everything in The Snapshot",
+      "3 Scenario Comparison Tool",
+      "Sensitivity Analysis Charts",
+      "60-Day Platform Access",
+      "Priority Email Support",
     ],
-    stripeLink: "#",
   },
   {
-    id: "institutional",
-    name: "Institutional Package",
-    price: 1297,
-    description: "Custom Models + Tax Map",
+    id: "investor-kit",
+    name: "The Investor Kit",
+    price: 1997,
+    originalPrice: 2997,
+    accessDays: 180,
     featured: true,
+    description: "Complete Investor Package",
     features: [
-      "Everything in Producer Package",
-      "Custom Financial Model Build",
-      "Tax Incentive Optimization Map",
-      "Gap Financing Analysis",
-      "60-min Strategy Call",
+      "Everything in The Blueprint",
+      "Comparable Films Database",
+      "Investor Pitch Deck Template",
+      "Term Sheet Framework",
+      "6-Month Platform Access",
+      "1-on-1 Strategy Call (30 min)",
     ],
-    stripeLink: "#",
   },
   {
-    id: "bespoke",
-    name: "Bespoke Modeling",
-    price: 2500,
-    description: "1-on-1 Strategy",
+    id: "greenlight",
+    name: "The Greenlight Package",
+    price: 4997,
+    originalPrice: 7500,
+    accessDays: 365,
+    description: "White-Glove Service",
     features: [
-      "Everything in Institutional Package",
-      "Dedicated Financial Strategist",
-      "Full Project Financial Model",
-      "Investor Presentation Review",
-      "Ongoing Support (30 days)",
+      "Everything in The Investor Kit",
+      "Custom Financial Model Build",
+      "White-Label Report Branding",
+      "Tax Incentive Optimization",
+      "12-Month Platform Access",
+      "Dedicated Strategist (3 calls)",
+      "Ongoing Support Channel",
     ],
-    stripeLink: "#",
   },
 ];
 
 const Store = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [agreedTerms, setAgreedTerms] = useState<Record<string, boolean>>({});
+  const [loading, setLoading] = useState<string | null>(null);
+  const [showSuccess, setShowSuccess] = useState(false);
 
-  const handlePurchase = (packageId: string, stripeLink: string) => {
-    if (!agreedTerms[packageId]) return;
-    window.open(stripeLink, "_blank");
+  useEffect(() => {
+    if (searchParams.get("success") === "true") {
+      setShowSuccess(true);
+    }
+  }, [searchParams]);
+
+  const handlePurchase = async (product: typeof products[0]) => {
+    if (!agreedTerms[product.id]) return;
+    
+    setLoading(product.id);
+    
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      const { data, error } = await supabase.functions.invoke("create-checkout", {
+        body: {
+          productId: product.id,
+          productName: product.name,
+          price: product.price,
+          accessDays: product.accessDays,
+          userEmail: user?.email,
+          userId: user?.id,
+        },
+      });
+
+      if (error) throw error;
+      
+      if (data?.url) {
+        window.location.href = data.url;
+      }
+    } catch (error: any) {
+      console.error("Checkout error:", error);
+      toast.error("Failed to start checkout. Please try again.");
+    } finally {
+      setLoading(null);
+    }
   };
+
+  if (showSuccess) {
+    return (
+      <div className="min-h-screen bg-background flex flex-col">
+        <Header title="SUCCESS" />
+        <main className="flex-1 px-6 py-16 flex items-center justify-center animate-page-in">
+          <div className="text-center max-w-md">
+            <div className="w-20 h-20 border-2 border-gold mx-auto mb-6 flex items-center justify-center">
+              <Check className="w-10 h-10 text-gold" />
+            </div>
+            <h1 className="font-bebas text-4xl text-foreground mb-4">
+              PAYMENT SUCCESSFUL
+            </h1>
+            <p className="text-muted-foreground mb-8">
+              Your purchase has been confirmed. You now have access to export your professional reports.
+            </p>
+            <Button
+              onClick={() => navigate("/calculator")}
+              className="btn-vault w-full py-4 min-h-[52px]"
+            >
+              <Download className="w-5 h-5 mr-2" />
+              GO TO CALCULATOR
+            </Button>
+          </div>
+        </main>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      {/* Header with consistent menu */}
-      <Header title="SERVICES" />
+      <Header title="PACKAGES" />
 
       <main className="flex-1 px-6 py-8 animate-page-in">
         {/* Header */}
-        <div className="text-center mb-10">
+        <div className="text-center mb-8">
           <h1 className="font-bebas text-4xl md:text-5xl text-foreground mb-3">
-            PRODUCER SERVICES
+            CHOOSE YOUR PACKAGE
           </h1>
-          <p className="text-muted-foreground text-sm max-w-md mx-auto">
-            Professional film finance consulting for serious producers
+          <p className="text-muted-foreground text-sm max-w-md mx-auto mb-4">
+            Professional film finance tools for serious producers
           </p>
-        </div>
-
-        {/* Trust Bridge - Audio Player Placeholder */}
-        <div className="glass-card p-6 mb-8">
-          <div className="flex items-center gap-4">
-            <button className="w-12 h-12 border border-gold flex items-center justify-center hover:bg-gold/10 transition-colors flex-shrink-0 touch-feedback min-h-[48px]">
-              <Volume2 className="w-6 h-6 text-gold" />
-            </button>
-            <div className="flex-1 min-w-0">
-              <span className="text-gold text-xs tracking-[0.2em] uppercase block mb-2">
-                Listen to the Process
-              </span>
-              <div className="flex items-center gap-0.5 h-6 overflow-hidden">
-                {Array.from({ length: 30 }).map((_, i) => (
-                  <div
-                    key={i}
-                    className="bg-gold/30 w-1 rounded-full flex-shrink-0"
-                    style={{ 
-                      height: `${Math.random() * 100}%`,
-                      minHeight: '4px'
-                    }}
-                  />
-                ))}
-              </div>
-            </div>
+          <div className="inline-flex items-center gap-2 px-4 py-2 border border-gold/30 bg-gold/5">
+            <Sparkles className="w-4 h-4 text-gold" />
+            <span className="text-gold text-xs tracking-[0.15em] uppercase">
+              Founders Pricing — Limited Time
+            </span>
           </div>
         </div>
 
-        {/* Pricing Cards - Stacked on Mobile with better spacing */}
-        <div className="space-y-6 pb-8">
-          {packages.map((pkg) => (
+        {/* Pricing Cards */}
+        <div className="space-y-6 pb-8 max-w-2xl mx-auto">
+          {products.map((product) => (
             <div
-              key={pkg.id}
-              className={`glass-card p-6 ${pkg.featured ? 'border-gold' : ''}`}
+              key={product.id}
+              className={`glass-card p-6 ${product.featured ? 'border-gold' : ''}`}
             >
-              {pkg.featured && (
+              {product.featured && (
                 <span className="text-gold text-xs tracking-[0.3em] uppercase mb-3 block">
                   Most Popular
                 </span>
@@ -117,17 +183,22 @@ const Store = () => {
               <div className="flex items-start justify-between mb-4">
                 <div>
                   <h3 className="font-bebas text-xl text-foreground">
-                    {pkg.name.toUpperCase()}
+                    {product.name.toUpperCase()}
                   </h3>
-                  <p className="text-muted-foreground text-xs">{pkg.description}</p>
+                  <p className="text-muted-foreground text-xs">{product.description}</p>
                 </div>
-                <span className="font-mono text-2xl text-gold">
-                  ${pkg.price.toLocaleString()}
-                </span>
+                <div className="text-right">
+                  <span className="text-muted-foreground text-sm line-through block">
+                    ${product.originalPrice.toLocaleString()}
+                  </span>
+                  <span className="font-mono text-2xl text-gold">
+                    ${product.price.toLocaleString()}
+                  </span>
+                </div>
               </div>
 
               <ul className="space-y-2 mb-6">
-                {pkg.features.map((feature, index) => (
+                {product.features.map((feature, index) => (
                   <li key={index} className="flex items-start gap-2">
                     <Check className="w-4 h-4 text-gold mt-0.5 flex-shrink-0" />
                     <span className="text-foreground text-sm">{feature}</span>
@@ -138,27 +209,32 @@ const Store = () => {
               <div className="space-y-3">
                 <div className="flex items-start gap-3 min-h-[44px] py-2">
                   <Checkbox
-                    id={`terms-${pkg.id}`}
-                    checked={agreedTerms[pkg.id] || false}
+                    id={`terms-${product.id}`}
+                    checked={agreedTerms[product.id] || false}
                     onCheckedChange={(checked) => 
-                      setAgreedTerms(prev => ({ ...prev, [pkg.id]: !!checked }))
+                      setAgreedTerms(prev => ({ ...prev, [product.id]: !!checked }))
                     }
                     className="mt-0.5 border-border data-[state=checked]:bg-gold data-[state=checked]:border-gold w-5 h-5"
                   />
                   <label 
-                    htmlFor={`terms-${pkg.id}`} 
+                    htmlFor={`terms-${product.id}`} 
                     className="text-muted-foreground text-xs cursor-pointer leading-relaxed"
                   >
-                    I agree this is a non-refundable consulting service
+                    I agree to the terms of service and understand this is a digital product
                   </label>
                 </div>
 
                 <Button
-                  onClick={() => handlePurchase(pkg.id, pkg.stripeLink)}
-                  disabled={!agreedTerms[pkg.id]}
-                  className={`w-full py-4 min-h-[52px] touch-feedback ${pkg.featured ? 'btn-vault' : 'btn-ghost-gold disabled:opacity-30'}`}
+                  onClick={() => handlePurchase(product)}
+                  disabled={!agreedTerms[product.id] || loading === product.id}
+                  className={`w-full py-4 min-h-[52px] touch-feedback ${product.featured ? 'btn-vault' : 'btn-ghost-gold disabled:opacity-30'}`}
                 >
-                  {agreedTerms[pkg.id] ? 'PURCHASE' : 'AGREE TO TERMS'}
+                  {loading === product.id 
+                    ? 'LOADING...' 
+                    : agreedTerms[product.id] 
+                      ? 'PURCHASE' 
+                      : 'AGREE TO TERMS'
+                  }
                 </Button>
               </div>
             </div>

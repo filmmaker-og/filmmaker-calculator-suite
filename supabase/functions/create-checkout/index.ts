@@ -19,7 +19,7 @@ const PRODUCTS = {
     price: 99700, // $997 in cents
     accessDays: 60,
   },
-  investor_kit: {
+  "investor-kit": {
     name: "The Investor Kit",
     price: 199700, // $1,997 in cents
     accessDays: 180,
