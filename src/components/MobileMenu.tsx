@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Menu, X, Home, Calculator, BookOpen, Book } from "lucide-react";
+import { Menu, X, Home, Calculator, BookOpen, Book, Mail, Instagram } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const MobileMenu = () => {
@@ -32,7 +32,7 @@ const MobileMenu = () => {
       {/* Drawer */}
       <div
         className={cn(
-          "fixed top-0 right-0 bottom-0 w-[280px] bg-bg-card border-l border-border-default z-[201] p-6 shadow-modal transition-transform duration-300 ease-out",
+          "fixed top-0 right-0 bottom-0 w-[280px] bg-bg-card border-l border-border-default z-[201] p-6 shadow-modal transition-transform duration-300 ease-out flex flex-col",
           isOpen ? "translate-x-0" : "translate-x-full"
         )}
       >
@@ -45,7 +45,7 @@ const MobileMenu = () => {
           </button>
         </div>
 
-        <div className="space-y-6">
+        <div className="space-y-6 flex-1">
           <div className="space-y-2">
             <h3 className="text-xs font-bold text-text-dim uppercase tracking-widest pl-3">Menu</h3>
             
@@ -82,13 +82,33 @@ const MobileMenu = () => {
             </button>
           </div>
 
-          <div className="pt-6 border-t border-border-default">
-            <p className="text-xs text-text-dim px-3">
-              FILMMAKER.OG v2.0.5
-              <br />
-              <span className="opacity-50">Build: {new Date().toLocaleDateString()}</span>
-            </p>
+          <div className="space-y-2 pt-6 border-t border-border-subtle">
+            <h3 className="text-xs font-bold text-text-dim uppercase tracking-widest pl-3">Contact</h3>
+            
+            <a
+              href="mailto:thefilmmaker.og@gmail.com"
+              className="w-full flex items-center gap-3 p-3 rounded-lg text-text-primary hover:bg-bg-elevated transition-colors text-left group"
+            >
+              <Mail className="w-5 h-5 text-gold/70 group-hover:text-gold" />
+              <span className="font-medium text-sm">thefilmmaker.og@gmail.com</span>
+            </a>
+
+            <a
+              href="https://www.instagram.com/filmmaker.og"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full flex items-center gap-3 p-3 rounded-lg text-text-primary hover:bg-bg-elevated transition-colors text-left group"
+            >
+              <Instagram className="w-5 h-5 text-gold/70 group-hover:text-gold" />
+              <span className="font-medium text-sm">@filmmaker.og</span>
+            </a>
           </div>
+        </div>
+
+        <div className="pt-6 border-t border-border-default">
+          <p className="text-xs text-text-dim px-3">
+            FILMMAKER.OG v2.1.0
+          </p>
         </div>
       </div>
     </>
