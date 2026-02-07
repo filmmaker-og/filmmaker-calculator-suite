@@ -402,6 +402,14 @@
     opacity: 0.3;
   }
 
+  .gold-section-divider {
+    height: 1px;
+    max-width: 120px;
+    margin: 0 auto;
+    background: linear-gradient(90deg, transparent 0%, var(--gold) 50%, transparent 100%);
+    opacity: 0.35;
+  }
+
   /* ═══════════════════════════════════════════════════════════════════
      TAB BAR — Fixed bottom navigation
      ═══════════════════════════════════════════════════════════════════ */

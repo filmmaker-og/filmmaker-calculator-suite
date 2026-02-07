@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Menu, X, Home, Calculator, BookOpen, Book, Mail, Instagram, Briefcase } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { Home, Calculator, BookOpen, Book, Mail, Instagram, Briefcase } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const MobileMenu = () => {
@@ -14,11 +14,32 @@ const MobileMenu = () => {
 
   return (
     <>
+      {/* Animated Hamburger Button */}
       <button
-        onClick={() => setIsOpen(true)}
-        className="p-2 text-gold hover:bg-gold/10 rounded-full transition-colors"
+        onClick={() => setIsOpen(!isOpen)}
+        className="relative w-10 h-10 flex items-center justify-center rounded-lg hover:bg-bg-elevated transition-colors"
+        aria-label={isOpen ? "Close menu" : "Open menu"}
       >
-        <Menu className="w-6 h-6" />
+        <div className="w-5 h-4 relative flex flex-col justify-between">
+          <span
+            className={cn(
+              "block h-[1.5px] w-full bg-gold rounded-full transition-all duration-300 origin-center",
+              isOpen && "translate-y-[7px] rotate-45"
+            )}
+          />
+          <span
+            className={cn(
+              "block h-[1.5px] w-full bg-gold rounded-full transition-all duration-300",
+              isOpen ? "opacity-0 scale-x-0" : "opacity-100 scale-x-100"
+            )}
+          />
+          <span
+            className={cn(
+              "block h-[1.5px] w-full bg-gold rounded-full transition-all duration-300 origin-center",
+              isOpen && "-translate-y-[7px] -rotate-45"
+            )}
+          />
+        </div>
       </button>
 
       {/* Overlay */}
@@ -39,16 +60,20 @@ const MobileMenu = () => {
         <div className="flex justify-end mb-8">
           <button
             onClick={() => setIsOpen(false)}
-            className="p-2 text-text-dim hover:text-white rounded-full hover:bg-bg-elevated transition-colors"
+            className="relative w-10 h-10 flex items-center justify-center rounded-lg hover:bg-bg-elevated transition-colors"
+            aria-label="Close menu"
           >
-            <X className="w-6 h-6" />
+            <div className="w-5 h-4 relative">
+              <span className="block h-[1.5px] w-full bg-text-dim rounded-full absolute top-1/2 -translate-y-1/2 rotate-45 transition-colors hover:bg-white" />
+              <span className="block h-[1.5px] w-full bg-text-dim rounded-full absolute top-1/2 -translate-y-1/2 -rotate-45 transition-colors hover:bg-white" />
+            </div>
           </button>
         </div>
 
         <div className="space-y-6 flex-1">
           <div className="space-y-2">
             <h3 className="font-bebas text-xs text-text-dim uppercase tracking-[0.2em] pl-3">Menu</h3>
-            
+
             <button
               onClick={() => handleNavigate('/store')}
               className="w-full flex items-center gap-3 p-3 rounded-lg text-text-primary hover:bg-bg-elevated transition-colors text-left group"
@@ -92,7 +117,7 @@ const MobileMenu = () => {
 
           <div className="space-y-2 pt-6 border-t border-border-subtle">
             <h3 className="font-bebas text-xs text-text-dim uppercase tracking-[0.2em] pl-3">Contact</h3>
-            
+
             <a
               href="mailto:thefilmmaker.og@gmail.com"
               className="w-full flex items-center gap-3 p-3 rounded-lg text-text-primary hover:bg-bg-elevated transition-colors text-left group"
