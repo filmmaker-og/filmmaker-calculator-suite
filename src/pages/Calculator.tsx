@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useHaptics } from "@/hooks/use-haptics";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { User } from "@supabase/supabase-js";
-import { calculateWaterfall, WaterfallInputs, WaterfallResult, GuildState } from "@/lib/waterfall";
+import { calculateWaterfall, WaterfallInputs, GuildState } from "@/lib/waterfall";
 import { cn } from "@/lib/utils";
 
 // New Tab Components
@@ -12,7 +12,7 @@ import TabBar, { TabId } from "@/components/calculator/TabBar";
 import { BudgetTab, StackTab, DealTab, WaterfallTab } from "@/components/calculator/tabs";
 import { CapitalSourceSelections, defaultSelections } from "@/components/calculator/stack/CapitalSelect";
 import EmailGateModal from "@/components/EmailGateModal";
-import Header from "@/components/Header"; // Import shared Header
+import Header from "@/components/Header";
 
 const STORAGE_KEY = "filmmaker_og_inputs";
 const EMAIL_CAPTURED_KEY = "filmmaker_og_email_captured";
