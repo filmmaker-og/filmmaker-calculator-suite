@@ -1,5 +1,11 @@
 // Waterfall Calculation Logic - Source of Truth from PRD
-// Last updated: 2026-02-05
+// Last updated: 2026-02-07
+
+// ===== SHARED CONSTANTS (single source of truth) =====
+export const CAM_PCT = 0.01;
+export const SAG_PCT = 0.045;
+export const WGA_PCT = 0.012;
+export const DGA_PCT = 0.012;
 
 export interface WaterfallInputs {
   revenue: number;
@@ -36,12 +42,19 @@ export interface WaterfallResult {
   guilds: number;
   marketing: number;
   deferments: number;
+  credits: number;
   recouped: number;
   recoupPct: number;
   investor: number;
   producer: number;
   multiple: number;
   ledger: LedgerItem[];
+  // Structured phase totals — use these instead of re-deriving from ledger
+  offTopTotal: number;
+  debtTotal: number;
+  seniorDebtHurdle: number;
+  mezzDebtHurdle: number;
+  equityHurdle: number;
 }
 
 // Calculate the algebraic breakeven point
@@ -51,15 +64,10 @@ export interface CapitalSelections {
   seniorDebt: boolean;
   gapLoan: boolean;
   equity: boolean;
+  deferments: boolean;
 }
 
 export function calculateBreakeven(inputs: WaterfallInputs, guilds: GuildState, selections: CapitalSelections): number {
-  // Constants
-  const CAM_PCT = 0.01;
-  const SAG_PCT = 0.045;
-  const WGA_PCT = 0.012;
-  const DGA_PCT = 0.012;
-
   // Calculate off-top percentage (variable costs based on revenue)
   const salesFeePct = Math.max(0, Math.min(100, inputs.salesFee || 0)) / 100;
   const guildsPct = (guilds.sag ? SAG_PCT : 0) +
@@ -103,11 +111,6 @@ export function calculateBreakeven(inputs: WaterfallInputs, guilds: GuildState, 
 
 // Get off-top rate as a percentage (for display)
 export function getOffTopRate(inputs: WaterfallInputs, guilds: GuildState): number {
-  const CAM_PCT = 0.01;
-  const SAG_PCT = 0.045;
-  const WGA_PCT = 0.012;
-  const DGA_PCT = 0.012;
-
   const salesFeePct = Math.max(0, Math.min(100, inputs.salesFee || 0)) / 100;
   const guildsPct = (guilds.sag ? SAG_PCT : 0) +
                     (guilds.wga ? WGA_PCT : 0) +
@@ -117,14 +120,9 @@ export function getOffTopRate(inputs: WaterfallInputs, guilds: GuildState): numb
 }
 
 export function calculateWaterfall(inputs: WaterfallInputs, guilds: GuildState): WaterfallResult {
-  // Constants
-  const CAM_PCT = 0.01;
-  const SAG_PCT = 0.045;
-  const WGA_PCT = 0.012;
-  const DGA_PCT = 0.012;
-
   // Extract inputs with safety guards (ensure non-negative)
   const revenue = Math.max(0, inputs.revenue || 0);
+  const credits = Math.max(0, inputs.credits || 0);
   const debt = Math.max(0, inputs.debt || 0);
   const seniorDebtRate = Math.max(0, Math.min(100, inputs.seniorDebtRate || 0));
   const mezzanineDebt = Math.max(0, inputs.mezzanineDebt || 0);
@@ -146,19 +144,19 @@ export function calculateWaterfall(inputs: WaterfallInputs, guilds: GuildState):
                    (guilds.dga ? DGA_PCT : 0);
   const guildsCost = revenue * guildPct;
 
-  // 3. Hurdles - Now using actual user-input rates
+  // 3. Hurdles
   const offTop = cam + guildsCost + salesFeeAmount + marketing;
   const seniorDebtHurdle = debt * (1 + (seniorDebtRate / 100));
   const mezzDebtHurdle = mezzanineDebt * (1 + (mezzanineRate / 100));
   const totalDebtHurdle = seniorDebtHurdle + mezzDebtHurdle;
   const equityHurdle = equity * (1 + (premium / 100));
-  
-  // Total hurdle now includes deferments
-  const totalHurdle = offTop + totalDebtHurdle + equityHurdle + deferments;
 
-  // 4. Distribution
+  // 4. Tax credits reduce the total hurdle (consistent with breakeven calc)
+  const totalHurdle = offTop + totalDebtHurdle + equityHurdle + deferments - credits;
+
+  // 5. Distribution
   const profitPool = Math.max(0, revenue - totalHurdle);
-  const recouped = Math.min(revenue, totalHurdle);
+  const recouped = Math.min(revenue, Math.max(0, totalHurdle));
   const recoupPct = totalHurdle > 0 ? Math.min(100, (revenue / totalHurdle) * 100) : 0;
 
   const investorRecoup = Math.min(equityHurdle, Math.max(0, revenue - offTop - totalDebtHurdle));
@@ -166,12 +164,13 @@ export function calculateWaterfall(inputs: WaterfallInputs, guilds: GuildState):
   const producerShare = profitPool * 0.5;
   const multiple = equity > 0 ? investorTotal / equity : 0;
 
-  // 5. Ledger Construction
+  // 6. Ledger Construction
   const ledger: LedgerItem[] = [
     { name: "CAM / Admin", detail: "1% OF GROSS", amount: cam },
     { name: "Sales Agent Marketing", detail: "EXPENSE CAP (STANDARD $75K)", amount: marketing },
     { name: "Sales Agent", detail: `${salesFee}% COMMISSION`, amount: salesFeeAmount },
     { name: "Unions", detail: "GUILD RESIDUALS / P&H", amount: guildsCost },
+    ...(credits > 0 ? [{ name: "Tax Credits", detail: "INCENTIVE OFFSET", amount: -credits }] : []),
     { name: "Senior Debt", detail: `${seniorDebtRate}% INTEREST`, amount: seniorDebtHurdle },
     ...(mezzanineDebt > 0 ? [{ name: "Gap/Mezz Debt", detail: `${mezzanineRate}% INTEREST`, amount: mezzDebtHurdle }] : []),
     { name: "Equity", detail: `PRINCIPAL + ${premium}% PREF`, amount: equityHurdle },
@@ -186,12 +185,19 @@ export function calculateWaterfall(inputs: WaterfallInputs, guilds: GuildState):
     guilds: guildsCost,
     marketing,
     deferments,
+    credits,
     recouped,
     recoupPct,
     investor: investorTotal,
     producer: producerShare,
     multiple,
-    ledger
+    ledger,
+    // Structured phase totals
+    offTopTotal: offTop,
+    debtTotal: totalDebtHurdle,
+    seniorDebtHurdle,
+    mezzDebtHurdle,
+    equityHurdle,
   };
 }
 
@@ -210,11 +216,14 @@ export function formatCompactCurrency(value: number): string {
   // Guard against NaN/Infinity
   if (!Number.isFinite(value)) return '$0';
 
-  if (Math.abs(value) >= 1000000) {
-    return `$${(value / 1000000).toFixed(1)}M`;
+  const sign = value < 0 ? '-' : '';
+  const abs = Math.abs(value);
+
+  if (abs >= 1000000) {
+    return `${sign}$${(abs / 1000000).toFixed(1)}M`;
   }
-  if (Math.abs(value) >= 1000) {
-    return `$${(value / 1000).toFixed(0)}K`;
+  if (abs >= 1000) {
+    return `${sign}$${(abs / 1000).toFixed(0)}K`;
   }
   return formatCurrency(value);
 }

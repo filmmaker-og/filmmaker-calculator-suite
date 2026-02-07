@@ -1,12 +1,12 @@
-import { WaterfallResult, WaterfallInputs, formatCurrency, formatCompactCurrency, calculateWaterfall } from "@/lib/waterfall";
-import { ArrowRight, Lock, BookOpen, AlertTriangle, ChevronDown, ChevronUp, Play } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
-import { cn } from "@/lib/utils";
+import { WaterfallResult, WaterfallInputs, calculateWaterfall, formatCompactCurrency, formatMultiple } from "@/lib/waterfall";
+import { getVerdictStatus } from "@/lib/design-system";
+import { Lock, AlertTriangle, ChevronDown, ChevronUp, Play, X } from "lucide-react";
+import { Link } from "react-router-dom";
 import StandardStepLayout from "../StandardStepLayout";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useHaptics } from "@/hooks/use-haptics";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import WaterfallVisual from "../WaterfallVisual"; // IMPORTED THE MISSING COMPONENT
+import WaterfallVisual from "../WaterfallVisual";
 
 interface WaterfallTabProps {
   result: WaterfallResult;
@@ -31,8 +31,7 @@ const DEMO_INPUTS: WaterfallInputs = {
 
 const WaterfallTab = ({ result: initialResult, inputs: initialInputs }: WaterfallTabProps) => {
   const haptics = useHaptics();
-  const location = useLocation();
-  
+
   // State for Demo Mode (if real inputs are empty)
   const isEmpty = initialInputs.budget === 0 || initialInputs.revenue === 0;
   const [isDemoMode, setIsDemoMode] = useState(false);
@@ -51,8 +50,6 @@ const WaterfallTab = ({ result: initialResult, inputs: initialInputs }: Waterfal
   const [showResult, setShowResult] = useState(false);
   const [showDisclaimer, setShowDisclaimer] = useState(false);
   
-  const hasRevealedRef = useRef(false);
-
   // Trigger Animation on Load or Demo Toggle
   useEffect(() => {
     if (isLocked) {
@@ -68,7 +65,6 @@ const WaterfallTab = ({ result: initialResult, inputs: initialInputs }: Waterfal
       setIsCalculating(false);
       haptics.success();
       setShowResult(true);
-      hasRevealedRef.current = true;
     }, 1200);
 
     return () => clearTimeout(timer);
@@ -113,24 +109,6 @@ const WaterfallTab = ({ result: initialResult, inputs: initialInputs }: Waterfal
     );
   }
 
-  // Derived metrics for visuals
-  const offTheTop = activeResult.ledger.find(i => i.name === "Sales Fees")?.amount || 0; 
-  // Simplified mapping for the Visual Component
-  // Note: WaterfallVisual expects specific buckets. We aggregate result.ledger to match.
-  // This is a simplification; for production, we might want exact matching.
-  
-  const debtService = activeResult.ledger
-    .filter(i => i.name.includes("Debt") || i.name.includes("Loan") || i.name.includes("Interest"))
-    .reduce((acc, curr) => acc + curr.amount, 0);
-
-  const equityReturn = activeResult.ledger
-    .filter(i => i.name.includes("Equity"))
-    .reduce((acc, curr) => acc + curr.amount, 0);
-
-  const deferments = activeResult.ledger
-    .filter(i => i.name.includes("Deferment"))
-    .reduce((acc, curr) => acc + curr.amount, 0);
-
   return (
     <StandardStepLayout
       chapter="04"
@@ -139,7 +117,7 @@ const WaterfallTab = ({ result: initialResult, inputs: initialInputs }: Waterfal
       className="pb-24"
     >
       <div className="space-y-6">
-        
+
         {/* CALCULATING STATE */}
         {isCalculating && (
           <div className="h-[400px] bg-bg-card border border-border-default rounded-lg flex flex-col items-center justify-center space-y-6 animate-pulse-subtle">
@@ -157,19 +135,66 @@ const WaterfallTab = ({ result: initialResult, inputs: initialInputs }: Waterfal
           </div>
         )}
 
-        {/* RESULT STATE - NOW USING WATERFALL VISUAL */}
+        {/* RESULT STATE - Uses engine's pre-computed phase totals (single source of truth) */}
         {!isCalculating && showResult && (
           <div className="animate-reveal-up space-y-6">
-            
-            {/* THE NEW VISUAL COMPONENT */}
-            <WaterfallVisual 
+
+            {/* Demo mode exit banner */}
+            {isDemoMode && (
+              <div className="flex items-center justify-between p-3 border border-gold/30 bg-gold/[0.06] rounded-lg">
+                <span className="text-xs text-gold uppercase tracking-wider font-bold">Demo Mode</span>
+                <button
+                  onClick={() => setIsDemoMode(false)}
+                  className="flex items-center gap-1 text-xs text-text-dim hover:text-text-primary transition-colors"
+                >
+                  <X className="w-3 h-3" />
+                  <span>Exit</span>
+                </button>
+              </div>
+            )}
+
+            <WaterfallVisual
               revenue={activeInputs.revenue}
-              offTheTop={activeInputs.salesFee * activeInputs.revenue / 100 + activeInputs.salesExp} // approx
-              debtService={debtService}
-              equityPremium={equityReturn}
-              deferments={deferments}
-              profitPool={activeResult.producer + activeResult.investor}
+              offTheTop={activeResult.offTopTotal}
+              debtService={activeResult.debtTotal}
+              equityPremium={activeResult.equityHurdle}
+              deferments={activeResult.deferments}
+              profitPool={activeResult.profitPool}
             />
+
+            {/* Verdict + Investor Summary */}
+            {(() => {
+              const verdict = getVerdictStatus(activeResult.multiple, activeResult.profitPool > 0);
+              return (
+                <div
+                  className="p-5 border rounded-lg space-y-4"
+                  style={{ borderColor: verdict.color + '33', backgroundColor: verdict.bgColor }}
+                >
+                  <div className="flex items-center justify-between">
+                    <span
+                      className="text-xs font-bold uppercase tracking-widest"
+                      style={{ color: verdict.color }}
+                    >
+                      {verdict.label}
+                    </span>
+                    <span className="font-mono text-lg font-bold" style={{ color: verdict.color }}>
+                      {formatMultiple(activeResult.multiple)}
+                    </span>
+                  </div>
+                  <p className="text-xs text-text-dim leading-relaxed">{verdict.description}</p>
+                  <div className="grid grid-cols-2 gap-4 pt-2 border-t border-border-subtle">
+                    <div>
+                      <p className="text-[9px] uppercase tracking-wider text-text-dim mb-1">Investor Total</p>
+                      <p className="font-mono text-sm text-text-primary">{formatCompactCurrency(activeResult.investor)}</p>
+                    </div>
+                    <div>
+                      <p className="text-[9px] uppercase tracking-wider text-text-dim mb-1">Producer Share</p>
+                      <p className="font-mono text-sm text-text-primary">{formatCompactCurrency(activeResult.producer)}</p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })()}
 
             {/* Disclaimer */}
             <Collapsible open={showDisclaimer} onOpenChange={setShowDisclaimer} className="border border-border-subtle rounded-lg bg-bg-surface overflow-hidden">
