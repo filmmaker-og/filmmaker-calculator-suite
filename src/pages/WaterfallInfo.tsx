@@ -15,7 +15,11 @@ const WaterfallInfo = () => {
 
   const handleReturnToCalculator = () => {
     // Navigate to calculator. If they have data, it will show their last state.
-    navigate('/calculator?tab=waterfall'); 
+    // NOTE: We do NOT force ?tab=waterfall here, because the Calculator component
+    // has logic to determine the correct tab based on completion status.
+    // If we force tab=waterfall but inputs are empty, it might show a locked screen.
+    // Ideally, we just go back to the calculator.
+    navigate('/calculator'); 
   };
 
   const handleStartFresh = () => {
