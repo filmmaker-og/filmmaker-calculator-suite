@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useHaptics } from "@/hooks/use-haptics";
@@ -67,7 +67,8 @@ const Calculator = () => {
   const [activeTab, setActiveTab] = useState<TabId>('budget');
   const [inputs, setInputs] = useState<WaterfallInputs>(defaultInputs);
   const [guilds, setGuilds] = useState<GuildState>(defaultGuilds);
-  const [result, setResult] = useState<WaterfallResult | null>(null);
+  // REMOVED: state-based result
+  // const [result, setResult] = useState<WaterfallResult | null>(null);
   const [showEmailGate, setShowEmailGate] = useState(false);
   const [emailCaptured, setEmailCaptured] = useState(false);
   const [sourceSelections, setSourceSelections] = useState<CapitalSourceSelections>(defaultSelections);
@@ -136,10 +137,11 @@ const Calculator = () => {
     }));
   }, [inputs, guilds, activeTab, sourceSelections]);
 
-  // Calculate on input change
-  useEffect(() => {
-    const calculated = calculateWaterfall(inputs, guilds);
-    setResult(calculated);
+  // DERIVE RESULT SYNCHRONOUSLY
+  // This ensures 'result' is never null during a render if inputs exist.
+  // It prevents the "flash of null" or "nothing loads" issue when switching tabs.
+  const result = useMemo(() => {
+    return calculateWaterfall(inputs, guilds);
   }, [inputs, guilds]);
 
   // Auth
@@ -192,8 +194,7 @@ const Calculator = () => {
     setEmailCaptured(true);
     setShowEmailGate(false);
     handleTabChange('waterfall'); // Continue to waterfall after success
-  };
-
+  };\n
   const handleEmailSkip = () => {
     setEmailCaptured(true);
     setShowEmailGate(false);
@@ -209,11 +210,10 @@ const Calculator = () => {
     if (inputs.budget > 0) completed.push('budget');
     if (inputs.credits > 0 || inputs.debt > 0 || inputs.mezzanineDebt > 0 || inputs.equity > 0) {
       completed.push('stack');
-    }
-    if (inputs.revenue > 0) completed.push('deal');
+    }\n    if (inputs.revenue > 0) completed.push('deal');
     if (inputs.revenue > 0 && inputs.budget > 0) completed.push('waterfall');
-    return completed;\n  };
-
+    return completed;
+  };\n
   // Determine which tabs are disabled
   const getDisabledTabs = (): TabId[] => {
     const disabled: TabId[] = [];
@@ -228,19 +228,17 @@ const Calculator = () => {
     const currentIndex = STEP_TO_TAB.indexOf(activeTab);
     // Find next tab that's not disabled
     for (let i = currentIndex + 1; i < STEP_TO_TAB.length; i++) {
-      const nextTab = STEP_TO_TAB[i];\n      if (!getDisabledTabs().includes(nextTab)) {
+      const nextTab = STEP_TO_TAB[i];
+      if (!getDisabledTabs().includes(nextTab)) {
         return nextTab;
       }
     }
     return null;
-  };
-
+  };\n
   // Stack Tab Internal State Handling (Step within Step)
   // We need to know if we are "deep" inside the Stack Wizard to know if Back should go to previous stack step or previous TAB
   // This is a limitation of the current architecture where StackTab manages its own internal state
-  // ideally, this state should be lifted up, but for now we will rely on the TAB navigation.
-  
-  // FIX: handleBack Logic
+  // ideally, this state should be lifted up, but for now we will rely on the TAB navigation.\n  \n  // FIX: handleBack Logic
   const handleBack = () => {
     const currentIndex = STEP_TO_TAB.indexOf(activeTab);
     
@@ -254,8 +252,7 @@ const Calculator = () => {
     const prevTab = STEP_TO_TAB[currentIndex - 1];
     haptics.light();
     setActiveTab(prevTab);
-  };
-
+  };\n
   // Handle Next button
   const handleNext = useCallback(() => {
     const nextTab = getNextTab();
@@ -267,14 +264,12 @@ const Calculator = () => {
   // Check if current section is completed
   const isCurrentSectionComplete = (): boolean => {
     const completed = getCompletedTabs();
-    return completed.includes(activeTab);
-  };
+    return completed.includes(activeTab);\n  };
 
   // Render current tab content
   const renderTabContent = () => {
     switch (activeTab) {
-      case 'budget':
-        return (
+      case 'budget':\n        return (
           <BudgetTab
             inputs={inputs}
             guilds={guilds}
@@ -304,45 +299,49 @@ const Calculator = () => {
           />
         );
       case 'waterfall':
-        return result ? (
+        // FIX: Always render WaterfallTab if result is available (which it always is now via useMemo)
+        return (
           <WaterfallTab
             result={result}
             inputs={inputs}
           />
-        ) : null;
+        );
       default:
         return null;
-    }\n  };
+    }
+  };
 
   if (loading) {
     return (
-      <div className=\"min-h-screen bg-bg-void flex flex-col\">
+      <div className="min-h-screen bg-bg-void flex flex-col">
         <Header />
-        <div className=\"flex-1 flex items-center justify-center\">
-          <div className=\"w-8 h-8 border-2 border-gold border-t-transparent rounded-full animate-spin\" />\n        </div>
+        <div className="flex-1 flex items-center justify-center">
+          <div className="w-8 h-8 border-2 border-gold border-t-transparent rounded-full animate-spin" />
+        </div>
       </div>
-    );\n  }
+    );
+  }
 
   // Calculate progress percentage
   const progressPercent = TAB_TO_STEP[activeTab] * 25;
 
   return (
-    <div className=\"min-h-screen bg-bg-void flex flex-col\">
+    <div className="min-h-screen bg-bg-void flex flex-col">
       {/* Shared Header - Fixes logo color and consistency */}
       <Header />
 
       {/* Main Content */}
       <main
         ref={mainRef}
-        className=\"flex-1 px-4 py-6 overflow-y-auto\"
+        className="flex-1 px-4 py-6 overflow-y-auto"
         style={{
           paddingBottom: 'calc(var(--tabbar-h) + 100px + env(safe-area-inset-bottom))',
         }}
       >
         <div
           className={cn(
-            \"max-w-[460px] mx-auto\",
-            \"animate-fade-in\"
+            "max-w-[460px] mx-auto",
+            "animate-fade-in"
           )}
         >
           {renderTabContent()}
@@ -351,7 +350,7 @@ const Calculator = () => {
 
       {/* Floating bar above tab bar - Back + Progress + Next */}
       <div
-        className=\"fixed left-0 right-0 z-40 flex items-center justify-between px-4 py-2\"
+        className="fixed left-0 right-0 z-40 flex items-center justify-between px-4 py-2"
         style={{
           bottom: 'calc(var(--tabbar-h) + env(safe-area-inset-bottom))',
           backgroundColor: 'var(--bg-card)',
@@ -361,46 +360,45 @@ const Calculator = () => {
         <button
           onClick={handleBack}
           className={cn(
-            \"flex items-center gap-2 px-4 py-2 rounded-md transition-all\",
-            \"border border-gold-muted bg-gold-subtle text-white\",
-            \"hover:bg-gold hover:text-black\",
-            \"active:scale-95\"
+            "flex items-center gap-2 px-4 py-2 rounded-md transition-all",
+            "border border-gold-muted bg-gold-subtle text-white",\n            "hover:bg-gold hover:text-black",
+            "active:scale-95"
           )}
         >
-          <ArrowLeft className=\"w-4 h-4\" />
-          <span className=\"text-xs font-bold uppercase tracking-wider\">Back</span>
-        </button>
+          <ArrowLeft className="w-4 h-4" />
+          <span className="text-xs font-bold uppercase tracking-wider">Back</span>\n        </button>
 
         {/* Circular progress indicator */}
-        <div className=\"relative w-11 h-11 flex items-center justify-center\">
+        <div className="relative w-11 h-11 flex items-center justify-center">
           {/* Background circle */}
-          <svg className=\"absolute w-11 h-11 -rotate-90\">
+          <svg className="absolute w-11 h-11 -rotate-90">
             <circle
-              cx=\"22\"
-              cy=\"22\"
-              r=\"18\"
-              fill=\"none\"
-              stroke=\"var(--border-subtle)\"
-              strokeWidth=\"2\"
+              cx="22"
+              cy="22"
+              r="18"
+              fill="none"
+              stroke="var(--border-subtle)"
+              strokeWidth="2"
             />
             {/* Progress arc */}
             <circle
-              cx=\"22\"
-              cy=\"22\"
-              r=\"18\"
-              fill=\"none\"
-              stroke=\"var(--gold)\"
-              strokeWidth=\"2\"
-              strokeLinecap=\"round\"
+              cx="22"
+              cy=\"22\"\n              r=\"18\"
+              fill="none"
+              stroke="var(--gold)"
+              strokeWidth="2"
+              strokeLinecap="round"
               strokeDasharray={`${progressPercent * 1.13} 113`}
-              className=\"transition-all duration-500 ease-out\"
+              className="transition-all duration-500 ease-out"
               style={{
                 filter: 'drop-shadow(0 0 4px rgba(212, 175, 55, 0.5))',
               }}
-            />\n          </svg>
+            />
+          </svg>
           {/* Percentage text */}
-          <span className=\"relative z-10 font-mono text-[11px] font-bold text-gold\">
-            {progressPercent}%\n          </span>
+          <span className="relative z-10 font-mono text-[11px] font-bold text-gold">
+            {progressPercent}%
+          </span>
         </div>
 
         {/* Next button - pulsing when available */}
@@ -408,13 +406,14 @@ const Calculator = () => {
           <button
             onClick={handleNext}
             className={cn(
-              \"flex items-center gap-2 px-4 py-2 rounded-md transition-all\",
-              \"border border-gold-muted bg-gold-subtle text-white\",\n              \"hover:bg-gold hover:text-black\",
-              \"active:scale-95 animate-pulse-subtle\"
+              "flex items-center gap-2 px-4 py-2 rounded-md transition-all",
+              "border border-gold-muted bg-gold-subtle text-white",
+              "hover:bg-gold hover:text-black",
+              "active:scale-95 animate-pulse-subtle"
             )}
           >
-            <span className=\"text-xs font-bold uppercase tracking-wider\">Next</span>
-            <ArrowRight className=\"w-4 h-4\" />
+            <span className="text-xs font-bold uppercase tracking-wider">Next</span>
+            <ArrowRight className="w-4 h-4" />
           </button>
         )}
       </div>
@@ -435,6 +434,7 @@ const Calculator = () => {
         onSkip={handleEmailSkip}
       />
     </div>
-  );\n};
+  );
+};
 
 export default Calculator;
