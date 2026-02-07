@@ -66,7 +66,8 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext }: DealIn
   const guildRate = (guilds.sag ? SAG_PCT : 0) + (guilds.wga ? WGA_PCT : 0) + (guilds.dga ? DGA_PCT : 0);
   const guildFee = inputs.revenue * guildRate;
 
-  const totalOffTop = camFee + salesAgentFee + inputs.marketingExpenses + guildFee;
+  // FIX: Use salesExp (the cap) instead of marketingExpenses
+  const totalOffTop = camFee + salesAgentFee + inputs.salesExp + guildFee;
   const netRevenue = Math.max(0, inputs.revenue - totalOffTop);
 
   return (
@@ -157,11 +158,12 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext }: DealIn
                  <span className="text-[10px] text-text-dim/70">Expense Cap (Standard $75k)</span>
               </div>
               <div className="w-32">
+                {/* FIX: Bind to salesExp, NOT marketingExpenses */}
                 <input
                   type="text"
                   inputMode="numeric"
-                  value={formatValue(inputs.marketingExpenses)}
-                  onChange={(e) => onUpdateInput('marketingExpenses', parseValue(e.target.value))}
+                  value={formatValue(inputs.salesExp)}
+                  onChange={(e) => onUpdateInput('salesExp', parseValue(e.target.value))}
                   placeholder="0"
                   className="w-full bg-bg-elevated border border-border-subtle rounded px-3 py-2 font-mono text-sm text-right text-text-primary focus:border-gold/50 focus:outline-none"
                 />
@@ -194,7 +196,8 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext }: DealIn
                 {/* Marketing */}
                 <div className="flex items-center justify-between p-3 text-xs">
                    <span className="text-text-dim">Sales Agent Marketing</span>
-                   <span className="font-mono text-text-mid">{formatCompactCurrency(inputs.marketingExpenses)}</span>
+                   {/* FIX: Use salesExp here too */}
+                   <span className="font-mono text-text-mid">{formatCompactCurrency(inputs.salesExp)}</span>
                 </div>
                 
                 {/* Guilds */}
