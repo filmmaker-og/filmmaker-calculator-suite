@@ -33,13 +33,13 @@ const IntroView = () => {
           </div>
 
           {/* The Manifesto: "Shadow Authority" */}
-          <div className="relative bg-bg-surface border border-gold/20 p-8 rounded-lg overflow-hidden">
+          <div className="relative bg-bg-surface border border-border-default p-8 rounded-lg overflow-hidden">
             {/* Ambient background glow - made subtler for matte look */}
             <div className="absolute top-0 right-0 w-64 h-64 bg-gold/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
             
             <div className="relative z-10 space-y-4">
               <div className="flex items-center gap-3 mb-2">
-                <div className="p-2 bg-gold/10 rounded-full border border-gold/20">
+                <div className="p-2 bg-gold/10 rounded-full border border-border-default">
                   <Eye className="w-5 h-5 text-gold" />
                 </div>
                 <h3 className="text-sm font-mono uppercase tracking-widest text-gold">Mission Statement</h3>
@@ -68,7 +68,7 @@ const IntroView = () => {
 
           {/* The "Why" - Tactical Value */}
           <div className="grid md:grid-cols-2 gap-6">
-            <div className="bg-bg-surface border border-border-default rounded-lg p-6 space-y-3 hover:border-gold/30 transition-colors">
+            <div className="bg-bg-surface border border-border-default rounded-lg p-6 space-y-3 hover:border-border-default transition-colors">
               <div className="p-2 w-fit bg-gold/10 rounded-md">
                 <ShieldCheck className="w-5 h-5 text-gold" />
               </div>
@@ -79,7 +79,7 @@ const IntroView = () => {
               </p>
             </div>
 
-            <div className="bg-bg-surface border border-border-default rounded-lg p-6 space-y-3 hover:border-gold/30 transition-colors">
+            <div className="bg-bg-surface border border-border-default rounded-lg p-6 space-y-3 hover:border-border-default transition-colors">
               <div className="p-2 w-fit bg-gold/10 rounded-md">
                 <TrendingUp className="w-5 h-5 text-gold" />
               </div>
@@ -104,7 +104,7 @@ const IntroView = () => {
             <h3 className="text-2xl font-bebas text-white border-b border-border-default pb-2">Protocol FAQ</h3>
             <Accordion type="single" collapsible className="w-full">
               <AccordionItem value="item-1" className="border-border-default">
-                <AccordionTrigger className="text-text-primary hover:text-gold hover:no-underline font-medium">
+                <AccordionTrigger className="text-text-primary hover:text-text-mid hover:no-underline font-medium">
                   Who is this tool for?
                 </AccordionTrigger>
                 <AccordionContent className="text-text-dim leading-relaxed">
@@ -114,7 +114,7 @@ const IntroView = () => {
               </AccordionItem>
               
               <AccordionItem value="item-2" className="border-border-default">
-                <AccordionTrigger className="text-text-primary hover:text-gold hover:no-underline font-medium">
+                <AccordionTrigger className="text-text-primary hover:text-text-mid hover:no-underline font-medium">
                   How do I use these results?
                 </AccordionTrigger>
                 <AccordionContent className="text-text-dim leading-relaxed">
@@ -127,7 +127,7 @@ const IntroView = () => {
               </AccordionItem>
 
               <AccordionItem value="item-3" className="border-border-default">
-                <AccordionTrigger className="text-text-primary hover:text-gold hover:no-underline font-medium">
+                <AccordionTrigger className="text-text-primary hover:text-text-mid hover:no-underline font-medium">
                   Is this legal financial advice?
                 </AccordionTrigger>
                 <AccordionContent className="text-text-dim">
@@ -136,13 +136,13 @@ const IntroView = () => {
               </AccordionItem>
               
               <AccordionItem value="item-4" className="border-border-default">
-                <AccordionTrigger className="text-text-primary hover:text-gold hover:no-underline font-medium">
+                <AccordionTrigger className="text-text-primary hover:text-text-mid hover:no-underline font-medium">
                   What is a "Waterfall"?
                 </AccordionTrigger>
                 <AccordionContent className="text-text-dim">
                   A waterfall is the priority order in which revenue is distributed. 
-                  <span 
-                    className="text-gold cursor-pointer hover:underline ml-1 font-medium"
+                  <span
+                    className="text-text-dim cursor-pointer hover:text-text-mid ml-1"
                     onClick={() => navigate('/waterfall-info')}
                   >
                     Read the full breakdown here →
@@ -154,21 +154,21 @@ const IntroView = () => {
 
           {/* Action Area - NOW WITH DUAL BUTTONS */}
           <div className="pt-8 border-t border-border-default space-y-4 md:space-y-0 md:flex md:items-center md:gap-4">
-            <Button 
+            <Button
               onClick={() => navigate('/calculator')}
-              className="w-full md:flex-1 bg-gold hover:bg-gold-bright text-black font-bold text-lg px-8 py-6 rounded-md shadow-[0_0_20px_rgba(212,175,55,0.2)] hover:shadow-[0_0_30px_rgba(212,175,55,0.4)] transition-all duration-300 group"
+              className="w-full md:flex-1 btn-vault text-lg px-8 py-6"
             >
               Initialize Simulation
-              <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="ml-2 w-5 h-5" />
             </Button>
 
-            <Button 
+            <button
               onClick={() => navigate('/waterfall-info')}
-              className="w-full md:w-auto border border-border-subtle bg-bg-surface hover:bg-bg-elevated text-text-mid hover:text-white font-medium text-lg px-8 py-6 rounded-md transition-all duration-300 group"
+              className="btn-ghost-gold w-full md:w-auto text-lg px-8 py-6"
             >
-              <BookOpen className="mr-2 w-5 h-5 text-gold group-hover:scale-110 transition-transform" />
+              <BookOpen className="mr-2 w-5 h-5 text-gold" />
               Read Protocol
-            </Button>
+            </button>
           </div>
           
           <div className="text-center md:text-left text-text-dim text-sm font-mono flex items-center justify-center md:justify-start gap-2">

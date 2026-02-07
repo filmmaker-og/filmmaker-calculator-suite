@@ -140,7 +140,6 @@ const Auth = () => {
                       autoComplete="name"
                       autoCapitalize="words"
                       enterKeyHint="next"
-                      autoFocus
                       placeholder="John Producer"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
@@ -150,7 +149,7 @@ const Auth = () => {
                           document.getElementById('email')?.focus();
                         }
                       }}
-                      className="h-12 bg-bg-surface border border-border-subtle text-text-primary placeholder:text-text-dim focus:border-gold focus:ring-0 focus:ring-offset-0 transition-colors rounded-[--radius-md]"
+                      className="h-12 bg-bg-surface border border-border-subtle text-text-primary placeholder:text-text-dim focus:border-border-active focus:shadow-focus focus:ring-0 focus:ring-offset-0 transition-colors rounded-[--radius-md]"
                       required
                     />
                   </div>
@@ -181,7 +180,7 @@ const Auth = () => {
                           handleSubmit(e as any);
                         }
                       }}
-                      className="h-12 bg-bg-surface border border-border-subtle text-text-primary placeholder:text-text-dim font-mono focus:border-gold focus:ring-0 focus:ring-offset-0 transition-colors rounded-[--radius-md]"
+                      className="h-12 bg-bg-surface border border-border-subtle text-text-primary placeholder:text-text-dim font-mono focus:border-border-active focus:shadow-focus focus:ring-0 focus:ring-offset-0 transition-colors rounded-[--radius-md]"
                       required
                     />
                   </div>
@@ -190,7 +189,7 @@ const Auth = () => {
                   <Button
                     type="submit"
                     disabled={loading || !email || !name.trim()}
-                    className="w-full min-h-[52px] rounded-[--radius-md] font-black text-xs uppercase tracking-[1.5px] bg-gold-cta text-black hover:brightness-110 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200"
+                    className="w-full min-h-[52px] rounded-[--radius-md] font-black text-xs uppercase tracking-[1.5px] bg-gold-cta-subtle border border-gold-cta-muted text-gold-cta shadow-button hover:border-gold-cta disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200"
                   >
                     {loading ? (
                       <Loader2 className="w-5 h-5 animate-spin" />
@@ -224,7 +223,7 @@ const Auth = () => {
               <div className="text-center">
                 
                 {/* Icon - Single, clean */}
-                <div className="w-16 h-16 border-2 border-gold/50 flex items-center justify-center mx-auto mb-8">
+                <div className="w-16 h-16 border-2 border-border-default flex items-center justify-center mx-auto mb-8">
                   <Mail className="w-8 h-8 text-gold" />
                 </div>
 
@@ -242,13 +241,13 @@ const Auth = () => {
                 </p>
 
                 {/* Divider */}
-                <div className="w-12 h-[1px] bg-gold/30 mx-auto mb-10" />
+                <div className="w-12 h-[1px] bg-border-subtle mx-auto mb-10" />
 
                 {/* Actions */}
                 <div className="space-y-6">
                   <button
                     onClick={() => setStep('email')}
-                    className="text-text-dim hover:text-gold text-sm font-medium transition-colors"
+                    className="text-text-dim hover:text-text-mid text-sm font-medium transition-colors"
                   >
                     Use different email
                   </button>

@@ -286,7 +286,7 @@ const Store = () => {
         <section className="px-6 pb-10 max-w-5xl mx-auto text-center">
           <button
             onClick={() => navigate("/store/compare")}
-            className="inline-flex items-center gap-2 py-3 text-text-dim hover:text-gold transition-colors"
+            className="inline-flex items-center gap-2 py-3 text-text-dim hover:text-text-mid transition-colors"
           >
             <span className="text-[11px] tracking-[0.2em] uppercase font-semibold">
               Compare All Packages

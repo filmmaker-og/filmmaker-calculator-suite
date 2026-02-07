@@ -37,7 +37,7 @@ const WaterfallInfo = () => {
             {/* Back Link */}
             <button 
               onClick={() => navigate(-1)} 
-              className="flex items-center gap-2 text-sm text-text-dim hover:text-gold transition-colors group"
+              className="flex items-center gap-2 text-sm text-text-dim hover:text-text-mid transition-colors group"
             >
               <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
               <span>Back</span>
@@ -52,13 +52,13 @@ const WaterfallInfo = () => {
               >
                 Start Fresh
               </Button>
-              <Button 
+              <button
                 onClick={handleReturnToCalculator}
-                className="bg-gold hover:bg-gold-bright text-black font-bold h-9 text-xs uppercase tracking-wider"
+                className="btn-vault h-9 w-auto px-4 text-xs"
               >
                 <Calculator className="w-3 h-3 mr-2" />
                 Open Calculator
-              </Button>
+              </button>
             </div>
           </div>
 
@@ -91,7 +91,7 @@ const WaterfallInfo = () => {
           {/* Detailed Flow Table */}
           <div className="space-y-6">
              <div className="flex items-center gap-2 mb-2">
-                <div className="p-1.5 bg-gold/10 rounded-md border border-gold/20">
+                <div className="p-1.5 bg-gold/10 rounded-md border border-border-default">
                   <BadgeDollarSign className="w-5 h-5 text-gold" />
                 </div>
                 <h2 className="text-2xl font-bebas text-white">The Recoupment Schedule</h2>
@@ -163,7 +163,7 @@ const WaterfallInfo = () => {
                     <span className="text-xs text-text-dim">Pro-rata share to equity financiers.</span>
                   </div>
                 </li>
-                <li className="flex items-start gap-3 bg-gold/10 p-3 rounded border border-gold/30">
+                <li className="flex items-start gap-3 bg-gold/10 p-3 rounded border border-border-default">
                   <div className="w-6 h-6 rounded-full bg-gold text-black flex items-center justify-center font-bold text-xs">B</div>
                   <div>
                     <span className="text-gold font-bold block text-sm">Producer's Pool (50%)</span>
@@ -199,7 +199,7 @@ const WaterfallInfo = () => {
           </div>
 
           {/* COMMON TRAPS — Gold-only warning styling */}
-          <div className="bg-gold/[0.04] border border-gold/20 rounded-lg p-6 space-y-4">
+          <div className="bg-gold/[0.04] border border-border-default rounded-lg p-6 space-y-4">
             <div className="flex items-center gap-2 mb-2">
               <ShieldAlert className="w-5 h-5 text-gold" />
               <h2 className="text-lg font-bold text-gold uppercase tracking-widest">Common Traps</h2>
@@ -228,22 +228,21 @@ const WaterfallInfo = () => {
             <p className="text-text-dim text-sm max-w-md text-center">
               Now that you understand the rules, use the calculator to see if your deal actually makes money.
             </p>
-            <Button 
+            <button
               onClick={handleReturnToCalculator}
-              className="bg-gold hover:bg-gold-bright text-black font-bold h-12 px-8 w-full max-w-xs text-sm uppercase tracking-wider shadow-[0_0_20px_rgba(212,175,55,0.2)]"
+              className="btn-vault w-full max-w-xs h-12 px-8 text-sm"
             >
               Open Calculator
               <ArrowRight className="ml-2 w-4 h-4" />
-            </Button>
-            
-            <Button 
+            </button>
+
+            <button
               onClick={() => window.print()}
-              variant="link"
-              className="text-text-dim hover:text-gold gap-2"
+              className="flex items-center gap-2 text-[11px] tracking-wider text-text-dim hover:text-text-mid transition-colors"
             >
               <Printer className="w-3 h-3" />
               Print Protocol
-            </Button>
+            </button>
           </div>
 
         </div>
