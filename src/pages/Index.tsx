@@ -8,12 +8,18 @@ import {
   Layers,
   Handshake,
   BarChart3,
-  ChevronRight,
   ChevronDown,
   Shield,
   Sparkles,
   Star,
   MessageCircle,
+  Eye,
+  FileSpreadsheet,
+  Presentation,
+  BookOpen,
+  TrendingUp,
+  Target,
+  Pen,
 } from "lucide-react";
 import filmmakerLogo from "@/assets/filmmaker-logo.jpg";
 import Header from "@/components/Header";
@@ -22,34 +28,36 @@ import { formatCompactCurrency } from "@/lib/waterfall";
 import { products } from "@/lib/store-products";
 
 const STORAGE_KEY = "filmmaker_og_inputs";
+const INTRO_SEEN_KEY = "filmmaker_og_intro_seen";
 
 /* ═══════════════════════════════════════════════════════════════════
    SCENARIO PROMPTS — Future chatbot bridge
+   Action-oriented prompts, not quotes from people
    ═══════════════════════════════════════════════════════════════════ */
 const scenarioPrompts = [
   {
-    question: "I have a $500K horror film. What's a realistic acquisition price?",
-    context: "Genre, budget, and cast all affect what buyers will pay.",
+    prompt: "Model a $500K horror film acquisition",
+    context: "See how genre, budget, and cast affect what buyers will pay.",
   },
   {
-    question: "My investors want 120% recoupment before I see a dime. Is that fair?",
-    context: "Standard investor recoupment and how to negotiate.",
+    prompt: "Show me how 35% distribution fees affect my backend",
+    context: "Model distribution fee ranges and see what's left for you.",
   },
   {
-    question: "My distributor wants 35% fees. Is that standard?",
-    context: "Distribution fee ranges and what to watch for.",
+    prompt: "What happens with 120% investor recoupment?",
+    context: "Understand how preferred returns change your waterfall.",
   },
   {
-    question: "I'm raising equity and pre-sales. How do I structure the waterfall?",
-    context: "Capital stack priority and revenue distribution order.",
+    prompt: "Structure a waterfall with equity and pre-sales",
+    context: "Build a capital stack and see who gets paid first.",
   },
   {
-    question: "My film got into Sundance. What should I expect from buyers?",
-    context: "Festival economics and acquisition price ranges.",
+    prompt: "Model a $2M drama with a Sundance premiere",
+    context: "See realistic acquisition ranges for festival films.",
   },
   {
-    question: "How do I show investors their money is protected?",
-    context: "Recoupment structure, preferred returns, and risk mitigation.",
+    prompt: "Show my investors their money is protected",
+    context: "Map the recoupment structure and risk mitigation.",
   },
 ];
 
@@ -70,7 +78,7 @@ const faqs = [
     a: "No. This is a simulation tool for estimation and planning purposes only. Always consult a qualified entertainment attorney or accountant for final deal structures.",
   },
   {
-    q: "What is a \"waterfall\"?",
+    q: 'What is a "waterfall"?',
     a: "A waterfall is the priority order in which revenue from your film is distributed — who gets paid first, second, and last. Most filmmakers sign deals without ever seeing theirs.",
   },
   {
@@ -84,7 +92,7 @@ const faqs = [
 ];
 
 /* ═══════════════════════════════════════════════════════════════════
-   HOW IT WORKS STEPS
+   HOW IT WORKS STEPS (static — not clickable)
    ═══════════════════════════════════════════════════════════════════ */
 const steps = [
   {
@@ -92,28 +100,45 @@ const steps = [
     title: "Set Your Budget",
     desc: "Enter your total production budget and select any guild/union signatories. This establishes the baseline for everything that follows.",
     icon: DollarSign,
-    tab: "budget",
   },
   {
     num: "02",
     title: "Build Your Capital Stack",
     desc: "Choose where your money is coming from — equity, pre-sales, gap financing, tax incentives. Each source has different recoupment priorities.",
     icon: Layers,
-    tab: "stack",
   },
   {
     num: "03",
     title: "Model the Deal",
     desc: "Set the acquisition price, distribution fees, and marketing spend. This is where you see how much actually comes back.",
     icon: Handshake,
-    tab: "deal",
   },
   {
     num: "04",
     title: "See the Waterfall",
     desc: "Watch every dollar flow through the priority chain. See exactly who gets paid, in what order, and what's left for you.",
     icon: BarChart3,
-    tab: "waterfall",
+  },
+];
+
+/* ═══════════════════════════════════════════════════════════════════
+   USE CASES
+   ═══════════════════════════════════════════════════════════════════ */
+const useCases = [
+  {
+    icon: TrendingUp,
+    title: "Before You Raise",
+    desc: "Run the numbers before you pitch investors. Know exactly what you're offering and what they'll get back.",
+  },
+  {
+    icon: Pen,
+    title: "Before You Sign",
+    desc: "A distributor made an offer. Model the deal terms and see what's actually left for you before you sign.",
+  },
+  {
+    icon: Target,
+    title: "Before You Greenlight",
+    desc: "You have the budget, the script, the team. Make sure the financial structure actually works.",
   },
 ];
 
@@ -123,7 +148,7 @@ const steps = [
 const FaqItem = ({ q, a }: { q: string; a: string }) => {
   const [open, setOpen] = useState(false);
   return (
-    <div className="border-b border-border-subtle">
+    <div className="border-b border-border-subtle last:border-b-0">
       <button
         onClick={() => setOpen(!open)}
         className="w-full flex items-center justify-between py-4 text-left group"
@@ -149,6 +174,13 @@ const FaqItem = ({ q, a }: { q: string; a: string }) => {
     </div>
   );
 };
+
+/* ═══════════════════════════════════════════════════════════════════
+   GOLD SECTION DIVIDER
+   ═══════════════════════════════════════════════════════════════════ */
+const GoldDivider = () => (
+  <div className="gold-section-divider" />
+);
 
 /* ═══════════════════════════════════════════════════════════════════
    MAIN INDEX COMPONENT
@@ -177,8 +209,14 @@ const Index = () => {
 
   const isReturningUser = savedState !== null;
 
-  // Check if we should skip intro based on URL param
-  const shouldSkip = searchParams.get("skipIntro") === "true";
+  // Intro plays ONCE — check localStorage flag
+  const hasSeenIntro = useMemo(() => {
+    try {
+      return localStorage.getItem(INTRO_SEEN_KEY) === "true";
+    } catch { return false; }
+  }, []);
+
+  const shouldSkip = searchParams.get("skipIntro") === "true" || hasSeenIntro;
 
   const [phase, setPhase] = useState<
     'dark' | 'beam' | 'logo' | 'pulse' | 'tagline' | 'complete'
@@ -197,6 +235,13 @@ const Index = () => {
 
     return () => timers.forEach(clearTimeout);
   }, [shouldSkip]);
+
+  // Mark intro as seen when it finishes
+  useEffect(() => {
+    if (phase === 'complete' && !hasSeenIntro) {
+      try { localStorage.setItem(INTRO_SEEN_KEY, "true"); } catch { /* ignore */ }
+    }
+  }, [phase, hasSeenIntro]);
 
   const handleStartClick = () => {
     haptics.medium();
@@ -226,124 +271,126 @@ const Index = () => {
       <div className="min-h-screen flex flex-col relative overflow-hidden bg-black">
 
         {/* ═══════════════════════════════════════════════════════════════════
-            CINEMATIC INTRO - Theatrical Spotlight (unchanged)
+            CINEMATIC INTRO - Theatrical Spotlight (plays once only)
             ═══════════════════════════════════════════════════════════════════ */}
-        <div
-          className={cn(
-            "fixed inset-0 z-[100] flex items-center justify-center transition-opacity duration-1000",
-            isComplete ? "opacity-0 pointer-events-none" : "opacity-100"
-          )}
-          style={{ backgroundColor: '#000000' }}
-        >
-          {/* OUTER SPOTLIGHT CONE BEAM */}
+        {!shouldSkip && (
           <div
             className={cn(
-              "absolute inset-0 pointer-events-none transition-all duration-1000",
-              showBeam ? "opacity-100" : "opacity-0"
+              "fixed inset-0 z-[100] flex items-center justify-center transition-opacity duration-1000",
+              isComplete ? "opacity-0 pointer-events-none" : "opacity-100"
             )}
-            style={{
-              background: `radial-gradient(ellipse 70% 60% at 50% 0%, rgba(212, 175, 55, 0.08) 0%, rgba(255, 255, 255, 0.12) 20%, rgba(255, 255, 255, 0.05) 40%, rgba(255, 255, 255, 0.01) 60%, transparent 80%)`,
-              clipPath: showBeam ? 'polygon(25% 0%, 75% 0%, 95% 100%, 5% 100%)' : 'polygon(48% 0%, 52% 0%, 52% 30%, 48% 30%)',
-              transition: 'clip-path 1.2s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.8s ease',
-            }}
-          />
-
-          {/* BRIGHT CORE BEAM */}
-          <div
-            className={cn(
-              "absolute inset-0 pointer-events-none transition-all duration-1000",
-              showBeam ? "opacity-100" : "opacity-0"
-            )}
-            style={{
-              background: `radial-gradient(ellipse 30% 45% at 50% 0%, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0.15) 30%, rgba(212, 175, 55, 0.05) 50%, transparent 70%)`,
-              clipPath: showBeam ? 'polygon(38% 0%, 62% 0%, 78% 100%, 22% 100%)' : 'polygon(48% 0%, 52% 0%, 52% 30%, 48% 30%)',
-              transition: 'clip-path 1s cubic-bezier(0.22, 1, 0.36, 1) 0.1s, opacity 0.8s ease',
-            }}
-          />
-
-          {/* DUST PARTICLES */}
-          <div
-            className={cn(
-              "absolute inset-0 pointer-events-none transition-opacity duration-1500",
-              showBeam ? "opacity-100" : "opacity-0"
-            )}
-            style={{
-              background: `radial-gradient(ellipse 80% 100% at 50% 0%, rgba(212, 175, 55, 0.02) 0%, transparent 60%)`,
-            }}
-          />
-
-          {/* FOCAL POOL */}
-          <div
-            className={cn(
-              "absolute left-1/2 top-1/2 w-[400px] h-[400px] pointer-events-none transition-all duration-700",
-              showLogo ? "opacity-100" : "opacity-0"
-            )}
-            style={{
-              background: `radial-gradient(circle, rgba(212, 175, 55, 0.12) 0%, rgba(255, 255, 255, 0.08) 30%, rgba(255, 255, 255, 0.03) 50%, transparent 70%)`,
-              transform: 'translate(-50%, -50%)',
-              filter: 'blur(40px)',
-              animation: isPulsed ? 'focal-pulse 3s ease-in-out infinite' : 'none',
-            }}
-          />
-
-          {/* CENTER CONTENT */}
-          <div className="relative z-10 flex flex-col items-center">
+            style={{ backgroundColor: '#000000' }}
+          >
+            {/* OUTER SPOTLIGHT CONE BEAM */}
             <div
               className={cn(
-                "relative transition-all duration-1000 ease-out",
-                showLogo ? "opacity-100 scale-100 translate-y-0" : "opacity-0 scale-90 translate-y-6"
-              )}
-            >
-              <div
-                className={cn(
-                  "absolute inset-0 -m-4 transition-opacity duration-700",
-                  isPulsed ? "opacity-100" : "opacity-0"
-                )}
-                style={{
-                  background: 'radial-gradient(circle, rgba(212, 175, 55, 0.3) 0%, transparent 70%)',
-                  filter: 'blur(15px)',
-                }}
-              />
-              <img
-                src={filmmakerLogo}
-                alt="Filmmaker.OG"
-                className="w-32 h-32 object-contain rounded-lg relative"
-                style={{
-                  filter: isPulsed
-                    ? 'brightness(1.2) drop-shadow(0 0 30px rgba(212, 175, 55, 0.5))'
-                    : 'brightness(0.9)',
-                  transition: 'filter 0.7s ease',
-                }}
-              />
-            </div>
-
-            <p
-              className={cn(
-                "mt-8 text-sm tracking-[0.4em] uppercase font-semibold transition-all duration-700",
-                showTagline ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
+                "absolute inset-0 pointer-events-none transition-all duration-1000",
+                showBeam ? "opacity-100" : "opacity-0"
               )}
               style={{
-                color: '#D4AF37',
-                textShadow: '0 0 20px rgba(212, 175, 55, 0.4)',
+                background: `radial-gradient(ellipse 70% 60% at 50% 0%, rgba(212, 175, 55, 0.08) 0%, rgba(255, 255, 255, 0.12) 20%, rgba(255, 255, 255, 0.05) 40%, rgba(255, 255, 255, 0.01) 60%, transparent 80%)`,
+                clipPath: showBeam ? 'polygon(25% 0%, 75% 0%, 95% 100%, 5% 100%)' : 'polygon(48% 0%, 52% 0%, 52% 30%, 48% 30%)',
+                transition: 'clip-path 1.2s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.8s ease',
               }}
-            >
-              Know Your Numbers
-            </p>
+            />
 
-            <div className="mt-6 w-32 h-[2px] overflow-hidden bg-border-subtle rounded-full">
+            {/* BRIGHT CORE BEAM */}
+            <div
+              className={cn(
+                "absolute inset-0 pointer-events-none transition-all duration-1000",
+                showBeam ? "opacity-100" : "opacity-0"
+              )}
+              style={{
+                background: `radial-gradient(ellipse 30% 45% at 50% 0%, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0.15) 30%, rgba(212, 175, 55, 0.05) 50%, transparent 70%)`,
+                clipPath: showBeam ? 'polygon(38% 0%, 62% 0%, 78% 100%, 22% 100%)' : 'polygon(48% 0%, 52% 0%, 52% 30%, 48% 30%)',
+                transition: 'clip-path 1s cubic-bezier(0.22, 1, 0.36, 1) 0.1s, opacity 0.8s ease',
+              }}
+            />
+
+            {/* DUST PARTICLES */}
+            <div
+              className={cn(
+                "absolute inset-0 pointer-events-none transition-opacity duration-1500",
+                showBeam ? "opacity-100" : "opacity-0"
+              )}
+              style={{
+                background: `radial-gradient(ellipse 80% 100% at 50% 0%, rgba(212, 175, 55, 0.02) 0%, transparent 60%)`,
+              }}
+            />
+
+            {/* FOCAL POOL */}
+            <div
+              className={cn(
+                "absolute left-1/2 top-1/2 w-[400px] h-[400px] pointer-events-none transition-all duration-700",
+                showLogo ? "opacity-100" : "opacity-0"
+              )}
+              style={{
+                background: `radial-gradient(circle, rgba(212, 175, 55, 0.12) 0%, rgba(255, 255, 255, 0.08) 30%, rgba(255, 255, 255, 0.03) 50%, transparent 70%)`,
+                transform: 'translate(-50%, -50%)',
+                filter: 'blur(40px)',
+                animation: isPulsed ? 'focal-pulse 3s ease-in-out infinite' : 'none',
+              }}
+            />
+
+            {/* CENTER CONTENT */}
+            <div className="relative z-10 flex flex-col items-center">
               <div
                 className={cn(
-                  "h-full bg-gold rounded-full transition-all",
-                  showTagline && !shouldSkip ? "animate-progress-draw" : ""
+                  "relative transition-all duration-1000 ease-out",
+                  showLogo ? "opacity-100 scale-100 translate-y-0" : "opacity-0 scale-90 translate-y-6"
+                )}
+              >
+                <div
+                  className={cn(
+                    "absolute inset-0 -m-4 transition-opacity duration-700",
+                    isPulsed ? "opacity-100" : "opacity-0"
+                  )}
+                  style={{
+                    background: 'radial-gradient(circle, rgba(212, 175, 55, 0.3) 0%, transparent 70%)',
+                    filter: 'blur(15px)',
+                  }}
+                />
+                <img
+                  src={filmmakerLogo}
+                  alt="Filmmaker.OG"
+                  className="w-32 h-32 object-contain rounded-lg relative"
+                  style={{
+                    filter: isPulsed
+                      ? 'brightness(1.2) drop-shadow(0 0 30px rgba(212, 175, 55, 0.5))'
+                      : 'brightness(0.9)',
+                    transition: 'filter 0.7s ease',
+                  }}
+                />
+              </div>
+
+              <p
+                className={cn(
+                  "mt-8 text-sm tracking-[0.4em] uppercase font-semibold transition-all duration-700",
+                  showTagline ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
                 )}
                 style={{
-                  boxShadow: '0 0 15px rgba(212, 175, 55, 0.7)',
-                  width: shouldSkip ? '100%' : (showTagline ? undefined : '0%'),
+                  color: '#D4AF37',
+                  textShadow: '0 0 20px rgba(212, 175, 55, 0.4)',
                 }}
-              />
+              >
+                Know Your Numbers
+              </p>
+
+              <div className="mt-6 w-32 h-[2px] overflow-hidden bg-border-subtle rounded-full">
+                <div
+                  className={cn(
+                    "h-full bg-gold rounded-full transition-all",
+                    showTagline ? "animate-progress-draw" : ""
+                  )}
+                  style={{
+                    boxShadow: '0 0 15px rgba(212, 175, 55, 0.7)',
+                    width: showTagline ? undefined : '0%',
+                  }}
+                />
+              </div>
             </div>
           </div>
-        </div>
+        )}
 
         {/* ═══════════════════════════════════════════════════════════════════
             LANDING PAGE — Full Scrollable Content
@@ -371,20 +418,20 @@ const Index = () => {
               }}
             />
 
-            <div className="relative px-6 pt-24 pb-16 max-w-xl mx-auto text-center">
-              {/* Logo */}
-              <div className="mb-6 relative inline-block">
+            <div className="relative px-6 pt-24 pb-20 max-w-xl mx-auto text-center">
+              {/* Logo — same size as intro (w-32 h-32 = 128px) */}
+              <div className="mb-8 relative inline-block">
                 <div
-                  className="absolute inset-0 -m-6"
+                  className="absolute inset-0 -m-8"
                   style={{
                     background: 'radial-gradient(circle, rgba(212, 175, 55, 0.2) 0%, transparent 70%)',
-                    filter: 'blur(12px)',
+                    filter: 'blur(16px)',
                   }}
                 />
                 <img
                   src={filmmakerLogo}
                   alt="Filmmaker.OG"
-                  className="relative w-20 h-20 object-contain rounded-lg"
+                  className="relative w-32 h-32 object-contain rounded-lg"
                   style={{
                     filter: 'brightness(1.15) drop-shadow(0 0 25px rgba(212, 175, 55, 0.45))',
                   }}
@@ -451,13 +498,108 @@ const Index = () => {
                   </p>
                 </div>
               )}
+
+              {/* Scroll hint */}
+              <div className="mt-12 animate-pulse-slow">
+                <ChevronDown className="w-5 h-5 text-text-dim mx-auto" />
+              </div>
             </div>
           </section>
 
+          <GoldDivider />
+
           {/* ─────────────────────────────────────────────────────────
-              SECTION 2: THE PROBLEM
+              SECTION 2: WHAT OTHERS CHARGE (prominent, moved up)
               ───────────────────────────────────────────────────────── */}
-          <section className="px-6 py-16 border-t border-border-subtle">
+          <section className="px-6 py-20">
+            <div className="max-w-2xl mx-auto">
+              <div className="bg-bg-card border border-border-default rounded-xl p-8 md:p-10">
+                <p className="text-gold text-[10px] tracking-[0.3em] uppercase text-center mb-4 font-semibold">
+                  The Industry Charges Thousands
+                </p>
+                <h2 className="font-bebas text-2xl md:text-3xl tracking-[0.08em] text-text-primary text-center mb-8">
+                  WHAT OTHERS CHARGE FOR THIS ANALYSIS
+                </h2>
+
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center mb-8">
+                  {[
+                    { label: "Entertainment Lawyer", cost: "$5K–$15K" },
+                    { label: "Finance Consultant", cost: "$10K–$30K" },
+                    { label: "Producer's Rep", cost: "5–10% of deal" },
+                    { label: "Filmmaker.OG", cost: "Free", highlight: true },
+                  ].map((item) => (
+                    <div key={item.label} className="py-3">
+                      <p
+                        className={cn(
+                          "font-mono text-xl md:text-2xl font-bold mb-1",
+                          item.highlight
+                            ? "text-gold-cta"
+                            : "text-text-dim line-through decoration-text-dim/40"
+                        )}
+                      >
+                        {item.cost}
+                      </p>
+                      <p className="text-text-dim text-[10px] tracking-wider uppercase">
+                        {item.label}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="text-center">
+                  <p className="text-text-mid text-sm leading-relaxed max-w-md mx-auto">
+                    The simulation is completely free. Professional document exports start at{" "}
+                    <span className="text-gold font-mono font-bold">$197</span> — less than a single hour with an entertainment lawyer.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <GoldDivider />
+
+          {/* ─────────────────────────────────────────────────────────
+              SECTION 3: WHEN TO USE THIS (Use Cases)
+              ───────────────────────────────────────────────────────── */}
+          <section className="px-6 py-20">
+            <div className="max-w-3xl mx-auto">
+              <p className="text-gold text-[10px] tracking-[0.3em] uppercase text-center mb-3 font-semibold">
+                When To Use This
+              </p>
+              <h2 className="font-bebas text-2xl md:text-3xl tracking-[0.08em] text-text-primary text-center mb-10">
+                THREE MOMENTS THAT DEFINE YOUR DEAL
+              </h2>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                {useCases.map((uc) => {
+                  const Icon = uc.icon;
+                  return (
+                    <div
+                      key={uc.title}
+                      className="bg-bg-card border border-border-subtle rounded-xl p-6 hover:border-border-default transition-colors"
+                    >
+                      <div className="w-10 h-10 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center mb-4">
+                        <Icon className="w-4 h-4 text-gold" />
+                      </div>
+                      <h3 className="text-text-primary text-sm font-semibold mb-2">
+                        {uc.title}
+                      </h3>
+                      <p className="text-text-dim text-xs leading-relaxed">
+                        {uc.desc}
+                      </p>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </section>
+
+          <GoldDivider />
+
+          {/* ─────────────────────────────────────────────────────────
+              SECTION 4: THE PROBLEM
+              ───────────────────────────────────────────────────────── */}
+          <section className="px-6 py-20">
             <div className="max-w-3xl mx-auto">
               <p className="text-gold text-[10px] tracking-[0.3em] uppercase text-center mb-3 font-semibold">
                 The Problem
@@ -487,7 +629,7 @@ const Index = () => {
                 ].map((card) => (
                   <div
                     key={card.title}
-                    className="bg-bg-card border border-border-subtle rounded-lg p-5"
+                    className="bg-bg-card border border-border-subtle rounded-xl p-6"
                   >
                     <h3 className="text-text-primary text-sm font-semibold mb-2">
                       {card.title}
@@ -501,10 +643,57 @@ const Index = () => {
             </div>
           </section>
 
+          <GoldDivider />
+
           {/* ─────────────────────────────────────────────────────────
-              SECTION 3: HOW IT WORKS
+              SECTION 5: DEMOCRATIZATION
               ───────────────────────────────────────────────────────── */}
-          <section className="px-6 py-16 bg-bg-elevated border-t border-border-subtle">
+          <section className="px-6 py-20">
+            <div className="max-w-2xl mx-auto">
+              <div className="bg-bg-card border border-border-default rounded-xl p-8 md:p-10 relative overflow-hidden">
+                {/* Ambient glow */}
+                <div className="absolute top-0 right-0 w-64 h-64 bg-gold/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+
+                <div className="relative z-10">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-10 h-10 rounded-lg bg-gold/10 border border-border-default flex items-center justify-center">
+                      <Eye className="w-4 h-4 text-gold" />
+                    </div>
+                    <p className="text-gold text-[10px] tracking-[0.3em] uppercase font-semibold">
+                      Our Mission
+                    </p>
+                  </div>
+
+                  <h2 className="font-bebas text-2xl md:text-3xl tracking-[0.08em] text-text-primary mb-5">
+                    DEMOCRATIZING THE BUSINESS OF FILM
+                  </h2>
+
+                  <div className="space-y-4 text-text-mid text-sm leading-relaxed">
+                    <p>
+                      For too long, the mechanics of film finance have been obscured by
+                      gatekeepers. Agencies, distributors, and studios thrive on information
+                      asymmetry. They know the numbers; you don't.
+                    </p>
+                    <p className="text-text-primary font-medium">
+                      We built this tool to level the playing field.
+                    </p>
+                    <p>
+                      This tool extracts the proprietary logic used by top-tier entertainment
+                      lawyers and sales agents, putting institutional-grade modeling directly
+                      into your hands. Free simulation. Professional exports available. Just the math.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <GoldDivider />
+
+          {/* ─────────────────────────────────────────────────────────
+              SECTION 6: HOW IT WORKS (static, not clickable)
+              ───────────────────────────────────────────────────────── */}
+          <section className="px-6 py-20 bg-bg-card">
             <div className="max-w-3xl mx-auto">
               <p className="text-gold text-[10px] tracking-[0.3em] uppercase text-center mb-3 font-semibold">
                 How It Works
@@ -513,16 +702,15 @@ const Index = () => {
                 FOUR STEPS TO CLARITY
               </h2>
 
-              <div className="space-y-6">
+              <div className="space-y-4">
                 {steps.map((step) => {
                   const Icon = step.icon;
                   return (
-                    <button
+                    <div
                       key={step.num}
-                      onClick={() => navigate(`/calculator?tab=${step.tab}`)}
-                      className="w-full flex items-start gap-5 bg-bg-card border border-border-subtle rounded-lg p-5 text-left group hover:border-border-default transition-colors"
+                      className="flex items-start gap-5 bg-bg-elevated border border-border-subtle rounded-xl p-5"
                     >
-                      <div className="flex-shrink-0 w-10 h-10 rounded-md bg-bg-elevated border border-border-subtle flex items-center justify-center group-hover:border-border-default transition-colors">
+                      <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-bg-card border border-border-subtle flex items-center justify-center">
                         <Icon className="w-4 h-4 text-gold" />
                       </div>
                       <div className="flex-1 min-w-0">
@@ -538,31 +726,108 @@ const Index = () => {
                           {step.desc}
                         </p>
                       </div>
-                      <ChevronRight className="w-4 h-4 text-text-dim flex-shrink-0 mt-3 group-hover:text-text-mid transition-colors" />
-                    </button>
+                    </div>
                   );
                 })}
               </div>
             </div>
           </section>
 
+          <GoldDivider />
+
           {/* ─────────────────────────────────────────────────────────
-              SECTION 4: SCENARIO PROMPT CAROUSEL
+              SECTION 7: WHAT YOU GET (Deliverables)
               ───────────────────────────────────────────────────────── */}
-          <section className="py-16 border-t border-border-subtle">
+          <section className="px-6 py-20">
+            <div className="max-w-2xl mx-auto">
+              <p className="text-gold text-[10px] tracking-[0.3em] uppercase text-center mb-3 font-semibold">
+                What You Walk Away With
+              </p>
+              <h2 className="font-bebas text-2xl md:text-3xl tracking-[0.08em] text-text-primary text-center mb-4">
+                PROFESSIONAL FINANCIAL DOCUMENTS
+              </h2>
+              <p className="text-text-mid text-sm text-center max-w-lg mx-auto mb-10 leading-relaxed">
+                Designed so anyone — your investor, your business partner, your family —
+                can understand your film's financials at a glance.
+              </p>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div className="bg-bg-card border border-border-subtle rounded-xl p-6">
+                  <div className="w-10 h-10 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center mb-4">
+                    <FileSpreadsheet className="w-4 h-4 text-gold" />
+                  </div>
+                  <h3 className="text-text-primary text-sm font-semibold mb-2">
+                    6-Sheet Excel Workbook
+                  </h3>
+                  <p className="text-text-dim text-xs leading-relaxed">
+                    Executive summary, full waterfall ledger, capital stack breakdown,
+                    investor return summary, and plain-English glossary. Formatted
+                    the way entertainment lawyers format theirs.
+                  </p>
+                </div>
+
+                <div className="bg-bg-card border border-border-subtle rounded-xl p-6">
+                  <div className="w-10 h-10 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center mb-4">
+                    <Presentation className="w-4 h-4 text-gold" />
+                  </div>
+                  <h3 className="text-text-primary text-sm font-semibold mb-2">
+                    Presentation-Ready PDF
+                  </h3>
+                  <p className="text-text-dim text-xs leading-relaxed">
+                    A polished document you can email, print, or hand to an investor
+                    in a meeting. Clear visuals, plain language, zero jargon confusion.
+                    Anyone at any skill level can understand it.
+                  </p>
+                </div>
+
+                <div className="bg-bg-card border border-border-subtle rounded-xl p-6">
+                  <div className="w-10 h-10 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center mb-4">
+                    <BookOpen className="w-4 h-4 text-gold" />
+                  </div>
+                  <h3 className="text-text-primary text-sm font-semibold mb-2">
+                    Plain-English Glossary
+                  </h3>
+                  <p className="text-text-dim text-xs leading-relaxed">
+                    Every financial term explained in language a first-time filmmaker
+                    can understand. No MBA required. No gatekeeping.
+                  </p>
+                </div>
+
+                <div className="bg-bg-card border border-border-subtle rounded-xl p-6">
+                  <div className="w-10 h-10 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center mb-4">
+                    <BarChart3 className="w-4 h-4 text-gold" />
+                  </div>
+                  <h3 className="text-text-primary text-sm font-semibold mb-2">
+                    Visual Waterfall Chart
+                  </h3>
+                  <p className="text-text-dim text-xs leading-relaxed">
+                    A clear, visual breakdown of exactly who gets paid, in what order,
+                    and how much. The single most important chart in film finance.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <GoldDivider />
+
+          {/* ─────────────────────────────────────────────────────────
+              SECTION 8: SCENARIO PROMPT CAROUSEL (chatbot bridge)
+              ───────────────────────────────────────────────────────── */}
+          <section className="py-20">
             <div className="max-w-3xl mx-auto px-6 mb-8">
               <div className="flex items-center gap-2 justify-center mb-3">
                 <MessageCircle className="w-4 h-4 text-gold" />
                 <p className="text-gold text-[10px] tracking-[0.3em] uppercase font-semibold">
-                  Real Questions, Real Answers
+                  Try a Scenario
                 </p>
               </div>
               <h2 className="font-bebas text-2xl md:text-3xl tracking-[0.08em] text-text-primary text-center mb-3">
                 WHAT FILMMAKERS ASK
               </h2>
               <p className="text-text-mid text-sm text-center max-w-lg mx-auto leading-relaxed">
-                These are the questions indie filmmakers ask every day.
-                Our calculator helps you find the answers.
+                Real scenarios indie filmmakers face every day.
+                Tap one to start modeling.
               </p>
             </div>
 
@@ -575,20 +840,25 @@ const Index = () => {
               {/* Left spacer for centering on large screens */}
               <div className="flex-shrink-0 w-[max(0px,calc((100vw-768px)/2-1.5rem))]" />
 
-              {scenarioPrompts.map((prompt, i) => (
+              {scenarioPrompts.map((item, i) => (
                 <button
                   key={i}
                   onClick={handleStartClick}
-                  className="flex-shrink-0 w-[280px] snap-center bg-bg-card border border-border-subtle rounded-lg p-5 text-left hover:border-border-default transition-colors group"
+                  className="flex-shrink-0 w-[280px] snap-center bg-bg-card border border-border-subtle rounded-xl p-5 text-left hover:border-border-default transition-colors group"
                 >
-                  <p className="text-text-primary text-sm font-medium leading-snug mb-3 group-hover:text-text-mid transition-colors">
-                    "{prompt.question}"
+                  <div className="flex items-start gap-3 mb-3">
+                    <div className="w-6 h-6 rounded-full bg-bg-elevated border border-border-subtle flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <MessageCircle className="w-3 h-3 text-gold" />
+                    </div>
+                    <p className="text-text-primary text-sm font-medium leading-snug group-hover:text-text-mid transition-colors">
+                      {item.prompt}
+                    </p>
+                  </div>
+                  <p className="text-text-dim text-[11px] leading-relaxed mb-4 pl-9">
+                    {item.context}
                   </p>
-                  <p className="text-text-dim text-[11px] leading-relaxed mb-4">
-                    {prompt.context}
-                  </p>
-                  <span className="flex items-center gap-1.5 text-gold-cta text-[11px] tracking-wider font-semibold">
-                    Try the calculator <ArrowRight className="w-3 h-3" />
+                  <span className="flex items-center gap-1.5 text-gold-cta text-[11px] tracking-wider font-semibold pl-9">
+                    Try it <ArrowRight className="w-3 h-3" />
                   </span>
                 </button>
               ))}
@@ -598,57 +868,18 @@ const Index = () => {
             </div>
           </section>
 
-          {/* ─────────────────────────────────────────────────────────
-              SECTION 5: TRUST BAR
-              ───────────────────────────────────────────────────────── */}
-          <section className="border-t border-border-subtle bg-bg-elevated">
-            <div className="px-6 py-10 max-w-3xl mx-auto">
-              <p className="text-text-dim text-[10px] tracking-[0.2em] uppercase text-center mb-6 font-semibold">
-                What Others Charge for the Same Analysis
-              </p>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-                {[
-                  { label: "Entertainment Lawyer", cost: "$5K–$15K" },
-                  { label: "Finance Consultant", cost: "$10K–$30K" },
-                  { label: "Producer's Rep", cost: "$50K–$250K+" },
-                  { label: "Filmmaker.OG", cost: "Free", highlight: true },
-                ].map((item) => (
-                  <div key={item.label} className="py-3">
-                    <p
-                      className={cn(
-                        "font-mono text-lg font-bold",
-                        item.highlight
-                          ? "text-gold-cta"
-                          : "text-text-dim line-through decoration-text-dim/40"
-                      )}
-                    >
-                      {item.cost}
-                    </p>
-                    <p className="text-text-dim text-[10px] tracking-wider uppercase mt-1">
-                      {item.label}
-                    </p>
-                  </div>
-                ))}
-              </div>
-
-              {/* Sub-note */}
-              <p className="text-text-dim text-[11px] text-center mt-6 max-w-md mx-auto leading-relaxed">
-                The simulation is free. Professional document exports start at{" "}
-                <span className="text-gold font-mono font-bold">$197</span>.
-              </p>
-            </div>
-          </section>
+          <GoldDivider />
 
           {/* ─────────────────────────────────────────────────────────
-              SECTION 6: FAQ
+              SECTION 9: FAQ
               ───────────────────────────────────────────────────────── */}
-          <section className="px-6 py-16 border-t border-border-subtle">
+          <section className="px-6 py-20">
             <div className="max-w-xl mx-auto">
               <h2 className="font-bebas text-2xl tracking-[0.08em] text-text-primary text-center mb-8">
                 FREQUENTLY ASKED QUESTIONS
               </h2>
 
-              <div className="bg-bg-card border border-border-subtle rounded-lg px-5">
+              <div className="bg-bg-card border border-border-subtle rounded-xl px-6">
                 {faqs.map((faq) => (
                   <FaqItem key={faq.q} q={faq.q} a={faq.a} />
                 ))}
@@ -665,10 +896,12 @@ const Index = () => {
             </div>
           </section>
 
+          <GoldDivider />
+
           {/* ─────────────────────────────────────────────────────────
-              SECTION 7: STORE TEASE
+              SECTION 10: STORE TEASE
               ───────────────────────────────────────────────────────── */}
-          <section className="px-6 py-16 bg-bg-elevated border-t border-border-subtle">
+          <section className="px-6 py-20 bg-bg-card">
             <div className="max-w-3xl mx-auto">
               <div className="flex items-center gap-2 justify-center mb-3">
                 <Sparkles className="w-4 h-4 text-gold" />
@@ -692,10 +925,10 @@ const Index = () => {
                       key={product.id}
                       onClick={() => navigate(`/store/${product.slug}`)}
                       className={cn(
-                        "text-left p-4 rounded-lg border transition-all hover:border-border-default",
+                        "text-left p-4 rounded-xl border transition-all hover:border-border-default",
                         product.featured
                           ? "bg-gold/[0.04] border-border-default"
-                          : "bg-bg-card border-border-subtle"
+                          : "bg-bg-elevated border-border-subtle"
                       )}
                     >
                       {product.featured && (
@@ -725,7 +958,7 @@ const Index = () => {
                           ${product.price.toLocaleString()}
                         </span>
                       </div>
-                      <span className="flex items-center gap-1 text-text-dim text-[10px] hover:text-text-mid transition-colors">
+                      <span className="flex items-center gap-1 text-gold-cta text-[10px] tracking-wider font-semibold">
                         Details <ArrowRight className="w-2.5 h-2.5" />
                       </span>
                     </button>
@@ -744,10 +977,12 @@ const Index = () => {
             </div>
           </section>
 
+          <GoldDivider />
+
           {/* ─────────────────────────────────────────────────────────
-              SECTION 8: FINAL CTA
+              SECTION 11: FINAL CTA
               ───────────────────────────────────────────────────────── */}
-          <section className="relative px-6 py-20 border-t border-border-subtle overflow-hidden">
+          <section className="relative px-6 py-24 overflow-hidden">
             {/* Ambient glow */}
             <div
               className="absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none"
