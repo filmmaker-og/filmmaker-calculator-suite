@@ -28,6 +28,9 @@ import {
   UserCheck,
   Briefcase,
   Share2,
+  Mail,
+  Instagram,
+  Link2,
 } from "lucide-react";
 import filmmakerLogo from "@/assets/filmmaker-logo.jpg";
 import Header from "@/components/Header";
@@ -45,12 +48,12 @@ const SHARE_TITLE = "FILMMAKER.OG — See Where Every Dollar Goes";
    ═══════════════════════════════════════════════════════════════════ */
 const SECTION_IDS = [
   "hero",
-  "mission",
   "industry-charges",
   "deliverables",
   "how-it-works",
   "use-cases",
   "problem",
+  "mission",
   "chatbot",
   "faq",
   "final-cta",
@@ -234,7 +237,7 @@ const FaqItem = ({ q, a }: { q: string; a: string }) => {
         </span>
         <ChevronDown
           className={cn(
-            "w-4 h-4 text-text-dim flex-shrink-0 transition-transform duration-200",
+            "w-4 h-4 text-gold flex-shrink-0 transition-transform duration-200",
             open && "rotate-180"
           )}
         />
@@ -286,7 +289,7 @@ const SectionHeader = ({
 /* ═══════════════════════════════════════════════════════════════════
    SECTION CHEVRON — bigger, clickable, scrolls to next section
    ═══════════════════════════════════════════════════════════════════ */
-const SectionChevron = ({ nextId }: { nextId?: string }) => {
+const SectionChevron = ({ nextId, large }: { nextId?: string; large?: boolean }) => {
   const handleClick = useCallback(() => {
     if (!nextId) return;
     const el = document.getElementById(nextId);
@@ -300,10 +303,18 @@ const SectionChevron = ({ nextId }: { nextId?: string }) => {
   return (
     <button
       onClick={handleClick}
-      className="flex items-center justify-center w-10 h-10 mx-auto mt-4 rounded-full border border-white/10 hover:border-gold/40 transition-all group"
+      className={cn(
+        "flex items-center justify-center mx-auto rounded-full border border-white/10 hover:border-gold/40 transition-all group",
+        large ? "w-12 h-12 mt-8" : "w-10 h-10 mt-6"
+      )}
       aria-label="Scroll to next section"
     >
-      <ChevronDown className="w-5 h-5 text-text-dim group-hover:text-gold animate-bounce-chevron transition-colors" />
+      <ChevronDown
+        className={cn(
+          "text-text-dim group-hover:text-gold animate-bounce-chevron transition-colors",
+          large ? "w-6 h-6" : "w-5 h-5"
+        )}
+      />
     </button>
   );
 };
@@ -315,24 +326,18 @@ const SectionFrame = ({
   id,
   children,
   className,
-  noPadding,
 }: {
   id: string;
   children: React.ReactNode;
   className?: string;
-  noPadding?: boolean;
 }) => (
   <section
     id={id}
-    className={cn(
-      "snap-section min-h-[85vh] flex flex-col justify-center",
-      !noPadding && "px-4"
-    )}
+    className="snap-section min-h-[80vh] flex flex-col justify-center px-4 py-3"
   >
     <div
       className={cn(
-        "bg-bg-elevated border border-white/[0.06] rounded-2xl overflow-hidden",
-        !noPadding && "p-6",
+        "bg-bg-elevated border border-white/[0.06] rounded-2xl overflow-hidden p-6",
         className
       )}
     >
@@ -350,7 +355,7 @@ const Index = () => {
   const haptics = useHaptics();
   const carouselRef = useRef<HTMLDivElement>(null);
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
-  const [shareState, setShareState] = useState<"idle" | "copied">("idle");
+  const [linkCopied, setLinkCopied] = useState(false);
 
   // Detect returning user with saved data
   const savedState = useMemo(() => {
@@ -427,7 +432,6 @@ const Index = () => {
   }, []);
 
   const handleShare = useCallback(async () => {
-    // Try native Web Share API first (Android share sheet, iOS share sheet)
     if (navigator.share) {
       try {
         await navigator.share({
@@ -440,16 +444,15 @@ const Index = () => {
         // User cancelled or API failed — fall through to clipboard
       }
     }
+    handleCopyLink();
+  }, []);
 
-    // Fallback: copy link + text to clipboard
+  const handleCopyLink = useCallback(() => {
     const shareContent = `${SHARE_TEXT}\n\n${SHARE_URL}`;
-    try {
-      await navigator.clipboard.writeText(shareContent);
-      setShareState("copied");
-      setTimeout(() => setShareState("idle"), 2000);
-    } catch {
-      // Last resort: do nothing
-    }
+    navigator.clipboard.writeText(shareContent).then(() => {
+      setLinkCopied(true);
+      setTimeout(() => setLinkCopied(false), 2000);
+    }).catch(() => { /* do nothing */ });
   }, []);
 
   const isComplete = phase === 'complete';
@@ -524,7 +527,7 @@ const Index = () => {
                 background: `radial-gradient(ellipse 50% 40% at 50% 10%, rgba(212,175,55,0.1) 0%, rgba(212,175,55,0.04) 40%, transparent 70%)`,
               }}
             />
-            <div className="relative px-6 pt-20 pb-10 max-w-xl mx-auto text-center">
+            <div className="relative px-6 pt-20 pb-6 max-w-xl mx-auto text-center">
               <div className="mb-8 relative inline-block">
                 <div
                   className="absolute inset-0 -m-8"
@@ -585,63 +588,12 @@ const Index = () => {
                 </div>
               )}
 
-              {/* Share button */}
-              <button
-                onClick={handleShare}
-                className="mt-6 inline-flex items-center gap-2 text-[11px] tracking-wider text-text-dim hover:text-gold transition-colors py-2 px-4 rounded-full border border-white/[0.06] hover:border-gold/30"
-              >
-                {shareState === "copied" ? (
-                  <>
-                    <Check className="w-3.5 h-3.5 text-green-400" />
-                    <span className="text-green-400">Link copied!</span>
-                  </>
-                ) : (
-                  <>
-                    <Share2 className="w-3.5 h-3.5" />
-                    <span>Share this tool</span>
-                  </>
-                )}
-              </button>
-
-              <SectionChevron nextId="mission" />
+              {/* Chevron — big and immediately visible */}
+              <SectionChevron nextId="industry-charges" large />
             </div>
           </section>
 
-          {/* ── SECTION 2: MISSION / DEMOCRATIZATION ── */}
-          <SectionFrame id="mission">
-            <div className="max-w-2xl mx-auto">
-              <div className="relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-gold/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-                <div className="relative z-10">
-                  <div className="flex items-center gap-3 mb-5">
-                    <div className="w-9 h-9 rounded-lg bg-gold/10 border border-border-default flex items-center justify-center">
-                      <Eye className="w-4 h-4 text-gold" />
-                    </div>
-                    <p className="text-gold text-[10px] tracking-[0.3em] uppercase font-semibold">Our Mission</p>
-                  </div>
-                  <h2 className="font-bebas text-2xl md:text-3xl tracking-[0.08em] text-text-primary mb-4">
-                    DEMOCRATIZING THE BUSINESS OF FILM
-                  </h2>
-                  <div className="space-y-3 text-text-mid text-sm leading-relaxed">
-                    <p>
-                      For too long, the mechanics of film finance have been obscured by gatekeepers.
-                      Agencies, distributors, and studios thrive on information asymmetry. They know the numbers; you don't.
-                    </p>
-                    <p className="text-text-primary font-medium">
-                      We built this tool to level the playing field.
-                    </p>
-                    <p>
-                      This tool extracts the proprietary logic used by top-tier entertainment lawyers and sales agents,
-                      putting institutional-grade modeling directly into your hands. Free simulation. Just the math.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <SectionChevron nextId="industry-charges" />
-          </SectionFrame>
-
-          {/* ── SECTION 3: WHAT THE INDUSTRY CHARGES ── */}
+          {/* ── SECTION 2: WHAT THE INDUSTRY CHARGES ── */}
           <SectionFrame id="industry-charges">
             <div className="max-w-2xl mx-auto">
               <SectionHeader
@@ -697,7 +649,7 @@ const Index = () => {
             <SectionChevron nextId="deliverables" />
           </SectionFrame>
 
-          {/* ── SECTION 4: WHAT YOU GET (moved up, right after industry charges) ── */}
+          {/* ── SECTION 3: WHAT YOU GET (right after industry charges) ── */}
           <SectionFrame id="deliverables">
             <div className="max-w-2xl mx-auto">
               <SectionHeader
@@ -707,7 +659,7 @@ const Index = () => {
                 subtitle="Designed so anyone — your investor, your business partner, your family — can understand your film's financials at a glance."
               />
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-3">
                 {[
                   { icon: FileSpreadsheet, title: "6-Sheet Excel Workbook", desc: "Executive summary, full waterfall ledger, capital stack breakdown, investor return summary, and plain-English glossary." },
                   { icon: Presentation, title: "Presentation-Ready PDF", desc: "A polished document you can email, print, or hand to an investor. Clear visuals, plain language, zero jargon." },
@@ -716,12 +668,12 @@ const Index = () => {
                 ].map((item) => {
                   const Icon = item.icon;
                   return (
-                    <div key={item.title} className="bg-bg-card border border-border-subtle rounded-xl p-5">
-                      <div className="w-9 h-9 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center mb-3">
-                        <Icon className="w-4 h-4 text-gold" />
+                    <div key={item.title} className="bg-bg-card border border-border-subtle rounded-xl p-4">
+                      <div className="w-8 h-8 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center mb-3">
+                        <Icon className="w-3.5 h-3.5 text-gold" />
                       </div>
-                      <h3 className="text-text-primary text-sm font-semibold mb-2">{item.title}</h3>
-                      <p className="text-text-dim text-xs leading-relaxed">{item.desc}</p>
+                      <h3 className="text-text-primary text-sm font-semibold mb-1.5">{item.title}</h3>
+                      <p className="text-text-dim text-[11px] leading-relaxed">{item.desc}</p>
                     </div>
                   );
                 })}
@@ -730,7 +682,7 @@ const Index = () => {
             <SectionChevron nextId="how-it-works" />
           </SectionFrame>
 
-          {/* ── SECTION 5: HOW IT WORKS ── */}
+          {/* ── SECTION 4: HOW IT WORKS ── */}
           <SectionFrame id="how-it-works">
             <div className="max-w-3xl mx-auto">
               <SectionHeader eyebrow="How It Works" title="FOUR STEPS TO CLARITY" />
@@ -739,7 +691,7 @@ const Index = () => {
                 {steps.map((step) => {
                   const Icon = step.icon;
                   return (
-                    <div key={step.num} className="flex items-start gap-4 bg-bg-card border border-border-subtle rounded-xl p-5">
+                    <div key={step.num} className="flex items-start gap-4 bg-bg-card border border-border-subtle rounded-xl p-4">
                       <div className="flex-shrink-0 w-9 h-9 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center">
                         <Icon className="w-4 h-4 text-gold" />
                       </div>
@@ -758,16 +710,16 @@ const Index = () => {
             <SectionChevron nextId="use-cases" />
           </SectionFrame>
 
-          {/* ── SECTION 6: WHEN TO USE THIS ── */}
+          {/* ── SECTION 5: WHEN TO USE THIS ── */}
           <SectionFrame id="use-cases">
             <div className="max-w-3xl mx-auto">
               <SectionHeader eyebrow="When To Use This" title="THREE MOMENTS THAT DEFINE YOUR DEAL" />
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                 {useCases.map((uc) => {
                   const Icon = uc.icon;
                   return (
-                    <div key={uc.title} className="bg-bg-card border border-border-subtle rounded-xl p-5">
+                    <div key={uc.title} className="bg-bg-card border border-border-subtle rounded-xl p-4">
                       <div className="w-9 h-9 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center mb-3">
                         <Icon className="w-4 h-4 text-gold" />
                       </div>
@@ -781,7 +733,7 @@ const Index = () => {
             <SectionChevron nextId="problem" />
           </SectionFrame>
 
-          {/* ── SECTION 7: THE PROBLEM ── */}
+          {/* ── SECTION 6: THE PROBLEM ── */}
           <SectionFrame id="problem">
             <div className="max-w-3xl mx-auto">
               <SectionHeader
@@ -790,11 +742,11 @@ const Index = () => {
                 subtitle="It's not because the films are bad. It's because filmmakers sign deals they don't understand."
               />
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                 {problemCards.map((card) => {
                   const Icon = card.icon;
                   return (
-                    <div key={card.title} className="bg-bg-card border border-border-subtle rounded-xl p-5">
+                    <div key={card.title} className="bg-bg-card border border-border-subtle rounded-xl p-4">
                       <div className="w-9 h-9 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center mb-3">
                         <Icon className="w-4 h-4 text-gold" />
                       </div>
@@ -805,15 +757,49 @@ const Index = () => {
                 })}
               </div>
             </div>
+            <SectionChevron nextId="mission" />
+          </SectionFrame>
+
+          {/* ── SECTION 7: MISSION / DEMOCRATIZATION ── */}
+          <SectionFrame id="mission">
+            <div className="max-w-2xl mx-auto">
+              <div className="relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-gold/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+                <div className="relative z-10">
+                  <div className="flex items-center gap-3 mb-5">
+                    <div className="w-9 h-9 rounded-lg bg-gold/10 border border-border-default flex items-center justify-center">
+                      <Eye className="w-4 h-4 text-gold" />
+                    </div>
+                    <p className="text-gold text-[10px] tracking-[0.3em] uppercase font-semibold">Our Mission</p>
+                  </div>
+                  <h2 className="font-bebas text-2xl md:text-3xl tracking-[0.08em] text-text-primary mb-4">
+                    DEMOCRATIZING THE BUSINESS OF FILM
+                  </h2>
+                  <div className="space-y-3 text-text-mid text-sm leading-relaxed">
+                    <p>
+                      For too long, the mechanics of film finance have been obscured by gatekeepers.
+                      Agencies, distributors, and studios thrive on information asymmetry. They know the numbers; you don't.
+                    </p>
+                    <p className="text-text-primary font-medium">
+                      We built this tool to level the playing field.
+                    </p>
+                    <p>
+                      This tool extracts the proprietary logic used by top-tier entertainment lawyers and sales agents,
+                      putting institutional-grade modeling directly into your hands. Free simulation. Just the math.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
             <SectionChevron nextId="chatbot" />
           </SectionFrame>
 
           {/* ── SECTION 8: ASK OUR FRIENDLY CHATBOT (with copy) ── */}
           <section
             id="chatbot"
-            className="snap-section min-h-[85vh] flex flex-col justify-center"
+            className="snap-section min-h-[80vh] flex flex-col justify-center px-4 py-3"
           >
-            <div className="bg-bg-elevated border border-white/[0.06] rounded-2xl overflow-hidden mx-4 p-6 pb-2">
+            <div className="bg-bg-elevated border border-white/[0.06] rounded-2xl overflow-hidden p-6 pb-3">
               <div className="max-w-3xl mx-auto mb-6">
                 <SectionHeader
                   icon={MessageCircle}
@@ -825,13 +811,13 @@ const Index = () => {
 
               <div
                 ref={carouselRef}
-                className="flex gap-4 overflow-x-auto snap-x snap-mandatory px-2 pb-4 scrollbar-hide"
+                className="flex gap-3 overflow-x-auto snap-x snap-mandatory px-1 pb-4 scrollbar-hide"
                 style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
               >
                 {scenarioPrompts.map((item, i) => (
                   <div
                     key={i}
-                    className="flex-shrink-0 w-[260px] snap-center bg-bg-card border border-border-subtle rounded-xl p-5 text-left hover:border-border-default transition-colors group"
+                    className="flex-shrink-0 w-[250px] snap-center bg-bg-card border border-border-subtle rounded-xl p-4 text-left hover:border-border-default transition-colors group"
                   >
                     <div className="flex items-start gap-3 mb-3">
                       <div className="w-6 h-6 rounded-full bg-bg-elevated border border-border-subtle flex items-center justify-center flex-shrink-0 mt-0.5">
@@ -841,7 +827,7 @@ const Index = () => {
                         {item.prompt}
                       </p>
                     </div>
-                    <p className="text-text-dim text-[11px] leading-relaxed mb-4 pl-9">
+                    <p className="text-text-dim text-[11px] leading-relaxed mb-3 pl-9">
                       {item.context}
                     </p>
                     <button
@@ -865,28 +851,29 @@ const Index = () => {
                 ))}
               </div>
             </div>
-            <div className="px-4">
-              <SectionChevron nextId="faq" />
-            </div>
+            <SectionChevron nextId="faq" />
           </section>
 
           {/* ── SECTION 9: FAQ ── */}
           <SectionFrame id="faq">
             <div className="max-w-xl mx-auto">
-              <h2 className="font-bebas text-2xl tracking-[0.08em] text-text-primary text-center mb-6">
-                WHAT FILMMAKERS ASK
-              </h2>
+              <SectionHeader
+                icon={MessageCircle}
+                eyebrow="Common Questions"
+                title="WHAT FILMMAKERS ASK"
+              />
               <div className="bg-bg-card border border-border-subtle rounded-xl px-5">
                 {faqs.map((faq) => (
                   <FaqItem key={faq.q} q={faq.q} a={faq.a} />
                 ))}
               </div>
-              <div className="text-center mt-5">
+              <div className="text-center mt-6">
                 <button
                   onClick={() => navigate("/intro")}
-                  className="text-text-dim hover:text-text-mid text-[11px] tracking-wider transition-colors"
+                  className="inline-flex items-center gap-2 text-gold-cta hover:text-gold text-xs tracking-wider font-semibold transition-colors py-2 px-4 rounded-lg border border-gold-cta/20 hover:border-gold/40 bg-gold-cta-subtle"
                 >
-                  Read the full protocol documentation →
+                  <BookOpen className="w-3.5 h-3.5" />
+                  Read the full protocol documentation
                 </button>
               </div>
             </div>
@@ -896,7 +883,7 @@ const Index = () => {
           {/* ── SECTION 10: FINAL CTA — clean and simple ── */}
           <section
             id="final-cta"
-            className="snap-section min-h-[70vh] flex flex-col justify-center relative px-4 overflow-hidden"
+            className="snap-section min-h-[60vh] flex flex-col justify-center relative px-4 py-3 overflow-hidden"
           >
             <div
               className="absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none"
@@ -924,31 +911,57 @@ const Index = () => {
               <p className="text-text-dim text-[11px] tracking-wider mt-4">
                 No account required. No credit card. Just clarity.
               </p>
-
-              {/* Share button */}
-              <button
-                onClick={handleShare}
-                className="mt-5 inline-flex items-center gap-2 text-[11px] tracking-wider text-text-dim hover:text-gold transition-colors py-2 px-4 rounded-full border border-white/[0.06] hover:border-gold/30"
-              >
-                {shareState === "copied" ? (
-                  <>
-                    <Check className="w-3.5 h-3.5 text-green-400" />
-                    <span className="text-green-400">Link copied!</span>
-                  </>
-                ) : (
-                  <>
-                    <Share2 className="w-3.5 h-3.5" />
-                    <span>Share this tool</span>
-                  </>
-                )}
-              </button>
             </div>
           </section>
 
           {/* ── FOOTER ── */}
-          <footer className="border-t border-border-subtle py-6">
-            <div className="px-6 text-center max-w-2xl mx-auto">
-              <p className="text-text-dim text-[10px] tracking-wide leading-relaxed">
+          <footer className="border-t border-border-subtle py-8 px-6">
+            <div className="max-w-md mx-auto">
+              {/* Contact + Share row */}
+              <div className="flex items-center justify-center gap-3 mb-6">
+                <a
+                  href="mailto:thefilmmaker.og@gmail.com"
+                  className="flex items-center gap-1.5 text-[11px] tracking-wider text-text-dim hover:text-gold transition-colors py-2 px-3 rounded-full border border-white/[0.06] hover:border-gold/30"
+                >
+                  <Mail className="w-3.5 h-3.5" />
+                  <span>Email</span>
+                </a>
+                <a
+                  href="https://www.instagram.com/filmmaker.og"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1.5 text-[11px] tracking-wider text-text-dim hover:text-gold transition-colors py-2 px-3 rounded-full border border-white/[0.06] hover:border-gold/30"
+                >
+                  <Instagram className="w-3.5 h-3.5" />
+                  <span>Instagram</span>
+                </a>
+                <button
+                  onClick={handleShare}
+                  className="flex items-center gap-1.5 text-[11px] tracking-wider text-text-dim hover:text-gold transition-colors py-2 px-3 rounded-full border border-white/[0.06] hover:border-gold/30"
+                >
+                  <Share2 className="w-3.5 h-3.5" />
+                  <span>Share</span>
+                </button>
+                <button
+                  onClick={handleCopyLink}
+                  className="flex items-center gap-1.5 text-[11px] tracking-wider transition-colors py-2 px-3 rounded-full border border-white/[0.06] hover:border-gold/30"
+                >
+                  {linkCopied ? (
+                    <>
+                      <Check className="w-3.5 h-3.5 text-green-400" />
+                      <span className="text-green-400">Copied!</span>
+                    </>
+                  ) : (
+                    <>
+                      <Link2 className="w-3.5 h-3.5 text-text-dim" />
+                      <span className="text-text-dim">Copy URL</span>
+                    </>
+                  )}
+                </button>
+              </div>
+
+              {/* Disclaimer */}
+              <p className="text-text-dim text-[10px] tracking-wide leading-relaxed text-center">
                 This tool is for educational and informational purposes only.
                 It does not constitute legal, tax, accounting, or investment advice.
                 Consult a qualified entertainment attorney before making any

@@ -1,16 +1,45 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { Home, Calculator, BookOpen, Book, Mail, Instagram, Briefcase } from "lucide-react";
+import { Home, Calculator, BookOpen, Book, Mail, Instagram, Briefcase, Share2, Link2, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
+
+const SHARE_URL = "https://filmmaker.og";
+const SHARE_TEXT = "Free film finance simulator — model your deal structure, capital stack, and revenue waterfall. See where every dollar goes before you sign.";
+const SHARE_TITLE = "FILMMAKER.OG — See Where Every Dollar Goes";
 
 const MobileMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [linkCopied, setLinkCopied] = useState(false);
   const navigate = useNavigate();
 
   const handleNavigate = (path: string) => {
     setIsOpen(false);
     navigate(path);
   };
+
+  const handleShare = useCallback(async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: SHARE_TITLE,
+          text: SHARE_TEXT,
+          url: SHARE_URL,
+        });
+        return;
+      } catch {
+        // User cancelled or API failed — fall through to clipboard
+      }
+    }
+    handleCopyLink();
+  }, []);
+
+  const handleCopyLink = useCallback(() => {
+    const shareContent = `${SHARE_TEXT}\n\n${SHARE_URL}`;
+    navigator.clipboard.writeText(shareContent).then(() => {
+      setLinkCopied(true);
+      setTimeout(() => setLinkCopied(false), 2000);
+    }).catch(() => { /* do nothing */ });
+  }, []);
 
   return (
     <>
@@ -135,6 +164,35 @@ const MobileMenu = () => {
               <Instagram className="w-5 h-5 text-gold/70 group-hover:text-gold" />
               <span className="font-bebas text-sm tracking-wide">@filmmaker.og</span>
             </a>
+          </div>
+
+          <div className="space-y-2 pt-6 border-t border-border-subtle">
+            <h3 className="font-bebas text-xs text-text-dim uppercase tracking-[0.2em] pl-3">Share</h3>
+
+            <button
+              onClick={handleShare}
+              className="w-full flex items-center gap-3 p-3 rounded-lg text-text-primary hover:bg-bg-elevated transition-colors text-left group"
+            >
+              <Share2 className="w-5 h-5 text-gold/70 group-hover:text-gold" />
+              <span className="font-bebas text-sm tracking-wide">Share this tool</span>
+            </button>
+
+            <button
+              onClick={handleCopyLink}
+              className="w-full flex items-center gap-3 p-3 rounded-lg text-text-primary hover:bg-bg-elevated transition-colors text-left group"
+            >
+              {linkCopied ? (
+                <>
+                  <Check className="w-5 h-5 text-green-400" />
+                  <span className="font-bebas text-sm tracking-wide text-green-400">Link copied!</span>
+                </>
+              ) : (
+                <>
+                  <Link2 className="w-5 h-5 text-gold/70 group-hover:text-gold" />
+                  <span className="font-bebas text-sm tracking-wide">Copy link</span>
+                </>
+              )}
+            </button>
           </div>
         </div>
 
