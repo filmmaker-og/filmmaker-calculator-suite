@@ -16,6 +16,7 @@ import EmailGateModal from "@/components/EmailGateModal";
 import Header from "@/components/Header"; // Import shared Header
 
 const STORAGE_KEY = "filmmaker_og_inputs";
+const EMAIL_CAPTURED_KEY = "filmmaker_og_email_captured";
 
 const defaultInputs: WaterfallInputs = {
   revenue: 0,
@@ -24,7 +25,7 @@ const defaultInputs: WaterfallInputs = {
   debt: 0,
   seniorDebtRate: 10,
   mezzanineDebt: 0,
-  mezzanineRate: 15,
+  mezzanineRate: 18,
   equity: 0,
   premium: 20,
   salesFee: 15,
@@ -71,7 +72,9 @@ const Calculator = () => {
   const [inputs, setInputs] = useState<WaterfallInputs>(defaultInputs);
   const [guilds, setGuilds] = useState<GuildState>(defaultGuilds);
   const [showEmailGate, setShowEmailGate] = useState(false);
-  const [emailCaptured, setEmailCaptured] = useState(false);
+  const [emailCaptured, setEmailCaptured] = useState(() => {
+    return localStorage.getItem(EMAIL_CAPTURED_KEY) === 'true';
+  });
   const [sourceSelections, setSourceSelections] = useState<CapitalSourceSelections>(defaultSelections);
 
   // Derive capital selections for breakeven calc (from explicit toggle state)
@@ -197,12 +200,14 @@ const Calculator = () => {
 
   const handleEmailSuccess = () => {
     setEmailCaptured(true);
+    localStorage.setItem(EMAIL_CAPTURED_KEY, 'true');
     setShowEmailGate(false);
-    handleTabChange('waterfall'); 
+    handleTabChange('waterfall');
   };
 
   const handleEmailSkip = () => {
     setEmailCaptured(true);
+    localStorage.setItem(EMAIL_CAPTURED_KEY, 'true');
     setShowEmailGate(false);
     handleTabChange('waterfall');
   };
@@ -317,7 +322,9 @@ const Calculator = () => {
     );
   }
 
-  const progressPercent = TAB_TO_STEP[activeTab] * 25;
+  // Progress = number of completed tabs * 25%
+  const completedTabs = getCompletedTabs();
+  const progressPercent = completedTabs.length * 25;
 
   return (
     <div className="min-h-screen bg-bg-void flex flex-col">

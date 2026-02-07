@@ -1,5 +1,5 @@
 import { WaterfallResult, WaterfallInputs, calculateWaterfall } from "@/lib/waterfall";
-import { Lock, AlertTriangle, ChevronDown, ChevronUp, Play } from "lucide-react";
+import { Lock, AlertTriangle, ChevronDown, ChevronUp, Play, X } from "lucide-react";
 import { Link } from "react-router-dom";
 import StandardStepLayout from "../StandardStepLayout";
 import { useEffect, useState } from "react";
@@ -137,6 +137,20 @@ const WaterfallTab = ({ result: initialResult, inputs: initialInputs }: Waterfal
         {/* RESULT STATE - Uses engine's pre-computed phase totals (single source of truth) */}
         {!isCalculating && showResult && (
           <div className="animate-reveal-up space-y-6">
+
+            {/* Demo mode exit banner */}
+            {isDemoMode && (
+              <div className="flex items-center justify-between p-3 border border-gold/30 bg-gold/[0.06] rounded-lg">
+                <span className="text-xs text-gold uppercase tracking-wider font-bold">Demo Mode</span>
+                <button
+                  onClick={() => setIsDemoMode(false)}
+                  className="flex items-center gap-1 text-xs text-text-dim hover:text-text-primary transition-colors"
+                >
+                  <X className="w-3 h-3" />
+                  <span>Exit</span>
+                </button>
+              </div>
+            )}
 
             <WaterfallVisual
               revenue={activeInputs.revenue}
