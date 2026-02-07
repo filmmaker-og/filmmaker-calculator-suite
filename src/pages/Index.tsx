@@ -1,15 +1,36 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useHaptics } from "@/hooks/use-haptics";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, RotateCcw } from "lucide-react";
 import filmmakerLogo from "@/assets/filmmaker-logo.jpg";
 import Header from "@/components/Header";
 import { cn } from "@/lib/utils";
+import { formatCompactCurrency } from "@/lib/waterfall";
+
+const STORAGE_KEY = "filmmaker_og_inputs";
 
 const Index = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const haptics = useHaptics();
+
+  // Detect returning user with saved data
+  const savedState = useMemo(() => {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return null;
+      const parsed = JSON.parse(raw);
+      if (parsed?.inputs?.budget > 0) {
+        return {
+          budget: parsed.inputs.budget as number,
+          activeTab: parsed.activeTab as string,
+        };
+      }
+    } catch { /* ignore */ }
+    return null;
+  }, []);
+
+  const isReturningUser = savedState !== null;
 
   // Check if we should skip intro based on URL param
   const shouldSkip = searchParams.get("skipIntro") === "true";
@@ -36,6 +57,17 @@ const Index = () => {
   const handleStartClick = () => {
     haptics.medium();
     navigate("/calculator?tab=budget");
+  };
+
+  const handleContinueClick = () => {
+    haptics.medium();
+    // No ?tab= param → Calculator restores last active tab from localStorage
+    navigate("/calculator");
+  };
+
+  const handleStartFresh = () => {
+    haptics.light();
+    navigate("/calculator?tab=budget&reset=true");
   };
 
   const isComplete = phase === 'complete';
@@ -272,27 +304,45 @@ const Index = () => {
               See where every dollar goes.
             </p>
 
-            {/* CTA */}
-            <button
-              onClick={handleStartClick}
-              className="w-full max-w-[280px] h-14 text-sm font-black tracking-[0.12em] transition-all active:scale-[0.96] relative z-10 rounded-md"
-              style={{
-                backgroundColor: 'rgba(249, 224, 118, 0.12)',
-                border: '1px solid rgba(249, 224, 118, 0.45)',
-                color: '#F9E076',
-                boxShadow: '0 10px 40px rgba(249, 224, 118, 0.25)',
-              }}
-            >
-              <span className="flex items-center justify-center gap-2">
-                RUN THE NUMBERS
-                <ArrowRight size={18} />
-              </span>
-            </button>
-
-            {/* Hint */}
-            <p className="text-text-dim text-[11px] tracking-wider mt-6 relative z-10">
-              Takes about 2 minutes
-            </p>
+            {/* CTA — Returning vs New User */}
+            {isReturningUser ? (
+              <div className="w-full max-w-[280px] space-y-3 relative z-10">
+                <button
+                  onClick={handleContinueClick}
+                  className="w-full h-14 text-sm font-black tracking-[0.12em] transition-all active:scale-[0.96] rounded-md bg-gold-cta-subtle border border-gold-cta-muted text-gold-cta shadow-button hover:border-gold-cta"
+                >
+                  <span className="flex items-center justify-center gap-2">
+                    CONTINUE SIMULATION
+                    <ArrowRight size={18} />
+                  </span>
+                </button>
+                <p className="text-text-dim text-[11px] tracking-wider text-center">
+                  {formatCompactCurrency(savedState!.budget)} budget in progress
+                </p>
+                <button
+                  onClick={handleStartFresh}
+                  className="w-full flex items-center justify-center gap-1.5 text-[11px] tracking-wider text-text-dim hover:text-text-mid transition-colors py-2"
+                >
+                  <RotateCcw className="w-3 h-3" />
+                  Start fresh
+                </button>
+              </div>
+            ) : (
+              <>
+                <button
+                  onClick={handleStartClick}
+                  className="w-full max-w-[280px] h-14 text-sm font-black tracking-[0.12em] transition-all active:scale-[0.96] relative z-10 rounded-md bg-gold-cta-subtle border border-gold-cta-muted text-gold-cta shadow-button hover:border-gold-cta"
+                >
+                  <span className="flex items-center justify-center gap-2">
+                    RUN THE NUMBERS
+                    <ArrowRight size={18} />
+                  </span>
+                </button>
+                <p className="text-text-dim text-[11px] tracking-wider mt-6 relative z-10">
+                  Takes about 2 minutes
+                </p>
+              </>
+            )}
           </div>
         </main>
 
