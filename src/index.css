@@ -381,6 +381,107 @@
   }
 
   /* ═══════════════════════════════════════════════════════════════════
+     STORE CARDS — Pricing page cards
+     ═══════════════════════════════════════════════════════════════════ */
+  .store-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    transition: border-color var(--timing-medium) ease;
+  }
+
+  .store-card-featured {
+    background: linear-gradient(180deg, rgba(212, 175, 55, 0.06) 0%, var(--bg-card) 40%);
+    border-color: var(--gold-muted);
+    box-shadow: 0 0 30px rgba(212, 175, 55, 0.06), inset 0 0 30px rgba(212, 175, 55, 0.03);
+  }
+
+  /* Glass card — generic base (used on Store and elsewhere) */
+  .glass-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════
+     VAULT BUTTON — Primary CTA with gold glow
+     ═══════════════════════════════════════════════════════════════════ */
+  .btn-vault {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 52px;
+    padding: var(--space-md) var(--space-lg);
+    background: var(--gold-cta-subtle);
+    border: 1px solid var(--gold-cta-muted);
+    border-radius: var(--radius-md);
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--gold-cta);
+    cursor: pointer;
+    transition: all var(--timing-fast) ease;
+    box-shadow: var(--shadow-button);
+  }
+
+  .btn-vault:hover {
+    background: rgba(249, 224, 118, 0.18);
+    border-color: var(--gold-cta);
+  }
+
+  .btn-vault:active {
+    transform: scale(0.97);
+  }
+
+  .btn-vault:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════
+     GHOST GOLD BUTTON — Secondary outline style
+     ═══════════════════════════════════════════════════════════════════ */
+  .btn-ghost-gold {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 52px;
+    padding: var(--space-md) var(--space-lg);
+    background: transparent;
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-md);
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--gold);
+    cursor: pointer;
+    transition: all var(--timing-fast) ease;
+  }
+
+  .btn-ghost-gold:hover {
+    background: var(--gold-subtle);
+    border-color: var(--gold-muted);
+  }
+
+  .btn-ghost-gold:active {
+    transform: scale(0.97);
+  }
+
+  .btn-ghost-gold:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════
      PRIMARY BUTTON (CTA) — Uses CTA Gold exclusively
      ═══════════════════════════════════════════════════════════════════ */
   .btn-primary {
