@@ -55,7 +55,7 @@ const StoreCompare = () => {
                     >
                       <button
                         onClick={() => navigate(`/store/${p.slug}`)}
-                        className="hover:text-gold transition-colors"
+                        className="hover:text-text-mid transition-colors"
                       >
                         {p.name.replace("The ", "")}
                       </button>
@@ -137,7 +137,7 @@ const StoreCompare = () => {
                   <p className={cn("font-mono text-xl font-bold mb-2", product.featured ? "text-gold-cta" : "text-gold")}>
                     ${product.price.toLocaleString()}
                   </p>
-                  <span className="flex items-center gap-1 text-text-dim text-[11px] hover:text-gold transition-colors">
+                  <span className="flex items-center gap-1 text-text-dim text-[11px] hover:text-text-mid transition-colors">
                     View Details <ArrowRight className="w-3 h-3" />
                   </span>
                 </button>

@@ -39,7 +39,7 @@ const MobileMenu = () => {
         <div className="flex justify-end mb-8">
           <button
             onClick={() => setIsOpen(false)}
-            className="p-2 text-text-dim hover:text-white rounded-full hover:bg-white/5 transition-colors"
+            className="p-2 text-text-dim hover:text-white rounded-full hover:bg-bg-elevated transition-colors"
           >
             <X className="w-6 h-6" />
           </button>

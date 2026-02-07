@@ -35,7 +35,7 @@ const CapitalInfo = () => {
           <div className="space-y-4 pt-6 animate-fade-in">
             <button
               onClick={handleBackToOverview}
-              className="flex items-center gap-2 text-sm transition-colors mb-4 text-text-dim hover:text-gold"
+              className="flex items-center gap-2 text-sm transition-colors mb-4 text-text-dim hover:text-text-mid"
             >
               <ArrowLeft className="w-4 h-4" />
               <span>Back to Overview</span>
@@ -259,7 +259,7 @@ const CapitalInfo = () => {
             {/* Primary: Back to Overview */}
             <button
               onClick={handleBackToOverview}
-              className="flex items-center gap-2 text-sm transition-colors text-text-dim hover:text-gold"
+              className="flex items-center gap-2 text-sm transition-colors text-text-dim hover:text-text-mid"
             >
               <ArrowLeft className="w-4 h-4" />
               <span>Back to Overview</span>
@@ -268,7 +268,7 @@ const CapitalInfo = () => {
             {/* Secondary: Subtle exit to calculator */}
             <button
               onClick={handleStartSimulation}
-              className="text-xs transition-colors text-text-dim hover:text-gold"
+              className="text-xs transition-colors text-text-dim hover:text-text-mid"
             >
               Ready to run the numbers? Start Simulation →
             </button>

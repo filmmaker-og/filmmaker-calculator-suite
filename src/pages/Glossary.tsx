@@ -243,7 +243,7 @@ const Glossary = () => {
                 placeholder="Search 100+ terms..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="block w-full pl-10 pr-3 py-3 border border-border-subtle rounded-md leading-5 bg-bg-elevated text-text-primary placeholder-text-dim focus:outline-none focus:border-gold/50 focus:ring-1 focus:ring-gold/20 sm:text-sm transition-all"
+                className="block w-full pl-10 pr-3 py-3 border border-border-subtle rounded-md leading-5 bg-bg-elevated text-text-primary placeholder-text-dim focus:outline-none focus:border-border-active focus:shadow-focus sm:text-sm transition-all"
               />
             </div>
           </div>
@@ -258,10 +258,10 @@ const Glossary = () => {
               filteredTerms.map((item, idx) => (
                 <div 
                   key={idx}
-                  className="group bg-bg-surface border border-border-default hover:border-gold/30 rounded-lg p-6 transition-all duration-200"
+                  className="group bg-bg-surface border border-border-default hover:border-border-active rounded-lg p-6 transition-all duration-200"
                 >
                   <div className="flex flex-col md:flex-row md:items-baseline gap-2 md:gap-4 mb-2">
-                    <h3 className="text-xl font-bold text-white group-hover:text-gold transition-colors">
+                    <h3 className="text-xl font-bold text-white group-hover:text-text-primary transition-colors">
                       {item.term}
                     </h3>
                     <span className="text-[10px] uppercase tracking-wider text-text-dim bg-bg-elevated px-2 py-1 rounded w-fit">
@@ -288,7 +288,7 @@ const Glossary = () => {
               </p>
               <a 
                 href="mailto:thefilmmaker.og@gmail.com" 
-                className="text-gold hover:text-gold-bright transition-colors text-sm font-mono"
+                className="text-text-dim hover:text-text-mid transition-colors text-sm font-mono"
               >
                 thefilmmaker.og@gmail.com
               </a>
@@ -297,7 +297,7 @@ const Glossary = () => {
             <div className="flex justify-center pt-4">
               <button 
                 onClick={() => navigate('/')} 
-                className="flex items-center gap-2 text-text-dim hover:text-gold transition-colors uppercase tracking-widest text-xs font-bold"
+                className="flex items-center gap-2 text-text-dim hover:text-text-mid transition-colors uppercase tracking-widest text-xs font-bold"
               >
                 <Home className="w-4 h-4" />
                 Return to Home
