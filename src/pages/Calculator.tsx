@@ -64,11 +64,12 @@ const Calculator = () => {
 
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  
+  // ALWAYS DEFAULT TO BUDGET (STEP 1)
   const [activeTab, setActiveTab] = useState<TabId>('budget');
+  
   const [inputs, setInputs] = useState<WaterfallInputs>(defaultInputs);
   const [guilds, setGuilds] = useState<GuildState>(defaultGuilds);
-  // REMOVED: state-based result
-  // const [result, setResult] = useState<WaterfallResult | null>(null);
   const [showEmailGate, setShowEmailGate] = useState(false);
   const [emailCaptured, setEmailCaptured] = useState(false);
   const [sourceSelections, setSourceSelections] = useState<CapitalSourceSelections>(defaultSelections);
@@ -95,36 +96,46 @@ const Calculator = () => {
     }
   }, [searchParams]);
 
-  // Load saved state
+  // Load saved state + IGNORE URL TAB PARAM
   useEffect(() => {
     if (searchParams.get("reset") === "true" || searchParams.get("skip") === "true") return;
 
     const saved = localStorage.getItem(STORAGE_KEY);
+    
+    // NOTE: We intentionally IGNORE the "tab" URL parameter here.
+    // The requirement is "it should go to step 1 no matter what without logic checking".
+    // So deep links to ?tab=waterfall will simply load the app at Step 1 (Budget).
+    
+    let loadedInputs = defaultInputs;
+    let targetTab: TabId = 'budget'; // Default to Budget
+
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
-        if (parsed.inputs) {
-          setInputs(parsed.inputs);
-        }
+        if (parsed.inputs) loadedInputs = parsed.inputs;
         if (parsed.guilds) setGuilds(parsed.guilds);
         if (parsed.sourceSelections) setSourceSelections(parsed.sourceSelections);
-        // Only restore saved tab if no explicit ?tab= param was provided
-        const tabParam = searchParams.get("tab") as TabId | null;
-        if (tabParam && STEP_TO_TAB.includes(tabParam)) {
-          setActiveTab(tabParam);
-        } else if (parsed.activeTab) {
-          setActiveTab(parsed.activeTab);
+        
+        // We only restore the saved tab if it exists. We DO NOT look at the URL.
+        if (parsed.activeTab) {
+           // Optional: We could even force this to budget if "no matter what" implies ignoring resume?
+           // For now, ignoring URL is the key fix for the Wiki link issue.
+           targetTab = parsed.activeTab;
         }
       } catch (e) {
         console.error("Failed to load saved inputs");
       }
-    } else {
-      // No saved state — still respect ?tab= param
-      const tabParam = searchParams.get("tab") as TabId | null;
-      if (tabParam && STEP_TO_TAB.includes(tabParam)) {
-        setActiveTab(tabParam);
-      }
     }
+    
+    // Explicitly enforce that if we loaded 'waterfall' from storage but have no data, go to budget.
+    // This isn't "logic checking" the URL, it's just basic state sanity.
+    if (targetTab === 'waterfall' && (loadedInputs.budget === 0 || loadedInputs.revenue === 0)) {
+        targetTab = 'budget';
+    }
+
+    setInputs(loadedInputs);
+    setActiveTab(targetTab);
+
   }, [searchParams]);
 
   // Save state
@@ -138,8 +149,6 @@ const Calculator = () => {
   }, [inputs, guilds, activeTab, sourceSelections]);
 
   // DERIVE RESULT SYNCHRONOUSLY
-  // This ensures 'result' is never null during a render if inputs exist.
-  // It prevents the "flash of null" or "nothing loads" issue when switching tabs.
   const result = useMemo(() => {
     return calculateWaterfall(inputs, guilds);
   }, [inputs, guilds]);
@@ -178,32 +187,25 @@ const Calculator = () => {
 
   // Handle tab change with validation
   const handleTabChange = useCallback((tab: TabId) => {
-    // Email gate: show when trying to view waterfall (tab 4) if not authenticated
-    // Trigger only if we are advancing to 'waterfall' for the first time
     if (tab === 'waterfall' && !user && !emailCaptured) {
       setShowEmailGate(true);
       return;
     }
-
     haptics.light();
     setActiveTab(tab);
   }, [user, emailCaptured, haptics]);
 
-  // Email gate handlers
   const handleEmailSuccess = () => {
     setEmailCaptured(true);
     setShowEmailGate(false);
-    handleTabChange('waterfall'); // Continue to waterfall after success
+    handleTabChange('waterfall'); 
   };
 
   const handleEmailSkip = () => {
     setEmailCaptured(true);
     setShowEmailGate(false);
-    handleTabChange('waterfall'); // Continue even on skip (demo mode)
+    handleTabChange('waterfall');
   };
-
-  // Get current tab config
-  const currentTabConfig = TAB_CONFIG.find(t => t.id === activeTab);
 
   // Determine which tabs are completed
   const getCompletedTabs = (): TabId[] => {
@@ -220,17 +222,14 @@ const Calculator = () => {
   // Determine which tabs are disabled
   const getDisabledTabs = (): TabId[] => {
     const disabled: TabId[] = [];
-    // Waterfall requires both budget and revenue
     if (inputs.budget === 0 || inputs.revenue === 0) {
       disabled.push('waterfall');
     }
     return disabled;
   };
 
-  // Get next available tab
   const getNextTab = (): TabId | null => {
     const currentIndex = STEP_TO_TAB.indexOf(activeTab);
-    // Find next tab that's not disabled
     for (let i = currentIndex + 1; i < STEP_TO_TAB.length; i++) {
       const nextTab = STEP_TO_TAB[i];
       if (!getDisabledTabs().includes(nextTab)) {
@@ -240,28 +239,17 @@ const Calculator = () => {
     return null;
   };
 
-  // Stack Tab Internal State Handling (Step within Step)
-  // We need to know if we are "deep" inside the Stack Wizard to know if Back should go to previous stack step or previous TAB
-  // This is a limitation of the current architecture where StackTab manages its own internal state
-  // ideally, this state should be lifted up, but for now we will rely on the TAB navigation.
-  
-  // FIX: handleBack Logic
   const handleBack = () => {
     const currentIndex = STEP_TO_TAB.indexOf(activeTab);
-    
-    // 1. If we are on the first tab (Budget), go to Home (Intro)
     if (currentIndex === 0) {
-      navigate("/"); // Go to root (Intro), NOT /?skipIntro=true which skips the intro
+      navigate("/");
       return;
     } 
-
-    // 2. Otherwise, simply go to the previous TAB
     const prevTab = STEP_TO_TAB[currentIndex - 1];
     haptics.light();
     setActiveTab(prevTab);
   };
 
-  // Handle Next button
   const handleNext = useCallback(() => {
     const nextTab = getNextTab();
     if (nextTab) {
@@ -269,13 +257,11 @@ const Calculator = () => {
     }
   }, [handleTabChange, activeTab, inputs]);
 
-  // Check if current section is completed
   const isCurrentSectionComplete = (): boolean => {
     const completed = getCompletedTabs();
     return completed.includes(activeTab);
   };
 
-  // Render current tab content
   const renderTabContent = () => {
     switch (activeTab) {
       case 'budget':
@@ -309,7 +295,6 @@ const Calculator = () => {
           />
         );
       case 'waterfall':
-        // FIX: Always render WaterfallTab if result is available (which it always is now via useMemo)
         return (
           <WaterfallTab
             result={result}
@@ -332,15 +317,11 @@ const Calculator = () => {
     );
   }
 
-  // Calculate progress percentage
   const progressPercent = TAB_TO_STEP[activeTab] * 25;
 
   return (
     <div className="min-h-screen bg-bg-void flex flex-col">
-      {/* Shared Header - Fixes logo color and consistency */}
       <Header />
-
-      {/* Main Content */}
       <main
         ref={mainRef}
         className="flex-1 px-4 py-6 overflow-y-auto"
@@ -348,17 +329,11 @@ const Calculator = () => {
           paddingBottom: 'calc(var(--tabbar-h) + 100px + env(safe-area-inset-bottom))',
         }}
       >
-        <div
-          className={cn(
-            "max-w-[460px] mx-auto",
-            "animate-fade-in"
-          )}
-        >
+        <div className={cn("max-w-[460px] mx-auto", "animate-fade-in")}>
           {renderTabContent()}
         </div>
       </main>
 
-      {/* Floating bar above tab bar - Back + Progress + Next */}
       <div
         className="fixed left-0 right-0 z-40 flex items-center justify-between px-4 py-2"
         style={{
@@ -366,7 +341,6 @@ const Calculator = () => {
           backgroundColor: 'var(--bg-card)',
         }}
       >
-        {/* Back button - same style as Next */}
         <button
           onClick={handleBack}
           className={cn(
@@ -380,19 +354,9 @@ const Calculator = () => {
           <span className="text-xs font-bold uppercase tracking-wider">Back</span>
         </button>
 
-        {/* Circular progress indicator */}
         <div className="relative w-11 h-11 flex items-center justify-center">
-          {/* Background circle */}
           <svg className="absolute w-11 h-11 -rotate-90">
-            <circle
-              cx="22"
-              cy="22"
-              r="18"
-              fill="none"
-              stroke="var(--border-subtle)"
-              strokeWidth="2"
-            />
-            {/* Progress arc */}
+            <circle cx="22" cy="22" r="18" fill="none" stroke="var(--border-subtle)" strokeWidth="2" />
             <circle
               cx="22"
               cy="22"
@@ -403,18 +367,14 @@ const Calculator = () => {
               strokeLinecap="round"
               strokeDasharray={`${progressPercent * 1.13} 113`}
               className="transition-all duration-500 ease-out"
-              style={{
-                filter: 'drop-shadow(0 0 4px rgba(212, 175, 55, 0.5))',
-              }}
+              style={{ filter: 'drop-shadow(0 0 4px rgba(212, 175, 55, 0.5))' }}
             />
           </svg>
-          {/* Percentage text */}
           <span className="relative z-10 font-mono text-[11px] font-bold text-gold">
             {progressPercent}%
           </span>
         </div>
 
-        {/* Next button - pulsing when available */}
         {getNextTab() && isCurrentSectionComplete() && (
           <button
             onClick={handleNext}
@@ -431,7 +391,6 @@ const Calculator = () => {
         )}
       </div>
 
-      {/* Tab Bar - Fixed Bottom */}
       <TabBar
         activeTab={activeTab}
         onTabChange={handleTabChange}
@@ -439,7 +398,6 @@ const Calculator = () => {
         disabledTabs={getDisabledTabs()}
       />
 
-      {/* Email Gate Modal - Removed IntroOverlay */}
       <EmailGateModal
         isOpen={showEmailGate}
         onClose={() => setShowEmailGate(false)}
