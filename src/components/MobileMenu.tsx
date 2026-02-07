@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Menu, X, Home, Calculator, BookOpen, Book, Mail, Instagram } from "lucide-react";
+import { Menu, X, Home, Calculator, BookOpen, Book, Mail, Instagram, Briefcase } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const MobileMenu = () => {
@@ -49,6 +49,14 @@ const MobileMenu = () => {
           <div className="space-y-2">
             <h3 className="text-xs font-bold text-text-dim uppercase tracking-widest pl-3">Menu</h3>
             
+            <button
+              onClick={() => handleNavigate('/store')}
+              className="w-full flex items-center gap-3 p-3 rounded-lg text-text-primary hover:bg-bg-elevated transition-colors text-left group"
+            >
+              <Briefcase className="w-5 h-5 text-gold group-hover:text-gold" />
+              <span className="font-bold text-gold">Producer's Services</span>
+            </button>
+
             <button
               onClick={() => handleNavigate('/')}
               className="w-full flex items-center gap-3 p-3 rounded-lg text-text-primary hover:bg-bg-elevated transition-colors text-left group"
