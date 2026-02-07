@@ -93,18 +93,14 @@ const Calculator = () => {
     }
   }, [searchParams]);
 
-  // Load saved state + IGNORE URL TAB PARAM
+  // Load saved state + honor URL ?tab= param if present
   useEffect(() => {
     if (searchParams.get("reset") === "true" || searchParams.get("skip") === "true") return;
 
     const saved = localStorage.getItem(STORAGE_KEY);
-    
-    // NOTE: We intentionally IGNORE the "tab" URL parameter here.
-    // The requirement is "it should go to step 1 no matter what without logic checking".
-    // So deep links to ?tab=waterfall will simply load the app at Step 1 (Budget).
-    
+
     let loadedInputs = defaultInputs;
-    let targetTab: TabId = 'budget'; // Default to Budget
+    let targetTab: TabId = 'budget';
 
     if (saved) {
       try {
@@ -112,20 +108,19 @@ const Calculator = () => {
         if (parsed.inputs) loadedInputs = parsed.inputs;
         if (parsed.guilds) setGuilds(parsed.guilds);
         if (parsed.sourceSelections) setSourceSelections(parsed.sourceSelections);
-        
-        // We only restore the saved tab if it exists. We DO NOT look at the URL.
-        if (parsed.activeTab) {
-           // Optional: We could even force this to budget if "no matter what" implies ignoring resume?
-           // For now, ignoring URL is the key fix for the Wiki link issue.
-           targetTab = parsed.activeTab;
-        }
+        if (parsed.activeTab) targetTab = parsed.activeTab;
       } catch (e) {
         console.error("Failed to load saved inputs");
       }
     }
-    
-    // Explicitly enforce that if we loaded 'waterfall' from storage but have no data, go to budget.
-    // This isn't "logic checking" the URL, it's just basic state sanity.
+
+    // Honor URL ?tab= param if present (e.g., from info pages or post-purchase)
+    const urlTab = searchParams.get("tab") as TabId | null;
+    if (urlTab && ['budget', 'stack', 'deal', 'waterfall'].includes(urlTab)) {
+      targetTab = urlTab;
+    }
+
+    // Sanity: don't land on waterfall if there's no data to show
     if (targetTab === 'waterfall' && (loadedInputs.budget === 0 || loadedInputs.revenue === 0)) {
         targetTab = 'budget';
     }
@@ -182,15 +177,11 @@ const Calculator = () => {
     setGuilds(prev => ({ ...prev, [guild]: !prev[guild] }));
   }, [haptics]);
 
-  // Handle tab change with validation
+  // Handle tab change — no gate, let them see their results freely
   const handleTabChange = useCallback((tab: TabId) => {
-    if (tab === 'waterfall' && !user && !emailCaptured) {
-      setShowEmailGate(true);
-      return;
-    }
     haptics.light();
     setActiveTab(tab);
-  }, [user, emailCaptured, haptics]);
+  }, [haptics]);
 
   const handleEmailSuccess = () => {
     setEmailCaptured(true);

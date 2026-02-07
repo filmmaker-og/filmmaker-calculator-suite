@@ -1,7 +1,7 @@
 import { WaterfallResult, WaterfallInputs, calculateWaterfall, formatCompactCurrency, formatMultiple } from "@/lib/waterfall";
 import { getVerdictStatus } from "@/lib/design-system";
-import { Lock, AlertTriangle, ChevronDown, ChevronUp, Play, X } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Lock, AlertTriangle, ChevronDown, ChevronUp, Play, X, FileSpreadsheet, Sparkles } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 import StandardStepLayout from "../StandardStepLayout";
 import { useEffect, useState } from "react";
 import { useHaptics } from "@/hooks/use-haptics";
@@ -31,6 +31,7 @@ const DEMO_INPUTS: WaterfallInputs = {
 
 const WaterfallTab = ({ result: initialResult, inputs: initialInputs }: WaterfallTabProps) => {
   const haptics = useHaptics();
+  const navigate = useNavigate();
 
   // State for Demo Mode (if real inputs are empty)
   const isEmpty = initialInputs.budget === 0 || initialInputs.revenue === 0;
@@ -196,6 +197,29 @@ const WaterfallTab = ({ result: initialResult, inputs: initialInputs }: Waterfal
               );
             })()}
 
+            {/* ═══ EXPORT CTA — The bridge to the store ═══ */}
+            {!isDemoMode && (
+              <div className="border border-gold/30 bg-gold/[0.04] rounded-lg p-5 space-y-4">
+                <div className="flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-gold" />
+                  <span className="text-[10px] uppercase tracking-[0.2em] text-gold font-bold">
+                    Ready to Share?
+                  </span>
+                </div>
+                <p className="text-sm text-text-mid leading-relaxed">
+                  Turn these numbers into a professional investor package.
+                  Beautifully designed. Presentation-grade. Starting at $197.
+                </p>
+                <button
+                  onClick={() => navigate('/store')}
+                  className="btn-vault w-full"
+                >
+                  <FileSpreadsheet className="w-4 h-4 mr-2" />
+                  EXPORT YOUR FINANCIAL SNAPSHOT
+                </button>
+              </div>
+            )}
+
             {/* Disclaimer */}
             <Collapsible open={showDisclaimer} onOpenChange={setShowDisclaimer} className="border border-border-subtle rounded-lg bg-bg-surface overflow-hidden">
                <CollapsibleTrigger className="flex items-center justify-between w-full p-4 hover:bg-bg-elevated transition-colors">
@@ -206,13 +230,13 @@ const WaterfallTab = ({ result: initialResult, inputs: initialInputs }: Waterfal
                   {showDisclaimer ? <ChevronUp className="w-4 h-4 text-text-dim" /> : <ChevronDown className="w-4 h-4 text-text-dim" />}
                </CollapsibleTrigger>
                <CollapsibleContent className="p-4 pt-0 text-xs text-text-dim space-y-2 border-t border-border-subtle bg-bg-void/50">
-                  <p className="mt-4">This calculator is for educational purposes only.</p>
-                  <p className="font-bold text-red-400 mt-2">Consult a qualified entertainment attorney.</p>
+                  <p className="mt-4">This calculator is for educational purposes only.
+                  Consult a qualified entertainment attorney before making any financing decisions.</p>
                </CollapsibleContent>
             </Collapsible>
 
             {/* Back to Wiki */}
-            <Link 
+            <Link
               to="/waterfall-info"
               className="block p-4 text-center text-xs text-gold/70 hover:text-gold hover:underline"
             >

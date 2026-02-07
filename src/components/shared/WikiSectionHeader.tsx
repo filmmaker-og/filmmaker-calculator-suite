@@ -1,29 +1,12 @@
 import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { colors, radius } from "@/lib/design-system";
 
 /**
  * WIKI SECTION HEADER — Single source of truth
  *
  * The gold-accented section header used across ALL pages.
  * Features: Radiant gold left bar, gradient background, section number + title.
- *
- * This replaces the 5 separate SectionHeader implementations that existed
- * in IntroView, BudgetInfo, CapitalInfo, FeesInfo, and WaterfallInfo.
  */
-
-const tokens = {
-  gold: colors.gold,
-  goldMuted: colors.goldMuted,
-  goldGlow: colors.goldGlow,
-  goldFill: colors.goldSubtle,
-  goldRadiant: colors.goldGlow,
-  bgHeader: colors.elevated,
-  borderMatte: colors.borderSubtle,
-  borderSubtle: colors.borderSubtle,
-  textPrimary: colors.textPrimary,
-  textDim: colors.textDim,
-};
 
 interface WikiSectionHeaderProps {
   number: string;
@@ -42,47 +25,28 @@ const WikiSectionHeader = ({
 }: WikiSectionHeaderProps) => (
   <div
     className={cn(
-      "flex items-stretch",
+      "flex items-stretch bg-gradient-to-r from-gold-glow via-bg-elevated to-bg-elevated",
+      isExpanded !== false && "border-b border-border-subtle",
       isClickable && "cursor-pointer hover:bg-gold-subtle transition-colors"
     )}
-    style={{
-      background: `linear-gradient(90deg, ${tokens.goldRadiant} 0%, ${tokens.bgHeader} 15%, ${tokens.bgHeader} 100%)`,
-      borderBottom: isExpanded !== false ? `1px solid ${tokens.borderMatte}` : "none",
-    }}
     onClick={onClick}
   >
     {/* Gold Left Bar — THE signature element */}
     <div
-      className="w-1 flex-shrink-0"
-      style={{
-        background: `linear-gradient(180deg, ${tokens.gold} 0%, ${tokens.goldMuted} 100%)`,
-        boxShadow: `0 0 12px ${tokens.goldGlow}`,
-      }}
+      className="w-1 flex-shrink-0 bg-gradient-to-b from-gold to-gold-muted"
+      style={{ boxShadow: '0 0 12px var(--gold-glow)' }}
     />
 
     {/* Section Number */}
-    <div
-      className="flex items-center justify-center px-4 py-4"
-      style={{
-        borderRight: `1px solid ${tokens.borderSubtle}`,
-        minWidth: "56px",
-        background: tokens.goldFill,
-      }}
-    >
-      <span
-        className="font-bebas text-xl tracking-wide"
-        style={{ color: tokens.gold }}
-      >
+    <div className="flex items-center justify-center px-4 py-4 border-r border-border-subtle min-w-[56px] bg-gold-subtle">
+      <span className="font-bebas text-xl tracking-wide text-gold">
         {number}
       </span>
     </div>
 
     {/* Title + Chevron */}
     <div className="flex items-center flex-1 px-4 py-4 justify-between">
-      <h2
-        className="font-bold text-xs uppercase tracking-widest"
-        style={{ color: tokens.textPrimary }}
-      >
+      <h2 className="font-bold text-xs uppercase tracking-widest text-text-primary">
         {title}
       </h2>
 
@@ -90,9 +54,8 @@ const WikiSectionHeader = ({
         <ChevronDown
           className={cn(
             "w-4 h-4 flex-shrink-0 transition-transform duration-200",
-            isExpanded && "rotate-180"
+            isExpanded ? "rotate-180 text-gold" : "text-text-dim"
           )}
-          style={{ color: isExpanded ? tokens.gold : tokens.textDim }}
         />
       )}
     </div>

@@ -91,11 +91,11 @@ const IntroView = () => {
             </div>
           </div>
 
-          {/* Callout / Note */}
-          <div className="bg-blue-900/10 border-l-4 border-blue-500/50 p-4 rounded-r-md flex items-start space-x-3">
-            <Info className="w-5 h-5 text-blue-400 mt-0.5 flex-shrink-0" />
-            <div className="text-sm text-blue-200/80">
-              <span className="font-bold text-blue-200">Pro Tip:</span> Don't worry if you see terms you don't recognize. You can access the <span className="text-white font-semibold">Glossary</span> at any time via the menu in the top right corner.
+          {/* Callout / Note — Gold-only */}
+          <div className="bg-gold/[0.04] border-l-4 border-gold/50 p-4 rounded-r-md flex items-start space-x-3">
+            <Info className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+            <div className="text-sm text-text-mid">
+              <span className="font-bold text-gold">Pro Tip:</span> Don't worry if you see terms you don't recognize. You can access the <span className="text-white font-semibold">Glossary</span> at any time via the menu in the top right corner.
             </div>
           </div>
 

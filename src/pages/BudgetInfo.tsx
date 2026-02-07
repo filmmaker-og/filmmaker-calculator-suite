@@ -9,27 +9,7 @@ import Header from "@/components/Header";
    WIKI CONTAINMENT: This mini wiki can ONLY link back to /intro
    Secondary exit: Subtle "Start Simulation" text link at bottom
    ═══════════════════════════════════════════════════════════════════════════ */
-// Sourced from design-system.ts (aligned to index.css)
-import { colors, radius } from "@/lib/design-system";
 import { WikiSectionHeader, WikiCard, WikiCallout } from "@/components/shared";
-
-const tokens = {
-  bgVoid: colors.void,
-  bgMatte: colors.card,
-  bgHeader: colors.elevated,
-  bgSurface: colors.surface,
-  gold: colors.gold,
-  goldMuted: colors.goldMuted,
-  goldSubtle: colors.goldSubtle,
-  goldGlow: colors.goldGlow,
-  borderMatte: colors.borderSubtle,
-  borderSubtle: colors.borderSubtle,
-  textPrimary: colors.textPrimary,
-  textMid: colors.textMid,
-  textDim: colors.textDim,
-  radiusMd: radius.md,
-  radiusLg: radius.lg,
-};
 
 /* ═══════════════════════════════════════════════════════════════════════════
    GOLD INTENSITY TIERS — Budget tier accent colors
@@ -53,12 +33,8 @@ interface BudgetTierCardProps {
 
 const BudgetTierCard = ({ tier, range, description, accentColor }: BudgetTierCardProps) => (
   <div
-    className="p-4 flex-1"
-    style={{
-      background: tokens.bgSurface,
-      borderRadius: tokens.radiusMd,
-      borderTop: `3px solid ${accentColor}`,
-    }}
+    className="p-4 flex-1 bg-bg-surface rounded-[--radius-md]"
+    style={{ borderTop: `3px solid ${accentColor}` }}
   >
     <span
       className="font-bebas text-xs tracking-wide uppercase"
@@ -66,13 +42,10 @@ const BudgetTierCard = ({ tier, range, description, accentColor }: BudgetTierCar
     >
       {tier}
     </span>
-    <p
-      className="text-lg font-bold text-white mt-1 mb-2"
-      style={{ fontFamily: 'Roboto Mono, monospace' }}
-    >
+    <p className="text-lg font-bold text-white mt-1 mb-2 font-mono">
       {range}
     </p>
-    <p className="text-xs leading-relaxed" style={{ color: tokens.textDim }}>
+    <p className="text-xs leading-relaxed text-text-dim">
       {description}
     </p>
   </div>
@@ -88,27 +61,14 @@ interface BudgetComponentProps {
 }
 
 const BudgetComponent = ({ category, percentage, items }: BudgetComponentProps) => (
-  <div
-    className="p-4"
-    style={{
-      background: tokens.bgSurface,
-      borderRadius: tokens.radiusMd,
-      borderLeft: `2px solid ${tokens.goldMuted}`,
-    }}
-  >
+  <div className="p-4 bg-bg-surface rounded-[--radius-md] border-l-2 border-gold-muted">
     <div className="flex items-center justify-between mb-2">
       <span className="text-sm font-semibold text-white">{category}</span>
-      <span
-        className="text-xs font-mono px-2 py-1 rounded"
-        style={{
-          background: tokens.goldSubtle,
-          color: tokens.gold,
-        }}
-      >
+      <span className="text-xs font-mono px-2 py-1 rounded bg-gold-subtle text-gold">
         {percentage}
       </span>
     </div>
-    <p className="text-xs leading-relaxed" style={{ color: tokens.textDim }}>
+    <p className="text-xs leading-relaxed text-text-dim">
       {items.join(' · ')}
     </p>
   </div>
@@ -123,21 +83,11 @@ interface MistakeCardProps {
 }
 
 const MistakeCard = ({ title, description }: MistakeCardProps) => (
-  <div
-    className="p-4 flex gap-3"
-    style={{
-      background: tokens.goldSubtle,
-      borderRadius: tokens.radiusMd,
-      border: `1px solid ${tokens.goldMuted}`,
-    }}
-  >
-    <AlertTriangle
-      className="w-5 h-5 flex-shrink-0 mt-0.5"
-      style={{ color: tokens.gold }}
-    />
+  <div className="p-4 flex gap-3 bg-gold-subtle rounded-[--radius-md] border border-gold-muted">
+    <AlertTriangle className="w-5 h-5 flex-shrink-0 mt-0.5 text-gold" />
     <div>
       <p className="text-sm font-semibold text-white mb-1">{title}</p>
-      <p className="text-xs leading-relaxed" style={{ color: tokens.textDim }}>
+      <p className="text-xs leading-relaxed text-text-dim">
         {description}
       </p>
     </div>
@@ -148,7 +98,7 @@ const BudgetInfo = () => {
   const navigate = useNavigate();
 
   const handleBackToOverview = () => {
-    navigate('/intro');
+    navigate(-1);
     window.scrollTo(0, 0);
   };
 
@@ -161,10 +111,7 @@ const BudgetInfo = () => {
     <>
       <Header />
 
-      <div
-        className="min-h-screen text-white pt-16 pb-12 px-4 md:px-8 font-sans"
-        style={{ background: tokens.bgVoid }}
-      >
+      <div className="min-h-screen text-white pt-16 pb-12 px-4 md:px-8 font-sans bg-bg-void">
         <div className="max-w-2xl mx-auto space-y-6">
 
           {/* ═══════════════════════════════════════════════════════════════
@@ -174,23 +121,17 @@ const BudgetInfo = () => {
             {/* Back to Overview — ONLY navigation link allowed */}
             <button
               onClick={handleBackToOverview}
-              className="flex items-center gap-2 text-sm transition-colors mb-4"
-              style={{ color: tokens.textDim }}
-              onMouseEnter={(e) => e.currentTarget.style.color = tokens.gold}
-              onMouseLeave={(e) => e.currentTarget.style.color = tokens.textDim}
+              className="flex items-center gap-2 text-sm transition-colors mb-4 text-text-dim hover:text-gold"
             >
               <ArrowLeft className="w-4 h-4" />
               <span>Back to Overview</span>
             </button>
 
             <h1 className="text-4xl md:text-5xl font-bebas tracking-wide leading-tight">
-              Production <span style={{ color: tokens.gold }}>Budget</span>
+              Production <span className="text-gold">Budget</span>
             </h1>
 
-            <p
-              className="text-base leading-relaxed max-w-lg"
-              style={{ color: tokens.textMid }}
-            >
+            <p className="text-base leading-relaxed max-w-lg text-text-mid">
               Your budget isn't just a number—it's the foundation of your entire deal structure.
               Everything flows from here: capital requirements, investor returns, and your ultimate profit position.
             </p>
@@ -199,7 +140,7 @@ const BudgetInfo = () => {
             <div
               className="h-px w-full"
               style={{
-                background: `linear-gradient(90deg, ${tokens.gold}, ${tokens.goldMuted} 40%, transparent 80%)`
+                background: 'linear-gradient(90deg, var(--gold), var(--gold-muted) 40%, transparent 80%)'
               }}
             />
           </div>
@@ -211,10 +152,7 @@ const BudgetInfo = () => {
             <WikiSectionHeader number="01" title="Budget Range Benchmarks" />
 
             <div className="p-5 space-y-5">
-              <p
-                className="text-sm leading-relaxed"
-                style={{ color: tokens.textMid }}
-              >
+              <p className="text-sm leading-relaxed text-text-mid">
                 Independent films operate across a wide spectrum. Where you land determines
                 your financing options, crew expectations, and realistic sales projections.
               </p>
@@ -257,7 +195,7 @@ const BudgetInfo = () => {
             <WikiSectionHeader number="02" title="Budget Composition" />
 
             <div className="p-5 space-y-4">
-              <p className="text-sm leading-relaxed" style={{ color: tokens.textMid }}>
+              <p className="text-sm leading-relaxed text-text-mid">
                 A professional budget breaks into predictable categories. Understanding these
                 helps you identify where costs can flex—and where they can't.
               </p>
@@ -288,7 +226,7 @@ const BudgetInfo = () => {
                 />
               </div>
 
-              <p className="text-xs leading-relaxed pt-2" style={{ color: tokens.textDim }}>
+              <p className="text-xs leading-relaxed pt-2 text-text-dim">
                 These percentages shift based on genre and approach. VFX-heavy films push post
                 to 25%+. Star-driven projects can see ATL exceed 40%.
               </p>
@@ -327,17 +265,14 @@ const BudgetInfo = () => {
             <div
               className="h-px w-full"
               style={{
-                background: `linear-gradient(90deg, transparent 10%, ${tokens.goldMuted} 50%, transparent 90%)`
+                background: 'linear-gradient(90deg, transparent 10%, var(--gold-muted) 50%, transparent 90%)'
               }}
             />
 
             {/* Primary: Back to Overview */}
             <button
               onClick={handleBackToOverview}
-              className="flex items-center gap-2 text-sm transition-colors"
-              style={{ color: tokens.textDim }}
-              onMouseEnter={(e) => e.currentTarget.style.color = tokens.gold}
-              onMouseLeave={(e) => e.currentTarget.style.color = tokens.textDim}
+              className="flex items-center gap-2 text-sm transition-colors text-text-dim hover:text-gold"
             >
               <ArrowLeft className="w-4 h-4" />
               <span>Back to Overview</span>
@@ -346,10 +281,7 @@ const BudgetInfo = () => {
             {/* Secondary: Subtle exit to calculator */}
             <button
               onClick={handleStartSimulation}
-              className="text-xs transition-colors"
-              style={{ color: tokens.textDim }}
-              onMouseEnter={(e) => e.currentTarget.style.color = tokens.gold}
-              onMouseLeave={(e) => e.currentTarget.style.color = tokens.textDim}
+              className="text-xs transition-colors text-text-dim hover:text-gold"
             >
               Ready to run the numbers? Start Simulation →
             </button>
