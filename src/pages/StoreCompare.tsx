@@ -13,7 +13,7 @@ const StoreCompare = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-screen bg-bg-void flex flex-col">
       <Header title="PACKAGES" />
 
       <main className="flex-1 animate-fade-in">
@@ -21,7 +21,7 @@ const StoreCompare = () => {
         <div className="px-6 pt-6 max-w-5xl mx-auto">
           <button
             onClick={() => navigate("/store")}
-            className="flex items-center gap-2 text-sm text-text-dim hover:text-gold transition-colors"
+            className="flex items-center gap-2 text-sm text-text-dim hover:text-text-mid transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             All Packages
@@ -30,7 +30,7 @@ const StoreCompare = () => {
 
         {/* HEADER */}
         <section className="px-6 pt-8 pb-6 max-w-5xl mx-auto text-center">
-          <h1 className="font-bebas text-3xl md:text-4xl tracking-[0.1em] text-foreground mb-3">
+          <h1 className="font-bebas text-3xl md:text-4xl tracking-[0.1em] text-text-primary mb-3">
             COMPARE ALL PACKAGES
           </h1>
           <p className="text-text-mid text-sm max-w-lg mx-auto">
@@ -77,7 +77,7 @@ const StoreCompare = () => {
                       <span
                         className={cn(
                           "font-mono font-bold",
-                          p.featured ? "text-gold-cta text-base" : "text-foreground"
+                          p.featured ? "text-gold-cta text-base" : "text-text-primary"
                         )}
                       >
                         ${p.price.toLocaleString()}
@@ -100,7 +100,7 @@ const StoreCompare = () => {
                           ) : val === false ? (
                             <Minus className="w-3.5 h-3.5 text-white/10 mx-auto" />
                           ) : (
-                            <span className="text-foreground text-[11px] font-semibold">
+                            <span className="text-text-primary text-[11px] font-semibold">
                               {val}
                             </span>
                           )}
@@ -124,15 +124,15 @@ const StoreCompare = () => {
                   key={product.id}
                   onClick={() => navigate(`/store/${product.slug}`)}
                   className={cn(
-                    "text-left p-4 rounded-[--radius-lg] border transition-all hover:border-gold/40",
+                    "text-left p-4 rounded-[--radius-lg] border transition-all hover:border-border-default",
                     product.featured
-                      ? "bg-gold/[0.04] border-gold/20"
+                      ? "bg-gold/[0.04] border-border-default"
                       : "bg-bg-card border-border-subtle"
                   )}
                 >
                   <div className="flex items-center gap-3 mb-2">
                     <Icon className={cn("w-4 h-4", product.featured ? "text-gold" : "text-text-dim")} />
-                    <span className="font-bebas text-lg text-foreground">{product.name.toUpperCase()}</span>
+                    <span className="font-bebas text-lg text-text-primary">{product.name.toUpperCase()}</span>
                   </div>
                   <p className={cn("font-mono text-xl font-bold mb-2", product.featured ? "text-gold-cta" : "text-gold")}>
                     ${product.price.toLocaleString()}
