@@ -169,7 +169,7 @@ export function calculateWaterfall(inputs: WaterfallInputs, guilds: GuildState):
   // 5. Ledger Construction
   const ledger: LedgerItem[] = [
     { name: "CAM / Admin", detail: "1% OF GROSS", amount: cam },
-    { name: "Marketing / Delivery", detail: "FIXED ASSUMPTION", amount: marketing },
+    { name: "Sales Agent Marketing", detail: "EXPENSE CAP (STANDARD $75K)", amount: marketing },
     { name: "Sales Agent", detail: `${salesFee}% COMMISSION`, amount: salesFeeAmount },
     { name: "Unions", detail: "GUILD RESIDUALS / P&H", amount: guildsCost },
     { name: "Senior Debt", detail: `${seniorDebtRate}% INTEREST`, amount: seniorDebtHurdle },
