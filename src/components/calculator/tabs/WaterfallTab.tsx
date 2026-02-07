@@ -1,4 +1,5 @@
-import { WaterfallResult, WaterfallInputs, calculateWaterfall } from "@/lib/waterfall";
+import { WaterfallResult, WaterfallInputs, calculateWaterfall, formatCompactCurrency, formatMultiple } from "@/lib/waterfall";
+import { getVerdictStatus } from "@/lib/design-system";
 import { Lock, AlertTriangle, ChevronDown, ChevronUp, Play, X } from "lucide-react";
 import { Link } from "react-router-dom";
 import StandardStepLayout from "../StandardStepLayout";
@@ -160,6 +161,40 @@ const WaterfallTab = ({ result: initialResult, inputs: initialInputs }: Waterfal
               deferments={activeResult.deferments}
               profitPool={activeResult.profitPool}
             />
+
+            {/* Verdict + Investor Summary */}
+            {(() => {
+              const verdict = getVerdictStatus(activeResult.multiple, activeResult.profitPool > 0);
+              return (
+                <div
+                  className="p-5 border rounded-lg space-y-4"
+                  style={{ borderColor: verdict.color + '33', backgroundColor: verdict.bgColor }}
+                >
+                  <div className="flex items-center justify-between">
+                    <span
+                      className="text-xs font-bold uppercase tracking-widest"
+                      style={{ color: verdict.color }}
+                    >
+                      {verdict.label}
+                    </span>
+                    <span className="font-mono text-lg font-bold" style={{ color: verdict.color }}>
+                      {formatMultiple(activeResult.multiple)}
+                    </span>
+                  </div>
+                  <p className="text-xs text-text-dim leading-relaxed">{verdict.description}</p>
+                  <div className="grid grid-cols-2 gap-4 pt-2 border-t border-border-subtle">
+                    <div>
+                      <p className="text-[9px] uppercase tracking-wider text-text-dim mb-1">Investor Total</p>
+                      <p className="font-mono text-sm text-text-primary">{formatCompactCurrency(activeResult.investor)}</p>
+                    </div>
+                    <div>
+                      <p className="text-[9px] uppercase tracking-wider text-text-dim mb-1">Producer Share</p>
+                      <p className="font-mono text-sm text-text-primary">{formatCompactCurrency(activeResult.producer)}</p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })()}
 
             {/* Disclaimer */}
             <Collapsible open={showDisclaimer} onOpenChange={setShowDisclaimer} className="border border-border-subtle rounded-lg bg-bg-surface overflow-hidden">

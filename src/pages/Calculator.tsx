@@ -10,7 +10,6 @@ import { cn } from "@/lib/utils";
 // New Tab Components
 import TabBar, { TabId } from "@/components/calculator/TabBar";
 import { BudgetTab, StackTab, DealTab, WaterfallTab } from "@/components/calculator/tabs";
-import { CapitalSelections } from "@/lib/waterfall";
 import { CapitalSourceSelections, defaultSelections } from "@/components/calculator/stack/CapitalSelect";
 import EmailGateModal from "@/components/EmailGateModal";
 import Header from "@/components/Header"; // Import shared Header
@@ -77,13 +76,8 @@ const Calculator = () => {
   });
   const [sourceSelections, setSourceSelections] = useState<CapitalSourceSelections>(defaultSelections);
 
-  // Derive capital selections for breakeven calc (from explicit toggle state)
-  const capitalSelections: CapitalSelections = {
-    taxCredits: sourceSelections.taxCredits,
-    seniorDebt: sourceSelections.seniorDebt,
-    gapLoan: sourceSelections.gapLoan,
-    equity: sourceSelections.equity,
-  };
+  // sourceSelections is now the same type as CapitalSelections (unified)
+  const capitalSelections = sourceSelections;
 
   const toggleSourceSelection = useCallback((key: keyof CapitalSourceSelections) => {
     setSourceSelections(prev => ({ ...prev, [key]: !prev[key] }));

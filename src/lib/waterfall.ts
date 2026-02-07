@@ -64,6 +64,7 @@ export interface CapitalSelections {
   seniorDebt: boolean;
   gapLoan: boolean;
   equity: boolean;
+  deferments: boolean;
 }
 
 export function calculateBreakeven(inputs: WaterfallInputs, guilds: GuildState, selections: CapitalSelections): number {

@@ -3,18 +3,10 @@ import { useHaptics } from "@/hooks/use-haptics";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 import StandardStepLayout from "../StandardStepLayout";
+import { CapitalSelections } from "@/lib/waterfall";
 
-/**
- * Selection state for which capital sources the user has.
- * This is the GATEKEEPER — only checked sources show input screens.
- */
-export interface CapitalSourceSelections {
-  taxCredits: boolean;
-  seniorDebt: boolean;
-  gapLoan: boolean;
-  equity: boolean;
-  deferments: boolean;
-}
+// Re-export as alias for backward compatibility
+export type CapitalSourceSelections = CapitalSelections;
 
 export const defaultSelections: CapitalSourceSelections = {
   taxCredits: false,
