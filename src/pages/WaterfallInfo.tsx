@@ -113,7 +113,7 @@ const WaterfallInfo = () => {
                   <h3 className="text-white font-bold mb-1">Sales Fees & Expenses</h3>
                   <p className="text-sm text-text-dim">
                     The Sales Agent takes their commission (10-25%) and recoups capped expenses (marketing, festivals, deliverables).
-                    <span className="block mt-1 text-red-400/80 text-xs font-medium">⚠️ TRAP: Ensure expenses are "Capped" in your contract.</span>
+                    <span className="block mt-1 text-gold text-xs font-semibold">TRAP: Ensure expenses are "Capped" in your contract.</span>
                   </p>
                 </div>
 
@@ -198,25 +198,25 @@ const WaterfallInfo = () => {
             </div>
           </div>
 
-          {/* DANGER ZONE - The Traps */}
-          <div className="bg-red-950/10 border border-red-900/30 rounded-lg p-6 space-y-4">
+          {/* COMMON TRAPS — Gold-only warning styling */}
+          <div className="bg-gold/[0.04] border border-gold/20 rounded-lg p-6 space-y-4">
             <div className="flex items-center gap-2 mb-2">
-              <ShieldAlert className="w-5 h-5 text-red-500" />
-              <h2 className="text-lg font-bold text-red-400 uppercase tracking-widest">Common Traps</h2>
+              <ShieldAlert className="w-5 h-5 text-gold" />
+              <h2 className="text-lg font-bold text-gold uppercase tracking-widest">Common Traps</h2>
             </div>
-            
+
             <div className="grid md:grid-cols-2 gap-6">
               <div>
                 <h3 className="text-white font-bold text-sm mb-1">Cross-Collateralization</h3>
                 <p className="text-xs text-text-dim leading-relaxed">
-                  When a distributor uses the profits from your film to pay for the losses of *another* film they bought. 
-                  <span className="block mt-1 text-red-400">Never allow this. Require "Single Picture Accounting".</span>
+                  When a distributor uses the profits from your film to pay for the losses of *another* film they bought.
+                  <span className="block mt-1 text-gold font-semibold">Never allow this. Require "Single Picture Accounting".</span>
                 </p>
               </div>
               <div>
                 <h3 className="text-white font-bold text-sm mb-1">Overhead Fees</h3>
                 <p className="text-xs text-text-dim leading-relaxed">
-                  Distributors often charge a flat "Overhead" fee (10-15%) on top of their commission for "office expenses." 
+                  Distributors often charge a flat "Overhead" fee (10-15%) on top of their commission for "office expenses."
                   This is pure profit for them. Fight to cap or remove it.
                 </p>
               </div>

@@ -54,7 +54,7 @@ const MobileMenu = () => {
               className="w-full flex items-center gap-3 p-3 rounded-lg text-text-primary hover:bg-bg-elevated transition-colors text-left group"
             >
               <Briefcase className="w-5 h-5 text-gold group-hover:text-gold" />
-              <span className="font-bebas text-base tracking-wide text-gold">Producer's Services</span>
+              <span className="font-bebas text-base tracking-wide text-gold">Packages</span>
             </button>
 
             <button

@@ -333,15 +333,15 @@ const Store = () => {
               PAYMENT SUCCESSFUL
             </h1>
             <p className="text-muted-foreground mb-8 leading-relaxed">
-              Your purchase has been confirmed. You now have access to export
-              your professional reports.
+              Your purchase has been confirmed. Your professional export is
+              now available from the Waterfall tab.
             </p>
             <Button
-              onClick={() => navigate("/calculator")}
+              onClick={() => navigate("/calculator?tab=waterfall")}
               className="btn-vault w-full py-4 min-h-[52px]"
             >
               <Download className="w-5 h-5 mr-2" />
-              GO TO CALCULATOR
+              VIEW YOUR WATERFALL
             </Button>
           </div>
         </main>

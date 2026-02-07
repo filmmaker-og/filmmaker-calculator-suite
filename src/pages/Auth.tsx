@@ -150,7 +150,7 @@ const Auth = () => {
                           document.getElementById('email')?.focus();
                         }
                       }}
-                      className="h-12 bg-bg-surface border border-border-subtle text-text-primary placeholder:text-text-dim focus:border-gold focus:ring-0 focus:ring-offset-0 transition-colors rounded-none"
+                      className="h-12 bg-bg-surface border border-border-subtle text-text-primary placeholder:text-text-dim focus:border-gold focus:ring-0 focus:ring-offset-0 transition-colors rounded-[--radius-md]"
                       required
                     />
                   </div>
@@ -181,7 +181,7 @@ const Auth = () => {
                           handleSubmit(e as any);
                         }
                       }}
-                      className="h-12 bg-bg-surface border border-border-subtle text-text-primary placeholder:text-text-dim font-mono focus:border-gold focus:ring-0 focus:ring-offset-0 transition-colors rounded-none"
+                      className="h-12 bg-bg-surface border border-border-subtle text-text-primary placeholder:text-text-dim font-mono focus:border-gold focus:ring-0 focus:ring-offset-0 transition-colors rounded-[--radius-md]"
                       required
                     />
                   </div>
@@ -190,7 +190,7 @@ const Auth = () => {
                   <Button
                     type="submit"
                     disabled={loading || !email || !name.trim()}
-                    className="w-full h-14 rounded-none font-black text-base tracking-[0.12em] bg-gold-cta text-black hover:brightness-110 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200"
+                    className="w-full min-h-[52px] rounded-[--radius-md] font-black text-xs uppercase tracking-[1.5px] bg-gold-cta text-black hover:brightness-110 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200"
                   >
                     {loading ? (
                       <Loader2 className="w-5 h-5 animate-spin" />

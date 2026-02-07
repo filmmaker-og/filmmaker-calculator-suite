@@ -42,11 +42,17 @@ const TabBar = ({ activeTab, onTabChange, completedTabs = [], disabledTabs = [] 
               isDisabled && "opacity-30 cursor-not-allowed"
             )}
           >
-            <span className={cn(
-              "tab-icon transition-colors",
-              isActive ? "text-gold" : isCompleted ? "text-text-mid" : "text-text-dim"
-            )}>
-              {tab.icon}
+            <span className="relative">
+              <span className={cn(
+                "tab-icon transition-colors",
+                isActive ? "text-gold" : isCompleted ? "text-text-mid" : "text-text-dim"
+              )}>
+                {tab.icon}
+              </span>
+              {/* Gold completion dot */}
+              {isCompleted && !isActive && (
+                <span className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 bg-gold rounded-full" />
+              )}
             </span>
             <span>{tab.label}</span>
           </button>
