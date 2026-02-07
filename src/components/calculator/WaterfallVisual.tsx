@@ -20,7 +20,7 @@ interface LedgerTier {
 }
 
 /**
- * WaterfallVisual - Minimal payment ledger
+ * WaterfallVisual - Minimal payment ledger with "Grass" (Graph) visual indicators
  */
 const WaterfallVisual = ({
   revenue,
@@ -173,14 +173,17 @@ const WaterfallVisual = ({
                 isProfit && tier.paid > 0 && "bg-gold-subtle border-gold/20"
               )}
             >
-              {/* Progress Fill */}
+              {/* Progress Fill (The "Grass" Visual?) - Making it more prominent */}
               <div
-                className="absolute inset-0 bg-gold-subtle transition-all duration-500"
+                className={cn(
+                    "absolute inset-0 transition-all duration-500",
+                    tier.status === "filled" ? "bg-gold-subtle/50" : "bg-gold-subtle/20" 
+                )}
                 style={{ width: `${percentage}%` }}
               />
 
               {/* Content */}
-              <div className="relative flex items-center justify-between">
+              <div className="relative flex items-center justify-between z-10">
                 <div className="flex items-center gap-4">
                   {/* Phase Badge */}
                   <div
@@ -234,11 +237,11 @@ const WaterfallVisual = ({
                 </div>
               </div>
 
-              {/* Progress Bar */}
-              <div className="relative mt-3 h-[2px] bg-bg-header overflow-hidden">
+              {/* Progress Bar (Visual Indicator) */}
+              <div className="relative mt-3 h-[4px] bg-bg-header overflow-hidden rounded-full">
                 <div
                   className={cn(
-                    "h-full transition-all duration-500",
+                    "h-full transition-all duration-500 rounded-full",
                     isProfit ? "bg-gold" : "bg-gold-muted"
                   )}
                   style={{ width: `${percentage}%` }}
