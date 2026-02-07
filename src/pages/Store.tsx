@@ -28,17 +28,17 @@ const Store = () => {
   /* ─── SUCCESS VIEW ─── */
   if (showSuccess) {
     return (
-      <div className="min-h-screen bg-background flex flex-col">
+      <div className="min-h-screen bg-bg-void flex flex-col">
         <Header title="SUCCESS" />
         <main className="flex-1 px-6 py-16 flex items-center justify-center animate-fade-in">
           <div className="text-center max-w-md">
             <div className="w-20 h-20 border-2 border-gold mx-auto mb-6 rounded-lg flex items-center justify-center">
               <Check className="w-10 h-10 text-gold" />
             </div>
-            <h1 className="font-bebas text-4xl text-foreground mb-4">
+            <h1 className="font-bebas text-4xl text-text-primary mb-4">
               PAYMENT SUCCESSFUL
             </h1>
-            <p className="text-muted-foreground mb-8 leading-relaxed">
+            <p className="text-text-dim mb-8 leading-relaxed">
               Your purchase has been confirmed. Your professional export is
               now available from the Waterfall tab.
             </p>
@@ -57,7 +57,7 @@ const Store = () => {
 
   /* ─── MAIN STORE VIEW ─── */
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-screen bg-bg-void flex flex-col">
       <Header title="PACKAGES" />
 
       <main className="flex-1 animate-fade-in">
@@ -80,7 +80,7 @@ const Store = () => {
               Democratizing the Business of Film
             </p>
 
-            <h1 className="font-bebas text-[clamp(2.2rem,8vw,3.5rem)] leading-[1.05] text-foreground mb-5">
+            <h1 className="font-bebas text-[clamp(2.2rem,8vw,3.5rem)] leading-[1.05] text-text-primary mb-5">
               TURN YOUR NUMBERS
               <br />
               INTO A{" "}
@@ -96,7 +96,7 @@ const Store = () => {
               to produce.
             </p>
 
-            <div className="inline-flex items-center gap-2 px-5 py-2.5 border border-gold/30 bg-gold/5 rounded-sm">
+            <div className="inline-flex items-center gap-2 px-5 py-2.5 border border-border-default bg-gold/[0.04] rounded-sm">
               <Sparkles className="w-4 h-4 text-gold" />
               <span className="text-gold text-[11px] tracking-[0.15em] uppercase font-semibold">
                 Founders Pricing
@@ -144,7 +144,7 @@ const Store = () => {
             PACKAGE CARDS — Link to detail pages
             ═══════════════════════════════════════════════════════════ */}
         <section className="px-4 sm:px-6 py-10 max-w-5xl mx-auto">
-          <h2 className="font-bebas text-2xl tracking-[0.1em] text-foreground text-center mb-2">
+          <h2 className="font-bebas text-2xl tracking-[0.1em] text-text-primary text-center mb-2">
             CHOOSE YOUR PACKAGE
           </h2>
           <p className="text-text-dim text-xs text-center mb-8 max-w-md mx-auto">
@@ -182,8 +182,8 @@ const Store = () => {
                       className={cn(
                         "w-9 h-9 rounded-md flex items-center justify-center flex-shrink-0",
                         isFeatured
-                          ? "bg-gold/15 border border-gold/30"
-                          : "bg-white/5 border border-white/10"
+                          ? "bg-gold/10 border border-border-default"
+                          : "bg-bg-elevated border border-border-subtle"
                       )}
                     >
                       <Icon
@@ -193,7 +193,7 @@ const Store = () => {
                         )}
                       />
                     </div>
-                    <h3 className="font-bebas text-xl text-foreground leading-tight">
+                    <h3 className="font-bebas text-xl text-text-primary leading-tight">
                       {product.name.toUpperCase()}
                     </h3>
                   </div>
@@ -258,7 +258,7 @@ const Store = () => {
                             isFeatured ? "text-gold" : "text-text-dim"
                           )}
                         />
-                        <span className="text-foreground text-[13px] leading-snug">
+                        <span className="text-text-primary text-[13px] leading-snug">
                           {feature}
                         </span>
                       </li>
@@ -301,7 +301,7 @@ const Store = () => {
         <section className="border-t border-border-subtle bg-bg-elevated px-6 py-10">
           <div className="max-w-2xl mx-auto text-center">
             <Shield className="w-6 h-6 text-gold mx-auto mb-4" />
-            <h3 className="font-bebas text-xl tracking-[0.1em] text-foreground mb-3">
+            <h3 className="font-bebas text-xl tracking-[0.1em] text-text-primary mb-3">
               WHO THIS IS FOR
             </h3>
             <p className="text-text-mid text-sm leading-relaxed max-w-lg mx-auto mb-6">

@@ -37,12 +37,12 @@ const StorePackage = () => {
 
   if (!product) {
     return (
-      <div className="min-h-screen bg-background flex flex-col">
+      <div className="min-h-screen bg-bg-void flex flex-col">
         <Header title="NOT FOUND" />
         <main className="flex-1 flex items-center justify-center">
           <div className="text-center">
             <p className="text-text-mid mb-4">Package not found.</p>
-            <button onClick={() => navigate("/store")} className="text-gold text-sm hover:underline">
+            <button onClick={() => navigate("/store")} className="text-text-dim text-sm hover:text-text-mid transition-colors">
               Back to Packages
             </button>
           </div>
@@ -90,7 +90,7 @@ const StorePackage = () => {
   const next = currentIdx < products.length - 1 ? products[currentIdx + 1] : null;
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-screen bg-bg-void flex flex-col">
       <Header title="PACKAGES" />
 
       <main className="flex-1 animate-fade-in">
@@ -98,7 +98,7 @@ const StorePackage = () => {
         <div className="px-6 pt-6 max-w-2xl mx-auto">
           <button
             onClick={() => navigate("/store")}
-            className="flex items-center gap-2 text-sm text-text-dim hover:text-gold transition-colors"
+            className="flex items-center gap-2 text-sm text-text-dim hover:text-text-mid transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             All Packages
@@ -121,14 +121,14 @@ const StorePackage = () => {
               className={cn(
                 "w-12 h-12 rounded-md flex items-center justify-center flex-shrink-0",
                 isFeatured
-                  ? "bg-gold/15 border border-gold/30"
-                  : "bg-white/5 border border-white/10"
+                  ? "bg-gold/10 border border-border-default"
+                  : "bg-bg-elevated border border-border-subtle"
               )}
             >
               <Icon className={cn("w-5 h-5", isFeatured ? "text-gold" : "text-text-dim")} />
             </div>
             <div>
-              <h1 className="font-bebas text-3xl md:text-4xl text-foreground leading-tight">
+              <h1 className="font-bebas text-3xl md:text-4xl text-text-primary leading-tight">
                 {product.name.toUpperCase()}
               </h1>
               <p className="text-text-dim text-[10px] tracking-[0.2em] uppercase">
@@ -176,7 +176,7 @@ const StorePackage = () => {
         <section className="px-6 pb-8 max-w-2xl mx-auto space-y-6">
           {product.detailSections.map((section, i) => (
             <div key={i} className="bg-bg-card border border-border-subtle rounded-[--radius-lg] p-5">
-              <h3 className="font-bebas text-lg tracking-[0.08em] text-foreground mb-3">
+              <h3 className="font-bebas text-lg tracking-[0.08em] text-text-primary mb-3">
                 {section.title.toUpperCase()}
               </h3>
               <p className="text-text-mid text-sm leading-relaxed">
@@ -189,14 +189,14 @@ const StorePackage = () => {
         {/* FEATURES LIST */}
         <section className="px-6 pb-8 max-w-2xl mx-auto">
           <div className="bg-bg-card border border-border-subtle rounded-[--radius-lg] p-5">
-            <h3 className="font-bebas text-lg tracking-[0.08em] text-foreground mb-4">
+            <h3 className="font-bebas text-lg tracking-[0.08em] text-text-primary mb-4">
               WHAT'S INCLUDED
             </h3>
             <ul className="space-y-3">
               {product.features.map((feature, i) => (
                 <li key={i} className="flex items-start gap-3">
                   <Check className={cn("w-4 h-4 mt-0.5 flex-shrink-0", isFeatured ? "text-gold" : "text-text-dim")} />
-                  <span className="text-foreground text-[13px] leading-snug">{feature}</span>
+                  <span className="text-text-primary text-[13px] leading-snug">{feature}</span>
                 </li>
               ))}
             </ul>
@@ -205,7 +205,7 @@ const StorePackage = () => {
 
         {/* BUYER MATH */}
         <section className="px-6 pb-8 max-w-2xl mx-auto">
-          <div className="bg-white/[0.02] border border-white/[0.04] rounded-md px-4 py-3">
+          <div className="bg-bg-card border border-border-subtle rounded-md px-4 py-3">
             <p className="text-text-dim text-[11px] leading-relaxed italic">
               "{product.buyerMath}"
             </p>
@@ -217,10 +217,10 @@ const StorePackage = () => {
           <div className={cn(
             "rounded-[--radius-lg] p-6 space-y-4",
             isFeatured
-              ? "bg-gold/[0.04] border border-gold/20"
+              ? "bg-gold/[0.04] border border-border-default"
               : "bg-bg-card border border-border-subtle"
           )}>
-            <h3 className="font-bebas text-lg tracking-[0.08em] text-foreground">
+            <h3 className="font-bebas text-lg tracking-[0.08em] text-text-primary">
               GET {product.name.toUpperCase()}
             </h3>
 
@@ -235,7 +235,7 @@ const StorePackage = () => {
                   placeholder="your@email.com"
                   value={guestEmail}
                   onChange={(e) => setGuestEmail(e.target.value)}
-                  className="bg-bg-elevated border-border-subtle text-foreground h-12"
+                  className="bg-bg-elevated border-border-subtle text-text-primary h-12"
                 />
                 <p className="text-text-dim text-[10px] mt-2">
                   Required for purchase confirmation and document access.
@@ -274,7 +274,7 @@ const StorePackage = () => {
         <section className="px-6 pb-6 max-w-2xl mx-auto text-center">
           <button
             onClick={() => navigate("/store/compare")}
-            className="text-text-dim text-[11px] tracking-[0.15em] uppercase hover:text-gold transition-colors"
+            className="text-text-dim text-[11px] tracking-[0.15em] uppercase hover:text-text-mid transition-colors"
           >
             Compare All Packages →
           </button>
@@ -286,7 +286,7 @@ const StorePackage = () => {
             {prev ? (
               <button
                 onClick={() => navigate(`/store/${prev.slug}`)}
-                className="flex items-center gap-2 text-text-dim hover:text-gold transition-colors text-sm"
+                className="flex items-center gap-2 text-text-dim hover:text-text-mid transition-colors text-sm"
               >
                 <ArrowLeft className="w-4 h-4" />
                 <span className="hidden sm:inline">{prev.name}</span>
@@ -296,7 +296,7 @@ const StorePackage = () => {
             {next ? (
               <button
                 onClick={() => navigate(`/store/${next.slug}`)}
-                className="flex items-center gap-2 text-text-dim hover:text-gold transition-colors text-sm"
+                className="flex items-center gap-2 text-text-dim hover:text-text-mid transition-colors text-sm"
               >
                 <span className="hidden sm:inline">{next.name}</span>
                 <span className="sm:hidden">Next</span>
