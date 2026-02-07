@@ -7,7 +7,7 @@ import { WikiSectionHeader, WikiCard, WikiCallout } from "@/components/shared";
    MINI WIKI: CAPITAL STACK
    Full educational deep-dive on how indie films are financed.
 
-   WIKI CONTAINMENT: This mini wiki can ONLY link back to /intro
+   WIKI CONTAINMENT: This mini wiki can ONLY link back to /
    Secondary exit: Subtle "Start Simulation" text link at bottom
    ═══════════════════════════════════════════════════════════════════════════ */
 

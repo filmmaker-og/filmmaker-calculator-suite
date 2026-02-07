@@ -7,7 +7,7 @@ import { WikiSectionHeader, WikiCard, WikiCallout } from "@/components/shared";
    MINI WIKI: DISTRIBUTION FEES
    Deep-dive on fees that come off the top before anyone gets paid.
 
-   WIKI CONTAINMENT: This mini wiki can ONLY link back to /intro
+   WIKI CONTAINMENT: This mini wiki can ONLY link back to /
    Secondary exit: Subtle "Start Simulation" text link at bottom
    ═══════════════════════════════════════════════════════════════════════════ */
 

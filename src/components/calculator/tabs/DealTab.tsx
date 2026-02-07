@@ -16,7 +16,7 @@ interface DealTabProps {
 /**
  * DealTab - Pure Action Zone
  * 
- * No wiki screens - education lives in /intro.
+ * No wiki screens - education lives on the landing page.
  * This tab goes straight to input collection.
  * 
  * On completion, advances to Waterfall tab.
