@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useHaptics } from "@/hooks/use-haptics";
@@ -67,7 +67,8 @@ const Calculator = () => {
   const [activeTab, setActiveTab] = useState<TabId>('budget');
   const [inputs, setInputs] = useState<WaterfallInputs>(defaultInputs);
   const [guilds, setGuilds] = useState<GuildState>(defaultGuilds);
-  const [result, setResult] = useState<WaterfallResult | null>(null);
+  // REMOVED: state-based result
+  // const [result, setResult] = useState<WaterfallResult | null>(null);
   const [showEmailGate, setShowEmailGate] = useState(false);
   const [emailCaptured, setEmailCaptured] = useState(false);
   const [sourceSelections, setSourceSelections] = useState<CapitalSourceSelections>(defaultSelections);
@@ -136,10 +137,11 @@ const Calculator = () => {
     }));
   }, [inputs, guilds, activeTab, sourceSelections]);
 
-  // Calculate on input change
-  useEffect(() => {
-    const calculated = calculateWaterfall(inputs, guilds);
-    setResult(calculated);
+  // DERIVE RESULT SYNCHRONOUSLY
+  // This ensures 'result' is never null during a render if inputs exist.
+  // It prevents the "flash of null" or "nothing loads" issue when switching tabs.
+  const result = useMemo(() => {
+    return calculateWaterfall(inputs, guilds);
   }, [inputs, guilds]);
 
   // Auth
@@ -307,12 +309,13 @@ const Calculator = () => {
           />
         );
       case 'waterfall':
-        return result ? (
+        // FIX: Always render WaterfallTab if result is available (which it always is now via useMemo)
+        return (
           <WaterfallTab
             result={result}
             inputs={inputs}
           />
-        ) : null;
+        );
       default:
         return null;
     }
