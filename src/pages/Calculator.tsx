@@ -38,22 +38,6 @@ const defaultGuilds: GuildState = {
   dga: false,
 };
 
-// Tab configuration
-const TAB_CONFIG: { id: TabId; label: string; chapter: string }[] = [
-  { id: 'budget', label: 'BUDGET', chapter: '01' },
-  { id: 'stack', label: 'STACK', chapter: '02' },
-  { id: 'deal', label: 'DEAL', chapter: '03' },
-  { id: 'waterfall', label: 'WATERFALL', chapter: '04' },
-];
-
-// Tab to step number mapping
-const TAB_TO_STEP: Record<TabId, number> = {
-  budget: 1,
-  stack: 2,
-  deal: 3,
-  waterfall: 4,
-};
-
 const STEP_TO_TAB: TabId[] = ['budget', 'stack', 'deal', 'waterfall'];
 
 const Calculator = () => {
@@ -120,10 +104,8 @@ const Calculator = () => {
       targetTab = urlTab;
     }
 
-    // Sanity: don't land on waterfall if there's no data to show
-    if (targetTab === 'waterfall' && (loadedInputs.budget === 0 || loadedInputs.revenue === 0)) {
-        targetTab = 'budget';
-    }
+    // Waterfall handles its own empty state (Protocol Locked + Demo button)
+    // so no redirect needed here
 
     setInputs(loadedInputs);
     setActiveTab(targetTab);
@@ -187,14 +169,21 @@ const Calculator = () => {
     setEmailCaptured(true);
     localStorage.setItem(EMAIL_CAPTURED_KEY, 'true');
     setShowEmailGate(false);
-    handleTabChange('waterfall');
   };
 
   const handleEmailSkip = () => {
     setEmailCaptured(true);
     localStorage.setItem(EMAIL_CAPTURED_KEY, 'true');
     setShowEmailGate(false);
-    handleTabChange('waterfall');
+  };
+
+  // Triggered by WaterfallTab's Export CTA
+  const handleExportClick = () => {
+    if (!user && !emailCaptured) {
+      setShowEmailGate(true);
+    } else {
+      navigate('/store');
+    }
   };
 
   // Determine which tabs are completed
@@ -209,13 +198,9 @@ const Calculator = () => {
     return completed;
   };
 
-  // Determine which tabs are disabled
+  // No tabs are ever disabled — Waterfall shows "Protocol Locked" + Demo button when empty
   const getDisabledTabs = (): TabId[] => {
-    const disabled: TabId[] = [];
-    if (inputs.budget === 0 || inputs.revenue === 0) {
-      disabled.push('waterfall');
-    }
-    return disabled;
+    return [];
   };
 
   const getNextTab = (): TabId | null => {
@@ -289,6 +274,7 @@ const Calculator = () => {
           <WaterfallTab
             result={result}
             inputs={inputs}
+            onExport={handleExportClick}
           />
         );
       default:

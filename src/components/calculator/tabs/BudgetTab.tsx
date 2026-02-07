@@ -1,5 +1,4 @@
 import { WaterfallInputs, GuildState } from "@/lib/waterfall";
-import { useState } from "react";
 import BudgetInput from "../budget/BudgetInput";
 import { Info, Check } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
@@ -23,98 +22,68 @@ const BudgetTab = ({ inputs, guilds, onUpdateInput, onToggleGuild, onAdvance }: 
         onNext={onAdvance} 
       />
 
-      {/* 2. Guild Toggles - Refined "Matte" Style */}
+      {/* 2. Guild Toggles - Unified list style (matches CapitalSelect) */}
       <div className="space-y-4 pt-4 border-t border-border-subtle animate-fade-in">
-        <div className="flex items-center gap-2 mb-3">
-           <span className="text-xs font-bold uppercase tracking-widest text-text-dim">
-            Union Signatories
-          </span>
-          <TooltipProvider>
-            <Tooltip delayDuration={0}>
-              <TooltipTrigger asChild>
-                <Info className="w-3.5 h-3.5 text-text-dim/50 hover:text-gold cursor-pointer transition-colors" />
-              </TooltipTrigger>
-              <TooltipContent side="right" className="max-w-[200px] bg-bg-card border-gold/30 text-xs">
-                <p>Check these if your production is signatory to any guilds. This adds mandatory P&H and Residual reserves to the waterfall.</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+        <div className="bg-bg-elevated border border-border-default rounded-lg overflow-hidden">
+          <div className="px-5 py-3 border-b border-border-subtle flex items-center justify-between bg-bg-surface/50">
+            <div className="flex items-center gap-2">
+              <span className="text-xs uppercase tracking-widest text-text-dim font-bold">
+                Union Signatories
+              </span>
+              <TooltipProvider>
+                <Tooltip delayDuration={0}>
+                  <TooltipTrigger asChild>
+                    <Info className="w-3.5 h-3.5 text-text-dim/50 hover:text-gold cursor-pointer transition-colors" />
+                  </TooltipTrigger>
+                  <TooltipContent side="right" className="max-w-[200px] bg-bg-card border-border-subtle text-xs">
+                    <p>Check these if your production is signatory to any guilds. This adds mandatory P&H and Residual reserves to the waterfall.</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
+          </div>
+
+          <div className="divide-y divide-border-subtle">
+            {([
+              { key: 'sag' as const, label: 'SAG-AFTRA', desc: 'Actors' },
+              { key: 'dga' as const, label: 'DGA', desc: 'Directors' },
+              { key: 'wga' as const, label: 'WGA', desc: 'Writers' },
+            ]).map((guild) => {
+              const isSelected = guilds[guild.key];
+              return (
+                <button
+                  key={guild.key}
+                  onClick={() => onToggleGuild(guild.key)}
+                  className={cn(
+                    "w-full p-4 text-left transition-all duration-150 group flex items-center gap-4",
+                    isSelected ? "bg-bg-surface" : "bg-transparent hover:bg-bg-elevated"
+                  )}
+                >
+                  <div className="flex-1 min-w-0">
+                    <span className={cn(
+                      "text-sm font-medium transition-colors",
+                      isSelected ? "text-gold" : "text-text-mid"
+                    )}>
+                      {guild.label}
+                    </span>
+                    <p className="text-xs text-text-dim">{guild.desc}</p>
+                  </div>
+                  <div className={cn(
+                    "w-5 h-5 flex items-center justify-center border transition-all duration-150 rounded-sm",
+                    isSelected
+                      ? "bg-gold border-gold"
+                      : "bg-transparent border-border-subtle group-hover:border-text-dim"
+                  )}>
+                    {isSelected && <Check className="w-3 h-3 text-black" />}
+                  </div>
+                </button>
+              );
+            })}
+          </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-3">
-          {/* SAG-AFTRA */}
-          <button
-            onClick={() => onToggleGuild('sag')}
-            className={cn(
-              "group relative flex flex-col items-center justify-center p-3 rounded-lg border transition-all duration-200",
-              guilds.sag
-                ? "bg-bg-elevated border-gold shadow-[0_0_15px_rgba(212,175,55,0.1)]" // Active: Gold border + Glow, but dark bg
-                : "bg-bg-elevated border-border-default hover:border-border-active"   // Inactive: Standard matte
-            )}
-          >
-            {guilds.sag && (
-              <div className="absolute top-2 right-2">
-                <Check className="w-3 h-3 text-gold" />
-              </div>
-            )}
-            <span className={cn("font-bold text-sm", guilds.sag ? "text-gold" : "text-text-dim group-hover:text-text-mid")}>
-              SAG
-            </span>
-            <span className="text-[9px] uppercase tracking-wider mt-1 opacity-60 text-text-dim">
-              Actors
-            </span>
-          </button>
-
-          {/* DGA */}
-          <button
-            onClick={() => onToggleGuild('dga')}
-            className={cn(
-              "group relative flex flex-col items-center justify-center p-3 rounded-lg border transition-all duration-200",
-              guilds.dga
-                ? "bg-bg-elevated border-gold shadow-[0_0_15px_rgba(212,175,55,0.1)]"
-                : "bg-bg-elevated border-border-default hover:border-border-active"
-            )}
-          >
-            {guilds.dga && (
-               <div className="absolute top-2 right-2">
-                <Check className="w-3 h-3 text-gold" />
-              </div>
-            )}
-            <span className={cn("font-bold text-sm", guilds.dga ? "text-gold" : "text-text-dim group-hover:text-text-mid")}>
-              DGA
-            </span>
-            <span className="text-[9px] uppercase tracking-wider mt-1 opacity-60 text-text-dim">
-              Directors
-            </span>
-          </button>
-
-          {/* WGA */}
-          <button
-            onClick={() => onToggleGuild('wga')}
-            className={cn(
-              "group relative flex flex-col items-center justify-center p-3 rounded-lg border transition-all duration-200",
-              guilds.wga
-                ? "bg-bg-elevated border-gold shadow-[0_0_15px_rgba(212,175,55,0.1)]"
-                : "bg-bg-elevated border-border-default hover:border-border-active"
-            )}
-          >
-             {guilds.wga && (
-               <div className="absolute top-2 right-2">
-                <Check className="w-3 h-3 text-gold" />
-              </div>
-            )}
-            <span className={cn("font-bold text-sm", guilds.wga ? "text-gold" : "text-text-dim group-hover:text-text-mid")}>
-              WGA
-            </span>
-            <span className="text-[9px] uppercase tracking-wider mt-1 opacity-60 text-text-dim">
-              Writers
-            </span>
-          </button>
-        </div>
-        
-        {/* SVOD Sub-note */}
-        <p className="text-[10px] leading-snug text-text-dim/80 uppercase tracking-wider">
-          SVOD acquisition deals: most indie filmmakers are not guild signatories. Stress-test by unchecking guilds to see how much your break-even moves.
+        <p className="text-[10px] leading-snug text-text-dim/80 text-center">
+          Most indie filmmakers are not guild signatories. Leave unchecked if unsure.
         </p>
       </div>
     </div>

@@ -98,7 +98,7 @@ const BudgetInput = ({ inputs, onUpdateInput, onNext }: BudgetInputProps) => {
                   <TooltipTrigger asChild>
                     <Info className="w-3.5 h-3.5 text-text-dim/50 hover:text-gold cursor-pointer transition-colors" />
                   </TooltipTrigger>
-                  <TooltipContent side="right" className="max-w-[200px] bg-bg-card border-gold/30 text-xs">
+                  <TooltipContent side="right" className="max-w-[200px] bg-bg-card border-border-subtle text-xs">
                     <p>$2M negative cost (all-in budget).</p>
                   </TooltipContent>
                 </Tooltip>
@@ -140,7 +140,7 @@ const BudgetInput = ({ inputs, onUpdateInput, onNext }: BudgetInputProps) => {
         </div>
 
         {/* Quick Amounts */}
-        <div className="p-4 border border-gold/20 bg-gold/[0.03] rounded-lg">
+        <div className="p-4 border border-border-subtle bg-bg-surface rounded-lg">
           <p className="text-xs text-text-dim mb-3 uppercase tracking-wide font-medium text-center">
             Quick amounts
           </p>
@@ -152,8 +152,8 @@ const BudgetInput = ({ inputs, onUpdateInput, onNext }: BudgetInputProps) => {
                 className={cn(
                   "font-mono text-xs px-3 py-2 rounded transition-colors border",
                   inputs.budget === qa.value
-                    ? "bg-gold/20 border-gold text-gold"
-                    : "bg-bg-void border-border-subtle text-text-mid hover:border-gold/50"
+                    ? "bg-gold/15 border-gold text-gold"
+                    : "bg-bg-elevated border-border-subtle text-text-mid hover:border-text-dim"
                 )}
               >
                 {qa.label}
