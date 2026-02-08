@@ -36,6 +36,7 @@ import {
   Award,
   Clock,
   AlertTriangle,
+  Waves,
 } from "lucide-react";
 import filmmakerLogo from "@/assets/filmmaker-logo.jpg";
 import Header from "@/components/Header";
@@ -101,7 +102,7 @@ const faqs = [
   { q: "Who is this for?", a: "Independent producers, directors, and investors. Whether you're raising $50K or $5M, the mechanics of recoupment are the same. If you intend to sell your film for profit, you need this." },
   { q: "How does the calculator work?", a: "Four steps: set your budget, build your capital stack, model an acquisition deal, and see exactly where every dollar goes in the waterfall. It takes about 2 minutes." },
   { q: "Is this financial or legal advice?", a: "No. This is a simulation tool for estimation and planning purposes only. Always consult a qualified entertainment attorney or accountant for final deal structures." },
-  { q: 'What is a "waterfall"?', a: "A waterfall is the priority order in which revenue from your film is distributed — who gets paid first, second, and last. Most filmmakers sign deals without ever seeing theirs." },
+  { q: 'What is a "waterfall"?', a: "A waterfall is the priority order in which revenue from your film is distributed — who gets paid first, second, and last. Most filmmakers sign deals without ever seeing theirs.", link: { label: "Learn more on Wikipedia", url: "https://en.wikipedia.org/wiki/Hollywood_accounting" } },
   { q: "Is the calculator free?", a: "Yes, the simulation is completely free. Run as many scenarios as you want, adjust the variables, and see different outcomes. No paywalls, no limits." },
   { q: "Do I need an account?", a: "No. You can use the calculator without signing up. If you want to save your work, we offer a simple magic link — no password required." },
 ];
@@ -113,7 +114,7 @@ const steps = [
   { num: "01", title: "Set Your Budget", desc: "Enter your total production budget and select any guild/union signatories. This establishes the baseline for everything that follows.", icon: DollarSign },
   { num: "02", title: "Build Your Capital Stack", desc: "Choose where your money is coming from — equity, pre-sales, gap financing, tax incentives. Each source has different recoupment priorities.", icon: Layers },
   { num: "03", title: "Model the Deal", desc: "Set the acquisition price, distribution fees, and marketing spend. This is where you see how much actually comes back.", icon: Handshake },
-  { num: "04", title: "See the Waterfall", desc: "Watch every dollar flow through the priority chain. See exactly who gets paid, in what order, and what's left for you.", icon: BarChart3, callout: "Most filmmakers sign deals without ever seeing their waterfall. This tool shows you yours in under 2 minutes." },
+  { num: "04", title: "See the Waterfall", desc: "Watch every dollar flow through the priority chain. See exactly who gets paid, in what order, and what's left for you.", icon: Waves, callout: "Most filmmakers sign deals without ever seeing their waterfall. This tool shows you yours in under 2 minutes." },
 ];
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -137,18 +138,24 @@ const problemCards = [
 /* ═══════════════════════════════════════════════════════════════════
    SECTION HEADER
    ═══════════════════════════════════════════════════════════════════ */
-const SectionHeader = ({ eyebrow, title, subtitle, icon: Icon }: {
+const SectionHeader = ({ eyebrow, title, subtitle, icon: Icon, plainSubtitle }: {
   eyebrow: string; title: string; subtitle?: string;
   icon?: React.ComponentType<{ className?: string }>;
+  plainSubtitle?: boolean;
 }) => (
   <div className="text-center mb-8">
     <div className="flex items-center gap-2 justify-center mb-3">
       {Icon && <Icon className="w-4 h-4 text-gold" />}
       <p className="text-gold text-xs tracking-[0.3em] uppercase font-semibold">{eyebrow}</p>
     </div>
-    <h2 className="font-bebas text-3xl md:text-4xl tracking-[0.08em] text-text-primary">{title}</h2>
+    <h2 className="font-bebas text-4xl md:text-5xl tracking-[0.08em] text-text-primary">{title}</h2>
     {subtitle && (
-      <p className="text-text-mid text-[15px] text-center max-w-lg mx-auto mt-4 leading-relaxed px-4 py-2.5 rounded-xl bg-gold/[0.06] border border-gold/20">
+      <p className={cn(
+        "text-center max-w-lg mx-auto mt-4 leading-relaxed",
+        plainSubtitle
+          ? "text-text-mid text-[15px]"
+          : "text-text-mid text-[15px] px-4 py-2.5 rounded-xl bg-gold/[0.06] border border-gold/20"
+      )}>
         {subtitle}
       </p>
     )}
@@ -402,7 +409,7 @@ const Index = () => {
                     className="w-full h-16 text-base font-black tracking-[0.12em] transition-all active:scale-[0.96] rounded-md bg-gold-cta-subtle border border-gold-cta-muted text-gold-cta shadow-button hover:border-gold-cta">
                     RUN THE NUMBERS
                   </button>
-                  <p className="text-text-dim text-xs tracking-wider mt-3">No account required</p>
+                  <p className="text-text-dim text-[13px] tracking-wider mt-3">No account required</p>
                 </div>
               )}
 
@@ -434,7 +441,7 @@ const Index = () => {
               </div>
               <div className="text-center mt-4 px-6 py-5 rounded-xl bg-gold/[0.06] border border-gold/20 max-w-xs mx-auto">
                 <p className="font-bebas text-4xl md:text-5xl tracking-[0.1em] text-gold">FREE</p>
-                <p className="text-text-dim text-sm tracking-wider mt-1">The same analysis. Zero cost.</p>
+                <p className="text-text-dim text-[15px] tracking-wider mt-1">The same analysis. Zero cost.</p>
               </div>
             </div>
             <SectionChevron nextId="deliverables" />
@@ -443,7 +450,7 @@ const Index = () => {
           {/* ── WHAT YOU GET ── */}
           <SectionFrame id="deliverables">
             <div ref={fade3.ref} className={cn(fade3.className, "max-w-2xl mx-auto")}>
-              <SectionHeader icon={Award} eyebrow="What You Get" title="PROFESSIONAL FINANCIAL DOCUMENTS" subtitle="Designed so anyone — your investor, your business partner, your family — can understand your film's financials at a glance." />
+              <SectionHeader icon={Award} eyebrow="What You Get" title="PROFESSIONAL FINANCIAL DOCUMENTS" subtitle="Designed so anyone — your investor, your business partner, your family — can understand your film's financials at a glance." plainSubtitle />
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {[
                   { icon: FileSpreadsheet, title: "6-Sheet Excel Workbook", desc: "Executive summary, full waterfall ledger, capital stack breakdown, investor return summary, and plain-English glossary." },
@@ -457,7 +464,7 @@ const Index = () => {
                       <div className="w-9 h-9 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center mb-3">
                         <Icon className="w-4 h-4 text-gold" />
                       </div>
-                      <h3 className="text-text-primary text-base font-semibold mb-1.5">{item.title}</h3>
+                      <h3 className="text-text-primary text-lg font-semibold mb-1.5">{item.title}</h3>
                       <p className="text-text-dim text-[15px] leading-relaxed">{item.desc}</p>
                     </div>
                   );
@@ -470,7 +477,7 @@ const Index = () => {
           {/* ── HOW IT WORKS ── */}
           <SectionFrame id="how-it-works">
             <div ref={fade4.ref} className={cn(fade4.className, "max-w-2xl mx-auto")}>
-              <SectionHeader icon={Film} eyebrow="How It Works" title="FOUR STEPS TO CLARITY" subtitle="From budget to waterfall in four steps. No financial background required." />
+              <SectionHeader icon={Film} eyebrow="How It Works" title="FOUR STEPS TO CLARITY" subtitle="From budget to waterfall in four steps. No financial background required." plainSubtitle />
               <div className="space-y-4">
                 {steps.map((step, i) => {
                   const Icon = step.icon;
@@ -483,7 +490,7 @@ const Index = () => {
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-1">
                             <span className="font-mono text-xs text-text-dim tracking-wider">{step.num}</span>
-                            <h3 className="text-text-primary text-base font-semibold">{step.title}</h3>
+                            <h3 className="text-text-primary text-lg font-semibold">{step.title}</h3>
                           </div>
                           <p className="text-text-dim text-[15px] leading-relaxed">{step.desc}</p>
                         </div>
@@ -504,7 +511,7 @@ const Index = () => {
           {/* ── WHEN TO USE THIS ── */}
           <SectionFrame id="use-cases">
             <div ref={fade5.ref} className={cn(fade5.className, "max-w-2xl mx-auto")}>
-              <SectionHeader icon={Clock} eyebrow="When To Use This" title="THREE MOMENTS THAT DEFINE YOUR DEAL" subtitle="The three moments where knowing your numbers changes everything." />
+              <SectionHeader icon={Clock} eyebrow="When To Use This" title="THREE MOMENTS THAT DEFINE YOUR DEAL" subtitle="The three moments where knowing your numbers changes everything." plainSubtitle />
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {useCases.map((uc, i) => {
                   const Icon = uc.icon;
@@ -513,7 +520,7 @@ const Index = () => {
                       <div className="w-9 h-9 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center mb-3">
                         <Icon className="w-4 h-4 text-gold" />
                       </div>
-                      <h3 className="text-text-primary text-base font-semibold mb-2">{uc.title}</h3>
+                      <h3 className="text-text-primary text-lg font-semibold mb-2">{uc.title}</h3>
                       <p className="text-text-dim text-[15px] leading-relaxed">{uc.desc}</p>
                     </div>
                   );
@@ -535,7 +542,7 @@ const Index = () => {
                       <div className="w-9 h-9 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center mb-3">
                         <Icon className="w-4 h-4 text-gold" />
                       </div>
-                      <h3 className="text-text-primary text-base font-semibold mb-2">{card.title}</h3>
+                      <h3 className="text-text-primary text-lg font-semibold mb-2">{card.title}</h3>
                       <p className="text-text-dim text-[15px] leading-relaxed">{card.body}</p>
                     </div>
                   );
@@ -554,7 +561,7 @@ const Index = () => {
                   <SectionHeader icon={Eye} eyebrow="Our Mission" title="DEMOCRATIZING THE BUSINESS OF FILM" subtitle="The tools they use. Now in your hands." />
                   <div className="space-y-4 text-text-mid text-[15px] leading-relaxed text-center">
                     <p>For too long, the mechanics of film finance have been obscured by gatekeepers. Agencies, distributors, and studios thrive on information asymmetry. They know the numbers; you don't.</p>
-                    <p className="text-text-primary font-medium text-base">We built this tool to level the playing field.</p>
+                    <p className="text-text-primary font-medium text-lg">We built this tool to level the playing field.</p>
                     <p>This tool extracts the proprietary logic used by top-tier entertainment lawyers and sales agents, putting institutional-grade modeling directly into your hands. Free simulation. Just the math.</p>
                   </div>
                 </div>
@@ -568,7 +575,7 @@ const Index = () => {
             <div ref={fade8.ref} className={fade8.className}>
               <div className="max-w-2xl mx-auto mb-5">
                 <SectionHeader icon={Bot} eyebrow="AI-Powered Guidance" title="ASK OUR CHATBOT"
-                  subtitle="Have a question about your deal? Copy a prompt or ask your own." />
+                  subtitle="Have a question about your deal? Copy a prompt or ask your own." plainSubtitle />
               </div>
 
               <div className="relative">
@@ -581,9 +588,9 @@ const Index = () => {
                       <div className="w-9 h-9 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center flex-shrink-0">
                         <MessageCircle className="w-4 h-4 text-gold" />
                       </div>
-                      <p className="text-text-primary text-sm font-medium leading-snug">{item.prompt}</p>
+                      <p className="text-text-primary text-[15px] font-medium leading-snug">{item.prompt}</p>
                     </div>
-                    <p className="text-text-dim text-xs leading-relaxed mb-3 pl-12">{item.context}</p>
+                    <p className="text-text-dim text-[13px] leading-relaxed mb-3 pl-12">{item.context}</p>
                     <div className="flex items-center justify-between pl-12">
                       <button onClick={(e) => { e.stopPropagation(); handleCopyPrompt(item.prompt, i); }}
                         className="flex items-center gap-1.5 text-xs tracking-wider font-semibold transition-colors">
@@ -619,16 +626,22 @@ const Index = () => {
           {/* ── FAQ ── */}
           <SectionFrame id="faq">
             <div ref={fade9.ref} className={cn(fade9.className, "max-w-2xl mx-auto")}>
-              <SectionHeader icon={HelpCircle} eyebrow="Common Questions" title="WHAT FILMMAKERS ASK" subtitle="Quick answers to the questions we hear most." />
+              <SectionHeader icon={HelpCircle} eyebrow="Common Questions" title="WHAT FILMMAKERS ASK" subtitle="Quick answers to the questions we hear most." plainSubtitle />
               <div className="bg-bg-card border border-border-subtle rounded-xl px-5">
                 <Accordion type="single" collapsible className="w-full">
                   {faqs.map((faq, i) => (
                     <AccordionItem key={faq.q} value={`faq-${i}`} className="border-border-subtle">
-                      <AccordionTrigger className="text-text-primary hover:text-text-mid hover:no-underline text-base font-medium text-left">
+                      <AccordionTrigger className="text-text-primary hover:text-text-mid hover:no-underline text-lg font-medium text-left">
                         {faq.q}
                       </AccordionTrigger>
                       <AccordionContent className="text-text-dim text-[15px] leading-relaxed">
                         {faq.a}
+                        {faq.link && (
+                          <a href={faq.link.url} target="_blank" rel="noopener noreferrer"
+                            className="inline-block mt-2 text-gold/70 hover:text-gold text-[13px] tracking-wider transition-colors underline underline-offset-2 decoration-gold/30">
+                            {faq.link.label} &rarr;
+                          </a>
+                        )}
                       </AccordionContent>
                     </AccordionItem>
                   ))}
@@ -651,8 +664,6 @@ const Index = () => {
                   SEE YOUR WATERFALL
                 </button>
                 <p className="text-text-dim text-[15px] tracking-wider mt-4">No account required. No credit card.</p>
-                <img src={filmmakerLogo} alt="Filmmaker.OG" className="w-16 h-16 object-contain rounded-lg mx-auto mt-6"
-                  style={{ filter: 'brightness(1.0) drop-shadow(0 0 10px rgba(212,175,55,0.2))', opacity: 0.85 }} />
               </div>
             </div>
           </section>
