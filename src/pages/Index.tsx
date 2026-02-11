@@ -349,6 +349,7 @@ const Index = () => {
               <div className="flex-1 min-w-0 bg-bg-elevated">
                 <div className="h-[2px] bg-gradient-to-r from-gold/40 via-gold/25 to-transparent" />
                 <div ref={revealWaterfall.ref} className={cn("p-6 md:p-8 max-w-2xl mx-auto transition-all duration-500 ease-out", revealWaterfall.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
+                  <p className="text-text-dim text-xs tracking-[0.3em] uppercase font-semibold text-center mb-3">What They Didn't Teach You In Film School</p>
                   <p className="font-bebas text-3xl md:text-4xl tracking-[0.1em] text-gold text-center mb-5">THE WATERFALL</p>
                   <div className="relative flex items-start justify-between max-w-[300px] mx-auto mb-5">
                     <div className="absolute top-[14px] left-[28px] right-[28px] h-[1px] bg-gradient-to-r from-gold/30 via-gold/50 to-gold/30" />
@@ -425,7 +426,7 @@ const Index = () => {
           {/* ── KNOWLEDGE ISN'T CHEAP (compact) ── */}
           <SectionFrame id="industry-charges">
             <div ref={revealCosts.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", revealCosts.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
-              <SectionHeader icon={Calculator} eyebrow="What They Didn't Teach You In Film School" title={<>KNOWLEDGE ISN&apos;T <span className="text-white">CHEAP</span></>} />
+              <SectionHeader icon={Calculator} eyebrow="Industry Rates" title={<>KNOWLEDGE ISN&apos;T <span className="text-white">CHEAP</span></>} />
               <div className="grid grid-cols-2 gap-3 mb-4">
                 {[
                   { icon: Gavel, cost: "$5K–$15K", label: "Entertainment Lawyer" },
