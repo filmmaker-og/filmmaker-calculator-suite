@@ -155,6 +155,22 @@ const useFadeIn = () => {
   };
 };
 
+/** Swipe index tracker for horizontal scroll sections */
+const useSwipeIndex = (count: number) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const [index, setIndex] = useState(0);
+
+  const onScroll = useCallback(() => {
+    const el = ref.current;
+    if (!el || !el.children.length) return;
+    const child = el.children[0] as HTMLElement;
+    const cardWidth = child.offsetWidth + 12; // gap-3 = 12px
+    setIndex(Math.min(Math.round(el.scrollLeft / cardWidth), count - 1));
+  }, [count]);
+
+  return { ref, index, onScroll };
+};
+
 /** Stagger delay style for children within a visible section */
 const staggerDelay = (index: number, visible: boolean): React.CSSProperties => ({
   transitionDelay: visible ? `${index * 120}ms` : "0ms",
@@ -179,6 +195,11 @@ const Index = () => {
   const fade4 = useFadeIn();
   const fade5 = useFadeIn();
   const fade6 = useFadeIn();
+
+  // Swipe index trackers for horizontal scroll sections
+  const swipeProblem = useSwipeIndex(problemCards.length);
+  const swipeIndustry = useSwipeIndex(industryCosts.length);
+  const swipeDeliverables = useSwipeIndex(4);
 
   const savedState = useMemo(() => {
     try {
@@ -287,7 +308,7 @@ const Index = () => {
           <section id="hero" className="snap-section min-h-[calc(100vh-56px)] flex flex-col justify-center relative overflow-hidden">
             <div className="absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none animate-spotlight-pulse"
               style={{ width: '100vw', height: '75vh', background: `radial-gradient(ellipse 50% 40% at 50% 10%, rgba(212,175,55,0.1) 0%, rgba(212,175,55,0.04) 40%, transparent 70%)` }} />
-            <div className="relative px-6 pt-10 pb-4 max-w-xl mx-auto text-center">
+            <div className="relative px-6 py-4 max-w-xl mx-auto text-center">
               <div className="mb-6 relative inline-block">
                 <div className="absolute inset-0 -m-8" style={{ background: 'radial-gradient(circle, rgba(212,175,55,0.2) 0%, transparent 70%)', filter: 'blur(16px)' }} />
                 <img src={filmmakerLogo} alt="Filmmaker.OG" className="relative w-28 h-28 object-contain rounded-lg"
@@ -298,8 +319,8 @@ const Index = () => {
                 SEE WHERE EVERY<br />DOLLAR <span className="text-gold">GOES</span>
               </h1>
               <p className="text-text-mid text-base font-medium leading-relaxed max-w-sm mx-auto mb-8">
-                Model your deal. See the waterfall. Know if the math works for
-                everyone — before you sign anything. Free. Two minutes.
+                Before you raise a dollar or sign a deal, know exactly who gets
+                paid, in what order, and whether there's anything left for you.
               </p>
 
               {isReturningUser ? (
@@ -320,34 +341,69 @@ const Index = () => {
                     className="w-full h-16 text-base font-semibold tracking-[0.12em] transition-all active:scale-[0.96] rounded-md bg-gold-cta-subtle border border-gold-cta-muted text-gold-cta shadow-button hover:border-gold-cta">
                     RUN THE NUMBERS
                   </button>
-                  <p className="text-text-dim text-[13px] tracking-wider mt-3">No account required</p>
+                  <p className="text-text-dim text-[13px] tracking-wider mt-3">Free. No credit card required.</p>
                 </div>
               )}
 
             </div>
           </section>
 
-          {/* ── THE PROBLEM (moved up — lead with pain) ── */}
+          {/* ── THE PROBLEM ── */}
           <SectionFrame id="problem">
             <div ref={fade2.ref} className={cn(fade2.className, "max-w-2xl mx-auto")}>
-              <SectionHeader icon={AlertTriangle} eyebrow="The Problem" title="WHY MOST INDIE FILMS LOSE MONEY" subtitle="It's not bad films. It's deals made without seeing how the money flows back." plainSubtitle />
-              <div className="space-y-4">
-                {problemCards.map((card, i) => {
-                  const Icon = card.icon;
-                  return (
-                    <div key={i} className={cn("bg-bg-card border border-border-subtle hover:border-gold/20 rounded-xl p-5 transition-colors", staggerChild(fade2.visible))} style={staggerDelay(i, fade2.visible)}>
-                      <div className="flex items-start gap-4">
-                        <div className="flex-shrink-0 w-9 h-9 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center">
+              <SectionHeader icon={AlertTriangle} eyebrow="The Problem" title="IT'S NOT THE FILM. IT'S THE DEAL." subtitle="The film can be great. If the deal is wrong, the money still doesn't come back." plainSubtitle />
+
+              {/* Problem cards — horizontal swipe */}
+              <div className="-mx-6 md:-mx-8">
+                <div ref={swipeProblem.ref} onScroll={swipeProblem.onScroll} className="flex gap-3 overflow-x-auto scrollbar-hide snap-x snap-mandatory px-6 md:px-8 pb-3">
+                  {problemCards.map((card, i) => {
+                    const Icon = card.icon;
+                    return (
+                      <div key={i} className={cn("flex-shrink-0 w-[290px] snap-start bg-bg-card border border-border-subtle rounded-xl p-5", staggerChild(fade2.visible))} style={staggerDelay(i, fade2.visible)}>
+                        <div className="w-9 h-9 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center mb-3">
                           <Icon className="w-4 h-4 text-gold" />
                         </div>
-                        <div className="flex-1 min-w-0">
-                          <h3 className="text-text-primary text-lg font-semibold mb-1.5">{card.title}</h3>
-                          <p className="text-text-mid text-[15px] leading-relaxed">{card.body}</p>
-                        </div>
+                        <h3 className="text-text-primary text-lg font-semibold mb-1.5">{card.title}</h3>
+                        <p className="text-text-mid text-[15px] leading-relaxed">{card.body}</p>
                       </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+                </div>
+              </div>
+              <p className="text-center mt-3 font-mono text-xs text-text-dim tracking-wider">
+                {swipeProblem.index + 1} <span className="text-gold/40">/</span> {problemCards.length}
+              </p>
+
+              {/* Waterfall explainer */}
+              <div className="mt-6 px-4 py-5 rounded-xl bg-gold/[0.06] border border-gold/20">
+                <p className="text-gold text-[10px] tracking-[0.3em] uppercase font-semibold text-center mb-4">The Missing Piece</p>
+                <div className="relative flex items-start justify-between max-w-[300px] mx-auto mb-4">
+                  <div className="absolute top-[14px] left-[28px] right-[28px] h-[1px] bg-gradient-to-r from-gold/30 via-gold/50 to-gold/30" />
+                  {[
+                    { icon: DollarSign, label: "Budget" },
+                    { icon: Layers, label: "Stack" },
+                    { icon: Handshake, label: "Deal" },
+                    { icon: Waves, label: "Waterfall" },
+                  ].map((s) => {
+                    const StepIcon = s.icon;
+                    return (
+                      <div key={s.label} className="relative flex flex-col items-center gap-1.5 w-[56px]">
+                        <div className="w-7 h-7 rounded-full bg-bg-card border border-gold/40 flex items-center justify-center">
+                          <StepIcon className="w-3 h-3 text-gold" />
+                        </div>
+                        <span className="text-[10px] text-text-dim tracking-wider">{s.label}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+                <p className="text-text-mid text-[14px] leading-relaxed text-center max-w-xs mx-auto">
+                  A <span className="text-gold font-semibold">waterfall</span> is the priority order that determines
+                  who gets paid first when your film earns revenue. Most filmmakers sign deals without ever seeing one.
+                </p>
+                <button onClick={() => navigate('/waterfall-info')}
+                  className="block mx-auto mt-3 text-gold/70 hover:text-gold text-[13px] tracking-wider transition-colors">
+                  How waterfalls work &rarr;
+                </button>
               </div>
             </div>
           </SectionFrame>
@@ -398,7 +454,7 @@ const Index = () => {
             <div ref={fade4.ref} className={cn(fade4.className, "max-w-2xl mx-auto")}>
               <SectionHeader icon={Clapperboard} eyebrow="The Industry Standard" title="WHAT OTHERS CHARGE FOR THIS" subtitle="What people charge to help you understand your own deal." plainSubtitle />
               <div className="-mx-6 md:-mx-8 mb-4">
-                <div className="flex gap-3 overflow-x-auto scrollbar-hide snap-x snap-mandatory px-6 md:px-8 pb-3">
+                <div ref={swipeIndustry.ref} onScroll={swipeIndustry.onScroll} className="flex gap-3 overflow-x-auto scrollbar-hide snap-x snap-mandatory px-6 md:px-8 pb-3">
                   {industryCosts.map((item, i) => {
                     const Icon = item.icon;
                     return (
@@ -417,6 +473,9 @@ const Index = () => {
                   })}
                 </div>
               </div>
+              <p className="text-center mt-3 font-mono text-xs text-text-dim tracking-wider">
+                {swipeIndustry.index + 1} <span className="text-gold/40">/</span> {industryCosts.length}
+              </p>
               <div className="text-center mt-4 px-6 py-5 rounded-xl bg-gold/[0.06] border border-gold/20 max-w-xs mx-auto">
                 <p className="font-bebas text-4xl md:text-5xl tracking-[0.1em] text-gold">FREE</p>
                 <p className="text-text-dim text-[15px] tracking-wider mt-1">The same analysis. No catch.</p>
@@ -429,7 +488,7 @@ const Index = () => {
             <div ref={fade5.ref} className={cn(fade5.className, "max-w-2xl mx-auto")}>
               <SectionHeader icon={Award} eyebrow="The Deliverables" title="WHAT YOU WALK AWAY WITH" subtitle="Everything you need to walk into a room full of money people and hold your own." plainSubtitle />
               <div className="-mx-6 md:-mx-8">
-                <div className="flex gap-3 overflow-x-auto scrollbar-hide snap-x snap-mandatory px-6 md:px-8 pb-3">
+                <div ref={swipeDeliverables.ref} onScroll={swipeDeliverables.onScroll} className="flex gap-3 overflow-x-auto scrollbar-hide snap-x snap-mandatory px-6 md:px-8 pb-3">
                   {[
                     { icon: FileSpreadsheet, title: "The document that closes your raise", desc: "A 6-sheet Excel workbook — executive summary, waterfall ledger, capital breakdown, and investor returns. Hand it over and let the numbers speak." },
                     { icon: Presentation, title: "A PDF your investor will actually read", desc: "Presentation-ready, plain language, zero jargon. Email it, print it, or hand it across the table. Designed to make you look like you've done this before." },
@@ -449,6 +508,9 @@ const Index = () => {
                   })}
                 </div>
               </div>
+              <p className="text-center mt-3 font-mono text-xs text-text-dim tracking-wider">
+                {swipeDeliverables.index + 1} <span className="text-gold/40">/</span> 4
+              </p>
             </div>
           </SectionFrame>
 
