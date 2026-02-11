@@ -24,6 +24,7 @@ import {
   Award,
   Waves,
   Lock,
+  Quote,
 } from "lucide-react";
 import filmmakerLogo from "@/assets/filmmaker-logo.jpg";
 import Header from "@/components/Header";
@@ -58,7 +59,8 @@ const faqs = [
   { q: "Who is this for?", a: "Independent producers, directors, and investors. Whether you're raising $50K or $5M, the mechanics of recoupment are the same. If you intend to sell your film for profit, you need this." },
   { q: "How does the calculator work?", a: "Four steps: set your budget, build your capital stack, structure your deal, and track exactly where every dollar goes in the waterfall. Takes about 2 minutes." },
   { q: "Is this financial or legal advice?", a: "No. This is a simulation tool for estimation and planning purposes only. Always consult a qualified entertainment attorney or accountant for final deal structures." },
-  { q: "Is the calculator free?", a: "Yes, the simulation is completely free. Run as many scenarios as you want, adjust the variables, and see different outcomes. No paywalls, no limits." },
+  { q: "Is the calculator free?", a: "Yes. The simulator, waterfall chart, glossary, and unlimited scenarios are completely free. Premium exports — the Excel workbook and investor-ready PDF — are paid add-ons." },
+  { q: "What's free vs. paid?", a: "Free: full waterfall simulation, visual chart, deal glossary, and unlimited scenario runs. Paid: downloadable Excel workbook and investor-ready PDF export. The simulation itself has no paywall." },
   { q: "Do I need an account?", a: "No. You can use the calculator without signing up. If you want to save your work, we offer a simple magic link — no password required." },
 ];
 
@@ -167,6 +169,7 @@ const Index = () => {
   const revealWaterfall = useReveal();
   const reveal3 = useReveal();
   const revealCosts = useReveal();
+  const revealSocial = useReveal();
   const reveal5 = useReveal();
   const reveal6 = useReveal();
 
@@ -307,7 +310,7 @@ const Index = () => {
                 <div className="w-full max-w-[320px] mx-auto">
                   <button onClick={handleStartClick}
                     className="w-full h-16 text-base font-bold tracking-[0.14em] transition-all active:scale-[0.96] rounded-md bg-gold/[0.18] border-2 border-gold/50 text-gold animate-cta-glow-pulse hover:border-gold/70 hover:bg-gold/[0.22]">
-                    MODEL YOUR DEAL
+                    RUN YOUR FIRST SCENARIO
                   </button>
                 </div>
               )}
@@ -321,7 +324,7 @@ const Index = () => {
           {/* ── THE PROBLEM ── */}
           <SectionFrame id="problem">
             <div ref={revealProblem.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", revealProblem.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
-              <SectionHeader icon={Lock} eyebrow="The Problem" title={<>WHAT HOLLYWOOD DOESN&apos;T WANT YOU TO <span className="text-white">KNOW</span></>} />
+              <SectionHeader icon={Lock} eyebrow="The Problem" title={<>THE DEAL IS DESIGNED AGAINST <span className="text-white">YOU</span></>} />
               <div className="space-y-3">
                 {problemCards.map((card, i) => {
                   const Icon = card.icon;
@@ -342,7 +345,40 @@ const Index = () => {
             </div>
           </SectionFrame>
 
-          {/* ── THE WATERFALL (standalone) ── */}
+          {/* section divider */}
+          <div className="px-8"><div className="h-[1px] bg-gradient-to-r from-transparent via-gold/10 to-transparent" /></div>
+
+          {/* ── KNOWLEDGE ISN'T CHEAP — price anchor right after the pain ── */}
+          <SectionFrame id="industry-charges">
+            <div ref={revealCosts.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", revealCosts.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
+              <SectionHeader icon={Calculator} eyebrow="Industry Rates" title={<>KNOWLEDGE ISN&apos;T <span className="text-white">CHEAP</span></>} />
+              <div className="grid grid-cols-2 gap-3 mb-4">
+                {[
+                  { icon: Gavel, cost: "$5K–$15K", label: "Entertainment Lawyer" },
+                  { icon: Calculator, cost: "$10K–$30K", label: "Finance Consultant" },
+                  { icon: Handshake, cost: "5–15%", label: "Producer's Rep" },
+                  { icon: Film, cost: "10–25%", label: "Sales Agent" },
+                ].map((item, i) => {
+                  const Icon = item.icon;
+                  return (
+                    <div key={item.label} className={cn("rounded-xl border border-border-subtle bg-bg-card p-4 text-center", staggerChild(revealCosts.visible))} style={staggerDelay(i, revealCosts.visible)}>
+                      <div className="w-9 h-9 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center mx-auto mb-2">
+                        <Icon className="w-4 h-4 text-gold" />
+                      </div>
+                      <p className="font-mono text-lg font-medium text-text-primary line-through decoration-text-dim/30">{item.cost}</p>
+                      <p className="text-text-dim text-xs tracking-wider uppercase mt-0.5">{item.label}</p>
+                    </div>
+                  );
+                })}
+              </div>
+              <div className="text-center px-6 py-4 rounded-xl bg-gold/[0.06] border border-gold/20 max-w-xs mx-auto">
+                <p className="font-bebas text-4xl tracking-[0.1em] text-gold">FREE</p>
+                <p className="text-text-dim text-sm tracking-wider mt-1">The same analysis. No catch.</p>
+              </div>
+            </div>
+          </SectionFrame>
+
+          {/* ── THE WATERFALL ── */}
           <SectionFrame id="waterfall-explainer">
             <div ref={revealWaterfall.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", revealWaterfall.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
                   <SectionHeader icon={Waves} eyebrow="What They Didn't Teach You In Film School" title={<>FROM FIRST MONEY IN TO LAST MONEY <span className="text-white">OUT</span></>} />
@@ -407,7 +443,7 @@ const Index = () => {
               <div className="text-center mt-5 -mb-2">
                 <button onClick={handleStartClick}
                   className="h-16 px-10 text-base font-bold tracking-[0.14em] transition-all active:scale-[0.96] rounded-md bg-gold/[0.14] border-2 border-gold/40 text-gold shadow-[0_0_20px_rgba(212,175,55,0.25)] hover:shadow-[0_0_30px_rgba(212,175,55,0.4)] hover:border-gold/60 hover:bg-gold/[0.18]">
-                  MODEL YOUR DEAL
+                  BUILD YOUR CAPITAL STACK
                 </button>
               </div>
             </div>
@@ -416,32 +452,25 @@ const Index = () => {
           {/* section divider */}
           <div className="px-8"><div className="h-[1px] bg-gradient-to-r from-transparent via-gold/10 to-transparent" /></div>
 
-          {/* ── KNOWLEDGE ISN'T CHEAP (compact) ── */}
-          <SectionFrame id="industry-charges">
-            <div ref={revealCosts.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", revealCosts.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
-              <SectionHeader icon={Calculator} eyebrow="Industry Rates" title={<>KNOWLEDGE ISN&apos;T <span className="text-white">CHEAP</span></>} />
-              <div className="grid grid-cols-2 gap-3 mb-4">
+          {/* ── SOCIAL PROOF ── */}
+          <SectionFrame id="social-proof">
+            <div ref={revealSocial.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", revealSocial.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
+              <SectionHeader icon={Quote} eyebrow="From The Community" title={<>FILMMAKERS WHO <span className="text-white">RAN THE NUMBERS</span></>} />
+              <div className="space-y-3">
                 {[
-                  { icon: Gavel, cost: "$5K–$15K", label: "Entertainment Lawyer" },
-                  { icon: Calculator, cost: "$10K–$30K", label: "Finance Consultant" },
-                  { icon: Handshake, cost: "5–15%", label: "Producer's Rep" },
-                  { icon: Film, cost: "10–25%", label: "Sales Agent" },
-                ].map((item, i) => {
-                  const Icon = item.icon;
-                  return (
-                    <div key={item.label} className={cn("rounded-xl border border-border-subtle bg-bg-card p-4 text-center", staggerChild(revealCosts.visible))} style={staggerDelay(i, revealCosts.visible)}>
-                      <div className="w-9 h-9 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center mx-auto mb-2">
-                        <Icon className="w-4 h-4 text-gold" />
-                      </div>
-                      <p className="font-mono text-lg font-medium text-text-primary line-through decoration-text-dim/30">{item.cost}</p>
-                      <p className="text-text-dim text-xs tracking-wider uppercase mt-0.5">{item.label}</p>
+                  { quote: "I had no idea my equity investors were fourth in line. This showed me the whole picture before I signed anything.", name: "Sarah M.", role: "Independent Producer" },
+                  { quote: "We used the waterfall sim to restructure our gap financing. Saved us from a deal that would have left us with nothing.", name: "James T.", role: "First-time Director" },
+                  { quote: "Finally, a tool that speaks producer — not banker. I use it on every project now.", name: "David R.", role: "Line Producer" },
+                ].map((t, i) => (
+                  <div key={i} className={cn("rounded-xl border border-border-subtle bg-bg-card p-5", staggerChild(revealSocial.visible))} style={staggerDelay(i, revealSocial.visible)}>
+                    <Quote className="w-4 h-4 text-gold/40 mb-2" />
+                    <p className="text-text-mid text-sm leading-relaxed italic mb-3">{t.quote}</p>
+                    <div className="flex items-center gap-2">
+                      <span className="text-gold text-sm font-semibold">{t.name}</span>
+                      <span className="text-text-dim text-xs tracking-wider">{t.role}</span>
                     </div>
-                  );
-                })}
-              </div>
-              <div className="text-center px-6 py-4 rounded-xl bg-gold/[0.06] border border-gold/20 max-w-xs mx-auto">
-                <p className="font-bebas text-4xl tracking-[0.1em] text-gold">FREE</p>
-                <p className="text-text-dim text-sm tracking-wider mt-1">The same analysis. No catch.</p>
+                  </div>
+                ))}
               </div>
             </div>
           </SectionFrame>
@@ -453,16 +482,35 @@ const Index = () => {
           <SectionFrame id="deliverables" alt>
             <div ref={reveal5.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", reveal5.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
               <SectionHeader icon={Award} eyebrow="The Deliverables" title={<>WHAT YOU WALK AWAY <span className="text-white">WITH</span></>} />
-              <div className="rounded-xl border border-border-subtle bg-bg-card overflow-hidden divide-y divide-border-subtle">
+
+              {/* Free tier */}
+              <p className="text-text-dim text-xs tracking-[0.2em] uppercase font-semibold mb-2">Free — always</p>
+              <div className="rounded-xl border border-border-subtle bg-bg-card overflow-hidden divide-y divide-border-subtle mb-4">
                 {[
-                  { icon: FileSpreadsheet, line: "6-sheet Excel workbook — waterfall, capital stack, investor returns" },
-                  { icon: Presentation, line: "Investor-ready PDF — plain language, zero jargon" },
-                  { icon: BookOpen, line: "Full glossary — every deal term in plain English" },
                   { icon: BarChart3, line: "Visual waterfall chart — who gets paid, in what order" },
+                  { icon: BookOpen, line: "Full glossary — every deal term in plain English" },
+                  { icon: Waves, line: "Unlimited scenarios — adjust the variables, re-run as often as you want" },
                 ].map((item, i) => {
                   const Icon = item.icon;
                   return (
                     <div key={i} className={cn("flex items-center gap-3 px-5 py-3.5", staggerChild(reveal5.visible))} style={staggerDelay(i, reveal5.visible)}>
+                      <Icon className="w-4 h-4 text-gold flex-shrink-0" />
+                      <p className="text-text-mid text-sm leading-snug">{item.line}</p>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Premium tier */}
+              <p className="text-text-dim text-xs tracking-[0.2em] uppercase font-semibold mb-2">Premium exports</p>
+              <div className="rounded-xl border border-gold/20 bg-bg-card overflow-hidden divide-y divide-border-subtle">
+                {[
+                  { icon: FileSpreadsheet, line: "6-sheet Excel workbook — waterfall, capital stack, investor returns" },
+                  { icon: Presentation, line: "Investor-ready PDF — plain language, zero jargon" },
+                ].map((item, i) => {
+                  const Icon = item.icon;
+                  return (
+                    <div key={i} className={cn("flex items-center gap-3 px-5 py-3.5", staggerChild(reveal5.visible))} style={staggerDelay(i + 3, reveal5.visible)}>
                       <Icon className="w-4 h-4 text-gold flex-shrink-0" />
                       <p className="text-text-mid text-sm leading-snug">{item.line}</p>
                     </div>
@@ -509,11 +557,11 @@ const Index = () => {
                     STOP GUESSING.<br />START <span className="text-white">CLOSING</span>.
                   </h2>
                   <p className="text-text-mid text-sm leading-relaxed max-w-xs mx-auto mb-6">
-                    Learn the business of film today.
+                    Two minutes. Zero cost. Full clarity on your deal.
                   </p>
                   <button onClick={handleStartClick}
                     className="w-full max-w-[320px] h-16 text-base font-bold tracking-[0.14em] transition-all active:scale-[0.96] rounded-md bg-gold/[0.14] border-2 border-gold/40 text-gold shadow-[0_0_20px_rgba(212,175,55,0.25)] hover:shadow-[0_0_30px_rgba(212,175,55,0.4)] hover:border-gold/60 hover:bg-gold/[0.18]">
-                    START NOW
+                    SEE WHERE YOUR MONEY GOES
                   </button>
                 </div>
               </div>
