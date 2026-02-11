@@ -343,14 +343,9 @@ const Index = () => {
           </SectionFrame>
 
           {/* ── THE WATERFALL (standalone) ── */}
-          <section id="waterfall-explainer" className="snap-section px-4 py-6">
-            <div className="flex rounded-2xl overflow-hidden border border-white/[0.06]">
-              <div className="w-1.5 flex-shrink-0 bg-gold" style={{ boxShadow: '0 0 14px rgba(212,175,55,0.35)' }} />
-              <div className="flex-1 min-w-0 bg-bg-elevated">
-                <div className="h-[2px] bg-gradient-to-r from-gold/40 via-gold/25 to-transparent" />
-                <div ref={revealWaterfall.ref} className={cn("p-6 md:p-8 max-w-2xl mx-auto transition-all duration-500 ease-out", revealWaterfall.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
-                  <p className="text-text-dim text-xs tracking-[0.3em] uppercase font-semibold text-center mb-3">What They Didn't Teach You In Film School</p>
-                  <p className="font-bebas text-3xl md:text-4xl tracking-[0.1em] text-gold text-center mb-5">THE WATERFALL</p>
+          <SectionFrame id="waterfall-explainer">
+            <div ref={revealWaterfall.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", revealWaterfall.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
+                  <SectionHeader icon={Waves} eyebrow="What They Didn't Teach You In Film School" title={<>FROM FIRST MONEY IN TO LAST MONEY <span className="text-white">OUT</span></>} />
                   <div className="relative flex items-start justify-between max-w-[300px] mx-auto mb-5">
                     <div className="absolute top-[14px] left-[28px] right-[28px] h-[1px] bg-gradient-to-r from-gold/30 via-gold/50 to-gold/30" />
                     {[
@@ -377,10 +372,8 @@ const Index = () => {
                     className="block mx-auto mt-5 px-6 py-2.5 text-sm font-semibold tracking-[0.15em] uppercase transition-all rounded-md bg-gold/[0.04] border border-gold/25 text-gold hover:bg-gold/[0.08] hover:border-gold/40 active:scale-[0.97]">
                     LEARN MORE &rarr;
                   </button>
-                </div>
-              </div>
             </div>
-          </section>
+          </SectionFrame>
 
           {/* section divider */}
           <div className="px-8"><div className="h-[1px] bg-gradient-to-r from-transparent via-white/[0.04] to-transparent" /></div>
@@ -388,7 +381,7 @@ const Index = () => {
           {/* ── HOW IT WORKS ── */}
           <SectionFrame id="how-it-works" alt>
             <div ref={reveal3.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", reveal3.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
-              <SectionHeader icon={Film} eyebrow="How It Works" title={<>FROM FIRST MONEY IN TO LAST MONEY <span className="text-white">OUT</span></>} subtitle="Four steps. No finance degree." plainSubtitle />
+              <SectionHeader icon={Film} eyebrow="How It Works" title={<>YOUR DEAL IN FOUR <span className="text-white">STEPS</span></>} subtitle="No finance degree required." plainSubtitle />
               <div className="space-y-3">
                 {steps.map((step, i) => {
                   const Icon = step.icon;
