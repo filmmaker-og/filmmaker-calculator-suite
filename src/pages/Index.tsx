@@ -105,8 +105,8 @@ const SectionHeader = ({ eyebrow, title, subtitle, icon: Icon, plainSubtitle }: 
       <p className={cn(
         "text-center max-w-lg mx-auto mt-4 leading-relaxed",
         plainSubtitle
-          ? "text-text-mid text-[15px]"
-          : "text-text-mid text-[15px] px-4 py-2.5 rounded-xl bg-gold/[0.06] border border-gold/20"
+          ? "text-text-mid text-sm"
+          : "text-text-mid text-sm px-4 py-2.5 rounded-xl bg-gold/[0.06] border border-gold/20"
       )}>
         {subtitle}
       </p>
@@ -117,11 +117,11 @@ const SectionHeader = ({ eyebrow, title, subtitle, icon: Icon, plainSubtitle }: 
 /* ═══════════════════════════════════════════════════════════════════
    SECTION FRAME — content-driven height (no forced min-h)
    ═══════════════════════════════════════════════════════════════════ */
-const SectionFrame = ({ id, children, className }: {
-  id: string; children: React.ReactNode; className?: string;
+const SectionFrame = ({ id, children, className, alt }: {
+  id: string; children: React.ReactNode; className?: string; alt?: boolean;
 }) => (
   <section id={id} className="snap-section px-4 py-6">
-    <div className={cn("bg-bg-elevated border border-white/[0.06] rounded-2xl overflow-hidden", className)}>
+    <div className={cn(alt ? "bg-bg-surface" : "bg-bg-elevated", "border border-white/[0.06] rounded-2xl overflow-hidden", className)}>
       <div className="h-[2px] bg-gradient-to-r from-transparent via-gold/25 to-transparent" />
       <div className="p-6 md:p-8">
         {children}
@@ -322,20 +322,20 @@ const Index = () => {
           <div className="vignette" />
 
           {/* ── HERO ── */}
-          <section id="hero" className="snap-section min-h-[85vh] flex flex-col justify-start pt-[12vh] relative overflow-hidden">
+          <section id="hero" className="snap-section min-h-[70vh] flex flex-col justify-center relative overflow-hidden">
             <div className="absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none animate-spotlight-pulse"
               style={{ width: '100vw', height: '75vh', background: `radial-gradient(ellipse 50% 40% at 50% 10%, rgba(212,175,55,0.1) 0%, rgba(212,175,55,0.04) 40%, transparent 70%)` }} />
             <div className="relative px-6 py-4 max-w-xl mx-auto text-center">
               <div className="mb-5 relative inline-block">
-                <div className="absolute inset-0 -m-6" style={{ background: 'radial-gradient(circle, rgba(212,175,55,0.2) 0%, transparent 70%)', filter: 'blur(16px)' }} />
-                <img src={filmmakerLogo} alt="Filmmaker.OG" className="relative w-20 h-20 object-contain rounded-lg"
-                  style={{ filter: 'brightness(1.15) drop-shadow(0 0 25px rgba(212,175,55,0.45))' }} />
+                <div className="absolute inset-0 -m-8" style={{ background: 'radial-gradient(circle, rgba(212,175,55,0.2) 0%, transparent 70%)', filter: 'blur(20px)' }} />
+                <img src={filmmakerLogo} alt="Filmmaker.OG" className="relative w-28 h-28 object-contain rounded-xl"
+                  style={{ filter: 'brightness(1.15) drop-shadow(0 0 30px rgba(212,175,55,0.45))' }} />
               </div>
-              <p className="text-text-dim text-sm tracking-[0.35em] uppercase mb-4 font-semibold">Free Film Finance Simulator</p>
+              <p className="text-text-dim text-sm tracking-[0.35em] uppercase mb-4 font-semibold">Demystifying Film Finance</p>
               <h1 className="font-bebas text-[clamp(2.2rem,8vw,3.6rem)] leading-[1.05] text-gold mb-4">
                 SEE WHERE EVERY<br />DOLLAR <span className="text-white">GOES</span>
               </h1>
-              <p className="text-text-mid text-base font-medium leading-relaxed max-w-sm mx-auto mb-8">
+              <p className="text-text-mid text-sm font-medium leading-relaxed max-w-sm mx-auto mb-6">
                 Before you raise a dollar or sign a deal, know exactly who gets
                 paid, in what order, and how to come out on top.
               </p>
@@ -364,10 +364,13 @@ const Index = () => {
             </div>
           </section>
 
+          {/* section divider */}
+          <div className="px-8"><div className="h-[1px] bg-gradient-to-r from-transparent via-gold/10 to-transparent" /></div>
+
           {/* ── THE PROBLEM ── */}
           <SectionFrame id="problem">
             <div ref={reveal2.ref} style={reveal2.style} className="max-w-2xl mx-auto">
-              <SectionHeader icon={Lock} eyebrow="The Problem" title="YOU WERE NEVER MEANT TO SEE THIS" subtitle="Hollywood's financial playbook was never meant to be accessible. We're demystifying the film business — starting with your deal." plainSubtitle />
+              <SectionHeader icon={Lock} eyebrow="The Problem" title="WHAT HOLLYWOOD DOESN'T WANT YOU TO KNOW" subtitle="Hollywood's financial playbook was never meant to be accessible. We're changing that — starting with your deal." plainSubtitle />
 
               {/* Problem cards — horizontal swipe */}
               <div className="-mx-6 md:-mx-8">
@@ -379,8 +382,8 @@ const Index = () => {
                         <div className="w-9 h-9 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center mb-3">
                           <Icon className="w-4 h-4 text-gold" />
                         </div>
-                        <h3 className="text-text-primary text-lg font-semibold mb-1.5">{card.title}</h3>
-                        <p className="text-text-mid text-[15px] leading-relaxed">{card.body}</p>
+                        <h3 className="text-gold text-lg font-semibold mb-1.5">{card.title}</h3>
+                        <p className="text-text-mid text-sm leading-relaxed">{card.body}</p>
                       </div>
                     );
                   })}
@@ -420,19 +423,22 @@ const Index = () => {
                     );
                   })}
                 </div>
-                <p className="text-text-mid text-[15px] leading-relaxed text-center max-w-xs mx-auto">
+                <p className="text-text-mid text-sm leading-relaxed text-center max-w-xs mx-auto">
                   The majority of filmmakers have never seen one. The <span className="text-gold font-semibold">waterfall</span> is the financial structure that determines who gets paid back, in what order, and how much. It's the key to package financing.
                 </p>
                 <button onClick={() => navigate('/waterfall-info')}
                   className="block mx-auto mt-3 text-gold/70 hover:text-gold text-sm font-semibold tracking-[0.15em] uppercase transition-colors">
-                  LEARN MORE &rarr;&rarr;
+                  LEARN MORE &rarr;
                 </button>
               </div>
             </div>
           </SectionFrame>
 
+          {/* section divider */}
+          <div className="px-8"><div className="h-[1px] bg-gradient-to-r from-transparent via-white/[0.04] to-transparent" /></div>
+
           {/* ── HOW IT WORKS ── */}
-          <SectionFrame id="how-it-works">
+          <SectionFrame id="how-it-works" alt>
             <div ref={reveal3.ref} style={reveal3.style} className="max-w-2xl mx-auto">
               <SectionHeader icon={Film} eyebrow="How It Works" title="FROM FIRST MONEY IN TO LAST MONEY OUT" subtitle="Four steps. Two minutes. No finance degree." plainSubtitle />
               <div className="space-y-4">
@@ -447,14 +453,14 @@ const Index = () => {
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-1">
                             <span className="font-mono text-xs text-gold tracking-wider font-semibold">{step.num}</span>
-                            <h3 className="text-text-primary text-lg font-semibold">{step.title}</h3>
+                            <h3 className="text-gold text-lg font-semibold">{step.title}</h3>
                           </div>
-                          <p className="text-text-mid text-[15px] leading-relaxed">{step.desc}</p>
+                          <p className="text-text-mid text-sm leading-relaxed">{step.desc}</p>
                         </div>
                       </div>
                       {step.callout && (
                         <div className="mt-3 px-4 py-3 bg-gold/[0.08] border border-gold/25 rounded-xl">
-                          <p className="text-gold/80 text-[15px] leading-relaxed italic">{step.callout}</p>
+                          <p className="text-gold/80 text-sm leading-relaxed italic">{step.callout}</p>
                         </div>
                       )}
                     </div>
@@ -465,17 +471,20 @@ const Index = () => {
               {/* Mid-page CTA — catch fast deciders */}
               <div className="text-center mt-5 -mb-2">
                 <button onClick={handleStartClick}
-                  className="h-14 px-10 text-sm font-semibold tracking-[0.12em] transition-all active:scale-[0.96] rounded-md border border-gold-cta-muted text-gold-cta hover:border-gold-cta hover:bg-gold/[0.06]">
+                  className="h-16 px-10 text-base font-semibold tracking-[0.12em] transition-all active:scale-[0.96] rounded-md bg-gold-cta-subtle border border-gold-cta-muted text-gold-cta shadow-button hover:border-gold-cta">
                   RUN THE NUMBERS — NOW
                 </button>
               </div>
             </div>
           </SectionFrame>
 
+          {/* section divider */}
+          <div className="px-8"><div className="h-[1px] bg-gradient-to-r from-transparent via-gold/10 to-transparent" /></div>
+
           {/* ── INDUSTRY CHARGES ── */}
           <SectionFrame id="industry-charges">
             <div ref={reveal4.ref} style={reveal4.style} className="max-w-2xl mx-auto">
-              <SectionHeader icon={Clapperboard} eyebrow="The Industry Standard" title="THIS KNOWLEDGE ISN'T CHEAP" subtitle="You shouldn't need a $5,000 retainer from an entertainment attorney to understand your own deal." plainSubtitle />
+              <SectionHeader icon={Clapperboard} eyebrow="The Industry Standard" title="KNOWLEDGE ISN'T CHEAP" subtitle="You shouldn't need a $5,000 retainer from an entertainment attorney to understand your own deal." plainSubtitle />
               <div className="grid grid-cols-2 gap-3">
                 {industryCosts.map((item, i) => {
                   const Icon = item.icon;
@@ -488,7 +497,7 @@ const Index = () => {
                         </div>
                         <p className="font-mono text-lg font-medium text-text-primary line-through decoration-text-dim/30 mb-0.5">{item.cost}</p>
                         <p className="text-text-dim text-xs tracking-wider uppercase">{item.label}</p>
-                        <p className="text-text-dim text-[13px] mt-1">{item.note}</p>
+                        <p className="text-text-dim text-xs mt-1">{item.note}</p>
                       </div>
                     </div>
                   );
@@ -496,45 +505,45 @@ const Index = () => {
               </div>
               <div className="text-center mt-5 px-6 py-5 rounded-xl bg-gold/[0.06] border border-gold/20 max-w-xs mx-auto">
                 <p className="font-bebas text-4xl md:text-5xl tracking-[0.1em] text-gold">FREE</p>
-                <p className="text-text-dim text-[15px] tracking-wider mt-1">The same analysis. No catch.</p>
+                <p className="text-text-dim text-sm tracking-wider mt-1">The same analysis. No catch.</p>
               </div>
             </div>
           </SectionFrame>
 
+          {/* section divider */}
+          <div className="px-8"><div className="h-[1px] bg-gradient-to-r from-transparent via-white/[0.04] to-transparent" /></div>
+
           {/* ── WHAT YOU GET ── */}
-          <SectionFrame id="deliverables">
+          <SectionFrame id="deliverables" alt>
             <div ref={reveal5.ref} style={reveal5.style} className="max-w-2xl mx-auto">
               <SectionHeader icon={Award} eyebrow="The Deliverables" title="WHAT YOU WALK AWAY WITH" subtitle="Everything you need to walk into a room full of investors and hold your own." plainSubtitle />
-              <div className="flex rounded-xl overflow-hidden border border-border-subtle">
-                <div className="w-1 flex-shrink-0 bg-gradient-to-b from-gold via-gold/60 to-gold/20" style={{ boxShadow: '0 0 12px rgba(212,175,55,0.25)' }} />
-                <div className="flex-1 bg-bg-card px-5">
-                  <Accordion type="single" collapsible className="w-full">
-                    {[
-                      { icon: FileSpreadsheet, title: "The document that closes your raise", desc: "A 6-sheet Excel workbook — executive summary, waterfall ledger, capital breakdown, and investor returns. Hand it over and let the numbers speak." },
-                      { icon: Presentation, title: "A PDF your investor will actually read", desc: "Presentation-ready, plain language, zero jargon. Email it, print it, or hand it across the table. Designed to make you look like you've done this before." },
-                      { icon: BookOpen, title: "Every term, in plain English", desc: "A glossary of every financial term in your deal. No MBA required — just the language you need to hold your own in any room." },
-                      { icon: BarChart3, title: "One chart that explains everything", desc: "A visual waterfall showing who gets paid, in what order, and how much. The most important chart in film finance — and now it's yours." },
-                    ].map((item, i) => {
-                      const Icon = item.icon;
-                      return (
-                        <AccordionItem key={item.title} value={`del-${i}`} className="border-border-subtle">
-                          <AccordionTrigger className="text-text-primary hover:text-text-mid hover:no-underline text-lg font-semibold text-left">
-                            <span className="flex items-center gap-3">
-                              <Icon className="w-4 h-4 text-gold flex-shrink-0" />
-                              {item.title}
-                            </span>
-                          </AccordionTrigger>
-                          <AccordionContent className="text-text-dim text-[15px] leading-relaxed pl-7">
-                            {item.desc}
-                          </AccordionContent>
-                        </AccordionItem>
-                      );
-                    })}
-                  </Accordion>
-                </div>
+              <div className="space-y-3">
+                {[
+                  { icon: FileSpreadsheet, title: "The document that closes your raise", desc: "A 6-sheet Excel workbook — executive summary, waterfall ledger, capital breakdown, and investor returns. Hand it over and let the numbers speak." },
+                  { icon: Presentation, title: "A PDF your investor will actually read", desc: "Presentation-ready, plain language, zero jargon. Email it, print it, or hand it across the table. Designed to make you look like you've done this before." },
+                  { icon: BookOpen, title: "Every term, in plain English", desc: "A glossary of every financial term in your deal. No MBA required — just the language you need to hold your own in any room." },
+                  { icon: BarChart3, title: "One chart that explains everything", desc: "A visual waterfall showing who gets paid, in what order, and how much. The most important chart in film finance — and now it's yours." },
+                ].map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <div key={item.title} className="flex rounded-xl overflow-hidden border border-border-subtle hover:border-gold/20 transition-colors">
+                      <div className="w-1 flex-shrink-0 bg-gradient-to-b from-gold via-gold/60 to-gold/20" style={{ boxShadow: '0 0 12px rgba(212,175,55,0.25)' }} />
+                      <div className="flex-1 bg-bg-card p-5">
+                        <div className="flex items-start gap-3 mb-2">
+                          <Icon className="w-4 h-4 text-gold flex-shrink-0 mt-1" />
+                          <h3 className="text-gold text-lg font-semibold">{item.title}</h3>
+                        </div>
+                        <p className="text-text-mid text-sm leading-relaxed pl-7">{item.desc}</p>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </SectionFrame>
+
+          {/* section divider */}
+          <div className="px-8"><div className="h-[1px] bg-gradient-to-r from-transparent via-gold/10 to-transparent" /></div>
 
           {/* ── FAQ ── */}
           <SectionFrame id="faq">
@@ -549,11 +558,11 @@ const Index = () => {
                         <AccordionTrigger className="text-text-primary hover:text-text-mid hover:no-underline text-lg font-semibold text-left">
                           {faq.q}
                         </AccordionTrigger>
-                        <AccordionContent className="text-text-dim text-[15px] leading-relaxed">
+                        <AccordionContent className="text-text-dim text-sm leading-relaxed">
                           {faq.a}
                           {faq.link && (
                             <a href={faq.link.url} target="_blank" rel="noopener noreferrer"
-                              className="inline-block mt-2 text-gold/70 hover:text-gold text-[13px] tracking-wider transition-colors underline underline-offset-2 decoration-gold/30">
+                              className="inline-block mt-2 text-gold/70 hover:text-gold text-xs tracking-wider transition-colors underline underline-offset-2 decoration-gold/30">
                               {faq.link.label} &rarr;
                             </a>
                           )}
@@ -576,7 +585,7 @@ const Index = () => {
                 <h2 className="font-bebas text-3xl md:text-4xl tracking-[0.08em] text-gold mb-4">
                   STOP GUESSING.<br />START CLOSING.
                 </h2>
-                <p className="text-text-mid text-[15px] leading-relaxed max-w-xs mx-auto mb-6">
+                <p className="text-text-mid text-sm leading-relaxed max-w-xs mx-auto mb-6">
                   Every filmmaker who's been burned wishes they'd run the numbers first.
                 </p>
                 <button onClick={handleStartClick}
