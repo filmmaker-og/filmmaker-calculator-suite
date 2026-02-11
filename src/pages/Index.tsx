@@ -7,7 +7,6 @@ import {
   Layers,
   Handshake,
   BarChart3,
-  ChevronDown,
   HelpCircle,
   FileSpreadsheet,
   Presentation,
@@ -73,19 +72,19 @@ const faqs = [
    HOW IT WORKS STEPS (static — not clickable)
    ═══════════════════════════════════════════════════════════════════ */
 const steps = [
-  { num: "01", title: "Set Your Budget", desc: "Enter your total production budget and select any guild/union signatories. This establishes the baseline for everything that follows.", icon: DollarSign },
-  { num: "02", title: "Build Your Capital Stack", desc: "Choose where your money is coming from — equity, pre-sales, gap financing, tax incentives. Each source has different recoupment priorities.", icon: Layers },
-  { num: "03", title: "Model the Deal", desc: "Set the acquisition price, distribution fees, and marketing spend. This is where you see how much actually comes back.", icon: Handshake },
-  { num: "04", title: "See the Waterfall", desc: "Watch every dollar flow through the priority chain. See exactly who gets paid, in what order, and what's left for you.", icon: Waves, callout: "Most filmmakers make deals without ever seeing how the money flows back. This tool shows you — in under 2 minutes." },
+  { num: "01", title: "Set Your Budget", desc: "Total production cost plus guild signatories. This is your baseline.", icon: DollarSign },
+  { num: "02", title: "Build Your Capital Stack", desc: "Equity, pre-sales, gap, tax incentives — where the money comes from and how each source gets paid back.", icon: Layers },
+  { num: "03", title: "Model the Deal", desc: "Acquisition price, distribution fees, P&A spend. See how much actually makes it back.", icon: Handshake },
+  { num: "04", title: "See the Waterfall", desc: "Every dollar through the priority chain. Who gets paid first. What's left for you.", icon: Waves, callout: "Most filmmakers sign deals without ever seeing this chart." },
 ];
 
 /* ═══════════════════════════════════════════════════════════════════
    PROBLEM CARDS — filmmaker language, not finance jargon
    ═══════════════════════════════════════════════════════════════════ */
 const problemCards = [
-  { icon: Receipt, title: "The investor asks how they get paid back.", body: "You need an answer — not a vague promise. How does the money come back? In what order? What if the film underperforms? If you can't show them the math, the conversation stalls before it starts." },
-  { icon: EyeOff, title: "Nobody ran the numbers.", body: "Most indie deals aren't structured to protect both sides. Not out of bad faith — just math nobody modeled. Filmmakers give away too much. Investors take on more risk than they realize. It starts with one missing step: seeing how the money actually flows." },
-  { icon: Scale, title: "Structure is what gets you funded.", body: "When investors can see their downside is managed — preferred returns, clear priority, transparent recoupment — they say yes faster. A well-structured deal doesn't just protect you. It's what turns a pitch into a funded project." },
+  { icon: Receipt, title: "\u201CShow me how I get paid back.\u201D", body: "That's what every investor asks before they write a check. How does the money return? In what order? What if the film underperforms? If you can't answer clearly, the conversation ends before it starts." },
+  { icon: EyeOff, title: "Nobody ran the numbers.", body: "Most indie deals aren't built to protect both sides. Not bad faith — just math nobody modeled. Filmmakers give away too much. Investors take on risk they can't see. It starts with one missing step." },
+  { icon: Scale, title: "Structure closes the deal.", body: "Preferred returns, clear priority, transparent recoupment — when investors can see their downside is managed, they say yes faster. Structure turns a pitch into a funded project." },
 ];
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -114,35 +113,6 @@ const SectionHeader = ({ eyebrow, title, subtitle, icon: Icon, plainSubtitle }: 
     )}
   </div>
 );
-
-/* ═══════════════════════════════════════════════════════════════════
-   SECTION CHEVRON
-   ═══════════════════════════════════════════════════════════════════ */
-const SectionChevron = ({ nextId, large }: { nextId?: string; large?: boolean }) => {
-  const handleClick = useCallback(() => {
-    if (!nextId) return;
-    const el = document.getElementById(nextId);
-    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-  }, [nextId]);
-
-  if (!nextId) return null;
-
-  return (
-    <button
-      onClick={handleClick}
-      className={cn(
-        "flex items-center justify-center mx-auto rounded-full border border-white/10 hover:border-gold/40 transition-all group",
-        large ? "w-12 h-12 mt-6" : "w-10 h-10 mt-5"
-      )}
-      aria-label="Scroll to next section"
-    >
-      <ChevronDown className={cn(
-        "text-text-dim group-hover:text-gold animate-bounce-chevron transition-colors",
-        large ? "w-6 h-6" : "w-5 h-5"
-      )} />
-    </button>
-  );
-};
 
 /* ═══════════════════════════════════════════════════════════════════
    SECTION FRAME — content-driven height (no forced min-h)
@@ -181,18 +151,18 @@ const useFadeIn = () => {
   return {
     ref,
     visible,
-    className: cn("transition-all duration-500 ease-out", visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"),
+    className: cn("transition-all duration-700 ease-out", visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"),
   };
 };
 
 /** Stagger delay style for children within a visible section */
 const staggerDelay = (index: number, visible: boolean): React.CSSProperties => ({
-  transitionDelay: visible ? `${index * 80}ms` : "0ms",
+  transitionDelay: visible ? `${index * 120}ms` : "0ms",
 });
 
 /** Class for stagger-animated child items */
 const staggerChild = (visible: boolean) =>
-  cn("transition-all duration-500 ease-out", visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3");
+  cn("transition-all duration-600 ease-out", visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5");
 
 /* ═══════════════════════════════════════════════════════════════════
    MAIN INDEX COMPONENT
@@ -354,14 +324,13 @@ const Index = () => {
                 </div>
               )}
 
-              <SectionChevron nextId="problem" large />
             </div>
           </section>
 
           {/* ── THE PROBLEM (moved up — lead with pain) ── */}
           <SectionFrame id="problem">
             <div ref={fade2.ref} className={cn(fade2.className, "max-w-2xl mx-auto")}>
-              <SectionHeader icon={AlertTriangle} eyebrow="The Problem" title="WHY MOST INDIE FILMS LOSE MONEY" subtitle="It's not bad films. It's deals made without seeing how the money flows back." />
+              <SectionHeader icon={AlertTriangle} eyebrow="The Problem" title="WHY MOST INDIE FILMS LOSE MONEY" subtitle="It's not bad films. It's deals made without seeing how the money flows back." plainSubtitle />
               <div className="space-y-4">
                 {problemCards.map((card, i) => {
                   const Icon = card.icon;
@@ -386,7 +355,7 @@ const Index = () => {
           {/* ── HOW IT WORKS ── */}
           <SectionFrame id="how-it-works">
             <div ref={fade3.ref} className={cn(fade3.className, "max-w-2xl mx-auto")}>
-              <SectionHeader icon={Film} eyebrow="How It Works" title="FOUR STEPS TO CLARITY" subtitle="From budget to waterfall in four steps. No financial background required." plainSubtitle />
+              <SectionHeader icon={Film} eyebrow="How It Works" title="FROM BUDGET TO WATERFALL" subtitle="Four steps. Two minutes. No finance degree." plainSubtitle />
               <div className="space-y-4">
                 {steps.map((step, i) => {
                   const Icon = step.icon;
@@ -427,7 +396,7 @@ const Index = () => {
           {/* ── INDUSTRY CHARGES ── */}
           <SectionFrame id="industry-charges">
             <div ref={fade4.ref} className={cn(fade4.className, "max-w-2xl mx-auto")}>
-              <SectionHeader icon={Clapperboard} eyebrow="The Industry Standard" title="WHAT OTHERS CHARGE FOR THIS ANALYSIS" subtitle="This is what it costs to understand your own deal. Until now." />
+              <SectionHeader icon={Clapperboard} eyebrow="The Industry Standard" title="WHAT OTHERS CHARGE FOR THIS" subtitle="What people charge to help you understand your own deal." plainSubtitle />
               <div className="-mx-6 md:-mx-8 mb-4">
                 <div className="flex gap-3 overflow-x-auto scrollbar-hide snap-x snap-mandatory px-6 md:px-8 pb-3">
                   {industryCosts.map((item, i) => {
@@ -486,7 +455,7 @@ const Index = () => {
           {/* ── FAQ ── */}
           <SectionFrame id="faq">
             <div ref={fade6.ref} className={cn(fade6.className, "max-w-2xl mx-auto")}>
-              <SectionHeader icon={HelpCircle} eyebrow="Common Questions" title="WHAT FILMMAKERS ASK" subtitle="Quick answers to the questions we hear most." plainSubtitle />
+              <SectionHeader icon={HelpCircle} eyebrow="Common Questions" title="WHAT FILMMAKERS ASK" subtitle="Straight answers. No jargon." plainSubtitle />
               <div className="flex rounded-xl overflow-hidden border border-border-subtle">
                 <div className="w-1 flex-shrink-0 bg-gradient-to-b from-gold via-gold/60 to-gold/20" style={{ boxShadow: '0 0 12px rgba(212,175,55,0.25)' }} />
                 <div className="flex-1 bg-bg-card px-5">
@@ -538,38 +507,33 @@ const Index = () => {
           </section>
 
           {/* ── FOOTER ── */}
-          <footer className="py-8 px-6">
-            <div className="h-[2px] bg-gradient-to-r from-transparent via-gold/25 to-transparent mb-8" />
-            <div className="max-w-md mx-auto">
-              <div className="flex flex-wrap items-center justify-center gap-2.5 mb-5">
+          <footer className="py-10 px-6">
+            <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/20 to-transparent mb-8" />
+            <div className="max-w-sm mx-auto">
+              <div className="grid grid-cols-2 gap-2.5 mb-8 max-w-[260px] mx-auto">
                 <a href="mailto:thefilmmaker.og@gmail.com"
-                  className="flex items-center gap-1.5 text-xs tracking-wider text-gold/70 hover:text-gold transition-colors py-2 px-3 rounded-full border border-white/[0.06] hover:border-gold/30">
+                  className="flex items-center justify-center gap-1.5 text-xs tracking-wider text-gold/70 hover:text-gold transition-colors py-2.5 rounded-lg border border-white/[0.06] hover:border-gold/30">
                   <Mail className="w-3.5 h-3.5" /><span>Email</span>
                 </a>
                 <a href="https://www.instagram.com/filmmaker.og" target="_blank" rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 text-xs tracking-wider text-gold/70 hover:text-gold transition-colors py-2 px-3 rounded-full border border-white/[0.06] hover:border-gold/30">
+                  className="flex items-center justify-center gap-1.5 text-xs tracking-wider text-gold/70 hover:text-gold transition-colors py-2.5 rounded-lg border border-white/[0.06] hover:border-gold/30">
                   <Instagram className="w-3.5 h-3.5" /><span>Instagram</span>
                 </a>
                 <button onClick={handleShare}
-                  className="flex items-center gap-1.5 text-xs tracking-wider text-gold/70 hover:text-gold transition-colors py-2 px-3 rounded-full border border-white/[0.06] hover:border-gold/30">
+                  className="flex items-center justify-center gap-1.5 text-xs tracking-wider text-gold/70 hover:text-gold transition-colors py-2.5 rounded-lg border border-white/[0.06] hover:border-gold/30">
                   <Share2 className="w-3.5 h-3.5" /><span>Share</span>
                 </button>
                 <button onClick={handleCopyLink}
-                  className="flex items-center gap-1.5 text-xs tracking-wider text-gold/70 hover:text-gold py-2 px-3 rounded-full border border-white/[0.06] hover:border-gold/30 transition-colors">
+                  className="flex items-center justify-center gap-1.5 text-xs tracking-wider text-gold/70 hover:text-gold transition-colors py-2.5 rounded-lg border border-white/[0.06] hover:border-gold/30">
                   {linkCopied ? (
                     <><Check className="w-3.5 h-3.5 text-green-400" /><span className="text-green-400">Copied!</span></>
                   ) : (
-                    <><Link2 className="w-3.5 h-3.5" /><span>Copy URL</span></>
+                    <><Link2 className="w-3.5 h-3.5" /><span>Copy Link</span></>
                   )}
                 </button>
               </div>
 
-              <p className="text-text-dim text-xs tracking-wide leading-relaxed text-center mb-3">
-                This tool is for educational and informational purposes only.
-                It does not constitute legal, tax, accounting, or investment advice.
-                Consult a qualified entertainment attorney before making any investment or financing decisions.
-              </p>
-              <div className="flex items-center justify-center gap-2.5">
+              <div className="flex items-center justify-center gap-2.5 mb-4">
                 <span className="font-bebas text-lg tracking-[0.2em] text-gold">
                   FILMMAKER<span className="text-white">.OG</span>
                 </span>
@@ -577,6 +541,10 @@ const Index = () => {
                   BETA
                 </span>
               </div>
+              <p className="text-text-dim/60 text-[11px] tracking-wide leading-relaxed text-center">
+                For educational and informational purposes only. Not legal, tax, or investment advice.
+                Consult a qualified entertainment attorney before making financing decisions.
+              </p>
             </div>
           </footer>
         </main>
