@@ -431,6 +431,8 @@ const Index = () => {
                 {[
                   { icon: Gavel, cost: "$5K–$15K", label: "Entertainment Lawyer" },
                   { icon: Calculator, cost: "$10K–$30K", label: "Finance Consultant" },
+                  { icon: Handshake, cost: "5–15%", label: "Producer's Rep" },
+                  { icon: Film, cost: "10–25%", label: "Sales Agent" },
                 ].map((item, i) => {
                   const Icon = item.icon;
                   return (
