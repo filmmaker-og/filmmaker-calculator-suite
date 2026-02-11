@@ -151,8 +151,10 @@ export function calculateWaterfall(inputs: WaterfallInputs, guilds: GuildState):
   const totalDebtHurdle = seniorDebtHurdle + mezzDebtHurdle;
   const equityHurdle = equity * (1 + (premium / 100));
 
-  // 4. Tax credits reduce the total hurdle (consistent with breakeven calc)
-  const totalHurdle = offTop + totalDebtHurdle + equityHurdle + deferments - credits;
+  // 4. Tax credits reduce the total hurdle (capped so it can't go negative)
+  const maxCredits = offTop + totalDebtHurdle + equityHurdle + deferments;
+  const creditsApplied = Math.min(credits, maxCredits);
+  const totalHurdle = offTop + totalDebtHurdle + equityHurdle + deferments - creditsApplied;
 
   // 5. Distribution
   const profitPool = Math.max(0, revenue - totalHurdle);
@@ -167,10 +169,10 @@ export function calculateWaterfall(inputs: WaterfallInputs, guilds: GuildState):
   // 6. Ledger Construction
   const ledger: LedgerItem[] = [
     { name: "CAM / Admin", detail: "1% OF GROSS", amount: cam },
-    { name: "Sales Agent Marketing", detail: "EXPENSE CAP (STANDARD $75K)", amount: marketing },
+    { name: "Sales Agent Marketing", detail: "EXPENSE CAP", amount: marketing },
     { name: "Sales Agent", detail: `${salesFee}% COMMISSION`, amount: salesFeeAmount },
     { name: "Unions", detail: "GUILD RESIDUALS / P&H", amount: guildsCost },
-    ...(credits > 0 ? [{ name: "Tax Credits", detail: "INCENTIVE OFFSET", amount: -credits }] : []),
+    ...(creditsApplied > 0 ? [{ name: "Tax Credits", detail: "INCENTIVE OFFSET", amount: -creditsApplied }] : []),
     { name: "Senior Debt", detail: `${seniorDebtRate}% INTEREST`, amount: seniorDebtHurdle },
     ...(mezzanineDebt > 0 ? [{ name: "Gap/Mezz Debt", detail: `${mezzanineRate}% INTEREST`, amount: mezzDebtHurdle }] : []),
     { name: "Equity", detail: `PRINCIPAL + ${premium}% PREF`, amount: equityHurdle },
