@@ -294,6 +294,19 @@ const Index = () => {
                 Know who gets paid first, in what order, and what's left for you. Understand the deal before you sign it.
               </p>
 
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
+                {[
+                  { t: "Break-even clarity", d: "Know what your film must earn before investors recoup." },
+                  { t: "Recoupment order", d: "See who gets paid first, and what's left after fees + debt." },
+                  { t: "Investor-ready story", d: "Explain the math in plain English without losing confidence." },
+                ].map((b) => (
+                  <div key={b.t} className="rounded-xl border border-border-subtle bg-bg-card p-4 text-left">
+                    <div className="text-gold text-sm font-semibold tracking-wide">{b.t}</div>
+                    <div className="text-text-mid text-xs leading-relaxed mt-1">{b.d}</div>
+                  </div>
+                ))}
+              </div>
+
               {isReturningUser ? (
                 <div className="w-full max-w-[320px] mx-auto space-y-3">
                   <button onClick={handleContinueClick}
@@ -310,7 +323,7 @@ const Index = () => {
                 <div className="w-full max-w-[320px] mx-auto">
                   <button onClick={handleStartClick}
                     className="w-full h-16 text-base font-bold tracking-[0.14em] transition-all active:scale-[0.96] rounded-md bg-gold/[0.18] border-2 border-gold/50 text-gold animate-cta-glow-pulse hover:border-gold/70 hover:bg-gold/[0.22]">
-                    RUN YOUR FIRST SCENARIO
+                    RUN THE CALCULATOR
                   </button>
                 </div>
               )}
@@ -439,11 +452,20 @@ const Index = () => {
                 })}
               </div>
 
+              <div className="mt-5 rounded-xl bg-gold/[0.06] border border-gold/20 px-5 py-4">
+                <p className="text-gold text-xs tracking-[0.2em] uppercase font-semibold">Assumptions (plain English)</p>
+                <ul className="mt-3 space-y-2 text-text-mid text-sm leading-relaxed">
+                  <li>Percent fees are applied to gross revenue before recoupment.</li>
+                  <li>Marketing is treated as a fixed expense cap (not a percentage).</li>
+                  <li>Tax credits reduce the amount that must be recouped (they don't magically increase revenue).</li>
+                </ul>
+              </div>
+
               {/* Mid-page CTA — catch fast deciders */}
               <div className="text-center mt-5 -mb-2">
                 <button onClick={handleStartClick}
                   className="h-16 px-10 text-base font-bold tracking-[0.14em] transition-all active:scale-[0.96] rounded-md bg-gold/[0.14] border-2 border-gold/40 text-gold shadow-[0_0_20px_rgba(212,175,55,0.25)] hover:shadow-[0_0_30px_rgba(212,175,55,0.4)] hover:border-gold/60 hover:bg-gold/[0.18]">
-                  BUILD YOUR CAPITAL STACK
+                  RUN THE CALCULATOR
                 </button>
               </div>
             </div>
@@ -561,7 +583,7 @@ const Index = () => {
                   </p>
                   <button onClick={handleStartClick}
                     className="w-full max-w-[320px] h-16 text-base font-bold tracking-[0.14em] transition-all active:scale-[0.96] rounded-md bg-gold/[0.14] border-2 border-gold/40 text-gold shadow-[0_0_20px_rgba(212,175,55,0.25)] hover:shadow-[0_0_30px_rgba(212,175,55,0.4)] hover:border-gold/60 hover:bg-gold/[0.18]">
-                    SEE WHERE YOUR MONEY GOES
+                    RUN THE CALCULATOR
                   </button>
                 </div>
               </div>
