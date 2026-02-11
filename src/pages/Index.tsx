@@ -62,7 +62,7 @@ const industryCosts = [
    ═══════════════════════════════════════════════════════════════════ */
 const faqs = [
   { q: "Who is this for?", a: "Independent producers, directors, and investors. Whether you're raising $50K or $5M, the mechanics of recoupment are the same. If you intend to sell your film for profit, you need this." },
-  { q: "How does the calculator work?", a: "Four steps: set your budget, build your capital stack, structure the deal, and see exactly where every dollar goes in the waterfall. Takes about 2 minutes." },
+  { q: "How does the calculator work?", a: "Four steps: set your budget, build your capital stack, structure your deal, and track exactly where every dollar goes in the waterfall. Takes about 2 minutes." },
   { q: "Is this financial or legal advice?", a: "No. This is a simulation tool for estimation and planning purposes only. Always consult a qualified entertainment attorney or accountant for final deal structures." },
   { q: "Is the calculator free?", a: "Yes, the simulation is completely free. Run as many scenarios as you want, adjust the variables, and see different outcomes. No paywalls, no limits." },
   { q: "Do I need an account?", a: "No. You can use the calculator without signing up. If you want to save your work, we offer a simple magic link — no password required." },
@@ -74,8 +74,8 @@ const faqs = [
 const steps = [
   { num: "01", title: "Set Your Budget", desc: "Total production cost plus guild signatories. This is your baseline.", icon: DollarSign },
   { num: "02", title: "Build Your Capital Stack", desc: "Equity, pre-sales, gap, tax incentives — where the money comes from and how each source gets paid back.", icon: Layers },
-  { num: "03", title: "Structure the Deal", desc: "Acquisition price, distribution fees, P&A spend. See how much actually makes it back.", icon: Handshake },
-  { num: "04", title: "See the Waterfall", desc: "Every dollar through the priority chain. Who gets paid first. What's left for you.", icon: Waves },
+  { num: "03", title: "Structure Your Deal", desc: "Acquisition price, distribution fees, P&A spend. See how much actually makes it back.", icon: Handshake },
+  { num: "04", title: "Track the Recoupment", desc: "Every dollar through the priority chain. Who gets paid first. What's left for you.", icon: Waves },
 ];
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -83,7 +83,7 @@ const steps = [
    ═══════════════════════════════════════════════════════════════════ */
 const problemCards = [
   { icon: Receipt, title: "There's a pecking order — but that doesn't mean you can't come out on top.", body: "Every deal has a priority structure: distributors take fees off the top, lenders recoup next, then equity investors — and you're last in line. The math exists. Nobody shows it to you because the moment you see it, you start asking the right questions." },
-  { icon: Gavel, title: "The playbook exists. It was never meant to be accessible.", body: "Recoupment schedules, distribution fees, P&A overages — Hollywood elites have used this financial playbook for decades. It's complicated and it was designed to stay that way. Until now." },
+  { icon: Gavel, title: "The rules were written. You just weren't invited to read them.", body: "Recoupment schedules, distribution fees, P&A overages — Hollywood has used this financial playbook for decades. It's complicated by design, not by accident. Until now." },
   { icon: EyeOff, title: "Learn the language. Level the playing field.", body: "Capital stacks, waterfall structures, producer corridors — these aren't secrets, they're skills. The filmmakers who close deals speak this language fluently. Now you can too." },
 ];
 
@@ -91,7 +91,7 @@ const problemCards = [
    SECTION HEADER
    ═══════════════════════════════════════════════════════════════════ */
 const SectionHeader = ({ eyebrow, title, subtitle, icon: Icon, plainSubtitle }: {
-  eyebrow: string; title: string; subtitle?: string;
+  eyebrow: string; title: React.ReactNode; subtitle?: string;
   icon?: React.ComponentType<{ className?: string }>;
   plainSubtitle?: boolean;
 }) => (
@@ -115,55 +115,48 @@ const SectionHeader = ({ eyebrow, title, subtitle, icon: Icon, plainSubtitle }: 
 );
 
 /* ═══════════════════════════════════════════════════════════════════
-   SECTION FRAME — content-driven height (no forced min-h)
+   SECTION FRAME — gold accent border on every section
    ═══════════════════════════════════════════════════════════════════ */
 const SectionFrame = ({ id, children, className, alt }: {
   id: string; children: React.ReactNode; className?: string; alt?: boolean;
 }) => (
   <section id={id} className="snap-section px-4 py-6">
-    <div className={cn(alt ? "bg-bg-surface" : "bg-bg-elevated", "border border-white/[0.06] rounded-2xl overflow-hidden", className)}>
-      <div className="h-[2px] bg-gradient-to-r from-transparent via-gold/25 to-transparent" />
-      <div className="p-6 md:p-8">
-        {children}
+    <div className="flex rounded-2xl overflow-hidden border border-white/[0.06]">
+      <div className="w-1 flex-shrink-0 bg-gradient-to-b from-gold via-gold/60 to-gold/20" style={{ boxShadow: '0 0 12px rgba(212,175,55,0.25)' }} />
+      <div className={cn("flex-1", alt ? "bg-bg-surface" : "bg-bg-elevated", className)}>
+        <div className="h-[2px] bg-gradient-to-r from-transparent via-gold/25 to-transparent" />
+        <div className="p-6 md:p-8">
+          {children}
+        </div>
       </div>
     </div>
   </section>
 );
 
 /* ═══════════════════════════════════════════════════════════════════
-   SECTION FADE-IN HOOK (IntersectionObserver)
+   SECTION REVEAL — one-shot slide-up (no blur)
    ═══════════════════════════════════════════════════════════════════ */
 const useReveal = () => {
   const ref = useRef<HTMLDivElement>(null);
-  const [progress, setProgress] = useState(0);
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    const thresholds = Array.from({ length: 21 }, (_, i) => i / 20);
     const observer = new IntersectionObserver(
       ([entry]) => {
-        const p = Math.min(entry.intersectionRatio / 0.35, 1);
-        setProgress(prev => (prev >= 1 ? prev : Math.max(prev, p)));
-        if (p >= 1) observer.disconnect();
+        if (entry.isIntersecting) {
+          setVisible(true);
+          observer.disconnect();
+        }
       },
-      { threshold: thresholds }
+      { threshold: 0.15 }
     );
     observer.observe(el);
     return () => observer.disconnect();
   }, []);
 
-  const revealed = progress >= 1;
-  return {
-    ref,
-    visible: progress > 0.7,
-    style: revealed ? {} : {
-      filter: `blur(${(1 - progress) * 12}px)`,
-      opacity: 0.06 + progress * 0.94,
-      transform: `translateY(${(1 - progress) * 24}px)`,
-      transition: 'filter 0.05s linear, opacity 0.05s linear, transform 0.05s linear',
-    } as React.CSSProperties,
-  };
+  return { ref, visible };
 };
 
 /** Swipe index tracker for horizontal scroll sections */
@@ -208,7 +201,7 @@ const Index = () => {
   const haptics = useHaptics();
   const [linkCopied, setLinkCopied] = useState(false);
 
-  // Progressive blur-reveal refs for each section
+  // One-shot reveal refs for each section
   const reveal2 = useReveal();
   const reveal3 = useReveal();
   const reveal4 = useReveal();
@@ -327,13 +320,13 @@ const Index = () => {
               style={{ width: '100vw', height: '75vh', background: `radial-gradient(ellipse 50% 40% at 50% 10%, rgba(212,175,55,0.1) 0%, rgba(212,175,55,0.04) 40%, transparent 70%)` }} />
             <div className="relative px-6 py-4 max-w-xl mx-auto text-center">
               <div className="mb-5 relative inline-block">
-                <div className="absolute inset-0 -m-8" style={{ background: 'radial-gradient(circle, rgba(212,175,55,0.2) 0%, transparent 70%)', filter: 'blur(20px)' }} />
-                <img src={filmmakerLogo} alt="Filmmaker.OG" className="relative w-28 h-28 object-contain rounded-xl"
-                  style={{ filter: 'brightness(1.15) drop-shadow(0 0 30px rgba(212,175,55,0.45))' }} />
+                <div className="absolute inset-0 -m-7" style={{ background: 'radial-gradient(circle, rgba(212,175,55,0.2) 0%, transparent 70%)', filter: 'blur(18px)' }} />
+                <img src={filmmakerLogo} alt="Filmmaker.OG" className="relative w-24 h-24 object-contain rounded-xl"
+                  style={{ filter: 'brightness(1.15) drop-shadow(0 0 28px rgba(212,175,55,0.45))' }} />
               </div>
               <p className="text-text-dim text-sm tracking-[0.35em] uppercase mb-4 font-semibold">Demystifying Film Finance</p>
-              <h1 className="font-bebas text-[clamp(2.2rem,8vw,3.6rem)] leading-[1.05] text-gold mb-4">
-                SEE WHERE EVERY<br />DOLLAR <span className="text-white">GOES</span>
+              <h1 className="font-bebas text-[clamp(2rem,7vw,3.2rem)] leading-[1.05] text-gold mb-4">
+                SEE WHERE EVERY DOLLAR <span className="text-white">GOES</span>
               </h1>
               <p className="text-text-mid text-sm font-medium leading-relaxed max-w-sm mx-auto mb-6">
                 Before you raise a dollar or sign a deal, know exactly who gets
@@ -369,8 +362,8 @@ const Index = () => {
 
           {/* ── THE PROBLEM ── */}
           <SectionFrame id="problem">
-            <div ref={reveal2.ref} style={reveal2.style} className="max-w-2xl mx-auto">
-              <SectionHeader icon={Lock} eyebrow="The Problem" title="WHAT HOLLYWOOD DOESN'T WANT YOU TO KNOW" subtitle="Hollywood's financial playbook was never meant to be accessible. We're changing that — starting with your deal." plainSubtitle />
+            <div ref={reveal2.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", reveal2.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
+              <SectionHeader icon={Lock} eyebrow="The Problem" title={<>WHAT HOLLYWOOD DOESN&apos;T WANT YOU TO <span className="text-white">KNOW</span></>} subtitle="The deal structures, the fee schedules, the fine print — it was all designed to keep you in the dark. That's not your fault. We're changing it." plainSubtitle />
 
               {/* Problem cards — horizontal swipe */}
               <div className="-mx-6 md:-mx-8">
@@ -427,7 +420,7 @@ const Index = () => {
                   The majority of filmmakers have never seen one. The <span className="text-gold font-semibold">waterfall</span> is the financial structure that determines who gets paid back, in what order, and how much. It's the key to package financing.
                 </p>
                 <button onClick={() => navigate('/waterfall-info')}
-                  className="block mx-auto mt-3 text-gold/70 hover:text-gold text-sm font-semibold tracking-[0.15em] uppercase transition-colors">
+                  className="block mx-auto mt-4 px-6 py-2.5 text-sm font-semibold tracking-[0.15em] uppercase transition-all rounded-md bg-gold/[0.04] border border-gold/25 text-gold hover:bg-gold/[0.08] hover:border-gold/40 active:scale-[0.97]">
                   LEARN MORE &rarr;
                 </button>
               </div>
@@ -439,8 +432,8 @@ const Index = () => {
 
           {/* ── HOW IT WORKS ── */}
           <SectionFrame id="how-it-works" alt>
-            <div ref={reveal3.ref} style={reveal3.style} className="max-w-2xl mx-auto">
-              <SectionHeader icon={Film} eyebrow="How It Works" title="FROM FIRST MONEY IN TO LAST MONEY OUT" subtitle="Four steps. Two minutes. No finance degree." plainSubtitle />
+            <div ref={reveal3.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", reveal3.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
+              <SectionHeader icon={Film} eyebrow="How It Works" title={<>FROM FIRST MONEY IN TO LAST MONEY <span className="text-white">OUT</span></>} subtitle="Four steps. Two minutes. No finance degree." plainSubtitle />
               <div className="space-y-4">
                 {steps.map((step, i) => {
                   const Icon = step.icon;
@@ -458,11 +451,6 @@ const Index = () => {
                           <p className="text-text-mid text-sm leading-relaxed">{step.desc}</p>
                         </div>
                       </div>
-                      {step.callout && (
-                        <div className="mt-3 px-4 py-3 bg-gold/[0.08] border border-gold/25 rounded-xl">
-                          <p className="text-gold/80 text-sm leading-relaxed italic">{step.callout}</p>
-                        </div>
-                      )}
                     </div>
                   );
                 })}
@@ -483,21 +471,24 @@ const Index = () => {
 
           {/* ── INDUSTRY CHARGES ── */}
           <SectionFrame id="industry-charges">
-            <div ref={reveal4.ref} style={reveal4.style} className="max-w-2xl mx-auto">
-              <SectionHeader icon={Clapperboard} eyebrow="The Industry Standard" title="KNOWLEDGE ISN'T CHEAP" subtitle="You shouldn't need a $5,000 retainer from an entertainment attorney to understand your own deal." plainSubtitle />
+            <div ref={reveal4.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", reveal4.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
+              <SectionHeader icon={Clapperboard} eyebrow="The Industry Standard" title={<>KNOWLEDGE ISN&apos;T <span className="text-white">CHEAP</span></>} subtitle="What they didn't teach you in film school." plainSubtitle />
               <div className="grid grid-cols-2 gap-3">
                 {industryCosts.map((item, i) => {
                   const Icon = item.icon;
                   return (
-                    <div key={item.label} className={cn("bg-bg-card border border-border-subtle rounded-xl p-5 relative overflow-hidden", staggerChild(reveal4.visible))} style={staggerDelay(i, reveal4.visible)}>
-                      <div className="absolute top-0 right-0 w-16 h-16 bg-gold/[0.03] rounded-full blur-2xl translate-x-4 -translate-y-4" />
-                      <div className="relative">
-                        <div className="w-9 h-9 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center mb-3">
-                          <Icon className="w-4 h-4 text-gold" />
+                    <div key={item.label} className={cn("flex rounded-xl overflow-hidden border border-border-subtle", staggerChild(reveal4.visible))} style={staggerDelay(i, reveal4.visible)}>
+                      <div className="w-1 flex-shrink-0 bg-gradient-to-b from-gold via-gold/60 to-gold/20" />
+                      <div className="flex-1 bg-bg-card p-5 relative overflow-hidden">
+                        <div className="absolute top-0 right-0 w-16 h-16 bg-gold/[0.03] rounded-full blur-2xl translate-x-4 -translate-y-4" />
+                        <div className="relative">
+                          <div className="w-9 h-9 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center mb-3">
+                            <Icon className="w-4 h-4 text-gold" />
+                          </div>
+                          <p className="font-mono text-lg font-medium text-text-primary line-through decoration-text-dim/30 mb-0.5">{item.cost}</p>
+                          <p className="text-text-dim text-xs tracking-wider uppercase">{item.label}</p>
+                          <p className="text-text-dim text-xs mt-1">{item.note}</p>
                         </div>
-                        <p className="font-mono text-lg font-medium text-text-primary line-through decoration-text-dim/30 mb-0.5">{item.cost}</p>
-                        <p className="text-text-dim text-xs tracking-wider uppercase">{item.label}</p>
-                        <p className="text-text-dim text-xs mt-1">{item.note}</p>
                       </div>
                     </div>
                   );
@@ -515,8 +506,8 @@ const Index = () => {
 
           {/* ── WHAT YOU GET ── */}
           <SectionFrame id="deliverables" alt>
-            <div ref={reveal5.ref} style={reveal5.style} className="max-w-2xl mx-auto">
-              <SectionHeader icon={Award} eyebrow="The Deliverables" title="WHAT YOU WALK AWAY WITH" subtitle="Everything you need to walk into a room full of investors and hold your own." plainSubtitle />
+            <div ref={reveal5.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", reveal5.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
+              <SectionHeader icon={Award} eyebrow="The Deliverables" title={<>WHAT YOU WALK AWAY <span className="text-white">WITH</span></>} subtitle="Everything you need to walk into a room full of investors and hold your own." plainSubtitle />
               <div className="space-y-3">
                 {[
                   { icon: FileSpreadsheet, title: "The document that closes your raise", desc: "A 6-sheet Excel workbook — executive summary, waterfall ledger, capital breakdown, and investor returns. Hand it over and let the numbers speak." },
@@ -547,51 +538,43 @@ const Index = () => {
 
           {/* ── FAQ ── */}
           <SectionFrame id="faq">
-            <div ref={reveal6.ref} style={reveal6.style} className="max-w-2xl mx-auto">
-              <SectionHeader icon={HelpCircle} eyebrow="Common Questions" title="WHAT FILMMAKERS ASK" subtitle="Straight answers. No jargon." plainSubtitle />
-              <div className="flex rounded-xl overflow-hidden border border-border-subtle">
-                <div className="w-1 flex-shrink-0 bg-gradient-to-b from-gold via-gold/60 to-gold/20" style={{ boxShadow: '0 0 12px rgba(212,175,55,0.25)' }} />
-                <div className="flex-1 bg-bg-card px-5">
-                  <Accordion type="single" collapsible className="w-full">
-                    {faqs.map((faq, i) => (
-                      <AccordionItem key={faq.q} value={`faq-${i}`} className="border-border-subtle">
-                        <AccordionTrigger className="text-text-primary hover:text-text-mid hover:no-underline text-lg font-semibold text-left">
-                          {faq.q}
-                        </AccordionTrigger>
-                        <AccordionContent className="text-text-dim text-sm leading-relaxed">
-                          {faq.a}
-                          {faq.link && (
-                            <a href={faq.link.url} target="_blank" rel="noopener noreferrer"
-                              className="inline-block mt-2 text-gold/70 hover:text-gold text-xs tracking-wider transition-colors underline underline-offset-2 decoration-gold/30">
-                              {faq.link.label} &rarr;
-                            </a>
-                          )}
-                        </AccordionContent>
-                      </AccordionItem>
-                    ))}
-                  </Accordion>
-                </div>
-              </div>
+            <div ref={reveal6.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", reveal6.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
+              <SectionHeader icon={HelpCircle} eyebrow="Common Questions" title={<>WHAT FILMMAKERS <span className="text-white">ASK</span></>} subtitle="Straight answers. No jargon." plainSubtitle />
+              <Accordion type="single" collapsible className="w-full">
+                {faqs.map((faq, i) => (
+                  <AccordionItem key={faq.q} value={`faq-${i}`} className="border-border-subtle">
+                    <AccordionTrigger className="text-text-primary hover:text-text-mid hover:no-underline text-base font-medium text-left">
+                      {faq.q}
+                    </AccordionTrigger>
+                    <AccordionContent className="text-text-dim text-sm leading-relaxed">
+                      {faq.a}
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
             </div>
           </SectionFrame>
 
           {/* ── FINAL CTA ── */}
           <section id="final-cta" className="snap-section py-8 px-4">
-            <div className="bg-bg-elevated border border-white/[0.06] rounded-2xl overflow-hidden relative">
-              <div className="h-[2px] bg-gradient-to-r from-transparent via-gold/25 to-transparent" />
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none"
-                style={{ width: '100%', height: '100%', background: `radial-gradient(ellipse 60% 60% at 50% 10%, rgba(212,175,55,0.08) 0%, transparent 70%)` }} />
-              <div className="relative p-8 md:p-12 max-w-md mx-auto text-center">
-                <h2 className="font-bebas text-3xl md:text-4xl tracking-[0.08em] text-gold mb-4">
-                  STOP GUESSING.<br />START CLOSING.
-                </h2>
-                <p className="text-text-mid text-sm leading-relaxed max-w-xs mx-auto mb-6">
-                  Every filmmaker who's been burned wishes they'd run the numbers first.
-                </p>
-                <button onClick={handleStartClick}
-                  className="w-full max-w-[320px] h-16 text-base font-semibold tracking-[0.12em] transition-all active:scale-[0.96] rounded-md bg-gold-cta-subtle border border-gold-cta-muted text-gold-cta shadow-button hover:border-gold-cta">
-                  RUN THE NUMBERS
-                </button>
+            <div className="flex rounded-2xl overflow-hidden border border-white/[0.06]">
+              <div className="w-1 flex-shrink-0 bg-gradient-to-b from-gold via-gold/60 to-gold/20" style={{ boxShadow: '0 0 12px rgba(212,175,55,0.25)' }} />
+              <div className="bg-bg-elevated flex-1 overflow-hidden relative">
+                <div className="h-[2px] bg-gradient-to-r from-transparent via-gold/25 to-transparent" />
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none"
+                  style={{ width: '100%', height: '100%', background: `radial-gradient(ellipse 60% 60% at 50% 10%, rgba(212,175,55,0.08) 0%, transparent 70%)` }} />
+                <div className="relative p-8 md:p-12 max-w-md mx-auto text-center">
+                  <h2 className="font-bebas text-3xl md:text-4xl tracking-[0.08em] text-gold mb-4">
+                    STOP GUESSING.<br />START <span className="text-white">CLOSING</span>.
+                  </h2>
+                  <p className="text-text-mid text-sm leading-relaxed max-w-xs mx-auto mb-6">
+                    They didn't teach you this in film school. Learn it in two minutes.
+                  </p>
+                  <button onClick={handleStartClick}
+                    className="w-full max-w-[320px] h-16 text-base font-semibold tracking-[0.12em] transition-all active:scale-[0.96] rounded-md bg-gold-cta-subtle border border-gold-cta-muted text-gold-cta shadow-button hover:border-gold-cta">
+                    START NOW
+                  </button>
+                </div>
               </div>
             </div>
           </section>
