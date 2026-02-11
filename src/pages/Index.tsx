@@ -123,7 +123,7 @@ const SectionFrame = ({ id, children, className, alt }: {
   <section id={id} className="snap-section px-4 py-6">
     <div className="flex rounded-2xl overflow-hidden border border-white/[0.06]">
       <div className="w-1 flex-shrink-0 bg-gradient-to-b from-gold via-gold/60 to-gold/20" style={{ boxShadow: '0 0 12px rgba(212,175,55,0.25)' }} />
-      <div className={cn("flex-1", alt ? "bg-bg-surface" : "bg-bg-elevated", className)}>
+      <div className={cn("flex-1 min-w-0", alt ? "bg-bg-surface" : "bg-bg-elevated", className)}>
         <div className="h-[2px] bg-gradient-to-r from-transparent via-gold/25 to-transparent" />
         <div className="p-6 md:p-8">
           {children}
@@ -559,7 +559,7 @@ const Index = () => {
           <section id="final-cta" className="snap-section py-8 px-4">
             <div className="flex rounded-2xl overflow-hidden border border-white/[0.06]">
               <div className="w-1 flex-shrink-0 bg-gradient-to-b from-gold via-gold/60 to-gold/20" style={{ boxShadow: '0 0 12px rgba(212,175,55,0.25)' }} />
-              <div className="bg-bg-elevated flex-1 overflow-hidden relative">
+              <div className="bg-bg-elevated flex-1 min-w-0 overflow-hidden relative">
                 <div className="h-[2px] bg-gradient-to-r from-transparent via-gold/25 to-transparent" />
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none"
                   style={{ width: '100%', height: '100%', background: `radial-gradient(ellipse 60% 60% at 50% 10%, rgba(212,175,55,0.08) 0%, transparent 70%)` }} />
