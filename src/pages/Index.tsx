@@ -26,8 +26,6 @@ import {
   Film,
   Award,
   Waves,
-  ChevronLeft,
-  ChevronRight,
   Lock,
 } from "lucide-react";
 import filmmakerLogo from "@/assets/filmmaker-logo.jpg";
@@ -82,8 +80,8 @@ const steps = [
    PROBLEM CARDS — filmmaker language, not finance jargon
    ═══════════════════════════════════════════════════════════════════ */
 const problemCards = [
-  { icon: Receipt, title: "There's a pecking order — but that doesn't mean you can't come out on top.", body: "Every deal has a priority structure: distributors take fees off the top, lenders recoup next, then equity investors — and you're last in line. The math exists. Nobody shows it to you because the moment you see it, you start asking the right questions." },
-  { icon: Gavel, title: "The rules were written. The gatekeepers just never passed you a copy.", body: "Recoupment schedules, distribution fees, P&A overages — Hollywood has used this financial playbook for decades. It's complicated by design, not by accident. Until now." },
+  { icon: Receipt, title: "There's a pecking order — and you're at the bottom of it.", body: "Distributors take fees first. Lenders recoup next. Then equity investors. You're last in line — unless you understand the deal structure well enough to negotiate your position." },
+  { icon: Gavel, title: "The rules exist. The gatekeepers never shared them.", body: "Recoupment schedules, distribution fees, P&A overages — Hollywood has run this financial playbook for decades. It's complicated by design, not by accident. Until now." },
   { icon: EyeOff, title: "Learn the language. Level the playing field.", body: "Capital stacks, waterfall structures, producer corridors — these aren't secrets, they're skills. The filmmakers who close deals speak this language fluently. Now you can too." },
 ];
 
@@ -159,30 +157,6 @@ const useReveal = () => {
   return { ref, visible };
 };
 
-/** Swipe index tracker for horizontal scroll sections */
-const useSwipeIndex = (count: number) => {
-  const ref = useRef<HTMLDivElement>(null);
-  const [index, setIndex] = useState(0);
-
-  const onScroll = useCallback(() => {
-    const el = ref.current;
-    if (!el || !el.children.length) return;
-    const child = el.children[0] as HTMLElement;
-    const cardWidth = child.offsetWidth + 12; // gap-3 = 12px
-    setIndex(Math.min(Math.round(el.scrollLeft / cardWidth), count - 1));
-  }, [count]);
-
-  const scrollTo = useCallback((target: number) => {
-    const el = ref.current;
-    if (!el || !el.children.length) return;
-    const child = el.children[0] as HTMLElement;
-    const cardWidth = child.offsetWidth + 12;
-    el.scrollTo({ left: cardWidth * target, behavior: 'smooth' });
-  }, []);
-
-  return { ref, index, onScroll, scrollTo };
-};
-
 /** Stagger delay style for children within a visible section */
 const staggerDelay = (index: number, visible: boolean): React.CSSProperties => ({
   transitionDelay: visible ? `${index * 120}ms` : "0ms",
@@ -208,9 +182,6 @@ const Index = () => {
   const reveal4 = useReveal();
   const reveal5 = useReveal();
   const reveal6 = useReveal();
-
-  // Swipe index tracker for horizontal scroll sections
-  const swipeProblem = useSwipeIndex(problemCards.length);
 
   const savedState = useMemo(() => {
     try {
@@ -330,14 +301,13 @@ const Index = () => {
                 SEE WHERE EVERY<br /><span className="text-white">DOLLAR GOES</span>
               </h1>
               <p className="text-text-mid text-sm font-medium leading-relaxed max-w-sm mx-auto mb-6">
-                Before you raise a dollar or sign a deal, know exactly who gets
-                paid, in what order, and how to come out on top.
+                Know who gets paid first, in what order, and what's left for you. Understand the deal before you sign it.
               </p>
 
               {isReturningUser ? (
                 <div className="w-full max-w-[320px] mx-auto space-y-3">
                   <button onClick={handleContinueClick}
-                    className="w-full h-16 text-base font-semibold tracking-[0.12em] transition-all active:scale-[0.96] rounded-md bg-gold-cta-subtle border border-gold-cta-muted text-gold-cta shadow-button hover:border-gold-cta">
+                    className="w-full h-16 text-base font-bold tracking-[0.14em] transition-all active:scale-[0.96] rounded-md bg-gold/[0.14] border-2 border-gold/40 text-gold shadow-[0_0_20px_rgba(212,175,55,0.25)] hover:shadow-[0_0_30px_rgba(212,175,55,0.4)] hover:border-gold/60 hover:bg-gold/[0.18]">
                     CONTINUE SIMULATION
                   </button>
                   <p className="text-text-dim text-xs tracking-wider text-center">{formatCompactCurrency(savedState!.budget)} budget in progress</p>
@@ -349,7 +319,7 @@ const Index = () => {
               ) : (
                 <div className="w-full max-w-[320px] mx-auto">
                   <button onClick={handleStartClick}
-                    className="w-full h-16 text-base font-semibold tracking-[0.12em] transition-all active:scale-[0.96] rounded-md bg-gold-cta-subtle border border-gold-cta-muted text-gold-cta shadow-button hover:border-gold-cta">
+                    className="w-full h-16 text-base font-bold tracking-[0.14em] transition-all active:scale-[0.96] rounded-md bg-gold/[0.14] border-2 border-gold/40 text-gold shadow-[0_0_20px_rgba(212,175,55,0.25)] hover:shadow-[0_0_30px_rgba(212,175,55,0.4)] hover:border-gold/60 hover:bg-gold/[0.18]">
                     MODEL YOUR DEAL
                   </button>
                 </div>
@@ -366,33 +336,23 @@ const Index = () => {
             <div ref={reveal2.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", reveal2.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
               <SectionHeader icon={Lock} eyebrow="The Problem" title={<>WHAT HOLLYWOOD DOESN&apos;T WANT YOU TO <span className="text-white">KNOW</span></>} subtitle="The deal structures, the fee schedules, the fine print — it was all designed to keep you in the dark." plainSubtitle />
 
-              {/* Problem cards — horizontal swipe */}
-              <div className="-mx-6 md:-mx-8">
-                <div ref={swipeProblem.ref} onScroll={swipeProblem.onScroll} className="flex gap-3 overflow-x-auto scrollbar-hide snap-x snap-mandatory px-6 md:px-8 pb-3">
-                  {problemCards.map((card, i) => {
-                    const Icon = card.icon;
-                    return (
-                      <div key={i} className={cn("flex-shrink-0 w-[290px] snap-start bg-bg-card border border-border-subtle rounded-xl p-5", staggerChild(reveal2.visible))} style={staggerDelay(i, reveal2.visible)}>
-                        <div className="w-9 h-9 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center mb-3">
-                          <Icon className="w-4 h-4 text-gold" />
+              {/* Problem cards — vertical stacked, matching deliverables format */}
+              <div className="space-y-3">
+                {problemCards.map((card, i) => {
+                  const Icon = card.icon;
+                  return (
+                    <div key={i} className={cn("flex rounded-xl overflow-hidden border border-border-subtle hover:border-gold/20 transition-colors", staggerChild(reveal2.visible))} style={staggerDelay(i, reveal2.visible)}>
+                      <div className="w-1 flex-shrink-0 bg-gradient-to-b from-gold via-gold/60 to-gold/20" />
+                      <div className="flex-1 bg-bg-card p-5">
+                        <div className="flex items-start gap-3 mb-2">
+                          <Icon className="w-4 h-4 text-gold flex-shrink-0 mt-1" />
+                          <h3 className="font-bebas text-[22px] tracking-[0.06em] uppercase text-gold">{card.title}</h3>
                         </div>
-                        <h3 className="font-bebas text-[20px] tracking-[0.06em] uppercase text-gold mb-1.5">{card.title}</h3>
-                        <p className="text-text-mid text-sm leading-relaxed">{card.body}</p>
+                        <p className="text-text-mid text-sm leading-relaxed pl-7">{card.body}</p>
                       </div>
-                    );
-                  })}
-                </div>
-              </div>
-              <div className="flex items-center justify-center gap-4 mt-3">
-                <button onClick={() => swipeProblem.scrollTo(swipeProblem.index - 1)} disabled={swipeProblem.index === 0}
-                  className="w-8 h-8 flex items-center justify-center rounded-full border border-border-subtle text-text-dim hover:text-gold hover:border-gold/40 transition-colors disabled:opacity-30 disabled:pointer-events-none">
-                  <ChevronLeft className="w-4 h-4" />
-                </button>
-                <span className="font-mono text-sm text-text-dim tracking-wider">{swipeProblem.index + 1} <span className="text-gold/40">/</span> {problemCards.length}</span>
-                <button onClick={() => swipeProblem.scrollTo(swipeProblem.index + 1)} disabled={swipeProblem.index === problemCards.length - 1}
-                  className="w-8 h-8 flex items-center justify-center rounded-full border border-border-subtle text-text-dim hover:text-gold hover:border-gold/40 transition-colors disabled:opacity-30 disabled:pointer-events-none">
-                  <ChevronRight className="w-4 h-4" />
-                </button>
+                    </div>
+                  );
+                })}
               </div>
 
             </div>
@@ -443,22 +403,21 @@ const Index = () => {
           {/* ── HOW IT WORKS ── */}
           <SectionFrame id="how-it-works" alt>
             <div ref={reveal3.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", reveal3.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
-              <SectionHeader icon={Film} eyebrow="How It Works" title={<>FROM FIRST MONEY IN TO LAST MONEY <span className="text-white">OUT</span></>} subtitle="Four steps. Two minutes. No finance degree." plainSubtitle />
-              <div className="space-y-4">
+              <SectionHeader icon={Film} eyebrow="How It Works" title={<>FROM FIRST MONEY IN TO LAST MONEY <span className="text-white">OUT</span></>} subtitle="Four steps. No finance degree." plainSubtitle />
+              <div className="space-y-3">
                 {steps.map((step, i) => {
                   const Icon = step.icon;
                   return (
                     <div key={step.num} className={staggerChild(reveal3.visible)} style={staggerDelay(i, reveal3.visible)}>
-                      <div className="flex items-start gap-4 bg-bg-card border border-border-subtle hover:border-gold/20 rounded-xl p-5 transition-colors">
-                        <div className="flex-shrink-0 w-9 h-9 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center">
-                          <Icon className="w-4 h-4 text-gold" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2 mb-1">
-                            <span className="font-mono text-xs text-gold tracking-wider font-semibold">{step.num}</span>
+                      <div className="flex rounded-xl overflow-hidden border border-border-subtle hover:border-gold/20 transition-colors">
+                        <div className="w-1 flex-shrink-0 bg-gradient-to-b from-gold via-gold/60 to-gold/20" />
+                        <div className="flex-1 bg-bg-card p-5">
+                          <div className="flex items-center gap-2 mb-2">
+                            <span className="font-mono text-xs text-gold/60 tracking-wider">{step.num}</span>
+                            <Icon className="w-4 h-4 text-gold" />
                             <h3 className="font-bebas text-[22px] tracking-[0.06em] uppercase text-gold">{step.title}</h3>
                           </div>
-                          <p className="text-text-mid text-sm leading-relaxed">{step.desc}</p>
+                          <p className="text-text-mid text-sm leading-relaxed pl-7">{step.desc}</p>
                         </div>
                       </div>
                     </div>
@@ -469,7 +428,7 @@ const Index = () => {
               {/* Mid-page CTA — catch fast deciders */}
               <div className="text-center mt-5 -mb-2">
                 <button onClick={handleStartClick}
-                  className="h-16 px-10 text-base font-semibold tracking-[0.12em] transition-all active:scale-[0.96] rounded-md bg-gold-cta-subtle border border-gold-cta-muted text-gold-cta shadow-button hover:border-gold-cta">
+                  className="h-16 px-10 text-base font-bold tracking-[0.14em] transition-all active:scale-[0.96] rounded-md bg-gold/[0.14] border-2 border-gold/40 text-gold shadow-[0_0_20px_rgba(212,175,55,0.25)] hover:shadow-[0_0_30px_rgba(212,175,55,0.4)] hover:border-gold/60 hover:bg-gold/[0.18]">
                   MODEL YOUR DEAL
                 </button>
               </div>
@@ -583,7 +542,7 @@ const Index = () => {
                     Learn the business of film today.
                   </p>
                   <button onClick={handleStartClick}
-                    className="w-full max-w-[320px] h-16 text-base font-semibold tracking-[0.12em] transition-all active:scale-[0.96] rounded-md bg-gold-cta-subtle border border-gold-cta-muted text-gold-cta shadow-button hover:border-gold-cta">
+                    className="w-full max-w-[320px] h-16 text-base font-bold tracking-[0.14em] transition-all active:scale-[0.96] rounded-md bg-gold/[0.14] border-2 border-gold/40 text-gold shadow-[0_0_20px_rgba(212,175,55,0.25)] hover:shadow-[0_0_30px_rgba(212,175,55,0.4)] hover:border-gold/60 hover:bg-gold/[0.18]">
                     START NOW
                   </button>
                 </div>
@@ -595,25 +554,25 @@ const Index = () => {
           <footer className="py-10 px-6">
             <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/20 to-transparent mb-8" />
             <div className="max-w-sm mx-auto">
-              <div className="grid grid-cols-2 gap-2.5 mb-8 max-w-[260px] mx-auto">
+              <div className="grid grid-cols-2 gap-3 mb-8 max-w-[340px] mx-auto">
                 <a href="mailto:thefilmmaker.og@gmail.com"
-                  className="flex items-center justify-center gap-1.5 text-xs tracking-wider text-gold/70 hover:text-gold transition-colors py-2.5 rounded-lg border border-white/[0.06] hover:border-gold/30">
-                  <Mail className="w-3.5 h-3.5" /><span>Email</span>
+                  className="flex items-center justify-center gap-2 text-sm tracking-wider text-gold/70 hover:text-gold transition-colors py-3.5 rounded-lg border border-white/[0.08] hover:border-gold/30">
+                  <Mail className="w-4 h-4" /><span>Email</span>
                 </a>
                 <a href="https://www.instagram.com/filmmaker.og" target="_blank" rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-1.5 text-xs tracking-wider text-gold/70 hover:text-gold transition-colors py-2.5 rounded-lg border border-white/[0.06] hover:border-gold/30">
-                  <Instagram className="w-3.5 h-3.5" /><span>Instagram</span>
+                  className="flex items-center justify-center gap-2 text-sm tracking-wider text-gold/70 hover:text-gold transition-colors py-3.5 rounded-lg border border-white/[0.08] hover:border-gold/30">
+                  <Instagram className="w-4 h-4" /><span>Instagram</span>
                 </a>
                 <button onClick={handleShare}
-                  className="flex items-center justify-center gap-1.5 text-xs tracking-wider text-gold/70 hover:text-gold transition-colors py-2.5 rounded-lg border border-white/[0.06] hover:border-gold/30">
-                  <Share2 className="w-3.5 h-3.5" /><span>Share</span>
+                  className="flex items-center justify-center gap-2 text-sm tracking-wider text-gold/70 hover:text-gold transition-colors py-3.5 rounded-lg border border-white/[0.08] hover:border-gold/30">
+                  <Share2 className="w-4 h-4" /><span>Share</span>
                 </button>
                 <button onClick={handleCopyLink}
-                  className="flex items-center justify-center gap-1.5 text-xs tracking-wider text-gold/70 hover:text-gold transition-colors py-2.5 rounded-lg border border-white/[0.06] hover:border-gold/30">
+                  className="flex items-center justify-center gap-2 text-sm tracking-wider text-gold/70 hover:text-gold transition-colors py-3.5 rounded-lg border border-white/[0.08] hover:border-gold/30">
                   {linkCopied ? (
-                    <><Check className="w-3.5 h-3.5 text-green-400" /><span className="text-green-400">Copied!</span></>
+                    <><Check className="w-4 h-4 text-green-400" /><span className="text-green-400">Copied!</span></>
                   ) : (
-                    <><Link2 className="w-3.5 h-3.5" /><span>Copy Link</span></>
+                    <><Link2 className="w-4 h-4" /><span>Copy Link</span></>
                   )}
                 </button>
               </div>
