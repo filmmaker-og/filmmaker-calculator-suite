@@ -8,16 +8,10 @@ import {
   Handshake,
   BarChart3,
   ChevronDown,
-  MessageCircle,
-  Eye,
   HelpCircle,
   FileSpreadsheet,
   Presentation,
   BookOpen,
-  TrendingUp,
-  Target,
-  Pen,
-  Copy,
   Check,
   Scale,
   EyeOff,
@@ -30,11 +24,9 @@ import {
   Mail,
   Instagram,
   Link2,
-  Bot,
   Clapperboard,
   Film,
   Award,
-  Clock,
   AlertTriangle,
   Waves,
 } from "lucide-react";
@@ -54,36 +46,6 @@ const CINEMATIC_SEEN_KEY = "filmmaker_og_intro_seen";
 const SHARE_URL = "https://filmmaker.og";
 const SHARE_TEXT = "Free film finance simulator — model your deal structure, capital stack, and revenue waterfall. See where every dollar goes before you sign.";
 const SHARE_TITLE = "FILMMAKER.OG — See Where Every Dollar Goes";
-
-/* ═══════════════════════════════════════════════════════════════════
-   SCENARIO PROMPTS — Chatbot bridge (with copy)
-   ═══════════════════════════════════════════════════════════════════ */
-const scenarioPrompts = [
-  {
-    prompt: "Model a $500K horror film acquisition",
-    context: "See how genre, budget, and cast affect what buyers will pay.",
-  },
-  {
-    prompt: "Show me how 35% distribution fees affect my backend",
-    context: "Model distribution fee ranges and see what's left for you.",
-  },
-  {
-    prompt: "What happens with 120% investor recoupment?",
-    context: "Understand how preferred returns change your waterfall.",
-  },
-  {
-    prompt: "Structure a waterfall with equity and pre-sales",
-    context: "Build a capital stack and see who gets paid first.",
-  },
-  {
-    prompt: "Model a $2M drama with a Sundance premiere",
-    context: "See realistic acquisition ranges for festival films.",
-  },
-  {
-    prompt: "Show my investors their money is protected",
-    context: "Map the recoupment structure and risk mitigation.",
-  },
-];
 
 /* ═══════════════════════════════════════════════════════════════════
    INDUSTRY COST COMPARISON
@@ -118,21 +80,12 @@ const steps = [
 ];
 
 /* ═══════════════════════════════════════════════════════════════════
-   USE CASES
-   ═══════════════════════════════════════════════════════════════════ */
-const useCases = [
-  { icon: TrendingUp, title: "Before You Raise", desc: "Run the numbers before you pitch investors. Know exactly what you're offering and what they'll get back." },
-  { icon: Pen, title: "Before You Sign", desc: "A distributor made an offer. Model the deal terms and see what's actually left for you before you sign." },
-  { icon: Target, title: "Before You Greenlight", desc: "You have the budget, the script, the team. Make sure the financial structure actually works." },
-];
-
-/* ═══════════════════════════════════════════════════════════════════
-   PROBLEM CARDS
+   PROBLEM CARDS — filmmaker language, not finance jargon
    ═══════════════════════════════════════════════════════════════════ */
 const problemCards = [
-  { icon: Receipt, title: "Hidden Fee Structures", body: "Distribution fees, marketing expenses, and producer's reps can eat 50–70% of revenue before anyone gets paid. Most filmmakers don't see this until it's too late." },
-  { icon: EyeOff, title: "No Waterfall Visibility", body: "You signed the deal, but do you know who gets paid first? Second? Last? If you can't map the waterfall, you can't protect your backend." },
-  { icon: Scale, title: "Information Asymmetry", body: "The other side of the table always knows the numbers. The less you understand about your own deal, the more leverage they have — and the worse your outcome." },
+  { icon: Receipt, title: "Your distributor sent a deal memo. Do you understand it?", body: "Distribution fees, marketing expenses, and producer's reps can eat 50–70% of revenue before anyone gets paid. Model the fees before you sign." },
+  { icon: EyeOff, title: "Your investor asked how they get paid back. Do you have an answer?", body: "If you can't map the waterfall — who gets paid first, second, last — you can't close the raise. Build the waterfall in 2 minutes." },
+  { icon: Scale, title: "The other side of the table knows your numbers better than you do.", body: "Agencies, distributors, and financiers model every deal. If you walk in without your own numbers, you're negotiating blind." },
 ];
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -248,8 +201,6 @@ const Index = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const haptics = useHaptics();
-  const carouselRef = useRef<HTMLDivElement>(null);
-  const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
   const [linkCopied, setLinkCopied] = useState(false);
 
   // Fade-in refs for each section
@@ -258,9 +209,6 @@ const Index = () => {
   const fade4 = useFadeIn();
   const fade5 = useFadeIn();
   const fade6 = useFadeIn();
-  const fade7 = useFadeIn();
-  const fade8 = useFadeIn();
-  const fade9 = useFadeIn();
 
   const savedState = useMemo(() => {
     try {
@@ -303,13 +251,6 @@ const Index = () => {
   const handleStartClick = () => { haptics.medium(); navigate("/calculator?tab=budget"); };
   const handleContinueClick = () => { haptics.medium(); navigate("/calculator"); };
   const handleStartFresh = () => { haptics.light(); navigate("/calculator?tab=budget&reset=true"); };
-
-  const handleCopyPrompt = useCallback((text: string, index: number) => {
-    navigator.clipboard.writeText(text).then(() => {
-      setCopiedIndex(index);
-      setTimeout(() => setCopiedIndex(null), 1500);
-    }).catch(() => {});
-  }, []);
 
   const handleShare = useCallback(async () => {
     if (navigator.share) {
@@ -413,19 +354,87 @@ const Index = () => {
                 </div>
               )}
 
-              <SectionChevron nextId="industry-charges" large />
+              <SectionChevron nextId="problem" large />
             </div>
           </section>
 
+          {/* ── THE PROBLEM (moved up — lead with pain) ── */}
+          <SectionFrame id="problem">
+            <div ref={fade2.ref} className={cn(fade2.className, "max-w-2xl mx-auto")}>
+              <SectionHeader icon={AlertTriangle} eyebrow="The Problem" title="WHY MOST INDIE FILMS LOSE MONEY" subtitle="It's not because the films are bad. It's because filmmakers sign deals they don't understand." />
+              <div className="space-y-4">
+                {problemCards.map((card, i) => {
+                  const Icon = card.icon;
+                  return (
+                    <div key={i} className={cn("bg-bg-card border border-border-subtle hover:border-gold/20 rounded-xl p-5 transition-colors", staggerChild(fade2.visible))} style={staggerDelay(i, fade2.visible)}>
+                      <div className="flex items-start gap-4">
+                        <div className="flex-shrink-0 w-9 h-9 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center">
+                          <Icon className="w-4 h-4 text-gold" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h3 className="text-text-primary text-lg font-semibold mb-1.5">{card.title}</h3>
+                          <p className="text-text-dim text-[15px] leading-relaxed">{card.body}</p>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+            <SectionChevron nextId="how-it-works" />
+          </SectionFrame>
+
+          {/* ── HOW IT WORKS ── */}
+          <SectionFrame id="how-it-works">
+            <div ref={fade3.ref} className={cn(fade3.className, "max-w-2xl mx-auto")}>
+              <SectionHeader icon={Film} eyebrow="How It Works" title="FOUR STEPS TO CLARITY" subtitle="From budget to waterfall in four steps. No financial background required." plainSubtitle />
+              <div className="space-y-4">
+                {steps.map((step, i) => {
+                  const Icon = step.icon;
+                  return (
+                    <div key={step.num} className={staggerChild(fade3.visible)} style={staggerDelay(i, fade3.visible)}>
+                      <div className="flex items-start gap-4 bg-bg-card border border-border-subtle hover:border-gold/20 rounded-xl p-5 transition-colors">
+                        <div className="flex-shrink-0 w-9 h-9 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center">
+                          <Icon className="w-4 h-4 text-gold" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className="font-mono text-xs text-text-dim tracking-wider">{step.num}</span>
+                            <h3 className="text-text-primary text-lg font-semibold">{step.title}</h3>
+                          </div>
+                          <p className="text-text-dim text-[15px] leading-relaxed">{step.desc}</p>
+                        </div>
+                      </div>
+                      {step.callout && (
+                        <div className="mt-3 px-4 py-3 bg-gold/[0.08] border border-gold/25 rounded-xl">
+                          <p className="text-gold/80 text-[15px] leading-relaxed italic">{step.callout}</p>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Mid-page CTA — catch fast deciders */}
+              <div className="text-center mt-8">
+                <button onClick={handleStartClick}
+                  className="h-14 px-10 text-sm font-black tracking-[0.12em] transition-all active:scale-[0.96] rounded-md border border-gold-cta-muted text-gold-cta hover:border-gold-cta hover:bg-gold/[0.06]">
+                  RUN THE NUMBERS — FREE
+                </button>
+              </div>
+            </div>
+            <SectionChevron nextId="industry-charges" />
+          </SectionFrame>
+
           {/* ── INDUSTRY CHARGES ── */}
           <SectionFrame id="industry-charges">
-            <div ref={fade2.ref} className={cn(fade2.className, "max-w-2xl mx-auto")}>
+            <div ref={fade4.ref} className={cn(fade4.className, "max-w-2xl mx-auto")}>
               <SectionHeader icon={Clapperboard} eyebrow="The Industry Standard" title="WHAT OTHERS CHARGE FOR THIS ANALYSIS" subtitle="This is what it costs to understand your own deal. Until now." />
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                 {industryCosts.map((item, i) => {
                   const Icon = item.icon;
                   return (
-                    <div key={item.label} className={cn("bg-bg-card border border-border-subtle hover:border-gold/20 rounded-xl p-5 relative overflow-hidden transition-colors", staggerChild(fade2.visible))} style={staggerDelay(i, fade2.visible)}>
+                    <div key={item.label} className={cn("bg-bg-card border border-border-subtle hover:border-gold/20 rounded-xl p-5 relative overflow-hidden transition-colors", staggerChild(fade4.visible))} style={staggerDelay(i, fade4.visible)}>
                       <div className="absolute top-0 right-0 w-16 h-16 bg-gold/[0.03] rounded-full blur-2xl translate-x-4 -translate-y-4" />
                       <div className="relative">
                         <div className="w-9 h-9 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center mb-3">
@@ -449,7 +458,7 @@ const Index = () => {
 
           {/* ── WHAT YOU GET ── */}
           <SectionFrame id="deliverables">
-            <div ref={fade3.ref} className={cn(fade3.className, "max-w-2xl mx-auto")}>
+            <div ref={fade5.ref} className={cn(fade5.className, "max-w-2xl mx-auto")}>
               <SectionHeader icon={Award} eyebrow="What You Get" title="PROFESSIONAL FINANCIAL DOCUMENTS" subtitle="Designed so anyone — your investor, your business partner, your family — can understand your film's financials at a glance." plainSubtitle />
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {[
@@ -460,7 +469,7 @@ const Index = () => {
                 ].map((item, i) => {
                   const Icon = item.icon;
                   return (
-                    <div key={item.title} className={cn("bg-bg-card border border-border-subtle hover:border-gold/20 rounded-xl p-5 transition-colors", staggerChild(fade3.visible))} style={staggerDelay(i, fade3.visible)}>
+                    <div key={item.title} className={cn("bg-bg-card border border-border-subtle hover:border-gold/20 rounded-xl p-5 transition-colors", staggerChild(fade5.visible))} style={staggerDelay(i, fade5.visible)}>
                       <div className="w-9 h-9 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center mb-3">
                         <Icon className="w-4 h-4 text-gold" />
                       </div>
@@ -471,161 +480,12 @@ const Index = () => {
                 })}
               </div>
             </div>
-            <SectionChevron nextId="how-it-works" />
-          </SectionFrame>
-
-          {/* ── HOW IT WORKS ── */}
-          <SectionFrame id="how-it-works">
-            <div ref={fade4.ref} className={cn(fade4.className, "max-w-2xl mx-auto")}>
-              <SectionHeader icon={Film} eyebrow="How It Works" title="FOUR STEPS TO CLARITY" subtitle="From budget to waterfall in four steps. No financial background required." plainSubtitle />
-              <div className="space-y-4">
-                {steps.map((step, i) => {
-                  const Icon = step.icon;
-                  return (
-                    <div key={step.num} className={staggerChild(fade4.visible)} style={staggerDelay(i, fade4.visible)}>
-                      <div className="flex items-start gap-4 bg-bg-card border border-border-subtle hover:border-gold/20 rounded-xl p-5 transition-colors">
-                        <div className="flex-shrink-0 w-9 h-9 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center">
-                          <Icon className="w-4 h-4 text-gold" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2 mb-1">
-                            <span className="font-mono text-xs text-text-dim tracking-wider">{step.num}</span>
-                            <h3 className="text-text-primary text-lg font-semibold">{step.title}</h3>
-                          </div>
-                          <p className="text-text-dim text-[15px] leading-relaxed">{step.desc}</p>
-                        </div>
-                      </div>
-                      {step.callout && (
-                        <div className="mt-3 px-4 py-3 bg-gold/[0.08] border border-gold/25 rounded-xl">
-                          <p className="text-gold/80 text-[15px] leading-relaxed italic">{step.callout}</p>
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-            <SectionChevron nextId="use-cases" />
-          </SectionFrame>
-
-          {/* ── WHEN TO USE THIS ── */}
-          <SectionFrame id="use-cases">
-            <div ref={fade5.ref} className={cn(fade5.className, "max-w-2xl mx-auto")}>
-              <SectionHeader icon={Clock} eyebrow="When To Use This" title="THREE MOMENTS THAT DEFINE YOUR DEAL" subtitle="The three moments where knowing your numbers changes everything." plainSubtitle />
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {useCases.map((uc, i) => {
-                  const Icon = uc.icon;
-                  return (
-                    <div key={uc.title} className={cn("bg-bg-card border border-border-subtle hover:border-gold/20 rounded-xl p-5 transition-colors", staggerChild(fade5.visible))} style={staggerDelay(i, fade5.visible)}>
-                      <div className="w-9 h-9 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center mb-3">
-                        <Icon className="w-4 h-4 text-gold" />
-                      </div>
-                      <h3 className="text-text-primary text-lg font-semibold mb-2">{uc.title}</h3>
-                      <p className="text-text-dim text-[15px] leading-relaxed">{uc.desc}</p>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-            <SectionChevron nextId="problem" />
-          </SectionFrame>
-
-          {/* ── THE PROBLEM ── */}
-          <SectionFrame id="problem">
-            <div ref={fade6.ref} className={cn(fade6.className, "max-w-2xl mx-auto")}>
-              <SectionHeader icon={AlertTriangle} eyebrow="The Problem" title="WHY MOST INDIE FILMS LOSE MONEY" subtitle="It's not because the films are bad. It's because filmmakers sign deals they don't understand." />
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {problemCards.map((card, i) => {
-                  const Icon = card.icon;
-                  return (
-                    <div key={card.title} className={cn("bg-bg-card border border-border-subtle hover:border-gold/20 rounded-xl p-5 transition-colors", staggerChild(fade6.visible))} style={staggerDelay(i, fade6.visible)}>
-                      <div className="w-9 h-9 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center mb-3">
-                        <Icon className="w-4 h-4 text-gold" />
-                      </div>
-                      <h3 className="text-text-primary text-lg font-semibold mb-2">{card.title}</h3>
-                      <p className="text-text-dim text-[15px] leading-relaxed">{card.body}</p>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-            <SectionChevron nextId="mission" />
-          </SectionFrame>
-
-          {/* ── MISSION ── */}
-          <SectionFrame id="mission">
-            <div ref={fade7.ref} className={cn(fade7.className, "max-w-2xl mx-auto")}>
-              <div className="relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-gold/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-                <div className="relative z-10">
-                  <SectionHeader icon={Eye} eyebrow="Our Mission" title="DEMOCRATIZING THE BUSINESS OF FILM" subtitle="The tools they use. Now in your hands." />
-                  <div className="space-y-4 text-text-mid text-[15px] leading-relaxed text-center">
-                    <p>For too long, the mechanics of film finance have been obscured by gatekeepers. Agencies, distributors, and studios thrive on information asymmetry. They know the numbers; you don't.</p>
-                    <p className="text-text-primary font-medium text-lg">We built this tool to level the playing field.</p>
-                    <p>This tool extracts the proprietary logic used by top-tier entertainment lawyers and sales agents, putting institutional-grade modeling directly into your hands. Free simulation. Just the math.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <SectionChevron nextId="chatbot" />
-          </SectionFrame>
-
-          {/* ── CHATBOT ── */}
-          <SectionFrame id="chatbot">
-            <div ref={fade8.ref} className={fade8.className}>
-              <div className="max-w-2xl mx-auto mb-5">
-                <SectionHeader icon={Bot} eyebrow="AI-Powered Guidance" title="ASK OUR CHATBOT"
-                  subtitle="Have a question about your deal? Copy a prompt or ask your own." plainSubtitle />
-              </div>
-
-              <div className="relative">
-              <div className="absolute right-0 top-0 bottom-4 w-12 bg-gradient-to-l from-bg-elevated to-transparent z-10 pointer-events-none rounded-r-xl" />
-              <div ref={carouselRef} className="flex gap-3 overflow-x-auto snap-x snap-mandatory px-1 pb-4 scrollbar-hide"
-                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-                {scenarioPrompts.map((item, i) => (
-                  <div key={i} className="flex-shrink-0 w-[260px] snap-center bg-bg-card border border-border-subtle rounded-xl p-5 text-left hover:border-gold/20 transition-colors group">
-                    <div className="flex items-start gap-3 mb-3">
-                      <div className="w-9 h-9 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center flex-shrink-0">
-                        <MessageCircle className="w-4 h-4 text-gold" />
-                      </div>
-                      <p className="text-text-primary text-[15px] font-medium leading-snug">{item.prompt}</p>
-                    </div>
-                    <p className="text-text-dim text-[13px] leading-relaxed mb-3 pl-12">{item.context}</p>
-                    <div className="flex items-center justify-between pl-12">
-                      <button onClick={(e) => { e.stopPropagation(); handleCopyPrompt(item.prompt, i); }}
-                        className="flex items-center gap-1.5 text-xs tracking-wider font-semibold transition-colors">
-                        {copiedIndex === i ? (
-                          <span className="text-green-400 flex items-center gap-1.5"><Check className="w-3 h-3" /> Copied</span>
-                        ) : (
-                          <span className="text-gold-cta flex items-center gap-1.5"><Copy className="w-3 h-3" /> Copy prompt</span>
-                        )}
-                      </button>
-                      {/* Typing indicator */}
-                      <div className="flex items-center gap-[3px] pr-1">
-                        <span className="w-1 h-1 rounded-full bg-gold/40 animate-typing-dot-1" />
-                        <span className="w-1 h-1 rounded-full bg-gold/40 animate-typing-dot-2" />
-                        <span className="w-1 h-1 rounded-full bg-gold/40 animate-typing-dot-3" />
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              </div>
-
-              {/* Get started signpost */}
-              <div className="text-center mt-3 mb-2">
-                <div className="inline-flex items-center gap-2 text-text-dim text-xs tracking-wider">
-                  <Bot className="w-3.5 h-3.5 text-gold/50" />
-                  <span>Not sure where to start? Ask our chatbot.</span>
-                </div>
-              </div>
-            </div>
             <SectionChevron nextId="faq" />
           </SectionFrame>
 
           {/* ── FAQ ── */}
           <SectionFrame id="faq">
-            <div ref={fade9.ref} className={cn(fade9.className, "max-w-2xl mx-auto")}>
+            <div ref={fade6.ref} className={cn(fade6.className, "max-w-2xl mx-auto")}>
               <SectionHeader icon={HelpCircle} eyebrow="Common Questions" title="WHAT FILMMAKERS ASK" subtitle="Quick answers to the questions we hear most." plainSubtitle />
               <div className="bg-bg-card border border-border-subtle rounded-xl px-5">
                 <Accordion type="single" collapsible className="w-full">
