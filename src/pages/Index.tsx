@@ -64,7 +64,7 @@ const faqs = [
   { q: "Who is this for?", a: "Independent producers, directors, and investors. Whether you're raising $50K or $5M, the mechanics of recoupment are the same. If you intend to sell your film for profit, you need this." },
   { q: "How does the calculator work?", a: "Four steps: set your budget, build your capital stack, model an acquisition deal, and see exactly where every dollar goes in the waterfall. It takes about 2 minutes." },
   { q: "Is this financial or legal advice?", a: "No. This is a simulation tool for estimation and planning purposes only. Always consult a qualified entertainment attorney or accountant for final deal structures." },
-  { q: 'What is a "waterfall"?', a: "A waterfall is the priority order in which revenue from your film is distributed — who gets paid first, second, and last. Most filmmakers sign deals without ever seeing theirs.", link: { label: "Learn more on Wikipedia", url: "https://en.wikipedia.org/wiki/Hollywood_accounting" } },
+  { q: 'What is a "waterfall"?', a: "A waterfall is the priority order in which revenue from your film is distributed — who gets paid first, second, and last. Most filmmakers make deals without ever seeing how the money flows back.", link: { label: "Learn more on Wikipedia", url: "https://en.wikipedia.org/wiki/Hollywood_accounting" } },
   { q: "Is the calculator free?", a: "Yes, the simulation is completely free. Run as many scenarios as you want, adjust the variables, and see different outcomes. No paywalls, no limits." },
   { q: "Do I need an account?", a: "No. You can use the calculator without signing up. If you want to save your work, we offer a simple magic link — no password required." },
 ];
@@ -76,16 +76,16 @@ const steps = [
   { num: "01", title: "Set Your Budget", desc: "Enter your total production budget and select any guild/union signatories. This establishes the baseline for everything that follows.", icon: DollarSign },
   { num: "02", title: "Build Your Capital Stack", desc: "Choose where your money is coming from — equity, pre-sales, gap financing, tax incentives. Each source has different recoupment priorities.", icon: Layers },
   { num: "03", title: "Model the Deal", desc: "Set the acquisition price, distribution fees, and marketing spend. This is where you see how much actually comes back.", icon: Handshake },
-  { num: "04", title: "See the Waterfall", desc: "Watch every dollar flow through the priority chain. See exactly who gets paid, in what order, and what's left for you.", icon: Waves, callout: "Most filmmakers sign deals without ever seeing their waterfall. This tool shows you yours in under 2 minutes." },
+  { num: "04", title: "See the Waterfall", desc: "Watch every dollar flow through the priority chain. See exactly who gets paid, in what order, and what's left for you.", icon: Waves, callout: "Most filmmakers make deals without ever seeing how the money flows back. This tool shows you — in under 2 minutes." },
 ];
 
 /* ═══════════════════════════════════════════════════════════════════
    PROBLEM CARDS — filmmaker language, not finance jargon
    ═══════════════════════════════════════════════════════════════════ */
 const problemCards = [
-  { icon: Receipt, title: "You're asking people for money but you can't show them where it goes.", body: "Investors want to see the math — how they get paid back, in what order, and what happens if the film underperforms. Without a waterfall, you're asking them to trust a napkin." },
-  { icon: EyeOff, title: "You've never seen a waterfall — and neither has anyone you're pitching.", body: "A waterfall is the single most important document in film finance. It shows who gets paid first, second, and last. Most filmmakers sign deals without ever seeing one." },
-  { icon: Scale, title: "The people across the table have done this 100 times. This is your first.", body: "Agencies, distributors, and financiers model every deal before they walk in. If you show up without your own numbers, you're negotiating blind — and they know it." },
+  { icon: Receipt, title: "You're about to ask someone to invest in your film. Can you show them exactly how they get paid back?", body: "Before anyone writes a check, they want to see the math. How does the money come back? In what order? What if the film underperforms? If you can't answer that clearly, the conversation stalls." },
+  { icon: EyeOff, title: "Most indie deals aren't structured to protect both sides. That's not bad faith — it's math nobody ran.", body: "Without seeing how revenue actually flows, filmmakers inadvertently give away too much and investors take on more risk than they realize. A deal that works for everyone starts with the numbers." },
+  { icon: Scale, title: "A well-structured deal doesn't just protect you — it makes your film fundable.", body: "When investors can see their downside is managed — preferred returns, clear priority, transparent recoupment — they're more likely to say yes. Structure is what turns a pitch into a funded project." },
 ];
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -328,8 +328,9 @@ const Index = () => {
                 SEE WHERE EVERY<br />DOLLAR <span className="text-gold">GOES</span>
               </h1>
               <p className="text-text-mid text-base leading-relaxed max-w-md mx-auto mb-8">
-                Model your film's deal structure, capital stack, and revenue waterfall — the same analysis
-                the industry gatekeepers use. Free to simulate. Takes 2 minutes.
+                Before you raise a dollar or shake hands on a deal, see exactly how the money
+                flows — who gets paid first, what's left for you, and how to structure it so
+                everyone wins. Free. Takes 2 minutes.
               </p>
 
               {isReturningUser ? (
@@ -361,7 +362,7 @@ const Index = () => {
           {/* ── THE PROBLEM (moved up — lead with pain) ── */}
           <SectionFrame id="problem">
             <div ref={fade2.ref} className={cn(fade2.className, "max-w-2xl mx-auto")}>
-              <SectionHeader icon={AlertTriangle} eyebrow="The Problem" title="WHY MOST INDIE FILMS LOSE MONEY" subtitle="It's not because the films are bad. It's because filmmakers sign deals they don't understand." />
+              <SectionHeader icon={AlertTriangle} eyebrow="The Problem" title="WHY MOST INDIE FILMS LOSE MONEY" subtitle="It's not bad films. It's deals made without the full picture — where one side gives up too much and nobody builds a structure that works for both." />
               <div className="space-y-4">
                 {problemCards.map((card, i) => {
                   const Icon = card.icon;
@@ -459,13 +460,13 @@ const Index = () => {
           {/* ── WHAT YOU GET ── */}
           <SectionFrame id="deliverables">
             <div ref={fade5.ref} className={cn(fade5.className, "max-w-2xl mx-auto")}>
-              <SectionHeader icon={Award} eyebrow="What You Walk Away With" title="DOCUMENTS THAT CLOSE THE DEAL" subtitle="Walk into any meeting — with investors, distributors, or partners — and speak with clarity and conviction." plainSubtitle />
+              <SectionHeader icon={Award} eyebrow="The Deliverables" title="WHAT YOU WALK AWAY WITH" subtitle="Walk into any meeting and speak with clarity. These documents do the talking for you." plainSubtitle />
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {[
-                  { icon: FileSpreadsheet, title: "The document that closes your raise", desc: "A 6-sheet Excel workbook with executive summary, full waterfall ledger, capital stack breakdown, and investor return summary. Hand it over and let the numbers speak." },
-                  { icon: Presentation, title: "Hand this to your investor. They'll take you seriously.", desc: "A presentation-ready PDF you can email, print, or present. Clear visuals, plain language, zero jargon — designed to impress anyone across the table." },
-                  { icon: BarChart3, title: "Show anyone where every dollar goes — in 10 seconds", desc: "A visual waterfall chart that breaks down who gets paid, in what order, and how much. The most important chart in film finance, and now it's yours." },
-                  { icon: BookOpen, title: "Never get caught not knowing a term again", desc: "A plain-English glossary of every financial term in your deal. No MBA required — just the language you need to sound like you've done this before." },
+                  { icon: FileSpreadsheet, title: "The document that closes your raise", desc: "A 6-sheet Excel workbook — executive summary, waterfall ledger, capital breakdown, and investor returns. Hand it over and let the numbers speak." },
+                  { icon: Presentation, title: "A PDF your investor will actually read", desc: "Presentation-ready, plain language, zero jargon. Email it, print it, or hand it across the table. Designed to make you look like you've done this before." },
+                  { icon: BarChart3, title: "One chart that explains everything", desc: "A visual waterfall showing who gets paid, in what order, and how much. The most important chart in film finance — and now it's yours." },
+                  { icon: BookOpen, title: "Every term, in plain English", desc: "A glossary of every financial term in your deal. No MBA required — just the language you need to hold your own in any room." },
                 ].map((item, i) => {
                   const Icon = item.icon;
                   return (
@@ -494,14 +495,16 @@ const Index = () => {
                       <AccordionTrigger className="text-text-primary hover:text-text-mid hover:no-underline text-lg font-semibold text-left">
                         {faq.q}
                       </AccordionTrigger>
-                      <AccordionContent className="text-text-dim text-[15px] leading-relaxed border-l-2 border-gold/25 pl-4 ml-1">
-                        {faq.a}
-                        {faq.link && (
-                          <a href={faq.link.url} target="_blank" rel="noopener noreferrer"
-                            className="inline-block mt-2 text-gold/70 hover:text-gold text-[13px] tracking-wider transition-colors underline underline-offset-2 decoration-gold/30">
-                            {faq.link.label} &rarr;
-                          </a>
-                        )}
+                      <AccordionContent className="text-text-dim text-[15px] leading-relaxed">
+                        <div className="border-l-2 border-gold/30 pl-4">
+                          {faq.a}
+                          {faq.link && (
+                            <a href={faq.link.url} target="_blank" rel="noopener noreferrer"
+                              className="inline-block mt-2 text-gold/70 hover:text-gold text-[13px] tracking-wider transition-colors underline underline-offset-2 decoration-gold/30">
+                              {faq.link.label} &rarr;
+                            </a>
+                          )}
+                        </div>
                       </AccordionContent>
                     </AccordionItem>
                   ))}
