@@ -83,7 +83,7 @@ const steps = [
    ═══════════════════════════════════════════════════════════════════ */
 const problemCards = [
   { icon: Receipt, title: "There's a pecking order — but that doesn't mean you can't come out on top.", body: "Every deal has a priority structure: distributors take fees off the top, lenders recoup next, then equity investors — and you're last in line. The math exists. Nobody shows it to you because the moment you see it, you start asking the right questions." },
-  { icon: Gavel, title: "The rules were written. You just weren't invited to read them.", body: "Recoupment schedules, distribution fees, P&A overages — Hollywood has used this financial playbook for decades. It's complicated by design, not by accident. Until now." },
+  { icon: Gavel, title: "The rules were written. The gatekeepers just never passed you a copy.", body: "Recoupment schedules, distribution fees, P&A overages — Hollywood has used this financial playbook for decades. It's complicated by design, not by accident. Until now." },
   { icon: EyeOff, title: "Learn the language. Level the playing field.", body: "Capital stacks, waterfall structures, producer corridors — these aren't secrets, they're skills. The filmmakers who close deals speak this language fluently. Now you can too." },
 ];
 
@@ -203,6 +203,7 @@ const Index = () => {
 
   // One-shot reveal refs for each section
   const reveal2 = useReveal();
+  const revealWaterfall = useReveal();
   const reveal3 = useReveal();
   const reveal4 = useReveal();
   const reveal5 = useReveal();
@@ -321,12 +322,12 @@ const Index = () => {
             <div className="relative px-6 py-4 max-w-xl mx-auto text-center">
               <div className="mb-5 relative inline-block">
                 <div className="absolute inset-0 -m-7 animate-logo-breathe" style={{ background: 'radial-gradient(circle, rgba(212,175,55,0.25) 0%, transparent 70%)', filter: 'blur(18px)' }} />
-                <img src={filmmakerLogo} alt="Filmmaker.OG" className="relative w-[104px] h-[104px] object-contain rounded-xl"
+                <img src={filmmakerLogo} alt="Filmmaker.OG" className="relative w-[96px] h-[96px] object-contain rounded-xl"
                   style={{ filter: 'brightness(1.15) drop-shadow(0 0 28px rgba(212,175,55,0.45))' }} />
               </div>
               <p className="text-text-dim text-sm tracking-[0.35em] uppercase mb-4 font-semibold">Demystifying Film Finance</p>
               <h1 className="font-bebas text-[clamp(2rem,7vw,3.2rem)] leading-[1.05] text-gold mb-4">
-                SEE WHERE EVERY DOLLAR<br /><span className="text-white">GOES</span>
+                SEE WHERE EVERY<br /><span className="text-white">DOLLAR GOES</span>
               </h1>
               <p className="text-text-mid text-sm font-medium leading-relaxed max-w-sm mx-auto mb-6">
                 Before you raise a dollar or sign a deal, know exactly who gets
@@ -349,7 +350,7 @@ const Index = () => {
                 <div className="w-full max-w-[320px] mx-auto">
                   <button onClick={handleStartClick}
                     className="w-full h-16 text-base font-semibold tracking-[0.12em] transition-all active:scale-[0.96] rounded-md bg-gold-cta-subtle border border-gold-cta-muted text-gold-cta shadow-button hover:border-gold-cta">
-                    RUN THE NUMBERS
+                    MODEL YOUR DEAL
                   </button>
                 </div>
               )}
@@ -363,7 +364,7 @@ const Index = () => {
           {/* ── THE PROBLEM ── */}
           <SectionFrame id="problem">
             <div ref={reveal2.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", reveal2.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
-              <SectionHeader icon={Lock} eyebrow="The Problem" title={<>WHAT HOLLYWOOD DOESN&apos;T WANT YOU TO <span className="text-white">KNOW</span></>} subtitle="The deal structures, the fee schedules, the fine print — it was all designed to keep you in the dark. That's not your fault. We're changing it." plainSubtitle />
+              <SectionHeader icon={Lock} eyebrow="The Problem" title={<>WHAT HOLLYWOOD DOESN&apos;T WANT YOU TO <span className="text-white">KNOW</span></>} subtitle="The deal structures, the fee schedules, the fine print — it was all designed to keep you in the dark." plainSubtitle />
 
               {/* Problem cards — horizontal swipe */}
               <div className="-mx-6 md:-mx-8">
@@ -375,7 +376,7 @@ const Index = () => {
                         <div className="w-9 h-9 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center mb-3">
                           <Icon className="w-4 h-4 text-gold" />
                         </div>
-                        <h3 className="text-gold text-lg font-semibold mb-1.5">{card.title}</h3>
+                        <h3 className="font-bebas text-[20px] tracking-[0.06em] uppercase text-gold mb-1.5">{card.title}</h3>
                         <p className="text-text-mid text-sm leading-relaxed">{card.body}</p>
                       </div>
                     );
@@ -394,38 +395,47 @@ const Index = () => {
                 </button>
               </div>
 
-              {/* Waterfall explainer */}
-              <div className="mt-6 px-4 py-5 rounded-xl bg-gold/[0.06] border border-gold/20">
-                <p className="font-bebas text-2xl tracking-[0.1em] text-gold text-center mb-4">THE WATERFALL</p>
-                <div className="relative flex items-start justify-between max-w-[300px] mx-auto mb-4">
-                  <div className="absolute top-[14px] left-[28px] right-[28px] h-[1px] bg-gradient-to-r from-gold/30 via-gold/50 to-gold/30" />
-                  {[
-                    { icon: DollarSign, label: "Budget" },
-                    { icon: Layers, label: "Stack" },
-                    { icon: Handshake, label: "Deal" },
-                    { icon: Waves, label: "Waterfall" },
-                  ].map((s) => {
-                    const StepIcon = s.icon;
-                    return (
-                      <div key={s.label} className="relative flex flex-col items-center gap-1.5 w-[56px]">
-                        <div className="w-7 h-7 rounded-full bg-bg-card border border-gold/40 flex items-center justify-center">
-                          <StepIcon className="w-3 h-3 text-gold" />
-                        </div>
-                        <span className="text-xs text-text-dim tracking-wider">{s.label}</span>
-                      </div>
-                    );
-                  })}
-                </div>
-                <p className="text-text-mid text-sm leading-relaxed text-center max-w-xs mx-auto">
-                  The majority of filmmakers have never seen one. The <span className="text-gold font-semibold">waterfall</span> is the financial structure that determines who gets paid back, in what order, and how much. It's the key to package financing.
-                </p>
-                <button onClick={() => navigate('/waterfall-info')}
-                  className="block mx-auto mt-4 px-6 py-2.5 text-sm font-semibold tracking-[0.15em] uppercase transition-all rounded-md bg-gold/[0.04] border border-gold/25 text-gold hover:bg-gold/[0.08] hover:border-gold/40 active:scale-[0.97]">
-                  LEARN MORE &rarr;
-                </button>
-              </div>
             </div>
           </SectionFrame>
+
+          {/* ── THE WATERFALL (standalone) ── */}
+          <section id="waterfall-explainer" className="snap-section px-4 py-6">
+            <div className="flex rounded-2xl overflow-hidden border border-white/[0.06]">
+              <div className="w-1.5 flex-shrink-0 bg-gold" style={{ boxShadow: '0 0 14px rgba(212,175,55,0.35)' }} />
+              <div className="flex-1 min-w-0 bg-bg-elevated">
+                <div className="h-[2px] bg-gradient-to-r from-gold/40 via-gold/25 to-transparent" />
+                <div ref={revealWaterfall.ref} className={cn("p-6 md:p-8 max-w-2xl mx-auto transition-all duration-500 ease-out", revealWaterfall.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
+                  <p className="font-bebas text-3xl md:text-4xl tracking-[0.1em] text-gold text-center mb-5">THE WATERFALL</p>
+                  <div className="relative flex items-start justify-between max-w-[300px] mx-auto mb-5">
+                    <div className="absolute top-[14px] left-[28px] right-[28px] h-[1px] bg-gradient-to-r from-gold/30 via-gold/50 to-gold/30" />
+                    {[
+                      { icon: DollarSign, label: "Budget" },
+                      { icon: Layers, label: "Stack" },
+                      { icon: Handshake, label: "Deal" },
+                      { icon: Waves, label: "Waterfall" },
+                    ].map((s) => {
+                      const StepIcon = s.icon;
+                      return (
+                        <div key={s.label} className="relative flex flex-col items-center gap-1.5 w-[56px]">
+                          <div className="w-7 h-7 rounded-full bg-bg-card border border-gold/40 flex items-center justify-center">
+                            <StepIcon className="w-3 h-3 text-gold" />
+                          </div>
+                          <span className="text-xs text-text-dim tracking-wider">{s.label}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  <p className="text-text-mid text-sm leading-relaxed text-center max-w-xs mx-auto">
+                    The majority of filmmakers have never seen one. The <span className="text-gold font-semibold">waterfall</span> is the financial structure that determines who gets paid back, in what order, and how much. It's the key to package financing.
+                  </p>
+                  <button onClick={() => navigate('/waterfall-info')}
+                    className="block mx-auto mt-5 px-6 py-2.5 text-sm font-semibold tracking-[0.15em] uppercase transition-all rounded-md bg-gold/[0.04] border border-gold/25 text-gold hover:bg-gold/[0.08] hover:border-gold/40 active:scale-[0.97]">
+                    LEARN MORE &rarr;
+                  </button>
+                </div>
+              </div>
+            </div>
+          </section>
 
           {/* section divider */}
           <div className="px-8"><div className="h-[1px] bg-gradient-to-r from-transparent via-white/[0.04] to-transparent" /></div>
@@ -446,7 +456,7 @@ const Index = () => {
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-1">
                             <span className="font-mono text-xs text-gold tracking-wider font-semibold">{step.num}</span>
-                            <h3 className="text-gold text-lg font-semibold">{step.title}</h3>
+                            <h3 className="font-bebas text-[22px] tracking-[0.06em] uppercase text-gold">{step.title}</h3>
                           </div>
                           <p className="text-text-mid text-sm leading-relaxed">{step.desc}</p>
                         </div>
@@ -460,7 +470,7 @@ const Index = () => {
               <div className="text-center mt-5 -mb-2">
                 <button onClick={handleStartClick}
                   className="h-16 px-10 text-base font-semibold tracking-[0.12em] transition-all active:scale-[0.96] rounded-md bg-gold-cta-subtle border border-gold-cta-muted text-gold-cta shadow-button hover:border-gold-cta">
-                  RUN THE NUMBERS — NOW
+                  MODEL YOUR DEAL
                 </button>
               </div>
             </div>
@@ -522,7 +532,7 @@ const Index = () => {
                       <div className="flex-1 bg-bg-card p-5">
                         <div className="flex items-start gap-3 mb-2">
                           <Icon className="w-4 h-4 text-gold flex-shrink-0 mt-1" />
-                          <h3 className="text-gold text-lg font-semibold">{item.title}</h3>
+                          <h3 className="font-bebas text-[22px] tracking-[0.06em] uppercase text-gold">{item.title}</h3>
                         </div>
                         <p className="text-text-mid text-sm leading-relaxed pl-7">{item.desc}</p>
                       </div>
@@ -570,7 +580,7 @@ const Index = () => {
                     STOP GUESSING.<br />START <span className="text-white">CLOSING</span>.
                   </h2>
                   <p className="text-text-mid text-sm leading-relaxed max-w-xs mx-auto mb-6">
-                    They didn't teach you this in film school. Learn it in two minutes.
+                    Learn the business of film today.
                   </p>
                   <button onClick={handleStartClick}
                     className="w-full max-w-[320px] h-16 text-base font-semibold tracking-[0.12em] transition-all active:scale-[0.96] rounded-md bg-gold-cta-subtle border border-gold-cta-muted text-gold-cta shadow-button hover:border-gold-cta">

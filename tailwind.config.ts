@@ -88,8 +88,8 @@ export default {
           "100%": { width: "100%" },
         },
         "logo-breathe": {
-          "0%, 100%": { opacity: "0.15" },
-          "50%": { opacity: "0.3" },
+          "0%, 100%": { opacity: "0.2" },
+          "50%": { opacity: "0.45" },
         },
       },
       animation: {
