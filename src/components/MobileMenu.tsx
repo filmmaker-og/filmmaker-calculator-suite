@@ -43,20 +43,31 @@ const MobileMenu = () => {
 
   return (
     <>
-      {/* Grid Menu Button (2x2 squares) */}
+      {/* Animated Hamburger Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="relative w-10 h-10 flex items-center justify-center rounded-lg hover:bg-bg-elevated transition-colors"
         aria-label={isOpen ? "Close menu" : "Open menu"}
       >
-        <div className={cn(
-          "grid grid-cols-2 gap-[3px] transition-all duration-300",
-          isOpen && "rotate-45 scale-90"
-        )}>
-          <span className={cn("block w-[7px] h-[7px] rounded-[2px] bg-gold transition-all duration-300", isOpen && "opacity-60")} />
-          <span className={cn("block w-[7px] h-[7px] rounded-[2px] bg-gold transition-all duration-300", isOpen && "opacity-60")} />
-          <span className={cn("block w-[7px] h-[7px] rounded-[2px] bg-gold transition-all duration-300", isOpen && "opacity-60")} />
-          <span className={cn("block w-[7px] h-[7px] rounded-[2px] bg-gold transition-all duration-300", isOpen && "opacity-60")} />
+        <div className="w-5 h-4 relative flex flex-col justify-between">
+          <span
+            className={cn(
+              "block h-[1.5px] w-full bg-gold rounded-full transition-all duration-300 origin-center",
+              isOpen && "translate-y-[7px] rotate-45"
+            )}
+          />
+          <span
+            className={cn(
+              "block h-[1.5px] w-full bg-gold rounded-full transition-all duration-300",
+              isOpen ? "opacity-0 scale-x-0" : "opacity-100 scale-x-100"
+            )}
+          />
+          <span
+            className={cn(
+              "block h-[1.5px] w-full bg-gold rounded-full transition-all duration-300 origin-center",
+              isOpen && "-translate-y-[7px] -rotate-45"
+            )}
+          />
         </div>
       </button>
 
