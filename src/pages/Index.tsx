@@ -47,8 +47,8 @@ const SHARE_TITLE = "FILMMAKER.OG — See Where Every Dollar Goes";
    ═══════════════════════════════════════════════════════════════════ */
 const problemCards = [
   { icon: Receipt, title: "There's a pecking order.", body: "Distributors take fees first. Lenders recoup next. Then equity. You're last in line — unless you understand the structure well enough to negotiate your position." },
-  { icon: Gavel, title: "The rules exist. Nobody shared them.", body: "Recoupment schedules, fee waterfalls, P&A overages — Hollywood has run this playbook for decades. It's complicated by design, not by accident." },
-  { icon: EyeOff, title: "Learn the language. Level the field.", body: "Capital stacks, waterfall structures, producer corridors — the filmmakers who close deals speak this language fluently. Now you can too." },
+  { icon: Gavel, title: "The rules exist. Nobody shared them.", body: "Every deal has a financial structure that decides who gets paid back and how much. It's not in the script. It's not in film school. It's in the contracts — and it's complicated by design." },
+  { icon: EyeOff, title: "Know what they know.", body: "Capital stacks, waterfall structures, producer corridors — the filmmakers who close deals speak this language fluently. Now you can too." },
 ];
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -64,23 +64,14 @@ const faqs = [
 ];
 
 /* ═══════════════════════════════════════════════════════════════════
-   HOW IT WORKS STEPS (static — not clickable)
+   VERTICAL FLOW DIAGRAM — "How the Money Flows"
+   Combines waterfall education + tool mechanics in one cascade
    ═══════════════════════════════════════════════════════════════════ */
-const steps = [
-  { num: "01", title: "Set Your Budget", desc: "Total production cost plus guild signatories. This is your baseline.", icon: DollarSign },
-  { num: "02", title: "Build Your Capital Stack", desc: "Equity, pre-sales, gap, tax incentives — where the money comes from and how each source gets paid back.", icon: Layers },
-  { num: "03", title: "Structure Your Deal", desc: "Acquisition price, distribution fees, P&A spend. See how much actually makes it back.", icon: Handshake },
-  { num: "04", title: "Track the Recoupment", desc: "Every dollar through the priority chain. Who gets paid first. What's left for you.", icon: Waves },
-];
-
-/* ═══════════════════════════════════════════════════════════════════
-   WATERFALL FLOW DIAGRAM STEPS
-   ═══════════════════════════════════════════════════════════════════ */
-const waterfallSteps = [
-  { icon: DollarSign, label: "Budget" },
-  { icon: Layers, label: "Stack" },
-  { icon: Handshake, label: "Deal" },
-  { icon: Waves, label: "Waterfall" },
+const flowSteps = [
+  { icon: DollarSign, title: "Set Your Budget", desc: "Your total production cost — the baseline everything is measured against." },
+  { icon: Layers, title: "Build Your Capital Stack", desc: "Equity, debt, tax credits, gap — who put money in and how each source gets repaid." },
+  { icon: Handshake, title: "Structure Your Deal", desc: "Acquisition price, distribution fees, marketing cap — the terms that shape what comes back." },
+  { icon: Waves, title: "See the Waterfall", desc: "Every dollar through the priority chain. Fees first. Then debt. Then equity. Then you." },
 ];
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -199,8 +190,7 @@ const Index = () => {
 
   // One-shot reveal refs for each section
   const revealProblem = useReveal();
-  const revealWaterfall = useReveal();
-  const revealSteps = useReveal();
+  const revealFlow = useReveal();
   const revealPrice = useReveal();
   const revealFaq = useReveal();
 
@@ -321,22 +311,9 @@ const Index = () => {
               <h1 className="font-bebas text-[clamp(2rem,7vw,3.2rem)] leading-[1.05] text-gold mb-4">
                 SEE WHERE EVERY<br /><span className="text-white">DOLLAR GOES</span>
               </h1>
-              <p className="text-text-mid text-sm font-medium leading-relaxed max-w-[380px] mx-auto mb-6">
-                Know who gets paid first, in what order, and what's left for you. Understand the deal before you sign it.
+              <p className="text-text-mid text-sm font-medium leading-relaxed max-w-sm mx-auto mb-6">
+                Before you raise a dollar or sign a deal — know exactly who gets paid, in what order, and what's left for you.
               </p>
-
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
-                {[
-                  { t: "Break-even clarity", d: "Know what your film must earn before investors recoup." },
-                  { t: "Recoupment order", d: "See who gets paid first, and what's left after fees + debt." },
-                  { t: "Investor-ready story", d: "Explain the math in plain English without losing confidence." },
-                ].map((b) => (
-                  <div key={b.t} className="rounded-xl border border-border-subtle bg-bg-card p-4 text-left">
-                    <div className="text-gold text-sm font-semibold tracking-wide">{b.t}</div>
-                    <div className="text-text-mid text-xs leading-relaxed mt-1">{b.d}</div>
-                  </div>
-                ))}
-              </div>
 
               {isReturningUser ? (
                 <div className="w-full max-w-[320px] mx-auto space-y-3">
@@ -392,68 +369,32 @@ const Index = () => {
           {/* section divider */}
           <div className="px-8"><div className="h-[1px] bg-gradient-to-r from-transparent via-gold/10 to-transparent" /></div>
 
-          {/* ── § 3: THE WATERFALL EXPLAINER ── */}
-          <SectionFrame id="waterfall-explainer" alt>
-            <div ref={revealWaterfall.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", revealWaterfall.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
+          {/* ── § 3: HOW THE MONEY FLOWS (vertical cascade) ── */}
+          <SectionFrame id="how-money-flows" alt>
+            <div ref={revealFlow.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", revealFlow.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
               <SectionHeader icon={Waves} eyebrow="What They Didn't Teach You In Film School" title={<>FROM FIRST MONEY IN TO LAST MONEY <span className="text-white">OUT</span></>} />
 
-              {/* Flow diagram */}
-              <div className="rounded-xl bg-gold/[0.06] border border-gold/20 p-6 mb-6">
-                <div className="relative flex justify-between items-start max-w-[300px] mx-auto">
-                  {/* Connecting line */}
-                  <div className="absolute left-[28px] right-[28px] top-[14px] h-[1px] bg-gradient-to-r from-gold/30 via-gold/50 to-gold/30" />
-                  {waterfallSteps.map((ws) => {
-                    const Icon = ws.icon;
-                    return (
-                      <div key={ws.label} className="flex flex-col items-center gap-1.5 w-14 relative z-10">
-                        <div className="w-7 h-7 rounded-full bg-bg-card border border-gold/40 flex items-center justify-center">
-                          <Icon className="w-3 h-3 text-gold" />
-                        </div>
-                        <span className="text-text-dim text-xs tracking-wider">{ws.label}</span>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Explanatory paragraph */}
-              <p className="text-text-mid text-sm leading-relaxed text-center max-w-[320px] mx-auto mb-5">
-                Most filmmakers have never seen one. The <span className="text-gold font-semibold">waterfall</span> determines who gets paid back, in what order, and how much. It's the key to package financing.
-              </p>
-
-              {/* Learn More link */}
-              <div className="text-center">
-                <button onClick={() => navigate("/waterfall-info")}
-                  className="text-gold/70 hover:text-gold text-sm font-semibold tracking-[0.15em] uppercase bg-gold/[0.04] border border-gold/25 rounded-md px-6 py-2.5 hover:bg-gold/[0.08] hover:border-gold/40 transition-all">
-                  LEARN MORE &rarr;
-                </button>
-              </div>
-            </div>
-          </SectionFrame>
-
-          {/* section divider */}
-          <div className="px-8"><div className="h-[1px] bg-gradient-to-r from-transparent via-white/[0.04] to-transparent" /></div>
-
-          {/* ── § 4: HOW IT WORKS ── */}
-          <SectionFrame id="how-it-works">
-            <div ref={revealSteps.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", revealSteps.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
-              <SectionHeader icon={Film} eyebrow="How It Works" title={<>YOUR DEAL IN FOUR <span className="text-white">STEPS</span></>} plainSubtitle subtitle="From budget to waterfall in under two minutes. No financial background required." />
-              <div className="space-y-3">
-                {steps.map((step, i) => {
+              {/* Vertical flow diagram */}
+              <div className="flex flex-col items-center max-w-sm mx-auto">
+                {flowSteps.map((step, i) => {
                   const Icon = step.icon;
+                  const isLast = i === flowSteps.length - 1;
                   return (
-                    <div key={step.num} className={staggerChild(revealSteps.visible)} style={staggerDelay(i, revealSteps.visible)}>
-                      <div className="flex rounded-xl overflow-hidden border border-border-subtle hover:border-gold/20 transition-colors">
-                        <div className="w-1 flex-shrink-0 bg-gradient-to-b from-gold via-gold/60 to-gold/20" />
-                        <div className="flex-1 bg-bg-card p-5">
-                          <div className="flex items-center gap-2 mb-2">
-                            <span className="font-mono text-xs text-gold/60 tracking-wider">{step.num}</span>
-                            <Icon className="w-4 h-4 text-gold" />
-                            <h3 className="font-bebas text-[22px] tracking-[0.06em] uppercase text-gold">{step.title}</h3>
-                          </div>
-                          <p className="text-text-mid text-sm leading-relaxed pl-7">{step.desc}</p>
+                    <div key={step.title} className={staggerChild(revealFlow.visible)} style={{ transitionDelay: revealFlow.visible ? `${i * 200}ms` : "0ms" }}>
+                      {/* Node */}
+                      <div className="flex flex-col items-center text-center">
+                        <div className="w-7 h-7 rounded-full bg-bg-card border border-gold/40 flex items-center justify-center">
+                          <Icon className="w-3.5 h-3.5 text-gold" />
                         </div>
+                        <h3 className="font-bebas text-[20px] tracking-[0.06em] uppercase text-gold mt-2">{step.title}</h3>
+                        <p className="text-text-mid text-[13px] leading-relaxed max-w-[280px] mt-1">{step.desc}</p>
                       </div>
+                      {/* Connecting line */}
+                      {!isLast && (
+                        <div className="flex justify-center py-1">
+                          <div className="w-[2px] h-8 bg-gradient-to-b from-gold/40 to-gold/20" />
+                        </div>
+                      )}
                     </div>
                   );
                 })}
@@ -464,7 +405,7 @@ const Index = () => {
           {/* section divider */}
           <div className="px-8"><div className="h-[1px] bg-gradient-to-r from-transparent via-gold/10 to-transparent" /></div>
 
-          {/* ── § 5: PRICE ANCHOR + DELIVERABLES ── */}
+          {/* ── § 4: PRICE ANCHOR + DELIVERABLES ── */}
           <SectionFrame id="price-anchor" alt>
             <div ref={revealPrice.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", revealPrice.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
               <SectionHeader icon={Award} eyebrow="The Industry Standard" title={<>THIS KNOWLEDGE ISN'T CHEAP</>} plainSubtitle subtitle="You shouldn't need a $5,000 retainer from an entertainment attorney to understand your own deal." />
@@ -526,7 +467,7 @@ const Index = () => {
           {/* section divider */}
           <div className="px-8"><div className="h-[1px] bg-gradient-to-r from-transparent via-gold/10 to-transparent" /></div>
 
-          {/* ── § 6: FAQ ── */}
+          {/* ── § 5: FAQ ── */}
           <SectionFrame id="faq">
             <div ref={revealFaq.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", revealFaq.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
               <SectionHeader icon={HelpCircle} eyebrow="Common Questions" title={<>WHAT FILMMAKERS <span className="text-white">ASK</span></>} />
