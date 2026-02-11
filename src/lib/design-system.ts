@@ -88,11 +88,11 @@ export const typography = {
     textTransform: 'uppercase' as const,
   },
   body: {
-    fontFamily: "'Inter', sans-serif",
+    fontFamily: "'DM Sans', sans-serif",
     fontWeight: 400,
   },
   bodyBold: {
-    fontFamily: "'Inter', sans-serif",
+    fontFamily: "'DM Sans', sans-serif",
     fontWeight: 600,
   },
   mono: {
