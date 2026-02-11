@@ -91,6 +91,10 @@ export default {
           "0%, 100%": { opacity: "0.2" },
           "50%": { opacity: "0.45" },
         },
+        "cta-glow-pulse": {
+          "0%, 100%": { boxShadow: "0 0 20px rgba(212,175,55,0.25), 0 0 60px rgba(212,175,55,0.08)" },
+          "50%": { boxShadow: "0 0 30px rgba(212,175,55,0.45), 0 0 80px rgba(212,175,55,0.15)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -101,6 +105,7 @@ export default {
         "focal-pulse": "focal-pulse 4s ease-in-out infinite",
         "progress-draw": "progress-draw 1.5s cubic-bezier(0.22, 1, 0.36, 1) forwards",
         "logo-breathe": "logo-breathe 3.5s ease-in-out infinite",
+        "cta-glow-pulse": "cta-glow-pulse 2.5s ease-in-out infinite",
       },
     },
   },
