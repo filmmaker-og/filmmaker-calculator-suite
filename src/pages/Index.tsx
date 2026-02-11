@@ -6,11 +6,7 @@ import {
   DollarSign,
   Layers,
   Handshake,
-  BarChart3,
   HelpCircle,
-  FileSpreadsheet,
-  Presentation,
-  BookOpen,
   Check,
   EyeOff,
   Receipt,
@@ -21,10 +17,8 @@ import {
   Instagram,
   Link2,
   Film,
-  Award,
   Waves,
   Lock,
-  Quote,
 } from "lucide-react";
 import filmmakerLogo from "@/assets/filmmaker-logo.jpg";
 import Header from "@/components/Header";
@@ -47,31 +41,27 @@ const SHARE_TITLE = "FILMMAKER.OG — See Where Every Dollar Goes";
    PROBLEM CARDS — tighter copy, vertical layout
    ═══════════════════════════════════════════════════════════════════ */
 const problemCards = [
-  { icon: Receipt, title: "There's a pecking order.", body: "Distributors take fees first. Lenders recoup next. Then equity. You're last in line — unless you understand the structure well enough to negotiate your position." },
-  { icon: Gavel, title: "The rules exist. Nobody shared them.", body: "Recoupment schedules, fee waterfalls, P&A overages — Hollywood has run this playbook for decades. It's complicated by design, not by accident." },
-  { icon: EyeOff, title: "Learn the language. Level the field.", body: "Capital stacks, waterfall structures, producer corridors — the filmmakers who close deals speak this language fluently. Now you can too." },
+  { icon: Receipt, title: "You're last in line.", body: "Fees and lenders recoup first; producers get what's left unless you structure the order." },
+  { icon: Gavel, title: "The rules exist. You just haven't seen them.", body: "Contracts hide recoupment behind jargon — waterfalls make the order visible." },
+  { icon: EyeOff, title: "Producers who close speak this language.", body: "If you can explain recoupment clearly, you negotiate from strength." },
 ];
 
 /* ═══════════════════════════════════════════════════════════════════
    FAQ DATA
    ═══════════════════════════════════════════════════════════════════ */
 const faqs = [
-  { q: "Who is this for?", a: "Independent producers, directors, and investors. Whether you're raising $50K or $5M, the mechanics of recoupment are the same. If you intend to sell your film for profit, you need this." },
-  { q: "How does the calculator work?", a: "Four steps: set your budget, build your capital stack, structure your deal, and track exactly where every dollar goes in the waterfall. Takes about 2 minutes." },
-  { q: "Is this financial or legal advice?", a: "No. This is a simulation tool for estimation and planning purposes only. Always consult a qualified entertainment attorney or accountant for final deal structures." },
-  { q: "Is the calculator free?", a: "Yes. The simulator, waterfall chart, glossary, and unlimited scenarios are completely free. Premium exports — the Excel workbook and investor-ready PDF — are paid add-ons." },
-  { q: "What's free vs. paid?", a: "Free: full waterfall simulation, visual chart, deal glossary, and unlimited scenario runs. Paid: downloadable Excel workbook and investor-ready PDF export. The simulation itself has no paywall." },
-  { q: "Do I need an account?", a: "No. You can use the calculator without signing up. If you want to save your work, we offer a simple magic link — no password required." },
+  { q: "Who is this for?", a: "Independent producers, directors, and investors. If you intend to sell your film for profit, you need to understand recoupment." },
+  { q: "What's free vs. paid?", a: "Free: full simulator, waterfall chart, glossary, unlimited scenarios. Paid: professional exports (Excel/PDF) from $197." },
+  { q: "What assumptions does this model use?", a: "Fees are applied to gross before recoupment; marketing is treated as a fixed cap; tax credits reduce what must be recouped." },
 ];
 
 /* ═══════════════════════════════════════════════════════════════════
    HOW IT WORKS STEPS (static — not clickable)
    ═══════════════════════════════════════════════════════════════════ */
 const steps = [
-  { num: "01", title: "Set Your Budget", desc: "Total production cost plus guild signatories. This is your baseline.", icon: DollarSign },
-  { num: "02", title: "Build Your Capital Stack", desc: "Equity, pre-sales, gap, tax incentives — where the money comes from and how each source gets paid back.", icon: Layers },
-  { num: "03", title: "Structure Your Deal", desc: "Acquisition price, distribution fees, P&A spend. See how much actually makes it back.", icon: Handshake },
-  { num: "04", title: "Track the Recoupment", desc: "Every dollar through the priority chain. Who gets paid first. What's left for you.", icon: Waves },
+  { num: "01", title: "Set Your Budget", desc: "Your real cost basis.", icon: DollarSign },
+  { num: "02", title: "Build Your Capital Stack", desc: "Equity, debt, credits — who gets repaid.", icon: Layers },
+  { num: "03", title: "Run the Waterfall", desc: "Fees → debt → equity → profit split.", icon: Waves },
 ];
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -166,11 +156,7 @@ const Index = () => {
 
   // One-shot reveal refs for each section
   const revealProblem = useReveal();
-  const revealWaterfall = useReveal();
   const reveal3 = useReveal();
-  const revealCosts = useReveal();
-  const revealSocial = useReveal();
-  const reveal5 = useReveal();
   const reveal6 = useReveal();
 
   const savedState = useMemo(() => {
@@ -286,19 +272,19 @@ const Index = () => {
                 <img src={filmmakerLogo} alt="Filmmaker.OG" className="relative w-[96px] h-[96px] object-contain rounded-xl"
                   style={{ filter: 'brightness(1.15) drop-shadow(0 0 28px rgba(212,175,55,0.45))' }} />
               </div>
-              <p className="text-text-dim text-sm tracking-[0.35em] uppercase mb-4 font-semibold">Demystifying Film Finance</p>
+              <p className="text-text-dim text-sm tracking-[0.35em] uppercase mb-4 font-semibold">Free Film Finance Simulator</p>
               <h1 className="font-bebas text-[clamp(2rem,7vw,3.2rem)] leading-[1.05] text-gold mb-4">
                 SEE WHERE EVERY<br /><span className="text-white">DOLLAR GOES</span>
               </h1>
               <p className="text-text-mid text-sm font-medium leading-relaxed max-w-sm mx-auto mb-6">
-                Know who gets paid first, in what order, and what's left for you. Understand the deal before you sign it.
+                Model your budget, capital stack, and recoupment waterfall in under 2 minutes. Free. No account required to start.
               </p>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
                 {[
-                  { t: "Break-even clarity", d: "Know what your film must earn before investors recoup." },
-                  { t: "Recoupment order", d: "See who gets paid first, and what's left after fees + debt." },
-                  { t: "Investor-ready story", d: "Explain the math in plain English without losing confidence." },
+                  { t: "Break-even number", d: "Know the revenue your film needs before anyone profits." },
+                  { t: "Priority waterfall", d: "See who gets paid first — and what's left for producers." },
+                  { t: "Investor-ready language", d: "Walk into the room speaking the same language as the money." },
                 ].map((b) => (
                   <div key={b.t} className="rounded-xl border border-border-subtle bg-bg-card p-4 text-left">
                     <div className="text-gold text-sm font-semibold tracking-wide">{b.t}</div>
@@ -334,7 +320,7 @@ const Index = () => {
           {/* section divider */}
           <div className="px-8"><div className="h-[1px] bg-gradient-to-r from-transparent via-gold/10 to-transparent" /></div>
 
-          {/* ── THE PROBLEM ── */}
+          {/* ── THE PROBLEM + PRICE ANCHOR ── */}
           <SectionFrame id="problem">
             <div ref={revealProblem.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", revealProblem.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
               <SectionHeader icon={Lock} eyebrow="The Problem" title={<>THE DEAL IS DESIGNED AGAINST <span className="text-white">YOU</span></>} />
@@ -355,72 +341,35 @@ const Index = () => {
                   );
                 })}
               </div>
-            </div>
-          </SectionFrame>
 
-          {/* section divider */}
-          <div className="px-8"><div className="h-[1px] bg-gradient-to-r from-transparent via-gold/10 to-transparent" /></div>
-
-          {/* ── KNOWLEDGE ISN'T CHEAP — price anchor right after the pain ── */}
-          <SectionFrame id="industry-charges">
-            <div ref={revealCosts.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", revealCosts.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
-              <SectionHeader icon={Calculator} eyebrow="Industry Rates" title={<>KNOWLEDGE ISN&apos;T <span className="text-white">CHEAP</span></>} />
-              <div className="grid grid-cols-2 gap-3 mb-4">
-                {[
-                  { icon: Gavel, cost: "$5K–$15K", label: "Entertainment Lawyer" },
-                  { icon: Calculator, cost: "$10K–$30K", label: "Finance Consultant" },
-                  { icon: Handshake, cost: "5–15%", label: "Producer's Rep" },
-                  { icon: Film, cost: "10–25%", label: "Sales Agent" },
-                ].map((item, i) => {
-                  const Icon = item.icon;
-                  return (
-                    <div key={item.label} className={cn("rounded-xl border border-border-subtle bg-bg-card p-4 text-center", staggerChild(revealCosts.visible))} style={staggerDelay(i, revealCosts.visible)}>
-                      <div className="w-9 h-9 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center mx-auto mb-2">
-                        <Icon className="w-4 h-4 text-gold" />
-                      </div>
-                      <p className="font-mono text-lg font-medium text-text-primary line-through decoration-text-dim/30">{item.cost}</p>
-                      <p className="text-text-dim text-xs tracking-wider uppercase mt-0.5">{item.label}</p>
-                    </div>
-                  );
-                })}
-              </div>
-              <div className="text-center px-6 py-4 rounded-xl bg-gold/[0.06] border border-gold/20 max-w-xs mx-auto">
-                <p className="font-bebas text-4xl tracking-[0.1em] text-gold">FREE</p>
-                <p className="text-text-dim text-sm tracking-wider mt-1">The same analysis. No catch.</p>
-              </div>
-            </div>
-          </SectionFrame>
-
-          {/* ── THE WATERFALL ── */}
-          <SectionFrame id="waterfall-explainer">
-            <div ref={revealWaterfall.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", revealWaterfall.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
-                  <SectionHeader icon={Waves} eyebrow="What They Didn't Teach You In Film School" title={<>FROM FIRST MONEY IN TO LAST MONEY <span className="text-white">OUT</span></>} />
-                  <div className="relative flex items-start justify-between max-w-[300px] mx-auto mb-5">
-                    <div className="absolute top-[14px] left-[28px] right-[28px] h-[1px] bg-gradient-to-r from-gold/30 via-gold/50 to-gold/30" />
-                    {[
-                      { icon: DollarSign, label: "Budget" },
-                      { icon: Layers, label: "Stack" },
-                      { icon: Handshake, label: "Deal" },
-                      { icon: Waves, label: "Waterfall" },
-                    ].map((s) => {
-                      const StepIcon = s.icon;
-                      return (
-                        <div key={s.label} className="relative flex flex-col items-center gap-1.5 w-[56px]">
-                          <div className="w-7 h-7 rounded-full bg-bg-card border border-gold/40 flex items-center justify-center">
-                            <StepIcon className="w-3 h-3 text-gold" />
-                          </div>
-                          <span className="text-xs text-text-dim tracking-wider">{s.label}</span>
+              {/* Price anchor — merged inline */}
+              <div className="mt-6">
+                <p className="text-text-dim text-xs tracking-[0.2em] uppercase font-semibold mb-3">Industry rates</p>
+                <p className="text-text-mid text-sm leading-relaxed mb-4">This analysis is usually paid. Here you can run it free.</p>
+                <div className="grid grid-cols-2 gap-3 mb-4">
+                  {[
+                    { icon: Gavel, cost: "$5K–$15K", label: "Entertainment Lawyer" },
+                    { icon: Calculator, cost: "$10K–$30K", label: "Finance Consultant" },
+                    { icon: Handshake, cost: "5–15%", label: "Producer's Rep" },
+                    { icon: Film, cost: "10–25%", label: "Sales Agent" },
+                  ].map((item, i) => {
+                    const Icon = item.icon;
+                    return (
+                      <div key={item.label} className={cn("rounded-xl border border-border-subtle bg-bg-card p-4 text-center", staggerChild(revealProblem.visible))} style={staggerDelay(i + 3, revealProblem.visible)}>
+                        <div className="w-9 h-9 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center mx-auto mb-2">
+                          <Icon className="w-4 h-4 text-gold" />
                         </div>
-                      );
-                    })}
-                  </div>
-                  <p className="text-text-mid text-sm leading-relaxed text-center max-w-xs mx-auto">
-                    Most filmmakers have never seen one. The <span className="text-gold font-semibold">waterfall</span> determines who gets paid back, in what order, and how much. It's the key to package financing.
-                  </p>
-                  <button onClick={() => navigate('/waterfall-info')}
-                    className="block mx-auto mt-5 px-6 py-2.5 text-sm font-semibold tracking-[0.15em] uppercase transition-all rounded-md bg-gold/[0.04] border border-gold/25 text-gold hover:bg-gold/[0.08] hover:border-gold/40 active:scale-[0.97]">
-                    LEARN MORE &rarr;
-                  </button>
+                        <p className="font-mono text-lg font-medium text-text-primary line-through decoration-text-dim/30">{item.cost}</p>
+                        <p className="text-text-dim text-xs tracking-wider uppercase mt-0.5">{item.label}</p>
+                      </div>
+                    );
+                  })}
+                </div>
+                <div className="text-center px-6 py-4 rounded-xl bg-gold/[0.06] border border-gold/20 max-w-xs mx-auto">
+                  <p className="font-bebas text-4xl tracking-[0.1em] text-gold">FREE</p>
+                  <p className="text-text-dim text-sm tracking-wider mt-1">Premium exports available from $197.</p>
+                </div>
+              </div>
             </div>
           </SectionFrame>
 
@@ -430,7 +379,7 @@ const Index = () => {
           {/* ── HOW IT WORKS ── */}
           <SectionFrame id="how-it-works" alt>
             <div ref={reveal3.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", reveal3.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
-              <SectionHeader icon={Film} eyebrow="How It Works" title={<>YOUR DEAL IN FOUR <span className="text-white">STEPS</span></>} subtitle="No finance degree required." plainSubtitle />
+              <SectionHeader icon={Film} eyebrow="How It Works" title={<>YOUR DEAL IN THREE <span className="text-white">STEPS</span></>} />
               <div className="space-y-3">
                 {steps.map((step, i) => {
                   const Icon = step.icon;
@@ -451,94 +400,6 @@ const Index = () => {
                   );
                 })}
               </div>
-
-              <div className="mt-5 rounded-xl bg-gold/[0.06] border border-gold/20 px-5 py-4">
-                <p className="text-gold text-xs tracking-[0.2em] uppercase font-semibold">Assumptions (plain English)</p>
-                <ul className="mt-3 space-y-2 text-text-mid text-sm leading-relaxed">
-                  <li>Percent fees are applied to gross revenue before recoupment.</li>
-                  <li>Marketing is treated as a fixed expense cap (not a percentage).</li>
-                  <li>Tax credits reduce the amount that must be recouped (they don't magically increase revenue).</li>
-                </ul>
-              </div>
-
-              {/* Mid-page CTA — catch fast deciders */}
-              <div className="text-center mt-5 -mb-2">
-                <button onClick={handleStartClick}
-                  className="h-16 px-10 text-base font-bold tracking-[0.14em] transition-all active:scale-[0.96] rounded-md bg-gold/[0.14] border-2 border-gold/40 text-gold shadow-[0_0_20px_rgba(212,175,55,0.25)] hover:shadow-[0_0_30px_rgba(212,175,55,0.4)] hover:border-gold/60 hover:bg-gold/[0.18]">
-                  RUN THE CALCULATOR
-                </button>
-              </div>
-            </div>
-          </SectionFrame>
-
-          {/* section divider */}
-          <div className="px-8"><div className="h-[1px] bg-gradient-to-r from-transparent via-gold/10 to-transparent" /></div>
-
-          {/* ── SOCIAL PROOF ── */}
-          <SectionFrame id="social-proof">
-            <div ref={revealSocial.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", revealSocial.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
-              <SectionHeader icon={Quote} eyebrow="From The Community" title={<>FILMMAKERS WHO <span className="text-white">RAN THE NUMBERS</span></>} />
-              <div className="space-y-3">
-                {[
-                  { quote: "I had no idea my equity investors were fourth in line. This showed me the whole picture before I signed anything.", name: "Sarah M.", role: "Independent Producer" },
-                  { quote: "We used the waterfall sim to restructure our gap financing. Saved us from a deal that would have left us with nothing.", name: "James T.", role: "First-time Director" },
-                  { quote: "Finally, a tool that speaks producer — not banker. I use it on every project now.", name: "David R.", role: "Line Producer" },
-                ].map((t, i) => (
-                  <div key={i} className={cn("rounded-xl border border-border-subtle bg-bg-card p-5", staggerChild(revealSocial.visible))} style={staggerDelay(i, revealSocial.visible)}>
-                    <Quote className="w-4 h-4 text-gold/40 mb-2" />
-                    <p className="text-text-mid text-sm leading-relaxed italic mb-3">{t.quote}</p>
-                    <div className="flex items-center gap-2">
-                      <span className="text-gold text-sm font-semibold">{t.name}</span>
-                      <span className="text-text-dim text-xs tracking-wider">{t.role}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </SectionFrame>
-
-          {/* section divider */}
-          <div className="px-8"><div className="h-[1px] bg-gradient-to-r from-transparent via-white/[0.04] to-transparent" /></div>
-
-          {/* ── WHAT YOU GET (tight receipt) ── */}
-          <SectionFrame id="deliverables" alt>
-            <div ref={reveal5.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", reveal5.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
-              <SectionHeader icon={Award} eyebrow="The Deliverables" title={<>WHAT YOU WALK AWAY <span className="text-white">WITH</span></>} />
-
-              {/* Free tier */}
-              <p className="text-text-dim text-xs tracking-[0.2em] uppercase font-semibold mb-2">Free — always</p>
-              <div className="rounded-xl border border-border-subtle bg-bg-card overflow-hidden divide-y divide-border-subtle mb-4">
-                {[
-                  { icon: BarChart3, line: "Visual waterfall chart — who gets paid, in what order" },
-                  { icon: BookOpen, line: "Full glossary — every deal term in plain English" },
-                  { icon: Waves, line: "Unlimited scenarios — adjust the variables, re-run as often as you want" },
-                ].map((item, i) => {
-                  const Icon = item.icon;
-                  return (
-                    <div key={i} className={cn("flex items-center gap-3 px-5 py-3.5", staggerChild(reveal5.visible))} style={staggerDelay(i, reveal5.visible)}>
-                      <Icon className="w-4 h-4 text-gold flex-shrink-0" />
-                      <p className="text-text-mid text-sm leading-snug">{item.line}</p>
-                    </div>
-                  );
-                })}
-              </div>
-
-              {/* Premium tier */}
-              <p className="text-text-dim text-xs tracking-[0.2em] uppercase font-semibold mb-2">Premium exports</p>
-              <div className="rounded-xl border border-gold/20 bg-bg-card overflow-hidden divide-y divide-border-subtle">
-                {[
-                  { icon: FileSpreadsheet, line: "6-sheet Excel workbook — waterfall, capital stack, investor returns" },
-                  { icon: Presentation, line: "Investor-ready PDF — plain language, zero jargon" },
-                ].map((item, i) => {
-                  const Icon = item.icon;
-                  return (
-                    <div key={i} className={cn("flex items-center gap-3 px-5 py-3.5", staggerChild(reveal5.visible))} style={staggerDelay(i + 3, reveal5.visible)}>
-                      <Icon className="w-4 h-4 text-gold flex-shrink-0" />
-                      <p className="text-text-mid text-sm leading-snug">{item.line}</p>
-                    </div>
-                  );
-                })}
-              </div>
             </div>
           </SectionFrame>
 
@@ -548,7 +409,7 @@ const Index = () => {
           {/* ── FAQ ── */}
           <SectionFrame id="faq">
             <div ref={reveal6.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", reveal6.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
-              <SectionHeader icon={HelpCircle} eyebrow="Common Questions" title={<>WHAT FILMMAKERS <span className="text-white">ASK</span></>} subtitle="Straight answers. No jargon." plainSubtitle />
+              <SectionHeader icon={HelpCircle} eyebrow="Common Questions" title={<>WHAT FILMMAKERS <span className="text-white">ASK</span></>} />
               <div className="bg-bg-card rounded-xl px-5 border border-border-subtle">
                 <Accordion type="single" collapsible className="w-full">
                   {faqs.map((faq, i) => (
@@ -576,7 +437,7 @@ const Index = () => {
                   style={{ width: '100%', height: '100%', background: `radial-gradient(ellipse 60% 60% at 50% 10%, rgba(212,175,55,0.08) 0%, transparent 70%)` }} />
                 <div className="relative p-8 md:p-12 max-w-md mx-auto text-center">
                   <h2 className="font-bebas text-3xl md:text-4xl tracking-[0.08em] text-gold mb-4">
-                    STOP GUESSING.<br />START <span className="text-white">CLOSING</span>.
+                    INVESTORS WILL ASK HOW THE MONEY FLOWS <span className="text-white">BACK</span>.<br />HAVE THE <span className="text-white">ANSWER</span>.
                   </h2>
                   <p className="text-text-mid text-sm leading-relaxed max-w-xs mx-auto mb-6">
                     Two minutes. Zero cost. Full clarity on your deal.
@@ -617,12 +478,9 @@ const Index = () => {
                 </button>
               </div>
 
-              <div className="flex items-center justify-center gap-3 mb-4">
+              <div className="flex items-center justify-center mb-4">
                 <span className="font-bebas text-3xl tracking-[0.2em] text-gold">
                   FILMMAKER<span className="text-white">.OG</span>
-                </span>
-                <span className="text-xs font-semibold tracking-[0.15em] text-gold border border-gold/40 rounded-full px-2 py-1 leading-none uppercase">
-                  BETA
                 </span>
               </div>
               <p className="text-text-dim/60 text-xs tracking-wide leading-relaxed text-center">
