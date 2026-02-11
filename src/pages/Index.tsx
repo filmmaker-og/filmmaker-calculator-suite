@@ -63,7 +63,7 @@ const faqs = [
   { q: "Who is this for?", a: "Independent producers, directors, and investors. Whether you're raising $50K or $5M, the mechanics of recoupment are the same. If you intend to sell your film for profit, you need this." },
   { q: "How does the calculator work?", a: "Four steps: set your budget, build your capital stack, model an acquisition deal, and see exactly where every dollar goes in the waterfall. It takes about 2 minutes." },
   { q: "Is this financial or legal advice?", a: "No. This is a simulation tool for estimation and planning purposes only. Always consult a qualified entertainment attorney or accountant for final deal structures." },
-  { q: 'What is a "waterfall"?', a: "A waterfall is the priority order in which revenue from your film is distributed — who gets paid first, second, and last. Most filmmakers make deals without ever seeing how the money flows back.", link: { label: "Learn more on Wikipedia", url: "https://en.wikipedia.org/wiki/Hollywood_accounting" } },
+  { q: 'What is a "waterfall"?', a: "A waterfall is the priority order in which revenue from your film is distributed — who gets paid first, second, and last. It's the single most important structure in your deal — and the one you're least likely to be shown.", link: { label: "Learn more on Wikipedia", url: "https://en.wikipedia.org/wiki/Hollywood_accounting" } },
   { q: "Is the calculator free?", a: "Yes, the simulation is completely free. Run as many scenarios as you want, adjust the variables, and see different outcomes. No paywalls, no limits." },
   { q: "Do I need an account?", a: "No. You can use the calculator without signing up. If you want to save your work, we offer a simple magic link — no password required." },
 ];
@@ -75,16 +75,16 @@ const steps = [
   { num: "01", title: "Set Your Budget", desc: "Total production cost plus guild signatories. This is your baseline.", icon: DollarSign },
   { num: "02", title: "Build Your Capital Stack", desc: "Equity, pre-sales, gap, tax incentives — where the money comes from and how each source gets paid back.", icon: Layers },
   { num: "03", title: "Model the Deal", desc: "Acquisition price, distribution fees, P&A spend. See how much actually makes it back.", icon: Handshake },
-  { num: "04", title: "See the Waterfall", desc: "Every dollar through the priority chain. Who gets paid first. What's left for you.", icon: Waves, callout: "Most filmmakers sign deals without ever seeing this chart." },
+  { num: "04", title: "See the Waterfall", desc: "Every dollar through the priority chain. Who gets paid first. What's left for you.", icon: Waves },
 ];
 
 /* ═══════════════════════════════════════════════════════════════════
    PROBLEM CARDS — filmmaker language, not finance jargon
    ═══════════════════════════════════════════════════════════════════ */
 const problemCards = [
-  { icon: Receipt, title: "\u201CShow me how I get paid back.\u201D", body: "That's what every investor asks before they write a check. How does the money return? In what order? What if the film underperforms? If you can't answer clearly, the conversation ends before it starts." },
-  { icon: EyeOff, title: "Nobody ran the numbers.", body: "Most indie deals aren't built to protect both sides. Not bad faith — just math nobody modeled. Filmmakers give away too much. Investors take on risk they can't see. It starts with one missing step." },
-  { icon: Scale, title: "Structure closes the deal.", body: "Preferred returns, clear priority, transparent recoupment — when investors can see their downside is managed, they say yes faster. Structure turns a pitch into a funded project." },
+  { icon: EyeOff, title: "Asymmetrical information is the business model.", body: "Studios, sales agents, and distributors understand the financial order — who gets paid first, second, last. You don't. The less you know about your deal, the better their deal gets. That's not a flaw. That's the design." },
+  { icon: Receipt, title: "There's a pecking order. You're at the bottom.", body: "Every deal has a priority structure: distributors recoup first, then investors, then lenders — then you, if anything's left. The math exists. Nobody shows it to you because the moment you see it, you start asking the right questions." },
+  { icon: Gavel, title: "The gatekeepers wrote the rules. You can learn them.", body: "Recoupment schedules, distribution fees, P&A overages — Hollywood elites have used this playbook for decades. It's not complicated. It was just never meant to be accessible. Until now." },
 ];
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -133,25 +133,36 @@ const SectionFrame = ({ id, children, className }: {
 /* ═══════════════════════════════════════════════════════════════════
    SECTION FADE-IN HOOK (IntersectionObserver)
    ═══════════════════════════════════════════════════════════════════ */
-const useFadeIn = () => {
+const useReveal = () => {
   const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+    const thresholds = Array.from({ length: 21 }, (_, i) => i / 20);
     const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { setVisible(true); observer.disconnect(); } },
-      { threshold: 0.15 }
+      ([entry]) => {
+        const p = Math.min(entry.intersectionRatio / 0.35, 1);
+        setProgress(prev => (prev >= 1 ? prev : Math.max(prev, p)));
+        if (p >= 1) observer.disconnect();
+      },
+      { threshold: thresholds }
     );
     observer.observe(el);
     return () => observer.disconnect();
   }, []);
 
+  const revealed = progress >= 1;
   return {
     ref,
-    visible,
-    className: cn("transition-all duration-700 ease-out", visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"),
+    visible: progress > 0.7,
+    style: revealed ? {} : {
+      filter: `blur(${(1 - progress) * 12}px)`,
+      opacity: 0.06 + progress * 0.94,
+      transform: `translateY(${(1 - progress) * 24}px)`,
+      transition: 'filter 0.05s linear, opacity 0.05s linear, transform 0.05s linear',
+    } as React.CSSProperties,
   };
 };
 
@@ -189,17 +200,16 @@ const Index = () => {
   const haptics = useHaptics();
   const [linkCopied, setLinkCopied] = useState(false);
 
-  // Fade-in refs for each section
-  const fade2 = useFadeIn();
-  const fade3 = useFadeIn();
-  const fade4 = useFadeIn();
-  const fade5 = useFadeIn();
-  const fade6 = useFadeIn();
+  // Progressive blur-reveal refs for each section
+  const reveal2 = useReveal();
+  const reveal3 = useReveal();
+  const reveal4 = useReveal();
+  const reveal5 = useReveal();
+  const reveal6 = useReveal();
 
   // Swipe index trackers for horizontal scroll sections
   const swipeProblem = useSwipeIndex(problemCards.length);
   const swipeIndustry = useSwipeIndex(industryCosts.length);
-  const swipeDeliverables = useSwipeIndex(4);
 
   const savedState = useMemo(() => {
     try {
@@ -350,8 +360,8 @@ const Index = () => {
 
           {/* ── THE PROBLEM ── */}
           <SectionFrame id="problem">
-            <div ref={fade2.ref} className={cn(fade2.className, "max-w-2xl mx-auto")}>
-              <SectionHeader icon={AlertTriangle} eyebrow="The Problem" title="IT'S NOT THE FILM. IT'S THE DEAL." subtitle="The film can be great. If the deal is wrong, the money still doesn't come back." plainSubtitle />
+            <div ref={reveal2.ref} style={reveal2.style} className="max-w-2xl mx-auto">
+              <SectionHeader icon={AlertTriangle} eyebrow="The Problem" title="YOU WERE NEVER MEANT TO SEE THIS" subtitle="Hollywood runs on one advantage: filmmakers don't understand the deal. Every dollar flows through a financial order designed by the people who get paid first." plainSubtitle />
 
               {/* Problem cards — horizontal swipe */}
               <div className="-mx-6 md:-mx-8">
@@ -359,7 +369,7 @@ const Index = () => {
                   {problemCards.map((card, i) => {
                     const Icon = card.icon;
                     return (
-                      <div key={i} className={cn("flex-shrink-0 w-[290px] snap-start bg-bg-card border border-border-subtle rounded-xl p-5", staggerChild(fade2.visible))} style={staggerDelay(i, fade2.visible)}>
+                      <div key={i} className={cn("flex-shrink-0 w-[290px] snap-start bg-bg-card border border-border-subtle rounded-xl p-5", staggerChild(reveal2.visible))} style={staggerDelay(i, reveal2.visible)}>
                         <div className="w-9 h-9 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center mb-3">
                           <Icon className="w-4 h-4 text-gold" />
                         </div>
@@ -376,7 +386,7 @@ const Index = () => {
 
               {/* Waterfall explainer */}
               <div className="mt-6 px-4 py-5 rounded-xl bg-gold/[0.06] border border-gold/20">
-                <p className="text-gold text-[10px] tracking-[0.3em] uppercase font-semibold text-center mb-4">The Missing Piece</p>
+                <p className="text-gold text-[10px] tracking-[0.3em] uppercase font-semibold text-center mb-4">What They Don't Show You</p>
                 <div className="relative flex items-start justify-between max-w-[300px] mx-auto mb-4">
                   <div className="absolute top-[14px] left-[28px] right-[28px] h-[1px] bg-gradient-to-r from-gold/30 via-gold/50 to-gold/30" />
                   {[
@@ -397,8 +407,8 @@ const Index = () => {
                   })}
                 </div>
                 <p className="text-text-mid text-[14px] leading-relaxed text-center max-w-xs mx-auto">
-                  A <span className="text-gold font-semibold">waterfall</span> is the priority order that determines
-                  who gets paid first when your film earns revenue. Most filmmakers sign deals without ever seeing one.
+                  Most filmmakers have no idea there's a financial order that decides whether they ever see a dollar.
+                  It's called a <span className="text-gold font-semibold">waterfall</span> — and the people on top wrote the rules.
                 </p>
                 <button onClick={() => navigate('/waterfall-info')}
                   className="block mx-auto mt-3 text-gold/70 hover:text-gold text-[13px] tracking-wider transition-colors">
@@ -410,13 +420,13 @@ const Index = () => {
 
           {/* ── HOW IT WORKS ── */}
           <SectionFrame id="how-it-works">
-            <div ref={fade3.ref} className={cn(fade3.className, "max-w-2xl mx-auto")}>
+            <div ref={reveal3.ref} style={reveal3.style} className="max-w-2xl mx-auto">
               <SectionHeader icon={Film} eyebrow="How It Works" title="FROM BUDGET TO WATERFALL" subtitle="Four steps. Two minutes. No finance degree." plainSubtitle />
               <div className="space-y-4">
                 {steps.map((step, i) => {
                   const Icon = step.icon;
                   return (
-                    <div key={step.num} className={staggerChild(fade3.visible)} style={staggerDelay(i, fade3.visible)}>
+                    <div key={step.num} className={staggerChild(reveal3.visible)} style={staggerDelay(i, reveal3.visible)}>
                       <div className="flex items-start gap-4 bg-bg-card border border-border-subtle hover:border-gold/20 rounded-xl p-5 transition-colors">
                         <div className="flex-shrink-0 w-9 h-9 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center">
                           <Icon className="w-4 h-4 text-gold" />
@@ -451,14 +461,14 @@ const Index = () => {
 
           {/* ── INDUSTRY CHARGES ── */}
           <SectionFrame id="industry-charges">
-            <div ref={fade4.ref} className={cn(fade4.className, "max-w-2xl mx-auto")}>
+            <div ref={reveal4.ref} style={reveal4.style} className="max-w-2xl mx-auto">
               <SectionHeader icon={Clapperboard} eyebrow="The Industry Standard" title="WHAT OTHERS CHARGE FOR THIS" subtitle="What people charge to help you understand your own deal." plainSubtitle />
               <div className="-mx-6 md:-mx-8 mb-4">
                 <div ref={swipeIndustry.ref} onScroll={swipeIndustry.onScroll} className="flex gap-3 overflow-x-auto scrollbar-hide snap-x snap-mandatory px-6 md:px-8 pb-3">
                   {industryCosts.map((item, i) => {
                     const Icon = item.icon;
                     return (
-                      <div key={item.label} className={cn("flex-shrink-0 w-[260px] snap-start bg-bg-card border border-border-subtle rounded-xl p-5 relative overflow-hidden", staggerChild(fade4.visible))} style={staggerDelay(i, fade4.visible)}>
+                      <div key={item.label} className={cn("flex-shrink-0 w-[260px] snap-start bg-bg-card border border-border-subtle rounded-xl p-5 relative overflow-hidden", staggerChild(reveal4.visible))} style={staggerDelay(i, reveal4.visible)}>
                         <div className="absolute top-0 right-0 w-16 h-16 bg-gold/[0.03] rounded-full blur-2xl translate-x-4 -translate-y-4" />
                         <div className="relative">
                           <div className="w-9 h-9 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center mb-3">
@@ -485,38 +495,35 @@ const Index = () => {
 
           {/* ── WHAT YOU GET ── */}
           <SectionFrame id="deliverables">
-            <div ref={fade5.ref} className={cn(fade5.className, "max-w-2xl mx-auto")}>
+            <div ref={reveal5.ref} style={reveal5.style} className="max-w-2xl mx-auto">
               <SectionHeader icon={Award} eyebrow="The Deliverables" title="WHAT YOU WALK AWAY WITH" subtitle="Everything you need to walk into a room full of money people and hold your own." plainSubtitle />
-              <div className="-mx-6 md:-mx-8">
-                <div ref={swipeDeliverables.ref} onScroll={swipeDeliverables.onScroll} className="flex gap-3 overflow-x-auto scrollbar-hide snap-x snap-mandatory px-6 md:px-8 pb-3">
-                  {[
-                    { icon: FileSpreadsheet, title: "The document that closes your raise", desc: "A 6-sheet Excel workbook — executive summary, waterfall ledger, capital breakdown, and investor returns. Hand it over and let the numbers speak." },
-                    { icon: Presentation, title: "A PDF your investor will actually read", desc: "Presentation-ready, plain language, zero jargon. Email it, print it, or hand it across the table. Designed to make you look like you've done this before." },
-                    { icon: BarChart3, title: "One chart that explains everything", desc: "A visual waterfall showing who gets paid, in what order, and how much. The most important chart in film finance — and now it's yours." },
-                    { icon: BookOpen, title: "Every term, in plain English", desc: "A glossary of every financial term in your deal. No MBA required — just the language you need to hold your own in any room." },
-                  ].map((item, i) => {
-                    const Icon = item.icon;
-                    return (
-                      <div key={item.title} className={cn("flex-shrink-0 w-[280px] snap-start bg-bg-card border border-border-subtle rounded-xl p-5", staggerChild(fade5.visible))} style={staggerDelay(i, fade5.visible)}>
-                        <div className="w-9 h-9 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center mb-3">
-                          <Icon className="w-4 h-4 text-gold" />
-                        </div>
-                        <h3 className="text-text-primary text-lg font-semibold mb-1.5">{item.title}</h3>
+              <div className="space-y-3">
+                {[
+                  { icon: FileSpreadsheet, title: "The document that closes your raise", desc: "A 6-sheet Excel workbook — executive summary, waterfall ledger, capital breakdown, and investor returns. Hand it over and let the numbers speak." },
+                  { icon: Presentation, title: "A PDF your investor will actually read", desc: "Presentation-ready, plain language, zero jargon. Email it, print it, or hand it across the table. Designed to make you look like you've done this before." },
+                  { icon: BarChart3, title: "One chart that explains everything", desc: "A visual waterfall showing who gets paid, in what order, and how much. The most important chart in film finance — and now it's yours." },
+                  { icon: BookOpen, title: "Every term, in plain English", desc: "A glossary of every financial term in your deal. No MBA required — just the language you need to hold your own in any room." },
+                ].map((item, i) => {
+                  const Icon = item.icon;
+                  return (
+                    <div key={item.title} className={cn("bg-bg-card border border-border-subtle rounded-xl p-5 flex items-start gap-4", staggerChild(reveal5.visible))} style={staggerDelay(i, reveal5.visible)}>
+                      <div className="flex-shrink-0 w-9 h-9 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center">
+                        <Icon className="w-4 h-4 text-gold" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="text-text-primary text-lg font-semibold mb-1">{item.title}</h3>
                         <p className="text-text-mid text-[15px] leading-relaxed">{item.desc}</p>
                       </div>
-                    );
-                  })}
-                </div>
+                    </div>
+                  );
+                })}
               </div>
-              <p className="text-center mt-3 font-mono text-xs text-text-dim tracking-wider">
-                {swipeDeliverables.index + 1} <span className="text-gold/40">/</span> 4
-              </p>
             </div>
           </SectionFrame>
 
           {/* ── FAQ ── */}
           <SectionFrame id="faq">
-            <div ref={fade6.ref} className={cn(fade6.className, "max-w-2xl mx-auto")}>
+            <div ref={reveal6.ref} style={reveal6.style} className="max-w-2xl mx-auto">
               <SectionHeader icon={HelpCircle} eyebrow="Common Questions" title="WHAT FILMMAKERS ASK" subtitle="Straight answers. No jargon." plainSubtitle />
               <div className="flex rounded-xl overflow-hidden border border-border-subtle">
                 <div className="w-1 flex-shrink-0 bg-gradient-to-b from-gold via-gold/60 to-gold/20" style={{ boxShadow: '0 0 12px rgba(212,175,55,0.25)' }} />
