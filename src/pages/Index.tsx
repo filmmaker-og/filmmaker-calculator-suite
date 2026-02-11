@@ -310,7 +310,7 @@ const Index = () => {
         )}
 
         {/* ═══════ LANDING PAGE ═══════ */}
-        <main className={cn("flex-1 flex flex-col transition-all duration-700 snap-container", isComplete ? "opacity-100" : "opacity-0")}>
+        <main className={cn("flex-1 flex flex-col transition-all duration-700 scroll-smooth", isComplete ? "opacity-100" : "opacity-0")}>
           <div className="vignette" />
 
           {/* ── HERO ── */}
@@ -373,7 +373,7 @@ const Index = () => {
                         </div>
                         <div className="flex-1 min-w-0">
                           <h3 className="text-text-primary text-lg font-semibold mb-1.5">{card.title}</h3>
-                          <p className="text-text-dim text-[15px] leading-relaxed">{card.body}</p>
+                          <p className="text-text-mid text-[15px] leading-relaxed">{card.body}</p>
                         </div>
                       </div>
                     </div>
@@ -381,7 +381,6 @@ const Index = () => {
                 })}
               </div>
             </div>
-            <SectionChevron nextId="how-it-works" />
           </SectionFrame>
 
           {/* ── HOW IT WORKS ── */}
@@ -402,7 +401,7 @@ const Index = () => {
                             <span className="font-mono text-xs text-text-dim tracking-wider">{step.num}</span>
                             <h3 className="text-text-primary text-lg font-semibold">{step.title}</h3>
                           </div>
-                          <p className="text-text-dim text-[15px] leading-relaxed">{step.desc}</p>
+                          <p className="text-text-mid text-[15px] leading-relaxed">{step.desc}</p>
                         </div>
                       </div>
                       {step.callout && (
@@ -423,64 +422,65 @@ const Index = () => {
                 </button>
               </div>
             </div>
-            <SectionChevron nextId="industry-charges" />
           </SectionFrame>
 
           {/* ── INDUSTRY CHARGES ── */}
           <SectionFrame id="industry-charges">
             <div ref={fade4.ref} className={cn(fade4.className, "max-w-2xl mx-auto")}>
               <SectionHeader icon={Clapperboard} eyebrow="The Industry Standard" title="WHAT OTHERS CHARGE FOR THIS ANALYSIS" subtitle="This is what it costs to understand your own deal. Until now." />
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-                {industryCosts.map((item, i) => {
-                  const Icon = item.icon;
-                  return (
-                    <div key={item.label} className={cn("bg-bg-card border border-border-subtle hover:border-gold/20 rounded-xl p-5 relative overflow-hidden transition-colors", staggerChild(fade4.visible))} style={staggerDelay(i, fade4.visible)}>
-                      <div className="absolute top-0 right-0 w-16 h-16 bg-gold/[0.03] rounded-full blur-2xl translate-x-4 -translate-y-4" />
-                      <div className="relative">
-                        <div className="w-9 h-9 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center mb-3">
-                          <Icon className="w-4 h-4 text-gold" />
+              <div className="-mx-6 md:-mx-8 mb-4">
+                <div className="flex gap-3 overflow-x-auto scrollbar-hide snap-x snap-mandatory px-6 md:px-8 pb-3">
+                  {industryCosts.map((item, i) => {
+                    const Icon = item.icon;
+                    return (
+                      <div key={item.label} className={cn("flex-shrink-0 w-[260px] snap-start bg-bg-card border border-border-subtle rounded-xl p-5 relative overflow-hidden", staggerChild(fade4.visible))} style={staggerDelay(i, fade4.visible)}>
+                        <div className="absolute top-0 right-0 w-16 h-16 bg-gold/[0.03] rounded-full blur-2xl translate-x-4 -translate-y-4" />
+                        <div className="relative">
+                          <div className="w-9 h-9 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center mb-3">
+                            <Icon className="w-4 h-4 text-gold" />
+                          </div>
+                          <p className="font-mono text-xl font-medium text-text-primary line-through decoration-text-dim/30 mb-0.5">{item.cost}</p>
+                          <p className="text-text-dim text-xs tracking-wider uppercase">{item.label}</p>
+                          <p className="text-text-dim text-[13px] mt-1">{item.note}</p>
                         </div>
-                        <p className="font-mono text-xl md:text-2xl font-medium text-text-primary line-through decoration-text-dim/30 mb-0.5">{item.cost}</p>
-                        <p className="text-text-dim text-xs tracking-wider uppercase">{item.label}</p>
-                        <p className="text-text-dim text-[13px] mt-1">{item.note}</p>
                       </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+                </div>
               </div>
               <div className="text-center mt-4 px-6 py-5 rounded-xl bg-gold/[0.06] border border-gold/20 max-w-xs mx-auto">
                 <p className="font-bebas text-4xl md:text-5xl tracking-[0.1em] text-gold">FREE</p>
                 <p className="text-text-dim text-[15px] tracking-wider mt-1">The same analysis. No catch.</p>
               </div>
             </div>
-            <SectionChevron nextId="deliverables" />
           </SectionFrame>
 
           {/* ── WHAT YOU GET ── */}
           <SectionFrame id="deliverables">
             <div ref={fade5.ref} className={cn(fade5.className, "max-w-2xl mx-auto")}>
               <SectionHeader icon={Award} eyebrow="The Deliverables" title="WHAT YOU WALK AWAY WITH" subtitle="Everything you need to walk into a room full of money people and hold your own." plainSubtitle />
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {[
-                  { icon: FileSpreadsheet, title: "The document that closes your raise", desc: "A 6-sheet Excel workbook — executive summary, waterfall ledger, capital breakdown, and investor returns. Hand it over and let the numbers speak." },
-                  { icon: Presentation, title: "A PDF your investor will actually read", desc: "Presentation-ready, plain language, zero jargon. Email it, print it, or hand it across the table. Designed to make you look like you've done this before." },
-                  { icon: BarChart3, title: "One chart that explains everything", desc: "A visual waterfall showing who gets paid, in what order, and how much. The most important chart in film finance — and now it's yours." },
-                  { icon: BookOpen, title: "Every term, in plain English", desc: "A glossary of every financial term in your deal. No MBA required — just the language you need to hold your own in any room." },
-                ].map((item, i) => {
-                  const Icon = item.icon;
-                  return (
-                    <div key={item.title} className={cn("bg-bg-card border border-border-subtle hover:border-gold/20 rounded-xl p-5 transition-colors", staggerChild(fade5.visible))} style={staggerDelay(i, fade5.visible)}>
-                      <div className="w-9 h-9 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center mb-3">
-                        <Icon className="w-4 h-4 text-gold" />
+              <div className="-mx-6 md:-mx-8">
+                <div className="flex gap-3 overflow-x-auto scrollbar-hide snap-x snap-mandatory px-6 md:px-8 pb-3">
+                  {[
+                    { icon: FileSpreadsheet, title: "The document that closes your raise", desc: "A 6-sheet Excel workbook — executive summary, waterfall ledger, capital breakdown, and investor returns. Hand it over and let the numbers speak." },
+                    { icon: Presentation, title: "A PDF your investor will actually read", desc: "Presentation-ready, plain language, zero jargon. Email it, print it, or hand it across the table. Designed to make you look like you've done this before." },
+                    { icon: BarChart3, title: "One chart that explains everything", desc: "A visual waterfall showing who gets paid, in what order, and how much. The most important chart in film finance — and now it's yours." },
+                    { icon: BookOpen, title: "Every term, in plain English", desc: "A glossary of every financial term in your deal. No MBA required — just the language you need to hold your own in any room." },
+                  ].map((item, i) => {
+                    const Icon = item.icon;
+                    return (
+                      <div key={item.title} className={cn("flex-shrink-0 w-[280px] snap-start bg-bg-card border border-border-subtle rounded-xl p-5", staggerChild(fade5.visible))} style={staggerDelay(i, fade5.visible)}>
+                        <div className="w-9 h-9 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center mb-3">
+                          <Icon className="w-4 h-4 text-gold" />
+                        </div>
+                        <h3 className="text-text-primary text-lg font-semibold mb-1.5">{item.title}</h3>
+                        <p className="text-text-mid text-[15px] leading-relaxed">{item.desc}</p>
                       </div>
-                      <h3 className="text-text-primary text-lg font-semibold mb-1.5">{item.title}</h3>
-                      <p className="text-text-dim text-[15px] leading-relaxed">{item.desc}</p>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+                </div>
               </div>
             </div>
-            <SectionChevron nextId="faq" />
           </SectionFrame>
 
           {/* ── FAQ ── */}
@@ -511,7 +511,6 @@ const Index = () => {
                 </div>
               </div>
             </div>
-            <SectionChevron nextId="final-cta" />
           </SectionFrame>
 
           {/* ── FINAL CTA ── */}
@@ -542,25 +541,25 @@ const Index = () => {
           <footer className="py-8 px-6">
             <div className="h-[2px] bg-gradient-to-r from-transparent via-gold/25 to-transparent mb-8" />
             <div className="max-w-md mx-auto">
-              <div className="flex items-center justify-center gap-2 mb-5">
+              <div className="flex flex-wrap items-center justify-center gap-2.5 mb-5">
                 <a href="mailto:thefilmmaker.og@gmail.com"
-                  className="flex items-center gap-1 text-xs tracking-wider text-gold/70 hover:text-gold transition-colors py-1.5 px-2.5 rounded-full border border-white/[0.06] hover:border-gold/30">
-                  <Mail className="w-3 h-3" /><span>Email</span>
+                  className="flex items-center gap-1.5 text-xs tracking-wider text-gold/70 hover:text-gold transition-colors py-2 px-3 rounded-full border border-white/[0.06] hover:border-gold/30">
+                  <Mail className="w-3.5 h-3.5" /><span>Email</span>
                 </a>
                 <a href="https://www.instagram.com/filmmaker.og" target="_blank" rel="noopener noreferrer"
-                  className="flex items-center gap-1 text-xs tracking-wider text-gold/70 hover:text-gold transition-colors py-1.5 px-2.5 rounded-full border border-white/[0.06] hover:border-gold/30">
-                  <Instagram className="w-3 h-3" /><span>Instagram</span>
+                  className="flex items-center gap-1.5 text-xs tracking-wider text-gold/70 hover:text-gold transition-colors py-2 px-3 rounded-full border border-white/[0.06] hover:border-gold/30">
+                  <Instagram className="w-3.5 h-3.5" /><span>Instagram</span>
                 </a>
                 <button onClick={handleShare}
-                  className="flex items-center gap-1 text-xs tracking-wider text-gold/70 hover:text-gold transition-colors py-1.5 px-2.5 rounded-full border border-white/[0.06] hover:border-gold/30">
-                  <Share2 className="w-3 h-3" /><span>Share</span>
+                  className="flex items-center gap-1.5 text-xs tracking-wider text-gold/70 hover:text-gold transition-colors py-2 px-3 rounded-full border border-white/[0.06] hover:border-gold/30">
+                  <Share2 className="w-3.5 h-3.5" /><span>Share</span>
                 </button>
                 <button onClick={handleCopyLink}
-                  className="flex items-center gap-1 text-xs tracking-wider text-gold/70 hover:text-gold py-1.5 px-2.5 rounded-full border border-white/[0.06] hover:border-gold/30 transition-colors">
+                  className="flex items-center gap-1.5 text-xs tracking-wider text-gold/70 hover:text-gold py-2 px-3 rounded-full border border-white/[0.06] hover:border-gold/30 transition-colors">
                   {linkCopied ? (
-                    <><Check className="w-3 h-3 text-green-400" /><span className="text-green-400">Copied!</span></>
+                    <><Check className="w-3.5 h-3.5 text-green-400" /><span className="text-green-400">Copied!</span></>
                   ) : (
-                    <><Link2 className="w-3 h-3" /><span>Copy URL</span></>
+                    <><Link2 className="w-3.5 h-3.5" /><span>Copy URL</span></>
                   )}
                 </button>
               </div>

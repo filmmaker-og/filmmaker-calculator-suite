@@ -4,7 +4,11 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Scrollbar hide utility for carousels */
+/* Scrollbar hide utility for carousels & horizontal scroll */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
 .scrollbar-hide::-webkit-scrollbar { display: none; }
 
 /* ═══════════════════════════════════════════════════════════════════
