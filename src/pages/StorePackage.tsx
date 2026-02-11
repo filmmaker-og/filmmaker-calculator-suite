@@ -110,7 +110,7 @@ const StorePackage = () => {
           {isFeatured && (
             <div className="flex items-center gap-1.5 mb-4">
               <Star className="w-3 h-3 text-gold fill-gold" />
-              <span className="text-gold text-[10px] tracking-[0.3em] uppercase font-bold">
+              <span className="text-gold text-[10px] tracking-[0.3em] uppercase font-semibold">
                 Most Popular
               </span>
             </div>
@@ -144,7 +144,7 @@ const StorePackage = () => {
                 ${product.originalPrice.toLocaleString()}
               </span>
             )}
-            <span className={cn("font-mono text-4xl font-bold", isFeatured ? "text-gold-cta" : "text-gold")}>
+            <span className={cn("font-mono text-4xl font-medium", isFeatured ? "text-gold-cta" : "text-gold")}>
               ${product.price.toLocaleString()}
             </span>
           </div>

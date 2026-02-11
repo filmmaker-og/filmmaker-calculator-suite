@@ -6,7 +6,7 @@ const DisclaimerFooter = () => {
       <div className="flex items-start gap-3">
         <AlertTriangle className="w-4 h-4 text-gold/40 flex-shrink-0 mt-0.5" />
         <p className="text-[10px] text-text-dim leading-relaxed">
-          <span className="text-gold font-medium">Educational model only.</span>{" "}
+          <span className="text-gold font-semibold">Educational model only.</span>{" "}
           Not financial, legal, or investment advice. Consult qualified entertainment 
           counsel and financial advisor before making deal decisions.
         </p>

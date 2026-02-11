@@ -50,7 +50,7 @@ export const MatteCardHeader = ({
         className
       )}
     >
-      <span className="text-xs uppercase tracking-widest text-text-dim font-bold">
+      <span className="text-xs uppercase tracking-widest text-text-dim font-semibold">
         {children}
       </span>
       {rightElement}
@@ -231,7 +231,7 @@ export const LedgerRow = ({
         <span
           className={cn(
             "font-mono",
-            isTotal ? "text-xl text-gold font-bold" : "text-base text-text-mid"
+            isTotal ? "text-xl text-gold font-semibold" : "text-base text-text-mid"
           )}
         >
           {value}

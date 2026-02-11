@@ -46,7 +46,7 @@ const WikiSectionHeader = ({
 
     {/* Title + Chevron */}
     <div className="flex items-center flex-1 px-4 py-4 justify-between">
-      <h2 className="font-bold text-xs uppercase tracking-widest text-text-primary">
+      <h2 className="font-semibold text-xs uppercase tracking-widest text-text-primary">
         {title}
       </h2>
 

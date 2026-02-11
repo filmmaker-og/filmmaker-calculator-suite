@@ -201,7 +201,7 @@ const MobileMenu = () => {
             <span className="font-bebas text-lg tracking-[0.2em] text-gold">
               FILMMAKER<span className="text-white">.OG</span>
             </span>
-            <span className="text-[8px] font-bold tracking-[0.15em] text-gold border border-gold/40 rounded-full px-1.5 py-0.5 leading-none uppercase">
+            <span className="text-[8px] font-semibold tracking-[0.15em] text-gold border border-gold/40 rounded-full px-1.5 py-0.5 leading-none uppercase">
               BETA
             </span>
           </div>

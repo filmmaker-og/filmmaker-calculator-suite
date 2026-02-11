@@ -143,9 +143,9 @@ const WaterfallVisual = ({
           <p className="text-[9px] uppercase tracking-wider text-text-dim mb-1">
             GROSS REVENUE
           </p>
-          <p className="text-sm text-text-primary font-medium">Acquisition Price</p>
+          <p className="text-sm text-text-primary font-semibold">Acquisition Price</p>
         </div>
-        <p className="font-mono text-xl text-text-primary font-bold tabular-nums">
+        <p className="font-mono text-xl text-text-primary font-medium tabular-nums">
           {formatCompactCurrency(revenue)}
         </p>
       </div>
@@ -188,7 +188,7 @@ const WaterfallVisual = ({
                   {/* Phase Badge */}
                   <div
                     className={cn(
-                      "w-7 h-7 flex items-center justify-center text-[9px] font-mono font-bold",
+                      "w-7 h-7 flex items-center justify-center text-[9px] font-mono font-medium",
                       tier.status === "filled" && "bg-gold text-black",
                       tier.status === "partial" && "bg-gold/20 text-text-primary border border-gold/20",
                       tier.status === "empty" && "bg-bg-header text-text-dim border border-border-subtle"
@@ -205,7 +205,7 @@ const WaterfallVisual = ({
                     </p>
                     <p
                       className={cn(
-                        "text-sm font-medium",
+                        "text-sm font-semibold",
                         tier.status === "filled" && "text-text-primary",
                         tier.status === "partial" && "text-text-mid",
                         tier.status === "empty" && "text-text-dim"
@@ -270,7 +270,7 @@ const WaterfallVisual = ({
         )}
         <div className="relative flex items-center justify-between">
           <div>
-            <p className="text-[9px] uppercase tracking-wider text-text-dim mb-1 font-bold">
+            <p className="text-[9px] uppercase tracking-wider text-text-dim mb-1 font-semibold">
               REMAINING FOR SPLIT
             </p>
             <p className="text-xs text-text-dim">
@@ -279,7 +279,7 @@ const WaterfallVisual = ({
           </div>
           <p
             className={cn(
-              "font-mono text-2xl font-bold tabular-nums",
+              "font-mono text-2xl font-medium tabular-nums",
               profitPool > 0 ? "text-gold" : "text-text-dim"
             )}
             style={profitPool > 0 ? { textShadow: '0 0 20px rgba(212,175,55,0.4)' } : undefined}

@@ -130,7 +130,7 @@ const Auth = () => {
                   <div>
                     <label
                       htmlFor="name"
-                      className="block text-xs uppercase tracking-[0.2em] text-text-dim font-medium mb-3"
+                      className="block text-xs uppercase tracking-[0.2em] text-text-dim font-semibold mb-3"
                     >
                       Name
                     </label>
@@ -158,7 +158,7 @@ const Auth = () => {
                   <div>
                     <label
                       htmlFor="email"
-                      className="block text-xs uppercase tracking-[0.2em] text-text-dim font-medium mb-3"
+                      className="block text-xs uppercase tracking-[0.2em] text-text-dim font-semibold mb-3"
                     >
                       Email
                     </label>
@@ -189,7 +189,7 @@ const Auth = () => {
                   <Button
                     type="submit"
                     disabled={loading || !email || !name.trim()}
-                    className="w-full min-h-[52px] rounded-[--radius-md] font-black text-xs uppercase tracking-[1.5px] bg-gold-cta-subtle border border-gold-cta-muted text-gold-cta shadow-button hover:border-gold-cta disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200"
+                    className="w-full min-h-[52px] rounded-[--radius-md] font-semibold text-xs uppercase tracking-[1.5px] bg-gold-cta-subtle border border-gold-cta-muted text-gold-cta shadow-button hover:border-gold-cta disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200"
                   >
                     {loading ? (
                       <Loader2 className="w-5 h-5 animate-spin" />
@@ -247,7 +247,7 @@ const Auth = () => {
                 <div className="space-y-6">
                   <button
                     onClick={() => setStep('email')}
-                    className="text-text-dim hover:text-text-mid text-sm font-medium transition-colors"
+                    className="text-text-dim hover:text-text-mid text-sm font-normal transition-colors"
                   >
                     Use different email
                   </button>

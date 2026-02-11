@@ -90,7 +90,7 @@ const BudgetInput = ({ inputs, onUpdateInput, onNext }: BudgetInputProps) => {
         <div className="bg-bg-elevated border border-border-default rounded-lg p-5 transition-all focus-within:border-gold/50 focus-within:shadow-focus focus-within:bg-bg-surface">
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">
-              <span className="text-xs uppercase tracking-widest text-text-dim font-bold">
+              <span className="text-xs uppercase tracking-widest text-text-dim font-semibold">
                 Total Budget (Negative Cost)
               </span>
               <TooltipProvider>
@@ -141,7 +141,7 @@ const BudgetInput = ({ inputs, onUpdateInput, onNext }: BudgetInputProps) => {
 
         {/* Quick Amounts */}
         <div className="p-4 border border-border-subtle bg-bg-surface rounded-lg">
-          <p className="text-xs text-text-dim mb-3 uppercase tracking-wide font-medium text-center">
+          <p className="text-xs text-text-dim mb-3 uppercase tracking-wide font-semibold text-center">
             Quick amounts
           </p>
           <div className="flex gap-2 flex-wrap justify-center">

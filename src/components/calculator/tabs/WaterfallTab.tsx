@@ -103,7 +103,7 @@ const WaterfallTab = ({ result: initialResult, inputs: initialInputs, onExport }
             className="flex items-center gap-2 px-6 py-3 bg-gold-cta-subtle border border-gold-cta-muted text-gold-cta rounded-md shadow-button hover:border-gold-cta transition-all active:scale-[0.98]"
           >
             <Play className="w-4 h-4 fill-current" />
-            <span className="text-sm font-bold uppercase tracking-wider">Run Demo Simulation</span>
+            <span className="text-sm font-semibold uppercase tracking-wider">Run Demo Simulation</span>
           </button>
         </div>
       </StandardStepLayout>
@@ -143,7 +143,7 @@ const WaterfallTab = ({ result: initialResult, inputs: initialInputs, onExport }
             {/* Demo mode exit banner */}
             {isDemoMode && (
               <div className="flex items-center justify-between p-3 border border-border-default bg-gold/[0.04] rounded-lg">
-                <span className="text-xs text-gold uppercase tracking-wider font-bold">Demo Mode</span>
+                <span className="text-xs text-gold uppercase tracking-wider font-semibold">Demo Mode</span>
                 <button
                   onClick={() => setIsDemoMode(false)}
                   className="flex items-center gap-1 text-xs text-text-dim hover:text-text-primary transition-colors"
@@ -173,12 +173,12 @@ const WaterfallTab = ({ result: initialResult, inputs: initialInputs, onExport }
                 >
                   <div className="flex items-center justify-between">
                     <span
-                      className="text-xs font-bold uppercase tracking-widest"
+                      className="text-xs font-semibold uppercase tracking-widest"
                       style={{ color: verdict.color }}
                     >
                       {verdict.label}
                     </span>
-                    <span className="font-mono text-lg font-bold" style={{ color: verdict.color }}>
+                    <span className="font-mono text-lg font-medium" style={{ color: verdict.color }}>
                       {formatMultiple(activeResult.multiple)}
                     </span>
                   </div>
@@ -202,7 +202,7 @@ const WaterfallTab = ({ result: initialResult, inputs: initialInputs, onExport }
               <div className="border border-border-default bg-gold/[0.04] rounded-lg p-5 space-y-4">
                 <div className="flex items-center gap-2">
                   <Sparkles className="w-4 h-4 text-gold" />
-                  <span className="text-[10px] uppercase tracking-[0.2em] text-gold font-bold">
+                  <span className="text-[10px] uppercase tracking-[0.2em] text-gold font-semibold">
                     Ready to Share?
                   </span>
                 </div>
@@ -225,7 +225,7 @@ const WaterfallTab = ({ result: initialResult, inputs: initialInputs, onExport }
                <CollapsibleTrigger className="flex items-center justify-between w-full p-4 hover:bg-bg-elevated transition-colors">
                   <div className="flex items-center gap-2 text-text-dim">
                      <AlertTriangle className="w-4 h-4" />
-                     <span className="text-xs font-bold uppercase tracking-widest">Legal Disclaimer</span>
+                     <span className="text-xs font-semibold uppercase tracking-widest">Legal Disclaimer</span>
                   </div>
                   {showDisclaimer ? <ChevronUp className="w-4 h-4 text-text-dim" /> : <ChevronDown className="w-4 h-4 text-text-dim" />}
                </CollapsibleTrigger>

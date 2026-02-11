@@ -161,7 +161,7 @@ const PremiumInput = React.forwardRef<HTMLInputElement, PremiumInputProps>(
               {stepNumber && (
                 <div
                   className={cn(
-                    "w-6 h-6 flex items-center justify-center text-xs font-mono font-bold transition-colors",
+                    "w-6 h-6 flex items-center justify-center text-xs font-mono font-medium transition-colors",
                     isCompleted
                       ? "bg-gold text-black"
                       : needsAttention
@@ -268,7 +268,7 @@ const PremiumInput = React.forwardRef<HTMLInputElement, PremiumInputProps>(
             <div className="px-4 pb-4 animate-fade-in">
               <div className="flex items-center gap-2 text-gold">
                 <ChevronRight className="w-4 h-4 animate-bounce-right" />
-                <span className="text-xs font-medium tracking-wide">
+                <span className="text-xs font-semibold tracking-wide">
                   {actionHint || `Enter ${label?.toLowerCase() || 'value'} to continue`}
                 </span>
               </div>

@@ -76,7 +76,7 @@ const StoreCompare = () => {
                       )}
                       <span
                         className={cn(
-                          "font-mono font-bold",
+                          "font-mono font-medium",
                           p.featured ? "text-gold-cta text-base" : "text-text-primary"
                         )}
                       >
@@ -134,7 +134,7 @@ const StoreCompare = () => {
                     <Icon className={cn("w-4 h-4", product.featured ? "text-gold" : "text-text-dim")} />
                     <span className="font-bebas text-lg text-text-primary">{product.name.toUpperCase()}</span>
                   </div>
-                  <p className={cn("font-mono text-xl font-bold mb-2", product.featured ? "text-gold-cta" : "text-gold")}>
+                  <p className={cn("font-mono text-xl font-medium mb-2", product.featured ? "text-gold-cta" : "text-gold")}>
                     ${product.price.toLocaleString()}
                   </p>
                   <span className="flex items-center gap-1 text-text-dim text-[11px] hover:text-text-mid transition-colors">

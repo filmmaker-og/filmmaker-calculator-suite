@@ -112,7 +112,7 @@ const SmartCTA = ({
           onMouseLeave={() => setIsPressed(false)}
           className={cn(
             "flex-1 h-14 relative overflow-hidden",
-            "font-black text-sm tracking-[0.15em] uppercase",
+            "font-semibold text-sm tracking-[0.15em] uppercase",
             "transition-all duration-200",
             showShake && "animate-shake",
             isPressed && canProceed && "scale-[0.98]",

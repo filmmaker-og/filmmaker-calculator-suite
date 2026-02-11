@@ -42,7 +42,7 @@ const BudgetTierCard = ({ tier, range, description, accentColor }: BudgetTierCar
     >
       {tier}
     </span>
-    <p className="text-lg font-bold text-white mt-1 mb-2 font-mono">
+    <p className="text-lg font-medium text-white mt-1 mb-2 font-mono">
       {range}
     </p>
     <p className="text-xs leading-relaxed text-text-dim">

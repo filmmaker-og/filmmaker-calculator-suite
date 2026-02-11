@@ -76,7 +76,7 @@ const StandardStepLayout = ({
                 )}
                 style={{ borderRadius: 'var(--radius-md)' }}
               >
-                <span className="text-sm font-bold uppercase tracking-wider">{nextLabel}</span>
+                <span className="text-sm font-semibold uppercase tracking-wider">{nextLabel}</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>
