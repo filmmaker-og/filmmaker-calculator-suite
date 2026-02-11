@@ -83,9 +83,9 @@ const steps = [
    PROBLEM CARDS — filmmaker language, not finance jargon
    ═══════════════════════════════════════════════════════════════════ */
 const problemCards = [
-  { icon: Receipt, title: "Your distributor sent a deal memo. Do you understand it?", body: "Distribution fees, marketing expenses, and producer's reps can eat 50–70% of revenue before anyone gets paid. Model the fees before you sign." },
-  { icon: EyeOff, title: "Your investor asked how they get paid back. Do you have an answer?", body: "If you can't map the waterfall — who gets paid first, second, last — you can't close the raise. Build the waterfall in 2 minutes." },
-  { icon: Scale, title: "The other side of the table knows your numbers better than you do.", body: "Agencies, distributors, and financiers model every deal. If you walk in without your own numbers, you're negotiating blind." },
+  { icon: Receipt, title: "You're asking people for money but you can't show them where it goes.", body: "Investors want to see the math — how they get paid back, in what order, and what happens if the film underperforms. Without a waterfall, you're asking them to trust a napkin." },
+  { icon: EyeOff, title: "You've never seen a waterfall — and neither has anyone you're pitching.", body: "A waterfall is the single most important document in film finance. It shows who gets paid first, second, and last. Most filmmakers sign deals without ever seeing one." },
+  { icon: Scale, title: "The people across the table have done this 100 times. This is your first.", body: "Agencies, distributors, and financiers model every deal before they walk in. If you show up without your own numbers, you're negotiating blind — and they know it." },
 ];
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -459,13 +459,13 @@ const Index = () => {
           {/* ── WHAT YOU GET ── */}
           <SectionFrame id="deliverables">
             <div ref={fade5.ref} className={cn(fade5.className, "max-w-2xl mx-auto")}>
-              <SectionHeader icon={Award} eyebrow="What You Get" title="PROFESSIONAL FINANCIAL DOCUMENTS" subtitle="Designed so anyone — your investor, your business partner, your family — can understand your film's financials at a glance." plainSubtitle />
+              <SectionHeader icon={Award} eyebrow="What You Walk Away With" title="DOCUMENTS THAT CLOSE THE DEAL" subtitle="Walk into any meeting — with investors, distributors, or partners — and speak with clarity and conviction." plainSubtitle />
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {[
-                  { icon: FileSpreadsheet, title: "6-Sheet Excel Workbook", desc: "Executive summary, full waterfall ledger, capital stack breakdown, investor return summary, and plain-English glossary." },
-                  { icon: Presentation, title: "Presentation-Ready PDF", desc: "A polished document you can email, print, or hand to an investor. Clear visuals, plain language, zero jargon." },
-                  { icon: BarChart3, title: "Visual Waterfall Chart", desc: "A clear breakdown of who gets paid, in what order, and how much. The most important chart in film finance." },
-                  { icon: BookOpen, title: "Plain-English Glossary", desc: "Every financial term explained in language a first-time filmmaker can understand. No MBA required." },
+                  { icon: FileSpreadsheet, title: "The document that closes your raise", desc: "A 6-sheet Excel workbook with executive summary, full waterfall ledger, capital stack breakdown, and investor return summary. Hand it over and let the numbers speak." },
+                  { icon: Presentation, title: "Hand this to your investor. They'll take you seriously.", desc: "A presentation-ready PDF you can email, print, or present. Clear visuals, plain language, zero jargon — designed to impress anyone across the table." },
+                  { icon: BarChart3, title: "Show anyone where every dollar goes — in 10 seconds", desc: "A visual waterfall chart that breaks down who gets paid, in what order, and how much. The most important chart in film finance, and now it's yours." },
+                  { icon: BookOpen, title: "Never get caught not knowing a term again", desc: "A plain-English glossary of every financial term in your deal. No MBA required — just the language you need to sound like you've done this before." },
                 ].map((item, i) => {
                   const Icon = item.icon;
                   return (
@@ -491,10 +491,10 @@ const Index = () => {
                 <Accordion type="single" collapsible className="w-full">
                   {faqs.map((faq, i) => (
                     <AccordionItem key={faq.q} value={`faq-${i}`} className="border-border-subtle">
-                      <AccordionTrigger className="text-text-primary hover:text-text-mid hover:no-underline text-lg font-medium text-left">
+                      <AccordionTrigger className="text-text-primary hover:text-text-mid hover:no-underline text-lg font-semibold text-left">
                         {faq.q}
                       </AccordionTrigger>
-                      <AccordionContent className="text-text-dim text-[15px] leading-relaxed">
+                      <AccordionContent className="text-text-dim text-[15px] leading-relaxed border-l-2 border-gold/25 pl-4 ml-1">
                         {faq.a}
                         {faq.link && (
                           <a href={faq.link.url} target="_blank" rel="noopener noreferrer"
@@ -530,7 +530,7 @@ const Index = () => {
 
           {/* ── FOOTER ── */}
           <footer className="py-8 px-6">
-            <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/20 to-transparent mb-8" />
+            <div className="h-[2px] bg-gradient-to-r from-transparent via-gold/25 to-transparent mb-8" />
             <div className="max-w-md mx-auto">
               <div className="flex items-center justify-center gap-2 mb-5">
                 <a href="mailto:thefilmmaker.og@gmail.com"
