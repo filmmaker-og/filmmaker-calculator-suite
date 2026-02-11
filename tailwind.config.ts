@@ -87,6 +87,10 @@ export default {
           "0%": { width: "0%" },
           "100%": { width: "100%" },
         },
+        "logo-breathe": {
+          "0%, 100%": { opacity: "0.15" },
+          "50%": { opacity: "0.3" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -96,6 +100,7 @@ export default {
         "spotlight-beam": "spotlight-beam 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards",
         "focal-pulse": "focal-pulse 4s ease-in-out infinite",
         "progress-draw": "progress-draw 1.5s cubic-bezier(0.22, 1, 0.36, 1) forwards",
+        "logo-breathe": "logo-breathe 3.5s ease-in-out infinite",
       },
     },
   },

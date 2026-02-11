@@ -123,7 +123,7 @@ const SectionFrame = ({ id, children, className, alt }: {
   <section id={id} className="snap-section px-4 py-6">
     <div className="flex rounded-2xl overflow-hidden border border-white/[0.06]">
       <div className="w-1 flex-shrink-0 bg-gradient-to-b from-gold via-gold/60 to-gold/20" style={{ boxShadow: '0 0 12px rgba(212,175,55,0.25)' }} />
-      <div className={cn("flex-1", alt ? "bg-bg-surface" : "bg-bg-elevated", className)}>
+      <div className={cn("flex-1 min-w-0", alt ? "bg-bg-surface" : "bg-bg-elevated", className)}>
         <div className="h-[2px] bg-gradient-to-r from-transparent via-gold/25 to-transparent" />
         <div className="p-6 md:p-8">
           {children}
@@ -320,13 +320,13 @@ const Index = () => {
               style={{ width: '100vw', height: '75vh', background: `radial-gradient(ellipse 50% 40% at 50% 10%, rgba(212,175,55,0.1) 0%, rgba(212,175,55,0.04) 40%, transparent 70%)` }} />
             <div className="relative px-6 py-4 max-w-xl mx-auto text-center">
               <div className="mb-5 relative inline-block">
-                <div className="absolute inset-0 -m-7" style={{ background: 'radial-gradient(circle, rgba(212,175,55,0.2) 0%, transparent 70%)', filter: 'blur(18px)' }} />
-                <img src={filmmakerLogo} alt="Filmmaker.OG" className="relative w-24 h-24 object-contain rounded-xl"
+                <div className="absolute inset-0 -m-7 animate-logo-breathe" style={{ background: 'radial-gradient(circle, rgba(212,175,55,0.25) 0%, transparent 70%)', filter: 'blur(18px)' }} />
+                <img src={filmmakerLogo} alt="Filmmaker.OG" className="relative w-[104px] h-[104px] object-contain rounded-xl"
                   style={{ filter: 'brightness(1.15) drop-shadow(0 0 28px rgba(212,175,55,0.45))' }} />
               </div>
               <p className="text-text-dim text-sm tracking-[0.35em] uppercase mb-4 font-semibold">Demystifying Film Finance</p>
               <h1 className="font-bebas text-[clamp(2rem,7vw,3.2rem)] leading-[1.05] text-gold mb-4">
-                SEE WHERE EVERY DOLLAR <span className="text-white">GOES</span>
+                SEE WHERE EVERY DOLLAR<br /><span className="text-white">GOES</span>
               </h1>
               <p className="text-text-mid text-sm font-medium leading-relaxed max-w-sm mx-auto mb-6">
                 Before you raise a dollar or sign a deal, know exactly who gets
@@ -540,18 +540,20 @@ const Index = () => {
           <SectionFrame id="faq">
             <div ref={reveal6.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", reveal6.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
               <SectionHeader icon={HelpCircle} eyebrow="Common Questions" title={<>WHAT FILMMAKERS <span className="text-white">ASK</span></>} subtitle="Straight answers. No jargon." plainSubtitle />
-              <Accordion type="single" collapsible className="w-full">
-                {faqs.map((faq, i) => (
-                  <AccordionItem key={faq.q} value={`faq-${i}`} className="border-border-subtle">
-                    <AccordionTrigger className="text-text-primary hover:text-text-mid hover:no-underline text-base font-medium text-left">
-                      {faq.q}
-                    </AccordionTrigger>
-                    <AccordionContent className="text-text-dim text-sm leading-relaxed">
-                      {faq.a}
-                    </AccordionContent>
-                  </AccordionItem>
-                ))}
-              </Accordion>
+              <div className="bg-bg-card rounded-xl px-5 border border-border-subtle">
+                <Accordion type="single" collapsible className="w-full">
+                  {faqs.map((faq, i) => (
+                    <AccordionItem key={faq.q} value={`faq-${i}`} className="border-border-subtle">
+                      <AccordionTrigger className="text-text-primary hover:text-text-mid hover:no-underline text-base font-medium text-left">
+                        {faq.q}
+                      </AccordionTrigger>
+                      <AccordionContent className="text-text-dim text-sm leading-relaxed">
+                        {faq.a}
+                      </AccordionContent>
+                    </AccordionItem>
+                  ))}
+                </Accordion>
+              </div>
             </div>
           </SectionFrame>
 
@@ -559,7 +561,7 @@ const Index = () => {
           <section id="final-cta" className="snap-section py-8 px-4">
             <div className="flex rounded-2xl overflow-hidden border border-white/[0.06]">
               <div className="w-1 flex-shrink-0 bg-gradient-to-b from-gold via-gold/60 to-gold/20" style={{ boxShadow: '0 0 12px rgba(212,175,55,0.25)' }} />
-              <div className="bg-bg-elevated flex-1 overflow-hidden relative">
+              <div className="bg-bg-elevated flex-1 min-w-0 overflow-hidden relative">
                 <div className="h-[2px] bg-gradient-to-r from-transparent via-gold/25 to-transparent" />
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none"
                   style={{ width: '100%', height: '100%', background: `radial-gradient(ellipse 60% 60% at 50% 10%, rgba(212,175,55,0.08) 0%, transparent 70%)` }} />
