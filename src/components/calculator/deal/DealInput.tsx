@@ -67,7 +67,7 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext }: DealIn
         <div className="bg-bg-elevated border border-border-default rounded-lg p-5 transition-all focus-within:border-gold/50 focus-within:shadow-focus focus-within:bg-bg-surface">
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">
-              <span className="text-xs uppercase tracking-widest text-text-dim font-bold">
+              <span className="text-xs uppercase tracking-widest text-text-dim font-semibold">
                 Gross Acquisition Price
               </span>
                <TooltipProvider>
@@ -105,17 +105,17 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext }: DealIn
         {/* 2. THE "FIRES" (Deductions Inputs) */}
         <div className="space-y-4">
            <div className="flex items-center gap-2 mb-2">
-             <h3 className="text-sm font-bold uppercase tracking-widest text-text-dim">Distribution Expenses</h3>
+             <h3 className="text-sm font-semibold uppercase tracking-widest text-text-dim">Distribution Expenses</h3>
              <div className="h-px flex-1 bg-border-subtle" />
            </div>
 
            {/* Sales Fee Slider */}
            <div className="bg-bg-surface border border-border-subtle rounded-lg p-4">
               <div className="flex items-center justify-between mb-4">
-                 <span className="text-xs uppercase tracking-wide text-text-dim font-bold flex items-center gap-2">
+                 <span className="text-xs uppercase tracking-wide text-text-dim font-semibold flex items-center gap-2">
                    Sales Agent Fee <Percent className="w-3 h-3 text-text-dim/50" />
                  </span>
-                 <span className="font-mono text-sm font-bold text-text-primary">
+                 <span className="font-mono text-sm font-medium text-text-primary">
                    {inputs.salesFee}%
                  </span>
               </div>
@@ -137,7 +137,7 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext }: DealIn
            {/* Marketing Expenses */}
            <div className="bg-bg-surface border border-border-subtle rounded-lg p-4 flex items-center justify-between">
               <div className="flex flex-col gap-1">
-                 <span className="text-xs uppercase tracking-wide text-text-dim font-bold flex items-center gap-2">
+                 <span className="text-xs uppercase tracking-wide text-text-dim font-semibold flex items-center gap-2">
                    Sales Agent Marketing <DollarSign className="w-3 h-3 text-text-dim/50" />
                  </span>
                  <span className="text-[10px] text-text-dim/70">Expense Cap (Standard $75k)</span>
@@ -162,7 +162,7 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext }: DealIn
           <div className="space-y-3 pt-2">
              <div className="flex items-center gap-2">
                <Calculator className="w-3 h-3 text-gold" />
-               <span className="text-xs font-bold uppercase tracking-widest text-gold">Live Assumptions</span>
+               <span className="text-xs font-semibold uppercase tracking-widest text-gold">Live Assumptions</span>
              </div>
              
              <div className="bg-bg-card border border-border-default rounded-lg overflow-hidden divide-y divide-border-subtle">
@@ -193,8 +193,8 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext }: DealIn
 
                 {/* Net to Waterfall */}
                 <div className="flex items-center justify-between p-3 bg-bg-elevated border-t border-border-default">
-                   <span className="text-xs font-bold text-white uppercase">Net to Waterfall</span>
-                   <span className="font-mono text-sm font-bold text-gold">{formatCompactCurrency(netRevenue)}</span>
+                   <span className="text-xs font-semibold text-white uppercase">Net to Waterfall</span>
+                   <span className="font-mono text-sm font-medium text-gold">{formatCompactCurrency(netRevenue)}</span>
                 </div>
              </div>
           </div>

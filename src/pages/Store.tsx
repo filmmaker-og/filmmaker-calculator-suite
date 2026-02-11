@@ -123,7 +123,7 @@ const Store = () => {
                 <div key={item.label} className="py-2">
                   <p
                     className={cn(
-                      "font-mono text-lg font-bold",
+                      "font-mono text-lg font-medium",
                       item.highlight
                         ? "text-gold-cta"
                         : "text-text-dim line-through decoration-text-dim/40"
@@ -170,7 +170,7 @@ const Store = () => {
                   {isFeatured && (
                     <div className="flex items-center gap-1.5 mb-4">
                       <Star className="w-3 h-3 text-gold fill-gold" />
-                      <span className="text-gold text-[10px] tracking-[0.3em] uppercase font-bold">
+                      <span className="text-gold text-[10px] tracking-[0.3em] uppercase font-semibold">
                         Most Popular
                       </span>
                     </div>
@@ -212,7 +212,7 @@ const Store = () => {
                     )}
                     <span
                       className={cn(
-                        "font-mono text-3xl font-bold",
+                        "font-mono text-3xl font-medium",
                         isFeatured ? "text-gold-cta" : "text-gold"
                       )}
                     >

@@ -102,7 +102,7 @@ const StackInputCard = ({
           {/* Section header */}
           <div className="px-5 py-3 border-b border-border-subtle flex items-center justify-between bg-bg-surface/50">
             <div className="flex items-center gap-2">
-              <span className="text-xs uppercase tracking-widest text-text-dim font-bold">
+              <span className="text-xs uppercase tracking-widest text-text-dim font-semibold">
                 {amountLabel}
               </span>
               {helpText && (
@@ -146,10 +146,10 @@ const StackInputCard = ({
           {rateConfig && hasAmount && (
             <div className="p-5 border-t border-border-subtle bg-bg-surface/30">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-6 h-6 flex items-center justify-center text-xs font-mono font-bold bg-gold text-black rounded-sm">
+                <div className="w-6 h-6 flex items-center justify-center text-xs font-mono font-medium bg-gold text-black rounded-sm">
                   %
                 </div>
-                <span className="text-xs uppercase tracking-widest text-gold font-bold">
+                <span className="text-xs uppercase tracking-widest text-gold font-semibold">
                   {rateConfig.label}
                 </span>
               </div>
@@ -216,7 +216,7 @@ const StackInputCard = ({
             )}
           >
             <ArrowLeft className="w-4 h-4" />
-            <span className="text-xs font-bold uppercase tracking-wider">Back</span>
+            <span className="text-xs font-semibold uppercase tracking-wider">Back</span>
           </button>
 
           {/* Skip (if no value) or Next (if has value) */}
@@ -231,7 +231,7 @@ const StackInputCard = ({
                 "rounded-md shadow-button"
               )}
             >
-              <span className="text-xs font-bold uppercase tracking-wider">Continue</span>
+              <span className="text-xs font-semibold uppercase tracking-wider">Continue</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           ) : showSkip && onSkip ? (
@@ -245,7 +245,7 @@ const StackInputCard = ({
                 "rounded-md"
               )}
             >
-              <span className="text-xs font-medium uppercase tracking-wider">Skip This</span>
+              <span className="text-xs font-semibold uppercase tracking-wider">Skip This</span>
               <SkipForward className="w-4 h-4" />
             </button>
           ) : null}

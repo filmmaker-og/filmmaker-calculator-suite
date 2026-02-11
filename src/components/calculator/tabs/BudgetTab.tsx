@@ -27,7 +27,7 @@ const BudgetTab = ({ inputs, guilds, onUpdateInput, onToggleGuild, onAdvance }: 
         <div className="bg-bg-elevated border border-border-default rounded-lg overflow-hidden">
           <div className="px-5 py-3 border-b border-border-subtle flex items-center justify-between bg-bg-surface/50">
             <div className="flex items-center gap-2">
-              <span className="text-xs uppercase tracking-widest text-text-dim font-bold">
+              <span className="text-xs uppercase tracking-widest text-text-dim font-semibold">
                 Union Signatories
               </span>
               <TooltipProvider>
@@ -61,7 +61,7 @@ const BudgetTab = ({ inputs, guilds, onUpdateInput, onToggleGuild, onAdvance }: 
                 >
                   <div className="flex-1 min-w-0">
                     <span className={cn(
-                      "text-sm font-medium transition-colors",
+                      "text-sm font-semibold transition-colors",
                       isSelected ? "text-gold" : "text-text-mid"
                     )}>
                       {guild.label}

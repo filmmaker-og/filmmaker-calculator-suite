@@ -336,7 +336,7 @@ const Index = () => {
               {isReturningUser ? (
                 <div className="w-full max-w-[320px] mx-auto space-y-3">
                   <button onClick={handleContinueClick}
-                    className="w-full h-16 text-base font-black tracking-[0.12em] transition-all active:scale-[0.96] rounded-md bg-gold-cta-subtle border border-gold-cta-muted text-gold-cta shadow-button hover:border-gold-cta">
+                    className="w-full h-16 text-base font-semibold tracking-[0.12em] transition-all active:scale-[0.96] rounded-md bg-gold-cta-subtle border border-gold-cta-muted text-gold-cta shadow-button hover:border-gold-cta">
                     CONTINUE SIMULATION
                   </button>
                   <p className="text-text-dim text-xs tracking-wider text-center">{formatCompactCurrency(savedState!.budget)} budget in progress</p>
@@ -348,7 +348,7 @@ const Index = () => {
               ) : (
                 <div className="w-full max-w-[320px] mx-auto">
                   <button onClick={handleStartClick}
-                    className="w-full h-16 text-base font-black tracking-[0.12em] transition-all active:scale-[0.96] rounded-md bg-gold-cta-subtle border border-gold-cta-muted text-gold-cta shadow-button hover:border-gold-cta">
+                    className="w-full h-16 text-base font-semibold tracking-[0.12em] transition-all active:scale-[0.96] rounded-md bg-gold-cta-subtle border border-gold-cta-muted text-gold-cta shadow-button hover:border-gold-cta">
                     RUN THE NUMBERS
                   </button>
                   <p className="text-text-dim text-[13px] tracking-wider mt-3">No account required</p>
@@ -419,7 +419,7 @@ const Index = () => {
               {/* Mid-page CTA — catch fast deciders */}
               <div className="text-center mt-8">
                 <button onClick={handleStartClick}
-                  className="h-14 px-10 text-sm font-black tracking-[0.12em] transition-all active:scale-[0.96] rounded-md border border-gold-cta-muted text-gold-cta hover:border-gold-cta hover:bg-gold/[0.06]">
+                  className="h-14 px-10 text-sm font-semibold tracking-[0.12em] transition-all active:scale-[0.96] rounded-md border border-gold-cta-muted text-gold-cta hover:border-gold-cta hover:bg-gold/[0.06]">
                   RUN THE NUMBERS — FREE
                 </button>
               </div>
@@ -441,7 +441,7 @@ const Index = () => {
                         <div className="w-9 h-9 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center mb-3">
                           <Icon className="w-4 h-4 text-gold" />
                         </div>
-                        <p className="font-mono text-xl md:text-2xl font-bold text-text-primary line-through decoration-text-dim/30 mb-0.5">{item.cost}</p>
+                        <p className="font-mono text-xl md:text-2xl font-medium text-text-primary line-through decoration-text-dim/30 mb-0.5">{item.cost}</p>
                         <p className="text-text-dim text-xs tracking-wider uppercase">{item.label}</p>
                         <p className="text-text-dim text-[13px] mt-1">{item.note}</p>
                       </div>
@@ -523,7 +523,7 @@ const Index = () => {
               <div className="relative p-8 md:p-12 max-w-md mx-auto text-center">
                 <p className="text-gold text-xs tracking-[0.3em] uppercase font-semibold mb-5">Ready?</p>
                 <button onClick={handleStartClick}
-                  className="w-full max-w-[320px] h-16 text-base font-black tracking-[0.12em] transition-all active:scale-[0.96] rounded-md bg-gold-cta-subtle border border-gold-cta-muted text-gold-cta shadow-button hover:border-gold-cta">
+                  className="w-full max-w-[320px] h-16 text-base font-semibold tracking-[0.12em] transition-all active:scale-[0.96] rounded-md bg-gold-cta-subtle border border-gold-cta-muted text-gold-cta shadow-button hover:border-gold-cta">
                   SEE YOUR WATERFALL
                 </button>
                 <p className="text-text-dim text-[15px] tracking-wider mt-4">No account required. No credit card.</p>
@@ -567,7 +567,7 @@ const Index = () => {
                 <span className="font-bebas text-lg tracking-[0.2em] text-gold">
                   FILMMAKER<span className="text-white">.OG</span>
                 </span>
-                <span className="text-[10px] font-bold tracking-[0.15em] text-gold border border-gold/40 rounded-full px-1.5 py-0.5 leading-none uppercase">
+                <span className="text-[10px] font-semibold tracking-[0.15em] text-gold border border-gold/40 rounded-full px-1.5 py-0.5 leading-none uppercase">
                   BETA
                 </span>
               </div>

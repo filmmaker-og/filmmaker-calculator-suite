@@ -118,7 +118,7 @@ const EmailGateModal = ({ isOpen, onClose, onSuccess, onSkip }: EmailGateModalPr
               <button
                 type="submit"
                 disabled={loading || !email}
-                className="w-full h-12 font-black text-sm tracking-wider bg-gold-cta text-black hover:brightness-110 disabled:opacity-40 transition-all active:scale-[0.98]"
+                className="w-full h-12 font-semibold text-sm tracking-wider bg-gold-cta text-black hover:brightness-110 disabled:opacity-40 transition-all active:scale-[0.98]"
               >
                 {loading ? (
                   <Loader2 className="w-5 h-5 animate-spin mx-auto" />

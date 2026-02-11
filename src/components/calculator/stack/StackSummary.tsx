@@ -73,9 +73,9 @@ const StackSummary = ({ inputs, selections, onEdit, onComplete }: StackSummaryPr
               />
             )}
             <div className="relative flex items-center justify-between mb-2">
-              <span className="text-xs font-bold uppercase tracking-wider text-text-dim">Total Capital</span>
+              <span className="text-xs font-semibold uppercase tracking-wider text-text-dim">Total Capital</span>
               <span
-                className="font-mono text-lg font-bold text-gold"
+                className="font-mono text-lg font-medium text-gold"
                 style={isFullyFunded ? { textShadow: '0 0 12px rgba(212,175,55,0.4)' } : undefined}
               >
                 {formatCompactCurrency(totalCapital)}
@@ -98,7 +98,7 @@ const StackSummary = ({ inputs, selections, onEdit, onComplete }: StackSummaryPr
             <div className="relative flex items-center justify-between">
               <span className="text-xs text-text-dim">Budget: {formatCompactCurrency(inputs.budget)}</span>
               <span className={cn(
-                "font-mono text-xs font-bold",
+                "font-mono text-xs font-medium",
                 gapPercent >= 100 ? "text-gold" : "text-gold/60"
               )}>
                 {gapPercent.toFixed(0)}% Funded
@@ -110,7 +110,7 @@ const StackSummary = ({ inputs, selections, onEdit, onComplete }: StackSummaryPr
         {/* Stack Breakdown - Matte Look */}
         <div className="bg-bg-elevated border border-border-default rounded-lg overflow-hidden">
           <div className="px-5 py-3 border-b border-border-subtle bg-bg-surface/50">
-            <span className="text-xs uppercase tracking-widest text-text-dim font-bold">
+            <span className="text-xs uppercase tracking-widest text-text-dim font-semibold">
               Capital Sources
             </span>
           </div>
@@ -128,7 +128,7 @@ const StackSummary = ({ inputs, selections, onEdit, onComplete }: StackSummaryPr
                       <div className={cn("w-1 h-8 rounded-full", item.color)} />
                       <Icon className="w-4 h-4 text-text-dim" />
                       <div>
-                        <span className="text-sm text-text-primary font-medium">{item.label}</span>
+                        <span className="text-sm text-text-primary font-semibold">{item.label}</span>
                         {item.rate !== undefined && (
                           <span className="text-xs text-text-dim ml-2">@ {item.rate}% {item.rateLabel}</span>
                         )}
@@ -162,7 +162,7 @@ const StackSummary = ({ inputs, selections, onEdit, onComplete }: StackSummaryPr
             style={{ borderRadius: '0 var(--radius-md) var(--radius-md) 0' }}
           >
             <p className="text-xs text-text-mid leading-relaxed">
-              <span className="font-bold text-gold">Note:</span> Your stack doesn't fully cover the budget. 
+              <span className="font-semibold text-gold">Note:</span> Your stack doesn't fully cover the budget. 
               You can still proceed, but you may need additional financing.
             </p>
           </div>

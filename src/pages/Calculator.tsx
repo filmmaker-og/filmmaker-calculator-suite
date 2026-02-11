@@ -331,7 +331,7 @@ const Calculator = () => {
           )}
         >
           <ArrowLeft className="w-4 h-4" />
-          <span className="text-xs font-bold uppercase tracking-wider">Back</span>
+          <span className="text-xs font-semibold uppercase tracking-wider">Back</span>
         </button>
 
         <div className="relative w-11 h-11 flex items-center justify-center">
@@ -350,7 +350,7 @@ const Calculator = () => {
               style={{ filter: 'drop-shadow(0 0 4px rgba(212, 175, 55, 0.5))' }}
             />
           </svg>
-          <span className="relative z-10 font-mono text-[11px] font-bold text-gold">
+          <span className="relative z-10 font-mono text-[11px] font-medium text-gold">
             {progressPercent}%
           </span>
         </div>
@@ -365,7 +365,7 @@ const Calculator = () => {
               "active:scale-95 shadow-button"
             )}
           >
-            <span className="text-xs font-bold uppercase tracking-wider">Next</span>
+            <span className="text-xs font-semibold uppercase tracking-wider">Next</span>
             <ArrowRight className="w-4 h-4" />
           </button>
         )}

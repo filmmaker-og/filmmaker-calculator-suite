@@ -105,7 +105,7 @@ const CapitalSelect = ({ selections, onToggle, onNext }: CapitalSelectProps) => 
         {/* Selection cards - Matte Look with Sparing Gold */}
         <div className="bg-bg-elevated border border-border-default rounded-lg overflow-hidden">
           <div className="px-5 py-3 border-b border-border-subtle flex items-center justify-between bg-bg-surface/50">
-            <span className="text-xs uppercase tracking-widest text-text-dim font-bold">
+            <span className="text-xs uppercase tracking-widest text-text-dim font-semibold">
               Select all that apply
             </span>
             {selectedCount > 0 && (
@@ -150,7 +150,7 @@ const CapitalSelect = ({ selections, onToggle, onNext }: CapitalSelectProps) => 
                       <div className="flex items-center gap-2 mb-0.5">
                         <span
                           className={cn(
-                            "text-sm font-medium transition-colors",
+                            "text-sm font-semibold transition-colors",
                             isSelected ? "text-gold" : "text-text-mid" // Text turns gold when selected
                           )}
                         >

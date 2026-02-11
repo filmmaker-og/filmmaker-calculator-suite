@@ -221,7 +221,7 @@ const Glossary = () => {
           <div className="flex flex-col gap-6 border-b border-border-default pb-8">
             <div className="flex items-center gap-2 text-gold mb-2">
               <Book className="w-5 h-5" />
-              <span className="text-xs font-bold uppercase tracking-widest">The Black Book</span>
+              <span className="text-xs font-semibold uppercase tracking-widest">The Black Book</span>
             </div>
             
             <h1 className="text-5xl md:text-6xl font-bebas text-white tracking-wide">
@@ -261,7 +261,7 @@ const Glossary = () => {
                   className="group bg-bg-surface border border-border-default hover:border-border-active rounded-lg p-6 transition-all duration-200"
                 >
                   <div className="flex flex-col md:flex-row md:items-baseline gap-2 md:gap-4 mb-2">
-                    <h3 className="text-xl font-bold text-white group-hover:text-text-primary transition-colors">
+                    <h3 className="text-xl font-semibold text-white group-hover:text-text-primary transition-colors">
                       {item.term}
                     </h3>
                     <span className="text-[10px] uppercase tracking-wider text-text-dim bg-bg-elevated px-2 py-1 rounded w-fit">
@@ -281,7 +281,7 @@ const Glossary = () => {
             <div className="flex flex-col items-center gap-4 text-center">
               <div className="flex items-center gap-2 text-gold">
                 <Mail className="w-4 h-4" />
-                <span className="text-xs font-bold uppercase tracking-widest">Questions or Corrections?</span>
+                <span className="text-xs font-semibold uppercase tracking-widest">Questions or Corrections?</span>
               </div>
               <p className="text-sm text-text-mid max-w-md">
                 This glossary is a living document. If you spot an error or want to suggest a term, email us:
@@ -297,7 +297,7 @@ const Glossary = () => {
             <div className="flex justify-center pt-4">
               <button 
                 onClick={() => navigate('/')} 
-                className="flex items-center gap-2 text-text-dim hover:text-text-mid transition-colors uppercase tracking-widest text-xs font-bold"
+                className="flex items-center gap-2 text-text-dim hover:text-text-mid transition-colors uppercase tracking-widest text-xs font-semibold"
               >
                 <Home className="w-4 h-4" />
                 Return to Home
