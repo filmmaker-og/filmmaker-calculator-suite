@@ -298,16 +298,19 @@ const Index = () => {
           <div className="vignette" />
 
           {/* ── HERO ── */}
-          <section id="hero" className="snap-section min-h-[70vh] flex flex-col justify-center relative overflow-hidden">
+          <section id="hero" className="snap-section min-h-0 pt-16 pb-8 flex flex-col justify-center relative overflow-hidden">
             <div className="absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none animate-spotlight-pulse"
-              style={{ width: '100vw', height: '100vh', background: `radial-gradient(ellipse 50% 50% at 50% 10%, rgba(212,175,55,0.1) 0%, rgba(212,175,55,0.04) 50%, transparent 80%)` }} />
+              style={{ width: '100vw', height: '120%', background: `radial-gradient(ellipse 50% 50% at 50% 15%, rgba(212,175,55,0.10) 0%, rgba(212,175,55,0.04) 45%, transparent 75%)` }} />
             <div className="relative px-6 py-4 max-w-xl mx-auto text-center">
               <div className="mb-5 relative inline-block">
                 <div className="absolute inset-0 -m-7 animate-logo-breathe" style={{ background: 'radial-gradient(circle, rgba(212,175,55,0.25) 0%, transparent 70%)', filter: 'blur(18px)' }} />
                 <img src={filmmakerLogo} alt="Filmmaker.OG" className="relative w-[96px] h-[96px] object-contain rounded-xl"
                   style={{ filter: 'brightness(1.15) drop-shadow(0 0 28px rgba(212,175,55,0.45))' }} />
               </div>
-              <p className="text-text-dim text-sm tracking-[0.35em] uppercase mb-4 font-semibold">Demystifying Film Finance</p>
+              <div className="mb-4">
+                <p className="text-text-dim text-sm tracking-[0.35em] uppercase font-semibold">Demystifying Film Finance</p>
+                <div className="w-10 h-[1px] bg-gold/30 mx-auto mt-2" />
+              </div>
               <h1 className="font-bebas text-[clamp(2rem,7vw,3.2rem)] leading-[1.05] text-gold mb-4">
                 SEE WHERE EVERY<br /><span className="text-white">DOLLAR GOES</span>
               </h1>
@@ -350,9 +353,9 @@ const Index = () => {
                 {problemCards.map((card, i) => {
                   const Icon = card.icon;
                   return (
-                    <div key={i} className={cn("flex rounded-xl overflow-hidden border border-border-subtle hover:border-gold/20 transition-colors", staggerChild(revealProblem.visible))} style={staggerDelay(i, revealProblem.visible)}>
+                    <div key={i} className={cn("flex rounded-xl overflow-hidden border border-[#2A2A2A] hover:border-gold/20 transition-colors", staggerChild(revealProblem.visible))} style={staggerDelay(i, revealProblem.visible)}>
                       <div className="w-1 flex-shrink-0 bg-gradient-to-b from-gold via-gold/60 to-gold/20" />
-                      <div className="flex-1 bg-bg-card p-5">
+                      <div className="flex-1 bg-[#141414] p-5">
                         <div className="flex items-start gap-3 mb-2">
                           <Icon className="w-4 h-4 text-gold flex-shrink-0 mt-1" />
                           <h3 className="font-bebas text-[22px] tracking-[0.06em] uppercase text-gold">{card.title}</h3>
@@ -416,7 +419,7 @@ const Index = () => {
                 {industryCosts.map((item, i) => {
                   const Icon = item.icon;
                   return (
-                    <div key={item.label} className={cn("rounded-xl border border-border-subtle bg-bg-card p-5 text-center relative overflow-hidden", staggerChild(revealPrice.visible))} style={staggerDelay(i, revealPrice.visible)}>
+                    <div key={item.label} className={cn("rounded-xl border border-[#2A2A2A] bg-[#141414] p-5 text-center relative overflow-hidden", staggerChild(revealPrice.visible))} style={staggerDelay(i, revealPrice.visible)}>
                       <div className="w-9 h-9 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center mx-auto mb-3">
                         <Icon className="w-4 h-4 text-gold" />
                       </div>
@@ -436,7 +439,7 @@ const Index = () => {
 
               {/* Free tier deliverables */}
               <p className="text-text-dim text-xs tracking-[0.2em] uppercase font-semibold mb-2">Free — always</p>
-              <div className="rounded-xl border border-border-subtle bg-bg-card divide-y divide-border-subtle mb-4">
+              <div className="rounded-xl border border-[#2A2A2A] bg-[#141414] divide-y divide-[#2A2A2A] mb-4">
                 {freeDeliverables.map((d) => {
                   const Icon = d.icon;
                   return (
@@ -450,7 +453,7 @@ const Index = () => {
 
               {/* Premium tier deliverables */}
               <p className="text-text-dim text-xs tracking-[0.2em] uppercase font-semibold mb-2 mt-4">Premium exports</p>
-              <div className="rounded-xl border border-gold/20 bg-bg-card divide-y divide-border-subtle">
+              <div className="rounded-xl border border-gold/20 bg-[#141414] divide-y divide-[#2A2A2A]">
                 {premiumDeliverables.map((d) => {
                   const Icon = d.icon;
                   return (
@@ -471,11 +474,11 @@ const Index = () => {
           <SectionFrame id="faq">
             <div ref={revealFaq.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", revealFaq.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
               <SectionHeader icon={HelpCircle} eyebrow="Common Questions" title={<>WHAT FILMMAKERS <span className="text-white">ASK</span></>} />
-              <div className="bg-bg-card rounded-xl px-5 border border-border-subtle">
+              <div className="bg-[#141414] rounded-xl px-5 border border-[#2A2A2A]">
                 <Accordion type="single" collapsible className="w-full">
                   {faqs.map((faq, i) => (
                     <AccordionItem key={faq.q} value={`faq-${i}`} className="border-border-subtle">
-                      <AccordionTrigger className="font-bebas text-xl tracking-[0.06em] uppercase text-gold hover:text-gold/80 hover:no-underline text-left">
+                      <AccordionTrigger className="font-bebas text-xl tracking-[0.06em] uppercase text-white hover:text-white/70 hover:no-underline text-left">
                         {faq.q}
                       </AccordionTrigger>
                       <AccordionContent className="text-text-dim text-sm leading-relaxed">
@@ -514,7 +517,7 @@ const Index = () => {
 
           {/* ── FOOTER ── */}
           <footer className="py-10 px-6">
-            <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/20 to-transparent mb-8" />
+            <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/25 to-transparent mb-8" />
             <div className="max-w-sm mx-auto">
               <div className="grid grid-cols-2 gap-3 mb-8 max-w-[340px] mx-auto">
                 <a href="mailto:thefilmmaker.og@gmail.com"
