@@ -177,7 +177,7 @@ const staggerDelay = (index: number, visible: boolean): React.CSSProperties => (
 
 /** Class for stagger-animated child items */
 const staggerChild = (visible: boolean) =>
-  cn("transition-all duration-600 ease-out", visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5");
+  cn("transition-all duration-400 ease-out", visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2");
 
 /* ═══════════════════════════════════════════════════════════════════
    MAIN INDEX COMPONENT
@@ -340,7 +340,7 @@ const Index = () => {
           </section>
 
           {/* section divider */}
-          <div className="px-8"><div className="h-[1px] bg-gradient-to-r from-transparent via-gold/10 to-transparent" /></div>
+          <div className="px-8"><div className="h-[1px] bg-gradient-to-r from-transparent via-gold/20 to-transparent" /></div>
 
           {/* ── § 2: THE PROBLEM ── */}
           <SectionFrame id="problem">
@@ -367,7 +367,7 @@ const Index = () => {
           </SectionFrame>
 
           {/* section divider */}
-          <div className="px-8"><div className="h-[1px] bg-gradient-to-r from-transparent via-gold/10 to-transparent" /></div>
+          <div className="px-8"><div className="h-[1px] bg-gradient-to-r from-transparent via-gold/20 to-transparent" /></div>
 
           {/* ── § 3: HOW THE MONEY FLOWS (vertical cascade) ── */}
           <SectionFrame id="how-it-flows" alt>
@@ -404,7 +404,7 @@ const Index = () => {
           </SectionFrame>
 
           {/* section divider */}
-          <div className="px-8"><div className="h-[1px] bg-gradient-to-r from-transparent via-gold/10 to-transparent" /></div>
+          <div className="px-8"><div className="h-[1px] bg-gradient-to-r from-transparent via-gold/20 to-transparent" /></div>
 
           {/* ── § 4: PRICE ANCHOR + DELIVERABLES ── */}
           <SectionFrame id="price-anchor">
@@ -429,7 +429,7 @@ const Index = () => {
               </div>
 
               {/* FREE badge */}
-              <div className="text-center px-6 py-5 rounded-xl bg-gold/[0.06] border border-gold/20 max-w-[280px] mx-auto mb-6">
+              <div className="text-center px-6 py-5 rounded-xl bg-gold/[0.06] border border-gold/20 max-w-[280px] mx-auto my-6">
                 <p className="font-bebas text-4xl md:text-5xl tracking-[0.1em] text-gold">FREE</p>
                 <p className="text-text-dim text-[15px] tracking-wider mt-1">Premium exports available from $197.</p>
               </div>
@@ -465,7 +465,7 @@ const Index = () => {
           </SectionFrame>
 
           {/* section divider */}
-          <div className="px-8"><div className="h-[1px] bg-gradient-to-r from-transparent via-gold/10 to-transparent" /></div>
+          <div className="px-8"><div className="h-[1px] bg-gradient-to-r from-transparent via-gold/20 to-transparent" /></div>
 
           {/* ── § 5: FAQ ── */}
           <SectionFrame id="faq">
