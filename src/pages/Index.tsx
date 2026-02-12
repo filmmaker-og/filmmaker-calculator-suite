@@ -24,6 +24,7 @@ import {
   BookOpen,
   FileSpreadsheet,
   Presentation,
+  ChevronDown,
 } from "lucide-react";
 import filmmakerLogo from "@/assets/filmmaker-logo.jpg";
 import Header from "@/components/Header";
@@ -39,7 +40,7 @@ import { formatCompactCurrency } from "@/lib/waterfall";
 const STORAGE_KEY = "filmmaker_og_inputs";
 const CINEMATIC_SEEN_KEY = "filmmaker_og_intro_seen";
 const SHARE_URL = "https://filmmaker.og";
-const SHARE_TEXT = "Free film finance simulator — model your deal structure, capital stack, and revenue waterfall. See where every dollar goes before you sign.";
+const SHARE_TEXT = "Before you sign a deal, see exactly who gets paid and what's left for you. Free film finance tool — no account required.";
 const SHARE_TITLE = "FILMMAKER.OG — See Where Every Dollar Goes";
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -59,6 +60,7 @@ const faqs = [
   { q: "How does the calculator work?", a: "Four steps: set your budget, build your capital stack, structure your deal, and track exactly where every dollar goes in the waterfall. Takes about 2 minutes." },
   { q: "Is this financial or legal advice?", a: "No. This is a simulation tool for estimation and planning purposes only. Always consult a qualified entertainment attorney or accountant for final deal structures." },
   { q: "Is the calculator free?", a: "Yes. The simulator, waterfall chart, glossary, and unlimited scenarios are completely free. Premium exports — the Excel workbook and investor-ready PDF — are paid add-ons." },
+  { q: "Why is this free?", a: "Because understanding your own deal shouldn't require a $15,000 retainer. The simulator is free. If you need investor-grade exports, those are available as a paid upgrade. The tool itself has no paywall, no trial period, and no account required." },
   { q: "What's free vs. paid?", a: "Free: full waterfall simulation, visual chart, deal glossary, and unlimited scenario runs. Paid: downloadable Excel workbook and investor-ready PDF export. The simulation itself has no paywall." },
   { q: "Do I need an account?", a: "No. You can use the calculator without signing up. If you want to save your work, we offer a simple magic link — no password required." },
 ];
@@ -94,8 +96,8 @@ const freeDeliverables = [
 ];
 
 const premiumDeliverables = [
-  { icon: FileSpreadsheet, line: "6-sheet Excel workbook — waterfall, capital stack, investor returns" },
-  { icon: Presentation, line: "Investor-ready PDF — plain language, zero jargon" },
+  { icon: FileSpreadsheet, line: "6-sheet Excel workbook — the spreadsheet your investor's accountant will actually review" },
+  { icon: Presentation, line: "Investor-ready PDF — the document you hand across the table in the meeting" },
 ];
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -133,7 +135,7 @@ const SectionFrame = ({ id, children, className, alt }: {
 }) => (
   <section id={id} className="snap-section px-4 py-6">
     <div className="flex rounded-2xl overflow-hidden border border-white/[0.06]">
-      <div className="w-1 flex-shrink-0 bg-gradient-to-b from-gold via-gold/60 to-gold/20" style={{ boxShadow: '0 0 12px rgba(212,175,55,0.25)' }} />
+      <div className="w-1 flex-shrink-0 bg-gradient-to-b from-gold via-gold/60 to-gold/20" style={{ boxShadow: '0 0 16px rgba(212,175,55,0.30)' }} />
       <div className={cn("flex-1 min-w-0", alt ? "bg-bg-surface" : "bg-bg-elevated", className)}>
         <div className="h-[2px] bg-gradient-to-r from-transparent via-gold/25 to-transparent" />
         <div className="p-6 md:p-8">
@@ -192,6 +194,7 @@ const Index = () => {
   const revealProblem = useReveal();
   const revealFlow = useReveal();
   const revealPrice = useReveal();
+  const revealDeliverables = useReveal();
   const revealFaq = useReveal();
 
   const savedState = useMemo(() => {
@@ -315,7 +318,7 @@ const Index = () => {
                 SEE WHERE EVERY<br /><span className="text-white">DOLLAR GOES</span>
               </h1>
               <p className="text-text-mid text-sm font-medium leading-relaxed max-w-sm mx-auto mb-6">
-                Before you raise a dollar or sign a deal — know exactly who gets paid, in what order, and what's left for you.
+                Know who gets paid, in what order, and what's left for you.
               </p>
 
               {isReturningUser ? (
@@ -334,21 +337,24 @@ const Index = () => {
                 <div className="w-full max-w-[320px] mx-auto">
                   <button onClick={handleStartClick}
                     className="w-full h-16 text-base font-bold tracking-[0.14em] transition-all active:scale-[0.96] rounded-md bg-gold/[0.18] border-2 border-gold/50 text-gold animate-cta-glow-pulse hover:border-gold/70 hover:bg-gold/[0.22]">
-                    RUN THE CALCULATOR
+                    SEE YOUR DEAL
                   </button>
                 </div>
               )}
 
+              <div className="mt-8 flex justify-center animate-bounce-subtle">
+                <ChevronDown className="w-5 h-5 text-gold/30" />
+              </div>
             </div>
           </section>
 
           {/* section divider */}
-          <div className="px-8"><div className="h-[1px] bg-gradient-to-r from-transparent via-gold/20 to-transparent" /></div>
+          <div className="px-8"><div className="h-[1px] bg-gradient-to-r from-transparent via-gold/25 to-transparent" /></div>
 
           {/* ── § 2: THE PROBLEM ── */}
           <SectionFrame id="problem">
             <div ref={revealProblem.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", revealProblem.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
-              <SectionHeader icon={Lock} eyebrow="The Problem" title={<>THE MATH HAS TO WORK <span className="text-white">FIRST</span></>} />
+              <SectionHeader icon={Lock} eyebrow="The Problem" title={<>MOST INDIE FILMS LOSE MONEY.<br /><span className="text-white">HERE'S WHY.</span></>} />
               <div className="space-y-3">
                 {problemCards.map((card, i) => {
                   const Icon = card.icon;
@@ -370,7 +376,9 @@ const Index = () => {
           </SectionFrame>
 
           {/* section divider */}
-          <div className="px-8"><div className="h-[1px] bg-gradient-to-r from-transparent via-gold/20 to-transparent" /></div>
+          <div className="px-8">
+            <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/35 to-transparent" />
+          </div>
 
           {/* ── § 3: HOW THE MONEY FLOWS (vertical cascade) ── */}
           <SectionFrame id="how-it-flows" alt>
@@ -393,7 +401,7 @@ const Index = () => {
                         className={cn("flex flex-col items-center text-center", staggerChild(revealFlow.visible))}
                         style={staggerDelay(i, revealFlow.visible)}
                       >
-                        <div className="w-10 h-10 rounded-full bg-bg-card border border-gold/40 flex items-center justify-center mb-3">
+                        <div className="w-10 h-10 rounded-full bg-[#141414] border border-gold/40 flex items-center justify-center mb-3">
                           <Icon className="w-4 h-4 text-gold" />
                         </div>
                         <h3 className="font-bebas text-xl tracking-[0.06em] uppercase text-gold mb-1">{step.title}</h3>
@@ -403,24 +411,39 @@ const Index = () => {
                   );
                 })}
               </div>
+
+              {/* Summary line */}
+              <p className="text-text-mid text-sm italic text-center max-w-[280px] mx-auto mt-6">
+                That's the <span className="text-gold font-semibold not-italic">waterfall</span> — and it's what this tool builds for you.
+              </p>
+
+              {/* Mid-page CTA */}
+              <div className="text-center mt-6">
+                <button
+                  onClick={handleStartClick}
+                  className="text-gold hover:text-gold/80 font-semibold text-sm tracking-wider transition-colors"
+                >
+                  Ready? See your deal →
+                </button>
+              </div>
             </div>
           </SectionFrame>
 
           {/* section divider */}
-          <div className="px-8"><div className="h-[1px] bg-gradient-to-r from-transparent via-gold/20 to-transparent" /></div>
+          <div className="px-8"><div className="h-[1px] bg-gradient-to-r from-transparent via-gold/25 to-transparent" /></div>
 
-          {/* ── § 4: PRICE ANCHOR + DELIVERABLES ── */}
+          {/* ── § 4: THIS KNOWLEDGE ISN'T CHEAP ── */}
           <SectionFrame id="price-anchor">
             <div ref={revealPrice.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", revealPrice.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
               <SectionHeader icon={Award} eyebrow="The Industry Standard" title={<>THIS KNOWLEDGE ISN'T <span className="text-white">CHEAP</span></>} plainSubtitle subtitle="You shouldn't need a $5,000 retainer from an entertainment attorney to understand your own deal." />
 
-              {/* Industry cost grid */}
+              {/* Industry Cost Grid — 2x2 */}
               <div className="grid grid-cols-2 gap-3 mb-5">
                 {industryCosts.map((item, i) => {
                   const Icon = item.icon;
                   return (
-                    <div key={item.label} className={cn("rounded-xl border border-[#2A2A2A] bg-[#141414] p-5 text-center relative overflow-hidden", staggerChild(revealPrice.visible))} style={staggerDelay(i, revealPrice.visible)}>
-                      <div className="w-9 h-9 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center mx-auto mb-3">
+                    <div key={item.label} className={cn("rounded-xl border border-[#2A2A2A] bg-[#141414] p-5 text-center", staggerChild(revealPrice.visible))} style={staggerDelay(i, revealPrice.visible)}>
+                      <div className="w-9 h-9 rounded-lg bg-bg-elevated border border-[#2A2A2A] flex items-center justify-center mx-auto mb-3">
                         <Icon className="w-4 h-4 text-gold" />
                       </div>
                       <p className="font-mono text-lg font-medium text-text-primary line-through decoration-text-dim/30">{item.cost}</p>
@@ -431,46 +454,78 @@ const Index = () => {
                 })}
               </div>
 
-              {/* FREE badge */}
-              <div className="text-center px-6 py-5 rounded-xl bg-gold/[0.06] border border-gold/20 max-w-[280px] mx-auto my-6">
+              {/* FREE Badge */}
+              <div className="text-center px-6 py-5 rounded-xl bg-gold/[0.06] border border-gold/20 max-w-[280px] mx-auto">
                 <p className="font-bebas text-4xl md:text-5xl tracking-[0.1em] text-gold">FREE</p>
-                <p className="text-text-dim text-[15px] tracking-wider mt-1">Premium exports available from $197.</p>
-              </div>
-
-              {/* Free tier deliverables */}
-              <p className="text-text-dim text-xs tracking-[0.2em] uppercase font-semibold mb-2">Free — always</p>
-              <div className="rounded-xl border border-[#2A2A2A] bg-[#141414] divide-y divide-[#2A2A2A] mb-4">
-                {freeDeliverables.map((d) => {
-                  const Icon = d.icon;
-                  return (
-                    <div key={d.line} className="flex items-center gap-3 px-5 py-3.5">
-                      <Icon className="w-4 h-4 text-gold flex-shrink-0" />
-                      <p className="text-text-mid text-sm leading-snug">{d.line}</p>
-                    </div>
-                  );
-                })}
-              </div>
-
-              {/* Premium tier deliverables */}
-              <p className="text-text-dim text-xs tracking-[0.2em] uppercase font-semibold mb-2 mt-4">Premium exports</p>
-              <div className="rounded-xl border border-gold/20 bg-[#141414] divide-y divide-[#2A2A2A]">
-                {premiumDeliverables.map((d) => {
-                  const Icon = d.icon;
-                  return (
-                    <div key={d.line} className="flex items-center gap-3 px-5 py-3.5">
-                      <Icon className="w-4 h-4 text-gold flex-shrink-0" />
-                      <p className="text-text-mid text-sm leading-snug">{d.line}</p>
-                    </div>
-                  );
-                })}
+                <p className="text-text-dim text-[15px] tracking-wider mt-1">
+                  Premium exports available from $197.
+                </p>
               </div>
             </div>
           </SectionFrame>
 
           {/* section divider */}
-          <div className="px-8"><div className="h-[1px] bg-gradient-to-r from-transparent via-gold/20 to-transparent" /></div>
+          <div className="px-8"><div className="h-[1px] bg-gradient-to-r from-transparent via-gold/25 to-transparent" /></div>
 
-          {/* ── § 5: FAQ ── */}
+          {/* ── § 5: WHAT YOU WALK AWAY WITH ── */}
+          <SectionFrame id="deliverables" alt>
+            <div ref={revealDeliverables.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", revealDeliverables.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
+              <SectionHeader icon={Film} eyebrow="What You Walk Away With" title={<>EVERYTHING YOU NEED TO <span className="text-white">CLOSE</span></>} />
+
+              {/* Free Tier */}
+              <p className="text-text-dim text-xs tracking-[0.2em] uppercase font-semibold mb-2">
+                Free — always
+              </p>
+              <div className="rounded-xl border border-[#2A2A2A] bg-[#141414] divide-y divide-[#2A2A2A] mb-4">
+                {freeDeliverables.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <div key={item.line} className="flex items-center gap-3 px-5 py-3.5">
+                      <Icon className="w-4 h-4 text-gold flex-shrink-0" />
+                      <p className="text-text-mid text-sm leading-snug">{item.line}</p>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Price context line */}
+              <p className="text-text-dim text-sm text-center my-4">
+                $197 for both. That's less than one hour with an entertainment lawyer.
+              </p>
+
+              {/* Premium Tier */}
+              <p className="text-text-dim text-xs tracking-[0.2em] uppercase font-semibold mb-2">
+                Premium exports
+              </p>
+              <div className="rounded-xl border border-gold/20 bg-[#141414] divide-y divide-[#2A2A2A]">
+                {premiumDeliverables.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <div key={item.line} className="flex items-center gap-3 px-5 py-3.5">
+                      <Icon className="w-4 h-4 text-gold flex-shrink-0" />
+                      <p className="text-text-mid text-sm leading-snug">{item.line}</p>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Section CTA */}
+              <div className="text-center mt-6">
+                <p className="text-text-dim text-sm mb-4">Start free. Export when you're ready.</p>
+                <button
+                  onClick={handleStartClick}
+                  className="w-full max-w-[320px] h-16 text-base font-bold tracking-[0.14em] transition-all active:scale-[0.96] rounded-md bg-gold/[0.18] border-2 border-gold/50 text-gold animate-cta-glow-pulse hover:border-gold/70 hover:bg-gold/[0.22]"
+                >
+                  SEE YOUR DEAL
+                </button>
+              </div>
+            </div>
+          </SectionFrame>
+
+          {/* section divider */}
+          <div className="px-8"><div className="h-[1px] bg-gradient-to-r from-transparent via-gold/25 to-transparent" /></div>
+
+          {/* ── § 6: FAQ ── */}
           <SectionFrame id="faq">
             <div ref={revealFaq.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", revealFaq.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
               <SectionHeader icon={HelpCircle} eyebrow="Common Questions" title={<>WHAT FILMMAKERS <span className="text-white">ASK</span></>} />
@@ -494,7 +549,7 @@ const Index = () => {
           {/* ── FINAL CTA ── */}
           <section id="final-cta" className="snap-section py-8 px-4">
             <div className="flex rounded-2xl overflow-hidden border border-white/[0.06]">
-              <div className="w-1 flex-shrink-0 bg-gradient-to-b from-gold via-gold/60 to-gold/20" style={{ boxShadow: '0 0 12px rgba(212,175,55,0.25)' }} />
+              <div className="w-1 flex-shrink-0 bg-gradient-to-b from-gold via-gold/60 to-gold/20" style={{ boxShadow: '0 0 16px rgba(212,175,55,0.30)' }} />
               <div className="bg-bg-elevated flex-1 min-w-0 overflow-hidden relative">
                 <div className="h-[2px] bg-gradient-to-r from-transparent via-gold/25 to-transparent" />
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none"
@@ -508,7 +563,7 @@ const Index = () => {
                   </p>
                   <button onClick={handleStartClick}
                     className="w-full max-w-[320px] h-16 text-base font-bold tracking-[0.14em] transition-all active:scale-[0.96] rounded-md bg-gold/[0.14] border-2 border-gold/40 text-gold shadow-[0_0_20px_rgba(212,175,55,0.25)] hover:shadow-[0_0_30px_rgba(212,175,55,0.4)] hover:border-gold/60 hover:bg-gold/[0.18]">
-                    RUN THE CALCULATOR
+                    BUILD YOUR WATERFALL
                   </button>
                 </div>
               </div>
