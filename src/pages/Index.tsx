@@ -46,9 +46,9 @@ const SHARE_TITLE = "FILMMAKER.OG — See Where Every Dollar Goes";
    PROBLEM CARDS — tighter copy, vertical layout
    ═══════════════════════════════════════════════════════════════════ */
 const problemCards = [
-  { icon: Receipt, title: "There's a pecking order.", body: "Distributors take fees first. Lenders recoup next. Then equity. You're last in line — unless you understand the structure well enough to negotiate your position." },
-  { icon: Gavel, title: "The rules exist. Nobody shared them.", body: "Every deal has a financial structure that decides who gets paid back and how much. It's not in the script. It's not in film school. It's in the contracts — and it's complicated by design." },
-  { icon: EyeOff, title: "Know what they know.", body: "Capital stacks, waterfall structures, producer corridors — the filmmakers who close deals speak this language fluently. Now you can too." },
+  { icon: Receipt, title: "Most indie films lose money.", body: "Not because filmmakers aren't talented — because the financial structure didn't match what the film could realistically earn. The math was wrong before cameras rolled." },
+  { icon: Gavel, title: "You can't raise what you can't explain.", body: "Investors ask one question: how does my money come back? First-time producers give vague answers because no one taught them the mechanics. That's where the meeting ends." },
+  { icon: EyeOff, title: "This knowledge exists. It's just expensive.", body: "Entertainment lawyers and finance consultants understand deal structures fluently. They charge $5,000 to $30,000 for that understanding. Film school never covered it." },
 ];
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -90,7 +90,7 @@ const industryCosts = [
 const freeDeliverables = [
   { icon: BarChart3, line: "Visual waterfall chart — who gets paid, in what order" },
   { icon: BookOpen, line: "Full glossary — every deal term in plain English" },
-  { icon: Waves, line: "Unlimited scenarios — adjust the variables, re-run as often as you want" },
+  { icon: Waves, line: "Unlimited scenarios — adjust variables, re-run anytime" },
 ];
 
 const premiumDeliverables = [
@@ -345,7 +345,7 @@ const Index = () => {
           {/* ── § 2: THE PROBLEM ── */}
           <SectionFrame id="problem">
             <div ref={revealProblem.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", revealProblem.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
-              <SectionHeader icon={Lock} eyebrow="The Problem" title={<>THE DEAL IS DESIGNED AGAINST <span className="text-white">YOU</span></>} />
+              <SectionHeader icon={Lock} eyebrow="The Problem" title={<>THE MATH HAS TO WORK <span className="text-white">FIRST</span></>} />
               <div className="space-y-3">
                 {problemCards.map((card, i) => {
                   const Icon = card.icon;
@@ -370,7 +370,7 @@ const Index = () => {
           <div className="px-8"><div className="h-[1px] bg-gradient-to-r from-transparent via-gold/10 to-transparent" /></div>
 
           {/* ── § 3: HOW THE MONEY FLOWS (vertical cascade) ── */}
-          <SectionFrame id="how-money-flows" alt>
+          <SectionFrame id="how-it-flows" alt>
             <div ref={revealFlow.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", revealFlow.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
               <SectionHeader icon={Waves} eyebrow="What They Didn't Teach You In Film School" title={<>FROM FIRST MONEY IN TO LAST MONEY <span className="text-white">OUT</span></>} />
 
@@ -378,23 +378,24 @@ const Index = () => {
               <div className="flex flex-col items-center max-w-sm mx-auto">
                 {flowSteps.map((step, i) => {
                   const Icon = step.icon;
-                  const isLast = i === flowSteps.length - 1;
                   return (
-                    <div key={step.title} className={staggerChild(revealFlow.visible)} style={{ transitionDelay: revealFlow.visible ? `${i * 200}ms` : "0ms" }}>
-                      {/* Node */}
-                      <div className="flex flex-col items-center text-center">
-                        <div className="w-7 h-7 rounded-full bg-bg-card border border-gold/40 flex items-center justify-center">
-                          <Icon className="w-3.5 h-3.5 text-gold" />
-                        </div>
-                        <h3 className="font-bebas text-[20px] tracking-[0.06em] uppercase text-gold mt-2">{step.title}</h3>
-                        <p className="text-text-mid text-[13px] leading-relaxed max-w-[280px] mt-1">{step.desc}</p>
-                      </div>
-                      {/* Connecting line */}
-                      {!isLast && (
-                        <div className="flex justify-center py-1">
-                          <div className="w-[2px] h-8 bg-gradient-to-b from-gold/40 to-gold/20" />
-                        </div>
+                    <div key={step.title} className="flex flex-col items-center">
+                      {/* Connecting line ABOVE (skip for first item) */}
+                      {i > 0 && (
+                        <div className="w-[1px] h-8 bg-gradient-to-b from-gold/40 to-gold/20" />
                       )}
+
+                      {/* Node */}
+                      <div
+                        className={cn("flex flex-col items-center text-center", staggerChild(revealFlow.visible))}
+                        style={staggerDelay(i, revealFlow.visible)}
+                      >
+                        <div className="w-10 h-10 rounded-full bg-bg-card border border-gold/40 flex items-center justify-center mb-3">
+                          <Icon className="w-4 h-4 text-gold" />
+                        </div>
+                        <h3 className="font-bebas text-xl tracking-[0.06em] uppercase text-gold mb-1">{step.title}</h3>
+                        <p className="text-text-mid text-sm leading-relaxed max-w-[280px]">{step.desc}</p>
+                      </div>
                     </div>
                   );
                 })}
@@ -406,9 +407,9 @@ const Index = () => {
           <div className="px-8"><div className="h-[1px] bg-gradient-to-r from-transparent via-gold/10 to-transparent" /></div>
 
           {/* ── § 4: PRICE ANCHOR + DELIVERABLES ── */}
-          <SectionFrame id="price-anchor" alt>
+          <SectionFrame id="price-anchor">
             <div ref={revealPrice.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", revealPrice.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
-              <SectionHeader icon={Award} eyebrow="The Industry Standard" title={<>THIS KNOWLEDGE ISN'T CHEAP</>} plainSubtitle subtitle="You shouldn't need a $5,000 retainer from an entertainment attorney to understand your own deal." />
+              <SectionHeader icon={Award} eyebrow="The Industry Standard" title={<>THIS KNOWLEDGE ISN'T <span className="text-white">CHEAP</span></>} plainSubtitle subtitle="You shouldn't need a $5,000 retainer from an entertainment attorney to understand your own deal." />
 
               {/* Industry cost grid */}
               <div className="grid grid-cols-2 gap-3 mb-5">
@@ -416,7 +417,6 @@ const Index = () => {
                   const Icon = item.icon;
                   return (
                     <div key={item.label} className={cn("rounded-xl border border-border-subtle bg-bg-card p-5 text-center relative overflow-hidden", staggerChild(revealPrice.visible))} style={staggerDelay(i, revealPrice.visible)}>
-                      <div className="absolute top-0 right-0 w-8 h-8 pointer-events-none" style={{ background: 'radial-gradient(circle at top right, rgba(212,175,55,0.12) 0%, transparent 70%)', filter: 'blur(16px)' }} />
                       <div className="w-9 h-9 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center mx-auto mb-3">
                         <Icon className="w-4 h-4 text-gold" />
                       </div>
@@ -442,7 +442,7 @@ const Index = () => {
                   return (
                     <div key={d.line} className="flex items-center gap-3 px-5 py-3.5">
                       <Icon className="w-4 h-4 text-gold flex-shrink-0" />
-                      <span className="text-text-mid text-sm leading-snug">{d.line}</span>
+                      <p className="text-text-mid text-sm leading-snug">{d.line}</p>
                     </div>
                   );
                 })}
@@ -456,7 +456,7 @@ const Index = () => {
                   return (
                     <div key={d.line} className="flex items-center gap-3 px-5 py-3.5">
                       <Icon className="w-4 h-4 text-gold flex-shrink-0" />
-                      <span className="text-text-mid text-sm leading-snug">{d.line}</span>
+                      <p className="text-text-mid text-sm leading-snug">{d.line}</p>
                     </div>
                   );
                 })}
