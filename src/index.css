@@ -759,8 +759,12 @@
     position: fixed;
     inset: 0;
     pointer-events: none;
-    background: radial-gradient(ellipse at center, transparent 0%, transparent 50%, rgba(0, 0, 0, 0.4) 100%);
-    z-index: 1;
+    z-index: 50;
+    background: radial-gradient(
+      ellipse 70% 60% at 50% 50%,
+      transparent 50%,
+      rgba(0,0,0,0.4) 100%
+    );
   }
 
   /* ═══════════════════════════════════════════════════════════════════
@@ -805,6 +809,17 @@
   @keyframes typingDot {
     0%, 60%, 100% { opacity: 0.3; transform: scale(1); }
     30% { opacity: 1; transform: scale(1.3); }
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════
+     BOUNCE SUBTLE — scroll indicator
+     ═══════════════════════════════════════════════════════════════════ */
+  @keyframes bounce-subtle {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(6px); }
+  }
+  .animate-bounce-subtle {
+    animation: bounce-subtle 2.5s ease-in-out infinite;
   }
 
   .animate-typing-dot-1 {
