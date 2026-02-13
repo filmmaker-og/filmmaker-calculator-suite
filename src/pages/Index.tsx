@@ -49,7 +49,7 @@ const SHARE_TITLE = "FILMMAKER.OG — See Where Every Dollar Goes";
 const problemCards = [
   { icon: Receipt, title: "Most indie films lose\u00A0money.", body: "Not because the film was bad. Because nobody modeled the recoupment before production. The waterfall determines who profits — and most first-time producers have never seen one." },
   { icon: Gavel, title: "You can't raise what you can't\u00A0explain.", body: "Investors don't fund passion — they fund structure. They need to see the capital stack, the priority chain, and the projected return. If you can't walk them through the waterfall, the meeting is over." },
-  { icon: EyeOff, title: "Nobody teaches this.", body: "Film school covers craft. It doesn't cover recoupment order, pari passu splits, or how a sales agent's corridor eats into producer equity. This is institutional knowledge — and it's been locked behind retainers and NDAs." },
+  { icon: EyeOff, title: "The people across the table know\u00A0this.", body: "Distributors, sales agents, and financiers model waterfalls before every deal. When the producer doesn't, the terms favor everyone else. That's not a conspiracy — it's a knowledge gap with a price tag." },
 ];
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -57,12 +57,10 @@ const problemCards = [
    ═══════════════════════════════════════════════════════════════════ */
 const faqs = [
   { q: "Who is this for?", a: "Independent producers, directors, and investors. Whether you're raising $50K or $5M, the mechanics of recoupment are the same. If you intend to sell your film for profit, you need this." },
-  { q: "How does the calculator work?", a: "Four steps: set your budget, build your capital stack, structure your deal, and track exactly where every dollar goes in the waterfall. Takes about 2 minutes." },
+  { q: "How does the calculator work?", a: "Four steps: set your budget, build your capital stack, structure your deal, and see exactly where every dollar goes in the waterfall. Takes about 2 minutes." },
   { q: "Is this financial or legal advice?", a: "No. This is a simulation tool for estimation and planning purposes only. Always consult a qualified entertainment attorney or accountant for final deal structures." },
-  { q: "Is the calculator free?", a: "Yes. The simulator, waterfall chart, glossary, and unlimited scenarios are completely free. Premium exports — the Excel workbook and investor-ready PDF — are paid add-ons." },
-  { q: "Why is this free?", a: "Because understanding your own deal shouldn't require a retainer. The simulator is free. If you need investor-grade exports, those are available as a paid upgrade. The tool itself has no paywall, no trial period, and no account required." },
-  { q: "What's free vs. paid?", a: "Free: full waterfall simulation, visual chart, deal glossary, and unlimited scenario runs. Paid: downloadable Excel workbook and investor-ready PDF export. The simulation itself has no paywall." },
-  { q: "Do I need an account?", a: "No. You can use the calculator without signing up. If you want to save your work, we offer a simple magic link — no password required." },
+  { q: "Why is this free?", a: "Because understanding your own deal shouldn't require a retainer. The full simulator, waterfall chart, glossary, and unlimited scenarios are free — no paywall, no trial period, no credit card. If you need investor-grade exports like the Excel workbook and PDF, those are available as a paid upgrade." },
+  { q: "How is this different from a spreadsheet?", a: "A spreadsheet shows numbers. This shows the structure — the priority chain that determines who gets paid first and what's left for you. It translates the legal architecture of a deal into something visual that you and your investors can actually understand." },
 ];
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -311,9 +309,12 @@ const Index = () => {
                   style={{ filter: 'brightness(1.15) drop-shadow(0 0 28px rgba(212,175,55,0.45))' }} />
               </div>
               <p className="text-text-dim text-xs tracking-[0.3em] uppercase font-semibold mb-5">Democratizing Film Finance</p>
-              <h1 className="font-bebas text-[clamp(2.8rem,9vw,4.2rem)] leading-[1.05] text-gold mb-6">
+              <h1 className="font-bebas text-[clamp(2.8rem,9vw,4.2rem)] leading-[1.05] text-gold mb-3">
                 SEE WHERE EVERY<br /><span className="text-white">DOLLAR GOES</span>
               </h1>
+              <p className="text-text-dim text-xs tracking-[0.2em] uppercase mb-6">
+                Built by a Tribeca-winning, CAA-repped producer whose debut sold to&nbsp;Netflix.
+              </p>
 
               {isReturningUser ? (
                 <div className="w-full max-w-[320px] mx-auto space-y-3">
@@ -338,10 +339,10 @@ const Index = () => {
 
               {/* Scroll indicator — tappable, scrolls to Problem */}
               <div
-                className="mt-8 flex justify-center animate-bounce-subtle cursor-pointer"
+                className="mt-8 flex justify-center animate-bounce-subtle cursor-pointer active:scale-[0.97]"
                 onClick={() => document.getElementById('problem')?.scrollIntoView({ behavior: 'smooth' })}
               >
-                <ChevronDown className="w-5 h-5 text-gold/60 active:scale-[0.97]" />
+                <ChevronDown className="w-5 h-5 text-gold/60" />
               </div>
             </div>
           </section>
@@ -422,7 +423,7 @@ const Index = () => {
                 >
                   SEE YOUR DEAL
                 </button>
-                <p className="text-text-dim text-xs tracking-wider mt-2">Free. No account required.</p>
+                <p className="text-text-dim text-xs tracking-wider mt-2">Free. No credit card. No signup.</p>
               </div>
             </div>
           </SectionFrame>
@@ -460,16 +461,6 @@ const Index = () => {
               </div>
             </div>
           </SectionFrame>
-
-          {/* section divider */}
-          <div className="px-8"><div className="h-[1px] bg-gradient-to-r from-transparent via-gold/25 to-transparent" /></div>
-
-          {/* ── Credentials (standalone between §4 and §5) ── */}
-          <div className="py-6 px-6 text-center">
-            <p className="text-text-dim text-xs tracking-[0.2em] uppercase">
-              Built by a Tribeca-winning, CAA-repped producer whose debut sold to&nbsp;Netflix.
-            </p>
-          </div>
 
           {/* section divider */}
           <div className="px-8"><div className="h-[1px] bg-gradient-to-r from-transparent via-gold/25 to-transparent" /></div>
