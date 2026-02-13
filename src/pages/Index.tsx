@@ -60,7 +60,7 @@ const faqs = [
   { q: "How does the calculator work?", a: "Four steps: set your budget, build your capital stack, structure your deal, and track exactly where every dollar goes in the waterfall. Takes about 2 minutes." },
   { q: "Is this financial or legal advice?", a: "No. This is a simulation tool for estimation and planning purposes only. Always consult a qualified entertainment attorney or accountant for final deal structures." },
   { q: "Is the calculator free?", a: "Yes. The simulator, waterfall chart, glossary, and unlimited scenarios are completely free. Premium exports — the Excel workbook and investor-ready PDF — are paid add-ons." },
-  { q: "Why is this free?", a: "Because understanding your own deal shouldn't require a $15,000 retainer. The simulator is free. If you need investor-grade exports, those are available as a paid upgrade. The tool itself has no paywall, no trial period, and no account required." },
+  { q: "Why is this free?", a: "Because understanding your own deal shouldn't require a retainer. The simulator is free. If you need investor-grade exports, those are available as a paid upgrade. The tool itself has no paywall, no trial period, and no account required." },
   { q: "What's free vs. paid?", a: "Free: full waterfall simulation, visual chart, deal glossary, and unlimited scenario runs. Paid: downloadable Excel workbook and investor-ready PDF export. The simulation itself has no paywall." },
   { q: "Do I need an account?", a: "No. You can use the calculator without signing up. If you want to save your work, we offer a simple magic link — no password required." },
 ];
@@ -311,10 +311,10 @@ const Index = () => {
                   style={{ filter: 'brightness(1.15) drop-shadow(0 0 28px rgba(212,175,55,0.45))' }} />
               </div>
               <div className="mb-4">
-                <p className="text-text-dim text-sm tracking-[0.35em] uppercase font-semibold">Demystifying Film Finance</p>
+                <p className="text-text-dim text-sm tracking-[0.25em] uppercase font-semibold">Demystifying Film Finance</p>
                 <div className="w-10 h-[1px] bg-gold/30 mx-auto mt-2" />
               </div>
-              <h1 className="font-bebas text-[clamp(2rem,7vw,3.2rem)] leading-[1.05] text-gold mb-4">
+              <h1 className="font-bebas text-[clamp(2.4rem,8vw,3.8rem)] leading-[1.05] text-gold mb-4">
                 SEE WHERE EVERY<br /><span className="text-white">DOLLAR GOES</span>
               </h1>
               <p className="text-text-mid text-sm font-medium leading-relaxed max-w-sm mx-auto mb-6">
@@ -325,12 +325,12 @@ const Index = () => {
                 <div className="w-full max-w-[320px] mx-auto space-y-3">
                   <button onClick={handleContinueClick}
                     className="w-full h-16 text-base font-bold tracking-[0.14em] transition-all active:scale-[0.96] rounded-md bg-gold/[0.18] border-2 border-gold/50 text-gold animate-cta-glow-soft hover:border-gold/70 hover:bg-gold/[0.22]">
-                    CONTINUE SIMULATION
+                    CONTINUE YOUR DEAL
                   </button>
                   <p className="text-text-dim text-xs tracking-wider text-center">{formatCompactCurrency(savedState!.budget)} budget in progress</p>
                   <button onClick={handleStartFresh}
                     className="w-full flex items-center justify-center gap-1.5 text-xs tracking-wider text-text-dim hover:text-text-mid transition-colors py-2">
-                    <RotateCcw className="w-3 h-3" /> Start fresh
+                    <RotateCcw className="w-3 h-3" /> Start a new deal
                   </button>
                 </div>
               ) : (
@@ -342,7 +342,11 @@ const Index = () => {
                 </div>
               )}
 
-              <div className="mt-8 flex justify-center animate-bounce-subtle">
+              {/* Scroll indicator — tappable, scrolls to Problem */}
+              <div
+                className="mt-8 flex justify-center animate-bounce-subtle cursor-pointer"
+                onClick={() => document.getElementById('problem')?.scrollIntoView({ behavior: 'smooth' })}
+              >
                 <ChevronDown className="w-5 h-5 text-gold/60" />
               </div>
             </div>
@@ -396,16 +400,18 @@ const Index = () => {
                         <div className="w-[1px] h-8 bg-gradient-to-b from-gold/40 to-gold/20" />
                       )}
 
-                      {/* Node */}
+                      {/* Node with card surface */}
                       <div
                         className={cn("flex flex-col items-center text-center", staggerChild(revealFlow.visible))}
                         style={staggerDelay(i, revealFlow.visible)}
                       >
-                        <div className="w-10 h-10 rounded-full bg-[#141414] border border-gold/40 flex items-center justify-center mb-3">
-                          <Icon className="w-4 h-4 text-gold" />
+                        <div className="w-full max-w-[320px] rounded-xl bg-[#141414] border border-[#2A2A2A] px-5 py-4 flex flex-col items-center">
+                          <div className="w-10 h-10 rounded-full bg-bg-elevated border border-gold/40 flex items-center justify-center mb-3">
+                            <Icon className="w-4 h-4 text-gold" />
+                          </div>
+                          <h3 className="font-bebas text-xl tracking-[0.06em] uppercase text-gold mb-1">{step.title}</h3>
+                          <p className="text-text-mid text-sm leading-relaxed max-w-[280px]">{step.desc}</p>
                         </div>
-                        <h3 className="font-bebas text-xl tracking-[0.06em] uppercase text-gold mb-1">{step.title}</h3>
-                        <p className="text-text-mid text-sm leading-relaxed max-w-[280px]">{step.desc}</p>
                       </div>
                     </div>
                   );
@@ -414,7 +420,7 @@ const Index = () => {
 
               {/* Summary line */}
               <p className="text-text-mid text-sm italic text-center max-w-[280px] mx-auto mt-6">
-                That's the <a href="/waterfall" className="text-gold font-semibold not-italic underline underline-offset-2 decoration-gold/30 hover:decoration-gold/60 transition-colors">waterfall</a> — and it's what this tool builds for you.
+                That's the <a href="/waterfall" className="text-gold font-semibold not-italic underline underline-offset-2 decoration-gold/30 hover:decoration-gold/60 transition-colors">waterfall</a> — and it's what this tool builds for&nbsp;you.
               </p>
 
               {/* Mid-page CTA */}
@@ -436,7 +442,7 @@ const Index = () => {
           {/* ── § 4: THIS KNOWLEDGE ISN'T CHEAP ── */}
           <SectionFrame id="price-anchor">
             <div ref={revealPrice.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", revealPrice.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
-              <SectionHeader icon={Award} eyebrow="The Industry Standard" title={<>THIS KNOWLEDGE ISN'T <span className="text-white">CHEAP</span></>} plainSubtitle subtitle="You shouldn't need a $5,000 retainer from an entertainment attorney to understand your own deal." />
+              <SectionHeader icon={Award} eyebrow="The Industry Standard" title={<>THIS KNOWLEDGE ISN'T <span className="text-white">CHEAP</span></>} plainSubtitle subtitle={"You shouldn't need a $5,000 retainer from an entertainment attorney to understand your own\u00A0deal."} />
 
               {/* Industry Cost Grid — 2x2 */}
               <div className="grid grid-cols-2 gap-3 mb-5">
@@ -459,7 +465,7 @@ const Index = () => {
               <div className="text-center px-6 py-5 rounded-xl bg-gold/[0.06] border border-gold/20 max-w-[280px] mx-auto">
                 <p className="font-bebas text-4xl md:text-5xl tracking-[0.1em] text-gold">FREE</p>
                 <p className="text-text-dim text-[15px] tracking-wider mt-1">
-                  Premium exports available from $197.
+                  Premium exports available when you're&nbsp;ready.
                 </p>
               </div>
             </div>
@@ -474,7 +480,7 @@ const Index = () => {
               <SectionHeader icon={Film} eyebrow="What You Walk Away With" title={<>EVERYTHING YOU NEED TO <span className="text-white">CLOSE</span></>} />
 
               {/* Free Tier */}
-              <p className="text-text-dim text-xs tracking-[0.2em] uppercase font-semibold mb-2">
+              <p className="text-text-mid text-xs tracking-[0.2em] uppercase font-bold mb-2 text-center">
                 Free — always
               </p>
               <div className="rounded-xl border border-[#2A2A2A] bg-[#141414] divide-y divide-[#2A2A2A] mb-4">
@@ -489,16 +495,14 @@ const Index = () => {
                 })}
               </div>
 
-              {/* Price context line */}
-              <p className="text-text-dim text-sm text-center my-4">
-                $197 for both. That's less than one hour with an entertainment lawyer.
-              </p>
+              {/* Start free reassurance */}
+              <p className="text-text-dim text-sm text-center my-4">Start free. Export when you're&nbsp;ready.</p>
 
               {/* Premium Tier */}
-              <p className="text-text-dim text-xs tracking-[0.2em] uppercase font-semibold mb-2">
+              <p className="text-gold text-xs tracking-[0.2em] uppercase font-bold mb-2 text-center">
                 Premium exports
               </p>
-              <div className="rounded-xl border border-gold/20 bg-[#141414] divide-y divide-[#2A2A2A]">
+              <div className="rounded-xl border border-gold/20 bg-[#141414] divide-y divide-[#2A2A2A] mb-6">
                 {premiumDeliverables.map((item) => {
                   const Icon = item.icon;
                   return (
@@ -511,8 +515,7 @@ const Index = () => {
               </div>
 
               {/* Section CTA */}
-              <div className="text-center mt-6">
-                <p className="text-text-dim text-sm mb-4">Start free. Export when you're ready.</p>
+              <div className="text-center">
                 <button
                   onClick={handleStartClick}
                   className="w-full max-w-[320px] h-16 text-base font-bold tracking-[0.14em] transition-all active:scale-[0.96] rounded-md bg-gold/[0.18] border-2 border-gold/50 text-gold animate-cta-glow-soft hover:border-gold/70 hover:bg-gold/[0.22]"
@@ -533,11 +536,11 @@ const Index = () => {
               <div className="bg-[#141414] rounded-xl px-5 border border-[#2A2A2A]">
                 <Accordion type="single" collapsible className="w-full">
                   {faqs.map((faq, i) => (
-                    <AccordionItem key={faq.q} value={`faq-${i}`} className="border-[#2A2A2A]">
+                    <AccordionItem key={faq.q} value={`faq-${i}`}>
                       <AccordionTrigger className="font-bebas text-xl tracking-[0.06em] uppercase text-white hover:text-white/70 hover:no-underline text-left">
                         {faq.q}
                       </AccordionTrigger>
-                      <AccordionContent className="text-text-dim text-sm leading-relaxed">
+                      <AccordionContent className="text-text-dim text-sm leading-relaxed normal-case font-sans">
                         {faq.a}
                       </AccordionContent>
                     </AccordionItem>
@@ -556,11 +559,14 @@ const Index = () => {
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none"
                   style={{ width: '100%', height: '100%', background: `radial-gradient(ellipse 60% 60% at 50% 10%, rgba(212,175,55,0.08) 0%, transparent 70%)` }} />
                 <div className="relative p-8 md:p-12 max-w-md mx-auto text-center">
+                  <p className="text-text-dim text-xs tracking-[0.2em] uppercase mb-4 text-center">
+                    Built by a Tribeca-winning, CAA-repped producer whose debut sold to&nbsp;Netflix.
+                  </p>
                   <h2 className="font-bebas text-3xl md:text-4xl tracking-[0.08em] text-gold mb-4">
                     INVESTORS WILL ASK HOW THE MONEY FLOWS <span className="text-white">BACK</span>.<br />HAVE THE <span className="text-white">ANSWER</span>.
                   </h2>
                   <p className="text-text-mid text-sm leading-relaxed max-w-xs mx-auto mb-6">
-                    Two minutes. Zero cost. Full clarity on your deal.
+                    Two minutes. Zero cost. Full clarity on your&nbsp;deal.
                   </p>
                   <button onClick={handleStartClick}
                     className="w-full max-w-[320px] h-16 text-base font-bold tracking-[0.14em] transition-all active:scale-[0.96] rounded-md bg-gold/[0.18] border-2 border-gold/50 text-gold hover:border-gold/70 hover:bg-gold/[0.22]">
