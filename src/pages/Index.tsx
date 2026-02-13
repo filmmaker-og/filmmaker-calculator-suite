@@ -49,7 +49,7 @@ const SHARE_TITLE = "FILMMAKER.OG — See Where Every Dollar Goes";
 const problemCards = [
   { icon: Receipt, title: "Most indie films lose\u00A0money.", body: "Not because the film was bad. Because nobody modeled the recoupment before production. The waterfall determines who profits — and most first-time producers have never seen one." },
   { icon: Gavel, title: "You can't raise what you can't\u00A0explain.", body: "Investors don't fund passion — they fund structure. They need to see the capital stack, the priority chain, and the projected return. If you can't walk them through the waterfall, the meeting is over." },
-  { icon: EyeOff, title: "The people across the table know\u00A0this.", body: "Distributors, sales agents, and financiers model waterfalls before every deal. When the producer doesn't, the terms favor everyone else. That's not a conspiracy — it's a knowledge gap with a price tag." },
+  { icon: EyeOff, title: "The people across the table know\u00A0this.", body: "Distributors, sales agents, and financiers model waterfalls before every deal. They know the recoupment order. They know where the corridors are. When the producer doesn't, the terms favor everyone else. That's not a conspiracy — it's a knowledge gap with a price tag." },
 ];
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -334,6 +334,7 @@ const Index = () => {
                     className="w-full h-16 text-base font-bold tracking-[0.14em] transition-all active:scale-[0.96] rounded-md bg-gold/[0.18] border-2 border-gold/50 text-gold animate-cta-glow-soft hover:border-gold/70 hover:bg-gold/[0.22]">
                     SEE YOUR DEAL
                   </button>
+                  <p className="text-text-dim text-xs tracking-wider mt-2 text-center">No credit card required.</p>
                 </div>
               )}
 
