@@ -4,7 +4,7 @@ import { Home, Calculator, BookOpen, Book, Mail, Instagram, Briefcase, Share2, L
 import { cn } from "@/lib/utils";
 
 const SHARE_URL = "https://filmmaker.og";
-const SHARE_TEXT = "Free film finance simulator — model your deal structure, capital stack, and revenue waterfall. See where every dollar goes before you sign.";
+const SHARE_TEXT = "Before you sign a deal, see exactly who gets paid and what's left for you. Free film finance tool — no account required.";
 const SHARE_TITLE = "FILMMAKER.OG — See Where Every Dollar Goes";
 
 const MobileMenu = () => {
