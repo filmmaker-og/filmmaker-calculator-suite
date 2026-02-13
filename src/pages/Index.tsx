@@ -47,9 +47,9 @@ const SHARE_TITLE = "FILMMAKER.OG — See Where Every Dollar Goes";
    PROBLEM CARDS — tighter copy, vertical layout
    ═══════════════════════════════════════════════════════════════════ */
 const problemCards = [
-  { icon: Receipt, title: "Most indie films lose money.", body: "Not because filmmakers aren't talented — because the financial structure didn't match what the film could realistically earn. The math was wrong before cameras rolled." },
-  { icon: Gavel, title: "You can't raise what you can't explain.", body: "Investors ask one question: how does my money come back? First-time producers give vague answers because no one taught them the mechanics. That's where the meeting ends." },
-  { icon: EyeOff, title: "This knowledge exists. It's just expensive.", body: "Entertainment lawyers and finance consultants understand deal structures fluently. They charge $5,000 to $30,000 for that understanding. Film school never covered it." },
+  { icon: Receipt, title: "Most indie films lose\u00A0money.", body: "Not because the film was bad. Because nobody modeled the recoupment before production. The waterfall determines who profits — and most first-time producers have never seen one." },
+  { icon: Gavel, title: "You can't raise what you can't\u00A0explain.", body: "Investors don't fund passion — they fund structure. They need to see the capital stack, the priority chain, and the projected return. If you can't walk them through the waterfall, the meeting is over." },
+  { icon: EyeOff, title: "Nobody teaches this.", body: "Film school covers craft. It doesn't cover recoupment order, pari passu splits, or how a sales agent's corridor eats into producer equity. This is institutional knowledge — and it's been locked behind retainers and NDAs." },
 ];
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -318,13 +318,13 @@ const Index = () => {
                 SEE WHERE EVERY<br /><span className="text-white">DOLLAR GOES</span>
               </h1>
               <p className="text-text-mid text-sm font-medium leading-relaxed max-w-sm mx-auto mb-6">
-                Know who gets paid, in what order, and what's left for you.
+                Know who gets paid, in what order, and what's&nbsp;left&nbsp;for&nbsp;you.
               </p>
 
               {isReturningUser ? (
                 <div className="w-full max-w-[320px] mx-auto space-y-3">
                   <button onClick={handleContinueClick}
-                    className="w-full h-16 text-base font-bold tracking-[0.14em] transition-all active:scale-[0.96] rounded-md bg-gold/[0.18] border-2 border-gold/50 text-gold animate-cta-glow-pulse hover:border-gold/70 hover:bg-gold/[0.22]">
+                    className="w-full h-16 text-base font-bold tracking-[0.14em] transition-all active:scale-[0.96] rounded-md bg-gold/[0.18] border-2 border-gold/50 text-gold animate-cta-glow-soft hover:border-gold/70 hover:bg-gold/[0.22]">
                     CONTINUE SIMULATION
                   </button>
                   <p className="text-text-dim text-xs tracking-wider text-center">{formatCompactCurrency(savedState!.budget)} budget in progress</p>
@@ -336,14 +336,14 @@ const Index = () => {
               ) : (
                 <div className="w-full max-w-[320px] mx-auto">
                   <button onClick={handleStartClick}
-                    className="w-full h-16 text-base font-bold tracking-[0.14em] transition-all active:scale-[0.96] rounded-md bg-gold/[0.18] border-2 border-gold/50 text-gold animate-cta-glow-pulse hover:border-gold/70 hover:bg-gold/[0.22]">
+                    className="w-full h-16 text-base font-bold tracking-[0.14em] transition-all active:scale-[0.96] rounded-md bg-gold/[0.18] border-2 border-gold/50 text-gold animate-cta-glow-soft hover:border-gold/70 hover:bg-gold/[0.22]">
                     SEE YOUR DEAL
                   </button>
                 </div>
               )}
 
               <div className="mt-8 flex justify-center animate-bounce-subtle">
-                <ChevronDown className="w-5 h-5 text-gold/30" />
+                <ChevronDown className="w-5 h-5 text-gold/60" />
               </div>
             </div>
           </section>
@@ -414,17 +414,18 @@ const Index = () => {
 
               {/* Summary line */}
               <p className="text-text-mid text-sm italic text-center max-w-[280px] mx-auto mt-6">
-                That's the <span className="text-gold font-semibold not-italic">waterfall</span> — and it's what this tool builds for you.
+                That's the <a href="/waterfall" className="text-gold font-semibold not-italic underline underline-offset-2 decoration-gold/30 hover:decoration-gold/60 transition-colors">waterfall</a> — and it's what this tool builds for you.
               </p>
 
               {/* Mid-page CTA */}
-              <div className="text-center mt-6">
+              <div className="text-center mt-8">
                 <button
                   onClick={handleStartClick}
-                  className="text-gold hover:text-gold/80 font-semibold text-sm tracking-wider transition-colors"
+                  className="px-8 py-3 rounded-md border-2 border-gold/50 bg-gold/[0.12] text-gold text-sm font-bold tracking-[0.12em] uppercase hover:border-gold/60 hover:bg-gold/[0.18] transition-all active:scale-[0.96] animate-cta-glow-pulse"
                 >
-                  Ready? See your deal →
+                  SEE YOUR DEAL
                 </button>
+                <p className="text-text-dim text-xs tracking-wider mt-2">Free. No account required.</p>
               </div>
             </div>
           </SectionFrame>
@@ -514,7 +515,7 @@ const Index = () => {
                 <p className="text-text-dim text-sm mb-4">Start free. Export when you're ready.</p>
                 <button
                   onClick={handleStartClick}
-                  className="w-full max-w-[320px] h-16 text-base font-bold tracking-[0.14em] transition-all active:scale-[0.96] rounded-md bg-gold/[0.18] border-2 border-gold/50 text-gold animate-cta-glow-pulse hover:border-gold/70 hover:bg-gold/[0.22]"
+                  className="w-full max-w-[320px] h-16 text-base font-bold tracking-[0.14em] transition-all active:scale-[0.96] rounded-md bg-gold/[0.18] border-2 border-gold/50 text-gold animate-cta-glow-soft hover:border-gold/70 hover:bg-gold/[0.22]"
                 >
                   SEE YOUR DEAL
                 </button>
@@ -532,7 +533,7 @@ const Index = () => {
               <div className="bg-[#141414] rounded-xl px-5 border border-[#2A2A2A]">
                 <Accordion type="single" collapsible className="w-full">
                   {faqs.map((faq, i) => (
-                    <AccordionItem key={faq.q} value={`faq-${i}`} className="border-border-subtle">
+                    <AccordionItem key={faq.q} value={`faq-${i}`} className="border-[#2A2A2A]">
                       <AccordionTrigger className="font-bebas text-xl tracking-[0.06em] uppercase text-white hover:text-white/70 hover:no-underline text-left">
                         {faq.q}
                       </AccordionTrigger>
@@ -562,7 +563,7 @@ const Index = () => {
                     Two minutes. Zero cost. Full clarity on your deal.
                   </p>
                   <button onClick={handleStartClick}
-                    className="w-full max-w-[320px] h-16 text-base font-bold tracking-[0.14em] transition-all active:scale-[0.96] rounded-md bg-gold/[0.14] border-2 border-gold/40 text-gold shadow-[0_0_20px_rgba(212,175,55,0.25)] hover:shadow-[0_0_30px_rgba(212,175,55,0.4)] hover:border-gold/60 hover:bg-gold/[0.18]">
+                    className="w-full max-w-[320px] h-16 text-base font-bold tracking-[0.14em] transition-all active:scale-[0.96] rounded-md bg-gold/[0.18] border-2 border-gold/50 text-gold hover:border-gold/70 hover:bg-gold/[0.22]">
                     BUILD YOUR WATERFALL
                   </button>
                 </div>
