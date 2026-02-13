@@ -308,7 +308,6 @@ const Index = () => {
                 <img src={filmmakerLogo} alt="Filmmaker.OG" className="relative w-[96px] h-[96px] object-contain rounded-xl"
                   style={{ filter: 'brightness(1.15) drop-shadow(0 0 28px rgba(212,175,55,0.45))' }} />
               </div>
-              <p className="text-text-dim text-xs tracking-[0.3em] uppercase font-semibold mb-5">Democratizing Film Finance</p>
               <h1 className="font-bebas text-[clamp(2.8rem,9vw,4.2rem)] leading-[1.05] text-gold mb-3">
                 SEE WHERE EVERY<br /><span className="text-white">DOLLAR GOES</span>
               </h1>
@@ -555,7 +554,7 @@ const Index = () => {
                     INVESTORS WILL ASK HOW THE MONEY FLOWS <span className="text-white">BACK</span>.<br />HAVE THE <span className="text-white">ANSWER</span>.
                   </h2>
                   <p className="text-text-mid text-sm leading-relaxed max-w-xs mx-auto mb-6">
-                    Two minutes. Zero cost. Full clarity on your&nbsp;deal.
+                    Your next investor meeting shouldn't be the first time you see your own&nbsp;waterfall.
                   </p>
                   <button onClick={handleStartClick}
                     className="w-full max-w-[320px] h-16 text-base font-bold tracking-[0.14em] transition-all active:scale-[0.96] rounded-md bg-gold/[0.18] border-2 border-gold/50 text-gold hover:border-gold/70 hover:bg-gold/[0.22]">
