@@ -80,10 +80,10 @@ const flowSteps = [
    INDUSTRY COSTS (price anchor)
    ═══════════════════════════════════════════════════════════════════ */
 const industryCosts = [
-  { icon: Gavel, cost: "$5K–$15K", label: "Entertainment Lawyer", note: "Per deal analysis" },
-  { icon: Calculator, cost: "$10K–$30K", label: "Finance Consultant", note: "Financial modeling" },
-  { icon: Handshake, cost: "5–15%", label: "Producer's Rep", note: "Percentage of deal" },
-  { icon: Film, cost: "10–25%", label: "Sales Agent", note: "Of gross revenue" },
+  { icon: Gavel, cost: "$5K–$15K", label: "Entertainment Lawyer" },
+  { icon: Calculator, cost: "$10K–$30K", label: "Finance Consultant" },
+  { icon: Handshake, cost: "5–15%", label: "Producer's Rep" },
+  { icon: Film, cost: "10–25%", label: "Sales Agent" },
 ];
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -113,7 +113,7 @@ const SectionHeader = ({ eyebrow, title, subtitle, icon: Icon, plainSubtitle }: 
       {Icon && <Icon className="w-5 h-5 text-gold" />}
       <p className="text-text-dim text-xs tracking-[0.3em] uppercase font-semibold">{eyebrow}</p>
     </div>
-    <h2 className="font-bebas text-4xl md:text-5xl tracking-[0.08em] text-gold">{title}</h2>
+    <h2 className="font-bebas text-3xl md:text-4xl tracking-[0.08em] text-gold">{title}</h2>
     {subtitle && (
       <p className={cn(
         "text-center max-w-lg mx-auto mt-4 leading-relaxed",
@@ -297,7 +297,7 @@ const Index = () => {
         )}
 
         {/* ═══════ LANDING PAGE ═══════ */}
-        <main className={cn("flex-1 flex flex-col transition-all duration-700 scroll-smooth", isComplete ? "opacity-100" : "opacity-0")}>
+        <main aria-label="Film Finance Simulator" className={cn("flex-1 flex flex-col transition-all duration-700 scroll-smooth", isComplete ? "opacity-100" : "opacity-0")}>
           <div className="vignette" />
 
           {/* ── HERO ── */}
@@ -310,16 +310,10 @@ const Index = () => {
                 <img src={filmmakerLogo} alt="Filmmaker.OG" className="relative w-[96px] h-[96px] object-contain rounded-xl"
                   style={{ filter: 'brightness(1.15) drop-shadow(0 0 28px rgba(212,175,55,0.45))' }} />
               </div>
-              <div className="mb-4">
-                <p className="text-text-dim text-sm tracking-[0.25em] uppercase font-semibold">Demystifying Film Finance</p>
-                <div className="w-10 h-[1px] bg-gold/30 mx-auto mt-2" />
-              </div>
-              <h1 className="font-bebas text-[clamp(2.4rem,8vw,3.8rem)] leading-[1.05] text-gold mb-4">
+              <p className="text-text-dim text-xs tracking-[0.3em] uppercase font-semibold mb-5">Democratizing Film Finance</p>
+              <h1 className="font-bebas text-[clamp(2.8rem,9vw,4.2rem)] leading-[1.05] text-gold mb-6">
                 SEE WHERE EVERY<br /><span className="text-white">DOLLAR GOES</span>
               </h1>
-              <p className="text-text-mid text-sm font-medium leading-relaxed max-w-sm mx-auto mb-6">
-                Know who gets paid, in what order, and what's&nbsp;left&nbsp;for&nbsp;you.
-              </p>
 
               {isReturningUser ? (
                 <div className="w-full max-w-[320px] mx-auto space-y-3">
@@ -347,7 +341,7 @@ const Index = () => {
                 className="mt-8 flex justify-center animate-bounce-subtle cursor-pointer"
                 onClick={() => document.getElementById('problem')?.scrollIntoView({ behavior: 'smooth' })}
               >
-                <ChevronDown className="w-5 h-5 text-gold/60" />
+                <ChevronDown className="w-5 h-5 text-gold/60 active:scale-[0.97]" />
               </div>
             </div>
           </section>
@@ -363,15 +357,12 @@ const Index = () => {
                 {problemCards.map((card, i) => {
                   const Icon = card.icon;
                   return (
-                    <div key={i} className={cn("flex rounded-xl overflow-hidden border border-[#2A2A2A] hover:border-gold/20 transition-colors", staggerChild(revealProblem.visible))} style={staggerDelay(i, revealProblem.visible)}>
-                      <div className="w-1 flex-shrink-0 bg-gradient-to-b from-gold via-gold/60 to-gold/20" />
-                      <div className="flex-1 bg-[#141414] p-5">
-                        <div className="flex items-start gap-3 mb-2">
-                          <Icon className="w-4 h-4 text-gold flex-shrink-0 mt-1" />
-                          <h3 className="font-bebas text-[22px] tracking-[0.06em] uppercase text-gold">{card.title}</h3>
-                        </div>
-                        <p className="text-text-mid text-sm leading-relaxed pl-7">{card.body}</p>
+                    <div key={i} className={cn("rounded-xl border border-[#2A2A2A] bg-[#141414] p-5", staggerChild(revealProblem.visible))} style={staggerDelay(i, revealProblem.visible)}>
+                      <div className="flex items-start gap-3 mb-2">
+                        <Icon className="w-4 h-4 text-gold flex-shrink-0 mt-1" />
+                        <h3 className="font-bebas text-xl tracking-[0.06em] uppercase text-gold">{card.title}</h3>
                       </div>
+                      <p className="text-text-mid text-sm leading-relaxed pl-7">{card.body}</p>
                     </div>
                   );
                 })}
@@ -420,7 +411,7 @@ const Index = () => {
 
               {/* Summary line */}
               <p className="text-text-mid text-sm italic text-center max-w-[280px] mx-auto mt-6">
-                That's the <a href="/waterfall" className="text-gold font-semibold not-italic underline underline-offset-2 decoration-gold/30 hover:decoration-gold/60 transition-colors">waterfall</a> — and it's what this tool builds for&nbsp;you.
+                That's the <a href="/waterfall-info" className="text-gold font-semibold not-italic underline underline-offset-2 decoration-gold/30 hover:decoration-gold/60 transition-colors">waterfall</a> — and it's what this tool builds for&nbsp;you.
               </p>
 
               {/* Mid-page CTA */}
@@ -455,7 +446,6 @@ const Index = () => {
                       </div>
                       <p className="font-mono text-lg font-medium text-text-primary line-through decoration-text-dim/30">{item.cost}</p>
                       <p className="text-text-dim text-xs tracking-wider uppercase mt-0.5">{item.label}</p>
-                      <p className="text-text-dim text-[13px] mt-1">{item.note}</p>
                     </div>
                   );
                 })}
@@ -464,12 +454,22 @@ const Index = () => {
               {/* FREE Badge */}
               <div className="text-center px-6 py-5 rounded-xl bg-gold/[0.06] border border-gold/20 max-w-[280px] mx-auto">
                 <p className="font-bebas text-4xl md:text-5xl tracking-[0.1em] text-gold">FREE</p>
-                <p className="text-text-dim text-[15px] tracking-wider mt-1">
+                <p className="text-text-dim text-[15px] tracking-[0.2em] mt-1">
                   Premium exports available when you're&nbsp;ready.
                 </p>
               </div>
             </div>
           </SectionFrame>
+
+          {/* section divider */}
+          <div className="px-8"><div className="h-[1px] bg-gradient-to-r from-transparent via-gold/25 to-transparent" /></div>
+
+          {/* ── Credentials (standalone between §4 and §5) ── */}
+          <div className="py-6 px-6 text-center">
+            <p className="text-text-dim text-xs tracking-[0.2em] uppercase">
+              Built by a Tribeca-winning, CAA-repped producer whose debut sold to&nbsp;Netflix.
+            </p>
+          </div>
 
           {/* section divider */}
           <div className="px-8"><div className="h-[1px] bg-gradient-to-r from-transparent via-gold/25 to-transparent" /></div>
@@ -537,7 +537,7 @@ const Index = () => {
                 <Accordion type="single" collapsible className="w-full">
                   {faqs.map((faq, i) => (
                     <AccordionItem key={faq.q} value={`faq-${i}`}>
-                      <AccordionTrigger className="font-bebas text-xl tracking-[0.06em] uppercase text-white hover:text-white/70 hover:no-underline text-left">
+                      <AccordionTrigger className="font-bebas text-xl tracking-[0.06em] uppercase text-gold hover:text-gold/70 hover:no-underline text-left">
                         {faq.q}
                       </AccordionTrigger>
                       <AccordionContent className="text-text-dim text-sm leading-relaxed normal-case font-sans">
@@ -559,9 +559,6 @@ const Index = () => {
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none"
                   style={{ width: '100%', height: '100%', background: `radial-gradient(ellipse 60% 60% at 50% 10%, rgba(212,175,55,0.08) 0%, transparent 70%)` }} />
                 <div className="relative p-8 md:p-12 max-w-md mx-auto text-center">
-                  <p className="text-text-dim text-xs tracking-[0.2em] uppercase mb-4 text-center">
-                    Built by a Tribeca-winning, CAA-repped producer whose debut sold to&nbsp;Netflix.
-                  </p>
                   <h2 className="font-bebas text-3xl md:text-4xl tracking-[0.08em] text-gold mb-4">
                     INVESTORS WILL ASK HOW THE MONEY FLOWS <span className="text-white">BACK</span>.<br />HAVE THE <span className="text-white">ANSWER</span>.
                   </h2>
@@ -583,19 +580,19 @@ const Index = () => {
             <div className="max-w-sm mx-auto">
               <div className="grid grid-cols-2 gap-3 mb-8 max-w-[340px] mx-auto">
                 <a href="mailto:thefilmmaker.og@gmail.com"
-                  className="flex items-center justify-center gap-2 text-sm tracking-wider text-gold/70 hover:text-gold transition-colors py-3.5 rounded-lg border border-white/[0.08] hover:border-gold/30">
+                  className="flex items-center justify-center gap-2 text-sm tracking-wider text-gold/70 hover:text-gold transition-colors active:scale-[0.97] py-3.5 rounded-lg border border-white/[0.08] hover:border-gold/30">
                   <Mail className="w-4 h-4" /><span>Email</span>
                 </a>
                 <a href="https://www.instagram.com/filmmaker.og" target="_blank" rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 text-sm tracking-wider text-gold/70 hover:text-gold transition-colors py-3.5 rounded-lg border border-white/[0.08] hover:border-gold/30">
+                  className="flex items-center justify-center gap-2 text-sm tracking-wider text-gold/70 hover:text-gold transition-colors active:scale-[0.97] py-3.5 rounded-lg border border-white/[0.08] hover:border-gold/30">
                   <Instagram className="w-4 h-4" /><span>Instagram</span>
                 </a>
                 <button onClick={handleShare}
-                  className="flex items-center justify-center gap-2 text-sm tracking-wider text-gold/70 hover:text-gold transition-colors py-3.5 rounded-lg border border-white/[0.08] hover:border-gold/30">
+                  className="flex items-center justify-center gap-2 text-sm tracking-wider text-gold/70 hover:text-gold transition-colors active:scale-[0.97] py-3.5 rounded-lg border border-white/[0.08] hover:border-gold/30">
                   <Share2 className="w-4 h-4" /><span>Share</span>
                 </button>
                 <button onClick={handleCopyLink}
-                  className="flex items-center justify-center gap-2 text-sm tracking-wider text-gold/70 hover:text-gold transition-colors py-3.5 rounded-lg border border-white/[0.08] hover:border-gold/30">
+                  className="flex items-center justify-center gap-2 text-sm tracking-wider text-gold/70 hover:text-gold transition-colors active:scale-[0.97] py-3.5 rounded-lg border border-white/[0.08] hover:border-gold/30">
                   {linkCopied ? (
                     <><Check className="w-4 h-4 text-green-400" /><span className="text-green-400">Copied!</span></>
                   ) : (
