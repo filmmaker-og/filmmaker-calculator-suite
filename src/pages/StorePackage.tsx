@@ -117,7 +117,7 @@ const StorePackage = () => {
           {/* Badge */}
           {product.badge && (
             <div className="mb-4">
-              <span className="inline-block px-3 py-1 rounded-full bg-gold text-black text-[10px] tracking-[0.15em] uppercase font-bold">
+              <span className="inline-block px-3 py-1.5 rounded-full bg-gold/[0.15] border border-gold/30 text-gold text-xs tracking-[0.15em] uppercase font-bold">
                 {product.badge}
               </span>
             </div>
@@ -252,10 +252,10 @@ const StorePackage = () => {
               onClick={handlePurchase}
               disabled={!agreedTerms || !isEmailValid() || loading}
               className={cn(
-                "w-full py-4 rounded-md text-sm font-bold tracking-[0.1em] uppercase transition-all active:scale-[0.96] disabled:opacity-30 disabled:cursor-not-allowed",
+                "w-full h-14 rounded-md font-bold tracking-[0.12em] uppercase transition-all active:scale-[0.96] disabled:opacity-30 disabled:cursor-not-allowed",
                 isFeatured
-                  ? "bg-gold-cta text-black hover:bg-gold-cta/90"
-                  : "border-2 border-gold/50 bg-transparent text-gold hover:border-gold/70 hover:bg-gold/[0.06]"
+                  ? "bg-gold/[0.22] border-2 border-gold/60 text-gold text-base animate-cta-glow-soft hover:border-gold/80 hover:bg-gold/[0.28]"
+                  : "bg-gold/[0.12] border-2 border-gold/40 text-gold text-sm hover:border-gold/60 hover:bg-gold/[0.18]"
               )}
             >
               {loading

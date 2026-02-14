@@ -69,7 +69,7 @@ const StoreCompare = () => {
                         <span
                           className={cn(
                             "font-mono text-xs",
-                            p.featured ? "text-gold-cta" : "text-text-dim"
+                            p.featured ? "text-gold" : "text-text-dim"
                           )}
                         >
                           ${p.price}
@@ -149,10 +149,10 @@ const StoreCompare = () => {
                 key={p.id}
                 onClick={() => navigate(`/store/${p.slug}`)}
                 className={cn(
-                  "py-3.5 rounded-md text-sm font-bold tracking-[0.1em] uppercase transition-all active:scale-[0.96]",
+                  "h-14 rounded-md font-bold tracking-[0.12em] uppercase transition-all active:scale-[0.96]",
                   p.featured
-                    ? "bg-gold-cta text-black hover:bg-gold-cta/90"
-                    : "border-2 border-gold/50 bg-transparent text-gold hover:border-gold/70 hover:bg-gold/[0.06]"
+                    ? "bg-gold/[0.22] border-2 border-gold/60 text-gold text-base hover:border-gold/80 hover:bg-gold/[0.28]"
+                    : "bg-gold/[0.08] border-2 border-gold/40 text-gold text-sm hover:border-gold/60 hover:bg-gold/[0.18]"
                 )}
               >
                 {p.slug === "the-export"
