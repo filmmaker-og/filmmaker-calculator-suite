@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════════════
-   PRODUCT DATA — Phase 1: Store UI + Copy + Stripe Configuration
+   PRODUCT DATA — Phase 2: Finance Plan Builder Architecture
    ═══════════════════════════════════════════════════════════════════ */
 
 export interface Product {
@@ -10,6 +10,8 @@ export interface Product {
   originalPrice: number | null;
   badge: string | null;
   featured: boolean;
+  isAddOn?: boolean;
+  requiresBase?: string[];
   shortDescription: string;
   fullDescription: string;
   features: string[];
@@ -21,48 +23,48 @@ export interface Product {
 
 export const products: Product[] = [
   {
-    id: "the-export",
-    slug: "the-export",
-    name: "The Export",
-    price: 97,
+    id: "the-blueprint",
+    slug: "the-blueprint",
+    name: "The Blueprint",
+    price: 197,
     originalPrice: null,
     badge: null,
     featured: false,
-    shortDescription: "Your complete financial model as a clean, professional PDF.",
+    shortDescription: "Your complete finance plan, documented.",
     fullDescription:
-      "Your complete waterfall model exported as a clean, professional PDF — white-labeled with your production company name and project title.\n\nEvery section of your financial model formatted for clarity: budget breakdown, capital stack structure, deal terms, full waterfall cascade, and scenario analysis. Clean design, standard professional formatting, ready to reference, print, or attach to an email.\n\nThis is the document you send when someone asks \"can you walk me through the numbers?\"",
+      "Your complete finance plan — documented, structured, and ready to reference.\n\nWe take your project details, budget, capital stack, and deal structure and build a professional finance plan PDF. Every assumption explained, every number sourced, every waterfall tier documented. This is the document your attorney reviews, your accountant references, and your co-producers align around.\n\nTell us about your project. We build the plan.",
     features: [
-      "Complete multi-page PDF",
-      "White-labeled with your company name",
-      "Budget, Stack, Deal, Waterfall, Scenarios",
-      "Clean professional formatting",
+      "Finance Plan Summary PDF",
+      "Capital Stack Breakdown",
+      "Scenario Comparison Sheet",
+      "Assumptions Reference",
     ],
     whatsIncluded: [
       {
-        title: "Complete Multi-Page PDF",
-        body: "Your full financial model across all sections — Budget, Capital Stack, Deal Terms, Waterfall Breakdown, and Scenario Analysis — formatted as a single professional document.",
+        title: "Finance Plan Summary PDF",
+        body: "Your complete financial model across all sections — Budget, Capital Stack, Deal Terms, Waterfall Breakdown, and Scenario Analysis — formatted as a single professional document.",
       },
       {
-        title: "White-Labeled With Your Identity",
-        body: "Your production company name and project title on the cover and headers. No filmmaker.og branding anywhere in the document.",
+        title: "Capital Stack Breakdown",
+        body: "Detailed breakdown of every funding source, priority positions, and recoupment structure. Shows exactly who gets paid and in what order.",
       },
       {
-        title: "Clean Professional Formatting",
-        body: "White background, standard professional typography, well-organized tables and data layouts. Readable, presentable, print-ready.",
+        title: "Scenario Comparison Sheet",
+        body: "Three revenue scenarios showing investor returns at conservative, target, and optimistic acquisition prices.",
       },
       {
-        title: "All Calculator Sections Included",
-        body: "Every input and output from your model: budget totals, funding source breakdown, deal term assumptions, complete waterfall tier-by-tier flow, and all scenario comparisons.",
+        title: "Assumptions Reference",
+        body: "Every default value, industry standard, and assumption documented with source and range — so your attorney knows exactly what to review.",
       },
     ],
     whoItsFor:
-      "Producers who need a clean reference document of their financial model. Use it for internal planning, co-producer discussions, or as a supporting attachment when investors ask for the numbers behind your pitch.",
+      "Producers who need a clear, professional record of their project's financial structure. Use it for internal planning, co-producer alignment, or as the foundation document when investors ask for the numbers.",
     whatYoullBuild:
-      "A complete financial overview of your project showing exactly how money flows — from gross receipts through sales agent commissions, distribution fees, debt service, equity recoupment, and profit splits — formatted for anyone to read and understand.",
+      "A complete financial plan showing exactly how money flows — from gross receipts through sales agent commissions, distribution fees, debt service, equity recoupment, and profit splits — formatted for anyone to read and understand.",
     upgradePrompt: {
       title: "WANT THE FULL TREATMENT?",
-      body: "The Pitch Package adds premium cinematic design, an investor-ready PowerPoint deck, a static Excel workbook, and a one-page executive summary — everything you need to walk into a meeting fully prepared.",
-      cta: "Upgrade for $150 more →",
+      body: "The Pitch Package adds a presentation-ready PowerPoint deck, individual investor return profiles, a one-page executive summary, and deal terms summary — everything you need to walk into the room.",
+      cta: "Upgrade to The Pitch Package →",
       link: "/store/the-pitch-package",
     },
   },
@@ -70,66 +72,63 @@ export const products: Product[] = [
     id: "the-pitch-package",
     slug: "the-pitch-package",
     name: "The Pitch Package",
-    price: 247,
-    originalPrice: 347,
-    badge: "MOST POPULAR · SAVE $100",
+    price: 497,
+    originalPrice: 697,
+    badge: "RECOMMENDED · SAVE $200",
     featured: true,
-    shortDescription: "Walk into any meeting with institutional-grade materials.",
+    shortDescription: "Your finance plan, presentation-ready for the room.",
     fullDescription:
-      "Everything in The Export, plus the full premium treatment.\n\nYour financial model redesigned with the same visual standard used by finance boutiques and institutional advisors — dark cinematic layouts, data visualizations, professional charts, and infographic-style waterfall breakdowns. The kind of document that makes investors take you seriously before you say a word.\n\nPlus a ready-to-present PowerPoint deck that turns your numbers into a 10-slide investor pitch with built-in speaker notes. Plus a static Excel workbook for due diligence follow-up. Plus a one-page executive summary designed as the leave-behind document investors keep after the meeting.\n\nFour files. One purchase. You walk into the room prepared.",
+      "Everything in The Blueprint, plus the full investor-facing treatment.\n\nYour finance plan redesigned for the room — a presentation-ready PowerPoint deck, individual investor return profiles, a one-page executive summary leave-behind, and a deal terms summary. The kind of materials that make investors take you seriously before you say a word.\n\nFour additional deliverables on top of your complete finance plan. One purchase. You walk into the room prepared.",
     features: [
-      "Everything in The Export",
-      "Premium cinematic PDF design",
-      "Static Excel reference workbook",
-      "PowerPoint investor pitch deck (10 slides)",
-      "One-page executive summary leave-behind",
+      "Everything in The Blueprint",
+      "Individual Investor Return Profiles",
+      "Pitch Deck (PowerPoint)",
+      "One-Page Executive Summary",
+      "Deal Terms Summary",
     ],
     whatsIncluded: [
       {
-        title: "Premium-Designed PDF",
-        body: "Full cinematic visual treatment — black backgrounds, gold accents, professional charts, infographic-style waterfall cascade, scenario comparison spreads. This is the document that looks like a $10,000 finance boutique produced it.",
+        title: "Everything in The Blueprint",
+        body: "Finance Plan Summary PDF, Capital Stack Breakdown, Scenario Comparison Sheet, and Assumptions Reference — all included.",
       },
       {
-        title: "Static Excel Reference Workbook",
-        body: "All your numbers laid out in clean rows and columns with professional formatting. When an investor's business manager asks \"can you send me the underlying numbers?\" — this is what you send. Values are hard-coded for reference; this is a data document, not a modeling tool.",
+        title: "Individual Investor Return Profiles",
+        body: "Per-investor documents showing their specific investment amount, priority position, preferred return, profit participation, and projected returns across all three scenarios.",
       },
       {
-        title: "PowerPoint Investor Pitch Deck",
-        body: "10 slides built from your actual project data. Title slide, budget overview, capital structure, deal terms, waterfall flow, scenario analysis, investor returns, and executive summary. Speaker notes included on every slide telling you exactly what to say and why.",
+        title: "Pitch Deck (PowerPoint)",
+        body: "10 slides built from your actual project data. Title slide, budget overview, capital structure, deal terms, waterfall flow, scenario analysis, investor returns, and executive summary. Speaker notes included on every slide.",
       },
       {
         title: "One-Page Executive Summary",
-        body: "The leave-behind. A single-page document with your project's key financials — budget, acquisition target, capital structure, investor return projections — designed to sit on an investor's desk after the meeting ends. This is the document that keeps your project in the conversation.",
+        body: "The leave-behind. A single-page document with your project's key financials — budget, acquisition target, capital structure, investor return projections — designed to sit on an investor's desk after the meeting ends.",
       },
       {
-        title: "White-Labeled Across All Files",
-        body: "Your production company name and project title on every document. No filmmaker.og branding. These are your materials.",
+        title: "Deal Terms Summary",
+        body: "A clean, structured summary of all deal terms — distribution model, commission rates, fee structures, and recoupment waterfall — formatted for attorney review and investor due diligence.",
       },
     ],
     whoItsFor:
       "Producers preparing to sit in front of investors, equity partners, or co-financiers. You have a meeting coming up — or you want to be ready when one lands. This package gives you the complete set of materials that institutional capital expects to see.",
     whatYoullBuild:
-      "A professional capital-raise package showing your project's complete financial architecture — how the money comes in, how it flows through the waterfall, and what investors can expect in return — presented across four coordinated documents that cover every moment from the pitch to the follow-up.",
-    upgradePrompt: {
-      title: "WANT THE REUSABLE MODEL?",
-      body: "The Working Model adds a live formula-driven Excel workbook where changing any input recalculates everything downstream. Use it on this project, your next project, and every project after that.",
-      cta: "Upgrade for $150 more →",
-      link: "/store/the-working-model",
-    },
+      "A professional capital-raise package showing your project's complete financial architecture — how the money comes in, how it flows through the waterfall, and what investors can expect in return — presented across coordinated documents that cover every moment from the pitch to the follow-up.",
+    upgradePrompt: null,
   },
   {
     id: "the-working-model",
     slug: "the-working-model",
     name: "The Working Model",
-    price: 397,
+    price: 99,
     originalPrice: null,
-    badge: null,
+    badge: "ADD-ON",
     featured: false,
-    shortDescription: "The financial engine. Not just this project — every project.",
+    isAddOn: true,
+    requiresBase: ["the-blueprint", "the-pitch-package"],
+    shortDescription:
+      "The live Excel engine behind your finance plan. Reuse on every project.",
     fullDescription:
-      "Everything in The Pitch Package, plus the engine behind it.\n\nThe Working Model includes a live formula-driven Excel workbook where every output is connected to every input. Change your budget — the waterfall recalculates. Adjust the sales agent commission from 15% to 20% — every downstream tier updates. Swap your equity split — investor returns recompute instantly.\n\nThis isn't a snapshot of one deal. It's a financial modeling tool you'll use for years.\n\nThe Pitch Package gives you the documents for this deal. The Working Model gives you the machine for every deal going forward.",
+      "The formula-driven Excel engine behind your finance plan.\n\nEvery output cell is connected to every input. Change your budget — the waterfall recalculates. Adjust the sales agent commission — every downstream tier updates. Swap your equity split — investor returns recompute instantly.\n\nThis isn't a snapshot of one deal. It's a financial modeling tool you'll use for years. Buy it once, use it on every project going forward.",
     features: [
-      "Everything in The Pitch Package",
       "Live formula-driven Excel model",
       "Change any input — everything recalculates",
       "Full formula documentation",
@@ -137,16 +136,12 @@ export const products: Product[] = [
     ],
     whatsIncluded: [
       {
-        title: "Everything in The Pitch Package",
-        body: "Premium PDF, static Excel reference, PowerPoint pitch deck, and executive summary — all white-labeled with your project details.",
-      },
-      {
         title: "Live Formula-Driven Excel Workbook",
-        body: "Every output cell is driven by formulas. Change any input — budget, revenue projections, fee percentages, capital structure, profit splits — and watch every downstream number recalculate in real time. Model unlimited scenarios without rebuilding anything.",
+        body: "Every output cell is driven by formulas. Change any input — budget, revenue projections, fee percentages, capital structure, profit splits — and watch every downstream number recalculate in real time.",
       },
       {
         title: "Full Formula Documentation",
-        body: "Every formula is documented. A companion reference explaining what each calculation does, why it's structured that way, and what assumptions it relies on. You'll understand the model, not just use it.",
+        body: "Every formula is documented. A companion reference explaining what each calculation does, why it's structured that way, and what assumptions it relies on.",
       },
       {
         title: "Reusable Across Unlimited Projects",
@@ -154,12 +149,18 @@ export const products: Product[] = [
       },
     ],
     whoItsFor:
-      "Producers and production companies who model multiple projects, want to stress-test deal structures before committing, or need a reusable financial tool they can bring to every negotiation. If you're building a slate — not just a single film — this is the tool that scales with you.",
+      "Producers and production companies who model multiple projects, want to stress-test deal structures before committing, or need a reusable financial tool they can bring to every negotiation.",
     whatYoullBuild:
-      "A complete, living financial model that lets you test any combination of budget, capital structure, deal terms, and revenue scenarios — and instantly see how every change affects investor returns, producer profits, and recoupment timelines. The same tool institutional finance teams use, formatted for independent production.",
+      "A complete, living financial model that lets you test any combination of budget, capital structure, deal terms, and revenue scenarios — and instantly see how every change affects investor returns and recoupment timelines.",
     upgradePrompt: null,
   },
 ];
+
+/** Get the two main (non-add-on) products */
+export const mainProducts: Product[] = products.filter((p) => !p.isAddOn);
+
+/** Get the add-on product */
+export const addOnProduct: Product | undefined = products.find((p) => p.isAddOn);
 
 export const getProduct = (slug: string): Product | undefined =>
   products.find((p) => p.slug === slug);
@@ -174,9 +175,8 @@ export interface ComparisonSection {
   title: string;
   features: {
     label: string;
-    theExport: FeatureValue;
+    theBlueprint: FeatureValue;
     thePitchPackage: FeatureValue;
-    theWorkingModel: FeatureValue;
   }[];
 }
 
@@ -184,38 +184,35 @@ export const comparisonSections: ComparisonSection[] = [
   {
     title: "Documents",
     features: [
-      { label: "Professional PDF (clean format)", theExport: true, thePitchPackage: true, theWorkingModel: true },
-      { label: "Premium Cinematic PDF (dark design, charts, infographics)", theExport: false, thePitchPackage: true, theWorkingModel: true },
-      { label: "Static Excel Reference Workbook", theExport: false, thePitchPackage: true, theWorkingModel: true },
-      { label: "PowerPoint Investor Pitch Deck (10 slides + speaker notes)", theExport: false, thePitchPackage: true, theWorkingModel: true },
-      { label: "One-Page Executive Summary Leave-Behind", theExport: false, thePitchPackage: true, theWorkingModel: true },
-      { label: "Live Formula-Driven Excel Model", theExport: false, thePitchPackage: false, theWorkingModel: true },
+      { label: "Finance Plan Summary PDF", theBlueprint: true, thePitchPackage: true },
+      { label: "Capital Stack Breakdown", theBlueprint: true, thePitchPackage: true },
+      { label: "Scenario Comparison Sheet", theBlueprint: true, thePitchPackage: true },
+      { label: "Assumptions Reference", theBlueprint: true, thePitchPackage: true },
+      { label: "Individual Investor Return Profiles", theBlueprint: false, thePitchPackage: true },
+      { label: "Pitch Deck (PowerPoint)", theBlueprint: false, thePitchPackage: true },
+      { label: "One-Page Executive Summary", theBlueprint: false, thePitchPackage: true },
+      { label: "Deal Terms Summary", theBlueprint: false, thePitchPackage: true },
     ],
   },
   {
     title: "Features",
     features: [
-      { label: "White-labeled with your company/project", theExport: true, thePitchPackage: true, theWorkingModel: true },
-      { label: "Budget breakdown", theExport: true, thePitchPackage: true, theWorkingModel: true },
-      { label: "Capital stack structure", theExport: true, thePitchPackage: true, theWorkingModel: true },
-      { label: "Deal terms summary", theExport: true, thePitchPackage: true, theWorkingModel: true },
-      { label: "Waterfall cascade (full tier-by-tier)", theExport: true, thePitchPackage: true, theWorkingModel: true },
-      { label: "Scenario comparison (Low/Base/High)", theExport: true, thePitchPackage: true, theWorkingModel: true },
-      { label: "Data visualizations and charts", theExport: false, thePitchPackage: true, theWorkingModel: true },
-      { label: "Infographic-style waterfall visual", theExport: false, thePitchPackage: true, theWorkingModel: true },
-      { label: "Investor return calculations", theExport: false, thePitchPackage: true, theWorkingModel: true },
-      { label: "Speaker notes for pitch presentation", theExport: false, thePitchPackage: true, theWorkingModel: true },
-      { label: "Live recalculation (change inputs → outputs update)", theExport: false, thePitchPackage: false, theWorkingModel: true },
-      { label: "Formula documentation", theExport: false, thePitchPackage: false, theWorkingModel: true },
-      { label: "Reusable across unlimited projects", theExport: false, thePitchPackage: false, theWorkingModel: true },
+      { label: "White-labeled with your company/project", theBlueprint: true, thePitchPackage: true },
+      { label: "Budget breakdown", theBlueprint: true, thePitchPackage: true },
+      { label: "Capital stack structure", theBlueprint: true, thePitchPackage: true },
+      { label: "Deal terms summary", theBlueprint: true, thePitchPackage: true },
+      { label: "Waterfall cascade (full tier-by-tier)", theBlueprint: true, thePitchPackage: true },
+      { label: "Scenario comparison (Conservative/Target/Optimistic)", theBlueprint: true, thePitchPackage: true },
+      { label: "Per-investor return profiles", theBlueprint: false, thePitchPackage: true },
+      { label: "Speaker notes for pitch presentation", theBlueprint: false, thePitchPackage: true },
     ],
   },
   {
     title: "Use Case",
     features: [
-      { label: "Best for", theExport: "Reference & planning", thePitchPackage: "Investor meetings", theWorkingModel: "Ongoing deal modeling" },
-      { label: "You need this when", theExport: "You want a clean record of your financial model", thePitchPackage: "You're preparing to pitch investors or co-financiers", theWorkingModel: "You model multiple projects or need to stress-test scenarios" },
-      { label: "Files delivered", theExport: "1 (PDF)", thePitchPackage: "4 (PDF + Excel + PPTX + Summary)", theWorkingModel: "5 (PDF + Excel + PPTX + Summary + Live Model)" },
+      { label: "Best for", theBlueprint: "Internal planning & documentation", thePitchPackage: "Investor meetings & capital raises" },
+      { label: "You need this when", theBlueprint: "You want a professional finance plan for your project", thePitchPackage: "You're preparing to pitch investors or co-financiers" },
+      { label: "Deliverables", theBlueprint: "4 documents", thePitchPackage: "8 documents" },
     ],
   },
 ];

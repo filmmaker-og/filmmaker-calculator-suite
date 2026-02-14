@@ -8,18 +8,22 @@ const corsHeaders = {
 };
 
 // Product configuration
-const PRODUCTS = {
-  "the-export": {
-    name: "The Export",
-    price: 9700, // $97 in cents
+const PRODUCTS: Record<string, { name: string; price: number }> = {
+  "the-blueprint": {
+    name: "The Blueprint",
+    price: 19700, // $197 in cents
   },
   "the-pitch-package": {
     name: "The Pitch Package",
-    price: 24700, // $247 in cents
+    price: 49700, // $497 in cents
   },
   "the-working-model": {
     name: "The Working Model",
-    price: 39700, // $397 in cents
+    price: 9900, // $99 in cents
+  },
+  "the-working-model-discount": {
+    name: "The Working Model (Bundle Discount)",
+    price: 4900, // $49 in cents
   },
 };
 
@@ -29,13 +33,8 @@ serve(async (req) => {
   }
 
   try {
-    const { productId, email } = await req.json();
-
-    if (!productId || !PRODUCTS[productId as keyof typeof PRODUCTS]) {
-      throw new Error("Invalid product ID");
-    }
-
-    const product = PRODUCTS[productId as keyof typeof PRODUCTS];
+    const body = await req.json();
+    const { productId, items, email } = body;
 
     // Initialize Stripe
     const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
@@ -51,7 +50,7 @@ serve(async (req) => {
     // Try to get authenticated user
     let userId: string | null = null;
     let userEmail = email;
-    
+
     const authHeader = req.headers.get("Authorization");
     if (authHeader) {
       const token = authHeader.replace("Bearer ", "");
@@ -73,29 +72,65 @@ serve(async (req) => {
       customerId = customers.data[0].id;
     }
 
-    // Create checkout session
-    const session = await stripe.checkout.sessions.create({
-      customer: customerId,
-      customer_email: customerId ? undefined : userEmail,
-      line_items: [
+    // Build line items — support both single productId and items array
+    let lineItems: Stripe.Checkout.SessionCreateParams.LineItem[];
+    let metaProductId: string;
+    let metaProductName: string;
+
+    if (items && Array.isArray(items) && items.length > 0) {
+      // Multi-item checkout (e.g., base product + Working Model bundle)
+      lineItems = items.map((itemId: string) => {
+        const product = PRODUCTS[itemId];
+        if (!product) throw new Error(`Invalid product ID: ${itemId}`);
+        return {
+          price_data: {
+            currency: "usd",
+            product_data: {
+              name: product.name,
+              description: `FILMMAKER.OG — ${product.name}`,
+            },
+            unit_amount: product.price,
+          },
+          quantity: 1,
+        };
+      });
+      // Use the first item (base product) as the primary product in metadata
+      const baseProduct = PRODUCTS[items[0]];
+      metaProductId = items.join(",");
+      metaProductName = items.map((id: string) => PRODUCTS[id]?.name || id).join(" + ");
+    } else if (productId && PRODUCTS[productId]) {
+      // Single product checkout (backward compatible)
+      const product = PRODUCTS[productId];
+      lineItems = [
         {
           price_data: {
             currency: "usd",
             product_data: {
               name: product.name,
-              description: `Professional film finance export — ${product.name}`,
+              description: `FILMMAKER.OG — ${product.name}`,
             },
             unit_amount: product.price,
           },
           quantity: 1,
         },
-      ],
+      ];
+      metaProductId = productId;
+      metaProductName = product.name;
+    } else {
+      throw new Error("Invalid product ID or items array");
+    }
+
+    // Create checkout session
+    const session = await stripe.checkout.sessions.create({
+      customer: customerId,
+      customer_email: customerId ? undefined : userEmail,
+      line_items: lineItems,
       mode: "payment",
-      success_url: `${req.headers.get("origin")}/store?success=true&session_id={CHECKOUT_SESSION_ID}`,
+      success_url: `${req.headers.get("origin")}/build-your-plan?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${req.headers.get("origin")}/store?canceled=true`,
       metadata: {
-        productId,
-        productName: product.name,
+        productId: metaProductId,
+        productName: metaProductName,
         userId: userId || "",
         userEmail,
       },

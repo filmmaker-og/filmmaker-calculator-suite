@@ -14,6 +14,7 @@ import Calculator from "./pages/Calculator";
 import Store from "./pages/Store";
 import StorePackage from "./pages/StorePackage";
 import StoreCompare from "./pages/StoreCompare";
+import BuildYourPlan from "./pages/BuildYourPlan";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -36,6 +37,7 @@ const App = () => (
           <Route path="/store" element={<Store />} />
           <Route path="/store/compare" element={<StoreCompare />} />
           <Route path="/store/:slug" element={<StorePackage />} />
+          <Route path="/build-your-plan" element={<BuildYourPlan />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
