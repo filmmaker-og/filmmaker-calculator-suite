@@ -34,7 +34,7 @@ const fmtPct = (n: number) => `${n}%`;
 const Tooltip = ({ text }: { text: string }) => (
   <div className="group relative inline-flex ml-1.5">
     <Info className="w-3.5 h-3.5 text-text-dim/60 cursor-help" />
-    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-3 rounded-lg bg-[#1A1A1A] border border-white/10 text-text-mid text-[11px] leading-relaxed opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity z-50">
+    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-3 rounded-lg bg-bg-surface border border-white/10 text-text-mid text-[11px] leading-relaxed opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity z-50">
       {text}
     </div>
   </div>
@@ -140,7 +140,7 @@ const CollapsibleSection = ({
 }) => {
   const [open, setOpen] = useState(defaultOpen);
   return (
-    <div className="rounded-xl border border-[#2A2A2A] bg-[#141414] overflow-hidden">
+    <div className="rounded-xl border border-border-subtle bg-bg-card overflow-hidden">
       <button
         onClick={() => setOpen(!open)}
         className="w-full flex items-center justify-between p-5 text-left"

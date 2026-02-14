@@ -28,11 +28,11 @@ export default {
         border: {
           default: "rgba(212, 175, 55, 0.20)",   // --border-default
           active: "rgba(212, 175, 55, 0.50)",     // --border-active
-          subtle: "#1A1A1A",                       // --border-subtle
+          subtle: "#2A2A2A",                       // --border-subtle
         },
         bg: {
           void: "#000000",
-          card: "#070707",
+          card: "#141414",
           surface: "#111111",
           elevated: "#0D0D0D",
           header: "#0A0A0A",
@@ -40,8 +40,8 @@ export default {
         },
         text: {
           primary: "#FFFFFF",
-          mid: "#CFCFCF",
-          dim: "#8A8A8A",
+          mid: "#D4D4D4",
+          dim: "#999999",
         },
         gold: {
           DEFAULT: "#D4AF37",                      // Metallic (non-interactive)

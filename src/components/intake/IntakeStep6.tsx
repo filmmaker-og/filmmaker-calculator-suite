@@ -42,7 +42,7 @@ const SummaryCard = ({
   onEdit: (step: number) => void;
   children: React.ReactNode;
 }) => (
-  <div className="rounded-xl border border-[#2A2A2A] bg-[#141414] overflow-hidden">
+  <div className="rounded-xl border border-border-subtle bg-bg-card overflow-hidden">
     <div className="flex items-center justify-between p-5 pb-0">
       <h3 className="font-bebas text-lg tracking-[0.06em] text-gold">
         {title}

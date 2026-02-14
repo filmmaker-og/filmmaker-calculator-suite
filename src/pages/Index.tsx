@@ -39,7 +39,7 @@ import { formatCompactCurrency } from "@/lib/waterfall";
 
 const STORAGE_KEY = "filmmaker_og_inputs";
 const CINEMATIC_SEEN_KEY = "filmmaker_og_intro_seen";
-const SHARE_URL = "https://filmmaker.og";
+const getShareUrl = () => window.location.origin;
 const SHARE_TEXT = "Before you sign a deal, see exactly who gets paid and what's left for you. Free film finance tool — no account required.";
 const SHARE_TITLE = "FILMMAKER.OG — See Where Every Dollar Goes";
 
@@ -239,13 +239,13 @@ const Index = () => {
 
   const handleShare = useCallback(async () => {
     if (navigator.share) {
-      try { await navigator.share({ title: SHARE_TITLE, text: SHARE_TEXT, url: SHARE_URL }); return; } catch {}
+      try { await navigator.share({ title: SHARE_TITLE, text: SHARE_TEXT, url: getShareUrl() }); return; } catch {}
     }
     handleCopyLink();
   }, []);
 
   const handleCopyLink = useCallback(() => {
-    navigator.clipboard.writeText(`${SHARE_TEXT}\n\n${SHARE_URL}`).then(() => {
+    navigator.clipboard.writeText(`${SHARE_TEXT}\n\n${getShareUrl()}`).then(() => {
       setLinkCopied(true);
       setTimeout(() => setLinkCopied(false), 2000);
     }).catch(() => {});
@@ -358,7 +358,7 @@ const Index = () => {
                 {problemCards.map((card, i) => {
                   const Icon = card.icon;
                   return (
-                    <div key={i} className={cn("rounded-xl border border-[#2A2A2A] bg-[#141414] p-5", staggerChild(revealProblem.visible))} style={staggerDelay(i, revealProblem.visible)}>
+                    <div key={i} className={cn("rounded-xl border border-border-subtle bg-bg-card p-5", staggerChild(revealProblem.visible))} style={staggerDelay(i, revealProblem.visible)}>
                       <div className="flex items-start gap-3 mb-2">
                         <Icon className="w-4 h-4 text-gold flex-shrink-0 mt-1" />
                         <h3 className="font-bebas text-xl tracking-[0.06em] uppercase text-gold">{card.title}</h3>
@@ -397,7 +397,7 @@ const Index = () => {
                         className={cn("flex flex-col items-center text-center", staggerChild(revealFlow.visible))}
                         style={staggerDelay(i, revealFlow.visible)}
                       >
-                        <div className="w-full max-w-[320px] rounded-xl bg-[#141414] border border-[#2A2A2A] px-5 py-4 flex flex-col items-center">
+                        <div className="w-full max-w-[320px] rounded-xl bg-bg-card border border-border-subtle px-5 py-4 flex flex-col items-center">
                           <div className="w-10 h-10 rounded-full bg-bg-elevated border border-gold/40 flex items-center justify-center mb-3">
                             <Icon className="w-4 h-4 text-gold" />
                           </div>
@@ -441,8 +441,8 @@ const Index = () => {
                 {industryCosts.map((item, i) => {
                   const Icon = item.icon;
                   return (
-                    <div key={item.label} className={cn("rounded-xl border border-[#2A2A2A] bg-[#141414] p-5 text-center", staggerChild(revealPrice.visible))} style={staggerDelay(i, revealPrice.visible)}>
-                      <div className="w-9 h-9 rounded-lg bg-bg-elevated border border-[#2A2A2A] flex items-center justify-center mx-auto mb-3">
+                    <div key={item.label} className={cn("rounded-xl border border-border-subtle bg-bg-card p-5 text-center", staggerChild(revealPrice.visible))} style={staggerDelay(i, revealPrice.visible)}>
+                      <div className="w-9 h-9 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center mx-auto mb-3">
                         <Icon className="w-4 h-4 text-gold" />
                       </div>
                       <p className="font-mono text-lg font-medium text-text-primary line-through decoration-text-dim/30">{item.cost}</p>
@@ -474,7 +474,7 @@ const Index = () => {
               <p className="text-text-mid text-xs tracking-[0.2em] uppercase font-bold mb-2 text-center">
                 Free — always
               </p>
-              <div className="rounded-xl border border-[#2A2A2A] bg-[#141414] divide-y divide-[#2A2A2A] mb-4">
+              <div className="rounded-xl border border-border-subtle bg-bg-card divide-y divide-border-subtle mb-4">
                 {freeDeliverables.map((item) => {
                   const Icon = item.icon;
                   return (
@@ -493,7 +493,7 @@ const Index = () => {
               <p className="text-gold text-xs tracking-[0.2em] uppercase font-bold mb-2 text-center">
                 Premium exports
               </p>
-              <div className="rounded-xl border border-gold/20 bg-[#141414] divide-y divide-[#2A2A2A] mb-6">
+              <div className="rounded-xl border border-gold/20 bg-bg-card divide-y divide-border-subtle mb-6">
                 {premiumDeliverables.map((item) => {
                   const Icon = item.icon;
                   return (
@@ -524,7 +524,7 @@ const Index = () => {
           <SectionFrame id="faq">
             <div ref={revealFaq.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", revealFaq.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
               <SectionHeader icon={HelpCircle} eyebrow="Common Questions" title={<>WHAT FILMMAKERS <span className="text-white">ASK</span></>} />
-              <div className="bg-[#141414] rounded-xl px-5 border border-[#2A2A2A]">
+              <div className="bg-bg-card rounded-xl px-5 border border-border-subtle">
                 <Accordion type="single" collapsible className="w-full">
                   {faqs.map((faq, i) => (
                     <AccordionItem key={faq.q} value={`faq-${i}`}>
