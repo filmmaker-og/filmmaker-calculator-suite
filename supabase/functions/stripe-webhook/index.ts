@@ -47,9 +47,6 @@ serve(async (req) => {
       const session = event.data.object as Stripe.Checkout.Session;
       
       const metadata = session.metadata || {};
-      const accessDays = parseInt(metadata.accessDays || "30", 10);
-      const accessExpiresAt = new Date();
-      accessExpiresAt.setDate(accessExpiresAt.getDate() + accessDays);
 
       // Create Supabase admin client
       const supabaseAdmin = createClient(
@@ -68,7 +65,6 @@ serve(async (req) => {
         amount_paid: session.amount_total || 0,
         currency: session.currency || "usd",
         status: "completed",
-        access_expires_at: accessExpiresAt.toISOString(),
       });
 
       if (insertError) {

@@ -1,23 +1,153 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { Button } from "@/components/ui/button";
 import {
   Check,
-  Download,
-  Sparkles,
-  Shield,
   ArrowRight,
-  Star,
+  Minus,
+  Gavel,
+  Calculator,
+  HelpCircle,
 } from "lucide-react";
 import Header from "@/components/Header";
-import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
-import { products } from "@/lib/store-products";
+import { products, type Product } from "@/lib/store-products";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
+/* ═══════════════════════════════════════════════════════════════════
+   FAQ DATA — Store-specific
+   ═══════════════════════════════════════════════════════════════════ */
+const storeFaqs = [
+  {
+    q: "How fast do I get my files?",
+    a: "Your files are generated instantly after purchase. Download immediately from your confirmation page.",
+  },
+  {
+    q: "Can I use these for multiple projects?",
+    a: "The Export and Pitch Package are generated from your current calculator inputs — one project per purchase. The Working Model includes a reusable Excel template you can use across unlimited future projects.",
+  },
+  {
+    q: "What if I want to upgrade later?",
+    a: "Contact us and we'll apply what you've already paid toward the higher tier.",
+  },
+  {
+    q: "Do I need to re-enter my data?",
+    a: "No. Your exports are generated directly from the financial model you already built in the calculator. Every number carries over automatically.",
+  },
+];
+
+/* ═══════════════════════════════════════════════════════════════════
+   PRODUCT CARD
+   ═══════════════════════════════════════════════════════════════════ */
+const ProductCard = ({
+  product,
+  onBuy,
+  onDetails,
+}: {
+  product: Product;
+  onBuy: () => void;
+  onDetails: () => void;
+}) => {
+  const isFeatured = product.featured;
+
+  return (
+    <div
+      className={cn(
+        "flex flex-col rounded-xl p-6 transition-all",
+        isFeatured
+          ? "border-2 border-gold bg-[#141414] shadow-[0_0_40px_rgba(212,175,55,0.08)]"
+          : "border border-[#2A2A2A] bg-[#141414]"
+      )}
+    >
+      {/* Badge */}
+      {product.badge && (
+        <div className="mb-4">
+          <span className="inline-block px-3 py-1 rounded-full bg-gold text-black text-[10px] tracking-[0.15em] uppercase font-bold">
+            {product.badge}
+          </span>
+        </div>
+      )}
+
+      {/* Name */}
+      <h3 className="font-bebas text-2xl tracking-[0.06em] text-white mb-2">
+        {product.name.toUpperCase()}
+      </h3>
+
+      {/* Price */}
+      <div className="mb-3">
+        {product.originalPrice && (
+          <span className="font-mono text-lg text-text-dim line-through mr-2">
+            ${product.originalPrice}
+          </span>
+        )}
+        <span className={cn("font-mono text-3xl font-medium", isFeatured ? "text-white" : "text-white")}>
+          ${product.price}
+        </span>
+      </div>
+
+      {/* Short description */}
+      <p className="text-text-dim text-sm leading-relaxed mb-5">
+        {product.shortDescription}
+      </p>
+
+      {/* Feature list */}
+      <ul className="space-y-2.5 mb-6 flex-1">
+        {product.features.map((feature) => (
+          <li key={feature} className="flex items-start gap-2.5">
+            <Check className="w-3.5 h-3.5 mt-0.5 flex-shrink-0 text-gold" />
+            <span className="text-text-primary text-[13px] leading-snug">
+              {feature}
+            </span>
+          </li>
+        ))}
+      </ul>
+
+      {/* CTA Button */}
+      <button
+        onClick={onBuy}
+        className={cn(
+          "w-full py-3.5 rounded-md text-sm font-bold tracking-[0.1em] uppercase transition-all active:scale-[0.96] mb-3",
+          isFeatured
+            ? "bg-gold-cta text-black hover:bg-gold-cta/90"
+            : "border-2 border-gold/50 bg-transparent text-gold hover:border-gold/70 hover:bg-gold/[0.06]"
+        )}
+      >
+        {isFeatured
+          ? `Get The Pitch Package — $${product.price}`
+          : product.slug === "the-export"
+            ? `Get My Export — $${product.price}`
+            : `Get The Working Model — $${product.price}`}
+      </button>
+
+      {/* Details link */}
+      <button
+        onClick={onDetails}
+        className="text-text-dim text-xs tracking-wider hover:text-text-mid transition-colors text-center"
+      >
+        See full details →
+      </button>
+    </div>
+  );
+};
+
+/* ═══════════════════════════════════════════════════════════════════
+   MAIN STORE COMPONENT
+   ═══════════════════════════════════════════════════════════════════ */
 const Store = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [showSuccess, setShowSuccess] = useState(false);
+  const [purchasedEmail] = useState(() => {
+    try {
+      return localStorage.getItem("filmmaker_og_purchase_email") || "";
+    } catch {
+      return "";
+    }
+  });
 
   useEffect(() => {
     if (searchParams.get("success") === "true") {
@@ -25,30 +155,37 @@ const Store = () => {
     }
   }, [searchParams]);
 
-  /* ─── SUCCESS VIEW ─── */
+  /* ─── SUCCESS / CONFIRMATION VIEW ─── */
   if (showSuccess) {
     return (
       <div className="min-h-screen bg-bg-void flex flex-col">
-        <Header title="SUCCESS" />
+        <Header title="CONFIRMED" />
         <main className="flex-1 px-6 py-16 flex items-center justify-center animate-fade-in">
           <div className="text-center max-w-md">
             <div className="w-20 h-20 border-2 border-gold mx-auto mb-6 rounded-lg flex items-center justify-center">
               <Check className="w-10 h-10 text-gold" />
             </div>
             <h1 className="font-bebas text-4xl text-text-primary mb-4">
-              PAYMENT SUCCESSFUL
+              YOUR PURCHASE IS CONFIRMED
             </h1>
-            <p className="text-text-dim mb-8 leading-relaxed">
-              Your purchase has been confirmed. Your professional export is
-              now available from the Waterfall tab.
+            <p className="text-text-mid text-sm leading-relaxed mb-2">
+              Thank you for your purchase.
             </p>
-            <Button
-              onClick={() => navigate("/calculator?tab=waterfall")}
-              className="btn-vault w-full py-4 min-h-[52px]"
-            >
-              <Download className="w-5 h-5 mr-2" />
-              VIEW YOUR WATERFALL
-            </Button>
+            <p className="text-text-mid text-sm leading-relaxed mb-8">
+              Your files are being prepared and will be delivered
+              {purchasedEmail ? (
+                <> to <span className="text-white font-semibold">{purchasedEmail}</span></>
+              ) : null}{" "}
+              within 24 hours.
+            </p>
+            <div className="flex flex-col gap-3">
+              <button
+                onClick={() => navigate("/calculator")}
+                className="w-full py-3.5 rounded-md border-2 border-gold/50 text-gold text-sm font-bold tracking-[0.1em] uppercase hover:border-gold/70 hover:bg-gold/[0.06] transition-all active:scale-[0.96]"
+              >
+                Return to Calculator
+              </button>
+            </div>
           </div>
         </main>
       </div>
@@ -62,260 +199,129 @@ const Store = () => {
 
       <main className="flex-1 animate-fade-in">
         {/* ═══════════════════════════════════════════════════════════
-            HERO SECTION
+            PAGE HEADER
             ═══════════════════════════════════════════════════════════ */}
-        <section className="relative overflow-hidden">
-          <div
-            className="absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none"
-            style={{
-              width: "100vw",
-              height: "500px",
-              background:
-                "radial-gradient(ellipse 60% 50% at 50% 0%, rgba(212, 175, 55, 0.07) 0%, transparent 70%)",
-            }}
-          />
-
-          <div className="relative px-6 pt-10 pb-8 max-w-3xl mx-auto text-center">
-            <p className="text-gold text-[10px] tracking-[0.35em] uppercase mb-6 font-semibold">
-              Democratizing the Business of Film
-            </p>
-
-            <h1 className="font-bebas text-[clamp(2.2rem,8vw,3.5rem)] leading-[1.05] text-text-primary mb-5">
-              TURN YOUR NUMBERS
-              <br />
-              INTO A{" "}
-              <span className="text-gold">DEAL</span>
-            </h1>
-
-            <p className="text-text-mid text-sm leading-relaxed max-w-lg mx-auto mb-8">
-              Professional film finance documents that make investors take you
-              seriously. The same materials entertainment lawyers charge{" "}
-              <span className="text-white font-semibold">
-                $5,000–$15,000
-              </span>{" "}
-              to produce.
-            </p>
-
-            <div className="inline-flex items-center gap-2 px-5 py-2.5 border border-border-default bg-gold/[0.04] rounded-sm">
-              <Sparkles className="w-4 h-4 text-gold" />
-              <span className="text-gold text-[11px] tracking-[0.15em] uppercase font-semibold">
-                Founders Pricing
-              </span>
-            </div>
-          </div>
-        </section>
-
-        {/* ═══════════════════════════════════════════════════════════
-            TRUST ANCHORING BAR
-            ═══════════════════════════════════════════════════════════ */}
-        <section className="border-y border-border-subtle bg-bg-elevated">
-          <div className="px-6 py-6 max-w-3xl mx-auto">
-            <p className="text-text-dim text-[10px] tracking-[0.2em] uppercase text-center mb-4 font-semibold">
-              What Others Charge
-            </p>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-              {[
-                { label: "Entertainment Lawyer", cost: "$5K–$15K" },
-                { label: "Finance Consultant", cost: "$10K–$30K" },
-                { label: "Producer's Rep", cost: "$50K–$250K+" },
-                { label: "Filmmaker.OG", cost: "From $197", highlight: true },
-              ].map((item) => (
-                <div key={item.label} className="py-2">
-                  <p
-                    className={cn(
-                      "font-mono text-lg font-medium",
-                      item.highlight
-                        ? "text-gold-cta"
-                        : "text-text-dim line-through decoration-text-dim/40"
-                    )}
-                  >
-                    {item.cost}
-                  </p>
-                  <p className="text-text-dim text-[10px] tracking-wider uppercase mt-1">
-                    {item.label}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ═══════════════════════════════════════════════════════════
-            PACKAGE CARDS — Link to detail pages
-            ═══════════════════════════════════════════════════════════ */}
-        <section className="px-4 sm:px-6 py-10 max-w-5xl mx-auto">
-          <h2 className="font-bebas text-2xl tracking-[0.1em] text-text-primary text-center mb-2">
-            CHOOSE YOUR PACKAGE
-          </h2>
-          <p className="text-text-dim text-xs text-center mb-8 max-w-md mx-auto">
-            Every package is a one-time purchase. No subscriptions. No hidden
-            fees.
+        <section className="px-6 pt-10 pb-8 max-w-3xl mx-auto text-center">
+          <h1 className="font-bebas text-[clamp(2rem,7vw,3.2rem)] leading-[1.05] text-white mb-4">
+            YOUR NUMBERS.{" "}
+            <span className="text-gold">PRESENTATION-READY.</span>
+          </h1>
+          <p className="text-text-mid text-sm leading-relaxed max-w-lg mx-auto">
+            You built the model. Now export it in the format that matches your
+            next move.
           </p>
+        </section>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
-            {products.map((product) => {
-              const Icon = product.icon;
-              const isFeatured = !!product.featured;
-
-              return (
-                <button
-                  key={product.id}
-                  onClick={() => navigate(`/store/${product.slug}`)}
-                  className={cn(
-                    "flex flex-col text-left transition-all hover:scale-[1.01]",
-                    isFeatured ? "store-card-featured store-card" : "store-card"
-                  )}
-                >
-                  {/* Badge */}
-                  {isFeatured && (
-                    <div className="flex items-center gap-1.5 mb-4">
-                      <Star className="w-3 h-3 text-gold fill-gold" />
-                      <span className="text-gold text-[10px] tracking-[0.3em] uppercase font-semibold">
-                        Most Popular
-                      </span>
-                    </div>
-                  )}
-
-                  {/* Icon + Name */}
-                  <div className="flex items-center gap-3 mb-1">
-                    <div
-                      className={cn(
-                        "w-9 h-9 rounded-md flex items-center justify-center flex-shrink-0",
-                        isFeatured
-                          ? "bg-gold/10 border border-border-default"
-                          : "bg-bg-elevated border border-border-subtle"
-                      )}
-                    >
-                      <Icon
-                        className={cn(
-                          "w-4 h-4",
-                          isFeatured ? "text-gold" : "text-text-dim"
-                        )}
-                      />
-                    </div>
-                    <h3 className="font-bebas text-xl text-text-primary leading-tight">
-                      {product.name.toUpperCase()}
-                    </h3>
-                  </div>
-
-                  {/* Tagline */}
-                  <p className="text-text-dim text-[10px] tracking-[0.2em] uppercase mb-4">
-                    {product.tagline}
-                  </p>
-
-                  {/* Price */}
-                  <div className="mb-1">
-                    {product.originalPrice && (
-                      <span className="text-text-dim text-sm line-through mr-2">
-                        ${product.originalPrice.toLocaleString()}
-                      </span>
-                    )}
-                    <span
-                      className={cn(
-                        "font-mono text-3xl font-medium",
-                        isFeatured ? "text-gold-cta" : "text-gold"
-                      )}
-                    >
-                      ${product.price.toLocaleString()}
-                    </span>
-                  </div>
-
-                  {/* Founders badge */}
-                  {product.originalPrice && (
-                    <p className="text-gold text-[10px] tracking-[0.15em] uppercase font-semibold mb-3">
-                      Founders Price
-                    </p>
-                  )}
-
-                  {/* Access period */}
-                  <p className="text-text-dim text-[11px] mb-5">
-                    {product.accessLabel} unlimited access
-                  </p>
-
-                  {/* Description */}
-                  <p className="text-text-mid text-sm leading-relaxed mb-1">
-                    {product.description}
-                  </p>
-                  <p
-                    className={cn(
-                      "text-xs italic mb-5",
-                      isFeatured ? "text-gold/70" : "text-text-dim"
-                    )}
-                  >
-                    {product.hook}
-                  </p>
-
-                  {/* Divider */}
-                  <div className="premium-divider mb-5" />
-
-                  {/* Top features (first 3) */}
-                  <ul className="space-y-2.5 mb-6 flex-1">
-                    {product.features.slice(0, 3).map((feature, index) => (
-                      <li key={index} className="flex items-start gap-2.5">
-                        <Check
-                          className={cn(
-                            "w-3.5 h-3.5 mt-0.5 flex-shrink-0",
-                            isFeatured ? "text-gold" : "text-text-dim"
-                          )}
-                        />
-                        <span className="text-text-primary text-[13px] leading-snug">
-                          {feature}
-                        </span>
-                      </li>
-                    ))}
-                    {product.features.length > 3 && (
-                      <li className="text-text-dim text-[11px] pl-6">
-                        + {product.features.length - 3} more included
-                      </li>
-                    )}
-                  </ul>
-
-                  {/* CTA */}
-                  <div className="mt-auto flex items-center gap-2 text-gold text-[11px] tracking-[0.15em] uppercase font-semibold">
-                    View Details <ArrowRight className="w-3 h-3" />
-                  </div>
-                </button>
-              );
-            })}
+        {/* ═══════════════════════════════════════════════════════════
+            THREE-TIER GRID
+            ═══════════════════════════════════════════════════════════ */}
+        <section className="px-4 sm:px-6 pb-8 max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {products.map((product) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                onBuy={() => navigate(`/store/${product.slug}`)}
+                onDetails={() => navigate(`/store/${product.slug}`)}
+              />
+            ))}
           </div>
         </section>
 
         {/* ═══════════════════════════════════════════════════════════
-            COMPARE ALL LINK
+            COMPARE LINK
             ═══════════════════════════════════════════════════════════ */}
         <section className="px-6 pb-10 max-w-5xl mx-auto text-center">
           <button
             onClick={() => navigate("/store/compare")}
-            className="inline-flex items-center gap-2 py-3 text-text-dim hover:text-text-mid transition-colors"
+            className="inline-flex items-center gap-2 text-text-dim hover:text-text-mid transition-colors"
           >
             <span className="text-[11px] tracking-[0.2em] uppercase font-semibold">
-              Compare All Packages
+              Not sure which one? Compare all packages
             </span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </section>
 
         {/* ═══════════════════════════════════════════════════════════
-            TRUST SECTION
+            TRUST / ANCHORING SECTION
             ═══════════════════════════════════════════════════════════ */}
-        <section className="border-t border-border-subtle bg-bg-elevated px-6 py-10">
-          <div className="max-w-2xl mx-auto text-center">
-            <Shield className="w-6 h-6 text-gold mx-auto mb-4" />
-            <h3 className="font-bebas text-xl tracking-[0.1em] text-text-primary mb-3">
-              WHO THIS IS FOR
-            </h3>
-            <p className="text-text-mid text-sm leading-relaxed max-w-lg mx-auto mb-6">
-              You have a script and a vision. Maybe it's your first film, maybe
-              your second. You don't have an entertainment lawyer on retainer.
-              You don't have a sales agent. You've never built a waterfall.
-            </p>
-            <p className="text-text-mid text-sm leading-relaxed max-w-lg mx-auto mb-6">
-              We give you the documents and the confidence to walk into any room
-              and be taken seriously — even if it's your first time.
-            </p>
-            <div className="inline-flex items-center gap-2 text-gold text-[10px] tracking-[0.25em] uppercase font-semibold">
-              <ArrowRight className="w-3 h-3" />
-              Every Document. Presentation-Grade. Yours to Keep.
+        <section className="border-t border-[#2A2A2A] px-6 py-10">
+          <div className="max-w-3xl mx-auto">
+            <h2 className="font-bebas text-2xl md:text-3xl tracking-[0.08em] text-gold text-center mb-8">
+              WHAT THIS WOULD COST ANYWHERE ELSE
+            </h2>
+            <div className="grid grid-cols-3 gap-4 text-center">
+              <div>
+                <div className="w-9 h-9 rounded-lg bg-bg-elevated border border-[#2A2A2A] flex items-center justify-center mx-auto mb-3">
+                  <Gavel className="w-4 h-4 text-gold" />
+                </div>
+                <p className="font-mono text-lg font-medium text-text-primary line-through decoration-text-dim/30">
+                  $5,000–$15,000
+                </p>
+                <p className="text-text-dim text-[10px] tracking-wider uppercase mt-1">
+                  Entertainment Lawyer
+                </p>
+                <p className="text-text-dim text-[10px] mt-1 leading-snug">
+                  To build your financial model
+                </p>
+              </div>
+              <div>
+                <div className="w-9 h-9 rounded-lg bg-bg-elevated border border-[#2A2A2A] flex items-center justify-center mx-auto mb-3">
+                  <Calculator className="w-4 h-4 text-gold" />
+                </div>
+                <p className="font-mono text-lg font-medium text-text-primary line-through decoration-text-dim/30">
+                  $10,000–$30,000
+                </p>
+                <p className="text-text-dim text-[10px] tracking-wider uppercase mt-1">
+                  Finance Consultant
+                </p>
+                <p className="text-text-dim text-[10px] mt-1 leading-snug">
+                  To prepare investor materials
+                </p>
+              </div>
+              <div>
+                <div className="w-9 h-9 rounded-lg bg-gold/[0.06] border border-gold/20 flex items-center justify-center mx-auto mb-3">
+                  <Check className="w-4 h-4 text-gold" />
+                </div>
+                <p className="font-mono text-lg font-medium text-gold">
+                  $97–$397
+                </p>
+                <p className="text-gold text-[10px] tracking-wider uppercase mt-1 font-semibold">
+                  filmmaker.og
+                </p>
+                <p className="text-text-dim text-[10px] mt-1 leading-snug">
+                  Instant. Professional. Yours.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ═══════════════════════════════════════════════════════════
+            STORE FAQ
+            ═══════════════════════════════════════════════════════════ */}
+        <section className="border-t border-[#2A2A2A] px-6 py-10">
+          <div className="max-w-2xl mx-auto">
+            <div className="flex items-center gap-2 justify-center mb-6">
+              <HelpCircle className="w-5 h-5 text-gold" />
+              <h2 className="font-bebas text-2xl tracking-[0.08em] text-gold">
+                COMMON QUESTIONS
+              </h2>
+            </div>
+            <div className="bg-[#141414] rounded-xl px-5 border border-[#2A2A2A]">
+              <Accordion type="single" collapsible className="w-full">
+                {storeFaqs.map((faq, i) => (
+                  <AccordionItem key={faq.q} value={`faq-${i}`}>
+                    <AccordionTrigger className="font-bebas text-lg tracking-[0.06em] uppercase text-gold hover:text-gold/70 hover:no-underline text-left">
+                      {faq.q}
+                    </AccordionTrigger>
+                    <AccordionContent className="text-text-dim text-sm leading-relaxed normal-case font-sans">
+                      {faq.a}
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
             </div>
           </div>
         </section>
@@ -323,9 +329,9 @@ const Store = () => {
         {/* ═══════════════════════════════════════════════════════════
             FOOTER DISCLAIMER
             ═══════════════════════════════════════════════════════════ */}
-        <footer className="border-t border-border-subtle py-8 mt-auto">
+        <footer className="border-t border-[#2A2A2A] py-8 mt-auto">
           <div className="px-6 text-center max-w-2xl mx-auto">
-            <p className="text-text-dim text-[10px] tracking-wide leading-relaxed">
+            <p className="text-text-dim/60 text-[10px] tracking-wide leading-relaxed">
               This document is generated by Filmmaker.OG for educational and
               informational purposes only. It does not constitute legal, tax,
               accounting, or investment advice. The financial projections

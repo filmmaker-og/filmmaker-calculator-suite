@@ -1,186 +1,163 @@
-import {
-  FileSpreadsheet,
-  BarChart3,
-  Users,
-  Crown,
-  type LucideIcon,
-} from "lucide-react";
-
 /* ═══════════════════════════════════════════════════════════════════
-   PRODUCT DATA — Matches strategy document exactly
+   PRODUCT DATA — Phase 1: Store UI + Copy + Stripe Configuration
    ═══════════════════════════════════════════════════════════════════ */
 
 export interface Product {
   id: string;
   slug: string;
   name: string;
-  tagline: string;
   price: number;
   originalPrice: number | null;
-  accessDays: number;
-  accessLabel: string;
-  icon: LucideIcon;
-  featured?: boolean;
-  description: string;
-  hook: string;
+  badge: string | null;
+  featured: boolean;
+  shortDescription: string;
+  fullDescription: string;
   features: string[];
-  buyerMath: string;
-  /** Longer sell copy for the detail page */
-  detailSections: {
-    title: string;
-    body: string;
-  }[];
+  whatsIncluded: { title: string; body: string }[];
+  whoItsFor: string;
+  whatYoullBuild: string;
+  upgradePrompt: { title: string; body: string; cta: string; link: string } | null;
 }
 
 export const products: Product[] = [
   {
-    id: "snapshot",
-    slug: "snapshot",
-    name: "The Snapshot",
-    tagline: "Quick Export",
-    price: 197,
+    id: "the-export",
+    slug: "the-export",
+    name: "The Export",
+    price: 97,
     originalPrice: null,
-    accessDays: 30,
-    accessLabel: "30 days",
-    icon: FileSpreadsheet,
-    description: "Your deal at a glance. Professionally packaged.",
-    hook: "Beautiful enough to email. Detailed enough to impress.",
+    badge: null,
+    featured: false,
+    shortDescription: "Your complete financial model as a clean, professional PDF.",
+    fullDescription:
+      "Your complete waterfall model exported as a clean, professional PDF — white-labeled with your production company name and project title.\n\nEvery section of your financial model formatted for clarity: budget breakdown, capital stack structure, deal terms, full waterfall cascade, and scenario analysis. Clean design, standard professional formatting, ready to reference, print, or attach to an email.\n\nThis is the document you send when someone asks \"can you walk me through the numbers?\"",
     features: [
-      "6-Sheet Professional Excel Export",
-      "Executive Summary Dashboard",
-      "Full Waterfall Distribution Ledger",
-      "Capital Stack Breakdown",
-      "Investor Return Summary",
-      "Plain-English Glossary",
-      "Investor-Ready Formatting",
+      "Complete multi-page PDF",
+      "White-labeled with your company name",
+      "Budget, Stack, Deal, Waterfall, Scenarios",
+      "Clean professional formatting",
     ],
-    buyerMath:
-      "Less than Final Draft costs — and this actually helps you raise money.",
-    detailSections: [
+    whatsIncluded: [
       {
-        title: "What You Get",
-        body: "A polished, 6-sheet Excel workbook that turns your calculator inputs into a professional financial package. Every sheet is formatted for investors — not a raw spreadsheet dump. Includes an executive summary dashboard, your complete waterfall distribution ledger, capital stack breakdown, investor return summary, and a plain-English glossary so your investors aren't lost in film finance jargon.",
+        title: "Complete Multi-Page PDF",
+        body: "Your full financial model across all sections — Budget, Capital Stack, Deal Terms, Waterfall Breakdown, and Scenario Analysis — formatted as a single professional document.",
       },
       {
-        title: "Who It's For",
-        body: "You've finished running your numbers in the calculator and need a clean, professional document to share. Maybe it's for a potential investor meeting next week, or you want to attach something credible to an email. The Snapshot gives you exactly that — nothing more, nothing less.",
+        title: "White-Labeled With Your Identity",
+        body: "Your production company name and project title on the cover and headers. No filmmaker.og branding anywhere in the document.",
       },
       {
-        title: "Why It Works",
-        body: "Investors see dozens of pitches. Most come with amateur spreadsheets or no financials at all. The Snapshot immediately signals that you've done the work. It's formatted the way entertainment lawyers format theirs — because we studied their output.",
+        title: "Clean Professional Formatting",
+        body: "White background, standard professional typography, well-organized tables and data layouts. Readable, presentable, print-ready.",
+      },
+      {
+        title: "All Calculator Sections Included",
+        body: "Every input and output from your model: budget totals, funding source breakdown, deal term assumptions, complete waterfall tier-by-tier flow, and all scenario comparisons.",
       },
     ],
+    whoItsFor:
+      "Producers who need a clean reference document of their financial model. Use it for internal planning, co-producer discussions, or as a supporting attachment when investors ask for the numbers behind your pitch.",
+    whatYoullBuild:
+      "A complete financial overview of your project showing exactly how money flows — from gross receipts through sales agent commissions, distribution fees, debt service, equity recoupment, and profit splits — formatted for anyone to read and understand.",
+    upgradePrompt: {
+      title: "WANT THE FULL TREATMENT?",
+      body: "The Pitch Package adds premium cinematic design, an investor-ready PowerPoint deck, a static Excel workbook, and a one-page executive summary — everything you need to walk into a meeting fully prepared.",
+      cta: "Upgrade for $150 more →",
+      link: "/store/the-pitch-package",
+    },
   },
   {
-    id: "blueprint",
-    slug: "blueprint",
-    name: "The Blueprint",
-    tagline: "Present With Confidence",
-    price: 997,
-    originalPrice: null,
-    accessDays: 60,
-    accessLabel: "60 days",
-    icon: BarChart3,
-    description: "Your film's financial story. Ready for any room.",
-    hook: "Show range. Show confidence. Show you've done the work.",
-    features: [
-      "Everything in The Snapshot",
-      "3 Scenario Comparison (Conservative / Base / Upside)",
-      "Side-by-Side Investor Return Analysis",
-      "Visual Scenario Comparison Chart",
-      '"How to Read Your Blueprint" Guide',
-    ],
-    buyerMath:
-      "A single lawyer hour costs $350–$750. This is your entire financial story.",
-    detailSections: [
-      {
-        title: "What You Get",
-        body: "Everything in The Snapshot, plus three distinct financial scenarios — Conservative, Base, and Upside — presented side by side. Investors don't want to see one number. They want to see range. The Blueprint shows them you've thought through what happens if things go well, if things go okay, and if things go sideways.",
-      },
-      {
-        title: "Who It's For",
-        body: "You're preparing for a real investor meeting or pitch. You need to show that you understand risk and aren't just selling the dream. The Blueprint gives you the credibility of a finance-literate producer — even if you've never done this before.",
-      },
-      {
-        title: "The Scenario Advantage",
-        body: "Sophisticated investors always ask: 'What's the downside?' If you can't answer that with real numbers, the meeting is over. The Blueprint lets you answer confidently with three data-backed scenarios, a visual comparison chart, and a guide that helps you walk through each one.",
-      },
-    ],
-  },
-  {
-    id: "investor-kit",
-    slug: "investor-kit",
-    name: "The Investor Kit",
-    tagline: "Most Popular",
-    price: 1997,
-    originalPrice: 2997,
-    accessDays: 180,
-    accessLabel: "6 months",
-    icon: Users,
+    id: "the-pitch-package",
+    slug: "the-pitch-package",
+    name: "The Pitch Package",
+    price: 247,
+    originalPrice: 347,
+    badge: "MOST POPULAR · SAVE $100",
     featured: true,
-    description:
-      "Everything you need to walk into a room and be taken seriously.",
-    hook: "Even if it's your first time.",
+    shortDescription: "Walk into any meeting with institutional-grade materials.",
+    fullDescription:
+      "Everything in The Export, plus the full premium treatment.\n\nYour financial model redesigned with the same visual standard used by finance boutiques and institutional advisors — dark cinematic layouts, data visualizations, professional charts, and infographic-style waterfall breakdowns. The kind of document that makes investors take you seriously before you say a word.\n\nPlus a ready-to-present PowerPoint deck that turns your numbers into a 10-slide investor pitch with built-in speaker notes. Plus a static Excel workbook for due diligence follow-up. Plus a one-page executive summary designed as the leave-behind document investors keep after the meeting.\n\nFour files. One purchase. You walk into the room prepared.",
     features: [
-      "Everything in The Blueprint",
-      "Comparable Films Report (5 Titles)",
-      "Investor One-Pager (PDF)",
-      "Investor Memo (3–5 Page PDF)",
-      '"What Investors Actually Ask" Guide',
+      "Everything in The Export",
+      "Premium cinematic PDF design",
+      "Static Excel reference workbook",
+      "PowerPoint investor pitch deck (10 slides)",
+      "One-page executive summary leave-behind",
     ],
-    buyerMath:
-      "A consultant would charge $15K. This gives you 80% of what they'd deliver.",
-    detailSections: [
+    whatsIncluded: [
       {
-        title: "What You Get",
-        body: "Everything in The Blueprint, plus the documents that actually close deals. A comparable films report analyzing 5 similar titles and their market performance. A one-page investor summary designed to be handed out or emailed. A 3-5 page investor memo that tells your film's financial story from beginning to end. And a guide covering what investors actually ask — so you're never caught off guard.",
+        title: "Premium-Designed PDF",
+        body: "Full cinematic visual treatment — black backgrounds, gold accents, professional charts, infographic-style waterfall cascade, scenario comparison spreads. This is the document that looks like a $10,000 finance boutique produced it.",
       },
       {
-        title: "Who It's For",
-        body: "You're actively fundraising. You have meetings booked or you're about to start booking them. You need more than numbers — you need a complete package that makes you look like you've done this before. The Investor Kit is the bridge between 'aspiring filmmaker' and 'serious producer.'",
+        title: "Static Excel Reference Workbook",
+        body: "All your numbers laid out in clean rows and columns with professional formatting. When an investor's business manager asks \"can you send me the underlying numbers?\" — this is what you send. Values are hard-coded for reference; this is a data document, not a modeling tool.",
       },
       {
-        title: "Why Founders Pricing",
-        body: "We're building something new. The Investor Kit at $1,997 (down from $2,997) is our way of rewarding early adopters who believe in what we're doing. This price won't last forever. Once we have case studies of films funded using these materials, the price goes up.",
+        title: "PowerPoint Investor Pitch Deck",
+        body: "10 slides built from your actual project data. Title slide, budget overview, capital structure, deal terms, waterfall flow, scenario analysis, investor returns, and executive summary. Speaker notes included on every slide telling you exactly what to say and why.",
+      },
+      {
+        title: "One-Page Executive Summary",
+        body: "The leave-behind. A single-page document with your project's key financials — budget, acquisition target, capital structure, investor return projections — designed to sit on an investor's desk after the meeting ends. This is the document that keeps your project in the conversation.",
+      },
+      {
+        title: "White-Labeled Across All Files",
+        body: "Your production company name and project title on every document. No filmmaker.og branding. These are your materials.",
       },
     ],
+    whoItsFor:
+      "Producers preparing to sit in front of investors, equity partners, or co-financiers. You have a meeting coming up — or you want to be ready when one lands. This package gives you the complete set of materials that institutional capital expects to see.",
+    whatYoullBuild:
+      "A professional capital-raise package showing your project's complete financial architecture — how the money comes in, how it flows through the waterfall, and what investors can expect in return — presented across four coordinated documents that cover every moment from the pitch to the follow-up.",
+    upgradePrompt: {
+      title: "WANT THE REUSABLE MODEL?",
+      body: "The Working Model adds a live formula-driven Excel workbook where changing any input recalculates everything downstream. Use it on this project, your next project, and every project after that.",
+      cta: "Upgrade for $150 more →",
+      link: "/store/the-working-model",
+    },
   },
   {
-    id: "greenlight",
-    slug: "greenlight",
-    name: "The Greenlight Package",
-    tagline: "The Full Package",
-    price: 4997,
+    id: "the-working-model",
+    slug: "the-working-model",
+    name: "The Working Model",
+    price: 397,
     originalPrice: null,
-    accessDays: 365,
-    accessLabel: "12 months",
-    icon: Crown,
-    description: "The closest thing to having a team without having a team.",
-    hook: "White-labeled. Multi-project. Complete.",
+    badge: null,
+    featured: false,
+    shortDescription: "The financial engine. Not just this project — every project.",
+    fullDescription:
+      "Everything in The Pitch Package, plus the engine behind it.\n\nThe Working Model includes a live formula-driven Excel workbook where every output is connected to every input. Change your budget — the waterfall recalculates. Adjust the sales agent commission from 15% to 20% — every downstream tier updates. Swap your equity split — investor returns recompute instantly.\n\nThis isn't a snapshot of one deal. It's a financial modeling tool you'll use for years.\n\nThe Pitch Package gives you the documents for this deal. The Working Model gives you the machine for every deal going forward.",
     features: [
-      "Everything in The Investor Kit",
-      "Deep Comp Analysis (10 Titles + Trends)",
-      "Term Sheet Outline",
-      "Distribution Strategy Brief",
-      "White-Label Everything (Your Brand)",
-      "Multiple Projects",
+      "Everything in The Pitch Package",
+      "Live formula-driven Excel model",
+      "Change any input — everything recalculates",
+      "Full formula documentation",
+      "Reusable across unlimited projects",
     ],
-    buyerMath:
-      "Your lawyer alone will cost more — and you don't even have one yet.",
-    detailSections: [
+    whatsIncluded: [
       {
-        title: "What You Get",
-        body: "Everything in The Investor Kit, scaled up. A deep comparable analysis covering 10 titles plus market trends. A term sheet outline so you know what a real deal looks like. A distribution strategy brief covering your film's path to market. Every single document white-labeled with your production company brand. And you can run multiple projects — not just one film.",
+        title: "Everything in The Pitch Package",
+        body: "Premium PDF, static Excel reference, PowerPoint pitch deck, and executive summary — all white-labeled with your project details.",
       },
       {
-        title: "Who It's For",
-        body: "You're a production company or a producer with multiple projects in development. You need professional-grade materials for every project, and you need them to look like yours — not ours. The Greenlight Package is your back office.",
+        title: "Live Formula-Driven Excel Workbook",
+        body: "Every output cell is driven by formulas. Change any input — budget, revenue projections, fee percentages, capital structure, profit splits — and watch every downstream number recalculate in real time. Model unlimited scenarios without rebuilding anything.",
       },
       {
-        title: "The White-Label Difference",
-        body: "When you hand an investor a document branded with your production company, you're not a filmmaker using a tool — you're a production company with professional infrastructure. That perception shift is worth more than the price difference.",
+        title: "Full Formula Documentation",
+        body: "Every formula is documented. A companion reference explaining what each calculation does, why it's structured that way, and what assumptions it relies on. You'll understand the model, not just use it.",
+      },
+      {
+        title: "Reusable Across Unlimited Projects",
+        body: "Clear the inputs and start fresh with a new project. The model structure, formulas, and documentation work for any production in the $1M–$10M budget range. Buy it once, use it forever.",
       },
     ],
+    whoItsFor:
+      "Producers and production companies who model multiple projects, want to stress-test deal structures before committing, or need a reusable financial tool they can bring to every negotiation. If you're building a slate — not just a single film — this is the tool that scales with you.",
+    whatYoullBuild:
+      "A complete, living financial model that lets you test any combination of budget, capital structure, deal terms, and revenue scenarios — and instantly see how every change affects investor returns, producer profits, and recoupment timelines. The same tool institutional finance teams use, formatted for independent production.",
+    upgradePrompt: null,
   },
 ];
 
@@ -193,27 +170,52 @@ export const getProduct = (slug: string): Product | undefined =>
 
 export type FeatureValue = boolean | string;
 
-export interface ComparisonFeature {
-  label: string;
-  snapshot: FeatureValue;
-  blueprint: FeatureValue;
-  investorKit: FeatureValue;
-  greenlight: FeatureValue;
+export interface ComparisonSection {
+  title: string;
+  features: {
+    label: string;
+    theExport: FeatureValue;
+    thePitchPackage: FeatureValue;
+    theWorkingModel: FeatureValue;
+  }[];
 }
 
-export const comparisonFeatures: ComparisonFeature[] = [
-  { label: "Beautiful Excel Waterfall Report", snapshot: true, blueprint: true, investorKit: true, greenlight: true },
-  { label: "Professional Design & Branding", snapshot: true, blueprint: true, investorKit: true, greenlight: true },
-  { label: "Plain-English Glossary", snapshot: true, blueprint: true, investorKit: true, greenlight: true },
-  { label: "3 Scenario Comparison", snapshot: false, blueprint: true, investorKit: true, greenlight: true },
-  { label: '"How to Read This" Guide', snapshot: false, blueprint: true, investorKit: true, greenlight: true },
-  { label: "Comparable Films", snapshot: false, blueprint: false, investorKit: "5 titles", greenlight: "10 + trends" },
-  { label: "Investor One-Pager (PDF)", snapshot: false, blueprint: false, investorKit: true, greenlight: true },
-  { label: "Investor Memo (PDF)", snapshot: false, blueprint: false, investorKit: true, greenlight: true },
-  { label: '"What Investors Ask" Guide', snapshot: false, blueprint: false, investorKit: true, greenlight: true },
-  { label: "Term Sheet Outline", snapshot: false, blueprint: false, investorKit: false, greenlight: true },
-  { label: "Distribution Strategy Brief", snapshot: false, blueprint: false, investorKit: false, greenlight: true },
-  { label: "White-Label (Your Brand)", snapshot: false, blueprint: false, investorKit: false, greenlight: true },
-  { label: "Multiple Projects", snapshot: false, blueprint: false, investorKit: false, greenlight: true },
-  { label: "Access Period", snapshot: "30 days", blueprint: "60 days", investorKit: "6 months", greenlight: "12 months" },
+export const comparisonSections: ComparisonSection[] = [
+  {
+    title: "Documents",
+    features: [
+      { label: "Professional PDF (clean format)", theExport: true, thePitchPackage: true, theWorkingModel: true },
+      { label: "Premium Cinematic PDF (dark design, charts, infographics)", theExport: false, thePitchPackage: true, theWorkingModel: true },
+      { label: "Static Excel Reference Workbook", theExport: false, thePitchPackage: true, theWorkingModel: true },
+      { label: "PowerPoint Investor Pitch Deck (10 slides + speaker notes)", theExport: false, thePitchPackage: true, theWorkingModel: true },
+      { label: "One-Page Executive Summary Leave-Behind", theExport: false, thePitchPackage: true, theWorkingModel: true },
+      { label: "Live Formula-Driven Excel Model", theExport: false, thePitchPackage: false, theWorkingModel: true },
+    ],
+  },
+  {
+    title: "Features",
+    features: [
+      { label: "White-labeled with your company/project", theExport: true, thePitchPackage: true, theWorkingModel: true },
+      { label: "Budget breakdown", theExport: true, thePitchPackage: true, theWorkingModel: true },
+      { label: "Capital stack structure", theExport: true, thePitchPackage: true, theWorkingModel: true },
+      { label: "Deal terms summary", theExport: true, thePitchPackage: true, theWorkingModel: true },
+      { label: "Waterfall cascade (full tier-by-tier)", theExport: true, thePitchPackage: true, theWorkingModel: true },
+      { label: "Scenario comparison (Low/Base/High)", theExport: true, thePitchPackage: true, theWorkingModel: true },
+      { label: "Data visualizations and charts", theExport: false, thePitchPackage: true, theWorkingModel: true },
+      { label: "Infographic-style waterfall visual", theExport: false, thePitchPackage: true, theWorkingModel: true },
+      { label: "Investor return calculations", theExport: false, thePitchPackage: true, theWorkingModel: true },
+      { label: "Speaker notes for pitch presentation", theExport: false, thePitchPackage: true, theWorkingModel: true },
+      { label: "Live recalculation (change inputs → outputs update)", theExport: false, thePitchPackage: false, theWorkingModel: true },
+      { label: "Formula documentation", theExport: false, thePitchPackage: false, theWorkingModel: true },
+      { label: "Reusable across unlimited projects", theExport: false, thePitchPackage: false, theWorkingModel: true },
+    ],
+  },
+  {
+    title: "Use Case",
+    features: [
+      { label: "Best for", theExport: "Reference & planning", thePitchPackage: "Investor meetings", theWorkingModel: "Ongoing deal modeling" },
+      { label: "You need this when", theExport: "You want a clean record of your financial model", thePitchPackage: "You're preparing to pitch investors or co-financiers", theWorkingModel: "You model multiple projects or need to stress-test scenarios" },
+      { label: "Files delivered", theExport: "1 (PDF)", thePitchPackage: "4 (PDF + Excel + PPTX + Summary)", theWorkingModel: "5 (PDF + Excel + PPTX + Summary + Live Model)" },
+    ],
+  },
 ];
