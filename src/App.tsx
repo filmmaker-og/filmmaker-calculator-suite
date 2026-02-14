@@ -16,6 +16,7 @@ import StorePackage from "./pages/StorePackage";
 import StoreCompare from "./pages/StoreCompare";
 import BuildYourPlan from "./pages/BuildYourPlan";
 import NotFound from "./pages/NotFound";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 const queryClient = new QueryClient();
 
@@ -23,6 +24,7 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
+      <ErrorBoundary>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
@@ -42,6 +44,7 @@ const App = () => (
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
+      </ErrorBoundary>
     </TooltipProvider>
   </QueryClientProvider>
 );

@@ -93,8 +93,7 @@ const StorePackage = () => {
       );
       if (error) throw error;
       if (data?.url) window.location.href = data.url;
-    } catch (error: any) {
-      console.error("Checkout error:", error);
+    } catch {
       toast.error("Failed to start checkout. Please try again.");
     } finally {
       setLoading(false);
@@ -187,7 +186,7 @@ const StorePackage = () => {
             {product.whatsIncluded.map((item) => (
               <div
                 key={item.title}
-                className="rounded-xl border border-[#2A2A2A] bg-[#141414] p-5"
+                className="rounded-xl border border-border-subtle bg-bg-card p-5"
               >
                 <div className="flex items-start gap-3 mb-2">
                   <Check className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
@@ -230,7 +229,7 @@ const StorePackage = () => {
               "rounded-xl p-6 space-y-4",
               isFeatured
                 ? "bg-gold/[0.04] border-2 border-gold"
-                : "bg-[#141414] border border-[#2A2A2A]"
+                : "bg-bg-card border border-border-subtle"
             )}
           >
             <h3 className="font-bebas text-xl tracking-[0.08em] text-white">
@@ -319,7 +318,7 @@ const StorePackage = () => {
           </section>
         ) : (
           <section className="px-6 pb-8 max-w-2xl mx-auto">
-            <div className="rounded-xl border border-[#2A2A2A] bg-[#141414] p-5">
+            <div className="rounded-xl border border-border-subtle bg-bg-card p-5">
               <h3 className="font-bebas text-lg tracking-[0.08em] text-gold mb-2">
                 NEED SOMETHING CUSTOM?
               </h3>
@@ -350,7 +349,7 @@ const StorePackage = () => {
         </section>
 
         {/* PREV / NEXT NAV */}
-        <section className="border-t border-[#2A2A2A] px-6 py-6">
+        <section className="border-t border-border-subtle px-6 py-6">
           <div className="max-w-2xl mx-auto flex justify-between">
             {prev ? (
               <button

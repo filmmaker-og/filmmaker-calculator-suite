@@ -14,14 +14,14 @@
 export const colors = {
   // Backgrounds (layered system)
   void: '#000000',           // --bg-void
-  card: '#070707',           // --bg-card
+  card: '#141414',           // --bg-card
   surface: '#111111',        // --bg-surface
   elevated: '#0D0D0D',       // --bg-elevated
   header: '#0A0A0A',         // --bg-header
 
   // Borders
   borderDefault: 'rgba(212, 175, 55, 0.20)',  // --border-default (metallic gold 20%)
-  borderSubtle: '#1A1A1A',                     // --border-subtle
+  borderSubtle: '#2A2A2A',                     // --border-subtle
   borderActive: 'rgba(212, 175, 55, 0.50)',    // --border-active
 
   // Gold palette — Metallic (non-interactive brand elements)
@@ -37,8 +37,8 @@ export const colors = {
 
   // Text hierarchy
   textPrimary: '#FFFFFF',    // --text-primary
-  textMid: '#CFCFCF',        // --text-mid
-  textDim: '#8A8A8A',        // --text-dim
+  textMid: '#D4D4D4',        // --text-mid
+  textDim: '#999999',        // --text-dim
 } as const;
 
 // ===== SPACING (matches index.css) =====

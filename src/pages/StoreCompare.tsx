@@ -43,19 +43,19 @@ const StoreCompare = () => {
 
         {/* COMPARISON TABLE */}
         <section className="px-4 pb-10 max-w-4xl mx-auto">
-          <div className="overflow-x-auto rounded-xl border border-[#2A2A2A] bg-[#141414]">
+          <div className="overflow-x-auto rounded-xl border border-border-subtle bg-bg-card">
             <table className="w-full border-collapse">
               {/* Table Header */}
               <thead>
                 <tr>
-                  <th className="text-left text-text-dim text-[10px] font-sans font-semibold tracking-wider p-3 border-b border-[#2A2A2A] min-w-[160px]">
+                  <th className="text-left text-text-dim text-[10px] font-sans font-semibold tracking-wider p-3 border-b border-border-subtle min-w-[160px]">
                     Feature
                   </th>
                   {mainProducts.map((p) => (
                     <th
                       key={p.id}
                       className={cn(
-                        "p-3 text-center border-b border-[#2A2A2A] min-w-[120px]",
+                        "p-3 text-center border-b border-border-subtle min-w-[120px]",
                         p.featured && "bg-gold/[0.04]"
                       )}
                     >
@@ -92,7 +92,7 @@ const StoreCompare = () => {
                     <tr>
                       <td
                         colSpan={3}
-                        className="px-3 pt-5 pb-2 border-b border-[#2A2A2A]"
+                        className="px-3 pt-5 pb-2 border-b border-border-subtle"
                       >
                         <span className="font-bebas text-sm tracking-[0.1em] text-gold uppercase">
                           {section.title}
@@ -104,7 +104,7 @@ const StoreCompare = () => {
                     {section.features.map((feature) => (
                       <tr
                         key={feature.label}
-                        className="border-b border-[#2A2A2A]/50"
+                        className="border-b border-border-subtle/50"
                       >
                         <td className="px-3 py-2.5 text-text-dim text-[11px] leading-snug">
                           {feature.label}

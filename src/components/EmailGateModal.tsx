@@ -59,11 +59,11 @@ const EmailGateModal = ({ isOpen, onClose, onSuccess, onSkip }: EmailGateModalPr
       setTimeout(() => {
         onSuccess();
       }, 2000);
-    } catch (error: any) {
+    } catch (error) {
       haptics.error();
       toast({
         title: "Error",
-        description: error.message || "Failed to send link",
+        description: error instanceof Error ? error.message : "Failed to send link",
         variant: "destructive",
       });
     } finally {

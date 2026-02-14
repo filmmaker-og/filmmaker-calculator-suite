@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Home, Calculator, BookOpen, Book, Mail, Instagram, Briefcase, Share2, Link2, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const SHARE_URL = "https://filmmaker.og";
+const getShareUrl = () => window.location.origin;
 const SHARE_TEXT = "Before you sign a deal, see exactly who gets paid and what's left for you. Free film finance tool — no account required.";
 const SHARE_TITLE = "FILMMAKER.OG — See Where Every Dollar Goes";
 
@@ -23,7 +23,7 @@ const MobileMenu = () => {
         await navigator.share({
           title: SHARE_TITLE,
           text: SHARE_TEXT,
-          url: SHARE_URL,
+          url: getShareUrl(),
         });
         return;
       } catch {
@@ -34,7 +34,7 @@ const MobileMenu = () => {
   }, []);
 
   const handleCopyLink = useCallback(() => {
-    const shareContent = `${SHARE_TEXT}\n\n${SHARE_URL}`;
+    const shareContent = `${SHARE_TEXT}\n\n${getShareUrl()}`;
     navigator.clipboard.writeText(shareContent).then(() => {
       setLinkCopied(true);
       setTimeout(() => setLinkCopied(false), 2000);

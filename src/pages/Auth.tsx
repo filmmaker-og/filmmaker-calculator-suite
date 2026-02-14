@@ -82,11 +82,11 @@ const Auth = () => {
 
       haptics.success();
       setStep('sent');
-    } catch (error: any) {
+    } catch (error) {
       haptics.error();
       toast({
         title: "Error",
-        description: error.message || "Failed to send magic link",
+        description: error instanceof Error ? error.message : "Failed to send magic link",
         variant: "destructive",
       });
     } finally {

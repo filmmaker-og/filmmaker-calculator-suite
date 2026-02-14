@@ -16,7 +16,7 @@ interface Props {
 const Tooltip = ({ text }: { text: string }) => (
   <div className="group relative inline-flex ml-1.5">
     <Info className="w-3.5 h-3.5 text-text-dim/60 cursor-help" />
-    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-3 rounded-lg bg-[#1A1A1A] border border-white/10 text-text-mid text-[11px] leading-relaxed opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity z-50">
+    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-3 rounded-lg bg-bg-surface border border-white/10 text-text-mid text-[11px] leading-relaxed opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity z-50">
       {text}
     </div>
   </div>
@@ -137,7 +137,7 @@ const IntakeStep4 = ({ formData, updateFormData, onNext, onBack }: Props) => {
             "p-5 rounded-xl text-left transition-all",
             formData.distribution_model === "sales_agent"
               ? "border-2 border-gold bg-gold/[0.06]"
-              : "border border-[#2A2A2A] bg-[#141414] hover:border-gold/30"
+              : "border border-border-subtle bg-bg-card hover:border-gold/30"
           )}
         >
           <h3 className="font-bebas text-lg tracking-[0.06em] text-white mb-2">
@@ -160,7 +160,7 @@ const IntakeStep4 = ({ formData, updateFormData, onNext, onBack }: Props) => {
             "p-5 rounded-xl text-left transition-all",
             formData.distribution_model === "direct_platform"
               ? "border-2 border-gold bg-gold/[0.06]"
-              : "border border-[#2A2A2A] bg-[#141414] hover:border-gold/30"
+              : "border border-border-subtle bg-bg-card hover:border-gold/30"
           )}
         >
           <h3 className="font-bebas text-lg tracking-[0.06em] text-white mb-2">
@@ -178,7 +178,7 @@ const IntakeStep4 = ({ formData, updateFormData, onNext, onBack }: Props) => {
 
       {/* SALES AGENT FIELDS */}
       {formData.distribution_model === "sales_agent" && (
-        <div className="rounded-xl border border-[#2A2A2A] bg-[#141414] p-5 space-y-4">
+        <div className="rounded-xl border border-border-subtle bg-bg-card p-5 space-y-4">
           <h3 className="font-bebas text-lg tracking-[0.06em] text-gold">
             SALES AGENT TERMS
           </h3>
@@ -261,7 +261,7 @@ const IntakeStep4 = ({ formData, updateFormData, onNext, onBack }: Props) => {
 
       {/* DIRECT PLATFORM FIELDS */}
       {formData.distribution_model === "direct_platform" && (
-        <div className="rounded-xl border border-[#2A2A2A] bg-[#141414] p-5 space-y-4">
+        <div className="rounded-xl border border-border-subtle bg-bg-card p-5 space-y-4">
           <h3 className="font-bebas text-lg tracking-[0.06em] text-gold">
             PLATFORM DEAL TERMS
           </h3>

@@ -34,7 +34,7 @@ import {
 /* ═══════════════════════════════════════════════════════════════════
    SHARE CONSTANTS
    ═══════════════════════════════════════════════════════════════════ */
-const SHARE_URL = "https://filmmaker.og";
+const getShareUrl = () => window.location.origin;
 const SHARE_TEXT =
   "Before you sign a deal, see exactly who gets paid and what's left for you. Free film finance tool — no account required.";
 const SHARE_TITLE = "FILMMAKER.OG — See Where Every Dollar Goes";
@@ -234,7 +234,7 @@ const WorkingModelPopup = ({
       onClick={onClose}
     />
     {/* Modal */}
-    <div className="relative w-full max-w-md rounded-xl border border-gold/30 bg-[#0A0A0A] p-6 space-y-5 animate-fade-in">
+    <div className="relative w-full max-w-md rounded-xl border border-gold/30 bg-bg-header p-6 space-y-5 animate-fade-in">
       <button
         onClick={onClose}
         className="absolute top-4 right-4 text-text-dim hover:text-text-mid transition-colors"
@@ -308,8 +308,8 @@ const ProductCard = ({
         "flex flex-col rounded-xl p-6 transition-all",
         staggerChild(visible),
         isFeatured
-          ? "border-2 border-gold bg-[#141414] shadow-[0_0_40px_rgba(212,175,55,0.12)] md:scale-[1.03] md:z-10 relative"
-          : "border border-[#2A2A2A] bg-[#141414]"
+          ? "border-2 border-gold bg-bg-card shadow-[0_0_40px_rgba(212,175,55,0.12)] md:scale-[1.03] md:z-10 relative"
+          : "border border-border-subtle bg-bg-card"
       )}
       style={staggerDelay(index, visible)}
     >
@@ -431,7 +431,7 @@ const Store = () => {
 
   const handleCopyLink = useCallback(() => {
     navigator.clipboard
-      .writeText(`${SHARE_TEXT}\n\n${SHARE_URL}`)
+      .writeText(`${SHARE_TEXT}\n\n${getShareUrl()}`)
       .then(() => {
         setLinkCopied(true);
         setTimeout(() => setLinkCopied(false), 2000);
@@ -445,7 +445,7 @@ const Store = () => {
         await navigator.share({
           title: SHARE_TITLE,
           text: SHARE_TEXT,
-          url: SHARE_URL,
+          url: getShareUrl(),
         });
         return;
       } catch {}
@@ -611,7 +611,7 @@ const Store = () => {
                         "w-9 h-9 rounded-lg flex items-center justify-center mx-auto mb-3",
                         item.featured
                           ? "bg-gold/[0.06] border border-gold/20"
-                          : "bg-bg-elevated border border-[#2A2A2A]"
+                          : "bg-bg-elevated border border-border-subtle"
                       )}
                     >
                       <Icon className="w-4 h-4 text-gold" />
@@ -709,7 +709,7 @@ const Store = () => {
                   "mt-5 rounded-xl p-5 transition-all cursor-pointer",
                   workingModelSelected
                     ? "border-2 border-gold bg-gold/[0.06]"
-                    : "border border-[#2A2A2A] bg-[#141414] hover:border-gold/30"
+                    : "border border-border-subtle bg-bg-card hover:border-gold/30"
                 )}
                 onClick={() => setWorkingModelSelected(!workingModelSelected)}
               >
@@ -777,18 +777,18 @@ const Store = () => {
               subtitle="Both tiers are built from the same institutional-grade financial model. The difference is depth and deliverables."
             />
 
-            <div className="overflow-x-auto rounded-xl border border-[#2A2A2A] bg-[#141414]">
+            <div className="overflow-x-auto rounded-xl border border-border-subtle bg-bg-card">
               <table className="w-full border-collapse">
                 <thead>
                   <tr>
-                    <th className="text-left text-text-dim text-[10px] font-sans font-semibold tracking-wider p-3 border-b border-[#2A2A2A] min-w-[160px]">
+                    <th className="text-left text-text-dim text-[10px] font-sans font-semibold tracking-wider p-3 border-b border-border-subtle min-w-[160px]">
                       Feature
                     </th>
                     {mainProducts.map((p) => (
                       <th
                         key={p.id}
                         className={cn(
-                          "p-3 text-center border-b border-[#2A2A2A] min-w-[120px]",
+                          "p-3 text-center border-b border-border-subtle min-w-[120px]",
                           p.featured && "bg-gold/[0.04]"
                         )}
                       >
@@ -824,7 +824,7 @@ const Store = () => {
                       <tr>
                         <td
                           colSpan={3}
-                          className="px-3 pt-5 pb-2 border-b border-[#2A2A2A]"
+                          className="px-3 pt-5 pb-2 border-b border-border-subtle"
                         >
                           <span className="font-bebas text-sm tracking-[0.1em] text-gold uppercase">
                             {section.title}
@@ -835,7 +835,7 @@ const Store = () => {
                       {section.features.map((feature) => (
                         <tr
                           key={feature.label}
-                          className="border-b border-[#2A2A2A]/50"
+                          className="border-b border-border-subtle/50"
                         >
                           <td className="px-3 py-2.5 text-text-dim text-[11px] leading-snug">
                             {feature.label}
@@ -917,7 +917,7 @@ const Store = () => {
                 </>
               }
             />
-            <div className="bg-[#141414] rounded-xl px-5 border border-[#2A2A2A]">
+            <div className="bg-bg-card rounded-xl px-5 border border-border-subtle">
               <Accordion type="single" collapsible className="w-full">
                 {storeFaqs.map((faq, i) => (
                   <AccordionItem key={faq.q} value={`faq-${i}`}>

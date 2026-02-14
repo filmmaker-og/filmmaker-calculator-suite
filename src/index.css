@@ -40,7 +40,7 @@
        Rule: Content always lives on --bg-card, never directly on --bg-void
        ═══════════════════════════════════════════════════════════════════ */
     --bg-void: #000000;
-    --bg-card: #0F0F0F;
+    --bg-card: #141414;
     --bg-surface: #111111;
     --bg-elevated: #0D0D0D;
     --bg-header: #0A0A0A;
@@ -68,7 +68,7 @@
 
     /* BORDERS */
     --border-default: rgba(212, 175, 55, 0.20);
-    --border-subtle: #222222; /* INCREASED FROM #1A1A1A for visibility */
+    --border-subtle: #2A2A2A; /* INCREASED FROM #1A1A1A for visibility */
     --border-active: rgba(212, 175, 55, 0.50);
 
     /* SPACING (Base unit: 4px) */
@@ -110,7 +110,7 @@
        ═══════════════════════════════════════════════════════════════════ */
     --background: 0 0% 0%;
     --foreground: 0 0% 100%;
-    --card: 0 0% 2.7%;
+    --card: 0 0% 7.8%;
     --card-foreground: 0 0% 100%;
     --popover: 0 0% 3.5%;
     --popover-foreground: 0 0% 100%;
