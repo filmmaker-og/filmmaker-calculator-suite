@@ -9,25 +9,17 @@ const corsHeaders = {
 
 // Product configuration
 const PRODUCTS = {
-  snapshot: {
-    name: "The Snapshot",
-    price: 19700, // $197 in cents
-    accessDays: 30,
+  "the-export": {
+    name: "The Export",
+    price: 9700, // $97 in cents
   },
-  blueprint: {
-    name: "The Blueprint",
-    price: 99700, // $997 in cents
-    accessDays: 60,
+  "the-pitch-package": {
+    name: "The Pitch Package",
+    price: 24700, // $247 in cents
   },
-  "investor-kit": {
-    name: "The Investor Kit",
-    price: 199700, // $1,997 in cents
-    accessDays: 180,
-  },
-  greenlight: {
-    name: "The Greenlight Package",
-    price: 499700, // $4,997 in cents
-    accessDays: 365,
+  "the-working-model": {
+    name: "The Working Model",
+    price: 39700, // $397 in cents
   },
 };
 
@@ -91,7 +83,7 @@ serve(async (req) => {
             currency: "usd",
             product_data: {
               name: product.name,
-              description: `${product.accessDays} days of access to professional film finance tools`,
+              description: `Professional film finance export — ${product.name}`,
             },
             unit_amount: product.price,
           },
@@ -104,7 +96,6 @@ serve(async (req) => {
       metadata: {
         productId,
         productName: product.name,
-        accessDays: product.accessDays.toString(),
         userId: userId || "",
         userEmail,
       },
