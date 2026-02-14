@@ -1,11 +1,11 @@
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Check, Minus } from "lucide-react";
 import Header from "@/components/Header";
 import { cn } from "@/lib/utils";
-import { products, comparisonSections } from "@/lib/store-products";
+import { mainProducts, comparisonSections } from "@/lib/store-products";
 
-const tierKeys = ["theExport", "thePitchPackage", "theWorkingModel"] as const;
+const tierKeys = ["theBlueprint", "thePitchPackage"] as const;
 
 const StoreCompare = () => {
   const navigate = useNavigate();
@@ -20,7 +20,7 @@ const StoreCompare = () => {
 
       <main className="flex-1 animate-fade-in">
         {/* BACK NAV */}
-        <div className="px-6 pt-6 max-w-5xl mx-auto">
+        <div className="px-6 pt-6 max-w-4xl mx-auto">
           <button
             onClick={() => navigate("/store")}
             className="flex items-center gap-2 text-sm text-text-dim hover:text-text-mid transition-colors"
@@ -31,18 +31,18 @@ const StoreCompare = () => {
         </div>
 
         {/* HEADER */}
-        <section className="px-6 pt-8 pb-6 max-w-5xl mx-auto text-center">
+        <section className="px-6 pt-8 pb-6 max-w-4xl mx-auto text-center">
           <h1 className="font-bebas text-3xl md:text-4xl tracking-[0.08em] text-white mb-3">
             COMPARE <span className="text-gold">PACKAGES</span>
           </h1>
           <p className="text-text-mid text-sm max-w-lg mx-auto">
-            Every tier is built from the same institutional-grade financial
-            model. The difference is depth, format, and flexibility.
+            Both tiers are built from the same institutional-grade financial
+            model. The difference is depth and deliverables.
           </p>
         </section>
 
         {/* COMPARISON TABLE */}
-        <section className="px-4 pb-10 max-w-5xl mx-auto">
+        <section className="px-4 pb-10 max-w-4xl mx-auto">
           <div className="overflow-x-auto rounded-xl border border-[#2A2A2A] bg-[#141414]">
             <table className="w-full border-collapse">
               {/* Table Header */}
@@ -51,7 +51,7 @@ const StoreCompare = () => {
                   <th className="text-left text-text-dim text-[10px] font-sans font-semibold tracking-wider p-3 border-b border-[#2A2A2A] min-w-[160px]">
                     Feature
                   </th>
-                  {products.map((p) => (
+                  {mainProducts.map((p) => (
                     <th
                       key={p.id}
                       className={cn(
@@ -76,7 +76,7 @@ const StoreCompare = () => {
                         </span>
                         {p.featured && (
                           <span className="block text-[8px] tracking-[0.15em] uppercase text-gold font-bold mt-1">
-                            Most Popular
+                            Recommended
                           </span>
                         )}
                       </button>
@@ -87,11 +87,11 @@ const StoreCompare = () => {
 
               <tbody>
                 {comparisonSections.map((section) => (
-                  <>
+                  <React.Fragment key={`section-${section.title}`}>
                     {/* Section header row */}
-                    <tr key={`section-${section.title}`}>
+                    <tr>
                       <td
-                        colSpan={4}
+                        colSpan={3}
                         className="px-3 pt-5 pb-2 border-b border-[#2A2A2A]"
                       >
                         <span className="font-bebas text-sm tracking-[0.1em] text-gold uppercase">
@@ -134,7 +134,7 @@ const StoreCompare = () => {
                         })}
                       </tr>
                     ))}
-                  </>
+                  </React.Fragment>
                 ))}
               </tbody>
             </table>
@@ -142,9 +142,9 @@ const StoreCompare = () => {
         </section>
 
         {/* CTA ROW */}
-        <section className="px-4 sm:px-6 pb-10 max-w-5xl mx-auto">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {products.map((p) => (
+        <section className="px-4 sm:px-6 pb-10 max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {mainProducts.map((p) => (
               <button
                 key={p.id}
                 onClick={() => navigate(`/store/${p.slug}`)}
@@ -155,11 +155,9 @@ const StoreCompare = () => {
                     : "bg-gold/[0.08] border-2 border-gold/40 text-gold text-sm hover:border-gold/60 hover:bg-gold/[0.18]"
                 )}
               >
-                {p.slug === "the-export"
-                  ? `Get My Export — $${p.price}`
-                  : p.featured
-                    ? `Get The Pitch Package — $${p.price}`
-                    : `Get The Working Model — $${p.price}`}
+                {p.featured
+                  ? `Get The Pitch Package — $${p.price}`
+                  : `Get The Blueprint — $${p.price}`}
               </button>
             ))}
           </div>

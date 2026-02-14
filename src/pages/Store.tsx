@@ -14,10 +14,16 @@ import {
   Share2,
   Link2,
   ChevronDown,
+  X,
 } from "lucide-react";
 import Header from "@/components/Header";
 import { cn } from "@/lib/utils";
-import { products, comparisonSections, type Product } from "@/lib/store-products";
+import {
+  mainProducts,
+  addOnProduct,
+  comparisonSections,
+  type Product,
+} from "@/lib/store-products";
 import {
   Accordion,
   AccordionContent,
@@ -38,20 +44,20 @@ const SHARE_TITLE = "FILMMAKER.OG — See Where Every Dollar Goes";
    ═══════════════════════════════════════════════════════════════════ */
 const storeFaqs = [
   {
-    q: "How fast do I get my files?",
-    a: "Your files are generated instantly after purchase. Download immediately from your confirmation page.",
+    q: "How does it work?",
+    a: "After purchase, you'll be guided through a short intake form where you enter your project details, budget, capital stack, and deal structure. We use that information to build your finance plan and deliverables — delivered to your email within 24 hours.",
   },
   {
-    q: "Can I use these for multiple projects?",
-    a: "The Export and Pitch Package are generated from your current calculator inputs — one project per purchase. The Working Model includes a reusable Excel template you can use across unlimited future projects.",
+    q: "What's the difference between The Blueprint and The Pitch Package?",
+    a: "The Blueprint gives you the complete finance plan documentation (PDF, capital stack breakdown, scenario analysis, assumptions reference). The Pitch Package adds investor-facing materials: a PowerPoint pitch deck, individual investor return profiles, an executive summary leave-behind, and a deal terms summary.",
   },
   {
-    q: "What if I want to upgrade later?",
+    q: "What is The Working Model?",
+    a: "It's a live, formula-driven Excel workbook. Change any input and every downstream calculation updates instantly. It's the engine behind your finance plan — reusable across unlimited future projects.",
+  },
+  {
+    q: "Can I upgrade later?",
     a: "Contact us and we'll apply what you've already paid toward the higher tier.",
-  },
-  {
-    q: "Do I need to re-enter my data?",
-    a: "No. Your exports are generated directly from the financial model you already built in the calculator. Every number carries over automatically.",
   },
 ];
 
@@ -75,9 +81,9 @@ const trustColumns = [
   },
   {
     icon: Check,
-    cost: "$97–$397",
+    cost: "$197–$497",
     label: "filmmaker.og",
-    desc: "Instant. Professional. Yours.",
+    desc: "Professional. 24-hour delivery.",
     featured: true,
   },
 ];
@@ -208,6 +214,73 @@ const staggerChild = (visible: boolean) =>
   );
 
 /* ═══════════════════════════════════════════════════════════════════
+   WORKING MODEL POPUP
+   ═══════════════════════════════════════════════════════════════════ */
+const WorkingModelPopup = ({
+  baseProduct,
+  onAccept,
+  onDecline,
+  onClose,
+}: {
+  baseProduct: Product;
+  onAccept: () => void;
+  onDecline: () => void;
+  onClose: () => void;
+}) => (
+  <div className="fixed inset-0 z-[200] flex items-center justify-center p-6">
+    {/* Backdrop */}
+    <div
+      className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+      onClick={onClose}
+    />
+    {/* Modal */}
+    <div className="relative w-full max-w-md rounded-xl border border-gold/30 bg-[#0A0A0A] p-6 space-y-5 animate-fade-in">
+      <button
+        onClick={onClose}
+        className="absolute top-4 right-4 text-text-dim hover:text-text-mid transition-colors"
+      >
+        <X className="w-5 h-5" />
+      </button>
+
+      <div>
+        <h3 className="font-bebas text-2xl tracking-[0.06em] text-gold mb-1">
+          ADD THE LIVE EXCEL MODEL
+        </h3>
+        <p className="text-text-mid text-sm">50% off when you bundle now</p>
+      </div>
+
+      <div className="flex items-baseline gap-2">
+        <span className="font-mono text-lg text-text-dim line-through">
+          $99
+        </span>
+        <span className="font-mono text-3xl font-medium text-white">$49</span>
+      </div>
+
+      <p className="text-text-dim text-sm leading-relaxed">
+        Get the formula-driven Excel engine behind your finance plan. Change any
+        input — watch every investor's return recalculate instantly. Reuse on
+        every project.
+      </p>
+
+      <div className="space-y-3">
+        <button
+          onClick={onAccept}
+          className="w-full h-14 rounded-md font-bold tracking-[0.12em] uppercase transition-all active:scale-[0.96] bg-gold/[0.22] border-2 border-gold/60 text-gold text-base hover:border-gold/80 hover:bg-gold/[0.28]"
+        >
+          Yes, Add for $49
+        </button>
+        <button
+          onClick={onDecline}
+          className="w-full text-center text-text-dim text-sm hover:text-text-mid transition-colors py-2"
+        >
+          No thanks, continue
+        </button>
+      </div>
+    </div>
+  </div>
+);
+
+/* ═══════════════════════════════════════════════════════════════════
    PRODUCT CARD
    ═══════════════════════════════════════════════════════════════════ */
 const ProductCard = ({
@@ -216,14 +289,18 @@ const ProductCard = ({
   onDetails,
   visible,
   index,
+  workingModelSelected,
 }: {
   product: Product;
   onBuy: () => void;
   onDetails: () => void;
   visible: boolean;
   index: number;
+  workingModelSelected: boolean;
 }) => {
   const isFeatured = product.featured;
+  const addOnPrice = workingModelSelected ? 99 : 0;
+  const totalPrice = product.price + addOnPrice;
 
   return (
     <div
@@ -284,7 +361,7 @@ const ProductCard = ({
         ))}
       </ul>
 
-      {/* CTA Button — translucent gold system */}
+      {/* CTA Button */}
       <button
         onClick={onBuy}
         className={cn(
@@ -294,11 +371,11 @@ const ProductCard = ({
             : "bg-gold/[0.12] border-2 border-gold/40 text-gold text-sm hover:border-gold/60 hover:bg-gold/[0.18]"
         )}
       >
-        {isFeatured
-          ? `Get The Pitch Package — $${product.price}`
-          : product.slug === "the-export"
-            ? `Get My Export — $${product.price}`
-            : `Get The Working Model — $${product.price}`}
+        {workingModelSelected
+          ? `Get ${product.name} — $${totalPrice}`
+          : isFeatured
+            ? `Get The Pitch Package — $${product.price}`
+            : `Get The Blueprint — $${product.price}`}
       </button>
 
       {/* Details link */}
@@ -315,7 +392,7 @@ const ProductCard = ({
 /* ═══════════════════════════════════════════════════════════════════
    COMPARISON TABLE TIER KEYS
    ═══════════════════════════════════════════════════════════════════ */
-const tierKeys = ["theExport", "thePitchPackage", "theWorkingModel"] as const;
+const tierKeys = ["theBlueprint", "thePitchPackage"] as const;
 
 /* ═══════════════════════════════════════════════════════════════════
    MAIN STORE COMPONENT
@@ -325,6 +402,8 @@ const Store = () => {
   const [searchParams] = useSearchParams();
   const [showSuccess, setShowSuccess] = useState(false);
   const [linkCopied, setLinkCopied] = useState(false);
+  const [workingModelSelected, setWorkingModelSelected] = useState(false);
+  const [showPopup, setShowPopup] = useState<Product | null>(null);
   const [purchasedEmail] = useState(() => {
     try {
       return localStorage.getItem("filmmaker_og_purchase_email") || "";
@@ -346,7 +425,7 @@ const Store = () => {
   const revealFaq = useReveal();
 
   // Mobile-sorted products: featured first
-  const mobileProducts = [...products].sort(
+  const mobileProducts = [...mainProducts].sort(
     (a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0)
   );
 
@@ -373,6 +452,30 @@ const Store = () => {
     }
     handleCopyLink();
   }, [handleCopyLink]);
+
+  const handleBuy = (product: Product) => {
+    if (workingModelSelected) {
+      // Working Model already selected at full price — go straight to checkout
+      navigate(`/store/${product.slug}?addon=the-working-model`);
+    } else {
+      // Show Working Model popup
+      setShowPopup(product);
+    }
+  };
+
+  const handlePopupAccept = () => {
+    if (!showPopup) return;
+    // Bundle: base + discounted Working Model
+    navigate(`/store/${showPopup.slug}?addon=the-working-model-discount`);
+    setShowPopup(null);
+  };
+
+  const handlePopupDecline = () => {
+    if (!showPopup) return;
+    // Base product only
+    navigate(`/store/${showPopup.slug}`);
+    setShowPopup(null);
+  };
 
   /* ─── SUCCESS / CONFIRMATION VIEW ─── */
   if (showSuccess) {
@@ -422,18 +525,28 @@ const Store = () => {
     <div className="min-h-screen bg-bg-void flex flex-col">
       <Header title="PACKAGES" />
 
+      {/* Working Model Popup */}
+      {showPopup && (
+        <WorkingModelPopup
+          baseProduct={showPopup}
+          onAccept={handlePopupAccept}
+          onDecline={handlePopupDecline}
+          onClose={() => setShowPopup(null)}
+        />
+      )}
+
       <main className="flex-1 animate-fade-in">
         {/* ═══════════════════════════════════════════════════════════
             HERO
             ═══════════════════════════════════════════════════════════ */}
         <section className="px-6 pt-10 pb-8 max-w-3xl mx-auto text-center">
           <h1 className="font-bebas text-[clamp(2rem,7vw,3.2rem)] leading-[1.05] mb-4">
-            <span className="text-gold">YOUR NUMBERS.</span>{" "}
-            <span className="text-white">PRESENTATION-READY.</span>
+            <span className="text-gold">YOUR FINANCE PLAN.</span>{" "}
+            <span className="text-white">BUILT FOR YOU.</span>
           </h1>
           <p className="text-text-mid text-sm leading-relaxed max-w-lg mx-auto mb-6">
-            You built the model. Now export it in the format that matches your
-            next move.
+            Tell us about your project. We build your complete finance plan —
+            delivered within 24 hours.
           </p>
           <button
             onClick={() =>
@@ -536,13 +649,13 @@ const Store = () => {
         <GoldDivider />
 
         {/* ═══════════════════════════════════════════════════════════
-            PRODUCT GRID
+            PRODUCT GRID — Two main products
             ═══════════════════════════════════════════════════════════ */}
         <SectionFrame id="products" alt>
           <div
             ref={revealProducts.ref}
             className={cn(
-              "max-w-5xl mx-auto transition-all duration-500 ease-out",
+              "max-w-4xl mx-auto transition-all duration-500 ease-out",
               revealProducts.visible
                 ? "opacity-100 translate-y-0"
                 : "opacity-0 translate-y-4"
@@ -559,16 +672,17 @@ const Store = () => {
               }
             />
 
-            {/* Desktop: original order (Export / Pitch / Working Model) */}
-            <div className="hidden md:grid md:grid-cols-3 gap-5">
-              {products.map((product, i) => (
+            {/* Desktop: side by side */}
+            <div className="hidden md:grid md:grid-cols-2 gap-5">
+              {mainProducts.map((product, i) => (
                 <ProductCard
                   key={product.id}
                   product={product}
-                  onBuy={() => navigate(`/store/${product.slug}`)}
+                  onBuy={() => handleBuy(product)}
                   onDetails={() => navigate(`/store/${product.slug}`)}
                   visible={revealProducts.visible}
                   index={i}
+                  workingModelSelected={workingModelSelected}
                 />
               ))}
             </div>
@@ -579,13 +693,60 @@ const Store = () => {
                 <ProductCard
                   key={product.id}
                   product={product}
-                  onBuy={() => navigate(`/store/${product.slug}`)}
+                  onBuy={() => handleBuy(product)}
                   onDetails={() => navigate(`/store/${product.slug}`)}
                   visible={revealProducts.visible}
                   index={i}
+                  workingModelSelected={workingModelSelected}
                 />
               ))}
             </div>
+
+            {/* ADD-ON: The Working Model */}
+            {addOnProduct && (
+              <div
+                className={cn(
+                  "mt-5 rounded-xl p-5 transition-all cursor-pointer",
+                  workingModelSelected
+                    ? "border-2 border-gold bg-gold/[0.06]"
+                    : "border border-[#2A2A2A] bg-[#141414] hover:border-gold/30"
+                )}
+                onClick={() => setWorkingModelSelected(!workingModelSelected)}
+              >
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="px-2 py-0.5 rounded text-[9px] tracking-[0.12em] uppercase font-bold text-text-dim border border-white/10">
+                        Add-on
+                      </span>
+                      <h3 className="font-bebas text-lg tracking-[0.06em] text-white">
+                        {addOnProduct.name.toUpperCase()}
+                      </h3>
+                    </div>
+                    <p className="text-text-dim text-sm leading-relaxed">
+                      {addOnProduct.shortDescription}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <span className="font-mono text-2xl font-medium text-white">
+                      ${addOnProduct.price}
+                    </span>
+                    <div
+                      className={cn(
+                        "w-6 h-6 rounded border-2 flex items-center justify-center transition-all",
+                        workingModelSelected
+                          ? "border-gold bg-gold"
+                          : "border-white/20 bg-transparent"
+                      )}
+                    >
+                      {workingModelSelected && (
+                        <Check className="w-4 h-4 text-black" />
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </SectionFrame>
 
@@ -598,7 +759,7 @@ const Store = () => {
           <div
             ref={revealCompare.ref}
             className={cn(
-              "max-w-5xl mx-auto transition-all duration-500 ease-out",
+              "max-w-4xl mx-auto transition-all duration-500 ease-out",
               revealCompare.visible
                 ? "opacity-100 translate-y-0"
                 : "opacity-0 translate-y-4"
@@ -613,7 +774,7 @@ const Store = () => {
                 </>
               }
               plainSubtitle
-              subtitle="Every tier is built from the same institutional-grade financial model. The difference is depth, format, and flexibility."
+              subtitle="Both tiers are built from the same institutional-grade financial model. The difference is depth and deliverables."
             />
 
             <div className="overflow-x-auto rounded-xl border border-[#2A2A2A] bg-[#141414]">
@@ -623,7 +784,7 @@ const Store = () => {
                     <th className="text-left text-text-dim text-[10px] font-sans font-semibold tracking-wider p-3 border-b border-[#2A2A2A] min-w-[160px]">
                       Feature
                     </th>
-                    {products.map((p) => (
+                    {mainProducts.map((p) => (
                       <th
                         key={p.id}
                         className={cn(
@@ -648,7 +809,7 @@ const Store = () => {
                           </span>
                           {p.featured && (
                             <span className="block text-[8px] tracking-[0.15em] uppercase text-gold font-bold mt-1">
-                              Most Popular
+                              Recommended
                             </span>
                           )}
                         </button>
@@ -660,10 +821,9 @@ const Store = () => {
                 <tbody>
                   {comparisonSections.map((section) => (
                     <React.Fragment key={`section-${section.title}`}>
-                      {/* Section header row */}
                       <tr>
                         <td
-                          colSpan={4}
+                          colSpan={3}
                           className="px-3 pt-5 pb-2 border-b border-[#2A2A2A]"
                         >
                           <span className="font-bebas text-sm tracking-[0.1em] text-gold uppercase">
@@ -672,7 +832,6 @@ const Store = () => {
                         </td>
                       </tr>
 
-                      {/* Feature rows */}
                       {section.features.map((feature) => (
                         <tr
                           key={feature.label}
@@ -713,11 +872,11 @@ const Store = () => {
             </div>
 
             {/* CTA row below table */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
-              {products.map((p) => (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
+              {mainProducts.map((p) => (
                 <button
                   key={p.id}
-                  onClick={() => navigate(`/store/${p.slug}`)}
+                  onClick={() => handleBuy(p)}
                   className={cn(
                     "h-14 rounded-md font-bold tracking-[0.12em] uppercase transition-all active:scale-[0.96]",
                     p.featured
@@ -725,11 +884,9 @@ const Store = () => {
                       : "bg-gold/[0.08] border-2 border-gold/40 text-gold text-sm hover:border-gold/60 hover:bg-gold/[0.18]"
                   )}
                 >
-                  {p.slug === "the-export"
-                    ? `Get My Export — $${p.price}`
-                    : p.featured
-                      ? `Get The Pitch Package — $${p.price}`
-                      : `Get The Working Model — $${p.price}`}
+                  {p.featured
+                    ? `Get The Pitch Package — $${p.price}`
+                    : `Get The Blueprint — $${p.price}`}
                 </button>
               ))}
             </div>

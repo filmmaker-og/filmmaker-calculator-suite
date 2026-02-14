@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import {
@@ -12,12 +12,14 @@ import Header from "@/components/Header";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-import { getProduct, products } from "@/lib/store-products";
+import { getProduct, mainProducts } from "@/lib/store-products";
 
 const StorePackage = () => {
   const { slug } = useParams<{ slug: string }>();
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const product = getProduct(slug || "");
+  const addonId = searchParams.get("addon"); // e.g. "the-working-model" or "the-working-model-discount"
 
   const [agreedTerms, setAgreedTerms] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -34,6 +36,12 @@ const StorePackage = () => {
     };
     checkUser();
   }, [slug]);
+
+  // If it's the add-on product page, redirect to store (can't buy alone)
+  if (product?.isAddOn) {
+    navigate("/store");
+    return null;
+  }
 
   if (!product) {
     return (
@@ -69,11 +77,19 @@ const StorePackage = () => {
         localStorage.setItem("filmmaker_og_purchase_email", getEmail()!);
       } catch { /* ignore */ }
 
+      // Build the checkout request
+      let body: Record<string, unknown>;
+      if (addonId) {
+        // Multi-item: base product + addon
+        body = { items: [product.id, addonId], email: getEmail() };
+      } else {
+        // Single product
+        body = { productId: product.id, email: getEmail() };
+      }
+
       const { data, error } = await supabase.functions.invoke(
         "create-checkout",
-        {
-          body: { productId: product.id, email: getEmail() },
-        }
+        { body }
       );
       if (error) throw error;
       if (data?.url) window.location.href = data.url;
@@ -87,14 +103,19 @@ const StorePackage = () => {
 
   const isFeatured = product.featured;
 
-  // Prev / next navigation
-  const currentIdx = products.findIndex((p) => p.slug === product.slug);
-  const prev = currentIdx > 0 ? products[currentIdx - 1] : null;
+  // Prev / next navigation (only among main products)
+  const navProducts = mainProducts;
+  const currentIdx = navProducts.findIndex((p) => p.slug === product.slug);
+  const prev = currentIdx > 0 ? navProducts[currentIdx - 1] : null;
   const next =
-    currentIdx < products.length - 1 ? products[currentIdx + 1] : null;
+    currentIdx < navProducts.length - 1 ? navProducts[currentIdx + 1] : null;
 
   // Format description paragraphs
   const descParagraphs = product.fullDescription.split("\n\n");
+
+  // Calculate total price with addon
+  const addonPrice = addonId === "the-working-model-discount" ? 49 : addonId === "the-working-model" ? 99 : 0;
+  const totalPrice = product.price + addonPrice;
 
   return (
     <div className="min-h-screen bg-bg-void flex flex-col">
@@ -138,6 +159,11 @@ const StorePackage = () => {
             <span className="font-mono text-4xl font-medium text-white">
               ${product.price}
             </span>
+            {addonId && (
+              <span className="ml-3 text-gold text-sm font-mono">
+                + ${addonPrice} Working Model
+              </span>
+            )}
           </div>
 
           {/* Full description */}
@@ -264,11 +290,11 @@ const StorePackage = () => {
                   ? "ENTER EMAIL ABOVE"
                   : !agreedTerms
                     ? "AGREE TO TERMS"
-                    : isFeatured
-                      ? `Get The Pitch Package — $${product.price}`
-                      : product.slug === "the-export"
-                        ? `Get My Export — $${product.price}`
-                        : `Get The Working Model — $${product.price}`}
+                    : addonId
+                      ? `Get ${product.name} + Working Model — $${totalPrice}`
+                      : isFeatured
+                        ? `Get The Pitch Package — $${product.price}`
+                        : `Get The Blueprint — $${product.price}`}
             </button>
           </div>
         </section>
