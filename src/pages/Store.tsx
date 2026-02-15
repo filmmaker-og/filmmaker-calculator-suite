@@ -31,13 +31,9 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
-/* ═══════════════════════════════════════════════════════════════════
-   SHARE CONSTANTS
-   ═══════════════════════════════════════════════════════════════════ */
-const getShareUrl = () => window.location.origin;
-const SHARE_TEXT =
-  "Before you sign a deal, see exactly who gets paid and what's left for you. Free film finance tool — no account required.";
-const SHARE_TITLE = "FILMMAKER.OG — See Where Every Dollar Goes";
+import { getShareUrl, SHARE_TEXT, SHARE_TITLE } from "@/lib/constants";
+import SectionFrame from "@/components/SectionFrame";
+import SectionHeader from "@/components/SectionHeader";
 
 /* ═══════════════════════════════════════════════════════════════════
    FAQ DATA — Store-specific
@@ -87,81 +83,6 @@ const trustColumns = [
     featured: true,
   },
 ];
-
-/* ═══════════════════════════════════════════════════════════════════
-   SECTION HEADER — Matches Index.tsx pattern exactly
-   ═══════════════════════════════════════════════════════════════════ */
-const SectionHeader = ({
-  eyebrow,
-  title,
-  subtitle,
-  icon: Icon,
-  plainSubtitle,
-}: {
-  eyebrow: string;
-  title: React.ReactNode;
-  subtitle?: string;
-  icon?: React.ComponentType<{ className?: string }>;
-  plainSubtitle?: boolean;
-}) => (
-  <div className="text-center mb-8">
-    <div className="flex items-center gap-2 justify-center mb-3">
-      {Icon && <Icon className="w-5 h-5 text-gold" />}
-      <p className="text-text-dim text-xs tracking-[0.3em] uppercase font-semibold">
-        {eyebrow}
-      </p>
-    </div>
-    <h2 className="font-bebas text-3xl md:text-4xl tracking-[0.08em] text-gold">
-      {title}
-    </h2>
-    {subtitle && (
-      <p
-        className={cn(
-          "text-center max-w-lg mx-auto mt-4 leading-relaxed",
-          plainSubtitle
-            ? "text-text-mid text-sm"
-            : "text-text-mid text-sm px-4 py-2.5 rounded-xl bg-gold/[0.06] border border-gold/20"
-        )}
-      >
-        {subtitle}
-      </p>
-    )}
-  </div>
-);
-
-/* ═══════════════════════════════════════════════════════════════════
-   SECTION FRAME — Gold accent border on every section
-   ═══════════════════════════════════════════════════════════════════ */
-const SectionFrame = ({
-  id,
-  children,
-  className,
-  alt,
-}: {
-  id: string;
-  children: React.ReactNode;
-  className?: string;
-  alt?: boolean;
-}) => (
-  <section id={id} className="px-4 py-6">
-    <div className="flex rounded-2xl overflow-hidden border border-white/[0.06]">
-      <div
-        className="w-1 flex-shrink-0 bg-gradient-to-b from-gold via-gold/60 to-gold/20"
-        style={{ boxShadow: "0 0 16px rgba(212,175,55,0.30)" }}
-      />
-      <div
-        className={cn(
-          "flex-1 min-w-0",
-          alt ? "bg-bg-surface" : "bg-bg-elevated",
-          className
-        )}
-      >
-        <div className="h-[2px] bg-gradient-to-r from-transparent via-gold/25 to-transparent" />
-        <div className="p-6 md:p-8">{children}</div>
-      </div>
-    </div>
-  </section>
-);
 
 /* ═══════════════════════════════════════════════════════════════════
    GOLD DIVIDER — Between every section
@@ -265,7 +186,7 @@ const WorkingModelPopup = ({
       <div className="space-y-3">
         <button
           onClick={onAccept}
-          className="w-full h-14 rounded-md font-bold tracking-[0.12em] uppercase transition-all active:scale-[0.96] bg-gold/[0.22] border-2 border-gold/60 text-gold text-base hover:border-gold/80 hover:bg-gold/[0.28]"
+          className="w-full h-14 text-base btn-cta-primary"
         >
           Yes, Add for $49
         </button>
@@ -365,10 +286,10 @@ const ProductCard = ({
       <button
         onClick={onBuy}
         className={cn(
-          "w-full h-14 rounded-md font-bold tracking-[0.12em] uppercase transition-all active:scale-[0.96] mb-3",
+          "w-full h-14 mb-3",
           isFeatured
-            ? "bg-gold/[0.22] border-2 border-gold/60 text-gold text-base animate-cta-glow-soft hover:border-gold/80 hover:bg-gold/[0.28]"
-            : "bg-gold/[0.12] border-2 border-gold/40 text-gold text-sm hover:border-gold/60 hover:bg-gold/[0.18]"
+            ? "text-base btn-cta-primary"
+            : "text-sm btn-cta-secondary"
         )}
       >
         {workingModelSelected
@@ -509,7 +430,7 @@ const Store = () => {
             <div className="flex flex-col gap-3">
               <button
                 onClick={() => navigate("/calculator")}
-                className="w-full h-14 rounded-md border-2 border-gold/40 bg-gold/[0.12] text-gold text-sm font-bold tracking-[0.12em] uppercase hover:border-gold/60 hover:bg-gold/[0.18] transition-all active:scale-[0.96]"
+                className="w-full h-14 text-sm btn-cta-secondary"
               >
                 Return to Calculator
               </button>
@@ -554,7 +475,7 @@ const Store = () => {
                 .getElementById("products")
                 ?.scrollIntoView({ behavior: "smooth" })
             }
-            className="px-8 py-3 rounded-md border-2 border-gold/50 bg-gold/[0.12] text-gold text-sm font-bold tracking-[0.12em] uppercase hover:border-gold/60 hover:bg-gold/[0.18] transition-all active:scale-[0.96]"
+            className="px-8 py-3 text-sm btn-cta-secondary"
           >
             SEE PACKAGES
           </button>
@@ -878,10 +799,10 @@ const Store = () => {
                   key={p.id}
                   onClick={() => handleBuy(p)}
                   className={cn(
-                    "h-14 rounded-md font-bold tracking-[0.12em] uppercase transition-all active:scale-[0.96]",
+                    "h-14",
                     p.featured
-                      ? "bg-gold/[0.22] border-2 border-gold/60 text-gold text-base hover:border-gold/80 hover:bg-gold/[0.28]"
-                      : "bg-gold/[0.08] border-2 border-gold/40 text-gold text-sm hover:border-gold/60 hover:bg-gold/[0.18]"
+                      ? "text-base btn-cta-primary"
+                      : "text-sm btn-cta-secondary"
                   )}
                 >
                   {p.featured
@@ -968,7 +889,7 @@ const Store = () => {
                       .getElementById("products")
                       ?.scrollIntoView({ behavior: "smooth" })
                   }
-                  className="w-full max-w-[320px] h-16 text-base font-bold tracking-[0.14em] transition-all active:scale-[0.96] rounded-md bg-gold/[0.18] border-2 border-gold/50 text-gold hover:border-gold/70 hover:bg-gold/[0.22]"
+                  className="w-full max-w-[320px] h-16 text-base btn-cta-primary"
                 >
                   GET YOUR PACKAGE
                 </button>

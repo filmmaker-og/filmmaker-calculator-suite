@@ -277,10 +277,10 @@ const StorePackage = () => {
               onClick={handlePurchase}
               disabled={!agreedTerms || !isEmailValid() || loading}
               className={cn(
-                "w-full h-14 rounded-md font-bold tracking-[0.12em] uppercase transition-all active:scale-[0.96] disabled:opacity-30 disabled:cursor-not-allowed",
+                "w-full h-14 disabled:opacity-30 disabled:cursor-not-allowed",
                 isFeatured
-                  ? "bg-gold/[0.22] border-2 border-gold/60 text-gold text-base animate-cta-glow-soft hover:border-gold/80 hover:bg-gold/[0.28]"
-                  : "bg-gold/[0.12] border-2 border-gold/40 text-gold text-sm hover:border-gold/60 hover:bg-gold/[0.18]"
+                  ? "text-base btn-cta-primary"
+                  : "text-sm btn-cta-secondary"
               )}
             >
               {loading

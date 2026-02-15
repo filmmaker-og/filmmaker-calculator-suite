@@ -763,6 +763,56 @@
     animation: cta-glow-soft 3s ease-in-out infinite;
   }
 
+  @keyframes cta-glow-pulse {
+    0%, 100% { box-shadow: 0 0 14px rgba(212,175,55,0.12); }
+    50% { box-shadow: 0 0 24px rgba(212,175,55,0.25); }
+  }
+  .animate-cta-glow-pulse {
+    animation: cta-glow-pulse 3s ease-in-out infinite;
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════
+     STANDARDISED CTA BUTTONS — single source of truth
+     Primary:   full-width hero / section CTAs (featured)
+     Secondary: non-featured product / comparison CTAs
+     ═══════════════════════════════════════════════════════════════════ */
+  .btn-cta-primary {
+    background: rgba(212, 175, 55, 0.18);
+    border: 2px solid rgba(212, 175, 55, 0.50);
+    color: var(--gold);
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    border-radius: var(--radius-md);
+    transition: all var(--timing-fast) ease;
+    animation: cta-glow-soft 3s ease-in-out infinite;
+  }
+  .btn-cta-primary:hover {
+    border-color: rgba(212, 175, 55, 0.70);
+    background: rgba(212, 175, 55, 0.22);
+  }
+  .btn-cta-primary:active {
+    transform: scale(0.96);
+  }
+
+  .btn-cta-secondary {
+    background: rgba(212, 175, 55, 0.12);
+    border: 2px solid rgba(212, 175, 55, 0.40);
+    color: var(--gold);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border-radius: var(--radius-md);
+    transition: all var(--timing-fast) ease;
+  }
+  .btn-cta-secondary:hover {
+    border-color: rgba(212, 175, 55, 0.60);
+    background: rgba(212, 175, 55, 0.18);
+  }
+  .btn-cta-secondary:active {
+    transform: scale(0.96);
+  }
+
   /* ═══════════════════════════════════════════════════════════════════
      CINEMATIC VIGNETTE
      ═══════════════════════════════════════════════════════════════════ */

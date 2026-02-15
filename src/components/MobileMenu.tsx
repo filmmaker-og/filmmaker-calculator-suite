@@ -2,10 +2,7 @@ import { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { Home, Calculator, BookOpen, Book, Mail, Instagram, Briefcase, Share2, Link2, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-const getShareUrl = () => window.location.origin;
-const SHARE_TEXT = "Before you sign a deal, see exactly who gets paid and what's left for you. Free film finance tool — no account required.";
-const SHARE_TITLE = "FILMMAKER.OG — See Where Every Dollar Goes";
+import { getShareUrl, SHARE_TEXT, SHARE_TITLE } from "@/lib/constants";
 
 const MobileMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -16,6 +13,14 @@ const MobileMenu = () => {
     setIsOpen(false);
     navigate(path);
   };
+
+  const handleCopyLink = useCallback(() => {
+    const shareContent = `${SHARE_TEXT}\n\n${getShareUrl()}`;
+    navigator.clipboard.writeText(shareContent).then(() => {
+      setLinkCopied(true);
+      setTimeout(() => setLinkCopied(false), 2000);
+    }).catch(() => { /* do nothing */ });
+  }, []);
 
   const handleShare = useCallback(async () => {
     if (navigator.share) {
@@ -31,15 +36,7 @@ const MobileMenu = () => {
       }
     }
     handleCopyLink();
-  }, []);
-
-  const handleCopyLink = useCallback(() => {
-    const shareContent = `${SHARE_TEXT}\n\n${getShareUrl()}`;
-    navigator.clipboard.writeText(shareContent).then(() => {
-      setLinkCopied(true);
-      setTimeout(() => setLinkCopied(false), 2000);
-    }).catch(() => { /* do nothing */ });
-  }, []);
+  }, [handleCopyLink]);
 
   return (
     <>
