@@ -149,10 +149,10 @@ const StoreCompare = () => {
                 key={p.id}
                 onClick={() => navigate(`/store/${p.slug}`)}
                 className={cn(
-                  "h-14 rounded-md font-bold tracking-[0.12em] uppercase transition-all active:scale-[0.96]",
+                  "h-14",
                   p.featured
-                    ? "bg-gold/[0.22] border-2 border-gold/60 text-gold text-base hover:border-gold/80 hover:bg-gold/[0.28]"
-                    : "bg-gold/[0.08] border-2 border-gold/40 text-gold text-sm hover:border-gold/60 hover:bg-gold/[0.18]"
+                    ? "text-base btn-cta-primary"
+                    : "text-sm btn-cta-secondary"
                 )}
               >
                 {p.featured

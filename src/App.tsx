@@ -1,22 +1,40 @@
+import { lazy, Suspense } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import ErrorBoundary from "./components/ErrorBoundary";
+
+/* ═══════════════════════════════════════════════════════════════════
+   Lazy-loaded pages — only the landing page is eagerly loaded.
+   Everything else loads on demand with a Suspense fallback.
+   ═══════════════════════════════════════════════════════════════════ */
 import Index from "./pages/Index";
 
-import BudgetInfo from "./pages/BudgetInfo";
-import CapitalInfo from "./pages/CapitalInfo";
-import FeesInfo from "./pages/FeesInfo";
-import WaterfallInfo from "./pages/WaterfallInfo";
-import Glossary from "./pages/Glossary";
-import Auth from "./pages/Auth";
-import Calculator from "./pages/Calculator";
-import Store from "./pages/Store";
-import StorePackage from "./pages/StorePackage";
-import StoreCompare from "./pages/StoreCompare";
-import BuildYourPlan from "./pages/BuildYourPlan";
-import NotFound from "./pages/NotFound";
-import ErrorBoundary from "./components/ErrorBoundary";
+const BudgetInfo = lazy(() => import("./pages/BudgetInfo"));
+const CapitalInfo = lazy(() => import("./pages/CapitalInfo"));
+const FeesInfo = lazy(() => import("./pages/FeesInfo"));
+const WaterfallInfo = lazy(() => import("./pages/WaterfallInfo"));
+const Glossary = lazy(() => import("./pages/Glossary"));
+const Auth = lazy(() => import("./pages/Auth"));
+const Calculator = lazy(() => import("./pages/Calculator"));
+const Store = lazy(() => import("./pages/Store"));
+const StorePackage = lazy(() => import("./pages/StorePackage"));
+const StoreCompare = lazy(() => import("./pages/StoreCompare"));
+const BuildYourPlan = lazy(() => import("./pages/BuildYourPlan"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+
+/* ═══════════════════════════════════════════════════════════════════
+   Route-level loading fallback
+   ═══════════════════════════════════════════════════════════════════ */
+const PageLoader = () => (
+  <div className="min-h-screen bg-bg-void flex items-center justify-center">
+    <div className="text-center">
+      <div className="w-8 h-8 border-2 border-gold border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+      <p className="text-text-dim text-sm">Loading...</p>
+    </div>
+  </div>
+);
 
 const queryClient = new QueryClient();
 
@@ -26,6 +44,7 @@ const App = () => (
       <Toaster />
       <ErrorBoundary>
       <BrowserRouter>
+        <Suspense fallback={<PageLoader />}>
         <Routes>
           <Route path="/" element={<Index />} />
 
@@ -43,6 +62,7 @@ const App = () => (
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
+        </Suspense>
       </BrowserRouter>
       </ErrorBoundary>
     </TooltipProvider>

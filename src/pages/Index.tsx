@@ -36,12 +36,12 @@ import {
 } from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
 import { formatCompactCurrency } from "@/lib/waterfall";
+import { getShareUrl, SHARE_TEXT, SHARE_TITLE } from "@/lib/constants";
+import SectionFrame from "@/components/SectionFrame";
+import SectionHeader from "@/components/SectionHeader";
 
 const STORAGE_KEY = "filmmaker_og_inputs";
 const CINEMATIC_SEEN_KEY = "filmmaker_og_intro_seen";
-const getShareUrl = () => window.location.origin;
-const SHARE_TEXT = "Before you sign a deal, see exactly who gets paid and what's left for you. Free film finance tool — no account required.";
-const SHARE_TITLE = "FILMMAKER.OG — See Where Every Dollar Goes";
 
 /* ═══════════════════════════════════════════════════════════════════
    PROBLEM CARDS — tighter copy, vertical layout
@@ -97,52 +97,6 @@ const premiumDeliverables = [
   { icon: FileSpreadsheet, line: "6-sheet Excel workbook — the spreadsheet your investor's accountant will actually review" },
   { icon: Presentation, line: "Investor-ready PDF — the document you hand across the table in the meeting" },
 ];
-
-/* ═══════════════════════════════════════════════════════════════════
-   SECTION HEADER
-   ═══════════════════════════════════════════════════════════════════ */
-const SectionHeader = ({ eyebrow, title, subtitle, icon: Icon, plainSubtitle }: {
-  eyebrow: string; title: React.ReactNode; subtitle?: string;
-  icon?: React.ComponentType<{ className?: string }>;
-  plainSubtitle?: boolean;
-}) => (
-  <div className="text-center mb-8">
-    <div className="flex items-center gap-2 justify-center mb-3">
-      {Icon && <Icon className="w-5 h-5 text-gold" />}
-      <p className="text-text-dim text-xs tracking-[0.3em] uppercase font-semibold">{eyebrow}</p>
-    </div>
-    <h2 className="font-bebas text-3xl md:text-4xl tracking-[0.08em] text-gold">{title}</h2>
-    {subtitle && (
-      <p className={cn(
-        "text-center max-w-lg mx-auto mt-4 leading-relaxed",
-        plainSubtitle
-          ? "text-text-mid text-sm"
-          : "text-text-mid text-sm px-4 py-2.5 rounded-xl bg-gold/[0.06] border border-gold/20"
-      )}>
-        {subtitle}
-      </p>
-    )}
-  </div>
-);
-
-/* ═══════════════════════════════════════════════════════════════════
-   SECTION FRAME — gold accent border on every section
-   ═══════════════════════════════════════════════════════════════════ */
-const SectionFrame = ({ id, children, className, alt }: {
-  id: string; children: React.ReactNode; className?: string; alt?: boolean;
-}) => (
-  <section id={id} className="snap-section px-4 py-6">
-    <div className="flex rounded-2xl overflow-hidden border border-white/[0.06]">
-      <div className="w-1 flex-shrink-0 bg-gradient-to-b from-gold via-gold/60 to-gold/20" style={{ boxShadow: '0 0 16px rgba(212,175,55,0.30)' }} />
-      <div className={cn("flex-1 min-w-0", alt ? "bg-bg-surface" : "bg-bg-elevated", className)}>
-        <div className="h-[2px] bg-gradient-to-r from-transparent via-gold/25 to-transparent" />
-        <div className="p-6 md:p-8">
-          {children}
-        </div>
-      </div>
-    </div>
-  </section>
-);
 
 /* ═══════════════════════════════════════════════════════════════════
    SECTION REVEAL — one-shot slide-up (no blur)
@@ -237,19 +191,19 @@ const Index = () => {
   const handleContinueClick = () => { haptics.medium(); navigate("/calculator"); };
   const handleStartFresh = () => { haptics.light(); navigate("/calculator?tab=budget&reset=true"); };
 
-  const handleShare = useCallback(async () => {
-    if (navigator.share) {
-      try { await navigator.share({ title: SHARE_TITLE, text: SHARE_TEXT, url: getShareUrl() }); return; } catch {}
-    }
-    handleCopyLink();
-  }, []);
-
   const handleCopyLink = useCallback(() => {
     navigator.clipboard.writeText(`${SHARE_TEXT}\n\n${getShareUrl()}`).then(() => {
       setLinkCopied(true);
       setTimeout(() => setLinkCopied(false), 2000);
     }).catch(() => {});
   }, []);
+
+  const handleShare = useCallback(async () => {
+    if (navigator.share) {
+      try { await navigator.share({ title: SHARE_TITLE, text: SHARE_TEXT, url: getShareUrl() }); return; } catch {}
+    }
+    handleCopyLink();
+  }, [handleCopyLink]);
 
   const isComplete = phase === 'complete';
   const showBeam = phase !== 'dark' && !shouldSkip;
@@ -318,7 +272,7 @@ const Index = () => {
               {isReturningUser ? (
                 <div className="w-full max-w-[320px] mx-auto space-y-3">
                   <button onClick={handleContinueClick}
-                    className="w-full h-16 text-base font-bold tracking-[0.14em] transition-all active:scale-[0.96] rounded-md bg-gold/[0.18] border-2 border-gold/50 text-gold animate-cta-glow-soft hover:border-gold/70 hover:bg-gold/[0.22]">
+                    className="w-full h-16 text-base btn-cta-primary">
                     CONTINUE YOUR DEAL
                   </button>
                   <p className="text-text-dim text-xs tracking-wider text-center">{formatCompactCurrency(savedState!.budget)} budget in progress</p>
@@ -330,7 +284,7 @@ const Index = () => {
               ) : (
                 <div className="w-full max-w-[320px] mx-auto">
                   <button onClick={handleStartClick}
-                    className="w-full h-16 text-base font-bold tracking-[0.14em] transition-all active:scale-[0.96] rounded-md bg-gold/[0.18] border-2 border-gold/50 text-gold animate-cta-glow-soft hover:border-gold/70 hover:bg-gold/[0.22]">
+                    className="w-full h-16 text-base btn-cta-primary">
                     SEE YOUR DEAL
                   </button>
                   <p className="text-text-dim text-xs tracking-wider mt-2 text-center">No credit card required.</p>
@@ -419,7 +373,7 @@ const Index = () => {
               <div className="text-center mt-8">
                 <button
                   onClick={handleStartClick}
-                  className="px-8 py-3 rounded-md border-2 border-gold/50 bg-gold/[0.12] text-gold text-sm font-bold tracking-[0.12em] uppercase hover:border-gold/60 hover:bg-gold/[0.18] transition-all active:scale-[0.96] animate-cta-glow-pulse"
+                  className="px-8 py-3 text-sm btn-cta-secondary animate-cta-glow-pulse"
                 >
                   SEE YOUR DEAL
                 </button>
@@ -509,7 +463,7 @@ const Index = () => {
               <div className="text-center">
                 <button
                   onClick={handleStartClick}
-                  className="w-full max-w-[320px] h-16 text-base font-bold tracking-[0.14em] transition-all active:scale-[0.96] rounded-md bg-gold/[0.18] border-2 border-gold/50 text-gold animate-cta-glow-soft hover:border-gold/70 hover:bg-gold/[0.22]"
+                  className="w-full max-w-[320px] h-16 text-base btn-cta-primary"
                 >
                   SEE YOUR DEAL
                 </button>
@@ -557,7 +511,7 @@ const Index = () => {
                     Your next investor meeting shouldn't be the first time you see your own&nbsp;waterfall.
                   </p>
                   <button onClick={handleStartClick}
-                    className="w-full max-w-[320px] h-16 text-base font-bold tracking-[0.14em] transition-all active:scale-[0.96] rounded-md bg-gold/[0.18] border-2 border-gold/50 text-gold hover:border-gold/70 hover:bg-gold/[0.22]">
+                    className="w-full max-w-[320px] h-16 text-base btn-cta-primary">
                     BUILD YOUR WATERFALL
                   </button>
                 </div>
