@@ -44,7 +44,7 @@ const StandardStepLayout = ({
         chapter={chapter}
         title={title}
         isActive={true}
-        className="overflow-visible min-h-[500px]" 
+        className="overflow-visible" 
       >
         <div className="flex flex-col h-full justify-between space-y-6">
           {/* Top Content */}

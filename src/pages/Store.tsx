@@ -402,7 +402,7 @@ const Store = () => {
   if (showSuccess) {
     return (
       <div className="min-h-screen bg-bg-void flex flex-col">
-        <Header title="CONFIRMED" />
+        <Header />
         <main className="flex-1 px-6 py-16 flex items-center justify-center animate-fade-in">
           <div className="text-center max-w-md">
             <div className="w-20 h-20 border-2 border-gold mx-auto mb-6 rounded-lg flex items-center justify-center">
@@ -444,7 +444,7 @@ const Store = () => {
   /* ─── MAIN STORE VIEW ─── */
   return (
     <div className="min-h-screen bg-bg-void flex flex-col">
-      <Header title="PACKAGES" />
+      <Header />
 
       {/* Working Model Popup */}
       {showPopup && (

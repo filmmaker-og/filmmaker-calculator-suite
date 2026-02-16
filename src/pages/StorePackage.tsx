@@ -46,7 +46,7 @@ const StorePackage = () => {
   if (!product) {
     return (
       <div className="min-h-screen bg-bg-void flex flex-col">
-        <Header title="NOT FOUND" />
+        <Header />
         <main className="flex-1 flex items-center justify-center">
           <div className="text-center">
             <p className="text-text-mid mb-4">Package not found.</p>
@@ -118,7 +118,7 @@ const StorePackage = () => {
 
   return (
     <div className="min-h-screen bg-bg-void flex flex-col">
-      <Header title="PACKAGES" />
+      <Header />
 
       <main className="flex-1 animate-fade-in">
         {/* BACK NAV */}

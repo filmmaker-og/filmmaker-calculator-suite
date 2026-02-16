@@ -212,7 +212,7 @@ const WaterfallTab = ({ result: initialResult, inputs: initialInputs, onExport }
                 </p>
                 <button
                   onClick={onExport}
-                  className="btn-vault w-full"
+                  className="btn-cta-primary w-full h-14"
                 >
                   <FileSpreadsheet className="w-4 h-4 mr-2" />
                   EXPORT YOUR FINANCIAL SNAPSHOT

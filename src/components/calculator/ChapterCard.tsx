@@ -41,8 +41,8 @@ const ChapterCard = ({
         </div>
       </header>
 
-      {/* Body - Applied bg-elevated to match Wiki style cards */}
-      <div className="chapter-card-body bg-bg-elevated/50">
+      {/* Body */}
+      <div className="chapter-card-body">
         {children}
       </div>
     </section>
