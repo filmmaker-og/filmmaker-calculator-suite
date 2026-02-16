@@ -98,7 +98,7 @@ const Auth = () => {
     <div className="min-h-screen min-h-[100dvh] bg-bg-void flex flex-col">
       
       {/* Header with hamburger menu */}
-      <Header title="SIGN IN" />
+      <Header />
 
       {/* Main Content - Centered */}
       <main className="flex-1 flex items-center justify-center px-6 py-12">

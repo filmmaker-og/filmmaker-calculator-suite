@@ -54,7 +54,7 @@ const WaterfallInfo = () => {
               </Button>
               <button
                 onClick={handleReturnToCalculator}
-                className="btn-vault h-9 w-auto px-4 text-xs"
+                className="btn-cta-secondary h-9 w-auto px-4 text-xs"
               >
                 <Calculator className="w-3 h-3 mr-2" />
                 Open Calculator
@@ -230,7 +230,7 @@ const WaterfallInfo = () => {
             </p>
             <button
               onClick={handleReturnToCalculator}
-              className="btn-vault w-full max-w-xs h-12 px-8 text-sm"
+              className="btn-cta-primary w-full max-w-xs h-12 px-8 text-sm"
             >
               Open Calculator
               <ArrowRight className="ml-2 w-4 h-4" />

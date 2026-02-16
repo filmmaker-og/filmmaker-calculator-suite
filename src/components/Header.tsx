@@ -1,11 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import MobileMenu from "./MobileMenu";
 
-interface HeaderProps {
-  title?: string;
-}
-
-const Header = ({ title }: HeaderProps) => {
+const Header = () => {
   const navigate = useNavigate();
 
   const handleLogoClick = () => {
@@ -31,13 +27,6 @@ const Header = ({ title }: HeaderProps) => {
               BETA
             </span>
           </button>
-
-          {/* Center: Title (optional) */}
-          {title && (
-            <span className="font-bebas text-sm tracking-[0.15em] text-gold absolute left-1/2 -translate-x-1/2">
-              {title}
-            </span>
-          )}
 
           {/* Right: Hamburger Menu */}
           <MobileMenu />

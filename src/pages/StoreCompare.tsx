@@ -16,7 +16,7 @@ const StoreCompare = () => {
 
   return (
     <div className="min-h-screen bg-bg-void flex flex-col">
-      <Header title="PACKAGES" />
+      <Header />
 
       <main className="flex-1 animate-fade-in">
         {/* BACK NAV */}
