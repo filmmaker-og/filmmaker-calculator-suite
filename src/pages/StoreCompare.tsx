@@ -1,22 +1,80 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Check, Minus } from "lucide-react";
 import Header from "@/components/Header";
 import { cn } from "@/lib/utils";
-import { mainProducts, comparisonSections } from "@/lib/store-products";
+import { mainProducts, comparisonSections, type Product } from "@/lib/store-products";
+import { toast } from "sonner";
+import { startCheckout } from "@/lib/checkout";
+import WorkingModelPopup from "@/components/WorkingModelPopup";
 
 const tierKeys = ["theBlueprint", "thePitchPackage"] as const;
 
 const StoreCompare = () => {
   const navigate = useNavigate();
+  const [showPopup, setShowPopup] = useState<Product | null>(null);
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
+  // Direct-to-Stripe: invoke create-checkout and redirect
+  const doCheckout = useCallback(async (productId: string, addonId?: string) => {
+    setCheckoutLoading(true);
+    try {
+      const url = await startCheckout(productId, addonId);
+      window.location.href = url;
+    } catch {
+      toast.error("Failed to start checkout. Please try again.");
+    } finally {
+      setCheckoutLoading(false);
+    }
+  }, []);
+
+  const handleBuy = (product: Product) => {
+    setShowPopup(product);
+  };
+
+  const handlePopupAccept = () => {
+    if (!showPopup) return;
+    const product = showPopup;
+    setShowPopup(null);
+    doCheckout(product.id, "the-working-model-discount");
+  };
+
+  const handlePopupDecline = () => {
+    if (!showPopup) return;
+    const product = showPopup;
+    setShowPopup(null);
+    doCheckout(product.id);
+  };
+
   return (
     <div className="min-h-screen bg-bg-void flex flex-col">
       <Header />
+
+      {/* Working Model Popup */}
+      {showPopup && (
+        <WorkingModelPopup
+          baseProduct={showPopup}
+          onAccept={handlePopupAccept}
+          onDecline={handlePopupDecline}
+          onClose={() => setShowPopup(null)}
+        />
+      )}
+
+      {/* Checkout loading overlay */}
+      {checkoutLoading && (
+        <div className="fixed inset-0 z-[250] flex items-center justify-center bg-black/70 backdrop-blur-sm">
+          <div className="text-center space-y-4">
+            <div className="w-10 h-10 border-2 border-gold border-t-transparent rounded-full animate-spin mx-auto" />
+            <p className="text-gold text-sm font-semibold uppercase tracking-wider">
+              Connecting to Stripe...
+            </p>
+          </div>
+        </div>
+      )}
 
       <main className="flex-1 animate-fade-in">
         {/* BACK NAV */}
@@ -147,7 +205,7 @@ const StoreCompare = () => {
             {mainProducts.map((p) => (
               <button
                 key={p.id}
-                onClick={() => navigate(`/store/${p.slug}`)}
+                onClick={() => handleBuy(p)}
                 className={cn(
                   "h-14",
                   p.featured

@@ -49,7 +49,7 @@ serve(async (req) => {
 
     // Try to get authenticated user
     let userId: string | null = null;
-    let userEmail = email;
+    let userEmail = email || null;
 
     const authHeader = req.headers.get("Authorization");
     if (authHeader) {
@@ -57,19 +57,17 @@ serve(async (req) => {
       const { data } = await supabaseClient.auth.getUser(token);
       if (data.user) {
         userId = data.user.id;
-        userEmail = data.user.email || email;
+        userEmail = data.user.email || email || null;
       }
     }
 
-    if (!userEmail) {
-      throw new Error("Email is required");
-    }
-
-    // Check if customer exists
-    const customers = await stripe.customers.list({ email: userEmail, limit: 1 });
+    // Check if customer exists (only if we have an email)
     let customerId: string | undefined;
-    if (customers.data.length > 0) {
-      customerId = customers.data[0].id;
+    if (userEmail) {
+      const customers = await stripe.customers.list({ email: userEmail, limit: 1 });
+      if (customers.data.length > 0) {
+        customerId = customers.data[0].id;
+      }
     }
 
     // Build line items — support both single productId and items array
@@ -121,9 +119,10 @@ serve(async (req) => {
     }
 
     // Create checkout session
+    // If no email is known, Stripe Checkout will collect it from the customer.
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
-      customer_email: customerId ? undefined : userEmail,
+      customer_email: customerId ? undefined : (userEmail || undefined),
       line_items: lineItems,
       mode: "payment",
       success_url: `${req.headers.get("origin")}/build-your-plan?session_id={CHECKOUT_SESSION_ID}`,
@@ -132,7 +131,7 @@ serve(async (req) => {
         productId: metaProductId,
         productName: metaProductName,
         userId: userId || "",
-        userEmail,
+        userEmail: userEmail || "",
       },
     });
 
