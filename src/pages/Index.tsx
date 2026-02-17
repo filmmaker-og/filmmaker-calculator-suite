@@ -131,7 +131,6 @@ const Index = () => {
   const revealProblem = useReveal();
   const revealFlow = useReveal();
   const revealPrice = useReveal();
-  const revealSolution = useReveal();
   const revealFaq = useReveal();
 
   const savedState = useMemo(() => {
@@ -303,9 +302,9 @@ const Index = () => {
                     )}
                     style={staggerDelay(i, revealProblem.visible)}
                   >
-                    <span className="font-mono text-[11px] text-white/20 tabular-nums">{String(i + 1).padStart(2, '0')}</span>
-                    <h3 className="font-bebas text-[19px] md:text-[21px] tracking-[0.06em] uppercase leading-tight mt-1 text-white">{fact.headline}</h3>
-                    <p className="text-white/50 text-sm leading-relaxed mt-2">{fact.body}</p>
+                    <span className="font-mono text-[11px] text-white/30 tabular-nums">{String(i + 1).padStart(2, '0')}</span>
+                    <h3 className="font-bebas text-[21px] md:text-[23px] tracking-[0.06em] uppercase leading-tight mt-1 text-white">{fact.headline}</h3>
+                    <p className="text-white/70 text-sm leading-relaxed mt-2">{fact.body}</p>
                   </div>
                 ))}
               </div>
@@ -323,7 +322,7 @@ const Index = () => {
               <SectionHeader eyebrow="The Waterfall" title={<>HOW THE MONEY <span className="text-white">FLOWS</span></>} />
 
               {/* Annotation */}
-              <p className="text-white/40 text-sm text-center mb-4 max-w-md mx-auto">
+              <p className="text-white/50 text-sm text-center mb-4 max-w-md mx-auto">
                 A $3M SVOD acquisition. Here&rsquo;s what actually reaches the filmmaker.
               </p>
 
@@ -363,7 +362,7 @@ const Index = () => {
                           <span className={cn(
                             "font-bebas text-[21px] tracking-[0.08em] uppercase leading-none",
                             isFirst && "text-white",
-                            isMiddle && "text-white/75",
+                            isMiddle && "text-white/80",
                             isLast && "text-[#F9E076]"
                           )}>
                             {tier.name}
@@ -372,9 +371,9 @@ const Index = () => {
 
                         {/* Right: amount */}
                         <span className={cn(
-                          "font-mono text-[17px] font-medium",
-                          isFirst && "text-white/70",
-                          isMiddle && "text-white/55",
+                          "font-mono text-[17px] font-semibold",
+                          isFirst && "text-white/80",
+                          isMiddle && "text-white/60",
                           isLast && "text-[#F9E076]"
                         )}>
                           {tier.amount}
@@ -383,7 +382,7 @@ const Index = () => {
 
                       {/* Remaining balance (tiers 2-6 only) */}
                       {tier.remaining && (
-                        <p className="font-mono text-[12px] text-white/25 text-right mt-1">
+                        <p className="font-mono text-[12px] text-white/30 text-right mt-1">
                           {tier.remaining} remaining
                         </p>
                       )}
@@ -393,7 +392,7 @@ const Index = () => {
 
                 {/* Tagline — ends cold, no CTA */}
                 <div className="border-t border-border-subtle px-5 py-5 text-center">
-                  <p className="text-[14px] font-light" style={{ color: 'rgba(255,255,255,0.35)' }}>
+                  <p className="text-[14px] font-light text-white/40">
                     This is the standard waterfall.
                   </p>
                 </div>
@@ -401,58 +400,54 @@ const Index = () => {
             </div>
           </SectionFrame>
 
-          {/* ── § 4: THIS KNOWLEDGE ISN'T CHEAP ── */}
+          {/* ── § 4: KNOWLEDGE ISN'T CHEAP + SOLUTION PIVOT ── */}
           <SectionFrame id="price-anchor">
             <div ref={revealPrice.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", revealPrice.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
               <SectionHeader eyebrow="The Industry Standard" title={<>KNOWLEDGE ISN'T <span className="text-white">CHEAP</span></>} />
 
-              <div className="max-w-xs mx-auto mt-2">
-                <div className="space-y-3">
-                  <div className="flex items-baseline justify-between py-3 border-b border-white/[0.06]">
-                    <span className="text-white/50 text-sm">Entertainment Attorney</span>
-                    <span className="font-mono text-sm text-white/40">$5K–$15K</span>
-                  </div>
-                  <div className="flex items-baseline justify-between py-3 border-b border-white/[0.06]">
-                    <span className="text-white/50 text-sm">Producing Consultant</span>
-                    <span className="font-mono text-sm text-white/40">$2K–$5K</span>
-                  </div>
-                  <div className="flex items-baseline justify-between py-3 border-b border-white/[0.06]">
-                    <span className="text-white/50 text-sm">Film School</span>
-                    <span className="font-mono text-sm text-white/40">$50K–$200K</span>
-                  </div>
-                  <div className="flex items-baseline justify-between py-3">
-                    <span className="text-white/50 text-sm">Trial and Error</span>
-                    <span className="font-mono text-sm text-white/40">3–5 years</span>
-                  </div>
+              {/* 2x2 cost cards */}
+              <div className="grid grid-cols-2 gap-3 max-w-sm mx-auto">
+                <div className="rounded-xl border border-border-subtle bg-bg-card p-5 text-center">
+                  <p className="font-mono text-lg font-semibold text-white/80">$5K–$15K</p>
+                  <p className="text-white/50 text-xs tracking-wider uppercase mt-1">Entertainment Attorney</p>
+                </div>
+                <div className="rounded-xl border border-border-subtle bg-bg-card p-5 text-center">
+                  <p className="font-mono text-lg font-semibold text-white/80">$2K–$5K</p>
+                  <p className="text-white/50 text-xs tracking-wider uppercase mt-1">Producing Consultant</p>
+                </div>
+                <div className="rounded-xl border border-border-subtle bg-bg-card p-5 text-center">
+                  <p className="font-mono text-lg font-semibold text-white/80">$50K–$200K</p>
+                  <p className="text-white/50 text-xs tracking-wider uppercase mt-1">Film School</p>
+                </div>
+                <div className="rounded-xl border border-border-subtle bg-bg-card p-5 text-center">
+                  <p className="font-mono text-lg font-semibold text-white/80">3–5 Years</p>
+                  <p className="text-white/50 text-xs tracking-wider uppercase mt-1">Trial and Error</p>
                 </div>
               </div>
-            </div>
-          </SectionFrame>
 
-          {/* ── § 5: THE SOLUTION (agency moment) ── */}
-          <SectionFrame id="solution" alt>
-            <div ref={revealSolution.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", revealSolution.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
-              <SectionHeader eyebrow="The Solution" title={<>WE DEMOCRATIZED <span className="text-white">THIS</span></>} />
-              <div className="max-w-sm mx-auto text-center">
-                <p className="text-white/60 text-sm leading-relaxed">
+              {/* Solution pivot */}
+              <div className="max-w-sm mx-auto text-center mt-10">
+                <p className="text-white/50 text-sm leading-relaxed">
+                  We built a way around it.
+                </p>
+                <p className="text-white/70 text-sm leading-relaxed mt-3">
                   Restructure the debt. Lower the equity hurdle.<br />
                   Stack tax credits. See what changes.
                 </p>
-                <div className="mt-8">
-                  <button onClick={handleStartClick}
-                    className="w-full max-w-[320px] h-16 text-base btn-cta-primary">
-                    BUILD YOUR WATERFALL
-                  </button>
-                </div>
+              </div>
+
+              {/* CTA */}
+              <div className="text-center mt-8">
+                <button onClick={handleStartClick}
+                  className="w-full max-w-[320px] h-16 text-base btn-cta-primary">
+                  BUILD YOUR WATERFALL
+                </button>
               </div>
             </div>
           </SectionFrame>
 
-          {/* section divider */}
-          <div className="px-8"><div className="h-[1px] bg-gradient-to-r from-transparent via-gold/25 to-transparent" /></div>
-
-          {/* ── § 6: FAQ ── */}
-          <SectionFrame id="faq">
+          {/* ── § 5: FAQ ── */}
+          <SectionFrame id="faq" alt>
             <div ref={revealFaq.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", revealFaq.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
               <SectionHeader eyebrow="Common Questions" title={<>WHAT FILMMAKERS <span className="text-white">ASK</span></>} />
               <div className="bg-bg-card rounded-xl px-5 border border-border-subtle">
@@ -462,7 +457,7 @@ const Index = () => {
                       <AccordionTrigger className="font-bebas text-xl tracking-[0.06em] uppercase text-gold hover:text-gold/70 hover:no-underline text-left">
                         {faq.q}
                       </AccordionTrigger>
-                      <AccordionContent className="text-text-dim text-sm leading-relaxed normal-case font-sans">
+                      <AccordionContent className="text-white/70 text-sm leading-relaxed normal-case font-sans">
                         {faq.a}
                       </AccordionContent>
                     </AccordionItem>
@@ -471,6 +466,9 @@ const Index = () => {
               </div>
             </div>
           </SectionFrame>
+
+          {/* section divider */}
+          <div className="px-8"><div className="h-[1px] bg-gradient-to-r from-transparent via-gold/25 to-transparent" /></div>
 
           {/* ── FINAL CTA ── */}
           <section id="final-cta" className="snap-section py-8 px-4">
