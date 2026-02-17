@@ -18,10 +18,6 @@ import {
   Waves,
   Lock,
   Award,
-  BarChart3,
-  BookOpen,
-  FileSpreadsheet,
-  Presentation,
   ChevronDown,
 } from "lucide-react";
 import filmmakerLogo from "@/assets/filmmaker-logo.jpg";
@@ -73,22 +69,21 @@ const faqs = [
 ];
 
 /* ═══════════════════════════════════════════════════════════════════
-   WATERFALL CASCADE — 8-tier diminishing visualization
+   WATERFALL TIERS — 8-row list with shrinking gold bar
    ═══════════════════════════════════════════════════════════════════ */
-const cascadeTiers: {
-  name: string; pct: string; nc: string; pc: string; py: string;
-  ns?: Record<string, string>; ps?: Record<string, string>;
-  dw?: string; dop?: number;
-}[] = [
-  { name: "GROSS RECEIPTS", pct: "100%", nc: "text-[34px] md:text-[42px] text-gold", pc: "text-[15px] text-white/[0.65]", py: "pt-0 pb-6", dw: "100%", dop: 0.55 },
-  { name: "CAM FEES", pct: "0.5–1%", nc: "text-[22px] md:text-[25px] text-gold/[0.80]", pc: "text-[13px] text-white/[0.52]", py: "py-[22px]", dw: "82%", dop: 0.38 },
-  { name: "SALES AGENT COMMISSION", pct: "10–25%", nc: "text-[20px] md:text-[24px] text-gold/[0.68]", pc: "text-[13px] text-white/[0.44]", py: "py-[22px]", dw: "65%", dop: 0.28 },
-  { name: "SENIOR DEBT", pct: "8–12% Interest", nc: "text-[19px] md:text-[22px] text-gold/[0.55]", pc: "text-[13px] text-white/[0.36]", py: "py-[22px]", dw: "50%", dop: 0.20 },
-  { name: "MEZZANINE DEBT", pct: "12–20% Premium", nc: "text-[17px] md:text-[20px] text-gold/[0.44]", pc: "text-[13px] text-white/[0.30]", py: "py-[22px]", dw: "38%", dop: 0.14 },
-  { name: "EQUITY RECOUPMENT", pct: "120% Hurdle", nc: "text-[16px] md:text-[19px] text-gold/[0.34]", pc: "text-[13px] text-white/[0.24]", py: "py-[22px]", dw: "26%", dop: 0.10 },
-  { name: "DEFERRALS", pct: "As Negotiated", nc: "text-[15px] md:text-[18px] text-gold/[0.26]", pc: "text-[13px] text-white/[0.18]", py: "py-[22px]", dw: "16%", dop: 0.06 },
-  { name: "PRODUCER & TALENT", pct: "What's Left", nc: "text-[21px] md:text-[24px] font-bold", pc: "text-[14px]", py: "pt-7 pb-0", ns: { color: '#F9E076', textShadow: '0 0 35px rgba(249,224,118,0.18)' }, ps: { color: 'rgba(249,224,118,0.55)' } },
+const waterfallTiers = [
+  { name: "Gross Receipts", pct: "100%" },
+  { name: "CAM Fees", pct: "0.5–1%" },
+  { name: "Sales Agent Commission", pct: "10–25%" },
+  { name: "Senior Debt", pct: "8–12% Interest" },
+  { name: "Mezzanine Debt", pct: "12–20% Premium" },
+  { name: "Equity Recoupment", pct: "120% Hurdle" },
+  { name: "Deferrals", pct: "As Negotiated" },
+  { name: "Producer & Talent", pct: "What's Left" },
 ];
+
+const GOLD_BAR_HEIGHT = ['100%', '85%', '70%', '55%', '42%', '30%', '20%', '100%'];
+const GOLD_BAR_OPACITY = [0.70, 0.55, 0.42, 0.32, 0.22, 0.15, 0.10, 1];
 
 /* ═══════════════════════════════════════════════════════════════════
    INDUSTRY COSTS (price anchor)
@@ -98,17 +93,6 @@ const industryCosts = [
   { icon: Calculator, cost: "$10K–$30K", label: "Finance Consultant" },
   { icon: Handshake, cost: "5–15%", label: "Producer's Rep" },
   { icon: Film, cost: "10–25%", label: "Sales Agent" },
-];
-
-/* ═══════════════════════════════════════════════════════════════════
-   DELIVERABLES — unified list (free + premium inline)
-   ═══════════════════════════════════════════════════════════════════ */
-const deliverableRows = [
-  { icon: BarChart3, text: "Visual waterfall chart" },
-  { icon: BookOpen, text: "Full deal glossary" },
-  { icon: Waves, text: "Unlimited scenarios" },
-  { icon: FileSpreadsheet, text: "Excel workbook", premium: true },
-  { icon: Presentation, text: "Investor-ready PDF", premium: true },
 ];
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -159,7 +143,6 @@ const Index = () => {
   const revealProblem = useReveal();
   const revealFlow = useReveal();
   const revealPrice = useReveal();
-  const revealDeliverables = useReveal();
   const revealFaq = useReveal();
 
   const savedState = useMemo(() => {
@@ -348,58 +331,64 @@ const Index = () => {
             <div ref={revealFlow.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", revealFlow.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
               <SectionHeader icon={Waves} eyebrow="What They Didn't Teach You In Film School" title={<>FROM FIRST MONEY IN TO LAST MONEY <span className="text-white">OUT</span></>} />
 
-              {/* Waterfall tier cascade card */}
-              <div className="rounded-xl border border-border-subtle bg-bg-card max-w-md mx-auto mt-6 relative overflow-hidden">
-                {/* Top gradient overlay */}
-                <div className="absolute inset-0 pointer-events-none"
-                  style={{ background: 'linear-gradient(180deg, rgba(212,175,55,0.04) 0%, transparent 35%)' }} />
-
-                {/* Top glow line */}
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[70%] h-[1px]"
-                  style={{ background: 'linear-gradient(90deg, transparent, rgba(212,175,55,0.45), transparent)' }} />
-
-                <div className="relative px-8 py-12 md:px-10 md:py-14">
-                  {cascadeTiers.map((tier, i) => (
-                    <div key={tier.name}>
+              {/* Waterfall tier list card */}
+              <div className="rounded-xl border border-border-subtle bg-bg-card max-w-sm mx-auto mt-6 overflow-hidden">
+                {waterfallTiers.map((tier, i) => {
+                  const isLast = i === waterfallTiers.length - 1;
+                  return (
+                    <div
+                      key={tier.name}
+                      className={cn(
+                        "flex items-center justify-between px-5 py-4 relative",
+                        i > 0 && "border-t border-border-subtle",
+                        staggerChild(revealFlow.visible)
+                      )}
+                      style={staggerDelay(i, revealFlow.visible)}
+                    >
+                      {/* Gold accent bar — left edge, shrinks per tier */}
                       <div
-                        className={cn("flex flex-col items-center text-center", tier.py, staggerChild(revealFlow.visible))}
-                        style={staggerDelay(i, revealFlow.visible)}
-                      >
-                        <span
-                          className={cn("font-bebas tracking-[0.12em] uppercase leading-none", tier.nc)}
-                          style={tier.ns}
-                        >
-                          {tier.name}
+                        className="absolute left-0 top-0 w-[3px]"
+                        style={{
+                          height: GOLD_BAR_HEIGHT[i],
+                          background: isLast ? '#F9E076' : '#D4AF37',
+                          opacity: isLast ? 1 : GOLD_BAR_OPACITY[i],
+                        }}
+                      />
+
+                      {/* Left: tier number + name */}
+                      <div className="flex items-baseline gap-3">
+                        <span className={cn(
+                          "font-mono text-[11px] tabular-nums",
+                          isLast ? "text-[#F9E076]" : "text-gold/40"
+                        )}>
+                          {String(i + 1).padStart(2, '0')}
                         </span>
-                        <span
-                          className={cn("font-mono font-medium mt-[5px]", tier.pc)}
-                          style={tier.ps}
-                        >
-                          {tier.pct}
+                        <span className={cn(
+                          "font-bebas text-[18px] tracking-[0.08em] uppercase leading-none",
+                          isLast ? "text-[#F9E076]" : "text-white/80"
+                        )}>
+                          {tier.name}
                         </span>
                       </div>
 
-                      {/* Divider (not after last tier) */}
-                      {tier.dw && (
-                        <div
-                          className="mx-auto h-[1px] my-0"
-                          style={{
-                            width: tier.dw,
-                            background: `linear-gradient(90deg, transparent, rgba(212,175,55,${tier.dop}), transparent)`,
-                          }}
-                        />
-                      )}
+                      {/* Right: percentage */}
+                      <span className={cn(
+                        "font-mono text-[12px]",
+                        isLast ? "text-[#F9E076]/70" : "text-white/35"
+                      )}>
+                        {tier.pct}
+                      </span>
                     </div>
-                  ))}
+                  );
+                })}
 
-                  {/* Tagline */}
-                  <p
-                    className={cn("font-sans font-light text-[13px] text-center mt-12", staggerChild(revealFlow.visible))}
-                    style={{ color: 'rgba(255,255,255,0.18)', ...staggerDelay(8, revealFlow.visible) }}
-                  >
-                    This is the waterfall.
-                  </p>
-                </div>
+                {/* Tagline */}
+                <p
+                  className="text-center text-[13px] font-light px-5 py-5 border-t border-border-subtle"
+                  style={{ color: 'rgba(255,255,255,0.25)' }}
+                >
+                  This is the waterfall.
+                </p>
               </div>
             </div>
           </SectionFrame>
@@ -413,7 +402,7 @@ const Index = () => {
               <SectionHeader icon={Award} eyebrow="The Industry Standard" title={<>THIS KNOWLEDGE ISN'T <span className="text-white">CHEAP</span></>} plainSubtitle subtitle={"You shouldn't need a $5,000 retainer from an entertainment attorney to understand your own\u00A0deal."} />
 
               {/* Industry Cost Grid — 2x2 */}
-              <div className="grid grid-cols-2 gap-3 mb-0">
+              <div className="grid grid-cols-2 gap-3 mb-8">
                 {industryCosts.map((item, i) => {
                   const Icon = item.icon;
                   return (
@@ -427,36 +416,14 @@ const Index = () => {
                   );
                 })}
               </div>
-            </div>
-          </SectionFrame>
 
-          {/* section divider */}
-          <div className="px-8"><div className="h-[1px] bg-gradient-to-r from-transparent via-gold/25 to-transparent" /></div>
+              <p className="text-text-mid text-sm leading-relaxed text-center max-w-xs mx-auto mb-8">
+                The simulator, waterfall chart, glossary, and unlimited scenarios are free.
+                When you're ready for the meeting, export an investor-grade Excel workbook
+                and&nbsp;PDF.
+              </p>
 
-          {/* ── § 5: WHAT YOU WALK AWAY WITH ── */}
-          <SectionFrame id="deliverables" alt>
-            <div ref={revealDeliverables.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", revealDeliverables.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
-              <SectionHeader icon={Film} eyebrow="Your Deliverables" title={<>WHAT YOU WALK AWAY <span className="text-white">WITH</span></>} />
-
-              <div className="rounded-xl border border-border-subtle bg-bg-card divide-y divide-border-subtle">
-                {deliverableRows.map((item) => {
-                  const Icon = item.icon;
-                  return (
-                    <div key={item.text} className={cn("flex items-center gap-3 px-5 py-4", item.premium && "bg-gold/[0.02]")}>
-                      <Icon className="w-4 h-4 text-gold flex-shrink-0" />
-                      <p className="text-text-mid text-sm leading-snug flex-1">{item.text}</p>
-                      {item.premium && (
-                        <span className="text-[10px] tracking-[0.15em] uppercase font-semibold text-gold/70 border border-gold/20 rounded px-2 py-0.5 flex-shrink-0">
-                          Premium
-                        </span>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-
-              {/* Section CTA */}
-              <div className="text-center mt-6">
+              <div className="text-center">
                 <button
                   onClick={handleStartClick}
                   className="w-full max-w-[320px] h-16 text-base btn-cta-primary"
