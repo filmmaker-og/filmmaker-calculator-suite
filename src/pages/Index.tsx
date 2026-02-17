@@ -33,9 +33,9 @@ const CINEMATIC_SEEN_KEY = "filmmaker_og_intro_seen";
    ═══════════════════════════════════════════════════════════════════ */
 const closedDoors = [
   { name: "Entertainment Attorney", lock: "If they\u2019ll take the meeting.", cost: "$500/hr" },
-  { name: "Producing Consultant", lock: "Costs more than your development budget.", cost: "$5K+" },
+  { name: "Producing Consultant", lock: "If you can afford one.", cost: "$5K+" },
   { name: "Film School", lock: "Four years you don\u2019t have.", cost: "$200K" },
-  { name: "Trial & Error", lock: "Your investors don\u2019t get a second chance.", cost: "Everything" },
+  { name: "Trial & Error", lock: "Your investors won\u2019t get a second one.", cost: "Everything" },
 ];
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -44,17 +44,17 @@ const closedDoors = [
 const realities = [
   {
     label: "The Recoupment Gap",
-    body: "They budget the production. They don\u2019t budget the recoupment. CAM fees, sales commissions, debt service, corridor splits, recoupment premiums\u00A0\u2014 the friction between gross receipts and net profits isn\u2019t in the plan.",
+    body: "They budget the production. They don\u2019t budget the recoupment. The friction between gross receipts and net profits isn\u2019t in the plan.",
     punchline: "Every number in the investor deck is modeled against the wrong baseline.",
   },
   {
     label: "Net Profit Erosion",
-    body: "\u201CNet profits\u201D in a distribution agreement isn\u2019t net. It\u2019s gross minus distribution fees, P&A recoupment, delivery costs, market reserves, and overhead charges. By the time standard contractual deductions clear,",
+    body: "\u201CNet profits\u201D in a distribution agreement isn\u2019t net. By the time standard contractual deductions clear, the margin doesn\u2019t exist.",
     punchline: "The margin you projected at green light doesn\u2019t exist.",
   },
   {
     label: "Structural Asymmetry",
-    body: "Distributors, sales agents, and financiers run waterfall models before every term sheet. They stress-test the capital stack, the recoupment order, and the corridor structure before they sit down. The producer across the table brought a budget topsheet.",
+    body: "Distributors run waterfall models before every term sheet. The producer across the table brought a budget topsheet.",
     punchline: "That asymmetry isn\u2019t accidental. It\u2019s on purpose.",
   },
 ];
@@ -81,21 +81,21 @@ const productTiers = [
     desc: "Model your deal. See where every dollar goes.",
     pct: 30, barClass: "bg-[#D4AF37]/30", tierColor: "text-gold/50",
     nameColor: "text-white/90", descColor: "text-white/50", barH: "h-2",
-    featured: false,
+    featured: false, elevated: false,
   },
   {
     tier: "Premium", product: "The Blueprint", price: "$197",
     desc: "The full financial picture. Every number, every tier, every scenario.",
-    pct: 65, barClass: "bg-[#D4AF37]/50", tierColor: "text-gold/60",
-    nameColor: "text-white/90", descColor: "text-white/50", barH: "h-2",
-    featured: false,
+    pct: 65, barClass: "bg-[#D4AF37]/50", tierColor: "text-gold/70",
+    nameColor: "text-white/90", descColor: "text-white/55", barH: "h-2",
+    featured: false, elevated: true,
   },
   {
     tier: "Investment Grade", product: "The Pitch Package", price: "$497",
     desc: "What the other side of the table expects to see.",
     pct: 100, barClass: "bg-[#D4AF37]/70", tierColor: "text-gold",
     nameColor: "text-white", descColor: "text-white/60", barH: "h-3",
-    featured: true,
+    featured: true, elevated: false,
   },
 ];
 
@@ -350,7 +350,7 @@ const Index = () => {
               )}
 
               <div className="mt-8 flex justify-center animate-bounce-subtle cursor-pointer active:scale-[0.97]"
-                onClick={() => document.getElementById('mission')?.scrollIntoView({ behavior: 'smooth' })}>
+                onClick={() => document.getElementById('evidence')?.scrollIntoView({ behavior: 'smooth' })}>
                 <ChevronDown className="w-6 h-6 text-gold" />
               </div>
             </div>
@@ -440,7 +440,7 @@ const Index = () => {
                     {[
                       { asset: "Real Estate", tool: "comps and cap rate models" },
                       { asset: "Private Equity", tool: "carry and IRR structures" },
-                      { asset: "Venture Capital", tool: "term sheet standards" },
+                      { asset: "Venture Capital", tool: "term sheets and valuation frameworks" },
                     ].map((row, i) => (
                       <div
                         key={row.asset}
@@ -665,7 +665,7 @@ const Index = () => {
                 <h3 className="font-bebas text-[30px] md:text-[40px] tracking-[0.08em] uppercase text-gold leading-tight">
                   We Built The Toolkit They Didn{"\u2019"}t Teach You In Film{"\u00A0"}<span className="text-white">School</span>.
                 </h3>
-                <p className="text-white/40 text-sm tracking-[0.12em] uppercase mt-4">Three tiers. Zero gatekeeping.</p>
+                <p className="text-white/40 text-sm tracking-[0.12em] uppercase mt-4">No gatekeepers. No guesswork.</p>
               </div>
               <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
               <div className="flex justify-center mt-6">
@@ -696,7 +696,9 @@ const Index = () => {
                       "relative border overflow-hidden p-6 transition-all duration-600 ease-out",
                       t.featured
                         ? "border-gold/40 bg-gold/[0.06]"
-                        : "border-white/[0.10] bg-white/[0.04]",
+                        : t.elevated
+                          ? "border-gold/20 bg-white/[0.05]"
+                          : "border-white/[0.10] bg-white/[0.04]",
                       revPath.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
                     )}
                     style={{
@@ -711,7 +713,9 @@ const Index = () => {
                       style={{
                         background: t.featured
                           ? 'linear-gradient(to bottom, rgba(212,175,55,0.80), rgba(212,175,55,0.40), transparent)'
-                          : 'linear-gradient(to bottom, rgba(212,175,55,0.35), rgba(212,175,55,0.15), transparent)',
+                          : t.elevated
+                            ? 'linear-gradient(to bottom, rgba(212,175,55,0.55), rgba(212,175,55,0.25), transparent)'
+                            : 'linear-gradient(to bottom, rgba(212,175,55,0.35), rgba(212,175,55,0.15), transparent)',
                       }}
                     />
                     {t.featured && (
