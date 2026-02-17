@@ -200,15 +200,6 @@ const Index = () => {
 
   const ladderRef = useRef<HTMLDivElement>(null);
 
-  // Closed doors — lock animation (doors dim after appearing)
-  const [doorsLocked, setDoorsLocked] = useState(false);
-  useEffect(() => {
-    if (revCost.visible) {
-      const timer = setTimeout(() => setDoorsLocked(true), 800);
-      return () => clearTimeout(timer);
-    }
-  }, [revCost.visible]);
-
   // Net Profits countup
   const [countVal, setCountVal] = useState(0);
   useEffect(() => {
@@ -335,14 +326,9 @@ const Index = () => {
               <h1 className="font-bebas text-[clamp(2.8rem,9vw,4.2rem)] leading-[1.05] text-gold mb-5">
                 SEE WHERE EVERY<br /><span className="text-white">DOLLAR GOES</span>
               </h1>
-              <div className="mb-6 space-y-1.5">
-                <p className="text-white/90 text-[15px] leading-[1.6] tracking-[0.12em] uppercase font-medium">
-                  Built by a Tribeca-winning, CAA-repped producer
-                </p>
-                <p className="text-white/50 text-[13px] leading-[1.6] tracking-[0.18em] uppercase">
-                  whose debut sold to <span className="text-gold font-semibold">Netflix</span>.
-                </p>
-              </div>
+              <p className="mb-6 text-white/70 text-[14px] leading-[1.7] tracking-[0.10em] uppercase font-medium max-w-[320px] mx-auto">
+                Built by a Tribeca-winning, CAA-repped producer whose debut sold to <span className="text-gold font-semibold">Netflix</span>.
+              </p>
 
               {isReturningUser ? (
                 <div className="w-full max-w-[320px] mx-auto space-y-3">
@@ -373,7 +359,70 @@ const Index = () => {
           <Divider />
 
           {/* ──────────────────────────────────────────────────────────
-               § 2  MISSION — stacked thesis + Blum quote
+               § 2  THE PROBLEM — three reality panels
+             ────────────────────────────────────────────────────────── */}
+          <section id="evidence" className="snap-section py-16 px-6" style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.01) 0%, rgba(255,255,255,0.03) 50%, rgba(255,255,255,0.01) 100%)' }}>
+            <div ref={revEvidence.ref} className={cn("transition-all duration-700 ease-out", revEvidence.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
+              <SHeader eyebrow="The Problem">
+                MOST INDIE FILMS <span className="text-gold">LOSE</span> <span className="text-white">MONEY.</span>
+              </SHeader>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto">
+                {realities.map((r, i) => (
+                  <div
+                    key={r.label}
+                    className={cn(
+                      "relative p-6 md:p-7 bg-white/[0.04] border border-white/[0.10] overflow-hidden transition-all duration-600 ease-out group",
+                      revEvidence.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+                    )}
+                    style={{ transitionDelay: revEvidence.visible ? `${i * 180}ms` : '0ms' }}
+                  >
+                    {/* Gold left accent bar — matched to toolkit cards */}
+                    <div className="absolute left-0 top-0 bottom-0 w-[3px]"
+                      style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.55), rgba(212,175,55,0.25), transparent)' }} />
+                    <div className="relative z-10 pl-2">
+                      <div className="flex items-baseline gap-3 mb-3">
+                        <span className="font-mono text-2xl text-gold/35 font-semibold leading-none">{String(i + 1).padStart(2, '0')}</span>
+                        <h3 className="font-bebas text-[17px] tracking-[0.12em] uppercase text-gold">
+                          {r.label}
+                        </h3>
+                      </div>
+                      <p className="text-white/60 text-sm leading-relaxed">{r.body}</p>
+                      <div className="h-[1px] bg-gradient-to-r from-gold/30 to-transparent mt-4 mb-3" />
+                      <p
+                        className={cn(
+                          "text-sm font-semibold text-white/70 italic transition-opacity duration-[0ms]",
+                          revEvidence.visible ? "opacity-100" : "opacity-0"
+                        )}
+                        style={{
+                          transitionTimingFunction: 'step-end',
+                          transitionDelay: revEvidence.visible ? `${600 + i * 180}ms` : '0ms',
+                        }}
+                      >
+                        {"\u201C"}{r.punchline}{"\u201D"}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Post-problem declaration */}
+              <p
+                className={cn(
+                  "text-center font-bebas text-[24px] md:text-[30px] tracking-[0.08em] text-gold/80 mt-10 transition-all duration-500 ease-out",
+                  revEvidence.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
+                )}
+                style={{ transitionDelay: revEvidence.visible ? '800ms' : '0ms' }}
+              >
+                We leveled the playing{"\u00A0"}<span className="text-white">field</span>.
+              </p>
+            </div>
+          </section>
+
+          <Divider />
+
+          {/* ──────────────────────────────────────────────────────────
+               § 3  THE THESIS — stacked manifesto + Blum quote
              ────────────────────────────────────────────────────────── */}
           <section id="mission" className="snap-section py-16 px-6">
             <div ref={revMission.ref} className={cn("transition-all duration-700 ease-out", revMission.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
@@ -433,7 +482,7 @@ const Index = () => {
                     textShadow: revMission.visible ? '0 0 30px rgba(212,175,55,0.4), 0 0 60px rgba(212,175,55,0.15)' : 'none',
                   }}
                 >
-                  Until now.
+                  Until <span className="text-white">now</span>.
                 </p>
               </div>
 
@@ -452,7 +501,7 @@ const Index = () => {
                         Filmmakers have a perception in the business world of being kind of flaky dudes{"\u2026"} you need to be buttoned down{"\u2026"} speak the language that they speak.
                       </p>
                     </blockquote>
-                    <div className="mt-6 pt-5 border-t border-white/[0.08]">
+                    <div className="mt-6 -mx-1 p-4 bg-gold/[0.08] border border-gold/20">
                       <div className="flex items-center gap-3">
                         <div className="w-8 h-[1px] bg-gold/50" />
                         <cite className="not-italic">
@@ -464,69 +513,6 @@ const Index = () => {
                   </div>
                 </div>
               </div>
-            </div>
-          </section>
-
-          <Divider />
-
-          {/* ──────────────────────────────────────────────────────────
-               § 3  THE PROBLEM — three reality panels
-             ────────────────────────────────────────────────────────── */}
-          <section id="evidence" className="snap-section py-16 px-6" style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.01) 0%, rgba(255,255,255,0.03) 50%, rgba(255,255,255,0.01) 100%)' }}>
-            <div ref={revEvidence.ref} className={cn("transition-all duration-700 ease-out", revEvidence.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
-              <SHeader eyebrow="The Problem">
-                MOST INDIE FILMS <span className="text-gold">LOSE</span> <span className="text-white">MONEY.</span>
-              </SHeader>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto">
-                {realities.map((r, i) => (
-                  <div
-                    key={r.label}
-                    className={cn(
-                      "relative p-6 md:p-7 bg-white/[0.04] border border-white/[0.10] overflow-hidden transition-all duration-600 ease-out group",
-                      revEvidence.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-                    )}
-                    style={{ transitionDelay: revEvidence.visible ? `${i * 180}ms` : '0ms' }}
-                  >
-                    {/* Gold left accent bar — matched to toolkit cards */}
-                    <div className="absolute left-0 top-0 bottom-0 w-[3px]"
-                      style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.55), rgba(212,175,55,0.25), transparent)' }} />
-                    <div className="relative z-10 pl-2">
-                      <div className="flex items-baseline gap-3 mb-3">
-                        <span className="font-mono text-2xl text-gold/35 font-semibold leading-none">{String(i + 1).padStart(2, '0')}</span>
-                        <h3 className="font-bebas text-[17px] tracking-[0.12em] uppercase text-gold">
-                          {r.label}
-                        </h3>
-                      </div>
-                      <p className="text-white/60 text-sm leading-relaxed">{r.body}</p>
-                      <div className="h-[1px] bg-gradient-to-r from-gold/30 to-transparent mt-4 mb-3" />
-                      <p
-                        className={cn(
-                          "text-sm font-semibold text-white/70 italic transition-opacity duration-[0ms]",
-                          revEvidence.visible ? "opacity-100" : "opacity-0"
-                        )}
-                        style={{
-                          transitionTimingFunction: 'step-end',
-                          transitionDelay: revEvidence.visible ? `${600 + i * 180}ms` : '0ms',
-                        }}
-                      >
-                        {"\u201C"}{r.punchline}{"\u201D"}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Post-problem declaration */}
-              <p
-                className={cn(
-                  "text-center font-bebas text-[24px] md:text-[30px] tracking-[0.08em] text-gold/80 mt-10 transition-all duration-500 ease-out",
-                  revEvidence.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
-                )}
-                style={{ transitionDelay: revEvidence.visible ? '800ms' : '0ms' }}
-              >
-                We level the playing{"\u00A0"}<span className="text-white">field</span>.
-              </p>
             </div>
           </section>
 
@@ -628,9 +614,7 @@ const Index = () => {
                     key={door.name}
                     className={cn(
                       "relative border p-6 transition-all duration-700 ease-out overflow-hidden",
-                      doorsLocked
-                        ? "bg-white/[0.02] border-white/[0.06]"
-                        : "bg-white/[0.06] border-white/[0.12]",
+                      "bg-white/[0.06] border-white/[0.12]",
                       revCost.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                     )}
                     style={{
@@ -638,46 +622,27 @@ const Index = () => {
                     }}
                   >
                     {/* Gold left elbow — dims with lock */}
-                    <div className={cn(
-                      "absolute left-0 top-0 bottom-0 w-[3px] transition-opacity duration-700",
-                      doorsLocked ? "opacity-15" : "opacity-100"
-                    )}
+                    <div className="absolute left-0 top-0 bottom-0 w-[3px]"
                       style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.70), rgba(212,175,55,0.35), transparent)' }}
                     />
                     <div className="pl-2">
                       <div className="flex items-start justify-between mb-2">
                         <p
-                          className={cn(
-                            "font-bebas text-[18px] md:text-[20px] tracking-[0.10em] uppercase leading-tight transition-all duration-700",
-                            doorsLocked ? "text-white/20" : "text-white"
-                          )}
-                          style={{ transitionDelay: doorsLocked ? `${i * 200}ms` : '0ms' }}
+                          className="font-bebas text-[18px] md:text-[20px] tracking-[0.10em] uppercase leading-tight text-white"
                         >
                           {door.name}
                         </p>
                         <Lock
-                          className={cn(
-                            "w-4 h-4 flex-shrink-0 ml-2 mt-0.5 transition-all duration-700",
-                            doorsLocked ? "text-white/30 opacity-100" : "text-white/0 opacity-0"
-                          )}
-                          style={{ transitionDelay: doorsLocked ? `${i * 200}ms` : '0ms' }}
+                          className="w-4 h-4 flex-shrink-0 ml-2 mt-0.5 text-white/30"
                         />
                       </div>
                       <span
-                        className={cn(
-                          "inline-block font-mono text-[15px] font-bold mb-3 transition-all duration-700",
-                          doorsLocked ? "text-white/15" : "text-gold"
-                        )}
-                        style={{ transitionDelay: doorsLocked ? `${i * 200 + 50}ms` : '0ms' }}
+                        className="inline-block font-mono text-[15px] font-bold mb-3 text-gold"
                       >
                         {door.cost}
                       </span>
                       <p
-                        className={cn(
-                          "text-sm leading-relaxed transition-all duration-700",
-                          doorsLocked ? "text-white/30 opacity-100" : "text-white/50 opacity-100"
-                        )}
-                        style={{ transitionDelay: doorsLocked ? `${i * 200 + 100}ms` : '0ms' }}
+                        className="text-sm leading-relaxed text-white/50"
                       >
                         {door.lock}
                       </p>
@@ -813,7 +778,7 @@ const Index = () => {
               <div className="bg-black px-5 border border-white/[0.06]">
                 <Accordion type="single" collapsible className="w-full">
                   {faqs.map((faq, i) => (
-                    <AccordionItem key={faq.q} value={`faq-${i}`}>
+                    <AccordionItem key={faq.q} value={`faq-${i}`} className="border-b border-white/[0.08]">
                       <AccordionTrigger className="font-bebas text-xl tracking-[0.06em] uppercase text-gold hover:text-gold/70 hover:no-underline text-left">
                         {faq.q}
                       </AccordionTrigger>
