@@ -683,14 +683,14 @@
     box-shadow: none;
   }
 
-  /* Final CTA — elevated gold with warm glow, urgency presence */
+  /* Final CTA — purple pattern interrupt, impossible to miss against gold/black */
   .btn-cta-final {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(165deg, #FFE8A0 0%, #F9E076 25%, #D4AF37 80%, #B8962E 100%);
-    border: 1px solid rgba(255, 232, 160, 0.50);
-    color: #000000;
+    background: linear-gradient(165deg, #9333EA 0%, #7C3AED 40%, #6D28D9 100%);
+    border: 1px solid rgba(147, 51, 234, 0.50);
+    color: #FFFFFF;
     font-family: 'Bebas Neue', sans-serif;
     font-size: 18px;
     font-weight: 700;
@@ -699,14 +699,12 @@
     border-radius: 2px;
     transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
     box-shadow:
-      0 4px 24px rgba(212, 175, 55, 0.40),
-      0 12px 48px rgba(212, 175, 55, 0.20),
-      0 0 60px rgba(212, 175, 55, 0.10),
-      inset 0 1px 0 rgba(255, 255, 255, 0.30);
+      0 4px 24px rgba(124, 58, 237, 0.35),
+      0 12px 48px rgba(124, 58, 237, 0.15),
+      inset 0 1px 0 rgba(255, 255, 255, 0.15);
     position: relative;
     overflow: hidden;
-    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.10);
-    animation: cta-pulse 3s ease-in-out infinite;
+    animation: cta-pulse-purple 3s ease-in-out infinite;
   }
   .btn-cta-final::before {
     content: '';
@@ -715,24 +713,24 @@
     left: -100%;
     width: 60%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
     animation: cta-shimmer 4s ease-in-out infinite;
   }
   @keyframes cta-shimmer {
     0%, 100% { left: -100%; }
     50% { left: 120%; }
   }
-  @keyframes cta-pulse {
-    0%, 100% { box-shadow: 0 4px 24px rgba(212,175,55,0.40), 0 12px 48px rgba(212,175,55,0.20), 0 0 60px rgba(212,175,55,0.10), inset 0 1px 0 rgba(255,255,255,0.30); }
-    50% { box-shadow: 0 6px 32px rgba(212,175,55,0.50), 0 16px 56px rgba(212,175,55,0.25), 0 0 80px rgba(212,175,55,0.15), inset 0 1px 0 rgba(255,255,255,0.30); }
+  @keyframes cta-pulse-purple {
+    0%, 100% { box-shadow: 0 4px 24px rgba(124,58,237,0.35), 0 12px 48px rgba(124,58,237,0.15), inset 0 1px 0 rgba(255,255,255,0.15); }
+    50% { box-shadow: 0 6px 32px rgba(124,58,237,0.45), 0 16px 56px rgba(124,58,237,0.20), 0 0 60px rgba(124,58,237,0.10), inset 0 1px 0 rgba(255,255,255,0.15); }
   }
   .btn-cta-final:hover {
-    background: linear-gradient(165deg, #FFF0C0 0%, #FFE8A0 25%, #D4AF37 80%, #C4A030 100%);
+    background: linear-gradient(165deg, #A855F7 0%, #8B5CF6 40%, #7C3AED 100%);
     box-shadow:
-      0 8px 32px rgba(212, 175, 55, 0.50),
-      0 16px 56px rgba(212, 175, 55, 0.25),
-      0 0 80px rgba(212, 175, 55, 0.15),
-      inset 0 1px 0 rgba(255, 255, 255, 0.35);
+      0 8px 32px rgba(124, 58, 237, 0.50),
+      0 16px 56px rgba(124, 58, 237, 0.25),
+      0 0 60px rgba(124, 58, 237, 0.12),
+      inset 0 1px 0 rgba(255, 255, 255, 0.20);
     transform: translateY(-2px);
   }
   .btn-cta-final:active {

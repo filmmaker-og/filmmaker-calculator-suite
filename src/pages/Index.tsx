@@ -4,6 +4,8 @@ import { useHaptics } from "@/hooks/use-haptics";
 import {
   RotateCcw,
   Check,
+  X,
+  Lock,
   Share2,
   Mail,
   Instagram,
@@ -78,22 +80,25 @@ const waterfallTiers = [
    ═══════════════════════════════════════════════════════════════════ */
 const productTiers = [
   {
-    tier: "Courtesy", product: "Waterfall Simulator",
+    tier: "Courtesy", product: "Waterfall Simulator", price: "Free",
     desc: "Model your deal. See where every dollar goes.",
     pct: 30, barClass: "bg-[#D4AF37]/30", tierColor: "text-white/50",
     nameColor: "text-white/80", descColor: "text-white/50", barH: "h-2",
+    featured: false,
   },
   {
-    tier: "Premium", product: "The Blueprint",
+    tier: "Premium", product: "The Blueprint", price: "$197",
     desc: "The full financial picture. Every number, every tier, every scenario.",
     pct: 65, barClass: "bg-[#D4AF37]/50", tierColor: "text-[rgba(212,175,55,0.60)]",
     nameColor: "text-white/90", descColor: "text-white/50", barH: "h-2",
+    featured: false,
   },
   {
-    tier: "Investment Grade", product: "The Pitch Package",
+    tier: "Investment Grade", product: "The Pitch Package", price: "$497",
     desc: "What the other side of the table expects to see.",
     pct: 100, barClass: "bg-[#D4AF37]/70", tierColor: "text-[#D4AF37]",
     nameColor: "text-white", descColor: "text-white/60", barH: "h-3",
+    featured: true,
   },
 ];
 
@@ -145,7 +150,7 @@ const SHeader = ({ eyebrow, children }: { eyebrow: string; children: React.React
   <div className="text-center mb-10">
     <div className="flex items-center justify-center gap-4 mb-4">
       <div className="h-[1px] w-8 bg-gradient-to-r from-transparent to-gold/40" />
-      <p className="text-gold/70 text-[11px] tracking-[0.35em] uppercase font-semibold">{eyebrow}</p>
+      <p className="text-gold/70 text-xs tracking-[0.3em] uppercase font-semibold">{eyebrow}</p>
       <div className="h-[1px] w-8 bg-gradient-to-l from-transparent to-gold/40" />
     </div>
     <h2 className="font-bebas text-3xl md:text-4xl tracking-[0.08em] text-gold">{children}</h2>
@@ -179,7 +184,9 @@ const Index = () => {
   const revWater    = useReveal();
   const revCost     = useReveal();
   const revPath     = useReveal();
+  const revDecl     = useReveal();
   const revFaq      = useReveal();
+  const revFinal    = useReveal();
 
   // Waterfall bar animation
   const [barsRevealed, setBarsRevealed] = useState(false);
@@ -364,7 +371,7 @@ const Index = () => {
                   <button onClick={handleStartClick} className="w-full h-[60px] text-base btn-cta-primary">
                     BUILD YOUR WATERFALL &mdash; FREE
                   </button>
-                  <p className="text-white/30 text-[11px] tracking-[0.12em] text-center">No account required. Results in 60&nbsp;seconds.</p>
+                  <p className="text-white/30 text-xs tracking-[0.10em] text-center">No account required. Results in 60&nbsp;seconds.</p>
                 </div>
               )}
 
@@ -405,6 +412,10 @@ const Index = () => {
                       style={{ transitionDelay: revMission.visible ? `${300 + i * 120}ms` : '0ms' }}
                     >
                       <div className="flex items-center gap-3">
+                        {row.status
+                          ? <Check className="w-3.5 h-3.5 text-gold/50 flex-shrink-0" />
+                          : <X className="w-3.5 h-3.5 text-white/20 flex-shrink-0" />
+                        }
                         <span className={cn(
                           "font-bebas text-[15px] tracking-[0.10em] uppercase",
                           row.status ? "text-white/60" : "text-gold"
@@ -489,10 +500,17 @@ const Index = () => {
                       </div>
                       <p className="text-white/60 text-sm leading-relaxed">{r.body}</p>
                       <div className="h-[1px] bg-gradient-to-r from-gold/30 to-transparent mt-4 mb-3" />
-                      <p className={cn(
-                        "font-semibold",
-                        r.loud ? "text-base text-white" : "text-sm text-white/80"
-                      )}>
+                      <p
+                        className={cn(
+                          "font-semibold transition-opacity duration-[0ms]",
+                          r.loud ? "text-base text-white" : "text-sm text-white/80",
+                          revEvidence.visible ? "opacity-100" : "opacity-0"
+                        )}
+                        style={{
+                          transitionTimingFunction: 'step-end',
+                          transitionDelay: revEvidence.visible ? `${600 + i * 180}ms` : '0ms',
+                        }}
+                      >
                         {r.punchline}
                       </p>
                     </div>
@@ -525,7 +543,7 @@ const Index = () => {
                       i > 0 && "border-t border-white/[0.06]",
                       tier.isFinal && "py-5"
                     )}
-                    style={tier.isFinal ? { background: 'rgba(249,224,118,0.04)' } : undefined}
+                    style={tier.isFinal ? { background: 'rgba(0,200,83,0.04)' } : undefined}
                   >
                     {/* Labels */}
                     <div className="flex justify-between items-baseline mb-2">
@@ -535,7 +553,7 @@ const Index = () => {
                         </span>
                         <span className={cn(
                           "font-bebas tracking-[0.08em] uppercase",
-                          tier.isFinal ? "text-[23px] text-[#F9E076]" :
+                          tier.isFinal ? "text-[23px] text-[#00C853]" :
                           i === 0 ? "text-[20px] text-white" : "text-[17px] text-white/80"
                         )}>
                           {tier.name}
@@ -543,7 +561,7 @@ const Index = () => {
                       </div>
                       <span className={cn(
                         "font-mono font-semibold",
-                        tier.isFinal ? "text-[22px] font-bold text-[#F9E076]" :
+                        tier.isFinal ? "text-[22px] font-bold text-[#00C853]" :
                         i === 0 ? "text-[15px] text-white/80" : "text-[15px] text-white/60"
                       )}>
                         {tier.isFinal ? `$${countVal.toLocaleString()}` : tier.amount}
@@ -555,8 +573,8 @@ const Index = () => {
                         className="absolute left-0 top-0 h-full"
                         style={{
                           width: barsRevealed ? `${tier.pct}%` : '0%',
-                          background: tier.isFinal ? '#F9E076' : `rgba(255,255,255,${tier.barOpacity})`,
-                          boxShadow: tier.isFinal ? '0 0 8px rgba(249,224,118,0.3)' : 'none',
+                          background: tier.isFinal ? '#00C853' : `rgba(255,255,255,${tier.barOpacity})`,
+                          boxShadow: tier.isFinal ? '0 0 10px rgba(0,200,83,0.35)' : 'none',
                           transition: `width 500ms cubic-bezier(0.16,1,0.3,1)`,
                           transitionDelay: `${tier.isFinal ? 1200 : i * 150}ms`,
                         }}
@@ -565,11 +583,15 @@ const Index = () => {
                   </div>
                 ))}
 
-                {/* Footer */}
-                <div className="border-t border-white/[0.06] px-5 py-5 text-center">
-                  <p className="text-[14px] font-medium tracking-wide text-white/50">
+                {/* Mid-waterfall CTA — capture intent at emotional peak */}
+                <div className="border-t border-white/[0.06] px-5 py-6 text-center">
+                  <p className="text-white/50 text-[13px] tracking-wide mb-4">
                     This is the standard waterfall.
                   </p>
+                  <button onClick={handleStartClick}
+                    className="w-full max-w-[280px] h-12 text-sm btn-cta-primary mx-auto">
+                    WHAT DOES YOUR DEAL LOOK LIKE?
+                  </button>
                 </div>
               </div>
             </div>
@@ -602,15 +624,24 @@ const Index = () => {
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex-1">
-                        <p
-                          className={cn(
-                            "font-bebas text-[19px] md:text-[22px] tracking-[0.10em] uppercase transition-all duration-700",
-                            doorsLocked ? "text-white/20 line-through decoration-white/10" : "text-white/80"
-                          )}
-                          style={{ transitionDelay: doorsLocked ? `${i * 200}ms` : '0ms' }}
-                        >
-                          {door.name}
-                        </p>
+                        <div className="flex items-center gap-2.5">
+                          <Lock
+                            className={cn(
+                              "w-3.5 h-3.5 flex-shrink-0 transition-all duration-700",
+                              doorsLocked ? "text-white/25 opacity-100" : "text-white/0 opacity-0"
+                            )}
+                            style={{ transitionDelay: doorsLocked ? `${i * 200}ms` : '0ms' }}
+                          />
+                          <p
+                            className={cn(
+                              "font-bebas text-[19px] md:text-[22px] tracking-[0.10em] uppercase transition-all duration-700",
+                              doorsLocked ? "text-white/20 line-through decoration-white/10" : "text-white/80"
+                            )}
+                            style={{ transitionDelay: doorsLocked ? `${i * 200}ms` : '0ms' }}
+                          >
+                            {door.name}
+                          </p>
+                        </div>
                         <p
                           className={cn(
                             "text-sm italic mt-1.5 transition-all duration-700",
@@ -643,7 +674,7 @@ const Index = () => {
           <section className="py-12 px-6 relative">
             <div className="absolute inset-0 pointer-events-none"
               style={{ background: 'radial-gradient(ellipse 50% 50% at 50% 50%, rgba(212,175,55,0.04) 0%, transparent 70%)' }} />
-            <div className="max-w-md mx-auto relative">
+            <div ref={revDecl.ref} className={cn("max-w-md mx-auto relative transition-all duration-700 ease-out", revDecl.visible ? "opacity-100 scale-100" : "opacity-0 scale-[0.96]")}>
               <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/50 to-transparent" />
               <div className="py-10 px-4 text-center">
                 <h3 className="font-bebas text-[28px] md:text-[36px] tracking-[0.08em] uppercase text-gold leading-tight">
@@ -680,8 +711,15 @@ const Index = () => {
                     )}
                     style={{ transitionDelay: revPath.visible ? `${i * 150}ms` : '0ms' }}
                   >
-                    {i === 2 && (
+                    {t.featured && (
                       <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
+                    )}
+                    {t.featured && (
+                      <div className="mb-2">
+                        <span className="text-[11px] tracking-[0.16em] uppercase font-bold text-gold/80 bg-gold/[0.08] px-2 py-0.5 border border-gold/20">
+                          Recommended
+                        </span>
+                      </div>
                     )}
                     <div className="flex items-baseline justify-between mb-1.5">
                       <div className="flex items-baseline gap-3">
@@ -692,7 +730,12 @@ const Index = () => {
                           {t.product}
                         </span>
                       </div>
-                      {i === 0 && <span className="text-[11px] tracking-[0.12em] uppercase text-gold/40 font-semibold">Free</span>}
+                      <span className={cn(
+                        "font-mono text-[13px] font-semibold",
+                        t.featured ? "text-gold" : "text-white/40"
+                      )}>
+                        {t.price}
+                      </span>
                     </div>
                     <p className={cn("text-sm mb-3", t.descColor)}>{t.desc}</p>
                     <div className={cn("w-full bg-white/[0.04] relative overflow-hidden", t.barH)}>
@@ -760,7 +803,7 @@ const Index = () => {
                § 8  FINAL CTA
              ────────────────────────────────────────────────────────── */}
           <section id="final-cta" className="snap-section py-10 px-4">
-            <div className="relative overflow-hidden border border-gold/20">
+            <div ref={revFinal.ref} className={cn("relative overflow-hidden border border-gold/20 transition-all duration-700 ease-out", revFinal.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
               {/* Gold corner accents */}
               <div className="absolute top-0 left-0 w-8 h-[1px] bg-gold/50" />
               <div className="absolute top-0 left-0 w-[1px] h-8 bg-gold/50" />
@@ -776,7 +819,7 @@ const Index = () => {
                 style={{ width: '100%', height: '100%', background: `radial-gradient(ellipse 60% 50% at 50% 20%, rgba(212,175,55,0.06) 0%, transparent 70%)` }} />
 
               <div className="relative p-8 md:p-14 max-w-md mx-auto text-center">
-                <p className="text-gold/60 text-[11px] tracking-[0.35em] uppercase font-semibold mb-5">The Moment of Truth</p>
+                <p className="text-gold/60 text-xs tracking-[0.3em] uppercase font-semibold mb-5">The Moment of Truth</p>
                 <h2 className="font-bebas text-[28px] md:text-[38px] leading-[1.1] tracking-[0.06em] text-gold mb-5">
                   YOUR INVESTOR WILL ASK<br />HOW THE MONEY FLOWS <span className="text-white">BACK</span>.
                 </h2>
