@@ -54,25 +54,40 @@ const problemCards = [
    FAQ DATA
    ═══════════════════════════════════════════════════════════════════ */
 const faqs = [
-  { q: "Who is this for?", a: "Independent producers, directors, and investors. Whether you're raising $50K or $5M, the mechanics of recoupment are the same. If you intend to sell your film for profit, you need this." },
-  { q: "How does the calculator work?", a: "Four steps: set your budget, build your capital stack, structure your deal, and see exactly where every dollar goes in the waterfall. Takes about 2 minutes." },
-  { q: "Is this financial or legal advice?", a: "No. This is a simulation tool for estimation and planning purposes only. Always consult a qualified entertainment attorney or accountant for final deal structures." },
-  { q: "Why is this free?", a: "Because understanding your own deal shouldn't require a retainer. The full simulator, waterfall chart, glossary, and unlimited scenarios are free — no paywall, no trial period, no credit card. If you need investor-grade exports like the Excel workbook and PDF, those are available as a paid upgrade." },
-  { q: "How is this different from a spreadsheet?", a: "A spreadsheet shows numbers. This shows the structure — the priority chain that determines who gets paid first and what's left for you. It translates the legal architecture of a deal into something visual that you and your investors can actually understand." },
+  {
+    q: "What assumptions does the waterfall use?",
+    a: "The simulator models the standard independent film recoupment hierarchy used in real production financing\u00A0— CAM fees, sales agent commission, senior and mezzanine debt service, equity recoupment with preferred return, deferrals, and backend profit splits. Benchmarks reflect current market terms for films in the $1M\u2013$10M budget range. Every deal is different. This gives you the structure\u00A0— your attorney finalizes the numbers."
+  },
+  {
+    q: "What are the premium exports?",
+    a: "The simulator, waterfall chart, glossary, and unlimited scenarios are completely free. When you\u2019re ready to take it into a meeting, you can export a 6-sheet Excel workbook and an investor-ready PDF\u00A0— the documents your investor\u2019s accountant and attorney will actually review."
+  },
+  {
+    q: "Who built this?",
+    a: "A Tribeca-winning, CAA-repped producer whose debut sold to Netflix. This tool exists because the waterfall is the most important financial document in independent film\u00A0— and most producers have never seen one before their first investor meeting."
+  },
+  {
+    q: "Why is this free?",
+    a: "Because understanding your own deal shouldn\u2019t require a $5,000 retainer. The people sitting across the table from you\u00A0— distributors, sales agents, financiers\u00A0— model waterfalls before every negotiation. Now you can too."
+  },
 ];
 
 /* ═══════════════════════════════════════════════════════════════════
-   WATERFALL TIERS — cascading visualization
-   Each tier shows money diminishing through the priority chain
+   WATERFALL CASCADE — 8-tier diminishing visualization
    ═══════════════════════════════════════════════════════════════════ */
-const waterfallTiers = [
-  { num: "01", name: "Gross Receipts", pct: "100%", nameColor: "rgba(212,175,55,1)", pctColor: "rgba(255,255,255,0.50)", lineWidth: "100%", lineOpacity: 0.8, lineColor: "#D4AF37" },
-  { num: "02", name: "Distribution Fees", pct: "65–75%", nameColor: "rgba(255,255,255,0.65)", pctColor: "rgba(255,255,255,0.35)", lineWidth: "88%", lineOpacity: 0.55, lineColor: "#D4AF37" },
-  { num: "03", name: "Expenses & P&A", pct: "50–60%", nameColor: "rgba(255,255,255,0.55)", pctColor: "rgba(255,255,255,0.30)", lineWidth: "68%", lineOpacity: 0.40, lineColor: "#D4AF37" },
-  { num: "04", name: "Sales Agent", pct: "40–50%", nameColor: "rgba(255,255,255,0.45)", pctColor: "rgba(255,255,255,0.25)", lineWidth: "48%", lineOpacity: 0.28, lineColor: "#D4AF37" },
-  { num: "05", name: "Debt Service", pct: "25–35%", nameColor: "rgba(255,255,255,0.38)", pctColor: "rgba(255,255,255,0.22)", lineWidth: "32%", lineOpacity: 0.20, lineColor: "#D4AF37" },
-  { num: "06", name: "Equity Recoupment", pct: "10–20%", nameColor: "rgba(255,255,255,0.30)", pctColor: "rgba(255,255,255,0.18)", lineWidth: "20%", lineOpacity: 0.14, lineColor: "#D4AF37" },
-  { num: "07", name: "Producer Net", pct: "5–15%", nameColor: "#F9E076", pctColor: "rgba(249,224,118,0.70)", lineWidth: "12%", lineOpacity: 1, lineColor: "#F9E076", bold: true },
+const cascadeTiers: {
+  name: string; pct: string; nc: string; pc: string; py: string;
+  ns?: Record<string, string>; ps?: Record<string, string>;
+  dw?: string; dop?: number;
+}[] = [
+  { name: "GROSS RECEIPTS", pct: "100%", nc: "text-[34px] md:text-[42px] text-gold", pc: "text-[15px] text-white/[0.65]", py: "pt-0 pb-6", dw: "100%", dop: 0.55 },
+  { name: "CAM FEES", pct: "0.5–1%", nc: "text-[22px] md:text-[25px] text-gold/[0.80]", pc: "text-[13px] text-white/[0.52]", py: "py-[22px]", dw: "82%", dop: 0.38 },
+  { name: "SALES AGENT COMMISSION", pct: "10–25%", nc: "text-[20px] md:text-[24px] text-gold/[0.68]", pc: "text-[13px] text-white/[0.44]", py: "py-[22px]", dw: "65%", dop: 0.28 },
+  { name: "SENIOR DEBT", pct: "8–12% Interest", nc: "text-[19px] md:text-[22px] text-gold/[0.55]", pc: "text-[13px] text-white/[0.36]", py: "py-[22px]", dw: "50%", dop: 0.20 },
+  { name: "MEZZANINE DEBT", pct: "12–20% Premium", nc: "text-[17px] md:text-[20px] text-gold/[0.44]", pc: "text-[13px] text-white/[0.30]", py: "py-[22px]", dw: "38%", dop: 0.14 },
+  { name: "EQUITY RECOUPMENT", pct: "120% Hurdle", nc: "text-[16px] md:text-[19px] text-gold/[0.34]", pc: "text-[13px] text-white/[0.24]", py: "py-[22px]", dw: "26%", dop: 0.10 },
+  { name: "DEFERRALS", pct: "As Negotiated", nc: "text-[15px] md:text-[18px] text-gold/[0.26]", pc: "text-[13px] text-white/[0.18]", py: "py-[22px]", dw: "16%", dop: 0.06 },
+  { name: "PRODUCER & TALENT", pct: "What's Left", nc: "text-[21px] md:text-[24px] font-bold", pc: "text-[14px]", py: "pt-7 pb-0", ns: { color: '#F9E076', textShadow: '0 0 35px rgba(249,224,118,0.18)' }, ps: { color: 'rgba(249,224,118,0.55)' } },
 ];
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -86,17 +101,14 @@ const industryCosts = [
 ];
 
 /* ═══════════════════════════════════════════════════════════════════
-   DELIVERABLES
+   DELIVERABLES — unified list (free + premium inline)
    ═══════════════════════════════════════════════════════════════════ */
-const freeDeliverables = [
-  { icon: BarChart3, line: "Visual waterfall chart — who gets paid, in what order" },
-  { icon: BookOpen, line: "Full glossary — every deal term in plain English" },
-  { icon: Waves, line: "Unlimited scenarios — adjust variables, re-run anytime" },
-];
-
-const premiumDeliverables = [
-  { icon: FileSpreadsheet, line: "6-sheet Excel workbook — the spreadsheet your investor's accountant will actually review" },
-  { icon: Presentation, line: "Investor-ready PDF — the document you hand across the table in the meeting" },
+const deliverableRows = [
+  { icon: BarChart3, text: "Visual waterfall chart" },
+  { icon: BookOpen, text: "Full deal glossary" },
+  { icon: Waves, text: "Unlimited scenarios" },
+  { icon: FileSpreadsheet, text: "Excel workbook", premium: true },
+  { icon: Presentation, text: "Investor-ready PDF", premium: true },
 ];
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -336,73 +348,58 @@ const Index = () => {
             <div ref={revealFlow.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", revealFlow.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
               <SectionHeader icon={Waves} eyebrow="What They Didn't Teach You In Film School" title={<>FROM FIRST MONEY IN TO LAST MONEY <span className="text-white">OUT</span></>} />
 
-              {/* Waterfall tier cascade */}
-              <div className="max-w-[400px] mx-auto">
-                {waterfallTiers.map((tier, i) => (
-                  <div
-                    key={tier.num}
-                    className={cn(
-                      "relative transition-all duration-400 ease-out",
-                      revealFlow.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-[6px]"
-                    )}
-                    style={{ transitionDelay: revealFlow.visible ? `${i * 150}ms` : "0ms" }}
-                  >
-                    {/* Row content */}
-                    <div className="grid grid-cols-[40px_1fr_auto] items-center py-6">
-                      <span
-                        className="font-mono text-[10px]"
-                        style={{ color: "rgba(255,255,255,0.20)" }}
+              {/* Waterfall tier cascade card */}
+              <div className="rounded-xl border border-border-subtle bg-bg-card max-w-md mx-auto mt-6 relative overflow-hidden">
+                {/* Top gradient overlay */}
+                <div className="absolute inset-0 pointer-events-none"
+                  style={{ background: 'linear-gradient(180deg, rgba(212,175,55,0.04) 0%, transparent 35%)' }} />
+
+                {/* Top glow line */}
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[70%] h-[1px]"
+                  style={{ background: 'linear-gradient(90deg, transparent, rgba(212,175,55,0.45), transparent)' }} />
+
+                <div className="relative px-8 py-12 md:px-10 md:py-14">
+                  {cascadeTiers.map((tier, i) => (
+                    <div key={tier.name}>
+                      <div
+                        className={cn("flex flex-col items-center text-center", tier.py, staggerChild(revealFlow.visible))}
+                        style={staggerDelay(i, revealFlow.visible)}
                       >
-                        {tier.num}
-                      </span>
-                      <span
-                        className="text-[13px] uppercase tracking-[0.06em]"
-                        style={{
-                          color: tier.nameColor,
-                          fontWeight: tier.bold ? 700 : 600,
-                        }}
-                      >
-                        {tier.name}
-                      </span>
-                      <span
-                        className="font-mono text-xs font-medium text-right"
-                        style={{ color: tier.pctColor }}
-                      >
-                        {tier.pct}
-                      </span>
+                        <span
+                          className={cn("font-bebas tracking-[0.12em] uppercase leading-none", tier.nc)}
+                          style={tier.ns}
+                        >
+                          {tier.name}
+                        </span>
+                        <span
+                          className={cn("font-mono font-medium mt-[5px]", tier.pc)}
+                          style={tier.ps}
+                        >
+                          {tier.pct}
+                        </span>
+                      </div>
+
+                      {/* Divider (not after last tier) */}
+                      {tier.dw && (
+                        <div
+                          className="mx-auto h-[1px] my-0"
+                          style={{
+                            width: tier.dw,
+                            background: `linear-gradient(90deg, transparent, rgba(212,175,55,${tier.dop}), transparent)`,
+                          }}
+                        />
+                      )}
                     </div>
+                  ))}
 
-                    {/* Bottom border — full-width subtle base */}
-                    <div
-                      className="absolute bottom-0 left-0 right-0 h-[1px]"
-                      style={{ backgroundColor: "rgba(212,175,55,0.12)" }}
-                    />
-
-                    {/* Gold accent overlay — shrinks per tier */}
-                    <div
-                      className="absolute bottom-0 left-0 h-[1px]"
-                      style={{
-                        width: tier.lineWidth,
-                        backgroundColor: tier.lineColor,
-                        opacity: tier.lineOpacity,
-                      }}
-                    />
-                  </div>
-                ))}
-
-                {/* Tagline */}
-                <p
-                  className={cn(
-                    "text-[13px] font-light text-center mt-14 transition-all duration-400 ease-out",
-                    revealFlow.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-[6px]"
-                  )}
-                  style={{
-                    color: "rgba(255,255,255,0.25)",
-                    transitionDelay: revealFlow.visible ? `${7 * 150 + 300}ms` : "0ms",
-                  }}
-                >
-                  This is the waterfall.
-                </p>
+                  {/* Tagline */}
+                  <p
+                    className={cn("font-sans font-light text-[13px] text-center mt-12", staggerChild(revealFlow.visible))}
+                    style={{ color: 'rgba(255,255,255,0.18)', ...staggerDelay(8, revealFlow.visible) }}
+                  >
+                    This is the waterfall.
+                  </p>
+                </div>
               </div>
             </div>
           </SectionFrame>
@@ -416,7 +413,7 @@ const Index = () => {
               <SectionHeader icon={Award} eyebrow="The Industry Standard" title={<>THIS KNOWLEDGE ISN'T <span className="text-white">CHEAP</span></>} plainSubtitle subtitle={"You shouldn't need a $5,000 retainer from an entertainment attorney to understand your own\u00A0deal."} />
 
               {/* Industry Cost Grid — 2x2 */}
-              <div className="grid grid-cols-2 gap-3 mb-5">
+              <div className="grid grid-cols-2 gap-3 mb-0">
                 {industryCosts.map((item, i) => {
                   const Icon = item.icon;
                   return (
@@ -430,14 +427,6 @@ const Index = () => {
                   );
                 })}
               </div>
-
-              {/* FREE Badge */}
-              <div className="text-center px-6 py-5 rounded-xl bg-gold/[0.06] border border-gold/20 max-w-[280px] mx-auto">
-                <p className="font-bebas text-4xl md:text-5xl tracking-[0.1em] text-gold">FREE</p>
-                <p className="text-text-dim text-[15px] tracking-[0.2em] mt-1">
-                  Premium exports available when you're&nbsp;ready.
-                </p>
-              </div>
             </div>
           </SectionFrame>
 
@@ -447,45 +436,27 @@ const Index = () => {
           {/* ── § 5: WHAT YOU WALK AWAY WITH ── */}
           <SectionFrame id="deliverables" alt>
             <div ref={revealDeliverables.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", revealDeliverables.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
-              <SectionHeader icon={Film} eyebrow="What You Walk Away With" title={<>EVERYTHING YOU NEED TO <span className="text-white">CLOSE</span></>} />
+              <SectionHeader icon={Film} eyebrow="Your Deliverables" title={<>WHAT YOU WALK AWAY <span className="text-white">WITH</span></>} />
 
-              {/* Free Tier */}
-              <p className="text-text-mid text-xs tracking-[0.2em] uppercase font-bold mb-2 text-center">
-                Free — always
-              </p>
-              <div className="rounded-xl border border-border-subtle bg-bg-card divide-y divide-border-subtle mb-4">
-                {freeDeliverables.map((item) => {
+              <div className="rounded-xl border border-border-subtle bg-bg-card divide-y divide-border-subtle">
+                {deliverableRows.map((item) => {
                   const Icon = item.icon;
                   return (
-                    <div key={item.line} className="flex items-center gap-3 px-5 py-3.5">
+                    <div key={item.text} className={cn("flex items-center gap-3 px-5 py-4", item.premium && "bg-gold/[0.02]")}>
                       <Icon className="w-4 h-4 text-gold flex-shrink-0" />
-                      <p className="text-text-mid text-sm leading-snug">{item.line}</p>
-                    </div>
-                  );
-                })}
-              </div>
-
-              {/* Start free reassurance */}
-              <p className="text-text-dim text-sm text-center my-4">Start free. Export when you're&nbsp;ready.</p>
-
-              {/* Premium Tier */}
-              <p className="text-gold text-xs tracking-[0.2em] uppercase font-bold mb-2 text-center">
-                Premium exports
-              </p>
-              <div className="rounded-xl border border-gold/20 bg-bg-card divide-y divide-border-subtle mb-6">
-                {premiumDeliverables.map((item) => {
-                  const Icon = item.icon;
-                  return (
-                    <div key={item.line} className="flex items-center gap-3 px-5 py-3.5">
-                      <Icon className="w-4 h-4 text-gold flex-shrink-0" />
-                      <p className="text-text-mid text-sm leading-snug">{item.line}</p>
+                      <p className="text-text-mid text-sm leading-snug flex-1">{item.text}</p>
+                      {item.premium && (
+                        <span className="text-[10px] tracking-[0.15em] uppercase font-semibold text-gold/70 border border-gold/20 rounded px-2 py-0.5 flex-shrink-0">
+                          Premium
+                        </span>
+                      )}
                     </div>
                   );
                 })}
               </div>
 
               {/* Section CTA */}
-              <div className="text-center">
+              <div className="text-center mt-6">
                 <button
                   onClick={handleStartClick}
                   className="w-full max-w-[320px] h-16 text-base btn-cta-primary"
