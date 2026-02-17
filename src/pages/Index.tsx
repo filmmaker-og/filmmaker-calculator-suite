@@ -27,12 +27,13 @@ const STORAGE_KEY = "filmmaker_og_inputs";
 const CINEMATIC_SEEN_KEY = "filmmaker_og_intro_seen";
 
 /* ═══════════════════════════════════════════════════════════════════
-   COMPARISON TABLE — asset classes + their tools
+   CLOSED DOORS — the alternatives that don't exist for you
    ═══════════════════════════════════════════════════════════════════ */
-const assetClasses = [
-  { name: "Real Estate", tools: "Comps & Appraisals" },
-  { name: "Private Equity", tools: "Return Models & Carry Structures" },
-  { name: "Venture Capital", tools: "Term Sheets & Valuation Frameworks" },
+const closedDoors = [
+  { name: "Entertainment Attorney", lock: "If they\u2019ll take the meeting." },
+  { name: "Producing Consultant", lock: "Costs more than your development budget." },
+  { name: "Film School", lock: "Four years you don\u2019t have." },
+  { name: "Trial & Error", lock: "Your investors don\u2019t get a second chance." },
 ];
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -199,6 +200,15 @@ const Index = () => {
     return () => obs.disconnect();
   }, []);
 
+  // Closed doors — lock animation (doors dim after appearing)
+  const [doorsLocked, setDoorsLocked] = useState(false);
+  useEffect(() => {
+    if (revCost.visible) {
+      const timer = setTimeout(() => setDoorsLocked(true), 800);
+      return () => clearTimeout(timer);
+    }
+  }, [revCost.visible]);
+
   // Net Profits countup
   const [countVal, setCountVal] = useState(0);
   useEffect(() => {
@@ -363,34 +373,20 @@ const Index = () => {
           <section id="mission" className="snap-section py-16 px-6">
             <div ref={revMission.ref} className={cn("transition-all duration-600 ease-out", revMission.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
               <SHeader eyebrow="The Thesis">
-                FILM AS AN ALTERNATIVE <span className="text-white">ASSET</span>
+                FILM IS AN ALTERNATIVE <span className="text-white">ASSET CLASS</span>
               </SHeader>
 
-              {/* Comparison table — centered vertical stack with arrows */}
-              <div className="max-w-sm mx-auto text-center">
-                {assetClasses.map((ac) => (
-                  <div key={ac.name}>
-                    <div className="py-4">
-                      <p className="font-bebas text-[19px] md:text-[22px] tracking-[0.08em] uppercase text-white/80">
-                        {ac.name}
-                      </p>
-                      <p className="text-sm text-white/50 mt-1">{ac.tools}</p>
-                    </div>
-                    <div className="flex justify-center py-2">
-                      <span className="text-gold/30 text-lg">&darr;</span>
-                    </div>
-                  </div>
-                ))}
-
-                {/* Film — the empty row */}
-                <div className="py-4">
-                  <p className="font-bebas text-[19px] md:text-[22px] tracking-[0.08em] uppercase text-white">
-                    Film
-                  </p>
-                  <div className="flex justify-center mt-2">
-                    <span className="text-white/20 text-3xl font-light select-none">&ne;</span>
-                  </div>
-                </div>
+              {/* Condensed thesis — three lines, no table */}
+              <div className="max-w-md mx-auto text-center">
+                <p className="text-white/60 text-sm md:text-base leading-relaxed">
+                  Every alternative asset class gives investors standardized tools to model returns.
+                </p>
+                <p className="text-white/40 text-sm leading-relaxed mt-3">
+                  Real estate has comps. Private equity has carry structures. Venture has term&nbsp;sheets.
+                </p>
+                <p className="font-bebas text-2xl md:text-3xl tracking-[0.06em] text-white mt-6">
+                  Film has nothing.
+                </p>
               </div>
 
               {/* Blum quote */}
@@ -404,17 +400,6 @@ const Index = () => {
                 <p className="mt-4 font-bebas text-[13px] tracking-[0.12em] uppercase" style={{ color: 'rgba(212,175,55,0.60)' }}>
                   Jason Blum &mdash; Blumhouse
                 </p>
-              </div>
-
-              {/* Declaration between gold rules */}
-              <div className="mt-12 max-w-md mx-auto">
-                <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
-                <div className="py-8 px-4 text-center">
-                  <h3 className="font-bebas text-2xl md:text-3xl tracking-[0.06em] uppercase text-white leading-tight">
-                    We Built The Arsenal That Levels The Playing&nbsp;Field.
-                  </h3>
-                </div>
-                <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
               </div>
             </div>
           </section>
@@ -531,47 +516,63 @@ const Index = () => {
           <Divider />
 
           {/* ──────────────────────────────────────────────────────────
-               § 5  KNOWLEDGE ISN'T CHEAP — 2-1-1 cost cards
+               § 5  CLOSED DOORS — inaccessibility, not price tags
              ────────────────────────────────────────────────────────── */}
-          <SectionFrame id="cost">
+          <section id="cost" className="snap-section py-16 px-6">
             <div ref={revCost.ref} className={cn("transition-all duration-500 ease-out", revCost.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
-              <SHeader eyebrow="The Industry Standard">
-                KNOWLEDGE ISN'T <span className="text-white">CHEAP</span>
+              <SHeader eyebrow="The Alternatives">
+                EVERY OTHER DOOR <span className="text-white">IS CLOSED.</span>
               </SHeader>
 
               <div className="max-w-sm mx-auto">
-                {/* Row 1: two small cards */}
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="border border-white/[0.06] bg-black p-4 text-center">
-                    <p className="font-mono text-base font-semibold text-white/80">$5K&ndash;$15K</p>
-                    <p className="text-xs tracking-wider uppercase text-white/50 mt-1.5">Entertainment Attorney</p>
+                {closedDoors.map((door, i) => (
+                  <div
+                    key={door.name}
+                    className={cn(
+                      "py-5 transition-all duration-500 ease-out",
+                      i > 0 && "border-t border-white/[0.06]",
+                      revCost.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
+                    )}
+                    style={{ transitionDelay: revCost.visible ? `${i * 120}ms` : '0ms' }}
+                  >
+                    <p
+                      className={cn(
+                        "font-bebas text-[19px] md:text-[22px] tracking-[0.10em] uppercase transition-all duration-700",
+                        doorsLocked ? "text-white/20 line-through decoration-white/15" : "text-white/80"
+                      )}
+                      style={{ transitionDelay: doorsLocked ? `${i * 200}ms` : '0ms' }}
+                    >
+                      {door.name}
+                    </p>
+                    <p
+                      className={cn(
+                        "text-sm italic mt-2 transition-all duration-700",
+                        doorsLocked ? "text-white/50 opacity-100" : "opacity-0"
+                      )}
+                      style={{ transitionDelay: doorsLocked ? `${i * 200 + 100}ms` : '0ms' }}
+                    >
+                      {door.lock}
+                    </p>
                   </div>
-                  <div className="border border-white/[0.06] bg-black p-4 text-center">
-                    <p className="font-mono text-base font-semibold text-white/80">$2K&ndash;$5K</p>
-                    <p className="text-xs tracking-wider uppercase text-white/50 mt-1.5">Producing Consultant</p>
-                  </div>
-                </div>
-
-                {/* Row 2: Film School — dominates */}
-                <div className="mt-3">
-                  <div className="border p-6 text-center bg-white/[0.03]" style={{ borderColor: 'rgba(212,175,55,0.20)' }}>
-                    <p className="font-mono text-2xl md:text-3xl font-bold text-white/90">$50K&ndash;$200K</p>
-                    <p className="text-xs tracking-wider uppercase text-white/50 mt-2">Film School</p>
-                  </div>
-                </div>
-
-                {/* Row 3: Trial and Error */}
-                <div className="mt-3">
-                  <div className="border border-white/[0.06] bg-black p-4 text-center">
-                    <p className="font-mono text-base font-semibold text-white/80">3&ndash;5 Years</p>
-                    <p className="text-xs tracking-wider uppercase text-white/50 mt-1.5">Trial and Error</p>
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
-          </SectionFrame>
+          </section>
 
-          <Divider />
+          {/* ──────────────────────────────────────────────────────────
+               DECLARATION — the hinge between closed doors and the path
+             ────────────────────────────────────────────────────────── */}
+          <section className="py-10 px-6">
+            <div className="max-w-md mx-auto">
+              <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
+              <div className="py-8 px-4 text-center">
+                <h3 className="font-bebas text-2xl md:text-3xl tracking-[0.06em] uppercase text-white leading-tight">
+                  We Built The Arsenal That Levels The Playing&nbsp;Field.
+                </h3>
+              </div>
+              <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
+            </div>
+          </section>
 
           {/* ──────────────────────────────────────────────────────────
                § 6  THE PATH — gold bar product ladder + CTA
