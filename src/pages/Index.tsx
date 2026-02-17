@@ -3,8 +3,6 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { useHaptics } from "@/hooks/use-haptics";
 import {
   RotateCcw,
-  DollarSign,
-  Layers,
   Handshake,
   HelpCircle,
   Check,
@@ -64,14 +62,17 @@ const faqs = [
 ];
 
 /* ═══════════════════════════════════════════════════════════════════
-   VERTICAL FLOW DIAGRAM — "How the Money Flows"
-   Combines waterfall education + tool mechanics in one cascade
+   WATERFALL TIERS — cascading visualization
+   Each tier shows money diminishing through the priority chain
    ═══════════════════════════════════════════════════════════════════ */
-const flowSteps = [
-  { icon: DollarSign, title: "Set Your Budget", desc: "Your total production cost — the baseline everything is measured against." },
-  { icon: Layers, title: "Build Your Capital Stack", desc: "Equity, debt, tax credits, gap — who put money in and how each source gets repaid." },
-  { icon: Handshake, title: "Structure Your Deal", desc: "Acquisition price, distribution fees, marketing cap — the terms that shape what comes back." },
-  { icon: Waves, title: "See the Waterfall", desc: "Every dollar through the priority chain. Fees first. Then debt. Then equity. Then you." },
+const waterfallTiers = [
+  { num: "01", name: "Gross Receipts", pct: "100%", nameColor: "rgba(212,175,55,1)", pctColor: "rgba(255,255,255,0.50)", lineWidth: "100%", lineOpacity: 0.8, lineColor: "#D4AF37" },
+  { num: "02", name: "Distribution Fees", pct: "65–75%", nameColor: "rgba(255,255,255,0.65)", pctColor: "rgba(255,255,255,0.35)", lineWidth: "88%", lineOpacity: 0.55, lineColor: "#D4AF37" },
+  { num: "03", name: "Expenses & P&A", pct: "50–60%", nameColor: "rgba(255,255,255,0.55)", pctColor: "rgba(255,255,255,0.30)", lineWidth: "68%", lineOpacity: 0.40, lineColor: "#D4AF37" },
+  { num: "04", name: "Sales Agent", pct: "40–50%", nameColor: "rgba(255,255,255,0.45)", pctColor: "rgba(255,255,255,0.25)", lineWidth: "48%", lineOpacity: 0.28, lineColor: "#D4AF37" },
+  { num: "05", name: "Debt Service", pct: "25–35%", nameColor: "rgba(255,255,255,0.38)", pctColor: "rgba(255,255,255,0.22)", lineWidth: "32%", lineOpacity: 0.20, lineColor: "#D4AF37" },
+  { num: "06", name: "Equity Recoupment", pct: "10–20%", nameColor: "rgba(255,255,255,0.30)", pctColor: "rgba(255,255,255,0.18)", lineWidth: "20%", lineOpacity: 0.14, lineColor: "#D4AF37" },
+  { num: "07", name: "Producer Net", pct: "5–15%", nameColor: "#F9E076", pctColor: "rgba(249,224,118,0.70)", lineWidth: "12%", lineOpacity: 1, lineColor: "#F9E076", bold: true },
 ];
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -335,49 +336,73 @@ const Index = () => {
             <div ref={revealFlow.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", revealFlow.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
               <SectionHeader icon={Waves} eyebrow="What They Didn't Teach You In Film School" title={<>FROM FIRST MONEY IN TO LAST MONEY <span className="text-white">OUT</span></>} />
 
-              {/* Vertical flow diagram */}
-              <div className="flex flex-col items-center max-w-sm mx-auto">
-                {flowSteps.map((step, i) => {
-                  const Icon = step.icon;
-                  return (
-                    <div key={step.title} className="flex flex-col items-center">
-                      {/* Connecting line ABOVE (skip for first item) */}
-                      {i > 0 && (
-                        <div className="w-[1px] h-8 bg-gradient-to-b from-gold/40 to-gold/20" />
-                      )}
-
-                      {/* Node with card surface */}
-                      <div
-                        className={cn("flex flex-col items-center text-center", staggerChild(revealFlow.visible))}
-                        style={staggerDelay(i, revealFlow.visible)}
+              {/* Waterfall tier cascade */}
+              <div className="max-w-[400px] mx-auto">
+                {waterfallTiers.map((tier, i) => (
+                  <div
+                    key={tier.num}
+                    className={cn(
+                      "relative transition-all duration-400 ease-out",
+                      revealFlow.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-[6px]"
+                    )}
+                    style={{ transitionDelay: revealFlow.visible ? `${i * 150}ms` : "0ms" }}
+                  >
+                    {/* Row content */}
+                    <div className="grid grid-cols-[40px_1fr_auto] items-center py-6">
+                      <span
+                        className="font-mono text-[10px]"
+                        style={{ color: "rgba(255,255,255,0.20)" }}
                       >
-                        <div className="w-full max-w-[320px] rounded-xl bg-bg-card border border-border-subtle px-5 py-4 flex flex-col items-center">
-                          <div className="w-10 h-10 rounded-full bg-bg-elevated border border-gold/40 flex items-center justify-center mb-3">
-                            <Icon className="w-4 h-4 text-gold" />
-                          </div>
-                          <h3 className="font-bebas text-xl tracking-[0.06em] uppercase text-gold mb-1">{step.title}</h3>
-                          <p className="text-text-mid text-sm leading-relaxed max-w-[280px]">{step.desc}</p>
-                        </div>
-                      </div>
+                        {tier.num}
+                      </span>
+                      <span
+                        className="text-[13px] uppercase tracking-[0.06em]"
+                        style={{
+                          color: tier.nameColor,
+                          fontWeight: tier.bold ? 700 : 600,
+                        }}
+                      >
+                        {tier.name}
+                      </span>
+                      <span
+                        className="font-mono text-xs font-medium text-right"
+                        style={{ color: tier.pctColor }}
+                      >
+                        {tier.pct}
+                      </span>
                     </div>
-                  );
-                })}
-              </div>
 
-              {/* Summary line */}
-              <p className="text-text-mid text-sm italic text-center max-w-[280px] mx-auto mt-6">
-                That's the <a href="/waterfall-info" className="text-gold font-semibold not-italic underline underline-offset-2 decoration-gold/30 hover:decoration-gold/60 transition-colors">waterfall</a> — and it's what this tool builds for&nbsp;you.
-              </p>
+                    {/* Bottom border — full-width subtle base */}
+                    <div
+                      className="absolute bottom-0 left-0 right-0 h-[1px]"
+                      style={{ backgroundColor: "rgba(212,175,55,0.12)" }}
+                    />
 
-              {/* Mid-page CTA */}
-              <div className="text-center mt-8">
-                <button
-                  onClick={handleStartClick}
-                  className="px-8 py-3 text-sm btn-cta-secondary animate-cta-glow-pulse"
+                    {/* Gold accent overlay — shrinks per tier */}
+                    <div
+                      className="absolute bottom-0 left-0 h-[1px]"
+                      style={{
+                        width: tier.lineWidth,
+                        backgroundColor: tier.lineColor,
+                        opacity: tier.lineOpacity,
+                      }}
+                    />
+                  </div>
+                ))}
+
+                {/* Tagline */}
+                <p
+                  className={cn(
+                    "text-[13px] font-light text-center mt-14 transition-all duration-400 ease-out",
+                    revealFlow.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-[6px]"
+                  )}
+                  style={{
+                    color: "rgba(255,255,255,0.25)",
+                    transitionDelay: revealFlow.visible ? `${7 * 150 + 300}ms` : "0ms",
+                  }}
                 >
-                  SEE YOUR DEAL
-                </button>
-                <p className="text-text-dim text-xs tracking-wider mt-2">Free. No credit card. No signup.</p>
+                  This is the waterfall.
+                </p>
               </div>
             </div>
           </SectionFrame>
