@@ -282,7 +282,7 @@ const Index = () => {
               <h1 className="font-bebas text-[clamp(2.8rem,9vw,4.2rem)] leading-[1.05] text-gold mb-3">
                 SEE WHERE EVERY<br /><span className="text-white">DOLLAR GOES</span>
               </h1>
-              <p className="text-text-dim text-xs tracking-[0.2em] uppercase mb-6">
+              <p className="text-text-dim text-sm tracking-[0.18em] uppercase mb-6">
                 Built by a Tribeca-winning, CAA-repped producer whose debut sold to&nbsp;Netflix.
               </p>
 
@@ -320,7 +320,7 @@ const Index = () => {
           {/* section divider */}
           <div className="px-8"><div className="h-[1px] bg-gradient-to-r from-transparent via-gold/25 to-transparent" /></div>
 
-          {/* ── § 2: MISSION — Visual Comparison Table (open) ── */}
+          {/* ── § 2: THESIS — structured comparison with visual elbows ── */}
           <section id="mission" className="py-16 px-6">
             <div ref={revealMission.ref} className="max-w-lg mx-auto text-center">
               <p className="text-white/50 text-xs tracking-[0.3em] uppercase font-semibold mb-3">The Thesis</p>
@@ -328,56 +328,76 @@ const Index = () => {
                 FILM AS AN ALTERNATIVE <span className="text-white">ASSET</span>
               </h2>
 
-              {/* Comparison table — centered vertical stack with arrows */}
-              <div className="max-w-md mx-auto mt-8">
-                {[
-                  { asset: "Real Estate", tool: "Comps & Appraisals", delay: 0 },
-                  { asset: "Private Equity", tool: "Return Models & Carry Structures", delay: 200 },
-                ].map((row) => (
-                  <div key={row.asset}>
-                    <div
-                      className={cn("text-center py-4 transition-all", revealMission.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3")}
-                      style={{ transitionDuration: '400ms', transitionDelay: revealMission.visible ? `${row.delay}ms` : '0ms', transitionTimingFunction: EASE_REVEAL }}
-                    >
-                      <p className="font-bebas text-[22px] md:text-[26px] tracking-[0.08em] uppercase text-white/90">{row.asset}</p>
-                      <p className="text-sm md:text-base text-white/50 mt-1">{row.tool}</p>
+              {/* Comparison table — contained card with elbow accents */}
+              <div className="max-w-sm mx-auto mt-10">
+                <div className="border border-white/[0.08] bg-white/[0.02] relative">
+                  {/* top-left elbow accent */}
+                  <div className="absolute top-0 left-0 w-5 h-[1px] bg-gold/30" />
+                  <div className="absolute top-0 left-0 w-[1px] h-5 bg-gold/30" />
+                  {/* top-right elbow accent */}
+                  <div className="absolute top-0 right-0 w-5 h-[1px] bg-gold/30" />
+                  <div className="absolute top-0 right-0 w-[1px] h-5 bg-gold/30" />
+                  {/* bottom-left elbow accent */}
+                  <div className="absolute bottom-0 left-0 w-5 h-[1px] bg-gold/30" />
+                  <div className="absolute bottom-0 left-0 w-[1px] h-5 bg-gold/30" />
+                  {/* bottom-right elbow accent */}
+                  <div className="absolute bottom-0 right-0 w-5 h-[1px] bg-gold/30" />
+                  <div className="absolute bottom-0 right-0 w-[1px] h-5 bg-gold/30" />
+
+                  <div className="px-6 py-8">
+                    {[
+                      { asset: "Real Estate", tool: "Comps & Appraisals", delay: 0 },
+                      { asset: "Private Equity", tool: "Return Models & Carry Structures", delay: 200 },
+                      { asset: "Venture Capital", tool: "Term Sheets & Valuation Frameworks", delay: 400 },
+                    ].map((row, idx) => (
+                      <div key={row.asset}>
+                        <div
+                          className={cn("text-center py-3 transition-all", revealMission.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3")}
+                          style={{ transitionDuration: '400ms', transitionDelay: revealMission.visible ? `${row.delay}ms` : '0ms', transitionTimingFunction: EASE_REVEAL }}
+                        >
+                          <p className="font-bebas text-[24px] md:text-[28px] tracking-[0.08em] uppercase text-white/90">{row.asset}</p>
+                          <p className="text-sm text-white/50 mt-1">{row.tool}</p>
+                        </div>
+                        {idx < 2 && (
+                          <div
+                            className={cn("text-center py-1 transition-all", revealMission.visible ? "opacity-100 scale-100" : "opacity-0 scale-75")}
+                            style={{ transitionDuration: '350ms', transitionDelay: revealMission.visible ? `${row.delay + 120}ms` : '0ms' }}
+                          >
+                            <span className="text-gold/50 text-xl">&darr;</span>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+
+                    {/* ≠ disruption */}
+                    <div className="my-3">
+                      <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/25 to-transparent" />
                     </div>
                     <div
-                      className={cn("text-center py-2 transition-all", revealMission.visible ? "opacity-100 scale-100" : "opacity-0 scale-75")}
-                      style={{ transitionDuration: '350ms', transitionDelay: revealMission.visible ? `${row.delay + 120}ms` : '0ms' }}
+                      className={cn("text-center transition-all", revealMission.visible ? "opacity-100 scale-100" : "opacity-0 scale-75")}
+                      style={{ transitionDuration: '400ms', transitionDelay: revealMission.visible ? '550ms' : '0ms' }}
                     >
-                      <span className="text-gold/70 text-2xl font-light">&darr;</span>
+                      <span className="text-gold text-3xl md:text-4xl font-bold" style={{ textShadow: '0 0 12px rgba(212,175,55,0.4)' }}>&ne;</span>
+                    </div>
+                    <div className="my-3">
+                      <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/25 to-transparent" />
+                    </div>
+
+                    {/* Film row — the gap */}
+                    <div
+                      className={cn("text-center py-3 transition-all", revealMission.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3")}
+                      style={{ transitionDuration: '400ms', transitionDelay: revealMission.visible ? '700ms' : '0ms', transitionTimingFunction: EASE_REVEAL }}
+                    >
+                      <p className="font-bebas text-[28px] md:text-[34px] tracking-[0.08em] uppercase text-white">Film</p>
+                      <p className="text-sm text-white/40 mt-1 italic">Budget Topsheets &amp; Gut Instinct</p>
                     </div>
                   </div>
-                ))}
-                {/* Venture Capital — last asset with ≠ instead of arrow */}
-                <div
-                  className={cn("text-center py-4 transition-all", revealMission.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3")}
-                  style={{ transitionDuration: '400ms', transitionDelay: revealMission.visible ? '400ms' : '0ms', transitionTimingFunction: EASE_REVEAL }}
-                >
-                  <p className="font-bebas text-[22px] md:text-[26px] tracking-[0.08em] uppercase text-white/90">Venture Capital</p>
-                  <p className="text-sm md:text-base text-white/50 mt-1">Term Sheets & Valuation Frameworks</p>
-                </div>
-                {/* ≠ — the disruption, where the user expects another arrow */}
-                <div
-                  className={cn("text-center py-3 transition-all", revealMission.visible ? "opacity-100 scale-100" : "opacity-0 scale-75")}
-                  style={{ transitionDuration: '400ms', transitionDelay: revealMission.visible ? '550ms' : '0ms' }}
-                >
-                  <span className="text-gold text-3xl md:text-4xl font-bold" style={{ textShadow: '0 0 12px rgba(212,175,55,0.4)' }}>&ne;</span>
-                </div>
-                {/* Film row — the gap */}
-                <div
-                  className={cn("text-center py-4 transition-all", revealMission.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3")}
-                  style={{ transitionDuration: '400ms', transitionDelay: revealMission.visible ? '700ms' : '0ms', transitionTimingFunction: EASE_REVEAL }}
-                >
-                  <p className="font-bebas text-[26px] md:text-[32px] tracking-[0.08em] uppercase text-white">Film</p>
-                  <p className="text-sm md:text-base text-white/40 mt-1.5 italic">Budget Topsheets &amp; Gut Instinct</p>
                 </div>
               </div>
 
               {/* Blum quote block */}
               <div
-                className={cn("mt-10 max-w-md mx-auto bg-white/[0.04] border-l-[3px] border-gold/40 p-6 md:p-8 text-left transition-all", revealMission.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}
+                className={cn("mt-10 max-w-sm mx-auto bg-white/[0.04] border-l-[3px] border-gold/40 p-6 md:p-8 text-left transition-all", revealMission.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}
                 style={{ transitionDuration: '400ms', transitionDelay: revealMission.visible ? '900ms' : '0ms', transitionTimingFunction: EASE_REVEAL }}
               >
                 <span className="font-bebas text-[72px] md:text-[96px] leading-none text-gold/20 select-none pointer-events-none block -mb-10 md:-mb-14">&ldquo;</span>
@@ -409,10 +429,10 @@ const Index = () => {
                       )}
                       style={{ transitionDuration: '450ms', transitionDelay: rv.visible ? `${i * 150}ms` : '0ms', transitionTimingFunction: EASE_REVEAL }}
                     >
-                      <h3 className="font-bebas text-[15px] tracking-[0.12em] uppercase" style={{ color: '#D4AF37' }}>
+                      <h3 className="font-bebas text-[17px] tracking-[0.12em] uppercase" style={{ color: '#D4AF37' }}>
                         {r.label}
                       </h3>
-                      <p className="text-white/70 text-sm leading-relaxed mt-3">{r.body}</p>
+                      <p className="text-white/70 text-[15px] leading-relaxed mt-3">{r.body}</p>
                       {/* Gold rule */}
                       <div className="h-[1px] bg-gradient-to-r from-gold/40 to-transparent mt-4 mb-3" />
                       {/* Punchline — snap cut */}
@@ -424,12 +444,12 @@ const Index = () => {
                           )}
                           style={{ transitionDuration: '200ms', transitionDelay: rv.visible ? `${i * 150 + 400}ms` : '0ms', transitionTimingFunction: 'step-end' }}
                         >
-                          <p className="text-base font-semibold text-white">{r.punchline}</p>
+                          <p className="text-[15px] font-semibold text-white">{r.punchline}</p>
                         </div>
                       ) : (
                         <p
                           className={cn(
-                            "text-sm font-semibold text-white/90 transition-opacity",
+                            "text-[15px] font-semibold text-white/90 transition-opacity",
                             rv.visible ? "opacity-100" : "opacity-0"
                           )}
                           style={{ transitionDuration: '200ms', transitionDelay: rv.visible ? `${i * 150 + 400}ms` : '0ms', transitionTimingFunction: 'step-end' }}
@@ -442,34 +462,43 @@ const Index = () => {
             </div>
           </section>
 
-          {/* ── DECLARATION — compact hinge between problem and proof ── */}
-          <section className="py-8 px-6">
-            <div ref={revealDeclaration.ref} className="max-w-lg mx-auto">
+          {/* ── DECLARATION — centered hinge between problem and proof ── */}
+          <section className="py-10 px-6">
+            <div ref={revealDeclaration.ref} className="max-w-md mx-auto">
+              {/* Divider above */}
               <div
-                className={cn("flex items-center gap-4 transition-all", revealDeclaration.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3")}
+                className={cn("h-[1px] bg-gradient-to-r from-transparent via-gold/30 to-transparent transition-opacity mb-6", revealDeclaration.visible ? "opacity-100" : "opacity-0")}
+                style={{ transitionDuration: '400ms' }}
+              />
+              {/* Declaration text — centered, balanced */}
+              <div
+                className={cn("text-center transition-all", revealDeclaration.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3")}
                 style={{ transitionDuration: '500ms', transitionDelay: revealDeclaration.visible ? '100ms' : '0ms', transitionTimingFunction: EASE_REVEAL }}
               >
-                <div className="flex-1 h-[1px] bg-gradient-to-r from-transparent to-gold/40" />
-                <p className="font-bebas text-lg md:text-xl tracking-[0.08em] uppercase text-white/80 text-center shrink-0 leading-tight">
-                  We built the arsenal that levels the playing field.
-                  <span className="block text-sm tracking-[0.12em] text-gold/50 mt-1">&mdash; FILMMAKER.OG</span>
+                <p className="font-bebas text-xl md:text-2xl tracking-[0.08em] uppercase text-white/80 leading-snug">
+                  We built the arsenal that levels the playing&nbsp;field.
                 </p>
-                <div className="flex-1 h-[1px] bg-gradient-to-l from-transparent to-gold/40" />
+                <p className="font-bebas text-sm tracking-[0.14em] uppercase text-gold/50 mt-2">&mdash; FILMMAKER.OG</p>
               </div>
+              {/* Divider below */}
+              <div
+                className={cn("h-[1px] bg-gradient-to-r from-transparent via-gold/30 to-transparent transition-opacity mt-6", revealDeclaration.visible ? "opacity-100" : "opacity-0")}
+                style={{ transitionDuration: '400ms' }}
+              />
             </div>
           </section>
 
           {/* ── § 4: HOW THE MONEY FLOWS — visual break from gold-on-black ── */}
-          <section id="how-it-flows" className="py-12 px-4 relative">
+          <section id="how-it-flows" className="py-12 px-6 relative">
             {/* Subtle background shift to break monotone */}
             <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(180deg, transparent 0%, rgba(212,175,55,0.02) 30%, rgba(212,175,55,0.03) 50%, rgba(212,175,55,0.02) 70%, transparent 100%)' }} />
             <div ref={revealFlow.ref} className={cn("max-w-2xl mx-auto relative transition-all duration-500", revealFlow.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")} style={{ transitionTimingFunction: EASE_REVEAL }}>
               <SectionHeader eyebrow="The Waterfall" title={<>HOW THE MONEY <span className="text-white">FLOWS</span></>} />
 
               {/* Annotation */}
-              <div className="text-center mb-4 max-w-md mx-auto">
-                <p className="text-white/50 text-sm">A $3M SVOD acquisition.</p>
-                <p className="text-white/70 text-sm font-medium mt-1">Here&rsquo;s what actually reaches the filmmaker.</p>
+              <div className="text-center mb-5 max-w-md mx-auto">
+                <p className="text-white/50 text-base">A $3M SVOD acquisition.</p>
+                <p className="text-white/70 text-base font-medium mt-1">Here&rsquo;s what actually reaches the filmmaker.</p>
               </div>
 
               {/* Proportional bar visualization */}
@@ -554,7 +583,7 @@ const Index = () => {
                   className={cn("border-t border-gold/15 px-5 py-6 text-center transition-opacity", revealFlow.visible ? "opacity-100" : "opacity-0")}
                   style={{ transitionDuration: '500ms', transitionDelay: revealFlow.visible ? '3200ms' : '0ms' }}
                 >
-                  <p className="text-[14px] font-medium tracking-wide text-white/50 mb-4">
+                  <p className="text-[15px] font-medium tracking-wide text-white/50 mb-4">
                     This is the standard waterfall.
                   </p>
                   <button onClick={handleStartClick}
@@ -578,12 +607,12 @@ const Index = () => {
                   style={{ transitionDuration: '400ms', transitionTimingFunction: EASE_SCALE }}
                 >
                   <div className="border border-gold/15 bg-bg-card p-5 text-center">
-                    <p className="font-mono text-lg font-semibold text-gold/80">$5K–$15K</p>
-                    <p className="text-white/50 text-xs tracking-wider uppercase mt-1.5">Entertainment Attorney</p>
+                    <p className="font-mono text-xl font-semibold text-gold/80">$5K–$15K</p>
+                    <p className="text-white/50 text-sm tracking-wider uppercase mt-1.5">Entertainment Attorney</p>
                   </div>
                   <div className="border border-gold/15 bg-bg-card p-5 text-center">
-                    <p className="font-mono text-lg font-semibold text-gold/80">$2K–$5K</p>
-                    <p className="text-white/50 text-xs tracking-wider uppercase mt-1.5">Producing Consultant</p>
+                    <p className="font-mono text-xl font-semibold text-gold/80">$2K–$5K</p>
+                    <p className="text-white/50 text-sm tracking-wider uppercase mt-1.5">Producing Consultant</p>
                   </div>
                 </div>
                 <div
@@ -598,8 +627,8 @@ const Index = () => {
                   className={cn("mt-3 border border-gold/15 bg-bg-card p-5 text-center transition-all", revealCost.visible ? "opacity-100 scale-100" : "opacity-0 scale-[0.92]")}
                   style={{ transitionDuration: '400ms', transitionDelay: revealCost.visible ? '500ms' : '0ms', transitionTimingFunction: EASE_SCALE }}
                 >
-                  <p className="font-mono text-lg font-semibold text-gold/80">3–5 Years</p>
-                  <p className="text-white/50 text-xs tracking-wider uppercase mt-1.5">Trial and Error</p>
+                  <p className="font-mono text-xl font-semibold text-gold/80">3–5 Years</p>
+                  <p className="text-white/50 text-sm tracking-wider uppercase mt-1.5">Trial and Error</p>
                 </div>
               </div>
             </div>
@@ -617,8 +646,8 @@ const Index = () => {
                 className={cn("text-center mb-8 transition-all", revealPath.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-[10px]")}
                 style={{ transitionDuration: '400ms', transitionTimingFunction: EASE_REVEAL }}
               >
-                <p className="font-bebas text-lg md:text-xl tracking-[0.12em] uppercase text-white/60">
-                  Your deal&ensp;&middot;&ensp;Your numbers&ensp;&middot;&ensp;Your leverage
+                <p className="font-bebas text-xl md:text-2xl tracking-[0.10em] uppercase text-white/60">
+                  Your deal&ensp;&middot;&ensp;Your numbers&ensp;&middot;&ensp;Your&nbsp;leverage
                 </p>
               </div>
 
@@ -635,8 +664,8 @@ const Index = () => {
                       {/* Vertical accent bar */}
                       <div className="w-1 self-stretch bg-gold/25 flex-shrink-0" />
                       <div className="min-w-0">
-                        <p className="font-bebas text-[12px] tracking-[0.15em] uppercase text-white/40">Courtesy</p>
-                        <p className="font-semibold text-sm text-white/80">Waterfall Simulator</p>
+                        <p className="font-bebas text-[13px] tracking-[0.15em] uppercase text-white/40">Courtesy</p>
+                        <p className="font-semibold text-[15px] text-white/80">Waterfall Simulator</p>
                         <p className="text-xs text-white/40 mt-0.5">Model your deal. See where every dollar goes.</p>
                       </div>
                     </div>
@@ -656,8 +685,8 @@ const Index = () => {
                     <div className="flex items-center gap-4 min-w-0">
                       <div className="w-1 self-stretch bg-gold/45 flex-shrink-0" />
                       <div className="min-w-0">
-                        <p className="font-bebas text-[12px] tracking-[0.15em] uppercase" style={{ color: 'rgba(212,175,55,0.60)' }}>Premium</p>
-                        <p className="font-semibold text-sm text-white/90">The Blueprint</p>
+                        <p className="font-bebas text-[13px] tracking-[0.15em] uppercase" style={{ color: 'rgba(212,175,55,0.60)' }}>Premium</p>
+                        <p className="font-semibold text-[15px] text-white/90">The Blueprint</p>
                         <p className="text-xs text-white/40 mt-0.5">Your complete finance plan, documented.</p>
                       </div>
                     </div>
@@ -679,10 +708,10 @@ const Index = () => {
                       <div className="w-1 self-stretch flex-shrink-0" style={{ background: '#D4AF37', boxShadow: '0 0 6px rgba(212,175,55,0.3)' }} />
                       <div className="min-w-0">
                         <div className="flex items-center gap-2">
-                          <p className="font-bebas text-[12px] tracking-[0.15em] uppercase text-gold">Investment Grade</p>
+                          <p className="font-bebas text-[13px] tracking-[0.15em] uppercase text-gold">Investment Grade</p>
                           <span className="text-[10px] tracking-wider uppercase bg-gold/10 text-gold/80 px-1.5 py-0.5">Save $200</span>
                         </div>
-                        <p className="font-semibold text-sm text-white">The Pitch Package</p>
+                        <p className="font-semibold text-[15px] text-white">The Pitch Package</p>
                         <p className="text-xs text-white/50 mt-0.5">Presentation-ready for the room.</p>
                       </div>
                     </div>
@@ -715,10 +744,10 @@ const Index = () => {
                 <Accordion type="single" collapsible className="w-full">
                   {faqs.map((faq, i) => (
                     <AccordionItem key={faq.q} value={`faq-${i}`}>
-                      <AccordionTrigger className="font-bebas text-xl tracking-[0.06em] uppercase text-gold hover:text-gold/70 hover:no-underline text-left">
+                      <AccordionTrigger className="font-bebas text-[22px] tracking-[0.06em] uppercase text-gold hover:text-gold/70 hover:no-underline text-left">
                         {faq.q}
                       </AccordionTrigger>
-                      <AccordionContent className="text-white/70 text-sm leading-relaxed normal-case font-sans">
+                      <AccordionContent className="text-white/70 text-[15px] leading-relaxed normal-case font-sans">
                         {faq.a}
                       </AccordionContent>
                     </AccordionItem>
@@ -743,7 +772,7 @@ const Index = () => {
                   <h2 className="font-bebas text-3xl md:text-4xl tracking-[0.08em] text-gold mb-4">
                     INVESTORS WILL ASK HOW THE MONEY FLOWS <span className="text-white">BACK</span>.<br />HAVE THE <span className="text-white">ANSWER</span>.
                   </h2>
-                  <p className="text-white/50 text-sm leading-relaxed max-w-xs mx-auto mb-6">
+                  <p className="text-white/50 text-base leading-relaxed max-w-xs mx-auto mb-6">
                     Your next investor meeting shouldn't be the first time you see your own&nbsp;waterfall.
                   </p>
                   <button onClick={handleStartClick}
