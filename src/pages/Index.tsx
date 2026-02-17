@@ -359,7 +359,70 @@ const Index = () => {
           <Divider />
 
           {/* ──────────────────────────────────────────────────────────
-               § 2  MISSION — stacked thesis + Blum quote
+               § 2  THE PROBLEM — three reality panels
+             ────────────────────────────────────────────────────────── */}
+          <section id="evidence" className="snap-section py-16 px-6" style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.01) 0%, rgba(255,255,255,0.03) 50%, rgba(255,255,255,0.01) 100%)' }}>
+            <div ref={revEvidence.ref} className={cn("transition-all duration-700 ease-out", revEvidence.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
+              <SHeader eyebrow="The Problem">
+                MOST INDIE FILMS <span className="text-gold">LOSE</span> <span className="text-white">MONEY.</span>
+              </SHeader>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto">
+                {realities.map((r, i) => (
+                  <div
+                    key={r.label}
+                    className={cn(
+                      "relative p-6 md:p-7 bg-white/[0.04] border border-white/[0.10] overflow-hidden transition-all duration-600 ease-out group",
+                      revEvidence.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+                    )}
+                    style={{ transitionDelay: revEvidence.visible ? `${i * 180}ms` : '0ms' }}
+                  >
+                    {/* Gold left accent bar — matched to toolkit cards */}
+                    <div className="absolute left-0 top-0 bottom-0 w-[3px]"
+                      style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.55), rgba(212,175,55,0.25), transparent)' }} />
+                    <div className="relative z-10 pl-2">
+                      <div className="flex items-baseline gap-3 mb-3">
+                        <span className="font-mono text-2xl text-gold/35 font-semibold leading-none">{String(i + 1).padStart(2, '0')}</span>
+                        <h3 className="font-bebas text-[17px] tracking-[0.12em] uppercase text-gold">
+                          {r.label}
+                        </h3>
+                      </div>
+                      <p className="text-white/60 text-sm leading-relaxed">{r.body}</p>
+                      <div className="h-[1px] bg-gradient-to-r from-gold/30 to-transparent mt-4 mb-3" />
+                      <p
+                        className={cn(
+                          "text-sm font-semibold text-white/70 italic transition-opacity duration-[0ms]",
+                          revEvidence.visible ? "opacity-100" : "opacity-0"
+                        )}
+                        style={{
+                          transitionTimingFunction: 'step-end',
+                          transitionDelay: revEvidence.visible ? `${600 + i * 180}ms` : '0ms',
+                        }}
+                      >
+                        {"\u201C"}{r.punchline}{"\u201D"}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Post-problem declaration */}
+              <p
+                className={cn(
+                  "text-center font-bebas text-[24px] md:text-[30px] tracking-[0.08em] text-gold/80 mt-10 transition-all duration-500 ease-out",
+                  revEvidence.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
+                )}
+                style={{ transitionDelay: revEvidence.visible ? '800ms' : '0ms' }}
+              >
+                We leveled the playing{"\u00A0"}<span className="text-white">field</span>.
+              </p>
+            </div>
+          </section>
+
+          <Divider />
+
+          {/* ──────────────────────────────────────────────────────────
+               § 3  THE THESIS — stacked manifesto + Blum quote
              ────────────────────────────────────────────────────────── */}
           <section id="mission" className="snap-section py-16 px-6">
             <div ref={revMission.ref} className={cn("transition-all duration-700 ease-out", revMission.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
@@ -419,7 +482,7 @@ const Index = () => {
                     textShadow: revMission.visible ? '0 0 30px rgba(212,175,55,0.4), 0 0 60px rgba(212,175,55,0.15)' : 'none',
                   }}
                 >
-                  Until now.
+                  Until <span className="text-white">now</span>.
                 </p>
               </div>
 
@@ -450,69 +513,6 @@ const Index = () => {
                   </div>
                 </div>
               </div>
-            </div>
-          </section>
-
-          <Divider />
-
-          {/* ──────────────────────────────────────────────────────────
-               § 3  THE PROBLEM — three reality panels
-             ────────────────────────────────────────────────────────── */}
-          <section id="evidence" className="snap-section py-16 px-6" style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.01) 0%, rgba(255,255,255,0.03) 50%, rgba(255,255,255,0.01) 100%)' }}>
-            <div ref={revEvidence.ref} className={cn("transition-all duration-700 ease-out", revEvidence.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
-              <SHeader eyebrow="The Problem">
-                MOST INDIE FILMS <span className="text-gold">LOSE</span> <span className="text-white">MONEY.</span>
-              </SHeader>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto">
-                {realities.map((r, i) => (
-                  <div
-                    key={r.label}
-                    className={cn(
-                      "relative p-6 md:p-7 bg-white/[0.04] border border-white/[0.10] overflow-hidden transition-all duration-600 ease-out group",
-                      revEvidence.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-                    )}
-                    style={{ transitionDelay: revEvidence.visible ? `${i * 180}ms` : '0ms' }}
-                  >
-                    {/* Gold left accent bar — matched to toolkit cards */}
-                    <div className="absolute left-0 top-0 bottom-0 w-[3px]"
-                      style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.55), rgba(212,175,55,0.25), transparent)' }} />
-                    <div className="relative z-10 pl-2">
-                      <div className="flex items-baseline gap-3 mb-3">
-                        <span className="font-mono text-2xl text-gold/35 font-semibold leading-none">{String(i + 1).padStart(2, '0')}</span>
-                        <h3 className="font-bebas text-[17px] tracking-[0.12em] uppercase text-gold">
-                          {r.label}
-                        </h3>
-                      </div>
-                      <p className="text-white/60 text-sm leading-relaxed">{r.body}</p>
-                      <div className="h-[1px] bg-gradient-to-r from-gold/30 to-transparent mt-4 mb-3" />
-                      <p
-                        className={cn(
-                          "text-sm font-semibold text-white/70 italic transition-opacity duration-[0ms]",
-                          revEvidence.visible ? "opacity-100" : "opacity-0"
-                        )}
-                        style={{
-                          transitionTimingFunction: 'step-end',
-                          transitionDelay: revEvidence.visible ? `${600 + i * 180}ms` : '0ms',
-                        }}
-                      >
-                        {"\u201C"}{r.punchline}{"\u201D"}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Post-problem declaration */}
-              <p
-                className={cn(
-                  "text-center font-bebas text-[24px] md:text-[30px] tracking-[0.08em] text-gold/80 mt-10 transition-all duration-500 ease-out",
-                  revEvidence.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
-                )}
-                style={{ transitionDelay: revEvidence.visible ? '800ms' : '0ms' }}
-              >
-                We leveled the playing{"\u00A0"}<span className="text-white">field</span>.
-              </p>
             </div>
           </section>
 
@@ -778,7 +778,7 @@ const Index = () => {
               <div className="bg-black px-5 border border-white/[0.06]">
                 <Accordion type="single" collapsible className="w-full">
                   {faqs.map((faq, i) => (
-                    <AccordionItem key={faq.q} value={`faq-${i}`}>
+                    <AccordionItem key={faq.q} value={`faq-${i}`} className="border-b border-white/[0.08]">
                       <AccordionTrigger className="font-bebas text-xl tracking-[0.06em] uppercase text-gold hover:text-gold/70 hover:no-underline text-left">
                         {faq.q}
                       </AccordionTrigger>
