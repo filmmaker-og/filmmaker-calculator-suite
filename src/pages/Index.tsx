@@ -28,7 +28,7 @@ const STORAGE_KEY = "filmmaker_og_inputs";
 const CINEMATIC_SEEN_KEY = "filmmaker_og_intro_seen";
 
 /* ═══════════════════════════════════════════════════════════════════
-   PROBLEM FACTS — 5 gut-punch facts, no icons
+   PROBLEM FACTS — 3 gut-punch facts, no icons
    ═══════════════════════════════════════════════════════════════════ */
 const problemFacts = [
   {
@@ -36,16 +36,8 @@ const problemFacts = [
     body: "CAM fees, sales commissions, debt service, recoupment premiums, corridor splits. If you don\u2019t model the friction between gross receipts and net profits, every number in your investor deck is a\u00A0lie."
   },
   {
-    headline: "They structure the capital stack wrong.",
-    body: "Equity too senior. Debt too expensive. Gap too wide. One misranked tranche and a profitable film can\u2019t reach breakeven for the people who funded\u00A0it."
-  },
-  {
     headline: "They don\u2019t understand how \u201Cnet\u201D gets destroyed.",
     body: "Distribution fees. P&A recoupment. Delivery costs. Reserves. Overhead charges. By the time standard deductions are done, your projected profit doesn\u2019t\u00A0exist."
-  },
-  {
-    headline: "They budget off inflated comps and soft interest.",
-    body: "A sales agent saying \u201CI think I can get $3M\u201D is not a pre-sale. When the financing plan is built on numbers that aren\u2019t real, it collapses midstream or closes at terms that guarantee\u00A0losses."
   },
   {
     headline: "They sign terms that quietly siphon the upside.",
@@ -139,6 +131,7 @@ const Index = () => {
   const revealProblem = useReveal();
   const revealFlow = useReveal();
   const revealPrice = useReveal();
+  const revealSolution = useReveal();
   const revealFaq = useReveal();
 
   const savedState = useMemo(() => {
@@ -299,7 +292,7 @@ const Index = () => {
           <SectionFrame id="problem">
             <div ref={revealProblem.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", revealProblem.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
               <SectionHeader eyebrow="The Problem" title={<>MOST INDIE FILMS <span className="text-white">LOSE MONEY.</span></>} />
-              <div className="rounded-xl border border-border-subtle bg-bg-card max-w-lg mx-auto overflow-hidden">
+              <div className="max-w-lg mx-auto">
                 {problemFacts.map((fact, i) => (
                   <div
                     key={i}
@@ -312,7 +305,7 @@ const Index = () => {
                   >
                     <span className="font-mono text-[11px] text-white/20 tabular-nums">{String(i + 1).padStart(2, '0')}</span>
                     <h3 className="font-bebas text-[19px] md:text-[21px] tracking-[0.06em] uppercase leading-tight mt-1 text-white">{fact.headline}</h3>
-                    <p className="text-white/40 text-sm leading-relaxed mt-2">{fact.body}</p>
+                    <p className="text-white/50 text-sm leading-relaxed mt-2">{fact.body}</p>
                   </div>
                 ))}
               </div>
@@ -327,10 +320,10 @@ const Index = () => {
           {/* ── § 3: HOW THE MONEY FLOWS (vertical cascade) ── */}
           <SectionFrame id="how-it-flows" alt>
             <div ref={revealFlow.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", revealFlow.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
-              <SectionHeader eyebrow="What They Didn't Teach You In Film School" title={<>FROM FIRST MONEY IN TO LAST MONEY <span className="text-white">OUT</span></>} />
+              <SectionHeader eyebrow="The Waterfall" title={<>HOW THE MONEY <span className="text-white">FLOWS</span></>} />
 
               {/* Annotation */}
-              <p className="text-white/30 text-sm text-center mb-4 max-w-md mx-auto">
+              <p className="text-white/40 text-sm text-center mb-4 max-w-md mx-auto">
                 A $3M SVOD acquisition. Here&rsquo;s what actually reaches the filmmaker.
               </p>
 
@@ -368,9 +361,9 @@ const Index = () => {
                             {String(i + 1).padStart(2, '0')}
                           </span>
                           <span className={cn(
-                            "font-bebas text-[19px] tracking-[0.08em] uppercase leading-none",
+                            "font-bebas text-[21px] tracking-[0.08em] uppercase leading-none",
                             isFirst && "text-white",
-                            isMiddle && "text-white/70",
+                            isMiddle && "text-white/75",
                             isLast && "text-[#F9E076]"
                           )}>
                             {tier.name}
@@ -379,9 +372,9 @@ const Index = () => {
 
                         {/* Right: amount */}
                         <span className={cn(
-                          "font-mono text-[15px] font-medium",
+                          "font-mono text-[17px] font-medium",
                           isFirst && "text-white/70",
-                          isMiddle && "text-white/40",
+                          isMiddle && "text-white/55",
                           isLast && "text-[#F9E076]"
                         )}>
                           {tier.amount}
@@ -390,7 +383,7 @@ const Index = () => {
 
                       {/* Remaining balance (tiers 2-6 only) */}
                       {tier.remaining && (
-                        <p className="font-mono text-[12px] text-white/15 text-right mt-1">
+                        <p className="font-mono text-[12px] text-white/25 text-right mt-1">
                           {tier.remaining} remaining
                         </p>
                       )}
@@ -398,30 +391,15 @@ const Index = () => {
                   );
                 })}
 
-                {/* Tagline + solution + CTA */}
-                <div className="border-t border-border-subtle px-5 py-6 text-center">
-                  <p className="text-[14px] font-light" style={{ color: 'rgba(255,255,255,0.30)' }}>
+                {/* Tagline — ends cold, no CTA */}
+                <div className="border-t border-border-subtle px-5 py-5 text-center">
+                  <p className="text-[14px] font-light" style={{ color: 'rgba(255,255,255,0.35)' }}>
                     This is the standard waterfall.
                   </p>
-                  <p className="text-white/50 text-sm leading-relaxed mt-4">
-                    Restructure the debt. Lower the equity hurdle.<br />
-                    Stack tax credits. See what changes.
-                  </p>
-                  <div className="mt-6">
-                    <button
-                      onClick={handleStartClick}
-                      className="w-full max-w-[280px] h-14 text-base btn-cta-primary"
-                    >
-                      BUILD A BETTER ONE
-                    </button>
-                  </div>
                 </div>
               </div>
             </div>
           </SectionFrame>
-
-          {/* section divider */}
-          <div className="px-8"><div className="h-[1px] bg-gradient-to-r from-transparent via-gold/25 to-transparent" /></div>
 
           {/* ── § 4: THIS KNOWLEDGE ISN'T CHEAP ── */}
           <SectionFrame id="price-anchor">
@@ -432,27 +410,37 @@ const Index = () => {
                 <div className="space-y-3">
                   <div className="flex items-baseline justify-between py-3 border-b border-white/[0.06]">
                     <span className="text-white/50 text-sm">Entertainment Attorney</span>
-                    <span className="font-mono text-sm text-white/25">$5K–$15K</span>
+                    <span className="font-mono text-sm text-white/40">$5K–$15K</span>
                   </div>
                   <div className="flex items-baseline justify-between py-3 border-b border-white/[0.06]">
                     <span className="text-white/50 text-sm">Producing Consultant</span>
-                    <span className="font-mono text-sm text-white/25">$2K–$5K</span>
+                    <span className="font-mono text-sm text-white/40">$2K–$5K</span>
                   </div>
                   <div className="flex items-baseline justify-between py-3 border-b border-white/[0.06]">
                     <span className="text-white/50 text-sm">Film School</span>
-                    <span className="font-mono text-sm text-white/25">$50K–$200K</span>
+                    <span className="font-mono text-sm text-white/40">$50K–$200K</span>
                   </div>
                   <div className="flex items-baseline justify-between py-3">
                     <span className="text-white/50 text-sm">Trial and Error</span>
-                    <span className="font-mono text-sm text-white/25">3–5 years</span>
+                    <span className="font-mono text-sm text-white/40">3–5 years</span>
                   </div>
                 </div>
+              </div>
+            </div>
+          </SectionFrame>
 
-                <div className="text-center pt-8">
-                  <button
-                    onClick={handleStartClick}
-                    className="w-full max-w-[320px] h-16 text-base btn-cta-primary"
-                  >
+          {/* ── § 5: THE SOLUTION (agency moment) ── */}
+          <SectionFrame id="solution" alt>
+            <div ref={revealSolution.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", revealSolution.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
+              <SectionHeader eyebrow="The Solution" title={<>WE DEMOCRATIZED <span className="text-white">THIS</span></>} />
+              <div className="max-w-sm mx-auto text-center">
+                <p className="text-white/60 text-sm leading-relaxed">
+                  Restructure the debt. Lower the equity hurdle.<br />
+                  Stack tax credits. See what changes.
+                </p>
+                <div className="mt-8">
+                  <button onClick={handleStartClick}
+                    className="w-full max-w-[320px] h-16 text-base btn-cta-primary">
                     BUILD YOUR WATERFALL
                   </button>
                 </div>
