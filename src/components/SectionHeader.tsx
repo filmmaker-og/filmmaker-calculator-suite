@@ -19,11 +19,11 @@ const SectionHeader = ({
   <div className="text-center mb-8">
     <div className="flex items-center gap-2 justify-center mb-3">
       {Icon && <Icon className="w-5 h-5 text-gold" />}
-      <p className="text-text-dim text-xs tracking-[0.3em] uppercase font-semibold">
+      <p className="text-text-dim text-sm tracking-[0.3em] uppercase font-semibold">
         {eyebrow}
       </p>
     </div>
-    <h2 className="font-bebas text-3xl md:text-4xl tracking-[0.08em] text-gold">
+    <h2 className="font-bebas text-4xl md:text-5xl tracking-[0.08em] text-gold">
       {title}
     </h2>
     {subtitle && (
@@ -31,8 +31,8 @@ const SectionHeader = ({
         className={cn(
           "text-center max-w-lg mx-auto mt-4 leading-relaxed",
           plainSubtitle
-            ? "text-text-mid text-sm"
-            : "text-text-mid text-sm px-4 py-2.5 rounded-xl bg-gold/[0.06] border border-gold/20"
+            ? "text-text-mid text-base"
+            : "text-text-mid text-base px-4 py-2.5 rounded-xl bg-gold/[0.06] border border-gold/20"
         )}
       >
         {subtitle}

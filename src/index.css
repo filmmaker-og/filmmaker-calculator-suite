@@ -623,11 +623,11 @@
   }
 
   /* ═══════════════════════════════════════════════════════════════════
-     CTA GLOW SOFT — inviting, not aggressive
+     CTA GLOW SOFT — purple pulse, inviting not aggressive
      ═══════════════════════════════════════════════════════════════════ */
   @keyframes cta-glow-soft {
-    0%, 100% { box-shadow: 0 8px 32px rgba(249,224,118,0.12), inset 0 1px 0 rgba(249,224,118,0.08); }
-    50% { box-shadow: 0 8px 32px rgba(249,224,118,0.22), 0 0 16px rgba(249,224,118,0.08), inset 0 1px 0 rgba(249,224,118,0.12); }
+    0%, 100% { box-shadow: 0 8px 32px rgba(124,58,237,0.20), inset 0 1px 0 rgba(255,255,255,0.08); }
+    50% { box-shadow: 0 8px 32px rgba(124,58,237,0.35), 0 0 16px rgba(124,58,237,0.12), inset 0 1px 0 rgba(255,255,255,0.12); }
   }
   .animate-cta-glow-soft {
     animation: cta-glow-soft 3s ease-in-out infinite;
@@ -650,20 +650,22 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, rgba(249, 224, 118, 0.18) 0%, rgba(212, 175, 55, 0.12) 100%);
-    border: 2px solid var(--gold-cta-muted);
-    color: var(--gold-cta);
-    font-weight: 700;
+    background: #7C3AED;
+    border: 2px solid rgba(124, 58, 237, 0.70);
+    color: #FFFFFF;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    font-weight: 400;
     letter-spacing: 0.14em;
     text-transform: uppercase;
     border-radius: var(--radius-md);
     transition: all var(--timing-fast) ease;
-    box-shadow: 0 8px 32px rgba(249, 224, 118, 0.15), inset 0 1px 0 rgba(249, 224, 118, 0.10);
+    box-shadow: 0 8px 32px rgba(124, 58, 237, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.10);
     animation: cta-glow-soft 3s ease-in-out infinite;
   }
   .btn-cta-primary:hover {
-    background: linear-gradient(135deg, rgba(249, 224, 118, 0.25) 0%, rgba(212, 175, 55, 0.18) 100%);
-    box-shadow: 0 12px 40px rgba(249, 224, 118, 0.25), inset 0 1px 0 rgba(249, 224, 118, 0.15);
+    background: #6D28D9;
+    box-shadow: 0 12px 40px rgba(124, 58, 237, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.15);
   }
   .btn-cta-primary:active {
     transform: scale(0.96);
