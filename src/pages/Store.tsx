@@ -758,8 +758,8 @@ const Store = () => {
               >
                 {linkCopied ? (
                   <>
-                    <Check className="w-4 h-4 text-green-400" />
-                    <span className="text-green-400">Copied!</span>
+                    <Check className="w-4 h-4 text-gold" />
+                    <span className="text-gold">Copied!</span>
                   </>
                 ) : (
                   <>

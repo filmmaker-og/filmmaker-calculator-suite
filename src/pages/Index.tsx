@@ -24,6 +24,7 @@ import { cn } from "@/lib/utils";
 import { formatCompactCurrency } from "@/lib/waterfall";
 import { getShareUrl, SHARE_TEXT, SHARE_TITLE } from "@/lib/constants";
 import SectionFrame from "@/components/SectionFrame";
+import SectionHeader from "@/components/SectionHeader";
 
 const STORAGE_KEY = "filmmaker_og_inputs";
 const CINEMATIC_SEEN_KEY = "filmmaker_og_intro_seen";
@@ -66,7 +67,7 @@ const waterfallTiers = [
   { name: "Senior Debt",       amount: "\u2212$440,000",     pct: 69.6,  barColor: "rgba(212,175,55,0.65)", isFinal: false },
   { name: "Mezzanine",         amount: "\u2212$230,000",     pct: 61.9,  barColor: "rgba(212,175,55,0.65)", isFinal: false },
   { name: "Equity Recoupment", amount: "\u2212$1,440,000",   pct: 13.9,  barColor: "rgba(212,175,55,0.65)", isFinal: false },
-  { name: "Net Profits",       amount: "$417,500",       pct: 13.9,  barColor: "#00C853",               isFinal: true  },
+  { name: "Net Profits",       amount: "$417,500",       pct: 13.9,  barColor: "rgba(212,175,55,0.85)",  isFinal: true  },
 ];
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -81,18 +82,18 @@ const productTiers = [
     featured: false, elevated: false,
   },
   {
-    tier: "Premium", product: "The Blueprint", price: "$197",
-    desc: "The full financial picture. Every number, every tier, every scenario.",
-    pct: 65, barClass: "bg-[#D4AF37]/50", tierColor: "text-gold/70",
-    nameColor: "text-white/90", descColor: "text-white/55", barH: "h-2",
-    featured: false, elevated: true,
-  },
-  {
     tier: "Investment Grade", product: "The Pitch Package", price: "$497",
     desc: "What the other side of the table expects to see.",
     pct: 100, barClass: "bg-[#D4AF37]/70", tierColor: "text-gold",
     nameColor: "text-white", descColor: "text-white/60", barH: "h-3",
     featured: true, elevated: false,
+  },
+  {
+    tier: "Premium", product: "The Blueprint", price: "$197",
+    desc: "The full financial picture. Every number, every tier, every scenario.",
+    pct: 65, barClass: "bg-[#D4AF37]/50", tierColor: "text-gold/70",
+    nameColor: "text-white/90", descColor: "text-white/55", barH: "h-2",
+    featured: false, elevated: true,
   },
 ];
 
@@ -136,20 +137,6 @@ const useReveal = (threshold = 0.15) => {
   }, [threshold]);
   return { ref, visible };
 };
-
-/* ═══════════════════════════════════════════════════════════════════
-   SECTION HEADER (inline — consistent everywhere)
-   ═══════════════════════════════════════════════════════════════════ */
-const SHeader = ({ eyebrow, children }: { eyebrow: string; children: React.ReactNode }) => (
-  <div className="text-center mb-10">
-    <div className="flex items-center justify-center gap-4 mb-4">
-      <div className="h-[1px] w-8 bg-gradient-to-r from-transparent to-white/20" />
-      <p className="text-white/50 text-xs tracking-[0.3em] uppercase font-semibold">{eyebrow}</p>
-      <div className="h-[1px] w-8 bg-gradient-to-l from-transparent to-white/20" />
-    </div>
-    <h2 className="font-bebas text-3xl md:text-4xl tracking-[0.08em] text-gold">{children}</h2>
-  </div>
-);
 
 /* ═══════════════════════════════════════════════════════════════════
    DIVIDER
@@ -358,11 +345,9 @@ const Index = () => {
           {/* ──────────────────────────────────────────────────────────
                § 2  THE PROBLEM — three reality panels
              ────────────────────────────────────────────────────────── */}
-          <section id="evidence" className="snap-section py-16 px-6" style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.01) 0%, rgba(255,255,255,0.03) 50%, rgba(255,255,255,0.01) 100%)' }}>
+          <SectionFrame id="evidence">
             <div ref={revEvidence.ref} className={cn("transition-all duration-700 ease-out", revEvidence.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
-              <SHeader eyebrow="The Problem">
-                MOST INDIE FILMS LOSE <span className="text-white">MONEY.</span>
-              </SHeader>
+              <SectionHeader eyebrow="The Problem" title={<>MOST INDIE FILMS LOSE <span className="text-white">MONEY.</span></>} flankingLines compact />
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto">
                 {realities.map((r, i) => (
@@ -404,18 +389,16 @@ const Index = () => {
                 We leveled the playing{"\u00A0"}<span className="text-white">field</span>.
               </p>
             </div>
-          </section>
+          </SectionFrame>
 
           <Divider />
 
           {/* ──────────────────────────────────────────────────────────
                § 3  THE THESIS — stacked manifesto + Blum quote
              ────────────────────────────────────────────────────────── */}
-          <section id="mission" className="snap-section py-16 px-6">
+          <SectionFrame id="mission">
             <div ref={revMission.ref} className={cn("transition-all duration-700 ease-out", revMission.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
-              <SHeader eyebrow="The Thesis">
-                FILM AS AN ALTERNATIVE{"\u00A0"}ASSET{"\u00A0"}<span className="text-white">CLASS</span>
-              </SHeader>
+              <SectionHeader eyebrow="The Thesis" title={<>FILM AS AN ALTERNATIVE{"\u00A0"}ASSET{"\u00A0"}<span className="text-white">CLASS</span></>} flankingLines compact />
 
               {/* Stacked manifesto */}
               <div className="max-w-md mx-auto">
@@ -501,7 +484,7 @@ const Index = () => {
                 </div>
               </div>
             </div>
-          </section>
+          </SectionFrame>
 
           <Divider />
 
@@ -510,9 +493,7 @@ const Index = () => {
              ────────────────────────────────────────────────────────── */}
           <SectionFrame id="waterfall">
             <div ref={revWater.ref} className={cn("transition-all duration-700 ease-out", revWater.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
-              <SHeader eyebrow="The Waterfall">
-                HOW THE MONEY <span className="text-white">FLOWS</span>
-              </SHeader>
+              <SectionHeader eyebrow="The Waterfall" title={<>HOW THE MONEY <span className="text-white">FLOWS</span></>} flankingLines compact />
 
               <p className="text-white/50 text-sm text-center mb-1">A $3M SVOD acquisition.</p>
               <p className="text-white/70 text-sm font-medium text-center mb-6">Here&rsquo;s what actually reaches the filmmaker.</p>
@@ -522,42 +503,50 @@ const Index = () => {
                   <div
                     key={tier.name}
                     className={cn(
-                      "px-5 py-4",
+                      "px-5 py-4 relative",
                       i > 0 && "border-t border-white/[0.06]",
-                      tier.isFinal && "py-5"
+                      tier.isFinal && "py-7 border-t-2 border-gold/30"
                     )}
-                    style={tier.isFinal ? { background: 'rgba(0,200,83,0.04)' } : undefined}
+                    style={tier.isFinal ? { background: 'rgba(212,175,55,0.06)' } : undefined}
                   >
+                    {/* Gold left accent on final row */}
+                    {tier.isFinal && (
+                      <div className="absolute left-0 top-0 bottom-0 w-[3px]"
+                        style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.80), rgba(212,175,55,0.40), transparent)' }} />
+                    )}
                     {/* Labels */}
-                    <div className="flex justify-between items-baseline mb-2">
+                    <div className={cn("flex justify-between items-baseline", tier.isFinal ? "mb-3" : "mb-2")}>
                       <div className="flex items-baseline gap-2">
                         <span className="font-mono text-[11px] text-white/30 tabular-nums">
                           {String(i + 1).padStart(2, '0')}
                         </span>
                         <span className={cn(
                           "font-bebas tracking-[0.08em] uppercase",
-                          tier.isFinal ? "text-[23px] text-[#00C853]" :
+                          tier.isFinal ? "text-[28px] text-gold" :
                           i === 0 ? "text-[20px] text-white" : "text-[17px] text-white/80"
                         )}>
                           {tier.name}
                         </span>
                       </div>
-                      <span className={cn(
-                        "font-mono font-semibold",
-                        tier.isFinal ? "text-[24px] font-bold text-[#00C853]" :
-                        i === 0 ? "text-[17px] text-white/90" : "text-[17px] text-white/70"
-                      )}>
+                      <span
+                        className={cn(
+                          "font-mono font-semibold",
+                          tier.isFinal ? "text-[30px] font-bold text-gold" :
+                          i === 0 ? "text-[17px] text-white/90" : "text-[17px] text-white/70"
+                        )}
+                        style={tier.isFinal ? { textShadow: '0 0 20px rgba(212,175,55,0.4), 0 0 40px rgba(212,175,55,0.15)' } : undefined}
+                      >
                         {tier.isFinal ? `$${countVal.toLocaleString()}` : tier.amount}
                       </span>
                     </div>
                     {/* Proportional bar */}
-                    <div className={cn("w-full bg-white/[0.06] relative overflow-hidden", tier.isFinal ? "h-3" : i === 0 ? "h-3" : "h-2")}>
+                    <div className={cn("w-full bg-white/[0.06] relative overflow-hidden", tier.isFinal ? "h-4" : i === 0 ? "h-3" : "h-2")}>
                       <div
                         className="absolute left-0 top-0 h-full"
                         style={{
                           width: barsRevealed ? `${tier.pct}%` : '0%',
                           background: tier.barColor,
-                          boxShadow: tier.isFinal ? '0 0 10px rgba(0,200,83,0.35)' : i === 0 ? '0 0 8px rgba(212,175,55,0.15)' : 'none',
+                          boxShadow: tier.isFinal ? '0 0 12px rgba(212,175,55,0.35)' : i === 0 ? '0 0 8px rgba(212,175,55,0.15)' : 'none',
                           transition: `width 500ms cubic-bezier(0.16,1,0.3,1)`,
                           transitionDelay: `${tier.isFinal ? 1200 : i * 150}ms`,
                         }}
@@ -589,11 +578,9 @@ const Index = () => {
           {/* ──────────────────────────────────────────────────────────
                § 5  CLOSED DOORS — the reality of what exists
              ────────────────────────────────────────────────────────── */}
-          <section id="cost" className="snap-section py-16 px-6" style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.01) 0%, rgba(255,255,255,0.03) 50%, rgba(255,255,255,0.01) 100%)' }}>
+          <SectionFrame id="cost">
             <div ref={revCost.ref} className={cn("transition-all duration-700 ease-out", revCost.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
-              <SHeader eyebrow="The Reality">
-                THE DOORS ARE <span className="text-white">CLOSED.</span>
-              </SHeader>
+              <SectionHeader eyebrow="The Reality" title={<>THE DOORS ARE <span className="text-white">CLOSED.</span></>} flankingLines compact />
 
               <div className="grid grid-cols-2 gap-4 max-w-lg mx-auto">
                 {closedDoors.map((door, i) => (
@@ -638,7 +625,9 @@ const Index = () => {
                 ))}
               </div>
             </div>
-          </section>
+          </SectionFrame>
+
+          <Divider />
 
           {/* ──────────────────────────────────────────────────────────
                DECLARATION — the hinge between closed doors and the path
@@ -666,9 +655,7 @@ const Index = () => {
              ────────────────────────────────────────────────────────── */}
           <SectionFrame id="path">
             <div ref={revPath.ref} className={cn("transition-all duration-700 ease-out", revPath.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
-              <SHeader eyebrow="The Toolkit">
-                THREE TIERS. <span className="text-white">ONE STANDARD.</span>
-              </SHeader>
+              <SectionHeader eyebrow="The Toolkit" title={<>THREE TIERS. <span className="text-white">ONE STANDARD.</span></>} flankingLines compact />
 
               <p className="text-center text-white/50 text-sm mb-8 max-w-sm mx-auto">
                 Whether you&rsquo;re modeling your first deal or walking into a meeting with real&nbsp;capital, there&rsquo;s a tier built for&nbsp;you.
@@ -762,9 +749,7 @@ const Index = () => {
              ────────────────────────────────────────────────────────── */}
           <SectionFrame id="faq">
             <div ref={revFaq.ref} className={cn("max-w-2xl mx-auto transition-all duration-700 ease-out", revFaq.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
-              <SHeader eyebrow="Common Questions">
-                WHAT FILMMAKERS <span className="text-white">ASK</span>
-              </SHeader>
+              <SectionHeader eyebrow="Common Questions" title={<>WHAT FILMMAKERS <span className="text-white">ASK</span></>} flankingLines compact />
 
               <div className="bg-black px-5 border border-white/[0.06]">
                 <Accordion type="single" collapsible className="w-full">
@@ -840,7 +825,7 @@ const Index = () => {
                 <button onClick={handleCopyLink}
                   className="flex items-center justify-center gap-2.5 text-sm tracking-wider text-gold/80 hover:text-gold bg-white/[0.04] hover:bg-white/[0.07] transition-all active:scale-[0.97] py-5 border border-white/[0.12] hover:border-gold/40">
                   {linkCopied ? (
-                    <><Check className="w-4 h-4 text-green-400" /><span className="text-green-400">Copied!</span></>
+                    <><Check className="w-4 h-4 text-gold" /><span className="text-gold">Copied!</span></>
                   ) : (
                     <><Link2 className="w-4 h-4" /><span>Copy Link</span></>
                   )}
