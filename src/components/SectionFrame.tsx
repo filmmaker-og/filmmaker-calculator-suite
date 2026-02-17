@@ -9,7 +9,7 @@ const SectionFrame = ({
   className,
   alt,
 }: {
-  id: string;
+  id?: string;
   children: React.ReactNode;
   className?: string;
   alt?: boolean;

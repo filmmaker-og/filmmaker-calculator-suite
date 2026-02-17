@@ -122,7 +122,7 @@ const StorePackage = () => {
         {/* ═══════════════════════════════════════════════════════════
             WHAT'S INCLUDED
             ═══════════════════════════════════════════════════════════ */}
-        <SectionFrame>
+        <SectionFrame id="whats-included">
           <div className="max-w-2xl mx-auto">
             <SectionHeader
               icon={FileText}
@@ -157,7 +157,7 @@ const StorePackage = () => {
         {/* ═══════════════════════════════════════════════════════════
             WHO THIS IS FOR
             ═══════════════════════════════════════════════════════════ */}
-        <SectionFrame alt>
+        <SectionFrame id="who-its-for" alt>
           <div className="max-w-2xl mx-auto">
             <SectionHeader
               icon={Users}
@@ -177,7 +177,7 @@ const StorePackage = () => {
         {/* ═══════════════════════════════════════════════════════════
             WHAT YOU'LL BUILD
             ═══════════════════════════════════════════════════════════ */}
-        <SectionFrame>
+        <SectionFrame id="what-youll-build">
           <div className="max-w-2xl mx-auto">
             <SectionHeader
               icon={Target}

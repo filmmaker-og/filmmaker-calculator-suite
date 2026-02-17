@@ -9,6 +9,9 @@ import {
   Share2,
   Link2,
   X,
+  ClipboardList,
+  Cog,
+  Send,
 } from "lucide-react";
 import Header from "@/components/Header";
 import { cn } from "@/lib/utils";
@@ -62,6 +65,27 @@ const trustRows = [
   { label: "Entertainment Lawyer", cost: "$5,000–$15,000", featured: false },
   { label: "Finance Consultant", cost: "$10,000–$30,000", featured: false },
   { label: "filmmaker.og", cost: "$197–$497", featured: true },
+];
+
+/* ═══════════════════════════════════════════════════════════════════
+   HOW IT WORKS STEPS
+   ═══════════════════════════════════════════════════════════════════ */
+const howItWorksSteps = [
+  {
+    icon: ClipboardList,
+    title: "Tell us about your project",
+    description: "Complete a short intake form with your budget, capital stack, and deal structure.",
+  },
+  {
+    icon: Cog,
+    title: "We build your finance plan",
+    description: "Modeled by a working producer using real production financing standards.",
+  },
+  {
+    icon: Send,
+    title: "Delivered to your inbox",
+    description: "Within 24 hours — formatted, professional, and ready to use.",
+  },
 ];
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -133,7 +157,7 @@ const WorkingModelPopup = ({
       className="absolute inset-0 bg-black/80 backdrop-blur-sm"
       onClick={loading ? undefined : onClose}
     />
-    <div className="relative w-full max-w-md rounded-xl border border-gold/30 bg-bg-header p-6 space-y-5 animate-fade-in">
+    <div className="relative w-full max-w-md border border-gold/30 bg-bg-header p-6 space-y-5 animate-fade-in">
       <button
         onClick={onClose}
         disabled={loading}
@@ -183,7 +207,7 @@ const WorkingModelPopup = ({
 );
 
 /* ═══════════════════════════════════════════════════════════════════
-   PRODUCT CARD
+   PRODUCT CARD — Sharp edges, visual hierarchy
    ═══════════════════════════════════════════════════════════════════ */
 const ProductCard = ({
   product,
@@ -201,18 +225,25 @@ const ProductCard = ({
   return (
     <div
       className={cn(
-        "flex flex-col rounded-xl p-6 transition-all",
+        "flex flex-col p-6 transition-all",
         staggerChild(visible),
         isFeatured
-          ? "border-2 border-gold bg-bg-card shadow-[0_0_40px_rgba(212,175,55,0.12)] relative"
+          ? "border-2 border-gold bg-bg-card shadow-[0_0_48px_rgba(212,175,55,0.14)] relative"
           : "border border-border-subtle bg-bg-card"
       )}
       style={staggerDelay(index, visible)}
     >
       {/* Badge */}
-      {product.badge && (
+      {isFeatured && (
         <div className="mb-4">
-          <span className="inline-block px-3 py-1.5 rounded-full bg-gold/[0.15] border border-gold/30 text-gold text-xs tracking-[0.15em] uppercase font-bold">
+          <span className="inline-block px-3 py-1.5 bg-gold/20 border border-gold/40 text-gold text-xs tracking-[0.15em] uppercase font-bold">
+            RECOMMENDED
+          </span>
+        </div>
+      )}
+      {product.badge && !isFeatured && (
+        <div className="mb-4">
+          <span className="inline-block px-3 py-1.5 bg-white/[0.04] border border-border-subtle text-text-dim text-xs tracking-[0.15em] uppercase font-bold">
             {product.badge}
           </span>
         </div>
@@ -233,7 +264,7 @@ const ProductCard = ({
         <span
           className={cn(
             "font-mono font-medium text-white",
-            isFeatured ? "text-4xl" : "text-3xl"
+            isFeatured ? "text-5xl" : "text-3xl"
           )}
         >
           ${product.price}
@@ -267,9 +298,7 @@ const ProductCard = ({
             : "text-sm btn-cta-secondary"
         )}
       >
-        {isFeatured
-          ? `Get The Pitch Package — $${product.price}`
-          : `Get The Blueprint — $${product.price}`}
+        {isFeatured ? "GET THE FULL PACKAGE" : "START WITH THE BLUEPRINT"}
       </button>
 
       {/* Details link */}
@@ -301,6 +330,8 @@ const Store = () => {
   );
 
   // Reveal refs
+  const revealTrust = useReveal();
+  const revealHowItWorks = useReveal();
   const revealProducts = useReveal();
   const revealFaq = useReveal();
 
@@ -328,6 +359,12 @@ const Store = () => {
     }
     handleCopyLink();
   }, [handleCopyLink]);
+
+  /* ─── SMOOTH SCROLL ─── */
+  const scrollToProducts = () => {
+    const el = document.getElementById("products");
+    if (el) el.scrollIntoView({ behavior: "smooth" });
+  };
 
   /* ─── CHECKOUT — DIRECT TO STRIPE ─── */
   const startCheckout = async (productId: string, addonId?: string) => {
@@ -391,62 +428,163 @@ const Store = () => {
 
       <main className="flex-1 animate-fade-in">
         {/* ═══════════════════════════════════════════════════════════
-            HERO + TRUST ANCHOR
+            1. HERO — spotlight gradient, bold headline, scroll CTA
             ═══════════════════════════════════════════════════════════ */}
-        <section className="px-6 pt-10 pb-8 max-w-2xl mx-auto text-center">
-          <h1 className="font-bebas text-[clamp(2rem,7vw,3.2rem)] leading-[1.05] mb-4">
-            <span className="text-gold">YOUR FINANCE PLAN.</span>{" "}
-            <span className="text-white">BUILT FOR YOU.</span>
-          </h1>
-          <p className="text-text-mid text-sm leading-relaxed max-w-lg mx-auto">
-            Tell us about your project. We build your complete finance plan —
-            delivered within 24 hours.
-          </p>
+        <section className="relative px-6 pt-14 pb-12 max-w-2xl mx-auto text-center overflow-hidden">
+          {/* Gold spotlight gradient */}
+          <div
+            className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] pointer-events-none animate-spotlight-pulse"
+            style={{
+              background: "radial-gradient(ellipse 50% 60% at 50% 20%, rgba(212,175,55,0.08) 0%, transparent 70%)",
+            }}
+          />
 
-          {/* Trust Anchor — stacked rows */}
-          <div className="mt-8 max-w-sm mx-auto space-y-2">
-            <p className="text-text-dim text-[10px] tracking-[0.15em] uppercase text-center mb-3">
-              What this costs everywhere else
+          <div className="relative z-10">
+            <h1 className="font-bebas text-[clamp(2.6rem,9vw,4.2rem)] leading-[0.95] mb-4 tracking-[0.04em]">
+              <span className="text-gold">YOUR FINANCE PLAN.</span>
+              <br />
+              <span className="text-white">BUILT FOR YOU.</span>
+            </h1>
+            <p className="text-text-mid text-base leading-relaxed max-w-md mx-auto mb-8">
+              Your complete finance plan — delivered within 24 hours.
             </p>
-            {trustRows.map((item) => (
-              <div
-                key={item.label}
-                className={cn(
-                  "flex items-center justify-between px-4 py-2.5 rounded-lg",
-                  item.featured
-                    ? "border border-gold/30 bg-gold/[0.04]"
-                    : "border border-border-subtle bg-bg-card"
-                )}
-              >
-                <span
-                  className={cn(
-                    "text-xs",
-                    item.featured
-                      ? "text-gold font-semibold"
-                      : "text-text-dim"
-                  )}
-                >
-                  {item.label}
-                </span>
-                <span
-                  className={cn(
-                    "font-mono text-sm",
-                    item.featured
-                      ? "text-gold font-medium"
-                      : "text-text-dim line-through decoration-text-dim/30"
-                  )}
-                >
-                  {item.cost}
-                </span>
-              </div>
-            ))}
+            <button
+              onClick={scrollToProducts}
+              className="btn-cta-primary h-14 px-10 text-base mx-auto"
+            >
+              SEE PACKAGES
+            </button>
           </div>
         </section>
+
+        {/* ═══════════════════════════════════════════════════════════
+            2. TRUST ANCHOR — SectionFrame, larger type, gold accent
+            ═══════════════════════════════════════════════════════════ */}
+        <SectionFrame id="trust" alt>
+          <div
+            ref={revealTrust.ref}
+            className={cn(
+              "max-w-lg mx-auto transition-all duration-500 ease-out",
+              revealTrust.visible
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-4"
+            )}
+          >
+            <p className="text-text-dim text-xs tracking-[0.2em] uppercase text-center mb-6 font-semibold">
+              What this costs everywhere else
+            </p>
+
+            <div className="space-y-3">
+              {trustRows.map((item, i) => (
+                <div
+                  key={item.label}
+                  className={cn(
+                    "flex items-center justify-between px-5 py-3.5 transition-all",
+                    staggerChild(revealTrust.visible),
+                    item.featured
+                      ? "border-l-[3px] border-l-gold border border-gold/30 bg-gold/[0.06] shadow-[0_0_20px_rgba(212,175,55,0.08)]"
+                      : "border border-border-subtle bg-bg-card"
+                  )}
+                  style={staggerDelay(i, revealTrust.visible)}
+                >
+                  <span
+                    className={cn(
+                      "text-sm font-medium",
+                      item.featured ? "text-gold" : "text-text-mid"
+                    )}
+                  >
+                    {item.label}
+                  </span>
+                  <span
+                    className={cn(
+                      "font-mono text-base font-medium",
+                      item.featured
+                        ? "text-gold"
+                        : "text-text-dim line-through decoration-text-dim/30"
+                    )}
+                  >
+                    {item.cost}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            <p className="text-text-dim text-sm text-center mt-5 italic">
+              Same financial models. Fraction of the cost.
+            </p>
+          </div>
+        </SectionFrame>
 
         <GoldDivider />
 
         {/* ═══════════════════════════════════════════════════════════
-            PRODUCT CARDS
+            3. HOW IT WORKS — 3-step vertical flow, gold connectors
+            ═══════════════════════════════════════════════════════════ */}
+        <SectionFrame id="how-it-works">
+          <div
+            ref={revealHowItWorks.ref}
+            className={cn(
+              "max-w-lg mx-auto transition-all duration-500 ease-out",
+              revealHowItWorks.visible
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-4"
+            )}
+          >
+            <SectionHeader
+              eyebrow="The Process"
+              title={
+                <>
+                  HOW IT <span className="text-white">WORKS</span>
+                </>
+              }
+            />
+
+            <div className="relative">
+              {/* Gold connector line */}
+              <div
+                className="absolute left-5 top-8 bottom-8 w-[2px]"
+                style={{
+                  background: "linear-gradient(180deg, var(--gold) 0%, rgba(212,175,55,0.20) 100%)",
+                }}
+              />
+
+              <div className="space-y-8">
+                {howItWorksSteps.map((step, i) => {
+                  const Icon = step.icon;
+                  return (
+                    <div
+                      key={step.title}
+                      className={cn(
+                        "flex items-start gap-5 relative",
+                        staggerChild(revealHowItWorks.visible)
+                      )}
+                      style={staggerDelay(i, revealHowItWorks.visible)}
+                    >
+                      {/* Step circle */}
+                      <div className="w-10 h-10 flex-shrink-0 flex items-center justify-center border border-gold/40 bg-bg-card relative z-10">
+                        <Icon className="w-4.5 h-4.5 text-gold" />
+                      </div>
+
+                      <div className="pt-1">
+                        <h3 className="font-bebas text-xl tracking-[0.06em] text-white mb-1">
+                          {step.title.toUpperCase()}
+                        </h3>
+                        <p className="text-text-dim text-sm leading-relaxed">
+                          {step.description}
+                        </p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </SectionFrame>
+
+        <GoldDivider />
+
+        {/* ═══════════════════════════════════════════════════════════
+            4. PRODUCT CARDS — sharp edges, featured glow
             ═══════════════════════════════════════════════════════════ */}
         <SectionFrame id="products">
           <div
@@ -495,41 +633,39 @@ const Store = () => {
               ))}
             </div>
 
-            {/* ADD-ON: Working Model — informational only */}
+            {/* ADD-ON: Working Model — slim horizontal upsell bar */}
             {addOnProduct && (
-              <div className="mt-5 rounded-xl border border-border-subtle bg-bg-card p-5">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1.5">
-                      <span className="px-2 py-0.5 rounded text-[9px] tracking-[0.12em] uppercase font-bold text-text-dim border border-white/10">
-                        Add-on
-                      </span>
-                      <h3 className="font-bebas text-lg tracking-[0.06em] text-white">
-                        {addOnProduct.name.toUpperCase()}
-                      </h3>
-                    </div>
-                    <p className="text-text-dim text-sm leading-relaxed">
-                      {addOnProduct.shortDescription}
-                    </p>
-                    <p className="text-gold/70 text-xs mt-1.5">
-                      $49 when bundled at checkout
-                    </p>
-                  </div>
-                  <div className="flex items-center">
-                    <span className="font-mono text-2xl font-medium text-white">
-                      ${addOnProduct.price}
-                    </span>
-                  </div>
+              <div className="mt-5 border border-gold/20 bg-gold/[0.03] px-5 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="flex items-center gap-3 flex-1 min-w-0">
+                  <span className="px-2 py-0.5 text-[9px] tracking-[0.12em] uppercase font-bold text-gold border border-gold/30 flex-shrink-0">
+                    Add-on
+                  </span>
+                  <span className="font-bebas text-lg tracking-[0.06em] text-white truncate">
+                    {addOnProduct.name.toUpperCase()}
+                  </span>
                 </div>
+                <span className="text-gold font-mono text-sm font-medium flex-shrink-0">
+                  Add for $49 at checkout
+                </span>
               </div>
             )}
+
+            {/* 5. Compare packages link */}
+            <div className="text-center mt-6">
+              <button
+                onClick={() => navigate("/store/compare")}
+                className="text-text-dim text-sm hover:text-gold transition-colors tracking-wider"
+              >
+                Compare packages side by side →
+              </button>
+            </div>
           </div>
         </SectionFrame>
 
         <GoldDivider />
 
         {/* ═══════════════════════════════════════════════════════════
-            FAQ
+            6. FAQ
             ═══════════════════════════════════════════════════════════ */}
         <SectionFrame id="faq" alt>
           <div
@@ -550,7 +686,7 @@ const Store = () => {
                 </>
               }
             />
-            <div className="bg-bg-card rounded-xl px-5 border border-border-subtle">
+            <div className="bg-bg-card px-5 border border-border-subtle">
               <Accordion type="single" collapsible className="w-full">
                 {storeFaqs.map((faq, i) => (
                   <AccordionItem key={faq.q} value={`faq-${i}`}>
@@ -566,7 +702,7 @@ const Store = () => {
             </div>
 
             {/* Custom work prompt */}
-            <div className="mt-5 rounded-xl border border-border-subtle bg-bg-card p-5">
+            <div className="mt-5 border border-border-subtle bg-bg-card p-5">
               <h3 className="font-bebas text-lg tracking-[0.08em] text-gold mb-2">
                 NEED SOMETHING CUSTOM?
               </h3>
@@ -587,7 +723,7 @@ const Store = () => {
         </SectionFrame>
 
         {/* ═══════════════════════════════════════════════════════════
-            FOOTER
+            7. FOOTER
             ═══════════════════════════════════════════════════════════ */}
         <footer className="py-10 px-6">
           <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/25 to-transparent mb-8" />
@@ -595,7 +731,7 @@ const Store = () => {
             <div className="grid grid-cols-2 gap-3 mb-8 max-w-[340px] mx-auto">
               <a
                 href="mailto:thefilmmaker.og@gmail.com"
-                className="flex items-center justify-center gap-2 text-sm tracking-wider text-gold/70 hover:text-gold transition-colors active:scale-[0.97] py-3.5 rounded-lg border border-white/[0.08] hover:border-gold/30"
+                className="flex items-center justify-center gap-2 text-sm tracking-wider text-gold/70 hover:text-gold transition-colors active:scale-[0.97] py-3.5 border border-white/[0.08] hover:border-gold/30"
               >
                 <Mail className="w-4 h-4" />
                 <span>Email</span>
@@ -604,21 +740,21 @@ const Store = () => {
                 href="https://www.instagram.com/filmmaker.og"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 text-sm tracking-wider text-gold/70 hover:text-gold transition-colors active:scale-[0.97] py-3.5 rounded-lg border border-white/[0.08] hover:border-gold/30"
+                className="flex items-center justify-center gap-2 text-sm tracking-wider text-gold/70 hover:text-gold transition-colors active:scale-[0.97] py-3.5 border border-white/[0.08] hover:border-gold/30"
               >
                 <Instagram className="w-4 h-4" />
                 <span>Instagram</span>
               </a>
               <button
                 onClick={handleShare}
-                className="flex items-center justify-center gap-2 text-sm tracking-wider text-gold/70 hover:text-gold transition-colors active:scale-[0.97] py-3.5 rounded-lg border border-white/[0.08] hover:border-gold/30"
+                className="flex items-center justify-center gap-2 text-sm tracking-wider text-gold/70 hover:text-gold transition-colors active:scale-[0.97] py-3.5 border border-white/[0.08] hover:border-gold/30"
               >
                 <Share2 className="w-4 h-4" />
                 <span>Share</span>
               </button>
               <button
                 onClick={handleCopyLink}
-                className="flex items-center justify-center gap-2 text-sm tracking-wider text-gold/70 hover:text-gold transition-colors active:scale-[0.97] py-3.5 rounded-lg border border-white/[0.08] hover:border-gold/30"
+                className="flex items-center justify-center gap-2 text-sm tracking-wider text-gold/70 hover:text-gold transition-colors active:scale-[0.97] py-3.5 border border-white/[0.08] hover:border-gold/30"
               >
                 {linkCopied ? (
                   <>
