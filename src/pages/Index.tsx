@@ -28,20 +28,20 @@ const STORAGE_KEY = "filmmaker_og_inputs";
 const CINEMATIC_SEEN_KEY = "filmmaker_og_intro_seen";
 
 /* ═══════════════════════════════════════════════════════════════════
-   PROBLEM FACTS — 3 gut-punch facts, no icons
+   THREE REALITIES — editorial evidence blocks
    ═══════════════════════════════════════════════════════════════════ */
-const problemFacts = [
+const realities = [
   {
-    headline: "They don\u2019t budget the waterfall \u2014 just the production.",
-    body: "CAM fees, sales commissions, debt service, recoupment premiums, corridor splits. If you don\u2019t model the friction between gross receipts and net profits, every number in your investor deck is a\u00A0lie."
+    label: "THE RECOUPMENT GAP",
+    body: "They budget the production. They don\u2019t budget the recoupment. CAM fees, sales commissions, debt service, corridor splits, recoupment premiums\u00A0\u2014 the friction between gross receipts and net profits isn\u2019t in the plan. Every number in the investor deck is modeled against the wrong\u00A0baseline."
   },
   {
-    headline: "They don\u2019t understand how \u201Cnet\u201D gets destroyed.",
-    body: "Distribution fees. P&A recoupment. Delivery costs. Reserves. Overhead charges. By the time standard deductions are done, your projected profit doesn\u2019t\u00A0exist."
+    label: "NET PROFIT EROSION",
+    body: "\u201CNet profits\u201D in a distribution agreement isn\u2019t net. It\u2019s gross minus distribution fees, P&A recoupment, delivery costs, market reserves, and overhead charges. By the time standard contractual deductions clear, the margin you projected at greenlight doesn\u2019t\u00A0exist."
   },
   {
-    headline: "They sign terms that quietly siphon the upside.",
-    body: "Default clauses. Recoupment premiums. Sweeping security interests. Excessive lender fees. The revenue is there\u00A0\u2014 it just never reaches the people who made the\u00A0film."
+    label: "STRUCTURAL ASYMMETRY",
+    body: "Distributors, sales agents, and financiers run waterfall models before every term sheet. They stress-test the capital stack, the recoupment order, and the corridor structure before they sit down. The producer across the table brought a budget topsheet. That asymmetry isn\u2019t accidental. It\u2019s\u00A0structural."
   },
 ];
 
@@ -62,8 +62,8 @@ const faqs = [
     a: "No. This is an educational simulation tool for estimation and planning purposes only. Always consult a qualified entertainment attorney or accountant before making financing decisions."
   },
   {
-    q: "What if I need more than the simulator?",
-    a: "The simulator shows you the structure. When you\u2019re ready for the meeting, we offer investor-grade packages\u00A0\u2014 from a complete financial blueprint to a full pitch-ready package with waterfall, projections, and capital strategy."
+    q: "What if I want a custom financial model?",
+    a: "The simulator gives you the framework. The packages give you the documents. If your deal requires bespoke modeling\u00A0\u2014 complex capital stacks, multi-territory structures, or co-financing arrangements\u00A0\u2014 reach out. That\u2019s what we do."
   },
 ];
 
@@ -293,40 +293,39 @@ const Index = () => {
             <div ref={revealMission.ref} className={cn("max-w-lg mx-auto text-center transition-all duration-500 ease-out", revealMission.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
               <p className="text-white/50 text-xs tracking-[0.3em] uppercase font-semibold mb-3">The Thesis</p>
               <h2 className="font-bebas text-3xl md:text-4xl tracking-[0.08em] text-gold">
-                FILM IS AN ALTERNATIVE <span className="text-white">ASSET CLASS</span>
+                FILM AS AN ALTERNATIVE <span className="text-white">ASSET</span>
               </h2>
               <div className="mt-6 space-y-4 text-white/70 text-sm leading-relaxed">
                 <p>
-                  Same category as real estate, private equity, and venture capital. But it's the only alternative asset where investors commit capital without standardized tools to model their return.
+                  Every alternative asset class has return-modeling infrastructure. Real estate has cap rate analysis and DCF. Private equity has IRR benchmarks and carried interest structures. Venture has term sheet frameworks and liquidation preferences.
                 </p>
                 <p>
-                  That information asymmetry is why film has a reputation as a bad investment. It's not. It's a misunderstood one.
-                </p>
-                <p className="text-white/50">
-                  This tool is how we start fixing that.
+                  Film has the back office of a sales agency that doesn't share its models with the people financing the project.
                 </p>
               </div>
+              <p className="mt-6 text-base font-semibold text-white">
+                We built the infrastructure for your side of the table.
+              </p>
             </div>
           </section>
 
-          {/* ── § 3: PROBLEM (open — text on black) ── */}
+          {/* ── § 3: THREE REALITIES (open — text on black) ── */}
           <section id="problem" className="py-12 px-6">
             <div ref={revealProblem.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", revealProblem.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
               <SectionHeader eyebrow="The Evidence" title={<>MOST INDIE FILMS <span className="text-white">LOSE MONEY.</span></>} />
               <div className="max-w-lg mx-auto">
-                {problemFacts.map((fact, i) => (
+                {realities.map((r, i) => (
                   <div
-                    key={i}
+                    key={r.label}
                     className={cn(
-                      "px-5 py-5",
+                      "py-8",
                       i > 0 && "border-t border-white/[0.06]",
                       staggerChild(revealProblem.visible)
                     )}
                     style={staggerDelay(i, revealProblem.visible)}
                   >
-                    <span className="font-mono text-[11px] text-white/30 tabular-nums">{String(i + 1).padStart(2, '0')}</span>
-                    <h3 className="font-bebas text-[21px] md:text-[23px] tracking-[0.06em] uppercase leading-tight mt-1 text-white">{fact.headline}</h3>
-                    <p className="text-white/70 text-sm leading-relaxed mt-2">{fact.body}</p>
+                    <p className="font-bebas text-[15px] tracking-[0.12em] uppercase" style={{ color: '#D4AF37' }}>{r.label}</p>
+                    <p className="text-white/70 text-sm leading-relaxed mt-3">{r.body}</p>
                   </div>
                 ))}
               </div>
@@ -373,7 +372,7 @@ const Index = () => {
                       <div className="flex items-baseline justify-between gap-4">
                         {/* Left: tier number + name */}
                         <div className="flex items-baseline gap-3">
-                          <span className="font-mono text-[11px] text-white/20 tabular-nums">
+                          <span className="font-mono text-[11px] text-white/30 tabular-nums">
                             {String(i + 1).padStart(2, '0')}
                           </span>
                           <span className={cn(
@@ -445,6 +444,32 @@ const Index = () => {
                 </div>
               </div>
 
+              {/* Product ladder */}
+              <div className="max-w-sm mx-auto mt-10 relative">
+                {/* Vertical connector line */}
+                <div className="absolute left-3 top-0 bottom-0 w-[2px]" style={{ background: 'rgba(212,175,55,0.25)' }} />
+                <div className="space-y-3 relative">
+                  {/* Tier 3 — Investment Grade (top) */}
+                  <div className="border border-gold/40 rounded-lg p-4" style={{ background: 'rgba(212,175,55,0.03)' }}>
+                    <p className="font-bebas text-[13px] tracking-[0.15em] uppercase" style={{ color: '#D4AF37' }}>INVESTMENT GRADE</p>
+                    <p className="text-sm font-semibold text-white mt-1">The Pitch Package</p>
+                    <p className="text-xs text-white/60 mt-1">What the other side of the table expects to see.</p>
+                  </div>
+                  {/* Tier 2 — Premium (middle) */}
+                  <div className="border border-gold/20 rounded-lg p-4">
+                    <p className="font-bebas text-[13px] tracking-[0.15em] uppercase" style={{ color: 'rgba(212,175,55,0.60)' }}>PREMIUM</p>
+                    <p className="text-sm font-semibold text-white/90 mt-1">The Blueprint</p>
+                    <p className="text-xs text-white/50 mt-1">Complete financial architecture for your project.</p>
+                  </div>
+                  {/* Tier 1 — Courtesy (bottom) */}
+                  <div className="border border-border-subtle rounded-lg p-4">
+                    <p className="font-bebas text-[13px] tracking-[0.15em] uppercase text-white/50">COURTESY</p>
+                    <p className="text-sm font-semibold text-white/80 mt-1">Waterfall Simulator</p>
+                    <p className="text-xs text-white/50 mt-1">Model your deal. See where every dollar goes.</p>
+                  </div>
+                </div>
+              </div>
+
               {/* Two paths */}
               <div className="max-w-sm mx-auto text-center mt-10">
                 <p className="text-white/70 text-sm leading-relaxed">
@@ -460,7 +485,7 @@ const Index = () => {
                 <div className="mt-4">
                   <a href="/store"
                     className="text-white/40 text-sm hover:text-gold transition-colors">
-                    Already know what you need?
+                    Ready for the meeting?
                     <span className="text-gold/70 ml-1">See packages &rarr;</span>
                   </a>
                 </div>
@@ -507,7 +532,7 @@ const Index = () => {
                   <h2 className="font-bebas text-3xl md:text-4xl tracking-[0.08em] text-gold mb-4">
                     INVESTORS WILL ASK HOW THE MONEY FLOWS <span className="text-white">BACK</span>.<br />HAVE THE <span className="text-white">ANSWER</span>.
                   </h2>
-                  <p className="text-text-mid text-sm leading-relaxed max-w-xs mx-auto mb-6">
+                  <p className="text-white/50 text-sm leading-relaxed max-w-xs mx-auto mb-6">
                     Your next investor meeting shouldn't be the first time you see your own&nbsp;waterfall.
                   </p>
                   <button onClick={handleStartClick}
