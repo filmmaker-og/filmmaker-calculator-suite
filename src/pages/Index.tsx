@@ -33,15 +33,18 @@ const CINEMATIC_SEEN_KEY = "filmmaker_og_intro_seen";
 const realities = [
   {
     label: "THE RECOUPMENT GAP",
-    body: "They budget the production. They don\u2019t budget the recoupment. CAM fees, sales commissions, debt service, corridor splits, recoupment premiums\u00A0\u2014 the friction between gross receipts and net profits isn\u2019t in the plan. Every number in the investor deck is modeled against the wrong\u00A0baseline."
+    body: "They budget the production. They don\u2019t budget the recoupment. CAM fees, sales commissions, debt service, corridor splits, recoupment premiums\u00A0\u2014 the friction between gross receipts and net profits isn\u2019t in the plan.",
+    punchline: "Every number in the investor deck is modeled against the wrong\u00A0baseline.",
   },
   {
     label: "NET PROFIT EROSION",
-    body: "\u201CNet profits\u201D in a distribution agreement isn\u2019t net. It\u2019s gross minus distribution fees, P&A recoupment, delivery costs, market reserves, and overhead charges. By the time standard contractual deductions clear, the margin you projected at greenlight doesn\u2019t\u00A0exist."
+    body: "\u201CNet profits\u201D in a distribution agreement isn\u2019t net. It\u2019s gross minus distribution fees, P&A recoupment, delivery costs, market reserves, and overhead charges.",
+    punchline: "By the time standard contractual deductions clear, the margin you projected at greenlight doesn\u2019t\u00A0exist.",
   },
   {
     label: "STRUCTURAL ASYMMETRY",
-    body: "Distributors, sales agents, and financiers run waterfall models before every term sheet. They stress-test the capital stack, the recoupment order, and the corridor structure before they sit down. The producer across the table brought a budget topsheet. That asymmetry isn\u2019t accidental. It\u2019s\u00A0structural."
+    body: "Distributors, sales agents, and financiers run waterfall models before every term sheet. They stress-test the capital stack, the recoupment order, and the corridor structure before they sit down. The producer across the table brought a budget topsheet.",
+    punchline: "That asymmetry isn\u2019t accidental. It\u2019s\u00A0structural.",
   },
 ];
 
@@ -84,8 +87,11 @@ const GOLD_BAR_HEIGHT  = ['100%', '85%', '70%', '55%', '42%', '28%', '100%'];
 const GOLD_BAR_OPACITY = [0.80,  0.60,  0.45,  0.35,  0.25,  0.16,  1];
 
 /* ═══════════════════════════════════════════════════════════════════
-   SECTION REVEAL — one-shot slide-up (no blur)
+   MOTION SYSTEM — easing tokens + one-shot reveal
    ═══════════════════════════════════════════════════════════════════ */
+const EASE_REVEAL = 'cubic-bezier(0.16, 1, 0.3, 1)';
+const EASE_SCALE  = 'cubic-bezier(0.34, 1.56, 0.64, 1)';
+
 const useReveal = () => {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
@@ -109,14 +115,26 @@ const useReveal = () => {
   return { ref, visible };
 };
 
-/** Stagger delay style for children within a visible section */
-const staggerDelay = (index: number, visible: boolean): React.CSSProperties => ({
-  transitionDelay: visible ? `${index * 120}ms` : "0ms",
-});
+/** Countup animation: 0 → target over duration ms */
+const useCountUp = (target: number, duration: number, trigger: boolean) => {
+  const [value, setValue] = useState(0);
+  const hasRun = useRef(false);
 
-/** Class for stagger-animated child items */
-const staggerChild = (visible: boolean) =>
-  cn("transition-all duration-400 ease-out", visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2");
+  useEffect(() => {
+    if (!trigger || hasRun.current) return;
+    hasRun.current = true;
+    const start = performance.now();
+    const tick = (now: number) => {
+      const t = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - t, 3);
+      setValue(Math.round(eased * target));
+      if (t < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  }, [trigger, target, duration]);
+
+  return value;
+};
 
 /* ═══════════════════════════════════════════════════════════════════
    MAIN INDEX COMPONENT
@@ -130,9 +148,23 @@ const Index = () => {
   // One-shot reveal refs for each section
   const revealMission = useReveal();
   const revealProblem = useReveal();
+  const revealReality0 = useReveal();
+  const revealReality1 = useReveal();
+  const revealReality2 = useReveal();
   const revealFlow = useReveal();
   const revealPrice = useReveal();
   const revealFaq = useReveal();
+  const realityReveals = [revealReality0, revealReality1, revealReality2];
+
+  // Net Profits countup — triggers 800ms after waterfall visible
+  const [countupReady, setCountupReady] = useState(false);
+  useEffect(() => {
+    if (revealFlow.visible) {
+      const t = setTimeout(() => setCountupReady(true), 800);
+      return () => clearTimeout(t);
+    }
+  }, [revealFlow.visible]);
+  const netProfitsCount = useCountUp(417500, 800, countupReady);
 
   const savedState = useMemo(() => {
     try {
@@ -220,7 +252,7 @@ const Index = () => {
               <div className={cn("relative transition-all duration-1000 ease-out", showLogo ? "opacity-100 scale-100 translate-y-0" : "opacity-0 scale-90 translate-y-6")}>
                 <div className={cn("absolute inset-0 -m-4 transition-opacity duration-700", isPulsed ? "opacity-100" : "opacity-0")}
                   style={{ background: 'radial-gradient(circle, rgba(212,175,55,0.3) 0%, transparent 70%)', filter: 'blur(15px)' }} />
-                <img src={filmmakerLogo} alt="Filmmaker.OG" className="w-32 h-32 object-contain rounded-lg relative"
+                <img src={filmmakerLogo} alt="Filmmaker.OG" className="w-32 h-32 object-contain rounded-none relative"
                   style={{ filter: isPulsed ? 'brightness(1.2) drop-shadow(0 0 30px rgba(212,175,55,0.5))' : 'brightness(0.9)', transition: 'filter 0.7s ease' }} />
               </div>
               <p className={cn("mt-8 text-sm tracking-[0.4em] uppercase font-semibold transition-all duration-700", showTagline ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3")}
@@ -244,7 +276,7 @@ const Index = () => {
             <div className="relative px-6 py-4 max-w-xl mx-auto text-center">
               <div className="mb-5 relative inline-block">
                 <div className="absolute inset-0 -m-7 animate-logo-breathe" style={{ background: 'radial-gradient(circle, rgba(212,175,55,0.25) 0%, transparent 70%)', filter: 'blur(18px)' }} />
-                <img src={filmmakerLogo} alt="Filmmaker.OG" className="relative w-[96px] h-[96px] object-contain rounded-xl"
+                <img src={filmmakerLogo} alt="Filmmaker.OG" className="relative w-[96px] h-[96px] object-contain rounded-none"
                   style={{ filter: 'brightness(1.15) drop-shadow(0 0 28px rgba(212,175,55,0.45))' }} />
               </div>
               <h1 className="font-bebas text-[clamp(2.8rem,9vw,4.2rem)] leading-[1.05] text-gold mb-3">
@@ -290,7 +322,7 @@ const Index = () => {
 
           {/* ── § 2: MISSION (open — text on black) ── */}
           <section id="mission" className="py-16 px-6">
-            <div ref={revealMission.ref} className={cn("max-w-lg mx-auto text-center transition-all duration-500 ease-out", revealMission.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
+            <div ref={revealMission.ref} className={cn("max-w-lg mx-auto text-center transition-all duration-500", revealMission.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")} style={{ transitionTimingFunction: EASE_REVEAL }}>
               <p className="text-white/50 text-xs tracking-[0.3em] uppercase font-semibold mb-3">The Thesis</p>
               <h2 className="font-bebas text-3xl md:text-4xl tracking-[0.08em] text-gold">
                 FILM AS AN ALTERNATIVE <span className="text-white">ASSET</span>
@@ -303,60 +335,99 @@ const Index = () => {
                   Film has the back office of a sales agency that doesn't share its models with the people financing the project.
                 </p>
               </div>
-              <p className="mt-6 text-base font-semibold text-white">
+              <p
+                className={cn("mt-6 font-bebas text-2xl md:text-3xl tracking-[0.08em] uppercase text-white transition-all", revealMission.visible ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-3 scale-[0.97]")}
+                style={{ transitionDuration: '600ms', transitionDelay: revealMission.visible ? '200ms' : '0ms', transitionTimingFunction: EASE_SCALE }}
+              >
                 We built the infrastructure for your side of the table.
               </p>
             </div>
           </section>
 
           {/* ── § 3: THREE REALITIES (open — text on black) ── */}
-          <section id="problem" className="py-12 px-6">
-            <div ref={revealProblem.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", revealProblem.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
+          <section id="problem" className="py-16 px-6">
+            <div ref={revealProblem.ref} className={cn("max-w-2xl mx-auto transition-all duration-500", revealProblem.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")} style={{ transitionTimingFunction: EASE_REVEAL }}>
               <SectionHeader eyebrow="The Evidence" title={<>MOST INDIE FILMS <span className="text-white">LOSE MONEY.</span></>} />
               <div className="max-w-lg mx-auto">
-                {realities.map((r, i) => (
-                  <div
-                    key={r.label}
-                    className={cn(
-                      "py-8",
-                      i > 0 && "border-t border-white/[0.06]",
-                      staggerChild(revealProblem.visible)
-                    )}
-                    style={staggerDelay(i, revealProblem.visible)}
-                  >
-                    <p className="font-bebas text-[15px] tracking-[0.12em] uppercase" style={{ color: '#D4AF37' }}>{r.label}</p>
-                    <p className="text-white/70 text-sm leading-relaxed mt-3">{r.body}</p>
-                  </div>
-                ))}
+                {realities.map((r, i) => {
+                  const rv = realityReveals[i];
+                  return (
+                    <div
+                      ref={rv.ref}
+                      key={r.label}
+                      className={cn("py-8", i > 0 && "border-t border-white/[0.06]")}
+                    >
+                      {/* Label — slide from left */}
+                      <p
+                        className={cn("font-bebas text-[15px] tracking-[0.12em] uppercase transition-all", rv.visible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-[30px]")}
+                        style={{ color: '#D4AF37', transitionDuration: '400ms', transitionTimingFunction: EASE_REVEAL }}
+                      >{r.label}</p>
+                      {/* Body — simple fade */}
+                      <p
+                        className={cn("text-white/70 text-sm leading-relaxed mt-3 transition-opacity", rv.visible ? "opacity-100" : "opacity-0")}
+                        style={{ transitionDuration: '400ms', transitionDelay: rv.visible ? '100ms' : '0ms' }}
+                      >{r.body}</p>
+                      {/* Punchline — snap cut */}
+                      <p
+                        className={cn(
+                          "mt-3 transition-opacity",
+                          i === 2 ? "text-base font-semibold text-white" : "text-sm font-semibold text-white/90",
+                          rv.visible ? "opacity-100" : "opacity-0"
+                        )}
+                        style={{ transitionDuration: '200ms', transitionDelay: rv.visible ? '400ms' : '0ms', transitionTimingFunction: 'step-end' }}
+                      >{r.punchline}</p>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </section>
 
           {/* ── § 4: HOW THE MONEY FLOWS (contained — SectionFrame) ── */}
           <SectionFrame id="how-it-flows">
-            <div ref={revealFlow.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", revealFlow.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
+            <div ref={revealFlow.ref} className={cn("max-w-2xl mx-auto transition-all duration-500", revealFlow.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")} style={{ transitionTimingFunction: EASE_REVEAL }}>
               <SectionHeader eyebrow="The Waterfall" title={<>HOW THE MONEY <span className="text-white">FLOWS</span></>} />
 
               {/* Annotation */}
-              <p className="text-white/50 text-sm text-center mb-4 max-w-md mx-auto">
-                A $3M SVOD acquisition. Here&rsquo;s what actually reaches the filmmaker.
-              </p>
+              <div className="text-center mb-4 max-w-md mx-auto">
+                <p className="text-white/50 text-sm">A $3M SVOD acquisition.</p>
+                <p className="text-white/70 text-sm font-medium">Here&rsquo;s what actually reaches the filmmaker.</p>
+              </div>
 
               {/* Waterfall tier list card */}
-              <div className="rounded-xl border border-border-subtle bg-bg-card max-w-md mx-auto overflow-hidden">
+              <div className="rounded-none border border-border-subtle bg-bg-card max-w-md mx-auto overflow-hidden">
                 {waterfallTiers.map((tier, i) => {
                   const isFirst = i === 0;
                   const isLast = i === waterfallTiers.length - 1;
                   const isMiddle = !isFirst && !isLast;
+                  // Tiers 1-6: slide down, 300ms, 100ms stagger
+                  // Tier 7: fade + scale(0.97), 400ms, 800ms delay
+                  const tierStyle: React.CSSProperties = isLast
+                    ? {
+                        transitionDuration: '400ms',
+                        transitionDelay: revealFlow.visible ? '800ms' : '0ms',
+                        transitionTimingFunction: EASE_SCALE,
+                        background: 'rgba(212,175,55,0.04)',
+                      }
+                    : {
+                        transitionDuration: '300ms',
+                        transitionDelay: revealFlow.visible ? `${i * 100}ms` : '0ms',
+                        transitionTimingFunction: EASE_REVEAL,
+                      };
                   return (
                     <div
                       key={tier.name}
                       className={cn(
-                        "relative px-5 py-4",
+                        "relative px-5 transition-all",
+                        isLast ? "py-5" : "py-4",
                         i > 0 && "border-t border-border-subtle",
-                        staggerChild(revealFlow.visible)
+                        revealFlow.visible
+                          ? "opacity-100 translate-y-0 scale-100"
+                          : isLast
+                            ? "opacity-0 scale-[0.97]"
+                            : "opacity-0 -translate-y-2"
                       )}
-                      style={staggerDelay(i, revealFlow.visible)}
+                      style={tierStyle}
                     >
                       {/* Gold accent bar — left edge, shrinks per tier */}
                       <div
@@ -376,7 +447,8 @@ const Index = () => {
                             {String(i + 1).padStart(2, '0')}
                           </span>
                           <span className={cn(
-                            "font-bebas text-[21px] tracking-[0.08em] uppercase leading-none",
+                            "font-bebas tracking-[0.08em] uppercase leading-none",
+                            isLast ? "text-[23px]" : "text-[21px]",
                             isFirst && "text-white",
                             isMiddle && "text-white/80",
                             isLast && "text-[#F9E076]"
@@ -385,14 +457,15 @@ const Index = () => {
                           </span>
                         </div>
 
-                        {/* Right: amount */}
+                        {/* Right: amount (countup for Net Profits) */}
                         <span className={cn(
-                          "font-mono text-[17px] font-semibold",
+                          "font-mono",
+                          isLast ? "text-[22px] font-bold" : "text-[17px] font-semibold",
                           isFirst && "text-white/80",
                           isMiddle && "text-white/60",
                           isLast && "text-[#F9E076]"
                         )}>
-                          {tier.amount}
+                          {isLast ? `$${netProfitsCount.toLocaleString()}` : tier.amount}
                         </span>
                       </div>
 
@@ -406,9 +479,12 @@ const Index = () => {
                   );
                 })}
 
-                {/* Tagline — ends cold, no CTA */}
-                <div className="border-t border-border-subtle px-5 py-5 text-center">
-                  <p className="text-[14px] font-light text-white/40">
+                {/* Tagline — fade 500ms, 400ms after countup completes (~2000ms total) */}
+                <div
+                  className={cn("border-t border-border-subtle px-5 py-5 text-center transition-opacity", revealFlow.visible ? "opacity-100" : "opacity-0")}
+                  style={{ transitionDuration: '500ms', transitionDelay: revealFlow.visible ? '2000ms' : '0ms' }}
+                >
+                  <p className="text-[14px] font-medium text-white/50">
                     This is the standard waterfall.
                   </p>
                 </div>
@@ -421,61 +497,92 @@ const Index = () => {
 
           {/* ── § 5: KNOWLEDGE ISN'T CHEAP + TWO PATHS ── */}
           <SectionFrame id="price-anchor">
-            <div ref={revealPrice.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", revealPrice.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
+            <div ref={revealPrice.ref} className={cn("max-w-2xl mx-auto transition-all duration-500", revealPrice.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")} style={{ transitionTimingFunction: EASE_REVEAL }}>
               <SectionHeader eyebrow="The Industry Standard" title={<>KNOWLEDGE ISN'T <span className="text-white">CHEAP</span></>} />
 
-              {/* 2x2 cost cards */}
+              {/* 2x2 cost cards — fade + scale(0.92), 400ms */}
               <div className="grid grid-cols-2 gap-3 max-w-sm mx-auto">
-                <div className="rounded-xl border border-border-subtle bg-bg-card p-5 text-center">
-                  <p className="font-mono text-lg font-semibold text-white/80">$5K–$15K</p>
-                  <p className="text-white/50 text-xs tracking-wider uppercase mt-1.5">Entertainment Attorney</p>
-                </div>
-                <div className="rounded-xl border border-border-subtle bg-bg-card p-5 text-center">
-                  <p className="font-mono text-lg font-semibold text-white/80">$2K–$5K</p>
-                  <p className="text-white/50 text-xs tracking-wider uppercase mt-1.5">Producing Consultant</p>
-                </div>
-                <div className="rounded-xl border border-border-subtle bg-bg-card p-5 text-center">
-                  <p className="font-mono text-lg font-semibold text-white/80">$50K–$200K</p>
-                  <p className="text-white/50 text-xs tracking-wider uppercase mt-1.5">Film School</p>
-                </div>
-                <div className="rounded-xl border border-border-subtle bg-bg-card p-5 text-center">
-                  <p className="font-mono text-lg font-semibold text-white/80">3–5 Years</p>
-                  <p className="text-white/50 text-xs tracking-wider uppercase mt-1.5">Trial and Error</p>
-                </div>
+                {[
+                  { price: "$5K–$15K", label: "Entertainment Attorney", highlight: false },
+                  { price: "$2K–$5K", label: "Producing Consultant", highlight: false },
+                  { price: "$50K–$200K", label: "Film School", highlight: true },
+                  { price: "3–5 Years", label: "Trial and Error", highlight: false },
+                ].map((card, ci) => (
+                  <div
+                    key={card.label}
+                    className={cn(
+                      "rounded-none bg-bg-card p-5 text-center transition-all",
+                      card.highlight ? "border border-gold/20" : "border border-border-subtle",
+                      revealPrice.visible ? "opacity-100 scale-100" : "opacity-0 scale-[0.92]"
+                    )}
+                    style={{
+                      transitionDuration: '400ms',
+                      transitionDelay: revealPrice.visible ? `${ci * 80}ms` : '0ms',
+                      transitionTimingFunction: EASE_SCALE,
+                      ...(card.highlight && revealPrice.visible ? { boxShadow: '0 0 20px rgba(212,175,55,0.08)' } : {}),
+                    }}
+                  >
+                    <p className={cn("font-mono text-lg font-semibold", card.highlight ? "text-white/90" : "text-white/80")}>{card.price}</p>
+                    <p className="text-white/50 text-xs tracking-wider uppercase mt-1.5">{card.label}</p>
+                  </div>
+                ))}
               </div>
 
-              {/* Product ladder */}
+              {/* Product ladder — bottom-to-top build, 200ms stagger */}
               <div className="max-w-sm mx-auto mt-10 relative">
                 {/* Vertical connector line */}
                 <div className="absolute left-3 top-0 bottom-0 w-[2px]" style={{ background: 'rgba(212,175,55,0.25)' }} />
                 <div className="space-y-3 relative">
-                  {/* Tier 3 — Investment Grade (top) */}
-                  <div className="border border-gold/40 rounded-lg p-4" style={{ background: 'rgba(212,175,55,0.03)' }}>
+                  {/* Tier 3 — Investment Grade (top, renders last: delay 400ms) */}
+                  <div
+                    className={cn("border border-gold/40 rounded-none p-4 transition-all", revealPrice.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3")}
+                    style={{ background: 'rgba(212,175,55,0.03)', transitionDuration: '400ms', transitionDelay: revealPrice.visible ? '800ms' : '0ms', transitionTimingFunction: EASE_REVEAL }}
+                  >
                     <p className="font-bebas text-[13px] tracking-[0.15em] uppercase" style={{ color: '#D4AF37' }}>INVESTMENT GRADE</p>
                     <p className="text-sm font-semibold text-white mt-1">The Pitch Package</p>
-                    <p className="text-xs text-white/60 mt-1">What the other side of the table expects to see.</p>
+                    <p className="text-sm text-white/60 mt-1">What the other side of the table expects to see.</p>
                   </div>
-                  {/* Tier 2 — Premium (middle) */}
-                  <div className="border border-gold/20 rounded-lg p-4">
+                  {/* Tier 2 — Premium (middle, delay 200ms) */}
+                  <div
+                    className={cn("border border-gold/20 rounded-none p-4 transition-all", revealPrice.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3")}
+                    style={{ transitionDuration: '400ms', transitionDelay: revealPrice.visible ? '600ms' : '0ms', transitionTimingFunction: EASE_REVEAL }}
+                  >
                     <p className="font-bebas text-[13px] tracking-[0.15em] uppercase" style={{ color: 'rgba(212,175,55,0.60)' }}>PREMIUM</p>
                     <p className="text-sm font-semibold text-white/90 mt-1">The Blueprint</p>
-                    <p className="text-xs text-white/50 mt-1">Complete financial architecture for your project.</p>
+                    <p className="text-sm text-white/50 mt-1">Complete financial architecture for your project.</p>
                   </div>
-                  {/* Tier 1 — Courtesy (bottom) */}
-                  <div className="border border-border-subtle rounded-lg p-4">
+                  {/* Tier 1 — Courtesy (bottom, first to appear: delay 400ms base) */}
+                  <div
+                    className={cn("border border-border-subtle rounded-none p-4 transition-all", revealPrice.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3")}
+                    style={{ transitionDuration: '400ms', transitionDelay: revealPrice.visible ? '400ms' : '0ms', transitionTimingFunction: EASE_REVEAL }}
+                  >
                     <p className="font-bebas text-[13px] tracking-[0.15em] uppercase text-white/50">COURTESY</p>
                     <p className="text-sm font-semibold text-white/80 mt-1">Waterfall Simulator</p>
-                    <p className="text-xs text-white/50 mt-1">Model your deal. See where every dollar goes.</p>
+                    <p className="text-sm text-white/50 mt-1">Model your deal. See where every dollar goes.</p>
                   </div>
                 </div>
               </div>
 
-              {/* Two paths */}
+              {/* Solution commands — stacked reveal, 120ms stagger, 300ms gap before last */}
               <div className="max-w-sm mx-auto text-center mt-10">
-                <p className="text-white/70 text-sm leading-relaxed">
-                  Restructure the debt. Lower the equity hurdle.<br />
-                  Stack tax credits. See what changes.
-                </p>
+                <div className="space-y-1">
+                  {[
+                    { text: "Restructure the debt.", last: false, delay: 1000 },
+                    { text: "Lower the equity hurdle.", last: false, delay: 1120 },
+                    { text: "Stack tax credits.", last: false, delay: 1240 },
+                    { text: "See what changes.", last: true, delay: 1540 },
+                  ].map((cmd) => (
+                    <p
+                      key={cmd.text}
+                      className={cn(
+                        "font-bebas text-lg tracking-[0.08em] uppercase transition-opacity",
+                        cmd.last ? "text-white" : "text-white/70",
+                        revealPrice.visible ? "opacity-100" : "opacity-0"
+                      )}
+                      style={{ transitionDuration: '300ms', transitionDelay: revealPrice.visible ? `${cmd.delay}ms` : '0ms' }}
+                    >{cmd.text}</p>
+                  ))}
+                </div>
                 <div className="mt-6">
                   <button onClick={handleStartClick}
                     className="w-full max-w-[320px] h-16 text-base btn-cta-primary">
@@ -498,9 +605,9 @@ const Index = () => {
 
           {/* ── § 6: FAQ ── */}
           <SectionFrame id="faq">
-            <div ref={revealFaq.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", revealFaq.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
+            <div ref={revealFaq.ref} className={cn("max-w-2xl mx-auto transition-all duration-500", revealFaq.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")} style={{ transitionTimingFunction: EASE_REVEAL }}>
               <SectionHeader eyebrow="Common Questions" title={<>WHAT FILMMAKERS <span className="text-white">ASK</span></>} />
-              <div className="bg-bg-card rounded-xl px-5 border border-border-subtle">
+              <div className="bg-bg-card rounded-none px-5 border border-border-subtle">
                 <Accordion type="single" collapsible className="w-full">
                   {faqs.map((faq, i) => (
                     <AccordionItem key={faq.q} value={`faq-${i}`}>
@@ -522,7 +629,7 @@ const Index = () => {
 
           {/* ── FINAL CTA ── */}
           <section id="final-cta" className="snap-section py-8 px-4">
-            <div className="flex rounded-2xl overflow-hidden border border-white/[0.06]">
+            <div className="flex rounded-none overflow-hidden border border-white/[0.06]">
               <div className="w-1 flex-shrink-0 bg-gradient-to-b from-gold via-gold/60 to-gold/20" style={{ boxShadow: '0 0 16px rgba(212,175,55,0.30)' }} />
               <div className="bg-bg-elevated flex-1 min-w-0 overflow-hidden relative">
                 <div className="h-[2px] bg-gradient-to-r from-transparent via-gold/25 to-transparent" />
@@ -550,19 +657,19 @@ const Index = () => {
             <div className="max-w-sm mx-auto">
               <div className="grid grid-cols-2 gap-3 mb-8 max-w-[340px] mx-auto">
                 <a href="mailto:thefilmmaker.og@gmail.com"
-                  className="flex items-center justify-center gap-2 text-sm tracking-wider text-gold/70 hover:text-gold transition-colors active:scale-[0.97] py-3.5 rounded-lg border border-white/[0.08] hover:border-gold/30">
+                  className="flex items-center justify-center gap-2 text-sm tracking-wider text-gold/70 hover:text-gold transition-colors active:scale-[0.97] py-3.5 rounded-none border border-white/[0.08] hover:border-gold/30">
                   <Mail className="w-4 h-4" /><span>Email</span>
                 </a>
                 <a href="https://www.instagram.com/filmmaker.og" target="_blank" rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 text-sm tracking-wider text-gold/70 hover:text-gold transition-colors active:scale-[0.97] py-3.5 rounded-lg border border-white/[0.08] hover:border-gold/30">
+                  className="flex items-center justify-center gap-2 text-sm tracking-wider text-gold/70 hover:text-gold transition-colors active:scale-[0.97] py-3.5 rounded-none border border-white/[0.08] hover:border-gold/30">
                   <Instagram className="w-4 h-4" /><span>Instagram</span>
                 </a>
                 <button onClick={handleShare}
-                  className="flex items-center justify-center gap-2 text-sm tracking-wider text-gold/70 hover:text-gold transition-colors active:scale-[0.97] py-3.5 rounded-lg border border-white/[0.08] hover:border-gold/30">
+                  className="flex items-center justify-center gap-2 text-sm tracking-wider text-gold/70 hover:text-gold transition-colors active:scale-[0.97] py-3.5 rounded-none border border-white/[0.08] hover:border-gold/30">
                   <Share2 className="w-4 h-4" /><span>Share</span>
                 </button>
                 <button onClick={handleCopyLink}
-                  className="flex items-center justify-center gap-2 text-sm tracking-wider text-gold/70 hover:text-gold transition-colors active:scale-[0.97] py-3.5 rounded-lg border border-white/[0.08] hover:border-gold/30">
+                  className="flex items-center justify-center gap-2 text-sm tracking-wider text-gold/70 hover:text-gold transition-colors active:scale-[0.97] py-3.5 rounded-none border border-white/[0.08] hover:border-gold/30">
                   {linkCopied ? (
                     <><Check className="w-4 h-4 text-green-400" /><span className="text-green-400">Copied!</span></>
                   ) : (
