@@ -63,15 +63,15 @@ const faqs = [
   },
   {
     q: "What are the premium exports?",
-    a: "The simulator, waterfall chart, glossary, and unlimited scenarios are completely free. When you\u2019re ready to take it into a meeting, you can export a 6-sheet Excel workbook and an investor-ready PDF\u00A0— the documents your investor\u2019s accountant and attorney will actually review."
+    a: "The simulator, waterfall chart, deal glossary, and unlimited scenarios are completely free\u00A0\u2014 no account required. When you\u2019re ready to take it into a real meeting, premium exports include a 6-sheet Excel workbook and an investor-ready PDF. These are the documents your investor\u2019s accountant and attorney will actually review."
   },
   {
     q: "Who built this?",
-    a: "A Tribeca-winning, CAA-repped producer whose debut sold to Netflix. This tool exists because the waterfall is the most important financial document in independent film\u00A0— and most producers have never seen one before their first investor meeting."
+    a: "A producer who spent years learning through expensive mistakes what should have been accessible from day one. Tribeca-winning, CAA-repped, debut sold to Netflix. This tool exists because the waterfall shouldn\u2019t be something you discover for the first time when someone else\u2019s lawyer slides it across the table."
   },
   {
     q: "Why is this free?",
-    a: "Because understanding your own deal shouldn\u2019t require a $5,000 retainer. The people sitting across the table from you\u00A0— distributors, sales agents, financiers\u00A0— model waterfalls before every negotiation. Now you can too."
+    a: "Film is an alternative asset class\u00A0\u2014 same category as real estate, private equity, and venture capital. Every other alt asset gives investors standardized tools to model returns. Film doesn\u2019t. That\u2019s why the industry has a reputation as a bad investment. It\u2019s not. It\u2019s a misunderstood one. This tool is the starting point."
   },
 ];
 
@@ -245,7 +245,7 @@ const Index = () => {
           <div className="vignette" />
 
           {/* ── HERO ── */}
-          <section id="hero" className="snap-section min-h-0 pt-16 pb-8 flex flex-col justify-center relative overflow-hidden">
+          <section id="hero" className="snap-section min-h-0 pt-20 pb-12 flex flex-col justify-center relative overflow-hidden">
             <div className="absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none animate-spotlight-pulse"
               style={{ width: '100vw', height: '120%', background: `radial-gradient(ellipse 50% 50% at 50% 15%, rgba(212,175,55,0.10) 0%, rgba(212,175,55,0.04) 45%, transparent 75%)` }} />
             <div className="relative px-6 py-4 max-w-xl mx-auto text-center">
@@ -298,8 +298,8 @@ const Index = () => {
           {/* ── § 2: THE PROBLEM ── */}
           <SectionFrame id="problem">
             <div ref={revealProblem.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", revealProblem.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
-              <SectionHeader eyebrow="The Problem" title={<>MOST INDIE FILMS LOSE MONEY.<br /><span className="text-white">HERE'S WHY.</span></>} />
-              <div className="rounded-xl border border-border-subtle bg-bg-card max-w-md mx-auto overflow-hidden">
+              <SectionHeader eyebrow="The Problem" title={<>MOST INDIE FILMS <span className="text-white">LOSE MONEY.</span></>} />
+              <div className="rounded-xl border border-border-subtle bg-bg-card max-w-lg mx-auto overflow-hidden">
                 {problemFacts.map((fact, i) => (
                   <div
                     key={i}
@@ -310,7 +310,7 @@ const Index = () => {
                     )}
                     style={staggerDelay(i, revealProblem.visible)}
                   >
-                    <span className="font-mono text-[11px] text-white/20">{String(i + 1).padStart(2, '0')}</span>
+                    <span className="font-mono text-[11px] text-white/20 tabular-nums">{String(i + 1).padStart(2, '0')}</span>
                     <h3 className="font-bebas text-[19px] md:text-[21px] tracking-[0.06em] uppercase leading-tight mt-1 text-white">{fact.headline}</h3>
                     <p className="text-white/40 text-sm leading-relaxed mt-2">{fact.body}</p>
                   </div>
@@ -329,8 +329,13 @@ const Index = () => {
             <div ref={revealFlow.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", revealFlow.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
               <SectionHeader eyebrow="What They Didn't Teach You In Film School" title={<>FROM FIRST MONEY IN TO LAST MONEY <span className="text-white">OUT</span></>} />
 
+              {/* Annotation */}
+              <p className="text-white/30 text-sm text-center mb-4 max-w-md mx-auto">
+                A $3M SVOD acquisition. Here&rsquo;s what actually reaches the filmmaker.
+              </p>
+
               {/* Waterfall tier list card */}
-              <div className="rounded-xl border border-border-subtle bg-bg-card max-w-sm mx-auto mt-6 overflow-hidden">
+              <div className="rounded-xl border border-border-subtle bg-bg-card max-w-md mx-auto overflow-hidden">
                 {waterfallTiers.map((tier, i) => {
                   const isFirst = i === 0;
                   const isLast = i === waterfallTiers.length - 1;
@@ -363,7 +368,7 @@ const Index = () => {
                             {String(i + 1).padStart(2, '0')}
                           </span>
                           <span className={cn(
-                            "font-bebas text-[17px] tracking-[0.08em] uppercase leading-none",
+                            "font-bebas text-[19px] tracking-[0.08em] uppercase leading-none",
                             isFirst && "text-white",
                             isMiddle && "text-white/70",
                             isLast && "text-[#F9E076]"
@@ -374,7 +379,7 @@ const Index = () => {
 
                         {/* Right: amount */}
                         <span className={cn(
-                          "font-mono text-[13px] font-medium",
+                          "font-mono text-[15px] font-medium",
                           isFirst && "text-white/70",
                           isMiddle && "text-white/40",
                           isLast && "text-[#F9E076]"
@@ -385,7 +390,7 @@ const Index = () => {
 
                       {/* Remaining balance (tiers 2-6 only) */}
                       {tier.remaining && (
-                        <p className="font-mono text-[11px] text-white/15 text-right mt-1">
+                        <p className="font-mono text-[12px] text-white/15 text-right mt-1">
                           {tier.remaining} remaining
                         </p>
                       )}
@@ -393,23 +398,24 @@ const Index = () => {
                   );
                 })}
 
-                {/* Tagline */}
-                <p
-                  className="text-center text-[13px] font-light px-5 py-5 border-t border-border-subtle"
-                  style={{ color: 'rgba(255,255,255,0.25)' }}
-                >
-                  This is the standard waterfall.
-                </p>
-              </div>
-
-              {/* CTA below card */}
-              <div className="text-center mt-8">
-                <button
-                  onClick={handleStartClick}
-                  className="w-full max-w-[320px] h-16 text-base btn-cta-primary"
-                >
-                  BUILD A BETTER ONE
-                </button>
+                {/* Tagline + solution + CTA */}
+                <div className="border-t border-border-subtle px-5 py-6 text-center">
+                  <p className="text-[14px] font-light" style={{ color: 'rgba(255,255,255,0.30)' }}>
+                    This is the standard waterfall.
+                  </p>
+                  <p className="text-white/50 text-sm leading-relaxed mt-4">
+                    Restructure the debt. Lower the equity hurdle.<br />
+                    Stack tax credits. See what changes.
+                  </p>
+                  <div className="mt-6">
+                    <button
+                      onClick={handleStartClick}
+                      className="w-full max-w-[280px] h-14 text-base btn-cta-primary"
+                    >
+                      BUILD A BETTER ONE
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           </SectionFrame>
@@ -420,9 +426,9 @@ const Index = () => {
           {/* ── § 4: THIS KNOWLEDGE ISN'T CHEAP ── */}
           <SectionFrame id="price-anchor">
             <div ref={revealPrice.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", revealPrice.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
-              <SectionHeader eyebrow="The Industry Standard" title={<>THIS KNOWLEDGE ISN'T <span className="text-white">CHEAP</span></>} />
+              <SectionHeader eyebrow="The Industry Standard" title={<>KNOWLEDGE ISN'T <span className="text-white">CHEAP</span></>} />
 
-              <div className="max-w-xs mx-auto mt-2 space-y-4">
+              <div className="max-w-xs mx-auto mt-2">
                 <div className="space-y-3">
                   <div className="flex items-baseline justify-between py-3 border-b border-white/[0.06]">
                     <span className="text-white/50 text-sm">Entertainment Attorney</span>
@@ -442,7 +448,7 @@ const Index = () => {
                   </div>
                 </div>
 
-                <div className="text-center pt-4">
+                <div className="text-center pt-8">
                   <button
                     onClick={handleStartClick}
                     className="w-full max-w-[320px] h-16 text-base btn-cta-primary"
