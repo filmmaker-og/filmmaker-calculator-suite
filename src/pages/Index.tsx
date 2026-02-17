@@ -66,13 +66,13 @@ const realities = [
    WATERFALL TIERS — proportional bars ($3M cascade)
    ═══════════════════════════════════════════════════════════════════ */
 const waterfallTiers = [
-  { name: "Acquisition Price", amount: "$3,000,000",    pct: 100.0, barColor: "rgba(212,175,55,0.50)", isFinal: false },
-  { name: "CAM Fees",          amount: "\u2212$22,500",      pct: 99.3,  barColor: "rgba(212,175,55,0.40)", isFinal: false },
-  { name: "Sales Agent",       amount: "\u2212$450,000",     pct: 84.3,  barColor: "rgba(212,175,55,0.33)", isFinal: false },
-  { name: "Senior Debt",       amount: "\u2212$440,000",     pct: 69.6,  barColor: "rgba(212,175,55,0.25)", isFinal: false },
-  { name: "Mezzanine",         amount: "\u2212$230,000",     pct: 61.9,  barColor: "rgba(212,175,55,0.18)", isFinal: false },
-  { name: "Equity Recoupment", amount: "\u2212$1,440,000",   pct: 13.9,  barColor: "rgba(212,175,55,0.12)", isFinal: false },
-  { name: "Net Profits",       amount: "$417,500",       pct: 13.9,  barColor: "#00C853",              isFinal: true  },
+  { name: "Acquisition Price", amount: "$3,000,000",    pct: 100.0, barColor: "rgba(212,175,55,0.70)", isFinal: false },
+  { name: "CAM Fees",          amount: "\u2212$22,500",      pct: 99.3,  barColor: "rgba(230,160,50,0.55)", isFinal: false },
+  { name: "Sales Agent",       amount: "\u2212$450,000",     pct: 84.3,  barColor: "rgba(220,120,40,0.50)", isFinal: false },
+  { name: "Senior Debt",       amount: "\u2212$440,000",     pct: 69.6,  barColor: "rgba(200,80,40,0.45)",  isFinal: false },
+  { name: "Mezzanine",         amount: "\u2212$230,000",     pct: 61.9,  barColor: "rgba(180,50,50,0.40)",  isFinal: false },
+  { name: "Equity Recoupment", amount: "\u2212$1,440,000",   pct: 13.9,  barColor: "rgba(140,30,40,0.35)",  isFinal: false },
+  { name: "Net Profits",       amount: "$417,500",       pct: 13.9,  barColor: "#00C853",               isFinal: true  },
 ];
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -202,19 +202,7 @@ const Index = () => {
     return () => obs.disconnect();
   }, []);
 
-  // Ladder bar animation
-  const [ladderRevealed, setLadderRevealed] = useState(false);
   const ladderRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const el = ladderRef.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([e]) => { if (e.isIntersecting) { setLadderRevealed(true); obs.disconnect(); } },
-      { threshold: 0.2 }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, []);
 
   // Closed doors — lock animation (doors dim after appearing)
   const [doorsLocked, setDoorsLocked] = useState(false);
@@ -371,16 +359,13 @@ const Index = () => {
                   <button onClick={handleStartClick} className="w-full h-[60px] text-base btn-cta-primary">
                     BUILD YOUR WATERFALL &mdash; FREE
                   </button>
-                  <p className="text-white/50 text-sm tracking-[0.10em] text-center">No account required. Results in 60&nbsp;seconds.</p>
-                  <p className="text-white/30 text-xs tracking-wider text-center pt-1">
-                    Used by independent producers financing films from $1M&ndash;$10M.
-                  </p>
+                  <p className="text-white/50 text-sm tracking-[0.10em] text-center">No account required. Results in two&nbsp;minutes.</p>
                 </div>
               )}
 
               <div className="mt-8 flex justify-center animate-bounce-subtle cursor-pointer active:scale-[0.97]"
                 onClick={() => document.getElementById('mission')?.scrollIntoView({ behavior: 'smooth' })}>
-                <ChevronDown className="w-5 h-5 text-gold/60" />
+                <ChevronDown className="w-6 h-6 text-gold" />
               </div>
             </div>
           </section>
@@ -408,8 +393,8 @@ const Index = () => {
                     <div
                       key={row.asset}
                       className={cn(
-                        "flex items-center justify-between px-5 py-4 transition-all duration-500 ease-out",
-                        row.status ? "bg-white/[0.04]" : "bg-gold/[0.06]",
+                        "flex items-center justify-between px-5 transition-all duration-500 ease-out",
+                        row.status ? "bg-white/[0.04] py-4" : "bg-gold/[0.10] py-5 border-l-[3px] border-gold/60",
                         revMission.visible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-3"
                       )}
                       style={{ transitionDelay: revMission.visible ? `${300 + i * 120}ms` : '0ms' }}
@@ -417,18 +402,17 @@ const Index = () => {
                       <div className="flex items-center gap-3">
                         {row.status
                           ? <Check className="w-3.5 h-3.5 text-gold/50 flex-shrink-0" />
-                          : <X className="w-3.5 h-3.5 text-white/20 flex-shrink-0" />
+                          : <X className="w-4 h-4 text-white/30 flex-shrink-0" />
                         }
                         <span className={cn(
-                          "font-bebas text-[15px] tracking-[0.10em] uppercase",
-                          row.status ? "text-white/60" : "text-gold"
+                          "font-bebas tracking-[0.10em] uppercase",
+                          row.status ? "text-[17px] text-white/60" : "text-[20px] text-gold"
                         )}>
                           {row.asset}
                         </span>
                       </div>
                       <span className={cn(
-                        "text-sm",
-                        row.status ? "text-white/40" : "font-bebas text-[17px] tracking-[0.06em] text-white"
+                        row.status ? "text-sm text-white/40" : "font-bebas text-[19px] tracking-[0.06em] text-white font-bold"
                       )}>
                         {row.tool}
                       </span>
@@ -436,10 +420,10 @@ const Index = () => {
                   ))}
                 </div>
 
-                <p className="text-center text-white/50 text-sm leading-relaxed mt-6">
+                <p className="text-center text-white/50 text-sm leading-relaxed mt-8">
                   Every other asset class gives investors standardized tools to model&nbsp;returns.
                 </p>
-                <p className="text-center font-bebas text-2xl md:text-3xl tracking-[0.06em] text-gold mt-3">
+                <p className="text-center font-bebas text-3xl md:text-4xl tracking-[0.06em] text-gold mt-5 mb-2">
                   Until now.
                 </p>
               </div>
@@ -449,9 +433,11 @@ const Index = () => {
                 <div className="relative bg-white/[0.05] border border-white/[0.08] overflow-hidden">
                   {/* Gold left accent */}
                   <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-gold/60 via-gold/30 to-transparent" />
+                  {/* Gold bottom accent */}
+                  <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
                   <div className="p-6 md:p-8 pl-7 md:pl-10">
                     {/* Opening quote mark */}
-                    <div className="font-bebas text-[64px] md:text-[80px] leading-none select-none pointer-events-none text-gold/20 -mb-6 -ml-1"
+                    <div className="font-bebas text-[64px] md:text-[80px] leading-none select-none pointer-events-none text-gold/40 -mb-6 -ml-1"
                       aria-hidden="true">{"\u201C"}</div>
                     <blockquote className="relative z-10">
                       <p className="text-[15px] md:text-base leading-[1.7] text-white/80 italic">
@@ -496,7 +482,7 @@ const Index = () => {
                     <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-gold/50 via-gold/25 to-transparent" />
                     <div className="relative z-10 pl-2">
                       <div className="flex items-baseline gap-3 mb-3">
-                        <span className="font-mono text-lg text-gold/30 font-semibold leading-none">{String(i + 1).padStart(2, '0')}</span>
+                        <span className="font-mono text-2xl text-gold/20 font-semibold leading-none">{String(i + 1).padStart(2, '0')}</span>
                         <h3 className="font-bebas text-[17px] tracking-[0.12em] uppercase text-gold">
                           {r.label}
                         </h3>
@@ -505,8 +491,8 @@ const Index = () => {
                       <div className="h-[1px] bg-gradient-to-r from-gold/30 to-transparent mt-4 mb-3" />
                       <p
                         className={cn(
-                          "font-semibold italic transition-opacity duration-[0ms]",
-                          r.loud ? "text-base text-white not-italic" : "text-sm text-white/70",
+                          "italic transition-opacity duration-[0ms]",
+                          r.loud ? "text-base font-bold text-white" : "text-sm font-semibold text-white/70",
                           revEvidence.visible ? "opacity-100" : "opacity-0"
                         )}
                         style={{
@@ -514,7 +500,7 @@ const Index = () => {
                           transitionDelay: revEvidence.visible ? `${600 + i * 180}ms` : '0ms',
                         }}
                       >
-                        {r.loud ? r.punchline : `\u201C${r.punchline}\u201D`}
+                        {"\u201C"}{r.punchline}{"\u201D"}
                       </p>
                     </div>
                   </div>
@@ -589,7 +575,7 @@ const Index = () => {
                 {/* Mid-waterfall CTA — capture intent at emotional peak */}
                 <div className="border-t border-white/[0.06] px-5 py-6 text-center">
                   <p className="text-white/50 text-[13px] tracking-wide mb-4">
-                    This is the standard waterfall.
+                    A simplified waterfall.
                   </p>
                   <button onClick={handleStartClick}
                     className="w-full max-w-[280px] h-12 text-sm btn-cta-primary mx-auto">
@@ -615,54 +601,52 @@ const Index = () => {
                 THE DOORS ARE <span className="text-white">CLOSED.</span>
               </SHeader>
 
-              <div className="max-w-sm mx-auto border border-white/[0.06] overflow-hidden">
+              <div className="grid grid-cols-2 gap-3 max-w-lg mx-auto">
                 {closedDoors.map((door, i) => (
                   <div
                     key={door.name}
                     className={cn(
-                      "px-5 py-5 transition-all duration-600 ease-out relative",
-                      i > 0 && "border-t border-white/[0.06]",
-                      revCost.visible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-3"
+                      "relative bg-white/[0.05] border border-white/[0.08] p-5 transition-all duration-600 ease-out overflow-hidden",
+                      revCost.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                     )}
                     style={{
                       transitionDelay: revCost.visible ? `${i * 150}ms` : '0ms',
-                      background: doorsLocked ? 'rgba(255,255,255,0.01)' : 'rgba(255,255,255,0.02)',
                     }}
                   >
-                    <div className="flex items-center justify-between">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2.5">
-                          <Lock
-                            className={cn(
-                              "w-3.5 h-3.5 flex-shrink-0 transition-all duration-700",
-                              doorsLocked ? "text-white/25 opacity-100" : "text-white/0 opacity-0"
-                            )}
-                            style={{ transitionDelay: doorsLocked ? `${i * 200}ms` : '0ms' }}
-                          />
-                          <p
-                            className={cn(
-                              "font-bebas text-[19px] md:text-[22px] tracking-[0.10em] uppercase transition-all duration-700",
-                              doorsLocked ? "text-white/20 line-through decoration-white/10" : "text-white/80"
-                            )}
-                            style={{ transitionDelay: doorsLocked ? `${i * 200}ms` : '0ms' }}
-                          >
-                            {door.name}
-                          </p>
-                        </div>
+                    {/* Gold left elbow accent */}
+                    <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-gold/50 via-gold/25 to-transparent" />
+                    <div className="pl-2">
+                      <div className="flex items-start justify-between mb-2">
                         <p
                           className={cn(
-                            "text-sm italic mt-1.5 transition-all duration-700",
-                            doorsLocked ? "text-white/40 opacity-100" : "opacity-0"
+                            "font-bebas text-[18px] md:text-[20px] tracking-[0.10em] uppercase leading-tight transition-all duration-700",
+                            doorsLocked ? "text-white/30" : "text-white/80"
                           )}
-                          style={{ transitionDelay: doorsLocked ? `${i * 200 + 100}ms` : '0ms' }}
+                          style={{ transitionDelay: doorsLocked ? `${i * 200}ms` : '0ms' }}
                         >
-                          {door.lock}
+                          {door.name}
                         </p>
+                        <Lock
+                          className={cn(
+                            "w-3.5 h-3.5 flex-shrink-0 ml-2 mt-0.5 transition-all duration-700",
+                            doorsLocked ? "text-white/25 opacity-100" : "text-white/0 opacity-0"
+                          )}
+                          style={{ transitionDelay: doorsLocked ? `${i * 200}ms` : '0ms' }}
+                        />
                       </div>
+                      <p
+                        className={cn(
+                          "text-sm leading-relaxed transition-all duration-700",
+                          doorsLocked ? "text-white/40 opacity-100" : "opacity-0"
+                        )}
+                        style={{ transitionDelay: doorsLocked ? `${i * 200 + 100}ms` : '0ms' }}
+                      >
+                        {door.lock}
+                      </p>
                       <span
                         className={cn(
-                          "font-mono text-xs transition-all duration-700 flex-shrink-0 ml-4",
-                          doorsLocked ? "text-white/15" : "text-white/30"
+                          "inline-block font-mono text-xs mt-3 transition-all duration-700",
+                          doorsLocked ? "text-white/20" : "text-white/30"
                         )}
                         style={{ transitionDelay: doorsLocked ? `${i * 200 + 50}ms` : '0ms' }}
                       >
@@ -685,7 +669,7 @@ const Index = () => {
               <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/50 to-transparent" />
               <div className="py-10 px-4 text-center">
                 <h3 className="font-bebas text-[28px] md:text-[36px] tracking-[0.08em] uppercase text-gold leading-tight">
-                  We Built The Toolkit That Levels The Playing{"\u00A0"}<span className="text-white">Field</span>.
+                  We Built The Toolkit They Didn{"\u2019"}t Teach You In Film{"\u00A0"}<span className="text-white">School</span>.
                 </h3>
               </div>
               <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/50 to-transparent" />
@@ -705,64 +689,59 @@ const Index = () => {
                 Whether you&rsquo;re modeling your first deal or walking into a meeting with real&nbsp;capital, there&rsquo;s a tier built for&nbsp;you.
               </p>
 
-              {/* Product ladder — gold proportional bars */}
-              <div ref={ladderRef} className="max-w-md mx-auto border border-white/[0.06] overflow-hidden">
+              {/* Product cards */}
+              <div ref={ladderRef} className="grid grid-cols-1 gap-4 max-w-md mx-auto">
                 {productTiers.map((t, i) => (
                   <div
                     key={t.tier}
                     className={cn(
-                      "px-5 py-5 transition-all duration-600 ease-out relative",
-                      i > 0 && "border-t border-white/[0.06]",
-                      i === 2 && "bg-gold/[0.03]",
+                      "relative bg-white/[0.04] border overflow-hidden p-6 transition-all duration-600 ease-out",
+                      t.featured ? "border-gold/30 bg-gold/[0.04]" : "border-white/[0.08]",
                       revPath.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
                     )}
                     style={{ transitionDelay: revPath.visible ? `${i * 150}ms` : '0ms' }}
                   >
+                    {/* Gold left accent for featured */}
                     {t.featured && (
-                      <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
+                      <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-gold/60 via-gold/30 to-transparent" />
                     )}
                     {t.featured && (
-                      <div className="mb-2">
-                        <span className="text-xs tracking-[0.16em] uppercase font-bold text-gold bg-gold/[0.10] px-2.5 py-1 border border-gold/30">
+                      <div className="mb-3">
+                        <span className="text-sm tracking-[0.16em] uppercase font-bold text-gold bg-gold/[0.12] px-3 py-1.5 border border-gold/40">
                           Recommended
                         </span>
                       </div>
                     )}
-                    <div className="flex items-baseline justify-between mb-1.5">
-                      <div className="flex items-baseline gap-3">
-                        <span className={cn("font-bebas text-[13px] tracking-[0.15em] uppercase", t.tierColor)}>
-                          {t.tier}
-                        </span>
-                        <span className={cn("text-sm font-semibold", t.nameColor)}>
-                          {t.product}
-                        </span>
-                      </div>
+                    <div className="flex items-baseline justify-between mb-1">
+                      <span className={cn("font-bebas text-[13px] tracking-[0.15em] uppercase", t.tierColor)}>
+                        {t.tier}
+                      </span>
                       <span className={cn(
-                        "font-mono text-[13px] font-semibold",
+                        "font-mono text-[15px] font-semibold",
                         t.featured ? "text-gold" : "text-white/40"
                       )}>
                         {t.price}
                       </span>
                     </div>
-                    <p className={cn("text-sm mb-3", t.descColor)}>{t.desc}</p>
-                    <div className={cn("w-full bg-white/[0.04] relative overflow-hidden", t.barH)}>
-                      <div
-                        className={cn("absolute left-0 top-0 h-full", t.barClass)}
-                        style={{
-                          width: ladderRevealed ? `${t.pct}%` : '0%',
-                          transition: 'width 600ms cubic-bezier(0.16,1,0.3,1)',
-                          transitionDelay: `${i * 250}ms`,
-                          boxShadow: i === 2 ? '0 0 12px rgba(212,175,55,0.25)' : 'none',
-                        }}
-                      />
-                    </div>
+                    <h4 className={cn("font-bebas text-[22px] tracking-[0.08em] uppercase mb-2", t.nameColor)}>
+                      {t.product}
+                    </h4>
+                    <p className={cn("text-sm leading-relaxed mb-4", t.descColor)}>{t.desc}</p>
+                    <a
+                      href={i === 0 ? "/calculator?tab=budget" : "/store"}
+                      className={cn(
+                        "inline-flex items-center text-sm tracking-wider transition-colors",
+                        t.featured ? "text-gold hover:text-gold/80" : "text-white/40 hover:text-white/60"
+                      )}
+                    >
+                      {i === 0 ? "Get Started" : "View Package"} <span className="ml-1.5">&rarr;</span>
+                    </a>
                   </div>
                 ))}
               </div>
 
               {/* CTA */}
               <div className="text-center mt-10">
-                <p className="text-white/40 text-xs tracking-[0.15em] uppercase mb-4">Start free. Upgrade when you&rsquo;re ready.</p>
                 <button onClick={handleStartClick}
                   className="w-full max-w-[320px] h-[60px] text-base btn-cta-primary mx-auto">
                   MODEL YOUR FIRST DEAL
@@ -810,16 +789,16 @@ const Index = () => {
                § 8  FINAL CTA
              ────────────────────────────────────────────────────────── */}
           <section id="final-cta" className="snap-section py-10 px-4">
-            <div ref={revFinal.ref} className={cn("relative overflow-hidden border border-gold/20 transition-all duration-700 ease-out", revFinal.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
+            <div ref={revFinal.ref} className={cn("relative overflow-hidden border border-gold/40 transition-all duration-700 ease-out", revFinal.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
               {/* Gold corner accents */}
-              <div className="absolute top-0 left-0 w-8 h-[1px] bg-gold/50" />
-              <div className="absolute top-0 left-0 w-[1px] h-8 bg-gold/50" />
-              <div className="absolute top-0 right-0 w-8 h-[1px] bg-gold/50" />
-              <div className="absolute top-0 right-0 w-[1px] h-8 bg-gold/50" />
-              <div className="absolute bottom-0 left-0 w-8 h-[1px] bg-gold/50" />
-              <div className="absolute bottom-0 left-0 w-[1px] h-8 bg-gold/50" />
-              <div className="absolute bottom-0 right-0 w-8 h-[1px] bg-gold/50" />
-              <div className="absolute bottom-0 right-0 w-[1px] h-8 bg-gold/50" />
+              <div className="absolute top-0 left-0 w-8 h-[1px] bg-gold/70" />
+              <div className="absolute top-0 left-0 w-[1px] h-8 bg-gold/70" />
+              <div className="absolute top-0 right-0 w-8 h-[1px] bg-gold/70" />
+              <div className="absolute top-0 right-0 w-[1px] h-8 bg-gold/70" />
+              <div className="absolute bottom-0 left-0 w-8 h-[1px] bg-gold/70" />
+              <div className="absolute bottom-0 left-0 w-[1px] h-8 bg-gold/70" />
+              <div className="absolute bottom-0 right-0 w-8 h-[1px] bg-gold/70" />
+              <div className="absolute bottom-0 right-0 w-[1px] h-8 bg-gold/70" />
 
               {/* Ambient glow */}
               <div className="absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none"
@@ -843,23 +822,23 @@ const Index = () => {
 
           {/* ── FOOTER ── */}
           <footer className="py-10 px-6">
-            <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/25 to-transparent mb-8" />
+            <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/40 to-transparent mb-8" />
             <div className="max-w-sm mx-auto">
-              <div className="grid grid-cols-2 gap-3 mb-8 max-w-[340px] mx-auto">
+              <div className="grid grid-cols-2 gap-4 mb-8 max-w-[340px] mx-auto">
                 <a href="mailto:thefilmmaker.og@gmail.com"
-                  className="flex items-center justify-center gap-2 text-sm tracking-wider text-gold/70 hover:text-gold transition-colors active:scale-[0.97] py-3.5 border border-white/[0.08] hover:border-gold/30">
+                  className="flex items-center justify-center gap-2 text-sm tracking-wider text-gold/70 hover:text-gold transition-colors active:scale-[0.97] py-5 border border-white/[0.08] hover:border-gold/30">
                   <Mail className="w-4 h-4" /><span>Email</span>
                 </a>
                 <a href="https://www.instagram.com/filmmaker.og" target="_blank" rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 text-sm tracking-wider text-gold/70 hover:text-gold transition-colors active:scale-[0.97] py-3.5 border border-white/[0.08] hover:border-gold/30">
+                  className="flex items-center justify-center gap-2 text-sm tracking-wider text-gold/70 hover:text-gold transition-colors active:scale-[0.97] py-5 border border-white/[0.08] hover:border-gold/30">
                   <Instagram className="w-4 h-4" /><span>Instagram</span>
                 </a>
                 <button onClick={handleShare}
-                  className="flex items-center justify-center gap-2 text-sm tracking-wider text-gold/70 hover:text-gold transition-colors active:scale-[0.97] py-3.5 border border-white/[0.08] hover:border-gold/30">
+                  className="flex items-center justify-center gap-2 text-sm tracking-wider text-gold/70 hover:text-gold transition-colors active:scale-[0.97] py-5 border border-white/[0.08] hover:border-gold/30">
                   <Share2 className="w-4 h-4" /><span>Share</span>
                 </button>
                 <button onClick={handleCopyLink}
-                  className="flex items-center justify-center gap-2 text-sm tracking-wider text-gold/70 hover:text-gold transition-colors active:scale-[0.97] py-3.5 border border-white/[0.08] hover:border-gold/30">
+                  className="flex items-center justify-center gap-2 text-sm tracking-wider text-gold/70 hover:text-gold transition-colors active:scale-[0.97] py-5 border border-white/[0.08] hover:border-gold/30">
                   {linkCopied ? (
                     <><Check className="w-4 h-4 text-green-400" /><span className="text-green-400">Copied!</span></>
                   ) : (
