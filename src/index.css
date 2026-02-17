@@ -626,16 +626,16 @@
      CTA GLOW SOFT — inviting, not aggressive
      ═══════════════════════════════════════════════════════════════════ */
   @keyframes cta-glow-soft {
-    0%, 100% { box-shadow: 0 0 12px rgba(249,224,118,0.08); }
-    50% { box-shadow: 0 0 20px rgba(249,224,118,0.18); }
+    0%, 100% { box-shadow: 0 8px 32px rgba(249,224,118,0.12), inset 0 1px 0 rgba(249,224,118,0.08); }
+    50% { box-shadow: 0 8px 32px rgba(249,224,118,0.22), 0 0 16px rgba(249,224,118,0.08), inset 0 1px 0 rgba(249,224,118,0.12); }
   }
   .animate-cta-glow-soft {
     animation: cta-glow-soft 3s ease-in-out infinite;
   }
 
   @keyframes cta-glow-pulse {
-    0%, 100% { box-shadow: 0 0 14px rgba(249,224,118,0.10); }
-    50% { box-shadow: 0 0 24px rgba(249,224,118,0.22); }
+    0%, 100% { box-shadow: 0 8px 32px rgba(249,224,118,0.15), inset 0 1px 0 rgba(249,224,118,0.08); }
+    50% { box-shadow: 0 12px 40px rgba(249,224,118,0.28), 0 0 20px rgba(249,224,118,0.12), inset 0 1px 0 rgba(249,224,118,0.12); }
   }
   .animate-cta-glow-pulse {
     animation: cta-glow-pulse 3s ease-in-out infinite;
@@ -647,7 +647,10 @@
      Secondary: non-featured product / comparison CTAs
      ═══════════════════════════════════════════════════════════════════ */
   .btn-cta-primary {
-    background: var(--gold-cta-subtle);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(249, 224, 118, 0.18) 0%, rgba(212, 175, 55, 0.12) 100%);
     border: 2px solid var(--gold-cta-muted);
     color: var(--gold-cta);
     font-weight: 700;
@@ -655,19 +658,29 @@
     text-transform: uppercase;
     border-radius: var(--radius-md);
     transition: all var(--timing-fast) ease;
+    box-shadow: 0 8px 32px rgba(249, 224, 118, 0.15), inset 0 1px 0 rgba(249, 224, 118, 0.10);
     animation: cta-glow-soft 3s ease-in-out infinite;
   }
   .btn-cta-primary:hover {
-    border-color: rgba(249, 224, 118, 0.65);
-    background: rgba(249, 224, 118, 0.18);
+    background: linear-gradient(135deg, rgba(249, 224, 118, 0.25) 0%, rgba(212, 175, 55, 0.18) 100%);
+    box-shadow: 0 12px 40px rgba(249, 224, 118, 0.25), inset 0 1px 0 rgba(249, 224, 118, 0.15);
   }
   .btn-cta-primary:active {
     transform: scale(0.96);
   }
+  .btn-cta-primary:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    animation: none;
+    box-shadow: none;
+  }
 
   .btn-cta-secondary {
-    background: transparent;
-    border: 1px solid var(--gold-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(212, 175, 55, 0.06);
+    border: 1px solid rgba(212, 175, 55, 0.30);
     color: var(--gold);
     font-weight: 700;
     letter-spacing: 0.12em;
@@ -676,11 +689,15 @@
     transition: all var(--timing-fast) ease;
   }
   .btn-cta-secondary:hover {
-    border-color: rgba(212, 175, 55, 0.60);
-    background: rgba(212, 175, 55, 0.08);
+    border-color: rgba(212, 175, 55, 0.50);
+    background: rgba(212, 175, 55, 0.10);
   }
   .btn-cta-secondary:active {
     transform: scale(0.96);
+  }
+  .btn-cta-secondary:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
   }
 
   /* ═══════════════════════════════════════════════════════════════════
