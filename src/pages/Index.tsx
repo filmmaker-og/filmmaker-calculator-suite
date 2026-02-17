@@ -66,13 +66,13 @@ const realities = [
    WATERFALL TIERS — proportional bars ($3M cascade)
    ═══════════════════════════════════════════════════════════════════ */
 const waterfallTiers = [
-  { name: "Acquisition Price", amount: "$3,000,000",    pct: 100.0, barOpacity: 0.60, isFinal: false },
-  { name: "CAM Fees",          amount: "\u2212$22,500",      pct: 99.3,  barOpacity: 0.45, isFinal: false },
-  { name: "Sales Agent",       amount: "\u2212$450,000",     pct: 84.3,  barOpacity: 0.40, isFinal: false },
-  { name: "Senior Debt",       amount: "\u2212$440,000",     pct: 69.6,  barOpacity: 0.30, isFinal: false },
-  { name: "Mezzanine",         amount: "\u2212$230,000",     pct: 61.9,  barOpacity: 0.25, isFinal: false },
-  { name: "Equity Recoupment", amount: "\u2212$1,440,000",   pct: 13.9,  barOpacity: 0.18, isFinal: false },
-  { name: "Net Profits",       amount: "$417,500",       pct: 13.9,  barOpacity: 1,    isFinal: true  },
+  { name: "Acquisition Price", amount: "$3,000,000",    pct: 100.0, barColor: "rgba(212,175,55,0.50)", isFinal: false },
+  { name: "CAM Fees",          amount: "\u2212$22,500",      pct: 99.3,  barColor: "rgba(212,175,55,0.40)", isFinal: false },
+  { name: "Sales Agent",       amount: "\u2212$450,000",     pct: 84.3,  barColor: "rgba(212,175,55,0.33)", isFinal: false },
+  { name: "Senior Debt",       amount: "\u2212$440,000",     pct: 69.6,  barColor: "rgba(212,175,55,0.25)", isFinal: false },
+  { name: "Mezzanine",         amount: "\u2212$230,000",     pct: 61.9,  barColor: "rgba(212,175,55,0.18)", isFinal: false },
+  { name: "Equity Recoupment", amount: "\u2212$1,440,000",   pct: 13.9,  barColor: "rgba(212,175,55,0.12)", isFinal: false },
+  { name: "Net Profits",       amount: "$417,500",       pct: 13.9,  barColor: "#00C853",              isFinal: true  },
 ];
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -120,7 +120,7 @@ const faqs = [
   },
   {
     q: "Why is this free?",
-    a: "Film is an alternative asset class\u00A0\u2014 same category as real estate, private equity, and venture capital. Every other alt asset gives investors standardized tools to model returns. Film doesn\u2019t. That\u2019s why the industry has a reputation as a bad investment. It\u2019s not. It\u2019s a misunderstood one. This tool is the starting point.",
+    a: "Film as an alternative asset class\u00A0\u2014 same category as real estate, private equity, and venture capital. Every other alt asset gives investors standardized tools to model returns. Film doesn\u2019t. That\u2019s why the industry has a reputation as a bad investment. It\u2019s not. It\u2019s a misunderstood one. This tool is the starting point.",
   },
 ];
 
@@ -265,11 +265,11 @@ const Index = () => {
   useEffect(() => {
     if (shouldSkip) return;
     const timers = [
-      setTimeout(() => setPhase('beam'), 400),
-      setTimeout(() => setPhase('logo'), 1200),
-      setTimeout(() => setPhase('pulse'), 2000),
-      setTimeout(() => setPhase('tagline'), 2800),
-      setTimeout(() => setPhase('complete'), 4000),
+      setTimeout(() => setPhase('beam'), 300),
+      setTimeout(() => setPhase('logo'), 800),
+      setTimeout(() => setPhase('pulse'), 1300),
+      setTimeout(() => setPhase('tagline'), 1800),
+      setTimeout(() => setPhase('complete'), 2600),
     ];
     return () => timers.forEach(clearTimeout);
   }, [shouldSkip]);
@@ -351,7 +351,7 @@ const Index = () => {
               <h1 className="font-bebas text-[clamp(2.8rem,9vw,4.2rem)] leading-[1.05] text-gold mb-3">
                 SEE WHERE EVERY<br /><span className="text-white">DOLLAR GOES</span>
               </h1>
-              <p className="text-white/50 text-xs tracking-[0.2em] uppercase mb-6">
+              <p className="text-white/70 text-sm tracking-[0.15em] uppercase mb-6">
                 Built by a Tribeca-winning, CAA-repped producer whose debut sold to&nbsp;Netflix.
               </p>
 
@@ -371,7 +371,10 @@ const Index = () => {
                   <button onClick={handleStartClick} className="w-full h-[60px] text-base btn-cta-primary">
                     BUILD YOUR WATERFALL &mdash; FREE
                   </button>
-                  <p className="text-white/30 text-xs tracking-[0.10em] text-center">No account required. Results in 60&nbsp;seconds.</p>
+                  <p className="text-white/50 text-sm tracking-[0.10em] text-center">No account required. Results in 60&nbsp;seconds.</p>
+                  <p className="text-white/30 text-xs tracking-wider text-center pt-1">
+                    Used by independent producers financing films from $1M&ndash;$10M.
+                  </p>
                 </div>
               )}
 
@@ -390,7 +393,7 @@ const Index = () => {
           <section id="mission" className="snap-section py-16 px-6">
             <div ref={revMission.ref} className={cn("transition-all duration-700 ease-out", revMission.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
               <SHeader eyebrow="The Thesis">
-                FILM IS AN ALTERNATIVE <span className="text-white">ASSET CLASS</span>
+                FILM AS AN ALTERNATIVE <span className="text-white">ASSET CLASS</span>
               </SHeader>
 
               {/* Institutional comparison — asset class grid */}
@@ -400,13 +403,13 @@ const Index = () => {
                     { asset: "Real Estate", tool: "Comps & Cap Rate Models", status: true },
                     { asset: "Private Equity", tool: "Carry & IRR Structures", status: true },
                     { asset: "Venture Capital", tool: "Term Sheet Standards", status: true },
-                    { asset: "Film", tool: "Nothing.", status: false },
+                    { asset: "Film", tool: "Gatekept.", status: false },
                   ].map((row, i) => (
                     <div
                       key={row.asset}
                       className={cn(
                         "flex items-center justify-between px-5 py-4 transition-all duration-500 ease-out",
-                        row.status ? "bg-white/[0.02]" : "bg-gold/[0.04]",
+                        row.status ? "bg-white/[0.04]" : "bg-gold/[0.06]",
                         revMission.visible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-3"
                       )}
                       style={{ transitionDelay: revMission.visible ? `${300 + i * 120}ms` : '0ms' }}
@@ -434,7 +437,7 @@ const Index = () => {
                 </div>
 
                 <p className="text-center text-white/50 text-sm leading-relaxed mt-6">
-                  Every alternative asset class gives investors standardized tools to model&nbsp;returns.
+                  Every other asset class gives investors standardized tools to model&nbsp;returns.
                 </p>
                 <p className="text-center font-bebas text-2xl md:text-3xl tracking-[0.06em] text-gold mt-3">
                   Until now.
@@ -443,7 +446,7 @@ const Index = () => {
 
               {/* Blum quote — properly structured */}
               <div className="mt-12 max-w-md mx-auto">
-                <div className="relative bg-white/[0.03] border border-white/[0.06] overflow-hidden">
+                <div className="relative bg-white/[0.05] border border-white/[0.08] overflow-hidden">
                   {/* Gold left accent */}
                   <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-gold/60 via-gold/30 to-transparent" />
                   <div className="p-6 md:p-8 pl-7 md:pl-10">
@@ -484,16 +487,16 @@ const Index = () => {
                   <div
                     key={r.label}
                     className={cn(
-                      "relative p-6 bg-white/[0.02] border border-white/[0.06] overflow-hidden transition-all duration-600 ease-out group",
+                      "relative p-6 md:p-7 bg-white/[0.04] border border-white/[0.08] overflow-hidden transition-all duration-600 ease-out group",
                       revEvidence.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                     )}
                     style={{ transitionDelay: revEvidence.visible ? `${i * 180}ms` : '0ms' }}
                   >
-                    {/* Top gold accent line */}
-                    <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
-                    <div className="relative z-10">
-                      <div className="flex items-center gap-2 mb-3">
-                        <span className="font-mono text-[11px] text-gold/40">{String(i + 1).padStart(2, '0')}</span>
+                    {/* Gold left accent bar ("elbow") */}
+                    <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-gold/50 via-gold/25 to-transparent" />
+                    <div className="relative z-10 pl-2">
+                      <div className="flex items-baseline gap-3 mb-3">
+                        <span className="font-mono text-lg text-gold/30 font-semibold leading-none">{String(i + 1).padStart(2, '0')}</span>
                         <h3 className="font-bebas text-[17px] tracking-[0.12em] uppercase text-gold">
                           {r.label}
                         </h3>
@@ -502,8 +505,8 @@ const Index = () => {
                       <div className="h-[1px] bg-gradient-to-r from-gold/30 to-transparent mt-4 mb-3" />
                       <p
                         className={cn(
-                          "font-semibold transition-opacity duration-[0ms]",
-                          r.loud ? "text-base text-white" : "text-sm text-white/80",
+                          "font-semibold italic transition-opacity duration-[0ms]",
+                          r.loud ? "text-base text-white not-italic" : "text-sm text-white/70",
                           revEvidence.visible ? "opacity-100" : "opacity-0"
                         )}
                         style={{
@@ -511,7 +514,7 @@ const Index = () => {
                           transitionDelay: revEvidence.visible ? `${600 + i * 180}ms` : '0ms',
                         }}
                       >
-                        {r.punchline}
+                        {r.loud ? r.punchline : `\u201C${r.punchline}\u201D`}
                       </p>
                     </div>
                   </div>
@@ -561,8 +564,8 @@ const Index = () => {
                       </div>
                       <span className={cn(
                         "font-mono font-semibold",
-                        tier.isFinal ? "text-[22px] font-bold text-[#00C853]" :
-                        i === 0 ? "text-[15px] text-white/80" : "text-[15px] text-white/60"
+                        tier.isFinal ? "text-[24px] font-bold text-[#00C853]" :
+                        i === 0 ? "text-[17px] text-white/90" : "text-[17px] text-white/70"
                       )}>
                         {tier.isFinal ? `$${countVal.toLocaleString()}` : tier.amount}
                       </span>
@@ -573,8 +576,8 @@ const Index = () => {
                         className="absolute left-0 top-0 h-full"
                         style={{
                           width: barsRevealed ? `${tier.pct}%` : '0%',
-                          background: tier.isFinal ? '#00C853' : `rgba(255,255,255,${tier.barOpacity})`,
-                          boxShadow: tier.isFinal ? '0 0 10px rgba(0,200,83,0.35)' : 'none',
+                          background: tier.barColor,
+                          boxShadow: tier.isFinal ? '0 0 10px rgba(0,200,83,0.35)' : i === 0 ? '0 0 8px rgba(212,175,55,0.15)' : 'none',
                           transition: `width 500ms cubic-bezier(0.16,1,0.3,1)`,
                           transitionDelay: `${tier.isFinal ? 1200 : i * 150}ms`,
                         }}
@@ -592,6 +595,10 @@ const Index = () => {
                     className="w-full max-w-[280px] h-12 text-sm btn-cta-primary mx-auto">
                     WHAT DOES YOUR DEAL LOOK LIKE?
                   </button>
+                  <button onClick={handleShare}
+                    className="mt-4 inline-flex items-center gap-2 text-xs tracking-wider text-white/30 hover:text-gold/60 transition-colors">
+                    <Share2 className="w-3.5 h-3.5" /> Send this to your producing partner
+                  </button>
                 </div>
               </div>
             </div>
@@ -605,7 +612,7 @@ const Index = () => {
           <section id="cost" className="snap-section py-16 px-6">
             <div ref={revCost.ref} className={cn("transition-all duration-700 ease-out", revCost.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
               <SHeader eyebrow="The Reality">
-                EVERY OTHER DOOR <span className="text-white">IS CLOSED.</span>
+                THE DOORS ARE <span className="text-white">CLOSED.</span>
               </SHeader>
 
               <div className="max-w-sm mx-auto border border-white/[0.06] overflow-hidden">
@@ -678,7 +685,7 @@ const Index = () => {
               <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/50 to-transparent" />
               <div className="py-10 px-4 text-center">
                 <h3 className="font-bebas text-[28px] md:text-[36px] tracking-[0.08em] uppercase text-gold leading-tight">
-                  We Built The Arsenal That Levels The Playing{"\u00A0"}<span className="text-white">Field</span>.
+                  We Built The Toolkit That Levels The Playing{"\u00A0"}<span className="text-white">Field</span>.
                 </h3>
               </div>
               <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/50 to-transparent" />
@@ -690,7 +697,7 @@ const Index = () => {
              ────────────────────────────────────────────────────────── */}
           <SectionFrame id="path">
             <div ref={revPath.ref} className={cn("transition-all duration-700 ease-out", revPath.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
-              <SHeader eyebrow="The Arsenal">
+              <SHeader eyebrow="The Toolkit">
                 THREE TIERS. <span className="text-white">ONE STANDARD.</span>
               </SHeader>
 
@@ -716,7 +723,7 @@ const Index = () => {
                     )}
                     {t.featured && (
                       <div className="mb-2">
-                        <span className="text-[11px] tracking-[0.16em] uppercase font-bold text-gold/80 bg-gold/[0.08] px-2 py-0.5 border border-gold/20">
+                        <span className="text-xs tracking-[0.16em] uppercase font-bold text-gold bg-gold/[0.10] px-2.5 py-1 border border-gold/30">
                           Recommended
                         </span>
                       </div>
@@ -823,11 +830,8 @@ const Index = () => {
                 <h2 className="font-bebas text-[28px] md:text-[38px] leading-[1.1] tracking-[0.06em] text-gold mb-5">
                   YOUR INVESTOR WILL ASK<br />HOW THE MONEY FLOWS <span className="text-white">BACK</span>.
                 </h2>
-                <p className="text-white/50 text-sm leading-relaxed max-w-xs mx-auto mb-3">
+                <p className="text-white/50 text-sm leading-relaxed max-w-xs mx-auto mb-8">
                   That meeting shouldn&rsquo;t be the first time you see your own&nbsp;waterfall.
-                </p>
-                <p className="text-white/30 text-xs tracking-wider mb-8">
-                  Free to start. No account&nbsp;required.
                 </p>
                 <button onClick={handleStartClick}
                   className="w-full max-w-[320px] h-16 text-base btn-cta-final mx-auto">
@@ -873,6 +877,11 @@ const Index = () => {
                 For educational and informational purposes only. Not legal, tax, or investment advice.
                 Consult a qualified entertainment attorney before making financing decisions.
               </p>
+              <div className="flex items-center justify-center gap-4 mt-4">
+                <a href="/terms" className="text-white/20 text-xs hover:text-white/40 transition-colors">Terms</a>
+                <span className="text-white/10">|</span>
+                <a href="/privacy" className="text-white/20 text-xs hover:text-white/40 transition-colors">Privacy</a>
+              </div>
             </div>
           </footer>
         </main>
