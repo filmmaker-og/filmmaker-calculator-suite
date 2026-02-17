@@ -3,17 +3,11 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { useHaptics } from "@/hooks/use-haptics";
 import {
   RotateCcw,
-  HelpCircle,
   Check,
-  EyeOff,
-  Receipt,
-  Gavel,
   Share2,
   Mail,
   Instagram,
   Link2,
-  Waves,
-  Lock,
   ChevronDown,
 } from "lucide-react";
 import filmmakerLogo from "@/assets/filmmaker-logo.jpg";
@@ -34,12 +28,29 @@ const STORAGE_KEY = "filmmaker_og_inputs";
 const CINEMATIC_SEEN_KEY = "filmmaker_og_intro_seen";
 
 /* ═══════════════════════════════════════════════════════════════════
-   PROBLEM CARDS — tighter copy, vertical layout
+   PROBLEM FACTS — 5 gut-punch facts, no icons
    ═══════════════════════════════════════════════════════════════════ */
-const problemCards = [
-  { icon: Receipt, title: "Most indie films lose\u00A0money.", body: "Not because the film was bad. Because nobody modeled the recoupment before production. The waterfall determines who profits — and most first-time producers have never seen one." },
-  { icon: Gavel, title: "You can't raise what you can't\u00A0explain.", body: "Investors don't fund passion — they fund structure. They need to see the capital stack, the priority chain, and the projected return. If you can't walk them through the waterfall, the meeting is over." },
-  { icon: EyeOff, title: "The people across the table know\u00A0this.", body: "Distributors, sales agents, and financiers model waterfalls before every deal. They know the recoupment order. They know where the corridors are. When the producer doesn't, the terms favor everyone else. That's not a conspiracy — it's a knowledge gap with a price tag." },
+const problemFacts = [
+  {
+    headline: "They don\u2019t budget the waterfall \u2014 just the production.",
+    body: "CAM fees, sales commissions, debt service, recoupment premiums, corridor splits. If you don\u2019t model the friction between gross receipts and net profits, every number in your investor deck is a\u00A0lie."
+  },
+  {
+    headline: "They structure the capital stack wrong.",
+    body: "Equity too senior. Debt too expensive. Gap too wide. One misranked tranche and a profitable film can\u2019t reach breakeven for the people who funded\u00A0it."
+  },
+  {
+    headline: "They don\u2019t understand how \u201Cnet\u201D gets destroyed.",
+    body: "Distribution fees. P&A recoupment. Delivery costs. Reserves. Overhead charges. By the time standard deductions are done, your projected profit doesn\u2019t\u00A0exist."
+  },
+  {
+    headline: "They budget off inflated comps and soft interest.",
+    body: "A sales agent saying \u201CI think I can get $3M\u201D is not a pre-sale. When the financing plan is built on numbers that aren\u2019t real, it collapses midstream or closes at terms that guarantee\u00A0losses."
+  },
+  {
+    headline: "They sign terms that quietly siphon the upside.",
+    body: "Default clauses. Recoupment premiums. Sweeping security interests. Excessive lender fees. The revenue is there\u00A0\u2014 it just never reaches the people who made the\u00A0film."
+  },
 ];
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -68,17 +79,17 @@ const faqs = [
    WATERFALL TIERS — 7-row dollar-amount cascade ($3M → $417K)
    ═══════════════════════════════════════════════════════════════════ */
 const waterfallTiers = [
-  { name: "Acquisition Price",   amount: "$3,000,000",    remaining: null as string | null,       isFirst: true,  isLast: false },
-  { name: "CAM Fees",            amount: "\u2212$22,500",      remaining: "$2,977,500", isFirst: false, isLast: false },
-  { name: "Sales Agent",         amount: "\u2212$450,000",     remaining: "$2,527,500", isFirst: false, isLast: false },
-  { name: "Senior Debt",         amount: "\u2212$440,000",     remaining: "$2,087,500", isFirst: false, isLast: false },
-  { name: "Mezzanine",           amount: "\u2212$230,000",     remaining: "$1,857,500", isFirst: false, isLast: false },
-  { name: "Equity Recoupment",   amount: "\u2212$1,440,000",   remaining: "$417,500",   isFirst: false, isLast: false },
-  { name: "Net Profits",         amount: "$417,500",       remaining: null,         isFirst: false, isLast: true  },
+  { name: "Acquisition Price",  amount: "$3,000,000",   remaining: null as string | null },
+  { name: "CAM Fees",           amount: "\u2212$22,500",     remaining: "$2,977,500" },
+  { name: "Sales Agent",        amount: "\u2212$450,000",    remaining: "$2,527,500" },
+  { name: "Senior Debt",        amount: "\u2212$440,000",    remaining: "$2,087,500" },
+  { name: "Mezzanine",          amount: "\u2212$230,000",    remaining: "$1,857,500" },
+  { name: "Equity Recoupment",  amount: "\u2212$1,440,000",  remaining: "$417,500"   },
+  { name: "Net Profits",        amount: "$417,500",      remaining: null         },
 ];
 
-const GOLD_BAR_HEIGHT = ['100%', '82%', '66%', '52%', '40%', '28%', '100%'];
-const GOLD_BAR_OPACITY = [0.80, 0.60, 0.45, 0.35, 0.25, 0.16, 1];
+const GOLD_BAR_HEIGHT  = ['100%', '85%', '70%', '55%', '42%', '28%', '100%'];
+const GOLD_BAR_OPACITY = [0.80,  0.60,  0.45,  0.35,  0.25,  0.16,  1];
 
 /* ═══════════════════════════════════════════════════════════════════
    SECTION REVEAL — one-shot slide-up (no blur)
@@ -266,9 +277,8 @@ const Index = () => {
                 <div className="w-full max-w-[320px] mx-auto">
                   <button onClick={handleStartClick}
                     className="w-full h-16 text-base btn-cta-primary">
-                    SEE YOUR DEAL
+                    BUILD YOUR WATERFALL
                   </button>
-                  <p className="text-text-dim text-xs tracking-wider mt-2 text-center">No credit card required.</p>
                 </div>
               )}
 
@@ -288,20 +298,23 @@ const Index = () => {
           {/* ── § 2: THE PROBLEM ── */}
           <SectionFrame id="problem">
             <div ref={revealProblem.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", revealProblem.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
-              <SectionHeader icon={Lock} eyebrow="The Problem" title={<>MOST INDIE FILMS LOSE MONEY.<br /><span className="text-white">HERE'S WHY.</span></>} />
-              <div className="space-y-3">
-                {problemCards.map((card, i) => {
-                  const Icon = card.icon;
-                  return (
-                    <div key={i} className={cn("rounded-xl border border-border-subtle bg-bg-card p-5", staggerChild(revealProblem.visible))} style={staggerDelay(i, revealProblem.visible)}>
-                      <div className="flex items-start gap-3 mb-2">
-                        <Icon className="w-4 h-4 text-gold flex-shrink-0 mt-1" />
-                        <h3 className="font-bebas text-xl tracking-[0.06em] uppercase text-gold">{card.title}</h3>
-                      </div>
-                      <p className="text-text-mid text-sm leading-relaxed pl-7">{card.body}</p>
-                    </div>
-                  );
-                })}
+              <SectionHeader eyebrow="The Problem" title={<>MOST INDIE FILMS LOSE MONEY.<br /><span className="text-white">HERE'S WHY.</span></>} />
+              <div className="rounded-xl border border-border-subtle bg-bg-card max-w-md mx-auto overflow-hidden">
+                {problemFacts.map((fact, i) => (
+                  <div
+                    key={i}
+                    className={cn(
+                      "px-5 py-5",
+                      i > 0 && "border-t border-border-subtle",
+                      staggerChild(revealProblem.visible)
+                    )}
+                    style={staggerDelay(i, revealProblem.visible)}
+                  >
+                    <span className="font-mono text-[11px] text-white/20">{String(i + 1).padStart(2, '0')}</span>
+                    <h3 className="font-bebas text-[19px] md:text-[21px] tracking-[0.06em] uppercase leading-tight mt-1 text-white">{fact.headline}</h3>
+                    <p className="text-white/40 text-sm leading-relaxed mt-2">{fact.body}</p>
+                  </div>
+                ))}
               </div>
             </div>
           </SectionFrame>
@@ -314,62 +327,71 @@ const Index = () => {
           {/* ── § 3: HOW THE MONEY FLOWS (vertical cascade) ── */}
           <SectionFrame id="how-it-flows" alt>
             <div ref={revealFlow.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", revealFlow.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
-              <SectionHeader icon={Waves} eyebrow="What They Didn't Teach You In Film School" title={<>FROM FIRST MONEY IN TO LAST MONEY <span className="text-white">OUT</span></>} />
+              <SectionHeader eyebrow="What They Didn't Teach You In Film School" title={<>FROM FIRST MONEY IN TO LAST MONEY <span className="text-white">OUT</span></>} />
 
               {/* Waterfall tier list card */}
               <div className="rounded-xl border border-border-subtle bg-bg-card max-w-sm mx-auto mt-6 overflow-hidden">
-                {waterfallTiers.map((tier, i) => (
-                  <div
-                    key={tier.name}
-                    className={cn(
-                      "flex items-center justify-between px-5 py-4 relative",
-                      i > 0 && "border-t border-border-subtle",
-                      staggerChild(revealFlow.visible)
-                    )}
-                    style={staggerDelay(i, revealFlow.visible)}
-                  >
-                    {/* Gold accent bar — left edge, shrinks per tier */}
+                {waterfallTiers.map((tier, i) => {
+                  const isFirst = i === 0;
+                  const isLast = i === waterfallTiers.length - 1;
+                  const isMiddle = !isFirst && !isLast;
+                  return (
                     <div
-                      className="absolute left-0 top-0 w-[3px]"
-                      style={{
-                        height: GOLD_BAR_HEIGHT[i],
-                        background: tier.isLast ? '#F9E076' : '#D4AF37',
-                        opacity: tier.isLast ? 1 : GOLD_BAR_OPACITY[i],
-                      }}
-                    />
+                      key={tier.name}
+                      className={cn(
+                        "relative px-5 py-4",
+                        i > 0 && "border-t border-border-subtle",
+                        staggerChild(revealFlow.visible)
+                      )}
+                      style={staggerDelay(i, revealFlow.visible)}
+                    >
+                      {/* Gold accent bar — left edge, shrinks per tier */}
+                      <div
+                        className="absolute left-0 top-0 w-[3px]"
+                        style={{
+                          height: GOLD_BAR_HEIGHT[i],
+                          background: isLast ? '#F9E076' : '#D4AF37',
+                          opacity: isLast ? 1 : GOLD_BAR_OPACITY[i],
+                        }}
+                      />
 
-                    {/* Left: tier number + name */}
-                    <div className="flex items-baseline gap-3">
-                      <span className={cn(
-                        "font-mono text-[11px] tabular-nums",
-                        tier.isLast ? "text-[#F9E076]" : "text-gold/40"
-                      )}>
-                        {String(i + 1).padStart(2, '0')}
-                      </span>
-                      <span className={cn(
-                        "font-bebas text-[18px] tracking-[0.08em] uppercase leading-none",
-                        tier.isLast ? "text-[#F9E076]" : "text-white/80"
-                      )}>
-                        {tier.name}
-                      </span>
-                    </div>
+                      {/* Main row */}
+                      <div className="flex items-baseline justify-between gap-4">
+                        {/* Left: tier number + name */}
+                        <div className="flex items-baseline gap-3">
+                          <span className="font-mono text-[11px] text-white/20 tabular-nums">
+                            {String(i + 1).padStart(2, '0')}
+                          </span>
+                          <span className={cn(
+                            "font-bebas text-[17px] tracking-[0.08em] uppercase leading-none",
+                            isFirst && "text-white",
+                            isMiddle && "text-white/70",
+                            isLast && "text-[#F9E076]"
+                          )}>
+                            {tier.name}
+                          </span>
+                        </div>
 
-                    {/* Right: amount + remaining */}
-                    <div className="text-right">
-                      <span className={cn(
-                        "font-mono text-[12px] block",
-                        tier.isLast ? "text-[#F9E076]" : tier.isFirst ? "text-white/60" : "text-white/35"
-                      )}>
-                        {tier.amount}
-                      </span>
-                      {tier.remaining && (
-                        <span className="font-mono text-[10px] text-white/20 block mt-0.5">
-                          {tier.remaining}
+                        {/* Right: amount */}
+                        <span className={cn(
+                          "font-mono text-[13px] font-medium",
+                          isFirst && "text-white/70",
+                          isMiddle && "text-white/40",
+                          isLast && "text-[#F9E076]"
+                        )}>
+                          {tier.amount}
                         </span>
+                      </div>
+
+                      {/* Remaining balance (tiers 2-6 only) */}
+                      {tier.remaining && (
+                        <p className="font-mono text-[11px] text-white/15 text-right mt-1">
+                          {tier.remaining} remaining
+                        </p>
                       )}
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
 
                 {/* Tagline */}
                 <p
@@ -395,32 +417,39 @@ const Index = () => {
           {/* section divider */}
           <div className="px-8"><div className="h-[1px] bg-gradient-to-r from-transparent via-gold/25 to-transparent" /></div>
 
-          {/* ── § 4: CONSEQUENCE FRAMING ── */}
+          {/* ── § 4: THIS KNOWLEDGE ISN'T CHEAP ── */}
           <SectionFrame id="price-anchor">
             <div ref={revealPrice.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", revealPrice.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
-              <SectionHeader eyebrow="The Reality" title={<>THE PEOPLE ACROSS THE TABLE <span className="text-white">KNOW THIS</span></>} />
+              <SectionHeader eyebrow="The Industry Standard" title={<>THIS KNOWLEDGE ISN'T <span className="text-white">CHEAP</span></>} />
 
-              <div className="space-y-4 text-center max-w-sm mx-auto mb-8">
-                <p className="text-text-mid text-sm leading-relaxed">
-                  <span className="line-through decoration-text-dim/40">Hiring an entertainment lawyer</span>{" "}
-                  <span className="text-text-dim text-xs">— $5K–$15K retainer</span>
-                </p>
-                <p className="text-text-mid text-sm leading-relaxed">
-                  <span className="line-through decoration-text-dim/40">Hiring a finance consultant</span>{" "}
-                  <span className="text-text-dim text-xs">— $10K–$30K</span>
-                </p>
-                <p className="text-sm leading-relaxed" style={{ color: '#F9E076' }}>
-                  Not understanding your waterfall → Costs&nbsp;more.
-                </p>
-              </div>
+              <div className="max-w-xs mx-auto mt-2 space-y-4">
+                <div className="space-y-3">
+                  <div className="flex items-baseline justify-between py-3 border-b border-white/[0.06]">
+                    <span className="text-white/50 text-sm">Entertainment Attorney</span>
+                    <span className="font-mono text-sm text-white/25">$5K–$15K</span>
+                  </div>
+                  <div className="flex items-baseline justify-between py-3 border-b border-white/[0.06]">
+                    <span className="text-white/50 text-sm">Producing Consultant</span>
+                    <span className="font-mono text-sm text-white/25">$2K–$5K</span>
+                  </div>
+                  <div className="flex items-baseline justify-between py-3 border-b border-white/[0.06]">
+                    <span className="text-white/50 text-sm">Film School</span>
+                    <span className="font-mono text-sm text-white/25">$50K–$200K</span>
+                  </div>
+                  <div className="flex items-baseline justify-between py-3">
+                    <span className="text-white/50 text-sm">Trial and Error</span>
+                    <span className="font-mono text-sm text-white/25">3–5 years</span>
+                  </div>
+                </div>
 
-              <div className="text-center">
-                <button
-                  onClick={handleStartClick}
-                  className="w-full max-w-[320px] h-16 text-base btn-cta-primary"
-                >
-                  BUILD YOUR WATERFALL
-                </button>
+                <div className="text-center pt-4">
+                  <button
+                    onClick={handleStartClick}
+                    className="w-full max-w-[320px] h-16 text-base btn-cta-primary"
+                  >
+                    BUILD YOUR WATERFALL
+                  </button>
+                </div>
               </div>
             </div>
           </SectionFrame>
@@ -431,7 +460,7 @@ const Index = () => {
           {/* ── § 6: FAQ ── */}
           <SectionFrame id="faq">
             <div ref={revealFaq.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", revealFaq.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
-              <SectionHeader icon={HelpCircle} eyebrow="Common Questions" title={<>WHAT FILMMAKERS <span className="text-white">ASK</span></>} />
+              <SectionHeader eyebrow="Common Questions" title={<>WHAT FILMMAKERS <span className="text-white">ASK</span></>} />
               <div className="bg-bg-card rounded-xl px-5 border border-border-subtle">
                 <Accordion type="single" collapsible className="w-full">
                   {faqs.map((faq, i) => (
