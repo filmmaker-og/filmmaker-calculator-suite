@@ -156,15 +156,15 @@ const Index = () => {
   const revealFaq = useReveal();
   const realityReveals = [revealReality0, revealReality1, revealReality2];
 
-  // Net Profits countup — triggers after net profits bar appears (~2900ms = 2200ms delay + 700ms bar anim)
+  // Net Profits countup — triggers after net profits bar appears (~1900ms = 1400ms delay + 500ms bar anim)
   const [countupReady, setCountupReady] = useState(false);
   useEffect(() => {
     if (revealFlow.visible) {
-      const t = setTimeout(() => setCountupReady(true), 2900);
+      const t = setTimeout(() => setCountupReady(true), 1900);
       return () => clearTimeout(t);
     }
   }, [revealFlow.visible]);
-  const netProfitsCount = useCountUp(417500, 1200, countupReady);
+  const netProfitsCount = useCountUp(417500, 1000, countupReady);
 
   const savedState = useMemo(() => {
     try {
@@ -442,37 +442,28 @@ const Index = () => {
             </div>
           </section>
 
-          {/* ── DECLARATION — the hinge between problem and proof ── */}
-          <section className="py-16 px-6">
-            <div ref={revealDeclaration.ref} className="max-w-md mx-auto">
+          {/* ── DECLARATION — compact hinge between problem and proof ── */}
+          <section className="py-8 px-6">
+            <div ref={revealDeclaration.ref} className="max-w-lg mx-auto">
               <div
-                className={cn("h-[1px] bg-gradient-to-r from-transparent via-gold/40 to-transparent transition-opacity", revealDeclaration.visible ? "opacity-100" : "opacity-0")}
-                style={{ transitionDuration: '400ms' }}
-              />
-              <div className="py-8">
-                <div
-                  className={cn("bg-white/[0.04] border-l-[3px] border-gold/40 p-6 md:p-8 text-left transition-all", revealDeclaration.visible ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-5 scale-[0.95]")}
-                  style={{ transitionDuration: '600ms', transitionDelay: revealDeclaration.visible ? '200ms' : '0ms', transitionTimingFunction: EASE_REVEAL }}
-                >
-                  <span className="font-bebas text-[72px] md:text-[96px] leading-none text-gold/20 select-none pointer-events-none block -mb-10 md:-mb-14">&ldquo;</span>
-                  <h3 className="font-bebas text-2xl md:text-3xl tracking-[0.06em] uppercase text-white leading-tight">
-                    We Built The Arsenal That Levels The Playing Field.
-                  </h3>
-                  <p className="font-bebas text-base tracking-[0.1em] text-gold/60 mt-4">
-                    &mdash; FILMMAKER.OG
-                  </p>
-                </div>
+                className={cn("flex items-center gap-4 transition-all", revealDeclaration.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3")}
+                style={{ transitionDuration: '500ms', transitionDelay: revealDeclaration.visible ? '100ms' : '0ms', transitionTimingFunction: EASE_REVEAL }}
+              >
+                <div className="flex-1 h-[1px] bg-gradient-to-r from-transparent to-gold/40" />
+                <p className="font-bebas text-lg md:text-xl tracking-[0.08em] uppercase text-white/80 text-center shrink-0 leading-tight">
+                  We built the arsenal that levels the playing field.
+                  <span className="block text-sm tracking-[0.12em] text-gold/50 mt-1">&mdash; FILMMAKER.OG</span>
+                </p>
+                <div className="flex-1 h-[1px] bg-gradient-to-l from-transparent to-gold/40" />
               </div>
-              <div
-                className={cn("h-[1px] bg-gradient-to-r from-transparent via-gold/40 to-transparent transition-opacity", revealDeclaration.visible ? "opacity-100" : "opacity-0")}
-                style={{ transitionDuration: '400ms' }}
-              />
             </div>
           </section>
 
-          {/* ── § 4: HOW THE MONEY FLOWS (contained — SectionFrame) ── */}
-          <SectionFrame id="how-it-flows">
-            <div ref={revealFlow.ref} className={cn("max-w-2xl mx-auto transition-all duration-500", revealFlow.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")} style={{ transitionTimingFunction: EASE_REVEAL }}>
+          {/* ── § 4: HOW THE MONEY FLOWS — visual break from gold-on-black ── */}
+          <section id="how-it-flows" className="py-12 px-4 relative">
+            {/* Subtle background shift to break monotone */}
+            <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(180deg, transparent 0%, rgba(212,175,55,0.02) 30%, rgba(212,175,55,0.03) 50%, rgba(212,175,55,0.02) 70%, transparent 100%)' }} />
+            <div ref={revealFlow.ref} className={cn("max-w-2xl mx-auto relative transition-all duration-500", revealFlow.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")} style={{ transitionTimingFunction: EASE_REVEAL }}>
               <SectionHeader eyebrow="The Waterfall" title={<>HOW THE MONEY <span className="text-white">FLOWS</span></>} />
 
               {/* Annotation */}
@@ -481,14 +472,14 @@ const Index = () => {
                 <p className="text-white/70 text-sm font-medium mt-1">Here&rsquo;s what actually reaches the filmmaker.</p>
               </div>
 
-              {/* Proportional bar visualization — gold-tinted bars, green for Net Profits */}
-              <div className="border border-border-subtle bg-bg-card max-w-md mx-auto overflow-hidden">
+              {/* Proportional bar visualization */}
+              <div className="border border-gold/15 bg-bg-card max-w-md mx-auto overflow-hidden">
                 {waterfallTiers.map((tier, i) => {
                   const isFirst = i === 0;
                   const isLast = i === waterfallTiers.length - 1;
                   const isMiddle = !isFirst && !isLast;
-                  // Slower cascade: 300ms between rows, net profits delayed further
-                  const tierDelay = isLast ? 2200 : i * 300;
+                  // Paced cascade: 200ms between rows, net profits delayed
+                  const tierDelay = isLast ? 1400 : i * 200;
                   // Gold-tinted bars fading as money disappears, green for Net Profits
                   const barColor = isLast
                     ? ''
@@ -508,7 +499,7 @@ const Index = () => {
                         revealFlow.visible ? "opacity-100" : "opacity-0"
                       )}
                       style={{
-                        transitionDuration: '400ms',
+                        transitionDuration: '350ms',
                         transitionDelay: revealFlow.visible ? `${tierDelay}ms` : '0ms',
                         ...(isLast ? { background: 'rgba(0,200,83,0.04)' } : {}),
                       }}
@@ -547,7 +538,7 @@ const Index = () => {
                           className={cn("absolute left-0 top-0 h-full transition-all", barColor)}
                           style={{
                             width: revealFlow.visible ? `${tier.barWidth}%` : '0%',
-                            transitionDuration: '700ms',
+                            transitionDuration: '600ms',
                             transitionDelay: `${tierDelay}ms`,
                             transitionTimingFunction: EASE_REVEAL,
                             ...(isLast ? { background: '#00C853', boxShadow: '0 0 10px rgba(0,200,83,0.35)' } : {}),
@@ -558,30 +549,30 @@ const Index = () => {
                   );
                 })}
 
-                {/* Tagline — fade 500ms, after countup completes */}
+                {/* Tagline + CTA — capture intent at emotional peak */}
                 <div
-                  className={cn("border-t border-border-subtle px-5 py-5 text-center transition-opacity", revealFlow.visible ? "opacity-100" : "opacity-0")}
-                  style={{ transitionDuration: '500ms', transitionDelay: revealFlow.visible ? '4500ms' : '0ms' }}
+                  className={cn("border-t border-gold/15 px-5 py-6 text-center transition-opacity", revealFlow.visible ? "opacity-100" : "opacity-0")}
+                  style={{ transitionDuration: '500ms', transitionDelay: revealFlow.visible ? '3200ms' : '0ms' }}
                 >
-                  <p className="text-[14px] font-medium tracking-wide text-white/50">
+                  <p className="text-[14px] font-medium tracking-wide text-white/50 mb-4">
                     This is the standard waterfall.
                   </p>
+                  <button onClick={handleStartClick}
+                    className="w-full max-w-[280px] h-12 text-sm btn-cta-primary">
+                    WHAT DOES YOUR DEAL LOOK LIKE?
+                  </button>
                 </div>
               </div>
             </div>
-          </SectionFrame>
+          </section>
 
-          {/* section divider: Waterfall → Cost */}
-          <div className="px-8"><div className="h-[1px] bg-gradient-to-r from-transparent via-gold/25 to-transparent" /></div>
-
-          {/* ── § 5: KNOWLEDGE ISN'T CHEAP — Cost cards only ── */}
+          {/* ── § 5: KNOWLEDGE ISN'T CHEAP + PRODUCT TIERS (merged) ── */}
           <SectionFrame id="price-anchor">
             <div ref={revealCost.ref} className={cn("max-w-2xl mx-auto transition-all duration-500", revealCost.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")} style={{ transitionTimingFunction: EASE_REVEAL }}>
               <SectionHeader eyebrow="The Industry Standard" title={<>KNOWLEDGE ISN'T <span className="text-white">CHEAP</span></>} />
 
-              {/* 2-1-1 cost layout — Film School dominates */}
+              {/* Cost comparison cards */}
               <div className="max-w-sm mx-auto">
-                {/* Row 1: Two small cards side by side */}
                 <div
                   className={cn("grid grid-cols-2 gap-3 transition-all", revealCost.visible ? "opacity-100 scale-100" : "opacity-0 scale-[0.92]")}
                   style={{ transitionDuration: '400ms', transitionTimingFunction: EASE_SCALE }}
@@ -595,7 +586,6 @@ const Index = () => {
                     <p className="text-white/50 text-xs tracking-wider uppercase mt-1.5">Producing Consultant</p>
                   </div>
                 </div>
-                {/* Row 2: Film School — FULL WIDTH, the gut punch */}
                 <div
                   className={cn("mt-3 border-2 border-gold/30 bg-bg-card p-8 text-center relative overflow-hidden transition-all", revealCost.visible ? "opacity-100 scale-100 animate-glow-pulse" : "opacity-0 scale-[0.92]")}
                   style={{ transitionDuration: '400ms', transitionDelay: revealCost.visible ? '250ms' : '0ms', transitionTimingFunction: EASE_SCALE }}
@@ -604,7 +594,6 @@ const Index = () => {
                   <p className="font-mono text-3xl md:text-4xl font-bold text-gold relative">$50K–$200K</p>
                   <p className="text-white/50 text-xs tracking-[0.2em] uppercase mt-3 relative">Film School</p>
                 </div>
-                {/* Row 3: Trial and Error — full width, quieter */}
                 <div
                   className={cn("mt-3 border border-gold/15 bg-bg-card p-5 text-center transition-all", revealCost.visible ? "opacity-100 scale-100" : "opacity-0 scale-[0.92]")}
                   style={{ transitionDuration: '400ms', transitionDelay: revealCost.visible ? '500ms' : '0ms', transitionTimingFunction: EASE_SCALE }}
@@ -616,15 +605,14 @@ const Index = () => {
             </div>
           </SectionFrame>
 
-          {/* section divider: Cost → Path */}
+          {/* section divider */}
           <div className="px-8"><div className="h-[1px] bg-gradient-to-r from-transparent via-gold/25 to-transparent" /></div>
 
-          {/* ── § 6: THE PATH — Vertical column tiers + CTA ── */}
+          {/* ── § 6: THE PATH — Stacked product tiers with prices ── */}
           <SectionFrame id="the-path">
             <div ref={revealPath.ref} className={cn("max-w-2xl mx-auto transition-all duration-500", revealPath.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")} style={{ transitionTimingFunction: EASE_REVEAL }}>
               <SectionHeader eyebrow="The Path" title={<>YOUR <span className="text-white">MOVE.</span></>} />
 
-              {/* Possessive tagline — single line */}
               <div
                 className={cn("text-center mb-8 transition-all", revealPath.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-[10px]")}
                 style={{ transitionDuration: '400ms', transitionTimingFunction: EASE_REVEAL }}
@@ -634,84 +622,84 @@ const Index = () => {
                 </p>
               </div>
 
-              {/* Product tiers — vertical columns growing upward */}
-              <div className="max-w-md mx-auto grid grid-cols-3 gap-3 items-end">
-                {/* Tier 1: Courtesy — shortest column */}
+              {/* Product tiers — stacked, tappable, with prices */}
+              <div className="max-w-sm mx-auto space-y-3">
+                {/* Tier 1: Free */}
                 <div
-                  className={cn("transition-all", revealPath.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}
-                  style={{ transitionDuration: '400ms', transitionDelay: revealPath.visible ? '0ms' : '0ms', transitionTimingFunction: EASE_REVEAL }}
+                  className={cn("transition-all cursor-pointer group", revealPath.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}
+                  style={{ transitionDuration: '400ms', transitionTimingFunction: EASE_REVEAL }}
+                  onClick={handleStartClick}
                 >
-                  <div className="border border-border-subtle bg-bg-card p-4 text-center">
-                    {/* Vertical bar */}
-                    <div className="mx-auto w-3 bg-white/[0.04] relative overflow-hidden mb-4" style={{ height: '60px' }}>
-                      <div
-                        className="absolute left-0 bottom-0 w-full bg-gold/30 transition-all"
-                        style={{ height: revealPath.visible ? '100%' : '0%', transitionDuration: '600ms', transitionDelay: '200ms', transitionTimingFunction: EASE_REVEAL }}
-                      />
+                  <div className="border border-border-subtle bg-bg-card p-5 flex items-center justify-between gap-4 group-hover:border-gold/30 group-active:scale-[0.99] transition-all">
+                    <div className="flex items-center gap-4 min-w-0">
+                      {/* Vertical accent bar */}
+                      <div className="w-1 self-stretch bg-gold/25 flex-shrink-0" />
+                      <div className="min-w-0">
+                        <p className="font-bebas text-[12px] tracking-[0.15em] uppercase text-white/40">Courtesy</p>
+                        <p className="font-semibold text-sm text-white/80">Waterfall Simulator</p>
+                        <p className="text-xs text-white/40 mt-0.5">Model your deal. See where every dollar goes.</p>
+                      </div>
                     </div>
-                    <p className="font-bebas text-[11px] tracking-[0.15em] uppercase text-white/50">Courtesy</p>
-                    <p className="font-semibold text-sm text-white/80 mt-1">Waterfall Simulator</p>
-                    <p className="text-xs text-white/40 mt-2 leading-relaxed">Model your deal.</p>
+                    <div className="text-right flex-shrink-0">
+                      <p className="font-mono text-lg font-bold text-white/70">Free</p>
+                    </div>
                   </div>
                 </div>
-                {/* Tier 2: Premium — mid column */}
+
+                {/* Tier 2: The Blueprint */}
                 <div
-                  className={cn("transition-all", revealPath.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}
-                  style={{ transitionDuration: '400ms', transitionDelay: revealPath.visible ? '200ms' : '0ms', transitionTimingFunction: EASE_REVEAL }}
+                  className={cn("transition-all cursor-pointer group", revealPath.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}
+                  style={{ transitionDuration: '400ms', transitionDelay: revealPath.visible ? '150ms' : '0ms', transitionTimingFunction: EASE_REVEAL }}
+                  onClick={() => navigate("/store")}
                 >
-                  <div className="border border-gold/20 bg-bg-card p-4 text-center">
-                    {/* Vertical bar */}
-                    <div className="mx-auto w-3 bg-white/[0.04] relative overflow-hidden mb-4" style={{ height: '100px' }}>
-                      <div
-                        className="absolute left-0 bottom-0 w-full bg-gold/50 transition-all"
-                        style={{ height: revealPath.visible ? '100%' : '0%', transitionDuration: '600ms', transitionDelay: '400ms', transitionTimingFunction: EASE_REVEAL }}
-                      />
+                  <div className="border border-gold/20 bg-bg-card p-5 flex items-center justify-between gap-4 group-hover:border-gold/40 group-active:scale-[0.99] transition-all">
+                    <div className="flex items-center gap-4 min-w-0">
+                      <div className="w-1 self-stretch bg-gold/45 flex-shrink-0" />
+                      <div className="min-w-0">
+                        <p className="font-bebas text-[12px] tracking-[0.15em] uppercase" style={{ color: 'rgba(212,175,55,0.60)' }}>Premium</p>
+                        <p className="font-semibold text-sm text-white/90">The Blueprint</p>
+                        <p className="text-xs text-white/40 mt-0.5">Your complete finance plan, documented.</p>
+                      </div>
                     </div>
-                    <p className="font-bebas text-[11px] tracking-[0.15em] uppercase" style={{ color: 'rgba(212,175,55,0.60)' }}>Premium</p>
-                    <p className="font-semibold text-sm text-white/90 mt-1">The Blueprint</p>
-                    <p className="text-xs text-white/40 mt-2 leading-relaxed">Every number, every tier.</p>
+                    <div className="text-right flex-shrink-0">
+                      <p className="font-mono text-lg font-bold text-gold/80">$197</p>
+                    </div>
                   </div>
                 </div>
-                {/* Tier 3: Investment Grade — tallest column, glows */}
+
+                {/* Tier 3: The Pitch Package — featured */}
                 <div
-                  className={cn("transition-all", revealPath.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}
-                  style={{ transitionDuration: '400ms', transitionDelay: revealPath.visible ? '400ms' : '0ms', transitionTimingFunction: EASE_REVEAL }}
+                  className={cn("transition-all cursor-pointer group", revealPath.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}
+                  style={{ transitionDuration: '400ms', transitionDelay: revealPath.visible ? '300ms' : '0ms', transitionTimingFunction: EASE_REVEAL }}
+                  onClick={() => navigate("/store")}
                 >
-                  <div className="border border-gold/30 bg-bg-card p-4 text-center relative overflow-hidden">
-                    <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse 100% 80% at 50% 100%, rgba(212,175,55,0.06) 0%, transparent 70%)' }} />
-                    {/* Vertical bar */}
-                    <div className="relative mx-auto w-3 bg-white/[0.04] overflow-hidden mb-4" style={{ height: '140px' }}>
-                      <div
-                        className="absolute left-0 bottom-0 w-full transition-all"
-                        style={{
-                          background: 'rgba(212,175,55,0.70)',
-                          height: revealPath.visible ? '100%' : '0%',
-                          transitionDuration: '700ms',
-                          transitionDelay: '600ms',
-                          transitionTimingFunction: EASE_REVEAL,
-                          boxShadow: '0 0 8px rgba(212,175,55,0.25)',
-                        }}
-                      />
+                  <div className="border-2 border-gold/35 bg-bg-card p-5 flex items-center justify-between gap-4 relative overflow-hidden group-hover:border-gold/50 group-active:scale-[0.99] transition-all">
+                    <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse 80% 80% at 50% 50%, rgba(212,175,55,0.04) 0%, transparent 70%)' }} />
+                    <div className="flex items-center gap-4 min-w-0 relative">
+                      <div className="w-1 self-stretch flex-shrink-0" style={{ background: '#D4AF37', boxShadow: '0 0 6px rgba(212,175,55,0.3)' }} />
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-2">
+                          <p className="font-bebas text-[12px] tracking-[0.15em] uppercase text-gold">Investment Grade</p>
+                          <span className="text-[10px] tracking-wider uppercase bg-gold/10 text-gold/80 px-1.5 py-0.5">Save $200</span>
+                        </div>
+                        <p className="font-semibold text-sm text-white">The Pitch Package</p>
+                        <p className="text-xs text-white/50 mt-0.5">Presentation-ready for the room.</p>
+                      </div>
                     </div>
-                    <p className="relative font-bebas text-[11px] tracking-[0.15em] uppercase" style={{ color: '#D4AF37' }}>Investment Grade</p>
-                    <p className="relative font-semibold text-sm text-white mt-1">The Pitch Package</p>
-                    <p className="relative text-xs text-white/50 mt-2 leading-relaxed">What the other side expects.</p>
+                    <div className="text-right flex-shrink-0 relative">
+                      <p className="font-mono text-xs text-white/40 line-through">$697</p>
+                      <p className="font-mono text-xl font-bold text-gold">$497</p>
+                    </div>
                   </div>
                 </div>
               </div>
 
-              {/* CTA */}
-              <div className="text-center mt-10">
+              {/* Bottom CTA — for the free path */}
+              <div className="text-center mt-8">
                 <button onClick={handleStartClick}
-                  className="w-full max-w-[320px] h-16 text-base btn-cta-primary">
-                  BUILD YOUR WATERFALL
+                  className="w-full max-w-[320px] h-14 text-sm btn-cta-primary">
+                  BUILD YOUR WATERFALL &mdash; FREE
                 </button>
-                <div className="mt-4">
-                  <a href="/store"
-                    className="text-white/40 text-sm hover:text-gold transition-colors">
-                    See <span className="text-gold/70">premium packages &rarr;</span>
-                  </a>
-                </div>
               </div>
             </div>
           </SectionFrame>
@@ -760,7 +748,7 @@ const Index = () => {
                   </p>
                   <button onClick={handleStartClick}
                     className="w-full max-w-[320px] h-16 text-base btn-cta-primary">
-                    BUILD YOUR WATERFALL
+                    START FREE &mdash; BUILD YOUR WATERFALL
                   </button>
                 </div>
               </div>
