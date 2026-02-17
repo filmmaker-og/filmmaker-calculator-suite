@@ -27,17 +27,17 @@ const STORAGE_KEY = "filmmaker_og_inputs";
 const CINEMATIC_SEEN_KEY = "filmmaker_og_intro_seen";
 
 /* ═══════════════════════════════════════════════════════════════════
-   CLOSED DOORS — the alternatives that don't exist for you
+   CLOSED DOORS — the reality of what's available
    ═══════════════════════════════════════════════════════════════════ */
 const closedDoors = [
-  { name: "Entertainment Attorney", lock: "If they\u2019ll take the meeting." },
-  { name: "Producing Consultant", lock: "Costs more than your development budget." },
-  { name: "Film School", lock: "Four years you don\u2019t have." },
-  { name: "Trial & Error", lock: "Your investors don\u2019t get a second chance." },
+  { name: "Entertainment Attorney", lock: "If they\u2019ll take the meeting.", cost: "$500/hr" },
+  { name: "Producing Consultant", lock: "Costs more than your development budget.", cost: "$5K+" },
+  { name: "Film School", lock: "Four years you don\u2019t have.", cost: "$200K" },
+  { name: "Trial & Error", lock: "Your investors don\u2019t get a second chance.", cost: "Everything" },
 ];
 
 /* ═══════════════════════════════════════════════════════════════════
-   THREE REALITIES — column panels
+   THE PROBLEM — column panels showing why indie films lose money
    ═══════════════════════════════════════════════════════════════════ */
 const realities = [
   {
@@ -142,8 +142,12 @@ const useReveal = (threshold = 0.15) => {
    SECTION HEADER (inline — consistent everywhere)
    ═══════════════════════════════════════════════════════════════════ */
 const SHeader = ({ eyebrow, children }: { eyebrow: string; children: React.ReactNode }) => (
-  <div className="text-center mb-8">
-    <p className="text-white/50 text-xs tracking-[0.3em] uppercase font-semibold mb-3">{eyebrow}</p>
+  <div className="text-center mb-10">
+    <div className="flex items-center justify-center gap-4 mb-4">
+      <div className="h-[1px] w-8 bg-gradient-to-r from-transparent to-gold/40" />
+      <p className="text-gold/70 text-[11px] tracking-[0.35em] uppercase font-semibold">{eyebrow}</p>
+      <div className="h-[1px] w-8 bg-gradient-to-l from-transparent to-gold/40" />
+    </div>
     <h2 className="font-bebas text-3xl md:text-4xl tracking-[0.08em] text-gold">{children}</h2>
   </div>
 );
@@ -152,7 +156,12 @@ const SHeader = ({ eyebrow, children }: { eyebrow: string; children: React.React
    DIVIDER
    ═══════════════════════════════════════════════════════════════════ */
 const Divider = () => (
-  <div className="px-8"><div className="h-[1px] bg-gradient-to-r from-transparent via-gold/25 to-transparent" /></div>
+  <div className="py-4 px-6">
+    <div className="max-w-md mx-auto relative">
+      <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 rotate-45 border border-gold/30 bg-black" />
+    </div>
+  </div>
 );
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -341,7 +350,7 @@ const Index = () => {
 
               {isReturningUser ? (
                 <div className="w-full max-w-[320px] mx-auto space-y-3">
-                  <button onClick={handleContinueClick} className="w-full h-16 text-base btn-cta-primary">
+                  <button onClick={handleContinueClick} className="w-full h-[60px] text-base btn-cta-primary">
                     CONTINUE YOUR DEAL
                   </button>
                   <p className="text-white/40 text-xs tracking-wider text-center">{formatCompactCurrency(savedState!.budget)} budget in progress</p>
@@ -351,10 +360,11 @@ const Index = () => {
                   </button>
                 </div>
               ) : (
-                <div className="w-full max-w-[320px] mx-auto">
-                  <button onClick={handleStartClick} className="w-full h-16 text-base btn-cta-primary">
-                    BUILD YOUR WATERFALL
+                <div className="w-full max-w-[320px] mx-auto space-y-3">
+                  <button onClick={handleStartClick} className="w-full h-[60px] text-base btn-cta-primary">
+                    BUILD YOUR WATERFALL &mdash; FREE
                   </button>
+                  <p className="text-white/30 text-[11px] tracking-[0.12em] text-center">No account required. Results in 60&nbsp;seconds.</p>
                 </div>
               )}
 
@@ -371,45 +381,90 @@ const Index = () => {
                § 2  MISSION — comparison table + Blum quote + declaration
              ────────────────────────────────────────────────────────── */}
           <section id="mission" className="snap-section py-16 px-6">
-            <div ref={revMission.ref} className={cn("transition-all duration-600 ease-out", revMission.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
+            <div ref={revMission.ref} className={cn("transition-all duration-700 ease-out", revMission.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
               <SHeader eyebrow="The Thesis">
                 FILM IS AN ALTERNATIVE <span className="text-white">ASSET CLASS</span>
               </SHeader>
 
-              {/* Condensed thesis — three lines, no table */}
-              <div className="max-w-md mx-auto text-center">
-                <p className="text-white/60 text-sm md:text-base leading-relaxed">
-                  Every alternative asset class gives investors standardized tools to model returns.
+              {/* Institutional comparison — asset class grid */}
+              <div className="max-w-md mx-auto">
+                <div className="grid grid-cols-1 gap-[1px] bg-white/[0.06] border border-white/[0.06] overflow-hidden">
+                  {[
+                    { asset: "Real Estate", tool: "Comps & Cap Rate Models", status: true },
+                    { asset: "Private Equity", tool: "Carry & IRR Structures", status: true },
+                    { asset: "Venture Capital", tool: "Term Sheet Standards", status: true },
+                    { asset: "Film", tool: "Nothing.", status: false },
+                  ].map((row, i) => (
+                    <div
+                      key={row.asset}
+                      className={cn(
+                        "flex items-center justify-between px-5 py-4 transition-all duration-500 ease-out",
+                        row.status ? "bg-white/[0.02]" : "bg-gold/[0.04]",
+                        revMission.visible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-3"
+                      )}
+                      style={{ transitionDelay: revMission.visible ? `${300 + i * 120}ms` : '0ms' }}
+                    >
+                      <div className="flex items-center gap-3">
+                        <span className={cn(
+                          "font-bebas text-[15px] tracking-[0.10em] uppercase",
+                          row.status ? "text-white/60" : "text-gold"
+                        )}>
+                          {row.asset}
+                        </span>
+                      </div>
+                      <span className={cn(
+                        "text-sm",
+                        row.status ? "text-white/40" : "font-bebas text-[17px] tracking-[0.06em] text-white"
+                      )}>
+                        {row.tool}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+
+                <p className="text-center text-white/50 text-sm leading-relaxed mt-6">
+                  Every alternative asset class gives investors standardized tools to model&nbsp;returns.
                 </p>
-                <p className="text-white/40 text-sm leading-relaxed mt-3">
-                  Real estate has comps. Private equity has carry structures. Venture has term&nbsp;sheets.
-                </p>
-                <p className="font-bebas text-2xl md:text-3xl tracking-[0.06em] text-white mt-6">
-                  Film has nothing.
+                <p className="text-center font-bebas text-2xl md:text-3xl tracking-[0.06em] text-gold mt-3">
+                  Until now.
                 </p>
               </div>
 
-              {/* Blum quote */}
-              <div className="mt-10 max-w-md mx-auto relative bg-white/[0.04] border-l-[3px] p-6 md:p-8"
-                style={{ borderLeftColor: 'rgba(212,175,55,0.40)' }}>
-                <div className="absolute top-2 left-4 font-bebas text-[72px] md:text-[96px] leading-none select-none pointer-events-none"
-                  style={{ color: 'rgba(212,175,55,0.20)' }} aria-hidden="true">&ldquo;</div>
-                <p className="relative z-10 text-sm md:text-base leading-relaxed text-white/80 italic">
-                  Filmmakers have a perception in the business world of being kind of flaky dudes... you need to be buttoned down... speak the language that they speak.
-                </p>
-                <p className="mt-4 font-bebas text-[13px] tracking-[0.12em] uppercase" style={{ color: 'rgba(212,175,55,0.60)' }}>
-                  Jason Blum &mdash; Blumhouse
-                </p>
+              {/* Blum quote — properly structured */}
+              <div className="mt-12 max-w-md mx-auto">
+                <div className="relative bg-white/[0.03] border border-white/[0.06] overflow-hidden">
+                  {/* Gold left accent */}
+                  <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-gold/60 via-gold/30 to-transparent" />
+                  <div className="p-6 md:p-8 pl-7 md:pl-10">
+                    {/* Opening quote mark */}
+                    <div className="font-bebas text-[64px] md:text-[80px] leading-none select-none pointer-events-none text-gold/20 -mb-6 -ml-1"
+                      aria-hidden="true">{"\u201C"}</div>
+                    <blockquote className="relative z-10">
+                      <p className="text-[15px] md:text-base leading-[1.7] text-white/80 italic">
+                        Filmmakers have a perception in the business world of being kind of flaky dudes{"\u2026"} you need to be buttoned down{"\u2026"} speak the language that they speak.
+                      </p>
+                    </blockquote>
+                    <div className="mt-5 pt-4 border-t border-white/[0.06] flex items-center gap-3">
+                      <div className="w-8 h-[1px] bg-gold/40" />
+                      <cite className="not-italic">
+                        <span className="font-bebas text-[14px] tracking-[0.14em] uppercase text-gold/70">Jason Blum</span>
+                        <span className="text-white/30 text-xs ml-2">Blumhouse Productions</span>
+                      </cite>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </section>
 
+          <Divider />
+
           {/* ──────────────────────────────────────────────────────────
-               § 3  THE EVIDENCE — three reality panels
+               § 3  THE PROBLEM — three reality panels
              ────────────────────────────────────────────────────────── */}
           <section id="evidence" className="snap-section py-16 px-6">
-            <div ref={revEvidence.ref} className={cn("transition-all duration-600 ease-out", revEvidence.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
-              <SHeader eyebrow="The Evidence">
+            <div ref={revEvidence.ref} className={cn("transition-all duration-700 ease-out", revEvidence.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
+              <SHeader eyebrow="The Problem">
                 MOST INDIE FILMS <span className="text-white">LOSE MONEY.</span>
               </SHeader>
 
@@ -418,20 +473,25 @@ const Index = () => {
                   <div
                     key={r.label}
                     className={cn(
-                      "relative p-6 bg-white/[0.03] border border-white/[0.06] overflow-hidden transition-all duration-500 ease-out",
-                      revEvidence.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
+                      "relative p-6 bg-white/[0.02] border border-white/[0.06] overflow-hidden transition-all duration-600 ease-out group",
+                      revEvidence.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                     )}
-                    style={{ transitionDelay: revEvidence.visible ? `${i * 150}ms` : '0ms' }}
+                    style={{ transitionDelay: revEvidence.visible ? `${i * 180}ms` : '0ms' }}
                   >
+                    {/* Top gold accent line */}
+                    <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
                     <div className="relative z-10">
-                      <h3 className="font-bebas text-[17px] tracking-[0.12em] uppercase" style={{ color: '#D4AF37' }}>
-                        {r.label}
-                      </h3>
-                      <p className="text-white/70 text-sm leading-relaxed mt-3">{r.body}</p>
-                      <div className="h-[1px] bg-gradient-to-r from-[rgba(212,175,55,0.40)] to-transparent mt-4 mb-3" />
+                      <div className="flex items-center gap-2 mb-3">
+                        <span className="font-mono text-[11px] text-gold/40">{String(i + 1).padStart(2, '0')}</span>
+                        <h3 className="font-bebas text-[17px] tracking-[0.12em] uppercase text-gold">
+                          {r.label}
+                        </h3>
+                      </div>
+                      <p className="text-white/60 text-sm leading-relaxed">{r.body}</p>
+                      <div className="h-[1px] bg-gradient-to-r from-gold/30 to-transparent mt-4 mb-3" />
                       <p className={cn(
                         "font-semibold",
-                        r.loud ? "text-base text-white" : "text-sm text-white/90"
+                        r.loud ? "text-base text-white" : "text-sm text-white/80"
                       )}>
                         {r.punchline}
                       </p>
@@ -442,11 +502,13 @@ const Index = () => {
             </div>
           </section>
 
+          <Divider />
+
           {/* ──────────────────────────────────────────────────────────
                § 4  THE WATERFALL — proportional bars
              ────────────────────────────────────────────────────────── */}
           <SectionFrame id="waterfall">
-            <div ref={revWater.ref} className={cn("transition-all duration-500 ease-out", revWater.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
+            <div ref={revWater.ref} className={cn("transition-all duration-700 ease-out", revWater.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
               <SHeader eyebrow="The Waterfall">
                 HOW THE MONEY <span className="text-white">FLOWS</span>
               </SHeader>
@@ -516,43 +578,59 @@ const Index = () => {
           <Divider />
 
           {/* ──────────────────────────────────────────────────────────
-               § 5  CLOSED DOORS — inaccessibility, not price tags
+               § 5  CLOSED DOORS — the reality of what exists
              ────────────────────────────────────────────────────────── */}
           <section id="cost" className="snap-section py-16 px-6">
-            <div ref={revCost.ref} className={cn("transition-all duration-500 ease-out", revCost.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
-              <SHeader eyebrow="The Alternatives">
+            <div ref={revCost.ref} className={cn("transition-all duration-700 ease-out", revCost.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
+              <SHeader eyebrow="The Reality">
                 EVERY OTHER DOOR <span className="text-white">IS CLOSED.</span>
               </SHeader>
 
-              <div className="max-w-sm mx-auto">
+              <div className="max-w-sm mx-auto border border-white/[0.06] overflow-hidden">
                 {closedDoors.map((door, i) => (
                   <div
                     key={door.name}
                     className={cn(
-                      "py-5 transition-all duration-500 ease-out",
+                      "px-5 py-5 transition-all duration-600 ease-out relative",
                       i > 0 && "border-t border-white/[0.06]",
-                      revCost.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
+                      revCost.visible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-3"
                     )}
-                    style={{ transitionDelay: revCost.visible ? `${i * 120}ms` : '0ms' }}
+                    style={{
+                      transitionDelay: revCost.visible ? `${i * 150}ms` : '0ms',
+                      background: doorsLocked ? 'rgba(255,255,255,0.01)' : 'rgba(255,255,255,0.02)',
+                    }}
                   >
-                    <p
-                      className={cn(
-                        "font-bebas text-[19px] md:text-[22px] tracking-[0.10em] uppercase transition-all duration-700",
-                        doorsLocked ? "text-white/20 line-through decoration-white/15" : "text-white/80"
-                      )}
-                      style={{ transitionDelay: doorsLocked ? `${i * 200}ms` : '0ms' }}
-                    >
-                      {door.name}
-                    </p>
-                    <p
-                      className={cn(
-                        "text-sm italic mt-2 transition-all duration-700",
-                        doorsLocked ? "text-white/50 opacity-100" : "opacity-0"
-                      )}
-                      style={{ transitionDelay: doorsLocked ? `${i * 200 + 100}ms` : '0ms' }}
-                    >
-                      {door.lock}
-                    </p>
+                    <div className="flex items-center justify-between">
+                      <div className="flex-1">
+                        <p
+                          className={cn(
+                            "font-bebas text-[19px] md:text-[22px] tracking-[0.10em] uppercase transition-all duration-700",
+                            doorsLocked ? "text-white/20 line-through decoration-white/10" : "text-white/80"
+                          )}
+                          style={{ transitionDelay: doorsLocked ? `${i * 200}ms` : '0ms' }}
+                        >
+                          {door.name}
+                        </p>
+                        <p
+                          className={cn(
+                            "text-sm italic mt-1.5 transition-all duration-700",
+                            doorsLocked ? "text-white/40 opacity-100" : "opacity-0"
+                          )}
+                          style={{ transitionDelay: doorsLocked ? `${i * 200 + 100}ms` : '0ms' }}
+                        >
+                          {door.lock}
+                        </p>
+                      </div>
+                      <span
+                        className={cn(
+                          "font-mono text-xs transition-all duration-700 flex-shrink-0 ml-4",
+                          doorsLocked ? "text-white/15" : "text-white/30"
+                        )}
+                        style={{ transitionDelay: doorsLocked ? `${i * 200 + 50}ms` : '0ms' }}
+                      >
+                        {door.cost}
+                      </span>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -562,15 +640,17 @@ const Index = () => {
           {/* ──────────────────────────────────────────────────────────
                DECLARATION — the hinge between closed doors and the path
              ────────────────────────────────────────────────────────── */}
-          <section className="py-10 px-6">
-            <div className="max-w-md mx-auto">
-              <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
-              <div className="py-8 px-4 text-center">
-                <h3 className="font-bebas text-2xl md:text-3xl tracking-[0.06em] uppercase text-white leading-tight">
-                  We Built The Arsenal That Levels The Playing&nbsp;Field.
+          <section className="py-12 px-6 relative">
+            <div className="absolute inset-0 pointer-events-none"
+              style={{ background: 'radial-gradient(ellipse 50% 50% at 50% 50%, rgba(212,175,55,0.04) 0%, transparent 70%)' }} />
+            <div className="max-w-md mx-auto relative">
+              <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/50 to-transparent" />
+              <div className="py-10 px-4 text-center">
+                <h3 className="font-bebas text-[28px] md:text-[36px] tracking-[0.08em] uppercase text-gold leading-tight">
+                  We Built The Arsenal That Levels The Playing{"\u00A0"}<span className="text-white">Field</span>.
                 </h3>
               </div>
-              <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
+              <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/50 to-transparent" />
             </div>
           </section>
 
@@ -578,32 +658,51 @@ const Index = () => {
                § 6  THE PATH — gold bar product ladder + CTA
              ────────────────────────────────────────────────────────── */}
           <SectionFrame id="path">
-            <div ref={revPath.ref} className={cn("transition-all duration-500 ease-out", revPath.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
-              <SHeader eyebrow="The Path">
-                YOUR <span className="text-white">MOVE.</span>
+            <div ref={revPath.ref} className={cn("transition-all duration-700 ease-out", revPath.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
+              <SHeader eyebrow="The Arsenal">
+                THREE TIERS. <span className="text-white">ONE STANDARD.</span>
               </SHeader>
 
+              <p className="text-center text-white/50 text-sm mb-8 max-w-sm mx-auto">
+                Whether you&rsquo;re modeling your first deal or walking into a meeting with real&nbsp;capital, there&rsquo;s a tier built for&nbsp;you.
+              </p>
+
               {/* Product ladder — gold proportional bars */}
-              <div ref={ladderRef} className="max-w-md mx-auto">
+              <div ref={ladderRef} className="max-w-md mx-auto border border-white/[0.06] overflow-hidden">
                 {productTiers.map((t, i) => (
-                  <div key={t.tier} className={cn("py-4", i > 0 && "border-t border-white/[0.06]")}>
-                    <div className="flex items-baseline gap-3 mb-1">
-                      <span className={cn("font-bebas text-[13px] tracking-[0.15em] uppercase", t.tierColor)}>
-                        {t.tier}
-                      </span>
-                      <span className={cn("text-sm font-semibold", t.nameColor)}>
-                        {t.product}
-                      </span>
+                  <div
+                    key={t.tier}
+                    className={cn(
+                      "px-5 py-5 transition-all duration-600 ease-out relative",
+                      i > 0 && "border-t border-white/[0.06]",
+                      i === 2 && "bg-gold/[0.03]",
+                      revPath.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
+                    )}
+                    style={{ transitionDelay: revPath.visible ? `${i * 150}ms` : '0ms' }}
+                  >
+                    {i === 2 && (
+                      <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
+                    )}
+                    <div className="flex items-baseline justify-between mb-1.5">
+                      <div className="flex items-baseline gap-3">
+                        <span className={cn("font-bebas text-[13px] tracking-[0.15em] uppercase", t.tierColor)}>
+                          {t.tier}
+                        </span>
+                        <span className={cn("text-sm font-semibold", t.nameColor)}>
+                          {t.product}
+                        </span>
+                      </div>
+                      {i === 0 && <span className="text-[11px] tracking-[0.12em] uppercase text-gold/40 font-semibold">Free</span>}
                     </div>
-                    <p className={cn("text-sm mb-2", t.descColor)}>{t.desc}</p>
+                    <p className={cn("text-sm mb-3", t.descColor)}>{t.desc}</p>
                     <div className={cn("w-full bg-white/[0.04] relative overflow-hidden", t.barH)}>
                       <div
                         className={cn("absolute left-0 top-0 h-full", t.barClass)}
                         style={{
                           width: ladderRevealed ? `${t.pct}%` : '0%',
-                          transition: 'width 500ms cubic-bezier(0.16,1,0.3,1)',
-                          transitionDelay: `${i * 200}ms`,
-                          boxShadow: i === 2 ? '0 0 8px rgba(212,175,55,0.2)' : 'none',
+                          transition: 'width 600ms cubic-bezier(0.16,1,0.3,1)',
+                          transitionDelay: `${i * 250}ms`,
+                          boxShadow: i === 2 ? '0 0 12px rgba(212,175,55,0.25)' : 'none',
                         }}
                       />
                     </div>
@@ -613,13 +712,14 @@ const Index = () => {
 
               {/* CTA */}
               <div className="text-center mt-10">
+                <p className="text-white/40 text-xs tracking-[0.15em] uppercase mb-4">Start free. Upgrade when you&rsquo;re ready.</p>
                 <button onClick={handleStartClick}
-                  className="w-full max-w-[320px] h-16 text-base btn-cta-primary mx-auto">
-                  BUILD YOUR WATERFALL
+                  className="w-full max-w-[320px] h-[60px] text-base btn-cta-primary mx-auto">
+                  MODEL YOUR FIRST DEAL
                 </button>
-                <div className="mt-4">
+                <div className="mt-5 flex items-center justify-center gap-4">
                   <a href="/store" className="text-white/40 text-sm hover:text-gold transition-colors">
-                    See premium packages <span className="text-gold/70">&rarr;</span>
+                    Compare packages <span className="text-gold/70">&rarr;</span>
                   </a>
                 </div>
               </div>
@@ -632,7 +732,7 @@ const Index = () => {
                § 7  FAQ
              ────────────────────────────────────────────────────────── */}
           <SectionFrame id="faq">
-            <div ref={revFaq.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", revFaq.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
+            <div ref={revFaq.ref} className={cn("max-w-2xl mx-auto transition-all duration-700 ease-out", revFaq.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
               <SHeader eyebrow="Common Questions">
                 WHAT FILMMAKERS <span className="text-white">ASK</span>
               </SHeader>
@@ -659,25 +759,37 @@ const Index = () => {
           {/* ──────────────────────────────────────────────────────────
                § 8  FINAL CTA
              ────────────────────────────────────────────────────────── */}
-          <section id="final-cta" className="snap-section py-8 px-4">
-            <div className="flex overflow-hidden border border-white/[0.06]">
-              <div className="w-1 flex-shrink-0 bg-gradient-to-b from-gold via-gold/60 to-gold/20" style={{ boxShadow: '0 0 16px rgba(212,175,55,0.30)' }} />
-              <div className="bg-black flex-1 min-w-0 overflow-hidden relative">
-                <div className="h-[2px] bg-gradient-to-r from-transparent via-gold/25 to-transparent" />
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none"
-                  style={{ width: '100%', height: '100%', background: `radial-gradient(ellipse 60% 60% at 50% 10%, rgba(212,175,55,0.08) 0%, transparent 70%)` }} />
-                <div className="relative p-8 md:p-12 max-w-md mx-auto text-center">
-                  <h2 className="font-bebas text-3xl md:text-4xl tracking-[0.08em] text-gold mb-4">
-                    INVESTORS WILL ASK HOW THE MONEY FLOWS <span className="text-white">BACK</span>.<br />HAVE THE <span className="text-white">ANSWER</span>.
-                  </h2>
-                  <p className="text-white/50 text-sm leading-relaxed max-w-xs mx-auto mb-6">
-                    Your next investor meeting shouldn't be the first time you see your own&nbsp;waterfall.
-                  </p>
-                  <button onClick={handleStartClick}
-                    className="w-full max-w-[320px] h-16 text-base btn-cta-final mx-auto">
-                    BUILD YOUR WATERFALL
-                  </button>
-                </div>
+          <section id="final-cta" className="snap-section py-10 px-4">
+            <div className="relative overflow-hidden border border-gold/20">
+              {/* Gold corner accents */}
+              <div className="absolute top-0 left-0 w-8 h-[1px] bg-gold/50" />
+              <div className="absolute top-0 left-0 w-[1px] h-8 bg-gold/50" />
+              <div className="absolute top-0 right-0 w-8 h-[1px] bg-gold/50" />
+              <div className="absolute top-0 right-0 w-[1px] h-8 bg-gold/50" />
+              <div className="absolute bottom-0 left-0 w-8 h-[1px] bg-gold/50" />
+              <div className="absolute bottom-0 left-0 w-[1px] h-8 bg-gold/50" />
+              <div className="absolute bottom-0 right-0 w-8 h-[1px] bg-gold/50" />
+              <div className="absolute bottom-0 right-0 w-[1px] h-8 bg-gold/50" />
+
+              {/* Ambient glow */}
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none"
+                style={{ width: '100%', height: '100%', background: `radial-gradient(ellipse 60% 50% at 50% 20%, rgba(212,175,55,0.06) 0%, transparent 70%)` }} />
+
+              <div className="relative p-8 md:p-14 max-w-md mx-auto text-center">
+                <p className="text-gold/60 text-[11px] tracking-[0.35em] uppercase font-semibold mb-5">The Moment of Truth</p>
+                <h2 className="font-bebas text-[28px] md:text-[38px] leading-[1.1] tracking-[0.06em] text-gold mb-5">
+                  YOUR INVESTOR WILL ASK<br />HOW THE MONEY FLOWS <span className="text-white">BACK</span>.
+                </h2>
+                <p className="text-white/50 text-sm leading-relaxed max-w-xs mx-auto mb-3">
+                  That meeting shouldn&rsquo;t be the first time you see your own&nbsp;waterfall.
+                </p>
+                <p className="text-white/30 text-xs tracking-wider mb-8">
+                  Free to start. No account&nbsp;required.
+                </p>
+                <button onClick={handleStartClick}
+                  className="w-full max-w-[320px] h-16 text-base btn-cta-final mx-auto">
+                  BUILD YOUR WATERFALL &mdash; FREE
+                </button>
               </div>
             </div>
           </section>
