@@ -525,7 +525,7 @@ const Index = () => {
                 )}
                 style={{ transitionDelay: revEvidence.visible ? '800ms' : '0ms' }}
               >
-                We leveled the playing{"\u00A0"}<span className="text-white">field</span>.
+                We level the playing{"\u00A0"}<span className="text-white">field</span>.
               </p>
             </div>
           </section>
