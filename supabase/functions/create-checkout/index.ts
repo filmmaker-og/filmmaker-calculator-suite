@@ -49,7 +49,7 @@ serve(async (req) => {
 
     // Try to get authenticated user
     let userId: string | null = null;
-    let userEmail = email || null;
+    let userEmail: string | undefined = email;
 
     const authHeader = req.headers.get("Authorization");
     if (authHeader) {
@@ -57,9 +57,12 @@ serve(async (req) => {
       const { data } = await supabaseClient.auth.getUser(token);
       if (data.user) {
         userId = data.user.id;
-        userEmail = data.user.email || email || null;
+        userEmail = data.user.email || email;
       }
     }
+
+    // Email is now optional — Stripe collects it at checkout
+    // If we have it, we'll pre-fill. If not, Stripe handles it.
 
     // Check if customer exists (only if we have an email)
     let customerId: string | undefined;
@@ -92,12 +95,10 @@ serve(async (req) => {
           quantity: 1,
         };
       });
-      // Use the first item (base product) as the primary product in metadata
-      const baseProduct = PRODUCTS[items[0]];
       metaProductId = items.join(",");
       metaProductName = items.map((id: string) => PRODUCTS[id]?.name || id).join(" + ");
     } else if (productId && PRODUCTS[productId]) {
-      // Single product checkout (backward compatible)
+      // Single product checkout
       const product = PRODUCTS[productId];
       lineItems = [
         {
@@ -119,10 +120,15 @@ serve(async (req) => {
     }
 
     // Create checkout session
-    // If no email is known, Stripe Checkout will collect it from the customer.
+    // - If we have a customer ID, use it (pre-fills email)
+    // - If we have email but no customer, pre-fill via customer_email
+    // - If neither, Stripe will collect email at checkout
     const session = await stripe.checkout.sessions.create({
-      customer: customerId,
-      customer_email: customerId ? undefined : (userEmail || undefined),
+      ...(customerId
+        ? { customer: customerId }
+        : userEmail
+          ? { customer_email: userEmail }
+          : {}),
       line_items: lineItems,
       mode: "payment",
       success_url: `${req.headers.get("origin")}/build-your-plan?session_id={CHECKOUT_SESSION_ID}`,

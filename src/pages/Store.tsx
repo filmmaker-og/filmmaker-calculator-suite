@@ -2,25 +2,19 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Check,
-  Minus,
-  Gavel,
-  Calculator,
   HelpCircle,
-  Award,
   Package,
-  Layers,
   Mail,
   Instagram,
   Share2,
   Link2,
-  ChevronDown,
+  X,
 } from "lucide-react";
 import Header from "@/components/Header";
 import { cn } from "@/lib/utils";
 import {
   mainProducts,
   addOnProduct,
-  comparisonSections,
   type Product,
 } from "@/lib/store-products";
 import {
@@ -29,16 +23,14 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-
 import { getShareUrl, SHARE_TEXT, SHARE_TITLE } from "@/lib/constants";
-import { startCheckout } from "@/lib/checkout";
 import SectionFrame from "@/components/SectionFrame";
 import SectionHeader from "@/components/SectionHeader";
-import WorkingModelPopup from "@/components/WorkingModelPopup";
 
 /* ═══════════════════════════════════════════════════════════════════
-   FAQ DATA — Store-specific
+   FAQ DATA
    ═══════════════════════════════════════════════════════════════════ */
 const storeFaqs = [
   {
@@ -51,7 +43,11 @@ const storeFaqs = [
   },
   {
     q: "What is The Working Model?",
-    a: "It's a live, formula-driven Excel workbook. Change any input and every downstream calculation updates instantly. It's the engine behind your finance plan — reusable across unlimited future projects.",
+    a: "It's a live, formula-driven Excel workbook. Change any input and every downstream calculation updates instantly. It's the engine behind your finance plan — reusable across unlimited future projects. You can add it at checkout for $49 when bundled with any package.",
+  },
+  {
+    q: "What if the deliverables don't meet my expectations?",
+    a: "If your deliverables don't meet the institutional standard described, we'll revise them. These are the same financial models used in real production financing — if something doesn't hold up, we fix it.",
   },
   {
     q: "Can I upgrade later?",
@@ -62,32 +58,14 @@ const storeFaqs = [
 /* ═══════════════════════════════════════════════════════════════════
    TRUST ANCHOR DATA
    ═══════════════════════════════════════════════════════════════════ */
-const trustColumns = [
-  {
-    icon: Gavel,
-    cost: "$5,000–$15,000",
-    label: "Entertainment Lawyer",
-    desc: "To build your financial model",
-    featured: false,
-  },
-  {
-    icon: Calculator,
-    cost: "$10,000–$30,000",
-    label: "Finance Consultant",
-    desc: "To prepare investor materials",
-    featured: false,
-  },
-  {
-    icon: Check,
-    cost: "$197–$497",
-    label: "filmmaker.og",
-    desc: "Professional. 24-hour delivery.",
-    featured: true,
-  },
+const trustRows = [
+  { label: "Entertainment Lawyer", cost: "$5,000–$15,000", featured: false },
+  { label: "Finance Consultant", cost: "$10,000–$30,000", featured: false },
+  { label: "filmmaker.og", cost: "$197–$497", featured: true },
 ];
 
 /* ═══════════════════════════════════════════════════════════════════
-   GOLD DIVIDER — Between every section
+   GOLD DIVIDER
    ═══════════════════════════════════════════════════════════════════ */
 const GoldDivider = () => (
   <div className="px-8">
@@ -96,7 +74,7 @@ const GoldDivider = () => (
 );
 
 /* ═══════════════════════════════════════════════════════════════════
-   SECTION REVEAL — one-shot slide-up (IntersectionObserver)
+   SECTION REVEAL
    ═══════════════════════════════════════════════════════════════════ */
 const useReveal = () => {
   const ref = useRef<HTMLDivElement>(null);
@@ -121,7 +99,6 @@ const useReveal = () => {
   return { ref, visible };
 };
 
-/** Stagger delay style for children within a visible section */
 const staggerDelay = (
   index: number,
   visible: boolean
@@ -129,7 +106,6 @@ const staggerDelay = (
   transitionDelay: visible ? `${index * 120}ms` : "0ms",
 });
 
-/** Class for stagger-animated child items */
 const staggerChild = (visible: boolean) =>
   cn(
     "transition-all duration-400 ease-out",
@@ -137,26 +113,90 @@ const staggerChild = (visible: boolean) =>
   );
 
 /* ═══════════════════════════════════════════════════════════════════
+   WORKING MODEL POPUP
+   ═══════════════════════════════════════════════════════════════════ */
+const WorkingModelPopup = ({
+  baseProduct,
+  onAccept,
+  onDecline,
+  onClose,
+  loading,
+}: {
+  baseProduct: Product;
+  onAccept: () => void;
+  onDecline: () => void;
+  onClose: () => void;
+  loading: boolean;
+}) => (
+  <div className="fixed inset-0 z-[200] flex items-center justify-center p-6">
+    <div
+      className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+      onClick={loading ? undefined : onClose}
+    />
+    <div className="relative w-full max-w-md rounded-xl border border-gold/30 bg-bg-header p-6 space-y-5 animate-fade-in">
+      <button
+        onClick={onClose}
+        disabled={loading}
+        className="absolute top-4 right-4 text-text-dim hover:text-text-mid transition-colors"
+      >
+        <X className="w-5 h-5" />
+      </button>
+
+      <div>
+        <h3 className="font-bebas text-2xl tracking-[0.06em] text-gold mb-1">
+          ADD THE LIVE EXCEL MODEL
+        </h3>
+        <p className="text-text-mid text-sm">50% off when you bundle now</p>
+      </div>
+
+      <div className="flex items-baseline gap-2">
+        <span className="font-mono text-lg text-text-dim line-through">
+          $99
+        </span>
+        <span className="font-mono text-3xl font-medium text-white">$49</span>
+      </div>
+
+      <p className="text-text-dim text-sm leading-relaxed">
+        Get the formula-driven Excel engine behind your finance plan. Change any
+        input — watch every investor's return recalculate instantly. Reuse on
+        every project.
+      </p>
+
+      <div className="space-y-3">
+        <button
+          onClick={onAccept}
+          disabled={loading}
+          className="w-full h-14 text-base btn-cta-primary"
+        >
+          {loading ? "CONNECTING..." : "Yes, Add for $49"}
+        </button>
+        <button
+          onClick={onDecline}
+          disabled={loading}
+          className="w-full text-center text-text-dim text-sm hover:text-text-mid transition-colors py-2"
+        >
+          {loading ? "CONNECTING..." : "No thanks, continue"}
+        </button>
+      </div>
+    </div>
+  </div>
+);
+
+/* ═══════════════════════════════════════════════════════════════════
    PRODUCT CARD
    ═══════════════════════════════════════════════════════════════════ */
 const ProductCard = ({
   product,
   onBuy,
-  onDetails,
   visible,
   index,
-  workingModelSelected,
 }: {
   product: Product;
   onBuy: () => void;
-  onDetails: () => void;
   visible: boolean;
   index: number;
-  workingModelSelected: boolean;
 }) => {
   const isFeatured = product.featured;
-  const addOnPrice = workingModelSelected ? 99 : 0;
-  const totalPrice = product.price + addOnPrice;
 
   return (
     <div
@@ -164,7 +204,7 @@ const ProductCard = ({
         "flex flex-col rounded-xl p-6 transition-all",
         staggerChild(visible),
         isFeatured
-          ? "border-2 border-gold bg-bg-card shadow-[0_0_40px_rgba(212,175,55,0.12)] md:scale-[1.03] md:z-10 relative"
+          ? "border-2 border-gold bg-bg-card shadow-[0_0_40px_rgba(212,175,55,0.12)] relative"
           : "border border-border-subtle bg-bg-card"
       )}
       style={staggerDelay(index, visible)}
@@ -217,27 +257,28 @@ const ProductCard = ({
         ))}
       </ul>
 
-      {/* CTA Button */}
+      {/* CTA */}
       <button
         onClick={onBuy}
         className={cn(
-          "w-full h-14 mb-3",
+          "w-full h-14",
           isFeatured
             ? "text-base btn-cta-primary"
             : "text-sm btn-cta-secondary"
         )}
       >
-        {workingModelSelected
-          ? `Get ${product.name} — $${totalPrice}`
-          : isFeatured
-            ? `Get The Pitch Package — $${product.price}`
-            : `Get The Blueprint — $${product.price}`}
+        {isFeatured
+          ? `Get The Pitch Package — $${product.price}`
+          : `Get The Blueprint — $${product.price}`}
       </button>
 
       {/* Details link */}
       <button
-        onClick={onDetails}
-        className="text-text-dim text-xs tracking-wider hover:text-text-mid transition-colors text-center"
+        onClick={(e) => {
+          e.stopPropagation();
+          window.location.href = `/store/${product.slug}`;
+        }}
+        className="text-text-dim text-xs tracking-wider hover:text-text-mid transition-colors text-center mt-3"
       >
         See full details →
       </button>
@@ -246,31 +287,24 @@ const ProductCard = ({
 };
 
 /* ═══════════════════════════════════════════════════════════════════
-   COMPARISON TABLE TIER KEYS
-   ═══════════════════════════════════════════════════════════════════ */
-const tierKeys = ["theBlueprint", "thePitchPackage"] as const;
-
-/* ═══════════════════════════════════════════════════════════════════
    MAIN STORE COMPONENT
    ═══════════════════════════════════════════════════════════════════ */
 const Store = () => {
   const navigate = useNavigate();
   const [linkCopied, setLinkCopied] = useState(false);
-  const [workingModelSelected, setWorkingModelSelected] = useState(false);
   const [showPopup, setShowPopup] = useState<Product | null>(null);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
-
-  // Reveal refs
-  const revealTrust = useReveal();
-  const revealProducts = useReveal();
-  const revealCompare = useReveal();
-  const revealFaq = useReveal();
 
   // Mobile-sorted products: featured first
   const mobileProducts = [...mainProducts].sort(
     (a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0)
   );
 
+  // Reveal refs
+  const revealProducts = useReveal();
+  const revealFaq = useReveal();
+
+  /* ─── SHARE HELPERS ─── */
   const handleCopyLink = useCallback(() => {
     navigator.clipboard
       .writeText(`${SHARE_TEXT}\n\n${getShareUrl()}`)
@@ -295,46 +329,42 @@ const Store = () => {
     handleCopyLink();
   }, [handleCopyLink]);
 
-  // Direct-to-Stripe: invoke create-checkout and redirect
-  const doCheckout = useCallback(async (productId: string, addonId?: string) => {
+  /* ─── CHECKOUT — DIRECT TO STRIPE ─── */
+  const startCheckout = async (productId: string, addonId?: string) => {
     setCheckoutLoading(true);
     try {
-      const url = await startCheckout(productId, addonId);
-      window.location.href = url;
+      const body: Record<string, unknown> = addonId
+        ? { items: [productId, addonId] }
+        : { productId };
+
+      const { data, error } = await supabase.functions.invoke(
+        "create-checkout",
+        { body }
+      );
+      if (error) throw error;
+      if (data?.url) window.location.href = data.url;
     } catch {
       toast.error("Failed to start checkout. Please try again.");
     } finally {
       setCheckoutLoading(false);
     }
-  }, []);
+  };
 
   const handleBuy = (product: Product) => {
-    if (workingModelSelected) {
-      // Working Model already selected at full price — go straight to Stripe
-      doCheckout(product.id, "the-working-model");
-    } else {
-      // Show Working Model popup
-      setShowPopup(product);
-    }
+    setShowPopup(product);
   };
 
   const handlePopupAccept = () => {
     if (!showPopup) return;
-    const product = showPopup;
-    setShowPopup(null);
-    // Bundle: base + discounted Working Model → Stripe
-    doCheckout(product.id, "the-working-model-discount");
+    startCheckout(showPopup.id, "the-working-model-discount");
   };
 
   const handlePopupDecline = () => {
     if (!showPopup) return;
-    const product = showPopup;
-    setShowPopup(null);
-    // Base product only → Stripe
-    doCheckout(product.id);
+    startCheckout(showPopup.id);
   };
 
-  /* ─── MAIN STORE VIEW ─── */
+  /* ─── RENDER ─── */
   return (
     <div className="min-h-screen bg-bg-void flex flex-col">
       <Header />
@@ -345,139 +375,80 @@ const Store = () => {
           baseProduct={showPopup}
           onAccept={handlePopupAccept}
           onDecline={handlePopupDecline}
-          onClose={() => setShowPopup(null)}
+          onClose={() => !checkoutLoading && setShowPopup(null)}
+          loading={checkoutLoading}
         />
       )}
 
       {/* Checkout loading overlay */}
-      {checkoutLoading && (
-        <div className="fixed inset-0 z-[250] flex items-center justify-center bg-black/70 backdrop-blur-sm">
-          <div className="text-center space-y-4">
-            <div className="w-10 h-10 border-2 border-gold border-t-transparent rounded-full animate-spin mx-auto" />
-            <p className="text-gold text-sm font-semibold uppercase tracking-wider">
-              Connecting to Stripe...
-            </p>
+      {checkoutLoading && !showPopup && (
+        <div className="fixed inset-0 z-[300] bg-black/60 flex items-center justify-center">
+          <div className="text-gold text-sm tracking-[0.15em] animate-pulse">
+            CONNECTING TO CHECKOUT...
           </div>
         </div>
       )}
 
       <main className="flex-1 animate-fade-in">
         {/* ═══════════════════════════════════════════════════════════
-            HERO
+            HERO + TRUST ANCHOR
             ═══════════════════════════════════════════════════════════ */}
-        <section className="px-6 pt-10 pb-8 max-w-3xl mx-auto text-center">
+        <section className="px-6 pt-10 pb-8 max-w-2xl mx-auto text-center">
           <h1 className="font-bebas text-[clamp(2rem,7vw,3.2rem)] leading-[1.05] mb-4">
             <span className="text-gold">YOUR FINANCE PLAN.</span>{" "}
             <span className="text-white">BUILT FOR YOU.</span>
           </h1>
-          <p className="text-text-mid text-sm leading-relaxed max-w-lg mx-auto mb-6">
+          <p className="text-text-mid text-sm leading-relaxed max-w-lg mx-auto">
             Tell us about your project. We build your complete finance plan —
             delivered within 24 hours.
           </p>
-          <button
-            onClick={() =>
-              document
-                .getElementById("products")
-                ?.scrollIntoView({ behavior: "smooth" })
-            }
-            className="px-8 py-3 text-sm btn-cta-secondary"
-          >
-            SEE PACKAGES
-          </button>
-          <div
-            className="mt-6 flex justify-center animate-bounce-subtle cursor-pointer active:scale-[0.97]"
-            onClick={() =>
-              document
-                .getElementById("trust")
-                ?.scrollIntoView({ behavior: "smooth" })
-            }
-          >
-            <ChevronDown className="w-5 h-5 text-gold/60" />
+
+          {/* Trust Anchor — stacked rows */}
+          <div className="mt-8 max-w-sm mx-auto space-y-2">
+            <p className="text-text-dim text-[10px] tracking-[0.15em] uppercase text-center mb-3">
+              What this costs everywhere else
+            </p>
+            {trustRows.map((item) => (
+              <div
+                key={item.label}
+                className={cn(
+                  "flex items-center justify-between px-4 py-2.5 rounded-lg",
+                  item.featured
+                    ? "border border-gold/30 bg-gold/[0.04]"
+                    : "border border-border-subtle bg-bg-card"
+                )}
+              >
+                <span
+                  className={cn(
+                    "text-xs",
+                    item.featured
+                      ? "text-gold font-semibold"
+                      : "text-text-dim"
+                  )}
+                >
+                  {item.label}
+                </span>
+                <span
+                  className={cn(
+                    "font-mono text-sm",
+                    item.featured
+                      ? "text-gold font-medium"
+                      : "text-text-dim line-through decoration-text-dim/30"
+                  )}
+                >
+                  {item.cost}
+                </span>
+              </div>
+            ))}
           </div>
         </section>
 
         <GoldDivider />
 
         {/* ═══════════════════════════════════════════════════════════
-            TRUST ANCHOR — "What This Costs Everywhere Else"
+            PRODUCT CARDS
             ═══════════════════════════════════════════════════════════ */}
-        <SectionFrame id="trust">
-          <div
-            ref={revealTrust.ref}
-            className={cn(
-              "max-w-2xl mx-auto transition-all duration-500 ease-out",
-              revealTrust.visible
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-4"
-            )}
-          >
-            <SectionHeader
-              icon={Award}
-              eyebrow="The Industry Standard"
-              title={
-                <>
-                  WHAT THIS COSTS{" "}
-                  <span className="text-white">EVERYWHERE ELSE</span>
-                </>
-              }
-              plainSubtitle
-              subtitle="Professional investor materials typically require a finance consultant or entertainment attorney. Here's what they charge."
-            />
-            <div className="grid grid-cols-3 gap-4 text-center">
-              {trustColumns.map((item, i) => {
-                const Icon = item.icon;
-                return (
-                  <div
-                    key={item.label}
-                    className={staggerChild(revealTrust.visible)}
-                    style={staggerDelay(i, revealTrust.visible)}
-                  >
-                    <div
-                      className={cn(
-                        "w-9 h-9 rounded-lg flex items-center justify-center mx-auto mb-3",
-                        item.featured
-                          ? "bg-gold/[0.06] border border-gold/20"
-                          : "bg-bg-elevated border border-border-subtle"
-                      )}
-                    >
-                      <Icon className="w-4 h-4 text-gold" />
-                    </div>
-                    <p
-                      className={cn(
-                        "font-mono text-lg font-medium",
-                        item.featured
-                          ? "text-gold"
-                          : "text-text-primary line-through decoration-text-dim/30"
-                      )}
-                    >
-                      {item.cost}
-                    </p>
-                    <p
-                      className={cn(
-                        "text-[10px] tracking-wider uppercase mt-1",
-                        item.featured
-                          ? "text-gold font-semibold"
-                          : "text-text-dim"
-                      )}
-                    >
-                      {item.label}
-                    </p>
-                    <p className="text-text-dim text-[10px] mt-1 leading-snug">
-                      {item.desc}
-                    </p>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </SectionFrame>
-
-        <GoldDivider />
-
-        {/* ═══════════════════════════════════════════════════════════
-            PRODUCT GRID — Two main products
-            ═══════════════════════════════════════════════════════════ */}
-        <SectionFrame id="products" alt>
+        <SectionFrame id="products">
           <div
             ref={revealProducts.ref}
             className={cn(
@@ -505,43 +476,31 @@ const Store = () => {
                   key={product.id}
                   product={product}
                   onBuy={() => handleBuy(product)}
-                  onDetails={() => navigate(`/store/${product.slug}`)}
                   visible={revealProducts.visible}
                   index={i}
-                  workingModelSelected={workingModelSelected}
                 />
               ))}
             </div>
 
-            {/* Mobile: featured product first */}
+            {/* Mobile: featured first */}
             <div className="md:hidden space-y-5">
               {mobileProducts.map((product, i) => (
                 <ProductCard
                   key={product.id}
                   product={product}
                   onBuy={() => handleBuy(product)}
-                  onDetails={() => navigate(`/store/${product.slug}`)}
                   visible={revealProducts.visible}
                   index={i}
-                  workingModelSelected={workingModelSelected}
                 />
               ))}
             </div>
 
-            {/* ADD-ON: The Working Model */}
+            {/* ADD-ON: Working Model — informational only */}
             {addOnProduct && (
-              <div
-                className={cn(
-                  "mt-5 rounded-xl p-5 transition-all cursor-pointer",
-                  workingModelSelected
-                    ? "border-2 border-gold bg-gold/[0.06]"
-                    : "border border-border-subtle bg-bg-card hover:border-gold/30"
-                )}
-                onClick={() => setWorkingModelSelected(!workingModelSelected)}
-              >
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="mt-5 rounded-xl border border-border-subtle bg-bg-card p-5">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-2">
+                    <div className="flex items-center gap-2 mb-1.5">
                       <span className="px-2 py-0.5 rounded text-[9px] tracking-[0.12em] uppercase font-bold text-text-dim border border-white/10">
                         Add-on
                       </span>
@@ -552,170 +511,18 @@ const Store = () => {
                     <p className="text-text-dim text-sm leading-relaxed">
                       {addOnProduct.shortDescription}
                     </p>
+                    <p className="text-gold/70 text-xs mt-1.5">
+                      $49 when bundled at checkout
+                    </p>
                   </div>
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center">
                     <span className="font-mono text-2xl font-medium text-white">
                       ${addOnProduct.price}
                     </span>
-                    <div
-                      className={cn(
-                        "w-6 h-6 rounded border-2 flex items-center justify-center transition-all",
-                        workingModelSelected
-                          ? "border-gold bg-gold"
-                          : "border-white/20 bg-transparent"
-                      )}
-                    >
-                      {workingModelSelected && (
-                        <Check className="w-4 h-4 text-black" />
-                      )}
-                    </div>
                   </div>
                 </div>
               </div>
             )}
-          </div>
-        </SectionFrame>
-
-        <GoldDivider />
-
-        {/* ═══════════════════════════════════════════════════════════
-            INLINE COMPARISON TABLE
-            ═══════════════════════════════════════════════════════════ */}
-        <SectionFrame id="compare">
-          <div
-            ref={revealCompare.ref}
-            className={cn(
-              "max-w-4xl mx-auto transition-all duration-500 ease-out",
-              revealCompare.visible
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-4"
-            )}
-          >
-            <SectionHeader
-              icon={Layers}
-              eyebrow="Side by Side"
-              title={
-                <>
-                  COMPARE <span className="text-white">PACKAGES</span>
-                </>
-              }
-              plainSubtitle
-              subtitle="Both tiers are built from the same institutional-grade financial model. The difference is depth and deliverables."
-            />
-
-            <div className="overflow-x-auto rounded-xl border border-border-subtle bg-bg-card">
-              <table className="w-full border-collapse">
-                <thead>
-                  <tr>
-                    <th className="text-left text-text-dim text-[10px] font-sans font-semibold tracking-wider p-3 border-b border-border-subtle min-w-[160px]">
-                      Feature
-                    </th>
-                    {mainProducts.map((p) => (
-                      <th
-                        key={p.id}
-                        className={cn(
-                          "p-3 text-center border-b border-border-subtle min-w-[120px]",
-                          p.featured && "bg-gold/[0.04]"
-                        )}
-                      >
-                        <button
-                          onClick={() => navigate(`/store/${p.slug}`)}
-                          className="hover:text-gold transition-colors"
-                        >
-                          <span className="font-bebas text-sm tracking-wider text-white block">
-                            {p.name.toUpperCase()}
-                          </span>
-                          <span
-                            className={cn(
-                              "font-mono text-xs",
-                              p.featured ? "text-gold" : "text-text-dim"
-                            )}
-                          >
-                            ${p.price}
-                          </span>
-                          {p.featured && (
-                            <span className="block text-[8px] tracking-[0.15em] uppercase text-gold font-bold mt-1">
-                              Recommended
-                            </span>
-                          )}
-                        </button>
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-
-                <tbody>
-                  {comparisonSections.map((section) => (
-                    <React.Fragment key={`section-${section.title}`}>
-                      <tr>
-                        <td
-                          colSpan={3}
-                          className="px-3 pt-5 pb-2 border-b border-border-subtle"
-                        >
-                          <span className="font-bebas text-sm tracking-[0.1em] text-gold uppercase">
-                            {section.title}
-                          </span>
-                        </td>
-                      </tr>
-
-                      {section.features.map((feature) => (
-                        <tr
-                          key={feature.label}
-                          className="border-b border-border-subtle/50"
-                        >
-                          <td className="px-3 py-2.5 text-text-dim text-[11px] leading-snug">
-                            {feature.label}
-                          </td>
-                          {tierKeys.map((tier) => {
-                            const val = feature[tier];
-                            const isFeaturedCol = tier === "thePitchPackage";
-                            return (
-                              <td
-                                key={tier}
-                                className={cn(
-                                  "px-3 py-2.5 text-center",
-                                  isFeaturedCol && "bg-gold/[0.04]"
-                                )}
-                              >
-                                {val === true ? (
-                                  <Check className="w-4 h-4 text-gold mx-auto" />
-                                ) : val === false ? (
-                                  <Minus className="w-3.5 h-3.5 text-white/10 mx-auto" />
-                                ) : (
-                                  <span className="text-text-primary text-[11px] leading-snug">
-                                    {val}
-                                  </span>
-                                )}
-                              </td>
-                            );
-                          })}
-                        </tr>
-                      ))}
-                    </React.Fragment>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
-            {/* CTA row below table */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
-              {mainProducts.map((p) => (
-                <button
-                  key={p.id}
-                  onClick={() => handleBuy(p)}
-                  className={cn(
-                    "h-14",
-                    p.featured
-                      ? "text-base btn-cta-primary"
-                      : "text-sm btn-cta-secondary"
-                  )}
-                >
-                  {p.featured
-                    ? `Get The Pitch Package — $${p.price}`
-                    : `Get The Blueprint — $${p.price}`}
-                </button>
-              ))}
-            </div>
           </div>
         </SectionFrame>
 
@@ -757,54 +564,30 @@ const Store = () => {
                 ))}
               </Accordion>
             </div>
+
+            {/* Custom work prompt */}
+            <div className="mt-5 rounded-xl border border-border-subtle bg-bg-card p-5">
+              <h3 className="font-bebas text-lg tracking-[0.08em] text-gold mb-2">
+                NEED SOMETHING CUSTOM?
+              </h3>
+              <p className="text-text-mid text-sm leading-relaxed mb-3">
+                If your project requires bespoke financial modeling, custom comp
+                research, or institutional-grade investor materials beyond what
+                these packages cover — get in touch.
+              </p>
+              <a
+                href="mailto:thefilmmaker.og@gmail.com"
+                className="inline-flex items-center gap-2 text-gold text-sm font-semibold hover:text-gold/80 transition-colors"
+              >
+                <Mail className="w-4 h-4" />
+                Contact Us →
+              </a>
+            </div>
           </div>
         </SectionFrame>
 
         {/* ═══════════════════════════════════════════════════════════
-            FINAL CTA — matching Index.tsx pattern
-            ═══════════════════════════════════════════════════════════ */}
-        <section id="final-cta" className="py-8 px-4">
-          <div className="flex rounded-2xl overflow-hidden border border-white/[0.06]">
-            <div
-              className="w-1 flex-shrink-0 bg-gradient-to-b from-gold via-gold/60 to-gold/20"
-              style={{ boxShadow: "0 0 16px rgba(212,175,55,0.30)" }}
-            />
-            <div className="bg-bg-elevated flex-1 min-w-0 overflow-hidden relative">
-              <div className="h-[2px] bg-gradient-to-r from-transparent via-gold/25 to-transparent" />
-              <div
-                className="absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none"
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  background: `radial-gradient(ellipse 60% 60% at 50% 10%, rgba(212,175,55,0.08) 0%, transparent 70%)`,
-                }}
-              />
-              <div className="relative p-8 md:p-12 max-w-md mx-auto text-center">
-                <h2 className="font-bebas text-3xl md:text-4xl tracking-[0.08em] text-gold mb-4">
-                  YOUR NEXT INVESTOR MEETING SHOULDN'T BE THE FIRST TIME YOU SEE
-                  YOUR OWN <span className="text-white">WATERFALL</span>.
-                </h2>
-                <p className="text-text-mid text-sm leading-relaxed max-w-xs mx-auto mb-6">
-                  Walk in with institutional-grade materials — or don't walk in
-                  at all.
-                </p>
-                <button
-                  onClick={() =>
-                    document
-                      .getElementById("products")
-                      ?.scrollIntoView({ behavior: "smooth" })
-                  }
-                  className="w-full max-w-[320px] h-16 text-base btn-cta-primary"
-                >
-                  GET YOUR PACKAGE
-                </button>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ═══════════════════════════════════════════════════════════
-            FOOTER — matching Index.tsx
+            FOOTER
             ═══════════════════════════════════════════════════════════ */}
         <footer className="py-10 px-6">
           <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/25 to-transparent mb-8" />
