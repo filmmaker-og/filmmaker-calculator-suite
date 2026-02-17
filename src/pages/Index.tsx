@@ -46,19 +46,16 @@ const realities = [
     label: "The Recoupment Gap",
     body: "They budget the production. They don\u2019t budget the recoupment. CAM fees, sales commissions, debt service, corridor splits, recoupment premiums\u00A0\u2014 the friction between gross receipts and net profits isn\u2019t in the plan.",
     punchline: "Every number in the investor deck is modeled against the wrong baseline.",
-    loud: false,
   },
   {
     label: "Net Profit Erosion",
     body: "\u201CNet profits\u201D in a distribution agreement isn\u2019t net. It\u2019s gross minus distribution fees, P&A recoupment, delivery costs, market reserves, and overhead charges. By the time standard contractual deductions clear,",
     punchline: "The margin you projected at green light doesn\u2019t exist.",
-    loud: false,
   },
   {
     label: "Structural Asymmetry",
     body: "Distributors, sales agents, and financiers run waterfall models before every term sheet. They stress-test the capital stack, the recoupment order, and the corridor structure before they sit down. The producer across the table brought a budget topsheet.",
     punchline: "That asymmetry isn\u2019t accidental. It\u2019s on purpose.",
-    loud: true,
   },
 ];
 
@@ -335,15 +332,17 @@ const Index = () => {
                 <img src={filmmakerLogo} alt="Filmmaker.OG" className="relative w-[96px] h-[96px] object-contain"
                   style={{ filter: 'brightness(1.15) drop-shadow(0 0 28px rgba(212,175,55,0.45))' }} />
               </div>
-              <h1 className="font-bebas text-[clamp(2.8rem,9vw,4.2rem)] leading-[1.05] text-gold mb-3">
+              <h1 className="font-bebas text-[clamp(2.8rem,9vw,4.2rem)] leading-[1.05] text-gold mb-5">
                 SEE WHERE EVERY<br /><span className="text-white">DOLLAR GOES</span>
               </h1>
-              <p className="text-white/90 text-[15px] tracking-[0.12em] uppercase font-medium mb-1">
-                Built by a Tribeca-winning, CAA-repped producer
-              </p>
-              <p className="text-white/50 text-[13px] tracking-[0.18em] uppercase mb-6">
-                whose debut sold to <span className="text-gold font-semibold">Netflix</span>.
-              </p>
+              <div className="mb-6 space-y-1.5">
+                <p className="text-white/90 text-[15px] leading-[1.6] tracking-[0.12em] uppercase font-medium">
+                  Built by a Tribeca-winning, CAA-repped producer
+                </p>
+                <p className="text-white/50 text-[13px] leading-[1.6] tracking-[0.18em] uppercase">
+                  whose debut sold to <span className="text-gold font-semibold">Netflix</span>.
+                </p>
+              </div>
 
               {isReturningUser ? (
                 <div className="w-full max-w-[320px] mx-auto space-y-3">
