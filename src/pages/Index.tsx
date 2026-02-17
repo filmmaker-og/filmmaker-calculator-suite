@@ -338,11 +338,11 @@ const Index = () => {
               <h1 className="font-bebas text-[clamp(2.8rem,9vw,4.2rem)] leading-[1.05] text-gold mb-3">
                 SEE WHERE EVERY<br /><span className="text-white">DOLLAR GOES</span>
               </h1>
-              <p className="text-white/80 text-sm tracking-[0.15em] uppercase mb-1.5">
+              <p className="text-white/90 text-[15px] tracking-[0.12em] uppercase font-medium mb-1">
                 Built by a Tribeca-winning, CAA-repped producer
               </p>
-              <p className="text-white/50 text-sm tracking-[0.15em] uppercase mb-6">
-                whose debut sold to <span className="text-gold">Netflix</span>.
+              <p className="text-white/50 text-[13px] tracking-[0.18em] uppercase mb-6">
+                whose debut sold to <span className="text-gold font-semibold">Netflix</span>.
               </p>
 
               {isReturningUser ? (
@@ -408,15 +408,15 @@ const Index = () => {
                         </p>
                       </div>
                     ))}
-                    {/* The punchline */}
+                    {/* The punchline — contained with background for visual weight */}
                     <div
                       className={cn(
-                        "pt-4 border-t border-white/[0.08] flex items-baseline gap-3 transition-all duration-500 ease-out",
+                        "mt-1 -mx-1 p-4 bg-gold/[0.08] border border-gold/20 flex items-center gap-3 transition-all duration-500 ease-out",
                         revMission.visible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-3"
                       )}
                       style={{ transitionDelay: revMission.visible ? '850ms' : '0ms' }}
                     >
-                      <X className="w-4 h-4 text-white/30 flex-shrink-0 relative top-[2px]" />
+                      <X className="w-4 h-4 text-white/40 flex-shrink-0" />
                       <p className="font-bebas text-[22px] md:text-[26px] tracking-[0.06em] text-gold leading-tight">
                         Film has nothing.
                       </p>
@@ -426,10 +426,13 @@ const Index = () => {
 
                 <p
                   className={cn(
-                    "text-center font-bebas text-3xl md:text-4xl tracking-[0.06em] text-gold mt-10 transition-all duration-500 ease-out",
-                    revMission.visible ? "opacity-100 scale-100" : "opacity-0 scale-95"
+                    "text-center font-bebas text-[36px] md:text-[44px] tracking-[0.06em] text-gold mt-10 transition-all duration-700 ease-out",
+                    revMission.visible ? "opacity-100 scale-100" : "opacity-0 scale-90"
                   )}
-                  style={{ transitionDelay: revMission.visible ? '1100ms' : '0ms' }}
+                  style={{
+                    transitionDelay: revMission.visible ? '1100ms' : '0ms',
+                    textShadow: revMission.visible ? '0 0 30px rgba(212,175,55,0.4), 0 0 60px rgba(212,175,55,0.15)' : 'none',
+                  }}
                 >
                   Until now.
                 </p>
@@ -473,7 +476,7 @@ const Index = () => {
           <section id="evidence" className="snap-section py-16 px-6" style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.01) 0%, rgba(255,255,255,0.03) 50%, rgba(255,255,255,0.01) 100%)' }}>
             <div ref={revEvidence.ref} className={cn("transition-all duration-700 ease-out", revEvidence.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
               <SHeader eyebrow="The Problem">
-                MOST INDIE FILMS <span className="text-white">LOSE MONEY.</span>
+                MOST INDIE FILMS <span className="text-gold">LOSE</span> <span className="text-white">MONEY.</span>
               </SHeader>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto">
@@ -500,8 +503,7 @@ const Index = () => {
                       <div className="h-[1px] bg-gradient-to-r from-gold/30 to-transparent mt-4 mb-3" />
                       <p
                         className={cn(
-                          "italic transition-opacity duration-[0ms]",
-                          r.loud ? "text-base font-bold text-white" : "text-sm font-semibold text-white/70",
+                          "text-sm font-semibold text-white/70 italic transition-opacity duration-[0ms]",
                           revEvidence.visible ? "opacity-100" : "opacity-0"
                         )}
                         style={{
@@ -515,6 +517,17 @@ const Index = () => {
                   </div>
                 ))}
               </div>
+
+              {/* Post-problem declaration */}
+              <p
+                className={cn(
+                  "text-center font-bebas text-[24px] md:text-[30px] tracking-[0.08em] text-gold/80 mt-10 transition-all duration-500 ease-out",
+                  revEvidence.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
+                )}
+                style={{ transitionDelay: revEvidence.visible ? '800ms' : '0ms' }}
+              >
+                We leveled the playing{"\u00A0"}<span className="text-white">field</span>.
+              </p>
             </div>
           </section>
 
@@ -615,27 +628,29 @@ const Index = () => {
                   <div
                     key={door.name}
                     className={cn(
-                      "relative border p-6 transition-all duration-600 ease-out overflow-hidden",
-                      doorsLocked ? "bg-white/[0.02] border-white/[0.06]" : "bg-white/[0.04] border-white/[0.10]",
+                      "relative border p-6 transition-all duration-700 ease-out overflow-hidden",
+                      doorsLocked
+                        ? "bg-white/[0.02] border-white/[0.06]"
+                        : "bg-white/[0.06] border-white/[0.12]",
                       revCost.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                     )}
                     style={{
                       transitionDelay: revCost.visible ? `${i * 150}ms` : '0ms',
                     }}
                   >
-                    {/* Gold left elbow — matched to toolkit cards, dims with lock */}
+                    {/* Gold left elbow — dims with lock */}
                     <div className={cn(
                       "absolute left-0 top-0 bottom-0 w-[3px] transition-opacity duration-700",
-                      doorsLocked ? "opacity-20" : "opacity-100"
+                      doorsLocked ? "opacity-15" : "opacity-100"
                     )}
-                      style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.55), rgba(212,175,55,0.25), transparent)' }}
+                      style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.70), rgba(212,175,55,0.35), transparent)' }}
                     />
-                    <div className="pl-1">
+                    <div className="pl-2">
                       <div className="flex items-start justify-between mb-2">
                         <p
                           className={cn(
                             "font-bebas text-[18px] md:text-[20px] tracking-[0.10em] uppercase leading-tight transition-all duration-700",
-                            doorsLocked ? "text-white/25" : "text-white"
+                            doorsLocked ? "text-white/20" : "text-white"
                           )}
                           style={{ transitionDelay: doorsLocked ? `${i * 200}ms` : '0ms' }}
                         >
@@ -644,15 +659,15 @@ const Index = () => {
                         <Lock
                           className={cn(
                             "w-4 h-4 flex-shrink-0 ml-2 mt-0.5 transition-all duration-700",
-                            doorsLocked ? "text-white/35 opacity-100" : "text-white/0 opacity-0"
+                            doorsLocked ? "text-white/30 opacity-100" : "text-white/0 opacity-0"
                           )}
                           style={{ transitionDelay: doorsLocked ? `${i * 200}ms` : '0ms' }}
                         />
                       </div>
                       <span
                         className={cn(
-                          "inline-block font-mono text-sm font-semibold mb-3 transition-all duration-700",
-                          doorsLocked ? "text-white/15" : "text-gold/70"
+                          "inline-block font-mono text-[15px] font-bold mb-3 transition-all duration-700",
+                          doorsLocked ? "text-white/15" : "text-gold"
                         )}
                         style={{ transitionDelay: doorsLocked ? `${i * 200 + 50}ms` : '0ms' }}
                       >
@@ -661,7 +676,7 @@ const Index = () => {
                       <p
                         className={cn(
                           "text-sm leading-relaxed transition-all duration-700",
-                          doorsLocked ? "text-white/35 opacity-100" : "opacity-0"
+                          doorsLocked ? "text-white/30 opacity-100" : "text-white/50 opacity-100"
                         )}
                         style={{ transitionDelay: doorsLocked ? `${i * 200 + 100}ms` : '0ms' }}
                       >
