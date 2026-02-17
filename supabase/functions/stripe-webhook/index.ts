@@ -54,10 +54,18 @@ serve(async (req) => {
         Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
       );
 
+      // Pull email from Stripe's customer_details (collected on checkout page),
+      // then fall back to customer_email or metadata.
+      const purchaseEmail =
+        session.customer_details?.email ||
+        session.customer_email ||
+        metadata.userEmail ||
+        "";
+
       // Insert purchase record
       const { error: insertError } = await supabaseAdmin.from("purchases").insert({
         user_id: metadata.userId || null,
-        email: session.customer_email || metadata.userEmail || "",
+        email: purchaseEmail,
         stripe_session_id: session.id,
         stripe_payment_intent: typeof session.payment_intent === "string" ? session.payment_intent : null,
         product_id: metadata.productId || "",

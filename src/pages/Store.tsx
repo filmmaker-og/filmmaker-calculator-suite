@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   Check,
   Minus,
@@ -14,7 +14,6 @@ import {
   Share2,
   Link2,
   ChevronDown,
-  X,
 } from "lucide-react";
 import Header from "@/components/Header";
 import { cn } from "@/lib/utils";
@@ -30,10 +29,13 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { toast } from "sonner";
 
 import { getShareUrl, SHARE_TEXT, SHARE_TITLE } from "@/lib/constants";
+import { startCheckout } from "@/lib/checkout";
 import SectionFrame from "@/components/SectionFrame";
 import SectionHeader from "@/components/SectionHeader";
+import WorkingModelPopup from "@/components/WorkingModelPopup";
 
 /* ═══════════════════════════════════════════════════════════════════
    FAQ DATA — Store-specific
@@ -133,73 +135,6 @@ const staggerChild = (visible: boolean) =>
     "transition-all duration-400 ease-out",
     visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
   );
-
-/* ═══════════════════════════════════════════════════════════════════
-   WORKING MODEL POPUP
-   ═══════════════════════════════════════════════════════════════════ */
-const WorkingModelPopup = ({
-  baseProduct,
-  onAccept,
-  onDecline,
-  onClose,
-}: {
-  baseProduct: Product;
-  onAccept: () => void;
-  onDecline: () => void;
-  onClose: () => void;
-}) => (
-  <div className="fixed inset-0 z-[200] flex items-center justify-center p-6">
-    {/* Backdrop */}
-    <div
-      className="absolute inset-0 bg-black/80 backdrop-blur-sm"
-      onClick={onClose}
-    />
-    {/* Modal */}
-    <div className="relative w-full max-w-md rounded-xl border border-gold/30 bg-bg-header p-6 space-y-5 animate-fade-in">
-      <button
-        onClick={onClose}
-        className="absolute top-4 right-4 text-text-dim hover:text-text-mid transition-colors"
-      >
-        <X className="w-5 h-5" />
-      </button>
-
-      <div>
-        <h3 className="font-bebas text-2xl tracking-[0.06em] text-gold mb-1">
-          ADD THE LIVE EXCEL MODEL
-        </h3>
-        <p className="text-text-mid text-sm">50% off when you bundle now</p>
-      </div>
-
-      <div className="flex items-baseline gap-2">
-        <span className="font-mono text-lg text-text-dim line-through">
-          $99
-        </span>
-        <span className="font-mono text-3xl font-medium text-white">$49</span>
-      </div>
-
-      <p className="text-text-dim text-sm leading-relaxed">
-        Get the formula-driven Excel engine behind your finance plan. Change any
-        input — watch every investor's return recalculate instantly. Reuse on
-        every project.
-      </p>
-
-      <div className="space-y-3">
-        <button
-          onClick={onAccept}
-          className="w-full h-14 text-base btn-cta-primary"
-        >
-          Yes, Add for $49
-        </button>
-        <button
-          onClick={onDecline}
-          className="w-full text-center text-text-dim text-sm hover:text-text-mid transition-colors py-2"
-        >
-          No thanks, continue
-        </button>
-      </div>
-    </div>
-  </div>
-);
 
 /* ═══════════════════════════════════════════════════════════════════
    PRODUCT CARD
@@ -320,24 +255,10 @@ const tierKeys = ["theBlueprint", "thePitchPackage"] as const;
    ═══════════════════════════════════════════════════════════════════ */
 const Store = () => {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const [showSuccess, setShowSuccess] = useState(false);
   const [linkCopied, setLinkCopied] = useState(false);
   const [workingModelSelected, setWorkingModelSelected] = useState(false);
   const [showPopup, setShowPopup] = useState<Product | null>(null);
-  const [purchasedEmail] = useState(() => {
-    try {
-      return localStorage.getItem("filmmaker_og_purchase_email") || "";
-    } catch {
-      return "";
-    }
-  });
-
-  useEffect(() => {
-    if (searchParams.get("success") === "true") {
-      setShowSuccess(true);
-    }
-  }, [searchParams]);
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
 
   // Reveal refs
   const revealTrust = useReveal();
@@ -374,10 +295,23 @@ const Store = () => {
     handleCopyLink();
   }, [handleCopyLink]);
 
+  // Direct-to-Stripe: invoke create-checkout and redirect
+  const doCheckout = useCallback(async (productId: string, addonId?: string) => {
+    setCheckoutLoading(true);
+    try {
+      const url = await startCheckout(productId, addonId);
+      window.location.href = url;
+    } catch {
+      toast.error("Failed to start checkout. Please try again.");
+    } finally {
+      setCheckoutLoading(false);
+    }
+  }, []);
+
   const handleBuy = (product: Product) => {
     if (workingModelSelected) {
-      // Working Model already selected at full price — go straight to checkout
-      navigate(`/store/${product.slug}?addon=the-working-model`);
+      // Working Model already selected at full price — go straight to Stripe
+      doCheckout(product.id, "the-working-model");
     } else {
       // Show Working Model popup
       setShowPopup(product);
@@ -386,60 +320,19 @@ const Store = () => {
 
   const handlePopupAccept = () => {
     if (!showPopup) return;
-    // Bundle: base + discounted Working Model
-    navigate(`/store/${showPopup.slug}?addon=the-working-model-discount`);
+    const product = showPopup;
     setShowPopup(null);
+    // Bundle: base + discounted Working Model → Stripe
+    doCheckout(product.id, "the-working-model-discount");
   };
 
   const handlePopupDecline = () => {
     if (!showPopup) return;
-    // Base product only
-    navigate(`/store/${showPopup.slug}`);
+    const product = showPopup;
     setShowPopup(null);
+    // Base product only → Stripe
+    doCheckout(product.id);
   };
-
-  /* ─── SUCCESS / CONFIRMATION VIEW ─── */
-  if (showSuccess) {
-    return (
-      <div className="min-h-screen bg-bg-void flex flex-col">
-        <Header />
-        <main className="flex-1 px-6 py-16 flex items-center justify-center animate-fade-in">
-          <div className="text-center max-w-md">
-            <div className="w-20 h-20 border-2 border-gold mx-auto mb-6 rounded-lg flex items-center justify-center">
-              <Check className="w-10 h-10 text-gold" />
-            </div>
-            <h1 className="font-bebas text-4xl text-text-primary mb-4">
-              YOUR PURCHASE IS CONFIRMED
-            </h1>
-            <p className="text-text-mid text-sm leading-relaxed mb-2">
-              Thank you for your purchase.
-            </p>
-            <p className="text-text-mid text-sm leading-relaxed mb-8">
-              Your files are being prepared and will be delivered
-              {purchasedEmail ? (
-                <>
-                  {" "}
-                  to{" "}
-                  <span className="text-white font-semibold">
-                    {purchasedEmail}
-                  </span>
-                </>
-              ) : null}{" "}
-              within 24 hours.
-            </p>
-            <div className="flex flex-col gap-3">
-              <button
-                onClick={() => navigate("/calculator")}
-                className="w-full h-14 text-sm btn-cta-secondary"
-              >
-                Return to Calculator
-              </button>
-            </div>
-          </div>
-        </main>
-      </div>
-    );
-  }
 
   /* ─── MAIN STORE VIEW ─── */
   return (
@@ -454,6 +347,18 @@ const Store = () => {
           onDecline={handlePopupDecline}
           onClose={() => setShowPopup(null)}
         />
+      )}
+
+      {/* Checkout loading overlay */}
+      {checkoutLoading && (
+        <div className="fixed inset-0 z-[250] flex items-center justify-center bg-black/70 backdrop-blur-sm">
+          <div className="text-center space-y-4">
+            <div className="w-10 h-10 border-2 border-gold border-t-transparent rounded-full animate-spin mx-auto" />
+            <p className="text-gold text-sm font-semibold uppercase tracking-wider">
+              Connecting to Stripe...
+            </p>
+          </div>
+        </div>
       )}
 
       <main className="flex-1 animate-fade-in">

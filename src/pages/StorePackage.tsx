@@ -72,11 +72,6 @@ const StorePackage = () => {
     if (!agreedTerms || !isEmailValid()) return;
     setLoading(true);
     try {
-      // Save email for confirmation page
-      try {
-        localStorage.setItem("filmmaker_og_purchase_email", getEmail()!);
-      } catch { /* ignore */ }
-
       // Build the checkout request
       let body: Record<string, unknown>;
       if (addonId) {
