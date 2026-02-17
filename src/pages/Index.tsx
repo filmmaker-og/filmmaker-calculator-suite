@@ -200,15 +200,6 @@ const Index = () => {
 
   const ladderRef = useRef<HTMLDivElement>(null);
 
-  // Closed doors — lock animation (doors dim after appearing)
-  const [doorsLocked, setDoorsLocked] = useState(false);
-  useEffect(() => {
-    if (revCost.visible) {
-      const timer = setTimeout(() => setDoorsLocked(true), 800);
-      return () => clearTimeout(timer);
-    }
-  }, [revCost.visible]);
-
   // Net Profits countup
   const [countVal, setCountVal] = useState(0);
   useEffect(() => {
@@ -335,14 +326,9 @@ const Index = () => {
               <h1 className="font-bebas text-[clamp(2.8rem,9vw,4.2rem)] leading-[1.05] text-gold mb-5">
                 SEE WHERE EVERY<br /><span className="text-white">DOLLAR GOES</span>
               </h1>
-              <div className="mb-6 space-y-1.5">
-                <p className="text-white/90 text-[15px] leading-[1.6] tracking-[0.12em] uppercase font-medium">
-                  Built by a Tribeca-winning, CAA-repped producer
-                </p>
-                <p className="text-white/50 text-[13px] leading-[1.6] tracking-[0.18em] uppercase">
-                  whose debut sold to <span className="text-gold font-semibold">Netflix</span>.
-                </p>
-              </div>
+              <p className="mb-6 text-white/70 text-[14px] leading-[1.7] tracking-[0.10em] uppercase font-medium max-w-[320px] mx-auto">
+                Built by a Tribeca-winning, CAA-repped producer whose debut sold to <span className="text-gold font-semibold">Netflix</span>.
+              </p>
 
               {isReturningUser ? (
                 <div className="w-full max-w-[320px] mx-auto space-y-3">
@@ -452,7 +438,7 @@ const Index = () => {
                         Filmmakers have a perception in the business world of being kind of flaky dudes{"\u2026"} you need to be buttoned down{"\u2026"} speak the language that they speak.
                       </p>
                     </blockquote>
-                    <div className="mt-6 pt-5 border-t border-white/[0.08]">
+                    <div className="mt-6 -mx-1 p-4 bg-gold/[0.08] border border-gold/20">
                       <div className="flex items-center gap-3">
                         <div className="w-8 h-[1px] bg-gold/50" />
                         <cite className="not-italic">
@@ -525,7 +511,7 @@ const Index = () => {
                 )}
                 style={{ transitionDelay: revEvidence.visible ? '800ms' : '0ms' }}
               >
-                We level the playing{"\u00A0"}<span className="text-white">field</span>.
+                We leveled the playing{"\u00A0"}<span className="text-white">field</span>.
               </p>
             </div>
           </section>
@@ -628,9 +614,7 @@ const Index = () => {
                     key={door.name}
                     className={cn(
                       "relative border p-6 transition-all duration-700 ease-out overflow-hidden",
-                      doorsLocked
-                        ? "bg-white/[0.02] border-white/[0.06]"
-                        : "bg-white/[0.06] border-white/[0.12]",
+                      "bg-white/[0.06] border-white/[0.12]",
                       revCost.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                     )}
                     style={{
@@ -638,46 +622,27 @@ const Index = () => {
                     }}
                   >
                     {/* Gold left elbow — dims with lock */}
-                    <div className={cn(
-                      "absolute left-0 top-0 bottom-0 w-[3px] transition-opacity duration-700",
-                      doorsLocked ? "opacity-15" : "opacity-100"
-                    )}
+                    <div className="absolute left-0 top-0 bottom-0 w-[3px]"
                       style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.70), rgba(212,175,55,0.35), transparent)' }}
                     />
                     <div className="pl-2">
                       <div className="flex items-start justify-between mb-2">
                         <p
-                          className={cn(
-                            "font-bebas text-[18px] md:text-[20px] tracking-[0.10em] uppercase leading-tight transition-all duration-700",
-                            doorsLocked ? "text-white/20" : "text-white"
-                          )}
-                          style={{ transitionDelay: doorsLocked ? `${i * 200}ms` : '0ms' }}
+                          className="font-bebas text-[18px] md:text-[20px] tracking-[0.10em] uppercase leading-tight text-white"
                         >
                           {door.name}
                         </p>
                         <Lock
-                          className={cn(
-                            "w-4 h-4 flex-shrink-0 ml-2 mt-0.5 transition-all duration-700",
-                            doorsLocked ? "text-white/30 opacity-100" : "text-white/0 opacity-0"
-                          )}
-                          style={{ transitionDelay: doorsLocked ? `${i * 200}ms` : '0ms' }}
+                          className="w-4 h-4 flex-shrink-0 ml-2 mt-0.5 text-white/30"
                         />
                       </div>
                       <span
-                        className={cn(
-                          "inline-block font-mono text-[15px] font-bold mb-3 transition-all duration-700",
-                          doorsLocked ? "text-white/15" : "text-gold"
-                        )}
-                        style={{ transitionDelay: doorsLocked ? `${i * 200 + 50}ms` : '0ms' }}
+                        className="inline-block font-mono text-[15px] font-bold mb-3 text-gold"
                       >
                         {door.cost}
                       </span>
                       <p
-                        className={cn(
-                          "text-sm leading-relaxed transition-all duration-700",
-                          doorsLocked ? "text-white/30 opacity-100" : "text-white/50 opacity-100"
-                        )}
-                        style={{ transitionDelay: doorsLocked ? `${i * 200 + 100}ms` : '0ms' }}
+                        className="text-sm leading-relaxed text-white/50"
                       >
                         {door.lock}
                       </p>
