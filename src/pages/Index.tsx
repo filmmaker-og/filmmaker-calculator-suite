@@ -44,17 +44,17 @@ const closedDoors = [
 const realities = [
   {
     label: "The Recoupment Gap",
-    body: "They budget the production. They don\u2019t budget the recoupment. The friction between gross receipts and net profits isn\u2019t in the plan.",
+    body: "They budget the production. They don\u2019t budget the recoupment.",
     punchline: "Every number in the investor deck is modeled against the wrong baseline.",
   },
   {
     label: "Net Profit Erosion",
-    body: "\u201CNet profits\u201D in a distribution agreement isn\u2019t net. By the time standard contractual deductions clear, the margin doesn\u2019t exist.",
+    body: "\u201CNet profits\u201D in a distribution agreement isn\u2019t net.",
     punchline: "The margin you projected at green light doesn\u2019t exist.",
   },
   {
     label: "Structural Asymmetry",
-    body: "Distributors run waterfall models before every term sheet. The producer across the table brought a budget topsheet.",
+    body: "Distributors run waterfall models before every term sheet.",
     punchline: "That asymmetry isn\u2019t accidental. It\u2019s on purpose.",
   },
 ];
@@ -327,7 +327,7 @@ const Index = () => {
                 SEE WHERE EVERY<br /><span className="text-white">DOLLAR GOES</span>
               </h1>
               <p className="mb-6 text-white/70 text-[14px] leading-[1.7] tracking-[0.10em] uppercase font-medium max-w-[320px] mx-auto">
-                Built by a Tribeca-winning, CAA-repped producer whose debut sold to <span className="text-gold font-semibold">Netflix</span>.
+                Built by a Tribeca-winning producer.<br />Debut sold to <span className="text-gold font-semibold">Netflix</span>.
               </p>
 
               {isReturningUser ? (
@@ -387,11 +387,10 @@ const Index = () => {
                           {r.label}
                         </h3>
                       </div>
-                      <p className="text-white/60 text-sm leading-relaxed">{r.body}</p>
-                      <div className="h-[1px] bg-gradient-to-r from-gold/30 to-transparent mt-4 mb-3" />
+                      <p className="text-white/60 text-sm leading-relaxed mb-4">{r.body}</p>
                       <p
                         className={cn(
-                          "text-sm font-semibold text-white/70 italic transition-opacity duration-[0ms]",
+                          "text-sm font-semibold text-white/80 italic transition-opacity duration-[0ms]",
                           revEvidence.visible ? "opacity-100" : "opacity-0"
                         )}
                         style={{
@@ -508,7 +507,7 @@ const Index = () => {
                           <span className="font-bebas text-[16px] tracking-[0.14em] uppercase text-gold">Jason Blum</span>
                         </cite>
                       </div>
-                      <p className="text-white/50 text-sm tracking-[0.08em] mt-2 ml-11">Blumhouse Productions</p>
+                      <p className="text-white/50 text-sm tracking-[0.08em] mt-2 ml-11">Blumhouse &middot; Paranormal Activity</p>
                     </div>
                   </div>
                 </div>
