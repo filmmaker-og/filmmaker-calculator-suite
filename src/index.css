@@ -623,58 +623,59 @@
   }
 
   /* ═══════════════════════════════════════════════════════════════════
-     CTA GLOW SOFT — purple pulse, inviting not aggressive
-     ═══════════════════════════════════════════════════════════════════ */
-  @keyframes cta-glow-soft {
-    0%, 100% { box-shadow: 0 8px 32px rgba(124,58,237,0.20), inset 0 1px 0 rgba(255,255,255,0.08); }
-    50% { box-shadow: 0 8px 32px rgba(124,58,237,0.35), 0 0 16px rgba(124,58,237,0.12), inset 0 1px 0 rgba(255,255,255,0.12); }
-  }
-  .animate-cta-glow-soft {
-    animation: cta-glow-soft 3s ease-in-out infinite;
-  }
-
-  @keyframes cta-glow-pulse {
-    0%, 100% { box-shadow: 0 8px 32px rgba(249,224,118,0.15), inset 0 1px 0 rgba(249,224,118,0.08); }
-    50% { box-shadow: 0 12px 40px rgba(249,224,118,0.28), 0 0 20px rgba(249,224,118,0.12), inset 0 1px 0 rgba(249,224,118,0.12); }
-  }
-  .animate-cta-glow-pulse {
-    animation: cta-glow-pulse 3s ease-in-out infinite;
-  }
-
-  /* ═══════════════════════════════════════════════════════════════════
      STANDARDISED CTA BUTTONS — single source of truth
-     Primary:   full-width hero / section CTAs (featured)
+     Primary: solid gold (#F9E076), black text — hero + section CTAs
+     Final:   purple (#6D28D9), white text — closing CTA only
      Secondary: non-featured product / comparison CTAs
      ═══════════════════════════════════════════════════════════════════ */
   .btn-cta-primary {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #7C3AED;
-    border: 2px solid rgba(124, 58, 237, 0.70);
-    color: #FFFFFF;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 18px;
-    font-weight: 400;
+    background: #F9E076;
+    border: none;
+    color: #000000;
+    font-weight: 700;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    border-radius: var(--radius-md);
-    transition: all var(--timing-fast) ease;
-    box-shadow: 0 8px 32px rgba(124, 58, 237, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.10);
-    animation: cta-glow-soft 3s ease-in-out infinite;
+    border-radius: 2px;
+    transition: all 0.15s ease;
+    box-shadow: 0 4px 24px rgba(249, 224, 118, 0.25);
   }
   .btn-cta-primary:hover {
-    background: #6D28D9;
-    box-shadow: 0 12px 40px rgba(124, 58, 237, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    background: #FFEBA0;
+    box-shadow: 0 8px 32px rgba(249, 224, 118, 0.35);
   }
   .btn-cta-primary:active {
-    transform: scale(0.96);
+    transform: scale(0.97);
   }
   .btn-cta-primary:disabled {
     opacity: 0.3;
     cursor: not-allowed;
-    animation: none;
     box-shadow: none;
+  }
+
+  /* Final CTA — purple, the only one on the page */
+  .btn-cta-final {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #6D28D9;
+    border: none;
+    color: #FFFFFF;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    border-radius: 2px;
+    transition: all 0.15s ease;
+    box-shadow: 0 4px 24px rgba(109, 40, 217, 0.30);
+  }
+  .btn-cta-final:hover {
+    background: #7C3AED;
+    box-shadow: 0 8px 32px rgba(124, 58, 237, 0.40);
+  }
+  .btn-cta-final:active {
+    transform: scale(0.97);
   }
 
   .btn-cta-secondary {
