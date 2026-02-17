@@ -770,6 +770,15 @@
     animation: bounce-subtle 2.5s ease-in-out infinite;
   }
 
+  @keyframes glow-pulse {
+    0%   { box-shadow: 0 0 0 rgba(212,175,55,0); }
+    40%  { box-shadow: 0 0 16px rgba(212,175,55,0.15); }
+    100% { box-shadow: 0 0 0 rgba(212,175,55,0); }
+  }
+  .animate-glow-pulse {
+    animation: glow-pulse 600ms ease-out forwards;
+  }
+
   /* ═══════════════════════════════════════════════════════════════════
      FOCUS-VISIBLE — keyboard navigation
      ═══════════════════════════════════════════════════════════════════ */
