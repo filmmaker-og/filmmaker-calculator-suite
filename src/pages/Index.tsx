@@ -66,12 +66,12 @@ const realities = [
    WATERFALL TIERS — proportional bars ($3M cascade)
    ═══════════════════════════════════════════════════════════════════ */
 const waterfallTiers = [
-  { name: "Acquisition Price", amount: "$3,000,000",    pct: 100.0, barColor: "rgba(212,175,55,0.75)", isFinal: false },
-  { name: "CAM Fees",          amount: "\u2212$22,500",      pct: 99.3,  barColor: "rgba(200,160,45,0.65)", isFinal: false },
-  { name: "Sales Agent",       amount: "\u2212$450,000",     pct: 84.3,  barColor: "rgba(190,130,35,0.65)", isFinal: false },
-  { name: "Senior Debt",       amount: "\u2212$440,000",     pct: 69.6,  barColor: "rgba(180,95,30,0.65)",  isFinal: false },
-  { name: "Mezzanine",         amount: "\u2212$230,000",     pct: 61.9,  barColor: "rgba(170,60,35,0.65)",  isFinal: false },
-  { name: "Equity Recoupment", amount: "\u2212$1,440,000",   pct: 13.9,  barColor: "rgba(155,35,35,0.65)",  isFinal: false },
+  { name: "Acquisition Price", amount: "$3,000,000",    pct: 100.0, barColor: "rgba(212,175,55,0.65)", isFinal: false },
+  { name: "CAM Fees",          amount: "\u2212$22,500",      pct: 99.3,  barColor: "rgba(212,175,55,0.65)", isFinal: false },
+  { name: "Sales Agent",       amount: "\u2212$450,000",     pct: 84.3,  barColor: "rgba(212,175,55,0.65)", isFinal: false },
+  { name: "Senior Debt",       amount: "\u2212$440,000",     pct: 69.6,  barColor: "rgba(212,175,55,0.65)", isFinal: false },
+  { name: "Mezzanine",         amount: "\u2212$230,000",     pct: 61.9,  barColor: "rgba(212,175,55,0.65)", isFinal: false },
+  { name: "Equity Recoupment", amount: "\u2212$1,440,000",   pct: 13.9,  barColor: "rgba(212,175,55,0.65)", isFinal: false },
   { name: "Net Profits",       amount: "$417,500",       pct: 13.9,  barColor: "#00C853",               isFinal: true  },
 ];
 
@@ -162,9 +162,8 @@ const SHeader = ({ eyebrow, children }: { eyebrow: string; children: React.React
    ═══════════════════════════════════════════════════════════════════ */
 const Divider = () => (
   <div className="py-4 px-6">
-    <div className="max-w-md mx-auto relative">
-      <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
-      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 rotate-45 border border-gold/30 bg-black" />
+    <div className="max-w-md mx-auto">
+      <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/25 to-transparent" />
     </div>
   </div>
 );
@@ -339,8 +338,11 @@ const Index = () => {
               <h1 className="font-bebas text-[clamp(2.8rem,9vw,4.2rem)] leading-[1.05] text-gold mb-3">
                 SEE WHERE EVERY<br /><span className="text-white">DOLLAR GOES</span>
               </h1>
-              <p className="text-white/70 text-sm tracking-[0.15em] uppercase mb-6">
-                Built by a Tribeca-winning, CAA-repped producer whose debut sold to&nbsp;Netflix.
+              <p className="text-white/80 text-sm tracking-[0.15em] uppercase mb-1.5">
+                Built by a Tribeca-winning, CAA-repped producer
+              </p>
+              <p className="text-white/50 text-sm tracking-[0.15em] uppercase mb-6">
+                whose debut sold to <span className="text-gold">Netflix</span>.
               </p>
 
               {isReturningUser ? (
@@ -359,7 +361,6 @@ const Index = () => {
                   <button onClick={handleStartClick} className="w-full h-[60px] text-base btn-cta-primary">
                     BUILD YOUR WATERFALL &mdash; FREE
                   </button>
-                  <p className="text-white/50 text-sm tracking-[0.10em] text-center">No account required. Results in two&nbsp;minutes.</p>
                 </div>
               )}
 
@@ -373,7 +374,7 @@ const Index = () => {
           <Divider />
 
           {/* ──────────────────────────────────────────────────────────
-               § 2  MISSION — comparison table + Blum quote + declaration
+               § 2  MISSION — stacked thesis + Blum quote
              ────────────────────────────────────────────────────────── */}
           <section id="mission" className="snap-section py-16 px-6">
             <div ref={revMission.ref} className={cn("transition-all duration-700 ease-out", revMission.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
@@ -381,61 +382,68 @@ const Index = () => {
                 FILM AS AN ALTERNATIVE{"\u00A0"}<span className="text-gold">ASSET</span>{"\u00A0"}<span className="text-white">CLASS</span>
               </SHeader>
 
-              {/* Institutional comparison — asset class grid */}
+              {/* Stacked manifesto */}
               <div className="max-w-md mx-auto">
-                <div className="grid grid-cols-1 gap-[1px] bg-white/[0.08] border border-white/[0.10] overflow-hidden">
-                  {[
-                    { asset: "Real Estate", tool: "Comps & Cap Rate Models", status: true },
-                    { asset: "Private Equity", tool: "Carry & IRR Structures", status: true },
-                    { asset: "Venture Capital", tool: "Term Sheet Standards", status: true },
-                    { asset: "Film", tool: "Gatekept.", status: false },
-                  ].map((row, i) => (
+                <div className="relative bg-white/[0.04] border border-white/[0.10] overflow-hidden">
+                  {/* Gold left accent */}
+                  <div className="absolute left-0 top-0 bottom-0 w-[3px]"
+                    style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.80), rgba(212,175,55,0.40), transparent)' }} />
+                  <div className="p-7 md:p-9 pl-8 md:pl-10 space-y-5">
+                    {[
+                      { asset: "Real Estate", tool: "comps and cap rate models" },
+                      { asset: "Private Equity", tool: "carry and IRR structures" },
+                      { asset: "Venture Capital", tool: "term sheet standards" },
+                    ].map((row, i) => (
+                      <div
+                        key={row.asset}
+                        className={cn(
+                          "flex items-baseline gap-3 transition-all duration-500 ease-out",
+                          revMission.visible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-3"
+                        )}
+                        style={{ transitionDelay: revMission.visible ? `${400 + i * 150}ms` : '0ms' }}
+                      >
+                        <Check className="w-3.5 h-3.5 text-gold/50 flex-shrink-0 relative top-[2px]" />
+                        <p className="text-white/60 text-[15px] leading-relaxed">
+                          <span className="text-white/80 font-semibold">{row.asset}</span> has {row.tool}.
+                        </p>
+                      </div>
+                    ))}
+                    {/* The punchline */}
                     <div
-                      key={row.asset}
                       className={cn(
-                        "flex items-center justify-between px-5 transition-all duration-500 ease-out",
-                        row.status ? "bg-white/[0.06] py-4" : "bg-gold/[0.12] py-5 border-l-[3px] border-gold/70",
+                        "pt-4 border-t border-white/[0.08] flex items-baseline gap-3 transition-all duration-500 ease-out",
                         revMission.visible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-3"
                       )}
-                      style={{ transitionDelay: revMission.visible ? `${300 + i * 120}ms` : '0ms' }}
+                      style={{ transitionDelay: revMission.visible ? '850ms' : '0ms' }}
                     >
-                      <div className="flex items-center gap-3">
-                        {row.status
-                          ? <Check className="w-3.5 h-3.5 text-gold/60 flex-shrink-0" />
-                          : <X className="w-4 h-4 text-white/40 flex-shrink-0" />
-                        }
-                        <span className={cn(
-                          "font-bebas tracking-[0.10em] uppercase",
-                          row.status ? "text-[17px] text-white/70" : "text-[20px] text-gold"
-                        )}>
-                          {row.asset}
-                        </span>
-                      </div>
-                      <span className={cn(
-                        row.status ? "text-sm text-white/50" : "font-bebas text-[19px] tracking-[0.06em] text-white font-bold"
-                      )}>
-                        {row.tool}
-                      </span>
+                      <X className="w-4 h-4 text-white/30 flex-shrink-0 relative top-[2px]" />
+                      <p className="font-bebas text-[22px] md:text-[26px] tracking-[0.06em] text-gold leading-tight">
+                        Film has nothing.
+                      </p>
                     </div>
-                  ))}
+                  </div>
                 </div>
 
-                <p className="text-center text-white/60 text-[15px] leading-relaxed mt-10">
-                  Every other asset class gives investors standardized tools to model&nbsp;returns.
-                </p>
-                <p className="text-center font-bebas text-3xl md:text-4xl tracking-[0.06em] text-gold mt-4 mb-0">
+                <p
+                  className={cn(
+                    "text-center font-bebas text-3xl md:text-4xl tracking-[0.06em] text-gold mt-10 transition-all duration-500 ease-out",
+                    revMission.visible ? "opacity-100 scale-100" : "opacity-0 scale-95"
+                  )}
+                  style={{ transitionDelay: revMission.visible ? '1100ms' : '0ms' }}
+                >
                   Until now.
                 </p>
               </div>
 
-              {/* Blum quote — properly structured */}
+              {/* Blum quote */}
               <div className="mt-10 max-w-md mx-auto">
                 <div className="relative bg-white/[0.04] border border-white/[0.10] overflow-hidden">
                   {/* Gold left accent */}
-                  <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-gold via-gold/50 to-gold/20" />
+                  <div className="absolute left-0 top-0 bottom-0 w-[3px]"
+                    style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.60), rgba(212,175,55,0.30), transparent)' }} />
                   <div className="p-7 md:p-9 pl-8 md:pl-11">
                     {/* Opening quote mark */}
-                    <div className="font-bebas text-[56px] md:text-[68px] leading-none select-none pointer-events-none text-gold/30 -mb-5 -ml-1"
+                    <div className="font-bebas text-[56px] md:text-[68px] leading-none select-none pointer-events-none text-gold/25 -mb-5 -ml-1"
                       aria-hidden="true">{"\u201C"}</div>
                     <blockquote className="relative z-10">
                       <p className="text-[15px] md:text-base leading-[1.8] text-white/80 italic">
@@ -473,16 +481,17 @@ const Index = () => {
                   <div
                     key={r.label}
                     className={cn(
-                      "relative p-6 md:p-7 bg-white/[0.04] border border-white/[0.08] overflow-hidden transition-all duration-600 ease-out group",
+                      "relative p-6 md:p-7 bg-white/[0.04] border border-white/[0.10] overflow-hidden transition-all duration-600 ease-out group",
                       revEvidence.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                     )}
                     style={{ transitionDelay: revEvidence.visible ? `${i * 180}ms` : '0ms' }}
                   >
-                    {/* Gold left accent bar ("elbow") */}
-                    <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-gold/50 via-gold/25 to-transparent" />
+                    {/* Gold left accent bar — matched to toolkit cards */}
+                    <div className="absolute left-0 top-0 bottom-0 w-[3px]"
+                      style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.55), rgba(212,175,55,0.25), transparent)' }} />
                     <div className="relative z-10 pl-2">
                       <div className="flex items-baseline gap-3 mb-3">
-                        <span className="font-mono text-2xl text-gold/20 font-semibold leading-none">{String(i + 1).padStart(2, '0')}</span>
+                        <span className="font-mono text-2xl text-gold/35 font-semibold leading-none">{String(i + 1).padStart(2, '0')}</span>
                         <h3 className="font-bebas text-[17px] tracking-[0.12em] uppercase text-gold">
                           {r.label}
                         </h3>
@@ -601,32 +610,32 @@ const Index = () => {
                 THE DOORS ARE <span className="text-white">CLOSED.</span>
               </SHeader>
 
-              <div className="grid grid-cols-2 gap-3 max-w-lg mx-auto">
+              <div className="grid grid-cols-2 gap-4 max-w-lg mx-auto">
                 {closedDoors.map((door, i) => (
                   <div
                     key={door.name}
                     className={cn(
-                      "relative border p-5 transition-all duration-600 ease-out overflow-hidden",
-                      doorsLocked ? "bg-white/[0.03] border-white/[0.06]" : "bg-white/[0.07] border-white/[0.12]",
+                      "relative border p-6 transition-all duration-600 ease-out overflow-hidden",
+                      doorsLocked ? "bg-white/[0.02] border-white/[0.06]" : "bg-white/[0.04] border-white/[0.10]",
                       revCost.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                     )}
                     style={{
                       transitionDelay: revCost.visible ? `${i * 150}ms` : '0ms',
                     }}
                   >
-                    {/* Gold left elbow accent — dims with lock */}
+                    {/* Gold left elbow — matched to toolkit cards, dims with lock */}
                     <div className={cn(
                       "absolute left-0 top-0 bottom-0 w-[3px] transition-opacity duration-700",
-                      doorsLocked ? "opacity-30" : "opacity-100"
+                      doorsLocked ? "opacity-20" : "opacity-100"
                     )}
-                      style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.7), rgba(212,175,55,0.35), transparent)' }}
+                      style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.55), rgba(212,175,55,0.25), transparent)' }}
                     />
-                    <div className="pl-2">
+                    <div className="pl-1">
                       <div className="flex items-start justify-between mb-2">
                         <p
                           className={cn(
                             "font-bebas text-[18px] md:text-[20px] tracking-[0.10em] uppercase leading-tight transition-all duration-700",
-                            doorsLocked ? "text-white/30" : "text-white"
+                            doorsLocked ? "text-white/25" : "text-white"
                           )}
                           style={{ transitionDelay: doorsLocked ? `${i * 200}ms` : '0ms' }}
                         >
@@ -635,15 +644,15 @@ const Index = () => {
                         <Lock
                           className={cn(
                             "w-4 h-4 flex-shrink-0 ml-2 mt-0.5 transition-all duration-700",
-                            doorsLocked ? "text-white/40 opacity-100" : "text-white/0 opacity-0"
+                            doorsLocked ? "text-white/35 opacity-100" : "text-white/0 opacity-0"
                           )}
                           style={{ transitionDelay: doorsLocked ? `${i * 200}ms` : '0ms' }}
                         />
                       </div>
                       <span
                         className={cn(
-                          "inline-block font-mono text-sm font-semibold mb-2 transition-all duration-700",
-                          doorsLocked ? "text-white/20" : "text-gold/80"
+                          "inline-block font-mono text-sm font-semibold mb-3 transition-all duration-700",
+                          doorsLocked ? "text-white/15" : "text-gold/70"
                         )}
                         style={{ transitionDelay: doorsLocked ? `${i * 200 + 50}ms` : '0ms' }}
                       >
@@ -652,7 +661,7 @@ const Index = () => {
                       <p
                         className={cn(
                           "text-sm leading-relaxed transition-all duration-700",
-                          doorsLocked ? "text-white/40 opacity-100" : "opacity-0"
+                          doorsLocked ? "text-white/35 opacity-100" : "opacity-0"
                         )}
                         style={{ transitionDelay: doorsLocked ? `${i * 200 + 100}ms` : '0ms' }}
                       >
@@ -834,7 +843,7 @@ const Index = () => {
                   That meeting shouldn&rsquo;t be the first time you see your own&nbsp;waterfall.
                 </p>
                 <button onClick={handleStartClick}
-                  className="w-full max-w-[320px] h-16 text-base btn-cta-primary mx-auto">
+                  className="w-full max-w-[320px] h-16 text-base btn-cta-final mx-auto">
                   BUILD YOUR WATERFALL &mdash; FREE
                 </button>
               </div>
