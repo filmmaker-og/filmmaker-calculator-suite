@@ -44,7 +44,7 @@ const realities = [
   {
     label: "STRUCTURAL ASYMMETRY",
     body: "Distributors, sales agents, and financiers run waterfall models before every term sheet. They stress-test the capital stack, the recoupment order, and the corridor structure before they sit down. The producer across the table brought a budget topsheet.",
-    punchline: "That asymmetry isn\u2019t accidental. It\u2019s\u00A0structural.",
+    punchline: "That asymmetry isn\u2019t accidental. It\u2019s on\u00A0purpose.",
   },
 ];
 
@@ -353,6 +353,18 @@ const Index = () => {
                 </div>
               </div>
 
+              {/* Blum quote block */}
+              <div
+                className={cn("mt-10 max-w-md mx-auto bg-white/[0.04] border-l-[3px] border-gold/40 p-6 md:p-8 text-left transition-all", revealMission.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}
+                style={{ transitionDuration: '400ms', transitionDelay: revealMission.visible ? '600ms' : '0ms', transitionTimingFunction: EASE_REVEAL }}
+              >
+                <span className="font-bebas text-[72px] md:text-[96px] leading-none text-gold/20 select-none pointer-events-none block -mb-10 md:-mb-14">&ldquo;</span>
+                <p className="italic text-white/80 text-sm md:text-base leading-relaxed">
+                  Filmmakers are &ldquo;flaky dudes&rdquo; who don&rsquo;t understand the business side.
+                </p>
+                <p className="font-bebas text-sm tracking-[0.1em] text-gold/60 mt-4">Jason Blum &mdash; Blumhouse</p>
+              </div>
+
               {/* Declaration frame — gold rules above/below */}
               <div className="mt-12 max-w-md mx-auto">
                 <div
@@ -364,7 +376,7 @@ const Index = () => {
                     className={cn("font-bebas text-2xl md:text-3xl tracking-[0.06em] uppercase text-white leading-tight transition-all", revealMission.visible ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-5 scale-[0.95]")}
                     style={{ transitionDuration: '600ms', transitionDelay: revealMission.visible ? '900ms' : '0ms', transitionTimingFunction: EASE_REVEAL }}
                   >
-                    We Built The Infrastructure<br />For Your Side Of The Table.
+                    We Built The Arsenal That Levels<br />The Playing Field.
                   </h3>
                 </div>
                 <div
@@ -570,7 +582,7 @@ const Index = () => {
           {/* ── § 6: THE PATH — Gold bar ladder + CTA ── */}
           <SectionFrame id="the-path">
             <div ref={revealPath.ref} className={cn("max-w-2xl mx-auto transition-all duration-500", revealPath.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")} style={{ transitionTimingFunction: EASE_REVEAL }}>
-              <SectionHeader eyebrow="The Path" title={<>START HERE. <span className="text-white">GO FURTHER.</span></>} />
+              <SectionHeader eyebrow="The Path" title={<>YOUR <span className="text-white">MOVE.</span></>} />
 
               {/* Product ladder as GOLD bar visualization */}
               <div className="max-w-md mx-auto">
@@ -604,7 +616,7 @@ const Index = () => {
                       <span className="font-semibold text-sm ml-3 text-white/90">The Blueprint</span>
                     </div>
                   </div>
-                  <p className="text-sm text-white/50 mb-2">Complete financial architecture for your project.</p>
+                  <p className="text-sm text-white/50 mb-2">The full financial picture. Every number, every tier, every scenario.</p>
                   <div className="w-full h-2 bg-white/[0.04] relative overflow-hidden">
                     <div
                       className="absolute left-0 top-0 h-full bg-gold/50 transition-all"
@@ -644,10 +656,10 @@ const Index = () => {
               <div className="max-w-sm mx-auto text-center mt-10">
                 <div className="space-y-1">
                   {[
-                    { text: "Restructure the debt.", last: false, delay: 600 },
-                    { text: "Lower the equity hurdle.", last: false, delay: 720 },
-                    { text: "Stack tax credits.", last: false, delay: 840 },
-                    { text: "See what changes.", last: true, delay: 1140 },
+                    { text: "Restructure the debt.", last: false, delay: 0 },
+                    { text: "Lower the equity hurdle.", last: false, delay: 120 },
+                    { text: "Stack tax credits.", last: false, delay: 240 },
+                    { text: "See what changes.", last: true, delay: 540 },
                   ].map((cmd) => (
                     <p
                       key={cmd.text}
@@ -660,7 +672,7 @@ const Index = () => {
                     >{cmd.text}</p>
                   ))}
                 </div>
-                <div className="text-center mt-8">
+                <div className="text-center mt-6">
                   <button onClick={handleStartClick}
                     className="w-full max-w-[320px] h-16 text-base btn-cta-primary">
                     BUILD YOUR WATERFALL
