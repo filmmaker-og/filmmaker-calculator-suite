@@ -51,19 +51,19 @@ const problemFacts = [
 const faqs = [
   {
     q: "What assumptions does the waterfall use?",
-    a: "The simulator models the standard independent film recoupment hierarchy used in real production financing\u00A0— CAM fees, sales agent commission, senior and mezzanine debt service, equity recoupment with preferred return, and backend profit splits. Benchmarks reflect current market terms for films in the $1M\u2013$10M budget range. Every deal is different. This gives you the structure\u00A0— your attorney finalizes the numbers."
-  },
-  {
-    q: "What are the premium exports?",
-    a: "The simulator, waterfall chart, deal glossary, and unlimited scenarios are completely free\u00A0\u2014 no account required. When you\u2019re ready to take it into a real meeting, premium exports include a 6-sheet Excel workbook and an investor-ready PDF. These are the documents your investor\u2019s accountant and attorney will actually review."
+    a: "The simulator models the standard independent film recoupment hierarchy\u00A0\u2014 CAM fees, sales agent commission, senior and mezzanine debt service, equity recoupment with preferred return, and backend profit splits. Benchmarks reflect current market terms for films in the $1M\u2013$10M budget range. Every deal is different. This gives you the structure\u00A0\u2014 your attorney finalizes the numbers."
   },
   {
     q: "Who built this?",
     a: "A producer who spent years learning through expensive mistakes what should have been accessible from day one. Tribeca-winning, CAA-repped, debut sold to Netflix. This tool exists because the waterfall shouldn\u2019t be something you discover for the first time when someone else\u2019s lawyer slides it across the table."
   },
   {
-    q: "Why is this free?",
-    a: "Film is an alternative asset class\u00A0\u2014 same category as real estate, private equity, and venture capital. Every other alt asset gives investors standardized tools to model returns. Film doesn\u2019t. That\u2019s why the industry has a reputation as a bad investment. It\u2019s not. It\u2019s a misunderstood one. This tool is the starting point."
+    q: "Is this financial or legal advice?",
+    a: "No. This is an educational simulation tool for estimation and planning purposes only. Always consult a qualified entertainment attorney or accountant before making financing decisions."
+  },
+  {
+    q: "What if I need more than the simulator?",
+    a: "The simulator shows you the structure. When you\u2019re ready for the meeting, we offer investor-grade packages\u00A0\u2014 from a complete financial blueprint to a full pitch-ready package with waterfall, projections, and capital strategy."
   },
 ];
 
@@ -128,6 +128,7 @@ const Index = () => {
   const [linkCopied, setLinkCopied] = useState(false);
 
   // One-shot reveal refs for each section
+  const revealMission = useReveal();
   const revealProblem = useReveal();
   const revealFlow = useReveal();
   const revealPrice = useReveal();
@@ -277,7 +278,7 @@ const Index = () => {
               {/* Scroll indicator — tappable, scrolls to Problem */}
               <div
                 className="mt-8 flex justify-center animate-bounce-subtle cursor-pointer active:scale-[0.97]"
-                onClick={() => document.getElementById('problem')?.scrollIntoView({ behavior: 'smooth' })}
+                onClick={() => document.getElementById('mission')?.scrollIntoView({ behavior: 'smooth' })}
               >
                 <ChevronDown className="w-5 h-5 text-gold/60" />
               </div>
@@ -287,17 +288,38 @@ const Index = () => {
           {/* section divider */}
           <div className="px-8"><div className="h-[1px] bg-gradient-to-r from-transparent via-gold/25 to-transparent" /></div>
 
-          {/* ── § 2: THE PROBLEM ── */}
-          <SectionFrame id="problem">
+          {/* ── § 2: MISSION (open — text on black) ── */}
+          <section id="mission" className="py-16 px-6">
+            <div ref={revealMission.ref} className={cn("max-w-lg mx-auto text-center transition-all duration-500 ease-out", revealMission.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
+              <p className="text-white/50 text-xs tracking-[0.3em] uppercase font-semibold mb-3">The Thesis</p>
+              <h2 className="font-bebas text-3xl md:text-4xl tracking-[0.08em] text-gold">
+                FILM IS AN ALTERNATIVE <span className="text-white">ASSET CLASS</span>
+              </h2>
+              <div className="mt-6 space-y-4 text-white/70 text-sm leading-relaxed">
+                <p>
+                  Same category as real estate, private equity, and venture capital. But it's the only alternative asset where investors commit capital without standardized tools to model their return.
+                </p>
+                <p>
+                  That information asymmetry is why film has a reputation as a bad investment. It's not. It's a misunderstood one.
+                </p>
+                <p className="text-white/50">
+                  This tool is how we start fixing that.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          {/* ── § 3: PROBLEM (open — text on black) ── */}
+          <section id="problem" className="py-12 px-6">
             <div ref={revealProblem.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", revealProblem.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
-              <SectionHeader eyebrow="The Problem" title={<>MOST INDIE FILMS <span className="text-white">LOSE MONEY.</span></>} />
+              <SectionHeader eyebrow="The Evidence" title={<>MOST INDIE FILMS <span className="text-white">LOSE MONEY.</span></>} />
               <div className="max-w-lg mx-auto">
                 {problemFacts.map((fact, i) => (
                   <div
                     key={i}
                     className={cn(
                       "px-5 py-5",
-                      i > 0 && "border-t border-border-subtle",
+                      i > 0 && "border-t border-white/[0.06]",
                       staggerChild(revealProblem.visible)
                     )}
                     style={staggerDelay(i, revealProblem.visible)}
@@ -309,15 +331,10 @@ const Index = () => {
                 ))}
               </div>
             </div>
-          </SectionFrame>
+          </section>
 
-          {/* section divider */}
-          <div className="px-8">
-            <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/35 to-transparent" />
-          </div>
-
-          {/* ── § 3: HOW THE MONEY FLOWS (vertical cascade) ── */}
-          <SectionFrame id="how-it-flows" alt>
+          {/* ── § 4: HOW THE MONEY FLOWS (contained — SectionFrame) ── */}
+          <SectionFrame id="how-it-flows">
             <div ref={revealFlow.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", revealFlow.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
               <SectionHeader eyebrow="The Waterfall" title={<>HOW THE MONEY <span className="text-white">FLOWS</span></>} />
 
@@ -400,7 +417,10 @@ const Index = () => {
             </div>
           </SectionFrame>
 
-          {/* ── § 4: KNOWLEDGE ISN'T CHEAP + SOLUTION PIVOT ── */}
+          {/* section divider */}
+          <div className="px-8"><div className="h-[1px] bg-gradient-to-r from-transparent via-gold/25 to-transparent" /></div>
+
+          {/* ── § 5: KNOWLEDGE ISN'T CHEAP + TWO PATHS ── */}
           <SectionFrame id="price-anchor">
             <div ref={revealPrice.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", revealPrice.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
               <SectionHeader eyebrow="The Industry Standard" title={<>KNOWLEDGE ISN'T <span className="text-white">CHEAP</span></>} />
@@ -409,45 +429,50 @@ const Index = () => {
               <div className="grid grid-cols-2 gap-3 max-w-sm mx-auto">
                 <div className="rounded-xl border border-border-subtle bg-bg-card p-5 text-center">
                   <p className="font-mono text-lg font-semibold text-white/80">$5K–$15K</p>
-                  <p className="text-white/50 text-xs tracking-wider uppercase mt-1">Entertainment Attorney</p>
+                  <p className="text-white/50 text-xs tracking-wider uppercase mt-1.5">Entertainment Attorney</p>
                 </div>
                 <div className="rounded-xl border border-border-subtle bg-bg-card p-5 text-center">
                   <p className="font-mono text-lg font-semibold text-white/80">$2K–$5K</p>
-                  <p className="text-white/50 text-xs tracking-wider uppercase mt-1">Producing Consultant</p>
+                  <p className="text-white/50 text-xs tracking-wider uppercase mt-1.5">Producing Consultant</p>
                 </div>
                 <div className="rounded-xl border border-border-subtle bg-bg-card p-5 text-center">
                   <p className="font-mono text-lg font-semibold text-white/80">$50K–$200K</p>
-                  <p className="text-white/50 text-xs tracking-wider uppercase mt-1">Film School</p>
+                  <p className="text-white/50 text-xs tracking-wider uppercase mt-1.5">Film School</p>
                 </div>
                 <div className="rounded-xl border border-border-subtle bg-bg-card p-5 text-center">
                   <p className="font-mono text-lg font-semibold text-white/80">3–5 Years</p>
-                  <p className="text-white/50 text-xs tracking-wider uppercase mt-1">Trial and Error</p>
+                  <p className="text-white/50 text-xs tracking-wider uppercase mt-1.5">Trial and Error</p>
                 </div>
               </div>
 
-              {/* Solution pivot */}
+              {/* Two paths */}
               <div className="max-w-sm mx-auto text-center mt-10">
-                <p className="text-white/50 text-sm leading-relaxed">
-                  We built a way around it.
-                </p>
-                <p className="text-white/70 text-sm leading-relaxed mt-3">
+                <p className="text-white/70 text-sm leading-relaxed">
                   Restructure the debt. Lower the equity hurdle.<br />
                   Stack tax credits. See what changes.
                 </p>
-              </div>
-
-              {/* CTA */}
-              <div className="text-center mt-8">
-                <button onClick={handleStartClick}
-                  className="w-full max-w-[320px] h-16 text-base btn-cta-primary">
-                  BUILD YOUR WATERFALL
-                </button>
+                <div className="mt-6">
+                  <button onClick={handleStartClick}
+                    className="w-full max-w-[320px] h-16 text-base btn-cta-primary">
+                    BUILD YOUR WATERFALL
+                  </button>
+                </div>
+                <div className="mt-4">
+                  <a href="/store"
+                    className="text-white/40 text-sm hover:text-gold transition-colors">
+                    Already know what you need?
+                    <span className="text-gold/70 ml-1">See packages &rarr;</span>
+                  </a>
+                </div>
               </div>
             </div>
           </SectionFrame>
 
-          {/* ── § 5: FAQ ── */}
-          <SectionFrame id="faq" alt>
+          {/* section divider */}
+          <div className="px-8"><div className="h-[1px] bg-gradient-to-r from-transparent via-gold/25 to-transparent" /></div>
+
+          {/* ── § 6: FAQ ── */}
+          <SectionFrame id="faq">
             <div ref={revealFaq.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", revealFaq.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
               <SectionHeader eyebrow="Common Questions" title={<>WHAT FILMMAKERS <span className="text-white">ASK</span></>} />
               <div className="bg-bg-card rounded-xl px-5 border border-border-subtle">
