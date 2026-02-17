@@ -23,7 +23,7 @@ const SectionFrame = ({
       <div
         className={cn(
           "flex-1 min-w-0",
-          alt ? "bg-bg-surface" : "bg-bg-elevated",
+          "bg-transparent",
           className
         )}
       >
