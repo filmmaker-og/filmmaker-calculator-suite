@@ -32,7 +32,7 @@ const CINEMATIC_SEEN_KEY = "filmmaker_og_intro_seen";
    CLOSED DOORS — the reality of what's available
    ═══════════════════════════════════════════════════════════════════ */
 const closedDoors = [
-  { name: "Entertainment Attorney", lock: "If they\u2019ll take the meeting.", cost: "$500/hr" },
+  { name: "Entertainment Attorney", lock: "If they\u2019ll take the meeting.", cost: "$800/hr" },
   { name: "Producing Consultant", lock: "If you can afford one.", cost: "$5K+" },
   { name: "Film School", lock: "Four years you don\u2019t have.", cost: "$200K" },
   { name: "Trial & Error", lock: "Your investors won\u2019t get a second one.", cost: "Everything" },
@@ -44,18 +44,15 @@ const closedDoors = [
 const realities = [
   {
     label: "The Recoupment Gap",
-    body: "They budget the production. They don\u2019t budget the recoupment.",
-    punchline: "Every number in the investor deck is modeled against the wrong baseline.",
+    line: "Every number in the investor deck is modeled against the wrong baseline.",
   },
   {
     label: "Net Profit Erosion",
-    body: "\u201CNet profits\u201D in a distribution agreement isn\u2019t net.",
-    punchline: "The margin you projected at green light doesn\u2019t exist.",
+    line: "The margin you projected at green light doesn\u2019t exist.",
   },
   {
     label: "Structural Asymmetry",
-    body: "Distributors run waterfall models before every term sheet.",
-    punchline: "That asymmetry isn\u2019t accidental. It\u2019s on purpose.",
+    line: "That asymmetry isn\u2019t accidental. It\u2019s on purpose.",
   },
 ];
 
@@ -146,9 +143,9 @@ const useReveal = (threshold = 0.15) => {
 const SHeader = ({ eyebrow, children }: { eyebrow: string; children: React.ReactNode }) => (
   <div className="text-center mb-10">
     <div className="flex items-center justify-center gap-4 mb-4">
-      <div className="h-[1px] w-8 bg-gradient-to-r from-transparent to-gold/40" />
-      <p className="text-gold/70 text-xs tracking-[0.3em] uppercase font-semibold">{eyebrow}</p>
-      <div className="h-[1px] w-8 bg-gradient-to-l from-transparent to-gold/40" />
+      <div className="h-[1px] w-8 bg-gradient-to-r from-transparent to-white/20" />
+      <p className="text-white/50 text-xs tracking-[0.3em] uppercase font-semibold">{eyebrow}</p>
+      <div className="h-[1px] w-8 bg-gradient-to-l from-transparent to-white/20" />
     </div>
     <h2 className="font-bebas text-3xl md:text-4xl tracking-[0.08em] text-gold">{children}</h2>
   </div>
@@ -326,7 +323,7 @@ const Index = () => {
               <h1 className="font-bebas text-[clamp(2.8rem,9vw,4.2rem)] leading-[1.05] text-gold mb-5">
                 SEE WHERE EVERY<br /><span className="text-white">DOLLAR GOES</span>
               </h1>
-              <p className="mb-6 text-white/70 text-[14px] leading-[1.7] tracking-[0.10em] uppercase font-medium max-w-[320px] mx-auto">
+              <p className="mb-6 text-white/70 text-[14px] leading-[1.7] tracking-[0.06em] uppercase font-medium max-w-[360px] mx-auto">
                 Built by a Tribeca-winning producer.<br />Debut sold to <span className="text-gold font-semibold">Netflix</span>.
               </p>
 
@@ -364,7 +361,7 @@ const Index = () => {
           <section id="evidence" className="snap-section py-16 px-6" style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.01) 0%, rgba(255,255,255,0.03) 50%, rgba(255,255,255,0.01) 100%)' }}>
             <div ref={revEvidence.ref} className={cn("transition-all duration-700 ease-out", revEvidence.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
               <SHeader eyebrow="The Problem">
-                MOST INDIE FILMS <span className="text-gold">LOSE</span> <span className="text-white">MONEY.</span>
+                MOST INDIE FILMS LOSE <span className="text-white">MONEY.</span>
               </SHeader>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto">
@@ -387,19 +384,7 @@ const Index = () => {
                           {r.label}
                         </h3>
                       </div>
-                      <p className="text-white/60 text-sm leading-relaxed mb-4">{r.body}</p>
-                      <p
-                        className={cn(
-                          "text-sm font-semibold text-white/80 italic transition-opacity duration-[0ms]",
-                          revEvidence.visible ? "opacity-100" : "opacity-0"
-                        )}
-                        style={{
-                          transitionTimingFunction: 'step-end',
-                          transitionDelay: revEvidence.visible ? `${600 + i * 180}ms` : '0ms',
-                        }}
-                      >
-                        {"\u201C"}{r.punchline}{"\u201D"}
-                      </p>
+                      <p className="text-white/70 text-sm leading-relaxed">{r.line}</p>
                     </div>
                   </div>
                 ))}
@@ -408,10 +393,13 @@ const Index = () => {
               {/* Post-problem declaration */}
               <p
                 className={cn(
-                  "text-center font-bebas text-[24px] md:text-[30px] tracking-[0.08em] text-gold/80 mt-10 transition-all duration-500 ease-out",
-                  revEvidence.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
+                  "text-center font-bebas text-[36px] md:text-[44px] tracking-[0.06em] text-gold mt-10 transition-all duration-700 ease-out",
+                  revEvidence.visible ? "opacity-100 scale-100" : "opacity-0 scale-90"
                 )}
-                style={{ transitionDelay: revEvidence.visible ? '800ms' : '0ms' }}
+                style={{
+                  transitionDelay: revEvidence.visible ? '800ms' : '0ms',
+                  textShadow: revEvidence.visible ? '0 0 30px rgba(212,175,55,0.4), 0 0 60px rgba(212,175,55,0.15)' : 'none',
+                }}
               >
                 We leveled the playing{"\u00A0"}<span className="text-white">field</span>.
               </p>
@@ -426,7 +414,7 @@ const Index = () => {
           <section id="mission" className="snap-section py-16 px-6">
             <div ref={revMission.ref} className={cn("transition-all duration-700 ease-out", revMission.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
               <SHeader eyebrow="The Thesis">
-                FILM AS AN ALTERNATIVE{"\u00A0"}<span className="text-gold">ASSET</span>{"\u00A0"}<span className="text-white">CLASS</span>
+                FILM AS AN ALTERNATIVE{"\u00A0"}ASSET{"\u00A0"}<span className="text-white">CLASS</span>
               </SHeader>
 
               {/* Stacked manifesto */}
@@ -507,7 +495,7 @@ const Index = () => {
                           <span className="font-bebas text-[16px] tracking-[0.14em] uppercase text-gold">Jason Blum</span>
                         </cite>
                       </div>
-                      <p className="text-white/50 text-sm tracking-[0.08em] mt-2 ml-11">Blumhouse &middot; Paranormal Activity</p>
+                      <p className="text-white/50 text-sm tracking-[0.08em] mt-2 ml-11">Blumhouse &middot; {"\u201C"}Paranormal Activity{"\u201D"}</p>
                     </div>
                   </div>
                 </div>
@@ -817,8 +805,8 @@ const Index = () => {
                 style={{ width: '100%', height: '100%', background: `radial-gradient(ellipse 60% 50% at 50% 20%, rgba(212,175,55,0.08) 0%, transparent 70%)` }} />
 
               <div className="relative p-10 md:p-16 max-w-md mx-auto text-center">
-                <p className="text-gold/70 text-xs tracking-[0.3em] uppercase font-semibold mb-5">The Moment of Truth</p>
-                <h2 className="font-bebas text-[28px] md:text-[38px] leading-[1.1] tracking-[0.06em] text-gold mb-5">
+                <p className="text-white/50 text-xs tracking-[0.3em] uppercase font-semibold mb-5">The Moment of Truth</p>
+                <h2 className="font-bebas text-3xl md:text-4xl leading-[1.1] tracking-[0.08em] text-gold mb-5">
                   YOUR INVESTOR WILL ASK<br />HOW THE MONEY FLOWS <span className="text-white">BACK</span>.
                 </h2>
                 <p className="text-white/50 text-sm leading-relaxed max-w-xs mx-auto mb-8">
