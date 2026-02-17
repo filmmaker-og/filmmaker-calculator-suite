@@ -3,21 +3,17 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { useHaptics } from "@/hooks/use-haptics";
 import {
   RotateCcw,
-  Handshake,
   HelpCircle,
   Check,
   EyeOff,
   Receipt,
   Gavel,
-  Calculator,
   Share2,
   Mail,
   Instagram,
   Link2,
-  Film,
   Waves,
   Lock,
-  Award,
   ChevronDown,
 } from "lucide-react";
 import filmmakerLogo from "@/assets/filmmaker-logo.jpg";
@@ -52,7 +48,7 @@ const problemCards = [
 const faqs = [
   {
     q: "What assumptions does the waterfall use?",
-    a: "The simulator models the standard independent film recoupment hierarchy used in real production financing\u00A0— CAM fees, sales agent commission, senior and mezzanine debt service, equity recoupment with preferred return, deferrals, and backend profit splits. Benchmarks reflect current market terms for films in the $1M\u2013$10M budget range. Every deal is different. This gives you the structure\u00A0— your attorney finalizes the numbers."
+    a: "The simulator models the standard independent film recoupment hierarchy used in real production financing\u00A0— CAM fees, sales agent commission, senior and mezzanine debt service, equity recoupment with preferred return, and backend profit splits. Benchmarks reflect current market terms for films in the $1M\u2013$10M budget range. Every deal is different. This gives you the structure\u00A0— your attorney finalizes the numbers."
   },
   {
     q: "What are the premium exports?",
@@ -69,31 +65,20 @@ const faqs = [
 ];
 
 /* ═══════════════════════════════════════════════════════════════════
-   WATERFALL TIERS — 8-row list with shrinking gold bar
+   WATERFALL TIERS — 7-row dollar-amount cascade ($3M → $417K)
    ═══════════════════════════════════════════════════════════════════ */
 const waterfallTiers = [
-  { name: "Gross Receipts", pct: "100%" },
-  { name: "CAM Fees", pct: "0.5–1%" },
-  { name: "Sales Agent Commission", pct: "10–25%" },
-  { name: "Senior Debt", pct: "8–12% Interest" },
-  { name: "Mezzanine Debt", pct: "12–20% Premium" },
-  { name: "Equity Recoupment", pct: "120% Hurdle" },
-  { name: "Deferrals", pct: "As Negotiated" },
-  { name: "Producer & Talent", pct: "What's Left" },
+  { name: "Acquisition Price",   amount: "$3,000,000",    remaining: null as string | null,       isFirst: true,  isLast: false },
+  { name: "CAM Fees",            amount: "\u2212$22,500",      remaining: "$2,977,500", isFirst: false, isLast: false },
+  { name: "Sales Agent",         amount: "\u2212$450,000",     remaining: "$2,527,500", isFirst: false, isLast: false },
+  { name: "Senior Debt",         amount: "\u2212$440,000",     remaining: "$2,087,500", isFirst: false, isLast: false },
+  { name: "Mezzanine",           amount: "\u2212$230,000",     remaining: "$1,857,500", isFirst: false, isLast: false },
+  { name: "Equity Recoupment",   amount: "\u2212$1,440,000",   remaining: "$417,500",   isFirst: false, isLast: false },
+  { name: "Net Profits",         amount: "$417,500",       remaining: null,         isFirst: false, isLast: true  },
 ];
 
-const GOLD_BAR_HEIGHT = ['100%', '85%', '70%', '55%', '42%', '30%', '20%', '100%'];
-const GOLD_BAR_OPACITY = [0.70, 0.55, 0.42, 0.32, 0.22, 0.15, 0.10, 1];
-
-/* ═══════════════════════════════════════════════════════════════════
-   INDUSTRY COSTS (price anchor)
-   ═══════════════════════════════════════════════════════════════════ */
-const industryCosts = [
-  { icon: Gavel, cost: "$5K–$15K", label: "Entertainment Lawyer" },
-  { icon: Calculator, cost: "$10K–$30K", label: "Finance Consultant" },
-  { icon: Handshake, cost: "5–15%", label: "Producer's Rep" },
-  { icon: Film, cost: "10–25%", label: "Sales Agent" },
-];
+const GOLD_BAR_HEIGHT = ['100%', '82%', '66%', '52%', '40%', '28%', '100%'];
+const GOLD_BAR_OPACITY = [0.80, 0.60, 0.45, 0.35, 0.25, 0.16, 1];
 
 /* ═══════════════════════════════════════════════════════════════════
    SECTION REVEAL — one-shot slide-up (no blur)
@@ -333,62 +318,76 @@ const Index = () => {
 
               {/* Waterfall tier list card */}
               <div className="rounded-xl border border-border-subtle bg-bg-card max-w-sm mx-auto mt-6 overflow-hidden">
-                {waterfallTiers.map((tier, i) => {
-                  const isLast = i === waterfallTiers.length - 1;
-                  return (
+                {waterfallTiers.map((tier, i) => (
+                  <div
+                    key={tier.name}
+                    className={cn(
+                      "flex items-center justify-between px-5 py-4 relative",
+                      i > 0 && "border-t border-border-subtle",
+                      staggerChild(revealFlow.visible)
+                    )}
+                    style={staggerDelay(i, revealFlow.visible)}
+                  >
+                    {/* Gold accent bar — left edge, shrinks per tier */}
                     <div
-                      key={tier.name}
-                      className={cn(
-                        "flex items-center justify-between px-5 py-4 relative",
-                        i > 0 && "border-t border-border-subtle",
-                        staggerChild(revealFlow.visible)
-                      )}
-                      style={staggerDelay(i, revealFlow.visible)}
-                    >
-                      {/* Gold accent bar — left edge, shrinks per tier */}
-                      <div
-                        className="absolute left-0 top-0 w-[3px]"
-                        style={{
-                          height: GOLD_BAR_HEIGHT[i],
-                          background: isLast ? '#F9E076' : '#D4AF37',
-                          opacity: isLast ? 1 : GOLD_BAR_OPACITY[i],
-                        }}
-                      />
+                      className="absolute left-0 top-0 w-[3px]"
+                      style={{
+                        height: GOLD_BAR_HEIGHT[i],
+                        background: tier.isLast ? '#F9E076' : '#D4AF37',
+                        opacity: tier.isLast ? 1 : GOLD_BAR_OPACITY[i],
+                      }}
+                    />
 
-                      {/* Left: tier number + name */}
-                      <div className="flex items-baseline gap-3">
-                        <span className={cn(
-                          "font-mono text-[11px] tabular-nums",
-                          isLast ? "text-[#F9E076]" : "text-gold/40"
-                        )}>
-                          {String(i + 1).padStart(2, '0')}
-                        </span>
-                        <span className={cn(
-                          "font-bebas text-[18px] tracking-[0.08em] uppercase leading-none",
-                          isLast ? "text-[#F9E076]" : "text-white/80"
-                        )}>
-                          {tier.name}
-                        </span>
-                      </div>
-
-                      {/* Right: percentage */}
+                    {/* Left: tier number + name */}
+                    <div className="flex items-baseline gap-3">
                       <span className={cn(
-                        "font-mono text-[12px]",
-                        isLast ? "text-[#F9E076]/70" : "text-white/35"
+                        "font-mono text-[11px] tabular-nums",
+                        tier.isLast ? "text-[#F9E076]" : "text-gold/40"
                       )}>
-                        {tier.pct}
+                        {String(i + 1).padStart(2, '0')}
+                      </span>
+                      <span className={cn(
+                        "font-bebas text-[18px] tracking-[0.08em] uppercase leading-none",
+                        tier.isLast ? "text-[#F9E076]" : "text-white/80"
+                      )}>
+                        {tier.name}
                       </span>
                     </div>
-                  );
-                })}
+
+                    {/* Right: amount + remaining */}
+                    <div className="text-right">
+                      <span className={cn(
+                        "font-mono text-[12px] block",
+                        tier.isLast ? "text-[#F9E076]" : tier.isFirst ? "text-white/60" : "text-white/35"
+                      )}>
+                        {tier.amount}
+                      </span>
+                      {tier.remaining && (
+                        <span className="font-mono text-[10px] text-white/20 block mt-0.5">
+                          {tier.remaining}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                ))}
 
                 {/* Tagline */}
                 <p
                   className="text-center text-[13px] font-light px-5 py-5 border-t border-border-subtle"
                   style={{ color: 'rgba(255,255,255,0.25)' }}
                 >
-                  This is the waterfall.
+                  This is the standard waterfall.
                 </p>
+              </div>
+
+              {/* CTA below card */}
+              <div className="text-center mt-8">
+                <button
+                  onClick={handleStartClick}
+                  className="w-full max-w-[320px] h-16 text-base btn-cta-primary"
+                >
+                  BUILD A BETTER ONE
+                </button>
               </div>
             </div>
           </SectionFrame>
@@ -396,39 +395,31 @@ const Index = () => {
           {/* section divider */}
           <div className="px-8"><div className="h-[1px] bg-gradient-to-r from-transparent via-gold/25 to-transparent" /></div>
 
-          {/* ── § 4: THIS KNOWLEDGE ISN'T CHEAP ── */}
+          {/* ── § 4: CONSEQUENCE FRAMING ── */}
           <SectionFrame id="price-anchor">
             <div ref={revealPrice.ref} className={cn("max-w-2xl mx-auto transition-all duration-500 ease-out", revealPrice.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}>
-              <SectionHeader icon={Award} eyebrow="The Industry Standard" title={<>THIS KNOWLEDGE ISN'T <span className="text-white">CHEAP</span></>} plainSubtitle subtitle={"You shouldn't need a $5,000 retainer from an entertainment attorney to understand your own\u00A0deal."} />
+              <SectionHeader eyebrow="The Reality" title={<>THE PEOPLE ACROSS THE TABLE <span className="text-white">KNOW THIS</span></>} />
 
-              {/* Industry Cost Grid — 2x2 */}
-              <div className="grid grid-cols-2 gap-3 mb-8">
-                {industryCosts.map((item, i) => {
-                  const Icon = item.icon;
-                  return (
-                    <div key={item.label} className={cn("rounded-xl border border-border-subtle bg-bg-card p-5 text-center", staggerChild(revealPrice.visible))} style={staggerDelay(i, revealPrice.visible)}>
-                      <div className="w-9 h-9 rounded-lg bg-bg-elevated border border-border-subtle flex items-center justify-center mx-auto mb-3">
-                        <Icon className="w-4 h-4 text-gold" />
-                      </div>
-                      <p className="font-mono text-lg font-medium text-text-primary line-through decoration-text-dim/30">{item.cost}</p>
-                      <p className="text-text-dim text-xs tracking-wider uppercase mt-0.5">{item.label}</p>
-                    </div>
-                  );
-                })}
+              <div className="space-y-4 text-center max-w-sm mx-auto mb-8">
+                <p className="text-text-mid text-sm leading-relaxed">
+                  <span className="line-through decoration-text-dim/40">Hiring an entertainment lawyer</span>{" "}
+                  <span className="text-text-dim text-xs">— $5K–$15K retainer</span>
+                </p>
+                <p className="text-text-mid text-sm leading-relaxed">
+                  <span className="line-through decoration-text-dim/40">Hiring a finance consultant</span>{" "}
+                  <span className="text-text-dim text-xs">— $10K–$30K</span>
+                </p>
+                <p className="text-sm leading-relaxed" style={{ color: '#F9E076' }}>
+                  Not understanding your waterfall → Costs&nbsp;more.
+                </p>
               </div>
-
-              <p className="text-text-mid text-sm leading-relaxed text-center max-w-xs mx-auto mb-8">
-                The simulator, waterfall chart, glossary, and unlimited scenarios are free.
-                When you're ready for the meeting, export an investor-grade Excel workbook
-                and&nbsp;PDF.
-              </p>
 
               <div className="text-center">
                 <button
                   onClick={handleStartClick}
                   className="w-full max-w-[320px] h-16 text-base btn-cta-primary"
                 >
-                  SEE YOUR DEAL
+                  BUILD YOUR WATERFALL
                 </button>
               </div>
             </div>
