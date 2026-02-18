@@ -88,8 +88,8 @@ export default {
           "100%": { width: "100%" },
         },
         "logo-breathe": {
-          "0%, 100%": { opacity: "0.2" },
-          "50%": { opacity: "0.45" },
+          "0%, 100%": { opacity: "0.4" },
+          "50%": { opacity: "0.8" },
         },
         "cta-glow-pulse": {
           "0%, 100%": { boxShadow: "0 0 20px rgba(212,175,55,0.25), 0 0 60px rgba(212,175,55,0.08)" },
