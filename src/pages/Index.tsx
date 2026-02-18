@@ -751,10 +751,7 @@ const Index = () => {
                         <span className="font-mono text-[15px] font-bold text-gold">
                           {door.cost}
                         </span>
-                        <LockKeyhole
-                          className="w-4 h-4 text-gold/70"
-                          strokeWidth={2.5}
-                        />
+                        <span className="text-gold/70 text-xs">🔒</span>
                       </div>
                       <p className="text-sm leading-relaxed text-white/60">
                         {door.lock}
