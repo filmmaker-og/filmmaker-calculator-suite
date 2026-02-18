@@ -202,7 +202,7 @@ const LeadCaptureModal = ({ isOpen, onClose, onSuccess }: LeadCaptureModalProps)
               <button
                 type="submit"
                 disabled={loading || !email || !name.trim()}
-                className="w-full h-12 font-semibold text-sm tracking-wider bg-gold-cta text-black hover:brightness-110 disabled:opacity-40 transition-all active:scale-[0.98]"
+                className="w-full h-12 btn-cta-primary disabled:opacity-40"
               >
                 {loading ? (
                   <Loader2 className="w-5 h-5 animate-spin mx-auto" />

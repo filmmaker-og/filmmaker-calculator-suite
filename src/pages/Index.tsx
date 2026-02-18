@@ -6,7 +6,7 @@ import {
   RotateCcw,
   Check,
   X,
-  Lock,
+  LockKeyhole,
   Share2,
   Mail,
   Instagram,
@@ -108,8 +108,8 @@ const faqs = [
     a: "The simulator models the standard independent film recoupment hierarchy used in real production financing\u00A0\u2014 CAM fees, sales agent commission, senior and mezzanine debt service, equity recoupment with preferred return, and backend profit splits. Benchmarks reflect current market terms for films in the $1M\u2013$10M budget range. Every deal is different. This gives you the structure\u00A0\u2014 your attorney finalizes the numbers.",
   },
   {
-    q: "What are the premium exports?",
-    a: "The simulator, waterfall chart, deal glossary, and unlimited scenarios are completely free\u00A0\u2014 no account required. When you\u2019re ready to take it into a real meeting, premium exports include a 6-sheet Excel workbook and an investor-ready PDF. These are the documents your investor\u2019s accountant and attorney will actually review.",
+    q: "How do I get started?",
+    a: "Enter your email, open the magic link, and you\u2019re in\u00A0\u2014 no password, no credit card. Set your budget, adjust the deal terms, and the waterfall builds itself in real time. When you\u2019re ready for the meeting, upgrade to export the investor-ready package.",
   },
   {
     q: "Who built this?",
@@ -381,7 +381,7 @@ const Index = () => {
                 <div className={cn("absolute inset-0 -m-4 transition-opacity duration-700", isPulsed ? "opacity-100" : "opacity-0")}
                   style={{ background: 'radial-gradient(circle, rgba(212,175,55,0.3) 0%, transparent 70%)', filter: 'blur(15px)' }} />
                 <img src={filmmakerLogo} alt="Filmmaker.OG" className="w-32 h-32 object-contain relative"
-                  style={{ filter: isPulsed ? 'drop-shadow(0 0 30px rgba(212,175,55,0.5))' : 'none', transition: 'filter 0.7s ease' }} />
+                  style={{ filter: isPulsed ? 'brightness(1.15) drop-shadow(0 0 30px rgba(212,175,55,0.5))' : 'brightness(1.15)', transition: 'filter 0.7s ease' }} />
               </div>
               <p className={cn("mt-8 text-sm tracking-[0.4em] uppercase font-semibold transition-all duration-700", showTagline ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3")}
                 style={{ color: '#D4AF37', textShadow: '0 0 20px rgba(212,175,55,0.4)' }}>Know Your Numbers</p>
@@ -420,7 +420,7 @@ const Index = () => {
               <div className="mb-5 relative inline-block">
                 <div className="absolute inset-0 -m-7 animate-logo-breathe" style={{ background: 'radial-gradient(circle, rgba(212,175,55,0.25) 0%, transparent 70%)', filter: 'blur(18px)' }} />
                 <img src={filmmakerLogo} alt="Filmmaker.OG" className="relative w-[96px] h-[96px] object-contain"
-                  style={{ filter: 'drop-shadow(0 0 28px rgba(212,175,55,0.45))' }} />
+                  style={{ filter: 'brightness(1.15) drop-shadow(0 0 28px rgba(212,175,55,0.45))' }} />
               </div>
               <h1 className="font-bebas text-[clamp(2.8rem,9vw,4.2rem)] leading-[1.05] text-gold mb-5">
                 SEE WHERE EVERY<br /><span className="text-white">DOLLAR GOES</span>
@@ -431,7 +431,7 @@ const Index = () => {
 
               {isReturningUser ? (
                 <div className="w-full max-w-[320px] mx-auto space-y-3">
-                  <button onClick={handleContinueClick} className="w-full h-[60px] text-base btn-cta-primary">
+                  <button onClick={handleContinueClick} className="w-full h-14 text-base btn-cta-primary">
                     CONTINUE YOUR DEAL
                   </button>
                   <p className="text-white/40 text-xs tracking-wider text-center">{formatCompactCurrency(savedState!.budget)} budget in progress</p>
@@ -442,7 +442,7 @@ const Index = () => {
                 </div>
               ) : (
                 <div className="w-full max-w-[320px] mx-auto space-y-3">
-                  <button onClick={handleStartClick} className="w-full h-[60px] text-base btn-cta-primary">
+                  <button onClick={handleStartClick} className="w-full h-14 text-base btn-cta-primary">
                     BUILD YOUR WATERFALL &mdash; FREE
                   </button>
                   <p className="text-white/50 text-sm tracking-wider">No credit card. Takes 2{"\u00A0"}minutes.</p>
@@ -485,7 +485,7 @@ const Index = () => {
                           {r.label}
                         </h3>
                       </div>
-                      <p className="text-white/70 text-sm leading-relaxed">{r.line}</p>
+                      <p className="text-white/60 text-sm leading-relaxed">{r.line}</p>
                     </div>
                   </div>
                 ))}
@@ -760,9 +760,8 @@ const Index = () => {
                         >
                           {door.name}
                         </p>
-                        <Lock
-                          className="w-[18px] h-[18px] flex-shrink-0 ml-2 mt-[3px] text-gold/70"
-                          strokeWidth={2.5}
+                        <LockKeyhole
+                          className="w-5 h-5 flex-shrink-0 ml-2 mt-[2px] text-gold/80"
                         />
                       </div>
                       <span
@@ -771,7 +770,7 @@ const Index = () => {
                         {door.cost}
                       </span>
                       <p
-                        className="text-sm leading-relaxed text-white/50"
+                        className="text-sm leading-relaxed text-white/60"
                       >
                         {door.lock}
                       </p>
@@ -887,7 +886,7 @@ const Index = () => {
               {/* CTA */}
               <div className="text-center mt-10">
                 <button onClick={handleStartClick}
-                  className="w-full max-w-[320px] h-[60px] text-base btn-cta-primary mx-auto">
+                  className="w-full max-w-[320px] h-14 text-base btn-cta-primary mx-auto">
                   MODEL YOUR FIRST DEAL
                 </button>
                 <div className="mt-5 flex items-center justify-center gap-4">
@@ -912,7 +911,7 @@ const Index = () => {
                 <Accordion type="single" collapsible className="w-full">
                   {faqs.map((faq, i) => (
                     <AccordionItem key={faq.q} value={`faq-${i}`} className="border-b border-white/[0.08]">
-                      <AccordionTrigger className="font-bebas text-lg md:text-xl tracking-[0.06em] uppercase text-gold hover:text-gold/70 hover:no-underline text-left">
+                      <AccordionTrigger className="font-bebas text-lg md:text-xl tracking-[0.06em] uppercase text-gold/80 hover:text-gold hover:no-underline text-left">
                         {faq.q}
                       </AccordionTrigger>
                       <AccordionContent className="text-white/60 text-sm leading-relaxed normal-case font-sans">
@@ -995,14 +994,14 @@ const Index = () => {
                   FILMMAKER<span className="text-white">.OG</span>
                 </span>
               </div>
-              <p className="text-white/30 text-xs tracking-wide leading-relaxed text-center">
+              <p className="text-white/40 text-xs tracking-wide leading-relaxed text-center">
                 For educational and informational purposes only. Not legal, tax, or investment advice.
                 Consult a qualified entertainment attorney before making financing decisions.
               </p>
               <div className="flex items-center justify-center gap-4 mt-4">
-                <a href="/terms" className="text-white/20 text-xs hover:text-white/40 transition-colors">Terms</a>
+                <button onClick={() => navigate("/terms")} className="text-white/20 text-xs hover:text-white/40 transition-colors">Terms</button>
                 <span className="text-white/10">|</span>
-                <a href="/privacy" className="text-white/20 text-xs hover:text-white/40 transition-colors">Privacy</a>
+                <button onClick={() => navigate("/privacy")} className="text-white/20 text-xs hover:text-white/40 transition-colors">Privacy</button>
               </div>
             </div>
           </footer>
