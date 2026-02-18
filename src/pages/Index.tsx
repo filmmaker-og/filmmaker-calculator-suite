@@ -522,7 +522,7 @@ const Index = () => {
                         </span>
                         <span className={cn(
                           "font-bebas tracking-[0.08em] uppercase",
-                          tier.isFinal ? "text-[28px] text-gold" :
+                          tier.isFinal ? "text-[24px] md:text-[28px] text-gold" :
                           i === 0 ? "text-[20px] text-white" : "text-[17px] text-white/80"
                         )}>
                           {tier.name}
@@ -531,7 +531,7 @@ const Index = () => {
                       <span
                         className={cn(
                           "font-mono font-semibold",
-                          tier.isFinal ? "text-[30px] font-bold text-gold" :
+                          tier.isFinal ? "text-[26px] md:text-[30px] font-bold text-gold" :
                           i === 0 ? "text-[17px] text-white/90" : "text-[17px] text-white/70"
                         )}
                         style={tier.isFinal ? { textShadow: '0 0 20px rgba(212,175,55,0.4), 0 0 40px rgba(212,175,55,0.15)' } : undefined}
@@ -565,7 +565,7 @@ const Index = () => {
                     WHAT DOES YOUR DEAL LOOK LIKE?
                   </button>
                   <button onClick={handleShare}
-                    className="mt-4 inline-flex items-center gap-2 text-xs tracking-wider text-white/30 hover:text-gold/60 transition-colors">
+                    className="mt-4 inline-flex items-center gap-2 text-xs tracking-wider text-white/30 hover:text-gold/60 transition-colors py-2">
                     <Share2 className="w-3.5 h-3.5" /> Send this to your producing partner
                   </button>
                 </div>
@@ -582,12 +582,12 @@ const Index = () => {
             <div ref={revCost.ref} className={cn("transition-all duration-700 ease-out", revCost.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
               <SectionHeader eyebrow="The Reality" title={<>THE DOORS ARE <span className="text-white">CLOSED.</span></>} flankingLines compact />
 
-              <div className="grid grid-cols-2 gap-4 max-w-lg mx-auto">
+              <div className="grid grid-cols-2 gap-3 md:gap-4 max-w-lg mx-auto">
                 {closedDoors.map((door, i) => (
                   <div
                     key={door.name}
                     className={cn(
-                      "relative border p-6 transition-all duration-700 ease-out overflow-hidden",
+                      "relative border p-4 md:p-6 transition-all duration-700 ease-out overflow-hidden",
                       "bg-white/[0.06] border-white/[0.12]",
                       revCost.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                     )}
@@ -632,13 +632,13 @@ const Index = () => {
           {/* ──────────────────────────────────────────────────────────
                DECLARATION — the hinge between closed doors and the path
              ────────────────────────────────────────────────────────── */}
-          <section className="py-16 px-6 relative">
+          <section className="py-10 md:py-16 px-6 relative">
             <div className="absolute inset-0 pointer-events-none"
               style={{ background: 'radial-gradient(ellipse 60% 55% at 50% 50%, rgba(212,175,55,0.07) 0%, transparent 70%)' }} />
             <div ref={revDecl.ref} className={cn("max-w-md mx-auto relative transition-all duration-700 ease-out", revDecl.visible ? "opacity-100 scale-100" : "opacity-0 scale-[0.96]")}>
               <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
               <div className="py-12 px-4 text-center">
-                <h3 className="font-bebas text-[30px] md:text-[40px] tracking-[0.08em] uppercase text-gold leading-tight">
+                <h3 className="font-bebas text-[26px] md:text-[40px] tracking-[0.08em] uppercase text-gold leading-tight">
                   We Built The Toolkit They Didn{"\u2019"}t Teach You In Film{"\u00A0"}<span className="text-white">School</span>.
                 </h3>
                 <p className="text-white/40 text-sm tracking-[0.12em] uppercase mt-4">No gatekeepers. No guesswork.</p>
@@ -669,7 +669,7 @@ const Index = () => {
                     className={cn(
                       "relative border overflow-hidden p-6 transition-all duration-600 ease-out",
                       t.featured
-                        ? "border-gold/40 bg-gold/[0.06]"
+                        ? "border-gold/40 bg-gold/[0.06] scale-[1.02]"
                         : t.elevated
                           ? "border-gold/20 bg-white/[0.05]"
                           : "border-white/[0.10] bg-white/[0.04]",
@@ -755,7 +755,7 @@ const Index = () => {
                 <Accordion type="single" collapsible className="w-full">
                   {faqs.map((faq, i) => (
                     <AccordionItem key={faq.q} value={`faq-${i}`} className="border-b border-white/[0.08]">
-                      <AccordionTrigger className="font-bebas text-xl tracking-[0.06em] uppercase text-gold hover:text-gold/70 hover:no-underline text-left">
+                      <AccordionTrigger className="font-bebas text-lg md:text-xl tracking-[0.06em] uppercase text-gold hover:text-gold/70 hover:no-underline text-left">
                         {faq.q}
                       </AccordionTrigger>
                       <AccordionContent className="text-white/60 text-sm leading-relaxed normal-case font-sans">
@@ -773,7 +773,7 @@ const Index = () => {
           {/* ──────────────────────────────────────────────────────────
                § 8  FINAL CTA
              ────────────────────────────────────────────────────────── */}
-          <section id="final-cta" className="snap-section py-10 px-4">
+          <section id="final-cta" className="snap-section py-10 px-6">
             <div ref={revFinal.ref} className={cn("relative overflow-hidden transition-all duration-700 ease-out", revFinal.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
               {/* Gold corner accents — cinematic frame, no full border */}
               <div className="absolute top-0 left-0 w-12 h-[2px] bg-gold/80" />
