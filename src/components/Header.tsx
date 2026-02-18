@@ -28,9 +28,6 @@ const Header = ({ rightSlot }: HeaderProps) => {
             <span className="font-bebas text-lg tracking-[0.2em] text-gold group-hover:text-white transition-colors duration-200">
               FILMMAKER<span className="text-white group-hover:text-gold transition-colors duration-200">.OG</span>
             </span>
-            <span className="text-[10px] font-semibold tracking-[0.15em] text-gold border border-gold/40 px-1.5 py-0.5 leading-none uppercase">
-              BETA
-            </span>
           </button>
 
           {/* Center: Optional CTA slot (only used on landing page) */}

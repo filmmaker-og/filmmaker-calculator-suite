@@ -13,7 +13,7 @@ import {
   Link2,
   ChevronDown,
 } from "lucide-react";
-import filmmakerLogo from "@/assets/filmmaker-logo.jpg";
+import filmmakerLogo from "@/assets/F Icon_Transparent.png";
 import Header from "@/components/Header";
 import LeadCaptureModal from "@/components/LeadCaptureModal";
 import {
@@ -203,6 +203,7 @@ const Index = () => {
   const revDecl        = useReveal();
   const revFaq         = useReveal();
   const revFinal       = useReveal();
+  const revUntilNow    = useReveal();
 
   // Waterfall bar animation
   const [barsRevealed, setBarsRevealed] = useState(false);
@@ -337,7 +338,7 @@ const Index = () => {
           ? "opacity-100 translate-y-0 pointer-events-auto"
           : "opacity-0 -translate-y-1 pointer-events-none"
       )}
-      style={{ borderRadius: 'var(--radius-sm)' }}
+      style={{ borderRadius: 0 }}
     >
       {isReturningUser ? "CONTINUE" : "BUILD FREE"}
     </button>
@@ -380,7 +381,7 @@ const Index = () => {
                 <div className={cn("absolute inset-0 -m-4 transition-opacity duration-700", isPulsed ? "opacity-100" : "opacity-0")}
                   style={{ background: 'radial-gradient(circle, rgba(212,175,55,0.3) 0%, transparent 70%)', filter: 'blur(15px)' }} />
                 <img src={filmmakerLogo} alt="Filmmaker.OG" className="w-32 h-32 object-contain relative"
-                  style={{ filter: isPulsed ? 'brightness(1.2) drop-shadow(0 0 30px rgba(212,175,55,0.5))' : 'brightness(0.9)', transition: 'filter 0.7s ease' }} />
+                  style={{ filter: isPulsed ? 'drop-shadow(0 0 30px rgba(212,175,55,0.5))' : 'none', transition: 'filter 0.7s ease' }} />
               </div>
               <p className={cn("mt-8 text-sm tracking-[0.4em] uppercase font-semibold transition-all duration-700", showTagline ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3")}
                 style={{ color: '#D4AF37', textShadow: '0 0 20px rgba(212,175,55,0.4)' }}>Know Your Numbers</p>
@@ -419,7 +420,7 @@ const Index = () => {
               <div className="mb-5 relative inline-block">
                 <div className="absolute inset-0 -m-7 animate-logo-breathe" style={{ background: 'radial-gradient(circle, rgba(212,175,55,0.25) 0%, transparent 70%)', filter: 'blur(18px)' }} />
                 <img src={filmmakerLogo} alt="Filmmaker.OG" className="relative w-[96px] h-[96px] object-contain"
-                  style={{ filter: 'brightness(1.15) drop-shadow(0 0 28px rgba(212,175,55,0.45))' }} />
+                  style={{ filter: 'drop-shadow(0 0 28px rgba(212,175,55,0.45))' }} />
               </div>
               <h1 className="font-bebas text-[clamp(2.8rem,9vw,4.2rem)] leading-[1.05] text-gold mb-5">
                 SEE WHERE EVERY<br /><span className="text-white">DOLLAR GOES</span>
@@ -444,7 +445,7 @@ const Index = () => {
                   <button onClick={handleStartClick} className="w-full h-[60px] text-base btn-cta-primary">
                     BUILD YOUR WATERFALL &mdash; FREE
                   </button>
-                  <p className="text-white/30 text-xs tracking-wider">No credit card. Takes 2{"\u00A0"}minutes.</p>
+                  <p className="text-white/50 text-sm tracking-wider">No credit card. Takes 2{"\u00A0"}minutes.</p>
                 </div>
               )}
 
@@ -493,9 +494,9 @@ const Index = () => {
           </SectionFrame>
 
           {/* ── TRANSITION — problem to thesis hinge ── */}
-          <section className="py-8 md:py-12 px-6 relative">
+          <section className="py-10 md:py-14 px-6 relative">
             <div className="absolute inset-0 pointer-events-none"
-              style={{ background: 'radial-gradient(ellipse 60% 55% at 50% 50%, rgba(212,175,55,0.05) 0%, transparent 70%)' }} />
+              style={{ background: 'radial-gradient(ellipse 60% 55% at 50% 50%, rgba(212,175,55,0.06) 0%, transparent 70%)' }} />
             <div
               ref={revTransition.ref}
               className={cn(
@@ -503,8 +504,9 @@ const Index = () => {
                 revTransition.visible ? "opacity-100 scale-100" : "opacity-0 scale-90"
               )}
             >
+              <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/40 to-transparent mb-8" />
               <p
-                className="font-bebas text-[36px] md:text-[44px] tracking-[0.06em] text-gold"
+                className="font-bebas text-[40px] md:text-[50px] tracking-[0.06em] text-gold"
                 style={{
                   textShadow: revTransition.visible
                     ? '0 0 30px rgba(212,175,55,0.4), 0 0 60px rgba(212,175,55,0.15)'
@@ -513,6 +515,7 @@ const Index = () => {
               >
                 We leveled the playing{"\u00A0"}<span className="text-white">field</span>.
               </p>
+              <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/40 to-transparent mt-8" />
             </div>
           </section>
 
@@ -551,15 +554,15 @@ const Index = () => {
                         </p>
                       </div>
                     ))}
-                    {/* The punchline — contained with background for visual weight */}
+                    {/* The punchline — standalone row matching asset class rows */}
                     <div
                       className={cn(
-                        "mt-1 -mx-1 p-4 bg-gold/[0.08] border border-gold/20 flex items-center gap-3 transition-all duration-500 ease-out",
+                        "flex items-baseline gap-3 mt-2 transition-all duration-500 ease-out",
                         revMission.visible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-3"
                       )}
                       style={{ transitionDelay: revMission.visible ? '850ms' : '0ms' }}
                     >
-                      <X className="w-4 h-4 text-white/40 flex-shrink-0" />
+                      <X className="w-4 h-4 text-white/50 flex-shrink-0 relative top-[2px]" />
                       <p className="font-bebas text-[22px] md:text-[26px] tracking-[0.06em] text-gold leading-tight">
                         Film has no standardized framework.
                       </p>
@@ -567,21 +570,35 @@ const Index = () => {
                   </div>
                 </div>
 
-                <p
-                  className={cn(
-                    "text-center font-bebas text-[36px] md:text-[44px] tracking-[0.06em] text-gold mt-10 transition-all duration-700 ease-out",
-                    revMission.visible ? "opacity-100 scale-100" : "opacity-0 scale-90"
-                  )}
-                  style={{
-                    transitionDelay: revMission.visible ? '1100ms' : '0ms',
-                    textShadow: revMission.visible ? '0 0 30px rgba(212,175,55,0.4), 0 0 60px rgba(212,175,55,0.15)' : 'none',
-                  }}
-                >
-                  Until <span className="text-white">now</span>.
-                </p>
               </div>
             </div>
           </SectionFrame>
+
+          {/* ── TRANSITION — thesis to validation ── */}
+          <section className="py-10 md:py-14 px-6 relative">
+            <div className="absolute inset-0 pointer-events-none"
+              style={{ background: 'radial-gradient(ellipse 60% 55% at 50% 50%, rgba(212,175,55,0.06) 0%, transparent 70%)' }} />
+            <div
+              ref={revUntilNow.ref}
+              className={cn(
+                "max-w-md mx-auto text-center transition-all duration-700 ease-out",
+                revUntilNow.visible ? "opacity-100 scale-100" : "opacity-0 scale-90"
+              )}
+            >
+              <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/40 to-transparent mb-8" />
+              <p
+                className="font-bebas text-[40px] md:text-[50px] tracking-[0.06em] text-gold"
+                style={{
+                  textShadow: revUntilNow.visible
+                    ? '0 0 30px rgba(212,175,55,0.4), 0 0 60px rgba(212,175,55,0.15)'
+                    : 'none',
+                }}
+              >
+                Until <span className="text-white">now</span>.
+              </p>
+              <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/40 to-transparent mt-8" />
+            </div>
+          </section>
 
           {/* ── INTERSTITIAL: Blum Quote ── */}
           <section className="py-8 md:py-12 px-6">
@@ -615,7 +632,8 @@ const Index = () => {
                         <span className="font-bebas text-[16px] tracking-[0.14em] uppercase text-gold">Jason Blum</span>
                       </cite>
                     </div>
-                    <p className="text-white/50 text-sm tracking-[0.08em] mt-2 ml-11">Blumhouse{"\u2002"}&mdash;{"\u2002"}{"\u201C"}Paranormal Activity{"\u201D"}</p>
+                    <p className="text-white/50 text-sm tracking-[0.08em] mt-2 ml-11">Blumhouse</p>
+                    <p className="text-white/40 text-xs tracking-[0.08em] mt-1 ml-11">{"\u201C"}Paranormal Activity{"\u201D"}</p>
                   </div>
                 </div>
               </div>
@@ -693,17 +711,17 @@ const Index = () => {
 
                 {/* Mid-waterfall CTA — capture intent at emotional peak */}
                 <div className="border-t border-white/[0.06] px-5 py-6 text-center">
-                  <p className="text-white/50 text-[13px] tracking-wide mb-4">
-                    A simplified waterfall.
-                  </p>
                   <button onClick={handleStartClick}
-                    className="w-full max-w-[280px] h-12 text-sm btn-cta-primary mx-auto">
+                    className="w-full max-w-[280px] h-14 text-base btn-cta-primary mx-auto">
                     WHAT DOES YOUR DEAL LOOK LIKE?
                   </button>
                   <button onClick={handleShare}
                     className="mt-4 inline-flex items-center gap-2 text-xs tracking-wider text-white/30 hover:text-gold/60 transition-colors py-2">
                     <Share2 className="w-3.5 h-3.5" /> Send this to your producing partner
                   </button>
+                  <p className="text-white/30 text-[11px] tracking-wide mt-4">
+                    *A simplified waterfall for illustration.
+                  </p>
                 </div>
               </div>
             </div>
@@ -723,7 +741,7 @@ const Index = () => {
                   <div
                     key={door.name}
                     className={cn(
-                      "relative border p-4 md:p-6 transition-all duration-700 ease-out overflow-hidden",
+                      "relative border p-4 md:p-6 transition-all duration-700 ease-out overflow-hidden min-h-[140px]",
                       "bg-white/[0.06] border-white/[0.12]",
                       revCost.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                     )}
@@ -743,7 +761,7 @@ const Index = () => {
                           {door.name}
                         </p>
                         <Lock
-                          className="w-4 h-4 flex-shrink-0 ml-2 mt-0.5 text-white/30"
+                          className="w-5 h-5 flex-shrink-0 ml-2 mt-0.5 text-gold/60"
                         />
                       </div>
                       <span
@@ -774,10 +792,9 @@ const Index = () => {
             <div ref={revDecl.ref} className={cn("max-w-md mx-auto relative transition-all duration-700 ease-out", revDecl.visible ? "opacity-100 scale-100" : "opacity-0 scale-[0.96]")}>
               <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
               <div className="py-12 px-4 text-center">
-                <h3 className="font-bebas text-[26px] md:text-[40px] tracking-[0.08em] uppercase text-gold leading-tight">
+                <h3 className="font-bebas text-[32px] md:text-[40px] tracking-[0.08em] uppercase text-gold leading-tight">
                   We Built The Toolkit They Didn{"\u2019"}t Teach You In Film{"\u00A0"}<span className="text-white">School</span>.
                 </h3>
-                <p className="text-white/40 text-sm tracking-[0.12em] uppercase mt-4">No gatekeepers. No guesswork.</p>
               </div>
               <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
               <div className="flex justify-center mt-6">
@@ -791,7 +808,7 @@ const Index = () => {
              ────────────────────────────────────────────────────────── */}
           <SectionFrame id="path">
             <div ref={revPath.ref} className={cn("transition-all duration-700 ease-out", revPath.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
-              <SectionHeader eyebrow="The Toolkit" title={<>YOUR <span className="text-white">TOOLKIT.</span></>} flankingLines compact />
+              <SectionHeader eyebrow="The Toolkit" title={<>NO <span className="text-white">GUESSWORK.</span></>} flankingLines compact />
 
               <p className="text-center text-white/50 text-sm mb-8 max-w-sm mx-auto">
                 Whether you&rsquo;re modeling your first deal or walking into a meeting with real&nbsp;capital, there&rsquo;s a tier built for&nbsp;you.
@@ -853,15 +870,15 @@ const Index = () => {
                       {t.product}
                     </h4>
                     <p className={cn("text-sm leading-relaxed mb-4 pl-1", t.descColor)}>{t.desc}</p>
-                    <a
-                      href={i === 0 ? "/calculator?tab=budget" : "/store"}
+                    <button
+                      onClick={() => { haptics.light(); i === 0 ? gatedNavigate("/calculator?tab=budget") : navigate("/store"); }}
                       className={cn(
                         "inline-flex items-center text-sm tracking-wider transition-colors pl-1",
                         t.featured ? "text-gold hover:text-gold/80" : "text-white/50 hover:text-white/70"
                       )}
                     >
                       {i === 0 ? "Get Started" : "View Package"} <span className="ml-1.5">&rarr;</span>
-                    </a>
+                    </button>
                   </div>
                 ))}
               </div>
@@ -873,9 +890,9 @@ const Index = () => {
                   MODEL YOUR FIRST DEAL
                 </button>
                 <div className="mt-5 flex items-center justify-center gap-4">
-                  <a href="/store" className="text-white/40 text-sm hover:text-gold transition-colors">
+                  <button onClick={() => navigate("/store")} className="text-white/40 text-sm hover:text-gold transition-colors">
                     Compare packages <span className="text-gold/70">&rarr;</span>
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>
@@ -940,7 +957,7 @@ const Index = () => {
                   className="w-full max-w-[320px] h-16 text-base btn-cta-final mx-auto">
                   BUILD YOUR WATERFALL &mdash; FREE
                 </button>
-                <p className="text-white/30 text-xs tracking-wider mt-4">No credit card. Takes 2{"\u00A0"}minutes.</p>
+                <p className="text-white/50 text-sm tracking-wider mt-4">No credit card. Takes 2{"\u00A0"}minutes.</p>
               </div>
             </div>
           </section>
