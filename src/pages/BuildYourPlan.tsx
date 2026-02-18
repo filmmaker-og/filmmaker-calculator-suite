@@ -207,7 +207,8 @@ const BuildYourPlan = () => {
         );
 
         // Check for existing submission
-        const { data: existingSub } = await supabase
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const { data: existingSub } = await (supabase as any)
           .from("intake_submissions")
           .select("*")
           .eq("purchase_id", purchase.id)
@@ -271,7 +272,8 @@ const BuildYourPlan = () => {
           }));
         } else {
           // Create new submission
-          const { data: newSub, error } = await supabase
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const { data: newSub, error } = await (supabase as any)
             .from("intake_submissions")
             .insert({
               purchase_id: purchase.id,
@@ -349,7 +351,8 @@ const BuildYourPlan = () => {
   const handleSubmit = useCallback(async () => {
     if (!submissionId) return;
     try {
-      const { error } = await supabase
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { error } = await (supabase as any)
         .from("intake_submissions")
         .update({
           status: "submitted",
