@@ -6,8 +6,6 @@ import {
   RotateCcw,
   Check,
   X,
-  LockKeyhole,
-  Share2,
   Mail,
   Instagram,
   Link2,
@@ -617,12 +615,9 @@ const Index = () => {
                 <div className="absolute left-0 top-0 bottom-0 w-[3px]"
                   style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.80), rgba(212,175,55,0.40), transparent)' }} />
                 <div className="p-5 md:p-7 pl-6 md:pl-9">
-                  {/* Opening quote mark */}
-                  <div className="font-bebas text-[44px] md:text-[54px] leading-none select-none pointer-events-none text-gold/40 -mb-4 -ml-1"
-                    aria-hidden="true">{"\u201C"}</div>
                   <blockquote className="relative z-10">
                     <p className="text-[15px] md:text-base leading-[1.7] text-white/85 italic">
-                      Filmmakers have a perception in the business world of being kind of flaky dudes{"\u2026"} you need to be buttoned down{"\u2026"} speak the language that they speak.
+                      <span className="font-bebas text-[44px] md:text-[54px] leading-none select-none pointer-events-none text-gold/40 mr-1 align-bottom" aria-hidden="true">{"\u201C"}</span>Filmmakers have a perception in the business world of being kind of flaky dudes{"\u2026"} you need to be buttoned down{"\u2026"} speak the language that they speak.
                     </p>
                   </blockquote>
                   <div className="mt-4 -mx-1 p-3 bg-gold/[0.08] border border-gold/20">
@@ -648,7 +643,7 @@ const Index = () => {
             <div ref={revWater.ref} className={cn("transition-all duration-700 ease-out", revWater.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
               <SectionHeader eyebrow="The Waterfall" title={<>HOW THE MONEY <span className="text-white">FLOWS</span></>} flankingLines compact />
 
-              <p className="text-white/50 text-sm text-center mb-1">A $3M SVOD acquisition.</p>
+              <p className="text-white/50 text-sm text-center mb-1">A simplified $3M SVOD acquisition.</p>
               <p className="text-white/60 text-sm font-medium text-center mb-6">Here&rsquo;s what actually reaches the filmmaker.</p>
 
               <div ref={waterBarRef} className="border border-white/[0.06] bg-black max-w-md mx-auto overflow-hidden">
@@ -714,13 +709,6 @@ const Index = () => {
                     className="w-full max-w-[320px] h-14 text-base btn-cta-primary mx-auto">
                     WHAT DOES YOUR DEAL LOOK LIKE?
                   </button>
-                  <button onClick={handleShare}
-                    className="mt-4 inline-flex items-center gap-2 text-xs tracking-wider text-white/30 hover:text-gold/60 transition-colors py-2">
-                    <Share2 className="w-3.5 h-3.5" /> Send this to your producing partner
-                  </button>
-                  <p className="text-white/30 text-[11px] tracking-wide mt-4">
-                    *A simplified waterfall for illustration.
-                  </p>
                 </div>
               </div>
             </div>
@@ -753,16 +741,12 @@ const Index = () => {
                       style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.55), rgba(212,175,55,0.25), transparent)' }}
                     />
                     <div className="pl-2">
-                      <div className="flex items-start justify-between mb-2">
+                    <div className="flex items-start justify-between mb-2">
                         <p
                           className="font-bebas text-[18px] md:text-[20px] tracking-[0.10em] uppercase leading-tight text-white"
                         >
                           {door.name}
                         </p>
-                        <LockKeyhole
-                          className="w-5 h-5 flex-shrink-0 ml-2 mt-[2px] text-gold/80"
-                          strokeWidth={2.5}
-                        />
                       </div>
                       <span
                         className="inline-block font-mono text-[15px] font-bold mb-3 text-gold"
@@ -977,7 +961,7 @@ const Index = () => {
                 </a>
                 <button onClick={handleShare}
                   className="flex items-center justify-center gap-2.5 text-sm tracking-wider text-gold/80 hover:text-gold bg-white/[0.04] hover:bg-white/[0.07] transition-all active:scale-[0.97] py-5 border border-white/[0.12] hover:border-gold/40">
-                  <Share2 className="w-4 h-4" /><span>Share</span>
+                  <Link2 className="w-4 h-4" /><span>Share</span>
                 </button>
                 <button onClick={handleCopyLink}
                   className="flex items-center justify-center gap-2.5 text-sm tracking-wider text-gold/80 hover:text-gold bg-white/[0.04] hover:bg-white/[0.07] transition-all active:scale-[0.97] py-5 border border-white/[0.12] hover:border-gold/40">
