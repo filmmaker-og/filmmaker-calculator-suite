@@ -6,6 +6,7 @@ import {
   RotateCcw,
   Check,
   X,
+  LockKeyhole,
   Mail,
   Instagram,
   Link2,
@@ -44,16 +45,16 @@ const closedDoors = [
    ═══════════════════════════════════════════════════════════════════ */
 const realities = [
   {
-    label: "The Math Is Broken",
-    line: "Your waterfall is rigged to fail. You\u2019ve hard-coded \u201Cnet profit\u201D definitions that are mathematically impossible to reach. When you promise \u201Cfirst money out\u201D to everyone\u2014your investor, your lender, and your star\u2014you guarantee a lawsuit.",
+    label: "Structural Default",
+    line: "Most indie waterfalls hard-code \u201Cnet profit\u201D definitions that are mathematically impossible to satisfy. When every party is promised first-dollar recoupment, competing claims stack until no revenue scenario can make participants whole.",
   },
   {
-    label: "The \u201COff-The-Top\u201D Trap",
-    line: "You think you\u2019re splitting a dollar, but you\u2019re splitting pennies. Sales agents, distributors, and CAMs take their cut from Gross, not Net. After the off-the-top sharks eat, you\u2019ll be lucky to see $0.30.",
+    label: "The Off-The-Top Stack",
+    line: "Sales agents, distributors, and CAM fees deduct from gross receipts\u2014not net. By the time off-the-top obligations clear, roughly $0.30 of every earned dollar remains for everyone below the line.",
   },
   {
-    label: "You Gave Away the Farm",
-    line: "You diluted your equity before you even started. You gave \u201Cpoints\u201D to cast and crew like candy. Now you need to offer investors a 50/50 split and realize you have 0% left for yourself.",
+    label: "Equity Dilution",
+    line: "Backend points promised during packaging\u2014to cast, directors, and key crew\u2014consume the equity pool before investors are at the table. A standard 50/50 investor split becomes structurally untenable when profit participation has already claimed the producer\u2019s share.",
   },
 ];
 
@@ -617,10 +618,10 @@ const Index = () => {
                 <div className="p-5 md:p-7 pl-6 md:pl-9">
                   {/* Opening quote mark */}
                   <div className="font-bebas text-[48px] md:text-[60px] leading-none select-none pointer-events-none text-gold/55 -mb-4 -ml-1"
-                    aria-hidden="true">{"\u201C"}</div>
+                    aria-hidden="true">{"\u2018"}</div>
                   <blockquote className="relative z-10">
                     <p className="text-[15px] md:text-base leading-[1.7] text-white/85 italic">
-                      <span className="font-bebas text-[44px] md:text-[54px] leading-none select-none pointer-events-none text-gold/40 mr-1 align-bottom" aria-hidden="true">{"\u201C"}</span>Filmmakers have a perception in the business world of being kind of flaky dudes{"\u2026"} you need to be buttoned down{"\u2026"} speak the language that they speak.
+                      Filmmakers have a perception in the business world of being kind of flaky dudes{"\u2026"} you need to be buttoned down{"\u2026"} speak the language that they speak.
                     </p>
                   </blockquote>
                   <div className="mt-4 -mx-1 p-3 bg-gold/[0.12] border border-gold/30">
