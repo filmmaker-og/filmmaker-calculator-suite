@@ -49,6 +49,129 @@ export type Database = {
           },
         ]
       }
+      intake_submissions: {
+        Row: {
+          cam_fee_is_default: boolean | null
+          cam_fee_pct: number | null
+          completed_at: string | null
+          created_at: string
+          current_step: number
+          debt_tranches: Json | null
+          deferments: Json | null
+          distribution_fee_domestic_is_default: boolean | null
+          distribution_fee_domestic_pct: number | null
+          distribution_fee_international_is_default: boolean | null
+          distribution_fee_international_pct: number | null
+          distribution_model: string | null
+          dp_deal_type: string | null
+          dp_target_platform: string | null
+          email: string
+          equity_investors: Json | null
+          genre: string | null
+          id: string
+          includes_working_model: boolean
+          logline: string | null
+          production_company: string | null
+          project_title: string | null
+          purchase_id: string
+          sa_domestic_commission_is_default: boolean | null
+          sa_domestic_commission_pct: number | null
+          sa_expense_cap: number | null
+          sa_expense_cap_is_default: boolean | null
+          sa_international_commission_is_default: boolean | null
+          sa_international_commission_pct: number | null
+          scenario_conservative: number | null
+          scenario_optimistic: number | null
+          scenario_target: number | null
+          soft_money: Json | null
+          status: string
+          tier: string
+          total_budget: number | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          cam_fee_is_default?: boolean | null
+          cam_fee_pct?: number | null
+          completed_at?: string | null
+          created_at?: string
+          current_step?: number
+          debt_tranches?: Json | null
+          deferments?: Json | null
+          distribution_fee_domestic_is_default?: boolean | null
+          distribution_fee_domestic_pct?: number | null
+          distribution_fee_international_is_default?: boolean | null
+          distribution_fee_international_pct?: number | null
+          distribution_model?: string | null
+          dp_deal_type?: string | null
+          dp_target_platform?: string | null
+          email: string
+          equity_investors?: Json | null
+          genre?: string | null
+          id?: string
+          includes_working_model?: boolean
+          logline?: string | null
+          production_company?: string | null
+          project_title?: string | null
+          purchase_id: string
+          sa_domestic_commission_is_default?: boolean | null
+          sa_domestic_commission_pct?: number | null
+          sa_expense_cap?: number | null
+          sa_expense_cap_is_default?: boolean | null
+          sa_international_commission_is_default?: boolean | null
+          sa_international_commission_pct?: number | null
+          scenario_conservative?: number | null
+          scenario_optimistic?: number | null
+          scenario_target?: number | null
+          soft_money?: Json | null
+          status?: string
+          tier?: string
+          total_budget?: number | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          cam_fee_is_default?: boolean | null
+          cam_fee_pct?: number | null
+          completed_at?: string | null
+          created_at?: string
+          current_step?: number
+          debt_tranches?: Json | null
+          deferments?: Json | null
+          distribution_fee_domestic_is_default?: boolean | null
+          distribution_fee_domestic_pct?: number | null
+          distribution_fee_international_is_default?: boolean | null
+          distribution_fee_international_pct?: number | null
+          distribution_model?: string | null
+          dp_deal_type?: string | null
+          dp_target_platform?: string | null
+          email?: string
+          equity_investors?: Json | null
+          genre?: string | null
+          id?: string
+          includes_working_model?: boolean
+          logline?: string | null
+          production_company?: string | null
+          project_title?: string | null
+          purchase_id?: string
+          sa_domestic_commission_is_default?: boolean | null
+          sa_domestic_commission_pct?: number | null
+          sa_expense_cap?: number | null
+          sa_expense_cap_is_default?: boolean | null
+          sa_international_commission_is_default?: boolean | null
+          sa_international_commission_pct?: number | null
+          scenario_conservative?: number | null
+          scenario_optimistic?: number | null
+          scenario_target?: number | null
+          soft_money?: Json | null
+          status?: string
+          tier?: string
+          total_budget?: number | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string

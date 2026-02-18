@@ -9,7 +9,8 @@ export function useIntakeAutoSave(submissionId: string | null) {
   const saveToSupabase = useCallback(
     async (data: Record<string, unknown>) => {
       if (!submissionId) return;
-      const { error } = await supabase
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { error } = await (supabase as any)
         .from("intake_submissions")
         .update({ ...data, updated_at: new Date().toISOString() })
         .eq("id", submissionId);
