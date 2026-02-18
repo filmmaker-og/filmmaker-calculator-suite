@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useHaptics } from "@/hooks/use-haptics";
@@ -16,16 +16,27 @@ interface LeadCaptureModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSuccess: () => void;
-  onSkip: () => void;
 }
 
-const LeadCaptureModal = ({ isOpen, onClose, onSuccess, onSkip }: LeadCaptureModalProps) => {
+const LeadCaptureModal = ({ isOpen, onClose, onSuccess }: LeadCaptureModalProps) => {
   const { toast } = useToast();
   const haptics = useHaptics();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
+
+  // Listen for auth state change — user clicked the magic link
+  useEffect(() => {
+    if (!isOpen || !sent) return;
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (session?.user) {
+        haptics.success();
+        onSuccess();
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [isOpen, sent, onSuccess, haptics]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -60,16 +71,37 @@ const LeadCaptureModal = ({ isOpen, onClose, onSuccess, onSkip }: LeadCaptureMod
 
       haptics.success();
       setSent(true);
-
-      // Auto-continue after brief confirmation
-      setTimeout(() => {
-        onSuccess();
-      }, 1500);
     } catch (error) {
       haptics.error();
       toast({
         title: "Error",
         description: error instanceof Error ? error.message : "Failed to send link",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResend = async () => {
+    setLoading(true);
+    try {
+      const redirectUrl = `${window.location.origin}/calculator`;
+      const { error } = await supabase.auth.signInWithOtp({
+        email: email.trim(),
+        options: {
+          emailRedirectTo: redirectUrl,
+          data: { full_name: name.trim() },
+        },
+      });
+      if (error) throw error;
+      haptics.light();
+      toast({ title: "Link Resent", description: `Check ${email}` });
+    } catch (error) {
+      haptics.error();
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "Failed to resend",
         variant: "destructive",
       });
     } finally {
@@ -84,7 +116,7 @@ const LeadCaptureModal = ({ isOpen, onClose, onSuccess, onSkip }: LeadCaptureMod
         <div className="h-[2px] w-full bg-gold" />
 
         {sent ? (
-          // Success state
+          // Waiting for magic link click
           <div className="p-6 text-center">
             <div className="w-12 h-12 border border-gold/50 flex items-center justify-center mx-auto mb-4">
               <Mail className="w-6 h-6 text-gold" />
@@ -92,12 +124,33 @@ const LeadCaptureModal = ({ isOpen, onClose, onSuccess, onSkip }: LeadCaptureMod
             <p className="font-bebas text-xl tracking-wider text-text-primary mb-2">
               CHECK YOUR EMAIL
             </p>
-            <p className="text-text-dim text-sm mb-4">
-              Link sent to <span className="text-gold font-mono">{email}</span>
+            <p className="text-text-dim text-sm mb-2">
+              We sent a magic link to
             </p>
-            <p className="text-text-dim text-xs">
-              Building your waterfall...
+            <p className="font-mono text-gold text-sm mb-6">
+              {email}
             </p>
+            <p className="text-text-dim text-xs mb-6 leading-relaxed">
+              Click the link in your email to unlock the calculator.
+            </p>
+
+            <div className="space-y-3">
+              <button
+                onClick={handleResend}
+                disabled={loading}
+                className="text-text-dim hover:text-text-mid text-xs tracking-wider transition-colors"
+              >
+                {loading ? "Sending..." : "Didn't get it? Resend"}
+              </button>
+              <div>
+                <button
+                  onClick={() => setSent(false)}
+                  className="text-text-dim hover:text-text-mid text-xs transition-colors"
+                >
+                  Use different email
+                </button>
+              </div>
+            </div>
           </div>
         ) : (
           // Name + email form
@@ -155,20 +208,12 @@ const LeadCaptureModal = ({ isOpen, onClose, onSuccess, onSkip }: LeadCaptureMod
                   <Loader2 className="w-5 h-5 animate-spin mx-auto" />
                 ) : (
                   <span className="flex items-center justify-center gap-2">
-                    START BUILDING
+                    SEND MAGIC LINK
                     <ArrowRight className="w-4 h-4" />
                   </span>
                 )}
               </button>
             </div>
-
-            <button
-              type="button"
-              onClick={onSkip}
-              className="w-full mt-4 py-2 text-text-dim hover:text-text-mid text-[11px] tracking-wider transition-colors"
-            >
-              continue without saving
-            </button>
           </form>
         )}
       </DialogContent>

@@ -68,14 +68,13 @@ const Calculator = () => {
     setSourceSelections(prev => ({ ...prev, [key]: !prev[key] }));
   }, []);
 
-  // Gate: redirect to landing page if user hasn't gone through email capture
+  // Gate: redirect to landing page if user hasn't verified via magic link
   useEffect(() => {
     if (loading) return; // wait for auth check to resolve
-    const isSkipping = searchParams.get("skip") === "true";
-    if (!user && !emailCaptured && !isSkipping) {
+    if (!user) {
       navigate("/", { replace: true });
     }
-  }, [user, emailCaptured, loading, navigate, searchParams]);
+  }, [user, loading, navigate]);
 
   // Reset on ?reset=true or ?skip=true (demo mode)
   useEffect(() => {
