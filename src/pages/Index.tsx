@@ -11,7 +11,7 @@ import {
   Link2,
   ChevronDown,
 } from "lucide-react";
-import filmmakerLogo from "@/assets/neuralpony (18).png";
+import filmmakerLogo from "@/assets/filmmaker-f-icon.png";
 import Header from "@/components/Header";
 import LeadCaptureModal from "@/components/LeadCaptureModal";
 import {
@@ -378,8 +378,8 @@ const Index = () => {
               <div className={cn("relative transition-all duration-1000 ease-out", showLogo ? "opacity-100 scale-100 translate-y-0" : "opacity-0 scale-90 translate-y-6")}>
                 <div className={cn("absolute inset-0 -m-4 transition-opacity duration-700", isPulsed ? "opacity-100" : "opacity-0")}
                   style={{ background: 'radial-gradient(circle, rgba(212,175,55,0.5) 0%, transparent 70%)', filter: 'blur(15px)' }} />
-                <img src={filmmakerLogo} alt="Filmmaker.OG" className="w-32 h-32 object-contain relative"
-                  style={{ filter: isPulsed ? 'brightness(1.5) saturate(1.2) drop-shadow(0 0 30px rgba(212,175,55,0.5))' : 'brightness(1.5) saturate(1.2)', transition: 'filter 0.7s ease' }} />
+                <img src={filmmakerLogo} alt="Filmmaker.OG" className="w-32 h-32 object-contain relative z-10"
+                  style={{ filter: 'brightness(1.5) saturate(1.2)', transition: 'filter 0.7s ease' }} />
               </div>
               <p className={cn("mt-8 text-sm tracking-[0.4em] uppercase font-semibold transition-all duration-700", showTagline ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3")}
                 style={{ color: '#D4AF37', textShadow: '0 0 20px rgba(212,175,55,0.4)' }}>Know Your Numbers</p>
@@ -417,8 +417,8 @@ const Index = () => {
             <div className="relative px-6 py-4 max-w-xl mx-auto text-center">
               <div className="mb-5 relative inline-block">
                 <div className="absolute inset-0 -m-10 animate-logo-breathe" style={{ background: 'radial-gradient(circle, rgba(212,175,55,0.45) 0%, transparent 70%)', filter: 'blur(18px)' }} />
-                <img src={filmmakerLogo} alt="Filmmaker.OG" className="relative w-[96px] h-[96px] object-contain"
-                  style={{ filter: 'brightness(1.5) saturate(1.2) drop-shadow(0 0 28px rgba(212,175,55,0.45))' }} />
+                <img src={filmmakerLogo} alt="Filmmaker.OG" className="relative z-10 w-[96px] h-[96px] object-contain"
+                  style={{ filter: 'brightness(1.5) saturate(1.2)' }} />
               </div>
               <h1 className="font-bebas text-[clamp(2.8rem,9vw,4.2rem)] leading-[1.05] text-gold mb-5">
                 SEE WHERE EVERY<br /><span className="text-white">DOLLAR GOES</span>
@@ -608,21 +608,24 @@ const Index = () => {
               )}
             >
               <div
-                className="relative bg-gold/[0.04] border-2 border-gold/30 overflow-hidden"
-                style={{ boxShadow: '0 0 40px rgba(212,175,55,0.08), inset 0 1px 0 rgba(212,175,55,0.10)' }}
+                className="relative bg-gold/[0.08] border-2 border-gold/45 overflow-hidden"
+                style={{ boxShadow: '0 0 40px rgba(212,175,55,0.12), 0 8px 32px rgba(212,175,55,0.06), inset 0 1px 0 rgba(212,175,55,0.15)' }}
               >
                 {/* Gold left accent — strong */}
                 <div className="absolute left-0 top-0 bottom-0 w-[3px]"
                   style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.80), rgba(212,175,55,0.40), transparent)' }} />
                 <div className="p-5 md:p-7 pl-6 md:pl-9">
+                  {/* Opening quote mark */}
+                  <div className="font-bebas text-[48px] md:text-[60px] leading-none select-none pointer-events-none text-gold/55 -mb-4 -ml-1"
+                    aria-hidden="true">{"\u201C"}</div>
                   <blockquote className="relative z-10">
                     <p className="text-[15px] md:text-base leading-[1.7] text-white/85 italic">
                       <span className="font-bebas text-[44px] md:text-[54px] leading-none select-none pointer-events-none text-gold/40 mr-1 align-bottom" aria-hidden="true">{"\u201C"}</span>Filmmakers have a perception in the business world of being kind of flaky dudes{"\u2026"} you need to be buttoned down{"\u2026"} speak the language that they speak.
                     </p>
                   </blockquote>
-                  <div className="mt-4 -mx-1 p-3 bg-gold/[0.08] border border-gold/20">
+                  <div className="mt-4 -mx-1 p-3 bg-gold/[0.12] border border-gold/30">
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-[1px] bg-gold/50" />
+                      <div className="w-10 h-[1.5px] bg-gold/50" />
                       <cite className="not-italic">
                         <span className="font-bebas text-[14px] tracking-[0.14em] uppercase text-gold">Jason Blum</span>
                       </cite>
@@ -728,7 +731,7 @@ const Index = () => {
                   <div
                     key={door.name}
                     className={cn(
-                      "relative border p-5 md:p-7 transition-all duration-700 ease-out overflow-hidden min-h-[140px]",
+                      "relative border p-4 md:p-6 transition-all duration-700 ease-out overflow-hidden",
                       "bg-white/[0.06] border-white/[0.12]",
                       revCost.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                     )}
@@ -736,26 +739,24 @@ const Index = () => {
                       transitionDelay: revCost.visible ? `${i * 150}ms` : '0ms',
                     }}
                   >
-                    {/* Gold left elbow — dims with lock */}
+                    {/* Gold left elbow */}
                     <div className="absolute left-0 top-0 bottom-0 w-[3px]"
                       style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.55), rgba(212,175,55,0.25), transparent)' }}
                     />
                     <div className="pl-2">
-                    <div className="flex items-start justify-between mb-2">
-                        <p
-                          className="font-bebas text-[19px] md:text-[22px] tracking-[0.08em] uppercase leading-tight text-white whitespace-nowrap"
-                        >
-                          {door.name}
-                        </p>
+                      <p className="font-bebas text-[17px] md:text-[20px] tracking-[0.08em] uppercase leading-tight text-white mb-2">
+                        {door.name}
+                      </p>
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="font-mono text-[15px] font-bold text-gold">
+                          {door.cost}
+                        </span>
+                        <LockKeyhole
+                          className="w-4 h-4 text-gold/70"
+                          strokeWidth={2.5}
+                        />
                       </div>
-                      <span
-                        className="inline-block font-mono text-[17px] font-bold mb-3 text-gold"
-                      >
-                        {door.cost}
-                      </span>
-                      <p
-                        className="text-sm leading-relaxed text-white/60"
-                      >
+                      <p className="text-sm leading-relaxed text-white/60">
                         {door.lock}
                       </p>
                     </div>
