@@ -11,7 +11,7 @@ const SectionFrame = ({
   className?: string;
   alt?: boolean;
 }) => (
-  <section id={id} className="snap-section px-4 py-6">
+  <section id={id} className="snap-section px-6 py-6">
     <div className="flex overflow-hidden border border-white/[0.06]">
       <div
         className="w-1 flex-shrink-0 bg-gradient-to-b from-gold via-gold/60 to-gold/20"
