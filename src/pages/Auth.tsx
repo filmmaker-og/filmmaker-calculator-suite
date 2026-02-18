@@ -7,7 +7,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useHaptics } from "@/hooks/use-haptics";
 import { ArrowRight, Loader2, Mail } from "lucide-react";
 import { z } from "zod";
-import filmmakerLogo from "@/assets/neuralpony (18).png";
+import filmmakerLogo from "@/assets/filmmaker-f-icon.png";
 import Header from "@/components/Header";
 
 const emailSchema = z.string().email("Please enter a valid email address");
