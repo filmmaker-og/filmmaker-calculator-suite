@@ -13,7 +13,7 @@ import {
   Link2,
   ChevronDown,
 } from "lucide-react";
-import filmmakerLogo from "@/assets/filmmaker-logo.jpg";
+import filmmakerLogo from "@/assets/F Icon_Transparent.png";
 import Header from "@/components/Header";
 import LeadCaptureModal from "@/components/LeadCaptureModal";
 import {
@@ -381,7 +381,7 @@ const Index = () => {
                 <div className={cn("absolute inset-0 -m-4 transition-opacity duration-700", isPulsed ? "opacity-100" : "opacity-0")}
                   style={{ background: 'radial-gradient(circle, rgba(212,175,55,0.3) 0%, transparent 70%)', filter: 'blur(15px)' }} />
                 <img src={filmmakerLogo} alt="Filmmaker.OG" className="w-32 h-32 object-contain relative"
-                  style={{ filter: isPulsed ? 'brightness(1.2) drop-shadow(0 0 30px rgba(212,175,55,0.5))' : 'brightness(0.9)', transition: 'filter 0.7s ease' }} />
+                  style={{ filter: isPulsed ? 'drop-shadow(0 0 30px rgba(212,175,55,0.5))' : 'none', transition: 'filter 0.7s ease' }} />
               </div>
               <p className={cn("mt-8 text-sm tracking-[0.4em] uppercase font-semibold transition-all duration-700", showTagline ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3")}
                 style={{ color: '#D4AF37', textShadow: '0 0 20px rgba(212,175,55,0.4)' }}>Know Your Numbers</p>
@@ -420,7 +420,7 @@ const Index = () => {
               <div className="mb-5 relative inline-block">
                 <div className="absolute inset-0 -m-7 animate-logo-breathe" style={{ background: 'radial-gradient(circle, rgba(212,175,55,0.25) 0%, transparent 70%)', filter: 'blur(18px)' }} />
                 <img src={filmmakerLogo} alt="Filmmaker.OG" className="relative w-[96px] h-[96px] object-contain"
-                  style={{ filter: 'brightness(1.15) drop-shadow(0 0 28px rgba(212,175,55,0.45))' }} />
+                  style={{ filter: 'drop-shadow(0 0 28px rgba(212,175,55,0.45))' }} />
               </div>
               <h1 className="font-bebas text-[clamp(2.8rem,9vw,4.2rem)] leading-[1.05] text-gold mb-5">
                 SEE WHERE EVERY<br /><span className="text-white">DOLLAR GOES</span>
