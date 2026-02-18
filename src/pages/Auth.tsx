@@ -111,7 +111,8 @@ const Auth = () => {
                 <img
                   src={filmmakerLogo}
                   alt="Filmmaker.OG"
-                  className="w-16 h-16 object-contain mx-auto mb-6 opacity-90"
+                  className="w-16 h-16 object-contain mx-auto mb-6"
+                  style={{ filter: 'brightness(1.5) saturate(1.2)' }}
                 />
                 
                 <h1 className="font-bebas text-3xl tracking-[0.12em] text-text-primary mb-3">
@@ -189,7 +190,7 @@ const Auth = () => {
                   <Button
                     type="submit"
                     disabled={loading || !email || !name.trim()}
-                    className="w-full min-h-[52px] rounded-[--radius-md] font-semibold text-xs uppercase tracking-[1.5px] bg-gold-cta-subtle border border-gold-cta-muted text-gold-cta shadow-button hover:border-gold-cta disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200"
+                    className="w-full min-h-[52px] btn-cta-primary disabled:opacity-40 disabled:cursor-not-allowed"
                   >
                     {loading ? (
                       <Loader2 className="w-5 h-5 animate-spin" />

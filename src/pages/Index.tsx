@@ -381,7 +381,7 @@ const Index = () => {
                 <div className={cn("absolute inset-0 -m-4 transition-opacity duration-700", isPulsed ? "opacity-100" : "opacity-0")}
                   style={{ background: 'radial-gradient(circle, rgba(212,175,55,0.3) 0%, transparent 70%)', filter: 'blur(15px)' }} />
                 <img src={filmmakerLogo} alt="Filmmaker.OG" className="w-32 h-32 object-contain relative"
-                  style={{ filter: isPulsed ? 'brightness(1.15) drop-shadow(0 0 30px rgba(212,175,55,0.5))' : 'brightness(1.15)', transition: 'filter 0.7s ease' }} />
+                  style={{ filter: isPulsed ? 'brightness(1.5) saturate(1.2) drop-shadow(0 0 30px rgba(212,175,55,0.5))' : 'brightness(1.5) saturate(1.2)', transition: 'filter 0.7s ease' }} />
               </div>
               <p className={cn("mt-8 text-sm tracking-[0.4em] uppercase font-semibold transition-all duration-700", showTagline ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3")}
                 style={{ color: '#D4AF37', textShadow: '0 0 20px rgba(212,175,55,0.4)' }}>Know Your Numbers</p>
@@ -420,12 +420,12 @@ const Index = () => {
               <div className="mb-5 relative inline-block">
                 <div className="absolute inset-0 -m-7 animate-logo-breathe" style={{ background: 'radial-gradient(circle, rgba(212,175,55,0.25) 0%, transparent 70%)', filter: 'blur(18px)' }} />
                 <img src={filmmakerLogo} alt="Filmmaker.OG" className="relative w-[96px] h-[96px] object-contain"
-                  style={{ filter: 'brightness(1.15) drop-shadow(0 0 28px rgba(212,175,55,0.45))' }} />
+                  style={{ filter: 'brightness(1.5) saturate(1.2) drop-shadow(0 0 28px rgba(212,175,55,0.45))' }} />
               </div>
               <h1 className="font-bebas text-[clamp(2.8rem,9vw,4.2rem)] leading-[1.05] text-gold mb-5">
                 SEE WHERE EVERY<br /><span className="text-white">DOLLAR GOES</span>
               </h1>
-              <p className="mb-6 text-white/70 text-[14px] leading-[1.7] tracking-[0.06em] uppercase font-medium max-w-[360px] mx-auto">
+              <p className="mb-6 text-white/60 text-[14px] leading-[1.7] tracking-[0.06em] uppercase font-medium max-w-[360px] mx-auto">
                 Built by a Tribeca-winning producer whose debut sold to <span className="text-gold font-semibold">Netflix</span>.
               </p>
 
@@ -481,7 +481,7 @@ const Index = () => {
                     <div className="relative z-10 pl-2">
                       <div className="flex items-baseline gap-3 mb-3">
                         <span className="font-mono text-2xl text-gold/35 font-semibold leading-none">{String(i + 1).padStart(2, '0')}</span>
-                        <h3 className="font-bebas text-[17px] tracking-[0.12em] uppercase text-gold">
+                        <h3 className="font-bebas text-[17px] tracking-[0.10em] uppercase text-gold">
                           {r.label}
                         </h3>
                       </div>
@@ -533,7 +533,7 @@ const Index = () => {
                 <div className="relative bg-white/[0.04] border border-white/[0.10] overflow-hidden">
                   {/* Gold left accent */}
                   <div className="absolute left-0 top-0 bottom-0 w-[3px]"
-                    style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.80), rgba(212,175,55,0.40), transparent)' }} />
+                    style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.55), rgba(212,175,55,0.25), transparent)' }} />
                   <div className="p-7 md:p-9 pl-8 md:pl-10 space-y-5">
                     {[
                       { asset: "Real Estate", tool: "comps and cap rate models" },
@@ -615,7 +615,7 @@ const Index = () => {
               >
                 {/* Gold left accent — strong */}
                 <div className="absolute left-0 top-0 bottom-0 w-[3px]"
-                  style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.90), rgba(212,175,55,0.50), transparent)' }} />
+                  style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.80), rgba(212,175,55,0.40), transparent)' }} />
                 <div className="p-5 md:p-7 pl-6 md:pl-9">
                   {/* Opening quote mark */}
                   <div className="font-bebas text-[44px] md:text-[54px] leading-none select-none pointer-events-none text-gold/40 -mb-4 -ml-1"
@@ -632,8 +632,7 @@ const Index = () => {
                         <span className="font-bebas text-[14px] tracking-[0.14em] uppercase text-gold">Jason Blum</span>
                       </cite>
                     </div>
-                    <p className="text-white/50 text-xs tracking-[0.08em] mt-1.5 ml-9">Blumhouse</p>
-                    <p className="text-white/40 text-xs tracking-[0.08em] mt-0.5 ml-9">{"\u201C"}Paranormal Activity{"\u201D"}</p>
+                    <p className="text-white/50 text-xs tracking-[0.08em] mt-1.5 ml-9">Blumhouse "Paranormal Activity"</p>
                   </div>
                 </div>
               </div>
@@ -650,7 +649,7 @@ const Index = () => {
               <SectionHeader eyebrow="The Waterfall" title={<>HOW THE MONEY <span className="text-white">FLOWS</span></>} flankingLines compact />
 
               <p className="text-white/50 text-sm text-center mb-1">A $3M SVOD acquisition.</p>
-              <p className="text-white/70 text-sm font-medium text-center mb-6">Here&rsquo;s what actually reaches the filmmaker.</p>
+              <p className="text-white/60 text-sm font-medium text-center mb-6">Here&rsquo;s what actually reaches the filmmaker.</p>
 
               <div ref={waterBarRef} className="border border-white/[0.06] bg-black max-w-md mx-auto overflow-hidden">
                 {waterfallTiers.map((tier, i) => (
@@ -712,7 +711,7 @@ const Index = () => {
                 {/* Mid-waterfall CTA — capture intent at emotional peak */}
                 <div className="border-t border-white/[0.06] px-5 py-6 text-center">
                   <button onClick={handleStartClick}
-                    className="w-full max-w-[280px] h-14 text-base btn-cta-primary mx-auto">
+                    className="w-full max-w-[320px] h-14 text-base btn-cta-primary mx-auto">
                     WHAT DOES YOUR DEAL LOOK LIKE?
                   </button>
                   <button onClick={handleShare}
@@ -751,7 +750,7 @@ const Index = () => {
                   >
                     {/* Gold left elbow — dims with lock */}
                     <div className="absolute left-0 top-0 bottom-0 w-[3px]"
-                      style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.70), rgba(212,175,55,0.35), transparent)' }}
+                      style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.55), rgba(212,175,55,0.25), transparent)' }}
                     />
                     <div className="pl-2">
                       <div className="flex items-start justify-between mb-2">
@@ -762,6 +761,7 @@ const Index = () => {
                         </p>
                         <LockKeyhole
                           className="w-5 h-5 flex-shrink-0 ml-2 mt-[2px] text-gold/80"
+                          strokeWidth={2.5}
                         />
                       </div>
                       <span
@@ -853,7 +853,7 @@ const Index = () => {
                       </div>
                     )}
                     <div className="flex items-baseline justify-between mb-1 pl-1">
-                      <span className={cn("font-bebas text-[13px] tracking-[0.15em] uppercase", t.tierColor)}>
+                      <span className={cn("font-bebas text-[13px] tracking-[0.12em] uppercase", t.tierColor)}>
                         {t.tier}
                       </span>
                       <span className={cn(
@@ -866,7 +866,7 @@ const Index = () => {
                         {t.price}
                       </span>
                     </div>
-                    <h4 className={cn("font-bebas text-[22px] tracking-[0.08em] uppercase mb-2 pl-1", t.nameColor)}>
+                    <h4 className={cn("font-bebas text-[22px] tracking-[0.10em] uppercase mb-2 pl-1", t.nameColor)}>
                       {t.product}
                     </h4>
                     <p className={cn("text-sm leading-relaxed mb-4 pl-1", t.descColor)}>{t.desc}</p>
@@ -904,14 +904,14 @@ const Index = () => {
                § 7  FAQ
              ────────────────────────────────────────────────────────── */}
           <SectionFrame id="faq">
-            <div ref={revFaq.ref} className={cn("max-w-2xl mx-auto transition-all duration-700 ease-out", revFaq.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
+            <div ref={revFaq.ref} className={cn("max-w-lg mx-auto transition-all duration-700 ease-out", revFaq.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
               <SectionHeader eyebrow="Common Questions" title={<>WHAT FILMMAKERS <span className="text-white">ASK</span></>} flankingLines compact />
 
               <div className="bg-black px-5 border border-white/[0.06]">
                 <Accordion type="single" collapsible className="w-full">
                   {faqs.map((faq, i) => (
                     <AccordionItem key={faq.q} value={`faq-${i}`} className="border-b border-white/[0.08]">
-                      <AccordionTrigger className="font-bebas text-lg md:text-xl tracking-[0.06em] uppercase text-gold/80 hover:text-gold hover:no-underline text-left">
+                      <AccordionTrigger className="font-bebas text-lg md:text-xl tracking-[0.08em] uppercase text-gold/80 hover:text-gold hover:no-underline text-left">
                         {faq.q}
                       </AccordionTrigger>
                       <AccordionContent className="text-white/60 text-sm leading-relaxed normal-case font-sans">
@@ -950,7 +950,7 @@ const Index = () => {
                 <h2 className="font-bebas text-3xl md:text-4xl leading-[1.1] tracking-[0.08em] text-gold mb-5">
                   YOUR INVESTOR WILL ASK<br />HOW THE MONEY FLOWS <span className="text-white">BACK</span>.
                 </h2>
-                <p className="text-white/50 text-sm leading-relaxed max-w-xs mx-auto mb-8">
+                <p className="text-white/55 text-sm leading-relaxed max-w-xs mx-auto mb-8">
                   That meeting shouldn&rsquo;t be the first time you think about your recoupment&nbsp;structure.
                 </p>
                 <button onClick={handleStartClick}
@@ -999,9 +999,9 @@ const Index = () => {
                 Consult a qualified entertainment attorney before making financing decisions.
               </p>
               <div className="flex items-center justify-center gap-4 mt-4">
-                <button onClick={() => navigate("/terms")} className="text-white/20 text-xs hover:text-white/40 transition-colors">Terms</button>
+                <button onClick={() => navigate("/terms")} className="text-white/30 text-xs hover:text-white/50 transition-colors">Terms</button>
                 <span className="text-white/10">|</span>
-                <button onClick={() => navigate("/privacy")} className="text-white/20 text-xs hover:text-white/40 transition-colors">Privacy</button>
+                <button onClick={() => navigate("/privacy")} className="text-white/30 text-xs hover:text-white/50 transition-colors">Privacy</button>
               </div>
             </div>
           </footer>
