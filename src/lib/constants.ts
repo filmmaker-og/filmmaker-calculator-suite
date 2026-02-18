@@ -10,3 +10,5 @@ export const SHARE_TEXT =
 
 export const SHARE_TITLE =
   "FILMMAKER.OG — See Where Every Dollar Goes";
+
+export const EMAIL_CAPTURED_KEY = "filmmaker_og_email_captured";

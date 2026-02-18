@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 import { useHaptics } from "@/hooks/use-haptics";
 import {
   RotateCcw,
@@ -14,6 +15,7 @@ import {
 } from "lucide-react";
 import filmmakerLogo from "@/assets/filmmaker-logo.jpg";
 import Header from "@/components/Header";
+import LeadCaptureModal from "@/components/LeadCaptureModal";
 import {
   Accordion,
   AccordionContent,
@@ -158,6 +160,38 @@ const Index = () => {
   const haptics = useHaptics();
   const [linkCopied, setLinkCopied] = useState(false);
 
+  // Lead capture gate — requires magic link verification
+  const [showLeadCapture, setShowLeadCapture] = useState(false);
+  const [pendingDestination, setPendingDestination] = useState<string | null>(null);
+  const [hasSession, setHasSession] = useState(false);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session?.user) setHasSession(true);
+    });
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.user) setHasSession(true);
+    });
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const gatedNavigate = useCallback((destination: string) => {
+    if (!hasSession) {
+      setPendingDestination(destination);
+      setShowLeadCapture(true);
+    } else {
+      navigate(destination);
+    }
+  }, [hasSession, navigate]);
+
+  // Hero scroll tracking (for sticky CTA)
+  const heroRef = useRef<HTMLElement>(null);
+  const [heroPast, setHeroPast] = useState(false);
+
+  // Intro skip
+  const introTimersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
+  const [showSkipHint, setShowSkipHint] = useState(false);
+
   // Reveals
   const revMission  = useReveal();
   const revEvidence = useReveal();
@@ -223,15 +257,27 @@ const Index = () => {
 
   useEffect(() => {
     if (shouldSkip) return;
-    const timers = [
+    introTimersRef.current = [
       setTimeout(() => setPhase('beam'), 300),
       setTimeout(() => setPhase('logo'), 800),
       setTimeout(() => setPhase('pulse'), 1300),
       setTimeout(() => setPhase('tagline'), 1800),
       setTimeout(() => setPhase('complete'), 2600),
     ];
-    return () => timers.forEach(clearTimeout);
+    return () => introTimersRef.current.forEach(clearTimeout);
   }, [shouldSkip]);
+
+  // Show "tap to skip" hint after 1s
+  useEffect(() => {
+    if (shouldSkip || phase === 'complete') return;
+    const t = setTimeout(() => setShowSkipHint(true), 1000);
+    return () => clearTimeout(t);
+  }, [shouldSkip, phase]);
+
+  const handleSkipIntro = useCallback(() => {
+    introTimersRef.current.forEach(clearTimeout);
+    setPhase('complete');
+  }, []);
 
   useEffect(() => {
     if (phase === 'complete' && !hasSeenCinematic) {
@@ -239,9 +285,9 @@ const Index = () => {
     }
   }, [phase, hasSeenCinematic]);
 
-  const handleStartClick    = () => { haptics.medium(); navigate("/calculator?tab=budget"); };
-  const handleContinueClick = () => { haptics.medium(); navigate("/calculator"); };
-  const handleStartFresh    = () => { haptics.light(); navigate("/calculator?tab=budget&reset=true"); };
+  const handleStartClick    = () => { haptics.medium(); gatedNavigate("/calculator?tab=budget"); };
+  const handleContinueClick = () => { haptics.medium(); gatedNavigate("/calculator"); };
+  const handleStartFresh    = () => { haptics.light(); gatedNavigate("/calculator?tab=budget&reset=true"); };
 
   const handleCopyLink = useCallback(() => {
     navigator.clipboard.writeText(`${SHARE_TEXT}\n\n${getShareUrl()}`).then(() => {
@@ -260,15 +306,66 @@ const Index = () => {
   const isPulsed = ['pulse','tagline','complete'].includes(phase) || shouldSkip;
   const showTagline = ['tagline','complete'].includes(phase) || shouldSkip;
 
+  // Hero scroll observer — triggers sticky CTA
+  useEffect(() => {
+    if (!isComplete) return;
+    const el = heroRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => setHeroPast(!entry.isIntersecting),
+      { threshold: 0, rootMargin: '-56px 0px 0px 0px' }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [isComplete]);
+
+  // Sticky CTA button for the header
+  const stickyCtaButton = isComplete ? (
+    <button
+      onClick={isReturningUser ? handleContinueClick : handleStartClick}
+      className={cn(
+        "font-bebas text-[13px] tracking-[0.14em] uppercase whitespace-nowrap",
+        "h-8 px-3.5",
+        "bg-gold-cta-subtle border border-gold-cta-muted text-gold-cta",
+        "transition-all duration-300 ease-out",
+        "hover:border-gold-cta",
+        "active:scale-[0.97]",
+        heroPast
+          ? "opacity-100 translate-y-0 pointer-events-auto"
+          : "opacity-0 -translate-y-1 pointer-events-none"
+      )}
+      style={{ borderRadius: 'var(--radius-sm)' }}
+    >
+      {isReturningUser ? "CONTINUE" : "BUILD FREE"}
+    </button>
+  ) : undefined;
+
   return (
     <>
-      {isComplete && <Header />}
+      {isComplete && <Header rightSlot={stickyCtaButton} />}
+
+      {/* Lead capture modal — requires magic link verification */}
+      <LeadCaptureModal
+        isOpen={showLeadCapture}
+        onClose={() => setShowLeadCapture(false)}
+        onSuccess={() => {
+          setHasSession(true);
+          setShowLeadCapture(false);
+          navigate(pendingDestination || "/calculator?tab=budget");
+        }}
+      />
 
       <div className="min-h-screen flex flex-col relative overflow-hidden bg-black">
 
         {/* ═══════ CINEMATIC INTRO ═══════ */}
         {!shouldSkip && (
-          <div className={cn("fixed inset-0 z-[100] flex items-center justify-center transition-opacity duration-1000", isComplete ? "opacity-0 pointer-events-none" : "opacity-100")} style={{ backgroundColor: '#000' }}>
+          <div
+            className={cn("fixed inset-0 z-[100] flex items-center justify-center transition-opacity duration-1000 cursor-pointer", isComplete ? "opacity-0 pointer-events-none" : "opacity-100")}
+            style={{ backgroundColor: '#000' }}
+            onClick={handleSkipIntro}
+            role="button"
+            aria-label="Skip intro"
+          >
             <div className={cn("absolute inset-0 pointer-events-none transition-all duration-1000", showBeam ? "opacity-100" : "opacity-0")}
               style={{ background: `radial-gradient(ellipse 70% 60% at 50% 0%, rgba(212,175,55,0.08) 0%, rgba(255,255,255,0.12) 20%, rgba(255,255,255,0.05) 40%, rgba(255,255,255,0.01) 60%, transparent 80%)`, clipPath: showBeam ? 'polygon(25% 0%,75% 0%,95% 100%,5% 100%)' : 'polygon(48% 0%,52% 0%,52% 30%,48% 30%)', transition: 'clip-path 1.2s cubic-bezier(0.22,1,0.36,1), opacity 0.8s ease' }} />
             <div className={cn("absolute inset-0 pointer-events-none transition-all duration-1000", showBeam ? "opacity-100" : "opacity-0")}
@@ -289,6 +386,20 @@ const Index = () => {
                   style={{ boxShadow: '0 0 15px rgba(212,175,55,0.7)', width: showTagline ? undefined : '0%' }} />
               </div>
             </div>
+
+            {/* Tap to skip hint */}
+            <p
+              className={cn(
+                "absolute bottom-10 left-1/2 -translate-x-1/2",
+                "text-[11px] tracking-[0.3em] uppercase text-white/25",
+                "transition-all duration-500 select-none pointer-events-none",
+                showSkipHint && !isComplete
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-1"
+              )}
+            >
+              tap to skip
+            </p>
           </div>
         )}
 
@@ -298,7 +409,7 @@ const Index = () => {
           {/* ──────────────────────────────────────────────────────────
                § 1  HERO
              ────────────────────────────────────────────────────────── */}
-          <section id="hero" className="snap-section min-h-0 pt-20 pb-12 flex flex-col justify-center relative overflow-hidden">
+          <section id="hero" ref={heroRef} className="snap-section min-h-0 pt-20 pb-12 flex flex-col justify-center relative overflow-hidden">
             <div className="absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none animate-spotlight-pulse"
               style={{ width: '100vw', height: '120%', background: `radial-gradient(ellipse 50% 50% at 50% 15%, rgba(212,175,55,0.10) 0%, rgba(212,175,55,0.04) 45%, transparent 75%)` }} />
             <div className="relative px-6 py-4 max-w-xl mx-auto text-center">

@@ -1,7 +1,12 @@
+import { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import MobileMenu from "./MobileMenu";
 
-const Header = () => {
+interface HeaderProps {
+  rightSlot?: ReactNode;
+}
+
+const Header = ({ rightSlot }: HeaderProps) => {
   const navigate = useNavigate();
 
   const handleLogoClick = () => {
@@ -27,6 +32,13 @@ const Header = () => {
               BETA
             </span>
           </button>
+
+          {/* Center: Optional CTA slot (only used on landing page) */}
+          {rightSlot && (
+            <div className="flex-1 flex justify-center px-3 overflow-hidden">
+              {rightSlot}
+            </div>
+          )}
 
           {/* Right: Hamburger Menu */}
           <MobileMenu />

@@ -148,8 +148,10 @@ const StackSummary = ({ inputs, selections, onEdit, onComplete }: StackSummaryPr
               })
             ) : (
               <div className="px-5 py-8 text-center">
-                <p className="text-text-dim text-sm">No capital sources added yet.</p>
-                <p className="text-text-dim text-xs mt-1">Go back to add funding sources.</p>
+                <p className="text-text-dim text-sm">No capital sources selected.</p>
+                <p className="text-text-dim/70 text-xs mt-1 leading-relaxed">
+                  Self-financed? You're all set — continue to model your deal terms.
+                </p>
               </div>
             )}
           </div>

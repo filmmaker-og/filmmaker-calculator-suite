@@ -1,6 +1,7 @@
 import { useState, useCallback, useMemo } from "react";
 import { WaterfallInputs } from "@/lib/waterfall";
 import { useHaptics } from "@/hooks/use-haptics";
+import { cn } from "@/lib/utils";
 
 import CapitalSelect, { CapitalSourceSelections } from "../stack/CapitalSelect";
 import TaxCreditsInput from "../stack/TaxCreditsInput";
@@ -9,6 +10,53 @@ import GapMezzInput from "../stack/GapMezzInput";
 import EquityInput from "../stack/EquityInput";
 import DefermentsInput from "../stack/DefermentsInput";
 import StackSummary from "../stack/StackSummary";
+
+/* ── Step label map ─────────────────────────────── */
+const STEP_LABELS: Record<string, string> = {
+  select: 'Sources',
+  taxCredits: 'Tax Credits',
+  seniorDebt: 'Debt',
+  gapLoan: 'Gap',
+  equity: 'Equity',
+  deferments: 'Defers',
+  summary: 'Review',
+};
+
+/* ── Wizard progress pip row ───────────────────── */
+const WizardProgress = ({ steps, currentIndex }: { steps: string[]; currentIndex: number }) => (
+  <div className="px-6 pt-4 pb-2">
+    <div className="flex items-center justify-center">
+      {steps.map((step, i) => {
+        const isCompleted = i < currentIndex;
+        const isCurrent = i === currentIndex;
+        return (
+          <div key={step} className="flex items-center">
+            {i > 0 && (
+              <div className={cn(
+                "h-[1.5px] transition-colors duration-300",
+                steps.length <= 4 ? "w-6" : "w-4",
+                isCompleted ? "bg-gold/60" : "bg-white/10"
+              )} />
+            )}
+            <div className={cn(
+              "rounded-full transition-all duration-300",
+              isCurrent
+                ? "w-2.5 h-2.5 bg-gold shadow-[0_0_6px_rgba(212,175,55,0.6)]"
+                : isCompleted
+                  ? "w-2 h-2 bg-gold/50"
+                  : "w-2 h-2 bg-white/15"
+            )} />
+          </div>
+        );
+      })}
+    </div>
+    <p className="text-center text-[11px] font-mono text-text-dim mt-2 tracking-wider">
+      Step {currentIndex + 1} of {steps.length}
+      {" — "}
+      <span className="text-text-mid">{STEP_LABELS[steps[currentIndex]] ?? steps[currentIndex]}</span>
+    </p>
+  </div>
+);
 
 interface StackTabProps {
   inputs: WaterfallInputs;
@@ -133,6 +181,7 @@ const StackTab = ({ inputs, onUpdateInput, onAdvance, selections, onToggleSelect
 
   return (
     <div className="pb-8">
+      <WizardProgress steps={steps} currentIndex={safeIndex} />
       {renderStep()}
     </div>
   );
