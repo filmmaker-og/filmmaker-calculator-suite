@@ -68,13 +68,13 @@ const Calculator = () => {
     setSourceSelections(prev => ({ ...prev, [key]: !prev[key] }));
   }, []);
 
-  // Gate: redirect to landing page if user hasn't gone through email capture
+  // Gate: redirect to landing page if no authenticated session (hard gate — magic link required)
   useEffect(() => {
     if (loading) return; // wait for auth check to resolve
-    if (!user && !emailCaptured) {
+    if (!user) {
       navigate("/", { replace: true });
     }
-  }, [user, emailCaptured, loading, navigate]);
+  }, [user, loading, navigate]);
 
   // Reset on ?reset=true or ?skip=true (demo mode)
   useEffect(() => {
