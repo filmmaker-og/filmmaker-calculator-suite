@@ -6,6 +6,7 @@ import {
   RotateCcw,
   Check,
   X,
+  LockKeyhole,
   Mail,
   Instagram,
   Link2,
@@ -620,7 +621,7 @@ const Index = () => {
                     aria-hidden="true">{"\u2018"}</div>
                   <blockquote className="relative z-10">
                     <p className="text-[15px] md:text-base leading-[1.7] text-white/85 italic">
-                      <span className="font-bebas text-[44px] md:text-[54px] leading-none select-none pointer-events-none text-gold/40 mr-1 align-bottom" aria-hidden="true">{"\u201C"}</span>Filmmakers have a perception in the business world of being kind of flaky dudes{"\u2026"} you need to be buttoned down{"\u2026"} speak the language that they speak.
+                      Filmmakers have a perception in the business world of being kind of flaky dudes{"\u2026"} you need to be buttoned down{"\u2026"} speak the language that they speak.
                     </p>
                   </blockquote>
                   <div className="mt-4 -mx-1 p-3 bg-gold/[0.12] border border-gold/30">
