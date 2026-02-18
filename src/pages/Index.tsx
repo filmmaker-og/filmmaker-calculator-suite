@@ -13,7 +13,7 @@ import {
   Link2,
   ChevronDown,
 } from "lucide-react";
-import filmmakerLogo from "@/assets/filmmaker-logo.jpg";
+import filmmakerLogo from "@/assets/neuralpony (18).png";
 import Header from "@/components/Header";
 import LeadCaptureModal from "@/components/LeadCaptureModal";
 import {
