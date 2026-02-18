@@ -13,7 +13,7 @@ import {
   Link2,
   ChevronDown,
 } from "lucide-react";
-import filmmakerLogo from "@/assets/F Icon_Transparent.png";
+import filmmakerLogo from "@/assets/neuralpony (18).png";
 import Header from "@/components/Header";
 import LeadCaptureModal from "@/components/LeadCaptureModal";
 import {
@@ -46,16 +46,16 @@ const closedDoors = [
    ═══════════════════════════════════════════════════════════════════ */
 const realities = [
   {
-    label: "The Recoupment Gap",
-    line: "Every number in the investor deck is modeled against the wrong baseline.",
+    label: "You\u2019ll Never See a Dime",
+    line: "Your film made money. Your distributor got paid. Your investors got paid. You got a statement that says you still owe.",
   },
   {
-    label: "Net Profit Erosion",
-    line: "The margin you projected at green light doesn\u2019t exist.",
+    label: "The Deal Was Written Against You",
+    line: "The waterfall structure ensures everyone above you recoups first. By the time it reaches you, there\u2019s nothing left.",
   },
   {
-    label: "Structural Asymmetry",
-    line: "That asymmetry isn\u2019t accidental. It\u2019s on purpose.",
+    label: "And Nobody Told You",
+    line: "No film school teaches this. No agent explains it. You find out when you open the envelope\u2009\u2014\u2009three years too late.",
   },
 ];
 
@@ -601,7 +601,7 @@ const Index = () => {
           </section>
 
           {/* ── INTERSTITIAL: Blum Quote ── */}
-          <section className="py-8 md:py-12 px-6">
+          <section className="py-6 md:py-10 px-6">
             <div
               ref={revBlum.ref}
               className={cn(
@@ -616,24 +616,24 @@ const Index = () => {
                 {/* Gold left accent — strong */}
                 <div className="absolute left-0 top-0 bottom-0 w-[3px]"
                   style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.90), rgba(212,175,55,0.50), transparent)' }} />
-                <div className="p-7 md:p-9 pl-8 md:pl-11">
+                <div className="p-5 md:p-7 pl-6 md:pl-9">
                   {/* Opening quote mark */}
-                  <div className="font-bebas text-[56px] md:text-[68px] leading-none select-none pointer-events-none text-gold/40 -mb-5 -ml-1"
+                  <div className="font-bebas text-[44px] md:text-[54px] leading-none select-none pointer-events-none text-gold/40 -mb-4 -ml-1"
                     aria-hidden="true">{"\u201C"}</div>
                   <blockquote className="relative z-10">
-                    <p className="text-[17px] md:text-lg leading-[1.8] text-white/85 italic">
+                    <p className="text-[15px] md:text-base leading-[1.7] text-white/85 italic">
                       Filmmakers have a perception in the business world of being kind of flaky dudes{"\u2026"} you need to be buttoned down{"\u2026"} speak the language that they speak.
                     </p>
                   </blockquote>
-                  <div className="mt-6 -mx-1 p-4 bg-gold/[0.08] border border-gold/20">
+                  <div className="mt-4 -mx-1 p-3 bg-gold/[0.08] border border-gold/20">
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-[1px] bg-gold/50" />
                       <cite className="not-italic">
-                        <span className="font-bebas text-[16px] tracking-[0.14em] uppercase text-gold">Jason Blum</span>
+                        <span className="font-bebas text-[14px] tracking-[0.14em] uppercase text-gold">Jason Blum</span>
                       </cite>
                     </div>
-                    <p className="text-white/50 text-sm tracking-[0.08em] mt-2 ml-11">Blumhouse</p>
-                    <p className="text-white/40 text-xs tracking-[0.08em] mt-1 ml-11">{"\u201C"}Paranormal Activity{"\u201D"}</p>
+                    <p className="text-white/50 text-xs tracking-[0.08em] mt-1.5 ml-9">Blumhouse</p>
+                    <p className="text-white/40 text-xs tracking-[0.08em] mt-0.5 ml-9">{"\u201C"}Paranormal Activity{"\u201D"}</p>
                   </div>
                 </div>
               </div>
@@ -761,7 +761,8 @@ const Index = () => {
                           {door.name}
                         </p>
                         <Lock
-                          className="w-5 h-5 flex-shrink-0 ml-2 mt-0.5 text-gold/60"
+                          className="w-[18px] h-[18px] flex-shrink-0 ml-2 mt-[3px] text-gold/70"
+                          strokeWidth={2.5}
                         />
                       </div>
                       <span
