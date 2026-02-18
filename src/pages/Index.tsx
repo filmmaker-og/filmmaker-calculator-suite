@@ -84,7 +84,7 @@ const productTiers = [
     featured: false, elevated: false,
   },
   {
-    tier: "Investment Grade", product: "The Pitch Package", price: "$497",
+    tier: "Investment Grade", product: "The Pitch Package", price: "$497", originalPrice: "$697",
     desc: "What the other side of the table expects to see.",
     pct: 100, barClass: "bg-[#D4AF37]/70", tierColor: "text-gold",
     nameColor: "text-white", descColor: "text-white/60", barH: "h-3",
@@ -193,14 +193,16 @@ const Index = () => {
   const [showSkipHint, setShowSkipHint] = useState(false);
 
   // Reveals
-  const revMission  = useReveal();
-  const revEvidence = useReveal();
-  const revWater    = useReveal();
-  const revCost     = useReveal();
-  const revPath     = useReveal();
-  const revDecl     = useReveal();
-  const revFaq      = useReveal();
-  const revFinal    = useReveal();
+  const revMission     = useReveal();
+  const revEvidence    = useReveal();
+  const revTransition  = useReveal();
+  const revBlum        = useReveal();
+  const revWater       = useReveal();
+  const revCost        = useReveal();
+  const revPath        = useReveal();
+  const revDecl        = useReveal();
+  const revFaq         = useReveal();
+  const revFinal       = useReveal();
 
   // Waterfall bar animation
   const [barsRevealed, setBarsRevealed] = useState(false);
@@ -224,11 +226,12 @@ const Index = () => {
     if (!barsRevealed) return;
     const delay = setTimeout(() => {
       const target = 417500;
-      const dur = 800;
+      const dur = 1800;
       const start = performance.now();
       const step = (now: number) => {
         const t = Math.min((now - start) / dur, 1);
-        setCountVal(Math.round(t * target));
+        const eased = 1 - Math.pow(1 - t, 3); // cubic ease-out
+        setCountVal(Math.round(eased * target));
         if (t < 1) requestAnimationFrame(step);
       };
       requestAnimationFrame(step);
@@ -422,7 +425,7 @@ const Index = () => {
                 SEE WHERE EVERY<br /><span className="text-white">DOLLAR GOES</span>
               </h1>
               <p className="mb-6 text-white/70 text-[14px] leading-[1.7] tracking-[0.06em] uppercase font-medium max-w-[360px] mx-auto">
-                Built by a Tribeca-winning producer.<br />Debut sold to <span className="text-gold font-semibold">Netflix</span>.
+                Built by a Tribeca-winning producer whose debut sold to <span className="text-gold font-semibold">Netflix</span>.
               </p>
 
               {isReturningUser ? (
@@ -441,6 +444,7 @@ const Index = () => {
                   <button onClick={handleStartClick} className="w-full h-[60px] text-base btn-cta-primary">
                     BUILD YOUR WATERFALL &mdash; FREE
                   </button>
+                  <p className="text-white/30 text-xs tracking-wider">No credit card. Takes 2{"\u00A0"}minutes.</p>
                 </div>
               )}
 
@@ -485,22 +489,32 @@ const Index = () => {
                   </div>
                 ))}
               </div>
+            </div>
+          </SectionFrame>
 
-              {/* Post-problem declaration */}
+          {/* ── TRANSITION — problem to thesis hinge ── */}
+          <section className="py-8 md:py-12 px-6 relative">
+            <div className="absolute inset-0 pointer-events-none"
+              style={{ background: 'radial-gradient(ellipse 60% 55% at 50% 50%, rgba(212,175,55,0.05) 0%, transparent 70%)' }} />
+            <div
+              ref={revTransition.ref}
+              className={cn(
+                "max-w-md mx-auto text-center transition-all duration-700 ease-out",
+                revTransition.visible ? "opacity-100 scale-100" : "opacity-0 scale-90"
+              )}
+            >
               <p
-                className={cn(
-                  "text-center font-bebas text-[36px] md:text-[44px] tracking-[0.06em] text-gold mt-10 transition-all duration-700 ease-out",
-                  revEvidence.visible ? "opacity-100 scale-100" : "opacity-0 scale-90"
-                )}
+                className="font-bebas text-[36px] md:text-[44px] tracking-[0.06em] text-gold"
                 style={{
-                  transitionDelay: revEvidence.visible ? '800ms' : '0ms',
-                  textShadow: revEvidence.visible ? '0 0 30px rgba(212,175,55,0.4), 0 0 60px rgba(212,175,55,0.15)' : 'none',
+                  textShadow: revTransition.visible
+                    ? '0 0 30px rgba(212,175,55,0.4), 0 0 60px rgba(212,175,55,0.15)'
+                    : 'none',
                 }}
               >
                 We leveled the playing{"\u00A0"}<span className="text-white">field</span>.
               </p>
             </div>
-          </SectionFrame>
+          </section>
 
           <Divider />
 
@@ -547,7 +561,7 @@ const Index = () => {
                     >
                       <X className="w-4 h-4 text-white/40 flex-shrink-0" />
                       <p className="font-bebas text-[22px] md:text-[26px] tracking-[0.06em] text-gold leading-tight">
-                        Film has nothing.
+                        Film has no standardized framework.
                       </p>
                     </div>
                   </div>
@@ -566,36 +580,47 @@ const Index = () => {
                   Until <span className="text-white">now</span>.
                 </p>
               </div>
+            </div>
+          </SectionFrame>
 
-              {/* Blum quote */}
-              <div className="mt-10 max-w-md mx-auto">
-                <div className="relative bg-white/[0.04] border border-white/[0.10] overflow-hidden">
-                  {/* Gold left accent */}
-                  <div className="absolute left-0 top-0 bottom-0 w-[3px]"
-                    style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.60), rgba(212,175,55,0.30), transparent)' }} />
-                  <div className="p-7 md:p-9 pl-8 md:pl-11">
-                    {/* Opening quote mark */}
-                    <div className="font-bebas text-[56px] md:text-[68px] leading-none select-none pointer-events-none text-gold/25 -mb-5 -ml-1"
-                      aria-hidden="true">{"\u201C"}</div>
-                    <blockquote className="relative z-10">
-                      <p className="text-[15px] md:text-base leading-[1.8] text-white/80 italic">
-                        Filmmakers have a perception in the business world of being kind of flaky dudes{"\u2026"} you need to be buttoned down{"\u2026"} speak the language that they speak.
-                      </p>
-                    </blockquote>
-                    <div className="mt-6 -mx-1 p-4 bg-gold/[0.08] border border-gold/20">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-[1px] bg-gold/50" />
-                        <cite className="not-italic">
-                          <span className="font-bebas text-[16px] tracking-[0.14em] uppercase text-gold">Jason Blum</span>
-                        </cite>
-                      </div>
-                      <p className="text-white/50 text-sm tracking-[0.08em] mt-2 ml-11">Blumhouse &middot; {"\u201C"}Paranormal Activity{"\u201D"}</p>
+          {/* ── INTERSTITIAL: Blum Quote ── */}
+          <section className="py-8 md:py-12 px-6">
+            <div
+              ref={revBlum.ref}
+              className={cn(
+                "max-w-md mx-auto transition-all duration-700 ease-out",
+                revBlum.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+              )}
+            >
+              <div
+                className="relative bg-gold/[0.04] border-2 border-gold/30 overflow-hidden"
+                style={{ boxShadow: '0 0 40px rgba(212,175,55,0.08), inset 0 1px 0 rgba(212,175,55,0.10)' }}
+              >
+                {/* Gold left accent — strong */}
+                <div className="absolute left-0 top-0 bottom-0 w-[3px]"
+                  style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.90), rgba(212,175,55,0.50), transparent)' }} />
+                <div className="p-7 md:p-9 pl-8 md:pl-11">
+                  {/* Opening quote mark */}
+                  <div className="font-bebas text-[56px] md:text-[68px] leading-none select-none pointer-events-none text-gold/40 -mb-5 -ml-1"
+                    aria-hidden="true">{"\u201C"}</div>
+                  <blockquote className="relative z-10">
+                    <p className="text-[17px] md:text-lg leading-[1.8] text-white/85 italic">
+                      Filmmakers have a perception in the business world of being kind of flaky dudes{"\u2026"} you need to be buttoned down{"\u2026"} speak the language that they speak.
+                    </p>
+                  </blockquote>
+                  <div className="mt-6 -mx-1 p-4 bg-gold/[0.08] border border-gold/20">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-[1px] bg-gold/50" />
+                      <cite className="not-italic">
+                        <span className="font-bebas text-[16px] tracking-[0.14em] uppercase text-gold">Jason Blum</span>
+                      </cite>
                     </div>
+                    <p className="text-white/50 text-sm tracking-[0.08em] mt-2 ml-11">Blumhouse{"\u2002"}&mdash;{"\u2002"}{"\u201C"}Paranormal Activity{"\u201D"}</p>
                   </div>
                 </div>
               </div>
             </div>
-          </SectionFrame>
+          </section>
 
           <Divider />
 
@@ -691,7 +716,7 @@ const Index = () => {
              ────────────────────────────────────────────────────────── */}
           <SectionFrame id="cost">
             <div ref={revCost.ref} className={cn("transition-all duration-700 ease-out", revCost.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
-              <SectionHeader eyebrow="The Reality" title={<>THE DOORS ARE <span className="text-white">CLOSED.</span></>} flankingLines compact />
+              <SectionHeader eyebrow="The Reality" title={<>THE GATEKEEPERS WON{"\u2019"}T LET YOU <span className="text-white">IN.</span></>} flankingLines compact />
 
               <div className="grid grid-cols-2 gap-3 md:gap-4 max-w-lg mx-auto">
                 {closedDoors.map((door, i) => (
@@ -766,7 +791,7 @@ const Index = () => {
              ────────────────────────────────────────────────────────── */}
           <SectionFrame id="path">
             <div ref={revPath.ref} className={cn("transition-all duration-700 ease-out", revPath.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
-              <SectionHeader eyebrow="The Toolkit" title={<>THREE TIERS. <span className="text-white">ONE STANDARD.</span></>} flankingLines compact />
+              <SectionHeader eyebrow="The Toolkit" title={<>YOUR <span className="text-white">TOOLKIT.</span></>} flankingLines compact />
 
               <p className="text-center text-white/50 text-sm mb-8 max-w-sm mx-auto">
                 Whether you&rsquo;re modeling your first deal or walking into a meeting with real&nbsp;capital, there&rsquo;s a tier built for&nbsp;you.
@@ -818,6 +843,9 @@ const Index = () => {
                         "font-mono text-[15px] font-semibold",
                         t.featured ? "text-gold" : "text-white/50"
                       )}>
+                        {'originalPrice' in t && t.originalPrice && (
+                          <span className="text-white/40 line-through mr-1.5 text-[13px]">{t.originalPrice}</span>
+                        )}
                         {t.price}
                       </span>
                     </div>
@@ -906,12 +934,13 @@ const Index = () => {
                   YOUR INVESTOR WILL ASK<br />HOW THE MONEY FLOWS <span className="text-white">BACK</span>.
                 </h2>
                 <p className="text-white/50 text-sm leading-relaxed max-w-xs mx-auto mb-8">
-                  That meeting shouldn&rsquo;t be the first time you see your own&nbsp;waterfall.
+                  That meeting shouldn&rsquo;t be the first time you think about your recoupment&nbsp;structure.
                 </p>
                 <button onClick={handleStartClick}
                   className="w-full max-w-[320px] h-16 text-base btn-cta-final mx-auto">
                   BUILD YOUR WATERFALL &mdash; FREE
                 </button>
+                <p className="text-white/30 text-xs tracking-wider mt-4">No credit card. Takes 2{"\u00A0"}minutes.</p>
               </div>
             </div>
           </section>
