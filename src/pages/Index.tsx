@@ -44,16 +44,16 @@ const closedDoors = [
    ═══════════════════════════════════════════════════════════════════ */
 const realities = [
   {
-    label: "You\u2019ll Never See a Dime",
-    line: "Your film made money. Your distributor got paid. Your investors got paid. You got a statement that says you still owe.",
+    label: "The Math Is Broken",
+    line: "Your waterfall is rigged to fail. You\u2019ve hard-coded \u201Cnet profit\u201D definitions that are mathematically impossible to reach. When you promise \u201Cfirst money out\u201D to everyone\u2014your investor, your lender, and your star\u2014you guarantee a lawsuit.",
   },
   {
-    label: "The Deal Was Written Against You",
-    line: "The waterfall structure ensures everyone above you recoups first. By the time it reaches you, there\u2019s nothing left.",
+    label: "The \u201COff-The-Top\u201D Trap",
+    line: "You think you\u2019re splitting a dollar, but you\u2019re splitting pennies. Sales agents, distributors, and CAMs take their cut from Gross, not Net. After the off-the-top sharks eat, you\u2019ll be lucky to see $0.30.",
   },
   {
-    label: "And Nobody Told You",
-    line: "No film school teaches this. No agent explains it. You find out when you open the envelope\u2009\u2014\u2009three years too late.",
+    label: "You Gave Away the Farm",
+    line: "You diluted your equity before you even started. You gave \u201Cpoints\u201D to cast and crew like candy. Now you need to offer investors a 50/50 split and realize you have 0% left for yourself.",
   },
 ];
 
@@ -377,7 +377,7 @@ const Index = () => {
             <div className="relative z-10 flex flex-col items-center">
               <div className={cn("relative transition-all duration-1000 ease-out", showLogo ? "opacity-100 scale-100 translate-y-0" : "opacity-0 scale-90 translate-y-6")}>
                 <div className={cn("absolute inset-0 -m-4 transition-opacity duration-700", isPulsed ? "opacity-100" : "opacity-0")}
-                  style={{ background: 'radial-gradient(circle, rgba(212,175,55,0.3) 0%, transparent 70%)', filter: 'blur(15px)' }} />
+                  style={{ background: 'radial-gradient(circle, rgba(212,175,55,0.5) 0%, transparent 70%)', filter: 'blur(15px)' }} />
                 <img src={filmmakerLogo} alt="Filmmaker.OG" className="w-32 h-32 object-contain relative"
                   style={{ filter: isPulsed ? 'brightness(1.5) saturate(1.2) drop-shadow(0 0 30px rgba(212,175,55,0.5))' : 'brightness(1.5) saturate(1.2)', transition: 'filter 0.7s ease' }} />
               </div>
@@ -416,7 +416,7 @@ const Index = () => {
               style={{ width: '100vw', height: '120%', background: `radial-gradient(ellipse 50% 50% at 50% 15%, rgba(212,175,55,0.10) 0%, rgba(212,175,55,0.04) 45%, transparent 75%)` }} />
             <div className="relative px-6 py-4 max-w-xl mx-auto text-center">
               <div className="mb-5 relative inline-block">
-                <div className="absolute inset-0 -m-7 animate-logo-breathe" style={{ background: 'radial-gradient(circle, rgba(212,175,55,0.25) 0%, transparent 70%)', filter: 'blur(18px)' }} />
+                <div className="absolute inset-0 -m-10 animate-logo-breathe" style={{ background: 'radial-gradient(circle, rgba(212,175,55,0.45) 0%, transparent 70%)', filter: 'blur(18px)' }} />
                 <img src={filmmakerLogo} alt="Filmmaker.OG" className="relative w-[96px] h-[96px] object-contain"
                   style={{ filter: 'brightness(1.5) saturate(1.2) drop-shadow(0 0 28px rgba(212,175,55,0.45))' }} />
               </div>
@@ -468,7 +468,7 @@ const Index = () => {
                   <div
                     key={r.label}
                     className={cn(
-                      "relative p-6 md:p-7 bg-white/[0.04] border border-white/[0.10] overflow-hidden transition-all duration-600 ease-out group",
+                      "relative p-5 md:p-7 bg-white/[0.04] border border-white/[0.10] overflow-hidden transition-all duration-600 ease-out group",
                       revEvidence.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                     )}
                     style={{ transitionDelay: revEvidence.visible ? `${i * 180}ms` : '0ms' }}
@@ -478,8 +478,8 @@ const Index = () => {
                       style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.55), rgba(212,175,55,0.25), transparent)' }} />
                     <div className="relative z-10 pl-2">
                       <div className="flex items-baseline gap-3 mb-3">
-                        <span className="font-mono text-2xl text-gold/35 font-semibold leading-none">{String(i + 1).padStart(2, '0')}</span>
-                        <h3 className="font-bebas text-[17px] tracking-[0.10em] uppercase text-gold">
+                        <span className="font-mono text-2xl font-semibold leading-none bg-gradient-to-b from-gold/70 to-gold/30 bg-clip-text text-transparent">{String(i + 1).padStart(2, '0')}</span>
+                        <h3 className="font-bebas text-[18px] tracking-[0.10em] uppercase text-gold">
                           {r.label}
                         </h3>
                       </div>
@@ -723,12 +723,12 @@ const Index = () => {
             <div ref={revCost.ref} className={cn("transition-all duration-700 ease-out", revCost.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
               <SectionHeader eyebrow="The Reality" title={<>THE GATEKEEPERS WON{"\u2019"}T LET YOU <span className="text-white">IN.</span></>} flankingLines compact />
 
-              <div className="grid grid-cols-2 gap-3 md:gap-4 max-w-lg mx-auto">
+              <div className="grid grid-cols-2 gap-4 max-w-lg mx-auto">
                 {closedDoors.map((door, i) => (
                   <div
                     key={door.name}
                     className={cn(
-                      "relative border p-4 md:p-6 transition-all duration-700 ease-out overflow-hidden min-h-[140px]",
+                      "relative border p-5 md:p-7 transition-all duration-700 ease-out overflow-hidden min-h-[140px]",
                       "bg-white/[0.06] border-white/[0.12]",
                       revCost.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                     )}
@@ -743,13 +743,13 @@ const Index = () => {
                     <div className="pl-2">
                     <div className="flex items-start justify-between mb-2">
                         <p
-                          className="font-bebas text-[18px] md:text-[20px] tracking-[0.10em] uppercase leading-tight text-white"
+                          className="font-bebas text-[19px] md:text-[22px] tracking-[0.08em] uppercase leading-tight text-white whitespace-nowrap"
                         >
                           {door.name}
                         </p>
                       </div>
                       <span
-                        className="inline-block font-mono text-[15px] font-bold mb-3 text-gold"
+                        className="inline-block font-mono text-[17px] font-bold mb-3 text-gold"
                       >
                         {door.cost}
                       </span>
@@ -804,17 +804,17 @@ const Index = () => {
                   <div
                     key={t.tier}
                     className={cn(
-                      "relative border overflow-hidden p-6 transition-all duration-600 ease-out",
+                      "relative border overflow-hidden p-5 md:p-7 transition-all duration-600 ease-out",
                       t.featured
-                        ? "border-gold/40 bg-gold/[0.06] scale-[1.02]"
+                        ? "border-gold/60 bg-gold/[0.10] scale-[1.04]"
                         : t.elevated
-                          ? "border-gold/20 bg-white/[0.05]"
+                          ? "border-gold/30 bg-white/[0.05]"
                           : "border-white/[0.10] bg-white/[0.04]",
                       revPath.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
                     )}
                     style={{
                       transitionDelay: revPath.visible ? `${i * 150}ms` : '0ms',
-                      ...(t.featured ? { boxShadow: '0 0 30px rgba(212,175,55,0.08), inset 0 1px 0 rgba(212,175,55,0.15)' } : {}),
+                      ...(t.featured ? { boxShadow: '0 0 40px rgba(212,175,55,0.12), 0 12px 40px rgba(212,175,55,0.08), inset 0 1px 0 rgba(212,175,55,0.20)' } : {}),
                     }}
                   >
                     {/* Gold left accent — all cards get one, featured is stronger */}
@@ -857,11 +857,13 @@ const Index = () => {
                     <button
                       onClick={() => { haptics.light(); i === 0 ? gatedNavigate("/calculator?tab=budget") : navigate("/store"); }}
                       className={cn(
-                        "inline-flex items-center text-sm tracking-wider transition-colors pl-1",
-                        t.featured ? "text-gold hover:text-gold/80" : "text-white/50 hover:text-white/70"
+                        "w-full mt-2 font-bebas tracking-[0.10em] uppercase transition-all",
+                        t.featured
+                          ? "h-12 text-sm btn-cta-primary"
+                          : "h-10 text-sm btn-cta-secondary"
                       )}
                     >
-                      {i === 0 ? "Get Started" : "View Package"} <span className="ml-1.5">&rarr;</span>
+                      {i === 0 ? "GET STARTED" : "VIEW PACKAGE"}
                     </button>
                   </div>
                 ))}
