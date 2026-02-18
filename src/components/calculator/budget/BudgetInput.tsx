@@ -99,7 +99,7 @@ const BudgetInput = ({ inputs, onUpdateInput, onNext }: BudgetInputProps) => {
                     <Info className="w-3.5 h-3.5 text-text-dim/50 hover:text-gold cursor-pointer transition-colors" />
                   </TooltipTrigger>
                   <TooltipContent side="right" className="max-w-[200px] bg-bg-card border-border-subtle text-xs">
-                    <p>$2M negative cost (all-in budget).</p>
+                    <p>The total production spend before any revenue. Also called your "negative cost."</p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
@@ -138,6 +138,11 @@ const BudgetInput = ({ inputs, onUpdateInput, onNext }: BudgetInputProps) => {
             )}
           </div>
         </div>
+
+        {/* Contextual hint */}
+        <p className="text-center text-xs text-text-dim leading-relaxed px-2">
+          Your all-in production budget — total spend before distribution revenue.
+        </p>
 
         {/* Quick Amounts */}
         <div className="p-4 border border-border-subtle bg-bg-surface rounded-lg">

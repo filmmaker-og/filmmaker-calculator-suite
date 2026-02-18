@@ -14,8 +14,9 @@ import { CapitalSourceSelections, defaultSelections } from "@/components/calcula
 import EmailGateModal from "@/components/EmailGateModal";
 import Header from "@/components/Header";
 
+import { EMAIL_CAPTURED_KEY } from "@/lib/constants";
+
 const STORAGE_KEY = "filmmaker_og_inputs";
-const EMAIL_CAPTURED_KEY = "filmmaker_og_email_captured";
 
 const defaultInputs: WaterfallInputs = {
   revenue: 0,
@@ -66,6 +67,15 @@ const Calculator = () => {
   const toggleSourceSelection = useCallback((key: keyof CapitalSourceSelections) => {
     setSourceSelections(prev => ({ ...prev, [key]: !prev[key] }));
   }, []);
+
+  // Gate: redirect to landing page if user hasn't gone through email capture
+  useEffect(() => {
+    if (loading) return; // wait for auth check to resolve
+    const isSkipping = searchParams.get("skip") === "true";
+    if (!user && !emailCaptured && !isSkipping) {
+      navigate("/", { replace: true });
+    }
+  }, [user, emailCaptured, loading, navigate, searchParams]);
 
   // Reset on ?reset=true or ?skip=true (demo mode)
   useEffect(() => {
