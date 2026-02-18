@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
 import { formatCompactCurrency } from "@/lib/waterfall";
-import { getShareUrl, SHARE_TEXT, SHARE_TITLE } from "@/lib/constants";
+import { getShareUrl, SHARE_TEXT, SHARE_TITLE, EMAIL_CAPTURED_KEY } from "@/lib/constants";
 import SectionFrame from "@/components/SectionFrame";
 import SectionHeader from "@/components/SectionHeader";
 
@@ -160,29 +160,30 @@ const Index = () => {
   const haptics = useHaptics();
   const [linkCopied, setLinkCopied] = useState(false);
 
-  // Lead capture gate — requires magic link verification
+  // Lead capture gate
   const [showLeadCapture, setShowLeadCapture] = useState(false);
   const [pendingDestination, setPendingDestination] = useState<string | null>(null);
+  const [emailCaptured, setEmailCaptured] = useState(() =>
+    localStorage.getItem(EMAIL_CAPTURED_KEY) === "true"
+  );
   const [hasSession, setHasSession] = useState(false);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session?.user) setHasSession(true);
     });
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (session?.user) setHasSession(true);
-    });
-    return () => subscription.unsubscribe();
   }, []);
 
+  const needsGate = !hasSession && !emailCaptured;
+
   const gatedNavigate = useCallback((destination: string) => {
-    if (!hasSession) {
+    if (needsGate) {
       setPendingDestination(destination);
       setShowLeadCapture(true);
     } else {
       navigate(destination);
     }
-  }, [hasSession, navigate]);
+  }, [needsGate, navigate]);
 
   // Hero scroll tracking (for sticky CTA)
   const heroRef = useRef<HTMLElement>(null);
@@ -344,12 +345,19 @@ const Index = () => {
     <>
       {isComplete && <Header rightSlot={stickyCtaButton} />}
 
-      {/* Lead capture modal — hard gate, requires magic link verification */}
+      {/* Lead capture modal */}
       <LeadCaptureModal
         isOpen={showLeadCapture}
         onClose={() => setShowLeadCapture(false)}
         onSuccess={() => {
-          setHasSession(true);
+          setEmailCaptured(true);
+          localStorage.setItem(EMAIL_CAPTURED_KEY, "true");
+          setShowLeadCapture(false);
+          navigate(pendingDestination || "/calculator?tab=budget");
+        }}
+        onSkip={() => {
+          setEmailCaptured(true);
+          localStorage.setItem(EMAIL_CAPTURED_KEY, "true");
           setShowLeadCapture(false);
           navigate(pendingDestination || "/calculator?tab=budget");
         }}
