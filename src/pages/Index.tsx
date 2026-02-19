@@ -315,7 +315,7 @@ const Index = () => {
       onClick={handleStartClick}
       className={cn(
         "font-bebas text-[13px] tracking-[0.14em] uppercase whitespace-nowrap",
-        "h-8 px-3.5",
+        "h-9 px-3.5",
         "bg-gold-cta-subtle border border-gold-cta-muted text-gold-cta",
         "transition-all duration-300 ease-out",
         "hover:border-gold-cta",
@@ -446,7 +446,7 @@ const Index = () => {
               </div>
 
               <div className="mt-8 flex justify-center animate-bounce-subtle cursor-pointer active:scale-[0.97]"
-                onClick={() => document.getElementById('evidence')?.scrollIntoView({ behavior: 'smooth' })}>
+                onClick={() => { haptics.light(); document.getElementById('evidence')?.scrollIntoView({ behavior: 'smooth' }); }}>
                 <ChevronDown className="w-6 h-6 text-gold" />
               </div>
             </div>
@@ -547,7 +547,7 @@ const Index = () => {
               <div className="text-center mb-12">
                 <div className="flex items-center justify-center gap-4 mb-5">
                   <div className="h-[1px] w-10 bg-gradient-to-r from-transparent to-gold/40" />
-                  <p className="tracking-[0.3em] uppercase font-semibold text-gold/70 text-xs">The Reveal</p>
+                  <p className="tracking-[0.3em] uppercase font-semibold text-gold/70 text-[13px]">The Reveal</p>
                   <div className="h-[1px] w-10 bg-gradient-to-l from-transparent to-gold/40" />
                 </div>
                 <h2
@@ -556,11 +556,10 @@ const Index = () => {
                 >
                   <span className="text-gold">THE</span> <span className="text-white">WATERFALL</span>
                 </h2>
-                <p className="text-white/40 text-sm tracking-[0.15em] uppercase mt-4">How the money flows</p>
+                <p className="text-white/40 text-[15px] tracking-[0.15em] uppercase mt-4">How the money flows</p>
               </div>
 
-              <p className="text-white/50 text-sm text-center mb-1">Based on a hypothetical $1.8M budget and a $3M acquisition.</p>
-              <p className="text-white/60 text-sm font-medium text-center mb-6">Here&rsquo;s how the money actually flows.</p>
+              <p className="text-white/50 text-[15px] text-center mb-6">Based on a hypothetical $1.8M budget and a $3M acquisition.</p>
 
               <div ref={waterBarRef} className="max-w-md mx-auto">
                 {/* Waterfall rows — all identical structure */}
@@ -575,7 +574,7 @@ const Index = () => {
                     >
                       <div className="flex justify-between items-baseline mb-2">
                         <div className="flex items-baseline gap-2">
-                          <span className="font-mono text-[11px] text-white/30 tabular-nums">
+                          <span className="font-mono text-[12px] text-white/40 tabular-nums">
                             {String(i + 1).padStart(2, '0')}
                           </span>
                           <span className={cn(
@@ -609,7 +608,7 @@ const Index = () => {
                 </div>
 
                 {/* Net Profits — then corridor split */}
-                <div className="mt-3 border border-gold/25 bg-gold/[0.04] px-5 py-4 text-center">
+                <div className="mt-4 border border-gold/25 bg-gold/[0.04] px-5 py-4 text-center">
                   <p className="text-[10px] tracking-[0.2em] uppercase font-semibold text-gold/60 mb-1">Net Profits</p>
                   <span className="font-mono text-[22px] font-bold text-gold">
                     ${countVal.toLocaleString()}
@@ -618,40 +617,41 @@ const Index = () => {
 
                 {/* Branching connector */}
                 <div className="flex justify-center">
-                  <div className="w-[1px] h-4 bg-gold/30" />
+                  <div className="w-[2px] h-6 bg-gold/40" />
                 </div>
                 <div className="flex items-start">
                   <div className="flex-1 flex justify-end">
-                    <div className="w-1/2 h-[1px] bg-gold/30" />
+                    <div className="w-1/2 h-[2px] bg-gold/40" />
                   </div>
                   <div className="flex-1 flex justify-start">
-                    <div className="w-1/2 h-[1px] bg-gold/30" />
+                    <div className="w-1/2 h-[2px] bg-gold/40" />
                   </div>
                 </div>
 
                 {/* Two corridor boxes */}
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="border border-gold/20 bg-gold/[0.03] px-4 py-4 text-center">
-                    <p className="text-[9px] tracking-[0.2em] uppercase font-semibold text-gold/60 mb-1">Producer Corridor</p>
-                    <span className="font-mono text-[17px] font-bold text-gold">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="relative border border-gold/25 bg-gold/[0.06] px-4 py-5 text-center overflow-hidden">
+                    <div className="absolute top-0 left-0 right-0 h-[2px] bg-gold/50" />
+                    <p className="text-[10px] tracking-[0.2em] uppercase font-semibold text-gold/70 mb-1">Producer Corridor</p>
+                    <span className="font-mono text-[18px] font-bold text-gold">
                       ${producerVal.toLocaleString()}
                     </span>
                   </div>
-                  <div className="border border-white/[0.08] bg-white/[0.03] px-4 py-4 text-center">
-                    <p className="text-[9px] tracking-[0.2em] uppercase font-semibold text-white/40 mb-1">Investor Corridor</p>
-                    <span className="font-mono text-[17px] font-bold text-white/70">
+                  <div className="border border-white/[0.10] bg-white/[0.05] px-4 py-5 text-center">
+                    <p className="text-[10px] tracking-[0.2em] uppercase font-semibold text-white/45 mb-1">Investor Corridor</p>
+                    <span className="font-mono text-[18px] font-bold text-white/70">
                       ${investorVal.toLocaleString()}
                     </span>
                   </div>
                 </div>
 
                 {/* CTA — capture intent at emotional peak */}
-                <div className="mt-5 text-center">
+                <div className="mt-6 text-center">
                   <button onClick={handleStartClick}
                     className="w-full max-w-[320px] h-14 text-base btn-cta-primary mx-auto">
                     WHAT DOES YOUR DEAL LOOK LIKE?
                   </button>
-                  <p className="text-white/40 text-xs tracking-wider mt-3">See how to keep more of it.</p>
+                  <p className="text-white/55 text-[15px] tracking-wider mt-3">See how to keep more of it.</p>
                 </div>
               </div>
             </div>
@@ -767,10 +767,10 @@ const Index = () => {
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-[1.5px] bg-gold/50" />
                       <cite className="not-italic">
-                        <span className="font-bebas text-[14px] tracking-[0.14em] uppercase text-gold">Jason Blum</span>
+                        <span className="font-bebas text-[15px] tracking-[0.14em] uppercase text-gold">Jason Blum</span>
                       </cite>
                     </div>
-                    <p className="text-white/50 text-xs tracking-[0.08em] mt-1.5 ml-9">Blumhouse "Paranormal Activity"</p>
+                    <p className="text-white/50 text-[13px] tracking-[0.08em] mt-1.5 ml-9">Blumhouse "Paranormal Activity"</p>
                   </div>
                 </div>
               </div>
@@ -792,7 +792,7 @@ const Index = () => {
               </div>
               <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
               <div className="flex justify-center mt-6 cursor-pointer active:scale-[0.97]"
-                onClick={() => document.getElementById('cost')?.scrollIntoView({ behavior: 'smooth' })}>
+                onClick={() => { haptics.light(); document.getElementById('cost')?.scrollIntoView({ behavior: 'smooth' }); }}>
                 <ChevronDown className="w-5 h-5 text-gold/50 animate-bounce-subtle" />
               </div>
             </div>
@@ -833,7 +833,7 @@ const Index = () => {
                       <span className="font-mono text-[14px] font-bold text-gold block mb-1.5">
                         {door.cost}
                       </span>
-                      <p className="text-[12px] leading-relaxed text-white/50">
+                      <p className="text-[13px] leading-relaxed text-white/50">
                         {door.lock}
                       </p>
                     </div>
@@ -867,7 +867,7 @@ const Index = () => {
               </p>
               <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/60 to-transparent mt-8" />
               <div className="flex justify-center mt-6 cursor-pointer active:scale-[0.97]"
-                onClick={() => document.getElementById('arsenal')?.scrollIntoView({ behavior: 'smooth' })}>
+                onClick={() => { haptics.light(); document.getElementById('arsenal')?.scrollIntoView({ behavior: 'smooth' }); }}>
                 <ChevronDown className="w-6 h-6 text-gold animate-bounce-subtle" />
               </div>
             </div>
@@ -880,13 +880,13 @@ const Index = () => {
               <div className="text-center mb-10">
                 <div className="flex items-center justify-center gap-4 mb-4">
                   <div className="h-[1px] w-8 bg-gradient-to-r from-transparent to-white/20" />
-                  <p className="tracking-[0.3em] uppercase font-semibold text-white/50 text-xs">What You Get</p>
+                  <p className="tracking-[0.3em] uppercase font-semibold text-white/50 text-[13px]">What You Get</p>
                   <div className="h-[1px] w-8 bg-gradient-to-l from-transparent to-white/20" />
                 </div>
                 <h2 className="font-bebas tracking-[0.06em] text-gold text-[40px] md:text-[52px] leading-[0.95]">
                   AN ARSENAL. <span className="text-white">NO GUESSWORK.</span>
                 </h2>
-                <p className="text-center text-white/50 text-sm mt-5 max-w-sm mx-auto leading-relaxed">
+                <p className="text-center text-white/50 text-[15px] mt-5 max-w-sm mx-auto leading-relaxed">
                   Institutional-grade tools built for independent producers modeling their deal structures or walking into a meeting fully&nbsp;prepared.
                 </p>
               </div>
@@ -928,7 +928,7 @@ const Index = () => {
                       </div>
                     )}
                     <div className="flex items-baseline justify-between mb-1 pl-1">
-                      <span className={cn("font-bebas text-[13px] tracking-[0.12em] uppercase", t.tierColor)}>
+                      <span className={cn("font-bebas text-[14px] tracking-[0.12em] uppercase", t.tierColor)}>
                         {t.tier}
                       </span>
                       <span className={cn(
@@ -944,7 +944,7 @@ const Index = () => {
                     <h4 className={cn("font-bebas text-[22px] tracking-[0.10em] uppercase mb-2 pl-1", t.nameColor)}>
                       {t.product}
                     </h4>
-                    <p className={cn("text-sm leading-relaxed mb-4 pl-1", t.descColor)}>{t.desc}</p>
+                    <p className={cn("text-[15px] leading-relaxed mb-4 pl-1", t.descColor)}>{t.desc}</p>
                     <button
                       onClick={() => { haptics.light(); i === 0 ? gatedNavigate("/calculator?tab=budget") : navigate("/store"); }}
                       className={cn(
@@ -954,7 +954,7 @@ const Index = () => {
                           : "h-10 text-sm btn-cta-secondary"
                       )}
                     >
-                      {i === 0 ? "GET STARTED" : "VIEW PACKAGE"}
+                      {i === 0 ? "BUILD FREE" : "VIEW PACKAGE"}
                     </button>
                   </div>
                 ))}
@@ -964,10 +964,10 @@ const Index = () => {
               <div className="text-center mt-10">
                 <button onClick={handleStartClick}
                   className="w-full max-w-[320px] h-14 text-base btn-cta-primary mx-auto">
-                  MODEL YOUR FIRST DEAL
+                  BUILD YOUR WATERFALL &mdash; FREE
                 </button>
                 <div className="mt-5 flex items-center justify-center gap-4">
-                  <button onClick={() => navigate("/store")} className="text-white/40 text-sm hover:text-gold transition-colors">
+                  <button onClick={() => navigate("/store")} className="text-white/50 text-[15px] hover:text-gold transition-colors">
                     Compare packages <span className="text-gold/70">&rarr;</span>
                   </button>
                 </div>
@@ -988,10 +988,10 @@ const Index = () => {
                 <Accordion type="single" collapsible className="w-full">
                   {faqs.map((faq, i) => (
                     <AccordionItem key={faq.q} value={`faq-${i}`} className="border-b border-white/[0.08]">
-                      <AccordionTrigger className="font-bebas text-lg md:text-xl tracking-[0.08em] uppercase text-gold/80 hover:text-gold hover:no-underline text-left">
+                      <AccordionTrigger onClick={() => haptics.light()} className="font-bebas text-lg md:text-xl tracking-[0.08em] uppercase text-gold/80 hover:text-gold hover:no-underline text-left">
                         {faq.q}
                       </AccordionTrigger>
-                      <AccordionContent className="text-white/60 text-sm leading-relaxed normal-case font-sans">
+                      <AccordionContent className="text-white/60 text-[15px] leading-relaxed normal-case font-sans">
                         {faq.a}
                       </AccordionContent>
                     </AccordionItem>
@@ -1023,11 +1023,11 @@ const Index = () => {
                 style={{ width: '100%', height: '100%', background: `radial-gradient(ellipse 60% 50% at 50% 20%, rgba(212,175,55,0.08) 0%, transparent 70%)` }} />
 
               <div className="relative p-10 md:p-16 max-w-md mx-auto text-center">
-                <p className="text-white/50 text-xs tracking-[0.3em] uppercase font-semibold mb-5">The Moment of Truth</p>
+                <p className="text-white/50 text-[13px] tracking-[0.3em] uppercase font-semibold mb-5">The Moment of Truth</p>
                 <h2 className="font-bebas text-3xl md:text-4xl leading-[1.1] tracking-[0.08em] text-gold mb-5">
                   YOUR INVESTOR WILL ASK<br />HOW THE MONEY FLOWS <span className="text-white">BACK</span>.
                 </h2>
-                <p className="text-white/55 text-sm leading-relaxed max-w-xs mx-auto mb-8">
+                <p className="text-white/55 text-[15px] leading-relaxed max-w-xs mx-auto mb-8">
                   That meeting shouldn&rsquo;t be the first time you think about your recoupment&nbsp;structure.
                 </p>
                 <button onClick={handleStartClick}
@@ -1051,11 +1051,11 @@ const Index = () => {
                   className="flex items-center justify-center gap-2.5 text-sm tracking-wider text-gold/80 hover:text-gold bg-white/[0.04] hover:bg-white/[0.07] transition-all active:scale-[0.97] py-5 border border-white/[0.12] hover:border-gold/40">
                   <Instagram className="w-4 h-4" /><span>Instagram</span>
                 </a>
-                <button onClick={handleShare}
+                <button onClick={() => { haptics.light(); handleShare(); }}
                   className="flex items-center justify-center gap-2.5 text-sm tracking-wider text-gold/80 hover:text-gold bg-white/[0.04] hover:bg-white/[0.07] transition-all active:scale-[0.97] py-5 border border-white/[0.12] hover:border-gold/40">
                   <Link2 className="w-4 h-4" /><span>Share</span>
                 </button>
-                <button onClick={handleCopyLink}
+                <button onClick={() => { haptics.light(); handleCopyLink(); }}
                   className="flex items-center justify-center gap-2.5 text-sm tracking-wider text-gold/80 hover:text-gold bg-white/[0.04] hover:bg-white/[0.07] transition-all active:scale-[0.97] py-5 border border-white/[0.12] hover:border-gold/40">
                   {linkCopied ? (
                     <><Check className="w-4 h-4 text-gold" /><span className="text-gold">Copied!</span></>
@@ -1074,9 +1074,6 @@ const Index = () => {
                 For educational and informational purposes only. Not legal, tax, or investment advice.
                 Consult a qualified entertainment attorney before making financing decisions.
               </p>
-              <div className="flex items-center justify-center gap-4 mt-4">
-                <a href="mailto:thefilmmaker.og@gmail.com" className="text-white/30 text-xs hover:text-white/50 transition-colors">Contact</a>
-              </div>
             </div>
           </footer>
         </main>
