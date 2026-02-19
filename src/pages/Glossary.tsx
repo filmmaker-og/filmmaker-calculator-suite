@@ -9,7 +9,7 @@ import SectionHeader from "@/components/SectionHeader";
 // ------------------------------------------------------------------
 // SCROLL REVEAL HOOK (same pattern as Index.tsx)
 // ------------------------------------------------------------------
-const useReveal = (threshold = 0.1) => {
+const useReveal = (threshold = 0.05) => {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
   useEffect(() => {
@@ -482,12 +482,12 @@ const Glossary = () => {
   return (
     <>
       <Header />
-      <div className="min-h-screen bg-black text-white pt-[68px] pb-16 font-sans">
+      <div className="min-h-screen bg-black text-white pt-[68px] pb-4 font-sans">
 
         {/* ═══════════════════════════════════════════════════════════
             PAGE TITLE BLOCK
             ═══════════════════════════════════════════════════════════ */}
-        <div className="px-6 md:px-10 pt-4 pb-3">
+        <div className="px-6 md:px-10 pt-4 pb-1">
           <div className="max-w-4xl mx-auto">
             <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-gold/60 mb-3">
               Film Finance
@@ -521,7 +521,7 @@ const Glossary = () => {
                   ASK THE OG
                 </span>
               }
-              subtitle="Film industry questions only."
+              subtitle="Ask me film industry questions (only.)"
               plainSubtitle
             />
 
@@ -534,7 +534,7 @@ const Glossary = () => {
                     onClick={() => handleAsk(chip)}
                     disabled={ogLoading}
                     style={{ borderRadius: 0 }}
-                    className="text-[11px] font-mono uppercase tracking-wider px-3 py-1.5 border border-gold/20 text-gold/50 hover:border-gold/50 hover:text-gold hover:bg-gold/[0.06] transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                    className="text-[12px] font-mono uppercase tracking-wider px-4 py-2.5 border border-gold/20 text-gold/50 hover:border-gold/50 hover:text-gold hover:bg-gold/[0.06] transition-all disabled:opacity-40 disabled:cursor-not-allowed"
                   >
                     {chip}
                   </button>
@@ -550,7 +550,7 @@ const Glossary = () => {
                     {/* Question */}
                     <div className="flex justify-end">
                       <div
-                        className="max-w-[85%] px-4 py-2.5 border border-gold/20 bg-gold/[0.06] text-sm text-white/80"
+                        className="max-w-[85%] px-4 py-2.5 border border-gold/20 bg-gold/[0.06] text-[15px] text-white/85"
                         style={{ borderRadius: 0 }}
                       >
                         {msg.question}
@@ -582,7 +582,7 @@ const Glossary = () => {
                           {msg.error ? (
                             <p className="text-[15px] text-gold/50 leading-relaxed">{msg.error}</p>
                           ) : (
-                            <p className="text-[15px] text-white/80 leading-relaxed whitespace-pre-wrap">
+                            <p className="text-[16px] text-white/90 leading-[1.8] whitespace-pre-wrap">
                               {msg.answer}
                               {msg.streaming && !msg.answer && (
                                 <span className="text-white/20">Thinking…</span>
@@ -611,7 +611,7 @@ const Glossary = () => {
                   placeholder="Ask a film industry question…"
                   rows={2}
                   disabled={ogLoading}
-                  className="flex-1 px-4 py-3 bg-transparent text-white placeholder-white/20 focus:outline-none text-base resize-none disabled:opacity-50"
+                  className="flex-1 px-4 py-3 bg-transparent text-white placeholder-white/20 focus:outline-none text-base resize-none disabled:opacity-50 min-h-[52px]"
                   style={{ borderRadius: 0 }}
                 />
                 <button
@@ -640,64 +640,66 @@ const Glossary = () => {
           </SectionFrame>
         </div>
 
-        <div className="py-2" />
+        {ogMessages.length === 0 && (
+          <>
+            <div className="py-2" />
 
-        {/* ═══════════════════════════════════════════════════════════
-            TOP 10 MUST-KNOW TERMS
-            ═══════════════════════════════════════════════════════════ */}
-        <div
-          ref={revTop10.ref}
-          style={{
-            opacity: revTop10.visible ? 1 : 0,
-            transform: revTop10.visible ? "translateY(0)" : "translateY(24px)",
-            transition: "opacity 0.6s ease, transform 0.6s ease",
-          }}
-        >
-          <SectionFrame id="top10">
-            <SectionHeader
-              eyebrow="The Essential 10"
-              title="KNOW THESE FIRST"
-              subtitle="Master these 10 terms and you'll understand 80% of any deal conversation."
-              plainSubtitle
-            />
-            <div className="space-y-3 mt-6">
-              {TOP_10.map((item, i) => (
-                <div
-                  key={item.num}
-                  className="group flex gap-4 border border-white/[0.06] hover:border-gold/20 bg-white/[0.02] hover:bg-gold/[0.03] transition-all duration-300 p-5"
-                  style={{
-                    opacity: revTop10.visible ? 1 : 0,
-                    transform: revTop10.visible ? "translateY(0)" : "translateY(16px)",
-                    transition: `opacity 0.5s ease ${i * 0.05}s, transform 0.5s ease ${i * 0.05}s`,
-                  }}
-                >
-                  {/* Number badge */}
-                  <div className="flex-shrink-0 w-10 h-10 flex items-center justify-center border border-gold/20 bg-gold/[0.06]">
-                    <span className="font-mono tabular-nums text-sm font-bold text-gold/70">
-                      {item.num}
-                    </span>
-                  </div>
-                  {/* Content */}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-baseline gap-3 flex-wrap mb-1">
-                      <h3 className="font-bebas text-2xl tracking-wide text-white group-hover:text-gold transition-colors">
-                        {item.term}
-                      </h3>
-                      <span className="text-[9px] uppercase tracking-[0.15em] text-gold/40 font-mono">
-                        {item.category}
-                      </span>
+            {/* ═══════════════════════════════════════════════════════════
+                TOP 10 MUST-KNOW TERMS
+                ═══════════════════════════════════════════════════════════ */}
+            <div
+              ref={revTop10.ref}
+              style={{
+                opacity: revTop10.visible ? 1 : 0,
+                transform: revTop10.visible ? "translateY(0)" : "translateY(24px)",
+                transition: "opacity 0.6s ease, transform 0.6s ease",
+              }}
+            >
+              <SectionFrame id="top10">
+                <SectionHeader
+                  eyebrow="The Essential 10"
+                  title="KNOW THESE FIRST"
+                  subtitle="Master these 10 terms and you'll understand 80% of any deal conversation."
+                  plainSubtitle
+                />
+                <div className="space-y-3 mt-6">
+                  {TOP_10.map((item, i) => (
+                    <div
+                      key={item.num}
+                      className="group flex gap-4 border border-white/[0.06] hover:border-gold/20 bg-white/[0.02] hover:bg-gold/[0.03] transition-all duration-300 p-5"
+                      style={{
+                        opacity: revTop10.visible ? 1 : 0,
+                        transform: revTop10.visible ? "translateY(0)" : "translateY(16px)",
+                        transition: `opacity 0.5s ease ${i * 0.05}s, transform 0.5s ease ${i * 0.05}s`,
+                      }}
+                    >
+                      {/* Number badge */}
+                      <div className="flex-shrink-0 w-10 h-10 flex items-center justify-center border border-gold/20 bg-gold/[0.06]">
+                        <span className="font-mono tabular-nums text-sm font-bold text-gold/70">
+                          {item.num}
+                        </span>
+                      </div>
+                      {/* Content */}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-baseline gap-3 flex-wrap mb-1">
+                          <h3 className="font-bebas text-2xl tracking-wide text-white group-hover:text-gold transition-colors">
+                            {item.term}
+                          </h3>
+                          <span className="text-[9px] uppercase tracking-[0.15em] text-gold/40 font-mono">
+                            {item.category}
+                          </span>
+                        </div>
+                        <p className="text-[15px] text-white/65 leading-relaxed">
+                          {item.def}
+                        </p>
+                      </div>
                     </div>
-                    <p className="text-[15px] text-white/65 leading-relaxed">
-                      {item.def}
-                    </p>
-                  </div>
+                  ))}
                 </div>
-              ))}
+              </SectionFrame>
             </div>
-          </SectionFrame>
-        </div>
-
-        <div className="py-2" />
+          </>
+        )}
 
         {/* ═══════════════════════════════════════════════════════════
             A–Z GLOSSARY
@@ -727,7 +729,7 @@ const Glossary = () => {
                 placeholder={`Search ${SORTED_TERMS.length} terms…`}
                 value={search}
                 onChange={(e) => { setSearch(e.target.value); setActiveLetter(null); }}
-                className="block w-full pl-11 pr-16 py-3.5 border border-gold/20 bg-gold/[0.04] text-white placeholder-white/25 focus:outline-none focus:border-gold/50 focus:bg-gold/[0.07] text-sm transition-all"
+                className="block w-full pl-11 pr-16 py-3.5 border border-gold/20 bg-gold/[0.04] text-white placeholder-white/25 focus:outline-none focus:border-gold/50 focus:bg-gold/[0.07] text-base transition-all"
                 style={{ borderRadius: 0 }}
               />
               {search && (
@@ -753,7 +755,7 @@ const Glossary = () => {
                       onClick={() => { scrollToLetter(letter); setSearch(""); }}
                       style={{ borderRadius: 0 }}
                       className={cn(
-                        "w-8 h-8 text-xs font-semibold transition-all",
+                        "flex-1 max-w-[36px] h-9 text-[11px] font-semibold transition-all",
                         !hasTerms && "text-white/10 cursor-default",
                         hasTerms && !isActive && "text-white/35 hover:text-gold hover:bg-gold/[0.08]",
                         isActive && "bg-gold/20 text-gold border border-gold/30"
@@ -817,7 +819,7 @@ const Glossary = () => {
                             </span>
                           </div>
                           <p className={cn(
-                            "text-[13px] text-white/40 leading-relaxed mt-1",
+                            "text-[14px] text-white/55 leading-relaxed mt-1",
                             isLong && !isExpanded && "line-clamp-2"
                           )}>
                             {t.def}
@@ -841,7 +843,7 @@ const Glossary = () => {
         {/* ═══════════════════════════════════════════════════════════
             FOOTER
             ═══════════════════════════════════════════════════════════ */}
-        <div className="pt-10 mt-4 mx-6 border-t border-white/[0.05] text-center space-y-4">
+        <div className="pt-6 mx-6 border-t border-white/[0.05] text-center space-y-4">
           <p className="text-xs text-white/20 max-w-sm mx-auto leading-relaxed">
             This glossary is a living document. Spot an error or want to suggest a term?
           </p>
