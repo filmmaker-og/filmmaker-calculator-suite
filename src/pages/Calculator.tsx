@@ -16,7 +16,6 @@ import Header from "@/components/Header";
 
 import { EMAIL_CAPTURED_KEY } from "@/lib/constants";
 
-const STORAGE_KEY = "filmmaker_og_inputs";
 
 const defaultInputs: WaterfallInputs = {
   revenue: 0,
@@ -76,60 +75,13 @@ const Calculator = () => {
     }
   }, [user, loading, navigate]);
 
-  // Reset on ?reset=true or ?skip=true (demo mode)
+  // Honor URL ?tab= param if present (e.g., from info pages or post-purchase)
   useEffect(() => {
-    if (searchParams.get("reset") === "true" || searchParams.get("skip") === "true") {
-      localStorage.removeItem(STORAGE_KEY);
-      setInputs(defaultInputs);
-      setGuilds(defaultGuilds);
-      setActiveTab('budget');
-    }
-  }, [searchParams]);
-
-  // Load saved state + honor URL ?tab= param if present
-  useEffect(() => {
-    if (searchParams.get("reset") === "true" || searchParams.get("skip") === "true") return;
-
-    const saved = localStorage.getItem(STORAGE_KEY);
-
-    let loadedInputs = defaultInputs;
-    let targetTab: TabId = 'budget';
-
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        if (parsed.inputs) loadedInputs = parsed.inputs;
-        if (parsed.guilds) setGuilds(parsed.guilds);
-        if (parsed.sourceSelections) setSourceSelections(parsed.sourceSelections);
-        if (parsed.activeTab) targetTab = parsed.activeTab;
-      } catch (e) {
-        console.error("Failed to load saved inputs");
-      }
-    }
-
-    // Honor URL ?tab= param if present (e.g., from info pages or post-purchase)
     const urlTab = searchParams.get("tab") as TabId | null;
     if (urlTab && ['budget', 'stack', 'deal', 'waterfall'].includes(urlTab)) {
-      targetTab = urlTab;
+      setActiveTab(urlTab);
     }
-
-    // Waterfall handles its own empty state (Protocol Locked + Demo button)
-    // so no redirect needed here
-
-    setInputs(loadedInputs);
-    setActiveTab(targetTab);
-
   }, [searchParams]);
-
-  // Save state
-  useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({
-      inputs,
-      guilds,
-      activeTab,
-      sourceSelections,
-    }));
-  }, [inputs, guilds, activeTab, sourceSelections]);
 
   // DERIVE RESULT SYNCHRONOUSLY
   const result = useMemo(() => {
