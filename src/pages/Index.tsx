@@ -41,20 +41,6 @@ const closedDoors = [
 ];
 
 /* ═══════════════════════════════════════════════════════════════════
-   THE PROBLEM — column panels showing why indie films lose money
-   ═══════════════════════════════════════════════════════════════════ */
-const realities = [
-  {
-    label: "Broken Deal Math",
-    line: "Most indie waterfalls define \u201Cnet profit\u201D in terms no revenue scenario can satisfy. When every party negotiates first-dollar recoupment, the math guarantees a loss\u2014regardless of how the film performs.",
-  },
-  {
-    label: "Equity Dilution",
-    line: "Backend points promised during packaging consume the profit pool before investors arrive. By the time equity splits are structured, there\u2019s nothing left to split.",
-  },
-];
-
-/* ═══════════════════════════════════════════════════════════════════
    WATERFALL TIERS — proportional bars ($3M cascade)
    ═══════════════════════════════════════════════════════════════════ */
 const waterfallTiers = [
@@ -188,17 +174,15 @@ const Index = () => {
   const [showSkipHint, setShowSkipHint] = useState(false);
 
   // Reveals
-  const revMission     = useReveal();
   const revEvidence    = useReveal();
   const revTransition  = useReveal();
   const revBlum        = useReveal();
   const revWater       = useReveal();
   const revCost        = useReveal();
   const revPath        = useReveal();
-  const revDecl        = useReveal();
+  const revArsenal     = useReveal();
   const revFaq         = useReveal();
   const revFinal       = useReveal();
-  const revUntilNow    = useReveal();
 
   // Waterfall bar animation
   const [barsRevealed, setBarsRevealed] = useState(false);
@@ -406,22 +390,39 @@ const Index = () => {
         <main aria-label="Film Finance Simulator" className={cn("flex-1 flex flex-col transition-all duration-700", isComplete ? "opacity-100" : "opacity-0")}>
 
           {/* ──────────────────────────────────────────────────────────
-               § 1  HERO
+               § 1  HERO — Hook
              ────────────────────────────────────────────────────────── */}
           <section id="hero" ref={heroRef} className="snap-section min-h-0 pt-20 pb-12 flex flex-col justify-center relative overflow-hidden">
             <div className="absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none animate-spotlight-pulse"
               style={{ width: '100vw', height: '120%', background: `radial-gradient(ellipse 50% 50% at 50% 15%, rgba(212,175,55,0.10) 0%, rgba(212,175,55,0.04) 45%, transparent 75%)` }} />
-            {/* Static spotlight cone — settled version of cinematic intro beam */}
+            {/* Center spotlight cone */}
             <div className="absolute top-0 left-0 right-0 bottom-0 pointer-events-none"
               style={{
                 background: `radial-gradient(ellipse 25% 40% at 50% 0%, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.06) 30%, rgba(212,175,55,0.02) 50%, transparent 70%)`,
                 clipPath: 'polygon(42% 0%, 58% 0%, 72% 100%, 28% 100%)',
               }} />
+            {/* Left spotlight cone */}
+            <div className="absolute top-0 left-0 right-0 bottom-0 pointer-events-none"
+              style={{
+                background: `radial-gradient(ellipse 20% 35% at 30% 0%, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.03) 40%, transparent 70%)`,
+                clipPath: 'polygon(22% 0%, 38% 0%, 58% 100%, 12% 100%)',
+              }} />
+            {/* Right spotlight cone */}
+            <div className="absolute top-0 left-0 right-0 bottom-0 pointer-events-none"
+              style={{
+                background: `radial-gradient(ellipse 20% 35% at 70% 0%, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.03) 40%, transparent 70%)`,
+                clipPath: 'polygon(62% 0%, 78% 0%, 88% 100%, 42% 100%)',
+              }} />
+            {/* Floor bounce glow */}
+            <div className="absolute bottom-0 left-0 right-0 h-1/3 pointer-events-none"
+              style={{
+                background: `radial-gradient(ellipse 60% 80% at 50% 100%, rgba(212,175,55,0.06) 0%, rgba(255,255,255,0.03) 40%, transparent 70%)`,
+              }} />
             <div className="relative px-6 py-4 max-w-xl mx-auto text-center">
               <div className="mb-5 relative inline-block">
                 <div className="absolute inset-0 -m-10 animate-logo-breathe" style={{ background: 'radial-gradient(circle, rgba(212,175,55,0.45) 0%, transparent 70%)', filter: 'blur(18px)' }} />
                 <img src={filmmakerLogo} alt="Filmmaker.OG" className="relative z-10 w-[96px] h-[96px] object-contain"
-                  style={{ filter: 'brightness(1.5) saturate(1.2)' }} />
+                  style={{ filter: 'brightness(1.6) saturate(1.2) drop-shadow(0 0 12px rgba(212,175,55,0.5))' }} />
               </div>
               <h1 className="font-bebas text-[clamp(2.8rem,9vw,4.2rem)] leading-[1.05] text-gold mb-5">
                 SEE WHERE EVERY<br /><span className="text-white">DOLLAR GOES</span>
@@ -451,7 +452,7 @@ const Index = () => {
               )}
 
               <div className="mt-8 flex justify-center animate-bounce-subtle cursor-pointer active:scale-[0.97]"
-                onClick={() => document.getElementById('mission')?.scrollIntoView({ behavior: 'smooth' })}>
+                onClick={() => document.getElementById('waterfall')?.scrollIntoView({ behavior: 'smooth' })}>
                 <ChevronDown className="w-6 h-6 text-gold" />
               </div>
             </div>
@@ -460,127 +461,7 @@ const Index = () => {
           <Divider />
 
           {/* ──────────────────────────────────────────────────────────
-               § 2  THE THESIS — stacked manifesto + Blum quote
-             ────────────────────────────────────────────────────────── */}
-          <SectionFrame id="mission">
-            <div ref={revMission.ref} className={cn("transition-all duration-700 ease-out", revMission.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
-              <SectionHeader eyebrow="The Thesis" title={<>FILM AS AN ALTERNATIVE{"\u00A0"}ASSET{"\u00A0"}<span className="text-white">CLASS</span></>} flankingLines compact />
-
-              {/* Stacked manifesto */}
-              <div className="max-w-md mx-auto">
-                <div className="relative bg-white/[0.04] border border-white/[0.10] overflow-hidden">
-                  {/* Gold left accent */}
-                  <div className="absolute left-0 top-0 bottom-0 w-[3px]"
-                    style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.55), rgba(212,175,55,0.25), transparent)' }} />
-                  <div className="p-7 md:p-9 pl-8 md:pl-10 space-y-5">
-                    {[
-                      { asset: "Real Estate", tool: "comps and cap rate models" },
-                      { asset: "Private Equity", tool: "carry and IRR structures" },
-                      { asset: "Venture Capital", tool: "term sheets and valuation frameworks" },
-                    ].map((row, i) => (
-                      <div
-                        key={row.asset}
-                        className={cn(
-                          "flex items-baseline gap-3 transition-all duration-500 ease-out",
-                          revMission.visible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-3"
-                        )}
-                        style={{ transitionDelay: revMission.visible ? `${400 + i * 150}ms` : '0ms' }}
-                      >
-                        <Check className="w-3.5 h-3.5 text-gold/50 flex-shrink-0 relative top-[2px]" />
-                        <p className="text-white/60 text-[15px] leading-relaxed">
-                          <span className="text-white/80 font-semibold">{row.asset}</span> has {row.tool}.
-                        </p>
-                      </div>
-                    ))}
-                    {/* The punchline — standalone row matching asset class rows */}
-                    <div
-                      className={cn(
-                        "flex items-baseline gap-3 mt-2 transition-all duration-500 ease-out",
-                        revMission.visible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-3"
-                      )}
-                      style={{ transitionDelay: revMission.visible ? '850ms' : '0ms' }}
-                    >
-                      <X className="w-4 h-4 text-white/50 flex-shrink-0 relative top-[2px]" />
-                      <p className="font-bebas text-[22px] md:text-[26px] tracking-[0.06em] text-gold leading-tight">
-                        Film has no standardized framework.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-          </SectionFrame>
-
-          {/* ── TRANSITION — thesis to validation ── */}
-          <section className="py-10 md:py-14 px-6 relative">
-            <div className="absolute inset-0 pointer-events-none"
-              style={{ background: 'radial-gradient(ellipse 60% 55% at 50% 50%, rgba(212,175,55,0.06) 0%, transparent 70%)' }} />
-            <div
-              ref={revUntilNow.ref}
-              className={cn(
-                "max-w-md mx-auto text-center transition-all duration-700 ease-out",
-                revUntilNow.visible ? "opacity-100 scale-100" : "opacity-0 scale-90"
-              )}
-            >
-              <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/40 to-transparent mb-8" />
-              <p
-                className="font-bebas text-[40px] md:text-[50px] tracking-[0.06em] text-gold"
-                style={{
-                  textShadow: revUntilNow.visible
-                    ? '0 0 30px rgba(212,175,55,0.4), 0 0 60px rgba(212,175,55,0.15)'
-                    : 'none',
-                }}
-              >
-                Until <span className="text-white">now</span>.
-              </p>
-              <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/40 to-transparent mt-8" />
-            </div>
-          </section>
-
-          {/* ── INTERSTITIAL: Blum Quote ── */}
-          <section className="py-6 md:py-10 px-6">
-            <div
-              ref={revBlum.ref}
-              className={cn(
-                "max-w-md mx-auto transition-all duration-700 ease-out",
-                revBlum.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-              )}
-            >
-              <div
-                className="relative bg-gold/[0.08] border-2 border-gold/45 overflow-hidden"
-                style={{ boxShadow: '0 0 40px rgba(212,175,55,0.12), 0 8px 32px rgba(212,175,55,0.06), inset 0 1px 0 rgba(212,175,55,0.15)' }}
-              >
-                {/* Gold left accent — strong */}
-                <div className="absolute left-0 top-0 bottom-0 w-[3px]"
-                  style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.80), rgba(212,175,55,0.40), transparent)' }} />
-                <div className="p-5 md:p-7 pl-6 md:pl-9">
-                  {/* Opening quote mark */}
-                  <div className="font-bebas text-[48px] md:text-[60px] leading-none select-none pointer-events-none text-gold/55 -mb-4 -ml-1"
-                    aria-hidden="true">{"\u2018"}</div>
-                  <blockquote className="relative z-10">
-                    <p className="text-[15px] md:text-base leading-[1.7] text-white/85 italic">
-                      Filmmakers have a perception in the business world of being kind of flaky dudes{"\u2026"} you need to be buttoned down{"\u2026"} speak the language that they speak.
-                    </p>
-                  </blockquote>
-                  <div className="mt-4 -mx-1 p-3 bg-gold/[0.12] border border-gold/30">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-[1.5px] bg-gold/50" />
-                      <cite className="not-italic">
-                        <span className="font-bebas text-[14px] tracking-[0.14em] uppercase text-gold">Jason Blum</span>
-                      </cite>
-                    </div>
-                    <p className="text-white/50 text-xs tracking-[0.08em] mt-1.5 ml-9">Blumhouse "Paranormal Activity"</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <Divider />
-
-          {/* ──────────────────────────────────────────────────────────
-               § 3  THE WATERFALL — proportional bars
+               § 2  THE WATERFALL — Prove (proportional bars)
              ────────────────────────────────────────────────────────── */}
           <SectionFrame id="waterfall">
             <div ref={revWater.ref} className={cn("transition-all duration-700 ease-out", revWater.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
@@ -650,7 +531,7 @@ const Index = () => {
                 <div className="border-t border-white/[0.06] px-5 py-6 text-center">
                   <button onClick={handleStartClick}
                     className="w-full max-w-[320px] h-14 text-base btn-cta-primary mx-auto">
-                    WHAT DOES YOUR DEAL LOOK LIKE?
+                    BUILD YOUR WATERFALL &mdash; FREE
                   </button>
                 </div>
               </div>
@@ -660,54 +541,188 @@ const Index = () => {
           <Divider />
 
           {/* ──────────────────────────────────────────────────────────
-               DECLARATION — the hinge between waterfall and the problem
-             ────────────────────────────────────────────────────────── */}
-          <section className="py-10 md:py-16 px-6 relative">
-            <div className="absolute inset-0 pointer-events-none"
-              style={{ background: 'radial-gradient(ellipse 60% 55% at 50% 50%, rgba(212,175,55,0.07) 0%, transparent 70%)' }} />
-            <div ref={revDecl.ref} className={cn("max-w-md mx-auto relative transition-all duration-700 ease-out", revDecl.visible ? "opacity-100 scale-100" : "opacity-0 scale-[0.96]")}>
-              <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
-              <div className="py-12 px-4 text-center">
-                <h3 className="font-bebas text-[32px] md:text-[40px] tracking-[0.08em] uppercase text-gold leading-tight">
-                  We Built The Toolkit They Didn{"\u2019"}t Teach You In Film{"\u00A0"}<span className="text-white">School</span>.
-                </h3>
-              </div>
-              <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
-              <div className="flex justify-center mt-6 cursor-pointer active:scale-[0.97]"
-                onClick={() => document.getElementById('evidence')?.scrollIntoView({ behavior: 'smooth' })}>
-                <ChevronDown className="w-5 h-5 text-gold/50 animate-bounce-subtle" />
-              </div>
-            </div>
-          </section>
-
-          {/* ──────────────────────────────────────────────────────────
-               § 4  THE PROBLEM — two reality panels
+               § 3  THE PROBLEM — Explain (manifesto + single card)
              ────────────────────────────────────────────────────────── */}
           <SectionFrame id="evidence">
             <div ref={revEvidence.ref} className={cn("transition-all duration-700 ease-out", revEvidence.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
               <SectionHeader eyebrow="The Problem" title={<>MOST INDIE FILMS LOSE <span className="text-white">MONEY.</span></>} flankingLines compact />
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl mx-auto">
-                {realities.map((r, i) => (
+              {/* Manifesto comparison — folded in from thesis */}
+              <div className="max-w-md mx-auto mb-8">
+                <div className="space-y-4">
+                  {[
+                    { asset: "Real Estate", tool: "comps and cap rate models" },
+                    { asset: "Private Equity", tool: "carry and IRR structures" },
+                    { asset: "Venture Capital", tool: "term sheets and valuation frameworks" },
+                  ].map((row, i) => (
+                    <div
+                      key={row.asset}
+                      className={cn(
+                        "flex items-baseline gap-3 transition-all duration-500 ease-out",
+                        revEvidence.visible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-3"
+                      )}
+                      style={{ transitionDelay: revEvidence.visible ? `${400 + i * 150}ms` : '0ms' }}
+                    >
+                      <Check className="w-3.5 h-3.5 text-gold/50 flex-shrink-0 relative top-[2px]" />
+                      <p className="text-white/60 text-[15px] leading-relaxed">
+                        <span className="text-white/80 font-semibold">{row.asset}</span> has {row.tool}.
+                      </p>
+                    </div>
+                  ))}
                   <div
-                    key={r.label}
                     className={cn(
-                      "relative p-5 md:p-7 bg-white/[0.04] border border-white/[0.10] overflow-hidden transition-all duration-600 ease-out group",
-                      revEvidence.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+                      "flex items-baseline gap-3 mt-2 transition-all duration-500 ease-out",
+                      revEvidence.visible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-3"
                     )}
-                    style={{ transitionDelay: revEvidence.visible ? `${i * 180}ms` : '0ms' }}
+                    style={{ transitionDelay: revEvidence.visible ? '850ms' : '0ms' }}
                   >
-                    {/* Gold left accent bar — matched to toolkit cards */}
+                    <X className="w-4 h-4 text-white/50 flex-shrink-0 relative top-[2px]" />
+                    <p className="font-bebas text-[22px] md:text-[26px] tracking-[0.06em] text-gold leading-tight">
+                      Film has no standardized framework.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Single card — BROKEN RECOUPMENT STRUCTURE */}
+              <div className="max-w-md mx-auto">
+                <div
+                  className={cn(
+                    "relative p-6 md:p-8 bg-white/[0.04] border border-white/[0.10] overflow-hidden transition-all duration-600 ease-out",
+                    revEvidence.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+                  )}
+                  style={{ transitionDelay: revEvidence.visible ? '1000ms' : '0ms' }}
+                >
+                  {/* Gold left accent bar */}
+                  <div className="absolute left-0 top-0 bottom-0 w-[3px]"
+                    style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.55), rgba(212,175,55,0.25), transparent)' }} />
+                  <div className="relative z-10 pl-2">
+                    <h3 className="font-bebas text-[20px] tracking-[0.10em] uppercase text-gold mb-5">
+                      Broken Recoupment Structure
+                    </h3>
+                    <ul className="space-y-3">
+                      {[
+                        "Net profit defined in terms no revenue scenario can satisfy",
+                        "Backend points consumed before equity investors arrive",
+                        "First-dollar recoupment claims stacked across every party",
+                        "Distribution fees calculated before recoupment begins",
+                      ].map((bullet, i) => (
+                        <li
+                          key={i}
+                          className={cn(
+                            "flex items-start gap-3 text-white/60 text-sm leading-relaxed transition-all duration-500 ease-out",
+                            revEvidence.visible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-2"
+                          )}
+                          style={{ transitionDelay: revEvidence.visible ? `${1100 + i * 120}ms` : '0ms' }}
+                        >
+                          <span className="text-gold/50 font-mono text-xs mt-0.5">{"\u2022"}</span>
+                          <span>{bullet}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              {/* Closing line — pull quote */}
+              <div className="max-w-md mx-auto mt-8">
+                <p
+                  className={cn(
+                    "text-center text-white/50 text-[15px] leading-relaxed italic transition-all duration-700 ease-out",
+                    revEvidence.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
+                  )}
+                  style={{ transitionDelay: revEvidence.visible ? '1600ms' : '0ms' }}
+                >
+                  {"\u201C"}Most indie films don{"\u2019"}t lose money because they perform badly.
+                  They lose money because the deal was broken before the camera rolled.{"\u201D"}
+                </p>
+              </div>
+            </div>
+          </SectionFrame>
+
+          {/* ──────────────────────────────────────────────────────────
+               § 4  BLUM QUOTE — Validate
+             ────────────────────────────────────────────────────────── */}
+          <section className="py-6 md:py-10 px-6">
+            <div
+              ref={revBlum.ref}
+              className={cn(
+                "max-w-md mx-auto transition-all duration-700 ease-out",
+                revBlum.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+              )}
+            >
+              <div
+                className="relative bg-gold/[0.08] border-2 border-gold/45 overflow-hidden"
+                style={{ boxShadow: '0 0 40px rgba(212,175,55,0.12), 0 8px 32px rgba(212,175,55,0.06), inset 0 1px 0 rgba(212,175,55,0.15)' }}
+              >
+                {/* Gold left accent — strong */}
+                <div className="absolute left-0 top-0 bottom-0 w-[3px]"
+                  style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.80), rgba(212,175,55,0.40), transparent)' }} />
+                <div className="p-5 md:p-7 pl-6 md:pl-9">
+                  {/* Opening quote mark */}
+                  <div className="font-bebas text-[48px] md:text-[60px] leading-none select-none pointer-events-none text-gold/55 -mb-4 -ml-1"
+                    aria-hidden="true">{"\u201C"}</div>
+                  <blockquote className="relative z-10">
+                    <p className="text-[15px] md:text-base leading-[1.7] text-white/85 italic">
+                      Filmmakers have a perception in the business world of being kind of flaky dudes{"\u2026"} you need to be buttoned down{"\u2026"} speak the language that they speak.
+                    </p>
+                  </blockquote>
+                  <div className="mt-4 -mx-1 p-3 bg-gold/[0.12] border border-gold/30">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-[1.5px] bg-gold/50" />
+                      <cite className="not-italic">
+                        <span className="font-bebas text-[14px] tracking-[0.14em] uppercase text-gold">Jason Blum</span>
+                      </cite>
+                    </div>
+                    <p className="text-white/50 text-xs tracking-[0.08em] mt-1.5 ml-9">Blumhouse "Paranormal Activity"</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <Divider />
+
+          {/* ──────────────────────────────────────────────────────────
+               § 5  CLOSED DOORS — Contrast (fear)
+             ────────────────────────────────────────────────────────── */}
+          <SectionFrame id="cost">
+            <div ref={revCost.ref} className={cn("transition-all duration-700 ease-out", revCost.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
+              <SectionHeader eyebrow="The Reality" title={<>THE GATEKEEPERS WON{"\u2019"}T LET YOU <span className="text-white">IN.</span></>} flankingLines compact />
+
+              <div className="grid grid-cols-2 gap-4 max-w-lg mx-auto">
+                {closedDoors.map((door, i) => (
+                  <div
+                    key={door.name}
+                    className={cn(
+                      "relative border p-4 md:p-6 transition-all duration-700 ease-out overflow-hidden",
+                      "bg-white/[0.06] border-white/[0.12]",
+                      revCost.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+                    )}
+                    style={{
+                      transitionDelay: revCost.visible ? `${i * 150}ms` : '0ms',
+                    }}
+                  >
+                    {/* Gold left elbow */}
                     <div className="absolute left-0 top-0 bottom-0 w-[3px]"
-                      style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.55), rgba(212,175,55,0.25), transparent)' }} />
-                    <div className="relative z-10 pl-2">
-                      <div className="flex items-baseline gap-3 mb-3">
-                        <span className="font-mono text-2xl font-semibold leading-none bg-gradient-to-b from-gold/70 to-gold/30 bg-clip-text text-transparent">{String(i + 1).padStart(2, '0')}</span>
-                        <h3 className="font-bebas text-[18px] tracking-[0.10em] uppercase text-gold">
-                          {r.label}
-                        </h3>
+                      style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.55), rgba(212,175,55,0.25), transparent)' }}
+                    />
+                    <div className="pl-2">
+                      <p className="font-bebas text-[17px] md:text-[20px] tracking-[0.08em] uppercase leading-tight text-white mb-2">
+                        {door.name}
+                      </p>
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="font-mono text-[15px] font-bold text-gold">
+                          {door.cost}
+                        </span>
+                        <LockKeyhole
+                          className="w-4 h-4 text-gold/70"
+                          strokeWidth={2.5}
+                        />
                       </div>
-                      <p className="text-white/60 text-sm leading-relaxed">{r.line}</p>
+                      <p className="text-sm leading-relaxed text-white/60">
+                        {door.lock}
+                      </p>
                     </div>
                   </div>
                 ))}
@@ -715,7 +730,7 @@ const Index = () => {
             </div>
           </SectionFrame>
 
-          {/* ── TRANSITION — problem to toolkit hinge ── */}
+          {/* ── TRANSITION — fear to relief hinge ── */}
           <section className="py-10 md:py-14 px-6 relative">
             <div className="absolute inset-0 pointer-events-none"
               style={{ background: 'radial-gradient(ellipse 60% 55% at 50% 50%, rgba(212,175,55,0.06) 0%, transparent 70%)' }} />
@@ -739,14 +754,45 @@ const Index = () => {
               </p>
               <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/40 to-transparent mt-8" />
               <div className="flex justify-center mt-6 cursor-pointer active:scale-[0.97]"
-                onClick={() => document.getElementById('path')?.scrollIntoView({ behavior: 'smooth' })}>
+                onClick={() => document.getElementById('arsenal')?.scrollIntoView({ behavior: 'smooth' })}>
                 <ChevronDown className="w-6 h-6 text-gold animate-bounce-subtle" />
               </div>
             </div>
           </section>
 
           {/* ──────────────────────────────────────────────────────────
-               § 5  THE PATH — gold bar product ladder + CTA
+               § 6  THE ARSENAL — Contrast (relief)
+             ────────────────────────────────────────────────────────── */}
+          <section id="arsenal" className="py-8 md:py-12 px-6">
+            <div
+              ref={revArsenal.ref}
+              className={cn(
+                "max-w-md mx-auto transition-all duration-700 ease-out",
+                revArsenal.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+              )}
+            >
+              <div
+                className="relative bg-gold/[0.08] border-2 border-gold/45 overflow-hidden"
+                style={{ boxShadow: '0 0 40px rgba(212,175,55,0.12), 0 8px 32px rgba(212,175,55,0.06), inset 0 1px 0 rgba(212,175,55,0.15)' }}
+              >
+                {/* Gold left accent — strong */}
+                <div className="absolute left-0 top-0 bottom-0 w-[3px]"
+                  style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.80), rgba(212,175,55,0.40), transparent)' }} />
+                <div className="p-7 md:p-10 text-center">
+                  <p className="text-white/50 text-xs tracking-[0.3em] uppercase font-semibold mb-4">What You Get</p>
+                  <h3 className="font-bebas text-[36px] md:text-[44px] tracking-[0.08em] uppercase text-gold leading-tight mb-4">
+                    The Arsenal
+                  </h3>
+                  <p className="text-white/60 text-[15px] leading-relaxed max-w-sm mx-auto">
+                    Institutional-grade deal tools. Built for independent producers who can{"\u2019"}t afford to learn the hard way.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* ──────────────────────────────────────────────────────────
+               § 7  THE PATH — Sell (gold bar product ladder + CTA)
              ────────────────────────────────────────────────────────── */}
           <SectionFrame id="path">
             <div ref={revPath.ref} className={cn("transition-all duration-700 ease-out", revPath.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
@@ -821,7 +867,7 @@ const Index = () => {
                           : "h-10 text-sm btn-cta-secondary"
                       )}
                     >
-                      {i === 0 ? "GET STARTED" : "VIEW PACKAGE"}
+                      {i === 0 ? "BUILD YOUR WATERFALL \u2014 FREE" : "VIEW PACKAGE"}
                     </button>
                   </div>
                 ))}
@@ -831,7 +877,7 @@ const Index = () => {
               <div className="text-center mt-10">
                 <button onClick={handleStartClick}
                   className="w-full max-w-[320px] h-14 text-base btn-cta-primary mx-auto">
-                  MODEL YOUR FIRST DEAL
+                  BUILD YOUR WATERFALL &mdash; FREE
                 </button>
                 <div className="mt-5 flex items-center justify-center gap-4">
                   <button onClick={() => navigate("/store")} className="text-white/40 text-sm hover:text-gold transition-colors">
@@ -845,54 +891,7 @@ const Index = () => {
           <Divider />
 
           {/* ──────────────────────────────────────────────────────────
-               § 6  CLOSED DOORS — the reality of what exists
-             ────────────────────────────────────────────────────────── */}
-          <SectionFrame id="cost">
-            <div ref={revCost.ref} className={cn("transition-all duration-700 ease-out", revCost.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
-              <SectionHeader eyebrow="The Reality" title={<>THE GATEKEEPERS WON{"\u2019"}T LET YOU <span className="text-white">IN.</span></>} flankingLines compact />
-
-              <div className="grid grid-cols-2 gap-4 max-w-lg mx-auto">
-                {closedDoors.map((door, i) => (
-                  <div
-                    key={door.name}
-                    className={cn(
-                      "relative border p-4 md:p-6 transition-all duration-700 ease-out overflow-hidden",
-                      "bg-white/[0.06] border-white/[0.12]",
-                      revCost.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-                    )}
-                    style={{
-                      transitionDelay: revCost.visible ? `${i * 150}ms` : '0ms',
-                    }}
-                  >
-                    {/* Gold left elbow */}
-                    <div className="absolute left-0 top-0 bottom-0 w-[3px]"
-                      style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.55), rgba(212,175,55,0.25), transparent)' }}
-                    />
-                    <div className="pl-2">
-                      <p className="font-bebas text-[17px] md:text-[20px] tracking-[0.08em] uppercase leading-tight text-white mb-2">
-                        {door.name}
-                      </p>
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="font-mono text-[15px] font-bold text-gold">
-                          {door.cost}
-                        </span>
-                        <LockKeyhole
-                          className="w-4 h-4 text-gold/70"
-                          strokeWidth={2.5}
-                        />
-                      </div>
-                      <p className="text-sm leading-relaxed text-white/60">
-                        {door.lock}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </SectionFrame>
-
-          {/* ──────────────────────────────────────────────────────────
-               § 7  FAQ
+               § 8  FAQ
              ────────────────────────────────────────────────────────── */}
           <SectionFrame id="faq">
             <div ref={revFaq.ref} className={cn("max-w-lg mx-auto transition-all duration-700 ease-out", revFaq.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
@@ -918,7 +917,7 @@ const Index = () => {
           <Divider />
 
           {/* ──────────────────────────────────────────────────────────
-               § 8  FINAL CTA
+               § 9  FINAL CTA — Close
              ────────────────────────────────────────────────────────── */}
           <section id="final-cta" className="snap-section py-10 px-6">
             <div ref={revFinal.ref} className={cn("relative overflow-hidden transition-all duration-700 ease-out", revFinal.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
