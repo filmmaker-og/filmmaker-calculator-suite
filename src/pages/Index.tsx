@@ -570,67 +570,65 @@ const Index = () => {
               <p className="text-white/50 text-sm text-center mb-1">A simplified $3M SVOD acquisition.</p>
               <p className="text-white/60 text-sm font-medium text-center mb-6">Here&rsquo;s what actually reaches the filmmaker.</p>
 
-              <div ref={waterBarRef} className="border border-white/[0.06] bg-black max-w-md mx-auto overflow-hidden">
-                {waterfallTiers.map((tier, i) => (
-                  <div
-                    key={tier.name}
-                    className={cn(
-                      "px-5 py-4 relative",
-                      i > 0 && "border-t border-white/[0.06]",
-                    )}
-                  >
-                    {/* Gold left accent on final row */}
-                    {tier.isFinal && (
-                      <div className="absolute left-0 top-0 bottom-0 w-[3px]"
-                        style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.80), rgba(212,175,55,0.40), transparent)' }} />
-                    )}
-                    {/* Labels */}
-                    <div className="flex justify-between items-baseline mb-2">
-                      <div className="flex items-baseline gap-2">
-                        <span className="font-mono text-[11px] text-white/30 tabular-nums">
-                          {String(i + 1).padStart(2, '0')}
-                        </span>
-                        {tier.isFinal && (
-                          <span className="text-[9px] tracking-[0.15em] uppercase font-bold text-gold/70 mr-1">
-                            Your Take
+              <div ref={waterBarRef} className="max-w-md mx-auto">
+                {/* Waterfall rows — all identical structure */}
+                <div className="border border-white/[0.06] bg-black overflow-hidden">
+                  {waterfallTiers.filter(t => !t.isFinal).map((tier, i) => (
+                    <div
+                      key={tier.name}
+                      className={cn(
+                        "px-5 py-4 relative",
+                        i > 0 && "border-t border-white/[0.06]",
+                      )}
+                    >
+                      <div className="flex justify-between items-baseline mb-2">
+                        <div className="flex items-baseline gap-2">
+                          <span className="font-mono text-[11px] text-white/30 tabular-nums">
+                            {String(i + 1).padStart(2, '0')}
                           </span>
-                        )}
+                          <span className={cn(
+                            "font-bebas tracking-[0.08em] uppercase",
+                            i === 0 ? "text-[20px] text-white" : "text-[17px] text-white/80"
+                          )}>
+                            {tier.name}
+                          </span>
+                        </div>
                         <span className={cn(
-                          "font-bebas tracking-[0.08em] uppercase",
-                          tier.isFinal ? "text-[20px] text-gold" :
-                          i === 0 ? "text-[20px] text-white" : "text-[17px] text-white/80"
+                          "font-mono text-[17px] font-semibold",
+                          i === 0 ? "text-white/90" : "text-white/70"
                         )}>
-                          {tier.name}
+                          {tier.amount}
                         </span>
                       </div>
-                      <span
-                        className={cn(
-                          "font-mono text-[17px] font-semibold",
-                          tier.isFinal ? "font-bold text-gold" :
-                          i === 0 ? "text-white/90" : "text-white/70"
-                        )}
-                      >
-                        {tier.isFinal ? `$${countVal.toLocaleString()}` : tier.amount}
-                      </span>
+                      <div className={cn("w-full bg-white/[0.06] relative overflow-hidden", i === 0 ? "h-3" : "h-2")}>
+                        <div
+                          className="absolute left-0 top-0 h-full"
+                          style={{
+                            width: barsRevealed ? `${tier.pct}%` : '0%',
+                            background: tier.barColor,
+                            boxShadow: i === 0 ? '0 0 8px rgba(212,175,55,0.15)' : 'none',
+                            transition: `width 500ms cubic-bezier(0.16,1,0.3,1)`,
+                            transitionDelay: `${i * 150}ms`,
+                          }}
+                        />
+                      </div>
                     </div>
-                    {/* Proportional bar */}
-                    <div className={cn("w-full bg-white/[0.06] relative overflow-hidden", i === 0 ? "h-3" : "h-2")}>
-                      <div
-                        className="absolute left-0 top-0 h-full"
-                        style={{
-                          width: barsRevealed ? `${tier.pct}%` : '0%',
-                          background: tier.barColor,
-                          boxShadow: tier.isFinal ? '0 0 12px rgba(212,175,55,0.35)' : i === 0 ? '0 0 8px rgba(212,175,55,0.15)' : 'none',
-                          transition: `width 500ms cubic-bezier(0.16,1,0.3,1)`,
-                          transitionDelay: `${tier.isFinal ? 1200 : i * 150}ms`,
-                        }}
-                      />
-                    </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
 
-                {/* Mid-waterfall CTA — capture intent at emotional peak */}
-                <div className="border-t border-white/[0.06] px-5 py-6 text-center">
+                {/* Net Profits — separated as the payoff */}
+                <div className="mt-3 border border-gold/25 bg-gold/[0.04] px-5 py-5 flex items-center justify-between">
+                  <div>
+                    <p className="text-[10px] tracking-[0.2em] uppercase font-semibold text-gold/60 mb-1">Your Take</p>
+                    <p className="font-bebas text-[20px] tracking-[0.08em] uppercase text-gold">Net Profits</p>
+                  </div>
+                  <span className="font-mono text-[22px] font-bold text-gold">
+                    ${countVal.toLocaleString()}
+                  </span>
+                </div>
+
+                {/* CTA — capture intent at emotional peak */}
+                <div className="mt-5 text-center">
                   <button onClick={handleStartClick}
                     className="w-full max-w-[320px] h-14 text-base btn-cta-primary mx-auto">
                     WHAT DOES YOUR DEAL LOOK LIKE?
@@ -837,7 +835,7 @@ const Index = () => {
                 revTransition.visible ? "opacity-100 scale-100" : "opacity-0 scale-90"
               )}
             >
-              <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/40 to-transparent mb-8" />
+              <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/60 to-transparent mb-8" />
               <p
                 className="font-bebas text-[40px] md:text-[50px] tracking-[0.06em] text-gold"
                 style={{
@@ -848,7 +846,7 @@ const Index = () => {
               >
                 Level the Playing{"\u00A0"}<span className="text-white">Field</span>.
               </p>
-              <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/40 to-transparent mt-8" />
+              <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/60 to-transparent mt-8" />
               <div className="flex justify-center mt-6 cursor-pointer active:scale-[0.97]"
                 onClick={() => document.getElementById('arsenal')?.scrollIntoView({ behavior: 'smooth' })}>
                 <ChevronDown className="w-6 h-6 text-gold animate-bounce-subtle" />
@@ -1058,9 +1056,7 @@ const Index = () => {
                 Consult a qualified entertainment attorney before making financing decisions.
               </p>
               <div className="flex items-center justify-center gap-4 mt-4">
-                <button onClick={() => navigate("/terms")} className="text-white/30 text-xs hover:text-white/50 transition-colors">Terms</button>
-                <span className="text-white/10">|</span>
-                <button onClick={() => navigate("/privacy")} className="text-white/30 text-xs hover:text-white/50 transition-colors">Privacy</button>
+                <a href="mailto:thefilmmaker.og@gmail.com" className="text-white/30 text-xs hover:text-white/50 transition-colors">Contact</a>
               </div>
             </div>
           </footer>
