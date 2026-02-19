@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import Header from "@/components/Header";
 import { useHaptics } from "@/hooks/use-haptics";
-import { ArrowLeft, ShieldAlert, BadgeDollarSign, ArrowRight, BookOpen } from "lucide-react";
+import { ShieldAlert, BadgeDollarSign, ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const WaterfallInfo = () => {
@@ -22,15 +22,6 @@ const WaterfallInfo = () => {
       <Header />
       <div className="min-h-screen bg-black text-white pt-24 pb-16 px-4 md:px-8 font-sans">
         <div className="max-w-4xl mx-auto space-y-14 animate-fade-in">
-
-          {/* Back link — minimal */}
-          <button
-            onClick={() => { haptics.light(); navigate(-1); }}
-            className="flex items-center gap-2 text-[13px] tracking-[0.08em] uppercase text-white/40 hover:text-white/60 transition-colors group"
-          >
-            <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" />
-            Back
-          </button>
 
           {/* ─── Title ─── */}
           <div className="space-y-6 pb-8">
@@ -127,7 +118,7 @@ const WaterfallInfo = () => {
               This is typically split 50/50.
             </p>
 
-            {/* Corridors — equal visual weight, different color identity */}
+            {/* Corridors */}
             <div className="grid grid-cols-2 gap-4">
               {/* Producer Corridor */}
               <div className="relative border border-gold/25 bg-gold/[0.06] p-5 md:p-7 overflow-hidden">
@@ -158,21 +149,21 @@ const WaterfallInfo = () => {
               </div>
             </div>
 
-            {/* Flow diagram — full width to match corridors */}
-            <div className="py-6">
-              <div className="relative max-w-lg mx-auto">
+            {/* Flow diagram — full width */}
+            <div className="py-8">
+              <div className="relative">
                 {/* Vertical spine */}
-                <div className="absolute left-1/2 top-0 -translate-x-1/2 w-[1px] bg-white/[0.06]" style={{ height: 'calc(100% - 60px)' }} />
+                <div className="absolute left-1/2 top-0 -translate-x-1/2 w-[1px] bg-white/[0.08]" style={{ height: 'calc(100% - 80px)' }} />
 
                 <div className="space-y-0 relative z-10">
                   {['Distributor Revenue', 'Sales Agent Fees', 'Lenders', 'Equity Investors'].map((label, i) => (
                     <div key={label}>
-                      <div className="max-w-xs mx-auto h-12 border border-white/[0.12] bg-black flex items-center justify-center text-[13px] tracking-[0.08em] text-white/50 uppercase font-medium">
+                      <div className="max-w-sm mx-auto h-14 border border-white/[0.15] bg-black flex items-center justify-center text-[14px] tracking-[0.08em] text-white/60 uppercase font-medium">
                         {label}
                       </div>
                       {i < 3 && (
-                        <div className="flex justify-center h-6">
-                          <div className="w-[1px] h-full bg-white/[0.12]" />
+                        <div className="flex justify-center h-7">
+                          <div className="w-[1px] h-full bg-white/[0.15]" />
                         </div>
                       )}
                     </div>
@@ -180,23 +171,23 @@ const WaterfallInfo = () => {
                 </div>
 
                 {/* Gold branch to corridors */}
-                <div className="flex justify-center h-6 relative z-10">
-                  <div className="w-[1px] h-full bg-gold/40" />
+                <div className="flex justify-center h-7 relative z-10">
+                  <div className="w-[1px] h-full bg-gold/50" />
                 </div>
 
-                {/* Horizontal branch line */}
-                <div className="relative mx-auto max-w-xs">
-                  <div className="h-[1px] bg-gold/30" />
-                  <div className="absolute left-0 top-0 w-[1px] h-5 bg-gold/30" />
-                  <div className="absolute right-0 top-0 w-[1px] h-5 bg-gold/30" />
+                {/* Horizontal branch */}
+                <div className="relative mx-auto max-w-sm">
+                  <div className="h-[1px] bg-gold/40" />
+                  <div className="absolute left-0 top-0 w-[1px] h-6 bg-gold/40" />
+                  <div className="absolute right-0 top-0 w-[1px] h-6 bg-gold/40" />
                 </div>
 
                 {/* Terminal boxes */}
-                <div className="grid grid-cols-2 gap-4 mt-5 max-w-xs mx-auto">
-                  <div className="h-14 border border-gold/40 bg-gold/[0.08] flex items-center justify-center text-[13px] font-semibold text-gold tracking-[0.12em] uppercase">
+                <div className="grid grid-cols-2 gap-4 mt-6 max-w-sm mx-auto">
+                  <div className="h-16 border border-gold/40 bg-gold/[0.08] flex items-center justify-center text-[14px] font-semibold text-gold tracking-[0.14em] uppercase">
                     Producers
                   </div>
-                  <div className="h-14 border border-white/[0.15] bg-white/[0.04] flex items-center justify-center text-[13px] font-semibold text-white/50 tracking-[0.12em] uppercase">
+                  <div className="h-16 border border-white/[0.15] bg-white/[0.04] flex items-center justify-center text-[14px] font-semibold text-white/60 tracking-[0.14em] uppercase">
                     Investors
                   </div>
                 </div>
@@ -248,20 +239,14 @@ const WaterfallInfo = () => {
               <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_center,_rgba(212,175,55,0.08)_0%,_transparent_60%)]" />
 
               <div className="relative z-10 flex flex-col items-center text-center space-y-6">
-                <div className="flex items-center gap-2">
-                  <BookOpen className="w-4 h-4 text-gold/60" />
-                  <span className="text-[11px] tracking-[0.25em] uppercase font-semibold text-gold/60">
-                    Protocol Complete
-                  </span>
-                </div>
-
                 <h3 className="font-bebas text-[32px] md:text-[40px] tracking-[0.06em] leading-[1.1] text-white">
-                  Now see if your deal <span className="text-gold">actually makes money.</span>
+                  Now see if your deal<br />
+                  <span className="text-gold">actually makes money.</span>
                 </h3>
 
-                <p className="text-[15px] text-white/55 leading-[1.7] max-w-md">
-                  Run your numbers through the waterfall calculator. Input your budget,
-                  financing, and deal terms &mdash; see exactly where the money lands.
+                <p className="text-[17px] text-white/55 leading-[1.7] max-w-sm">
+                  Plug in your budget, financing, and deal terms.
+                  See where every dollar ends up.
                 </p>
 
                 <button
