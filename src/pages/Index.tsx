@@ -844,7 +844,7 @@ const Index = () => {
              ────────────────────────────────────────────────────────── */}
           <SectionFrame id="path">
             <div ref={revPath.ref} className={cn("transition-all duration-700 ease-out", revPath.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
-              <SectionHeader eyebrow="The Toolkit" title={<>NO <span className="text-white">GUESSWORK.</span></>} flankingLines compact />
+              <SectionHeader eyebrow="Inside The Arsenal" title={<>NO <span className="text-white">GUESSWORK.</span></>} flankingLines compact />
 
               <p className="text-center text-white/50 text-sm mb-8 max-w-sm mx-auto">
                 Whether you&rsquo;re modeling your first deal or walking into a meeting with real&nbsp;capital, there&rsquo;s a tier built for&nbsp;you.
@@ -992,10 +992,9 @@ const Index = () => {
                   That meeting shouldn&rsquo;t be the first time you think about your recoupment&nbsp;structure.
                 </p>
                 <button onClick={handleStartClick}
-                  className="w-full max-w-[320px] h-16 text-base btn-cta-final mx-auto">
-                  BUILD YOUR WATERFALL &mdash; FREE
+                  className="w-full max-w-[320px] h-14 text-base btn-cta-final mx-auto">
+                  BUILD YOUR WATERFALL
                 </button>
-                <p className="text-white/50 text-sm tracking-wider mt-4">No credit card. Takes 2{"\u00A0"}minutes.</p>
               </div>
             </div>
           </section>
