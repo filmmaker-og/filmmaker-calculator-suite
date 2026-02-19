@@ -41,20 +41,6 @@ const closedDoors = [
 ];
 
 /* ═══════════════════════════════════════════════════════════════════
-   THE PROBLEM — column panels showing why indie films lose money
-   ═══════════════════════════════════════════════════════════════════ */
-const realities = [
-  {
-    label: "Broken Deal Math",
-    line: "Most indie waterfalls define \u201Cnet profit\u201D in terms no revenue scenario can satisfy. When every party negotiates first-dollar recoupment, the math guarantees a loss\u2014regardless of how the film performs.",
-  },
-  {
-    label: "Equity Dilution",
-    line: "Backend points promised during packaging consume the profit pool before investors arrive. By the time equity splits are structured, there\u2019s nothing left to split.",
-  },
-];
-
-/* ═══════════════════════════════════════════════════════════════════
    WATERFALL TIERS — proportional bars ($3M cascade)
    ═══════════════════════════════════════════════════════════════════ */
 const waterfallTiers = [
@@ -478,7 +464,91 @@ const Index = () => {
           <Divider />
 
           {/* ──────────────────────────────────────────────────────────
-               § 2  THE WATERFALL — proportional bars
+               § 2  THE PROBLEM — narrative setup for waterfall reveal
+             ────────────────────────────────────────────────────────── */}
+          <SectionFrame id="evidence">
+            <div ref={revEvidence.ref} className={cn("transition-all duration-700 ease-out", revEvidence.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
+              <SectionHeader eyebrow="The Problem" title={<>MOST FILMS LOSE <span className="text-white">MONEY.</span></>} flankingLines compact />
+
+              <div className="max-w-md mx-auto">
+                <div className="relative bg-white/[0.04] border border-white/[0.10] overflow-hidden"
+                  style={{ boxShadow: '0 0 20px rgba(212,175,55,0.06)' }}>
+                  {/* Gold left accent */}
+                  <div className="absolute left-0 top-0 bottom-0 w-[3px]"
+                    style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.55), rgba(212,175,55,0.25), transparent)' }} />
+                  <div className="p-7 md:p-9 pl-8 md:pl-10">
+                    {/* Dramatic sub-headline */}
+                    <p
+                      className={cn(
+                        "font-bebas text-[24px] md:text-[30px] tracking-[0.06em] leading-tight mb-6 transition-all duration-600 ease-out",
+                        revEvidence.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
+                      )}
+                      style={{ transitionDelay: revEvidence.visible ? '200ms' : '0ms' }}
+                    >
+                      <span className="text-gold">YOUR FILM CAN MAKE MONEY</span><br />
+                      <span className="text-white">AND YOU STILL LOSE.</span>
+                    </p>
+
+                    {/* The beats */}
+                    <div className="space-y-3 mb-6">
+                      <p
+                        className={cn(
+                          "text-white/50 text-[15px] leading-relaxed transition-all duration-500 ease-out",
+                          revEvidence.visible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-3"
+                        )}
+                        style={{ transitionDelay: revEvidence.visible ? '500ms' : '0ms' }}
+                      >
+                        Not because it didn{"\u2019"}t recoup.
+                      </p>
+                      <p
+                        className={cn(
+                          "text-white/70 text-[15px] leading-relaxed font-medium transition-all duration-500 ease-out",
+                          revEvidence.visible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-3"
+                        )}
+                        style={{ transitionDelay: revEvidence.visible ? '700ms' : '0ms' }}
+                      >
+                        Because of how the deal was structured.
+                      </p>
+                    </div>
+
+                    {/* Gold divider — dramatic pause */}
+                    <div
+                      className={cn(
+                        "h-[1px] w-12 bg-gold/40 mb-6 transition-all duration-600 ease-out",
+                        revEvidence.visible ? "opacity-100" : "opacity-0"
+                      )}
+                      style={{ transitionDelay: revEvidence.visible ? '950ms' : '0ms' }}
+                    />
+
+                    {/* The kicker */}
+                    <p
+                      className={cn(
+                        "text-gold/80 text-[15px] tracking-wide italic mb-2 transition-all duration-500 ease-out",
+                        revEvidence.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
+                      )}
+                      style={{ transitionDelay: revEvidence.visible ? '1100ms' : '0ms' }}
+                    >
+                      There{"\u2019"}s a name for it.
+                    </p>
+                    <p
+                      className={cn(
+                        "font-bebas text-[20px] md:text-[24px] tracking-[0.08em] text-white/80 transition-all duration-500 ease-out",
+                        revEvidence.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
+                      )}
+                      style={{ transitionDelay: revEvidence.visible ? '1300ms' : '0ms' }}
+                    >
+                      Most filmmakers learn it too late.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </SectionFrame>
+
+          <Divider />
+
+          {/* ──────────────────────────────────────────────────────────
+               § 3  THE WATERFALL — proportional bars
              ────────────────────────────────────────────────────────── */}
           <SectionFrame id="waterfall">
             <div ref={revWater.ref} className={cn("transition-all duration-700 ease-out", revWater.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
@@ -675,43 +745,6 @@ const Index = () => {
             </div>
           </section>
 
-          <Divider />
-
-          {/* ──────────────────────────────────────────────────────────
-               § 4  THE PROBLEM — two reality panels
-             ────────────────────────────────────────────────────────── */}
-          <SectionFrame id="evidence">
-            <div ref={revEvidence.ref} className={cn("transition-all duration-700 ease-out", revEvidence.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
-              <SectionHeader eyebrow="The Problem" title={<>MOST INDIE FILMS LOSE <span className="text-white">MONEY.</span></>} flankingLines compact />
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl mx-auto">
-                {realities.map((r, i) => (
-                  <div
-                    key={r.label}
-                    className={cn(
-                      "relative p-5 md:p-7 bg-white/[0.04] border border-white/[0.10] overflow-hidden transition-all duration-600 ease-out group",
-                      revEvidence.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-                    )}
-                    style={{ transitionDelay: revEvidence.visible ? `${i * 180}ms` : '0ms' }}
-                  >
-                    {/* Gold left accent bar — matched to toolkit cards */}
-                    <div className="absolute left-0 top-0 bottom-0 w-[3px]"
-                      style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.55), rgba(212,175,55,0.25), transparent)' }} />
-                    <div className="relative z-10 pl-2">
-                      <div className="flex items-baseline gap-3 mb-3">
-                        <span className="font-mono text-2xl font-semibold leading-none bg-gradient-to-b from-gold/70 to-gold/30 bg-clip-text text-transparent">{String(i + 1).padStart(2, '0')}</span>
-                        <h3 className="font-bebas text-[18px] tracking-[0.10em] uppercase text-gold">
-                          {r.label}
-                        </h3>
-                      </div>
-                      <p className="text-white/60 text-sm leading-relaxed">{r.line}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </SectionFrame>
-
           {/* ──────────────────────────────────────────────────────────
                DECLARATION — the hinge between problem and gatekeepers
              ────────────────────────────────────────────────────────── */}
@@ -844,7 +877,7 @@ const Index = () => {
              ────────────────────────────────────────────────────────── */}
           <SectionFrame id="path">
             <div ref={revPath.ref} className={cn("transition-all duration-700 ease-out", revPath.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
-              <SectionHeader eyebrow="The Toolkit" title={<>NO <span className="text-white">GUESSWORK.</span></>} flankingLines compact />
+              <SectionHeader eyebrow="Inside The Arsenal" title={<>NO <span className="text-white">GUESSWORK.</span></>} flankingLines compact />
 
               <p className="text-center text-white/50 text-sm mb-8 max-w-sm mx-auto">
                 Whether you&rsquo;re modeling your first deal or walking into a meeting with real&nbsp;capital, there&rsquo;s a tier built for&nbsp;you.
@@ -992,10 +1025,9 @@ const Index = () => {
                   That meeting shouldn&rsquo;t be the first time you think about your recoupment&nbsp;structure.
                 </p>
                 <button onClick={handleStartClick}
-                  className="w-full max-w-[320px] h-16 text-base btn-cta-final mx-auto">
-                  BUILD YOUR WATERFALL &mdash; FREE
+                  className="w-full max-w-[320px] h-14 text-base btn-cta-final mx-auto">
+                  BUILD YOUR WATERFALL
                 </button>
-                <p className="text-white/50 text-sm tracking-wider mt-4">No credit card. Takes 2{"\u00A0"}minutes.</p>
               </div>
             </div>
           </section>
