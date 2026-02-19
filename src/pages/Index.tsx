@@ -626,10 +626,9 @@ const Index = () => {
                     ${countVal.toLocaleString()}
                   </span>
                 </div>
-              </div>
 
-                {/* Mid-waterfall CTA — capture intent at emotional peak */}
-                <div className="border-t border-white/[0.06] px-5 py-6 text-center">
+                {/* CTA — capture intent at emotional peak */}
+                <div className="mt-5 text-center">
                   <button onClick={handleStartClick}
                     className="w-full max-w-[320px] h-14 text-base btn-cta-primary mx-auto">
                     WHAT DOES YOUR DEAL LOOK LIKE?
@@ -836,7 +835,7 @@ const Index = () => {
                 revTransition.visible ? "opacity-100 scale-100" : "opacity-0 scale-90"
               )}
             >
-              <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/40 to-transparent mb-8" />
+              <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/60 to-transparent mb-8" />
               <p
                 className="font-bebas text-[40px] md:text-[50px] tracking-[0.06em] text-gold"
                 style={{
@@ -847,7 +846,7 @@ const Index = () => {
               >
                 Level the Playing{"\u00A0"}<span className="text-white">Field</span>.
               </p>
-              <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/40 to-transparent mt-8" />
+              <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/60 to-transparent mt-8" />
               <div className="flex justify-center mt-6 cursor-pointer active:scale-[0.97]"
                 onClick={() => document.getElementById('arsenal')?.scrollIntoView({ behavior: 'smooth' })}>
                 <ChevronDown className="w-6 h-6 text-gold animate-bounce-subtle" />
@@ -1057,9 +1056,7 @@ const Index = () => {
                 Consult a qualified entertainment attorney before making financing decisions.
               </p>
               <div className="flex items-center justify-center gap-4 mt-4">
-                <button onClick={() => navigate("/terms")} className="text-white/30 text-xs hover:text-white/50 transition-colors">Terms</button>
-                <span className="text-white/10">|</span>
-                <button onClick={() => navigate("/privacy")} className="text-white/30 text-xs hover:text-white/50 transition-colors">Privacy</button>
+                <a href="mailto:thefilmmaker.og@gmail.com" className="text-white/30 text-xs hover:text-white/50 transition-colors">Contact</a>
               </div>
             </div>
           </footer>
