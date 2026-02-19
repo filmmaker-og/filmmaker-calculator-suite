@@ -1,137 +1,93 @@
 
-## Rebuild the Glossary Page: Top 10 Essentials + A-Z Search + AI "Ask the OG" Strip
+## Glossary Page: UX & Layout Fixes
 
-### What We're Building
+### Summary of All Changes
 
-A full rebuild of `/glossary` that adds three major upgrades while matching the landing page's visual language (SectionFrame gold border, Bebas Neue headers, spotlight dividers, scroll-reveal animations):
-
-1. **Top 10 Must-Know Terms** — A curated, ranked list including Recoupment, Waterfall, Producer's Corridor, Capital Stack, Cross-Collateralization, etc., displayed as numbered cards with the gold left-accent SectionFrame style.
-2. **A-Z Glossary with Search** — The existing 100+ term A-Z section, rebuilt with the landing page's visual treatment — gold letter dividers, SectionFrame containers, and a prominent gold-accented search bar.
-3. **"Ask the OG" AI Strip** — A compact AI search bar at the bottom of the page using a new `film-search` backend function, limited strictly to film industry questions, with streaming responses that render inline in the same gold-card style used throughout the app.
+Seven targeted issues to fix in `src/pages/Glossary.tsx` only — no other files need to change.
 
 ---
 
-### Visual Design — Matching the Landing Page
+### 1. Rename the Page Header
 
-The landing page uses these specific visual patterns we'll carry over:
+Current text that needs to go:
+- Eyebrow: "The Black Book" → rename to something direct and useful
+- Title: "Protocol Glossary" → rename to something clear
 
-- `SectionFrame` — the gold left-bar + faint top line + dark bg container (already used on `/`)
-- `SectionHeader` — eyebrow + large Bebas title with optional flanking gradient lines
-- Scroll-reveal: `useReveal` hook (opacity + translateY transition on IntersectionObserver)
-- Spotlight gradient dividers (`Divider` component from Index.tsx)
-- Category color badges replaced with gold-intensity-only labels (no color semantics per design rules)
-- Number labels in `font-mono tabular-nums` for the Top 10
-
----
-
-### Top 10 Must-Know Terms
-
-These 10 are hand-curated and will be hard-coded in display order with short expert descriptions:
-
-| # | Term |
-|---|------|
-| 1 | Waterfall |
-| 2 | Recoupment |
-| 3 | Capital Stack |
-| 4 | Negative Cost |
-| 5 | Senior Debt |
-| 6 | Equity |
-| 7 | Cross-Collateralization |
-| 8 | Sales Agent |
-| 9 | Producer's Corridor |
-| 10 | CAM (Collection Account Manager) |
-
-Each card will display: gold number badge, term name in Bebas, one-line definition, and a category label.
+New names:
+- Eyebrow: **"Film Finance"** (direct, no jargon)
+- Title: **"THE GLOSSARY"** (simple, obvious)
+- Subtitle stays as-is (it's good)
 
 ---
 
-### Files to Create / Modify
+### 2. Reduce Dead Space at the Top
 
-**New files:**
-1. `supabase/functions/film-search/index.ts` — Streaming edge function calling Lovable AI with a strict film-industry-only system prompt.
-
-**Modified files:**
-2. `src/pages/Glossary.tsx` — Full rebuild with:
-   - Landing page visual style (SectionFrame, scroll-reveal, spotlight dividers)
-   - Top 10 section as numbered SectionFrame cards
-   - Improved A-Z search with gold-accented input bar
-   - "Ask the OG" AI strip at the bottom (streaming inline response)
-3. `supabase/config.toml` — Register `film-search` with `verify_jwt = false`
+The page header block has `pt-8 pb-6` plus a `Divider` below it, creating a large empty band before any content. Fix:
+- Reduce top padding: `pt-8 pb-6` → `pt-4 pb-3`
+- Remove the Divider between the header and the first section (it's redundant when content follows immediately)
 
 ---
 
-### Technical Architecture
+### 3. Reorder Sections: Ask the OG Moves to the Top
 
-**Backend (Edge Function: `film-search`)**
+Current order: Title → Top 10 → A-Z → Ask the OG
 
-```text
-POST /functions/v1/film-search
-Body: { question: string }
+New order: Title → **Ask the OG** → Top 10 → A-Z
 
-→ Calls Lovable AI Gateway (Gemini 3 Flash Preview)
-→ System prompt: "Film industry expert only. Decline anything not about film."
-→ Streams SSE response back to client
-→ Handles 429/402 errors with clear messages
-```
-
-**Frontend (in Glossary.tsx)**
-
-```text
-User types in "Ask the OG" bar → hits Enter or clicks ASK button
-→ fetch() to film-search function with SSE streaming
-→ Response appears token-by-token in a gold WikiCard-style answer block
-→ Typing indicator (3 pulsing gold dots) while streaming
-→ Previous answers stay visible above the input (session-only, no DB)
-```
-
-**System Prompt (film-only guard):**
-> You are an expert in the independent film industry — financing, production, distribution, waterfall accounting, deal structures, and film business vocabulary. You ONLY answer questions related to film and television. If asked about anything else, politely decline and redirect. Keep answers concise, practical, and expert-level. Use plain text only — no markdown headers, use short paragraphs.
+This is a JSX block reorder — the three `<div ref={rev___}>` sections swap positions. The scroll reveal hooks and refs stay unchanged.
 
 ---
 
-### Page Layout (top to bottom)
+### 4. Simplify "Ask the OG" Section
 
-```text
-┌─────────────────────────────────────┐
-│  HEADER (fixed)                     │
-├─────────────────────────────────────┤
-│  Page title block                   │
-│  "Protocol Glossary"                │
-│  "The Black Book" eyebrow           │
-├─────────────────────────────────────┤
-│  Spotlight Divider                  │
-├─────────────────────────────────────┤
-│  SectionFrame: "KNOW THESE FIRST"   │
-│  Top 10 numbered cards              │
-│  (01 Waterfall … 10 CAM)           │
-├─────────────────────────────────────┤
-│  Spotlight Divider                  │
-├─────────────────────────────────────┤
-│  SectionFrame: "A–Z GLOSSARY"       │
-│  Gold search bar (full width)       │
-│  Alphabet rail (sticky)             │
-│  Terms grouped by letter            │
-├─────────────────────────────────────┤
-│  Spotlight Divider                  │
-├─────────────────────────────────────┤
-│  SectionFrame: "ASK THE OG"         │
-│  Subtitle: "Film industry only."    │
-│  Question input + ASK button        │
-│  Streaming answer card              │
-│  Example chips: "What is a CAM?"   │
-├─────────────────────────────────────┤
-│  Footer                             │
-└─────────────────────────────────────┘
-```
+Current state: Long explanatory subtitle ("Ask anything about film financing, distribution, deal structures, or waterfall accounting. This AI knows the industry — not anything else.") + 5 example chips
+
+New state:
+- Subtitle → one short sentence: **"Film industry questions only."**
+- Example chips → reduced from 5 to exactly 3:
+  1. "What is a waterfall?"
+  2. "How does gap financing work?"
+  3. "What is a CAM?"
+- Remove the "Ask again" chip block that appears after the first message (the input itself is obvious enough)
+- The `SectionHeader` eyebrow changes from "Film Industry Only" → **"AI Search"**
 
 ---
 
-### Key Constraints Respected
+### 5. Increase Top 10 Readability
 
-- **No color semantics** — category labels will use gold-only styling instead of amber/emerald/sky/rose colors (violates the design system)
-- **No border radius** — all cards and buttons will use `rounded-none` (sharp edges only per brand rules)
-- **No green/red** — AI answer cards styled in the same gold-border dark pattern as the rest of the app
-- **Streaming** — responses appear token-by-token, not in a single bulk render
-- **Session-only** — no database writes; AI history lives in component state only
-- **Character limit** — input capped at 500 characters with a visible counter
-- **Error handling** — 429 (rate limit) and 402 (credits) errors surface as inline messages, not toasts
+Current definition text: `text-[13px] text-white/50` — small and too dim
+
+Changes:
+- Definition text: `text-[13px] text-white/50` → **`text-[15px] text-white/65`**
+- Term heading: `text-xl` → **`text-2xl`** (Bebas Neue, so going up one step is fine)
+- Number badge: stays the same (already reads well)
+- Card padding: `p-4` → **`p-5`** for breathing room
+
+---
+
+### 6. Remove Dead Space Between Sections
+
+The `Divider` components add `py-6` above and below each section. Between Top 10 and the Ask the OG section, you currently have: SectionFrame padding + Divider + SectionFrame padding — that's ~64px of empty space.
+
+Fix: Replace the `<Divider />` separators between sections with a thinner spacer (`py-2`) so sections feel connected rather than isolated.
+
+---
+
+### 7. Increase AI Answer Text Size
+
+The response body is currently `text-[13px] text-white/70` — it's hard to read at that size, especially on mobile.
+
+Fix:
+- Answer body text: `text-[13px] text-white/70` → **`text-[15px] text-white/80`**
+- Input `textarea` placeholder text: `text-sm` → **`text-base`**
+- "Thinking…" placeholder: keep as-is
+
+---
+
+### Technical Notes
+
+- All changes are contained in **`src/pages/Glossary.tsx`** only
+- No edge functions, no config, no routing changes needed
+- The EXAMPLE_CHIPS array at line 276 will be trimmed from 5 items to 3
+- Section order swap is a JSX structural change — the three scroll-reveal `<div>` wrappers move, but their internal markup is unchanged
+- No new dependencies or hooks required
