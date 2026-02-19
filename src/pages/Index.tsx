@@ -464,7 +464,91 @@ const Index = () => {
           <Divider />
 
           {/* ──────────────────────────────────────────────────────────
-               § 2  THE WATERFALL — proportional bars
+               § 2  THE PROBLEM — narrative setup for waterfall reveal
+             ────────────────────────────────────────────────────────── */}
+          <SectionFrame id="evidence">
+            <div ref={revEvidence.ref} className={cn("transition-all duration-700 ease-out", revEvidence.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
+              <SectionHeader eyebrow="The Problem" title={<>MOST FILMS LOSE <span className="text-white">MONEY.</span></>} flankingLines compact />
+
+              <div className="max-w-md mx-auto">
+                <div className="relative bg-white/[0.04] border border-white/[0.10] overflow-hidden"
+                  style={{ boxShadow: '0 0 20px rgba(212,175,55,0.06)' }}>
+                  {/* Gold left accent */}
+                  <div className="absolute left-0 top-0 bottom-0 w-[3px]"
+                    style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.55), rgba(212,175,55,0.25), transparent)' }} />
+                  <div className="p-7 md:p-9 pl-8 md:pl-10">
+                    {/* Dramatic sub-headline */}
+                    <p
+                      className={cn(
+                        "font-bebas text-[24px] md:text-[30px] tracking-[0.06em] leading-tight mb-6 transition-all duration-600 ease-out",
+                        revEvidence.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
+                      )}
+                      style={{ transitionDelay: revEvidence.visible ? '200ms' : '0ms' }}
+                    >
+                      <span className="text-gold">YOUR FILM CAN MAKE MONEY</span><br />
+                      <span className="text-white">AND YOU STILL LOSE.</span>
+                    </p>
+
+                    {/* The beats */}
+                    <div className="space-y-3 mb-6">
+                      <p
+                        className={cn(
+                          "text-white/50 text-[15px] leading-relaxed transition-all duration-500 ease-out",
+                          revEvidence.visible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-3"
+                        )}
+                        style={{ transitionDelay: revEvidence.visible ? '500ms' : '0ms' }}
+                      >
+                        Not because it didn{"\u2019"}t recoup.
+                      </p>
+                      <p
+                        className={cn(
+                          "text-white/70 text-[15px] leading-relaxed font-medium transition-all duration-500 ease-out",
+                          revEvidence.visible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-3"
+                        )}
+                        style={{ transitionDelay: revEvidence.visible ? '700ms' : '0ms' }}
+                      >
+                        Because of how the deal was structured.
+                      </p>
+                    </div>
+
+                    {/* Gold divider — dramatic pause */}
+                    <div
+                      className={cn(
+                        "h-[1px] w-12 bg-gold/40 mb-6 transition-all duration-600 ease-out",
+                        revEvidence.visible ? "opacity-100" : "opacity-0"
+                      )}
+                      style={{ transitionDelay: revEvidence.visible ? '950ms' : '0ms' }}
+                    />
+
+                    {/* The kicker */}
+                    <p
+                      className={cn(
+                        "text-gold/80 text-[15px] tracking-wide italic mb-2 transition-all duration-500 ease-out",
+                        revEvidence.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
+                      )}
+                      style={{ transitionDelay: revEvidence.visible ? '1100ms' : '0ms' }}
+                    >
+                      There{"\u2019"}s a name for it.
+                    </p>
+                    <p
+                      className={cn(
+                        "font-bebas text-[20px] md:text-[24px] tracking-[0.08em] text-white/80 transition-all duration-500 ease-out",
+                        revEvidence.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
+                      )}
+                      style={{ transitionDelay: revEvidence.visible ? '1300ms' : '0ms' }}
+                    >
+                      Most filmmakers learn it too late.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </SectionFrame>
+
+          <Divider />
+
+          {/* ──────────────────────────────────────────────────────────
+               § 3  THE WATERFALL — proportional bars
              ────────────────────────────────────────────────────────── */}
           <SectionFrame id="waterfall">
             <div ref={revWater.ref} className={cn("transition-all duration-700 ease-out", revWater.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
@@ -660,90 +744,6 @@ const Index = () => {
               </div>
             </div>
           </section>
-
-          <Divider />
-
-          {/* ──────────────────────────────────────────────────────────
-               § 4  THE PROBLEM — two reality panels
-             ────────────────────────────────────────────────────────── */}
-          <SectionFrame id="evidence">
-            <div ref={revEvidence.ref} className={cn("transition-all duration-700 ease-out", revEvidence.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
-              <SectionHeader eyebrow="The Problem" title={<>MOST FILMS LOSE <span className="text-white">MONEY.</span></>} flankingLines compact />
-
-              <div className="max-w-md mx-auto">
-                <div className="relative bg-white/[0.04] border border-white/[0.10] overflow-hidden"
-                  style={{ boxShadow: '0 0 20px rgba(212,175,55,0.06)' }}>
-                  {/* Gold left accent */}
-                  <div className="absolute left-0 top-0 bottom-0 w-[3px]"
-                    style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.55), rgba(212,175,55,0.25), transparent)' }} />
-                  <div className="p-7 md:p-9 pl-8 md:pl-10">
-                    {/* Dramatic sub-headline */}
-                    <p
-                      className={cn(
-                        "font-bebas text-[24px] md:text-[30px] tracking-[0.06em] leading-tight mb-6 transition-all duration-600 ease-out",
-                        revEvidence.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
-                      )}
-                      style={{ transitionDelay: revEvidence.visible ? '200ms' : '0ms' }}
-                    >
-                      <span className="text-gold">YOUR FILM CAN MAKE MONEY</span><br />
-                      <span className="text-white">AND YOU STILL LOSE.</span>
-                    </p>
-
-                    {/* The beats */}
-                    <div className="space-y-3 mb-6">
-                      <p
-                        className={cn(
-                          "text-white/50 text-[15px] leading-relaxed transition-all duration-500 ease-out",
-                          revEvidence.visible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-3"
-                        )}
-                        style={{ transitionDelay: revEvidence.visible ? '500ms' : '0ms' }}
-                      >
-                        Not because it didn{"\u2019"}t recoup.
-                      </p>
-                      <p
-                        className={cn(
-                          "text-white/70 text-[15px] leading-relaxed font-medium transition-all duration-500 ease-out",
-                          revEvidence.visible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-3"
-                        )}
-                        style={{ transitionDelay: revEvidence.visible ? '700ms' : '0ms' }}
-                      >
-                        Because of how the deal was structured.
-                      </p>
-                    </div>
-
-                    {/* Gold divider — dramatic pause */}
-                    <div
-                      className={cn(
-                        "h-[1px] w-12 bg-gold/40 mb-6 transition-all duration-600 ease-out",
-                        revEvidence.visible ? "opacity-100" : "opacity-0"
-                      )}
-                      style={{ transitionDelay: revEvidence.visible ? '950ms' : '0ms' }}
-                    />
-
-                    {/* The kicker */}
-                    <p
-                      className={cn(
-                        "text-gold/80 text-[15px] tracking-wide italic mb-2 transition-all duration-500 ease-out",
-                        revEvidence.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
-                      )}
-                      style={{ transitionDelay: revEvidence.visible ? '1100ms' : '0ms' }}
-                    >
-                      There{"\u2019"}s a name for it.
-                    </p>
-                    <p
-                      className={cn(
-                        "font-bebas text-[20px] md:text-[24px] tracking-[0.08em] text-white/80 transition-all duration-500 ease-out",
-                        revEvidence.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
-                      )}
-                      style={{ transitionDelay: revEvidence.visible ? '1300ms' : '0ms' }}
-                    >
-                      Most filmmakers learn it too late.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </SectionFrame>
 
           {/* ──────────────────────────────────────────────────────────
                DECLARATION — the hinge between problem and gatekeepers
