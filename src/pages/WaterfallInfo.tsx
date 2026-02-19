@@ -20,11 +20,11 @@ const WaterfallInfo = () => {
   return (
     <>
       <Header />
-      <div className="min-h-screen bg-black text-white pt-20 pb-16 px-4 md:px-8 font-sans">
-        <div className="max-w-4xl mx-auto space-y-10 animate-fade-in">
+      <div className="min-h-screen bg-black text-white pt-[68px] pb-16 px-4 md:px-8 font-sans">
+        <div className="max-w-4xl mx-auto space-y-8 animate-fade-in">
 
           {/* ─── Title ─── */}
-          <div className="space-y-5 pb-6">
+          <div className="space-y-4 pb-5">
             <div className="flex items-center gap-3">
               <div className="h-[1px] w-8 bg-gold/50" />
               <span className="text-[12px] tracking-[0.3em] uppercase font-semibold text-gold/70">
@@ -153,17 +153,17 @@ const WaterfallInfo = () => {
             <div className="py-8">
               <div className="relative">
                 {/* Vertical spine */}
-                <div className="absolute left-1/2 top-0 -translate-x-1/2 w-[1px] bg-white/[0.10]" style={{ height: 'calc(100% - 80px)' }} />
+                <div className="absolute left-1/2 top-0 -translate-x-1/2 w-[1px] bg-white/[0.15]" style={{ height: 'calc(100% - 80px)' }} />
 
                 <div className="space-y-0 relative z-10">
                   {['Distributor Revenue', 'Sales Agent Fees', 'Lenders', 'Equity Investors'].map((label, i) => (
                     <div key={label}>
-                      <div className="max-w-sm mx-auto h-14 border border-white/[0.20] bg-white/[0.06] flex items-center justify-center text-[14px] tracking-[0.08em] text-white/70 uppercase font-medium">
+                      <div className="max-w-sm mx-auto h-14 border border-white/[0.25] bg-[#1a1a1a] flex items-center justify-center text-[14px] tracking-[0.08em] text-white/80 uppercase font-medium">
                         {label}
                       </div>
                       {i < 3 && (
                         <div className="flex justify-center h-7">
-                          <div className="w-[1px] h-full bg-white/[0.20]" />
+                          <div className="w-[1px] h-full bg-white/[0.25]" />
                         </div>
                       )}
                     </div>
@@ -172,22 +172,22 @@ const WaterfallInfo = () => {
 
                 {/* Gold branch to corridors */}
                 <div className="flex justify-center h-7 relative z-10">
-                  <div className="w-[1px] h-full bg-gold/50" />
+                  <div className="w-[1px] h-full bg-gold/60" />
                 </div>
 
                 {/* Horizontal branch */}
                 <div className="relative mx-auto max-w-sm">
-                  <div className="h-[1px] bg-gold/40" />
-                  <div className="absolute left-0 top-0 w-[1px] h-6 bg-gold/40" />
-                  <div className="absolute right-0 top-0 w-[1px] h-6 bg-gold/40" />
+                  <div className="h-[1px] bg-gold/50" />
+                  <div className="absolute left-0 top-0 w-[1px] h-6 bg-gold/50" />
+                  <div className="absolute right-0 top-0 w-[1px] h-6 bg-gold/50" />
                 </div>
 
                 {/* Terminal boxes */}
                 <div className="grid grid-cols-2 gap-4 mt-6 max-w-sm mx-auto">
-                  <div className="h-16 border border-gold/40 bg-gold/[0.10] flex items-center justify-center text-[14px] font-semibold text-gold tracking-[0.14em] uppercase">
+                  <div className="h-16 border border-gold/50 bg-gold/[0.12] flex items-center justify-center text-[14px] font-semibold text-gold tracking-[0.14em] uppercase">
                     Producers
                   </div>
-                  <div className="h-16 border border-white/[0.20] bg-white/[0.06] flex items-center justify-center text-[14px] font-semibold text-white/70 tracking-[0.14em] uppercase">
+                  <div className="h-16 border border-white/[0.25] bg-[#1a1a1a] flex items-center justify-center text-[14px] font-semibold text-white/80 tracking-[0.14em] uppercase">
                     Investors
                   </div>
                 </div>
