@@ -3,7 +3,6 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useHaptics } from "@/hooks/use-haptics";
 import {
-  RotateCcw,
   Check,
   X,
   LockKeyhole,
@@ -22,12 +21,10 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
-import { formatCompactCurrency } from "@/lib/waterfall";
 import { getShareUrl, SHARE_TEXT, SHARE_TITLE } from "@/lib/constants";
 import SectionFrame from "@/components/SectionFrame";
 import SectionHeader from "@/components/SectionHeader";
 
-const STORAGE_KEY = "filmmaker_og_inputs";
 const CINEMATIC_SEEN_KEY = "filmmaker_og_intro_seen";
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -221,17 +218,27 @@ const Index = () => {
     return () => clearTimeout(delay);
   }, [barsRevealed]);
 
-  // Returning user
-  const savedState = useMemo(() => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) return null;
-      const parsed = JSON.parse(raw);
-      if (parsed?.inputs?.budget > 0) return { budget: parsed.inputs.budget as number };
-    } catch { /* ignore */ }
-    return null;
-  }, []);
-  const isReturningUser = savedState !== null;
+  // Corridor split countup (starts after main counter finishes)
+  const [producerVal, setProducerVal] = useState(0);
+  const [investorVal, setInvestorVal] = useState(0);
+  useEffect(() => {
+    if (!barsRevealed) return;
+    const delay = setTimeout(() => {
+      const target = 208750;
+      const dur = 1200;
+      const start = performance.now();
+      const step = (now: number) => {
+        const t = Math.min((now - start) / dur, 1);
+        const eased = 1 - Math.pow(1 - t, 3);
+        const val = Math.round(eased * target);
+        setProducerVal(val);
+        setInvestorVal(val);
+        if (t < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    }, 3800);
+    return () => clearTimeout(delay);
+  }, [barsRevealed]);
 
   // Cinematic intro
   const hasSeenCinematic = useMemo(() => {
@@ -271,8 +278,6 @@ const Index = () => {
   }, [phase, hasSeenCinematic]);
 
   const handleStartClick    = () => { haptics.medium(); gatedNavigate("/calculator?tab=budget"); };
-  const handleContinueClick = () => { haptics.medium(); gatedNavigate("/calculator"); };
-  const handleStartFresh    = () => { haptics.light(); gatedNavigate("/calculator?tab=budget&reset=true"); };
 
   const handleCopyLink = useCallback(() => {
     navigator.clipboard.writeText(`${SHARE_TEXT}\n\n${getShareUrl()}`).then(() => {
@@ -429,32 +434,19 @@ const Index = () => {
               <h1 className="font-bebas text-[clamp(2.8rem,9vw,4.2rem)] leading-[1.05] text-gold mb-5">
                 SEE WHERE EVERY<br /><span className="text-white">DOLLAR GOES</span>
               </h1>
-              <p className="mb-6 text-white/60 text-[14px] leading-[1.7] tracking-[0.06em] uppercase font-medium max-w-[360px] mx-auto">
+              <p className="mb-6 text-white/60 text-[15px] leading-[1.7] tracking-[0.06em] uppercase font-medium max-w-[360px] mx-auto">
                 Built by a Tribeca-winning producer whose debut sold to <span className="text-gold font-semibold">Netflix</span>.
               </p>
 
-              {isReturningUser ? (
-                <div className="w-full max-w-[320px] mx-auto space-y-3">
-                  <button onClick={handleContinueClick} className="w-full h-14 text-base btn-cta-primary">
-                    CONTINUE YOUR DEAL
-                  </button>
-                  <p className="text-white/40 text-xs tracking-wider text-center">{formatCompactCurrency(savedState!.budget)} budget in progress</p>
-                  <button onClick={handleStartFresh}
-                    className="w-full flex items-center justify-center gap-1.5 text-xs tracking-wider text-white/40 hover:text-white/60 transition-colors py-2">
-                    <RotateCcw className="w-3 h-3" /> Start a new deal
-                  </button>
-                </div>
-              ) : (
-                <div className="w-full max-w-[320px] mx-auto space-y-3">
-                  <button onClick={handleStartClick} className="w-full h-14 text-base btn-cta-primary">
-                    BUILD YOUR WATERFALL &mdash; FREE
-                  </button>
-                  <p className="text-white/50 text-sm tracking-wider">No credit card. Takes 2{"\u00A0"}minutes.</p>
-                </div>
-              )}
+              <div className="w-full max-w-[320px] mx-auto space-y-3">
+                <button onClick={handleStartClick} className="w-full h-14 text-base btn-cta-primary">
+                  BUILD YOUR WATERFALL &mdash; FREE
+                </button>
+                <p className="text-white/50 text-sm tracking-wider">No credit card. Takes 2{"\u00A0"}minutes.</p>
+              </div>
 
               <div className="mt-8 flex justify-center animate-bounce-subtle cursor-pointer active:scale-[0.97]"
-                onClick={() => document.getElementById('waterfall')?.scrollIntoView({ behavior: 'smooth' })}>
+                onClick={() => document.getElementById('evidence')?.scrollIntoView({ behavior: 'smooth' })}>
                 <ChevronDown className="w-6 h-6 text-gold" />
               </div>
             </div>
@@ -567,8 +559,8 @@ const Index = () => {
                 <p className="text-white/40 text-sm tracking-[0.15em] uppercase mt-4">How the money flows</p>
               </div>
 
-              <p className="text-white/50 text-sm text-center mb-1">A simplified $3M SVOD acquisition.</p>
-              <p className="text-white/60 text-sm font-medium text-center mb-6">Here&rsquo;s what actually reaches the filmmaker.</p>
+              <p className="text-white/50 text-sm text-center mb-1">Based on a hypothetical $1.8M budget and a $3M acquisition.</p>
+              <p className="text-white/60 text-sm font-medium text-center mb-6">Here&rsquo;s how the money actually flows.</p>
 
               <div ref={waterBarRef} className="max-w-md mx-auto">
                 {/* Waterfall rows — all identical structure */}
@@ -616,15 +608,41 @@ const Index = () => {
                   ))}
                 </div>
 
-                {/* Net Profits — separated as the payoff */}
-                <div className="mt-3 border border-gold/25 bg-gold/[0.04] px-5 py-5 flex items-center justify-between">
-                  <div>
-                    <p className="text-[10px] tracking-[0.2em] uppercase font-semibold text-gold/60 mb-1">Your Take</p>
-                    <p className="font-bebas text-[20px] tracking-[0.08em] uppercase text-gold">Net Profits</p>
-                  </div>
+                {/* Net Profits — then corridor split */}
+                <div className="mt-3 border border-gold/25 bg-gold/[0.04] px-5 py-4 text-center">
+                  <p className="text-[10px] tracking-[0.2em] uppercase font-semibold text-gold/60 mb-1">Net Profits</p>
                   <span className="font-mono text-[22px] font-bold text-gold">
                     ${countVal.toLocaleString()}
                   </span>
+                </div>
+
+                {/* Branching connector */}
+                <div className="flex justify-center">
+                  <div className="w-[1px] h-4 bg-gold/30" />
+                </div>
+                <div className="flex items-start">
+                  <div className="flex-1 flex justify-end">
+                    <div className="w-1/2 h-[1px] bg-gold/30" />
+                  </div>
+                  <div className="flex-1 flex justify-start">
+                    <div className="w-1/2 h-[1px] bg-gold/30" />
+                  </div>
+                </div>
+
+                {/* Two corridor boxes */}
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="border border-gold/20 bg-gold/[0.03] px-4 py-4 text-center">
+                    <p className="text-[9px] tracking-[0.2em] uppercase font-semibold text-gold/60 mb-1">Producer Corridor</p>
+                    <span className="font-mono text-[17px] font-bold text-gold">
+                      ${producerVal.toLocaleString()}
+                    </span>
+                  </div>
+                  <div className="border border-white/[0.08] bg-white/[0.03] px-4 py-4 text-center">
+                    <p className="text-[9px] tracking-[0.2em] uppercase font-semibold text-white/40 mb-1">Investor Corridor</p>
+                    <span className="font-mono text-[17px] font-bold text-white/70">
+                      ${investorVal.toLocaleString()}
+                    </span>
+                  </div>
                 </div>
 
                 {/* CTA — capture intent at emotional peak */}
@@ -633,6 +651,7 @@ const Index = () => {
                     className="w-full max-w-[320px] h-14 text-base btn-cta-primary mx-auto">
                     WHAT DOES YOUR DEAL LOOK LIKE?
                   </button>
+                  <p className="text-white/40 text-xs tracking-wider mt-3">See how to keep more of it.</p>
                 </div>
               </div>
             </div>
