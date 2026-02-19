@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import Header from "@/components/Header";
-import { ArrowLeft, Search, Book, Mail, Home } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Search, Book, Mail, Home, Star, ChevronDown } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 
 // ------------------------------------------------------------------
@@ -11,9 +11,9 @@ type Term = {
   term: string;
   def: string;
   category: "Roles" | "Finance" | "Distribution" | "Legal" | "The Math" | "Production";
+  essential?: boolean;          // top 10 "must-know" flag
 };
 
-// Raw data - we will sort it alphabetically on render
 const RAW_TERMS: Term[] = [
   // A
   { term: "Above the Line (ATL)", def: "The costs for the 'Creative' elements: Writer, Director, Producer, and Principal Cast. These are usually fixed fees negotiated upfront.", category: "Finance" },
@@ -30,7 +30,7 @@ const RAW_TERMS: Term[] = [
   { term: "At-Source", def: "A clause requiring the distributor/agent to calculate their commission based on the *original* gross receipts from sub-distributors, not the net amount after the sub-distributor takes their cut. **Critical protection.**", category: "Legal" },
   { term: "Audit Rights", def: "Your contractual right to hire an accountant to inspect the distributor's books to ensure they aren't hiding money.", category: "Legal" },
   { term: "AVOD (Ad-Based VOD)", def: "Free streaming platforms with ads (Tubi, Pluto). Revenue is split based on views or ad impressions.", category: "Distribution" },
-  
+
   // B
   { term: "Back End", def: "Net profits payable to participants *after* all recoupment. Also called 'Net Profit Participation.'", category: "The Math" },
   { term: "Bankable", def: "Talent (Actor/Director) whose name alone can secure financing or pre-sales.", category: "Roles" },
@@ -43,8 +43,9 @@ const RAW_TERMS: Term[] = [
 
   // C
   { term: "Call Sheet", def: "The daily schedule listing call times, locations, and scenes for cast and crew.", category: "Production" },
-  { term: "CAM (Collection Account Manager)", def: "A neutral third party that receives revenue and distributes it. Takes ~1% off the top. Essential for transparency.", category: "Roles" },
+  { term: "CAM (Collection Account Manager)", def: "A neutral third party that receives revenue and distributes it. Takes ~1% off the top. Essential for transparency.", category: "Roles", essential: true },
   { term: "Capped Expenses", def: "A negotiated limit on how much a distributor can deduct for marketing/expenses. **Critical.**", category: "Legal" },
+  { term: "Capital Stack", def: "The combination of different funding sources used to finance the budget — tax credits, debt, equity, and deferrals layered by risk and repayment priority.", category: "Finance", essential: true },
   { term: "Cash Flow", def: "The schedule of when money is needed vs. when it is available.", category: "Finance" },
   { term: "Chain of Title", def: "The stack of legal documents proving you own the rights to the script, music, and film. You cannot sell a film without this.", category: "Legal" },
   { term: "Completion Bond", def: "Insurance that guarantees the film will be finished. Banks require this for Senior Debt.", category: "Finance" },
@@ -52,7 +53,7 @@ const RAW_TERMS: Term[] = [
   { term: "Contingency", def: "An emergency buffer (usually 10% of budget). You should plan to spend it.", category: "Finance" },
   { term: "Co-Production", def: "A joint venture between two production companies (often from different countries) to access tax incentives and funding.", category: "Production" },
   { term: "Corridor (Producer's Corridor)", def: "A % of first-dollar gross reserved for the producer, paid *before* expenses. Rare and powerful.", category: "The Math" },
-  { term: "Cross-Collateralization", def: "**TRAP.** When a distributor uses profits from Film A to pay for losses on Film B. Always require 'Single Picture Accounting.'", category: "Legal" },
+  { term: "Cross-Collateralization", def: "**TRAP.** When a distributor uses profits from Film A to pay for losses on Film B. Always require 'Single Picture Accounting.'", category: "Legal", essential: true },
 
   // D
   { term: "Day and Date", def: "Releasing in theaters and on VOD on the same day. Good for marketing cost, bad for theater relationships.", category: "Distribution" },
@@ -69,7 +70,7 @@ const RAW_TERMS: Term[] = [
 
   // E
   { term: "E&O Insurance (Errors & Omissions)", def: "Liability insurance against copyright/libel claims. Distributors require this to release.", category: "Production" },
-  { term: "Equity", def: "Investment for ownership. High risk, paid last, but keeps owning a piece forever.", category: "Finance" },
+  { term: "Equity", def: "Investment for ownership. High risk, paid last, but keeps owning a piece forever.", category: "Finance", essential: true },
   { term: "Escrow", def: "A holding account where funds are kept until specific conditions are met (e.g., Cast is signed).", category: "Finance" },
   { term: "Executive Producer (EP)", def: "Usually the person who secured the funding or the IP. Rarely handles physical production.", category: "Roles" },
   { term: "Exclusivity", def: "A window of time where a film can *only* be shown on one specific platform.", category: "Legal" },
@@ -80,7 +81,7 @@ const RAW_TERMS: Term[] = [
   { term: "Finance Plan", def: "The document showing exactly where every dollar of the budget is coming from (Tax Credits, Presales, Equity, Gap).", category: "Finance" },
   { term: "First Dollar Gross", def: "The most advantageous participation. You get paid from the very first dollar of revenue, before *any* deductions.", category: "The Math" },
   { term: "First Look Deal", def: "A contract giving a studio the first right to finance/distribute a producer's next project.", category: "Legal" },
-  { term: "Force Majeure", def: " 'Act of God.' A clause allowing cancellation of a contract due to unforeseen events (War, Pandemic).", category: "Legal" },
+  { term: "Force Majeure", def: "'Act of God.' A clause allowing cancellation of a contract due to unforeseen events (War, Pandemic).", category: "Legal" },
   { term: "Foreign Sales Agent", def: "Represents the film to distributors outside the domestic territory.", category: "Roles" },
   { term: "Four-Wall", def: "Renting a theater yourself to show your film. You keep 100% of the box office (minus rental).", category: "Distribution" },
   { term: "Fringes", def: "The payroll taxes and union benefits added on top of a crew member's salary (usually +20-30%).", category: "Finance" },
@@ -96,6 +97,7 @@ const RAW_TERMS: Term[] = [
   { term: "Holdback", def: "A period where you are *prevented* from releasing the film on a certain platform (e.g., 'No VOD for 90 days after Theatrical').", category: "Legal" },
 
   // I
+  { term: "IATSE", def: "International Alliance of Theatrical Stage Employees. The primary union for below-the-line film crew (camera, grip, electric, art, wardrobe, etc.).", category: "Roles" },
   { term: "Interest", def: "The cost of borrowing money. Accrues daily.", category: "Finance" },
   { term: "Independent Film", def: "A film produced outside the major studio system.", category: "Production" },
   { term: "IP (Intellectual Property)", def: "The underlying work (Book, Script, Life Rights) the film is based on.", category: "Legal" },
@@ -111,14 +113,17 @@ const RAW_TERMS: Term[] = [
   { term: "LLC (Limited Liability Company)", def: "The standard corporate structure for a single film (Single Purpose Vehicle) to protect the producers personally.", category: "Legal" },
 
   // M
+  { term: "M&E (Music & Effects)", def: "The audio mix of a film minus the dialogue. Required for international dubbing and foreign distribution deals.", category: "Production" },
   { term: "Marketing Cap", def: "The maximum amount a distributor is allowed to spend (and deduct) on P&A. Also known as Sales Agent Marketing expenses.", category: "Legal" },
   { term: "Master", def: "The highest quality final version of the film.", category: "Production" },
   { term: "Minimum Guarantee (MG)", def: "Cash advance from a distributor.", category: "Finance" },
   { term: "Mezzanine Financing", def: "See *Gap Financing*.", category: "Finance" },
+  { term: "Micro-Budget", def: "A film produced for under $500k, typically SAG Ultra Low Budget or Modified Low Budget agreements. Most indie first features.", category: "Production" },
   { term: "Moral Rights", def: "The right of an author to protect the integrity of their work (harder to waive in Europe than the US).", category: "Legal" },
 
   // N
-  { term: "Negative Cost", def: "The actual cost to produce the finished film (master), excluding marketing/distribution. $2M negative cost (all-in budget).", category: "Finance" },
+  { term: "Negative Cost", def: "The actual cost to produce the finished film (master), excluding marketing/distribution. Your all-in production budget.", category: "Finance", essential: true },
+  { term: "Negative Pickup", def: "A studio agrees to buy (pick up) the finished film at a set price, but doesn't fund production. The producer uses that commitment to secure bank loans.", category: "Distribution" },
   { term: "Net Profit", def: "Money remaining after *everyone* (Distributor, Lenders, Investors) has been paid.", category: "The Math" },
   { term: "Net Receipts", def: "Gross Receipts minus Distributor Fees and Expenses. This flows to the Producer.", category: "The Math" },
   { term: "Non-Recourse Loan", def: "A loan secured *only* by the film's potential revenue, not the producer's personal assets.", category: "Finance" },
@@ -131,8 +136,9 @@ const RAW_TERMS: Term[] = [
 
   // P
   { term: "P&A (Prints & Advertising)", def: "Marketing and distribution costs.", category: "Finance" },
+  { term: "P&H (Payroll & Health)", def: "Payroll taxes and health/pension contributions required by unions. Added on top of gross wages — typically 20-23% for SAG-AFTRA.", category: "Finance" },
   { term: "Package", def: "The combination of Script, Director, and Cast presented to financiers.", category: "Production" },
-  { term: "Pari Passu", def: " 'On Equal Footing.' Investors in the same tier get paid back simultaneously.", category: "The Math" },
+  { term: "Pari Passu", def: "'On Equal Footing.' Investors in the same tier get paid back simultaneously.", category: "The Math" },
   { term: "Pay or Play", def: "A guarantee that talent gets paid even if the film is cancelled.", category: "Legal" },
   { term: "Pay-1 / Pay-2", def: "The first and second windows for Premium Cable/Streaming release.", category: "Distribution" },
   { term: "Points", def: "Percentage ownership of the backend.", category: "Legal" },
@@ -146,7 +152,7 @@ const RAW_TERMS: Term[] = [
   { term: "Qualifying Expense", def: "Expenses that count toward a Tax Credit calculation (usually in-state spend).", category: "Finance" },
 
   // R
-  { term: "Recoupment", def: "Earning back the initial investment.", category: "The Math" },
+  { term: "Recoupment", def: "Earning back the initial investment. The waterfall determines the order.", category: "The Math", essential: true },
   { term: "Recoupment Schedule", def: "The list showing the order of who gets paid back first.", category: "The Math" },
   { term: "Release Window", def: "The exclusivity period for a specific medium (Theatrical, VOD, etc.).", category: "Distribution" },
   { term: "Residuals", def: "Royalties paid to Guild members (SAG/WGA/DGA) for reruns and secondary markets.", category: "Legal" },
@@ -155,12 +161,14 @@ const RAW_TERMS: Term[] = [
   { term: "ROI (Return on Investment)", def: "Profit percentage.", category: "The Math" },
 
   // S
-  { term: "SAG-AFTRA", def: "Screen Actors Guild.", category: "Roles" },
-  { term: "Sales Agent", def: "Broker who sells rights internationally.", category: "Roles" },
+  { term: "SAG-AFTRA", def: "Screen Actors Guild – American Federation of Television and Radio Artists. The primary actors' union.", category: "Roles" },
+  { term: "Sales Agent", def: "Broker who sells distribution rights internationally. Takes 10-20% commission off gross.", category: "Roles", essential: true },
   { term: "Sales Agent Marketing", def: "Expenses incurred by the sales agent (travel, markets, posters) to sell the film, usually capped (e.g., $75k). Deducted from gross receipts.", category: "Finance" },
   { term: "Sales Estimates", def: "Projected revenue numbers (High/Low/Take) provided by a Sales Agent to help value the film.", category: "Finance" },
-  { term: "Senior Debt", def: "First-position bank loans.", category: "Finance" },
+  { term: "Senior Debt", def: "First-position bank loans secured by reliable collateral like tax credits or pre-sale contracts. Lowest risk, paid back first.", category: "Finance", essential: true },
   { term: "Single Picture Accounting", def: "Accounting for one film only, preventing cross-collateralization.", category: "Legal" },
+  { term: "Slate", def: "A group of films being produced or financed together by a company or fund.", category: "Production" },
+  { term: "SOFR", def: "Secured Overnight Financing Rate. The benchmark interest rate that replaced LIBOR. Senior debt is often priced as SOFR + a margin (e.g., SOFR + 5%).", category: "Finance" },
   { term: "Soft Money", def: "Tax credits, grants, subsidies.", category: "Finance" },
   { term: "Source Material", def: "The original work the film is based on.", category: "Legal" },
   { term: "Sub-Distributor", def: "A local distributor in a specific country hired by the global Sales Agent.", category: "Distribution" },
@@ -168,7 +176,7 @@ const RAW_TERMS: Term[] = [
   { term: "SVOD (Subscription VOD)", def: "Netflix, Hulu, Prime.", category: "Distribution" },
 
   // T
-  { term: "Tax Credit", def: "A government rebate on production spend.", category: "Finance" },
+  { term: "Tax Credit", def: "A government rebate on qualifying production spend in a specific state or country. Ranges from 15-40%.", category: "Finance", essential: true },
   { term: "Territory", def: "A specific geographic region for distribution rights.", category: "Legal" },
   { term: "Theatrical", def: "Cinema release.", category: "Distribution" },
   { term: "Trades", def: "Industry publications (Deadline, Variety, Hollywood Reporter).", category: "Production" },
@@ -182,7 +190,7 @@ const RAW_TERMS: Term[] = [
   { term: "VOD (Video on Demand)", def: "General term for digital streaming/rental.", category: "Distribution" },
 
   // W
-  { term: "Waterfall", def: "The priority order of payments.", category: "The Math" },
+  { term: "Waterfall", def: "The priority order in which revenue flows from box office to stakeholders. Money trickles down: Theaters → Distributor → Sales Agent → Lenders → Investors → Producers.", category: "The Math", essential: true },
   { term: "WGA", def: "Writers Guild of America.", category: "Roles" },
   { term: "Windowing", def: "Staggering the release across different platforms to maximize revenue.", category: "Distribution" },
   { term: "Wrap", def: "The end of filming.", category: "Production" },
@@ -195,111 +203,266 @@ const RAW_TERMS: Term[] = [
 // COMPONENT
 // ------------------------------------------------------------------
 
-// Sort alphabetically by term
-const SORTED_TERMS = RAW_TERMS.sort((a, b) => a.term.localeCompare(b.term));
+const SORTED_TERMS = [...RAW_TERMS].sort((a, b) => a.term.localeCompare(b.term));
+
+const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+
+const CATEGORY_COLORS: Record<Term["category"], string> = {
+  Roles:        "text-amber-400/80",
+  Finance:      "text-emerald-400/80",
+  Distribution: "text-sky-400/80",
+  Legal:        "text-rose-400/80",
+  "The Math":   "text-violet-400/80",
+  Production:   "text-orange-400/80",
+};
 
 const Glossary = () => {
   const navigate = useNavigate();
-  const [searchTerm, setSearchTerm] = useState("");
+  const [search, setSearch] = useState("");
+  const [activeLetter, setActiveLetter] = useState<string | null>(null);
+  const [expanded, setExpanded] = useState<string | null>(null);
+  const sectionRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
+  useEffect(() => { window.scrollTo(0, 0); }, []);
+
+  // ── Derived data ──
+  const essentialTerms = useMemo(() => SORTED_TERMS.filter(t => t.essential), []);
+
+  const isSearching = search.length > 0;
+
+  const filtered = useMemo(() => {
+    if (!isSearching && !activeLetter) return SORTED_TERMS;
+    let results = SORTED_TERMS;
+    if (isSearching) {
+      const q = search.toLowerCase();
+      results = results.filter(t =>
+        t.term.toLowerCase().includes(q) || t.def.toLowerCase().includes(q)
+      );
+    }
+    if (activeLetter) {
+      results = results.filter(t => t.term[0].toUpperCase() === activeLetter);
+    }
+    return results;
+  }, [search, activeLetter, isSearching]);
+
+  // Group by first letter
+  const grouped = useMemo(() => {
+    const map: Record<string, Term[]> = {};
+    for (const t of filtered) {
+      const letter = t.term[0].toUpperCase();
+      if (!map[letter]) map[letter] = [];
+      map[letter].push(t);
+    }
+    return map;
+  }, [filtered]);
+
+  // Letters that have terms
+  const activeLetters = useMemo(() => {
+    const set = new Set<string>();
+    for (const t of SORTED_TERMS) set.add(t.term[0].toUpperCase());
+    return set;
   }, []);
 
-  const filteredTerms = SORTED_TERMS.filter(t => 
-    t.term.toLowerCase().includes(searchTerm.toLowerCase()) || 
-    t.def.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const scrollToLetter = (letter: string) => {
+    setActiveLetter(prev => prev === letter ? null : letter);
+    // If clearing the filter, no scroll needed
+    if (activeLetter === letter) return;
+    // Let the filter render, then scroll to top of list
+    setTimeout(() => {
+      const el = sectionRefs.current[letter];
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 50);
+  };
 
   return (
     <>
       <Header />
-      <div className="min-h-screen bg-bg-void text-text-primary pt-24 pb-12 px-4 md:px-8 font-sans">
-        <div className="max-w-3xl mx-auto space-y-8 animate-fade-in">
-          
-          {/* Header */}
-          <div className="flex flex-col gap-6 border-b border-border-default pb-8">
-            <div className="flex items-center gap-2 text-gold mb-2">
-              <Book className="w-5 h-5" />
-              <span className="text-xs font-semibold uppercase tracking-widest">The Black Book</span>
+      <div className="min-h-screen bg-black text-white pt-[68px] pb-16 px-4 md:px-8 font-sans">
+        <div className="max-w-3xl mx-auto animate-fade-in">
+
+          {/* ─── Header ─── */}
+          <div className="pt-4 pb-6 space-y-4 border-b border-white/[0.08]">
+            <div className="flex items-center gap-2 text-gold">
+              <Book className="w-4 h-4" />
+              <span className="text-[10px] font-semibold uppercase tracking-[0.2em]">The Black Book</span>
             </div>
-            
-            <h1 className="text-5xl md:text-6xl font-bebas text-white tracking-wide">
+
+            <h1 className="text-4xl md:text-5xl font-bebas text-white tracking-wide leading-none">
               Protocol <span className="text-gold">Glossary</span>
             </h1>
-            
-            <p className="text-xl text-text-mid leading-relaxed max-w-2xl">
+
+            <p className="text-sm text-white/50 leading-relaxed max-w-xl">
               The film industry uses jargon to keep outsiders out. This is your decoder ring.
-              Knowing these terms is the difference between looking like a novice and looking like a closer.
             </p>
 
-            {/* Search Bar */}
-            <div className="relative max-w-md">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Search className="h-4 w-4 text-text-dim" />
+            {/* ─── Search ─── */}
+            <div className="relative max-w-md pt-1">
+              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                <Search className="h-4 w-4 text-white/30" />
               </div>
               <input
                 type="text"
-                placeholder="Search 100+ terms..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="block w-full pl-10 pr-3 py-3 border border-border-subtle rounded-md leading-5 bg-bg-elevated text-text-primary placeholder-text-dim focus:outline-none focus:border-border-active focus:shadow-focus sm:text-sm transition-all"
+                placeholder={`Search ${SORTED_TERMS.length} terms…`}
+                value={search}
+                onChange={(e) => { setSearch(e.target.value); setActiveLetter(null); }}
+                className="block w-full pl-10 pr-3 py-3 border border-white/[0.12] rounded bg-white/[0.04] text-white placeholder-white/30 focus:outline-none focus:border-gold/40 focus:bg-white/[0.06] text-sm transition-all"
               />
+              {search && (
+                <button
+                  onClick={() => setSearch("")}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/60 text-xs"
+                >
+                  Clear
+                </button>
+              )}
             </div>
           </div>
 
-          {/* Terms List */}
-          <div className="grid gap-4">
-            {filteredTerms.length === 0 ? (
-              <div className="py-12 text-center text-text-dim">
-                No terms found for "{searchTerm}"
+          {/* ─── Alphabet Rail ─── */}
+          <div className="sticky top-14 z-20 bg-black/95 backdrop-blur-sm border-b border-white/[0.06] py-2.5 -mx-4 px-4 md:-mx-8 md:px-8">
+            <div className="flex flex-wrap gap-0.5 justify-center max-w-3xl mx-auto">
+              {ALPHABET.map(letter => {
+                const hasTerms = activeLetters.has(letter);
+                const isActive = activeLetter === letter;
+                return (
+                  <button
+                    key={letter}
+                    disabled={!hasTerms}
+                    onClick={() => { scrollToLetter(letter); setSearch(""); }}
+                    className={cn(
+                      "w-8 h-8 text-xs font-semibold rounded transition-all",
+                      !hasTerms && "text-white/10 cursor-default",
+                      hasTerms && !isActive && "text-white/40 hover:text-white hover:bg-white/[0.06]",
+                      isActive && "bg-gold/20 text-gold"
+                    )}
+                  >
+                    {letter}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* ─── Essential Terms ─── */}
+          {!isSearching && !activeLetter && (
+            <div className="pt-8 pb-4">
+              <div className="flex items-center gap-2 mb-5">
+                <Star className="w-3.5 h-3.5 text-gold" />
+                <h2 className="text-[11px] font-semibold uppercase tracking-[0.2em] text-gold">
+                  Know These First
+                </h2>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {essentialTerms.map(t => (
+                  <button
+                    key={t.term}
+                    onClick={() => {
+                      setSearch(t.term.split(" (")[0].split(" /")[0]);
+                    }}
+                    className="group text-left border border-gold/20 bg-gold/[0.04] hover:bg-gold/[0.08] rounded-lg px-4 py-3 transition-all"
+                  >
+                    <div className="text-sm font-semibold text-white group-hover:text-gold transition-colors leading-tight">
+                      {t.term}
+                    </div>
+                    <div className="text-xs text-white/40 mt-1 line-clamp-2 leading-relaxed">
+                      {t.def}
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* ─── Terms List (grouped by letter) ─── */}
+          <div className="pt-6 space-y-1">
+            {filtered.length === 0 ? (
+              <div className="py-16 text-center">
+                <p className="text-white/30 text-sm">No terms found for "{search}"</p>
+                <button
+                  onClick={() => { setSearch(""); setActiveLetter(null); }}
+                  className="text-gold/60 hover:text-gold text-xs mt-2 transition-colors"
+                >
+                  Clear search
+                </button>
               </div>
             ) : (
-              filteredTerms.map((item, idx) => (
-                <div 
-                  key={idx}
-                  className="group bg-bg-surface border border-border-default hover:border-border-active rounded-lg p-6 transition-all duration-200"
+              Object.entries(grouped).map(([letter, terms]) => (
+                <div
+                  key={letter}
+                  ref={(el) => { sectionRefs.current[letter] = el; }}
+                  className="scroll-mt-28"
                 >
-                  <div className="flex flex-col md:flex-row md:items-baseline gap-2 md:gap-4 mb-2">
-                    <h3 className="text-xl font-semibold text-white group-hover:text-text-primary transition-colors">
-                      {item.term}
-                    </h3>
-                    <span className="text-[10px] uppercase tracking-wider text-text-dim bg-bg-elevated px-2 py-1 rounded w-fit">
-                      {item.category}
-                    </span>
+                  {/* Letter divider */}
+                  <div className="flex items-center gap-3 pt-6 pb-3">
+                    <span className="text-xl font-bebas text-gold/60 w-6 text-center">{letter}</span>
+                    <div className="flex-1 h-[1px] bg-white/[0.06]" />
+                    <span className="text-[10px] text-white/20 tabular-nums">{terms.length}</span>
                   </div>
-                  <p className="text-text-mid leading-relaxed text-sm md:text-base">
-                    {item.def}
-                  </p>
+
+                  {/* Terms */}
+                  {terms.map(t => {
+                    const isLong = t.def.length > 120;
+                    const isExpanded = expanded === t.term;
+                    return (
+                      <div
+                        key={t.term}
+                        className={cn(
+                          "group border-l-2 border-transparent hover:border-gold/30 pl-4 py-2.5 -ml-[2px] transition-all cursor-default",
+                          t.essential && "border-gold/10"
+                        )}
+                        onClick={() => isLong && setExpanded(isExpanded ? null : t.term)}
+                      >
+                        <div className="flex items-baseline gap-3 flex-wrap">
+                          <h3 className="text-[15px] font-semibold text-white/90 leading-tight">
+                            {t.term}
+                            {t.essential && <Star className="inline w-2.5 h-2.5 text-gold/50 ml-1.5 -mt-0.5" />}
+                          </h3>
+                          <span className={cn("text-[9px] uppercase tracking-[0.12em] font-medium", CATEGORY_COLORS[t.category])}>
+                            {t.category}
+                          </span>
+                        </div>
+                        <p className={cn(
+                          "text-[13px] text-white/40 leading-relaxed mt-1",
+                          isLong && !isExpanded && "line-clamp-2"
+                        )}>
+                          {t.def}
+                        </p>
+                        {isLong && (
+                          <button className="flex items-center gap-1 text-[10px] text-white/20 hover:text-white/40 mt-1 transition-colors">
+                            <ChevronDown className={cn("w-3 h-3 transition-transform", isExpanded && "rotate-180")} />
+                            {isExpanded ? "Less" : "More"}
+                          </button>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               ))
             )}
           </div>
 
-          {/* Footer */}
-          <div className="pt-12 border-t border-border-default space-y-6">
-            <div className="flex flex-col items-center gap-4 text-center">
-              <div className="flex items-center gap-2 text-gold">
-                <Mail className="w-4 h-4" />
-                <span className="text-xs font-semibold uppercase tracking-widest">Questions or Corrections?</span>
-              </div>
-              <p className="text-sm text-text-mid max-w-md">
-                This glossary is a living document. If you spot an error or want to suggest a term, email us:
-              </p>
-              <a 
-                href="mailto:thefilmmaker.og@gmail.com" 
-                className="text-text-dim hover:text-text-mid transition-colors text-sm font-mono"
-              >
-                thefilmmaker.og@gmail.com
-              </a>
+          {/* ─── Footer ─── */}
+          <div className="pt-12 mt-8 border-t border-white/[0.06] space-y-5 text-center">
+            <div className="flex items-center justify-center gap-2 text-gold/60">
+              <Mail className="w-3.5 h-3.5" />
+              <span className="text-[10px] font-semibold uppercase tracking-[0.16em]">Questions or Corrections?</span>
             </div>
+            <p className="text-xs text-white/30 max-w-sm mx-auto leading-relaxed">
+              This glossary is a living document. Spot an error or want to suggest a term?
+            </p>
+            <a
+              href="mailto:thefilmmaker.og@gmail.com"
+              className="inline-block text-white/20 hover:text-white/40 transition-colors text-xs font-mono"
+            >
+              thefilmmaker.og@gmail.com
+            </a>
 
-            <div className="flex justify-center pt-4">
-              <button 
-                onClick={() => navigate('/')} 
-                className="flex items-center gap-2 text-text-dim hover:text-text-mid transition-colors uppercase tracking-widest text-xs font-semibold"
+            <div className="pt-4">
+              <button
+                onClick={() => navigate('/')}
+                className="flex items-center gap-2 mx-auto text-white/20 hover:text-white/40 transition-colors uppercase tracking-[0.16em] text-[10px] font-semibold"
               >
-                <Home className="w-4 h-4" />
+                <Home className="w-3.5 h-3.5" />
                 Return to Home
               </button>
             </div>
