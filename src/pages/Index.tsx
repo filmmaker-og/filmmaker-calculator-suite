@@ -803,19 +803,18 @@ const Index = () => {
                     <div className="absolute left-0 top-0 bottom-0 w-[3px]"
                       style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.55), rgba(212,175,55,0.25), transparent)' }}
                     />
-                    <div className="pl-2">
+                    {/* Lock — pinned top-right for uniform placement */}
+                    <LockKeyhole
+                      className="absolute top-4 right-4 w-4 h-4 text-gold/40"
+                      strokeWidth={2}
+                    />
+                    <div className="pl-2 pr-6">
                       <p className="font-bebas text-[17px] md:text-[20px] tracking-[0.08em] uppercase leading-tight text-white mb-2">
                         {door.name}
                       </p>
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="font-mono text-[15px] font-bold text-gold">
-                          {door.cost}
-                        </span>
-                        <LockKeyhole
-                          className="w-4 h-4 text-gold/70"
-                          strokeWidth={2.5}
-                        />
-                      </div>
+                      <span className="font-mono text-[15px] font-bold text-gold block mb-2">
+                        {door.cost}
+                      </span>
                       <p className="text-sm leading-relaxed text-white/60">
                         {door.lock}
                       </p>
@@ -882,32 +881,30 @@ const Index = () => {
                     className={cn(
                       "relative border overflow-hidden p-5 md:p-7 transition-all duration-600 ease-out",
                       t.featured
-                        ? "border-gold/60 bg-gold/[0.10] scale-[1.04]"
+                        ? "border-gold/50 bg-white/[0.04]"
                         : t.elevated
-                          ? "border-gold/30 bg-white/[0.05]"
+                          ? "border-white/[0.12] bg-white/[0.04]"
                           : "border-white/[0.10] bg-white/[0.04]",
                       revPath.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
                     )}
                     style={{
                       transitionDelay: revPath.visible ? `${i * 150}ms` : '0ms',
-                      ...(t.featured ? { boxShadow: '0 0 40px rgba(212,175,55,0.12), 0 12px 40px rgba(212,175,55,0.08), inset 0 1px 0 rgba(212,175,55,0.20)' } : {}),
+                      ...(t.featured ? { boxShadow: '0 0 30px rgba(212,175,55,0.10), 0 0 60px rgba(212,175,55,0.05)' } : {}),
                     }}
                   >
-                    {/* Gold left accent — all cards get one, featured is stronger */}
-                    <div className={cn(
-                      "absolute left-0 top-0 bottom-0 w-[3px]",
+                    {/* Gold top accent — featured gets a full-width gold bar */}
+                    {t.featured && (
+                      <div className="absolute top-0 left-0 right-0 h-[2px] bg-gold/70" />
                     )}
+                    {/* Gold left accent — all cards get one, same weight */}
+                    <div className="absolute left-0 top-0 bottom-0 w-[3px]"
                       style={{
-                        background: t.featured
-                          ? 'linear-gradient(to bottom, rgba(212,175,55,0.80), rgba(212,175,55,0.40), transparent)'
-                          : t.elevated
-                            ? 'linear-gradient(to bottom, rgba(212,175,55,0.55), rgba(212,175,55,0.25), transparent)'
-                            : 'linear-gradient(to bottom, rgba(212,175,55,0.35), rgba(212,175,55,0.15), transparent)',
+                        background: 'linear-gradient(to bottom, rgba(212,175,55,0.50), rgba(212,175,55,0.20), transparent)',
                       }}
                     />
                     {t.featured && (
                       <div className="mb-3">
-                        <span className="text-sm tracking-[0.16em] uppercase font-bold text-gold bg-gold/[0.15] px-3 py-1.5 border border-gold/50">
+                        <span className="text-[11px] tracking-[0.16em] uppercase font-bold text-gold bg-gold/[0.12] px-3 py-1.5 border border-gold/30">
                           Recommended
                         </span>
                       </div>
