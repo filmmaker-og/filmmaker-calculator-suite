@@ -552,7 +552,21 @@ const Index = () => {
              ────────────────────────────────────────────────────────── */}
           <SectionFrame id="waterfall">
             <div ref={revWater.ref} className={cn("transition-all duration-700 ease-out", revWater.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
-              <SectionHeader eyebrow="The Waterfall" title={<>HOW THE MONEY <span className="text-white">FLOWS</span></>} flankingLines compact />
+              {/* THE REVEAL — oversized, not the standard compact SectionHeader */}
+              <div className="text-center mb-12">
+                <div className="flex items-center justify-center gap-4 mb-5">
+                  <div className="h-[1px] w-10 bg-gradient-to-r from-transparent to-gold/40" />
+                  <p className="tracking-[0.3em] uppercase font-semibold text-gold/70 text-xs">The Reveal</p>
+                  <div className="h-[1px] w-10 bg-gradient-to-l from-transparent to-gold/40" />
+                </div>
+                <h2
+                  className="font-bebas tracking-[0.06em] text-[52px] md:text-[72px] leading-[0.9]"
+                  style={{ textShadow: revWater.visible ? '0 0 40px rgba(212,175,55,0.3), 0 0 80px rgba(212,175,55,0.1)' : 'none' }}
+                >
+                  <span className="text-gold">THE</span> <span className="text-white">WATERFALL</span>
+                </h2>
+                <p className="text-white/40 text-sm tracking-[0.15em] uppercase mt-4">How the money flows</p>
+              </div>
 
               <p className="text-white/50 text-sm text-center mb-1">A simplified $3M SVOD acquisition.</p>
               <p className="text-white/60 text-sm font-medium text-center mb-6">Here&rsquo;s what actually reaches the filmmaker.</p>
