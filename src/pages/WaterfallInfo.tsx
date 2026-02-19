@@ -20,11 +20,11 @@ const WaterfallInfo = () => {
   return (
     <>
       <Header />
-      <div className="min-h-screen bg-black text-white pt-24 pb-16 px-4 md:px-8 font-sans">
-        <div className="max-w-4xl mx-auto space-y-14 animate-fade-in">
+      <div className="min-h-screen bg-black text-white pt-[68px] pb-16 px-4 md:px-8 font-sans">
+        <div className="max-w-4xl mx-auto space-y-8 animate-fade-in">
 
           {/* ─── Title ─── */}
-          <div className="space-y-6 pb-8">
+          <div className="space-y-4 pb-5">
             <div className="flex items-center gap-3">
               <div className="h-[1px] w-8 bg-gold/50" />
               <span className="text-[12px] tracking-[0.3em] uppercase font-semibold text-gold/70">
@@ -36,7 +36,7 @@ const WaterfallInfo = () => {
               The Waterfall <span className="text-white">Protocol</span>
             </h1>
 
-            <p className="text-[15px] md:text-[17px] text-white/55 leading-[1.7] max-w-2xl">
+            <p className="text-[15px] md:text-[17px] text-white/70 leading-[1.7] max-w-2xl">
               Understanding the priority of payments is the single most critical skill for a producer.
               This is the proprietary logic used by sales agents to distribute revenue.
             </p>
@@ -54,11 +54,11 @@ const WaterfallInfo = () => {
               The &ldquo;Bucket&rdquo; Metaphor
             </h2>
             <div className="space-y-4">
-              <p className="text-[15px] md:text-base text-white/60 leading-[1.7]">
+              <p className="text-[15px] md:text-base text-white/75 leading-[1.7]">
                 Imagine a series of buckets arranged vertically. Water (revenue) is poured into the top bucket.
                 Only when the first bucket is full does it spill over into the next one.
               </p>
-              <p className="text-[15px] md:text-base text-white/60 leading-[1.7]">
+              <p className="text-[15px] md:text-base text-white/75 leading-[1.7]">
                 If the flow of water stops, the buckets at the bottom stay dry.
                 <span className="text-gold font-semibold"> You (the Producer) are at the very bottom.</span>
               </p>
@@ -76,7 +76,7 @@ const WaterfallInfo = () => {
               </h2>
             </div>
 
-            <div className="bg-white/[0.02] border border-white/[0.10] overflow-hidden">
+            <div className="bg-white/[0.03] border border-white/[0.10] overflow-hidden">
               <div className="grid grid-cols-[auto_1fr] gap-0 divide-y divide-white/[0.06]">
                 {[
                   { num: '01', title: 'Collection Account Management (CAM)', desc: 'Before anything happens, the CAM takes ~1% off the top to manage the money. This protects you from the distributor holding your cash.' },
@@ -87,12 +87,12 @@ const WaterfallInfo = () => {
                   { num: '06', title: 'Equity Investors (Principal + Premium)', desc: 'Your investors get 100% of their money back, plus a premium (usually 20%). Only after they are 120% whole does the \u201cNet Profit\u201d split begin.' },
                 ].map((row) => (
                   <div key={row.num} className="contents">
-                    <div className="p-4 bg-white/[0.02] text-gold font-mono font-medium border-r border-white/[0.06] flex items-center justify-center min-w-[60px] text-[15px]">
+                    <div className="p-4 bg-white/[0.03] text-gold font-mono font-medium border-r border-white/[0.06] flex items-center justify-center min-w-[60px] text-[15px]">
                       {row.num}
                     </div>
                     <div className="p-5">
                       <h3 className="text-white font-semibold text-base mb-1.5">{row.title}</h3>
-                      <p className="text-[15px] text-white/55 leading-[1.7]">
+                      <p className="text-[15px] text-white/70 leading-[1.7]">
                         {row.desc}
                         {row.trap && (
                           <span className="block mt-2 text-gold text-[13px] font-semibold tracking-wide">{row.trap}</span>
@@ -113,7 +113,7 @@ const WaterfallInfo = () => {
             <h2 className="font-bebas text-[24px] md:text-[30px] tracking-[0.06em] text-gold">
               The Backend Split
             </h2>
-            <p className="text-[15px] md:text-base text-white/55 leading-[1.7] max-w-2xl">
+            <p className="text-[15px] md:text-base text-white/70 leading-[1.7] max-w-2xl">
               Once everyone above is paid, the remaining water falls into the &ldquo;Net Profit&rdquo; pool.
               This is typically split 50/50.
             </p>
@@ -129,41 +129,41 @@ const WaterfallInfo = () => {
                 <div className="font-mono text-[36px] md:text-[48px] font-bold text-gold leading-none mb-3">
                   50%
                 </div>
-                <p className="text-[14px] text-gold/60 leading-[1.65]">
+                <p className="text-[14px] text-gold/70 leading-[1.65]">
                   You, the director, and talent points come from this pool. This is the money you actually fight for.
                 </p>
               </div>
 
               {/* Investor Corridor */}
-              <div className="relative border border-white/[0.15] bg-white/[0.04] p-5 md:p-7 overflow-hidden">
+              <div className="relative border border-white/[0.15] bg-white/[0.05] p-5 md:p-7 overflow-hidden">
                 <div className="absolute top-0 left-0 right-0 h-[2px] bg-white/[0.15]" />
-                <p className="text-[11px] tracking-[0.2em] uppercase font-semibold text-white/50 mb-3">
+                <p className="text-[11px] tracking-[0.2em] uppercase font-semibold text-white/60 mb-3">
                   Investor Corridor
                 </p>
-                <div className="font-mono text-[36px] md:text-[48px] font-bold text-white/70 leading-none mb-3">
+                <div className="font-mono text-[36px] md:text-[48px] font-bold text-white/80 leading-none mb-3">
                   50%
                 </div>
-                <p className="text-[14px] text-white/50 leading-[1.65]">
+                <p className="text-[14px] text-white/60 leading-[1.65]">
                   Pro-rata share to equity financiers. They already got their principal + premium above.
                 </p>
               </div>
             </div>
 
-            {/* Flow diagram — full width */}
+            {/* Flow diagram */}
             <div className="py-8">
               <div className="relative">
                 {/* Vertical spine */}
-                <div className="absolute left-1/2 top-0 -translate-x-1/2 w-[1px] bg-white/[0.08]" style={{ height: 'calc(100% - 80px)' }} />
+                <div className="absolute left-1/2 top-0 -translate-x-1/2 w-[1px] bg-white/[0.15]" style={{ height: 'calc(100% - 80px)' }} />
 
                 <div className="space-y-0 relative z-10">
                   {['Distributor Revenue', 'Sales Agent Fees', 'Lenders', 'Equity Investors'].map((label, i) => (
                     <div key={label}>
-                      <div className="max-w-sm mx-auto h-14 border border-white/[0.15] bg-black flex items-center justify-center text-[14px] tracking-[0.08em] text-white/60 uppercase font-medium">
+                      <div className="max-w-sm mx-auto h-14 border border-white/[0.25] bg-[#1a1a1a] flex items-center justify-center text-[14px] tracking-[0.08em] text-white/80 uppercase font-medium">
                         {label}
                       </div>
                       {i < 3 && (
                         <div className="flex justify-center h-7">
-                          <div className="w-[1px] h-full bg-white/[0.15]" />
+                          <div className="w-[1px] h-full bg-white/[0.25]" />
                         </div>
                       )}
                     </div>
@@ -172,22 +172,22 @@ const WaterfallInfo = () => {
 
                 {/* Gold branch to corridors */}
                 <div className="flex justify-center h-7 relative z-10">
-                  <div className="w-[1px] h-full bg-gold/50" />
+                  <div className="w-[1px] h-full bg-gold/60" />
                 </div>
 
                 {/* Horizontal branch */}
                 <div className="relative mx-auto max-w-sm">
-                  <div className="h-[1px] bg-gold/40" />
-                  <div className="absolute left-0 top-0 w-[1px] h-6 bg-gold/40" />
-                  <div className="absolute right-0 top-0 w-[1px] h-6 bg-gold/40" />
+                  <div className="h-[1px] bg-gold/50" />
+                  <div className="absolute left-0 top-0 w-[1px] h-6 bg-gold/50" />
+                  <div className="absolute right-0 top-0 w-[1px] h-6 bg-gold/50" />
                 </div>
 
                 {/* Terminal boxes */}
                 <div className="grid grid-cols-2 gap-4 mt-6 max-w-sm mx-auto">
-                  <div className="h-16 border border-gold/40 bg-gold/[0.08] flex items-center justify-center text-[14px] font-semibold text-gold tracking-[0.14em] uppercase">
+                  <div className="h-16 border border-gold/50 bg-gold/[0.12] flex items-center justify-center text-[14px] font-semibold text-gold tracking-[0.14em] uppercase">
                     Producers
                   </div>
-                  <div className="h-16 border border-white/[0.15] bg-white/[0.04] flex items-center justify-center text-[14px] font-semibold text-white/60 tracking-[0.14em] uppercase">
+                  <div className="h-16 border border-white/[0.25] bg-[#1a1a1a] flex items-center justify-center text-[14px] font-semibold text-white/80 tracking-[0.14em] uppercase">
                     Investors
                   </div>
                 </div>
@@ -213,7 +213,7 @@ const WaterfallInfo = () => {
             <div className="grid md:grid-cols-2 gap-6">
               <div>
                 <h3 className="text-white font-semibold text-[15px] mb-1.5">Cross-Collateralization</h3>
-                <p className="text-[14px] text-white/55 leading-[1.65]">
+                <p className="text-[14px] text-white/70 leading-[1.65]">
                   When a distributor uses the profits from your film to pay for the losses of <em>another</em> film they bought.
                   <span className="block mt-2 text-gold text-[13px] font-semibold tracking-wide">
                     Never allow this. Require &ldquo;Single Picture Accounting&rdquo;.
@@ -222,7 +222,7 @@ const WaterfallInfo = () => {
               </div>
               <div>
                 <h3 className="text-white font-semibold text-[15px] mb-1.5">Overhead Fees</h3>
-                <p className="text-[14px] text-white/55 leading-[1.65]">
+                <p className="text-[14px] text-white/70 leading-[1.65]">
                   Distributors often charge a flat &ldquo;Overhead&rdquo; fee (10-15%) on top of their commission for &ldquo;office expenses.&rdquo;
                   This is pure profit for them. Fight to cap or remove it.
                 </p>
@@ -244,7 +244,7 @@ const WaterfallInfo = () => {
                   <span className="text-gold">actually makes money.</span>
                 </h3>
 
-                <p className="text-[17px] text-white/55 leading-[1.7] max-w-sm">
+                <p className="text-[17px] text-white/70 leading-[1.7] max-w-sm">
                   Plug in your budget, financing, and deal terms.
                   See where every dollar ends up.
                 </p>
