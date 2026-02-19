@@ -276,9 +276,7 @@ type AiMessage = {
 const EXAMPLE_CHIPS = [
   "What is a waterfall?",
   "How does gap financing work?",
-  "What percentage does a sales agent take?",
-  "Explain Producer's Corridor",
-  "What is cross-collateralization?",
+  "What is a CAM?",
 ];
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
@@ -489,13 +487,13 @@ const Glossary = () => {
         {/* ═══════════════════════════════════════════════════════════
             PAGE TITLE BLOCK
             ═══════════════════════════════════════════════════════════ */}
-        <div className="px-6 md:px-10 pt-8 pb-6">
+        <div className="px-6 md:px-10 pt-4 pb-3">
           <div className="max-w-4xl mx-auto">
             <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-gold/60 mb-3">
-              The Black Book
+              Film Finance
             </p>
             <h1 className="font-bebas text-5xl md:text-7xl tracking-wide text-white leading-none">
-              Protocol <span className="text-gold">Glossary</span>
+              The <span className="text-gold">Glossary</span>
             </h1>
             <p className="text-sm text-white/40 leading-relaxed mt-3 max-w-xl">
               The film industry uses jargon to keep outsiders out. This is your decoder ring — {SORTED_TERMS.length} terms, curated from the front lines.
@@ -503,7 +501,146 @@ const Glossary = () => {
           </div>
         </div>
 
-        <Divider />
+        {/* ═══════════════════════════════════════════════════════════
+            ASK THE OG — AI Strip (moved to top)
+            ═══════════════════════════════════════════════════════════ */}
+        <div
+          ref={revAsk.ref}
+          style={{
+            opacity: revAsk.visible ? 1 : 0,
+            transform: revAsk.visible ? "translateY(0)" : "translateY(24px)",
+            transition: "opacity 0.6s ease, transform 0.6s ease",
+          }}
+        >
+          <SectionFrame id="ask-the-og">
+            <SectionHeader
+              eyebrow="AI Search"
+              title={
+                <span className="flex items-center justify-center gap-3">
+                  <Sparkles className="w-7 h-7 text-gold" />
+                  ASK THE OG
+                </span>
+              }
+              subtitle="Film industry questions only."
+              plainSubtitle
+            />
+
+            {/* Example chips */}
+            {ogMessages.length === 0 && (
+              <div className="flex flex-wrap gap-2 mb-6 justify-center">
+                {EXAMPLE_CHIPS.map(chip => (
+                  <button
+                    key={chip}
+                    onClick={() => handleAsk(chip)}
+                    disabled={ogLoading}
+                    style={{ borderRadius: 0 }}
+                    className="text-[11px] font-mono uppercase tracking-wider px-3 py-1.5 border border-gold/20 text-gold/50 hover:border-gold/50 hover:text-gold hover:bg-gold/[0.06] transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                  >
+                    {chip}
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {/* Message history */}
+            {ogMessages.length > 0 && (
+              <div className="space-y-5 mb-6">
+                {ogMessages.map(msg => (
+                  <div key={msg.id} className="space-y-3">
+                    {/* Question */}
+                    <div className="flex justify-end">
+                      <div
+                        className="max-w-[85%] px-4 py-2.5 border border-gold/20 bg-gold/[0.06] text-sm text-white/80"
+                        style={{ borderRadius: 0 }}
+                      >
+                        {msg.question}
+                      </div>
+                    </div>
+
+                    {/* Answer */}
+                    <div className="flex justify-start">
+                      <div
+                        className="max-w-[95%] border border-white/[0.08] bg-white/[0.02] overflow-hidden"
+                        style={{ borderRadius: 0 }}
+                      >
+                        {/* Answer header bar */}
+                        <div className="flex items-center gap-2 px-4 py-2 border-b border-white/[0.06] bg-gold/[0.03]">
+                          <Sparkles className="w-3 h-3 text-gold/60" />
+                          <span className="text-[9px] uppercase tracking-[0.2em] font-mono text-gold/50">
+                            The OG
+                          </span>
+                          {msg.streaming && (
+                            <div className="flex gap-1 ml-auto">
+                              <div className="w-1 h-1 bg-gold/60 animate-bounce" style={{ animationDelay: "0ms" }} />
+                              <div className="w-1 h-1 bg-gold/60 animate-bounce" style={{ animationDelay: "150ms" }} />
+                              <div className="w-1 h-1 bg-gold/60 animate-bounce" style={{ animationDelay: "300ms" }} />
+                            </div>
+                          )}
+                        </div>
+                        {/* Answer content */}
+                        <div className="px-4 py-3">
+                          {msg.error ? (
+                            <p className="text-[15px] text-gold/50 leading-relaxed">{msg.error}</p>
+                          ) : (
+                            <p className="text-[15px] text-white/80 leading-relaxed whitespace-pre-wrap">
+                              {msg.answer}
+                              {msg.streaming && !msg.answer && (
+                                <span className="text-white/20">Thinking…</span>
+                              )}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                <div ref={messagesEndRef} />
+              </div>
+            )}
+
+            {/* Input form */}
+            <form onSubmit={handleOgSubmit} className="relative">
+              <div className="flex gap-0 border border-gold/20 focus-within:border-gold/50 transition-colors">
+                <textarea
+                  ref={inputRef}
+                  value={ogInput}
+                  onChange={(e) => {
+                    if (e.target.value.length <= 500) setOgInput(e.target.value);
+                  }}
+                  onKeyDown={handleKeyDown}
+                  placeholder="Ask a film industry question…"
+                  rows={2}
+                  disabled={ogLoading}
+                  className="flex-1 px-4 py-3 bg-transparent text-white placeholder-white/20 focus:outline-none text-base resize-none disabled:opacity-50"
+                  style={{ borderRadius: 0 }}
+                />
+                <button
+                  type="submit"
+                  disabled={!ogInput.trim() || ogLoading}
+                  style={{ borderRadius: 0 }}
+                  className="px-5 bg-gold/[0.06] border-l border-gold/20 text-gold hover:bg-gold/[0.15] disabled:opacity-30 disabled:cursor-not-allowed transition-all flex items-center gap-2 flex-shrink-0"
+                >
+                  <SendHorizonal className="w-4 h-4" />
+                  <span className="font-bebas text-base tracking-wider hidden sm:block">ASK</span>
+                </button>
+              </div>
+              {/* Character counter */}
+              <div className="flex items-center justify-between mt-1.5 px-1">
+                <p className="text-[10px] text-white/15 font-mono">
+                  Press Enter to send · Shift+Enter for new line
+                </p>
+                <span className={cn(
+                  "text-[10px] font-mono tabular-nums",
+                  ogInput.length > 450 ? "text-gold/60" : "text-white/15"
+                )}>
+                  {ogInput.length}/500
+                </span>
+              </div>
+            </form>
+          </SectionFrame>
+        </div>
+
+        <div className="py-2" />
 
         {/* ═══════════════════════════════════════════════════════════
             TOP 10 MUST-KNOW TERMS
@@ -527,7 +664,7 @@ const Glossary = () => {
               {TOP_10.map((item, i) => (
                 <div
                   key={item.num}
-                  className="group flex gap-4 border border-white/[0.06] hover:border-gold/20 bg-white/[0.02] hover:bg-gold/[0.03] transition-all duration-300 p-4"
+                  className="group flex gap-4 border border-white/[0.06] hover:border-gold/20 bg-white/[0.02] hover:bg-gold/[0.03] transition-all duration-300 p-5"
                   style={{
                     opacity: revTop10.visible ? 1 : 0,
                     transform: revTop10.visible ? "translateY(0)" : "translateY(16px)",
@@ -543,14 +680,14 @@ const Glossary = () => {
                   {/* Content */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-baseline gap-3 flex-wrap mb-1">
-                      <h3 className="font-bebas text-xl tracking-wide text-white group-hover:text-gold transition-colors">
+                      <h3 className="font-bebas text-2xl tracking-wide text-white group-hover:text-gold transition-colors">
                         {item.term}
                       </h3>
                       <span className="text-[9px] uppercase tracking-[0.15em] text-gold/40 font-mono">
                         {item.category}
                       </span>
                     </div>
-                    <p className="text-[13px] text-white/50 leading-relaxed">
+                    <p className="text-[15px] text-white/65 leading-relaxed">
                       {item.def}
                     </p>
                   </div>
@@ -560,7 +697,7 @@ const Glossary = () => {
           </SectionFrame>
         </div>
 
-        <Divider />
+        <div className="py-2" />
 
         {/* ═══════════════════════════════════════════════════════════
             A–Z GLOSSARY
@@ -698,165 +835,6 @@ const Glossary = () => {
                 ))
               )}
             </div>
-          </SectionFrame>
-        </div>
-
-        <Divider />
-
-        {/* ═══════════════════════════════════════════════════════════
-            ASK THE OG — AI Strip
-            ═══════════════════════════════════════════════════════════ */}
-        <div
-          ref={revAsk.ref}
-          style={{
-            opacity: revAsk.visible ? 1 : 0,
-            transform: revAsk.visible ? "translateY(0)" : "translateY(24px)",
-            transition: "opacity 0.6s ease, transform 0.6s ease",
-          }}
-        >
-          <SectionFrame id="ask-the-og">
-            <SectionHeader
-              eyebrow="Film Industry Only"
-              title={
-                <span className="flex items-center justify-center gap-3">
-                  <Sparkles className="w-7 h-7 text-gold" />
-                  ASK THE OG
-                </span>
-              }
-              subtitle="Ask anything about film financing, distribution, deal structures, or waterfall accounting. This AI knows the industry — not anything else."
-              plainSubtitle
-            />
-
-            {/* Example chips */}
-            {ogMessages.length === 0 && (
-              <div className="flex flex-wrap gap-2 mb-6 justify-center">
-                {EXAMPLE_CHIPS.map(chip => (
-                  <button
-                    key={chip}
-                    onClick={() => handleAsk(chip)}
-                    disabled={ogLoading}
-                    style={{ borderRadius: 0 }}
-                    className="text-[11px] font-mono uppercase tracking-wider px-3 py-1.5 border border-gold/20 text-gold/50 hover:border-gold/50 hover:text-gold hover:bg-gold/[0.06] transition-all disabled:opacity-40 disabled:cursor-not-allowed"
-                  >
-                    {chip}
-                  </button>
-                ))}
-              </div>
-            )}
-
-            {/* Message history */}
-            {ogMessages.length > 0 && (
-              <div className="space-y-5 mb-6">
-                {ogMessages.map(msg => (
-                  <div key={msg.id} className="space-y-3">
-                    {/* Question */}
-                    <div className="flex justify-end">
-                      <div
-                        className="max-w-[85%] px-4 py-2.5 border border-gold/20 bg-gold/[0.06] text-sm text-white/80"
-                        style={{ borderRadius: 0 }}
-                      >
-                        {msg.question}
-                      </div>
-                    </div>
-
-                    {/* Answer */}
-                    <div className="flex justify-start">
-                      <div
-                        className="max-w-[95%] border border-white/[0.08] bg-white/[0.02] overflow-hidden"
-                        style={{ borderRadius: 0 }}
-                      >
-                        {/* Answer header bar */}
-                        <div className="flex items-center gap-2 px-4 py-2 border-b border-white/[0.06] bg-gold/[0.03]">
-                          <Sparkles className="w-3 h-3 text-gold/60" />
-                          <span className="text-[9px] uppercase tracking-[0.2em] font-mono text-gold/50">
-                            The OG
-                          </span>
-                          {msg.streaming && (
-                            <div className="flex gap-1 ml-auto">
-                              <div className="w-1 h-1 bg-gold/60 animate-bounce" style={{ animationDelay: "0ms" }} />
-                              <div className="w-1 h-1 bg-gold/60 animate-bounce" style={{ animationDelay: "150ms" }} />
-                              <div className="w-1 h-1 bg-gold/60 animate-bounce" style={{ animationDelay: "300ms" }} />
-                            </div>
-                          )}
-                        </div>
-                        {/* Answer content */}
-                        <div className="px-4 py-3">
-                          {msg.error ? (
-                            <p className="text-[13px] text-gold/50 leading-relaxed">{msg.error}</p>
-                          ) : (
-                            <p className="text-[13px] text-white/70 leading-relaxed whitespace-pre-wrap">
-                              {msg.answer}
-                              {msg.streaming && !msg.answer && (
-                                <span className="text-white/20">Thinking…</span>
-                              )}
-                            </p>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-                <div ref={messagesEndRef} />
-              </div>
-            )}
-
-            {/* Input form */}
-            <form onSubmit={handleOgSubmit} className="relative">
-              <div className="flex gap-0 border border-gold/20 focus-within:border-gold/50 transition-colors">
-                <textarea
-                  ref={inputRef}
-                  value={ogInput}
-                  onChange={(e) => {
-                    if (e.target.value.length <= 500) setOgInput(e.target.value);
-                  }}
-                  onKeyDown={handleKeyDown}
-                  placeholder="Ask a film industry question…"
-                  rows={2}
-                  disabled={ogLoading}
-                  className="flex-1 px-4 py-3 bg-transparent text-white placeholder-white/20 focus:outline-none text-sm resize-none disabled:opacity-50"
-                  style={{ borderRadius: 0 }}
-                />
-                <button
-                  type="submit"
-                  disabled={!ogInput.trim() || ogLoading}
-                  style={{ borderRadius: 0 }}
-                  className="px-5 bg-gold/[0.06] border-l border-gold/20 text-gold hover:bg-gold/[0.15] disabled:opacity-30 disabled:cursor-not-allowed transition-all flex items-center gap-2 flex-shrink-0"
-                >
-                  <SendHorizonal className="w-4 h-4" />
-                  <span className="font-bebas text-base tracking-wider hidden sm:block">ASK</span>
-                </button>
-              </div>
-              {/* Character counter */}
-              <div className="flex items-center justify-between mt-1.5 px-1">
-                <p className="text-[10px] text-white/15 font-mono">
-                  Press Enter to send · Shift+Enter for new line
-                </p>
-                <span className={cn(
-                  "text-[10px] font-mono tabular-nums",
-                  ogInput.length > 450 ? "text-gold/60" : "text-white/15"
-                )}>
-                  {ogInput.length}/500
-                </span>
-              </div>
-            </form>
-
-            {/* Ask again chips (after first message) */}
-            {ogMessages.length > 0 && (
-              <div className="flex flex-wrap gap-2 mt-5 pt-5 border-t border-white/[0.06]">
-                <span className="text-[10px] text-white/20 uppercase tracking-wider font-mono self-center">Try:</span>
-                {EXAMPLE_CHIPS.slice(0, 3).map(chip => (
-                  <button
-                    key={chip}
-                    onClick={() => handleAsk(chip)}
-                    disabled={ogLoading}
-                    style={{ borderRadius: 0 }}
-                    className="text-[10px] font-mono px-2.5 py-1 border border-white/[0.08] text-white/30 hover:border-gold/30 hover:text-gold/60 transition-all disabled:opacity-30"
-                  >
-                    {chip}
-                  </button>
-                ))}
-              </div>
-            )}
           </SectionFrame>
         </div>
 
