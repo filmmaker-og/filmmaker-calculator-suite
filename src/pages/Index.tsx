@@ -185,7 +185,6 @@ const Index = () => {
   const revFaq         = useReveal();
   const revFinal       = useReveal();
   const revUntilNow    = useReveal();
-  const revArsenal     = useReveal();
 
   // Waterfall bar animation
   const [barsRevealed, setBarsRevealed] = useState(false);
@@ -548,11 +547,25 @@ const Index = () => {
           <Divider />
 
           {/* ──────────────────────────────────────────────────────────
-               § 3  THE WATERFALL — proportional bars
+               § 3  THE WATERFALL — the reveal
              ────────────────────────────────────────────────────────── */}
           <SectionFrame id="waterfall">
             <div ref={revWater.ref} className={cn("transition-all duration-700 ease-out", revWater.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
-              <SectionHeader eyebrow="The Waterfall" title={<>HOW THE MONEY <span className="text-white">FLOWS</span></>} flankingLines compact />
+              {/* THE REVEAL — oversized, not the standard compact SectionHeader */}
+              <div className="text-center mb-12">
+                <div className="flex items-center justify-center gap-4 mb-5">
+                  <div className="h-[1px] w-10 bg-gradient-to-r from-transparent to-gold/40" />
+                  <p className="tracking-[0.3em] uppercase font-semibold text-gold/70 text-xs">The Reveal</p>
+                  <div className="h-[1px] w-10 bg-gradient-to-l from-transparent to-gold/40" />
+                </div>
+                <h2
+                  className="font-bebas tracking-[0.06em] text-[52px] md:text-[72px] leading-[0.9]"
+                  style={{ textShadow: revWater.visible ? '0 0 40px rgba(212,175,55,0.3), 0 0 80px rgba(212,175,55,0.1)' : 'none' }}
+                >
+                  <span className="text-gold">THE</span> <span className="text-white">WATERFALL</span>
+                </h2>
+                <p className="text-white/40 text-sm tracking-[0.15em] uppercase mt-4">How the money flows</p>
+              </div>
 
               <p className="text-white/50 text-sm text-center mb-1">A simplified $3M SVOD acquisition.</p>
               <p className="text-white/60 text-sm font-medium text-center mb-6">Here&rsquo;s what actually reaches the filmmaker.</p>
@@ -628,7 +641,7 @@ const Index = () => {
           <Divider />
 
           {/* ──────────────────────────────────────────────────────────
-               § 3  THE THESIS — stacked manifesto + Blum quote
+               § 4  THE THESIS — why film has no tools
              ────────────────────────────────────────────────────────── */}
           <SectionFrame id="mission">
             <div ref={revMission.ref} className={cn("transition-all duration-700 ease-out", revMission.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
@@ -680,7 +693,7 @@ const Index = () => {
             </div>
           </SectionFrame>
 
-          {/* ── TRANSITION — thesis to validation ── */}
+          {/* ── PIVOT — "Until now." ── */}
           <section className="py-10 md:py-14 px-6 relative">
             <div className="absolute inset-0 pointer-events-none"
               style={{ background: 'radial-gradient(ellipse 60% 55% at 50% 50%, rgba(212,175,55,0.06) 0%, transparent 70%)' }} />
@@ -746,7 +759,7 @@ const Index = () => {
           </section>
 
           {/* ──────────────────────────────────────────────────────────
-               DECLARATION — the hinge between problem and gatekeepers
+               DECLARATION — the hinge before gatekeepers
              ────────────────────────────────────────────────────────── */}
           <section className="py-10 md:py-16 px-6 relative">
             <div className="absolute inset-0 pointer-events-none"
@@ -843,45 +856,23 @@ const Index = () => {
             </div>
           </section>
 
-          {/* ── § 6  THE ARSENAL ── */}
-          <section id="arsenal" className="py-8 md:py-12 px-6">
-            <div
-              ref={revArsenal.ref}
-              className={cn(
-                "max-w-md mx-auto transition-all duration-700 ease-out",
-                revArsenal.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-              )}
-            >
-              <div
-                className="relative bg-white/[0.04] border border-white/[0.10] overflow-hidden"
-                style={{ boxShadow: '0 0 20px rgba(212,175,55,0.08)' }}
-              >
-                {/* Gold left accent */}
-                <div className="absolute left-0 top-0 bottom-0 w-[3px]"
-                  style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.55), rgba(212,175,55,0.25), transparent)' }} />
-                <div className="p-7 md:p-10 pl-8 md:pl-10 text-center">
-                  <p className="text-white/50 text-xs tracking-[0.3em] uppercase font-semibold mb-4">What You Get</p>
-                  <h3 className="font-bebas text-[28px] md:text-[34px] tracking-[0.08em] uppercase text-gold leading-tight mb-4">
-                    The Arsenal
-                  </h3>
-                  <p className="text-white/60 text-sm leading-relaxed max-w-sm mx-auto">
-                    Institutional-grade deal tools. Built for independent producers who can{"\u2019"}t afford to learn the hard way.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* ──────────────────────────────────────────────────────────
-               § 7  THE PATH — gold bar product ladder + CTA
-             ────────────────────────────────────────────────────────── */}
-          <SectionFrame id="path">
+          {/* ── § 6  THE ARSENAL — combined header + product ladder ── */}
+          <SectionFrame id="arsenal">
             <div ref={revPath.ref} className={cn("transition-all duration-700 ease-out", revPath.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
-              <SectionHeader eyebrow="Inside The Arsenal" title={<>NO <span className="text-white">GUESSWORK.</span></>} flankingLines compact />
-
-              <p className="text-center text-white/50 text-sm mb-8 max-w-sm mx-auto">
-                Whether you&rsquo;re modeling your first deal or walking into a meeting with real&nbsp;capital, there&rsquo;s a tier built for&nbsp;you.
-              </p>
+              {/* Combined header: What You Get → AN ARSENAL. NO GUESSWORK. */}
+              <div className="text-center mb-10">
+                <div className="flex items-center justify-center gap-4 mb-4">
+                  <div className="h-[1px] w-8 bg-gradient-to-r from-transparent to-white/20" />
+                  <p className="tracking-[0.3em] uppercase font-semibold text-white/50 text-xs">What You Get</p>
+                  <div className="h-[1px] w-8 bg-gradient-to-l from-transparent to-white/20" />
+                </div>
+                <h2 className="font-bebas tracking-[0.06em] text-gold text-[40px] md:text-[52px] leading-[0.95]">
+                  AN ARSENAL. <span className="text-white">NO GUESSWORK.</span>
+                </h2>
+                <p className="text-center text-white/50 text-sm mt-5 max-w-sm mx-auto leading-relaxed">
+                  Institutional-grade tools built for independent producers modeling their deal structures or walking into a meeting fully&nbsp;prepared.
+                </p>
+              </div>
 
               {/* Product cards */}
               <div ref={ladderRef} className="grid grid-cols-1 gap-4 max-w-md mx-auto">
