@@ -312,7 +312,7 @@ const Index = () => {
   // Sticky CTA button for the header
   const stickyCtaButton = isComplete ? (
     <button
-      onClick={isReturningUser ? handleContinueClick : handleStartClick}
+      onClick={handleStartClick}
       className={cn(
         "font-bebas text-[13px] tracking-[0.14em] uppercase whitespace-nowrap",
         "h-8 px-3.5",
@@ -326,7 +326,7 @@ const Index = () => {
       )}
       style={{ borderRadius: 0 }}
     >
-      {isReturningUser ? "CONTINUE" : "BUILD FREE"}
+      BUILD FREE
     </button>
   ) : undefined;
 
