@@ -548,7 +548,7 @@ const Index = () => {
           <Divider />
 
           {/* ──────────────────────────────────────────────────────────
-               § 3  THE WATERFALL — proportional bars
+               § 3  THE WATERFALL — the reveal
              ────────────────────────────────────────────────────────── */}
           <SectionFrame id="waterfall">
             <div ref={revWater.ref} className={cn("transition-all duration-700 ease-out", revWater.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
@@ -628,7 +628,7 @@ const Index = () => {
           <Divider />
 
           {/* ──────────────────────────────────────────────────────────
-               § 3  THE THESIS — stacked manifesto + Blum quote
+               § 4  THE THESIS — why film has no tools
              ────────────────────────────────────────────────────────── */}
           <SectionFrame id="mission">
             <div ref={revMission.ref} className={cn("transition-all duration-700 ease-out", revMission.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
@@ -680,7 +680,7 @@ const Index = () => {
             </div>
           </SectionFrame>
 
-          {/* ── TRANSITION — thesis to validation ── */}
+          {/* ── PIVOT — "Until now." ── */}
           <section className="py-10 md:py-14 px-6 relative">
             <div className="absolute inset-0 pointer-events-none"
               style={{ background: 'radial-gradient(ellipse 60% 55% at 50% 50%, rgba(212,175,55,0.06) 0%, transparent 70%)' }} />
@@ -746,7 +746,7 @@ const Index = () => {
           </section>
 
           {/* ──────────────────────────────────────────────────────────
-               DECLARATION — the hinge between problem and gatekeepers
+               DECLARATION — the hinge before gatekeepers
              ────────────────────────────────────────────────────────── */}
           <section className="py-10 md:py-16 px-6 relative">
             <div className="absolute inset-0 pointer-events-none"
