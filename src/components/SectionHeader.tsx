@@ -31,7 +31,7 @@ const SectionHeader = ({
       {Icon && !flankingLines && <Icon className="w-5 h-5 text-gold" />}
       <p className={cn(
         "tracking-[0.3em] uppercase font-semibold",
-        compact ? "text-white/50 text-xs" : "text-text-dim text-sm"
+        compact ? "text-white/50 text-[13px]" : "text-text-dim text-sm"
       )}>
         {eyebrow}
       </p>
