@@ -577,9 +577,7 @@ const Index = () => {
                     className={cn(
                       "px-5 py-4 relative",
                       i > 0 && "border-t border-white/[0.06]",
-                      tier.isFinal && "py-7 border-t-2 border-gold/30"
                     )}
-                    style={tier.isFinal ? { background: 'rgba(212,175,55,0.06)' } : undefined}
                   >
                     {/* Gold left accent on final row */}
                     {tier.isFinal && (
@@ -587,14 +585,19 @@ const Index = () => {
                         style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.80), rgba(212,175,55,0.40), transparent)' }} />
                     )}
                     {/* Labels */}
-                    <div className={cn("flex justify-between items-baseline", tier.isFinal ? "mb-3" : "mb-2")}>
+                    <div className="flex justify-between items-baseline mb-2">
                       <div className="flex items-baseline gap-2">
                         <span className="font-mono text-[11px] text-white/30 tabular-nums">
                           {String(i + 1).padStart(2, '0')}
                         </span>
+                        {tier.isFinal && (
+                          <span className="text-[9px] tracking-[0.15em] uppercase font-bold text-gold/70 mr-1">
+                            Your Take
+                          </span>
+                        )}
                         <span className={cn(
                           "font-bebas tracking-[0.08em] uppercase",
-                          tier.isFinal ? "text-[24px] md:text-[28px] text-gold" :
+                          tier.isFinal ? "text-[20px] text-gold" :
                           i === 0 ? "text-[20px] text-white" : "text-[17px] text-white/80"
                         )}>
                           {tier.name}
@@ -602,17 +605,16 @@ const Index = () => {
                       </div>
                       <span
                         className={cn(
-                          "font-mono font-semibold",
-                          tier.isFinal ? "text-[26px] md:text-[30px] font-bold text-gold" :
-                          i === 0 ? "text-[17px] text-white/90" : "text-[17px] text-white/70"
+                          "font-mono text-[17px] font-semibold",
+                          tier.isFinal ? "font-bold text-gold" :
+                          i === 0 ? "text-white/90" : "text-white/70"
                         )}
-                        style={tier.isFinal ? { textShadow: '0 0 20px rgba(212,175,55,0.4), 0 0 40px rgba(212,175,55,0.15)' } : undefined}
                       >
                         {tier.isFinal ? `$${countVal.toLocaleString()}` : tier.amount}
                       </span>
                     </div>
                     {/* Proportional bar */}
-                    <div className={cn("w-full bg-white/[0.06] relative overflow-hidden", tier.isFinal ? "h-4" : i === 0 ? "h-3" : "h-2")}>
+                    <div className={cn("w-full bg-white/[0.06] relative overflow-hidden", i === 0 ? "h-3" : "h-2")}>
                       <div
                         className="absolute left-0 top-0 h-full"
                         style={{
@@ -786,36 +788,35 @@ const Index = () => {
             <div ref={revCost.ref} className={cn("transition-all duration-700 ease-out", revCost.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
               <SectionHeader eyebrow="The Reality" title={<>THE GATEKEEPERS WON{"\u2019"}T LET YOU <span className="text-white">IN.</span></>} flankingLines compact />
 
-              <div className="grid grid-cols-2 gap-4 max-w-lg mx-auto">
+              <div className="grid grid-cols-2 gap-3 max-w-md mx-auto">
                 {closedDoors.map((door, i) => (
                   <div
                     key={door.name}
                     className={cn(
-                      "relative border p-4 md:p-6 transition-all duration-700 ease-out overflow-hidden",
-                      "bg-white/[0.06] border-white/[0.12]",
+                      "relative border p-5 flex flex-col justify-between transition-all duration-700 ease-out overflow-hidden",
+                      "bg-white/[0.06] border-white/[0.12] aspect-square",
                       revCost.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                     )}
                     style={{
                       transitionDelay: revCost.visible ? `${i * 150}ms` : '0ms',
                     }}
                   >
-                    {/* Gold left elbow */}
-                    <div className="absolute left-0 top-0 bottom-0 w-[3px]"
-                      style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.55), rgba(212,175,55,0.25), transparent)' }}
-                    />
-                    {/* Lock — pinned top-right for uniform placement */}
+                    {/* Lock watermark — centered behind content */}
                     <LockKeyhole
-                      className="absolute top-4 right-4 w-4 h-4 text-gold/40"
-                      strokeWidth={2}
+                      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 text-white/[0.04]"
+                      strokeWidth={1.5}
                     />
-                    <div className="pl-2 pr-6">
-                      <p className="font-bebas text-[17px] md:text-[20px] tracking-[0.08em] uppercase leading-tight text-white mb-2">
+                    {/* Content */}
+                    <div className="relative z-10">
+                      <p className="font-bebas text-[16px] md:text-[18px] tracking-[0.08em] uppercase leading-tight text-white">
                         {door.name}
                       </p>
-                      <span className="font-mono text-[15px] font-bold text-gold block mb-2">
+                    </div>
+                    <div className="relative z-10">
+                      <span className="font-mono text-[14px] font-bold text-gold block mb-1.5">
                         {door.cost}
                       </span>
-                      <p className="text-sm leading-relaxed text-white/60">
+                      <p className="text-[12px] leading-relaxed text-white/50">
                         {door.lock}
                       </p>
                     </div>
