@@ -213,15 +213,23 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
           isOpen ? "translate-y-0" : "translate-y-full"
         )}
         style={{
-          height: "72vh",
+          height: "min(72vh, 580px)",
           paddingBottom: "calc(var(--bottom-bar-h) + env(safe-area-inset-bottom))",
           background: "#000000",
-          // Strong gold top-edge + ambient glow
-          boxShadow: "0 -4px 0 rgba(212,175,55,0.55), 0 -20px 70px rgba(212,175,55,0.22), 0 -60px 120px rgba(0,0,0,0.95)",
+          // Ambient glow only — no chunky border-shadow
+          boxShadow: "0 -20px 60px rgba(212,175,55,0.18), 0 -40px 80px rgba(0,0,0,0.95)",
         }}
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
+        {/* 1px gold gradient top-edge line — SectionFrame DNA (replaces chunky shadow-border) */}
+        <div
+          className="absolute top-0 left-0 right-0 h-[1px] pointer-events-none z-10"
+          style={{
+            background: "linear-gradient(to right, transparent 0%, rgba(212,175,55,0.60) 30%, rgba(212,175,55,0.80) 50%, rgba(212,175,55,0.60) 70%, transparent 100%)",
+          }}
+        />
+
         {/* Gold left accent bar — SectionFrame DNA */}
         <div
           className="absolute left-0 top-0 bottom-0 w-[3px] pointer-events-none"
@@ -230,9 +238,9 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
           }}
         />
 
-        {/* Drag handle */}
+        {/* Drag handle — neutral white, standard iOS affordance */}
         <div className="flex justify-center pt-3 pb-1 flex-shrink-0">
-          <div className="w-10 h-[3px] rounded-full" style={{ background: "rgba(212,175,55,0.35)" }} />
+          <div className="w-10 h-[3px] rounded-full" style={{ background: "rgba(255,255,255,0.15)" }} />
         </div>
 
         {/* ── Sheet header — eyebrow pattern ── */}
@@ -296,7 +304,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
               {/* Eyebrow */}
               <div className="flex items-center gap-3 w-full">
                 <div className="h-[1px] flex-1" style={{ background: "rgba(255,255,255,0.08)" }} />
-                <span className="font-mono text-[10px] tracking-[0.22em] uppercase" style={{ color: "rgba(255,255,255,0.22)" }}>
+                <span className="font-mono text-[10px] tracking-[0.22em] uppercase whitespace-nowrap" style={{ color: "rgba(255,255,255,0.22)" }}>
                   What do you want to know
                 </span>
                 <div className="h-[1px] flex-1" style={{ background: "rgba(255,255,255,0.08)" }} />
