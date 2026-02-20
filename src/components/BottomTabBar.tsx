@@ -65,7 +65,6 @@ const BottomTabBar = () => {
               className={cn(
                 "relative flex-1 flex flex-col items-center justify-center gap-[3px] transition-all duration-200 active:scale-95 overflow-hidden",
               )}
-              style={{ color: isActive ? GOLD_FULL : GOLD_DIM }}
               aria-label={tab.label}
             >
               {/* Gold tap-ripple */}
@@ -75,13 +74,17 @@ const BottomTabBar = () => {
                   style={{ background: "rgba(212,175,55,0.3)" }}
                 />
               )}
-              <Icon className="w-5 h-5" />
+              <Icon
+                className="w-5 h-5"
+                style={{ color: isActive ? GOLD_FULL : GOLD_DIM }}
+              />
               <span
                 className="font-bebas leading-none transition-all"
                 style={{
                   fontSize: "10px",
                   letterSpacing: isActive ? "0.16em" : "0.10em",
                   fontWeight: isActive ? 500 : 400,
+                  color: isActive ? "rgba(255,255,255,0.95)" : "rgba(255,255,255,0.55)",
                 }}
               >
                 {tab.label}

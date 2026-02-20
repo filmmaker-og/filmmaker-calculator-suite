@@ -77,37 +77,32 @@ const AppHeader = ({ onBotOpen, isBotOpen, onMoreOpen }: AppHeaderProps) => {
               onClick={onBotOpen}
               className="relative w-10 h-10 flex flex-col items-center justify-center transition-all duration-200 active:scale-90"
               aria-label="Ask the OG Bot"
+              style={{
+                background: isBotOpen ? "rgba(212,175,55,0.08)" : "rgba(255,255,255,0.06)",
+                border: isBotOpen ? "1px solid rgba(212,175,55,0.25)" : "1px solid rgba(255,255,255,0.10)",
+                borderRadius: "6px",
+              }}
             >
               <span
-                className="font-bebas leading-none transition-opacity duration-200"
+                className="font-bebas leading-none transition-all duration-200"
                 style={{
-                  fontSize: "15px",
+                  fontSize: "17px",
                   letterSpacing: "0.14em",
-                  color: isBotOpen ? GOLD_FULL : GOLD_DIM,
+                  color: isBotOpen ? GOLD_FULL : "rgba(212,175,55,0.85)",
                 }}
               >
                 OG
               </span>
               <span
-                className="font-mono uppercase leading-none transition-opacity duration-200"
+                className="font-mono uppercase leading-none transition-all duration-200"
                 style={{
-                  fontSize: "8px",
+                  fontSize: "9px",
                   letterSpacing: "0.10em",
-                  color: isBotOpen ? GOLD_FULL : "rgba(212,175,55,0.45)",
+                  color: isBotOpen ? GOLD_FULL : "rgba(212,175,55,0.55)",
                 }}
               >
                 bot
               </span>
-              {/* Active glow ring */}
-              {isBotOpen && (
-                <span
-                  className="absolute inset-0 rounded-md pointer-events-none"
-                  style={{
-                    background: "rgba(212,175,55,0.08)",
-                    border: "1px solid rgba(212,175,55,0.25)",
-                  }}
-                />
-              )}
             </button>
 
             {/* Vertical ⋮ menu button */}
