@@ -1,95 +1,45 @@
 
-## The Resource — Page Rename, Identity & Menu Update
+## Fix: Remove Excessive Top Padding on The Resource Page
 
-### Overview
+### Root Cause
 
-Four focused changes across two files: `src/pages/Glossary.tsx` and `src/components/MobileMenu.tsx`. The route `/glossary` stays the same — only the visible labels change.
+The Glossary page wrapper at line 486 has `pt-[68px]` applied:
 
----
-
-### Change 1 — Page Title: "THE RESOURCE"
-
-**File:** `src/pages/Glossary.tsx`, lines 490–502
-
-Current:
-- Eyebrow: `Film Finance`
-- H1: `The <span>Glossary</span>`
-- Subtitle: "The film industry uses jargon to keep outsiders out. This is your decoder ring — {N} terms, curated from the front lines."
-
-New:
-- Eyebrow: `Film Finance` (keep — it's clean)
-- H1: `The <span className="text-gold">Resource</span>`
-- Subtitle: `"The film industry uses jargon to keep outsiders out. This is your definitive resource."`
-- Remove the term count from the subtitle entirely (no number)
-
----
-
-### Change 2 — Remove "AI Search" Eyebrow from Ask the OG Section
-
-**File:** `src/pages/Glossary.tsx`, line 517
-
-Current:
-```
-<SectionHeader eyebrow="AI Search" title={...} subtitle="Ask me film industry questions (only.)" />
-```
-
-New:
-```
-<SectionHeader eyebrow="" title={...} subtitle="Ask me film industry questions (only.)" />
-```
-
-The `SectionHeader` component renders the eyebrow text in a `<p>` tag — passing an empty string renders nothing visible. The gold Sparkles icon + "ASK THE OG" title + subtitle are sufficient identity on their own.
-
----
-
-### Change 3 — Top 10 Section: Convert to Accordion Style
-
-**File:** `src/pages/Glossary.tsx`, lines 658–700
-
-The `@radix-ui/react-accordion` package is already installed. The current flat cards showing full definitions get replaced with an accordion where:
-
-- Only the number badge + term name is visible by default (collapsed)
-- Tapping/clicking reveals the definition below
-- Only one item can be open at a time (`type="single" collapsible`)
-- The "Master these 10 terms..." subtitle is removed
-- The category badge is also removed (it's noise inside an accordion)
-
-Structure of each accordion item:
-```
-[01]  WATERFALL                              ∨
-      ──────────────────────────────────────
-      [definition text, 16px, white/80]      ← only shown when expanded
-```
-
-The gold number badge, term name in Bebas Neue `text-2xl`, and gold chevron rotate on open — all consistent with existing accordion patterns in `src/components/ui/accordion.tsx`.
-
----
-
-### Change 4 — Mobile Menu Label
-
-**File:** `src/components/MobileMenu.tsx`, line 140
-
-Current:
 ```tsx
-<span className="font-bebas text-base tracking-wide">Glossary</span>
+<div className="min-h-screen bg-black text-white pt-[68px] pb-4 font-sans">
 ```
 
-New:
-```tsx
-<span className="font-bebas text-base tracking-wide">ASK THE OG (BOT)</span>
-```
+The `<Header />` component already renders a **56px spacer div** immediately after the fixed header bar (`<div style={{ height: 'var(--appbar-h)' }} />`). This means the page content is already correctly positioned below the header before `pt-[68px]` even fires.
 
-The `Book` icon on line 139 stays — it's a good visual anchor. The label changes to exactly what was requested: `ASK THE OG (BOT)`.
+**The result:** 56px (Header spacer) + 68px (wrapper padding) + 16px (title block `pt-4`) = **140px** of dead space before "Film Finance" appears.
 
 ---
 
-### Summary Table
+### The Fix
 
-| # | File | What Changes |
-|---|------|-------------|
-| 1 | `Glossary.tsx` | H1 title → "The Resource", subtitle reworded, no term count |
-| 2 | `Glossary.tsx` | Ask the OG eyebrow → empty (removed) |
-| 3 | `Glossary.tsx` | Top 10 flat cards → accordion, no subtitle |
-| 4 | `MobileMenu.tsx` | Menu label "Glossary" → "ASK THE OG (BOT)" |
+**File:** `src/pages/Glossary.tsx`, line 486
 
-No route changes. No new dependencies. No other files touched.
+Change:
+```tsx
+<div className="min-h-screen bg-black text-white pt-[68px] pb-4 font-sans">
+```
+
+To:
+```tsx
+<div className="min-h-screen bg-black text-white pb-4 font-sans">
+```
+
+Remove `pt-[68px]` entirely. The Header spacer handles all the clearance needed.
+
+The title block `pt-4` (line 491) can also be reduced to `pt-2` for a tighter, more intentional gap between the header separator line and the "Film Finance" eyebrow.
+
+---
+
+### Summary
+
+| Location | Current | Fix |
+|----------|---------|-----|
+| Wrapper div (line 486) | `pt-[68px]` | Remove entirely |
+| Title block (line 491) | `pt-4` | `pt-2` (tighter breath below header) |
+
+**File:** `src/pages/Glossary.tsx` only. Single change, two lines.
