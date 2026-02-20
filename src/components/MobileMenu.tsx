@@ -59,7 +59,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
   const SectionLabel = ({ children }: { children: React.ReactNode }) => (
     <div className="flex items-center gap-3 pl-1 mb-2">
       <div className="h-[1px] flex-1" style={{ background: "linear-gradient(90deg, rgba(212,175,55,0.35) 0%, transparent 100%)" }} />
-      <span className="font-bebas text-[10px] text-gold/50 uppercase tracking-[0.25em] flex-shrink-0">{children}</span>
+      <span className="font-bebas text-[11px] text-gold/50 uppercase tracking-[0.25em] flex-shrink-0">{children}</span>
       <div className="h-[1px] flex-1" style={{ background: "linear-gradient(270deg, rgba(212,175,55,0.35) 0%, transparent 100%)" }} />
     </div>
   );
@@ -73,15 +73,16 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
         />
       )}
 
-      {/* Bottom Sheet */}
+      {/* Bottom Sheet — premium black */}
       <div
         className={cn(
-          "fixed bottom-0 left-0 right-0 bg-bg-card z-[201] rounded-t-2xl max-h-[85vh] overflow-y-auto",
+          "fixed bottom-0 left-0 right-0 z-[201] rounded-t-2xl max-h-[85vh] overflow-y-auto",
           "transition-transform duration-300 ease-out",
           isOpen ? "translate-y-0" : "translate-y-full"
         )}
         style={{
           paddingBottom: "env(safe-area-inset-bottom)",
+          background: "#0A0A0A",
           boxShadow: "0 -4px 60px rgba(212,175,55,0.12), 0 -2px 20px rgba(0,0,0,0.80)",
         }}
         onTouchStart={handleTouchStart}
@@ -97,10 +98,10 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
 
         {/* Drag handle + X close button */}
         <div className="relative flex justify-center pt-3 pb-5">
-          <div className="w-8 h-1 bg-white/15 rounded-full" />
+          <div className="w-8 h-1 bg-gold/30 rounded-full" />
           <button
             onClick={() => setIsOpen(false)}
-            className="absolute top-2 right-4 w-8 h-8 flex items-center justify-center text-white/40 hover:text-gold transition-colors"
+            className="absolute top-2 right-4 w-8 h-8 flex items-center justify-center text-gold/40 hover:text-gold transition-colors"
             aria-label="Close menu"
           >
             <CloseIcon className="w-4 h-4" />
@@ -112,9 +113,10 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
           <div className="space-y-2">
             <SectionLabel>Menu</SectionLabel>
             <div className="grid grid-cols-2 gap-2">
+              {/* Packages — featured card with gold left accent */}
               <button
                 onClick={() => handleNavigate('/store')}
-                className="flex items-center gap-2.5 p-3.5 border col-span-2 text-left group transition-all"
+                className="relative flex items-center gap-2.5 p-3.5 border col-span-2 text-left group transition-all overflow-hidden"
                 style={{
                   borderRadius: 0,
                   borderColor: "rgba(212,175,55,0.50)",
@@ -122,18 +124,22 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
                 }}
               >
                 <div
+                  className="absolute left-0 top-0 bottom-0 w-[3px]"
+                  style={{ background: "linear-gradient(to bottom, rgba(212,175,55,0.70), rgba(212,175,55,0.30), transparent)" }}
+                />
+                <div
                   className="w-7 h-7 flex items-center justify-center flex-shrink-0"
                   style={{ background: "var(--gold)", borderRadius: 0 }}
                 >
                   <Book className="w-4 h-4 text-black" />
                 </div>
                 <span className="font-bebas text-base tracking-wide text-gold leading-none">Packages</span>
-                <span className="ml-auto font-bebas text-[10px] tracking-[0.2em] text-gold/40 leading-none">VIEW ALL →</span>
+                <span className="ml-auto font-bebas text-[11px] tracking-[0.2em] text-gold/40 leading-none">VIEW ALL →</span>
               </button>
 
               <button
                 onClick={() => handleNavigate('/')}
-                className="flex items-center gap-2.5 p-3.5 border border-border-subtle bg-white/[0.02] text-left group hover:border-gold/30 hover:bg-gold/[0.04] transition-all"
+                className="flex items-center gap-2.5 p-3.5 border border-white/[0.10] bg-white/[0.04] text-left group hover:border-gold/40 hover:bg-gold/[0.06] transition-all"
                 style={{ borderRadius: 0 }}
               >
                 <Home className="w-4 h-4 text-white/50 group-hover:text-gold flex-shrink-0 transition-colors" />
@@ -142,7 +148,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
 
               <button
                 onClick={() => handleNavigate('/calculator')}
-                className="flex items-center gap-2.5 p-3.5 border border-border-subtle bg-white/[0.02] text-left group hover:border-gold/30 hover:bg-gold/[0.04] transition-all"
+                className="flex items-center gap-2.5 p-3.5 border border-white/[0.10] bg-white/[0.04] text-left group hover:border-gold/40 hover:bg-gold/[0.06] transition-all"
                 style={{ borderRadius: 0 }}
               >
                 <Calculator className="w-4 h-4 text-white/50 group-hover:text-gold flex-shrink-0 transition-colors" />
@@ -151,7 +157,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
 
               <button
                 onClick={() => handleNavigate('/waterfall-info')}
-                className="flex items-center gap-2.5 p-3.5 border border-border-subtle bg-white/[0.02] text-left group hover:border-gold/30 hover:bg-gold/[0.04] transition-all"
+                className="flex items-center gap-2.5 p-3.5 border border-white/[0.10] bg-white/[0.04] text-left group hover:border-gold/40 hover:bg-gold/[0.06] transition-all"
                 style={{ borderRadius: 0 }}
               >
                 <BookOpen className="w-4 h-4 text-white/50 group-hover:text-gold flex-shrink-0 transition-colors" />
@@ -160,7 +166,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
 
               <button
                 onClick={() => handleNavigate('/glossary')}
-                className="flex items-center gap-2.5 p-3.5 border border-border-subtle bg-white/[0.02] text-left group hover:border-gold/30 hover:bg-gold/[0.04] transition-all"
+                className="flex items-center gap-2.5 p-3.5 border border-white/[0.10] bg-white/[0.04] text-left group hover:border-gold/40 hover:bg-gold/[0.06] transition-all"
                 style={{ borderRadius: 0 }}
               >
                 <Book className="w-4 h-4 text-white/50 group-hover:text-gold flex-shrink-0 transition-colors" />
@@ -170,12 +176,12 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
           </div>
 
           {/* Contact + Share */}
-          <div className="pt-2 border-t border-border-subtle space-y-2">
+          <div className="pt-2 border-t border-white/[0.08] space-y-2">
             <SectionLabel>Contact & Share</SectionLabel>
             <div className="grid grid-cols-3 gap-2">
               <a
                 href="mailto:thefilmmaker.og@gmail.com"
-                className="flex flex-col items-center gap-1.5 p-3.5 border border-border-subtle bg-white/[0.02] text-center group hover:border-gold/30 hover:bg-gold/[0.04] transition-all"
+                className="flex flex-col items-center gap-1.5 p-3.5 border border-white/[0.10] bg-white/[0.04] text-center group hover:border-gold/40 hover:bg-gold/[0.06] transition-all"
                 style={{ borderRadius: 0 }}
               >
                 <Mail className="w-4 h-4 text-white/50 group-hover:text-gold transition-colors" />
@@ -186,7 +192,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
                 href="https://www.instagram.com/filmmaker.og"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex flex-col items-center gap-1.5 p-3.5 border border-border-subtle bg-white/[0.02] text-center group hover:border-gold/30 hover:bg-gold/[0.04] transition-all"
+                className="flex flex-col items-center gap-1.5 p-3.5 border border-white/[0.10] bg-white/[0.04] text-center group hover:border-gold/40 hover:bg-gold/[0.06] transition-all"
                 style={{ borderRadius: 0 }}
               >
                 <Instagram className="w-4 h-4 text-white/50 group-hover:text-gold transition-colors" />
@@ -195,7 +201,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
 
               <button
                 onClick={handleShare}
-                className="flex flex-col items-center gap-1.5 p-3.5 border border-border-subtle bg-white/[0.02] text-center group hover:border-gold/30 hover:bg-gold/[0.04] transition-all"
+                className="flex flex-col items-center gap-1.5 p-3.5 border border-white/[0.10] bg-white/[0.04] text-center group hover:border-gold/40 hover:bg-gold/[0.06] transition-all"
                 style={{ borderRadius: 0 }}
               >
                 <Share2 className="w-4 h-4 text-white/50 group-hover:text-gold transition-colors" />
@@ -215,7 +221,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
               onClick={() => handleNavigate('/')}
               className="flex items-center gap-2 hover:opacity-80 transition-opacity group"
             >
-              <span className="font-bebas text-lg tracking-[0.2em] text-gold group-hover:text-white transition-colors duration-200">
+              <span className="font-bebas text-[22px] tracking-[0.2em] text-gold group-hover:text-white transition-colors duration-200">
                 FILMMAKER<span className="text-white group-hover:text-gold transition-colors duration-200">.OG</span>
               </span>
             </button>

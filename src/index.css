@@ -891,4 +891,15 @@
   .animate-typing-dot-3 {
     animation: typingDot 1.4s ease-in-out 0.4s infinite;
   }
+
+  /* ═══════════════════════════════════════════════════════════════════
+     TAP RIPPLE — gold radial pulse for BottomTabBar
+     ═══════════════════════════════════════════════════════════════════ */
+  @keyframes tap-ripple {
+    0%   { transform: translate(-50%, -50%) scale(0); opacity: 0.4; }
+    100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
+  }
+  .animate-tap-ripple {
+    animation: tap-ripple 400ms ease-out forwards;
+  }
 }
