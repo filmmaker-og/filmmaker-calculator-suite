@@ -44,12 +44,12 @@ const OgBotSheet = () => {
     touchStartY.current = null;
   };
 
-  // Auto-focus input when sheet opens
+  // Scroll to bottom when sheet opens with existing messages
   useEffect(() => {
-    if (isOpen) {
-      setTimeout(() => inputRef.current?.focus(), 350);
+    if (isOpen && ogMessages.length > 0) {
+      setTimeout(() => messagesEndRef.current?.scrollIntoView({ behavior: "smooth" }), 350);
     }
-  }, [isOpen]);
+  }, [isOpen, ogMessages.length]);
 
   // ── Streaming ask ──
   const handleAsk = useCallback(async (question: string) => {
