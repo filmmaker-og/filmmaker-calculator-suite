@@ -156,21 +156,12 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
               </button>
 
               <button
-                onClick={() => handleNavigate('/waterfall-info')}
+                onClick={() => handleNavigate('/resources')}
                 className="flex items-center gap-2.5 p-3.5 border border-white/[0.10] bg-white/[0.04] text-left group hover:border-gold/40 hover:bg-gold/[0.06] transition-all"
                 style={{ borderRadius: 0 }}
               >
                 <BookOpen className="w-4 h-4 text-white/50 group-hover:text-gold flex-shrink-0 transition-colors" />
-                <span className="font-bebas text-base tracking-wide text-white/70 group-hover:text-white leading-none transition-colors">Waterfall</span>
-              </button>
-
-              <button
-                onClick={() => handleNavigate('/glossary')}
-                className="flex items-center gap-2.5 p-3.5 border border-white/[0.10] bg-white/[0.04] text-left group hover:border-gold/40 hover:bg-gold/[0.06] transition-all"
-                style={{ borderRadius: 0 }}
-              >
-                <Book className="w-4 h-4 text-white/50 group-hover:text-gold flex-shrink-0 transition-colors" />
-                <span className="font-bebas text-base tracking-wide text-white/70 group-hover:text-white leading-none transition-colors">Glossary</span>
+                <span className="font-bebas text-base tracking-wide text-white/70 group-hover:text-white leading-none transition-colors">Resources</span>
               </button>
             </div>
           </div>

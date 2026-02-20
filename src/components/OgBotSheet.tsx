@@ -243,29 +243,11 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
           <div className="w-10 h-[3px] rounded-full" style={{ background: "rgba(255,255,255,0.15)" }} />
         </div>
 
-        {/* ── Sheet header — eyebrow pattern ── */}
+        {/* ── Sheet header ── */}
         <div
           className="px-5 pt-3 pb-4 flex-shrink-0 border-b"
           style={{ borderColor: "rgba(212,175,55,0.18)" }}
         >
-          {/* Eyebrow flanking line row */}
-          <div className="flex items-center gap-3 mb-3">
-            <div className="h-[1px] flex-1" style={{ background: "linear-gradient(to right, transparent, rgba(212,175,55,0.40))" }} />
-            <div className="flex items-center gap-2">
-              <img
-                src={filmmakerFIcon}
-                alt="OG"
-                className="w-4 h-4 object-contain"
-                style={{ filter: "drop-shadow(0 0 4px rgba(212,175,55,0.7))", opacity: 0.9 }}
-              />
-              <span className="font-mono text-[10px] tracking-[0.28em] uppercase" style={{ color: "rgba(212,175,55,0.60)" }}>
-                Film Industry Q&amp;A
-              </span>
-            </div>
-            <div className="h-[1px] flex-1" style={{ background: "linear-gradient(to left, transparent, rgba(212,175,55,0.40))" }} />
-          </div>
-
-          {/* Big title row */}
           <div className="flex items-end justify-between">
             <h2 className="font-bebas text-[28px] tracking-[0.15em] leading-none" style={{ color: "rgba(212,175,55,1)" }}>
               ASK THE OG
@@ -301,14 +283,9 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
           {/* Empty state — example chips with eyebrow */}
           {ogMessages.length === 0 && (
             <div className="flex flex-col items-center gap-5 pt-3">
-              {/* Eyebrow */}
-              <div className="flex items-center gap-3 w-full">
-                <div className="h-[1px] flex-1" style={{ background: "rgba(255,255,255,0.08)" }} />
-                <span className="font-mono text-[10px] tracking-[0.22em] uppercase whitespace-nowrap" style={{ color: "rgba(255,255,255,0.22)" }}>
-                  What do you want to know
-                </span>
-                <div className="h-[1px] flex-1" style={{ background: "rgba(255,255,255,0.08)" }} />
-              </div>
+              <span className="font-bebas text-[14px] tracking-[0.12em]" style={{ color: "rgba(255,255,255,0.70)" }}>
+                What do you want to know
+              </span>
 
               {/* Chips */}
               <div className="flex flex-wrap gap-2.5 justify-center">
@@ -317,7 +294,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
                     key={chip}
                     onClick={() => handleAsk(chip)}
                     disabled={ogLoading}
-                    className="font-mono text-[12px] uppercase tracking-[0.18em] px-4 py-2.5 transition-all disabled:opacity-40 disabled:cursor-not-allowed border"
+                    className="font-mono text-[13px] uppercase tracking-[0.18em] px-5 py-3 transition-all disabled:opacity-40 disabled:cursor-not-allowed border"
                     onMouseEnter={e => {
                       e.currentTarget.style.borderColor = "rgba(212,175,55,0.60)";
                       e.currentTarget.style.background = "rgba(212,175,55,0.14)";
@@ -326,7 +303,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
                     onMouseLeave={e => {
                       e.currentTarget.style.borderColor = "rgba(212,175,55,0.30)";
                       e.currentTarget.style.background = "rgba(212,175,55,0.08)";
-                      e.currentTarget.style.color = "rgba(212,175,55,0.75)";
+                      e.currentTarget.style.color = "rgba(212,175,55,0.85)";
                     }}
                     onTouchStart={e => {
                       e.currentTarget.style.borderColor = "rgba(212,175,55,0.60)";
@@ -340,7 +317,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
                       borderRadius: 0,
                       borderColor: "rgba(212,175,55,0.30)",
                       background: "rgba(212,175,55,0.08)",
-                      color: "rgba(212,175,55,0.75)",
+                      color: "rgba(212,175,55,0.85)",
                     }}
                   >
                     {chip}
@@ -381,8 +358,8 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
                   style={{
                     borderRadius: 0,
                     background: "#000000",
-                    borderColor: "rgba(212,175,55,0.25)",
-                    boxShadow: "0 0 30px rgba(212,175,55,0.10)",
+                    borderColor: "rgba(212,175,55,0.15)",
+                    boxShadow: "0 0 30px rgba(212,175,55,0.08)",
                   }}
                 >
                   {/* Gold header band */}

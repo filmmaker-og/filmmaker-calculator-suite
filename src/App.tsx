@@ -2,10 +2,11 @@ import { lazy, Suspense, useState, ReactNode } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import ErrorBoundary from "./components/ErrorBoundary";
 import BottomTabBar from "./components/BottomTabBar";
 import OgBotSheet from "./components/OgBotSheet";
+import OgBotFab from "./components/OgBotFab";
 import MobileMenu from "./components/MobileMenu";
 import AppHeader, { HeaderCtaContext } from "./components/AppHeader";
 
@@ -20,6 +21,7 @@ const CapitalInfo = lazy(() => import("./pages/CapitalInfo"));
 const FeesInfo = lazy(() => import("./pages/FeesInfo"));
 const WaterfallInfo = lazy(() => import("./pages/WaterfallInfo"));
 const Glossary = lazy(() => import("./pages/Glossary"));
+const Resources = lazy(() => import("./pages/Resources"));
 const Auth = lazy(() => import("./pages/Auth"));
 const Calculator = lazy(() => import("./pages/Calculator"));
 const Store = lazy(() => import("./pages/Store"));
@@ -51,8 +53,6 @@ const AppShell = () => {
   return (
     <HeaderCtaContext.Provider value={{ ctaSlot, setCtaSlot }}>
       <AppHeader
-        onBotOpen={() => setIsBotOpen(true)}
-        isBotOpen={isBotOpen}
         onMoreOpen={() => setIsMenuOpen(true)}
       />
 
@@ -62,8 +62,9 @@ const AppShell = () => {
           <Route path="/budget-info" element={<BudgetInfo />} />
           <Route path="/capital-info" element={<CapitalInfo />} />
           <Route path="/fees-info" element={<FeesInfo />} />
-          <Route path="/waterfall-info" element={<WaterfallInfo />} />
-          <Route path="/glossary" element={<Glossary />} />
+          <Route path="/resources" element={<Resources />} />
+          <Route path="/waterfall-info" element={<Navigate to="/resources?tab=waterfall" replace />} />
+          <Route path="/glossary" element={<Navigate to="/resources?tab=terms" replace />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/calculator" element={<Calculator />} />
           <Route path="/store" element={<Store />} />
@@ -78,6 +79,7 @@ const AppShell = () => {
       {/* Global persistent UI — always mounted */}
       <OgBotSheet isOpen={isBotOpen} onOpenChange={setIsBotOpen} />
       <MobileMenu isOpen={isMenuOpen} onOpenChange={setIsMenuOpen} />
+      <OgBotFab onClick={() => setIsBotOpen(true)} isActive={isBotOpen} />
       <BottomTabBar />
     </HeaderCtaContext.Provider>
   );

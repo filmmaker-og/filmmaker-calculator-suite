@@ -1,12 +1,13 @@
 import { useState, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Home, Calculator, ShoppingBag } from "lucide-react";
+import { Home, Calculator, ShoppingBag, BookOpen } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const tabs = [
   { id: "home",       path: "/",           label: "HOME", icon: Home },
   { id: "calculator", path: "/calculator", label: "CALC", icon: Calculator },
   { id: "store",      path: "/store",      label: "PKGS", icon: ShoppingBag },
+  { id: "resources",  path: "/resources",  label: "INFO", icon: BookOpen },
 ];
 
 const BottomTabBar = () => {
@@ -26,7 +27,7 @@ const BottomTabBar = () => {
   }, [navigate]);
 
   const GOLD_FULL = "rgba(212,175,55,1)";
-  const GOLD_DIM  = "rgba(212,175,55,0.65)";
+  const GOLD_DIM  = "rgba(212,175,55,0.75)";
 
   return (
     /* Full-width transparent wrapper — handles safe-area, centers the pill */
@@ -48,9 +49,9 @@ const BottomTabBar = () => {
           height: "54px",
           borderRadius: "16px",
           background: "#0A0A0A",
-          border: "1.5px solid rgba(212,175,55,0.35)",
+          border: "1.5px solid rgba(212,175,55,0.45)",
           boxShadow:
-            "0 8px 32px rgba(0,0,0,0.90), 0 0 0 1px rgba(212,175,55,0.10)",
+            "0 8px 32px rgba(0,0,0,0.90), 0 0 0 1px rgba(212,175,55,0.10), 0 0 15px rgba(212,175,55,0.08)",
           paddingLeft: "6px",
           paddingRight: "6px",
         }}
@@ -64,7 +65,11 @@ const BottomTabBar = () => {
               onClick={() => handleTap(tab)}
               className={cn(
                 "relative flex-1 flex flex-col items-center justify-center gap-[3px] transition-all duration-200 active:scale-95 overflow-hidden",
+                isActive && "rounded-lg",
               )}
+              style={{
+                background: isActive ? "rgba(255,255,255,0.06)" : "transparent",
+              }}
               aria-label={tab.label}
             >
               {/* Gold tap-ripple */}
@@ -84,7 +89,7 @@ const BottomTabBar = () => {
                   fontSize: "10px",
                   letterSpacing: isActive ? "0.16em" : "0.10em",
                   fontWeight: isActive ? 500 : 400,
-                  color: isActive ? "rgba(255,255,255,0.95)" : "rgba(255,255,255,0.55)",
+                  color: isActive ? "rgba(255,255,255,0.95)" : "rgba(255,255,255,0.65)",
                 }}
               >
                 {tab.label}
@@ -94,8 +99,8 @@ const BottomTabBar = () => {
                 <span
                   className="absolute bottom-[5px] left-1/2 -translate-x-1/2"
                   style={{
-                    width: "18px",
-                    height: "2px",
+                    width: "24px",
+                    height: "2.5px",
                     borderRadius: "2px",
                     background: GOLD_FULL,
                     display: "block",

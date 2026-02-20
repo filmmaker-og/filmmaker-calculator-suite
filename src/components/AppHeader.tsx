@@ -25,15 +25,13 @@ export const useHeaderCta = () => useContext(HeaderCtaContext);
    Right:  F-icon bot button + vertical ⋮ menu button
    ═══════════════════════════════════════════════════════════════════ */
 interface AppHeaderProps {
-  onBotOpen?: () => void;
-  isBotOpen?: boolean;
   onMoreOpen?: () => void;
 }
 
 const GOLD_FULL = "rgba(212,175,55,1)";
 const GOLD_DIM  = "rgba(212,175,55,0.65)";
 
-const AppHeader = ({ onBotOpen, isBotOpen, onMoreOpen }: AppHeaderProps) => {
+const AppHeader = ({ onMoreOpen }: AppHeaderProps) => {
   const navigate = useNavigate();
   const { ctaSlot } = useHeaderCta();
 
@@ -70,42 +68,8 @@ const AppHeader = ({ onBotOpen, isBotOpen, onMoreOpen }: AppHeaderProps) => {
             </div>
           )}
 
-          {/* Right — Bot icon + vertical ⋮ */}
-          <div className="flex items-center gap-1 flex-shrink-0">
-            {/* OG Bot button */}
-            <button
-              onClick={onBotOpen}
-              className="relative w-10 h-10 flex flex-col items-center justify-center transition-all duration-200 active:scale-90"
-              aria-label="Ask the OG Bot"
-              style={{
-                background: isBotOpen ? "rgba(212,175,55,0.08)" : "rgba(255,255,255,0.06)",
-                border: isBotOpen ? "1px solid rgba(212,175,55,0.25)" : "1px solid rgba(255,255,255,0.10)",
-                borderRadius: "6px",
-              }}
-            >
-              <span
-                className="font-bebas leading-none transition-all duration-200"
-                style={{
-                  fontSize: "17px",
-                  letterSpacing: "0.14em",
-                  color: isBotOpen ? GOLD_FULL : "rgba(212,175,55,0.85)",
-                }}
-              >
-                OG
-              </span>
-              <span
-                className="font-mono uppercase leading-none transition-all duration-200"
-                style={{
-                  fontSize: "9px",
-                  letterSpacing: "0.10em",
-                  color: isBotOpen ? GOLD_FULL : "rgba(212,175,55,0.55)",
-                }}
-              >
-                bot
-              </span>
-            </button>
-
-            {/* Vertical ⋮ menu button */}
+          {/* Right — vertical ⋮ menu */}
+          <div className="flex items-center flex-shrink-0">
             <button
               onClick={onMoreOpen}
               className="w-10 h-10 flex items-center justify-center transition-all duration-200 active:scale-90 hover:opacity-80"
