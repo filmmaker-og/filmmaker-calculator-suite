@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
-import MiniHeader from "@/components/MiniHeader";
+
 import { WikiSectionHeader, WikiCard, WikiCallout } from "@/components/shared";
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -26,8 +26,6 @@ const FeesInfo = () => {
 
   return (
     <>
-      <MiniHeader />
-
       <div
         className="min-h-screen text-white page-safe px-4 md:px-8 font-sans bg-bg-void"
       >
