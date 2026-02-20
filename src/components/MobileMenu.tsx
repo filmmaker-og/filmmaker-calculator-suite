@@ -1,12 +1,11 @@
-import { useState, useCallback, useRef } from "react";
+import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { Home, Calculator, BookOpen, Book, Mail, Instagram, Briefcase, Share2, Link2, Check } from "lucide-react";
+import { Home, Calculator, BookOpen, Book, Mail, Instagram, ShoppingBag, Share2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { getShareUrl, SHARE_TEXT, SHARE_TITLE } from "@/lib/constants";
 
 const MobileMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [linkCopied, setLinkCopied] = useState(false);
   const navigate = useNavigate();
 
   // Swipe-to-dismiss
@@ -28,15 +27,7 @@ const MobileMenu = () => {
     navigate(path);
   };
 
-  const handleCopyLink = useCallback(() => {
-    const shareContent = `${SHARE_TEXT}\n\n${getShareUrl()}`;
-    navigator.clipboard.writeText(shareContent).then(() => {
-      setLinkCopied(true);
-      setTimeout(() => setLinkCopied(false), 2000);
-    }).catch(() => { /* do nothing */ });
-  }, []);
-
-  const handleShare = useCallback(async () => {
+  const handleShare = async () => {
     if (navigator.share) {
       try {
         await navigator.share({
@@ -49,8 +40,11 @@ const MobileMenu = () => {
         // User cancelled or API failed — fall through to clipboard
       }
     }
-    handleCopyLink();
-  }, [handleCopyLink]);
+    // Fallback: copy to clipboard
+    const shareContent = `${SHARE_TEXT}\n\n${getShareUrl()}`;
+    navigator.clipboard.writeText(shareContent).catch(() => {});
+  };
+
 
   return (
     <>
@@ -115,7 +109,7 @@ const MobileMenu = () => {
                 className="flex items-center gap-2.5 p-3.5 border border-gold/30 bg-gold/[0.06] text-left group hover:border-gold/60 transition-all"
                 style={{ borderRadius: 0 }}
               >
-                <Briefcase className="w-4 h-4 text-gold flex-shrink-0" />
+                <ShoppingBag className="w-4 h-4 text-gold flex-shrink-0" />
                 <span className="font-bebas text-base tracking-wide text-gold leading-none">Packages</span>
               </button>
 
@@ -190,34 +184,35 @@ const MobileMenu = () => {
                 <span className="font-bebas text-sm tracking-wide text-white/70 group-hover:text-white leading-none transition-colors">Share</span>
               </button>
 
-              <button
-                onClick={handleCopyLink}
-                className="flex items-center gap-2.5 p-3.5 border border-border-subtle bg-white/[0.02] text-left group hover:border-gold/30 hover:bg-gold/[0.04] transition-all"
-                style={{ borderRadius: 0 }}
-              >
-                {linkCopied ? (
-                  <>
-                    <Check className="w-4 h-4 text-gold flex-shrink-0" />
-                    <span className="font-bebas text-sm tracking-wide text-gold leading-none">Copied!</span>
-                  </>
-                ) : (
-                  <>
-                    <Link2 className="w-4 h-4 text-white/50 group-hover:text-gold flex-shrink-0 transition-colors" />
-                    <span className="font-bebas text-sm tracking-wide text-white/70 group-hover:text-white leading-none transition-colors">Copy Link</span>
-                  </>
-                )}
-              </button>
             </div>
           </div>
 
-          {/* Brand footer */}
-          <div className="pt-2 border-t border-border-default flex items-center gap-2.5 pl-1">
-            <span className="font-bebas text-lg tracking-[0.2em] text-gold">
-              FILMMAKER<span className="text-white">.OG</span>
-            </span>
-            <span className="text-[8px] font-semibold tracking-[0.15em] text-gold border border-gold/40 px-1.5 py-0.5 leading-none uppercase">
-              BETA
-            </span>
+          {/* Brand footer — mirrors the header exactly */}
+          <div
+            className="pt-3 border-t flex items-center justify-between"
+            style={{
+              borderColor: "transparent",
+              background: "transparent",
+              borderTopColor: "rgba(212,175,55,0.12)",
+            }}
+          >
+            <button
+              onClick={() => handleNavigate('/')}
+              className="flex items-center gap-2 hover:opacity-80 transition-opacity group"
+            >
+              <span className="font-bebas text-lg tracking-[0.2em] text-gold group-hover:text-white transition-colors duration-200">
+                FILMMAKER<span className="text-white group-hover:text-gold transition-colors duration-200">.OG</span>
+              </span>
+              <span className="text-[8px] font-semibold tracking-[0.15em] text-gold border border-gold/40 px-1.5 py-0.5 leading-none uppercase">
+                BETA
+              </span>
+            </button>
+            {/* Gold separator line matching header */}
+            <div className="h-[1px] flex-1 mx-4"
+              style={{
+                background: "linear-gradient(90deg, rgba(212,175,55,0.35) 0%, transparent 100%)",
+              }}
+            />
           </div>
         </div>
       </div>
