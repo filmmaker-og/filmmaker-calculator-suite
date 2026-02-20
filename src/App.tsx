@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState } from "react";
+import { lazy, Suspense, useState, ReactNode } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -7,6 +7,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import BottomTabBar from "./components/BottomTabBar";
 import OgBotSheet from "./components/OgBotSheet";
 import MobileMenu from "./components/MobileMenu";
+import AppHeader, { HeaderCtaContext } from "./components/AppHeader";
 
 /* ═══════════════════════════════════════════════════════════════════
    Lazy-loaded pages — only the landing page is eagerly loaded.
@@ -41,13 +42,20 @@ const PageLoader = () => (
 
 const queryClient = new QueryClient();
 
-/* ─── Root layout — mounts BottomTabBar + OgBotSheet globally ─── */
+/* ─── Root layout — mounts AppHeader + BottomTabBar + OgBotSheet globally ─── */
 const AppShell = () => {
   const [isBotOpen, setIsBotOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [ctaSlot, setCtaSlot] = useState<ReactNode>(null);
 
   return (
-    <>
+    <HeaderCtaContext.Provider value={{ ctaSlot, setCtaSlot }}>
+      <AppHeader
+        onBotOpen={() => setIsBotOpen(true)}
+        isBotOpen={isBotOpen}
+        onMoreOpen={() => setIsMenuOpen(true)}
+      />
+
       <Suspense fallback={<PageLoader />}>
         <Routes>
           <Route path="/" element={<Index />} />
@@ -70,12 +78,8 @@ const AppShell = () => {
       {/* Global persistent UI — always mounted */}
       <OgBotSheet isOpen={isBotOpen} onOpenChange={setIsBotOpen} />
       <MobileMenu isOpen={isMenuOpen} onOpenChange={setIsMenuOpen} />
-      <BottomTabBar
-        onBotOpen={() => setIsBotOpen(true)}
-        isBotOpen={isBotOpen}
-        onMoreOpen={() => setIsMenuOpen(true)}
-      />
-    </>
+      <BottomTabBar />
+    </HeaderCtaContext.Provider>
   );
 };
 
@@ -93,4 +97,3 @@ const App = () => (
 );
 
 export default App;
-

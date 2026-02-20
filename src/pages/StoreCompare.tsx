@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Check, X as XIcon } from "lucide-react";
-import MiniHeader from "@/components/MiniHeader";
+
 import { cn } from "@/lib/utils";
 import {
   mainProducts,
@@ -44,8 +44,6 @@ const StoreCompare = () => {
 
   return (
     <div className="min-h-screen bg-bg-void flex flex-col">
-      <MiniHeader />
-
       <main className="flex-1 animate-fade-in">
         {/* BACK NAV */}
         <div className="px-6 pt-6 max-w-3xl mx-auto">

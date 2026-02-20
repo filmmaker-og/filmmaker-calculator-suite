@@ -11,7 +11,7 @@ import {
   Share2,
   Link2,
 } from "lucide-react";
-import MiniHeader from "@/components/MiniHeader";
+
 import { cn } from "@/lib/utils";
 import { getProduct, mainProducts } from "@/lib/store-products";
 import SectionFrame from "@/components/SectionFrame";
@@ -48,7 +48,6 @@ const StorePackage = () => {
   if (!product) {
     return (
       <div className="min-h-screen bg-bg-void flex flex-col">
-        <MiniHeader />
         <main className="flex-1 flex items-center justify-center">
           <div className="text-center">
             <p className="text-text-mid mb-4">Package not found.</p>
@@ -69,8 +68,6 @@ const StorePackage = () => {
 
   return (
     <div className="min-h-screen bg-bg-void flex flex-col">
-      <MiniHeader />
-
       <main className="flex-1 animate-fade-in pb-24">
         {/* BACK NAV */}
         <div className="px-6 pt-6 max-w-2xl mx-auto">

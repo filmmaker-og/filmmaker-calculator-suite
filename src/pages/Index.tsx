@@ -12,7 +12,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 import filmmakerLogo from "@/assets/filmmaker-f-icon.png";
-import Header from "@/components/Header";
+import { useHeaderCta } from "@/components/AppHeader";
 import LeadCaptureModal from "@/components/LeadCaptureModal";
 import {
   Accordion,
@@ -305,30 +305,36 @@ const Index = () => {
     return () => obs.disconnect();
   }, [isComplete]);
 
-  // Sticky CTA button for the header
-  const stickyCtaButton = isComplete ? (
-    <button
-      onClick={handleStartClick}
-      className={cn(
-        "font-bebas text-[13px] tracking-[0.14em] uppercase whitespace-nowrap",
-        "h-9 px-3.5",
-        "bg-gold-cta-subtle border border-gold-cta-muted text-gold-cta",
-        "transition-all duration-300 ease-out",
-        "hover:border-gold-cta",
-        "active:scale-[0.97]",
-        heroPast
-          ? "opacity-100 translate-y-0 pointer-events-auto"
-          : "opacity-0 -translate-y-1 pointer-events-none"
-      )}
-      style={{ borderRadius: 0 }}
-    >
-      BUILD FREE
-    </button>
-  ) : undefined;
+  // Inject sticky CTA into the global AppHeader via context
+  const { setCtaSlot } = useHeaderCta();
+
+  useEffect(() => {
+    if (!isComplete) return;
+    const ctaButton = (
+      <button
+        onClick={handleStartClick}
+        className={cn(
+          "font-bebas text-[13px] tracking-[0.14em] uppercase whitespace-nowrap",
+          "h-9 px-3.5",
+          "bg-gold-cta-subtle border border-gold-cta-muted text-gold-cta",
+          "transition-all duration-300 ease-out",
+          "hover:border-gold-cta",
+          "active:scale-[0.97]",
+          heroPast
+            ? "opacity-100 translate-y-0 pointer-events-auto"
+            : "opacity-0 -translate-y-1 pointer-events-none"
+        )}
+        style={{ borderRadius: 0 }}
+      >
+        BUILD FREE
+      </button>
+    );
+    setCtaSlot(ctaButton);
+    return () => setCtaSlot(null);
+  }, [isComplete, heroPast, handleStartClick, setCtaSlot]);
 
   return (
     <>
-      {isComplete && <Header rightSlot={stickyCtaButton} />}
 
       {/* Lead capture modal — requires magic link verification */}
       <LeadCaptureModal

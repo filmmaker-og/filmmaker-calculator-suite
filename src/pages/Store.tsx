@@ -13,7 +13,7 @@ import {
   Cog,
   Send,
 } from "lucide-react";
-import MiniHeader from "@/components/MiniHeader";
+
 import { cn } from "@/lib/utils";
 import {
   mainProducts,
@@ -404,8 +404,6 @@ const Store = () => {
   /* ─── RENDER ─── */
   return (
     <div className="min-h-screen bg-bg-void flex flex-col">
-      <MiniHeader />
-
       {/* Working Model Popup */}
       {showPopup && (
         <WorkingModelPopup

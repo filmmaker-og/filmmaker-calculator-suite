@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import MiniHeader from "@/components/MiniHeader";
+
 import { X } from "lucide-react";
 import SectionFrame from "@/components/SectionFrame";
 import SectionHeader from "@/components/SectionHeader";
@@ -108,7 +108,7 @@ const Glossary = () => {
 
   return (
     <>
-      <MiniHeader />
+      
       <div className="min-h-screen bg-black text-white page-safe pb-8 font-sans">
 
         {/* PAGE TITLE */}

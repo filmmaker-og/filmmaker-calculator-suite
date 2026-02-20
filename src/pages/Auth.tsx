@@ -8,7 +8,7 @@ import { useHaptics } from "@/hooks/use-haptics";
 import { ArrowRight, Loader2, Mail } from "lucide-react";
 import { z } from "zod";
 import filmmakerLogo from "@/assets/filmmaker-f-icon.png";
-import MiniHeader from "@/components/MiniHeader";
+
 
 const emailSchema = z.string().email("Please enter a valid email address");
 const nameSchema = z.string().min(1, "Name is required").max(100, "Name must be less than 100 characters");
@@ -97,9 +97,6 @@ const Auth = () => {
   return (
     <div className="min-h-screen min-h-[100dvh] bg-bg-void flex flex-col">
       
-      {/* Mini F icon header */}
-      <MiniHeader />
-
       {/* Main Content - Centered */}
       <main className="flex-1 flex items-center justify-center px-6 py-12">
         <div className="w-full max-w-md">

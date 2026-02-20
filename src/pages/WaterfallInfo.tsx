@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import MiniHeader from "@/components/MiniHeader";
+
 import { useHaptics } from "@/hooks/use-haptics";
 import { ShieldAlert, BadgeDollarSign, ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -19,7 +19,7 @@ const WaterfallInfo = () => {
 
   return (
     <>
-      <MiniHeader />
+      
       <div className="min-h-screen bg-black text-white page-safe px-4 md:px-8 font-sans">
         <div className="max-w-4xl mx-auto space-y-8 animate-fade-in">
 
