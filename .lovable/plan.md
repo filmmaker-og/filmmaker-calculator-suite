@@ -1,143 +1,184 @@
 
-# Cleanup + Navigation Architecture Rethink
+# Navigation, Bot, and Header Overhaul
 
-## What's Being Fixed + Decided
+## Summary of What's Being Fixed
 
-There are 6 distinct things to address, some quick cleanup and one architectural decision.
+There are 5 distinct problems to solve:
 
----
-
-## 1 — Landing Page: Remove "Copy Link" from Footer
-
-**Current:** The footer grid has 4 items: Email / Instagram / Share / Copy Link. Share and Copy Link do the same thing — Share is superior (uses native share sheet on mobile).
-
-**Fix:** Remove the "Copy Link" button entirely. The 2x2 grid becomes a 3-item row. Clean it up to: Email · Instagram · Share — three equal cells in a `grid-cols-3`.
-
-Also remove the `linkCopied` state, `handleCopyLink` function, `Link2` icon import, and the `handleShare` fallback that was calling `handleCopyLink`.
-
-**File:** `src/pages/Index.tsx`
+1. **Bottom tab bar is hard to read** — inactive tabs at `text-white/30` and `opacity-30` are nearly invisible, no visual hierarchy between active/inactive
+2. **No `...` / More button** — Share, Glossary, Instagram etc. are buried in the now-orphaned `MobileMenu.tsx` which has no trigger in the UI
+3. **No header on inner pages, F icon instead** — but the landing page keeps its full header
+4. **Bot sheet is hard to read** — background too dark, low contrast text, weak visual weight
+5. **Header should be removed from all non-landing pages and replaced with a small centered F icon with the light effect**
 
 ---
 
-## 2 — Landing Page: Remove the paragraph above the Final CTA
+## Problem 1 — Bottom Tab Bar Readability
 
-**Current (lines 1030–1031):**
-```
-That meeting shouldn't be the first time you think about your recoupment structure.
-```
+**Current state:**
+- Inactive: `text-white/30`, F icon has `opacity-30 grayscale` — nearly invisible on black
+- Active: `text-gold` — correct
+- No indicator line, no background differentiation
 
-This line exists directly above the "BUILD YOUR WATERFALL" CTA button in the "Moment of Truth" section. The heading `YOUR INVESTOR WILL ASK HOW THE MONEY FLOWS BACK` is already complete as a standalone statement — the paragraph weakens it. Remove it. The CTA button follows the heading directly.
+**Fix — three layers of visual hierarchy:**
 
-**File:** `src/pages/Index.tsx` — remove the `<p>` tag at line 1030–1032.
+**Layer 1: Inactive state boost**
+- Icons: `text-white/55` (up from `text-white/30`) — still clearly dimmed but readable
+- Labels: `text-[10px]` (up from `text-[9px]`) and `tracking-[0.12em]` — more legible
+- F icon: `opacity-55` without grayscale — gold tint always faintly visible
 
----
+**Layer 2: Active state punch**
+- Gold top indicator bar: `2px` line at the TOP of the tab (this is the iOS tab bar convention — the indicator sits at the top edge, not the bottom, because the tab bar is at the bottom of the screen). `absolute top-0`, full tab width, gold.
+- Active icon: `text-gold` ✓ (keep)
+- Active label: slightly brighter, `tracking-[0.15em]`
+- Active tab gets a very subtle gold ambient background: `bg-gold/[0.06]`
 
-## 3 — Menu: Add X button (upper right) + Visual Premium Upgrade
+**Layer 3: Tab bar itself**
+- Increase border-top to `rgba(212,175,55,0.28)` (up from `0.18`) — more defined separation from page content
+- Add a very subtle upward glow: `boxShadow: "0 -8px 32px rgba(0,0,0,0.90), 0 -1px 0 rgba(212,175,55,0.20)"`
 
-The slide-up menu currently has: drag handle → nav grid → contact/share → brand footer. It needs:
-
-**X Close Button:** A positioned close button in the upper-right corner of the sheet, overlaid on the drag handle row. This is the native iOS pattern — every bottom sheet has an X in the top-right.
-
-```
-[ ──── ]           ← drag handle centered
-                [X]  ← absolute positioned top-right
-```
-
-The X button: `absolute top-3 right-4`, `w-8 h-8 flex items-center justify-center`, gold `X` icon at `w-4 h-4` opacity 50%, hover to full opacity.
-
-**Premium Visual Upgrade:** The current menu feels flat. Three changes to make it pop:
-
-- **Gold ambient glow on the sheet itself:** Add `boxShadow: "0 -4px 60px rgba(212,175,55,0.12), 0 -2px 20px rgba(0,0,0,0.80)"` to the bottom sheet container. This is the cinematic upward light leak.
-- **Gold top edge line:** Replace the plain `border-t border-border-default` with a full-width gold gradient line at the very top of the sheet — same pattern as the header separator.
-- **Featured nav items get more visual weight:** The "Packages" button (currently already gold-bordered) gets upgraded to use a proper gold fill: `bg-gold/[0.10]` → `bg-gold/[0.15]` and the border upgraded to `border-gold/50`. Add a small `ShoppingBag` icon in gold.
-- **Section labels ("Menu", "Contact & Share") upgrade:** From dim text to a proper gold rule with flanking lines — `flex items-center gap-3` with `h-[1px] bg-gold/20` on each side. Matches the cinematic design language.
-
-**File:** `src/components/MobileMenu.tsx`
+**File:** `src/components/BottomTabBar.tsx`
 
 ---
 
-## 4 — FAB: Replace Sparkles with F Icon + Label
+## Problem 2 — Add the `···` More Tab
 
-Replace the `<Sparkles>` icon in the FAB with `/brand-icon-f.jpg` at `w-7 h-7 object-contain`, and add "ASK" as a label below in `font-bebas text-[9px] tracking-[0.18em] text-black`.
+The `MobileMenu.tsx` slide-up sheet exists and works perfectly — it has Glossary, Waterfall, Share, Email, Instagram, and Packages. It just has no trigger in the UI since the header hamburger was removed.
 
-The FAB container becomes `w-14 h-auto py-2.5 flex-col gap-0.5`.
+**Fix:** Add a 5th tab to the bottom bar — `···` or `MORE` — that opens the `MobileMenu` sheet.
+
+This keeps the sheet as-is (no rework needed) but gives it a persistent trigger in the tab bar. The 5 tabs become:
+
+```
+[ HOME ] [ CALC ] [ PKGS ] [ ASK ] [ ··· ]
+```
+
+**Architecture:**
+- `BottomTabBar` gets a new `onMoreOpen` prop (just like `onBotOpen`)
+- `App.tsx` manages `isMobileMenuOpen` state, passes it down
+- `MobileMenu` already accepts no external props — it manages its own `isOpen` internally. We need to convert it to accept optional `isOpen`/`onOpenChange` controlled props, same pattern as `OgBotSheet`.
+- When `···` is tapped, `setIsMobileMenuOpen(true)` in `App.tsx` opens the sheet
+
+**Tab icon:** `MoreHorizontal` from lucide (three dots), `w-5 h-5`
+**Label:** `MORE`
+
+**Files:** `src/components/BottomTabBar.tsx`, `src/components/MobileMenu.tsx`, `src/App.tsx`
+
+---
+
+## Problem 3 — Replace Header on All Pages Except Landing
+
+**Current:** All pages (Calculator, Glossary, Store, BudgetInfo, CapitalInfo, FeesInfo, WaterfallInfo, Auth, StorePackage, StoreCompare, NotFound) use `<Header />` which renders a full-width header bar with `FILMMAKER.OG` text.
+
+**New pattern — Mini F Icon Header:**
+
+Replace `<Header />` on all non-landing pages with a new component: `<MiniHeader />`.
+
+`MiniHeader` renders:
+- No full-width bar (no `bg-bg-header`, no fixed height)
+- A centered block with:
+  - The F icon at `w-8 h-8 object-contain` with the light/glow effect (same as landing page hero)
+  - A subtle ambient radial glow behind it: `radial-gradient(circle, rgba(212,175,55,0.35) 0%, transparent 70%)` blurred — a "mini spotlight"
+  - Tapping it navigates to `/`
+- Fixed position at the top, `z-[150]`, height `~48px`
+- NOT on the landing page — `Index.tsx` keeps `<Header />` as-is (it has the sticky CTA slot that only works with the full header)
+
+**Visual result:** Every inner page has a small glowing F centered at the top — brand consistent, navigates home, takes up minimal space. The full `FILMMAKER.OG` text header is gone from inner pages.
+
+**Implementation:**
+- Create `src/components/MiniHeader.tsx` — new file, ~30 lines
+- In each page that imports `Header`, replace with `MiniHeader`
+- Remove the unused `rightSlot` prop pattern from inner pages
+- `Index.tsx` keeps `<Header rightSlot={stickyCtaButton} />` exactly as-is
+
+**Files:**
+- New: `src/components/MiniHeader.tsx`
+- Edit: `Calculator.tsx`, `Glossary.tsx`, `Store.tsx`, `StorePackage.tsx`, `StoreCompare.tsx`, `Auth.tsx`, `NotFound.tsx`, `WaterfallInfo.tsx`, `BudgetInfo.tsx`, `CapitalInfo.tsx`, `FeesInfo.tsx`
+
+**The `--appbar-h` CSS variable is currently 56px.** Pages use it for their top padding. With `MiniHeader` we keep the same `48px` height so layouts don't break — just update the variable to `--appbar-h: 48px` in `index.css` and keep the spacer div at the same height.
+
+---
+
+## Problem 4 — Bot Sheet Contrast & Readability
+
+**Current issues:**
+- Sheet background: `#0D0900` — very dark brownish black, almost no contrast with text
+- Messages area: very dark, text at `text-white/90` which should be fine but the dark background makes it feel murky
+- Question bubbles: `bg-gold/[0.10]` — too subtle, hard to distinguish from the sheet bg
+- Answer card: `background: "#080600"` — nearly black, no contrast
+- Input area: `border-gold/10` separator — barely visible
+- Example chips: `text-gold/60` and `bg-gold/[0.06]` — very hard to read
+
+**Fix — Full contrast overhaul:**
+
+**Sheet itself:**
+- Background: `#0F0C00` → `#111008` — slightly warmer and slightly lighter, keeps the cinematic brown-black but more legible
+- Add a stronger gold ambient glow at top: `boxShadow: "0 -8px 60px rgba(212,175,55,0.18), 0 -2px 30px rgba(0,0,0,0.90)"`
+
+**Header band:**
+- Border: `border-gold/20` → `border-gold/30`
+- "ASK THE OG" gold pill: Keep as-is (already gold bg, good contrast)
+- Add the `"Film industry Q&A"` subtitle visible on mobile too (remove `hidden sm:block`)
+
+**Example chips (empty state):**
+- Border: `border-gold/25` → `border-gold/40`
+- Background: `bg-gold/[0.06]` → `bg-gold/[0.10]`
+- Text: `text-gold/60` → `text-gold/80`
+- Font size: `text-[12px]` → `text-[13px]`
+
+**Question bubble (user message):**
+- Border: `border-gold/30` → `border-gold/50`
+- Background: `bg-gold/[0.10]` → `bg-gold/[0.15]`
+- Text: `text-white/90` → `text-white` (full white)
+- Font size: `text-[15px]` → `text-base` (same but explicit)
+
+**Answer card:**
+- Container background: `#080600` → `#131000` — a noticeably lighter near-black
+- Container border: `border-gold/20` → `border-gold/35`
+- Container shadow: `rgba(212,175,55,0.06)` → `rgba(212,175,55,0.14)` — visible glow
+- Answer text: `text-white/90` → `text-white`
+- Thinking text: `text-white/20` → `text-white/40`
+
+**Input area:**
+- Border-top separator: `border-gold/10` → `border-gold/25`
+- Input container border: `border-gold/40` → `border-gold/55`
+- Left accent line: keep `3px solid var(--gold)` ✓
+- Placeholder: `placeholder-white/20` → `placeholder-white/35`
+- `focus-within:border-gold` — keep ✓
 
 **File:** `src/components/OgBotSheet.tsx`
 
 ---
 
-## 5 — Naming: "The Resource" → "Glossary" in the Menu
-
-In `MobileMenu.tsx`, the nav button currently reads "The Resource". Change the label back to **"Glossary"** — it's universally understood, it scans faster, and the page title itself already says "The Resource" as the H1 so the menu entry doesn't need to repeat it.
-
-**File:** `src/components/MobileMenu.tsx` — one word change.
-
----
-
-## 6 — The Big Question: Persistent Bottom Tab Bar (Header → Footer)
-
-**The user's instinct is architecturally correct.** Here is the honest assessment:
-
-Every major native app — Instagram, TikTok, Apple Podcasts, Spotify — uses a persistent bottom tab bar. No hamburger menu. The tabs are always visible, always accessible, never hidden behind a gesture. This is the single biggest signal that something is an app vs. a website.
-
-**What the new architecture looks like:**
-
-```
-┌─────────────────────────┐
-│  [F]   FILMMAKER.OG     │  ← slim header, just brand mark. No hamburger.
-│─────────────────────────│
-│                         │
-│   page content          │
-│                         │
-│─────────────────────────│
-│  [Home] [Calc] [Store] [OG] │  ← persistent bottom tab bar
-└─────────────────────────┘
-```
-
-The OG Bot becomes a tab, not a FAB. Tapping it opens the bot sheet from the tab bar, not from a floating button. This is how every native AI app works (Perplexity, ChatGPT on mobile).
-
-**What gets removed:**
-- The hamburger button entirely
-- The FAB
-- The slide-up hamburger menu sheet
-
-**What gets added:**
-- A new `src/components/BottomTabBar.tsx` — fixed bottom bar, `h-[60px]`, 4 tabs
-- Tab icons: `Home` · `Calculator` · `ShoppingBag` · `F icon` (for bot)
-- Active tab highlighted in gold, inactive in `white/30`
-- The OG Bot sheet opens from the tab tap, same sheet as before, but no FAB
-
-**The header** becomes purely the brand mark — `FILMMAKER.OG` text only, no hamburger. A secondary "more" or settings access (for contact/share/instagram) could live in the bot tab or a minimal menu off the header logo long-press.
-
-**Tradeoffs to surface:**
-- Removes the hamburger slide-up menu entirely — contact/share/instagram need a new home (footer on landing page already has them; other pages could lose them or they move into the bot tab area)
-- The calculator page already has a TabBar for Budget/Stack/Waterfall — a bottom tab bar needs to coexist without collision. The calculator's internal tab bar would sit above the global nav bar, requiring a `padding-bottom` adjustment on the calculator layout.
-- The Glossary/Waterfall-Info pages would need a `pb-[60px]` adjustment for the bar.
-
-**Recommendation:** Implement the bottom tab bar, but keep a minimal "more" `···` button in the header for the contact/share/instagram links. The hamburger goes away. The FAB goes away. Navigation becomes permanently visible and instantly accessible.
-
----
-
-## Files Changed
+## File Summary
 
 | File | What Changes |
 |---|---|
-| `src/pages/Index.tsx` | Remove Copy Link button + footer grid cleanup; remove paragraph above final CTA |
-| `src/components/MobileMenu.tsx` | Add X close button; premium visual upgrades; rename "The Resource" → "Glossary" |
-| `src/components/OgBotSheet.tsx` | Replace Sparkles FAB with F icon + "ASK" label |
-| `src/components/BottomTabBar.tsx` | New file — persistent 4-tab bottom nav |
-| `src/components/Header.tsx` | Remove hamburger reference, simplify to brand mark only |
-| `src/App.tsx` | Mount `BottomTabBar` at root; remove `OgBotSheet` FAB if bot moves to tab |
-| Various pages | Add `pb-[60px]` to account for bottom tab bar |
+| `src/components/BottomTabBar.tsx` | Readability upgrade: inactive `white/55`, active indicator bar, `···` MORE tab |
+| `src/components/MobileMenu.tsx` | Accept controlled `isOpen`/`onOpenChange` props so it can be triggered from tab bar |
+| `src/App.tsx` | Add `isMobileMenuOpen` state, wire `MobileMenu` + new `···` tab together |
+| `src/components/MiniHeader.tsx` | New file — small centered F icon with glow, replaces Header on inner pages |
+| `src/pages/Calculator.tsx` | Replace `<Header />` with `<MiniHeader />` |
+| `src/pages/Glossary.tsx` | Replace `<Header />` with `<MiniHeader />` |
+| `src/pages/Store.tsx` | Replace `<Header />` with `<MiniHeader />` |
+| `src/pages/StorePackage.tsx` | Replace `<Header />` with `<MiniHeader />` |
+| `src/pages/StoreCompare.tsx` | Replace `<Header />` with `<MiniHeader />` |
+| `src/pages/Auth.tsx` | Replace `<Header />` with `<MiniHeader />` |
+| `src/pages/NotFound.tsx` | Replace `<Header />` with `<MiniHeader />` |
+| `src/pages/WaterfallInfo.tsx` | Replace `<Header />` with `<MiniHeader />` |
+| `src/pages/BudgetInfo.tsx` | Replace `<Header />` with `<MiniHeader />` |
+| `src/pages/CapitalInfo.tsx` | Replace `<Header />` with `<MiniHeader />` |
+| `src/pages/FeesInfo.tsx` | Replace `<Header />` with `<MiniHeader />` |
+| `src/components/OgBotSheet.tsx` | Full contrast overhaul on all message areas |
+| `src/index.css` | Optionally reduce `--appbar-h` to `48px` to match slimmer mini header |
+
+**`Index.tsx` is NOT touched** — the landing page keeps its full `<Header />` with the sticky CTA slot exactly as-is.
 
 ---
 
-## Implementation Order
+## What the App Will Feel Like After This
 
-1. Quick cleanup first (Copy Link removal, paragraph removal) — zero risk
-2. Menu X button + premium visual upgrades — self-contained
-3. FAB icon upgrade — single component, zero risk
-4. Rename "The Resource" → "Glossary" in menu — one word
-5. Bottom tab bar — new component, then wire up to App.tsx, then adjust all pages
-
-The bottom tab bar change is the biggest one and should be approved as a separate step if the user wants to see the smaller fixes first.
+- **Tab bar:** Clearly legible at all times. Inactive tabs visible but subordinate. Active tab has a gold top-line indicator and subtle gold wash. The `···` tab is always there to reach Glossary, Share, Instagram.
+- **Inner pages:** Opening Calculator, Store, or Glossary — a small glowing F icon centered at the top, tappable to go home. No text header cluttering the top.
+- **Bot sheet:** Opens and the conversation is immediately readable. High contrast, warm dark background, gold accents pop against it. The chips are tappable. The answers feel like they belong to a premium product.
+- **Landing page:** Unchanged. Full header, spotlight cones, cinematic F icon logo, sticky CTA.
