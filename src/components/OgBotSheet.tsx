@@ -210,38 +210,40 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
       {/* ── Bottom Sheet ── */}
       <div
         className={cn(
-          "fixed bottom-0 left-0 right-0 z-[180] bg-[#0D0900] border-t border-gold/20 rounded-t-2xl transition-transform duration-300 ease-out",
+          "fixed bottom-0 left-0 right-0 z-[180] border-t border-gold/30 rounded-t-2xl transition-transform duration-300 ease-out",
           "flex flex-col",
           isOpen ? "translate-y-0" : "translate-y-full"
         )}
         style={{
           height: "70vh",
           paddingBottom: "calc(var(--bottom-bar-h) + env(safe-area-inset-bottom))",
+          background: "#111008",
+          boxShadow: "0 -8px 60px rgba(212,175,55,0.18), 0 -2px 30px rgba(0,0,0,0.90)",
         }}
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
         {/* Drag handle */}
         <div className="flex justify-center pt-3 pb-1 flex-shrink-0">
-          <div className="w-8 h-1 bg-white/15 rounded-full" />
+          <div className="w-8 h-1 bg-white/20 rounded-full" />
         </div>
 
         {/* Sheet header */}
-        <div className="flex items-center justify-between px-4 py-3 flex-shrink-0 border-b border-gold/10">
+        <div className="flex items-center justify-between px-4 py-3 flex-shrink-0 border-b border-gold/30">
           <div className="flex items-center gap-2.5">
             <div className="flex items-center gap-2 bg-gold px-3 py-1.5" style={{ borderRadius: 0 }}>
               <img src={filmmakerFIcon} alt="OG" className="w-3.5 h-3.5 object-contain" />
               <span className="font-bebas text-sm tracking-[0.22em] text-black leading-none">ASK THE OG</span>
             </div>
-            <span className="text-[10px] text-white/25 font-mono uppercase tracking-widest hidden sm:block">
-              Film industry Q&A
+            <span className="text-[10px] text-white/40 font-mono uppercase tracking-widest">
+              Film industry Q&amp;A
             </span>
           </div>
           <div className="flex items-center gap-3">
             {ogMessages.length > 0 && (
               <button
                 onClick={handleReset}
-                className="flex items-center gap-1.5 text-[10px] font-mono uppercase tracking-[0.15em] text-white/20 hover:text-gold/60 transition-colors"
+                className="flex items-center gap-1.5 text-[10px] font-mono uppercase tracking-[0.15em] text-white/35 hover:text-gold/70 transition-colors"
               >
                 <RotateCcw className="w-3 h-3" />
                 Reset
@@ -249,7 +251,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
             )}
             <button
               onClick={() => setIsOpen(false)}
-              className="text-white/30 hover:text-white/70 transition-colors p-1"
+              className="text-white/45 hover:text-white/80 transition-colors p-1"
             >
               <X className="w-4 h-4" />
             </button>
@@ -267,7 +269,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
                   onClick={() => handleAsk(chip)}
                   disabled={ogLoading}
                   style={{ borderRadius: 0 }}
-                  className="text-[12px] font-mono uppercase tracking-wider px-4 py-2.5 border border-gold/25 bg-gold/[0.06] text-gold/60 hover:border-gold/60 hover:text-gold hover:bg-gold/[0.12] transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                  className="text-[13px] font-mono uppercase tracking-wider px-4 py-2.5 border border-gold/40 bg-gold/[0.10] text-gold/80 hover:border-gold/70 hover:text-gold hover:bg-gold/[0.16] transition-all disabled:opacity-40 disabled:cursor-not-allowed"
                 >
                   {chip}
                 </button>
@@ -281,7 +283,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
               {/* Question bubble */}
               <div className="flex justify-end">
                 <div
-                  className="max-w-[85%] px-4 py-3 border border-gold/30 bg-gold/[0.10] text-[15px] text-white/90"
+                  className="max-w-[85%] px-4 py-3 border border-gold/50 bg-gold/[0.15] text-base text-white"
                   style={{ borderRadius: 0 }}
                 >
                   {msg.question}
@@ -291,8 +293,8 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
               {/* Answer card */}
               <div className="flex justify-start">
                 <div
-                  className="max-w-[95%] border border-gold/20 overflow-hidden"
-                  style={{ borderRadius: 0, background: "#080600", boxShadow: "0 0 24px rgba(212,175,55,0.06)" }}
+                  className="max-w-[95%] border border-gold/35 overflow-hidden"
+                  style={{ borderRadius: 0, background: "#131000", boxShadow: "0 0 24px rgba(212,175,55,0.14)" }}
                 >
                   <div className="flex items-center gap-2.5 px-4 py-2 bg-gold">
                     <img src={filmmakerFIcon} alt="OG" className="w-3 h-3 object-contain" />
@@ -307,12 +309,12 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
                   </div>
                   <div className="px-4 py-4">
                     {msg.error ? (
-                      <p className="text-[15px] text-gold/50 leading-relaxed">{msg.error}</p>
+                      <p className="text-[15px] text-gold/60 leading-relaxed">{msg.error}</p>
                     ) : (
-                      <p className="text-[15px] text-white/90 leading-[1.8] whitespace-pre-wrap">
+                      <p className="text-base text-white leading-[1.8] whitespace-pre-wrap">
                         {msg.answer}
                         {msg.streaming && !msg.answer && (
-                          <span className="text-white/20">Thinking…</span>
+                          <span className="text-white/40">Thinking…</span>
                         )}
                       </p>
                     )}
@@ -325,10 +327,10 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
         </div>
 
         {/* Input area */}
-        <div className="px-4 pb-3 pt-2 border-t border-gold/10 flex-shrink-0">
+        <div className="px-4 pb-3 pt-2 border-t border-gold/25 flex-shrink-0">
           <form onSubmit={handleOgSubmit}>
             <div
-              className="flex gap-0 border border-gold/40 focus-within:border-gold transition-colors"
+              className="flex gap-0 border border-gold/55 focus-within:border-gold transition-colors"
               style={{ borderLeft: "3px solid var(--gold)" }}
             >
               <textarea
@@ -341,7 +343,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
                 placeholder="Ask a film industry question…"
                 rows={2}
                 disabled={ogLoading}
-                className="flex-1 px-4 py-3 bg-transparent text-white placeholder-white/20 focus:outline-none text-base resize-none disabled:opacity-50 min-h-[52px]"
+                className="flex-1 px-4 py-3 bg-transparent text-white placeholder-white/35 focus:outline-none text-base resize-none disabled:opacity-50 min-h-[52px]"
                 style={{ borderRadius: 0 }}
               />
               <button
@@ -357,7 +359,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
             <div className="flex items-center justify-end mt-1.5 px-1">
               <span className={cn(
                 "text-[10px] font-mono tabular-nums",
-                ogInput.length > 1350 ? "text-gold/60" : "text-white/15"
+                ogInput.length > 1350 ? "text-gold/60" : "text-white/25"
               )}>
                 {ogInput.length}/1500
               </span>

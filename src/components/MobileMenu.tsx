@@ -4,8 +4,18 @@ import { Home, Calculator, BookOpen, Book, Mail, Instagram, Share2, X as CloseIc
 import { cn } from "@/lib/utils";
 import { getShareUrl, SHARE_TEXT, SHARE_TITLE } from "@/lib/constants";
 
-const MobileMenu = () => {
-  const [isOpen, setIsOpen] = useState(false);
+interface MobileMenuProps {
+  isOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
+}
+
+const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) => {
+  const [internalOpen, setInternalOpen] = useState(false);
+  const isOpen = controlledOpen !== undefined ? controlledOpen : internalOpen;
+  const setIsOpen = (v: boolean) => {
+    if (onOpenChange) onOpenChange(v);
+    else setInternalOpen(v);
+  };
   const navigate = useNavigate();
 
   // Swipe-to-dismiss

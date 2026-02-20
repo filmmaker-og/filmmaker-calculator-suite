@@ -11,7 +11,7 @@ import {
   Share2,
   Link2,
 } from "lucide-react";
-import Header from "@/components/Header";
+import MiniHeader from "@/components/MiniHeader";
 import { cn } from "@/lib/utils";
 import { getProduct, mainProducts } from "@/lib/store-products";
 import SectionFrame from "@/components/SectionFrame";
@@ -29,6 +29,16 @@ const StorePackage = () => {
     window.scrollTo(0, 0);
   }, [slug]);
 
+  const handleCopyLink = useCallback(() => {
+    navigator.clipboard
+      .writeText(`${SHARE_TEXT}\n\n${getShareUrl()}`)
+      .then(() => {
+        setLinkCopied(true);
+        setTimeout(() => setLinkCopied(false), 2000);
+      })
+      .catch(() => {});
+  }, []);
+
   // Redirect add-on product pages to store
   if (product?.isAddOn) {
     navigate("/store");
@@ -38,7 +48,7 @@ const StorePackage = () => {
   if (!product) {
     return (
       <div className="min-h-screen bg-bg-void flex flex-col">
-        <Header />
+        <MiniHeader />
         <main className="flex-1 flex items-center justify-center">
           <div className="text-center">
             <p className="text-text-mid mb-4">Package not found.</p>
@@ -57,19 +67,9 @@ const StorePackage = () => {
   const isFeatured = product.featured;
   const descParagraphs = product.fullDescription.split("\n\n");
 
-  const handleCopyLink = useCallback(() => {
-    navigator.clipboard
-      .writeText(`${SHARE_TEXT}\n\n${getShareUrl()}`)
-      .then(() => {
-        setLinkCopied(true);
-        setTimeout(() => setLinkCopied(false), 2000);
-      })
-      .catch(() => {});
-  }, []);
-
   return (
     <div className="min-h-screen bg-bg-void flex flex-col">
-      <Header />
+      <MiniHeader />
 
       <main className="flex-1 animate-fade-in pb-24">
         {/* BACK NAV */}

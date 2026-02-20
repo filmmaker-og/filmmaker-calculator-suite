@@ -12,7 +12,7 @@ import TabBar, { TabId } from "@/components/calculator/TabBar";
 import { BudgetTab, StackTab, DealTab, WaterfallTab } from "@/components/calculator/tabs";
 import { CapitalSourceSelections, defaultSelections } from "@/components/calculator/stack/CapitalSelect";
 import EmailGateModal from "@/components/EmailGateModal";
-import Header from "@/components/Header";
+import MiniHeader from "@/components/MiniHeader";
 
 import { EMAIL_CAPTURED_KEY } from "@/lib/constants";
 
@@ -248,7 +248,7 @@ const Calculator = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-bg-void flex flex-col">
-        <Header />
+        <MiniHeader />
         <div className="flex-1 flex items-center justify-center">
           <div className="w-8 h-8 border-2 border-gold border-t-transparent rounded-full animate-spin" />
         </div>
@@ -262,7 +262,7 @@ const Calculator = () => {
 
   return (
     <div className="min-h-screen bg-bg-void flex flex-col">
-      <Header />
+      <MiniHeader />
       <main
         ref={mainRef}
         className="flex-1 px-4 py-6 overflow-y-auto"
