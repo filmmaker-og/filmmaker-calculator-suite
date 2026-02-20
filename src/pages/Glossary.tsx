@@ -483,12 +483,12 @@ const Glossary = () => {
   return (
     <>
       <Header />
-      <div className="min-h-screen bg-black text-white pt-[68px] pb-4 font-sans">
+      <div className="min-h-screen bg-black text-white pb-4 font-sans">
 
         {/* ═══════════════════════════════════════════════════════════
             PAGE TITLE BLOCK
             ═══════════════════════════════════════════════════════════ */}
-        <div className="px-6 md:px-10 pt-4 pb-1">
+        <div className="px-6 md:px-10 pt-2 pb-1">
           <div className="max-w-4xl mx-auto">
             <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-gold/60 mb-3">
               Film Finance
