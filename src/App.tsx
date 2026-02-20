@@ -10,6 +10,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
    Everything else loads on demand with a Suspense fallback.
    ═══════════════════════════════════════════════════════════════════ */
 import Index from "./pages/Index";
+import OgBotSheet from "./components/OgBotSheet";
 
 const BudgetInfo = lazy(() => import("./pages/BudgetInfo"));
 const CapitalInfo = lazy(() => import("./pages/CapitalInfo"));
@@ -45,6 +46,7 @@ const App = () => (
       <ErrorBoundary>
       <BrowserRouter>
         <Suspense fallback={<PageLoader />}>
+        <OgBotSheet />
         <Routes>
           <Route path="/" element={<Index />} />
 
