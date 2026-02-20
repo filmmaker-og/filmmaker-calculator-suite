@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ErrorBoundary from "./components/ErrorBoundary";
 import BottomTabBar from "./components/BottomTabBar";
 import OgBotSheet from "./components/OgBotSheet";
+import MobileMenu from "./components/MobileMenu";
 
 /* ═══════════════════════════════════════════════════════════════════
    Lazy-loaded pages — only the landing page is eagerly loaded.
@@ -43,6 +44,7 @@ const queryClient = new QueryClient();
 /* ─── Root layout — mounts BottomTabBar + OgBotSheet globally ─── */
 const AppShell = () => {
   const [isBotOpen, setIsBotOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
     <>
@@ -67,7 +69,12 @@ const AppShell = () => {
 
       {/* Global persistent UI — always mounted */}
       <OgBotSheet isOpen={isBotOpen} onOpenChange={setIsBotOpen} />
-      <BottomTabBar onBotOpen={() => setIsBotOpen(true)} isBotOpen={isBotOpen} />
+      <MobileMenu isOpen={isMenuOpen} onOpenChange={setIsMenuOpen} />
+      <BottomTabBar
+        onBotOpen={() => setIsBotOpen(true)}
+        isBotOpen={isBotOpen}
+        onMoreOpen={() => setIsMenuOpen(true)}
+      />
     </>
   );
 };
@@ -86,3 +93,4 @@ const App = () => (
 );
 
 export default App;
+
