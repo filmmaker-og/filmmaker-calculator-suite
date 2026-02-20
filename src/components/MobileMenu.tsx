@@ -181,10 +181,11 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
             <div className="grid grid-cols-3 gap-2">
               <a
                 href="mailto:thefilmmaker.og@gmail.com"
-                className="flex flex-col items-center gap-1.5 p-3.5 border border-white/[0.10] bg-white/[0.04] text-center group hover:border-gold/40 hover:bg-gold/[0.06] transition-all"
+                className="relative flex flex-col items-center gap-1.5 p-3.5 border border-white/[0.10] bg-white/[0.04] text-center group hover:border-gold/40 hover:bg-gold/[0.06] transition-all overflow-hidden"
                 style={{ borderRadius: 0 }}
               >
-                <Mail className="w-4 h-4 text-white/50 group-hover:text-gold transition-colors" />
+                <div className="absolute left-0 top-0 bottom-0 w-[1px]" style={{ background: "linear-gradient(to bottom, rgba(212,175,55,0.40), transparent)" }} />
+                <Mail className="w-4 h-4 text-gold/60 group-hover:text-gold transition-colors" />
                 <span className="font-bebas text-xs tracking-wide text-white/60 group-hover:text-white leading-none transition-colors">Email</span>
               </a>
 
@@ -192,19 +193,21 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
                 href="https://www.instagram.com/filmmaker.og"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex flex-col items-center gap-1.5 p-3.5 border border-white/[0.10] bg-white/[0.04] text-center group hover:border-gold/40 hover:bg-gold/[0.06] transition-all"
+                className="relative flex flex-col items-center gap-1.5 p-3.5 border border-white/[0.10] bg-white/[0.04] text-center group hover:border-gold/40 hover:bg-gold/[0.06] transition-all overflow-hidden"
                 style={{ borderRadius: 0 }}
               >
-                <Instagram className="w-4 h-4 text-white/50 group-hover:text-gold transition-colors" />
+                <div className="absolute left-0 top-0 bottom-0 w-[1px]" style={{ background: "linear-gradient(to bottom, rgba(212,175,55,0.40), transparent)" }} />
+                <Instagram className="w-4 h-4 text-gold/60 group-hover:text-gold transition-colors" />
                 <span className="font-bebas text-xs tracking-wide text-white/60 group-hover:text-white leading-none transition-colors">Instagram</span>
               </a>
 
               <button
                 onClick={handleShare}
-                className="flex flex-col items-center gap-1.5 p-3.5 border border-white/[0.10] bg-white/[0.04] text-center group hover:border-gold/40 hover:bg-gold/[0.06] transition-all"
+                className="relative flex flex-col items-center gap-1.5 p-3.5 border border-white/[0.10] bg-white/[0.04] text-center group hover:border-gold/40 hover:bg-gold/[0.06] transition-all overflow-hidden"
                 style={{ borderRadius: 0 }}
               >
-                <Share2 className="w-4 h-4 text-white/50 group-hover:text-gold transition-colors" />
+                <div className="absolute left-0 top-0 bottom-0 w-[1px]" style={{ background: "linear-gradient(to bottom, rgba(212,175,55,0.40), transparent)" }} />
+                <Share2 className="w-4 h-4 text-gold/60 group-hover:text-gold transition-colors" />
                 <span className="font-bebas text-xs tracking-wide text-white/60 group-hover:text-white leading-none transition-colors">Share</span>
               </button>
             </div>

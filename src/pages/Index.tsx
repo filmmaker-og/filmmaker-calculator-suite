@@ -6,9 +6,6 @@ import {
   Check,
   X,
   LockKeyhole,
-  Mail,
-  Instagram,
-  Share2,
   ChevronDown,
 } from "lucide-react";
 import filmmakerLogo from "@/assets/filmmaker-f-icon.png";
@@ -21,7 +18,6 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
-import { getShareUrl, SHARE_TEXT, SHARE_TITLE } from "@/lib/constants";
 import SectionFrame from "@/components/SectionFrame";
 import SectionHeader from "@/components/SectionHeader";
 
@@ -278,13 +274,6 @@ const Index = () => {
   }, [phase, hasSeenCinematic]);
 
   const handleStartClick    = () => { haptics.medium(); gatedNavigate("/calculator?tab=budget"); };
-
-  const handleShare = useCallback(async () => {
-    if (navigator.share) {
-      try { await navigator.share({ title: SHARE_TITLE, text: SHARE_TEXT, url: getShareUrl() }); return; } catch {}
-    }
-    navigator.clipboard.writeText(`${SHARE_TEXT}\n\n${getShareUrl()}`).catch(() => {});
-  }, []);
 
   const isComplete = phase === 'complete';
   const showBeam = phase !== 'dark' && !shouldSkip;
@@ -901,7 +890,7 @@ const Index = () => {
                     className={cn(
                       "relative border overflow-hidden p-5 md:p-7 transition-all duration-600 ease-out",
                       t.featured
-                        ? "border-gold/50 bg-white/[0.04]"
+                        ? "border-gold/50 bg-gold/[0.04]"
                         : t.elevated
                           ? "border-white/[0.12] bg-white/[0.04]"
                           : "border-white/[0.10] bg-white/[0.04]",
@@ -909,12 +898,16 @@ const Index = () => {
                     )}
                     style={{
                       transitionDelay: revPath.visible ? `${i * 150}ms` : '0ms',
-                      ...(t.featured ? { boxShadow: '0 0 30px rgba(212,175,55,0.10), 0 0 60px rgba(212,175,55,0.05)' } : {}),
+                      ...(t.featured ? { boxShadow: '0 0 40px rgba(212,175,55,0.15), 0 0 80px rgba(212,175,55,0.06)' } : {}),
                     }}
                   >
-                    {/* Gold top accent — featured gets a full-width gold bar */}
+                    {/* Gold top accent — featured gets a full-width gold bar + glow */}
                     {t.featured && (
-                      <div className="absolute top-0 left-0 right-0 h-[2px] bg-gold/70" />
+                      <>
+                        <div className="absolute top-0 left-0 right-0 h-[2px] bg-gold/70" />
+                        <div className="absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none"
+                          style={{ width: '80%', height: '60px', background: 'radial-gradient(ellipse 80% 100% at 50% 0%, rgba(212,175,55,0.08) 0%, transparent 70%)' }} />
+                      </>
                     )}
                     {/* Gold left accent — all cards get one, same weight */}
                     <div className="absolute left-0 top-0 bottom-0 w-[3px]"
@@ -924,7 +917,7 @@ const Index = () => {
                     />
                     {t.featured && (
                       <div className="mb-3">
-                        <span className="text-[11px] tracking-[0.16em] uppercase font-bold text-gold bg-gold/[0.12] px-3 py-1.5 border border-gold/30">
+                        <span className="text-[12px] tracking-[0.20em] uppercase font-bold text-gold bg-gold/[0.12] px-3 py-1.5 border border-gold/30">
                           Recommended
                         </span>
                       </div>
@@ -938,7 +931,7 @@ const Index = () => {
                         t.featured ? "text-gold" : "text-white/50"
                       )}>
                         {'originalPrice' in t && t.originalPrice && (
-                          <span className="text-white/40 line-through mr-1.5 text-[13px]">{t.originalPrice}</span>
+                          <span className="text-white/50 line-through mr-1.5 text-[13px]">{t.originalPrice}</span>
                         )}
                         {t.price}
                       </span>
@@ -1041,21 +1034,6 @@ const Index = () => {
           <footer className="py-10 px-6">
             <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/40 to-transparent mb-8" />
             <div className="max-w-sm mx-auto">
-              <div className="grid grid-cols-3 gap-3 mb-8 max-w-[340px] mx-auto">
-                <a href="mailto:thefilmmaker.og@gmail.com"
-                  className="flex items-center justify-center gap-2.5 font-bebas text-sm tracking-wider text-gold/80 hover:text-gold bg-white/[0.04] hover:bg-white/[0.07] transition-all active:scale-[0.97] py-5 border border-white/[0.12] hover:border-gold/40">
-                  <Mail className="w-4 h-4" /><span>Email</span>
-                </a>
-                <a href="https://www.instagram.com/filmmaker.og" target="_blank" rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2.5 font-bebas text-sm tracking-wider text-gold/80 hover:text-gold bg-white/[0.04] hover:bg-white/[0.07] transition-all active:scale-[0.97] py-5 border border-white/[0.12] hover:border-gold/40">
-                  <Instagram className="w-4 h-4" /><span>Instagram</span>
-                </a>
-                <button onClick={() => { haptics.light(); handleShare(); }}
-                  className="flex items-center justify-center gap-2.5 font-bebas text-sm tracking-wider text-gold/80 hover:text-gold bg-white/[0.04] hover:bg-white/[0.07] transition-all active:scale-[0.97] py-5 border border-white/[0.12] hover:border-gold/40">
-                  <Share2 className="w-4 h-4" /><span>Share</span>
-                </button>
-              </div>
-
               {/* Flanking gold lines around wordmark */}
               <div className="flex items-center gap-4 mb-4">
                 <div className="h-[1px] flex-1 bg-gradient-to-r from-transparent to-gold/30" />
