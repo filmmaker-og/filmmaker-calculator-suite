@@ -8,7 +8,7 @@ import {
   LockKeyhole,
   Mail,
   Instagram,
-  Link2,
+  Share2,
   ChevronDown,
 } from "lucide-react";
 import filmmakerLogo from "@/assets/filmmaker-f-icon.png";
@@ -136,7 +136,7 @@ const Index = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const haptics = useHaptics();
-  const [linkCopied, setLinkCopied] = useState(false);
+  
 
   // Lead capture gate — requires magic link verification
   const [showLeadCapture, setShowLeadCapture] = useState(false);
@@ -279,16 +279,12 @@ const Index = () => {
 
   const handleStartClick    = () => { haptics.medium(); gatedNavigate("/calculator?tab=budget"); };
 
-  const handleCopyLink = useCallback(() => {
-    navigator.clipboard.writeText(`${SHARE_TEXT}\n\n${getShareUrl()}`).then(() => {
-      setLinkCopied(true); setTimeout(() => setLinkCopied(false), 2000);
-    }).catch(() => {});
-  }, []);
-
   const handleShare = useCallback(async () => {
-    if (navigator.share) { try { await navigator.share({ title: SHARE_TITLE, text: SHARE_TEXT, url: getShareUrl() }); return; } catch {} }
-    handleCopyLink();
-  }, [handleCopyLink]);
+    if (navigator.share) {
+      try { await navigator.share({ title: SHARE_TITLE, text: SHARE_TEXT, url: getShareUrl() }); return; } catch {}
+    }
+    navigator.clipboard.writeText(`${SHARE_TEXT}\n\n${getShareUrl()}`).catch(() => {});
+  }, []);
 
   const isComplete = phase === 'complete';
   const showBeam = phase !== 'dark' && !shouldSkip;
@@ -394,7 +390,7 @@ const Index = () => {
         )}
 
         {/* ═══════ LANDING PAGE ═══════ */}
-        <main aria-label="Film Finance Simulator" className={cn("flex-1 flex flex-col transition-all duration-700", isComplete ? "opacity-100" : "opacity-0")}>
+        <main aria-label="Film Finance Simulator" className={cn("flex-1 flex flex-col transition-all duration-700", isComplete ? "opacity-100" : "opacity-0")} style={{ paddingBottom: "calc(var(--bottom-bar-h) + env(safe-area-inset-bottom))" }}>
 
           {/* ──────────────────────────────────────────────────────────
                § 1  HERO
@@ -1024,12 +1020,9 @@ const Index = () => {
 
               <div className="relative p-10 md:p-16 max-w-md mx-auto text-center">
                 <p className="text-white/50 text-[13px] tracking-[0.3em] uppercase font-semibold mb-5">The Moment of Truth</p>
-                <h2 className="font-bebas text-3xl md:text-4xl leading-[1.1] tracking-[0.08em] text-gold mb-5">
+                <h2 className="font-bebas text-3xl md:text-4xl leading-[1.1] tracking-[0.08em] text-gold mb-8">
                   YOUR INVESTOR WILL ASK<br />HOW THE MONEY FLOWS <span className="text-white">BACK</span>.
                 </h2>
-                <p className="text-white/55 text-[15px] leading-relaxed max-w-xs mx-auto mb-8">
-                  That meeting shouldn&rsquo;t be the first time you think about your recoupment&nbsp;structure.
-                </p>
                 <button onClick={handleStartClick}
                   className="w-full max-w-[320px] h-14 text-base btn-cta-final mx-auto">
                   BUILD YOUR WATERFALL
@@ -1042,7 +1035,7 @@ const Index = () => {
           <footer className="py-10 px-6">
             <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/40 to-transparent mb-8" />
             <div className="max-w-sm mx-auto">
-              <div className="grid grid-cols-2 gap-3 mb-8 max-w-[340px] mx-auto">
+              <div className="grid grid-cols-3 gap-3 mb-8 max-w-[340px] mx-auto">
                 <a href="mailto:thefilmmaker.og@gmail.com"
                   className="flex items-center justify-center gap-2.5 text-sm tracking-wider text-gold/80 hover:text-gold bg-white/[0.04] hover:bg-white/[0.07] transition-all active:scale-[0.97] py-5 border border-white/[0.12] hover:border-gold/40">
                   <Mail className="w-4 h-4" /><span>Email</span>
@@ -1053,15 +1046,7 @@ const Index = () => {
                 </a>
                 <button onClick={() => { haptics.light(); handleShare(); }}
                   className="flex items-center justify-center gap-2.5 text-sm tracking-wider text-gold/80 hover:text-gold bg-white/[0.04] hover:bg-white/[0.07] transition-all active:scale-[0.97] py-5 border border-white/[0.12] hover:border-gold/40">
-                  <Link2 className="w-4 h-4" /><span>Share</span>
-                </button>
-                <button onClick={() => { haptics.light(); handleCopyLink(); }}
-                  className="flex items-center justify-center gap-2.5 text-sm tracking-wider text-gold/80 hover:text-gold bg-white/[0.04] hover:bg-white/[0.07] transition-all active:scale-[0.97] py-5 border border-white/[0.12] hover:border-gold/40">
-                  {linkCopied ? (
-                    <><Check className="w-4 h-4 text-gold" /><span className="text-gold">Copied!</span></>
-                  ) : (
-                    <><Link2 className="w-4 h-4" /><span>Copy Link</span></>
-                  )}
+                  <Share2 className="w-4 h-4" /><span>Share</span>
                 </button>
               </div>
 

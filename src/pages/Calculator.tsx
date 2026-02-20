@@ -267,7 +267,7 @@ const Calculator = () => {
         ref={mainRef}
         className="flex-1 px-4 py-6 overflow-y-auto"
         style={{
-          paddingBottom: 'calc(var(--tabbar-h) + 100px + env(safe-area-inset-bottom))',
+          paddingBottom: 'calc(var(--tabbar-h) + var(--bottom-bar-h) + 100px + env(safe-area-inset-bottom))',
         }}
       >
         <div className={cn("max-w-[460px] mx-auto", "animate-fade-in")}>
@@ -278,7 +278,7 @@ const Calculator = () => {
       <div
         className="fixed left-0 right-0 z-40 flex items-center justify-between px-4 py-2"
         style={{
-          bottom: 'calc(var(--tabbar-h) + env(safe-area-inset-bottom))',
+          bottom: 'calc(var(--tabbar-h) + var(--bottom-bar-h) + env(safe-area-inset-bottom))',
           backgroundColor: 'var(--bg-card)',
         }}
       >

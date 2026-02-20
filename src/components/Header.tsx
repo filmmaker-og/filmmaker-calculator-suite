@@ -1,6 +1,5 @@
 import { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
-import MobileMenu from "./MobileMenu";
 
 interface HeaderProps {
   rightSlot?: ReactNode;
@@ -8,10 +7,6 @@ interface HeaderProps {
 
 const Header = ({ rightSlot }: HeaderProps) => {
   const navigate = useNavigate();
-
-  const handleLogoClick = () => {
-    navigate("/");
-  };
 
   return (
     <>
@@ -22,7 +17,7 @@ const Header = ({ rightSlot }: HeaderProps) => {
         <div className="flex items-center justify-between px-4" style={{ height: 'var(--appbar-h)' }}>
           {/* Left: Logo Text (clickable to home) */}
           <button
-            onClick={handleLogoClick}
+            onClick={() => navigate("/")}
             className="flex items-center gap-2.5 hover:opacity-80 transition-opacity group"
           >
             <span className="font-bebas text-lg tracking-[0.2em] text-gold group-hover:text-white transition-colors duration-200">
@@ -36,9 +31,6 @@ const Header = ({ rightSlot }: HeaderProps) => {
               {rightSlot}
             </div>
           )}
-
-          {/* Right: Hamburger Menu */}
-          <MobileMenu />
         </div>
 
         {/* Gold line separator */}
