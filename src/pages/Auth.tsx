@@ -131,7 +131,7 @@ const Auth = () => {
                   <div>
                     <label
                       htmlFor="name"
-                      className="block text-xs uppercase tracking-[0.2em] text-text-dim font-semibold mb-3"
+                      className="block text-xs uppercase tracking-[0.2em] text-text-dim font-bebas mb-3"
                     >
                       Name
                     </label>
@@ -159,7 +159,7 @@ const Auth = () => {
                   <div>
                     <label
                       htmlFor="email"
-                      className="block text-xs uppercase tracking-[0.2em] text-text-dim font-semibold mb-3"
+                      className="block text-xs uppercase tracking-[0.2em] text-text-dim font-bebas mb-3"
                     >
                       Email
                     </label>
@@ -209,11 +209,11 @@ const Auth = () => {
               <div className="mt-8 text-center space-y-3">
                 <button
                   onClick={() => navigate("/calculator?skip=true")}
-                  className="text-text-dim hover:text-text-primary text-base font-semibold transition-colors"
+                  className="text-text-dim hover:text-text-primary font-bebas text-[16px] tracking-[0.12em] transition-colors"
                 >
                   Continue without saving →
                 </button>
-                <p className="text-text-dim text-xs">
+                <p className="text-text-dim text-xs font-mono">
                   Your work won't be saved
                 </p>
               </div>
@@ -248,7 +248,7 @@ const Auth = () => {
                 <div className="space-y-6">
                   <button
                     onClick={() => setStep('email')}
-                    className="text-text-dim hover:text-text-mid text-sm font-normal transition-colors"
+                    className="text-text-dim hover:text-text-mid font-mono text-sm tracking-[0.08em] transition-colors"
                   >
                     Use different email
                   </button>
@@ -256,7 +256,7 @@ const Auth = () => {
                   <div>
                     <button
                       onClick={() => navigate("/calculator?skip=true")}
-                      className="text-text-dim hover:text-text-mid text-sm transition-colors"
+                      className="text-text-dim hover:text-text-mid font-bebas text-[16px] tracking-[0.12em] transition-colors"
                     >
                       Continue without saving →
                     </button>
