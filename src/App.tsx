@@ -1,16 +1,17 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useState } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ErrorBoundary from "./components/ErrorBoundary";
+import BottomTabBar from "./components/BottomTabBar";
+import OgBotSheet from "./components/OgBotSheet";
 
 /* ═══════════════════════════════════════════════════════════════════
    Lazy-loaded pages — only the landing page is eagerly loaded.
    Everything else loads on demand with a Suspense fallback.
    ═══════════════════════════════════════════════════════════════════ */
 import Index from "./pages/Index";
-import OgBotSheet from "./components/OgBotSheet";
 
 const BudgetInfo = lazy(() => import("./pages/BudgetInfo"));
 const CapitalInfo = lazy(() => import("./pages/CapitalInfo"));
@@ -39,17 +40,15 @@ const PageLoader = () => (
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <ErrorBoundary>
-      <BrowserRouter>
-        <Suspense fallback={<PageLoader />}>
-        <OgBotSheet />
+/* ─── Root layout — mounts BottomTabBar + OgBotSheet globally ─── */
+const AppShell = () => {
+  const [isBotOpen, setIsBotOpen] = useState(false);
+
+  return (
+    <>
+      <Suspense fallback={<PageLoader />}>
         <Routes>
           <Route path="/" element={<Index />} />
-
           <Route path="/budget-info" element={<BudgetInfo />} />
           <Route path="/capital-info" element={<CapitalInfo />} />
           <Route path="/fees-info" element={<FeesInfo />} />
@@ -64,8 +63,23 @@ const App = () => (
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
-        </Suspense>
-      </BrowserRouter>
+      </Suspense>
+
+      {/* Global persistent UI — always mounted */}
+      <OgBotSheet isOpen={isBotOpen} onOpenChange={setIsBotOpen} />
+      <BottomTabBar onBotOpen={() => setIsBotOpen(true)} isBotOpen={isBotOpen} />
+    </>
+  );
+};
+
+const App = () => (
+  <QueryClientProvider client={queryClient}>
+    <TooltipProvider>
+      <Toaster />
+      <ErrorBoundary>
+        <BrowserRouter>
+          <AppShell />
+        </BrowserRouter>
       </ErrorBoundary>
     </TooltipProvider>
   </QueryClientProvider>

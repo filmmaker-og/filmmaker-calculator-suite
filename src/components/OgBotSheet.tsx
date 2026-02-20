@@ -1,5 +1,6 @@
 import { useState, useRef, useCallback, useEffect } from "react";
-import { Sparkles, SendHorizonal, RotateCcw, X } from "lucide-react";
+import { SendHorizonal, RotateCcw, X } from "lucide-react";
+import filmmakerFIcon from "@/assets/filmmaker-f-icon.png";
 import { cn } from "@/lib/utils";
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -24,8 +25,18 @@ const EXAMPLE_CHIPS = [
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
-const OgBotSheet = () => {
-  const [isOpen, setIsOpen] = useState(false);
+interface OgBotSheetProps {
+  isOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
+}
+
+const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) => {
+  const [internalOpen, setInternalOpen] = useState(false);
+  const isOpen = controlledOpen !== undefined ? controlledOpen : internalOpen;
+  const setIsOpen = (v: boolean) => {
+    if (onOpenChange) onOpenChange(v);
+    else setInternalOpen(v);
+  };
   const [ogInput, setOgInput] = useState("");
   const [ogMessages, setOgMessages] = useState<AiMessage[]>([]);
   const [ogLoading, setOgLoading] = useState(false);
@@ -186,23 +197,7 @@ const OgBotSheet = () => {
 
   return (
     <>
-      {/* ── Gold FAB ── */}
-      <button
-        onClick={() => setIsOpen(true)}
-        className={cn(
-          "fixed right-4 z-[160] w-12 h-12 flex items-center justify-center transition-all duration-300",
-          isOpen ? "opacity-0 pointer-events-none scale-90" : "opacity-100 scale-100"
-        )}
-        style={{
-          bottom: "calc(env(safe-area-inset-bottom) + 80px)",
-          background: "var(--gold)",
-          borderRadius: 0,
-          boxShadow: "0 4px 24px rgba(212,175,55,0.40), 0 2px 8px rgba(0,0,0,0.40)",
-        }}
-        aria-label="Ask the OG"
-      >
-        <Sparkles className="w-5 h-5 text-black" />
-      </button>
+      {/* FAB removed — bot is now triggered by the BottomTabBar ASK tab */}
 
       {/* ── Overlay ── */}
       {isOpen && (
@@ -221,7 +216,7 @@ const OgBotSheet = () => {
         )}
         style={{
           height: "70vh",
-          paddingBottom: "env(safe-area-inset-bottom)",
+          paddingBottom: "calc(var(--bottom-bar-h) + env(safe-area-inset-bottom))",
         }}
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
@@ -235,7 +230,7 @@ const OgBotSheet = () => {
         <div className="flex items-center justify-between px-4 py-3 flex-shrink-0 border-b border-gold/10">
           <div className="flex items-center gap-2.5">
             <div className="flex items-center gap-2 bg-gold px-3 py-1.5" style={{ borderRadius: 0 }}>
-              <Sparkles className="w-3.5 h-3.5 text-black" />
+              <img src={filmmakerFIcon} alt="OG" className="w-3.5 h-3.5 object-contain" />
               <span className="font-bebas text-sm tracking-[0.22em] text-black leading-none">ASK THE OG</span>
             </div>
             <span className="text-[10px] text-white/25 font-mono uppercase tracking-widest hidden sm:block">
@@ -300,7 +295,7 @@ const OgBotSheet = () => {
                   style={{ borderRadius: 0, background: "#080600", boxShadow: "0 0 24px rgba(212,175,55,0.06)" }}
                 >
                   <div className="flex items-center gap-2.5 px-4 py-2 bg-gold">
-                    <Sparkles className="w-3 h-3 text-black" />
+                    <img src={filmmakerFIcon} alt="OG" className="w-3 h-3 object-contain" />
                     <span className="font-bebas text-xs tracking-[0.2em] text-black leading-none">THE OG</span>
                     {msg.streaming && (
                       <div className="flex gap-1 ml-auto">

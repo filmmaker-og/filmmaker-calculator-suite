@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { Home, Calculator, BookOpen, Book, Mail, Instagram, ShoppingBag, Share2 } from "lucide-react";
+import { Home, Calculator, BookOpen, Book, Mail, Instagram, Share2, X as CloseIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { getShareUrl, SHARE_TEXT, SHARE_TITLE } from "@/lib/constants";
 
@@ -45,6 +45,14 @@ const MobileMenu = () => {
     navigator.clipboard.writeText(shareContent).catch(() => {});
   };
 
+  /* ─── Section label with flanking gold rules ─────────────────── */
+  const SectionLabel = ({ children }: { children: React.ReactNode }) => (
+    <div className="flex items-center gap-3 pl-1 mb-2">
+      <div className="h-[1px] flex-1" style={{ background: "linear-gradient(90deg, rgba(212,175,55,0.35) 0%, transparent 100%)" }} />
+      <span className="font-bebas text-[10px] text-gold/50 uppercase tracking-[0.25em] flex-shrink-0">{children}</span>
+      <div className="h-[1px] flex-1" style={{ background: "linear-gradient(270deg, rgba(212,175,55,0.35) 0%, transparent 100%)" }} />
+    </div>
+  );
 
   return (
     <>
@@ -87,30 +95,59 @@ const MobileMenu = () => {
       {/* Bottom Sheet */}
       <div
         className={cn(
-          "fixed bottom-0 left-0 right-0 bg-bg-card border-t border-border-default z-[201] shadow-modal transition-transform duration-300 ease-out rounded-t-2xl max-h-[85vh] overflow-y-auto",
+          "fixed bottom-0 left-0 right-0 bg-bg-card z-[201] rounded-t-2xl max-h-[85vh] overflow-y-auto",
+          "transition-transform duration-300 ease-out",
           isOpen ? "translate-y-0" : "translate-y-full"
         )}
-        style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
+        style={{
+          paddingBottom: "env(safe-area-inset-bottom)",
+          boxShadow: "0 -4px 60px rgba(212,175,55,0.12), 0 -2px 20px rgba(0,0,0,0.80)",
+        }}
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
-        {/* Drag handle */}
-        <div className="flex justify-center pt-3 pb-5">
+        {/* Gold top edge line */}
+        <div
+          className="h-[1px] w-full"
+          style={{
+            background: "linear-gradient(90deg, transparent 0%, rgba(212,175,55,0.50) 30%, rgba(212,175,55,0.50) 70%, transparent 100%)",
+          }}
+        />
+
+        {/* Drag handle + X close button */}
+        <div className="relative flex justify-center pt-3 pb-5">
           <div className="w-8 h-1 bg-white/15 rounded-full" />
+          <button
+            onClick={() => setIsOpen(false)}
+            className="absolute top-2 right-4 w-8 h-8 flex items-center justify-center text-white/40 hover:text-gold transition-colors"
+            aria-label="Close menu"
+          >
+            <CloseIcon className="w-4 h-4" />
+          </button>
         </div>
 
         <div className="px-4 pb-6 space-y-6">
           {/* Primary Nav — 2-col grid */}
           <div className="space-y-2">
-            <h3 className="font-bebas text-xs text-text-dim uppercase tracking-[0.2em] pl-1 mb-2">Menu</h3>
+            <SectionLabel>Menu</SectionLabel>
             <div className="grid grid-cols-2 gap-2">
               <button
                 onClick={() => handleNavigate('/store')}
-                className="flex items-center gap-2.5 p-3.5 border border-gold/30 bg-gold/[0.06] text-left group hover:border-gold/60 transition-all"
-                style={{ borderRadius: 0 }}
+                className="flex items-center gap-2.5 p-3.5 border col-span-2 text-left group transition-all"
+                style={{
+                  borderRadius: 0,
+                  borderColor: "rgba(212,175,55,0.50)",
+                  background: "rgba(212,175,55,0.12)",
+                }}
               >
-                <ShoppingBag className="w-4 h-4 text-gold flex-shrink-0" />
+                <div
+                  className="w-7 h-7 flex items-center justify-center flex-shrink-0"
+                  style={{ background: "var(--gold)", borderRadius: 0 }}
+                >
+                  <Book className="w-4 h-4 text-black" />
+                </div>
                 <span className="font-bebas text-base tracking-wide text-gold leading-none">Packages</span>
+                <span className="ml-auto font-bebas text-[10px] tracking-[0.2em] text-gold/40 leading-none">VIEW ALL →</span>
               </button>
 
               <button
@@ -142,57 +179,54 @@ const MobileMenu = () => {
 
               <button
                 onClick={() => handleNavigate('/glossary')}
-                className="flex items-center gap-2.5 p-3.5 col-span-2 border border-border-subtle bg-white/[0.02] text-left group hover:border-gold/30 hover:bg-gold/[0.04] transition-all"
+                className="flex items-center gap-2.5 p-3.5 border border-border-subtle bg-white/[0.02] text-left group hover:border-gold/30 hover:bg-gold/[0.04] transition-all"
                 style={{ borderRadius: 0 }}
               >
                 <Book className="w-4 h-4 text-white/50 group-hover:text-gold flex-shrink-0 transition-colors" />
-                <span className="font-bebas text-base tracking-wide text-white/70 group-hover:text-white leading-none transition-colors">The Resource</span>
+                <span className="font-bebas text-base tracking-wide text-white/70 group-hover:text-white leading-none transition-colors">Glossary</span>
               </button>
             </div>
           </div>
 
-          {/* Contact + Share — 2-col grid */}
+          {/* Contact + Share */}
           <div className="pt-2 border-t border-border-subtle space-y-2">
-            <h3 className="font-bebas text-xs text-text-dim uppercase tracking-[0.2em] pl-1 mb-2">Contact & Share</h3>
-            <div className="grid grid-cols-2 gap-2">
+            <SectionLabel>Contact & Share</SectionLabel>
+            <div className="grid grid-cols-3 gap-2">
               <a
                 href="mailto:thefilmmaker.og@gmail.com"
-                className="flex items-center gap-2.5 p-3.5 border border-border-subtle bg-white/[0.02] text-left group hover:border-gold/30 hover:bg-gold/[0.04] transition-all"
+                className="flex flex-col items-center gap-1.5 p-3.5 border border-border-subtle bg-white/[0.02] text-center group hover:border-gold/30 hover:bg-gold/[0.04] transition-all"
                 style={{ borderRadius: 0 }}
               >
-                <Mail className="w-4 h-4 text-white/50 group-hover:text-gold flex-shrink-0 transition-colors" />
-                <span className="font-bebas text-sm tracking-wide text-white/70 group-hover:text-white leading-none transition-colors">Email Us</span>
+                <Mail className="w-4 h-4 text-white/50 group-hover:text-gold transition-colors" />
+                <span className="font-bebas text-xs tracking-wide text-white/60 group-hover:text-white leading-none transition-colors">Email</span>
               </a>
 
               <a
                 href="https://www.instagram.com/filmmaker.og"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2.5 p-3.5 border border-border-subtle bg-white/[0.02] text-left group hover:border-gold/30 hover:bg-gold/[0.04] transition-all"
+                className="flex flex-col items-center gap-1.5 p-3.5 border border-border-subtle bg-white/[0.02] text-center group hover:border-gold/30 hover:bg-gold/[0.04] transition-all"
                 style={{ borderRadius: 0 }}
               >
-                <Instagram className="w-4 h-4 text-white/50 group-hover:text-gold flex-shrink-0 transition-colors" />
-                <span className="font-bebas text-sm tracking-wide text-white/70 group-hover:text-white leading-none transition-colors">Instagram</span>
+                <Instagram className="w-4 h-4 text-white/50 group-hover:text-gold transition-colors" />
+                <span className="font-bebas text-xs tracking-wide text-white/60 group-hover:text-white leading-none transition-colors">Instagram</span>
               </a>
 
               <button
                 onClick={handleShare}
-                className="flex items-center gap-2.5 p-3.5 border border-border-subtle bg-white/[0.02] text-left group hover:border-gold/30 hover:bg-gold/[0.04] transition-all"
+                className="flex flex-col items-center gap-1.5 p-3.5 border border-border-subtle bg-white/[0.02] text-center group hover:border-gold/30 hover:bg-gold/[0.04] transition-all"
                 style={{ borderRadius: 0 }}
               >
-                <Share2 className="w-4 h-4 text-white/50 group-hover:text-gold flex-shrink-0 transition-colors" />
-                <span className="font-bebas text-sm tracking-wide text-white/70 group-hover:text-white leading-none transition-colors">Share</span>
+                <Share2 className="w-4 h-4 text-white/50 group-hover:text-gold transition-colors" />
+                <span className="font-bebas text-xs tracking-wide text-white/60 group-hover:text-white leading-none transition-colors">Share</span>
               </button>
-
             </div>
           </div>
 
-          {/* Brand footer — mirrors the header exactly */}
+          {/* Brand footer */}
           <div
             className="pt-3 border-t flex items-center justify-between"
             style={{
-              borderColor: "transparent",
-              background: "transparent",
               borderTopColor: "rgba(212,175,55,0.12)",
             }}
           >
@@ -204,7 +238,6 @@ const MobileMenu = () => {
                 FILMMAKER<span className="text-white group-hover:text-gold transition-colors duration-200">.OG</span>
               </span>
             </button>
-            {/* Gold separator line matching header */}
             <div className="h-[1px] flex-1 mx-4"
               style={{
                 background: "linear-gradient(90deg, rgba(212,175,55,0.35) 0%, transparent 100%)",
