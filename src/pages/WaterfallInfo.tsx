@@ -20,7 +20,7 @@ const WaterfallInfo = () => {
   return (
     <>
       <Header />
-      <div className="min-h-screen bg-black text-white pt-[68px] pb-16 px-4 md:px-8 font-sans">
+      <div className="min-h-screen bg-black text-white page-safe px-4 md:px-8 font-sans">
         <div className="max-w-4xl mx-auto space-y-8 animate-fade-in">
 
           {/* ─── Title ─── */}

@@ -111,7 +111,7 @@ const BudgetInfo = () => {
     <>
       <Header />
 
-      <div className="min-h-screen text-white pt-16 pb-12 px-4 md:px-8 font-sans bg-bg-void">
+      <div className="min-h-screen text-white page-safe px-4 md:px-8 font-sans bg-bg-void">
         <div className="max-w-2xl mx-auto space-y-6">
 
           {/* ═══════════════════════════════════════════════════════════════

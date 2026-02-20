@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Home, Calculator, BookOpen, Book, Mail, Instagram, Briefcase, Share2, Link2, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -8,6 +8,20 @@ const MobileMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [linkCopied, setLinkCopied] = useState(false);
   const navigate = useNavigate();
+
+  // Swipe-to-dismiss
+  const touchStartY = useRef<number | null>(null);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartY.current = e.touches[0].clientY;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartY.current === null) return;
+    const delta = e.changedTouches[0].clientY - touchStartY.current;
+    if (delta > 60) setIsOpen(false);
+    touchStartY.current = null;
+  };
 
   const handleNavigate = (path: string) => {
     setIsOpen(false);
@@ -76,125 +90,128 @@ const MobileMenu = () => {
         />
       )}
 
-      {/* Drawer */}
+      {/* Bottom Sheet */}
       <div
         className={cn(
-          "fixed top-0 right-0 bottom-0 w-[280px] bg-bg-card border-l border-border-default z-[201] p-6 shadow-modal transition-transform duration-300 ease-out flex flex-col",
-          isOpen ? "translate-x-0" : "translate-x-full"
+          "fixed bottom-0 left-0 right-0 bg-bg-card border-t border-border-default z-[201] shadow-modal transition-transform duration-300 ease-out rounded-t-2xl max-h-[85vh] overflow-y-auto",
+          isOpen ? "translate-y-0" : "translate-y-full"
         )}
+        style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
       >
-        <div className="flex justify-end mb-8">
-          <button
-            onClick={() => setIsOpen(false)}
-            className="relative w-10 h-10 flex items-center justify-center rounded-lg hover:bg-bg-elevated transition-colors"
-            aria-label="Close menu"
-          >
-            <div className="w-5 h-4 relative">
-              <span className="block h-[1.5px] w-full bg-text-dim rounded-full absolute top-1/2 -translate-y-1/2 rotate-45 transition-colors hover:bg-white" />
-              <span className="block h-[1.5px] w-full bg-text-dim rounded-full absolute top-1/2 -translate-y-1/2 -rotate-45 transition-colors hover:bg-white" />
-            </div>
-          </button>
+        {/* Drag handle */}
+        <div className="flex justify-center pt-3 pb-5">
+          <div className="w-8 h-1 bg-white/15 rounded-full" />
         </div>
 
-        <div className="space-y-6 flex-1">
+        <div className="px-4 pb-6 space-y-6">
+          {/* Primary Nav — 2-col grid */}
           <div className="space-y-2">
-            <h3 className="font-bebas text-xs text-text-dim uppercase tracking-[0.2em] pl-3">Menu</h3>
+            <h3 className="font-bebas text-xs text-text-dim uppercase tracking-[0.2em] pl-1 mb-2">Menu</h3>
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                onClick={() => handleNavigate('/store')}
+                className="flex items-center gap-2.5 p-3.5 border border-gold/30 bg-gold/[0.06] text-left group hover:border-gold/60 transition-all"
+                style={{ borderRadius: 0 }}
+              >
+                <Briefcase className="w-4 h-4 text-gold flex-shrink-0" />
+                <span className="font-bebas text-base tracking-wide text-gold leading-none">Packages</span>
+              </button>
 
-            <button
-              onClick={() => handleNavigate('/store')}
-              className="w-full flex items-center gap-3 p-3 rounded-lg text-text-primary hover:bg-bg-elevated transition-colors text-left group"
-            >
-              <Briefcase className="w-5 h-5 text-gold group-hover:text-gold" />
-              <span className="font-bebas text-base tracking-wide text-gold">Packages</span>
-            </button>
+              <button
+                onClick={() => handleNavigate('/')}
+                className="flex items-center gap-2.5 p-3.5 border border-border-subtle bg-white/[0.02] text-left group hover:border-gold/30 hover:bg-gold/[0.04] transition-all"
+                style={{ borderRadius: 0 }}
+              >
+                <Home className="w-4 h-4 text-white/50 group-hover:text-gold flex-shrink-0 transition-colors" />
+                <span className="font-bebas text-base tracking-wide text-white/70 group-hover:text-white leading-none transition-colors">Home</span>
+              </button>
 
-            <button
-              onClick={() => handleNavigate('/')}
-              className="w-full flex items-center gap-3 p-3 rounded-lg text-text-primary hover:bg-bg-elevated transition-colors text-left group"
-            >
-              <Home className="w-5 h-5 text-gold/70 group-hover:text-gold" />
-              <span className="font-bebas text-base tracking-wide">Home</span>
-            </button>
+              <button
+                onClick={() => handleNavigate('/calculator')}
+                className="flex items-center gap-2.5 p-3.5 border border-border-subtle bg-white/[0.02] text-left group hover:border-gold/30 hover:bg-gold/[0.04] transition-all"
+                style={{ borderRadius: 0 }}
+              >
+                <Calculator className="w-4 h-4 text-white/50 group-hover:text-gold flex-shrink-0 transition-colors" />
+                <span className="font-bebas text-base tracking-wide text-white/70 group-hover:text-white leading-none transition-colors">Calculator</span>
+              </button>
 
-            <button
-              onClick={() => handleNavigate('/calculator')}
-              className="w-full flex items-center gap-3 p-3 rounded-lg text-text-primary hover:bg-bg-elevated transition-colors text-left group"
-            >
-              <Calculator className="w-5 h-5 text-gold/70 group-hover:text-gold" />
-              <span className="font-bebas text-base tracking-wide">Calculator</span>
-            </button>
+              <button
+                onClick={() => handleNavigate('/waterfall-info')}
+                className="flex items-center gap-2.5 p-3.5 border border-border-subtle bg-white/[0.02] text-left group hover:border-gold/30 hover:bg-gold/[0.04] transition-all"
+                style={{ borderRadius: 0 }}
+              >
+                <BookOpen className="w-4 h-4 text-white/50 group-hover:text-gold flex-shrink-0 transition-colors" />
+                <span className="font-bebas text-base tracking-wide text-white/70 group-hover:text-white leading-none transition-colors">Waterfall</span>
+              </button>
 
-            <button
-              onClick={() => handleNavigate('/waterfall-info')}
-              className="w-full flex items-center gap-3 p-3 rounded-lg text-text-primary hover:bg-bg-elevated transition-colors text-left group"
-            >
-              <BookOpen className="w-5 h-5 text-gold/70 group-hover:text-gold" />
-              <span className="font-bebas text-base tracking-wide">Waterfall Protocol</span>
-            </button>
-
-            <button
-              onClick={() => handleNavigate('/glossary')}
-              className="w-full flex items-center gap-3 p-3 rounded-lg text-text-primary hover:bg-bg-elevated transition-colors text-left group"
-            >
-              <Book className="w-5 h-5 text-gold/70 group-hover:text-gold" />
-              <span className="font-bebas text-base tracking-wide">ASK THE OG (BOT)</span>
-            </button>
+              <button
+                onClick={() => handleNavigate('/glossary')}
+                className="flex items-center gap-2.5 p-3.5 col-span-2 border border-border-subtle bg-white/[0.02] text-left group hover:border-gold/30 hover:bg-gold/[0.04] transition-all"
+                style={{ borderRadius: 0 }}
+              >
+                <Book className="w-4 h-4 text-white/50 group-hover:text-gold flex-shrink-0 transition-colors" />
+                <span className="font-bebas text-base tracking-wide text-white/70 group-hover:text-white leading-none transition-colors">The Resource</span>
+              </button>
+            </div>
           </div>
 
-          <div className="space-y-2 pt-6 border-t border-border-subtle">
-            <h3 className="font-bebas text-xs text-text-dim uppercase tracking-[0.2em] pl-3">Contact</h3>
+          {/* Contact + Share — 2-col grid */}
+          <div className="pt-2 border-t border-border-subtle space-y-2">
+            <h3 className="font-bebas text-xs text-text-dim uppercase tracking-[0.2em] pl-1 mb-2">Contact & Share</h3>
+            <div className="grid grid-cols-2 gap-2">
+              <a
+                href="mailto:thefilmmaker.og@gmail.com"
+                className="flex items-center gap-2.5 p-3.5 border border-border-subtle bg-white/[0.02] text-left group hover:border-gold/30 hover:bg-gold/[0.04] transition-all"
+                style={{ borderRadius: 0 }}
+              >
+                <Mail className="w-4 h-4 text-white/50 group-hover:text-gold flex-shrink-0 transition-colors" />
+                <span className="font-bebas text-sm tracking-wide text-white/70 group-hover:text-white leading-none transition-colors">Email Us</span>
+              </a>
 
-            <a
-              href="mailto:thefilmmaker.og@gmail.com"
-              className="w-full flex items-center gap-3 p-3 rounded-lg text-text-primary hover:bg-bg-elevated transition-colors text-left group"
-            >
-              <Mail className="w-5 h-5 text-gold/70 group-hover:text-gold" />
-              <span className="font-bebas text-sm tracking-wide">thefilmmaker.og@gmail.com</span>
-            </a>
+              <a
+                href="https://www.instagram.com/filmmaker.og"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2.5 p-3.5 border border-border-subtle bg-white/[0.02] text-left group hover:border-gold/30 hover:bg-gold/[0.04] transition-all"
+                style={{ borderRadius: 0 }}
+              >
+                <Instagram className="w-4 h-4 text-white/50 group-hover:text-gold flex-shrink-0 transition-colors" />
+                <span className="font-bebas text-sm tracking-wide text-white/70 group-hover:text-white leading-none transition-colors">Instagram</span>
+              </a>
 
-            <a
-              href="https://www.instagram.com/filmmaker.og"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full flex items-center gap-3 p-3 rounded-lg text-text-primary hover:bg-bg-elevated transition-colors text-left group"
-            >
-              <Instagram className="w-5 h-5 text-gold/70 group-hover:text-gold" />
-              <span className="font-bebas text-sm tracking-wide">@filmmaker.og</span>
-            </a>
+              <button
+                onClick={handleShare}
+                className="flex items-center gap-2.5 p-3.5 border border-border-subtle bg-white/[0.02] text-left group hover:border-gold/30 hover:bg-gold/[0.04] transition-all"
+                style={{ borderRadius: 0 }}
+              >
+                <Share2 className="w-4 h-4 text-white/50 group-hover:text-gold flex-shrink-0 transition-colors" />
+                <span className="font-bebas text-sm tracking-wide text-white/70 group-hover:text-white leading-none transition-colors">Share</span>
+              </button>
+
+              <button
+                onClick={handleCopyLink}
+                className="flex items-center gap-2.5 p-3.5 border border-border-subtle bg-white/[0.02] text-left group hover:border-gold/30 hover:bg-gold/[0.04] transition-all"
+                style={{ borderRadius: 0 }}
+              >
+                {linkCopied ? (
+                  <>
+                    <Check className="w-4 h-4 text-gold flex-shrink-0" />
+                    <span className="font-bebas text-sm tracking-wide text-gold leading-none">Copied!</span>
+                  </>
+                ) : (
+                  <>
+                    <Link2 className="w-4 h-4 text-white/50 group-hover:text-gold flex-shrink-0 transition-colors" />
+                    <span className="font-bebas text-sm tracking-wide text-white/70 group-hover:text-white leading-none transition-colors">Copy Link</span>
+                  </>
+                )}
+              </button>
+            </div>
           </div>
 
-          <div className="space-y-2 pt-6 border-t border-border-subtle">
-            <h3 className="font-bebas text-xs text-text-dim uppercase tracking-[0.2em] pl-3">Share</h3>
-
-            <button
-              onClick={handleShare}
-              className="w-full flex items-center gap-3 p-3 rounded-lg text-text-primary hover:bg-bg-elevated transition-colors text-left group"
-            >
-              <Share2 className="w-5 h-5 text-gold/70 group-hover:text-gold" />
-              <span className="font-bebas text-sm tracking-wide">Share this tool</span>
-            </button>
-
-            <button
-              onClick={handleCopyLink}
-              className="w-full flex items-center gap-3 p-3 rounded-lg text-text-primary hover:bg-bg-elevated transition-colors text-left group"
-            >
-              {linkCopied ? (
-                <>
-                  <Check className="w-5 h-5 text-gold" />
-                  <span className="font-bebas text-sm tracking-wide text-gold">Link copied!</span>
-                </>
-              ) : (
-                <>
-                  <Link2 className="w-5 h-5 text-gold/70 group-hover:text-gold" />
-                  <span className="font-bebas text-sm tracking-wide">Copy link</span>
-                </>
-              )}
-            </button>
-          </div>
-        </div>
-
-        <div className="pt-6 border-t border-border-default px-3">
-          <div className="flex items-center gap-2.5">
+          {/* Brand footer */}
+          <div className="pt-2 border-t border-border-default flex items-center gap-2.5 pl-1">
             <span className="font-bebas text-lg tracking-[0.2em] text-gold">
               FILMMAKER<span className="text-white">.OG</span>
             </span>

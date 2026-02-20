@@ -135,6 +135,37 @@
     background-color: #000000;
     color: #FFFFFF;
     font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    /* Suppress iOS pull-to-refresh and bounce scroll */
+    overscroll-behavior: none;
+  }
+
+  /* Universal active-state press feedback — native app feel */
+  button:active,
+  a:active,
+  [role="button"]:active {
+    transform: scale(0.97);
+    opacity: 0.85;
+    transition: transform 80ms ease, opacity 80ms ease;
+  }
+  /* Carve-out: elements with their own Tailwind active transforms */
+  .btn-cta-primary:active,
+  .btn-cta-secondary:active,
+  .btn-cta-final:active,
+  .tab-bar-item:active {
+    transform: unset;
+    opacity: 1;
+  }
+
+  /* touch-action: manipulation on all interactive elements
+     eliminates 300ms click delay on older mobile browsers */
+  button, a, [role="button"] {
+    touch-action: manipulation;
+  }
+
+  /* Page-safe: accounts for iOS notch / Dynamic Island + home indicator */
+  .page-safe {
+    padding-top: max(var(--appbar-h), env(safe-area-inset-top));
+    padding-bottom: max(64px, env(safe-area-inset-bottom));
   }
 
   /* Mobile keyboard handling */
