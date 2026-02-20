@@ -1,3 +1,4 @@
+import { useState, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Home, Calculator, ShoppingBag } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -11,11 +12,18 @@ const tabs = [
 const BottomTabBar = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [rippleId, setRippleId] = useState<string | null>(null);
 
   const getActive = (path: string) => {
     if (path === "/") return location.pathname === "/";
     return location.pathname.startsWith(path);
   };
+
+  const handleTap = useCallback((tab: typeof tabs[0]) => {
+    setRippleId(tab.id);
+    navigate(tab.path);
+    setTimeout(() => setRippleId(null), 420);
+  }, [navigate]);
 
   const GOLD_FULL = "rgba(212,175,55,1)";
   const GOLD_DIM  = "rgba(212,175,55,0.65)";
@@ -53,16 +61,23 @@ const BottomTabBar = () => {
           return (
             <button
               key={tab.id}
-              onClick={() => navigate(tab.path)}
+              onClick={() => handleTap(tab)}
               className={cn(
-                "relative flex-1 flex flex-col items-center justify-center gap-[3px] transition-all duration-200 active:scale-95",
+                "relative flex-1 flex flex-col items-center justify-center gap-[3px] transition-all duration-200 active:scale-95 overflow-hidden",
               )}
               style={{ color: isActive ? GOLD_FULL : GOLD_DIM }}
               aria-label={tab.label}
             >
+              {/* Gold tap-ripple */}
+              {rippleId === tab.id && (
+                <span
+                  className="absolute top-1/2 left-1/2 w-10 h-10 rounded-full pointer-events-none animate-tap-ripple"
+                  style={{ background: "rgba(212,175,55,0.3)" }}
+                />
+              )}
               <Icon className="w-5 h-5" />
               <span
-                className="font-mono leading-none transition-all"
+                className="font-bebas leading-none transition-all"
                 style={{
                   fontSize: "10px",
                   letterSpacing: isActive ? "0.16em" : "0.10em",

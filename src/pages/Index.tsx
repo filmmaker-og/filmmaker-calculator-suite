@@ -57,7 +57,7 @@ const productTiers = [
   {
     tier: "Courtesy", product: "Waterfall Simulator", price: "Free",
     desc: "Model your deal. See where every dollar goes.",
-    pct: 30, barClass: "bg-[#D4AF37]/30", tierColor: "text-gold/50",
+    pct: 30, barClass: "bg-[#D4AF37]/30", tierColor: "text-gold/65",
     nameColor: "text-white/90", descColor: "text-white/50", barH: "h-2",
     featured: false, elevated: false,
   },
@@ -326,7 +326,7 @@ const Index = () => {
         )}
         style={{ borderRadius: 0 }}
       >
-        BUILD FREE
+        BUILD NOW
       </button>
     );
     setCtaSlot(ctaButton);
@@ -952,11 +952,11 @@ const Index = () => {
                       className={cn(
                         "w-full mt-2 font-bebas tracking-[0.10em] uppercase transition-all",
                         t.featured
-                          ? "h-12 text-sm btn-cta-primary"
+                          ? "h-12 text-base btn-cta-primary"
                           : "h-10 text-sm btn-cta-secondary"
                       )}
                     >
-                      {i === 0 ? "BUILD FREE" : "VIEW PACKAGE"}
+                      {i === 0 ? "START BUILDING" : "VIEW PACKAGE"}
                     </button>
                   </div>
                 ))}
@@ -966,7 +966,7 @@ const Index = () => {
               <div className="text-center mt-10">
                 <button onClick={handleStartClick}
                   className="w-full max-w-[320px] h-14 text-base btn-cta-primary mx-auto">
-                  BUILD YOUR WATERFALL &mdash; FREE
+                  BUILD YOUR WATERFALL
                 </button>
                 <div className="mt-5 flex items-center justify-center gap-4">
                   <button onClick={() => navigate("/store")} className="text-white/50 text-[15px] hover:text-gold transition-colors">
@@ -1043,23 +1043,26 @@ const Index = () => {
             <div className="max-w-sm mx-auto">
               <div className="grid grid-cols-3 gap-3 mb-8 max-w-[340px] mx-auto">
                 <a href="mailto:thefilmmaker.og@gmail.com"
-                  className="flex items-center justify-center gap-2.5 text-sm tracking-wider text-gold/80 hover:text-gold bg-white/[0.04] hover:bg-white/[0.07] transition-all active:scale-[0.97] py-5 border border-white/[0.12] hover:border-gold/40">
+                  className="flex items-center justify-center gap-2.5 font-bebas text-sm tracking-wider text-gold/80 hover:text-gold bg-white/[0.04] hover:bg-white/[0.07] transition-all active:scale-[0.97] py-5 border border-white/[0.12] hover:border-gold/40">
                   <Mail className="w-4 h-4" /><span>Email</span>
                 </a>
                 <a href="https://www.instagram.com/filmmaker.og" target="_blank" rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2.5 text-sm tracking-wider text-gold/80 hover:text-gold bg-white/[0.04] hover:bg-white/[0.07] transition-all active:scale-[0.97] py-5 border border-white/[0.12] hover:border-gold/40">
+                  className="flex items-center justify-center gap-2.5 font-bebas text-sm tracking-wider text-gold/80 hover:text-gold bg-white/[0.04] hover:bg-white/[0.07] transition-all active:scale-[0.97] py-5 border border-white/[0.12] hover:border-gold/40">
                   <Instagram className="w-4 h-4" /><span>Instagram</span>
                 </a>
                 <button onClick={() => { haptics.light(); handleShare(); }}
-                  className="flex items-center justify-center gap-2.5 text-sm tracking-wider text-gold/80 hover:text-gold bg-white/[0.04] hover:bg-white/[0.07] transition-all active:scale-[0.97] py-5 border border-white/[0.12] hover:border-gold/40">
+                  className="flex items-center justify-center gap-2.5 font-bebas text-sm tracking-wider text-gold/80 hover:text-gold bg-white/[0.04] hover:bg-white/[0.07] transition-all active:scale-[0.97] py-5 border border-white/[0.12] hover:border-gold/40">
                   <Share2 className="w-4 h-4" /><span>Share</span>
                 </button>
               </div>
 
-              <div className="flex items-center justify-center mb-4">
+              {/* Flanking gold lines around wordmark */}
+              <div className="flex items-center gap-4 mb-4">
+                <div className="h-[1px] flex-1 bg-gradient-to-r from-transparent to-gold/30" />
                 <span className="font-bebas text-3xl tracking-[0.2em] text-gold">
                   FILMMAKER<span className="text-white">.OG</span>
                 </span>
+                <div className="h-[1px] flex-1 bg-gradient-to-l from-transparent to-gold/30" />
               </div>
               <p className="text-white/40 text-xs tracking-wide leading-relaxed text-center">
                 For educational and informational purposes only. Not legal, tax, or investment advice.

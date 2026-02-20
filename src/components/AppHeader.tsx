@@ -1,7 +1,6 @@
 import { ReactNode, createContext, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { MoreVertical } from "lucide-react";
-import filmmakerFIcon from "@/assets/filmmaker-f-icon.png";
 
 /* ═══════════════════════════════════════════════════════════════════
    HeaderCtaContext — lets Index.tsx inject a sticky CTA into the
@@ -54,7 +53,7 @@ const AppHeader = ({ onBotOpen, isBotOpen, onMoreOpen }: AppHeaderProps) => {
             className="flex items-center gap-2.5 hover:opacity-80 transition-opacity group flex-shrink-0"
             aria-label="Go home"
           >
-            <span className="font-bebas text-lg tracking-[0.2em] group-hover:opacity-80 transition-opacity duration-200"
+            <span className="font-bebas text-[22px] tracking-[0.2em] group-hover:opacity-80 transition-opacity duration-200"
               style={{ color: GOLD_FULL }}
             >
               FILMMAKER
@@ -73,24 +72,32 @@ const AppHeader = ({ onBotOpen, isBotOpen, onMoreOpen }: AppHeaderProps) => {
 
           {/* Right — Bot icon + vertical ⋮ */}
           <div className="flex items-center gap-1 flex-shrink-0">
-            {/* F-icon bot button */}
+            {/* OG Bot button */}
             <button
               onClick={onBotOpen}
-              className="relative w-10 h-10 flex items-center justify-center transition-all duration-200 active:scale-90"
-              aria-label="Ask the OG"
-              style={{ color: isBotOpen ? GOLD_FULL : GOLD_DIM }}
+              className="relative w-10 h-10 flex flex-col items-center justify-center transition-all duration-200 active:scale-90"
+              aria-label="Ask the OG Bot"
             >
-              <img
-                src={filmmakerFIcon}
-                alt="OG Bot"
-                className="w-6 h-6 object-contain transition-all duration-200"
+              <span
+                className="font-bebas leading-none transition-opacity duration-200"
                 style={{
-                  opacity: isBotOpen ? 1 : 0.65,
-                  filter: isBotOpen
-                    ? "drop-shadow(0 0 8px rgba(212,175,55,0.95)) brightness(1.1)"
-                    : "sepia(0.3) saturate(0.8)",
+                  fontSize: "15px",
+                  letterSpacing: "0.14em",
+                  color: isBotOpen ? GOLD_FULL : GOLD_DIM,
                 }}
-              />
+              >
+                OG
+              </span>
+              <span
+                className="font-mono uppercase leading-none transition-opacity duration-200"
+                style={{
+                  fontSize: "8px",
+                  letterSpacing: "0.10em",
+                  color: isBotOpen ? GOLD_FULL : "rgba(212,175,55,0.45)",
+                }}
+              >
+                bot
+              </span>
               {/* Active glow ring */}
               {isBotOpen && (
                 <span
@@ -115,14 +122,8 @@ const AppHeader = ({ onBotOpen, isBotOpen, onMoreOpen }: AppHeaderProps) => {
           </div>
         </div>
 
-        {/* Gold gradient separator line — identical to Header.tsx */}
-        <div
-          className="h-[1px] w-full"
-          style={{
-            background:
-              "linear-gradient(90deg, transparent 0%, rgba(212,175,55,0.45) 20%, rgba(212,175,55,0.45) 80%, transparent 100%)",
-          }}
-        />
+        {/* Gold gradient separator line */}
+        <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-gold/45 to-transparent" />
       </header>
 
       {/* Spacer for fixed header */}
