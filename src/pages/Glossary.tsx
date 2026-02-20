@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import SectionFrame from "@/components/SectionFrame";
 import SectionHeader from "@/components/SectionHeader";
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 
 // ------------------------------------------------------------------
 // SCROLL REVEAL HOOK (same pattern as Index.tsx)
@@ -493,10 +494,10 @@ const Glossary = () => {
               Film Finance
             </p>
             <h1 className="font-bebas text-5xl md:text-7xl tracking-wide text-white leading-none">
-              The <span className="text-gold">Glossary</span>
+              The <span className="text-gold">Resource</span>
             </h1>
             <p className="text-sm text-white/40 leading-relaxed mt-3 max-w-xl">
-              The film industry uses jargon to keep outsiders out. This is your decoder ring — {SORTED_TERMS.length} terms, curated from the front lines.
+              The film industry uses jargon to keep outsiders out. This is your definitive resource.
             </p>
           </div>
         </div>
@@ -514,7 +515,7 @@ const Glossary = () => {
         >
           <SectionFrame id="ask-the-og">
             <SectionHeader
-              eyebrow="AI Search"
+              eyebrow=""
               title={
                 <span className="flex items-center justify-center gap-3">
                   <Sparkles className="w-7 h-7 text-gold" />
@@ -659,43 +660,40 @@ const Glossary = () => {
                 <SectionHeader
                   eyebrow="The Essential 10"
                   title="KNOW THESE FIRST"
-                  subtitle="Master these 10 terms and you'll understand 80% of any deal conversation."
                   plainSubtitle
                 />
-                <div className="space-y-3 mt-6">
+                <Accordion type="single" collapsible className="mt-4">
                   {TOP_10.map((item, i) => (
-                    <div
+                    <AccordionItem
                       key={item.num}
-                      className="group flex gap-4 border border-white/[0.06] hover:border-gold/20 bg-white/[0.02] hover:bg-gold/[0.03] transition-all duration-300 p-5"
+                      value={item.num}
+                      className="border-b border-white/[0.06] last:border-b-0"
                       style={{
                         opacity: revTop10.visible ? 1 : 0,
                         transform: revTop10.visible ? "translateY(0)" : "translateY(16px)",
                         transition: `opacity 0.5s ease ${i * 0.05}s, transform 0.5s ease ${i * 0.05}s`,
                       }}
                     >
-                      {/* Number badge */}
-                      <div className="flex-shrink-0 w-10 h-10 flex items-center justify-center border border-gold/20 bg-gold/[0.06]">
-                        <span className="font-mono tabular-nums text-sm font-bold text-gold/70">
-                          {item.num}
-                        </span>
-                      </div>
-                      {/* Content */}
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-baseline gap-3 flex-wrap mb-1">
-                          <h3 className="font-bebas text-2xl tracking-wide text-white group-hover:text-gold transition-colors">
+                      <AccordionTrigger className="hover:no-underline py-4 px-1 group [&[data-state=open]>svg]:rotate-180">
+                        <div className="flex items-center gap-4">
+                          <div className="flex-shrink-0 w-9 h-9 flex items-center justify-center border border-gold/20 bg-gold/[0.06]">
+                            <span className="font-mono tabular-nums text-sm font-bold text-gold/70">
+                              {item.num}
+                            </span>
+                          </div>
+                          <span className="font-bebas text-2xl tracking-wide text-white group-data-[state=open]:text-gold transition-colors">
                             {item.term}
-                          </h3>
-                          <span className="text-[9px] uppercase tracking-[0.15em] text-gold/40 font-mono">
-                            {item.category}
                           </span>
                         </div>
-                        <p className="text-[15px] text-white/65 leading-relaxed">
+                      </AccordionTrigger>
+                      <AccordionContent className="px-1 pb-4">
+                        <p className="text-[15px] text-white/70 leading-[1.75] pl-[52px]">
                           {item.def}
                         </p>
-                      </div>
-                    </div>
+                      </AccordionContent>
+                    </AccordionItem>
                   ))}
-                </div>
+                </Accordion>
               </SectionFrame>
             </div>
           </>

@@ -137,7 +137,7 @@ const MobileMenu = () => {
               className="w-full flex items-center gap-3 p-3 rounded-lg text-text-primary hover:bg-bg-elevated transition-colors text-left group"
             >
               <Book className="w-5 h-5 text-gold/70 group-hover:text-gold" />
-              <span className="font-bebas text-base tracking-wide">Glossary</span>
+              <span className="font-bebas text-base tracking-wide">ASK THE OG (BOT)</span>
             </button>
           </div>
 
