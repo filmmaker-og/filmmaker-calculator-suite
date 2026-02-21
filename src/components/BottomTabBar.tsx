@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Home, Calculator, ShoppingBag, BookOpen } from "lucide-react";
+import { Home, Calculator, ShoppingBag, BookOpen, MoreHorizontal } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useHaptics } from "@/hooks/use-haptics";
 
@@ -9,15 +9,21 @@ const tabs = [
   { id: "calculator", path: "/calculator", label: "CALC", icon: Calculator },
   { id: "store",      path: "/store",      label: "SHOP", icon: ShoppingBag },
   { id: "resources",  path: "/resources",  label: "INFO", icon: BookOpen },
+  { id: "more",       path: null,          label: "MORE", icon: MoreHorizontal },
 ];
 
-const BottomTabBar = () => {
+interface BottomTabBarProps {
+  onMoreOpen?: () => void;
+}
+
+const BottomTabBar = ({ onMoreOpen }: BottomTabBarProps) => {
   const navigate = useNavigate();
   const location = useLocation();
   const haptics = useHaptics();
   const [rippleId, setRippleId] = useState<string | null>(null);
 
-  const getActive = (path: string) => {
+  const getActive = (path: string | null) => {
+    if (!path) return false;
     if (path === "/") return location.pathname === "/";
     return location.pathname.startsWith(path);
   };
@@ -25,9 +31,13 @@ const BottomTabBar = () => {
   const handleTap = useCallback((tab: typeof tabs[0]) => {
     haptics.light();
     setRippleId(tab.id);
-    navigate(tab.path);
+    if (tab.id === "more") {
+      onMoreOpen?.();
+    } else if (tab.path) {
+      navigate(tab.path);
+    }
     setTimeout(() => setRippleId(null), 420);
-  }, [navigate, haptics]);
+  }, [navigate, haptics, onMoreOpen]);
 
   const GOLD_FULL = "rgba(212,175,55,1)";
   const GOLD_DIM  = "rgba(212,175,55,0.75)";
@@ -48,7 +58,7 @@ const BottomTabBar = () => {
         style={{
           pointerEvents: "auto",
           width: "100%",
-          maxWidth: "340px",
+          maxWidth: "380px",
           height: "54px",
           borderRadius: "16px",
           background: "rgba(0,0,0,0.85)",
@@ -101,7 +111,7 @@ const BottomTabBar = () => {
                   fontSize: "11px",
                   letterSpacing: isActive ? "0.16em" : "0.10em",
                   fontWeight: 500,
-                  color: isActive ? "rgba(255,255,255,1)" : "rgba(255,255,255,0.75)",
+                  color: isActive ? GOLD_FULL : GOLD_DIM,
                 }}
               >
                 {tab.label}

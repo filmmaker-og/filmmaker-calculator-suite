@@ -4,7 +4,6 @@ const SectionFrame = ({
   id,
   children,
   className,
-  alt: _alt,
 }: {
   id?: string;
   children: React.ReactNode;
