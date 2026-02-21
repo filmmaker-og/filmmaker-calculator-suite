@@ -109,60 +109,48 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
         </div>
 
         <div className="px-4 pb-6 space-y-6">
-          {/* Primary Nav — 2-col grid */}
+          {/* Primary Nav — 2×2 grid */}
           <div className="space-y-2">
             <SectionLabel>Menu</SectionLabel>
-            <div className="grid grid-cols-2 gap-2">
-              {/* Packages — featured card with gold left accent */}
-              <button
-                onClick={() => handleNavigate('/store')}
-                className="relative flex items-center gap-2.5 p-3.5 border col-span-2 text-left group transition-all overflow-hidden"
-                style={{
-                  borderRadius: 0,
-                  borderColor: "rgba(212,175,55,0.50)",
-                  background: "rgba(212,175,55,0.12)",
-                }}
-              >
-                <div
-                  className="absolute left-0 top-0 bottom-0 w-[3px]"
-                  style={{ background: "linear-gradient(to bottom, rgba(212,175,55,0.70), rgba(212,175,55,0.30), transparent)" }}
-                />
-                <div
-                  className="w-7 h-7 flex items-center justify-center flex-shrink-0"
-                  style={{ background: "var(--gold)", borderRadius: 0 }}
-                >
-                  <Book className="w-4 h-4 text-black" />
-                </div>
-                <span className="font-bebas text-base tracking-wide text-gold leading-none">Packages</span>
-                <span className="ml-auto font-bebas text-[11px] tracking-[0.2em] text-gold/40 leading-none">VIEW ALL →</span>
-              </button>
-
-              <button
-                onClick={() => handleNavigate('/')}
-                className="flex items-center gap-2.5 p-3.5 border border-white/[0.10] bg-white/[0.04] text-left group hover:border-gold/40 hover:bg-gold/[0.06] transition-all"
-                style={{ borderRadius: 0 }}
-              >
-                <Home className="w-4 h-4 text-white/50 group-hover:text-gold flex-shrink-0 transition-colors" />
-                <span className="font-bebas text-base tracking-wide text-white/70 group-hover:text-white leading-none transition-colors">Home</span>
-              </button>
-
-              <button
-                onClick={() => handleNavigate('/calculator')}
-                className="flex items-center gap-2.5 p-3.5 border border-white/[0.10] bg-white/[0.04] text-left group hover:border-gold/40 hover:bg-gold/[0.06] transition-all"
-                style={{ borderRadius: 0 }}
-              >
-                <Calculator className="w-4 h-4 text-white/50 group-hover:text-gold flex-shrink-0 transition-colors" />
-                <span className="font-bebas text-base tracking-wide text-white/70 group-hover:text-white leading-none transition-colors">Calculator</span>
-              </button>
-
-              <button
-                onClick={() => handleNavigate('/resources')}
-                className="flex items-center gap-2.5 p-3.5 border border-white/[0.10] bg-white/[0.04] text-left group hover:border-gold/40 hover:bg-gold/[0.06] transition-all"
-                style={{ borderRadius: 0 }}
-              >
-                <BookOpen className="w-4 h-4 text-white/50 group-hover:text-gold flex-shrink-0 transition-colors" />
-                <span className="font-bebas text-base tracking-wide text-white/70 group-hover:text-white leading-none transition-colors">Resources</span>
-              </button>
+            <div className="grid grid-cols-2 gap-2.5">
+              {([
+                { path: "/store",      icon: Book,       label: "Packages",   featured: true },
+                { path: "/",           icon: Home,       label: "Home",       featured: false },
+                { path: "/calculator", icon: Calculator, label: "Calculator", featured: false },
+                { path: "/resources",  icon: BookOpen,   label: "Resources",  featured: false },
+              ] as const).map((item) => {
+                const Icon = item.icon;
+                return (
+                  <button
+                    key={item.path}
+                    onClick={() => handleNavigate(item.path)}
+                    className="relative flex flex-col items-center justify-center gap-2 py-5 border text-center group transition-all overflow-hidden"
+                    style={{
+                      borderRadius: 0,
+                      borderColor: item.featured ? "rgba(212,175,55,0.50)" : "rgba(255,255,255,0.12)",
+                      background: item.featured ? "rgba(212,175,55,0.10)" : "rgba(255,255,255,0.04)",
+                    }}
+                  >
+                    {/* Gold left accent on featured */}
+                    {item.featured && (
+                      <div
+                        className="absolute left-0 top-0 bottom-0 w-[2px]"
+                        style={{ background: "linear-gradient(to bottom, rgba(212,175,55,0.70), rgba(212,175,55,0.25))" }}
+                      />
+                    )}
+                    <Icon
+                      className="w-5 h-5 transition-colors"
+                      style={{ color: item.featured ? "rgba(212,175,55,1)" : "rgba(255,255,255,0.70)" }}
+                    />
+                    <span
+                      className="font-bebas text-[16px] tracking-[0.12em] leading-none transition-colors"
+                      style={{ color: item.featured ? "rgba(212,175,55,1)" : "rgba(255,255,255,0.85)" }}
+                    >
+                      {item.label}
+                    </span>
+                  </button>
+                );
+              })}
             </div>
           </div>
 
