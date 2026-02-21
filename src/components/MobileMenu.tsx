@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Home, Calculator, BookOpen, Book, Mail, Instagram, Share2, X as CloseIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { getShareUrl, SHARE_TEXT, SHARE_TITLE } from "@/lib/constants";
+import { useHaptics } from "@/hooks/use-haptics";
 
 interface MobileMenuProps {
   isOpen?: boolean;
@@ -17,6 +18,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
     else setInternalOpen(v);
   };
   const navigate = useNavigate();
+  const haptics = useHaptics();
 
   // Swipe-to-dismiss
   const touchStartY = useRef<number | null>(null);
@@ -33,11 +35,13 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
   };
 
   const handleNavigate = (path: string) => {
+    haptics.light();
     setIsOpen(false);
     navigate(path);
   };
 
   const handleShare = async () => {
+    haptics.light();
     if (navigator.share) {
       try {
         await navigator.share({
@@ -100,7 +104,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
         <div className="relative flex justify-center pt-3 pb-5">
           <div className="w-8 h-1 bg-gold/30 rounded-full" />
           <button
-            onClick={() => setIsOpen(false)}
+            onClick={() => { haptics.light(); setIsOpen(false); }}
             className="absolute top-2 right-4 w-9 h-9 flex items-center justify-center text-gold/60 hover:text-gold transition-colors"
             aria-label="Close menu"
           >
@@ -126,7 +130,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
                     onClick={() => handleNavigate(item.path)}
                     className="relative flex flex-col items-center justify-center gap-2 py-5 border text-center group transition-all overflow-hidden"
                     style={{
-                      borderRadius: 0,
+                      borderRadius: 8,
                       borderColor: item.featured ? "rgba(212,175,55,0.50)" : "rgba(255,255,255,0.12)",
                       background: item.featured ? "rgba(212,175,55,0.10)" : "rgba(255,255,255,0.04)",
                       boxShadow: item.featured ? "0 0 20px rgba(212,175,55,0.08), inset 0 1px 0 rgba(212,175,55,0.08)" : "none",
@@ -161,8 +165,9 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
             <div className="grid grid-cols-3 gap-2">
               <a
                 href="mailto:thefilmmaker.og@gmail.com"
+                onClick={() => haptics.light()}
                 className="relative flex flex-col items-center gap-2 p-4 border border-white/[0.10] bg-white/[0.04] text-center group hover:border-gold/40 hover:bg-gold/[0.06] transition-all overflow-hidden"
-                style={{ borderRadius: 0 }}
+                style={{ borderRadius: 8 }}
               >
                 <div className="absolute left-0 top-0 bottom-0 w-[2px]" style={{ background: "linear-gradient(to bottom, rgba(212,175,55,0.40), transparent)", boxShadow: "0 0 8px rgba(212,175,55,0.15)" }} />
                 <Mail className="w-5 h-5 text-gold/70 group-hover:text-gold transition-colors" />
@@ -173,8 +178,9 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
                 href="https://www.instagram.com/filmmaker.og"
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => haptics.light()}
                 className="relative flex flex-col items-center gap-2 p-4 border border-white/[0.10] bg-white/[0.04] text-center group hover:border-gold/40 hover:bg-gold/[0.06] transition-all overflow-hidden"
-                style={{ borderRadius: 0 }}
+                style={{ borderRadius: 8 }}
               >
                 <div className="absolute left-0 top-0 bottom-0 w-[2px]" style={{ background: "linear-gradient(to bottom, rgba(212,175,55,0.40), transparent)", boxShadow: "0 0 8px rgba(212,175,55,0.15)" }} />
                 <Instagram className="w-5 h-5 text-gold/70 group-hover:text-gold transition-colors" />
@@ -184,7 +190,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
               <button
                 onClick={handleShare}
                 className="relative flex flex-col items-center gap-2 p-4 border border-white/[0.10] bg-white/[0.04] text-center group hover:border-gold/40 hover:bg-gold/[0.06] transition-all overflow-hidden"
-                style={{ borderRadius: 0 }}
+                style={{ borderRadius: 8 }}
               >
                 <div className="absolute left-0 top-0 bottom-0 w-[2px]" style={{ background: "linear-gradient(to bottom, rgba(212,175,55,0.40), transparent)", boxShadow: "0 0 8px rgba(212,175,55,0.15)" }} />
                 <Share2 className="w-5 h-5 text-gold/70 group-hover:text-gold transition-colors" />

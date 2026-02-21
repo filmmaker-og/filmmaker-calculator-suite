@@ -100,8 +100,10 @@ const faqs = [
    ═══════════════════════════════════════════════════════════════════ */
 const useReveal = (threshold = 0.15) => {
   const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
+  const prefersReduced = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const [visible, setVisible] = useState(prefersReduced);
   useEffect(() => {
+    if (prefersReduced) return;
     const el = ref.current;
     if (!el) return;
     const obs = new IntersectionObserver(
@@ -110,7 +112,7 @@ const useReveal = (threshold = 0.15) => {
     );
     obs.observe(el);
     return () => obs.disconnect();
-  }, [threshold]);
+  }, [threshold, prefersReduced]);
   return { ref, visible };
 };
 
@@ -313,7 +315,7 @@ const Index = () => {
             ? "opacity-100 translate-y-0 pointer-events-auto"
             : "opacity-0 -translate-y-1 pointer-events-none"
         )}
-        style={{ borderRadius: 0 }}
+        style={{ borderRadius: 6 }}
       >
         BUILD NOW
       </button>
@@ -453,7 +455,7 @@ const Index = () => {
               <SectionHeader eyebrow="The Problem" title={<>MOST FILMS LOSE <span className="text-white">MONEY.</span></>} flankingLines compact />
 
               <div className="max-w-md mx-auto">
-                <div className="relative bg-white/[0.04] border border-white/[0.10] overflow-hidden"
+                <div className="relative bg-white/[0.04] border border-white/[0.10] overflow-hidden rounded-lg"
                   style={{ boxShadow: '0 0 20px rgba(212,175,55,0.06)' }}>
                   {/* Gold left accent */}
                   <div className="absolute left-0 top-0 bottom-0 w-[3px]"
@@ -554,7 +556,7 @@ const Index = () => {
 
               <div ref={waterBarRef} className="max-w-md mx-auto">
                 {/* Waterfall rows — all identical structure */}
-                <div className="border border-white/[0.06] bg-black overflow-hidden">
+                <div className="border border-white/[0.06] bg-black overflow-hidden rounded-lg">
                   {waterfallTiers.filter(t => !t.isFinal).map((tier, i) => (
                     <div
                       key={tier.name}
@@ -599,7 +601,7 @@ const Index = () => {
                 </div>
 
                 {/* Net Profits — then corridor split */}
-                <div className="mt-4 border border-gold/25 bg-gold/[0.04] px-5 py-4 text-center">
+                <div className="mt-4 border border-gold/25 bg-gold/[0.04] px-5 py-4 text-center rounded-md">
                   <p className="text-[10px] tracking-[0.2em] uppercase font-semibold text-gold/60 mb-1">Net Profits</p>
                   <span className="font-mono text-[22px] font-bold text-gold">
                     ${countVal.toLocaleString()}
@@ -621,14 +623,14 @@ const Index = () => {
 
                 {/* Two corridor boxes */}
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="relative border border-gold/25 bg-gold/[0.06] px-4 py-5 text-center overflow-hidden">
+                  <div className="relative border border-gold/25 bg-gold/[0.06] px-4 py-5 text-center overflow-hidden rounded-md">
                     <div className="absolute top-0 left-0 right-0 h-[2px] bg-gold/50" />
                     <p className="text-[10px] tracking-[0.2em] uppercase font-semibold text-gold/70 mb-1">Producer Corridor</p>
                     <span className="font-mono text-[18px] font-bold text-gold">
                       ${producerVal.toLocaleString()}
                     </span>
                   </div>
-                  <div className="border border-white/[0.10] bg-white/[0.05] px-4 py-5 text-center">
+                  <div className="border border-white/[0.10] bg-white/[0.05] px-4 py-5 text-center rounded-md">
                     <p className="text-[10px] tracking-[0.2em] uppercase font-semibold text-white/45 mb-1">Investor Corridor</p>
                     <span className="font-mono text-[18px] font-bold text-white/70">
                       ${investorVal.toLocaleString()}
@@ -659,7 +661,7 @@ const Index = () => {
 
               {/* Stacked manifesto */}
               <div className="max-w-md mx-auto">
-                <div className="relative bg-white/[0.04] border border-white/[0.10] overflow-hidden">
+                <div className="relative bg-white/[0.04] border border-white/[0.10] overflow-hidden rounded-lg">
                   {/* Gold left accent */}
                   <div className="absolute left-0 top-0 bottom-0 w-[3px]"
                     style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.55), rgba(212,175,55,0.25), transparent)' }} />
@@ -739,9 +741,16 @@ const Index = () => {
               )}
             >
               <div
-                className="relative bg-gold/[0.08] border-2 border-gold/45 overflow-hidden"
+                className="relative bg-gold/[0.08] border-2 border-gold/45 overflow-hidden rounded-lg"
                 style={{ boxShadow: '0 0 40px rgba(212,175,55,0.12), 0 8px 32px rgba(212,175,55,0.06), inset 0 1px 0 rgba(212,175,55,0.15)' }}
               >
+                {/* Inner atmospheric haze */}
+                <div
+                  className="absolute inset-0 pointer-events-none rounded-lg"
+                  style={{
+                    background: 'radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.06) 0%, transparent 70%)',
+                  }}
+                />
                 {/* Gold left accent — strong */}
                 <div className="absolute left-0 top-0 bottom-0 w-[3px]"
                   style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.80), rgba(212,175,55,0.40), transparent)' }} />
@@ -754,7 +763,7 @@ const Index = () => {
                       Filmmakers have a perception in the business world of being kind of flaky dudes{"\u2026"} you need to be buttoned down{"\u2026"} speak the language that they speak.
                     </p>
                   </blockquote>
-                  <div className="mt-4 -mx-1 p-3 bg-gold/[0.12] border border-gold/30">
+                  <div className="mt-4 -mx-1 p-3 bg-gold/[0.12] border border-gold/30 rounded-md">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-[1.5px] bg-gold/50" />
                       <cite className="not-italic">
@@ -801,7 +810,7 @@ const Index = () => {
                   <div
                     key={door.name}
                     className={cn(
-                      "relative border p-5 flex flex-col justify-between transition-all duration-700 ease-out overflow-hidden",
+                      "relative border p-5 flex flex-col justify-between transition-all duration-700 ease-out overflow-hidden rounded-lg",
                       "bg-white/[0.06] border-white/[0.12] aspect-square",
                       revCost.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                     )}
@@ -888,7 +897,7 @@ const Index = () => {
                   <div
                     key={t.tier}
                     className={cn(
-                      "relative border overflow-hidden p-5 md:p-7 transition-all duration-600 ease-out",
+                      "relative border overflow-hidden p-5 md:p-7 transition-all duration-600 ease-out rounded-lg",
                       t.featured
                         ? "border-gold/50 bg-gold/[0.04]"
                         : t.elevated
@@ -917,7 +926,7 @@ const Index = () => {
                     />
                     {t.featured && (
                       <div className="mb-3">
-                        <span className="text-[12px] tracking-[0.20em] uppercase font-bold text-gold bg-gold/[0.12] px-3 py-1.5 border border-gold/30">
+                        <span className="text-[12px] tracking-[0.20em] uppercase font-bold text-gold bg-gold/[0.12] px-3 py-1.5 border border-gold/30 rounded-sm">
                           Recommended
                         </span>
                       </div>
@@ -979,7 +988,7 @@ const Index = () => {
             <div ref={revFaq.ref} className={cn("max-w-lg mx-auto transition-all duration-700 ease-out", revFaq.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
               <SectionHeader eyebrow="Common Questions" title={<>WHAT FILMMAKERS <span className="text-white">ASK</span></>} flankingLines compact />
 
-              <div className="bg-black px-5 border border-white/[0.06]">
+              <div className="bg-black px-5 border border-white/[0.06] rounded-lg">
                 <Accordion type="single" collapsible className="w-full">
                   {faqs.map((faq, i) => (
                     <AccordionItem key={faq.q} value={`faq-${i}`} className="border-b border-white/[0.08]">
