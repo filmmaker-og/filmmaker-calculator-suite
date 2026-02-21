@@ -414,7 +414,7 @@ const Index = () => {
             {/* Floor bounce glow */}
             <div className="absolute bottom-0 left-0 right-0 h-1/3 pointer-events-none"
               style={{
-                background: `radial-gradient(ellipse 60% 80% at 50% 100%, rgba(212,175,55,0.06) 0%, rgba(255,255,255,0.03) 40%, transparent 70%)`,
+                background: `radial-gradient(ellipse 400px 80% at 50% 100%, rgba(212,175,55,0.06) 0%, rgba(255,255,255,0.03) 40%, transparent 70%)`,
               }} />
             <div className="relative px-6 py-4 max-w-xl mx-auto text-center">
               <div className="mb-5 relative inline-block">
@@ -706,7 +706,7 @@ const Index = () => {
           {/* ── PIVOT — "Until now." ── */}
           <section className="py-10 md:py-14 px-6 relative">
             <div className="absolute inset-0 pointer-events-none"
-              style={{ background: 'radial-gradient(ellipse 60% 55% at 50% 50%, rgba(212,175,55,0.06) 0%, transparent 70%)' }} />
+              style={{ background: 'radial-gradient(ellipse 320px 55% at 50% 50%, rgba(212,175,55,0.06) 0%, transparent 70%)' }} />
             <div
               ref={revUntilNow.ref}
               className={cn(
@@ -773,7 +773,7 @@ const Index = () => {
              ────────────────────────────────────────────────────────── */}
           <section className="py-10 md:py-16 px-6 relative">
             <div className="absolute inset-0 pointer-events-none"
-              style={{ background: 'radial-gradient(ellipse 60% 55% at 50% 50%, rgba(212,175,55,0.07) 0%, transparent 70%)' }} />
+              style={{ background: 'radial-gradient(ellipse 320px 55% at 50% 50%, rgba(212,175,55,0.07) 0%, transparent 70%)' }} />
             <div ref={revDecl.ref} className={cn("max-w-md mx-auto relative transition-all duration-700 ease-out", revDecl.visible ? "opacity-100 scale-100" : "opacity-0 scale-[0.96]")}>
               <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
               <div className="py-12 px-4 text-center">
@@ -837,7 +837,7 @@ const Index = () => {
           {/* ── TRANSITION — gatekeepers to arsenal hinge ── */}
           <section className="py-10 md:py-14 px-6 relative">
             <div className="absolute inset-0 pointer-events-none"
-              style={{ background: 'radial-gradient(ellipse 60% 55% at 50% 50%, rgba(212,175,55,0.06) 0%, transparent 70%)' }} />
+              style={{ background: 'radial-gradient(ellipse 320px 55% at 50% 50%, rgba(212,175,55,0.06) 0%, transparent 70%)' }} />
             <div
               ref={revTransition.ref}
               className={cn(
@@ -1015,7 +1015,7 @@ const Index = () => {
 
               {/* Ambient glow */}
               <div className="absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none"
-                style={{ width: '100%', height: '100%', background: `radial-gradient(ellipse 60% 50% at 50% 20%, rgba(212,175,55,0.08) 0%, transparent 70%)` }} />
+                style={{ width: '100%', height: '100%', background: `radial-gradient(ellipse 320px 50% at 50% 20%, rgba(212,175,55,0.08) 0%, transparent 70%)` }} />
 
               <div className="relative p-10 md:p-16 max-w-md mx-auto text-center">
                 <p className="text-white/50 text-[13px] tracking-[0.3em] uppercase font-semibold mb-5">The Moment of Truth</p>

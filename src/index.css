@@ -804,7 +804,7 @@
     pointer-events: none;
     z-index: 50;
     background: radial-gradient(
-      ellipse 70% 60% at 50% 50%,
+      ellipse 500px 60% at 50% 50%,
       transparent 50%,
       rgba(0,0,0,0.4) 100%
     );
@@ -902,5 +902,27 @@
   }
   .animate-tap-ripple {
     animation: tap-ripple 400ms ease-out forwards;
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════
+     OG BOT FAB — orbital accent dot rotation
+     ═══════════════════════════════════════════════════════════════════ */
+  @keyframes orbit {
+    0%   { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  .animate-orbit {
+    animation: orbit 8s linear infinite;
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════
+     PULSE GOLD — subtle active glow breathing
+     ═══════════════════════════════════════════════════════════════════ */
+  @keyframes pulse-gold {
+    0%, 100% { box-shadow: 0 0 20px rgba(212,175,55,0.15); }
+    50%      { box-shadow: 0 0 30px rgba(212,175,55,0.30); }
+  }
+  .animate-pulse-gold {
+    animation: pulse-gold 3s ease-in-out infinite;
   }
 }

@@ -41,21 +41,30 @@ const BottomTabBar = () => {
     >
       {/* Floating box-rounded nav pill */}
       <nav
-        className="flex items-stretch"
+        className="relative flex items-stretch overflow-hidden"
         style={{
           pointerEvents: "auto",
           width: "100%",
           maxWidth: "340px",
           height: "54px",
           borderRadius: "16px",
-          background: "#0A0A0A",
-          border: "1.5px solid rgba(212,175,55,0.45)",
+          background: "rgba(0,0,0,0.85)",
+          backdropFilter: "blur(16px)",
+          WebkitBackdropFilter: "blur(16px)",
+          border: "1.5px solid rgba(212,175,55,0.60)",
           boxShadow:
-            "0 8px 32px rgba(0,0,0,0.90), 0 0 0 1px rgba(212,175,55,0.10), 0 0 15px rgba(212,175,55,0.08)",
+            "0 8px 32px rgba(0,0,0,0.90), 0 0 0 1px rgba(212,175,55,0.15), 0 0 20px rgba(212,175,55,0.12), inset 0 0.5px 0 rgba(212,175,55,0.10)",
           paddingLeft: "6px",
           paddingRight: "6px",
         }}
       >
+        {/* Gold top edge line */}
+        <div
+          className="absolute top-0 left-0 right-0 h-[1px] pointer-events-none"
+          style={{
+            background: "linear-gradient(90deg, transparent 0%, rgba(212,175,55,0.30) 30%, rgba(212,175,55,0.40) 50%, rgba(212,175,55,0.30) 70%, transparent 100%)",
+          }}
+        />
         {tabs.map((tab) => {
           const isActive = getActive(tab.path);
           const Icon = tab.icon;
@@ -68,7 +77,7 @@ const BottomTabBar = () => {
                 isActive && "rounded-lg",
               )}
               style={{
-                background: isActive ? "rgba(212,175,55,0.12)" : "transparent",
+                background: isActive ? "rgba(212,175,55,0.15)" : "transparent",
               }}
               aria-label={tab.label}
             >
@@ -104,6 +113,7 @@ const BottomTabBar = () => {
                     borderRadius: "2px",
                     background: GOLD_FULL,
                     display: "block",
+                    boxShadow: "0 0 8px rgba(212,175,55,0.50), 0 0 16px rgba(212,175,55,0.20)",
                   }}
                 />
               )}

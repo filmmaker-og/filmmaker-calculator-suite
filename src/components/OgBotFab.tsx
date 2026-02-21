@@ -14,40 +14,69 @@ const OgBotFab = ({ onClick, isActive }: OgBotFabProps) => {
         right: "16px",
         width: "52px",
         height: "52px",
-        borderRadius: 0,
-        background: isActive ? "rgba(212,175,55,1)" : "#0A0A0A",
+        borderRadius: "14px",
+        background: isActive
+          ? "linear-gradient(135deg, #D4AF37 0%, #F9E076 100%)"
+          : "linear-gradient(135deg, #0A0A0A 0%, #111111 100%)",
         border: isActive
-          ? "1.5px solid rgba(212,175,55,0.70)"
+          ? "1.5px solid rgba(249,224,118,0.70)"
           : "1.5px solid rgba(212,175,55,0.50)",
         boxShadow: isActive
-          ? "0 0 28px rgba(212,175,55,0.35), 0 4px 16px rgba(0,0,0,0.60)"
-          : "0 0 22px rgba(212,175,55,0.18), 0 4px 16px rgba(0,0,0,0.60), inset 0 1px 0 rgba(212,175,55,0.08)",
+          ? "0 0 28px rgba(212,175,55,0.40), 0 4px 16px rgba(0,0,0,0.60)"
+          : "0 0 20px rgba(212,175,55,0.15), 0 4px 16px rgba(0,0,0,0.60)",
       }}
     >
-      {/* Corner accents — decorative notch marks */}
-      <div className="absolute top-0 left-0 w-[6px] h-[1px] pointer-events-none"
-        style={{ background: isActive ? "rgba(0,0,0,0.30)" : "rgba(212,175,55,0.50)" }} />
-      <div className="absolute top-0 left-0 w-[1px] h-[6px] pointer-events-none"
-        style={{ background: isActive ? "rgba(0,0,0,0.30)" : "rgba(212,175,55,0.50)" }} />
-      <div className="absolute top-0 right-0 w-[6px] h-[1px] pointer-events-none"
-        style={{ background: isActive ? "rgba(0,0,0,0.30)" : "rgba(212,175,55,0.50)" }} />
-      <div className="absolute top-0 right-0 w-[1px] h-[6px] pointer-events-none"
-        style={{ background: isActive ? "rgba(0,0,0,0.30)" : "rgba(212,175,55,0.50)" }} />
-      <div className="absolute bottom-0 left-0 w-[6px] h-[1px] pointer-events-none"
-        style={{ background: isActive ? "rgba(0,0,0,0.30)" : "rgba(212,175,55,0.50)" }} />
-      <div className="absolute bottom-0 left-0 w-[1px] h-[6px] pointer-events-none"
-        style={{ background: isActive ? "rgba(0,0,0,0.30)" : "rgba(212,175,55,0.50)" }} />
-      <div className="absolute bottom-0 right-0 w-[6px] h-[1px] pointer-events-none"
-        style={{ background: isActive ? "rgba(0,0,0,0.30)" : "rgba(212,175,55,0.50)" }} />
-      <div className="absolute bottom-0 right-0 w-[1px] h-[6px] pointer-events-none"
-        style={{ background: isActive ? "rgba(0,0,0,0.30)" : "rgba(212,175,55,0.50)" }} />
+      {/* Inner atmosphere — subtle gold light source */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          borderRadius: "13px",
+          background: isActive
+            ? "radial-gradient(circle at 30% 30%, rgba(255,255,255,0.15) 0%, transparent 60%)"
+            : "radial-gradient(circle at 30% 30%, rgba(212,175,55,0.12) 0%, transparent 60%)",
+        }}
+      />
+
+      {/* Inner border ring — lens/bezel depth */}
+      <div
+        className="absolute pointer-events-none"
+        style={{
+          inset: "3px",
+          borderRadius: "11px",
+          border: isActive
+            ? "1px solid rgba(0,0,0,0.12)"
+            : "1px solid rgba(212,175,55,0.15)",
+        }}
+      />
+
+      {/* Orbital accent dot — rotates slowly when inactive */}
+      {!isActive && (
+        <div
+          className="absolute inset-0 pointer-events-none animate-orbit"
+          style={{ borderRadius: "14px" }}
+        >
+          <div
+            className="absolute"
+            style={{
+              width: "4px",
+              height: "4px",
+              borderRadius: "50%",
+              background: "rgba(212,175,55,0.60)",
+              boxShadow: "0 0 6px rgba(212,175,55,0.40)",
+              top: "-2px",
+              left: "50%",
+              marginLeft: "-2px",
+            }}
+          />
+        </div>
+      )}
 
       {/* OG text */}
       <span
-        className="font-bebas leading-none"
+        className="relative font-bebas leading-none"
         style={{
-          fontSize: "19px",
-          letterSpacing: "0.14em",
+          fontSize: "20px",
+          letterSpacing: "0.16em",
           color: isActive ? "#000000" : "rgba(212,175,55,1)",
         }}
       >
@@ -55,11 +84,11 @@ const OgBotFab = ({ onClick, isActive }: OgBotFabProps) => {
       </span>
       {/* bot label */}
       <span
-        className="font-mono uppercase leading-none"
+        className="relative font-bebas uppercase leading-none"
         style={{
-          fontSize: "8px",
-          letterSpacing: "0.12em",
-          color: isActive ? "rgba(0,0,0,0.60)" : "rgba(212,175,55,0.60)",
+          fontSize: "9px",
+          letterSpacing: "0.20em",
+          color: isActive ? "rgba(0,0,0,0.55)" : "rgba(212,175,55,0.55)",
           marginTop: "1px",
         }}
       >
