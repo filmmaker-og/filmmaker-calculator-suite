@@ -59,11 +59,11 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
     navigator.clipboard.writeText(shareContent).catch(() => {});
   };
 
-  /* ─── Section label with flanking gold rules ─────────────────── */
+  /* ─── Section label ─────────────────────────────────────────── */
   const SectionLabel = ({ children }: { children: React.ReactNode }) => (
-    <div className="flex items-center gap-3 pl-1 mb-2">
+    <div className="flex items-center gap-3 pl-1 mb-3">
       <div className="h-[1px] flex-1" style={{ background: "linear-gradient(90deg, rgba(212,175,55,0.35) 0%, transparent 100%)" }} />
-      <span className="font-bebas text-[13px] text-gold/60 uppercase tracking-[0.25em] flex-shrink-0">{children}</span>
+      <span className="font-bebas text-[16px] text-gold/80 uppercase tracking-[0.20em] flex-shrink-0">{children}</span>
       <div className="h-[1px] flex-1" style={{ background: "linear-gradient(270deg, rgba(212,175,55,0.35) 0%, transparent 100%)" }} />
     </div>
   );
@@ -77,7 +77,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
         />
       )}
 
-      {/* Bottom Sheet — premium black */}
+      {/* Bottom Sheet */}
       <div
         className={cn(
           "fixed bottom-0 left-0 right-0 z-[201] rounded-t-2xl max-h-[85vh] overflow-y-auto",
@@ -101,11 +101,11 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
         />
 
         {/* Drag handle + X close button */}
-        <div className="relative flex justify-center pt-3 pb-5">
+        <div className="relative flex justify-center pt-4 pb-6">
           <div className="w-8 h-1 bg-gold/30 rounded-full" />
           <button
             onClick={() => { haptics.light(); setIsOpen(false); }}
-            className="absolute top-2 right-4 w-9 h-9 flex items-center justify-center text-gold/60 hover:text-gold transition-colors"
+            className="absolute top-3 right-4 w-9 h-9 flex items-center justify-center text-gold/60 hover:text-gold transition-colors"
             aria-label="Close menu"
           >
             <CloseIcon className="w-5 h-5" />
@@ -114,7 +114,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
 
         <div className="px-4 pb-6 space-y-6">
           {/* Primary Nav — 2×2 grid */}
-          <div className="space-y-2">
+          <div className="space-y-3">
             <SectionLabel>Menu</SectionLabel>
             <div className="grid grid-cols-2 gap-2.5">
               {([
@@ -130,9 +130,9 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
                     onClick={() => handleNavigate(item.path)}
                     className="relative flex flex-col items-center justify-center gap-2 py-5 border text-center group transition-all overflow-hidden"
                     style={{
-                      borderRadius: 8,
-                      borderColor: item.featured ? "rgba(212,175,55,0.50)" : "rgba(255,255,255,0.12)",
-                      background: item.featured ? "rgba(212,175,55,0.10)" : "rgba(255,255,255,0.04)",
+                      borderRadius: 12,
+                      borderColor: item.featured ? "rgba(212,175,55,0.50)" : "rgba(255,255,255,0.10)",
+                      background: item.featured ? "rgba(212,175,55,0.08)" : "rgba(255,255,255,0.03)",
                       boxShadow: item.featured ? "0 0 20px rgba(212,175,55,0.08), inset 0 1px 0 rgba(212,175,55,0.08)" : "none",
                     }}
                   >
@@ -160,18 +160,17 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
           </div>
 
           {/* Contact + Share */}
-          <div className="pt-2 border-t border-white/[0.08] space-y-2">
+          <div className="pt-2 border-t border-white/[0.08] space-y-3">
             <SectionLabel>Contact & Share</SectionLabel>
             <div className="grid grid-cols-3 gap-2">
               <a
                 href="mailto:thefilmmaker.og@gmail.com"
                 onClick={() => haptics.light()}
-                className="relative flex flex-col items-center gap-2 p-4 border border-white/[0.10] bg-white/[0.04] text-center group hover:border-gold/40 hover:bg-gold/[0.06] transition-all overflow-hidden"
-                style={{ borderRadius: 8 }}
+                className="relative flex flex-col items-center gap-2 p-4 border border-white/[0.10] bg-white/[0.03] text-center group hover:border-gold/40 hover:bg-gold/[0.06] transition-all overflow-hidden"
+                style={{ borderRadius: 12 }}
               >
-                <div className="absolute left-0 top-0 bottom-0 w-[2px]" style={{ background: "linear-gradient(to bottom, rgba(212,175,55,0.40), transparent)", boxShadow: "0 0 8px rgba(212,175,55,0.15)" }} />
                 <Mail className="w-5 h-5 text-gold/70 group-hover:text-gold transition-colors" />
-                <span className="font-bebas text-[14px] tracking-[0.08em] text-white/70 group-hover:text-white leading-none transition-colors">Email</span>
+                <span className="font-bebas text-[15px] tracking-[0.08em] text-white/75 group-hover:text-white leading-none transition-colors">Email</span>
               </a>
 
               <a
@@ -179,46 +178,30 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => haptics.light()}
-                className="relative flex flex-col items-center gap-2 p-4 border border-white/[0.10] bg-white/[0.04] text-center group hover:border-gold/40 hover:bg-gold/[0.06] transition-all overflow-hidden"
-                style={{ borderRadius: 8 }}
+                className="relative flex flex-col items-center gap-2 p-4 border border-white/[0.10] bg-white/[0.03] text-center group hover:border-gold/40 hover:bg-gold/[0.06] transition-all overflow-hidden"
+                style={{ borderRadius: 12 }}
               >
-                <div className="absolute left-0 top-0 bottom-0 w-[2px]" style={{ background: "linear-gradient(to bottom, rgba(212,175,55,0.40), transparent)", boxShadow: "0 0 8px rgba(212,175,55,0.15)" }} />
                 <Instagram className="w-5 h-5 text-gold/70 group-hover:text-gold transition-colors" />
-                <span className="font-bebas text-[14px] tracking-[0.08em] text-white/70 group-hover:text-white leading-none transition-colors">Instagram</span>
+                <span className="font-bebas text-[15px] tracking-[0.08em] text-white/75 group-hover:text-white leading-none transition-colors">Instagram</span>
               </a>
 
               <button
                 onClick={handleShare}
-                className="relative flex flex-col items-center gap-2 p-4 border border-white/[0.10] bg-white/[0.04] text-center group hover:border-gold/40 hover:bg-gold/[0.06] transition-all overflow-hidden"
-                style={{ borderRadius: 8 }}
+                className="relative flex flex-col items-center gap-2 p-4 border border-white/[0.10] bg-white/[0.03] text-center group hover:border-gold/40 hover:bg-gold/[0.06] transition-all overflow-hidden"
+                style={{ borderRadius: 12 }}
               >
-                <div className="absolute left-0 top-0 bottom-0 w-[2px]" style={{ background: "linear-gradient(to bottom, rgba(212,175,55,0.40), transparent)", boxShadow: "0 0 8px rgba(212,175,55,0.15)" }} />
                 <Share2 className="w-5 h-5 text-gold/70 group-hover:text-gold transition-colors" />
-                <span className="font-bebas text-[14px] tracking-[0.08em] text-white/70 group-hover:text-white leading-none transition-colors">Share</span>
+                <span className="font-bebas text-[15px] tracking-[0.08em] text-white/75 group-hover:text-white leading-none transition-colors">Share</span>
               </button>
             </div>
           </div>
 
-          {/* Brand footer */}
-          <div
-            className="pt-3 border-t flex items-center justify-between"
-            style={{
-              borderTopColor: "rgba(212,175,55,0.12)",
-            }}
-          >
-            <button
-              onClick={() => handleNavigate('/')}
-              className="flex items-center gap-2 hover:opacity-80 transition-opacity group"
-            >
-              <span className="font-bebas text-[22px] tracking-[0.2em] text-gold group-hover:text-white transition-colors duration-200">
-                FILMMAKER<span className="text-white group-hover:text-gold transition-colors duration-200">.OG</span>
-              </span>
-            </button>
-            <div className="h-[1px] flex-1 mx-4"
-              style={{
-                background: "linear-gradient(90deg, rgba(212,175,55,0.35) 0%, transparent 100%)",
-              }}
-            />
+          {/* Legal disclaimer — replaces the old FILMMAKER.OG brand footer */}
+          <div className="pt-3 border-t border-white/[0.06]">
+            <p className="text-white/30 text-[11px] tracking-wide leading-relaxed text-center px-2">
+              For educational and informational purposes only. Not legal, tax, or investment advice.
+              Consult a qualified entertainment attorney before making financing decisions.
+            </p>
           </div>
         </div>
       </div>

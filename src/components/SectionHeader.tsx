@@ -51,7 +51,7 @@ const SectionHeader = ({
           "text-center max-w-lg mx-auto mt-4 leading-relaxed",
           plainSubtitle
             ? "text-text-mid text-base"
-            : "text-text-mid text-base px-4 py-2.5 bg-gold/[0.06] border border-gold/20 rounded-md"
+            : "text-text-mid text-base px-4 py-2.5 bg-gold/[0.06] border border-gold/20 rounded-xl"
         )}
       >
         {subtitle}

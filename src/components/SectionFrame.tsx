@@ -12,7 +12,7 @@ const SectionFrame = ({
   alt?: boolean;
 }) => (
   <section id={id} className="snap-section px-4 py-4">
-    <div className="flex overflow-hidden border border-white/[0.06] rounded-lg">
+    <div className="flex overflow-hidden border border-white/[0.06] rounded-2xl">
       <div
         className="w-1 flex-shrink-0 bg-gradient-to-b from-gold via-gold/60 to-gold/20"
         style={{ boxShadow: "0 0 16px rgba(212,175,55,0.30)" }}
