@@ -10,15 +10,8 @@ import {
 } from "lucide-react";
 import filmmakerLogo from "@/assets/filmmaker-f-icon.png";
 import LeadCaptureModal from "@/components/LeadCaptureModal";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
 import SectionFrame from "@/components/SectionFrame";
-import SectionHeader from "@/components/SectionHeader";
 
 const CINEMATIC_SEEN_KEY = "filmmaker_og_intro_seen";
 
@@ -43,55 +36,6 @@ const waterfallTiers = [
   { name: "Mezzanine",         amount: "\u2212$230,000",     pct: 61.9,  barColor: "rgba(212,175,55,0.65)", isFinal: false },
   { name: "Equity Recoupment", amount: "\u2212$1,440,000",   pct: 13.9,  barColor: "rgba(212,175,55,0.65)", isFinal: false },
   { name: "Net Profits",       amount: "$417,500",       pct: 13.9,  barColor: "rgba(212,175,55,0.85)",  isFinal: true  },
-];
-
-/* ═══════════════════════════════════════════════════════════════════
-   PRODUCT LADDER — gold bar tiers
-   ═══════════════════════════════════════════════════════════════════ */
-const productTiers = [
-  {
-    tier: "Always Free", product: "Waterfall Simulator", price: "Free",
-    desc: "Model your deal. See where every dollar goes.",
-    pct: 30, barClass: "bg-[#D4AF37]/30", tierColor: "text-gold",
-    nameColor: "text-white", descColor: "text-white/65", barH: "h-2",
-    featured: false, elevated: false,
-  },
-  {
-    tier: "Investment Grade", product: "The Pitch Package", price: "$497", originalPrice: "$697",
-    desc: "What the other side of the table expects to see.",
-    pct: 100, barClass: "bg-[#D4AF37]/70", tierColor: "text-gold",
-    nameColor: "text-white", descColor: "text-white/65", barH: "h-3",
-    featured: true, elevated: false,
-  },
-  {
-    tier: "Premium", product: "The Blueprint", price: "$197",
-    desc: "Every number, every tier, every scenario \u2014 the complete financial model.",
-    pct: 65, barClass: "bg-[#D4AF37]/50", tierColor: "text-gold",
-    nameColor: "text-white", descColor: "text-white/65", barH: "h-2",
-    featured: false, elevated: true,
-  },
-];
-
-/* ═══════════════════════════════════════════════════════════════════
-   FAQ DATA
-   ═══════════════════════════════════════════════════════════════════ */
-const faqs = [
-  {
-    q: "What assumptions does the waterfall use?",
-    a: "The simulator models the standard independent film recoupment hierarchy used in real production financing\u00A0\u2014 CAM fees, sales agent commission, senior and mezzanine debt service, equity recoupment with preferred return, and backend profit splits. Benchmarks reflect current market terms for films in the $1M\u2013$10M budget range. Every deal is different. This gives you the structure\u00A0\u2014 your attorney finalizes the numbers.",
-  },
-  {
-    q: "How do I get started?",
-    a: "Enter your email, open the magic link, and you\u2019re in\u00A0\u2014 no password, no credit card. Set your budget, adjust the deal terms, and the waterfall builds itself in real time. When you\u2019re ready for the meeting, upgrade to export the investor-ready package.",
-  },
-  {
-    q: "Who built this?",
-    a: "A producer who spent years learning through expensive mistakes what should have been accessible from day one. Tribeca-winning, CAA-repped, debut sold to Netflix. This tool exists because the waterfall shouldn\u2019t be something you discover for the first time when someone else\u2019s lawyer slides it across the table.",
-  },
-  {
-    q: "Why is this free?",
-    a: "Film as an alternative asset class\u00A0\u2014 same category as real estate, private equity, and venture capital. Every other alt asset gives investors standardized tools to model returns. Film doesn\u2019t. That\u2019s why the industry has a reputation as a bad investment. It\u2019s not. It\u2019s a misunderstood one. This tool is the starting point.",
-  },
 ];
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -122,7 +66,7 @@ const Index = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const haptics = useHaptics();
-  
+
 
   // Lead capture gate — requires magic link verification
   const [showLeadCapture, setShowLeadCapture] = useState(false);
@@ -153,17 +97,14 @@ const Index = () => {
   const [showSkipHint, setShowSkipHint] = useState(false);
 
   // Reveals
-  const revMission     = useReveal();
   const revEvidence    = useReveal();
-  const revTransition  = useReveal();
-  const revBlum        = useReveal();
+  const revMission     = useReveal();
   const revWater       = useReveal();
   const revCost        = useReveal();
-  const revPath        = useReveal();
   const revDecl        = useReveal();
-  const revFaq         = useReveal();
   const revFinal       = useReveal();
   const revUntilNow    = useReveal();
+  const revBlum        = useReveal();
 
   // Waterfall bar animation
   const [barsRevealed, setBarsRevealed] = useState(false);
@@ -178,8 +119,6 @@ const Index = () => {
     obs.observe(el);
     return () => obs.disconnect();
   }, []);
-
-  const ladderRef = useRef<HTMLDivElement>(null);
 
   // Net Profits countup
   const [countVal, setCountVal] = useState(0);
@@ -381,7 +320,7 @@ const Index = () => {
               </div>
 
               <div className="mt-8 flex justify-center animate-bounce-subtle cursor-pointer active:scale-[0.97]"
-                onClick={() => { haptics.light(); document.getElementById('evidence')?.scrollIntoView({ behavior: 'smooth' }); }}>
+                onClick={() => { haptics.light(); document.getElementById('waterfall')?.scrollIntoView({ behavior: 'smooth' }); }}>
                 <ChevronDown className="w-6 h-6 text-gold" />
               </div>
             </div>
@@ -389,114 +328,16 @@ const Index = () => {
 
 
           {/* ──────────────────────────────────────────────────────────
-               § 2  THE PROBLEM — narrative setup for waterfall reveal
-             ────────────────────────────────────────────────────────── */}
-          <SectionFrame id="evidence">
-            <div ref={revEvidence.ref} className={cn("transition-all duration-700 ease-out", revEvidence.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
-              <SectionHeader eyebrow="The Problem" title={<>MOST FILMS LOSE <span className="text-white">MONEY.</span></>} flankingLines compact />
-
-              <div className="max-w-md mx-auto">
-                <div className="relative bg-white/[0.04] border border-white/[0.10] overflow-hidden rounded-xl"
-                  style={{ boxShadow: '0 0 20px rgba(212,175,55,0.06)' }}>
-                  {/* Gold left accent */}
-                  <div className="absolute left-0 top-0 bottom-0 w-[3px]"
-                    style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.55), rgba(212,175,55,0.25), transparent)' }} />
-                  <div className="p-7 md:p-9 pl-8 md:pl-10">
-                    {/* Dramatic sub-headline */}
-                    <p
-                      className={cn(
-                        "font-bebas text-[24px] md:text-[30px] tracking-[0.06em] leading-tight mb-6 transition-all duration-500 ease-out",
-                        revEvidence.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
-                      )}
-                      style={{ transitionDelay: revEvidence.visible ? '200ms' : '0ms' }}
-                    >
-                      <span className="text-gold">YOUR FILM CAN MAKE MONEY</span><br />
-                      <span className="text-white">AND YOU STILL LOSE.</span>
-                    </p>
-
-                    {/* The beats */}
-                    <div className="space-y-3 mb-6">
-                      <p
-                        className={cn(
-                          "text-white/50 text-[15px] leading-relaxed transition-all duration-500 ease-out",
-                          revEvidence.visible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-3"
-                        )}
-                        style={{ transitionDelay: revEvidence.visible ? '300ms' : '0ms' }}
-                      >
-                        Not because it didn{"\u2019"}t recoup.
-                      </p>
-                      <p
-                        className={cn(
-                          "text-white/70 text-[15px] leading-relaxed font-medium transition-all duration-500 ease-out",
-                          revEvidence.visible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-3"
-                        )}
-                        style={{ transitionDelay: revEvidence.visible ? '450ms' : '0ms' }}
-                      >
-                        Because of how the deal was structured.
-                      </p>
-                    </div>
-
-                    {/* Gold divider — dramatic pause */}
-                    <div
-                      className={cn(
-                        "h-[1px] w-12 bg-gold/40 mb-6 transition-all duration-500 ease-out",
-                        revEvidence.visible ? "opacity-100" : "opacity-0"
-                      )}
-                      style={{ transitionDelay: revEvidence.visible ? '600ms' : '0ms' }}
-                    />
-
-                    {/* The kicker */}
-                    <p
-                      className={cn(
-                        "text-gold/80 text-[15px] tracking-wide italic mb-2 transition-all duration-500 ease-out",
-                        revEvidence.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
-                      )}
-                      style={{ transitionDelay: revEvidence.visible ? '750ms' : '0ms' }}
-                    >
-                      There{"\u2019"}s a name for it.
-                    </p>
-                    <p
-                      className={cn(
-                        "font-bebas text-[20px] md:text-[24px] tracking-[0.08em] text-white/80 transition-all duration-500 ease-out",
-                        revEvidence.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
-                      )}
-                      style={{ transitionDelay: revEvidence.visible ? '850ms' : '0ms' }}
-                    >
-                      Most filmmakers learn it too late.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </SectionFrame>
-
-
-          {/* ──────────────────────────────────────────────────────────
-               § 3  THE WATERFALL — the reveal
+               § 2  THE WATERFALL — immediately after hero
              ────────────────────────────────────────────────────────── */}
           <SectionFrame id="waterfall">
             <div ref={revWater.ref} className={cn("transition-all duration-700 ease-out", revWater.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
-              {/* THE REVEAL — oversized, not the standard compact SectionHeader */}
-              <div className="text-center mb-12">
-                <div className="flex items-center justify-center gap-4 mb-5">
-                  <div className="h-[1px] w-10 bg-gradient-to-r from-transparent to-gold/40" />
-                  <p className="tracking-[0.3em] uppercase font-semibold text-gold/70 text-[13px]">The Reveal</p>
-                  <div className="h-[1px] w-10 bg-gradient-to-l from-transparent to-gold/40" />
-                </div>
-                <h2
-                  className="font-bebas tracking-[0.06em] text-[52px] md:text-[72px] leading-[0.9]"
-                  style={{ textShadow: revWater.visible ? '0 0 40px rgba(212,175,55,0.3), 0 0 80px rgba(212,175,55,0.1)' : 'none' }}
-                >
-                  <span className="text-gold">THE</span> <span className="text-white">WATERFALL</span>
-                </h2>
-                <p className="text-white/40 text-[15px] tracking-[0.15em] uppercase mt-4">How the money flows</p>
-              </div>
 
               <p className="text-white/50 text-[15px] text-center mb-6">Based on a hypothetical $1.8M budget and a $3M acquisition.</p>
 
               <div ref={waterBarRef} className="max-w-md mx-auto">
-                {/* Waterfall rows — all identical structure */}
-                <div className="border border-white/[0.06] bg-black overflow-hidden rounded-xl">
+                {/* Waterfall rows — unified financial table */}
+                <div className="border border-gold/25 bg-black overflow-hidden rounded-xl">
                   {waterfallTiers.filter(t => !t.isFinal).map((tier, i) => (
                     <div
                       key={tier.name}
@@ -540,8 +381,8 @@ const Index = () => {
                   ))}
                 </div>
 
-                {/* Net Profits — then corridor split */}
-                <div className="mt-4 border border-gold/25 bg-gold/[0.04] px-5 py-4 text-center rounded-lg">
+                {/* Net Profits */}
+                <div className="mt-4 border border-gold/25 bg-black px-5 py-4 text-center rounded-lg">
                   <p className="text-[10px] tracking-[0.2em] uppercase font-semibold text-gold/60 mb-1">Net Profits</p>
                   <span className="font-mono text-[22px] font-bold text-gold">
                     ${countVal.toLocaleString()}
@@ -561,30 +402,20 @@ const Index = () => {
                   </div>
                 </div>
 
-                {/* Two corridor boxes */}
+                {/* Two corridor boxes — consistent treatment */}
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="relative border border-gold/25 bg-gold/[0.06] px-4 py-5 text-center overflow-hidden rounded-lg">
-                    <div className="absolute top-0 left-0 right-0 h-[2px] bg-gold/50" />
+                  <div className="border border-gold/25 bg-black px-4 py-5 text-center rounded-lg">
                     <p className="text-[10px] tracking-[0.2em] uppercase font-semibold text-gold/70 mb-1">Producer Corridor</p>
                     <span className="font-mono text-[18px] font-bold text-gold">
                       ${producerVal.toLocaleString()}
                     </span>
                   </div>
-                  <div className="border border-white/[0.10] bg-white/[0.05] px-4 py-5 text-center rounded-lg">
+                  <div className="border border-gold/25 bg-black px-4 py-5 text-center rounded-lg">
                     <p className="text-[10px] tracking-[0.2em] uppercase font-semibold text-white/45 mb-1">Investor Corridor</p>
                     <span className="font-mono text-[18px] font-bold text-white/70">
                       ${investorVal.toLocaleString()}
                     </span>
                   </div>
-                </div>
-
-                {/* CTA — capture intent at emotional peak */}
-                <div className="mt-6 text-center">
-                  <button onClick={handleStartClick}
-                    className="w-full max-w-[320px] h-14 text-base btn-cta-primary mx-auto">
-                    BUILD YOUR WATERFALL
-                  </button>
-                  <p className="text-white/55 text-[15px] tracking-wider mt-3">See how to keep more of it.</p>
                 </div>
               </div>
             </div>
@@ -592,54 +423,130 @@ const Index = () => {
 
 
           {/* ──────────────────────────────────────────────────────────
-               § 4  THE THESIS — why film has no tools
+               § 3  COMBINED PROBLEM + THESIS — one continuous section
              ────────────────────────────────────────────────────────── */}
-          <SectionFrame id="mission">
-            <div ref={revMission.ref} className={cn("transition-all duration-700 ease-out", revMission.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
-              <SectionHeader eyebrow="The Thesis" title={<>FILM AS AN ALTERNATIVE{"\u00A0"}ASSET{"\u00A0"}<span className="text-white">CLASS</span></>} flankingLines compact />
+          <SectionFrame id="evidence">
+            <div ref={revEvidence.ref} className={cn("transition-all duration-700 ease-out", revEvidence.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
 
-              {/* Stacked manifesto */}
+              {/* Section header — large, confident, no eyebrow */}
+              <div className="text-center mb-10">
+                <h2
+                  className="font-bebas text-[40px] md:text-[52px] tracking-[0.06em] leading-[0.95] text-gold"
+                  style={{
+                    textShadow: revEvidence.visible
+                      ? '0 0 30px rgba(212,175,55,0.25), 0 0 60px rgba(212,175,55,0.10)'
+                      : 'none',
+                  }}
+                >
+                  MOST FILMS LOSE <span className="text-white">MONEY.</span>
+                </h2>
+              </div>
+
+              {/* Unified container — problem flows into thesis */}
               <div className="max-w-md mx-auto">
-                <div className="relative bg-white/[0.04] border border-white/[0.10] overflow-hidden rounded-xl">
+                <div className="relative bg-white/[0.04] border border-white/[0.10] overflow-hidden rounded-xl"
+                  style={{ boxShadow: '0 0 20px rgba(212,175,55,0.06)' }}>
                   {/* Gold left accent */}
                   <div className="absolute left-0 top-0 bottom-0 w-[3px]"
                     style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.55), rgba(212,175,55,0.25), transparent)' }} />
-                  <div className="p-7 md:p-9 pl-8 md:pl-10 space-y-5">
-                    {[
-                      { asset: "Real Estate", tool: "comps and cap rate models" },
-                      { asset: "Private Equity", tool: "carry and IRR structures" },
-                      { asset: "Venture Capital", tool: "term sheets and valuation frameworks" },
-                    ].map((row, i) => (
-                      <div
-                        key={row.asset}
-                        className={cn(
-                          "flex items-baseline gap-3 transition-all duration-500 ease-out",
-                          revMission.visible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-3"
-                        )}
-                        style={{ transitionDelay: revMission.visible ? `${200 + i * 120}ms` : '0ms' }}
-                      >
-                        <Check className="w-3.5 h-3.5 text-gold/50 flex-shrink-0 relative top-[2px]" />
-                        <p className="text-white/60 text-[15px] leading-relaxed">
-                          <span className="text-white/80 font-semibold">{row.asset}</span> has {row.tool}.
-                        </p>
-                      </div>
-                    ))}
-                    {/* The punchline — standalone row matching asset class rows */}
-                    <div
+                  <div className="p-7 md:p-9 pl-8 md:pl-10">
+
+                    {/* — Problem narrative — */}
+                    <p
                       className={cn(
-                        "flex items-baseline gap-3 mt-2 transition-all duration-500 ease-out",
-                        revMission.visible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-3"
+                        "font-bebas text-[24px] md:text-[30px] tracking-[0.06em] leading-tight mb-6 transition-all duration-500 ease-out",
+                        revEvidence.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
                       )}
-                      style={{ transitionDelay: revMission.visible ? '560ms' : '0ms' }}
+                      style={{ transitionDelay: revEvidence.visible ? '200ms' : '0ms' }}
                     >
-                      <X className="w-4 h-4 text-white/50 flex-shrink-0 relative top-[2px]" />
-                      <p className="font-bebas text-[22px] md:text-[26px] tracking-[0.06em] text-gold leading-tight">
-                        Film has no standardized framework.
+                      <span className="text-gold">YOUR FILM CAN MAKE MONEY</span><br />
+                      <span className="text-white">AND YOU STILL LOSE.</span>
+                    </p>
+
+                    <div className="space-y-3 mb-6">
+                      <p
+                        className={cn(
+                          "text-white/50 text-[15px] leading-relaxed transition-all duration-500 ease-out",
+                          revEvidence.visible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-3"
+                        )}
+                        style={{ transitionDelay: revEvidence.visible ? '300ms' : '0ms' }}
+                      >
+                        Not because it didn{"\u2019"}t recoup.
+                      </p>
+                      <p
+                        className={cn(
+                          "text-white/70 text-[15px] leading-relaxed font-medium transition-all duration-500 ease-out",
+                          revEvidence.visible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-3"
+                        )}
+                        style={{ transitionDelay: revEvidence.visible ? '450ms' : '0ms' }}
+                      >
+                        Because of how the deal was structured.
                       </p>
                     </div>
+
+                    {/* Gold divider — dramatic pause */}
+                    <div
+                      className={cn(
+                        "h-[1px] w-12 bg-gold/40 mb-6 transition-all duration-500 ease-out",
+                        revEvidence.visible ? "opacity-100" : "opacity-0"
+                      )}
+                      style={{ transitionDelay: revEvidence.visible ? '600ms' : '0ms' }}
+                    />
+
+                    <p
+                      className={cn(
+                        "font-bebas text-[20px] md:text-[24px] tracking-[0.08em] text-white/80 mb-8 transition-all duration-500 ease-out",
+                        revEvidence.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
+                      )}
+                      style={{ transitionDelay: revEvidence.visible ? '750ms' : '0ms' }}
+                    >
+                      Most filmmakers learn it too late.
+                    </p>
+
+                    {/* — Thesis: alternative asset class — */}
+                    <div
+                      ref={revMission.ref}
+                      className={cn(
+                        "border-t border-white/[0.08] pt-6 space-y-5 transition-all duration-700 ease-out",
+                        revMission.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+                      )}
+                    >
+                      {[
+                        { asset: "Real Estate", tool: "comps and cap rate models" },
+                        { asset: "Private Equity", tool: "carry and IRR structures" },
+                        { asset: "Venture Capital", tool: "term sheets and valuation frameworks" },
+                      ].map((row, i) => (
+                        <div
+                          key={row.asset}
+                          className={cn(
+                            "flex items-baseline gap-3 transition-all duration-500 ease-out",
+                            revMission.visible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-3"
+                          )}
+                          style={{ transitionDelay: revMission.visible ? `${200 + i * 120}ms` : '0ms' }}
+                        >
+                          <Check className="w-3.5 h-3.5 text-gold/50 flex-shrink-0 relative top-[2px]" />
+                          <p className="text-white/60 text-[15px] leading-relaxed">
+                            <span className="text-white/80 font-semibold">{row.asset}</span> has {row.tool}.
+                          </p>
+                        </div>
+                      ))}
+                      {/* The punchline */}
+                      <div
+                        className={cn(
+                          "flex items-baseline gap-3 mt-2 transition-all duration-500 ease-out",
+                          revMission.visible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-3"
+                        )}
+                        style={{ transitionDelay: revMission.visible ? '560ms' : '0ms' }}
+                      >
+                        <X className="w-4 h-4 text-white/50 flex-shrink-0 relative top-[2px]" />
+                        <p className="font-bebas text-[22px] md:text-[26px] tracking-[0.06em] text-gold leading-tight">
+                          Film has no standardized framework.
+                        </p>
+                      </div>
+                    </div>
+
                   </div>
                 </div>
-
               </div>
             </div>
           </SectionFrame>
@@ -734,11 +641,10 @@ const Index = () => {
           </section>
 
           {/* ──────────────────────────────────────────────────────────
-               § 5  CLOSED DOORS — the reality of what exists
+               § 4  CLOSED DOORS — the four cards speak for themselves
              ────────────────────────────────────────────────────────── */}
           <SectionFrame id="cost">
             <div ref={revCost.ref} className={cn("transition-all duration-700 ease-out", revCost.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
-              <SectionHeader eyebrow="The Reality" title={<>THE GATEKEEPERS WON{"\u2019"}T LET YOU <span className="text-white">IN.</span></>} flankingLines compact />
 
               <div className="grid grid-cols-2 gap-3 max-w-md mx-auto">
                 {closedDoors.map((door, i) => (
@@ -778,170 +684,9 @@ const Index = () => {
             </div>
           </SectionFrame>
 
-          {/* ── TRANSITION — gatekeepers to arsenal hinge ── */}
-          <section className="py-10 md:py-14 px-6 relative">
-            <div className="absolute inset-0 pointer-events-none"
-              style={{ background: 'radial-gradient(ellipse 320px 55% at 50% 50%, rgba(212,175,55,0.06) 0%, transparent 70%)' }} />
-            <div
-              ref={revTransition.ref}
-              className={cn(
-                "max-w-md mx-auto text-center transition-all duration-700 ease-out",
-                revTransition.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"
-              )}
-            >
-              <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/60 to-transparent mb-8" />
-              <p
-                className="font-bebas text-[40px] md:text-[50px] tracking-[0.06em] text-gold"
-                style={{
-                  textShadow: revTransition.visible
-                    ? '0 0 30px rgba(212,175,55,0.4), 0 0 60px rgba(212,175,55,0.15)'
-                    : 'none',
-                }}
-              >
-                Level the Playing{"\u00A0"}<span className="text-white">Field</span>.
-              </p>
-              <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/60 to-transparent mt-8" />
-              <div className="flex justify-center mt-6 cursor-pointer active:scale-[0.97]"
-                onClick={() => { haptics.light(); document.getElementById('arsenal')?.scrollIntoView({ behavior: 'smooth' }); }}>
-                <ChevronDown className="w-6 h-6 text-gold animate-bounce-subtle" />
-              </div>
-            </div>
-          </section>
-
-          {/* ── § 6  THE ARSENAL — combined header + product ladder ── */}
-          <SectionFrame id="arsenal">
-            <div ref={revPath.ref} className={cn("transition-all duration-700 ease-out", revPath.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
-              {/* Combined header: What You Get → AN ARSENAL. NO GUESSWORK. */}
-              <div className="text-center mb-10">
-                <div className="flex items-center justify-center gap-4 mb-4">
-                  <div className="h-[1px] w-8 bg-gradient-to-r from-transparent to-white/20" />
-                  <p className="tracking-[0.3em] uppercase font-semibold text-white/50 text-[13px]">What You Get</p>
-                  <div className="h-[1px] w-8 bg-gradient-to-l from-transparent to-white/20" />
-                </div>
-                <h2 className="font-bebas tracking-[0.06em] text-gold text-[40px] md:text-[52px] leading-[0.95]">
-                  EVERYTHING YOU <span className="text-white">NEED.</span>
-                </h2>
-                <p className="text-center text-white/55 text-[15px] mt-5 max-w-sm mx-auto leading-relaxed">
-                  Three tiers. Pick what fits your stage.
-                </p>
-              </div>
-
-              {/* Product cards */}
-              <div ref={ladderRef} className="grid grid-cols-1 gap-4 max-w-md mx-auto">
-                {productTiers.map((t, i) => (
-                  <div
-                    key={t.tier}
-                    className={cn(
-                      "relative border overflow-hidden p-5 md:p-7 transition-all duration-700 ease-out rounded-xl",
-                      t.featured
-                        ? "border-gold/50 bg-gold/[0.04]"
-                        : t.elevated
-                          ? "border-white/[0.12] bg-white/[0.04]"
-                          : "border-white/[0.10] bg-white/[0.04]",
-                      revPath.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
-                    )}
-                    style={{
-                      transitionDelay: revPath.visible ? `${i * 120}ms` : '0ms',
-                      ...(t.featured ? { boxShadow: '0 0 40px rgba(212,175,55,0.15), 0 0 80px rgba(212,175,55,0.06)' } : {}),
-                    }}
-                  >
-                    {/* Gold top accent — featured gets a full-width gold bar + glow */}
-                    {t.featured && (
-                      <>
-                        <div className="absolute top-0 left-0 right-0 h-[2px] bg-gold/70" />
-                        <div className="absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none"
-                          style={{ width: '80%', height: '60px', background: 'radial-gradient(ellipse 80% 100% at 50% 0%, rgba(212,175,55,0.08) 0%, transparent 70%)' }} />
-                      </>
-                    )}
-                    {/* Gold left accent — all cards get one, same weight */}
-                    <div className="absolute left-0 top-0 bottom-0 w-[3px]"
-                      style={{
-                        background: 'linear-gradient(to bottom, rgba(212,175,55,0.50), rgba(212,175,55,0.20), transparent)',
-                      }}
-                    />
-                    {t.featured && (
-                      <div className="mb-3">
-                        <span className="text-[12px] tracking-[0.20em] uppercase font-bold text-gold bg-gold/[0.10] px-3 py-1.5 border border-gold/25 rounded-md">
-                          Recommended
-                        </span>
-                      </div>
-                    )}
-                    <div className="flex items-baseline justify-between mb-1 pl-1">
-                      <span className={cn("font-bebas text-[14px] tracking-[0.12em] uppercase", t.tierColor)}>
-                        {t.tier}
-                      </span>
-                      <span className={cn(
-                        "font-mono text-[15px] font-semibold",
-                        t.featured ? "text-gold" : "text-white/50"
-                      )}>
-                        {'originalPrice' in t && t.originalPrice && (
-                          <span className="text-white/50 line-through mr-1.5 text-[13px]">{t.originalPrice}</span>
-                        )}
-                        {t.price}
-                      </span>
-                    </div>
-                    <h4 className={cn("font-bebas text-[22px] tracking-[0.10em] uppercase mb-2 pl-1", t.nameColor)}>
-                      {t.product}
-                    </h4>
-                    <p className={cn("text-[15px] leading-relaxed mb-4 pl-1", t.descColor)}>{t.desc}</p>
-                    <button
-                      onClick={() => { haptics.light(); i === 0 ? gatedNavigate("/calculator?tab=budget") : navigate("/store"); }}
-                      className={cn(
-                        "w-full mt-2 font-bebas tracking-[0.10em] uppercase transition-all",
-                        t.featured
-                          ? "h-12 text-base btn-cta-primary"
-                          : "h-10 text-sm btn-cta-secondary"
-                      )}
-                    >
-                      {i === 0 ? "BUILD YOUR WATERFALL" : "VIEW PACKAGES"}
-                    </button>
-                  </div>
-                ))}
-              </div>
-
-              {/* CTA */}
-              <div className="text-center mt-10">
-                <button onClick={handleStartClick}
-                  className="w-full max-w-[320px] h-14 text-base btn-cta-primary mx-auto">
-                  BUILD YOUR WATERFALL
-                </button>
-                <div className="mt-5 flex items-center justify-center gap-4">
-                  <button onClick={() => navigate("/store")} className="text-white/50 text-[15px] hover:text-gold transition-colors">
-                    View packages <span className="text-gold/70">&rarr;</span>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </SectionFrame>
-
 
           {/* ──────────────────────────────────────────────────────────
-               § 8  FAQ
-             ────────────────────────────────────────────────────────── */}
-          <SectionFrame id="faq">
-            <div ref={revFaq.ref} className={cn("max-w-lg mx-auto transition-all duration-700 ease-out", revFaq.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
-              <SectionHeader eyebrow="Common Questions" title={<>WHAT FILMMAKERS <span className="text-white">ASK</span></>} flankingLines compact />
-
-              <div className="bg-black px-5 border border-white/[0.06] rounded-xl">
-                <Accordion type="single" collapsible className="w-full">
-                  {faqs.map((faq, i) => (
-                    <AccordionItem key={faq.q} value={`faq-${i}`} className="border-b border-white/[0.08]">
-                      <AccordionTrigger onClick={() => haptics.light()} className="font-bebas text-lg md:text-xl tracking-[0.08em] uppercase text-gold/80 hover:text-gold hover:no-underline text-left">
-                        {faq.q}
-                      </AccordionTrigger>
-                      <AccordionContent className="text-white/60 text-[15px] leading-relaxed normal-case font-sans">
-                        {faq.a}
-                      </AccordionContent>
-                    </AccordionItem>
-                  ))}
-                </Accordion>
-              </div>
-            </div>
-          </SectionFrame>
-
-
-          {/* ──────────────────────────────────────────────────────────
-               § 9  FINAL CTA
+               § 5  FINAL CTA
              ────────────────────────────────────────────────────────── */}
           <section id="final-cta" className="snap-section py-10 px-4">
             <div
