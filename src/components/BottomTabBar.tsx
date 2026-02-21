@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Home, Calculator, ShoppingBag, BookOpen, MoreHorizontal } from "lucide-react";
+import { Home, Calculator, ShoppingBag, BookOpen } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useHaptics } from "@/hooks/use-haptics";
 
@@ -9,21 +9,15 @@ const tabs = [
   { id: "calculator", path: "/calculator", label: "CALC", icon: Calculator },
   { id: "store",      path: "/store",      label: "SHOP", icon: ShoppingBag },
   { id: "resources",  path: "/resources",  label: "INFO", icon: BookOpen },
-  { id: "more",       path: null,          label: "MORE", icon: MoreHorizontal },
 ];
 
-interface BottomTabBarProps {
-  onMoreOpen?: () => void;
-}
-
-const BottomTabBar = ({ onMoreOpen }: BottomTabBarProps) => {
+const BottomTabBar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const haptics = useHaptics();
   const [rippleId, setRippleId] = useState<string | null>(null);
 
-  const getActive = (path: string | null) => {
-    if (!path) return false;
+  const getActive = (path: string) => {
     if (path === "/") return location.pathname === "/";
     return location.pathname.startsWith(path);
   };
@@ -31,13 +25,9 @@ const BottomTabBar = ({ onMoreOpen }: BottomTabBarProps) => {
   const handleTap = useCallback((tab: typeof tabs[0]) => {
     haptics.light();
     setRippleId(tab.id);
-    if (tab.id === "more") {
-      onMoreOpen?.();
-    } else if (tab.path) {
-      navigate(tab.path);
-    }
+    navigate(tab.path);
     setTimeout(() => setRippleId(null), 420);
-  }, [navigate, haptics, onMoreOpen]);
+  }, [navigate, haptics]);
 
   const GOLD_FULL = "rgba(212,175,55,1)";
   const GOLD_DIM  = "rgba(212,175,55,0.75)";
@@ -66,7 +56,7 @@ const BottomTabBar = ({ onMoreOpen }: BottomTabBarProps) => {
           WebkitBackdropFilter: "blur(16px)",
           border: "1.5px solid rgba(212,175,55,0.60)",
           boxShadow:
-            "0 8px 32px rgba(0,0,0,0.90), 0 0 0 1px rgba(212,175,55,0.15), 0 0 20px rgba(212,175,55,0.12), inset 0 0.5px 0 rgba(212,175,55,0.10)",
+            "0 8px 32px rgba(0,0,0,0.90), 0 0 0 1px rgba(212,175,55,0.15), 0 0 12px rgba(212,175,55,0.06), inset 0 0.5px 0 rgba(212,175,55,0.10)",
           paddingLeft: "6px",
           paddingRight: "6px",
         }}
@@ -90,7 +80,7 @@ const BottomTabBar = ({ onMoreOpen }: BottomTabBarProps) => {
                 isActive && "rounded-lg",
               )}
               style={{
-                background: isActive ? "rgba(212,175,55,0.15)" : "transparent",
+                background: isActive ? "rgba(212,175,55,0.06)" : "transparent",
               }}
               aria-label={tab.label}
             >
@@ -111,7 +101,7 @@ const BottomTabBar = ({ onMoreOpen }: BottomTabBarProps) => {
                   fontSize: "11px",
                   letterSpacing: isActive ? "0.16em" : "0.10em",
                   fontWeight: 500,
-                  color: isActive ? GOLD_FULL : GOLD_DIM,
+                  color: isActive ? GOLD_FULL : "rgba(255,255,255,0.55)",
                 }}
               >
                 {tab.label}
@@ -126,7 +116,6 @@ const BottomTabBar = ({ onMoreOpen }: BottomTabBarProps) => {
                     borderRadius: "2px",
                     background: GOLD_FULL,
                     display: "block",
-                    boxShadow: "0 0 8px rgba(212,175,55,0.50), 0 0 16px rgba(212,175,55,0.20)",
                   }}
                 />
               )}

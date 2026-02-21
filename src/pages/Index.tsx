@@ -276,29 +276,12 @@ const Index = () => {
              ────────────────────────────────────────────────────────── */}
           <section id="hero" className="snap-section min-h-0 pt-20 pb-12 flex flex-col justify-center relative overflow-hidden">
             <div className="absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none animate-spotlight-pulse"
-              style={{ width: '100vw', height: '120%', background: `radial-gradient(ellipse 50% 50% at 50% 15%, rgba(212,175,55,0.10) 0%, rgba(212,175,55,0.04) 45%, transparent 75%)` }} />
+              style={{ width: '100vw', height: '120%', background: `radial-gradient(ellipse 35% 35% at 50% 15%, rgba(212,175,55,0.06) 0%, rgba(212,175,55,0.04) 45%, transparent 75%)` }} />
             {/* Static spotlight cone — settled version of cinematic intro beam */}
             <div className="absolute top-0 left-0 right-0 bottom-0 pointer-events-none"
               style={{
-                background: `radial-gradient(ellipse 25% 40% at 50% 0%, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.06) 30%, rgba(212,175,55,0.02) 50%, transparent 70%)`,
+                background: `radial-gradient(ellipse 25% 40% at 50% 0%, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.03) 30%, rgba(212,175,55,0.02) 50%, transparent 70%)`,
                 clipPath: 'polygon(42% 0%, 58% 0%, 72% 100%, 28% 100%)',
-              }} />
-            {/* Left spotlight cone */}
-            <div className="absolute top-0 left-0 right-0 bottom-0 pointer-events-none"
-              style={{
-                background: `radial-gradient(ellipse 20% 35% at 30% 0%, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.03) 40%, transparent 70%)`,
-                clipPath: 'polygon(22% 0%, 38% 0%, 55% 100%, 15% 100%)',
-              }} />
-            {/* Right spotlight cone */}
-            <div className="absolute top-0 left-0 right-0 bottom-0 pointer-events-none"
-              style={{
-                background: `radial-gradient(ellipse 20% 35% at 70% 0%, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.03) 40%, transparent 70%)`,
-                clipPath: 'polygon(62% 0%, 78% 0%, 85% 100%, 45% 100%)',
-              }} />
-            {/* Floor bounce glow */}
-            <div className="absolute bottom-0 left-0 right-0 h-1/3 pointer-events-none"
-              style={{
-                background: `radial-gradient(ellipse 400px 80% at 50% 100%, rgba(212,175,55,0.06) 0%, rgba(255,255,255,0.03) 40%, transparent 70%)`,
               }} />
             <div className="relative px-6 py-4 max-w-xl mx-auto text-center">
               <div className="mb-5 relative inline-block">
@@ -333,7 +316,9 @@ const Index = () => {
           <SectionFrame id="waterfall">
             <div ref={revWater.ref} className={cn("transition-all duration-700 ease-out", revWater.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
 
-              <p className="text-white/50 text-[15px] text-center mb-6">Based on a hypothetical $1.8M budget and a $3M acquisition.</p>
+              <h2 className="font-bebas text-[36px] md:text-[44px] text-gold tracking-[0.08em] text-center">THE WATERFALL</h2>
+              <p className="text-[14px] text-white/40 tracking-[0.12em] uppercase text-center">Your recoupment structure</p>
+              <p className="text-white/50 text-[15px] text-center mb-6 mt-4">Based on a hypothetical $1.8M budget and a $3M acquisition.</p>
 
               <div ref={waterBarRef} className="max-w-md mx-auto">
                 {/* Waterfall rows — unified financial table */}
@@ -411,8 +396,8 @@ const Index = () => {
                     </span>
                   </div>
                   <div className="border border-gold/25 bg-black px-4 py-5 text-center rounded-lg">
-                    <p className="text-[10px] tracking-[0.2em] uppercase font-semibold text-white/45 mb-1">Investor Corridor</p>
-                    <span className="font-mono text-[18px] font-bold text-white/70">
+                    <p className="text-[10px] tracking-[0.2em] uppercase font-semibold text-gold/60 mb-1">Investor Corridor</p>
+                    <span className="font-mono text-[18px] font-bold text-gold">
                       ${investorVal.toLocaleString()}
                     </span>
                   </div>
@@ -605,7 +590,7 @@ const Index = () => {
                       Filmmakers have a perception in the business world of being kind of flaky dudes{"\u2026"} you need to be buttoned down{"\u2026"} speak the language that they speak.
                     </p>
                   </blockquote>
-                  <div className="mt-4 -mx-1 p-3 bg-gold/[0.06] border border-gold/25 rounded-lg">
+                  <div className="mt-4 pt-3">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-[1.5px] bg-gold/50" />
                       <cite className="not-italic">
@@ -615,27 +600,6 @@ const Index = () => {
                     <p className="text-white/50 text-[13px] tracking-[0.08em] mt-1.5 ml-9">Blumhouse "Paranormal Activity"</p>
                   </div>
                 </div>
-              </div>
-            </div>
-          </section>
-
-          {/* ──────────────────────────────────────────────────────────
-               DECLARATION — the hinge before gatekeepers
-             ────────────────────────────────────────────────────────── */}
-          <section className="py-10 md:py-16 px-6 relative">
-            <div className="absolute inset-0 pointer-events-none"
-              style={{ background: 'radial-gradient(ellipse 320px 55% at 50% 50%, rgba(212,175,55,0.07) 0%, transparent 70%)' }} />
-            <div ref={revDecl.ref} className={cn("max-w-md mx-auto relative transition-all duration-700 ease-out", revDecl.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5")}>
-              <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
-              <div className="py-12 px-4 text-center">
-                <h3 className="font-bebas text-[32px] md:text-[40px] tracking-[0.08em] uppercase text-gold leading-tight">
-                  We Built The Toolkit They Didn{"\u2019"}t Teach You In Film{"\u00A0"}<span className="text-white">School</span>.
-                </h3>
-              </div>
-              <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
-              <div className="flex justify-center mt-6 cursor-pointer active:scale-[0.97]"
-                onClick={() => { haptics.light(); document.getElementById('cost')?.scrollIntoView({ behavior: 'smooth' }); }}>
-                <ChevronDown className="w-5 h-5 text-gold/50 animate-bounce-subtle" />
               </div>
             </div>
           </section>
@@ -683,6 +647,27 @@ const Index = () => {
               </div>
             </div>
           </SectionFrame>
+
+          {/* ──────────────────────────────────────────────────────────
+               DECLARATION — the hinge before final CTA
+             ────────────────────────────────────────────────────────── */}
+          <section className="py-10 md:py-16 px-6 relative">
+            <div className="absolute inset-0 pointer-events-none"
+              style={{ background: 'radial-gradient(ellipse 320px 55% at 50% 50%, rgba(212,175,55,0.07) 0%, transparent 70%)' }} />
+            <div ref={revDecl.ref} className={cn("max-w-md mx-auto relative transition-all duration-700 ease-out", revDecl.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5")}>
+              <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
+              <div className="py-12 px-4 text-center">
+                <h3 className="font-bebas text-[32px] md:text-[40px] tracking-[0.08em] uppercase text-gold leading-tight">
+                  We Built The Toolkit They Didn{"\u2019"}t Teach You In Film{"\u00A0"}<span className="text-white">School</span>.
+                </h3>
+              </div>
+              <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
+              <div className="flex justify-center mt-6 cursor-pointer active:scale-[0.97]"
+                onClick={() => { haptics.light(); document.getElementById('final-cta')?.scrollIntoView({ behavior: 'smooth' }); }}>
+                <ChevronDown className="w-5 h-5 text-gold/50 animate-bounce-subtle" />
+              </div>
+            </div>
+          </section>
 
 
           {/* ──────────────────────────────────────────────────────────
