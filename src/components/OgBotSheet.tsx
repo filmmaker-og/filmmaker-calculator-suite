@@ -290,12 +290,12 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
                     onMouseEnter={e => {
                       e.currentTarget.style.borderColor = "rgba(212,175,55,0.60)";
                       e.currentTarget.style.background = "rgba(212,175,55,0.14)";
-                      e.currentTarget.style.color = "rgba(212,175,55,1)";
+                      e.currentTarget.style.color = "rgba(255,255,255,1)";
                     }}
                     onMouseLeave={e => {
                       e.currentTarget.style.borderColor = "rgba(212,175,55,0.30)";
                       e.currentTarget.style.background = "rgba(212,175,55,0.08)";
-                      e.currentTarget.style.color = "rgba(212,175,55,0.85)";
+                      e.currentTarget.style.color = "rgba(255,255,255,0.80)";
                     }}
                     onTouchStart={e => {
                       e.currentTarget.style.borderColor = "rgba(212,175,55,0.60)";
@@ -309,7 +309,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
                       borderRadius: "10px",
                       borderColor: "rgba(212,175,55,0.30)",
                       background: "rgba(212,175,55,0.08)",
-                      color: "rgba(212,175,55,0.85)",
+                      color: "rgba(255,255,255,0.80)",
                     }}
                   >
                     {chip}
@@ -422,7 +422,6 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
                   style={{ background: "rgba(212,175,55,1)", color: "#000", borderRadius: "0 11px 11px 0" }}
                 >
                 <SendHorizonal className="w-4 h-4" />
-                <span className="text-base hidden sm:block">ASK</span>
               </button>
             </div>
             <div className="flex items-center justify-end mt-1.5 px-1">

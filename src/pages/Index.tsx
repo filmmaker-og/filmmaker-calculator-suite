@@ -328,7 +328,7 @@ const Index = () => {
           <SectionFrame id="waterfall">
             <div ref={revWater.ref} className={cn("transition-all duration-700 ease-out", revWater.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
 
-              <h2 className="font-bebas text-[36px] md:text-[44px] text-gold tracking-[0.08em] text-center mb-1">THE WATERFALL</h2>
+              <h2 className="font-bebas text-[36px] md:text-[44px] text-gold tracking-[0.08em] text-center mb-1">THE <span className="text-white">WATERFALL</span></h2>
               <p className="text-[15px] text-white/50 tracking-[0.12em] uppercase text-center mb-2">Your recoupment structure</p>
 
               <div ref={waterBarRef} className="max-w-md mx-auto">
@@ -413,7 +413,7 @@ const Index = () => {
                     </span>
                   </div>
                 </div>
-                <p className="text-white/50 text-[15px] text-center mt-5">Based on a hypothetical $1.8M budget and a $3M acquisition.</p>
+                <p className="font-mono text-[12px] text-white/35 text-center mt-5">Based on a hypothetical $1.8M budget and a $3M acquisition.</p>
               </div>
             </div>
           </SectionFrame>
@@ -426,7 +426,7 @@ const Index = () => {
             <div ref={revEvidence.ref} className={cn("transition-all duration-700 ease-out", revEvidence.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
 
               <div className="text-center mb-10">
-                <p className="text-white/40 text-[11px] tracking-[0.25em] uppercase font-semibold mb-3 text-center">The Problem</p>
+                <p className="text-white/40 text-[12px] tracking-[0.25em] uppercase font-semibold mb-5 text-center">The Problem</p>
                 <h2
                   className="font-bebas text-[40px] md:text-[52px] tracking-[0.06em] leading-[0.95] text-gold"
                   style={{
@@ -627,7 +627,7 @@ const Index = () => {
               <div className="text-center mb-8">
                 <h2 className="font-bebas text-[36px] md:text-[44px] tracking-[0.08em] text-gold"
                   style={{ textShadow: revCost.visible ? '0 0 30px rgba(212,175,55,0.4), 0 0 60px rgba(212,175,55,0.15)' : 'none' }}>
-                  THE REALITY
+                  THE <span className="text-white">REALITY</span>
                 </h2>
               </div>
 
@@ -676,7 +676,6 @@ const Index = () => {
             <div className="absolute inset-0 pointer-events-none"
               style={{ background: 'radial-gradient(ellipse 320px 55% at 50% 50%, rgba(212,175,55,0.07) 0%, transparent 70%)' }} />
             <div ref={revDecl.ref} className={cn("max-w-md mx-auto relative transition-all duration-700 ease-out", revDecl.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5")}>
-              <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
               <div className="py-12 px-4 text-center">
                 <h3
                   className="font-bebas text-[32px] md:text-[40px] tracking-[0.08em] uppercase text-gold leading-tight"
@@ -685,7 +684,6 @@ const Index = () => {
                   We Built The Toolkit They Didn{"\u2019"}t Teach You In Film{"\u00A0"}<span className="text-white">School</span>.
                 </h3>
               </div>
-              <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
               <div className="flex justify-center mt-6 cursor-pointer active:scale-[0.97]"
                 onClick={() => { haptics.light(); document.getElementById('final-cta')?.scrollIntoView({ behavior: 'smooth' }); }}>
                 <ChevronDown className="w-5 h-5 text-gold/50 animate-bounce-subtle" />
@@ -715,8 +713,8 @@ const Index = () => {
 
               <div className="relative p-10 md:p-16 max-w-md mx-auto text-center">
                 <p className="text-white/50 text-[13px] tracking-[0.3em] uppercase font-semibold mb-5">The Moment of Truth</p>
-                <h2 className="font-bebas text-4xl md:text-5xl leading-[1.1] tracking-[0.08em] text-gold mb-8">
-                  YOUR INVESTOR WILL ASK<br />HOW THE MONEY FLOWS <span className="text-white">BACK</span>.
+                <h2 className="font-bebas text-[34px] md:text-[44px] leading-[1.1] tracking-[0.08em] text-gold mb-8">
+                  YOUR INVESTOR WILL{"\u00A0"}ASK HOW THE MONEY FLOWS <span className="text-white">BACK</span>.
                 </h2>
                 <button onClick={handleStartClick}
                   className="w-full max-w-[320px] h-14 btn-cta-final mx-auto">
