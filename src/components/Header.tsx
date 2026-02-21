@@ -37,7 +37,7 @@ const Header = ({ rightSlot }: HeaderProps) => {
         <div
           className="h-[1px] w-full"
           style={{
-            background: "linear-gradient(90deg, transparent 0%, rgba(212, 175, 55, 0.55) 20%, rgba(212, 175, 55, 0.55) 80%, transparent 100%)",
+            background: "linear-gradient(90deg, transparent 0%, rgba(212, 175, 55, 0.45) 20%, rgba(212, 175, 55, 0.45) 80%, transparent 100%)",
           }}
         />
       </header>

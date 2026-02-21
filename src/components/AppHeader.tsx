@@ -1,23 +1,10 @@
-import { ReactNode, createContext, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { MoreVertical } from "lucide-react";
 import { useHaptics } from "@/hooks/use-haptics";
 
 /* ═══════════════════════════════════════════════════════════════════
-   HeaderCtaContext — allows any page to inject a CTA into the header
-   ═══════════════════════════════════════════════════════════════════ */
-interface HeaderCtaContextType {
-  ctaSlot: ReactNode;
-  setCtaSlot: (node: ReactNode) => void;
-}
-
-export const HeaderCtaContext = createContext<HeaderCtaContextType>({ ctaSlot: null, setCtaSlot: () => {} });
-export const useHeaderCta = () => useContext(HeaderCtaContext);
-
-/* ═══════════════════════════════════════════════════════════════════
    AppHeader — unified global header for all pages
    Left:   FILMMAKER.OG (→ home)
-   Center: optional CTA slot
    Right:  kebab menu (→ MobileMenu)
    ═══════════════════════════════════════════════════════════════════ */
 interface AppHeaderProps {
@@ -29,26 +16,48 @@ const GOLD_FULL = "rgba(212,175,55,1)";
 const AppHeader = ({ onMoreOpen }: AppHeaderProps) => {
   const navigate = useNavigate();
   const haptics = useHaptics();
-  const { ctaSlot } = useHeaderCta();
 
   return (
     <>
       <header
-        className="fixed top-0 left-0 right-0 z-[150]"
-        style={{ background: "var(--bg-header)" }}
+        className="fixed top-0 left-0 right-0 z-[150] flex justify-center"
+        style={{ background: "transparent", pointerEvents: "none" }}
       >
-        <div
-          className="flex items-center justify-between px-4"
-          style={{ height: "var(--appbar-h)" }}
+        {/* Floating centered bar */}
+        <nav
+          className="relative flex items-center justify-between overflow-hidden"
+          style={{
+            pointerEvents: "auto",
+            width: "100%",
+            maxWidth: "300px",
+            height: "var(--appbar-h)",
+            marginTop: "12px",
+            borderRadius: "16px",
+            background: "rgba(10,10,10,0.88)",
+            backdropFilter: "blur(16px)",
+            WebkitBackdropFilter: "blur(16px)",
+            border: "1.5px solid rgba(212,175,55,0.35)",
+            boxShadow:
+              "0 8px 32px rgba(0,0,0,0.90), 0 0 0 1px rgba(212,175,55,0.10), 0 0 20px rgba(212,175,55,0.08)",
+            paddingLeft: "16px",
+            paddingRight: "12px",
+          }}
         >
+          {/* Gold top edge line inside the bar */}
+          <div
+            className="absolute top-0 left-0 right-0 h-[1px] pointer-events-none"
+            style={{
+              background: "linear-gradient(90deg, transparent 0%, rgba(212,175,55,0.30) 30%, rgba(212,175,55,0.40) 50%, rgba(212,175,55,0.30) 70%, transparent 100%)",
+            }}
+          />
+
           {/* Left — FILMMAKER.OG wordmark */}
           <button
             onClick={() => { haptics.light(); navigate("/"); }}
             className="flex items-center gap-2.5 hover:opacity-80 transition-opacity group flex-shrink-0"
             aria-label="Go home"
           >
-            <span
-              className="font-bebas text-[22px] tracking-[0.2em] group-hover:opacity-80 transition-opacity duration-200"
+            <span className="font-bebas text-[22px] tracking-[0.2em] group-hover:opacity-80 transition-opacity duration-200"
               style={{ color: GOLD_FULL }}
             >
               FILMMAKER
@@ -57,13 +66,6 @@ const AppHeader = ({ onMoreOpen }: AppHeaderProps) => {
               </span>
             </span>
           </button>
-
-          {/* Center — optional CTA slot */}
-          {ctaSlot && (
-            <div className="flex-1 flex justify-center px-3 overflow-hidden">
-              {ctaSlot}
-            </div>
-          )}
 
           {/* Right — kebab menu */}
           <button
@@ -77,17 +79,14 @@ const AppHeader = ({ onMoreOpen }: AppHeaderProps) => {
           >
             <MoreVertical
               className="w-5 h-5"
-              style={{ color: "rgba(212,175,55,0.65)" }}
+              style={{ color: GOLD_FULL }}
             />
           </button>
-        </div>
-
-        {/* Gold line separator */}
-        <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-gold/45 to-transparent" />
+        </nav>
       </header>
 
-      {/* Spacer for fixed header */}
-      <div style={{ height: "var(--appbar-h)" }} className="flex-shrink-0" />
+      {/* Spacer for fixed header — accounts for margin-top + bar height */}
+      <div style={{ height: "calc(var(--appbar-h) + 12px)" }} className="flex-shrink-0" />
     </>
   );
 };

@@ -1,4 +1,4 @@
-import { lazy, ReactNode, Suspense, useState } from "react";
+import { lazy, Suspense, useState } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -8,7 +8,7 @@ import BottomTabBar from "./components/BottomTabBar";
 import OgBotSheet from "./components/OgBotSheet";
 import OgBotFab from "./components/OgBotFab";
 import MobileMenu from "./components/MobileMenu";
-import AppHeader, { HeaderCtaContext } from "./components/AppHeader";
+import AppHeader from "./components/AppHeader";
 
 /* ═══════════════════════════════════════════════════════════════════
    Lazy-loaded pages — only the landing page is eagerly loaded.
@@ -48,10 +48,9 @@ const queryClient = new QueryClient();
 const AppShell = () => {
   const [isBotOpen, setIsBotOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [ctaSlot, setCtaSlot] = useState<ReactNode>(null);
 
   return (
-    <HeaderCtaContext.Provider value={{ ctaSlot, setCtaSlot }}>
+    <>
       <AppHeader
         onMoreOpen={() => setIsMenuOpen(true)}
       />
@@ -81,7 +80,7 @@ const AppShell = () => {
       <MobileMenu isOpen={isMenuOpen} onOpenChange={setIsMenuOpen} />
       <OgBotFab onClick={() => setIsBotOpen(true)} isActive={isBotOpen} />
       <BottomTabBar />
-    </HeaderCtaContext.Provider>
+    </>
   );
 };
 

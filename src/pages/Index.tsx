@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect, useMemo, useRef, useCallback } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useHaptics } from "@/hooks/use-haptics";
 import {
@@ -12,6 +12,8 @@ import filmmakerLogo from "@/assets/filmmaker-f-icon.png";
 import LeadCaptureModal from "@/components/LeadCaptureModal";
 import { cn } from "@/lib/utils";
 import SectionFrame from "@/components/SectionFrame";
+
+const CINEMATIC_SEEN_KEY = "filmmaker_og_intro_seen";
 
 /* ═══════════════════════════════════════════════════════════════════
    CLOSED DOORS — the reality of what's available
@@ -62,6 +64,7 @@ const useReveal = (threshold = 0.15) => {
    ═══════════════════════════════════════════════════════════════════ */
 const Index = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const haptics = useHaptics();
 
 
@@ -89,9 +92,14 @@ const Index = () => {
     }
   }, [hasSession, navigate]);
 
+  // Intro skip
+  const introTimersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
+  const [showSkipHint, setShowSkipHint] = useState(false);
+
   // Reveals
   const revEvidence    = useReveal();
   const revMission     = useReveal();
+  const revWater       = useReveal();
   const revCost        = useReveal();
   const revDecl        = useReveal();
   const revFinal       = useReveal();
@@ -153,7 +161,50 @@ const Index = () => {
     return () => clearTimeout(delay);
   }, [barsRevealed]);
 
+  // Cinematic intro
+  const hasSeenCinematic = useMemo(() => {
+    try { return localStorage.getItem(CINEMATIC_SEEN_KEY) === "true"; } catch { return false; }
+  }, []);
+  const shouldSkip = searchParams.get("skipIntro") === "true" || hasSeenCinematic;
+  const [phase, setPhase] = useState<'dark'|'beam'|'logo'|'pulse'|'tagline'|'complete'>(shouldSkip ? 'complete' : 'dark');
+
+  useEffect(() => {
+    if (shouldSkip) return;
+    introTimersRef.current = [
+      setTimeout(() => setPhase('beam'), 300),
+      setTimeout(() => setPhase('logo'), 800),
+      setTimeout(() => setPhase('pulse'), 1300),
+      setTimeout(() => setPhase('tagline'), 1800),
+      setTimeout(() => setPhase('complete'), 2600),
+    ];
+    return () => introTimersRef.current.forEach(clearTimeout);
+  }, [shouldSkip]);
+
+  // Show "tap to skip" hint after 1s
+  useEffect(() => {
+    if (shouldSkip || phase === 'complete') return;
+    const t = setTimeout(() => setShowSkipHint(true), 1000);
+    return () => clearTimeout(t);
+  }, [shouldSkip, phase]);
+
+  const handleSkipIntro = useCallback(() => {
+    introTimersRef.current.forEach(clearTimeout);
+    setPhase('complete');
+  }, []);
+
+  useEffect(() => {
+    if (phase === 'complete' && !hasSeenCinematic) {
+      try { localStorage.setItem(CINEMATIC_SEEN_KEY, "true"); } catch {}
+    }
+  }, [phase, hasSeenCinematic]);
+
   const handleStartClick    = () => { haptics.medium(); gatedNavigate("/calculator?tab=budget"); };
+
+  const isComplete = phase === 'complete';
+  const showBeam = phase !== 'dark' && !shouldSkip;
+  const showLogo = (phase !== 'dark' && phase !== 'beam') || shouldSkip;
+  const isPulsed = ['pulse','tagline','complete'].includes(phase) || shouldSkip;
+  const showTagline = ['tagline','complete'].includes(phase) || shouldSkip;
 
   return (
     <>
@@ -171,8 +222,54 @@ const Index = () => {
 
       <div className="min-h-screen flex flex-col relative overflow-hidden bg-black">
 
+        {/* ═══════ CINEMATIC INTRO ═══════ */}
+        {!shouldSkip && (
+          <div
+            className={cn("fixed inset-0 z-[100] flex items-center justify-center transition-opacity duration-1000 cursor-pointer", isComplete ? "opacity-0 pointer-events-none" : "opacity-100")}
+            style={{ backgroundColor: '#000' }}
+            onClick={handleSkipIntro}
+            role="button"
+            aria-label="Skip intro"
+          >
+            <div className={cn("absolute inset-0 pointer-events-none transition-all duration-1000", showBeam ? "opacity-100" : "opacity-0")}
+              style={{ background: `radial-gradient(ellipse 70% 60% at 50% 0%, rgba(212,175,55,0.08) 0%, rgba(255,255,255,0.12) 20%, rgba(255,255,255,0.05) 40%, rgba(255,255,255,0.01) 60%, transparent 80%)`, clipPath: showBeam ? 'polygon(25% 0%,75% 0%,95% 100%,5% 100%)' : 'polygon(48% 0%,52% 0%,52% 30%,48% 30%)', transition: 'clip-path 1.2s cubic-bezier(0.22,1,0.36,1), opacity 0.8s ease' }} />
+            <div className={cn("absolute inset-0 pointer-events-none transition-all duration-1000", showBeam ? "opacity-100" : "opacity-0")}
+              style={{ background: `radial-gradient(ellipse 30% 45% at 50% 0%, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.15) 30%, rgba(212,175,55,0.05) 50%, transparent 70%)`, clipPath: showBeam ? 'polygon(38% 0%,62% 0%,78% 100%,22% 100%)' : 'polygon(48% 0%,52% 0%,52% 30%,48% 30%)', transition: 'clip-path 1s cubic-bezier(0.22,1,0.36,1) 0.1s, opacity 0.8s ease' }} />
+            <div className={cn("absolute left-1/2 top-1/2 w-[400px] h-[400px] pointer-events-none transition-all duration-700", showLogo ? "opacity-100" : "opacity-0")}
+              style={{ background: `radial-gradient(circle, rgba(212,175,55,0.12) 0%, rgba(255,255,255,0.08) 30%, transparent 70%)`, transform: 'translate(-50%,-50%)', filter: 'blur(40px)', animation: isPulsed ? 'focal-pulse 3s ease-in-out infinite' : 'none' }} />
+            <div className="relative z-10 flex flex-col items-center">
+              <div className={cn("relative transition-all duration-1000 ease-out", showLogo ? "opacity-100 scale-100 translate-y-0" : "opacity-0 scale-90 translate-y-6")}>
+                <div className={cn("absolute inset-0 -m-4 transition-opacity duration-700", isPulsed ? "opacity-100" : "opacity-0")}
+                  style={{ background: 'radial-gradient(circle, rgba(212,175,55,0.5) 0%, transparent 70%)', filter: 'blur(15px)' }} />
+                <img src={filmmakerLogo} alt="Filmmaker.OG" className="w-32 h-32 object-contain relative z-10"
+                  style={{ filter: 'brightness(1.25) saturate(1.1)', transition: 'filter 0.7s ease' }} />
+              </div>
+              <p className={cn("mt-8 text-sm tracking-[0.4em] uppercase font-semibold transition-all duration-700", showTagline ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3")}
+                style={{ color: '#D4AF37', textShadow: '0 0 20px rgba(212,175,55,0.4)' }}>Know Your Numbers</p>
+              <div className="mt-6 w-32 h-[2px] overflow-hidden bg-white/10">
+                <div className={cn("h-full bg-gold", showTagline ? "animate-progress-draw" : "")}
+                  style={{ boxShadow: '0 0 15px rgba(212,175,55,0.7)', width: showTagline ? undefined : '0%' }} />
+              </div>
+            </div>
+
+            {/* Tap to skip hint */}
+            <p
+              className={cn(
+                "absolute bottom-10 left-1/2 -translate-x-1/2",
+                "text-[11px] tracking-[0.3em] uppercase text-white/25",
+                "transition-all duration-500 select-none pointer-events-none",
+                showSkipHint && !isComplete
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-1"
+              )}
+            >
+              tap to skip
+            </p>
+          </div>
+        )}
+
         {/* ═══════ LANDING PAGE ═══════ */}
-        <main aria-label="Film Finance Simulator" className="flex-1 flex flex-col" style={{ paddingBottom: "calc(var(--bottom-bar-h) + env(safe-area-inset-bottom))" }}>
+        <main aria-label="Film Finance Simulator" className={cn("flex-1 flex flex-col transition-all duration-700", isComplete ? "opacity-100" : "opacity-0")} style={{ paddingBottom: "calc(var(--bottom-bar-h) + env(safe-area-inset-bottom))" }}>
 
           {/* ──────────────────────────────────────────────────────────
                § 1  HERO
@@ -229,7 +326,7 @@ const Index = () => {
                § 2  THE WATERFALL — immediately after hero
              ────────────────────────────────────────────────────────── */}
           <SectionFrame id="waterfall">
-            <div>
+            <div ref={revWater.ref} className={cn("transition-all duration-700 ease-out", revWater.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
 
               <h2 className="font-bebas text-[36px] md:text-[44px] text-gold tracking-[0.08em] text-center mb-1">THE <span className="text-white">WATERFALL</span></h2>
               <p className="text-[15px] text-white/50 tracking-[0.12em] uppercase text-center mb-2">Your recoupment structure</p>
@@ -633,14 +730,7 @@ const Index = () => {
 
           {/* ── FOOTER ── */}
           <footer className="py-8 px-6">
-            <div
-              className="mx-auto max-w-sm mb-6 h-px"
-              style={{
-                background:
-                  "linear-gradient(90deg, transparent 0%, rgba(212,175,55,0.35) 30%, rgba(212,175,55,0.50) 50%, rgba(212,175,55,0.35) 70%, transparent 100%)",
-              }}
-            />
-            <p className="text-white/50 text-xs tracking-wide leading-relaxed text-center max-w-sm mx-auto">
+            <p className="text-white/30 text-xs tracking-wide leading-relaxed text-center max-w-sm mx-auto">
               For educational and informational purposes only. Not legal, tax, or investment advice.
               Consult a qualified entertainment attorney before making financing decisions.
             </p>
