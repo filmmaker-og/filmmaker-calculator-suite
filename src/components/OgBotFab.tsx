@@ -51,15 +51,15 @@ const OgBotFab = ({ onClick, isActive }: OgBotFabProps) => {
         }}
       />
 
-      {/* Sparkle accent — top-right corner */}
+      {/* Sparkle accent — inside top-right */}
       <Sparkles
         className="absolute pointer-events-none"
         style={{
-          top: "-2px",
-          right: "-2px",
-          width: "13px",
-          height: "13px",
-          color: "rgba(212,175,55,0.70)",
+          top: "6px",
+          right: "6px",
+          width: "11px",
+          height: "11px",
+          color: "rgba(212,175,55,0.60)",
         }}
         strokeWidth={2}
       />
@@ -68,24 +68,12 @@ const OgBotFab = ({ onClick, isActive }: OgBotFabProps) => {
       <span
         className="relative font-bebas leading-none"
         style={{
-          fontSize: "20px",
+          fontSize: "22px",
           letterSpacing: "0.16em",
           color: isActive ? "#000000" : "rgba(212,175,55,1)",
         }}
       >
         OG
-      </span>
-      {/* bot label */}
-      <span
-        className="relative font-bebas uppercase leading-none"
-        style={{
-          fontSize: "9px",
-          letterSpacing: "0.20em",
-          color: isActive ? "rgba(0,0,0,0.55)" : "rgba(212,175,55,0.55)",
-          marginTop: "1px",
-        }}
-      >
-        bot
       </span>
     </button>
   );
