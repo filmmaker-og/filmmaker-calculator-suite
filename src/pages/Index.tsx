@@ -301,7 +301,7 @@ const Index = () => {
                 <img src={filmmakerLogo} alt="Filmmaker.OG" className="relative z-10 w-[96px] h-[96px] object-contain"
                   style={{ filter: 'brightness(1.25) saturate(1.1) drop-shadow(0 0 12px rgba(212,175,55,0.5))' }} />
               </div>
-              <h1 className="font-bebas text-[clamp(2.8rem,9vw,4.2rem)] leading-[1.05] text-gold mb-5">
+              <h1 className="font-bebas text-[clamp(2.8rem,9vw,4.2rem)] leading-[1.05] tracking-[0.06em] text-gold mb-5">
                 SEE WHERE EVERY<br /><span className="text-white">DOLLAR GOES</span>
               </h1>
               <p className="mb-6 text-white/60 text-[16px] leading-[1.7] tracking-[0.06em] uppercase font-medium max-w-[360px] mx-auto">
@@ -401,7 +401,7 @@ const Index = () => {
                 {/* Two corridor boxes — consistent treatment */}
                 <div className="grid grid-cols-2 gap-4">
                   <div className="border border-gold/25 bg-black px-4 py-5 text-center rounded-lg">
-                    <p className="text-[10px] tracking-[0.2em] uppercase font-semibold text-gold/70 mb-1">Producer Corridor</p>
+                    <p className="text-[10px] tracking-[0.2em] uppercase font-semibold text-gold/60 mb-1">Producer Corridor</p>
                     <span className="font-mono text-[18px] font-bold text-white">
                       ${producerVal.toLocaleString()}
                     </span>
@@ -426,7 +426,7 @@ const Index = () => {
             <div ref={revEvidence.ref} className={cn("transition-all duration-700 ease-out", revEvidence.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
 
               <div className="text-center mb-10">
-                <p className="text-white/40 text-[12px] tracking-[0.25em] uppercase font-semibold mb-5 text-center">The Problem</p>
+                <p className="text-white/40 text-[15px] tracking-[0.20em] uppercase font-semibold mb-5 text-center">The Problem</p>
                 <h2
                   className="font-bebas text-[40px] md:text-[52px] tracking-[0.06em] leading-[0.95] text-gold"
                   style={{
@@ -522,7 +522,7 @@ const Index = () => {
                           style={{ transitionDelay: revMission.visible ? `${200 + i * 120}ms` : '0ms' }}
                         >
                           <Check className="w-3.5 h-3.5 text-gold/50 flex-shrink-0 relative top-[2px]" />
-                          <p className="text-white/60 text-[15px] leading-relaxed">
+                          <p className="text-white/60 text-[16px] leading-relaxed">
                             <span className="text-white/80 font-semibold">{row.asset}</span> has {row.tool}.
                           </p>
                         </div>
@@ -676,13 +676,17 @@ const Index = () => {
             <div className="absolute inset-0 pointer-events-none"
               style={{ background: 'radial-gradient(ellipse 320px 55% at 50% 50%, rgba(212,175,55,0.07) 0%, transparent 70%)' }} />
             <div ref={revDecl.ref} className={cn("max-w-md mx-auto relative transition-all duration-700 ease-out", revDecl.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5")}>
-              <div className="py-12 px-4 text-center">
-                <h3
-                  className="font-bebas text-[32px] md:text-[40px] tracking-[0.08em] uppercase text-gold leading-tight"
-                  style={{ textShadow: revDecl.visible ? '0 0 30px rgba(212,175,55,0.4), 0 0 60px rgba(212,175,55,0.15)' : 'none' }}
-                >
-                  We Built The Toolkit They Didn{"\u2019"}t Teach You In Film{"\u00A0"}<span className="text-white">School</span>.
-                </h3>
+              <div className="py-12 px-4">
+                <div className="flex items-center gap-4 justify-center">
+                  <div className="h-[1.5px] w-16 flex-shrink-0 bg-gradient-to-r from-transparent to-gold/50" />
+                  <h3
+                    className="font-bebas text-[36px] md:text-[44px] tracking-[0.08em] uppercase text-gold leading-tight text-center"
+                    style={{ textShadow: revDecl.visible ? '0 0 30px rgba(212,175,55,0.4), 0 0 60px rgba(212,175,55,0.15)' : 'none' }}
+                  >
+                    We Built The Toolkit They Didn{"\u2019"}t Teach You In Film{"\u00A0"}<span className="text-white">School</span>.
+                  </h3>
+                  <div className="h-[1.5px] w-16 flex-shrink-0 bg-gradient-to-l from-transparent to-gold/50" />
+                </div>
               </div>
               <div className="flex justify-center mt-6 cursor-pointer active:scale-[0.97]"
                 onClick={() => { haptics.light(); document.getElementById('final-cta')?.scrollIntoView({ behavior: 'smooth' }); }}>
@@ -712,7 +716,7 @@ const Index = () => {
                 style={{ width: '100%', height: '100%', background: `radial-gradient(ellipse 320px 50% at 50% 20%, rgba(212,175,55,0.06) 0%, transparent 70%)` }} />
 
               <div className="relative p-10 md:p-16 max-w-md mx-auto text-center">
-                <p className="text-white/50 text-[13px] tracking-[0.3em] uppercase font-semibold mb-5">The Moment of Truth</p>
+                <p className="text-white/50 text-[14px] tracking-[0.20em] uppercase font-semibold mb-5">The Moment of Truth</p>
                 <h2 className="font-bebas text-[34px] md:text-[44px] leading-[1.1] tracking-[0.08em] text-gold mb-8">
                   YOUR INVESTOR WILL{"\u00A0"}ASK HOW THE MONEY FLOWS <span className="text-white">BACK</span>.
                 </h2>

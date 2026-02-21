@@ -17,27 +17,24 @@ const OgBotFab = ({ onClick, isActive }: OgBotFabProps) => {
         right: "16px",
         width: "56px",
         height: "56px",
-        borderRadius: "16px",
-        background: isActive
-          ? "linear-gradient(135deg, #D4AF37 0%, #F9E076 100%)"
-          : "linear-gradient(135deg, #0A0A0A 0%, #111111 100%)",
-        border: isActive
-          ? "1.5px solid rgba(249,224,118,0.70)"
-          : "1.5px solid rgba(212,175,55,0.50)",
+        borderRadius: "50%",
+        background: "transparent",
+        border: "none",
         boxShadow: isActive
-          ? "0 0 28px rgba(212,175,55,0.40), 0 4px 16px rgba(0,0,0,0.60)"
-          : "0 0 20px rgba(212,175,55,0.15), 0 4px 16px rgba(0,0,0,0.60)",
+          ? "0 0 24px rgba(212,175,55,0.35), 0 4px 16px rgba(0,0,0,0.50)"
+          : "0 4px 20px rgba(0,0,0,0.60)",
       }}
     >
-      {/* Sparkle AI indicator — top right corner */}
+      {/* Sparkle AI indicator — top right, overlapping icon edge */}
       <Sparkles
         className="absolute pointer-events-none"
         style={{
-          top: "5px",
-          right: "5px",
-          width: "12px",
-          height: "12px",
-          color: isActive ? "rgba(0,0,0,0.40)" : "rgba(212,175,55,0.65)",
+          top: "2px",
+          right: "2px",
+          width: "14px",
+          height: "14px",
+          color: isActive ? "rgba(249,224,118,0.90)" : "rgba(212,175,55,0.70)",
+          filter: isActive ? "drop-shadow(0 0 4px rgba(212,175,55,0.50))" : "none",
         }}
         strokeWidth={2}
       />
@@ -48,12 +45,10 @@ const OgBotFab = ({ onClick, isActive }: OgBotFabProps) => {
         alt=""
         className="pointer-events-none"
         style={{
-          width: "32px",
-          height: "32px",
+          width: "36px",
+          height: "36px",
           objectFit: "contain",
-          filter: isActive
-            ? "brightness(0.3)"
-            : "brightness(1.25) saturate(1.1)",
+          filter: "brightness(1.25) saturate(1.1) drop-shadow(0 0 10px rgba(212,175,55,0.40))",
         }}
       />
     </button>
