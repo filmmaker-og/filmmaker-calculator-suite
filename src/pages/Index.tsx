@@ -730,7 +730,14 @@ const Index = () => {
 
           {/* ── FOOTER ── */}
           <footer className="py-8 px-6">
-            <p className="text-white/30 text-xs tracking-wide leading-relaxed text-center max-w-sm mx-auto">
+            <div
+              className="mx-auto max-w-sm mb-6 h-px"
+              style={{
+                background:
+                  "linear-gradient(90deg, transparent 0%, rgba(212,175,55,0.35) 30%, rgba(212,175,55,0.50) 50%, rgba(212,175,55,0.35) 70%, transparent 100%)",
+              }}
+            />
+            <p className="text-white/50 text-xs tracking-wide leading-relaxed text-center max-w-sm mx-auto">
               For educational and informational purposes only. Not legal, tax, or investment advice.
               Consult a qualified entertainment attorney before making financing decisions.
             </p>

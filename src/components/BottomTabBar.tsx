@@ -51,12 +51,12 @@ const BottomTabBar = () => {
           maxWidth: "340px",
           height: "54px",
           borderRadius: "16px",
-          background: "rgba(0,0,0,0.85)",
+          background: "rgba(10,10,10,0.92)",
           backdropFilter: "blur(16px)",
           WebkitBackdropFilter: "blur(16px)",
-          border: "1.5px solid rgba(212,175,55,0.60)",
+          border: "1.5px solid rgba(212,175,55,0.55)",
           boxShadow:
-            "0 8px 32px rgba(0,0,0,0.90), 0 0 0 1px rgba(212,175,55,0.15), 0 0 12px rgba(212,175,55,0.06), inset 0 0.5px 0 rgba(212,175,55,0.10)",
+            "0 8px 32px rgba(0,0,0,0.90), 0 0 0 1px rgba(212,175,55,0.14), 0 0 16px rgba(212,175,55,0.10), inset 0 0.5px 0 rgba(212,175,55,0.12)",
           paddingLeft: "6px",
           paddingRight: "6px",
         }}
@@ -65,7 +65,7 @@ const BottomTabBar = () => {
         <div
           className="absolute top-0 left-0 right-0 h-[1px] pointer-events-none"
           style={{
-            background: "linear-gradient(90deg, transparent 0%, rgba(212,175,55,0.30) 30%, rgba(212,175,55,0.40) 50%, rgba(212,175,55,0.30) 70%, transparent 100%)",
+            background: "linear-gradient(90deg, transparent 0%, rgba(212,175,55,0.45) 30%, rgba(212,175,55,0.60) 50%, rgba(212,175,55,0.45) 70%, transparent 100%)",
           }}
         />
         {tabs.map((tab) => {
@@ -101,7 +101,7 @@ const BottomTabBar = () => {
                   fontSize: "11px",
                   letterSpacing: isActive ? "0.16em" : "0.10em",
                   fontWeight: 500,
-                  color: isActive ? GOLD_FULL : "rgba(255,255,255,0.55)",
+                  color: isActive ? GOLD_FULL : "rgba(255,255,255,0.65)",
                 }}
               >
                 {tab.label}
