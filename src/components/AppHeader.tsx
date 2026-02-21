@@ -1,40 +1,23 @@
-import { ReactNode, createContext, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { MoreVertical } from "lucide-react";
 import { useHaptics } from "@/hooks/use-haptics";
 
 /* ═══════════════════════════════════════════════════════════════════
-   HeaderCtaContext — lets Index.tsx inject a sticky CTA into the
-   header's center slot without prop-drilling through the router.
-   ═══════════════════════════════════════════════════════════════════ */
-interface HeaderCtaContextType {
-  ctaSlot: ReactNode;
-  setCtaSlot: (node: ReactNode) => void;
-}
-
-export const HeaderCtaContext = createContext<HeaderCtaContextType>({
-  ctaSlot: null,
-  setCtaSlot: () => {},
-});
-
-export const useHeaderCta = () => useContext(HeaderCtaContext);
-
-/* ═══════════════════════════════════════════════════════════════════
    AppHeader — unified global header for all pages
    Left:   FILMMAKER.OG (→ home)
-   Center: conditional CTA slot (only on landing page, injected via context)
-   Right:  F-icon bot button + vertical ⋮ menu button
+   Center: OG bot pill
+   Right:  vertical ⋮ menu button
    ═══════════════════════════════════════════════════════════════════ */
 interface AppHeaderProps {
   onMoreOpen?: () => void;
+  onBotOpen?: () => void;
 }
 
 const GOLD_FULL = "rgba(212,175,55,1)";
 const GOLD_DIM  = "rgba(212,175,55,0.65)";
 
-const AppHeader = ({ onMoreOpen }: AppHeaderProps) => {
+const AppHeader = ({ onMoreOpen, onBotOpen }: AppHeaderProps) => {
   const navigate = useNavigate();
-  const { ctaSlot } = useHeaderCta();
   const haptics = useHaptics();
 
   return (
@@ -87,12 +70,35 @@ const AppHeader = ({ onMoreOpen }: AppHeaderProps) => {
             </span>
           </button>
 
-          {/* Center — optional sticky CTA (landing page only) */}
-          {ctaSlot && (
-            <div className="flex-1 flex justify-center px-3 overflow-hidden">
-              {ctaSlot}
-            </div>
-          )}
+          {/* Center — OG bot pill */}
+          <button
+            onClick={() => { haptics.light(); onBotOpen?.(); }}
+            className="flex items-center justify-center gap-1.5 transition-all duration-200 active:scale-95 hover:opacity-90"
+            aria-label="Ask OG"
+            style={{
+              height: "36px",
+              minWidth: "88px",
+              paddingLeft: "14px",
+              paddingRight: "14px",
+              borderRadius: "999px",
+              background: "rgba(20,20,20,0.90)",
+              border: "1px solid rgba(212,175,55,0.35)",
+              boxShadow: "0 2px 8px rgba(0,0,0,0.40), inset 0 1px 0 rgba(255,255,255,0.03)",
+            }}
+          >
+            <span
+              className="font-bebas text-[15px] tracking-[0.14em]"
+              style={{ color: GOLD_FULL }}
+            >
+              OG
+            </span>
+            <span
+              className="text-[12px] tracking-[0.06em]"
+              style={{ color: "rgba(255,255,255,0.35)" }}
+            >
+              Ask
+            </span>
+          </button>
 
           {/* Right — vertical ⋮ menu */}
           <div className="flex items-center flex-shrink-0">

@@ -9,7 +9,6 @@ import {
   ChevronDown,
 } from "lucide-react";
 import filmmakerLogo from "@/assets/filmmaker-f-icon.png";
-import { useHeaderCta } from "@/components/AppHeader";
 import LeadCaptureModal from "@/components/LeadCaptureModal";
 import {
   Accordion,
@@ -117,17 +116,6 @@ const useReveal = (threshold = 0.15) => {
 };
 
 /* ═══════════════════════════════════════════════════════════════════
-   DIVIDER
-   ═══════════════════════════════════════════════════════════════════ */
-const Divider = () => (
-  <div className="py-4 px-6">
-    <div className="max-w-md mx-auto">
-      <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/25 to-transparent" />
-    </div>
-  </div>
-);
-
-/* ═══════════════════════════════════════════════════════════════════
    MAIN COMPONENT
    ═══════════════════════════════════════════════════════════════════ */
 const Index = () => {
@@ -159,10 +147,6 @@ const Index = () => {
       navigate(destination);
     }
   }, [hasSession, navigate]);
-
-  // Hero scroll tracking (for sticky CTA)
-  const heroRef = useRef<HTMLElement>(null);
-  const [heroPast, setHeroPast] = useState(false);
 
   // Intro skip
   const introTimersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
@@ -283,47 +267,6 @@ const Index = () => {
   const isPulsed = ['pulse','tagline','complete'].includes(phase) || shouldSkip;
   const showTagline = ['tagline','complete'].includes(phase) || shouldSkip;
 
-  // Hero scroll observer — triggers sticky CTA
-  useEffect(() => {
-    if (!isComplete) return;
-    const el = heroRef.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([entry]) => setHeroPast(!entry.isIntersecting),
-      { threshold: 0, rootMargin: '-56px 0px 0px 0px' }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [isComplete]);
-
-  // Inject sticky CTA into the global AppHeader via context
-  const { setCtaSlot } = useHeaderCta();
-
-  useEffect(() => {
-    if (!isComplete) return;
-    const ctaButton = (
-      <button
-        onClick={handleStartClick}
-        className={cn(
-          "font-bebas text-[13px] tracking-[0.14em] uppercase whitespace-nowrap",
-          "h-9 px-3.5",
-          "bg-gold-cta-subtle border border-gold-cta-muted text-gold-cta",
-          "transition-all duration-300 ease-out",
-          "hover:border-gold-cta",
-          "active:scale-[0.97]",
-          heroPast
-            ? "opacity-100 translate-y-0 pointer-events-auto"
-            : "opacity-0 -translate-y-1 pointer-events-none"
-        )}
-        style={{ borderRadius: 10 }}
-      >
-        BUILD NOW
-      </button>
-    );
-    setCtaSlot(ctaButton);
-    return () => setCtaSlot(null);
-  }, [isComplete, heroPast, handleStartClick, setCtaSlot]);
-
   return (
     <>
 
@@ -392,7 +335,7 @@ const Index = () => {
           {/* ──────────────────────────────────────────────────────────
                § 1  HERO
              ────────────────────────────────────────────────────────── */}
-          <section id="hero" ref={heroRef} className="snap-section min-h-0 pt-20 pb-12 flex flex-col justify-center relative overflow-hidden">
+          <section id="hero" className="snap-section min-h-0 pt-20 pb-12 flex flex-col justify-center relative overflow-hidden">
             <div className="absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none animate-spotlight-pulse"
               style={{ width: '100vw', height: '120%', background: `radial-gradient(ellipse 50% 50% at 50% 15%, rgba(212,175,55,0.10) 0%, rgba(212,175,55,0.04) 45%, transparent 75%)` }} />
             {/* Static spotlight cone — settled version of cinematic intro beam */}
@@ -433,9 +376,8 @@ const Index = () => {
 
               <div className="w-full max-w-[320px] mx-auto space-y-3">
                 <button onClick={handleStartClick} className="w-full h-14 text-base btn-cta-primary">
-                  BUILD YOUR WATERFALL &mdash; FREE
+                  BUILD YOUR WATERFALL
                 </button>
-                <p className="text-white/50 text-sm tracking-wider">No credit card. Takes 2{"\u00A0"}minutes.</p>
               </div>
 
               <div className="mt-8 flex justify-center animate-bounce-subtle cursor-pointer active:scale-[0.97]"
@@ -445,7 +387,6 @@ const Index = () => {
             </div>
           </section>
 
-          <Divider />
 
           {/* ──────────────────────────────────────────────────────────
                § 2  THE PROBLEM — narrative setup for waterfall reveal
@@ -529,7 +470,6 @@ const Index = () => {
             </div>
           </SectionFrame>
 
-          <Divider />
 
           {/* ──────────────────────────────────────────────────────────
                § 3  THE WATERFALL — the reveal
@@ -642,7 +582,7 @@ const Index = () => {
                 <div className="mt-6 text-center">
                   <button onClick={handleStartClick}
                     className="w-full max-w-[320px] h-14 text-base btn-cta-primary mx-auto">
-                    BUILD YOUR WATERFALL &mdash; FREE
+                    BUILD YOUR WATERFALL
                   </button>
                   <p className="text-white/55 text-[15px] tracking-wider mt-3">See how to keep more of it.</p>
                 </div>
@@ -650,7 +590,6 @@ const Index = () => {
             </div>
           </SectionFrame>
 
-          <Divider />
 
           {/* ──────────────────────────────────────────────────────────
                § 4  THE THESIS — why film has no tools
@@ -964,7 +903,7 @@ const Index = () => {
               <div className="text-center mt-10">
                 <button onClick={handleStartClick}
                   className="w-full max-w-[320px] h-14 text-base btn-cta-primary mx-auto">
-                  BUILD YOUR WATERFALL &mdash; FREE
+                  BUILD YOUR WATERFALL
                 </button>
                 <div className="mt-5 flex items-center justify-center gap-4">
                   <button onClick={() => navigate("/store")} className="text-white/50 text-[15px] hover:text-gold transition-colors">
@@ -975,7 +914,6 @@ const Index = () => {
             </div>
           </SectionFrame>
 
-          <Divider />
 
           {/* ──────────────────────────────────────────────────────────
                § 8  FAQ
@@ -1001,7 +939,6 @@ const Index = () => {
             </div>
           </SectionFrame>
 
-          <Divider />
 
           {/* ──────────────────────────────────────────────────────────
                § 9  FINAL CTA
