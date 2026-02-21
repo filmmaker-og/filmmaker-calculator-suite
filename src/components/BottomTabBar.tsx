@@ -68,7 +68,7 @@ const BottomTabBar = () => {
                 isActive && "rounded-lg",
               )}
               style={{
-                background: isActive ? "rgba(255,255,255,0.06)" : "transparent",
+                background: isActive ? "rgba(212,175,55,0.12)" : "transparent",
               }}
               aria-label={tab.label}
             >
@@ -86,10 +86,10 @@ const BottomTabBar = () => {
               <span
                 className="font-bebas leading-none transition-all"
                 style={{
-                  fontSize: "10px",
+                  fontSize: "11px",
                   letterSpacing: isActive ? "0.16em" : "0.10em",
-                  fontWeight: isActive ? 500 : 400,
-                  color: isActive ? "rgba(255,255,255,0.95)" : "rgba(255,255,255,0.65)",
+                  fontWeight: 500,
+                  color: isActive ? "rgba(255,255,255,1)" : "rgba(255,255,255,0.75)",
                 }}
               >
                 {tab.label}
