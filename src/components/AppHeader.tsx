@@ -40,25 +40,37 @@ const AppHeader = ({ onMoreOpen }: AppHeaderProps) => {
   return (
     <>
       <header
-        className="fixed top-0 left-0 right-0 z-[150]"
-        style={{
-          background: "rgba(10,10,10,0.88)",
-          backdropFilter: "blur(12px)",
-          WebkitBackdropFilter: "blur(12px)",
-        }}
+        className="fixed top-0 left-0 right-0 z-[150] flex justify-center"
+        style={{ background: "transparent", pointerEvents: "none" }}
       >
-        {/* Subtle top gold edge — bookends with footer */}
-        <div
-          className="h-[1px] w-full"
+        {/* Floating centered bar — matches footer's pill language */}
+        <nav
+          className="relative flex items-center justify-between overflow-hidden"
           style={{
-            background: "linear-gradient(90deg, transparent 0%, rgba(212,175,55,0.20) 30%, rgba(212,175,55,0.20) 70%, transparent 100%)",
+            pointerEvents: "auto",
+            width: "100%",
+            maxWidth: "380px",
+            height: "var(--appbar-h)",
+            marginTop: "12px",
+            borderRadius: "16px",
+            background: "rgba(10,10,10,0.88)",
+            backdropFilter: "blur(16px)",
+            WebkitBackdropFilter: "blur(16px)",
+            border: "1.5px solid rgba(212,175,55,0.35)",
+            boxShadow:
+              "0 8px 32px rgba(0,0,0,0.90), 0 0 0 1px rgba(212,175,55,0.10), 0 0 20px rgba(212,175,55,0.08)",
+            paddingLeft: "16px",
+            paddingRight: "8px",
           }}
-        />
-
-        <div
-          className="flex items-center justify-between px-4"
-          style={{ height: "var(--appbar-h)" }}
         >
+          {/* Gold top edge line inside the bar */}
+          <div
+            className="absolute top-0 left-0 right-0 h-[1px] pointer-events-none"
+            style={{
+              background: "linear-gradient(90deg, transparent 0%, rgba(212,175,55,0.30) 30%, rgba(212,175,55,0.40) 50%, rgba(212,175,55,0.30) 70%, transparent 100%)",
+            }}
+          />
+
           {/* Left — FILMMAKER.OG wordmark */}
           <button
             onClick={() => { haptics.light(); navigate("/"); }}
@@ -93,20 +105,11 @@ const AppHeader = ({ onMoreOpen }: AppHeaderProps) => {
               <MoreVertical className="w-5 h-5" />
             </button>
           </div>
-        </div>
-
-        {/* Gold gradient separator line — enhanced to match footer presence */}
-        <div
-          className="h-[1px] w-full"
-          style={{
-            background: "linear-gradient(90deg, transparent 0%, rgba(212,175,55,0.55) 30%, rgba(212,175,55,0.55) 70%, transparent 100%)",
-            boxShadow: "0 1px 12px rgba(212,175,55,0.08)",
-          }}
-        />
+        </nav>
       </header>
 
-      {/* Spacer for fixed header */}
-      <div style={{ height: "var(--appbar-h)" }} className="flex-shrink-0" />
+      {/* Spacer for fixed header — accounts for margin-top + bar height */}
+      <div style={{ height: "calc(var(--appbar-h) + 12px)" }} className="flex-shrink-0" />
     </>
   );
 };
