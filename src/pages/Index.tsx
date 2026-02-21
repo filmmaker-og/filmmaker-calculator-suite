@@ -283,6 +283,18 @@ const Index = () => {
                 background: `radial-gradient(ellipse 25% 40% at 50% 0%, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.03) 30%, rgba(212,175,55,0.02) 50%, transparent 70%)`,
                 clipPath: 'polygon(42% 0%, 58% 0%, 72% 100%, 28% 100%)',
               }} />
+            {/* Left focused beam */}
+            <div className="absolute top-0 left-0 right-0 bottom-0 pointer-events-none"
+              style={{
+                background: `radial-gradient(ellipse 18% 35% at 38% 0%, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 40%, transparent 70%)`,
+                clipPath: 'polygon(30% 0%, 46% 0%, 58% 100%, 20% 100%)',
+              }} />
+            {/* Right focused beam */}
+            <div className="absolute top-0 left-0 right-0 bottom-0 pointer-events-none"
+              style={{
+                background: `radial-gradient(ellipse 18% 35% at 62% 0%, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 40%, transparent 70%)`,
+                clipPath: 'polygon(54% 0%, 70% 0%, 80% 100%, 42% 100%)',
+              }} />
             <div className="relative px-6 py-4 max-w-xl mx-auto text-center">
               <div className="mb-5 relative inline-block">
                 <div className="absolute inset-0 -m-10 animate-logo-breathe" style={{ background: 'radial-gradient(circle, rgba(212,175,55,0.45) 0%, transparent 70%)', filter: 'blur(18px)' }} />
@@ -317,8 +329,7 @@ const Index = () => {
             <div ref={revWater.ref} className={cn("transition-all duration-700 ease-out", revWater.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
 
               <h2 className="font-bebas text-[36px] md:text-[44px] text-gold tracking-[0.08em] text-center">THE WATERFALL</h2>
-              <p className="text-[14px] text-white/40 tracking-[0.12em] uppercase text-center">Your recoupment structure</p>
-              <p className="text-white/50 text-[15px] text-center mb-6 mt-4">Based on a hypothetical $1.8M budget and a $3M acquisition.</p>
+              <p className="text-[14px] text-gold/40 tracking-[0.12em] uppercase text-center">Your recoupment structure</p>
 
               <div ref={waterBarRef} className="max-w-md mx-auto">
                 {/* Waterfall rows — unified financial table */}
@@ -369,7 +380,7 @@ const Index = () => {
                 {/* Net Profits */}
                 <div className="mt-4 border border-gold/25 bg-black px-5 py-4 text-center rounded-lg">
                   <p className="text-[10px] tracking-[0.2em] uppercase font-semibold text-gold/60 mb-1">Net Profits</p>
-                  <span className="font-mono text-[22px] font-bold text-gold">
+                  <span className="font-mono text-[22px] font-bold text-white">
                     ${countVal.toLocaleString()}
                   </span>
                 </div>
@@ -391,17 +402,18 @@ const Index = () => {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="border border-gold/25 bg-black px-4 py-5 text-center rounded-lg">
                     <p className="text-[10px] tracking-[0.2em] uppercase font-semibold text-gold/70 mb-1">Producer Corridor</p>
-                    <span className="font-mono text-[18px] font-bold text-gold">
+                    <span className="font-mono text-[18px] font-bold text-white">
                       ${producerVal.toLocaleString()}
                     </span>
                   </div>
                   <div className="border border-gold/25 bg-black px-4 py-5 text-center rounded-lg">
                     <p className="text-[10px] tracking-[0.2em] uppercase font-semibold text-gold/60 mb-1">Investor Corridor</p>
-                    <span className="font-mono text-[18px] font-bold text-gold">
+                    <span className="font-mono text-[18px] font-bold text-white">
                       ${investorVal.toLocaleString()}
                     </span>
                   </div>
                 </div>
+                <p className="text-white/50 text-[15px] text-center mt-5">Based on a hypothetical $1.8M budget and a $3M acquisition.</p>
               </div>
             </div>
           </SectionFrame>
@@ -413,8 +425,8 @@ const Index = () => {
           <SectionFrame id="evidence">
             <div ref={revEvidence.ref} className={cn("transition-all duration-700 ease-out", revEvidence.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
 
-              {/* Section header — large, confident, no eyebrow */}
               <div className="text-center mb-10">
+                <p className="text-white/40 text-[11px] tracking-[0.25em] uppercase font-semibold mb-3 text-center">The Problem</p>
                 <h2
                   className="font-bebas text-[40px] md:text-[52px] tracking-[0.06em] leading-[0.95] text-gold"
                   style={{
@@ -625,7 +637,7 @@ const Index = () => {
                   >
                     {/* Lock watermark — centered behind content */}
                     <LockKeyhole
-                      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 text-white/[0.04]"
+                      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 text-gold/[0.08]"
                       strokeWidth={1.5}
                     />
                     {/* Content */}
@@ -657,7 +669,10 @@ const Index = () => {
             <div ref={revDecl.ref} className={cn("max-w-md mx-auto relative transition-all duration-700 ease-out", revDecl.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5")}>
               <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
               <div className="py-12 px-4 text-center">
-                <h3 className="font-bebas text-[32px] md:text-[40px] tracking-[0.08em] uppercase text-gold leading-tight">
+                <h3
+                  className="font-bebas text-[32px] md:text-[40px] tracking-[0.08em] uppercase text-gold leading-tight"
+                  style={{ textShadow: revDecl.visible ? '0 0 30px rgba(212,175,55,0.4), 0 0 60px rgba(212,175,55,0.15)' : 'none' }}
+                >
                   We Built The Toolkit They Didn{"\u2019"}t Teach You In Film{"\u00A0"}<span className="text-white">School</span>.
                 </h3>
               </div>

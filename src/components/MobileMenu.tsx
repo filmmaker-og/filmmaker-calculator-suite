@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { Home, Calculator, BookOpen, Book, Mail, Instagram, Share2, X as CloseIcon } from "lucide-react";
+import { Home, Calculator, BookOpen, ShoppingBag, Mail, Instagram, Share2, X as CloseIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { getShareUrl, SHARE_TEXT, SHARE_TITLE } from "@/lib/constants";
 import { useHaptics } from "@/hooks/use-haptics";
@@ -118,10 +118,10 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
             <SectionLabel>Menu</SectionLabel>
             <div className="grid grid-cols-2 gap-2.5">
               {([
-                { path: "/store",      icon: Book,       label: "Packages",   featured: true },
-                { path: "/",           icon: Home,       label: "Home",       featured: false },
-                { path: "/calculator", icon: Calculator, label: "Calculator", featured: false },
-                { path: "/resources",  icon: BookOpen,   label: "Resources",  featured: false },
+                { path: "/",           icon: Home,        label: "Home" },
+                { path: "/calculator", icon: Calculator,  label: "Calculator" },
+                { path: "/store",      icon: ShoppingBag, label: "Shop" },
+                { path: "/resources",  icon: BookOpen,    label: "Resources" },
               ] as const).map((item) => {
                 const Icon = item.icon;
                 return (
@@ -131,25 +131,17 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
                     className="relative flex flex-col items-center justify-center gap-2 py-5 border text-center group transition-all overflow-hidden"
                     style={{
                       borderRadius: 12,
-                      borderColor: item.featured ? "rgba(212,175,55,0.50)" : "rgba(255,255,255,0.10)",
-                      background: item.featured ? "rgba(212,175,55,0.08)" : "rgba(255,255,255,0.03)",
-                      boxShadow: item.featured ? "0 0 20px rgba(212,175,55,0.08), inset 0 1px 0 rgba(212,175,55,0.08)" : "none",
+                      borderColor: "rgba(255,255,255,0.10)",
+                      background: "rgba(255,255,255,0.03)",
                     }}
                   >
-                    {/* Gold left accent on featured */}
-                    {item.featured && (
-                      <div
-                        className="absolute left-0 top-0 bottom-0 w-[2px]"
-                        style={{ background: "linear-gradient(to bottom, rgba(212,175,55,0.70), rgba(212,175,55,0.25))" }}
-                      />
-                    )}
                     <Icon
                       className="w-5 h-5 transition-colors"
-                      style={{ color: item.featured ? "rgba(212,175,55,1)" : "rgba(255,255,255,0.70)" }}
+                      style={{ color: "rgba(212,175,55,1)" }}
                     />
                     <span
                       className="font-bebas text-[18px] tracking-[0.12em] leading-none transition-colors"
-                      style={{ color: item.featured ? "rgba(212,175,55,1)" : "rgba(255,255,255,0.85)" }}
+                      style={{ color: "rgba(255,255,255,0.85)" }}
                     >
                       {item.label}
                     </span>
