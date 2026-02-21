@@ -61,11 +61,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
 
   /* ─── Section label ─────────────────────────────────────────── */
   const SectionLabel = ({ children }: { children: React.ReactNode }) => (
-    <div className="flex items-center gap-3 pl-1 mb-3">
-      <div className="h-[1px] flex-1" style={{ background: "linear-gradient(90deg, rgba(212,175,55,0.35) 0%, transparent 100%)" }} />
-      <span className="font-bebas text-[16px] text-gold/80 uppercase tracking-[0.20em] flex-shrink-0">{children}</span>
-      <div className="h-[1px] flex-1" style={{ background: "linear-gradient(270deg, rgba(212,175,55,0.35) 0%, transparent 100%)" }} />
-    </div>
+    <p className="font-bebas text-[13px] text-gold/50 uppercase tracking-[0.20em] mb-3 pl-1">{children}</p>
   );
 
   return (
@@ -102,7 +98,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
 
         {/* Drag handle + X close button */}
         <div className="relative flex justify-center pt-4 pb-6">
-          <div className="w-8 h-1 bg-gold/30 rounded-full" />
+          <div className="w-8 h-1 bg-white/15 rounded-full" />
           <button
             onClick={() => { haptics.light(); setIsOpen(false); }}
             className="absolute top-3 right-4 w-9 h-9 flex items-center justify-center text-gold/60 hover:text-gold transition-colors"

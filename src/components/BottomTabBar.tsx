@@ -48,7 +48,7 @@ const BottomTabBar = () => {
         style={{
           pointerEvents: "auto",
           width: "100%",
-          maxWidth: "380px",
+          maxWidth: "340px",
           height: "54px",
           borderRadius: "16px",
           background: "rgba(0,0,0,0.85)",
