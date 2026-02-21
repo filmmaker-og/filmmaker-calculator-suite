@@ -20,9 +20,7 @@ const OgBotFab = ({ onClick, isActive }: OgBotFabProps) => {
         borderRadius: "50%",
         background: "transparent",
         border: "none",
-        boxShadow: isActive
-          ? "0 0 24px rgba(212,175,55,0.35), 0 4px 16px rgba(0,0,0,0.50)"
-          : "0 4px 20px rgba(0,0,0,0.60)",
+        boxShadow: "none",
       }}
     >
       {/* Sparkle AI indicator — top right, overlapping icon edge */}
