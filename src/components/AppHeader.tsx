@@ -29,7 +29,7 @@ const AppHeader = ({ onMoreOpen }: AppHeaderProps) => {
           style={{
             pointerEvents: "auto",
             width: "100%",
-            maxWidth: "380px",
+            maxWidth: "300px",
             height: "var(--appbar-h)",
             marginTop: "12px",
             borderRadius: "16px",

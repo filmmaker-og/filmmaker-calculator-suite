@@ -248,7 +248,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
               {ogMessages.length > 0 && (
                 <button
                   onClick={handleReset}
-                  className="flex items-center gap-1.5 text-[10px] uppercase tracking-[0.15em] transition-colors tabular-nums"
+                  className="flex items-center gap-1.5 font-bebas text-[11px] uppercase tracking-[0.15em] transition-colors tabular-nums"
                   style={{ color: "rgba(255,255,255,0.30)" }}
                   onMouseEnter={e => (e.currentTarget.style.color = "rgba(212,175,55,0.70)")}
                   onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,0.30)")}
@@ -275,7 +275,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
           {/* Empty state — example chips with eyebrow */}
           {ogMessages.length === 0 && (
             <div className="flex flex-col items-center gap-5 pt-3">
-              <span className="font-bebas text-[14px] tracking-[0.12em]" style={{ color: "rgba(255,255,255,0.70)" }}>
+              <span className="font-bebas text-[20px] tracking-[0.16em] uppercase" style={{ color: "rgba(212,175,55,0.60)" }}>
                 What do you want to know
               </span>
 

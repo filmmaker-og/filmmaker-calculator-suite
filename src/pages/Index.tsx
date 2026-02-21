@@ -242,7 +242,7 @@ const Index = () => {
                 <div className={cn("absolute inset-0 -m-4 transition-opacity duration-700", isPulsed ? "opacity-100" : "opacity-0")}
                   style={{ background: 'radial-gradient(circle, rgba(212,175,55,0.5) 0%, transparent 70%)', filter: 'blur(15px)' }} />
                 <img src={filmmakerLogo} alt="Filmmaker.OG" className="w-32 h-32 object-contain relative z-10"
-                  style={{ filter: 'brightness(1.5) saturate(1.2)', transition: 'filter 0.7s ease' }} />
+                  style={{ filter: 'brightness(1.25) saturate(1.1)', transition: 'filter 0.7s ease' }} />
               </div>
               <p className={cn("mt-8 text-sm tracking-[0.4em] uppercase font-semibold transition-all duration-700", showTagline ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3")}
                 style={{ color: '#D4AF37', textShadow: '0 0 20px rgba(212,175,55,0.4)' }}>Know Your Numbers</p>
@@ -299,17 +299,17 @@ const Index = () => {
               <div className="mb-5 relative inline-block">
                 <div className="absolute inset-0 -m-10 animate-logo-breathe" style={{ background: 'radial-gradient(circle, rgba(212,175,55,0.45) 0%, transparent 70%)', filter: 'blur(18px)' }} />
                 <img src={filmmakerLogo} alt="Filmmaker.OG" className="relative z-10 w-[96px] h-[96px] object-contain"
-                  style={{ filter: 'brightness(1.6) saturate(1.2) drop-shadow(0 0 12px rgba(212,175,55,0.5))' }} />
+                  style={{ filter: 'brightness(1.25) saturate(1.1) drop-shadow(0 0 12px rgba(212,175,55,0.5))' }} />
               </div>
               <h1 className="font-bebas text-[clamp(2.8rem,9vw,4.2rem)] leading-[1.05] text-gold mb-5">
                 SEE WHERE EVERY<br /><span className="text-white">DOLLAR GOES</span>
               </h1>
-              <p className="mb-6 text-white/60 text-[15px] leading-[1.7] tracking-[0.06em] uppercase font-medium max-w-[360px] mx-auto">
+              <p className="mb-6 text-white/60 text-[16px] leading-[1.7] tracking-[0.06em] uppercase font-medium max-w-[360px] mx-auto">
                 Built by a Tribeca-winning producer whose debut sold to <span className="text-gold font-semibold">Netflix</span>.
               </p>
 
               <div className="w-full max-w-[320px] mx-auto space-y-3">
-                <button onClick={handleStartClick} className="w-full h-14 text-base btn-cta-primary">
+                <button onClick={handleStartClick} className="w-full h-14 btn-cta-primary">
                   BUILD YOUR WATERFALL
                 </button>
               </div>
@@ -328,8 +328,8 @@ const Index = () => {
           <SectionFrame id="waterfall">
             <div ref={revWater.ref} className={cn("transition-all duration-700 ease-out", revWater.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
 
-              <h2 className="font-bebas text-[36px] md:text-[44px] text-gold tracking-[0.08em] text-center">THE WATERFALL</h2>
-              <p className="text-[14px] text-gold/40 tracking-[0.12em] uppercase text-center">Your recoupment structure</p>
+              <h2 className="font-bebas text-[36px] md:text-[44px] text-gold tracking-[0.08em] text-center mb-1">THE WATERFALL</h2>
+              <p className="text-[15px] text-white/50 tracking-[0.12em] uppercase text-center mb-2">Your recoupment structure</p>
 
               <div ref={waterBarRef} className="max-w-md mx-auto">
                 {/* Waterfall rows — unified financial table */}
@@ -463,7 +463,7 @@ const Index = () => {
                     <div className="space-y-3 mb-6">
                       <p
                         className={cn(
-                          "text-white/50 text-[15px] leading-relaxed transition-all duration-500 ease-out",
+                          "text-white/50 text-[16px] leading-relaxed transition-all duration-500 ease-out",
                           revEvidence.visible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-3"
                         )}
                         style={{ transitionDelay: revEvidence.visible ? '300ms' : '0ms' }}
@@ -472,7 +472,7 @@ const Index = () => {
                       </p>
                       <p
                         className={cn(
-                          "text-white/70 text-[15px] leading-relaxed font-medium transition-all duration-500 ease-out",
+                          "text-white/70 text-[16px] leading-relaxed font-medium transition-all duration-500 ease-out",
                           revEvidence.visible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-3"
                         )}
                         style={{ transitionDelay: revEvidence.visible ? '450ms' : '0ms' }}
@@ -559,18 +559,20 @@ const Index = () => {
                 revUntilNow.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"
               )}
             >
-              <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/40 to-transparent mb-8" />
-              <p
-                className="font-bebas text-[40px] md:text-[50px] tracking-[0.06em] text-gold"
-                style={{
-                  textShadow: revUntilNow.visible
-                    ? '0 0 30px rgba(212,175,55,0.4), 0 0 60px rgba(212,175,55,0.15)'
-                    : 'none',
-                }}
-              >
-                Until <span className="text-white">now</span>.
-              </p>
-              <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/40 to-transparent mt-8" />
+              <div className="flex items-center gap-5 justify-center">
+                <div className="h-[1.5px] w-16 bg-gradient-to-r from-transparent to-gold/50" />
+                <p
+                  className="font-bebas text-[40px] md:text-[50px] tracking-[0.06em] text-gold"
+                  style={{
+                    textShadow: revUntilNow.visible
+                      ? '0 0 30px rgba(212,175,55,0.4), 0 0 60px rgba(212,175,55,0.15)'
+                      : 'none',
+                  }}
+                >
+                  Until <span className="text-white">now</span>.
+                </p>
+                <div className="h-[1.5px] w-16 bg-gradient-to-l from-transparent to-gold/50" />
+              </div>
             </div>
           </section>
 
@@ -598,7 +600,7 @@ const Index = () => {
                   <div className="font-bebas text-[48px] md:text-[60px] leading-none select-none pointer-events-none text-gold/55 -mb-4 -ml-1"
                     aria-hidden="true">{"\u201C"}</div>
                   <blockquote className="relative z-10">
-                    <p className="text-[15px] md:text-base leading-[1.7] text-white/85 italic">
+                    <p className="text-[16px] md:text-[17px] leading-[1.7] text-white/85 italic">
                       Filmmakers have a perception in the business world of being kind of flaky dudes{"\u2026"} you need to be buttoned down{"\u2026"} speak the language that they speak.
                     </p>
                   </blockquote>
@@ -622,13 +624,20 @@ const Index = () => {
           <SectionFrame id="cost">
             <div ref={revCost.ref} className={cn("transition-all duration-700 ease-out", revCost.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
 
+              <div className="text-center mb-8">
+                <h2 className="font-bebas text-[36px] md:text-[44px] tracking-[0.08em] text-gold"
+                  style={{ textShadow: revCost.visible ? '0 0 30px rgba(212,175,55,0.4), 0 0 60px rgba(212,175,55,0.15)' : 'none' }}>
+                  THE REALITY
+                </h2>
+              </div>
+
               <div className="grid grid-cols-2 gap-3 max-w-md mx-auto">
                 {closedDoors.map((door, i) => (
                   <div
                     key={door.name}
                     className={cn(
-                      "relative border p-5 flex flex-col justify-between transition-all duration-700 ease-out overflow-hidden rounded-xl",
-                      "bg-white/[0.06] border-white/[0.12] aspect-square",
+                      "relative border p-5 flex flex-col justify-between transition-all duration-700 ease-out overflow-hidden rounded-xl min-h-[160px]",
+                      "bg-white/[0.06] border-white/[0.12]",
                       revCost.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                     )}
                     style={{
@@ -637,20 +646,20 @@ const Index = () => {
                   >
                     {/* Lock watermark — centered behind content */}
                     <LockKeyhole
-                      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 text-gold/[0.08]"
+                      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 text-gold/[0.18]"
                       strokeWidth={1.5}
                     />
                     {/* Content */}
                     <div className="relative z-10">
-                      <p className="font-bebas text-[16px] md:text-[18px] tracking-[0.08em] uppercase leading-tight text-white">
+                      <p className="font-bebas text-[18px] md:text-[20px] tracking-[0.08em] uppercase leading-tight text-white">
                         {door.name}
                       </p>
                     </div>
                     <div className="relative z-10">
-                      <span className="font-mono text-[14px] font-bold text-gold block mb-1.5">
+                      <span className="font-mono text-[15px] font-bold text-gold block mb-1.5">
                         {door.cost}
                       </span>
-                      <p className="text-[13px] leading-relaxed text-white/50">
+                      <p className="text-[14px] leading-relaxed text-white/50">
                         {door.lock}
                       </p>
                     </div>
@@ -706,11 +715,11 @@ const Index = () => {
 
               <div className="relative p-10 md:p-16 max-w-md mx-auto text-center">
                 <p className="text-white/50 text-[13px] tracking-[0.3em] uppercase font-semibold mb-5">The Moment of Truth</p>
-                <h2 className="font-bebas text-3xl md:text-4xl leading-[1.1] tracking-[0.08em] text-gold mb-8">
+                <h2 className="font-bebas text-4xl md:text-5xl leading-[1.1] tracking-[0.08em] text-gold mb-8">
                   YOUR INVESTOR WILL ASK<br />HOW THE MONEY FLOWS <span className="text-white">BACK</span>.
                 </h2>
                 <button onClick={handleStartClick}
-                  className="w-full max-w-[320px] h-14 text-base btn-cta-final mx-auto">
+                  className="w-full max-w-[320px] h-14 btn-cta-final mx-auto">
                   BUILD YOUR WATERFALL
                 </button>
               </div>
