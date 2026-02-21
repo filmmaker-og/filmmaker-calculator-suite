@@ -33,12 +33,12 @@ const AppHeader = ({ onMoreOpen }: AppHeaderProps) => {
             height: "var(--appbar-h)",
             marginTop: "12px",
             borderRadius: "16px",
-            background: "rgba(10,10,10,0.88)",
+            background: "rgba(10,10,10,0.92)",
             backdropFilter: "blur(16px)",
             WebkitBackdropFilter: "blur(16px)",
-            border: "1.5px solid rgba(212,175,55,0.35)",
+            border: "1.5px solid rgba(212,175,55,0.50)",
             boxShadow:
-              "0 8px 32px rgba(0,0,0,0.90), 0 0 0 1px rgba(212,175,55,0.10), 0 0 20px rgba(212,175,55,0.08)",
+              "0 8px 32px rgba(0,0,0,0.90), 0 0 0 1px rgba(212,175,55,0.14), 0 0 20px rgba(212,175,55,0.12)",
             paddingLeft: "16px",
             paddingRight: "12px",
           }}
@@ -47,7 +47,7 @@ const AppHeader = ({ onMoreOpen }: AppHeaderProps) => {
           <div
             className="absolute top-0 left-0 right-0 h-[1px] pointer-events-none"
             style={{
-              background: "linear-gradient(90deg, transparent 0%, rgba(212,175,55,0.30) 30%, rgba(212,175,55,0.40) 50%, rgba(212,175,55,0.30) 70%, transparent 100%)",
+              background: "linear-gradient(90deg, transparent 0%, rgba(212,175,55,0.45) 30%, rgba(212,175,55,0.60) 50%, rgba(212,175,55,0.45) 70%, transparent 100%)",
             }}
           />
 
@@ -61,7 +61,7 @@ const AppHeader = ({ onMoreOpen }: AppHeaderProps) => {
               style={{ color: GOLD_FULL }}
             >
               FILMMAKER
-              <span style={{ color: "rgba(255,255,255,0.90)" }}>
+              <span style={{ color: "rgba(255,255,255,1)" }}>
                 .OG
               </span>
             </span>
