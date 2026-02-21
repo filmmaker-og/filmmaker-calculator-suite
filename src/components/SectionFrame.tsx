@@ -12,15 +12,8 @@ const SectionFrame = ({
   alt?: boolean;
 }) => (
   <section id={id} className="snap-section px-4 py-4">
-    <div className="flex overflow-hidden border border-white/[0.06] rounded-2xl">
-      <div
-        className="w-1 flex-shrink-0 bg-gradient-to-b from-gold via-gold/60 to-gold/20"
-        style={{ boxShadow: "0 0 16px rgba(212,175,55,0.30)" }}
-      />
-      <div className={cn("flex-1 min-w-0 bg-black", className)}>
-        <div className="h-[2px] bg-gradient-to-r from-transparent via-gold/25 to-transparent" />
-        <div className="px-7 py-5 md:px-10 md:py-7">{children}</div>
-      </div>
+    <div className={cn("px-7 py-5 md:px-10 md:py-7", className)}>
+      {children}
     </div>
   </section>
 );
