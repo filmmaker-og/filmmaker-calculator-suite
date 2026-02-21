@@ -1013,14 +1013,14 @@ const Index = () => {
           <section id="final-cta" className="snap-section py-10 px-6">
             <div ref={revFinal.ref} className={cn("relative overflow-hidden transition-all duration-700 ease-out", revFinal.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
               {/* Gold corner accents — cinematic frame, no full border */}
-              <div className="absolute top-0 left-0 w-12 h-[2px] bg-gold/80" />
-              <div className="absolute top-0 left-0 w-[2px] h-12 bg-gold/80" />
-              <div className="absolute top-0 right-0 w-12 h-[2px] bg-gold/80" />
-              <div className="absolute top-0 right-0 w-[2px] h-12 bg-gold/80" />
-              <div className="absolute bottom-0 left-0 w-12 h-[2px] bg-gold/80" />
-              <div className="absolute bottom-0 left-0 w-[2px] h-12 bg-gold/80" />
-              <div className="absolute bottom-0 right-0 w-12 h-[2px] bg-gold/80" />
-              <div className="absolute bottom-0 right-0 w-[2px] h-12 bg-gold/80" />
+              <div className="absolute top-0 left-0 w-12 h-[2px] rounded-full bg-gold/80" />
+              <div className="absolute top-0 left-0 w-[2px] h-12 rounded-full bg-gold/80" />
+              <div className="absolute top-0 right-0 w-12 h-[2px] rounded-full bg-gold/80" />
+              <div className="absolute top-0 right-0 w-[2px] h-12 rounded-full bg-gold/80" />
+              <div className="absolute bottom-0 left-0 w-12 h-[2px] rounded-full bg-gold/80" />
+              <div className="absolute bottom-0 left-0 w-[2px] h-12 rounded-full bg-gold/80" />
+              <div className="absolute bottom-0 right-0 w-12 h-[2px] rounded-full bg-gold/80" />
+              <div className="absolute bottom-0 right-0 w-[2px] h-12 rounded-full bg-gold/80" />
 
               {/* Ambient glow */}
               <div className="absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none"
