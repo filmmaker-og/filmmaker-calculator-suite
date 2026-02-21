@@ -796,21 +796,6 @@
   }
 
   /* ═══════════════════════════════════════════════════════════════════
-     CINEMATIC VIGNETTE
-     ═══════════════════════════════════════════════════════════════════ */
-  .vignette {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 50;
-    background: radial-gradient(
-      ellipse 500px 60% at 50% 50%,
-      transparent 50%,
-      rgba(0,0,0,0.4) 100%
-    );
-  }
-
-  /* ═══════════════════════════════════════════════════════════════════
      SPOTLIGHT INTRO ANIMATIONS
      ═══════════════════════════════════════════════════════════════════ */
   @keyframes spotlight-beam-expand {

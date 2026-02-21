@@ -1,3 +1,5 @@
+import { Sparkles } from "lucide-react";
+
 interface OgBotFabProps {
   onClick: () => void;
   isActive?: boolean;
@@ -49,27 +51,18 @@ const OgBotFab = ({ onClick, isActive }: OgBotFabProps) => {
         }}
       />
 
-      {/* Orbital accent dot — rotates slowly when inactive */}
-      {!isActive && (
-        <div
-          className="absolute inset-0 pointer-events-none animate-orbit"
-          style={{ borderRadius: "14px" }}
-        >
-          <div
-            className="absolute"
-            style={{
-              width: "4px",
-              height: "4px",
-              borderRadius: "50%",
-              background: "rgba(212,175,55,0.60)",
-              boxShadow: "0 0 6px rgba(212,175,55,0.40)",
-              top: "-2px",
-              left: "50%",
-              marginLeft: "-2px",
-            }}
-          />
-        </div>
-      )}
+      {/* Sparkle accent — top-right corner */}
+      <Sparkles
+        className="absolute pointer-events-none"
+        style={{
+          top: "-2px",
+          right: "-2px",
+          width: "13px",
+          height: "13px",
+          color: "rgba(212,175,55,0.70)",
+        }}
+        strokeWidth={2}
+      />
 
       {/* OG text */}
       <span

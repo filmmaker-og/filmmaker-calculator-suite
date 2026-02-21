@@ -1,18 +1,19 @@
 import { useNavigate } from "react-router-dom";
+import { MoreVertical } from "lucide-react";
 import { useHaptics } from "@/hooks/use-haptics";
 
 /* ═══════════════════════════════════════════════════════════════════
    AppHeader — unified global header for all pages
    Left:   FILMMAKER.OG (→ home)
-   Right:  OG bot search pill (→ OgBotSheet)
+   Right:  kebab menu (→ MobileMenu)
    ═══════════════════════════════════════════════════════════════════ */
 interface AppHeaderProps {
-  onBotOpen?: () => void;
+  onMoreOpen?: () => void;
 }
 
 const GOLD_FULL = "rgba(212,175,55,1)";
 
-const AppHeader = ({ onBotOpen }: AppHeaderProps) => {
+const AppHeader = ({ onMoreOpen }: AppHeaderProps) => {
   const navigate = useNavigate();
   const haptics = useHaptics();
 
@@ -66,33 +67,20 @@ const AppHeader = ({ onBotOpen }: AppHeaderProps) => {
             </span>
           </button>
 
-          {/* Right — OG bot search pill */}
+          {/* Right — kebab menu */}
           <button
-            onClick={() => { haptics.light(); onBotOpen?.(); }}
-            className="flex items-center gap-2 transition-all duration-200 active:scale-95 hover:opacity-90 flex-shrink-0"
-            aria-label="Ask OG"
+            onClick={() => { haptics.light(); onMoreOpen?.(); }}
+            className="flex items-center justify-center transition-all duration-200 active:scale-95 flex-shrink-0"
+            aria-label="More options"
             style={{
-              height: "34px",
-              width: "130px",
-              paddingLeft: "14px",
-              paddingRight: "14px",
-              borderRadius: "999px",
-              background: "#000000",
-              border: "1px solid rgba(212,175,55,0.35)",
+              width: "40px",
+              height: "40px",
             }}
           >
-            <span
-              className="font-bebas text-[14px] tracking-[0.14em]"
+            <MoreVertical
+              className="w-5 h-5"
               style={{ color: GOLD_FULL }}
-            >
-              OG
-            </span>
-            <span
-              className="text-[13px] tracking-[0.15em]"
-              style={{ color: "rgba(255,255,255,0.30)" }}
-            >
-              ...
-            </span>
+            />
           </button>
         </nav>
       </header>
