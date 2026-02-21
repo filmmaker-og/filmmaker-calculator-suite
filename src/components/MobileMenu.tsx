@@ -61,7 +61,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
 
   /* ─── Section label ─────────────────────────────────────────── */
   const SectionLabel = ({ children }: { children: React.ReactNode }) => (
-    <p className="font-bebas text-[13px] text-gold/50 uppercase tracking-[0.20em] mb-3 pl-1">{children}</p>
+    <p className="font-bebas text-[16px] text-white/70 uppercase tracking-[0.20em] mb-3 pl-1">{children}</p>
   );
 
   return (
