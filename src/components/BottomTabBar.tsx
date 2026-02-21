@@ -2,17 +2,19 @@ import { useState, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Home, Calculator, ShoppingBag, BookOpen } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useHaptics } from "@/hooks/use-haptics";
 
 const tabs = [
   { id: "home",       path: "/",           label: "HOME", icon: Home },
   { id: "calculator", path: "/calculator", label: "CALC", icon: Calculator },
-  { id: "store",      path: "/store",      label: "PKGS", icon: ShoppingBag },
+  { id: "store",      path: "/store",      label: "SHOP", icon: ShoppingBag },
   { id: "resources",  path: "/resources",  label: "INFO", icon: BookOpen },
 ];
 
 const BottomTabBar = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const haptics = useHaptics();
   const [rippleId, setRippleId] = useState<string | null>(null);
 
   const getActive = (path: string) => {
@@ -21,10 +23,11 @@ const BottomTabBar = () => {
   };
 
   const handleTap = useCallback((tab: typeof tabs[0]) => {
+    haptics.light();
     setRippleId(tab.id);
     navigate(tab.path);
     setTimeout(() => setRippleId(null), 420);
-  }, [navigate]);
+  }, [navigate, haptics]);
 
   const GOLD_FULL = "rgba(212,175,55,1)";
   const GOLD_DIM  = "rgba(212,175,55,0.75)";
