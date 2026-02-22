@@ -579,13 +579,17 @@ const Index = () => {
              ────────────────────────────────────────────────────────── */}
           <section className="py-10 md:py-16 px-6 relative">
             <div ref={revDecl.ref} className={cn("max-w-md mx-auto relative transition-all duration-700 ease-out", revDecl.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5")}>
-              <div className="py-10 px-2 text-center">
-                <h3
-                  className="font-bebas text-[34px] md:text-[44px] tracking-[0.06em] uppercase text-gold leading-[1.1]"
-                  style={{ textShadow: revDecl.visible ? '0 0 30px rgba(212,175,55,0.4), 0 0 60px rgba(212,175,55,0.15)' : 'none' }}
-                >
-                  The Toolkit They Didn{"\u2019"}t Teach In Film{"\u00A0"}<span className="text-white">School</span>.
-                </h3>
+              <div className="py-10">
+                <div className="flex items-center gap-5 justify-center">
+                  <div className="h-[1.5px] w-16 bg-gradient-to-r from-transparent to-gold-accent" />
+                  <h3
+                    className="font-bebas text-[34px] md:text-[44px] tracking-[0.06em] uppercase text-gold leading-[1.1] text-center"
+                    style={{ textShadow: revDecl.visible ? '0 0 30px rgba(212,175,55,0.4), 0 0 60px rgba(212,175,55,0.15)' : 'none' }}
+                  >
+                    The Toolkit They Didn{"\u2019"}t Teach In Film{"\u00A0"}<span className="text-white">School</span>.
+                  </h3>
+                  <div className="h-[1.5px] w-16 bg-gradient-to-l from-transparent to-gold-accent" />
+                </div>
               </div>
               <div className="flex justify-center mt-6 cursor-pointer active:scale-[0.97]"
                 onClick={() => { haptics.light(); document.getElementById('final-cta')?.scrollIntoView({ behavior: 'smooth' }); }}>
@@ -610,6 +614,10 @@ const Index = () => {
                 boxShadow: '0 0 40px rgba(212,175,55,0.08), inset 0 1px 0 rgba(212,175,55,0.08)',
               }}
             >
+              {/* Ambient glow */}
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none"
+                style={{ width: '100%', height: '100%', background: `radial-gradient(ellipse 320px 50% at 50% 20%, rgba(212,175,55,0.06) 0%, transparent 70%)` }} />
+
               <div className="relative p-10 md:p-16 max-w-md mx-auto text-center">
                 <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-secondary mb-5">The Moment of Truth</p>
                 <h2 className="font-bebas text-[36px] md:text-[44px] leading-[1.1] tracking-[0.08em] text-gold mb-8">
