@@ -180,25 +180,29 @@ const Index = () => {
                § 1  HERO
              ────────────────────────────────────────────────────────── */}
           <section id="hero" className="snap-section min-h-0 pt-10 pb-12 flex flex-col justify-center relative overflow-hidden">
+            {/* Ambient gold glow — stops at logo */}
             <div className="absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none animate-spotlight-pulse"
-              style={{ width: '100vw', height: '120%', background: `radial-gradient(ellipse 35% 35% at 50% 15%, rgba(212,175,55,0.06) 0%, rgba(212,175,55,0.04) 45%, transparent 75%)` }} />
-            {/* Static spotlight cone — settled version of cinematic intro beam */}
-            <div className="absolute top-0 left-0 right-0 bottom-0 pointer-events-none"
+              style={{ width: '100vw', height: '280px', background: `radial-gradient(ellipse 35% 55% at 50% 15%, rgba(212,175,55,0.06) 0%, rgba(212,175,55,0.04) 45%, transparent 75%)` }} />
+            {/* Static spotlight cone — contained to top half */}
+            <div className="absolute top-0 left-0 right-0 pointer-events-none"
               style={{
-                background: `radial-gradient(ellipse 25% 40% at 50% 0%, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.03) 30%, rgba(212,175,55,0.02) 50%, transparent 70%)`,
-                clipPath: 'polygon(42% 0%, 58% 0%, 72% 100%, 28% 100%)',
+                height: '280px',
+                background: `radial-gradient(ellipse 25% 60% at 50% 0%, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.03) 30%, rgba(212,175,55,0.02) 50%, transparent 70%)`,
+                clipPath: 'polygon(42% 0%, 58% 0%, 68% 100%, 32% 100%)',
               }} />
-            {/* Left focused beam */}
-            <div className="absolute top-0 left-0 right-0 bottom-0 pointer-events-none"
+            {/* Left focused beam — contained */}
+            <div className="absolute top-0 left-0 right-0 pointer-events-none"
               style={{
-                background: `radial-gradient(ellipse 18% 35% at 38% 0%, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 40%, transparent 70%)`,
-                clipPath: 'polygon(30% 0%, 46% 0%, 58% 100%, 20% 100%)',
+                height: '260px',
+                background: `radial-gradient(ellipse 18% 55% at 38% 0%, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 40%, transparent 70%)`,
+                clipPath: 'polygon(33% 0%, 46% 0%, 54% 100%, 24% 100%)',
               }} />
-            {/* Right focused beam */}
-            <div className="absolute top-0 left-0 right-0 bottom-0 pointer-events-none"
+            {/* Right focused beam — contained */}
+            <div className="absolute top-0 left-0 right-0 pointer-events-none"
               style={{
-                background: `radial-gradient(ellipse 18% 35% at 62% 0%, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 40%, transparent 70%)`,
-                clipPath: 'polygon(54% 0%, 70% 0%, 80% 100%, 42% 100%)',
+                height: '260px',
+                background: `radial-gradient(ellipse 18% 55% at 62% 0%, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 40%, transparent 70%)`,
+                clipPath: 'polygon(54% 0%, 67% 0%, 76% 100%, 46% 100%)',
               }} />
             <div className="relative px-6 py-4 max-w-xl mx-auto text-center">
               <div className="mb-5 relative inline-block">
@@ -452,8 +456,6 @@ const Index = () => {
 
           {/* ── PIVOT — "Until now." ── */}
           <section className="py-10 md:py-14 px-6 relative">
-            <div className="absolute inset-0 pointer-events-none"
-              style={{ background: 'radial-gradient(ellipse 320px 55% at 50% 50%, rgba(212,175,55,0.06) 0%, transparent 70%)' }} />
             <div
               ref={revUntilNow.ref}
               className={cn(
@@ -538,7 +540,7 @@ const Index = () => {
                   <div
                     key={door.name}
                     className={cn(
-                      "relative border p-5 flex flex-col justify-between transition-all duration-700 ease-out overflow-hidden rounded-xl min-h-[160px]",
+                      "relative border p-5 flex flex-col gap-4 transition-all duration-700 ease-out overflow-hidden rounded-xl",
                       "bg-bg-card border-bg-card-border",
                       revCost.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                     )}
@@ -546,22 +548,23 @@ const Index = () => {
                       transitionDelay: revCost.visible ? `${i * 100}ms` : '0ms',
                     }}
                   >
-                    {/* Lock watermark — centered behind content */}
+                    {/* Lock watermark */}
                     <LockKeyhole
-                      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 text-gold-ghost"
-                      strokeWidth={1.5}
+                      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-14 h-14 text-gold-accent"
+                      strokeWidth={1}
                     />
-                    {/* Content */}
+                    {/* Title */}
                     <div className="relative z-10">
                       <p className="font-bebas text-[18px] md:text-[20px] tracking-[0.08em] uppercase leading-tight text-white">
                         {door.name}
                       </p>
                     </div>
-                    <div className="relative z-10">
-                      <span className="font-mono text-[15px] font-bold text-gold block mb-1.5">
+                    {/* Cost + description */}
+                    <div className="relative z-10 mt-auto">
+                      <span className="font-mono text-[15px] font-bold text-gold block mb-2">
                         {door.cost}
                       </span>
-                      <p className="text-[14px] leading-relaxed text-ink-body">
+                      <p className="text-[13px] leading-[1.5] text-ink-secondary">
                         {door.lock}
                       </p>
                     </div>
@@ -575,20 +578,14 @@ const Index = () => {
                DECLARATION — the hinge before final CTA
              ────────────────────────────────────────────────────────── */}
           <section className="py-10 md:py-16 px-6 relative">
-            <div className="absolute inset-0 pointer-events-none"
-              style={{ background: 'radial-gradient(ellipse 320px 55% at 50% 50%, rgba(212,175,55,0.07) 0%, transparent 70%)' }} />
             <div ref={revDecl.ref} className={cn("max-w-md mx-auto relative transition-all duration-700 ease-out", revDecl.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5")}>
-              <div className="py-12 px-4">
-                <div className="flex items-center gap-4 justify-center">
-                  <div className="h-[1.5px] w-16 flex-shrink-0 bg-gradient-to-r from-transparent to-gold-accent" />
-                  <h3
-                    className="font-bebas text-[36px] md:text-[44px] tracking-[0.08em] uppercase text-gold leading-tight text-center"
-                    style={{ textShadow: revDecl.visible ? '0 0 30px rgba(212,175,55,0.4), 0 0 60px rgba(212,175,55,0.15)' : 'none' }}
-                  >
-                    We Built The Toolkit They Didn{"\u2019"}t Teach You In Film{"\u00A0"}<span className="text-white">School</span>.
-                  </h3>
-                  <div className="h-[1.5px] w-16 flex-shrink-0 bg-gradient-to-l from-transparent to-gold-accent" />
-                </div>
+              <div className="py-10 px-2 text-center">
+                <h3
+                  className="font-bebas text-[34px] md:text-[44px] tracking-[0.06em] uppercase text-gold leading-[1.1]"
+                  style={{ textShadow: revDecl.visible ? '0 0 30px rgba(212,175,55,0.4), 0 0 60px rgba(212,175,55,0.15)' : 'none' }}
+                >
+                  The Toolkit They Didn{"\u2019"}t Teach In Film{"\u00A0"}<span className="text-white">School</span>.
+                </h3>
               </div>
               <div className="flex justify-center mt-6 cursor-pointer active:scale-[0.97]"
                 onClick={() => { haptics.light(); document.getElementById('final-cta')?.scrollIntoView({ behavior: 'smooth' }); }}>
@@ -613,10 +610,6 @@ const Index = () => {
                 boxShadow: '0 0 40px rgba(212,175,55,0.08), inset 0 1px 0 rgba(212,175,55,0.08)',
               }}
             >
-              {/* Ambient glow */}
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none"
-                style={{ width: '100%', height: '100%', background: `radial-gradient(ellipse 320px 50% at 50% 20%, rgba(212,175,55,0.06) 0%, transparent 70%)` }} />
-
               <div className="relative p-10 md:p-16 max-w-md mx-auto text-center">
                 <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-secondary mb-5">The Moment of Truth</p>
                 <h2 className="font-bebas text-[36px] md:text-[44px] leading-[1.1] tracking-[0.08em] text-gold mb-8">
@@ -641,7 +634,7 @@ const Index = () => {
                 background: "#000000",
                 border: "1.5px solid rgba(212,175,55,0.50)",
                 boxShadow: "0 8px 32px rgba(0,0,0,0.95), 0 0 0 1px rgba(212,175,55,0.10)",
-                padding: "20px 28px",
+                padding: "24px 32px",
               }}
             >
               <p className="text-ink-secondary text-xs tracking-wide leading-relaxed">
