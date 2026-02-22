@@ -1,17 +1,16 @@
 import { useState, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Home, Calculator, ShoppingBag, BookOpen, MoreHorizontal } from "lucide-react";
+import { Calculator, ShoppingBag, BookOpen, MoreHorizontal } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useHaptics } from "@/hooks/use-haptics";
 
 /* ═══════════════════════════════════════════════════════════════════
-   BottomTabBar — 5-tab navigation pill
-   Width matches AppHeader at 320px — bookend chrome system
-   5th tab: MORE → opens MobileMenu (kebab relocated from header)
+   BottomTabBar — 4-tab navigation pill
+   HOME removed (F icon in header handles it)
+   CALC · SHOP · INFO · MORE
    ═══════════════════════════════════════════════════════════════════ */
 
 const navTabs = [
-  { id: "home",       path: "/",           label: "HOME",  icon: Home },
   { id: "calculator", path: "/calculator", label: "CALC",  icon: Calculator },
   { id: "store",      path: "/store",      label: "SHOP",  icon: ShoppingBag },
   { id: "resources",  path: "/resources",  label: "INFO",  icon: BookOpen },
@@ -28,7 +27,6 @@ const BottomTabBar = ({ onMoreOpen }: BottomTabBarProps) => {
   const [rippleId, setRippleId] = useState<string | null>(null);
 
   const getActive = (path: string) => {
-    if (path === "/") return location.pathname === "/";
     return location.pathname.startsWith(path);
   };
 
@@ -56,16 +54,20 @@ const BottomTabBar = ({ onMoreOpen }: BottomTabBarProps) => {
       }}
     >
       <nav
-        className="relative flex items-stretch overflow-hidden bg-chrome-bg-solid border-[1.5px] border-chrome-border backdrop-blur-[16px]"
+        className="relative flex items-stretch overflow-hidden"
         style={{
           pointerEvents: "auto",
           width: "100%",
           maxWidth: "320px",
           height: "54px",
           borderRadius: "16px",
-          boxShadow: "0 8px 32px rgba(0,0,0,0.90), 0 0 0 1px rgba(212,175,55,0.15), 0 0 12px rgba(212,175,55,0.06)",
-          paddingLeft: "4px",
-          paddingRight: "4px",
+          background: "rgba(10,10,10,0.88)",
+          backdropFilter: "blur(16px)",
+          WebkitBackdropFilter: "blur(16px)",
+          border: "1.5px solid rgba(212,175,55,0.50)",
+          boxShadow: "0 8px 32px rgba(0,0,0,0.90), 0 0 0 1px rgba(212,175,55,0.10), 0 0 12px rgba(212,175,55,0.06)",
+          paddingLeft: "6px",
+          paddingRight: "6px",
         }}
       >
         {/* Gold top edge line */}
@@ -97,15 +99,15 @@ const BottomTabBar = ({ onMoreOpen }: BottomTabBarProps) => {
                 <span className="absolute top-1/2 left-1/2 w-10 h-10 rounded-full pointer-events-none animate-tap-ripple bg-chrome-ripple" />
               )}
               <Icon
-                className={cn("w-[18px] h-[18px] transition-all duration-200", isActive ? "text-gold" : "text-gold-label")}
+                className={cn("w-5 h-5 transition-all duration-200", isActive ? "text-gold" : "text-gold-label")}
                 style={isActive ? { filter: "drop-shadow(0 0 4px rgba(212,175,55,0.35))" } : undefined}
               />
               <span
                 className={cn(
-                  "font-bebas leading-none transition-all text-[10px]",
+                  "font-bebas leading-none transition-all text-[11px]",
                   isActive
-                    ? "text-gold tracking-[0.14em] font-medium"
-                    : "text-ink-secondary tracking-[0.08em] font-medium"
+                    ? "text-gold tracking-[0.14em]"
+                    : "text-ink-secondary tracking-[0.10em]"
                 )}
               >
                 {tab.label}
@@ -114,7 +116,7 @@ const BottomTabBar = ({ onMoreOpen }: BottomTabBarProps) => {
                 <span
                   className="absolute bottom-[4px] left-1/2 -translate-x-1/2 block"
                   style={{
-                    width: "16px",
+                    width: "18px",
                     height: "2px",
                     borderRadius: "2px",
                     background: "#D4AF37",
@@ -126,7 +128,7 @@ const BottomTabBar = ({ onMoreOpen }: BottomTabBarProps) => {
           );
         })}
 
-        {/* MORE tab — opens MobileMenu */}
+        {/* MORE tab */}
         <button
           onClick={handleMoreTap}
           className="relative flex-1 flex flex-col items-center justify-center gap-[3px] transition-all duration-200 active:scale-95 overflow-hidden"
@@ -135,8 +137,8 @@ const BottomTabBar = ({ onMoreOpen }: BottomTabBarProps) => {
           {rippleId === "more" && (
             <span className="absolute top-1/2 left-1/2 w-10 h-10 rounded-full pointer-events-none animate-tap-ripple bg-chrome-ripple" />
           )}
-          <MoreHorizontal className="w-[18px] h-[18px] text-gold-label transition-all duration-200" />
-          <span className="font-bebas leading-none text-[10px] text-ink-secondary tracking-[0.08em] font-medium">
+          <MoreHorizontal className="w-5 h-5 text-gold-label transition-all duration-200" />
+          <span className="font-bebas leading-none text-[11px] text-ink-secondary tracking-[0.10em]">
             MORE
           </span>
         </button>

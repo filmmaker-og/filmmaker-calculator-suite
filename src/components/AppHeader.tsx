@@ -4,12 +4,13 @@ import filmmakerFIcon from "@/assets/filmmaker-f-icon.png";
 import { useHaptics } from "@/hooks/use-haptics";
 
 /* ═══════════════════════════════════════════════════════════════════
-   AppHeader — unified global header pill
+   AppHeader — search-bar style AI entry point
    Left:   F brand icon (→ home)
-   Center: FILMMAKER.OG wordmark
-   Right:  Sparkles AI icon (→ OgBot)
+   Center: "Ask the OG..." placeholder (tap → opens bot)
+   Right:  Sparkles icon (tap → opens bot)
    
-   Width matches BottomTabBar at 320px — bookend chrome system
+   Inspired by Messenger/Perplexity search bar pattern.
+   Not a real input — entire bar is a bot trigger.
    ═══════════════════════════════════════════════════════════════════ */
 interface AppHeaderProps {
   onBotOpen?: () => void;
@@ -25,67 +26,78 @@ const AppHeader = ({ onBotOpen }: AppHeaderProps) => {
         className="fixed top-0 left-0 right-0 z-[150] flex justify-center"
         style={{ background: "transparent", pointerEvents: "none" }}
       >
-        <nav
-          className="relative flex items-center justify-between overflow-hidden bg-chrome-bg border-[1.5px] border-chrome-border backdrop-blur-[16px]"
+        <div
+          className="flex items-center gap-2.5"
           style={{
             pointerEvents: "auto",
             width: "100%",
-            maxWidth: "320px",
-            height: "var(--appbar-h)",
+            maxWidth: "360px",
             marginTop: "12px",
-            borderRadius: "16px",
-            boxShadow: "0 8px 32px rgba(0,0,0,0.90), 0 0 0 1px rgba(212,175,55,0.10), 0 0 20px rgba(212,175,55,0.08)",
             paddingLeft: "12px",
             paddingRight: "12px",
           }}
         >
-          {/* Gold top edge line */}
-          <div
-            className="absolute top-0 left-0 right-0 h-[1px] pointer-events-none"
-            style={{
-              background: "linear-gradient(90deg, transparent 0%, rgba(212,175,55,0.30) 30%, rgba(212,175,55,0.40) 50%, rgba(212,175,55,0.30) 70%, transparent 100%)",
-            }}
-          />
-
-          {/* Left — F icon → home */}
+          {/* F icon — home button */}
           <button
             onClick={() => { haptics.light(); navigate("/"); }}
-            className="flex items-center justify-center flex-shrink-0 hover:opacity-80 transition-opacity active:scale-95"
+            className="flex items-center justify-center flex-shrink-0 active:scale-95 transition-transform"
             aria-label="Go home"
-            style={{ width: "36px", height: "36px" }}
+            style={{
+              width: "44px",
+              height: "44px",
+              borderRadius: "14px",
+              background: "rgba(10,10,10,0.88)",
+              backdropFilter: "blur(16px)",
+              WebkitBackdropFilter: "blur(16px)",
+              border: "1.5px solid rgba(212,175,55,0.50)",
+              boxShadow: "0 4px 16px rgba(0,0,0,0.70), 0 0 0 1px rgba(212,175,55,0.08)",
+            }}
           >
             <img
               src={filmmakerFIcon}
               alt="Filmmaker.OG"
-              className="w-7 h-7 object-contain"
+              className="w-6 h-6 object-contain"
               style={{ filter: "brightness(1.2) saturate(1.1)" }}
             />
           </button>
 
-          {/* Center — wordmark (decorative, not interactive) */}
-          <span className="font-bebas text-[20px] tracking-[0.18em] text-gold select-none pointer-events-none">
-            FILMMAKER
-            <span className="text-ink-body">.OG</span>
-          </span>
-
-          {/* Right — Sparkles → open AI bot */}
+          {/* Search bar — bot trigger */}
           <button
             onClick={() => { haptics.light(); onBotOpen?.(); }}
-            className="flex items-center justify-center flex-shrink-0 transition-all duration-200 active:scale-90"
+            className="flex-1 flex items-center gap-3 active:scale-[0.98] transition-transform"
             aria-label="Ask the OG Bot"
-            style={{ width: "36px", height: "36px" }}
+            style={{
+              height: "44px",
+              borderRadius: "14px",
+              background: "rgba(10,10,10,0.88)",
+              backdropFilter: "blur(16px)",
+              WebkitBackdropFilter: "blur(16px)",
+              border: "1.5px solid rgba(212,175,55,0.30)",
+              boxShadow: "0 4px 16px rgba(0,0,0,0.70), 0 0 0 1px rgba(212,175,55,0.06)",
+              paddingLeft: "14px",
+              paddingRight: "14px",
+            }}
           >
+            <span
+              className="flex-1 text-left font-sans text-[14px] tracking-[0.02em]"
+              style={{ color: "rgba(255,255,255,0.35)" }}
+            >
+              Ask the OG...
+            </span>
             <Sparkles
-              className="w-[18px] h-[18px] text-gold"
+              className="w-[16px] h-[16px] flex-shrink-0"
               strokeWidth={1.8}
-              style={{ filter: "drop-shadow(0 0 6px rgba(212,175,55,0.40))" }}
+              style={{
+                color: "rgba(212,175,55,0.70)",
+                filter: "drop-shadow(0 0 4px rgba(212,175,55,0.25))",
+              }}
             />
           </button>
-        </nav>
+        </div>
       </header>
 
       {/* Spacer */}
-      <div style={{ height: "calc(var(--appbar-h) + 12px)" }} className="flex-shrink-0" />
+      <div style={{ height: "calc(44px + 24px)" }} className="flex-shrink-0" />
     </>
   );
 };
