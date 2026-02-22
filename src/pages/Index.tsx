@@ -95,7 +95,6 @@ const Index = () => {
   const revMission     = useReveal();
   const revWater       = useReveal();
   const revCost        = useReveal();
-  const revDecl        = useReveal();
   const revFinal       = useReveal();
   const revUntilNow    = useReveal();
   const revBlum        = useReveal();
@@ -573,31 +572,6 @@ const Index = () => {
               </div>
             </div>
           </section>
-
-          {/* ──────────────────────────────────────────────────────────
-               DECLARATION — the hinge before final CTA
-             ────────────────────────────────────────────────────────── */}
-          <section className="py-10 md:py-16 px-6 relative">
-            <div ref={revDecl.ref} className={cn("max-w-md mx-auto relative transition-all duration-700 ease-out", revDecl.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5")}>
-              <div className="py-10">
-                <div className="flex items-center gap-5 justify-center">
-                  <div className="h-[1.5px] w-16 bg-gradient-to-r from-transparent to-gold-accent" />
-                  <h3
-                    className="font-bebas text-[34px] md:text-[44px] tracking-[0.06em] uppercase text-gold leading-[1.1] text-center"
-                    style={{ textShadow: revDecl.visible ? '0 0 30px rgba(212,175,55,0.4), 0 0 60px rgba(212,175,55,0.15)' : 'none' }}
-                  >
-                    We Built What They Didn{"\u2019"}t Teach You In Film{"\u00A0"}<span className="text-white">School</span>.
-                  </h3>
-                  <div className="h-[1.5px] w-16 bg-gradient-to-l from-transparent to-gold-accent" />
-                </div>
-              </div>
-              <div className="flex justify-center mt-6 cursor-pointer active:scale-[0.97]"
-                onClick={() => { haptics.light(); document.getElementById('final-cta')?.scrollIntoView({ behavior: 'smooth' }); }}>
-                <ChevronDown className="w-5 h-5 text-gold animate-bounce-subtle" />
-              </div>
-            </div>
-          </section>
-
 
           {/* ──────────────────────────────────────────────────────────
                § 5  FINAL CTA
