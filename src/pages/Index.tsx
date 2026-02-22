@@ -318,7 +318,7 @@ const Index = () => {
                     </span>
                   </div>
                 </div>
-                <p className="font-mono text-[12px] text-ink-ghost text-center mt-5">Based on a hypothetical $1.8M budget and a $3M acquisition.</p>
+                <p className="font-mono text-[12px] text-ink-secondary text-center mt-5">Based on a hypothetical $1.8M budget and a $3M acquisition.</p>
               </div>
             </div>
           </SectionFrame>
@@ -536,7 +536,7 @@ const Index = () => {
                 </h2>
               </div>
 
-              <div className="grid grid-cols-2 gap-3 max-w-md mx-auto">
+              <div className="grid grid-cols-2 gap-4 max-w-md mx-auto">
                 {closedDoors.map((door, i) => (
                   <div
                     key={door.name}
@@ -634,11 +634,24 @@ const Index = () => {
           </section>
 
           {/* ── FOOTER ── */}
-          <footer className="py-8 px-6">
-            <p className="text-ink-secondary text-xs tracking-wide leading-relaxed text-center max-w-md mx-auto">
-              For educational and informational purposes only. Not legal, tax, or investment advice.
-              Consult a qualified entertainment attorney before making financing decisions.
-            </p>
+          <footer className="py-8 flex justify-center px-4">
+            <div
+              className="text-center"
+              style={{
+                width: "100%",
+                maxWidth: "320px",
+                borderRadius: "16px",
+                background: "#000000",
+                border: "1.5px solid rgba(212,175,55,0.50)",
+                boxShadow: "0 8px 32px rgba(0,0,0,0.95), 0 0 0 1px rgba(212,175,55,0.10)",
+                padding: "16px 20px",
+              }}
+            >
+              <p className="text-ink-secondary text-xs tracking-wide leading-relaxed">
+                For educational and informational purposes only. Not legal, tax, or investment advice.
+                Consult a qualified entertainment attorney before making financing decisions.
+              </p>
+            </div>
           </footer>
         </main>
       </div>
