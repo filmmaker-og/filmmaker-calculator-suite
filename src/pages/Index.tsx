@@ -263,7 +263,7 @@ const Index = () => {
                           {tier.amount}
                         </span>
                       </div>
-                      <div className={cn("w-full bg-bg-card relative overflow-hidden", i === 0 ? "h-3" : "h-2")}>
+                      <div className={cn("w-full relative overflow-hidden", i === 0 ? "h-3" : "h-2")} style={{ background: "rgba(255,255,255,0.08)" }}>
                         <div
                           className="absolute left-0 top-0 h-full"
                           style={{
@@ -289,14 +289,14 @@ const Index = () => {
 
                 {/* Branching connector */}
                 <div className="flex justify-center">
-                  <div className="w-[2px] h-6 bg-gold-accent" />
+                  <div className="w-[2px] h-6" style={{ background: "rgba(212,175,55,0.60)" }} />
                 </div>
                 <div className="flex items-start">
                   <div className="flex-1 flex justify-end">
-                    <div className="w-1/2 h-[2px] bg-gold-accent" />
+                    <div className="w-1/2 h-[2px]" style={{ background: "rgba(212,175,55,0.60)" }} />
                   </div>
                   <div className="flex-1 flex justify-start">
-                    <div className="w-1/2 h-[2px] bg-gold-accent" />
+                    <div className="w-1/2 h-[2px]" style={{ background: "rgba(212,175,55,0.60)" }} />
                   </div>
                 </div>
 
@@ -374,7 +374,7 @@ const Index = () => {
                       </p>
                       <p
                         className={cn(
-                          "text-ink-secondary text-[16px] leading-relaxed font-medium transition-all duration-500 ease-out",
+                          "text-ink-body text-[16px] leading-relaxed font-medium transition-all duration-500 ease-out",
                           revEvidence.visible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-3"
                         )}
                         style={{ transitionDelay: revEvidence.visible ? '450ms' : '0ms' }}
@@ -423,7 +423,7 @@ const Index = () => {
                           )}
                           style={{ transitionDelay: revMission.visible ? `${200 + i * 120}ms` : '0ms' }}
                         >
-                          <Check className="w-3.5 h-3.5 text-gold-accent flex-shrink-0 relative top-[2px]" />
+                          <Check className="w-3.5 h-3.5 text-gold flex-shrink-0 relative top-[2px]" />
                           <p className="text-ink-secondary text-[16px] leading-relaxed">
                             <span className="text-ink-body font-semibold">{row.asset}</span> has {row.tool}.
                           </p>
@@ -499,7 +499,7 @@ const Index = () => {
                   style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.80), rgba(212,175,55,0.40), transparent)' }} />
                 <div className="p-5 md:p-7 pl-6 md:pl-9">
                   {/* Opening quote mark */}
-                  <div className="font-bebas text-[48px] md:text-[60px] leading-none select-none pointer-events-none text-gold-label -mb-4 -ml-1"
+                  <div className="font-bebas text-[48px] md:text-[60px] leading-none select-none pointer-events-none text-gold -mb-4 -ml-1"
                     aria-hidden="true">{"\u201C"}</div>
                   <blockquote className="relative z-10">
                     <p className="text-[16px] md:text-[17px] leading-[1.7] text-ink-body italic">
@@ -592,7 +592,7 @@ const Index = () => {
               </div>
               <div className="flex justify-center mt-6 cursor-pointer active:scale-[0.97]"
                 onClick={() => { haptics.light(); document.getElementById('final-cta')?.scrollIntoView({ behavior: 'smooth' }); }}>
-                <ChevronDown className="w-5 h-5 text-gold-accent animate-bounce-subtle" />
+                <ChevronDown className="w-5 h-5 text-gold animate-bounce-subtle" />
               </div>
             </div>
           </section>
@@ -633,7 +633,7 @@ const Index = () => {
           {/* ── FOOTER ── */}
           <footer className="py-8 flex justify-center px-4">
             <div
-              className="text-center"
+              className="text-center overflow-hidden"
               style={{
                 width: "100%",
                 maxWidth: "320px",
@@ -641,7 +641,7 @@ const Index = () => {
                 background: "#000000",
                 border: "1.5px solid rgba(212,175,55,0.50)",
                 boxShadow: "0 8px 32px rgba(0,0,0,0.95), 0 0 0 1px rgba(212,175,55,0.10)",
-                padding: "16px 20px",
+                padding: "20px 28px",
               }}
             >
               <p className="text-ink-secondary text-xs tracking-wide leading-relaxed">
