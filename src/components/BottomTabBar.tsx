@@ -1,45 +1,59 @@
 import { useState, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Home, Calculator, ShoppingBag, BookOpen } from "lucide-react";
+import { Calculator, ShoppingBag, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useHaptics } from "@/hooks/use-haptics";
 
 /* ═══════════════════════════════════════════════════════════════════
-   BottomTabBar — full-width, matches AppHeader spec exactly
-   Height: 54px (--appbar-h)
-   Border: 1px gold @ 0.25
-   Background: solid #000000
+   BottomTabBar — 3 buttons
+   SHOP · CALC · OG (bot)
+   Full-width. Solid #000. Gold top border.
+   Matches AppHeader: same height, same border, same gold.
    ═══════════════════════════════════════════════════════════════════ */
 
-const tabs = [
-  { id: "home",       path: "/",           label: "HOME", icon: Home },
-  { id: "calculator", path: "/calculator", label: "CALC", icon: Calculator },
-  { id: "store",      path: "/store",      label: "SHOP", icon: ShoppingBag },
-  { id: "resources",  path: "/resources",  label: "INFO", icon: BookOpen },
-];
+interface BottomTabBarProps {
+  onBotOpen?: () => void;
+}
 
-const BottomTabBar = () => {
+const BottomTabBar = ({ onBotOpen }: BottomTabBarProps) => {
   const navigate = useNavigate();
   const location = useLocation();
   const haptics = useHaptics();
   const [rippleId, setRippleId] = useState<string | null>(null);
 
-  const getActive = (path: string) => {
-    if (path === "/") return location.pathname === "/";
-    return location.pathname.startsWith(path);
-  };
+  const navTabs = [
+    {
+      id: "shop",
+      label: "SHOP",
+      icon: ShoppingBag,
+      isActive: location.pathname.startsWith("/store"),
+      onTap: () => { navigate("/store"); },
+    },
+    {
+      id: "calc",
+      label: "CALC",
+      icon: Calculator,
+      isActive: location.pathname.startsWith("/calculator"),
+      onTap: () => { navigate("/calculator"); },
+    },
+    {
+      id: "og",
+      label: "OG",
+      icon: Sparkles,
+      isActive: false,
+      onTap: () => { onBotOpen?.(); },
+    },
+  ];
 
-  const handleTap = useCallback((tab: typeof tabs[0]) => {
+  const handleTap = useCallback((tab: typeof navTabs[0]) => {
     haptics.light();
     setRippleId(tab.id);
-    navigate(tab.path);
+    tab.onTap();
     setTimeout(() => setRippleId(null), 420);
-  }, [navigate, haptics]);
+  }, [haptics, navTabs]);
 
   return (
-    <div
-      className="fixed bottom-0 left-0 right-0 z-[140]"
-    >
+    <div className="fixed bottom-0 left-0 right-0 z-[140]">
       <nav
         className="relative flex items-stretch"
         style={{
@@ -53,17 +67,15 @@ const BottomTabBar = () => {
           paddingRight: "16px",
         }}
       >
-        {tabs.map((tab) => {
-          const isActive = getActive(tab.path);
+        {navTabs.map((tab) => {
           const Icon = tab.icon;
           return (
             <button
               key={tab.id}
               onClick={() => handleTap(tab)}
-              className="relative flex-1 flex flex-col items-center justify-center gap-[4px] transition-all duration-200 active:scale-95 overflow-hidden"
+              className="relative flex-1 flex flex-col items-center justify-center gap-[5px] transition-all duration-200 active:scale-95 overflow-hidden"
               aria-label={tab.label}
             >
-              {/* Tap ripple */}
               {rippleId === tab.id && (
                 <span
                   className="absolute top-1/2 left-1/2 w-12 h-12 rounded-full pointer-events-none animate-tap-ripple"
@@ -74,30 +86,28 @@ const BottomTabBar = () => {
               <Icon
                 className={cn(
                   "transition-all duration-200",
-                  isActive ? "text-gold" : "text-ink-secondary"
+                  tab.isActive ? "text-gold" : "text-gold-label"
                 )}
                 style={{
-                  width: "22px",
-                  height: "22px",
-                  ...(isActive ? { filter: "drop-shadow(0 0 5px rgba(212,175,55,0.40))" } : {}),
+                  width: "24px",
+                  height: "24px",
+                  ...(tab.isActive ? { filter: "drop-shadow(0 0 5px rgba(212,175,55,0.40))" } : {}),
                 }}
-                strokeWidth={isActive ? 2 : 1.5}
+                strokeWidth={tab.isActive ? 2 : 1.5}
               />
 
               <span
                 className={cn(
-                  "font-bebas leading-none transition-all",
-                  isActive
+                  "font-bebas leading-none transition-all text-[13px]",
+                  tab.isActive
                     ? "text-gold tracking-[0.16em]"
                     : "text-ink-secondary tracking-[0.10em]"
                 )}
-                style={{ fontSize: "12px" }}
               >
                 {tab.label}
               </span>
 
-              {/* Active indicator — hangs from top border */}
-              {isActive && (
+              {tab.isActive && (
                 <span
                   className="absolute top-0 left-1/2 -translate-x-1/2 block"
                   style={{
