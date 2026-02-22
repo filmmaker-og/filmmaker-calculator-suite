@@ -12,7 +12,7 @@ const SectionFrame = ({
 }) => (
   <section id={id} className="snap-section px-4 py-4">
     <div
-      className={cn("px-7 py-5 md:px-10 md:py-7 max-w-md mx-auto rounded-2xl", className)}
+      className={cn("px-7 py-8 md:px-10 md:py-10 max-w-md mx-auto rounded-2xl", className)}
       style={{
         border: "1px solid rgba(255, 255, 255, 0.08)",
         background: "rgba(255, 255, 255, 0.02)",
