@@ -1,26 +1,30 @@
 import { useState, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Home, Calculator, ShoppingBag, BookOpen } from "lucide-react";
+import { Home, ShoppingBag, BookOpen, MoreHorizontal } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useHaptics } from "@/hooks/use-haptics";
 
 /* ═══════════════════════════════════════════════════════════════════
    BottomTabBar — floating pill, 4 tabs
-   HOME · CALC · SHOP · INFO
+   HOME · SHOP · INFO · MORE
    
-   340px pill. Solid black. Gold border at 0.55 (confident).
-   Icons 22px, labels 12px — readable, not cramped.
-   Active state: gold icon + glow + top indicator bar.
+   CALC removed — calculator is the conversion destination, not nav.
+   CTAs handle that routing.
+   
+   Gold icons. White text. No muting. Crystal clear.
    ═══════════════════════════════════════════════════════════════════ */
 
-const tabs = [
-  { id: "home",       path: "/",           label: "HOME", icon: Home },
-  { id: "calculator", path: "/calculator", label: "CALC", icon: Calculator },
-  { id: "store",      path: "/store",      label: "SHOP", icon: ShoppingBag },
-  { id: "resources",  path: "/resources",  label: "INFO", icon: BookOpen },
+const navTabs = [
+  { id: "home",      path: "/",          label: "HOME", icon: Home },
+  { id: "store",     path: "/store",     label: "SHOP", icon: ShoppingBag },
+  { id: "resources", path: "/resources", label: "INFO", icon: BookOpen },
 ];
 
-const BottomTabBar = () => {
+interface BottomTabBarProps {
+  onMoreOpen?: () => void;
+}
+
+const BottomTabBar = ({ onMoreOpen }: BottomTabBarProps) => {
   const navigate = useNavigate();
   const location = useLocation();
   const haptics = useHaptics();
@@ -31,12 +35,19 @@ const BottomTabBar = () => {
     return location.pathname.startsWith(path);
   };
 
-  const handleTap = useCallback((tab: typeof tabs[0]) => {
+  const handleNavTap = useCallback((tab: typeof navTabs[0]) => {
     haptics.light();
     setRippleId(tab.id);
     navigate(tab.path);
     setTimeout(() => setRippleId(null), 420);
   }, [navigate, haptics]);
+
+  const handleMoreTap = useCallback(() => {
+    haptics.light();
+    setRippleId("more");
+    onMoreOpen?.();
+    setTimeout(() => setRippleId(null), 420);
+  }, [haptics, onMoreOpen]);
 
   return (
     <div
@@ -57,8 +68,8 @@ const BottomTabBar = () => {
           background: "#000000",
           border: "1.5px solid rgba(212,175,55,0.55)",
           boxShadow: "0 8px 32px rgba(0,0,0,0.95), 0 0 0 1px rgba(212,175,55,0.12), 0 0 16px rgba(212,175,55,0.08)",
-          paddingLeft: "6px",
-          paddingRight: "6px",
+          paddingLeft: "8px",
+          paddingRight: "8px",
         }}
       >
         {/* Gold top edge line */}
@@ -69,63 +80,51 @@ const BottomTabBar = () => {
           }}
         />
 
-        {tabs.map((tab) => {
+        {/* Nav tabs */}
+        {navTabs.map((tab) => {
           const isActive = getActive(tab.path);
           const Icon = tab.icon;
           return (
             <button
               key={tab.id}
-              onClick={() => handleTap(tab)}
+              onClick={() => handleNavTap(tab)}
               className={cn(
                 "relative flex-1 flex flex-col items-center justify-center gap-[4px] transition-all duration-200 active:scale-95 overflow-hidden",
                 isActive && "rounded-xl",
               )}
               style={{
-                background: isActive ? "rgba(212,175,55,0.08)" : "transparent",
+                background: isActive ? "rgba(212,175,55,0.10)" : "transparent",
               }}
               aria-label={tab.label}
             >
-              {/* Tap ripple */}
               {rippleId === tab.id && (
                 <span
                   className="absolute top-1/2 left-1/2 w-12 h-12 rounded-full pointer-events-none animate-tap-ripple"
                   style={{ background: "rgba(212,175,55,0.20)" }}
                 />
               )}
-
-              {/* Icon */}
               <Icon
-                className={cn(
-                  "transition-all duration-200",
-                  isActive ? "text-gold" : "text-ink-secondary"
-                )}
+                className="transition-all duration-200 text-gold"
                 style={{
                   width: "22px",
                   height: "22px",
-                  ...(isActive ? { filter: "drop-shadow(0 0 5px rgba(212,175,55,0.40))" } : {}),
+                  ...(isActive ? { filter: "drop-shadow(0 0 6px rgba(212,175,55,0.50))" } : {}),
                 }}
-                strokeWidth={isActive ? 2 : 1.5}
+                strokeWidth={isActive ? 2.2 : 1.5}
               />
-
-              {/* Label */}
               <span
                 className={cn(
-                  "font-bebas leading-none transition-all",
-                  isActive
-                    ? "text-gold tracking-[0.16em]"
-                    : "text-ink-secondary tracking-[0.10em]"
+                  "font-bebas leading-none transition-all text-[12px] tracking-[0.14em]",
+                  isActive ? "text-white" : "text-white"
                 )}
-                style={{ fontSize: "12px" }}
               >
                 {tab.label}
               </span>
-
-              {/* Active indicator — top edge */}
               {isActive && (
                 <span
                   className="absolute top-[2px] left-1/2 -translate-x-1/2 block"
                   style={{
-                    width: "20px",
+                    width: "22px",
                     height: "2.5px",
                     borderRadius: "0 0 3px 3px",
                     background: "#D4AF37",
@@ -136,6 +135,28 @@ const BottomTabBar = () => {
             </button>
           );
         })}
+
+        {/* MORE tab */}
+        <button
+          onClick={handleMoreTap}
+          className="relative flex-1 flex flex-col items-center justify-center gap-[4px] transition-all duration-200 active:scale-95 overflow-hidden"
+          aria-label="More options"
+        >
+          {rippleId === "more" && (
+            <span
+              className="absolute top-1/2 left-1/2 w-12 h-12 rounded-full pointer-events-none animate-tap-ripple"
+              style={{ background: "rgba(212,175,55,0.20)" }}
+            />
+          )}
+          <MoreHorizontal
+            className="text-gold transition-all duration-200"
+            style={{ width: "22px", height: "22px" }}
+            strokeWidth={1.5}
+          />
+          <span className="font-bebas leading-none text-[12px] text-white tracking-[0.14em]">
+            MORE
+          </span>
+        </button>
       </nav>
     </div>
   );

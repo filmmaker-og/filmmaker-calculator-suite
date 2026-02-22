@@ -1,91 +1,83 @@
-import { useNavigate } from "react-router-dom";
-import { MoreVertical } from "lucide-react";
-import filmmakerFIcon from "@/assets/filmmaker-f-icon.png";
 import { Sparkles } from "lucide-react";
 import { useHaptics } from "@/hooks/use-haptics";
 
 /* ═══════════════════════════════════════════════════════════════════
-   AppHeader — full-width institutional header
-   Left:   FILMMAKER.OG wordmark (→ home)
-   Right:  OG Bot trigger (F icon + sparkle badge)  |  kebab menu
-   
-   No pill. No glass. Solid black. Brand-first.
+   AppHeader — floating pill
+   Left:   FILMMAKER.OG wordmark (→ home via tab bar)
+   Right:  OG bot trigger ("OG" badge + sparkle)
    ═══════════════════════════════════════════════════════════════════ */
 interface AppHeaderProps {
   onBotOpen?: () => void;
-  onMoreOpen?: () => void;
 }
 
-const AppHeader = ({ onBotOpen, onMoreOpen }: AppHeaderProps) => {
-  const navigate = useNavigate();
+const AppHeader = ({ onBotOpen }: AppHeaderProps) => {
   const haptics = useHaptics();
 
   return (
     <>
       <header
-        className="fixed top-0 left-0 right-0 z-[150]"
-        style={{
-          height: "var(--appbar-h)",
-          background: "#000000",
-          borderBottom: "1px solid rgba(212,175,55,0.25)",
-          boxShadow: "0 4px 20px rgba(0,0,0,0.80)",
-        }}
+        className="fixed top-0 left-0 right-0 z-[150] flex justify-center"
+        style={{ background: "transparent", pointerEvents: "none" }}
       >
-        <div
-          className="flex items-center justify-between h-full"
+        <nav
+          className="relative flex items-center justify-between overflow-hidden"
           style={{
-            maxWidth: "480px",
-            margin: "0 auto",
-            paddingLeft: "16px",
-            paddingRight: "8px",
+            pointerEvents: "auto",
+            width: "100%",
+            maxWidth: "340px",
+            height: "var(--appbar-h)",
+            marginTop: "12px",
+            borderRadius: "18px",
+            background: "#000000",
+            border: "1.5px solid rgba(212,175,55,0.55)",
+            boxShadow: "0 8px 32px rgba(0,0,0,0.95), 0 0 0 1px rgba(212,175,55,0.12), 0 0 16px rgba(212,175,55,0.08)",
+            paddingLeft: "18px",
+            paddingRight: "10px",
           }}
         >
-          {/* Left — wordmark → home */}
+          {/* Gold top edge line */}
+          <div
+            className="absolute top-0 left-0 right-0 h-[1px] pointer-events-none"
+            style={{
+              background: "linear-gradient(90deg, transparent 0%, rgba(212,175,55,0.40) 30%, rgba(212,175,55,0.55) 50%, rgba(212,175,55,0.40) 70%, transparent 100%)",
+            }}
+          />
+
+          {/* Wordmark */}
+          <span className="font-bebas text-[22px] tracking-[0.2em] text-gold select-none">
+            FILMMAKER<span className="text-white">.OG</span>
+          </span>
+
+          {/* OG Bot trigger */}
           <button
-            onClick={() => { haptics.light(); navigate("/"); }}
-            className="flex items-center hover:opacity-80 transition-opacity"
-            aria-label="Go home"
+            onClick={() => { haptics.light(); onBotOpen?.(); }}
+            className="relative flex items-center gap-1.5 active:scale-95 transition-transform"
+            aria-label="Ask the OG Bot"
+            style={{
+              height: "34px",
+              paddingLeft: "10px",
+              paddingRight: "10px",
+              borderRadius: "10px",
+              background: "rgba(212,175,55,0.08)",
+              border: "1px solid rgba(212,175,55,0.30)",
+            }}
           >
-            <span className="font-bebas text-[24px] tracking-[0.2em] text-gold">
-              FILMMAKER<span className="text-ink-body">.OG</span>
+            <span
+              className="font-bebas text-[15px] tracking-[0.12em] text-gold leading-none"
+            >
+              OG
             </span>
+            <Sparkles
+              className="w-3.5 h-3.5 text-gold"
+              strokeWidth={2}
+              style={{ filter: "drop-shadow(0 0 4px rgba(212,175,55,0.50))" }}
+            />
           </button>
-
-          {/* Right — bot trigger + menu */}
-          <div className="flex items-center gap-1">
-            {/* OG Bot trigger */}
-            <button
-              onClick={() => { haptics.light(); onBotOpen?.(); }}
-              className="relative flex items-center justify-center w-10 h-10 active:scale-90 transition-transform"
-              aria-label="Ask the OG Bot"
-            >
-              <img
-                src={filmmakerFIcon}
-                alt=""
-                className="w-6 h-6 object-contain"
-                style={{ filter: "brightness(1.15) saturate(1.1)" }}
-              />
-              <Sparkles
-                className="absolute -top-0.5 -right-0.5 w-3 h-3 text-gold"
-                strokeWidth={2}
-                style={{ filter: "drop-shadow(0 0 3px rgba(212,175,55,0.50))" }}
-              />
-            </button>
-
-            {/* Kebab menu */}
-            <button
-              onClick={() => { haptics.light(); onMoreOpen?.(); }}
-              className="flex items-center justify-center w-10 h-10 active:scale-95 transition-transform"
-              aria-label="More options"
-            >
-              <MoreVertical className="w-5 h-5 text-gold-label" />
-            </button>
-          </div>
-        </div>
+        </nav>
       </header>
 
       {/* Spacer */}
-      <div style={{ height: "var(--appbar-h)" }} className="flex-shrink-0" />
+      <div style={{ height: "calc(var(--appbar-h) + 12px)" }} className="flex-shrink-0" />
     </>
   );
 };
