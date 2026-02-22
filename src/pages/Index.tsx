@@ -93,11 +93,12 @@ const Index = () => {
   // Reveals
   const revEvidence    = useReveal();
   const revMission     = useReveal();
-  const revWater       = useReveal();
-  const revCost        = useReveal();
-  const revFinal       = useReveal();
-  const revUntilNow    = useReveal();
   const revBlum        = useReveal();
+  const revCost        = useReveal();
+  const revSolution    = useReveal();
+  const revWater       = useReveal();
+  const revTiers       = useReveal();
+  const revFinal       = useReveal();
 
   // Waterfall bar animation
   const [barsRevealed, setBarsRevealed] = useState(false);
@@ -155,6 +156,7 @@ const Index = () => {
   }, [barsRevealed]);
 
   const handleStartClick    = () => { haptics.medium(); gatedNavigate("/calculator?tab=budget"); };
+  const handleStoreClick    = () => { haptics.medium(); navigate("/store"); };
 
   return (
     <>
@@ -223,7 +225,7 @@ const Index = () => {
               </div>
 
               <div className="mt-8 flex justify-center animate-bounce-subtle cursor-pointer active:scale-[0.97]"
-                onClick={() => { haptics.light(); document.getElementById('waterfall')?.scrollIntoView({ behavior: 'smooth' }); }}>
+                onClick={() => { haptics.light(); document.getElementById('evidence')?.scrollIntoView({ behavior: 'smooth' }); }}>
                 <ChevronDown className="w-6 h-6 text-gold" />
               </div>
             </div>
@@ -231,101 +233,7 @@ const Index = () => {
 
 
           {/* ──────────────────────────────────────────────────────────
-               § 2  THE WATERFALL — immediately after hero
-             ────────────────────────────────────────────────────────── */}
-          <SectionFrame id="waterfall">
-            <div ref={revWater.ref} className={cn("transition-all duration-700 ease-out", revWater.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
-
-              <h2 className="font-bebas text-[36px] md:text-[44px] text-gold tracking-[0.08em] text-center mb-1">THE <span className="text-white">WATERFALL</span></h2>
-              <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-secondary text-center mb-2">Your recoupment structure</p>
-
-              <div ref={waterBarRef} className="max-w-md mx-auto">
-                {/* Waterfall rows — unified financial table */}
-                <div className="border border-gold-border bg-black overflow-hidden rounded-xl">
-                  {waterfallTiers.filter(t => !t.isFinal).map((tier, i) => (
-                    <div
-                      key={tier.name}
-                      className={cn(
-                        "px-5 py-4 relative",
-                        i > 0 && "border-t border-bg-card-rule",
-                      )}
-                    >
-                      <div className="flex justify-between items-baseline mb-2">
-                        <div className="flex items-baseline gap-2">
-                          <span className="font-mono text-[12px] text-ink-secondary tabular-nums">
-                            {String(i + 1).padStart(2, '0')}
-                          </span>
-                          <span className={cn(
-                            "font-bebas tracking-[0.08em] uppercase",
-                            i === 0 ? "text-[20px] text-white" : "text-[17px] text-ink-body"
-                          )}>
-                            {tier.name}
-                          </span>
-                        </div>
-                        <span className="font-mono text-[17px] font-semibold text-ink-body">
-                          {tier.amount}
-                        </span>
-                      </div>
-                      <div className={cn("w-full relative overflow-hidden", i === 0 ? "h-3" : "h-2")} style={{ background: "rgba(255,255,255,0.08)" }}>
-                        <div
-                          className="absolute left-0 top-0 h-full"
-                          style={{
-                            width: barsRevealed ? `${tier.pct}%` : '0%',
-                            background: tier.barColor,
-                            boxShadow: i === 0 ? '0 0 8px rgba(212,175,55,0.15)' : 'none',
-                            transition: `width 500ms cubic-bezier(0.16,1,0.3,1)`,
-                            transitionDelay: `${i * 150}ms`,
-                          }}
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Net Profits */}
-                <div className="mt-4 border border-gold-border bg-black px-5 py-4 text-center rounded-lg">
-                  <p className="text-[11px] tracking-[0.2em] uppercase font-semibold text-gold mb-1">Net Profits</p>
-                  <span className="font-mono text-[22px] font-bold text-white">
-                    ${countVal.toLocaleString()}
-                  </span>
-                </div>
-
-                {/* Branching connector */}
-                <div className="flex justify-center">
-                  <div className="w-[2px] h-6" style={{ background: "rgba(212,175,55,0.60)" }} />
-                </div>
-                <div className="flex items-start">
-                  <div className="flex-1 flex justify-end">
-                    <div className="w-1/2 h-[2px]" style={{ background: "rgba(212,175,55,0.60)" }} />
-                  </div>
-                  <div className="flex-1 flex justify-start">
-                    <div className="w-1/2 h-[2px]" style={{ background: "rgba(212,175,55,0.60)" }} />
-                  </div>
-                </div>
-
-                {/* Two corridor boxes — consistent treatment */}
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="border border-gold-border bg-black px-4 py-5 text-center rounded-lg">
-                    <p className="text-[11px] tracking-[0.2em] uppercase font-semibold text-gold mb-1">Producer Corridor</p>
-                    <span className="font-mono text-[18px] font-bold text-white">
-                      ${producerVal.toLocaleString()}
-                    </span>
-                  </div>
-                  <div className="border border-gold-border bg-black px-4 py-5 text-center rounded-lg">
-                    <p className="text-[11px] tracking-[0.2em] uppercase font-semibold text-gold mb-1">Investor Corridor</p>
-                    <span className="font-mono text-[18px] font-bold text-white">
-                      ${investorVal.toLocaleString()}
-                    </span>
-                  </div>
-                </div>
-                <p className="font-mono text-[12px] text-ink-secondary text-center mt-5">Based on a hypothetical $1.8M budget and a $3M acquisition.</p>
-              </div>
-            </div>
-          </SectionFrame>
-
-
-          {/* ──────────────────────────────────────────────────────────
-               § 3  COMBINED PROBLEM + THESIS — one continuous section
+               § 2  THE PROBLEM + THESIS — with "Until now." punchline
              ────────────────────────────────────────────────────────── */}
           <SectionFrame id="evidence">
             <div ref={revEvidence.ref} className={cn("transition-all duration-700 ease-out", revEvidence.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
@@ -333,7 +241,7 @@ const Index = () => {
               <div className="text-center mb-10">
                 <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-secondary mb-5 text-center">The Problem</p>
                 <h2
-                  className="font-bebas text-[36px] md:text-[44px] tracking-[0.06em] leading-[0.95] text-gold"
+                  className="font-bebas text-[40px] md:text-[50px] tracking-[0.06em] leading-[0.95] text-gold"
                   style={{
                     textShadow: revEvidence.visible
                       ? '0 0 30px rgba(212,175,55,0.25), 0 0 60px rgba(212,175,55,0.10)'
@@ -351,12 +259,12 @@ const Index = () => {
                   {/* Gold left accent */}
                   <div className="absolute left-0 top-0 bottom-0 w-[3px]"
                     style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.55), rgba(212,175,55,0.25), transparent)' }} />
-                  <div className="p-7 md:p-9 pl-8 md:pl-10">
+                  <div className="p-8 md:p-10 pl-9 md:pl-11">
 
                     {/* — Problem narrative — */}
                     <p
                       className={cn(
-                        "font-bebas text-[24px] md:text-[30px] tracking-[0.06em] leading-tight mb-6 transition-all duration-500 ease-out",
+                        "font-bebas text-[26px] md:text-[32px] tracking-[0.06em] leading-tight mb-6 transition-all duration-500 ease-out",
                         revEvidence.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
                       )}
                       style={{ transitionDelay: revEvidence.visible ? '200ms' : '0ms' }}
@@ -368,7 +276,7 @@ const Index = () => {
                     <div className="space-y-3 mb-6">
                       <p
                         className={cn(
-                          "text-ink-secondary text-[16px] leading-relaxed transition-all duration-500 ease-out",
+                          "text-ink-secondary text-[17px] leading-relaxed transition-all duration-500 ease-out",
                           revEvidence.visible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-3"
                         )}
                         style={{ transitionDelay: revEvidence.visible ? '300ms' : '0ms' }}
@@ -377,7 +285,7 @@ const Index = () => {
                       </p>
                       <p
                         className={cn(
-                          "text-ink-body text-[16px] leading-relaxed font-medium transition-all duration-500 ease-out",
+                          "text-ink-body text-[17px] leading-relaxed font-medium transition-all duration-500 ease-out",
                           revEvidence.visible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-3"
                         )}
                         style={{ transitionDelay: revEvidence.visible ? '450ms' : '0ms' }}
@@ -397,7 +305,7 @@ const Index = () => {
 
                     <p
                       className={cn(
-                        "font-bebas text-[20px] md:text-[24px] tracking-[0.08em] text-ink-body mb-8 transition-all duration-500 ease-out",
+                        "font-bebas text-[22px] md:text-[26px] tracking-[0.08em] text-ink-body mb-8 transition-all duration-500 ease-out",
                         revEvidence.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
                       )}
                       style={{ transitionDelay: revEvidence.visible ? '750ms' : '0ms' }}
@@ -426,8 +334,8 @@ const Index = () => {
                           )}
                           style={{ transitionDelay: revMission.visible ? `${200 + i * 120}ms` : '0ms' }}
                         >
-                          <Check className="w-3.5 h-3.5 text-gold flex-shrink-0 relative top-[2px]" />
-                          <p className="text-ink-secondary text-[16px] leading-relaxed">
+                          <Check className="w-4 h-4 text-gold flex-shrink-0 relative top-[2px]" />
+                          <p className="text-ink-secondary text-[17px] leading-relaxed">
                             <span className="text-ink-body font-semibold">{row.asset}</span> has {row.tool}.
                           </p>
                         </div>
@@ -441,10 +349,26 @@ const Index = () => {
                         style={{ transitionDelay: revMission.visible ? '560ms' : '0ms' }}
                       >
                         <X className="w-4 h-4 text-ink-secondary flex-shrink-0 relative top-[2px]" />
-                        <p className="font-bebas text-[22px] md:text-[26px] tracking-[0.06em] text-gold leading-tight">
+                        <p className="font-bebas text-[24px] md:text-[28px] tracking-[0.06em] text-gold leading-tight">
                           Film has no standardized framework.
                         </p>
                       </div>
+
+                      {/* "Until now." — the seed */}
+                      <p
+                        className={cn(
+                          "font-bebas text-[36px] md:text-[42px] tracking-[0.06em] text-gold pt-4 transition-all duration-700 ease-out",
+                          revMission.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
+                        )}
+                        style={{
+                          transitionDelay: revMission.visible ? '800ms' : '0ms',
+                          textShadow: revMission.visible
+                            ? '0 0 30px rgba(212,175,55,0.4), 0 0 60px rgba(212,175,55,0.15)'
+                            : 'none',
+                        }}
+                      >
+                        Until <span className="text-white">now</span>.
+                      </p>
                     </div>
 
                   </div>
@@ -454,7 +378,7 @@ const Index = () => {
           </SectionFrame>
 
           {/* ── INTERSTITIAL: Blum Quote ── */}
-          <section className="py-6 md:py-10 px-6">
+          <section className="py-8 md:py-12 px-6">
             <div
               ref={revBlum.ref}
               className={cn(
@@ -472,20 +396,20 @@ const Index = () => {
                 {/* Gold left accent — strong */}
                 <div className="absolute left-0 top-0 bottom-0 w-[3px]"
                   style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.80), rgba(212,175,55,0.40), transparent)' }} />
-                <div className="p-5 md:p-7 pl-6 md:pl-9">
+                <div className="p-7 md:p-9 pl-8 md:pl-10">
                   {/* Opening quote mark */}
-                  <div className="font-bebas text-[48px] md:text-[60px] leading-none select-none pointer-events-none text-gold -mb-4 -ml-1"
+                  <div className="font-bebas text-[52px] md:text-[64px] leading-none select-none pointer-events-none text-gold -mb-4 -ml-1"
                     aria-hidden="true">{"\u201C"}</div>
                   <blockquote className="relative z-10">
-                    <p className="text-[16px] md:text-[17px] leading-[1.7] text-ink-body italic">
+                    <p className="text-[17px] md:text-[18px] leading-[1.7] text-ink-body italic">
                       Filmmakers have a perception in the business world of being kind of flaky dudes{"\u2026"} you need to be buttoned down{"\u2026"} speak the language that they speak.
                     </p>
                   </blockquote>
-                  <div className="mt-4 pt-3">
+                  <div className="mt-5 pt-3">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-[1.5px] bg-gold-accent" />
                       <cite className="not-italic">
-                        <span className="font-bebas text-[15px] tracking-[0.14em] uppercase text-gold">Jason Blum</span>
+                        <span className="font-bebas text-[16px] tracking-[0.14em] uppercase text-gold">Jason Blum</span>
                       </cite>
                     </div>
                     <p className="text-ink-secondary text-[14px] tracking-[0.08em] mt-1.5 ml-9">Blumhouse "Paranormal Activity"</p>
@@ -495,14 +419,15 @@ const Index = () => {
             </div>
           </section>
 
+
           {/* ──────────────────────────────────────────────────────────
-               § 4  CLOSED DOORS — the four cards speak for themselves
+               § 3  CLOSED DOORS — the four cards speak for themselves
              ────────────────────────────────────────────────────────── */}
           <SectionFrame id="cost">
             <div ref={revCost.ref} className={cn("transition-all duration-700 ease-out", revCost.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
 
               <div className="text-center mb-8">
-                <h2 className="font-bebas text-[36px] md:text-[44px] tracking-[0.08em] text-gold"
+                <h2 className="font-bebas text-[40px] md:text-[50px] tracking-[0.08em] text-gold"
                   style={{ textShadow: revCost.visible ? '0 0 30px rgba(212,175,55,0.4), 0 0 60px rgba(212,175,55,0.15)' : 'none' }}>
                   THE <span className="text-white">REALITY</span>
                 </h2>
@@ -513,7 +438,7 @@ const Index = () => {
                   <div
                     key={door.name}
                     className={cn(
-                      "relative border p-5 flex flex-col gap-4 transition-all duration-700 ease-out overflow-hidden rounded-xl",
+                      "relative border p-6 flex flex-col transition-all duration-700 ease-out overflow-hidden rounded-xl min-h-[160px]",
                       "bg-bg-card border-bg-card-border",
                       revCost.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                     )}
@@ -521,60 +446,253 @@ const Index = () => {
                       transitionDelay: revCost.visible ? `${i * 100}ms` : '0ms',
                     }}
                   >
-                    {/* Lock watermark */}
+                    {/* Lock icon — top right, subtle */}
                     <LockKeyhole
-                      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-14 h-14 text-gold-accent"
-                      strokeWidth={1}
+                      className="absolute top-4 right-4 w-4 h-4 text-gold-accent"
+                      strokeWidth={1.5}
                     />
+                    {/* Cost — the visual anchor */}
+                    <span className="font-mono text-[20px] font-bold text-gold mb-3">
+                      {door.cost}
+                    </span>
                     {/* Title */}
-                    <div className="relative z-10">
-                      <p className="font-bebas text-[18px] md:text-[20px] tracking-[0.08em] uppercase leading-tight text-white">
-                        {door.name}
-                      </p>
-                    </div>
-                    {/* Cost + description */}
-                    <div className="relative z-10 mt-auto">
-                      <span className="font-mono text-[15px] font-bold text-gold block mb-2">
-                        {door.cost}
-                      </span>
-                      <p className="text-[13px] leading-[1.5] text-ink-secondary">
-                        {door.lock}
-                      </p>
-                    </div>
+                    <p className="font-bebas text-[20px] tracking-[0.08em] uppercase leading-tight text-white mb-2">
+                      {door.name}
+                    </p>
+                    {/* Description */}
+                    <p className="text-[14px] leading-[1.5] text-ink-secondary mt-auto">
+                      {door.lock}
+                    </p>
                   </div>
                 ))}
               </div>
             </div>
           </SectionFrame>
 
-          {/* ── PIVOT — "Until now." ── */}
-          <section className="py-10 md:py-14 px-6 relative">
+
+          {/* ──────────────────────────────────────────────────────────
+               § 4  THE SOLUTION — pivot into the product
+             ────────────────────────────────────────────────────────── */}
+          <section className="py-12 md:py-16 px-6">
             <div
-              ref={revUntilNow.ref}
+              ref={revSolution.ref}
               className={cn(
                 "max-w-md mx-auto text-center transition-all duration-700 ease-out",
-                revUntilNow.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"
+                revSolution.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"
               )}
             >
-              <div className="flex items-center gap-5 justify-center">
-                <div className="h-[1.5px] w-16 bg-gradient-to-r from-transparent to-gold-accent" />
-                <p
-                  className="font-bebas text-[40px] md:text-[50px] tracking-[0.06em] text-gold"
+              <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-secondary mb-4">The Solution</p>
+              <h2
+                className="font-bebas text-[42px] md:text-[52px] tracking-[0.08em] leading-[1.05] text-gold"
+                style={{
+                  textShadow: revSolution.visible
+                    ? '0 0 30px rgba(212,175,55,0.4), 0 0 60px rgba(212,175,55,0.15)'
+                    : 'none',
+                }}
+              >
+                WE BUILT THE{"\u00A0"}<span className="text-white">FRAMEWORK</span>.
+              </h2>
+            </div>
+          </section>
+
+
+          {/* ──────────────────────────────────────────────────────────
+               § 5  THE WATERFALL — the product reveal
+             ────────────────────────────────────────────────────────── */}
+          <SectionFrame id="waterfall">
+            <div ref={revWater.ref} className={cn("transition-all duration-700 ease-out", revWater.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
+
+              <h2 className="font-bebas text-[40px] md:text-[50px] text-gold tracking-[0.08em] text-center mb-1">THE <span className="text-white">WATERFALL</span></h2>
+              <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-secondary text-center mb-4">Your recoupment structure</p>
+
+              <div ref={waterBarRef} className="max-w-md mx-auto">
+                {/* Waterfall rows — unified financial table */}
+                <div className="border border-gold-border bg-black overflow-hidden rounded-xl">
+                  {waterfallTiers.filter(t => !t.isFinal).map((tier, i) => (
+                    <div
+                      key={tier.name}
+                      className={cn(
+                        "px-5 py-4 relative",
+                        i > 0 && "border-t border-bg-card-rule",
+                      )}
+                    >
+                      <div className="flex justify-between items-baseline mb-2">
+                        <div className="flex items-baseline gap-2">
+                          <span className="font-mono text-[12px] text-ink-secondary tabular-nums">
+                            {String(i + 1).padStart(2, '0')}
+                          </span>
+                          <span className={cn(
+                            "font-bebas tracking-[0.08em] uppercase",
+                            i === 0 ? "text-[22px] text-white" : "text-[18px] text-ink-body"
+                          )}>
+                            {tier.name}
+                          </span>
+                        </div>
+                        <span className="font-mono text-[17px] font-semibold text-ink-body">
+                          {tier.amount}
+                        </span>
+                      </div>
+                      <div className={cn("w-full relative overflow-hidden", i === 0 ? "h-3" : "h-2")} style={{ background: "rgba(255,255,255,0.08)" }}>
+                        <div
+                          className="absolute left-0 top-0 h-full"
+                          style={{
+                            width: barsRevealed ? `${tier.pct}%` : '0%',
+                            background: tier.barColor,
+                            boxShadow: i === 0 ? '0 0 8px rgba(212,175,55,0.15)' : 'none',
+                            transition: `width 500ms cubic-bezier(0.16,1,0.3,1)`,
+                            transitionDelay: `${i * 150}ms`,
+                          }}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Net Profits */}
+                <div className="mt-4 border border-gold-border bg-black px-5 py-5 text-center rounded-lg">
+                  <p className="text-[12px] tracking-[0.2em] uppercase font-semibold text-gold mb-1">Net Profits</p>
+                  <span className="font-mono text-[24px] font-bold text-white">
+                    ${countVal.toLocaleString()}
+                  </span>
+                </div>
+
+                {/* Branching connector */}
+                <div className="flex justify-center">
+                  <div className="w-[2px] h-6" style={{ background: "rgba(212,175,55,0.60)" }} />
+                </div>
+                <div className="flex items-start">
+                  <div className="flex-1 flex justify-end">
+                    <div className="w-1/2 h-[2px]" style={{ background: "rgba(212,175,55,0.60)" }} />
+                  </div>
+                  <div className="flex-1 flex justify-start">
+                    <div className="w-1/2 h-[2px]" style={{ background: "rgba(212,175,55,0.60)" }} />
+                  </div>
+                </div>
+
+                {/* Two corridor boxes */}
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="border border-gold-border bg-black px-4 py-5 text-center rounded-lg">
+                    <p className="text-[12px] tracking-[0.2em] uppercase font-semibold text-gold mb-1">Producer Corridor</p>
+                    <span className="font-mono text-[20px] font-bold text-white">
+                      ${producerVal.toLocaleString()}
+                    </span>
+                  </div>
+                  <div className="border border-gold-border bg-black px-4 py-5 text-center rounded-lg">
+                    <p className="text-[12px] tracking-[0.2em] uppercase font-semibold text-gold mb-1">Investor Corridor</p>
+                    <span className="font-mono text-[20px] font-bold text-white">
+                      ${investorVal.toLocaleString()}
+                    </span>
+                  </div>
+                </div>
+                <p className="font-mono text-[13px] text-ink-secondary text-center mt-5">Based on a hypothetical $1.8M budget and a $3M acquisition.</p>
+              </div>
+            </div>
+          </SectionFrame>
+
+
+          {/* ──────────────────────────────────────────────────────────
+               § 6  WHAT YOU GET — the solution ladder
+             ────────────────────────────────────────────────────────── */}
+          <section className="snap-section py-6 px-4">
+            <div
+              ref={revTiers.ref}
+              className={cn(
+                "max-w-md mx-auto transition-all duration-700 ease-out",
+                revTiers.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+              )}
+            >
+              <div className="text-center mb-8">
+                <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-secondary mb-4">What You Get</p>
+                <h2 className="font-bebas text-[40px] md:text-[50px] tracking-[0.08em] text-gold leading-[1.05]">
+                  YOUR PATH{"\u00A0"}<span className="text-white">FORWARD</span>
+                </h2>
+              </div>
+
+              <div className="space-y-4">
+                {/* Free Calculator — the entry point */}
+                <div
+                  className={cn(
+                    "relative overflow-hidden rounded-2xl border border-gold-accent transition-all duration-500 ease-out",
+                    revTiers.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+                  )}
                   style={{
-                    textShadow: revUntilNow.visible
-                      ? '0 0 30px rgba(212,175,55,0.4), 0 0 60px rgba(212,175,55,0.15)'
-                      : 'none',
+                    transitionDelay: revTiers.visible ? '100ms' : '0ms',
+                    background: 'rgba(212,175,55,0.03)',
+                    boxShadow: '0 0 30px rgba(212,175,55,0.08), inset 0 1px 0 rgba(212,175,55,0.08)',
                   }}
                 >
-                  Until <span className="text-white">now</span>.
-                </p>
-                <div className="h-[1.5px] w-16 bg-gradient-to-l from-transparent to-gold-accent" />
+                  <div className="p-8 md:p-10">
+                    <span className="inline-block font-bebas text-[16px] tracking-[0.20em] uppercase text-gold mb-3">Free</span>
+                    <h3 className="font-bebas text-[28px] md:text-[32px] tracking-[0.06em] text-white mb-3">THE CALCULATOR</h3>
+                    <p className="text-ink-secondary text-[16px] leading-relaxed mb-6">
+                      Model your deal. Stress-test your numbers. See where every dollar flows.
+                    </p>
+                    <button onClick={handleStartClick}
+                      className="w-full max-w-[280px] h-12 btn-cta-primary text-[18px]">
+                      START FREE
+                    </button>
+                  </div>
+                </div>
+
+                {/* The Blueprint — $197 */}
+                <div
+                  className={cn(
+                    "relative overflow-hidden rounded-2xl transition-all duration-500 ease-out",
+                    revTiers.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+                  )}
+                  style={{
+                    transitionDelay: revTiers.visible ? '250ms' : '0ms',
+                    border: '1px solid rgba(255,255,255,0.08)',
+                    background: 'rgba(255,255,255,0.02)',
+                  }}
+                >
+                  <div className="p-8 md:p-10">
+                    <span className="inline-block font-mono text-[18px] font-bold text-gold mb-3">$197</span>
+                    <h3 className="font-bebas text-[28px] md:text-[32px] tracking-[0.06em] text-white mb-3">THE BLUEPRINT</h3>
+                    <p className="text-ink-secondary text-[16px] leading-relaxed mb-6">
+                      Your complete finance plan in 4 professional documents. Formatted for your attorney.
+                    </p>
+                    <button onClick={handleStoreClick}
+                      className="w-full max-w-[280px] h-12 btn-cta-secondary text-[18px]">
+                      VIEW DETAILS
+                    </button>
+                  </div>
+                </div>
+
+                {/* The Pitch Package — $497 */}
+                <div
+                  className={cn(
+                    "relative overflow-hidden rounded-2xl border border-gold-accent transition-all duration-500 ease-out",
+                    revTiers.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+                  )}
+                  style={{
+                    transitionDelay: revTiers.visible ? '400ms' : '0ms',
+                    background: 'rgba(212,175,55,0.03)',
+                    boxShadow: '0 0 30px rgba(212,175,55,0.08), inset 0 1px 0 rgba(212,175,55,0.08)',
+                  }}
+                >
+                  <div className="p-8 md:p-10">
+                    <div className="flex items-center gap-3 mb-3">
+                      <span className="inline-block font-mono text-[18px] font-bold text-gold">$497</span>
+                      <span className="text-[11px] tracking-[0.12em] uppercase font-semibold text-ink-secondary line-through">$697</span>
+                    </div>
+                    <h3 className="font-bebas text-[28px] md:text-[32px] tracking-[0.06em] text-white mb-3">THE PITCH PACKAGE</h3>
+                    <p className="text-ink-secondary text-[16px] leading-relaxed mb-6">
+                      8 documents including pitch deck and investor return profiles. Walk into the room prepared.
+                    </p>
+                    <button onClick={handleStoreClick}
+                      className="w-full max-w-[280px] h-12 btn-cta-secondary text-[18px]">
+                      VIEW DETAILS
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           </section>
 
+
           {/* ──────────────────────────────────────────────────────────
-               § 5  FINAL CTA
+               § 7  FINAL CTA — The Moment of Truth
              ────────────────────────────────────────────────────────── */}
           <section id="final-cta" className="snap-section py-10 px-4">
             <div
@@ -588,13 +706,9 @@ const Index = () => {
                 boxShadow: '0 0 40px rgba(212,175,55,0.08), inset 0 1px 0 rgba(212,175,55,0.08)',
               }}
             >
-              {/* Ambient glow */}
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none"
-                style={{ width: '100%', height: '100%', background: `radial-gradient(ellipse 320px 50% at 50% 20%, rgba(212,175,55,0.06) 0%, transparent 70%)` }} />
-
               <div className="relative p-10 md:p-16 max-w-md mx-auto text-center">
                 <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-secondary mb-5">The Moment of Truth</p>
-                <h2 className="font-bebas text-[36px] md:text-[44px] leading-[1.1] tracking-[0.08em] text-gold mb-8">
+                <h2 className="font-bebas text-[40px] md:text-[50px] leading-[1.1] tracking-[0.08em] text-gold mb-8">
                   YOUR INVESTOR WILL{"\u00A0"}ASK HOW THE MONEY FLOWS <span className="text-white">BACK</span>.
                 </h2>
                 <button onClick={handleStartClick}
@@ -614,8 +728,7 @@ const Index = () => {
                 maxWidth: "320px",
                 borderRadius: "16px",
                 background: "#000000",
-                border: "1.5px solid rgba(212,175,55,0.50)",
-                boxShadow: "0 8px 32px rgba(0,0,0,0.95), 0 0 0 1px rgba(212,175,55,0.10)",
+                border: "1.5px solid rgba(212,175,55,0.30)",
                 padding: "24px 32px",
               }}
             >
