@@ -6,7 +6,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import ErrorBoundary from "./components/ErrorBoundary";
 import BottomTabBar from "./components/BottomTabBar";
 import OgBotSheet from "./components/OgBotSheet";
-import OgBotFab from "./components/OgBotFab";
+
 import MobileMenu from "./components/MobileMenu";
 import AppHeader from "./components/AppHeader";
 
@@ -52,7 +52,7 @@ const AppShell = () => {
   return (
     <>
       <AppHeader
-        onMoreOpen={() => setIsMenuOpen(true)}
+        onBotOpen={() => setIsBotOpen(true)}
       />
 
       <Suspense fallback={<PageLoader />}>
@@ -78,8 +78,7 @@ const AppShell = () => {
       {/* Global persistent UI — always mounted */}
       <OgBotSheet isOpen={isBotOpen} onOpenChange={setIsBotOpen} />
       <MobileMenu isOpen={isMenuOpen} onOpenChange={setIsMenuOpen} />
-      <OgBotFab onClick={() => setIsBotOpen(true)} isActive={isBotOpen} />
-      <BottomTabBar />
+      <BottomTabBar onMoreOpen={() => setIsMenuOpen(true)} />
     </>
   );
 };
