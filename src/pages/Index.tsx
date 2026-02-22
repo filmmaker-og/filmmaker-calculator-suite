@@ -641,7 +641,7 @@ const Index = () => {
                 background: "#000000",
                 border: "1.5px solid rgba(212,175,55,0.50)",
                 boxShadow: "0 8px 32px rgba(0,0,0,0.95), 0 0 0 1px rgba(212,175,55,0.10)",
-                padding: "16px 20px",
+                padding: "20px 28px",
               }}
             >
               <p className="text-ink-secondary text-xs tracking-wide leading-relaxed">
