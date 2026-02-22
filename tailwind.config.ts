@@ -24,33 +24,72 @@ export default {
         mono: ["Roboto Mono", "monospace"],
       },
       colors: {
-        // Two-Gold System: Metallic #D4AF37 + CTA #F9E076
-        border: {
-          default: "rgba(212, 175, 55, 0.20)",   // --border-default
-          active: "rgba(212, 175, 55, 0.50)",     // --border-active
-          subtle: "#2A2A2A",                       // --border-subtle
+        /* ═══════════════════════════════════════════════════════
+           DESIGN TOKEN SYSTEM — filmmaker.og
+           Two-tier luminance hierarchy:
+             CHROME = permanent architecture (header/tabbar) → bold
+             CONTENT = variable inventory (page body) → restrained
+           ═══════════════════════════════════════════════════════ */
+
+        // ── CHROME: header, tab bar, navigation fixtures ──
+        chrome: {
+          bg:        "rgba(10, 10, 10, 0.88)",       // pill background
+          "bg-solid": "rgba(0, 0, 0, 0.85)",         // tab bar (slightly darker)
+          border:    "rgba(212, 175, 55, 0.50)",      // confident gold border
+          glow:      "rgba(212, 175, 55, 0.30)",      // edge gradient peaks
+          "glow-faint": "rgba(212, 175, 55, 0.10)",   // outer shadow rings
+          active:    "rgba(212, 175, 55, 0.06)",       // active tab bg tint
+          ripple:    "rgba(212, 175, 55, 0.30)",       // tap ripple
         },
+
+        // ── GOLD: content hierarchy (6 tiers, no drift) ──
+        gold: {
+          DEFAULT:   "#D4AF37",                        // headlines, wordmarks, icons — FULL
+          label:     "rgba(212, 175, 55, 0.60)",       // micro-labels, category text
+          accent:    "rgba(212, 175, 55, 0.40)",       // dividers, connectors, accent stripes
+          border:    "rgba(212, 175, 55, 0.25)",       // card/section borders
+          ghost:     "rgba(212, 175, 55, 0.15)",       // watermarks, ghost text
+          glow:      "rgba(212, 175, 55, 0.06)",       // ambient radial backgrounds
+          cta:       "#F9E076",                        // CTA buttons ONLY
+          "cta-muted": "rgba(249, 224, 118, 0.45)",
+          "cta-subtle": "rgba(249, 224, 118, 0.12)",
+        },
+
+        // ── WHITE TEXT: 4 tiers, no drift ──
+        ink: {
+          DEFAULT:   "#FFFFFF",                        // headlines, key numbers — FULL
+          body:      "rgba(255, 255, 255, 0.80)",      // paragraph text, descriptions
+          secondary: "rgba(255, 255, 255, 0.55)",      // supporting info, metadata
+          ghost:     "rgba(255, 255, 255, 0.30)",      // disclaimers, fine print
+        },
+
+        // ── BACKGROUNDS ──
         bg: {
-          void: "#000000",
-          card: "#141414",
-          surface: "#111111",
-          elevated: "#0D0D0D",
-          header: "#0A0A0A",
-          overlay: "rgba(0, 0, 0, 0.85)",
+          void:      "#000000",
+          surface:   "#111111",
+          elevated:  "#0C0C0C",                        // quote cards, featured
+          card:      "rgba(255, 255, 255, 0.04)",      // content card fill
+          "card-border": "rgba(255, 255, 255, 0.10)",  // content card stroke
+          "card-rule":   "rgba(255, 255, 255, 0.06)",  // inner divider lines
+          overlay:   "rgba(0, 0, 0, 0.85)",
+        },
+
+        // ── WATERFALL BARS ──
+        bar: {
+          DEFAULT:   "rgba(212, 175, 55, 0.65)",       // standard tier bar
+          final:     "rgba(212, 175, 55, 0.85)",       // net profits bar
+        },
+
+        // ── LEGACY COMPAT (other pages still using old tokens) ──
+        border: {
+          default: "rgba(212, 175, 55, 0.25)",
+          active:  "rgba(212, 175, 55, 0.50)",
+          subtle:  "#2A2A2A",
         },
         text: {
           primary: "#FFFFFF",
-          mid: "#D4D4D4",
-          dim: "#999999",
-        },
-        gold: {
-          DEFAULT: "#D4AF37",                      // Metallic (non-interactive)
-          muted: "rgba(212, 175, 55, 0.45)",
-          subtle: "rgba(212, 175, 55, 0.10)",
-          glow: "rgba(212, 175, 55, 0.25)",
-          cta: "#F9E076",                          // CTA (clickable ONLY)
-          "cta-muted": "rgba(249, 224, 118, 0.45)",
-          "cta-subtle": "rgba(249, 224, 118, 0.12)",
+          mid:     "#D4D4D4",
+          dim:     "#999999",
         },
       },
       borderRadius: {

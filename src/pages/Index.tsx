@@ -256,7 +256,7 @@ const Index = () => {
             <p
               className={cn(
                 "absolute bottom-10 left-1/2 -translate-x-1/2",
-                "text-[11px] tracking-[0.3em] uppercase text-white/25",
+                "text-[11px] tracking-[0.3em] uppercase text-ink-ghost",
                 "transition-all duration-500 select-none pointer-events-none",
                 showSkipHint && !isComplete
                   ? "opacity-100 translate-y-0"
@@ -304,7 +304,7 @@ const Index = () => {
               <h1 className="font-bebas text-[clamp(2.8rem,9vw,4.2rem)] leading-[1.05] tracking-[0.06em] text-gold mb-5">
                 SEE WHERE EVERY<br /><span className="text-white">DOLLAR GOES</span>
               </h1>
-              <p className="mb-6 text-white/60 text-[16px] leading-[1.7] tracking-[0.06em] uppercase font-medium max-w-[360px] mx-auto">
+              <p className="mb-6 text-ink-secondary text-[16px] leading-[1.7] tracking-[0.06em] uppercase font-medium max-w-[360px] mx-auto">
                 Built by a Tribeca-winning producer whose debut sold to <span className="text-gold font-semibold">Netflix</span>.
               </p>
 
@@ -329,39 +329,39 @@ const Index = () => {
             <div ref={revWater.ref} className={cn("transition-all duration-700 ease-out", revWater.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
 
               <h2 className="font-bebas text-[36px] md:text-[44px] text-gold tracking-[0.08em] text-center mb-1">THE <span className="text-white">WATERFALL</span></h2>
-              <p className="text-[15px] text-white/50 tracking-[0.12em] uppercase text-center mb-2">Your recoupment structure</p>
+              <p className="text-[15px] text-ink-secondary tracking-[0.12em] uppercase text-center mb-2">Your recoupment structure</p>
 
               <div ref={waterBarRef} className="max-w-md mx-auto">
                 {/* Waterfall rows — unified financial table */}
-                <div className="border border-gold/25 bg-black overflow-hidden rounded-xl">
+                <div className="border border-gold-border bg-black overflow-hidden rounded-xl">
                   {waterfallTiers.filter(t => !t.isFinal).map((tier, i) => (
                     <div
                       key={tier.name}
                       className={cn(
                         "px-5 py-4 relative",
-                        i > 0 && "border-t border-white/[0.06]",
+                        i > 0 && "border-t border-bg-card-rule",
                       )}
                     >
                       <div className="flex justify-between items-baseline mb-2">
                         <div className="flex items-baseline gap-2">
-                          <span className="font-mono text-[12px] text-white/40 tabular-nums">
+                          <span className="font-mono text-[12px] text-ink-ghost tabular-nums">
                             {String(i + 1).padStart(2, '0')}
                           </span>
                           <span className={cn(
                             "font-bebas tracking-[0.08em] uppercase",
-                            i === 0 ? "text-[20px] text-white" : "text-[17px] text-white/80"
+                            i === 0 ? "text-[20px] text-white" : "text-[17px] text-ink-body"
                           )}>
                             {tier.name}
                           </span>
                         </div>
                         <span className={cn(
                           "font-mono text-[17px] font-semibold",
-                          i === 0 ? "text-white/90" : "text-white/70"
+                          i === 0 ? "text-ink-body" : "text-ink-secondary"
                         )}>
                           {tier.amount}
                         </span>
                       </div>
-                      <div className={cn("w-full bg-white/[0.06] relative overflow-hidden", i === 0 ? "h-3" : "h-2")}>
+                      <div className={cn("w-full bg-bg-card relative overflow-hidden", i === 0 ? "h-3" : "h-2")}>
                         <div
                           className="absolute left-0 top-0 h-full"
                           style={{
@@ -378,8 +378,8 @@ const Index = () => {
                 </div>
 
                 {/* Net Profits */}
-                <div className="mt-4 border border-gold/25 bg-black px-5 py-4 text-center rounded-lg">
-                  <p className="text-[10px] tracking-[0.2em] uppercase font-semibold text-gold/60 mb-1">Net Profits</p>
+                <div className="mt-4 border border-gold-border bg-black px-5 py-4 text-center rounded-lg">
+                  <p className="text-[10px] tracking-[0.2em] uppercase font-semibold text-gold-label mb-1">Net Profits</p>
                   <span className="font-mono text-[22px] font-bold text-white">
                     ${countVal.toLocaleString()}
                   </span>
@@ -387,33 +387,33 @@ const Index = () => {
 
                 {/* Branching connector */}
                 <div className="flex justify-center">
-                  <div className="w-[2px] h-6 bg-gold/40" />
+                  <div className="w-[2px] h-6 bg-gold-accent" />
                 </div>
                 <div className="flex items-start">
                   <div className="flex-1 flex justify-end">
-                    <div className="w-1/2 h-[2px] bg-gold/40" />
+                    <div className="w-1/2 h-[2px] bg-gold-accent" />
                   </div>
                   <div className="flex-1 flex justify-start">
-                    <div className="w-1/2 h-[2px] bg-gold/40" />
+                    <div className="w-1/2 h-[2px] bg-gold-accent" />
                   </div>
                 </div>
 
                 {/* Two corridor boxes — consistent treatment */}
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="border border-gold/25 bg-black px-4 py-5 text-center rounded-lg">
-                    <p className="text-[10px] tracking-[0.2em] uppercase font-semibold text-gold/60 mb-1">Producer Corridor</p>
+                  <div className="border border-gold-border bg-black px-4 py-5 text-center rounded-lg">
+                    <p className="text-[10px] tracking-[0.2em] uppercase font-semibold text-gold-label mb-1">Producer Corridor</p>
                     <span className="font-mono text-[18px] font-bold text-white">
                       ${producerVal.toLocaleString()}
                     </span>
                   </div>
-                  <div className="border border-gold/25 bg-black px-4 py-5 text-center rounded-lg">
-                    <p className="text-[10px] tracking-[0.2em] uppercase font-semibold text-gold/60 mb-1">Investor Corridor</p>
+                  <div className="border border-gold-border bg-black px-4 py-5 text-center rounded-lg">
+                    <p className="text-[10px] tracking-[0.2em] uppercase font-semibold text-gold-label mb-1">Investor Corridor</p>
                     <span className="font-mono text-[18px] font-bold text-white">
                       ${investorVal.toLocaleString()}
                     </span>
                   </div>
                 </div>
-                <p className="font-mono text-[12px] text-white/35 text-center mt-5">Based on a hypothetical $1.8M budget and a $3M acquisition.</p>
+                <p className="font-mono text-[12px] text-ink-ghost text-center mt-5">Based on a hypothetical $1.8M budget and a $3M acquisition.</p>
               </div>
             </div>
           </SectionFrame>
@@ -426,7 +426,7 @@ const Index = () => {
             <div ref={revEvidence.ref} className={cn("transition-all duration-700 ease-out", revEvidence.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
 
               <div className="text-center mb-10">
-                <p className="text-white/40 text-[15px] tracking-[0.20em] uppercase font-semibold mb-5 text-center">The Problem</p>
+                <p className="text-ink-ghost text-[15px] tracking-[0.20em] uppercase font-semibold mb-5 text-center">The Problem</p>
                 <h2
                   className="font-bebas text-[40px] md:text-[52px] tracking-[0.06em] leading-[0.95] text-gold"
                   style={{
@@ -441,7 +441,7 @@ const Index = () => {
 
               {/* Unified container — problem flows into thesis */}
               <div className="max-w-md mx-auto">
-                <div className="relative bg-white/[0.04] border border-white/[0.10] overflow-hidden rounded-xl"
+                <div className="relative bg-bg-card border border-bg-card-border overflow-hidden rounded-xl"
                   style={{ boxShadow: '0 0 20px rgba(212,175,55,0.06)' }}>
                   {/* Gold left accent */}
                   <div className="absolute left-0 top-0 bottom-0 w-[3px]"
@@ -463,7 +463,7 @@ const Index = () => {
                     <div className="space-y-3 mb-6">
                       <p
                         className={cn(
-                          "text-white/50 text-[16px] leading-relaxed transition-all duration-500 ease-out",
+                          "text-ink-secondary text-[16px] leading-relaxed transition-all duration-500 ease-out",
                           revEvidence.visible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-3"
                         )}
                         style={{ transitionDelay: revEvidence.visible ? '300ms' : '0ms' }}
@@ -472,7 +472,7 @@ const Index = () => {
                       </p>
                       <p
                         className={cn(
-                          "text-white/70 text-[16px] leading-relaxed font-medium transition-all duration-500 ease-out",
+                          "text-ink-secondary text-[16px] leading-relaxed font-medium transition-all duration-500 ease-out",
                           revEvidence.visible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-3"
                         )}
                         style={{ transitionDelay: revEvidence.visible ? '450ms' : '0ms' }}
@@ -484,7 +484,7 @@ const Index = () => {
                     {/* Gold divider — dramatic pause */}
                     <div
                       className={cn(
-                        "h-[1px] w-12 bg-gold/40 mb-6 transition-all duration-500 ease-out",
+                        "h-[1px] w-12 bg-gold-accent mb-6 transition-all duration-500 ease-out",
                         revEvidence.visible ? "opacity-100" : "opacity-0"
                       )}
                       style={{ transitionDelay: revEvidence.visible ? '600ms' : '0ms' }}
@@ -492,7 +492,7 @@ const Index = () => {
 
                     <p
                       className={cn(
-                        "font-bebas text-[20px] md:text-[24px] tracking-[0.08em] text-white/80 mb-8 transition-all duration-500 ease-out",
+                        "font-bebas text-[20px] md:text-[24px] tracking-[0.08em] text-ink-body mb-8 transition-all duration-500 ease-out",
                         revEvidence.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
                       )}
                       style={{ transitionDelay: revEvidence.visible ? '750ms' : '0ms' }}
@@ -504,7 +504,7 @@ const Index = () => {
                     <div
                       ref={revMission.ref}
                       className={cn(
-                        "border-t border-white/[0.08] pt-6 space-y-5 transition-all duration-700 ease-out",
+                        "border-t border-bg-card-rule pt-6 space-y-5 transition-all duration-700 ease-out",
                         revMission.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                       )}
                     >
@@ -521,9 +521,9 @@ const Index = () => {
                           )}
                           style={{ transitionDelay: revMission.visible ? `${200 + i * 120}ms` : '0ms' }}
                         >
-                          <Check className="w-3.5 h-3.5 text-gold/50 flex-shrink-0 relative top-[2px]" />
-                          <p className="text-white/60 text-[16px] leading-relaxed">
-                            <span className="text-white/80 font-semibold">{row.asset}</span> has {row.tool}.
+                          <Check className="w-3.5 h-3.5 text-gold-accent flex-shrink-0 relative top-[2px]" />
+                          <p className="text-ink-secondary text-[16px] leading-relaxed">
+                            <span className="text-ink-body font-semibold">{row.asset}</span> has {row.tool}.
                           </p>
                         </div>
                       ))}
@@ -535,7 +535,7 @@ const Index = () => {
                         )}
                         style={{ transitionDelay: revMission.visible ? '560ms' : '0ms' }}
                       >
-                        <X className="w-4 h-4 text-white/50 flex-shrink-0 relative top-[2px]" />
+                        <X className="w-4 h-4 text-ink-secondary flex-shrink-0 relative top-[2px]" />
                         <p className="font-bebas text-[22px] md:text-[26px] tracking-[0.06em] text-gold leading-tight">
                           Film has no standardized framework.
                         </p>
@@ -560,7 +560,7 @@ const Index = () => {
               )}
             >
               <div className="flex items-center gap-5 justify-center">
-                <div className="h-[1.5px] w-16 bg-gradient-to-r from-transparent to-gold/50" />
+                <div className="h-[1.5px] w-16 bg-gradient-to-r from-transparent to-gold-accent" />
                 <p
                   className="font-bebas text-[40px] md:text-[50px] tracking-[0.06em] text-gold"
                   style={{
@@ -571,7 +571,7 @@ const Index = () => {
                 >
                   Until <span className="text-white">now</span>.
                 </p>
-                <div className="h-[1.5px] w-16 bg-gradient-to-l from-transparent to-gold/50" />
+                <div className="h-[1.5px] w-16 bg-gradient-to-l from-transparent to-gold-accent" />
               </div>
             </div>
           </section>
@@ -586,7 +586,7 @@ const Index = () => {
               )}
             >
               <div
-                className="relative border border-gold/40 overflow-hidden rounded-xl"
+                className="relative border border-gold-accent overflow-hidden rounded-xl"
                 style={{
                   background: '#0C0C0C',
                   boxShadow: '0 0 30px rgba(212,175,55,0.08), inset 0 1px 0 rgba(212,175,55,0.10)',
@@ -597,21 +597,21 @@ const Index = () => {
                   style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.80), rgba(212,175,55,0.40), transparent)' }} />
                 <div className="p-5 md:p-7 pl-6 md:pl-9">
                   {/* Opening quote mark */}
-                  <div className="font-bebas text-[48px] md:text-[60px] leading-none select-none pointer-events-none text-gold/55 -mb-4 -ml-1"
+                  <div className="font-bebas text-[48px] md:text-[60px] leading-none select-none pointer-events-none text-gold-label -mb-4 -ml-1"
                     aria-hidden="true">{"\u201C"}</div>
                   <blockquote className="relative z-10">
-                    <p className="text-[16px] md:text-[17px] leading-[1.7] text-white/85 italic">
+                    <p className="text-[16px] md:text-[17px] leading-[1.7] text-ink-body italic">
                       Filmmakers have a perception in the business world of being kind of flaky dudes{"\u2026"} you need to be buttoned down{"\u2026"} speak the language that they speak.
                     </p>
                   </blockquote>
                   <div className="mt-4 pt-3">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-[1.5px] bg-gold/50" />
+                      <div className="w-10 h-[1.5px] bg-gold-accent" />
                       <cite className="not-italic">
                         <span className="font-bebas text-[15px] tracking-[0.14em] uppercase text-gold">Jason Blum</span>
                       </cite>
                     </div>
-                    <p className="text-white/50 text-[13px] tracking-[0.08em] mt-1.5 ml-9">Blumhouse "Paranormal Activity"</p>
+                    <p className="text-ink-secondary text-[13px] tracking-[0.08em] mt-1.5 ml-9">Blumhouse "Paranormal Activity"</p>
                   </div>
                 </div>
               </div>
@@ -637,7 +637,7 @@ const Index = () => {
                     key={door.name}
                     className={cn(
                       "relative border p-5 flex flex-col justify-between transition-all duration-700 ease-out overflow-hidden rounded-xl min-h-[160px]",
-                      "bg-white/[0.06] border-white/[0.12]",
+                      "bg-bg-card border-bg-card-border",
                       revCost.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                     )}
                     style={{
@@ -646,7 +646,7 @@ const Index = () => {
                   >
                     {/* Lock watermark — centered behind content */}
                     <LockKeyhole
-                      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 text-gold/[0.18]"
+                      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 text-gold-ghost"
                       strokeWidth={1.5}
                     />
                     {/* Content */}
@@ -659,7 +659,7 @@ const Index = () => {
                       <span className="font-mono text-[15px] font-bold text-gold block mb-1.5">
                         {door.cost}
                       </span>
-                      <p className="text-[14px] leading-relaxed text-white/50">
+                      <p className="text-[14px] leading-relaxed text-ink-secondary">
                         {door.lock}
                       </p>
                     </div>
@@ -678,19 +678,19 @@ const Index = () => {
             <div ref={revDecl.ref} className={cn("max-w-md mx-auto relative transition-all duration-700 ease-out", revDecl.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5")}>
               <div className="py-12 px-4">
                 <div className="flex items-center gap-4 justify-center">
-                  <div className="h-[1.5px] w-16 flex-shrink-0 bg-gradient-to-r from-transparent to-gold/50" />
+                  <div className="h-[1.5px] w-16 flex-shrink-0 bg-gradient-to-r from-transparent to-gold-accent" />
                   <h3
                     className="font-bebas text-[36px] md:text-[44px] tracking-[0.08em] uppercase text-gold leading-tight text-center"
                     style={{ textShadow: revDecl.visible ? '0 0 30px rgba(212,175,55,0.4), 0 0 60px rgba(212,175,55,0.15)' : 'none' }}
                   >
                     We Built The Toolkit They Didn{"\u2019"}t Teach You In Film{"\u00A0"}<span className="text-white">School</span>.
                   </h3>
-                  <div className="h-[1.5px] w-16 flex-shrink-0 bg-gradient-to-l from-transparent to-gold/50" />
+                  <div className="h-[1.5px] w-16 flex-shrink-0 bg-gradient-to-l from-transparent to-gold-accent" />
                 </div>
               </div>
               <div className="flex justify-center mt-6 cursor-pointer active:scale-[0.97]"
                 onClick={() => { haptics.light(); document.getElementById('final-cta')?.scrollIntoView({ behavior: 'smooth' }); }}>
-                <ChevronDown className="w-5 h-5 text-gold/50 animate-bounce-subtle" />
+                <ChevronDown className="w-5 h-5 text-gold-accent animate-bounce-subtle" />
               </div>
             </div>
           </section>
@@ -703,7 +703,7 @@ const Index = () => {
             <div
               ref={revFinal.ref}
               className={cn(
-                "relative overflow-hidden transition-all duration-700 ease-out rounded-2xl border border-gold/40",
+                "relative overflow-hidden transition-all duration-700 ease-out rounded-2xl border border-gold-accent",
                 revFinal.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
               )}
               style={{
@@ -716,7 +716,7 @@ const Index = () => {
                 style={{ width: '100%', height: '100%', background: `radial-gradient(ellipse 320px 50% at 50% 20%, rgba(212,175,55,0.06) 0%, transparent 70%)` }} />
 
               <div className="relative p-10 md:p-16 max-w-md mx-auto text-center">
-                <p className="text-white/50 text-[14px] tracking-[0.20em] uppercase font-semibold mb-5">The Moment of Truth</p>
+                <p className="text-ink-secondary text-[14px] tracking-[0.20em] uppercase font-semibold mb-5">The Moment of Truth</p>
                 <h2 className="font-bebas text-[34px] md:text-[44px] leading-[1.1] tracking-[0.08em] text-gold mb-8">
                   YOUR INVESTOR WILL{"\u00A0"}ASK HOW THE MONEY FLOWS <span className="text-white">BACK</span>.
                 </h2>
@@ -730,7 +730,7 @@ const Index = () => {
 
           {/* ── FOOTER ── */}
           <footer className="py-8 px-6">
-            <p className="text-white/30 text-xs tracking-wide leading-relaxed text-center max-w-sm mx-auto">
+            <p className="text-ink-ghost text-xs tracking-wide leading-relaxed text-center max-w-sm mx-auto">
               For educational and informational purposes only. Not legal, tax, or investment advice.
               Consult a qualified entertainment attorney before making financing decisions.
             </p>

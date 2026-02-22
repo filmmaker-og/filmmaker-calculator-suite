@@ -11,6 +11,10 @@ const tabs = [
   { id: "resources",  path: "/resources",  label: "INFO", icon: BookOpen },
 ];
 
+/* ═══════════════════════════════════════════════════════════════════
+   BottomTabBar — uses chrome-* design tokens
+   Matches AppHeader luminance tier (architectural gold)
+   ═══════════════════════════════════════════════════════════════════ */
 const BottomTabBar = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -29,9 +33,6 @@ const BottomTabBar = () => {
     setTimeout(() => setRippleId(null), 420);
   }, [navigate, haptics]);
 
-  const GOLD_FULL = "rgba(212,175,55,1)";
-  const GOLD_DIM  = "rgba(212,175,55,0.75)";
-
   return (
     /* Full-width transparent wrapper — handles safe-area, centers the pill */
     <div
@@ -44,30 +45,21 @@ const BottomTabBar = () => {
     >
       {/* Floating box-rounded nav pill */}
       <nav
-        className="relative flex items-stretch overflow-hidden"
+        className="relative flex items-stretch overflow-hidden bg-chrome-bg-solid border-[1.5px] border-chrome-border backdrop-blur-[16px]"
         style={{
           pointerEvents: "auto",
           width: "100%",
           maxWidth: "340px",
           height: "54px",
           borderRadius: "16px",
-          background: "rgba(0,0,0,0.85)",
-          backdropFilter: "blur(16px)",
-          WebkitBackdropFilter: "blur(16px)",
-          border: "1.5px solid rgba(212,175,55,0.60)",
-          boxShadow:
-            "0 8px 32px rgba(0,0,0,0.90), 0 0 0 1px rgba(212,175,55,0.15), 0 0 12px rgba(212,175,55,0.06), inset 0 0.5px 0 rgba(212,175,55,0.10)",
+          boxShadow: "0 8px 32px rgba(0,0,0,0.90), 0 0 0 1px rgba(212,175,55,0.15), 0 0 12px rgba(212,175,55,0.06)",
           paddingLeft: "6px",
           paddingRight: "6px",
         }}
       >
         {/* Gold top edge line */}
-        <div
-          className="absolute top-0 left-0 right-0 h-[1px] pointer-events-none"
-          style={{
-            background: "linear-gradient(90deg, transparent 0%, rgba(212,175,55,0.30) 30%, rgba(212,175,55,0.40) 50%, rgba(212,175,55,0.30) 70%, transparent 100%)",
-          }}
-        />
+        <div className="absolute top-0 left-0 right-0 h-[1px] pointer-events-none bg-gradient-to-r from-transparent via-chrome-glow to-transparent" />
+
         {tabs.map((tab) => {
           const isActive = getActive(tab.path);
           const Icon = tab.icon;
@@ -77,46 +69,33 @@ const BottomTabBar = () => {
               onClick={() => handleTap(tab)}
               className={cn(
                 "relative flex-1 flex flex-col items-center justify-center gap-[3px] transition-all duration-200 active:scale-95 overflow-hidden",
-                isActive && "rounded-lg",
+                isActive && "rounded-lg bg-chrome-active",
               )}
-              style={{
-                background: isActive ? "rgba(212,175,55,0.06)" : "transparent",
-              }}
               aria-label={tab.label}
             >
               {/* Gold tap-ripple */}
               {rippleId === tab.id && (
                 <span
-                  className="absolute top-1/2 left-1/2 w-10 h-10 rounded-full pointer-events-none animate-tap-ripple"
-                  style={{ background: "rgba(212,175,55,0.3)" }}
+                  className="absolute top-1/2 left-1/2 w-10 h-10 rounded-full pointer-events-none animate-tap-ripple bg-chrome-ripple"
                 />
               )}
               <Icon
-                className="w-5 h-5"
-                style={{ color: isActive ? GOLD_FULL : GOLD_DIM }}
+                className={cn("w-5 h-5", isActive ? "text-gold" : "text-gold-label")}
               />
               <span
-                className="font-bebas leading-none transition-all"
-                style={{
-                  fontSize: "11px",
-                  letterSpacing: isActive ? "0.16em" : "0.10em",
-                  fontWeight: 500,
-                  color: isActive ? GOLD_FULL : "rgba(255,255,255,0.55)",
-                }}
+                className={cn(
+                  "font-bebas leading-none transition-all text-[11px]",
+                  isActive
+                    ? "text-gold tracking-[0.16em] font-medium"
+                    : "text-ink-secondary tracking-[0.10em] font-medium"
+                )}
               >
                 {tab.label}
               </span>
-              {/* Telegram-style active dot indicator */}
+              {/* Active indicator bar */}
               {isActive && (
                 <span
-                  className="absolute bottom-[5px] left-1/2 -translate-x-1/2"
-                  style={{
-                    width: "24px",
-                    height: "2.5px",
-                    borderRadius: "2px",
-                    background: GOLD_FULL,
-                    display: "block",
-                  }}
+                  className="absolute bottom-[5px] left-1/2 -translate-x-1/2 w-6 h-[2.5px] rounded-sm bg-gold block"
                 />
               )}
             </button>
