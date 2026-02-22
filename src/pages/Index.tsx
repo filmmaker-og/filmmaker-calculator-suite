@@ -586,7 +586,7 @@ const Index = () => {
                     className="font-bebas text-[34px] md:text-[44px] tracking-[0.06em] uppercase text-gold leading-[1.1] text-center"
                     style={{ textShadow: revDecl.visible ? '0 0 30px rgba(212,175,55,0.4), 0 0 60px rgba(212,175,55,0.15)' : 'none' }}
                   >
-                    The Toolkit They Didn{"\u2019"}t Teach In Film{"\u00A0"}<span className="text-white">School</span>.
+                    We Built What They Didn{"\u2019"}t Teach You In Film{"\u00A0"}<span className="text-white">School</span>.
                   </h3>
                   <div className="h-[1.5px] w-16 bg-gradient-to-l from-transparent to-gold-accent" />
                 </div>
