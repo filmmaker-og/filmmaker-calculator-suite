@@ -209,7 +209,7 @@ const Index = () => {
               <h1 className="font-bebas text-[clamp(2.8rem,9vw,4.2rem)] leading-[1.05] tracking-[0.06em] text-gold mb-5">
                 SEE WHERE EVERY<br /><span className="text-white">DOLLAR GOES</span>
               </h1>
-              <p className="mb-6 text-ink-secondary text-[16px] leading-[1.7] tracking-[0.06em] uppercase font-medium max-w-[360px] mx-auto">
+              <p className="mb-6 text-ink-secondary text-[16px] leading-[1.7] tracking-[0.02em] font-medium max-w-[360px] mx-auto">
                 Built by a Tribeca-winning producer whose debut sold to <span className="text-gold font-semibold">Netflix</span>.
               </p>
 
@@ -234,7 +234,7 @@ const Index = () => {
             <div ref={revWater.ref} className={cn("transition-all duration-700 ease-out", revWater.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
 
               <h2 className="font-bebas text-[36px] md:text-[44px] text-gold tracking-[0.08em] text-center mb-1">THE <span className="text-white">WATERFALL</span></h2>
-              <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-ghost text-center mb-2">Your recoupment structure</p>
+              <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-secondary text-center mb-2">Your recoupment structure</p>
 
               <div ref={waterBarRef} className="max-w-md mx-auto">
                 {/* Waterfall rows — unified financial table */}
@@ -259,10 +259,7 @@ const Index = () => {
                             {tier.name}
                           </span>
                         </div>
-                        <span className={cn(
-                          "font-mono text-[17px] font-semibold",
-                          i === 0 ? "text-ink-body" : "text-ink-secondary"
-                        )}>
+                        <span className="font-mono text-[17px] font-semibold text-ink-body">
                           {tier.amount}
                         </span>
                       </div>
@@ -284,7 +281,7 @@ const Index = () => {
 
                 {/* Net Profits */}
                 <div className="mt-4 border border-gold-border bg-black px-5 py-4 text-center rounded-lg">
-                  <p className="text-[10px] tracking-[0.2em] uppercase font-semibold text-gold-label mb-1">Net Profits</p>
+                  <p className="text-[11px] tracking-[0.2em] uppercase font-semibold text-gold mb-1">Net Profits</p>
                   <span className="font-mono text-[22px] font-bold text-white">
                     ${countVal.toLocaleString()}
                   </span>
@@ -306,13 +303,13 @@ const Index = () => {
                 {/* Two corridor boxes — consistent treatment */}
                 <div className="grid grid-cols-2 gap-4">
                   <div className="border border-gold-border bg-black px-4 py-5 text-center rounded-lg">
-                    <p className="text-[10px] tracking-[0.2em] uppercase font-semibold text-gold-label mb-1">Producer Corridor</p>
+                    <p className="text-[11px] tracking-[0.2em] uppercase font-semibold text-gold mb-1">Producer Corridor</p>
                     <span className="font-mono text-[18px] font-bold text-white">
                       ${producerVal.toLocaleString()}
                     </span>
                   </div>
                   <div className="border border-gold-border bg-black px-4 py-5 text-center rounded-lg">
-                    <p className="text-[10px] tracking-[0.2em] uppercase font-semibold text-gold-label mb-1">Investor Corridor</p>
+                    <p className="text-[11px] tracking-[0.2em] uppercase font-semibold text-gold mb-1">Investor Corridor</p>
                     <span className="font-mono text-[18px] font-bold text-white">
                       ${investorVal.toLocaleString()}
                     </span>
@@ -331,7 +328,7 @@ const Index = () => {
             <div ref={revEvidence.ref} className={cn("transition-all duration-700 ease-out", revEvidence.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
 
               <div className="text-center mb-10">
-                <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-ghost mb-5 text-center">The Problem</p>
+                <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-secondary mb-5 text-center">The Problem</p>
                 <h2
                   className="font-bebas text-[36px] md:text-[44px] tracking-[0.06em] leading-[0.95] text-gold"
                   style={{
@@ -516,7 +513,7 @@ const Index = () => {
                         <span className="font-bebas text-[15px] tracking-[0.14em] uppercase text-gold">Jason Blum</span>
                       </cite>
                     </div>
-                    <p className="text-ink-secondary text-[13px] tracking-[0.08em] mt-1.5 ml-9">Blumhouse "Paranormal Activity"</p>
+                    <p className="text-ink-secondary text-[14px] tracking-[0.08em] mt-1.5 ml-9">Blumhouse "Paranormal Activity"</p>
                   </div>
                 </div>
               </div>
@@ -564,7 +561,7 @@ const Index = () => {
                       <span className="font-mono text-[15px] font-bold text-gold block mb-1.5">
                         {door.cost}
                       </span>
-                      <p className="text-[14px] leading-relaxed text-ink-secondary">
+                      <p className="text-[14px] leading-relaxed text-ink-body">
                         {door.lock}
                       </p>
                     </div>
@@ -621,7 +618,7 @@ const Index = () => {
                 style={{ width: '100%', height: '100%', background: `radial-gradient(ellipse 320px 50% at 50% 20%, rgba(212,175,55,0.06) 0%, transparent 70%)` }} />
 
               <div className="relative p-10 md:p-16 max-w-md mx-auto text-center">
-                <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-ghost mb-5">The Moment of Truth</p>
+                <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-secondary mb-5">The Moment of Truth</p>
                 <h2 className="font-bebas text-[36px] md:text-[44px] leading-[1.1] tracking-[0.08em] text-gold mb-8">
                   YOUR INVESTOR WILL{"\u00A0"}ASK HOW THE MONEY FLOWS <span className="text-white">BACK</span>.
                 </h2>

@@ -668,7 +668,7 @@
     color: #000000;
     font-family: 'Bebas Neue', sans-serif;
     font-size: 22px;
-    font-weight: 700;
+    font-weight: 400;
     letter-spacing: 0.18em;
     text-transform: uppercase;
     border-radius: 10px;
@@ -724,7 +724,7 @@
     color: #FFFFFF;
     font-family: 'Bebas Neue', sans-serif;
     font-size: 22px;
-    font-weight: 700;
+    font-weight: 400;
     letter-spacing: 0.18em;
     text-transform: uppercase;
     border-radius: 10px;
@@ -777,7 +777,7 @@
     border: 1px solid rgba(212, 175, 55, 0.30);
     color: var(--gold);
     font-family: 'Bebas Neue', sans-serif;
-    font-weight: 700;
+    font-weight: 400;
     letter-spacing: 0.12em;
     text-transform: uppercase;
     border-radius: 10px;
