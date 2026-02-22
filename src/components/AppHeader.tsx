@@ -1,9 +1,10 @@
+import { useNavigate } from "react-router-dom";
 import { MoreVertical } from "lucide-react";
 import { useHaptics } from "@/hooks/use-haptics";
 
 /* ═══════════════════════════════════════════════════════════════════
    AppHeader — floating pill
-   Left:   FILMMAKER.OG wordmark
+   Left:   FILMMAKER.OG wordmark (tap → home)
    Right:  Kebab (→ MobileMenu)
    ═══════════════════════════════════════════════════════════════════ */
 interface AppHeaderProps {
@@ -11,6 +12,7 @@ interface AppHeaderProps {
 }
 
 const AppHeader = ({ onMoreOpen }: AppHeaderProps) => {
+  const navigate = useNavigate();
   const haptics = useHaptics();
 
   return (
@@ -43,10 +45,16 @@ const AppHeader = ({ onMoreOpen }: AppHeaderProps) => {
             }}
           />
 
-          {/* Wordmark */}
-          <span className="font-bebas text-[22px] tracking-[0.2em] text-gold select-none">
-            FILMMAKER<span className="text-white">.OG</span>
-          </span>
+          {/* Wordmark → home */}
+          <button
+            onClick={() => { haptics.light(); navigate("/"); }}
+            className="flex items-center hover:opacity-80 active:scale-[0.97] transition-all"
+            aria-label="Go home"
+          >
+            <span className="font-bebas text-[22px] tracking-[0.2em] text-gold">
+              FILMMAKER<span className="text-white">.OG</span>
+            </span>
+          </button>
 
           {/* Kebab → menu */}
           <button

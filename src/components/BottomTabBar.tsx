@@ -1,19 +1,18 @@
 import { useState, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Home, ShoppingBag, BookOpen, Sparkles } from "lucide-react";
+import { ShoppingBag, BookOpen, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useHaptics } from "@/hooks/use-haptics";
 
 /* ═══════════════════════════════════════════════════════════════════
-   BottomTabBar — floating pill, 4 tabs
-   HOME · SHOP · INFO · ✦ OG (bot)
+   BottomTabBar — floating pill, 3 tabs
+   SHOP · INFO · ✦ OG
    
-   Bot lives in the tab bar as a first-class destination.
-   Sparkle icon + "OG" label — looks native, invites curiosity.
+   HOME removed — header wordmark handles that.
+   Three tabs = luxury spacing. Intentional, not empty.
    ═══════════════════════════════════════════════════════════════════ */
 
 const navTabs = [
-  { id: "home",      path: "/",          label: "HOME", icon: Home },
   { id: "store",     path: "/store",     label: "SHOP", icon: ShoppingBag },
   { id: "resources", path: "/resources", label: "INFO", icon: BookOpen },
 ];
@@ -29,7 +28,6 @@ const BottomTabBar = ({ onBotOpen }: BottomTabBarProps) => {
   const [rippleId, setRippleId] = useState<string | null>(null);
 
   const getActive = (path: string) => {
-    if (path === "/") return location.pathname === "/";
     return location.pathname.startsWith(path);
   };
 
@@ -110,9 +108,7 @@ const BottomTabBar = ({ onBotOpen }: BottomTabBarProps) => {
                 }}
                 strokeWidth={isActive ? 2.2 : 1.5}
               />
-              <span
-                className="font-bebas leading-none text-[12px] tracking-[0.14em] text-white"
-              >
+              <span className="font-bebas leading-none text-[12px] tracking-[0.14em] text-white">
                 {tab.label}
               </span>
               {isActive && (
@@ -131,7 +127,7 @@ const BottomTabBar = ({ onBotOpen }: BottomTabBarProps) => {
           );
         })}
 
-        {/* OG Bot tab — sparkle icon + "OG" label */}
+        {/* OG Bot tab */}
         <button
           onClick={handleBotTap}
           className="relative flex-1 flex flex-col items-center justify-center gap-[4px] transition-all duration-200 active:scale-95 overflow-hidden"
