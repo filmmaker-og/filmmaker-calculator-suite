@@ -454,32 +454,6 @@ const Index = () => {
             </div>
           </SectionFrame>
 
-          {/* ── PIVOT — "Until now." ── */}
-          <section className="py-10 md:py-14 px-6 relative">
-            <div
-              ref={revUntilNow.ref}
-              className={cn(
-                "max-w-md mx-auto text-center transition-all duration-700 ease-out",
-                revUntilNow.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"
-              )}
-            >
-              <div className="flex items-center gap-5 justify-center">
-                <div className="h-[1.5px] w-16 bg-gradient-to-r from-transparent to-gold-accent" />
-                <p
-                  className="font-bebas text-[40px] md:text-[50px] tracking-[0.06em] text-gold"
-                  style={{
-                    textShadow: revUntilNow.visible
-                      ? '0 0 30px rgba(212,175,55,0.4), 0 0 60px rgba(212,175,55,0.15)'
-                      : 'none',
-                  }}
-                >
-                  Until <span className="text-white">now</span>.
-                </p>
-                <div className="h-[1.5px] w-16 bg-gradient-to-l from-transparent to-gold-accent" />
-              </div>
-            </div>
-          </section>
-
           {/* ── INTERSTITIAL: Blum Quote ── */}
           <section className="py-6 md:py-10 px-6">
             <div
@@ -573,6 +547,32 @@ const Index = () => {
               </div>
             </div>
           </SectionFrame>
+
+          {/* ── PIVOT — "Until now." ── */}
+          <section className="py-10 md:py-14 px-6 relative">
+            <div
+              ref={revUntilNow.ref}
+              className={cn(
+                "max-w-md mx-auto text-center transition-all duration-700 ease-out",
+                revUntilNow.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"
+              )}
+            >
+              <div className="flex items-center gap-5 justify-center">
+                <div className="h-[1.5px] w-16 bg-gradient-to-r from-transparent to-gold-accent" />
+                <p
+                  className="font-bebas text-[40px] md:text-[50px] tracking-[0.06em] text-gold"
+                  style={{
+                    textShadow: revUntilNow.visible
+                      ? '0 0 30px rgba(212,175,55,0.4), 0 0 60px rgba(212,175,55,0.15)'
+                      : 'none',
+                  }}
+                >
+                  Until <span className="text-white">now</span>.
+                </p>
+                <div className="h-[1.5px] w-16 bg-gradient-to-l from-transparent to-gold-accent" />
+              </div>
+            </div>
+          </section>
 
           {/* ──────────────────────────────────────────────────────────
                DECLARATION — the hinge before final CTA
