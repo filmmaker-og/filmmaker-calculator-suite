@@ -1,16 +1,16 @@
-import { Sparkles } from "lucide-react";
+import { MoreVertical } from "lucide-react";
 import { useHaptics } from "@/hooks/use-haptics";
 
 /* ═══════════════════════════════════════════════════════════════════
    AppHeader — floating pill
-   Left:   FILMMAKER.OG wordmark (→ home via tab bar)
-   Right:  OG bot trigger ("OG" badge + sparkle)
+   Left:   FILMMAKER.OG wordmark
+   Right:  Kebab (→ MobileMenu)
    ═══════════════════════════════════════════════════════════════════ */
 interface AppHeaderProps {
-  onBotOpen?: () => void;
+  onMoreOpen?: () => void;
 }
 
-const AppHeader = ({ onBotOpen }: AppHeaderProps) => {
+const AppHeader = ({ onMoreOpen }: AppHeaderProps) => {
   const haptics = useHaptics();
 
   return (
@@ -48,30 +48,13 @@ const AppHeader = ({ onBotOpen }: AppHeaderProps) => {
             FILMMAKER<span className="text-white">.OG</span>
           </span>
 
-          {/* OG Bot trigger */}
+          {/* Kebab → menu */}
           <button
-            onClick={() => { haptics.light(); onBotOpen?.(); }}
-            className="relative flex items-center gap-1.5 active:scale-95 transition-transform"
-            aria-label="Ask the OG Bot"
-            style={{
-              height: "34px",
-              paddingLeft: "10px",
-              paddingRight: "10px",
-              borderRadius: "10px",
-              background: "rgba(212,175,55,0.08)",
-              border: "1px solid rgba(212,175,55,0.30)",
-            }}
+            onClick={() => { haptics.light(); onMoreOpen?.(); }}
+            className="flex items-center justify-center w-10 h-10 active:scale-95 transition-transform"
+            aria-label="More options"
           >
-            <span
-              className="font-bebas text-[15px] tracking-[0.12em] text-gold leading-none"
-            >
-              OG
-            </span>
-            <Sparkles
-              className="w-3.5 h-3.5 text-gold"
-              strokeWidth={2}
-              style={{ filter: "drop-shadow(0 0 4px rgba(212,175,55,0.50))" }}
-            />
+            <MoreVertical className="w-5 h-5 text-gold" />
           </button>
         </nav>
       </header>

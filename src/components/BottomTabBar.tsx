@@ -1,17 +1,15 @@
 import { useState, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Home, ShoppingBag, BookOpen, MoreHorizontal } from "lucide-react";
+import { Home, ShoppingBag, BookOpen, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useHaptics } from "@/hooks/use-haptics";
 
 /* ═══════════════════════════════════════════════════════════════════
    BottomTabBar — floating pill, 4 tabs
-   HOME · SHOP · INFO · MORE
+   HOME · SHOP · INFO · ✦ OG (bot)
    
-   CALC removed — calculator is the conversion destination, not nav.
-   CTAs handle that routing.
-   
-   Gold icons. White text. No muting. Crystal clear.
+   Bot lives in the tab bar as a first-class destination.
+   Sparkle icon + "OG" label — looks native, invites curiosity.
    ═══════════════════════════════════════════════════════════════════ */
 
 const navTabs = [
@@ -21,10 +19,10 @@ const navTabs = [
 ];
 
 interface BottomTabBarProps {
-  onMoreOpen?: () => void;
+  onBotOpen?: () => void;
 }
 
-const BottomTabBar = ({ onMoreOpen }: BottomTabBarProps) => {
+const BottomTabBar = ({ onBotOpen }: BottomTabBarProps) => {
   const navigate = useNavigate();
   const location = useLocation();
   const haptics = useHaptics();
@@ -42,12 +40,12 @@ const BottomTabBar = ({ onMoreOpen }: BottomTabBarProps) => {
     setTimeout(() => setRippleId(null), 420);
   }, [navigate, haptics]);
 
-  const handleMoreTap = useCallback(() => {
+  const handleBotTap = useCallback(() => {
     haptics.light();
-    setRippleId("more");
-    onMoreOpen?.();
+    setRippleId("og");
+    onBotOpen?.();
     setTimeout(() => setRippleId(null), 420);
-  }, [haptics, onMoreOpen]);
+  }, [haptics, onBotOpen]);
 
   return (
     <div
@@ -113,10 +111,7 @@ const BottomTabBar = ({ onMoreOpen }: BottomTabBarProps) => {
                 strokeWidth={isActive ? 2.2 : 1.5}
               />
               <span
-                className={cn(
-                  "font-bebas leading-none transition-all text-[12px] tracking-[0.14em]",
-                  isActive ? "text-white" : "text-white"
-                )}
+                className="font-bebas leading-none text-[12px] tracking-[0.14em] text-white"
               >
                 {tab.label}
               </span>
@@ -136,25 +131,29 @@ const BottomTabBar = ({ onMoreOpen }: BottomTabBarProps) => {
           );
         })}
 
-        {/* MORE tab */}
+        {/* OG Bot tab — sparkle icon + "OG" label */}
         <button
-          onClick={handleMoreTap}
+          onClick={handleBotTap}
           className="relative flex-1 flex flex-col items-center justify-center gap-[4px] transition-all duration-200 active:scale-95 overflow-hidden"
-          aria-label="More options"
+          aria-label="OG Bot"
         >
-          {rippleId === "more" && (
+          {rippleId === "og" && (
             <span
               className="absolute top-1/2 left-1/2 w-12 h-12 rounded-full pointer-events-none animate-tap-ripple"
               style={{ background: "rgba(212,175,55,0.20)" }}
             />
           )}
-          <MoreHorizontal
+          <Sparkles
             className="text-gold transition-all duration-200"
-            style={{ width: "22px", height: "22px" }}
+            style={{
+              width: "22px",
+              height: "22px",
+              filter: "drop-shadow(0 0 4px rgba(212,175,55,0.35))",
+            }}
             strokeWidth={1.5}
           />
           <span className="font-bebas leading-none text-[12px] text-white tracking-[0.14em]">
-            MORE
+            OG
           </span>
         </button>
       </nav>

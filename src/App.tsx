@@ -52,7 +52,7 @@ const AppShell = () => {
   return (
     <>
       <AppHeader
-        onBotOpen={() => setIsBotOpen(true)}
+        onMoreOpen={() => setIsMenuOpen(true)}
       />
 
       <Suspense fallback={<PageLoader />}>
@@ -78,7 +78,7 @@ const AppShell = () => {
       {/* Global persistent UI — always mounted */}
       <OgBotSheet isOpen={isBotOpen} onOpenChange={setIsBotOpen} />
       <MobileMenu isOpen={isMenuOpen} onOpenChange={setIsMenuOpen} />
-      <BottomTabBar onMoreOpen={() => setIsMenuOpen(true)} />
+      <BottomTabBar onBotOpen={() => setIsBotOpen(true)} />
     </>
   );
 };
