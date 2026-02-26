@@ -6,7 +6,7 @@ import {
   Check,
   X,
 } from "lucide-react";
-import filmmakerLogo from "@/assets/filmmaker-f-icon.png";
+// Logo import removed — headline is the visual anchor
 import LeadCaptureModal from "@/components/LeadCaptureModal";
 import { cn } from "@/lib/utils";
 import SectionFrame from "@/components/SectionFrame";
@@ -149,21 +149,23 @@ const Index = () => {
           {/* ──────────────────────────────────────────────────────────
                § 1  HERO
              ────────────────────────────────────────────────────────── */}
-          <section id="hero" className="snap-section min-h-0 pt-10 pb-12 flex flex-col justify-center">
-            <div className="px-6 py-4 max-w-xl mx-auto text-center">
-              <div className="mb-5 inline-block">
-                <img src={filmmakerLogo} alt="Filmmaker.OG" className="w-[96px] h-[96px] object-contain"
-                  style={{ filter: 'drop-shadow(0 0 12px rgba(212,175,55,0.5))' }} />
-              </div>
-              <h1 className="font-bebas text-[clamp(2.8rem,9vw,4.2rem)] leading-[1.05] tracking-[0.06em] text-gold mb-5">
+          <section id="hero" className="snap-section min-h-0 pt-24 pb-16 flex flex-col justify-center">
+            <div className="px-6 py-4 max-w-xl mx-auto text-center relative">
+              {/* Atmospheric gold gradient — ambient warmth, not a light show */}
+              <div
+                className="absolute left-1/2 top-1/3 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] rounded-full pointer-events-none"
+                style={{ background: 'radial-gradient(circle, rgba(212,175,55,0.05) 0%, transparent 70%)' }}
+                aria-hidden="true"
+              />
+              <h1 className="font-bebas text-[clamp(2.8rem,9vw,4.2rem)] leading-[1.05] tracking-[0.06em] text-gold mb-5 relative z-10">
                 SEE WHERE EVERY<br /><span className="text-white">DOLLAR GOES</span>
               </h1>
-              <p className="mb-6 text-ink-secondary text-[17px] leading-[1.7] tracking-[0.02em] font-medium max-w-[360px] mx-auto">
+              <p className="mb-12 text-ink-secondary text-[17px] leading-[1.7] tracking-[0.02em] font-medium max-w-[360px] mx-auto relative z-10">
                 Built by a Tribeca-winning producer whose debut sold to <span className="text-gold font-semibold">Netflix</span>.
               </p>
 
-              <div className="w-full max-w-[320px] mx-auto space-y-3">
-                <button onClick={handleStartClick} className="w-full h-14 btn-cta-primary">
+              <div className="w-full max-w-[320px] mx-auto space-y-3 relative z-10">
+                <button onClick={handleStartClick} className="w-full h-14 btn-cta-primary animate-cta-glow-pulse">
                   BUILD YOUR WATERFALL
                 </button>
               </div>
@@ -171,6 +173,11 @@ const Index = () => {
             </div>
           </section>
 
+
+          {/* Gold structural divider */}
+          <div className="flex justify-center py-6">
+            <div className="w-12 h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(212,175,55,0.35), transparent)' }} />
+          </div>
 
           {/* ──────────────────────────────────────────────────────────
                § 2  THE PROBLEM + THESIS — with "Until now." punchline
@@ -249,6 +256,11 @@ const Index = () => {
             </div>
           </SectionFrame>
 
+          {/* Gold structural divider */}
+          <div className="flex justify-center py-6">
+            <div className="w-12 h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(212,175,55,0.35), transparent)' }} />
+          </div>
+
           {/* ──────────────────────────────────────────────────────────
                § 3  THE COST — escalates the pain before the pivot
              ────────────────────────────────────────────────────────── */}
@@ -293,7 +305,7 @@ const Index = () => {
               <div
                 className="relative bg-bg-elevated border border-gold-accent overflow-hidden rounded-xl"
                 style={{
-                  boxShadow: '0 0 30px rgba(212,175,55,0.10), inset 0 1px 0 rgba(212,175,55,0.10)',
+                  boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06), 0 0 30px rgba(212,175,55,0.10)',
                 }}
               >
                 {/* Gold left accent — strong */}
@@ -324,10 +336,15 @@ const Index = () => {
             </div>
           </section>
 
+          {/* Gold structural divider */}
+          <div className="flex justify-center py-6">
+            <div className="w-12 h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(212,175,55,0.35), transparent)' }} />
+          </div>
+
           {/* ──────────────────────────────────────────────────────────
                § 4  THE SOLUTION — the product reveal
              ────────────────────────────────────────────────────────── */}
-          <SectionFrame id="waterfall">
+          <SectionFrame id="waterfall" variant="gold">
             <div>
 
               <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-secondary text-center mb-5">The Solution</p>
@@ -339,17 +356,18 @@ const Index = () => {
 
               <div ref={waterBarRef} className="max-w-md mx-auto">
                 {/* Waterfall rows — unified financial table */}
-                <div className="border border-gold-border bg-black overflow-hidden rounded-xl">
+                <div className="border border-gold-border bg-black overflow-hidden rounded-xl"
+                  style={{ boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)' }}>
                   {waterfallTiers.filter(t => !t.isFinal).map((tier, i) => (
                     <div
                       key={tier.name}
                       className={cn(
-                        "px-5 py-4 relative",
+                        "px-6 py-4 relative",
                         i > 0 && "border-t border-bg-card-rule",
                       )}
                     >
                       <div className="flex justify-between items-baseline mb-2">
-                        <div className="flex items-baseline gap-2">
+                        <div className="flex items-baseline gap-3">
                           <span className="font-mono text-[13px] text-ink-secondary tabular-nums">
                             {String(i + 1).padStart(2, '0')}
                           </span>
@@ -364,7 +382,7 @@ const Index = () => {
                           {tier.amount}
                         </span>
                       </div>
-                      <div className={cn("w-full relative overflow-hidden", i === 0 ? "h-3" : "h-2")} style={{ background: "rgba(255,255,255,0.08)" }}>
+                      <div className={cn("w-full relative overflow-hidden", i === 0 ? "h-3" : "h-2")} style={{ background: "rgba(255,255,255,0.12)" }}>
                         <div
                           className="absolute left-0 top-0 h-full"
                           style={{
@@ -381,35 +399,38 @@ const Index = () => {
                 </div>
 
                 {/* Net Profits */}
-                <div className="mt-4 border border-gold-border bg-black px-5 py-5 text-center rounded-lg">
+                <div className="mt-4 border border-gold-border bg-black px-5 py-5 text-center rounded-lg"
+                  style={{ boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)' }}>
                   <p className="text-[13px] tracking-[0.2em] uppercase font-semibold text-gold mb-1">Net Profits</p>
                   <span className="font-mono text-[26px] font-bold text-white">
                     ${countVal.toLocaleString()}
                   </span>
                 </div>
 
-                {/* Branching connector */}
+                {/* Branching connector — financial schematic */}
                 <div className="flex justify-center">
-                  <div className="w-[2px] h-6" style={{ background: "rgba(212,175,55,0.60)" }} />
+                  <div className="w-[2px] h-6 bg-gold-accent" />
                 </div>
                 <div className="flex items-start">
                   <div className="flex-1 flex justify-end">
-                    <div className="w-1/2 h-[2px]" style={{ background: "rgba(212,175,55,0.60)" }} />
+                    <div className="w-1/2 h-[2px] bg-gold-accent" />
                   </div>
                   <div className="flex-1 flex justify-start">
-                    <div className="w-1/2 h-[2px]" style={{ background: "rgba(212,175,55,0.60)" }} />
+                    <div className="w-1/2 h-[2px] bg-gold-accent" />
                   </div>
                 </div>
 
                 {/* Two corridor boxes */}
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="border border-gold-border bg-black px-4 py-5 text-center rounded-lg">
+                  <div className="border border-gold-border bg-black px-4 py-5 text-center rounded-lg"
+                    style={{ boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)' }}>
                     <p className="text-[13px] tracking-[0.2em] uppercase font-semibold text-gold mb-1">Producer Corridor</p>
                     <span className="font-mono text-[26px] font-bold text-white">
                       ${producerVal.toLocaleString()}
                     </span>
                   </div>
-                  <div className="border border-gold-border bg-black px-4 py-5 text-center rounded-lg">
+                  <div className="border border-gold-border bg-black px-4 py-5 text-center rounded-lg"
+                    style={{ boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)' }}>
                     <p className="text-[13px] tracking-[0.2em] uppercase font-semibold text-gold mb-1">Investor Corridor</p>
                     <span className="font-mono text-[26px] font-bold text-white">
                       ${investorVal.toLocaleString()}
@@ -489,19 +510,31 @@ const Index = () => {
           </SectionFrame>
 
 
+          {/* Gold structural divider */}
+          <div className="flex justify-center py-6">
+            <div className="w-12 h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(212,175,55,0.35), transparent)' }} />
+          </div>
+
           {/* ──────────────────────────────────────────────────────────
                § 7  FINAL CTA — The Moment of Truth
              ────────────────────────────────────────────────────────── */}
-          <section id="final-cta" className="snap-section py-12 md:py-16 px-6">
+          <section id="final-cta" className="snap-section py-14 md:py-20 px-6">
             <div className="max-w-md mx-auto">
               <div
-                className="relative bg-bg-elevated border border-gold-accent overflow-hidden rounded-xl text-center px-6 py-10 md:py-12"
+                className="relative bg-bg-elevated overflow-hidden rounded-xl text-center px-8 py-14 md:px-10 md:py-16"
                 style={{
-                  boxShadow: '0 0 40px rgba(212,175,55,0.15), inset 0 1px 0 rgba(212,175,55,0.10)',
+                  border: '1px solid rgba(212,175,55,0.40)',
+                  boxShadow: [
+                    'inset 0 1px 0 rgba(255,255,255,0.06)',
+                    '0 0 12px rgba(212,175,55,0.12)',
+                    '0 0 40px rgba(212,175,55,0.08)',
+                    '0 4px 20px rgba(0,0,0,0.50)',
+                    '0 12px 48px rgba(0,0,0,0.30)',
+                  ].join(', '),
                 }}
               >
                 <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-secondary mb-5">The Ask</p>
-                <h2 className="font-bebas text-[40px] leading-[1.1] tracking-[0.08em] text-gold mb-8">
+                <h2 className="font-bebas text-[40px] leading-[1.1] tracking-[0.08em] text-gold mb-10">
                   YOUR INVESTOR WILL{"\u00A0"}ASK HOW THE MONEY FLOWS <span className="text-white">BACK</span>.
                 </h2>
                 <button onClick={handleStartClick}
