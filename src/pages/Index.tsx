@@ -20,7 +20,7 @@ const closedDoors = [
   { name: "Entertainment Attorney", lock: "If they\u2019ll take the meeting.", cost: "$800/hr" },
   { name: "Producing Consultant", lock: "If you can afford one.", cost: "$5K+" },
   { name: "Film School", lock: "Four years you don\u2019t have.", cost: "$200K" },
-  { name: "Trial & Error", lock: "Your investors won\u2019t get a second one.", cost: "Everything" },
+  { name: "Trial & Error", lock: "No second chances.", cost: "Everything" },
 ];
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -239,10 +239,10 @@ const Index = () => {
               <div className="text-center mb-10">
                 <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-secondary mb-5 text-center">The Problem</p>
                 <h2
-                  className="font-bebas text-[40px] md:text-[50px] tracking-[0.06em] leading-[0.95] text-gold"
+                  className="font-bebas text-[40px] md:text-[50px] tracking-[0.08em] leading-[0.95] text-gold"
                   style={{
                     textShadow: revEvidence.visible
-                      ? '0 0 30px rgba(212,175,55,0.25), 0 0 60px rgba(212,175,55,0.10)'
+                      ? '0 0 30px rgba(212,175,55,0.30), 0 0 60px rgba(212,175,55,0.12)'
                       : 'none',
                   }}
                 >
@@ -369,7 +369,7 @@ const Index = () => {
               <div className="text-center mb-8">
                 <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-secondary mb-5">The Cost</p>
                 <h2 className="font-bebas text-[40px] md:text-[50px] tracking-[0.08em] text-gold"
-                  style={{ textShadow: revCost.visible ? '0 0 30px rgba(212,175,55,0.4), 0 0 60px rgba(212,175,55,0.15)' : 'none' }}>
+                  style={{ textShadow: revCost.visible ? '0 0 30px rgba(212,175,55,0.30), 0 0 60px rgba(212,175,55,0.12)' : 'none' }}>
                   THE <span className="text-white">REALITY</span>
                 </h2>
               </div>
@@ -406,7 +406,7 @@ const Index = () => {
           </SectionFrame>
 
           {/* ── INTERSTITIAL: Blum Quote — authority validates the pain ── */}
-          <section className="py-10 md:py-14 px-6">
+          <section className="py-12 md:py-16 px-6">
             <div
               ref={revBlum.ref}
               className={cn(
@@ -415,10 +415,9 @@ const Index = () => {
               )}
             >
               <div
-                className="relative border border-gold-accent overflow-hidden rounded-xl"
+                className="relative bg-bg-elevated border border-gold-accent overflow-hidden rounded-xl"
                 style={{
-                  background: '#0C0C0C',
-                  boxShadow: '0 0 30px rgba(212,175,55,0.08), inset 0 1px 0 rgba(212,175,55,0.10)',
+                  boxShadow: '0 0 30px rgba(212,175,55,0.10), inset 0 1px 0 rgba(212,175,55,0.10)',
                 }}
               >
                 {/* Gold left accent — strong */}
@@ -558,7 +557,7 @@ const Index = () => {
               )}
             >
               <div className="text-center mb-8">
-                <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-secondary mb-4">The Offer</p>
+                <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-secondary mb-5">The Offer</p>
                 <h2 className="font-bebas text-[40px] md:text-[50px] tracking-[0.08em] text-gold leading-[1.05]">
                   YOUR PATH{"\u00A0"}<span className="text-white">FORWARD</span>
                 </h2>
@@ -568,13 +567,10 @@ const Index = () => {
                 {/* Free Calculator — the entry point (filled) */}
                 <div
                   className={cn(
-                    "rounded-xl p-5 md:p-6 transition-all duration-500 ease-out",
+                    "rounded-xl p-5 md:p-6 bg-bg-card transition-all duration-500 ease-out",
                     revTiers.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                   )}
-                  style={{
-                    transitionDelay: revTiers.visible ? '100ms' : '0ms',
-                    background: 'rgba(255,255,255,0.04)',
-                  }}
+                  style={{ transitionDelay: revTiers.visible ? '100ms' : '0ms' }}
                 >
                   <span className="inline-block font-bebas text-[16px] tracking-[0.20em] uppercase text-gold mb-2">Free</span>
                   <h3 className="font-bebas text-[26px] md:text-[30px] tracking-[0.06em] text-white mb-2">THE CALCULATOR</h3>
@@ -613,13 +609,10 @@ const Index = () => {
                 {/* The Pitch Package — $497 (filled) */}
                 <div
                   className={cn(
-                    "rounded-xl p-5 md:p-6 transition-all duration-500 ease-out",
+                    "rounded-xl p-5 md:p-6 bg-bg-card transition-all duration-500 ease-out",
                     revTiers.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                   )}
-                  style={{
-                    transitionDelay: revTiers.visible ? '400ms' : '0ms',
-                    background: 'rgba(255,255,255,0.04)',
-                  }}
+                  style={{ transitionDelay: revTiers.visible ? '400ms' : '0ms' }}
                 >
                   <div className="flex items-baseline gap-3 mb-2">
                     <span className="font-mono text-[28px] md:text-[32px] font-bold text-gold">$497</span>
@@ -645,7 +638,7 @@ const Index = () => {
           {/* ──────────────────────────────────────────────────────────
                § 7  FINAL CTA — The Moment of Truth
              ────────────────────────────────────────────────────────── */}
-          <section id="final-cta" className="snap-section py-14 md:py-20 px-6">
+          <section id="final-cta" className="snap-section py-12 md:py-16 px-6">
             <div
               ref={revFinal.ref}
               className={cn(
@@ -654,10 +647,9 @@ const Index = () => {
               )}
             >
               <div
-                className="relative border border-gold-accent overflow-hidden rounded-xl text-center px-6 py-10 md:py-12"
+                className="relative bg-bg-elevated border border-gold-accent overflow-hidden rounded-xl text-center px-6 py-10 md:py-12"
                 style={{
-                  background: '#0C0C0C',
-                  boxShadow: '0 0 40px rgba(212,175,55,0.10), inset 0 1px 0 rgba(212,175,55,0.12)',
+                  boxShadow: '0 0 40px rgba(212,175,55,0.15), inset 0 1px 0 rgba(212,175,55,0.10)',
                 }}
               >
                 <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-secondary mb-5">The Ask</p>
