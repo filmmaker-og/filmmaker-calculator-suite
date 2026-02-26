@@ -533,7 +533,6 @@ const Index = () => {
                   ].join(', '),
                 }}
               >
-                <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-secondary mb-5">The Ask</p>
                 <h2 className="font-bebas text-[40px] leading-[1.1] tracking-[0.08em] text-gold mb-10">
                   YOUR INVESTOR WILL{"\u00A0"}ASK HOW THE MONEY FLOWS <span className="text-white">BACK</span>.
                 </h2>
