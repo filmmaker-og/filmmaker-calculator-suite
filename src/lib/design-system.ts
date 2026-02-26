@@ -24,11 +24,14 @@ export const colors = {
   borderSubtle: '#2A2A2A',                     // --border-subtle
   borderActive: 'rgba(212, 175, 55, 0.50)',    // --border-active
 
-  // Gold palette — Metallic (non-interactive brand elements)
+  // Gold palette — Metallic (non-interactive brand elements, 8 tiers)
   gold: '#D4AF37',                             // --gold (metallic)
+  goldLabel: 'rgba(212, 175, 55, 0.60)',       // --gold-label
   goldMuted: 'rgba(212, 175, 55, 0.45)',       // --gold-muted
-  goldSubtle: 'rgba(212, 175, 55, 0.10)',      // --gold-subtle
   goldGlow: 'rgba(212, 175, 55, 0.25)',        // --gold-glow
+  goldGhost: 'rgba(212, 175, 55, 0.15)',       // --gold-ghost
+  goldSubtle: 'rgba(212, 175, 55, 0.10)',      // --gold-subtle
+  goldAmbient: 'rgba(212, 175, 55, 0.06)',     // --gold-ambient
 
   // CTA Gold — EXCLUSIVELY for clickable elements
   goldCta: '#F9E076',                          // --gold-cta (bright, warm)
@@ -132,19 +135,19 @@ export const verdictStatus = {
   excellent: {
     label: 'EXCELLENT DEAL',
     color: colors.gold,
-    bgColor: 'rgba(212, 175, 55, 0.15)',
+    bgColor: colors.goldGhost,
     description: 'This return profile will attract institutional capital.',
   },
   good: {
     label: 'SOLID DEAL',
     color: colors.gold,
-    bgColor: 'rgba(212, 175, 55, 0.10)',
+    bgColor: colors.goldSubtle,
     description: 'Healthy returns for all parties involved.',
   },
   marginal: {
     label: 'MARGINAL',
     color: colors.goldMuted,
-    bgColor: 'rgba(212, 175, 55, 0.06)',
+    bgColor: colors.goldAmbient,
     description: 'Consider renegotiating terms for better returns.',
   },
   underwater: {

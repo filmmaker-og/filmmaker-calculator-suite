@@ -50,11 +50,14 @@
        Rule: If it's not clickable, it's NOT --gold-cta.
        ═══════════════════════════════════════════════════════════════════ */
 
-    /* Metallic Gold — non-interactive brand elements */
+    /* Metallic Gold — non-interactive brand elements (8 tiers, no drift) */
     --gold: #D4AF37;
+    --gold-label: rgba(212, 175, 55, 0.60);
     --gold-muted: rgba(212, 175, 55, 0.45);
-    --gold-subtle: rgba(212, 175, 55, 0.10);
     --gold-glow: rgba(212, 175, 55, 0.25);
+    --gold-ghost: rgba(212, 175, 55, 0.15);
+    --gold-subtle: rgba(212, 175, 55, 0.10);
+    --gold-ambient: rgba(212, 175, 55, 0.06);
 
     /* CTA Gold — buttons, links, interactive CTAs ONLY */
     --gold-cta: #F9E076;
@@ -244,7 +247,7 @@
   .chapter-card-gold-bar {
     width: 3px;
     height: 100%;
-    background: linear-gradient(180deg, var(--gold) 0%, rgba(212, 175, 55, 0.60) 60%, rgba(212, 175, 55, 0.20) 100%);
+    background: linear-gradient(180deg, var(--gold) 0%, var(--gold-label) 60%, var(--border-default) 100%);
     box-shadow: 0 0 16px rgba(212, 175, 55, 0.30);
   }
 
@@ -310,18 +313,18 @@
   }
 
   .store-card:hover {
-    border-color: rgba(212, 175, 55, 0.15);
+    border-color: var(--gold-ghost);
   }
 
   .store-card-featured {
-    background: linear-gradient(180deg, rgba(212, 175, 55, 0.06) 0%, var(--bg-card) 40%);
+    background: linear-gradient(180deg, var(--gold-ambient) 0%, var(--bg-card) 40%);
     border: 1.5px solid var(--gold-muted);
-    box-shadow: 0 0 40px rgba(212, 175, 55, 0.08), inset 0 1px 0 rgba(212, 175, 55, 0.1);
+    box-shadow: 0 0 40px rgba(212, 175, 55, 0.08), inset 0 1px 0 var(--gold-subtle);
   }
 
   .store-card-featured:hover {
     border-color: var(--gold);
-    box-shadow: 0 0 50px rgba(212, 175, 55, 0.12), inset 0 1px 0 rgba(212, 175, 55, 0.15);
+    box-shadow: 0 0 50px rgba(212, 175, 55, 0.12), inset 0 1px 0 var(--gold-ghost);
   }
 
   .store-compare-table {
@@ -343,7 +346,7 @@
   }
 
   .store-compare-table th.featured-col {
-    background: rgba(212, 175, 55, 0.06);
+    background: var(--gold-ambient);
     border-bottom: 1px solid rgba(212, 175, 55, 0.3);
   }
 
@@ -459,7 +462,7 @@
     font-size: 11px;
     font-weight: 600;
     color: rgba(212, 175, 55, 0.7);
-    background: rgba(212, 175, 55, 0.05);
+    background: var(--gold-ambient);
     cursor: pointer;
     transition: all var(--timing-fast) ease;
   }
@@ -773,7 +776,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(212, 175, 55, 0.06);
+    background: var(--gold-ambient);
     border: 1px solid rgba(212, 175, 55, 0.30);
     color: var(--gold);
     font-family: 'Bebas Neue', sans-serif;
@@ -784,8 +787,8 @@
     transition: all var(--timing-fast) ease;
   }
   .btn-cta-secondary:hover {
-    border-color: rgba(212, 175, 55, 0.50);
-    background: rgba(212, 175, 55, 0.10);
+    border-color: var(--border-active);
+    background: var(--gold-subtle);
   }
   .btn-cta-secondary:active {
     transform: scale(0.96);
@@ -864,7 +867,7 @@
      ═══════════════════════════════════════════════════════════════════ */
   button:focus-visible,
   a:focus-visible {
-    outline: 2px solid rgba(212, 175, 55, 0.5);
+    outline: 2px solid var(--border-active);
     outline-offset: 2px;
   }
 
