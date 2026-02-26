@@ -562,14 +562,17 @@ const Index = () => {
                 </h2>
               </div>
 
-              <div className="space-y-0 divide-y divide-bg-card-rule">
-                {/* Free Calculator — the entry point */}
+              <div className="space-y-3">
+                {/* Free Calculator — the entry point (filled) */}
                 <div
                   className={cn(
-                    "pb-6 transition-all duration-500 ease-out",
+                    "rounded-xl p-5 md:p-6 transition-all duration-500 ease-out",
                     revTiers.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                   )}
-                  style={{ transitionDelay: revTiers.visible ? '100ms' : '0ms' }}
+                  style={{
+                    transitionDelay: revTiers.visible ? '100ms' : '0ms',
+                    background: 'rgba(255,255,255,0.04)',
+                  }}
                 >
                   <span className="inline-block font-bebas text-[16px] tracking-[0.20em] uppercase text-gold mb-2">Free</span>
                   <h3 className="font-bebas text-[26px] md:text-[30px] tracking-[0.06em] text-white mb-2">THE CALCULATOR</h3>
@@ -582,10 +585,10 @@ const Index = () => {
                   </button>
                 </div>
 
-                {/* The Blueprint — $197 */}
+                {/* The Blueprint — $197 (transparent) */}
                 <div
                   className={cn(
-                    "py-6 transition-all duration-500 ease-out",
+                    "rounded-xl p-5 md:p-6 transition-all duration-500 ease-out",
                     revTiers.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                   )}
                   style={{ transitionDelay: revTiers.visible ? '250ms' : '0ms' }}
@@ -601,13 +604,16 @@ const Index = () => {
                   </button>
                 </div>
 
-                {/* The Pitch Package — $497 */}
+                {/* The Pitch Package — $497 (filled) */}
                 <div
                   className={cn(
-                    "pt-6 transition-all duration-500 ease-out",
+                    "rounded-xl p-5 md:p-6 transition-all duration-500 ease-out",
                     revTiers.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                   )}
-                  style={{ transitionDelay: revTiers.visible ? '400ms' : '0ms' }}
+                  style={{
+                    transitionDelay: revTiers.visible ? '400ms' : '0ms',
+                    background: 'rgba(255,255,255,0.04)',
+                  }}
                 >
                   <div className="flex items-baseline gap-3 mb-2">
                     <span className="font-mono text-[28px] md:text-[32px] font-bold text-gold">$497</span>
