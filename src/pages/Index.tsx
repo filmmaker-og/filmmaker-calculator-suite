@@ -433,14 +433,16 @@ const Index = () => {
                       Filmmakers have a perception in the business world of being kind of flaky dudes{"\u2026"} you need to be buttoned down{"\u2026"} speak the language that they speak.
                     </p>
                   </blockquote>
-                  <div className="mt-5 pt-3">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-[1.5px] bg-gold-accent" />
-                      <cite className="not-italic">
-                        <span className="font-bebas text-[16px] tracking-[0.14em] uppercase text-gold">Jason Blum</span>
-                      </cite>
+                  <div className="mt-6 pt-4 border-t border-white/[0.06]">
+                    <div className="inline-flex items-center gap-3 rounded-lg px-4 py-2.5" style={{ background: 'rgba(255,255,255,0.03)' }}>
+                      <div className="w-8 h-[1.5px] bg-gold-accent flex-shrink-0" />
+                      <div>
+                        <cite className="not-italic">
+                          <span className="font-bebas text-[16px] tracking-[0.14em] uppercase text-gold">Jason Blum</span>
+                        </cite>
+                        <p className="text-ink-secondary text-[13px] tracking-[0.06em] mt-0.5">Blumhouse {"\u2014"} {"\u201C"}Paranormal Activity{"\u201D"}</p>
+                      </div>
                     </div>
-                    <p className="text-ink-secondary text-[14px] tracking-[0.08em] mt-1.5 ml-9">Blumhouse {"\u2014"} {"\u201C"}Paranormal Activity{"\u201D"}</p>
                   </div>
                 </div>
               </div>
@@ -566,7 +568,7 @@ const Index = () => {
                 {/* Free Calculator — the entry point (filled) */}
                 <div
                   className={cn(
-                    "rounded-xl p-5 md:p-6 text-center transition-all duration-500 ease-out",
+                    "rounded-xl p-5 md:p-6 transition-all duration-500 ease-out",
                     revTiers.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                   )}
                   style={{
@@ -579,16 +581,18 @@ const Index = () => {
                   <p className="text-ink-secondary text-[15px] leading-relaxed mb-5">
                     Model your deal. Stress-test your numbers. See where every dollar flows.
                   </p>
-                  <button onClick={handleStartClick}
-                    className="w-full max-w-[260px] h-12 btn-cta-primary text-[17px]">
-                    START FREE
-                  </button>
+                  <div className="text-center">
+                    <button onClick={handleStartClick}
+                      className="w-full max-w-[260px] h-12 btn-cta-primary text-[17px]">
+                      START FREE
+                    </button>
+                  </div>
                 </div>
 
                 {/* The Blueprint — $197 (transparent) */}
                 <div
                   className={cn(
-                    "rounded-xl p-5 md:p-6 text-center transition-all duration-500 ease-out",
+                    "rounded-xl p-5 md:p-6 transition-all duration-500 ease-out",
                     revTiers.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                   )}
                   style={{ transitionDelay: revTiers.visible ? '250ms' : '0ms' }}
@@ -598,16 +602,18 @@ const Index = () => {
                   <p className="text-ink-secondary text-[15px] leading-relaxed mb-5">
                     Your complete finance plan in 4 professional documents. Formatted for your attorney.
                   </p>
-                  <button onClick={handleStoreClick}
-                    className="w-full max-w-[260px] h-12 btn-cta-secondary text-[17px]">
-                    VIEW DETAILS
-                  </button>
+                  <div className="text-center">
+                    <button onClick={handleStoreClick}
+                      className="w-full max-w-[260px] h-12 btn-cta-secondary text-[17px]">
+                      VIEW DETAILS
+                    </button>
+                  </div>
                 </div>
 
                 {/* The Pitch Package — $497 (filled) */}
                 <div
                   className={cn(
-                    "rounded-xl p-5 md:p-6 text-center transition-all duration-500 ease-out",
+                    "rounded-xl p-5 md:p-6 transition-all duration-500 ease-out",
                     revTiers.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                   )}
                   style={{
@@ -615,7 +621,7 @@ const Index = () => {
                     background: 'rgba(255,255,255,0.04)',
                   }}
                 >
-                  <div className="flex items-baseline justify-center gap-3 mb-2">
+                  <div className="flex items-baseline gap-3 mb-2">
                     <span className="font-mono text-[28px] md:text-[32px] font-bold text-gold">$497</span>
                     <span className="font-mono text-[16px] text-ink-secondary line-through">$697</span>
                     <span className="text-[12px] tracking-[0.10em] uppercase font-semibold text-gold-accent">Save $200</span>
@@ -624,10 +630,12 @@ const Index = () => {
                   <p className="text-ink-secondary text-[15px] leading-relaxed mb-5">
                     8 documents including a pitch deck and investor return profiles. Walk into the room prepared.
                   </p>
-                  <button onClick={handleStoreClick}
-                    className="w-full max-w-[260px] h-12 btn-cta-secondary text-[17px]">
-                    VIEW DETAILS
-                  </button>
+                  <div className="text-center">
+                    <button onClick={handleStoreClick}
+                      className="w-full max-w-[260px] h-12 btn-cta-secondary text-[17px]">
+                      VIEW DETAILS
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -641,18 +649,26 @@ const Index = () => {
             <div
               ref={revFinal.ref}
               className={cn(
-                "max-w-md mx-auto text-center transition-all duration-700 ease-out",
+                "max-w-md mx-auto transition-all duration-700 ease-out",
                 revFinal.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
               )}
             >
-              <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-secondary mb-5">The Ask</p>
-              <h2 className="font-bebas text-[40px] md:text-[50px] leading-[1.1] tracking-[0.08em] text-gold mb-8">
-                YOUR INVESTOR WILL{"\u00A0"}ASK HOW THE MONEY FLOWS <span className="text-white">BACK</span>.
-              </h2>
-              <button onClick={handleStartClick}
-                className="w-full max-w-[320px] h-14 btn-cta-final mx-auto">
-                BUILD YOUR WATERFALL
-              </button>
+              <div
+                className="relative border border-gold-accent overflow-hidden rounded-xl text-center px-6 py-10 md:py-12"
+                style={{
+                  background: '#0C0C0C',
+                  boxShadow: '0 0 40px rgba(212,175,55,0.10), inset 0 1px 0 rgba(212,175,55,0.12)',
+                }}
+              >
+                <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-secondary mb-5">The Ask</p>
+                <h2 className="font-bebas text-[40px] md:text-[50px] leading-[1.1] tracking-[0.08em] text-gold mb-8">
+                  YOUR INVESTOR WILL{"\u00A0"}ASK HOW THE MONEY FLOWS <span className="text-white">BACK</span>.
+                </h2>
+                <button onClick={handleStartClick}
+                  className="w-full max-w-[320px] h-14 btn-cta-final mx-auto">
+                  BUILD YOUR WATERFALL
+                </button>
+              </div>
             </div>
           </section>
 
