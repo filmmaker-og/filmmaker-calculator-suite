@@ -6,7 +6,7 @@ import {
   Check,
   X,
 } from "lucide-react";
-// Logo import removed — headline is the visual anchor
+import filmmakerLogo from "@/assets/filmmaker-f-icon.png";
 import LeadCaptureModal from "@/components/LeadCaptureModal";
 import { cn } from "@/lib/utils";
 import SectionFrame from "@/components/SectionFrame";
@@ -149,22 +149,20 @@ const Index = () => {
           {/* ──────────────────────────────────────────────────────────
                § 1  HERO
              ────────────────────────────────────────────────────────── */}
-          <section id="hero" className="snap-section min-h-0 pt-24 pb-16 flex flex-col justify-center">
-            <div className="px-6 py-4 max-w-xl mx-auto text-center relative">
-              {/* Atmospheric gold gradient — ambient warmth, not a light show */}
-              <div
-                className="absolute left-1/2 top-1/3 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] rounded-full pointer-events-none"
-                style={{ background: 'radial-gradient(circle, rgba(212,175,55,0.05) 0%, transparent 70%)' }}
-                aria-hidden="true"
-              />
-              <h1 className="font-bebas text-[clamp(2.8rem,9vw,4.2rem)] leading-[1.05] tracking-[0.06em] text-gold mb-5 relative z-10">
+          <section id="hero" className="snap-section min-h-0 pt-10 pb-12 flex flex-col justify-center">
+            <div className="px-6 py-4 max-w-xl mx-auto text-center">
+              <div className="mb-5 inline-block">
+                <img src={filmmakerLogo} alt="Filmmaker.OG" className="w-[96px] h-[96px] object-contain"
+                  style={{ filter: 'drop-shadow(0 0 12px rgba(212,175,55,0.5))' }} />
+              </div>
+              <h1 className="font-bebas text-[clamp(2.8rem,9vw,4.2rem)] leading-[1.05] tracking-[0.06em] text-gold mb-5">
                 SEE WHERE EVERY<br /><span className="text-white">DOLLAR GOES</span>
               </h1>
-              <p className="mb-12 text-ink-secondary text-[17px] leading-[1.7] tracking-[0.02em] font-medium max-w-[360px] mx-auto relative z-10">
+              <p className="mb-6 text-ink-secondary text-[17px] leading-[1.7] tracking-[0.02em] font-medium max-w-[360px] mx-auto">
                 Built by a Tribeca-winning producer whose debut sold to <span className="text-gold font-semibold">Netflix</span>.
               </p>
 
-              <div className="w-full max-w-[320px] mx-auto space-y-3 relative z-10">
+              <div className="w-full max-w-[320px] mx-auto space-y-3">
                 <button onClick={handleStartClick} className="w-full h-14 btn-cta-primary animate-cta-glow-pulse">
                   BUILD YOUR WATERFALL
                 </button>
@@ -286,7 +284,7 @@ const Index = () => {
                       {door.cost}
                     </span>
                     {/* Title */}
-                    <p className="font-bebas text-[17px] tracking-[0.08em] uppercase leading-tight text-white mb-2">
+                    <p className="font-bebas text-[22px] tracking-[0.08em] uppercase leading-tight text-white mb-2">
                       {door.name}
                     </p>
                     {/* Description — pushed to bottom for alignment */}
