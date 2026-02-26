@@ -97,7 +97,6 @@ const Index = () => {
   const revCost        = useReveal();
   const revWater       = useReveal();
   const revTiers       = useReveal();
-  const revPivot       = useReveal();
   const revFinal       = useReveal();
 
   // Waterfall bar animation
@@ -451,45 +450,6 @@ const Index = () => {
                   </div>
                 </div>
               </div>
-            </div>
-          </section>
-
-          {/* ── INTERSTITIAL: "UNTIL NOW." — the narrative pivot ── */}
-          <section className="py-20 md:py-28 px-6 flex items-center justify-center min-h-[40vh]">
-            <div
-              ref={revPivot.ref}
-              className={cn(
-                "text-center transition-all duration-1000 ease-out",
-                revPivot.visible ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-4 scale-[0.97]"
-              )}
-            >
-              {/* Faint radial glow behind text for visual weight */}
-              <div className="absolute inset-0 pointer-events-none"
-                style={{
-                  background: revPivot.visible
-                    ? 'radial-gradient(ellipse 50% 60% at 50% 50%, rgba(212,175,55,0.06) 0%, transparent 70%)'
-                    : 'none',
-                  transition: 'background 1.2s ease-out',
-                }} />
-              {/* Subtle gold divider above */}
-              <div
-                className={cn(
-                  "w-12 h-[1px] mx-auto mb-8 transition-all duration-700 ease-out",
-                  revPivot.visible ? "opacity-100 scale-x-100" : "opacity-0 scale-x-0"
-                )}
-                style={{ background: 'rgba(212,175,55,0.35)', transitionDelay: '200ms' }}
-              />
-              <p
-                className="font-bebas text-[48px] md:text-[60px] tracking-[0.06em] text-gold relative z-10"
-                style={{
-                  textShadow: revPivot.visible
-                    ? '0 0 40px rgba(212,175,55,0.4), 0 0 80px rgba(212,175,55,0.15)'
-                    : 'none',
-                  transition: 'text-shadow 1.2s ease-out',
-                }}
-              >
-                Until <span className="text-white">now</span>.
-              </p>
             </div>
           </section>
 
