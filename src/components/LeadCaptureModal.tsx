@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useHaptics } from "@/hooks/use-haptics";
@@ -25,18 +25,9 @@ const LeadCaptureModal = ({ isOpen, onClose, onSuccess }: LeadCaptureModalProps)
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
-
-  // Listen for auth state change — user clicked the magic link
-  useEffect(() => {
-    if (!isOpen || !sent) return;
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (session?.user) {
-        haptics.success();
-        onSuccess();
-      }
-    });
-    return () => subscription.unsubscribe();
-  }, [isOpen, sent, onSuccess, haptics]);
+  const [otpCode, setOtpCode] = useState(["", "", "", "", "", ""]);
+  const [verifying, setVerifying] = useState(false);
+  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -59,11 +50,9 @@ const LeadCaptureModal = ({ isOpen, onClose, onSuccess }: LeadCaptureModalProps)
     setLoading(true);
 
     try {
-      const redirectUrl = `${window.location.origin}/calculator`;
       const { error } = await supabase.auth.signInWithOtp({
         email: email.trim(),
         options: {
-          emailRedirectTo: redirectUrl,
           data: { full_name: name.trim() },
         },
       });
@@ -75,7 +64,7 @@ const LeadCaptureModal = ({ isOpen, onClose, onSuccess }: LeadCaptureModalProps)
       haptics.error();
       toast({
         title: "Error",
-        description: error instanceof Error ? error.message : "Failed to send link",
+        description: error instanceof Error ? error.message : "Failed to send code",
         variant: "destructive",
       });
     } finally {
@@ -86,17 +75,15 @@ const LeadCaptureModal = ({ isOpen, onClose, onSuccess }: LeadCaptureModalProps)
   const handleResend = async () => {
     setLoading(true);
     try {
-      const redirectUrl = `${window.location.origin}/calculator`;
       const { error } = await supabase.auth.signInWithOtp({
         email: email.trim(),
         options: {
-          emailRedirectTo: redirectUrl,
           data: { full_name: name.trim() },
         },
       });
       if (error) throw error;
       haptics.light();
-      toast({ title: "Link Resent", description: `Check ${email}` });
+      toast({ title: "Code Resent", description: `Check ${email}` });
     } catch (error) {
       haptics.error();
       toast({
@@ -109,6 +96,72 @@ const LeadCaptureModal = ({ isOpen, onClose, onSuccess }: LeadCaptureModalProps)
     }
   };
 
+  const handleOtpChange = (index: number, value: string) => {
+    // Only allow digits
+    const digit = value.replace(/\D/g, "").slice(-1);
+    const newCode = [...otpCode];
+    newCode[index] = digit;
+    setOtpCode(newCode);
+
+    // Auto-advance to next input
+    if (digit && index < 5) {
+      inputRefs.current[index + 1]?.focus();
+    }
+  };
+
+  const handleOtpKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Backspace" && !otpCode[index] && index > 0) {
+      inputRefs.current[index - 1]?.focus();
+    }
+  };
+
+  const handleOtpPaste = (e: React.ClipboardEvent) => {
+    e.preventDefault();
+    const pasted = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, 6);
+    if (!pasted) return;
+    const newCode = [...otpCode];
+    for (let i = 0; i < pasted.length; i++) {
+      newCode[i] = pasted[i];
+    }
+    setOtpCode(newCode);
+    // Focus the next empty field or the last one
+    const nextEmpty = newCode.findIndex((d) => !d);
+    inputRefs.current[nextEmpty === -1 ? 5 : nextEmpty]?.focus();
+  };
+
+  // Auto-verify when all 6 digits are entered
+  const fullCode = otpCode.join("");
+  useEffect(() => {
+    if (fullCode.length !== 6 || verifying) return;
+
+    const verify = async () => {
+      setVerifying(true);
+      try {
+        const { error } = await supabase.auth.verifyOtp({
+          email: email.trim(),
+          token: fullCode,
+          type: "email",
+        });
+        if (error) throw error;
+        haptics.success();
+        onSuccess();
+      } catch (error) {
+        haptics.error();
+        setOtpCode(["", "", "", "", "", ""]);
+        inputRefs.current[0]?.focus();
+        toast({
+          title: "Invalid Code",
+          description: "Please check the code and try again.",
+          variant: "destructive",
+        });
+      } finally {
+        setVerifying(false);
+      }
+    };
+
+    verify();
+  }, [fullCode, verifying, email, haptics, onSuccess, toast]);
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="w-[calc(100%-2rem)] max-w-sm mx-auto bg-bg-void border-border-subtle p-0 gap-0">
@@ -116,23 +169,47 @@ const LeadCaptureModal = ({ isOpen, onClose, onSuccess }: LeadCaptureModalProps)
         <div className="h-[2px] w-full bg-gold" />
 
         {sent ? (
-          // Waiting for magic link click
+          // OTP code entry
           <div className="p-6 text-center">
             <div className="w-12 h-12 border border-gold/50 flex items-center justify-center mx-auto mb-4">
               <Mail className="w-6 h-6 text-gold" />
             </div>
             <p className="font-bebas text-xl tracking-wider text-text-primary mb-2">
-              CHECK YOUR EMAIL
+              ENTER YOUR CODE
             </p>
             <p className="text-text-dim text-sm mb-2">
-              We sent a magic link to
+              We sent a 6-digit code to
             </p>
             <p className="font-mono text-gold text-sm mb-6">
               {email}
             </p>
-            <p className="text-text-dim text-xs mb-6 leading-relaxed">
-              Click the link in your email to unlock the calculator.
-            </p>
+
+            {/* 6-digit OTP input */}
+            <div className="flex justify-center gap-2 mb-6" onPaste={handleOtpPaste}>
+              {otpCode.map((digit, i) => (
+                <input
+                  key={i}
+                  ref={(el) => { inputRefs.current[i] = el; }}
+                  type="text"
+                  inputMode="numeric"
+                  autoComplete="one-time-code"
+                  maxLength={1}
+                  value={digit}
+                  onChange={(e) => handleOtpChange(i, e.target.value)}
+                  onKeyDown={(e) => handleOtpKeyDown(i, e)}
+                  disabled={verifying}
+                  className="w-11 h-14 text-center font-mono text-xl bg-bg-header border border-border-subtle text-text-primary focus:border-gold focus:outline-none transition-colors rounded-md disabled:opacity-50"
+                  autoFocus={i === 0}
+                />
+              ))}
+            </div>
+
+            {verifying && (
+              <div className="flex items-center justify-center gap-2 mb-4">
+                <Loader2 className="w-4 h-4 animate-spin text-gold" />
+                <span className="text-text-dim text-xs">Verifying...</span>
+              </div>
+            )}
 
             <div className="space-y-3">
               <button
@@ -144,7 +221,7 @@ const LeadCaptureModal = ({ isOpen, onClose, onSuccess }: LeadCaptureModalProps)
               </button>
               <div>
                 <button
-                  onClick={() => setSent(false)}
+                  onClick={() => { setSent(false); setOtpCode(["", "", "", "", "", ""]); }}
                   className="text-text-dim hover:text-text-mid text-xs transition-colors"
                 >
                   Use different email
@@ -208,7 +285,7 @@ const LeadCaptureModal = ({ isOpen, onClose, onSuccess }: LeadCaptureModalProps)
                   <Loader2 className="w-5 h-5 animate-spin mx-auto" />
                 ) : (
                   <span className="flex items-center justify-center gap-2">
-                    SEND MAGIC LINK
+                    SEND CODE
                     <ArrowRight className="w-4 h-4" />
                   </span>
                 )}

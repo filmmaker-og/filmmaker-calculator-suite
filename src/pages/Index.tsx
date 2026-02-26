@@ -44,7 +44,7 @@ const Index = () => {
   const haptics = useHaptics();
 
 
-  // Lead capture gate — requires magic link verification
+  // Lead capture gate — requires OTP verification
   const [showLeadCapture, setShowLeadCapture] = useState(false);
   const [pendingDestination, setPendingDestination] = useState<string | null>(null);
   const [hasSession, setHasSession] = useState(false);
@@ -130,7 +130,7 @@ const Index = () => {
   return (
     <>
 
-      {/* Lead capture modal — requires magic link verification */}
+      {/* Lead capture modal — requires OTP verification */}
       <LeadCaptureModal
         isOpen={showLeadCapture}
         onClose={() => setShowLeadCapture(false)}
@@ -149,41 +149,16 @@ const Index = () => {
           {/* ──────────────────────────────────────────────────────────
                § 1  HERO
              ────────────────────────────────────────────────────────── */}
-          <section id="hero" className="snap-section min-h-0 pt-10 pb-12 flex flex-col justify-center relative overflow-hidden">
-            {/* Ambient gold glow — stops at logo */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none animate-spotlight-pulse"
-              style={{ width: '100vw', height: '280px', background: `radial-gradient(ellipse 35% 55% at 50% 15%, rgba(212,175,55,0.06) 0%, rgba(212,175,55,0.04) 45%, transparent 75%)` }} />
-            {/* Static spotlight cone — contained to top half */}
-            <div className="absolute top-0 left-0 right-0 pointer-events-none"
-              style={{
-                height: '280px',
-                background: `radial-gradient(ellipse 25% 60% at 50% 0%, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.03) 30%, rgba(212,175,55,0.02) 50%, transparent 70%)`,
-                clipPath: 'polygon(42% 0%, 58% 0%, 68% 100%, 32% 100%)',
-              }} />
-            {/* Left focused beam — contained */}
-            <div className="absolute top-0 left-0 right-0 pointer-events-none"
-              style={{
-                height: '260px',
-                background: `radial-gradient(ellipse 18% 55% at 38% 0%, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 40%, transparent 70%)`,
-                clipPath: 'polygon(33% 0%, 46% 0%, 54% 100%, 24% 100%)',
-              }} />
-            {/* Right focused beam — contained */}
-            <div className="absolute top-0 left-0 right-0 pointer-events-none"
-              style={{
-                height: '260px',
-                background: `radial-gradient(ellipse 18% 55% at 62% 0%, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 40%, transparent 70%)`,
-                clipPath: 'polygon(54% 0%, 67% 0%, 76% 100%, 46% 100%)',
-              }} />
-            <div className="relative px-6 py-4 max-w-xl mx-auto text-center">
-              <div className="mb-5 relative inline-block">
-                <div className="absolute inset-0 -m-10 animate-logo-breathe" style={{ background: 'radial-gradient(circle, rgba(212,175,55,0.45) 0%, transparent 70%)', filter: 'blur(18px)' }} />
-                <img src={filmmakerLogo} alt="Filmmaker.OG" className="relative z-10 w-[96px] h-[96px] object-contain"
-                  style={{ filter: 'brightness(1.25) saturate(1.1) drop-shadow(0 0 12px rgba(212,175,55,0.5))' }} />
+          <section id="hero" className="snap-section min-h-0 pt-10 pb-12 flex flex-col justify-center">
+            <div className="px-6 py-4 max-w-xl mx-auto text-center">
+              <div className="mb-5 inline-block">
+                <img src={filmmakerLogo} alt="Filmmaker.OG" className="w-[96px] h-[96px] object-contain"
+                  style={{ filter: 'drop-shadow(0 0 12px rgba(212,175,55,0.5))' }} />
               </div>
               <h1 className="font-bebas text-[clamp(2.8rem,9vw,4.2rem)] leading-[1.05] tracking-[0.06em] text-gold mb-5">
                 SEE WHERE EVERY<br /><span className="text-white">DOLLAR GOES</span>
               </h1>
-              <p className="mb-6 text-ink-secondary text-[16px] leading-[1.7] tracking-[0.02em] font-medium max-w-[360px] mx-auto">
+              <p className="mb-6 text-ink-secondary text-[17px] leading-[1.7] tracking-[0.02em] font-medium max-w-[360px] mx-auto">
                 Built by a Tribeca-winning producer whose debut sold to <span className="text-gold font-semibold">Netflix</span>.
               </p>
 
@@ -206,7 +181,7 @@ const Index = () => {
               <div className="text-center mb-10">
                 <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-secondary mb-5 text-center">The Problem</p>
                 <h2
-                  className="font-bebas text-[40px] md:text-[50px] tracking-[0.08em] leading-[0.95] text-gold"
+                  className="font-bebas text-[40px] tracking-[0.08em] leading-[0.95] text-gold"
                   style={{ textShadow: '0 0 30px rgba(212,175,55,0.30), 0 0 60px rgba(212,175,55,0.12)' }}
                 >
                   MOST FILMS LOSE <span className="text-white">MONEY.</span>
@@ -240,7 +215,7 @@ const Index = () => {
                     {/* Gold divider */}
                     <div className="h-[1px] w-12 bg-gold-accent mb-6" />
 
-                    <p className="font-bebas text-[22px] md:text-[26px] tracking-[0.08em] text-ink-body mb-8">
+                    <p className="font-bebas text-[26px] tracking-[0.08em] text-ink-body mb-8">
                       Most filmmakers learn it too late.
                     </p>
 
@@ -261,7 +236,7 @@ const Index = () => {
                       {/* The punchline */}
                       <div className="flex items-baseline gap-3 mt-2">
                         <X className="w-4 h-4 text-ink-secondary flex-shrink-0 relative top-[2px]" />
-                        <p className="font-bebas text-[24px] md:text-[28px] tracking-[0.06em] text-gold leading-tight">
+                        <p className="font-bebas text-[26px] tracking-[0.06em] text-gold leading-tight">
                           Film has no standardized framework.
                         </p>
                       </div>
@@ -282,7 +257,7 @@ const Index = () => {
 
               <div className="text-center mb-8">
                 <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-secondary mb-5">The Cost</p>
-                <h2 className="font-bebas text-[40px] md:text-[50px] tracking-[0.08em] text-gold"
+                <h2 className="font-bebas text-[40px] tracking-[0.08em] text-gold"
                   style={{ textShadow: '0 0 30px rgba(212,175,55,0.30), 0 0 60px rgba(212,175,55,0.12)' }}>
                   THE <span className="text-white">REALITY</span>
                 </h2>
@@ -295,11 +270,11 @@ const Index = () => {
                     className="relative border p-6 flex flex-col overflow-hidden rounded-xl bg-bg-card border-bg-card-border"
                   >
                     {/* Cost — the visual anchor */}
-                    <span className="font-mono text-[20px] font-bold text-gold mb-2">
+                    <span className="font-mono text-[26px] font-bold text-gold mb-2">
                       {door.cost}
                     </span>
                     {/* Title */}
-                    <p className="font-bebas text-[18px] tracking-[0.08em] uppercase leading-tight text-white mb-2">
+                    <p className="font-bebas text-[17px] tracking-[0.08em] uppercase leading-tight text-white mb-2">
                       {door.name}
                     </p>
                     {/* Description — pushed to bottom for alignment */}
@@ -329,7 +304,7 @@ const Index = () => {
                   <div className="font-bebas text-[52px] md:text-[64px] leading-none select-none pointer-events-none text-gold -mb-4 -ml-1"
                     aria-hidden="true">{"\u201C"}</div>
                   <blockquote className="relative z-10">
-                    <p className="text-[17px] md:text-[18px] leading-[1.7] text-ink-body italic">
+                    <p className="text-[17px] leading-[1.7] text-ink-body italic">
                       Filmmakers have a perception in the business world of being kind of flaky dudes{"\u2026"} you need to be buttoned down{"\u2026"} speak the language that they speak.
                     </p>
                   </blockquote>
@@ -338,7 +313,7 @@ const Index = () => {
                       <div className="w-8 h-[1.5px] bg-gold-accent flex-shrink-0" />
                       <div>
                         <cite className="not-italic">
-                          <span className="font-bebas text-[16px] tracking-[0.14em] uppercase text-gold">Jason Blum</span>
+                          <span className="font-bebas text-[17px] tracking-[0.14em] uppercase text-gold">Jason Blum</span>
                         </cite>
                         <p className="text-ink-secondary text-[13px] tracking-[0.06em] mt-0.5">Blumhouse {"\u2014"} {"\u201C"}Paranormal Activity{"\u201D"}</p>
                       </div>
@@ -356,8 +331,9 @@ const Index = () => {
             <div>
 
               <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-secondary text-center mb-5">The Solution</p>
-              <h2 className="font-bebas text-[40px] md:text-[50px] text-gold tracking-[0.08em] text-center mb-2">THE <span className="text-white">WATERFALL</span></h2>
-              <p className="font-bebas text-[22px] md:text-[26px] tracking-[0.06em] text-ink-secondary text-center mb-6">
+              <h2 className="font-bebas text-[40px] text-gold tracking-[0.08em] text-center mb-2"
+                style={{ textShadow: '0 0 30px rgba(212,175,55,0.30), 0 0 60px rgba(212,175,55,0.12)' }}>THE <span className="text-white">WATERFALL</span></h2>
+              <p className="font-bebas text-[26px] tracking-[0.06em] text-ink-secondary text-center mb-6">
                 We built the framework.
               </p>
 
@@ -374,12 +350,12 @@ const Index = () => {
                     >
                       <div className="flex justify-between items-baseline mb-2">
                         <div className="flex items-baseline gap-2">
-                          <span className="font-mono text-[12px] text-ink-secondary tabular-nums">
+                          <span className="font-mono text-[13px] text-ink-secondary tabular-nums">
                             {String(i + 1).padStart(2, '0')}
                           </span>
                           <span className={cn(
                             "font-bebas tracking-[0.08em] uppercase",
-                            i === 0 ? "text-[22px] text-white" : "text-[18px] text-ink-body"
+                            i === 0 ? "text-[26px] text-white" : "text-[17px] text-ink-body"
                           )}>
                             {tier.name}
                           </span>
@@ -406,8 +382,8 @@ const Index = () => {
 
                 {/* Net Profits */}
                 <div className="mt-4 border border-gold-border bg-black px-5 py-5 text-center rounded-lg">
-                  <p className="text-[12px] tracking-[0.2em] uppercase font-semibold text-gold mb-1">Net Profits</p>
-                  <span className="font-mono text-[24px] font-bold text-white">
+                  <p className="text-[13px] tracking-[0.2em] uppercase font-semibold text-gold mb-1">Net Profits</p>
+                  <span className="font-mono text-[26px] font-bold text-white">
                     ${countVal.toLocaleString()}
                   </span>
                 </div>
@@ -428,14 +404,14 @@ const Index = () => {
                 {/* Two corridor boxes */}
                 <div className="grid grid-cols-2 gap-4">
                   <div className="border border-gold-border bg-black px-4 py-5 text-center rounded-lg">
-                    <p className="text-[12px] tracking-[0.2em] uppercase font-semibold text-gold mb-1">Producer Corridor</p>
-                    <span className="font-mono text-[20px] font-bold text-white">
+                    <p className="text-[13px] tracking-[0.2em] uppercase font-semibold text-gold mb-1">Producer Corridor</p>
+                    <span className="font-mono text-[26px] font-bold text-white">
                       ${producerVal.toLocaleString()}
                     </span>
                   </div>
                   <div className="border border-gold-border bg-black px-4 py-5 text-center rounded-lg">
-                    <p className="text-[12px] tracking-[0.2em] uppercase font-semibold text-gold mb-1">Investor Corridor</p>
-                    <span className="font-mono text-[20px] font-bold text-white">
+                    <p className="text-[13px] tracking-[0.2em] uppercase font-semibold text-gold mb-1">Investor Corridor</p>
+                    <span className="font-mono text-[26px] font-bold text-white">
                       ${investorVal.toLocaleString()}
                     </span>
                   </div>
@@ -453,7 +429,8 @@ const Index = () => {
             <div>
               <div className="text-center mb-8">
                 <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-secondary mb-5">The Offer</p>
-                <h2 className="font-bebas text-[40px] md:text-[50px] tracking-[0.08em] text-gold leading-[1.05]">
+                <h2 className="font-bebas text-[40px] tracking-[0.08em] text-gold leading-[1.05]"
+                  style={{ textShadow: '0 0 30px rgba(212,175,55,0.30), 0 0 60px rgba(212,175,55,0.12)' }}>
                   YOUR PATH{"\u00A0"}<span className="text-white">FORWARD</span>
                 </h2>
               </div>
@@ -461,9 +438,9 @@ const Index = () => {
               <div className="space-y-3">
                 {/* Free Calculator — the entry point (filled) */}
                 <div className="rounded-xl p-5 md:p-6 bg-bg-card">
-                  <span className="inline-block font-bebas text-[16px] tracking-[0.20em] uppercase text-gold mb-2">Free</span>
-                  <h3 className="font-bebas text-[26px] md:text-[30px] tracking-[0.06em] text-white mb-2">THE CALCULATOR</h3>
-                  <p className="text-ink-secondary text-[15px] leading-relaxed mb-5">
+                  <span className="inline-block font-bebas text-[14px] tracking-[0.20em] uppercase text-gold mb-2">Free</span>
+                  <h3 className="font-bebas text-[26px] md:text-[32px] tracking-[0.06em] text-white mb-2">THE CALCULATOR</h3>
+                  <p className="text-ink-secondary text-[17px] leading-relaxed mb-5">
                     Model your deal. Stress-test your numbers. See where every dollar flows.
                   </p>
                   <div className="text-center">
@@ -476,9 +453,9 @@ const Index = () => {
 
                 {/* The Blueprint — $197 (transparent) */}
                 <div className="rounded-xl p-5 md:p-6">
-                  <span className="inline-block font-mono text-[22px] font-bold text-gold mb-2">$197</span>
-                  <h3 className="font-bebas text-[26px] md:text-[30px] tracking-[0.06em] text-white mb-2">THE BLUEPRINT</h3>
-                  <p className="text-ink-secondary text-[15px] leading-relaxed mb-5">
+                  <span className="inline-block font-mono text-[26px] font-bold text-gold mb-2">$197</span>
+                  <h3 className="font-bebas text-[26px] md:text-[32px] tracking-[0.06em] text-white mb-2">THE BLUEPRINT</h3>
+                  <p className="text-ink-secondary text-[17px] leading-relaxed mb-5">
                     Your complete finance plan in 4 professional documents. Formatted for your attorney.
                   </p>
                   <div className="text-center">
@@ -492,12 +469,12 @@ const Index = () => {
                 {/* The Pitch Package — $497 (filled) */}
                 <div className="rounded-xl p-5 md:p-6 bg-bg-card">
                   <div className="flex items-baseline gap-3 mb-2">
-                    <span className="font-mono text-[28px] md:text-[32px] font-bold text-gold">$497</span>
-                    <span className="font-mono text-[16px] text-ink-secondary line-through">$697</span>
-                    <span className="text-[12px] tracking-[0.10em] uppercase font-semibold text-gold-accent">Save $200</span>
+                    <span className="font-mono text-[26px] md:text-[32px] font-bold text-gold">$497</span>
+                    <span className="font-mono text-[17px] text-ink-secondary line-through">$697</span>
+                    <span className="text-[13px] tracking-[0.10em] uppercase font-semibold text-gold-accent">Save $200</span>
                   </div>
-                  <h3 className="font-bebas text-[26px] md:text-[30px] tracking-[0.06em] text-white mb-2">THE PITCH PACKAGE</h3>
-                  <p className="text-ink-secondary text-[15px] leading-relaxed mb-5">
+                  <h3 className="font-bebas text-[26px] md:text-[32px] tracking-[0.06em] text-white mb-2">THE PITCH PACKAGE</h3>
+                  <p className="text-ink-secondary text-[17px] leading-relaxed mb-5">
                     8 documents including a pitch deck and investor return profiles. Walk into the room prepared.
                   </p>
                   <div className="text-center">
@@ -524,11 +501,11 @@ const Index = () => {
                 }}
               >
                 <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-secondary mb-5">The Ask</p>
-                <h2 className="font-bebas text-[40px] md:text-[50px] leading-[1.1] tracking-[0.08em] text-gold mb-8">
+                <h2 className="font-bebas text-[40px] leading-[1.1] tracking-[0.08em] text-gold mb-8">
                   YOUR INVESTOR WILL{"\u00A0"}ASK HOW THE MONEY FLOWS <span className="text-white">BACK</span>.
                 </h2>
                 <button onClick={handleStartClick}
-                  className="w-full max-w-[320px] h-14 btn-cta-final mx-auto">
+                  className="w-full max-w-[320px] h-14 btn-cta-primary animate-cta-glow-pulse mx-auto">
                   BUILD YOUR WATERFALL
                 </button>
               </div>
