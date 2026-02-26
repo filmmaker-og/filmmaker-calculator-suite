@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { Check } from "lucide-react";
+import { useHaptics } from "@/hooks/use-haptics";
 import {
   INITIAL_FORM_DATA,
   STEP_LABELS,
@@ -123,6 +124,7 @@ const ConfirmationScreen = ({ email }: { email: string }) => (
 const BuildYourPlan = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const haptics = useHaptics();
   const sessionId = searchParams.get("session_id");
 
   // State
@@ -332,11 +334,12 @@ const BuildYourPlan = () => {
   // Step navigation
   const goToStep = useCallback(
     async (step: number) => {
+      haptics.step();
       setCurrentStep(step);
       await saveNow({ current_step: step });
       window.scrollTo({ top: 0, behavior: "smooth" });
     },
-    [saveNow]
+    [saveNow, haptics]
   );
 
   const handleNext = useCallback(() => {
@@ -362,12 +365,14 @@ const BuildYourPlan = () => {
         .eq("id", submissionId);
 
       if (error) throw error;
+      haptics.success();
       setSubmitted(true);
     } catch (err) {
       console.error("Submit error:", err);
+      haptics.error();
       toast.error("Failed to submit. Please try again.");
     }
-  }, [submissionId]);
+  }, [submissionId, haptics]);
 
   // Loading state
   if (loading) {
