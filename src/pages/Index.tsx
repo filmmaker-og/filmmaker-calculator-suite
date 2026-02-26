@@ -562,84 +562,66 @@ const Index = () => {
                 </h2>
               </div>
 
-              <div className="space-y-5">
+              <div className="space-y-0 divide-y divide-bg-card-rule">
                 {/* Free Calculator — the entry point */}
                 <div
                   className={cn(
-                    "relative overflow-hidden rounded-xl border border-gold-accent transition-all duration-500 ease-out",
+                    "pb-6 transition-all duration-500 ease-out",
                     revTiers.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                   )}
-                  style={{
-                    transitionDelay: revTiers.visible ? '100ms' : '0ms',
-                    background: 'rgba(212,175,55,0.03)',
-                  }}
+                  style={{ transitionDelay: revTiers.visible ? '100ms' : '0ms' }}
                 >
-                  <div className="p-6 md:p-8">
-                    <span className="inline-block font-bebas text-[16px] tracking-[0.20em] uppercase text-gold mb-2">Free</span>
-                    <h3 className="font-bebas text-[26px] md:text-[30px] tracking-[0.06em] text-white mb-2">THE CALCULATOR</h3>
-                    <p className="text-ink-secondary text-[15px] leading-relaxed mb-5">
-                      Model your deal. Stress-test your numbers. See where every dollar flows.
-                    </p>
-                    <button onClick={handleStartClick}
-                      className="w-full max-w-[260px] h-12 btn-cta-primary text-[17px]">
-                      START FREE
-                    </button>
-                  </div>
+                  <span className="inline-block font-bebas text-[16px] tracking-[0.20em] uppercase text-gold mb-2">Free</span>
+                  <h3 className="font-bebas text-[26px] md:text-[30px] tracking-[0.06em] text-white mb-2">THE CALCULATOR</h3>
+                  <p className="text-ink-secondary text-[15px] leading-relaxed mb-5">
+                    Model your deal. Stress-test your numbers. See where every dollar flows.
+                  </p>
+                  <button onClick={handleStartClick}
+                    className="w-full max-w-[260px] h-12 btn-cta-primary text-[17px]">
+                    START FREE
+                  </button>
                 </div>
 
                 {/* The Blueprint — $197 */}
                 <div
                   className={cn(
-                    "relative overflow-hidden rounded-xl border border-bg-card-border transition-all duration-500 ease-out",
+                    "py-6 transition-all duration-500 ease-out",
                     revTiers.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                   )}
-                  style={{
-                    transitionDelay: revTiers.visible ? '250ms' : '0ms',
-                    background: 'rgba(255,255,255,0.02)',
-                  }}
+                  style={{ transitionDelay: revTiers.visible ? '250ms' : '0ms' }}
                 >
-                  <div className="p-6 md:p-8">
-                    <div className="flex items-baseline gap-3 mb-2">
-                      <span className="font-mono text-[22px] font-bold text-gold">$197</span>
-                      <span className="font-mono text-[15px] text-ink-secondary line-through">$497</span>
-                    </div>
-                    <h3 className="font-bebas text-[26px] md:text-[30px] tracking-[0.06em] text-white mb-2">THE BLUEPRINT</h3>
-                    <p className="text-ink-secondary text-[15px] leading-relaxed mb-5">
-                      Your complete finance plan in 4 professional documents. Formatted for your attorney.
-                    </p>
-                    <button onClick={handleStoreClick}
-                      className="w-full max-w-[260px] h-12 btn-cta-secondary text-[17px]">
-                      VIEW DETAILS
-                    </button>
-                  </div>
+                  <span className="inline-block font-mono text-[22px] font-bold text-gold mb-2">$197</span>
+                  <h3 className="font-bebas text-[26px] md:text-[30px] tracking-[0.06em] text-white mb-2">THE BLUEPRINT</h3>
+                  <p className="text-ink-secondary text-[15px] leading-relaxed mb-5">
+                    Your complete finance plan in 4 professional documents. Formatted for your attorney.
+                  </p>
+                  <button onClick={handleStoreClick}
+                    className="w-full max-w-[260px] h-12 btn-cta-secondary text-[17px]">
+                    VIEW DETAILS
+                  </button>
                 </div>
 
                 {/* The Pitch Package — $497 */}
                 <div
                   className={cn(
-                    "relative overflow-hidden rounded-xl border border-gold-accent transition-all duration-500 ease-out",
+                    "pt-6 transition-all duration-500 ease-out",
                     revTiers.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                   )}
-                  style={{
-                    transitionDelay: revTiers.visible ? '400ms' : '0ms',
-                    background: 'rgba(212,175,55,0.03)',
-                  }}
+                  style={{ transitionDelay: revTiers.visible ? '400ms' : '0ms' }}
                 >
-                  <div className="p-6 md:p-8">
-                    <div className="flex items-baseline gap-3 mb-2">
-                      <span className="font-mono text-[28px] md:text-[32px] font-bold text-gold">$497</span>
-                      <span className="font-mono text-[16px] text-ink-secondary line-through">$697</span>
-                      <span className="text-[12px] tracking-[0.10em] uppercase font-semibold text-gold-accent ml-auto">Save $200</span>
-                    </div>
-                    <h3 className="font-bebas text-[26px] md:text-[30px] tracking-[0.06em] text-white mb-2">THE PITCH PACKAGE</h3>
-                    <p className="text-ink-secondary text-[15px] leading-relaxed mb-5">
-                      8 documents including pitch deck and investor return profiles. Walk into the room prepared.
-                    </p>
-                    <button onClick={handleStoreClick}
-                      className="w-full max-w-[260px] h-12 btn-cta-secondary text-[17px]">
-                      VIEW DETAILS
-                    </button>
+                  <div className="flex items-baseline gap-3 mb-2">
+                    <span className="font-mono text-[28px] md:text-[32px] font-bold text-gold">$497</span>
+                    <span className="font-mono text-[16px] text-ink-secondary line-through">$697</span>
+                    <span className="text-[12px] tracking-[0.10em] uppercase font-semibold text-gold-accent ml-auto">Save $200</span>
                   </div>
+                  <h3 className="font-bebas text-[26px] md:text-[30px] tracking-[0.06em] text-white mb-2">THE PITCH PACKAGE</h3>
+                  <p className="text-ink-secondary text-[15px] leading-relaxed mb-5">
+                    8 documents including pitch deck and investor return profiles. Walk into the room prepared.
+                  </p>
+                  <button onClick={handleStoreClick}
+                    className="w-full max-w-[260px] h-12 btn-cta-secondary text-[17px]">
+                    VIEW DETAILS
+                  </button>
                 </div>
               </div>
             </div>
@@ -649,30 +631,24 @@ const Index = () => {
           {/* ──────────────────────────────────────────────────────────
                § 7  FINAL CTA — The Moment of Truth
              ────────────────────────────────────────────────────────── */}
-          <section id="final-cta" className="snap-section py-10 md:py-14 px-4">
+          <SectionFrame id="final-cta">
             <div
               ref={revFinal.ref}
               className={cn(
-                "relative overflow-hidden transition-all duration-700 ease-out rounded-2xl border border-gold-accent",
+                "transition-all duration-700 ease-out text-center",
                 revFinal.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
               )}
-              style={{
-                background: 'rgba(212,175,55,0.03)',
-                boxShadow: '0 0 40px rgba(212,175,55,0.08), inset 0 1px 0 rgba(212,175,55,0.08)',
-              }}
             >
-              <div className="relative p-10 md:p-16 max-w-md mx-auto text-center">
-                <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-secondary mb-5">The Ask</p>
-                <h2 className="font-bebas text-[40px] md:text-[50px] leading-[1.1] tracking-[0.08em] text-gold mb-8">
-                  YOUR INVESTOR WILL{"\u00A0"}ASK HOW THE MONEY FLOWS <span className="text-white">BACK</span>.
-                </h2>
-                <button onClick={handleStartClick}
-                  className="w-full max-w-[320px] h-14 btn-cta-final mx-auto">
-                  BUILD YOUR WATERFALL
-                </button>
-              </div>
+              <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-secondary mb-5">The Ask</p>
+              <h2 className="font-bebas text-[40px] md:text-[50px] leading-[1.1] tracking-[0.08em] text-gold mb-8">
+                YOUR INVESTOR WILL{"\u00A0"}ASK HOW THE MONEY FLOWS <span className="text-white">BACK</span>.
+              </h2>
+              <button onClick={handleStartClick}
+                className="w-full max-w-[320px] h-14 btn-cta-final mx-auto">
+                BUILD YOUR WATERFALL
+              </button>
             </div>
-          </section>
+          </SectionFrame>
 
           {/* ── FOOTER ── */}
           <footer className="py-8 flex justify-center px-4">
