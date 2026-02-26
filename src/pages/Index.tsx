@@ -95,7 +95,6 @@ const Index = () => {
   const revMission     = useReveal();
   const revBlum        = useReveal();
   const revCost        = useReveal();
-  const revSolution    = useReveal();
   const revWater       = useReveal();
   const revTiers       = useReveal();
   const revPivot       = useReveal();
@@ -495,39 +494,16 @@ const Index = () => {
           </section>
 
           {/* ──────────────────────────────────────────────────────────
-               § 4  THE SOLUTION — pivot into the product
-             ────────────────────────────────────────────────────────── */}
-          <section className="py-12 md:py-16 px-6">
-            <div
-              ref={revSolution.ref}
-              className={cn(
-                "max-w-md mx-auto text-center transition-all duration-700 ease-out",
-                revSolution.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"
-              )}
-            >
-              <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-secondary mb-4">The Solution</p>
-              <h2
-                className="font-bebas text-[40px] md:text-[50px] tracking-[0.08em] leading-[1.05] text-gold"
-                style={{
-                  textShadow: revSolution.visible
-                    ? '0 0 30px rgba(212,175,55,0.4), 0 0 60px rgba(212,175,55,0.15)'
-                    : 'none',
-                }}
-              >
-                WE BUILT THE{"\u00A0"}<span className="text-white">FRAMEWORK</span>.
-              </h2>
-            </div>
-          </section>
-
-
-          {/* ──────────────────────────────────────────────────────────
-               § 5  THE WATERFALL — the product reveal
+               § 4  THE SOLUTION — the product reveal
              ────────────────────────────────────────────────────────── */}
           <SectionFrame id="waterfall">
             <div ref={revWater.ref} className={cn("transition-all duration-700 ease-out", revWater.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
 
-              <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-secondary text-center mb-5">The Product</p>
-              <h2 className="font-bebas text-[40px] md:text-[50px] text-gold tracking-[0.08em] text-center mb-4">THE <span className="text-white">WATERFALL</span></h2>
+              <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-secondary text-center mb-5">The Solution</p>
+              <h2 className="font-bebas text-[40px] md:text-[50px] text-gold tracking-[0.08em] text-center mb-2">THE <span className="text-white">WATERFALL</span></h2>
+              <p className="font-bebas text-[22px] md:text-[26px] tracking-[0.06em] text-ink-secondary text-center mb-6">
+                We built the framework.
+              </p>
 
               <div ref={waterBarRef} className="max-w-md mx-auto">
                 {/* Waterfall rows — unified financial table */}
@@ -661,13 +637,13 @@ const Index = () => {
                 {/* The Blueprint — $197 */}
                 <div
                   className={cn(
-                    "relative overflow-hidden rounded-2xl transition-all duration-500 ease-out",
+                    "relative overflow-hidden rounded-2xl border border-bg-card-border transition-all duration-500 ease-out",
                     revTiers.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                   )}
                   style={{
                     transitionDelay: revTiers.visible ? '250ms' : '0ms',
-                    border: '1px solid rgba(255,255,255,0.08)',
                     background: 'rgba(255,255,255,0.02)',
+                    boxShadow: '0 0 20px rgba(212,175,55,0.04)',
                   }}
                 >
                   <div className="p-8 md:p-10">
