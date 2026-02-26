@@ -98,6 +98,7 @@ const Index = () => {
   const revSolution    = useReveal();
   const revWater       = useReveal();
   const revTiers       = useReveal();
+  const revPivot       = useReveal();
   const revFinal       = useReveal();
 
   // Waterfall bar animation
@@ -354,21 +355,6 @@ const Index = () => {
                         </p>
                       </div>
 
-                      {/* "Until now." — the seed */}
-                      <p
-                        className={cn(
-                          "font-bebas text-[36px] md:text-[42px] tracking-[0.06em] text-gold pt-4 transition-all duration-700 ease-out",
-                          revMission.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
-                        )}
-                        style={{
-                          transitionDelay: revMission.visible ? '800ms' : '0ms',
-                          textShadow: revMission.visible
-                            ? '0 0 30px rgba(212,175,55,0.4), 0 0 60px rgba(212,175,55,0.15)'
-                            : 'none',
-                        }}
-                      >
-                        Until <span className="text-white">now</span>.
-                      </p>
                     </div>
 
                   </div>
@@ -377,56 +363,14 @@ const Index = () => {
             </div>
           </SectionFrame>
 
-          {/* ── INTERSTITIAL: Blum Quote ── */}
-          <section className="py-8 md:py-12 px-6">
-            <div
-              ref={revBlum.ref}
-              className={cn(
-                "max-w-md mx-auto transition-all duration-700 ease-out",
-                revBlum.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-              )}
-            >
-              <div
-                className="relative border border-gold-accent overflow-hidden rounded-xl"
-                style={{
-                  background: '#0C0C0C',
-                  boxShadow: '0 0 30px rgba(212,175,55,0.08), inset 0 1px 0 rgba(212,175,55,0.10)',
-                }}
-              >
-                {/* Gold left accent — strong */}
-                <div className="absolute left-0 top-0 bottom-0 w-[3px]"
-                  style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.80), rgba(212,175,55,0.40), transparent)' }} />
-                <div className="p-7 md:p-9 pl-8 md:pl-10">
-                  {/* Opening quote mark */}
-                  <div className="font-bebas text-[52px] md:text-[64px] leading-none select-none pointer-events-none text-gold -mb-4 -ml-1"
-                    aria-hidden="true">{"\u201C"}</div>
-                  <blockquote className="relative z-10">
-                    <p className="text-[17px] md:text-[18px] leading-[1.7] text-ink-body italic">
-                      Filmmakers have a perception in the business world of being kind of flaky dudes{"\u2026"} you need to be buttoned down{"\u2026"} speak the language that they speak.
-                    </p>
-                  </blockquote>
-                  <div className="mt-5 pt-3">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-[1.5px] bg-gold-accent" />
-                      <cite className="not-italic">
-                        <span className="font-bebas text-[16px] tracking-[0.14em] uppercase text-gold">Jason Blum</span>
-                      </cite>
-                    </div>
-                    <p className="text-ink-secondary text-[14px] tracking-[0.08em] mt-1.5 ml-9">Blumhouse "Paranormal Activity"</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-
           {/* ──────────────────────────────────────────────────────────
-               § 3  CLOSED DOORS — the four cards speak for themselves
+               § 3  THE COST — escalates the pain before the pivot
              ────────────────────────────────────────────────────────── */}
           <SectionFrame id="cost">
             <div ref={revCost.ref} className={cn("transition-all duration-700 ease-out", revCost.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
 
               <div className="text-center mb-8">
+                <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-secondary mb-5">The Cost</p>
                 <h2 className="font-bebas text-[40px] md:text-[50px] tracking-[0.08em] text-gold"
                   style={{ textShadow: revCost.visible ? '0 0 30px rgba(212,175,55,0.4), 0 0 60px rgba(212,175,55,0.15)' : 'none' }}>
                   THE <span className="text-white">REALITY</span>
@@ -469,6 +413,86 @@ const Index = () => {
             </div>
           </SectionFrame>
 
+          {/* ── INTERSTITIAL: Blum Quote — authority validates the pain ── */}
+          <section className="py-8 md:py-12 px-6">
+            <div
+              ref={revBlum.ref}
+              className={cn(
+                "max-w-md mx-auto transition-all duration-700 ease-out",
+                revBlum.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+              )}
+            >
+              <div
+                className="relative border border-gold-accent overflow-hidden rounded-xl"
+                style={{
+                  background: '#0C0C0C',
+                  boxShadow: '0 0 30px rgba(212,175,55,0.08), inset 0 1px 0 rgba(212,175,55,0.10)',
+                }}
+              >
+                {/* Gold left accent — strong */}
+                <div className="absolute left-0 top-0 bottom-0 w-[3px]"
+                  style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.80), rgba(212,175,55,0.40), transparent)' }} />
+                <div className="p-7 md:p-9 pl-8 md:pl-10">
+                  {/* Opening quote mark */}
+                  <div className="font-bebas text-[52px] md:text-[64px] leading-none select-none pointer-events-none text-gold -mb-4 -ml-1"
+                    aria-hidden="true">{"\u201C"}</div>
+                  <blockquote className="relative z-10">
+                    <p className="text-[17px] md:text-[18px] leading-[1.7] text-ink-body italic">
+                      Filmmakers have a perception in the business world of being kind of flaky dudes{"\u2026"} you need to be buttoned down{"\u2026"} speak the language that they speak.
+                    </p>
+                  </blockquote>
+                  <div className="mt-5 pt-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-[1.5px] bg-gold-accent" />
+                      <cite className="not-italic">
+                        <span className="font-bebas text-[16px] tracking-[0.14em] uppercase text-gold">Jason Blum</span>
+                      </cite>
+                    </div>
+                    <p className="text-ink-secondary text-[14px] tracking-[0.08em] mt-1.5 ml-9">Blumhouse "Paranormal Activity"</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* ── INTERSTITIAL: "UNTIL NOW." — the narrative pivot ── */}
+          <section className="py-20 md:py-28 px-6 flex items-center justify-center min-h-[40vh]">
+            <div
+              ref={revPivot.ref}
+              className={cn(
+                "text-center transition-all duration-1000 ease-out",
+                revPivot.visible ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-4 scale-[0.97]"
+              )}
+            >
+              {/* Faint radial glow behind text for visual weight */}
+              <div className="absolute inset-0 pointer-events-none"
+                style={{
+                  background: revPivot.visible
+                    ? 'radial-gradient(ellipse 50% 60% at 50% 50%, rgba(212,175,55,0.06) 0%, transparent 70%)'
+                    : 'none',
+                  transition: 'background 1.2s ease-out',
+                }} />
+              {/* Subtle gold divider above */}
+              <div
+                className={cn(
+                  "w-12 h-[1px] mx-auto mb-8 transition-all duration-700 ease-out",
+                  revPivot.visible ? "opacity-100 scale-x-100" : "opacity-0 scale-x-0"
+                )}
+                style={{ background: 'rgba(212,175,55,0.35)', transitionDelay: '200ms' }}
+              />
+              <p
+                className="font-bebas text-[48px] md:text-[60px] tracking-[0.06em] text-gold relative z-10"
+                style={{
+                  textShadow: revPivot.visible
+                    ? '0 0 40px rgba(212,175,55,0.4), 0 0 80px rgba(212,175,55,0.15)'
+                    : 'none',
+                  transition: 'text-shadow 1.2s ease-out',
+                }}
+              >
+                Until <span className="text-white">now</span>.
+              </p>
+            </div>
+          </section>
 
           {/* ──────────────────────────────────────────────────────────
                § 4  THE SOLUTION — pivot into the product
@@ -483,7 +507,7 @@ const Index = () => {
             >
               <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-secondary mb-4">The Solution</p>
               <h2
-                className="font-bebas text-[42px] md:text-[52px] tracking-[0.08em] leading-[1.05] text-gold"
+                className="font-bebas text-[40px] md:text-[50px] tracking-[0.08em] leading-[1.05] text-gold"
                 style={{
                   textShadow: revSolution.visible
                     ? '0 0 30px rgba(212,175,55,0.4), 0 0 60px rgba(212,175,55,0.15)'
@@ -502,8 +526,8 @@ const Index = () => {
           <SectionFrame id="waterfall">
             <div ref={revWater.ref} className={cn("transition-all duration-700 ease-out", revWater.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
 
-              <h2 className="font-bebas text-[40px] md:text-[50px] text-gold tracking-[0.08em] text-center mb-1">THE <span className="text-white">WATERFALL</span></h2>
-              <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-secondary text-center mb-4">Your recoupment structure</p>
+              <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-secondary text-center mb-5">The Product</p>
+              <h2 className="font-bebas text-[40px] md:text-[50px] text-gold tracking-[0.08em] text-center mb-4">THE <span className="text-white">WATERFALL</span></h2>
 
               <div ref={waterBarRef} className="max-w-md mx-auto">
                 {/* Waterfall rows — unified financial table */}
@@ -602,7 +626,7 @@ const Index = () => {
               )}
             >
               <div className="text-center mb-8">
-                <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-secondary mb-4">What You Get</p>
+                <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-secondary mb-4">The Offer</p>
                 <h2 className="font-bebas text-[40px] md:text-[50px] tracking-[0.08em] text-gold leading-[1.05]">
                   YOUR PATH{"\u00A0"}<span className="text-white">FORWARD</span>
                 </h2>
@@ -707,7 +731,7 @@ const Index = () => {
               }}
             >
               <div className="relative p-10 md:p-16 max-w-md mx-auto text-center">
-                <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-secondary mb-5">The Moment of Truth</p>
+                <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-secondary mb-5">The Ask</p>
                 <h2 className="font-bebas text-[40px] md:text-[50px] leading-[1.1] tracking-[0.08em] text-gold mb-8">
                   YOUR INVESTOR WILL{"\u00A0"}ASK HOW THE MONEY FLOWS <span className="text-white">BACK</span>.
                 </h2>
