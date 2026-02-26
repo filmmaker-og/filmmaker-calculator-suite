@@ -396,7 +396,7 @@ const Index = () => {
                       {door.name}
                     </p>
                     {/* Description — pushed to bottom for alignment */}
-                    <p className="text-[13px] leading-[1.5] text-ink-secondary mt-auto">
+                    <p className="text-[14px] leading-[1.5] text-ink-secondary mt-auto">
                       {door.lock}
                     </p>
                   </div>
@@ -440,7 +440,7 @@ const Index = () => {
                         <span className="font-bebas text-[16px] tracking-[0.14em] uppercase text-gold">Jason Blum</span>
                       </cite>
                     </div>
-                    <p className="text-ink-secondary text-[14px] tracking-[0.08em] mt-1.5 ml-9">Blumhouse "Paranormal Activity"</p>
+                    <p className="text-ink-secondary text-[14px] tracking-[0.08em] mt-1.5 ml-9">Blumhouse {"\u2014"} {"\u201C"}Paranormal Activity{"\u201D"}</p>
                   </div>
                 </div>
               </div>
@@ -562,14 +562,17 @@ const Index = () => {
                 </h2>
               </div>
 
-              <div className="space-y-0 divide-y divide-bg-card-rule">
-                {/* Free Calculator — the entry point */}
+              <div className="space-y-3">
+                {/* Free Calculator — the entry point (filled) */}
                 <div
                   className={cn(
-                    "pb-6 transition-all duration-500 ease-out",
+                    "rounded-xl p-5 md:p-6 text-center transition-all duration-500 ease-out",
                     revTiers.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                   )}
-                  style={{ transitionDelay: revTiers.visible ? '100ms' : '0ms' }}
+                  style={{
+                    transitionDelay: revTiers.visible ? '100ms' : '0ms',
+                    background: 'rgba(255,255,255,0.04)',
+                  }}
                 >
                   <span className="inline-block font-bebas text-[16px] tracking-[0.20em] uppercase text-gold mb-2">Free</span>
                   <h3 className="font-bebas text-[26px] md:text-[30px] tracking-[0.06em] text-white mb-2">THE CALCULATOR</h3>
@@ -582,10 +585,10 @@ const Index = () => {
                   </button>
                 </div>
 
-                {/* The Blueprint — $197 */}
+                {/* The Blueprint — $197 (transparent) */}
                 <div
                   className={cn(
-                    "py-6 transition-all duration-500 ease-out",
+                    "rounded-xl p-5 md:p-6 text-center transition-all duration-500 ease-out",
                     revTiers.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                   )}
                   style={{ transitionDelay: revTiers.visible ? '250ms' : '0ms' }}
@@ -601,22 +604,25 @@ const Index = () => {
                   </button>
                 </div>
 
-                {/* The Pitch Package — $497 */}
+                {/* The Pitch Package — $497 (filled) */}
                 <div
                   className={cn(
-                    "pt-6 transition-all duration-500 ease-out",
+                    "rounded-xl p-5 md:p-6 text-center transition-all duration-500 ease-out",
                     revTiers.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                   )}
-                  style={{ transitionDelay: revTiers.visible ? '400ms' : '0ms' }}
+                  style={{
+                    transitionDelay: revTiers.visible ? '400ms' : '0ms',
+                    background: 'rgba(255,255,255,0.04)',
+                  }}
                 >
-                  <div className="flex items-baseline gap-3 mb-2">
+                  <div className="flex items-baseline justify-center gap-3 mb-2">
                     <span className="font-mono text-[28px] md:text-[32px] font-bold text-gold">$497</span>
                     <span className="font-mono text-[16px] text-ink-secondary line-through">$697</span>
-                    <span className="text-[12px] tracking-[0.10em] uppercase font-semibold text-gold-accent ml-auto">Save $200</span>
+                    <span className="text-[12px] tracking-[0.10em] uppercase font-semibold text-gold-accent">Save $200</span>
                   </div>
                   <h3 className="font-bebas text-[26px] md:text-[30px] tracking-[0.06em] text-white mb-2">THE PITCH PACKAGE</h3>
                   <p className="text-ink-secondary text-[15px] leading-relaxed mb-5">
-                    8 documents including pitch deck and investor return profiles. Walk into the room prepared.
+                    8 documents including a pitch deck and investor return profiles. Walk into the room prepared.
                   </p>
                   <button onClick={handleStoreClick}
                     className="w-full max-w-[260px] h-12 btn-cta-secondary text-[17px]">
@@ -631,11 +637,11 @@ const Index = () => {
           {/* ──────────────────────────────────────────────────────────
                § 7  FINAL CTA — The Moment of Truth
              ────────────────────────────────────────────────────────── */}
-          <SectionFrame id="final-cta">
+          <section id="final-cta" className="snap-section py-14 md:py-20 px-6">
             <div
               ref={revFinal.ref}
               className={cn(
-                "transition-all duration-700 ease-out text-center",
+                "max-w-md mx-auto text-center transition-all duration-700 ease-out",
                 revFinal.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
               )}
             >
@@ -648,26 +654,14 @@ const Index = () => {
                 BUILD YOUR WATERFALL
               </button>
             </div>
-          </SectionFrame>
+          </section>
 
           {/* ── FOOTER ── */}
-          <footer className="py-8 flex justify-center px-4">
-            <div
-              className="text-center overflow-hidden"
-              style={{
-                width: "100%",
-                maxWidth: "320px",
-                borderRadius: "16px",
-                background: "#000000",
-                border: "1.5px solid rgba(212,175,55,0.30)",
-                padding: "24px 32px",
-              }}
-            >
-              <p className="text-ink-secondary text-xs tracking-wide leading-relaxed">
-                For educational and informational purposes only. Not legal, tax, or investment advice.
-                Consult a qualified entertainment attorney before making financing decisions.
-              </p>
-            </div>
+          <footer className="py-8 px-6 max-w-md mx-auto">
+            <p className="text-ink-secondary/50 text-[11px] tracking-wide leading-relaxed text-center">
+              For educational and informational purposes only. Not legal, tax, or investment advice.
+              Consult a qualified entertainment attorney before making financing decisions.
+            </p>
           </footer>
         </main>
       </div>

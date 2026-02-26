@@ -14,8 +14,8 @@ const SectionFrame = ({
     <div
       className={cn("px-7 py-8 md:px-10 md:py-10 max-w-md mx-auto rounded-2xl", className)}
       style={{
-        border: "1px solid rgba(255, 255, 255, 0.08)",
-        background: "rgba(255, 255, 255, 0.02)",
+        border: "1px solid rgba(255, 255, 255, 0.14)",
+        background: "rgba(255, 255, 255, 0.04)",
       }}
     >
       {children}
