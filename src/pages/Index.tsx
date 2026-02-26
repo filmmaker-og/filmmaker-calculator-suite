@@ -5,7 +5,6 @@ import { useHaptics } from "@/hooks/use-haptics";
 import {
   Check,
   X,
-  ChevronDown,
 } from "lucide-react";
 import filmmakerLogo from "@/assets/filmmaker-f-icon.png";
 import LeadCaptureModal from "@/components/LeadCaptureModal";
@@ -36,26 +35,6 @@ const waterfallTiers = [
   { name: "Net Profits",       amount: "$417,500",       pct: 13.9,  barColor: "rgba(212,175,55,0.85)",  isFinal: true  },
 ];
 
-/* ═══════════════════════════════════════════════════════════════════
-   SCROLL-TRIGGERED REVEAL HOOK
-   ═══════════════════════════════════════════════════════════════════ */
-const useReveal = (threshold = 0.15) => {
-  const ref = useRef<HTMLDivElement>(null);
-  const prefersReduced = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const [visible, setVisible] = useState(prefersReduced);
-  useEffect(() => {
-    if (prefersReduced) return;
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([e]) => { if (e.isIntersecting) { setVisible(true); obs.disconnect(); } },
-      { threshold }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [threshold, prefersReduced]);
-  return { ref, visible };
-};
 
 /* ═══════════════════════════════════════════════════════════════════
    MAIN COMPONENT
@@ -89,14 +68,6 @@ const Index = () => {
     }
   }, [hasSession, navigate]);
 
-  // Reveals
-  const revEvidence    = useReveal();
-  const revMission     = useReveal();
-  const revBlum        = useReveal();
-  const revCost        = useReveal();
-  const revWater       = useReveal();
-  const revTiers       = useReveal();
-  const revFinal       = useReveal();
 
   // Waterfall bar animation
   const [barsRevealed, setBarsRevealed] = useState(false);
@@ -222,10 +193,6 @@ const Index = () => {
                 </button>
               </div>
 
-              <div className="mt-8 flex justify-center animate-bounce-subtle cursor-pointer active:scale-[0.97]"
-                onClick={() => { haptics.light(); document.getElementById('evidence')?.scrollIntoView({ behavior: 'smooth' }); }}>
-                <ChevronDown className="w-6 h-6 text-gold" />
-              </div>
             </div>
           </section>
 
@@ -234,17 +201,13 @@ const Index = () => {
                § 2  THE PROBLEM + THESIS — with "Until now." punchline
              ────────────────────────────────────────────────────────── */}
           <SectionFrame id="evidence">
-            <div ref={revEvidence.ref} className={cn("transition-all duration-700 ease-out", revEvidence.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
+            <div>
 
               <div className="text-center mb-10">
                 <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-secondary mb-5 text-center">The Problem</p>
                 <h2
                   className="font-bebas text-[40px] md:text-[50px] tracking-[0.08em] leading-[0.95] text-gold"
-                  style={{
-                    textShadow: revEvidence.visible
-                      ? '0 0 30px rgba(212,175,55,0.30), 0 0 60px rgba(212,175,55,0.12)'
-                      : 'none',
-                  }}
+                  style={{ textShadow: '0 0 30px rgba(212,175,55,0.30), 0 0 60px rgba(212,175,55,0.12)' }}
                 >
                   MOST FILMS LOSE <span className="text-white">MONEY.</span>
                 </h2>
@@ -260,78 +223,35 @@ const Index = () => {
                   <div className="p-8 md:p-10 pl-9 md:pl-11">
 
                     {/* — Problem narrative — */}
-                    <p
-                      className={cn(
-                        "font-bebas text-[26px] md:text-[32px] tracking-[0.06em] leading-tight mb-6 transition-all duration-500 ease-out",
-                        revEvidence.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
-                      )}
-                      style={{ transitionDelay: revEvidence.visible ? '200ms' : '0ms' }}
-                    >
+                    <p className="font-bebas text-[26px] md:text-[32px] tracking-[0.06em] leading-tight mb-6">
                       <span className="text-gold">YOUR FILM CAN MAKE MONEY</span><br />
                       <span className="text-white">AND YOU STILL LOSE.</span>
                     </p>
 
                     <div className="space-y-3 mb-6">
-                      <p
-                        className={cn(
-                          "text-ink-secondary text-[17px] leading-relaxed transition-all duration-500 ease-out",
-                          revEvidence.visible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-3"
-                        )}
-                        style={{ transitionDelay: revEvidence.visible ? '300ms' : '0ms' }}
-                      >
+                      <p className="text-ink-secondary text-[17px] leading-relaxed">
                         Not because it didn{"\u2019"}t recoup.
                       </p>
-                      <p
-                        className={cn(
-                          "text-ink-body text-[17px] leading-relaxed font-medium transition-all duration-500 ease-out",
-                          revEvidence.visible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-3"
-                        )}
-                        style={{ transitionDelay: revEvidence.visible ? '450ms' : '0ms' }}
-                      >
+                      <p className="text-ink-body text-[17px] leading-relaxed font-medium">
                         Because of how the deal was structured.
                       </p>
                     </div>
 
-                    {/* Gold divider — dramatic pause */}
-                    <div
-                      className={cn(
-                        "h-[1px] w-12 bg-gold-accent mb-6 transition-all duration-500 ease-out",
-                        revEvidence.visible ? "opacity-100" : "opacity-0"
-                      )}
-                      style={{ transitionDelay: revEvidence.visible ? '600ms' : '0ms' }}
-                    />
+                    {/* Gold divider */}
+                    <div className="h-[1px] w-12 bg-gold-accent mb-6" />
 
-                    <p
-                      className={cn(
-                        "font-bebas text-[22px] md:text-[26px] tracking-[0.08em] text-ink-body mb-8 transition-all duration-500 ease-out",
-                        revEvidence.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
-                      )}
-                      style={{ transitionDelay: revEvidence.visible ? '750ms' : '0ms' }}
-                    >
+                    <p className="font-bebas text-[22px] md:text-[26px] tracking-[0.08em] text-ink-body mb-8">
                       Most filmmakers learn it too late.
                     </p>
 
                     {/* — Thesis: alternative asset class — */}
-                    <div
-                      ref={revMission.ref}
-                      className={cn(
-                        "border-t border-bg-card-rule pt-6 space-y-5 transition-all duration-700 ease-out",
-                        revMission.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-                      )}
-                    >
+                    <div className="border-t border-bg-card-rule pt-6 space-y-5">
                       {[
                         { asset: "Real Estate", tool: "comps and cap rate models" },
                         { asset: "Private Equity", tool: "carry and IRR structures" },
                         { asset: "Venture Capital", tool: "term sheets and valuation frameworks" },
-                      ].map((row, i) => (
-                        <div
-                          key={row.asset}
-                          className={cn(
-                            "flex items-baseline gap-3 transition-all duration-500 ease-out",
-                            revMission.visible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-3"
-                          )}
-                          style={{ transitionDelay: revMission.visible ? `${200 + i * 120}ms` : '0ms' }}
-                        >
+                      ].map((row) => (
+                        <div key={row.asset} className="flex items-baseline gap-3">
                           <Check className="w-4 h-4 text-gold flex-shrink-0 relative top-[2px]" />
                           <p className="text-ink-secondary text-[17px] leading-relaxed">
                             <span className="text-ink-body font-semibold">{row.asset}</span> has {row.tool}.
@@ -339,13 +259,7 @@ const Index = () => {
                         </div>
                       ))}
                       {/* The punchline */}
-                      <div
-                        className={cn(
-                          "flex items-baseline gap-3 mt-2 transition-all duration-500 ease-out",
-                          revMission.visible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-3"
-                        )}
-                        style={{ transitionDelay: revMission.visible ? '560ms' : '0ms' }}
-                      >
+                      <div className="flex items-baseline gap-3 mt-2">
                         <X className="w-4 h-4 text-ink-secondary flex-shrink-0 relative top-[2px]" />
                         <p className="font-bebas text-[24px] md:text-[28px] tracking-[0.06em] text-gold leading-tight">
                           Film has no standardized framework.
@@ -364,28 +278,21 @@ const Index = () => {
                § 3  THE COST — escalates the pain before the pivot
              ────────────────────────────────────────────────────────── */}
           <SectionFrame id="cost">
-            <div ref={revCost.ref} className={cn("transition-all duration-700 ease-out", revCost.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
+            <div>
 
               <div className="text-center mb-8">
                 <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-secondary mb-5">The Cost</p>
                 <h2 className="font-bebas text-[40px] md:text-[50px] tracking-[0.08em] text-gold"
-                  style={{ textShadow: revCost.visible ? '0 0 30px rgba(212,175,55,0.30), 0 0 60px rgba(212,175,55,0.12)' : 'none' }}>
+                  style={{ textShadow: '0 0 30px rgba(212,175,55,0.30), 0 0 60px rgba(212,175,55,0.12)' }}>
                   THE <span className="text-white">REALITY</span>
                 </h2>
               </div>
 
               <div className="grid grid-cols-2 gap-4 max-w-md mx-auto">
-                {closedDoors.map((door, i) => (
+                {closedDoors.map((door) => (
                   <div
                     key={door.name}
-                    className={cn(
-                      "relative border p-6 flex flex-col transition-all duration-700 ease-out overflow-hidden rounded-xl",
-                      "bg-bg-card border-bg-card-border",
-                      revCost.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-                    )}
-                    style={{
-                      transitionDelay: revCost.visible ? `${i * 100}ms` : '0ms',
-                    }}
+                    className="relative border p-6 flex flex-col overflow-hidden rounded-xl bg-bg-card border-bg-card-border"
                   >
                     {/* Cost — the visual anchor */}
                     <span className="font-mono text-[20px] font-bold text-gold mb-2">
@@ -407,13 +314,7 @@ const Index = () => {
 
           {/* ── INTERSTITIAL: Blum Quote — authority validates the pain ── */}
           <section className="py-12 md:py-16 px-6">
-            <div
-              ref={revBlum.ref}
-              className={cn(
-                "max-w-md mx-auto transition-all duration-700 ease-out",
-                revBlum.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-              )}
-            >
+            <div className="max-w-md mx-auto">
               <div
                 className="relative bg-bg-elevated border border-gold-accent overflow-hidden rounded-xl"
                 style={{
@@ -452,7 +353,7 @@ const Index = () => {
                § 4  THE SOLUTION — the product reveal
              ────────────────────────────────────────────────────────── */}
           <SectionFrame id="waterfall">
-            <div ref={revWater.ref} className={cn("transition-all duration-700 ease-out", revWater.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6")}>
+            <div>
 
               <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-secondary text-center mb-5">The Solution</p>
               <h2 className="font-bebas text-[40px] md:text-[50px] text-gold tracking-[0.08em] text-center mb-2">THE <span className="text-white">WATERFALL</span></h2>
@@ -549,13 +450,7 @@ const Index = () => {
                § 6  WHAT YOU GET — the solution ladder
              ────────────────────────────────────────────────────────── */}
           <SectionFrame id="offer">
-            <div
-              ref={revTiers.ref}
-              className={cn(
-                "transition-all duration-700 ease-out",
-                revTiers.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-              )}
-            >
+            <div>
               <div className="text-center mb-8">
                 <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-secondary mb-5">The Offer</p>
                 <h2 className="font-bebas text-[40px] md:text-[50px] tracking-[0.08em] text-gold leading-[1.05]">
@@ -565,13 +460,7 @@ const Index = () => {
 
               <div className="space-y-3">
                 {/* Free Calculator — the entry point (filled) */}
-                <div
-                  className={cn(
-                    "rounded-xl p-5 md:p-6 bg-bg-card transition-all duration-500 ease-out",
-                    revTiers.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-                  )}
-                  style={{ transitionDelay: revTiers.visible ? '100ms' : '0ms' }}
-                >
+                <div className="rounded-xl p-5 md:p-6 bg-bg-card">
                   <span className="inline-block font-bebas text-[16px] tracking-[0.20em] uppercase text-gold mb-2">Free</span>
                   <h3 className="font-bebas text-[26px] md:text-[30px] tracking-[0.06em] text-white mb-2">THE CALCULATOR</h3>
                   <p className="text-ink-secondary text-[15px] leading-relaxed mb-5">
@@ -586,13 +475,7 @@ const Index = () => {
                 </div>
 
                 {/* The Blueprint — $197 (transparent) */}
-                <div
-                  className={cn(
-                    "rounded-xl p-5 md:p-6 transition-all duration-500 ease-out",
-                    revTiers.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-                  )}
-                  style={{ transitionDelay: revTiers.visible ? '250ms' : '0ms' }}
-                >
+                <div className="rounded-xl p-5 md:p-6">
                   <span className="inline-block font-mono text-[22px] font-bold text-gold mb-2">$197</span>
                   <h3 className="font-bebas text-[26px] md:text-[30px] tracking-[0.06em] text-white mb-2">THE BLUEPRINT</h3>
                   <p className="text-ink-secondary text-[15px] leading-relaxed mb-5">
@@ -607,13 +490,7 @@ const Index = () => {
                 </div>
 
                 {/* The Pitch Package — $497 (filled) */}
-                <div
-                  className={cn(
-                    "rounded-xl p-5 md:p-6 bg-bg-card transition-all duration-500 ease-out",
-                    revTiers.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-                  )}
-                  style={{ transitionDelay: revTiers.visible ? '400ms' : '0ms' }}
-                >
+                <div className="rounded-xl p-5 md:p-6 bg-bg-card">
                   <div className="flex items-baseline gap-3 mb-2">
                     <span className="font-mono text-[28px] md:text-[32px] font-bold text-gold">$497</span>
                     <span className="font-mono text-[16px] text-ink-secondary line-through">$697</span>
@@ -639,13 +516,7 @@ const Index = () => {
                § 7  FINAL CTA — The Moment of Truth
              ────────────────────────────────────────────────────────── */}
           <section id="final-cta" className="snap-section py-12 md:py-16 px-6">
-            <div
-              ref={revFinal.ref}
-              className={cn(
-                "max-w-md mx-auto transition-all duration-700 ease-out",
-                revFinal.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-              )}
-            >
+            <div className="max-w-md mx-auto">
               <div
                 className="relative bg-bg-elevated border border-gold-accent overflow-hidden rounded-xl text-center px-6 py-10 md:py-12"
                 style={{
