@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 
 import { X } from "lucide-react";
+import { useHaptics } from "@/hooks/use-haptics";
 import SectionFrame from "@/components/SectionFrame";
 import SectionHeader from "@/components/SectionHeader";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
@@ -103,6 +104,7 @@ const TOP_10: Top10Term[] = [
 const Glossary = () => {
   const [selectedTerm, setSelectedTerm] = useState<Top10Term | null>(null);
   const revTop10 = useReveal();
+  const haptics = useHaptics();
 
   useEffect(() => { window.scrollTo(0, 0); }, []);
 
@@ -147,7 +149,7 @@ const Glossary = () => {
               {TOP_10.map((item, i) => (
                 <button
                   key={item.num}
-                  onClick={() => setSelectedTerm(item)}
+                  onClick={() => { haptics.light(); setSelectedTerm(item); }}
                   style={{
                     borderRadius: 0,
                     opacity: revTop10.visible ? 1 : 0,
@@ -203,7 +205,7 @@ const Glossary = () => {
                   </span>
                 </div>
                 <button
-                  onClick={() => setSelectedTerm(null)}
+                  onClick={() => { haptics.light(); setSelectedTerm(null); }}
                   className="text-black/50 hover:text-black transition-colors p-1"
                 >
                   <X className="w-4 h-4" />
@@ -224,7 +226,7 @@ const Glossary = () => {
                   return (
                     <>
                       <button
-                        onClick={() => prev && setSelectedTerm(prev)}
+                        onClick={() => { if (prev) { haptics.light(); setSelectedTerm(prev); } }}
                         disabled={!prev}
                         className="flex-1 py-3 text-[11px] font-mono uppercase tracking-wider text-white/20 hover:text-gold/60 hover:bg-gold/[0.04] disabled:opacity-0 transition-all text-left pl-5"
                       >
@@ -232,7 +234,7 @@ const Glossary = () => {
                       </button>
                       <div className="w-[1px] bg-white/[0.06]" />
                       <button
-                        onClick={() => next && setSelectedTerm(next)}
+                        onClick={() => { if (next) { haptics.light(); setSelectedTerm(next); } }}
                         disabled={!next}
                         className="flex-1 py-3 text-[11px] font-mono uppercase tracking-wider text-white/20 hover:text-gold/60 hover:bg-gold/[0.04] disabled:opacity-0 transition-all text-right pr-5"
                       >

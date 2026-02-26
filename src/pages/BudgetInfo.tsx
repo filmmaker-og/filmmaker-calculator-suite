@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, AlertTriangle } from 'lucide-react';
+import { useHaptics } from "@/hooks/use-haptics";
 
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -96,13 +97,16 @@ const MistakeCard = ({ title, description }: MistakeCardProps) => (
 
 const BudgetInfo = () => {
   const navigate = useNavigate();
+  const haptics = useHaptics();
 
   const handleBackToOverview = () => {
+    haptics.light();
     navigate(-1);
     window.scrollTo(0, 0);
   };
 
   const handleStartSimulation = () => {
+    haptics.medium();
     navigate('/calculator?tab=budget');
     window.scrollTo(0, 0);
   };

@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import { useHaptics } from "@/hooks/use-haptics";
 import {
   mainProducts,
   addOnProduct,
@@ -320,6 +321,7 @@ const ProductCard = ({
    ═══════════════════════════════════════════════════════════════════ */
 const Store = () => {
   const navigate = useNavigate();
+  const haptics = useHaptics();
   const [linkCopied, setLinkCopied] = useState(false);
   const [showPopup, setShowPopup] = useState<Product | null>(null);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
@@ -337,6 +339,7 @@ const Store = () => {
 
   /* ─── SHARE HELPERS ─── */
   const handleCopyLink = useCallback(() => {
+    haptics.light();
     navigator.clipboard
       .writeText(`${SHARE_TEXT}\n\n${getShareUrl()}`)
       .then(() => {
@@ -344,9 +347,10 @@ const Store = () => {
         setTimeout(() => setLinkCopied(false), 2000);
       })
       .catch(() => {});
-  }, []);
+  }, [haptics]);
 
   const handleShare = useCallback(async () => {
+    haptics.light();
     if (navigator.share) {
       try {
         await navigator.share({
@@ -358,10 +362,11 @@ const Store = () => {
       } catch {}
     }
     handleCopyLink();
-  }, [handleCopyLink]);
+  }, [handleCopyLink, haptics]);
 
   /* ─── SMOOTH SCROLL ─── */
   const scrollToProducts = () => {
+    haptics.light();
     const el = document.getElementById("products");
     if (el) el.scrollIntoView({ behavior: "smooth" });
   };
@@ -388,16 +393,19 @@ const Store = () => {
   };
 
   const handleBuy = (product: Product) => {
+    haptics.medium();
     setShowPopup(product);
   };
 
   const handlePopupAccept = () => {
     if (!showPopup) return;
+    haptics.medium();
     startCheckout(showPopup.id, "the-working-model-discount");
   };
 
   const handlePopupDecline = () => {
     if (!showPopup) return;
+    haptics.light();
     startCheckout(showPopup.id);
   };
 
@@ -651,7 +659,7 @@ const Store = () => {
             {/* 5. Compare packages link */}
             <div className="text-center mt-6">
               <button
-                onClick={() => navigate("/store/compare")}
+                onClick={() => { haptics.light(); navigate("/store/compare"); }}
                 className="text-text-dim text-sm hover:text-gold transition-colors tracking-wider"
               >
                 Compare packages side by side →

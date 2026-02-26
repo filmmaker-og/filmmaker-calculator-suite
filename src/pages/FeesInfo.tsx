@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
+import { useHaptics } from "@/hooks/use-haptics";
 
 import { WikiSectionHeader, WikiCard, WikiCallout } from "@/components/shared";
 
@@ -13,13 +14,16 @@ import { WikiSectionHeader, WikiCard, WikiCallout } from "@/components/shared";
 
 const FeesInfo = () => {
   const navigate = useNavigate();
+  const haptics = useHaptics();
 
   const handleBackToOverview = () => {
+    haptics.light();
     navigate(-1);
     window.scrollTo(0, 0);
   };
 
   const handleStartSimulation = () => {
+    haptics.medium();
     navigate('/calculator?tab=deal');
     window.scrollTo(0, 0);
   };
