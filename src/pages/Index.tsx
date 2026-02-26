@@ -5,7 +5,6 @@ import { useHaptics } from "@/hooks/use-haptics";
 import {
   Check,
   X,
-  LockKeyhole,
   ChevronDown,
 } from "lucide-react";
 import filmmakerLogo from "@/assets/filmmaker-f-icon.png";
@@ -380,7 +379,7 @@ const Index = () => {
                   <div
                     key={door.name}
                     className={cn(
-                      "relative border p-6 flex flex-col transition-all duration-700 ease-out overflow-hidden rounded-xl min-h-[160px]",
+                      "relative border p-6 flex flex-col transition-all duration-700 ease-out overflow-hidden rounded-xl",
                       "bg-bg-card border-bg-card-border",
                       revCost.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                     )}
@@ -388,21 +387,16 @@ const Index = () => {
                       transitionDelay: revCost.visible ? `${i * 100}ms` : '0ms',
                     }}
                   >
-                    {/* Lock icon — top right, subtle */}
-                    <LockKeyhole
-                      className="absolute top-4 right-4 w-4 h-4 text-gold-accent"
-                      strokeWidth={1.5}
-                    />
                     {/* Cost — the visual anchor */}
-                    <span className="font-mono text-[20px] font-bold text-gold mb-3">
+                    <span className="font-mono text-[20px] font-bold text-gold mb-2">
                       {door.cost}
                     </span>
                     {/* Title */}
-                    <p className="font-bebas text-[20px] tracking-[0.08em] uppercase leading-tight text-white mb-2">
+                    <p className="font-bebas text-[18px] tracking-[0.08em] uppercase leading-tight text-white mb-2">
                       {door.name}
                     </p>
-                    {/* Description */}
-                    <p className="text-[14px] leading-[1.5] text-ink-secondary mt-auto">
+                    {/* Description — pushed to bottom for alignment */}
+                    <p className="text-[13px] leading-[1.5] text-ink-secondary mt-auto">
                       {door.lock}
                     </p>
                   </div>
@@ -412,7 +406,7 @@ const Index = () => {
           </SectionFrame>
 
           {/* ── INTERSTITIAL: Blum Quote — authority validates the pain ── */}
-          <section className="py-8 md:py-12 px-6">
+          <section className="py-10 md:py-14 px-6">
             <div
               ref={revBlum.ref}
               className={cn(
@@ -553,11 +547,11 @@ const Index = () => {
           {/* ──────────────────────────────────────────────────────────
                § 6  WHAT YOU GET — the solution ladder
              ────────────────────────────────────────────────────────── */}
-          <section className="snap-section py-6 px-4">
+          <SectionFrame id="offer">
             <div
               ref={revTiers.ref}
               className={cn(
-                "max-w-md mx-auto transition-all duration-700 ease-out",
+                "transition-all duration-700 ease-out",
                 revTiers.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
               )}
             >
@@ -568,27 +562,26 @@ const Index = () => {
                 </h2>
               </div>
 
-              <div className="space-y-4">
+              <div className="space-y-5">
                 {/* Free Calculator — the entry point */}
                 <div
                   className={cn(
-                    "relative overflow-hidden rounded-2xl border border-gold-accent transition-all duration-500 ease-out",
+                    "relative overflow-hidden rounded-xl border border-gold-accent transition-all duration-500 ease-out",
                     revTiers.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                   )}
                   style={{
                     transitionDelay: revTiers.visible ? '100ms' : '0ms',
                     background: 'rgba(212,175,55,0.03)',
-                    boxShadow: '0 0 30px rgba(212,175,55,0.08), inset 0 1px 0 rgba(212,175,55,0.08)',
                   }}
                 >
-                  <div className="p-8 md:p-10">
-                    <span className="inline-block font-bebas text-[16px] tracking-[0.20em] uppercase text-gold mb-3">Free</span>
-                    <h3 className="font-bebas text-[28px] md:text-[32px] tracking-[0.06em] text-white mb-3">THE CALCULATOR</h3>
-                    <p className="text-ink-secondary text-[16px] leading-relaxed mb-6">
+                  <div className="p-6 md:p-8">
+                    <span className="inline-block font-bebas text-[16px] tracking-[0.20em] uppercase text-gold mb-2">Free</span>
+                    <h3 className="font-bebas text-[26px] md:text-[30px] tracking-[0.06em] text-white mb-2">THE CALCULATOR</h3>
+                    <p className="text-ink-secondary text-[15px] leading-relaxed mb-5">
                       Model your deal. Stress-test your numbers. See where every dollar flows.
                     </p>
                     <button onClick={handleStartClick}
-                      className="w-full max-w-[280px] h-12 btn-cta-primary text-[18px]">
+                      className="w-full max-w-[260px] h-12 btn-cta-primary text-[17px]">
                       START FREE
                     </button>
                   </div>
@@ -597,23 +590,25 @@ const Index = () => {
                 {/* The Blueprint — $197 */}
                 <div
                   className={cn(
-                    "relative overflow-hidden rounded-2xl border border-bg-card-border transition-all duration-500 ease-out",
+                    "relative overflow-hidden rounded-xl border border-bg-card-border transition-all duration-500 ease-out",
                     revTiers.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                   )}
                   style={{
                     transitionDelay: revTiers.visible ? '250ms' : '0ms',
                     background: 'rgba(255,255,255,0.02)',
-                    boxShadow: '0 0 20px rgba(212,175,55,0.04)',
                   }}
                 >
-                  <div className="p-8 md:p-10">
-                    <span className="inline-block font-mono text-[18px] font-bold text-gold mb-3">$197</span>
-                    <h3 className="font-bebas text-[28px] md:text-[32px] tracking-[0.06em] text-white mb-3">THE BLUEPRINT</h3>
-                    <p className="text-ink-secondary text-[16px] leading-relaxed mb-6">
+                  <div className="p-6 md:p-8">
+                    <div className="flex items-baseline gap-3 mb-2">
+                      <span className="font-mono text-[22px] font-bold text-gold">$197</span>
+                      <span className="font-mono text-[15px] text-ink-secondary line-through">$497</span>
+                    </div>
+                    <h3 className="font-bebas text-[26px] md:text-[30px] tracking-[0.06em] text-white mb-2">THE BLUEPRINT</h3>
+                    <p className="text-ink-secondary text-[15px] leading-relaxed mb-5">
                       Your complete finance plan in 4 professional documents. Formatted for your attorney.
                     </p>
                     <button onClick={handleStoreClick}
-                      className="w-full max-w-[280px] h-12 btn-cta-secondary text-[18px]">
+                      className="w-full max-w-[260px] h-12 btn-cta-secondary text-[17px]">
                       VIEW DETAILS
                     </button>
                   </div>
@@ -622,39 +617,39 @@ const Index = () => {
                 {/* The Pitch Package — $497 */}
                 <div
                   className={cn(
-                    "relative overflow-hidden rounded-2xl border border-gold-accent transition-all duration-500 ease-out",
+                    "relative overflow-hidden rounded-xl border border-gold-accent transition-all duration-500 ease-out",
                     revTiers.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                   )}
                   style={{
                     transitionDelay: revTiers.visible ? '400ms' : '0ms',
                     background: 'rgba(212,175,55,0.03)',
-                    boxShadow: '0 0 30px rgba(212,175,55,0.08), inset 0 1px 0 rgba(212,175,55,0.08)',
                   }}
                 >
-                  <div className="p-8 md:p-10">
-                    <div className="flex items-center gap-3 mb-3">
-                      <span className="inline-block font-mono text-[18px] font-bold text-gold">$497</span>
-                      <span className="text-[11px] tracking-[0.12em] uppercase font-semibold text-ink-secondary line-through">$697</span>
+                  <div className="p-6 md:p-8">
+                    <div className="flex items-baseline gap-3 mb-2">
+                      <span className="font-mono text-[28px] md:text-[32px] font-bold text-gold">$497</span>
+                      <span className="font-mono text-[16px] text-ink-secondary line-through">$697</span>
+                      <span className="text-[12px] tracking-[0.10em] uppercase font-semibold text-gold-accent ml-auto">Save $200</span>
                     </div>
-                    <h3 className="font-bebas text-[28px] md:text-[32px] tracking-[0.06em] text-white mb-3">THE PITCH PACKAGE</h3>
-                    <p className="text-ink-secondary text-[16px] leading-relaxed mb-6">
+                    <h3 className="font-bebas text-[26px] md:text-[30px] tracking-[0.06em] text-white mb-2">THE PITCH PACKAGE</h3>
+                    <p className="text-ink-secondary text-[15px] leading-relaxed mb-5">
                       8 documents including pitch deck and investor return profiles. Walk into the room prepared.
                     </p>
                     <button onClick={handleStoreClick}
-                      className="w-full max-w-[280px] h-12 btn-cta-secondary text-[18px]">
+                      className="w-full max-w-[260px] h-12 btn-cta-secondary text-[17px]">
                       VIEW DETAILS
                     </button>
                   </div>
                 </div>
               </div>
             </div>
-          </section>
+          </SectionFrame>
 
 
           {/* ──────────────────────────────────────────────────────────
                § 7  FINAL CTA — The Moment of Truth
              ────────────────────────────────────────────────────────── */}
-          <section id="final-cta" className="snap-section py-10 px-4">
+          <section id="final-cta" className="snap-section py-10 md:py-14 px-4">
             <div
               ref={revFinal.ref}
               className={cn(

@@ -10,7 +10,7 @@ const SectionFrame = ({
   className?: string;
   alt?: boolean;
 }) => (
-  <section id={id} className="snap-section px-4 py-4">
+  <section id={id} className="snap-section px-4 py-10 md:py-14">
     <div
       className={cn("px-7 py-8 md:px-10 md:py-10 max-w-md mx-auto rounded-2xl", className)}
       style={{
