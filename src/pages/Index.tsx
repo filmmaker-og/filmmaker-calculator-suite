@@ -355,12 +355,6 @@ const Index = () => {
                   transition: 'opacity 700ms ease-out, transform 700ms ease-out',
                 }}
               >
-                <p className="font-bebas text-[28px] tracking-[0.06em] text-gold leading-tight">
-                  We built the framework.
-                </p>
-                <p className="font-bebas text-[28px] tracking-[0.06em] text-white leading-tight mb-6">
-                  You run the numbers.
-                </p>
                 <h2 className="font-bebas text-[40px] leading-[1.1] tracking-[0.08em] text-gold mb-6">
                   YOUR INVESTORS WILL{"\u00A0"}ASK HOW THE MONEY FLOWS <span className="text-white">BACK.</span>
                 </h2>
