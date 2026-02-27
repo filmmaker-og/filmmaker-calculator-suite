@@ -162,7 +162,7 @@ const Index = () => {
                 <h1 className="font-bebas text-[clamp(3.2rem,11vw,4.8rem)] leading-[0.95] tracking-[0.02em] text-gold mb-3">
                   SEE WHERE EVERY DOLLAR <span className="text-white">GOES</span>
                 </h1>
-                <p className="font-mono text-[12px] tracking-[0.15em] uppercase text-gold mb-2">
+                <p className="font-mono text-[15px] tracking-[0.12em] uppercase text-gold mb-2">
                   THE WATERFALL
                 </p>
                 <p className="text-ink-secondary text-[15px] leading-[1.6] max-w-[300px] mx-auto">
@@ -291,8 +291,8 @@ const Index = () => {
                 style={{ boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)' }}>
 
                 {/* Checks — what you get */}
-                <div className="px-6 pt-5 pb-4">
-                  <p className="font-mono text-[11px] tracking-[0.15em] uppercase text-gold mb-4">
+                <div className="px-6 pt-6 pb-5">
+                  <p className="font-mono text-[13px] tracking-[0.12em] uppercase text-gold mb-5">
                     With your waterfall
                   </p>
                   {[
@@ -301,9 +301,9 @@ const Index = () => {
                     "Investor-ready waterfall PDF",
                     "Know your real numbers before you shoot",
                   ].map((item) => (
-                    <div key={item} className="flex items-start gap-3 py-2">
-                      <span className="text-gold text-[15px] leading-none mt-0.5">{"\u2713"}</span>
-                      <span className="text-[14px] text-ink-body leading-snug">{item}</span>
+                    <div key={item} className="flex items-start gap-3 py-2.5">
+                      <span className="text-gold text-[18px] leading-none mt-0.5">{"\u2713"}</span>
+                      <span className="text-[16px] text-ink-body leading-snug">{item}</span>
                     </div>
                   ))}
                 </div>
@@ -312,8 +312,8 @@ const Index = () => {
                 <div className="mx-6 h-[1px]" style={{ background: 'linear-gradient(90deg, transparent, rgba(212,175,55,0.30), transparent)' }} />
 
                 {/* X marks — without it */}
-                <div className="px-6 pt-5 pb-5" style={{ background: 'rgba(255,255,255,0.02)' }}>
-                  <p className="font-mono text-[11px] tracking-[0.15em] uppercase text-ink-secondary mb-4">
+                <div className="px-6 pt-6 pb-6" style={{ background: 'rgba(255,255,255,0.02)' }}>
+                  <p className="font-mono text-[13px] tracking-[0.12em] uppercase text-ink-secondary mb-5">
                     Without it
                   </p>
                   {[
@@ -322,9 +322,9 @@ const Index = () => {
                     "Ambiguity in how money flows back",
                     "Years of expensive trial and error",
                   ].map((item) => (
-                    <div key={item} className="flex items-start gap-3 py-2">
-                      <span className="text-ink-secondary text-[15px] leading-none mt-0.5">{"\u2717"}</span>
-                      <span className="text-[14px] text-ink-secondary leading-snug">{item}</span>
+                    <div key={item} className="flex items-start gap-3 py-2.5">
+                      <span className="text-ink-secondary text-[18px] leading-none mt-0.5">{"\u2717"}</span>
+                      <span className="text-[16px] text-ink-secondary leading-snug">{item}</span>
                     </div>
                   ))}
                 </div>
@@ -371,7 +371,7 @@ const Index = () => {
                 </h2>
                 <button onClick={handleStartClick}
                   className="w-full max-w-[320px] h-14 btn-cta-primary animate-cta-glow-pulse mx-auto">
-                  KNOW YOUR NUMBERS
+                  BUILD YOUR WATERFALL
                 </button>
               </div>
             </div>
