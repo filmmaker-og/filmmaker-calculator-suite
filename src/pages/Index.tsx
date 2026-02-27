@@ -14,7 +14,7 @@ const closedDoors = [
   { name: "Entertainment Attorney", lock: "If they\u2019ll take the meeting.", cost: "$800/hr" },
   { name: "Producing Consultant", lock: "If you can afford one.", cost: "$5K+" },
   { name: "Film School", lock: "Four years you don\u2019t have.", cost: "$200K" },
-  { name: "Trial & Error", lock: "No second chances.", cost: "Everything" },
+  { name: "Trial & Error", lock: "No second chances.", cost: "Your Film" },
 ];
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -159,11 +159,6 @@ const Index = () => {
                 </p>
               </div>
 
-              {/* Context line — anchors the visualization */}
-              <p className="font-mono text-[14px] text-ink-body text-center mb-6">
-                Hypothetical: $1.8M budget{"\u00A0"}{"\u2192"}{"\u00A0"}$3M acquisition
-              </p>
-
               {/* ── Waterfall Visualization ── */}
               <div ref={waterBarRef}>
                 {/* Waterfall rows — unified financial table */}
@@ -218,21 +213,8 @@ const Index = () => {
                   </span>
                 </div>
 
-                {/* Branching connector — financial schematic */}
-                <div className="flex justify-center">
-                  <div className="w-[2px] h-6 bg-gold-accent" />
-                </div>
-                <div className="flex items-start">
-                  <div className="flex-1 flex justify-end">
-                    <div className="w-1/2 h-[2px] bg-gold-accent" />
-                  </div>
-                  <div className="flex-1 flex justify-start">
-                    <div className="w-1/2 h-[2px] bg-gold-accent" />
-                  </div>
-                </div>
-
                 {/* Two corridor boxes */}
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-4 mt-4">
                   <div className="border border-gold-border bg-black px-4 py-6 text-center rounded-lg"
                     style={{ boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)' }}>
                     <p className="text-[13px] tracking-[0.2em] uppercase font-semibold text-gold mb-1">Producer Corridor</p>
@@ -248,7 +230,9 @@ const Index = () => {
                     </span>
                   </div>
                 </div>
-                <p className="font-mono text-[13px] text-ink-secondary text-center mt-4">50/50 net profit split after full recoupment.</p>
+                <p className="font-mono text-[12px] text-ink-secondary text-center mt-4">
+                  Hypothetical $1.8M budget{"\u00A0"}{"\u2022"}{"\u00A0"}$3M acquisition{"\u00A0"}{"\u2022"}{"\u00A0"}50/50 net profit split
+                </p>
               </div>
 
               {/* CTA — earns the click after the visualization */}
@@ -262,12 +246,6 @@ const Index = () => {
               </div>
             </div>
           </section>
-
-
-          {/* Gold structural divider */}
-          <div className="flex justify-center py-8 md:py-12">
-            <div className="w-16 h-px" style={{ background: "rgba(212,175,55,0.35)" }} />
-          </div>
 
 
           {/* ──────────────────────────────────────────────────────────
@@ -304,12 +282,6 @@ const Index = () => {
 
             </div>
           </SectionFrame>
-
-
-          {/* Gold structural divider */}
-          <div className="flex justify-center py-8 md:py-12">
-            <div className="w-16 h-px" style={{ background: "rgba(212,175,55,0.35)" }} />
-          </div>
 
 
           {/* ──────────────────────────────────────────────────────────
@@ -377,22 +349,20 @@ const Index = () => {
           </SectionFrame>
 
 
-          {/* ── INTERSTITIAL: Until Now — the pivot ── */}
-          <section className="py-16 md:py-20 px-6">
-            <div className="flex items-center justify-center gap-4 max-w-xs mx-auto">
-              <div className="flex-1 h-px" style={{ background: "rgba(212,175,55,0.40)" }} />
-              <span className="font-bebas text-[26px] tracking-[0.10em] text-white whitespace-nowrap">
-                UNTIL NOW.
-              </span>
-              <div className="flex-1 h-px" style={{ background: "rgba(212,175,55,0.40)" }} />
-            </div>
-          </section>
-
-
-          {/* Gold structural divider */}
+          {/* Gold structural divider — the only one on the page */}
           <div className="flex justify-center py-8 md:py-12">
             <div className="w-16 h-px" style={{ background: "rgba(212,175,55,0.35)" }} />
           </div>
+
+
+          {/* ── INTERSTITIAL: Until Now — the pivot ── */}
+          <section className="py-20 md:py-28 px-6">
+            <div className="text-center">
+              <p className="font-bebas text-[48px] md:text-[56px] tracking-[0.08em] text-white">
+                UNTIL NOW.
+              </p>
+            </div>
+          </section>
 
 
           {/* ──────────────────────────────────────────────────────────
