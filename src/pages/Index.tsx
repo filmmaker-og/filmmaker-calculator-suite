@@ -2,10 +2,6 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useHaptics } from "@/hooks/use-haptics";
-import {
-  Check,
-  X,
-} from "lucide-react";
 import filmmakerLogo from "@/assets/filmmaker-f-icon.png";
 import LeadCaptureModal from "@/components/LeadCaptureModal";
 import { cn } from "@/lib/utils";
@@ -149,11 +145,10 @@ const Index = () => {
           {/* ──────────────────────────────────────────────────────────
                § 1  HERO
              ────────────────────────────────────────────────────────── */}
-          <section id="hero" className="snap-section min-h-0 pt-10 pb-12 flex flex-col justify-center">
+          <section id="hero" className="snap-section min-h-0 pt-16 pb-16 flex flex-col justify-center">
             <div className="px-6 py-4 max-w-xl mx-auto text-center">
               <div className="mb-5 inline-block">
-                <img src={filmmakerLogo} alt="Filmmaker.OG" className="w-[96px] h-[96px] object-contain"
-                  style={{ filter: 'drop-shadow(0 0 12px rgba(212,175,55,0.5))' }} />
+                <img src={filmmakerLogo} alt="Filmmaker.OG" className="w-[96px] h-[96px] object-contain" />
               </div>
               <h1 className="font-bebas text-[clamp(2.8rem,9vw,4.2rem)] leading-[1.05] tracking-[0.06em] text-gold mb-5">
                 SEE WHERE EVERY<br /><span className="text-white">DOLLAR GOES</span>
@@ -163,7 +158,7 @@ const Index = () => {
               </p>
 
               <div className="w-full max-w-[320px] mx-auto space-y-3">
-                <button onClick={handleStartClick} className="w-full h-14 btn-cta-primary animate-cta-glow-pulse">
+                <button onClick={handleStartClick} className="w-full h-14 btn-cta-primary">
                   BUILD YOUR WATERFALL
                 </button>
               </div>
@@ -172,154 +167,122 @@ const Index = () => {
           </section>
 
 
-          {/* Gold structural divider */}
-          <div className="flex justify-center py-6">
-            <div className="w-12 h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(212,175,55,0.35), transparent)' }} />
-          </div>
 
           {/* ──────────────────────────────────────────────────────────
                § 2  THE PROBLEM + THESIS — with "Until now." punchline
              ────────────────────────────────────────────────────────── */}
-          <SectionFrame id="evidence">
-            <div>
+          <section id="evidence" className="snap-section px-6 py-12 md:py-16">
+            <div className="max-w-md mx-auto">
 
               <div className="text-center mb-10">
-                <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-secondary mb-5 text-center">The Problem</p>
-                <h2
-                  className="font-bebas text-[40px] tracking-[0.08em] leading-[0.95] text-gold"
-                  style={{ textShadow: '0 0 30px rgba(212,175,55,0.30), 0 0 60px rgba(212,175,55,0.12)' }}
-                >
+                <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-secondary mb-5">The Problem</p>
+                <h2 className="font-bebas text-[40px] tracking-[0.08em] leading-[0.95] text-gold">
                   MOST FILMS LOSE <span className="text-white">MONEY.</span>
                 </h2>
               </div>
 
-              {/* Unified container — problem flows into thesis */}
-              <div className="max-w-md mx-auto">
-                <div className="relative bg-bg-card border border-bg-card-border overflow-hidden rounded-xl"
-                  style={{ boxShadow: '0 0 20px rgba(212,175,55,0.06)' }}>
-                  {/* Gold left accent */}
-                  <div className="absolute left-0 top-0 bottom-0 w-[3px]"
-                    style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.55), rgba(212,175,55,0.25), transparent)' }} />
-                  <div className="p-8 md:p-10 pl-9 md:pl-11">
+              <div className="relative bg-bg-card border border-bg-card-border overflow-hidden rounded-xl">
+                {/* Gold left accent */}
+                <div className="absolute left-0 top-0 bottom-0 w-[3px]"
+                  style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.55), rgba(212,175,55,0.25), transparent)' }} />
+                <div className="p-8 md:p-10 pl-9 md:pl-11">
 
-                    {/* — Problem narrative — */}
-                    <p className="font-bebas text-[26px] md:text-[32px] tracking-[0.06em] leading-tight mb-6">
-                      <span className="text-gold">YOUR FILM CAN MAKE MONEY</span><br />
-                      <span className="text-white">AND YOU STILL LOSE.</span>
+                  {/* — Problem narrative — */}
+                  <p className="font-bebas text-[26px] md:text-[32px] tracking-[0.06em] leading-tight mb-6">
+                    <span className="text-gold">YOUR FILM CAN MAKE MONEY</span><br />
+                    <span className="text-white">AND YOU STILL LOSE.</span>
+                  </p>
+
+                  <div className="space-y-3 mb-6">
+                    <p className="text-ink-secondary text-[17px] leading-relaxed">
+                      Not because it didn{"\u2019"}t recoup.
                     </p>
-
-                    <div className="space-y-3 mb-6">
-                      <p className="text-ink-secondary text-[17px] leading-relaxed">
-                        Not because it didn{"\u2019"}t recoup.
-                      </p>
-                      <p className="text-ink-body text-[17px] leading-relaxed font-medium">
-                        Because of how the deal was structured.
-                      </p>
-                    </div>
-
-                    {/* Gold divider */}
-                    <div className="h-[1px] w-12 bg-gold-accent mb-6" />
-
-                    <p className="font-bebas text-[26px] tracking-[0.08em] text-ink-body mb-8">
-                      Most filmmakers learn it too late.
+                    <p className="text-ink-body text-[17px] leading-relaxed font-medium">
+                      Because of how the deal was structured.
                     </p>
-
-                    {/* — Thesis: alternative asset class — */}
-                    <div className="border-t border-bg-card-rule pt-6 space-y-5">
-                      {[
-                        { asset: "Real Estate", tool: "comps and cap rate models" },
-                        { asset: "Private Equity", tool: "carry and IRR structures" },
-                        { asset: "Venture Capital", tool: "term sheets and valuation frameworks" },
-                      ].map((row) => (
-                        <div key={row.asset} className="flex items-baseline gap-3">
-                          <Check className="w-4 h-4 text-gold flex-shrink-0 relative top-[2px]" />
-                          <p className="text-ink-secondary text-[17px] leading-relaxed">
-                            <span className="text-ink-body font-semibold">{row.asset}</span> has {row.tool}.
-                          </p>
-                        </div>
-                      ))}
-                      {/* The punchline */}
-                      <div className="flex items-baseline gap-3 mt-2">
-                        <X className="w-4 h-4 text-ink-secondary flex-shrink-0 relative top-[2px]" />
-                        <p className="font-bebas text-[26px] tracking-[0.06em] text-gold leading-tight">
-                          Film has no standardized framework.
-                        </p>
-                      </div>
-
-                    </div>
-
                   </div>
+
+                  {/* Gold divider */}
+                  <div className="h-[1px] w-12 bg-gold-accent mb-6" />
+
+                  <p className="font-bebas text-[26px] tracking-[0.08em] text-ink-body mb-8">
+                    Most filmmakers learn it too late.
+                  </p>
+
+                  {/* — Thesis: alternative asset class — */}
+                  <div className="border-t border-bg-card-rule pt-6 space-y-5">
+                    {[
+                      { asset: "Real Estate", tool: "comps and cap rate models" },
+                      { asset: "Private Equity", tool: "carry and IRR structures" },
+                      { asset: "Venture Capital", tool: "term sheets and valuation frameworks" },
+                    ].map((row) => (
+                      <p key={row.asset} className="text-ink-secondary text-[17px] leading-relaxed">
+                        <span className="text-ink-body font-semibold">{row.asset}</span> has {row.tool}.
+                      </p>
+                    ))}
+                    {/* The punchline */}
+                    <p className="font-bebas text-[26px] tracking-[0.06em] text-gold leading-tight mt-2">
+                      Film has no standardized framework.
+                    </p>
+                  </div>
+
                 </div>
               </div>
-            </div>
-          </SectionFrame>
 
-          {/* Gold structural divider */}
-          <div className="flex justify-center py-6">
-            <div className="w-12 h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(212,175,55,0.35), transparent)' }} />
-          </div>
+            </div>
+          </section>
+
 
           {/* ──────────────────────────────────────────────────────────
                § 3  THE COST — escalates the pain before the pivot
              ────────────────────────────────────────────────────────── */}
-          <SectionFrame id="cost">
-            <div>
+          <section id="cost" className="snap-section px-6 py-12 md:py-16">
+            <div className="max-w-md mx-auto">
 
               <div className="text-center mb-8">
                 <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-secondary mb-5">The Cost</p>
-                <h2 className="font-bebas text-[40px] tracking-[0.08em] text-gold"
-                  style={{ textShadow: '0 0 30px rgba(212,175,55,0.30), 0 0 60px rgba(212,175,55,0.12)' }}>
+                <h2 className="font-bebas text-[40px] tracking-[0.08em] text-gold">
                   THE <span className="text-white">REALITY</span>
                 </h2>
               </div>
 
-              <div className="grid grid-cols-2 gap-4 max-w-md mx-auto">
+              <div className="grid grid-cols-2 gap-4">
                 {closedDoors.map((door) => (
                   <div
                     key={door.name}
                     className="relative border p-6 flex flex-col overflow-hidden rounded-xl bg-bg-card border-bg-card-border"
                   >
-                    {/* Cost — the visual anchor */}
                     <span className="font-mono text-[26px] font-bold text-gold mb-2">
                       {door.cost}
                     </span>
-                    {/* Title */}
                     <p className="font-bebas text-[22px] tracking-[0.08em] uppercase leading-tight text-white mb-2">
                       {door.name}
                     </p>
-                    {/* Description — pushed to bottom for alignment */}
                     <p className="text-[14px] leading-[1.5] text-ink-secondary mt-auto">
                       {door.lock}
                     </p>
                   </div>
                 ))}
               </div>
+
             </div>
-          </SectionFrame>
+          </section>
 
           {/* ── INTERSTITIAL: Blum Quote — authority validates the pain ── */}
           <section className="py-12 md:py-16 px-6">
             <div className="max-w-md mx-auto">
-              <div
-                className="relative bg-bg-elevated border border-gold-accent overflow-hidden rounded-xl"
-                style={{
-                  boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06), 0 0 30px rgba(212,175,55,0.10)',
-                }}
-              >
-                {/* Gold left accent — strong */}
+              <div className="relative bg-bg-card border border-bg-card-border overflow-hidden rounded-xl">
+                {/* Gold left accent */}
                 <div className="absolute left-0 top-0 bottom-0 w-[3px]"
-                  style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.80), rgba(212,175,55,0.40), transparent)' }} />
+                  style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.55), rgba(212,175,55,0.25), transparent)' }} />
                 <div className="p-7 md:p-9 pl-8 md:pl-10">
-                  {/* Opening quote mark */}
-                  <div className="font-bebas text-[52px] md:text-[64px] leading-none select-none pointer-events-none text-gold -mb-4 -ml-1"
-                    aria-hidden="true">{"\u201C"}</div>
-                  <blockquote className="relative z-10">
+                  <blockquote>
                     <p className="text-[17px] leading-[1.7] text-ink-body italic">
                       Filmmakers have a perception in the business world of being kind of flaky dudes{"\u2026"} you need to be buttoned down{"\u2026"} speak the language that they speak.
                     </p>
                   </blockquote>
-                  <div className="mt-6 pt-4 border-t border-white/[0.06]">
-                    <div className="inline-flex items-center gap-3 rounded-lg px-4 py-2.5" style={{ background: 'rgba(255,255,255,0.03)' }}>
+                  <div className="mt-6 pt-4 border-t border-bg-card-rule">
+                    <div className="inline-flex items-center gap-3">
                       <div className="w-8 h-[1.5px] bg-gold-accent flex-shrink-0" />
                       <div>
                         <cite className="not-italic">
@@ -334,10 +297,6 @@ const Index = () => {
             </div>
           </section>
 
-          {/* Gold structural divider */}
-          <div className="flex justify-center py-6">
-            <div className="w-12 h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(212,175,55,0.35), transparent)' }} />
-          </div>
 
           {/* ──────────────────────────────────────────────────────────
                § 4  THE SOLUTION — the product reveal
@@ -346,8 +305,7 @@ const Index = () => {
             <div>
 
               <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-secondary text-center mb-5">The Solution</p>
-              <h2 className="font-bebas text-[40px] text-gold tracking-[0.08em] text-center mb-2"
-                style={{ textShadow: '0 0 30px rgba(212,175,55,0.30), 0 0 60px rgba(212,175,55,0.12)' }}>THE <span className="text-white">WATERFALL</span></h2>
+              <h2 className="font-bebas text-[40px] text-gold tracking-[0.08em] text-center mb-2">THE <span className="text-white">WATERFALL</span></h2>
               <p className="font-bebas text-[26px] tracking-[0.06em] text-ink-secondary text-center mb-6">
                 We built the framework.
               </p>
@@ -448,15 +406,14 @@ const Index = () => {
             <div>
               <div className="text-center mb-8">
                 <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-secondary mb-5">The Offer</p>
-                <h2 className="font-bebas text-[40px] tracking-[0.08em] text-gold leading-[1.05]"
-                  style={{ textShadow: '0 0 30px rgba(212,175,55,0.30), 0 0 60px rgba(212,175,55,0.12)' }}>
+                <h2 className="font-bebas text-[40px] tracking-[0.08em] text-gold leading-[1.05]">
                   YOUR PATH{"\u00A0"}<span className="text-white">FORWARD</span>
                 </h2>
               </div>
 
               <div className="space-y-3">
-                {/* Free Calculator — the entry point (filled) */}
-                <div className="rounded-xl p-5 md:p-6 bg-bg-card">
+                {/* Free Calculator */}
+                <div className="rounded-xl border border-bg-card-border p-5 md:p-6 bg-bg-card">
                   <span className="inline-block font-bebas text-[14px] tracking-[0.20em] uppercase text-gold mb-2">Free</span>
                   <h3 className="font-bebas text-[26px] md:text-[32px] tracking-[0.06em] text-white mb-2">THE CALCULATOR</h3>
                   <p className="text-ink-secondary text-[17px] leading-relaxed mb-5">
@@ -470,8 +427,8 @@ const Index = () => {
                   </div>
                 </div>
 
-                {/* The Blueprint — $197 (transparent) */}
-                <div className="rounded-xl p-5 md:p-6">
+                {/* The Blueprint — $197 */}
+                <div className="rounded-xl border border-bg-card-border p-5 md:p-6 bg-bg-card">
                   <span className="inline-block font-mono text-[26px] font-bold text-gold mb-2">$197</span>
                   <h3 className="font-bebas text-[26px] md:text-[32px] tracking-[0.06em] text-white mb-2">THE BLUEPRINT</h3>
                   <p className="text-ink-secondary text-[17px] leading-relaxed mb-5">
@@ -485,13 +442,9 @@ const Index = () => {
                   </div>
                 </div>
 
-                {/* The Pitch Package — $497 (filled) */}
-                <div className="rounded-xl p-5 md:p-6 bg-bg-card">
-                  <div className="flex items-baseline gap-3 mb-2">
-                    <span className="font-mono text-[26px] md:text-[32px] font-bold text-gold">$497</span>
-                    <span className="font-mono text-[17px] text-ink-secondary line-through">$697</span>
-                    <span className="text-[13px] tracking-[0.10em] uppercase font-semibold text-gold-accent">Save $200</span>
-                  </div>
+                {/* The Pitch Package — $497 */}
+                <div className="rounded-xl border border-bg-card-border p-5 md:p-6 bg-bg-card">
+                  <span className="inline-block font-mono text-[26px] font-bold text-gold mb-2">$497</span>
                   <h3 className="font-bebas text-[26px] md:text-[32px] tracking-[0.06em] text-white mb-2">THE PITCH PACKAGE</h3>
                   <p className="text-ink-secondary text-[17px] leading-relaxed mb-5">
                     8 documents including a pitch deck and investor return profiles. Walk into the room prepared.
@@ -508,10 +461,6 @@ const Index = () => {
           </SectionFrame>
 
 
-          {/* Gold structural divider */}
-          <div className="flex justify-center py-6">
-            <div className="w-12 h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(212,175,55,0.35), transparent)' }} />
-          </div>
 
           {/* ──────────────────────────────────────────────────────────
                § 7  FINAL CTA — The Moment of Truth
@@ -521,21 +470,15 @@ const Index = () => {
               <div
                 className="relative bg-bg-elevated overflow-hidden rounded-xl text-center px-8 py-14 md:px-10 md:py-16"
                 style={{
-                  border: '1px solid rgba(212,175,55,0.40)',
-                  boxShadow: [
-                    'inset 0 1px 0 rgba(255,255,255,0.06)',
-                    '0 0 12px rgba(212,175,55,0.12)',
-                    '0 0 40px rgba(212,175,55,0.08)',
-                    '0 4px 20px rgba(0,0,0,0.50)',
-                    '0 12px 48px rgba(0,0,0,0.30)',
-                  ].join(', '),
+                  border: '1px solid rgba(212,175,55,0.25)',
+                  boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06), 0 4px 20px rgba(0,0,0,0.50), 0 12px 48px rgba(0,0,0,0.30)',
                 }}
               >
                 <h2 className="font-bebas text-[40px] leading-[1.1] tracking-[0.08em] text-gold mb-10">
                   YOUR INVESTOR WILL{"\u00A0"}ASK HOW THE MONEY FLOWS <span className="text-white">BACK</span>.
                 </h2>
                 <button onClick={handleStartClick}
-                  className="w-full max-w-[320px] h-14 btn-cta-primary animate-cta-glow-pulse mx-auto">
+                  className="w-full max-w-[320px] h-14 btn-cta-primary mx-auto">
                   BUILD YOUR WATERFALL
                 </button>
               </div>
