@@ -64,18 +64,13 @@ const Index = () => {
   }, [hasSession, navigate]);
 
 
-  // Waterfall bar animation
+  // Waterfall bar animation — fires on load with a brief delay
+  // so the user has time to read the headline before bars animate
   const [barsRevealed, setBarsRevealed] = useState(false);
   const waterBarRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    const el = waterBarRef.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([e]) => { if (e.isIntersecting) { setBarsRevealed(true); obs.disconnect(); } },
-      { threshold: 0.2 }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
+    const delay = setTimeout(() => setBarsRevealed(true), 600);
+    return () => clearTimeout(delay);
   }, []);
 
   // Net Profits countup
@@ -160,7 +155,7 @@ const Index = () => {
                   SEE WHERE EVERY<br /><span className="text-gold">DOLLAR GOES</span>
                 </h1>
                 <p className="text-ink-secondary text-[17px] leading-[1.7] tracking-[0.02em] font-medium max-w-[340px] mx-auto">
-                  The indie film finance simulator that shows you where every dollar flows — before you shoot.
+                  Model your deal before you sign it. Free. No account to start.
                 </p>
               </div>
 
@@ -253,6 +248,7 @@ const Index = () => {
                     </span>
                   </div>
                 </div>
+                <p className="font-mono text-[13px] text-ink-secondary text-center mt-4">50/50 net profit split after full recoupment.</p>
               </div>
 
               {/* CTA — earns the click after the visualization */}
@@ -329,7 +325,8 @@ const Index = () => {
                     ))}
                     {/* The punchline */}
                     <p className="font-bebas text-[26px] tracking-[0.06em] text-gold leading-tight mt-6">
-                      Film has no standardized framework.
+                      Film had nothing.<br />
+                      <span className="text-white">Until now.</span>
                     </p>
                   </div>
 
@@ -424,7 +421,7 @@ const Index = () => {
                 </h2>
                 <button onClick={handleStartClick}
                   className="w-full max-w-[320px] h-14 btn-cta-primary animate-cta-glow-pulse mx-auto">
-                  BUILD YOUR WATERFALL
+                  KNOW YOUR NUMBERS
                 </button>
               </div>
             </div>
