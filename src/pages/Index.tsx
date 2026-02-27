@@ -162,10 +162,13 @@ const Index = () => {
                 <h1 className="font-bebas text-[clamp(3.2rem,11vw,4.8rem)] leading-[0.95] tracking-[0.02em] text-gold mb-3">
                   SEE WHERE EVERY DOLLAR <span className="text-white">GOES</span>
                 </h1>
-                <p className="font-mono text-[15px] tracking-[0.12em] uppercase text-gold mb-2">
+                <p className="text-ink-secondary text-[16px] leading-[1.7] tracking-[0.02em] font-medium mb-4">
+                  Democratizing the business of film.
+                </p>
+                <p className="font-bebas text-[28px] tracking-[0.08em] uppercase text-gold mb-2">
                   THE WATERFALL
                 </p>
-                <p className="text-ink-secondary text-[15px] leading-[1.6] max-w-[300px] mx-auto">
+                <p className="text-ink-secondary text-[16px] leading-[1.6] max-w-[300px] mx-auto">
                   Your recoupment schedule{"\u00A0"}{"\u2014"}{"\u00A0"}who gets paid, in what order, and what{"\u2019"}s left.
                 </p>
               </div>
@@ -292,7 +295,7 @@ const Index = () => {
 
                 {/* Checks — what you get */}
                 <div className="px-6 pt-6 pb-5">
-                  <p className="font-mono text-[13px] tracking-[0.12em] uppercase text-gold mb-5">
+                  <p className="font-mono text-[14px] tracking-[0.12em] uppercase text-gold mb-5">
                     With your waterfall
                   </p>
                   {[
@@ -313,7 +316,7 @@ const Index = () => {
 
                 {/* X marks — without it */}
                 <div className="px-6 pt-6 pb-6" style={{ background: 'rgba(255,255,255,0.02)' }}>
-                  <p className="font-mono text-[13px] tracking-[0.12em] uppercase text-ink-secondary mb-5">
+                  <p className="font-mono text-[14px] tracking-[0.12em] uppercase text-ink-secondary mb-5">
                     Without it
                   </p>
                   {[
@@ -345,10 +348,10 @@ const Index = () => {
                 transition: 'opacity 700ms ease-out, transform 700ms ease-out',
               }}
             >
-              <p className="font-bebas text-[36px] tracking-[0.06em] text-gold leading-tight">
+              <p className="font-bebas text-[40px] tracking-[0.06em] text-gold leading-tight">
                 We built the framework.
               </p>
-              <p className="font-bebas text-[36px] tracking-[0.06em] text-white leading-tight">
+              <p className="font-bebas text-[40px] tracking-[0.06em] text-white leading-tight">
                 You run the numbers.
               </p>
             </div>
@@ -378,7 +381,7 @@ const Index = () => {
           </section>
           {/* ── FOOTER ── */}
           <footer className="py-8 px-6 max-w-md mx-auto">
-            <p className="text-ink-secondary text-[13px] tracking-[0.04em] text-center mb-3">
+            <p className="text-ink-secondary text-[14px] tracking-[0.04em] text-center mb-3">
               Democratizing the business of film.
             </p>
             <p className="text-ink-ghost text-[12px] tracking-wide leading-relaxed text-center">
