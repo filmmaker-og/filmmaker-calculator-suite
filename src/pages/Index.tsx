@@ -346,63 +346,24 @@ const Index = () => {
             </div>
           </section>
           {/* ──────────────────────────────────────────────────────────
-               § 3  MOST FILMS LOSE MONEY
-               Asset class comparison. Same ledger language as §2.
+               § 3  MOST FILMS LOSE MONEY — diagnosis interstitial
              ────────────────────────────────────────────────────────── */}
           <section id="evidence" className="py-14 md:py-20 px-6">
             <div
               ref={evidenceRef}
-              className="max-w-md mx-auto"
+              className="max-w-md mx-auto text-center"
               style={{
                 opacity: evidenceVisible ? 1 : 0,
                 transform: evidenceVisible ? 'translateY(0)' : 'translateY(20px)',
                 transition: 'opacity 700ms ease-out, transform 700ms ease-out',
               }}
             >
-              <div className="text-center mb-3">
-                <h2 className="font-bebas text-[40px] tracking-[0.08em] leading-[0.95] text-gold">
-                  MOST FILMS LOSE <span className="text-white">MONEY.</span>
-                </h2>
-              </div>
-              <p className="text-center text-ink-secondary text-[15px] leading-relaxed mb-8 max-w-[320px] mx-auto">
+              <h2 className="font-bebas text-[40px] tracking-[0.08em] leading-[0.95] text-gold mb-0">
+                MOST FILMS LOSE <span className="text-white">MONEY.</span>
+              </h2>
+              <p className="text-[15px] text-ink-secondary leading-relaxed mt-3 max-w-[320px] mx-auto">
                 Not because they don{"\u2019"}t recoup.{" "}
                 <span className="text-ink-body font-medium">Because of how the deal was structured.</span>
-              </p>
-              {/* Comparison ledger — same container as Cost of Access */}
-              <div className="border border-gold-border bg-black overflow-hidden rounded-xl"
-                style={{ boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)' }}>
-                {/* Column header */}
-                <div className="px-6 py-3 flex items-baseline justify-between">
-                  <span className="font-mono text-[11px] tracking-[0.15em] uppercase text-ink-secondary">Asset Class</span>
-                  <span className="font-mono text-[11px] tracking-[0.15em] uppercase text-ink-secondary">Infrastructure</span>
-                </div>
-                {/* Row 1 */}
-                <div className="px-6 py-4 flex items-baseline justify-between border-t border-bg-card-rule">
-                  <span className="font-bebas text-[18px] tracking-[0.06em] text-white leading-tight">Real Estate</span>
-                  <span className="text-[13px] text-ink-secondary text-right ml-4">Comps {"\u00B7"} Cap rates {"\u00B7"} Appraisals</span>
-                </div>
-                {/* Row 2 */}
-                <div className="px-6 py-4 flex items-baseline justify-between border-t border-bg-card-rule">
-                  <span className="font-bebas text-[18px] tracking-[0.06em] text-white leading-tight">Private Equity</span>
-                  <span className="text-[13px] text-ink-secondary text-right ml-4">Carry structures {"\u00B7"} IRR models</span>
-                </div>
-                {/* Row 3 */}
-                <div className="px-6 py-4 flex items-baseline justify-between border-t border-bg-card-rule">
-                  <span className="font-bebas text-[18px] tracking-[0.06em] text-white leading-tight">Venture Capital</span>
-                  <span className="text-[13px] text-ink-secondary text-right ml-4">Term sheets {"\u00B7"} Valuations</span>
-                </div>
-                {/* Row 4 — Film: the void */}
-                <div className="px-6 py-4 flex items-baseline justify-between border-t border-bg-card-rule"
-                  style={{ background: 'rgba(255,255,255,0.02)' }}>
-                  <span className="font-bebas text-[18px] tracking-[0.06em] text-white leading-tight">Film</span>
-                  <span className="font-mono text-[13px] text-gold-label">{"\u2014"}</span>
-                </div>
-              </div>
-              {/* Punchline — outside the card, standalone */}
-              <p className="text-center mt-6">
-                <span className="font-bebas text-[24px] tracking-[0.06em] text-gold leading-tight">
-                  Nobody teaches the business of film.
-                </span>
               </p>
             </div>
           </section>
