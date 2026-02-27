@@ -120,7 +120,6 @@ const Index = () => {
   }, [barsRevealed]);
 
   const handleStartClick    = () => { haptics.medium(); gatedNavigate("/calculator?tab=budget"); };
-  const handleStoreClick    = () => { haptics.medium(); navigate("/store"); };
 
   return (
     <>
@@ -142,178 +141,36 @@ const Index = () => {
         <main aria-label="Film Finance Simulator" className="flex-1 flex flex-col" style={{ paddingBottom: "calc(var(--bottom-bar-h) + env(safe-area-inset-bottom))" }}>
 
           {/* ──────────────────────────────────────────────────────────
-               § 1  HERO
+               § 1  HERO + WATERFALL DEMO
+               The visualization IS the pitch. No preamble.
              ────────────────────────────────────────────────────────── */}
-          <section id="hero" className="relative min-h-[70vh] pt-32 pb-20 flex flex-col justify-center">
-            {/* Ambient warmth — single atmospheric element */}
+          <section id="hero" className="relative pt-28 pb-16">
+            {/* Ambient warmth */}
             <div
               className="absolute inset-0 pointer-events-none"
               style={{
-                background: "radial-gradient(ellipse 60% 50% at 50% 35%, rgba(212,175,55,0.06) 0%, transparent 100%)",
+                background: "radial-gradient(ellipse 60% 50% at 50% 25%, rgba(212,175,55,0.06) 0%, transparent 100%)",
               }}
             />
-            <div className="relative px-6 py-4 max-w-xl mx-auto text-center">
-              <h1 className="font-bebas text-[clamp(3.2rem,11vw,4.8rem)] leading-[0.95] tracking-[0.02em] text-white mb-8">
-                SEE WHERE EVERY<br /><span className="text-gold">DOLLAR GOES</span>
-              </h1>
-              <p className="mb-14 text-ink-secondary text-[17px] leading-[1.7] tracking-[0.02em] font-medium max-w-[340px] mx-auto">
-                The indie film finance simulator that shows you where every dollar flows — before you shoot.
-              </p>
 
-              <div className="w-full max-w-[280px] mx-auto">
-                <button onClick={handleStartClick}
-                  className="w-full h-14 btn-cta-primary animate-cta-glow-pulse">
-                  BUILD YOUR WATERFALL
-                </button>
-              </div>
-
-            </div>
-          </section>
-
-
-
-          {/* Gold structural divider */}
-          <div className="flex justify-center py-12 md:py-16">
-            <div className="w-16 h-px" style={{ background: "rgba(212,175,55,0.25)" }} />
-          </div>
-
-          {/* ──────────────────────────────────────────────────────────
-               § 2  THE PROBLEM + THESIS — with "Until now." punchline
-             ────────────────────────────────────────────────────────── */}
-          <SectionFrame id="evidence" tier="minimal">
-            <div>
-
-              <div className="text-center mb-8">
-                <p className="font-sans text-[12px] tracking-[0.25em] uppercase font-semibold text-gold-label mb-4">The Problem</p>
-                <h2 className="font-bebas text-[40px] tracking-[0.08em] leading-[0.95] text-white">
-                  MOST FILMS LOSE <span className="text-gold">MONEY.</span>
-                </h2>
-              </div>
-
-              <div className="relative bg-bg-card border border-bg-card-border overflow-hidden rounded-xl">
-                {/* Gold left accent */}
-                <div className="absolute left-0 top-0 bottom-0 w-[3px]"
-                  style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.55), rgba(212,175,55,0.25), transparent)' }} />
-                <div className="p-8 md:p-10">
-
-                  {/* — Problem narrative — */}
-                  <p className="font-bebas text-[26px] md:text-[32px] tracking-[0.06em] leading-tight mb-6">
-                    <span className="text-gold">YOUR FILM CAN MAKE MONEY</span><br />
-                    <span className="text-white">AND YOU STILL LOSE.</span>
-                  </p>
-
-                  <div className="space-y-4 mb-6">
-                    <p className="text-ink-secondary text-[17px] leading-relaxed">
-                      Not because it didn{"\u2019"}t recoup.
-                    </p>
-                    <p className="text-ink-body text-[17px] leading-relaxed font-medium">
-                      Because of how the deal was structured.
-                    </p>
-                  </div>
-
-                  {/* Gold divider */}
-                  <div className="h-[1px] w-12 bg-gold-accent mb-6" />
-
-                  <p className="font-sans text-[19px] font-semibold tracking-[0.02em] text-ink-body mb-8">
-                    Most filmmakers learn it too late.
-                  </p>
-
-                  {/* — Thesis: alternative asset class — */}
-                  <div className="border-t border-bg-card-rule pt-6 space-y-4">
-                    {[
-                      { asset: "Real Estate", tool: "comps and cap rate models" },
-                      { asset: "Private Equity", tool: "carry and IRR structures" },
-                      { asset: "Venture Capital", tool: "term sheets and valuation frameworks" },
-                    ].map((row) => (
-                      <p key={row.asset} className="text-ink-secondary text-[17px] leading-relaxed">
-                        <span className="text-ink-body font-semibold">{row.asset}</span> has {row.tool}.
-                      </p>
-                    ))}
-                    {/* The punchline */}
-                    <p className="font-bebas text-[26px] tracking-[0.06em] text-gold leading-tight mt-6">
-                      Film has no standardized framework.
-                    </p>
-                  </div>
-
-                </div>
-              </div>
-
-            </div>
-          </SectionFrame>
-
-
-          {/* ──────────────────────────────────────────────────────────
-               § 3  THE COST — escalates the pain before the pivot
-             ────────────────────────────────────────────────────────── */}
-          <SectionFrame id="cost" tier="standard">
-            <div>
-
-              <div className="text-center mb-8">
-                <p className="font-sans text-[12px] tracking-[0.25em] uppercase font-semibold text-gold-label mb-4">The Cost</p>
-                <h2 className="font-bebas text-[40px] tracking-[0.08em] text-white">
-                  THE REALITY
-                </h2>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                {closedDoors.map((door) => (
-                  <div
-                    key={door.name}
-                    className="relative border p-6 flex flex-col overflow-hidden rounded-xl bg-bg-card border-bg-card-border"
-                  >
-                    <span className="font-mono text-[26px] font-bold text-gold mb-2">
-                      {door.cost}
-                    </span>
-                    <p className="font-bebas text-[17px] tracking-[0.08em] uppercase leading-tight text-white mb-2">
-                      {door.name}
-                    </p>
-                    <p className="text-[14px] leading-[1.5] text-ink-secondary mt-auto">
-                      {door.lock}
-                    </p>
-                  </div>
-                ))}
-              </div>
-
-            </div>
-          </SectionFrame>
-
-          {/* ── INTERSTITIAL: Blum Quote — authority validates the pain ── */}
-          <section className="py-24 md:py-32 px-6">
-            <div className="max-w-sm mx-auto text-center">
-              {/* Gold rule above */}
-              <div className="w-10 h-px mx-auto mb-10" style={{ background: 'rgba(212,175,55,0.40)' }} />
-
-              <blockquote>
-                <p className="text-[19px] md:text-[21px] leading-[1.75] text-ink-body italic tracking-[0.01em]">
-                  Filmmakers have a perception in the business world of being kind of flaky dudes{"\u2026"} you need to be buttoned down{"\u2026"} speak the language that they speak.
+            <div className="relative px-6 max-w-md mx-auto">
+              {/* Headline */}
+              <div className="text-center mb-10">
+                <h1 className="font-bebas text-[clamp(3.2rem,11vw,4.8rem)] leading-[0.95] tracking-[0.02em] text-white mb-6">
+                  SEE WHERE EVERY<br /><span className="text-gold">DOLLAR GOES</span>
+                </h1>
+                <p className="text-ink-secondary text-[17px] leading-[1.7] tracking-[0.02em] font-medium max-w-[340px] mx-auto">
+                  The indie film finance simulator that shows you where every dollar flows — before you shoot.
                 </p>
-              </blockquote>
-
-              {/* Attribution */}
-              <div className="mt-10">
-                <div className="w-8 h-[1.5px] mx-auto mb-4" style={{ background: 'rgba(212,175,55,0.40)' }} />
-                <cite className="not-italic">
-                  <span className="font-bebas text-[17px] tracking-[0.14em] uppercase text-gold">Jason Blum</span>
-                </cite>
-                <p className="text-ink-secondary text-[13px] tracking-[0.06em] mt-1">Blumhouse {"\u2014"} {"\u201C"}Paranormal Activity{"\u201D"}</p>
               </div>
-            </div>
-          </section>
 
-
-          {/* ──────────────────────────────────────────────────────────
-               § 4  THE SOLUTION — the product reveal
-             ────────────────────────────────────────────────────────── */}
-          <SectionFrame id="waterfall" tier="elevated" className="!p-6 md:!p-8">
-            <div>
-
-              <p className="font-sans text-[12px] tracking-[0.25em] uppercase font-semibold text-gold-label text-center mb-4">The Solution</p>
-              <h2 className="font-bebas text-[40px] text-white tracking-[0.08em] text-center mb-4">THE <span className="text-gold">WATERFALL</span></h2>
-              <p className="font-bebas text-[26px] tracking-[0.06em] text-ink-secondary text-center mb-8">
-                We built the framework.
+              {/* Context line — anchors the visualization */}
+              <p className="font-mono text-[13px] text-ink-secondary text-center mb-6">
+                Hypothetical: $1.8M budget{"\u00A0"}{"\u2192"}{"\u00A0"}$3M acquisition
               </p>
 
-              <div ref={waterBarRef} className="max-w-md mx-auto">
+              {/* ── Waterfall Visualization ── */}
+              <div ref={waterBarRef}>
                 {/* Waterfall rows — unified financial table */}
                 <div className="border border-gold-border bg-black overflow-hidden rounded-xl"
                   style={{ boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)' }}>
@@ -396,73 +253,19 @@ const Index = () => {
                     </span>
                   </div>
                 </div>
-                <p className="font-mono text-[13px] text-ink-secondary text-center mt-6">Based on a hypothetical $1.8M budget and a $3M acquisition.</p>
-              </div>
-            </div>
-          </SectionFrame>
-
-
-          {/* ──────────────────────────────────────────────────────────
-               § 6  WHAT YOU GET — the solution ladder
-             ────────────────────────────────────────────────────────── */}
-          <SectionFrame id="offer" tier="elevated">
-            <div>
-              <div className="text-center mb-8">
-                <p className="font-sans text-[12px] tracking-[0.25em] uppercase font-semibold text-gold-label mb-4">The Offer</p>
-                <h2 className="font-bebas text-[40px] tracking-[0.08em] text-white leading-[1.05]">
-                  YOUR <span className="text-gold">PATH</span>{"\u00A0"}FORWARD
-                </h2>
               </div>
 
-              <div className="space-y-4">
-                {/* Free Calculator */}
-                <div className="rounded-xl border border-bg-card-border p-6 bg-bg-card">
-                  <span className="inline-block font-bebas text-[14px] tracking-[0.20em] uppercase text-gold mb-2">Free</span>
-                  <h3 className="font-bebas text-[26px] md:text-[32px] tracking-[0.06em] text-white mb-2">THE CALCULATOR</h3>
-                  <p className="text-ink-secondary text-[17px] leading-relaxed mb-6">
-                    Model your deal. Stress-test your numbers. See where every dollar flows.
-                  </p>
-                  <div className="text-center">
-                    <button onClick={handleStartClick}
-                      className="w-full max-w-[260px] h-12 btn-cta-primary text-[17px]">
-                      START FREE
-                    </button>
-                  </div>
-                </div>
-
-                {/* The Blueprint — $197 */}
-                <div className="rounded-xl border border-bg-card-border p-6 bg-bg-card">
-                  <span className="inline-block font-mono text-[26px] font-bold text-gold mb-2">$197</span>
-                  <h3 className="font-bebas text-[26px] md:text-[32px] tracking-[0.06em] text-white mb-2">THE BLUEPRINT</h3>
-                  <p className="text-ink-secondary text-[17px] leading-relaxed mb-6">
-                    Your complete finance plan in 4 professional documents. Formatted for your attorney.
-                  </p>
-                  <div className="text-center">
-                    <button onClick={handleStoreClick}
-                      className="w-full max-w-[260px] h-12 btn-cta-secondary text-[17px]">
-                      VIEW DETAILS
-                    </button>
-                  </div>
-                </div>
-
-                {/* The Pitch Package — $497 */}
-                <div className="rounded-xl border border-bg-card-border p-6 bg-bg-card">
-                  <span className="inline-block font-mono text-[26px] font-bold text-gold mb-2">$497</span>
-                  <h3 className="font-bebas text-[26px] md:text-[32px] tracking-[0.06em] text-white mb-2">THE PITCH PACKAGE</h3>
-                  <p className="text-ink-secondary text-[17px] leading-relaxed mb-6">
-                    8 documents including a pitch deck and investor return profiles. Walk into the room prepared.
-                  </p>
-                  <div className="text-center">
-                    <button onClick={handleStoreClick}
-                      className="w-full max-w-[260px] h-12 btn-cta-secondary text-[17px]">
-                      VIEW DETAILS
-                    </button>
-                  </div>
+              {/* CTA — earns the click after the visualization */}
+              <div className="mt-12 text-center">
+                <div className="w-full max-w-[280px] mx-auto">
+                  <button onClick={handleStartClick}
+                    className="w-full h-14 btn-cta-primary animate-cta-glow-pulse">
+                    BUILD YOUR WATERFALL
+                  </button>
                 </div>
               </div>
             </div>
-          </SectionFrame>
-
+          </section>
 
 
           {/* Gold structural divider */}
@@ -470,8 +273,141 @@ const Index = () => {
             <div className="w-16 h-px" style={{ background: "rgba(212,175,55,0.25)" }} />
           </div>
 
+
           {/* ──────────────────────────────────────────────────────────
-               § 7  FINAL CTA — The Moment of Truth
+               § 2  THE PROBLEM + THESIS
+               Now serves as intellectual context for what they just saw.
+             ────────────────────────────────────────────────────────── */}
+          <SectionFrame id="evidence" tier="minimal">
+            <div>
+
+              <div className="text-center mb-8">
+                <p className="font-sans text-[12px] tracking-[0.25em] uppercase font-semibold text-gold-label mb-4">The Problem</p>
+                <h2 className="font-bebas text-[40px] tracking-[0.08em] leading-[0.95] text-white">
+                  MOST FILMS LOSE <span className="text-gold">MONEY.</span>
+                </h2>
+              </div>
+
+              <div className="relative bg-bg-card border border-bg-card-border overflow-hidden rounded-xl">
+                {/* Gold left accent */}
+                <div className="absolute left-0 top-0 bottom-0 w-[3px]"
+                  style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.55), rgba(212,175,55,0.25), transparent)' }} />
+                <div className="p-8 md:p-10">
+
+                  {/* — Problem narrative — */}
+                  <p className="font-bebas text-[26px] md:text-[32px] tracking-[0.06em] leading-tight mb-6">
+                    <span className="text-gold">YOUR FILM CAN MAKE MONEY</span><br />
+                    <span className="text-white">AND YOU STILL LOSE.</span>
+                  </p>
+
+                  <div className="space-y-4 mb-6">
+                    <p className="text-ink-secondary text-[17px] leading-relaxed">
+                      Not because it didn{"\u2019"}t recoup.
+                    </p>
+                    <p className="text-ink-body text-[17px] leading-relaxed font-medium">
+                      Because of how the deal was structured.
+                    </p>
+                  </div>
+
+                  {/* Gold divider */}
+                  <div className="h-[1px] w-12 bg-gold-accent mb-6" />
+
+                  <p className="font-sans text-[19px] font-semibold tracking-[0.02em] text-ink-body mb-8">
+                    Most filmmakers learn it too late.
+                  </p>
+
+                  {/* — Thesis: alternative asset class — */}
+                  <div className="border-t border-bg-card-rule pt-6 space-y-4">
+                    {[
+                      { asset: "Real Estate", tool: "comps and cap rate models" },
+                      { asset: "Private Equity", tool: "carry and IRR structures" },
+                      { asset: "Venture Capital", tool: "term sheets and valuation frameworks" },
+                    ].map((row) => (
+                      <p key={row.asset} className="text-ink-secondary text-[17px] leading-relaxed">
+                        <span className="text-ink-body font-semibold">{row.asset}</span> has {row.tool}.
+                      </p>
+                    ))}
+                    {/* The punchline */}
+                    <p className="font-bebas text-[26px] tracking-[0.06em] text-gold leading-tight mt-6">
+                      Film has no standardized framework.
+                    </p>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+          </SectionFrame>
+
+
+          {/* ──────────────────────────────────────────────────────────
+               § 3  THE COST — Third Force positioning
+             ────────────────────────────────────────────────────────── */}
+          <SectionFrame id="cost" tier="standard">
+            <div>
+
+              <div className="text-center mb-8">
+                <p className="font-sans text-[12px] tracking-[0.25em] uppercase font-semibold text-gold-label mb-4">The Cost</p>
+                <h2 className="font-bebas text-[40px] tracking-[0.08em] text-white">
+                  THE REALITY
+                </h2>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                {closedDoors.map((door) => (
+                  <div
+                    key={door.name}
+                    className="relative border p-6 flex flex-col overflow-hidden rounded-xl bg-bg-card border-bg-card-border"
+                  >
+                    <span className="font-mono text-[26px] font-bold text-gold mb-2">
+                      {door.cost}
+                    </span>
+                    <p className="font-bebas text-[17px] tracking-[0.08em] uppercase leading-tight text-white mb-2">
+                      {door.name}
+                    </p>
+                    <p className="text-[14px] leading-[1.5] text-ink-secondary mt-auto">
+                      {door.lock}
+                    </p>
+                  </div>
+                ))}
+              </div>
+
+            </div>
+          </SectionFrame>
+
+
+          {/* ── INTERSTITIAL: Blum Quote — authority stamp ── */}
+          <section className="py-24 md:py-32 px-6">
+            <div className="max-w-sm mx-auto text-center">
+              {/* Gold rule above */}
+              <div className="w-10 h-px mx-auto mb-10" style={{ background: 'rgba(212,175,55,0.40)' }} />
+
+              <blockquote>
+                <p className="text-[19px] md:text-[21px] leading-[1.75] text-ink-body italic tracking-[0.01em]">
+                  Filmmakers have a perception in the business world of being kind of flaky dudes{"\u2026"} you need to be buttoned down{"\u2026"} speak the language that they speak.
+                </p>
+              </blockquote>
+
+              {/* Attribution */}
+              <div className="mt-10">
+                <div className="w-8 h-[1.5px] mx-auto mb-4" style={{ background: 'rgba(212,175,55,0.40)' }} />
+                <cite className="not-italic">
+                  <span className="font-bebas text-[17px] tracking-[0.14em] uppercase text-gold">Jason Blum</span>
+                </cite>
+                <p className="text-ink-secondary text-[13px] tracking-[0.06em] mt-1">Blumhouse {"\u2014"} {"\u201C"}Paranormal Activity{"\u201D"}</p>
+              </div>
+            </div>
+          </section>
+
+
+          {/* Gold structural divider */}
+          <div className="flex justify-center py-12 md:py-16">
+            <div className="w-16 h-px" style={{ background: "rgba(212,175,55,0.25)" }} />
+          </div>
+
+
+          {/* ──────────────────────────────────────────────────────────
+               § 4  FINAL CTA — The Close
              ────────────────────────────────────────────────────────── */}
           <section id="final-cta" className="py-24 md:py-32 px-6">
             <div className="max-w-md mx-auto">
