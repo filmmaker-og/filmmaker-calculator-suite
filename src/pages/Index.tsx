@@ -21,13 +21,13 @@ const closedDoors = [
    WATERFALL TIERS — proportional bars ($3M cascade)
    ═══════════════════════════════════════════════════════════════════ */
 const waterfallTiers = [
-  { name: "Acquisition Price", amount: "$3,000,000",    pct: 100.0, barColor: "rgba(212,175,55,0.65)", isFinal: false },
-  { name: "CAM Fees",          amount: "\u2212$22,500",      pct: 99.3,  barColor: "rgba(212,175,55,0.65)", isFinal: false },
-  { name: "Sales Agent",       amount: "\u2212$450,000",     pct: 84.3,  barColor: "rgba(212,175,55,0.65)", isFinal: false },
-  { name: "Senior Debt",       amount: "\u2212$440,000",     pct: 69.6,  barColor: "rgba(212,175,55,0.65)", isFinal: false },
-  { name: "Mezzanine",         amount: "\u2212$230,000",     pct: 61.9,  barColor: "rgba(212,175,55,0.65)", isFinal: false },
-  { name: "Equity Recoupment", amount: "\u2212$1,440,000",   pct: 13.9,  barColor: "rgba(212,175,55,0.65)", isFinal: false },
-  { name: "Net Profits",       amount: "$417,500",       pct: 13.9,  barColor: "rgba(212,175,55,0.85)",  isFinal: true  },
+  { name: "Acquisition Price", amount: "$3,000,000",    pct: 100.0, barColor: "rgba(212,175,55,0.80)",  isFinal: false },
+  { name: "CAM Fees",          amount: "\u2212$22,500",      pct: 99.3,  barColor: "rgba(180,85,55,0.70)",   isFinal: false },
+  { name: "Sales Agent",       amount: "\u2212$450,000",     pct: 84.3,  barColor: "rgba(180,85,55,0.70)",   isFinal: false },
+  { name: "Senior Debt",       amount: "\u2212$440,000",     pct: 69.6,  barColor: "rgba(180,85,55,0.70)",   isFinal: false },
+  { name: "Mezzanine",         amount: "\u2212$230,000",     pct: 61.9,  barColor: "rgba(180,85,55,0.70)",   isFinal: false },
+  { name: "Equity Recoupment", amount: "\u2212$1,440,000",   pct: 13.9,  barColor: "rgba(180,85,55,0.70)",   isFinal: false },
+  { name: "Net Profits",       amount: "$417,500",       pct: 13.9,  barColor: "rgba(212,175,55,0.90)",  isFinal: true  },
 ];
 
 
@@ -88,7 +88,7 @@ const Index = () => {
         if (t < 1) requestAnimationFrame(step);
       };
       requestAnimationFrame(step);
-    }, 1800);
+    }, 2200);
     return () => clearTimeout(delay);
   }, [barsRevealed]);
 
@@ -110,7 +110,7 @@ const Index = () => {
         if (t < 1) requestAnimationFrame(step);
       };
       requestAnimationFrame(step);
-    }, 3800);
+    }, 4600);
     return () => clearTimeout(delay);
   }, [barsRevealed]);
 
@@ -133,13 +133,13 @@ const Index = () => {
       <div className="min-h-screen flex flex-col relative overflow-hidden bg-black grain-overlay">
 
         {/* ═══════ LANDING PAGE ═══════ */}
-        <main aria-label="Film Finance Simulator" className="flex-1 flex flex-col" style={{ paddingBottom: "calc(var(--bottom-bar-h) + env(safe-area-inset-bottom))" }}>
+        <main aria-label="Film Finance Simulator" className="flex-1 flex flex-col" style={{ paddingBottom: "env(safe-area-inset-bottom)" }}>
 
           {/* ──────────────────────────────────────────────────────────
                § 1  HERO + WATERFALL DEMO
                The visualization IS the pitch. No preamble.
              ────────────────────────────────────────────────────────── */}
-          <section id="hero" className="relative pt-28 pb-16">
+          <section id="hero" className="relative pt-20 pb-12">
             {/* Ambient warmth */}
             <div
               className="absolute inset-0 pointer-events-none"
@@ -160,7 +160,7 @@ const Index = () => {
               </div>
 
               {/* Context line — anchors the visualization */}
-              <p className="font-mono text-[13px] text-ink-secondary text-center mb-6">
+              <p className="font-mono text-[14px] text-ink-body text-center mb-6">
                 Hypothetical: $1.8M budget{"\u00A0"}{"\u2192"}{"\u00A0"}$3M acquisition
               </p>
 
@@ -193,15 +193,15 @@ const Index = () => {
                           {tier.amount}
                         </span>
                       </div>
-                      <div className={cn("w-full relative overflow-hidden", i === 0 ? "h-3" : "h-2")} style={{ background: "rgba(255,255,255,0.12)" }}>
+                      <div className={cn("w-full relative overflow-hidden", i === 0 ? "h-4" : "h-3")} style={{ background: "rgba(255,255,255,0.08)" }}>
                         <div
                           className="absolute left-0 top-0 h-full"
                           style={{
                             width: barsRevealed ? `${tier.pct}%` : '0%',
                             background: tier.barColor,
-                            boxShadow: i === 0 ? '0 0 8px rgba(212,175,55,0.15)' : 'none',
-                            transition: `width 500ms cubic-bezier(0.16,1,0.3,1)`,
-                            transitionDelay: `${i * 150}ms`,
+                            boxShadow: i === 0 ? '0 0 12px rgba(212,175,55,0.25)' : 'none',
+                            transition: `width 800ms cubic-bezier(0.16,1,0.3,1)`,
+                            transitionDelay: `${i * 200}ms`,
                           }}
                         />
                       </div>
@@ -265,7 +265,7 @@ const Index = () => {
 
 
           {/* Gold structural divider */}
-          <div className="flex justify-center py-12 md:py-16">
+          <div className="flex justify-center py-8 md:py-12">
             <div className="w-16 h-px" style={{ background: "rgba(212,175,55,0.25)" }} />
           </div>
 
@@ -354,9 +354,9 @@ const Index = () => {
                 {closedDoors.map((door) => (
                   <div
                     key={door.name}
-                    className="relative border p-6 flex flex-col overflow-hidden rounded-xl bg-bg-card border-bg-card-border"
+                    className="relative border p-4 flex flex-col overflow-hidden rounded-xl bg-bg-card border-bg-card-border min-h-[150px]"
                   >
-                    <span className="font-mono text-[26px] font-bold text-gold mb-2">
+                    <span className="font-mono text-[22px] font-bold text-gold mb-2">
                       {door.cost}
                     </span>
                     <p className="font-bebas text-[17px] tracking-[0.08em] uppercase leading-tight text-white mb-2">
@@ -374,31 +374,40 @@ const Index = () => {
 
 
           {/* ── INTERSTITIAL: Blum Quote — authority stamp ── */}
-          <section className="py-24 md:py-32 px-6">
-            <div className="max-w-sm mx-auto text-center">
-              {/* Gold rule above */}
-              <div className="w-10 h-px mx-auto mb-10" style={{ background: 'rgba(212,175,55,0.40)' }} />
+          <section className="py-16 md:py-20 px-6">
+            <div className="max-w-sm mx-auto">
+              <div
+                className="relative rounded-xl p-8 overflow-hidden"
+                style={{
+                  background: 'rgba(255,255,255,0.03)',
+                  border: '1px solid rgba(255,255,255,0.06)',
+                }}
+              >
+                {/* Gold left accent */}
+                <div className="absolute left-0 top-0 bottom-0 w-[3px]"
+                  style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.50), rgba(212,175,55,0.20), transparent)' }} />
 
-              <blockquote>
-                <p className="text-[19px] md:text-[21px] leading-[1.75] text-ink-body italic tracking-[0.01em]">
-                  Filmmakers have a perception in the business world of being kind of flaky dudes{"\u2026"} you need to be buttoned down{"\u2026"} speak the language that they speak.
-                </p>
-              </blockquote>
+                <blockquote>
+                  <p className="text-[17px] md:text-[19px] leading-[1.75] text-ink-body italic tracking-[0.01em]">
+                    Filmmakers have a perception in the business world of being kind of flaky dudes{"\u2026"} you need to be buttoned down{"\u2026"} speak the language that they speak.
+                  </p>
+                </blockquote>
 
-              {/* Attribution */}
-              <div className="mt-10">
-                <div className="w-8 h-[1.5px] mx-auto mb-4" style={{ background: 'rgba(212,175,55,0.40)' }} />
-                <cite className="not-italic">
-                  <span className="font-bebas text-[17px] tracking-[0.14em] uppercase text-gold">Jason Blum</span>
-                </cite>
-                <p className="text-ink-secondary text-[13px] tracking-[0.06em] mt-1">Blumhouse {"\u2014"} {"\u201C"}Paranormal Activity{"\u201D"}</p>
+                {/* Attribution */}
+                <div className="mt-6">
+                  <div className="w-8 h-[1.5px] mb-3" style={{ background: 'rgba(212,175,55,0.35)' }} />
+                  <cite className="not-italic">
+                    <span className="font-bebas text-[15px] tracking-[0.14em] uppercase text-gold">Jason Blum</span>
+                  </cite>
+                  <p className="text-ink-secondary text-[12px] tracking-[0.06em] mt-1">Blumhouse {"\u2014"} {"\u201C"}Paranormal Activity{"\u201D"}</p>
+                </div>
               </div>
             </div>
           </section>
 
 
           {/* Gold structural divider */}
-          <div className="flex justify-center py-12 md:py-16">
+          <div className="flex justify-center py-8 md:py-12">
             <div className="w-16 h-px" style={{ background: "rgba(212,175,55,0.25)" }} />
           </div>
 
@@ -417,7 +426,7 @@ const Index = () => {
                 }}
               >
                 <h2 className="font-bebas text-[40px] leading-[1.1] tracking-[0.08em] text-white mb-8">
-                  YOUR INVESTOR WILL{"\u00A0"}ASK HOW THE MONEY FLOWS <span className="text-gold">BACK</span>.
+                  YOUR INVESTORS WILL{"\u00A0"}ASK HOW THE MONEY FLOWS <span className="text-gold">BACK</span>.
                 </h2>
                 <button onClick={handleStartClick}
                   className="w-full max-w-[320px] h-14 btn-cta-primary animate-cta-glow-pulse mx-auto">

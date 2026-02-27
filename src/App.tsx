@@ -4,7 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import ErrorBoundary from "./components/ErrorBoundary";
-import BottomTabBar from "./components/BottomTabBar";
+import OgBotFab from "./components/OgBotFab";
 import OgBotSheet from "./components/OgBotSheet";
 
 import MobileMenu from "./components/MobileMenu";
@@ -44,7 +44,7 @@ const PageLoader = () => (
 
 const queryClient = new QueryClient();
 
-/* ─── Root layout — mounts AppHeader + BottomTabBar + OgBotSheet globally ─── */
+/* ─── Root layout — mounts AppHeader + OgBotFab + OgBotSheet globally ─── */
 const AppShell = () => {
   const [isBotOpen, setIsBotOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -78,7 +78,7 @@ const AppShell = () => {
       {/* Global persistent UI — always mounted */}
       <OgBotSheet isOpen={isBotOpen} onOpenChange={setIsBotOpen} />
       <MobileMenu isOpen={isMenuOpen} onOpenChange={setIsMenuOpen} />
-      <BottomTabBar onBotOpen={() => setIsBotOpen(true)} />
+      <OgBotFab onTap={() => setIsBotOpen(true)} />
     </>
   );
 };
