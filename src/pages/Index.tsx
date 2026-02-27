@@ -256,53 +256,64 @@ const Index = () => {
             </div>
           </section>
           {/* ──────────────────────────────────────────────────────────
-               § 2  THE REALITY — Closed Doors
-               What it costs to learn this elsewhere.
+               § 2  THE REALITY — Cost of Access
+               What it costs to learn this elsewhere. Ledger format.
              ────────────────────────────────────────────────────────── */}
           <SectionFrame id="cost" tier="minimal">
             <div>
               <div className="text-center mb-5">
                 <h2 className="font-bebas text-[40px] tracking-[0.08em] text-white">
-                  THE REALITY
+                  THE COST OF ACCESS
                 </h2>
               </div>
-              <div className="grid grid-cols-2 gap-3">
+
+              {/* Cost ledger — mirrors waterfall table visual language */}
+              <div className="border border-gold-border bg-black overflow-hidden rounded-xl"
+                style={{ boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)' }}>
+
                 {/* Row 1 */}
-                <div className="border border-bg-card-border bg-bg-card rounded-xl p-4 flex flex-col">
-                  <div className="min-h-[68px]">
-                    <span className="font-mono text-[20px] font-bold text-gold">$800/hr</span>
-                    <p className="font-bebas text-[20px] tracking-[0.08em] uppercase leading-tight text-white mt-1">Entertainment Attorney</p>
+                <div className="px-5 py-4 flex gap-4">
+                  <span className="font-mono text-[18px] font-bold text-gold w-[88px] shrink-0 tabular-nums">$800/hr</span>
+                  <div className="min-w-0">
+                    <p className="font-bebas text-[18px] tracking-[0.06em] text-white leading-tight">Entertainment Attorney</p>
+                    <p className="text-[13px] text-ink-secondary mt-0.5">Retainer required</p>
                   </div>
-                  <p className="text-[14px] leading-[1.5] text-ink-secondary mt-auto pt-3">If they{"\u2019"}ll take the meeting.</p>
                 </div>
-                <div className="border border-bg-card-border bg-bg-card rounded-xl p-4 flex flex-col">
-                  <div className="min-h-[68px]">
-                    <span className="font-mono text-[20px] font-bold text-gold">$5K+</span>
-                    <p className="font-bebas text-[20px] tracking-[0.08em] uppercase leading-tight text-white mt-1">Producing Consultant</p>
-                  </div>
-                  <p className="text-[14px] leading-[1.5] text-ink-secondary mt-auto pt-3">If you can afford one.</p>
-                </div>
+
                 {/* Row 2 */}
-                <div className="border border-bg-card-border bg-bg-card rounded-xl p-4 flex flex-col">
-                  <div className="min-h-[68px]">
-                    <span className="font-mono text-[20px] font-bold text-gold">$200K</span>
-                    <p className="font-bebas text-[20px] tracking-[0.08em] uppercase leading-tight text-white mt-1">Film School</p>
+                <div className="px-5 py-4 flex gap-4 border-t border-bg-card-rule">
+                  <span className="font-mono text-[18px] font-bold text-gold w-[88px] shrink-0 tabular-nums">$5,000+</span>
+                  <div className="min-w-0">
+                    <p className="font-bebas text-[18px] tracking-[0.06em] text-white leading-tight">Producing Consultant</p>
+                    <p className="text-[13px] text-ink-secondary mt-0.5">If available</p>
                   </div>
-                  <p className="text-[14px] leading-[1.5] text-ink-secondary mt-auto pt-3">Four years you don{"\u2019"}t have.</p>
                 </div>
-                <div className="border border-bg-card-border bg-bg-card rounded-xl p-4 flex flex-col">
-                  <div className="min-h-[68px]">
-                    <span className="font-mono text-[20px] font-bold text-gold">Your Film</span>
-                    <p className="font-bebas text-[20px] tracking-[0.08em] uppercase leading-tight text-white mt-1">Trial & Error</p>
+
+                {/* Row 3 */}
+                <div className="px-5 py-4 flex gap-4 border-t border-bg-card-rule">
+                  <span className="font-mono text-[18px] font-bold text-gold w-[88px] shrink-0 tabular-nums">$200K</span>
+                  <div className="min-w-0">
+                    <p className="font-bebas text-[18px] tracking-[0.06em] text-white leading-tight">Film School</p>
+                    <p className="text-[13px] text-ink-secondary mt-0.5">3{"\u2013"}4 years</p>
                   </div>
-                  <p className="text-[14px] leading-[1.5] text-ink-secondary mt-auto pt-3">No second chances.</p>
                 </div>
+
+                {/* Row 4 — the gut punch */}
+                <div className="px-5 py-4 flex gap-4 border-t border-bg-card-rule"
+                  style={{ background: 'rgba(255,255,255,0.02)' }}>
+                  <span className="font-mono text-[18px] font-bold text-gold-label w-[88px] shrink-0">{"\u2014"}</span>
+                  <div className="min-w-0">
+                    <p className="font-bebas text-[18px] tracking-[0.06em] text-white leading-tight">Trial & Error</p>
+                    <p className="text-[13px] text-ink-secondary mt-0.5">Non-recoverable</p>
+                  </div>
+                </div>
+
               </div>
             </div>
           </SectionFrame>
           {/* ──────────────────────────────────────────────────────────
-               § 3  THE PROBLEM + THESIS
-               Why this matters — the intellectual resolution.
+               § 3  MOST FILMS LOSE MONEY — Asset Class Comparison
+               Every serious asset class has infrastructure. Film doesn't.
              ────────────────────────────────────────────────────────── */}
           <SectionFrame id="evidence" tier="minimal">
             <div>
@@ -311,46 +322,56 @@ const Index = () => {
                   MOST FILMS LOSE <span className="text-white">MONEY.</span>
                 </h2>
               </div>
-              <div className="relative bg-bg-card border border-bg-card-border rounded-xl">
-                {/* Gold left accent */}
-                <div className="absolute left-0 top-0 bottom-0 w-[3px]"
-                  style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.55), rgba(212,175,55,0.25), transparent)' }} />
-                <div className="p-8 md:p-10">
-                  {/* — Problem narrative — */}
-                  <p className="font-bebas text-[26px] tracking-[0.06em] leading-tight mb-6">
-                    <span className="text-gold">YOUR FILM CAN MAKE MONEY</span><br />
-                    <span className="text-white">AND YOU STILL LOSE.</span>
+
+              <div className="border border-gold-border bg-black rounded-xl overflow-hidden"
+                style={{ boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)' }}>
+
+                {/* Problem statement */}
+                <div className="px-6 pt-6 pb-5">
+                  <p className="font-bebas text-[22px] tracking-[0.04em] leading-tight text-white mb-3">
+                    Your film can make money{"\u00A0"}<span className="text-gold">&</span> you still lose.
                   </p>
-                  <div className="space-y-4 mb-6">
-                    <p className="text-ink-secondary text-[16px] leading-relaxed">
-                      Not because it didn{"\u2019"}t recoup.
-                    </p>
-                    <p className="text-ink-body text-[16px] leading-relaxed font-medium">
-                      Because of how the deal was structured.
-                    </p>
-                  </div>
-                  {/* Gold divider */}
-                  <div className="h-[1px] w-12 bg-gold-accent mb-6" />
-                  <p className="font-sans text-[20px] font-semibold tracking-[0.02em] text-ink-body mb-8">
-                    Most filmmakers learn it too late.
+                  <p className="text-[15px] text-ink-secondary leading-relaxed">
+                    Not because it didn{"\u2019"}t recoup.{" "}
+                    <span className="text-ink-body font-medium">Because of how the deal was structured.</span>
                   </p>
-                  {/* — Thesis: alternative asset class — */}
-                  <div className="border-t border-bg-card-rule pt-6 space-y-4">
-                    {[
-                      { asset: "Real Estate", tool: "comps and cap rate models" },
-                      { asset: "Private Equity", tool: "carry and IRR structures" },
-                      { asset: "Venture Capital", tool: "term sheets and valuation frameworks" },
-                    ].map((row) => (
-                      <p key={row.asset} className="text-ink-secondary text-[16px] leading-relaxed">
-                        <span className="text-ink-body font-semibold">{row.asset}</span> has {row.tool}.
-                      </p>
-                    ))}
-                    {/* The punchline */}
-                    <p className="font-bebas text-[26px] tracking-[0.06em] text-gold leading-tight mt-6">
-                      Nobody teaches the business of film.
-                    </p>
+                </div>
+
+                {/* Gold rule */}
+                <div className="mx-6 h-[1px] bg-gold-accent" />
+
+                {/* Asset class comparison — structured rows */}
+                <div className="px-6 pt-5 pb-2">
+                  <p className="font-mono text-[11px] tracking-[0.15em] uppercase text-ink-secondary mb-4">
+                    Every other asset class has infrastructure
+                  </p>
+
+                  {[
+                    { asset: "Real Estate", tools: "Comps \u00B7 Cap rates \u00B7 Appraisal models" },
+                    { asset: "Private Equity", tools: "Carry structures \u00B7 IRR frameworks" },
+                    { asset: "Venture Capital", tools: "Term sheets \u00B7 Valuation benchmarks" },
+                  ].map((row) => (
+                    <div key={row.asset} className="flex items-baseline justify-between py-2.5 border-t border-bg-card-rule">
+                      <span className="text-[15px] font-semibold text-ink-body">{row.asset}</span>
+                      <span className="text-[13px] text-ink-secondary text-right ml-4">{row.tools}</span>
+                    </div>
+                  ))}
+
+                  {/* Film row — the void */}
+                  <div className="flex items-baseline justify-between py-2.5 border-t border-bg-card-rule">
+                    <span className="text-[15px] font-semibold text-white">Film</span>
+                    <span className="font-mono text-[13px] text-gold-label">{"\u2014"}</span>
                   </div>
                 </div>
+
+                {/* Punchline */}
+                <div className="px-6 pt-4 pb-6 border-t border-bg-card-rule"
+                  style={{ background: 'rgba(255,255,255,0.02)' }}>
+                  <p className="font-bebas text-[24px] tracking-[0.06em] text-gold leading-tight">
+                    Nobody teaches the business of film.
+                  </p>
+                </div>
+
               </div>
             </div>
           </SectionFrame>
