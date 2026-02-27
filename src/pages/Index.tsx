@@ -39,7 +39,7 @@ const Index = () => {
   const haptics = useHaptics();
 
 
-  // Lead capture gate — requires OTP verification
+  // Lead capture gate — magic link auth
   const [showLeadCapture, setShowLeadCapture] = useState(false);
   const [pendingDestination, setPendingDestination] = useState<string | null>(null);
   const [hasSession, setHasSession] = useState(false);
@@ -119,7 +119,7 @@ const Index = () => {
   return (
     <>
 
-      {/* Lead capture modal — requires OTP verification */}
+      {/* Lead capture modal — magic link auth */}
       <LeadCaptureModal
         isOpen={showLeadCapture}
         onClose={() => setShowLeadCapture(false)}
@@ -266,25 +266,66 @@ const Index = () => {
 
           {/* Gold structural divider */}
           <div className="flex justify-center py-8 md:py-12">
-            <div className="w-16 h-px" style={{ background: "rgba(212,175,55,0.25)" }} />
+            <div className="w-16 h-px" style={{ background: "rgba(212,175,55,0.35)" }} />
           </div>
 
 
           {/* ──────────────────────────────────────────────────────────
-               § 2  THE PROBLEM + THESIS
-               Now serves as intellectual context for what they just saw.
+               § 2  THE REALITY — Closed Doors
+               What it costs to learn this elsewhere.
+             ────────────────────────────────────────────────────────── */}
+          <SectionFrame id="cost" tier="standard">
+            <div>
+
+              <div className="text-center mb-8">
+                <h2 className="font-bebas text-[40px] tracking-[0.08em] text-white">
+                  THE REALITY
+                </h2>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                {closedDoors.map((door) => (
+                  <div
+                    key={door.name}
+                    className="relative border p-4 flex flex-col rounded-xl bg-bg-card border-bg-card-border min-h-[150px]"
+                  >
+                    <span className="font-mono text-[22px] font-bold text-gold mb-2">
+                      {door.cost}
+                    </span>
+                    <p className="font-bebas text-[17px] tracking-[0.08em] uppercase leading-tight text-white mb-2">
+                      {door.name}
+                    </p>
+                    <p className="text-[14px] leading-[1.5] text-ink-secondary mt-auto">
+                      {door.lock}
+                    </p>
+                  </div>
+                ))}
+              </div>
+
+            </div>
+          </SectionFrame>
+
+
+          {/* Gold structural divider */}
+          <div className="flex justify-center py-8 md:py-12">
+            <div className="w-16 h-px" style={{ background: "rgba(212,175,55,0.35)" }} />
+          </div>
+
+
+          {/* ──────────────────────────────────────────────────────────
+               § 3  THE PROBLEM + THESIS
+               Why this matters — the intellectual resolution.
              ────────────────────────────────────────────────────────── */}
           <SectionFrame id="evidence" tier="minimal">
             <div>
 
               <div className="text-center mb-8">
-                <p className="font-sans text-[12px] tracking-[0.25em] uppercase font-semibold text-gold-label mb-4">The Problem</p>
                 <h2 className="font-bebas text-[40px] tracking-[0.08em] leading-[0.95] text-white">
                   MOST FILMS LOSE <span className="text-gold">MONEY.</span>
                 </h2>
               </div>
 
-              <div className="relative bg-bg-card border border-bg-card-border overflow-hidden rounded-xl">
+              <div className="relative bg-bg-card border border-bg-card-border rounded-xl">
                 {/* Gold left accent */}
                 <div className="absolute left-0 top-0 bottom-0 w-[3px]"
                   style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.55), rgba(212,175,55,0.25), transparent)' }} />
@@ -325,8 +366,7 @@ const Index = () => {
                     ))}
                     {/* The punchline */}
                     <p className="font-bebas text-[26px] tracking-[0.06em] text-gold leading-tight mt-6">
-                      Film had nothing.<br />
-                      <span className="text-white">Until now.</span>
+                      Film had nothing.
                     </p>
                   </div>
 
@@ -337,78 +377,21 @@ const Index = () => {
           </SectionFrame>
 
 
-          {/* ──────────────────────────────────────────────────────────
-               § 3  THE COST — Third Force positioning
-             ────────────────────────────────────────────────────────── */}
-          <SectionFrame id="cost" tier="standard">
-            <div>
-
-              <div className="text-center mb-8">
-                <p className="font-sans text-[12px] tracking-[0.25em] uppercase font-semibold text-gold-label mb-4">The Cost</p>
-                <h2 className="font-bebas text-[40px] tracking-[0.08em] text-white">
-                  THE REALITY
-                </h2>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                {closedDoors.map((door) => (
-                  <div
-                    key={door.name}
-                    className="relative border p-4 flex flex-col overflow-hidden rounded-xl bg-bg-card border-bg-card-border min-h-[150px]"
-                  >
-                    <span className="font-mono text-[22px] font-bold text-gold mb-2">
-                      {door.cost}
-                    </span>
-                    <p className="font-bebas text-[17px] tracking-[0.08em] uppercase leading-tight text-white mb-2">
-                      {door.name}
-                    </p>
-                    <p className="text-[14px] leading-[1.5] text-ink-secondary mt-auto">
-                      {door.lock}
-                    </p>
-                  </div>
-                ))}
-              </div>
-
-            </div>
-          </SectionFrame>
-
-
-          {/* ── INTERSTITIAL: Blum Quote — authority stamp ── */}
+          {/* ── INTERSTITIAL: Until Now — the pivot ── */}
           <section className="py-16 md:py-20 px-6">
-            <div className="max-w-sm mx-auto">
-              <div
-                className="relative rounded-xl p-8 overflow-hidden"
-                style={{
-                  background: 'rgba(255,255,255,0.03)',
-                  border: '1px solid rgba(255,255,255,0.06)',
-                }}
-              >
-                {/* Gold left accent */}
-                <div className="absolute left-0 top-0 bottom-0 w-[3px]"
-                  style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.50), rgba(212,175,55,0.20), transparent)' }} />
-
-                <blockquote>
-                  <p className="text-[17px] md:text-[19px] leading-[1.75] text-ink-body italic tracking-[0.01em]">
-                    Filmmakers have a perception in the business world of being kind of flaky dudes{"\u2026"} you need to be buttoned down{"\u2026"} speak the language that they speak.
-                  </p>
-                </blockquote>
-
-                {/* Attribution */}
-                <div className="mt-6">
-                  <div className="w-8 h-[1.5px] mb-3" style={{ background: 'rgba(212,175,55,0.35)' }} />
-                  <cite className="not-italic">
-                    <span className="font-bebas text-[15px] tracking-[0.14em] uppercase text-gold">Jason Blum</span>
-                  </cite>
-                  <p className="text-ink-secondary text-[12px] tracking-[0.06em] mt-1">Blumhouse {"\u2014"} {"\u201C"}Paranormal Activity{"\u201D"}</p>
-                </div>
-              </div>
+            <div className="flex items-center justify-center gap-4 max-w-xs mx-auto">
+              <div className="flex-1 h-px" style={{ background: "rgba(212,175,55,0.40)" }} />
+              <span className="font-bebas text-[26px] tracking-[0.10em] text-white whitespace-nowrap">
+                UNTIL NOW.
+              </span>
+              <div className="flex-1 h-px" style={{ background: "rgba(212,175,55,0.40)" }} />
             </div>
           </section>
 
 
           {/* Gold structural divider */}
           <div className="flex justify-center py-8 md:py-12">
-            <div className="w-16 h-px" style={{ background: "rgba(212,175,55,0.25)" }} />
+            <div className="w-16 h-px" style={{ background: "rgba(212,175,55,0.35)" }} />
           </div>
 
 
