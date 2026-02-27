@@ -104,24 +104,6 @@ const Index = () => {
     return () => clearTimeout(delay);
   }, [barsRevealed]);
   const handleStartClick    = () => { haptics.medium(); gatedNavigate("/calculator?tab=budget"); };
-  // "UNTIL NOW." fade-in on scroll — dramatic reveal for the pivot line
-  const untilNowRef = useRef<HTMLDivElement>(null);
-  const [untilNowVisible, setUntilNowVisible] = useState(false);
-  useEffect(() => {
-    const el = untilNowRef.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setUntilNowVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.5 }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
   // Scroll-triggered reveal for Cost of Access + Evidence sections
   const costRef = useRef<HTMLDivElement>(null);
   const [costVisible, setCostVisible] = useState(false);
@@ -177,17 +159,8 @@ const Index = () => {
               }}
             />
             <div className="relative px-4 max-w-md mx-auto">
-              {/* Hero card — visual containment for headline + visualization */}
-              <div
-                className="rounded-2xl px-2 pt-6 pb-5"
-                style={{
-                  border: '1px solid rgba(212,175,55,0.10)',
-                  background: 'rgba(255,255,255,0.02)',
-                  boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.04), 0 0 40px rgba(212,175,55,0.03)',
-                }}
-              >
-              {/* Headline */}
-              <div className="text-center mb-6 px-4">
+              {/* Headline — stands alone above the card */}
+              <div className="text-center mb-8 px-2">
                 <h1 className="font-bebas text-[clamp(3.2rem,11vw,4.8rem)] leading-[0.95] tracking-[0.02em] text-gold mb-6">
                   SEE WHERE EVERY DOLLAR <span className="text-white">GOES</span>
                 </h1>
@@ -195,6 +168,15 @@ const Index = () => {
                   Democratizing the business of film.
                 </p>
               </div>
+              {/* Waterfall card — the proof */}
+              <div
+                className="rounded-2xl px-2 pt-5 pb-5"
+                style={{
+                  border: '1px solid rgba(212,175,55,0.10)',
+                  background: 'rgba(255,255,255,0.02)',
+                  boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.04), 0 0 40px rgba(212,175,55,0.03)',
+                }}
+              >
               {/* ── Waterfall Visualization ── */}
               <div ref={waterBarRef}>
                 {/* Waterfall rows — unified financial table */}
@@ -367,18 +349,6 @@ const Index = () => {
               </p>
             </div>
           </section>
-          {/* ── INTERSTITIAL: Until Now — the pivot ── */}
-          <section className="py-12 md:py-16 px-6">
-            <div
-              ref={untilNowRef}
-              className="text-center transition-opacity duration-[600ms] ease-out"
-              style={{ opacity: untilNowVisible ? 1 : 0 }}
-            >
-              <p className="font-bebas text-[48px] tracking-[0.08em] text-white">
-                UNTIL NOW.
-              </p>
-            </div>
-          </section>
           {/* ──────────────────────────────────────────────────────────
                § 4  FINAL CTA — The Close
              ────────────────────────────────────────────────────────── */}
@@ -392,12 +362,15 @@ const Index = () => {
                   boxShadow: '0 0 60px rgba(212,175,55,0.06), 0 0 120px rgba(212,175,55,0.03), inset 0 1px 0 rgba(255,255,255,0.06)',
                 }}
               >
-                <h2 className="font-bebas text-[40px] leading-[1.1] tracking-[0.08em] text-gold mb-6">
-                  YOUR INVESTORS WILL{"\u00A0"}ASK HOW THE MONEY FLOWS <span className="text-white">BACK.</span>
+                <p className="font-bebas text-[28px] tracking-[0.06em] text-gold mb-2">
+                  Take the first step.
+                </p>
+                <h2 className="font-bebas text-[40px] leading-[1.1] tracking-[0.08em] text-white mb-8">
+                  KNOW YOUR{"\u00A0"}NUMBERS.
                 </h2>
                 <button onClick={handleStartClick}
                   className="w-full max-w-[320px] h-14 btn-cta-primary animate-cta-glow-pulse mx-auto">
-                  KNOW YOUR NUMBERS
+                  BUILD YOUR WATERFALL
                 </button>
               </div>
             </div>
