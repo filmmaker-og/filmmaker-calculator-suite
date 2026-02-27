@@ -8,8 +8,13 @@ const tierStyles = {
   },
   elevated: {
     border: '1px solid rgba(212,175,55,0.20)',
-    background: 'rgba(255,255,255,0.04)',
+    background: 'linear-gradient(180deg, rgba(212,175,55,0.03) 0%, rgba(255,255,255,0.04) 15%, rgba(255,255,255,0.04) 100%)',
     boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06), 0 0 40px rgba(212,175,55,0.04)',
+  },
+  minimal: {
+    border: 'none',
+    background: 'transparent',
+    boxShadow: 'none',
   },
 };
 
@@ -22,13 +27,14 @@ const SectionFrame = ({
   id?: string;
   children: React.ReactNode;
   className?: string;
-  tier?: 'standard' | 'elevated';
+  tier?: 'standard' | 'elevated' | 'minimal';
 }) => {
   return (
-    <section id={id} className="px-6 py-16 md:py-20">
+    <section id={id} className="px-6 py-24 md:py-32">
       <div
         className={cn(
-          "p-8 md:p-10 max-w-md mx-auto rounded-2xl",
+          "max-w-md mx-auto",
+          tier !== 'minimal' && "p-8 md:p-10 rounded-2xl",
           className,
         )}
         style={tierStyles[tier]}
