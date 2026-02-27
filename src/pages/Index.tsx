@@ -2,7 +2,6 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useHaptics } from "@/hooks/use-haptics";
-import filmmakerLogo from "@/assets/filmmaker-f-icon.png";
 import LeadCaptureModal from "@/components/LeadCaptureModal";
 import { cn } from "@/lib/utils";
 import SectionFrame from "@/components/SectionFrame";
@@ -137,7 +136,7 @@ const Index = () => {
         }}
       />
 
-      <div className="min-h-screen flex flex-col relative overflow-hidden bg-black">
+      <div className="min-h-screen flex flex-col relative overflow-hidden bg-black grain-overlay">
 
         {/* ═══════ LANDING PAGE ═══════ */}
         <main aria-label="Film Finance Simulator" className="flex-1 flex flex-col" style={{ paddingBottom: "calc(var(--bottom-bar-h) + env(safe-area-inset-bottom))" }}>
@@ -145,20 +144,25 @@ const Index = () => {
           {/* ──────────────────────────────────────────────────────────
                § 1  HERO
              ────────────────────────────────────────────────────────── */}
-          <section id="hero" className="snap-section min-h-0 pt-16 pb-16 flex flex-col justify-center">
-            <div className="px-6 py-4 max-w-xl mx-auto text-center">
-              <div className="mb-5 inline-block">
-                <img src={filmmakerLogo} alt="Filmmaker.OG" className="w-[96px] h-[96px] object-contain" />
-              </div>
-              <h1 className="font-bebas text-[clamp(2.8rem,9vw,4.2rem)] leading-[1.05] tracking-[0.06em] text-gold mb-5">
-                SEE WHERE EVERY<br /><span className="text-white">DOLLAR GOES</span>
+          <section id="hero" className="snap-section relative min-h-0 pt-24 pb-16 flex flex-col justify-center">
+            {/* Ambient warmth — single atmospheric element */}
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                background: "radial-gradient(ellipse 50% 60% at 50% 40%, rgba(212,175,55,0.04) 0%, transparent 100%)",
+              }}
+            />
+            <div className="relative px-6 py-4 max-w-xl mx-auto text-center">
+              <h1 className="font-bebas text-[clamp(3.2rem,11vw,4.8rem)] leading-[0.95] tracking-[0.02em] text-white mb-8">
+                SEE WHERE EVERY<br /><span className="text-gold">DOLLAR GOES</span>
               </h1>
-              <p className="mb-6 text-ink-secondary text-[17px] leading-[1.7] tracking-[0.02em] font-medium max-w-[360px] mx-auto">
-                Built by a Tribeca-winning producer whose debut sold to <span className="text-gold font-semibold">Netflix</span>.
+              <p className="mb-10 text-ink-secondary text-[17px] leading-[1.7] tracking-[0.02em] font-medium max-w-[340px] mx-auto">
+                The indie film finance simulator that shows you where every dollar flows — before you shoot.
               </p>
 
-              <div className="w-full max-w-[320px] mx-auto space-y-3">
-                <button onClick={handleStartClick} className="w-full h-14 btn-cta-primary">
+              <div className="w-full max-w-[280px] mx-auto">
+                <button onClick={handleStartClick}
+                  className="w-full h-14 btn-cta-primary animate-cta-glow-pulse">
                   BUILD YOUR WATERFALL
                 </button>
               </div>
@@ -171,11 +175,11 @@ const Index = () => {
           {/* ──────────────────────────────────────────────────────────
                § 2  THE PROBLEM + THESIS — with "Until now." punchline
              ────────────────────────────────────────────────────────── */}
-          <section id="evidence" className="snap-section px-6 py-12 md:py-16">
+          <section id="evidence" className="snap-section px-6 py-16 md:py-20">
             <div className="max-w-md mx-auto">
 
               <div className="text-center mb-10">
-                <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-secondary mb-5">The Problem</p>
+                <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-secondary mb-4">The Problem</p>
                 <h2 className="font-bebas text-[40px] tracking-[0.08em] leading-[0.95] text-gold">
                   MOST FILMS LOSE <span className="text-white">MONEY.</span>
                 </h2>
@@ -185,7 +189,7 @@ const Index = () => {
                 {/* Gold left accent */}
                 <div className="absolute left-0 top-0 bottom-0 w-[3px]"
                   style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.55), rgba(212,175,55,0.25), transparent)' }} />
-                <div className="p-8 md:p-10 pl-9 md:pl-11">
+                <div className="p-8 md:p-10">
 
                   {/* — Problem narrative — */}
                   <p className="font-bebas text-[26px] md:text-[32px] tracking-[0.06em] leading-tight mb-6">
@@ -193,7 +197,7 @@ const Index = () => {
                     <span className="text-white">AND YOU STILL LOSE.</span>
                   </p>
 
-                  <div className="space-y-3 mb-6">
+                  <div className="space-y-4 mb-6">
                     <p className="text-ink-secondary text-[17px] leading-relaxed">
                       Not because it didn{"\u2019"}t recoup.
                     </p>
@@ -210,7 +214,7 @@ const Index = () => {
                   </p>
 
                   {/* — Thesis: alternative asset class — */}
-                  <div className="border-t border-bg-card-rule pt-6 space-y-5">
+                  <div className="border-t border-bg-card-rule pt-6 space-y-4">
                     {[
                       { asset: "Real Estate", tool: "comps and cap rate models" },
                       { asset: "Private Equity", tool: "carry and IRR structures" },
@@ -236,11 +240,11 @@ const Index = () => {
           {/* ──────────────────────────────────────────────────────────
                § 3  THE COST — escalates the pain before the pivot
              ────────────────────────────────────────────────────────── */}
-          <section id="cost" className="snap-section px-6 py-12 md:py-16">
+          <section id="cost" className="snap-section px-6 py-16 md:py-20">
             <div className="max-w-md mx-auto">
 
               <div className="text-center mb-8">
-                <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-secondary mb-5">The Cost</p>
+                <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-secondary mb-4">The Cost</p>
                 <h2 className="font-bebas text-[40px] tracking-[0.08em] text-gold">
                   THE <span className="text-white">REALITY</span>
                 </h2>
@@ -269,26 +273,26 @@ const Index = () => {
           </section>
 
           {/* ── INTERSTITIAL: Blum Quote — authority validates the pain ── */}
-          <section className="py-12 md:py-16 px-6">
+          <section className="py-16 md:py-20 px-6">
             <div className="max-w-md mx-auto">
               <div className="relative bg-bg-card border border-bg-card-border overflow-hidden rounded-xl">
                 {/* Gold left accent */}
                 <div className="absolute left-0 top-0 bottom-0 w-[3px]"
                   style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.55), rgba(212,175,55,0.25), transparent)' }} />
-                <div className="p-7 md:p-9 pl-8 md:pl-10">
+                <div className="p-8 md:p-10">
                   <blockquote>
                     <p className="text-[17px] leading-[1.7] text-ink-body italic">
                       Filmmakers have a perception in the business world of being kind of flaky dudes{"\u2026"} you need to be buttoned down{"\u2026"} speak the language that they speak.
                     </p>
                   </blockquote>
                   <div className="mt-6 pt-4 border-t border-bg-card-rule">
-                    <div className="inline-flex items-center gap-3">
+                    <div className="inline-flex items-center gap-4">
                       <div className="w-8 h-[1.5px] bg-gold-accent flex-shrink-0" />
                       <div>
                         <cite className="not-italic">
                           <span className="font-bebas text-[17px] tracking-[0.14em] uppercase text-gold">Jason Blum</span>
                         </cite>
-                        <p className="text-ink-secondary text-[13px] tracking-[0.06em] mt-0.5">Blumhouse {"\u2014"} {"\u201C"}Paranormal Activity{"\u201D"}</p>
+                        <p className="text-ink-secondary text-[13px] tracking-[0.06em] mt-1">Blumhouse {"\u2014"} {"\u201C"}Paranormal Activity{"\u201D"}</p>
                       </div>
                     </div>
                   </div>
@@ -304,7 +308,7 @@ const Index = () => {
           <SectionFrame id="waterfall" variant="gold">
             <div>
 
-              <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-secondary text-center mb-5">The Solution</p>
+              <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-secondary text-center mb-4">The Solution</p>
               <h2 className="font-bebas text-[40px] text-gold tracking-[0.08em] text-center mb-2">THE <span className="text-white">WATERFALL</span></h2>
               <p className="font-bebas text-[26px] tracking-[0.06em] text-ink-secondary text-center mb-6">
                 We built the framework.
@@ -323,7 +327,7 @@ const Index = () => {
                       )}
                     >
                       <div className="flex justify-between items-baseline mb-2">
-                        <div className="flex items-baseline gap-3">
+                        <div className="flex items-baseline gap-2">
                           <span className="font-mono text-[13px] text-ink-secondary tabular-nums">
                             {String(i + 1).padStart(2, '0')}
                           </span>
@@ -355,7 +359,7 @@ const Index = () => {
                 </div>
 
                 {/* Net Profits */}
-                <div className="mt-4 border border-gold-border bg-black px-5 py-5 text-center rounded-lg"
+                <div className="mt-4 border border-gold-border bg-black px-6 py-6 text-center rounded-lg"
                   style={{ boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)' }}>
                   <p className="text-[13px] tracking-[0.2em] uppercase font-semibold text-gold mb-1">Net Profits</p>
                   <span className="font-mono text-[26px] font-bold text-white">
@@ -378,14 +382,14 @@ const Index = () => {
 
                 {/* Two corridor boxes */}
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="border border-gold-border bg-black px-4 py-5 text-center rounded-lg"
+                  <div className="border border-gold-border bg-black px-4 py-6 text-center rounded-lg"
                     style={{ boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)' }}>
                     <p className="text-[13px] tracking-[0.2em] uppercase font-semibold text-gold mb-1">Producer Corridor</p>
                     <span className="font-mono text-[26px] font-bold text-white">
                       ${producerVal.toLocaleString()}
                     </span>
                   </div>
-                  <div className="border border-gold-border bg-black px-4 py-5 text-center rounded-lg"
+                  <div className="border border-gold-border bg-black px-4 py-6 text-center rounded-lg"
                     style={{ boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)' }}>
                     <p className="text-[13px] tracking-[0.2em] uppercase font-semibold text-gold mb-1">Investor Corridor</p>
                     <span className="font-mono text-[26px] font-bold text-white">
@@ -393,7 +397,7 @@ const Index = () => {
                     </span>
                   </div>
                 </div>
-                <p className="font-mono text-[13px] text-ink-secondary text-center mt-5">Based on a hypothetical $1.8M budget and a $3M acquisition.</p>
+                <p className="font-mono text-[13px] text-ink-secondary text-center mt-6">Based on a hypothetical $1.8M budget and a $3M acquisition.</p>
               </div>
             </div>
           </SectionFrame>
@@ -405,18 +409,18 @@ const Index = () => {
           <SectionFrame id="offer">
             <div>
               <div className="text-center mb-8">
-                <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-secondary mb-5">The Offer</p>
+                <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-secondary mb-4">The Offer</p>
                 <h2 className="font-bebas text-[40px] tracking-[0.08em] text-gold leading-[1.05]">
                   YOUR PATH{"\u00A0"}<span className="text-white">FORWARD</span>
                 </h2>
               </div>
 
-              <div className="space-y-3">
+              <div className="space-y-4">
                 {/* Free Calculator */}
-                <div className="rounded-xl border border-bg-card-border p-5 md:p-6 bg-bg-card">
+                <div className="rounded-xl border border-bg-card-border p-6 bg-bg-card">
                   <span className="inline-block font-bebas text-[14px] tracking-[0.20em] uppercase text-gold mb-2">Free</span>
                   <h3 className="font-bebas text-[26px] md:text-[32px] tracking-[0.06em] text-white mb-2">THE CALCULATOR</h3>
-                  <p className="text-ink-secondary text-[17px] leading-relaxed mb-5">
+                  <p className="text-ink-secondary text-[17px] leading-relaxed mb-6">
                     Model your deal. Stress-test your numbers. See where every dollar flows.
                   </p>
                   <div className="text-center">
@@ -428,10 +432,10 @@ const Index = () => {
                 </div>
 
                 {/* The Blueprint — $197 */}
-                <div className="rounded-xl border border-bg-card-border p-5 md:p-6 bg-bg-card">
+                <div className="rounded-xl border border-bg-card-border p-6 bg-bg-card">
                   <span className="inline-block font-mono text-[26px] font-bold text-gold mb-2">$197</span>
                   <h3 className="font-bebas text-[26px] md:text-[32px] tracking-[0.06em] text-white mb-2">THE BLUEPRINT</h3>
-                  <p className="text-ink-secondary text-[17px] leading-relaxed mb-5">
+                  <p className="text-ink-secondary text-[17px] leading-relaxed mb-6">
                     Your complete finance plan in 4 professional documents. Formatted for your attorney.
                   </p>
                   <div className="text-center">
@@ -443,10 +447,10 @@ const Index = () => {
                 </div>
 
                 {/* The Pitch Package — $497 */}
-                <div className="rounded-xl border border-bg-card-border p-5 md:p-6 bg-bg-card">
+                <div className="rounded-xl border border-bg-card-border p-6 bg-bg-card">
                   <span className="inline-block font-mono text-[26px] font-bold text-gold mb-2">$497</span>
                   <h3 className="font-bebas text-[26px] md:text-[32px] tracking-[0.06em] text-white mb-2">THE PITCH PACKAGE</h3>
-                  <p className="text-ink-secondary text-[17px] leading-relaxed mb-5">
+                  <p className="text-ink-secondary text-[17px] leading-relaxed mb-6">
                     8 documents including a pitch deck and investor return profiles. Walk into the room prepared.
                   </p>
                   <div className="text-center">
@@ -465,7 +469,7 @@ const Index = () => {
           {/* ──────────────────────────────────────────────────────────
                § 7  FINAL CTA — The Moment of Truth
              ────────────────────────────────────────────────────────── */}
-          <section id="final-cta" className="snap-section py-14 md:py-20 px-6">
+          <section id="final-cta" className="snap-section py-16 md:py-20 px-6">
             <div className="max-w-md mx-auto">
               <div
                 className="relative bg-bg-elevated overflow-hidden rounded-xl text-center px-8 py-14 md:px-10 md:py-16"
@@ -478,7 +482,7 @@ const Index = () => {
                   YOUR INVESTOR WILL{"\u00A0"}ASK HOW THE MONEY FLOWS <span className="text-white">BACK</span>.
                 </h2>
                 <button onClick={handleStartClick}
-                  className="w-full max-w-[320px] h-14 btn-cta-primary mx-auto">
+                  className="w-full max-w-[320px] h-14 btn-cta-primary animate-cta-glow-pulse mx-auto">
                   BUILD YOUR WATERFALL
                 </button>
               </div>
