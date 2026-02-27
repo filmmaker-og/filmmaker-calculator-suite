@@ -4,7 +4,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { useHaptics } from "@/hooks/use-haptics";
 import LeadCaptureModal from "@/components/LeadCaptureModal";
 import { cn } from "@/lib/utils";
-import SectionFrame from "@/components/SectionFrame";
 /* ═══════════════════════════════════════════════════════════════════
    WATERFALL TIERS — proportional bars ($3M cascade)
    ═══════════════════════════════════════════════════════════════════ */
@@ -103,16 +102,16 @@ const Index = () => {
     }, 6000);
     return () => clearTimeout(delay);
   }, [barsRevealed]);
-  const handleStartClick    = () => { haptics.medium(); gatedNavigate("/calculator?tab=budget"); };
-  // Scroll-triggered reveal for Cost of Access + Evidence sections
-  const costRef = useRef<HTMLDivElement>(null);
-  const [costVisible, setCostVisible] = useState(false);
-  const evidenceRef = useRef<HTMLDivElement>(null);
-  const [evidenceVisible, setEvidenceVisible] = useState(false);
+  const handleStartClick = () => { haptics.medium(); gatedNavigate("/calculator?tab=budget"); };
+  // Scroll-triggered reveals — value section + bridge
+  const valueRef = useRef<HTMLDivElement>(null);
+  const [valueVisible, setValueVisible] = useState(false);
+  const bridgeRef = useRef<HTMLDivElement>(null);
+  const [bridgeVisible, setBridgeVisible] = useState(false);
   useEffect(() => {
     const sections = [
-      { el: costRef.current, setter: setCostVisible },
-      { el: evidenceRef.current, setter: setEvidenceVisible },
+      { el: valueRef.current, setter: setValueVisible },
+      { el: bridgeRef.current, setter: setBridgeVisible },
     ];
     const observers: IntersectionObserver[] = [];
     sections.forEach(({ el, setter }) => {
@@ -144,11 +143,10 @@ const Index = () => {
         }}
       />
       <div className="min-h-screen flex flex-col relative overflow-hidden bg-black grain-overlay">
-        {/* ═══════ LANDING PAGE ═══════ */}
         <main aria-label="Film Finance Simulator" className="flex-1 flex flex-col" style={{ paddingBottom: "env(safe-area-inset-bottom)" }}>
           {/* ──────────────────────────────────────────────────────────
-               § 1  HERO + WATERFALL DEMO
-               The visualization IS the pitch. No preamble.
+               § 1  THE WATERFALL — named demo with context
+               Show them the thing. Name it. Let the animation sell.
              ────────────────────────────────────────────────────────── */}
           <section id="hero" className="relative pt-14 pb-6">
             {/* Ambient warmth */}
@@ -159,13 +157,16 @@ const Index = () => {
               }}
             />
             <div className="relative px-4 max-w-md mx-auto">
-              {/* Headline — stands alone above the card */}
+              {/* Headline — brand statement */}
               <div className="text-center mb-8 px-2">
-                <h1 className="font-bebas text-[clamp(3.2rem,11vw,4.8rem)] leading-[0.95] tracking-[0.02em] text-gold mb-6">
+                <h1 className="font-bebas text-[clamp(3.2rem,11vw,4.8rem)] leading-[0.95] tracking-[0.02em] text-gold mb-3">
                   SEE WHERE EVERY DOLLAR <span className="text-white">GOES</span>
                 </h1>
-                <p className="text-ink-secondary text-[18px] leading-[1.7] tracking-[0.02em] font-medium max-w-[340px] mx-auto">
-                  Democratizing the business of film.
+                <p className="font-mono text-[12px] tracking-[0.15em] uppercase text-gold mb-2">
+                  THE WATERFALL
+                </p>
+                <p className="text-ink-secondary text-[15px] leading-[1.6] max-w-[300px] mx-auto">
+                  Your recoupment schedule{"\u00A0"}{"\u2014"}{"\u00A0"}who gets paid, in what order, and what{"\u2019"}s left.
                 </p>
               </div>
               {/* Waterfall card — the proof */}
@@ -252,8 +253,8 @@ const Index = () => {
                   Hypothetical $1.8M budget{"\u00A0"}{"\u2022"}{"\u00A0"}$3M acquisition{"\u00A0"}{"\u2022"}{"\u00A0"}50/50 net profit split
                 </p>
               </div>
-              </div>{/* /hero card */}
-              {/* CTA — earns the click after the visualization */}
+              </div>{/* /waterfall card */}
+              {/* First CTA — earns the click after the demo */}
               <div className="mt-10 text-center px-2">
                 <div className="w-full max-w-[280px] mx-auto">
                   <button onClick={handleStartClick}
@@ -265,10 +266,11 @@ const Index = () => {
             </div>
           </section>
           {/* ──────────────────────────────────────────────────────────
-               § 2  THE COST OF ACCESS
-               What it costs to learn this elsewhere. Premium ledger.
+               § 2  WHAT YOU GET — value clarity
+               Checks = what you walk away with. X marks = what
+               you're stuck with now. Conversion language, not content.
              ────────────────────────────────────────────────────────── */}
-          <section id="cost" className="relative py-14 md:py-20 px-6">
+          <section id="value" className="relative py-14 md:py-20 px-6">
             {/* Ambient warmth */}
             <div
               className="absolute inset-0 pointer-events-none"
@@ -277,75 +279,77 @@ const Index = () => {
               }}
             />
             <div
-              ref={costRef}
+              ref={valueRef}
               className="relative max-w-md mx-auto"
               style={{
-                opacity: costVisible ? 1 : 0,
-                transform: costVisible ? 'translateY(0)' : 'translateY(20px)',
+                opacity: valueVisible ? 1 : 0,
+                transform: valueVisible ? 'translateY(0)' : 'translateY(20px)',
                 transition: 'opacity 700ms ease-out, transform 700ms ease-out',
               }}
             >
-              <div className="text-center mb-8">
-                <h2 className="font-bebas text-[40px] tracking-[0.08em] text-white">
-                  THE COST OF ACCESS
-                </h2>
-              </div>
               <div className="border border-gold-border bg-black overflow-hidden rounded-xl"
                 style={{ boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)' }}>
-                <div className="px-6 py-5 flex gap-4">
-                  <span className="font-mono text-[18px] font-bold text-gold w-[88px] shrink-0 tabular-nums">$800/hr</span>
-                  <div className="min-w-0">
-                    <p className="font-bebas text-[18px] tracking-[0.06em] text-white leading-tight">Entertainment Attorney</p>
-                    <p className="text-[13px] text-ink-secondary mt-1">Retainer required</p>
-                  </div>
+
+                {/* Checks — what you get */}
+                <div className="px-6 pt-5 pb-4">
+                  <p className="font-mono text-[11px] tracking-[0.15em] uppercase text-gold mb-4">
+                    With your waterfall
+                  </p>
+                  {[
+                    "See exactly who gets paid and when",
+                    "Revenue splits calculated automatically",
+                    "Investor-ready waterfall PDF",
+                    "Know your real numbers before you shoot",
+                  ].map((item) => (
+                    <div key={item} className="flex items-start gap-3 py-2">
+                      <span className="text-gold text-[15px] leading-none mt-0.5">{"\u2713"}</span>
+                      <span className="text-[14px] text-ink-body leading-snug">{item}</span>
+                    </div>
+                  ))}
                 </div>
-                <div className="px-6 py-5 flex gap-4 border-t border-bg-card-rule">
-                  <span className="font-mono text-[18px] font-bold text-gold w-[88px] shrink-0 tabular-nums">$5,000+</span>
-                  <div className="min-w-0">
-                    <p className="font-bebas text-[18px] tracking-[0.06em] text-white leading-tight">Producing Consultant</p>
-                    <p className="text-[13px] text-ink-secondary mt-1">If available</p>
-                  </div>
+
+                {/* Gold divider */}
+                <div className="mx-6 h-[1px]" style={{ background: 'linear-gradient(90deg, transparent, rgba(212,175,55,0.30), transparent)' }} />
+
+                {/* X marks — without it */}
+                <div className="px-6 pt-5 pb-5" style={{ background: 'rgba(255,255,255,0.02)' }}>
+                  <p className="font-mono text-[11px] tracking-[0.15em] uppercase text-ink-secondary mb-4">
+                    Without it
+                  </p>
+                  {[
+                    "Deals structured on guesswork",
+                    "No framework for investor conversations",
+                    "Ambiguity in how money flows back",
+                    "Years of expensive trial and error",
+                  ].map((item) => (
+                    <div key={item} className="flex items-start gap-3 py-2">
+                      <span className="text-ink-secondary text-[15px] leading-none mt-0.5">{"\u2717"}</span>
+                      <span className="text-[14px] text-ink-secondary leading-snug">{item}</span>
+                    </div>
+                  ))}
                 </div>
-                <div className="px-6 py-5 flex gap-4 border-t border-bg-card-rule">
-                  <span className="font-mono text-[18px] font-bold text-gold w-[88px] shrink-0 tabular-nums">$200K</span>
-                  <div className="min-w-0">
-                    <p className="font-bebas text-[18px] tracking-[0.06em] text-white leading-tight">Film School</p>
-                    <p className="text-[13px] text-ink-secondary mt-1">3{"\u2013"}4 years</p>
-                  </div>
-                </div>
-                <div className="px-6 py-5 flex gap-4 border-t border-bg-card-rule"
-                  style={{ background: 'rgba(255,255,255,0.02)' }}>
-                  <span className="font-mono text-[18px] font-bold text-gold-label w-[88px] shrink-0">{"\u2014"}</span>
-                  <div className="min-w-0">
-                    <p className="font-bebas text-[18px] tracking-[0.06em] text-white leading-tight">Trial & Error</p>
-                    <p className="text-[13px] text-ink-secondary mt-1">Non-recoverable</p>
-                  </div>
-                </div>
+
               </div>
-              <p className="text-center text-ink-secondary text-[15px] leading-relaxed mt-6 max-w-[300px] mx-auto">
-                You shouldn{"\u2019"}t need <span className="text-white font-medium">$200K</span> to understand your own deal.
-              </p>
             </div>
           </section>
           {/* ──────────────────────────────────────────────────────────
-               § 3  MOST FILMS LOSE MONEY — diagnosis interstitial
+               § 3  BRIDGE — single statement, earns the close
              ────────────────────────────────────────────────────────── */}
-          <section id="evidence" className="py-14 md:py-20 px-6">
+          <section className="py-12 md:py-16 px-6">
             <div
-              ref={evidenceRef}
+              ref={bridgeRef}
               className="max-w-md mx-auto text-center"
               style={{
-                opacity: evidenceVisible ? 1 : 0,
-                transform: evidenceVisible ? 'translateY(0)' : 'translateY(20px)',
+                opacity: bridgeVisible ? 1 : 0,
+                transform: bridgeVisible ? 'translateY(0)' : 'translateY(12px)',
                 transition: 'opacity 700ms ease-out, transform 700ms ease-out',
               }}
             >
-              <h2 className="font-bebas text-[40px] tracking-[0.08em] leading-[0.95] text-gold mb-0">
-                MOST FILMS LOSE <span className="text-white">MONEY.</span>
-              </h2>
-              <p className="text-[15px] text-ink-secondary leading-relaxed mt-3 max-w-[320px] mx-auto">
-                Not because they don{"\u2019"}t recoup.{" "}
-                <span className="text-ink-body font-medium">Because of how the deal was structured.</span>
+              <p className="font-bebas text-[36px] tracking-[0.06em] text-gold leading-tight">
+                We built the framework.
+              </p>
+              <p className="font-bebas text-[36px] tracking-[0.06em] text-white leading-tight">
+                You run the numbers.
               </p>
             </div>
           </section>
@@ -362,21 +366,21 @@ const Index = () => {
                   boxShadow: '0 0 60px rgba(212,175,55,0.06), 0 0 120px rgba(212,175,55,0.03), inset 0 1px 0 rgba(255,255,255,0.06)',
                 }}
               >
-                <p className="font-bebas text-[28px] tracking-[0.06em] text-gold mb-2">
-                  Take the first step.
-                </p>
-                <h2 className="font-bebas text-[40px] leading-[1.1] tracking-[0.08em] text-white mb-8">
-                  KNOW YOUR{"\u00A0"}NUMBERS.
+                <h2 className="font-bebas text-[40px] leading-[1.1] tracking-[0.08em] text-gold mb-6">
+                  YOUR INVESTORS WILL{"\u00A0"}ASK HOW THE MONEY FLOWS <span className="text-white">BACK.</span>
                 </h2>
                 <button onClick={handleStartClick}
                   className="w-full max-w-[320px] h-14 btn-cta-primary animate-cta-glow-pulse mx-auto">
-                  BUILD YOUR WATERFALL
+                  KNOW YOUR NUMBERS
                 </button>
               </div>
             </div>
           </section>
           {/* ── FOOTER ── */}
           <footer className="py-8 px-6 max-w-md mx-auto">
+            <p className="text-ink-secondary text-[13px] tracking-[0.04em] text-center mb-3">
+              Democratizing the business of film.
+            </p>
             <p className="text-ink-ghost text-[12px] tracking-wide leading-relaxed text-center">
               For educational and informational purposes only. Not legal, tax, or investment advice.
               Consult a qualified entertainment attorney before making financing decisions.
