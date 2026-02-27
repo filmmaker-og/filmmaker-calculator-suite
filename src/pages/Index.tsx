@@ -144,19 +144,19 @@ const Index = () => {
           {/* ──────────────────────────────────────────────────────────
                § 1  HERO
              ────────────────────────────────────────────────────────── */}
-          <section id="hero" className="relative min-h-0 pt-24 pb-16 flex flex-col justify-center">
+          <section id="hero" className="relative min-h-[70vh] pt-32 pb-20 flex flex-col justify-center">
             {/* Ambient warmth — single atmospheric element */}
             <div
               className="absolute inset-0 pointer-events-none"
               style={{
-                background: "radial-gradient(ellipse 50% 60% at 50% 40%, rgba(212,175,55,0.04) 0%, transparent 100%)",
+                background: "radial-gradient(ellipse 60% 50% at 50% 35%, rgba(212,175,55,0.06) 0%, transparent 100%)",
               }}
             />
             <div className="relative px-6 py-4 max-w-xl mx-auto text-center">
               <h1 className="font-bebas text-[clamp(3.2rem,11vw,4.8rem)] leading-[0.95] tracking-[0.02em] text-white mb-8">
                 SEE WHERE EVERY<br /><span className="text-gold">DOLLAR GOES</span>
               </h1>
-              <p className="mb-10 text-ink-secondary text-[17px] leading-[1.7] tracking-[0.02em] font-medium max-w-[340px] mx-auto">
+              <p className="mb-14 text-ink-secondary text-[17px] leading-[1.7] tracking-[0.02em] font-medium max-w-[340px] mx-auto">
                 The indie film finance simulator that shows you where every dollar flows — before you shoot.
               </p>
 
@@ -173,18 +173,18 @@ const Index = () => {
 
 
           {/* Gold structural divider */}
-          <div className="flex justify-center py-8">
-            <div className="w-12 h-px" style={{ background: "rgba(212,175,55,0.30)" }} />
+          <div className="flex justify-center py-12 md:py-16">
+            <div className="w-16 h-px" style={{ background: "rgba(212,175,55,0.25)" }} />
           </div>
 
           {/* ──────────────────────────────────────────────────────────
                § 2  THE PROBLEM + THESIS — with "Until now." punchline
              ────────────────────────────────────────────────────────── */}
-          <SectionFrame id="evidence" tier="standard">
+          <SectionFrame id="evidence" tier="minimal">
             <div>
 
               <div className="text-center mb-8">
-                <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-gold-label mb-4">The Problem</p>
+                <p className="font-sans text-[12px] tracking-[0.25em] uppercase font-semibold text-gold-label mb-4">The Problem</p>
                 <h2 className="font-bebas text-[40px] tracking-[0.08em] leading-[0.95] text-white">
                   MOST FILMS LOSE <span className="text-gold">MONEY.</span>
                 </h2>
@@ -214,7 +214,7 @@ const Index = () => {
                   {/* Gold divider */}
                   <div className="h-[1px] w-12 bg-gold-accent mb-6" />
 
-                  <p className="font-bebas text-[26px] tracking-[0.08em] text-ink-body mb-8">
+                  <p className="font-sans text-[19px] font-semibold tracking-[0.02em] text-ink-body mb-8">
                     Most filmmakers learn it too late.
                   </p>
 
@@ -230,7 +230,7 @@ const Index = () => {
                       </p>
                     ))}
                     {/* The punchline */}
-                    <p className="font-bebas text-[26px] tracking-[0.06em] text-gold leading-tight mt-2">
+                    <p className="font-bebas text-[26px] tracking-[0.06em] text-gold leading-tight mt-6">
                       Film has no standardized framework.
                     </p>
                   </div>
@@ -249,7 +249,7 @@ const Index = () => {
             <div>
 
               <div className="text-center mb-8">
-                <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-gold-label mb-4">The Cost</p>
+                <p className="font-sans text-[12px] tracking-[0.25em] uppercase font-semibold text-gold-label mb-4">The Cost</p>
                 <h2 className="font-bebas text-[40px] tracking-[0.08em] text-white">
                   THE REALITY
                 </h2>
@@ -278,37 +278,24 @@ const Index = () => {
           </SectionFrame>
 
           {/* ── INTERSTITIAL: Blum Quote — authority validates the pain ── */}
-          <section className="py-16 md:py-20 px-6">
-            <div className="max-w-md mx-auto">
-              <div
-                className="relative overflow-hidden rounded-xl"
-                style={{
-                  background: 'rgba(255,255,255,0.04)',
-                  border: '1px solid rgba(212,175,55,0.20)',
-                  boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06), 0 0 30px rgba(212,175,55,0.06)',
-                }}
-              >
-                {/* Gold left accent */}
-                <div className="absolute left-0 top-0 bottom-0 w-[3px]"
-                  style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.55), rgba(212,175,55,0.25), transparent)' }} />
-                <div className="p-8 md:p-10">
-                  <blockquote>
-                    <p className="text-[17px] leading-[1.7] text-ink-body italic">
-                      Filmmakers have a perception in the business world of being kind of flaky dudes{"\u2026"} you need to be buttoned down{"\u2026"} speak the language that they speak.
-                    </p>
-                  </blockquote>
-                  <div className="mt-6 pt-4 border-t border-bg-card-rule">
-                    <div className="inline-flex items-center gap-4">
-                      <div className="w-8 h-[1.5px] bg-gold-accent flex-shrink-0" />
-                      <div>
-                        <cite className="not-italic">
-                          <span className="font-bebas text-[17px] tracking-[0.14em] uppercase text-gold">Jason Blum</span>
-                        </cite>
-                        <p className="text-ink-secondary text-[13px] tracking-[0.06em] mt-1">Blumhouse {"\u2014"} {"\u201C"}Paranormal Activity{"\u201D"}</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+          <section className="py-24 md:py-32 px-6">
+            <div className="max-w-sm mx-auto text-center">
+              {/* Gold rule above */}
+              <div className="w-10 h-px mx-auto mb-10" style={{ background: 'rgba(212,175,55,0.40)' }} />
+
+              <blockquote>
+                <p className="text-[19px] md:text-[21px] leading-[1.75] text-ink-body italic tracking-[0.01em]">
+                  Filmmakers have a perception in the business world of being kind of flaky dudes{"\u2026"} you need to be buttoned down{"\u2026"} speak the language that they speak.
+                </p>
+              </blockquote>
+
+              {/* Attribution */}
+              <div className="mt-10">
+                <div className="w-8 h-[1.5px] mx-auto mb-4" style={{ background: 'rgba(212,175,55,0.40)' }} />
+                <cite className="not-italic">
+                  <span className="font-bebas text-[17px] tracking-[0.14em] uppercase text-gold">Jason Blum</span>
+                </cite>
+                <p className="text-ink-secondary text-[13px] tracking-[0.06em] mt-1">Blumhouse {"\u2014"} {"\u201C"}Paranormal Activity{"\u201D"}</p>
               </div>
             </div>
           </section>
@@ -317,10 +304,10 @@ const Index = () => {
           {/* ──────────────────────────────────────────────────────────
                § 4  THE SOLUTION — the product reveal
              ────────────────────────────────────────────────────────── */}
-          <SectionFrame id="waterfall" tier="elevated">
+          <SectionFrame id="waterfall" tier="elevated" className="!p-6 md:!p-8">
             <div>
 
-              <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-gold-label text-center mb-4">The Solution</p>
+              <p className="font-sans text-[12px] tracking-[0.25em] uppercase font-semibold text-gold-label text-center mb-4">The Solution</p>
               <h2 className="font-bebas text-[40px] text-white tracking-[0.08em] text-center mb-4">THE <span className="text-gold">WATERFALL</span></h2>
               <p className="font-bebas text-[26px] tracking-[0.06em] text-ink-secondary text-center mb-8">
                 We built the framework.
@@ -421,7 +408,7 @@ const Index = () => {
           <SectionFrame id="offer" tier="elevated">
             <div>
               <div className="text-center mb-8">
-                <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-gold-label mb-4">The Offer</p>
+                <p className="font-sans text-[12px] tracking-[0.25em] uppercase font-semibold text-gold-label mb-4">The Offer</p>
                 <h2 className="font-bebas text-[40px] tracking-[0.08em] text-white leading-[1.05]">
                   YOUR <span className="text-gold">PATH</span>{"\u00A0"}FORWARD
                 </h2>
@@ -479,14 +466,14 @@ const Index = () => {
 
 
           {/* Gold structural divider */}
-          <div className="flex justify-center py-8">
-            <div className="w-12 h-px" style={{ background: "rgba(212,175,55,0.30)" }} />
+          <div className="flex justify-center py-12 md:py-16">
+            <div className="w-16 h-px" style={{ background: "rgba(212,175,55,0.25)" }} />
           </div>
 
           {/* ──────────────────────────────────────────────────────────
                § 7  FINAL CTA — The Moment of Truth
              ────────────────────────────────────────────────────────── */}
-          <section id="final-cta" className="py-16 md:py-20 px-6">
+          <section id="final-cta" className="py-24 md:py-32 px-6">
             <div className="max-w-md mx-auto">
               <div
                 className="rounded-2xl px-8 py-16 md:py-20 text-center"
