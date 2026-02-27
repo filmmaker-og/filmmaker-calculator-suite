@@ -144,7 +144,7 @@ const Index = () => {
           {/* ──────────────────────────────────────────────────────────
                § 1  HERO
              ────────────────────────────────────────────────────────── */}
-          <section id="hero" className="snap-section relative min-h-0 pt-24 pb-16 flex flex-col justify-center">
+          <section id="hero" className="relative min-h-0 pt-24 pb-16 flex flex-col justify-center">
             {/* Ambient warmth — single atmospheric element */}
             <div
               className="absolute inset-0 pointer-events-none"
@@ -172,11 +172,16 @@ const Index = () => {
 
 
 
+          {/* Gold structural divider */}
+          <div className="flex justify-center py-8">
+            <div className="w-12 h-px" style={{ background: "rgba(212,175,55,0.30)" }} />
+          </div>
+
           {/* ──────────────────────────────────────────────────────────
                § 2  THE PROBLEM + THESIS — with "Until now." punchline
              ────────────────────────────────────────────────────────── */}
-          <section id="evidence" className="snap-section px-6 py-16 md:py-20">
-            <div className="max-w-md mx-auto">
+          <SectionFrame id="evidence" tier="standard">
+            <div>
 
               <div className="text-center mb-8">
                 <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-gold-label mb-4">The Problem</p>
@@ -234,14 +239,14 @@ const Index = () => {
               </div>
 
             </div>
-          </section>
+          </SectionFrame>
 
 
           {/* ──────────────────────────────────────────────────────────
                § 3  THE COST — escalates the pain before the pivot
              ────────────────────────────────────────────────────────── */}
-          <section id="cost" className="snap-section px-6 py-16 md:py-20">
-            <div className="max-w-md mx-auto">
+          <SectionFrame id="cost" tier="standard">
+            <div>
 
               <div className="text-center mb-8">
                 <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-gold-label mb-4">The Cost</p>
@@ -270,12 +275,19 @@ const Index = () => {
               </div>
 
             </div>
-          </section>
+          </SectionFrame>
 
           {/* ── INTERSTITIAL: Blum Quote — authority validates the pain ── */}
           <section className="py-16 md:py-20 px-6">
             <div className="max-w-md mx-auto">
-              <div className="relative bg-bg-card border border-bg-card-border overflow-hidden rounded-xl">
+              <div
+                className="relative overflow-hidden rounded-xl"
+                style={{
+                  background: 'rgba(255,255,255,0.04)',
+                  border: '1px solid rgba(212,175,55,0.20)',
+                  boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06), 0 0 30px rgba(212,175,55,0.06)',
+                }}
+              >
                 {/* Gold left accent */}
                 <div className="absolute left-0 top-0 bottom-0 w-[3px]"
                   style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.55), rgba(212,175,55,0.25), transparent)' }} />
@@ -305,7 +317,7 @@ const Index = () => {
           {/* ──────────────────────────────────────────────────────────
                § 4  THE SOLUTION — the product reveal
              ────────────────────────────────────────────────────────── */}
-          <SectionFrame id="waterfall" variant="gold">
+          <SectionFrame id="waterfall" tier="elevated">
             <div>
 
               <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-gold-label text-center mb-4">The Solution</p>
@@ -362,7 +374,7 @@ const Index = () => {
                 <div className="mt-4 border border-gold-border bg-black px-6 py-6 text-center rounded-lg"
                   style={{ boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)' }}>
                   <p className="text-[13px] tracking-[0.2em] uppercase font-semibold text-gold mb-1">Net Profits</p>
-                  <span className="font-mono text-[26px] font-bold text-white">
+                  <span className="font-mono text-[32px] font-bold text-white">
                     ${countVal.toLocaleString()}
                   </span>
                 </div>
@@ -406,7 +418,7 @@ const Index = () => {
           {/* ──────────────────────────────────────────────────────────
                § 6  WHAT YOU GET — the solution ladder
              ────────────────────────────────────────────────────────── */}
-          <SectionFrame id="offer">
+          <SectionFrame id="offer" tier="elevated">
             <div>
               <div className="text-center mb-8">
                 <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-gold-label mb-4">The Offer</p>
@@ -466,16 +478,22 @@ const Index = () => {
 
 
 
+          {/* Gold structural divider */}
+          <div className="flex justify-center py-8">
+            <div className="w-12 h-px" style={{ background: "rgba(212,175,55,0.30)" }} />
+          </div>
+
           {/* ──────────────────────────────────────────────────────────
                § 7  FINAL CTA — The Moment of Truth
              ────────────────────────────────────────────────────────── */}
-          <section id="final-cta" className="snap-section py-16 md:py-20 px-6">
+          <section id="final-cta" className="py-16 md:py-20 px-6">
             <div className="max-w-md mx-auto">
               <div
-                className="relative bg-bg-elevated overflow-hidden rounded-xl text-center px-8 py-14 md:px-10 md:py-16"
+                className="rounded-2xl px-8 py-16 md:py-20 text-center"
                 style={{
-                  border: '1px solid rgba(212,175,55,0.25)',
-                  boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06), 0 4px 20px rgba(0,0,0,0.50), 0 12px 48px rgba(0,0,0,0.30)',
+                  border: '1px solid rgba(212,175,55,0.30)',
+                  background: 'rgba(255,255,255,0.04)',
+                  boxShadow: '0 0 60px rgba(212,175,55,0.06), 0 0 120px rgba(212,175,55,0.03), inset 0 1px 0 rgba(255,255,255,0.06)',
                 }}
               >
                 <h2 className="font-bebas text-[40px] leading-[1.1] tracking-[0.08em] text-white mb-8">
