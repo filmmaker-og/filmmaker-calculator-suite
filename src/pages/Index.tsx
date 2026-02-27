@@ -126,16 +126,10 @@ const Index = () => {
   const [costVisible, setCostVisible] = useState(false);
   const evidenceRef = useRef<HTMLDivElement>(null);
   const [evidenceVisible, setEvidenceVisible] = useState(false);
-  const comparisonRef = useRef<HTMLDivElement>(null);
-  const [comparisonVisible, setComparisonVisible] = useState(false);
-  const nobodyRef = useRef<HTMLDivElement>(null);
-  const [nobodyVisible, setNobodyVisible] = useState(false);
   useEffect(() => {
     const reveals = [
       { el: costRef.current, setter: setCostVisible },
       { el: evidenceRef.current, setter: setEvidenceVisible },
-      { el: comparisonRef.current, setter: setComparisonVisible },
-      { el: nobodyRef.current, setter: setNobodyVisible },
     ];
     const observers: IntersectionObserver[] = [];
     reveals.forEach(({ el, setter }) => {
@@ -359,10 +353,8 @@ const Index = () => {
           </section>
           {/* ──────────────────────────────────────────────────────────
                § 3  MOST FILMS LOSE MONEY
-               Broken into cinematic beats — each gets its own moment.
+               One contained card: problem → evidence → punchline.
              ────────────────────────────────────────────────────────── */}
-
-          {/* § 3a — Problem statement: standalone glowing card */}
           <section id="evidence" className="py-14 md:py-20 px-6">
             <div
               ref={evidenceRef}
@@ -380,87 +372,70 @@ const Index = () => {
               </div>
 
               <div
-                className="rounded-2xl px-8 py-8 text-center"
+                className="rounded-2xl overflow-hidden"
                 style={{
-                  border: '1px solid rgba(212,175,55,0.20)',
-                  background: 'rgba(255,255,255,0.03)',
-                  boxShadow: '0 0 40px rgba(212,175,55,0.04), inset 0 1px 0 rgba(255,255,255,0.06)',
+                  border: '1px solid rgba(212,175,55,0.15)',
+                  background: 'rgba(255,255,255,0.02)',
+                  boxShadow: '0 0 40px rgba(212,175,55,0.03), inset 0 1px 0 rgba(255,255,255,0.05)',
                 }}
               >
-                <p className="font-bebas text-[24px] tracking-[0.04em] leading-tight text-white mb-4">
-                  Your film can make money{"\u00A0"}<span className="text-gold">&</span>{"\u00A0"}you still lose.
-                </p>
-                <p className="text-[15px] text-ink-secondary leading-relaxed max-w-[300px] mx-auto">
-                  Not because it didn{"\u2019"}t recoup.{" "}
-                  <span className="text-ink-body font-medium">Because of how the deal was structured.</span>
-                </p>
-              </div>
-            </div>
-          </section>
+                {/* Problem statement */}
+                <div className="px-7 pt-7 pb-6 text-center">
+                  <p className="font-bebas text-[24px] tracking-[0.04em] leading-tight text-white mb-3">
+                    Your film can make money{"\u00A0"}<span className="text-gold">&</span>{"\u00A0"}you still lose.
+                  </p>
+                  <p className="text-[15px] text-ink-secondary leading-relaxed max-w-[300px] mx-auto">
+                    Not because it didn{"\u2019"}t recoup.{" "}
+                    <span className="text-ink-body font-medium">Because of how the deal was structured.</span>
+                  </p>
+                </div>
 
-          {/* § 3b — Asset class comparison: open-air, staggered reveal */}
-          <section className="py-10 md:py-14 px-6">
-            <div ref={comparisonRef} className="max-w-md mx-auto">
-              <p
-                className="font-mono text-[12px] tracking-[0.12em] uppercase text-ink-secondary text-center mb-6"
-                style={{
-                  opacity: comparisonVisible ? 1 : 0,
-                  transition: 'opacity 500ms ease-out',
-                }}
-              >
-                Every other asset class has infrastructure
-              </p>
+                {/* Gold divider */}
+                <div className="mx-7 h-[1px]" style={{ background: 'linear-gradient(90deg, transparent, rgba(212,175,55,0.30), transparent)' }} />
 
-              {[
-                { asset: "Real Estate", tools: "Comps \u00B7 Cap rates \u00B7 Appraisal models" },
-                { asset: "Private Equity", tools: "Carry structures \u00B7 IRR frameworks" },
-                { asset: "Venture Capital", tools: "Term sheets \u00B7 Valuation benchmarks" },
-              ].map((row, i) => (
+                {/* Asset class comparison */}
+                <div className="px-7 pt-5 pb-3">
+                  <p className="font-mono text-[11px] tracking-[0.15em] uppercase text-ink-secondary mb-4">
+                    Every other asset class has infrastructure
+                  </p>
+
+                  {[
+                    { asset: "Real Estate", tools: "Comps \u00B7 Cap rates \u00B7 Appraisals" },
+                    { asset: "Private Equity", tools: "Carry structures \u00B7 IRR models" },
+                    { asset: "Venture Capital", tools: "Term sheets \u00B7 Valuations" },
+                  ].map((row) => (
+                    <div key={row.asset} className="flex items-baseline justify-between py-3 border-t border-bg-card-rule">
+                      <span className="text-[14px] font-semibold text-ink-body">{row.asset}</span>
+                      <span className="text-[12px] text-ink-secondary text-right ml-4">{row.tools}</span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Film row — the void, promoted */}
                 <div
-                  key={row.asset}
-                  className="flex items-baseline justify-between py-3.5 border-t border-bg-card-rule"
+                  className="mx-5 mb-5 rounded-lg px-5 py-3.5 flex items-baseline justify-between"
                   style={{
-                    opacity: comparisonVisible ? 1 : 0,
-                    transform: comparisonVisible ? 'translateX(0)' : 'translateX(-12px)',
-                    transition: 'opacity 500ms ease-out, transform 500ms ease-out',
-                    transitionDelay: `${(i + 1) * 150}ms`,
+                    background: 'rgba(212,175,55,0.05)',
+                    border: '1px solid rgba(212,175,55,0.15)',
                   }}
                 >
-                  <span className="text-[15px] font-semibold text-ink-body">{row.asset}</span>
-                  <span className="text-[13px] text-ink-secondary text-right ml-4">{row.tools}</span>
+                  <span className="text-[15px] font-bold text-white">Film</span>
+                  <span className="font-mono text-[14px] text-gold">{"\u2014"}</span>
                 </div>
-              ))}
 
-              {/* Film row — the void, promoted */}
-              <div
-                className="mt-4 border border-gold-border rounded-lg px-5 py-4 flex items-baseline justify-between"
-                style={{
-                  background: 'rgba(212,175,55,0.04)',
-                  opacity: comparisonVisible ? 1 : 0,
-                  transform: comparisonVisible ? 'translateX(0)' : 'translateX(-12px)',
-                  transition: 'opacity 500ms ease-out, transform 500ms ease-out',
-                  transitionDelay: '600ms',
-                }}
-              >
-                <span className="text-[16px] font-bold text-white">Film</span>
-                <span className="font-mono text-[14px] text-gold">{"\u2014"}</span>
+                {/* Punchline */}
+                <div
+                  className="px-7 py-6 text-center"
+                  style={{
+                    borderTop: '1px solid rgba(255,255,255,0.06)',
+                    background: 'rgba(255,255,255,0.02)',
+                  }}
+                >
+                  <p className="font-bebas text-[22px] tracking-[0.06em] text-gold leading-tight">
+                    Nobody teaches the business of film.
+                  </p>
+                </div>
               </div>
-            </div>
-          </section>
-
-          {/* § 3c — "Nobody teaches..." — own interstitial moment */}
-          <section className="py-12 md:py-16 px-6">
-            <div
-              ref={nobodyRef}
-              className="text-center"
-              style={{
-                opacity: nobodyVisible ? 1 : 0,
-                transition: 'opacity 600ms ease-out',
-              }}
-            >
-              <p className="font-bebas text-[36px] tracking-[0.06em] text-gold leading-tight">
-                Nobody teaches the business of film.
-              </p>
             </div>
           </section>
           {/* ── INTERSTITIAL: Until Now — the pivot ── */}
