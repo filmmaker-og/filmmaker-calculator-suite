@@ -5,9 +5,6 @@ import { useHaptics } from "@/hooks/use-haptics";
 import LeadCaptureModal from "@/components/LeadCaptureModal";
 import { cn } from "@/lib/utils";
 import SectionFrame from "@/components/SectionFrame";
-
-
-
 /* ═══════════════════════════════════════════════════════════════════
    WATERFALL TIERS — proportional bars ($3M cascade)
    ═══════════════════════════════════════════════════════════════════ */
@@ -20,21 +17,16 @@ const waterfallTiers = [
   { name: "Equity Recoupment", amount: "\u2212$1,440,000",   pct: 13.9,  barColor: "rgba(212,175,55,0.35)",  isFinal: false },
   { name: "Net Profits",       amount: "$417,500",       pct: 13.9,  barColor: "rgba(212,175,55,0.95)",  isFinal: true  },
 ];
-
-
 /* ═══════════════════════════════════════════════════════════════════
    MAIN COMPONENT
    ═══════════════════════════════════════════════════════════════════ */
 const Index = () => {
   const navigate = useNavigate();
   const haptics = useHaptics();
-
-
   // Lead capture gate — magic link auth
   const [showLeadCapture, setShowLeadCapture] = useState(false);
   const [pendingDestination, setPendingDestination] = useState<string | null>(null);
   const [hasSession, setHasSession] = useState(false);
-
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session?.user) setHasSession(true);
@@ -44,7 +36,6 @@ const Index = () => {
     });
     return () => subscription.unsubscribe();
   }, []);
-
   const gatedNavigate = useCallback((destination: string) => {
     if (!hasSession) {
       setPendingDestination(destination);
@@ -53,17 +44,26 @@ const Index = () => {
       navigate(destination);
     }
   }, [hasSession, navigate]);
-
-
-  // Waterfall bar animation — fires on load with a brief delay
-  // so the user has time to read the headline before bars animate
+  // Waterfall bar animation — triggers when waterfall scrolls into view
+  // IntersectionObserver fires once, then 600ms delay lets user read headline
   const [barsRevealed, setBarsRevealed] = useState(false);
   const waterBarRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    const delay = setTimeout(() => setBarsRevealed(true), 600);
-    return () => clearTimeout(delay);
+    const el = waterBarRef.current;
+    if (!el) return;
+    let delay: ReturnType<typeof setTimeout>;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          delay = setTimeout(() => setBarsRevealed(true), 600);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.3 }
+    );
+    observer.observe(el);
+    return () => { observer.disconnect(); clearTimeout(delay); };
   }, []);
-
   // Net Profits countup
   const [countVal, setCountVal] = useState(0);
   useEffect(() => {
@@ -82,7 +82,6 @@ const Index = () => {
     }, 3400);
     return () => clearTimeout(delay);
   }, [barsRevealed]);
-
   // Corridor split countup (starts after main counter finishes)
   const [producerVal, setProducerVal] = useState(0);
   const [investorVal, setInvestorVal] = useState(0);
@@ -104,12 +103,27 @@ const Index = () => {
     }, 6000);
     return () => clearTimeout(delay);
   }, [barsRevealed]);
-
   const handleStartClick    = () => { haptics.medium(); gatedNavigate("/calculator?tab=budget"); };
-
+  // "UNTIL NOW." fade-in on scroll — dramatic reveal for the pivot line
+  const untilNowRef = useRef<HTMLDivElement>(null);
+  const [untilNowVisible, setUntilNowVisible] = useState(false);
+  useEffect(() => {
+    const el = untilNowRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setUntilNowVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.5 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
   return (
     <>
-
       {/* Lead capture modal — magic link auth */}
       <LeadCaptureModal
         isOpen={showLeadCapture}
@@ -120,12 +134,9 @@ const Index = () => {
           navigate(pendingDestination || "/calculator?tab=budget");
         }}
       />
-
       <div className="min-h-screen flex flex-col relative overflow-hidden bg-black grain-overlay">
-
         {/* ═══════ LANDING PAGE ═══════ */}
         <main aria-label="Film Finance Simulator" className="flex-1 flex flex-col" style={{ paddingBottom: "env(safe-area-inset-bottom)" }}>
-
           {/* ──────────────────────────────────────────────────────────
                § 1  HERO + WATERFALL DEMO
                The visualization IS the pitch. No preamble.
@@ -138,18 +149,25 @@ const Index = () => {
                 background: "radial-gradient(ellipse 60% 50% at 50% 25%, rgba(212,175,55,0.06) 0%, transparent 100%)",
               }}
             />
-
-            <div className="relative px-6 max-w-md mx-auto">
+            <div className="relative px-4 max-w-md mx-auto">
+              {/* Hero card — visual containment for headline + visualization */}
+              <div
+                className="rounded-2xl px-2 pt-6 pb-5"
+                style={{
+                  border: '1px solid rgba(212,175,55,0.10)',
+                  background: 'rgba(255,255,255,0.02)',
+                  boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.04), 0 0 40px rgba(212,175,55,0.03)',
+                }}
+              >
               {/* Headline */}
-              <div className="text-center mb-6">
+              <div className="text-center mb-6 px-4">
                 <h1 className="font-bebas text-[clamp(3.2rem,11vw,4.8rem)] leading-[0.95] tracking-[0.02em] text-gold mb-6">
                   SEE WHERE EVERY DOLLAR <span className="text-white">GOES</span>
                 </h1>
-                <p className="text-ink-secondary text-[16px] leading-[1.7] tracking-[0.02em] font-medium max-w-[340px] mx-auto">
+                <p className="text-ink-secondary text-[18px] leading-[1.7] tracking-[0.02em] font-medium max-w-[340px] mx-auto">
                   Democratizing the business of film.
                 </p>
               </div>
-
               {/* ── Waterfall Visualization ── */}
               <div ref={waterBarRef}>
                 {/* Waterfall rows — unified financial table */}
@@ -196,7 +214,6 @@ const Index = () => {
                     </div>
                   ))}
                 </div>
-
                 {/* Net Profits */}
                 <div className="mt-4 border border-gold-border bg-black px-6 py-6 text-center rounded-lg"
                   style={{ boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)' }}>
@@ -205,7 +222,6 @@ const Index = () => {
                     ${countVal.toLocaleString()}
                   </span>
                 </div>
-
                 {/* Two corridor boxes */}
                 <div className="grid grid-cols-2 gap-4 mt-4">
                   <div className="border border-gold-border bg-black px-4 py-6 text-center rounded-lg"
@@ -227,9 +243,9 @@ const Index = () => {
                   Hypothetical $1.8M budget{"\u00A0"}{"\u2022"}{"\u00A0"}$3M acquisition{"\u00A0"}{"\u2022"}{"\u00A0"}50/50 net profit split
                 </p>
               </div>
-
+              </div>{/* /hero card */}
               {/* CTA — earns the click after the visualization */}
-              <div className="mt-12 text-center">
+              <div className="mt-10 text-center px-2">
                 <div className="w-full max-w-[280px] mx-auto">
                   <button onClick={handleStartClick}
                     className="w-full h-14 btn-cta-primary animate-cta-glow-pulse">
@@ -239,80 +255,72 @@ const Index = () => {
               </div>
             </div>
           </section>
-
-
           {/* ──────────────────────────────────────────────────────────
                § 2  THE REALITY — Closed Doors
                What it costs to learn this elsewhere.
              ────────────────────────────────────────────────────────── */}
           <SectionFrame id="cost" tier="minimal">
             <div>
-
               <div className="text-center mb-5">
                 <h2 className="font-bebas text-[40px] tracking-[0.08em] text-white">
                   THE REALITY
                 </h2>
               </div>
-
               <div className="grid grid-cols-2 gap-3">
-
                 {/* Row 1 */}
                 <div className="border border-bg-card-border bg-bg-card rounded-xl p-4 flex flex-col">
-                  <span className="font-mono text-[20px] font-bold text-gold">$800/hr</span>
-                  <p className="font-bebas text-[20px] tracking-[0.08em] uppercase leading-tight text-white mt-1">Entertainment Attorney</p>
+                  <div className="min-h-[68px]">
+                    <span className="font-mono text-[20px] font-bold text-gold">$800/hr</span>
+                    <p className="font-bebas text-[20px] tracking-[0.08em] uppercase leading-tight text-white mt-1">Entertainment Attorney</p>
+                  </div>
                   <p className="text-[14px] leading-[1.5] text-ink-secondary mt-auto pt-3">If they{"\u2019"}ll take the meeting.</p>
                 </div>
-
                 <div className="border border-bg-card-border bg-bg-card rounded-xl p-4 flex flex-col">
-                  <span className="font-mono text-[20px] font-bold text-gold">$5K+</span>
-                  <p className="font-bebas text-[20px] tracking-[0.08em] uppercase leading-tight text-white mt-1">Producing Consultant</p>
+                  <div className="min-h-[68px]">
+                    <span className="font-mono text-[20px] font-bold text-gold">$5K+</span>
+                    <p className="font-bebas text-[20px] tracking-[0.08em] uppercase leading-tight text-white mt-1">Producing Consultant</p>
+                  </div>
                   <p className="text-[14px] leading-[1.5] text-ink-secondary mt-auto pt-3">If you can afford one.</p>
                 </div>
-
                 {/* Row 2 */}
                 <div className="border border-bg-card-border bg-bg-card rounded-xl p-4 flex flex-col">
-                  <span className="font-mono text-[20px] font-bold text-gold">$200K</span>
-                  <p className="font-bebas text-[20px] tracking-[0.08em] uppercase leading-tight text-white mt-1">Film School</p>
+                  <div className="min-h-[68px]">
+                    <span className="font-mono text-[20px] font-bold text-gold">$200K</span>
+                    <p className="font-bebas text-[20px] tracking-[0.08em] uppercase leading-tight text-white mt-1">Film School</p>
+                  </div>
                   <p className="text-[14px] leading-[1.5] text-ink-secondary mt-auto pt-3">Four years you don{"\u2019"}t have.</p>
                 </div>
-
                 <div className="border border-bg-card-border bg-bg-card rounded-xl p-4 flex flex-col">
-                  <span className="font-mono text-[20px] font-bold text-gold">Your Film</span>
-                  <p className="font-bebas text-[20px] tracking-[0.08em] uppercase leading-tight text-white mt-1">Trial & Error</p>
+                  <div className="min-h-[68px]">
+                    <span className="font-mono text-[20px] font-bold text-gold">Your Film</span>
+                    <p className="font-bebas text-[20px] tracking-[0.08em] uppercase leading-tight text-white mt-1">Trial & Error</p>
+                  </div>
                   <p className="text-[14px] leading-[1.5] text-ink-secondary mt-auto pt-3">No second chances.</p>
                 </div>
-
               </div>
-
             </div>
           </SectionFrame>
-
-
           {/* ──────────────────────────────────────────────────────────
                § 3  THE PROBLEM + THESIS
                Why this matters — the intellectual resolution.
              ────────────────────────────────────────────────────────── */}
           <SectionFrame id="evidence" tier="minimal">
             <div>
-
               <div className="text-center mb-5">
                 <h2 className="font-bebas text-[40px] tracking-[0.08em] leading-[0.95] text-gold">
                   MOST FILMS LOSE <span className="text-white">MONEY.</span>
                 </h2>
               </div>
-
               <div className="relative bg-bg-card border border-bg-card-border rounded-xl">
                 {/* Gold left accent */}
                 <div className="absolute left-0 top-0 bottom-0 w-[3px]"
                   style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.55), rgba(212,175,55,0.25), transparent)' }} />
                 <div className="p-8 md:p-10">
-
                   {/* — Problem narrative — */}
                   <p className="font-bebas text-[26px] tracking-[0.06em] leading-tight mb-6">
                     <span className="text-gold">YOUR FILM CAN MAKE MONEY</span><br />
                     <span className="text-white">AND YOU STILL LOSE.</span>
                   </p>
-
                   <div className="space-y-4 mb-6">
                     <p className="text-ink-secondary text-[16px] leading-relaxed">
                       Not because it didn{"\u2019"}t recoup.
@@ -321,14 +329,11 @@ const Index = () => {
                       Because of how the deal was structured.
                     </p>
                   </div>
-
                   {/* Gold divider */}
                   <div className="h-[1px] w-12 bg-gold-accent mb-6" />
-
                   <p className="font-sans text-[20px] font-semibold tracking-[0.02em] text-ink-body mb-8">
                     Most filmmakers learn it too late.
                   </p>
-
                   {/* — Thesis: alternative asset class — */}
                   <div className="border-t border-bg-card-rule pt-6 space-y-4">
                     {[
@@ -345,24 +350,22 @@ const Index = () => {
                       Nobody teaches the business of film.
                     </p>
                   </div>
-
                 </div>
               </div>
-
             </div>
           </SectionFrame>
-
-
           {/* ── INTERSTITIAL: Until Now — the pivot ── */}
           <section className="py-12 md:py-16 px-6">
-            <div className="text-center">
+            <div
+              ref={untilNowRef}
+              className="text-center transition-opacity duration-[600ms] ease-out"
+              style={{ opacity: untilNowVisible ? 1 : 0 }}
+            >
               <p className="font-bebas text-[48px] tracking-[0.08em] text-white">
                 UNTIL NOW.
               </p>
             </div>
           </section>
-
-
           {/* ──────────────────────────────────────────────────────────
                § 4  FINAL CTA — The Close
              ────────────────────────────────────────────────────────── */}
@@ -386,7 +389,6 @@ const Index = () => {
               </div>
             </div>
           </section>
-
           {/* ── FOOTER ── */}
           <footer className="py-8 px-6 max-w-md mx-auto">
             <p className="text-ink-ghost text-[12px] tracking-wide leading-relaxed text-center">
@@ -399,5 +401,4 @@ const Index = () => {
     </>
   );
 };
-
 export default Index;
