@@ -339,39 +339,28 @@ const Index = () => {
             </div>
           </section>
           {/* ──────────────────────────────────────────────────────────
-               § 3  BRIDGE — single statement, earns the close
-             ────────────────────────────────────────────────────────── */}
-          <section className="py-12 md:py-16 px-6">
-            <div
-              ref={bridgeRef}
-              className="max-w-md mx-auto text-center"
-              style={{
-                opacity: bridgeVisible ? 1 : 0,
-                transform: bridgeVisible ? 'translateY(0)' : 'translateY(12px)',
-                transition: 'opacity 700ms ease-out, transform 700ms ease-out',
-              }}
-            >
-              <p className="font-bebas text-[40px] tracking-[0.06em] text-gold leading-tight">
-                We built the framework.
-              </p>
-              <p className="font-bebas text-[40px] tracking-[0.06em] text-white leading-tight">
-                You run the numbers.
-              </p>
-            </div>
-          </section>
-          {/* ──────────────────────────────────────────────────────────
-               § 4  FINAL CTA — The Close
+               § 3  THE CLOSE — setup → payoff → action
              ────────────────────────────────────────────────────────── */}
           <section id="final-cta" className="py-14 md:py-20 px-6">
             <div className="max-w-md mx-auto">
               <div
+                ref={bridgeRef}
                 className="rounded-2xl px-8 py-10 md:py-14 text-center"
                 style={{
                   border: '1px solid rgba(212,175,55,0.30)',
                   background: 'rgba(255,255,255,0.04)',
                   boxShadow: '0 0 60px rgba(212,175,55,0.06), 0 0 120px rgba(212,175,55,0.03), inset 0 1px 0 rgba(255,255,255,0.06)',
+                  opacity: bridgeVisible ? 1 : 0,
+                  transform: bridgeVisible ? 'translateY(0)' : 'translateY(16px)',
+                  transition: 'opacity 700ms ease-out, transform 700ms ease-out',
                 }}
               >
+                <p className="font-bebas text-[28px] tracking-[0.06em] text-gold leading-tight">
+                  We built the framework.
+                </p>
+                <p className="font-bebas text-[28px] tracking-[0.06em] text-white leading-tight mb-6">
+                  You run the numbers.
+                </p>
                 <h2 className="font-bebas text-[40px] leading-[1.1] tracking-[0.08em] text-gold mb-6">
                   YOUR INVESTORS WILL{"\u00A0"}ASK HOW THE MONEY FLOWS <span className="text-white">BACK.</span>
                 </h2>
