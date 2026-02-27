@@ -4,7 +4,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { useHaptics } from "@/hooks/use-haptics";
 import LeadCaptureModal from "@/components/LeadCaptureModal";
 import { cn } from "@/lib/utils";
-import SectionFrame from "@/components/SectionFrame";
 /* ═══════════════════════════════════════════════════════════════════
    WATERFALL TIERS — proportional bars ($3M cascade)
    ═══════════════════════════════════════════════════════════════════ */
@@ -121,6 +120,33 @@ const Index = () => {
     );
     observer.observe(el);
     return () => observer.disconnect();
+  }, []);
+  // Scroll-triggered reveals — earned entrances for mid-page sections
+  const costRef = useRef<HTMLDivElement>(null);
+  const [costVisible, setCostVisible] = useState(false);
+  const evidenceRef = useRef<HTMLDivElement>(null);
+  const [evidenceVisible, setEvidenceVisible] = useState(false);
+  useEffect(() => {
+    const reveals = [
+      { el: costRef.current, setter: setCostVisible },
+      { el: evidenceRef.current, setter: setEvidenceVisible },
+    ];
+    const observers: IntersectionObserver[] = [];
+    reveals.forEach(({ el, setter }) => {
+      if (!el) return;
+      const obs = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setter(true);
+            obs.disconnect();
+          }
+        },
+        { threshold: 0.3 }
+      );
+      obs.observe(el);
+      observers.push(obs);
+    });
+    return () => observers.forEach(o => o.disconnect());
   }, []);
   return (
     <>
@@ -256,125 +282,162 @@ const Index = () => {
             </div>
           </section>
           {/* ──────────────────────────────────────────────────────────
-               § 2  THE REALITY — Cost of Access
-               What it costs to learn this elsewhere. Ledger format.
+               § 2  THE COST OF ACCESS
+               What it costs to learn this elsewhere. Premium ledger.
              ────────────────────────────────────────────────────────── */}
-          <SectionFrame id="cost" tier="minimal">
-            <div>
-              <div className="text-center mb-5">
+          <section id="cost" className="relative py-14 md:py-20 px-6">
+            {/* Ambient warmth */}
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                background: "radial-gradient(ellipse 70% 50% at 50% 40%, rgba(212,175,55,0.04) 0%, transparent 100%)",
+              }}
+            />
+            <div
+              ref={costRef}
+              className="relative max-w-md mx-auto"
+              style={{
+                opacity: costVisible ? 1 : 0,
+                transform: costVisible ? 'translateY(0)' : 'translateY(20px)',
+                transition: 'opacity 700ms ease-out, transform 700ms ease-out',
+              }}
+            >
+              <div className="text-center mb-8">
                 <h2 className="font-bebas text-[40px] tracking-[0.08em] text-white">
                   THE COST OF ACCESS
                 </h2>
               </div>
 
-              {/* Cost ledger — mirrors waterfall table visual language */}
               <div className="border border-gold-border bg-black overflow-hidden rounded-xl"
                 style={{ boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)' }}>
 
-                {/* Row 1 */}
-                <div className="px-5 py-4 flex gap-4">
+                <div className="px-6 py-5 flex gap-4">
                   <span className="font-mono text-[18px] font-bold text-gold w-[88px] shrink-0 tabular-nums">$800/hr</span>
                   <div className="min-w-0">
                     <p className="font-bebas text-[18px] tracking-[0.06em] text-white leading-tight">Entertainment Attorney</p>
-                    <p className="text-[13px] text-ink-secondary mt-0.5">Retainer required</p>
+                    <p className="text-[13px] text-ink-secondary mt-1">Retainer required</p>
                   </div>
                 </div>
 
-                {/* Row 2 */}
-                <div className="px-5 py-4 flex gap-4 border-t border-bg-card-rule">
+                <div className="px-6 py-5 flex gap-4 border-t border-bg-card-rule">
                   <span className="font-mono text-[18px] font-bold text-gold w-[88px] shrink-0 tabular-nums">$5,000+</span>
                   <div className="min-w-0">
                     <p className="font-bebas text-[18px] tracking-[0.06em] text-white leading-tight">Producing Consultant</p>
-                    <p className="text-[13px] text-ink-secondary mt-0.5">If available</p>
+                    <p className="text-[13px] text-ink-secondary mt-1">If available</p>
                   </div>
                 </div>
 
-                {/* Row 3 */}
-                <div className="px-5 py-4 flex gap-4 border-t border-bg-card-rule">
+                <div className="px-6 py-5 flex gap-4 border-t border-bg-card-rule">
                   <span className="font-mono text-[18px] font-bold text-gold w-[88px] shrink-0 tabular-nums">$200K</span>
                   <div className="min-w-0">
                     <p className="font-bebas text-[18px] tracking-[0.06em] text-white leading-tight">Film School</p>
-                    <p className="text-[13px] text-ink-secondary mt-0.5">3{"\u2013"}4 years</p>
+                    <p className="text-[13px] text-ink-secondary mt-1">3{"\u2013"}4 years</p>
                   </div>
                 </div>
 
-                {/* Row 4 — the gut punch */}
-                <div className="px-5 py-4 flex gap-4 border-t border-bg-card-rule"
+                <div className="px-6 py-5 flex gap-4 border-t border-bg-card-rule"
                   style={{ background: 'rgba(255,255,255,0.02)' }}>
                   <span className="font-mono text-[18px] font-bold text-gold-label w-[88px] shrink-0">{"\u2014"}</span>
                   <div className="min-w-0">
                     <p className="font-bebas text-[18px] tracking-[0.06em] text-white leading-tight">Trial & Error</p>
-                    <p className="text-[13px] text-ink-secondary mt-0.5">Non-recoverable</p>
+                    <p className="text-[13px] text-ink-secondary mt-1">Non-recoverable</p>
                   </div>
                 </div>
 
               </div>
+
+              <p className="text-center text-ink-secondary text-[15px] leading-relaxed mt-6 max-w-[300px] mx-auto">
+                You shouldn{"\u2019"}t need <span className="text-white font-medium">$200K</span> to understand your own deal.
+              </p>
             </div>
-          </SectionFrame>
+          </section>
           {/* ──────────────────────────────────────────────────────────
-               § 3  MOST FILMS LOSE MONEY — Asset Class Comparison
-               Every serious asset class has infrastructure. Film doesn't.
+               § 3  MOST FILMS LOSE MONEY
+               One contained card: problem → evidence → punchline.
              ────────────────────────────────────────────────────────── */}
-          <SectionFrame id="evidence" tier="minimal">
-            <div>
-              <div className="text-center mb-5">
+          <section id="evidence" className="py-14 md:py-20 px-6">
+            <div
+              ref={evidenceRef}
+              className="max-w-md mx-auto"
+              style={{
+                opacity: evidenceVisible ? 1 : 0,
+                transform: evidenceVisible ? 'translateY(0)' : 'translateY(20px)',
+                transition: 'opacity 700ms ease-out, transform 700ms ease-out',
+              }}
+            >
+              <div className="text-center mb-8">
                 <h2 className="font-bebas text-[40px] tracking-[0.08em] leading-[0.95] text-gold">
                   MOST FILMS LOSE <span className="text-white">MONEY.</span>
                 </h2>
               </div>
 
-              <div className="border border-gold-border bg-black rounded-xl overflow-hidden"
-                style={{ boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)' }}>
-
+              <div
+                className="rounded-2xl overflow-hidden"
+                style={{
+                  border: '1px solid rgba(212,175,55,0.15)',
+                  background: 'rgba(255,255,255,0.02)',
+                  boxShadow: '0 0 40px rgba(212,175,55,0.03), inset 0 1px 0 rgba(255,255,255,0.05)',
+                }}
+              >
                 {/* Problem statement */}
-                <div className="px-6 pt-6 pb-5">
-                  <p className="font-bebas text-[22px] tracking-[0.04em] leading-tight text-white mb-3">
-                    Your film can make money{"\u00A0"}<span className="text-gold">&</span> you still lose.
+                <div className="px-7 pt-7 pb-6 text-center">
+                  <p className="font-bebas text-[24px] tracking-[0.04em] leading-tight text-white mb-3">
+                    Your film can make money{"\u00A0"}<span className="text-gold">&</span>{"\u00A0"}you still lose.
                   </p>
-                  <p className="text-[15px] text-ink-secondary leading-relaxed">
+                  <p className="text-[15px] text-ink-secondary leading-relaxed max-w-[300px] mx-auto">
                     Not because it didn{"\u2019"}t recoup.{" "}
                     <span className="text-ink-body font-medium">Because of how the deal was structured.</span>
                   </p>
                 </div>
 
-                {/* Gold rule */}
-                <div className="mx-6 h-[1px] bg-gold-accent" />
+                {/* Gold divider */}
+                <div className="mx-7 h-[1px]" style={{ background: 'linear-gradient(90deg, transparent, rgba(212,175,55,0.30), transparent)' }} />
 
-                {/* Asset class comparison — structured rows */}
-                <div className="px-6 pt-5 pb-2">
+                {/* Asset class comparison */}
+                <div className="px-7 pt-5 pb-3">
                   <p className="font-mono text-[11px] tracking-[0.15em] uppercase text-ink-secondary mb-4">
                     Every other asset class has infrastructure
                   </p>
 
                   {[
-                    { asset: "Real Estate", tools: "Comps \u00B7 Cap rates \u00B7 Appraisal models" },
-                    { asset: "Private Equity", tools: "Carry structures \u00B7 IRR frameworks" },
-                    { asset: "Venture Capital", tools: "Term sheets \u00B7 Valuation benchmarks" },
+                    { asset: "Real Estate", tools: "Comps \u00B7 Cap rates \u00B7 Appraisals" },
+                    { asset: "Private Equity", tools: "Carry structures \u00B7 IRR models" },
+                    { asset: "Venture Capital", tools: "Term sheets \u00B7 Valuations" },
                   ].map((row) => (
-                    <div key={row.asset} className="flex items-baseline justify-between py-2.5 border-t border-bg-card-rule">
-                      <span className="text-[15px] font-semibold text-ink-body">{row.asset}</span>
-                      <span className="text-[13px] text-ink-secondary text-right ml-4">{row.tools}</span>
+                    <div key={row.asset} className="flex items-baseline justify-between py-3 border-t border-bg-card-rule">
+                      <span className="text-[14px] font-semibold text-ink-body">{row.asset}</span>
+                      <span className="text-[12px] text-ink-secondary text-right ml-4">{row.tools}</span>
                     </div>
                   ))}
+                </div>
 
-                  {/* Film row — the void */}
-                  <div className="flex items-baseline justify-between py-2.5 border-t border-bg-card-rule">
-                    <span className="text-[15px] font-semibold text-white">Film</span>
-                    <span className="font-mono text-[13px] text-gold-label">{"\u2014"}</span>
-                  </div>
+                {/* Film row — the void, promoted */}
+                <div
+                  className="mx-5 mb-5 rounded-lg px-5 py-3.5 flex items-baseline justify-between"
+                  style={{
+                    background: 'rgba(212,175,55,0.05)',
+                    border: '1px solid rgba(212,175,55,0.15)',
+                  }}
+                >
+                  <span className="text-[15px] font-bold text-white">Film</span>
+                  <span className="font-mono text-[14px] text-gold">{"\u2014"}</span>
                 </div>
 
                 {/* Punchline */}
-                <div className="px-6 pt-4 pb-6 border-t border-bg-card-rule"
-                  style={{ background: 'rgba(255,255,255,0.02)' }}>
-                  <p className="font-bebas text-[24px] tracking-[0.06em] text-gold leading-tight">
+                <div
+                  className="px-7 py-6 text-center"
+                  style={{
+                    borderTop: '1px solid rgba(255,255,255,0.06)',
+                    background: 'rgba(255,255,255,0.02)',
+                  }}
+                >
+                  <p className="font-bebas text-[22px] tracking-[0.06em] text-gold leading-tight">
                     Nobody teaches the business of film.
                   </p>
                 </div>
-
               </div>
             </div>
-          </SectionFrame>
+          </section>
           {/* ── INTERSTITIAL: Until Now — the pivot ── */}
           <section className="py-12 md:py-16 px-6">
             <div
