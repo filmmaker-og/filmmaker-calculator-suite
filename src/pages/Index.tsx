@@ -21,13 +21,13 @@ const closedDoors = [
    WATERFALL TIERS — proportional bars ($3M cascade)
    ═══════════════════════════════════════════════════════════════════ */
 const waterfallTiers = [
-  { name: "Acquisition Price", amount: "$3,000,000",    pct: 100.0, barColor: "rgba(212,175,55,0.80)",  isFinal: false },
-  { name: "CAM Fees",          amount: "\u2212$22,500",      pct: 99.3,  barColor: "rgba(180,85,55,0.70)",   isFinal: false },
-  { name: "Sales Agent",       amount: "\u2212$450,000",     pct: 84.3,  barColor: "rgba(180,85,55,0.70)",   isFinal: false },
-  { name: "Senior Debt",       amount: "\u2212$440,000",     pct: 69.6,  barColor: "rgba(180,85,55,0.70)",   isFinal: false },
-  { name: "Mezzanine",         amount: "\u2212$230,000",     pct: 61.9,  barColor: "rgba(180,85,55,0.70)",   isFinal: false },
-  { name: "Equity Recoupment", amount: "\u2212$1,440,000",   pct: 13.9,  barColor: "rgba(180,85,55,0.70)",   isFinal: false },
-  { name: "Net Profits",       amount: "$417,500",       pct: 13.9,  barColor: "rgba(212,175,55,0.90)",  isFinal: true  },
+  { name: "Acquisition Price", amount: "$3,000,000",    pct: 100.0, barColor: "rgba(212,175,55,0.90)",  isFinal: false },
+  { name: "CAM Fees",          amount: "\u2212$22,500",      pct: 99.3,  barColor: "rgba(212,175,55,0.75)",  isFinal: false },
+  { name: "Sales Agent",       amount: "\u2212$450,000",     pct: 84.3,  barColor: "rgba(212,175,55,0.65)",  isFinal: false },
+  { name: "Senior Debt",       amount: "\u2212$440,000",     pct: 69.6,  barColor: "rgba(212,175,55,0.55)",  isFinal: false },
+  { name: "Mezzanine",         amount: "\u2212$230,000",     pct: 61.9,  barColor: "rgba(212,175,55,0.45)",  isFinal: false },
+  { name: "Equity Recoupment", amount: "\u2212$1,440,000",   pct: 13.9,  barColor: "rgba(212,175,55,0.35)",  isFinal: false },
+  { name: "Net Profits",       amount: "$417,500",       pct: 13.9,  barColor: "rgba(212,175,55,0.95)",  isFinal: true  },
 ];
 
 
@@ -88,7 +88,7 @@ const Index = () => {
         if (t < 1) requestAnimationFrame(step);
       };
       requestAnimationFrame(step);
-    }, 2200);
+    }, 3400);
     return () => clearTimeout(delay);
   }, [barsRevealed]);
 
@@ -110,7 +110,7 @@ const Index = () => {
         if (t < 1) requestAnimationFrame(step);
       };
       requestAnimationFrame(step);
-    }, 4600);
+    }, 6000);
     return () => clearTimeout(delay);
   }, [barsRevealed]);
 
@@ -151,10 +151,10 @@ const Index = () => {
             <div className="relative px-6 max-w-md mx-auto">
               {/* Headline */}
               <div className="text-center mb-10">
-                <h1 className="font-bebas text-[clamp(3.2rem,11vw,4.8rem)] leading-[0.95] tracking-[0.02em] text-white mb-6">
-                  SEE WHERE EVERY<br /><span className="text-gold">DOLLAR GOES</span>
+                <h1 className="font-bebas text-[clamp(3.2rem,11vw,4.8rem)] leading-[0.95] tracking-[0.02em] text-gold mb-6">
+                  SEE WHERE EVERY DOLLAR<br /><span className="text-white">GOES</span>
                 </h1>
-                <p className="text-ink-secondary text-[17px] leading-[1.7] tracking-[0.02em] font-medium max-w-[340px] mx-auto">
+                <p className="text-ink-secondary text-[16px] leading-[1.7] tracking-[0.02em] font-medium max-w-[340px] mx-auto">
                   Model your deal before you sign it. Free. No account to start.
                 </p>
               </div>
@@ -174,17 +174,19 @@ const Index = () => {
                     >
                       <div className="flex justify-between items-baseline mb-2">
                         <div className="flex items-baseline gap-2">
-                          <span className="font-mono text-[13px] text-ink-secondary tabular-nums">
+                          <span className="font-mono text-[12px] text-ink-secondary tabular-nums">
                             {String(i + 1).padStart(2, '0')}
                           </span>
                           <span className={cn(
-                            "font-bebas tracking-[0.08em] uppercase",
-                            i === 0 ? "text-[26px] text-white" : "text-[17px] text-ink-body"
+                            "uppercase",
+                            i === 0
+                              ? "font-bebas tracking-[0.08em] text-[26px] text-white"
+                              : "font-sans text-[16px] tracking-[0.04em] font-medium text-ink-body"
                           )}>
                             {tier.name}
                           </span>
                         </div>
-                        <span className="font-mono text-[17px] font-semibold text-ink-body">
+                        <span className="font-mono text-[16px] font-semibold text-ink-body">
                           {tier.amount}
                         </span>
                       </div>
@@ -195,8 +197,8 @@ const Index = () => {
                             width: barsRevealed ? `${tier.pct}%` : '0%',
                             background: tier.barColor,
                             boxShadow: i === 0 ? '0 0 12px rgba(212,175,55,0.25)' : 'none',
-                            transition: `width 800ms cubic-bezier(0.16,1,0.3,1)`,
-                            transitionDelay: `${i * 200}ms`,
+                            transition: `width 1200ms cubic-bezier(0.16,1,0.3,1)`,
+                            transitionDelay: `${i * 300}ms`,
                           }}
                         />
                       </div>
@@ -207,8 +209,8 @@ const Index = () => {
                 {/* Net Profits */}
                 <div className="mt-4 border border-gold-border bg-black px-6 py-6 text-center rounded-lg"
                   style={{ boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)' }}>
-                  <p className="text-[13px] tracking-[0.2em] uppercase font-semibold text-gold mb-1">Net Profits</p>
-                  <span className="font-mono text-[32px] font-bold text-white">
+                  <p className="text-[12px] tracking-[0.2em] uppercase font-semibold text-gold mb-1">Net Profits</p>
+                  <span className="font-mono text-[26px] font-bold text-white">
                     ${countVal.toLocaleString()}
                   </span>
                 </div>
@@ -217,14 +219,14 @@ const Index = () => {
                 <div className="grid grid-cols-2 gap-4 mt-4">
                   <div className="border border-gold-border bg-black px-4 py-6 text-center rounded-lg"
                     style={{ boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)' }}>
-                    <p className="text-[13px] tracking-[0.2em] uppercase font-semibold text-gold mb-1">Producer Corridor</p>
+                    <p className="text-[12px] tracking-[0.2em] uppercase font-semibold text-gold mb-1">Producer Corridor</p>
                     <span className="font-mono text-[26px] font-bold text-white">
                       ${producerVal.toLocaleString()}
                     </span>
                   </div>
                   <div className="border border-gold-border bg-black px-4 py-6 text-center rounded-lg"
                     style={{ boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)' }}>
-                    <p className="text-[13px] tracking-[0.2em] uppercase font-semibold text-gold mb-1">Investor Corridor</p>
+                    <p className="text-[12px] tracking-[0.2em] uppercase font-semibold text-gold mb-1">Investor Corridor</p>
                     <span className="font-mono text-[26px] font-bold text-white">
                       ${investorVal.toLocaleString()}
                     </span>
@@ -252,7 +254,7 @@ const Index = () => {
                § 2  THE REALITY — Closed Doors
                What it costs to learn this elsewhere.
              ────────────────────────────────────────────────────────── */}
-          <SectionFrame id="cost" tier="standard">
+          <SectionFrame id="cost" tier="minimal">
             <div>
 
               <div className="text-center mb-8">
@@ -267,13 +269,13 @@ const Index = () => {
                     key={door.name}
                     className="relative border p-4 flex flex-col rounded-xl bg-bg-card border-bg-card-border min-h-[150px]"
                   >
-                    <span className="font-mono text-[22px] font-bold text-gold mb-2">
+                    <span className="font-mono text-[20px] font-bold text-gold mb-2">
                       {door.cost}
                     </span>
-                    <p className="font-bebas text-[17px] tracking-[0.08em] uppercase leading-tight text-white mb-2">
+                    <p className="font-bebas text-[20px] tracking-[0.08em] uppercase leading-tight text-white mb-2">
                       {door.name}
                     </p>
-                    <p className="text-[14px] leading-[1.5] text-ink-secondary mt-auto">
+                    <p className="text-[12px] leading-[1.5] text-ink-secondary mt-auto">
                       {door.lock}
                     </p>
                   </div>
@@ -292,8 +294,8 @@ const Index = () => {
             <div>
 
               <div className="text-center mb-8">
-                <h2 className="font-bebas text-[40px] tracking-[0.08em] leading-[0.95] text-white">
-                  MOST FILMS LOSE <span className="text-gold">MONEY.</span>
+                <h2 className="font-bebas text-[40px] tracking-[0.08em] leading-[0.95] text-gold">
+                  MOST FILMS LOSE <span className="text-white">MONEY.</span>
                 </h2>
               </div>
 
@@ -304,16 +306,16 @@ const Index = () => {
                 <div className="p-8 md:p-10">
 
                   {/* — Problem narrative — */}
-                  <p className="font-bebas text-[26px] md:text-[32px] tracking-[0.06em] leading-tight mb-6">
+                  <p className="font-bebas text-[26px] tracking-[0.06em] leading-tight mb-6">
                     <span className="text-gold">YOUR FILM CAN MAKE MONEY</span><br />
                     <span className="text-white">AND YOU STILL LOSE.</span>
                   </p>
 
                   <div className="space-y-4 mb-6">
-                    <p className="text-ink-secondary text-[17px] leading-relaxed">
+                    <p className="text-ink-secondary text-[16px] leading-relaxed">
                       Not because it didn{"\u2019"}t recoup.
                     </p>
-                    <p className="text-ink-body text-[17px] leading-relaxed font-medium">
+                    <p className="text-ink-body text-[16px] leading-relaxed font-medium">
                       Because of how the deal was structured.
                     </p>
                   </div>
@@ -321,7 +323,7 @@ const Index = () => {
                   {/* Gold divider */}
                   <div className="h-[1px] w-12 bg-gold-accent mb-6" />
 
-                  <p className="font-sans text-[19px] font-semibold tracking-[0.02em] text-ink-body mb-8">
+                  <p className="font-sans text-[20px] font-semibold tracking-[0.02em] text-ink-body mb-8">
                     Most filmmakers learn it too late.
                   </p>
 
@@ -332,7 +334,7 @@ const Index = () => {
                       { asset: "Private Equity", tool: "carry and IRR structures" },
                       { asset: "Venture Capital", tool: "term sheets and valuation frameworks" },
                     ].map((row) => (
-                      <p key={row.asset} className="text-ink-secondary text-[17px] leading-relaxed">
+                      <p key={row.asset} className="text-ink-secondary text-[16px] leading-relaxed">
                         <span className="text-ink-body font-semibold">{row.asset}</span> has {row.tool}.
                       </p>
                     ))}
@@ -349,16 +351,10 @@ const Index = () => {
           </SectionFrame>
 
 
-          {/* Gold structural divider — the only one on the page */}
-          <div className="flex justify-center py-8 md:py-12">
-            <div className="w-16 h-px" style={{ background: "rgba(212,175,55,0.35)" }} />
-          </div>
-
-
           {/* ── INTERSTITIAL: Until Now — the pivot ── */}
           <section className="py-20 md:py-28 px-6">
             <div className="text-center">
-              <p className="font-bebas text-[48px] md:text-[56px] tracking-[0.08em] text-white">
+              <p className="font-bebas text-[48px] tracking-[0.08em] text-white">
                 UNTIL NOW.
               </p>
             </div>
@@ -378,8 +374,8 @@ const Index = () => {
                   boxShadow: '0 0 60px rgba(212,175,55,0.06), 0 0 120px rgba(212,175,55,0.03), inset 0 1px 0 rgba(255,255,255,0.06)',
                 }}
               >
-                <h2 className="font-bebas text-[40px] leading-[1.1] tracking-[0.08em] text-white mb-8">
-                  YOUR INVESTORS WILL{"\u00A0"}ASK HOW THE MONEY FLOWS <span className="text-gold">BACK</span>.
+                <h2 className="font-bebas text-[40px] leading-[1.1] tracking-[0.08em] text-gold mb-8">
+                  YOUR INVESTORS WILL{"\u00A0"}ASK HOW THE MONEY FLOWS <span className="text-white">BACK.</span>
                 </h2>
                 <button onClick={handleStartClick}
                   className="w-full max-w-[320px] h-14 btn-cta-primary animate-cta-glow-pulse mx-auto">
@@ -391,7 +387,7 @@ const Index = () => {
 
           {/* ── FOOTER ── */}
           <footer className="py-8 px-6 max-w-md mx-auto">
-            <p className="text-ink-secondary/50 text-[11px] tracking-wide leading-relaxed text-center">
+            <p className="text-ink-ghost text-[12px] tracking-wide leading-relaxed text-center">
               For educational and informational purposes only. Not legal, tax, or investment advice.
               Consult a qualified entertainment attorney before making financing decisions.
             </p>
