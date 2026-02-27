@@ -178,10 +178,10 @@ const Index = () => {
           <section id="evidence" className="snap-section px-6 py-16 md:py-20">
             <div className="max-w-md mx-auto">
 
-              <div className="text-center mb-10">
-                <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-secondary mb-4">The Problem</p>
-                <h2 className="font-bebas text-[40px] tracking-[0.08em] leading-[0.95] text-gold">
-                  MOST FILMS LOSE <span className="text-white">MONEY.</span>
+              <div className="text-center mb-8">
+                <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-gold-label mb-4">The Problem</p>
+                <h2 className="font-bebas text-[40px] tracking-[0.08em] leading-[0.95] text-white">
+                  MOST FILMS LOSE <span className="text-gold">MONEY.</span>
                 </h2>
               </div>
 
@@ -244,9 +244,9 @@ const Index = () => {
             <div className="max-w-md mx-auto">
 
               <div className="text-center mb-8">
-                <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-secondary mb-4">The Cost</p>
-                <h2 className="font-bebas text-[40px] tracking-[0.08em] text-gold">
-                  THE <span className="text-white">REALITY</span>
+                <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-gold-label mb-4">The Cost</p>
+                <h2 className="font-bebas text-[40px] tracking-[0.08em] text-white">
+                  THE REALITY
                 </h2>
               </div>
 
@@ -259,7 +259,7 @@ const Index = () => {
                     <span className="font-mono text-[26px] font-bold text-gold mb-2">
                       {door.cost}
                     </span>
-                    <p className="font-bebas text-[22px] tracking-[0.08em] uppercase leading-tight text-white mb-2">
+                    <p className="font-bebas text-[17px] tracking-[0.08em] uppercase leading-tight text-white mb-2">
                       {door.name}
                     </p>
                     <p className="text-[14px] leading-[1.5] text-ink-secondary mt-auto">
@@ -308,9 +308,9 @@ const Index = () => {
           <SectionFrame id="waterfall" variant="gold">
             <div>
 
-              <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-secondary text-center mb-4">The Solution</p>
-              <h2 className="font-bebas text-[40px] text-gold tracking-[0.08em] text-center mb-2">THE <span className="text-white">WATERFALL</span></h2>
-              <p className="font-bebas text-[26px] tracking-[0.06em] text-ink-secondary text-center mb-6">
+              <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-gold-label text-center mb-4">The Solution</p>
+              <h2 className="font-bebas text-[40px] text-white tracking-[0.08em] text-center mb-4">THE <span className="text-gold">WATERFALL</span></h2>
+              <p className="font-bebas text-[26px] tracking-[0.06em] text-ink-secondary text-center mb-8">
                 We built the framework.
               </p>
 
@@ -409,9 +409,9 @@ const Index = () => {
           <SectionFrame id="offer">
             <div>
               <div className="text-center mb-8">
-                <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-ink-secondary mb-4">The Offer</p>
-                <h2 className="font-bebas text-[40px] tracking-[0.08em] text-gold leading-[1.05]">
-                  YOUR PATH{"\u00A0"}<span className="text-white">FORWARD</span>
+                <p className="text-[14px] tracking-[0.20em] uppercase font-semibold text-gold-label mb-4">The Offer</p>
+                <h2 className="font-bebas text-[40px] tracking-[0.08em] text-white leading-[1.05]">
+                  YOUR <span className="text-gold">PATH</span>{"\u00A0"}FORWARD
                 </h2>
               </div>
 
@@ -478,8 +478,8 @@ const Index = () => {
                   boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06), 0 4px 20px rgba(0,0,0,0.50), 0 12px 48px rgba(0,0,0,0.30)',
                 }}
               >
-                <h2 className="font-bebas text-[40px] leading-[1.1] tracking-[0.08em] text-gold mb-10">
-                  YOUR INVESTOR WILL{"\u00A0"}ASK HOW THE MONEY FLOWS <span className="text-white">BACK</span>.
+                <h2 className="font-bebas text-[40px] leading-[1.1] tracking-[0.08em] text-white mb-8">
+                  YOUR INVESTOR WILL{"\u00A0"}ASK HOW THE MONEY FLOWS <span className="text-gold">BACK</span>.
                 </h2>
                 <button onClick={handleStartClick}
                   className="w-full max-w-[320px] h-14 btn-cta-primary animate-cta-glow-pulse mx-auto">
