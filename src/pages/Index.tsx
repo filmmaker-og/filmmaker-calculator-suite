@@ -7,15 +7,6 @@ import { cn } from "@/lib/utils";
 import SectionFrame from "@/components/SectionFrame";
 
 
-/* ═══════════════════════════════════════════════════════════════════
-   CLOSED DOORS — the reality of what's available
-   ═══════════════════════════════════════════════════════════════════ */
-const closedDoors = [
-  { name: "Entertainment Attorney", lock: "If they\u2019ll take the meeting.", cost: "$800/hr" },
-  { name: "Producing Consultant", lock: "If you can afford one.", cost: "$5K+" },
-  { name: "Film School", lock: "Four years you don\u2019t have.", cost: "$200K" },
-  { name: "Trial & Error", lock: "No second chances.", cost: "Your Film" },
-];
 
 /* ═══════════════════════════════════════════════════════════════════
    WATERFALL TIERS — proportional bars ($3M cascade)
@@ -155,7 +146,7 @@ const Index = () => {
                   SEE WHERE EVERY DOLLAR <span className="text-white">GOES</span>
                 </h1>
                 <p className="text-ink-secondary text-[16px] leading-[1.7] tracking-[0.02em] font-medium max-w-[340px] mx-auto">
-                  Model your deal before you sign it. Free. No account to start.
+                  Democratizing the business of film.
                 </p>
               </div>
 
@@ -263,23 +254,34 @@ const Index = () => {
                 </h2>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                {closedDoors.map((door) => (
-                  <div
-                    key={door.name}
-                    className="relative border p-4 flex flex-col rounded-xl bg-bg-card border-bg-card-border min-h-[150px]"
-                  >
-                    <span className="font-mono text-[20px] font-bold text-gold mb-2">
-                      {door.cost}
-                    </span>
-                    <p className="font-bebas text-[20px] tracking-[0.08em] uppercase leading-tight text-white mb-2">
-                      {door.name}
-                    </p>
-                    <p className="text-[14px] leading-[1.5] text-ink-secondary mt-auto">
-                      {door.lock}
-                    </p>
-                  </div>
-                ))}
+              <div className="grid grid-cols-2 gap-3">
+
+                {/* Row 1 */}
+                <div className="border border-bg-card-border bg-bg-card rounded-xl p-4 flex flex-col">
+                  <span className="font-mono text-[20px] font-bold text-gold">$800/hr</span>
+                  <p className="font-bebas text-[20px] tracking-[0.08em] uppercase leading-tight text-white mt-1">Entertainment Attorney</p>
+                  <p className="text-[14px] leading-[1.5] text-ink-secondary mt-auto pt-3">If they{"\u2019"}ll take the meeting.</p>
+                </div>
+
+                <div className="border border-bg-card-border bg-bg-card rounded-xl p-4 flex flex-col">
+                  <span className="font-mono text-[20px] font-bold text-gold">$5K+</span>
+                  <p className="font-bebas text-[20px] tracking-[0.08em] uppercase leading-tight text-white mt-1">Producing Consultant</p>
+                  <p className="text-[14px] leading-[1.5] text-ink-secondary mt-auto pt-3">If you can afford one.</p>
+                </div>
+
+                {/* Row 2 */}
+                <div className="border border-bg-card-border bg-bg-card rounded-xl p-4 flex flex-col">
+                  <span className="font-mono text-[20px] font-bold text-gold">$200K</span>
+                  <p className="font-bebas text-[20px] tracking-[0.08em] uppercase leading-tight text-white mt-1">Film School</p>
+                  <p className="text-[14px] leading-[1.5] text-ink-secondary mt-auto pt-3">Four years you don{"\u2019"}t have.</p>
+                </div>
+
+                <div className="border border-bg-card-border bg-bg-card rounded-xl p-4 flex flex-col">
+                  <span className="font-bebas text-[20px] tracking-[0.08em] text-gold">Your Film</span>
+                  <p className="font-bebas text-[20px] tracking-[0.08em] uppercase leading-tight text-white mt-1">Trial & Error</p>
+                  <p className="text-[14px] leading-[1.5] text-ink-secondary mt-auto pt-3">No second chances.</p>
+                </div>
+
               </div>
 
             </div>
@@ -340,7 +342,7 @@ const Index = () => {
                     ))}
                     {/* The punchline */}
                     <p className="font-bebas text-[26px] tracking-[0.06em] text-gold leading-tight mt-6">
-                      Film had nothing.
+                      Nobody teaches the business of film.
                     </p>
                   </div>
 
