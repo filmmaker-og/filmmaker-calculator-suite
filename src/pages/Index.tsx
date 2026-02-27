@@ -139,7 +139,7 @@ const Index = () => {
                § 1  HERO + WATERFALL DEMO
                The visualization IS the pitch. No preamble.
              ────────────────────────────────────────────────────────── */}
-          <section id="hero" className="relative pt-20 pb-12">
+          <section id="hero" className="relative pt-14 pb-6">
             {/* Ambient warmth */}
             <div
               className="absolute inset-0 pointer-events-none"
@@ -150,9 +150,9 @@ const Index = () => {
 
             <div className="relative px-6 max-w-md mx-auto">
               {/* Headline */}
-              <div className="text-center mb-10">
+              <div className="text-center mb-6">
                 <h1 className="font-bebas text-[clamp(3.2rem,11vw,4.8rem)] leading-[0.95] tracking-[0.02em] text-gold mb-6">
-                  SEE WHERE EVERY DOLLAR<br /><span className="text-white">GOES</span>
+                  SEE WHERE EVERY DOLLAR <span className="text-white">GOES</span>
                 </h1>
                 <p className="text-ink-secondary text-[16px] leading-[1.7] tracking-[0.02em] font-medium max-w-[340px] mx-auto">
                   Model your deal before you sign it. Free. No account to start.
@@ -257,7 +257,7 @@ const Index = () => {
           <SectionFrame id="cost" tier="minimal">
             <div>
 
-              <div className="text-center mb-8">
+              <div className="text-center mb-5">
                 <h2 className="font-bebas text-[40px] tracking-[0.08em] text-white">
                   THE REALITY
                 </h2>
@@ -275,7 +275,7 @@ const Index = () => {
                     <p className="font-bebas text-[20px] tracking-[0.08em] uppercase leading-tight text-white mb-2">
                       {door.name}
                     </p>
-                    <p className="text-[12px] leading-[1.5] text-ink-secondary mt-auto">
+                    <p className="text-[14px] leading-[1.5] text-ink-secondary mt-auto">
                       {door.lock}
                     </p>
                   </div>
@@ -293,7 +293,7 @@ const Index = () => {
           <SectionFrame id="evidence" tier="minimal">
             <div>
 
-              <div className="text-center mb-8">
+              <div className="text-center mb-5">
                 <h2 className="font-bebas text-[40px] tracking-[0.08em] leading-[0.95] text-gold">
                   MOST FILMS LOSE <span className="text-white">MONEY.</span>
                 </h2>
@@ -352,7 +352,7 @@ const Index = () => {
 
 
           {/* ── INTERSTITIAL: Until Now — the pivot ── */}
-          <section className="py-20 md:py-28 px-6">
+          <section className="py-12 md:py-16 px-6">
             <div className="text-center">
               <p className="font-bebas text-[48px] tracking-[0.08em] text-white">
                 UNTIL NOW.
@@ -364,17 +364,17 @@ const Index = () => {
           {/* ──────────────────────────────────────────────────────────
                § 4  FINAL CTA — The Close
              ────────────────────────────────────────────────────────── */}
-          <section id="final-cta" className="py-24 md:py-32 px-6">
+          <section id="final-cta" className="py-14 md:py-20 px-6">
             <div className="max-w-md mx-auto">
               <div
-                className="rounded-2xl px-8 py-16 md:py-20 text-center"
+                className="rounded-2xl px-8 py-10 md:py-14 text-center"
                 style={{
                   border: '1px solid rgba(212,175,55,0.30)',
                   background: 'rgba(255,255,255,0.04)',
                   boxShadow: '0 0 60px rgba(212,175,55,0.06), 0 0 120px rgba(212,175,55,0.03), inset 0 1px 0 rgba(255,255,255,0.06)',
                 }}
               >
-                <h2 className="font-bebas text-[40px] leading-[1.1] tracking-[0.08em] text-gold mb-8">
+                <h2 className="font-bebas text-[40px] leading-[1.1] tracking-[0.08em] text-gold mb-6">
                   YOUR INVESTORS WILL{"\u00A0"}ASK HOW THE MONEY FLOWS <span className="text-white">BACK.</span>
                 </h2>
                 <button onClick={handleStartClick}
