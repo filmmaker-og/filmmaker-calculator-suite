@@ -157,19 +157,13 @@ const Index = () => {
               }}
             />
             <div className="relative px-4 max-w-md mx-auto">
-              {/* Headline — brand statement */}
+              {/* Headline — the hero */}
               <div className="text-center mb-8 px-2">
                 <h1 className="font-bebas text-[clamp(3.2rem,11vw,4.8rem)] leading-[0.95] tracking-[0.02em] text-gold mb-3">
                   SEE WHERE EVERY DOLLAR <span className="text-white">GOES</span>
                 </h1>
-                <p className="text-ink-secondary text-[16px] leading-[1.7] tracking-[0.02em] font-medium mb-4">
+                <p className="text-ink-secondary text-[16px] leading-[1.7] tracking-[0.02em] font-medium">
                   Democratizing the business of film.
-                </p>
-                <p className="font-bebas text-[28px] tracking-[0.08em] uppercase text-gold mb-2">
-                  THE WATERFALL
-                </p>
-                <p className="text-ink-secondary text-[16px] leading-[1.6] max-w-[300px] mx-auto">
-                  Your recoupment schedule{"\u00A0"}{"\u2014"}{"\u00A0"}who gets paid, in what order, and what{"\u2019"}s left.
                 </p>
               </div>
               {/* Waterfall card — the proof */}
@@ -181,6 +175,15 @@ const Index = () => {
                   boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.04), 0 0 40px rgba(212,175,55,0.03)',
                 }}
               >
+              {/* Card header — names the visualization */}
+              <div className="text-center mb-4 px-4">
+                <p className="font-bebas text-[28px] tracking-[0.08em] uppercase text-gold mb-2">
+                  THE WATERFALL
+                </p>
+                <p className="text-ink-secondary text-[16px] leading-[1.6] max-w-[300px] mx-auto">
+                  Your recoupment schedule{"\u00A0"}{"\u2014"}{"\u00A0"}who gets paid, in what order, and what{"\u2019"}s left.
+                </p>
+              </div>
               {/* ── Waterfall Visualization ── */}
               <div ref={waterBarRef}>
                 {/* Waterfall rows — unified financial table */}
@@ -381,9 +384,6 @@ const Index = () => {
           </section>
           {/* ── FOOTER ── */}
           <footer className="py-8 px-6 max-w-md mx-auto">
-            <p className="text-ink-secondary text-[14px] tracking-[0.04em] text-center mb-3">
-              Democratizing the business of film.
-            </p>
             <p className="text-ink-ghost text-[12px] tracking-wide leading-relaxed text-center">
               For educational and informational purposes only. Not legal, tax, or investment advice.
               Consult a qualified entertainment attorney before making financing decisions.
