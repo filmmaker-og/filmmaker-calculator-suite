@@ -73,7 +73,7 @@
 
     /* Metallic Gold — non-interactive brand elements (8 tiers, no drift) */
     --gold: #D4AF37;
-    --gold-label: rgba(212, 175, 55, 0.60);
+    --gold-label: rgba(212, 175, 55, 0.72);
     --gold-muted: rgba(212, 175, 55, 0.45);
     --gold-glow: rgba(212, 175, 55, 0.25);
     --gold-ghost: rgba(212, 175, 55, 0.15);
@@ -121,7 +121,7 @@
     /* LAYOUT */
     --appbar-h: 54px;
     --tabbar-h: 62px;
-    --bottom-bar-h: 82px;
+    --bottom-bar-h: 0px;
     --container-max: 460px;
 
     /* MOTION TOKENS */

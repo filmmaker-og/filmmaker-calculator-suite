@@ -30,7 +30,7 @@ const SectionFrame = ({
   tier?: 'standard' | 'elevated' | 'minimal';
 }) => {
   return (
-    <section id={id} className="px-6 py-24 md:py-32">
+    <section id={id} className="px-6 py-16 md:py-24">
       <div
         className={cn(
           "max-w-md mx-auto",

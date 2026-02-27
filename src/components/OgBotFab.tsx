@@ -1,54 +1,40 @@
 import { Sparkles } from "lucide-react";
-import filmmakerFIcon from "@/assets/filmmaker-f-icon.png";
+import { useHaptics } from "@/hooks/use-haptics";
+
+/* ═══════════════════════════════════════════════════════════════════
+   OgBotFab — floating action button for the OG bot
+   Bottom-right corner, always visible, opens the bot sheet.
+   ═══════════════════════════════════════════════════════════════════ */
 
 interface OgBotFabProps {
-  onClick: () => void;
-  isActive?: boolean;
+  onTap?: () => void;
 }
 
-const OgBotFab = ({ onClick, isActive }: OgBotFabProps) => {
+const OgBotFab = ({ onTap }: OgBotFabProps) => {
+  const haptics = useHaptics();
+
   return (
     <button
-      onClick={onClick}
-      aria-label="Ask the OG Bot"
-      className="fixed z-[145] flex items-center justify-center transition-all duration-200 active:scale-90"
+      onClick={() => { haptics.medium(); onTap?.(); }}
+      className="fixed z-[140] flex items-center justify-center active:scale-90 transition-transform"
       style={{
-        bottom: "calc(78px + env(safe-area-inset-bottom))",
-        right: "16px",
-        width: "56px",
-        height: "56px",
+        bottom: "calc(20px + env(safe-area-inset-bottom))",
+        right: "20px",
+        width: "52px",
+        height: "52px",
         borderRadius: "50%",
-        background: "transparent",
-        border: "none",
-        boxShadow: isActive
-          ? "0 0 24px rgba(212,175,55,0.35), 0 4px 16px rgba(0,0,0,0.50)"
-          : "0 4px 20px rgba(0,0,0,0.60)",
+        background: "#000000",
+        border: "1.5px solid rgba(212,175,55,0.50)",
+        boxShadow: "0 4px 20px rgba(0,0,0,0.80), 0 0 20px rgba(212,175,55,0.08)",
       }}
+      aria-label="Open OG assistant"
     >
-      {/* Sparkle AI indicator — top right, overlapping icon edge */}
       <Sparkles
-        className="absolute pointer-events-none"
+        className="text-gold"
         style={{
-          top: "2px",
-          right: "2px",
-          width: "14px",
-          height: "14px",
-          color: isActive ? "rgba(249,224,118,0.90)" : "rgba(212,175,55,0.70)",
-          filter: isActive ? "drop-shadow(0 0 4px rgba(212,175,55,0.50))" : "none",
-        }}
-        strokeWidth={2}
-      />
-
-      {/* F brand icon */}
-      <img
-        src={filmmakerFIcon}
-        alt=""
-        className="pointer-events-none"
-        style={{
-          width: "36px",
-          height: "36px",
-          objectFit: "contain",
-          filter: "brightness(1.25) saturate(1.1) drop-shadow(0 0 10px rgba(212,175,55,0.40))",
+          width: "22px",
+          height: "22px",
+          filter: "drop-shadow(0 0 4px rgba(212,175,55,0.30))",
         }}
       />
     </button>

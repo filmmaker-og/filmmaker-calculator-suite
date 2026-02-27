@@ -45,7 +45,7 @@ export default {
         // ── GOLD: content hierarchy (6 tiers, no drift) ──
         gold: {
           DEFAULT:   "#D4AF37",                        // headlines, wordmarks, icons — FULL
-          label:     "rgba(212, 175, 55, 0.60)",       // micro-labels, category text
+          label:     "rgba(212, 175, 55, 0.72)",       // micro-labels, category text
           accent:    "rgba(212, 175, 55, 0.40)",       // dividers, connectors, accent stripes
           border:    "rgba(212, 175, 55, 0.25)",       // card/section borders
           ghost:     "rgba(212, 175, 55, 0.15)",       // watermarks, ghost text
@@ -59,7 +59,7 @@ export default {
         ink: {
           DEFAULT:   "#FFFFFF",                        // headlines, key numbers — FULL
           body:      "rgba(255, 255, 255, 0.80)",      // paragraph text, descriptions
-          secondary: "rgba(255, 255, 255, 0.55)",      // supporting info, metadata
+          secondary: "rgba(255, 255, 255, 0.62)",      // supporting info, metadata
           ghost:     "rgba(255, 255, 255, 0.30)",      // disclaimers, fine print
         },
 
