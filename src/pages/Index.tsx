@@ -277,7 +277,7 @@ const Index = () => {
                 </div>
 
                 <div className="border border-bg-card-border bg-bg-card rounded-xl p-4 flex flex-col">
-                  <span className="font-bebas text-[20px] tracking-[0.08em] text-gold">Your Film</span>
+                  <span className="font-mono text-[20px] font-bold text-gold">Your Film</span>
                   <p className="font-bebas text-[20px] tracking-[0.08em] uppercase leading-tight text-white mt-1">Trial & Error</p>
                   <p className="text-[14px] leading-[1.5] text-ink-secondary mt-auto pt-3">No second chances.</p>
                 </div>
