@@ -225,11 +225,8 @@ const Index = () => {
                   transition: prefersReducedMotion ? "none" : "opacity 700ms ease-out, transform 700ms ease-out",
                 }}
               >
-                <p className="font-mono text-[11px] tracking-[0.14em] uppercase text-white/40 text-center mb-5">
-                  Why this exists
-                </p>
                 <p className="text-[15px] text-white/60 leading-relaxed text-center mb-7">
-                  I grew up in this business. Tribeca audience award. Netflix. And on my first deal, I still couldn't model where the money went.
+                  Built by a second-generation film producer whose first project premiered at Tribeca and landed on Netflix. These are the frameworks I wish I had.
                 </p>
                 <div className="flex flex-col gap-3">
                   {[0, 1].map((idx) => (
