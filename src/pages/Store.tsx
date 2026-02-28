@@ -116,12 +116,13 @@ const WorkingModelPopup = ({
         <h3 className="font-bebas text-[28px] tracking-[0.06em] text-gold mb-1">
           ADD THE LIVE EXCEL MODEL
         </h3>
-        <p className="text-ink-secondary text-[14px]">Save $70 when you bundle now</p>
+        <p className="text-ink-secondary text-[14px]">Bundle now and save 50%</p>
       </div>
 
       <div className="flex items-baseline gap-3">
         <span className="font-mono text-[16px] text-ink-secondary line-through">$149</span>
-        <span className="font-mono text-[26px] font-bold text-white">$79</span>
+        <span className="font-mono text-[26px] font-bold text-white">$75</span>
+        <span className="text-[12px] tracking-[0.12em] uppercase font-bold text-gold">50% OFF</span>
       </div>
 
       <p className="text-ink-secondary text-[16px] leading-relaxed">
@@ -136,7 +137,7 @@ const WorkingModelPopup = ({
           disabled={loading}
           className="w-full h-14 btn-cta-primary"
         >
-          {loading ? "CONNECTING..." : "YES, ADD FOR $79"}
+          {loading ? "CONNECTING..." : "YES, ADD FOR $75"}
         </button>
         <button
           onClick={onDecline}
@@ -416,7 +417,7 @@ const Store = () => {
                   </span>
                 </div>
                 <div className="flex items-baseline gap-2 flex-shrink-0">
-                  <span className="font-mono text-[14px] text-gold font-medium">$79 at checkout</span>
+                  <span className="font-mono text-[14px] text-gold font-medium">$75 at checkout</span>
                   <span className="font-mono text-[12px] text-ink-secondary line-through">$149</span>
                 </div>
               </div>
@@ -472,8 +473,10 @@ const Store = () => {
                 ))}
               </div>
 
-              {/* Sections + rows */}
-              {comparisonSections.map((section) => (
+              {/* Sections + rows — skip "Use Case" (text too long for grid) */}
+              {comparisonSections
+                .filter((s) => s.title !== "Use Case")
+                .map((section) => (
                 <div key={section.title}>
                   <div className="px-3 pt-5 pb-2">
                     <span className="font-mono text-[12px] tracking-[0.15em] uppercase text-gold font-bold">
