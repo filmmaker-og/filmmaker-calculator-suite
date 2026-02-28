@@ -94,62 +94,100 @@ const WorkingModelPopup = ({
   onClose: () => void;
   loading: boolean;
 }) => (
-  <div className="fixed inset-0 z-[200] flex items-center justify-center p-6">
+  <div className="fixed inset-0 z-[200] flex items-end sm:items-center justify-center sm:p-6">
     <div
       className="absolute inset-0 bg-black/80 backdrop-blur-sm"
       onClick={loading ? undefined : onClose}
     />
     <div
-      className="relative w-full max-w-md rounded-xl p-6 space-y-5 animate-fade-in"
+      className="relative w-full sm:max-w-md rounded-t-2xl sm:rounded-xl overflow-hidden animate-fade-in"
       style={{
-        border: "1px solid rgba(212,175,55,0.3)",
-        background: "linear-gradient(145deg, rgba(20,20,20,0.98), rgba(10,10,10,0.98))",
-        boxShadow: "0 0 40px rgba(212,175,55,0.08)",
+        border: "1px solid rgba(212,175,55,0.35)",
+        borderBottom: "none",
+        background:
+          "linear-gradient(165deg, rgba(22,22,22,0.99), rgba(8,8,8,0.99))",
+        boxShadow:
+          "0 -8px 40px rgba(0,0,0,0.5), 0 0 60px rgba(212,175,55,0.06)",
       }}
     >
+      {/* Close */}
       <button
         onClick={onClose}
         disabled={loading}
-        className="absolute top-4 right-4 text-ink-secondary hover:text-ink-body transition-colors"
+        className="absolute top-4 right-4 z-10 text-ink-secondary hover:text-ink-body transition-colors"
       >
         <X className="w-5 h-5" />
       </button>
 
-      <div>
-        <h3 className="font-bebas text-2xl tracking-[0.06em] text-gold mb-1">
+      {/* Header band */}
+      <div
+        className="px-6 pt-6 pb-4"
+        style={{
+          background:
+            "linear-gradient(180deg, rgba(212,175,55,0.08) 0%, transparent 100%)",
+        }}
+      >
+        <span className="inline-block px-3 py-1 bg-gold/15 border border-gold/30 text-gold text-[11px] tracking-[0.18em] uppercase font-bold rounded-full mb-3">
+          ONE-TIME OFFER
+        </span>
+        <h3 className="font-bebas text-[26px] tracking-[0.06em] text-white leading-tight">
           ADD THE LIVE EXCEL MODEL
         </h3>
-        <p className="text-ink-body text-[14px]">Save $70 when you bundle now</p>
       </div>
 
-      <div className="flex items-baseline gap-2">
-        <span className="font-mono text-lg text-ink-secondary line-through">
-          $149
-        </span>
-        <span className="font-mono text-3xl font-medium text-white">$79</span>
-      </div>
+      {/* Body */}
+      <div className="px-6 pb-6 space-y-4">
+        {/* Price row */}
+        <div className="flex items-center gap-3">
+          <div className="flex items-baseline gap-2">
+            <span className="font-mono text-base text-ink-secondary line-through decoration-ink-secondary/40">
+              $149
+            </span>
+            <span className="font-mono text-3xl font-semibold text-white">
+              $79
+            </span>
+          </div>
+          <span className="ml-auto px-2.5 py-1 bg-gold/10 border border-gold/20 text-gold text-[12px] tracking-[0.08em] font-semibold rounded-md">
+            SAVE $70
+          </span>
+        </div>
 
-      <p className="text-ink-secondary text-[14px] leading-relaxed">
-        Get the formula-driven Excel engine behind your finance plan. Change any
-        input — watch every investor's return recalculate instantly. Reuse on
-        every project.
-      </p>
+        {/* Divider */}
+        <div className="border-t border-white/[0.06]" />
 
-      <div className="space-y-3">
-        <button
-          onClick={onAccept}
-          disabled={loading}
-          className="w-full h-14 text-base btn-cta-primary"
-        >
-          {loading ? "CONNECTING..." : "YES, ADD FOR $79"}
-        </button>
-        <button
-          onClick={onDecline}
-          disabled={loading}
-          className="w-full text-center text-ink-secondary text-[14px] hover:text-ink-body transition-colors py-2"
-        >
-          {loading ? "CONNECTING..." : "No thanks, continue"}
-        </button>
+        {/* Feature list */}
+        <ul className="space-y-2.5">
+          {[
+            "Formula-driven Excel engine",
+            "Change any input \u2014 everything recalculates",
+            "Reusable across unlimited projects",
+          ].map((feat) => (
+            <li key={feat} className="flex items-start gap-2.5">
+              <Check className="w-3.5 h-3.5 mt-0.5 flex-shrink-0 text-gold" />
+              <span className="text-ink-body text-[14px] leading-snug">
+                {feat}
+              </span>
+            </li>
+          ))}
+        </ul>
+
+        {/* CTAs */}
+        <div className="space-y-2.5 pt-1">
+          <button
+            onClick={onAccept}
+            disabled={loading}
+            className="w-full h-[52px] text-[15px] btn-cta-primary"
+          >
+            {loading ? "CONNECTING..." : "YES, ADD FOR $79"}
+          </button>
+          <button
+            onClick={onDecline}
+            disabled={loading}
+            className="w-full text-center text-ink-secondary text-[13px] tracking-wide hover:text-ink-body transition-colors py-2"
+          >
+            {loading ? "Connecting..." : "No thanks, just the plan"}
+          </button>
+        </div>
       </div>
     </div>
   </div>
