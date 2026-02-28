@@ -72,6 +72,7 @@ const WaterfallCascade = () => {
 
   useEffect(() => {
     if (!revealed) return;
+    let rafId: number;
     const timeout = setTimeout(() => {
       const target = 417_500;
       const dur = 1400;
@@ -80,11 +81,11 @@ const WaterfallCascade = () => {
         const t = Math.min((now - start) / dur, 1);
         const eased = 1 - Math.pow(1 - t, 3);
         setProfitCount(Math.round(eased * target));
-        if (t < 1) requestAnimationFrame(step);
+        if (t < 1) rafId = requestAnimationFrame(step);
       };
-      requestAnimationFrame(step);
+      rafId = requestAnimationFrame(step);
     }, 2000);
-    return () => clearTimeout(timeout);
+    return () => { clearTimeout(timeout); cancelAnimationFrame(rafId); };
   }, [revealed]);
 
   useEffect(() => {
@@ -109,14 +110,14 @@ const WaterfallCascade = () => {
             >
               <div className="flex justify-between items-baseline px-4 pt-[10px] pb-[5px]">
                 <div className="flex items-baseline gap-2">
-                  <span className="font-mono text-[11px] text-white/30 tabular-nums">
+                  <span className="font-mono text-[11px] text-white/50 tabular-nums">
                     {String(i + 1).padStart(2, "0")}
                   </span>
                   <span
                     className={
                       isSource
                         ? "font-bebas text-[22px] tracking-[0.06em] text-white/90"
-                        : "text-[14px] tracking-[0.01em] font-medium text-white/55"
+                        : "text-[14px] tracking-[0.01em] font-medium text-white/65"
                     }
                   >
                     {block.name}
@@ -126,7 +127,7 @@ const WaterfallCascade = () => {
                   className={
                     isSource
                       ? "font-mono text-[17px] font-semibold text-white/90"
-                      : "font-mono text-[14px] font-medium text-white/55"
+                      : "font-mono text-[14px] font-medium text-white/65"
                   }
                 >
                   {isSource ? fmtFull(block.amount) : `\u2212${fmt(block.amount)}`}

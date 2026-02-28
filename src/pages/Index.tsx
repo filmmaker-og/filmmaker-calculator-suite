@@ -1,11 +1,11 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useHaptics } from "@/hooks/use-haptics";
+import { useInView } from "@/hooks/useInView";
 import LeadCaptureModal from "@/components/LeadCaptureModal";
 import WaterfallCascade from "@/components/WaterfallCascade";
 import filmmakerFIcon from "@/assets/filmmaker-f-icon.png";
-import { cn } from "@/lib/utils";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -39,36 +39,12 @@ const Index = () => {
     gatedNavigate("/calculator?tab=budget");
   };
 
-  const valueRef = useRef<HTMLDivElement>(null);
-  const [valueVisible, setValueVisible] = useState(false);
-  const credRef = useRef<HTMLDivElement>(null);
-  const [credVisible, setCredVisible] = useState(false);
-  const bridgeRef = useRef<HTMLDivElement>(null);
-  const [bridgeVisible, setBridgeVisible] = useState(false);
+  const prefersReducedMotion = typeof window !== "undefined"
+    && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  useEffect(() => {
-    const sections = [
-      { el: valueRef.current, setter: setValueVisible },
-      { el: credRef.current, setter: setCredVisible },
-      { el: bridgeRef.current, setter: setBridgeVisible },
-    ];
-    const observers: IntersectionObserver[] = [];
-    sections.forEach(({ el, setter }) => {
-      if (!el) return;
-      const obs = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting) {
-            setter(true);
-            obs.disconnect();
-          }
-        },
-        { threshold: 0.2 }
-      );
-      obs.observe(el);
-      observers.push(obs);
-    });
-    return () => observers.forEach(obs => obs.disconnect());
-  }, []);
+  const { ref: valueRef, inView: valueVisible } = useInView<HTMLDivElement>({ threshold: 0.2 });
+  const { ref: credRef, inView: credVisible } = useInView<HTMLDivElement>({ threshold: 0.2 });
+  const { ref: bridgeRef, inView: bridgeVisible } = useInView<HTMLDivElement>({ threshold: 0.2 });
 
   const withItems = [
     { title: "Revenue Mapped", desc: "Revenue divided automatically across every stakeholder" },
@@ -149,21 +125,21 @@ const Index = () => {
               <div className="border border-white/[0.08] bg-black overflow-hidden rounded-xl">
 
                 <div className="px-5 pt-6 pb-5">
-                  <p className="font-mono text-[14px] tracking-[0.12em] uppercase text-gold mb-5 px-1">
+                  <h2 className="font-mono text-[14px] tracking-[0.12em] uppercase text-gold mb-5 px-1">
                     With your waterfall
-                  </p>
-                  <div className="flex flex-col gap-3">
+                  </h2>
+                  <ul className="flex flex-col gap-3" aria-label="Benefits of using a waterfall">
                     {withItems.map((item, i) => (
-                      <div
+                      <li
                         key={item.title}
                         className="flex items-start gap-4 rounded-lg px-4 py-4"
                         style={{
                           background: "rgba(212,175,55,0.04)",
                           border: "1px solid rgba(212,175,55,0.08)",
-                          opacity: valueVisible ? 1 : 0,
-                          transform: valueVisible ? "translateY(0)" : "translateY(12px)",
-                          transition: "opacity 500ms ease-out, transform 500ms ease-out",
-                          transitionDelay: `${i * 120}ms`,
+                          opacity: prefersReducedMotion || valueVisible ? 1 : 0,
+                          transform: prefersReducedMotion || valueVisible ? "translateY(0)" : "translateY(12px)",
+                          transition: prefersReducedMotion ? "none" : "opacity 500ms ease-out, transform 500ms ease-out",
+                          transitionDelay: prefersReducedMotion ? "0ms" : `${i * 120}ms`,
                         }}
                       >
                         <div
@@ -172,50 +148,51 @@ const Index = () => {
                             background: "linear-gradient(135deg, #D4AF37 0%, #B8962E 100%)",
                           }}
                         >
-                          <span className="text-black text-[16px] font-bold leading-none">{"\u2713"}</span>
+                          <span className="text-black text-[16px] font-bold leading-none" aria-hidden="true">{"\u2713"}</span>
                         </div>
                         <div>
                           <p className="text-[15px] font-semibold text-white leading-snug">{item.title}</p>
                           <p className="text-[13px] text-ink-secondary leading-snug mt-1">{item.desc}</p>
                         </div>
-                      </div>
+                      </li>
                     ))}
-                  </div>
+                  </ul>
                 </div>
 
                 <div
                   className="mx-6 h-[1px]"
+                  aria-hidden="true"
                   style={{
                     background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.30), transparent)",
-                    opacity: valueVisible ? 1 : 0,
-                    transition: "opacity 500ms ease-out",
-                    transitionDelay: `${withItems.length * 120}ms`,
+                    opacity: prefersReducedMotion || valueVisible ? 1 : 0,
+                    transition: prefersReducedMotion ? "none" : "opacity 500ms ease-out",
+                    transitionDelay: prefersReducedMotion ? "0ms" : `${withItems.length * 120}ms`,
                   }}
                 />
 
                 <div className="px-5 pt-6 pb-6" style={{ background: "rgba(255,255,255,0.02)" }}>
-                  <p
+                  <h3
                     className="font-mono text-[14px] tracking-[0.12em] uppercase text-ink-secondary mb-5 px-1"
                     style={{
-                      opacity: valueVisible ? 1 : 0,
-                      transition: "opacity 500ms ease-out",
-                      transitionDelay: `${withItems.length * 120 + 80}ms`,
+                      opacity: prefersReducedMotion || valueVisible ? 1 : 0,
+                      transition: prefersReducedMotion ? "none" : "opacity 500ms ease-out",
+                      transitionDelay: prefersReducedMotion ? "0ms" : `${withItems.length * 120 + 80}ms`,
                     }}
                   >
                     Without it
-                  </p>
-                  <div className="flex flex-col gap-3">
+                  </h3>
+                  <ul className="flex flex-col gap-3" aria-label="Risks without a waterfall">
                     {withoutItems.map((item, i) => (
-                      <div
+                      <li
                         key={item.title}
                         className="flex items-start gap-4 rounded-lg px-4 py-4"
                         style={{
                           background: "rgba(180,60,60,0.08)",
                           border: "1px solid rgba(180,60,60,0.16)",
-                          opacity: valueVisible ? 1 : 0,
-                          transform: valueVisible ? "translateY(0)" : "translateY(12px)",
-                          transition: "opacity 500ms ease-out, transform 500ms ease-out",
-                          transitionDelay: `${(withItems.length + i + 1) * 120}ms`,
+                          opacity: prefersReducedMotion || valueVisible ? 1 : 0,
+                          transform: prefersReducedMotion || valueVisible ? "translateY(0)" : "translateY(12px)",
+                          transition: prefersReducedMotion ? "none" : "opacity 500ms ease-out, transform 500ms ease-out",
+                          transitionDelay: prefersReducedMotion ? "0ms" : `${(withItems.length + i + 1) * 120}ms`,
                         }}
                       >
                         <div
@@ -225,15 +202,15 @@ const Index = () => {
                             border: "1px solid rgba(180,60,60,0.25)",
                           }}
                         >
-                          <span className="text-[14px] font-bold leading-none" style={{ color: "rgba(220,100,100,0.85)" }}>{"\u2717"}</span>
+                          <span className="text-[14px] font-bold leading-none" aria-hidden="true" style={{ color: "rgba(220,100,100,0.85)" }}>{"\u2717"}</span>
                         </div>
                         <div>
                           <p className="text-[15px] font-semibold leading-snug" style={{ color: "rgba(255,200,200,0.75)" }}>{item.title}</p>
-                          <p className="text-[13px] leading-snug mt-1" style={{ color: "rgba(255,255,255,0.45)" }}>{item.desc}</p>
+                          <p className="text-[13px] leading-snug mt-1" style={{ color: "rgba(255,255,255,0.55)" }}>{item.desc}</p>
                         </div>
-                      </div>
+                      </li>
                     ))}
-                  </div>
+                  </ul>
                 </div>
 
               </div>
@@ -248,9 +225,9 @@ const Index = () => {
                 style={{
                   border: "1px solid rgba(255,255,255,0.08)",
                   background: "rgba(255,255,255,0.02)",
-                  opacity: credVisible ? 1 : 0,
-                  transform: credVisible ? "translateY(0)" : "translateY(16px)",
-                  transition: "opacity 700ms ease-out, transform 700ms ease-out",
+                  opacity: prefersReducedMotion || credVisible ? 1 : 0,
+                  transform: prefersReducedMotion || credVisible ? "translateY(0)" : "translateY(16px)",
+                  transition: prefersReducedMotion ? "none" : "opacity 700ms ease-out, transform 700ms ease-out",
                 }}
               >
                 <p className="text-[15px] text-white/70 leading-relaxed tracking-wide">
@@ -268,9 +245,9 @@ const Index = () => {
                 style={{
                   border: "2px solid rgba(212,175,55,0.40)",
                   background: "rgba(255,255,255,0.02)",
-                  opacity: bridgeVisible ? 1 : 0,
-                  transform: bridgeVisible ? "translateY(0)" : "translateY(16px)",
-                  transition: "opacity 700ms ease-out, transform 700ms ease-out",
+                  opacity: prefersReducedMotion || bridgeVisible ? 1 : 0,
+                  transform: prefersReducedMotion || bridgeVisible ? "translateY(0)" : "translateY(16px)",
+                  transition: prefersReducedMotion ? "none" : "opacity 700ms ease-out, transform 700ms ease-out",
                 }}
               >
                 <h2 className="font-bebas text-[40px] leading-[1.1] tracking-[0.08em] text-gold mb-6">
@@ -287,7 +264,7 @@ const Index = () => {
           </section>
 
           <footer className="py-8 px-6 max-w-md mx-auto">
-            <p className="text-ink-ghost text-[12px] tracking-wide leading-relaxed text-center">
+            <p className="text-ink-secondary text-[12px] tracking-wide leading-relaxed text-center">
               For educational and informational purposes only. Not legal, tax, or investment advice.
               Consult a qualified entertainment attorney before making financing decisions.
             </p>
