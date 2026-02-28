@@ -1,16 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import {
-  ArrowLeft,
-  Check,
-  Mail,
-  Instagram,
-} from "lucide-react";
+import { ArrowLeft, Check, Mail, Instagram } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import { getProduct, mainProducts } from "@/lib/store-products";
+import { getProduct } from "@/lib/store-products";
 import { getShareUrl, SHARE_TEXT, SHARE_TITLE } from "@/lib/constants";
-import { useState, useCallback } from "react";
+
 
 const StorePackage = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -43,7 +38,7 @@ const StorePackage = () => {
       <div className="min-h-screen bg-black flex flex-col">
         <main className="flex-1 flex items-center justify-center">
           <div className="text-center">
-            <p className="text-ink-body mb-4">Package not found.</p>
+            <p className="text-ink-body text-[16px] mb-4">Package not found.</p>
             <button
               onClick={() => navigate("/store")}
               className="text-ink-secondary text-[14px] hover:text-ink-body transition-colors"
@@ -57,13 +52,15 @@ const StorePackage = () => {
   }
 
   const isFeatured = product.featured;
+  const isPremium = product.tier === 3;
   const descParagraphs = product.fullDescription.split("\n\n");
 
   return (
     <div className="min-h-screen bg-black flex flex-col grain-overlay">
-      <main className="flex-1 animate-fade-in pb-24">
+      <main className="flex-1 pb-24" style={{ paddingBottom: "env(safe-area-inset-bottom)" }}>
+
         {/* BACK NAV */}
-        <div className="px-6 pt-6 max-w-2xl mx-auto">
+        <div className="px-6 pt-6 max-w-md mx-auto">
           <button
             onClick={() => navigate("/store")}
             className="flex items-center gap-2 text-[14px] text-ink-secondary hover:text-ink-body transition-colors"
@@ -73,66 +70,80 @@ const StorePackage = () => {
           </button>
         </div>
 
-        {/* ═══════════════════════════════════════════════════════════
-            HERO
-            ═══════════════════════════════════════════════════════════ */}
-        <section className="px-6 pt-8 pb-2 max-w-2xl mx-auto">
+        {/* ──────────────────────────────────────────────────────────
+             PRODUCT HEADER
+           ────────────────────────────────────────────────────────── */}
+        <section className="px-6 pt-8 pb-6 max-w-md mx-auto">
           {product.badge && (
             <div className="mb-4">
-              <span className="inline-block px-3 py-1.5 rounded-full bg-gold/[0.15] border border-gold/30 text-gold text-[12px] tracking-[0.15em] uppercase font-bold">
+              <span className={cn(
+                "inline-block px-3 py-1.5 text-[12px] tracking-[0.15em] uppercase font-bold rounded",
+                isFeatured
+                  ? "bg-gold/20 border border-gold/40 text-gold"
+                  : isPremium
+                  ? "bg-gold/10 border border-gold/25 text-gold"
+                  : "border border-gold-border text-ink-secondary"
+              )}>
                 {product.badge}
               </span>
             </div>
           )}
 
-          <h1 className="font-bebas text-3xl md:text-4xl text-white leading-tight mb-3">
+          <h1 className="font-bebas text-[40px] tracking-[0.06em] text-white leading-tight mb-3">
             {product.name.toUpperCase()}
           </h1>
 
           <div className="mb-6">
             {product.originalPrice && (
-              <span className="font-mono text-lg text-ink-secondary line-through mr-2">
-                ${product.originalPrice.toLocaleString()}
+              <span className="font-mono text-[16px] text-ink-secondary line-through mr-2">
+                ${product.originalPrice}
               </span>
             )}
-            <span className="font-mono text-4xl font-medium text-white">
+            <span className="font-mono text-[40px] font-bold text-white">
               ${product.price.toLocaleString()}
             </span>
           </div>
 
-          <div className="space-y-4 mb-2">
+          <div className="space-y-4">
             {descParagraphs.map((p, i) => (
-              <p key={i} className="text-ink-body text-[14px] leading-relaxed">
+              <p key={i} className="text-ink-body text-[16px] leading-relaxed">
                 {p}
               </p>
             ))}
           </div>
         </section>
 
-        {/* ═══════════════════════════════════════════════════════════
-            WHAT'S INCLUDED
-            ═══════════════════════════════════════════════════════════ */}
-        <section id="whats-included" className="px-6 py-12">
-          <div className="max-w-2xl mx-auto">
-            <p className="text-ink-secondary text-[12px] tracking-[0.2em] uppercase text-center mb-2 font-semibold">
-              Deliverables
-            </p>
-            <h2 className="font-bebas text-3xl tracking-[0.06em] text-gold text-center mb-8">
-              WHAT'S <span className="text-white">INCLUDED</span>
-            </h2>
-            <div className="space-y-4">
-              {product.whatsIncluded.map((item) => (
+
+        {/* ──────────────────────────────────────────────────────────
+             WHAT'S INCLUDED — ledger-style cards
+           ────────────────────────────────────────────────────────── */}
+        <section className="py-14 md:py-20 px-6">
+          <div className="max-w-md mx-auto">
+            <div className="text-center mb-8">
+              <h2 className="font-bebas text-[40px] tracking-[0.08em] text-gold">
+                WHAT{"\u2019"}S <span className="text-white">INCLUDED</span>
+              </h2>
+            </div>
+
+            <div
+              className="border border-gold-border bg-black overflow-hidden rounded-xl"
+              style={{ boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)' }}
+            >
+              {product.whatsIncluded.map((item, i) => (
                 <div
                   key={item.title}
-                  className="rounded-xl border border-gold-border bg-transparent p-5"
+                  className={cn(
+                    "px-6 py-5",
+                    i > 0 && "border-t border-bg-card-rule",
+                  )}
                 >
                   <div className="flex items-start gap-3 mb-2">
                     <Check className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
-                    <h3 className="font-bebas text-lg tracking-[0.06em] text-white">
+                    <h3 className="font-bebas text-[16px] tracking-[0.06em] text-white">
                       {item.title.toUpperCase()}
                     </h3>
                   </div>
-                  <p className="text-ink-body text-[14px] leading-relaxed pl-7">
+                  <p className="text-ink-secondary text-[16px] leading-relaxed pl-7">
                     {item.body}
                   </p>
                 </div>
@@ -141,45 +152,52 @@ const StorePackage = () => {
           </div>
         </section>
 
-        {/* ═══════════════════════════════════════════════════════════
-            WHO THIS IS FOR
-            ═══════════════════════════════════════════════════════════ */}
-        <section id="who-its-for" className="px-6 py-12">
-          <div className="max-w-2xl mx-auto">
-            <p className="text-ink-secondary text-[12px] tracking-[0.2em] uppercase text-center mb-2 font-semibold">
-              Ideal For
-            </p>
-            <h2 className="font-bebas text-3xl tracking-[0.06em] text-gold text-center mb-8">
-              WHO THIS IS <span className="text-white">FOR</span>
-            </h2>
-            <p className="text-ink-body text-[14px] leading-relaxed">
+
+        {/* ──────────────────────────────────────────────────────────
+             WHO THIS IS FOR
+           ────────────────────────────────────────────────────────── */}
+        <section className="py-14 md:py-20 px-6">
+          <div className="max-w-md mx-auto">
+            <div className="text-center mb-8">
+              <h2 className="font-bebas text-[40px] tracking-[0.08em] text-gold">
+                WHO THIS IS <span className="text-white">FOR</span>
+              </h2>
+            </div>
+            <p className="text-ink-body text-[16px] leading-relaxed">
               {product.whoItsFor}
             </p>
           </div>
         </section>
 
-        {/* ═══════════════════════════════════════════════════════════
-            WHAT YOU'LL BUILD
-            ═══════════════════════════════════════════════════════════ */}
-        <section id="what-youll-build" className="px-6 py-12">
-          <div className="max-w-2xl mx-auto">
-            <p className="text-ink-secondary text-[12px] tracking-[0.2em] uppercase text-center mb-2 font-semibold">
-              The Result
-            </p>
-            <h2 className="font-bebas text-3xl tracking-[0.06em] text-gold text-center mb-8">
-              WHAT YOU'LL <span className="text-white">BUILD</span>
-            </h2>
-            <p className="text-ink-body text-[14px] leading-relaxed">
+
+        {/* ──────────────────────────────────────────────────────────
+             WHAT YOU'LL BUILD
+           ────────────────────────────────────────────────────────── */}
+        <section className="py-14 md:py-20 px-6">
+          <div className="max-w-md mx-auto">
+            <div className="text-center mb-8">
+              <h2 className="font-bebas text-[40px] tracking-[0.08em] text-gold">
+                WHAT YOU{"\u2019"}LL <span className="text-white">BUILD</span>
+              </h2>
+            </div>
+            <p className="text-ink-body text-[16px] leading-relaxed">
               {product.whatYoullBuild}
             </p>
 
-            {/* Upgrade prompt (Blueprint only) */}
+            {/* Upgrade prompt */}
             {product.upgradePrompt && (
-              <div className="mt-6 rounded-xl border border-gold/20 bg-gold/[0.04] p-5">
-                <h3 className="font-bebas text-lg tracking-[0.08em] text-gold mb-2">
+              <div
+                className="mt-8 p-6 rounded-xl"
+                style={{
+                  border: '1px solid rgba(212,175,55,0.15)',
+                  background: 'rgba(212,175,55,0.03)',
+                  boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)',
+                }}
+              >
+                <h3 className="font-bebas text-[16px] tracking-[0.08em] text-gold mb-2">
                   {product.upgradePrompt.title}
                 </h3>
-                <p className="text-ink-body text-[14px] leading-relaxed mb-4">
+                <p className="text-ink-secondary text-[16px] leading-relaxed mb-4">
                   {product.upgradePrompt.body}
                 </p>
                 <button
@@ -193,64 +211,45 @@ const StorePackage = () => {
           </div>
         </section>
 
-        {/* ═══════════════════════════════════════════════════════════
-            FOOTER
-            ═══════════════════════════════════════════════════════════ */}
-        <footer className="py-10 px-6">
-          <div className="max-w-sm mx-auto">
-            <div className="grid grid-cols-2 gap-3 mb-8 max-w-[340px] mx-auto">
-              <a
-                href="mailto:thefilmmaker.og@gmail.com"
-                className="flex items-center justify-center gap-2 text-[14px] tracking-wider text-gold/70 hover:text-gold transition-colors active:scale-[0.97] py-3.5 rounded-lg border border-gold-border hover:border-gold/30"
-              >
-                <Mail className="w-4 h-4" />
-                <span>Email</span>
-              </a>
-              <a
-                href="https://www.instagram.com/filmmaker.og"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 text-[14px] tracking-wider text-gold/70 hover:text-gold transition-colors active:scale-[0.97] py-3.5 rounded-lg border border-gold-border hover:border-gold/30"
-              >
-                <Instagram className="w-4 h-4" />
-                <span>Instagram</span>
-              </a>
-            </div>
 
-            <div className="flex items-center justify-center mb-2">
-              <span className="font-bebas text-3xl tracking-[0.2em] text-gold">
-                FILMMAKER<span className="text-white">.OG</span>
-              </span>
-            </div>
-            <p className="text-ink-secondary/60 text-[12px] tracking-wide text-center mb-4">
-              Democratizing the business of film.
-            </p>
-            <p className="text-ink-secondary/60 text-[12px] tracking-wide leading-relaxed text-center">
-              For educational and informational purposes only. Not legal, tax, or
-              investment advice. Consult a qualified entertainment attorney before
-              making financing decisions.
-            </p>
-          </div>
+        {/* ──────────────────────────────────────────────────────────
+             FOOTER
+           ────────────────────────────────────────────────────────── */}
+        <footer className="py-8 px-6 max-w-md mx-auto">
+          <p className="text-ink-secondary text-[14px] tracking-[0.04em] text-center mb-3">
+            Democratizing the business of film.
+          </p>
+          <p className="text-ink-ghost text-[12px] tracking-wide leading-relaxed text-center">
+            For educational and informational purposes only. Not legal, tax, or
+            investment advice. Consult a qualified entertainment attorney before
+            making financing decisions.
+          </p>
         </footer>
       </main>
 
-      {/* ═══════════════════════════════════════════════════════════
-          STICKY BOTTOM CTA BAR
-          ═══════════════════════════════════════════════════════════ */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 bg-black/95 backdrop-blur-md border-t border-gold-border">
-        <div className="max-w-2xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
+      {/* ──────────────────────────────────────────────────────────
+           STICKY BOTTOM CTA BAR
+         ────────────────────────────────────────────────────────── */}
+      <div
+        className="fixed bottom-0 left-0 right-0 z-50 backdrop-blur-md"
+        style={{
+          background: 'rgba(0,0,0,0.92)',
+          borderTop: '1px solid rgba(212,175,55,0.15)',
+        }}
+      >
+        <div className="max-w-md mx-auto px-4 py-3 flex items-center justify-between gap-4">
           <div className="flex items-baseline gap-2 min-w-0">
-            <span className="font-bebas text-base text-white truncate">
+            <span className="font-bebas text-[16px] text-white truncate">
               {product.name.toUpperCase()}
             </span>
-            <span className="font-mono text-lg font-medium text-white">
+            <span className="font-mono text-[16px] font-bold text-white">
               ${product.price.toLocaleString()}
             </span>
           </div>
           <button
             onClick={() => navigate("/store#products")}
             className={cn(
-              "h-12 px-6 flex-shrink-0 text-[14px]",
+              "h-12 px-6 flex-shrink-0 uppercase tracking-[0.06em]",
               isFeatured ? "btn-cta-primary" : "btn-cta-secondary"
             )}
           >

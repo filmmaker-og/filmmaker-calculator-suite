@@ -63,54 +63,75 @@ const Index = () => {
     observer.observe(el);
     return () => { observer.disconnect(); clearTimeout(delay); };
   }, []);
-  // Net Profits countup
+  // Net Profits countup — scroll-triggered independently
   const [countVal, setCountVal] = useState(0);
+  const netProfitRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    if (!barsRevealed) return;
-    const delay = setTimeout(() => {
-      const target = 417500;
-      const dur = 1800;
-      const start = performance.now();
-      const step = (now: number) => {
-        const t = Math.min((now - start) / dur, 1);
-        const eased = 1 - Math.pow(1 - t, 3); // cubic ease-out
-        setCountVal(Math.round(eased * target));
-        if (t < 1) requestAnimationFrame(step);
-      };
-      requestAnimationFrame(step);
-    }, 3400);
-    return () => clearTimeout(delay);
-  }, [barsRevealed]);
-  // Corridor split countup (starts after main counter finishes)
+    const el = netProfitRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          obs.disconnect();
+          const target = 417500;
+          const dur = 1200;
+          const start = performance.now();
+          const step = (now: number) => {
+            const t = Math.min((now - start) / dur, 1);
+            const eased = 1 - Math.pow(1 - t, 3); // cubic ease-out
+            setCountVal(Math.round(eased * target));
+            if (t < 1) requestAnimationFrame(step);
+          };
+          requestAnimationFrame(step);
+        }
+      },
+      { threshold: 0.5 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+  // Corridor split countup — scroll-triggered independently
   const [producerVal, setProducerVal] = useState(0);
   const [investorVal, setInvestorVal] = useState(0);
+  const corridorRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    if (!barsRevealed) return;
-    const delay = setTimeout(() => {
-      const target = 208750;
-      const dur = 1200;
-      const start = performance.now();
-      const step = (now: number) => {
-        const t = Math.min((now - start) / dur, 1);
-        const eased = 1 - Math.pow(1 - t, 3);
-        const val = Math.round(eased * target);
-        setProducerVal(val);
-        setInvestorVal(val);
-        if (t < 1) requestAnimationFrame(step);
-      };
-      requestAnimationFrame(step);
-    }, 6000);
-    return () => clearTimeout(delay);
-  }, [barsRevealed]);
+    const el = corridorRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          obs.disconnect();
+          const target = 208750;
+          const dur = 1200;
+          const start = performance.now();
+          const step = (now: number) => {
+            const t = Math.min((now - start) / dur, 1);
+            const eased = 1 - Math.pow(1 - t, 3);
+            const val = Math.round(eased * target);
+            setProducerVal(val);
+            setInvestorVal(val);
+            if (t < 1) requestAnimationFrame(step);
+          };
+          requestAnimationFrame(step);
+        }
+      },
+      { threshold: 0.5 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
   const handleStartClick = () => { haptics.medium(); gatedNavigate("/calculator?tab=budget"); };
   // Scroll-triggered reveals — value section + bridge
   const valueRef = useRef<HTMLDivElement>(null);
   const [valueVisible, setValueVisible] = useState(false);
+  const credRef = useRef<HTMLDivElement>(null);
+  const [credVisible, setCredVisible] = useState(false);
   const bridgeRef = useRef<HTMLDivElement>(null);
   const [bridgeVisible, setBridgeVisible] = useState(false);
   useEffect(() => {
     const sections = [
       { el: valueRef.current, setter: setValueVisible },
+      { el: credRef.current, setter: setCredVisible },
       { el: bridgeRef.current, setter: setBridgeVisible },
     ];
     const observers: IntersectionObserver[] = [];
@@ -130,6 +151,19 @@ const Index = () => {
     });
     return () => observers.forEach(obs => obs.disconnect());
   }, []);
+  // Value section tile data
+  const withItems = [
+    { title: "Revenue Mapped", desc: "Revenue divided automatically across every stakeholder" },
+    { title: "Investor-Ready PDF", desc: "Share a polished waterfall document with one click" },
+    { title: "Full Clarity", desc: "See exactly who gets paid and when in the cascade" },
+    { title: "Real Numbers", desc: "Know your margins before you shoot a single frame" },
+  ];
+  const withoutItems = [
+    { title: "Guesswork Deals", desc: "Structured on hope, not data" },
+    { title: "No Framework", desc: "No shared language for investor conversations" },
+    { title: "Ambiguity", desc: "Money flow is unclear to everyone involved" },
+    { title: "Trial & Error", desc: "Years of expensive lessons learned the hard way" },
+  ];
   return (
     <>
       {/* Lead capture modal — magic link auth */}
@@ -162,7 +196,7 @@ const Index = () => {
                 <h1 className="font-bebas text-[clamp(3.2rem,11vw,4.8rem)] leading-[0.95] tracking-[0.02em] text-gold mb-3">
                   SEE WHERE EVERY DOLLAR <span className="text-white">GOES</span>
                 </h1>
-                <p className="text-ink-secondary text-[16px] leading-[1.7] tracking-[0.02em] font-medium">
+                <p className="text-white/80 text-[16px] leading-[1.7] tracking-[0.02em] font-medium">
                   Democratizing the business of film.
                 </p>
               </div>
@@ -231,7 +265,7 @@ const Index = () => {
                   ))}
                 </div>
                 {/* Net Profits */}
-                <div className="mt-4 border border-gold-border bg-black px-6 py-6 text-center rounded-lg"
+                <div ref={netProfitRef} className="mt-4 border border-gold-border bg-black px-6 py-6 text-center rounded-lg"
                   style={{ boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)' }}>
                   <p className="text-[12px] tracking-[0.2em] uppercase font-semibold text-gold mb-1">Net Profits</p>
                   <span className="font-mono text-[26px] font-bold text-white">
@@ -239,7 +273,7 @@ const Index = () => {
                   </span>
                 </div>
                 {/* Two corridor boxes */}
-                <div className="grid grid-cols-2 gap-4 mt-4">
+                <div ref={corridorRef} className="grid grid-cols-2 gap-4 mt-4">
                   <div className="border border-gold-border bg-black px-4 py-6 text-center rounded-lg"
                     style={{ boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)' }}>
                     <p className="text-[12px] tracking-[0.2em] uppercase font-semibold text-gold mb-1">Producer Corridor</p>
@@ -287,52 +321,97 @@ const Index = () => {
             <div
               ref={valueRef}
               className="relative max-w-md mx-auto"
-              style={{
-                opacity: valueVisible ? 1 : 0,
-                transform: valueVisible ? 'translateY(0)' : 'translateY(20px)',
-                transition: 'opacity 700ms ease-out, transform 700ms ease-out',
-              }}
             >
               <div className="border border-gold-border bg-black overflow-hidden rounded-xl"
                 style={{ boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)' }}>
 
                 {/* Checks — what you get */}
-                <div className="px-6 pt-6 pb-5">
-                  <p className="font-mono text-[14px] tracking-[0.12em] uppercase text-gold mb-5">
+                <div className="px-5 pt-6 pb-5">
+                  <p className="font-mono text-[14px] tracking-[0.12em] uppercase text-gold mb-5 px-1">
                     With your waterfall
                   </p>
-                  {[
-                    "See exactly who gets paid and when",
-                    "Revenue splits calculated automatically",
-                    "Investor-ready waterfall PDF",
-                    "Know your real numbers before you shoot",
-                  ].map((item) => (
-                    <div key={item} className="flex items-start gap-3 py-2.5">
-                      <span className="text-gold text-[18px] leading-none mt-0.5">{"\u2713"}</span>
-                      <span className="text-[16px] text-ink-body leading-snug">{item}</span>
-                    </div>
-                  ))}
+                  <div className="flex flex-col gap-3">
+                    {withItems.map((item, i) => (
+                      <div
+                        key={item.title}
+                        className="flex items-start gap-4 rounded-lg px-4 py-4"
+                        style={{
+                          background: 'rgba(212,175,55,0.04)',
+                          border: '1px solid rgba(212,175,55,0.08)',
+                          opacity: valueVisible ? 1 : 0,
+                          transform: valueVisible ? 'translateY(0)' : 'translateY(12px)',
+                          transition: 'opacity 500ms ease-out, transform 500ms ease-out',
+                          transitionDelay: `${i * 120}ms`,
+                        }}
+                      >
+                        <div
+                          className="flex-shrink-0 w-8 h-8 rounded-md flex items-center justify-center mt-0.5"
+                          style={{
+                            background: 'linear-gradient(135deg, #D4AF37 0%, #B8962E 100%)',
+                            boxShadow: '0 2px 8px rgba(212,175,55,0.25)',
+                          }}
+                        >
+                          <span className="text-black text-[16px] font-bold leading-none">{"\u2713"}</span>
+                        </div>
+                        <div>
+                          <p className="text-[15px] font-semibold text-white leading-snug">{item.title}</p>
+                          <p className="text-[13px] text-ink-secondary leading-snug mt-1">{item.desc}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
 
                 {/* Gold divider */}
-                <div className="mx-6 h-[1px]" style={{ background: 'linear-gradient(90deg, transparent, rgba(212,175,55,0.30), transparent)' }} />
+                <div className="mx-6 h-[1px]" style={{
+                  background: 'linear-gradient(90deg, transparent, rgba(212,175,55,0.30), transparent)',
+                  opacity: valueVisible ? 1 : 0,
+                  transition: 'opacity 500ms ease-out',
+                  transitionDelay: `${withItems.length * 120}ms`,
+                }} />
 
                 {/* X marks — without it */}
-                <div className="px-6 pt-6 pb-6" style={{ background: 'rgba(255,255,255,0.02)' }}>
-                  <p className="font-mono text-[14px] tracking-[0.12em] uppercase text-ink-secondary mb-5">
+                <div className="px-5 pt-6 pb-6" style={{ background: 'rgba(255,255,255,0.02)' }}>
+                  <p
+                    className="font-mono text-[14px] tracking-[0.12em] uppercase text-ink-secondary mb-5 px-1"
+                    style={{
+                      opacity: valueVisible ? 1 : 0,
+                      transition: 'opacity 500ms ease-out',
+                      transitionDelay: `${withItems.length * 120 + 80}ms`,
+                    }}
+                  >
                     Without it
                   </p>
-                  {[
-                    "Deals structured on guesswork",
-                    "No framework for investor conversations",
-                    "Ambiguity in how money flows back",
-                    "Years of expensive trial and error",
-                  ].map((item) => (
-                    <div key={item} className="flex items-start gap-3 py-2.5">
-                      <span className="text-ink-secondary text-[18px] leading-none mt-0.5">{"\u2717"}</span>
-                      <span className="text-[16px] text-ink-secondary leading-snug">{item}</span>
-                    </div>
-                  ))}
+                  <div className="flex flex-col gap-3">
+                    {withoutItems.map((item, i) => (
+                      <div
+                        key={item.title}
+                        className="flex items-start gap-4 rounded-lg px-4 py-4"
+                        style={{
+                          background: 'rgba(180,60,60,0.06)',
+                          border: '1px solid rgba(180,60,60,0.12)',
+                          opacity: valueVisible ? 1 : 0,
+                          transform: valueVisible ? 'translateY(0)' : 'translateY(12px)',
+                          transition: 'opacity 500ms ease-out, transform 500ms ease-out',
+                          transitionDelay: `${(withItems.length + i + 1) * 120}ms`,
+                        }}
+                      >
+                        <div
+                          className="flex-shrink-0 w-8 h-8 rounded-md flex items-center justify-center mt-0.5"
+                          style={{
+                            background: 'rgba(180,60,60,0.15)',
+                            border: '1px solid rgba(180,60,60,0.20)',
+                          }}
+                        >
+                          <span className="text-[14px] font-bold leading-none" style={{ color: 'rgba(220,100,100,0.70)' }}>{"\u2717"}</span>
+                        </div>
+                        <div>
+                          <p className="text-[15px] font-semibold leading-snug" style={{ color: 'rgba(255,200,200,0.60)' }}>{item.title}</p>
+                          <p className="text-[13px] leading-snug mt-1" style={{ color: 'rgba(255,255,255,0.35)' }}>{item.desc}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
 
               </div>
@@ -341,6 +420,28 @@ const Index = () => {
           {/* ──────────────────────────────────────────────────────────
                § 3  THE CLOSE — setup → payoff → action
              ────────────────────────────────────────────────────────── */}
+          {/* ── CREDIBILITY ── */}
+          <section className="px-6 pb-2">
+            <div className="max-w-md mx-auto">
+              <div
+                ref={credRef}
+                className="rounded-2xl px-8 py-10 text-center"
+                style={{
+                  border: '1px solid rgba(255,255,255,0.08)',
+                  background: 'rgba(255,255,255,0.03)',
+                  opacity: credVisible ? 1 : 0,
+                  transform: credVisible ? 'translateY(0)' : 'translateY(16px)',
+                  transition: 'opacity 700ms ease-out, transform 700ms ease-out',
+                }}
+              >
+                <p className="text-[15px] text-white/60 leading-relaxed tracking-wide">
+                  Built by a second-generation producer whose debut premiered at Tribeca and landed on Netflix.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          {/* ── FINAL CTA ── */}
           <section id="final-cta" className="py-14 md:py-20 px-6">
             <div className="max-w-md mx-auto">
               <div
