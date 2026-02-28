@@ -150,6 +150,10 @@ const Index = () => {
                 </div>
               </div>
 
+              <p className="text-[14px] text-white/45 italic leading-relaxed tracking-[0.01em] text-center py-4">
+                My first project premiered at Tribeca and landed on Netflix — and I still had to guess at the math.
+              </p>
+
               {/* WITHOUT card */}
               <div
                 className="rounded-xl overflow-hidden"
@@ -219,9 +223,6 @@ const Index = () => {
                   transition: prefersReducedMotion ? "none" : "opacity 700ms ease-out, transform 700ms ease-out",
                 }}
               >
-                <p className="text-[15px] text-white/55 italic leading-relaxed tracking-[0.01em] mb-6">
-                  My first project premiered at Tribeca and landed on Netflix — and I still had to guess at the math. These are the tools I built so you don't have to.
-                </p>
                 <h2 className="font-bebas text-[32px] leading-[1.1] tracking-[0.06em] text-gold mb-6">
                   YOUR INVESTORS WILL{"\u00A0"}ASK HOW THE MONEY FLOWS <span className="text-white">BACK.</span>
                 </h2>
