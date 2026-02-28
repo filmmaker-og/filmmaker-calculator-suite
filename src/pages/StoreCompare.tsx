@@ -8,6 +8,7 @@ import {
   type FeatureValue,
 } from "@/lib/store-products";
 
+
 /* ═══════════════════════════════════════════════════════════════════
    FEATURE VALUE CELL
    ═══════════════════════════════════════════════════════════════════ */
@@ -22,7 +23,7 @@ const FeatureCell = ({
     return value ? (
       <Check className={cn("w-4 h-4 mx-auto", featured ? "text-gold" : "text-ink-body")} />
     ) : (
-      <XIcon className="w-3.5 h-3.5 mx-auto text-ink-secondary/30" />
+      <XIcon className="w-3.5 h-3.5 mx-auto text-ink-ghost" />
     );
   }
   return (
@@ -32,8 +33,9 @@ const FeatureCell = ({
   );
 };
 
+
 /* ═══════════════════════════════════════════════════════════════════
-   STORE COMPARE PAGE
+   STORE COMPARE PAGE — three-column comparison
    ═══════════════════════════════════════════════════════════════════ */
 const StoreCompare = () => {
   const navigate = useNavigate();
@@ -43,9 +45,9 @@ const StoreCompare = () => {
 
   return (
     <div className="min-h-screen bg-black flex flex-col grain-overlay">
-      <main className="flex-1 animate-fade-in">
+      <main className="flex-1" style={{ paddingBottom: "env(safe-area-inset-bottom)" }}>
         {/* BACK NAV */}
-        <div className="px-6 pt-6 max-w-3xl mx-auto">
+        <div className="px-6 pt-6 max-w-md mx-auto">
           <button
             onClick={() => navigate("/store")}
             className="flex items-center gap-2 text-[14px] text-ink-secondary hover:text-ink-body transition-colors"
@@ -55,101 +57,102 @@ const StoreCompare = () => {
           </button>
         </div>
 
-        <section id="compare" className="px-6 py-12">
-          <div className="max-w-3xl mx-auto">
-            <p className="text-ink-secondary text-[12px] tracking-[0.2em] uppercase text-center mb-2 font-semibold">
-              Side by Side
-            </p>
-            <h2 className="font-bebas text-3xl tracking-[0.06em] text-gold text-center mb-8">
-              COMPARE <span className="text-white">PACKAGES</span>
-            </h2>
+        <section id="compare" className="py-14 md:py-20 px-4">
+          <div className="max-w-md mx-auto">
+            <div className="text-center mb-8">
+              <h1 className="font-bebas text-[40px] tracking-[0.08em] text-gold">
+                COMPARE <span className="text-white">PACKAGES</span>
+              </h1>
+            </div>
 
-            {/* Column headers */}
-            <div className="overflow-x-auto">
-              <table className="store-compare-table w-full">
-                <thead>
-                  <tr>
-                    <th className="text-left" />
-                    <th>
-                      <div className="flex flex-col items-center gap-1">
-                        <span>{blueprint?.name}</span>
-                        <span className="font-mono text-ink-body text-[14px] font-medium">
-                          ${blueprint?.price.toLocaleString()}
-                        </span>
+            {/* Comparison table */}
+            <div
+              className="border border-gold-border bg-black overflow-hidden rounded-xl"
+              style={{ boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)' }}
+            >
+              {/* Column headers */}
+              <div className="grid grid-cols-4 gap-0 px-3 py-4 border-b border-bg-card-rule">
+                <div /> {/* empty label col */}
+                <div className="text-center">
+                  <p className="font-bebas text-[12px] tracking-[0.06em] text-white leading-tight">
+                    {blueprint?.name.toUpperCase()}
+                  </p>
+                  <p className="font-mono text-[12px] text-ink-secondary mt-0.5">
+                    ${blueprint?.price}
+                  </p>
+                </div>
+                <div className="text-center">
+                  <p className="font-bebas text-[12px] tracking-[0.06em] text-gold leading-tight">
+                    {pitchPackage?.name.toUpperCase()}
+                  </p>
+                  <p className="font-mono text-[12px] text-gold mt-0.5">
+                    ${pitchPackage?.price}
+                  </p>
+                </div>
+                <div className="text-center">
+                  <p className="font-bebas text-[12px] tracking-[0.06em] text-white leading-tight">
+                    {marketCase?.name.toUpperCase()}
+                  </p>
+                  <p className="font-mono text-[12px] text-ink-secondary mt-0.5">
+                    ${marketCase?.price.toLocaleString()}
+                  </p>
+                </div>
+              </div>
+
+              {/* Sections + rows */}
+              {comparisonSections.map((section) => (
+                <div key={section.title}>
+                  {/* Section label */}
+                  <div className="px-3 pt-5 pb-2">
+                    <span className="font-mono text-[12px] tracking-[0.15em] uppercase text-gold font-bold">
+                      {section.title}
+                    </span>
+                  </div>
+
+                  {/* Feature rows */}
+                  {section.features.map((feat) => (
+                    <div
+                      key={feat.label}
+                      className="grid grid-cols-4 gap-0 px-3 py-3 border-t border-bg-card-rule items-center"
+                    >
+                      <span className="text-[12px] text-ink-secondary leading-snug pr-2">
+                        {feat.label}
+                      </span>
+                      <div className="text-center">
+                        <FeatureCell value={feat.theBlueprint} />
                       </div>
-                    </th>
-                    <th className="featured-col">
-                      <div className="flex flex-col items-center gap-1">
-                        <span className="text-gold">{pitchPackage?.name}</span>
-                        <span className="font-mono text-gold text-[14px] font-medium">
-                          ${pitchPackage?.price.toLocaleString()}
-                        </span>
+                      <div className="text-center">
+                        <FeatureCell value={feat.thePitchPackage} featured />
                       </div>
-                    </th>
-                    <th>
-                      <div className="flex flex-col items-center gap-1">
-                        <span>{marketCase?.name}</span>
-                        <span className="font-mono text-ink-body text-[14px] font-medium">
-                          ${marketCase?.price.toLocaleString()}
-                        </span>
+                      <div className="text-center">
+                        <FeatureCell value={feat.theMarketCase} />
                       </div>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {comparisonSections.map((section) => (
-                    <>
-                      <tr key={`section-${section.title}`}>
-                        <td
-                          colSpan={4}
-                          className="!text-left !text-gold !text-[11px] !tracking-[0.15em] !uppercase !font-bold !pt-6 !pb-2 !border-b-0"
-                        >
-                          {section.title}
-                        </td>
-                      </tr>
-                      {section.features.map((feat) => (
-                        <tr key={feat.label}>
-                          <td>{feat.label}</td>
-                          <td>
-                            <FeatureCell value={feat.theBlueprint} />
-                          </td>
-                          <td className="featured-col">
-                            <FeatureCell value={feat.thePitchPackage} featured />
-                          </td>
-                          <td>
-                            <FeatureCell value={feat.theMarketCase} />
-                          </td>
-                        </tr>
-                      ))}
-                    </>
+                    </div>
                   ))}
-                </tbody>
-              </table>
+                </div>
+              ))}
             </div>
 
             {/* CTAs */}
-            <div className="grid grid-cols-3 gap-4 mt-8">
+            <div className="space-y-3 mt-8">
               <button
                 onClick={() => navigate("/store#products")}
-                className="h-12 text-[14px] btn-cta-secondary"
+                className="w-full h-14 btn-cta-primary animate-cta-glow-pulse"
               >
-                START WITH THE BLUEPRINT
-              </button>
-              <button
-                onClick={() => navigate("/store#products")}
-                className="h-12 text-[14px] btn-cta-primary"
-              >
-                GET THE PITCH PACKAGE
-              </button>
-              <button
-                onClick={() => navigate("/store#products")}
-                className="h-12 text-[14px] btn-cta-secondary"
-              >
-                GET THE FULL PACKAGE
+                CHOOSE YOUR PACKAGE
               </button>
             </div>
           </div>
         </section>
+
+        {/* Footer */}
+        <footer className="py-8 px-6 max-w-md mx-auto">
+          <p className="text-ink-ghost text-[12px] tracking-wide leading-relaxed text-center">
+            For educational and informational purposes only. Not legal, tax, or
+            investment advice. Consult a qualified entertainment attorney before
+            making financing decisions.
+          </p>
+        </footer>
       </main>
     </div>
   );
