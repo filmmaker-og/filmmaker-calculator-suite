@@ -78,11 +78,11 @@ const Index = () => {
                   SEE WHERE EVERY DOLLAR <span className="text-white">GOES</span>
                 </h1>
                 <p className="text-white/60 text-[15px] leading-[1.7] tracking-[0.04em] font-medium">
-                  Model every fee, split, and return — before you take the meeting.
+                  See every fee, split, and return — before your investor asks.
                 </p>
               </div>
 
-              <div className="mb-9 text-center px-2">
+              <div className="mb-6 text-center px-2">
                 <div className="w-full max-w-[300px] mx-auto">
                   <button
                     onClick={handleStartClick}
@@ -107,7 +107,7 @@ const Index = () => {
             </div>
           </section>
 
-          <section id="value" className="relative py-16 md:py-20 px-6">
+          <section id="value" className="relative pt-16 pb-10 md:pt-20 md:pb-12 px-6">
             <div
               ref={valueRef}
               className="relative max-w-md mx-auto flex flex-col gap-5"
@@ -204,20 +204,11 @@ const Index = () => {
               </div>
             </div>
 
-            {/* Mid-page escape CTA */}
-            <div className="text-center mt-8 max-w-md mx-auto">
-              <button
-                onClick={handleStartClick}
-                className="text-gold text-[14px] font-medium tracking-wide hover:text-white transition-colors py-3"
-              >
-                See how it works →
-              </button>
-            </div>
           </section>
 
           <div className="gold-section-divider" />
 
-          <section className="px-6 pt-12 pb-10">
+          <section className="px-6 pt-10 pb-6">
             <div className="max-w-md mx-auto">
               <div
                 ref={credRef}
