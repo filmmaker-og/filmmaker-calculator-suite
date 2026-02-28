@@ -247,7 +247,7 @@ const Calculator = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-bg-void flex flex-col">
+      <div className="min-h-screen bg-black flex flex-col">
         <div className="flex-1 flex items-center justify-center">
           <div className="w-8 h-8 border-2 border-gold border-t-transparent rounded-full animate-spin" />
         </div>
@@ -260,7 +260,7 @@ const Calculator = () => {
   const progressPercent = completedTabs.length * 25;
 
   return (
-    <div className="min-h-screen bg-bg-void flex flex-col">
+    <div className="min-h-screen bg-black flex flex-col">
       <main
         ref={mainRef}
         className="flex-1 px-4 py-6 overflow-y-auto"
@@ -284,13 +284,13 @@ const Calculator = () => {
           onClick={handleBack}
           className={cn(
             "flex items-center gap-2 px-4 py-2 rounded-md transition-all",
-            "border border-border-subtle text-text-mid",
-            "hover:border-text-dim hover:text-text-primary",
+            "border border-gold-border text-ink-body",
+            "hover:border-gold hover:text-white",
             "active:scale-95"
           )}
         >
           <ArrowLeft className="w-4 h-4" />
-          <span className="text-xs font-semibold uppercase tracking-wider">Back</span>
+          <span className="text-[12px] font-semibold uppercase tracking-wider">Back</span>
         </button>
 
         <div className="relative w-11 h-11 flex items-center justify-center">
@@ -324,7 +324,7 @@ const Calculator = () => {
               "active:scale-95 shadow-button"
             )}
           >
-            <span className="text-xs font-semibold uppercase tracking-wider">Next</span>
+            <span className="text-[12px] font-semibold uppercase tracking-wider">Next</span>
             <ArrowRight className="w-4 h-4" />
           </button>
         )}

@@ -1,13 +1,6 @@
 import { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
-/**
- * WIKI CARD — Single source of truth for content containers
- *
- * The matte card with subtle border used across ALL pages.
- * Always pair with WikiSectionHeader for the header.
- */
-
 interface WikiCardProps {
   children: ReactNode;
   className?: string;
@@ -16,9 +9,10 @@ interface WikiCardProps {
 const WikiCard = ({ children, className }: WikiCardProps) => (
   <div
     className={cn(
-      "overflow-hidden animate-fade-in bg-bg-card border border-border-subtle rounded-[--radius-lg]",
+      "overflow-hidden animate-fade-in border border-gold-border bg-black rounded-xl",
       className
     )}
+    style={{ boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)' }}
   >
     {children}
   </div>

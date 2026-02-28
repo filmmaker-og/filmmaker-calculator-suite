@@ -34,19 +34,19 @@ interface BudgetTierCardProps {
 
 const BudgetTierCard = ({ tier, range, description, accentColor }: BudgetTierCardProps) => (
   <div
-    className="p-4 flex-1 bg-bg-surface rounded-[--radius-md]"
+    className="p-4 flex-1 bg-bg-surface rounded-xl"
     style={{ borderTop: `3px solid ${accentColor}` }}
   >
     <span
-      className="font-bebas text-xs tracking-wide uppercase"
+      className="font-bebas text-[12px] tracking-wide uppercase"
       style={{ color: accentColor }}
     >
       {tier}
     </span>
-    <p className="text-lg font-medium text-white mt-1 mb-2 font-mono">
+    <p className="text-[16px] font-medium text-white mt-1 mb-2 font-mono">
       {range}
     </p>
-    <p className="text-xs leading-relaxed text-text-dim">
+    <p className="text-[12px] leading-relaxed text-ink-secondary">
       {description}
     </p>
   </div>
@@ -62,14 +62,14 @@ interface BudgetComponentProps {
 }
 
 const BudgetComponent = ({ category, percentage, items }: BudgetComponentProps) => (
-  <div className="p-4 bg-bg-surface rounded-[--radius-md] border-l-2 border-gold-muted">
+  <div className="p-4 bg-bg-surface rounded-xl border-l-2 border-gold-muted">
     <div className="flex items-center justify-between mb-2">
-      <span className="text-sm font-semibold text-white">{category}</span>
-      <span className="text-xs font-mono px-2 py-1 rounded bg-gold-subtle text-gold">
+      <span className="text-[14px] font-semibold text-white">{category}</span>
+      <span className="text-[12px] font-mono px-2 py-1 rounded bg-gold-subtle text-gold">
         {percentage}
       </span>
     </div>
-    <p className="text-xs leading-relaxed text-text-dim">
+    <p className="text-[12px] leading-relaxed text-ink-secondary">
       {items.join(' · ')}
     </p>
   </div>
@@ -84,11 +84,11 @@ interface MistakeCardProps {
 }
 
 const MistakeCard = ({ title, description }: MistakeCardProps) => (
-  <div className="p-4 flex gap-3 bg-gold-subtle rounded-[--radius-md] border border-gold-muted">
+  <div className="p-4 flex gap-3 bg-gold-subtle rounded-xl border border-gold-muted">
     <AlertTriangle className="w-5 h-5 flex-shrink-0 mt-0.5 text-gold" />
     <div>
-      <p className="text-sm font-semibold text-white mb-1">{title}</p>
-      <p className="text-xs leading-relaxed text-text-dim">
+      <p className="text-[14px] font-semibold text-white mb-1">{title}</p>
+      <p className="text-[12px] leading-relaxed text-ink-secondary">
         {description}
       </p>
     </div>
@@ -113,7 +113,7 @@ const BudgetInfo = () => {
 
   return (
     <>
-      <div className="min-h-screen text-white page-safe px-4 md:px-8 font-sans bg-bg-void">
+      <div className="min-h-screen text-white page-safe px-4 md:px-8 font-sans bg-black">
         <div className="max-w-2xl mx-auto space-y-6">
 
           {/* ═══════════════════════════════════════════════════════════════
@@ -123,17 +123,17 @@ const BudgetInfo = () => {
             {/* Back to Overview — ONLY navigation link allowed */}
             <button
               onClick={handleBackToOverview}
-              className="flex items-center gap-2 text-sm transition-colors mb-4 text-text-dim hover:text-text-mid"
+              className="flex items-center gap-2 text-[14px] transition-colors mb-4 text-ink-secondary hover:text-ink-body"
             >
               <ArrowLeft className="w-4 h-4" />
               <span>Back to Overview</span>
             </button>
 
-            <h1 className="text-4xl md:text-5xl font-bebas tracking-wide leading-tight">
+            <h1 className="text-[40px] md:text-[40px] font-bebas tracking-wide leading-tight">
               Production <span className="text-gold">Budget</span>
             </h1>
 
-            <p className="text-base leading-relaxed max-w-lg text-text-mid">
+            <p className="text-[16px] leading-relaxed max-w-lg text-ink-body">
               Your budget isn't just a number—it's the foundation of your entire deal structure.
               Everything flows from here: capital requirements, investor returns, and your ultimate profit position.
             </p>
@@ -154,7 +154,7 @@ const BudgetInfo = () => {
             <WikiSectionHeader number="01" title="Budget Range Benchmarks" />
 
             <div className="p-5 space-y-5">
-              <p className="text-sm leading-relaxed text-text-mid">
+              <p className="text-[14px] leading-relaxed text-ink-body">
                 Independent films operate across a wide spectrum. Where you land determines
                 your financing options, crew expectations, and realistic sales projections.
               </p>
@@ -197,7 +197,7 @@ const BudgetInfo = () => {
             <WikiSectionHeader number="02" title="Budget Composition" />
 
             <div className="p-5 space-y-4">
-              <p className="text-sm leading-relaxed text-text-mid">
+              <p className="text-[14px] leading-relaxed text-ink-body">
                 A professional budget breaks into predictable categories. Understanding these
                 helps you identify where costs can flex—and where they can't.
               </p>
@@ -228,7 +228,7 @@ const BudgetInfo = () => {
                 />
               </div>
 
-              <p className="text-xs leading-relaxed pt-2 text-text-dim">
+              <p className="text-[12px] leading-relaxed pt-2 text-ink-secondary">
                 These percentages shift based on genre and approach. VFX-heavy films push post
                 to 25%+. Star-driven projects can see ATL exceed 40%.
               </p>
@@ -274,7 +274,7 @@ const BudgetInfo = () => {
             {/* Primary: Back to Overview */}
             <button
               onClick={handleBackToOverview}
-              className="flex items-center gap-2 text-sm transition-colors text-text-dim hover:text-text-mid"
+              className="flex items-center gap-2 text-[14px] transition-colors text-ink-secondary hover:text-ink-body"
             >
               <ArrowLeft className="w-4 h-4" />
               <span>Back to Overview</span>
@@ -283,7 +283,7 @@ const BudgetInfo = () => {
             {/* Secondary: Subtle exit to calculator */}
             <button
               onClick={handleStartSimulation}
-              className="text-xs transition-colors text-text-dim hover:text-text-mid"
+              className="text-[12px] transition-colors text-ink-secondary hover:text-ink-body"
             >
               Ready to run the numbers? Start Simulation →
             </button>

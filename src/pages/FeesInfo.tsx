@@ -31,7 +31,7 @@ const FeesInfo = () => {
   return (
     <>
       <div
-        className="min-h-screen text-white page-safe px-4 md:px-8 font-sans bg-bg-void"
+        className="min-h-screen text-white page-safe px-4 md:px-8 font-sans bg-black"
       >
         <div className="max-w-2xl mx-auto space-y-6">
 
@@ -39,18 +39,18 @@ const FeesInfo = () => {
           <div className="space-y-4 pt-6 animate-fade-in">
             <button
               onClick={handleBackToOverview}
-              className="flex items-center gap-2 text-sm transition-colors mb-4 text-text-dim hover:text-text-mid"
+              className="flex items-center gap-2 text-[14px] transition-colors mb-4 text-ink-secondary hover:text-ink-body"
             >
               <ArrowLeft className="w-4 h-4" />
               <span>Back to Overview</span>
             </button>
 
-            <h1 className="text-4xl md:text-5xl font-bebas tracking-wide leading-tight">
+            <h1 className="text-[40px] md:text-[40px] font-bebas tracking-wide leading-tight">
               Distribution <span className="text-gold">Fees</span>
             </h1>
 
             <p
-              className="text-base leading-relaxed max-w-lg text-text-mid"
+              className="text-[16px] leading-relaxed max-w-lg text-ink-body"
             >
               The money that comes off the top before your waterfall even begins.
             </p>
@@ -65,14 +65,14 @@ const FeesInfo = () => {
             <WikiSectionHeader number="01" title="Why Fees Matter" />
 
             <div className="p-5 space-y-4">
-              <p className="text-sm leading-relaxed text-text-mid">
+              <p className="text-[14px] leading-relaxed text-ink-body">
                 When a streamer or buyer acquires your film for $2 million, that $2 million
                 doesn't flow directly into your waterfall. <strong className="text-white">
                 Distribution fees come off the top first</strong>—before senior debt, before
                 equity recoupment, before anyone in your Operating Agreement sees a cent.
               </p>
 
-              <p className="text-sm leading-relaxed text-text-mid">
+              <p className="text-[14px] leading-relaxed text-ink-body">
                 These fees aren't optional. They're contractual obligations to the entities
                 who sold, delivered, and collected on your film. Understanding them is
                 critical because they directly reduce what's available for your waterfall.
@@ -90,19 +90,19 @@ const FeesInfo = () => {
             <WikiSectionHeader number="02" title="Sales Agent Fee" />
 
             <div className="p-5 space-y-4">
-              <p className="text-sm leading-relaxed text-text-mid">
+              <p className="text-[14px] leading-relaxed text-ink-body">
                 The <strong className="text-white">sales agent</strong> represents
                 your film to international buyers and domestic distributors. They attend markets
                 (Cannes, AFM, Berlin), pitch to acquisitions executives, negotiate deals, and
                 sometimes advance marketing costs.
               </p>
 
-              <p className="text-sm leading-relaxed text-text-mid">
+              <p className="text-[14px] leading-relaxed text-ink-body">
                 Sales agent fees typically range from <strong className="text-white">
                 10-20%</strong> of gross revenues, depending on:
               </p>
 
-              <ul className="text-sm space-y-2 pl-4 text-text-mid">
+              <ul className="text-[14px] space-y-2 pl-4 text-ink-body">
                 <li className="flex items-start gap-2">
                   <span className="text-gold">•</span>
                   <span><strong className="text-white">Territory</strong> —
@@ -120,7 +120,7 @@ const FeesInfo = () => {
                 </li>
               </ul>
 
-              <p className="text-sm leading-relaxed text-text-mid">
+              <p className="text-[14px] leading-relaxed text-ink-body">
                 Some sales agents also charge <strong className="text-white">
                 market fees</strong> for attending festivals and markets, plus <strong className="text-white">
                 recoupable expenses</strong> for marketing materials, screeners, and travel.
@@ -133,23 +133,23 @@ const FeesInfo = () => {
             <WikiSectionHeader number="03" title="Collection Agent Fee" />
 
             <div className="p-5 space-y-4">
-              <p className="text-sm leading-relaxed text-text-mid">
+              <p className="text-[14px] leading-relaxed text-ink-body">
                 The <strong className="text-white">collection agent</strong> (also
                 called a collection account manager or CAM) is a neutral third party who receives
                 all revenues, applies the waterfall, and distributes payments to the correct parties.
               </p>
 
-              <p className="text-sm leading-relaxed text-text-mid">
+              <p className="text-[14px] leading-relaxed text-ink-body">
                 Collection agent fees typically range from <strong className="text-white">
                 1-5%</strong> of gross revenues. Common CAMs include Fintage House, Freeway, and
                 Film Finances. While the percentage seems small, it comes off before anything else.
               </p>
 
-              <p className="text-sm leading-relaxed text-text-mid">
+              <p className="text-[14px] leading-relaxed text-ink-body">
                 Why use a collection agent? They provide:
               </p>
 
-              <ul className="text-sm space-y-2 pl-4 text-text-mid">
+              <ul className="text-[14px] space-y-2 pl-4 text-ink-body">
                 <li className="flex items-start gap-2">
                   <span className="text-gold">•</span>
                   <span><strong className="text-white">Investor confidence</strong> —
@@ -174,20 +174,20 @@ const FeesInfo = () => {
             <WikiSectionHeader number="04" title="Delivery Costs" />
 
             <div className="p-5 space-y-4">
-              <p className="text-sm leading-relaxed text-text-mid">
+              <p className="text-[14px] leading-relaxed text-ink-body">
                 When a buyer acquires your film, they don't just want the movie—they want a
                 complete <strong className="text-white">delivery package</strong>.
                 This includes specific technical masters, audio mixes, subtitles, closed captions,
                 artwork, and legal documentation.
               </p>
 
-              <p className="text-sm leading-relaxed text-text-mid">
+              <p className="text-[14px] leading-relaxed text-ink-body">
                 Delivery costs vary significantly but can range from $25,000 to $150,000+ depending
                 on the buyer's requirements. Streamers like Netflix have particularly detailed
                 technical specifications.
               </p>
 
-              <p className="text-sm leading-relaxed text-text-mid">
+              <p className="text-[14px] leading-relaxed text-ink-body">
                 In most deals, delivery costs are <strong className="text-white">
                 recoupable</strong>—meaning they come off the top of your revenues, just like
                 distribution fees. Make sure your budget includes a realistic delivery allowance.
@@ -200,12 +200,12 @@ const FeesInfo = () => {
             <WikiSectionHeader number="05" title="The Real Math" />
 
             <div className="p-5 space-y-4">
-              <p className="text-sm leading-relaxed text-text-mid">
+              <p className="text-[14px] leading-relaxed text-ink-body">
                 Here's what happens to a $2,000,000 acquisition before it reaches your waterfall:
               </p>
 
               <div
-                className="p-4 font-mono text-xs space-y-1 bg-bg-surface rounded-[--radius-md] border border-border-subtle text-text-mid"
+                className="p-4 font-mono text-[12px] space-y-1 bg-bg-surface rounded-xl border border-gold-border text-ink-body"
               >
                 <div className="flex justify-between">
                   <span>Gross Acquisition</span>
@@ -228,14 +228,14 @@ const FeesInfo = () => {
                   <span className="text-gold-muted">− $75,000</span>
                 </div>
                 <div
-                  className="pt-2 mt-2 flex justify-between font-semibold border-t border-border-subtle"
+                  className="pt-2 mt-2 flex justify-between font-semibold border-t border-gold-border"
                 >
                   <span className="text-gold">Net to Waterfall</span>
                   <span className="text-gold">$1,525,000</span>
                 </div>
               </div>
 
-              <p className="text-sm leading-relaxed text-text-mid">
+              <p className="text-[14px] leading-relaxed text-ink-body">
                 That's nearly <strong className="text-white">24% gone</strong> before
                 your senior debt, equity investors, or profit participants see anything. And this
                 is just one territory—international sales may have additional layers of fees.
@@ -248,12 +248,12 @@ const FeesInfo = () => {
             <WikiSectionHeader number="06" title="Negotiating Fees" />
 
             <div className="p-5 space-y-4">
-              <p className="text-sm leading-relaxed text-text-mid">
+              <p className="text-[14px] leading-relaxed text-ink-body">
                 While fees are standard in the industry, they're not set in stone. Producers
                 with leverage (strong packages, track records, or competing offers) can negotiate:
               </p>
 
-              <ul className="text-sm space-y-2 pl-4 text-text-mid">
+              <ul className="text-[14px] space-y-2 pl-4 text-ink-body">
                 <li className="flex items-start gap-2">
                   <span className="text-gold">•</span>
                   <span><strong className="text-white">Caps on recoupable expenses</strong> —
@@ -276,7 +276,7 @@ const FeesInfo = () => {
                 </li>
               </ul>
 
-              <p className="text-sm leading-relaxed text-text-mid">
+              <p className="text-[14px] leading-relaxed text-ink-body">
                 Always have an entertainment attorney review your sales representation and
                 collection agreements before signing. Small percentage differences can translate
                 to significant dollar amounts.
@@ -293,7 +293,7 @@ const FeesInfo = () => {
             {/* Primary: Back to Overview */}
             <button
               onClick={handleBackToOverview}
-              className="flex items-center gap-2 text-sm transition-colors text-text-dim hover:text-text-mid"
+              className="flex items-center gap-2 text-[14px] transition-colors text-ink-secondary hover:text-ink-body"
             >
               <ArrowLeft className="w-4 h-4" />
               <span>Back to Overview</span>
@@ -302,7 +302,7 @@ const FeesInfo = () => {
             {/* Secondary: Subtle exit to calculator */}
             <button
               onClick={handleStartSimulation}
-              className="text-xs transition-colors text-text-dim hover:text-text-mid"
+              className="text-[12px] transition-colors text-ink-secondary hover:text-ink-body"
             >
               Ready to run the numbers? Start Simulation →
             </button>

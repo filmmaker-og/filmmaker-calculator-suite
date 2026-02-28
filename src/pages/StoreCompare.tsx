@@ -7,8 +7,6 @@ import {
   comparisonSections,
   type FeatureValue,
 } from "@/lib/store-products";
-import SectionFrame from "@/components/SectionFrame";
-import SectionHeader from "@/components/SectionHeader";
 
 /* ═══════════════════════════════════════════════════════════════════
    FEATURE VALUE CELL
@@ -22,13 +20,13 @@ const FeatureCell = ({
 }) => {
   if (typeof value === "boolean") {
     return value ? (
-      <Check className={cn("w-4 h-4 mx-auto", featured ? "text-gold" : "text-text-mid")} />
+      <Check className={cn("w-4 h-4 mx-auto", featured ? "text-gold" : "text-ink-body")} />
     ) : (
-      <XIcon className="w-3.5 h-3.5 mx-auto text-text-dim/30" />
+      <XIcon className="w-3.5 h-3.5 mx-auto text-ink-secondary/30" />
     );
   }
   return (
-    <span className={cn("text-xs leading-snug", featured ? "text-text-primary" : "text-text-mid")}>
+    <span className={cn("text-[12px] leading-snug", featured ? "text-white" : "text-ink-body")}>
       {value}
     </span>
   );
@@ -41,31 +39,30 @@ const StoreCompare = () => {
   const navigate = useNavigate();
   const blueprint = mainProducts.find((p) => p.id === "the-blueprint");
   const pitchPackage = mainProducts.find((p) => p.id === "the-pitch-package");
+  const marketCase = mainProducts.find((p) => p.id === "the-market-case");
 
   return (
-    <div className="min-h-screen bg-bg-void flex flex-col">
+    <div className="min-h-screen bg-black flex flex-col grain-overlay">
       <main className="flex-1 animate-fade-in">
         {/* BACK NAV */}
         <div className="px-6 pt-6 max-w-3xl mx-auto">
           <button
             onClick={() => navigate("/store")}
-            className="flex items-center gap-2 text-sm text-text-dim hover:text-text-mid transition-colors"
+            className="flex items-center gap-2 text-[14px] text-ink-secondary hover:text-ink-body transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to Store
           </button>
         </div>
 
-        <SectionFrame id="compare">
+        <section id="compare" className="px-6 py-12">
           <div className="max-w-3xl mx-auto">
-            <SectionHeader
-              eyebrow="Side by Side"
-              title={
-                <>
-                  COMPARE <span className="text-white">PACKAGES</span>
-                </>
-              }
-            />
+            <p className="text-ink-secondary text-[12px] tracking-[0.2em] uppercase text-center mb-2 font-semibold">
+              Side by Side
+            </p>
+            <h2 className="font-bebas text-3xl tracking-[0.06em] text-gold text-center mb-8">
+              COMPARE <span className="text-white">PACKAGES</span>
+            </h2>
 
             {/* Column headers */}
             <div className="overflow-x-auto">
@@ -76,16 +73,24 @@ const StoreCompare = () => {
                     <th>
                       <div className="flex flex-col items-center gap-1">
                         <span>{blueprint?.name}</span>
-                        <span className="font-mono text-text-mid text-sm font-medium">
-                          ${blueprint?.price}
+                        <span className="font-mono text-ink-body text-[14px] font-medium">
+                          ${blueprint?.price.toLocaleString()}
                         </span>
                       </div>
                     </th>
                     <th className="featured-col">
                       <div className="flex flex-col items-center gap-1">
                         <span className="text-gold">{pitchPackage?.name}</span>
-                        <span className="font-mono text-gold text-sm font-medium">
-                          ${pitchPackage?.price}
+                        <span className="font-mono text-gold text-[14px] font-medium">
+                          ${pitchPackage?.price.toLocaleString()}
+                        </span>
+                      </div>
+                    </th>
+                    <th>
+                      <div className="flex flex-col items-center gap-1">
+                        <span>{marketCase?.name}</span>
+                        <span className="font-mono text-ink-body text-[14px] font-medium">
+                          ${marketCase?.price.toLocaleString()}
                         </span>
                       </div>
                     </th>
@@ -96,7 +101,7 @@ const StoreCompare = () => {
                     <>
                       <tr key={`section-${section.title}`}>
                         <td
-                          colSpan={3}
+                          colSpan={4}
                           className="!text-left !text-gold !text-[11px] !tracking-[0.15em] !uppercase !font-bold !pt-6 !pb-2 !border-b-0"
                         >
                           {section.title}
@@ -111,6 +116,9 @@ const StoreCompare = () => {
                           <td className="featured-col">
                             <FeatureCell value={feat.thePitchPackage} featured />
                           </td>
+                          <td>
+                            <FeatureCell value={feat.theMarketCase} />
+                          </td>
                         </tr>
                       ))}
                     </>
@@ -120,22 +128,28 @@ const StoreCompare = () => {
             </div>
 
             {/* CTAs */}
-            <div className="grid grid-cols-2 gap-4 mt-8">
+            <div className="grid grid-cols-3 gap-4 mt-8">
               <button
                 onClick={() => navigate("/store#products")}
-                className="h-12 text-sm btn-cta-secondary"
+                className="h-12 text-[14px] btn-cta-secondary"
               >
                 START WITH THE BLUEPRINT
               </button>
               <button
                 onClick={() => navigate("/store#products")}
-                className="h-12 text-sm btn-cta-primary"
+                className="h-12 text-[14px] btn-cta-primary"
+              >
+                GET THE PITCH PACKAGE
+              </button>
+              <button
+                onClick={() => navigate("/store#products")}
+                className="h-12 text-[14px] btn-cta-secondary"
               >
                 GET THE FULL PACKAGE
               </button>
             </div>
           </div>
-        </SectionFrame>
+        </section>
       </main>
     </div>
   );
