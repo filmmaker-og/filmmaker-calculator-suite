@@ -82,6 +82,17 @@ const Index = () => {
                 </p>
               </div>
 
+              <div className="mb-9 text-center px-2">
+                <div className="w-full max-w-[300px] mx-auto">
+                  <button
+                    onClick={handleStartClick}
+                    className="w-full h-[52px] btn-cta-primary"
+                  >
+                    BUILD YOUR WATERFALL
+                  </button>
+                </div>
+              </div>
+
               <div
                 className="rounded-2xl px-2 pt-4 pb-5"
                 style={{
@@ -93,21 +104,10 @@ const Index = () => {
                 <WaterfallCascade />
               </div>
 
-              <div className="mt-9 text-center px-2">
-                <div className="w-full max-w-[300px] mx-auto">
-                  <button
-                    onClick={handleStartClick}
-                    className="w-full h-[52px] btn-cta-primary"
-                  >
-                    BUILD YOUR WATERFALL
-                  </button>
-                </div>
-              </div>
-
             </div>
           </section>
 
-          <section id="value" className="relative py-14 md:py-20 px-6">
+          <section id="value" className="relative py-16 md:py-20 px-6">
             <div
               ref={valueRef}
               className="relative max-w-md mx-auto flex flex-col gap-5"
@@ -215,7 +215,7 @@ const Index = () => {
             </div>
           </section>
 
-          <section className="px-6 pt-10 pb-8">
+          <section className="px-6 pt-12 pb-10">
             <div className="max-w-md mx-auto">
               <div
                 ref={credRef}
@@ -225,11 +225,8 @@ const Index = () => {
                   transition: prefersReducedMotion ? "none" : "opacity 700ms ease-out, transform 700ms ease-out",
                 }}
               >
-                <p className="font-mono text-[11px] tracking-[0.14em] uppercase text-white/40 text-center mb-5">
-                  Second-generation producer{"\u00A0"}{"\u00B7"}{"\u00A0"}Tribeca premiere{"\u00A0"}{"\u00B7"}{"\u00A0"}Netflix acquisition
-                </p>
                 <p className="text-[15px] text-white/60 leading-relaxed text-center mb-7">
-                  This is the tool I needed on my first deal.
+                  My first project premiered at Tribeca and landed on Netflix — and I still had to guess at the math. These are the tools I built so you don't have to.
                 </p>
                 <div className="flex flex-col gap-3">
                   {[0, 1].map((idx) => (
@@ -266,7 +263,7 @@ const Index = () => {
             </div>
           </section>
 
-          <section id="final-cta" className="py-14 md:py-20 px-6">
+          <section id="final-cta" className="py-16 md:py-20 px-6">
             <div className="max-w-md mx-auto">
               <div
                 ref={bridgeRef}

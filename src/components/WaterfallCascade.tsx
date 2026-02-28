@@ -98,12 +98,15 @@ const WaterfallCascade = () => {
         <div className="px-5 pt-2 pb-4">
           {deductions.map((d, i) => {
             const delay = (i + 1) * 180;
+            const isEven = i % 2 === 0;
             return (
               <div
                 key={d.name}
-                className="flex justify-between items-baseline"
+                className="flex justify-between items-baseline rounded-md"
                 style={{
-                  padding: "9px 0",
+                  padding: "9px 8px",
+                  margin: "0 -8px",
+                  background: isEven ? "rgba(255,255,255,0.03)" : "transparent",
                   opacity: revealed ? 1 : 0,
                   transform: revealed ? "translateY(0)" : "translateY(6px)",
                   transition:
@@ -111,10 +114,10 @@ const WaterfallCascade = () => {
                   transitionDelay: `${delay}ms`,
                 }}
               >
-                <span className="text-[14px] font-medium text-white/50">
+                <span className="text-[14px] font-medium text-white/60">
                   {d.name}
                 </span>
-                <span className="font-mono text-[14px] font-medium text-white/50 tabular-nums">
+                <span className="font-mono text-[14px] font-medium text-white/60 tabular-nums">
                   {"\u2212"}{fmt(d.amount)}
                 </span>
               </div>
