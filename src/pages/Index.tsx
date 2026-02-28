@@ -244,10 +244,10 @@ const Index = () => {
             <div className="max-w-md mx-auto">
               <div
                 ref={credRef}
-                className="rounded-2xl px-8 py-10 text-center"
+                className="rounded-xl px-8 py-10 text-center"
                 style={{
                   border: "1px solid rgba(255,255,255,0.08)",
-                  background: "rgba(255,255,255,0.03)",
+                  background: "rgba(255,255,255,0.02)",
                   opacity: credVisible ? 1 : 0,
                   transform: credVisible ? "translateY(0)" : "translateY(16px)",
                   transition: "opacity 700ms ease-out, transform 700ms ease-out",

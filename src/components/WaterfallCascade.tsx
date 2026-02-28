@@ -225,7 +225,7 @@ const WaterfallCascade = () => {
         ].map((c) => (
           <div
             key={c.label}
-            className="border border-white/[0.06] bg-black px-3.5 py-3.5 text-center rounded-lg"
+            className="border border-white/[0.08] bg-black px-3.5 py-3.5 text-center rounded-lg"
             style={{
               opacity: corridorVisible ? 1 : 0,
               transform: corridorVisible
