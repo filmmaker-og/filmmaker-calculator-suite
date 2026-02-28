@@ -385,8 +385,8 @@ const Index = () => {
                         key={item.title}
                         className="flex items-start gap-4 rounded-lg px-4 py-4"
                         style={{
-                          background: 'rgba(255,255,255,0.03)',
-                          border: '1px solid rgba(255,255,255,0.08)',
+                          background: 'rgba(180,60,60,0.06)',
+                          border: '1px solid rgba(180,60,60,0.12)',
                           opacity: valueVisible ? 1 : 0,
                           transform: valueVisible ? 'translateY(0)' : 'translateY(12px)',
                           transition: 'opacity 500ms ease-out, transform 500ms ease-out',
@@ -396,14 +396,14 @@ const Index = () => {
                         <div
                           className="flex-shrink-0 w-8 h-8 rounded-md flex items-center justify-center mt-0.5"
                           style={{
-                            background: 'rgba(255,255,255,0.10)',
-                            border: '1px solid rgba(255,255,255,0.12)',
+                            background: 'rgba(180,60,60,0.15)',
+                            border: '1px solid rgba(180,60,60,0.20)',
                           }}
                         >
-                          <span className="text-[14px] font-bold leading-none" style={{ color: 'rgba(255,255,255,0.45)' }}>{"\u2717"}</span>
+                          <span className="text-[14px] font-bold leading-none" style={{ color: 'rgba(220,100,100,0.70)' }}>{"\u2717"}</span>
                         </div>
                         <div>
-                          <p className="text-[15px] font-semibold leading-snug" style={{ color: 'rgba(255,255,255,0.55)' }}>{item.title}</p>
+                          <p className="text-[15px] font-semibold leading-snug" style={{ color: 'rgba(255,200,200,0.60)' }}>{item.title}</p>
                           <p className="text-[13px] leading-snug mt-1" style={{ color: 'rgba(255,255,255,0.35)' }}>{item.desc}</p>
                         </div>
                       </div>
