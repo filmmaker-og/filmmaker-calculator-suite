@@ -431,6 +431,9 @@ const Index = () => {
                   transition: 'opacity 700ms ease-out, transform 700ms ease-out',
                 }}
               >
+                <p className="text-[13px] text-ink-secondary leading-relaxed tracking-wide mb-6">
+                  Built by a second-generation filmmaker who debut premiered at Tribeca and landed at Netflix.
+                </p>
                 <h2 className="font-bebas text-[40px] leading-[1.1] tracking-[0.08em] text-gold mb-6">
                   YOUR INVESTORS WILL{"\u00A0"}ASK HOW THE MONEY FLOWS <span className="text-white">BACK.</span>
                 </h2>
