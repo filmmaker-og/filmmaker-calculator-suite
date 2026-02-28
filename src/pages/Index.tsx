@@ -5,7 +5,6 @@ import { useHaptics } from "@/hooks/use-haptics";
 import { useInView } from "@/hooks/useInView";
 import LeadCaptureModal from "@/components/LeadCaptureModal";
 import WaterfallCascade from "@/components/WaterfallCascade";
-import filmmakerFIcon from "@/assets/filmmaker-f-icon.png";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -54,7 +53,7 @@ const Index = () => {
   const withoutItems = [
     { title: "The Question You Can't Answer", desc: "'How do I get my money back?' — and you're improvising" },
     { title: "Surprises After Signatures", desc: "Fees and splits you didn't account for surface after the deal closes" },
-    { title: "Expensive Education", desc: "You learn how film money actually works the hard way" },
+    { title: "First-Deal Math", desc: "You find out your backend points were worth nothing after the sales agent commission you forgot to model" },
   ];
 
   return (
@@ -72,15 +71,7 @@ const Index = () => {
         <main aria-label="Film Finance Simulator" className="flex-1 flex flex-col" style={{ paddingBottom: "env(safe-area-inset-bottom)" }}>
 
           <section id="hero" className="relative pt-8 pb-6">
-            <div className="relative px-4 max-w-md mx-auto">
-
-              <div className="text-center mb-5">
-                <img
-                  src={filmmakerFIcon}
-                  alt="filmmaker.og"
-                  className="w-14 h-14 mx-auto object-contain"
-                />
-              </div>
+            <div className="relative px-6 max-w-md mx-auto">
 
               <div className="text-center mb-8 px-2">
                 <h1 className="font-bebas text-[clamp(3rem,10vw,4.2rem)] leading-[0.95] tracking-[0.02em] text-gold mb-2.5">
@@ -170,7 +161,7 @@ const Index = () => {
                 }}
               >
                 <div className="px-5 pt-6 pb-6">
-                  <h3
+                  <h2
                     className="font-mono text-[13px] tracking-[0.14em] uppercase mb-6"
                     style={{
                       color: "rgba(220,120,120,0.70)",
@@ -180,7 +171,7 @@ const Index = () => {
                     }}
                   >
                     Without it
-                  </h3>
+                  </h2>
                   <ul className="flex flex-col gap-5" aria-label="Risks without a waterfall">
                     {withoutItems.map((item, i) => (
                       <li
@@ -212,9 +203,19 @@ const Index = () => {
                 </div>
               </div>
             </div>
+
+            {/* Mid-page escape CTA */}
+            <div className="text-center mt-8 max-w-md mx-auto">
+              <button
+                onClick={handleStartClick}
+                className="text-gold text-[14px] font-medium tracking-wide hover:text-white transition-colors"
+              >
+                See how it works →
+              </button>
+            </div>
           </section>
 
-          <section className="px-6 pb-2">
+          <section className="px-6 pt-10 pb-8">
             <div className="max-w-md mx-auto">
               <div
                 ref={credRef}
@@ -224,7 +225,7 @@ const Index = () => {
                   transition: prefersReducedMotion ? "none" : "opacity 700ms ease-out, transform 700ms ease-out",
                 }}
               >
-                <p className="font-mono text-[11px] tracking-[0.14em] uppercase text-white/40 text-center mb-3">
+                <p className="font-mono text-[11px] tracking-[0.14em] uppercase text-white/40 text-center mb-5">
                   Second-generation producer{"\u00A0"}{"\u00B7"}{"\u00A0"}Tribeca premiere{"\u00A0"}{"\u00B7"}{"\u00A0"}Netflix acquisition
                 </p>
                 <p className="text-[15px] text-white/60 leading-relaxed text-center mb-7">
@@ -279,7 +280,7 @@ const Index = () => {
                   transition: prefersReducedMotion ? "none" : "opacity 700ms ease-out, transform 700ms ease-out",
                 }}
               >
-                <h2 className="font-bebas text-[40px] leading-[1.1] tracking-[0.08em] text-gold mb-6">
+                <h2 className="font-bebas text-[32px] leading-[1.1] tracking-[0.06em] text-gold mb-6">
                   YOUR INVESTORS WILL{"\u00A0"}ASK HOW THE MONEY FLOWS <span className="text-white">BACK.</span>
                 </h2>
                 <button
@@ -293,7 +294,7 @@ const Index = () => {
           </section>
 
           <footer className="py-8 px-6 max-w-md mx-auto">
-            <p className="text-ink-secondary text-[12px] tracking-wide leading-relaxed text-center">
+            <p className="text-white/30 text-[12px] tracking-wide leading-relaxed text-center">
               For educational and informational purposes only. Not legal, tax, or investment advice.
               Consult a qualified entertainment attorney before making financing decisions.
             </p>
