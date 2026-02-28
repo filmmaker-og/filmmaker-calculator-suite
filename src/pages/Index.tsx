@@ -48,12 +48,10 @@ const Index = () => {
 
   const withItems = [
     { title: "Returns Mapped", desc: "Every investor sees exactly what they get back — and when" },
-    { title: "Ready for the Room", desc: "A polished financial document you can hand over in one click" },
     { title: "Nothing Hidden", desc: "Fees, splits, and repayment — all visible before you commit" },
     { title: "Real Math, No Guessing", desc: "Know your margins before you shoot a single frame" },
   ];
   const withoutItems = [
-    { title: "Deals Built on Trust", desc: "No model behind the promises you're making to investors" },
     { title: "The Question You Can't Answer", desc: "'How do I get my money back?' — and you're improvising" },
     { title: "Surprises After Signatures", desc: "Fees and splits you didn't account for surface after the deal closes" },
     { title: "Expensive Education", desc: "You learn how film money actually works the hard way" },
@@ -120,22 +118,23 @@ const Index = () => {
           <section id="value" className="relative py-14 md:py-20 px-6">
             <div
               ref={valueRef}
-              className="relative max-w-md mx-auto"
+              className="relative max-w-md mx-auto flex flex-col gap-5"
             >
-              <div className="border border-white/[0.08] bg-black overflow-hidden rounded-xl">
-
-                <div className="px-5 pt-6 pb-5">
-                  <h2 className="font-mono text-[14px] tracking-[0.12em] uppercase text-gold mb-5 px-1">
+              {/* WITH card */}
+              <div
+                className="bg-black rounded-xl overflow-hidden"
+                style={{ border: "1px solid rgba(212,175,55,0.15)" }}
+              >
+                <div className="px-5 pt-6 pb-6">
+                  <h2 className="font-mono text-[13px] tracking-[0.14em] uppercase text-gold mb-6">
                     With your waterfall
                   </h2>
-                  <ul className="flex flex-col gap-3" aria-label="Benefits of using a waterfall">
+                  <ul className="flex flex-col gap-5" aria-label="Benefits of using a waterfall">
                     {withItems.map((item, i) => (
                       <li
                         key={item.title}
-                        className="flex items-start gap-4 rounded-lg px-4 py-4"
+                        className="flex items-start gap-4"
                         style={{
-                          background: "rgba(212,175,55,0.04)",
-                          border: "1px solid rgba(212,175,55,0.08)",
                           opacity: prefersReducedMotion || valueVisible ? 1 : 0,
                           transform: prefersReducedMotion || valueVisible ? "translateY(0)" : "translateY(12px)",
                           transition: prefersReducedMotion ? "none" : "opacity 500ms ease-out, transform 500ms ease-out",
@@ -143,37 +142,36 @@ const Index = () => {
                         }}
                       >
                         <div
-                          className="flex-shrink-0 w-8 h-8 rounded-md flex items-center justify-center mt-0.5"
+                          className="flex-shrink-0 w-9 h-9 rounded-lg flex items-center justify-center mt-0.5"
                           style={{
                             background: "linear-gradient(135deg, #D4AF37 0%, #B8962E 100%)",
                           }}
                         >
-                          <span className="text-black text-[16px] font-bold leading-none" aria-hidden="true">{"\u2713"}</span>
+                          <span className="text-black text-[18px] font-bold leading-none" aria-hidden="true">{"\u2713"}</span>
                         </div>
                         <div>
                           <p className="text-[15px] font-semibold text-white leading-snug">{item.title}</p>
-                          <p className="text-[13px] text-ink-secondary leading-snug mt-1">{item.desc}</p>
+                          <p className="text-[13px] text-white/55 leading-snug mt-1">{item.desc}</p>
                         </div>
                       </li>
                     ))}
                   </ul>
                 </div>
+              </div>
 
-                <div
-                  className="mx-6 h-[1px]"
-                  aria-hidden="true"
-                  style={{
-                    background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.30), transparent)",
-                    opacity: prefersReducedMotion || valueVisible ? 1 : 0,
-                    transition: prefersReducedMotion ? "none" : "opacity 500ms ease-out",
-                    transitionDelay: prefersReducedMotion ? "0ms" : `${withItems.length * 120}ms`,
-                  }}
-                />
-
-                <div className="px-5 pt-6 pb-6" style={{ background: "rgba(255,255,255,0.02)" }}>
+              {/* WITHOUT card */}
+              <div
+                className="rounded-xl overflow-hidden"
+                style={{
+                  border: "1px solid rgba(180,60,60,0.22)",
+                  background: "rgba(180,60,60,0.04)",
+                }}
+              >
+                <div className="px-5 pt-6 pb-6">
                   <h3
-                    className="font-mono text-[14px] tracking-[0.12em] uppercase text-ink-secondary mb-5 px-1"
+                    className="font-mono text-[13px] tracking-[0.14em] uppercase mb-6"
                     style={{
+                      color: "rgba(220,120,120,0.70)",
                       opacity: prefersReducedMotion || valueVisible ? 1 : 0,
                       transition: prefersReducedMotion ? "none" : "opacity 500ms ease-out",
                       transitionDelay: prefersReducedMotion ? "0ms" : `${withItems.length * 120 + 80}ms`,
@@ -181,14 +179,12 @@ const Index = () => {
                   >
                     Without it
                   </h3>
-                  <ul className="flex flex-col gap-3" aria-label="Risks without a waterfall">
+                  <ul className="flex flex-col gap-5" aria-label="Risks without a waterfall">
                     {withoutItems.map((item, i) => (
                       <li
                         key={item.title}
-                        className="flex items-start gap-4 rounded-lg px-4 py-4"
+                        className="flex items-start gap-4"
                         style={{
-                          background: "rgba(180,60,60,0.08)",
-                          border: "1px solid rgba(180,60,60,0.16)",
                           opacity: prefersReducedMotion || valueVisible ? 1 : 0,
                           transform: prefersReducedMotion || valueVisible ? "translateY(0)" : "translateY(12px)",
                           transition: prefersReducedMotion ? "none" : "opacity 500ms ease-out, transform 500ms ease-out",
@@ -196,23 +192,22 @@ const Index = () => {
                         }}
                       >
                         <div
-                          className="flex-shrink-0 w-8 h-8 rounded-md flex items-center justify-center mt-0.5"
+                          className="flex-shrink-0 w-9 h-9 rounded-lg flex items-center justify-center mt-0.5"
                           style={{
-                            background: "rgba(180,60,60,0.18)",
-                            border: "1px solid rgba(180,60,60,0.25)",
+                            background: "rgba(180,60,60,0.20)",
+                            border: "1px solid rgba(180,60,60,0.30)",
                           }}
                         >
-                          <span className="text-[14px] font-bold leading-none" aria-hidden="true" style={{ color: "rgba(220,100,100,0.85)" }}>{"\u2717"}</span>
+                          <span className="text-[16px] font-bold leading-none" aria-hidden="true" style={{ color: "rgba(220,100,100,0.90)" }}>{"\u2717"}</span>
                         </div>
                         <div>
-                          <p className="text-[15px] font-semibold leading-snug" style={{ color: "rgba(255,200,200,0.75)" }}>{item.title}</p>
-                          <p className="text-[13px] leading-snug mt-1" style={{ color: "rgba(255,255,255,0.55)" }}>{item.desc}</p>
+                          <p className="text-[15px] font-semibold leading-snug" style={{ color: "rgba(255,200,200,0.80)" }}>{item.title}</p>
+                          <p className="text-[13px] leading-snug mt-1 text-white/50">{item.desc}</p>
                         </div>
                       </li>
                     ))}
                   </ul>
                 </div>
-
               </div>
             </div>
           </section>

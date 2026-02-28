@@ -2,14 +2,6 @@ import { useState, useEffect, useRef } from "react";
 
 const TOTAL = 3_000_000;
 const PROFIT = 417_500;
-const PROFIT_PCT = (PROFIT / TOTAL) * 100;
-
-interface Row {
-  name: string;
-  amount: number;
-  remainPct: number;
-  deductPct: number;
-}
 
 const deductions = [
   { name: "CAM Fees",          amount: 22_500 },
@@ -19,20 +11,6 @@ const deductions = [
   { name: "Equity Recoupment", amount: 1_440_000 },
 ];
 
-const buildRows = (): Row[] => {
-  let remaining = TOTAL;
-  return deductions.map((d) => {
-    remaining -= d.amount;
-    return {
-      ...d,
-      remainPct: Math.max(0, (remaining / TOTAL) * 100),
-      deductPct: (d.amount / TOTAL) * 100,
-    };
-  });
-};
-
-const rows = buildRows();
-
 const fmt = (n: number) => {
   if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(1)}M`;
   if (n >= 1_000) return `$${(n / 1_000).toFixed(0)}K`;
@@ -40,8 +18,6 @@ const fmt = (n: number) => {
 };
 
 const fmtFull = (n: number) => `$${n.toLocaleString()}`;
-
-const EASE = "cubic-bezier(0.16,1,0.3,1)";
 
 const WaterfallCascade = () => {
   const [revealed, setRevealed] = useState(false);
@@ -80,132 +56,106 @@ const WaterfallCascade = () => {
         if (t < 1) rafId = requestAnimationFrame(step);
       };
       rafId = requestAnimationFrame(step);
-    }, 2000);
+    }, 1800);
     return () => { clearTimeout(timeout); cancelAnimationFrame(rafId); };
   }, [revealed]);
 
   useEffect(() => {
     if (!revealed) return;
-    const timeout = setTimeout(() => setCorridorVisible(true), 2200);
+    const timeout = setTimeout(() => setCorridorVisible(true), 2400);
     return () => clearTimeout(timeout);
   }, [revealed]);
 
   return (
     <div ref={containerRef}>
+      {/* Ledger card */}
       <div className="border border-white/[0.08] bg-black overflow-hidden rounded-xl">
-        {/* Source row — full bar establishes the baseline */}
-        <div>
-          <div className="flex justify-between items-baseline px-4 pt-[10px] pb-[5px]">
-            <div className="flex items-baseline gap-2">
-              <span className="font-mono text-[11px] text-white/50 tabular-nums">
-                01
-              </span>
-              <span className="font-bebas text-[22px] tracking-[0.06em] text-white/90">
-                Acquisition Price
-              </span>
-            </div>
-            <span className="font-mono text-[17px] font-semibold text-white/90">
-              {fmtFull(TOTAL)}
-            </span>
-          </div>
-          <div className="px-4 pb-[10px]">
-            <div
-              className="w-full relative overflow-hidden rounded-sm h-4"
-              style={{ background: "rgba(255,255,255,0.05)" }}
-            >
-              <div
-                className="absolute left-0 top-0 h-full rounded-sm"
-                style={{
-                  width: revealed ? "100%" : "0%",
-                  background:
-                    "linear-gradient(90deg, rgba(212,175,55,0.70), rgba(212,175,55,0.45))",
-                  transition: `width 1000ms ${EASE}`,
-                }}
-              />
-            </div>
-          </div>
+        {/* Source row */}
+        <div className="flex justify-between items-baseline px-5 pt-5 pb-4">
+          <span className="font-bebas text-[22px] tracking-[0.06em] text-white/90">
+            Acquisition Price
+          </span>
+          <span className="font-mono text-[17px] font-semibold text-white/90 tabular-nums">
+            {fmtFull(TOTAL)}
+          </span>
         </div>
 
-        {/* Deduction rows — bars shrink to show remaining money */}
-        {rows.map((row, i) => {
-          const delay = (i + 1) * 250;
-          return (
-            <div key={row.name} className="border-t border-white/[0.07]">
-              <div className="flex justify-between items-baseline px-4 pt-[10px] pb-[5px]">
-                <div className="flex items-baseline gap-2">
-                  <span className="font-mono text-[11px] text-white/50 tabular-nums">
-                    {String(i + 2).padStart(2, "0")}
-                  </span>
-                  <span className="text-[14px] tracking-[0.01em] font-medium text-white/65">
-                    {row.name}
-                  </span>
-                </div>
-                <span className="font-mono text-[14px] font-medium text-white/65">
-                  {"\u2212"}{fmt(row.amount)}
+        {/* Gold divider */}
+        <div
+          className="mx-5 h-[1px]"
+          style={{
+            background:
+              "linear-gradient(90deg, rgba(212,175,55,0.30), rgba(212,175,55,0.08))",
+            opacity: revealed ? 1 : 0,
+            transition: "opacity 600ms ease-out",
+          }}
+        />
+
+        {/* Deduction line items */}
+        <div className="px-5 pt-2 pb-4">
+          {deductions.map((d, i) => {
+            const isEquity = d.name === "Equity Recoupment";
+            const delay = (i + 1) * 180;
+            return (
+              <div
+                key={d.name}
+                className="flex justify-between items-baseline"
+                style={{
+                  padding: isEquity ? "10px 0 10px 12px" : "9px 0",
+                  borderLeft: isEquity
+                    ? "2px solid rgba(212,175,55,0.50)"
+                    : "2px solid transparent",
+                  opacity: revealed ? 1 : 0,
+                  transform: revealed ? "translateY(0)" : "translateY(6px)",
+                  transition:
+                    "opacity 500ms ease-out, transform 500ms ease-out",
+                  transitionDelay: `${delay}ms`,
+                }}
+              >
+                <span
+                  className={
+                    isEquity
+                      ? "text-[14px] font-semibold text-white/80"
+                      : "text-[14px] font-medium text-white/45"
+                  }
+                >
+                  {d.name}
+                </span>
+                <span
+                  className={
+                    isEquity
+                      ? "font-mono text-[15px] font-semibold text-white/85 tabular-nums"
+                      : "font-mono text-[14px] font-medium text-white/45 tabular-nums"
+                  }
+                >
+                  {"\u2212"}{fmt(d.amount)}
                 </span>
               </div>
-              <div className="px-4 pb-[10px]">
-                <div
-                  className="w-full relative overflow-hidden rounded-sm h-[10px]"
-                  style={{ background: "rgba(255,255,255,0.05)" }}
-                >
-                  {/* Gold bar = what remains after this deduction */}
-                  <div
-                    className="absolute left-0 top-0 h-full rounded-sm"
-                    style={{
-                      width: revealed ? `${row.remainPct}%` : "0%",
-                      background:
-                        "linear-gradient(90deg, rgba(212,175,55,0.55), rgba(212,175,55,0.35))",
-                      transition: `width 800ms ${EASE}`,
-                      transitionDelay: `${delay}ms`,
-                    }}
-                  />
-                  {/* Dim slice = what this tier consumed */}
-                  <div
-                    className="absolute top-0 h-full rounded-sm"
-                    style={{
-                      left: revealed ? `${row.remainPct}%` : "0%",
-                      width: revealed ? `${row.deductPct}%` : "0%",
-                      background: "rgba(212,175,55,0.10)",
-                      transition: `left 800ms ${EASE}, width 800ms ${EASE}`,
-                      transitionDelay: `${delay}ms`,
-                    }}
-                  />
-                </div>
-              </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
 
-      {/* Profit box — tighter gap, bar echoes the final remaining slice */}
+      {/* Profit box */}
       <div
         className="mt-2 rounded-[10px] px-[18px] py-5 bg-black"
-        style={{ border: "2px solid rgba(212,175,55,0.60)" }}
+        style={{
+          border: "2px solid rgba(212,175,55,0.60)",
+          opacity: revealed ? 1 : 0,
+          transform: revealed ? "translateY(0)" : "translateY(8px)",
+          transition: "opacity 600ms ease-out, transform 600ms ease-out",
+          transitionDelay: "1400ms",
+        }}
       >
         <p className="font-mono text-[10px] tracking-[0.22em] uppercase font-semibold text-gold mb-1">
           Net Profits
         </p>
-        <span className="font-mono text-[32px] font-bold text-white tracking-tight">
+        <span className="font-mono text-[32px] font-bold text-white tracking-tight tabular-nums">
           ${profitCount.toLocaleString()}
         </span>
-        <div
-          className="w-full relative overflow-hidden rounded-sm h-[10px] mt-3"
-          style={{ background: "rgba(255,255,255,0.05)" }}
-        >
-          <div
-            className="absolute left-0 top-0 h-full rounded-sm"
-            style={{
-              width: revealed ? `${PROFIT_PCT}%` : "0%",
-              background:
-                "linear-gradient(90deg, rgba(212,175,55,0.75), rgba(212,175,55,0.55))",
-              transition: `width 1000ms ${EASE}`,
-              transitionDelay: "2000ms",
-            }}
-          />
-        </div>
       </div>
 
+      {/* Producer / Investor split */}
       <div className="grid grid-cols-2 gap-2 mt-2">
         {[
           { label: "Producer", amount: "$208,750", extraDelay: 0 },
@@ -226,7 +176,7 @@ const WaterfallCascade = () => {
             <p className="font-mono text-[10px] tracking-[0.18em] uppercase font-semibold text-gold-label mb-1">
               {c.label}
             </p>
-            <span className="font-mono text-[20px] font-bold text-white/90">
+            <span className="font-mono text-[20px] font-bold text-white/90 tabular-nums">
               {c.amount}
             </span>
           </div>
