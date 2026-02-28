@@ -47,16 +47,16 @@ const Index = () => {
   const { ref: bridgeRef, inView: bridgeVisible } = useInView<HTMLDivElement>({ threshold: 0.2 });
 
   const withItems = [
-    { title: "Revenue Mapped", desc: "Revenue divided automatically across every stakeholder" },
-    { title: "Investor-Ready PDF", desc: "Share a polished waterfall document with one click" },
-    { title: "Full Clarity", desc: "See exactly who gets paid and when in the cascade" },
-    { title: "Real Numbers", desc: "Know your margins before you shoot a single frame" },
+    { title: "Returns Mapped", desc: "Every investor sees exactly what they get back — and when" },
+    { title: "Ready for the Room", desc: "A polished financial document you can hand over in one click" },
+    { title: "Nothing Hidden", desc: "Fees, splits, and repayment — all visible before you commit" },
+    { title: "Real Math, Not Guesses", desc: "Know your margins before you shoot a single frame" },
   ];
   const withoutItems = [
-    { title: "Guesswork Deals", desc: "Structured on hope, not data" },
-    { title: "No Framework", desc: "No shared language for investor conversations" },
-    { title: "Ambiguity", desc: "Money flow is unclear to everyone involved" },
-    { title: "Trial & Error", desc: "Years of expensive lessons learned the hard way" },
+    { title: "Deals Built on Hope", desc: "No model behind the promises you're making to investors" },
+    { title: "The Question You Can't Answer", desc: "'How do I get my money back?' — and you're improvising" },
+    { title: "Surprises After Signatures", desc: "Fees and splits you didn't account for surface after the deal closes" },
+    { title: "Expensive Education", desc: "You learn how film money actually works the hard way" },
   ];
 
   return (
@@ -89,7 +89,7 @@ const Index = () => {
                   SEE WHERE EVERY DOLLAR <span className="text-white">GOES</span>
                 </h1>
                 <p className="text-white/60 text-[15px] leading-[1.7] tracking-[0.04em] font-medium">
-                  Democratizing the business of film.
+                  Simulate your film's money flow before you take the meeting.
                 </p>
               </div>
 
@@ -231,7 +231,7 @@ const Index = () => {
                 }}
               >
                 <p className="text-[15px] text-white/70 leading-relaxed tracking-wide">
-                  Built by a second-generation producer whose debut premiered at Tribeca and landed on Netflix.
+                  Built by a second-generation producer. Tribeca premiere. Netflix acquisition. This is the tool I needed on my first deal.
                 </p>
               </div>
             </div>
