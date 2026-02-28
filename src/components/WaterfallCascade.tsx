@@ -118,7 +118,7 @@ const WaterfallCascade = () => {
                   {d.name}
                 </span>
                 <span className="font-mono text-[14px] font-medium text-white/60 tabular-nums">
-                  {"\u2212"}{fmt(d.amount)}
+                  {"\u2212"}{fmtFull(d.amount)}
                 </span>
               </div>
             );
@@ -128,7 +128,7 @@ const WaterfallCascade = () => {
 
       {/* Profit box */}
       <div
-        className="mt-2 rounded-[10px] px-[18px] py-5 bg-black"
+        className="mt-2 rounded-[10px] py-5 bg-black text-center"
         style={{
           border: "2px solid rgba(212,175,55,0.60)",
           boxShadow: "0 0 40px 4px rgba(212,175,55,0.12), inset 0 1px 0 rgba(255,255,255,0.06)",
