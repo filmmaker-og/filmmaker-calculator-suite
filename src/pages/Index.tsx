@@ -226,10 +226,10 @@ const Index = () => {
                 }}
               >
                 <p className="font-mono text-[11px] tracking-[0.14em] uppercase text-white/40 text-center mb-5">
-                  Second-generation{"\u00A0"}{"\u00B7"}{"\u00A0"}Prepped at a major{"\u00A0"}{"\u00B7"}{"\u00A0"}Tribeca Audience Award{"\u00A0"}{"\u00B7"}{"\u00A0"}Netflix
+                  Why this exists
                 </p>
                 <p className="text-[15px] text-white/60 leading-relaxed text-center mb-7">
-                  I wish I'd had this data before my first deal.
+                  I grew up in this business. Prepped at a major. Tribeca audience award. Netflix. And on my first deal, I still couldn't model where the money went.
                 </p>
                 <div className="flex flex-col gap-3">
                   {[0, 1].map((idx) => (
