@@ -435,7 +435,7 @@ const Index = () => {
                 }}
               >
                 <p className="text-[15px] text-white/60 leading-relaxed tracking-wide">
-                  Built by a second-generation producer who debut premiered at Tribeca and landed at Netflix.
+                  Built by a second-generation producer whose debut premiered at Tribeca and landed on Netflix.
                 </p>
               </div>
             </div>
