@@ -118,7 +118,7 @@ const WaterfallCascade = () => {
                   {d.name}
                 </span>
                 <span className="font-mono text-[14px] font-medium text-white/60 tabular-nums">
-                  {"\u2212"}{fmt(d.amount)}
+                  {"\u2212"}{fmtFull(d.amount)}
                 </span>
               </div>
             );

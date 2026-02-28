@@ -42,7 +42,6 @@ const Index = () => {
     && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   const { ref: valueRef, inView: valueVisible } = useInView<HTMLDivElement>({ threshold: 0.2 });
-  const { ref: credRef, inView: credVisible } = useInView<HTMLDivElement>({ threshold: 0.2 });
   const { ref: bridgeRef, inView: bridgeVisible } = useInView<HTMLDivElement>({ threshold: 0.2 });
 
   const withItems = [
@@ -78,7 +77,7 @@ const Index = () => {
                   SEE WHERE EVERY DOLLAR <span className="text-white">GOES</span>
                 </h1>
                 <p className="text-white/60 text-[15px] leading-[1.7] tracking-[0.04em] font-medium">
-                  See every fee, split, and return — before your investor asks.
+                  Know every fee, split, and return — before your investor asks.
                 </p>
               </div>
 
@@ -194,7 +193,7 @@ const Index = () => {
                           <span className="text-[16px] font-bold leading-none" aria-hidden="true" style={{ color: "rgba(220,100,100,0.90)" }}>{"\u2717"}</span>
                         </div>
                         <div>
-                          <p className="text-[15px] font-semibold leading-snug text-white/90">{item.title}</p>
+                          <p className="text-[15px] font-semibold leading-snug text-white">{item.title}</p>
                           <p className="text-[13px] leading-snug mt-1 text-white/65">{item.desc}</p>
                         </div>
                       </li>
@@ -204,25 +203,6 @@ const Index = () => {
               </div>
             </div>
 
-          </section>
-
-          <div className="gold-section-divider" />
-
-          <section className="px-6 pt-10 pb-6">
-            <div className="max-w-md mx-auto">
-              <div
-                ref={credRef}
-                style={{
-                  opacity: prefersReducedMotion || credVisible ? 1 : 0,
-                  transform: prefersReducedMotion || credVisible ? "translateY(0)" : "translateY(16px)",
-                  transition: prefersReducedMotion ? "none" : "opacity 700ms ease-out, transform 700ms ease-out",
-                }}
-              >
-                <p className="text-[16px] text-white/75 italic leading-relaxed tracking-[0.01em] text-center">
-                  My first project premiered at Tribeca and landed on Netflix — and I still had to guess at the math. These are the tools I built so you don't have to.
-                </p>
-              </div>
-            </div>
           </section>
 
           <section id="final-cta" className="py-16 md:py-20 px-6">
@@ -239,6 +219,9 @@ const Index = () => {
                   transition: prefersReducedMotion ? "none" : "opacity 700ms ease-out, transform 700ms ease-out",
                 }}
               >
+                <p className="text-[15px] text-white/55 italic leading-relaxed tracking-[0.01em] mb-6">
+                  My first project premiered at Tribeca and landed on Netflix — and I still had to guess at the math. These are the tools I built so you don't have to.
+                </p>
                 <h2 className="font-bebas text-[32px] leading-[1.1] tracking-[0.06em] text-gold mb-6">
                   YOUR INVESTORS WILL{"\u00A0"}ASK HOW THE MONEY FLOWS <span className="text-white">BACK.</span>
                 </h2>
