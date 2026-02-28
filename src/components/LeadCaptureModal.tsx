@@ -146,7 +146,7 @@ const LeadCaptureModal = ({ isOpen, onClose, onSuccess }: LeadCaptureModalProps)
           // Name + email form
           <form onSubmit={handleSubmit} className="p-6">
             <p className="font-bebas text-xl tracking-wider text-text-primary text-center mb-1">
-              KNOW YOUR NUMBERS
+              BUILD YOUR WATERFALL
             </p>
             <p className="text-text-dim text-xs text-center mb-6">
               Enter your name and email to start building your waterfall.

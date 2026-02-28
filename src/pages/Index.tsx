@@ -53,7 +53,7 @@ const Index = () => {
   const withoutItems = [
     { title: "The Question You Can't Answer", desc: "'How do I get my money back?' — and you're improvising" },
     { title: "Surprises After Signatures", desc: "Fees and splits you didn't account for surface after the deal closes" },
-    { title: "First-Deal Math", desc: "You find out your backend points were worth nothing after the sales agent commission you forgot to model" },
+    { title: "First-Deal Math", desc: "Your backend points were worth nothing after the sales agent commission you forgot to model" },
   ];
 
   return (
@@ -94,7 +94,7 @@ const Index = () => {
               </div>
 
               <div
-                className="rounded-2xl px-2 pt-4 pb-5"
+                className="rounded-2xl pt-4 pb-5"
                 style={{
                   border: "1px solid rgba(255,255,255,0.06)",
                   background: "rgba(255,255,255,0.02)",
@@ -115,7 +115,7 @@ const Index = () => {
               {/* WITH card */}
               <div
                 className="bg-black rounded-xl overflow-hidden"
-                style={{ border: "1px solid rgba(212,175,55,0.15)", boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06)" }}
+                style={{ border: "1px solid rgba(212,175,55,0.25)", boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06)" }}
               >
                 <div className="px-5 pt-6 pb-6">
                   <h2 className="font-mono text-[13px] tracking-[0.14em] uppercase text-gold mb-6">
@@ -130,7 +130,7 @@ const Index = () => {
                           opacity: prefersReducedMotion || valueVisible ? 1 : 0,
                           transform: prefersReducedMotion || valueVisible ? "translateY(0)" : "translateY(12px)",
                           transition: prefersReducedMotion ? "none" : "opacity 500ms ease-out, transform 500ms ease-out",
-                          transitionDelay: prefersReducedMotion ? "0ms" : `${i * 120}ms`,
+                          transitionDelay: prefersReducedMotion ? "0ms" : `${i * 80}ms`,
                         }}
                       >
                         <div
@@ -143,7 +143,7 @@ const Index = () => {
                         </div>
                         <div>
                           <p className="text-[15px] font-semibold text-white leading-snug">{item.title}</p>
-                          <p className="text-[13px] text-white/55 leading-snug mt-1">{item.desc}</p>
+                          <p className="text-[13px] text-white/65 leading-snug mt-1">{item.desc}</p>
                         </div>
                       </li>
                     ))}
@@ -167,7 +167,7 @@ const Index = () => {
                       color: "rgba(220,120,120,0.70)",
                       opacity: prefersReducedMotion || valueVisible ? 1 : 0,
                       transition: prefersReducedMotion ? "none" : "opacity 500ms ease-out",
-                      transitionDelay: prefersReducedMotion ? "0ms" : `${withItems.length * 120 + 80}ms`,
+                      transitionDelay: prefersReducedMotion ? "0ms" : `${withItems.length * 80 + 60}ms`,
                     }}
                   >
                     Without it
@@ -181,7 +181,7 @@ const Index = () => {
                           opacity: prefersReducedMotion || valueVisible ? 1 : 0,
                           transform: prefersReducedMotion || valueVisible ? "translateY(0)" : "translateY(12px)",
                           transition: prefersReducedMotion ? "none" : "opacity 500ms ease-out, transform 500ms ease-out",
-                          transitionDelay: prefersReducedMotion ? "0ms" : `${(withItems.length + i + 1) * 120}ms`,
+                          transitionDelay: prefersReducedMotion ? "0ms" : `${(withItems.length + i + 1) * 80}ms`,
                         }}
                       >
                         <div
@@ -195,7 +195,7 @@ const Index = () => {
                         </div>
                         <div>
                           <p className="text-[15px] font-semibold leading-snug text-white/90">{item.title}</p>
-                          <p className="text-[13px] leading-snug mt-1 text-white/55">{item.desc}</p>
+                          <p className="text-[13px] leading-snug mt-1 text-white/65">{item.desc}</p>
                         </div>
                       </li>
                     ))}
@@ -208,12 +208,14 @@ const Index = () => {
             <div className="text-center mt-8 max-w-md mx-auto">
               <button
                 onClick={handleStartClick}
-                className="text-gold text-[14px] font-medium tracking-wide hover:text-white transition-colors"
+                className="text-gold text-[14px] font-medium tracking-wide hover:text-white transition-colors py-3"
               >
                 See how it works →
               </button>
             </div>
           </section>
+
+          <div className="gold-section-divider" />
 
           <section className="px-6 pt-12 pb-10">
             <div className="max-w-md mx-auto">
@@ -267,7 +269,7 @@ const Index = () => {
             <div className="max-w-md mx-auto">
               <div
                 ref={bridgeRef}
-                className="rounded-2xl px-8 py-10 md:py-14 text-center"
+                className="rounded-2xl px-6 py-10 md:py-14 text-center"
                 style={{
                   border: "2px solid rgba(212,175,55,0.40)",
                   background: "radial-gradient(ellipse at center 70%, rgba(212,175,55,0.04) 0%, rgba(255,255,255,0.02) 60%, transparent 100%)",
