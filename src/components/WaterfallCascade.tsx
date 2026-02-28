@@ -1,43 +1,37 @@
 import { useState, useEffect, useRef } from "react";
-import { cn } from "@/lib/utils";
 
 const TOTAL = 3_000_000;
+const PROFIT = 417_500;
+const PROFIT_PCT = (PROFIT / TOTAL) * 100;
 
-interface Tier {
+interface Row {
   name: string;
   amount: number;
-  type: "source" | "deduction" | "profit";
+  remainPct: number;
+  deductPct: number;
 }
 
-interface Block extends Tier {
-  startPct: number;
-  widthPct: number;
-}
-
-const tiers: Tier[] = [
-  { name: "Acquisition Price",  amount: 3_000_000, type: "source" },
-  { name: "CAM Fees",           amount: 22_500,    type: "deduction" },
-  { name: "Sales Agent",        amount: 450_000,   type: "deduction" },
-  { name: "Senior Debt",        amount: 440_000,   type: "deduction" },
-  { name: "Mezzanine",          amount: 230_000,   type: "deduction" },
-  { name: "Equity Recoupment",  amount: 1_440_000, type: "deduction" },
-  { name: "Net Profits",        amount: 417_500,   type: "profit" },
+const deductions = [
+  { name: "CAM Fees",          amount: 22_500 },
+  { name: "Sales Agent",       amount: 450_000 },
+  { name: "Senior Debt",       amount: 440_000 },
+  { name: "Mezzanine",         amount: 230_000 },
+  { name: "Equity Recoupment", amount: 1_440_000 },
 ];
 
-const buildBlocks = (): Block[] => {
-  let running = TOTAL;
-  return tiers.map((tier) => {
-    if (tier.type === "source") {
-      return { ...tier, startPct: 0, widthPct: 100 };
-    }
-    const startPct = ((TOTAL - running) / TOTAL) * 100;
-    const widthPct = (tier.amount / TOTAL) * 100;
-    if (tier.type === "deduction") running -= tier.amount;
-    return { ...tier, startPct, widthPct };
+const buildRows = (): Row[] => {
+  let remaining = TOTAL;
+  return deductions.map((d) => {
+    remaining -= d.amount;
+    return {
+      ...d,
+      remainPct: Math.max(0, (remaining / TOTAL) * 100),
+      deductPct: (d.amount / TOTAL) * 100,
+    };
   });
 };
 
-const blocks = buildBlocks();
+const rows = buildRows();
 
 const fmt = (n: number) => {
   if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(1)}M`;
@@ -46,6 +40,8 @@ const fmt = (n: number) => {
 };
 
 const fmtFull = (n: number) => `$${n.toLocaleString()}`;
+
+const EASE = "cubic-bezier(0.16,1,0.3,1)";
 
 const WaterfallCascade = () => {
   const [revealed, setRevealed] = useState(false);
@@ -74,7 +70,7 @@ const WaterfallCascade = () => {
     if (!revealed) return;
     let rafId: number;
     const timeout = setTimeout(() => {
-      const target = 417_500;
+      const target = PROFIT;
       const dur = 1400;
       const start = performance.now();
       const step = (now: number) => {
@@ -97,89 +93,84 @@ const WaterfallCascade = () => {
   return (
     <div ref={containerRef}>
       <div className="border border-white/[0.08] bg-black overflow-hidden rounded-xl">
-        {blocks.map((block, i) => {
-          if (block.type === "profit") return null;
-          const isSource = block.type === "source";
-          const delay = i * 250;
-          const barOpacity = Math.max(0.25, 0.55 - i * 0.05);
-
-          return (
+        {/* Source row — full bar establishes the baseline */}
+        <div>
+          <div className="flex justify-between items-baseline px-4 pt-[10px] pb-[5px]">
+            <div className="flex items-baseline gap-2">
+              <span className="font-mono text-[11px] text-white/50 tabular-nums">
+                01
+              </span>
+              <span className="font-bebas text-[22px] tracking-[0.06em] text-white/90">
+                Acquisition Price
+              </span>
+            </div>
+            <span className="font-mono text-[17px] font-semibold text-white/90">
+              {fmtFull(TOTAL)}
+            </span>
+          </div>
+          <div className="px-4 pb-[10px]">
             <div
-              key={block.name}
-              className={cn(i > 0 && "border-t border-white/[0.07]")}
+              className="w-full relative overflow-hidden rounded-sm h-4"
+              style={{ background: "rgba(255,255,255,0.05)" }}
             >
+              <div
+                className="absolute left-0 top-0 h-full rounded-sm"
+                style={{
+                  width: revealed ? "100%" : "0%",
+                  background:
+                    "linear-gradient(90deg, rgba(212,175,55,0.70), rgba(212,175,55,0.45))",
+                  transition: `width 1000ms ${EASE}`,
+                }}
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Deduction rows — bars shrink to show remaining money */}
+        {rows.map((row, i) => {
+          const delay = (i + 1) * 250;
+          return (
+            <div key={row.name} className="border-t border-white/[0.07]">
               <div className="flex justify-between items-baseline px-4 pt-[10px] pb-[5px]">
                 <div className="flex items-baseline gap-2">
                   <span className="font-mono text-[11px] text-white/50 tabular-nums">
-                    {String(i + 1).padStart(2, "0")}
+                    {String(i + 2).padStart(2, "0")}
                   </span>
-                  <span
-                    className={
-                      isSource
-                        ? "font-bebas text-[22px] tracking-[0.06em] text-white/90"
-                        : "text-[14px] tracking-[0.01em] font-medium text-white/65"
-                    }
-                  >
-                    {block.name}
+                  <span className="text-[14px] tracking-[0.01em] font-medium text-white/65">
+                    {row.name}
                   </span>
                 </div>
-                <span
-                  className={
-                    isSource
-                      ? "font-mono text-[17px] font-semibold text-white/90"
-                      : "font-mono text-[14px] font-medium text-white/65"
-                  }
-                >
-                  {isSource ? fmtFull(block.amount) : `\u2212${fmt(block.amount)}`}
+                <span className="font-mono text-[14px] font-medium text-white/65">
+                  {"\u2212"}{fmt(row.amount)}
                 </span>
               </div>
-
               <div className="px-4 pb-[10px]">
                 <div
-                  className={cn(
-                    "w-full relative overflow-hidden rounded-sm",
-                    isSource ? "h-4" : "h-[10px]"
-                  )}
+                  className="w-full relative overflow-hidden rounded-sm h-[10px]"
                   style={{ background: "rgba(255,255,255,0.05)" }}
                 >
-                  {isSource ? (
-                    <div
-                      className="absolute left-0 top-0 h-full rounded-sm"
-                      style={{
-                        width: revealed ? "100%" : "0%",
-                        background:
-                          "linear-gradient(90deg, rgba(212,175,55,0.70), rgba(212,175,55,0.45))",
-                        transition: "width 1000ms cubic-bezier(0.16,1,0.3,1)",
-                      }}
-                    />
-                  ) : (
-                    <>
-                      <div
-                        className="absolute top-0 h-full rounded-sm"
-                        style={{
-                          left: "0%",
-                          width: revealed
-                            ? `${block.startPct + block.widthPct}%`
-                            : "0%",
-                          background: "rgba(212,175,55,0.08)",
-                          transition:
-                            "width 800ms cubic-bezier(0.16,1,0.3,1)",
-                          transitionDelay: `${delay}ms`,
-                        }}
-                      />
-                      <div
-                        className="absolute top-0 h-full rounded-sm"
-                        style={{
-                          left: revealed ? `${block.startPct}%` : "0%",
-                          width: revealed ? `${block.widthPct}%` : "0%",
-                          background: `rgba(212,175,55,${barOpacity})`,
-                          transition:
-                            "left 800ms cubic-bezier(0.16,1,0.3,1), width 800ms cubic-bezier(0.16,1,0.3,1)",
-                          transitionDelay: `${delay}ms`,
-                        }}
-                      />
-                    </>
-                  )}
+                  {/* Gold bar = what remains after this deduction */}
+                  <div
+                    className="absolute left-0 top-0 h-full rounded-sm"
+                    style={{
+                      width: revealed ? `${row.remainPct}%` : "0%",
+                      background:
+                        "linear-gradient(90deg, rgba(212,175,55,0.55), rgba(212,175,55,0.35))",
+                      transition: `width 800ms ${EASE}`,
+                      transitionDelay: `${delay}ms`,
+                    }}
+                  />
+                  {/* Dim slice = what this tier consumed */}
+                  <div
+                    className="absolute top-0 h-full rounded-sm"
+                    style={{
+                      left: revealed ? `${row.remainPct}%` : "0%",
+                      width: revealed ? `${row.deductPct}%` : "0%",
+                      background: "rgba(212,175,55,0.10)",
+                      transition: `left 800ms ${EASE}, width 800ms ${EASE}`,
+                      transitionDelay: `${delay}ms`,
+                    }}
+                  />
                 </div>
               </div>
             </div>
@@ -187,35 +178,31 @@ const WaterfallCascade = () => {
         })}
       </div>
 
+      {/* Profit box — tighter gap, bar echoes the final remaining slice */}
       <div
-        className="mt-3.5 rounded-[10px] px-[18px] py-5 bg-black"
+        className="mt-2 rounded-[10px] px-[18px] py-5 bg-black"
         style={{ border: "2px solid rgba(212,175,55,0.60)" }}
       >
-        <div className="flex justify-between items-center">
-          <div>
-            <p className="font-mono text-[10px] tracking-[0.22em] uppercase font-semibold text-gold mb-1">
-              Net Profits
-            </p>
-            <span className="font-mono text-[32px] font-bold text-white tracking-tight">
-              ${profitCount.toLocaleString()}
-            </span>
-          </div>
+        <p className="font-mono text-[10px] tracking-[0.22em] uppercase font-semibold text-gold mb-1">
+          Net Profits
+        </p>
+        <span className="font-mono text-[32px] font-bold text-white tracking-tight">
+          ${profitCount.toLocaleString()}
+        </span>
+        <div
+          className="w-full relative overflow-hidden rounded-sm h-[10px] mt-3"
+          style={{ background: "rgba(255,255,255,0.05)" }}
+        >
           <div
-            className="w-20 h-9 rounded overflow-hidden relative"
-            style={{ background: "rgba(255,255,255,0.03)" }}
-          >
-            <div
-              className="absolute left-0 top-0 h-full rounded"
-              style={{
-                width: revealed
-                  ? `${(417_500 / TOTAL) * 100}%`
-                  : "0%",
-                background: "rgba(212,175,55,0.75)",
-                transition: "width 1000ms cubic-bezier(0.16,1,0.3,1)",
-                transitionDelay: "2000ms",
-              }}
-            />
-          </div>
+            className="absolute left-0 top-0 h-full rounded-sm"
+            style={{
+              width: revealed ? `${PROFIT_PCT}%` : "0%",
+              background:
+                "linear-gradient(90deg, rgba(212,175,55,0.75), rgba(212,175,55,0.55))",
+              transition: `width 1000ms ${EASE}`,
+              transitionDelay: "2000ms",
+            }}
+          />
         </div>
       </div>
 
