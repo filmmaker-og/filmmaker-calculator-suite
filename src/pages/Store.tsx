@@ -1,14 +1,13 @@
 import { useState, useEffect, useRef } from "react";
-import { Check, Mail, X as XIcon } from "lucide-react";
+import { Check, Mail, X as XIcon, Clock, ArrowRight } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { useHaptics } from "@/hooks/use-haptics";
 import {
-  mainProducts,
+  selfServeProducts,
+  turnkeyServices,
   addOnProduct,
-  comparisonSections,
   type Product,
-  type FeatureValue,
 } from "@/lib/store-products";
 import {
   Accordion,
@@ -20,35 +19,31 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
 
-
 /* ═══════════════════════════════════════════════════════════════════
    FAQ DATA
    ═══════════════════════════════════════════════════════════════════ */
 const storeFaqs = [
   {
-    q: "How does it work?",
-    a: "After purchase, you'll be guided through a short intake form where you enter your project details, budget, capital stack, and deal structure. We use that information to build your finance plan and deliverables — delivered to your email within 24 hours.",
+    q: "How do the self-serve products work?",
+    a: "After purchase, your calculator data is used to generate your deliverables automatically. Professional, white-labeled documents delivered to your email.",
   },
   {
-    q: "What's the difference between the three packages?",
-    a: "The Blueprint gives you the complete finance plan documentation. The Pitch Package adds investor-facing materials — a pitch deck, investor return profiles, executive summary, and deal terms summary. The Market Case adds comparable acquisition research, a defensible valuation range, and a market positioning memo.",
+    q: "How do the turnkey services work?",
+    a: "After purchase, you complete a short intake form with your project details — logline, genre, budget, cast, tone references, and raise amount. We build your complete investor package and deliver it within 5 business days.",
   },
   {
     q: "What is The Working Model?",
-    a: "A live, formula-driven Excel workbook. Change any input and every downstream calculation updates instantly. It's the engine behind your finance plan — reusable across unlimited future projects. Add it at checkout for $79 when bundled with any package.",
+    a: "A live, formula-driven Excel workbook. Change any input and every downstream calculation updates instantly. It\u2019s the engine behind your finance plan — reusable across unlimited future projects. Add it at checkout for $79 when bundled with any package.",
   },
   {
-    q: "What if the deliverables don't meet my expectations?",
-    a: "If your deliverables don't meet the institutional standard described, we'll revise them. These are the same financial models used in real production financing — if something doesn't hold up, we fix it.",
+    q: "What if the deliverables don\u2019t meet my expectations?",
+    a: "If your deliverables don\u2019t meet the institutional standard described, we\u2019ll revise them. These are the same financial models used in real production financing — if something doesn\u2019t hold up, we fix it.",
   },
   {
     q: "Can I upgrade later?",
-    a: "Contact us and we'll apply what you've already paid toward the higher tier.",
+    a: "Contact us and we\u2019ll apply what you\u2019ve already paid toward the higher tier.",
   },
 ];
-
-
-
 
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -191,7 +186,7 @@ const WorkingModelPopup = ({
 
 
 /* ═══════════════════════════════════════════════════════════════════
-   PRODUCT CARD
+   PRODUCT CARD — self-serve tiers (1-2)
    ═══════════════════════════════════════════════════════════════════ */
 const ProductCard = ({
   product,
@@ -205,40 +200,35 @@ const ProductCard = ({
   index: number;
 }) => {
   const isFeatured = product.featured;
-  const isPremium = product.tier === 3;
 
   return (
     <div
       className="flex flex-col p-6 rounded-xl"
       style={{
         opacity: visible ? 1 : 0,
-        transform: visible ? 'translateY(0)' : 'translateY(20px)',
-        transition: 'opacity 700ms ease-out, transform 700ms ease-out',
+        transform: visible ? "translateY(0)" : "translateY(20px)",
+        transition: "opacity 700ms ease-out, transform 700ms ease-out",
         transitionDelay: `${index * 120}ms`,
         border: isFeatured
-          ? '2px solid rgba(212,175,55,0.50)'
-          : isPremium
-          ? '1px solid rgba(212,175,55,0.30)'
-          : '1px solid rgba(212,175,55,0.25)',
-        background: isFeatured
-          ? 'rgba(212,175,55,0.04)'
-          : '#000',
+          ? "2px solid rgba(212,175,55,0.50)"
+          : "1px solid rgba(212,175,55,0.25)",
+        background: isFeatured ? "rgba(212,175,55,0.04)" : "#000",
         boxShadow: isFeatured
-          ? '0 0 48px rgba(212,175,55,0.12), inset 0 1px 0 rgba(255,255,255,0.06)'
-          : 'inset 0 1px 0 rgba(255,255,255,0.06)',
+          ? "0 0 48px rgba(212,175,55,0.12), inset 0 1px 0 rgba(255,255,255,0.06)"
+          : "inset 0 1px 0 rgba(255,255,255,0.06)",
       }}
     >
       {/* Badge */}
       {product.badge && (
         <div className="mb-4">
-          <span className={cn(
-            "inline-block px-3 py-1.5 text-[12px] tracking-[0.15em] uppercase font-bold rounded",
-            isFeatured
-              ? "bg-gold/20 border border-gold/40 text-gold"
-              : isPremium
-              ? "bg-gold/10 border border-gold/25 text-gold"
-              : "border border-gold-border text-ink-secondary"
-          )}>
+          <span
+            className={cn(
+              "inline-block px-3 py-1.5 text-[12px] tracking-[0.15em] uppercase font-bold rounded",
+              isFeatured
+                ? "bg-gold/20 border border-gold/40 text-gold"
+                : "border border-gold-border text-ink-secondary"
+            )}
+          >
             {product.badge}
           </span>
         </div>
@@ -258,15 +248,12 @@ const ProductCard = ({
 
       {/* Price */}
       <div className="mb-3">
-        {product.originalPrice && (
-          <span className="font-mono text-[16px] text-ink-secondary line-through mr-2">
-            ${product.originalPrice}
-          </span>
-        )}
-        <span className={cn(
-          "font-mono font-bold text-white",
-          isFeatured ? "text-[40px]" : isPremium ? "text-[40px]" : "text-[26px]"
-        )}>
+        <span
+          className={cn(
+            "font-mono font-bold text-white",
+            isFeatured ? "text-[40px]" : "text-[26px]"
+          )}
+        >
           ${product.price.toLocaleString()}
         </span>
       </div>
@@ -298,11 +285,7 @@ const ProductCard = ({
             : "btn-cta-secondary"
         )}
       >
-        {isPremium
-          ? "GET THE FULL PACKAGE"
-          : isFeatured
-          ? "GET THE PITCH PACKAGE"
-          : "START WITH THE BLUEPRINT"}
+        {product.ctaLabel}
       </button>
 
       {/* Details link */}
@@ -321,20 +304,117 @@ const ProductCard = ({
 
 
 /* ═══════════════════════════════════════════════════════════════════
-   COMPARE CELL — for inline comparison table
+   SERVICE CARD — turnkey tiers (3-4)
    ═══════════════════════════════════════════════════════════════════ */
-const CompareCell = ({ value, featured }: { value: FeatureValue; featured?: boolean }) => {
-  if (typeof value === "boolean") {
-    return value ? (
-      <Check className={cn("w-4 h-4 mx-auto", featured ? "text-gold" : "text-ink-body")} />
-    ) : (
-      <XIcon className="w-3.5 h-3.5 mx-auto text-ink-ghost" />
-    );
-  }
+const ServiceCard = ({
+  product,
+  onBuy,
+  visible,
+  index,
+}: {
+  product: Product;
+  onBuy: () => void;
+  visible: boolean;
+  index: number;
+}) => {
+  const isTop = product.tier === 4;
+
   return (
-    <span className={cn("text-[12px] leading-snug", featured ? "text-white" : "text-ink-body")}>
-      {value}
-    </span>
+    <div
+      className="flex flex-col p-6 rounded-xl"
+      style={{
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateY(0)" : "translateY(20px)",
+        transition: "opacity 700ms ease-out, transform 700ms ease-out",
+        transitionDelay: `${index * 120}ms`,
+        border: isTop
+          ? "1px solid rgba(212,175,55,0.40)"
+          : "1px solid rgba(212,175,55,0.30)",
+        background: isTop
+          ? "linear-gradient(165deg, rgba(212,175,55,0.05), rgba(0,0,0,0.6))"
+          : "linear-gradient(165deg, rgba(212,175,55,0.03), rgba(0,0,0,0.6))",
+        boxShadow: isTop
+          ? "0 0 40px rgba(212,175,55,0.08), inset 0 1px 0 rgba(255,255,255,0.06)"
+          : "inset 0 1px 0 rgba(255,255,255,0.06)",
+      }}
+    >
+      {/* Badge + Turnaround row */}
+      <div className="flex items-center justify-between mb-4">
+        {product.badge && (
+          <span
+            className={cn(
+              "inline-block px-3 py-1.5 text-[12px] tracking-[0.15em] uppercase font-bold rounded",
+              isTop
+                ? "bg-gold/15 border border-gold/30 text-gold"
+                : "bg-gold/10 border border-gold/25 text-gold"
+            )}
+          >
+            {product.badge}
+          </span>
+        )}
+        {product.turnaround && (
+          <span className="flex items-center gap-1.5 text-ink-secondary text-[12px] tracking-[0.06em]">
+            <Clock className="w-3.5 h-3.5" />
+            {product.turnaround}
+          </span>
+        )}
+      </div>
+
+      {/* Name */}
+      <h3 className="font-bebas text-[28px] tracking-[0.06em] text-white mb-1">
+        {product.name.toUpperCase()}
+      </h3>
+
+      {/* Pick this if */}
+      {product.pickThisIf && (
+        <p className="text-gold/70 text-[13px] italic mb-3">
+          Pick this one if {product.pickThisIf}
+        </p>
+      )}
+
+      {/* Price */}
+      <div className="mb-3">
+        <span className="font-mono text-[40px] font-bold text-white">
+          ${product.price.toLocaleString()}
+        </span>
+      </div>
+
+      {/* Short description */}
+      <p className="text-ink-secondary text-[16px] leading-relaxed mb-5">
+        {product.shortDescription}
+      </p>
+
+      {/* Feature list */}
+      <ul className="space-y-2.5 mb-6 flex-1">
+        {product.features.map((feature) => (
+          <li key={feature} className="flex items-start gap-2.5">
+            <Check className="w-3.5 h-3.5 mt-0.5 flex-shrink-0 text-gold" />
+            <span className="text-ink-body text-[14px] leading-snug">
+              {feature}
+            </span>
+          </li>
+        ))}
+      </ul>
+
+      {/* CTA */}
+      <button
+        onClick={onBuy}
+        className="w-full h-14 uppercase tracking-[0.06em] btn-cta-primary flex items-center justify-center gap-2"
+      >
+        {product.ctaLabel}
+      </button>
+
+      {/* Details link */}
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          window.location.href = `/store/${product.slug}`;
+        }}
+        className="text-ink-secondary text-[12px] tracking-[0.08em] hover:text-ink-body transition-colors text-center mt-3"
+      >
+        See full details {"\u2192"}
+      </button>
+    </div>
   );
 };
 
@@ -347,15 +427,9 @@ const Store = () => {
   const [showPopup, setShowPopup] = useState<Product | null>(null);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
 
-  // Mobile-sorted products: featured first, then premium, then base
-  const mobileProducts = [...mainProducts].sort((a, b) => {
-    if (a.featured) return -1;
-    if (b.featured) return 1;
-    return b.tier - a.tier;
-  });
-
   // Reveal refs
   const revealProducts = useReveal();
+  const revealServices = useReveal();
   const revealFaq = useReveal();
 
   /* ─── CHECKOUT — DIRECT TO STRIPE ─── */
@@ -379,8 +453,16 @@ const Store = () => {
     }
   };
 
-  const handleBuy = (product: Product) => {
+  /* ─── BUY HANDLERS ─── */
+  const handleBuyProduct = (product: Product) => {
     haptics.medium();
+    setShowPopup(product);
+  };
+
+  const handleBuyService = (product: Product) => {
+    haptics.medium();
+    // TODO: Route to intake form (Typeform, Google Form, or custom)
+    // For now, show the working model popup same as products
     setShowPopup(product);
   };
 
@@ -395,6 +477,18 @@ const Store = () => {
     haptics.light();
     startCheckout(showPopup.id);
   };
+
+  // Mobile sort: featured first for products
+  const sortedProducts = [...selfServeProducts].sort((a, b) => {
+    if (a.featured) return -1;
+    if (b.featured) return 1;
+    return a.tier - b.tier;
+  });
+
+  // Services: highest tier first
+  const sortedServices = [...turnkeyServices].sort(
+    (a, b) => a.tier - b.tier
+  );
 
   /* ─── RENDER ─── */
   return (
@@ -418,24 +512,35 @@ const Store = () => {
         </div>
       )}
 
-      <main className="flex-1" style={{ paddingBottom: "env(safe-area-inset-bottom)" }}>
-
+      <main
+        className="flex-1"
+        style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
+      >
         {/* ──────────────────────────────────────────────────────────
-             § 1  PRODUCT CARDS — first thing they see
-             Three tiers + add-on. No preamble.
+             § 1  SELF-SERVE PRODUCTS
+             Tiers 1-2. Instant delivery. Stripe checkout.
            ────────────────────────────────────────────────────────── */}
-        <section id="products" className="pt-14 pb-14 md:pb-20 px-6">
-          <div
-            ref={revealProducts.ref}
-            className="max-w-md mx-auto"
-          >
-            {/* Mobile: featured first, then stack */}
+        <section id="products" className="pt-14 pb-10 px-6">
+          <div ref={revealProducts.ref} className="max-w-md mx-auto">
+            {/* Section header */}
+            <div className="text-center mb-8">
+              <h2 className="font-bebas text-[40px] tracking-[0.08em] text-gold">
+                YOUR NUMBERS.{" "}
+                <span className="text-white">INVESTOR-READY.</span>
+              </h2>
+              <p className="text-ink-secondary text-[15px] leading-relaxed mt-3">
+                Professional financial documents built from your calculator
+                data. Purchase and download.
+              </p>
+            </div>
+
+            {/* Product cards */}
             <div className="space-y-5">
-              {mobileProducts.map((product, i) => (
+              {sortedProducts.map((product, i) => (
                 <ProductCard
                   key={product.id}
                   product={product}
-                  onBuy={() => handleBuy(product)}
+                  onBuy={() => handleBuyProduct(product)}
                   visible={revealProducts.visible}
                   index={i}
                 />
@@ -447,9 +552,9 @@ const Store = () => {
               <div
                 className="mt-5 px-5 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl"
                 style={{
-                  border: '1px solid rgba(212,175,55,0.15)',
-                  background: 'rgba(212,175,55,0.03)',
-                  boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)',
+                  border: "1px solid rgba(212,175,55,0.15)",
+                  background: "rgba(212,175,55,0.03)",
+                  boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06)",
                 }}
               >
                 <div className="flex items-center gap-3 flex-1 min-w-0">
@@ -461,93 +566,68 @@ const Store = () => {
                   </span>
                 </div>
                 <div className="flex items-baseline gap-2 flex-shrink-0">
-                  <span className="font-mono text-[14px] text-gold font-medium">$75 at checkout</span>
-                  <span className="font-mono text-[12px] text-ink-secondary line-through">$149</span>
+                  <span className="font-mono text-[14px] text-gold font-medium">
+                    $79 at checkout
+                  </span>
+                  <span className="font-mono text-[12px] text-ink-secondary line-through">
+                    $149
+                  </span>
                 </div>
               </div>
             )}
-
           </div>
         </section>
 
+        {/* ──────────────────────────────────────────────────────────
+             DIVIDER — category shift
+           ────────────────────────────────────────────────────────── */}
+        <div className="py-10 px-6">
+          <div className="max-w-md mx-auto">
+            <div
+              className="h-px w-full"
+              style={{
+                background:
+                  "linear-gradient(90deg, transparent, rgba(212,175,55,0.40), transparent)",
+              }}
+            />
+          </div>
+        </div>
 
         {/* ──────────────────────────────────────────────────────────
-             § 2  INLINE COMPARISON TABLE
-             What's in each tier at a glance. No separate page needed.
+             § 2  TURNKEY SERVICES
+             Tiers 3-4. Custom build. 5 business day turnaround.
            ────────────────────────────────────────────────────────── */}
-        <section id="compare" className="py-14 md:py-20 px-4">
-          <div className="max-w-md mx-auto">
+        <section id="services" className="pb-14 px-6">
+          <div ref={revealServices.ref} className="max-w-md mx-auto">
+            {/* Section header */}
             <div className="text-center mb-8">
               <h2 className="font-bebas text-[40px] tracking-[0.08em] text-gold">
-                WHAT{"\u2019"}S IN <span className="text-white">EACH TIER</span>
+                WE BUILD IT{" "}
+                <span className="text-white">FOR YOU.</span>
               </h2>
+              <p className="text-ink-secondary text-[15px] leading-relaxed mt-3">
+                Tell us about your project. We build the complete investor
+                package — turnkey, custom, delivered in 5 business days.
+              </p>
             </div>
 
-            <div
-              className="border border-gold-border bg-black overflow-hidden rounded-xl"
-              style={{ boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)' }}
-            >
-              {/* Column headers */}
-              <div className="grid grid-cols-4 gap-0 px-3 py-4 border-b" style={{ borderColor: 'rgba(255,255,255,0.06)' }}>
-                <div />
-                {mainProducts.map((p) => (
-                  <div key={p.id} className="text-center">
-                    <p className={cn(
-                      "font-bebas text-[12px] tracking-[0.06em] leading-tight",
-                      p.featured ? "text-gold" : "text-white"
-                    )}>
-                      {p.name.split(" ").slice(-1)[0].toUpperCase()}
-                    </p>
-                    <p className={cn(
-                      "font-mono text-[12px] mt-0.5",
-                      p.featured ? "text-gold" : "text-ink-secondary"
-                    )}>
-                      ${p.price.toLocaleString()}
-                    </p>
-                  </div>
-                ))}
-              </div>
-
-              {/* Sections + rows — skip "Use Case" (text too long for grid) */}
-              {comparisonSections
-                .filter((s) => s.title !== "Use Case")
-                .map((section) => (
-                <div key={section.title}>
-                  <div className="px-3 pt-5 pb-2">
-                    <span className="font-mono text-[12px] tracking-[0.15em] uppercase text-gold font-bold">
-                      {section.title}
-                    </span>
-                  </div>
-
-                  {section.features.map((feat) => (
-                    <div
-                      key={feat.label}
-                      className="grid grid-cols-4 gap-0 px-3 py-3 items-center"
-                      style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}
-                    >
-                      <span className="text-[12px] text-ink-body leading-snug pr-2">
-                        {feat.label}
-                      </span>
-                      <div className="text-center">
-                        <CompareCell value={feat.theBlueprint} />
-                      </div>
-                      <div className="text-center">
-                        <CompareCell value={feat.thePitchPackage} featured />
-                      </div>
-                      <div className="text-center">
-                        <CompareCell value={feat.theMarketCase} />
-                      </div>
-                    </div>
-                  ))}
-                </div>
+            {/* Service cards */}
+            <div className="space-y-5">
+              {sortedServices.map((product, i) => (
+                <ServiceCard
+                  key={product.id}
+                  product={product}
+                  onBuy={() => handleBuyService(product)}
+                  visible={revealServices.visible}
+                  index={i}
+                />
               ))}
             </div>
           </div>
         </section>
 
-
         {/* ──────────────────────────────────────────────────────────
-             § 3  FAQ — clean accordion, no wrappers
+             § 3  FAQ
            ────────────────────────────────────────────────────────── */}
         <section id="faq" className="py-14 md:py-20 px-6">
           <div
@@ -555,8 +635,11 @@ const Store = () => {
             className="max-w-md mx-auto"
             style={{
               opacity: revealFaq.visible ? 1 : 0,
-              transform: revealFaq.visible ? 'translateY(0)' : 'translateY(20px)',
-              transition: 'opacity 700ms ease-out, transform 700ms ease-out',
+              transform: revealFaq.visible
+                ? "translateY(0)"
+                : "translateY(20px)",
+              transition:
+                "opacity 700ms ease-out, transform 700ms ease-out",
             }}
           >
             <div className="text-center mb-8">
@@ -567,15 +650,19 @@ const Store = () => {
 
             <div
               className="border border-gold-border bg-black overflow-hidden rounded-xl px-6"
-              style={{ boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)' }}
+              style={{
+                boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06)",
+              }}
             >
               <Accordion type="single" collapsible className="w-full">
                 {storeFaqs.map((faq, i) => (
                   <AccordionItem
                     key={faq.q}
                     value={`faq-${i}`}
-                    className={cn(i > 0 && "border-t border-bg-card-rule")}
-                    style={{ borderBottom: 'none' }}
+                    className={cn(
+                      i > 0 && "border-t border-bg-card-rule"
+                    )}
+                    style={{ borderBottom: "none" }}
                   >
                     <AccordionTrigger className="font-bebas text-[16px] tracking-[0.06em] uppercase text-gold hover:text-gold/70 hover:no-underline text-left py-5">
                       {faq.q}
@@ -592,14 +679,15 @@ const Store = () => {
             <div
               className="mt-5 p-6 rounded-xl"
               style={{
-                border: '1px solid rgba(212,175,55,0.30)',
-                background: 'linear-gradient(165deg, rgba(212,175,55,0.05), rgba(0,0,0,0.6))',
+                border: "1px solid rgba(212,175,55,0.30)",
+                background:
+                  "linear-gradient(165deg, rgba(212,175,55,0.05), rgba(0,0,0,0.6))",
                 boxShadow:
-                  '0 0 32px rgba(212,175,55,0.08), inset 0 1px 0 rgba(255,255,255,0.06)',
+                  "0 0 32px rgba(212,175,55,0.08), inset 0 1px 0 rgba(255,255,255,0.06)",
               }}
             >
               <h3 className="font-bebas text-[18px] tracking-[0.08em] text-gold mb-2">
-                NEED SOMETHING CUSTOM?
+                NEED SOMETHING DIFFERENT?
               </h3>
               <p className="text-ink-body text-[15px] leading-relaxed mb-4">
                 Bespoke financial modeling, custom comp research, or
@@ -617,15 +705,14 @@ const Store = () => {
           </div>
         </section>
 
-
         {/* ──────────────────────────────────────────────────────────
              FOOTER — legal only
            ────────────────────────────────────────────────────────── */}
         <footer className="py-8 px-6 max-w-md mx-auto">
           <p className="text-ink-ghost text-[12px] tracking-wide leading-relaxed text-center">
-            For educational and informational purposes only. Not legal, tax, or
-            investment advice. Consult a qualified entertainment attorney before
-            making financing decisions.
+            For educational and informational purposes only. Not legal, tax,
+            or investment advice. Consult a qualified entertainment attorney
+            before making financing decisions.
           </p>
         </footer>
       </main>
