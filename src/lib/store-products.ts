@@ -1,6 +1,7 @@
 /* ═══════════════════════════════════════════════════════════════════
    PRODUCT DATA — filmmaker.og store
-   Three-tier product ladder + reusable Excel add-on
+   Four-tier architecture: 2 self-serve products + 2 turnkey services
+   Plus reusable Excel add-on
    ═══════════════════════════════════════════════════════════════════ */
 
 export interface Product {
@@ -12,134 +13,217 @@ export interface Product {
   badge: string | null;
   featured: boolean;
   tier: number;
+  category: "product" | "service";
   isAddOn?: boolean;
   requiresBase?: string[];
+  turnaround?: string;
   shortDescription: string;
   fullDescription: string;
   features: string[];
   whatsIncluded: { title: string; body: string }[];
   whoItsFor: string;
-  whatYoullBuild: string;
   pickThisIf: string | null;
-  upgradePrompt: { title: string; body: string; cta: string; link: string } | null;
+  upgradePrompt: {
+    title: string;
+    body: string;
+    cta: string;
+    link: string;
+  } | null;
+  ctaLabel: string;
 }
 
 export const products: Product[] = [
+  /* ─────────────────────────────────────────────────────────────
+     TIER 1 — THE SNAPSHOT ($197)
+     Self-serve product. Instant delivery.
+     ───────────────────────────────────────────────────────────── */
   {
-    id: "the-blueprint",
-    slug: "the-blueprint",
-    name: "The Blueprint",
-    price: 349,
+    id: "the-snapshot",
+    slug: "the-snapshot",
+    name: "The Snapshot",
+    price: 197,
     originalPrice: null,
     badge: null,
     featured: false,
     tier: 1,
-    shortDescription: "Your complete finance plan, documented.",
+    category: "product",
+    shortDescription:
+      "Your financial model. One document. Investor-ready.",
     fullDescription:
-      "Your complete finance plan — documented, structured, and ready to reference.\n\nWe take your project details, budget, capital stack, and deal structure and build a professional finance plan PDF. Every assumption explained, every number sourced, every waterfall tier documented. This is the document your attorney reviews, your accountant references, and your co-producers align around.\n\nTell us about your project. We build the plan.",
+      "Your complete financial model — budget, capital stack, waterfall, deal terms, and scenario analysis — presented as a single, designed document that any investor can pick up and understand.\n\nA clean, professional presentation built from your calculator data, formatted for the person across the table who\u2019s deciding whether to write a check.\n\nRun your numbers. We make them investor-ready.",
     features: [
-      "Finance Plan Summary PDF",
-      "Capital Stack Breakdown",
-      "Scenario Comparison Sheet",
-      "Assumptions Reference",
+      "Unified Financial Presentation (PDF)",
+      "Budget, capital stack, waterfall, scenarios \u2014 one document",
+      "White-labeled with your company and project",
     ],
     whatsIncluded: [
       {
-        title: "Finance Plan Summary PDF",
-        body: "Your complete financial model across all sections — Budget, Capital Stack, Deal Terms, Waterfall Breakdown, and Scenario Analysis — formatted as a single professional document.",
+        title: "Unified Financial Presentation (PDF)",
+        body: "Budget overview, capital stack structure, deal terms, full waterfall cascade, three-scenario analysis, and investor return summary. One cohesive document, designed to flow.",
       },
       {
-        title: "Capital Stack Breakdown",
-        body: "Detailed breakdown of every funding source, priority positions, and recoupment structure. Shows exactly who gets paid and in what order.",
-      },
-      {
-        title: "Scenario Comparison Sheet",
-        body: "Three revenue scenarios showing investor returns at conservative, target, and optimistic acquisition prices.",
-      },
-      {
-        title: "Assumptions Reference",
-        body: "Every default value, industry standard, and assumption documented with source and range — so your attorney knows exactly what to review.",
+        title: "White-Labeled Branding",
+        body: "Your production company name and project title on every page. Your project, your brand.",
       },
     ],
-    pickThisIf: "you need the numbers documented — no meeting yet",
+    pickThisIf:
+      "you need the numbers documented \u2014 clean and professional",
     whoItsFor:
-      "Producers who need a clear, professional record of their project's financial structure. Use it for internal planning, co-producer alignment, or as the foundation document when investors ask for the numbers.",
-    whatYoullBuild:
-      "A complete financial plan showing exactly how money flows — from gross receipts through sales agent commissions, distribution fees, debt service, equity recoupment, and profit splits — formatted for anyone to read and understand.",
+      "Producers who have their numbers modeled and need a professional document to reference, send, or attach. When someone asks for the numbers, this is what you hand them.",
     upgradePrompt: {
-      title: "WANT THE FULL TREATMENT?",
-      body: "The Pitch Package adds a presentation-ready PowerPoint deck, individual investor return profiles, a one-page executive summary, and deal terms summary — everything you need to walk into the room.",
-      cta: "Upgrade to The Pitch Package \u2192",
-      link: "/store/the-pitch-package",
+      title: "WANT THE FULL INVESTOR PACKAGE?",
+      body: "The Package adds standalone investor documents, visual design, and genre positioning \u2014 everything you need for real conversations with money.",
+      cta: "See The Package \u2192",
+      link: "/store/the-package",
     },
+    ctaLabel: "GET MY SNAPSHOT \u2014 $197",
   },
+
+  /* ─────────────────────────────────────────────────────────────
+     TIER 2 — THE PACKAGE ($597)
+     Self-serve product. Instant delivery.
+     ───────────────────────────────────────────────────────────── */
   {
-    id: "the-pitch-package",
-    slug: "the-pitch-package",
-    name: "The Pitch Package",
-    price: 749,
+    id: "the-package",
+    slug: "the-package",
+    name: "The Package",
+    price: 597,
     originalPrice: null,
     badge: "MOST POPULAR",
     featured: true,
     tier: 2,
-    shortDescription: "Your finance plan, presentation-ready for the room.",
+    category: "product",
+    shortDescription:
+      "Your complete investor package \u2014 financial presentation, standalone documents, visual design.",
     fullDescription:
-      "Everything in The Blueprint, plus the full investor-facing treatment.\n\nYour finance plan redesigned for the room — a presentation-ready PowerPoint deck, individual investor return profiles, a one-page executive summary leave-behind, and a deal terms summary. The kind of materials that make investors take you seriously before you say a word.\n\nFour additional deliverables on top of your complete finance plan. One purchase. You walk into the room prepared.",
+      "Everything in The Snapshot \u2014 elevated.\n\nYour financial model presented with visual hierarchy, genre positioning, and professional design throughout. Plus the standalone documents you need for every stage of the conversation \u2014 a one-page executive summary for the leave-behind, individual investor return profiles for each equity participant, and a deal terms summary for attorney review.\n\nThis is an investor package. It looks like one, it reads like one, and it holds up under scrutiny.",
     features: [
-      "Everything in The Blueprint",
+      "Enhanced Financial Presentation (PDF)",
       "Individual Investor Return Profiles",
-      "Pitch Deck (PowerPoint)",
       "One-Page Executive Summary",
       "Deal Terms Summary",
+      "Visual design with genre positioning",
+      "White-labeled with your company and project",
     ],
     whatsIncluded: [
       {
-        title: "Everything in The Blueprint",
-        body: "Finance Plan Summary PDF, Capital Stack Breakdown, Scenario Comparison Sheet, and Assumptions Reference — all included.",
+        title: "Enhanced Financial Presentation (PDF)",
+        body: "Everything in The Snapshot with elevated visual design, genre/market positioning section, and visual hierarchy throughout.",
       },
       {
         title: "Individual Investor Return Profiles",
-        body: "Per-investor documents showing their specific investment amount, priority position, preferred return, profit participation, and projected returns across all three scenarios.",
-      },
-      {
-        title: "Pitch Deck (PowerPoint)",
-        body: "10 slides built from your actual project data. Title slide, budget overview, capital structure, deal terms, waterfall flow, scenario analysis, investor returns, and executive summary. Speaker notes included on every slide.",
+        body: "Per-investor documents showing their specific investment amount, priority position, preferred return, and projected returns across all three scenarios.",
       },
       {
         title: "One-Page Executive Summary",
-        body: "The leave-behind. A single-page document with your project's key financials — budget, acquisition target, capital structure, investor return projections — designed to sit on an investor's desk after the meeting ends.",
+        body: "The leave-behind. Key financials on a single page, designed for the desk after the meeting ends.",
       },
       {
         title: "Deal Terms Summary",
-        body: "A clean, structured summary of all deal terms — distribution model, commission rates, fee structures, and recoupment waterfall — formatted for attorney review and investor due diligence.",
+        body: "All deal terms structured for attorney review and investor due diligence.",
       },
     ],
-    pickThisIf: "you have an investor meeting coming up",
+    pickThisIf:
+      "you want the full investor package with standalone documents",
     whoItsFor:
-      "Producers preparing to sit in front of investors, equity partners, or co-financiers. You have a meeting coming up — or you want to be ready when one lands. This package gives you the complete set of materials that institutional capital expects to see.",
-    whatYoullBuild:
-      "A professional capital-raise package showing your project's complete financial architecture — how the money comes in, how it flows through the waterfall, and what investors can expect in return — presented across coordinated documents that cover every moment from the pitch to the follow-up.",
+      "Producers preparing to have real conversations with investors or co-financiers. Professional documents for the pitch, the follow-up, and the due diligence.",
     upgradePrompt: {
-      title: "NEED MARKET VALIDATION?",
-      body: "The Market Case adds comparable acquisition research, a defensible valuation range, and a market positioning memo — so when investors ask 'why do you think this film sells for $3M?' you have the answer.",
-      cta: "Upgrade to The Market Case \u2192",
-      link: "/store/the-market-case",
+      title: "WANT US TO BUILD IT FOR YOU?",
+      body: "The Full Build includes a custom lookbook, pitch deck, and complete investor package \u2014 turnkey, delivered in 5 business days.",
+      cta: "See The Full Build \u2192",
+      link: "/store/the-full-build",
     },
+    ctaLabel: "GET THE PACKAGE \u2014 $597",
   },
+
+  /* ─────────────────────────────────────────────────────────────
+     TIER 3 — THE FULL BUILD ($1,497)
+     Turnkey service. 5 business day turnaround.
+     ───────────────────────────────────────────────────────────── */
   {
-    id: "the-market-case",
-    slug: "the-market-case",
-    name: "The Market Case",
-    price: 1997,
+    id: "the-full-build",
+    slug: "the-full-build",
+    name: "The Full Build",
+    price: 1497,
+    originalPrice: null,
+    badge: "TURNKEY",
+    featured: false,
+    tier: 3,
+    category: "service",
+    turnaround: "5 business days",
+    shortDescription:
+      "Custom lookbook, financials, pitch deck. We build it. You present it.",
+    fullDescription:
+      "Tell us about your project. We build the full investor package.\n\nCustom lookbook with visual identity tailored to your film \u2014 tone boards, cast packaging, genre positioning, the visual narrative that shows investors this project is real. Alongside the complete financial package \u2014 every document from The Package, plus a presentation-ready PowerPoint pitch deck with speaker notes.\n\nWe build it. You walk into the room.\n\n5 business day turnaround after intake.",
+    features: [
+      "Custom Lookbook \u2014 tone, cast, genre, visual identity",
+      "Pitch Deck (PowerPoint) with speaker notes",
+      "Enhanced Financial Presentation (PDF)",
+      "Individual Investor Return Profiles",
+      "One-Page Executive Summary",
+      "Deal Terms Summary",
+      "Everything white-labeled to your project",
+    ],
+    whatsIncluded: [
+      {
+        title: "Custom Lookbook",
+        body: "Bespoke visual presentation with tone/mood boards, cast packaging layout, genre positioning, and director\u2019s visual framework. Tailored to your film.",
+      },
+      {
+        title: "Pitch Deck (PowerPoint)",
+        body: "10-12 slides built from your project data with speaker notes on every slide. Ready for the room.",
+      },
+      {
+        title: "Enhanced Financial Presentation (PDF)",
+        body: "Everything in The Package \u2014 budget, capital stack, waterfall, scenarios \u2014 with elevated visual design and genre positioning.",
+      },
+      {
+        title: "Individual Investor Return Profiles",
+        body: "Per-investor documents showing their specific investment amount, priority position, preferred return, and projected returns across all three scenarios.",
+      },
+      {
+        title: "One-Page Executive Summary",
+        body: "The leave-behind. Key financials on a single page, designed for the desk after the meeting ends.",
+      },
+      {
+        title: "Deal Terms Summary",
+        body: "All deal terms structured for attorney review and investor due diligence.",
+      },
+    ],
+    pickThisIf:
+      "you want the full treatment \u2014 turnkey, custom, ready for the room",
+    whoItsFor:
+      "Producers with an investor meeting on the calendar \u2014 or the conviction to go get one. The complete set of materials that institutional capital expects to see, built by someone who knows what belongs in the room.",
+    upgradePrompt: {
+      title: "NEED TO DEFEND YOUR VALUATION?",
+      body: "Add comparable acquisition research, a defensible valuation range, and a market positioning memo.",
+      cta: "See The Full Build + Market Case \u2192",
+      link: "/store/the-full-build-market-case",
+    },
+    ctaLabel: "START MY BUILD \u2192",
+  },
+
+  /* ─────────────────────────────────────────────────────────────
+     TIER 4 — THE FULL BUILD + MARKET CASE ($2,497)
+     Turnkey service. 5 business day turnaround.
+     ───────────────────────────────────────────────────────────── */
+  {
+    id: "the-full-build-market-case",
+    slug: "the-full-build-market-case",
+    name: "The Full Build + Market Case",
+    price: 2497,
     originalPrice: null,
     badge: "INSTITUTIONAL GRADE",
     featured: false,
-    tier: 3,
-    shortDescription: "Your finance plan with market research and a defensible valuation.",
+    tier: 4,
+    category: "service",
+    turnaround: "5 business days",
+    shortDescription:
+      "The Full Build plus market research and a defensible valuation.",
     fullDescription:
-      "Everything in The Pitch Package, plus the market intelligence that backs it up.\n\nWe research comparable acquisitions in your genre, budget range, and cast tier. We build a defensible valuation range based on real transaction data — not hypothetical numbers. We deliver a market positioning memo that explains exactly where your film sits in the current buyer landscape.\n\nWhen the investor asks 'why do you think this film is worth $3M?' — this is your answer.",
+      "Everything in The Full Build \u2014 plus the market case that answers the question every serious investor asks: \u201cWhy is this film worth that?\u201d\n\nWe research 3-5 comparable acquisition deals in your genre, budget range, and cast tier. We build a defensible valuation range with methodology your investors can follow. We write a market positioning memo analyzing where your project sits in the current acquisition landscape \u2014 which buyers are active, what the market supports, and what elements of your package strengthen your position.\n\nYour three revenue scenarios are calibrated against real transactions. Not hypotheticals. Documented deals.\n\nThis is what institutional capital expects. We build it.\n\n5 business day turnaround after intake.",
     features: [
-      "Everything in The Pitch Package",
+      "Everything in The Full Build",
       "Comparable Acquisition Research (3\u20135 deals)",
       "Market Valuation Range & Methodology",
       "Revenue Scenarios Tied to Real Comps",
@@ -147,33 +231,37 @@ export const products: Product[] = [
     ],
     whatsIncluded: [
       {
-        title: "Everything in The Pitch Package",
-        body: "Finance Plan PDF, Capital Stack Breakdown, Scenario Comparison, Assumptions Reference, Investor Return Profiles, Pitch Deck, Executive Summary, and Deal Terms Summary — all included.",
+        title: "Everything in The Full Build",
+        body: "Custom lookbook, pitch deck, financial presentation, investor profiles, executive summary, and deal terms summary \u2014 all included.",
       },
       {
         title: "Comparable Acquisition Research",
-        body: "3\u20135 recent acquisition deals in your genre, budget range, and cast tier. Each comp includes buyer, reported price range, genre, budget level, and key deal characteristics. Sourced from trade reporting and market intelligence.",
+        body: "3-5 recent deals in your genre/budget/cast tier with buyer, reported price range, and key deal characteristics. Sourced from trade reporting and market intelligence.",
       },
       {
         title: "Market Valuation Range & Methodology",
-        body: "A defensible valuation range for your project based on the comparable transactions — with the methodology explained so your investors understand how the number was derived, not just what it is.",
+        body: "A defensible valuation range with methodology explained \u2014 so your investors understand how the number was derived, not just what it is.",
       },
       {
         title: "Revenue Scenarios Tied to Real Comps",
-        body: "Your three revenue scenarios (conservative, target, optimistic) recalibrated against actual market data. Instead of hypothetical acquisition prices, each scenario maps to a real comparable transaction.",
+        body: "Three scenarios mapped to actual comparable transactions. Real data behind every number.",
       },
       {
         title: "Market Positioning Memo",
-        body: "A one-page analysis of where your film sits in the current acquisition landscape — which buyers are active in your genre, what price range the market supports, and what elements of your package (cast, genre, budget) strengthen or weaken your position.",
+        body: "One-page analysis of where your film sits in the current acquisition landscape \u2014 which buyers are active, what price range the market supports, and what elements of your package strengthen your position.",
       },
     ],
-    pickThisIf: "you need to defend a valuation to institutional money",
+    pickThisIf:
+      "you need to defend a valuation to people who do this for a living",
     whoItsFor:
-      "Producers raising $1M+ who need to defend their valuation to sophisticated investors or co-financiers. You're not just presenting a plan — you're making a market case for why this specific project, at this specific budget, in this specific genre, is a sound investment at the proposed terms.",
-    whatYoullBuild:
-      "The complete capital-raise toolkit with market validation — every document from The Pitch Package plus the comparable research, valuation methodology, and market positioning that transforms your pitch from 'here's what we want to do' into 'here's what the market says this is worth.'",
+      "Producers raising $1M+ who need to defend their valuation to sophisticated investors or institutional co-financiers. The people across the table have seen a hundred pitches. This is how yours holds up.",
     upgradePrompt: null,
+    ctaLabel: "START MY BUILD \u2192",
   },
+
+  /* ─────────────────────────────────────────────────────────────
+     ADD-ON — THE WORKING MODEL ($149 / $79 at checkout)
+     ───────────────────────────────────────────────────────────── */
   {
     id: "the-working-model",
     slug: "the-working-model",
@@ -183,26 +271,32 @@ export const products: Product[] = [
     badge: "ADD-ON",
     featured: false,
     tier: 0,
+    category: "product",
     isAddOn: true,
-    requiresBase: ["the-blueprint", "the-pitch-package", "the-market-case"],
+    requiresBase: [
+      "the-snapshot",
+      "the-package",
+      "the-full-build",
+      "the-full-build-market-case",
+    ],
     shortDescription:
       "The live Excel engine behind your finance plan. Reuse on every project.",
     fullDescription:
-      "The formula-driven Excel engine behind your finance plan.\n\nEvery output cell is connected to every input. Change your budget — the waterfall recalculates. Adjust the sales agent commission — every downstream tier updates. Swap your equity split — investor returns recompute instantly.\n\nThis isn't a snapshot of one deal. It's a financial modeling tool you'll use for years. Buy it once, use it on every project going forward.",
+      "The formula-driven Excel engine behind your finance plan.\n\nEvery output cell is connected to every input. Change your budget \u2014 the waterfall recalculates. Adjust the sales agent commission \u2014 every downstream tier updates. Swap your equity split \u2014 investor returns recompute instantly.\n\nThis isn\u2019t a snapshot of one deal. It\u2019s a financial modeling tool you\u2019ll use for years. Buy it once, use it on every project going forward.",
     features: [
       "Live formula-driven Excel model",
-      "Change any input — everything recalculates",
+      "Change any input \u2014 everything recalculates",
       "Full formula documentation",
       "Reusable across unlimited projects",
     ],
     whatsIncluded: [
       {
         title: "Live Formula-Driven Excel Workbook",
-        body: "Every output cell is driven by formulas. Change any input — budget, revenue projections, fee percentages, capital structure, profit splits — and watch every downstream number recalculate in real time.",
+        body: "Every output cell is driven by formulas. Change any input \u2014 budget, revenue projections, fee percentages, capital structure, profit splits \u2014 and watch every downstream number recalculate in real time.",
       },
       {
         title: "Full Formula Documentation",
-        body: "Every formula is documented. A companion reference explaining what each calculation does, why it's structured that way, and what assumptions it relies on.",
+        body: "Every formula documented. A companion reference explaining what each calculation does, why it\u2019s structured that way, and what assumptions it relies on.",
       },
       {
         title: "Reusable Across Unlimited Projects",
@@ -212,76 +306,33 @@ export const products: Product[] = [
     pickThisIf: null,
     whoItsFor:
       "Producers and production companies who model multiple projects, want to stress-test deal structures before committing, or need a reusable financial tool they can bring to every negotiation.",
-    whatYoullBuild:
-      "A complete, living financial model that lets you test any combination of budget, capital structure, deal terms, and revenue scenarios — and instantly see how every change affects investor returns and recoupment timelines.",
     upgradePrompt: null,
+    ctaLabel: "YES, ADD FOR $79",
   },
 ];
-
-/** Get the three main (non-add-on) products */
-export const mainProducts: Product[] = products.filter((p) => !p.isAddOn);
-
-/** Get the add-on product */
-export const addOnProduct: Product | undefined = products.find((p) => p.isAddOn);
-
-export const getProduct = (slug: string): Product | undefined =>
-  products.find((p) => p.slug === slug);
 
 /* ═══════════════════════════════════════════════════════════════════
-   COMPARISON TABLE DATA
+   HELPERS
    ═══════════════════════════════════════════════════════════════════ */
 
-export type FeatureValue = boolean | string;
+/** Self-serve products (Tiers 1-2) */
+export const selfServeProducts: Product[] = products.filter(
+  (p) => p.category === "product" && !p.isAddOn
+);
 
-export interface ComparisonSection {
-  title: string;
-  features: {
-    label: string;
-    theBlueprint: FeatureValue;
-    thePitchPackage: FeatureValue;
-    theMarketCase: FeatureValue;
-  }[];
-}
+/** Turnkey services (Tiers 3-4) */
+export const turnkeyServices: Product[] = products.filter(
+  (p) => p.category === "service"
+);
 
-export const comparisonSections: ComparisonSection[] = [
-  {
-    title: "Documents",
-    features: [
-      { label: "Finance Plan Summary PDF", theBlueprint: true, thePitchPackage: true, theMarketCase: true },
-      { label: "Capital Stack Breakdown", theBlueprint: true, thePitchPackage: true, theMarketCase: true },
-      { label: "Scenario Comparison Sheet", theBlueprint: true, thePitchPackage: true, theMarketCase: true },
-      { label: "Assumptions Reference", theBlueprint: true, thePitchPackage: true, theMarketCase: true },
-      { label: "Individual Investor Return Profiles", theBlueprint: false, thePitchPackage: true, theMarketCase: true },
-      { label: "Pitch Deck (PowerPoint)", theBlueprint: false, thePitchPackage: true, theMarketCase: true },
-      { label: "One-Page Executive Summary", theBlueprint: false, thePitchPackage: true, theMarketCase: true },
-      { label: "Deal Terms Summary", theBlueprint: false, thePitchPackage: true, theMarketCase: true },
-      { label: "Comparable Acquisition Research", theBlueprint: false, thePitchPackage: false, theMarketCase: true },
-      { label: "Market Valuation Range & Methodology", theBlueprint: false, thePitchPackage: false, theMarketCase: true },
-      { label: "Market Positioning Memo", theBlueprint: false, thePitchPackage: false, theMarketCase: true },
-    ],
-  },
-  {
-    title: "Features",
-    features: [
-      { label: "White-labeled with your company/project", theBlueprint: true, thePitchPackage: true, theMarketCase: true },
-      { label: "Budget breakdown", theBlueprint: true, thePitchPackage: true, theMarketCase: true },
-      { label: "Capital stack structure", theBlueprint: true, thePitchPackage: true, theMarketCase: true },
-      { label: "Deal terms summary", theBlueprint: true, thePitchPackage: true, theMarketCase: true },
-      { label: "Waterfall cascade (full tier-by-tier)", theBlueprint: true, thePitchPackage: true, theMarketCase: true },
-      { label: "Scenario comparison (Conservative/Target/Optimistic)", theBlueprint: true, thePitchPackage: true, theMarketCase: true },
-      { label: "Per-investor return profiles", theBlueprint: false, thePitchPackage: true, theMarketCase: true },
-      { label: "Speaker notes for pitch presentation", theBlueprint: false, thePitchPackage: true, theMarketCase: true },
-      { label: "Comparable deal research (3\u20135 transactions)", theBlueprint: false, thePitchPackage: false, theMarketCase: true },
-      { label: "Revenue scenarios tied to real comps", theBlueprint: false, thePitchPackage: false, theMarketCase: true },
-      { label: "Market positioning analysis", theBlueprint: false, thePitchPackage: false, theMarketCase: true },
-    ],
-  },
-  {
-    title: "Use Case",
-    features: [
-      { label: "Best for", theBlueprint: "Internal planning & documentation", thePitchPackage: "Investor meetings & capital raises", theMarketCase: "Institutional capital raises with market validation" },
-      { label: "You need this when", theBlueprint: "You want a professional finance plan for your project", thePitchPackage: "You're preparing to pitch investors or co-financiers", theMarketCase: "You need to defend your valuation to sophisticated investors" },
-      { label: "Deliverables", theBlueprint: "4 documents", thePitchPackage: "8 documents", theMarketCase: "11 documents + market research" },
-    ],
-  },
-];
+/** All main (non-add-on) products */
+export const mainProducts: Product[] = products.filter((p) => !p.isAddOn);
+
+/** The add-on product */
+export const addOnProduct: Product | undefined = products.find(
+  (p) => p.isAddOn
+);
+
+/** Get product by slug */
+export const getProduct = (slug: string): Product | undefined =>
+  products.find((p) => p.slug === slug);
