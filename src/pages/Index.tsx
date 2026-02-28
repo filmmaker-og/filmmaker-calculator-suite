@@ -229,7 +229,7 @@ const Index = () => {
                   Why this exists
                 </p>
                 <p className="text-[15px] text-white/60 leading-relaxed text-center mb-7">
-                  I grew up in this business. Prepped at a major. Tribeca audience award. Netflix. And on my first deal, I still couldn't model where the money went.
+                  I grew up in this business. Tribeca audience award. Netflix. And on my first deal, I still couldn't model where the money went.
                 </p>
                 <div className="flex flex-col gap-3">
                   {[0, 1].map((idx) => (
