@@ -196,7 +196,7 @@ const Index = () => {
                 <h1 className="font-bebas text-[clamp(3.2rem,11vw,4.8rem)] leading-[0.95] tracking-[0.02em] text-gold mb-3">
                   SEE WHERE EVERY DOLLAR <span className="text-white">GOES</span>
                 </h1>
-                <p className="text-ink-secondary text-[16px] leading-[1.7] tracking-[0.02em] font-medium">
+                <p className="text-white/80 text-[16px] leading-[1.7] tracking-[0.02em] font-medium">
                   Democratizing the business of film.
                 </p>
               </div>
@@ -425,16 +425,16 @@ const Index = () => {
             <div className="max-w-md mx-auto">
               <div
                 ref={credRef}
-                className="rounded-2xl px-8 py-8 text-center"
+                className="rounded-2xl px-8 py-10 text-center"
                 style={{
-                  border: '1px solid rgba(255,255,255,0.06)',
-                  background: 'rgba(255,255,255,0.02)',
+                  border: '1px solid rgba(255,255,255,0.08)',
+                  background: 'rgba(255,255,255,0.03)',
                   opacity: credVisible ? 1 : 0,
                   transform: credVisible ? 'translateY(0)' : 'translateY(16px)',
                   transition: 'opacity 700ms ease-out, transform 700ms ease-out',
                 }}
               >
-                <p className="text-[13px] text-ink-secondary leading-relaxed tracking-wide">
+                <p className="text-[15px] text-white/60 leading-relaxed tracking-wide">
                   Built by a second-generation producer who debut premiered at Tribeca and landed at Netflix.
                 </p>
               </div>
