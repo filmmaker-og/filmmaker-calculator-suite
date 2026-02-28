@@ -6,7 +6,6 @@ import { cn } from "@/lib/utils";
 import { useHaptics } from "@/hooks/use-haptics";
 import {
   mainProducts,
-  addOnProduct,
   comparisonSections,
   type Product,
   type FeatureValue,
@@ -397,31 +396,6 @@ const Store = () => {
                 />
               ))}
             </div>
-
-            {/* ADD-ON: Working Model — bundled upsell note */}
-            {addOnProduct && (
-              <div
-                className="mt-5 px-5 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl"
-                style={{
-                  border: '1px solid rgba(212,175,55,0.15)',
-                  background: 'rgba(212,175,55,0.03)',
-                  boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)',
-                }}
-              >
-                <div className="flex items-center gap-3 flex-1 min-w-0">
-                  <span className="px-2 py-0.5 text-[12px] tracking-[0.12em] uppercase font-bold text-gold border border-gold-border rounded flex-shrink-0">
-                    Add-on
-                  </span>
-                  <span className="font-bebas text-[16px] tracking-[0.06em] text-white truncate">
-                    {addOnProduct.name.toUpperCase()}
-                  </span>
-                </div>
-                <div className="flex items-baseline gap-2 flex-shrink-0">
-                  <span className="font-mono text-[14px] text-gold font-medium">$75 at checkout</span>
-                  <span className="font-mono text-[12px] text-ink-secondary line-through">$149</span>
-                </div>
-              </div>
-            )}
 
             {/* Compare packages link */}
             <div className="text-center mt-6">
