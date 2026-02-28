@@ -124,11 +124,14 @@ const Index = () => {
   // Scroll-triggered reveals — value section + bridge
   const valueRef = useRef<HTMLDivElement>(null);
   const [valueVisible, setValueVisible] = useState(false);
+  const credRef = useRef<HTMLDivElement>(null);
+  const [credVisible, setCredVisible] = useState(false);
   const bridgeRef = useRef<HTMLDivElement>(null);
   const [bridgeVisible, setBridgeVisible] = useState(false);
   useEffect(() => {
     const sections = [
       { el: valueRef.current, setter: setValueVisible },
+      { el: credRef.current, setter: setCredVisible },
       { el: bridgeRef.current, setter: setBridgeVisible },
     ];
     const observers: IntersectionObserver[] = [];
@@ -417,6 +420,28 @@ const Index = () => {
           {/* ──────────────────────────────────────────────────────────
                § 3  THE CLOSE — setup → payoff → action
              ────────────────────────────────────────────────────────── */}
+          {/* ── CREDIBILITY ── */}
+          <section className="px-6 pb-2">
+            <div className="max-w-md mx-auto">
+              <div
+                ref={credRef}
+                className="rounded-2xl px-8 py-8 text-center"
+                style={{
+                  border: '1px solid rgba(255,255,255,0.06)',
+                  background: 'rgba(255,255,255,0.02)',
+                  opacity: credVisible ? 1 : 0,
+                  transform: credVisible ? 'translateY(0)' : 'translateY(16px)',
+                  transition: 'opacity 700ms ease-out, transform 700ms ease-out',
+                }}
+              >
+                <p className="text-[13px] text-ink-secondary leading-relaxed tracking-wide">
+                  Built by a second-generation producer who debut premiered at Tribeca and landed at Netflix.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          {/* ── FINAL CTA ── */}
           <section id="final-cta" className="py-14 md:py-20 px-6">
             <div className="max-w-md mx-auto">
               <div
@@ -431,9 +456,6 @@ const Index = () => {
                   transition: 'opacity 700ms ease-out, transform 700ms ease-out',
                 }}
               >
-                <p className="text-[13px] text-ink-secondary leading-relaxed tracking-wide mb-6">
-                  Built by a second-generation filmmaker who debut premiered at Tribeca and landed at Netflix.
-                </p>
                 <h2 className="font-bebas text-[40px] leading-[1.1] tracking-[0.08em] text-gold mb-6">
                   YOUR INVESTORS WILL{"\u00A0"}ASK HOW THE MONEY FLOWS <span className="text-white">BACK.</span>
                 </h2>
