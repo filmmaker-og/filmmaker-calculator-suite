@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { ArrowLeft, Check, Mail, Instagram } from "lucide-react";
+import { ArrowLeft, Check, Mail, Instagram, Clock } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { getProduct } from "@/lib/store-products";
@@ -52,7 +52,8 @@ const StorePackage = () => {
   }
 
   const isFeatured = product.featured;
-  const isPremium = product.tier === 3;
+  const isService = product.category === "service";
+  const isTopTier = product.tier === 4;
   const descParagraphs = product.fullDescription.split("\n\n");
 
   return (
@@ -74,20 +75,29 @@ const StorePackage = () => {
              PRODUCT HEADER
            ────────────────────────────────────────────────────────── */}
         <section className="px-6 pt-8 pb-6 max-w-md mx-auto">
-          {product.badge && (
-            <div className="mb-4">
+          {/* Badge + turnaround row */}
+          <div className="flex items-center gap-3 mb-4">
+            {product.badge && (
               <span className={cn(
                 "inline-block px-3 py-1.5 text-[12px] tracking-[0.15em] uppercase font-bold rounded",
                 isFeatured
                   ? "bg-gold/20 border border-gold/40 text-gold"
-                  : isPremium
+                  : isTopTier
+                  ? "bg-gold/15 border border-gold/30 text-gold"
+                  : isService
                   ? "bg-gold/10 border border-gold/25 text-gold"
                   : "border border-gold-border text-ink-secondary"
               )}>
                 {product.badge}
               </span>
-            </div>
-          )}
+            )}
+            {product.turnaround && (
+              <span className="flex items-center gap-1.5 text-ink-secondary text-[12px] tracking-[0.06em]">
+                <Clock className="w-3.5 h-3.5" />
+                {product.turnaround}
+              </span>
+            )}
+          </div>
 
           <h1 className="font-bebas text-[40px] tracking-[0.06em] text-white leading-tight mb-3">
             {product.name.toUpperCase()}
@@ -127,7 +137,7 @@ const StorePackage = () => {
 
             <div
               className="border border-gold-border bg-black overflow-hidden rounded-xl"
-              style={{ boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)' }}
+              style={{ boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06)" }}
             >
               {product.whatsIncluded.map((item, i) => (
                 <div
@@ -166,32 +176,15 @@ const StorePackage = () => {
             <p className="text-ink-body text-[16px] leading-relaxed">
               {product.whoItsFor}
             </p>
-          </div>
-        </section>
-
-
-        {/* ──────────────────────────────────────────────────────────
-             WHAT YOU'LL BUILD
-           ────────────────────────────────────────────────────────── */}
-        <section className="py-14 md:py-20 px-6">
-          <div className="max-w-md mx-auto">
-            <div className="text-center mb-8">
-              <h2 className="font-bebas text-[40px] tracking-[0.08em] text-gold">
-                WHAT YOU{"\u2019"}LL <span className="text-white">BUILD</span>
-              </h2>
-            </div>
-            <p className="text-ink-body text-[16px] leading-relaxed">
-              {product.whatYoullBuild}
-            </p>
 
             {/* Upgrade prompt */}
             {product.upgradePrompt && (
               <div
                 className="mt-8 p-6 rounded-xl"
                 style={{
-                  border: '1px solid rgba(212,175,55,0.15)',
-                  background: 'rgba(212,175,55,0.03)',
-                  boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)',
+                  border: "1px solid rgba(212,175,55,0.15)",
+                  background: "rgba(212,175,55,0.03)",
+                  boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06)",
                 }}
               >
                 <h3 className="font-bebas text-[16px] tracking-[0.08em] text-gold mb-2">
@@ -233,8 +226,8 @@ const StorePackage = () => {
       <div
         className="fixed bottom-0 left-0 right-0 z-50 backdrop-blur-md"
         style={{
-          background: 'rgba(0,0,0,0.92)',
-          borderTop: '1px solid rgba(212,175,55,0.15)',
+          background: "rgba(0,0,0,0.92)",
+          borderTop: "1px solid rgba(212,175,55,0.15)",
         }}
       >
         <div className="max-w-md mx-auto px-4 py-3 flex items-center justify-between gap-4">
@@ -250,10 +243,10 @@ const StorePackage = () => {
             onClick={() => navigate("/store#products")}
             className={cn(
               "h-12 px-6 flex-shrink-0 uppercase tracking-[0.06em]",
-              isFeatured ? "btn-cta-primary" : "btn-cta-secondary"
+              isFeatured || isService ? "btn-cta-primary" : "btn-cta-secondary"
             )}
           >
-            Get Started
+            {isService ? "Start My Build" : "Get Started"}
           </button>
         </div>
       </div>
