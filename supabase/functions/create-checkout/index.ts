@@ -11,19 +11,23 @@ const corsHeaders = {
 const PRODUCTS: Record<string, { name: string; price: number }> = {
   "the-blueprint": {
     name: "The Blueprint",
-    price: 19700, // $197 in cents
+    price: 34900, // $349 in cents
   },
   "the-pitch-package": {
     name: "The Pitch Package",
-    price: 49700, // $497 in cents
+    price: 74900, // $749 in cents
+  },
+  "the-market-case": {
+    name: "The Market Case",
+    price: 199700, // $1,997 in cents
   },
   "the-working-model": {
     name: "The Working Model",
-    price: 9900, // $99 in cents
+    price: 14900, // $149 in cents
   },
   "the-working-model-discount": {
     name: "The Working Model (Bundle Discount)",
-    price: 4900, // $49 in cents
+    price: 7900, // $79 in cents
   },
 };
 
