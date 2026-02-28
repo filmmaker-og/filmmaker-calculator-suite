@@ -218,40 +218,9 @@ const Index = () => {
                   transition: prefersReducedMotion ? "none" : "opacity 700ms ease-out, transform 700ms ease-out",
                 }}
               >
-                <p className="text-[16px] text-white/75 italic leading-relaxed tracking-[0.01em] text-center mb-7">
+                <p className="text-[16px] text-white/75 italic leading-relaxed tracking-[0.01em] text-center">
                   My first project premiered at Tribeca and landed on Netflix — and I still had to guess at the math. These are the tools I built so you don't have to.
                 </p>
-                <div className="flex flex-col gap-3">
-                  {[0, 1].map((idx) => (
-                    <div
-                      key={idx}
-                      className="rounded-xl px-6 py-5 text-left"
-                      style={{
-                        border: "1px solid rgba(255,255,255,0.08)",
-                        background: "rgba(255,255,255,0.02)",
-                        boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06)",
-                        opacity: prefersReducedMotion || credVisible ? 1 : 0,
-                        transform: prefersReducedMotion || credVisible ? "translateY(0)" : "translateY(10px)",
-                        transition: prefersReducedMotion ? "none" : "opacity 500ms ease-out, transform 500ms ease-out",
-                        transitionDelay: prefersReducedMotion ? "0ms" : `${400 + idx * 150}ms`,
-                      }}
-                    >
-                      <span
-                        className="block font-bebas text-[32px] leading-none select-none"
-                        aria-hidden="true"
-                        style={{ color: "rgba(212,175,55,0.18)" }}
-                      >
-                        {"\u201C"}
-                      </span>
-                      <p className="text-[14px] text-white/30 italic leading-relaxed -mt-1">
-                        {idx === 0 ? "Producer testimonial placeholder" : "Industry testimonial placeholder"}
-                      </p>
-                      <p className="font-mono text-[11px] text-white/20 mt-3 tracking-[0.08em]">
-                        — Name, Title
-                      </p>
-                    </div>
-                  ))}
-                </div>
               </div>
             </div>
           </section>
