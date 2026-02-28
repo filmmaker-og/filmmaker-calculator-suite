@@ -114,10 +114,10 @@ const WaterfallCascade = () => {
                   transitionDelay: `${delay}ms`,
                 }}
               >
-                <span className="text-[14px] font-medium text-white/60">
+                <span className="text-[14px] font-medium text-white/70">
                   {d.name}
                 </span>
-                <span className="font-mono text-[14px] font-medium text-white/60 tabular-nums">
+                <span className="font-mono text-[15px] font-medium text-white/70 tabular-nums">
                   {"\u2212"}{fmtFull(d.amount)}
                 </span>
               </div>
@@ -175,7 +175,7 @@ const WaterfallCascade = () => {
         ))}
       </div>
 
-      <p className="font-mono text-[11px] text-white/35 text-center mt-3.5">
+      <p className="font-mono text-[12px] text-white/45 text-center mt-3.5">
         Hypothetical $1.8M budget{"\u00A0"}{"\u00B7"}{"\u00A0"}$3M
         acquisition{"\u00A0"}{"\u00B7"}{"\u00A0"}50/50 net profit split
       </p>
