@@ -20,6 +20,7 @@ export interface Product {
   whatsIncluded: { title: string; body: string }[];
   whoItsFor: string;
   whatYoullBuild: string;
+  pickThisIf: string | null;
   upgradePrompt: { title: string; body: string; cta: string; link: string } | null;
 }
 
@@ -60,6 +61,7 @@ export const products: Product[] = [
         body: "Every default value, industry standard, and assumption documented with source and range — so your attorney knows exactly what to review.",
       },
     ],
+    pickThisIf: "you need the numbers documented — no meeting yet",
     whoItsFor:
       "Producers who need a clear, professional record of their project's financial structure. Use it for internal planning, co-producer alignment, or as the foundation document when investors ask for the numbers.",
     whatYoullBuild:
@@ -112,6 +114,7 @@ export const products: Product[] = [
         body: "A clean, structured summary of all deal terms — distribution model, commission rates, fee structures, and recoupment waterfall — formatted for attorney review and investor due diligence.",
       },
     ],
+    pickThisIf: "you have an investor meeting coming up",
     whoItsFor:
       "Producers preparing to sit in front of investors, equity partners, or co-financiers. You have a meeting coming up — or you want to be ready when one lands. This package gives you the complete set of materials that institutional capital expects to see.",
     whatYoullBuild:
@@ -164,6 +167,7 @@ export const products: Product[] = [
         body: "A one-page analysis of where your film sits in the current acquisition landscape — which buyers are active in your genre, what price range the market supports, and what elements of your package (cast, genre, budget) strengthen or weaken your position.",
       },
     ],
+    pickThisIf: "you need to defend a valuation to institutional money",
     whoItsFor:
       "Producers raising $1M+ who need to defend their valuation to sophisticated investors or co-financiers. You're not just presenting a plan — you're making a market case for why this specific project, at this specific budget, in this specific genre, is a sound investment at the proposed terms.",
     whatYoullBuild:
@@ -205,6 +209,7 @@ export const products: Product[] = [
         body: "Clear the inputs and start fresh with a new project. The model structure, formulas, and documentation work for any production in the $1M\u201310M budget range. Buy it once, use it forever.",
       },
     ],
+    pickThisIf: null,
     whoItsFor:
       "Producers and production companies who model multiple projects, want to stress-test deal structures before committing, or need a reusable financial tool they can bring to every negotiation.",
     whatYoullBuild:
