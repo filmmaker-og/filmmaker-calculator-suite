@@ -218,7 +218,7 @@ const Index = () => {
                   transition: prefersReducedMotion ? "none" : "opacity 700ms ease-out, transform 700ms ease-out",
                 }}
               >
-                <p className="text-[15px] text-white/60 leading-relaxed text-center mb-7">
+                <p className="text-[16px] text-white/75 italic leading-relaxed tracking-[0.01em] text-center mb-7">
                   My first project premiered at Tribeca and landed on Netflix — and I still had to guess at the math. These are the tools I built so you don't have to.
                 </p>
                 <div className="flex flex-col gap-3">
