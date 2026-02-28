@@ -109,14 +109,14 @@ const WaterfallCascade = () => {
             >
               <div className="flex justify-between items-baseline px-4 pt-[10px] pb-[5px]">
                 <div className="flex items-baseline gap-2">
-                  <span className="font-mono text-[10px] text-white/30 tabular-nums">
+                  <span className="font-mono text-[11px] text-white/30 tabular-nums">
                     {String(i + 1).padStart(2, "0")}
                   </span>
                   <span
                     className={
                       isSource
-                        ? "font-bebas text-[20px] tracking-[0.06em] text-white/90"
-                        : "text-[13px] tracking-[0.01em] font-medium text-white/55"
+                        ? "font-bebas text-[22px] tracking-[0.06em] text-white/90"
+                        : "text-[14px] tracking-[0.01em] font-medium text-white/55"
                     }
                   >
                     {block.name}
@@ -125,8 +125,8 @@ const WaterfallCascade = () => {
                 <span
                   className={
                     isSource
-                      ? "font-mono text-[16px] font-semibold text-white/90"
-                      : "font-mono text-[13px] font-medium text-white/55"
+                      ? "font-mono text-[17px] font-semibold text-white/90"
+                      : "font-mono text-[14px] font-medium text-white/55"
                   }
                 >
                   {isSource ? fmtFull(block.amount) : `\u2212${fmt(block.amount)}`}
@@ -230,7 +230,7 @@ const WaterfallCascade = () => {
               opacity: corridorVisible ? 1 : 0,
               transform: corridorVisible
                 ? "translateY(0)"
-                : "translateY(6px)",
+                : "translateY(10px)",
               transition: "opacity 500ms ease-out, transform 500ms ease-out",
               transitionDelay: `${c.extraDelay}ms`,
             }}
@@ -245,7 +245,7 @@ const WaterfallCascade = () => {
         ))}
       </div>
 
-      <p className="font-mono text-[10px] text-white/20 text-center mt-3.5">
+      <p className="font-mono text-[11px] text-white/35 text-center mt-3.5">
         Hypothetical $1.8M budget{"\u00A0"}{"\u00B7"}{"\u00A0"}$3M
         acquisition{"\u00A0"}{"\u00B7"}{"\u00A0"}50/50 net profit split
       </p>
