@@ -54,11 +54,11 @@ const WaterfallInfo = () => {
               The &ldquo;Bucket&rdquo; Metaphor
             </h2>
             <div className="space-y-4">
-              <p className="text-[15px] md:text-base text-white/75 leading-[1.7]">
+              <p className="text-[15px] md:text-[16px] text-white/75 leading-[1.7]">
                 Imagine a series of buckets arranged vertically. Water (revenue) is poured into the top bucket.
                 Only when the first bucket is full does it spill over into the next one.
               </p>
-              <p className="text-[15px] md:text-base text-white/75 leading-[1.7]">
+              <p className="text-[15px] md:text-[16px] text-white/75 leading-[1.7]">
                 If the flow of water stops, the buckets at the bottom stay dry.
                 <span className="text-gold font-semibold"> You (the Producer) are at the very bottom.</span>
               </p>
@@ -91,7 +91,7 @@ const WaterfallInfo = () => {
                       {row.num}
                     </div>
                     <div className="p-5">
-                      <h3 className="text-white font-semibold text-base mb-1.5">{row.title}</h3>
+                      <h3 className="text-white font-semibold text-[16px] mb-1.5">{row.title}</h3>
                       <p className="text-[15px] text-white/70 leading-[1.7]">
                         {row.desc}
                         {row.trap && (
@@ -113,7 +113,7 @@ const WaterfallInfo = () => {
             <h2 className="font-bebas text-[24px] md:text-[30px] tracking-[0.06em] text-gold">
               The Backend Split
             </h2>
-            <p className="text-[15px] md:text-base text-white/70 leading-[1.7] max-w-2xl">
+            <p className="text-[15px] md:text-[16px] text-white/70 leading-[1.7] max-w-2xl">
               Once everyone above is paid, the remaining water falls into the &ldquo;Net Profit&rdquo; pool.
               This is typically split 50/50.
             </p>

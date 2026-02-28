@@ -89,23 +89,23 @@ const ProgressBar = ({
    CONFIRMATION SCREEN
    ═══════════════════════════════════════════════════════════════════ */
 const ConfirmationScreen = ({ email }: { email: string }) => (
-  <div className="min-h-screen bg-bg-void flex flex-col items-center justify-center px-6 animate-fade-in">
+  <div className="min-h-screen bg-black flex flex-col items-center justify-center px-6 animate-fade-in">
     <div className="text-center max-w-md">
       <div className="w-20 h-20 border-2 border-gold mx-auto mb-6 rounded-lg flex items-center justify-center">
         <Check className="w-10 h-10 text-gold" />
       </div>
-      <h1 className="font-bebas text-4xl text-text-primary mb-4">
+      <h1 className="font-bebas text-[40px] text-white mb-4">
         YOUR FINANCE PLAN HAS BEEN SUBMITTED
       </h1>
-      <p className="text-text-mid text-sm leading-relaxed mb-2">
+      <p className="text-ink-body text-[14px] leading-relaxed mb-2">
         We're building your deliverables now.
       </p>
-      <p className="text-text-mid text-sm leading-relaxed mb-6">
+      <p className="text-ink-body text-[14px] leading-relaxed mb-6">
         You'll receive an email at{" "}
         <span className="text-white font-semibold">{email}</span> within 24
         hours.
       </p>
-      <p className="text-text-dim text-xs leading-relaxed">
+      <p className="text-ink-secondary text-[12px] leading-relaxed">
         Questions? Email{" "}
         <a
           href="mailto:thefilmmaker.og@gmail.com"
@@ -377,10 +377,10 @@ const BuildYourPlan = () => {
   // Loading state
   if (loading) {
     return (
-      <div className="min-h-screen bg-bg-void flex items-center justify-center">
+      <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-center">
           <div className="w-8 h-8 border-2 border-gold border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-text-dim text-sm">Loading your plan...</p>
+          <p className="text-ink-secondary text-[14px]">Loading your plan...</p>
         </div>
       </div>
     );
@@ -395,15 +395,15 @@ const BuildYourPlan = () => {
     tier === "the-pitch-package" ? "The Pitch Package" : "The Blueprint";
 
   return (
-    <div className="min-h-screen bg-bg-void flex flex-col">
+    <div className="min-h-screen bg-black flex flex-col">
       {/* Header */}
       <header className="sticky top-0 z-50 bg-bg-header/95 backdrop-blur-sm border-b border-white/[0.06]">
         <div className="max-w-[640px] mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <span className="font-bebas text-lg tracking-[0.2em] text-gold">
+            <span className="font-bebas text-[16px] tracking-[0.2em] text-gold">
               FILMMAKER<span className="text-white">.OG</span>
             </span>
-            <span className="text-text-dim text-[10px] tracking-[0.12em] uppercase">
+            <span className="text-ink-secondary text-[10px] tracking-[0.12em] uppercase">
               Auto-saved
             </span>
           </div>
@@ -414,10 +414,10 @@ const BuildYourPlan = () => {
         <div className="max-w-[640px] mx-auto px-6 pt-8 pb-16">
           {/* Title */}
           <div className="text-center mb-6">
-            <h1 className="font-bebas text-3xl md:text-4xl tracking-[0.08em] text-gold mb-1">
+            <h1 className="font-bebas text-[28px] md:text-[40px] tracking-[0.08em] text-gold mb-1">
               BUILD YOUR FINANCE PLAN
             </h1>
-            <p className="text-text-dim text-xs tracking-[0.15em] uppercase">
+            <p className="text-ink-secondary text-[12px] tracking-[0.15em] uppercase">
               {tierLabel}
             </p>
           </div>

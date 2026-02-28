@@ -41,7 +41,6 @@ const Auth = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validate name
     const nameResult = nameSchema.safeParse(name.trim());
     if (!nameResult.success) {
       haptics.error();
@@ -53,7 +52,6 @@ const Auth = () => {
       return;
     }
 
-    // Validate email
     const emailResult = emailSchema.safeParse(email);
     if (!emailResult.success) {
       haptics.error();
@@ -95,9 +93,7 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen min-h-[100dvh] bg-bg-void flex flex-col">
-      
-      {/* Main Content - Centered */}
+    <div className="min-h-screen min-h-[100dvh] bg-black flex flex-col">
       <main className="flex-1 flex items-center justify-center px-6 py-12">
         <div className="w-full max-w-md">
 
@@ -111,24 +107,30 @@ const Auth = () => {
                   className="w-16 h-16 object-contain mx-auto mb-6"
                   style={{ filter: 'brightness(1.5) saturate(1.2)' }}
                 />
-                
-                <h1 className="font-bebas text-3xl tracking-[0.12em] text-text-primary mb-3">
+                <h1 className="font-bebas text-[28px] tracking-[0.12em] text-white mb-3">
                   SAVE YOUR WATERFALL
                 </h1>
-                <p className="text-text-dim text-sm leading-relaxed">
+                <p className="text-ink-secondary text-[16px] leading-relaxed">
                   We'll email you a link. No password needed.
                 </p>
               </div>
 
-              {/* Form - Consistent with calculator design */}
-              <form onSubmit={handleSubmit} className="matte-section overflow-hidden">
+              {/* Form */}
+              <form
+                onSubmit={handleSubmit}
+                className="rounded-xl overflow-hidden"
+                style={{
+                  border: '1px solid rgba(212,175,55,0.25)',
+                  background: '#000',
+                  boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)',
+                }}
+              >
                 <div className="p-6 space-y-6">
-                  
                   {/* Name Field */}
                   <div>
                     <label
                       htmlFor="name"
-                      className="block text-xs uppercase tracking-[0.2em] text-text-dim font-bebas mb-3"
+                      className="block text-[12px] uppercase tracking-[0.2em] text-ink-secondary font-bebas mb-3"
                     >
                       Name
                     </label>
@@ -147,7 +149,7 @@ const Auth = () => {
                           document.getElementById('email')?.focus();
                         }
                       }}
-                      className="h-12 bg-bg-surface border border-border-subtle text-text-primary placeholder:text-text-dim focus:border-border-active focus:shadow-focus focus:ring-0 focus:ring-offset-0 transition-colors rounded-[--radius-md]"
+                      className="h-12 bg-bg-surface border border-gold-border text-white placeholder:text-ink-ghost focus:border-gold focus:ring-0 focus:ring-offset-0 transition-colors rounded-lg"
                       required
                     />
                   </div>
@@ -156,7 +158,7 @@ const Auth = () => {
                   <div>
                     <label
                       htmlFor="email"
-                      className="block text-xs uppercase tracking-[0.2em] text-text-dim font-bebas mb-3"
+                      className="block text-[12px] uppercase tracking-[0.2em] text-ink-secondary font-bebas mb-3"
                     >
                       Email
                     </label>
@@ -178,7 +180,7 @@ const Auth = () => {
                           handleSubmit(e as any);
                         }
                       }}
-                      className="h-12 bg-bg-surface border border-border-subtle text-text-primary placeholder:text-text-dim font-mono focus:border-border-active focus:shadow-focus focus:ring-0 focus:ring-offset-0 transition-colors rounded-[--radius-md]"
+                      className="h-12 bg-bg-surface border border-gold-border text-white placeholder:text-ink-ghost font-mono focus:border-gold focus:ring-0 focus:ring-offset-0 transition-colors rounded-lg"
                       required
                     />
                   </div>
@@ -198,54 +200,54 @@ const Auth = () => {
                       </span>
                     )}
                   </Button>
-
                 </div>
               </form>
 
-              {/* Skip Option - Prominent and Neutral */}
+              {/* Skip Option */}
               <div className="mt-8 text-center space-y-3">
                 <button
                   onClick={() => navigate("/calculator?skip=true")}
-                  className="text-text-dim hover:text-text-primary font-bebas text-[16px] tracking-[0.12em] transition-colors"
+                  className="text-ink-secondary hover:text-white font-bebas text-[16px] tracking-[0.12em] transition-colors"
                 >
                   Continue without saving →
                 </button>
-                <p className="text-text-dim text-xs font-mono">
+                <p className="text-ink-ghost text-[12px] font-mono">
                   Your work won't be saved
                 </p>
               </div>
             </>
           ) : (
-            /* Email Sent Confirmation - Simplified */
-            <div className="matte-section p-8">
+            /* Email Sent Confirmation */
+            <div
+              className="rounded-xl p-8"
+              style={{
+                border: '1px solid rgba(212,175,55,0.25)',
+                background: '#000',
+                boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)',
+              }}
+            >
               <div className="text-center">
-                
-                {/* Icon - Single, clean */}
-                <div className="w-16 h-16 border-2 border-border-default flex items-center justify-center mx-auto mb-8">
+                <div className="w-16 h-16 border-2 border-gold-border flex items-center justify-center mx-auto mb-8">
                   <Mail className="w-8 h-8 text-gold" />
                 </div>
 
-                {/* Heading */}
-                <h2 className="font-bebas text-2xl tracking-[0.12em] text-text-primary mb-4">
+                <h2 className="font-bebas text-[28px] tracking-[0.12em] text-white mb-4">
                   CHECK YOUR EMAIL
                 </h2>
 
-                {/* Email Display */}
-                <p className="text-text-dim text-sm mb-2">
+                <p className="text-ink-secondary text-[16px] mb-2">
                   We sent a link to
                 </p>
-                <p className="font-mono text-gold text-base mb-10">
+                <p className="font-mono text-gold text-[16px] mb-10">
                   {email}
                 </p>
 
-                {/* Divider */}
-                <div className="w-12 h-[1px] bg-border-subtle mx-auto mb-10" />
+                <div className="w-12 h-[1px] bg-gold-border mx-auto mb-10" />
 
-                {/* Actions */}
                 <div className="space-y-6">
                   <button
                     onClick={() => setStep('email')}
-                    className="text-text-dim hover:text-text-mid font-mono text-sm tracking-[0.08em] transition-colors"
+                    className="text-ink-secondary hover:text-ink-body font-mono text-[14px] tracking-[0.08em] transition-colors"
                   >
                     Use different email
                   </button>
@@ -253,13 +255,12 @@ const Auth = () => {
                   <div>
                     <button
                       onClick={() => navigate("/calculator?skip=true")}
-                      className="text-text-dim hover:text-text-mid font-bebas text-[16px] tracking-[0.12em] transition-colors"
+                      className="text-ink-secondary hover:text-ink-body font-bebas text-[16px] tracking-[0.12em] transition-colors"
                     >
                       Continue without saving →
                     </button>
                   </div>
                 </div>
-
               </div>
             </div>
           )}

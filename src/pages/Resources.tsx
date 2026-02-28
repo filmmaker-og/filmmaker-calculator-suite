@@ -2,8 +2,6 @@ import { useEffect, useState, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 import { X, ExternalLink } from "lucide-react";
 import { useHaptics } from "@/hooks/use-haptics";
-import SectionFrame from "@/components/SectionFrame";
-import SectionHeader from "@/components/SectionHeader";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 
 // ------------------------------------------------------------------
@@ -260,7 +258,7 @@ const Resources = () => {
             <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-gold/80 mb-3">
               Film Finance
             </p>
-            <h1 className="font-bebas text-5xl md:text-7xl tracking-wide text-white leading-none">
+            <h1 className="font-bebas text-[40px] md:text-7xl tracking-wide text-white leading-none">
               The <span className="text-gold">Resource</span>
             </h1>
             <p className="text-[15px] text-white/55 leading-relaxed mt-3 max-w-xl">
@@ -300,12 +298,13 @@ const Resources = () => {
               transition: "opacity 0.6s ease, transform 0.6s ease",
             }}
           >
-            <SectionFrame id="top10">
-              <SectionHeader
-                eyebrow="The Essential 10"
-                title="KNOW THESE FIRST"
-                plainSubtitle
-              />
+            <section id="top10" className="px-2">
+              <p className="font-mono text-[12px] tracking-[0.12em] uppercase text-gold-label mb-2">
+                The Essential 10
+              </p>
+              <h2 className="font-bebas text-[28px] tracking-[0.08em] text-white mb-4">
+                KNOW THESE FIRST
+              </h2>
 
               <div className="grid grid-cols-2 gap-2 mt-4">
                 {TOP_10.map((item, i) => (
@@ -333,7 +332,7 @@ const Resources = () => {
               <p className="text-center text-[11px] text-white/35 font-mono uppercase tracking-widest mt-4">
                 Tap any term to read the definition
               </p>
-            </SectionFrame>
+            </section>
           </div>
         )}
 
@@ -394,7 +393,7 @@ const Resources = () => {
                   <span className="font-mono text-[12px] font-bold text-black/60 tabular-nums">
                     {selectedTerm.num}
                   </span>
-                  <span className="font-bebas text-xl tracking-[0.15em] text-black leading-none">
+                  <span className="font-bebas text-[16px] tracking-[0.15em] text-black leading-none">
                     {selectedTerm.term}
                   </span>
                   <span className="text-[9px] uppercase tracking-[0.15em] font-mono text-black/50 hidden sm:block">

@@ -2,8 +2,6 @@ import { useEffect, useState, useRef } from "react";
 
 import { X } from "lucide-react";
 import { useHaptics } from "@/hooks/use-haptics";
-import SectionFrame from "@/components/SectionFrame";
-import SectionHeader from "@/components/SectionHeader";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 
 // ------------------------------------------------------------------
@@ -119,10 +117,10 @@ const Glossary = () => {
             <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-gold/60 mb-3">
               Film Finance
             </p>
-            <h1 className="font-bebas text-5xl md:text-7xl tracking-wide text-white leading-none">
+            <h1 className="font-bebas text-[40px] md:text-7xl tracking-wide text-white leading-none">
               The <span className="text-gold">Resource</span>
             </h1>
-            <p className="text-sm text-white/40 leading-relaxed mt-3 max-w-xl">
+            <p className="text-[14px] text-white/40 leading-relaxed mt-3 max-w-xl">
               The film industry uses jargon to keep outsiders out. This is your definitive resource.
             </p>
           </div>
@@ -137,12 +135,14 @@ const Glossary = () => {
             transition: "opacity 0.6s ease, transform 0.6s ease",
           }}
         >
-          <SectionFrame id="top10">
-            <SectionHeader
-              eyebrow="The Essential 10"
-              title="KNOW THESE FIRST"
-              plainSubtitle
-            />
+          <section id="top10" className="px-6 md:px-10">
+            <div className="max-w-4xl mx-auto">
+              <p className="font-mono text-[12px] tracking-[0.12em] uppercase text-gold-label mb-2">
+                The Essential 10
+              </p>
+              <h2 className="font-bebas text-[28px] tracking-[0.08em] text-white mb-4">
+                KNOW THESE FIRST
+              </h2>
 
             {/* 2×5 pill grid */}
             <div className="grid grid-cols-2 gap-2 mt-4">
@@ -171,7 +171,8 @@ const Glossary = () => {
             <p className="text-center text-[10px] text-white/15 font-mono uppercase tracking-widest mt-4">
               Tap any term to read the definition
             </p>
-          </SectionFrame>
+            </div>
+          </section>
         </div>
 
         <div className="px-6 md:px-10 pt-4">
@@ -197,7 +198,7 @@ const Glossary = () => {
                   <span className="font-mono text-[12px] font-bold text-black/60 tabular-nums">
                     {selectedTerm.num}
                   </span>
-                  <span className="font-bebas text-xl tracking-[0.15em] text-black leading-none">
+                  <span className="font-bebas text-[16px] tracking-[0.15em] text-black leading-none">
                     {selectedTerm.term}
                   </span>
                   <span className="text-[9px] uppercase tracking-[0.15em] font-mono text-black/50 hidden sm:block">
