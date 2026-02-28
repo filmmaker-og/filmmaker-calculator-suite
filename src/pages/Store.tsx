@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
 import { Check, Mail, X as XIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -246,9 +245,16 @@ const ProductCard = ({
       )}
 
       {/* Name */}
-      <h3 className="font-bebas text-[28px] tracking-[0.06em] text-white mb-2">
+      <h3 className="font-bebas text-[28px] tracking-[0.06em] text-white mb-1">
         {product.name.toUpperCase()}
       </h3>
+
+      {/* Pick this if */}
+      {product.pickThisIf && (
+        <p className="text-gold/70 text-[13px] italic mb-3">
+          Pick this one if {product.pickThisIf}
+        </p>
+      )}
 
       {/* Price */}
       <div className="mb-3">
@@ -337,7 +343,6 @@ const CompareCell = ({ value, featured }: { value: FeatureValue; featured?: bool
    MAIN STORE COMPONENT
    ═══════════════════════════════════════════════════════════════════ */
 const Store = () => {
-  const navigate = useNavigate();
   const haptics = useHaptics();
   const [showPopup, setShowPopup] = useState<Product | null>(null);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
@@ -462,15 +467,6 @@ const Store = () => {
               </div>
             )}
 
-            {/* Compare packages link */}
-            <div className="text-center mt-6">
-              <button
-                onClick={() => { haptics.light(); navigate("/store/compare"); }}
-                className="text-ink-secondary text-[14px] hover:text-gold transition-colors tracking-[0.04em]"
-              >
-                Compare packages side by side {"\u2192"}
-              </button>
-            </div>
           </div>
         </section>
 
