@@ -20,12 +20,12 @@ const OgBotFab = ({ onTap }: OgBotFabProps) => {
       style={{
         bottom: "calc(20px + env(safe-area-inset-bottom))",
         right: "20px",
-        width: "52px",
-        height: "52px",
+        width: "44px",
+        height: "44px",
         borderRadius: "50%",
         background: "#000000",
-        border: "1.5px solid rgba(212,175,55,0.50)",
-        boxShadow: "0 4px 20px rgba(0,0,0,0.80), 0 0 20px rgba(212,175,55,0.08)",
+        border: "1.5px solid rgba(255,255,255,0.12)",
+        boxShadow: "0 4px 20px rgba(0,0,0,0.80)",
       }}
       aria-label="Open OG assistant"
     >

@@ -13,7 +13,10 @@ const deductions = [
 
 const fmt = (n: number) => {
   if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(1)}M`;
-  if (n >= 1_000) return `$${(n / 1_000).toFixed(0)}K`;
+  if (n >= 1_000) {
+    const k = n / 1_000;
+    return `$${Number.isInteger(k) ? k.toFixed(0) : k.toFixed(1)}K`;
+  }
   return `$${n.toLocaleString()}`;
 };
 
@@ -56,13 +59,13 @@ const WaterfallCascade = () => {
         if (t < 1) rafId = requestAnimationFrame(step);
       };
       rafId = requestAnimationFrame(step);
-    }, 1800);
+    }, 1400);
     return () => { clearTimeout(timeout); cancelAnimationFrame(rafId); };
   }, [revealed]);
 
   useEffect(() => {
     if (!revealed) return;
-    const timeout = setTimeout(() => setCorridorVisible(true), 2400);
+    const timeout = setTimeout(() => setCorridorVisible(true), 2000);
     return () => clearTimeout(timeout);
   }, [revealed]);
 
@@ -125,7 +128,7 @@ const WaterfallCascade = () => {
         className="mt-2 rounded-[10px] px-[18px] py-5 bg-black"
         style={{
           border: "2px solid rgba(212,175,55,0.60)",
-          boxShadow: "0 0 40px 4px rgba(212,175,55,0.07), inset 0 1px 0 rgba(255,255,255,0.06)",
+          boxShadow: "0 0 40px 4px rgba(212,175,55,0.12), inset 0 1px 0 rgba(255,255,255,0.06)",
           opacity: revealed ? 1 : 0,
           transform: revealed ? "translateY(0)" : "translateY(8px)",
           transition: "opacity 600ms ease-out, transform 600ms ease-out",
