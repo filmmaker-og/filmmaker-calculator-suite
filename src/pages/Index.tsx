@@ -97,7 +97,7 @@ const Index = () => {
       <div className="min-h-screen flex flex-col relative overflow-hidden bg-black grain-overlay">
         <main aria-label="Film Finance Simulator" className="flex-1 flex flex-col" style={{ paddingBottom: "env(safe-area-inset-bottom)" }}>
 
-          <section id="hero" className="relative pt-14 pb-6">
+          <section id="hero" className="relative pt-8 pb-6">
             <div className="relative px-4 max-w-md mx-auto">
 
               <div className="text-center mb-5">
@@ -210,8 +210,8 @@ const Index = () => {
                         key={item.title}
                         className="flex items-start gap-4 rounded-lg px-4 py-4"
                         style={{
-                          background: "rgba(180,60,60,0.06)",
-                          border: "1px solid rgba(180,60,60,0.12)",
+                          background: "rgba(180,60,60,0.08)",
+                          border: "1px solid rgba(180,60,60,0.16)",
                           opacity: valueVisible ? 1 : 0,
                           transform: valueVisible ? "translateY(0)" : "translateY(12px)",
                           transition: "opacity 500ms ease-out, transform 500ms ease-out",
@@ -221,15 +221,15 @@ const Index = () => {
                         <div
                           className="flex-shrink-0 w-8 h-8 rounded-md flex items-center justify-center mt-0.5"
                           style={{
-                            background: "rgba(180,60,60,0.15)",
-                            border: "1px solid rgba(180,60,60,0.20)",
+                            background: "rgba(180,60,60,0.18)",
+                            border: "1px solid rgba(180,60,60,0.25)",
                           }}
                         >
-                          <span className="text-[14px] font-bold leading-none" style={{ color: "rgba(220,100,100,0.70)" }}>{"\u2717"}</span>
+                          <span className="text-[14px] font-bold leading-none" style={{ color: "rgba(220,100,100,0.85)" }}>{"\u2717"}</span>
                         </div>
                         <div>
-                          <p className="text-[15px] font-semibold leading-snug" style={{ color: "rgba(255,200,200,0.60)" }}>{item.title}</p>
-                          <p className="text-[13px] leading-snug mt-1" style={{ color: "rgba(255,255,255,0.35)" }}>{item.desc}</p>
+                          <p className="text-[15px] font-semibold leading-snug" style={{ color: "rgba(255,200,200,0.75)" }}>{item.title}</p>
+                          <p className="text-[13px] leading-snug mt-1" style={{ color: "rgba(255,255,255,0.45)" }}>{item.desc}</p>
                         </div>
                       </div>
                     ))}
@@ -244,16 +244,16 @@ const Index = () => {
             <div className="max-w-md mx-auto">
               <div
                 ref={credRef}
-                className="rounded-2xl px-8 py-10 text-center"
+                className="rounded-xl px-8 py-10 text-center"
                 style={{
                   border: "1px solid rgba(255,255,255,0.08)",
-                  background: "rgba(255,255,255,0.03)",
+                  background: "rgba(255,255,255,0.02)",
                   opacity: credVisible ? 1 : 0,
                   transform: credVisible ? "translateY(0)" : "translateY(16px)",
                   transition: "opacity 700ms ease-out, transform 700ms ease-out",
                 }}
               >
-                <p className="text-[15px] text-white/60 leading-relaxed tracking-wide">
+                <p className="text-[15px] text-white/70 leading-relaxed tracking-wide">
                   Built by a second-generation producer whose debut premiered at Tribeca and landed on Netflix.
                 </p>
               </div>

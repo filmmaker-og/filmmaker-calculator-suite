@@ -100,23 +100,23 @@ const WaterfallCascade = () => {
           if (block.type === "profit") return null;
           const isSource = block.type === "source";
           const delay = i * 250;
-          const barOpacity = Math.max(0.18, 0.40 - i * 0.04);
+          const barOpacity = Math.max(0.25, 0.55 - i * 0.05);
 
           return (
             <div
               key={block.name}
-              className={cn(i > 0 && "border-t border-white/[0.05]")}
+              className={cn(i > 0 && "border-t border-white/[0.07]")}
             >
               <div className="flex justify-between items-baseline px-4 pt-[10px] pb-[5px]">
                 <div className="flex items-baseline gap-2">
-                  <span className="font-mono text-[10px] text-white/20 tabular-nums">
+                  <span className="font-mono text-[11px] text-white/30 tabular-nums">
                     {String(i + 1).padStart(2, "0")}
                   </span>
                   <span
                     className={
                       isSource
-                        ? "font-bebas text-[20px] tracking-[0.06em] text-white/90"
-                        : "text-[13px] tracking-[0.01em] font-medium text-white/40"
+                        ? "font-bebas text-[22px] tracking-[0.06em] text-white/90"
+                        : "text-[14px] tracking-[0.01em] font-medium text-white/55"
                     }
                   >
                     {block.name}
@@ -125,8 +125,8 @@ const WaterfallCascade = () => {
                 <span
                   className={
                     isSource
-                      ? "font-mono text-[16px] font-semibold text-white/90"
-                      : "font-mono text-[13px] font-medium text-white/40"
+                      ? "font-mono text-[17px] font-semibold text-white/90"
+                      : "font-mono text-[14px] font-medium text-white/55"
                   }
                 >
                   {isSource ? fmtFull(block.amount) : `\u2212${fmt(block.amount)}`}
@@ -139,7 +139,7 @@ const WaterfallCascade = () => {
                     "w-full relative overflow-hidden rounded-sm",
                     isSource ? "h-4" : "h-[10px]"
                   )}
-                  style={{ background: "rgba(255,255,255,0.03)" }}
+                  style={{ background: "rgba(255,255,255,0.05)" }}
                 >
                   {isSource ? (
                     <div
@@ -160,7 +160,7 @@ const WaterfallCascade = () => {
                           width: revealed
                             ? `${block.startPct + block.widthPct}%`
                             : "0%",
-                          background: "rgba(212,175,55,0.05)",
+                          background: "rgba(212,175,55,0.08)",
                           transition:
                             "width 800ms cubic-bezier(0.16,1,0.3,1)",
                           transitionDelay: `${delay}ms`,
@@ -225,12 +225,12 @@ const WaterfallCascade = () => {
         ].map((c) => (
           <div
             key={c.label}
-            className="border border-white/[0.06] bg-black px-3.5 py-3.5 text-center rounded-lg"
+            className="border border-white/[0.08] bg-black px-3.5 py-3.5 text-center rounded-lg"
             style={{
               opacity: corridorVisible ? 1 : 0,
               transform: corridorVisible
                 ? "translateY(0)"
-                : "translateY(6px)",
+                : "translateY(10px)",
               transition: "opacity 500ms ease-out, transform 500ms ease-out",
               transitionDelay: `${c.extraDelay}ms`,
             }}
@@ -245,7 +245,7 @@ const WaterfallCascade = () => {
         ))}
       </div>
 
-      <p className="font-mono text-[10px] text-white/20 text-center mt-3.5">
+      <p className="font-mono text-[11px] text-white/35 text-center mt-3.5">
         Hypothetical $1.8M budget{"\u00A0"}{"\u00B7"}{"\u00A0"}$3M
         acquisition{"\u00A0"}{"\u00B7"}{"\u00A0"}50/50 net profit split
       </p>
