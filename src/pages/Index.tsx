@@ -50,10 +50,10 @@ const Index = () => {
     { title: "Returns Mapped", desc: "Every investor sees exactly what they get back — and when" },
     { title: "Ready for the Room", desc: "A polished financial document you can hand over in one click" },
     { title: "Nothing Hidden", desc: "Fees, splits, and repayment — all visible before you commit" },
-    { title: "Real Math, Not Guesses", desc: "Know your margins before you shoot a single frame" },
+    { title: "Real Math, No Guessing", desc: "Know your margins before you shoot a single frame" },
   ];
   const withoutItems = [
-    { title: "Deals Built on Hope", desc: "No model behind the promises you're making to investors" },
+    { title: "Deals Built on Trust", desc: "No model behind the promises you're making to investors" },
     { title: "The Question You Can't Answer", desc: "'How do I get my money back?' — and you're improvising" },
     { title: "Surprises After Signatures", desc: "Fees and splits you didn't account for surface after the deal closes" },
     { title: "Expensive Education", desc: "You learn how film money actually works the hard way" },
