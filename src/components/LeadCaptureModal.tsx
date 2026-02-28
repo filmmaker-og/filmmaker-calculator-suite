@@ -7,6 +7,7 @@ import { z } from "zod";
 import {
   Dialog,
   DialogContent,
+  DialogTitle,
 } from "@/components/ui/dialog";
 
 const emailSchema = z.string().email("Please enter a valid email");
@@ -100,6 +101,7 @@ const LeadCaptureModal = ({ isOpen, onClose, onSuccess }: LeadCaptureModalProps)
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="w-[calc(100%-2rem)] max-w-sm mx-auto bg-bg-void border-border-subtle p-0 gap-0">
+        <DialogTitle className="sr-only">Sign in to access the calculator</DialogTitle>
         {/* Gold accent */}
         <div className="h-[2px] w-full bg-gold" />
 
