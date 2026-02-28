@@ -69,7 +69,7 @@ const WaterfallCascade = () => {
   return (
     <div ref={containerRef}>
       {/* Ledger card */}
-      <div className="border border-white/[0.08] bg-black overflow-hidden rounded-xl">
+      <div className="border border-white/[0.08] bg-black overflow-hidden rounded-xl" style={{ boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06)" }}>
         {/* Source row */}
         <div className="flex justify-between items-baseline px-5 pt-5 pb-4">
           <span className="font-bebas text-[22px] tracking-[0.06em] text-white/90">
@@ -94,17 +94,13 @@ const WaterfallCascade = () => {
         {/* Deduction line items */}
         <div className="px-5 pt-2 pb-4">
           {deductions.map((d, i) => {
-            const isEquity = d.name === "Equity Recoupment";
             const delay = (i + 1) * 180;
             return (
               <div
                 key={d.name}
                 className="flex justify-between items-baseline"
                 style={{
-                  padding: isEquity ? "10px 0 10px 12px" : "9px 0",
-                  borderLeft: isEquity
-                    ? "2px solid rgba(212,175,55,0.50)"
-                    : "2px solid transparent",
+                  padding: "9px 0",
                   opacity: revealed ? 1 : 0,
                   transform: revealed ? "translateY(0)" : "translateY(6px)",
                   transition:
@@ -112,22 +108,10 @@ const WaterfallCascade = () => {
                   transitionDelay: `${delay}ms`,
                 }}
               >
-                <span
-                  className={
-                    isEquity
-                      ? "text-[14px] font-semibold text-white/80"
-                      : "text-[14px] font-medium text-white/45"
-                  }
-                >
+                <span className="text-[14px] font-medium text-white/50">
                   {d.name}
                 </span>
-                <span
-                  className={
-                    isEquity
-                      ? "font-mono text-[15px] font-semibold text-white/85 tabular-nums"
-                      : "font-mono text-[14px] font-medium text-white/45 tabular-nums"
-                  }
-                >
+                <span className="font-mono text-[14px] font-medium text-white/50 tabular-nums">
                   {"\u2212"}{fmt(d.amount)}
                 </span>
               </div>
@@ -141,6 +125,7 @@ const WaterfallCascade = () => {
         className="mt-2 rounded-[10px] px-[18px] py-5 bg-black"
         style={{
           border: "2px solid rgba(212,175,55,0.60)",
+          boxShadow: "0 0 40px 4px rgba(212,175,55,0.07), inset 0 1px 0 rgba(255,255,255,0.06)",
           opacity: revealed ? 1 : 0,
           transform: revealed ? "translateY(0)" : "translateY(8px)",
           transition: "opacity 600ms ease-out, transform 600ms ease-out",
@@ -165,6 +150,7 @@ const WaterfallCascade = () => {
             key={c.label}
             className="border border-white/[0.08] bg-black px-3.5 py-3.5 text-center rounded-lg"
             style={{
+              boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06)",
               opacity: corridorVisible ? 1 : 0,
               transform: corridorVisible
                 ? "translateY(0)"

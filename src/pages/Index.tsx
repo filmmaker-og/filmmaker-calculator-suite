@@ -87,7 +87,7 @@ const Index = () => {
                   SEE WHERE EVERY DOLLAR <span className="text-white">GOES</span>
                 </h1>
                 <p className="text-white/60 text-[15px] leading-[1.7] tracking-[0.04em] font-medium">
-                  Simulate your film's money flow before you take the meeting.
+                  Model every fee, split, and return — before you take the meeting.
                 </p>
               </div>
 
@@ -96,6 +96,7 @@ const Index = () => {
                 style={{
                   border: "1px solid rgba(255,255,255,0.06)",
                   background: "rgba(255,255,255,0.02)",
+                  boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06)",
                 }}
               >
                 <WaterfallCascade />
@@ -123,7 +124,7 @@ const Index = () => {
               {/* WITH card */}
               <div
                 className="bg-black rounded-xl overflow-hidden"
-                style={{ border: "1px solid rgba(212,175,55,0.15)" }}
+                style={{ border: "1px solid rgba(212,175,55,0.15)", boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06)" }}
               >
                 <div className="px-5 pt-6 pb-6">
                   <h2 className="font-mono text-[13px] tracking-[0.14em] uppercase text-gold mb-6">
@@ -163,8 +164,9 @@ const Index = () => {
               <div
                 className="rounded-xl overflow-hidden"
                 style={{
-                  border: "1px solid rgba(180,60,60,0.22)",
-                  background: "rgba(180,60,60,0.04)",
+                  border: "1px solid rgba(180,60,60,0.28)",
+                  background: "rgba(180,60,60,0.07)",
+                  boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06)",
                 }}
               >
                 <div className="px-5 pt-6 pb-6">
@@ -201,8 +203,8 @@ const Index = () => {
                           <span className="text-[16px] font-bold leading-none" aria-hidden="true" style={{ color: "rgba(220,100,100,0.90)" }}>{"\u2717"}</span>
                         </div>
                         <div>
-                          <p className="text-[15px] font-semibold leading-snug" style={{ color: "rgba(255,200,200,0.80)" }}>{item.title}</p>
-                          <p className="text-[13px] leading-snug mt-1 text-white/50">{item.desc}</p>
+                          <p className="text-[15px] font-semibold leading-snug text-white/90">{item.title}</p>
+                          <p className="text-[13px] leading-snug mt-1 text-white/55">{item.desc}</p>
                         </div>
                       </li>
                     ))}
@@ -216,18 +218,49 @@ const Index = () => {
             <div className="max-w-md mx-auto">
               <div
                 ref={credRef}
-                className="rounded-xl px-8 py-10 text-center"
                 style={{
-                  border: "1px solid rgba(255,255,255,0.08)",
-                  background: "rgba(255,255,255,0.02)",
                   opacity: prefersReducedMotion || credVisible ? 1 : 0,
                   transform: prefersReducedMotion || credVisible ? "translateY(0)" : "translateY(16px)",
                   transition: prefersReducedMotion ? "none" : "opacity 700ms ease-out, transform 700ms ease-out",
                 }}
               >
-                <p className="text-[15px] text-white/70 leading-relaxed tracking-wide">
-                  Built by a second-generation producer. Tribeca premiere. Netflix acquisition. This is the tool I needed on my first deal.
+                <p className="font-mono text-[11px] tracking-[0.14em] uppercase text-white/40 text-center mb-3">
+                  Second-generation producer{"\u00A0"}{"\u00B7"}{"\u00A0"}Tribeca premiere{"\u00A0"}{"\u00B7"}{"\u00A0"}Netflix acquisition
                 </p>
+                <p className="text-[15px] text-white/60 leading-relaxed text-center mb-7">
+                  This is the tool I needed on my first deal.
+                </p>
+                <div className="flex flex-col gap-3">
+                  {[0, 1].map((idx) => (
+                    <div
+                      key={idx}
+                      className="rounded-xl px-6 py-5 text-left"
+                      style={{
+                        border: "1px solid rgba(255,255,255,0.08)",
+                        background: "rgba(255,255,255,0.02)",
+                        boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06)",
+                        opacity: prefersReducedMotion || credVisible ? 1 : 0,
+                        transform: prefersReducedMotion || credVisible ? "translateY(0)" : "translateY(10px)",
+                        transition: prefersReducedMotion ? "none" : "opacity 500ms ease-out, transform 500ms ease-out",
+                        transitionDelay: prefersReducedMotion ? "0ms" : `${400 + idx * 150}ms`,
+                      }}
+                    >
+                      <span
+                        className="block font-bebas text-[32px] leading-none select-none"
+                        aria-hidden="true"
+                        style={{ color: "rgba(212,175,55,0.18)" }}
+                      >
+                        {"\u201C"}
+                      </span>
+                      <p className="text-[14px] text-white/30 italic leading-relaxed -mt-1">
+                        {idx === 0 ? "Producer testimonial placeholder" : "Industry testimonial placeholder"}
+                      </p>
+                      <p className="font-mono text-[11px] text-white/20 mt-3 tracking-[0.08em]">
+                        — Name, Title
+                      </p>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </section>
@@ -239,7 +272,8 @@ const Index = () => {
                 className="rounded-2xl px-8 py-10 md:py-14 text-center"
                 style={{
                   border: "2px solid rgba(212,175,55,0.40)",
-                  background: "rgba(255,255,255,0.02)",
+                  background: "radial-gradient(ellipse at center 70%, rgba(212,175,55,0.04) 0%, rgba(255,255,255,0.02) 60%, transparent 100%)",
+                  boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06)",
                   opacity: prefersReducedMotion || bridgeVisible ? 1 : 0,
                   transform: prefersReducedMotion || bridgeVisible ? "translateY(0)" : "translateY(16px)",
                   transition: prefersReducedMotion ? "none" : "opacity 700ms ease-out, transform 700ms ease-out",
