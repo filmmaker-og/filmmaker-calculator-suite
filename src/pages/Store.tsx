@@ -525,7 +525,7 @@ const Store = () => {
                       className="grid grid-cols-4 gap-0 px-3 py-3 items-center"
                       style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}
                     >
-                      <span className="text-[12px] text-ink-secondary leading-snug pr-2">
+                      <span className="text-[12px] text-ink-body leading-snug pr-2">
                         {feat.label}
                       </span>
                       <div className="text-center">
@@ -592,25 +592,26 @@ const Store = () => {
             <div
               className="mt-5 p-6 rounded-xl"
               style={{
-                border: '1px solid rgba(212,175,55,0.15)',
-                background: 'rgba(255,255,255,0.02)',
-                boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)',
+                border: '1px solid rgba(212,175,55,0.30)',
+                background: 'linear-gradient(165deg, rgba(212,175,55,0.05), rgba(0,0,0,0.6))',
+                boxShadow:
+                  '0 0 32px rgba(212,175,55,0.08), inset 0 1px 0 rgba(255,255,255,0.06)',
               }}
             >
-              <h3 className="font-bebas text-[16px] tracking-[0.08em] text-gold mb-2">
+              <h3 className="font-bebas text-[18px] tracking-[0.08em] text-gold mb-2">
                 NEED SOMETHING CUSTOM?
               </h3>
-              <p className="text-ink-secondary text-[16px] leading-relaxed mb-3">
-                If your project requires bespoke financial modeling, custom comp
-                research, or institutional-grade investor materials beyond what
-                these packages cover — get in touch.
+              <p className="text-ink-body text-[15px] leading-relaxed mb-4">
+                Bespoke financial modeling, custom comp research, or
+                institutional-grade investor materials beyond what these
+                packages cover.
               </p>
               <a
                 href="mailto:thefilmmaker.og@gmail.com"
                 className="inline-flex items-center gap-2 text-gold text-[14px] font-semibold hover:text-gold/80 transition-colors"
               >
                 <Mail className="w-4 h-4" />
-                Contact Us {"\u2192"}
+                Get In Touch {"\u2192"}
               </a>
             </div>
           </div>
