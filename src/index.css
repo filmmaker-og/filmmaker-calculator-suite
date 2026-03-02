@@ -85,6 +85,16 @@
     /* CTA Gold — buttons, links, interactive CTAs ONLY */
     --gold-cta: #F9E076;
 
+    /* ═══════════════════════════════════════════════════════════════════
+       RED DANGER — "Without" card, warnings, risk indicators
+       Same 4-tier opacity system as gold.
+       ═══════════════════════════════════════════════════════════════════ */
+    --red-danger: #DC3C3C;
+    --red-strong: rgba(220, 60, 60, 0.25);
+    --red-medium: rgba(220, 60, 60, 0.15);
+    --red-subtle: rgba(220, 60, 60, 0.08);
+    --red-ghost: rgba(220, 60, 60, 0.03);
+
     /* Legacy aliases — map old tokens to new spec for non-landing pages */
     --bg-card: #111111;
     --bg-header: #000000;
@@ -104,7 +114,9 @@
        ═══════════════════════════════════════════════════════════════════ */
     --text-primary: #FFFFFF;
     --text-secondary: rgba(255, 255, 255, 0.70);
+    --text-muted: rgba(255, 255, 255, 0.55);
     --text-tertiary: rgba(255, 255, 255, 0.40);
+    --gold-text: rgba(212, 175, 55, 0.60);
 
     /* BORDERS */
     --border-default: rgba(212, 175, 55, 0.15);

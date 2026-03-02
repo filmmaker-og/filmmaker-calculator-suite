@@ -3,10 +3,10 @@ import { MoreVertical } from "lucide-react";
 import { useHaptics } from "@/hooks/use-haptics";
 
 /* ═══════════════════════════════════════════════════════════════════
-   AppHeader — floating pill
+   AppHeader — floating bar (matches max-w-xl card column)
    Left:  FILMMAKER.OG → home
    Right: ⋮ kebab → MobileMenu
-   320px centered pill, 8px radius, solid black, gold border
+   576px max, 12px radius, solid black, gold border
    ═══════════════════════════════════════════════════════════════════ */
 interface AppHeaderProps {
   onMoreOpen?: () => void;
@@ -27,15 +27,17 @@ const AppHeader = ({ onMoreOpen }: AppHeaderProps) => {
           style={{
             pointerEvents: "auto",
             width: "100%",
-            maxWidth: "320px",
+            maxWidth: "576px",
             height: "54px",
             marginTop: "max(12px, env(safe-area-inset-top, 12px))",
-            borderRadius: "8px",
+            marginLeft: "16px",
+            marginRight: "16px",
+            borderRadius: "12px",
             background: "#000000",
             border: "1px solid rgba(212,175,55,0.25)",
             boxShadow: "0 8px 32px rgba(0,0,0,0.95)",
-            paddingLeft: "16px",
-            paddingRight: "10px",
+            paddingLeft: "20px",
+            paddingRight: "12px",
           }}
         >
           <button
@@ -43,7 +45,7 @@ const AppHeader = ({ onMoreOpen }: AppHeaderProps) => {
             className="flex items-center hover:opacity-80 transition-opacity"
             aria-label="Go home"
           >
-            <span className="font-bebas text-[22px] tracking-[0.2em] text-gold">
+            <span className="font-bebas text-[28px] tracking-[0.14em] text-gold leading-none">
               FILMMAKER<span className="text-ink-body">.OG</span>
             </span>
           </button>
