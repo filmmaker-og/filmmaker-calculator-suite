@@ -129,7 +129,7 @@ const WaterfallCascade = () => {
           transitionDelay: "1400ms",
         }}
       >
-        <p className="font-mono text-[10px] tracking-[0.16em] uppercase font-semibold text-gold-label mb-1">
+        <p className="font-mono text-[12px] tracking-[0.16em] uppercase font-semibold text-gold-label mb-1">
           Net Profits
         </p>
         <span className="font-mono text-[32px] font-bold text-gold tracking-tight tabular-nums">
@@ -156,10 +156,10 @@ const WaterfallCascade = () => {
               transitionDelay: `${c.extraDelay}ms`,
             }}
           >
-            <p className="font-mono text-[10px] tracking-[0.16em] uppercase font-semibold text-gold-label mb-1">
+            <p className="font-mono text-[12px] tracking-[0.16em] uppercase font-semibold text-gold-label mb-1">
               {c.label}
             </p>
-            <span className="font-mono text-[20px] font-bold text-gold tabular-nums">
+            <span className="font-mono text-[24px] font-bold text-gold tabular-nums">
               {c.amount}
             </span>
           </div>
