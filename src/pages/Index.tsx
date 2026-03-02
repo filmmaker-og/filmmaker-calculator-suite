@@ -237,7 +237,7 @@ const Index = () => {
                 </h2>
                 <button
                   onClick={handleStartClick}
-                  className="w-full max-w-[300px] h-[52px] btn-cta-primary animate-cta-glow-pulse mx-auto"
+                  className="w-full max-w-[300px] h-[52px] btn-cta-primary mx-auto"
                 >
                   BUILD YOUR WATERFALL
                 </button>
