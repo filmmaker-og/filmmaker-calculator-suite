@@ -76,10 +76,10 @@ const Index = () => {
       <div className="min-h-screen flex flex-col relative overflow-hidden bg-black grain-overlay">
         <main aria-label="Film Finance Simulator" className="flex-1 flex flex-col" style={{ paddingBottom: "env(safe-area-inset-bottom)" }}>
 
-          <section id="hero" className="relative pt-8 pb-6" style={{ background: "radial-gradient(ellipse at center top, rgba(212,175,55,0.04) 0%, transparent 60%)" }}>
-            <div className="relative px-6 max-w-md mx-auto">
+          <section id="hero" className="relative pb-6" style={{ paddingTop: "calc(env(safe-area-inset-top, 0px) + 3rem)", background: "radial-gradient(ellipse at center top, rgba(212,175,55,0.04) 0%, transparent 60%)" }}>
+            <div className="relative px-8 max-w-md mx-auto">
 
-              <div className="text-center mb-8 px-2">
+              <div className="text-center mb-8">
                 <h1 className="font-bebas text-[clamp(3rem,10vw,4.2rem)] leading-[0.95] tracking-[0.02em] text-gold mb-4">
                   SEE WHERE EVERY DOLLAR <span className="text-ink">GOES</span>
                 </h1>
@@ -88,7 +88,7 @@ const Index = () => {
                 </p>
               </div>
 
-              <div className="mb-6 text-center px-2">
+              <div className="mb-6 text-center">
                 <div className="w-full max-w-[300px] mx-auto">
                   <button
                     onClick={handleStartClick}
@@ -99,7 +99,9 @@ const Index = () => {
                 </div>
               </div>
 
-              <WaterfallCascade />
+              <div className="-mx-2">
+                <WaterfallCascade />
+              </div>
 
             </div>
           </section>
