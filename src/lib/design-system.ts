@@ -45,11 +45,22 @@ export const colors = {
   // CTA Gold — EXCLUSIVELY for clickable elements
   goldCta: '#F9E076',
 
-  // Text hierarchy — 4 tiers only
+  // Red danger — risk/warning indicators
+  redDanger: '#DC3C3C',
+  redStrong: 'rgba(220, 60, 60, 0.25)',
+  redMedium: 'rgba(220, 60, 60, 0.15)',
+  redSubtle: 'rgba(220, 60, 60, 0.08)',
+  redGhost: 'rgba(220, 60, 60, 0.03)',
+
+  // Text hierarchy — 5 tiers
   textPrimary: '#FFFFFF',
   textSecondary: 'rgba(255, 255, 255, 0.70)',
+  textMuted: 'rgba(255, 255, 255, 0.55)',
   textTertiary: 'rgba(255, 255, 255, 0.40)',
   textGhost: 'rgba(255, 255, 255, 0.06)',
+
+  // Gold label text
+  goldText: 'rgba(212, 175, 55, 0.60)',
 
   // White opacity helpers
   whiteStrong: 'rgba(255, 255, 255, 0.70)',

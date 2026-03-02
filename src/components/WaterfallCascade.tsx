@@ -68,10 +68,10 @@ const WaterfallCascade = () => {
       >
         {/* Acquisition price header row */}
         <div className="flex justify-between items-baseline px-5 pt-5 pb-4">
-          <span className="font-bebas text-[22px] tracking-[0.06em]" style={{ color: "rgba(212,175,55,0.55)" }}>
+          <span className="font-bebas text-[22px] tracking-[0.06em] text-gold-text">
             Acquisition Price
           </span>
-          <span className="font-mono text-[17px] font-semibold text-gold tabular-nums">
+          <span className="font-mono text-[16px] font-medium text-gold tabular-nums">
             {fmt(TOTAL)}
           </span>
         </div>
@@ -107,7 +107,7 @@ const WaterfallCascade = () => {
                 <span className="text-[14px] font-medium text-ink-secondary">
                   {d.name}
                 </span>
-                <span className="font-mono text-[15px] font-medium text-ink-body tabular-nums">
+                <span className="font-mono text-[14px] font-medium text-ink-body tabular-nums">
                   <span className="text-ink-secondary">{"\u2212"}</span>{fmt(d.amount)}
                 </span>
               </div>
@@ -128,10 +128,7 @@ const WaterfallCascade = () => {
           transitionDelay: "1400ms",
         }}
       >
-        <p
-          className="font-mono text-[10px] tracking-[0.16em] uppercase font-semibold mb-1"
-          style={{ color: "rgba(212,175,55,0.55)" }}
-        >
+        <p className="font-mono text-[10px] tracking-[0.14em] uppercase font-semibold mb-1 text-gold-text">
           Net Profits
         </p>
         <span className="font-mono text-[32px] font-bold text-gold tracking-tight tabular-nums">
@@ -157,20 +154,17 @@ const WaterfallCascade = () => {
               transitionDelay: `${c.delay}ms`,
             }}
           >
-            <p
-              className="font-mono text-[10px] tracking-[0.16em] uppercase font-semibold mb-1"
-              style={{ color: "rgba(212,175,55,0.55)" }}
-            >
+            <p className="font-mono text-[10px] tracking-[0.14em] uppercase font-semibold mb-1 text-gold-text">
               {c.label}
             </p>
-            <span className="font-mono text-[20px] font-bold text-gold tabular-nums">
+            <span className="font-mono text-[22px] font-bold text-gold tabular-nums">
               {c.amount}
             </span>
           </div>
         ))}
       </div>
 
-      <p className="font-mono text-[12px] text-ink-ghost text-center mt-3.5">
+      <p className="font-mono text-[11px] text-ink-secondary text-center mt-3.5">
         Hypothetical $1.8M budget{"\u00A0"}{"\u00B7"}{"\u00A0"}$3M
         acquisition{"\u00A0"}{"\u00B7"}{"\u00A0"}50/50 net profit split
       </p>

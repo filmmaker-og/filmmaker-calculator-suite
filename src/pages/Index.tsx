@@ -111,11 +111,11 @@ const Index = () => {
           className="flex-1 flex flex-col items-center"
           style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
         >
-          {/* Gamma-style card stack — narrow, centered, tight gaps */}
-          <div className="w-full max-w-xl px-4 md:px-6 flex flex-col gap-3 py-6">
+          {/* Gamma-style card stack — narrow, centered, breathing gaps */}
+          <div className="w-full max-w-xl px-5 md:px-8 flex flex-col gap-4 py-6">
 
             {/* ════════════════════════════════════════════════════════
-                1. HERO CARD — gold radial glow, gold headline, tight
+                1. HERO CARD — gold radial glow, gold headline
                 ════════════════════════════════════════════════════════ */}
             <Card
               accent
@@ -126,18 +126,15 @@ const Index = () => {
                 boxShadow: "inset 0 1px 0 rgba(212,175,55,0.06)",
               }}
             >
-              <p
-                className="font-mono text-[10px] uppercase tracking-[0.25em] mb-6"
-                style={{ color: "rgba(212,175,55,0.40)" }}
-              >
+              <p className="font-mono text-[11px] uppercase tracking-[0.20em] mb-6 text-gold-text">
                 Film Finance Simulator
               </p>
 
-              <h1 className="font-bebas text-[clamp(3rem,10vw,4.5rem)] leading-[0.93] tracking-[0.02em] text-gold mb-4">
+              <h1 className="font-bebas text-[clamp(3rem,10vw,4.5rem)] leading-[0.96] tracking-[0.02em] text-gold mb-4">
                 SEE WHERE EVERY DOLLAR GOES
               </h1>
 
-              <p className="text-[15px] leading-[1.7] text-ink-body tracking-[0.02em] mx-auto max-w-sm mb-8">
+              <p className="text-[16px] leading-[1.7] text-ink-body tracking-[0.02em] mx-auto max-w-sm mb-8">
                 Model your waterfall. Know every fee, split, and&nbsp;return
                 — before your investor asks.
               </p>
@@ -160,54 +157,59 @@ const Index = () => {
             </Card>
 
             {/* ════════════════════════════════════════════════════════
-                3. EDUCATION CARD — what is a waterfall
+                3A. EDUCATION CARD — why this matters
                 ════════════════════════════════════════════════════════ */}
             <Card className="px-6 py-8 md:px-8 md:py-10">
-              <p
-                className="font-mono text-[11px] uppercase tracking-[0.18em] text-gold mb-5"
-                style={{ opacity: 0.60 }}
-              >
+              <p className="font-mono text-[11px] uppercase tracking-[0.20em] text-gold-text mb-5">
                 Why This Matters
               </p>
 
-              <h2 className="font-bebas text-[clamp(1.8rem,7vw,2.4rem)] leading-[0.96] tracking-[0.02em] text-white mb-5">
+              <h2 className="font-bebas text-[clamp(2rem,7vw,2.6rem)] leading-[1.05] tracking-[0.02em] text-white mb-5">
                 KNOW YOUR DEAL BEFORE YOU SIGN&nbsp;IT
               </h2>
 
-              <div className="space-y-4">
-                <p className="text-[15px] leading-[1.75] text-ink-body">
-                  Every film deal has a pecking order — distributors, sales agents,
-                  lenders, and investors all get paid before you do.
-                  That's called a <span className="text-gold font-medium">waterfall</span>.
-                </p>
-                <p className="text-[15px] leading-[1.75] text-ink-body">
-                  This tool lets you model yours before you sign anything.
-                  Premium unlocks extended scenarios, financial modeling,
-                  and PDF exports.
-                </p>
-              </div>
+              <p className="text-[16px] leading-[1.7] text-ink-body">
+                Every film deal has a pecking order — distributors, sales agents,
+                lenders, and investors all get paid before you do.
+                That's called a <span className="text-gold font-medium">waterfall</span>.
+              </p>
 
               <a
                 href="/resources?tab=waterfall"
-                className="inline-block mt-6 font-mono text-[12px] tracking-[0.06em] text-gold-cta hover:opacity-70 transition-opacity"
+                className="inline-block mt-6 font-mono text-[11px] tracking-[0.06em] text-gold-cta hover:opacity-70 transition-opacity"
               >
                 What's a waterfall? {"\u2192"}
               </a>
             </Card>
 
             {/* ════════════════════════════════════════════════════════
-                4. WITH CARD — gold border, gold tint, checkmarks
+                3B. TOOL CARD — what you get
                 ════════════════════════════════════════════════════════ */}
-            <div ref={valueRef} className="flex flex-col gap-3">
-              <p className="text-[14px] text-ink-secondary italic leading-relaxed tracking-[0.01em] text-center px-2">
-                My first project premiered at Tribeca and landed on Netflix — and I still had to guess at the math.
+            <Card className="px-6 py-8 md:px-8 md:py-10">
+              <p className="font-mono text-[11px] uppercase tracking-[0.20em] text-gold-text mb-5">
+                What You Get
               </p>
 
+              <h2 className="font-bebas text-[clamp(2rem,7vw,2.6rem)] leading-[1.05] tracking-[0.02em] text-white mb-5">
+                MODEL YOURS BEFORE YOU SIGN&nbsp;ANYTHING
+              </h2>
+
+              <p className="text-[16px] leading-[1.7] text-ink-body">
+                This tool lets you build your own waterfall — map every fee,
+                split, and repayment tier. Premium unlocks extended scenarios,
+                financial modeling, and PDF&nbsp;exports.
+              </p>
+            </Card>
+
+            {/* ════════════════════════════════════════════════════════
+                4. WITH CARD — gold border, gold tint, checkmarks
+                ════════════════════════════════════════════════════════ */}
+            <div ref={valueRef} className="flex flex-col gap-4">
               <Card
                 accent
                 className="px-5 py-6 md:px-6 md:py-8"
               >
-                <h2 className="font-mono text-[13px] tracking-[0.14em] uppercase text-gold mb-6">
+                <h2 className="font-mono text-[11px] tracking-[0.14em] uppercase text-gold-text mb-6">
                   With your waterfall
                 </h2>
                 <ul className="flex flex-col gap-5" aria-label="Benefits of using a waterfall">
@@ -231,26 +233,23 @@ const Index = () => {
                         <span className="text-black text-[18px] font-bold leading-none" aria-hidden="true">{"\u2713"}</span>
                       </div>
                       <div>
-                        <p className="text-[15px] font-semibold text-ink leading-snug">{item.title}</p>
-                        <p className="text-[13px] text-ink-body leading-snug mt-1">{item.desc}</p>
+                        <p className="text-[14px] font-semibold text-ink leading-snug">{item.title}</p>
+                        <p className="text-[14px] text-ink-body leading-snug mt-1">{item.desc}</p>
                       </div>
                     </li>
                   ))}
                 </ul>
               </Card>
 
-              {/* 5. WITHOUT CARD — dimmed, ghosted, no gold */}
+              {/* 5. WITHOUT CARD — red danger treatment, readable */}
               <Card
                 className="px-5 py-6 md:px-6 md:py-8"
                 style={{
-                  background: "rgba(255,255,255,0.015)",
-                  border: "1px solid rgba(255,255,255,0.06)",
+                  background: "rgba(220,60,60,0.03)",
+                  border: "1px solid rgba(220,60,60,0.20)",
                 }}
               >
-                <h2
-                  className="font-mono text-[13px] tracking-[0.14em] uppercase mb-6"
-                  style={{ color: "rgba(255,255,255,0.30)" }}
-                >
+                <h2 className="font-mono text-[11px] tracking-[0.14em] uppercase mb-6 text-danger">
                   Without a waterfall
                 </h2>
                 <ul className="flex flex-col gap-5" aria-label="Risks without a waterfall">
@@ -268,15 +267,15 @@ const Index = () => {
                       <div
                         className="flex-shrink-0 w-9 h-9 rounded-lg flex items-center justify-center mt-0.5"
                         style={{
-                          background: "rgba(255,255,255,0.04)",
-                          border: "1px solid rgba(255,255,255,0.08)",
+                          background: "rgba(220,60,60,0.10)",
+                          border: "1px solid rgba(220,60,60,0.20)",
                         }}
                       >
-                        <span className="text-[16px] font-bold leading-none" aria-hidden="true" style={{ color: "rgba(255,255,255,0.25)" }}>{"\u2717"}</span>
+                        <span className="text-[16px] font-bold leading-none text-danger" aria-hidden="true">{"\u2717"}</span>
                       </div>
                       <div>
-                        <p className="text-[14px] font-semibold leading-snug" style={{ color: "rgba(255,255,255,0.50)" }}>{item.title}</p>
-                        <p className="text-[13px] leading-snug mt-1" style={{ color: "rgba(255,255,255,0.30)" }}>{item.desc}</p>
+                        <p className="text-[14px] font-semibold leading-snug text-ink-body">{item.title}</p>
+                        <p className="text-[14px] leading-snug mt-1 text-ink-muted">{item.desc}</p>
                       </div>
                     </li>
                   ))}
@@ -304,7 +303,7 @@ const Index = () => {
                   transition: prefersReducedMotion ? "none" : "opacity 700ms ease-out, transform 700ms ease-out",
                 }}
               >
-                <h2 className="font-bebas text-[clamp(2rem,8vw,2.6rem)] leading-[1.05] tracking-[0.04em] text-gold mb-6">
+                <h2 className="font-bebas text-[clamp(2rem,8vw,2.6rem)] leading-[1.05] tracking-[0.02em] text-gold mb-6">
                   YOUR INVESTORS WILL{"\u00A0"}ASK HOW THE MONEY FLOWS BACK.
                 </h2>
                 <div className="w-full max-w-[300px] mx-auto">
@@ -319,10 +318,14 @@ const Index = () => {
             </Card>
 
             {/* ════════════════════════════════════════════════════════
-                7. FOOTER — no card, just whisper text
+                7. FOOTER — visible disclaimer with top rule
                 ════════════════════════════════════════════════════════ */}
-            <footer className="py-6 px-4 text-center">
-              <p className="text-ink-ghost text-[12px] tracking-wide leading-relaxed mx-auto max-w-sm">
+            <footer className="pt-4 pb-6 px-4 text-center">
+              <div
+                className="mx-auto max-w-[200px] mb-4 h-[1px]"
+                style={{ background: "linear-gradient(90deg, transparent 0%, rgba(212,175,55,0.12) 50%, transparent 100%)" }}
+              />
+              <p className="text-ink-secondary text-[11px] tracking-wide leading-relaxed mx-auto max-w-sm">
                 For educational and informational purposes only. Not legal, tax,
                 or investment advice. Consult a qualified entertainment attorney
                 before making financing decisions.

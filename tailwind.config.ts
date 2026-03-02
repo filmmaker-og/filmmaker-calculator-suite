@@ -50,6 +50,7 @@ export default {
           subtle:    "rgba(212, 175, 55, 0.08)",         // background tints, hover fills
           ghost:     "rgba(212, 175, 55, 0.03)",         // ambient glow, large area tints
           deep:      "#7A5C12",                          // gradient depth, shadows
+          text:      "rgba(212, 175, 55, 0.60)",         // readable gold labels/eyebrows
           cta:       "#F9E076",                          // CTA buttons ONLY
           // Legacy aliases for non-landing pages
           label:     "rgba(212, 175, 55, 0.25)",
@@ -60,10 +61,20 @@ export default {
           "cta-subtle": "rgba(212, 175, 55, 0.08)",
         },
 
+        // ── RED DANGER: risk/warning — 4-tier opacity system ──
+        danger: {
+          DEFAULT:   "#DC3C3C",
+          strong:    "rgba(220, 60, 60, 0.25)",
+          medium:    "rgba(220, 60, 60, 0.15)",
+          subtle:    "rgba(220, 60, 60, 0.08)",
+          ghost:     "rgba(220, 60, 60, 0.03)",
+        },
+
         // ── WHITE TEXT: 4 tiers, no drift ──
         ink: {
           DEFAULT:   "#FFFFFF",                          // headlines, key numbers — FULL
           body:      "rgba(255, 255, 255, 0.70)",        // secondary / paragraph text
+          muted:     "rgba(255, 255, 255, 0.55)",        // readable subordinate text
           secondary: "rgba(255, 255, 255, 0.40)",        // tertiary, metadata
           ghost:     "rgba(255, 255, 255, 0.06)",        // hover bg, surface tints
         },
