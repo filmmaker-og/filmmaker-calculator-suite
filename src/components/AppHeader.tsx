@@ -6,7 +6,7 @@ import { useHaptics } from "@/hooks/use-haptics";
    AppHeader — floating pill
    Left:  FILMMAKER.OG → home
    Right: ⋮ kebab → MobileMenu
-   320px centered pill, 16px radius, solid black, gold border 0.50
+   320px centered pill, 8px radius, solid black, gold border
    ═══════════════════════════════════════════════════════════════════ */
 interface AppHeaderProps {
   onMoreOpen?: () => void;
@@ -30,10 +30,10 @@ const AppHeader = ({ onMoreOpen }: AppHeaderProps) => {
             maxWidth: "320px",
             height: "54px",
             marginTop: "max(12px, env(safe-area-inset-top, 12px))",
-            borderRadius: "16px",
+            borderRadius: "8px",
             background: "#000000",
-            border: "1.5px solid rgba(212,175,55,0.50)",
-            boxShadow: "0 8px 32px rgba(0,0,0,0.95), 0 0 0 1px rgba(212,175,55,0.10)",
+            border: "1px solid rgba(212,175,55,0.25)",
+            boxShadow: "0 8px 32px rgba(0,0,0,0.95)",
             paddingLeft: "16px",
             paddingRight: "10px",
           }}

@@ -100,27 +100,37 @@ const LeadCaptureModal = ({ isOpen, onClose, onSuccess }: LeadCaptureModalProps)
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="w-[calc(100%-2rem)] max-w-sm mx-auto bg-bg-void border-border-subtle p-0 gap-0">
+      <DialogContent
+        className="w-[calc(100%-2rem)] max-w-sm mx-auto p-0 gap-0"
+        style={{
+          background: "#000000",
+          border: "1px solid rgba(255,255,255,0.15)",
+          borderRadius: "6px",
+        }}
+      >
         <DialogTitle className="sr-only">Sign in to access the calculator</DialogTitle>
         {/* Gold accent */}
-        <div className="h-[2px] w-full" style={{ background: "linear-gradient(90deg, transparent, #D4AF37, transparent)" }} />
+        <div className="h-[1px] w-full" style={{ background: "linear-gradient(90deg, transparent, #D4AF37, transparent)" }} />
 
         {sent ? (
           // Magic link sent — check your email
           <div className="p-6 text-center">
-            <div className="w-12 h-12 border border-gold/50 flex items-center justify-center mx-auto mb-4">
+            <div
+              className="w-12 h-12 flex items-center justify-center mx-auto mb-4"
+              style={{ border: "1px solid rgba(212,175,55,0.25)", borderRadius: "6px" }}
+            >
               <Mail className="w-6 h-6 text-gold" />
             </div>
-            <p className="font-bebas text-xl tracking-wider text-text-primary mb-2">
+            <p className="font-bebas text-xl tracking-wider text-white mb-2">
               CHECK YOUR EMAIL
             </p>
-            <p className="text-text-dim text-sm mb-2">
+            <p className="text-sm mb-2" style={{ color: "rgba(255,255,255,0.40)" }}>
               We sent a sign-in link to
             </p>
             <p className="font-mono text-gold text-sm mb-6">
               {email}
             </p>
-            <p className="text-text-dim text-xs mb-6">
+            <p className="text-xs mb-6" style={{ color: "rgba(255,255,255,0.40)" }}>
               Click the link in your email to access the calculator.
             </p>
 
@@ -128,14 +138,16 @@ const LeadCaptureModal = ({ isOpen, onClose, onSuccess }: LeadCaptureModalProps)
               <button
                 onClick={handleResend}
                 disabled={loading}
-                className="text-text-dim hover:text-text-mid text-xs tracking-wider transition-colors"
+                className="text-xs tracking-wider transition-colors"
+                style={{ color: "rgba(255,255,255,0.40)" }}
               >
                 {loading ? "Sending..." : "Didn't get it? Resend"}
               </button>
               <div>
                 <button
                   onClick={() => setSent(false)}
-                  className="text-text-dim hover:text-text-mid text-xs transition-colors"
+                  className="text-xs transition-colors"
+                  style={{ color: "rgba(255,255,255,0.40)" }}
                 >
                   Use different email
                 </button>
@@ -145,10 +157,10 @@ const LeadCaptureModal = ({ isOpen, onClose, onSuccess }: LeadCaptureModalProps)
         ) : (
           // Name + email form
           <form onSubmit={handleSubmit} className="p-6">
-            <p className="font-bebas text-xl tracking-wider text-text-primary text-center mb-1">
+            <p className="font-bebas text-xl tracking-wider text-white text-center mb-1">
               BUILD YOUR WATERFALL
             </p>
-            <p className="text-text-dim text-xs text-center mb-6">
+            <p className="text-xs text-center mb-6" style={{ color: "rgba(255,255,255,0.40)" }}>
               Enter your name and email to start building your waterfall.
             </p>
 
@@ -167,7 +179,20 @@ const LeadCaptureModal = ({ isOpen, onClose, onSuccess }: LeadCaptureModalProps)
                     (e.currentTarget.nextElementSibling as HTMLInputElement)?.focus();
                   }
                 }}
-                className="w-full h-12 px-4 bg-bg-surface border border-border-subtle rounded-lg text-text-primary placeholder:text-text-dim text-sm focus:border-gold focus:shadow-[0_0_0_3px_rgba(212,175,55,0.10)] focus:outline-none transition-all"
+                className="w-full h-12 px-4 text-white text-sm focus:outline-none transition-all"
+                style={{
+                  background: "#1A1A1A",
+                  border: "1px solid rgba(255,255,255,0.15)",
+                  borderRadius: "4px",
+                }}
+                onFocus={e => {
+                  e.currentTarget.style.borderColor = "#D4AF37";
+                  e.currentTarget.style.boxShadow = "0 0 0 3px rgba(212,175,55,0.08)";
+                }}
+                onBlur={e => {
+                  e.currentTarget.style.borderColor = "rgba(255,255,255,0.15)";
+                  e.currentTarget.style.boxShadow = "none";
+                }}
               />
 
               <input
@@ -186,7 +211,20 @@ const LeadCaptureModal = ({ isOpen, onClose, onSuccess }: LeadCaptureModalProps)
                     handleSubmit(e as unknown as React.FormEvent);
                   }
                 }}
-                className="w-full h-12 px-4 bg-bg-surface border border-border-subtle rounded-lg text-text-primary placeholder:text-text-dim font-mono text-sm focus:border-gold focus:shadow-[0_0_0_3px_rgba(212,175,55,0.10)] focus:outline-none transition-all"
+                className="w-full h-12 px-4 font-mono text-white text-sm focus:outline-none transition-all"
+                style={{
+                  background: "#1A1A1A",
+                  border: "1px solid rgba(255,255,255,0.15)",
+                  borderRadius: "4px",
+                }}
+                onFocus={e => {
+                  e.currentTarget.style.borderColor = "#D4AF37";
+                  e.currentTarget.style.boxShadow = "0 0 0 3px rgba(212,175,55,0.08)";
+                }}
+                onBlur={e => {
+                  e.currentTarget.style.borderColor = "rgba(255,255,255,0.15)";
+                  e.currentTarget.style.boxShadow = "none";
+                }}
               />
 
               <button

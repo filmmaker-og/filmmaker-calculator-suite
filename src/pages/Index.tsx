@@ -52,14 +52,14 @@ const Index = () => {
   const { ref: bridgeRef, inView: bridgeVisible } = useInView<HTMLDivElement>({ threshold: 0.2 });
 
   const withItems = [
-    { title: "Returns Mapped", desc: "Every investor sees exactly what they get back — and when" },
-    { title: "Nothing Hidden", desc: "Fees, splits, and repayment — all visible before you commit" },
-    { title: "Real Math, No Guessing", desc: "Know your margins before you shoot a single frame" },
+    { title: "Returns Mapped", desc: "Every investor sees exactly what they get back — and when." },
+    { title: "Nothing Hidden", desc: "Fees, splits, and repayment order — all visible before you commit." },
+    { title: "Your Margins, Confirmed", desc: "Run the numbers on your backend points before you shoot a single frame. No more guessing at what's left after the waterfall." },
   ];
   const withoutItems = [
-    { title: "The Question You Can't Answer", desc: "'How do I get my money back?' — and you're improvising" },
-    { title: "Surprises After Signatures", desc: "Fees and splits you didn't account for surface after the deal closes" },
-    { title: "First-Deal Math", desc: "Your backend points were worth nothing after the sales agent commission you forgot to model" },
+    { title: "The Question You Can't Answer", desc: "'How do I get my money back?' — and you're improvising." },
+    { title: "Surprises After Signatures", desc: "Fees and splits you didn't model surface after the deal closes." },
+    { title: "First-Deal Math", desc: "Your backend points were worth nothing after the sales agent commission you forgot to model." },
   ];
 
   return (
@@ -76,20 +76,28 @@ const Index = () => {
       <div className="min-h-screen flex flex-col relative overflow-hidden bg-black grain-overlay">
         <main aria-label="Film Finance Simulator" className="flex-1 flex flex-col" style={{ paddingBottom: "env(safe-area-inset-bottom)" }}>
 
-          <section id="hero" className="relative pt-12 pb-6" style={{ background: "radial-gradient(ellipse at center top, rgba(212,175,55,0.04) 0%, transparent 60%)" }}>
-            <div className="relative px-8 max-w-md mx-auto">
+          {/* ═══ HERO — HEAVY ═══ */}
+          <section
+            id="hero"
+            className="relative py-20 md:py-28"
+            style={{ background: "radial-gradient(ellipse at center top, rgba(212,175,55,0.03) 0%, transparent 60%)" }}
+          >
+            <div className="relative px-8 max-w-md mx-auto md:max-w-2xl">
 
-              <div className="text-center mb-8">
-                <h1 className="font-bebas text-[clamp(3rem,10vw,4.2rem)] leading-[0.95] tracking-[0.02em] text-gold mb-4">
-                  SEE WHERE EVERY DOLLAR <span className="text-ink">GOES</span>
+              <div className="mb-10">
+                <p className="font-sans text-[11px] uppercase tracking-[0.2em] text-ink-secondary mb-4">
+                  FILM FINANCE SIMULATOR
+                </p>
+                <h1 className="font-bebas text-[clamp(3rem,10vw,4.5rem)] leading-[0.95] tracking-[0.02em] text-ink mb-5">
+                  SEE WHERE EVERY DOLLAR GOES
                 </h1>
-                <p className="text-ink-body text-[16px] leading-[1.7] tracking-[0.04em] font-medium">
+                <p className="text-ink-body text-[16px] leading-[1.7] tracking-[0.01em] max-w-sm">
                   Know every fee, split, and return — before your investor asks.
                 </p>
               </div>
 
-              <div className="mb-6 text-center">
-                <div className="w-full max-w-[300px] mx-auto">
+              <div className="mb-10">
+                <div className="w-full max-w-[300px]">
                   <button
                     onClick={handleStartClick}
                     className={`w-full h-[52px] btn-cta-primary${ctaGlow ? " animate-cta-glow-pulse" : ""}`}
@@ -106,39 +114,66 @@ const Index = () => {
             </div>
           </section>
 
-          {/* What This Is — education + mission */}
-          <section id="what-this-is" className="relative pt-12 pb-10 md:pt-16 md:pb-12 px-6">
-            <div className="max-w-md mx-auto flex flex-col gap-5">
+          {/* ═══ STATS DIVIDER — LIGHT ═══ */}
+          <section
+            className="py-6 md:py-8"
+            style={{
+              background: "#111111",
+              borderTop: "1px solid rgba(255,255,255,0.15)",
+              borderBottom: "1px solid rgba(255,255,255,0.15)",
+            }}
+          >
+            <div className="max-w-md mx-auto md:max-w-2xl px-8 flex justify-between">
+              <div>
+                <p className="font-mono text-[14px] text-gold tabular-nums">5</p>
+                <p className="font-sans text-[11px] uppercase tracking-[0.15em] text-ink-secondary">Deduction tiers</p>
+              </div>
+              <div>
+                <p className="font-mono text-[14px] text-gold tabular-nums">50/50</p>
+                <p className="font-sans text-[11px] uppercase tracking-[0.15em] text-ink-secondary">Profit split</p>
+              </div>
+              <div>
+                <p className="font-mono text-[14px] text-gold tabular-nums">PDF</p>
+                <p className="font-sans text-[11px] uppercase tracking-[0.15em] text-ink-secondary">Export ready</p>
+              </div>
+            </div>
+          </section>
+
+          {/* ═══ EDUCATION — MEDIUM ═══ */}
+          <section id="what-this-is" className="relative py-20 md:py-28 px-8">
+            <div className="max-w-md mx-auto md:max-w-2xl flex flex-col gap-8">
 
               {/* Card 1 — The problem */}
               <div
-                className="rounded-xl overflow-hidden"
                 style={{
-                  border: "1px solid rgba(212,175,55,0.25)",
-                  background: "rgba(212,175,55,0.02)",
-                  boxShadow: "inset 0 1px 0 rgba(212,175,55,0.06)",
+                  border: "1px solid rgba(212,175,55,0.15)",
+                  background: "#111111",
+                  borderRadius: "6px",
                 }}
               >
-                <div className="px-6 pt-7 pb-7 flex flex-col gap-5">
-                  <h2 className="font-bebas text-[clamp(1.6rem,6vw,2rem)] leading-[1.1] tracking-[0.04em] text-gold">
+                <div className="px-8 py-10 md:px-10 md:py-12 flex flex-col gap-5">
+                  <p className="font-sans text-[11px] uppercase tracking-[0.2em] text-ink-secondary">
+                    THE TOOL
+                  </p>
+                  <h2 className="font-bebas text-[clamp(1.6rem,6vw,2.2rem)] leading-[1.1] tracking-[0.04em] text-ink">
                     KNOW YOUR DEAL BEFORE YOU SIGN&nbsp;IT
                   </h2>
 
-                  <p className="text-[16px] text-ink-body leading-[1.75] tracking-[0.01em]">
+                  <p className="text-[16px] text-ink-body leading-[1.7]">
                     Every film deal has a pecking order&nbsp;— distributors, agents, lenders, and investors all get paid before you&nbsp;do.
                   </p>
 
-                  <p className="text-[16px] text-ink-body leading-[1.75] tracking-[0.01em]">
+                  <p className="text-[16px] text-ink-body leading-[1.7]">
                     That's called a <span className="text-gold font-semibold">waterfall</span>. This tool lets you model yours before you sign&nbsp;anything.
                   </p>
 
                   <a
                     href="/resources?tab=waterfall"
-                    className="inline-flex items-center gap-2 text-gold/70 hover:text-gold transition-colors text-[14px] font-medium"
+                    className="inline-flex items-center gap-2 text-gold-cta hover:opacity-80 transition-opacity text-[14px] font-medium"
                   >
                     <span
-                      className="inline-flex items-center justify-center w-[20px] h-[20px] rounded-full text-[12px] font-bold leading-none"
-                      style={{ border: "1px solid rgba(212,175,55,0.40)", color: "rgba(212,175,55,0.70)" }}
+                      className="inline-flex items-center justify-center w-[20px] h-[20px] text-[12px] font-bold leading-none"
+                      style={{ border: "1px solid rgba(212,175,55,0.25)", borderRadius: "4px", color: "rgba(255,255,255,0.70)" }}
                       aria-hidden="true"
                     >
                       i
@@ -148,22 +183,21 @@ const Index = () => {
                 </div>
               </div>
 
-              {/* Card 2 — The tool + mission */}
+              {/* Card 2 — Mission */}
               <div
-                className="rounded-xl overflow-hidden"
                 style={{
-                  border: "1px solid rgba(212,175,55,0.25)",
-                  background: "rgba(212,175,55,0.02)",
-                  boxShadow: "inset 0 1px 0 rgba(212,175,55,0.06)",
+                  border: "1px solid rgba(212,175,55,0.15)",
+                  background: "#111111",
+                  borderRadius: "6px",
                 }}
               >
-                <div className="px-6 pt-7 pb-7 flex flex-col gap-5">
-                  <p className="text-[16px] text-ink-body leading-[1.75] tracking-[0.01em]">
+                <div className="px-8 py-10 md:px-10 md:py-12 flex flex-col gap-5">
+                  <p className="text-[16px] text-ink-body leading-[1.7]">
                     Run it as many times as you want. Premium unlocks extended scenarios, financial modeling, and PDF&nbsp;exports.
                   </p>
 
-                  <p className="text-[15px] text-gold/60 italic tracking-[0.02em]">
-                    We're democratizing the business of film.
+                  <p className="text-[14px] text-ink-secondary italic tracking-[0.02em]">
+                    Institutional-grade tools shouldn't cost institutional-grade fees.
                   </p>
                 </div>
               </div>
@@ -171,21 +205,31 @@ const Index = () => {
             </div>
           </section>
 
-          <section id="value" className="relative pb-10 md:pb-12 px-6">
+          {/* ═══ LIGHT DIVIDER ═══ */}
+          <div
+            className="h-[1px] max-w-md mx-auto md:max-w-2xl w-full"
+            style={{ background: "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.15) 50%, transparent 100%)" }}
+          />
+
+          {/* ═══ VALUE PROP — MEDIUM ═══ */}
+          <section id="value" className="relative py-20 md:py-28 px-8">
             <div
               ref={valueRef}
-              className="relative max-w-md mx-auto flex flex-col gap-5"
+              className="relative max-w-md mx-auto md:max-w-2xl flex flex-col gap-8"
             >
               {/* WITH card */}
               <div
-                className="rounded-xl overflow-hidden"
-                style={{ border: "1px solid rgba(212,175,55,0.25)", background: "rgba(212,175,55,0.02)", boxShadow: "inset 0 1px 0 rgba(212,175,55,0.06)" }}
+                style={{
+                  border: "1px solid rgba(212,175,55,0.15)",
+                  background: "#111111",
+                  borderRadius: "6px",
+                }}
               >
-                <div className="px-5 pt-6 pb-6">
-                  <h2 className="font-mono text-[13px] tracking-[0.14em] uppercase text-gold mb-6">
+                <div className="px-8 py-10 md:px-10 md:py-12">
+                  <h2 className="font-mono text-[13px] tracking-[0.14em] uppercase text-gold mb-8">
                     With your waterfall
                   </h2>
-                  <ul className="flex flex-col gap-5" aria-label="Benefits of using a waterfall">
+                  <ul className="flex flex-col gap-6" aria-label="Benefits of using a waterfall">
                     {withItems.map((item, i) => (
                       <li
                         key={item.title}
@@ -197,17 +241,15 @@ const Index = () => {
                           transitionDelay: prefersReducedMotion ? "0ms" : `${i * 80}ms`,
                         }}
                       >
-                        <div
-                          className="flex-shrink-0 w-9 h-9 rounded-lg flex items-center justify-center mt-0.5"
-                          style={{
-                            background: "linear-gradient(135deg, #D4AF37 0%, #B8962E 100%)",
-                          }}
+                        <span
+                          className="flex-shrink-0 text-gold text-[16px] font-bold leading-none mt-1"
+                          aria-hidden="true"
                         >
-                          <span className="text-black text-[18px] font-bold leading-none" aria-hidden="true">{"\u2713"}</span>
-                        </div>
+                          {"\u2713"}
+                        </span>
                         <div>
                           <p className="text-[15px] font-semibold text-ink leading-snug">{item.title}</p>
-                          <p className="text-[13px] text-ink-body leading-snug mt-1">{item.desc}</p>
+                          <p className="text-[13px] text-ink-body leading-relaxed mt-1">{item.desc}</p>
                         </div>
                       </li>
                     ))}
@@ -215,19 +257,19 @@ const Index = () => {
                 </div>
               </div>
 
-              {/* WITHOUT card */}
+              {/* WITHOUT card — gold system only, no red */}
               <div
-                className="rounded-xl overflow-hidden"
                 style={{
-                  border: "1px solid rgba(180,60,60,0.28)",
-                  background: "rgba(180,60,60,0.07)",
+                  border: "1px solid rgba(255,255,255,0.15)",
+                  background: "#000000",
+                  borderRadius: "6px",
                 }}
               >
-                <div className="px-5 pt-6 pb-6">
+                <div className="px-8 py-10 md:px-10 md:py-12">
                   <h2
-                    className="font-mono text-[13px] tracking-[0.14em] uppercase mb-6"
+                    className="font-mono text-[13px] tracking-[0.14em] uppercase mb-8"
                     style={{
-                      color: "rgba(220,120,120,0.70)",
+                      color: "rgba(255,255,255,0.40)",
                       opacity: prefersReducedMotion || valueVisible ? 1 : 0,
                       transition: prefersReducedMotion ? "none" : "opacity 500ms ease-out",
                       transitionDelay: prefersReducedMotion ? "0ms" : `${withItems.length * 80 + 60}ms`,
@@ -235,7 +277,7 @@ const Index = () => {
                   >
                     Without a waterfall
                   </h2>
-                  <ul className="flex flex-col gap-5" aria-label="Risks without a waterfall">
+                  <ul className="flex flex-col gap-6" aria-label="Risks without a waterfall">
                     {withoutItems.map((item, i) => (
                       <li
                         key={item.title}
@@ -247,18 +289,16 @@ const Index = () => {
                           transitionDelay: prefersReducedMotion ? "0ms" : `${(withItems.length + i + 1) * 80}ms`,
                         }}
                       >
-                        <div
-                          className="flex-shrink-0 w-9 h-9 rounded-lg flex items-center justify-center mt-0.5"
-                          style={{
-                            background: "rgba(180,60,60,0.20)",
-                            border: "1px solid rgba(180,60,60,0.30)",
-                          }}
+                        <span
+                          className="flex-shrink-0 text-[16px] font-bold leading-none mt-1"
+                          style={{ color: "rgba(255,255,255,0.40)" }}
+                          aria-hidden="true"
                         >
-                          <span className="text-[16px] font-bold leading-none" aria-hidden="true" style={{ color: "rgba(220,100,100,0.90)" }}>{"\u2717"}</span>
-                        </div>
+                          {"\u2717"}
+                        </span>
                         <div>
                           <p className="text-[15px] font-semibold leading-snug text-ink">{item.title}</p>
-                          <p className="text-[13px] leading-snug mt-1 text-ink-secondary">{item.desc}</p>
+                          <p className="text-[13px] leading-relaxed mt-1 text-ink-secondary">{item.desc}</p>
                         </div>
                       </li>
                     ))}
@@ -269,35 +309,39 @@ const Index = () => {
 
           </section>
 
-          <section id="final-cta" className="py-12 md:py-16 px-6">
-            <div className="max-w-md mx-auto">
+          {/* ═══ FINAL CTA — HEAVY ═══ */}
+          <section id="final-cta" className="py-20 md:py-28 px-8" style={{ background: "#111111" }}>
+            <div className="max-w-md mx-auto md:max-w-lg">
               <div
                 ref={bridgeRef}
-                className="rounded-2xl px-6 py-10 md:py-14 text-center"
+                className="px-8 py-12 md:px-10 md:py-16"
                 style={{
-                  border: "2px solid rgba(212,175,55,0.40)",
-                  background: "radial-gradient(ellipse at center 70%, rgba(212,175,55,0.04) 0%, rgba(212,175,55,0.02) 60%, transparent 100%)",
-                  boxShadow: "inset 0 1px 0 rgba(212,175,55,0.06)",
+                  border: "1px solid rgba(212,175,55,0.15)",
+                  background: "radial-gradient(ellipse at center 70%, rgba(212,175,55,0.03) 0%, transparent 100%)",
+                  borderRadius: "6px",
                   opacity: prefersReducedMotion || bridgeVisible ? 1 : 0,
                   transform: prefersReducedMotion || bridgeVisible ? "translateY(0)" : "translateY(16px)",
                   transition: prefersReducedMotion ? "none" : "opacity 700ms ease-out, transform 700ms ease-out",
                 }}
               >
-                <h2 className="font-bebas text-[clamp(2rem,8vw,2.6rem)] leading-[1.1] tracking-[0.06em] text-gold mb-6">
-                  YOUR INVESTORS WILL{"\u00A0"}ASK HOW THE MONEY FLOWS <span className="text-ink">BACK.</span>
+                <h2 className="font-bebas text-[clamp(2rem,8vw,2.6rem)] leading-[1.1] tracking-[0.06em] text-ink mb-8">
+                  YOUR INVESTORS WILL{"\u00A0"}ASK HOW THE MONEY FLOWS BACK.
                 </h2>
-                <button
-                  onClick={handleStartClick}
-                  className="w-full max-w-[300px] h-[52px] btn-cta-primary mx-auto"
-                >
-                  BUILD YOUR WATERFALL
-                </button>
+                <div className="max-w-[300px]">
+                  <button
+                    onClick={handleStartClick}
+                    className="w-full h-[52px] btn-cta-primary"
+                  >
+                    BUILD YOUR WATERFALL
+                  </button>
+                </div>
               </div>
             </div>
           </section>
 
-          <footer className="py-8 px-6 max-w-md mx-auto">
-            <p className="text-ink-ghost text-[13px] tracking-wide leading-relaxed text-center">
+          {/* ═══ FOOTER — LIGHT ═══ */}
+          <footer className="py-12 md:py-16 px-8 max-w-md mx-auto md:max-w-2xl">
+            <p className="text-ink-secondary text-[13px] tracking-wide leading-relaxed">
               For educational and informational purposes only. Not legal, tax, or investment advice.
               Consult a qualified entertainment attorney before making financing decisions.
             </p>
