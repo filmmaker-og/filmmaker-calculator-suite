@@ -26,11 +26,11 @@ const WaterfallCascade = () => {
     const obs = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          delay = setTimeout(() => setRevealed(true), 300);
+          delay = setTimeout(() => setRevealed(true), 400);
           obs.disconnect();
         }
       },
-      { threshold: 0.2 }
+      { threshold: 0.25 }
     );
     obs.observe(el);
     return () => { obs.disconnect(); clearTimeout(delay); };
@@ -40,7 +40,7 @@ const WaterfallCascade = () => {
     if (!revealed) return;
     let rafId: number;
     const timeout = setTimeout(() => {
-      const dur = 1200;
+      const dur = 1400;
       const start = performance.now();
       const step = (now: number) => {
         const t = Math.min((now - start) / dur, 1);
@@ -49,113 +49,130 @@ const WaterfallCascade = () => {
         if (t < 1) rafId = requestAnimationFrame(step);
       };
       rafId = requestAnimationFrame(step);
-    }, deductions.length * 140 + 400);
+    }, 1400);
     return () => { clearTimeout(timeout); cancelAnimationFrame(rafId); };
   }, [revealed]);
 
   useEffect(() => {
     if (!revealed) return;
-    const timeout = setTimeout(() => setSplitVisible(true), deductions.length * 140 + 1800);
+    const timeout = setTimeout(() => setSplitVisible(true), 2000);
     return () => clearTimeout(timeout);
   }, [revealed]);
 
   return (
-    <div ref={containerRef}>
-      {/* Source line */}
-      <div className="flex justify-between items-baseline pb-4 mb-1" style={{ borderBottom: "1px solid rgba(212,175,55,0.10)" }}>
-        <span className="text-[14px] font-medium text-white">
-          Acquisition Price
-        </span>
-        <span className="font-mono text-[18px] font-semibold text-white tabular-nums">
-          {fmt(TOTAL)}
-        </span>
-      </div>
-
-      {/* Deductions */}
-      {deductions.map((d, i) => (
-        <div
-          key={d.name}
-          className="flex justify-between items-baseline py-3"
-          style={{
-            borderBottom: i < deductions.length - 1 ? "1px solid rgba(255,255,255,0.04)" : "none",
-            opacity: revealed ? 1 : 0,
-            transform: revealed ? "translateY(0)" : "translateY(4px)",
-            transition: "opacity 500ms ease-out, transform 500ms ease-out",
-            transitionDelay: `${(i + 1) * 140}ms`,
-          }}
-        >
-          <span className="text-[14px]" style={{ color: "rgba(255,255,255,0.35)" }}>
-            {d.name}
+    <div ref={containerRef} className="pt-2 pb-2">
+      {/* Ledger card — gold border, black interior */}
+      <div
+        className="overflow-hidden rounded-xl"
+        style={{ border: "1px solid rgba(212,175,55,0.12)", background: "#000" }}
+      >
+        {/* Acquisition price header row */}
+        <div className="flex justify-between items-baseline px-5 pt-5 pb-4">
+          <span className="font-bebas text-[22px] tracking-[0.06em]" style={{ color: "rgba(212,175,55,0.55)" }}>
+            Acquisition Price
           </span>
-          <span className="font-mono text-[14px] tabular-nums" style={{ color: "rgba(255,255,255,0.50)" }}>
-            {"\u2212"}{fmt(d.amount)}
+          <span className="font-mono text-[17px] font-semibold text-gold tabular-nums">
+            {fmt(TOTAL)}
           </span>
         </div>
-      ))}
 
-      {/* Gold divider before profit */}
-      <div
-        className="h-[1px] mt-6 mb-8"
-        style={{
-          background: "linear-gradient(90deg, rgba(212,175,55,0.20), rgba(212,175,55,0.05))",
-          opacity: revealed ? 1 : 0,
-          transition: "opacity 800ms ease-out",
-          transitionDelay: `${deductions.length * 140 + 200}ms`,
-        }}
-      />
+        {/* Gold divider */}
+        <div
+          className="mx-5 h-[1px]"
+          style={{
+            background: "linear-gradient(90deg, rgba(212,175,55,0.30), rgba(212,175,55,0.08))",
+            opacity: revealed ? 1 : 0,
+            transition: "opacity 600ms ease-out",
+          }}
+        />
 
-      {/* Net Profits — big number, centered */}
+        {/* Deduction rows — zebra-striped with gold tint */}
+        <div className="px-5 pt-2 pb-4">
+          {deductions.map((d, i) => {
+            const isEven = i % 2 === 0;
+            return (
+              <div
+                key={d.name}
+                className="flex justify-between items-baseline rounded-md"
+                style={{
+                  padding: "9px 8px",
+                  margin: "0 -8px",
+                  background: isEven ? "rgba(212,175,55,0.03)" : "transparent",
+                  opacity: revealed ? 1 : 0,
+                  transform: revealed ? "translateY(0)" : "translateY(6px)",
+                  transition: "opacity 500ms ease-out, transform 500ms ease-out",
+                  transitionDelay: `${(i + 1) * 180}ms`,
+                }}
+              >
+                <span className="text-[14px] font-medium text-ink-secondary">
+                  {d.name}
+                </span>
+                <span className="font-mono text-[15px] font-medium text-ink-body tabular-nums">
+                  <span className="text-ink-secondary">{"\u2212"}</span>{fmt(d.amount)}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Profit box — thick gold border + glow */}
       <div
-        className="text-center mb-8"
+        className="mt-2 rounded-[10px] py-5 bg-black text-center"
         style={{
+          border: "2px solid rgba(212,175,55,0.60)",
+          boxShadow: "0 0 16px 0px rgba(212,175,55,0.10), inset 0 1px 0 rgba(212,175,55,0.08)",
           opacity: revealed ? 1 : 0,
-          transition: "opacity 800ms ease-out",
-          transitionDelay: `${deductions.length * 140 + 300}ms`,
+          transform: revealed ? "translateY(0)" : "translateY(8px)",
+          transition: "opacity 600ms ease-out, transform 600ms ease-out",
+          transitionDelay: "1400ms",
         }}
       >
         <p
-          className="font-mono text-[11px] uppercase tracking-[0.2em] mb-2"
-          style={{ color: "rgba(212,175,55,0.50)" }}
+          className="font-mono text-[10px] tracking-[0.16em] uppercase font-semibold mb-1"
+          style={{ color: "rgba(212,175,55,0.55)" }}
         >
           Net Profits
         </p>
-        <span className="font-mono text-[38px] font-bold text-gold tracking-tight tabular-nums">
+        <span className="font-mono text-[32px] font-bold text-gold tracking-tight tabular-nums">
           ${profitCount.toLocaleString()}
         </span>
       </div>
 
-      {/* 50/50 split */}
-      <div
-        className="flex justify-center gap-16"
-        style={{
-          opacity: splitVisible ? 1 : 0,
-          transition: "opacity 600ms ease-out",
-        }}
-      >
+      {/* Producer / Investor split — two small gold-bordered cards */}
+      <div className="grid grid-cols-2 gap-2 mt-2">
         {([
-          { label: "Producer", amount: "$208,750" },
-          { label: "Investor", amount: "$208,750" },
-        ]).map((s) => (
-          <div key={s.label} className="text-center">
+          { label: "Producer", amount: "$208,750", delay: 0 },
+          { label: "Investor", amount: "$208,750", delay: 150 },
+        ]).map((c) => (
+          <div
+            key={c.label}
+            className="px-3.5 py-3.5 text-center rounded-lg"
+            style={{
+              border: "1px solid rgba(212,175,55,0.15)",
+              background: "rgba(212,175,55,0.03)",
+              opacity: splitVisible ? 1 : 0,
+              transform: splitVisible ? "translateY(0)" : "translateY(10px)",
+              transition: "opacity 500ms ease-out, transform 500ms ease-out",
+              transitionDelay: `${c.delay}ms`,
+            }}
+          >
             <p
-              className="font-mono text-[10px] uppercase tracking-[0.2em] mb-1"
-              style={{ color: "rgba(255,255,255,0.20)" }}
+              className="font-mono text-[10px] tracking-[0.16em] uppercase font-semibold mb-1"
+              style={{ color: "rgba(212,175,55,0.55)" }}
             >
-              {s.label}
+              {c.label}
             </p>
-            <span className="font-mono text-[20px] font-medium text-white tabular-nums">
-              {s.amount}
+            <span className="font-mono text-[20px] font-bold text-gold tabular-nums">
+              {c.amount}
             </span>
           </div>
         ))}
       </div>
 
-      {/* Footnote */}
-      <p
-        className="text-center mt-10 text-[11px] leading-[1.7]"
-        style={{ color: "rgba(255,255,255,0.15)" }}
-      >
-        Hypothetical $1.8M budget · $3M acquisition · 50/50 net profit split
+      <p className="font-mono text-[12px] text-ink-ghost text-center mt-3.5">
+        Hypothetical $1.8M budget{"\u00A0"}{"\u00B7"}{"\u00A0"}$3M
+        acquisition{"\u00A0"}{"\u00B7"}{"\u00A0"}50/50 net profit split
       </p>
     </div>
   );
