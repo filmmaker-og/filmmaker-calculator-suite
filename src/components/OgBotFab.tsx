@@ -22,9 +22,9 @@ const OgBotFab = ({ onTap }: OgBotFabProps) => {
         right: "20px",
         width: "44px",
         height: "44px",
-        borderRadius: "50%",
+        borderRadius: "8px",
         background: "#000000",
-        border: "1.5px solid rgba(255,255,255,0.12)",
+        border: "1px solid rgba(212,175,55,0.15)",
         boxShadow: "0 4px 20px rgba(0,0,0,0.80)",
       }}
       aria-label="Open OG assistant"
@@ -34,7 +34,7 @@ const OgBotFab = ({ onTap }: OgBotFabProps) => {
         style={{
           width: "22px",
           height: "22px",
-          filter: "drop-shadow(0 0 4px rgba(212,175,55,0.30))",
+          filter: "drop-shadow(0 0 4px rgba(212,175,55,0.25))",
         }}
       />
     </button>

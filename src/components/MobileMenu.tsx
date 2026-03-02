@@ -61,7 +61,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
 
   /* ─── Section label ─────────────────────────────────────────── */
   const SectionLabel = ({ children }: { children: React.ReactNode }) => (
-    <p className="font-bebas text-[16px] text-white/70 uppercase tracking-[0.20em] mb-3 pl-1">{children}</p>
+    <p className="font-sans text-[11px] uppercase tracking-[0.2em] mb-3 pl-1" style={{ color: "rgba(255,255,255,0.40)" }}>{children}</p>
   );
 
   return (
@@ -76,14 +76,15 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
       {/* Bottom Sheet */}
       <div
         className={cn(
-          "fixed bottom-0 left-0 right-0 z-[201] rounded-t-2xl max-h-[85vh] overflow-y-auto",
+          "fixed bottom-0 left-0 right-0 z-[201] max-h-[85vh] overflow-y-auto",
           "transition-transform duration-300 ease-out",
           isOpen ? "translate-y-0" : "translate-y-full"
         )}
         style={{
           paddingBottom: "env(safe-area-inset-bottom)",
-          background: "#0A0A0A",
-          boxShadow: "0 -4px 60px rgba(212,175,55,0.12), 0 -2px 20px rgba(0,0,0,0.80)",
+          background: "#111111",
+          borderRadius: "8px 8px 0 0",
+          boxShadow: "0 -4px 60px rgba(212,175,55,0.08), 0 -2px 20px rgba(0,0,0,0.80)",
         }}
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
@@ -92,16 +93,17 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
         <div
           className="h-[1px] w-full"
           style={{
-            background: "linear-gradient(90deg, transparent 0%, rgba(212,175,55,0.65) 30%, rgba(212,175,55,0.65) 70%, transparent 100%)",
+            background: "linear-gradient(90deg, transparent 0%, rgba(212,175,55,0.25) 30%, rgba(212,175,55,0.25) 70%, transparent 100%)",
           }}
         />
 
         {/* Drag handle + X close button */}
         <div className="relative flex justify-center pt-4 pb-6">
-          <div className="w-8 h-1 bg-white/15 rounded-full" />
+          <div className="w-8 h-1 rounded-full" style={{ background: "rgba(255,255,255,0.15)" }} />
           <button
             onClick={() => { haptics.light(); setIsOpen(false); }}
-            className="absolute top-3 right-4 w-9 h-9 flex items-center justify-center text-gold/60 hover:text-gold transition-colors"
+            className="absolute top-3 right-4 w-9 h-9 flex items-center justify-center transition-colors"
+            style={{ color: "rgba(255,255,255,0.40)" }}
             aria-label="Close menu"
           >
             <CloseIcon className="w-5 h-5" />
@@ -126,18 +128,17 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
                     onClick={() => handleNavigate(item.path)}
                     className="relative flex flex-col items-center justify-center gap-2 py-5 border text-center group transition-all overflow-hidden"
                     style={{
-                      borderRadius: 12,
-                      borderColor: "rgba(255,255,255,0.10)",
-                      background: "rgba(255,255,255,0.03)",
+                      borderRadius: "6px",
+                      borderColor: "rgba(255,255,255,0.15)",
+                      background: "rgba(255,255,255,0.06)",
                     }}
                   >
                     <Icon
-                      className="w-5 h-5 transition-colors"
-                      style={{ color: "rgba(212,175,55,1)" }}
+                      className="w-5 h-5 transition-colors text-gold"
                     />
                     <span
                       className="font-bebas text-[18px] tracking-[0.12em] leading-none transition-colors"
-                      style={{ color: "rgba(255,255,255,0.85)" }}
+                      style={{ color: "rgba(255,255,255,0.70)" }}
                     >
                       {item.label}
                     </span>
@@ -148,17 +149,21 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
           </div>
 
           {/* Contact + Share */}
-          <div className="pt-2 border-t border-white/[0.08] space-y-3">
+          <div className="pt-2 space-y-3" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
             <SectionLabel>Contact & Share</SectionLabel>
             <div className="grid grid-cols-3 gap-2">
               <a
                 href="mailto:thefilmmaker.og@gmail.com"
                 onClick={() => haptics.light()}
-                className="relative flex flex-col items-center gap-2 p-4 border border-white/[0.10] bg-white/[0.03] text-center group hover:border-gold/40 hover:bg-gold/[0.06] transition-all overflow-hidden"
-                style={{ borderRadius: 12 }}
+                className="relative flex flex-col items-center gap-2 p-4 border text-center group transition-all overflow-hidden hover:bg-gold-subtle"
+                style={{
+                  borderRadius: "6px",
+                  borderColor: "rgba(255,255,255,0.15)",
+                  background: "rgba(255,255,255,0.06)",
+                }}
               >
-                <Mail className="w-5 h-5 text-gold/70 group-hover:text-gold transition-colors" />
-                <span className="font-bebas text-[15px] tracking-[0.08em] text-white/75 group-hover:text-white leading-none transition-colors">Email</span>
+                <Mail className="w-5 h-5 text-gold group-hover:text-gold transition-colors" />
+                <span className="font-bebas text-[15px] tracking-[0.08em] leading-none transition-colors" style={{ color: "rgba(255,255,255,0.70)" }}>Email</span>
               </a>
 
               <a
@@ -166,27 +171,35 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => haptics.light()}
-                className="relative flex flex-col items-center gap-2 p-4 border border-white/[0.10] bg-white/[0.03] text-center group hover:border-gold/40 hover:bg-gold/[0.06] transition-all overflow-hidden"
-                style={{ borderRadius: 12 }}
+                className="relative flex flex-col items-center gap-2 p-4 border text-center group transition-all overflow-hidden hover:bg-gold-subtle"
+                style={{
+                  borderRadius: "6px",
+                  borderColor: "rgba(255,255,255,0.15)",
+                  background: "rgba(255,255,255,0.06)",
+                }}
               >
-                <Instagram className="w-5 h-5 text-gold/70 group-hover:text-gold transition-colors" />
-                <span className="font-bebas text-[15px] tracking-[0.08em] text-white/75 group-hover:text-white leading-none transition-colors">Instagram</span>
+                <Instagram className="w-5 h-5 text-gold group-hover:text-gold transition-colors" />
+                <span className="font-bebas text-[15px] tracking-[0.08em] leading-none transition-colors" style={{ color: "rgba(255,255,255,0.70)" }}>Instagram</span>
               </a>
 
               <button
                 onClick={handleShare}
-                className="relative flex flex-col items-center gap-2 p-4 border border-white/[0.10] bg-white/[0.03] text-center group hover:border-gold/40 hover:bg-gold/[0.06] transition-all overflow-hidden"
-                style={{ borderRadius: 12 }}
+                className="relative flex flex-col items-center gap-2 p-4 border text-center group transition-all overflow-hidden hover:bg-gold-subtle"
+                style={{
+                  borderRadius: "6px",
+                  borderColor: "rgba(255,255,255,0.15)",
+                  background: "rgba(255,255,255,0.06)",
+                }}
               >
-                <Share2 className="w-5 h-5 text-gold/70 group-hover:text-gold transition-colors" />
-                <span className="font-bebas text-[15px] tracking-[0.08em] text-white/75 group-hover:text-white leading-none transition-colors">Share</span>
+                <Share2 className="w-5 h-5 text-gold group-hover:text-gold transition-colors" />
+                <span className="font-bebas text-[15px] tracking-[0.08em] leading-none transition-colors" style={{ color: "rgba(255,255,255,0.70)" }}>Share</span>
               </button>
             </div>
           </div>
 
-          {/* Legal disclaimer — replaces the old FILMMAKER.OG brand footer */}
-          <div className="pt-3 border-t border-white/[0.06]">
-            <p className="text-white/30 text-[11px] tracking-wide leading-relaxed text-center px-2">
+          {/* Legal disclaimer */}
+          <div className="pt-3" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+            <p className="text-[11px] tracking-wide leading-relaxed" style={{ color: "rgba(255,255,255,0.40)" }}>
               For educational and informational purposes only. Not legal, tax, or investment advice.
               Consult a qualified entertainment attorney before making financing decisions.
             </p>

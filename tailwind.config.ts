@@ -20,7 +20,7 @@ export default {
     extend: {
       fontFamily: {
         bebas: ["Bebas Neue", "sans-serif"],
-        sans: ["DM Sans", "sans-serif"],
+        sans: ["Inter", "sans-serif"],
         mono: ["Roboto Mono", "monospace"],
       },
       colors: {
@@ -33,63 +33,68 @@ export default {
 
         // ── CHROME: header, tab bar, navigation fixtures ──
         chrome: {
-          bg:        "rgba(10, 10, 10, 0.88)",       // pill background
-          "bg-solid": "rgba(0, 0, 0, 0.85)",         // tab bar (slightly darker)
-          border:    "rgba(212, 175, 55, 0.50)",      // confident gold border
-          glow:      "rgba(212, 175, 55, 0.30)",      // edge gradient peaks
-          "glow-faint": "rgba(212, 175, 55, 0.10)",   // outer shadow rings
-          active:    "rgba(212, 175, 55, 0.06)",       // active tab bg tint
-          ripple:    "rgba(212, 175, 55, 0.30)",       // tap ripple
+          bg:        "#000000",
+          "bg-solid": "#000000",
+          border:    "rgba(212, 175, 55, 0.25)",
+          glow:      "rgba(212, 175, 55, 0.25)",
+          "glow-faint": "rgba(212, 175, 55, 0.08)",
+          active:    "rgba(212, 175, 55, 0.03)",
+          ripple:    "rgba(212, 175, 55, 0.25)",
         },
 
-        // ── GOLD: content hierarchy (6 tiers, no drift) ──
+        // ── GOLD: 4-tier opacity system, no drift ──
         gold: {
-          DEFAULT:   "#D4AF37",                        // headlines, wordmarks, icons — FULL
-          label:     "rgba(212, 175, 55, 0.72)",       // micro-labels, category text
-          accent:    "rgba(212, 175, 55, 0.40)",       // dividers, connectors, accent stripes
-          border:    "rgba(212, 175, 55, 0.25)",       // card/section borders
-          ghost:     "rgba(212, 175, 55, 0.15)",       // watermarks, ghost text
-          glow:      "rgba(212, 175, 55, 0.06)",       // ambient radial backgrounds
-          cta:       "#F9E076",                        // CTA buttons ONLY
-          "cta-muted": "rgba(249, 224, 118, 0.45)",
-          "cta-subtle": "rgba(249, 224, 118, 0.12)",
+          DEFAULT:   "#D4AF37",                          // brand mark, icons — FULL
+          strong:    "rgba(212, 175, 55, 0.25)",         // active borders, hover states
+          medium:    "rgba(212, 175, 55, 0.15)",         // card borders, section dividers
+          subtle:    "rgba(212, 175, 55, 0.08)",         // background tints, hover fills
+          ghost:     "rgba(212, 175, 55, 0.03)",         // ambient glow, large area tints
+          deep:      "#7A5C12",                          // gradient depth, shadows
+          cta:       "#F9E076",                          // CTA buttons ONLY
+          // Legacy aliases for non-landing pages
+          label:     "rgba(212, 175, 55, 0.25)",
+          accent:    "rgba(212, 175, 55, 0.15)",
+          border:    "rgba(212, 175, 55, 0.15)",
+          glow:      "rgba(212, 175, 55, 0.03)",
+          "cta-muted": "rgba(212, 175, 55, 0.25)",
+          "cta-subtle": "rgba(212, 175, 55, 0.08)",
         },
 
         // ── WHITE TEXT: 4 tiers, no drift ──
         ink: {
-          DEFAULT:   "#FFFFFF",                        // headlines, key numbers — FULL
-          body:      "rgba(255, 255, 255, 0.80)",      // paragraph text, descriptions
-          secondary: "rgba(255, 255, 255, 0.62)",      // supporting info, metadata
-          ghost:     "rgba(255, 255, 255, 0.30)",      // disclaimers, fine print
+          DEFAULT:   "#FFFFFF",                          // headlines, key numbers — FULL
+          body:      "rgba(255, 255, 255, 0.70)",        // secondary / paragraph text
+          secondary: "rgba(255, 255, 255, 0.40)",        // tertiary, metadata
+          ghost:     "rgba(255, 255, 255, 0.06)",        // hover bg, surface tints
         },
 
-        // ── BACKGROUNDS ──
+        // ── BACKGROUNDS — #000, #111, #1A1A1A only ──
         bg: {
           void:      "#000000",
-          surface:   "#111111",
-          elevated:  "#0C0C0C",                        // quote cards, featured
-          card:      "rgba(255, 255, 255, 0.04)",      // content card fill
-          "card-border": "rgba(255, 255, 255, 0.10)",  // content card stroke
-          "card-rule":   "rgba(255, 255, 255, 0.06)",  // inner divider lines
+          elevated:  "#111111",
+          surface:   "#1A1A1A",
+          card:      "#111111",                          // legacy alias
+          "card-border": "rgba(255, 255, 255, 0.15)",   // legacy alias
+          "card-rule":   "rgba(255, 255, 255, 0.06)",   // legacy alias
           overlay:   "rgba(0, 0, 0, 0.85)",
         },
 
         // ── WATERFALL BARS ──
         bar: {
-          DEFAULT:   "rgba(212, 175, 55, 0.65)",       // standard tier bar
-          final:     "rgba(212, 175, 55, 0.85)",       // net profits bar
+          DEFAULT:   "rgba(212, 175, 55, 0.25)",         // standard tier bar
+          final:     "#D4AF37",                          // net profits bar
         },
 
-        // ── LEGACY COMPAT (other pages still using old tokens) ──
+        // ── COMPAT ALIASES ──
         border: {
-          default: "rgba(212, 175, 55, 0.25)",
-          active:  "rgba(212, 175, 55, 0.50)",
-          subtle:  "#2A2A2A",
+          default: "rgba(212, 175, 55, 0.15)",
+          active:  "rgba(212, 175, 55, 0.25)",
+          subtle:  "rgba(255, 255, 255, 0.15)",
         },
         text: {
           primary: "#FFFFFF",
-          mid:     "#D4D4D4",
-          dim:     "#999999",
+          mid:     "rgba(255, 255, 255, 0.70)",
+          dim:     "rgba(255, 255, 255, 0.40)",
         },
       },
       borderRadius: {

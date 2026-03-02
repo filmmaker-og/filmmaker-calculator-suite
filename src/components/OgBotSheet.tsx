@@ -208,7 +208,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
       {/* ── Bottom Sheet ── */}
       <div
         className={cn(
-          "fixed bottom-0 left-0 right-0 z-[180] transition-transform duration-300 ease-out rounded-t-2xl",
+          "fixed bottom-0 left-0 right-0 z-[180] transition-transform duration-300 ease-out",
           "flex flex-col",
           isOpen ? "translate-y-0" : "translate-y-full"
         )}
@@ -216,7 +216,8 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
           height: "min(72vh, 580px)",
           paddingBottom: "calc(var(--bottom-bar-h) + env(safe-area-inset-bottom))",
           background: "#000000",
-          boxShadow: "0 -20px 60px rgba(212,175,55,0.18), 0 -40px 80px rgba(0,0,0,0.95)",
+          borderRadius: "8px 8px 0 0",
+          boxShadow: "0 -20px 60px rgba(212,175,55,0.08), 0 -40px 80px rgba(0,0,0,0.95)",
         }}
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
@@ -225,12 +226,12 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
         <div
           className="absolute top-0 left-0 right-0 h-[1px] pointer-events-none z-10"
           style={{
-            background: "linear-gradient(to right, transparent 0%, rgba(212,175,55,0.60) 30%, rgba(212,175,55,0.80) 50%, rgba(212,175,55,0.60) 70%, transparent 100%)",
-            borderRadius: "16px 16px 0 0",
+            background: "linear-gradient(to right, transparent 0%, rgba(212,175,55,0.25) 30%, rgba(212,175,55,0.25) 70%, transparent 100%)",
+            borderRadius: "8px 8px 0 0",
           }}
         />
 
-        {/* Drag handle — neutral white, standard iOS affordance */}
+        {/* Drag handle */}
         <div className="flex justify-center pt-3 pb-1 flex-shrink-0">
           <div className="w-10 h-[3px] rounded-full" style={{ background: "rgba(255,255,255,0.15)" }} />
         </div>
@@ -238,10 +239,10 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
         {/* ── Sheet header ── */}
         <div
           className="px-5 pt-3 pb-4 flex-shrink-0 border-b"
-          style={{ borderColor: "rgba(212,175,55,0.18)" }}
+          style={{ borderColor: "rgba(212,175,55,0.15)" }}
         >
           <div className="flex items-end justify-between">
-            <h2 className="font-bebas text-[28px] tracking-[0.15em] leading-none" style={{ color: "rgba(212,175,55,1)" }}>
+            <h2 className="font-bebas text-[28px] tracking-[0.15em] leading-none text-gold">
               ASK THE OG
             </h2>
             <div className="flex items-center gap-3 pb-0.5">
@@ -249,9 +250,9 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
                 <button
                   onClick={handleReset}
                   className="flex items-center gap-1.5 font-bebas text-[11px] uppercase tracking-[0.15em] transition-colors tabular-nums"
-                  style={{ color: "rgba(255,255,255,0.30)" }}
-                  onMouseEnter={e => (e.currentTarget.style.color = "rgba(212,175,55,0.70)")}
-                  onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,0.30)")}
+                  style={{ color: "rgba(255,255,255,0.40)" }}
+                  onMouseEnter={e => (e.currentTarget.style.color = "rgba(212,175,55,0.25)")}
+                  onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,0.40)")}
                 >
                   <RotateCcw className="w-3 h-3" />
                   Reset
@@ -260,9 +261,9 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
               <button
                 onClick={() => setIsOpen(false)}
                 className="transition-colors p-1"
-                style={{ color: "rgba(255,255,255,0.35)" }}
+                style={{ color: "rgba(255,255,255,0.40)" }}
                 onMouseEnter={e => (e.currentTarget.style.color = "rgba(255,255,255,0.70)")}
-                onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,0.35)")}
+                onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,0.40)")}
               >
                 <X className="w-4 h-4" />
               </button>
@@ -275,7 +276,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
           {/* Empty state — example chips with eyebrow */}
           {ogMessages.length === 0 && (
             <div className="flex flex-col items-center gap-5 pt-3">
-              <span className="font-bebas text-[20px] tracking-[0.16em] uppercase" style={{ color: "rgba(212,175,55,0.60)" }}>
+              <span className="font-bebas text-[20px] tracking-[0.16em] uppercase" style={{ color: "rgba(255,255,255,0.40)" }}>
                 What do you want to know
               </span>
 
@@ -288,28 +289,28 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
                     disabled={ogLoading}
                     className="font-bebas text-[15px] tracking-[0.10em] px-5 py-3 transition-all disabled:opacity-40 disabled:cursor-not-allowed border"
                     onMouseEnter={e => {
-                      e.currentTarget.style.borderColor = "rgba(212,175,55,0.60)";
-                      e.currentTarget.style.background = "rgba(212,175,55,0.14)";
-                      e.currentTarget.style.color = "rgba(255,255,255,1)";
+                      e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)";
+                      e.currentTarget.style.background = "rgba(212,175,55,0.08)";
+                      e.currentTarget.style.color = "#FFFFFF";
                     }}
                     onMouseLeave={e => {
-                      e.currentTarget.style.borderColor = "rgba(212,175,55,0.30)";
-                      e.currentTarget.style.background = "rgba(212,175,55,0.08)";
-                      e.currentTarget.style.color = "rgba(255,255,255,0.80)";
+                      e.currentTarget.style.borderColor = "rgba(212,175,55,0.15)";
+                      e.currentTarget.style.background = "rgba(212,175,55,0.03)";
+                      e.currentTarget.style.color = "rgba(255,255,255,0.70)";
                     }}
                     onTouchStart={e => {
-                      e.currentTarget.style.borderColor = "rgba(212,175,55,0.60)";
-                      e.currentTarget.style.background = "rgba(212,175,55,0.14)";
-                    }}
-                    onTouchEnd={e => {
-                      e.currentTarget.style.borderColor = "rgba(212,175,55,0.30)";
+                      e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)";
                       e.currentTarget.style.background = "rgba(212,175,55,0.08)";
                     }}
+                    onTouchEnd={e => {
+                      e.currentTarget.style.borderColor = "rgba(212,175,55,0.15)";
+                      e.currentTarget.style.background = "rgba(212,175,55,0.03)";
+                    }}
                     style={{
-                      borderRadius: "10px",
-                      borderColor: "rgba(212,175,55,0.30)",
-                      background: "rgba(212,175,55,0.08)",
-                      color: "rgba(255,255,255,0.80)",
+                      borderRadius: "4px",
+                      borderColor: "rgba(212,175,55,0.15)",
+                      background: "rgba(212,175,55,0.03)",
+                      color: "rgba(255,255,255,0.70)",
                     }}
                   >
                     {chip}
@@ -327,9 +328,9 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
                 <div
                   className="relative max-w-[85%] px-4 py-3 border overflow-hidden"
                   style={{
-                    borderRadius: "12px",
-                    background: "rgba(255,255,255,0.04)",
-                    borderColor: "rgba(212,175,55,0.20)",
+                    borderRadius: "6px",
+                    background: "rgba(255,255,255,0.06)",
+                    borderColor: "rgba(212,175,55,0.15)",
                   }}
                 >
                   <p className="text-base text-white leading-relaxed">{msg.question}</p>
@@ -341,7 +342,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
                 <div
                   className="max-w-[95%] border overflow-hidden"
                   style={{
-                    borderRadius: "12px",
+                    borderRadius: "6px",
                     background: "#000000",
                     borderColor: "rgba(212,175,55,0.15)",
                     boxShadow: "0 0 30px rgba(212,175,55,0.08)",
@@ -352,17 +353,17 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
                     {/* Inline attribution header */}
                     <div className="flex items-center gap-2 mb-3">
                       <img src={filmmakerFIcon} alt="OG" className="w-4 h-4 object-contain" />
-                      <span className="font-bebas text-[14px] tracking-[0.14em] leading-none" style={{ color: "rgba(212,175,55,1)" }}>OG</span>
+                      <span className="font-bebas text-[14px] tracking-[0.14em] leading-none text-gold">OG</span>
                       {msg.streaming && (
                         <div className="flex gap-1 ml-1">
-                          <div className="w-1.5 h-1.5 rounded-full bg-gold/50 animate-bounce" style={{ animationDelay: "0ms" }} />
-                          <div className="w-1.5 h-1.5 rounded-full bg-gold/50 animate-bounce" style={{ animationDelay: "150ms" }} />
-                          <div className="w-1.5 h-1.5 rounded-full bg-gold/50 animate-bounce" style={{ animationDelay: "300ms" }} />
+                          <div className="w-1.5 h-1.5 rounded-full animate-bounce" style={{ background: "rgba(212,175,55,0.25)", animationDelay: "0ms" }} />
+                          <div className="w-1.5 h-1.5 rounded-full animate-bounce" style={{ background: "rgba(212,175,55,0.25)", animationDelay: "150ms" }} />
+                          <div className="w-1.5 h-1.5 rounded-full animate-bounce" style={{ background: "rgba(212,175,55,0.25)", animationDelay: "300ms" }} />
                         </div>
                       )}
                     </div>
                     {msg.error ? (
-                      <p className="text-[15px] leading-relaxed" style={{ color: "rgba(212,175,55,0.60)" }}>{msg.error}</p>
+                      <p className="text-[15px] leading-relaxed" style={{ color: "rgba(255,255,255,0.40)" }}>{msg.error}</p>
                     ) : (
                       <p className="text-base text-white leading-[1.8] whitespace-pre-wrap">
                         {msg.answer}
@@ -382,17 +383,17 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
         {/* Input area */}
         <div
           className="px-4 pb-3 pt-3 flex-shrink-0 border-t"
-          style={{ borderColor: "rgba(212,175,55,0.20)", background: "#000000" }}
+          style={{ borderColor: "rgba(212,175,55,0.15)", background: "#000000" }}
         >
           <form onSubmit={handleOgSubmit}>
             <div
-              className="flex gap-0 border transition-colors"
+              className="flex gap-0 transition-colors"
               style={{
-                borderRadius: "12px",
-                border: "1px solid rgba(212,175,55,0.30)",
+                borderRadius: "6px",
+                border: "1px solid rgba(212,175,55,0.15)",
               }}
-              onFocus={e => (e.currentTarget.style.borderColor = "rgba(212,175,55,0.60)")}
-              onBlur={e => (e.currentTarget.style.borderColor = "rgba(212,175,55,0.30)")}
+              onFocus={e => (e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)")}
+              onBlur={e => (e.currentTarget.style.borderColor = "rgba(212,175,55,0.15)")}
             >
               <textarea
                 ref={inputRef}
@@ -406,7 +407,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
                 disabled={ogLoading}
                 className="flex-1 px-4 py-3 focus:outline-none text-base text-white resize-none disabled:opacity-50 min-h-[52px]"
                 style={{
-                  borderRadius: "12px 0 0 12px",
+                  borderRadius: "6px 0 0 6px",
                   background: "transparent",
                   color: "#FFFFFF",
                 }}
@@ -415,11 +416,9 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
                   type="submit"
                   disabled={!ogInput.trim() || ogLoading}
                   className="px-5 font-bebas tracking-wider transition-all flex items-center gap-2 flex-shrink-0 disabled:opacity-30 disabled:cursor-not-allowed"
-                  onMouseEnter={e => !e.currentTarget.disabled && (e.currentTarget.style.background = "rgba(212,175,55,0.80)")}
-                  onMouseLeave={e => (e.currentTarget.style.background = "rgba(212,175,55,1)")}
-                  onTouchStart={e => !e.currentTarget.disabled && (e.currentTarget.style.background = "rgba(212,175,55,0.80)")}
-                  onTouchEnd={e => (e.currentTarget.style.background = "rgba(212,175,55,1)")}
-                  style={{ background: "rgba(212,175,55,1)", color: "#000", borderRadius: "0 11px 11px 0" }}
+                  onMouseEnter={e => !e.currentTarget.disabled && (e.currentTarget.style.opacity = "0.8")}
+                  onMouseLeave={e => (e.currentTarget.style.opacity = "1")}
+                  style={{ background: "#D4AF37", color: "#000", borderRadius: "0 5px 5px 0" }}
                 >
                 <SendHorizonal className="w-4 h-4" />
               </button>
@@ -427,7 +426,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
             <div className="flex items-center justify-end mt-1.5 px-1">
               <span className={cn(
                 "text-[10px] tabular-nums",
-                ogInput.length > 1350 ? "text-gold/60" : "text-white/25"
+                ogInput.length > 1350 ? "text-gold" : "text-ink-secondary"
               )}>
                 {ogInput.length}/1500
               </span>

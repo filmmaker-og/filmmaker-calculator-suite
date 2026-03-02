@@ -63,10 +63,17 @@ const WaterfallCascade = () => {
   return (
     <div ref={containerRef} className="pt-4 pb-5">
       {/* Ledger card */}
-      <div className="border border-gold/[0.12] bg-black overflow-hidden rounded-xl">
+      <div
+        className="overflow-hidden"
+        style={{
+          border: "1px solid rgba(212,175,55,0.15)",
+          borderRadius: "6px",
+          background: "#000000",
+        }}
+      >
         {/* Source row */}
         <div className="flex justify-between items-baseline px-5 pt-5 pb-4">
-          <span className="font-bebas text-[22px] tracking-[0.06em] text-gold-label">
+          <span className="font-bebas text-[22px] tracking-[0.06em]" style={{ color: "rgba(255,255,255,0.70)" }}>
             Acquisition Price
           </span>
           <span className="font-mono text-[17px] font-semibold text-gold tabular-nums">
@@ -79,7 +86,7 @@ const WaterfallCascade = () => {
           className="mx-5 h-[1px]"
           style={{
             background:
-              "linear-gradient(90deg, rgba(212,175,55,0.30), rgba(212,175,55,0.08))",
+              "linear-gradient(90deg, rgba(212,175,55,0.25), rgba(212,175,55,0.08))",
             opacity: revealed ? 1 : 0,
             transition: "opacity 600ms ease-out",
           }}
@@ -93,10 +100,11 @@ const WaterfallCascade = () => {
             return (
               <div
                 key={d.name}
-                className="flex justify-between items-baseline rounded-md"
+                className="flex justify-between items-baseline"
                 style={{
                   padding: "9px 8px",
                   margin: "0 -8px",
+                  borderRadius: "4px",
                   background: isEven ? "rgba(212,175,55,0.03)" : "transparent",
                   opacity: revealed ? 1 : 0,
                   transform: revealed ? "translateY(0)" : "translateY(6px)",
@@ -119,17 +127,18 @@ const WaterfallCascade = () => {
 
       {/* Profit box */}
       <div
-        className="mt-2 rounded-[10px] py-5 bg-black text-center"
+        className="mt-2 py-5 bg-black text-center"
         style={{
-          border: "2px solid rgba(212,175,55,0.60)",
-          boxShadow: "0 0 16px 0px rgba(212,175,55,0.10), inset 0 1px 0 rgba(212,175,55,0.08)",
+          border: "1px solid rgba(212,175,55,0.25)",
+          borderRadius: "6px",
+          boxShadow: "0 0 16px rgba(212,175,55,0.08)",
           opacity: revealed ? 1 : 0,
           transform: revealed ? "translateY(0)" : "translateY(8px)",
           transition: "opacity 600ms ease-out, transform 600ms ease-out",
           transitionDelay: "1400ms",
         }}
       >
-        <p className="font-mono text-[12px] tracking-[0.16em] uppercase font-semibold text-gold-label mb-1">
+        <p className="font-mono text-[12px] tracking-[0.16em] uppercase font-semibold mb-1" style={{ color: "rgba(255,255,255,0.70)" }}>
           Net Profits
         </p>
         <span className="font-mono text-[32px] font-bold text-gold tracking-tight tabular-nums">
@@ -145,8 +154,10 @@ const WaterfallCascade = () => {
         ].map((c) => (
           <div
             key={c.label}
-            className="border border-gold/[0.15] px-3.5 py-3.5 text-center rounded-lg"
+            className="px-3.5 py-3.5 text-center"
             style={{
+              border: "1px solid rgba(212,175,55,0.15)",
+              borderRadius: "6px",
               background: "rgba(212,175,55,0.03)",
               opacity: corridorVisible ? 1 : 0,
               transform: corridorVisible
@@ -156,7 +167,7 @@ const WaterfallCascade = () => {
               transitionDelay: `${c.extraDelay}ms`,
             }}
           >
-            <p className="font-mono text-[12px] tracking-[0.16em] uppercase font-semibold text-gold-label mb-1">
+            <p className="font-mono text-[12px] tracking-[0.16em] uppercase font-semibold mb-1" style={{ color: "rgba(255,255,255,0.70)" }}>
               {c.label}
             </p>
             <span className="font-mono text-[24px] font-bold text-gold tabular-nums">
@@ -166,7 +177,7 @@ const WaterfallCascade = () => {
         ))}
       </div>
 
-      <p className="font-mono text-[12px] text-ink-ghost text-center mt-3.5">
+      <p className="font-mono text-[12px] text-ink-secondary text-center mt-3.5">
         Hypothetical $1.8M budget{"\u00A0"}{"\u00B7"}{"\u00A0"}$3M
         acquisition{"\u00A0"}{"\u00B7"}{"\u00A0"}50/50 net profit split
       </p>

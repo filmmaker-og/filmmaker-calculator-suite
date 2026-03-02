@@ -8,77 +8,87 @@
  * TWO-GOLD SYSTEM:
  *   Metallic Gold #D4AF37 — borders, icons, dividers, brand elements (non-interactive)
  *   CTA Gold #F9E076 — EXCLUSIVELY for clickable elements (buttons, links, CTAs)
+ *
+ * GOLD OPACITIES — ONLY THESE 4:
+ *   strong  rgba(212,175,55,0.25) — active borders, hover states
+ *   medium  rgba(212,175,55,0.15) — card borders, section dividers
+ *   subtle  rgba(212,175,55,0.08) — background tints, hover fills
+ *   ghost   rgba(212,175,55,0.03) — ambient glow, large area tints
+ *
+ * WHITE OPACITIES — ONLY THESE 4:
+ *   strong  rgba(255,255,255,0.70) — secondary text
+ *   medium  rgba(255,255,255,0.40) — tertiary text, borders
+ *   subtle  rgba(255,255,255,0.15) — dividers, faint borders
+ *   ghost   rgba(255,255,255,0.06) — hover backgrounds, surface tints
  */
 
-// ===== COLOR PALETTE (matches index.css exactly) =====
+// ===== COLOR PALETTE =====
 export const colors = {
-  // Backgrounds (layered system)
-  void: '#000000',           // --bg-void
-  card: '#141414',           // --bg-card
-  surface: '#111111',        // --bg-surface
-  elevated: '#0D0D0D',       // --bg-elevated
-  header: '#0A0A0A',         // --bg-header
+  // Backgrounds — #000, #111, #1A1A1A only
+  void: '#000000',
+  elevated: '#111111',
+  surface: '#1A1A1A',
 
   // Borders
-  borderDefault: 'rgba(212, 175, 55, 0.20)',  // --border-default (metallic gold 20%)
-  borderSubtle: '#2A2A2A',                     // --border-subtle
-  borderActive: 'rgba(212, 175, 55, 0.50)',    // --border-active
+  borderDefault: 'rgba(212, 175, 55, 0.15)',   // gold-medium
+  borderSubtle: 'rgba(255, 255, 255, 0.15)',    // white-subtle
+  borderActive: 'rgba(212, 175, 55, 0.25)',     // gold-strong
 
-  // Gold palette — Metallic (non-interactive brand elements, 8 tiers)
-  gold: '#D4AF37',                             // --gold (metallic)
-  goldLabel: 'rgba(212, 175, 55, 0.60)',       // --gold-label
-  goldMuted: 'rgba(212, 175, 55, 0.45)',       // --gold-muted
-  goldGlow: 'rgba(212, 175, 55, 0.25)',        // --gold-glow
-  goldGhost: 'rgba(212, 175, 55, 0.15)',       // --gold-ghost
-  goldSubtle: 'rgba(212, 175, 55, 0.10)',      // --gold-subtle
-  goldAmbient: 'rgba(212, 175, 55, 0.06)',     // --gold-ambient
+  // Gold palette — 4 opacity tiers only
+  gold: '#D4AF37',
+  goldStrong: 'rgba(212, 175, 55, 0.25)',
+  goldMedium: 'rgba(212, 175, 55, 0.15)',
+  goldSubtle: 'rgba(212, 175, 55, 0.08)',
+  goldGhost: 'rgba(212, 175, 55, 0.03)',
+  goldDeep: '#7A5C12',
 
   // CTA Gold — EXCLUSIVELY for clickable elements
-  goldCta: '#F9E076',                          // --gold-cta (bright, warm)
-  goldCtaMuted: 'rgba(249, 224, 118, 0.45)',   // --gold-cta-muted
-  goldCtaSubtle: 'rgba(249, 224, 118, 0.12)',  // --gold-cta-subtle
+  goldCta: '#F9E076',
 
-  // Text hierarchy
-  textPrimary: '#FFFFFF',    // --text-primary
-  textMid: '#D4D4D4',        // --text-mid
-  textDim: '#999999',        // --text-dim
+  // Text hierarchy — 4 tiers only
+  textPrimary: '#FFFFFF',
+  textSecondary: 'rgba(255, 255, 255, 0.70)',
+  textTertiary: 'rgba(255, 255, 255, 0.40)',
+  textGhost: 'rgba(255, 255, 255, 0.06)',
+
+  // White opacity helpers
+  whiteStrong: 'rgba(255, 255, 255, 0.70)',
+  whiteMedium: 'rgba(255, 255, 255, 0.40)',
+  whiteSubtle: 'rgba(255, 255, 255, 0.15)',
+  whiteGhost: 'rgba(255, 255, 255, 0.06)',
 } as const;
 
-// ===== SPACING (matches index.css) =====
+// ===== SPACING =====
 export const spacing = {
-  xs: '4px',     // --space-xs
-  sm: '8px',     // --space-sm
-  md: '12px',    // --space-md
-  lg: '16px',    // --space-lg
-  xl: '24px',    // --space-xl
-  '2xl': '32px', // --space-2xl
+  xs: '4px',
+  sm: '8px',
+  md: '12px',
+  lg: '16px',
+  xl: '24px',
+  '2xl': '32px',
 } as const;
 
-// ===== BORDER RADIUS (matches index.css) =====
+// ===== BORDER RADIUS — 8px max, 4-6px typical =====
 export const radius = {
-  none: '0px',    // --radius-none
-  sm: '8px',      // --radius-sm
-  md: '12px',     // --radius-md
-  lg: '14px',     // --radius-lg
-  xl: '18px',     // --radius-xl
-  full: '999px',  // --radius-full
+  none: '0px',
+  sm: '4px',    // CTAs, small elements
+  md: '6px',    // cards, typical
+  lg: '8px',    // absolute maximum
+  full: '999px',
 } as const;
 
-// ===== SHADOWS (matches index.css) =====
+// ===== SHADOWS =====
 export const shadows = {
-  none: 'none',                                      // --shadow-none
-  focus: '0 0 0 1px rgba(212, 175, 55, 0.16)',      // --shadow-focus
-  cardActive: '0 0 20px rgba(212, 175, 55, 0.08)',  // --shadow-card-active
-  button: '0 10px 26px rgba(249, 224, 118, 0.15)',  // --shadow-button (CTA glow)
-  modal: '0 20px 50px rgba(0, 0, 0, 0.8)',          // --shadow-modal
+  none: 'none',
+  focus: `0 0 0 1px ${colors.goldMedium}`,
+  cardActive: `0 0 20px ${colors.goldSubtle}`,
+  button: `0 10px 26px ${colors.goldMedium}`,
+  modal: '0 20px 50px rgba(0, 0, 0, 0.8)',
 } as const;
 
 // ===== GRADIENTS =====
 export const gradients = {
-  gold: 'linear-gradient(135deg, #D4AF37 0%, #E6C84A 100%)',
-  goldCta: 'linear-gradient(135deg, #F9E076 0%, #F5D55A 100%)',
-  goldSubtle: 'linear-gradient(135deg, rgba(212, 175, 55, 0.08) 0%, rgba(212, 175, 55, 0.02) 100%)',
-  dividerGold: 'linear-gradient(90deg, transparent 0%, rgba(212, 175, 55, 0.4) 20%, rgba(212, 175, 55, 0.4) 80%, transparent 100%)',
+  dividerGold: `linear-gradient(90deg, transparent 0%, ${colors.goldMedium} 20%, ${colors.goldMedium} 80%, transparent 100%)`,
   fadeBottom: 'linear-gradient(to top, #000000 0%, #000000 85%, transparent 100%)',
 } as const;
 
@@ -91,11 +101,11 @@ export const typography = {
     textTransform: 'uppercase' as const,
   },
   body: {
-    fontFamily: "'DM Sans', sans-serif",
+    fontFamily: "'Inter', sans-serif",
     fontWeight: 400,
   },
   bodyBold: {
-    fontFamily: "'DM Sans', sans-serif",
+    fontFamily: "'Inter', sans-serif",
     fontWeight: 600,
   },
   mono: {
@@ -104,10 +114,10 @@ export const typography = {
     fontVariantNumeric: 'tabular-nums',
   },
   label: {
-    fontSize: '10px',
+    fontSize: '11px',
     letterSpacing: '0.2em',
     textTransform: 'uppercase' as const,
-    color: colors.textDim,
+    color: colors.textTertiary,
   },
 } as const;
 
@@ -135,7 +145,7 @@ export const verdictStatus = {
   excellent: {
     label: 'EXCELLENT DEAL',
     color: colors.gold,
-    bgColor: colors.goldGhost,
+    bgColor: colors.goldMedium,
     description: 'This return profile will attract institutional capital.',
   },
   good: {
@@ -146,14 +156,14 @@ export const verdictStatus = {
   },
   marginal: {
     label: 'MARGINAL',
-    color: colors.goldMuted,
-    bgColor: colors.goldAmbient,
+    color: colors.textSecondary,
+    bgColor: colors.goldGhost,
     description: 'Consider renegotiating terms for better returns.',
   },
   underwater: {
     label: 'UNDERWATER',
-    color: colors.textDim,
-    bgColor: 'rgba(255, 255, 255, 0.04)',
+    color: colors.textTertiary,
+    bgColor: colors.whiteGhost,
     description: 'The acquisition price doesn\'t cover all costs.',
   },
 } as const;
