@@ -35,24 +35,27 @@ export default {
         chrome: {
           bg:        "#000000",
           "bg-solid": "#000000",
-          border:    "rgba(212, 175, 55, 0.25)",
+          border:    "rgba(212, 175, 55, 0.60)",
           glow:      "rgba(212, 175, 55, 0.25)",
           "glow-faint": "rgba(212, 175, 55, 0.08)",
           active:    "rgba(212, 175, 55, 0.03)",
           ripple:    "rgba(212, 175, 55, 0.25)",
         },
 
-        // ── GOLD: 4-tier opacity system, no drift ──
+        // ── GOLD: landing page token system (4-tier) ──
         gold: {
           DEFAULT:   "#D4AF37",                          // brand mark, icons — FULL
-          strong:    "rgba(212, 175, 55, 0.25)",         // active borders, hover states
-          medium:    "rgba(212, 175, 55, 0.15)",         // card borders, section dividers
-          subtle:    "rgba(212, 175, 55, 0.08)",         // background tints, hover fills
-          ghost:     "rgba(212, 175, 55, 0.03)",         // ambient glow, large area tints
+          full:      "rgba(212, 175, 55, 1.0)",          // active icons, gold text, section labels
+          bright:    "rgba(212, 175, 55, 0.60)",         // borders that matter, chrome borders
+          mid:       "rgba(212, 175, 55, 0.35)",         // subtle borders, divider gradients
+          ghost:     "rgba(212, 175, 55, 0.08)",         // ambient glows, hover fills
           deep:      "#7A5C12",                          // gradient depth, shadows
           text:      "rgba(212, 175, 55, 0.60)",         // readable gold labels/eyebrows
           cta:       "#F9E076",                          // CTA buttons ONLY
           // Legacy aliases for non-landing pages
+          strong:    "rgba(212, 175, 55, 0.25)",
+          medium:    "rgba(212, 175, 55, 0.15)",
+          subtle:    "rgba(212, 175, 55, 0.08)",
           label:     "rgba(212, 175, 55, 0.25)",
           accent:    "rgba(212, 175, 55, 0.15)",
           border:    "rgba(212, 175, 55, 0.15)",
@@ -70,7 +73,16 @@ export default {
           ghost:     "rgba(220, 60, 60, 0.03)",
         },
 
-        // ── WHITE TEXT: 4 tiers, no drift ──
+        // ── WHITE: landing page token system (4-tier) ──
+        white: {
+          DEFAULT:   "#FFFFFF",
+          primary:   "rgba(255, 255, 255, 0.90)",        // headlines, declarations
+          body:      "rgba(255, 255, 255, 0.60)",        // paragraph text, descriptions
+          tertiary:  "rgba(255, 255, 255, 0.40)",        // labels, captions, metadata
+          surface:   "rgba(255, 255, 255, 0.06)",        // card fills, panel backgrounds
+        },
+
+        // ── INK: legacy white text tiers ──
         ink: {
           DEFAULT:   "#FFFFFF",                          // headlines, key numbers — FULL
           body:      "rgba(255, 255, 255, 0.70)",        // secondary / paragraph text
