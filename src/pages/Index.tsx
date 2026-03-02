@@ -76,7 +76,7 @@ const Index = () => {
       <div className="min-h-screen flex flex-col relative overflow-hidden bg-black grain-overlay">
         <main aria-label="Film Finance Simulator" className="flex-1 flex flex-col" style={{ paddingBottom: "env(safe-area-inset-bottom)" }}>
 
-          <section id="hero" className="relative pb-6" style={{ paddingTop: "calc(env(safe-area-inset-top, 0px) + 3rem)", background: "radial-gradient(ellipse at center top, rgba(212,175,55,0.04) 0%, transparent 60%)" }}>
+          <section id="hero" className="relative pt-2 pb-6" style={{ background: "radial-gradient(ellipse at center top, rgba(212,175,55,0.04) 0%, transparent 60%)" }}>
             <div className="relative px-8 max-w-md mx-auto">
 
               <div className="text-center mb-8">

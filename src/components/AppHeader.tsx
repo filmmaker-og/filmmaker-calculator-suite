@@ -29,7 +29,7 @@ const AppHeader = ({ onMoreOpen }: AppHeaderProps) => {
             width: "100%",
             maxWidth: "320px",
             height: "54px",
-            marginTop: "12px",
+            marginTop: "max(12px, env(safe-area-inset-top, 12px))",
             borderRadius: "16px",
             background: "#000000",
             border: "1.5px solid rgba(212,175,55,0.50)",
@@ -58,7 +58,7 @@ const AppHeader = ({ onMoreOpen }: AppHeaderProps) => {
         </nav>
       </header>
 
-      <div style={{ height: "calc(54px + 24px)" }} className="flex-shrink-0" />
+      <div style={{ height: "calc(54px + max(24px, env(safe-area-inset-top, 24px)))" }} className="flex-shrink-0" />
     </>
   );
 };
