@@ -13,6 +13,7 @@ const Index = () => {
   const [showLeadCapture, setShowLeadCapture] = useState(false);
   const [pendingDestination, setPendingDestination] = useState<string | null>(null);
   const [hasSession, setHasSession] = useState(false);
+  const [ctaGlow, setCtaGlow] = useState(false);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -40,6 +41,12 @@ const Index = () => {
 
   const prefersReducedMotion = typeof window !== "undefined"
     && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  useEffect(() => {
+    if (prefersReducedMotion) return;
+    const timeout = setTimeout(() => setCtaGlow(true), 3500);
+    return () => clearTimeout(timeout);
+  }, [prefersReducedMotion]);
 
   const { ref: valueRef, inView: valueVisible } = useInView<HTMLDivElement>({ threshold: 0.2 });
   const { ref: bridgeRef, inView: bridgeVisible } = useInView<HTMLDivElement>({ threshold: 0.2 });
@@ -69,14 +76,14 @@ const Index = () => {
       <div className="min-h-screen flex flex-col relative overflow-hidden bg-black grain-overlay">
         <main aria-label="Film Finance Simulator" className="flex-1 flex flex-col" style={{ paddingBottom: "env(safe-area-inset-bottom)" }}>
 
-          <section id="hero" className="relative pt-8 pb-6">
+          <section id="hero" className="relative pt-8 pb-6" style={{ background: "radial-gradient(ellipse at center top, rgba(212,175,55,0.04) 0%, transparent 60%)" }}>
             <div className="relative px-6 max-w-md mx-auto">
 
               <div className="text-center mb-8 px-2">
-                <h1 className="font-bebas text-[clamp(3rem,10vw,4.2rem)] leading-[0.95] tracking-[0.02em] text-gold mb-2.5">
-                  SEE WHERE EVERY DOLLAR <span className="text-white">GOES</span>
+                <h1 className="font-bebas text-[clamp(3rem,10vw,4.2rem)] leading-[0.95] tracking-[0.02em] text-gold mb-4">
+                  SEE WHERE EVERY DOLLAR <span className="text-ink">GOES</span>
                 </h1>
-                <p className="text-white/60 text-[15px] leading-[1.7] tracking-[0.04em] font-medium">
+                <p className="text-ink-body text-[16px] leading-[1.7] tracking-[0.04em] font-medium">
                   Know every fee, split, and return — before your investor asks.
                 </p>
               </div>
@@ -85,36 +92,36 @@ const Index = () => {
                 <div className="w-full max-w-[300px] mx-auto">
                   <button
                     onClick={handleStartClick}
-                    className="w-full h-[52px] btn-cta-primary"
+                    className={`w-full h-[52px] btn-cta-primary${ctaGlow ? " animate-cta-glow-pulse" : ""}`}
                   >
                     BUILD YOUR WATERFALL
                   </button>
                 </div>
               </div>
 
-              <div
-                className="rounded-2xl pt-4 pb-5"
-                style={{
-                  border: "1px solid rgba(255,255,255,0.06)",
-                  background: "rgba(255,255,255,0.02)",
-                  boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06)",
-                }}
-              >
-                <WaterfallCascade />
-              </div>
+              <WaterfallCascade />
 
             </div>
           </section>
 
-          <section id="value" className="relative pt-16 pb-10 md:pt-20 md:pb-12 px-6">
+          {/* Section divider — breath mark between demo and argument */}
+          <div className="flex justify-center py-2">
+            <div className="w-[60px] h-[1px]" style={{ background: "linear-gradient(90deg, rgba(212,175,55,0.30), rgba(212,175,55,0.08))" }} />
+          </div>
+
+          <section id="value" className="relative pt-12 pb-10 md:pt-16 md:pb-12 px-6">
             <div
               ref={valueRef}
               className="relative max-w-md mx-auto flex flex-col gap-5"
             >
+              <p className="text-[14px] text-ink-secondary italic leading-relaxed tracking-[0.01em] text-center pb-1">
+                My first project premiered at Tribeca and landed on Netflix — and I still had to guess at the math.
+              </p>
+
               {/* WITH card */}
               <div
-                className="bg-black rounded-xl overflow-hidden"
-                style={{ border: "1px solid rgba(212,175,55,0.25)", boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06)" }}
+                className="rounded-xl overflow-hidden"
+                style={{ border: "1px solid rgba(212,175,55,0.25)", background: "rgba(212,175,55,0.02)", boxShadow: "inset 0 1px 0 rgba(212,175,55,0.06)" }}
               >
                 <div className="px-5 pt-6 pb-6">
                   <h2 className="font-mono text-[13px] tracking-[0.14em] uppercase text-gold mb-6">
@@ -141,8 +148,8 @@ const Index = () => {
                           <span className="text-black text-[18px] font-bold leading-none" aria-hidden="true">{"\u2713"}</span>
                         </div>
                         <div>
-                          <p className="text-[15px] font-semibold text-white leading-snug">{item.title}</p>
-                          <p className="text-[13px] text-white/65 leading-snug mt-1">{item.desc}</p>
+                          <p className="text-[15px] font-semibold text-ink leading-snug">{item.title}</p>
+                          <p className="text-[13px] text-ink-body leading-snug mt-1">{item.desc}</p>
                         </div>
                       </li>
                     ))}
@@ -150,17 +157,12 @@ const Index = () => {
                 </div>
               </div>
 
-              <p className="text-[14px] text-white/45 italic leading-relaxed tracking-[0.01em] text-center py-4">
-                My first project premiered at Tribeca and landed on Netflix — and I still had to guess at the math.
-              </p>
-
               {/* WITHOUT card */}
               <div
                 className="rounded-xl overflow-hidden"
                 style={{
                   border: "1px solid rgba(180,60,60,0.28)",
                   background: "rgba(180,60,60,0.07)",
-                  boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06)",
                 }}
               >
                 <div className="px-5 pt-6 pb-6">
@@ -173,7 +175,7 @@ const Index = () => {
                       transitionDelay: prefersReducedMotion ? "0ms" : `${withItems.length * 80 + 60}ms`,
                     }}
                   >
-                    Without it
+                    Without a waterfall
                   </h2>
                   <ul className="flex flex-col gap-5" aria-label="Risks without a waterfall">
                     {withoutItems.map((item, i) => (
@@ -197,8 +199,8 @@ const Index = () => {
                           <span className="text-[16px] font-bold leading-none" aria-hidden="true" style={{ color: "rgba(220,100,100,0.90)" }}>{"\u2717"}</span>
                         </div>
                         <div>
-                          <p className="text-[15px] font-semibold leading-snug text-white">{item.title}</p>
-                          <p className="text-[13px] leading-snug mt-1 text-white/65">{item.desc}</p>
+                          <p className="text-[15px] font-semibold leading-snug text-ink">{item.title}</p>
+                          <p className="text-[13px] leading-snug mt-1 text-ink-secondary">{item.desc}</p>
                         </div>
                       </li>
                     ))}
@@ -209,26 +211,31 @@ const Index = () => {
 
           </section>
 
-          <section id="final-cta" className="py-16 md:py-20 px-6">
+          {/* Section divider — breath mark between argument and close */}
+          <div className="flex justify-center py-2">
+            <div className="w-[60px] h-[1px]" style={{ background: "linear-gradient(90deg, rgba(212,175,55,0.30), rgba(212,175,55,0.08))" }} />
+          </div>
+
+          <section id="final-cta" className="py-12 md:py-16 px-6">
             <div className="max-w-md mx-auto">
               <div
                 ref={bridgeRef}
                 className="rounded-2xl px-6 py-10 md:py-14 text-center"
                 style={{
                   border: "2px solid rgba(212,175,55,0.40)",
-                  background: "radial-gradient(ellipse at center 70%, rgba(212,175,55,0.04) 0%, rgba(255,255,255,0.02) 60%, transparent 100%)",
-                  boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06)",
+                  background: "radial-gradient(ellipse at center 70%, rgba(212,175,55,0.04) 0%, rgba(212,175,55,0.02) 60%, transparent 100%)",
+                  boxShadow: "inset 0 1px 0 rgba(212,175,55,0.06)",
                   opacity: prefersReducedMotion || bridgeVisible ? 1 : 0,
                   transform: prefersReducedMotion || bridgeVisible ? "translateY(0)" : "translateY(16px)",
                   transition: prefersReducedMotion ? "none" : "opacity 700ms ease-out, transform 700ms ease-out",
                 }}
               >
-                <h2 className="font-bebas text-[32px] leading-[1.1] tracking-[0.06em] text-gold mb-6">
-                  YOUR INVESTORS WILL{"\u00A0"}ASK HOW THE MONEY FLOWS <span className="text-white">BACK.</span>
+                <h2 className="font-bebas text-[clamp(2rem,8vw,2.6rem)] leading-[1.1] tracking-[0.06em] text-gold mb-6">
+                  YOUR INVESTORS WILL{"\u00A0"}ASK HOW THE MONEY FLOWS <span className="text-ink">BACK.</span>
                 </h2>
                 <button
                   onClick={handleStartClick}
-                  className="w-full max-w-[300px] h-[52px] btn-cta-primary mx-auto"
+                  className="w-full max-w-[300px] h-[52px] btn-cta-primary animate-cta-glow-pulse mx-auto"
                 >
                   BUILD YOUR WATERFALL
                 </button>
@@ -237,7 +244,7 @@ const Index = () => {
           </section>
 
           <footer className="py-8 px-6 max-w-md mx-auto">
-            <p className="text-white/30 text-[12px] tracking-wide leading-relaxed text-center">
+            <p className="text-ink-ghost text-[13px] tracking-wide leading-relaxed text-center">
               For educational and informational purposes only. Not legal, tax, or investment advice.
               Consult a qualified entertainment attorney before making financing decisions.
             </p>

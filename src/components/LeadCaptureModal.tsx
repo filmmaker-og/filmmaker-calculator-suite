@@ -103,7 +103,7 @@ const LeadCaptureModal = ({ isOpen, onClose, onSuccess }: LeadCaptureModalProps)
       <DialogContent className="w-[calc(100%-2rem)] max-w-sm mx-auto bg-bg-void border-border-subtle p-0 gap-0">
         <DialogTitle className="sr-only">Sign in to access the calculator</DialogTitle>
         {/* Gold accent */}
-        <div className="h-[2px] w-full bg-gold" />
+        <div className="h-[2px] w-full" style={{ background: "linear-gradient(90deg, transparent, #D4AF37, transparent)" }} />
 
         {sent ? (
           // Magic link sent — check your email
@@ -167,7 +167,7 @@ const LeadCaptureModal = ({ isOpen, onClose, onSuccess }: LeadCaptureModalProps)
                     (e.currentTarget.nextElementSibling as HTMLInputElement)?.focus();
                   }
                 }}
-                className="w-full h-12 px-4 bg-bg-header border border-border-subtle text-text-primary placeholder:text-text-dim text-sm focus:border-gold focus:outline-none transition-colors"
+                className="w-full h-12 px-4 bg-bg-surface border border-border-subtle rounded-lg text-text-primary placeholder:text-text-dim text-sm focus:border-gold focus:shadow-[0_0_0_3px_rgba(212,175,55,0.10)] focus:outline-none transition-all"
               />
 
               <input
@@ -186,7 +186,7 @@ const LeadCaptureModal = ({ isOpen, onClose, onSuccess }: LeadCaptureModalProps)
                     handleSubmit(e as unknown as React.FormEvent);
                   }
                 }}
-                className="w-full h-12 px-4 bg-bg-header border border-border-subtle text-text-primary placeholder:text-text-dim font-mono text-sm focus:border-gold focus:outline-none transition-colors"
+                className="w-full h-12 px-4 bg-bg-surface border border-border-subtle rounded-lg text-text-primary placeholder:text-text-dim font-mono text-sm focus:border-gold focus:shadow-[0_0_0_3px_rgba(212,175,55,0.10)] focus:outline-none transition-all"
               />
 
               <button
