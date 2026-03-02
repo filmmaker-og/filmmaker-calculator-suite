@@ -11,15 +11,6 @@ const deductions = [
   { name: "Equity Recoupment", amount: 1_440_000 },
 ];
 
-const fmt = (n: number) => {
-  if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(1)}M`;
-  if (n >= 1_000) {
-    const k = n / 1_000;
-    return `$${Number.isInteger(k) ? k.toFixed(0) : k.toFixed(1)}K`;
-  }
-  return `$${n.toLocaleString()}`;
-};
-
 const fmtFull = (n: number) => `$${n.toLocaleString()}`;
 
 const WaterfallCascade = () => {
@@ -131,14 +122,14 @@ const WaterfallCascade = () => {
         className="mt-2 rounded-[10px] py-5 bg-black text-center"
         style={{
           border: "2px solid rgba(212,175,55,0.60)",
-          boxShadow: "0 0 40px 4px rgba(212,175,55,0.18), inset 0 1px 0 rgba(212,175,55,0.08)",
+          boxShadow: "0 0 16px 0px rgba(212,175,55,0.10), inset 0 1px 0 rgba(212,175,55,0.08)",
           opacity: revealed ? 1 : 0,
           transform: revealed ? "translateY(0)" : "translateY(8px)",
           transition: "opacity 600ms ease-out, transform 600ms ease-out",
           transitionDelay: "1400ms",
         }}
       >
-        <p className="font-mono text-[10px] tracking-[0.16em] uppercase font-semibold text-gold mb-1">
+        <p className="font-mono text-[10px] tracking-[0.16em] uppercase font-semibold text-gold-label mb-1">
           Net Profits
         </p>
         <span className="font-mono text-[32px] font-bold text-gold tracking-tight tabular-nums">
@@ -168,7 +159,7 @@ const WaterfallCascade = () => {
             <p className="font-mono text-[10px] tracking-[0.16em] uppercase font-semibold text-gold-label mb-1">
               {c.label}
             </p>
-            <span className="font-mono text-[20px] font-bold text-gold-label tabular-nums">
+            <span className="font-mono text-[20px] font-bold text-gold tabular-nums">
               {c.amount}
             </span>
           </div>

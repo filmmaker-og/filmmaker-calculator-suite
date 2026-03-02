@@ -76,7 +76,7 @@ const Index = () => {
       <div className="min-h-screen flex flex-col relative overflow-hidden bg-black grain-overlay">
         <main aria-label="Film Finance Simulator" className="flex-1 flex flex-col" style={{ paddingBottom: "env(safe-area-inset-bottom)" }}>
 
-          <section id="hero" className="relative pb-6" style={{ paddingTop: "calc(env(safe-area-inset-top, 0px) + 3rem)", background: "radial-gradient(ellipse at center top, rgba(212,175,55,0.04) 0%, transparent 60%)" }}>
+          <section id="hero" className="relative pt-2 pb-6" style={{ background: "radial-gradient(ellipse at center top, rgba(212,175,55,0.04) 0%, transparent 60%)" }}>
             <div className="relative px-8 max-w-md mx-auto">
 
               <div className="text-center mb-8">
@@ -105,11 +105,6 @@ const Index = () => {
 
             </div>
           </section>
-
-          {/* Section divider — breath mark between demo and argument */}
-          <div className="flex justify-center py-2">
-            <div className="w-[60px] h-[1px]" style={{ background: "linear-gradient(90deg, rgba(212,175,55,0.30), rgba(212,175,55,0.08))" }} />
-          </div>
 
           <section id="value" className="relative pt-12 pb-10 md:pt-16 md:pb-12 px-6">
             <div
@@ -213,11 +208,6 @@ const Index = () => {
 
           </section>
 
-          {/* Section divider — breath mark between argument and close */}
-          <div className="flex justify-center py-2">
-            <div className="w-[60px] h-[1px]" style={{ background: "linear-gradient(90deg, rgba(212,175,55,0.30), rgba(212,175,55,0.08))" }} />
-          </div>
-
           <section id="final-cta" className="py-12 md:py-16 px-6">
             <div className="max-w-md mx-auto">
               <div
@@ -237,7 +227,7 @@ const Index = () => {
                 </h2>
                 <button
                   onClick={handleStartClick}
-                  className="w-full max-w-[300px] h-[52px] btn-cta-primary animate-cta-glow-pulse mx-auto"
+                  className="w-full max-w-[300px] h-[52px] btn-cta-primary mx-auto"
                 >
                   BUILD YOUR WATERFALL
                 </button>
