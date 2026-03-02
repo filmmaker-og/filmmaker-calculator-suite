@@ -108,7 +108,9 @@ const Index = () => {
 
           {/* What This Is — education + mission */}
           <section id="what-this-is" className="relative pt-12 pb-10 md:pt-16 md:pb-12 px-6">
-            <div className="max-w-md mx-auto">
+            <div className="max-w-md mx-auto flex flex-col gap-5">
+
+              {/* Card 1 — The problem */}
               <div
                 className="rounded-xl overflow-hidden"
                 style={{
@@ -122,36 +124,50 @@ const Index = () => {
                     KNOW YOUR DEAL BEFORE YOU SIGN&nbsp;IT
                   </h2>
 
-                  <p className="text-[15px] text-ink-body leading-[1.7] tracking-[0.01em]">
+                  <p className="text-[16px] text-ink-body leading-[1.75] tracking-[0.01em]">
                     Every film deal has a pecking order&nbsp;— distributors, agents, lenders, and investors all get paid before you&nbsp;do.
                   </p>
 
-                  <p className="text-[15px] text-ink-body leading-[1.7] tracking-[0.01em]">
+                  <p className="text-[16px] text-ink-body leading-[1.75] tracking-[0.01em]">
                     That's called a <span className="text-gold font-semibold">waterfall</span>. This tool lets you model yours before you sign&nbsp;anything.
-                    <a
-                      href="/resources?tab=waterfall"
-                      className="inline-flex items-center gap-1.5 ml-2 text-gold/70 hover:text-gold transition-colors text-[13px] font-medium"
-                    >
-                      <span
-                        className="inline-flex items-center justify-center w-[18px] h-[18px] rounded-full text-[11px] font-bold leading-none"
-                        style={{ border: "1px solid rgba(212,175,55,0.40)", color: "rgba(212,175,55,0.70)" }}
-                        aria-hidden="true"
-                      >
-                        i
-                      </span>
-                      What's a waterfall?
-                    </a>
                   </p>
 
-                  <p className="text-[15px] text-ink-body leading-[1.7] tracking-[0.01em]">
+                  <a
+                    href="/resources?tab=waterfall"
+                    className="inline-flex items-center gap-2 text-gold/70 hover:text-gold transition-colors text-[14px] font-medium"
+                  >
+                    <span
+                      className="inline-flex items-center justify-center w-[20px] h-[20px] rounded-full text-[12px] font-bold leading-none"
+                      style={{ border: "1px solid rgba(212,175,55,0.40)", color: "rgba(212,175,55,0.70)" }}
+                      aria-hidden="true"
+                    >
+                      i
+                    </span>
+                    What's a waterfall?
+                  </a>
+                </div>
+              </div>
+
+              {/* Card 2 — The tool + mission */}
+              <div
+                className="rounded-xl overflow-hidden"
+                style={{
+                  border: "1px solid rgba(212,175,55,0.25)",
+                  background: "rgba(212,175,55,0.02)",
+                  boxShadow: "inset 0 1px 0 rgba(212,175,55,0.06)",
+                }}
+              >
+                <div className="px-6 pt-7 pb-7 flex flex-col gap-5">
+                  <p className="text-[16px] text-ink-body leading-[1.75] tracking-[0.01em]">
                     Run it as many times as you want. Premium unlocks extended scenarios, financial modeling, and PDF&nbsp;exports.
                   </p>
 
-                  <p className="text-[14px] text-gold/60 italic tracking-[0.02em] pt-1">
+                  <p className="text-[15px] text-gold/60 italic tracking-[0.02em]">
                     We're democratizing the business of film.
                   </p>
                 </div>
               </div>
+
             </div>
           </section>
 
