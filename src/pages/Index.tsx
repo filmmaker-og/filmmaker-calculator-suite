@@ -106,11 +106,6 @@ const Index = () => {
             </div>
           </section>
 
-          {/* Section divider — breath mark between demo and argument */}
-          <div className="flex justify-center py-2">
-            <div className="w-[60px] h-[1px]" style={{ background: "linear-gradient(90deg, rgba(212,175,55,0.30), rgba(212,175,55,0.08))" }} />
-          </div>
-
           <section id="value" className="relative pt-12 pb-10 md:pt-16 md:pb-12 px-6">
             <div
               ref={valueRef}
@@ -212,11 +207,6 @@ const Index = () => {
             </div>
 
           </section>
-
-          {/* Section divider — breath mark between argument and close */}
-          <div className="flex justify-center py-2">
-            <div className="w-[60px] h-[1px]" style={{ background: "linear-gradient(90deg, rgba(212,175,55,0.30), rgba(212,175,55,0.08))" }} />
-          </div>
 
           <section id="final-cta" className="py-12 md:py-16 px-6">
             <div className="max-w-md mx-auto">
