@@ -11,12 +11,12 @@ const deductions = [
   { name: "Equity Recoupment", amount: 1_440_000 },
 ];
 
-const fmtFull = (n: number) => `$${n.toLocaleString()}`;
+const fmt = (n: number) => `$${n.toLocaleString()}`;
 
 const WaterfallCascade = () => {
   const [revealed, setRevealed] = useState(false);
   const [profitCount, setProfitCount] = useState(0);
-  const [corridorVisible, setCorridorVisible] = useState(false);
+  const [splitVisible, setSplitVisible] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -26,11 +26,11 @@ const WaterfallCascade = () => {
     const obs = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          delay = setTimeout(() => setRevealed(true), 400);
+          delay = setTimeout(() => setRevealed(true), 300);
           obs.disconnect();
         }
       },
-      { threshold: 0.25 }
+      { threshold: 0.2 }
     );
     obs.observe(el);
     return () => { obs.disconnect(); clearTimeout(delay); };
@@ -40,146 +40,122 @@ const WaterfallCascade = () => {
     if (!revealed) return;
     let rafId: number;
     const timeout = setTimeout(() => {
-      const target = PROFIT;
-      const dur = 1400;
+      const dur = 1200;
       const start = performance.now();
       const step = (now: number) => {
         const t = Math.min((now - start) / dur, 1);
         const eased = 1 - Math.pow(1 - t, 3);
-        setProfitCount(Math.round(eased * target));
+        setProfitCount(Math.round(eased * PROFIT));
         if (t < 1) rafId = requestAnimationFrame(step);
       };
       rafId = requestAnimationFrame(step);
-    }, 1400);
+    }, deductions.length * 140 + 400);
     return () => { clearTimeout(timeout); cancelAnimationFrame(rafId); };
   }, [revealed]);
 
   useEffect(() => {
     if (!revealed) return;
-    const timeout = setTimeout(() => setCorridorVisible(true), 2000);
+    const timeout = setTimeout(() => setSplitVisible(true), deductions.length * 140 + 1800);
     return () => clearTimeout(timeout);
   }, [revealed]);
 
   return (
-    <div ref={containerRef} className="pt-4 pb-5">
-      {/* Ledger card */}
-      <div
-        className="overflow-hidden"
-        style={{
-          border: "1px solid rgba(212,175,55,0.15)",
-          borderRadius: "6px",
-          background: "#000000",
-        }}
-      >
-        {/* Source row */}
-        <div className="flex justify-between items-baseline px-5 pt-5 pb-4">
-          <span className="font-bebas text-[22px] tracking-[0.06em]" style={{ color: "rgba(255,255,255,0.70)" }}>
-            Acquisition Price
-          </span>
-          <span className="font-mono text-[17px] font-semibold text-gold tabular-nums">
-            {fmtFull(TOTAL)}
-          </span>
-        </div>
-
-        {/* Gold divider */}
-        <div
-          className="mx-5 h-[1px]"
-          style={{
-            background:
-              "linear-gradient(90deg, rgba(212,175,55,0.25), rgba(212,175,55,0.08))",
-            opacity: revealed ? 1 : 0,
-            transition: "opacity 600ms ease-out",
-          }}
-        />
-
-        {/* Deduction line items */}
-        <div className="px-5 pt-2 pb-4">
-          {deductions.map((d, i) => {
-            const delay = (i + 1) * 180;
-            const isEven = i % 2 === 0;
-            return (
-              <div
-                key={d.name}
-                className="flex justify-between items-baseline"
-                style={{
-                  padding: "9px 8px",
-                  margin: "0 -8px",
-                  borderRadius: "4px",
-                  background: isEven ? "rgba(212,175,55,0.03)" : "transparent",
-                  opacity: revealed ? 1 : 0,
-                  transform: revealed ? "translateY(0)" : "translateY(6px)",
-                  transition:
-                    "opacity 500ms ease-out, transform 500ms ease-out",
-                  transitionDelay: `${delay}ms`,
-                }}
-              >
-                <span className="text-[14px] font-medium text-ink-secondary">
-                  {d.name}
-                </span>
-                <span className="font-mono text-[15px] font-medium text-ink-body tabular-nums">
-                  <span className="text-ink-secondary">{"\u2212"}</span>{fmtFull(d.amount)}
-                </span>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Profit box */}
-      <div
-        className="mt-2 py-5 bg-black text-center"
-        style={{
-          border: "1px solid rgba(212,175,55,0.25)",
-          borderRadius: "6px",
-          boxShadow: "0 0 16px rgba(212,175,55,0.08)",
-          opacity: revealed ? 1 : 0,
-          transform: revealed ? "translateY(0)" : "translateY(8px)",
-          transition: "opacity 600ms ease-out, transform 600ms ease-out",
-          transitionDelay: "1400ms",
-        }}
-      >
-        <p className="font-mono text-[12px] tracking-[0.16em] uppercase font-semibold mb-1" style={{ color: "rgba(255,255,255,0.70)" }}>
-          Net Profits
-        </p>
-        <span className="font-mono text-[32px] font-bold text-gold tracking-tight tabular-nums">
-          ${profitCount.toLocaleString()}
+    <div ref={containerRef}>
+      {/* Source */}
+      <div className="flex justify-between items-baseline mb-8">
+        <span
+          className="font-mono text-[11px] uppercase tracking-[0.2em]"
+          style={{ color: "rgba(255,255,255,0.30)" }}
+        >
+          Acquisition
+        </span>
+        <span className="font-mono text-[20px] font-medium text-white tabular-nums">
+          {fmt(TOTAL)}
         </span>
       </div>
 
-      {/* Producer / Investor split */}
-      <div className="grid grid-cols-2 gap-2 mt-2">
-        {[
-          { label: "Producer", amount: "$208,750", extraDelay: 0 },
-          { label: "Investor", amount: "$208,750", extraDelay: 150 },
-        ].map((c) => (
+      {/* Deductions — no cards, just rows with a faint bottom rule */}
+      <div className="space-y-0">
+        {deductions.map((d, i) => (
           <div
-            key={c.label}
-            className="px-3.5 py-3.5 text-center"
+            key={d.name}
+            className="flex justify-between items-baseline py-3"
             style={{
-              border: "1px solid rgba(212,175,55,0.15)",
-              borderRadius: "6px",
-              background: "rgba(212,175,55,0.03)",
-              opacity: corridorVisible ? 1 : 0,
-              transform: corridorVisible
-                ? "translateY(0)"
-                : "translateY(10px)",
+              borderBottom: "1px solid rgba(255,255,255,0.04)",
+              opacity: revealed ? 1 : 0,
+              transform: revealed ? "translateY(0)" : "translateY(4px)",
               transition: "opacity 500ms ease-out, transform 500ms ease-out",
-              transitionDelay: `${c.extraDelay}ms`,
+              transitionDelay: `${(i + 1) * 140}ms`,
             }}
           >
-            <p className="font-mono text-[12px] tracking-[0.16em] uppercase font-semibold mb-1" style={{ color: "rgba(255,255,255,0.70)" }}>
-              {c.label}
-            </p>
-            <span className="font-mono text-[24px] font-bold text-gold tabular-nums">
-              {c.amount}
+            <span
+              className="text-[14px]"
+              style={{ color: "rgba(255,255,255,0.35)" }}
+            >
+              {d.name}
+            </span>
+            <span
+              className="font-mono text-[14px] tabular-nums"
+              style={{ color: "rgba(255,255,255,0.50)" }}
+            >
+              {"\u2212"}{fmt(d.amount)}
             </span>
           </div>
         ))}
       </div>
 
-      <p className="font-mono text-[12px] text-ink-secondary text-center mt-3.5">
-        Hypothetical $1.8M budget{"\u00A0"}{"\u00B7"}{"\u00A0"}$3M
-        acquisition{"\u00A0"}{"\u00B7"}{"\u00A0"}50/50 net profit split
+      {/* Net Profits — big number, no box */}
+      <div
+        className="mt-10 mb-2"
+        style={{
+          opacity: revealed ? 1 : 0,
+          transition: "opacity 800ms ease-out",
+          transitionDelay: `${deductions.length * 140 + 300}ms`,
+        }}
+      >
+        <p
+          className="font-mono text-[11px] uppercase tracking-[0.2em] mb-2"
+          style={{ color: "rgba(212,175,55,0.40)" }}
+        >
+          Net Profits
+        </p>
+        <span className="font-mono text-[36px] font-bold text-gold tracking-tight tabular-nums">
+          ${profitCount.toLocaleString()}
+        </span>
+      </div>
+
+      {/* 50/50 split — inline, not boxed */}
+      <div
+        className="flex gap-12 mt-6"
+        style={{
+          opacity: splitVisible ? 1 : 0,
+          transition: "opacity 600ms ease-out",
+        }}
+      >
+        {([
+          { label: "Producer", amount: "$208,750" },
+          { label: "Investor", amount: "$208,750" },
+        ]).map((s) => (
+          <div key={s.label}>
+            <p
+              className="font-mono text-[11px] uppercase tracking-[0.2em] mb-1"
+              style={{ color: "rgba(255,255,255,0.20)" }}
+            >
+              {s.label}
+            </p>
+            <span className="font-mono text-[20px] font-medium text-white tabular-nums">
+              {s.amount}
+            </span>
+          </div>
+        ))}
+      </div>
+
+      {/* Footnote */}
+      <p
+        className="mt-10 text-[12px] leading-[1.7]"
+        style={{ color: "rgba(255,255,255,0.15)" }}
+      >
+        Hypothetical $1.8M budget · $3M acquisition · 50/50 net profit split
       </p>
     </div>
   );
