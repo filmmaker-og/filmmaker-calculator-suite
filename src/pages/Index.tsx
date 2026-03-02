@@ -48,19 +48,8 @@ const Index = () => {
     return () => clearTimeout(timeout);
   }, [prefersReducedMotion]);
 
-  const { ref: valueRef, inView: valueVisible } = useInView<HTMLDivElement>({ threshold: 0.2 });
-  const { ref: bridgeRef, inView: bridgeVisible } = useInView<HTMLDivElement>({ threshold: 0.2 });
-
-  const withItems = [
-    { title: "Returns Mapped", desc: "Every investor sees exactly what they get back — and when." },
-    { title: "Nothing Hidden", desc: "Fees, splits, and repayment order — all visible before you commit." },
-    { title: "Your Margins, Confirmed", desc: "Run the numbers on your backend points before you shoot a single frame. No more guessing at what's left after the waterfall." },
-  ];
-  const withoutItems = [
-    { title: "The Question You Can't Answer", desc: "'How do I get my money back?' — and you're improvising." },
-    { title: "Surprises After Signatures", desc: "Fees and splits you didn't model surface after the deal closes." },
-    { title: "First-Deal Math", desc: "Your backend points were worth nothing after the sales agent commission you forgot to model." },
-  ];
+  const { ref: valueRef, inView: valueVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
+  const { ref: closerRef, inView: closerVisible } = useInView<HTMLDivElement>({ threshold: 0.2 });
 
   return (
     <>
@@ -76,274 +65,219 @@ const Index = () => {
       <div className="min-h-screen flex flex-col relative overflow-hidden bg-black grain-overlay">
         <main aria-label="Film Finance Simulator" className="flex-1 flex flex-col" style={{ paddingBottom: "env(safe-area-inset-bottom)" }}>
 
-          {/* ═══ HERO — HEAVY ═══ */}
-          <section
-            id="hero"
-            className="relative py-20 md:py-28"
-            style={{ background: "radial-gradient(ellipse at center top, rgba(212,175,55,0.03) 0%, transparent 60%)" }}
-          >
-            <div className="relative px-8 max-w-md mx-auto md:max-w-2xl">
-
-              <div className="mb-10">
-                <p className="font-sans text-[11px] uppercase tracking-[0.2em] text-ink-secondary mb-4">
-                  FILM FINANCE SIMULATOR
-                </p>
-                <h1 className="font-bebas text-[clamp(3rem,10vw,4.5rem)] leading-[0.95] tracking-[0.02em] text-ink mb-5">
-                  SEE WHERE EVERY DOLLAR GOES
-                </h1>
-                <p className="text-ink-body text-[16px] leading-[1.7] tracking-[0.01em] max-w-sm">
-                  Know every fee, split, and return — before your investor asks.
-                </p>
-              </div>
-
-              <div className="mb-10">
-                <div className="w-full max-w-[300px]">
-                  <button
-                    onClick={handleStartClick}
-                    className={`w-full h-[52px] btn-cta-primary${ctaGlow ? " animate-cta-glow-pulse" : ""}`}
-                  >
-                    BUILD YOUR WATERFALL
-                  </button>
-                </div>
-              </div>
-
-              <div className="-mx-2">
-                <WaterfallCascade />
-              </div>
-
-            </div>
-          </section>
-
-          {/* ═══ STATS DIVIDER — LIGHT ═══ */}
-          <section
-            className="py-6 md:py-8"
-            style={{
-              background: "#111111",
-              borderTop: "1px solid rgba(255,255,255,0.15)",
-              borderBottom: "1px solid rgba(255,255,255,0.15)",
-            }}
-          >
-            <div className="max-w-md mx-auto md:max-w-2xl px-8 flex justify-between">
-              <div>
-                <p className="font-mono text-[14px] text-gold tabular-nums">5</p>
-                <p className="font-sans text-[11px] uppercase tracking-[0.15em] text-ink-secondary">Deduction tiers</p>
-              </div>
-              <div>
-                <p className="font-mono text-[14px] text-gold tabular-nums">50/50</p>
-                <p className="font-sans text-[11px] uppercase tracking-[0.15em] text-ink-secondary">Profit split</p>
-              </div>
-              <div>
-                <p className="font-mono text-[14px] text-gold tabular-nums">PDF</p>
-                <p className="font-sans text-[11px] uppercase tracking-[0.15em] text-ink-secondary">Export ready</p>
-              </div>
-            </div>
-          </section>
-
-          {/* ═══ EDUCATION — MEDIUM ═══ */}
-          <section id="what-this-is" className="relative py-20 md:py-28 px-8">
-            <div className="max-w-md mx-auto md:max-w-2xl flex flex-col gap-8">
-
-              {/* Card 1 — The problem */}
-              <div
-                style={{
-                  border: "1px solid rgba(212,175,55,0.15)",
-                  background: "#111111",
-                  borderRadius: "6px",
-                }}
+          {/* ════════════════════════════════════════════════════════
+              HERO — Big type, CTA, nothing else
+              ════════════════════════════════════════════════════════ */}
+          <section className="relative pt-16 pb-24 md:pt-24 md:pb-36">
+            <div className="px-8 max-w-lg mx-auto md:max-w-xl">
+              <p
+                className="font-mono text-[11px] uppercase tracking-[0.25em] mb-6"
+                style={{ color: "rgba(255,255,255,0.30)" }}
               >
-                <div className="px-8 py-10 md:px-10 md:py-12 flex flex-col gap-5">
-                  <p className="font-sans text-[11px] uppercase tracking-[0.2em] text-ink-secondary">
-                    THE TOOL
-                  </p>
-                  <h2 className="font-bebas text-[clamp(1.6rem,6vw,2.2rem)] leading-[1.1] tracking-[0.04em] text-ink">
-                    KNOW YOUR DEAL BEFORE YOU SIGN&nbsp;IT
-                  </h2>
-
-                  <p className="text-[16px] text-ink-body leading-[1.7]">
-                    Every film deal has a pecking order&nbsp;— distributors, agents, lenders, and investors all get paid before you&nbsp;do.
-                  </p>
-
-                  <p className="text-[16px] text-ink-body leading-[1.7]">
-                    That's called a <span className="text-gold font-semibold">waterfall</span>. This tool lets you model yours before you sign&nbsp;anything.
-                  </p>
-
-                  <a
-                    href="/resources?tab=waterfall"
-                    className="inline-flex items-center gap-2 text-gold-cta hover:opacity-80 transition-opacity text-[14px] font-medium"
-                  >
-                    <span
-                      className="inline-flex items-center justify-center w-[20px] h-[20px] text-[12px] font-bold leading-none"
-                      style={{ border: "1px solid rgba(212,175,55,0.25)", borderRadius: "4px", color: "rgba(255,255,255,0.70)" }}
-                      aria-hidden="true"
-                    >
-                      i
-                    </span>
-                    What's a waterfall?
-                  </a>
-                </div>
-              </div>
-
-              {/* Card 2 — Mission */}
-              <div
-                style={{
-                  border: "1px solid rgba(212,175,55,0.15)",
-                  background: "#111111",
-                  borderRadius: "6px",
-                }}
+                Film Finance Simulator
+              </p>
+              <h1 className="font-bebas text-[clamp(3.2rem,12vw,5.5rem)] leading-[0.92] tracking-[0.01em] text-white mb-8">
+                SEE WHERE<br />
+                EVERY DOLLAR<br />
+                GOES
+              </h1>
+              <p
+                className="text-[17px] leading-[1.75] max-w-sm mb-12"
+                style={{ color: "rgba(255,255,255,0.50)" }}
               >
-                <div className="px-8 py-10 md:px-10 md:py-12 flex flex-col gap-5">
-                  <p className="text-[16px] text-ink-body leading-[1.7]">
-                    Run it as many times as you want. Premium unlocks extended scenarios, financial modeling, and PDF&nbsp;exports.
-                  </p>
-
-                  <p className="text-[14px] text-ink-secondary italic tracking-[0.02em]">
-                    Institutional-grade tools shouldn't cost institutional-grade fees.
-                  </p>
-                </div>
-              </div>
-
+                Model your waterfall. Know every fee, split, and&nbsp;return
+                — before your investor asks.
+              </p>
+              <button
+                onClick={handleStartClick}
+                className={`h-[52px] px-10 btn-cta-primary${ctaGlow ? " animate-cta-glow-pulse" : ""}`}
+              >
+                BUILD YOUR WATERFALL
+              </button>
             </div>
           </section>
 
-          {/* ═══ LIGHT DIVIDER ═══ */}
+          {/* ════════════════════════════════════════════════════════
+              THE WATERFALL — full bleed, no card wrapper
+              Thin gold rule separates it from hero
+              ════════════════════════════════════════════════════════ */}
           <div
-            className="h-[1px] max-w-md mx-auto md:max-w-2xl w-full"
-            style={{ background: "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.15) 50%, transparent 100%)" }}
+            className="w-full h-[1px]"
+            style={{ background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.12) 30%, rgba(212,175,55,0.12) 70%, transparent)" }}
           />
 
-          {/* ═══ VALUE PROP — MEDIUM ═══ */}
-          <section id="value" className="relative py-20 md:py-28 px-8">
+          <section className="py-20 md:py-28">
+            <div className="px-8 max-w-lg mx-auto md:max-w-xl">
+              <p
+                className="font-mono text-[11px] uppercase tracking-[0.25em] mb-10"
+                style={{ color: "rgba(255,255,255,0.30)" }}
+              >
+                Example Waterfall
+              </p>
+              <WaterfallCascade />
+            </div>
+          </section>
+
+          {/* ════════════════════════════════════════════════════════
+              WHAT THIS IS — editorial text, no cards
+              ════════════════════════════════════════════════════════ */}
+          <section className="py-24 md:py-36">
+            <div className="px-8 max-w-lg mx-auto md:max-w-xl">
+              <h2 className="font-bebas text-[clamp(2rem,8vw,3.2rem)] leading-[0.95] tracking-[0.02em] text-white mb-8">
+                KNOW YOUR DEAL<br />
+                BEFORE YOU SIGN&nbsp;IT
+              </h2>
+
+              <div className="space-y-6">
+                <p
+                  className="text-[17px] leading-[1.8]"
+                  style={{ color: "rgba(255,255,255,0.50)" }}
+                >
+                  Every film deal has a pecking order — distributors, sales agents,
+                  lenders, and investors all get paid before you do.
+                  That's called a <span className="text-gold">waterfall</span>.
+                </p>
+                <p
+                  className="text-[17px] leading-[1.8]"
+                  style={{ color: "rgba(255,255,255,0.50)" }}
+                >
+                  This tool lets you model yours before you sign anything.
+                  Run it as many times as you want. Premium unlocks extended
+                  scenarios, financial modeling, and PDF exports.
+                </p>
+              </div>
+
+              <a
+                href="/resources?tab=waterfall"
+                className="inline-block mt-8 font-mono text-[13px] tracking-[0.08em] text-gold-cta hover:opacity-70 transition-opacity"
+              >
+                What's a waterfall? {"\u2192"}
+              </a>
+            </div>
+          </section>
+
+          {/* ════════════════════════════════════════════════════════
+              WITH / WITHOUT — two text columns, no boxes
+              Left-aligned, separated by a single gold rule
+              ════════════════════════════════════════════════════════ */}
+          <div
+            className="w-full h-[1px]"
+            style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.06) 30%, rgba(255,255,255,0.06) 70%, transparent)" }}
+          />
+
+          <section className="py-24 md:py-36">
             <div
               ref={valueRef}
-              className="relative max-w-md mx-auto md:max-w-2xl flex flex-col gap-8"
+              className="px-8 max-w-lg mx-auto md:max-w-xl"
             >
-              {/* WITH card */}
-              <div
-                style={{
-                  border: "1px solid rgba(212,175,55,0.15)",
-                  background: "#111111",
-                  borderRadius: "6px",
-                }}
-              >
-                <div className="px-8 py-10 md:px-10 md:py-12">
-                  <h2 className="font-mono text-[13px] tracking-[0.14em] uppercase text-gold mb-8">
-                    With your waterfall
-                  </h2>
-                  <ul className="flex flex-col gap-6" aria-label="Benefits of using a waterfall">
-                    {withItems.map((item, i) => (
-                      <li
-                        key={item.title}
-                        className="flex items-start gap-4"
-                        style={{
-                          opacity: prefersReducedMotion || valueVisible ? 1 : 0,
-                          transform: prefersReducedMotion || valueVisible ? "translateY(0)" : "translateY(12px)",
-                          transition: prefersReducedMotion ? "none" : "opacity 500ms ease-out, transform 500ms ease-out",
-                          transitionDelay: prefersReducedMotion ? "0ms" : `${i * 80}ms`,
-                        }}
-                      >
-                        <span
-                          className="flex-shrink-0 text-gold text-[16px] font-bold leading-none mt-1"
-                          aria-hidden="true"
-                        >
-                          {"\u2713"}
-                        </span>
-                        <div>
-                          <p className="text-[15px] font-semibold text-ink leading-snug">{item.title}</p>
-                          <p className="text-[13px] text-ink-body leading-relaxed mt-1">{item.desc}</p>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+              {/* WITH */}
+              <div className="mb-20">
+                <p
+                  className="font-mono text-[11px] uppercase tracking-[0.25em] text-gold mb-8"
+                >
+                  With your waterfall
+                </p>
+                <ul className="space-y-8">
+                  {([
+                    { title: "Returns mapped", desc: "Every investor sees exactly what they get back — and when." },
+                    { title: "Nothing hidden", desc: "Fees, splits, and repayment order — all visible before you commit." },
+                    { title: "Your margins, confirmed", desc: "Run the numbers on your backend points before you shoot a single frame." },
+                  ]).map((item, i) => (
+                    <li
+                      key={item.title}
+                      style={{
+                        opacity: prefersReducedMotion || valueVisible ? 1 : 0,
+                        transform: prefersReducedMotion || valueVisible ? "translateY(0)" : "translateY(8px)",
+                        transition: prefersReducedMotion ? "none" : "opacity 600ms ease-out, transform 600ms ease-out",
+                        transitionDelay: prefersReducedMotion ? "0ms" : `${i * 120}ms`,
+                      }}
+                    >
+                      <p className="text-[15px] font-medium text-white leading-snug mb-1">{item.title}</p>
+                      <p className="text-[15px] leading-[1.7]" style={{ color: "rgba(255,255,255,0.40)" }}>{item.desc}</p>
+                    </li>
+                  ))}
+                </ul>
               </div>
 
-              {/* WITHOUT card — gold system only, no red */}
+              {/* Thin separator */}
               <div
-                style={{
-                  border: "1px solid rgba(255,255,255,0.15)",
-                  background: "#000000",
-                  borderRadius: "6px",
-                }}
-              >
-                <div className="px-8 py-10 md:px-10 md:py-12">
-                  <h2
-                    className="font-mono text-[13px] tracking-[0.14em] uppercase mb-8"
-                    style={{
-                      color: "rgba(255,255,255,0.40)",
-                      opacity: prefersReducedMotion || valueVisible ? 1 : 0,
-                      transition: prefersReducedMotion ? "none" : "opacity 500ms ease-out",
-                      transitionDelay: prefersReducedMotion ? "0ms" : `${withItems.length * 80 + 60}ms`,
-                    }}
-                  >
-                    Without a waterfall
-                  </h2>
-                  <ul className="flex flex-col gap-6" aria-label="Risks without a waterfall">
-                    {withoutItems.map((item, i) => (
-                      <li
-                        key={item.title}
-                        className="flex items-start gap-4"
-                        style={{
-                          opacity: prefersReducedMotion || valueVisible ? 1 : 0,
-                          transform: prefersReducedMotion || valueVisible ? "translateY(0)" : "translateY(12px)",
-                          transition: prefersReducedMotion ? "none" : "opacity 500ms ease-out, transform 500ms ease-out",
-                          transitionDelay: prefersReducedMotion ? "0ms" : `${(withItems.length + i + 1) * 80}ms`,
-                        }}
-                      >
-                        <span
-                          className="flex-shrink-0 text-[16px] font-bold leading-none mt-1"
-                          style={{ color: "rgba(255,255,255,0.40)" }}
-                          aria-hidden="true"
-                        >
-                          {"\u2717"}
-                        </span>
-                        <div>
-                          <p className="text-[15px] font-semibold leading-snug text-ink">{item.title}</p>
-                          <p className="text-[13px] leading-relaxed mt-1 text-ink-secondary">{item.desc}</p>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            </div>
+                className="h-[1px] w-16 mb-20"
+                style={{ background: "rgba(255,255,255,0.10)" }}
+              />
 
-          </section>
-
-          {/* ═══ FINAL CTA — HEAVY ═══ */}
-          <section id="final-cta" className="py-20 md:py-28 px-8" style={{ background: "#111111" }}>
-            <div className="max-w-md mx-auto md:max-w-lg">
-              <div
-                ref={bridgeRef}
-                className="px-8 py-12 md:px-10 md:py-16"
-                style={{
-                  border: "1px solid rgba(212,175,55,0.15)",
-                  background: "radial-gradient(ellipse at center 70%, rgba(212,175,55,0.03) 0%, transparent 100%)",
-                  borderRadius: "6px",
-                  opacity: prefersReducedMotion || bridgeVisible ? 1 : 0,
-                  transform: prefersReducedMotion || bridgeVisible ? "translateY(0)" : "translateY(16px)",
-                  transition: prefersReducedMotion ? "none" : "opacity 700ms ease-out, transform 700ms ease-out",
-                }}
-              >
-                <h2 className="font-bebas text-[clamp(2rem,8vw,2.6rem)] leading-[1.1] tracking-[0.06em] text-ink mb-8">
-                  YOUR INVESTORS WILL{"\u00A0"}ASK HOW THE MONEY FLOWS BACK.
-                </h2>
-                <div className="max-w-[300px]">
-                  <button
-                    onClick={handleStartClick}
-                    className="w-full h-[52px] btn-cta-primary"
-                  >
-                    BUILD YOUR WATERFALL
-                  </button>
-                </div>
+              {/* WITHOUT */}
+              <div>
+                <p
+                  className="font-mono text-[11px] uppercase tracking-[0.25em] mb-8"
+                  style={{ color: "rgba(255,255,255,0.20)" }}
+                >
+                  Without one
+                </p>
+                <ul className="space-y-8">
+                  {([
+                    { title: "The question you can't answer", desc: "'How do I get my money back?' — and you're improvising." },
+                    { title: "Surprises after signatures", desc: "Fees and splits you didn't model surface after the deal closes." },
+                    { title: "First-deal math", desc: "Your backend points were worth nothing after the sales agent commission you forgot to model." },
+                  ]).map((item, i) => (
+                    <li
+                      key={item.title}
+                      style={{
+                        opacity: prefersReducedMotion || valueVisible ? 1 : 0,
+                        transform: prefersReducedMotion || valueVisible ? "translateY(0)" : "translateY(8px)",
+                        transition: prefersReducedMotion ? "none" : "opacity 600ms ease-out, transform 600ms ease-out",
+                        transitionDelay: prefersReducedMotion ? "0ms" : `${(3 + i) * 120 + 200}ms`,
+                      }}
+                    >
+                      <p className="text-[15px] font-medium leading-snug mb-1" style={{ color: "rgba(255,255,255,0.50)" }}>{item.title}</p>
+                      <p className="text-[15px] leading-[1.7]" style={{ color: "rgba(255,255,255,0.25)" }}>{item.desc}</p>
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
           </section>
 
-          {/* ═══ FOOTER — LIGHT ═══ */}
-          <footer className="py-12 md:py-16 px-8 max-w-md mx-auto md:max-w-2xl">
-            <p className="text-ink-secondary text-[13px] tracking-wide leading-relaxed">
-              For educational and informational purposes only. Not legal, tax, or investment advice.
-              Consult a qualified entertainment attorney before making financing decisions.
+          {/* ════════════════════════════════════════════════════════
+              CLOSER — one line + CTA, maximum breathing room
+              ════════════════════════════════════════════════════════ */}
+          <section className="py-28 md:py-40">
+            <div
+              ref={closerRef}
+              className="px-8 max-w-lg mx-auto md:max-w-xl"
+              style={{
+                opacity: prefersReducedMotion || closerVisible ? 1 : 0,
+                transform: prefersReducedMotion || closerVisible ? "translateY(0)" : "translateY(12px)",
+                transition: prefersReducedMotion ? "none" : "opacity 800ms ease-out, transform 800ms ease-out",
+              }}
+            >
+              <h2 className="font-bebas text-[clamp(2rem,8vw,3rem)] leading-[0.95] tracking-[0.02em] text-white mb-10">
+                YOUR INVESTORS WILL ASK<br />
+                HOW THE MONEY FLOWS&nbsp;BACK.
+              </h2>
+              <button
+                onClick={handleStartClick}
+                className="h-[52px] px-10 btn-cta-primary"
+              >
+                BUILD YOUR WATERFALL
+              </button>
+            </div>
+          </section>
+
+          {/* ════════════════════════════════════════════════════════
+              FOOTER
+              ════════════════════════════════════════════════════════ */}
+          <footer className="pb-16 pt-8 px-8 max-w-lg mx-auto md:max-w-xl">
+            <div
+              className="h-[1px] w-full mb-8"
+              style={{ background: "rgba(255,255,255,0.06)" }}
+            />
+            <p
+              className="text-[12px] leading-[1.8] tracking-wide"
+              style={{ color: "rgba(255,255,255,0.20)" }}
+            >
+              For educational and informational purposes only. Not legal, tax,
+              or investment advice. Consult a qualified entertainment attorney
+              before making financing decisions.
             </p>
           </footer>
 
