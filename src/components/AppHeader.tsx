@@ -27,15 +27,15 @@ const AppHeader = ({ onMoreOpen }: AppHeaderProps) => {
           style={{
             pointerEvents: "auto",
             width: "100%",
-            maxWidth: "576px",
+            maxWidth: "340px",
             height: "54px",
             marginTop: "max(12px, env(safe-area-inset-top, 12px))",
             marginLeft: "16px",
             marginRight: "16px",
             borderRadius: "12px",
             background: "#000000",
-            border: "1px solid rgba(212,175,55,0.25)",
-            boxShadow: "0 8px 32px rgba(0,0,0,0.95)",
+            border: "1px solid rgba(212,175,55,0.60)",
+            boxShadow: "0 8px 32px rgba(0,0,0,0.95), inset 0 1px 0 rgba(212,175,55,0.08)",
             paddingLeft: "20px",
             paddingRight: "12px",
           }}
@@ -45,8 +45,8 @@ const AppHeader = ({ onMoreOpen }: AppHeaderProps) => {
             className="flex items-center hover:opacity-80 transition-opacity"
             aria-label="Go home"
           >
-            <span className="font-bebas text-[28px] tracking-[0.14em] text-gold leading-none">
-              FILMMAKER<span className="text-ink-body">.OG</span>
+            <span className="font-bebas text-[28px] tracking-[0.14em] text-gold-full leading-none">
+              FILMMAKER<span className="text-white-body">.OG</span>
             </span>
           </button>
 
@@ -55,7 +55,7 @@ const AppHeader = ({ onMoreOpen }: AppHeaderProps) => {
             className="flex items-center justify-center w-10 h-10 active:scale-95 transition-transform"
             aria-label="More options"
           >
-            <MoreVertical className="w-5 h-5 text-gold" />
+            <MoreVertical className="w-5 h-5 text-gold-full" />
           </button>
         </nav>
       </header>
