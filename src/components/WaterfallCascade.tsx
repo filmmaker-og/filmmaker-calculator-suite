@@ -63,8 +63,8 @@ const WaterfallCascade = () => {
     <div ref={containerRef} className="pt-2 pb-2">
       {/* Ledger card — gold border, black interior */}
       <div
-        className="overflow-hidden rounded-none"
-        style={{ border: "1px solid rgba(212,175,55,0.35)", background: "#000" }}
+        className="overflow-hidden rounded-xl"
+        style={{ border: "1px solid rgba(212,175,55,0.15)", background: "#000" }}
       >
         {/* Acquisition price header row */}
         <div className="flex justify-between items-baseline px-5 pt-5 pb-4">
@@ -80,7 +80,7 @@ const WaterfallCascade = () => {
         <div
           className="mx-5 h-[1px]"
           style={{
-            background: "linear-gradient(90deg, transparent 0%, rgba(212,175,55,0.35) 50%, transparent 100%)",
+            background: "linear-gradient(90deg, transparent 0%, rgba(212,175,55,0.25) 50%, transparent 100%)",
             opacity: revealed ? 1 : 0,
             transition: "opacity 500ms ease-out",
           }}
@@ -93,7 +93,7 @@ const WaterfallCascade = () => {
             return (
               <div
                 key={d.name}
-                className="flex justify-between items-baseline rounded-none"
+                className="flex justify-between items-baseline rounded-md"
                 style={{
                   padding: "9px 8px",
                   margin: "0 -8px",
@@ -118,7 +118,7 @@ const WaterfallCascade = () => {
 
       {/* Profit box — thick gold border + glow */}
       <div
-        className="mt-2 rounded-none py-5 bg-black text-center"
+        className="mt-2 rounded-xl py-5 bg-black text-center"
         style={{
           border: "2px solid rgba(212,175,55,1.0)",
           background: "rgba(212,175,55,0.08)",
@@ -145,9 +145,9 @@ const WaterfallCascade = () => {
         ]).map((c) => (
           <div
             key={c.label}
-            className="px-3.5 py-3.5 text-center rounded-none"
+            className="px-3.5 py-3.5 text-center rounded-xl"
             style={{
-              border: "1px solid rgba(212,175,55,0.35)",
+              border: "1px solid rgba(212,175,55,0.15)",
               background: "rgba(212,175,55,0.08)",
               opacity: splitVisible ? 1 : 0,
               transform: splitVisible ? "translateY(0)" : "translateY(16px)",
