@@ -7,9 +7,9 @@ import { useState, useEffect, useRef } from "react";
      Deduction row names       → text-[14px] (body tier)
      Deduction row amounts     → text-[14px] mono (matches names)
      Net Profits label         → text-[12px] mono uppercase gold
-     Net Profits amount        → text-[28px]/text-[32px] mono bold WHITE (largest number)
+     Net Profits amount        → text-[28px]/text-[32px] mono bold GOLD (largest number, climactic reveal)
      Producer/Investor labels  → text-[12px] mono uppercase gold
-     Producer/Investor amounts → text-[18px]/text-[20px] mono bold (subordinate to Net Profits)
+     Producer/Investor amounts → text-[18px]/text-[20px] mono bold WHITE (subordinate to Net Profits)
 */
 
 const TOTAL = 3_000_000;
@@ -38,11 +38,11 @@ const WaterfallCascade = () => {
     const obs = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          delay = setTimeout(() => setRevealed(true), 400);
+          delay = setTimeout(() => setRevealed(true), 200);
           obs.disconnect();
         }
       },
-      { threshold: 0.25 }
+      { threshold: 0.15 }
     );
     obs.observe(el);
     return () => { obs.disconnect(); clearTimeout(delay); };
@@ -139,7 +139,7 @@ const WaterfallCascade = () => {
         <p className="font-mono text-[12px] tracking-[0.14em] uppercase font-semibold mb-1 text-gold-full">
           Net Profits
         </p>
-        <span className="font-mono text-[28px] md:text-[32px] font-bold text-white tracking-tight tabular-nums">
+        <span className="font-mono text-[28px] md:text-[32px] font-bold text-gold-full tracking-tight tabular-nums">
           ${profitCount.toLocaleString()}
         </span>
       </div>
@@ -166,7 +166,7 @@ const WaterfallCascade = () => {
             <p className="font-mono text-[12px] tracking-[0.14em] uppercase font-semibold mb-1 text-gold-full">
               {c.label}
             </p>
-            <span className="font-mono text-[18px] md:text-[20px] font-bold text-gold-full tabular-nums">
+            <span className="font-mono text-[18px] md:text-[20px] font-bold text-white tabular-nums">
               {c.amount}
             </span>
           </div>
