@@ -59,6 +59,15 @@ export default {
           ghost:     "rgba(220, 60, 60, 0.03)",
         },
 
+        // ── INK: active text tier system (use these) ──
+        ink: {
+          DEFAULT:   "#FFFFFF",                          // headlines, key numbers — FULL
+          body:      "rgba(255, 255, 255, 0.70)",        // secondary / paragraph text
+          muted:     "rgba(255, 255, 255, 0.55)",        // readable subordinate text
+          secondary: "rgba(255, 255, 255, 0.40)",        // tertiary, metadata
+          ghost:     "rgba(255, 255, 255, 0.06)",        // hover bg, surface tints
+        },
+
         // ── WHITE: DEPRECATED — migrate to ink-* equivalents ──
         // white-body (0.60) → use ink-muted (0.55) or ink-body (0.70)
         // white-tertiary (0.40) → use ink-secondary (0.40)
@@ -69,15 +78,6 @@ export default {
           body:      "rgba(255, 255, 255, 0.60)",
           tertiary:  "rgba(255, 255, 255, 0.40)",
           surface:   "rgba(255, 255, 255, 0.06)",
-        },
-
-        // ── INK: active text tier system (use these) ──
-        ink: {
-          DEFAULT:   "#FFFFFF",                          // headlines, key numbers — FULL
-          body:      "rgba(255, 255, 255, 0.70)",        // secondary / paragraph text
-          muted:     "rgba(255, 255, 255, 0.55)",        // readable subordinate text
-          secondary: "rgba(255, 255, 255, 0.40)",        // tertiary, metadata
-          ghost:     "rgba(255, 255, 255, 0.06)",        // hover bg, surface tints
         },
 
         // ── BACKGROUNDS — #000, #111, #1A1A1A only ──
