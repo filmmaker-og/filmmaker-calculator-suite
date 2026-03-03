@@ -1,8 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 
 export function useInView<T extends HTMLElement>(options?: IntersectionObserverInit) {
   const ref = useRef<T | null>(null);
   const [inView, setInView] = useState(false);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const stableOptions = useMemo(() => options ?? { threshold: 0.12 }, [JSON.stringify(options)]);
 
   useEffect(() => {
     const el = ref.current;
@@ -12,16 +14,15 @@ export function useInView<T extends HTMLElement>(options?: IntersectionObserverI
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           setInView(true);
-          // we only need the entrance once — stop observing to keep work minimal
           obs.unobserve(entry.target);
         }
       });
-    }, options ?? { threshold: 0.12 });
+    }, stableOptions);
 
     observer.observe(el);
 
     return () => observer.disconnect();
-  }, [options]);
+  }, [stableOptions]);
 
   return { ref, inView };
 }

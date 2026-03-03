@@ -5,19 +5,6 @@ import { useHaptics } from "@/hooks/use-haptics";
 import { useInView } from "@/hooks/useInView";
 import LeadCaptureModal from "@/components/LeadCaptureModal";
 import WaterfallCascade from "@/components/WaterfallCascade";
-/* ═══════════════════════════════════════════════════════════════════
-   SHARED PRIMITIVES — design-system compliant, token-based
-   ═══════════════════════════════════════════════════════════════════ */
-/** Gold gradient divider — fades from transparent edges to gold center */
-const Divider = () => (
-  <div
-    className="h-[1px] w-full"
-    style={{
-      background:
-        "linear-gradient(90deg, transparent 0%, rgba(212,175,55,0.25) 50%, transparent 100%)",
-    }}
-  />
-);
 const Index = () => {
   const navigate = useNavigate();
   const haptics = useHaptics();
@@ -54,6 +41,7 @@ const Index = () => {
     return () => clearTimeout(timeout);
   }, [prefersReducedMotion]);
   /* ── Scroll-reveal refs ── */
+  const { ref: waterfallRef, inView: waterfallVisible } = useInView<HTMLDivElement>({ threshold: 0.2 });
   const { ref: caseRef, inView: caseVisible } = useInView<HTMLDivElement>({ threshold: 0.2 });
   const { ref: priceRef, inView: priceVisible } = useInView<HTMLDivElement>({ threshold: 0.2 });
   const { ref: closerRef, inView: closerVisible } = useInView<HTMLDivElement>({ threshold: 0.2 });
@@ -87,13 +75,14 @@ const Index = () => {
           className="flex-1 flex flex-col items-center"
           style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
         >
-          <div className="w-full max-w-xl px-5 md:px-8 flex flex-col gap-5 py-6">
+          <div className="w-full max-w-xl px-5 md:px-8 flex flex-col gap-8 py-6">
             {/* ════════════════════════════════════════════════════════
-                1. HERO — primary conversion card (rounded-2xl)
+                1. HERO — primary conversion card
                 ════════════════════════════════════════════════════════ */}
             <div
-              className="rounded-2xl px-6 py-10 md:px-8 md:py-14 text-center overflow-hidden"
+              className="px-6 py-10 md:px-8 md:py-14 text-center overflow-hidden"
               style={{
+                borderRadius: "8px",
                 background: "radial-gradient(ellipse at center top, rgba(212,175,55,0.08) 0%, rgba(212,175,55,0.03) 40%, transparent 100%)",
                 border: "1px solid rgba(212,175,55,0.25)",
                 boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06), 0 0 40px rgba(212,175,55,0.03)",
@@ -118,17 +107,20 @@ const Index = () => {
                 </button>
               </div>
             </div>
-            <Divider />
             {/* ════════════════════════════════════════════════════════
                 2. WATERFALL CASCADE — interactive proof-of-concept
-                   (rounded-xl data card treatment)
                 ════════════════════════════════════════════════════════ */}
             <div
-              className="rounded-xl px-5 py-6 md:px-6 md:py-8 overflow-hidden"
+              ref={waterfallRef}
+              className="px-5 py-6 md:px-6 md:py-8 overflow-hidden"
               style={{
-                background: "rgba(255,255,255,0.04)",
+                borderRadius: "8px",
+                background: "#111111",
                 border: "1px solid rgba(212,175,55,0.15)",
                 boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06)",
+                opacity: prefersReducedMotion || waterfallVisible ? 1 : 0,
+                transform: prefersReducedMotion || waterfallVisible ? "translateY(0)" : "translateY(20px)",
+                transition: prefersReducedMotion ? "none" : "opacity 700ms ease-out, transform 700ms ease-out",
               }}
             >
               <p className="max-w-2xl mx-auto text-center text-white-body text-[16px] leading-relaxed mb-8">
@@ -136,7 +128,6 @@ const Index = () => {
               </p>
               <WaterfallCascade />
             </div>
-            <Divider />
             {/* ════════════════════════════════════════════════════════
                 3. THE CASE — merged education + evidence
                    Wide card → 2-up evidence grid below
@@ -144,9 +135,10 @@ const Index = () => {
             <div ref={caseRef} className="flex flex-col gap-4">
               {/* Education card — the "why" */}
               <div
-                className="rounded-xl px-6 py-8 md:px-8 md:py-10 overflow-hidden"
+                className="px-6 py-8 md:px-8 md:py-10 overflow-hidden"
                 style={{
-                  background: "rgba(255,255,255,0.04)",
+                  borderRadius: "8px",
+                  background: "rgba(212,175,55,0.03)",
                   border: "1px solid rgba(212,175,55,0.15)",
                   boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06)",
                   opacity: prefersReducedMotion || caseVisible ? 1 : 0,
@@ -157,7 +149,7 @@ const Index = () => {
                 <p className="font-mono text-[14px] uppercase tracking-[0.20em] text-gold-full mb-5">
                   Why This Matters
                 </p>
-                <h2 className="font-bebas text-[28px] md:text-[40px] leading-[1.05] tracking-[0.06em] text-white mb-5">
+                <h2 className="font-bebas text-[26px] md:text-[36px] leading-[1.05] tracking-[0.06em] text-white mb-5">
                   KNOW YOUR DEAL BEFORE YOU SIGN&nbsp;IT
                 </h2>
                 <p className="text-[16px] leading-relaxed text-white-body">
@@ -167,21 +159,16 @@ const Index = () => {
                   This tool lets you map every fee, split, and repayment tier so you
                   walk into those conversations already knowing the math.
                 </p>
-                <a
-                  href="/resources?tab=waterfall"
-                  className="inline-block mt-6 font-mono text-[14px] tracking-[0.06em] text-gold-cta hover:opacity-70 transition-opacity"
-                >
-                  What's a waterfall? {"\u2192"}
-                </a>
               </div>
               {/* Evidence panels — 2-up grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {evidencePanels.map((panel, i) => (
                   <div
                     key={panel.label}
-                    className="rounded-xl p-5 md:p-6 overflow-hidden"
+                    className="p-5 md:p-6 overflow-hidden"
                     style={{
-                      background: "rgba(255,255,255,0.04)",
+                      borderRadius: "8px",
+                      background: "#111111",
                       border: "1px solid rgba(212,175,55,0.15)",
                       opacity: prefersReducedMotion || caseVisible ? 1 : 0,
                       transform: prefersReducedMotion || caseVisible ? "translateY(0)" : "translateY(20px)",
@@ -201,22 +188,54 @@ const Index = () => {
                         background: "linear-gradient(90deg, transparent 0%, rgba(212,175,55,0.25) 50%, transparent 100%)",
                       }}
                     />
-                    <p className="text-[14px] md:text-[16px] leading-relaxed text-white font-semibold">
+                    <p className="font-mono text-[14px] uppercase tracking-[0.12em] text-white font-medium">
                       {panel.punchline}
                     </p>
                   </div>
                 ))}
               </div>
+              {/* Evidence sub-cards — compact stat pair, always 2-up */}
+              <div
+                className="grid grid-cols-2 gap-2"
+                style={{
+                  opacity: prefersReducedMotion || caseVisible ? 1 : 0,
+                  transform: prefersReducedMotion || caseVisible ? "translateY(0)" : "translateY(12px)",
+                  transition: prefersReducedMotion ? "none" : "opacity 500ms ease-out, transform 500ms ease-out",
+                  transitionDelay: prefersReducedMotion ? "0ms" : "400ms",
+                }}
+              >
+                {[
+                  { number: "15–25%", label: "Sales agent off-the-top" },
+                  { number: "EVERY HAND", label: "In the pot before you" },
+                ].map((card) => (
+                  <div
+                    key={card.label}
+                    className="px-3.5 py-3.5 text-center"
+                    style={{
+                      borderRadius: "8px",
+                      background: "#111111",
+                      border: "1px solid rgba(212,175,55,0.15)",
+                    }}
+                  >
+                    <p className="font-mono text-[18px] md:text-[20px] font-bold text-gold-full mb-1">
+                      {card.number}
+                    </p>
+                    <p className="font-mono text-[12px] uppercase tracking-[0.12em]" style={{ color: "rgba(255,255,255,0.7)" }}>
+                      {card.label}
+                    </p>
+                  </div>
+                ))}
+              </div>
             </div>
-            <Divider />
             {/* ════════════════════════════════════════════════════════
                 4. WHAT THIS COSTS — compact, centered
                 ════════════════════════════════════════════════════════ */}
             <div
               ref={priceRef}
-              className="rounded-xl px-6 py-8 md:px-8 md:py-10 text-center overflow-hidden"
+              className="px-6 py-8 md:px-8 md:py-10 text-center overflow-hidden"
               style={{
-                background: "rgba(255,255,255,0.04)",
+                borderRadius: "8px",
+                background: "#111111",
                 border: "1px solid rgba(212,175,55,0.15)",
                 boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06)",
                 opacity: prefersReducedMotion || priceVisible ? 1 : 0,
@@ -243,15 +262,47 @@ const Index = () => {
                 </button>
               </div>
             </div>
-            <Divider />
+            {/* Resolution sub-cards — feature pair, always 2-up */}
+            <div
+              className="grid grid-cols-2 gap-2"
+              style={{
+                opacity: prefersReducedMotion || priceVisible ? 1 : 0,
+                transform: prefersReducedMotion || priceVisible ? "translateY(0)" : "translateY(12px)",
+                transition: prefersReducedMotion ? "none" : "opacity 500ms ease-out, transform 500ms ease-out",
+                transitionDelay: prefersReducedMotion ? "0ms" : "200ms",
+              }}
+            >
+              {[
+                { number: "EVERY TIER", label: "Off-tops through net profits" },
+                { number: "BREAKEVEN", label: "Know your number" },
+              ].map((card) => (
+                <div
+                  key={card.label}
+                  className="px-3.5 py-3.5 text-center"
+                  style={{
+                    borderRadius: "8px",
+                    background: "#111111",
+                    border: "1px solid rgba(212,175,55,0.15)",
+                  }}
+                >
+                  <p className="font-mono text-[18px] md:text-[20px] font-bold text-gold-full mb-1">
+                    {card.number}
+                  </p>
+                  <p className="font-mono text-[12px] uppercase tracking-[0.12em]" style={{ color: "rgba(255,255,255,0.7)" }}>
+                    {card.label}
+                  </p>
+                </div>
+              ))}
+            </div>
             {/* ════════════════════════════════════════════════════════
                 5. CLOSER CTA — emotional trigger + final conversion
-                   (rounded-2xl feature/CTA treatment)
                 ════════════════════════════════════════════════════════ */}
             <div
               ref={closerRef}
-              className="rounded-2xl px-6 py-10 md:px-8 md:py-14 text-center overflow-hidden"
+              data-section="closer"
+              className="px-6 py-10 md:px-8 md:py-14 text-center overflow-hidden"
               style={{
+                borderRadius: "8px",
                 border: "1px solid rgba(212,175,55,0.25)",
                 background: "radial-gradient(ellipse at center 70%, rgba(212,175,55,0.08) 0%, rgba(212,175,55,0.03) 60%, transparent 100%)",
                 boxShadow: "0 0 60px rgba(212,175,55,0.03), inset 0 1px 0 rgba(255,255,255,0.06)",
@@ -260,13 +311,13 @@ const Index = () => {
                 transition: prefersReducedMotion ? "none" : "opacity 700ms ease-out, transform 700ms ease-out",
               }}
             >
-              <h2 className="font-bebas text-[28px] md:text-[40px] leading-[1.05] tracking-[0.06em] text-white mb-6">
+              <h2 className="font-bebas text-[32px] md:text-[44px] leading-[1.05] tracking-[0.06em] text-white mb-6">
                 YOUR INVESTORS WILL{"\u00A0"}ASK HOW THE MONEY FLOWS BACK.
               </h2>
               <div className="w-full max-w-[280px] mx-auto">
                 <button
                   onClick={handleStartClick}
-                  className="w-full h-14 rounded-sm btn-cta-primary font-bold animate-cta-glow-pulse"
+                  className={`w-full h-14 rounded-sm btn-cta-primary font-bold${closerVisible ? " animate-cta-glow-pulse" : ""}`}
                 >
                   BUILD YOUR WATERFALL
                 </button>
@@ -276,8 +327,7 @@ const Index = () => {
                 6. FOOTER — disclaimer
                 ════════════════════════════════════════════════════════ */}
             <footer className="pt-4 pb-6 px-4 text-center">
-              <Divider />
-              <p className="text-white-tertiary text-[12px] tracking-wide leading-relaxed mx-auto max-w-sm mt-4">
+              <p className="text-ink-body text-[12px] tracking-wide leading-relaxed mx-auto max-w-sm">
                 For educational and informational purposes only. Not legal, tax,
                 or investment advice. Consult a qualified entertainment attorney
                 before making financing decisions.
