@@ -76,11 +76,11 @@ const WaterfallCascade = () => {
       {/* Ledger card — gold border, black interior */}
       <div
         className="overflow-hidden"
-        style={{ border: "1px solid rgba(212,175,55,0.15)", borderRadius: "8px", background: "#000" }}
+        style={{ border: "1px solid rgba(212,175,55,0.15)", borderRadius: "8px", background: "#000", boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06)" }}
       >
         {/* Acquisition price header row */}
         <div className="flex justify-between items-baseline px-5 pt-5 pb-4">
-          <span className="font-mono text-[14px] uppercase tracking-[0.12em]" style={{ color: "rgba(255,255,255,0.7)" }}>
+          <span className="font-mono text-[14px] uppercase tracking-[0.12em] text-ink-body">
             Acquisition Price
           </span>
           <span className="font-mono text-[18px] md:text-[20px] font-bold text-white tabular-nums">
@@ -88,18 +88,16 @@ const WaterfallCascade = () => {
           </span>
         </div>
 
-        {/* Gold divider */}
-        <div
-          className="mx-5 h-[1px]"
-          style={{
-            background: "linear-gradient(90deg, transparent 0%, rgba(212,175,55,0.25) 50%, transparent 100%)",
-            opacity: revealed ? 1 : 0,
-            transition: "opacity 500ms ease-out",
-          }}
-        />
-
         {/* Deduction rows — zebra-striped with gold tint */}
-        <div className="px-5 pt-2 pb-4">
+        <div
+          className="px-5 pt-2 pb-4"
+          style={{
+            opacity: revealed ? 1 : 0,
+            transform: revealed ? "translateY(0)" : "translateY(16px)",
+            transition: "opacity 500ms ease-out, transform 500ms ease-out",
+            transitionDelay: "150ms",
+          }}
+        >
           {deductions.map((d, i) => {
             const isEven = i % 2 === 0;
             return (
@@ -110,13 +108,9 @@ const WaterfallCascade = () => {
                   padding: "9px 8px",
                   margin: "0 -8px",
                   background: isEven ? "rgba(212,175,55,0.08)" : "transparent",
-                  opacity: revealed ? 1 : 0,
-                  transform: revealed ? "translateY(0)" : "translateY(16px)",
-                  transition: "opacity 500ms ease-out, transform 500ms ease-out",
-                  transitionDelay: `${(i + 1) * 150}ms`,
                 }}
               >
-                <span className="text-[14px] font-medium" style={{ color: "rgba(255,255,255,0.7)" }}>
+                <span className="text-[14px] font-medium text-ink-body">
                   {d.name}
                 </span>
                 <span className="font-mono text-[14px] font-medium text-white tabular-nums">
@@ -133,7 +127,7 @@ const WaterfallCascade = () => {
         className="mt-2 py-5 bg-black text-center"
         style={{
           borderRadius: "8px",
-          border: "2px solid rgba(212,175,55,1.0)",
+          border: "1px solid rgba(212,175,55,1.0)",
           background: "rgba(212,175,55,0.08)",
           boxShadow: "0 0 16px 0px rgba(212,175,55,0.08), inset 0 1px 0 rgba(212,175,55,0.08)",
           opacity: revealed ? 1 : 0,
@@ -161,7 +155,7 @@ const WaterfallCascade = () => {
             className="px-3.5 py-3.5 text-center"
             style={{
               borderRadius: "8px",
-              border: "1px solid rgba(255,255,255,0.15)",
+              border: "1px solid rgba(212,175,55,0.15)",
               background: "rgba(212,175,55,0.08)",
               opacity: splitVisible ? 1 : 0,
               transform: splitVisible ? "translateY(0)" : "translateY(16px)",
