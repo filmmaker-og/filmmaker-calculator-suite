@@ -46,7 +46,7 @@ const AppHeader = ({ onMoreOpen }: AppHeaderProps) => {
             aria-label="Go home"
           >
             <span className="font-bebas text-[28px] tracking-[0.14em] text-gold-full leading-none">
-              FILMMAKER<span className="text-white-body">.OG</span>
+              FILMMAKER<span className="text-ink-muted">.OG</span>
             </span>
           </button>
 

@@ -108,7 +108,7 @@ const WaterfallCascade = () => {
                   {d.name}
                 </span>
                 <span className="font-mono text-sm md:text-base font-medium text-white-primary tabular-nums">
-                  <span className="text-white-tertiary">{"\u2212"}</span>{fmt(d.amount)}
+                  <span className="text-ink-secondary">{"\u2212"}</span>{fmt(d.amount)}
                 </span>
               </div>
             );
@@ -165,7 +165,7 @@ const WaterfallCascade = () => {
         ))}
       </div>
 
-      <p className="font-mono text-sm text-white-tertiary text-center mt-3.5">
+      <p className="font-mono text-sm text-ink-secondary text-center mt-3.5">
         Hypothetical $1.8M budget{"\u00A0"}{"\u00B7"}{"\u00A0"}$3M
         acquisition{"\u00A0"}{"\u00B7"}{"\u00A0"}50/50 net profit split
       </p>

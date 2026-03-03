@@ -2,84 +2,99 @@
 
 Reference for all page-level work. Read this before modifying any page.
 
-The landing page (`src/pages/Index.tsx`) is the reference implementation. When in doubt, match it.
+The source of truth for token values is `src/lib/design-system.ts`. This document explains how to apply them. When values conflict, design-system.ts wins.
 
 ---
 
-## Type Scale (7 steps — no others)
+## Color System
 
-| Size | Role | Font | Example |
-|------|------|------|---------|
-| `text-[clamp(3.2rem,11vw,4.8rem)]` | Hero headline only | Bebas Neue | "SEE WHERE EVERY DOLLAR GOES" |
-| `text-[40px]` | Section headlines, bridge statements | Bebas Neue | "YOUR INVESTORS WILL ASK..." |
-| `text-[28px]` | Product/feature names | Bebas Neue | "THE WATERFALL" |
-| `text-[26px]` | Counter values, large data | Mono or Bebas | "$417,500" |
-| `text-[16px]` | Body text, descriptions, list items | DM Sans | Check/X items, explainer text |
-| `text-[14px]` | Section labels, secondary labels | Roboto Mono | "With your waterfall", footer tagline |
-| `text-[12px]` | Captions, footnotes, legal, counter labels | Roboto Mono / DM Sans | "Net Profits", disclaimers |
+### Gold — 4 Tiers + 2 Solids
 
-**Rules:**
+| Name | Value | Tailwind class | Use for |
+|------|-------|---------------|---------|
+| Full | `#D4AF37` | `text-gold-full`, `text-gold`, `border-gold` | Brand mark, icons, active labels, section eyebrows |
+| Strong | `rgba(212,175,55,0.25)` | `border-gold-strong` | Active borders, hover states, emphasis borders |
+| Medium | `rgba(212,175,55,0.15)` | `border-gold-medium`, `border-gold-border` | Card borders, section dividers, resting borders |
+| Subtle | `rgba(212,175,55,0.08)` | `bg-gold-subtle` | Hover fills, zebra row tints, background tints |
+| Ghost | `rgba(212,175,55,0.03)` | `bg-gold-glow` | Ambient glows, large area tints, radial backgrounds |
+| Deep | `#7A5C12` | `text-gold-deep` | Gradient depth, dark gold shadows |
+| CTA | `#F9E076` | `text-gold-cta` | **Clickable elements ONLY** — buttons, links, CTAs |
 
-- Never use `text-[13px]` or `text-[15px]` — they're too close to 14/16 and create visual ambiguity
-- Never use `text-sm`, `text-base`, `text-lg`, `text-xl`, `text-2xl` etc. — use explicit pixel values only
-- Every size has exactly one job. If it doesn't fit the table above, the size is wrong.
+**No other gold opacity values exist.** If you need a gold opacity not listed here, use the closest tier.
+
+### White / Text — 4 Tiers
+
+| Name | Value | Tailwind class | Use for |
+|------|-------|---------------|---------|
+| Primary | `#FFFFFF` | `text-white` | Headlines, key numbers, emphasis, primary content |
+| Secondary | `rgba(255,255,255,0.70)` | `text-ink-body` | Body text, descriptions, paragraph content |
+| Tertiary | `rgba(255,255,255,0.40)` | `text-ink-secondary` | Captions, metadata, labels, constraints |
+| Ghost | `rgba(255,255,255,0.06)` | `text-ink-ghost` | Hover backgrounds, surface tints, faint fills |
+
+Additional text tier (non-landing pages):
+
+| Name | Value | Tailwind class | Use for |
+|------|-------|---------------|---------|
+| Muted | `rgba(255,255,255,0.55)` | `text-ink-muted` | Readable subordinate text, between secondary and tertiary |
+
+**Readability rule:** Never combine white 0.40 with font sizes below 14px on #000, or below 16px on #111. If both opacity and size are at their minimum, bump opacity to 0.70.
+
+### Backgrounds — 3 Only
+
+| Background | Hex | Use for |
+|-----------|-----|---------|
+| Void | `#000000` | Page backgrounds, primary card backgrounds |
+| Elevated | `#111111` | Section panels, data cards, lifted containers |
+| Surface | `#1A1A1A` | Input fields, nested containers, recessed areas |
+
+No other background values. No `rgba(255,255,255,0.04)` card fills. Use #000 or #111 solid.
 
 ---
 
-## Font Assignments
+## Typography
+
+### Font Assignments
 
 | Font | Tailwind class | Use for |
 |------|---------------|---------|
-| Bebas Neue | `font-bebas` | Display headlines, section titles, product names, bridge lines |
-| DM Sans | `font-sans` (default) | Body text, descriptions, UI elements, list items |
-| Roboto Mono | `font-mono` | Numbers, prices, labels, data, footnotes, section eyebrows |
+| Bebas Neue | `font-bebas` | Display headlines, section titles, bridge statements |
+| Inter | `font-sans` (default) | Body text, descriptions, UI elements |
+| Roboto Mono | `font-mono` | Numbers, prices, labels, data, section eyebrows, footnotes |
+
+### Type Scale
+
+| Size | Role | Font | Example |
+|------|------|------|---------|
+| `clamp(3.2rem,11vw,4.8rem)` | Hero headline only | Bebas | "SEE WHERE EVERY DOLLAR GOES" |
+| `text-[40px]` / `text-[44px]` | Section H2 desktop | Bebas | "YOUR INVESTORS WILL ASK..." |
+| `text-[28px]` / `text-[32px]` | Section H2 mobile | Bebas | Same content, mobile size |
+| `text-[24px]` / `text-[26px]` | Subordinate H2 mobile | Bebas | Lower-priority section titles |
+| `text-[18px]` / `text-[20px]` | Featured body, thesis statements, large data | Inter or Mono | Intro paragraphs, acquisition amounts |
+| `text-[16px]` | Standard body text | Inter | Paragraphs, descriptions |
+| `text-[14px]` | Secondary text, labels, data rows | Mono or Inter | Section labels, table data, punchlines |
+| `text-[12px]` | Captions, footnotes, legal, counter labels | Mono | "Net Profits", disclaimers, metadata |
 
 **Rules:**
 
-- Bebas is always uppercase with `tracking-[0.06em]` to `tracking-[0.08em]`
-- Mono labels use `tracking-[0.12em]` uppercase
+- Use explicit pixel values only — never `text-sm`, `text-base`, `text-lg`, `text-xl`, `text-2xl` etc.
+- Never use `text-[13px]` or `text-[15px]` — they create visual ambiguity
+- Bebas always uppercase with `tracking-[0.06em]` to `tracking-[0.08em]`
+- Mono labels use `tracking-[0.12em]` to `tracking-[0.20em]` uppercase
 - Never mix fonts within a single text element
 
 ---
 
-## Color Tokens (use these, not legacy)
+## Border Radius — 8px Maximum
 
-### Text Colors
+| Radius | CSS | Use for |
+|--------|-----|---------|
+| 4px | `borderRadius: "4px"` or `rounded-sm` | CTA buttons, small interactive elements |
+| 6px | `borderRadius: "6px"` | Default cards, typical containers |
+| 8px | `borderRadius: "8px"` | Maximum — feature cards, hero sections |
 
-| Token | Tailwind class | Use for |
-|-------|---------------|---------|
-| White | `text-white` or `text-ink` | Headlines, key numbers, emphasis |
-| Body | `text-ink-body` | Paragraph text, descriptions |
-| Secondary | `text-ink-secondary` | Supporting info, metadata, constraints |
-| Ghost | `text-ink-ghost` | Disclaimers, fine print, legal |
-| Gold | `text-gold` | Gold headlines, labels, brand elements |
-| Gold label | `text-gold-label` | Micro-labels, muted gold text |
+**8px is the absolute maximum.** Do not use `rounded-lg`, `rounded-xl`, `rounded-2xl`, or `rounded-full` on cards or containers. The institutional aesthetic requires sharp corners. Use inline `borderRadius` or CSS variable equivalents (`--radius-sm`, `--radius-md`, `--radius-lg`).
 
-### Borders
-
-| Token | Tailwind class | Use for |
-|-------|---------------|---------|
-| Card border | `border-gold-border` | Card/section container borders |
-| Inner rule | `border-bg-card-rule` | Row dividers inside cards |
-
-### Backgrounds
-
-| Token | Tailwind class | Use for |
-|-------|---------------|---------|
-| Void | `bg-black` | Page background, card backgrounds |
-| Surface | `bg-bg-surface` | Section panels (#111111) |
-| Card fill | `bg-bg-card` | rgba(255,255,255,0.04) subtle card fill |
-| Emphasis row | inline `rgba(255,255,255,0.02)` | Highlighted rows within tables |
-
-### LEGACY TOKENS — DO NOT USE ON NEW/REBUILT PAGES
-
-These exist in `tailwind.config.ts` under "LEGACY COMPAT" for pages not yet migrated:
-
-- `text-text-primary`, `text-text-mid`, `text-text-dim` → replace with `text-white`, `text-ink-body`, `text-ink-secondary`
-- `border-border-subtle` → replace with `border-gold-border` or `border-bg-card-rule`
-- `bg-bg-card`, `bg-bg-header`, `bg-bg-void` → replace with `bg-black`, `bg-bg-surface`, or inline rgba values
-
-When rebuilding a page, replace ALL legacy tokens with the correct modern token. Do not mix systems on the same page.
+Exception: `rounded-full` for pill elements (badges, tags) only.
 
 ---
 
@@ -88,61 +103,48 @@ When rebuilding a page, replace ALL legacy tokens with the correct modern token.
 ### Data card (tables, ledgers, comparison grids)
 
 ```jsx
-className="border border-gold-border bg-black overflow-hidden rounded-xl"
-style={{ boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)' }}
-```
-
-- Row dividers: `border-t border-bg-card-rule`
-- Row padding: `px-6 py-4` or `px-6 py-5`
-- Emphasis rows: add `style={{ background: 'rgba(255,255,255,0.02)' }}`
-
-### Hero/feature card (subtle containment)
-
-```jsx
-className="rounded-2xl px-2 pt-6 pb-5"
 style={{
-  border: '1px solid rgba(212,175,55,0.10)',
-  background: 'rgba(255,255,255,0.02)',
-  boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.04), 0 0 40px rgba(212,175,55,0.03)',
+  border: '1px solid rgba(212,175,55,0.15)',
+  borderRadius: '8px',
+  background: '#111111',
+  boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)',
 }}
 ```
 
-### CTA card (strongest emphasis)
+- Row dividers: 1px `rgba(255,255,255,0.06)`
+- Row padding: `px-6 py-4` or `px-5 py-3.5`
+- Emphasis rows: `rgba(212,175,55,0.08)` background
+
+### Narrative card (evidence panels, info cards)
 
 ```jsx
-className="rounded-2xl px-8 py-10 md:py-14 text-center"
 style={{
-  border: '1px solid rgba(212,175,55,0.30)',
-  background: 'rgba(255,255,255,0.04)',
-  boxShadow: '0 0 60px rgba(212,175,55,0.06), 0 0 120px rgba(212,175,55,0.03), inset 0 1px 0 rgba(255,255,255,0.06)',
+  border: '1px solid rgba(212,175,55,0.15)',
+  borderRadius: '8px',
+  background: '#111111',
 }}
 ```
+
+### CTA / Closer card (strongest emphasis)
+
+```jsx
+style={{
+  border: '1px solid rgba(212,175,55,0.25)',
+  borderRadius: '8px',
+  background: '#000000',
+  boxShadow: '0 0 60px rgba(212,175,55,0.03)',
+}}
+```
+
+With radial gold gradient for warmth.
 
 ### Border opacity hierarchy (faintest → strongest)
 
-1. Hero card: `rgba(212,175,55,0.10)`
-2. Data cards: `border-gold-border` (0.25)
-3. CTA card: `rgba(212,175,55,0.30)`
+1. Ambient cards: `rgba(212,175,55,0.08)`
+2. Standard cards: `rgba(212,175,55,0.15)` — gold-medium
+3. Active / emphasis cards: `rgba(212,175,55,0.25)` — gold-strong
 
 Never invert this hierarchy. Stronger emphasis = stronger border.
-
----
-
-## Section Structure
-
-Use raw `<section>` tags with direct styling. Do NOT use `SectionFrame` or `SectionHeader` wrapper components — these are legacy and will be removed.
-
-```jsx
-<section id="section-name" className="py-14 md:py-20 px-6">
-  <div className="max-w-md mx-auto">
-    {/* content */}
-  </div>
-</section>
-```
-
-- Mobile max-width: `max-w-md` (448px)
-- Section padding: `py-14 md:py-20 px-6`
-- No ambient gradient backgrounds unless the section is a hero or primary feature
 
 ---
 
@@ -151,6 +153,8 @@ Use raw `<section>` tags with direct styling. Do NOT use `SectionFrame` or `Sect
 Use IntersectionObserver, fire once, fade + slide up:
 
 ```tsx
+const REVEAL_OPTIONS = { threshold: 0.2 }; // module-level constant
+
 const ref = useRef<HTMLDivElement>(null);
 const [visible, setVisible] = useState(false);
 
@@ -164,7 +168,7 @@ useEffect(() => {
         obs.disconnect();
       }
     },
-    { threshold: 0.2 }
+    REVEAL_OPTIONS
   );
   obs.observe(el);
   return () => obs.disconnect();
@@ -185,6 +189,7 @@ style={{
 - Duration: 600-700ms
 - Easing: `ease-out`
 - Fire once only — always `obs.disconnect()` after trigger
+- Sub-element reveals: use `translateY(12px)` with 200-300ms delay after parent
 
 ---
 
@@ -193,7 +198,7 @@ style={{
 ### Primary CTA:
 
 ```jsx
-<button className="w-full h-14 btn-cta-primary animate-cta-glow-pulse">
+<button className="w-full h-14 rounded-sm btn-cta-primary animate-cta-glow-pulse">
   BUTTON TEXT
 </button>
 ```
@@ -205,12 +210,37 @@ style={{
 
 ---
 
+## Token Namespaces in tailwind.config.ts
+
+The config has two generations of tokens. Use the correct ones:
+
+**ACTIVE — use on all new/rebuilt pages:**
+
+- `gold-full`, `gold-strong`, `gold-medium`, `gold-subtle`, `gold-glow`, `gold-cta`, `gold-deep`
+- `ink-body` (0.70), `ink-muted` (0.55), `ink-secondary` (0.40), `ink-ghost` (0.06)
+- `text-white` (full), `text-gold-full`, `text-gold-cta`
+- `bg-black`, `bg-bg-elevated`, `bg-bg-surface`
+- Inline rgba values using the 4-tier gold/white opacities listed above
+
+**LEGACY — exists for unmigrated pages, do NOT use on new work:**
+
+- `white-primary`, `white-body`, `white-tertiary`, `white-surface`
+- `gold-label`, `gold-accent`, `gold-border` (aliases — use gold-medium directly)
+- `text-text-primary`, `text-text-mid`, `text-text-dim`
+- `border-border-subtle`, `bg-bg-card`
+
+When rebuilding a page, replace ALL legacy tokens with the active equivalents. Do not mix systems on the same page.
+
+---
+
 ## What NOT to Do
 
-- No `rounded-lg` or `rounded-md` — use `rounded-xl` for data cards, `rounded-2xl` for feature/CTA cards
+- No `rounded-xl`, `rounded-2xl`, `rounded-lg` on cards — max 8px, use inline borderRadius
 - No Tailwind default text sizes (`text-sm`, `text-base`, `text-lg`) — explicit pixels only
-- No gradient gold dividers between sections — these are legacy Store page patterns
-- No `SectionFrame` or `SectionHeader` components
-- No lucide-react icons in section headers — the landing page uses none
+- No `text-[13px]` or `text-[15px]` — not in the type scale
+- No gold opacity values outside the 4-tier system (0.25/0.15/0.08/0.03)
+- No white opacity values outside the system (0.70/0.55/0.40/0.15/0.06)
+- No `rgba(255,255,255,0.04)` card backgrounds — use #000 or #111 solid
+- No `SectionFrame` or `SectionHeader` wrapper components (legacy, removing)
+- No mixing legacy and active tokens on the same page
 - No stagger delay animations on list items — use single container reveals
-- No mixing legacy and modern tokens on the same page
