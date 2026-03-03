@@ -26,40 +26,26 @@ export default {
       colors: {
         /* ═══════════════════════════════════════════════════════
            DESIGN TOKEN SYSTEM — filmmaker.og
-           Two-tier luminance hierarchy:
-             CHROME = permanent architecture (header/tabbar) → bold
-             CONTENT = variable inventory (page body) → restrained
+           Source of truth: src/lib/design-system.ts
+           Gold: 4-tier opacity (0.25 / 0.15 / 0.08 / 0.03)
+           White: 4-tier opacity (0.70 / 0.40 / 0.15 / 0.06)
+           See DESIGN_SYSTEM.md for usage rules.
            ═══════════════════════════════════════════════════════ */
-
-        // ── CHROME: header, tab bar, navigation fixtures ──
-        chrome: {
-          bg:        "#000000",
-          "bg-solid": "#000000",
-          border:    "rgba(212, 175, 55, 0.60)",
-          glow:      "rgba(212, 175, 55, 0.25)",
-          "glow-faint": "rgba(212, 175, 55, 0.08)",
-          active:    "rgba(212, 175, 55, 0.03)",
-          ripple:    "rgba(212, 175, 55, 0.25)",
-        },
-
-        // ── GOLD: landing page token system (4-tier) ──
+        // ── GOLD: 4-tier opacity system + solids ──
         gold: {
           DEFAULT:   "#D4AF37",                          // brand mark, icons — FULL
           full:      "rgba(212, 175, 55, 1.0)",          // active icons, gold text, section labels
-          bright:    "rgba(212, 175, 55, 0.60)",         // borders that matter, chrome borders
-          mid:       "rgba(212, 175, 55, 0.35)",         // subtle borders, divider gradients
-          ghost:     "rgba(212, 175, 55, 0.08)",         // ambient glows, hover fills
           deep:      "#7A5C12",                          // gradient depth, shadows
-          text:      "rgba(212, 175, 55, 0.60)",         // readable gold labels/eyebrows
           cta:       "#F9E076",                          // CTA buttons ONLY
-          // Legacy aliases for non-landing pages
-          strong:    "rgba(212, 175, 55, 0.25)",
-          medium:    "rgba(212, 175, 55, 0.15)",
-          subtle:    "rgba(212, 175, 55, 0.08)",
+          // 4-tier opacity system (use these)
+          strong:    "rgba(212, 175, 55, 0.25)",         // active borders, hover states
+          medium:    "rgba(212, 175, 55, 0.15)",         // card borders, section dividers
+          subtle:    "rgba(212, 175, 55, 0.08)",         // hover fills, zebra rows
+          glow:      "rgba(212, 175, 55, 0.03)",         // ambient glows, large area tints
+          // LEGACY ALIASES — exist for unmigrated pages, do NOT use on new work
           label:     "rgba(212, 175, 55, 0.25)",
           accent:    "rgba(212, 175, 55, 0.15)",
           border:    "rgba(212, 175, 55, 0.15)",
-          glow:      "rgba(212, 175, 55, 0.03)",
           "cta-muted": "rgba(212, 175, 55, 0.25)",
           "cta-subtle": "rgba(212, 175, 55, 0.08)",
         },
@@ -73,16 +59,19 @@ export default {
           ghost:     "rgba(220, 60, 60, 0.03)",
         },
 
-        // ── WHITE: landing page token system (4-tier) ──
+        // ── WHITE: DEPRECATED — migrate to ink-* equivalents ──
+        // white-body (0.60) → use ink-muted (0.55) or ink-body (0.70)
+        // white-tertiary (0.40) → use ink-secondary (0.40)
+        // white-surface (0.06) → use ink-ghost (0.06)
         white: {
           DEFAULT:   "#FFFFFF",
-          primary:   "rgba(255, 255, 255, 0.90)",        // headlines, declarations
-          body:      "rgba(255, 255, 255, 0.60)",        // paragraph text, descriptions
-          tertiary:  "rgba(255, 255, 255, 0.40)",        // labels, captions, metadata
-          surface:   "rgba(255, 255, 255, 0.06)",        // card fills, panel backgrounds
+          primary:   "rgba(255, 255, 255, 0.90)",
+          body:      "rgba(255, 255, 255, 0.60)",
+          tertiary:  "rgba(255, 255, 255, 0.40)",
+          surface:   "rgba(255, 255, 255, 0.06)",
         },
 
-        // ── INK: legacy white text tiers ──
+        // ── INK: active text tier system (use these) ──
         ink: {
           DEFAULT:   "#FFFFFF",                          // headlines, key numbers — FULL
           body:      "rgba(255, 255, 255, 0.70)",        // secondary / paragraph text
