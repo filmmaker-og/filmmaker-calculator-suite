@@ -104,11 +104,21 @@ const LeadCaptureModal = ({ isOpen, onClose, onSuccess }: LeadCaptureModalProps)
         className="w-[calc(100%-2rem)] max-w-sm mx-auto p-0 gap-0"
         style={{
           background: "#000000",
-          border: "1px solid rgba(255,255,255,0.15)",
+          border: "1px solid rgba(212,175,55,0.15)",
           borderRadius: "6px",
         }}
       >
         <DialogTitle className="sr-only">Sign in to access the calculator</DialogTitle>
+        {/* Autofill override — prevents Chrome painting inputs white/blue */}
+        <style>{`
+          .lead-capture-input:-webkit-autofill,
+          .lead-capture-input:-webkit-autofill:hover,
+          .lead-capture-input:-webkit-autofill:focus {
+            -webkit-box-shadow: 0 0 0 1000px #1A1A1A inset !important;
+            -webkit-text-fill-color: #FFFFFF !important;
+            caret-color: #FFFFFF;
+          }
+        `}</style>
         {/* Gold accent */}
         <div className="h-[1px] w-full" style={{ background: "linear-gradient(90deg, transparent, #D4AF37, transparent)" }} />
 
@@ -121,16 +131,16 @@ const LeadCaptureModal = ({ isOpen, onClose, onSuccess }: LeadCaptureModalProps)
             >
               <Mail className="w-6 h-6 text-gold" />
             </div>
-            <p className="font-bebas text-xl tracking-wider text-white mb-2">
+            <p className="font-bebas text-[20px] leading-[1.05] tracking-[0.06em] text-white mb-2">
               CHECK YOUR EMAIL
             </p>
-            <p className="text-sm mb-2" style={{ color: "rgba(255,255,255,0.40)" }}>
+            <p className="text-[14px] text-ink-secondary mb-2">
               We sent a sign-in link to
             </p>
-            <p className="font-mono text-gold text-sm mb-6">
+            <p className="font-mono text-gold text-[14px] mb-6">
               {email}
             </p>
-            <p className="text-xs mb-6" style={{ color: "rgba(255,255,255,0.40)" }}>
+            <p className="text-[12px] text-ink-secondary mb-6">
               Click the link in your email to access the calculator.
             </p>
 
@@ -138,16 +148,14 @@ const LeadCaptureModal = ({ isOpen, onClose, onSuccess }: LeadCaptureModalProps)
               <button
                 onClick={handleResend}
                 disabled={loading}
-                className="text-xs tracking-wider transition-colors"
-                style={{ color: "rgba(255,255,255,0.40)" }}
+                className="text-[12px] tracking-[0.12em] text-ink-secondary transition-colors"
               >
                 {loading ? "Sending..." : "Didn't get it? Resend"}
               </button>
               <div>
                 <button
                   onClick={() => setSent(false)}
-                  className="text-xs transition-colors"
-                  style={{ color: "rgba(255,255,255,0.40)" }}
+                  className="text-[12px] text-ink-secondary transition-colors"
                 >
                   Use different email
                 </button>
@@ -157,10 +165,10 @@ const LeadCaptureModal = ({ isOpen, onClose, onSuccess }: LeadCaptureModalProps)
         ) : (
           // Name + email form
           <form onSubmit={handleSubmit} className="p-6">
-            <p className="font-bebas text-xl tracking-wider text-white text-center mb-1">
+            <p className="font-bebas text-[20px] leading-[1.05] tracking-[0.06em] text-white text-center mb-1">
               BUILD YOUR WATERFALL
             </p>
-            <p className="text-xs text-center mb-6" style={{ color: "rgba(255,255,255,0.40)" }}>
+            <p className="text-[12px] text-ink-secondary text-center mb-6">
               Enter your name and email to start building your waterfall.
             </p>
 
@@ -179,7 +187,7 @@ const LeadCaptureModal = ({ isOpen, onClose, onSuccess }: LeadCaptureModalProps)
                     (e.currentTarget.nextElementSibling as HTMLInputElement)?.focus();
                   }
                 }}
-                className="w-full h-12 px-4 text-white text-sm focus:outline-none transition-all"
+                className="lead-capture-input w-full h-12 px-4 text-white text-[14px] focus:outline-none transition-all"
                 style={{
                   background: "#1A1A1A",
                   border: "1px solid rgba(255,255,255,0.15)",
@@ -211,7 +219,7 @@ const LeadCaptureModal = ({ isOpen, onClose, onSuccess }: LeadCaptureModalProps)
                     handleSubmit(e as unknown as React.FormEvent);
                   }
                 }}
-                className="w-full h-12 px-4 font-mono text-white text-sm focus:outline-none transition-all"
+                className="lead-capture-input w-full h-12 px-4 font-mono text-white text-[14px] focus:outline-none transition-all"
                 style={{
                   background: "#1A1A1A",
                   border: "1px solid rgba(255,255,255,0.15)",
@@ -230,7 +238,7 @@ const LeadCaptureModal = ({ isOpen, onClose, onSuccess }: LeadCaptureModalProps)
               <button
                 type="submit"
                 disabled={loading || !email || !name.trim()}
-                className="w-full h-12 btn-cta-primary disabled:opacity-40"
+                className="w-full h-12 btn-cta-primary font-bold disabled:opacity-40"
               >
                 {loading ? (
                   <Loader2 className="w-5 h-5 animate-spin mx-auto" />
