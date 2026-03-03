@@ -94,7 +94,7 @@ const Index = () => {
               <h1 className="font-bebas text-[clamp(3.2rem,11vw,4.8rem)] leading-[0.96] tracking-[0.06em] text-white mb-4">
                 SEE WHERE EVERY DOLLAR GOES
               </h1>
-              <p className="text-[16px] md:text-[18px] leading-[1.7] text-white-primary tracking-[0.02em] mx-auto max-w-sm mb-8" style={{ textWrap: "balance" as never }}>
+              <p className="text-[16px] md:text-[18px] leading-[1.7] text-ink-body tracking-[0.02em] mx-auto max-w-sm mb-8" style={{ textWrap: "balance" as never }}>
                 Model your waterfall. Know every fee, split, and&nbsp;return
                 — before your investor asks.
               </p>
@@ -123,7 +123,7 @@ const Index = () => {
                 transition: prefersReducedMotion ? "none" : "opacity 700ms ease-out, transform 700ms ease-out",
               }}
             >
-              <p className="max-w-2xl mx-auto text-center text-white-body text-[16px] leading-relaxed mb-8">
+              <p className="max-w-2xl mx-auto text-center text-ink-body text-[16px] leading-relaxed mb-8">
                 The waterfall dictates who gets paid first, who gets paid last, and how much is left by the time it reaches you.
               </p>
               <WaterfallCascade />
@@ -149,10 +149,10 @@ const Index = () => {
                 <p className="font-mono text-[14px] uppercase tracking-[0.20em] text-gold-full mb-5">
                   Why This Matters
                 </p>
-                <h2 className="font-bebas text-[26px] md:text-[36px] leading-[1.05] tracking-[0.06em] text-white mb-5">
+                <h2 className="font-bebas text-[28px] md:text-[36px] leading-[1.05] tracking-[0.06em] text-white mb-5">
                   KNOW YOUR DEAL BEFORE YOU SIGN&nbsp;IT
                 </h2>
-                <p className="text-[16px] leading-relaxed text-white-body">
+                <p className="text-[16px] leading-relaxed text-ink-body">
                   Every film deal has a pecking order — distributors, sales agents,
                   lenders, and investors all get paid before you do.
                   That's called a <span className="text-gold-full font-medium">waterfall</span>.
@@ -179,15 +179,9 @@ const Index = () => {
                     <p className="font-mono text-[12px] uppercase tracking-[0.14em] text-gold-full mb-4">
                       {panel.label}
                     </p>
-                    <p className="text-[14px] md:text-[16px] leading-relaxed text-white-body mb-4">
+                    <p className="text-[14px] md:text-[16px] leading-relaxed text-ink-body mb-4">
                       {panel.body}
                     </p>
-                    <div
-                      className="h-[1px] w-full mb-4"
-                      style={{
-                        background: "linear-gradient(90deg, transparent 0%, rgba(212,175,55,0.25) 50%, transparent 100%)",
-                      }}
-                    />
                     <p className="font-mono text-[14px] uppercase tracking-[0.12em] text-white font-medium">
                       {panel.punchline}
                     </p>
@@ -220,7 +214,7 @@ const Index = () => {
                     <p className="font-mono text-[18px] md:text-[20px] font-bold text-gold-full mb-1">
                       {card.number}
                     </p>
-                    <p className="font-mono text-[12px] uppercase tracking-[0.12em]" style={{ color: "rgba(255,255,255,0.7)" }}>
+                    <p className="font-mono text-[12px] uppercase tracking-[0.12em] text-ink-body">
                       {card.label}
                     </p>
                   </div>
@@ -249,7 +243,7 @@ const Index = () => {
               <p className="font-bebas text-[40px] leading-[1.05] tracking-[0.06em] text-white mb-4">
                 FREE
               </p>
-              <p className="max-w-md mx-auto text-[14px] md:text-[16px] leading-relaxed text-white-body mb-6">
+              <p className="max-w-md mx-auto text-[14px] md:text-[16px] leading-relaxed text-ink-body mb-6">
                 An entertainment attorney bills $500–$850/hr to walk you through
                 waterfall mechanics. This gives you the financial x-ray for free.
               </p>
@@ -288,7 +282,7 @@ const Index = () => {
                   <p className="font-mono text-[18px] md:text-[20px] font-bold text-gold-full mb-1">
                     {card.number}
                   </p>
-                  <p className="font-mono text-[12px] uppercase tracking-[0.12em]" style={{ color: "rgba(255,255,255,0.7)" }}>
+                  <p className="font-mono text-[12px] uppercase tracking-[0.12em] text-ink-body">
                     {card.label}
                   </p>
                 </div>
@@ -327,7 +321,7 @@ const Index = () => {
                 6. FOOTER — disclaimer
                 ════════════════════════════════════════════════════════ */}
             <footer className="pt-4 pb-6 px-4 text-center">
-              <p className="text-ink-body text-[12px] tracking-wide leading-relaxed mx-auto max-w-sm">
+              <p className="text-ink-body text-[12px] tracking-[0.02em] leading-relaxed mx-auto max-w-sm">
                 For educational and informational purposes only. Not legal, tax,
                 or investment advice. Consult a qualified entertainment attorney
                 before making financing decisions.
