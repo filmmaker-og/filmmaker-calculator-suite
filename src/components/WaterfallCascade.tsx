@@ -1,5 +1,17 @@
 import { useState, useEffect, useRef } from "react";
 
+/*
+   TYPE HIERARCHY (enforced):
+     Acquisition Price label   → text-[14px] mono uppercase (data label)
+     Acquisition Price amount  → text-[18px]/text-[20px] mono bold (largest in ledger)
+     Deduction row names       → text-[14px] (body tier)
+     Deduction row amounts     → text-[14px] mono (matches names)
+     Net Profits label         → text-[12px] mono uppercase gold
+     Net Profits amount        → text-[28px]/text-[32px] mono bold WHITE (largest number)
+     Producer/Investor labels  → text-[12px] mono uppercase gold
+     Producer/Investor amounts → text-[18px]/text-[20px] mono bold (subordinate to Net Profits)
+*/
+
 const TOTAL = 3_000_000;
 const PROFIT = 417_500;
 
@@ -63,15 +75,15 @@ const WaterfallCascade = () => {
     <div ref={containerRef} className="pt-2 pb-2">
       {/* Ledger card — gold border, black interior */}
       <div
-        className="overflow-hidden rounded-xl"
-        style={{ border: "1px solid rgba(212,175,55,0.15)", background: "#000" }}
+        className="overflow-hidden"
+        style={{ border: "1px solid rgba(212,175,55,0.15)", borderRadius: "8px", background: "#000" }}
       >
         {/* Acquisition price header row */}
         <div className="flex justify-between items-baseline px-5 pt-5 pb-4">
-          <span className="font-bebas text-[22px] tracking-[0.06em] text-white-primary">
+          <span className="font-mono text-[14px] uppercase tracking-[0.12em]" style={{ color: "rgba(255,255,255,0.7)" }}>
             Acquisition Price
           </span>
-          <span className="font-mono text-sm md:text-base font-medium text-white-primary tabular-nums">
+          <span className="font-mono text-[18px] md:text-[20px] font-bold text-white tabular-nums">
             {fmt(TOTAL)}
           </span>
         </div>
@@ -104,10 +116,10 @@ const WaterfallCascade = () => {
                   transitionDelay: `${(i + 1) * 150}ms`,
                 }}
               >
-                <span className="text-sm font-medium text-white-primary">
+                <span className="text-[14px] font-medium" style={{ color: "rgba(255,255,255,0.7)" }}>
                   {d.name}
                 </span>
-                <span className="font-mono text-sm md:text-base font-medium text-white-primary tabular-nums">
+                <span className="font-mono text-[14px] font-medium text-white tabular-nums">
                   <span className="text-ink-secondary">{"\u2212"}</span>{fmt(d.amount)}
                 </span>
               </div>
@@ -118,8 +130,9 @@ const WaterfallCascade = () => {
 
       {/* Profit box — thick gold border + glow */}
       <div
-        className="mt-2 rounded-xl py-5 bg-black text-center"
+        className="mt-2 py-5 bg-black text-center"
         style={{
+          borderRadius: "8px",
           border: "2px solid rgba(212,175,55,1.0)",
           background: "rgba(212,175,55,0.08)",
           boxShadow: "0 0 16px 0px rgba(212,175,55,0.08), inset 0 1px 0 rgba(212,175,55,0.08)",
@@ -129,15 +142,15 @@ const WaterfallCascade = () => {
           transitionDelay: "1400ms",
         }}
       >
-        <p className="font-mono text-sm tracking-[0.14em] uppercase font-semibold mb-1 text-gold-full">
+        <p className="font-mono text-[12px] tracking-[0.14em] uppercase font-semibold mb-1 text-gold-full">
           Net Profits
         </p>
-        <span className="font-mono text-lg md:text-xl font-bold text-gold-full tracking-tight tabular-nums">
+        <span className="font-mono text-[28px] md:text-[32px] font-bold text-white tracking-tight tabular-nums">
           ${profitCount.toLocaleString()}
         </span>
       </div>
 
-      {/* Producer / Investor split — two small gold-bordered cards */}
+      {/* Producer / Investor split — two small cards */}
       <div className="grid grid-cols-2 gap-2 mt-2">
         {([
           { label: "Producer", amount: "$208,750", delay: 0 },
@@ -145,9 +158,10 @@ const WaterfallCascade = () => {
         ]).map((c) => (
           <div
             key={c.label}
-            className="px-3.5 py-3.5 text-center rounded-xl"
+            className="px-3.5 py-3.5 text-center"
             style={{
-              border: "1px solid rgba(212,175,55,0.15)",
+              borderRadius: "8px",
+              border: "1px solid rgba(255,255,255,0.15)",
               background: "rgba(212,175,55,0.08)",
               opacity: splitVisible ? 1 : 0,
               transform: splitVisible ? "translateY(0)" : "translateY(16px)",
@@ -155,17 +169,17 @@ const WaterfallCascade = () => {
               transitionDelay: `${c.delay}ms`,
             }}
           >
-            <p className="font-mono text-sm tracking-[0.14em] uppercase font-semibold mb-1 text-gold-full">
+            <p className="font-mono text-[12px] tracking-[0.14em] uppercase font-semibold mb-1 text-gold-full">
               {c.label}
             </p>
-            <span className="font-mono text-[22px] font-bold text-gold-full tabular-nums">
+            <span className="font-mono text-[18px] md:text-[20px] font-bold text-gold-full tabular-nums">
               {c.amount}
             </span>
           </div>
         ))}
       </div>
 
-      <p className="font-mono text-sm text-ink-secondary text-center mt-3.5">
+      <p className="font-mono text-[12px] text-ink-secondary text-center mt-3.5">
         Hypothetical $1.8M budget{"\u00A0"}{"\u00B7"}{"\u00A0"}$3M
         acquisition{"\u00A0"}{"\u00B7"}{"\u00A0"}50/50 net profit split
       </p>
