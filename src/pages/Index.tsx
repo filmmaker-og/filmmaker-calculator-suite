@@ -148,7 +148,7 @@ const Index = () => {
   const EyebrowRuled = ({ text }: { text: string }) => (
     <div className="flex items-center gap-3 mb-[14px]">
       <div className="flex-1 h-px" style={{ background: "rgba(212,175,55,0.40)" }} />
-      <span className="font-['Roboto_Mono'] text-[11px] tracking-[0.2em] uppercase text-[#D4AF37] whitespace-nowrap">
+      <span className="font-['Roboto_Mono'] text-[13px] tracking-[0.2em] uppercase text-[#D4AF37] whitespace-nowrap">
         {text}
       </span>
       <div className="flex-1 h-px" style={{ background: "rgba(212,175,55,0.40)" }} />
@@ -227,7 +227,7 @@ const Index = () => {
           />
           <div className="relative z-[1]" style={reveal(heroVisible)}>
             <p
-              className="font-['Roboto_Mono'] text-[11px] uppercase text-center mb-5"
+              className="font-['Roboto_Mono'] text-[13px] uppercase text-center mb-5"
               style={{ letterSpacing: "0.2em", color: "rgba(212,175,55,0.75)" }}
             >
               Film Finance Intelligence
@@ -241,7 +241,7 @@ const Index = () => {
             </h1>
             <p
               className="font-['Bebas_Neue'] text-[3rem] text-center mb-[22px]"
-              style={{ lineHeight: 1, color: "rgba(255,255,255,0.28)", marginTop: "4px" }}
+              style={{ lineHeight: 1, color: "rgba(255,255,255,0.50)", marginTop: "4px" }}
             >
               Before You Raise.
             </p>
@@ -261,7 +261,7 @@ const Index = () => {
         >
           <div className="text-center" style={{ padding: "0 20px 24px" }}>
             <EyebrowRuled text="How the money flows" />
-            <h2 className="font-['Bebas_Neue'] text-[2.6rem] text-white text-center" style={{ lineHeight: 0.95 }}>
+            <h2 className="font-['Bebas_Neue'] text-[3rem] text-white text-center" style={{ lineHeight: 0.95 }}>
               The Recoupment<br /><span style={{ color: "#D4AF37" }}>Waterfall</span>
             </h2>
           </div>
@@ -283,10 +283,10 @@ const Index = () => {
               className="absolute top-0 left-0 right-0 h-px"
               style={{ background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.50), transparent)" }}
             />
-            <p className="font-['Roboto_Mono'] text-[9px] uppercase tracking-[0.14em] text-[#D4AF37] mb-1">
+            <p className="font-['Roboto_Mono'] text-[11px] uppercase tracking-[0.14em] text-[#D4AF37] mb-1">
               Streamer Acquisition Price
             </p>
-            <p className="font-['Roboto_Mono'] text-[9px] tracking-[0.06em] mb-2" style={{ color: "rgba(255,255,255,0.28)" }}>
+            <p className="font-['Roboto_Mono'] text-[11px] tracking-[0.06em] mb-2" style={{ color: "rgba(255,255,255,0.28)" }}>
               Tier 2 Action Thriller — Example
             </p>
             <p className="font-['Bebas_Neue'] text-[2.4rem] text-[#D4AF37]" style={{ lineHeight: 1, letterSpacing: "0.02em" }}>
@@ -398,13 +398,13 @@ const Index = () => {
                     padding: "16px 12px",
                   }}
                 >
-                  <p className="font-['Roboto_Mono'] text-[9px] uppercase tracking-[0.12em] mb-2" style={{ color: "rgba(255,255,255,0.70)" }}>
+                  <p className="font-['Roboto_Mono'] text-[11px] uppercase tracking-[0.12em] mb-2" style={{ color: "rgba(255,255,255,0.70)" }}>
                     {b.label}
                   </p>
                   <p className="font-['Bebas_Neue'] text-[2rem] text-[#D4AF37]" style={{ lineHeight: 1 }}>
                     {b.amount}
                   </p>
-                  <p className="font-['Roboto_Mono'] text-[9px] mt-[5px]" style={{ color: "rgba(255,255,255,0.50)" }}>
+                  <p className="font-['Roboto_Mono'] text-[11px] mt-[5px]" style={{ color: "rgba(255,255,255,0.50)" }}>
                     {b.pct}
                   </p>
                 </div>
@@ -414,7 +414,7 @@ const Index = () => {
 
           {/* Note */}
           <p
-            className="font-['Roboto_Mono'] text-[9px] uppercase text-center"
+            className="font-['Roboto_Mono'] text-[11px] uppercase text-center"
             style={{ color: "rgba(255,255,255,0.45)", letterSpacing: "0.06em", padding: "12px 20px 52px" }}
           >
             Model only — your numbers will differ
@@ -533,7 +533,7 @@ const Index = () => {
                     lineHeight: 1.4,
                   }}
                 >
-                  <span className="font-['Roboto_Mono'] text-[16px] flex-shrink-0 text-[#D4AF37]">✓</span>
+                  <span className="font-['Roboto_Mono'] text-[18px] flex-shrink-0 text-[#D4AF37]">✓</span>
                   <span style={{ color: "rgba(255,255,255,0.58)" }}>{item}</span>
                 </div>
               ))}
@@ -560,7 +560,7 @@ const Index = () => {
                     lineHeight: 1.4,
                   }}
                 >
-                  <span className="font-['Roboto_Mono'] text-[16px] flex-shrink-0" style={{ color: "rgba(255,80,80,0.6)" }}>✗</span>
+                  <span className="font-['Roboto_Mono'] text-[18px] flex-shrink-0" style={{ color: "rgba(255,80,80,0.6)" }}>✗</span>
                   <span style={{ color: "rgba(255,255,255,0.55)" }}>{item}</span>
                 </div>
               ))}
@@ -642,7 +642,7 @@ const Index = () => {
         >
           <div style={{ padding: "0 20px 24px" }}>
             <EyebrowRuled text="What you get" />
-            <h2 className="font-['Bebas_Neue'] text-[2.6rem] text-white text-center" style={{ lineHeight: 0.95 }}>
+            <h2 className="font-['Bebas_Neue'] text-[3rem] text-white text-center" style={{ lineHeight: 0.95 }}>
               The Arsenal
             </h2>
             <p className="font-['Inter'] text-[13px] mt-[10px]" style={{ color: "rgba(255,255,255,0.70)", lineHeight: 1.6 }}>
@@ -678,7 +678,7 @@ const Index = () => {
               }}
             >
               <div>
-                <p className="font-['Roboto_Mono'] text-[8px] uppercase tracking-[0.16em] text-[#D4AF37] mb-1">
+                <p className="font-['Roboto_Mono'] text-[11px] uppercase tracking-[0.16em] text-[#D4AF37] mb-1">
                   Executive Playbook
                 </p>
                 <p className="font-['Bebas_Neue'] text-[1.6rem] text-white" style={{ lineHeight: 1 }}>
@@ -739,7 +739,7 @@ const Index = () => {
                 className="absolute top-0 left-0 right-0 h-px"
                 style={{ background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.50), transparent)" }}
               />
-              <span className="font-['Roboto_Mono'] text-[9px] uppercase tracking-[0.18em] text-[#D4AF37]">
+              <span className="font-['Roboto_Mono'] text-[11px] uppercase tracking-[0.18em] text-[#D4AF37]">
                 Premium adds
               </span>
               <span
@@ -837,7 +837,7 @@ const Index = () => {
             </h2>
             <p
               className="font-['Inter'] text-[14px] mx-auto mb-7"
-              style={{ color: "rgba(255,255,255,0.75)", lineHeight: 1.65, maxWidth: "260px" }}
+              style={{ color: "rgba(255,255,255,0.75)", lineHeight: 1.65, maxWidth: "280px" }}
             >
               Stop guessing your backend. Build the model and walk into every pitch knowing exactly where the money goes.
             </p>

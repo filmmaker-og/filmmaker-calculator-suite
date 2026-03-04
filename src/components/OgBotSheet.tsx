@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from "react";
+import { useHaptics } from "@/hooks/use-haptics";
 import { SendHorizonal, RotateCcw, X } from "lucide-react";
 import filmmakerFIcon from "@/assets/filmmaker-f-icon.png";
 import { cn } from "@/lib/utils";
@@ -37,6 +38,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
     if (onOpenChange) onOpenChange(v);
     else setInternalOpen(v);
   };
+  const haptics = useHaptics();
   const [ogInput, setOgInput] = useState("");
   const [ogMessages, setOgMessages] = useState<AiMessage[]>([]);
   const [ogLoading, setOgLoading] = useState(false);
@@ -259,7 +261,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
                 </button>
               )}
               <button
-                onClick={() => setIsOpen(false)}
+                onClick={() => { haptics.light(); setIsOpen(false); }}
                 className="transition-colors p-1"
                 style={{ color: "rgba(255,255,255,0.40)" }}
                 onMouseEnter={e => (e.currentTarget.style.color = "rgba(255,255,255,0.70)")}
