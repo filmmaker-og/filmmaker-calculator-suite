@@ -1,16 +1,14 @@
 import { useState, useEffect, useRef } from "react";
 /*
-   TYPE HIERARCHY (enforced):
-     Acquisition Price label   → text-[14px] mono uppercase ink-body
-     Acquisition Price amount  → text-[18px]/text-[20px] mono bold white
-     Deduction row names       → text-[14px] font-medium ink-body
-     Deduction row amounts     → text-[14px] mono white
-     Net Profits label         → text-[12px] mono uppercase gold-full (climactic tier)
-     Net Profits amount        → text-[28px]/text-[32px] mono bold gold-full (only gold number)
-     Producer/Investor labels  → text-[12px] mono uppercase ink-secondary (subordinate)
-     Producer/Investor amounts → text-[18px]/text-[20px] mono bold white
-   Intro text lives inside this component — bound to what it introduces.
-   Zebra rows at 0.12 gold tint (warmer than previous 0.08).
+  BROWNISH CAST FIX:
+  The cast was caused by rgba(212,175,55,0.12) background fills on zebra rows
+  and rgba(212,175,55,0.08) on the Net Profits box — gold tint on dark bg
+  reads as olive/brown on phone screens.
+  NEW RULE: Zero gold fills anywhere in this component.
+  Row separation: 1px white divider at 0.06 opacity only.
+  Net Profits box: #000 background, full gold BORDER only.
+  Producer/Investor: #000 background, gold border 0.20.
+  Gold appears ONLY in: border strokes and text color.
 */
 const TOTAL  = 3_000_000;
 const PROFIT = 417_500;
@@ -66,24 +64,27 @@ const WaterfallCascade = () => {
   }, [revealed]);
   return (
     <div ref={containerRef}>
-      {/* Intro — bound to the component, above the ledger */}
+      {/* Intro */}
       <p
         className="text-center text-ink-body text-[16px] md:text-[18px] leading-relaxed mb-6 px-2"
         style={{ textWrap: "balance" as never }}
       >
         This is what happens to $3M in revenue before you see a dollar.
       </p>
-      {/* Ledger card */}
+      {/* Ledger — pure black, no fills */}
       <div
-        className="overflow-hidden"
         style={{
-          border:       "1px solid rgba(212,175,55,0.15)",
           borderRadius: "8px",
           background:   "#000000",
-          boxShadow:    "inset 0 1px 0 rgba(255,255,255,0.06)",
+          border:       "1px solid rgba(212,175,55,0.20)",
+          overflow:     "hidden",
         }}
       >
-        <div className="flex justify-between items-baseline px-5 pt-5 pb-4">
+        {/* Acquisition Price row */}
+        <div
+          className="flex justify-between items-baseline px-5 pt-5 pb-4"
+          style={{ borderBottom: "1px solid rgba(255,255,255,0.08)" }}
+        >
           <span className="font-mono text-[14px] uppercase tracking-[0.12em] text-ink-body">
             Acquisition Price
           </span>
@@ -91,9 +92,9 @@ const WaterfallCascade = () => {
             {fmt(TOTAL)}
           </span>
         </div>
-        {/* Deduction rows — gold-tinted zebra at 0.12 */}
+        {/* Deduction rows — white dividers only, zero gold fill */}
         <div
-          className="px-5 pt-2 pb-4"
+          className="px-5 pt-1 pb-4"
           style={{
             opacity:         revealed ? 1 : 0,
             transform:       revealed ? "translateY(0)" : "translateY(16px)",
@@ -104,11 +105,12 @@ const WaterfallCascade = () => {
           {deductions.map((d, i) => (
             <div
               key={d.name}
-              className="flex justify-between items-baseline rounded-md"
+              className="flex justify-between items-baseline"
               style={{
-                padding:    "9px 8px",
-                margin:     "0 -8px",
-                background: i % 2 === 0 ? "rgba(212,175,55,0.12)" : "transparent",
+                padding:      "10px 0",
+                borderBottom: i < deductions.length - 1
+                  ? "1px solid rgba(255,255,255,0.06)"
+                  : "none",
               }}
             >
               <span className="text-[14px] font-medium text-ink-body">{d.name}</span>
@@ -119,14 +121,13 @@ const WaterfallCascade = () => {
           ))}
         </div>
       </div>
-      {/* Net Profits — only gold number, climactic reveal */}
+      {/* Net Profits — #000 bg, full gold border, gold text only */}
       <div
         className="mt-2 py-5 text-center"
         style={{
           borderRadius:    "8px",
           border:          "1px solid rgba(212,175,55,1.0)",
-          background:      "rgba(212,175,55,0.08)",
-          boxShadow:       "0 0 16px 0px rgba(212,175,55,0.08), inset 0 1px 0 rgba(212,175,55,0.08)",
+          background:      "#000000",
           opacity:         revealed ? 1 : 0,
           transform:       revealed ? "translateY(0)" : "translateY(16px)",
           transition:      "opacity 500ms ease-out, transform 500ms ease-out",
@@ -140,7 +141,7 @@ const WaterfallCascade = () => {
           ${profitCount.toLocaleString()}
         </span>
       </div>
-      {/* Producer / Investor split — subordinate, white numbers on #111 */}
+      {/* Producer / Investor — #000 bg, gold border */}
       <div className="grid grid-cols-2 gap-2 mt-2">
         {([
           { label: "Producer", amount: "$208,750", delay: 0   },
@@ -151,8 +152,8 @@ const WaterfallCascade = () => {
             className="px-3.5 py-3.5 text-center"
             style={{
               borderRadius:    "8px",
-              border:          "1px solid rgba(212,175,55,0.15)",
-              background:      "#111111",
+              border:          "1px solid rgba(212,175,55,0.20)",
+              background:      "#000000",
               opacity:         splitVisible ? 1 : 0,
               transform:       splitVisible ? "translateY(0)" : "translateY(16px)",
               transition:      "opacity 500ms ease-out, transform 500ms ease-out",
@@ -168,6 +169,7 @@ const WaterfallCascade = () => {
           </div>
         ))}
       </div>
+      {/* Footnote */}
       <p className="font-mono text-[12px] text-ink-secondary text-center mt-3.5">
         Hypothetical $1.8M budget{"\u00A0"}{"\u00B7"}{"\u00A0"}$3M
         acquisition{"\u00A0"}{"\u00B7"}{"\u00A0"}50/50 net profit split

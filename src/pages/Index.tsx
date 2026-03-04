@@ -6,32 +6,30 @@ import { useInView } from "@/hooks/useInView";
 import LeadCaptureModal from "@/components/LeadCaptureModal";
 import WaterfallCascade from "@/components/WaterfallCascade";
 /*
-  PAGE STACK — 8 sections:
+  PAGE STACK — 7 sections:
     1. HERO          — warm arrival, primary CTA
-    2. WATERFALL     — interactive proof
-    3. THE REALITY   — 2x2 numbered cells: stat / bold label / cold one-liner
-    4. WITH/WITHOUT  — staggered cards, ✓ gold / ✗ red badges
+    2. WATERFALL     — interactive proof (brownish cast fixed in component)
+    3. THE REALITY   — 2x2 numbered cells, no badges, pure black
+    4. WITH/WITHOUT  — vertical timeline format, continuous line + numbered circles
     5. FREE          — price reveal, attorney anchor
-    6. QUOTE         — gold callout box, Miles' line
-    7. CLOSER        — emotional close, single CTA
-  REALITY CELL ANATOMY (ref: Image 2 + Image 3):
-    Circle number badge — centered on top border, half in/half out
-    Large gold stat — the number is the statement
-    Bold white label — ALL CAPS, what the number represents
-    Cold one-liner — ink-secondary, small, gut-punch
-  WITH/WITHOUT STAGGER:
-    Both cards full-width, stacked vertically.
-    WITHOUT card offset 16px right — creates visual ladder on mobile.
-    Gold ✓ badge / Red ✗ badge — left-aligned icon before each item.
-  QUOTE CALLOUT:
-    Gold background #D4AF37, black text.
-    Miles' line verbatim. No eyebrow. No headline. Just the quote.
-    Single use — maximum impact by being the only gold-bg element.
-  BACKGROUND RULES:
-    Warm (Hero, Closer): radial gold-ghost + gold-strong border (0.25)
-    Content sections:    #000 + gold border (0.12)
-    Sub-elements:        #111 + gold border (0.15)
-    Quote callout:       #D4AF37 bg + black text (only instance of gold bg)
+    6. QUOTE         — gold border, black bg, gold text (NOT gold bg)
+    7. CLOSER        — single CTA
+  PURE BLACK RULE (enforced):
+    - background: #000000 on ALL section cards
+    - background: transparent where no border needed
+    - NO rgba(212,175,55,x) fills anywhere — causes brownish cast on phones
+    - NO #111111 anywhere
+    - Gold appears ONLY as: border strokes, text color, circle fill on timeline nodes
+    - White appears ONLY as: body text, amounts
+    - Section separation: gold border 0.20–0.25 only
+  EYEBROW TREATMENT:
+    - Gold text + bottom gold underline accent (4px wide, 2px height, gold 0.60)
+    - Sits above section headline, provides visual anchor without fill color
+  WITH/WITHOUT TIMELINE:
+    - Vertical continuous line left side (gold for WITH, red for WITHOUT)
+    - Numbered circles on line (1, 2, 3) — filled gold/red, black number
+    - Items hang to the right of the line
+    - Two separate cards stacked, WITHOUT offset 16px right
 */
 const Index = () => {
   const navigate  = useNavigate();
@@ -68,84 +66,142 @@ const Index = () => {
     const timeout = setTimeout(() => setCtaGlow(true), 2000);
     return () => clearTimeout(timeout);
   }, [prefersReducedMotion]);
-  /* ── Scroll refs ── */
-  const { ref: waterfallRef, inView: waterfallVisible } = useInView<HTMLDivElement>({ threshold: 0.1  });
-  const { ref: realityRef,   inView: realityVisible   } = useInView<HTMLDivElement>({ threshold: 0.1  });
-  const { ref: withRef,      inView: withVisible      } = useInView<HTMLDivElement>({ threshold: 0.1  });
-  const { ref: priceRef,     inView: priceVisible     } = useInView<HTMLDivElement>({ threshold: 0.2  });
-  const { ref: quoteRef,     inView: quoteVisible     } = useInView<HTMLDivElement>({ threshold: 0.3  });
-  const { ref: closerRef,    inView: closerVisible    } = useInView<HTMLDivElement>({ threshold: 0.2  });
+  const { ref: waterfallRef, inView: waterfallVisible } = useInView<HTMLDivElement>({ threshold: 0.1 });
+  const { ref: realityRef,   inView: realityVisible   } = useInView<HTMLDivElement>({ threshold: 0.1 });
+  const { ref: withRef,      inView: withVisible      } = useInView<HTMLDivElement>({ threshold: 0.1 });
+  const { ref: priceRef,     inView: priceVisible     } = useInView<HTMLDivElement>({ threshold: 0.2 });
+  const { ref: quoteRef,     inView: quoteVisible     } = useInView<HTMLDivElement>({ threshold: 0.3 });
+  const { ref: closerRef,    inView: closerVisible    } = useInView<HTMLDivElement>({ threshold: 0.2 });
   /* ── Data ── */
-  // Reality cells: stat / bold white label / cold one-liner
   const realityCells = [
-    {
-      num:   "1",
-      stat:  "15–25%",
-      label: "Sales Agent Cut",
-      cold:  "Before your investors see a dollar.",
-    },
-    {
-      num:   "2",
-      stat:  "$850/hr",
-      label: "Entertainment Attorney",
-      cold:  "If they'll take the meeting.",
-    },
-    {
-      num:   "3",
-      stat:  "30 Sec",
-      label: "The Investor Test",
-      cold:  "Before the room decides.",
-    },
-    {
-      num:   "4",
-      stat:  "$0",
-      label: "Equity Position",
-      cold:  "You're last. Every time.",
-    },
+    { num: "1", stat: "15–25%",  label: "Sales Agent Cut",         cold: "Before your investors see a dollar." },
+    { num: "2", stat: "$850/hr", label: "Entertainment Attorney",  cold: "If they'll take the meeting."        },
+    { num: "3", stat: "30 Sec",  label: "The Investor Test",       cold: "Before the room decides."            },
+    { num: "4", stat: "$0",      label: "Equity Position",         cold: "You're last. Every time."            },
   ];
-  // With / Without items
   const withItems = [
-    {
-      title: "Returns Mapped",
-      body:  "Every investor sees exactly what they get back — and when.",
-    },
-    {
-      title: "Nothing Hidden",
-      body:  "Fees, splits, and repayment order visible before you commit.",
-    },
-    {
-      title: "Your Margins, Confirmed",
-      body:  "Run the numbers on your backend points before you shoot a frame.",
-    },
+    { title: "Returns Mapped",         body: "Every investor sees exactly what they get back — and when."          },
+    { title: "Nothing Hidden",         body: "Fees, splits, and repayment order visible before you commit."        },
+    { title: "Your Margins, Confirmed",body: "Run the numbers on your backend points before you shoot a frame."   },
   ];
   const withoutItems = [
-    {
-      title: "The Question You Can't Answer",
-      body:  "'How do I get my money back?' — and you're improvising.",
-    },
-    {
-      title: "Surprises After Signatures",
-      body:  "Fees and splits you didn't model surface after the deal closes.",
-    },
-    {
-      title: "Dead Backend Points",
-      body:  "Sales agent commission you forgot makes them worthless.",
-    },
+    { title: "The Question You Can't Answer", body: "'How do I get my money back?' — and you're improvising."              },
+    { title: "Surprises After Signatures",    body: "Fees and splits you didn't model surface after the deal closes."       },
+    { title: "Dead Backend Points",           body: "Sales agent commission you forgot makes them worthless."               },
   ];
-  /* ── Shared style helpers ── */
-  const contentCard = (extra?: React.CSSProperties): React.CSSProperties => ({
-    borderRadius: "8px",
-    background:   "#000000",
-    border:       "1px solid rgba(212,175,55,0.12)",
-    boxShadow:    "inset 0 1px 0 rgba(255,255,255,0.06)",
-    ...extra,
-  });
+  /* ── Shared helpers ── */
   const reveal = (visible: boolean, delay = 0): React.CSSProperties => ({
     opacity:         prefersReducedMotion || visible ? 1 : 0,
     transform:       prefersReducedMotion || visible ? "translateY(0)" : "translateY(20px)",
     transition:      prefersReducedMotion ? "none" : "opacity 700ms ease-out, transform 700ms ease-out",
     transitionDelay: prefersReducedMotion || delay === 0 ? "0ms" : `${delay}ms`,
   });
+  /* Eyebrow — gold text with short underline accent */
+  const Eyebrow = ({ children }: { children: React.ReactNode }) => (
+    <div className="mb-4">
+      <span
+        className="font-mono text-[12px] uppercase tracking-[0.16em] text-gold-full pb-1.5"
+        style={{ borderBottom: "2px solid rgba(212,175,55,0.50)" }}
+      >
+        {children}
+      </span>
+    </div>
+  );
+  /* Timeline card — used for both WITH and WITHOUT */
+  const TimelineCard = ({
+    eyebrow,
+    items,
+    accent,       // gold or red
+    offset = 0,
+    visible,
+    revealDelay = 0,
+  }: {
+    eyebrow: string;
+    items: { title: string; body: string }[];
+    accent: "gold" | "red";
+    offset?: number;
+    visible: boolean;
+    revealDelay?: number;
+  }) => {
+    const lineColor   = accent === "gold" ? "rgba(212,175,55,0.70)" : "rgba(200,60,60,0.70)";
+    const circleBg    = accent === "gold" ? "#D4AF37"               : "rgba(180,40,40,1)";
+    const circleText  = accent === "gold" ? "#000"                  : "#fff";
+    const eyebrowColor= accent === "gold" ? "rgba(212,175,55,1)"    : "rgba(210,70,70,1)";
+    const borderColor = accent === "gold" ? "rgba(212,175,55,0.22)" : "rgba(200,60,60,0.22)";
+    return (
+      <div
+        className="px-6 py-7 overflow-hidden"
+        style={{
+          marginLeft:   `${offset}px`,
+          borderRadius: "8px",
+          background:   "#000000",
+          border:       `1px solid ${borderColor}`,
+          ...reveal(visible, revealDelay),
+        }}
+      >
+        {/* Eyebrow */}
+        <div className="mb-5">
+          <span
+            className="font-mono text-[12px] uppercase tracking-[0.16em] pb-1.5"
+            style={{
+              color:        eyebrowColor,
+              borderBottom: `2px solid ${accent === "gold" ? "rgba(212,175,55,0.50)" : "rgba(200,60,60,0.40)"}`,
+            }}
+          >
+            {eyebrow}
+          </span>
+        </div>
+        {/* Timeline */}
+        <div className="relative">
+          {/* Continuous vertical line */}
+          <div
+            className="absolute"
+            style={{
+              left:       "13px",
+              top:        "14px",
+              bottom:     "14px",
+              width:      "2px",
+              background: lineColor,
+            }}
+          />
+          <div className="flex flex-col gap-7">
+            {items.map((item, i) => (
+              <div
+                key={item.title}
+                className="flex gap-5 items-start"
+                style={reveal(visible, revealDelay + 100 + i * 120)}
+              >
+                {/* Numbered circle — sits on the line */}
+                <div
+                  className="relative flex-shrink-0 flex items-center justify-center font-mono text-[11px] font-bold z-10"
+                  style={{
+                    width:        "28px",
+                    height:       "28px",
+                    borderRadius: "50%",
+                    background:   circleBg,
+                    color:        circleText,
+                    border:       "2px solid #000",
+                    marginTop:    "0px",
+                  }}
+                >
+                  {i + 1}
+                </div>
+                {/* Content */}
+                <div className="pt-0.5">
+                  <p className="text-[16px] font-semibold text-white leading-snug mb-1">
+                    {item.title}
+                  </p>
+                  <p className="text-[14px] leading-relaxed text-ink-body">
+                    {item.body}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  };
   return (
     <>
       <LeadCaptureModal
@@ -163,17 +219,16 @@ const Index = () => {
           className="flex-1 flex flex-col items-center"
           style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
         >
-          <div className="w-full max-w-xl md:max-w-2xl lg:max-w-3xl px-5 md:px-8 flex flex-col gap-8 lg:gap-20 py-6">
-            {/* ═══════════════════════════════════════════
+          <div className="w-full max-w-xl md:max-w-2xl lg:max-w-3xl px-5 md:px-8 flex flex-col gap-8 py-6">
+            {/* ══════════════════════════════
                 1. HERO
-                ═══════════════════════════════════════════ */}
+                ══════════════════════════════ */}
             <div
-              className="px-6 py-10 md:px-8 md:py-12 lg:py-14 text-center overflow-hidden"
+              className="px-6 py-10 md:px-8 md:py-14 text-center overflow-hidden"
               style={{
                 borderRadius: "8px",
-                background:   "radial-gradient(ellipse at center top, rgba(212,175,55,0.08) 0%, rgba(212,175,55,0.03) 40%, transparent 100%)",
-                border:       "1px solid rgba(212,175,55,0.25)",
-                boxShadow:    "inset 0 1px 0 rgba(255,255,255,0.06), 0 0 40px rgba(212,175,55,0.03)",
+                background:   "#000000",
+                border:       "1px solid rgba(212,175,55,0.30)",
               }}
             >
               <p className="font-mono text-[14px] uppercase tracking-[0.20em] mb-6 text-gold-full">
@@ -191,200 +246,110 @@ const Index = () => {
                 </button>
               </div>
             </div>
-            {/* ═══════════════════════════════════════════
+            {/* ══════════════════════════════
                 2. WATERFALL
-                ═══════════════════════════════════════════ */}
+                ══════════════════════════════ */}
             <div
               ref={waterfallRef}
               className="px-5 py-7 md:px-6 md:py-9 overflow-hidden"
-              style={{ ...contentCard(), ...reveal(waterfallVisible) }}
+              style={{
+                borderRadius: "8px",
+                background:   "#000000",
+                border:       "1px solid rgba(212,175,55,0.20)",
+                ...reveal(waterfallVisible),
+              }}
             >
               <WaterfallCascade />
             </div>
-            {/* ═══════════════════════════════════════════
+            {/* ══════════════════════════════
                 3. THE REALITY
-                2x2 numbered cells.
-                Anatomy per cell (ref Image 2 + Image 3):
-                  — Circle number badge: centered on top border
-                  — Large gold stat
-                  — Bold white label ALL CAPS
-                  — Cold one-liner in ink-secondary
-                Grid has pt-6 to give badge room to bleed out.
-                ═══════════════════════════════════════════ */}
+                2x2 grid — no badge circles,
+                no italic copy, no fills.
+                Stat / bold label / cold line.
+                Pure black cells, gold borders.
+                ══════════════════════════════ */}
             <div
               ref={realityRef}
               className="px-6 py-8 md:px-8 md:py-10 overflow-hidden"
-              style={{ ...contentCard(), ...reveal(realityVisible) }}
+              style={{
+                borderRadius: "8px",
+                background:   "#000000",
+                border:       "1px solid rgba(212,175,55,0.20)",
+                ...reveal(realityVisible),
+              }}
             >
-              <p className="font-mono text-[12px] uppercase tracking-[0.14em] text-gold-full mb-3">
-                The Reality
-              </p>
+              <Eyebrow>The Reality</Eyebrow>
               <p className="text-[16px] leading-relaxed text-ink-body mb-8">
                 Most producers walk into distribution meetings without knowing these numbers.
               </p>
-              {/* pt-5 gives the absolute-positioned number badge room to bleed above each cell */}
-              <div className="grid grid-cols-2 gap-4 pt-5">
+              <div className="grid grid-cols-2 gap-3">
                 {realityCells.map((cell, i) => (
                   <div
                     key={cell.num}
-                    className="relative px-4 pt-8 pb-5"
+                    className="px-4 py-5"
                     style={{
                       borderRadius: "6px",
-                      background:   "#111111",
-                      border:       "1px solid rgba(212,175,55,0.15)",
+                      background:   "#000000",
+                      border:       "1px solid rgba(212,175,55,0.18)",
                       ...reveal(realityVisible, i * 90),
                     }}
                   >
-                    {/* Circle number badge — sits on top border, centered */}
-                    <div
-                      className="absolute left-1/2 font-mono text-[11px] font-bold text-black flex items-center justify-center"
-                      style={{
-                        top:             "-14px",
-                        transform:       "translateX(-50%)",
-                        width:           "28px",
-                        height:          "28px",
-                        borderRadius:    "50%",
-                        background:      "#D4AF37",
-                        border:          "2px solid #000",
-                        lineHeight:      "1",
-                      }}
-                    >
-                      {cell.num}
-                    </div>
-                    {/* Stat — gold, large, the number */}
+                    {/* Large gold stat */}
                     <p className="font-mono text-[22px] md:text-[26px] font-bold text-gold-full tabular-nums leading-none mb-2">
                       {cell.stat}
                     </p>
-                    {/* Label — bold white, all caps */}
-                    <p className="text-[11px] font-bold text-white uppercase tracking-[0.08em] mb-3 leading-snug">
+                    {/* Bold white label */}
+                    <p className="text-[11px] font-bold text-white uppercase tracking-[0.08em] mb-2 leading-snug">
                       {cell.label}
                     </p>
-                    {/* Cold one-liner — small, muted, gut-punch */}
-                    <p className="text-[14px] leading-relaxed text-ink-secondary italic">
+                    {/* Cold one-liner */}
+                    <p className="text-[14px] leading-relaxed text-ink-secondary">
                       {cell.cold}
                     </p>
                   </div>
                 ))}
               </div>
             </div>
-            {/* ═══════════════════════════════════════════
+            {/* ══════════════════════════════
                 4. WITH / WITHOUT
-                Two full-width stacked cards.
-                WITHOUT offset 16px right — visual ladder stagger.
-                ✓ gold badge / ✗ red badge per item.
-                Each item: bold white title + body copy.
-                ═══════════════════════════════════════════ */}
+                Vertical timeline, continuous
+                gold/red line, numbered circles.
+                WITHOUT offset 16px right.
+                ══════════════════════════════ */}
             <div ref={withRef} className="flex flex-col gap-3">
-              {/* WITH YOUR WATERFALL */}
-              <div
-                className="px-6 py-7 overflow-hidden"
-                style={{
-                  ...contentCard({
-                    border: "1px solid rgba(212,175,55,0.20)",
-                  }),
-                  ...reveal(withVisible),
-                }}
-              >
-                <p className="font-mono text-[12px] uppercase tracking-[0.16em] text-gold-full mb-5">
-                  With Your Waterfall
-                </p>
-                <div className="flex flex-col gap-5">
-                  {withItems.map((item, i) => (
-                    <div
-                      key={item.title}
-                      className="flex gap-4 items-start"
-                      style={reveal(withVisible, 100 + i * 100)}
-                    >
-                      {/* Gold check badge */}
-                      <div
-                        className="flex-shrink-0 flex items-center justify-center text-black font-bold text-[14px]"
-                        style={{
-                          width:        "32px",
-                          height:       "32px",
-                          borderRadius: "6px",
-                          background:   "#D4AF37",
-                          marginTop:    "2px",
-                        }}
-                      >
-                        ✓
-                      </div>
-                      <div>
-                        <p className="text-[16px] font-semibold text-white leading-snug mb-1">
-                          {item.title}
-                        </p>
-                        <p className="text-[14px] leading-relaxed text-ink-body">
-                          {item.body}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              {/* WITHOUT A WATERFALL — offset 16px right for stagger */}
-              <div
-                className="px-6 py-7 overflow-hidden"
-                style={{
-                  marginLeft:   "16px",
-                  borderRadius: "8px",
-                  background:   "#000000",
-                  border:       "1px solid rgba(220,60,60,0.25)",
-                  boxShadow:    "inset 0 1px 0 rgba(255,255,255,0.04)",
-                  ...reveal(withVisible, 200),
-                }}
-              >
-                <p className="font-mono text-[12px] uppercase tracking-[0.16em] mb-5"
-                  style={{ color: "rgba(220,80,80,0.9)" }}>
-                  Without A Waterfall
-                </p>
-                <div className="flex flex-col gap-5">
-                  {withoutItems.map((item, i) => (
-                    <div
-                      key={item.title}
-                      className="flex gap-4 items-start"
-                      style={reveal(withVisible, 300 + i * 100)}
-                    >
-                      {/* Red X badge */}
-                      <div
-                        className="flex-shrink-0 flex items-center justify-center font-bold text-[14px]"
-                        style={{
-                          width:        "32px",
-                          height:       "32px",
-                          borderRadius: "6px",
-                          background:   "rgba(180,40,40,0.25)",
-                          border:       "1px solid rgba(220,60,60,0.40)",
-                          color:        "rgba(220,80,80,1)",
-                          marginTop:    "2px",
-                        }}
-                      >
-                        ✕
-                      </div>
-                      <div>
-                        <p className="text-[16px] font-semibold text-white leading-snug mb-1">
-                          {item.title}
-                        </p>
-                        <p className="text-[14px] leading-relaxed text-ink-body">
-                          {item.body}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              <TimelineCard
+                eyebrow="With Your Waterfall"
+                items={withItems}
+                accent="gold"
+                offset={0}
+                visible={withVisible}
+                revealDelay={0}
+              />
+              <TimelineCard
+                eyebrow="Without A Waterfall"
+                items={withoutItems}
+                accent="red"
+                offset={16}
+                visible={withVisible}
+                revealDelay={200}
+              />
             </div>
-            {/* ═══════════════════════════════════════════
+            {/* ══════════════════════════════
                 5. FREE
-                Pure #000, no gradient.
-                Attorney anchor creates reciprocity.
-                No CTA — belongs only in the Closer.
-                ═══════════════════════════════════════════ */}
+                Pure black, gold border 0.25.
+                No gradient — clean reveal.
+                ══════════════════════════════ */}
             <div
               ref={priceRef}
               className="px-6 py-10 md:px-8 md:py-12 text-center overflow-hidden"
-              style={{ ...contentCard(), ...reveal(priceVisible) }}
+              style={{
+                borderRadius: "8px",
+                background:   "#000000",
+                border:       "1px solid rgba(212,175,55,0.25)",
+                ...reveal(priceVisible),
+              }}
             >
-              <p className="font-mono text-[14px] uppercase tracking-[0.20em] text-gold-full mb-4">
-                What This Costs
-              </p>
+              <Eyebrow>What This Costs</Eyebrow>
               <p className="font-bebas text-[72px] md:text-[88px] leading-[1.0] tracking-[0.06em] text-white mb-5">
                 FREE
               </p>
@@ -393,51 +358,49 @@ const Index = () => {
                 waterfall mechanics. This gives you the financial x-ray for free.
               </p>
             </div>
-            {/* ═══════════════════════════════════════════
-                6. QUOTE CALLOUT
-                Gold background #D4AF37, black text.
-                Miles' line verbatim — no edits.
-                Only gold-bg element on the page.
-                No eyebrow, no headline — just the quote.
-                Scroll reveal on visibility.
-                ═══════════════════════════════════════════ */}
+            {/* ══════════════════════════════
+                6. QUOTE
+                Pure black bg. Full gold border.
+                Gold text. NOT a gold background.
+                The gold-bg version read as a
+                coupon/warning label — wrong register.
+                ══════════════════════════════ */}
             <div
               ref={quoteRef}
               className="px-7 py-8 md:px-8 md:py-10 overflow-hidden"
               style={{
                 borderRadius: "8px",
-                background:   "#D4AF37",
+                background:   "#000000",
+                border:       "1px solid rgba(212,175,55,0.60)",
                 ...reveal(quoteVisible),
               }}
             >
               <div className="flex gap-4 items-start">
-                {/* Quote mark accent */}
                 <span
-                  className="flex-shrink-0 font-bebas text-[48px] text-black leading-none"
-                  style={{ marginTop: "-8px", opacity: 0.25 }}
+                  className="flex-shrink-0 font-bebas text-[48px] text-gold-full leading-none"
+                  style={{ marginTop: "-8px", opacity: 0.40 }}
                 >
                   "
                 </span>
-                <p className="text-[16px] md:text-[18px] font-semibold text-black leading-relaxed">
+                <p className="text-[16px] md:text-[18px] font-semibold text-gold-full leading-relaxed">
                   The creative vision is only half the battle. The other half is proving
                   you can execute that vision responsibly and deliver a return.
                 </p>
               </div>
             </div>
-            {/* ═══════════════════════════════════════════
+            {/* ══════════════════════════════
                 7. CLOSER
-                Warmest card. One headline. One sentence.
-                One CTA. Nothing else.
-                ═══════════════════════════════════════════ */}
+                Strongest gold border on page.
+                One headline. One sentence. One CTA.
+                ══════════════════════════════ */}
             <div
               ref={closerRef}
               data-section="closer"
               className="px-6 py-12 md:px-8 md:py-16 text-center overflow-hidden"
               style={{
                 borderRadius: "8px",
-                border:       "1px solid rgba(212,175,55,0.25)",
-                background:   "radial-gradient(ellipse at center 70%, rgba(212,175,55,0.08) 0%, rgba(212,175,55,0.03) 60%, transparent 100%)",
-                boxShadow:    "0 0 60px rgba(212,175,55,0.04), inset 0 1px 0 rgba(255,255,255,0.06)",
+                background:   "#000000",
+                border:       "1px solid rgba(212,175,55,0.35)",
                 ...reveal(closerVisible),
               }}
             >
@@ -457,12 +420,17 @@ const Index = () => {
               </div>
             </div>
             {/* FOOTER */}
-            <footer className="pt-4 pb-6 px-4 text-center">
-              <p className="text-ink-body text-[12px] tracking-[0.02em] leading-relaxed mx-auto max-w-sm">
-                For educational and informational purposes only. Not legal, tax,
-                or investment advice. Consult a qualified entertainment attorney
-                before making financing decisions.
-              </p>
+            <footer className="pt-2 pb-8 px-4 text-center">
+              <div
+                className="pt-6"
+                style={{ borderTop: "1px solid rgba(212,175,55,0.12)" }}
+              >
+                <p className="text-ink-body text-[12px] tracking-[0.02em] leading-relaxed mx-auto max-w-sm">
+                  For educational and informational purposes only. Not legal, tax,
+                  or investment advice. Consult a qualified entertainment attorney
+                  before making financing decisions.
+                </p>
+              </div>
             </footer>
           </div>
         </main>
