@@ -143,9 +143,9 @@ const Index = () => {
               className="px-6 py-10 md:px-8 md:py-12 lg:py-14 text-center overflow-hidden"
               style={{
                 borderRadius: "8px",
-                background:   "radial-gradient(ellipse at center top, rgba(212,175,55,0.08) 0%, rgba(212,175,55,0.03) 40%, transparent 100%)",
-                border:       "1px solid rgba(212,175,55,0.25)",
-                boxShadow:    "inset 0 1px 0 rgba(255,255,255,0.06), 0 0 40px rgba(212,175,55,0.03)",
+                background:   "radial-gradient(ellipse at center top, rgba(212,175,55,0.14) 0%, rgba(212,175,55,0.07) 45%, transparent 100%)",
+                border:       "1px solid rgba(212,175,55,0.40)",
+                boxShadow:    "inset 0 1px 0 rgba(255,255,255,0.08), 0 0 60px rgba(212,175,55,0.06)",
               }}
             >
               <p className="font-mono text-[14px] uppercase tracking-[0.20em] mb-6 text-gold-full">
@@ -220,18 +220,16 @@ const Index = () => {
                   <h3 className="font-bebas text-[clamp(1.8rem,5vw,2.6rem)] leading-[0.96] tracking-[0.06em] text-white mb-7">
                     FOUR REASONS TO KNOW YOUR WATERFALL
                   </h3>
-                  <div className="flex flex-col gap-0">
+                  <div className="flex flex-col gap-3">
                     {whyPoints.map((pt, i) => (
                       <div
                         key={pt.num}
-                        className="flex gap-5 items-start"
+                        className="flex gap-4 items-start px-4 py-5"
                         style={{
                           ...reveal(whyVisible, 80 + i * 90),
-                          paddingBottom: i < whyPoints.length - 1 ? "24px" : "0",
-                          borderBottom:  i < whyPoints.length - 1
-                            ? "1px solid rgba(255,255,255,0.06)"
-                            : "none",
-                          paddingTop:    i > 0 ? "24px" : "0",
+                          borderRadius: "6px",
+                          background:   "#0d0d0d",
+                          border:       "1px solid rgba(212,175,55,0.18)",
                         }}
                       >
                         {/* Number accent */}
@@ -239,8 +237,8 @@ const Index = () => {
                           className="font-mono font-bold leading-none flex-shrink-0"
                           style={{
                             fontSize:    "clamp(1.4rem,4vw,1.8rem)",
-                            color:       "rgba(212,175,55,0.35)",
-                            marginTop:   "2px",
+                            color:         "rgba(212,175,55,0.60)",
+                            marginTop:     "2px",
                             letterSpacing: "0.04em",
                           }}
                         >
@@ -281,7 +279,7 @@ const Index = () => {
                 THE REALITY
               </h3>
               <p className="text-[15px] leading-relaxed text-ink-body mb-8">
-                Most producers walk into distribution meetings without knowing these numbers.
+                The waterfall either costs you now — or costs you everything later.
               </p>
               {/* pt-5 gives the absolute-positioned number badge room to bleed above each cell */}
               <div className="grid grid-cols-2 gap-4 pt-5">
@@ -344,7 +342,7 @@ const Index = () => {
                   ...reveal(withVisible),
                 }}
               >
-                <p className="font-mono text-[12px] uppercase tracking-[0.16em] text-gold-full mb-5">
+                <p className="font-bebas text-[clamp(1.4rem,5vw,2rem)] leading-none tracking-[0.06em] text-gold-full mb-5">
                   With Your Waterfall
                 </p>
                 <div className="flex flex-col gap-0">
@@ -402,7 +400,7 @@ const Index = () => {
                 }}
               >
                 <p
-                  className="font-mono text-[12px] uppercase tracking-[0.16em] mb-5"
+                  className="font-bebas text-[clamp(1.4rem,5vw,2rem)] leading-none tracking-[0.06em] mb-5"
                   style={{ color: "rgba(220,80,80,0.9)" }}
                 >
                   Without Your Waterfall
@@ -490,12 +488,14 @@ const Index = () => {
                 </p>
               </div>
               {/* Two sub-boxes */}
-              <div className="grid grid-cols-1 md:grid-cols-2">
+              <div className="flex flex-col md:grid md:grid-cols-2 gap-3 p-4">
                 {/* Box 1 — FREE */}
                 <div
-                  className="px-6 py-7 md:px-7"
+                  className="px-5 py-6"
                   style={{
-                    borderBottom: "1px solid rgba(212,175,55,0.12)",
+                    borderRadius: "6px",
+                    background:   "#0d0d0d",
+                    border:       "1px solid rgba(212,175,55,0.18)",
                   }}
                 >
                   <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-gold-full mb-3">
@@ -511,9 +511,11 @@ const Index = () => {
                 </div>
                 {/* Box 2 — PREMIUM */}
                 <div
-                  className="px-6 py-7 md:px-7"
+                  className="px-5 py-6"
                   style={{
-                    borderTop: "1px solid rgba(212,175,55,0.12)",
+                    borderRadius: "6px",
+                    background:   "#0d0d0d",
+                    border:       "1px solid rgba(212,175,55,0.18)",
                   }}
                 >
                   <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-gold-full mb-3">
