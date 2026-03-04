@@ -2,7 +2,7 @@ import { lazy, Suspense, useState } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import ErrorBoundary from "./components/ErrorBoundary";
 import OgBotFab from "./components/OgBotFab";
 import OgBotSheet from "./components/OgBotSheet";
@@ -48,12 +48,17 @@ const queryClient = new QueryClient();
 const AppShell = () => {
   const [isBotOpen, setIsBotOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const location = useLocation();
+  const isLanding = location.pathname === "/";
 
   return (
     <>
-      <AppHeader
-        onMoreOpen={() => setIsMenuOpen(true)}
-      />
+      {/* Landing page (v8) has its own pill nav — hide global header there */}
+      {!isLanding && (
+        <AppHeader
+          onMoreOpen={() => setIsMenuOpen(true)}
+        />
+      )}
 
       <Suspense fallback={<PageLoader />}>
         <Routes>

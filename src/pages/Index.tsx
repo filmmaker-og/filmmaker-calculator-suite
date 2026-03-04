@@ -4,33 +4,31 @@ import { supabase } from "@/integrations/supabase/client";
 import { useHaptics } from "@/hooks/use-haptics";
 import { useInView } from "@/hooks/useInView";
 import LeadCaptureModal from "@/components/LeadCaptureModal";
-import WaterfallCascade from "@/components/WaterfallCascade";
 /*
-  PAGE STACK — 8 sections:
-    1. HERO         — warm arrival, primary CTA
-    2. WATERFALL    — interactive proof
-    3. THE REALITY  — 2x2 cost comparison: what knowledge actually costs
-    4. WITH/WITHOUT — timeline cards, continuous gold/red line + numbered circles
-    5. ARSENAL      — what you get, institutional tools section
-    6. QUOTE        — Miles' line, gold border on black
-    7. CLOSER       — attorney line + single CTA
-    8. FOOTER
-  FREE SECTION: deliberately removed.
-    The waterfall demo + Reality cells already prove value.
-    Attorney line moves into Closer as final pre-CTA anchor.
-    Standalone FREE section oversells — signals insecurity.
-  BACKGROUND RULES:
-    All sections: #000 + gold border (0.20–0.30)
-    No gold fills anywhere — causes brownish cast on phones
-    Gold = border strokes + text only
+  PAGE STACK — v8 redesign:
+    1. PILL NAV     — fixed floating, logo + hamburger
+    2. HERO         — Bebas hierarchy, primary CTA
+    3. WATERFALL    — static ledger + flow diagram
+    4. WHY THIS MATTERS — 2×2 badge grid
+    5. REALITY      — blockquote + with/without check grid
+    6. HOW IT WORKS — 4-step vertical stack
+    7. ARSENAL      — unified block, free/premium divider
+    8. CLOSER       — final CTA
+    9. FOOTER
+
+  BACKGROUND: Pure black everywhere. Zero grids.
+  CTA: All go through auth check → LeadCaptureModal if no session.
+  WaterfallCascade REMOVED — replaced by static ledger visualization.
 */
+
 const Index = () => {
-  const navigate  = useNavigate();
-  const haptics   = useHaptics();
-  const [showLeadCapture,    setShowLeadCapture   ] = useState(false);
+  const navigate = useNavigate();
+  const haptics = useHaptics();
+
+  const [showLeadCapture, setShowLeadCapture] = useState(false);
   const [pendingDestination, setPendingDestination] = useState<string | null>(null);
-  const [hasSession,         setHasSession        ] = useState(false);
-  const [ctaGlow,            setCtaGlow           ] = useState(false);
+  const [hasSession, setHasSession] = useState(false);
+
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session?.user) setHasSession(true);
@@ -40,6 +38,7 @@ const Index = () => {
     });
     return () => subscription.unsubscribe();
   }, []);
+
   const gatedNavigate = useCallback((destination: string) => {
     if (!hasSession) {
       setPendingDestination(destination);
@@ -48,76 +47,107 @@ const Index = () => {
       navigate(destination);
     }
   }, [hasSession, navigate]);
-  const handleStartClick = () => {
+
+  const handleCTA = () => {
     haptics.medium();
-    gatedNavigate("/calculator?tab=budget");
+    gatedNavigate("/calculator");
   };
-  const prefersReducedMotion = typeof window !== "undefined"
-    && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  useEffect(() => {
-    if (prefersReducedMotion) return;
-    const timeout = setTimeout(() => setCtaGlow(true), 2000);
-    return () => clearTimeout(timeout);
-  }, [prefersReducedMotion]);
-  /* ── Scroll refs ── */
-  const { ref: waterfallRef, inView: waterfallVisible } = useInView<HTMLDivElement>({ threshold: 0.1  });
-  const { ref: whyRef,       inView: whyVisible       } = useInView<HTMLDivElement>({ threshold: 0.1  });
-  const { ref: realityRef,   inView: realityVisible   } = useInView<HTMLDivElement>({ threshold: 0.1  });
-  const { ref: withRef,      inView: withVisible      } = useInView<HTMLDivElement>({ threshold: 0.1  });
-  const { ref: arsenalRef,   inView: arsenalVisible   } = useInView<HTMLDivElement>({ threshold: 0.15 });
-  const { ref: quoteRef,     inView: quoteVisible     } = useInView<HTMLDivElement>({ threshold: 0.3  });
-  const { ref: closerRef,    inView: closerVisible    } = useInView<HTMLDivElement>({ threshold: 0.2  });
-  /* ── Data ── */
-  // Reality cells: stat / bold white label / cold one-liner
-  const realityCells = [
-    { stat: "$800/hr",   label: "Entertainment Attorney", cold: "If they'll take the meeting."           },
-    { stat: "$5K+",      label: "Producing Consultant",   cold: "If you can afford one."                 },
-    { stat: "$200K",     label: "Film School",            cold: "Four years you don't have."             },
-    { stat: "Your Time", label: "Trial & Error",          cold: "Your investors won't get a second one." },
-  ];
-  // With / Without items
-  const withItems = [
-    {
-      title: "Returns Mapped",
-      body:  "Every investor sees exactly what they get back — and when.",
-    },
-    {
-      title: "Nothing Hidden",
-      body:  "Fees, splits, and repayment order visible before you commit.",
-    },
-    {
-      title: "Your Margins, Confirmed",
-      body:  "Run the numbers on your backend points before you shoot a frame.",
-    },
-  ];
-  const withoutItems = [
-    {
-      title: "The Question You Can't Answer",
-      body:  "'How do I get my money back?' — and you're improvising.",
-    },
-    {
-      title: "Surprises After Signatures",
-      body:  "Fees and splits you didn't model surface after the deal closes.",
-    },
-    {
-      title: "Dead Backend Points",
-      body:  "Sales agent commission you forgot makes them worthless.",
-    },
-  ];
-  /* ── Shared style helpers ── */
-  const contentCard = (extra?: React.CSSProperties): React.CSSProperties => ({
-    borderRadius: "8px",
-    background:   "#000000",
-    border:       "1px solid rgba(212,175,55,0.12)",
-    boxShadow:    "inset 0 1px 0 rgba(255,255,255,0.06)",
-    ...extra,
-  });
+
+  const prefersReducedMotion =
+    typeof window !== "undefined" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
   const reveal = (visible: boolean, delay = 0): React.CSSProperties => ({
-    opacity:         prefersReducedMotion || visible ? 1 : 0,
-    transform:       prefersReducedMotion || visible ? "translateY(0)" : "translateY(20px)",
-    transition:      prefersReducedMotion ? "none" : "opacity 700ms ease-out, transform 700ms ease-out",
+    opacity: prefersReducedMotion || visible ? 1 : 0,
+    transform: prefersReducedMotion || visible ? "translateY(0)" : "translateY(20px)",
+    transition: prefersReducedMotion ? "none" : "opacity 700ms ease-out, transform 700ms ease-out",
     transitionDelay: prefersReducedMotion || delay === 0 ? "0ms" : `${delay}ms`,
   });
+
+  /* ── Scroll refs ── */
+  const { ref: waterfallRef, inView: waterfallVisible } = useInView<HTMLDivElement>({ threshold: 0.1 });
+  const { ref: whyRef, inView: whyVisible } = useInView<HTMLDivElement>({ threshold: 0.1 });
+  const { ref: realityRef, inView: realityVisible } = useInView<HTMLDivElement>({ threshold: 0.1 });
+  const { ref: stepsRef, inView: stepsVisible } = useInView<HTMLDivElement>({ threshold: 0.1 });
+  const { ref: arsenalRef, inView: arsenalVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
+  const { ref: closerRef, inView: closerVisible } = useInView<HTMLDivElement>({ threshold: 0.2 });
+
+  /* ── Data ── */
+  const waterfallTiers = [
+    { num: "01", name: "CAM Fee", amt: "$30,000" },
+    { num: "02", name: "Sales Agent Fee (10%)", amt: "$300,000" },
+    { num: "03", name: "Sales Agent Expenses", amt: "$50,000" },
+    { num: "04", name: "Guild Residuals", amt: "$94,000" },
+    { num: "05", name: "E&O / Delivery", amt: "$18,000" },
+    { num: "06", name: "Net Budget Recoupment", amt: "$1,800,000" },
+    { num: "07", name: "Investor Pref. Return (8%)", amt: "$144,000" },
+  ];
+
+  const badgeCards = [
+    { num: "1", title: "Investors Will Ask", body: "Serious money demands the model before wiring." },
+    { num: "2", title: "Fees Come Off The Top", body: "All deducted before a dollar hits recoupment." },
+    { num: "3", title: "Can't Negotiate Blind", body: "You can't push back on what you don't understand." },
+    { num: "4", title: "Backend Needs Context", body: "The waterfall makes participation real." },
+  ];
+
+  const withItems = [
+    "Model fees before they hit you",
+    "Show investors exact recoupment",
+    "Know what's negotiable",
+    "Know break-even before you raise",
+  ];
+  const withoutItems = [
+    "Guessing when investors ask",
+    "Overpromising returns",
+    "Leaving leverage on the table",
+    "Backend killed after signing",
+  ];
+
+  const steps = [
+    { n: "1", title: "Enter Your Budget", body: "Total budget, cash basis after deferments and tax credits, investor equity." },
+    { n: "2", title: "Choose Your Scenario", body: "Streamer acquisition or traditional distribution. Guild rates adjust automatically." },
+    { n: "3", title: "See the Full Waterfall", body: "Every tier with accurate rates — off-the-tops through net backend profit." },
+    { n: "4", title: "Stress-Test Your Deal", body: "Adjust price, negotiate fee caps. Run it until you know what you can't give up." },
+  ];
+
+  const freeArsenal = [
+    { num: "01.", name: "11-Tier Recoupment Model", sub: "Off-the-tops through net backend profit" },
+    { num: "02.", name: "Streamer + Theatrical Scenarios", sub: "Acquisition and distribution logic modeled" },
+    { num: "03.", name: "Accurate Guild Rates", sub: "SAG-AFTRA, WGA, DGA residuals built in" },
+    { num: "04.", name: "Tax Credit Handling", sub: "Soft money outside the waterfall, correctly" },
+  ];
+  const premArsenal = [
+    { num: "05.", name: "SPV Structure Templates", sub: "Operating agreement frameworks built for film finance" },
+    { num: "06.", name: "Capital Stack Architecture", sub: "Layer equity, soft money, and gap financing correctly" },
+    { num: "07.", name: "Streamer Acquisition Comps", sub: "Market rate intelligence by genre and cast tier" },
+  ];
+
+  /* ── CTA button component ── */
+  const CTAButton = () => (
+    <button
+      onClick={handleCTA}
+      className="inline-flex items-center gap-[10px] font-['Roboto_Mono'] text-[11px] font-medium uppercase tracking-[0.12em] text-black"
+      style={{
+        background: "#F9E076",
+        padding: "13px 24px",
+        clipPath: "polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px))",
+      }}
+    >
+      Build Your Waterfall →
+    </button>
+  );
+
+  /* ── Eyebrow ruled component ── */
+  const EyebrowRuled = ({ text }: { text: string }) => (
+    <div className="flex items-center gap-3 mb-[14px]">
+      <div className="flex-1 h-px" style={{ background: "rgba(212,175,55,0.20)" }} />
+      <span className="font-['Roboto_Mono'] text-[11px] tracking-[0.2em] uppercase text-[#D4AF37] whitespace-nowrap">
+        {text}
+      </span>
+      <div className="flex-1 h-px" style={{ background: "rgba(212,175,55,0.20)" }} />
+    </div>
+  );
+
   return (
     <>
       <LeadCaptureModal
@@ -126,487 +156,689 @@ const Index = () => {
         onSuccess={() => {
           setHasSession(true);
           setShowLeadCapture(false);
-          navigate(pendingDestination || "/calculator?tab=budget");
+          navigate(pendingDestination || "/calculator");
         }}
       />
-      <div className="min-h-screen flex flex-col relative overflow-hidden bg-black grain-overlay">
-        <main
-          aria-label="Film Finance Simulator"
-          className="flex-1 flex flex-col items-center"
-          style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
+
+      <div className="min-h-screen bg-black" style={{ paddingTop: "52px" }}>
+
+        {/* ═══════════════════════════════════════════
+            PILL NAV — fixed floating
+            ═══════════════════════════════════════════ */}
+        <nav
+          className="fixed z-50 flex items-center justify-between"
+          style={{
+            top: "46px",
+            left: "50%",
+            transform: "translateX(-50%)",
+            width: "calc(100% - 32px)",
+            maxWidth: "390px",
+            background: "rgba(6,6,6,0.96)",
+            border: "1px solid rgba(212,175,55,0.22)",
+            borderRadius: "999px",
+            padding: "7px 7px 7px 20px",
+            backdropFilter: "blur(24px)",
+            WebkitBackdropFilter: "blur(24px)",
+            boxShadow: "0 2px 24px rgba(0,0,0,0.8)",
+          }}
         >
-          <div className="w-full max-w-xl md:max-w-2xl lg:max-w-3xl px-5 md:px-8 flex flex-col gap-8 lg:gap-20 py-6">
-            {/* ═══════════════════════════════════════════
-                1. HERO
-                ═══════════════════════════════════════════ */}
-            <div
-              className="px-6 py-10 md:px-8 md:py-12 lg:py-14 text-center overflow-hidden"
-              style={{
-                borderRadius: "8px",
-                background:   "radial-gradient(ellipse at center top, rgba(212,175,55,0.14) 0%, rgba(212,175,55,0.07) 45%, transparent 100%)",
-                border:       "1px solid rgba(212,175,55,0.40)",
-                boxShadow:    "inset 0 1px 0 rgba(255,255,255,0.08), 0 0 60px rgba(212,175,55,0.06)",
-              }}
+          <span className="font-['Bebas_Neue'] text-[1.1rem] tracking-[0.08em]">
+            <span className="text-[#D4AF37]">filmmaker.</span>
+            <span className="text-white">og</span>
+          </span>
+          <button
+            className="w-8 h-8 rounded-full flex flex-col items-center justify-center gap-1 cursor-pointer"
+            style={{
+              background: "rgba(212,175,55,0.06)",
+              border: "1px solid rgba(212,175,55,0.20)",
+            }}
+            aria-label="Menu"
+          >
+            <span className="block h-px w-[13px]" style={{ background: "#D4AF37" }} />
+            <span className="block h-px w-[13px]" style={{ background: "#D4AF37" }} />
+            <span className="block h-px w-[8px]" style={{ background: "#D4AF37" }} />
+          </button>
+        </nav>
+
+        {/* ═══════════════════════════════════════════
+            § 1 HERO
+            ═══════════════════════════════════════════ */}
+        <section
+          className="relative overflow-hidden text-center"
+          style={{ background: "#000", padding: "60px 24px 52px" }}
+        >
+          {/* Radial warmth — top only */}
+          <div
+            className="absolute top-0 left-0 right-0 pointer-events-none"
+            style={{
+              height: "45%",
+              background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.065) 0%, transparent 70%)",
+            }}
+          />
+          <div className="relative z-[1]">
+            <p
+              className="font-['Roboto_Mono'] text-[11px] uppercase text-center mb-5"
+              style={{ letterSpacing: "0.2em", color: "rgba(212,175,55,0.75)" }}
             >
-              <p className="font-mono text-[14px] uppercase tracking-[0.20em] mb-6 text-gold-full">
-                Film Finance Simulator
-              </p>
-              <h1 className="font-bebas text-[clamp(3.2rem,9vw,5.2rem)] leading-[0.96] tracking-[0.06em] text-white mb-6">
-                SEE WHERE EVERY DOLLAR GOES
-              </h1>
-              <div className="w-full max-w-[280px] lg:max-w-[320px] mx-auto">
-                <button
-                  onClick={handleStartClick}
-                  className={`w-full h-14 rounded-sm btn-cta-primary font-bold${ctaGlow ? " animate-cta-glow-pulse" : ""}`}
-                >
-                  BUILD YOUR WATERFALL
-                </button>
-              </div>
-            </div>
-            {/* ═══════════════════════════════════════════
-                2. WATERFALL
-                ═══════════════════════════════════════════ */}
-            <div
-              ref={waterfallRef}
-              className="px-5 py-7 md:px-6 md:py-9 overflow-hidden"
-              style={{
-                ...contentCard({
-                  background: "radial-gradient(ellipse at top center, rgba(212,175,55,0.06) 0%, transparent 55%)",
-                  border:     "1px solid rgba(212,175,55,0.22)",
-                }),
-                ...reveal(waterfallVisible),
-              }}
+              Film Finance Intelligence
+            </p>
+            <h1
+              className="font-['Bebas_Neue'] text-[5rem] text-white text-center mb-1"
+              style={{ lineHeight: 0.86, letterSpacing: "0.01em" }}
             >
-              <WaterfallCascade />
-            </div>
-            {/* ═══════════════════════════════════════════
-                3. WHY THIS MATTERS
-                4-point compact section. Answers "why do I need
-                to understand the waterfall?" before the reality
-                cells prove the cost of not knowing.
-                ═══════════════════════════════════════════ */}
-            {(() => {
-              const whyPoints = [
-                {
-                  num:   "01",
-                  title: "INVESTORS WILL ASK",
-                  body:  "\"How do I get my money back?\" is the first real question in every serious capital conversation. You need an answer before that meeting.",
-                },
-                {
-                  num:   "02",
-                  title: "FEES COME OFF THE TOP",
-                  body:  "Sales agent commission, CAM fees, and distribution expenses hit before investor recoupment. Most first-time producers don't model these.",
-                },
-                {
-                  num:   "03",
-                  title: "YOU CAN'T NEGOTIATE BLIND",
-                  body:  "If you don't know your recoupment order, you can't evaluate a distribution offer. You're signing something you don't understand.",
-                },
-                {
-                  num:   "04",
-                  title: "BACKEND POINTS NEED CONTEXT",
-                  body:  "A 30% backend in a bad waterfall returns nothing. Know the math before you commit to the deal.",
-                },
-              ];
-              return (
-                <div
-                  ref={whyRef}
-                  className="px-6 py-8 md:px-8 md:py-10 overflow-hidden"
-                  style={{ ...contentCard(), ...reveal(whyVisible) }}
-                >
-                  <p className="font-mono text-[12px] uppercase tracking-[0.14em] text-gold-full mb-2">
-                    Why This Matters
-                  </p>
-                  <h3 className="font-bebas text-[clamp(1.8rem,5vw,2.6rem)] leading-[0.96] tracking-[0.06em] text-white mb-7">
-                    FOUR REASONS TO KNOW YOUR WATERFALL
-                  </h3>
-                  <div className="flex flex-col gap-3">
-                    {whyPoints.map((pt, i) => (
-                      <div
-                        key={pt.num}
-                        className="flex gap-4 items-start px-4 py-5"
-                        style={{
-                          ...reveal(whyVisible, 80 + i * 90),
-                          borderRadius: "6px",
-                          background:   "#0d0d0d",
-                          border:       "1px solid rgba(212,175,55,0.18)",
-                        }}
-                      >
-                        {/* Number accent */}
-                        <p
-                          className="font-mono font-bold leading-none flex-shrink-0"
-                          style={{
-                            fontSize:    "clamp(1.4rem,4vw,1.8rem)",
-                            color:         "rgba(212,175,55,0.60)",
-                            marginTop:     "2px",
-                            letterSpacing: "0.04em",
-                          }}
-                        >
-                          {pt.num}
-                        </p>
-                        <div>
-                          <p className="font-mono text-[12px] font-bold text-white uppercase tracking-[0.10em] mb-1.5">
-                            {pt.title}
-                          </p>
-                          <p className="text-[14px] leading-relaxed text-ink-body">
-                            {pt.body}
-                          </p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              );
-            })()}
-            {/* ═══════════════════════════════════════════
-                4. THE REALITY
-                2x2 numbered cells.
-                Anatomy per cell:
-                  — Circle number badge: centered on top border
-                  — Large gold stat
-                  — Bold white label ALL CAPS
-                  — Cold one-liner in ink-secondary
-                ═══════════════════════════════════════════ */}
-            <div
-              ref={realityRef}
-              className="px-6 py-8 md:px-8 md:py-10 overflow-hidden"
-              style={{ ...contentCard(), ...reveal(realityVisible) }}
+              Model Your
+              <em className="not-italic text-[#D4AF37] block">Waterfall</em>
+            </h1>
+            <p
+              className="font-['Bebas_Neue'] text-[2.6rem] text-center mb-[22px]"
+              style={{ lineHeight: 1, color: "rgba(255,255,255,0.28)", marginTop: "4px" }}
             >
-              <p className="font-mono text-[12px] uppercase tracking-[0.14em] text-gold-full mb-2">
-                The Cost
-              </p>
-              <h3 className="font-bebas text-[clamp(2rem,6vw,3rem)] leading-[0.96] tracking-[0.06em] text-white mb-3">
-                THE REALITY
-              </h3>
-              <p className="text-[15px] leading-relaxed text-ink-body mb-8">
-                The waterfall either costs you now — or costs you everything later.
-              </p>
-              {/* pt-5 gives the absolute-positioned number badge room to bleed above each cell */}
-              <div className="grid grid-cols-2 gap-4 pt-5">
-                {realityCells.map((cell, i) => (
-                  <div
-                    key={cell.label}
-                    className="relative px-4 pt-8 pb-5"
-                    style={{
-                      borderRadius: "6px",
-                      background:   "#111111",
-                      border:       "1px solid rgba(212,175,55,0.15)",
-                      ...reveal(realityVisible, i * 90),
-                    }}
-                  >
-                    {/* Circle number badge — sits on top border, centered */}
-                    <div
-                      className="absolute left-1/2 font-mono text-[11px] font-bold text-black flex items-center justify-center"
-                      style={{
-                        top:             "-14px",
-                        transform:       "translateX(-50%)",
-                        width:           "28px",
-                        height:          "28px",
-                        borderRadius:    "50%",
-                        background:      "#D4AF37",
-                        border:          "2px solid #000",
-                        lineHeight:      "1",
-                      }}
-                    >
-                      {i + 1}
-                    </div>
-                    {/* Stat — gold, large, the number */}
-                    <p className="font-mono text-[22px] md:text-[26px] font-bold text-gold-full tabular-nums leading-none mb-2">
-                      {cell.stat}
-                    </p>
-                    {/* Label — bold white, all caps */}
-                    <p className="text-[11px] font-bold text-white uppercase tracking-[0.08em] mb-3 leading-snug">
-                      {cell.label}
-                    </p>
-                    {/* Cold one-liner — small, muted, gut-punch */}
-                    <p className="text-[14px] leading-relaxed text-ink-secondary italic">
-                      {cell.cold}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-            {/* ═══════════════════════════════════════════
-                5. WITH / WITHOUT
-                Two full-width stacked cards, same alignment.
-                WITHOUT no longer offset — alignment parity enforced.
-                Label parity: "With Your Waterfall" / "Without Your Waterfall".
-                Vertical gold/red line connects badges down the left side.
-                ═══════════════════════════════════════════ */}
-            <div ref={withRef} className="flex flex-col gap-3">
-              {/* WITH YOUR WATERFALL */}
-              <div
-                className="px-6 py-7 overflow-hidden"
-                style={{
-                  ...contentCard({ border: "1px solid rgba(212,175,55,0.20)" }),
-                  ...reveal(withVisible),
-                }}
-              >
-                <p className="font-bebas text-[clamp(1.4rem,5vw,2rem)] leading-none tracking-[0.06em] text-gold-full mb-5">
-                  With Your Waterfall
-                </p>
-                <div className="flex flex-col gap-0">
-                  {withItems.map((item, i) => (
-                    <div
-                      key={item.title}
-                      className="flex gap-4 items-start"
-                      style={reveal(withVisible, 100 + i * 100)}
-                    >
-                      {/* Badge + connecting line */}
-                      <div className="flex flex-col items-center flex-shrink-0" style={{ width: 32 }}>
-                        <div
-                          className="flex items-center justify-center text-black font-bold text-[14px] flex-shrink-0"
-                          style={{
-                            width:        "32px",
-                            height:       "32px",
-                            borderRadius: "6px",
-                            background:   "#D4AF37",
-                          }}
-                        >
-                          ✓
-                        </div>
-                        {i < withItems.length - 1 && (
-                          <div
-                            style={{
-                              width:      "2px",
-                              flex:       1,
-                              minHeight:  "28px",
-                              background: "rgba(212,175,55,0.35)",
-                            }}
-                          />
-                        )}
-                      </div>
-                      <div style={{ paddingBottom: i < withItems.length - 1 ? "20px" : "0" }}>
-                        <p className="text-[16px] font-semibold text-white leading-snug mb-1">
-                          {item.title}
-                        </p>
-                        <p className="text-[14px] leading-relaxed text-ink-body">
-                          {item.body}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              {/* WITHOUT YOUR WATERFALL — same alignment, red border treatment */}
-              <div
-                className="px-6 py-7 overflow-hidden"
-                style={{
-                  borderRadius: "8px",
-                  background:   "#000000",
-                  border:       "1px solid rgba(220,60,60,0.25)",
-                  boxShadow:    "inset 0 1px 0 rgba(255,255,255,0.04)",
-                  ...reveal(withVisible, 200),
-                }}
-              >
-                <p
-                  className="font-bebas text-[clamp(1.4rem,5vw,2rem)] leading-none tracking-[0.06em] mb-5"
-                  style={{ color: "rgba(220,80,80,0.9)" }}
-                >
-                  Without Your Waterfall
-                </p>
-                <div className="flex flex-col gap-0">
-                  {withoutItems.map((item, i) => (
-                    <div
-                      key={item.title}
-                      className="flex gap-4 items-start"
-                      style={reveal(withVisible, 300 + i * 100)}
-                    >
-                      {/* Badge + connecting line */}
-                      <div className="flex flex-col items-center flex-shrink-0" style={{ width: 32 }}>
-                        <div
-                          className="flex-shrink-0 flex items-center justify-center font-bold text-[14px]"
-                          style={{
-                            width:        "32px",
-                            height:       "32px",
-                            borderRadius: "6px",
-                            background:   "rgba(180,40,40,0.25)",
-                            border:       "1px solid rgba(220,60,60,0.40)",
-                            color:        "rgba(220,80,80,1)",
-                          }}
-                        >
-                          ✕
-                        </div>
-                        {i < withoutItems.length - 1 && (
-                          <div
-                            style={{
-                              width:      "2px",
-                              flex:       1,
-                              minHeight:  "28px",
-                              background: "rgba(220,60,60,0.30)",
-                            }}
-                          />
-                        )}
-                      </div>
-                      <div style={{ paddingBottom: i < withoutItems.length - 1 ? "20px" : "0" }}>
-                        <p className="text-[16px] font-semibold text-white leading-snug mb-1">
-                          {item.title}
-                        </p>
-                        <p className="text-[14px] leading-relaxed text-ink-body">
-                          {item.body}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-            {/* ═══════════════════════════════════════════
-                6. ARSENAL
-                Header block: THE ARSENAL + tagline.
-                Two equal sub-boxes below within the same card:
-                  Box 1 — FREE: The Waterfall Calculator
-                  Box 2 — PREMIUM: Deal Packages
-                ═══════════════════════════════════════════ */}
-            <div
-              ref={arsenalRef}
-              className="overflow-hidden"
-              style={{
-                borderRadius: "8px",
-                background:   "#000000",
-                border:       "1px solid rgba(212,175,55,0.22)",
-                ...reveal(arsenalVisible),
-              }}
+              Before You Raise.
+            </p>
+            <p
+              className="font-['Inter'] text-[13px] font-medium text-center mx-auto mb-6"
+              style={{ color: "rgba(255,255,255,0.92)", maxWidth: "260px", lineHeight: 1.4 }}
             >
-              {/* Header block */}
-              <div
-                className="px-6 py-8 md:px-8 md:py-10 text-center"
-                style={{ borderBottom: "1px solid rgba(212,175,55,0.15)" }}
-              >
-                <p
-                  className="font-mono text-[12px] uppercase tracking-[0.18em] text-gold-full mb-4"
-                  style={{ display: "inline-block", borderBottom: "1px solid rgba(212,175,55,0.40)", paddingBottom: "6px" }}
-                >
-                  What You Get
-                </p>
-                <h3 className="font-bebas text-[clamp(2.6rem,8vw,4rem)] leading-[0.92] tracking-[0.06em] text-gold-full mt-4 mb-4">
-                  THE ARSENAL
-                </h3>
-                <p className="max-w-sm mx-auto text-[15px] leading-relaxed text-ink-body">
-                  Institutional-grade deal tools. Built for independent producers
-                  who can't afford to learn the hard way.
-                </p>
-              </div>
-              {/* Two sub-boxes */}
-              <div className="flex flex-col md:grid md:grid-cols-2 gap-3 p-4">
-                {/* Box 1 — FREE */}
-                <div
-                  className="px-5 py-6"
-                  style={{
-                    borderRadius: "6px",
-                    background:   "#0d0d0d",
-                    border:       "1px solid rgba(212,175,55,0.18)",
-                  }}
-                >
-                  <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-gold-full mb-3">
-                    Free
-                  </p>
-                  <p className="font-bebas text-[clamp(1.4rem,4vw,1.8rem)] leading-none tracking-[0.06em] text-white mb-3">
-                    THE WATERFALL CALCULATOR
-                  </p>
-                  <p className="text-[14px] leading-relaxed text-ink-body">
-                    Model your recoupment waterfall, run deal scenarios, and understand
-                    how the money flows — before you walk into the meeting.
-                  </p>
-                </div>
-                {/* Box 2 — PREMIUM */}
-                <div
-                  className="px-5 py-6"
-                  style={{
-                    borderRadius: "6px",
-                    background:   "#0d0d0d",
-                    border:       "1px solid rgba(212,175,55,0.18)",
-                  }}
-                >
-                  <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-gold-full mb-3">
-                    Premium
-                  </p>
-                  <p className="font-bebas text-[clamp(1.4rem,4vw,1.8rem)] leading-none tracking-[0.06em] text-white mb-3">
-                    DEAL PACKAGES
-                  </p>
-                  <p className="text-[14px] leading-relaxed text-ink-body">
-                    Full SPV structures, cap table models, and distribution
-                    templates. Institutional-grade, producer-ready.
-                  </p>
-                </div>
-              </div>
+              Know where the money goes before the room asks.
+            </p>
+            <div className="flex flex-col items-center">
+              <CTAButton />
             </div>
-            {/* ═══════════════════════════════════════════
-                7. QUOTE CALLOUT
-                #000 bg + gold border — pure black rule enforced.
-                Previous implementation had background: "#D4AF37"
-                which violated the pure-black rule and read as
-                a coupon/warning label. Fixed: black bg, gold border,
-                gold text. Same authority register as rest of page.
-                ═══════════════════════════════════════════ */}
-            <div
-              ref={quoteRef}
-              className="px-7 py-8 md:px-8 md:py-10 overflow-hidden"
-              style={{
-                borderRadius: "8px",
-                background:   "#000000",
-                border:       "1px solid rgba(212,175,55,0.55)",
-                boxShadow:    "inset 0 1px 0 rgba(212,175,55,0.08)",
-                ...reveal(quoteVisible),
-              }}
-            >
-              <div className="flex gap-4 items-start">
-                <span
-                  className="flex-shrink-0 font-bebas text-[52px] text-gold-full leading-none"
-                  style={{ marginTop: "-10px", opacity: 0.35 }}
-                >
-                  "
-                </span>
-                <p className="text-[16px] md:text-[18px] font-semibold text-white leading-relaxed">
-                  The creative vision is only half the battle. The other half is proving
-                  you can execute that vision responsibly and deliver a return.
-                </p>
-              </div>
-            </div>
-            {/* ═══════════════════════════════════════════
-                8. CLOSER
-                Attorney line removed — waterfall demo + Reality
-                cells already proved value. Keeping it here
-                oversells and dilutes the CTA.
-                ═══════════════════════════════════════════ */}
-            <div
-              ref={closerRef}
-              data-section="closer"
-              className="px-6 py-12 md:px-8 md:py-16 text-center overflow-hidden"
-              style={{
-                borderRadius: "8px",
-                border:       "1px solid rgba(212,175,55,0.30)",
-                background:   "#000000",
-                ...reveal(closerVisible),
-              }}
-            >
-              <h2 className="font-bebas text-[32px] md:text-[44px] leading-[1.05] tracking-[0.06em] text-white mb-5">
-                YOUR INVESTORS WILL{" "}ASK HOW THE MONEY FLOWS BACK.
-              </h2>
-              <p className="max-w-xs mx-auto text-[16px] leading-relaxed text-ink-body mb-8">
-                Run the math before the meeting.
-              </p>
-              <div className="w-full max-w-[280px] mx-auto">
-                <button
-                  onClick={handleStartClick}
-                  className={`w-full h-14 rounded-sm btn-cta-primary font-bold${closerVisible ? " animate-cta-glow-pulse" : ""}`}
-                >
-                  RUN YOUR DEAL FREE
-                </button>
-              </div>
-            </div>
-            {/* FOOTER */}
-            <footer className="pt-4 pb-6 px-4 text-center">
-              <p className="text-ink-body text-[12px] tracking-[0.02em] leading-relaxed mx-auto max-w-sm">
-                For educational and informational purposes only. Not legal, tax,
-                or investment advice. Consult a qualified entertainment attorney
-                before making financing decisions.
-              </p>
-            </footer>
           </div>
-        </main>
+        </section>
+
+        {/* ═══════════════════════════════════════════
+            § 2 WATERFALL
+            ═══════════════════════════════════════════ */}
+        <section
+          ref={waterfallRef}
+          className="bg-black"
+          style={{ padding: "52px 0 0", borderTop: "1px solid rgba(255,255,255,0.06)" }}
+        >
+          <div className="text-center" style={{ padding: "0 20px 24px" }}>
+            <EyebrowRuled text="How the money flows" />
+            <h2 className="font-['Bebas_Neue'] text-[2.6rem] text-white text-center" style={{ lineHeight: 0.95 }}>
+              The Recoupment<br />Waterfall
+            </h2>
+          </div>
+
+          {/* Acquisition callout */}
+          <div
+            className="relative overflow-hidden text-center"
+            style={{
+              ...reveal(waterfallVisible),
+              margin: "0 20px 10px",
+              background: "#0a0a0a",
+              border: "1px solid rgba(212,175,55,0.20)",
+              borderRadius: "12px",
+              padding: "18px 16px",
+            }}
+          >
+            {/* Gold top-line gradient */}
+            <div
+              className="absolute top-0 left-0 right-0 h-px"
+              style={{ background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.50), transparent)" }}
+            />
+            <p className="font-['Roboto_Mono'] text-[9px] uppercase tracking-[0.14em] text-[#D4AF37] mb-1">
+              Streamer Acquisition Price
+            </p>
+            <p className="font-['Roboto_Mono'] text-[9px] tracking-[0.06em] mb-2" style={{ color: "rgba(255,255,255,0.28)" }}>
+              Tier 2 Action Thriller — Example
+            </p>
+            <p className="font-['Bebas_Neue'] text-[2.4rem] text-[#D4AF37]" style={{ lineHeight: 1, letterSpacing: "0.02em" }}>
+              $3,000,000
+            </p>
+          </div>
+
+          {/* Waterfall tiers */}
+          <div
+            className="overflow-hidden"
+            style={{
+              ...reveal(waterfallVisible, 100),
+              margin: "0 20px 0",
+              border: "1px solid rgba(255,255,255,0.06)",
+              borderRadius: "12px",
+            }}
+          >
+            {waterfallTiers.map((tier, i) => (
+              <div
+                key={tier.num}
+                className="grid items-center"
+                style={{
+                  gridTemplateColumns: "22px 1fr auto",
+                  gap: "10px",
+                  padding: "11px 14px",
+                  borderBottom: i < waterfallTiers.length - 1 ? "1px solid rgba(255,255,255,0.06)" : "none",
+                }}
+              >
+                <span className="font-['Roboto_Mono'] text-[9px]" style={{ color: "rgba(255,255,255,0.28)" }}>
+                  {tier.num}
+                </span>
+                <span className="font-['Roboto_Mono'] text-[11px]" style={{ color: "rgba(255,255,255,0.58)" }}>
+                  {tier.name}
+                </span>
+                <span className="font-['Roboto_Mono'] text-[11px] text-right whitespace-nowrap" style={{ color: "rgba(255,255,255,0.28)" }}>
+                  — {tier.amt}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          {/* Flow diagram */}
+          <div style={{ ...reveal(waterfallVisible, 200), margin: "16px 20px 0" }}>
+            {/* Tank master */}
+            <div
+              className="relative text-center"
+              style={{
+                background: "#000",
+                border: "1px solid rgba(212,175,55,0.50)",
+                borderRadius: "12px",
+                padding: "24px 20px",
+                zIndex: 2,
+              }}
+            >
+              <div
+                className="absolute top-0 left-0 right-0 h-px"
+                style={{
+                  background: "linear-gradient(90deg, transparent, #D4AF37, transparent)",
+                  borderRadius: "12px 12px 0 0",
+                }}
+              />
+              <p className="font-['Roboto_Mono'] text-[9px] uppercase tracking-[0.18em] mb-2" style={{ color: "rgba(255,255,255,0.28)" }}>
+                Net Backend Profit
+              </p>
+              <p className="font-['Bebas_Neue'] text-[3.2rem] text-[#D4AF37]" style={{ lineHeight: 0.9, letterSpacing: "0.02em" }}>
+                $564,000
+              </p>
+            </div>
+
+            {/* Pipe network */}
+            <div className="flex flex-col items-center" style={{ marginTop: "-1px", position: "relative", zIndex: 1 }}>
+              <div className="w-[2px] h-[18px]" style={{ background: "rgba(212,175,55,0.50)" }} />
+              <div className="flex" style={{ width: "calc(50% + 10px)" }}>
+                <div
+                  className="flex-1"
+                  style={{
+                    height: "18px",
+                    borderTop: "2px solid rgba(212,175,55,0.50)",
+                    borderLeft: "2px solid rgba(212,175,55,0.50)",
+                    borderRadius: "6px 0 0 0",
+                  }}
+                />
+                <div
+                  className="flex-1"
+                  style={{
+                    height: "18px",
+                    borderTop: "2px solid rgba(212,175,55,0.50)",
+                    borderRight: "2px solid rgba(212,175,55,0.50)",
+                    borderRadius: "0 6px 0 0",
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* Buckets */}
+            <div className="flex gap-[10px]" style={{ marginTop: "-1px" }}>
+              {[
+                { label: "Producer", amount: "$338,400", pct: "60% of backend" },
+                { label: "Investor", amount: "$225,600", pct: "40% of backend" },
+              ].map((b) => (
+                <div
+                  key={b.label}
+                  className="flex-1 text-center"
+                  style={{
+                    background: "#0a0a0a",
+                    border: "1px solid rgba(212,175,55,0.20)",
+                    borderTop: "2px solid #D4AF37",
+                    borderRadius: "0 0 10px 10px",
+                    padding: "16px 12px",
+                  }}
+                >
+                  <p className="font-['Roboto_Mono'] text-[9px] uppercase tracking-[0.12em] mb-2" style={{ color: "rgba(255,255,255,0.28)" }}>
+                    {b.label}
+                  </p>
+                  <p className="font-['Bebas_Neue'] text-[2rem] text-[#D4AF37]" style={{ lineHeight: 1 }}>
+                    {b.amount}
+                  </p>
+                  <p className="font-['Roboto_Mono'] text-[9px] mt-[5px]" style={{ color: "rgba(255,255,255,0.28)" }}>
+                    {b.pct}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Note */}
+          <p
+            className="font-['Roboto_Mono'] text-[9px] uppercase text-center"
+            style={{ color: "rgba(255,255,255,0.28)", letterSpacing: "0.06em", padding: "12px 20px 52px" }}
+          >
+            Model only — your numbers will differ
+          </p>
+        </section>
+
+        {/* ═══════════════════════════════════════════
+            § 3 WHY THIS MATTERS
+            ═══════════════════════════════════════════ */}
+        <section
+          ref={whyRef}
+          className="bg-black text-center"
+          style={{ padding: "52px 0 0", borderTop: "1px solid rgba(255,255,255,0.06)" }}
+        >
+          <div
+            style={{
+              padding: "20px 20px 28px",
+              borderBottom: "1px solid rgba(212,175,55,0.20)",
+              background: "linear-gradient(180deg, rgba(212,175,55,0.04) 0%, transparent 100%)",
+            }}
+          >
+            <p
+              className="font-['Roboto_Mono'] text-[14px] uppercase text-center text-[#D4AF37] mb-[10px]"
+              style={{ letterSpacing: "0.16em" }}
+            >
+              Why This Matters
+            </p>
+            <h2 className="font-['Bebas_Neue'] text-[2.6rem] text-white text-center" style={{ lineHeight: 0.95 }}>
+              Four Reasons<br />You Can't Skip This
+            </h2>
+          </div>
+
+          {/* 2×2 badge grid */}
+          <div
+            className="grid grid-cols-2 text-left"
+            style={{ gap: "1px", background: "rgba(212,175,55,0.10)" }}
+          >
+            {badgeCards.map((card, i) => (
+              <div
+                key={card.num}
+                className="bg-black"
+                style={{
+                  ...reveal(whyVisible, i * 80),
+                  padding: "22px 18px",
+                  borderTop: i >= 2 ? "1px solid rgba(212,175,55,0.09)" : "none",
+                }}
+              >
+                <div
+                  className="flex items-center justify-center font-['Bebas_Neue'] text-[1.2rem] text-black mb-[14px]"
+                  style={{
+                    width: "36px",
+                    height: "36px",
+                    borderRadius: "50%",
+                    background: "#D4AF37",
+                  }}
+                >
+                  {card.num}
+                </div>
+                <p className="font-['Bebas_Neue'] text-[1.05rem] text-white mb-2" style={{ lineHeight: 1 }}>
+                  {card.title}
+                </p>
+                <p className="font-['Inter'] text-[11px]" style={{ lineHeight: 1.55, color: "rgba(255,255,255,0.58)" }}>
+                  {card.body}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ═══════════════════════════════════════════
+            § 4 REALITY (WITH / WITHOUT)
+            ═══════════════════════════════════════════ */}
+        <section
+          ref={realityRef}
+          className="bg-black text-left"
+          style={{ padding: "52px 20px", borderTop: "1px solid rgba(255,255,255,0.06)" }}
+        >
+          {/* Blockquote */}
+          <blockquote
+            className="font-['Bebas_Neue'] text-[2.4rem] mb-6"
+            style={{
+              ...reveal(realityVisible),
+              lineHeight: 0.95,
+              color: "rgba(255,255,255,0.92)",
+              borderLeft: "3px solid #D4AF37",
+              paddingLeft: "20px",
+            }}
+          >
+            The waterfall either costs you now — or costs you everything later.
+          </blockquote>
+
+          {/* Check grid */}
+          <div
+            className="grid grid-cols-2 overflow-hidden"
+            style={{
+              ...reveal(realityVisible, 100),
+              gap: "1px",
+              background: "rgba(255,255,255,0.06)",
+              borderRadius: "8px",
+            }}
+          >
+            {/* WITH column */}
+            <div className="bg-black">
+              <div className="px-[14px] py-[11px]" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+                <span className="font-['Bebas_Neue'] text-[1.2rem] text-[#D4AF37]" style={{ letterSpacing: "0.04em" }}>
+                  WITH
+                </span>
+              </div>
+              {withItems.map((item, i) => (
+                <div
+                  key={i}
+                  className="flex items-start gap-2"
+                  style={{
+                    padding: "10px 14px",
+                    borderBottom: i < withItems.length - 1 ? "1px solid rgba(255,255,255,0.06)" : "none",
+                    fontSize: "11px",
+                    lineHeight: 1.4,
+                  }}
+                >
+                  <span className="font-['Roboto_Mono'] text-[13px] flex-shrink-0 text-[#D4AF37]">✓</span>
+                  <span style={{ color: "rgba(255,255,255,0.58)" }}>{item}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* WITHOUT column */}
+            <div className="bg-black" style={{ borderLeft: "1px solid rgba(255,255,255,0.06)" }}>
+              <div className="px-[14px] py-[11px]" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+                <span className="font-['Bebas_Neue'] text-[1.2rem]" style={{ letterSpacing: "0.04em", color: "rgba(255,255,255,0.22)" }}>
+                  WITHOUT
+                </span>
+              </div>
+              {withoutItems.map((item, i) => (
+                <div
+                  key={i}
+                  className="flex items-start gap-2"
+                  style={{
+                    padding: "10px 14px",
+                    borderBottom: i < withoutItems.length - 1 ? "1px solid rgba(255,255,255,0.06)" : "none",
+                    fontSize: "11px",
+                    lineHeight: 1.4,
+                  }}
+                >
+                  <span className="font-['Roboto_Mono'] text-[13px] flex-shrink-0" style={{ color: "rgba(255,80,80,0.6)" }}>✗</span>
+                  <span style={{ color: "rgba(255,255,255,0.55)" }}>{item}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ═══════════════════════════════════════════
+            § 5 HOW IT WORKS
+            ═══════════════════════════════════════════ */}
+        <section
+          ref={stepsRef}
+          className="bg-black"
+          style={{ padding: "52px 0 0", borderTop: "1px solid rgba(255,255,255,0.06)" }}
+        >
+          <div className="text-center" style={{ padding: "0 20px 28px" }}>
+            <EyebrowRuled text="How it works" />
+            <h2 className="font-['Bebas_Neue'] text-[2.6rem] text-white text-center" style={{ lineHeight: 0.95 }}>
+              Build in Minutes
+            </h2>
+          </div>
+
+          <div className="flex flex-col text-left" style={{ gap: "1px", background: "rgba(255,255,255,0.06)" }}>
+            {steps.map((step, i) => (
+              <div
+                key={step.n}
+                className="grid bg-black"
+                style={{
+                  ...reveal(stepsVisible, i * 80),
+                  gridTemplateColumns: "52px 1fr",
+                }}
+              >
+                {/* Number column */}
+                <div
+                  className="relative flex items-start justify-center"
+                  style={{
+                    background: "#0a0a0a",
+                    borderRight: "1px solid rgba(212,175,55,0.20)",
+                    paddingTop: "18px",
+                  }}
+                >
+                  <span className="font-['Bebas_Neue'] text-[1.4rem] text-[#D4AF37]">{step.n}</span>
+                  {/* Chevron arrow */}
+                  <div
+                    className="absolute"
+                    style={{
+                      right: "-10px",
+                      top: "24px",
+                      width: 0,
+                      height: 0,
+                      borderTop: "11px solid transparent",
+                      borderBottom: "11px solid transparent",
+                      borderLeft: "10px solid #0a0a0a",
+                      zIndex: 2,
+                    }}
+                  />
+                </div>
+                {/* Content */}
+                <div style={{ padding: "16px 16px 16px 22px" }}>
+                  <p className="font-['Bebas_Neue'] text-[1.3rem] text-white mb-[5px]" style={{ lineHeight: 1 }}>
+                    {step.title}
+                  </p>
+                  <p className="font-['Inter'] text-[11px]" style={{ color: "rgba(255,255,255,0.58)", lineHeight: 1.55 }}>
+                    {step.body}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ═══════════════════════════════════════════
+            § 6 THE ARSENAL
+            ═══════════════════════════════════════════ */}
+        <section
+          ref={arsenalRef}
+          className="bg-black text-center"
+          style={{ padding: "52px 0 0", borderTop: "1px solid rgba(255,255,255,0.06)" }}
+        >
+          <div style={{ padding: "0 20px 24px" }}>
+            <EyebrowRuled text="What you get" />
+            <h2 className="font-['Bebas_Neue'] text-[2.6rem] text-white text-center" style={{ lineHeight: 0.95 }}>
+              The Arsenal
+            </h2>
+            <p className="font-['Inter'] text-[12px] mt-[10px]" style={{ color: "rgba(255,255,255,0.58)", lineHeight: 1.6 }}>
+              The math is free. The execution strategy is premium.
+            </p>
+          </div>
+
+          {/* Unified arsenal block */}
+          <div
+            className="relative overflow-hidden text-left"
+            style={{
+              ...reveal(arsenalVisible),
+              margin: "0 20px",
+              border: "1px solid rgba(212,175,55,0.50)",
+              borderRadius: "12px",
+              background: "#000",
+              boxShadow: "0 8px 32px rgba(212,175,55,0.10)",
+            }}
+          >
+            {/* Gold top line */}
+            <div
+              className="absolute top-0 left-0 right-0 h-px"
+              style={{ background: "linear-gradient(90deg, transparent, #D4AF37, transparent)" }}
+            />
+
+            {/* Block header */}
+            <div
+              className="flex items-end justify-between"
+              style={{
+                padding: "16px 18px",
+                borderBottom: "1px solid rgba(212,175,55,0.20)",
+                background: "linear-gradient(135deg, rgba(212,175,55,0.10) 0%, rgba(212,175,55,0.02) 100%)",
+              }}
+            >
+              <div>
+                <p className="font-['Roboto_Mono'] text-[8px] uppercase tracking-[0.16em] text-[#D4AF37] mb-1">
+                  Executive Playbook
+                </p>
+                <p className="font-['Bebas_Neue'] text-[1.6rem] text-white" style={{ lineHeight: 1 }}>
+                  Full Access
+                </p>
+              </div>
+              <span
+                className="font-['Roboto_Mono'] text-[8px] uppercase self-center"
+                style={{
+                  letterSpacing: "0.1em",
+                  color: "rgba(212,175,55,0.65)",
+                  border: "1px solid rgba(212,175,55,0.25)",
+                  padding: "3px 10px",
+                  borderRadius: "20px",
+                }}
+              >
+                Free to start
+              </span>
+            </div>
+
+            {/* FREE ITEMS (01–04) — dimmer */}
+            {freeArsenal.map((item) => (
+              <div
+                key={item.num}
+                className="grid items-start"
+                style={{
+                  gridTemplateColumns: "28px 1fr",
+                  gap: "12px",
+                  padding: "14px 18px",
+                  borderBottom: "1px solid rgba(255,255,255,0.05)",
+                }}
+              >
+                <span className="font-['Roboto_Mono'] text-[10px] text-right pt-[2px]" style={{ color: "rgba(212,175,55,0.45)" }}>
+                  {item.num}
+                </span>
+                <div>
+                  <p className="font-['Inter'] text-[13px] font-medium mb-[3px]" style={{ color: "rgba(255,255,255,0.58)" }}>
+                    {item.name}
+                  </p>
+                  <p className="font-['Inter'] text-[11px]" style={{ lineHeight: 1.4, color: "rgba(255,255,255,0.28)" }}>
+                    {item.sub}
+                  </p>
+                </div>
+              </div>
+            ))}
+
+            {/* DIVIDER — the upgrade moment */}
+            <div
+              className="relative flex items-center"
+              style={{
+                borderTop: "1px solid rgba(212,175,55,0.20)",
+                borderBottom: "1px solid rgba(212,175,55,0.20)",
+                background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.07), transparent)",
+                padding: "10px 18px",
+              }}
+            >
+              <div
+                className="absolute top-0 left-0 right-0 h-px"
+                style={{ background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.50), transparent)" }}
+              />
+              <span className="font-['Roboto_Mono'] text-[9px] uppercase tracking-[0.18em] text-[#D4AF37]">
+                Premium adds
+              </span>
+              <span
+                className="ml-auto font-['Roboto_Mono'] text-[8px] uppercase text-black"
+                style={{
+                  letterSpacing: "0.1em",
+                  background: "#D4AF37",
+                  padding: "3px 9px",
+                  borderRadius: "2px",
+                }}
+              >
+                Upgrade
+              </span>
+            </div>
+
+            {/* PREMIUM ITEMS (05–07) — full brightness */}
+            {premArsenal.map((item, i) => (
+              <div
+                key={item.num}
+                className="grid items-start"
+                style={{
+                  gridTemplateColumns: "28px 1fr",
+                  gap: "12px",
+                  padding: "14px 18px",
+                  borderBottom: i < premArsenal.length - 1 ? "1px solid rgba(255,255,255,0.05)" : "none",
+                }}
+              >
+                <span className="font-['Roboto_Mono'] text-[10px] text-right pt-[2px] text-[#D4AF37]">
+                  {item.num}
+                </span>
+                <div>
+                  <p className="font-['Inter'] text-[13px] font-medium mb-[3px]" style={{ color: "rgba(255,255,255,0.92)" }}>
+                    {item.name}
+                  </p>
+                  <p className="font-['Inter'] text-[11px]" style={{ lineHeight: 1.4, color: "rgba(255,255,255,0.28)" }}>
+                    {item.sub}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ═══════════════════════════════════════════
+            § 7 CLOSER
+            ═══════════════════════════════════════════ */}
+        <section
+          ref={closerRef}
+          data-section="closer"
+          className="relative overflow-hidden text-center"
+          style={{
+            padding: "64px 24px 72px",
+            borderTop: "1px solid rgba(212,175,55,0.20)",
+            background: "#000",
+          }}
+        >
+          {/* Radial glow from bottom */}
+          <div
+            className="absolute bottom-0 left-0 right-0 pointer-events-none"
+            style={{
+              height: "65%",
+              background: "radial-gradient(ellipse 100% 70% at 50% 100%, rgba(212,175,55,0.08) 0%, transparent 65%)",
+            }}
+          />
+          <div className="relative z-[1]" style={reveal(closerVisible)}>
+            <p
+              className="font-['Roboto_Mono'] text-[11px] uppercase text-[#D4AF37] text-center mb-[10px]"
+              style={{ letterSpacing: "0.18em" }}
+            >
+              Ready to run the numbers
+            </p>
+            <h2
+              className="font-['Bebas_Neue'] text-[4rem] text-white text-center"
+              style={{ lineHeight: 0.9, margin: "12px 0 20px" }}
+            >
+              The Room<br />
+              <span className="text-[#D4AF37] block">Will Ask.</span>
+            </h2>
+            <p
+              className="font-['Inter'] text-[13px] mx-auto mb-7"
+              style={{ color: "rgba(255,255,255,0.58)", lineHeight: 1.65, maxWidth: "260px" }}
+            >
+              Stop guessing your backend. Build the model and walk into every pitch knowing exactly where the money goes.
+            </p>
+            <CTAButton />
+          </div>
+        </section>
+
+        {/* ═══════════════════════════════════════════
+            FOOTER
+            ═══════════════════════════════════════════ */}
+        <footer
+          style={{
+            background: "#0a0a0a",
+            borderTop: "1px solid rgba(255,255,255,0.06)",
+            padding: "24px 20px",
+          }}
+        >
+          <p className="font-['Inter'] text-[10px] text-center" style={{ color: "rgba(255,255,255,0.28)", lineHeight: 1.55 }}>
+            filmmaker.og provides financial modeling tools for educational purposes. This is not legal or financial advice. Consult qualified counsel before executing any investment structure.
+          </p>
+        </footer>
       </div>
     </>
   );
 };
+
 export default Index;
