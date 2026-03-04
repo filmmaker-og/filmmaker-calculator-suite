@@ -64,12 +64,37 @@ const WaterfallCascade = () => {
   }, [revealed]);
   return (
     <div ref={containerRef}>
+      {/* ── Eyebrow — HOW THE MONEY FLOWS ──
+          Gradient strip gives the section header visual weight without
+          breaking the pure-black rule (fills are 0.08–0.10 opacity max).
+          Bebas headline + mono sub-label = two-tier hierarchy in gold. */}
+      <div
+        className="text-center mb-8"
+        style={{
+          padding:      "12px 24px 14px",
+          borderRadius: "6px",
+          background:   "linear-gradient(90deg, transparent 0%, rgba(212,175,55,0.08) 25%, rgba(212,175,55,0.10) 50%, rgba(212,175,55,0.08) 75%, transparent 100%)",
+          border:       "1px solid rgba(212,175,55,0.14)",
+        }}
+      >
+        <p
+          className="font-mono text-[10px] uppercase tracking-[0.26em] text-gold-full mb-1.5"
+          style={{ opacity: 0.60 }}
+        >
+          Recoupment Waterfall
+        </p>
+        <p className="font-bebas text-[clamp(2rem,6vw,3rem)] leading-none tracking-[0.06em] text-gold-full">
+          HOW THE MONEY FLOWS
+        </p>
+      </div>
       {/* Intro */}
       <p
         className="text-center text-ink-body text-[16px] md:text-[18px] leading-relaxed mb-6 px-2"
         style={{ textWrap: "balance" as never }}
       >
-        This is what happens to $3M in revenue before you see a dollar.
+        This is what happens to{" "}
+        <span className="text-white font-semibold">$3M in revenue</span>{" "}
+        before you see a dollar.
       </p>
       {/* Ledger — pure black, no fills */}
       <div

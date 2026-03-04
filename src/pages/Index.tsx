@@ -61,6 +61,7 @@ const Index = () => {
   }, [prefersReducedMotion]);
   /* ── Scroll refs ── */
   const { ref: waterfallRef, inView: waterfallVisible } = useInView<HTMLDivElement>({ threshold: 0.1  });
+  const { ref: whyRef,       inView: whyVisible       } = useInView<HTMLDivElement>({ threshold: 0.1  });
   const { ref: realityRef,   inView: realityVisible   } = useInView<HTMLDivElement>({ threshold: 0.1  });
   const { ref: withRef,      inView: withVisible      } = useInView<HTMLDivElement>({ threshold: 0.1  });
   const { ref: arsenalRef,   inView: arsenalVisible   } = useInView<HTMLDivElement>({ threshold: 0.15 });
@@ -168,29 +169,118 @@ const Index = () => {
             <div
               ref={waterfallRef}
               className="px-5 py-7 md:px-6 md:py-9 overflow-hidden"
-              style={{ ...contentCard(), ...reveal(waterfallVisible) }}
+              style={{
+                ...contentCard({
+                  background: "radial-gradient(ellipse at top center, rgba(212,175,55,0.06) 0%, transparent 55%)",
+                  border:     "1px solid rgba(212,175,55,0.22)",
+                }),
+                ...reveal(waterfallVisible),
+              }}
             >
               <WaterfallCascade />
             </div>
             {/* ═══════════════════════════════════════════
-                3. THE REALITY
+                3. WHY THIS MATTERS
+                4-point compact section. Answers "why do I need
+                to understand the waterfall?" before the reality
+                cells prove the cost of not knowing.
+                ═══════════════════════════════════════════ */}
+            {(() => {
+              const whyPoints = [
+                {
+                  num:   "01",
+                  title: "INVESTORS WILL ASK",
+                  body:  "\"How do I get my money back?\" is the first real question in every serious capital conversation. You need an answer before that meeting.",
+                },
+                {
+                  num:   "02",
+                  title: "FEES COME OFF THE TOP",
+                  body:  "Sales agent commission, CAM fees, and distribution expenses hit before investor recoupment. Most first-time producers don't model these.",
+                },
+                {
+                  num:   "03",
+                  title: "YOU CAN'T NEGOTIATE BLIND",
+                  body:  "If you don't know your recoupment order, you can't evaluate a distribution offer. You're signing something you don't understand.",
+                },
+                {
+                  num:   "04",
+                  title: "BACKEND POINTS NEED CONTEXT",
+                  body:  "A 30% backend in a bad waterfall returns nothing. Know the math before you commit to the deal.",
+                },
+              ];
+              return (
+                <div
+                  ref={whyRef}
+                  className="px-6 py-8 md:px-8 md:py-10 overflow-hidden"
+                  style={{ ...contentCard(), ...reveal(whyVisible) }}
+                >
+                  <p className="font-mono text-[12px] uppercase tracking-[0.14em] text-gold-full mb-2">
+                    Why This Matters
+                  </p>
+                  <h3 className="font-bebas text-[clamp(1.8rem,5vw,2.6rem)] leading-[0.96] tracking-[0.06em] text-white mb-7">
+                    FOUR REASONS TO KNOW YOUR WATERFALL
+                  </h3>
+                  <div className="flex flex-col gap-0">
+                    {whyPoints.map((pt, i) => (
+                      <div
+                        key={pt.num}
+                        className="flex gap-5 items-start"
+                        style={{
+                          ...reveal(whyVisible, 80 + i * 90),
+                          paddingBottom: i < whyPoints.length - 1 ? "24px" : "0",
+                          borderBottom:  i < whyPoints.length - 1
+                            ? "1px solid rgba(255,255,255,0.06)"
+                            : "none",
+                          paddingTop:    i > 0 ? "24px" : "0",
+                        }}
+                      >
+                        {/* Number accent */}
+                        <p
+                          className="font-mono font-bold leading-none flex-shrink-0"
+                          style={{
+                            fontSize:    "clamp(1.4rem,4vw,1.8rem)",
+                            color:       "rgba(212,175,55,0.35)",
+                            marginTop:   "2px",
+                            letterSpacing: "0.04em",
+                          }}
+                        >
+                          {pt.num}
+                        </p>
+                        <div>
+                          <p className="font-mono text-[12px] font-bold text-white uppercase tracking-[0.10em] mb-1.5">
+                            {pt.title}
+                          </p>
+                          <p className="text-[14px] leading-relaxed text-ink-body">
+                            {pt.body}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              );
+            })()}
+            {/* ═══════════════════════════════════════════
+                4. THE REALITY
                 2x2 numbered cells.
-                Anatomy per cell (ref Image 2 + Image 3):
+                Anatomy per cell:
                   — Circle number badge: centered on top border
                   — Large gold stat
                   — Bold white label ALL CAPS
                   — Cold one-liner in ink-secondary
-                Grid has pt-6 to give badge room to bleed out.
                 ═══════════════════════════════════════════ */}
             <div
               ref={realityRef}
               className="px-6 py-8 md:px-8 md:py-10 overflow-hidden"
               style={{ ...contentCard(), ...reveal(realityVisible) }}
             >
-              <p className="font-mono text-[12px] uppercase tracking-[0.14em] text-gold-full mb-3">
-                The Reality
+              <p className="font-mono text-[12px] uppercase tracking-[0.14em] text-gold-full mb-2">
+                The Cost
               </p>
-              <p className="text-[16px] leading-relaxed text-ink-body mb-8">
+              <h3 className="font-bebas text-[clamp(2rem,6vw,3rem)] leading-[0.96] tracking-[0.06em] text-white mb-3">
+                THE REALITY
+              </h3>
+              <p className="text-[15px] leading-relaxed text-ink-body mb-8">
                 Most producers walk into distribution meetings without knowing these numbers.
               </p>
               {/* pt-5 gives the absolute-positioned number badge room to bleed above each cell */}
@@ -239,47 +329,56 @@ const Index = () => {
               </div>
             </div>
             {/* ═══════════════════════════════════════════
-                4. WITH / WITHOUT
-                Two full-width stacked cards.
-                WITHOUT offset 16px right — visual ladder stagger.
-                ✓ gold badge / ✗ red badge per item.
-                Each item: bold white title + body copy.
+                5. WITH / WITHOUT
+                Two full-width stacked cards, same alignment.
+                WITHOUT no longer offset — alignment parity enforced.
+                Label parity: "With Your Waterfall" / "Without Your Waterfall".
+                Vertical gold/red line connects badges down the left side.
                 ═══════════════════════════════════════════ */}
             <div ref={withRef} className="flex flex-col gap-3">
               {/* WITH YOUR WATERFALL */}
               <div
                 className="px-6 py-7 overflow-hidden"
                 style={{
-                  ...contentCard({
-                    border: "1px solid rgba(212,175,55,0.20)",
-                  }),
+                  ...contentCard({ border: "1px solid rgba(212,175,55,0.20)" }),
                   ...reveal(withVisible),
                 }}
               >
                 <p className="font-mono text-[12px] uppercase tracking-[0.16em] text-gold-full mb-5">
                   With Your Waterfall
                 </p>
-                <div className="flex flex-col gap-5">
+                <div className="flex flex-col gap-0">
                   {withItems.map((item, i) => (
                     <div
                       key={item.title}
                       className="flex gap-4 items-start"
                       style={reveal(withVisible, 100 + i * 100)}
                     >
-                      {/* Gold check badge */}
-                      <div
-                        className="flex-shrink-0 flex items-center justify-center text-black font-bold text-[14px]"
-                        style={{
-                          width:        "32px",
-                          height:       "32px",
-                          borderRadius: "6px",
-                          background:   "#D4AF37",
-                          marginTop:    "2px",
-                        }}
-                      >
-                        ✓
+                      {/* Badge + connecting line */}
+                      <div className="flex flex-col items-center flex-shrink-0" style={{ width: 32 }}>
+                        <div
+                          className="flex items-center justify-center text-black font-bold text-[14px] flex-shrink-0"
+                          style={{
+                            width:        "32px",
+                            height:       "32px",
+                            borderRadius: "6px",
+                            background:   "#D4AF37",
+                          }}
+                        >
+                          ✓
+                        </div>
+                        {i < withItems.length - 1 && (
+                          <div
+                            style={{
+                              width:      "2px",
+                              flex:       1,
+                              minHeight:  "28px",
+                              background: "rgba(212,175,55,0.35)",
+                            }}
+                          />
+                        )}
                       </div>
-                      <div>
+                      <div style={{ paddingBottom: i < withItems.length - 1 ? "20px" : "0" }}>
                         <p className="text-[16px] font-semibold text-white leading-snug mb-1">
                           {item.title}
                         </p>
@@ -291,11 +390,10 @@ const Index = () => {
                   ))}
                 </div>
               </div>
-              {/* WITHOUT A WATERFALL — offset 16px right for stagger */}
+              {/* WITHOUT YOUR WATERFALL — same alignment, red border treatment */}
               <div
                 className="px-6 py-7 overflow-hidden"
                 style={{
-                  marginLeft:   "16px",
                   borderRadius: "8px",
                   background:   "#000000",
                   border:       "1px solid rgba(220,60,60,0.25)",
@@ -303,33 +401,46 @@ const Index = () => {
                   ...reveal(withVisible, 200),
                 }}
               >
-                <p className="font-mono text-[12px] uppercase tracking-[0.16em] mb-5"
-                  style={{ color: "rgba(220,80,80,0.9)" }}>
-                  Without A Waterfall
+                <p
+                  className="font-mono text-[12px] uppercase tracking-[0.16em] mb-5"
+                  style={{ color: "rgba(220,80,80,0.9)" }}
+                >
+                  Without Your Waterfall
                 </p>
-                <div className="flex flex-col gap-5">
+                <div className="flex flex-col gap-0">
                   {withoutItems.map((item, i) => (
                     <div
                       key={item.title}
                       className="flex gap-4 items-start"
                       style={reveal(withVisible, 300 + i * 100)}
                     >
-                      {/* Red X badge */}
-                      <div
-                        className="flex-shrink-0 flex items-center justify-center font-bold text-[14px]"
-                        style={{
-                          width:        "32px",
-                          height:       "32px",
-                          borderRadius: "6px",
-                          background:   "rgba(180,40,40,0.25)",
-                          border:       "1px solid rgba(220,60,60,0.40)",
-                          color:        "rgba(220,80,80,1)",
-                          marginTop:    "2px",
-                        }}
-                      >
-                        ✕
+                      {/* Badge + connecting line */}
+                      <div className="flex flex-col items-center flex-shrink-0" style={{ width: 32 }}>
+                        <div
+                          className="flex-shrink-0 flex items-center justify-center font-bold text-[14px]"
+                          style={{
+                            width:        "32px",
+                            height:       "32px",
+                            borderRadius: "6px",
+                            background:   "rgba(180,40,40,0.25)",
+                            border:       "1px solid rgba(220,60,60,0.40)",
+                            color:        "rgba(220,80,80,1)",
+                          }}
+                        >
+                          ✕
+                        </div>
+                        {i < withoutItems.length - 1 && (
+                          <div
+                            style={{
+                              width:      "2px",
+                              flex:       1,
+                              minHeight:  "28px",
+                              background: "rgba(220,60,60,0.30)",
+                            }}
+                          />
+                        )}
                       </div>
-                      <div>
+                      <div style={{ paddingBottom: i < withoutItems.length - 1 ? "20px" : "0" }}>
                         <p className="text-[16px] font-semibold text-white leading-snug mb-1">
                           {item.title}
                         </p>
@@ -343,10 +454,11 @@ const Index = () => {
               </div>
             </div>
             {/* ═══════════════════════════════════════════
-                5. ARSENAL
-                What you get. Institutional tools section.
-                Two-part card: headline block + inner sub-block
-                with left gold bar accent (ref: Image 3 from session).
+                6. ARSENAL
+                Header block: THE ARSENAL + tagline.
+                Two equal sub-boxes below within the same card:
+                  Box 1 — FREE: The Waterfall Calculator
+                  Box 2 — PREMIUM: Deal Packages
                 ═══════════════════════════════════════════ */}
             <div
               ref={arsenalRef}
@@ -358,79 +470,102 @@ const Index = () => {
                 ...reveal(arsenalVisible),
               }}
             >
-              {/* Top block — WHAT YOU GET */}
+              {/* Header block */}
               <div
                 className="px-6 py-8 md:px-8 md:py-10 text-center"
                 style={{ borderBottom: "1px solid rgba(212,175,55,0.15)" }}
               >
-                <p className="font-mono text-[12px] uppercase tracking-[0.18em] text-gold-full mb-3"
-                  style={{ borderBottom: "2px solid rgba(212,175,55,0.45)", display: "inline-block", paddingBottom: "6px" }}
+                <p
+                  className="font-mono text-[12px] uppercase tracking-[0.18em] text-gold-full mb-4"
+                  style={{ display: "inline-block", borderBottom: "1px solid rgba(212,175,55,0.40)", paddingBottom: "6px" }}
                 >
                   What You Get
                 </p>
-                <h3 className="font-bebas text-[clamp(2.4rem,7vw,3.6rem)] leading-[0.96] tracking-[0.06em] text-gold-full mt-4 mb-4">
+                <h3 className="font-bebas text-[clamp(2.6rem,8vw,4rem)] leading-[0.92] tracking-[0.06em] text-gold-full mt-4 mb-4">
                   THE ARSENAL
                 </h3>
-                <p className="max-w-sm mx-auto text-[16px] leading-relaxed text-ink-body">
+                <p className="max-w-sm mx-auto text-[15px] leading-relaxed text-ink-body">
                   Institutional-grade deal tools. Built for independent producers
                   who can't afford to learn the hard way.
                 </p>
               </div>
-              {/* Bottom block — INSIDE THE ARSENAL */}
-              <div
-                className="relative px-6 py-8 md:px-8 md:py-10"
-                style={{
-                  borderLeft: "3px solid rgba(212,175,55,0.70)",
-                }}
-              >
-                <p className="font-mono text-[12px] uppercase tracking-[0.18em] text-gold-full mb-4">
-                  Inside The Arsenal
-                </p>
-                <h4 className="font-bebas text-[clamp(1.8rem,5vw,2.4rem)] leading-[1.0] tracking-[0.06em] mb-4">
-                  <span className="text-gold-full">NO</span>
-                  <span className="text-white"> GUESSWORK.</span>
-                </h4>
-                <p className="text-[16px] leading-relaxed text-ink-body">
-                  Whether you're modeling your first deal or walking into a meeting
-                  with real capital, there's a tier built for you.
-                </p>
+              {/* Two sub-boxes */}
+              <div className="grid grid-cols-1 md:grid-cols-2">
+                {/* Box 1 — FREE */}
+                <div
+                  className="px-6 py-7 md:px-7"
+                  style={{
+                    borderBottom: "1px solid rgba(212,175,55,0.12)",
+                  }}
+                >
+                  <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-gold-full mb-3">
+                    Free
+                  </p>
+                  <p className="font-bebas text-[clamp(1.4rem,4vw,1.8rem)] leading-none tracking-[0.06em] text-white mb-3">
+                    THE WATERFALL CALCULATOR
+                  </p>
+                  <p className="text-[14px] leading-relaxed text-ink-body">
+                    Model your recoupment waterfall, run deal scenarios, and understand
+                    how the money flows — before you walk into the meeting.
+                  </p>
+                </div>
+                {/* Box 2 — PREMIUM */}
+                <div
+                  className="px-6 py-7 md:px-7"
+                  style={{
+                    borderTop: "1px solid rgba(212,175,55,0.12)",
+                  }}
+                >
+                  <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-gold-full mb-3">
+                    Premium
+                  </p>
+                  <p className="font-bebas text-[clamp(1.4rem,4vw,1.8rem)] leading-none tracking-[0.06em] text-white mb-3">
+                    DEAL PACKAGES
+                  </p>
+                  <p className="text-[14px] leading-relaxed text-ink-body">
+                    Full SPV structures, cap table models, and distribution
+                    templates. Institutional-grade, producer-ready.
+                  </p>
+                </div>
               </div>
             </div>
             {/* ═══════════════════════════════════════════
-                6. QUOTE CALLOUT
-                Gold background #D4AF37, black text.
-                Miles' line verbatim — no edits.
-                Only gold-bg element on the page.
-                No eyebrow, no headline — just the quote.
-                Scroll reveal on visibility.
+                7. QUOTE CALLOUT
+                #000 bg + gold border — pure black rule enforced.
+                Previous implementation had background: "#D4AF37"
+                which violated the pure-black rule and read as
+                a coupon/warning label. Fixed: black bg, gold border,
+                gold text. Same authority register as rest of page.
                 ═══════════════════════════════════════════ */}
             <div
               ref={quoteRef}
               className="px-7 py-8 md:px-8 md:py-10 overflow-hidden"
               style={{
                 borderRadius: "8px",
-                background:   "#D4AF37",
+                background:   "#000000",
+                border:       "1px solid rgba(212,175,55,0.55)",
+                boxShadow:    "inset 0 1px 0 rgba(212,175,55,0.08)",
                 ...reveal(quoteVisible),
               }}
             >
               <div className="flex gap-4 items-start">
-                {/* Quote mark accent */}
                 <span
-                  className="flex-shrink-0 font-bebas text-[48px] text-black leading-none"
-                  style={{ marginTop: "-8px", opacity: 0.25 }}
+                  className="flex-shrink-0 font-bebas text-[52px] text-gold-full leading-none"
+                  style={{ marginTop: "-10px", opacity: 0.35 }}
                 >
                   "
                 </span>
-                <p className="text-[16px] md:text-[18px] font-semibold text-black leading-relaxed">
+                <p className="text-[16px] md:text-[18px] font-semibold text-white leading-relaxed">
                   The creative vision is only half the battle. The other half is proving
                   you can execute that vision responsibly and deliver a return.
                 </p>
               </div>
             </div>
             {/* ═══════════════════════════════════════════
-                7. CLOSER
-                Attorney line is the final price anchor —
-                lands right before the CTA where it matters.
+                8. CLOSER
+                Attorney line removed — waterfall demo + Reality
+                cells already proved value. Keeping it here
+                oversells and dilutes the CTA.
                 ═══════════════════════════════════════════ */}
             <div
               ref={closerRef}
@@ -446,11 +581,8 @@ const Index = () => {
               <h2 className="font-bebas text-[32px] md:text-[44px] leading-[1.05] tracking-[0.06em] text-white mb-5">
                 YOUR INVESTORS WILL{" "}ASK HOW THE MONEY FLOWS BACK.
               </h2>
-              <p className="max-w-xs mx-auto text-[16px] leading-relaxed text-ink-body mb-3">
+              <p className="max-w-xs mx-auto text-[16px] leading-relaxed text-ink-body mb-8">
                 Run the math before the meeting.
-              </p>
-              <p className="max-w-xs mx-auto text-[14px] leading-relaxed text-ink-secondary mb-8">
-                An entertainment attorney bills $850/hr for this. Yours is free.
               </p>
               <div className="w-full max-w-[280px] mx-auto">
                 <button
