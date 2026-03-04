@@ -49,8 +49,8 @@ const OgBotFab = ({ onTap }: OgBotFabProps) => {
       <Sparkles
         className="text-gold"
         style={{
-          width: "22px",
-          height: "22px",
+          width: "26px",
+          height: "26px",
           filter: "drop-shadow(0 0 4px rgba(212,175,55,0.25))",
         }}
       />
