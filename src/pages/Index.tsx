@@ -6,19 +6,32 @@ import { useInView } from "@/hooks/useInView";
 import LeadCaptureModal from "@/components/LeadCaptureModal";
 import WaterfallCascade from "@/components/WaterfallCascade";
 /*
-  PAGE STACK — 5 sections, one job each:
-    1. HERO        — warm arrival, primary CTA
-    2. WATERFALL   — interactive proof, outer card restored for mobile
-    3. THE REALITY — 2x2 grid, stat + label only, no body copy in cells
-    4. FREE        — price reveal, attorney anchor, no CTA (pure #000)
-    5. CLOSER      — emotional close, single CTA (warmest card)
-  WHAT WAS CUT (deliberately):
-    - What Producers Get Wrong — longest section, furthest from conversion
-    - What It Models — feature list, waterfall demo already proves scope
+  PAGE STACK — 8 sections:
+    1. HERO          — warm arrival, primary CTA
+    2. WATERFALL     — interactive proof
+    3. THE REALITY   — 2x2 numbered cells: stat / bold label / cold one-liner
+    4. WITH/WITHOUT  — staggered cards, ✓ gold / ✗ red badges
+    5. FREE          — price reveal, attorney anchor
+    6. QUOTE         — gold callout box, Miles' line
+    7. CLOSER        — emotional close, single CTA
+  REALITY CELL ANATOMY (ref: Image 2 + Image 3):
+    Circle number badge — centered on top border, half in/half out
+    Large gold stat — the number is the statement
+    Bold white label — ALL CAPS, what the number represents
+    Cold one-liner — ink-secondary, small, gut-punch
+  WITH/WITHOUT STAGGER:
+    Both cards full-width, stacked vertically.
+    WITHOUT card offset 16px right — creates visual ladder on mobile.
+    Gold ✓ badge / Red ✗ badge — left-aligned icon before each item.
+  QUOTE CALLOUT:
+    Gold background #D4AF37, black text.
+    Miles' line verbatim. No eyebrow. No headline. Just the quote.
+    Single use — maximum impact by being the only gold-bg element.
   BACKGROUND RULES:
-    Warm (Hero, Closer):    radial gold-ghost + gold-strong border (0.25)
-    Content (Waterfall–FREE): #000 + gold border (0.12)
-    Sub-elements (cells):   #111 + gold border (0.15)
+    Warm (Hero, Closer): radial gold-ghost + gold-strong border (0.25)
+    Content sections:    #000 + gold border (0.12)
+    Sub-elements:        #111 + gold border (0.15)
+    Quote callout:       #D4AF37 bg + black text (only instance of gold bg)
 */
 const Index = () => {
   const navigate  = useNavigate();
@@ -55,19 +68,71 @@ const Index = () => {
     const timeout = setTimeout(() => setCtaGlow(true), 2000);
     return () => clearTimeout(timeout);
   }, [prefersReducedMotion]);
+  /* ── Scroll refs ── */
   const { ref: waterfallRef, inView: waterfallVisible } = useInView<HTMLDivElement>({ threshold: 0.1  });
   const { ref: realityRef,   inView: realityVisible   } = useInView<HTMLDivElement>({ threshold: 0.1  });
+  const { ref: withRef,      inView: withVisible      } = useInView<HTMLDivElement>({ threshold: 0.1  });
   const { ref: priceRef,     inView: priceVisible     } = useInView<HTMLDivElement>({ threshold: 0.2  });
+  const { ref: quoteRef,     inView: quoteVisible     } = useInView<HTMLDivElement>({ threshold: 0.3  });
   const { ref: closerRef,    inView: closerVisible    } = useInView<HTMLDivElement>({ threshold: 0.2  });
-  /* Reality grid — stat + label only, no body copy in cells.
-     The numbers speak. Framing sentence lives above the grid. */
-  const realityQuadrants = [
-    { stat: "15–25%", label: "Off The Top"       },
-    { stat: "$850/hr", label: "Legal Reality"    },
-    { stat: "30 Sec",  label: "Investor Test"    },
-    { stat: "$0",      label: "Equity Position"  },
+  /* ── Data ── */
+  // Reality cells: stat / bold white label / cold one-liner
+  const realityCells = [
+    {
+      num:   "1",
+      stat:  "15–25%",
+      label: "Sales Agent Cut",
+      cold:  "Before your investors see a dollar.",
+    },
+    {
+      num:   "2",
+      stat:  "$850/hr",
+      label: "Entertainment Attorney",
+      cold:  "If they'll take the meeting.",
+    },
+    {
+      num:   "3",
+      stat:  "30 Sec",
+      label: "The Investor Test",
+      cold:  "Before the room decides.",
+    },
+    {
+      num:   "4",
+      stat:  "$0",
+      label: "Equity Position",
+      cold:  "You're last. Every time.",
+    },
   ];
-  /* Shared style helpers — eliminates repeated inline style blocks */
+  // With / Without items
+  const withItems = [
+    {
+      title: "Returns Mapped",
+      body:  "Every investor sees exactly what they get back — and when.",
+    },
+    {
+      title: "Nothing Hidden",
+      body:  "Fees, splits, and repayment order visible before you commit.",
+    },
+    {
+      title: "Your Margins, Confirmed",
+      body:  "Run the numbers on your backend points before you shoot a frame.",
+    },
+  ];
+  const withoutItems = [
+    {
+      title: "The Question You Can't Answer",
+      body:  "'How do I get my money back?' — and you're improvising.",
+    },
+    {
+      title: "Surprises After Signatures",
+      body:  "Fees and splits you didn't model surface after the deal closes.",
+    },
+    {
+      title: "Dead Backend Points",
+      body:  "Sales agent commission you forgot makes them worthless.",
+    },
+  ];
+  /* ── Shared style helpers ── */
   const contentCard = (extra?: React.CSSProperties): React.CSSProperties => ({
     borderRadius: "8px",
     background:   "#000000",
@@ -99,11 +164,9 @@ const Index = () => {
           style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
         >
           <div className="w-full max-w-xl md:max-w-2xl lg:max-w-3xl px-5 md:px-8 flex flex-col gap-8 lg:gap-20 py-6">
-            {/* ═══════════════════════════════════════
+            {/* ═══════════════════════════════════════════
                 1. HERO
-                Warm arrival. Radial gold-ghost bg.
-                Primary CTA with 2s glow delay.
-                ═══════════════════════════════════════ */}
+                ═══════════════════════════════════════════ */}
             <div
               className="px-6 py-10 md:px-8 md:py-12 lg:py-14 text-center overflow-hidden"
               style={{
@@ -128,13 +191,9 @@ const Index = () => {
                 </button>
               </div>
             </div>
-            {/* ═══════════════════════════════════════
+            {/* ═══════════════════════════════════════════
                 2. WATERFALL
-                Outer card restored (#000 + gold border).
-                Intro text lives inside WaterfallCascade.
-                Card gives the component a visual container
-                on mobile — prevents orphaned floating text.
-                ═══════════════════════════════════════ */}
+                ═══════════════════════════════════════════ */}
             <div
               ref={waterfallRef}
               className="px-5 py-7 md:px-6 md:py-9 overflow-hidden"
@@ -142,14 +201,16 @@ const Index = () => {
             >
               <WaterfallCascade />
             </div>
-            {/* ═══════════════════════════════════════
+            {/* ═══════════════════════════════════════════
                 3. THE REALITY
-                2x2 grid — stat + label only.
-                No body copy inside cells: the number
-                is the statement. One framing sentence
-                above the grid sets context.
-                Cells: #111 sub-elements, no text wrap issues.
-                ═══════════════════════════════════════ */}
+                2x2 numbered cells.
+                Anatomy per cell (ref Image 2 + Image 3):
+                  — Circle number badge: centered on top border
+                  — Large gold stat
+                  — Bold white label ALL CAPS
+                  — Cold one-liner in ink-secondary
+                Grid has pt-6 to give badge room to bleed out.
+                ═══════════════════════════════════════════ */}
             <div
               ref={realityRef}
               className="px-6 py-8 md:px-8 md:py-10 overflow-hidden"
@@ -158,39 +219,164 @@ const Index = () => {
               <p className="font-mono text-[12px] uppercase tracking-[0.14em] text-gold-full mb-3">
                 The Reality
               </p>
-              <p className="text-[16px] leading-relaxed text-ink-body mb-7">
+              <p className="text-[16px] leading-relaxed text-ink-body mb-8">
                 Most producers walk into distribution meetings without knowing these numbers.
               </p>
-              <div className="grid grid-cols-2 gap-3">
-                {realityQuadrants.map((q, i) => (
+              {/* pt-5 gives the absolute-positioned number badge room to bleed above each cell */}
+              <div className="grid grid-cols-2 gap-4 pt-5">
+                {realityCells.map((cell, i) => (
                   <div
-                    key={q.label}
-                    className="px-4 py-5"
+                    key={cell.num}
+                    className="relative px-4 pt-8 pb-5"
                     style={{
-                      borderRadius:    "6px",
-                      background:      "#111111",
-                      border:          "1px solid rgba(212,175,55,0.15)",
-                      ...reveal(realityVisible, i * 80),
+                      borderRadius: "6px",
+                      background:   "#111111",
+                      border:       "1px solid rgba(212,175,55,0.15)",
+                      ...reveal(realityVisible, i * 90),
                     }}
                   >
-                    <p className="font-mono text-[24px] md:text-[28px] font-bold text-gold-full tabular-nums leading-none mb-2">
-                      {q.stat}
+                    {/* Circle number badge — sits on top border, centered */}
+                    <div
+                      className="absolute left-1/2 font-mono text-[11px] font-bold text-black flex items-center justify-center"
+                      style={{
+                        top:             "-14px",
+                        transform:       "translateX(-50%)",
+                        width:           "28px",
+                        height:          "28px",
+                        borderRadius:    "50%",
+                        background:      "#D4AF37",
+                        border:          "2px solid #000",
+                        lineHeight:      "1",
+                      }}
+                    >
+                      {cell.num}
+                    </div>
+                    {/* Stat — gold, large, the number */}
+                    <p className="font-mono text-[22px] md:text-[26px] font-bold text-gold-full tabular-nums leading-none mb-2">
+                      {cell.stat}
                     </p>
-                    <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-secondary">
-                      {q.label}
+                    {/* Label — bold white, all caps */}
+                    <p className="text-[11px] font-bold text-white uppercase tracking-[0.08em] mb-3 leading-snug">
+                      {cell.label}
+                    </p>
+                    {/* Cold one-liner — small, muted, gut-punch */}
+                    <p className="text-[14px] leading-relaxed text-ink-secondary italic">
+                      {cell.cold}
                     </p>
                   </div>
                 ))}
               </div>
             </div>
-            {/* ═══════════════════════════════════════
-                4. FREE
-                Pure #000 so FREE lands as a reveal.
+            {/* ═══════════════════════════════════════════
+                4. WITH / WITHOUT
+                Two full-width stacked cards.
+                WITHOUT offset 16px right — visual ladder stagger.
+                ✓ gold badge / ✗ red badge per item.
+                Each item: bold white title + body copy.
+                ═══════════════════════════════════════════ */}
+            <div ref={withRef} className="flex flex-col gap-3">
+              {/* WITH YOUR WATERFALL */}
+              <div
+                className="px-6 py-7 overflow-hidden"
+                style={{
+                  ...contentCard({
+                    border: "1px solid rgba(212,175,55,0.20)",
+                  }),
+                  ...reveal(withVisible),
+                }}
+              >
+                <p className="font-mono text-[12px] uppercase tracking-[0.16em] text-gold-full mb-5">
+                  With Your Waterfall
+                </p>
+                <div className="flex flex-col gap-5">
+                  {withItems.map((item, i) => (
+                    <div
+                      key={item.title}
+                      className="flex gap-4 items-start"
+                      style={reveal(withVisible, 100 + i * 100)}
+                    >
+                      {/* Gold check badge */}
+                      <div
+                        className="flex-shrink-0 flex items-center justify-center text-black font-bold text-[14px]"
+                        style={{
+                          width:        "32px",
+                          height:       "32px",
+                          borderRadius: "6px",
+                          background:   "#D4AF37",
+                          marginTop:    "2px",
+                        }}
+                      >
+                        ✓
+                      </div>
+                      <div>
+                        <p className="text-[16px] font-semibold text-white leading-snug mb-1">
+                          {item.title}
+                        </p>
+                        <p className="text-[14px] leading-relaxed text-ink-body">
+                          {item.body}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              {/* WITHOUT A WATERFALL — offset 16px right for stagger */}
+              <div
+                className="px-6 py-7 overflow-hidden"
+                style={{
+                  marginLeft:   "16px",
+                  borderRadius: "8px",
+                  background:   "#000000",
+                  border:       "1px solid rgba(220,60,60,0.25)",
+                  boxShadow:    "inset 0 1px 0 rgba(255,255,255,0.04)",
+                  ...reveal(withVisible, 200),
+                }}
+              >
+                <p className="font-mono text-[12px] uppercase tracking-[0.16em] mb-5"
+                  style={{ color: "rgba(220,80,80,0.9)" }}>
+                  Without A Waterfall
+                </p>
+                <div className="flex flex-col gap-5">
+                  {withoutItems.map((item, i) => (
+                    <div
+                      key={item.title}
+                      className="flex gap-4 items-start"
+                      style={reveal(withVisible, 300 + i * 100)}
+                    >
+                      {/* Red X badge */}
+                      <div
+                        className="flex-shrink-0 flex items-center justify-center font-bold text-[14px]"
+                        style={{
+                          width:        "32px",
+                          height:       "32px",
+                          borderRadius: "6px",
+                          background:   "rgba(180,40,40,0.25)",
+                          border:       "1px solid rgba(220,60,60,0.40)",
+                          color:        "rgba(220,80,80,1)",
+                          marginTop:    "2px",
+                        }}
+                      >
+                        ✕
+                      </div>
+                      <div>
+                        <p className="text-[16px] font-semibold text-white leading-snug mb-1">
+                          {item.title}
+                        </p>
+                        <p className="text-[14px] leading-relaxed text-ink-body">
+                          {item.body}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+            {/* ═══════════════════════════════════════════
+                5. FREE
+                Pure #000, no gradient.
                 Attorney anchor creates reciprocity.
-                No CTA — that belongs only in the closer.
-                No warm gradient — this is neutral by design,
-                which makes the closer feel warmer by contrast.
-                ═══════════════════════════════════════ */}
+                No CTA — belongs only in the Closer.
+                ═══════════════════════════════════════════ */}
             <div
               ref={priceRef}
               className="px-6 py-10 md:px-8 md:py-12 text-center overflow-hidden"
@@ -207,14 +393,42 @@ const Index = () => {
                 waterfall mechanics. This gives you the financial x-ray for free.
               </p>
             </div>
-            {/* ═══════════════════════════════════════
-                5. CLOSER
+            {/* ═══════════════════════════════════════════
+                6. QUOTE CALLOUT
+                Gold background #D4AF37, black text.
+                Miles' line verbatim — no edits.
+                Only gold-bg element on the page.
+                No eyebrow, no headline — just the quote.
+                Scroll reveal on visibility.
+                ═══════════════════════════════════════════ */}
+            <div
+              ref={quoteRef}
+              className="px-7 py-8 md:px-8 md:py-10 overflow-hidden"
+              style={{
+                borderRadius: "8px",
+                background:   "#D4AF37",
+                ...reveal(quoteVisible),
+              }}
+            >
+              <div className="flex gap-4 items-start">
+                {/* Quote mark accent */}
+                <span
+                  className="flex-shrink-0 font-bebas text-[48px] text-black leading-none"
+                  style={{ marginTop: "-8px", opacity: 0.25 }}
+                >
+                  "
+                </span>
+                <p className="text-[16px] md:text-[18px] font-semibold text-black leading-relaxed">
+                  The creative vision is only half the battle. The other half is proving
+                  you can execute that vision responsibly and deliver a return.
+                </p>
+              </div>
+            </div>
+            {/* ═══════════════════════════════════════════
+                7. CLOSER
                 Warmest card. One headline. One sentence.
                 One CTA. Nothing else.
-                CTA copy: "RUN YOUR DEAL FREE" — earned
-                by the scroll, different from hero CTA.
-                Glow triggers on scroll visibility.
-                ═══════════════════════════════════════ */}
+                ═══════════════════════════════════════════ */}
             <div
               ref={closerRef}
               data-section="closer"
