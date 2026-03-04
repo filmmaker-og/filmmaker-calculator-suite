@@ -6,13 +6,13 @@ import { useInView } from "@/hooks/useInView";
 import LeadCaptureModal from "@/components/LeadCaptureModal";
 import MobileMenu from "@/components/MobileMenu";
 /*
-  PAGE STACK — v8 redesign:
+  PAGE STACK — v9 design pass:
     1. PILL NAV     — fixed floating, logo + hamburger
     2. HERO         — Bebas hierarchy, primary CTA
     3. WATERFALL    — static ledger + flow diagram
     4. WHY THIS MATTERS — 2×2 badge grid
     5. REALITY      — blockquote + with/without check grid
-    6. HOW IT WORKS — 4-step vertical stack
+    6. HOW IT WORKS — 5-step vertical stack
     7. ARSENAL      — unified block, free/premium divider
     8. CLOSER       — final CTA
     9. FOOTER
@@ -61,30 +61,31 @@ const Index = () => {
 
   const reveal = (visible: boolean, delay = 0): React.CSSProperties => ({
     opacity: prefersReducedMotion || visible ? 1 : 0,
-    transform: prefersReducedMotion || visible ? "translateY(0)" : "translateY(20px)",
-    transition: prefersReducedMotion ? "none" : "opacity 700ms ease-out, transform 700ms ease-out",
+    transform: prefersReducedMotion || visible ? "translateY(0)" : "translateY(16px)",
+    transition: prefersReducedMotion ? "none" : "opacity 600ms ease-out, transform 600ms ease-out",
     transitionDelay: prefersReducedMotion || delay === 0 ? "0ms" : `${delay}ms`,
   });
 
   /* ── Scroll refs ── */
+  const { ref: heroRef, inView: heroVisible } = useInView<HTMLDivElement>({ threshold: 0.1 });
   const { ref: waterfallRef, inView: waterfallVisible } = useInView<HTMLDivElement>({ threshold: 0.1 });
   const { ref: whyRef, inView: whyVisible } = useInView<HTMLDivElement>({ threshold: 0.1 });
   const { ref: realityRef, inView: realityVisible } = useInView<HTMLDivElement>({ threshold: 0.1 });
   const { ref: stepsRef, inView: stepsVisible } = useInView<HTMLDivElement>({ threshold: 0.1 });
   const { ref: arsenalRef, inView: arsenalVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
   const { ref: closerRef, inView: closerVisible } = useInView<HTMLDivElement>({ threshold: 0.2 });
+  const { ref: footerRef, inView: footerVisible } = useInView<HTMLDivElement>({ threshold: 0.2 });
 
   /* ── Data ── */
   const waterfallTiers = [
-    { num: "01", name: "Sales Agent Fee (10%)",    amt: "— $300,000" },
-    { num: "02", name: "Sales Agent Expenses",      amt: "— $50,000"  },
-    { num: "03", name: "CAM Fee",                   amt: "— $30,000"  },
-    { num: "04", name: "E&O / Delivery",            amt: "— $18,000"  },
-    { num: "05", name: "Senior Debt Recoupment",    amt: "— $1,200,000" },
-    { num: "06", name: "Mezzanine Debt",            amt: "— $300,000" },
-    { num: "07", name: "Equity Recoupment",         amt: "— $450,000" },
-    { num: "08", name: "Investor Pref. Return (8%)", amt: "— $36,000" },
-    { num: "09", name: "Deferments",                amt: "— $52,000"  },
+    { num: "01", name: "CAM Fee",                amt: "— $30,000"    },
+    { num: "02", name: "Sales Agent Fee (10%)",  amt: "— $300,000"   },
+    { num: "03", name: "Sales Agent Expenses",   amt: "— $50,000"    },
+    { num: "04", name: "E&O / Delivery",         amt: "— $18,000"    },
+    { num: "05", name: "Senior Debt Recoupment", amt: "— $1,200,000" },
+    { num: "06", name: "Mezzanine Debt",         amt: "— $300,000"   },
+    { num: "07", name: "Equity Recoupment",      amt: "— $450,000"   },
+    { num: "08", name: "Deferments",             amt: "— $52,000"    },
   ];
 
   const badgeCards = [
@@ -131,11 +132,12 @@ const Index = () => {
   const CTAButton = () => (
     <button
       onClick={handleCTA}
-      className="inline-flex items-center gap-[10px] font-['Roboto_Mono'] text-[13px] font-medium uppercase tracking-[0.12em] text-black"
+      className="inline-flex items-center gap-[12px] font-['Roboto_Mono'] text-[13px] font-semibold uppercase tracking-[0.14em] text-black"
       style={{
         background: "#F9E076",
-        padding: "15px 32px",
-        clipPath: "polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px))",
+        padding: "16px 36px",
+        clipPath: "polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px))",
+        boxShadow: "0 0 28px rgba(249,224,118,0.30), 0 0 10px rgba(249,224,118,0.15)",
       }}
     >
       Build Your Waterfall →
@@ -145,11 +147,11 @@ const Index = () => {
   /* ── Eyebrow ruled component ── */
   const EyebrowRuled = ({ text }: { text: string }) => (
     <div className="flex items-center gap-3 mb-[14px]">
-      <div className="flex-1 h-px" style={{ background: "rgba(212,175,55,0.20)" }} />
+      <div className="flex-1 h-px" style={{ background: "rgba(212,175,55,0.40)" }} />
       <span className="font-['Roboto_Mono'] text-[11px] tracking-[0.2em] uppercase text-[#D4AF37] whitespace-nowrap">
         {text}
       </span>
-      <div className="flex-1 h-px" style={{ background: "rgba(212,175,55,0.20)" }} />
+      <div className="flex-1 h-px" style={{ background: "rgba(212,175,55,0.40)" }} />
     </div>
   );
 
@@ -166,7 +168,7 @@ const Index = () => {
         }}
       />
 
-      <div className="min-h-screen bg-black" style={{ paddingTop: "52px" }}>
+      <div className="min-h-screen bg-black" style={{ paddingTop: "80px" }}>
 
         {/* ═══════════════════════════════════════════
             PILL NAV — fixed floating
@@ -174,35 +176,35 @@ const Index = () => {
         <nav
           className="fixed z-50 flex items-center justify-between"
           style={{
-            top: "46px",
+            top: "16px",
             left: "50%",
             transform: "translateX(-50%)",
             width: "calc(100% - 32px)",
             maxWidth: "390px",
             background: "rgba(6,6,6,0.96)",
-            border: "1px solid rgba(212,175,55,0.22)",
+            border: "1px solid rgba(212,175,55,0.38)",
             borderRadius: "999px",
-            padding: "9px 9px 9px 22px",
+            padding: "10px 10px 10px 24px",
             backdropFilter: "blur(24px)",
             WebkitBackdropFilter: "blur(24px)",
             boxShadow: "0 2px 24px rgba(0,0,0,0.8)",
           }}
         >
-          <span className="font-['Bebas_Neue'] text-[1.35rem] tracking-[0.08em]">
+          <span className="font-['Bebas_Neue'] text-[1.4rem] tracking-[0.08em]">
             <span className="text-[#D4AF37]">filmmaker.</span>
             <span className="text-white">og</span>
           </span>
           <button
             onClick={() => { haptics.light(); setMenuOpen(true); }}
-            className="w-9 h-9 rounded-full flex flex-col items-center justify-center gap-1 cursor-pointer"
+            className="w-10 h-10 rounded-full flex flex-col items-center justify-center gap-1 cursor-pointer"
             style={{
               background: "rgba(212,175,55,0.06)",
               border: "1px solid rgba(212,175,55,0.20)",
             }}
             aria-label="Menu"
           >
-            <span className="block h-px w-[15px]" style={{ background: "#D4AF37" }} />
-            <span className="block h-px w-[15px]" style={{ background: "#D4AF37" }} />
+            <span className="block h-px w-[16px]" style={{ background: "#D4AF37" }} />
+            <span className="block h-px w-[16px]" style={{ background: "#D4AF37" }} />
             <span className="block h-px w-[10px]" style={{ background: "#D4AF37" }} />
           </button>
         </nav>
@@ -211,8 +213,9 @@ const Index = () => {
             § 1 HERO
             ═══════════════════════════════════════════ */}
         <section
+          ref={heroRef}
           className="relative overflow-hidden text-center"
-          style={{ background: "#000", padding: "60px 24px 52px" }}
+          style={{ background: "#000", padding: "48px 24px 60px" }}
         >
           {/* Radial warmth — top only */}
           <div
@@ -222,7 +225,7 @@ const Index = () => {
               background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.065) 0%, transparent 70%)",
             }}
           />
-          <div className="relative z-[1]">
+          <div className="relative z-[1]" style={reveal(heroVisible)}>
             <p
               className="font-['Roboto_Mono'] text-[11px] uppercase text-center mb-5"
               style={{ letterSpacing: "0.2em", color: "rgba(212,175,55,0.75)" }}
@@ -230,14 +233,14 @@ const Index = () => {
               Film Finance Intelligence
             </p>
             <h1
-              className="font-['Bebas_Neue'] text-[5rem] text-white text-center mb-1"
+              className="font-['Bebas_Neue'] text-[5.5rem] text-white text-center mb-1"
               style={{ lineHeight: 0.86, letterSpacing: "0.01em" }}
             >
               Model Your
               <em className="not-italic text-[#D4AF37] block">Waterfall</em>
             </h1>
             <p
-              className="font-['Bebas_Neue'] text-[2.6rem] text-center mb-[22px]"
+              className="font-['Bebas_Neue'] text-[3rem] text-center mb-[22px]"
               style={{ lineHeight: 1, color: "rgba(255,255,255,0.28)", marginTop: "4px" }}
             >
               Before You Raise.
@@ -254,7 +257,7 @@ const Index = () => {
         <section
           ref={waterfallRef}
           className="bg-black"
-          style={{ padding: "52px 0 0", borderTop: "1px solid rgba(255,255,255,0.06)" }}
+          style={{ padding: "36px 0 0", borderTop: "1px solid rgba(255,255,255,0.06)" }}
         >
           <div className="text-center" style={{ padding: "0 20px 24px" }}>
             <EyebrowRuled text="How the money flows" />
@@ -312,13 +315,13 @@ const Index = () => {
                   borderBottom: i < waterfallTiers.length - 1 ? "1px solid rgba(255,255,255,0.06)" : "none",
                 }}
               >
-                <span className="font-['Roboto_Mono'] text-[9px]" style={{ color: "rgba(255,255,255,0.28)" }}>
+                <span className="font-['Roboto_Mono'] text-[10px]" style={{ color: "rgba(255,255,255,0.35)" }}>
                   {tier.num}
                 </span>
-                <span className="font-['Roboto_Mono'] text-[11px]" style={{ color: "rgba(255,255,255,0.58)" }}>
+                <span className="font-['Roboto_Mono'] text-[13px]" style={{ color: "rgba(255,255,255,0.75)" }}>
                   {tier.name}
                 </span>
-                <span className="font-['Roboto_Mono'] text-[11px] text-right whitespace-nowrap" style={{ color: "rgba(255,255,255,0.28)" }}>
+                <span className="font-['Roboto_Mono'] text-[13px] text-right whitespace-nowrap" style={{ color: "rgba(255,255,255,0.50)" }}>
                   {tier.amt}
                 </span>
               </div>
@@ -332,7 +335,7 @@ const Index = () => {
               className="relative text-center"
               style={{
                 background: "#000",
-                border: "1px solid rgba(212,175,55,0.50)",
+                border: "1px solid rgba(212,175,55,0.35)",
                 borderRadius: "12px",
                 padding: "24px 20px",
                 zIndex: 2,
@@ -345,11 +348,11 @@ const Index = () => {
                   borderRadius: "12px 12px 0 0",
                 }}
               />
-              <p className="font-['Roboto_Mono'] text-[9px] uppercase tracking-[0.18em] mb-2" style={{ color: "rgba(255,255,255,0.45)" }}>
+              <p className="font-['Roboto_Mono'] text-[11px] uppercase tracking-[0.18em] mb-2" style={{ color: "rgba(255,255,255,0.70)" }}>
                 Net Backend Profit
               </p>
               <p className="font-['Bebas_Neue'] text-[3.2rem] text-[#D4AF37]" style={{ lineHeight: 0.9, letterSpacing: "0.02em" }}>
-                $564,000
+                $600,000
               </p>
             </div>
 
@@ -381,8 +384,8 @@ const Index = () => {
             {/* Buckets */}
             <div className="flex gap-[10px]" style={{ marginTop: "-1px" }}>
               {[
-                { label: "Investor", amount: "$338,400", pct: "60% of backend" },
-                { label: "Producer", amount: "$225,600", pct: "40% of backend" },
+                { label: "Investor", amount: "$300,000", pct: "50% of backend" },
+                { label: "Producer", amount: "$300,000", pct: "50% of backend" },
               ].map((b) => (
                 <div
                   key={b.label}
@@ -395,13 +398,13 @@ const Index = () => {
                     padding: "16px 12px",
                   }}
                 >
-                  <p className="font-['Roboto_Mono'] text-[9px] uppercase tracking-[0.12em] mb-2" style={{ color: "rgba(255,255,255,0.28)" }}>
+                  <p className="font-['Roboto_Mono'] text-[9px] uppercase tracking-[0.12em] mb-2" style={{ color: "rgba(255,255,255,0.70)" }}>
                     {b.label}
                   </p>
                   <p className="font-['Bebas_Neue'] text-[2rem] text-[#D4AF37]" style={{ lineHeight: 1 }}>
                     {b.amount}
                   </p>
-                  <p className="font-['Roboto_Mono'] text-[9px] mt-[5px]" style={{ color: "rgba(255,255,255,0.28)" }}>
+                  <p className="font-['Roboto_Mono'] text-[9px] mt-[5px]" style={{ color: "rgba(255,255,255,0.50)" }}>
                     {b.pct}
                   </p>
                 </div>
@@ -412,7 +415,7 @@ const Index = () => {
           {/* Note */}
           <p
             className="font-['Roboto_Mono'] text-[9px] uppercase text-center"
-            style={{ color: "rgba(255,255,255,0.28)", letterSpacing: "0.06em", padding: "12px 20px 52px" }}
+            style={{ color: "rgba(255,255,255,0.45)", letterSpacing: "0.06em", padding: "12px 20px 52px" }}
           >
             Model only — your numbers will differ
           </p>
@@ -434,7 +437,7 @@ const Index = () => {
             }}
           >
             <EyebrowRuled text="Why This Matters" />
-            <h2 className="font-['Bebas_Neue'] text-[2.6rem] text-white text-center" style={{ lineHeight: 0.95 }}>
+            <h2 className="font-['Bebas_Neue'] text-[3rem] text-white text-center" style={{ lineHeight: 0.95 }}>
               <span style={{ color: "#D4AF37" }}>4</span> Reasons<br />You Can't Skip This
             </h2>
           </div>
@@ -442,7 +445,7 @@ const Index = () => {
           {/* 2×2 badge grid */}
           <div
             className="grid grid-cols-2 text-left"
-            style={{ gap: "1px", background: "rgba(212,175,55,0.10)" }}
+            style={{ gap: "1px", background: "rgba(212,175,55,0.18)" }}
           >
             {badgeCards.map((card, i) => (
               <div
@@ -451,6 +454,7 @@ const Index = () => {
                 style={{
                   ...reveal(whyVisible, i * 80),
                   padding: "28px 20px",
+                  border: "1px solid rgba(255,255,255,0.07)",
                   borderTop: i >= 2 ? "1px solid rgba(212,175,55,0.09)" : "none",
                 }}
               >
@@ -465,10 +469,10 @@ const Index = () => {
                 >
                   {card.num}
                 </div>
-                <p className="font-['Bebas_Neue'] text-[1.05rem] text-white mb-2" style={{ lineHeight: 1 }}>
+                <p className="font-['Bebas_Neue'] text-[1.25rem] text-white mb-2" style={{ lineHeight: 1 }}>
                   {card.title}
                 </p>
-                <p className="font-['Inter'] text-[11px]" style={{ lineHeight: 1.55, color: "rgba(255,255,255,0.58)" }}>
+                <p className="font-['Inter'] text-[13px]" style={{ lineHeight: 1.55, color: "rgba(255,255,255,0.58)" }}>
                   {card.body}
                 </p>
               </div>
@@ -510,23 +514,26 @@ const Index = () => {
           >
             {/* WITH column */}
             <div className="bg-black">
-              <div className="px-[14px] py-[11px]" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-                <span className="font-['Bebas_Neue'] text-[1.4rem] text-[#D4AF37]" style={{ letterSpacing: "0.04em" }}>
+              <div className="px-[16px] py-[11px]" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+                <span className="font-['Bebas_Neue'] text-[1.5rem] text-[#D4AF37]" style={{ letterSpacing: "0.04em" }}>
                   WITH
                 </span>
               </div>
               {withItems.map((item, i) => (
                 <div
                   key={i}
-                  className="flex items-start gap-2"
+                  className="grid items-start"
                   style={{
-                    padding: "13px 14px",
+                    display: "grid",
+                    gridTemplateColumns: "22px 1fr",
+                    gap: "10px",
+                    padding: "14px 16px",
                     borderBottom: i < withItems.length - 1 ? "1px solid rgba(255,255,255,0.06)" : "none",
                     fontSize: "13px",
                     lineHeight: 1.4,
                   }}
                 >
-                  <span className="font-['Roboto_Mono'] text-[15px] flex-shrink-0 text-[#D4AF37]">✓</span>
+                  <span className="font-['Roboto_Mono'] text-[16px] flex-shrink-0 text-[#D4AF37]">✓</span>
                   <span style={{ color: "rgba(255,255,255,0.58)" }}>{item}</span>
                 </div>
               ))}
@@ -534,23 +541,26 @@ const Index = () => {
 
             {/* WITHOUT column */}
             <div className="bg-black" style={{ borderLeft: "1px solid rgba(255,255,255,0.06)" }}>
-              <div className="px-[14px] py-[11px]" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-                <span className="font-['Bebas_Neue'] text-[1.4rem]" style={{ letterSpacing: "0.04em", color: "rgba(255,255,255,0.50)" }}>
+              <div className="px-[16px] py-[11px]" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+                <span className="font-['Bebas_Neue'] text-[1.5rem]" style={{ letterSpacing: "0.04em", color: "rgba(255,255,255,0.55)" }}>
                   WITHOUT
                 </span>
               </div>
               {withoutItems.map((item, i) => (
                 <div
                   key={i}
-                  className="flex items-start gap-2"
+                  className="grid items-start"
                   style={{
-                    padding: "13px 14px",
+                    display: "grid",
+                    gridTemplateColumns: "22px 1fr",
+                    gap: "10px",
+                    padding: "14px 16px",
                     borderBottom: i < withoutItems.length - 1 ? "1px solid rgba(255,255,255,0.06)" : "none",
                     fontSize: "13px",
                     lineHeight: 1.4,
                   }}
                 >
-                  <span className="font-['Roboto_Mono'] text-[15px] flex-shrink-0" style={{ color: "rgba(255,80,80,0.6)" }}>✗</span>
+                  <span className="font-['Roboto_Mono'] text-[16px] flex-shrink-0" style={{ color: "rgba(255,80,80,0.6)" }}>✗</span>
                   <span style={{ color: "rgba(255,255,255,0.55)" }}>{item}</span>
                 </div>
               ))}
@@ -568,7 +578,7 @@ const Index = () => {
         >
           <div className="text-center" style={{ padding: "0 20px 28px" }}>
             <EyebrowRuled text="How it works" />
-            <h2 className="font-['Bebas_Neue'] text-[2.6rem] text-white text-center" style={{ lineHeight: 0.95 }}>
+            <h2 className="font-['Bebas_Neue'] text-[3rem] text-white text-center" style={{ lineHeight: 0.95 }}>
               Build in <span style={{ color: "#D4AF37" }}>Minutes</span>
             </h2>
           </div>
@@ -609,11 +619,11 @@ const Index = () => {
                   />
                 </div>
                 {/* Content */}
-                <div style={{ padding: "20px 16px 20px 22px" }}>
-                  <p className="font-['Bebas_Neue'] text-[1.3rem] text-white mb-[5px]" style={{ lineHeight: 1 }}>
+                <div style={{ padding: "22px 18px 22px 24px" }}>
+                  <p className="font-['Bebas_Neue'] text-[1.45rem] text-white mb-[5px]" style={{ lineHeight: 1 }}>
                     {step.title}
                   </p>
-                  <p className="font-['Inter'] text-[11px]" style={{ color: "rgba(255,255,255,0.58)", lineHeight: 1.55 }}>
+                  <p className="font-['Inter'] text-[13px]" style={{ color: "rgba(255,255,255,0.65)", lineHeight: 1.55 }}>
                     {step.body}
                   </p>
                 </div>
@@ -635,7 +645,7 @@ const Index = () => {
             <h2 className="font-['Bebas_Neue'] text-[2.6rem] text-white text-center" style={{ lineHeight: 0.95 }}>
               The Arsenal
             </h2>
-            <p className="font-['Inter'] text-[12px] mt-[10px]" style={{ color: "rgba(255,255,255,0.58)", lineHeight: 1.6 }}>
+            <p className="font-['Inter'] text-[13px] mt-[10px]" style={{ color: "rgba(255,255,255,0.70)", lineHeight: 1.6 }}>
               The math is free. The execution strategy is premium.
             </p>
           </div>
@@ -676,12 +686,12 @@ const Index = () => {
                 </p>
               </div>
               <span
-                className="font-['Roboto_Mono'] text-[8px] uppercase self-center"
+                className="font-['Roboto_Mono'] text-[10px] uppercase self-center"
                 style={{
                   letterSpacing: "0.1em",
                   color: "rgba(212,175,55,0.65)",
                   border: "1px solid rgba(212,175,55,0.25)",
-                  padding: "3px 10px",
+                  padding: "5px 14px",
                   borderRadius: "20px",
                 }}
               >
@@ -689,7 +699,7 @@ const Index = () => {
               </span>
             </div>
 
-            {/* FREE ITEMS (01–04) — dimmer */}
+            {/* FREE ITEMS (01–04) — same treatment as premium */}
             {freeArsenal.map((item) => (
               <div
                 key={item.num}
@@ -697,18 +707,18 @@ const Index = () => {
                 style={{
                   gridTemplateColumns: "28px 1fr",
                   gap: "12px",
-                  padding: "16px 18px",
+                  padding: "18px 20px",
                   borderBottom: "1px solid rgba(255,255,255,0.05)",
                 }}
               >
-                <span className="font-['Roboto_Mono'] text-[10px] text-right pt-[2px]" style={{ color: "rgba(212,175,55,0.45)" }}>
+                <span className="font-['Roboto_Mono'] text-[10px] text-right pt-[2px] text-[#D4AF37]">
                   {item.num}
                 </span>
                 <div>
-                  <p className="font-['Inter'] text-[14px] font-medium mb-[3px]" style={{ color: "rgba(255,255,255,0.58)" }}>
+                  <p className="font-['Inter'] text-[15px] font-medium mb-[3px]" style={{ color: "rgba(255,255,255,0.85)" }}>
                     {item.name}
                   </p>
-                  <p className="font-['Inter'] text-[12px]" style={{ lineHeight: 1.4, color: "rgba(255,255,255,0.28)" }}>
+                  <p className="font-['Inter'] text-[13px]" style={{ lineHeight: 1.4, color: "rgba(255,255,255,0.55)" }}>
                     {item.sub}
                   </p>
                 </div>
@@ -733,19 +743,19 @@ const Index = () => {
                 Premium adds
               </span>
               <span
-                className="ml-auto font-['Roboto_Mono'] text-[8px] uppercase text-black"
+                className="ml-auto font-['Roboto_Mono'] text-[10px] uppercase text-black"
                 style={{
                   letterSpacing: "0.1em",
                   background: "#D4AF37",
-                  padding: "3px 9px",
-                  borderRadius: "2px",
+                  padding: "5px 14px",
+                  borderRadius: "3px",
                 }}
               >
                 Upgrade
               </span>
             </div>
 
-            {/* PREMIUM ITEMS (05–07) — full brightness */}
+            {/* PREMIUM ITEMS (05–07) — same treatment as free */}
             {premArsenal.map((item, i) => (
               <div
                 key={item.num}
@@ -753,7 +763,7 @@ const Index = () => {
                 style={{
                   gridTemplateColumns: "28px 1fr",
                   gap: "12px",
-                  padding: "16px 18px",
+                  padding: "18px 20px",
                   borderBottom: i < premArsenal.length - 1 ? "1px solid rgba(255,255,255,0.05)" : "none",
                 }}
               >
@@ -761,10 +771,10 @@ const Index = () => {
                   {item.num}
                 </span>
                 <div>
-                  <p className="font-['Inter'] text-[14px] font-medium mb-[3px]" style={{ color: "rgba(255,255,255,0.92)" }}>
+                  <p className="font-['Inter'] text-[15px] font-medium mb-[3px]" style={{ color: "rgba(255,255,255,0.85)" }}>
                     {item.name}
                   </p>
-                  <p className="font-['Inter'] text-[12px]" style={{ lineHeight: 1.4, color: "rgba(255,255,255,0.28)" }}>
+                  <p className="font-['Inter'] text-[13px]" style={{ lineHeight: 1.4, color: "rgba(255,255,255,0.55)" }}>
                     {item.sub}
                   </p>
                 </div>
@@ -797,32 +807,37 @@ const Index = () => {
           <div
             style={{
               ...reveal(closerVisible),
-              border: "1px solid rgba(212,175,55,0.25)",
+              border: "1px solid rgba(212,175,55,0.42)",
               borderRadius: "16px",
               padding: "40px 28px",
-              background: "rgba(212,175,55,0.03)",
+              background: "rgba(212,175,55,0.06)",
               maxWidth: "360px",
               margin: "0 auto",
               position: "relative",
               zIndex: 1,
             }}
           >
+            {/* Gold top-line */}
+            <div
+              className="absolute top-0 left-0 right-0 h-px"
+              style={{ background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.65), transparent)" }}
+            />
             <p
-              className="font-['Roboto_Mono'] text-[11px] uppercase text-[#D4AF37] text-center mb-[10px]"
-              style={{ letterSpacing: "0.18em" }}
+              className="font-['Roboto_Mono'] text-[13px] uppercase text-center mb-[10px]"
+              style={{ letterSpacing: "0.18em", color: "rgba(212,175,55,0.90)" }}
             >
               Ready to run the numbers
             </p>
             <h2
-              className="font-['Bebas_Neue'] text-[4rem] text-white text-center"
+              className="font-['Bebas_Neue'] text-[4.5rem] text-white text-center"
               style={{ lineHeight: 0.9, margin: "12px 0 20px" }}
             >
               The Room<br />
               <span className="text-[#D4AF37] block">Will Ask.</span>
             </h2>
             <p
-              className="font-['Inter'] text-[13px] mx-auto mb-7"
-              style={{ color: "rgba(255,255,255,0.58)", lineHeight: 1.65, maxWidth: "260px" }}
+              className="font-['Inter'] text-[14px] mx-auto mb-7"
+              style={{ color: "rgba(255,255,255,0.75)", lineHeight: 1.65, maxWidth: "260px" }}
             >
               Stop guessing your backend. Build the model and walk into every pitch knowing exactly where the money goes.
             </p>
@@ -834,15 +849,18 @@ const Index = () => {
             FOOTER
             ═══════════════════════════════════════════ */}
         <footer
+          ref={footerRef}
           style={{
             background: "#0a0a0a",
             borderTop: "1px solid rgba(255,255,255,0.06)",
             padding: "24px 20px",
           }}
         >
-          <p className="font-['Inter'] text-[10px] text-center" style={{ color: "rgba(255,255,255,0.28)", lineHeight: 1.55 }}>
-            filmmaker.og provides financial modeling tools for educational purposes. This is not legal or financial advice. Consult qualified counsel before executing any investment structure.
-          </p>
+          <div style={reveal(footerVisible)}>
+            <p className="font-['Inter'] text-[11px] text-center" style={{ color: "rgba(255,255,255,0.45)", lineHeight: 1.55 }}>
+              filmmaker.og provides financial modeling tools for educational purposes. This is not legal or financial advice. Consult qualified counsel before executing any investment structure.
+            </p>
+          </div>
         </footer>
       </div>
     </>

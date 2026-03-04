@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { Home, Calculator, BookOpen, ShoppingBag, Mail, Instagram, Share2, X as CloseIcon } from "lucide-react";
+import { X as CloseIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { getShareUrl, SHARE_TEXT, SHARE_TITLE } from "@/lib/constants";
 import { useHaptics } from "@/hooks/use-haptics";
@@ -116,35 +116,37 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
             <SectionLabel>Menu</SectionLabel>
             <div className="grid grid-cols-2 gap-2.5">
               {([
-                { path: "/",           icon: Home,        label: "Home" },
-                { path: "/calculator", icon: Calculator,  label: "Calculator" },
-                { path: "/store",      icon: ShoppingBag, label: "Shop" },
-                { path: "/resources",  icon: BookOpen,    label: "Resources" },
-              ] as const).map((item) => {
-                const Icon = item.icon;
-                return (
-                  <button
-                    key={item.path}
-                    onClick={() => handleNavigate(item.path)}
-                    className="relative flex flex-col items-center justify-center gap-2 py-5 border text-center group transition-all overflow-hidden"
+                { path: "/",           label: "Home" },
+                { path: "/calculator", label: "Calculator" },
+                { path: "/store",      label: "Shop" },
+                { path: "/resources",  label: "Resources" },
+              ] as const).map((item) => (
+                <button
+                  key={item.path}
+                  onClick={() => handleNavigate(item.path)}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    padding: "22px 16px",
+                    background: "#0a0a0a",
+                    border: "1px solid rgba(255,255,255,0.08)",
+                    borderTop: "2px solid #D4AF37",
+                    borderRadius: "8px",
+                  }}
+                >
+                  <span
                     style={{
-                      borderRadius: "6px",
-                      borderColor: "rgba(255,255,255,0.15)",
-                      background: "rgba(255,255,255,0.06)",
+                      fontFamily: "'Bebas Neue', sans-serif",
+                      fontSize: "1.35rem",
+                      letterSpacing: "0.1em",
+                      color: "rgba(255,255,255,0.85)",
                     }}
                   >
-                    <Icon
-                      className="w-5 h-5 transition-colors text-gold"
-                    />
-                    <span
-                      className="font-bebas text-[18px] tracking-[0.12em] leading-none transition-colors"
-                      style={{ color: "rgba(255,255,255,0.70)" }}
-                    >
-                      {item.label}
-                    </span>
-                  </button>
-                );
-              })}
+                    {item.label}
+                  </span>
+                </button>
+              ))}
             </div>
           </div>
 
@@ -155,15 +157,28 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
               <a
                 href="mailto:thefilmmaker.og@gmail.com"
                 onClick={() => haptics.light()}
-                className="relative flex flex-col items-center gap-2 p-4 border text-center group transition-all overflow-hidden hover:bg-gold-subtle"
                 style={{
-                  borderRadius: "6px",
-                  borderColor: "rgba(255,255,255,0.15)",
-                  background: "rgba(255,255,255,0.06)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  padding: "22px 16px",
+                  background: "#0a0a0a",
+                  border: "1px solid rgba(255,255,255,0.08)",
+                  borderTop: "2px solid #D4AF37",
+                  borderRadius: "8px",
+                  textDecoration: "none",
                 }}
               >
-                <Mail className="w-5 h-5 text-gold group-hover:text-gold transition-colors" />
-                <span className="font-bebas text-[15px] tracking-[0.08em] leading-none transition-colors" style={{ color: "rgba(255,255,255,0.70)" }}>Email</span>
+                <span
+                  style={{
+                    fontFamily: "'Bebas Neue', sans-serif",
+                    fontSize: "1.35rem",
+                    letterSpacing: "0.1em",
+                    color: "rgba(255,255,255,0.85)",
+                  }}
+                >
+                  Email
+                </span>
               </a>
 
               <a
@@ -171,28 +186,53 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => haptics.light()}
-                className="relative flex flex-col items-center gap-2 p-4 border text-center group transition-all overflow-hidden hover:bg-gold-subtle"
                 style={{
-                  borderRadius: "6px",
-                  borderColor: "rgba(255,255,255,0.15)",
-                  background: "rgba(255,255,255,0.06)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  padding: "22px 16px",
+                  background: "#0a0a0a",
+                  border: "1px solid rgba(255,255,255,0.08)",
+                  borderTop: "2px solid #D4AF37",
+                  borderRadius: "8px",
+                  textDecoration: "none",
                 }}
               >
-                <Instagram className="w-5 h-5 text-gold group-hover:text-gold transition-colors" />
-                <span className="font-bebas text-[15px] tracking-[0.08em] leading-none transition-colors" style={{ color: "rgba(255,255,255,0.70)" }}>Instagram</span>
+                <span
+                  style={{
+                    fontFamily: "'Bebas Neue', sans-serif",
+                    fontSize: "1.35rem",
+                    letterSpacing: "0.1em",
+                    color: "rgba(255,255,255,0.85)",
+                  }}
+                >
+                  Instagram
+                </span>
               </a>
 
               <button
                 onClick={handleShare}
-                className="relative flex flex-col items-center gap-2 p-4 border text-center group transition-all overflow-hidden hover:bg-gold-subtle"
                 style={{
-                  borderRadius: "6px",
-                  borderColor: "rgba(255,255,255,0.15)",
-                  background: "rgba(255,255,255,0.06)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  padding: "22px 16px",
+                  background: "#0a0a0a",
+                  border: "1px solid rgba(255,255,255,0.08)",
+                  borderTop: "2px solid #D4AF37",
+                  borderRadius: "8px",
                 }}
               >
-                <Share2 className="w-5 h-5 text-gold group-hover:text-gold transition-colors" />
-                <span className="font-bebas text-[15px] tracking-[0.08em] leading-none transition-colors" style={{ color: "rgba(255,255,255,0.70)" }}>Share</span>
+                <span
+                  style={{
+                    fontFamily: "'Bebas Neue', sans-serif",
+                    fontSize: "1.35rem",
+                    letterSpacing: "0.1em",
+                    color: "rgba(255,255,255,0.85)",
+                  }}
+                >
+                  Share
+                </span>
               </button>
             </div>
           </div>
