@@ -113,7 +113,7 @@ const WaterfallCascade = () => {
           <span className="font-mono text-[14px] uppercase tracking-[0.12em] text-ink-body">
             Acquisition Price
           </span>
-          <span className="font-mono text-[18px] md:text-[20px] font-bold text-white tabular-nums">
+          <span className="font-mono text-[18px] md:text-[20px] font-bold text-gold-full tabular-nums">
             {fmt(TOTAL)}
           </span>
         </div>
