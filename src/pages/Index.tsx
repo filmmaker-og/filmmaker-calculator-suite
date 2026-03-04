@@ -41,12 +41,55 @@ const Index = () => {
     return () => clearTimeout(timeout);
   }, [prefersReducedMotion]);
   /* ── Scroll-reveal refs ── */
-  const { ref: waterfallRef, inView: waterfallVisible } = useInView<HTMLDivElement>({ threshold: 0.2 });
-  const { ref: caseRef, inView: caseVisible } = useInView<HTMLDivElement>({ threshold: 0.2 });
-  const { ref: evidenceRef, inView: evidenceVisible } = useInView<HTMLDivElement>({ threshold: 0.1 });
-  const { ref: priceRef, inView: priceVisible } = useInView<HTMLDivElement>({ threshold: 0.2 });
-  const { ref: closerRef, inView: closerVisible } = useInView<HTMLDivElement>({ threshold: 0.2 });
-
+  const { ref: waterfallRef, inView: waterfallVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
+  const { ref: caseRef,      inView: caseVisible      } = useInView<HTMLDivElement>({ threshold: 0.2  });
+  const { ref: realityRef,   inView: realityVisible   } = useInView<HTMLDivElement>({ threshold: 0.15 });
+  const { ref: wrongRef,     inView: wrongVisible     } = useInView<HTMLDivElement>({ threshold: 0.1  });
+  const { ref: priceRef,     inView: priceVisible     } = useInView<HTMLDivElement>({ threshold: 0.2  });
+  const { ref: closerRef,    inView: closerVisible    } = useInView<HTMLDivElement>({ threshold: 0.2  });
+  /* ── Data ── */
+  const realityQuadrants = [
+    {
+      stat: "15–25%",
+      label: "Negotiating Blind",
+      body: "Sales agents take off the top before your investors see a dollar — and most producers agree to it without modeling the impact.",
+    },
+    {
+      stat: "$850/hr",
+      label: "Legal Reality",
+      body: "That's what an entertainment attorney bills to explain waterfall mechanics. The math doesn't change — just who explains it.",
+    },
+    {
+      stat: "30 Sec",
+      label: "The Investor Test",
+      body: "That's how long you have to explain your recoupment stack before an investor decides whether you know your deal.",
+    },
+    {
+      stat: "$0",
+      label: "Net Profit Position",
+      body: "Equity investors sit last. Without modeling every tier above them, they cannot calculate their actual return — and neither can you.",
+    },
+  ];
+  const producerMistakes = [
+    {
+      number: "01",
+      label: "The Waterfall Assumption",
+      statement: "They package the deal before modeling who gets paid.",
+      body: "Most producers promise investor returns based on revenue projections — without mapping the recoupment order. By the time the money moves, the waterfall they agreed to makes those returns mathematically impossible.",
+    },
+    {
+      number: "02",
+      label: "The Promise Problem",
+      statement: "They over-commit because they've never run the math.",
+      body: "A 50% ROI sounds reasonable until you model the sales agent commission, distributor fee, senior debt, and equity recoupment sitting above it. The promise was made before anyone built the waterfall.",
+    },
+    {
+      number: "03",
+      label: "The Hidden Cost Stack",
+      statement: "They don't account for every cost in the stack.",
+      body: "CAM fees, E&O insurance, delivery costs, guild residuals — these come off the top before the waterfall even starts. Miss them in the budget and the shortfall shows up after the money is gone.",
+    },
+  ];
   return (
     <>
       <LeadCaptureModal
@@ -64,9 +107,9 @@ const Index = () => {
           className="flex-1 flex flex-col items-center"
           style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
         >
-          <div className="w-full max-w-xl md:max-w-2xl lg:max-w-3xl px-5 md:px-8 flex flex-col gap-8 lg:gap-14 py-6">
+          <div className="w-full max-w-xl md:max-w-2xl lg:max-w-3xl px-5 md:px-8 flex flex-col gap-8 lg:gap-20 py-6">
             {/* ════════════════════════════════════════════════════════
-                1. HERO — primary conversion card
+                1. HERO — primary conversion card (untouched)
                 ════════════════════════════════════════════════════════ */}
             <div
               className="px-6 py-10 md:px-8 md:py-12 lg:py-14 text-center overflow-hidden"
@@ -93,28 +136,29 @@ const Index = () => {
               </div>
             </div>
             {/* ════════════════════════════════════════════════════════
-                2. WATERFALL CASCADE — interactive proof-of-concept
+                2. WATERFALL CASCADE — stripped outer card, sits on page black
+                   The component's internal ledger card handles its own bg + border.
+                   The #111 outer wrapper was creating a gray sandwich — removed.
                 ════════════════════════════════════════════════════════ */}
             <div
               ref={waterfallRef}
-              className="px-5 py-6 md:px-6 md:py-8 overflow-hidden"
+              className="overflow-hidden"
               style={{
-                borderRadius: "8px",
-                background: "#111111",
-                border: "1px solid rgba(212,175,55,0.25)",
-                boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06)",
                 opacity: prefersReducedMotion || waterfallVisible ? 1 : 0,
                 transform: prefersReducedMotion || waterfallVisible ? "translateY(0)" : "translateY(20px)",
                 transition: prefersReducedMotion ? "none" : "opacity 700ms ease-out, transform 700ms ease-out",
               }}
             >
-              <p className="text-center text-ink-body text-[16px] md:text-[18px] leading-relaxed mb-8" style={{ textWrap: "balance" as never }}>
+              <p
+                className="text-center text-ink-body text-[16px] md:text-[18px] leading-relaxed mb-6 px-2"
+                style={{ textWrap: "balance" as never }}
+              >
                 This is what happens to $3M in revenue before you see a dollar.
               </p>
               <WaterfallCascade />
             </div>
             {/* ════════════════════════════════════════════════════════
-                3. EDUCATION — "Why This Matters" conceptual card
+                3. WHY IT MATTERS — education card (untouched)
                 ════════════════════════════════════════════════════════ */}
             <div
               ref={caseRef}
@@ -143,81 +187,119 @@ const Index = () => {
                 walk into those conversations already knowing the math.
               </p>
             </div>
-
             {/* ════════════════════════════════════════════════════════
-                4. EVIDENCE — "The Reality" practical card
+                4. THE REALITY — 2x2 quadrant grid
+                   Each cell: large mono stat → label → 1-sentence body
+                   Outer card: #111 elevated. Inner cells: #000 void.
                 ════════════════════════════════════════════════════════ */}
             <div
-              ref={evidenceRef}
+              ref={realityRef}
               className="px-6 py-8 md:px-8 md:py-10 overflow-hidden"
               style={{
                 borderRadius: "8px",
                 background: "#111111",
-                border: "1px solid rgba(212,175,55,0.25)",
+                border: "1px solid rgba(212,175,55,0.15)",
                 boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06)",
-                opacity: prefersReducedMotion || evidenceVisible ? 1 : 0,
-                transform: prefersReducedMotion || evidenceVisible ? "translateY(0)" : "translateY(20px)",
+                opacity: prefersReducedMotion || realityVisible ? 1 : 0,
+                transform: prefersReducedMotion || realityVisible ? "translateY(0)" : "translateY(20px)",
                 transition: prefersReducedMotion ? "none" : "opacity 700ms ease-out, transform 700ms ease-out",
               }}
             >
-              <p className="font-mono text-[12px] uppercase tracking-[0.14em] text-gold-full mb-5">
+              <p className="font-mono text-[12px] uppercase tracking-[0.14em] text-gold-full mb-6">
                 The Reality
               </p>
-
-              {/* Evidence Block 1 — NEGOTIATING BLIND */}
-              <div
-                style={{
-                  opacity: prefersReducedMotion || evidenceVisible ? 1 : 0,
-                  transform: prefersReducedMotion || evidenceVisible ? "translateY(0)" : "translateY(12px)",
-                  transition: prefersReducedMotion ? "none" : "opacity 700ms ease-out, transform 700ms ease-out",
-                }}
-              >
-                <p className="font-mono text-[20px] md:text-[24px] font-bold text-gold-full mb-1">
-                  15–25%
-                </p>
-                <p className="font-mono text-[12px] uppercase tracking-[0.14em] text-gold-full mb-4">
-                  Negotiating Blind
-                </p>
-                <p className="text-[14px] md:text-[16px] leading-relaxed text-ink-body mb-3">
-                  Sales agents take 15-25% off the top. CAM fees eat another 1-2% of gross. The distributor takes their fee before your investors see anything. If you don't know these numbers going in, you're not negotiating.
-                </p>
-                <p className="font-mono text-[14px] uppercase tracking-[0.12em] text-white font-medium">
-                  You're guessing.
-                </p>
-              </div>
-
-              {/* Divider */}
-              <div className="my-6 md:my-8" style={{ height: "1px", background: "rgba(255,255,255,0.06)" }} />
-
-              {/* Evidence Block 2 — THE MEETING YOU'RE NOT READY FOR */}
-              <div
-                style={{
-                  opacity: prefersReducedMotion || evidenceVisible ? 1 : 0,
-                  transform: prefersReducedMotion || evidenceVisible ? "translateY(0)" : "translateY(12px)",
-                  transition: prefersReducedMotion ? "none" : "opacity 700ms ease-out, transform 700ms ease-out",
-                  transitionDelay: prefersReducedMotion ? "0ms" : "200ms",
-                }}
-              >
-                <p className="font-mono text-[12px] uppercase tracking-[0.14em] text-gold-full mb-4">
-                  The Meeting You're Not Ready For
-                </p>
-                <p className="text-[14px] md:text-[16px] leading-relaxed text-ink-body mb-3">
-                  You walk into an investor meeting. They ask where their money sits in the recoupment stack. If you can't answer that in 30 seconds with actual numbers, the meeting is over.
-                </p>
-                <p className="font-mono text-[14px] uppercase tracking-[0.12em] text-white font-medium">
-                  They just won't tell you it's over.
-                </p>
+              <div className="grid grid-cols-2 gap-3">
+                {realityQuadrants.map((q, i) => (
+                  <div
+                    key={q.label}
+                    className="px-4 py-5"
+                    style={{
+                      borderRadius: "6px",
+                      background: "#000000",
+                      border: "1px solid rgba(212,175,55,0.12)",
+                      opacity: prefersReducedMotion || realityVisible ? 1 : 0,
+                      transform: prefersReducedMotion || realityVisible ? "translateY(0)" : "translateY(12px)",
+                      transition: prefersReducedMotion ? "none" : "opacity 600ms ease-out, transform 600ms ease-out",
+                      transitionDelay: prefersReducedMotion ? "0ms" : `${i * 100}ms`,
+                    }}
+                  >
+                    <p className="font-mono text-[22px] md:text-[26px] font-bold text-gold-full mb-1 tabular-nums">
+                      {q.stat}
+                    </p>
+                    <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-secondary mb-3">
+                      {q.label}
+                    </p>
+                    <p className="text-[14px] leading-relaxed text-ink-body">
+                      {q.body}
+                    </p>
+                  </div>
+                ))}
               </div>
             </div>
             {/* ════════════════════════════════════════════════════════
-                4. WHAT THIS COSTS — compact, centered
+                5. WHAT PRODUCERS GET WRONG — new section
+                   3 numbered sub-blocks inside one card.
+                   Pattern: number + label → bold statement → body paragraph.
+                   Dividers between blocks (rgba white 0.08).
+                   Tinted background (gold-ghost) to differentiate from Reality.
+                ════════════════════════════════════════════════════════ */}
+            <div
+              ref={wrongRef}
+              className="px-6 py-8 md:px-8 md:py-10 overflow-hidden"
+              style={{
+                borderRadius: "8px",
+                background: "rgba(212,175,55,0.03)",
+                border: "1px solid rgba(212,175,55,0.15)",
+                boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06)",
+                opacity: prefersReducedMotion || wrongVisible ? 1 : 0,
+                transform: prefersReducedMotion || wrongVisible ? "translateY(0)" : "translateY(20px)",
+                transition: prefersReducedMotion ? "none" : "opacity 700ms ease-out, transform 700ms ease-out",
+              }}
+            >
+              <p className="font-mono text-[12px] uppercase tracking-[0.14em] text-gold-full mb-4">
+                What Producers Get Wrong
+              </p>
+              <h2 className="font-bebas text-[26px] md:text-[32px] leading-[1.05] tracking-[0.06em] text-white mb-7">
+                THE MATH MOST PRODUCERS NEVER RUN
+              </h2>
+              {producerMistakes.map((m, i) => (
+                <div key={m.number}>
+                  {i > 0 && (
+                    <div
+                      className="my-6"
+                      style={{ height: "1px", background: "rgba(255,255,255,0.08)" }}
+                    />
+                  )}
+                  <div>
+                    <div className="flex items-baseline gap-3 mb-2">
+                      <span className="font-mono text-[12px] text-ink-secondary tracking-[0.14em]">
+                        {m.number}
+                      </span>
+                      <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-gold-full">
+                        {m.label}
+                      </span>
+                    </div>
+                    <p className="text-[16px] md:text-[17px] font-semibold text-white leading-snug mb-2">
+                      {m.statement}
+                    </p>
+                    <p className="text-[14px] md:text-[16px] leading-relaxed text-ink-body">
+                      {m.body}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+            {/* ════════════════════════════════════════════════════════
+                6. WHAT THIS COSTS — pure black bg (reveal feel), FREE enlarged
+                   Sub-cards removed — they were feature bullets in disguise.
+                   bg: #000 (not #111) so "FREE" lands as a reveal against page black.
                 ════════════════════════════════════════════════════════ */}
             <div
               ref={priceRef}
-              className="px-6 py-8 md:px-8 md:py-10 text-center overflow-hidden"
+              className="px-6 py-10 md:px-8 md:py-12 text-center overflow-hidden"
               style={{
                 borderRadius: "8px",
-                background: "#111111",
+                background: "#000000",
                 border: "1px solid rgba(212,175,55,0.15)",
                 boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06)",
                 opacity: prefersReducedMotion || priceVisible ? 1 : 0,
@@ -228,10 +310,10 @@ const Index = () => {
               <p className="font-mono text-[14px] uppercase tracking-[0.20em] text-gold-full mb-4">
                 What This Costs
               </p>
-              <p className="font-bebas text-[40px] leading-[1.05] tracking-[0.06em] text-white mb-4">
+              <p className="font-bebas text-[56px] md:text-[64px] leading-[1.0] tracking-[0.06em] text-white mb-4">
                 FREE
               </p>
-              <p className="max-w-md mx-auto text-[14px] md:text-[16px] leading-relaxed text-ink-body mb-6">
+              <p className="max-w-md mx-auto text-[14px] md:text-[16px] leading-relaxed text-ink-body mb-7">
                 An entertainment attorney bills $500–$850/hr to walk you through
                 waterfall mechanics. This gives you the financial x-ray for free.
               </p>
@@ -244,40 +326,10 @@ const Index = () => {
                 </button>
               </div>
             </div>
-            {/* Resolution sub-cards — feature pair, always 2-up */}
-            <div
-              className="grid grid-cols-2 gap-2"
-              style={{
-                opacity: prefersReducedMotion || priceVisible ? 1 : 0,
-                transform: prefersReducedMotion || priceVisible ? "translateY(0)" : "translateY(12px)",
-                transition: prefersReducedMotion ? "none" : "opacity 500ms ease-out, transform 500ms ease-out",
-                transitionDelay: prefersReducedMotion ? "0ms" : "200ms",
-              }}
-            >
-              {[
-                { number: "EVERY TIER", label: "Off-tops through net profits" },
-                { number: "BREAKEVEN", label: "Know your number" },
-              ].map((card) => (
-                <div
-                  key={card.label}
-                  className="px-3.5 py-3.5 text-center"
-                  style={{
-                    borderRadius: "8px",
-                    background: "#111111",
-                    border: "1px solid rgba(212,175,55,0.15)",
-                  }}
-                >
-                  <p className="font-mono text-[18px] md:text-[20px] font-bold text-gold-full mb-1">
-                    {card.number}
-                  </p>
-                  <p className="font-mono text-[12px] uppercase tracking-[0.12em] text-ink-body">
-                    {card.label}
-                  </p>
-                </div>
-              ))}
-            </div>
             {/* ════════════════════════════════════════════════════════
-                5. CLOSER CTA — emotional trigger + final conversion
+                5. CLOSER — warmest card, support copy added, CTA copy differentiated
+                   Support sentence: fear acknowledgment before the button.
+                   CTA copy: "RUN YOUR DEAL FREE" — matches emotional context.
                 ════════════════════════════════════════════════════════ */}
             <div
               ref={closerRef}
@@ -293,20 +345,24 @@ const Index = () => {
                 transition: prefersReducedMotion ? "none" : "opacity 700ms ease-out, transform 700ms ease-out",
               }}
             >
-              <h2 className="font-bebas text-[32px] md:text-[44px] leading-[1.05] tracking-[0.06em] text-white mb-6">
+              <h2 className="font-bebas text-[32px] md:text-[44px] leading-[1.05] tracking-[0.06em] text-white mb-4">
                 YOUR INVESTORS WILL{"\u00A0"}ASK HOW THE MONEY FLOWS BACK.
               </h2>
+              <p className="max-w-sm mx-auto text-[16px] leading-relaxed text-ink-body mb-7">
+                Most producers walk in with projections. No waterfall. No recoupment order.
+                Run the math before the meeting.
+              </p>
               <div className="w-full max-w-[280px] mx-auto">
                 <button
                   onClick={handleStartClick}
                   className={`w-full h-14 rounded-sm btn-cta-primary font-bold${closerVisible ? " animate-cta-glow-pulse" : ""}`}
                 >
-                  BUILD YOUR WATERFALL
+                  RUN YOUR DEAL FREE
                 </button>
               </div>
             </div>
             {/* ════════════════════════════════════════════════════════
-                6. FOOTER — disclaimer
+                8. FOOTER — disclaimer (untouched)
                 ════════════════════════════════════════════════════════ */}
             <footer className="pt-4 pb-6 px-4 text-center">
               <p className="text-ink-body text-[12px] tracking-[0.02em] leading-relaxed mx-auto max-w-sm">

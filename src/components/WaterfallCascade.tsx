@@ -6,29 +6,37 @@ import { useState, useEffect, useRef } from "react";
      Acquisition Price amount  → text-[18px]/text-[20px] mono bold (largest in ledger)
      Deduction row names       → text-[14px] (body tier)
      Deduction row amounts     → text-[14px] mono (matches names)
-     Net Profits label         → text-[12px] mono uppercase gold
-     Net Profits amount        → text-[28px]/text-[32px] mono bold GOLD (largest number, climactic reveal)
-     Producer/Investor labels  → text-[12px] mono uppercase gold
-     Producer/Investor amounts → text-[18px]/text-[20px] mono bold WHITE (subordinate to Net Profits)
+     Net Profits label         → text-[12px] mono uppercase gold-full (climactic tier)
+     Net Profits amount        → text-[28px]/text-[32px] mono bold gold-full (largest number, reveal)
+     Producer/Investor labels  → text-[12px] mono uppercase ink-secondary (subordinate — NOT gold)
+     Producer/Investor amounts → text-[18px]/text-[20px] mono bold white (subordinate to Net Profits)
+
+   HIERARCHY RATIONALE:
+     Net Profits is the climactic reveal — full gold label + full gold number.
+     Producer/Investor are a mechanical split of those profits, not a new tier.
+     Using gold-full on the split labels made them read as co-equal to Net Profits.
+     ink-secondary (0.40) correctly subordinates them: you care about the total first,
+     then how it divides. The split card backgrounds are also #111 (neutral/subordinate)
+     vs the profit box's gold-ghost tint — reinforcing the same hierarchy visually.
 */
 
-const TOTAL = 3_000_000;
-const PROFIT = 417_500;
+const TOTAL   = 3_000_000;
+const PROFIT  = 417_500;
 
 const deductions = [
-  { name: "CAM Fees",          amount: 22_500 },
-  { name: "Sales Agent",       amount: 450_000 },
-  { name: "Senior Debt",       amount: 440_000 },
-  { name: "Mezzanine",         amount: 230_000 },
+  { name: "CAM Fees",          amount:   22_500 },
+  { name: "Sales Agent",       amount:  450_000 },
+  { name: "Senior Debt",       amount:  440_000 },
+  { name: "Mezzanine",         amount:  230_000 },
   { name: "Equity Recoupment", amount: 1_440_000 },
 ];
 
 const fmt = (n: number) => `$${n.toLocaleString()}`;
 
 const WaterfallCascade = () => {
-  const [revealed, setRevealed] = useState(false);
-  const [profitCount, setProfitCount] = useState(0);
-  const [splitVisible, setSplitVisible] = useState(false);
+  const [revealed,     setRevealed     ] = useState(false);
+  const [profitCount,  setProfitCount  ] = useState(0);
+  const [splitVisible, setSplitVisible ] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -55,7 +63,7 @@ const WaterfallCascade = () => {
       const dur = 1400;
       const start = performance.now();
       const step = (now: number) => {
-        const t = Math.min((now - start) / dur, 1);
+        const t     = Math.min((now - start) / dur, 1);
         const eased = 1 - Math.pow(1 - t, 3);
         setProfitCount(Math.round(eased * PROFIT));
         if (t < 1) rafId = requestAnimationFrame(step);
@@ -73,10 +81,16 @@ const WaterfallCascade = () => {
 
   return (
     <div ref={containerRef} className="pt-2 pb-2">
-      {/* Ledger card — gold border, black interior */}
+
+      {/* Ledger card — gold-medium border, true black interior */}
       <div
         className="overflow-hidden"
-        style={{ border: "1px solid rgba(212,175,55,0.15)", borderRadius: "8px", background: "#000", boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06)" }}
+        style={{
+          border: "1px solid rgba(212,175,55,0.15)",
+          borderRadius: "8px",
+          background: "#000",
+          boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06)",
+        }}
       >
         {/* Acquisition price header row */}
         <div className="flex justify-between items-baseline px-5 pt-5 pb-4">
@@ -88,11 +102,11 @@ const WaterfallCascade = () => {
           </span>
         </div>
 
-        {/* Deduction rows — zebra-striped with gold tint */}
+        {/* Deduction rows — zebra-striped with gold-subtle tint */}
         <div
           className="px-5 pt-2 pb-4"
           style={{
-            opacity: revealed ? 1 : 0,
+            opacity:   revealed ? 1 : 0,
             transform: revealed ? "translateY(0)" : "translateY(16px)",
             transition: "opacity 500ms ease-out, transform 500ms ease-out",
             transitionDelay: "150ms",
@@ -105,8 +119,8 @@ const WaterfallCascade = () => {
                 key={d.name}
                 className="flex justify-between items-baseline rounded-md"
                 style={{
-                  padding: "9px 8px",
-                  margin: "0 -8px",
+                  padding:    "9px 8px",
+                  margin:     "0 -8px",
                   background: isEven ? "rgba(212,175,55,0.08)" : "transparent",
                 }}
               >
@@ -122,17 +136,17 @@ const WaterfallCascade = () => {
         </div>
       </div>
 
-      {/* Profit box — thick gold border + glow */}
+      {/* Net Profits box — full gold border + gold-ghost bg = climactic reveal */}
       <div
-        className="mt-2 py-5 bg-black text-center"
+        className="mt-2 py-5 text-center"
         style={{
           borderRadius: "8px",
-          border: "1px solid rgba(212,175,55,1.0)",
-          background: "rgba(212,175,55,0.08)",
-          boxShadow: "0 0 16px 0px rgba(212,175,55,0.08), inset 0 1px 0 rgba(212,175,55,0.08)",
-          opacity: revealed ? 1 : 0,
-          transform: revealed ? "translateY(0)" : "translateY(16px)",
-          transition: "opacity 500ms ease-out, transform 500ms ease-out",
+          border:       "1px solid rgba(212,175,55,1.0)",
+          background:   "rgba(212,175,55,0.08)",
+          boxShadow:    "0 0 16px 0px rgba(212,175,55,0.08), inset 0 1px 0 rgba(212,175,55,0.08)",
+          opacity:      revealed ? 1 : 0,
+          transform:    revealed ? "translateY(0)" : "translateY(16px)",
+          transition:   "opacity 500ms ease-out, transform 500ms ease-out",
           transitionDelay: "1400ms",
         }}
       >
@@ -144,10 +158,12 @@ const WaterfallCascade = () => {
         </span>
       </div>
 
-      {/* Producer / Investor split — two small cards */}
+      {/* Producer / Investor split — subordinate to Net Profits
+          Labels: ink-secondary (not gold) — these are a split mechanic, not a new tier.
+          Backgrounds: #111 neutral — cooler than the profit box's gold-ghost tint. */}
       <div className="grid grid-cols-2 gap-2 mt-2">
         {([
-          { label: "Producer", amount: "$208,750", delay: 0 },
+          { label: "Producer", amount: "$208,750", delay: 0   },
           { label: "Investor", amount: "$208,750", delay: 150 },
         ]).map((c) => (
           <div
@@ -155,15 +171,16 @@ const WaterfallCascade = () => {
             className="px-3.5 py-3.5 text-center"
             style={{
               borderRadius: "8px",
-              border: "1px solid rgba(212,175,55,0.15)",
-              background: "rgba(212,175,55,0.08)",
-              opacity: splitVisible ? 1 : 0,
-              transform: splitVisible ? "translateY(0)" : "translateY(16px)",
-              transition: "opacity 500ms ease-out, transform 500ms ease-out",
+              border:       "1px solid rgba(212,175,55,0.15)",
+              background:   "#111111",
+              opacity:      splitVisible ? 1 : 0,
+              transform:    splitVisible ? "translateY(0)" : "translateY(16px)",
+              transition:   "opacity 500ms ease-out, transform 500ms ease-out",
               transitionDelay: `${c.delay}ms`,
             }}
           >
-            <p className="font-mono text-[12px] tracking-[0.14em] uppercase font-semibold mb-1 text-gold-full">
+            {/* ink-secondary: subordinate label — NOT gold-full */}
+            <p className="font-mono text-[12px] tracking-[0.14em] uppercase font-semibold mb-1 text-ink-secondary">
               {c.label}
             </p>
             <span className="font-mono text-[18px] md:text-[20px] font-bold text-white tabular-nums">
