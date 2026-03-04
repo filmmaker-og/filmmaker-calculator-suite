@@ -6,15 +6,11 @@ import { useState, useEffect, useRef } from "react";
      Deduction row names       → text-[14px] font-medium ink-body
      Deduction row amounts     → text-[14px] mono white
      Net Profits label         → text-[12px] mono uppercase gold-full (climactic tier)
-     Net Profits amount        → text-[28px]/text-[32px] mono bold gold-full (only gold number — the punchline)
-     Producer/Investor labels  → text-[12px] mono uppercase ink-secondary (subordinate, NOT gold)
-     Producer/Investor amounts → text-[18px]/text-[20px] mono bold white (readable, subordinate)
-   INTRO TEXT:
-     Moved inside this component (previously floated outside in Index.tsx).
-     The framing sentence belongs with the component it introduces.
-   ZEBRA ROWS:
-     Even rows: rgba(212,175,55,0.12) — warmer than previous 0.08.
-     Reads as gold-tinted financial table, not generic gray striping.
+     Net Profits amount        → text-[28px]/text-[32px] mono bold gold-full (only gold number)
+     Producer/Investor labels  → text-[12px] mono uppercase ink-secondary (subordinate)
+     Producer/Investor amounts → text-[18px]/text-[20px] mono bold white
+   Intro text lives inside this component — bound to what it introduces.
+   Zebra rows at 0.12 gold tint (warmer than previous 0.08).
 */
 const TOTAL  = 3_000_000;
 const PROFIT = 417_500;
@@ -69,15 +65,15 @@ const WaterfallCascade = () => {
     return () => clearTimeout(timeout);
   }, [revealed]);
   return (
-    <div ref={containerRef} className="pt-2 pb-2">
-      {/* Intro framing — sits inside the component, above the ledger */}
+    <div ref={containerRef}>
+      {/* Intro — bound to the component, above the ledger */}
       <p
         className="text-center text-ink-body text-[16px] md:text-[18px] leading-relaxed mb-6 px-2"
         style={{ textWrap: "balance" as never }}
       >
         This is what happens to $3M in revenue before you see a dollar.
       </p>
-      {/* Ledger card — true black interior, gold-medium border */}
+      {/* Ledger card */}
       <div
         className="overflow-hidden"
         style={{
@@ -87,7 +83,6 @@ const WaterfallCascade = () => {
           boxShadow:    "inset 0 1px 0 rgba(255,255,255,0.06)",
         }}
       >
-        {/* Acquisition price header */}
         <div className="flex justify-between items-baseline px-5 pt-5 pb-4">
           <span className="font-mono text-[14px] uppercase tracking-[0.12em] text-ink-body">
             Acquisition Price
@@ -96,7 +91,7 @@ const WaterfallCascade = () => {
             {fmt(TOTAL)}
           </span>
         </div>
-        {/* Deduction rows — gold-tinted zebra at 0.12 (warmer than previous 0.08) */}
+        {/* Deduction rows — gold-tinted zebra at 0.12 */}
         <div
           className="px-5 pt-2 pb-4"
           style={{
@@ -116,9 +111,7 @@ const WaterfallCascade = () => {
                 background: i % 2 === 0 ? "rgba(212,175,55,0.12)" : "transparent",
               }}
             >
-              <span className="text-[14px] font-medium text-ink-body">
-                {d.name}
-              </span>
+              <span className="text-[14px] font-medium text-ink-body">{d.name}</span>
               <span className="font-mono text-[14px] font-medium text-white tabular-nums">
                 <span className="text-ink-secondary">{"\u2212"}</span>{fmt(d.amount)}
               </span>
@@ -126,7 +119,7 @@ const WaterfallCascade = () => {
           ))}
         </div>
       </div>
-      {/* Net Profits — climactic reveal. Only gold number in the component. */}
+      {/* Net Profits — only gold number, climactic reveal */}
       <div
         className="mt-2 py-5 text-center"
         style={{
@@ -147,10 +140,7 @@ const WaterfallCascade = () => {
           ${profitCount.toLocaleString()}
         </span>
       </div>
-      {/* Producer / Investor split
-          Labels: ink-secondary — subordinate, not a waterfall tier
-          Numbers: full white — high contrast on #111, clearly subordinate to gold above
-          Background: #111 — cooler than profit box gold-ghost tint */}
+      {/* Producer / Investor split — subordinate, white numbers on #111 */}
       <div className="grid grid-cols-2 gap-2 mt-2">
         {([
           { label: "Producer", amount: "$208,750", delay: 0   },
