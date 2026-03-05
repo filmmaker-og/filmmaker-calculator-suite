@@ -6,20 +6,18 @@ import { useInView } from "@/hooks/useInView";
 import LeadCaptureModal from "@/components/LeadCaptureModal";
 import MobileMenu from "@/components/MobileMenu";
 /*
-  PAGE STACK — v9c reorder:
+  PAGE STACK — v12 Producer's Cut:
     1. PILL NAV     — fixed floating, logo + hamburger
     2. HERO         — Bebas hierarchy, primary CTA
-    3. WHY THIS MATTERS — 2×2 badge grid
-    4. HOW IT WORKS — 5-step vertical stack
-    5. WATERFALL    — static ledger + flow diagram
-    6. REALITY      — blockquote + with/without check grid
-    7. ARSENAL      — unified block, free/premium divider
-    8. CLOSER       — final CTA
+    3. HOW IT WORKS — 5-step vertical stepper
+    4. WATERFALL    — acquisition callout, tier table, flow diagram
+    5. WHY THIS MATTERS — 4 badge cards
+    6. ARSENAL      — 3 tier cards (core/snapshot/package)
+    7. REALITY      — blockquote + WITH/WITHOUT grid
+    8. CLOSER       — final CTA card
     9. FOOTER
 
-  BACKGROUND: Pure black everywhere. Zero grids.
   CTA: All go through auth check → LeadCaptureModal if no session.
-  WaterfallCascade REMOVED — replaced by static ledger visualization.
 */
 
 const Index = () => {
@@ -61,38 +59,40 @@ const Index = () => {
 
   const reveal = (visible: boolean, delay = 0): React.CSSProperties => ({
     opacity: prefersReducedMotion || visible ? 1 : 0,
-    transform: prefersReducedMotion || visible ? "translateY(0)" : "translateY(16px)",
-    transition: prefersReducedMotion ? "none" : "opacity 600ms ease-out, transform 600ms ease-out",
-    transitionDelay: prefersReducedMotion || delay === 0 ? "0ms" : `${delay}ms`,
+    transform: prefersReducedMotion || visible ? "translateY(0)" : "translateY(30px)",
+    transition: prefersReducedMotion
+      ? "none"
+      : "opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1)",
+    transitionDelay: prefersReducedMotion || delay === 0 ? "0ms" : `${delay * 100}ms`,
   });
 
   /* ── Scroll refs ── */
-  const { ref: heroRef, inView: heroVisible } = useInView<HTMLDivElement>({ threshold: 0.1 });
-  const { ref: waterfallRef, inView: waterfallVisible } = useInView<HTMLDivElement>({ threshold: 0.1 });
-  const { ref: whyRef, inView: whyVisible } = useInView<HTMLDivElement>({ threshold: 0.1 });
-  const { ref: realityRef, inView: realityVisible } = useInView<HTMLDivElement>({ threshold: 0.1 });
-  const { ref: stepsRef, inView: stepsVisible } = useInView<HTMLDivElement>({ threshold: 0.1 });
+  const { ref: heroRef, inView: heroVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
+  const { ref: howRef, inView: howVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
+  const { ref: waterfallRef, inView: waterfallVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
+  const { ref: whyRef, inView: whyVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
   const { ref: arsenalRef, inView: arsenalVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
+  const { ref: realityRef, inView: realityVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
   const { ref: closerRef, inView: closerVisible } = useInView<HTMLDivElement>({ threshold: 0.2 });
   const { ref: footerRef, inView: footerVisible } = useInView<HTMLDivElement>({ threshold: 0.2 });
 
   /* ── Data ── */
   const waterfallTiers = [
-    { num: "01", name: "CAM Fee",                amt: "— $30,000"    },
-    { num: "02", name: "Sales Agent Fee (10%)",  amt: "— $300,000"   },
-    { num: "03", name: "Sales Agent Expenses",   amt: "— $50,000"    },
-    { num: "04", name: "E&O / Delivery",         amt: "— $18,000"    },
-    { num: "05", name: "Senior Debt Recoupment", amt: "— $1,200,000" },
-    { num: "06", name: "Mezzanine Debt",         amt: "— $300,000"   },
-    { num: "07", name: "Equity Recoupment",      amt: "— $450,000"   },
-    { num: "08", name: "Deferments",             amt: "— $52,000"    },
+    { num: "01", name: "CAM Fee", amt: "$30,000" },
+    { num: "02", name: "Sales Agent Fee (10%)", amt: "$300,000" },
+    { num: "03", name: "Sales Agent Expenses", amt: "$50,000" },
+    { num: "04", name: "E&O / Delivery", amt: "$18,000" },
+    { num: "05", name: "Senior Debt Recoupment", amt: "$1,200,000" },
+    { num: "06", name: "Mezzanine Debt", amt: "$300,000" },
+    { num: "07", name: "Equity Recoupment", amt: "$450,000" },
+    { num: "08", name: "Deferments", amt: "$52,000" },
   ];
 
   const badgeCards = [
-    { num: "1", title: "Investors Will Ask", body: "Serious money demands the model before wiring." },
-    { num: "2", title: "Fees Come Off The Top", body: "All deducted before a dollar hits recoupment." },
-    { num: "3", title: "Can't Negotiate Blind", body: "You can't push back on what you don't understand." },
-    { num: "4", title: "Backend Needs Context", body: "The waterfall makes participation real." },
+    { num: "1", title: "Don't Sell The Same Dollar Twice", body: "Track exactly where the money goes so you never over-promise equity and accidentally collapse your own backend." },
+    { num: "2", title: "Know What You're Giving Away", body: "Every sales fee, CAMA, and deferment eats into the profit before you see a dime. See the reality before you sign." },
+    { num: "3", title: "Explain The Deal Clearly", body: "Walk into the pitch with institutional-grade math. Answer recoupment questions with absolute confidence and look professional." },
+    { num: "4", title: "Protect Early Investors", body: "Keep your earliest, riskiest backers from getting blindsided by senior debt and off-the-top distribution deductions." },
   ];
 
   const withItems = [
@@ -116,49 +116,12 @@ const Index = () => {
     { n: "5", title: "Export & Share", body: "Download a formatted PDF. Share directly with investors, financiers, and co-producers." },
   ];
 
-  const freeArsenal = [
-    { num: "01.", name: "11-Tier Recoupment Model", sub: "Off-the-tops through net backend profit" },
-    { num: "02.", name: "Streamer + Theatrical Scenarios", sub: "Acquisition and distribution logic modeled" },
-    { num: "03.", name: "Accurate Guild Rates", sub: "SAG-AFTRA, WGA, DGA residuals built in" },
-    { num: "04.", name: "Tax Credit Handling", sub: "Soft money outside the waterfall, correctly" },
-  ];
-  const premArsenal = [
-    { num: "05.", name: "SPV Structure Templates", sub: "Operating agreement frameworks built for film finance" },
-    { num: "06.", name: "Capital Stack Architecture", sub: "Layer equity, soft money, and gap financing correctly" },
-    { num: "07.", name: "Streamer Acquisition Comps", sub: "Market rate intelligence by genre and cast tier" },
-  ];
-
-  /* ── CTA button component ── */
-  const CTAButton = () => (
-    <button
-      onClick={handleCTA}
-      className="font-['Roboto_Mono'] font-semibold uppercase text-black"
-      style={{
-        background: "#F9E076",
-        padding: "20px 56px",
-        letterSpacing: "0.18em",
-        fontSize: "16px",
-        borderRadius: "8px",
-        boxShadow:
-          "0 0 0 1px rgba(249,224,118,0.55), " +
-          "0 0 24px rgba(249,224,118,0.60), " +
-          "0 0 60px rgba(249,224,118,0.32), " +
-          "0 0 100px rgba(249,224,118,0.14)",
-        display: "inline-block",
-      }}
-    >
-      RUN MY WATERFALL
-    </button>
-  );
-
   /* ── Eyebrow ruled component ── */
   const EyebrowRuled = ({ text }: { text: string }) => (
-    <div className="flex items-center gap-3 mb-[14px]">
-      <div className="flex-1 h-px" style={{ background: "rgba(212,175,55,0.40)" }} />
-      <span className="font-['Roboto_Mono'] text-[13px] tracking-[0.2em] uppercase text-[#D4AF37] whitespace-nowrap">
-        {text}
-      </span>
-      <div className="flex-1 h-px" style={{ background: "rgba(212,175,55,0.40)" }} />
+    <div style={styles.eyebrowRuled}>
+      <div style={styles.eyebrowLine} />
+      <span style={styles.eyebrowLabel}>{text}</span>
+      <div style={styles.eyebrowLine} />
     </div>
   );
 
@@ -175,704 +138,315 @@ const Index = () => {
         }}
       />
 
-      <div className="min-h-screen bg-black" style={{ paddingTop: "80px" }}>
+      {/* ── Keyframe injection ── */}
+      <style>{`
+        @keyframes lp-shimmer {
+          0% { left: -100%; }
+          15% { left: 200%; }
+          100% { left: 200%; }
+        }
+      `}</style>
 
-        {/* ═══════════════════════════════════════════
-            PILL NAV — fixed floating
-            ═══════════════════════════════════════════ */}
-        <nav
-          className="fixed z-50 flex items-center justify-between"
-          style={{
-            top: "16px",
-            left: "50%",
-            transform: "translateX(-50%)",
-            width: "calc(100% - 32px)",
-            maxWidth: "390px",
-            background: "rgba(6,6,6,0.96)",
-            border: "1px solid rgba(212,175,55,0.38)",
-            borderRadius: "999px",
-            padding: "10px 10px 10px 24px",
-            backdropFilter: "blur(24px)",
-            WebkitBackdropFilter: "blur(24px)",
-            boxShadow: "0 2px 24px rgba(0,0,0,0.8)",
-          }}
-        >
-          <span className="font-['Bebas_Neue'] text-[1.7rem] tracking-[0.06em]">
-            <span className="text-[#D4AF37]">filmmaker.</span>
-            <span className="text-white">og</span>
+      <div style={{ minHeight: "100vh", background: "#000", paddingTop: "80px", maxWidth: "430px", margin: "0 auto" }}>
+
+        {/* ═══ PILL NAV ═══ */}
+        <nav style={styles.pillNav}>
+          <span
+            style={styles.pillLogo}
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          >
+            <span style={{ color: "#D4AF37" }}>filmmaker.</span>
+            <span style={{ color: "#fff" }}>og</span>
           </span>
           <button
             onClick={() => { haptics.light(); setMenuOpen(true); }}
-            className="w-10 h-10 rounded-full flex flex-col items-center justify-center gap-1 cursor-pointer"
-            style={{
-              background: "rgba(212,175,55,0.06)",
-              border: "1px solid rgba(212,175,55,0.20)",
-            }}
+            style={styles.pillHamburger}
             aria-label="Menu"
           >
-            <span className="block h-px w-[16px]" style={{ background: "#D4AF37" }} />
-            <span className="block h-px w-[16px]" style={{ background: "#D4AF37" }} />
-            <span className="block h-px w-[10px]" style={{ background: "#D4AF37" }} />
+            <span style={{ ...styles.hamburgerLine, width: "16px" }} />
+            <span style={{ ...styles.hamburgerLine, width: "16px" }} />
+            <span style={{ ...styles.hamburgerLine, width: "10px" }} />
           </button>
         </nav>
 
-        {/* ═══════════════════════════════════════════
-            § 1 HERO
-            ═══════════════════════════════════════════ */}
-        <section
-          ref={heroRef}
-          className="relative overflow-hidden text-center"
-          style={{ background: "#000", padding: "48px 24px 60px" }}
-        >
-          {/* Radial warmth — top only */}
-          <div
-            className="absolute top-0 left-0 right-0 pointer-events-none"
-            style={{
-              height: "45%",
-              background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.065) 0%, transparent 70%)",
-            }}
-          />
-          <div className="relative z-[1]" style={reveal(heroVisible)}>
-            <h1
-              className="font-['Bebas_Neue'] text-[4.6rem] text-white text-center mb-1"
-              style={{ lineHeight: 0.86, letterSpacing: "0.01em" }}
-            >
+        {/* ═══ § 1 HERO ═══ */}
+        <section ref={heroRef} style={styles.hero}>
+          <div style={styles.heroGlow} />
+          <div style={{ ...styles.heroInner, ...reveal(heroVisible) }}>
+            <h1 style={styles.heroH1}>
               Model Your
-              <em className="not-italic text-[#D4AF37] block">Waterfall</em>
+              <em style={styles.heroEm}>Waterfall</em>
             </h1>
-            <p
-              className="font-['Bebas_Neue'] text-[1.5rem] text-center mb-[28px]"
-              style={{ lineHeight: 1.1, color: "rgba(255,255,255,0.78)", marginTop: "8px", whiteSpace: "nowrap" }}
-            >
-              Your Recoupment Structure Starts Here.
-            </p>
-            <div className="flex justify-center">
-              <CTAButton />
+            <p style={styles.heroSub}>Your Recoupment Structure Starts Here.</p>
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <button onClick={handleCTA} style={styles.ctaBtn}>
+                <span style={{ position: "relative", zIndex: 1 }}>RUN MY WATERFALL</span>
+                <div style={styles.ctaShimmer} />
+              </button>
             </div>
           </div>
         </section>
 
-        {/* ═══════════════════════════════════════════
-            § 3 WHY THIS MATTERS
-            ═══════════════════════════════════════════ */}
-        <section
-          ref={whyRef}
-          className="bg-black text-center"
-          style={{ padding: "52px 0 0", borderTop: "1px solid rgba(255,255,255,0.06)" }}
-        >
-          <div
-            style={{
-              padding: "20px 20px 28px",
-              borderBottom: "1px solid rgba(212,175,55,0.20)",
-              background: "linear-gradient(180deg, rgba(212,175,55,0.04) 0%, transparent 100%)",
-            }}
-          >
-            <EyebrowRuled text="Why This Matters" />
-            <h2 className="font-['Bebas_Neue'] text-[3rem] text-white text-center" style={{ lineHeight: 0.95 }}>
-              <span style={{ color: "#D4AF37" }}>4</span> Reasons<br />You Can't Skip This
-            </h2>
+        {/* ═══ § 4 HOW IT WORKS ═══ */}
+        <section ref={howRef} style={styles.howSection}>
+          <div style={{ ...styles.howHeader, ...reveal(howVisible) }}>
+            <EyebrowRuled text="The Process" />
+            <h2 style={styles.howH2}>Build in <span style={{ color: "#D4AF37" }}>Minutes</span></h2>
           </div>
-
-          {/* 2×2 badge grid */}
-          <div
-            className="grid grid-cols-2 text-left"
-            style={{ gap: "1px", background: "rgba(212,175,55,0.18)" }}
-          >
-            {badgeCards.map((card, i) => (
-              <div
-                key={card.num}
-                className="bg-black"
-                style={{
-                  ...reveal(whyVisible, i * 80),
-                  padding: "28px 20px",
-                  border: "1px solid rgba(255,255,255,0.07)",
-                  borderTop: i >= 2 ? "1px solid rgba(212,175,55,0.09)" : "none",
-                }}
-              >
-                <div
-                  className="flex items-center justify-center font-['Bebas_Neue'] text-[1.2rem] text-black mb-[14px]"
-                  style={{
-                    width: "36px",
-                    height: "36px",
-                    borderRadius: "50%",
-                    background: "#D4AF37",
-                  }}
-                >
-                  {card.num}
-                </div>
-                <p className="font-['Bebas_Neue'] text-[1.25rem] text-white mb-2" style={{ lineHeight: 1 }}>
-                  {card.title}
-                </p>
-                <p className="font-['Inter'] text-[13px]" style={{ lineHeight: 1.55, color: "rgba(255,255,255,0.58)" }}>
-                  {card.body}
-                </p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* ═══════════════════════════════════════════
-            § 4 HOW IT WORKS
-            ═══════════════════════════════════════════ */}
-        <section
-          ref={stepsRef}
-          className="bg-black"
-          style={{ padding: "52px 0 0", borderTop: "1px solid rgba(255,255,255,0.06)" }}
-        >
-          <div className="text-center" style={{ padding: "16px 20px 28px" }}>
-            <EyebrowRuled text="How it works" />
-            <h2 className="font-['Bebas_Neue'] text-[3.6rem] text-white text-center" style={{ lineHeight: 0.95 }}>
-              Build in <span style={{ color: "#D4AF37" }}>Minutes</span>
-            </h2>
-          </div>
-
-          <div className="flex flex-col text-left" style={{ gap: "1px", background: "rgba(255,255,255,0.06)" }}>
+          <div style={styles.stepsContainer}>
             {steps.map((step, i) => (
-              <div
-                key={step.n}
-                className="grid bg-black"
-                style={{
-                  ...reveal(stepsVisible, i * 80),
-                  gridTemplateColumns: "52px 1fr",
-                }}
-              >
-                {/* Number column */}
-                <div
-                  className="relative flex items-start justify-center"
-                  style={{
-                    background: "#0a0a0a",
-                    borderRight: "1px solid rgba(212,175,55,0.20)",
-                    paddingTop: "18px",
-                  }}
-                >
-                  {/* Vertical connector line — runs full height of column */}
-                  <div
-                    className="absolute"
-                    style={{
-                      top: 0,
-                      bottom: 0,
-                      left: "50%",
-                      transform: "translateX(-50%)",
-                      width: "1px",
-                      background: "rgba(212,175,55,0.20)",
-                      zIndex: 0,
-                    }}
-                  />
-                  {/* Number badge — sits on top of line with background break */}
-                  <div
-                    className="relative z-[1] flex items-center justify-center"
-                    style={{
-                      background: "#0a0a0a",
-                      paddingTop: "2px",
-                      paddingBottom: "2px",
-                    }}
-                  >
-                    <span className="font-['Bebas_Neue'] text-[1.4rem] text-[#D4AF37]">{step.n}</span>
+              <div key={step.n} style={{ ...styles.step, ...reveal(howVisible, i) }}>
+                <div style={styles.stepNumCol}>
+                  {i < steps.length - 1 && <div style={styles.stepLine} />}
+                  <div style={styles.stepNumBadge}>
+                    <span style={styles.stepNumText}>{step.n}</span>
                   </div>
                 </div>
-                {/* Content */}
-                <div style={{ padding: "22px 18px 22px 24px" }}>
-                  <p className="font-['Bebas_Neue'] text-[1.45rem] mb-[5px]" style={{ lineHeight: 1, color: "#D4AF37" }}>
-                    {step.title}
-                  </p>
-                  <p className="font-['Inter'] text-[14px]" style={{ color: "rgba(255,255,255,0.88)", lineHeight: 1.55 }}>
-                    {step.body}
-                  </p>
+                <div style={styles.stepContent}>
+                  <p style={styles.stepTitle}>{step.title}</p>
+                  <p style={styles.stepBody}>{step.body}</p>
                 </div>
               </div>
             ))}
           </div>
         </section>
 
-        {/* ═══════════════════════════════════════════
-            § 5 WATERFALL
-            ═══════════════════════════════════════════ */}
-        <section
-          ref={waterfallRef}
-          className="bg-black"
-          style={{ padding: "36px 0 0", borderTop: "1px solid rgba(255,255,255,0.06)" }}
-        >
-          <div className="text-center" style={{ padding: "0 20px 24px" }}>
+        {/* ═══ § 5 WATERFALL ═══ */}
+        <section ref={waterfallRef} style={styles.waterfallSection}>
+          <div style={{ ...styles.waterfallHeader, ...reveal(waterfallVisible) }}>
             <EyebrowRuled text="How the money flows" />
-            <h2 className="font-['Bebas_Neue'] text-[3rem] text-white text-center" style={{ lineHeight: 0.95 }}>
-              The Recoupment<br /><span style={{ color: "#D4AF37" }}>Waterfall</span>
-            </h2>
+            <h2 style={styles.waterfallH2}>The Recoupment<br /><span style={{ color: "#D4AF37" }}>Waterfall</span></h2>
           </div>
 
           {/* Acquisition callout */}
-          <div
-            className="relative overflow-hidden text-center"
-            style={{
-              ...reveal(waterfallVisible),
-              margin: "0 20px 10px",
-              background: "#0a0a0a",
-              border: "1px solid rgba(212,175,55,0.20)",
-              borderRadius: "12px",
-              padding: "18px 16px",
-            }}
-          >
-            {/* Gold top-line gradient */}
-            <div
-              className="absolute top-0 left-0 right-0 h-px"
-              style={{ background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.50), transparent)" }}
-            />
-            <p className="font-['Roboto_Mono'] text-[14px] uppercase tracking-[0.14em] text-[#D4AF37] mb-1">
-              Streamer Acquisition Price
-            </p>
-            <p className="font-['Roboto_Mono'] text-[14px] mb-2" style={{ color: "rgba(255,255,255,0.70)" }}>
-              Tier 2 Action Thriller — Example
-            </p>
-            <p className="font-['Bebas_Neue'] text-[2.4rem] text-[#D4AF37]" style={{ lineHeight: 1, letterSpacing: "0.02em" }}>
-              $3,000,000
-            </p>
+          <div style={{ ...styles.acquisitionCallout, ...reveal(waterfallVisible, 1) }}>
+            <div style={styles.topLineGoldHalf} />
+            <p style={styles.acqLabel}>Streamer Acquisition Price</p>
+            <p style={styles.acqSub}>Tier 2 Action Thriller — Example</p>
+            <p style={styles.acqAmount}>$3,000,000</p>
           </div>
 
           {/* Waterfall tiers */}
-          <div
-            className="overflow-hidden"
-            style={{
-              ...reveal(waterfallVisible, 100),
-              margin: "0 20px 0",
-              border: "1px solid rgba(255,255,255,0.06)",
-              borderRadius: "12px",
-            }}
-          >
+          <div style={{ ...styles.waterfallTiersBox, ...reveal(waterfallVisible, 2) }}>
+            <div style={styles.topLineGold} />
             {waterfallTiers.map((tier, i) => (
-              <div
-                key={tier.num}
-                className="grid items-center"
-                style={{
-                  gridTemplateColumns: "28px 1fr auto",
-                  gap: "12px",
-                  padding: "15px 16px",
-                  borderBottom: i < waterfallTiers.length - 1 ? "1px solid rgba(255,255,255,0.06)" : "none",
-                }}
-              >
-                <span className="font-['Roboto_Mono'] text-[14px]" style={{ color: "#D4AF37" }}>
-                  {tier.num}
-                </span>
-                <span className="font-['Roboto_Mono'] text-[16px]" style={{ color: "rgba(255,255,255,0.75)" }}>
-                  {tier.name}
-                </span>
-                <span className="font-['Roboto_Mono'] text-[16px] text-right whitespace-nowrap" style={{ color: "rgba(255,255,255,0.65)" }}>
-                  {tier.amt}
-                </span>
+              <div key={tier.num} style={{ ...styles.tierRow, borderBottom: i < waterfallTiers.length - 1 ? "1px solid rgba(255,255,255,0.06)" : "none" }}>
+                <div style={styles.tierNum}>{tier.num}</div>
+                <div style={styles.tierName}>{tier.name}</div>
+                <div style={styles.tierAmt}>
+                  <span style={styles.tierMinus}>-</span>{tier.amt}
+                </div>
               </div>
             ))}
           </div>
 
           {/* Flow diagram */}
-          <div style={{ ...reveal(waterfallVisible, 200), margin: "16px 20px 0" }}>
-            {/* Tank master */}
-            <div
-              className="relative text-center"
-              style={{
-                background: "#000",
-                border: "1px solid rgba(212,175,55,0.35)",
-                borderRadius: "12px",
-                padding: "24px 20px",
-                zIndex: 2,
-              }}
-            >
-              <div
-                className="absolute top-0 left-0 right-0 h-px"
-                style={{
-                  background: "linear-gradient(90deg, transparent, #D4AF37, transparent)",
-                  borderRadius: "12px 12px 0 0",
-                }}
-              />
-              <p className="font-['Roboto_Mono'] text-[11px] uppercase tracking-[0.18em] mb-2" style={{ color: "rgba(255,255,255,0.70)" }}>
-                Net Backend Profit
-              </p>
-              <p className="font-['Bebas_Neue'] text-[3.2rem] text-[#D4AF37]" style={{ lineHeight: 0.9, letterSpacing: "0.02em" }}>
-                $600,000
-              </p>
+          <div style={{ ...styles.flowDiagram, ...reveal(waterfallVisible, 3) }}>
+            <div style={styles.netBackend}>
+              <div style={styles.topLineGold} />
+              <p style={styles.netLabel}>Net Backend Profit</p>
+              <p style={styles.netAmount}>$600,000</p>
             </div>
-
-            {/* Pipe network */}
-            <div className="flex flex-col items-center" style={{ marginTop: "-1px", position: "relative", zIndex: 1 }}>
-              <div className="w-[2px] h-[18px]" style={{ background: "rgba(212,175,55,0.50)" }} />
-              <div className="flex" style={{ width: "calc(50% + 10px)" }}>
-                <div
-                  className="flex-1"
-                  style={{
-                    height: "18px",
-                    borderTop: "2px solid rgba(212,175,55,0.50)",
-                    borderLeft: "2px solid rgba(212,175,55,0.50)",
-                    borderRadius: "6px 0 0 0",
-                  }}
-                />
-                <div
-                  className="flex-1"
-                  style={{
-                    height: "18px",
-                    borderTop: "2px solid rgba(212,175,55,0.50)",
-                    borderRight: "2px solid rgba(212,175,55,0.50)",
-                    borderRadius: "0 6px 0 0",
-                  }}
-                />
+            <div style={styles.pipeNetwork}>
+              <div style={styles.pipeVertical} />
+              <div style={styles.pipeFork}>
+                <div style={styles.pipeLeft} />
+                <div style={styles.pipeRight} />
               </div>
             </div>
-
-            {/* Buckets */}
-            <div className="flex gap-[10px]" style={{ marginTop: "-1px" }}>
+            <div style={styles.buckets}>
               {[
                 { label: "Investor", amount: "$300,000", pct: "50% of backend" },
                 { label: "Producer", amount: "$300,000", pct: "50% of backend" },
               ].map((b) => (
-                <div
-                  key={b.label}
-                  className="flex-1 text-center"
-                  style={{
-                    background: "#0a0a0a",
-                    border: "1px solid rgba(212,175,55,0.20)",
-                    borderTop: "2px solid #D4AF37",
-                    borderRadius: "0 0 10px 10px",
-                    padding: "16px 12px",
-                  }}
-                >
-                  <p className="font-['Roboto_Mono'] text-[11px] uppercase tracking-[0.12em] mb-2" style={{ color: "rgba(255,255,255,0.70)" }}>
-                    {b.label}
-                  </p>
-                  <p className="font-['Bebas_Neue'] text-[2rem] text-[#D4AF37]" style={{ lineHeight: 1 }}>
-                    {b.amount}
-                  </p>
-                  <p className="font-['Roboto_Mono'] text-[11px] mt-[5px]" style={{ color: "rgba(255,255,255,0.50)" }}>
-                    {b.pct}
-                  </p>
+                <div key={b.label} style={styles.bucket}>
+                  <p style={styles.bucketLabel}>{b.label}</p>
+                  <p style={styles.bucketAmount}>{b.amount}</p>
+                  <p style={styles.bucketPct}>{b.pct}</p>
                 </div>
               ))}
             </div>
           </div>
-
-          {/* Note */}
-          <p
-            className="font-['Roboto_Mono'] text-[11px] uppercase text-center"
-            style={{ color: "rgba(255,255,255,0.45)", letterSpacing: "0.06em", padding: "12px 20px 52px" }}
-          >
-            Model only — your numbers will differ
-          </p>
+          <p style={{ ...styles.waterfallNote, ...reveal(waterfallVisible, 3) }}>Model only — your numbers will differ</p>
         </section>
 
-        {/* ═══════════════════════════════════════════
-            § 6 REALITY (WITH / WITHOUT)
-            ═══════════════════════════════════════════ */}
-        <section
-          ref={realityRef}
-          className="bg-black text-left"
-          style={{ padding: "52px 20px 24px", borderTop: "1px solid rgba(255,255,255,0.06)" }}
-        >
-          {/* Blockquote */}
-          <blockquote
-            className="font-['Bebas_Neue'] text-[2.4rem] mb-6"
-            style={{
-              ...reveal(realityVisible),
-              lineHeight: 0.95,
-              color: "rgba(255,255,255,0.92)",
-              borderLeft: "3px solid #D4AF37",
-              paddingLeft: "20px",
-            }}
-          >
+        {/* ═══ § 3 WHY THIS MATTERS ═══ */}
+        <section ref={whyRef} style={styles.whySection}>
+          <div style={{ ...styles.whyHeader, ...reveal(whyVisible) }}>
+            <EyebrowRuled text="Why This Matters" />
+            <h2 style={styles.whyH2}><span style={{ color: "#D4AF37" }}>4</span> Reasons<br />You Can't Skip This</h2>
+          </div>
+
+          <div style={{ ...styles.badgeGridWrapper, ...reveal(whyVisible, 1) }}>
+            <div style={styles.topLineGold} />
+            <div style={styles.badgeGrid}>
+              {badgeCards.map((card) => (
+                <div key={card.num} style={styles.badgeCard}>
+                  <div style={styles.badgeNum}>{card.num}</div>
+                  <p style={styles.badgeTitle}>{card.title}</p>
+                  <p style={styles.badgeBody}>{card.body}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ═══ § 7 ARSENAL ═══ */}
+        <section ref={arsenalRef} style={styles.arsenalSection}>
+          <div style={{ ...styles.arsenalHeader, ...reveal(arsenalVisible) }}>
+            <EyebrowRuled text="What you get" />
+            <h2 style={styles.arsenalH2}>The <span style={{ color: "#D4AF37" }}>Arsenal</span></h2>
+            <p style={styles.arsenalSub}>Start with the math. Upgrade when you need the documents.</p>
+          </div>
+
+          <div style={styles.arsenalCards}>
+            {/* Core Engine Card (Free) */}
+            <div style={{ ...styles.tierCardCore, ...reveal(arsenalVisible, 1) }}>
+              <div style={styles.topLineGold} />
+              <div style={styles.tierHeaderCore}>
+                <div>
+                  <p style={styles.tierTitleCore}>The Modeling Engine</p>
+                  <p style={styles.tierSubCore}>Your baseline recoupment model.</p>
+                </div>
+                <span style={styles.tierBadgeCore} onClick={handleCTA}>Free Access</span>
+              </div>
+              <div style={styles.tierFeaturesCore}>
+                <div style={styles.featureItemCore}>
+                  <div style={styles.featureTextWrapCore}>
+                    <p style={styles.featureNameCore}>11-Tier Recoupment Logic</p>
+                    <p style={styles.featureDescCore}>Accurate calculations from gross receipts down to net backend profit.</p>
+                  </div>
+                </div>
+                <div style={styles.featureItemCore}>
+                  <div style={styles.featureTextWrapCore}>
+                    <p style={styles.featureNameCore}>Profit & Break-Even Scenarios</p>
+                    <p style={styles.featureDescCore}>Calculate exactly what your acquisition price needs to be to make investors whole.</p>
+                  </div>
+                </div>
+                <div style={styles.featureItemCore}>
+                  <div style={styles.featureTextWrapCore}>
+                    <p style={styles.featureNameCore}>Web Sharing & PDF Export</p>
+                    <p style={styles.featureDescCore}>Generate a live link or download a clean, formatted PDF to send directly to your financiers.</p>
+                  </div>
+                </div>
+              </div>
+              <div style={styles.tierAction}>
+                <button onClick={handleCTA} style={styles.btnSnapshot}>START MODELING</button>
+              </div>
+            </div>
+
+            {/* The Snapshot Card */}
+            <div style={{ ...styles.tierCardSnapshot, ...reveal(arsenalVisible, 2) }}>
+              <div style={styles.tierHeaderAlt}>
+                <div>
+                  <p style={styles.tierTitleAlt}>THE SNAPSHOT</p>
+                  <p style={styles.tierSubAlt}>Pick this one if you need the numbers documented — clean and professional</p>
+                </div>
+                <span style={styles.trendingBadge}>Trending</span>
+              </div>
+              <p style={styles.tierIntro}>Your financial model. One document. Investor-ready.</p>
+              <div style={styles.tierChecklist}>
+                {[
+                  "Unified Financial Presentation (PDF)",
+                  "Budget, capital stack, waterfall, scenarios — one document",
+                  "White-labeled with your company and project",
+                ].map((text, i) => (
+                  <div key={i} style={styles.checkItem}>
+                    <span style={styles.checkMark}>✓</span>
+                    <p style={styles.checkText}>{text}</p>
+                  </div>
+                ))}
+              </div>
+              <div style={styles.tierAction}>
+                <button style={styles.btnSnapshot}>GET THE SNAPSHOT</button>
+                <a href="#" style={styles.detailsLink}>See full details →</a>
+              </div>
+            </div>
+
+            {/* The Package Card */}
+            <div style={{ ...styles.tierCardPackage, ...reveal(arsenalVisible, 3) }}>
+              <div style={styles.topLineGoldThick} />
+              <div style={{ ...styles.tierHeaderAlt, paddingTop: "24px", borderBottomColor: "rgba(212,175,55,0.15)" }}>
+                <div>
+                  <p style={styles.tierTitleAlt}>THE PACKAGE</p>
+                  <p style={styles.tierSubAlt}>Pick this one if you want the full investor package with standalone documents</p>
+                </div>
+                <span style={styles.mostPopularBadge}>Most Popular</span>
+              </div>
+              <p style={styles.tierIntro}>Your complete investor package — financial presentation, standalone documents, visual design.</p>
+              <div style={styles.tierChecklist}>
+                {[
+                  "Enhanced Financial Presentation (PDF)",
+                  "Individual Investor Return Profiles",
+                  "One-Page Executive Summary",
+                  "Deal Terms Summary",
+                  "Visual design with genre positioning",
+                  "White-labeled with your company and project",
+                ].map((text, i) => (
+                  <div key={i} style={styles.checkItem}>
+                    <span style={styles.checkMark}>✓</span>
+                    <p style={styles.checkText}>{text}</p>
+                  </div>
+                ))}
+              </div>
+              <div style={styles.tierAction}>
+                <button style={styles.btnPackage}>
+                  <span style={{ position: "relative", zIndex: 1 }}>GET THE PACKAGE</span>
+                  <div style={styles.btnPackageShimmer} />
+                </button>
+                <a href="#" style={styles.detailsLink}>See full details →</a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ═══ § 6 REALITY ═══ */}
+        <section ref={realityRef} style={styles.realitySection}>
+          <blockquote style={{ ...styles.blockquote, ...reveal(realityVisible) }}>
             The waterfall either costs you now — or costs you everything <span style={{ color: "#D4AF37" }}>later</span>.
           </blockquote>
 
-          {/* Check grid — paired rows for height alignment */}
-          <div
-            style={{
-              ...reveal(realityVisible, 100),
-              border: "1px solid rgba(255,255,255,0.06)",
-              borderRadius: "8px",
-              overflow: "hidden",
-            }}
-          >
-            {/* Header row */}
-            <div
-              className="grid grid-cols-2"
-              style={{ gap: "1px", background: "rgba(255,255,255,0.06)", borderBottom: "1px solid rgba(255,255,255,0.06)" }}
-            >
-              <div className="bg-black px-[16px] py-[11px]">
-                <span className="font-['Bebas_Neue'] text-[1.5rem] text-[#D4AF37]" style={{ letterSpacing: "0.04em" }}>
-                  WITH
-                </span>
-              </div>
-              <div className="bg-black px-[16px] py-[11px]" style={{ borderLeft: "1px solid rgba(255,255,255,0.06)" }}>
-                <span className="font-['Bebas_Neue'] text-[1.5rem]" style={{ letterSpacing: "0.04em", color: "rgba(255,255,255,0.55)" }}>
-                  WITHOUT
-                </span>
-              </div>
+          <div style={{ ...styles.checkGrid, ...reveal(realityVisible, 1) }}>
+            {/* Header */}
+            <div style={styles.checkHeader}>
+              <div style={styles.checkHeaderWith}><span style={styles.checkHeaderWithText}>WITH</span></div>
+              <div style={styles.checkHeaderWithout}><span style={styles.checkHeaderWithoutText}>WITHOUT</span></div>
             </div>
-            {/* Paired data rows */}
+            {/* Rows */}
             {withItems.map((withItem, i) => (
-              <div
-                key={i}
-                className="grid grid-cols-2"
-                style={{
-                  gap: "1px",
-                  background: "rgba(255,255,255,0.06)",
-                  borderBottom: i < withItems.length - 1 ? "1px solid rgba(255,255,255,0.06)" : "none",
-                }}
-              >
-                <div
-                  className="bg-black grid items-start"
-                  style={{ gridTemplateColumns: "22px 1fr", gap: "10px", padding: "14px 16px" }}
-                >
-                  <span className="font-['Roboto_Mono'] text-[22px] flex-shrink-0 text-[#D4AF37]" style={{ paddingTop: "2px" }}>✓</span>
-                  <span className="font-['Inter'] text-[14px]" style={{ color: "rgba(255,255,255,0.85)", lineHeight: 1.4 }}>{withItem}</span>
+              <div key={i} style={{ ...styles.checkRow, borderBottom: i < withItems.length - 1 ? "1px solid rgba(255,255,255,0.06)" : "none" }}>
+                <div style={styles.checkCellLeft}>
+                  <span style={styles.checkIconYes}>✓</span>
+                  <span style={styles.checkTextYes}>{withItem}</span>
                 </div>
-                <div
-                  className="bg-black grid items-start"
-                  style={{ gridTemplateColumns: "22px 1fr", gap: "10px", padding: "14px 16px", borderLeft: "1px solid rgba(255,255,255,0.06)" }}
-                >
-                  <span className="font-['Roboto_Mono'] text-[22px] flex-shrink-0" style={{ color: "rgba(255,80,80,0.85)", paddingTop: "2px" }}>✗</span>
-                  <span className="font-['Inter'] text-[14px]" style={{ color: "rgba(255,255,255,0.55)", lineHeight: 1.4 }}>{withoutItems[i]}</span>
+                <div style={styles.checkCellRight}>
+                  <span style={styles.checkIconNo}>✗</span>
+                  <span style={styles.checkTextNo}>{withoutItems[i]}</span>
                 </div>
               </div>
             ))}
           </div>
         </section>
 
-        {/* ═══════════════════════════════════════════
-            § 7 THE ARSENAL
-            ═══════════════════════════════════════════ */}
-        <section
-          ref={arsenalRef}
-          className="bg-black text-center"
-          style={{ padding: "52px 0 0", borderTop: "1px solid rgba(255,255,255,0.06)" }}
-        >
-          <div style={{ padding: "0 20px 24px" }}>
-            <EyebrowRuled text="What you get" />
-            <h2 className="font-['Bebas_Neue'] text-[3rem] text-white text-center" style={{ lineHeight: 0.95 }}>
-              The Arsenal
-            </h2>
-            <p className="font-['Inter'] text-[13px] mt-[10px]" style={{ color: "rgba(255,255,255,0.70)", lineHeight: 1.6 }}>
-              The math is free. The execution strategy is premium.
-            </p>
-          </div>
-
-          {/* Unified arsenal block */}
-          <div
-            className="relative overflow-hidden text-left"
-            style={{
-              ...reveal(arsenalVisible),
-              margin: "0 20px",
-              border: "1px solid rgba(212,175,55,0.50)",
-              borderRadius: "12px",
-              background: "#000",
-              boxShadow: "0 8px 32px rgba(212,175,55,0.10)",
-            }}
-          >
-            {/* Gold top line */}
-            <div
-              className="absolute top-0 left-0 right-0 h-px"
-              style={{ background: "linear-gradient(90deg, transparent, #D4AF37, transparent)" }}
-            />
-
-            {/* Block header */}
-            <div
-              className="flex items-end justify-between"
-              style={{
-                padding: "16px 18px",
-                borderBottom: "1px solid rgba(212,175,55,0.20)",
-                background: "linear-gradient(135deg, rgba(212,175,55,0.10) 0%, rgba(212,175,55,0.02) 100%)",
-              }}
-            >
-              <div>
-                <p className="font-['Roboto_Mono'] text-[11px] uppercase tracking-[0.16em] text-[#D4AF37] mb-1">
-                  Executive Playbook
-                </p>
-                <p className="font-['Bebas_Neue'] text-[1.6rem] text-white" style={{ lineHeight: 1 }}>
-                  Full Access
-                </p>
-              </div>
-              <span
-                className="font-['Roboto_Mono'] text-[10px] uppercase self-center"
-                style={{
-                  letterSpacing: "0.1em",
-                  color: "rgba(212,175,55,0.65)",
-                  border: "1px solid rgba(212,175,55,0.25)",
-                  padding: "5px 14px",
-                  borderRadius: "20px",
-                }}
-              >
-                Free to start
-              </span>
-            </div>
-
-            {/* FREE ITEMS (01–04) — 2×2 grid */}
-            <div className="grid grid-cols-2" style={{ gap: "1px", background: "rgba(255,255,255,0.05)" }}>
-              {freeArsenal.map((item) => (
-                <div
-                  key={item.num}
-                  className="bg-black grid items-start"
-                  style={{ gridTemplateColumns: "28px 1fr", gap: "10px", padding: "16px 18px" }}
-                >
-                  <span className="font-['Roboto_Mono'] text-[10px] text-right pt-[2px] text-[#D4AF37]">
-                    {item.num}
-                  </span>
-                  <p className="font-['Inter'] text-[14px] font-medium" style={{ color: "rgba(255,255,255,0.85)", lineHeight: 1.3 }}>
-                    {item.name}
-                  </p>
-                </div>
-              ))}
-            </div>
-
-            {/* DIVIDER — the upgrade moment */}
-            <div
-              className="relative flex items-center"
-              style={{
-                borderTop: "1px solid rgba(212,175,55,0.20)",
-                borderBottom: "1px solid rgba(212,175,55,0.20)",
-                background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.07), transparent)",
-                padding: "10px 18px",
-              }}
-            >
-              <div
-                className="absolute top-0 left-0 right-0 h-px"
-                style={{ background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.50), transparent)" }}
-              />
-              <span className="font-['Roboto_Mono'] text-[11px] uppercase tracking-[0.18em] text-[#D4AF37]">
-                Premium adds
-              </span>
-              <span
-                className="ml-auto font-['Roboto_Mono'] text-[10px] uppercase text-black"
-                style={{
-                  letterSpacing: "0.1em",
-                  background: "#D4AF37",
-                  padding: "5px 14px",
-                  borderRadius: "3px",
-                }}
-              >
-                Upgrade
-              </span>
-            </div>
-
-            {/* PREMIUM ITEMS (05–07) — 2+1 staggered */}
-            <div className="grid grid-cols-2" style={{ gap: "1px", background: "rgba(255,255,255,0.05)" }}>
-              {premArsenal.slice(0, 2).map((item) => (
-                <div
-                  key={item.num}
-                  className="bg-black grid items-start"
-                  style={{ gridTemplateColumns: "28px 1fr", gap: "10px", padding: "18px 18px" }}
-                >
-                  <span className="font-['Roboto_Mono'] text-[10px] text-right pt-[2px] text-[#D4AF37]">
-                    {item.num}
-                  </span>
-                  <div>
-                    <p className="font-['Inter'] text-[14px] font-medium mb-[3px]" style={{ color: "rgba(255,255,255,0.85)" }}>
-                      {item.name}
-                    </p>
-                    <p className="font-['Inter'] text-[12px]" style={{ lineHeight: 1.4, color: "rgba(255,255,255,0.55)" }}>
-                      {item.sub}
-                    </p>
-                  </div>
-                </div>
-              ))}
-              {/* 07 — full-width bottom row */}
-              <div
-                className="col-span-2 bg-black grid items-start"
-                style={{ gridTemplateColumns: "28px 1fr", gap: "10px", padding: "18px 18px", borderTop: "1px solid rgba(255,255,255,0.05)" }}
-              >
-                <span className="font-['Roboto_Mono'] text-[10px] text-right pt-[2px] text-[#D4AF37]">
-                  {premArsenal[2].num}
-                </span>
-                <div>
-                  <p className="font-['Inter'] text-[14px] font-medium mb-[3px]" style={{ color: "rgba(255,255,255,0.85)" }}>
-                    {premArsenal[2].name}
-                  </p>
-                  <p className="font-['Inter'] text-[12px]" style={{ lineHeight: 1.4, color: "rgba(255,255,255,0.55)" }}>
-                    {premArsenal[2].sub}
-                  </p>
-                </div>
-              </div>
-            </div>
+        {/* ═══ § 8 CLOSER ═══ */}
+        <section ref={closerRef} style={styles.closerSection}>
+          <div style={styles.closerGlowBottom} />
+          <div style={styles.closerGlowTop} />
+          <div style={{ ...styles.closerCard, ...reveal(closerVisible) }}>
+            <div style={styles.topLineGoldBright} />
+            <h2 style={styles.closerH2}>Your Investors<br /><span style={{ color: "#D4AF37", display: "block" }}>Will Ask.</span></h2>
+            <p style={styles.closerBody}>Stop guessing your backend. Build the model and walk into every pitch knowing exactly where the money goes.</p>
+            <button onClick={handleCTA} style={styles.ctaBtn}>
+              <span style={{ position: "relative", zIndex: 1 }}>RUN MY WATERFALL</span>
+              <div style={styles.ctaShimmer} />
+            </button>
           </div>
         </section>
 
-        {/* ═══════════════════════════════════════════
-            § 8 CLOSER
-            ═══════════════════════════════════════════ */}
-        <section
-          ref={closerRef}
-          data-section="closer"
-          className="relative overflow-hidden text-center"
-          style={{
-            padding: "64px 24px 72px",
-            borderTop: "1px solid rgba(212,175,55,0.20)",
-            background: "#000",
-          }}
-        >
-          {/* Radial glow from bottom */}
-          <div
-            className="absolute bottom-0 left-0 right-0 pointer-events-none"
-            style={{
-              height: "65%",
-              background:
-                "radial-gradient(ellipse 80% 50% at 50% 30%, rgba(212,175,55,0.07) 0%, transparent 60%), " +
-                "radial-gradient(ellipse 100% 70% at 50% 100%, rgba(120,80,200,0.13) 0%, transparent 65%)",
-            }}
-          />
-          {/* Violet ambient — top of closer */}
-          <div
-            className="absolute top-0 left-0 right-0 pointer-events-none"
-            style={{
-              height: "40%",
-              background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(100,60,180,0.09) 0%, transparent 70%)",
-            }}
-          />
-          <div
-            style={{
-              ...reveal(closerVisible),
-              border: "1px solid rgba(212,175,55,0.42)",
-              borderRadius: "16px",
-              padding: "40px 28px",
-              background: "rgba(212,175,55,0.06)",
-              maxWidth: "360px",
-              margin: "0 auto",
-              position: "relative",
-              zIndex: 1,
-            }}
-          >
-            {/* Gold top-line */}
-            <div
-              className="absolute top-0 left-0 right-0 h-px"
-              style={{ background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.65), transparent)" }}
-            />
-            <p
-              className="font-['Roboto_Mono'] text-[13px] uppercase text-center mb-[10px]"
-              style={{ letterSpacing: "0.18em", color: "rgba(212,175,55,0.90)" }}
-            >
-              Ready to run the numbers
-            </p>
-            <h2
-              className="font-['Bebas_Neue'] text-[4.5rem] text-white text-center"
-              style={{ lineHeight: 0.9, margin: "12px 0 20px" }}
-            >
-              Your Investors<br />
-              <span className="text-[#D4AF37] block">Will Ask.</span>
-            </h2>
-            <p
-              className="font-['Inter'] text-[14px] mx-auto mb-7"
-              style={{ color: "rgba(255,255,255,0.75)", lineHeight: 1.65, maxWidth: "280px" }}
-            >
-              Stop guessing your backend. Build the model and walk into every pitch knowing exactly where the money goes.
-            </p>
-            <CTAButton />
-          </div>
-        </section>
-
-        {/* ═══════════════════════════════════════════
-            FOOTER
-            ═══════════════════════════════════════════ */}
-        <footer
-          ref={footerRef}
-          style={{
-            background: "#0a0a0a",
-            borderTop: "1px solid rgba(255,255,255,0.06)",
-            padding: "24px 20px",
-          }}
-        >
+        {/* ═══ FOOTER ═══ */}
+        <footer ref={footerRef} style={styles.footer}>
           <div style={reveal(footerVisible)}>
-            <p className="font-['Inter'] text-[14px] text-center" style={{ color: "rgba(255,255,255,0.65)", lineHeight: 1.55 }}>
+            <p style={styles.footerText}>
               filmmaker.og provides financial modeling tools for educational purposes. This is not legal or financial advice. Consult qualified counsel before executing any investment structure.
             </p>
           </div>
@@ -880,6 +454,360 @@ const Index = () => {
       </div>
     </>
   );
+};
+
+/* ══════════════════════════════════════════════════════════════════
+   STYLES — matches HTML v12 exactly
+   ══════════════════════════════════════════════════════════════════ */
+const styles: Record<string, React.CSSProperties> = {
+  /* ── Eyebrow ── */
+  eyebrowRuled: {
+    display: "flex", alignItems: "center", justifyContent: "center", gap: "12px", marginBottom: "14px",
+  },
+  eyebrowLine: {
+    flex: 1, height: "1px", background: "rgba(212,175,55,0.40)",
+  },
+  eyebrowLabel: {
+    fontFamily: "'Roboto Mono', monospace", fontSize: "13px",
+    letterSpacing: "0.2em", textTransform: "uppercase", color: "#D4AF37",
+    whiteSpace: "nowrap",
+  },
+
+  /* ── CTA Button ── */
+  ctaBtn: {
+    position: "relative", overflow: "hidden",
+    fontFamily: "'Roboto Mono', monospace", fontWeight: 600,
+    textTransform: "uppercase", color: "#000",
+    background: "#F9E076", padding: "20px 56px",
+    letterSpacing: "0.18em", fontSize: "16px",
+    borderRadius: "8px", border: "none", cursor: "pointer",
+    display: "inline-block",
+    boxShadow:
+      "0 0 0 1px rgba(249,224,118,0.55), " +
+      "0 0 24px rgba(249,224,118,0.60), " +
+      "0 0 60px rgba(249,224,118,0.32), " +
+      "0 0 100px rgba(249,224,118,0.14)",
+  },
+  ctaShimmer: {
+    position: "absolute", top: 0, left: "-100%", width: "50%", height: "100%",
+    background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent)",
+    transform: "skewX(-20deg)",
+    animation: "lp-shimmer 5s cubic-bezier(0.16, 1, 0.3, 1) infinite",
+  },
+
+  /* ── Pill Nav ── */
+  pillNav: {
+    position: "fixed", top: "16px", left: "50%", transform: "translateX(-50%)",
+    width: "calc(100% - 32px)", maxWidth: "390px",
+    background: "rgba(6,6,6,0.85)",
+    border: "1px solid rgba(212,175,55,0.38)",
+    borderRadius: "999px",
+    padding: "10px 10px 10px 24px",
+    backdropFilter: "blur(24px)",
+    WebkitBackdropFilter: "blur(24px)",
+    boxShadow: "0 2px 24px rgba(0,0,0,0.8)",
+    display: "flex", alignItems: "center", justifyContent: "space-between",
+    zIndex: 100,
+  },
+  pillLogo: {
+    fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.7rem", letterSpacing: "0.06em", cursor: "pointer",
+  },
+  pillHamburger: {
+    width: "40px", height: "40px", borderRadius: "50%",
+    display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "4px",
+    background: "rgba(212,175,55,0.06)", border: "1px solid rgba(212,175,55,0.20)",
+    cursor: "pointer",
+  },
+  hamburgerLine: {
+    display: "block", height: "1px", background: "#D4AF37",
+  },
+
+  /* ── § 1 HERO ── */
+  hero: {
+    position: "relative", textAlign: "center",
+    background: "#000", padding: "64px 24px 48px",
+  },
+  heroGlow: {
+    position: "absolute", top: "-10%", left: 0, right: 0, height: "65%", pointerEvents: "none",
+    background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.08) 0%, transparent 70%)",
+  },
+  heroInner: { position: "relative", zIndex: 1 },
+  heroH1: {
+    fontFamily: "'Bebas Neue', sans-serif", fontSize: "4.6rem", color: "#fff",
+    textAlign: "center", marginBottom: "4px", lineHeight: 0.86, letterSpacing: "0.01em",
+  },
+  heroEm: { fontStyle: "normal", color: "#D4AF37", display: "block" },
+  heroSub: {
+    fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.5rem", textAlign: "center",
+    marginBottom: "28px", lineHeight: 1.1, color: "rgba(255,255,255,0.78)",
+    marginTop: "8px", whiteSpace: "nowrap",
+  },
+
+  /* ── § 4 HOW IT WORKS ── */
+  howSection: { background: "#000", padding: "64px 0 0" },
+  howHeader: { textAlign: "center", padding: "16px 20px 28px" },
+  howH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.6rem", color: "#fff", lineHeight: 0.95 },
+  stepsContainer: { display: "flex", flexDirection: "column", gap: "1px", background: "rgba(255,255,255,0.06)" },
+  step: {
+    display: "grid", gridTemplateColumns: "52px 1fr", background: "#000",
+  },
+  stepNumCol: {
+    position: "relative", display: "flex", alignItems: "flex-start", justifyContent: "center",
+    background: "#0a0a0a", paddingTop: "22px",
+  },
+  stepLine: {
+    position: "absolute", top: "50px", bottom: "-23px", left: "50%", transform: "translateX(-50%)", width: "1px",
+    background: "linear-gradient(180deg, rgba(212,175,55,0.6) 0%, rgba(212,175,55,0.1) 100%)", zIndex: 0,
+  },
+  stepNumBadge: {
+    position: "relative", zIndex: 1, width: "28px", height: "28px", borderRadius: "50%",
+    background: "#D4AF37", display: "flex", alignItems: "center", justifyContent: "center",
+    boxShadow: "0 0 12px rgba(212,175,55,0.3)",
+  },
+  stepNumText: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.2rem", color: "#000", lineHeight: 1, paddingTop: "2px" },
+  stepContent: { padding: "22px 18px 22px 24px" },
+  stepTitle: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.45rem", color: "#D4AF37", lineHeight: 1, marginBottom: "5px" },
+  stepBody: { fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "rgba(255,255,255,0.88)", lineHeight: 1.55 },
+
+  /* ── § 5 WATERFALL ── */
+  waterfallSection: { background: "#000", padding: "64px 0 0" },
+  waterfallHeader: { textAlign: "center", padding: "0 20px 24px" },
+  waterfallH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3rem", color: "#fff", lineHeight: 0.95 },
+  acquisitionCallout: {
+    position: "relative", overflow: "hidden", textAlign: "center", margin: "0 20px 10px",
+    background: "#0a0a0a", border: "1px solid rgba(212,175,55,0.20)", borderRadius: "12px", padding: "18px 16px",
+  },
+  acqLabel: { fontFamily: "'Roboto Mono', monospace", fontSize: "14px", textTransform: "uppercase", letterSpacing: "0.14em", color: "#D4AF37", marginBottom: "4px" },
+  acqSub: { fontFamily: "'Roboto Mono', monospace", fontSize: "14px", color: "rgba(255,255,255,0.70)", marginBottom: "8px" },
+  acqAmount: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "2.4rem", color: "#D4AF37", lineHeight: 1, letterSpacing: "0.02em" },
+
+  waterfallTiersBox: {
+    position: "relative", overflow: "hidden", margin: "0 20px",
+    border: "1px solid rgba(212,175,55,0.25)", borderRadius: "12px", background: "#050505",
+    boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 24px rgba(212,175,55,0.05)",
+  },
+  tierRow: {
+    position: "relative", display: "grid", gridTemplateColumns: "auto 1fr auto",
+    gap: "16px", padding: "16px 20px", alignItems: "center",
+    borderBottom: "1px solid rgba(255,255,255,0.06)", cursor: "default",
+  },
+  tierNum: {
+    fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: "#D4AF37",
+    background: "rgba(212,175,55,0.12)", border: "1px solid rgba(212,175,55,0.25)",
+    width: "28px", height: "28px", display: "flex", alignItems: "center", justifyContent: "center",
+    borderRadius: "6px", fontWeight: 600,
+  },
+  tierName: { fontFamily: "'Inter', sans-serif", fontSize: "15px", fontWeight: 500, color: "rgba(255,255,255,0.95)", lineHeight: 1.3 },
+  tierAmt: { fontFamily: "'Roboto Mono', monospace", fontSize: "15px", color: "#fff", textAlign: "right", whiteSpace: "nowrap" },
+  tierMinus: { color: "rgba(255,255,255,0.3)", marginRight: "4px", fontWeight: 400 },
+
+  /* Flow diagram */
+  flowDiagram: { margin: "16px 20px 0" },
+  netBackend: {
+    position: "relative", textAlign: "center", background: "#000", border: "1px solid rgba(212,175,55,0.35)",
+    borderRadius: "12px", padding: "24px 20px", zIndex: 2, boxShadow: "0 8px 24px rgba(0,0,0,0.5)",
+  },
+  netLabel: { fontFamily: "'Roboto Mono', monospace", fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.18em", color: "rgba(255,255,255,0.70)", marginBottom: "8px" },
+  netAmount: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.2rem", color: "#D4AF37", lineHeight: 0.9, letterSpacing: "0.02em" },
+  pipeNetwork: { display: "flex", flexDirection: "column", alignItems: "center", marginTop: "-1px", position: "relative", zIndex: 1 },
+  pipeVertical: { width: "2px", height: "18px", background: "rgba(212,175,55,0.50)" },
+  pipeFork: { display: "flex", width: "calc(50% + 10px)" },
+  pipeLeft: { flex: 1, height: "18px", borderTop: "2px solid rgba(212,175,55,0.50)", borderLeft: "2px solid rgba(212,175,55,0.50)", borderRadius: "6px 0 0 0" },
+  pipeRight: { flex: 1, height: "18px", borderTop: "2px solid rgba(212,175,55,0.50)", borderRight: "2px solid rgba(212,175,55,0.50)", borderRadius: "0 6px 0 0" },
+  buckets: { display: "flex", gap: "10px", marginTop: "-1px" },
+  bucket: {
+    flex: 1, textAlign: "center", background: "#0a0a0a", border: "1px solid rgba(212,175,55,0.20)",
+    borderTop: "2px solid #D4AF37", borderRadius: "0 0 10px 10px", padding: "16px 12px",
+  },
+  bucketLabel: { fontFamily: "'Roboto Mono', monospace", fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.12em", color: "rgba(255,255,255,0.70)", marginBottom: "8px" },
+  bucketAmount: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "2rem", color: "#D4AF37", lineHeight: 1 },
+  bucketPct: { fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: "rgba(255,255,255,0.50)", marginTop: "5px" },
+  waterfallNote: { fontFamily: "'Roboto Mono', monospace", fontSize: "11px", textTransform: "uppercase", textAlign: "center", color: "rgba(255,255,255,0.45)", letterSpacing: "0.06em", padding: "16px 20px 0" },
+
+  /* ── § 3 WHY THIS MATTERS ── */
+  whySection: { background: "#000", textAlign: "center", padding: "64px 0 0" },
+  whyHeader: { padding: "20px 20px 24px" },
+  whyH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3rem", color: "#fff", textAlign: "center", lineHeight: 0.95 },
+  badgeGridWrapper: {
+    margin: "0 20px", borderRadius: "12px", overflow: "hidden", border: "1px solid rgba(212,175,55,0.25)",
+    boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 24px rgba(212,175,55,0.05)", position: "relative",
+  },
+  badgeGrid: { display: "grid", gridTemplateColumns: "1fr", gap: "1px", background: "rgba(255,255,255,0.08)" },
+  badgeCard: { background: "#050505", padding: "28px 24px", textAlign: "left" },
+  badgeNum: {
+    width: "36px", height: "36px", borderRadius: "50%", background: "#D4AF37", color: "#000",
+    display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.3rem",
+    marginBottom: "16px", paddingTop: "2px", boxShadow: "0 0 12px rgba(212,175,55,0.4)",
+  },
+  badgeTitle: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.4rem", color: "#fff", marginBottom: "8px", lineHeight: 1.05, letterSpacing: "0.02em" },
+  badgeBody: { fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "rgba(255,255,255,0.65)", lineHeight: 1.55 },
+
+  /* ── § 7 ARSENAL ── */
+  arsenalSection: { background: "#000", textAlign: "center", padding: "64px 0 0" },
+  arsenalHeader: { padding: "0 20px 24px" },
+  arsenalH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3rem", color: "#fff", lineHeight: 0.95 },
+  arsenalSub: { fontFamily: "'Inter', sans-serif", fontSize: "13px", marginTop: "10px", color: "rgba(255,255,255,0.70)", lineHeight: 1.6 },
+  arsenalCards: { display: "flex", flexDirection: "column", gap: "24px", margin: "0 20px" },
+
+  tierCardCore: {
+    borderRadius: "12px", position: "relative", overflow: "hidden", textAlign: "left",
+    background: "#000", border: "1px solid rgba(212,175,55,0.3)",
+    boxShadow: "0 16px 40px rgba(0,0,0,0.8), 0 0 20px rgba(212,175,55,0.05)",
+  },
+  tierHeaderCore: {
+    padding: "24px 24px 20px", borderBottom: "1px solid rgba(212,175,55,0.1)",
+    display: "flex", justifyContent: "space-between", alignItems: "flex-start",
+  },
+  tierTitleCore: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "2rem", color: "#fff", lineHeight: 1, letterSpacing: "0.02em" },
+  tierSubCore: { fontFamily: "'Inter', sans-serif", fontSize: "13px", color: "rgba(255,255,255,0.55)", marginTop: "6px" },
+  tierBadgeCore: {
+    fontFamily: "'Roboto Mono', monospace", fontSize: "10px", textTransform: "uppercase",
+    padding: "6px 12px", borderRadius: "4px", letterSpacing: "0.1em",
+    background: "rgba(212,175,55,0.1)", color: "#D4AF37", border: "1px solid rgba(212,175,55,0.3)",
+    cursor: "pointer", whiteSpace: "nowrap", flexShrink: 0,
+  },
+  tierFeaturesCore: { padding: "24px", display: "flex", flexDirection: "column", gap: "20px" },
+  featureItemCore: { display: "flex", gap: "16px", alignItems: "flex-start" },
+  featureTextWrapCore: { flex: 1 },
+  featureNameCore: { fontFamily: "'Inter', sans-serif", fontSize: "15px", fontWeight: 500, color: "#fff", lineHeight: 1.3, marginBottom: "4px" },
+  featureDescCore: { fontFamily: "'Inter', sans-serif", fontSize: "13px", color: "rgba(255,255,255,0.55)", lineHeight: 1.45 },
+
+  tierCardSnapshot: {
+    borderRadius: "12px", position: "relative", overflow: "hidden", textAlign: "left",
+    border: "1px solid rgba(212,175,55,0.25)", background: "#050505",
+    boxShadow: "0 16px 40px rgba(0,0,0,0.6)",
+  },
+  tierCardPackage: {
+    borderRadius: "12px", position: "relative", overflow: "hidden", textAlign: "left",
+    border: "1px solid rgba(212,175,55,0.5)", background: "#050505",
+    boxShadow: "0 16px 40px rgba(0,0,0,0.8), 0 0 40px rgba(212,175,55,0.08)",
+  },
+  tierHeaderAlt: {
+    padding: "32px 24px 20px", borderBottom: "1px solid rgba(255,255,255,0.06)",
+    display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "16px",
+  },
+  tierTitleAlt: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "2.2rem", color: "#fff", lineHeight: 1, letterSpacing: "0.04em", marginBottom: "8px" },
+  tierSubAlt: { fontFamily: "'Inter', sans-serif", fontSize: "13px", fontStyle: "italic", color: "rgba(212,175,55,0.8)", lineHeight: 1.4 },
+  tierIntro: { fontFamily: "'Inter', sans-serif", fontSize: "15px", color: "rgba(255,255,255,0.7)", lineHeight: 1.5, margin: "24px 24px 0" },
+  tierChecklist: { padding: "24px", display: "flex", flexDirection: "column", gap: "16px" },
+  checkItem: { display: "flex", gap: "12px", alignItems: "flex-start" },
+  checkMark: { color: "#D4AF37", fontSize: "14px", fontWeight: 600, lineHeight: 1.3 },
+  checkText: { fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "rgba(255,255,255,0.85)", lineHeight: 1.45 },
+  tierAction: { padding: "0 24px 32px" },
+  btnSnapshot: {
+    display: "block", width: "100%", textAlign: "center",
+    fontFamily: "'Roboto Mono', monospace", fontSize: "14px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.1em",
+    color: "#D4AF37", background: "rgba(212,175,55,0.05)", border: "1px solid rgba(212,175,55,0.3)",
+    padding: "18px", borderRadius: "6px", cursor: "pointer",
+  },
+  btnPackage: {
+    position: "relative", overflow: "hidden", display: "block", width: "100%", textAlign: "center",
+    fontFamily: "'Roboto Mono', monospace", fontSize: "14px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.1em",
+    color: "#000", background: "#D4AF37", border: "none", padding: "18px", borderRadius: "6px", cursor: "pointer",
+    boxShadow: "0 4px 15px rgba(212,175,55,0.3)",
+  },
+  btnPackageShimmer: {
+    position: "absolute", top: 0, left: "-100%", width: "50%", height: "100%",
+    background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent)",
+    transform: "skewX(-20deg)", animation: "lp-shimmer 4s infinite",
+  },
+  trendingBadge: {
+    display: "inline-block", fontFamily: "'Roboto Mono', monospace", fontSize: "10px", textTransform: "uppercase",
+    letterSpacing: "0.15em", color: "#000", background: "#fff",
+    padding: "6px 12px", borderRadius: "4px", fontWeight: 600, whiteSpace: "nowrap", flexShrink: 0,
+    boxShadow: "0 0 12px rgba(255,255,255,0.2)",
+  },
+  mostPopularBadge: {
+    display: "inline-block", fontFamily: "'Roboto Mono', monospace", fontSize: "10px", textTransform: "uppercase",
+    letterSpacing: "0.15em", color: "#000", background: "#D4AF37",
+    padding: "6px 12px", borderRadius: "4px", fontWeight: 600, whiteSpace: "nowrap", flexShrink: 0,
+    boxShadow: "0 0 12px rgba(212,175,55,0.4)",
+  },
+  detailsLink: { display: "block", textAlign: "center", fontFamily: "'Inter', sans-serif", fontSize: "12px", color: "rgba(255,255,255,0.35)", textDecoration: "none", marginTop: "16px" },
+
+  /* ── Top line helpers ── */
+  topLineGold: {
+    position: "absolute", top: 0, left: 0, right: 0, height: "1px",
+    background: "linear-gradient(90deg, transparent, #D4AF37, transparent)",
+  },
+  topLineGoldHalf: {
+    position: "absolute", top: 0, left: 0, right: 0, height: "1px",
+    background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.50), transparent)",
+  },
+  topLineGoldThick: {
+    position: "absolute", top: 0, left: 0, right: 0, height: "2px",
+    background: "linear-gradient(90deg, transparent, #D4AF37, transparent)",
+  },
+  topLineGoldBright: {
+    position: "absolute", top: 0, left: 0, right: 0, height: "1px",
+    background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.8), transparent)",
+  },
+
+  /* ── § 6 REALITY ── */
+  realitySection: { background: "#000", textAlign: "left", padding: "64px 20px 32px" },
+  blockquote: {
+    fontFamily: "'Bebas Neue', sans-serif", fontSize: "2.4rem", lineHeight: 0.95, color: "rgba(255,255,255,0.92)",
+    borderLeft: "3px solid #D4AF37", paddingLeft: "20px", marginBottom: "32px",
+  },
+  checkGrid: {
+    border: "1px solid rgba(255,255,255,0.06)", borderRadius: "8px", overflow: "hidden",
+    boxShadow: "0 8px 32px rgba(0,0,0,0.5)",
+  },
+  checkHeader: {
+    display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1px", background: "rgba(255,255,255,0.06)",
+    borderBottom: "1px solid rgba(255,255,255,0.06)",
+  },
+  checkHeaderWith: { background: "#000", padding: "11px 16px" },
+  checkHeaderWithout: { background: "#000", padding: "11px 16px", borderLeft: "1px solid rgba(255,255,255,0.06)" },
+  checkHeaderWithText: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.5rem", color: "#D4AF37", letterSpacing: "0.04em" },
+  checkHeaderWithoutText: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.5rem", color: "rgba(255,255,255,0.55)", letterSpacing: "0.04em" },
+  checkRow: {
+    display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1px", background: "rgba(255,255,255,0.06)",
+    borderBottom: "1px solid rgba(255,255,255,0.06)",
+  },
+  checkCellLeft: {
+    background: "#000", display: "grid", gridTemplateColumns: "22px 1fr", gap: "10px",
+    padding: "14px 16px", alignItems: "flex-start",
+  },
+  checkCellRight: {
+    background: "#000", display: "grid", gridTemplateColumns: "22px 1fr", gap: "10px",
+    padding: "14px 16px", alignItems: "flex-start", borderLeft: "1px solid rgba(255,255,255,0.06)",
+  },
+  checkIconYes: { fontFamily: "'Roboto Mono', monospace", fontSize: "22px", paddingTop: "2px", color: "#D4AF37" },
+  checkIconNo: { fontFamily: "'Roboto Mono', monospace", fontSize: "22px", paddingTop: "2px", color: "rgba(255,80,80,0.85)" },
+  checkTextYes: { fontFamily: "'Inter', sans-serif", fontSize: "14px", lineHeight: 1.4, color: "rgba(255,255,255,0.85)" },
+  checkTextNo: { fontFamily: "'Inter', sans-serif", fontSize: "14px", lineHeight: 1.4, color: "rgba(255,255,255,0.55)" },
+
+  /* ── § 8 CLOSER ── */
+  closerSection: {
+    position: "relative", overflow: "hidden", textAlign: "center", marginTop: "64px",
+    padding: "64px 24px 80px", borderTop: "1px solid rgba(212,175,55,0.20)", background: "#000",
+  },
+  closerGlowBottom: {
+    position: "absolute", bottom: 0, left: 0, right: 0, height: "80%", pointerEvents: "none",
+    background: "radial-gradient(ellipse 90% 60% at 50% 100%, rgba(212,175,55,0.12) 0%, transparent 60%)",
+  },
+  closerGlowTop: {
+    position: "absolute", top: 0, left: 0, right: 0, height: "50%", pointerEvents: "none",
+    background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.05) 0%, transparent 70%)",
+  },
+  closerCard: {
+    position: "relative", zIndex: 1, border: "1px solid rgba(212,175,55,0.42)", borderRadius: "16px",
+    padding: "40px 28px", background: "#000", maxWidth: "360px", margin: "0 auto",
+    boxShadow: "0 16px 40px rgba(0,0,0,0.8), 0 0 60px rgba(212,175,55,0.1)",
+  },
+  closerH2: {
+    fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.8rem", color: "#fff", textAlign: "center",
+    lineHeight: 0.95, margin: "12px 0 20px",
+  },
+  closerBody: {
+    fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "rgba(255,255,255,0.75)",
+    lineHeight: 1.65, maxWidth: "280px", margin: "0 auto 28px",
+  },
+
+  /* ── FOOTER ── */
+  footer: { background: "#0a0a0a", borderTop: "1px solid rgba(255,255,255,0.06)", padding: "24px 20px 40px" },
+  footerText: { fontFamily: "'Inter', sans-serif", fontSize: "14px", textAlign: "center", color: "rgba(255,255,255,0.65)", lineHeight: 1.55 },
 };
 
 export default Index;
