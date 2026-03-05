@@ -6,13 +6,13 @@ import { useInView } from "@/hooks/useInView";
 import LeadCaptureModal from "@/components/LeadCaptureModal";
 import MobileMenu from "@/components/MobileMenu";
 /*
-  PAGE STACK — v9 design pass:
+  PAGE STACK — v9c reorder:
     1. PILL NAV     — fixed floating, logo + hamburger
     2. HERO         — Bebas hierarchy, primary CTA
-    3. WATERFALL    — static ledger + flow diagram
-    4. WHY THIS MATTERS — 2×2 badge grid
-    5. REALITY      — blockquote + with/without check grid
-    6. HOW IT WORKS — 5-step vertical stack
+    3. WHY THIS MATTERS — 2×2 badge grid
+    4. HOW IT WORKS — 5-step vertical stack
+    5. WATERFALL    — static ledger + flow diagram
+    6. REALITY      — blockquote + with/without check grid
     7. ARSENAL      — unified block, free/premium divider
     8. CLOSER       — final CTA
     9. FOOTER
@@ -252,7 +252,130 @@ const Index = () => {
         </section>
 
         {/* ═══════════════════════════════════════════
-            § 2 WATERFALL
+            § 3 WHY THIS MATTERS
+            ═══════════════════════════════════════════ */}
+        <section
+          ref={whyRef}
+          className="bg-black text-center"
+          style={{ padding: "52px 0 0", borderTop: "1px solid rgba(255,255,255,0.06)" }}
+        >
+          <div
+            style={{
+              padding: "20px 20px 28px",
+              borderBottom: "1px solid rgba(212,175,55,0.20)",
+              background: "linear-gradient(180deg, rgba(212,175,55,0.04) 0%, transparent 100%)",
+            }}
+          >
+            <EyebrowRuled text="Why This Matters" />
+            <h2 className="font-['Bebas_Neue'] text-[3rem] text-white text-center" style={{ lineHeight: 0.95 }}>
+              <span style={{ color: "#D4AF37" }}>4</span> Reasons<br />You Can't Skip This
+            </h2>
+          </div>
+
+          {/* 2×2 badge grid */}
+          <div
+            className="grid grid-cols-2 text-left"
+            style={{ gap: "1px", background: "rgba(212,175,55,0.18)" }}
+          >
+            {badgeCards.map((card, i) => (
+              <div
+                key={card.num}
+                className="bg-black"
+                style={{
+                  ...reveal(whyVisible, i * 80),
+                  padding: "28px 20px",
+                  border: "1px solid rgba(255,255,255,0.07)",
+                  borderTop: i >= 2 ? "1px solid rgba(212,175,55,0.09)" : "none",
+                }}
+              >
+                <div
+                  className="flex items-center justify-center font-['Bebas_Neue'] text-[1.2rem] text-black mb-[14px]"
+                  style={{
+                    width: "36px",
+                    height: "36px",
+                    borderRadius: "50%",
+                    background: "#D4AF37",
+                  }}
+                >
+                  {card.num}
+                </div>
+                <p className="font-['Bebas_Neue'] text-[1.25rem] text-white mb-2" style={{ lineHeight: 1 }}>
+                  {card.title}
+                </p>
+                <p className="font-['Inter'] text-[13px]" style={{ lineHeight: 1.55, color: "rgba(255,255,255,0.58)" }}>
+                  {card.body}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ═══════════════════════════════════════════
+            § 4 HOW IT WORKS
+            ═══════════════════════════════════════════ */}
+        <section
+          ref={stepsRef}
+          className="bg-black"
+          style={{ padding: "52px 0 0", borderTop: "1px solid rgba(255,255,255,0.06)" }}
+        >
+          <div className="text-center" style={{ padding: "0 20px 28px" }}>
+            <EyebrowRuled text="How it works" />
+            <h2 className="font-['Bebas_Neue'] text-[3rem] text-white text-center" style={{ lineHeight: 0.95 }}>
+              Build in <span style={{ color: "#D4AF37" }}>Minutes</span>
+            </h2>
+          </div>
+
+          <div className="flex flex-col text-left" style={{ gap: "1px", background: "rgba(255,255,255,0.06)" }}>
+            {steps.map((step, i) => (
+              <div
+                key={step.n}
+                className="grid bg-black"
+                style={{
+                  ...reveal(stepsVisible, i * 80),
+                  gridTemplateColumns: "52px 1fr",
+                }}
+              >
+                {/* Number column */}
+                <div
+                  className="relative flex items-start justify-center"
+                  style={{
+                    background: "#0a0a0a",
+                    borderRight: "1px solid rgba(212,175,55,0.20)",
+                    paddingTop: "18px",
+                  }}
+                >
+                  <span className="font-['Bebas_Neue'] text-[1.4rem] text-[#D4AF37]">{step.n}</span>
+                  {/* Chevron arrow */}
+                  <div
+                    className="absolute"
+                    style={{
+                      right: "-10px",
+                      top: "24px",
+                      width: 0,
+                      height: 0,
+                      borderTop: "11px solid transparent",
+                      borderBottom: "11px solid transparent",
+                      borderLeft: "10px solid #0a0a0a",
+                      zIndex: 2,
+                    }}
+                  />
+                </div>
+                {/* Content */}
+                <div style={{ padding: "22px 18px 22px 24px" }}>
+                  <p className="font-['Bebas_Neue'] text-[1.45rem] text-white mb-[5px]" style={{ lineHeight: 1 }}>
+                    {step.title}
+                  </p>
+                  <p className="font-['Inter'] text-[13px]" style={{ color: "rgba(255,255,255,0.65)", lineHeight: 1.55 }}>
+                    {step.body}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ═══════════════════════════════════════════
+            § 5 WATERFALL
             ═══════════════════════════════════════════ */}
         <section
           ref={waterfallRef}
@@ -422,66 +545,7 @@ const Index = () => {
         </section>
 
         {/* ═══════════════════════════════════════════
-            § 3 WHY THIS MATTERS
-            ═══════════════════════════════════════════ */}
-        <section
-          ref={whyRef}
-          className="bg-black text-center"
-          style={{ padding: "52px 0 0", borderTop: "1px solid rgba(255,255,255,0.06)" }}
-        >
-          <div
-            style={{
-              padding: "20px 20px 28px",
-              borderBottom: "1px solid rgba(212,175,55,0.20)",
-              background: "linear-gradient(180deg, rgba(212,175,55,0.04) 0%, transparent 100%)",
-            }}
-          >
-            <EyebrowRuled text="Why This Matters" />
-            <h2 className="font-['Bebas_Neue'] text-[3rem] text-white text-center" style={{ lineHeight: 0.95 }}>
-              <span style={{ color: "#D4AF37" }}>4</span> Reasons<br />You Can't Skip This
-            </h2>
-          </div>
-
-          {/* 2×2 badge grid */}
-          <div
-            className="grid grid-cols-2 text-left"
-            style={{ gap: "1px", background: "rgba(212,175,55,0.18)" }}
-          >
-            {badgeCards.map((card, i) => (
-              <div
-                key={card.num}
-                className="bg-black"
-                style={{
-                  ...reveal(whyVisible, i * 80),
-                  padding: "28px 20px",
-                  border: "1px solid rgba(255,255,255,0.07)",
-                  borderTop: i >= 2 ? "1px solid rgba(212,175,55,0.09)" : "none",
-                }}
-              >
-                <div
-                  className="flex items-center justify-center font-['Bebas_Neue'] text-[1.2rem] text-black mb-[14px]"
-                  style={{
-                    width: "36px",
-                    height: "36px",
-                    borderRadius: "50%",
-                    background: "#D4AF37",
-                  }}
-                >
-                  {card.num}
-                </div>
-                <p className="font-['Bebas_Neue'] text-[1.25rem] text-white mb-2" style={{ lineHeight: 1 }}>
-                  {card.title}
-                </p>
-                <p className="font-['Inter'] text-[13px]" style={{ lineHeight: 1.55, color: "rgba(255,255,255,0.58)" }}>
-                  {card.body}
-                </p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* ═══════════════════════════════════════════
-            § 4 REALITY (WITH / WITHOUT)
+            § 6 REALITY (WITH / WITHOUT)
             ═══════════════════════════════════════════ */}
         <section
           ref={realityRef}
@@ -569,71 +633,7 @@ const Index = () => {
         </section>
 
         {/* ═══════════════════════════════════════════
-            § 5 HOW IT WORKS
-            ═══════════════════════════════════════════ */}
-        <section
-          ref={stepsRef}
-          className="bg-black"
-          style={{ padding: "52px 0 0", borderTop: "1px solid rgba(255,255,255,0.06)" }}
-        >
-          <div className="text-center" style={{ padding: "0 20px 28px" }}>
-            <EyebrowRuled text="How it works" />
-            <h2 className="font-['Bebas_Neue'] text-[3rem] text-white text-center" style={{ lineHeight: 0.95 }}>
-              Build in <span style={{ color: "#D4AF37" }}>Minutes</span>
-            </h2>
-          </div>
-
-          <div className="flex flex-col text-left" style={{ gap: "1px", background: "rgba(255,255,255,0.06)" }}>
-            {steps.map((step, i) => (
-              <div
-                key={step.n}
-                className="grid bg-black"
-                style={{
-                  ...reveal(stepsVisible, i * 80),
-                  gridTemplateColumns: "52px 1fr",
-                }}
-              >
-                {/* Number column */}
-                <div
-                  className="relative flex items-start justify-center"
-                  style={{
-                    background: "#0a0a0a",
-                    borderRight: "1px solid rgba(212,175,55,0.20)",
-                    paddingTop: "18px",
-                  }}
-                >
-                  <span className="font-['Bebas_Neue'] text-[1.4rem] text-[#D4AF37]">{step.n}</span>
-                  {/* Chevron arrow */}
-                  <div
-                    className="absolute"
-                    style={{
-                      right: "-10px",
-                      top: "24px",
-                      width: 0,
-                      height: 0,
-                      borderTop: "11px solid transparent",
-                      borderBottom: "11px solid transparent",
-                      borderLeft: "10px solid #0a0a0a",
-                      zIndex: 2,
-                    }}
-                  />
-                </div>
-                {/* Content */}
-                <div style={{ padding: "22px 18px 22px 24px" }}>
-                  <p className="font-['Bebas_Neue'] text-[1.45rem] text-white mb-[5px]" style={{ lineHeight: 1 }}>
-                    {step.title}
-                  </p>
-                  <p className="font-['Inter'] text-[13px]" style={{ color: "rgba(255,255,255,0.65)", lineHeight: 1.55 }}>
-                    {step.body}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* ═══════════════════════════════════════════
-            § 6 THE ARSENAL
+            § 7 THE ARSENAL
             ═══════════════════════════════════════════ */}
         <section
           ref={arsenalRef}
@@ -784,7 +784,7 @@ const Index = () => {
         </section>
 
         {/* ═══════════════════════════════════════════
-            § 7 CLOSER
+            § 8 CLOSER
             ═══════════════════════════════════════════ */}
         <section
           ref={closerRef}
