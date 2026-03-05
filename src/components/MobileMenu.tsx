@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { X as CloseIcon } from "lucide-react";
+import { X as CloseIcon, Home, Calculator, ShoppingBag, BarChart2, Mail, Instagram, Share2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { getShareUrl, SHARE_TEXT, SHARE_TITLE } from "@/lib/constants";
 import { useHaptics } from "@/hooks/use-haptics";
@@ -116,18 +116,20 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
             <SectionLabel>Menu</SectionLabel>
             <div className="grid grid-cols-2 gap-2.5">
               {([
-                { path: "/",           label: "Home" },
-                { path: "/calculator", label: "Calculator" },
-                { path: "/store",      label: "Shop" },
-                { path: "/resources",  label: "Resources" },
+                { path: "/",           label: "Home",       icon: <Home size={20} color="#D4AF37" /> },
+                { path: "/calculator", label: "Calculator", icon: <Calculator size={20} color="#D4AF37" /> },
+                { path: "/store",      label: "Shop",       icon: <ShoppingBag size={20} color="#D4AF37" /> },
+                { path: "/resources",  label: "Resources",  icon: <BarChart2 size={20} color="#D4AF37" /> },
               ] as const).map((item) => (
                 <button
                   key={item.path}
                   onClick={() => handleNavigate(item.path)}
                   style={{
                     display: "flex",
+                    flexDirection: "column",
                     alignItems: "center",
                     justifyContent: "center",
+                    gap: "8px",
                     padding: "22px 16px",
                     background: "#0a0a0a",
                     border: "1px solid rgba(255,255,255,0.08)",
@@ -135,10 +137,11 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
                     borderRadius: "8px",
                   }}
                 >
+                  {item.icon}
                   <span
                     style={{
                       fontFamily: "'Bebas Neue', sans-serif",
-                      fontSize: "1.35rem",
+                      fontSize: "1.2rem",
                       letterSpacing: "0.1em",
                       color: "rgba(255,255,255,0.85)",
                     }}
@@ -159,8 +162,10 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
                 onClick={() => haptics.light()}
                 style={{
                   display: "flex",
+                  flexDirection: "column",
                   alignItems: "center",
                   justifyContent: "center",
+                  gap: "8px",
                   padding: "22px 16px",
                   background: "#0a0a0a",
                   border: "1px solid rgba(255,255,255,0.08)",
@@ -169,10 +174,11 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
                   textDecoration: "none",
                 }}
               >
+                <Mail size={20} color="#D4AF37" />
                 <span
                   style={{
                     fontFamily: "'Bebas Neue', sans-serif",
-                    fontSize: "1.35rem",
+                    fontSize: "1.2rem",
                     letterSpacing: "0.1em",
                     color: "rgba(255,255,255,0.85)",
                   }}
@@ -188,8 +194,10 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
                 onClick={() => haptics.light()}
                 style={{
                   display: "flex",
+                  flexDirection: "column",
                   alignItems: "center",
                   justifyContent: "center",
+                  gap: "8px",
                   padding: "22px 16px",
                   background: "#0a0a0a",
                   border: "1px solid rgba(255,255,255,0.08)",
@@ -198,10 +206,11 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
                   textDecoration: "none",
                 }}
               >
+                <Instagram size={20} color="#D4AF37" />
                 <span
                   style={{
                     fontFamily: "'Bebas Neue', sans-serif",
-                    fontSize: "1.35rem",
+                    fontSize: "1.2rem",
                     letterSpacing: "0.1em",
                     color: "rgba(255,255,255,0.85)",
                   }}
@@ -214,8 +223,10 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
                 onClick={handleShare}
                 style={{
                   display: "flex",
+                  flexDirection: "column",
                   alignItems: "center",
                   justifyContent: "center",
+                  gap: "8px",
                   padding: "22px 16px",
                   background: "#0a0a0a",
                   border: "1px solid rgba(255,255,255,0.08)",
@@ -223,10 +234,11 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
                   borderRadius: "8px",
                 }}
               >
+                <Share2 size={20} color="#D4AF37" />
                 <span
                   style={{
                     fontFamily: "'Bebas Neue', sans-serif",
-                    fontSize: "1.35rem",
+                    fontSize: "1.2rem",
                     letterSpacing: "0.1em",
                     color: "rgba(255,255,255,0.85)",
                   }}

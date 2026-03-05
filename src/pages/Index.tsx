@@ -135,12 +135,15 @@ const Index = () => {
       className="font-['Roboto_Mono'] font-semibold uppercase text-black"
       style={{
         background: "#F9E076",
-        padding: "17px 48px",
+        padding: "20px 56px",
         letterSpacing: "0.18em",
-        fontSize: "13px",
+        fontSize: "16px",
         borderRadius: "8px",
         boxShadow:
-          "0 0 0 1px rgba(249,224,118,0.40), 0 0 28px rgba(249,224,118,0.40), 0 0 64px rgba(249,224,118,0.18)",
+          "0 0 0 1px rgba(249,224,118,0.55), " +
+          "0 0 24px rgba(249,224,118,0.60), " +
+          "0 0 60px rgba(249,224,118,0.32), " +
+          "0 0 100px rgba(249,224,118,0.14)",
         display: "inline-block",
       }}
     >
@@ -194,7 +197,7 @@ const Index = () => {
             boxShadow: "0 2px 24px rgba(0,0,0,0.8)",
           }}
         >
-          <span className="font-['Bebas_Neue'] text-[1.4rem] tracking-[0.08em]">
+          <span className="font-['Bebas_Neue'] text-[1.7rem] tracking-[0.06em]">
             <span className="text-[#D4AF37]">filmmaker.</span>
             <span className="text-white">og</span>
           </span>
@@ -231,15 +234,15 @@ const Index = () => {
           />
           <div className="relative z-[1]" style={reveal(heroVisible)}>
             <h1
-              className="font-['Bebas_Neue'] text-[5.5rem] text-white text-center mb-1"
+              className="font-['Bebas_Neue'] text-[4.6rem] text-white text-center mb-1"
               style={{ lineHeight: 0.86, letterSpacing: "0.01em" }}
             >
               Model Your
               <em className="not-italic text-[#D4AF37] block">Waterfall</em>
             </h1>
             <p
-              className="font-['Bebas_Neue'] text-[1.9rem] text-center mb-[28px]"
-              style={{ lineHeight: 1.1, color: "rgba(255,255,255,0.65)", marginTop: "8px" }}
+              className="font-['Bebas_Neue'] text-[1.5rem] text-center mb-[28px]"
+              style={{ lineHeight: 1.1, color: "rgba(255,255,255,0.78)", marginTop: "8px", whiteSpace: "nowrap" }}
             >
               Your Recoupment Structure Starts Here.
             </p>
@@ -318,7 +321,7 @@ const Index = () => {
         >
           <div className="text-center" style={{ padding: "16px 20px 28px" }}>
             <EyebrowRuled text="How it works" />
-            <h2 className="font-['Bebas_Neue'] text-[3rem] text-white text-center" style={{ lineHeight: 0.95 }}>
+            <h2 className="font-['Bebas_Neue'] text-[3.6rem] text-white text-center" style={{ lineHeight: 0.95 }}>
               Build in <span style={{ color: "#D4AF37" }}>Minutes</span>
             </h2>
           </div>
@@ -366,27 +369,13 @@ const Index = () => {
                   >
                     <span className="font-['Bebas_Neue'] text-[1.4rem] text-[#D4AF37]">{step.n}</span>
                   </div>
-                  {/* Chevron arrow */}
-                  <div
-                    className="absolute"
-                    style={{
-                      right: "-10px",
-                      top: "24px",
-                      width: 0,
-                      height: 0,
-                      borderTop: "11px solid transparent",
-                      borderBottom: "11px solid transparent",
-                      borderLeft: "10px solid #0a0a0a",
-                      zIndex: 2,
-                    }}
-                  />
                 </div>
                 {/* Content */}
                 <div style={{ padding: "22px 18px 22px 24px" }}>
-                  <p className="font-['Bebas_Neue'] text-[1.45rem] text-white mb-[5px]" style={{ lineHeight: 1 }}>
+                  <p className="font-['Bebas_Neue'] text-[1.45rem] mb-[5px]" style={{ lineHeight: 1, color: "#D4AF37" }}>
                     {step.title}
                   </p>
-                  <p className="font-['Inter'] text-[13px]" style={{ color: "rgba(255,255,255,0.65)", lineHeight: 1.55 }}>
+                  <p className="font-['Inter'] text-[14px]" style={{ color: "rgba(255,255,255,0.88)", lineHeight: 1.55 }}>
                     {step.body}
                   </p>
                 </div>
@@ -427,10 +416,10 @@ const Index = () => {
               className="absolute top-0 left-0 right-0 h-px"
               style={{ background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.50), transparent)" }}
             />
-            <p className="font-['Roboto_Mono'] text-[11px] uppercase tracking-[0.14em] text-[#D4AF37] mb-1">
+            <p className="font-['Roboto_Mono'] text-[14px] uppercase tracking-[0.14em] text-[#D4AF37] mb-1">
               Streamer Acquisition Price
             </p>
-            <p className="font-['Roboto_Mono'] text-[11px] tracking-[0.06em] mb-2" style={{ color: "rgba(255,255,255,0.28)" }}>
+            <p className="font-['Roboto_Mono'] text-[14px] mb-2" style={{ color: "rgba(255,255,255,0.70)" }}>
               Tier 2 Action Thriller — Example
             </p>
             <p className="font-['Bebas_Neue'] text-[2.4rem] text-[#D4AF37]" style={{ lineHeight: 1, letterSpacing: "0.02em" }}>
@@ -459,13 +448,13 @@ const Index = () => {
                   borderBottom: i < waterfallTiers.length - 1 ? "1px solid rgba(255,255,255,0.06)" : "none",
                 }}
               >
-                <span className="font-['Roboto_Mono'] text-[12px]" style={{ color: "rgba(255,255,255,0.35)" }}>
+                <span className="font-['Roboto_Mono'] text-[14px]" style={{ color: "#D4AF37" }}>
                   {tier.num}
                 </span>
-                <span className="font-['Roboto_Mono'] text-[15px]" style={{ color: "rgba(255,255,255,0.75)" }}>
+                <span className="font-['Roboto_Mono'] text-[16px]" style={{ color: "rgba(255,255,255,0.75)" }}>
                   {tier.name}
                 </span>
-                <span className="font-['Roboto_Mono'] text-[15px] text-right whitespace-nowrap" style={{ color: "rgba(255,255,255,0.65)" }}>
+                <span className="font-['Roboto_Mono'] text-[16px] text-right whitespace-nowrap" style={{ color: "rgba(255,255,255,0.65)" }}>
                   {tier.amt}
                 </span>
               </div>
@@ -587,69 +576,58 @@ const Index = () => {
             The waterfall either costs you now — or costs you everything <span style={{ color: "#D4AF37" }}>later</span>.
           </blockquote>
 
-          {/* Check grid */}
+          {/* Check grid — paired rows for height alignment */}
           <div
-            className="grid grid-cols-2 overflow-hidden"
             style={{
               ...reveal(realityVisible, 100),
-              gap: "1px",
-              background: "rgba(255,255,255,0.06)",
+              border: "1px solid rgba(255,255,255,0.06)",
               borderRadius: "8px",
+              overflow: "hidden",
             }}
           >
-            {/* WITH column */}
-            <div className="bg-black">
-              <div className="px-[16px] py-[11px]" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+            {/* Header row */}
+            <div
+              className="grid grid-cols-2"
+              style={{ gap: "1px", background: "rgba(255,255,255,0.06)", borderBottom: "1px solid rgba(255,255,255,0.06)" }}
+            >
+              <div className="bg-black px-[16px] py-[11px]">
                 <span className="font-['Bebas_Neue'] text-[1.5rem] text-[#D4AF37]" style={{ letterSpacing: "0.04em" }}>
                   WITH
                 </span>
               </div>
-              {withItems.map((item, i) => (
-                <div
-                  key={i}
-                  className="grid items-start"
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns: "22px 1fr",
-                    gap: "10px",
-                    padding: "14px 16px",
-                    borderBottom: i < withItems.length - 1 ? "1px solid rgba(255,255,255,0.06)" : "none",
-                    fontSize: "15px",
-                    lineHeight: 1.4,
-                  }}
-                >
-                  <span className="font-['Roboto_Mono'] text-[22px] flex-shrink-0 text-[#D4AF37]" style={{ paddingTop: "2px" }}>✓</span>
-                  <span style={{ color: "rgba(255,255,255,0.58)" }}>{item}</span>
-                </div>
-              ))}
-            </div>
-
-            {/* WITHOUT column */}
-            <div className="bg-black" style={{ borderLeft: "1px solid rgba(255,255,255,0.06)" }}>
-              <div className="px-[16px] py-[11px]" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+              <div className="bg-black px-[16px] py-[11px]" style={{ borderLeft: "1px solid rgba(255,255,255,0.06)" }}>
                 <span className="font-['Bebas_Neue'] text-[1.5rem]" style={{ letterSpacing: "0.04em", color: "rgba(255,255,255,0.55)" }}>
                   WITHOUT
                 </span>
               </div>
-              {withoutItems.map((item, i) => (
+            </div>
+            {/* Paired data rows */}
+            {withItems.map((withItem, i) => (
+              <div
+                key={i}
+                className="grid grid-cols-2"
+                style={{
+                  gap: "1px",
+                  background: "rgba(255,255,255,0.06)",
+                  borderBottom: i < withItems.length - 1 ? "1px solid rgba(255,255,255,0.06)" : "none",
+                }}
+              >
                 <div
-                  key={i}
-                  className="grid items-start"
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns: "22px 1fr",
-                    gap: "10px",
-                    padding: "14px 16px",
-                    borderBottom: i < withoutItems.length - 1 ? "1px solid rgba(255,255,255,0.06)" : "none",
-                    fontSize: "15px",
-                    lineHeight: 1.4,
-                  }}
+                  className="bg-black grid items-start"
+                  style={{ gridTemplateColumns: "22px 1fr", gap: "10px", padding: "14px 16px" }}
+                >
+                  <span className="font-['Roboto_Mono'] text-[22px] flex-shrink-0 text-[#D4AF37]" style={{ paddingTop: "2px" }}>✓</span>
+                  <span className="font-['Inter'] text-[14px]" style={{ color: "rgba(255,255,255,0.85)", lineHeight: 1.4 }}>{withItem}</span>
+                </div>
+                <div
+                  className="bg-black grid items-start"
+                  style={{ gridTemplateColumns: "22px 1fr", gap: "10px", padding: "14px 16px", borderLeft: "1px solid rgba(255,255,255,0.06)" }}
                 >
                   <span className="font-['Roboto_Mono'] text-[22px] flex-shrink-0" style={{ color: "rgba(255,80,80,0.85)", paddingTop: "2px" }}>✗</span>
-                  <span style={{ color: "rgba(255,255,255,0.55)" }}>{item}</span>
+                  <span className="font-['Inter'] text-[14px]" style={{ color: "rgba(255,255,255,0.55)", lineHeight: 1.4 }}>{withoutItems[i]}</span>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
         </section>
 
@@ -720,28 +698,23 @@ const Index = () => {
               </span>
             </div>
 
-            {/* FREE ITEMS (01–04) — same treatment as premium */}
-            {freeArsenal.map((item) => (
-              <div
-                key={item.num}
-                className="grid items-start"
-                style={{
-                  gridTemplateColumns: "28px 1fr",
-                  gap: "12px",
-                  padding: "14px 20px",
-                  borderBottom: "1px solid rgba(255,255,255,0.05)",
-                }}
-              >
-                <span className="font-['Roboto_Mono'] text-[10px] text-right pt-[2px] text-[#D4AF37]">
-                  {item.num}
-                </span>
-                <div>
-                  <p className="font-['Inter'] text-[15px] font-medium" style={{ color: "rgba(255,255,255,0.85)" }}>
+            {/* FREE ITEMS (01–04) — 2×2 grid */}
+            <div className="grid grid-cols-2" style={{ gap: "1px", background: "rgba(255,255,255,0.05)" }}>
+              {freeArsenal.map((item) => (
+                <div
+                  key={item.num}
+                  className="bg-black grid items-start"
+                  style={{ gridTemplateColumns: "28px 1fr", gap: "10px", padding: "16px 18px" }}
+                >
+                  <span className="font-['Roboto_Mono'] text-[10px] text-right pt-[2px] text-[#D4AF37]">
+                    {item.num}
+                  </span>
+                  <p className="font-['Inter'] text-[14px] font-medium" style={{ color: "rgba(255,255,255,0.85)", lineHeight: 1.3 }}>
                     {item.name}
                   </p>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
 
             {/* DIVIDER — the upgrade moment */}
             <div
@@ -773,31 +746,45 @@ const Index = () => {
               </span>
             </div>
 
-            {/* PREMIUM ITEMS (05–07) — same treatment as free */}
-            {premArsenal.map((item, i) => (
+            {/* PREMIUM ITEMS (05–07) — 2+1 staggered */}
+            <div className="grid grid-cols-2" style={{ gap: "1px", background: "rgba(255,255,255,0.05)" }}>
+              {premArsenal.slice(0, 2).map((item) => (
+                <div
+                  key={item.num}
+                  className="bg-black grid items-start"
+                  style={{ gridTemplateColumns: "28px 1fr", gap: "10px", padding: "18px 18px" }}
+                >
+                  <span className="font-['Roboto_Mono'] text-[10px] text-right pt-[2px] text-[#D4AF37]">
+                    {item.num}
+                  </span>
+                  <div>
+                    <p className="font-['Inter'] text-[14px] font-medium mb-[3px]" style={{ color: "rgba(255,255,255,0.85)" }}>
+                      {item.name}
+                    </p>
+                    <p className="font-['Inter'] text-[12px]" style={{ lineHeight: 1.4, color: "rgba(255,255,255,0.55)" }}>
+                      {item.sub}
+                    </p>
+                  </div>
+                </div>
+              ))}
+              {/* 07 — full-width bottom row */}
               <div
-                key={item.num}
-                className="grid items-start"
-                style={{
-                  gridTemplateColumns: "28px 1fr",
-                  gap: "12px",
-                  padding: "18px 20px",
-                  borderBottom: i < premArsenal.length - 1 ? "1px solid rgba(255,255,255,0.05)" : "none",
-                }}
+                className="col-span-2 bg-black grid items-start"
+                style={{ gridTemplateColumns: "28px 1fr", gap: "10px", padding: "18px 18px", borderTop: "1px solid rgba(255,255,255,0.05)" }}
               >
                 <span className="font-['Roboto_Mono'] text-[10px] text-right pt-[2px] text-[#D4AF37]">
-                  {item.num}
+                  {premArsenal[2].num}
                 </span>
                 <div>
-                  <p className="font-['Inter'] text-[15px] font-medium mb-[3px]" style={{ color: "rgba(255,255,255,0.85)" }}>
-                    {item.name}
+                  <p className="font-['Inter'] text-[14px] font-medium mb-[3px]" style={{ color: "rgba(255,255,255,0.85)" }}>
+                    {premArsenal[2].name}
                   </p>
-                  <p className="font-['Inter'] text-[13px]" style={{ lineHeight: 1.4, color: "rgba(255,255,255,0.55)" }}>
-                    {item.sub}
+                  <p className="font-['Inter'] text-[12px]" style={{ lineHeight: 1.4, color: "rgba(255,255,255,0.55)" }}>
+                    {premArsenal[2].sub}
                   </p>
                 </div>
               </div>
-            ))}
+            </div>
           </div>
         </section>
 
@@ -819,7 +806,17 @@ const Index = () => {
             className="absolute bottom-0 left-0 right-0 pointer-events-none"
             style={{
               height: "65%",
-              background: "radial-gradient(ellipse 100% 70% at 50% 100%, rgba(212,175,55,0.08) 0%, transparent 65%)",
+              background:
+                "radial-gradient(ellipse 80% 50% at 50% 30%, rgba(212,175,55,0.07) 0%, transparent 60%), " +
+                "radial-gradient(ellipse 100% 70% at 50% 100%, rgba(120,80,200,0.13) 0%, transparent 65%)",
+            }}
+          />
+          {/* Violet ambient — top of closer */}
+          <div
+            className="absolute top-0 left-0 right-0 pointer-events-none"
+            style={{
+              height: "40%",
+              background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(100,60,180,0.09) 0%, transparent 70%)",
             }}
           />
           <div
@@ -850,7 +847,7 @@ const Index = () => {
               className="font-['Bebas_Neue'] text-[4.5rem] text-white text-center"
               style={{ lineHeight: 0.9, margin: "12px 0 20px" }}
             >
-              The Room<br />
+              Your Investors<br />
               <span className="text-[#D4AF37] block">Will Ask.</span>
             </h2>
             <p
@@ -875,7 +872,7 @@ const Index = () => {
           }}
         >
           <div style={reveal(footerVisible)}>
-            <p className="font-['Inter'] text-[11px] text-center" style={{ color: "rgba(255,255,255,0.45)", lineHeight: 1.55 }}>
+            <p className="font-['Inter'] text-[14px] text-center" style={{ color: "rgba(255,255,255,0.65)", lineHeight: 1.55 }}>
               filmmaker.og provides financial modeling tools for educational purposes. This is not legal or financial advice. Consult qualified counsel before executing any investment structure.
             </p>
           </div>
