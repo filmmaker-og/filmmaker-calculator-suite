@@ -132,15 +132,19 @@ const Index = () => {
   const CTAButton = () => (
     <button
       onClick={handleCTA}
-      className="inline-flex items-center gap-[12px] font-['Roboto_Mono'] text-[13px] font-semibold uppercase tracking-[0.14em] text-black"
+      className="w-full font-['Roboto_Mono'] font-semibold uppercase text-black"
       style={{
         background: "#F9E076",
-        padding: "16px 36px",
-        clipPath: "polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px))",
-        boxShadow: "0 0 28px rgba(249,224,118,0.30), 0 0 10px rgba(249,224,118,0.15)",
+        padding: "18px 0",
+        letterSpacing: "0.18em",
+        fontSize: "13px",
+        borderRadius: "0",
+        boxShadow:
+          "0 0 0 1px rgba(249,224,118,0.40), 0 0 24px rgba(249,224,118,0.35), 0 0 60px rgba(249,224,118,0.15)",
+        display: "block",
       }}
     >
-      Build Your Waterfall →
+      RUN MY WATERFALL
     </button>
   );
 
@@ -226,12 +230,6 @@ const Index = () => {
             }}
           />
           <div className="relative z-[1]" style={reveal(heroVisible)}>
-            <p
-              className="font-['Roboto_Mono'] text-[13px] uppercase text-center mb-5"
-              style={{ letterSpacing: "0.2em", color: "rgba(212,175,55,0.75)" }}
-            >
-              Film Finance Intelligence
-            </p>
             <h1
               className="font-['Bebas_Neue'] text-[5.5rem] text-white text-center mb-1"
               style={{ lineHeight: 0.86, letterSpacing: "0.01em" }}
@@ -243,9 +241,9 @@ const Index = () => {
               className="font-['Bebas_Neue'] text-[3rem] text-center mb-[22px]"
               style={{ lineHeight: 1, color: "rgba(255,255,255,0.50)", marginTop: "4px" }}
             >
-              Before You Raise.
+              Your Recoupment Structure Starts Here.
             </p>
-            <div className="flex flex-col items-center">
+            <div className="w-full">
               <CTAButton />
             </div>
           </div>
