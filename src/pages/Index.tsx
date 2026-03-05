@@ -132,16 +132,16 @@ const Index = () => {
   const CTAButton = () => (
     <button
       onClick={handleCTA}
-      className="w-full font-['Roboto_Mono'] font-semibold uppercase text-black"
+      className="font-['Roboto_Mono'] font-semibold uppercase text-black"
       style={{
         background: "#F9E076",
-        padding: "18px 0",
+        padding: "17px 48px",
         letterSpacing: "0.18em",
         fontSize: "13px",
-        borderRadius: "0",
+        borderRadius: "8px",
         boxShadow:
-          "0 0 0 1px rgba(249,224,118,0.40), 0 0 24px rgba(249,224,118,0.35), 0 0 60px rgba(249,224,118,0.15)",
-        display: "block",
+          "0 0 0 1px rgba(249,224,118,0.40), 0 0 28px rgba(249,224,118,0.40), 0 0 64px rgba(249,224,118,0.18)",
+        display: "inline-block",
       }}
     >
       RUN MY WATERFALL
@@ -238,12 +238,12 @@ const Index = () => {
               <em className="not-italic text-[#D4AF37] block">Waterfall</em>
             </h1>
             <p
-              className="font-['Bebas_Neue'] text-[3rem] text-center mb-[22px]"
-              style={{ lineHeight: 1, color: "rgba(255,255,255,0.50)", marginTop: "4px" }}
+              className="font-['Bebas_Neue'] text-[1.9rem] text-center mb-[28px]"
+              style={{ lineHeight: 1.1, color: "rgba(255,255,255,0.65)", marginTop: "8px" }}
             >
               Your Recoupment Structure Starts Here.
             </p>
-            <div className="w-full">
+            <div className="flex justify-center">
               <CTAButton />
             </div>
           </div>
@@ -316,7 +316,7 @@ const Index = () => {
           className="bg-black"
           style={{ padding: "52px 0 0", borderTop: "1px solid rgba(255,255,255,0.06)" }}
         >
-          <div className="text-center" style={{ padding: "0 20px 28px" }}>
+          <div className="text-center" style={{ padding: "16px 20px 28px" }}>
             <EyebrowRuled text="How it works" />
             <h2 className="font-['Bebas_Neue'] text-[3rem] text-white text-center" style={{ lineHeight: 0.95 }}>
               Build in <span style={{ color: "#D4AF37" }}>Minutes</span>
@@ -342,7 +342,30 @@ const Index = () => {
                     paddingTop: "18px",
                   }}
                 >
-                  <span className="font-['Bebas_Neue'] text-[1.4rem] text-[#D4AF37]">{step.n}</span>
+                  {/* Vertical connector line — runs full height of column */}
+                  <div
+                    className="absolute"
+                    style={{
+                      top: 0,
+                      bottom: 0,
+                      left: "50%",
+                      transform: "translateX(-50%)",
+                      width: "1px",
+                      background: "rgba(212,175,55,0.20)",
+                      zIndex: 0,
+                    }}
+                  />
+                  {/* Number badge — sits on top of line with background break */}
+                  <div
+                    className="relative z-[1] flex items-center justify-center"
+                    style={{
+                      background: "#0a0a0a",
+                      paddingTop: "2px",
+                      paddingBottom: "2px",
+                    }}
+                  >
+                    <span className="font-['Bebas_Neue'] text-[1.4rem] text-[#D4AF37]">{step.n}</span>
+                  </div>
                   {/* Chevron arrow */}
                   <div
                     className="absolute"
@@ -430,19 +453,19 @@ const Index = () => {
                 key={tier.num}
                 className="grid items-center"
                 style={{
-                  gridTemplateColumns: "22px 1fr auto",
-                  gap: "10px",
-                  padding: "11px 14px",
+                  gridTemplateColumns: "28px 1fr auto",
+                  gap: "12px",
+                  padding: "15px 16px",
                   borderBottom: i < waterfallTiers.length - 1 ? "1px solid rgba(255,255,255,0.06)" : "none",
                 }}
               >
-                <span className="font-['Roboto_Mono'] text-[10px]" style={{ color: "rgba(255,255,255,0.35)" }}>
+                <span className="font-['Roboto_Mono'] text-[12px]" style={{ color: "rgba(255,255,255,0.35)" }}>
                   {tier.num}
                 </span>
-                <span className="font-['Roboto_Mono'] text-[13px]" style={{ color: "rgba(255,255,255,0.75)" }}>
+                <span className="font-['Roboto_Mono'] text-[15px]" style={{ color: "rgba(255,255,255,0.75)" }}>
                   {tier.name}
                 </span>
-                <span className="font-['Roboto_Mono'] text-[13px] text-right whitespace-nowrap" style={{ color: "rgba(255,255,255,0.50)" }}>
+                <span className="font-['Roboto_Mono'] text-[15px] text-right whitespace-nowrap" style={{ color: "rgba(255,255,255,0.65)" }}>
                   {tier.amt}
                 </span>
               </div>
@@ -548,7 +571,7 @@ const Index = () => {
         <section
           ref={realityRef}
           className="bg-black text-left"
-          style={{ padding: "52px 20px", borderTop: "1px solid rgba(255,255,255,0.06)" }}
+          style={{ padding: "52px 20px 24px", borderTop: "1px solid rgba(255,255,255,0.06)" }}
         >
           {/* Blockquote */}
           <blockquote
@@ -591,11 +614,11 @@ const Index = () => {
                     gap: "10px",
                     padding: "14px 16px",
                     borderBottom: i < withItems.length - 1 ? "1px solid rgba(255,255,255,0.06)" : "none",
-                    fontSize: "13px",
+                    fontSize: "15px",
                     lineHeight: 1.4,
                   }}
                 >
-                  <span className="font-['Roboto_Mono'] text-[18px] flex-shrink-0 text-[#D4AF37]">✓</span>
+                  <span className="font-['Roboto_Mono'] text-[22px] flex-shrink-0 text-[#D4AF37]" style={{ paddingTop: "2px" }}>✓</span>
                   <span style={{ color: "rgba(255,255,255,0.58)" }}>{item}</span>
                 </div>
               ))}
@@ -618,11 +641,11 @@ const Index = () => {
                     gap: "10px",
                     padding: "14px 16px",
                     borderBottom: i < withoutItems.length - 1 ? "1px solid rgba(255,255,255,0.06)" : "none",
-                    fontSize: "13px",
+                    fontSize: "15px",
                     lineHeight: 1.4,
                   }}
                 >
-                  <span className="font-['Roboto_Mono'] text-[18px] flex-shrink-0" style={{ color: "rgba(255,80,80,0.6)" }}>✗</span>
+                  <span className="font-['Roboto_Mono'] text-[22px] flex-shrink-0" style={{ color: "rgba(255,80,80,0.85)", paddingTop: "2px" }}>✗</span>
                   <span style={{ color: "rgba(255,255,255,0.55)" }}>{item}</span>
                 </div>
               ))}
@@ -705,7 +728,7 @@ const Index = () => {
                 style={{
                   gridTemplateColumns: "28px 1fr",
                   gap: "12px",
-                  padding: "18px 20px",
+                  padding: "14px 20px",
                   borderBottom: "1px solid rgba(255,255,255,0.05)",
                 }}
               >
@@ -713,11 +736,8 @@ const Index = () => {
                   {item.num}
                 </span>
                 <div>
-                  <p className="font-['Inter'] text-[15px] font-medium mb-[3px]" style={{ color: "rgba(255,255,255,0.85)" }}>
+                  <p className="font-['Inter'] text-[15px] font-medium" style={{ color: "rgba(255,255,255,0.85)" }}>
                     {item.name}
-                  </p>
-                  <p className="font-['Inter'] text-[13px]" style={{ lineHeight: 1.4, color: "rgba(255,255,255,0.55)" }}>
-                    {item.sub}
                   </p>
                 </div>
               </div>
