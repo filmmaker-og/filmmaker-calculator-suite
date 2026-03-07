@@ -1,451 +1,1160 @@
-import { useEffect, useState, useRef } from "react";
-import { useSearchParams } from "react-router-dom";
-import { X, ExternalLink } from "lucide-react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
+import { useInView } from "@/hooks/useInView";
 import { useHaptics } from "@/hooks/use-haptics";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
 
 // ------------------------------------------------------------------
-// SCROLL REVEAL HOOK
+// DATA
 // ------------------------------------------------------------------
-const useReveal = (threshold = 0.05) => {
-  const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([e]) => { if (e.isIntersecting) { setVisible(true); obs.disconnect(); } },
-      { threshold }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [threshold]);
-  return { ref, visible };
+type VaultEntry = {
+  id: string;
+  title: string;
+  excerpt: string;
+  category: "financing" | "distribution" | "business-affairs" | "development" | "ai" | "foundational" | "news";
+  type: "masterclass" | "article" | "guide" | "briefing" | "glossary" | "external";
+  date: string;
+  readTime: string;
+  href: string;
+  priority?: boolean;
+  external?: boolean;
+  badge: "gold" | "white" | "outline" | "dim";
+  badgeLabel: string;
+};
+
+const VAULT_ENTRIES: VaultEntry[] = [
+  {
+    id: "recoupment-waterfall",
+    title: "The Mechanics of the Recoupment Waterfall",
+    excerpt: "Every dollar your film earns flows through a predetermined sequence of tiers before anyone sees profit. Off-the-tops, senior debt, equity, and net backend.",
+    category: "financing",
+    type: "masterclass",
+    date: "2026-03-10",
+    readTime: "12 min read",
+    href: "#",
+    priority: true,
+    badge: "gold",
+    badgeLabel: "Masterclass",
+  },
+  {
+    id: "artists-equity",
+    title: "Why The Artists Equity Model Changes The Math",
+    excerpt: "Defer fees. Stack tax credits. Lower the cash basis. Sell for market value. The spread is your profit. Here's the waterfall behind the model.",
+    category: "news",
+    type: "external",
+    date: "2026-03-04",
+    readTime: "External",
+    href: "#",
+    external: true,
+    badge: "white",
+    badgeLabel: "Trending",
+  },
+  {
+    id: "tax-credits",
+    title: "Tax Credits Are Not Free Money",
+    excerpt: "State tax incentives reduce your cash basis — but only if you understand qualified expenditures, minimum spend thresholds, and the gap between transferable and refundable credits.",
+    category: "financing",
+    type: "article",
+    date: "2026-02-20",
+    readTime: "8 min read",
+    href: "#",
+    badge: "outline",
+    badgeLabel: "Article",
+  },
+  {
+    id: "theatrical-lottery",
+    title: "The Theatrical Lottery Is Not A Strategy",
+    excerpt: "Spending $10M on P&A to find out if your film works on opening weekend is a casino bet. The streamer acquisition path gives you a known valuation before you shoot.",
+    category: "distribution",
+    type: "article",
+    date: "2026-02-28",
+    readTime: "5 min read",
+    href: "#",
+    badge: "outline",
+    badgeLabel: "Article",
+  },
+  {
+    id: "first-spv",
+    title: "Structuring Your First SPV",
+    excerpt: "A Special Purpose Vehicle isolates your film's financial risk from everything else. What it is, why investors expect it, and what your lawyer needs to know.",
+    category: "business-affairs",
+    type: "guide",
+    date: "2026-02-10",
+    readTime: "15 min read",
+    href: "#",
+    badge: "dim",
+    badgeLabel: "Guide",
+  },
+  {
+    id: "sag-aftra-ai",
+    title: "SAG-AFTRA's AI Provisions And What They Cost",
+    excerpt: "The new AI consent and compensation clauses change your budget math. Digital replicas, synthetic performances, and voice licensing all have rates now.",
+    category: "ai",
+    type: "briefing",
+    date: "2026-03-01",
+    readTime: "6 min read",
+    href: "#",
+    badge: "dim",
+    badgeLabel: "Briefing",
+  },
+  {
+    id: "mezzanine-financing",
+    title: "Mezzanine Financing",
+    excerpt: "Debt that sits between senior lenders and equity investors in the capital stack. Higher risk than senior debt, lower priority than equity for upside.",
+    category: "foundational",
+    type: "glossary",
+    date: "2026-02-01",
+    readTime: "Definition",
+    href: "#",
+    badge: "dim",
+    badgeLabel: "Glossary",
+  },
+  {
+    id: "pari-passu",
+    title: "Pari Passu",
+    excerpt: 'Latin for "on equal footing." When investors share pari passu, they split returns proportionally based on investment size — no one has priority over another.',
+    category: "foundational",
+    type: "glossary",
+    date: "2026-01-20",
+    readTime: "Definition",
+    href: "#",
+    badge: "dim",
+    badgeLabel: "Glossary",
+  },
+];
+
+const CATEGORY_LABELS: Record<string, string> = {
+  all: "All",
+  financing: "Financing",
+  distribution: "Distribution",
+  "business-affairs": "Business Affairs",
+  development: "Development",
+  ai: "AI in Film",
+  foundational: "Foundational",
+  news: "News",
+};
+
+const CATEGORY_EYEBROW: Record<string, string> = {
+  financing: "Financing",
+  distribution: "Distribution",
+  "business-affairs": "Business Affairs",
+  development: "Development",
+  ai: "AI in Film",
+  foundational: "Foundational",
+  news: "Link \u2022 News",
 };
 
 // ------------------------------------------------------------------
-// TOP 10 MUST-KNOW TERMS
+// CARD COMPONENT
 // ------------------------------------------------------------------
-type Top10Term = {
-  num: string;
-  term: string;
-  category: string;
-  def: string;
+const VaultCard: React.FC<{
+  entry: VaultEntry;
+  index: number;
+  prefersReducedMotion: boolean;
+}> = ({ entry, index, prefersReducedMotion }) => {
+  const { ref, inView } = useInView<HTMLAnchorElement>({ threshold: 0.05 });
+  const [hovered, setHovered] = useState(false);
+  const isGlossary = entry.type === "glossary";
+
+  const formattedDate = new Date(entry.date + "T00:00:00").toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+
+  const delay = index % 6;
+  const cardReveal: React.CSSProperties = {
+    opacity: prefersReducedMotion || inView ? 1 : 0,
+    transform: prefersReducedMotion || inView ? "translateY(0)" : "translateY(20px)",
+    transition: prefersReducedMotion
+      ? "none"
+      : "opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)",
+    transitionDelay: prefersReducedMotion ? "0ms" : `${delay * 50}ms`,
+  };
+
+  const badgeStyle = (): React.CSSProperties => {
+    switch (entry.badge) {
+      case "gold":
+        return s.badgeGold;
+      case "white":
+        return s.badgeWhite;
+      case "outline":
+        return s.badgeOutline;
+      default:
+        return s.badgeDim;
+    }
+  };
+
+  const cardStyle: React.CSSProperties = {
+    ...s.card,
+    ...(entry.priority ? s.cardPriority : {}),
+    ...(hovered
+      ? entry.priority
+        ? s.cardPriorityHover
+        : s.cardHover
+      : {}),
+  };
+
+  const topLineStyle: React.CSSProperties = {
+    ...s.cardTopLine,
+    ...(entry.priority ? s.cardTopLinePriority : {}),
+    ...(hovered && !entry.priority ? s.cardTopLineHover : {}),
+  };
+
+  return (
+    <a
+      ref={ref}
+      href={entry.href}
+      target={entry.external ? "_blank" : undefined}
+      rel={entry.external ? "noopener noreferrer" : undefined}
+      style={{ ...cardStyle, ...cardReveal, textDecoration: "none", color: "inherit" }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      <div style={topLineStyle} />
+      <div className="vault-card-header" style={{
+        ...s.cardHeader,
+        ...(isGlossary ? s.cardHeaderGlossary : {}),
+        ...(entry.priority ? { borderBottomColor: "rgba(212,175,55,0.15)" } : {}),
+      }}>
+        <div style={s.cardHeaderText}>
+          <span style={s.cardEyebrow}>{CATEGORY_EYEBROW[entry.category] || entry.category}</span>
+          <h3 style={{ ...s.cardTitle, ...(isGlossary ? s.cardTitleGlossary : {}) }}>{entry.title}</h3>
+        </div>
+        <span style={{ ...s.cardBadge, ...badgeStyle() }}>{entry.badgeLabel}</span>
+      </div>
+      <div style={{ ...s.cardContent, ...(isGlossary ? { paddingTop: 0 } : {}) }}>
+        <p style={s.cardExcerpt}>{entry.excerpt}</p>
+        <div style={s.cardBottom}>
+          <div style={s.cardMeta}>
+            <span style={s.cardDate}>{formattedDate}</span>
+            <span style={s.metaDot}>&bull;</span>
+            <span style={s.cardRead}>{entry.readTime}</span>
+          </div>
+          <span style={{
+            ...s.cardArrow,
+            ...(hovered ? s.cardArrowHover : {}),
+          }}>
+            {entry.external ? "\u2197" : "\u2192"}
+          </span>
+        </div>
+      </div>
+    </a>
+  );
 };
-
-const TOP_10: Top10Term[] = [
-  {
-    num: "01",
-    term: "Waterfall",
-    category: "The Math",
-    def: "The strict priority order in which revenue flows from the box office to every stakeholder. Money trickles down: Theaters → Distributor → Sales Agent → Lenders → Investors → Producers. Understanding this is understanding independent film finance.",
-  },
-  {
-    num: "02",
-    term: "Recoupment",
-    category: "The Math",
-    def: "Earning back the initial investment before profits are shared. The recoupment schedule defines who gets paid back first — and at what premium — before anyone sees net profit. This is the core negotiation in any investor deal.",
-  },
-  {
-    num: "03",
-    term: "Capital Stack",
-    category: "Finance",
-    def: "The layered combination of funding sources used to finance a budget: tax credits (lowest risk), senior debt, gap/mezzanine loans, and equity (highest risk). Each tier has its own cost, priority, and return profile.",
-  },
-  {
-    num: "04",
-    term: "Negative Cost",
-    category: "Finance",
-    def: "The actual all-in cost to produce the finished film — development, production, and post — excluding marketing and distribution. This is the number you're financing. Not 'the budget estimate.' The final, locked number.",
-  },
-  {
-    num: "05",
-    term: "Senior Debt",
-    category: "Finance",
-    def: "First-position loans secured by reliable collateral — tax credits or pre-sale contracts. Lowest risk, lowest cost (typically SOFR + 5–10%), and paid back first in the waterfall. Banks write these. They don't lose.",
-  },
-  {
-    num: "06",
-    term: "Equity",
-    category: "Finance",
-    def: "Cash investment in exchange for ownership and backend profits. Highest risk, paid last, but holds a percentage of profits forever. Standard structure: principal back + 20% premium, then 50% of net profits going forward.",
-  },
-  {
-    num: "07",
-    term: "Cross-Collateral.",
-    category: "Legal",
-    def: "A trap. When a distributor uses profits from one film to cover losses on another in their portfolio. Your Film A profit funds their Film B write-off. Always require 'Single Picture Accounting' in any distribution contract.",
-  },
-  {
-    num: "08",
-    term: "Sales Agent",
-    category: "Roles",
-    def: "The broker who sells your international distribution rights — territory by territory — at film markets (Cannes, AFM, Berlin). Takes 10–20% commission off gross receipts. Their estimates can also be used to secure pre-sale bank loans.",
-  },
-  {
-    num: "09",
-    term: "Producer's Corridor",
-    category: "The Math",
-    def: "A percentage of first-dollar gross receipts reserved for the producer — paid before expenses are deducted. Rare, powerful, and a sign of real leverage. If you can negotiate it, do. It fundamentally changes your position in the waterfall.",
-  },
-  {
-    num: "10",
-    term: "CAM",
-    category: "Roles",
-    def: "Collection Account Manager. A neutral third party that receives all revenue and distributes it according to the agreed waterfall. Takes approximately 1% off the top. Essential for transparency and investor confidence. Without a CAM, you're trusting a distributor to pay everyone correctly.",
-  },
-];
-
-// ------------------------------------------------------------------
-// INDUSTRY LINKS
-// ------------------------------------------------------------------
-const INDUSTRY_LINKS = [
-  { name: "Producers Guild (PGA)", url: "https://producersguild.org", desc: "The guild for film & TV producers" },
-  { name: "Writers Guild (WGA)", url: "https://www.wga.org", desc: "Union for screenwriters" },
-  { name: "Directors Guild (DGA)", url: "https://www.dga.org", desc: "Union for directors & teams" },
-  { name: "SAG-AFTRA", url: "https://www.sagaftra.org", desc: "Actors & performers union" },
-  { name: "IATSE", url: "https://iatse.net", desc: "Below-the-line crew union" },
-  { name: "Box Office Mojo", url: "https://www.boxofficemojo.com", desc: "Box office tracking & data" },
-  { name: "The Numbers", url: "https://www.the-numbers.com", desc: "Film financial analysis" },
-  { name: "Film Independent", url: "https://www.filmindependent.org", desc: "Indie filmmaker resources" },
-  { name: "@filmmaker.og", url: "https://www.instagram.com/filmmaker.og", desc: "Follow us on Instagram" },
-];
-
-// ------------------------------------------------------------------
-// TAB IDS
-// ------------------------------------------------------------------
-type TabId = "terms" | "waterfall";
-
-const TABS: { id: TabId; label: string }[] = [
-  { id: "terms", label: "TERMS" },
-  { id: "waterfall", label: "WATERFALL" },
-];
-
-// ------------------------------------------------------------------
-// WATERFALL CONTENT (extracted from WaterfallInfo)
-// ------------------------------------------------------------------
-const WaterfallContent = () => (
-  <div className="space-y-8">
-    {/* The Bucket Metaphor */}
-    <div className="relative bg-white/[0.04] border border-white/[0.10] p-6 pl-7 space-y-4 overflow-hidden">
-      <div className="absolute left-0 top-0 bottom-0 w-[3px]"
-        style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.55), rgba(212,175,55,0.25), transparent)' }} />
-      <h2 className="font-bebas text-[22px] tracking-[0.06em] text-gold">
-        The &ldquo;Bucket&rdquo; Metaphor
-      </h2>
-      <p className="text-[15px] text-white/75 leading-[1.7]">
-        Imagine a series of buckets arranged vertically. Water (revenue) is poured into the top bucket.
-        Only when the first bucket is full does it spill over into the next one.
-      </p>
-      <p className="text-[15px] text-white/75 leading-[1.7]">
-        If the flow of water stops, the buckets at the bottom stay dry.
-        <span className="text-gold font-semibold"> You (the Producer) are at the very bottom.</span>
-      </p>
-    </div>
-
-    {/* Recoupment Schedule */}
-    <div className="space-y-4">
-      <h2 className="font-bebas text-[22px] tracking-[0.06em] text-gold">
-        The Recoupment Schedule
-      </h2>
-      <div className="bg-white/[0.03] border border-white/[0.10] overflow-hidden">
-        <div className="grid grid-cols-[auto_1fr] gap-0 divide-y divide-white/[0.06]">
-          {[
-            { num: '01', title: 'CAM', desc: 'Takes ~1% off the top to manage the money. Protects you from the distributor holding your cash.' },
-            { num: '02', title: 'Sales Fees & Expenses', desc: 'Sales Agent takes 10–25% commission + capped expenses.', trap: 'TRAP: Ensure expenses are "Capped" in your contract.' },
-            { num: '03', title: 'Guild Residuals', desc: 'SAG-AFTRA, DGA, WGA deposits. Don\'t pay = they shut you down.' },
-            { num: '04', title: 'Senior Debt', desc: 'Banks get paid first — least risk, lowest cost (SOFR + 5–10%).' },
-            { num: '05', title: 'Gap / Mezzanine Debt', desc: 'Higher risk lenders charging higher interest behind the bank.' },
-            { num: '06', title: 'Equity Investors', desc: '100% principal back + 20% premium. Only then does "Net Profit" split begin.' },
-          ].map((row) => (
-            <div key={row.num} className="contents">
-              <div className="p-3 bg-white/[0.03] text-gold font-mono font-medium border-r border-white/[0.06] flex items-center justify-center min-w-[48px] text-[14px]">
-                {row.num}
-              </div>
-              <div className="p-4">
-                <h3 className="text-white font-semibold text-[15px] mb-1">{row.title}</h3>
-                <p className="text-[14px] text-white/70 leading-[1.7]">
-                  {row.desc}
-                  {row.trap && (
-                    <span className="block mt-1.5 text-gold text-[13px] font-semibold tracking-wide">{row.trap}</span>
-                  )}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-
-    {/* Backend Split */}
-    <div className="space-y-4">
-      <h2 className="font-bebas text-[22px] tracking-[0.06em] text-gold">
-        The Backend Split
-      </h2>
-      <p className="text-[14px] text-white/70 leading-[1.7]">
-        Once everyone above is paid, the remaining revenue enters the "Net Profit" pool — typically split 50/50.
-      </p>
-      <div className="grid grid-cols-2 gap-3">
-        <div className="relative border border-gold/25 bg-gold/[0.06] p-4 overflow-hidden">
-          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gold/50" />
-          <p className="text-[10px] tracking-[0.2em] uppercase font-semibold text-gold/70 mb-2">Producer Corridor</p>
-          <div className="font-mono text-[32px] font-bold text-gold leading-none mb-2">50%</div>
-          <p className="text-[13px] text-gold/70 leading-[1.6]">You, the director, and talent points.</p>
-        </div>
-        <div className="relative border border-white/[0.15] bg-white/[0.05] p-4 overflow-hidden">
-          <div className="absolute top-0 left-0 right-0 h-[2px] bg-white/[0.15]" />
-          <p className="text-[10px] tracking-[0.2em] uppercase font-semibold text-white/60 mb-2">Investor Corridor</p>
-          <div className="font-mono text-[32px] font-bold text-white/80 leading-none mb-2">50%</div>
-          <p className="text-[13px] text-white/60 leading-[1.6]">Pro-rata share to equity financiers.</p>
-        </div>
-      </div>
-    </div>
-
-    {/* Common Traps */}
-    <div className="relative bg-gold/[0.04] border border-gold/20 p-6 pl-7 space-y-4 overflow-hidden">
-      <div className="absolute left-0 top-0 bottom-0 w-[3px]"
-        style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.70), rgba(212,175,55,0.35), transparent)' }} />
-      <h2 className="font-bebas text-[18px] tracking-[0.08em] uppercase text-gold">
-        Common Traps
-      </h2>
-      <div className="space-y-4">
-        <div>
-          <h3 className="text-white font-semibold text-[14px] mb-1">Cross-Collateralization</h3>
-          <p className="text-[13px] text-white/70 leading-[1.65]">
-            When a distributor uses your film's profits to cover losses on another film.
-            <span className="block mt-1.5 text-gold text-[12px] font-semibold tracking-wide">
-              Never allow this. Require "Single Picture Accounting".
-            </span>
-          </p>
-        </div>
-        <div>
-          <h3 className="text-white font-semibold text-[14px] mb-1">Overhead Fees</h3>
-          <p className="text-[13px] text-white/70 leading-[1.65]">
-            Distributors charge 10-15% "overhead" on top of commission. Pure profit for them. Fight to cap or remove it.
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-);
 
 // ------------------------------------------------------------------
 // MAIN COMPONENT
 // ------------------------------------------------------------------
 const Resources = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const initialTab = (searchParams.get("tab") as TabId) || "terms";
-  const [activeTab, setActiveTab] = useState<TabId>(initialTab);
-  const [selectedTerm, setSelectedTerm] = useState<Top10Term | null>(null);
-  const revTop10 = useReveal();
   const haptics = useHaptics();
 
   useEffect(() => { window.scrollTo(0, 0); }, []);
 
-  const handleTabChange = (tab: TabId) => {
-    haptics.light();
-    setActiveTab(tab);
-    setSearchParams({ tab });
-  };
+  const prefersReducedMotion =
+    typeof window !== "undefined" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const reveal = (visible: boolean, delay = 0): React.CSSProperties => ({
+    opacity: prefersReducedMotion || visible ? 1 : 0,
+    transform: prefersReducedMotion || visible ? "translateY(0)" : "translateY(20px)",
+    transition: prefersReducedMotion
+      ? "none"
+      : "opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)",
+    transitionDelay: prefersReducedMotion || delay === 0 ? "0ms" : `${delay * 80}ms`,
+  });
+
+  // Scroll refs
+  const { ref: headerRef, inView: headerVisible } = useInView<HTMLDivElement>({ threshold: 0.05 });
+  const { ref: pinnedRef, inView: pinnedVisible } = useInView<HTMLDivElement>({ threshold: 0.05 });
+  const { ref: gridRef, inView: gridVisible } = useInView<HTMLDivElement>({ threshold: 0.05 });
+  const { ref: footerRef, inView: footerVisible } = useInView<HTMLDivElement>({ threshold: 0.05 });
+
+  // Search & filter state
+  const [search, setSearch] = useState("");
+  const [activeSort, setActiveSort] = useState<"newest" | "oldest">("newest");
+  const [activeFilter, setActiveFilter] = useState("all");
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const searchRef = useRef<HTMLInputElement>(null);
+
+  // Pinned card hover states
+  const [pinnedPrimaryHover, setPinnedPrimaryHover] = useState(false);
+  const [pinnedSecondaryHover, setPinnedSecondaryHover] = useState(false);
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener("click", handler);
+    return () => document.removeEventListener("click", handler);
+  }, []);
+
+  // Filter & sort logic
+  const filteredEntries = VAULT_ENTRIES
+    .filter((entry) => {
+      const matchFilter = activeFilter === "all" || entry.category === activeFilter;
+      const matchSearch = !search || [entry.title, entry.excerpt, entry.category, entry.badgeLabel, entry.readTime]
+        .join(" ").toLowerCase().includes(search.toLowerCase());
+      return matchFilter && matchSearch;
+    })
+    .sort((a, b) => {
+      const da = new Date(a.date).getTime();
+      const db = new Date(b.date).getTime();
+      return activeSort === "newest" ? db - da : da - db;
+    });
+
+  const resultsText = search
+    ? `${filteredEntries.length} result${filteredEntries.length === 1 ? "" : "s"} for \u201c${search}\u201d`
+    : `${filteredEntries.length} Vault Asset${filteredEntries.length === 1 ? "" : "s"}`;
+
+  const dropdownLabel = `${CATEGORY_LABELS[activeFilter]} \u2022 ${activeSort === "newest" ? "Newest" : "Oldest"}`;
+
+  const handleClearSearch = useCallback(() => {
+    setSearch("");
+    searchRef.current?.focus();
+  }, []);
 
   return (
-    <>
-      <div className="min-h-screen bg-black text-white page-safe pb-8 font-sans">
-
-        {/* PAGE TITLE */}
-        <div className="px-6 md:px-10 pt-2 pb-1">
-          <div className="max-w-4xl mx-auto">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-gold/80 mb-3">
-              Film Finance
-            </p>
-            <h1 className="font-bebas text-[40px] md:text-7xl tracking-wide text-white leading-none">
-              The <span className="text-gold">Resource</span>
-            </h1>
-            <p className="text-[15px] text-white/55 leading-relaxed mt-3 max-w-xl">
-              The film industry uses jargon to keep outsiders out. This is your definitive resource.
-            </p>
-          </div>
+    <div style={s.page}>
+      {/* ═══ VAULT HEADER ═══ */}
+      <header ref={headerRef} style={s.vaultHeader}>
+        <div style={s.vaultHeaderGlow} />
+        <div style={s.wrap}>
+          <h1 style={{ ...s.pageTitle, ...reveal(headerVisible) }}>
+            Resource <span style={{ color: "#D4AF37" }}>Vault</span>
+          </h1>
+          <p style={{ ...s.vaultSub, ...reveal(headerVisible, 1) }}>
+            Institutional-grade film finance intelligence. Search it. Study it. Use it.
+          </p>
         </div>
+      </header>
 
-        {/* TAB SWITCHER */}
-        <div className="px-6 md:px-10 pt-4 pb-2">
-          <div className="max-w-4xl mx-auto flex gap-2">
-            {TABS.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => handleTabChange(tab.id)}
-                className="font-bebas text-[15px] tracking-[0.14em] px-5 py-2.5 border transition-all"
-                style={{
-                  borderRadius: 0,
-                  background: activeTab === tab.id ? "rgba(212,175,55,0.12)" : "rgba(255,255,255,0.04)",
-                  borderColor: activeTab === tab.id ? "rgba(212,175,55,0.50)" : "rgba(255,255,255,0.10)",
-                  color: activeTab === tab.id ? "rgba(212,175,55,1)" : "rgba(255,255,255,0.55)",
-                }}
-              >
-                {tab.label}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* TAB CONTENT */}
-        {activeTab === "terms" && (
-          <div
-            ref={revTop10.ref}
-            style={{
-              opacity: revTop10.visible ? 1 : 0,
-              transform: revTop10.visible ? "translateY(0)" : "translateY(24px)",
-              transition: "opacity 0.6s ease, transform 0.6s ease",
-            }}
-          >
-            <section id="top10" className="px-2">
-              <p className="font-mono text-[12px] tracking-[0.12em] uppercase text-gold-label mb-2">
-                The Essential 10
+      {/* ═══ CORNERSTONE PINNED CARDS ═══ */}
+      <section ref={pinnedRef} style={s.pinnedSection}>
+        <div style={s.wrap}>
+          <div className="vault-pinned-grid" style={s.pinnedGrid}>
+            {/* Primary Cornerstone */}
+            <a
+              href="#"
+              style={{
+                ...s.pinnedCard,
+                ...s.pinnedPrimary,
+                ...reveal(pinnedVisible),
+                ...(pinnedPrimaryHover ? s.pinnedPrimaryHover : {}),
+              }}
+              onMouseEnter={() => setPinnedPrimaryHover(true)}
+              onMouseLeave={() => setPinnedPrimaryHover(false)}
+            >
+              <div style={s.pinnedPrimaryTopLine} />
+              <span style={s.pinnedEyebrow}>Cornerstone</span>
+              <h2 style={s.pinnedPrimaryTitle}>What Is a Recoupment Waterfall</h2>
+              <p style={s.pinnedPrimaryDesc}>
+                Every dollar your film earns flows through a predetermined sequence of tiers before anyone sees profit. This is the complete breakdown — from gross receipts to net backend.
               </p>
-              <h2 className="font-bebas text-[28px] tracking-[0.08em] text-white mb-4">
-                KNOW THESE FIRST
-              </h2>
-
-              <div className="grid grid-cols-2 gap-2 mt-4">
-                {TOP_10.map((item, i) => (
-                  <button
-                    key={item.num}
-                    onClick={() => { haptics.light(); setSelectedTerm(item); }}
-                    style={{
-                      borderRadius: 0,
-                      opacity: revTop10.visible ? 1 : 0,
-                      transform: revTop10.visible ? "translateY(0)" : "translateY(12px)",
-                      transition: `opacity 0.45s ease ${i * 0.04}s, transform 0.45s ease ${i * 0.04}s`,
-                    }}
-                    className="group flex items-center gap-3 px-3 py-3 border border-white/[0.08] bg-white/[0.02] hover:border-gold/40 hover:bg-gold/[0.06] transition-all text-left"
-                  >
-                    <span className="font-mono text-[11px] font-bold text-gold/65 group-hover:text-gold/80 transition-colors flex-shrink-0 tabular-nums leading-none">
-                      {item.num}
-                    </span>
-                    <span className="font-bebas text-[17px] tracking-wide text-white/80 group-hover:text-white transition-colors leading-none truncate">
-                      {item.term}
-                    </span>
-                  </button>
-                ))}
+              <div style={s.pinnedPrimaryFooter}>
+                <span style={s.pinnedBadge}>Start Here</span>
+                <span style={{
+                  ...s.pinnedArrow,
+                  ...(pinnedPrimaryHover ? s.pinnedArrowHover : {}),
+                }}>{"\u2192"}</span>
               </div>
+            </a>
 
-              <p className="text-center text-[11px] text-white/35 font-mono uppercase tracking-widest mt-4">
-                Tap any term to read the definition
+            {/* Secondary Cornerstone */}
+            <a
+              href="#"
+              style={{
+                ...s.pinnedCard,
+                ...s.pinnedSecondary,
+                ...reveal(pinnedVisible, 1),
+                ...(pinnedSecondaryHover ? s.pinnedSecondaryHover : {}),
+              }}
+              onMouseEnter={() => setPinnedSecondaryHover(true)}
+              onMouseLeave={() => setPinnedSecondaryHover(false)}
+            >
+              <div style={s.pinnedSecondaryTopLine} />
+              <span style={s.pinnedEyebrow}>Reference</span>
+              <h2 style={s.pinnedSecondaryTitle}>15 Terms Your Investors Expect You to Know</h2>
+              <p style={s.pinnedSecondaryDesc}>
+                CAM fees, waterfalls, pari passu, preferred return — the vocabulary of film finance decoded.
               </p>
-            </section>
+              <div style={s.pinnedSecondaryFooter}>
+                <span style={s.pinnedRead}>Glossary</span>
+                <span style={{
+                  ...s.pinnedArrow,
+                  ...(pinnedSecondaryHover ? s.pinnedArrowHover : {}),
+                }}>{"\u2192"}</span>
+              </div>
+            </a>
           </div>
-        )}
+        </div>
+      </section>
 
-        {activeTab === "waterfall" && (
-          <div className="px-4 py-4">
-            <div className="max-w-4xl mx-auto">
-              <WaterfallContent />
-            </div>
-          </div>
-        )}
-
-        {/* INDUSTRY LINKS — always visible */}
-        <div className="px-6 md:px-10 pt-6">
-          <div className="max-w-4xl mx-auto">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="h-[1px] flex-1" style={{ background: "linear-gradient(90deg, rgba(212,175,55,0.35) 0%, transparent 100%)" }} />
-              <span className="font-bebas text-[12px] text-gold/60 uppercase tracking-[0.25em] flex-shrink-0">Industry Links</span>
-              <div className="h-[1px] flex-1" style={{ background: "linear-gradient(270deg, rgba(212,175,55,0.35) 0%, transparent 100%)" }} />
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-              {INDUSTRY_LINKS.map((link) => (
-                <a
-                  key={link.name}
-                  href={link.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group relative flex items-center gap-3 px-4 py-3 border border-white/[0.08] bg-white/[0.02] hover:border-gold/40 hover:bg-gold/[0.06] transition-all overflow-hidden"
-                  style={{ borderRadius: 0 }}
-                >
-                  <div className="absolute left-0 top-0 bottom-0 w-[1px]" style={{ background: "linear-gradient(to bottom, rgba(212,175,55,0.40), transparent)" }} />
-                  <div className="flex-1 min-w-0">
-                    <span className="font-bebas text-[15px] tracking-wide text-white/80 group-hover:text-white transition-colors leading-none block">
-                      {link.name}
-                    </span>
-                    <span className="text-[11px] text-white/35 group-hover:text-white/50 transition-colors leading-none mt-1 block">
-                      {link.desc}
-                    </span>
-                  </div>
-                  <ExternalLink className="w-3.5 h-3.5 text-gold/40 group-hover:text-gold/70 flex-shrink-0 transition-colors" />
-                </a>
-              ))}
-            </div>
-          </div>
+      {/* ═══ RULED DIVIDER ═══ */}
+      <div style={s.wrap}>
+        <div style={s.ruledDivider}>
+          <div style={s.ruledLine} />
         </div>
       </div>
 
-      {/* TERM DEFINITION MODAL */}
-      <Dialog open={!!selectedTerm} onOpenChange={(open) => !open && setSelectedTerm(null)}>
-        <DialogContent
-          className="p-0 overflow-hidden border-gold/30 max-w-[calc(100vw-2rem)] w-full sm:max-w-lg [&>button:last-child]:hidden"
-          style={{ borderRadius: 0, background: "#0D0900", boxShadow: "0 0 60px rgba(212,175,55,0.10)" }}
-        >
-          {selectedTerm && (
-            <>
-              <div className="flex items-center justify-between px-5 py-3 bg-gold">
-                <div className="flex items-center gap-3">
-                  <span className="font-mono text-[12px] font-bold text-black/60 tabular-nums">
-                    {selectedTerm.num}
-                  </span>
-                  <span className="font-bebas text-[16px] tracking-[0.15em] text-black leading-none">
-                    {selectedTerm.term}
-                  </span>
-                  <span className="text-[9px] uppercase tracking-[0.15em] font-mono text-black/50 hidden sm:block">
-                    {selectedTerm.category}
-                  </span>
-                </div>
-                <button
-                  onClick={() => { haptics.light(); setSelectedTerm(null); }}
-                  className="text-black/50 hover:text-black transition-colors p-1"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
+      {/* ═══ COMMAND CENTER (Sticky) ═══ */}
+      <section style={s.commandCenter}>
+        <div className="vault-command-inner" style={s.commandInner}>
+          {/* Search */}
+          <div className="vault-search-wrap" style={s.searchWrap}>
+            <svg
+              style={s.searchIcon}
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <input
+              ref={searchRef}
+              type="text"
+              placeholder="Search the vault..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              style={s.searchInput}
+              autoComplete="off"
+            />
+            {search && (
+              <button
+                onClick={handleClearSearch}
+                style={s.clearSearch}
+                aria-label="Clear search"
+              >
+                {"\u2715"}
+              </button>
+            )}
+          </div>
 
-              <div className="px-5 py-5">
-                <p className="text-[16px] text-white/85 leading-[1.8]">
-                  {selectedTerm.def}
-                </p>
-              </div>
+          {/* Dropdown */}
+          <div ref={dropdownRef} className="vault-control-dropdown" style={s.controlDropdown}>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                haptics.light();
+                setDropdownOpen((o) => !o);
+              }}
+              className="vault-dropdown-btn"
+              style={{
+                ...s.dropdownBtn,
+                ...(dropdownOpen ? s.dropdownBtnOpen : {}),
+              }}
+            >
+              <span>{dropdownLabel}</span>
+              <svg
+                style={{
+                  width: 12,
+                  height: 12,
+                  transition: "transform 0.2s",
+                  transform: dropdownOpen ? "rotate(180deg)" : "rotate(0deg)",
+                }}
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
 
-              <div className="flex border-t border-white/[0.06]">
-                {(() => {
-                  const idx = TOP_10.findIndex(t => t.num === selectedTerm.num);
-                  const prev = idx > 0 ? TOP_10[idx - 1] : null;
-                  const next = idx < TOP_10.length - 1 ? TOP_10[idx + 1] : null;
-                  return (
-                    <>
-                      <button
-                        onClick={() => { if (prev) { haptics.light(); setSelectedTerm(prev); } }}
-                        disabled={!prev}
-                        className="flex-1 py-3 text-[11px] font-mono uppercase tracking-wider text-white/20 hover:text-gold/60 hover:bg-gold/[0.04] disabled:opacity-0 transition-all text-left pl-5"
-                      >
-                        ← {prev?.term}
-                      </button>
-                      <div className="w-[1px] bg-white/[0.06]" />
-                      <button
-                        onClick={() => { if (next) { haptics.light(); setSelectedTerm(next); } }}
-                        disabled={!next}
-                        className="flex-1 py-3 text-[11px] font-mono uppercase tracking-wider text-white/20 hover:text-gold/60 hover:bg-gold/[0.04] disabled:opacity-0 transition-all text-right pr-5"
-                      >
-                        {next?.term} →
-                      </button>
-                    </>
-                  );
-                })()}
+            {dropdownOpen && (
+              <div className="vault-dropdown-panel" style={s.dropdownPanel}>
+                <div style={s.panelSectionTitle}>Sort</div>
+                {(["newest", "oldest"] as const).map((val) => (
+                  <button
+                    key={val}
+                    style={{
+                      ...s.panelItem,
+                      ...(activeSort === val ? s.panelItemActive : {}),
+                    }}
+                    onClick={() => {
+                      haptics.light();
+                      setActiveSort(val);
+                      setDropdownOpen(false);
+                    }}
+                  >
+                    <span>{val === "newest" ? "Newest First" : "Oldest First"}</span>
+                    {activeSort === val && <span style={s.panelCheck}>{"\u2713"}</span>}
+                  </button>
+                ))}
+                <div style={s.panelDivider} />
+                <div style={s.panelSectionTitle}>Category</div>
+                {Object.entries(CATEGORY_LABELS).map(([val, label]) => (
+                  <button
+                    key={val}
+                    style={{
+                      ...s.panelItem,
+                      ...(activeFilter === val ? s.panelItemActive : {}),
+                    }}
+                    onClick={() => {
+                      haptics.light();
+                      setActiveFilter(val);
+                      setDropdownOpen(false);
+                    }}
+                  >
+                    <span>{label}</span>
+                    {activeFilter === val && <span style={s.panelCheck}>{"\u2713"}</span>}
+                  </button>
+                ))}
               </div>
-            </>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ CONTENT GRID ═══ */}
+      <section style={s.contentSection}>
+        <div style={s.wrap}>
+          {/* Results Bar */}
+          <div style={s.resultsBar}>
+            <span style={s.resultsCount}>{resultsText}</span>
+          </div>
+
+          {/* Grid */}
+          {filteredEntries.length > 0 ? (
+            <div ref={gridRef} className="vault-grid" style={s.grid}>
+              {filteredEntries.map((entry, i) => (
+                <VaultCard
+                  key={entry.id}
+                  entry={entry}
+                  index={i}
+                  prefersReducedMotion={prefersReducedMotion}
+                />
+              ))}
+            </div>
+          ) : (
+            <div style={s.noResults}>
+              No assets found matching those parameters.
+            </div>
           )}
-        </DialogContent>
-      </Dialog>
-    </>
+        </div>
+      </section>
+
+      {/* ═══ TERMINAL FOOTER ═══ */}
+      <footer ref={footerRef} style={{ ...s.terminalFooter, ...reveal(footerVisible) }}>
+        <a href="#" style={s.indexLink}>[ MASTER INDEX ]</a>
+      </footer>
+    </div>
   );
 };
+
+// ------------------------------------------------------------------
+// STYLES
+// ------------------------------------------------------------------
+const s: Record<string, React.CSSProperties> = {
+  page: {
+    background: "#000000",
+    color: "rgba(255,255,255,0.95)",
+    fontFamily: "'Inter', sans-serif",
+    WebkitFontSmoothing: "antialiased",
+    lineHeight: 1.6,
+    minHeight: "100vh",
+  },
+  wrap: {
+    maxWidth: 1000,
+    margin: "0 auto",
+    padding: "0 24px",
+  },
+
+  // ── Vault Header ──
+  vaultHeader: {
+    padding: "120px 0 48px",
+    textAlign: "center",
+    position: "relative",
+  },
+  vaultHeaderGlow: {
+    position: "absolute",
+    top: "-10%",
+    left: 0,
+    right: 0,
+    height: "70%",
+    background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.06) 0%, transparent 70%)",
+    pointerEvents: "none",
+  },
+  pageTitle: {
+    fontFamily: "'Bebas Neue', sans-serif",
+    fontSize: "clamp(3.5rem, 7vw, 5rem)",
+    letterSpacing: "0.04em",
+    textTransform: "uppercase",
+    lineHeight: 1,
+    color: "rgba(255,255,255,0.95)",
+    position: "relative",
+    zIndex: 1,
+    margin: 0,
+  },
+  vaultSub: {
+    fontFamily: "'Inter', sans-serif",
+    fontSize: 14,
+    color: "rgba(255,255,255,0.45)",
+    marginTop: 12,
+    position: "relative",
+    zIndex: 1,
+  },
+
+  // ── Pinned Section ──
+  pinnedSection: {
+    padding: "0 0 48px",
+  },
+  pinnedGrid: {
+    display: "grid",
+    gridTemplateColumns: "1.4fr 1fr",
+    gap: 20,
+  },
+  pinnedCard: {
+    borderRadius: 12,
+    position: "relative",
+    overflow: "hidden",
+    textAlign: "left",
+    cursor: "pointer",
+    textDecoration: "none",
+    display: "block",
+    transition: "all 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
+    color: "inherit",
+  },
+  pinnedPrimary: {
+    background: "#050505",
+    border: "1px solid rgba(212,175,55,0.25)",
+    boxShadow: "0 16px 40px rgba(0,0,0,0.8), 0 0 40px rgba(212,175,55,0.03)",
+    padding: "32px 28px",
+  },
+  pinnedPrimaryHover: {
+    transform: "translateY(-3px)",
+    borderColor: "#D4AF37",
+    boxShadow: "0 20px 50px rgba(0,0,0,0.9), 0 0 50px rgba(212,175,55,0.12)",
+  },
+  pinnedPrimaryTopLine: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 2,
+    background: "linear-gradient(90deg, transparent, #D4AF37, transparent)",
+  },
+  pinnedEyebrow: {
+    fontFamily: "'Roboto Mono', monospace",
+    fontSize: 10,
+    letterSpacing: "0.15em",
+    textTransform: "uppercase",
+    color: "#D4AF37",
+    marginBottom: 10,
+    display: "block",
+  },
+  pinnedPrimaryTitle: {
+    fontFamily: "'Bebas Neue', sans-serif",
+    fontSize: "2.4rem",
+    color: "#fff",
+    lineHeight: 1,
+    letterSpacing: "0.03em",
+    marginBottom: 12,
+    margin: 0,
+    marginTop: 0,
+  },
+  pinnedPrimaryDesc: {
+    fontFamily: "'Inter', sans-serif",
+    fontSize: 14,
+    color: "rgba(255,255,255,0.70)",
+    lineHeight: 1.6,
+    marginTop: 12,
+  },
+  pinnedPrimaryFooter: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginTop: 20,
+    paddingTop: 16,
+    borderTop: "1px solid rgba(255,255,255,0.08)",
+  },
+  pinnedBadge: {
+    fontFamily: "'Roboto Mono', monospace",
+    fontSize: 10,
+    textTransform: "uppercase",
+    letterSpacing: "0.15em",
+    color: "#000",
+    background: "#D4AF37",
+    padding: "6px 12px",
+    borderRadius: 4,
+    fontWeight: 600,
+    boxShadow: "0 0 12px rgba(212,175,55,0.4)",
+  },
+  pinnedArrow: {
+    color: "rgba(255,255,255,0.45)",
+    fontSize: 16,
+    transition: "all 0.3s",
+  },
+  pinnedArrowHover: {
+    color: "#D4AF37",
+    transform: "translateX(6px)",
+  },
+
+  pinnedSecondary: {
+    background: "#050505",
+    border: "1px solid rgba(212,175,55,0.15)",
+    boxShadow: "0 16px 40px rgba(0,0,0,0.6)",
+    padding: "28px 24px",
+    display: "flex",
+    flexDirection: "column",
+  },
+  pinnedSecondaryHover: {
+    transform: "translateY(-3px)",
+    borderColor: "rgba(212,175,55,0.25)",
+    boxShadow: "0 20px 50px rgba(0,0,0,0.8), 0 0 20px rgba(212,175,55,0.05)",
+  },
+  pinnedSecondaryTopLine: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 1,
+    background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.5), transparent)",
+  },
+  pinnedSecondaryTitle: {
+    fontFamily: "'Bebas Neue', sans-serif",
+    fontSize: "2rem",
+    color: "#fff",
+    lineHeight: 1,
+    letterSpacing: "0.03em",
+    marginBottom: 10,
+    margin: 0,
+  },
+  pinnedSecondaryDesc: {
+    fontFamily: "'Inter', sans-serif",
+    fontSize: 13,
+    color: "rgba(255,255,255,0.70)",
+    lineHeight: 1.5,
+    marginTop: 10,
+  },
+  pinnedSecondaryFooter: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginTop: "auto",
+    paddingTop: 16,
+    borderTop: "1px solid rgba(255,255,255,0.08)",
+  },
+  pinnedRead: {
+    fontFamily: "'Roboto Mono', monospace",
+    fontSize: 10,
+    letterSpacing: "0.1em",
+    textTransform: "uppercase",
+    color: "rgba(255,255,255,0.45)",
+  },
+
+  // ── Ruled Divider ──
+  ruledDivider: {
+    display: "flex",
+    alignItems: "center",
+    gap: 12,
+    marginBottom: 32,
+  },
+  ruledLine: {
+    flex: 1,
+    height: 1,
+    background: "rgba(212,175,55,0.25)",
+  },
+
+  // ── Command Center ──
+  commandCenter: {
+    position: "sticky",
+    top: 0,
+    zIndex: 50,
+    background: "rgba(0,0,0,0.88)",
+    backdropFilter: "blur(24px)",
+    WebkitBackdropFilter: "blur(24px)",
+    borderBottom: "1px solid rgba(255,255,255,0.08)",
+    padding: "20px 0",
+    boxShadow: "0 10px 40px -10px rgba(0,0,0,0.9)",
+  },
+  commandInner: {
+    display: "flex",
+    alignItems: "center",
+    gap: 16,
+    maxWidth: 1000,
+    margin: "0 auto",
+    padding: "0 24px",
+  },
+  searchWrap: {
+    flex: 1,
+    position: "relative",
+  },
+  searchIcon: {
+    position: "absolute",
+    left: 20,
+    top: "50%",
+    transform: "translateY(-50%)",
+    width: 18,
+    height: 18,
+    color: "rgba(255,255,255,0.45)",
+    pointerEvents: "none",
+    transition: "color 0.3s",
+  },
+  searchInput: {
+    width: "100%",
+    background: "rgba(255,255,255,0.03)",
+    border: "1px solid rgba(255,255,255,0.08)",
+    borderRadius: 12,
+    color: "rgba(255,255,255,0.95)",
+    fontFamily: "'Inter', sans-serif",
+    fontSize: 15,
+    padding: "14px 44px 14px 52px",
+    outline: "none",
+    transition: "all 0.3s",
+    boxSizing: "border-box",
+  },
+  clearSearch: {
+    position: "absolute",
+    right: 14,
+    top: "50%",
+    transform: "translateY(-50%)",
+    background: "rgba(255,255,255,0.08)",
+    border: "none",
+    borderRadius: "50%",
+    width: 24,
+    height: 24,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    color: "rgba(255,255,255,0.95)",
+    cursor: "pointer",
+    fontSize: 11,
+    transition: "all 0.2s",
+  },
+  controlDropdown: {
+    position: "relative",
+    flexShrink: 0,
+  },
+  dropdownBtn: {
+    fontFamily: "'Roboto Mono', monospace",
+    fontSize: 11,
+    letterSpacing: "0.08em",
+    textTransform: "uppercase",
+    color: "rgba(255,255,255,0.95)",
+    background: "rgba(255,255,255,0.04)",
+    border: "1px solid rgba(255,255,255,0.08)",
+    borderRadius: 12,
+    padding: "14px 16px",
+    cursor: "pointer",
+    transition: "all 0.2s",
+    display: "flex",
+    alignItems: "center",
+    gap: 8,
+    whiteSpace: "nowrap",
+  },
+  dropdownBtnOpen: {
+    borderColor: "rgba(212,175,55,0.15)",
+    color: "#D4AF37",
+  },
+  dropdownPanel: {
+    position: "absolute",
+    top: "calc(100% + 8px)",
+    right: 0,
+    width: 240,
+    background: "rgba(8,8,8,0.98)",
+    border: "1px solid rgba(255,255,255,0.08)",
+    borderRadius: 12,
+    backdropFilter: "blur(20px)",
+    boxShadow: "0 15px 40px rgba(0,0,0,0.9)",
+    display: "flex",
+    flexDirection: "column",
+    zIndex: 100,
+    padding: "8px 0",
+  },
+  panelSectionTitle: {
+    fontFamily: "'Roboto Mono', monospace",
+    fontSize: 10,
+    letterSpacing: "0.15em",
+    textTransform: "uppercase",
+    color: "#D4AF37",
+    padding: "12px 20px 8px",
+    fontWeight: 600,
+    opacity: 0.6,
+  },
+  panelDivider: {
+    height: 1,
+    background: "rgba(255,255,255,0.08)",
+    margin: "8px 0",
+  },
+  panelItem: {
+    padding: "10px 20px",
+    background: "transparent",
+    border: "none",
+    borderLeft: "2px solid transparent",
+    color: "rgba(255,255,255,0.45)",
+    textAlign: "left",
+    fontFamily: "'Inter', sans-serif",
+    fontSize: 13,
+    fontWeight: 500,
+    cursor: "pointer",
+    transition: "all 0.15s",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: "100%",
+  },
+  panelItemActive: {
+    color: "#D4AF37",
+    background: "rgba(212,175,55,0.03)",
+    borderLeftColor: "#D4AF37",
+  },
+  panelCheck: {
+    fontFamily: "'Roboto Mono', monospace",
+    fontSize: 12,
+  },
+
+  // ── Content Section ──
+  contentSection: {
+    padding: "32px 0 100px",
+  },
+  resultsBar: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingBottom: 24,
+    marginBottom: 28,
+    borderBottom: "1px solid rgba(255,255,255,0.08)",
+  },
+  resultsCount: {
+    fontFamily: "'Roboto Mono', monospace",
+    fontSize: 11,
+    color: "rgba(255,255,255,0.45)",
+    letterSpacing: "0.1em",
+    textTransform: "uppercase",
+  },
+
+  // ── Content Cards ──
+  grid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(2, 1fr)",
+    gap: 20,
+  },
+  card: {
+    borderRadius: 12,
+    position: "relative",
+    overflow: "hidden",
+    textAlign: "left",
+    background: "#050505",
+    border: "1px solid rgba(255,255,255,0.08)",
+    boxShadow: "0 16px 40px rgba(0,0,0,0.6)",
+    display: "flex",
+    flexDirection: "column",
+    cursor: "pointer",
+    transition: "all 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
+  },
+  cardHover: {
+    borderColor: "rgba(212,175,55,0.15)",
+    transform: "translateY(-3px)",
+    boxShadow: "0 20px 50px rgba(0,0,0,0.8), 0 0 20px rgba(212,175,55,0.03)",
+  },
+  cardPriority: {
+    borderColor: "rgba(212,175,55,0.25)",
+    boxShadow: "0 16px 40px rgba(0,0,0,0.8), 0 0 30px rgba(212,175,55,0.03)",
+  },
+  cardPriorityHover: {
+    borderColor: "#D4AF37",
+    transform: "translateY(-3px)",
+    boxShadow: "0 20px 50px rgba(0,0,0,0.9), 0 0 40px rgba(212,175,55,0.1)",
+  },
+  cardTopLine: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 1,
+    background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent)",
+    transition: "all 0.3s",
+  },
+  cardTopLineHover: {
+    background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.25), transparent)",
+  },
+  cardTopLinePriority: {
+    height: 2,
+    background: "linear-gradient(90deg, transparent, #D4AF37, transparent)",
+  },
+  cardHeader: {
+    padding: "24px 24px 18px",
+    borderBottom: "1px solid rgba(255,255,255,0.08)",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    gap: 16,
+  },
+  cardHeaderGlossary: {
+    paddingBottom: 14,
+    borderBottom: "none",
+  },
+  cardHeaderText: {
+    flex: 1,
+  },
+  cardEyebrow: {
+    fontFamily: "'Roboto Mono', monospace",
+    fontSize: 10,
+    letterSpacing: "0.15em",
+    textTransform: "uppercase",
+    color: "#D4AF37",
+    marginBottom: 6,
+    display: "block",
+  },
+  cardTitle: {
+    fontFamily: "'Bebas Neue', sans-serif",
+    fontSize: "2rem",
+    color: "#fff",
+    lineHeight: 1,
+    letterSpacing: "0.03em",
+    margin: 0,
+  },
+  cardTitleGlossary: {
+    fontSize: "1.7rem",
+  },
+  cardBadge: {
+    display: "inline-block",
+    fontFamily: "'Roboto Mono', monospace",
+    fontSize: 10,
+    textTransform: "uppercase",
+    letterSpacing: "0.15em",
+    padding: "6px 12px",
+    borderRadius: 4,
+    fontWeight: 600,
+    whiteSpace: "nowrap",
+    flexShrink: 0,
+  },
+  badgeGold: {
+    color: "#000",
+    background: "#D4AF37",
+    boxShadow: "0 0 12px rgba(212,175,55,0.4)",
+  },
+  badgeWhite: {
+    color: "#000",
+    background: "#fff",
+    boxShadow: "0 0 12px rgba(255,255,255,0.2)",
+  },
+  badgeOutline: {
+    color: "#D4AF37",
+    background: "rgba(212,175,55,0.03)",
+    border: "1px solid rgba(212,175,55,0.25)",
+  },
+  badgeDim: {
+    color: "rgba(255,255,255,0.45)",
+    background: "rgba(255,255,255,0.02)",
+    border: "1px solid rgba(255,255,255,0.08)",
+  },
+  cardContent: {
+    padding: "20px 24px 24px",
+    flex: 1,
+    display: "flex",
+    flexDirection: "column",
+  },
+  cardExcerpt: {
+    fontFamily: "'Inter', sans-serif",
+    fontSize: 14,
+    color: "rgba(255,255,255,0.70)",
+    lineHeight: 1.6,
+    display: "-webkit-box",
+    WebkitLineClamp: 3,
+    WebkitBoxOrient: "vertical",
+    overflow: "hidden",
+    margin: 0,
+  },
+  cardBottom: {
+    marginTop: "auto",
+    paddingTop: 20,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  cardMeta: {
+    display: "flex",
+    alignItems: "center",
+    gap: 12,
+  },
+  cardDate: {
+    fontFamily: "'Roboto Mono', monospace",
+    fontSize: 10,
+    letterSpacing: "0.08em",
+    color: "rgba(255,255,255,0.45)",
+    opacity: 0.7,
+  },
+  cardRead: {
+    fontFamily: "'Roboto Mono', monospace",
+    fontSize: 10,
+    letterSpacing: "0.1em",
+    textTransform: "uppercase",
+    color: "rgba(255,255,255,0.45)",
+  },
+  metaDot: {
+    color: "rgba(255,255,255,0.08)",
+    fontSize: 8,
+  },
+  cardArrow: {
+    color: "rgba(255,255,255,0.45)",
+    fontSize: 16,
+    transition: "all 0.3s",
+  },
+  cardArrowHover: {
+    color: "#D4AF37",
+    transform: "translateX(6px)",
+  },
+
+  // ── No Results ──
+  noResults: {
+    textAlign: "center",
+    padding: "80px 20px",
+    color: "rgba(255,255,255,0.45)",
+    fontFamily: "'Roboto Mono', monospace",
+    fontSize: 12,
+    letterSpacing: "0.1em",
+    textTransform: "uppercase",
+    background: "rgba(255,255,255,0.02)",
+    borderRadius: 12,
+    border: "1px dashed rgba(255,255,255,0.08)",
+  },
+
+  // ── Terminal Footer ──
+  terminalFooter: {
+    padding: "0 0 80px",
+    textAlign: "center",
+  },
+  indexLink: {
+    display: "inline-flex",
+    alignItems: "center",
+    gap: 8,
+    fontFamily: "'Roboto Mono', monospace",
+    fontSize: 12,
+    color: "rgba(255,255,255,0.45)",
+    letterSpacing: "0.2em",
+    textTransform: "uppercase",
+    textDecoration: "none",
+    paddingBottom: 4,
+    borderBottom: "1px solid transparent",
+    transition: "all 0.3s",
+  },
+};
+
+// ── Responsive media query injection ──
+const RESPONSIVE_STYLE_ID = "vault-responsive";
+if (typeof document !== "undefined" && !document.getElementById(RESPONSIVE_STYLE_ID)) {
+  const style = document.createElement("style");
+  style.id = RESPONSIVE_STYLE_ID;
+  style.textContent = `
+    @media (max-width: 767px) {
+      .vault-pinned-grid { grid-template-columns: 1fr !important; }
+      .vault-command-inner { flex-direction: column !important; gap: 12px !important; }
+      .vault-search-wrap { width: 100% !important; }
+      .vault-control-dropdown { width: 100% !important; }
+      .vault-dropdown-btn { width: 100% !important; justify-content: space-between !important; }
+      .vault-dropdown-panel { width: 100% !important; left: 0 !important; right: auto !important; }
+      .vault-grid { grid-template-columns: 1fr !important; }
+      .vault-card-header { flex-direction: column !important; gap: 10px !important; }
+    }
+  `;
+  document.head.appendChild(style);
+}
 
 export default Resources;
