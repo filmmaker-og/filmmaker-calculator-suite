@@ -22,19 +22,6 @@ type VaultEntry = {
 
 const VAULT_ENTRIES: VaultEntry[] = [
   {
-    id: "recoupment-waterfall",
-    title: "The Mechanics of the Recoupment Waterfall",
-    excerpt: "Every dollar your film earns flows through a predetermined sequence of tiers before anyone sees profit. Off-the-tops, senior debt, equity, and net backend.",
-    category: "financing",
-    type: "masterclass",
-    date: "2026-03-10",
-    readTime: "12 min read",
-    href: "#",
-    priority: true,
-    badge: "gold",
-    badgeLabel: "Masterclass",
-  },
-  {
     id: "artists-equity",
     title: "Why The Artists Equity Model Changes The Math",
     excerpt: "Defer fees. Stack tax credits. Lower the cash basis. Sell for market value. The spread is your profit. Here's the waterfall behind the model.",
@@ -350,9 +337,6 @@ const Resources = () => {
               <div style={s.pinnedPrimaryTopLine} />
               <span style={s.pinnedEyebrow}>Cornerstone</span>
               <h2 style={s.pinnedPrimaryTitle}>What Is a Recoupment Waterfall</h2>
-              <p style={s.pinnedPrimaryDesc}>
-                Every dollar your film earns flows through a predetermined sequence of tiers before anyone sees profit. This is the complete breakdown — from gross receipts to net backend.
-              </p>
               <div style={s.pinnedPrimaryFooter}>
                 <span style={s.pinnedBadge}>Start Here</span>
                 <span style={{
@@ -377,9 +361,6 @@ const Resources = () => {
               <div style={s.pinnedSecondaryTopLine} />
               <span style={s.pinnedEyebrow}>Reference</span>
               <h2 style={s.pinnedSecondaryTitle}>15 Terms Your Investors Expect You to Know</h2>
-              <p style={s.pinnedSecondaryDesc}>
-                CAM fees, waterfalls, pari passu, preferred return — the vocabulary of film finance decoded.
-              </p>
               <div style={s.pinnedSecondaryFooter}>
                 <span style={s.pinnedRead}>Glossary</span>
                 <span style={{
@@ -394,7 +375,7 @@ const Resources = () => {
 
       {/* ═══ RULED DIVIDER ═══ */}
       <div style={s.wrap}>
-        <div style={s.ruledDivider}>
+        <div className="vault-ruled-divider" style={s.ruledDivider}>
           <div style={s.ruledLine} />
         </div>
       </div>
@@ -416,6 +397,7 @@ const Resources = () => {
             </svg>
             <input
               ref={searchRef}
+              className="vault-search-input"
               type="text"
               placeholder="Search the vault..."
               value={search}
@@ -624,7 +606,7 @@ const s: Record<string, React.CSSProperties> = {
     background: "#050505",
     border: "1px solid rgba(212,175,55,0.25)",
     boxShadow: "0 16px 40px rgba(0,0,0,0.8), 0 0 40px rgba(212,175,55,0.03)",
-    padding: "32px 28px",
+    padding: "24px 24px",
   },
   pinnedPrimaryHover: {
     transform: "translateY(-3px)",
@@ -650,7 +632,7 @@ const s: Record<string, React.CSSProperties> = {
   },
   pinnedPrimaryTitle: {
     fontFamily: "'Bebas Neue', sans-serif",
-    fontSize: "2.4rem",
+    fontSize: "2rem",
     color: "#fff",
     lineHeight: 1,
     letterSpacing: "0.03em",
@@ -658,19 +640,12 @@ const s: Record<string, React.CSSProperties> = {
     margin: 0,
     marginTop: 0,
   },
-  pinnedPrimaryDesc: {
-    fontFamily: "'Inter', sans-serif",
-    fontSize: 14,
-    color: "rgba(255,255,255,0.70)",
-    lineHeight: 1.6,
-    marginTop: 12,
-  },
   pinnedPrimaryFooter: {
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
-    marginTop: 20,
-    paddingTop: 16,
+    marginTop: 16,
+    paddingTop: 12,
     borderTop: "1px solid rgba(255,255,255,0.08)",
   },
   pinnedBadge: {
@@ -699,7 +674,7 @@ const s: Record<string, React.CSSProperties> = {
     background: "#050505",
     border: "1px solid rgba(212,175,55,0.15)",
     boxShadow: "0 16px 40px rgba(0,0,0,0.6)",
-    padding: "28px 24px",
+    padding: "24px 20px",
     display: "flex",
     flexDirection: "column",
   },
@@ -718,26 +693,19 @@ const s: Record<string, React.CSSProperties> = {
   },
   pinnedSecondaryTitle: {
     fontFamily: "'Bebas Neue', sans-serif",
-    fontSize: "2rem",
+    fontSize: "1.7rem",
     color: "#fff",
     lineHeight: 1,
     letterSpacing: "0.03em",
     marginBottom: 10,
     margin: 0,
   },
-  pinnedSecondaryDesc: {
-    fontFamily: "'Inter', sans-serif",
-    fontSize: 13,
-    color: "rgba(255,255,255,0.70)",
-    lineHeight: 1.5,
-    marginTop: 10,
-  },
   pinnedSecondaryFooter: {
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
     marginTop: "auto",
-    paddingTop: 16,
+    paddingTop: 12,
     borderTop: "1px solid rgba(255,255,255,0.08)",
   },
   pinnedRead: {
@@ -792,14 +760,14 @@ const s: Record<string, React.CSSProperties> = {
     transform: "translateY(-50%)",
     width: 18,
     height: 18,
-    color: "rgba(255,255,255,0.45)",
+    color: "rgba(212,175,55,0.35)",
     pointerEvents: "none",
     transition: "color 0.3s",
   },
   searchInput: {
     width: "100%",
     background: "rgba(255,255,255,0.03)",
-    border: "1px solid rgba(255,255,255,0.08)",
+    border: "1px solid rgba(212,175,55,0.08)",
     borderRadius: 12,
     color: "rgba(255,255,255,0.95)",
     fontFamily: "'Inter', sans-serif",
@@ -919,7 +887,7 @@ const s: Record<string, React.CSSProperties> = {
     alignItems: "center",
     paddingBottom: 24,
     marginBottom: 28,
-    borderBottom: "1px solid rgba(255,255,255,0.08)",
+    borderBottom: "none",
   },
   resultsCount: {
     fontFamily: "'Roboto Mono', monospace",
@@ -1011,7 +979,7 @@ const s: Record<string, React.CSSProperties> = {
     margin: 0,
   },
   cardTitleGlossary: {
-    fontSize: "1.7rem",
+    fontSize: "1.5rem",
   },
   cardBadge: {
     display: "inline-block",
@@ -1118,7 +1086,7 @@ const s: Record<string, React.CSSProperties> = {
 
   // ── Terminal Footer ──
   terminalFooter: {
-    padding: "0 0 80px",
+    padding: "48px 0 80px",
     textAlign: "center",
   },
   indexLink: {
@@ -1143,15 +1111,30 @@ if (typeof document !== "undefined" && !document.getElementById(RESPONSIVE_STYLE
   const style = document.createElement("style");
   style.id = RESPONSIVE_STYLE_ID;
   style.textContent = `
+    .vault-search-input::placeholder { color: rgba(255,255,255,0.35) !important; }
     @media (max-width: 767px) {
-      .vault-pinned-grid { grid-template-columns: 1fr !important; }
-      .vault-command-inner { flex-direction: column !important; gap: 12px !important; }
-      .vault-search-wrap { width: 100% !important; }
-      .vault-control-dropdown { width: 100% !important; }
-      .vault-dropdown-btn { width: 100% !important; justify-content: space-between !important; }
-      .vault-dropdown-panel { width: 100% !important; left: 0 !important; right: auto !important; }
+      .vault-pinned-grid {
+        display: flex !important;
+        overflow-x: auto !important;
+        scroll-snap-type: x mandatory !important;
+        -webkit-overflow-scrolling: touch !important;
+        gap: 16px !important;
+        padding-bottom: 8px !important;
+        scrollbar-width: none !important;
+      }
+      .vault-pinned-grid::-webkit-scrollbar { display: none !important; }
+      .vault-pinned-grid > a {
+        flex: 0 0 85% !important;
+        scroll-snap-align: start !important;
+        min-width: 0 !important;
+      }
+      .vault-command-inner { gap: 12px !important; }
+      .vault-search-wrap { flex: 1 !important; min-width: 0 !important; }
+      .vault-control-dropdown { flex-shrink: 0 !important; }
+      .vault-dropdown-btn { padding: 14px 12px !important; font-size: 10px !important; }
+      .vault-dropdown-panel { width: 220px !important; right: 0 !important; }
       .vault-grid { grid-template-columns: 1fr !important; }
-      .vault-card-header { flex-direction: column !important; gap: 10px !important; }
+      .vault-ruled-divider { display: none !important; }
     }
   `;
   document.head.appendChild(style);
