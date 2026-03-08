@@ -209,7 +209,7 @@ const VaultCard: React.FC<{
         <span style={{ ...s.cardBadge, ...badgeStyle() }}>{entry.badgeLabel}</span>
       </div>
       <div style={{ ...s.cardContent, ...(isGlossary ? { paddingTop: 0 } : {}) }}>
-        <p style={s.cardExcerpt}>{entry.excerpt}</p>
+        <p className="card-excerpt" style={s.cardExcerpt}>{entry.excerpt}</p>
         <div style={s.cardBottom}>
           <div style={s.cardMeta}>
             <span style={s.cardDate}>{formattedDate}</span>
@@ -772,7 +772,8 @@ const s: Record<string, React.CSSProperties> = {
     color: "rgba(255,255,255,0.95)",
     fontFamily: "'Inter', sans-serif",
     fontSize: 15,
-    padding: "14px 44px 14px 52px",
+    height: 50,
+    padding: "0 44px 0 52px",
     outline: "none",
     transition: "all 0.3s",
     boxSizing: "border-box",
@@ -808,7 +809,8 @@ const s: Record<string, React.CSSProperties> = {
     background: "rgba(255,255,255,0.04)",
     border: "1px solid rgba(255,255,255,0.08)",
     borderRadius: 12,
-    padding: "14px 16px",
+    height: 50,
+    padding: "0 16px",
     cursor: "pointer",
     transition: "all 0.2s",
     display: "flex",
@@ -1111,6 +1113,7 @@ if (typeof document !== "undefined" && !document.getElementById(RESPONSIVE_STYLE
   const style = document.createElement("style");
   style.id = RESPONSIVE_STYLE_ID;
   style.textContent = `
+    a, button { -webkit-tap-highlight-color: transparent; }
     .vault-search-input::placeholder { color: rgba(255,255,255,0.35) !important; }
     @media (max-width: 767px) {
       .vault-pinned-grid {
@@ -1119,7 +1122,8 @@ if (typeof document !== "undefined" && !document.getElementById(RESPONSIVE_STYLE
         scroll-snap-type: x mandatory !important;
         -webkit-overflow-scrolling: touch !important;
         gap: 16px !important;
-        padding-bottom: 8px !important;
+        margin: 0 -24px !important;
+        padding: 0 24px 8px 24px !important;
         scrollbar-width: none !important;
       }
       .vault-pinned-grid::-webkit-scrollbar { display: none !important; }
@@ -1128,15 +1132,17 @@ if (typeof document !== "undefined" && !document.getElementById(RESPONSIVE_STYLE
         scroll-snap-align: start !important;
         min-width: 0 !important;
       }
-      .vault-command-inner { gap: 12px !important; }
+      .vault-command-inner { gap: 8px !important; }
       .vault-search-wrap { flex: 1 !important; min-width: 0 !important; }
+      .vault-search-input { font-size: 16px !important; height: 46px !important; padding: 0 40px 0 44px !important; }
       .vault-control-dropdown { flex-shrink: 0 !important; }
-      .vault-dropdown-btn { padding: 14px 12px !important; font-size: 10px !important; }
-      .vault-dropdown-panel { width: 220px !important; right: 0 !important; }
+      .vault-dropdown-btn { padding: 0 12px !important; font-size: 10px !important; height: 46px !important; }
+      .vault-dropdown-panel { width: calc(100vw - 48px) !important; right: 0 !important; }
       .vault-grid { grid-template-columns: 1fr !important; }
       .vault-header { padding-top: 80px !important; }
       .pinned-section { padding-bottom: 32px !important; }
       .vault-ruled-divider { display: none !important; }
+      .card-excerpt { -webkit-line-clamp: 2 !important; }
     }
   `;
   document.head.appendChild(style);
