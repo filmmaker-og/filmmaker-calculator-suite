@@ -306,7 +306,7 @@ const Resources = () => {
   return (
     <div style={s.page}>
       {/* ═══ VAULT HEADER ═══ */}
-      <header ref={headerRef} style={s.vaultHeader}>
+      <header ref={headerRef} className="vault-header" style={s.vaultHeader}>
         <div style={s.vaultHeaderGlow} />
         <div style={s.wrap}>
           <h1 style={{ ...s.pageTitle, ...reveal(headerVisible) }}>
@@ -319,7 +319,7 @@ const Resources = () => {
       </header>
 
       {/* ═══ CORNERSTONE PINNED CARDS ═══ */}
-      <section ref={pinnedRef} style={s.pinnedSection}>
+      <section ref={pinnedRef} className="pinned-section" style={s.pinnedSection}>
         <div style={s.wrap}>
           <div className="vault-pinned-grid" style={s.pinnedGrid}>
             {/* Primary Cornerstone */}
@@ -603,7 +603,7 @@ const s: Record<string, React.CSSProperties> = {
     color: "inherit",
   },
   pinnedPrimary: {
-    background: "#050505",
+    background: "#0A0A0A",
     border: "1px solid rgba(212,175,55,0.25)",
     boxShadow: "0 16px 40px rgba(0,0,0,0.8), 0 0 40px rgba(212,175,55,0.03)",
     padding: "24px 24px",
@@ -671,7 +671,7 @@ const s: Record<string, React.CSSProperties> = {
   },
 
   pinnedSecondary: {
-    background: "#050505",
+    background: "#0A0A0A",
     border: "1px solid rgba(212,175,55,0.15)",
     boxShadow: "0 16px 40px rgba(0,0,0,0.6)",
     padding: "24px 20px",
@@ -767,7 +767,7 @@ const s: Record<string, React.CSSProperties> = {
   searchInput: {
     width: "100%",
     background: "rgba(255,255,255,0.03)",
-    border: "1px solid rgba(212,175,55,0.08)",
+    border: "1px solid rgba(212,175,55,0.15)",
     borderRadius: 12,
     color: "rgba(255,255,255,0.95)",
     fontFamily: "'Inter', sans-serif",
@@ -908,8 +908,8 @@ const s: Record<string, React.CSSProperties> = {
     position: "relative",
     overflow: "hidden",
     textAlign: "left",
-    background: "#050505",
-    border: "1px solid rgba(255,255,255,0.08)",
+    background: "#0A0A0A",
+    border: "1px solid rgba(255,255,255,0.15)",
     boxShadow: "0 16px 40px rgba(0,0,0,0.6)",
     display: "flex",
     flexDirection: "column",
@@ -1134,6 +1134,8 @@ if (typeof document !== "undefined" && !document.getElementById(RESPONSIVE_STYLE
       .vault-dropdown-btn { padding: 14px 12px !important; font-size: 10px !important; }
       .vault-dropdown-panel { width: 220px !important; right: 0 !important; }
       .vault-grid { grid-template-columns: 1fr !important; }
+      .vault-header { padding-top: 80px !important; }
+      .pinned-section { padding-bottom: 32px !important; }
       .vault-ruled-divider { display: none !important; }
     }
   `;
