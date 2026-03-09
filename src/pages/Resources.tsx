@@ -263,6 +263,9 @@ const Resources = () => {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
 
+  // Search focus state
+  const [searchInputFocused, setSearchInputFocused] = useState(false);
+
   // Pinned card hover states
   const [pinnedPrimaryHover, setPinnedPrimaryHover] = useState(false);
   const [pinnedSecondaryHover, setPinnedSecondaryHover] = useState(false);
@@ -402,11 +405,29 @@ const Resources = () => {
               placeholder="Search the vault..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              style={s.searchInput}
+              onFocus={() => {
+                setSearchInputFocused(true);
+                if (window.innerWidth <= 767) {
+                  window.dispatchEvent(new Event('vault-search-focus'));
+                }
+              }}
+              onBlur={() => {
+                setSearchInputFocused(false);
+                window.dispatchEvent(new Event('vault-search-blur'));
+              }}
+              style={{
+                ...s.searchInput,
+                ...(searchInputFocused ? {
+                  borderColor: "rgba(212,175,55,0.38)",
+                  background: "rgba(212,175,55,0.05)",
+                  boxShadow: "0 0 16px rgba(212,175,55,0.06)",
+                } : {}),
+              }}
               autoComplete="off"
             />
             {search && (
               <button
+                className="vault-clear-search"
                 onClick={handleClearSearch}
                 style={s.clearSearch}
                 aria-label="Clear search"
@@ -425,13 +446,27 @@ const Resources = () => {
                 setDropdownOpen((o) => !o);
               }}
               className="vault-dropdown-btn"
+              data-has-filter={(activeFilter !== "all" || activeSort !== "newest") ? "true" : "false"}
               style={{
                 ...s.dropdownBtn,
                 ...(dropdownOpen ? s.dropdownBtnOpen : {}),
               }}
             >
-              <span>{dropdownLabel}</span>
+              <span className="vault-dropdown-text">{dropdownLabel}</span>
               <svg
+                className="vault-dropdown-mobile-icon"
+                style={{ display: "none" }}
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+              </svg>
+              <svg
+                className="vault-dropdown-chevron"
                 style={{
                   width: 12,
                   height: 12,
@@ -497,9 +532,11 @@ const Resources = () => {
       <section style={s.contentSection}>
         <div style={s.wrap}>
           {/* Results Bar */}
-          <div style={s.resultsBar}>
-            <span style={s.resultsCount}>{resultsText}</span>
-          </div>
+          {search && (
+            <div style={s.resultsBar}>
+              <span style={s.resultsCount}>{resultsText}</span>
+            </div>
+          )}
 
           {/* Grid */}
           {filteredEntries.length > 0 ? (
@@ -549,7 +586,7 @@ const s: Record<string, React.CSSProperties> = {
 
   // ── Vault Header ──
   vaultHeader: {
-    padding: "120px 0 48px",
+    padding: "48px 0 40px",
     textAlign: "center",
     position: "relative",
   },
@@ -737,6 +774,7 @@ const s: Record<string, React.CSSProperties> = {
     background: "rgba(0,0,0,0.88)",
     backdropFilter: "blur(24px)",
     WebkitBackdropFilter: "blur(24px)",
+    borderTop: "1px solid rgba(212,175,55,0.08)",
     borderBottom: "1px solid rgba(255,255,255,0.08)",
     padding: "20px 0",
     boxShadow: "0 10px 40px -10px rgba(0,0,0,0.9)",
@@ -766,8 +804,8 @@ const s: Record<string, React.CSSProperties> = {
   },
   searchInput: {
     width: "100%",
-    background: "rgba(255,255,255,0.03)",
-    border: "1px solid rgba(212,175,55,0.15)",
+    background: "rgba(212,175,55,0.03)",
+    border: "1px solid rgba(212,175,55,0.25)",
     borderRadius: 12,
     color: "rgba(255,255,255,0.95)",
     fontFamily: "'Inter', sans-serif",
@@ -780,20 +818,20 @@ const s: Record<string, React.CSSProperties> = {
   },
   clearSearch: {
     position: "absolute",
-    right: 14,
+    right: 8,
     top: "50%",
     transform: "translateY(-50%)",
     background: "rgba(255,255,255,0.08)",
     border: "none",
     borderRadius: "50%",
-    width: 24,
-    height: 24,
+    width: 36,
+    height: 36,
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
     color: "rgba(255,255,255,0.95)",
     cursor: "pointer",
-    fontSize: 11,
+    fontSize: 14,
     transition: "all 0.2s",
   },
   controlDropdown: {
@@ -801,6 +839,7 @@ const s: Record<string, React.CSSProperties> = {
     flexShrink: 0,
   },
   dropdownBtn: {
+    position: "relative",
     fontFamily: "'Roboto Mono', monospace",
     fontSize: 11,
     letterSpacing: "0.08em",
@@ -853,7 +892,7 @@ const s: Record<string, React.CSSProperties> = {
     margin: "8px 0",
   },
   panelItem: {
-    padding: "10px 20px",
+    padding: "16px 20px",
     background: "transparent",
     border: "none",
     borderLeft: "2px solid transparent",
@@ -911,7 +950,7 @@ const s: Record<string, React.CSSProperties> = {
     overflow: "hidden",
     textAlign: "left",
     background: "#0A0A0A",
-    border: "1px solid rgba(255,255,255,0.15)",
+    border: "1px solid rgba(212,175,55,0.15)",
     boxShadow: "0 16px 40px rgba(0,0,0,0.6)",
     display: "flex",
     flexDirection: "column",
@@ -919,7 +958,7 @@ const s: Record<string, React.CSSProperties> = {
     transition: "all 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
   },
   cardHover: {
-    borderColor: "rgba(212,175,55,0.15)",
+    borderColor: "rgba(212,175,55,0.25)",
     transform: "translateY(-3px)",
     boxShadow: "0 20px 50px rgba(0,0,0,0.8), 0 0 20px rgba(212,175,55,0.03)",
   },
@@ -938,7 +977,7 @@ const s: Record<string, React.CSSProperties> = {
     left: 0,
     right: 0,
     height: 1,
-    background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent)",
+    background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.15), transparent)",
     transition: "all 0.3s",
   },
   cardTopLineHover: {
@@ -1128,18 +1167,43 @@ if (typeof document !== "undefined" && !document.getElementById(RESPONSIVE_STYLE
       }
       .vault-pinned-grid::-webkit-scrollbar { display: none !important; }
       .vault-pinned-grid > a {
-        flex: 0 0 85% !important;
+        flex: 0 0 78% !important;
         scroll-snap-align: start !important;
         min-width: 0 !important;
+      }
+      .pinned-section .wrap { position: relative !important; }
+      .pinned-section .wrap::after {
+        content: '';
+        position: absolute;
+        top: 0; right: 0; bottom: 0; width: 40px;
+        background: linear-gradient(to left, #000 0%, transparent 100%);
+        pointer-events: none;
+        z-index: 10;
       }
       .vault-command-inner { gap: 8px !important; }
       .vault-search-wrap { flex: 1 !important; min-width: 0 !important; }
       .vault-search-input { font-size: 16px !important; height: 46px !important; padding: 0 40px 0 44px !important; }
+      .vault-clear-search { width: 44px !important; height: 44px !important; right: 4px !important; }
       .vault-control-dropdown { flex-shrink: 0 !important; }
-      .vault-dropdown-btn { padding: 0 12px !important; font-size: 10px !important; height: 46px !important; }
+      .vault-dropdown-btn {
+        justify-content: center !important;
+        width: 50px !important;
+        height: 50px !important;
+        padding: 0 !important;
+      }
+      .vault-dropdown-btn[data-has-filter="true"]::after {
+        content: '';
+        position: absolute; top: 10px; right: 10px;
+        width: 8px; height: 8px;
+        background: #D4AF37; border-radius: 50%;
+        box-shadow: 0 0 8px rgba(212,175,55,0.6);
+      }
+      .vault-dropdown-text { display: none !important; }
+      .vault-dropdown-mobile-icon { display: block !important; }
+      .vault-dropdown-chevron { display: none !important; }
       .vault-dropdown-panel { width: calc(100vw - 48px) !important; right: 0 !important; }
       .vault-grid { grid-template-columns: 1fr !important; }
-      .vault-header { padding-top: 80px !important; }
+      .vault-header { padding-top: 36px !important; }
       .pinned-section { padding-bottom: 32px !important; }
       .vault-ruled-divider { display: none !important; }
       .card-excerpt { -webkit-line-clamp: 2 !important; }
