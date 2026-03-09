@@ -196,6 +196,10 @@ const Index = () => {
             <h2 style={styles.waterfallH2}>The Recoupment<br /><span style={{ color: "#D4AF37" }}>Waterfall</span></h2>
           </div>
 
+          <p style={{ ...styles.waterfallExplainer, ...reveal(waterfallVisible) }}>
+            A recoupment waterfall maps who gets paid, in what order, and how much — before you see a dollar of profit.
+          </p>
+
           {/* Acquisition callout */}
           <div style={{ ...styles.acquisitionCallout, ...reveal(waterfallVisible, 1) }}>
             <div style={styles.topLineGoldHalf} />
@@ -336,8 +340,8 @@ const Index = () => {
                 ))}
               </div>
               <div style={styles.tierAction}>
-                <button style={styles.btnSnapshot}>GET THE SNAPSHOT</button>
-                <a href="#" style={styles.detailsLink}>See full details →</a>
+                <button onClick={() => navigate("/store/snapshot")} style={styles.btnSnapshot}>GET THE SNAPSHOT</button>
+                <a href="/store/snapshot" onClick={(e) => { e.preventDefault(); navigate("/store/snapshot"); }} style={styles.detailsLink}>See full details →</a>
               </div>
             </div>
 
@@ -368,11 +372,11 @@ const Index = () => {
                 ))}
               </div>
               <div style={styles.tierAction}>
-                <button style={styles.btnPackage}>
+                <button onClick={() => navigate("/store/the-full-package")} style={styles.btnPackage}>
                   <span style={{ position: "relative", zIndex: 1 }}>GET THE PACKAGE</span>
                   <div style={styles.btnPackageShimmer} />
                 </button>
-                <a href="#" style={styles.detailsLink}>See full details →</a>
+                <a href="/store/the-full-package" onClick={(e) => { e.preventDefault(); navigate("/store/the-full-package"); }} style={styles.detailsLink}>See full details →</a>
               </div>
             </div>
           </div>
@@ -413,7 +417,7 @@ const Index = () => {
           <div style={{ ...styles.closerCard, ...reveal(closerVisible) }}>
             <div style={styles.topLineGoldBright} />
             <h2 style={styles.closerH2}>Your Investors<br /><span style={{ color: "#D4AF37", display: "block" }}>Will Ask.</span></h2>
-            <p style={styles.closerBody}>Stop guessing your backend. Build the model and walk into every pitch knowing exactly where the money goes.</p>
+            <p style={styles.closerBody}>Stop guessing your backend. Build the model before the pitch.</p>
             <button onClick={handleCTA} style={styles.ctaBtn}>
               <span style={{ position: "relative", zIndex: 1 }}>RUN MY WATERFALL</span>
               <div style={styles.ctaShimmer} />
@@ -476,7 +480,7 @@ const styles: Record<string, React.CSSProperties> = {
   /* ── § 1 HERO ── */
   hero: {
     position: "relative", textAlign: "center",
-    background: "#000", padding: "24px 24px 48px",
+    background: "#000", padding: "24px 24px 32px",
   },
   heroGlow: {
     position: "absolute", top: "-10%", left: 0, right: 0, height: "65%", pointerEvents: "none",
@@ -491,11 +495,11 @@ const styles: Record<string, React.CSSProperties> = {
   heroSub: {
     fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.5rem", textAlign: "center",
     marginBottom: "28px", lineHeight: 1.1, color: "rgba(255,255,255,0.78)",
-    marginTop: "8px", whiteSpace: "nowrap",
+    marginTop: "8px",
   },
 
   /* ── § 4 HOW IT WORKS ── */
-  howSection: { background: "#000", padding: "64px 0 0" },
+  howSection: { background: "#000", padding: "48px 0 0" },
   howHeader: { textAlign: "center", padding: "16px 20px 28px" },
   howH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.6rem", color: "#fff", lineHeight: 0.95 },
   stepsContainer: { display: "flex", flexDirection: "column", gap: "1px", background: "rgba(255,255,255,0.06)" },
@@ -524,6 +528,11 @@ const styles: Record<string, React.CSSProperties> = {
   waterfallSection: { background: "#000", padding: "64px 0 0" },
   waterfallHeader: { textAlign: "center", padding: "0 20px 24px" },
   waterfallH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3rem", color: "#fff", lineHeight: 0.95 },
+  waterfallExplainer: {
+    fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "rgba(255,255,255,0.55)",
+    lineHeight: 1.55, textAlign: "center", padding: "0 24px", marginBottom: "24px",
+    maxWidth: "380px", marginLeft: "auto", marginRight: "auto",
+  },
   acquisitionCallout: {
     position: "relative", overflow: "hidden", textAlign: "center", margin: "0 20px 10px",
     background: "#0a0a0a", border: "1px solid rgba(212,175,55,0.20)", borderRadius: "12px", padding: "18px 16px",
@@ -595,7 +604,7 @@ const styles: Record<string, React.CSSProperties> = {
 
   /* ── § 7 ARSENAL ── */
   arsenalSection: { background: "#000", textAlign: "center", padding: "64px 0 0" },
-  arsenalHeader: { padding: "0 20px 24px" },
+  arsenalHeader: { padding: "0 20px 16px" },
   arsenalH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3rem", color: "#fff", lineHeight: 0.95 },
   arsenalSub: { fontFamily: "'Inter', sans-serif", fontSize: "13px", marginTop: "10px", color: "rgba(255,255,255,0.70)", lineHeight: 1.6 },
   arsenalCards: { display: "flex", flexDirection: "column", gap: "24px", margin: "0 20px" },
@@ -638,7 +647,7 @@ const styles: Record<string, React.CSSProperties> = {
     display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "16px",
   },
   tierTitleAlt: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "2.2rem", color: "#fff", lineHeight: 1, letterSpacing: "0.04em", marginBottom: "8px" },
-  tierSubAlt: { fontFamily: "'Inter', sans-serif", fontSize: "13px", fontStyle: "italic", color: "rgba(212,175,55,0.8)", lineHeight: 1.4 },
+  tierSubAlt: { fontFamily: "'Inter', sans-serif", fontSize: "13px", color: "rgba(212,175,55,0.8)", lineHeight: 1.4 },
   tierIntro: { fontFamily: "'Inter', sans-serif", fontSize: "15px", color: "rgba(255,255,255,0.7)", lineHeight: 1.5, margin: "24px 24px 0" },
   tierChecklist: { padding: "24px", display: "flex", flexDirection: "column", gap: "16px" },
   checkItem: { display: "flex", gap: "12px", alignItems: "flex-start" },
@@ -674,7 +683,7 @@ const styles: Record<string, React.CSSProperties> = {
     padding: "6px 12px", borderRadius: "4px", fontWeight: 600, whiteSpace: "nowrap", flexShrink: 0,
     boxShadow: "0 0 12px rgba(212,175,55,0.4)",
   },
-  detailsLink: { display: "block", textAlign: "center", fontFamily: "'Inter', sans-serif", fontSize: "12px", color: "rgba(255,255,255,0.35)", textDecoration: "none", marginTop: "16px" },
+  detailsLink: { display: "block", textAlign: "center", fontFamily: "'Inter', sans-serif", fontSize: "12px", color: "rgba(212,175,55,0.50)", textDecoration: "none", marginTop: "16px", cursor: "pointer" },
 
   /* ── Top line helpers ── */
   topLineGold: {
@@ -695,7 +704,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
 
   /* ── § 6 REALITY ── */
-  realitySection: { background: "#000", textAlign: "left", padding: "64px 20px 32px" },
+  realitySection: { background: "#000", textAlign: "left", padding: "48px 20px 32px" },
   blockquote: {
     fontFamily: "'Bebas Neue', sans-serif", fontSize: "2.4rem", lineHeight: 0.95, color: "rgba(255,255,255,0.92)",
     borderLeft: "3px solid #D4AF37", paddingLeft: "20px", marginBottom: "32px",
@@ -731,8 +740,8 @@ const styles: Record<string, React.CSSProperties> = {
 
   /* ── § 8 CLOSER ── */
   closerSection: {
-    position: "relative", overflow: "hidden", textAlign: "center", marginTop: "64px",
-    padding: "64px 24px 80px", borderTop: "1px solid rgba(212,175,55,0.20)", background: "#000",
+    position: "relative", overflow: "hidden", textAlign: "center", marginTop: "48px",
+    padding: "48px 24px 80px", borderTop: "1px solid rgba(212,175,55,0.20)", background: "#000",
   },
   closerGlowBottom: {
     position: "absolute", bottom: 0, left: 0, right: 0, height: "80%", pointerEvents: "none",
@@ -744,16 +753,16 @@ const styles: Record<string, React.CSSProperties> = {
   },
   closerCard: {
     position: "relative", zIndex: 1, border: "1px solid rgba(212,175,55,0.42)", borderRadius: "16px",
-    padding: "40px 28px", background: "#000", maxWidth: "360px", margin: "0 auto",
+    padding: "24px 24px 36px", background: "#000", maxWidth: "320px", margin: "0 auto",
     boxShadow: "0 16px 40px rgba(0,0,0,0.8), 0 0 60px rgba(212,175,55,0.1)",
   },
   closerH2: {
-    fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.8rem", color: "#fff", textAlign: "center",
-    lineHeight: 0.95, margin: "12px 0 20px",
+    fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.4rem", color: "#fff", textAlign: "center",
+    lineHeight: 0.95, margin: "4px 0 14px",
   },
   closerBody: {
     fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "rgba(255,255,255,0.75)",
-    lineHeight: 1.65, maxWidth: "280px", margin: "0 auto 28px",
+    lineHeight: 1.5, maxWidth: "280px", margin: "0 auto 24px",
   },
 
   /* ── FOOTER ── */
