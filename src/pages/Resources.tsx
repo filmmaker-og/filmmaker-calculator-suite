@@ -236,6 +236,24 @@ const Resources = () => {
 
   useEffect(() => { window.scrollTo(0, 0); }, []);
 
+  // Track whether AppHeader has scrolled away
+  const [headerGone, setHeaderGone] = useState(false);
+  const lastScrollYRef = useRef(0);
+
+  useEffect(() => {
+    const handler = () => {
+      const currentY = window.scrollY;
+      if (currentY > 80 && currentY > lastScrollYRef.current) {
+        setHeaderGone(true);
+      } else {
+        setHeaderGone(false);
+      }
+      lastScrollYRef.current = currentY;
+    };
+    window.addEventListener('scroll', handler, { passive: true });
+    return () => window.removeEventListener('scroll', handler);
+  }, []);
+
   const prefersReducedMotion =
     typeof window !== "undefined" &&
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -386,6 +404,29 @@ const Resources = () => {
       {/* ═══ COMMAND CENTER (Sticky) ═══ */}
       <section style={s.commandCenter}>
         <div className="vault-command-inner" style={s.commandInner}>
+          {/* Nav escape — visible when header is hidden */}
+          <button
+            onClick={() => {
+              haptics.light();
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            style={{
+              ...s.commandNavTrigger,
+              opacity: headerGone ? 1 : 0,
+              width: headerGone ? "40px" : "0px",
+              padding: headerGone ? undefined : "0",
+              border: headerGone ? "1px solid rgba(212,175,55,0.20)" : "1px solid transparent",
+              overflow: "hidden",
+              transition: "all 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
+            }}
+            aria-label="Back to top"
+          >
+            <span style={s.commandNavLogo}>
+              <span style={{ color: '#D4AF37' }}>F</span>
+              <span style={{ color: 'rgba(255,255,255,0.95)' }}>.O</span>
+            </span>
+          </button>
+
           {/* Search */}
           <div className="vault-search-wrap" style={s.searchWrap}>
             <svg
@@ -584,6 +625,27 @@ const s: Record<string, React.CSSProperties> = {
     padding: "0 24px",
   },
 
+  // ── Command Nav Trigger ──
+  commandNavTrigger: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "40px",
+    height: "40px",
+    borderRadius: "50%",
+    background: "rgba(212,175,55,0.06)",
+    border: "1px solid rgba(212,175,55,0.20)",
+    cursor: "pointer",
+    flexShrink: 0,
+    transition: "all 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
+  },
+  commandNavLogo: {
+    fontFamily: "'Bebas Neue', sans-serif",
+    fontSize: "1rem",
+    letterSpacing: "0.04em",
+    lineHeight: 1,
+  },
+
   // ── Vault Header ──
   vaultHeader: {
     padding: "48px 0 40px",
@@ -621,7 +683,7 @@ const s: Record<string, React.CSSProperties> = {
 
   // ── Pinned Section ──
   pinnedSection: {
-    padding: "0 0 48px",
+    padding: "0 0 32px",
   },
   pinnedGrid: {
     display: "grid",
@@ -758,7 +820,7 @@ const s: Record<string, React.CSSProperties> = {
     display: "flex",
     alignItems: "center",
     gap: 12,
-    marginBottom: 32,
+    marginBottom: 16,
   },
   ruledLine: {
     flex: 1,
@@ -1162,8 +1224,8 @@ if (typeof document !== "undefined" && !document.getElementById(RESPONSIVE_STYLE
         scroll-snap-type: x mandatory !important;
         -webkit-overflow-scrolling: touch !important;
         gap: 16px !important;
-        margin: 0 -24px !important;
-        padding: 0 24px 8px 24px !important;
+        margin: 0 -24px 0 -20px !important;
+        padding: 0 20px 8px 20px !important;
         scrollbar-width: none !important;
       }
       .vault-pinned-grid::-webkit-scrollbar { display: none !important; }
@@ -1205,7 +1267,7 @@ if (typeof document !== "undefined" && !document.getElementById(RESPONSIVE_STYLE
       .vault-dropdown-panel { width: calc(100vw - 48px) !important; right: 0 !important; }
       .vault-grid { grid-template-columns: 1fr !important; }
       .vault-header { padding-top: 36px !important; }
-      .pinned-section { padding-bottom: 32px !important; }
+      .pinned-section { padding-bottom: 16px !important; }
       .vault-ruled-divider { display: none !important; }
       .card-excerpt { -webkit-line-clamp: 2 !important; }
     }
