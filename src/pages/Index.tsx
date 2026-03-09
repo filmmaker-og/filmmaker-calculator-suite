@@ -145,7 +145,7 @@ const Index = () => {
         }
       `}</style>
 
-      <div style={{ minHeight: "100vh", background: "#000", paddingTop: "80px", maxWidth: "430px", margin: "0 auto" }}>
+      <div style={{ minHeight: "100vh", background: "#000", paddingTop: "0px", maxWidth: "430px", margin: "0 auto" }}>
 
         {/* ═══ § 1 HERO ═══ */}
         <section ref={heroRef} style={styles.hero}>
