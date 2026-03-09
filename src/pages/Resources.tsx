@@ -1168,7 +1168,7 @@ if (typeof document !== "undefined" && !document.getElementById(RESPONSIVE_STYLE
       }
       .vault-pinned-grid::-webkit-scrollbar { display: none !important; }
       .vault-pinned-grid > a {
-        flex: 0 0 78% !important;
+        flex: 0 0 calc(100vw - 48px) !important;
         scroll-snap-align: start !important;
         min-width: 0 !important;
       }
