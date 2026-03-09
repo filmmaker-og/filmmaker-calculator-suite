@@ -84,11 +84,11 @@ const s: Record<string, React.CSSProperties> = {
   },
   /* Card header */
   cardHeaderStandard: {
-    padding: "28px 24px 20px",
-    borderBottom: "1px solid rgba(255,255,255,0.04)",
+    padding: "24px 24px 20px",
+    borderBottom: "1px solid rgba(255,255,255,0.06)",
   },
   cardHeaderFeatured: {
-    padding: "28px 24px 20px",
+    padding: "24px 24px 20px",
     borderBottom: "1px solid rgba(212,175,55,0.15)",
   },
   /* Price block */
@@ -211,7 +211,7 @@ const s: Record<string, React.CSSProperties> = {
   /* Name */
   cardName: {
     fontFamily: "'Bebas Neue', sans-serif",
-    fontSize: "1.5rem",
+    fontSize: "2rem",
     letterSpacing: "0.06em",
     color: "rgba(255,255,255,0.95)",
     textTransform: "uppercase" as const,
@@ -509,19 +509,17 @@ const ProductCard = ({
       {/* Top line */}
       <div style={isFeatured ? s.topLineFeatured : s.topLineStandard} />
 
-      {/* Header row */}
+      {/* Header */}
       <div style={isFeatured ? s.cardHeaderFeatured : s.cardHeaderStandard}>
-        <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "12px" }}>
-          <div>
-            <h3 style={s.cardName}>{product.name.toUpperCase()}</h3>
-            {product.pickThisIf && (
-              <p style={s.pickThisIf}>Pick this one if {product.pickThisIf}</p>
-            )}
-          </div>
-          {product.badge && (
+        {product.badge && (
+          <div style={{ marginBottom: "12px" }}>
             <span style={getBadgeStyle(product.badge)}>{product.badge}</span>
-          )}
-        </div>
+          </div>
+        )}
+        <h3 style={s.cardName}>{product.name.toUpperCase()}</h3>
+        {product.pickThisIf && (
+          <p style={s.pickThisIf}>Pick this one if {product.pickThisIf}</p>
+        )}
       </div>
 
       {/* Price block */}
@@ -532,8 +530,11 @@ const ProductCard = ({
         <p style={s.shortDesc}>{product.shortDescription}</p>
       </div>
 
+      {/* Subdivider */}
+      <div style={{ height: "1px", background: "rgba(255,255,255,0.06)", margin: "0 24px" }} />
+
       {/* Features */}
-      <div style={s.featuresBlock}>
+      <div style={{ ...s.featuresBlock, paddingTop: "20px" }}>
         {product.features.map((feature) => (
           <div key={feature} style={s.featureRow}>
             <Check style={{ width: "13px", height: "13px", ...s.featureCheck }} />
@@ -608,19 +609,17 @@ const ServiceCard = ({
       {/* Top line */}
       <div style={isTop ? s.topLineFeatured : s.topLineStandard} />
 
-      {/* Header row */}
+      {/* Header */}
       <div style={isTop ? s.cardHeaderFeatured : s.cardHeaderStandard}>
-        <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "12px" }}>
-          <div>
-            <h3 style={s.cardName}>{product.name.toUpperCase()}</h3>
-            {product.pickThisIf && (
-              <p style={s.pickThisIf}>Pick this one if {product.pickThisIf}</p>
-            )}
-          </div>
-          {product.badge && (
+        {product.badge && (
+          <div style={{ marginBottom: "12px" }}>
             <span style={getBadgeStyle(product.badge)}>{product.badge}</span>
-          )}
-        </div>
+          </div>
+        )}
+        <h3 style={s.cardName}>{product.name.toUpperCase()}</h3>
+        {product.pickThisIf && (
+          <p style={s.pickThisIf}>Pick this one if {product.pickThisIf}</p>
+        )}
       </div>
 
       {/* Price block + turnaround */}
@@ -639,8 +638,11 @@ const ServiceCard = ({
         <p style={s.shortDesc}>{product.shortDescription}</p>
       </div>
 
+      {/* Subdivider */}
+      <div style={{ height: "1px", background: "rgba(255,255,255,0.06)", margin: "0 24px" }} />
+
       {/* Features */}
-      <div style={s.featuresBlock}>
+      <div style={{ ...s.featuresBlock, paddingTop: "20px" }}>
         {product.features.map((feature) => (
           <div key={feature} style={s.featureRow}>
             <Check style={{ width: "13px", height: "13px", ...s.featureCheck }} />
@@ -1009,7 +1011,7 @@ const Store = () => {
          ────────────────────────────────────────────────────────── */}
       <section
         ref={faqRef}
-        style={{ padding: "48px 20px" }}
+        style={{ padding: "48px 20px 24px" }}
       >
         <div style={reveal(faqVisible)}>
           <EyebrowRuled text="Questions" />
