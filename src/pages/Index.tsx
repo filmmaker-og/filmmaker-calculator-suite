@@ -476,7 +476,7 @@ const styles: Record<string, React.CSSProperties> = {
   /* ── § 1 HERO ── */
   hero: {
     position: "relative", textAlign: "center",
-    background: "#000", padding: "64px 24px 48px",
+    background: "#000", padding: "24px 24px 48px",
   },
   heroGlow: {
     position: "absolute", top: "-10%", left: 0, right: 0, height: "65%", pointerEvents: "none",
