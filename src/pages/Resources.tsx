@@ -625,7 +625,7 @@ const s: Record<string, React.CSSProperties> = {
   },
   pinnedGrid: {
     display: "grid",
-    gridTemplateColumns: "1.4fr 1fr",
+    gridTemplateColumns: "repeat(2, 1fr)",
     gap: 20,
   },
   pinnedCard: {
