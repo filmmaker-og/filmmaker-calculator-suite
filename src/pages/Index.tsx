@@ -157,7 +157,7 @@ const Index = () => {
             </h1>
             <p style={styles.heroSub}>Your Recoupment Structure Starts Here.</p>
             <div style={{ display: "flex", justifyContent: "center" }}>
-              <button onClick={handleCTA} style={styles.ctaBtn}>
+              <button onClick={handleCTA} style={styles.ctaBtn} onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>
                 <span style={{ position: "relative", zIndex: 1 }}>RUN MY WATERFALL</span>
                 <div style={styles.ctaShimmer} />
               </button>
@@ -286,11 +286,11 @@ const Index = () => {
             <div style={{ ...styles.tierCardCore, ...reveal(arsenalVisible, 1) }}>
               <div style={styles.topLineGold} />
               <div style={styles.tierHeaderCore}>
-                <div>
-                  <p style={styles.tierTitleCore}>The Modeling Engine</p>
-                  <p style={styles.tierSubCore}>Your baseline recoupment model.</p>
+                <div style={{ marginBottom: "12px" }}>
+                  <span style={styles.tierBadgeCore}>Free Access</span>
                 </div>
-                <span style={styles.tierBadgeCore} onClick={handleCTA}>Free Access</span>
+                <p style={styles.tierTitleCore}>The Modeling Engine</p>
+                <p style={styles.tierSubCore}>Your baseline recoupment model.</p>
               </div>
               <div style={styles.tierFeaturesCore}>
                 <div style={styles.featureItemCore}>
@@ -313,18 +313,18 @@ const Index = () => {
                 </div>
               </div>
               <div style={styles.tierAction}>
-                <button onClick={handleCTA} style={styles.btnSnapshot}>START MODELING</button>
+                <button onClick={handleCTA} style={styles.btnSnapshot} onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>START MODELING</button>
               </div>
             </div>
 
             {/* The Snapshot Card */}
             <div style={{ ...styles.tierCardSnapshot, ...reveal(arsenalVisible, 2) }}>
               <div style={styles.tierHeaderAlt}>
-                <div>
-                  <p style={styles.tierTitleAlt}>THE SNAPSHOT</p>
-                  <p style={styles.tierSubAlt}>Pick this one if you need the numbers documented — clean and professional</p>
+                <div style={{ marginBottom: "12px" }}>
+                  <span style={styles.trendingBadge}>Trending</span>
                 </div>
-                <span style={styles.trendingBadge}>Trending</span>
+                <p style={styles.tierTitleAlt}>THE SNAPSHOT</p>
+                <p style={styles.tierSubAlt}>Pick this one if you need the numbers documented — clean and professional</p>
               </div>
               <p style={styles.tierIntro}>Your financial model. One document. Investor-ready.</p>
               <div style={styles.tierChecklist}>
@@ -340,8 +340,8 @@ const Index = () => {
                 ))}
               </div>
               <div style={styles.tierAction}>
-                <button onClick={() => navigate("/store/snapshot")} style={styles.btnSnapshot}>GET THE SNAPSHOT</button>
-                <a href="/store/snapshot" onClick={(e) => { e.preventDefault(); navigate("/store/snapshot"); }} style={styles.detailsLink}>See full details →</a>
+                <button onClick={() => navigate("/store/snapshot")} style={styles.btnSnapshot} onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>GET THE SNAPSHOT</button>
+                <a href="/store/snapshot" onClick={(e) => { e.preventDefault(); navigate("/store/snapshot"); }} style={styles.detailsLink} onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,1)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.60)"; }}>See full details →</a>
               </div>
             </div>
 
@@ -349,11 +349,11 @@ const Index = () => {
             <div style={{ ...styles.tierCardPackage, ...reveal(arsenalVisible, 3) }}>
               <div style={styles.topLineGoldThick} />
               <div style={{ ...styles.tierHeaderAlt, paddingTop: "24px", borderBottomColor: "rgba(212,175,55,0.15)" }}>
-                <div>
-                  <p style={styles.tierTitleAlt}>THE PACKAGE</p>
-                  <p style={styles.tierSubAlt}>Pick this one if you want the full investor package with standalone documents</p>
+                <div style={{ marginBottom: "12px" }}>
+                  <span style={styles.mostPopularBadge}>Most Popular</span>
                 </div>
-                <span style={styles.mostPopularBadge}>Most Popular</span>
+                <p style={styles.tierTitleAlt}>THE PACKAGE</p>
+                <p style={styles.tierSubAlt}>Pick this one if you want the full investor package with standalone documents</p>
               </div>
               <p style={styles.tierIntro}>Your complete investor package — financial presentation, standalone documents, visual design.</p>
               <div style={styles.tierChecklist}>
@@ -372,11 +372,11 @@ const Index = () => {
                 ))}
               </div>
               <div style={styles.tierAction}>
-                <button onClick={() => navigate("/store/the-full-package")} style={styles.btnPackage}>
+                <button onClick={() => navigate("/store/the-full-package")} style={styles.btnPackage} onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>
                   <span style={{ position: "relative", zIndex: 1 }}>GET THE PACKAGE</span>
                   <div style={styles.btnPackageShimmer} />
                 </button>
-                <a href="/store/the-full-package" onClick={(e) => { e.preventDefault(); navigate("/store/the-full-package"); }} style={styles.detailsLink}>See full details →</a>
+                <a href="/store/the-full-package" onClick={(e) => { e.preventDefault(); navigate("/store/the-full-package"); }} style={styles.detailsLink} onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,1)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.60)"; }}>See full details →</a>
               </div>
             </div>
           </div>
@@ -418,7 +418,7 @@ const Index = () => {
             <div style={styles.topLineGoldBright} />
             <h2 style={styles.closerH2}>Your Investors<br /><span style={{ color: "#D4AF37", display: "block" }}>Will Ask.</span></h2>
             <p style={styles.closerBody}>Stop guessing your backend. Build the model before the pitch.</p>
-            <button onClick={handleCTA} style={styles.ctaBtn}>
+            <button onClick={handleCTA} style={styles.ctaBtn} onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>
               <span style={{ position: "relative", zIndex: 1 }}>RUN MY WATERFALL</span>
               <div style={styles.ctaShimmer} />
             </button>
@@ -616,7 +616,6 @@ const styles: Record<string, React.CSSProperties> = {
   },
   tierHeaderCore: {
     padding: "24px 24px 20px", borderBottom: "1px solid rgba(212,175,55,0.1)",
-    display: "flex", justifyContent: "space-between", alignItems: "flex-start",
   },
   tierTitleCore: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "2rem", color: "#fff", lineHeight: 1, letterSpacing: "0.02em" },
   tierSubCore: { fontFamily: "'Inter', sans-serif", fontSize: "13px", color: "rgba(255,255,255,0.55)", marginTop: "6px" },
@@ -624,7 +623,7 @@ const styles: Record<string, React.CSSProperties> = {
     fontFamily: "'Roboto Mono', monospace", fontSize: "10px", textTransform: "uppercase",
     padding: "6px 12px", borderRadius: "4px", letterSpacing: "0.1em",
     background: "rgba(212,175,55,0.1)", color: "#D4AF37", border: "1px solid rgba(212,175,55,0.3)",
-    cursor: "pointer", whiteSpace: "nowrap", flexShrink: 0,
+    whiteSpace: "nowrap", flexShrink: 0,
   },
   tierFeaturesCore: { padding: "24px", display: "flex", flexDirection: "column", gap: "20px" },
   featureItemCore: { display: "flex", gap: "16px", alignItems: "flex-start" },
@@ -644,7 +643,6 @@ const styles: Record<string, React.CSSProperties> = {
   },
   tierHeaderAlt: {
     padding: "32px 24px 20px", borderBottom: "1px solid rgba(255,255,255,0.06)",
-    display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "16px",
   },
   tierTitleAlt: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "2.2rem", color: "#fff", lineHeight: 1, letterSpacing: "0.04em", marginBottom: "8px" },
   tierSubAlt: { fontFamily: "'Inter', sans-serif", fontSize: "13px", color: "rgba(212,175,55,0.8)", lineHeight: 1.4 },
@@ -663,27 +661,27 @@ const styles: Record<string, React.CSSProperties> = {
   btnPackage: {
     position: "relative", overflow: "hidden", display: "block", width: "100%", textAlign: "center",
     fontFamily: "'Roboto Mono', monospace", fontSize: "14px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.1em",
-    color: "#000", background: "#D4AF37", border: "none", padding: "18px", borderRadius: "6px", cursor: "pointer",
-    boxShadow: "0 4px 15px rgba(212,175,55,0.3)",
+    color: "#000", background: "#F9E076", border: "none", padding: "18px", borderRadius: "6px", cursor: "pointer",
+    boxShadow: "0 0 20px rgba(249,224,118,0.3), 0 0 60px rgba(249,224,118,0.1)",
   },
   btnPackageShimmer: {
     position: "absolute", top: 0, left: "-100%", width: "50%", height: "100%",
-    background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent)",
+    background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent)",
     transform: "skewX(-20deg)", animation: "lp-shimmer 4s infinite",
   },
   trendingBadge: {
     display: "inline-block", fontFamily: "'Roboto Mono', monospace", fontSize: "10px", textTransform: "uppercase",
-    letterSpacing: "0.15em", color: "#000", background: "#fff",
-    padding: "6px 12px", borderRadius: "4px", fontWeight: 600, whiteSpace: "nowrap", flexShrink: 0,
-    boxShadow: "0 0 12px rgba(255,255,255,0.2)",
+    letterSpacing: "0.15em", color: "rgba(255,255,255,0.70)", background: "rgba(255,255,255,0.04)",
+    border: "1px solid rgba(255,255,255,0.15)",
+    padding: "6px 12px", borderRadius: "4px", fontWeight: 600, whiteSpace: "nowrap",
   },
   mostPopularBadge: {
     display: "inline-block", fontFamily: "'Roboto Mono', monospace", fontSize: "10px", textTransform: "uppercase",
-    letterSpacing: "0.15em", color: "#000", background: "#D4AF37",
-    padding: "6px 12px", borderRadius: "4px", fontWeight: 600, whiteSpace: "nowrap", flexShrink: 0,
-    boxShadow: "0 0 12px rgba(212,175,55,0.4)",
+    letterSpacing: "0.15em", color: "#D4AF37", background: "rgba(212,175,55,0.08)",
+    border: "1px solid rgba(212,175,55,0.4)",
+    padding: "6px 12px", borderRadius: "4px", fontWeight: 600, whiteSpace: "nowrap",
   },
-  detailsLink: { display: "block", textAlign: "center", fontFamily: "'Inter', sans-serif", fontSize: "12px", color: "rgba(212,175,55,0.50)", textDecoration: "none", marginTop: "16px", cursor: "pointer" },
+  detailsLink: { display: "block", textAlign: "center", fontFamily: "'Inter', sans-serif", fontSize: "12px", color: "rgba(212,175,55,0.60)", textDecoration: "none", marginTop: "16px", cursor: "pointer", padding: "8px 0" },
 
   /* ── Top line helpers ── */
   topLineGold: {
