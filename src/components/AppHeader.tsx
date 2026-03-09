@@ -19,7 +19,6 @@ const AppHeader = ({ onMoreOpen }: AppHeaderProps) => {
 
   const [headerHidden, setHeaderHidden] = useState(false);
   const lastScrollY = useRef(0);
-  const idleTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     const handler = () => {
@@ -30,15 +29,10 @@ const AppHeader = ({ onMoreOpen }: AppHeaderProps) => {
         setHeaderHidden(false);
       }
       lastScrollY.current = currentY;
-
-      // Re-show header after user stops scrolling for 1.5s
-      if (idleTimer.current) clearTimeout(idleTimer.current);
-      idleTimer.current = setTimeout(() => setHeaderHidden(false), 1500);
     };
     window.addEventListener('scroll', handler, { passive: true });
     return () => {
       window.removeEventListener('scroll', handler);
-      if (idleTimer.current) clearTimeout(idleTimer.current);
     };
   }, []);
 
