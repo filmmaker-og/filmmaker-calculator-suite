@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useInView } from "@/hooks/useInView";
 import { useHaptics } from "@/hooks/use-haptics";
+import filmmakerFIcon from "@/assets/filmmaker-f-icon.png";
 
 // ------------------------------------------------------------------
 // DATA
@@ -413,18 +414,23 @@ const Resources = () => {
             style={{
               ...s.commandNavTrigger,
               opacity: headerGone ? 1 : 0,
-              width: headerGone ? "40px" : "0px",
-              padding: headerGone ? undefined : "0",
-              border: headerGone ? "1px solid rgba(212,175,55,0.20)" : "1px solid transparent",
+              width: headerGone ? "36px" : "0px",
+              height: "36px",
+              padding: 0,
               overflow: "hidden",
               transition: "all 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
             }}
             aria-label="Back to top"
           >
-            <span style={s.commandNavLogo}>
-              <span style={{ color: '#D4AF37' }}>F</span>
-              <span style={{ color: 'rgba(255,255,255,0.95)' }}>.O</span>
-            </span>
+            <img
+              src={filmmakerFIcon}
+              alt="F"
+              style={{
+                width: "20px",
+                height: "20px",
+                objectFit: "contain",
+              }}
+            />
           </button>
 
           {/* Search */}
@@ -630,8 +636,9 @@ const s: Record<string, React.CSSProperties> = {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    width: "40px",
-    height: "40px",
+    width: "36px",
+    height: "36px",
+    minWidth: "36px",
     borderRadius: "50%",
     background: "rgba(212,175,55,0.06)",
     border: "1px solid rgba(212,175,55,0.20)",
@@ -639,16 +646,10 @@ const s: Record<string, React.CSSProperties> = {
     flexShrink: 0,
     transition: "all 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
   },
-  commandNavLogo: {
-    fontFamily: "'Bebas Neue', sans-serif",
-    fontSize: "1rem",
-    letterSpacing: "0.04em",
-    lineHeight: 1,
-  },
 
   // ── Vault Header ──
   vaultHeader: {
-    padding: "48px 0 40px",
+    padding: "48px 0 24px",
     textAlign: "center",
     position: "relative",
   },
@@ -683,7 +684,7 @@ const s: Record<string, React.CSSProperties> = {
 
   // ── Pinned Section ──
   pinnedSection: {
-    padding: "0 0 32px",
+    padding: "0 0 16px",
   },
   pinnedGrid: {
     display: "grid",
@@ -705,7 +706,7 @@ const s: Record<string, React.CSSProperties> = {
     background: "#0A0A0A",
     border: "1px solid rgba(212,175,55,0.25)",
     boxShadow: "0 16px 40px rgba(0,0,0,0.8), 0 0 40px rgba(212,175,55,0.03)",
-    padding: "24px 24px",
+    padding: "18px 20px",
   },
   pinnedPrimaryHover: {
     transform: "translateY(-3px)",
@@ -726,12 +727,12 @@ const s: Record<string, React.CSSProperties> = {
     letterSpacing: "0.15em",
     textTransform: "uppercase",
     color: "#D4AF37",
-    marginBottom: 10,
+    marginBottom: 6,
     display: "block",
   },
   pinnedPrimaryTitle: {
     fontFamily: "'Bebas Neue', sans-serif",
-    fontSize: "2rem",
+    fontSize: "1.7rem",
     color: "#fff",
     lineHeight: 1,
     letterSpacing: "0.03em",
@@ -743,8 +744,8 @@ const s: Record<string, React.CSSProperties> = {
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
-    marginTop: 16,
-    paddingTop: 12,
+    marginTop: 12,
+    paddingTop: 10,
     borderTop: "1px solid rgba(255,255,255,0.08)",
   },
   pinnedBadge: {
@@ -773,7 +774,7 @@ const s: Record<string, React.CSSProperties> = {
     background: "#0A0A0A",
     border: "1px solid rgba(212,175,55,0.15)",
     boxShadow: "0 16px 40px rgba(0,0,0,0.6)",
-    padding: "24px 20px",
+    padding: "18px 18px",
     display: "flex",
     flexDirection: "column",
   },
@@ -792,11 +793,11 @@ const s: Record<string, React.CSSProperties> = {
   },
   pinnedSecondaryTitle: {
     fontFamily: "'Bebas Neue', sans-serif",
-    fontSize: "1.7rem",
+    fontSize: "1.45rem",
     color: "#fff",
     lineHeight: 1,
     letterSpacing: "0.03em",
-    marginBottom: 10,
+    marginBottom: 8,
     margin: 0,
   },
   pinnedSecondaryFooter: {
@@ -804,7 +805,7 @@ const s: Record<string, React.CSSProperties> = {
     alignItems: "center",
     justifyContent: "space-between",
     marginTop: "auto",
-    paddingTop: 12,
+    paddingTop: 10,
     borderTop: "1px solid rgba(255,255,255,0.08)",
   },
   pinnedRead: {
@@ -838,7 +839,7 @@ const s: Record<string, React.CSSProperties> = {
     WebkitBackdropFilter: "blur(24px)",
     borderTop: "1px solid rgba(212,175,55,0.08)",
     borderBottom: "1px solid rgba(255,255,255,0.08)",
-    padding: "20px 0",
+    padding: "14px 0",
     boxShadow: "0 10px 40px -10px rgba(0,0,0,0.9)",
   },
   commandInner: {
@@ -866,9 +867,9 @@ const s: Record<string, React.CSSProperties> = {
   },
   searchInput: {
     width: "100%",
-    background: "rgba(212,175,55,0.08)",
-    border: "1px solid rgba(212,175,55,0.45)",
-    boxShadow: "0 0 12px rgba(212,175,55,0.06), inset 0 1px 4px rgba(0,0,0,0.3)",
+    background: "rgba(212,175,55,0.03)",
+    border: "1px solid rgba(212,175,55,0.25)",
+    boxShadow: "0 0 12px rgba(212,175,55,0.06)",
     borderRadius: 12,
     color: "rgba(255,255,255,0.95)",
     fontFamily: "'Inter', sans-serif",
@@ -983,7 +984,7 @@ const s: Record<string, React.CSSProperties> = {
 
   // ── Content Section ──
   contentSection: {
-    padding: "32px 0 100px",
+    padding: "20px 0 100px",
   },
   resultsBar: {
     display: "flex",
@@ -1051,7 +1052,7 @@ const s: Record<string, React.CSSProperties> = {
     background: "linear-gradient(90deg, transparent, #D4AF37, transparent)",
   },
   cardHeader: {
-    padding: "24px 24px 18px",
+    padding: "20px 20px 14px",
     borderBottom: "1px solid rgba(255,255,255,0.08)",
     display: "flex",
     justifyContent: "space-between",
@@ -1076,7 +1077,7 @@ const s: Record<string, React.CSSProperties> = {
   },
   cardTitle: {
     fontFamily: "'Bebas Neue', sans-serif",
-    fontSize: "2rem",
+    fontSize: "1.6rem",
     color: "#fff",
     lineHeight: 1,
     letterSpacing: "0.03em",
@@ -1118,16 +1119,16 @@ const s: Record<string, React.CSSProperties> = {
     border: "1px solid rgba(255,255,255,0.08)",
   },
   cardContent: {
-    padding: "20px 24px 24px",
+    padding: "16px 20px 20px",
     flex: 1,
     display: "flex",
     flexDirection: "column",
   },
   cardExcerpt: {
     fontFamily: "'Inter', sans-serif",
-    fontSize: 14,
+    fontSize: "13px",
     color: "rgba(255,255,255,0.70)",
-    lineHeight: 1.6,
+    lineHeight: 1.5,
     display: "-webkit-box",
     WebkitLineClamp: 3,
     WebkitBoxOrient: "vertical",
@@ -1136,7 +1137,7 @@ const s: Record<string, React.CSSProperties> = {
   },
   cardBottom: {
     marginTop: "auto",
-    paddingTop: 20,
+    paddingTop: 14,
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
@@ -1223,14 +1224,14 @@ if (typeof document !== "undefined" && !document.getElementById(RESPONSIVE_STYLE
         overflow-x: auto !important;
         scroll-snap-type: x mandatory !important;
         -webkit-overflow-scrolling: touch !important;
-        gap: 16px !important;
+        gap: 12px !important;
         margin: 0 -24px 0 -20px !important;
         padding: 0 20px 8px 20px !important;
         scrollbar-width: none !important;
       }
       .vault-pinned-grid::-webkit-scrollbar { display: none !important; }
       .vault-pinned-grid > a {
-        flex: 0 0 calc(100vw - 48px) !important;
+        flex: 0 0 78% !important;
         scroll-snap-align: start !important;
         min-width: 0 !important;
       }
@@ -1267,7 +1268,7 @@ if (typeof document !== "undefined" && !document.getElementById(RESPONSIVE_STYLE
       .vault-dropdown-panel { width: calc(100vw - 48px) !important; right: 0 !important; }
       .vault-grid { grid-template-columns: 1fr !important; }
       .vault-header { padding-top: 36px !important; }
-      .pinned-section { padding-bottom: 16px !important; }
+      .pinned-section { padding-bottom: 8px !important; }
       .vault-ruled-divider { display: none !important; }
       .card-excerpt { -webkit-line-clamp: 2 !important; }
     }
