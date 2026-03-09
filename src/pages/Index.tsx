@@ -611,7 +611,7 @@ const styles: Record<string, React.CSSProperties> = {
 
   tierCardCore: {
     borderRadius: "12px", position: "relative", overflow: "hidden", textAlign: "left",
-    background: "#000", border: "1px solid rgba(212,175,55,0.3)",
+    background: "#0A0A0A", border: "1px solid rgba(212,175,55,0.3)",
     boxShadow: "0 16px 40px rgba(0,0,0,0.8), 0 0 20px rgba(212,175,55,0.05)",
   },
   tierHeaderCore: {
@@ -633,12 +633,12 @@ const styles: Record<string, React.CSSProperties> = {
 
   tierCardSnapshot: {
     borderRadius: "12px", position: "relative", overflow: "hidden", textAlign: "left",
-    border: "1px solid rgba(212,175,55,0.25)", background: "#050505",
+    border: "1px solid rgba(212,175,55,0.25)", background: "#0A0A0A",
     boxShadow: "0 16px 40px rgba(0,0,0,0.6)",
   },
   tierCardPackage: {
     borderRadius: "12px", position: "relative", overflow: "hidden", textAlign: "left",
-    border: "1px solid rgba(212,175,55,0.5)", background: "#050505",
+    border: "1px solid rgba(212,175,55,0.5)", background: "#0A0A0A",
     boxShadow: "0 16px 40px rgba(0,0,0,0.8), 0 0 40px rgba(212,175,55,0.08)",
   },
   tierHeaderAlt: {
