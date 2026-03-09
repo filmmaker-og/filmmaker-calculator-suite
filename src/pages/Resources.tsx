@@ -798,15 +798,15 @@ const s: Record<string, React.CSSProperties> = {
     transform: "translateY(-50%)",
     width: 18,
     height: 18,
-    color: "rgba(212,175,55,0.50)",
+    color: "rgba(212,175,55,0.60)",
     pointerEvents: "none",
     transition: "color 0.3s",
   },
   searchInput: {
     width: "100%",
-    background: "rgba(212,175,55,0.06)",
-    border: "1px solid rgba(212,175,55,0.35)",
-    boxShadow: "0 0 12px rgba(212,175,55,0.04)",
+    background: "rgba(212,175,55,0.08)",
+    border: "1px solid rgba(212,175,55,0.45)",
+    boxShadow: "0 0 12px rgba(212,175,55,0.06), inset 0 1px 4px rgba(0,0,0,0.3)",
     borderRadius: 12,
     color: "rgba(255,255,255,0.95)",
     fontFamily: "'Inter', sans-serif",
@@ -1154,7 +1154,7 @@ if (typeof document !== "undefined" && !document.getElementById(RESPONSIVE_STYLE
   style.id = RESPONSIVE_STYLE_ID;
   style.textContent = `
     a, button { -webkit-tap-highlight-color: transparent; }
-    .vault-search-input::placeholder { color: rgba(255,255,255,0.45) !important; }
+    .vault-search-input::placeholder { color: rgba(255,255,255,0.55) !important; }
     @media (max-width: 767px) {
       .vault-pinned-grid {
         display: flex !important;
