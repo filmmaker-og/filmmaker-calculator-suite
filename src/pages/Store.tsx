@@ -1,19 +1,13 @@
 import { useState, useEffect, useRef } from "react";
-import { Check, Mail, X as XIcon, Clock, ArrowRight } from "lucide-react";
+import { Check, Mail, X as XIcon, Clock, ChevronDown } from "lucide-react";
 
-import { cn } from "@/lib/utils";
 import { useHaptics } from "@/hooks/use-haptics";
+import { useInView } from "@/hooks/useInView";
 import {
   selfServeProducts,
   turnkeyServices,
   type Product,
 } from "@/lib/store-products";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
@@ -46,28 +40,237 @@ const storeFaqs = [
 
 
 /* ═══════════════════════════════════════════════════════════════════
-   SCROLL REVEAL HOOK
+   DESIGN TOKENS & STYLES
    ═══════════════════════════════════════════════════════════════════ */
-const useReveal = (threshold = 0.2) => {
-  const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisible(true);
-          obs.disconnect();
-        }
-      },
-      { threshold }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [threshold]);
-  return { ref, visible };
+const s: Record<string, React.CSSProperties> = {
+  /* Eyebrow */
+  eyebrowRuled: {
+    display: "flex", alignItems: "center", justifyContent: "center", gap: "12px", marginBottom: "14px",
+  },
+  eyebrowLine: {
+    flex: 1, height: "1px", background: "rgba(212,175,55,0.40)",
+  },
+  eyebrowLabel: {
+    fontFamily: "'Roboto Mono', monospace", fontSize: "13px",
+    letterSpacing: "0.2em", textTransform: "uppercase", color: "#D4AF37",
+  },
+  /* Card base */
+  cardStandard: {
+    background: "#0A0A0A",
+    border: "1px solid rgba(212,175,55,0.15)",
+    borderRadius: "12px",
+    boxShadow: "0 16px 40px rgba(0,0,0,0.4)",
+    overflow: "hidden",
+    transition: "transform 0.3s ease, border-color 0.3s ease",
+    position: "relative" as const,
+  },
+  cardFeatured: {
+    background: "#0A0A0A",
+    border: "1px solid rgba(212,175,55,0.35)",
+    borderRadius: "12px",
+    boxShadow: "0 24px 50px rgba(0,0,0,0.8)",
+    overflow: "hidden",
+    transition: "transform 0.3s ease, border-color 0.3s ease",
+    position: "relative" as const,
+  },
+  /* Card top line */
+  topLineStandard: {
+    height: "1px",
+    background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.4), transparent)",
+  },
+  topLineFeatured: {
+    height: "2px",
+    background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.6), transparent)",
+  },
+  /* Card header */
+  cardHeaderStandard: {
+    padding: "28px 24px 20px",
+    borderBottom: "1px solid rgba(255,255,255,0.04)",
+  },
+  cardHeaderFeatured: {
+    padding: "28px 24px 20px",
+    borderBottom: "1px solid rgba(212,175,55,0.15)",
+  },
+  /* Price block */
+  priceBlock: {
+    padding: "24px 24px 20px",
+  },
+  priceStandard: {
+    fontFamily: "'Roboto Mono', monospace",
+    fontSize: "2.4rem",
+    fontWeight: 700,
+    color: "rgba(255,255,255,0.95)",
+    lineHeight: 1,
+  },
+  priceFeatured: {
+    fontFamily: "'Roboto Mono', monospace",
+    fontSize: "3.2rem",
+    fontWeight: 700,
+    color: "#D4AF37",
+    lineHeight: 1,
+  },
+  shortDesc: {
+    fontFamily: "'Inter', sans-serif",
+    fontSize: "14px",
+    color: "rgba(255,255,255,0.55)",
+    marginTop: "8px",
+    lineHeight: 1.5,
+  },
+  /* Features */
+  featuresBlock: {
+    padding: "0 24px 28px",
+    display: "flex",
+    flexDirection: "column" as const,
+    gap: "14px",
+  },
+  featureRow: {
+    display: "flex",
+    alignItems: "flex-start",
+    gap: "10px",
+  },
+  featureCheck: {
+    color: "#D4AF37",
+    opacity: 0.9,
+    flexShrink: 0,
+    marginTop: "2px",
+  },
+  featureText: {
+    fontFamily: "'Inter', sans-serif",
+    fontSize: "14px",
+    color: "rgba(255,255,255,0.85)",
+    lineHeight: 1.5,
+  },
+  /* Actions */
+  actionBlock: {
+    padding: "0 24px 28px",
+  },
+  btnOutline: {
+    width: "100%",
+    padding: "16px",
+    fontFamily: "'Roboto Mono', monospace",
+    fontSize: "13px",
+    letterSpacing: "0.06em",
+    textTransform: "uppercase" as const,
+    color: "#D4AF37",
+    background: "rgba(212,175,55,0.03)",
+    border: "1px solid rgba(212,175,55,0.3)",
+    borderRadius: "8px",
+    cursor: "pointer",
+    transition: "background 0.2s, border-color 0.2s",
+  },
+  btnCta: {
+    width: "100%",
+    padding: "16px",
+    fontFamily: "'Roboto Mono', monospace",
+    fontSize: "13px",
+    letterSpacing: "0.06em",
+    textTransform: "uppercase" as const,
+    color: "#000",
+    background: "#F9E076",
+    border: "none",
+    borderRadius: "8px",
+    cursor: "pointer",
+    fontWeight: 700,
+    boxShadow: "0 0 20px rgba(249,224,118,0.3), 0 0 60px rgba(249,224,118,0.1)",
+    transition: "transform 0.15s, box-shadow 0.3s",
+  },
+  detailsLink: {
+    display: "block",
+    textAlign: "center" as const,
+    fontFamily: "'Inter', sans-serif",
+    fontSize: "13px",
+    color: "rgba(212,175,55,0.60)",
+    padding: "8px 0",
+    background: "none",
+    border: "none",
+    cursor: "pointer",
+    transition: "color 0.2s",
+    marginTop: "4px",
+  },
+  /* Badge base */
+  badgeBase: {
+    fontFamily: "'Roboto Mono', monospace",
+    fontSize: "11px",
+    letterSpacing: "0.15em",
+    textTransform: "uppercase" as const,
+    fontWeight: 700,
+    padding: "4px 10px",
+    borderRadius: "4px",
+    color: "#D4AF37",
+    whiteSpace: "nowrap" as const,
+  },
+  /* Pick this if */
+  pickThisIf: {
+    fontFamily: "'Inter', sans-serif",
+    fontSize: "13px",
+    color: "rgba(212,175,55,0.7)",
+    fontStyle: "normal",
+    marginTop: "4px",
+    lineHeight: 1.4,
+  },
+  /* Name */
+  cardName: {
+    fontFamily: "'Bebas Neue', sans-serif",
+    fontSize: "1.5rem",
+    letterSpacing: "0.06em",
+    color: "rgba(255,255,255,0.95)",
+    textTransform: "uppercase" as const,
+    lineHeight: 1.1,
+    margin: 0,
+  },
+  /* Turnaround badge */
+  turnaroundBadge: {
+    display: "inline-flex",
+    alignItems: "center",
+    gap: "6px",
+    fontFamily: "'Roboto Mono', monospace",
+    fontSize: "11px",
+    color: "rgba(255,255,255,0.5)",
+    background: "rgba(255,255,255,0.03)",
+    padding: "4px 8px",
+    borderRadius: "4px",
+  },
 };
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   SHIMMER KEYFRAMES (injected once)
+   ═══════════════════════════════════════════════════════════════════ */
+const shimmerCSS = `
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+@keyframes faqOpen {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+`;
+
+const StyleInjector = () => {
+  useEffect(() => {
+    const id = "store-shimmer-css";
+    if (document.getElementById(id)) return;
+    const tag = document.createElement("style");
+    tag.id = id;
+    tag.textContent = shimmerCSS;
+    document.head.appendChild(tag);
+    return () => { tag.remove(); };
+  }, []);
+  return null;
+};
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   EYEBROW RULED
+   ═══════════════════════════════════════════════════════════════════ */
+const EyebrowRuled = ({ text }: { text: string }) => (
+  <div style={s.eyebrowRuled}>
+    <div style={s.eyebrowLine} />
+    <span style={s.eyebrowLabel}>{text}</span>
+    <div style={s.eyebrowLine} />
+  </div>
+);
 
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -84,77 +287,126 @@ const WorkingModelPopup = ({
   onClose: () => void;
   loading: boolean;
 }) => (
-  <div className="fixed inset-0 z-[200] flex items-end sm:items-center justify-center sm:p-6">
+  <div style={{
+    position: "fixed", inset: 0, zIndex: 200,
+    display: "flex", alignItems: "flex-end", justifyContent: "center",
+  }}>
     <div
-      className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+      style={{
+        position: "absolute", inset: 0,
+        background: "rgba(0,0,0,0.80)", backdropFilter: "blur(4px)",
+      }}
       onClick={loading ? undefined : onClose}
     />
     <div
-      className="relative w-full sm:max-w-md rounded-t-2xl sm:rounded-xl overflow-hidden animate-fade-in"
       style={{
+        position: "relative", width: "100%", maxWidth: "430px",
+        borderTopLeftRadius: "16px", borderTopRightRadius: "16px",
+        overflow: "hidden",
         border: "1px solid rgba(212,175,55,0.35)",
         borderBottom: "none",
-        background:
-          "linear-gradient(165deg, rgba(22,22,22,0.99), rgba(8,8,8,0.99))",
-        boxShadow:
-          "0 -8px 40px rgba(0,0,0,0.5), 0 0 60px rgba(212,175,55,0.06)",
+        background: "#0A0A0A",
+        boxShadow: "0 -8px 40px rgba(0,0,0,0.5), 0 0 60px rgba(212,175,55,0.06)",
+        animation: "faqOpen 0.3s ease-out",
       }}
     >
       {/* Close */}
       <button
         onClick={onClose}
         disabled={loading}
-        className="absolute top-4 right-4 z-10 text-ink-secondary hover:text-ink-body transition-colors"
+        style={{
+          position: "absolute", top: "16px", right: "16px", zIndex: 10,
+          background: "none", border: "none", cursor: "pointer",
+          color: "rgba(255,255,255,0.55)", transition: "color 0.2s",
+        }}
       >
-        <XIcon className="w-5 h-5" />
+        <XIcon style={{ width: "20px", height: "20px" }} />
       </button>
 
       {/* Header band */}
-      <div
-        className="px-6 pt-6 pb-4"
-        style={{
-          background:
-            "linear-gradient(180deg, rgba(212,175,55,0.08) 0%, transparent 100%)",
-        }}
-      >
-        <span className="inline-block px-3 py-1 bg-gold/15 border border-gold/30 text-gold text-[11px] tracking-[0.18em] uppercase font-bold rounded-full mb-3">
+      <div style={{
+        padding: "24px 24px 16px",
+        background: "linear-gradient(180deg, rgba(212,175,55,0.08) 0%, transparent 100%)",
+      }}>
+        <span style={{
+          display: "inline-block",
+          padding: "4px 12px",
+          background: "rgba(212,175,55,0.08)",
+          border: "1px solid rgba(212,175,55,0.3)",
+          color: "#D4AF37",
+          fontSize: "11px",
+          letterSpacing: "0.18em",
+          textTransform: "uppercase",
+          fontWeight: 700,
+          borderRadius: "12px",
+          marginBottom: "12px",
+          fontFamily: "'Roboto Mono', monospace",
+        }}>
           ONE-TIME OFFER
         </span>
-        <h3 className="font-bebas text-[26px] tracking-[0.06em] text-white leading-tight">
+        <h3 style={{
+          fontFamily: "'Bebas Neue', sans-serif",
+          fontSize: "26px",
+          letterSpacing: "0.06em",
+          color: "rgba(255,255,255,0.95)",
+          lineHeight: 1.1,
+          margin: 0,
+        }}>
           ADD THE LIVE EXCEL MODEL
         </h3>
       </div>
 
       {/* Body */}
-      <div className="px-6 pb-6 space-y-4">
+      <div style={{ padding: "0 24px 24px" }}>
         {/* Price row */}
-        <div className="flex items-center gap-3">
-          <div className="flex items-baseline gap-2">
-            <span className="font-mono text-base text-ink-secondary line-through decoration-ink-secondary/40">
+        <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "16px" }}>
+          <div style={{ display: "flex", alignItems: "baseline", gap: "8px" }}>
+            <span style={{
+              fontFamily: "'Roboto Mono', monospace",
+              fontSize: "16px",
+              color: "rgba(255,255,255,0.55)",
+              textDecoration: "line-through",
+            }}>
               $149
             </span>
-            <span className="font-mono text-3xl font-semibold text-white">
+            <span style={{
+              fontFamily: "'Roboto Mono', monospace",
+              fontSize: "1.8rem",
+              fontWeight: 600,
+              color: "rgba(255,255,255,0.95)",
+            }}>
               $79
             </span>
           </div>
-          <span className="ml-auto px-2.5 py-1 bg-gold/10 border border-gold/20 text-gold text-[12px] tracking-[0.08em] font-semibold rounded-md">
+          <span style={{
+            marginLeft: "auto",
+            padding: "4px 10px",
+            background: "rgba(212,175,55,0.08)",
+            border: "1px solid rgba(212,175,55,0.2)",
+            color: "#D4AF37",
+            fontSize: "12px",
+            letterSpacing: "0.08em",
+            fontWeight: 600,
+            borderRadius: "6px",
+            fontFamily: "'Roboto Mono', monospace",
+          }}>
             SAVE $70
           </span>
         </div>
 
         {/* Divider */}
-        <div className="border-t border-white/[0.06]" />
+        <div style={{ height: "1px", background: "rgba(255,255,255,0.06)", marginBottom: "16px" }} />
 
         {/* Feature list */}
-        <ul className="space-y-2.5">
+        <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: "10px", marginBottom: "16px" }}>
           {[
             "Formula-driven Excel engine",
             "Change any input \u2014 everything recalculates",
             "Reusable across unlimited projects",
           ].map((feat) => (
-            <li key={feat} className="flex items-start gap-2.5">
-              <Check className="w-3.5 h-3.5 mt-0.5 flex-shrink-0 text-gold" />
-              <span className="text-ink-body text-[14px] leading-snug">
+            <li key={feat} style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
+              <Check style={{ width: "14px", height: "14px", marginTop: "2px", flexShrink: 0, color: "#D4AF37" }} />
+              <span style={{ fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "rgba(255,255,255,0.85)", lineHeight: 1.5 }}>
                 {feat}
               </span>
             </li>
@@ -162,18 +414,33 @@ const WorkingModelPopup = ({
         </ul>
 
         {/* CTAs */}
-        <div className="space-y-2.5 pt-1">
+        <div style={{ display: "flex", flexDirection: "column", gap: "10px", paddingTop: "4px" }}>
           <button
             onClick={onAccept}
             disabled={loading}
-            className="w-full h-[52px] text-[15px] btn-cta-primary"
+            style={{
+              ...s.btnCta,
+              height: "52px",
+              fontSize: "15px",
+              opacity: loading ? 0.7 : 1,
+            }}
+            onMouseDown={(e) => { (e.currentTarget.style.transform = "scale(0.98)"); }}
+            onMouseUp={(e) => { (e.currentTarget.style.transform = "scale(1)"); }}
           >
             {loading ? "CONNECTING..." : "YES, ADD FOR $79"}
           </button>
           <button
             onClick={onDecline}
             disabled={loading}
-            className="w-full text-center text-ink-secondary text-[13px] tracking-wide hover:text-ink-body transition-colors py-2"
+            style={{
+              background: "none", border: "none", cursor: "pointer",
+              color: "rgba(255,255,255,0.55)",
+              fontFamily: "'Inter', sans-serif",
+              fontSize: "13px",
+              letterSpacing: "0.04em",
+              padding: "8px",
+              transition: "color 0.2s",
+            }}
           >
             {loading ? "Connecting..." : "No thanks, just the plan"}
           </button>
@@ -182,6 +449,25 @@ const WorkingModelPopup = ({
     </div>
   </div>
 );
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   BADGE RENDERER
+   ═══════════════════════════════════════════════════════════════════ */
+const getBadgeStyle = (badge: string | null): React.CSSProperties => {
+  if (!badge) return {};
+  const base = { ...s.badgeBase };
+  switch (badge) {
+    case "MOST POPULAR":
+      return { ...base, background: "rgba(212,175,55,0.08)", border: "1px solid rgba(212,175,55,0.4)" };
+    case "TURNKEY":
+      return { ...base, background: "transparent", border: "1px solid rgba(212,175,55,0.25)" };
+    case "INSTITUTIONAL GRADE":
+      return { ...base, background: "rgba(212,175,55,0.12)", border: "1px solid rgba(212,175,55,0.6)", boxShadow: "0 0 12px rgba(212,175,55,0.15)" };
+    default:
+      return { ...base, background: "transparent", border: "1px solid rgba(212,175,55,0.25)" };
+  }
+};
 
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -198,105 +484,86 @@ const ProductCard = ({
   visible: boolean;
   index: number;
 }) => {
+  const [hovered, setHovered] = useState(false);
   const isFeatured = product.featured;
+
+  const cardStyle: React.CSSProperties = {
+    ...(isFeatured ? s.cardFeatured : s.cardStandard),
+    opacity: visible ? 1 : 0,
+    transform: visible
+      ? (hovered ? (isFeatured ? "translateY(-4px)" : "translateY(-2px)") : "translateY(0)")
+      : "translateY(20px)",
+    transition: "opacity 700ms ease-out, transform 400ms ease-out, border-color 0.3s ease",
+    transitionDelay: visible ? `${index * 120}ms` : "0ms",
+    borderColor: hovered
+      ? (isFeatured ? "rgba(212,175,55,0.5)" : "rgba(212,175,55,0.25)")
+      : undefined,
+  };
 
   return (
     <div
-      className="flex flex-col p-6 rounded-xl"
-      style={{
-        opacity: visible ? 1 : 0,
-        transform: visible ? "translateY(0)" : "translateY(20px)",
-        transition: "opacity 700ms ease-out, transform 700ms ease-out",
-        transitionDelay: `${index * 120}ms`,
-        border: isFeatured
-          ? "2px solid rgba(212,175,55,0.50)"
-          : "1px solid rgba(212,175,55,0.25)",
-        background: isFeatured ? "rgba(212,175,55,0.04)" : "#000",
-        boxShadow: isFeatured
-          ? "0 0 48px rgba(212,175,55,0.12), inset 0 1px 0 rgba(255,255,255,0.06)"
-          : "inset 0 1px 0 rgba(255,255,255,0.06)",
-      }}
+      style={cardStyle}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
     >
-      {/* Badge */}
-      {product.badge && (
-        <div className="mb-4">
-          <span
-            className={cn(
-              "inline-block px-3 py-1.5 text-[12px] tracking-[0.15em] uppercase font-bold rounded",
-              isFeatured
-                ? "bg-gold/20 border border-gold/40 text-gold"
-                : "border border-gold-border text-ink-secondary"
+      {/* Top line */}
+      <div style={isFeatured ? s.topLineFeatured : s.topLineStandard} />
+
+      {/* Header row */}
+      <div style={isFeatured ? s.cardHeaderFeatured : s.cardHeaderStandard}>
+        <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "12px" }}>
+          <div>
+            <h3 style={s.cardName}>{product.name.toUpperCase()}</h3>
+            {product.pickThisIf && (
+              <p style={s.pickThisIf}>Pick this one if {product.pickThisIf}</p>
             )}
-          >
-            {product.badge}
-          </span>
-        </div>
-      )}
-
-      {/* Name */}
-      <h3 className="font-bebas text-[28px] tracking-[0.06em] text-white mb-1">
-        {product.name.toUpperCase()}
-      </h3>
-
-      {/* Pick this if */}
-      {product.pickThisIf && (
-        <p className="text-gold/70 text-[13px] italic mb-3">
-          Pick this one if {product.pickThisIf}
-        </p>
-      )}
-
-      {/* Price */}
-      <div className="mb-3">
-        <span
-          className={cn(
-            "font-mono font-bold text-white",
-            isFeatured ? "text-[40px]" : "text-[26px]"
+          </div>
+          {product.badge && (
+            <span style={getBadgeStyle(product.badge)}>{product.badge}</span>
           )}
-        >
-          ${product.price.toLocaleString()}
-        </span>
+        </div>
       </div>
 
-      {/* Short description */}
-      <p className="text-ink-secondary text-[16px] leading-relaxed mb-5">
-        {product.shortDescription}
-      </p>
+      {/* Price block */}
+      <div style={s.priceBlock}>
+        <span style={isFeatured ? s.priceFeatured : s.priceStandard}>
+          ${product.price.toLocaleString()}
+        </span>
+        <p style={s.shortDesc}>{product.shortDescription}</p>
+      </div>
 
-      {/* Feature list */}
-      <ul className="space-y-2.5 mb-6 flex-1">
+      {/* Features */}
+      <div style={s.featuresBlock}>
         {product.features.map((feature) => (
-          <li key={feature} className="flex items-start gap-2.5">
-            <Check className="w-3.5 h-3.5 mt-0.5 flex-shrink-0 text-gold" />
-            <span className="text-ink-body text-[14px] leading-snug">
-              {feature}
-            </span>
-          </li>
+          <div key={feature} style={s.featureRow}>
+            <Check style={{ width: "13px", height: "13px", ...s.featureCheck }} />
+            <span style={s.featureText}>{feature}</span>
+          </div>
         ))}
-      </ul>
+      </div>
 
-      {/* CTA */}
-      <button
-        onClick={onBuy}
-        className={cn(
-          "w-full h-14 uppercase tracking-[0.06em]",
-          isFeatured
-            ? "btn-cta-primary animate-cta-glow-pulse"
-            : "btn-cta-secondary"
-        )}
-      >
-        {product.ctaLabel}
-      </button>
-
-      {/* Details link */}
-      <button
-        onClick={(e) => {
-          e.stopPropagation();
-          window.location.href = `/store/${product.slug}`;
-        }}
-        className="text-ink-secondary text-[12px] tracking-[0.08em] hover:text-ink-body transition-colors text-center mt-3"
-      >
-        See full details {"\u2192"}
-      </button>
+      {/* Action */}
+      <div style={s.actionBlock}>
+        <button
+          onClick={onBuy}
+          style={isFeatured ? s.btnCta : s.btnOutline}
+          onMouseDown={(e) => { (e.currentTarget.style.transform = "scale(0.98)"); }}
+          onMouseUp={(e) => { (e.currentTarget.style.transform = "scale(1)"); }}
+        >
+          {product.ctaLabel}
+        </button>
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            window.location.href = `/store/${product.slug}`;
+          }}
+          style={s.detailsLink}
+          onMouseEnter={(e) => { (e.currentTarget.style.color = "rgba(212,175,55,1)"); }}
+          onMouseLeave={(e) => { (e.currentTarget.style.color = "rgba(212,175,55,0.60)"); }}
+        >
+          See full details →
+        </button>
+      </div>
     </div>
   );
 };
@@ -316,106 +583,172 @@ const ServiceCard = ({
   visible: boolean;
   index: number;
 }) => {
+  const [hovered, setHovered] = useState(false);
   const isTop = product.tier === 4;
+
+  const cardStyle: React.CSSProperties = {
+    ...(isTop ? s.cardFeatured : s.cardStandard),
+    opacity: visible ? 1 : 0,
+    transform: visible
+      ? (hovered ? (isTop ? "translateY(-4px)" : "translateY(-2px)") : "translateY(0)")
+      : "translateY(20px)",
+    transition: "opacity 700ms ease-out, transform 400ms ease-out, border-color 0.3s ease",
+    transitionDelay: visible ? `${index * 120}ms` : "0ms",
+    borderColor: hovered
+      ? (isTop ? "rgba(212,175,55,0.5)" : "rgba(212,175,55,0.25)")
+      : undefined,
+  };
 
   return (
     <div
-      className="flex flex-col p-6 rounded-xl"
-      style={{
-        opacity: visible ? 1 : 0,
-        transform: visible ? "translateY(0)" : "translateY(20px)",
-        transition: "opacity 700ms ease-out, transform 700ms ease-out",
-        transitionDelay: `${index * 120}ms`,
-        border: isTop
-          ? "1px solid rgba(212,175,55,0.40)"
-          : "1px solid rgba(212,175,55,0.30)",
-        background: isTop
-          ? "linear-gradient(165deg, rgba(212,175,55,0.05), rgba(0,0,0,0.6))"
-          : "linear-gradient(165deg, rgba(212,175,55,0.03), rgba(0,0,0,0.6))",
-        boxShadow: isTop
-          ? "0 0 40px rgba(212,175,55,0.08), inset 0 1px 0 rgba(255,255,255,0.06)"
-          : "inset 0 1px 0 rgba(255,255,255,0.06)",
-      }}
+      style={cardStyle}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
     >
-      {/* Badge + Turnaround row */}
-      <div className="flex items-center justify-between mb-4">
-        {product.badge && (
-          <span
-            className={cn(
-              "inline-block px-3 py-1.5 text-[12px] tracking-[0.15em] uppercase font-bold rounded",
-              isTop
-                ? "bg-gold/15 border border-gold/30 text-gold"
-                : "bg-gold/10 border border-gold/25 text-gold"
+      {/* Top line */}
+      <div style={isTop ? s.topLineFeatured : s.topLineStandard} />
+
+      {/* Header row */}
+      <div style={isTop ? s.cardHeaderFeatured : s.cardHeaderStandard}>
+        <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "12px" }}>
+          <div>
+            <h3 style={s.cardName}>{product.name.toUpperCase()}</h3>
+            {product.pickThisIf && (
+              <p style={s.pickThisIf}>Pick this one if {product.pickThisIf}</p>
             )}
-          >
-            {product.badge}
-          </span>
-        )}
-        {product.turnaround && (
-          <span className="flex items-center gap-1.5 text-ink-secondary text-[12px] tracking-[0.06em]">
-            <Clock className="w-3.5 h-3.5" />
-            {product.turnaround}
-          </span>
-        )}
+          </div>
+          {product.badge && (
+            <span style={getBadgeStyle(product.badge)}>{product.badge}</span>
+          )}
+        </div>
       </div>
 
-      {/* Name */}
-      <h3 className="font-bebas text-[28px] tracking-[0.06em] text-white mb-1">
-        {product.name.toUpperCase()}
-      </h3>
-
-      {/* Pick this if */}
-      {product.pickThisIf && (
-        <p className="text-gold/70 text-[13px] italic mb-3">
-          Pick this one if {product.pickThisIf}
-        </p>
-      )}
-
-      {/* Price */}
-      <div className="mb-3">
-        <span className="font-mono text-[40px] font-bold text-white">
-          ${product.price.toLocaleString()}
-        </span>
-      </div>
-
-      {/* Short description */}
-      <p className="text-ink-secondary text-[16px] leading-relaxed mb-5">
-        {product.shortDescription}
-      </p>
-
-      {/* Feature list */}
-      <ul className="space-y-2.5 mb-6 flex-1">
-        {product.features.map((feature) => (
-          <li key={feature} className="flex items-start gap-2.5">
-            <Check className="w-3.5 h-3.5 mt-0.5 flex-shrink-0 text-gold" />
-            <span className="text-ink-body text-[14px] leading-snug">
-              {feature}
+      {/* Price block + turnaround */}
+      <div style={s.priceBlock}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <span style={isTop ? s.priceFeatured : s.priceStandard}>
+            ${product.price.toLocaleString()}
+          </span>
+          {product.turnaround && (
+            <span style={s.turnaroundBadge}>
+              <Clock style={{ width: "12px", height: "12px", color: "rgba(212,175,55,0.7)" }} />
+              {product.turnaround}
             </span>
-          </li>
+          )}
+        </div>
+        <p style={s.shortDesc}>{product.shortDescription}</p>
+      </div>
+
+      {/* Features */}
+      <div style={s.featuresBlock}>
+        {product.features.map((feature) => (
+          <div key={feature} style={s.featureRow}>
+            <Check style={{ width: "13px", height: "13px", ...s.featureCheck }} />
+            <span style={s.featureText}>{feature}</span>
+          </div>
         ))}
-      </ul>
+      </div>
 
-      {/* CTA */}
-      <button
-        onClick={onBuy}
-        className="w-full h-14 uppercase tracking-[0.06em] btn-cta-primary flex items-center justify-center gap-2"
-      >
-        {product.ctaLabel}
-      </button>
-
-      {/* Details link */}
-      <button
-        onClick={(e) => {
-          e.stopPropagation();
-          window.location.href = `/store/${product.slug}`;
-        }}
-        className="text-ink-secondary text-[12px] tracking-[0.08em] hover:text-ink-body transition-colors text-center mt-3"
-      >
-        See full details {"\u2192"}
-      </button>
+      {/* Action */}
+      <div style={s.actionBlock}>
+        <button
+          onClick={onBuy}
+          style={isTop ? s.btnCta : s.btnOutline}
+          onMouseDown={(e) => { (e.currentTarget.style.transform = "scale(0.98)"); }}
+          onMouseUp={(e) => { (e.currentTarget.style.transform = "scale(1)"); }}
+        >
+          {product.ctaLabel}
+        </button>
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            window.location.href = `/store/${product.slug}`;
+          }}
+          style={s.detailsLink}
+          onMouseEnter={(e) => { (e.currentTarget.style.color = "rgba(212,175,55,1)"); }}
+          onMouseLeave={(e) => { (e.currentTarget.style.color = "rgba(212,175,55,0.60)"); }}
+        >
+          See full details →
+        </button>
+      </div>
     </div>
   );
 };
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   FAQ ITEM
+   ═══════════════════════════════════════════════════════════════════ */
+const FaqItem = ({
+  faq,
+  isOpen,
+  onToggle,
+}: {
+  faq: { q: string; a: string };
+  isOpen: boolean;
+  onToggle: () => void;
+}) => (
+  <div style={{ borderBottom: "1px solid rgba(255,255,255,0.1)" }}>
+    <button
+      onClick={onToggle}
+      style={{
+        width: "100%",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        padding: "24px 0",
+        background: "none",
+        border: "none",
+        cursor: "pointer",
+        textAlign: "left",
+        gap: "12px",
+      }}
+      onMouseEnter={(e) => {
+        const t = e.currentTarget.querySelector("span") as HTMLElement;
+        if (t) t.style.color = "#D4AF37";
+      }}
+      onMouseLeave={(e) => {
+        const t = e.currentTarget.querySelector("span") as HTMLElement;
+        if (t && !isOpen) t.style.color = "rgba(255,255,255,0.9)";
+      }}
+    >
+      <span style={{
+        fontFamily: "'Bebas Neue', sans-serif",
+        fontSize: "1.3rem",
+        letterSpacing: "0.04em",
+        color: isOpen ? "#D4AF37" : "rgba(255,255,255,0.9)",
+        transition: "color 0.2s",
+        lineHeight: 1.2,
+      }}>
+        {faq.q}
+      </span>
+      <ChevronDown style={{
+        width: "18px",
+        height: "18px",
+        color: isOpen ? "#D4AF37" : "rgba(212,175,55,0.5)",
+        transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
+        transition: "transform 0.3s ease, color 0.2s",
+        flexShrink: 0,
+      }} />
+    </button>
+    {isOpen && (
+      <div style={{
+        padding: "0 0 24px",
+        animation: "faqOpen 0.3s ease-out",
+      }}>
+        <p style={{
+          fontFamily: "'Inter', sans-serif",
+          fontSize: "15px",
+          color: "rgba(255,255,255,0.65)",
+          lineHeight: 1.6,
+          margin: 0,
+        }}>
+          {faq.a}
+        </p>
+      </div>
+    )}
+  </div>
+);
 
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -425,11 +758,30 @@ const Store = () => {
   const haptics = useHaptics();
   const [showPopup, setShowPopup] = useState<Product | null>(null);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
+
+  // Reduced motion check
+  const prefersReducedMotion =
+    typeof window !== "undefined" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const reveal = (visible: boolean, delay = 0): React.CSSProperties => ({
+    opacity: prefersReducedMotion || visible ? 1 : 0,
+    transform: prefersReducedMotion || visible ? "translateY(0)" : "translateY(30px)",
+    transition: prefersReducedMotion
+      ? "none"
+      : "opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1)",
+    transitionDelay: prefersReducedMotion || delay === 0 ? "0ms" : `${delay * 100}ms`,
+  });
 
   // Reveal refs
-  const revealProducts = useReveal();
-  const revealServices = useReveal();
-  const revealFaq = useReveal();
+  const { ref: heroRef, inView: heroVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
+  const { ref: productsRef, inView: productsVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
+  const { ref: turnkeyHeroRef, inView: turnkeyHeroVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
+  const { ref: servicesRef, inView: servicesVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
+  const { ref: faqRef, inView: faqVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
+  const { ref: bespokeRef, inView: bespokeVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
+  const { ref: footerRef, inView: footerVisible } = useInView<HTMLDivElement>({ threshold: 0.2 });
 
   /* ─── CHECKOUT — DIRECT TO STRIPE ─── */
   const startCheckout = async (productId: string, addonId?: string) => {
@@ -460,8 +812,6 @@ const Store = () => {
 
   const handleBuyService = (product: Product) => {
     haptics.medium();
-    // TODO: Route to intake form (Typeform, Google Form, or custom)
-    // For now, show the working model popup same as products
     setShowPopup(product);
   };
 
@@ -491,7 +841,9 @@ const Store = () => {
 
   /* ─── RENDER ─── */
   return (
-    <div className="min-h-screen bg-black flex flex-col grain-overlay">
+    <div style={{ minHeight: "100vh", background: "#000", maxWidth: "430px", margin: "0 auto" }}>
+      <StyleInjector />
+
       {/* Working Model Popup */}
       {showPopup && (
         <WorkingModelPopup
@@ -504,189 +856,279 @@ const Store = () => {
 
       {/* Checkout loading overlay */}
       {checkoutLoading && !showPopup && (
-        <div className="fixed inset-0 z-[300] bg-black/60 flex items-center justify-center">
-          <div className="text-gold text-[14px] tracking-[0.15em] animate-pulse">
+        <div style={{
+          position: "fixed", inset: 0, zIndex: 300,
+          background: "rgba(0,0,0,0.6)",
+          display: "flex", alignItems: "center", justifyContent: "center",
+        }}>
+          <div style={{
+            color: "#D4AF37",
+            fontFamily: "'Roboto Mono', monospace",
+            fontSize: "14px",
+            letterSpacing: "0.15em",
+          }}>
             CONNECTING TO CHECKOUT...
           </div>
         </div>
       )}
 
-      <main
-        className="flex-1"
-        style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
+      {/* ──────────────────────────────────────────────────────────
+           § 1  SELF-SERVE — Hero
+         ────────────────────────────────────────────────────────── */}
+      <section
+        ref={heroRef}
+        style={{
+          padding: "40px 20px 48px",
+          textAlign: "center",
+          position: "relative",
+        }}
       >
-        {/* ──────────────────────────────────────────────────────────
-             § 1  SELF-SERVE PRODUCTS
-             Tiers 1-2. Instant delivery. Stripe checkout.
-           ────────────────────────────────────────────────────────── */}
-        <section id="products" className="pt-14 pb-10 px-6">
-          <div ref={revealProducts.ref} className="max-w-md mx-auto">
-            {/* Section header */}
-            <div className="text-center mb-8">
-              <h2 className="font-bebas text-[40px] tracking-[0.08em] text-gold">
-                YOUR NUMBERS.{" "}
-                <span className="text-white">INVESTOR-READY.</span>
-              </h2>
-              <p className="text-ink-secondary text-[15px] leading-relaxed mt-3">
-                Professional financial documents built from your calculator
-                data. Purchase and download.
-              </p>
-            </div>
+        {/* Radial glow */}
+        <div style={{
+          position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
+          background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.08) 0%, transparent 70%)",
+          pointerEvents: "none",
+        }} />
 
-            {/* Product cards */}
-            <div className="space-y-5">
-              {sortedProducts.map((product, i) => (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                  onBuy={() => handleBuyProduct(product)}
-                  visible={revealProducts.visible}
-                  index={i}
-                />
-              ))}
-            </div>
+        <div style={{ position: "relative", ...reveal(heroVisible) }}>
+          <EyebrowRuled text="Self-Serve" />
+          <h1 style={{
+            fontFamily: "'Bebas Neue', sans-serif",
+            fontSize: "3.5rem",
+            lineHeight: 0.95,
+            margin: "0 0 16px 0",
+            letterSpacing: "0.04em",
+          }}>
+            <span style={{ color: "rgba(255,255,255,0.95)" }}>Your Numbers.</span>
+            <br />
+            <span style={{ color: "#D4AF37" }}>Investor-Ready.</span>
+          </h1>
+          <p style={{
+            fontFamily: "'Inter', sans-serif",
+            fontSize: "15px",
+            color: "rgba(255,255,255,0.65)",
+            lineHeight: 1.6,
+            margin: 0,
+          }}>
+            Professional financial documents built from your calculator data. Purchase and download.
+          </p>
+        </div>
+      </section>
 
+      {/* ──────────────────────────────────────────────────────────
+           § 1  SELF-SERVE — Cards
+         ────────────────────────────────────────────────────────── */}
+      <div
+        ref={productsRef}
+        style={{
+          display: "flex", flexDirection: "column", gap: "24px",
+          padding: "0 20px 48px",
+        }}
+      >
+        {sortedProducts.map((product, i) => (
+          <ProductCard
+            key={product.id}
+            product={product}
+            onBuy={() => handleBuyProduct(product)}
+            visible={productsVisible}
+            index={i}
+          />
+        ))}
+      </div>
+
+      {/* ──────────────────────────────────────────────────────────
+           DIVIDER — diamond ornament
+         ────────────────────────────────────────────────────────── */}
+      <div style={{
+        padding: "0 20px", margin: "24px 0 48px",
+        display: "flex", alignItems: "center", justifyContent: "center", gap: "16px",
+      }}>
+        <div style={{ flex: 1, height: "1px", background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.25), transparent)" }} />
+        <span style={{ color: "rgba(212,175,55,0.4)", fontSize: "10px" }}>◆</span>
+        <div style={{ flex: 1, height: "1px", background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.25), transparent)" }} />
+      </div>
+
+      {/* ──────────────────────────────────────────────────────────
+           § 2  TURNKEY — Hero
+         ────────────────────────────────────────────────────────── */}
+      <section
+        ref={turnkeyHeroRef}
+        style={{
+          padding: "0 20px 32px",
+          textAlign: "center",
+        }}
+      >
+        <div style={reveal(turnkeyHeroVisible)}>
+          <EyebrowRuled text="Turnkey" />
+          <h2 style={{
+            fontFamily: "'Bebas Neue', sans-serif",
+            fontSize: "3.2rem",
+            lineHeight: 0.95,
+            margin: "0 0 16px 0",
+            letterSpacing: "0.04em",
+          }}>
+            <span style={{ color: "rgba(255,255,255,0.95)" }}>We Build It</span>
+            <br />
+            <span style={{ color: "#D4AF37" }}>For You.</span>
+          </h2>
+          <p style={{
+            fontFamily: "'Inter', sans-serif",
+            fontSize: "15px",
+            color: "rgba(255,255,255,0.65)",
+            lineHeight: 1.6,
+            margin: 0,
+          }}>
+            Tell us about your project. We build the complete investor package — turnkey, custom, delivered in 5 business days.
+          </p>
+        </div>
+      </section>
+
+      {/* ──────────────────────────────────────────────────────────
+           § 2  TURNKEY — Cards
+         ────────────────────────────────────────────────────────── */}
+      <div
+        ref={servicesRef}
+        style={{
+          display: "flex", flexDirection: "column", gap: "24px",
+          padding: "0 20px 48px",
+        }}
+      >
+        {sortedServices.map((product, i) => (
+          <ServiceCard
+            key={product.id}
+            product={product}
+            onBuy={() => handleBuyService(product)}
+            visible={servicesVisible}
+            index={i}
+          />
+        ))}
+      </div>
+
+      {/* ──────────────────────────────────────────────────────────
+           § 3  FAQ
+         ────────────────────────────────────────────────────────── */}
+      <section
+        ref={faqRef}
+        style={{ padding: "48px 20px" }}
+      >
+        <div style={reveal(faqVisible)}>
+          <EyebrowRuled text="Questions" />
+          <div style={{ textAlign: "center", marginBottom: "32px" }}>
+            <h2 style={{
+              fontFamily: "'Bebas Neue', sans-serif",
+              fontSize: "3.2rem",
+              lineHeight: 0.95,
+              margin: 0,
+              letterSpacing: "0.04em",
+            }}>
+              <span style={{ color: "rgba(255,255,255,0.95)" }}>Common</span>{" "}
+              <span style={{ color: "#D4AF37" }}>Questions</span>
+            </h2>
           </div>
-        </section>
 
-        {/* ──────────────────────────────────────────────────────────
-             DIVIDER — category shift
-           ────────────────────────────────────────────────────────── */}
-        <div className="py-10 px-6">
-          <div className="max-w-md mx-auto">
-            <div
-              className="h-px w-full"
-              style={{
-                background:
-                  "linear-gradient(90deg, transparent, rgba(212,175,55,0.40), transparent)",
-              }}
-            />
+          <div style={{ borderTop: "1px solid rgba(255,255,255,0.1)" }}>
+            {storeFaqs.map((faq, i) => (
+              <FaqItem
+                key={faq.q}
+                faq={faq}
+                isOpen={openFaq === i}
+                onToggle={() => setOpenFaq(openFaq === i ? null : i)}
+              />
+            ))}
           </div>
         </div>
+      </section>
 
-        {/* ──────────────────────────────────────────────────────────
-             § 2  TURNKEY SERVICES
-             Tiers 3-4. Custom build. 5 business day turnaround.
-           ────────────────────────────────────────────────────────── */}
-        <section id="services" className="pb-14 px-6">
-          <div ref={revealServices.ref} className="max-w-md mx-auto">
-            {/* Section header */}
-            <div className="text-center mb-8">
-              <h2 className="font-bebas text-[40px] tracking-[0.08em] text-gold">
-                WE BUILD IT{" "}
-                <span className="text-white">FOR YOU.</span>
-              </h2>
-              <p className="text-ink-secondary text-[15px] leading-relaxed mt-3">
-                Tell us about your project. We build the complete investor
-                package — turnkey, custom, delivered in 5 business days.
-              </p>
-            </div>
-
-            {/* Service cards */}
-            <div className="space-y-5">
-              {sortedServices.map((product, i) => (
-                <ServiceCard
-                  key={product.id}
-                  product={product}
-                  onBuy={() => handleBuyService(product)}
-                  visible={revealServices.visible}
-                  index={i}
-                />
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ──────────────────────────────────────────────────────────
-             § 3  FAQ
-           ────────────────────────────────────────────────────────── */}
-        <section id="faq" className="py-14 md:py-20 px-6">
-          <div
-            ref={revealFaq.ref}
-            className="max-w-md mx-auto"
-            style={{
-              opacity: revealFaq.visible ? 1 : 0,
-              transform: revealFaq.visible
-                ? "translateY(0)"
-                : "translateY(20px)",
-              transition:
-                "opacity 700ms ease-out, transform 700ms ease-out",
-            }}
-          >
-            <div className="text-center mb-8">
-              <h2 className="font-bebas text-[40px] tracking-[0.08em] text-gold">
-                COMMON <span className="text-white">QUESTIONS</span>
-              </h2>
-            </div>
-
-            <div
-              className="border border-gold-border bg-black overflow-hidden rounded-xl px-6"
-              style={{
-                boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06)",
-              }}
-            >
-              <Accordion type="single" collapsible className="w-full">
-                {storeFaqs.map((faq, i) => (
-                  <AccordionItem
-                    key={faq.q}
-                    value={`faq-${i}`}
-                    className={cn(
-                      i > 0 && "border-t border-bg-card-rule"
-                    )}
-                    style={{ borderBottom: "none" }}
-                  >
-                    <AccordionTrigger className="font-bebas text-[16px] tracking-[0.06em] uppercase text-gold hover:text-gold/70 hover:no-underline text-left py-5">
-                      {faq.q}
-                    </AccordionTrigger>
-                    <AccordionContent className="text-ink-secondary text-[16px] leading-relaxed normal-case font-sans pb-5">
-                      {faq.a}
-                    </AccordionContent>
-                  </AccordionItem>
-                ))}
-              </Accordion>
-            </div>
-
-            {/* Custom work prompt */}
-            <div
-              className="mt-5 p-6 rounded-xl"
-              style={{
-                border: "1px solid rgba(212,175,55,0.30)",
-                background:
-                  "linear-gradient(165deg, rgba(212,175,55,0.05), rgba(0,0,0,0.6))",
-                boxShadow:
-                  "0 0 32px rgba(212,175,55,0.08), inset 0 1px 0 rgba(255,255,255,0.06)",
-              }}
-            >
-              <h3 className="font-bebas text-[18px] tracking-[0.08em] text-gold mb-2">
-                NEED SOMETHING DIFFERENT?
-              </h3>
-              <p className="text-ink-body text-[15px] leading-relaxed mb-4">
-                Bespoke financial modeling, custom comp research, or
-                institutional-grade investor materials beyond what these
-                packages cover.
-              </p>
-              <a
-                href="mailto:thefilmmaker.og@gmail.com"
-                className="inline-flex items-center gap-2 text-gold text-[14px] font-semibold hover:text-gold/80 transition-colors"
-              >
-                <Mail className="w-4 h-4" />
-                Get In Touch {"\u2192"}
-              </a>
-            </div>
-          </div>
-        </section>
-
-        {/* ──────────────────────────────────────────────────────────
-             FOOTER — legal only
-           ────────────────────────────────────────────────────────── */}
-        <footer className="py-8 px-6 max-w-md mx-auto">
-          <p className="text-ink-ghost text-[12px] tracking-wide leading-relaxed text-center">
-            For educational and informational purposes only. Not legal, tax,
-            or investment advice. Consult a qualified entertainment attorney
-            before making financing decisions.
+      {/* ──────────────────────────────────────────────────────────
+           BESPOKE CARD (Closer)
+         ────────────────────────────────────────────────────────── */}
+      <div
+        ref={bespokeRef}
+        style={{
+          margin: "0 20px 64px",
+          ...reveal(bespokeVisible),
+        }}
+      >
+        <div style={{
+          background: "#0A0A0A",
+          border: "1px solid rgba(212,175,55,0.25)",
+          borderRadius: "12px",
+          padding: "40px 24px",
+          textAlign: "center",
+          outline: "1px solid rgba(212,175,55,0.08)",
+          outlineOffset: "-6px",
+        }}>
+          <h3 style={{
+            fontFamily: "'Bebas Neue', sans-serif",
+            fontSize: "1.8rem",
+            letterSpacing: "0.06em",
+            color: "rgba(255,255,255,0.95)",
+            margin: "0 0 12px 0",
+            lineHeight: 1.1,
+          }}>
+            NEED SOMETHING <span style={{ color: "#D4AF37" }}>DIFFERENT?</span>
+          </h3>
+          <p style={{
+            fontFamily: "'Inter', sans-serif",
+            fontSize: "15px",
+            color: "rgba(255,255,255,0.6)",
+            lineHeight: 1.6,
+            maxWidth: "90%",
+            margin: "0 auto 24px",
+          }}>
+            Bespoke financial modeling, custom comp research, or institutional-grade investor materials beyond what these packages cover.
           </p>
-        </footer>
-      </main>
+          <a
+            href="mailto:thefilmmaker.og@gmail.com"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "8px",
+              fontFamily: "'Roboto Mono', monospace",
+              fontSize: "13px",
+              letterSpacing: "0.06em",
+              textTransform: "uppercase",
+              color: "#D4AF37",
+              background: "rgba(212,175,55,0.05)",
+              border: "1px solid rgba(212,175,55,0.4)",
+              borderRadius: "6px",
+              padding: "14px 24px",
+              textDecoration: "none",
+              transition: "background 0.2s, border-color 0.2s",
+              cursor: "pointer",
+            }}
+            onMouseDown={(e) => { (e.currentTarget.style.transform = "scale(0.98)"); }}
+            onMouseUp={(e) => { (e.currentTarget.style.transform = "scale(1)"); }}
+          >
+            <Mail style={{ width: "16px", height: "16px" }} />
+            Get In Touch →
+          </a>
+        </div>
+      </div>
+
+      {/* ──────────────────────────────────────────────────────────
+           FOOTER
+         ────────────────────────────────────────────────────────── */}
+      <footer
+        ref={footerRef}
+        style={{
+          background: "#000",
+          borderTop: "1px solid rgba(255,255,255,0.06)",
+          padding: "32px 20px 64px",
+          ...reveal(footerVisible),
+        }}
+      >
+        <p style={{
+          fontFamily: "'Inter', sans-serif",
+          fontSize: "13px",
+          color: "rgba(255,255,255,0.4)",
+          textAlign: "center",
+          lineHeight: 1.6,
+          margin: 0,
+        }}>
+          For educational and informational purposes only. Not legal, tax, or investment advice. Consult a qualified entertainment attorney before making financing decisions.
+        </p>
+      </footer>
     </div>
   );
 };
