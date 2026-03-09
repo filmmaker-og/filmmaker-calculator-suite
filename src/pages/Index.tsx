@@ -4,7 +4,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { useHaptics } from "@/hooks/use-haptics";
 import { useInView } from "@/hooks/useInView";
 import LeadCaptureModal from "@/components/LeadCaptureModal";
-import MobileMenu from "@/components/MobileMenu";
 /*
   PAGE STACK — v12 Producer's Cut:
     1. PILL NAV     — fixed floating, logo + hamburger
@@ -27,7 +26,7 @@ const Index = () => {
   const [showLeadCapture, setShowLeadCapture] = useState(false);
   const [pendingDestination, setPendingDestination] = useState<string | null>(null);
   const [hasSession, setHasSession] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
+
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -127,7 +126,6 @@ const Index = () => {
 
   return (
     <>
-      <MobileMenu isOpen={menuOpen} onOpenChange={setMenuOpen} />
       <LeadCaptureModal
         isOpen={showLeadCapture}
         onClose={() => setShowLeadCapture(false)}
@@ -148,26 +146,6 @@ const Index = () => {
       `}</style>
 
       <div style={{ minHeight: "100vh", background: "#000", paddingTop: "80px", maxWidth: "430px", margin: "0 auto" }}>
-
-        {/* ═══ PILL NAV ═══ */}
-        <nav style={styles.pillNav}>
-          <span
-            style={styles.pillLogo}
-            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          >
-            <span style={{ color: "#D4AF37" }}>filmmaker.</span>
-            <span style={{ color: "#fff" }}>og</span>
-          </span>
-          <button
-            onClick={() => { haptics.light(); setMenuOpen(true); }}
-            style={styles.pillHamburger}
-            aria-label="Menu"
-          >
-            <span style={{ ...styles.hamburgerLine, width: "16px" }} />
-            <span style={{ ...styles.hamburgerLine, width: "16px" }} />
-            <span style={{ ...styles.hamburgerLine, width: "10px" }} />
-          </button>
-        </nav>
 
         {/* ═══ § 1 HERO ═══ */}
         <section ref={heroRef} style={styles.hero}>
@@ -493,33 +471,6 @@ const styles: Record<string, React.CSSProperties> = {
     background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent)",
     transform: "skewX(-20deg)",
     animation: "lp-shimmer 5s cubic-bezier(0.16, 1, 0.3, 1) infinite",
-  },
-
-  /* ── Pill Nav ── */
-  pillNav: {
-    position: "fixed", top: "16px", left: "50%", transform: "translateX(-50%)",
-    width: "calc(100% - 32px)", maxWidth: "390px",
-    background: "rgba(6,6,6,0.85)",
-    border: "1px solid rgba(212,175,55,0.38)",
-    borderRadius: "999px",
-    padding: "10px 10px 10px 24px",
-    backdropFilter: "blur(24px)",
-    WebkitBackdropFilter: "blur(24px)",
-    boxShadow: "0 2px 24px rgba(0,0,0,0.8)",
-    display: "flex", alignItems: "center", justifyContent: "space-between",
-    zIndex: 100,
-  },
-  pillLogo: {
-    fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.7rem", letterSpacing: "0.06em", cursor: "pointer",
-  },
-  pillHamburger: {
-    width: "40px", height: "40px", borderRadius: "50%",
-    display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "4px",
-    background: "rgba(212,175,55,0.06)", border: "1px solid rgba(212,175,55,0.20)",
-    cursor: "pointer",
-  },
-  hamburgerLine: {
-    display: "block", height: "1px", background: "#D4AF37",
   },
 
   /* ── § 1 HERO ── */
