@@ -255,11 +255,9 @@ const ProjectTab = ({ project, onUpdateProject, onAdvance }: ProjectTabProps) =>
                   ...(isPressed ? { transform: "scale(0.96)" } : {}),
                 }}
                 onClick={() => handleGenreSelect(genre)}
-                onMouseDown={() => setPressedPill(genre)}
-                onMouseUp={() => setPressedPill(null)}
-                onMouseLeave={() => setPressedPill(null)}
-                onTouchStart={() => setPressedPill(genre)}
-                onTouchEnd={() => setPressedPill(null)}
+                onPointerDown={() => setPressedPill(genre)}
+                onPointerUp={() => setPressedPill(null)}
+                onPointerLeave={() => setPressedPill(null)}
               >
                 {genre}
               </button>
@@ -297,11 +295,9 @@ const ProjectTab = ({ project, onUpdateProject, onAdvance }: ProjectTabProps) =>
                   ...(isPressed ? { transform: "scale(0.96)" } : {}),
                 }}
                 onClick={() => update("status", status)}
-                onMouseDown={() => setPressedPill(`status-${status}`)}
-                onMouseUp={() => setPressedPill(null)}
-                onMouseLeave={() => setPressedPill(null)}
-                onTouchStart={() => setPressedPill(`status-${status}`)}
-                onTouchEnd={() => setPressedPill(null)}
+                onPointerDown={() => setPressedPill(`status-${status}`)}
+                onPointerUp={() => setPressedPill(null)}
+                onPointerLeave={() => setPressedPill(null)}
               >
                 {status}
               </button>
@@ -429,11 +425,9 @@ const ProjectTab = ({ project, onUpdateProject, onAdvance }: ProjectTabProps) =>
             ...(ctaPressed ? { transform: "scale(0.98)" } : {}),
           }}
           onClick={onAdvance}
-          onMouseDown={() => setCtaPressed(true)}
-          onMouseUp={() => setCtaPressed(false)}
-          onMouseLeave={() => setCtaPressed(false)}
-          onTouchStart={() => setCtaPressed(true)}
-          onTouchEnd={() => setCtaPressed(false)}
+          onPointerDown={() => setCtaPressed(true)}
+          onPointerUp={() => setCtaPressed(false)}
+          onPointerLeave={() => setCtaPressed(false)}
         >
           Continue to Budget
           <ArrowRight style={{ width: "18px", height: "18px" }} />
