@@ -3,7 +3,7 @@ import { WaterfallInputs, formatCompactCurrency } from "@/lib/waterfall";
 import { PremiumInput } from "@/components/ui/premium-input";
 import { PercentStepper } from "@/components/ui/percent-stepper";
 import { cn } from "@/lib/utils";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import StandardStepLayout from "../StandardStepLayout";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
@@ -38,7 +38,7 @@ interface StackInputCardProps {
 
 /**
  * StackInputCard - Data collection mini-app screen
- * 
+ *
  * Job: Collect one capital source amount (+ optional rate)
  * Pattern: Enter value → See calculation → Next/Skip
  */
@@ -61,6 +61,7 @@ const StackInputCard = ({
   helpText,
 }: StackInputCardProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
+  const [focused, setFocused] = useState(false);
 
   const formatValue = (value: number | undefined) => {
     if (value === undefined || value === 0) return '';
@@ -74,7 +75,7 @@ const StackInputCard = ({
   const amount = (inputs[amountField] as number) || 0;
   const hasAmount = amount > 0;
   const rateValue = rateConfig ? (inputs[rateConfig.field] as number) : 0;
-  
+
   // Calculate total with rate if applicable
   const totalRepayment = rateConfig ? amount * (1 + rateValue / 100) : amount;
   const interestAmount = rateConfig ? amount * (rateValue / 100) : 0;
@@ -96,22 +97,39 @@ const StackInputCard = ({
       subtitle={subtitle}
     >
       <div className="space-y-6">
-        
-        {/* Main Input Card - Matte Look */}
-        <div className="bg-bg-elevated border border-border-default rounded-lg transition-all focus-within:border-gold/50 focus-within:shadow-focus focus-within:bg-bg-surface overflow-hidden">
+
+        {/* Main Input Card - Store card pattern */}
+        <div
+          className="overflow-hidden"
+          onFocusCapture={() => setFocused(true)}
+          onBlurCapture={() => setFocused(false)}
+          style={{
+            background: "#0A0A0A",
+            border: `1px solid rgba(212,175,55,${focused ? "0.35" : "0.15"})`,
+            borderRadius: "12px",
+            transition: "border-color 0.25s ease",
+          }}
+        >
           {/* Section header */}
-          <div className="px-5 py-3 border-b border-border-subtle flex items-center justify-between bg-bg-surface/50">
+          <div
+            className="px-5 py-3 flex items-center justify-between"
+            style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}
+          >
             <div className="flex items-center gap-2">
-              <span className="text-xs uppercase tracking-widest text-text-dim font-semibold">
+              <span className="text-xs uppercase tracking-widest font-semibold" style={{ color: "rgba(255,255,255,0.40)" }}>
                 {amountLabel}
               </span>
               {helpText && (
                 <TooltipProvider>
                   <Tooltip delayDuration={0}>
                     <TooltipTrigger asChild>
-                      <Info className="w-3.5 h-3.5 text-text-dim/50 hover:text-gold cursor-pointer transition-colors" />
+                      <Info className="w-3.5 h-3.5 cursor-pointer transition-colors" style={{ color: "rgba(255,255,255,0.20)" }} />
                     </TooltipTrigger>
-                    <TooltipContent side="right" className="max-w-[200px] bg-bg-card border-border-subtle text-xs">
+                    <TooltipContent
+                      side="right"
+                      className="max-w-[200px] text-xs"
+                      style={{ background: "#0A0A0A", border: "1px solid rgba(212,175,55,0.15)" }}
+                    >
                       <p>{helpText}</p>
                     </TooltipContent>
                   </Tooltip>
@@ -119,7 +137,7 @@ const StackInputCard = ({
               )}
             </div>
             {hasAmount && (
-              <span className="text-xs text-gold font-mono flex items-center gap-1">
+              <span className="text-xs font-mono flex items-center gap-1" style={{ color: "#D4AF37" }}>
                 <Check className="w-3 h-3" />
               </span>
             )}
@@ -144,12 +162,12 @@ const StackInputCard = ({
 
           {/* Rate Stepper (if applicable) */}
           {rateConfig && hasAmount && (
-            <div className="p-5 border-t border-border-subtle bg-bg-surface/30">
+            <div className="p-5" style={{ borderTop: "1px solid rgba(255,255,255,0.06)", background: "rgba(255,255,255,0.02)" }}>
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-6 h-6 flex items-center justify-center text-xs font-mono font-medium bg-gold text-black rounded-sm">
+                <div className="w-6 h-6 flex items-center justify-center text-xs font-mono font-medium rounded-sm" style={{ background: "#D4AF37", color: "#000" }}>
                   %
                 </div>
-                <span className="text-xs uppercase tracking-widest text-gold font-semibold">
+                <span className="text-xs uppercase tracking-widest font-semibold" style={{ color: "#D4AF37" }}>
                   {rateConfig.label}
                 </span>
               </div>
@@ -169,21 +187,21 @@ const StackInputCard = ({
 
           {/* Calculation Result */}
           {hasAmount && rateConfig && (
-            <div className="border-t border-border-subtle bg-bg-void/30">
+            <div style={{ borderTop: "1px solid rgba(255,255,255,0.06)", background: "rgba(0,0,0,0.3)" }}>
               <div className="p-5">
                 <div className="space-y-3">
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-text-dim">Principal</span>
-                    <span className="font-mono text-text-mid">{formatCompactCurrency(amount)}</span>
+                    <span style={{ color: "rgba(255,255,255,0.40)" }}>Principal</span>
+                    <span className="font-mono" style={{ color: "rgba(255,255,255,0.70)" }}>{formatCompactCurrency(amount)}</span>
                   </div>
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-text-dim">+ {rateConfig.label} ({rateValue}%)</span>
-                    <span className="font-mono text-text-mid">{formatCompactCurrency(interestAmount)}</span>
+                    <span style={{ color: "rgba(255,255,255,0.40)" }}>+ {rateConfig.label} ({rateValue}%)</span>
+                    <span className="font-mono" style={{ color: "rgba(255,255,255,0.70)" }}>{formatCompactCurrency(interestAmount)}</span>
                   </div>
-                  <div className="h-px bg-gold/20" />
+                  <div style={{ height: "1px", background: "rgba(212,175,55,0.20)" }} />
                   <div className="flex items-center justify-between">
-                    <span className="text-xs uppercase tracking-wider text-gold font-semibold">Total Repayment</span>
-                    <span className="font-mono text-xl text-gold font-semibold">{formatCompactCurrency(totalRepayment)}</span>
+                    <span className="text-xs uppercase tracking-wider font-semibold" style={{ color: "#D4AF37" }}>Total Repayment</span>
+                    <span className="font-mono text-xl font-semibold" style={{ color: "#D4AF37" }}>{formatCompactCurrency(totalRepayment)}</span>
                   </div>
                 </div>
               </div>
@@ -192,28 +210,25 @@ const StackInputCard = ({
 
           {/* Typical Range */}
           {typicalRangeLabel && (
-            <div className="px-5 py-3 border-t border-border-subtle bg-bg-surface/20">
+            <div className="px-5 py-3" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
               <div className="flex items-center justify-between">
-                <span className="text-xs text-text-dim">Typical range</span>
-                <span className="text-xs font-mono text-text-mid">{typicalRangeLabel}</span>
+                <span className="text-xs" style={{ color: "rgba(255,255,255,0.40)" }}>Typical range</span>
+                <span className="text-xs font-mono" style={{ color: "rgba(255,255,255,0.70)" }}>{typicalRangeLabel}</span>
               </div>
             </div>
           )}
         </div>
 
-        {/* HELP TEXT REMOVED FROM BOTTOM - Now in Tooltip */}
-        {/* Navigation Buttons (Custom) */}
+        {/* Navigation Buttons */}
         <div className="flex items-center gap-3 pt-2">
           {/* Back */}
           <button
             onClick={onBack}
             className={cn(
               "flex-1 py-3 flex items-center justify-center gap-2",
-              "border border-border-subtle text-text-mid",
-              "hover:border-text-dim hover:text-text-primary transition-all",
-              "active:scale-[0.98]",
-              "rounded-md"
+              "transition-all active:scale-[0.98] rounded-md"
             )}
+            style={{ border: "1px solid rgba(255,255,255,0.15)", color: "rgba(255,255,255,0.70)" }}
           >
             <ArrowLeft className="w-4 h-4" />
             <span className="text-xs font-semibold uppercase tracking-wider">Back</span>
@@ -225,11 +240,9 @@ const StackInputCard = ({
               onClick={onNext}
               className={cn(
                 "flex-[2] py-3 flex items-center justify-center gap-2",
-                "bg-gold-cta-subtle border border-gold-cta-muted text-gold-cta",
-                "hover:bg-gold-cta-subtle hover:border-gold-cta transition-all",
-                "active:scale-[0.98]",
-                "rounded-md shadow-button"
+                "transition-all active:scale-[0.98] rounded-md"
               )}
+              style={{ background: "rgba(212,175,55,0.08)", border: "1px solid rgba(212,175,55,0.25)", color: "#D4AF37" }}
             >
               <span className="text-xs font-semibold uppercase tracking-wider">Continue</span>
               <ArrowRight className="w-4 h-4" />
@@ -239,11 +252,9 @@ const StackInputCard = ({
               onClick={onSkip}
               className={cn(
                 "flex-[2] py-3 flex items-center justify-center gap-2",
-                "border border-border-subtle text-text-dim",
-                "hover:border-white/20 hover:text-text-mid transition-all",
-                "active:scale-[0.98]",
-                "rounded-md"
+                "transition-all active:scale-[0.98] rounded-md"
               )}
+              style={{ border: "1px solid rgba(255,255,255,0.10)", color: "rgba(255,255,255,0.40)" }}
             >
               <span className="text-xs font-semibold uppercase tracking-wider">Skip This</span>
               <SkipForward className="w-4 h-4" />

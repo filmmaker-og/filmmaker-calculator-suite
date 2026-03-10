@@ -1,7 +1,6 @@
 import { useState, useCallback, useMemo } from "react";
 import { WaterfallInputs } from "@/lib/waterfall";
 import { useHaptics } from "@/hooks/use-haptics";
-import { cn } from "@/lib/utils";
 
 import CapitalSelect, { CapitalSourceSelections } from "../stack/CapitalSelect";
 import TaxCreditsInput from "../stack/TaxCreditsInput";
@@ -32,28 +31,33 @@ const WizardProgress = ({ steps, currentIndex }: { steps: string[]; currentIndex
         return (
           <div key={step} className="flex items-center">
             {i > 0 && (
-              <div className={cn(
-                "h-[1.5px] transition-colors duration-300",
-                steps.length <= 4 ? "w-6" : "w-4",
-                isCompleted ? "bg-gold/60" : "bg-white/10"
-              )} />
+              <div
+                className="transition-colors duration-300"
+                style={{
+                  height: "1.5px",
+                  width: steps.length <= 4 ? "24px" : "16px",
+                  background: isCompleted ? "rgba(212,175,55,0.60)" : "rgba(255,255,255,0.10)",
+                }}
+              />
             )}
-            <div className={cn(
-              "rounded-full transition-all duration-300",
-              isCurrent
-                ? "w-2.5 h-2.5 bg-gold shadow-[0_0_6px_rgba(212,175,55,0.6)]"
-                : isCompleted
-                  ? "w-2 h-2 bg-gold/50"
-                  : "w-2 h-2 bg-white/15"
-            )} />
+            <div
+              className="rounded-full transition-all duration-300"
+              style={
+                isCurrent
+                  ? { width: "10px", height: "10px", background: "#D4AF37", boxShadow: "0 0 6px rgba(212,175,55,0.6)" }
+                  : isCompleted
+                    ? { width: "8px", height: "8px", background: "rgba(212,175,55,0.50)" }
+                    : { width: "8px", height: "8px", background: "rgba(255,255,255,0.15)" }
+              }
+            />
           </div>
         );
       })}
     </div>
-    <p className="text-center text-[11px] font-mono text-text-dim mt-2 tracking-wider">
+    <p className="text-center text-[11px] font-mono mt-2 tracking-wider" style={{ color: "rgba(255,255,255,0.40)" }}>
       Step {currentIndex + 1} of {steps.length}
       {" — "}
-      <span className="text-text-mid">{STEP_LABELS[steps[currentIndex]] ?? steps[currentIndex]}</span>
+      <span style={{ color: "rgba(255,255,255,0.70)" }}>{STEP_LABELS[steps[currentIndex]] ?? steps[currentIndex]}</span>
     </p>
   </div>
 );
