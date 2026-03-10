@@ -61,7 +61,18 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
 
   /* ─── Section label ─────────────────────────────────────────── */
   const SectionLabel = ({ children }: { children: React.ReactNode }) => (
-    <p className="font-sans text-[13px] uppercase tracking-[0.2em] mb-3 pl-1" style={{ color: "#D4AF37" }}>{children}</p>
+    <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "16px" }}>
+      <div style={{ flex: 1, height: "1px", background: "rgba(212,175,55,0.25)" }} />
+      <span style={{
+        fontFamily: "'Roboto Mono', monospace",
+        fontSize: "11px",
+        letterSpacing: "0.18em",
+        textTransform: "uppercase" as const,
+        color: "#D4AF37",
+        whiteSpace: "nowrap" as const,
+      }}>{children}</span>
+      <div style={{ flex: 1, height: "1px", background: "rgba(212,175,55,0.25)" }} />
+    </div>
   );
 
   return (
@@ -82,8 +93,10 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
         )}
         style={{
           paddingBottom: "env(safe-area-inset-bottom)",
-          background: "#111111",
-          borderRadius: "8px 8px 0 0",
+          background: "rgba(6,6,6,0.92)",
+          backdropFilter: "blur(40px)",
+          WebkitBackdropFilter: "blur(40px)",
+          borderRadius: "16px 16px 0 0",
           boxShadow: "0 -4px 60px rgba(212,175,55,0.08), 0 -2px 20px rgba(0,0,0,0.80)",
         }}
         onTouchStart={handleTouchStart}
@@ -93,13 +106,13 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
         <div
           className="h-[1px] w-full"
           style={{
-            background: "linear-gradient(90deg, transparent 0%, rgba(212,175,55,0.25) 30%, rgba(212,175,55,0.25) 70%, transparent 100%)",
+            background: "linear-gradient(90deg, transparent 0%, rgba(212,175,55,0.30) 20%, rgba(212,175,55,0.40) 50%, rgba(212,175,55,0.30) 80%, transparent 100%)",
           }}
         />
 
         {/* Drag handle + X close button */}
-        <div className="relative flex justify-center pt-4 pb-6">
-          <div className="w-8 h-1 rounded-full" style={{ background: "rgba(255,255,255,0.15)" }} />
+        <div className="relative flex justify-center pt-4 pb-2">
+          <div className="w-8 h-[3px] rounded-full" style={{ background: "rgba(255,255,255,0.12)" }} />
           <button
             onClick={() => { haptics.light(); setIsOpen(false); }}
             className="absolute top-3 right-4 w-9 h-9 flex items-center justify-center transition-colors"
@@ -110,10 +123,10 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
           </button>
         </div>
 
-        <div className="px-4 pb-6 space-y-6">
+        <div style={{ padding: "8px 20px 28px" }}>
           {/* Primary Nav — 2×2 grid */}
-          <div className="space-y-3">
-            <SectionLabel>Menu</SectionLabel>
+          <div style={{ marginBottom: "16px" }}>
+            <SectionLabel>Navigate</SectionLabel>
             <div className="grid grid-cols-2 gap-2.5">
               {([
                 { path: "/",           label: "Home",       icon: <Home size={20} color="#D4AF37" /> },
@@ -132,9 +145,9 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
                     gap: "8px",
                     padding: "22px 16px",
                     background: "#0a0a0a",
-                    border: "1px solid rgba(255,255,255,0.08)",
-                    borderTop: "2px solid #D4AF37",
+                    border: "1px solid rgba(212,175,55,0.15)",
                     borderRadius: "8px",
+                    transition: "transform 0.15s ease, border-color 0.25s ease",
                   }}
                 >
                   {item.icon}
@@ -153,40 +166,12 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
             </div>
           </div>
 
-          {/* Contact + Share */}
-          <div className="pt-2 space-y-3" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
-            <SectionLabel>Contact & Share</SectionLabel>
-            <div className="grid grid-cols-3 gap-2">
-              <a
-                href="mailto:thefilmmaker.og@gmail.com"
-                onClick={() => haptics.light()}
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: "8px",
-                  padding: "22px 16px",
-                  background: "#0a0a0a",
-                  border: "1px solid rgba(255,255,255,0.08)",
-                  borderTop: "2px solid #D4AF37",
-                  borderRadius: "8px",
-                  textDecoration: "none",
-                }}
-              >
-                <Mail size={20} color="#D4AF37" />
-                <span
-                  style={{
-                    fontFamily: "'Bebas Neue', sans-serif",
-                    fontSize: "1.2rem",
-                    letterSpacing: "0.1em",
-                    color: "rgba(255,255,255,0.85)",
-                  }}
-                >
-                  Email
-                </span>
-              </a>
+          {/* Follow — social links */}
+          <div style={{ paddingTop: "4px" }}>
+            <SectionLabel>Follow</SectionLabel>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "10px", marginBottom: "16px" }}>
 
+              {/* Instagram */}
               <a
                 href="https://www.instagram.com/filmmaker.og"
                 target="_blank"
@@ -198,59 +183,154 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
                   alignItems: "center",
                   justifyContent: "center",
                   gap: "8px",
-                  padding: "22px 16px",
-                  background: "#0a0a0a",
+                  padding: "18px 12px",
+                  background: "transparent",
                   border: "1px solid rgba(255,255,255,0.08)",
-                  borderTop: "2px solid #D4AF37",
                   borderRadius: "8px",
                   textDecoration: "none",
+                  transition: "transform 0.15s ease, border-color 0.25s ease",
                 }}
               >
-                <Instagram size={20} color="#D4AF37" />
-                <span
-                  style={{
-                    fontFamily: "'Bebas Neue', sans-serif",
-                    fontSize: "1.2rem",
-                    letterSpacing: "0.1em",
-                    color: "rgba(255,255,255,0.85)",
-                  }}
-                >
-                  Instagram
-                </span>
+                <Instagram size={20} style={{ color: "rgba(255,255,255,0.65)" }} />
+                <span style={{
+                  fontFamily: "'Inter', sans-serif",
+                  fontSize: "11px",
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase" as const,
+                  color: "rgba(255,255,255,0.40)",
+                }}>Instagram</span>
               </a>
 
-              <button
-                onClick={handleShare}
+              {/* TikTok — custom SVG */}
+              <a
+                href="https://www.tiktok.com/@filmmaker.og"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => haptics.light()}
                 style={{
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
                   justifyContent: "center",
                   gap: "8px",
-                  padding: "22px 16px",
-                  background: "#0a0a0a",
+                  padding: "18px 12px",
+                  background: "transparent",
                   border: "1px solid rgba(255,255,255,0.08)",
-                  borderTop: "2px solid #D4AF37",
                   borderRadius: "8px",
+                  textDecoration: "none",
+                  transition: "transform 0.15s ease, border-color 0.25s ease",
                 }}
               >
-                <Share2 size={20} color="#D4AF37" />
-                <span
-                  style={{
-                    fontFamily: "'Bebas Neue', sans-serif",
-                    fontSize: "1.2rem",
-                    letterSpacing: "0.1em",
-                    color: "rgba(255,255,255,0.85)",
-                  }}
-                >
-                  Share
-                </span>
+                <svg width={20} height={20} viewBox="0 0 24 24" fill="rgba(255,255,255,0.65)" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 0 0-.79-.05A6.34 6.34 0 0 0 3.15 15a6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V8.71a8.2 8.2 0 0 0 4.76 1.52v-3.4a4.85 4.85 0 0 1-1-.14z"/>
+                </svg>
+                <span style={{
+                  fontFamily: "'Inter', sans-serif",
+                  fontSize: "11px",
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase" as const,
+                  color: "rgba(255,255,255,0.40)",
+                }}>TikTok</span>
+              </a>
+
+              {/* Facebook — custom SVG */}
+              <a
+                href="https://www.facebook.com/filmmaker.og"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => haptics.light()}
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "8px",
+                  padding: "18px 12px",
+                  background: "transparent",
+                  border: "1px solid rgba(255,255,255,0.08)",
+                  borderRadius: "8px",
+                  textDecoration: "none",
+                  transition: "transform 0.15s ease, border-color 0.25s ease",
+                }}
+              >
+                <svg width={20} height={20} viewBox="0 0 24 24" fill="rgba(255,255,255,0.65)" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+                </svg>
+                <span style={{
+                  fontFamily: "'Inter', sans-serif",
+                  fontSize: "11px",
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase" as const,
+                  color: "rgba(255,255,255,0.40)",
+                }}>Facebook</span>
+              </a>
+
+            </div>
+          </div>
+
+          {/* Connect — email + share */}
+          <div>
+            <SectionLabel>Connect</SectionLabel>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", marginBottom: "24px" }}>
+
+              {/* Email */}
+              <a
+                href="mailto:thefilmmaker.og@gmail.com"
+                onClick={() => haptics.light()}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "10px",
+                  padding: "16px",
+                  background: "#0A0A0A",
+                  border: "1px solid rgba(212,175,55,0.08)",
+                  borderRadius: "8px",
+                  textDecoration: "none",
+                  transition: "transform 0.15s ease, border-color 0.25s ease",
+                }}
+              >
+                <Mail size={18} style={{ color: "#D4AF37", flexShrink: 0 }} />
+                <span style={{
+                  fontFamily: "'Bebas Neue', sans-serif",
+                  fontSize: "1.05rem",
+                  letterSpacing: "0.1em",
+                  color: "rgba(255,255,255,0.85)",
+                  lineHeight: 1,
+                }}>Email</span>
+              </a>
+
+              {/* Share */}
+              <button
+                onClick={handleShare}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "10px",
+                  padding: "16px",
+                  background: "#0A0A0A",
+                  border: "1px solid rgba(212,175,55,0.08)",
+                  borderRadius: "8px",
+                  cursor: "pointer",
+                  transition: "transform 0.15s ease, border-color 0.25s ease",
+                }}
+              >
+                <Share2 size={18} style={{ color: "#D4AF37", flexShrink: 0 }} />
+                <span style={{
+                  fontFamily: "'Bebas Neue', sans-serif",
+                  fontSize: "1.05rem",
+                  letterSpacing: "0.1em",
+                  color: "rgba(255,255,255,0.85)",
+                  lineHeight: 1,
+                }}>Share</span>
               </button>
+
             </div>
           </div>
 
           {/* Legal disclaimer */}
-          <div className="pt-3" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+          <div className="pt-3" style={{ borderTop: "1px solid rgba(255,255,255,0.04)" }}>
             <p className="text-[11px] tracking-wide leading-relaxed" style={{ color: "rgba(255,255,255,0.40)" }}>
               For educational and informational purposes only. Not legal, tax, or investment advice.
               Consult a qualified entertainment attorney before making financing decisions.
