@@ -1,12 +1,14 @@
 import React, { useState, useRef } from "react";
 import { Check } from "lucide-react";
-import { WaterfallInputs } from "@/lib/waterfall";
+import { WaterfallInputs, GuildState } from "@/lib/waterfall";
 import StandardStepLayout from "../StandardStepLayout";
 import GlossaryTrigger, { GLOSSARY } from "../GlossaryTrigger";
 
 interface BudgetInputProps {
   inputs: WaterfallInputs;
+  guilds: GuildState;
   onUpdateInput: (key: keyof WaterfallInputs, value: number) => void;
+  onToggleGuild: (guild: keyof GuildState) => void;
   onBack?: () => void;
   onNext: () => void;
 }
@@ -17,6 +19,12 @@ const quickAmounts = [
   { value: 1500000, label: "$1.5M" },
   { value: 2500000, label: "$2.5M" },
   { value: 5000000, label: "$5M" },
+];
+
+const guildItems = [
+  { key: "sag" as const, label: "SAG-AFTRA", desc: "Actors" },
+  { key: "dga" as const, label: "DGA", desc: "Directors" },
+  { key: "wga" as const, label: "WGA", desc: "Writers" },
 ];
 
 const s: Record<string, React.CSSProperties> = {
@@ -70,9 +78,10 @@ const s: Record<string, React.CSSProperties> = {
     background: "transparent",
     border: "none",
     outline: "none",
-    textAlign: "center" as const,
-    width: "100%",
-    maxWidth: "300px",
+    textAlign: "right" as const,
+    width: "auto",
+    minWidth: "60px",
+    maxWidth: "250px",
     padding: 0,
   },
   scale: {
@@ -84,13 +93,12 @@ const s: Record<string, React.CSSProperties> = {
     position: "relative" as const,
   },
   scaleLine: {
-    content: "''",
     position: "absolute" as const,
     top: "5px",
     left: "16px",
     right: "16px",
     height: "1px",
-    background: "rgba(255,255,255,0.06)",
+    background: "rgba(255,255,255,0.10)",
   },
   scaleStep: {
     display: "flex",
@@ -136,6 +144,102 @@ const s: Record<string, React.CSSProperties> = {
     color: "#D4AF37",
     transition: "color 0.2s",
   },
+  // Guild styles
+  guilds: {
+    borderTop: "1px solid rgba(255,255,255,0.08)",
+    paddingTop: "20px",
+  },
+  guildHeader: {
+    display: "flex",
+    alignItems: "center",
+    gap: "8px",
+    marginBottom: "12px",
+  },
+  guildTitle: {
+    fontFamily: "'Inter', sans-serif",
+    fontSize: "11px",
+    fontWeight: 600,
+    textTransform: "uppercase" as const,
+    letterSpacing: "0.15em",
+    color: "rgba(255,255,255,0.40)",
+  },
+  guildRow: {
+    display: "flex",
+    gap: "8px",
+  },
+  guild: {
+    flex: 1,
+    display: "flex",
+    flexDirection: "column" as const,
+    alignItems: "center",
+    gap: "6px",
+    padding: "14px 8px",
+    background: "transparent",
+    border: "1px solid rgba(255,255,255,0.08)",
+    borderRadius: "6px",
+    cursor: "pointer",
+    transition: "all 0.15s",
+  },
+  guildOn: {
+    flex: 1,
+    display: "flex",
+    flexDirection: "column" as const,
+    alignItems: "center",
+    gap: "6px",
+    padding: "14px 8px",
+    background: "rgba(212,175,55,0.06)",
+    border: "1px solid #D4AF37",
+    borderRadius: "6px",
+    cursor: "pointer",
+    transition: "all 0.15s",
+  },
+  checkbox: {
+    width: "16px",
+    height: "16px",
+    borderRadius: "3px",
+    border: "1.5px solid rgba(255,255,255,0.15)",
+    transition: "all 0.15s",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  checkboxOn: {
+    width: "16px",
+    height: "16px",
+    borderRadius: "3px",
+    border: "1.5px solid #D4AF37",
+    background: "#D4AF37",
+    transition: "all 0.15s",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  guildName: {
+    fontFamily: "'Inter', sans-serif",
+    fontSize: "12px",
+    fontWeight: 600,
+    color: "rgba(255,255,255,0.65)",
+    transition: "color 0.15s",
+  },
+  guildNameOn: {
+    fontFamily: "'Inter', sans-serif",
+    fontSize: "12px",
+    fontWeight: 600,
+    color: "#D4AF37",
+    transition: "color 0.15s",
+  },
+  guildDesc: {
+    fontFamily: "'Inter', sans-serif",
+    fontSize: "10px",
+    color: "rgba(255,255,255,0.25)",
+  },
+  guildHint: {
+    textAlign: "center" as const,
+    fontFamily: "'Inter', sans-serif",
+    fontSize: "11px",
+    color: "rgba(255,255,255,0.20)",
+    marginTop: "10px",
+  },
 };
 
 const formatValue = (value: number | undefined): string => {
@@ -143,21 +247,13 @@ const formatValue = (value: number | undefined): string => {
   return value.toLocaleString();
 };
 
-const formatDisplay = (value: number): string => {
-  if (value === 0) return "0";
-  if (value >= 10000000) {
-    const millions = value / 1000000;
-    return `${millions % 1 === 0 ? millions.toFixed(0) : millions.toFixed(1)}M`;
-  }
-  return value.toLocaleString();
-};
-
 const parseValue = (str: string): number => {
   return parseInt(str.replace(/[^0-9]/g, "")) || 0;
 };
 
-const BudgetInput = ({ inputs, onUpdateInput, onNext }: BudgetInputProps) => {
+const BudgetInput = ({ inputs, guilds, onUpdateInput, onToggleGuild, onNext }: BudgetInputProps) => {
   const [pressedStep, setPressedStep] = useState<number | null>(null);
+  const [pressedGuild, setPressedGuild] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const isCompleted = inputs.budget > 0;
@@ -234,11 +330,9 @@ const BudgetInput = ({ inputs, onUpdateInput, onNext }: BudgetInputProps) => {
                 ...(isPressed ? { transform: "scale(0.92)" } : {}),
               }}
               onClick={() => handleQuickAmount(qa.value)}
-              onMouseDown={() => setPressedStep(i)}
-              onMouseUp={() => setPressedStep(null)}
-              onMouseLeave={() => setPressedStep(null)}
-              onTouchStart={() => setPressedStep(i)}
-              onTouchEnd={() => setPressedStep(null)}
+              onPointerDown={() => setPressedStep(i)}
+              onPointerUp={() => setPressedStep(null)}
+              onPointerLeave={() => setPressedStep(null)}
             >
               <span style={isOn ? s.scaleDotOn : s.scaleDot} />
               <span style={isOn ? s.scaleLabelOn : s.scaleLabel}>
@@ -247,6 +341,50 @@ const BudgetInput = ({ inputs, onUpdateInput, onNext }: BudgetInputProps) => {
             </button>
           );
         })}
+      </div>
+
+      {/* Guild Toggle Cards */}
+      <div style={s.guilds}>
+        <div style={s.guildHeader}>
+          <span style={s.guildTitle}>Union Signatories</span>
+          <GlossaryTrigger
+            term="Union Signatories"
+            title="UNION SIGNATORIES"
+            description="Check these if your production is signatory to any guilds. This adds mandatory P&H and Residual reserves to the waterfall."
+          />
+        </div>
+
+        <div style={s.guildRow}>
+          {guildItems.map((guild) => {
+            const isSelected = guilds[guild.key];
+            const isPressed = pressedGuild === guild.key;
+            return (
+              <button
+                key={guild.key}
+                style={{
+                  ...(isSelected ? s.guildOn : s.guild),
+                  ...(isPressed ? { transform: "scale(0.96)" } : {}),
+                }}
+                onClick={() => onToggleGuild(guild.key)}
+                onPointerDown={() => setPressedGuild(guild.key)}
+                onPointerUp={() => setPressedGuild(null)}
+                onPointerLeave={() => setPressedGuild(null)}
+              >
+                <span style={isSelected ? s.checkboxOn : s.checkbox}>
+                  {isSelected && (
+                    <Check style={{ width: "11px", height: "11px", color: "#000" }} />
+                  )}
+                </span>
+                <span style={isSelected ? s.guildNameOn : s.guildName}>{guild.label}</span>
+                <span style={s.guildDesc}>{guild.desc}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        <p style={s.guildHint}>
+          Most indie productions are non-union. Leave unchecked if unsure.
+        </p>
       </div>
     </StandardStepLayout>
   );
