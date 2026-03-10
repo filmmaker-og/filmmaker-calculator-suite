@@ -1,21 +1,39 @@
-import { useState, useEffect, useCallback, useRef, useMemo } from "react";
+import React, { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useHaptics } from "@/hooks/use-haptics";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { User } from "@supabase/supabase-js";
 import { calculateWaterfall, WaterfallInputs, GuildState } from "@/lib/waterfall";
-import { cn } from "@/lib/utils";
 
 // New Tab Components
 import TabBar, { TabId } from "@/components/calculator/TabBar";
 import { BudgetTab, StackTab, DealTab, WaterfallTab } from "@/components/calculator/tabs";
+import ProjectTab from "@/components/calculator/tabs/ProjectTab";
 import { CapitalSourceSelections, defaultSelections } from "@/components/calculator/stack/CapitalSelect";
 import EmailGateModal from "@/components/EmailGateModal";
 
-
 import { EMAIL_CAPTURED_KEY } from "@/lib/constants";
 
+export interface ProjectDetails {
+  title: string;
+  logline: string;
+  genre: string;
+  customGenre: string;
+  status: string;
+  producers: string;
+  director: string;
+  writers: string;
+  cast: string;
+  company: string;
+  location: string;
+}
+
+const defaultProject: ProjectDetails = {
+  title: '', logline: '', genre: '', customGenre: '',
+  status: 'Development', producers: '', director: '',
+  writers: '', cast: '', company: '', location: '',
+};
 
 const defaultInputs: WaterfallInputs = {
   revenue: 0,
@@ -38,7 +56,119 @@ const defaultGuilds: GuildState = {
   dga: false,
 };
 
-const STEP_TO_TAB: TabId[] = ['budget', 'stack', 'deal', 'waterfall'];
+const STEP_TO_TAB: TabId[] = ['project', 'budget', 'stack', 'deal', 'waterfall'];
+
+/* ═══ Inline styles — Store pattern ═══ */
+const s: Record<string, React.CSSProperties> = {
+  page: {
+    background: "#000",
+    minHeight: "100vh",
+    display: "flex",
+    flexDirection: "column",
+  },
+  main: {
+    flex: 1,
+    padding: "20px",
+    overflowY: "auto",
+    paddingBottom: "calc(62px + 52px + 100px + env(safe-area-inset-bottom, 0px))",
+  },
+  col: {
+    maxWidth: "430px",
+    margin: "0 auto",
+  },
+  controlBar: {
+    position: "fixed",
+    left: 0,
+    right: 0,
+    zIndex: 40,
+    bottom: "62px", // tabbar-h
+    height: "52px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    padding: "0 16px",
+    background: "rgba(6,6,6,0.92)",
+    backdropFilter: "blur(24px)",
+    WebkitBackdropFilter: "blur(24px)",
+    borderTop: "1px solid rgba(212,175,55,0.10)",
+  },
+  backBtn: {
+    display: "flex",
+    alignItems: "center",
+    gap: "6px",
+    padding: "8px 14px",
+    borderRadius: "6px",
+    border: "1px solid rgba(212,175,55,0.15)",
+    background: "transparent",
+    color: "rgba(255,255,255,0.85)",
+    fontFamily: "'Inter', sans-serif",
+    fontSize: "12px",
+    fontWeight: 600,
+    textTransform: "uppercase" as const,
+    letterSpacing: "0.1em",
+    cursor: "pointer",
+    transition: "all 0.15s",
+  },
+  ring: {
+    position: "relative",
+    width: "44px",
+    height: "44px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  ringSvg: {
+    position: "absolute",
+    width: "44px",
+    height: "44px",
+    transform: "rotate(-90deg)",
+  },
+  ringText: {
+    position: "relative",
+    zIndex: 1,
+    fontFamily: "'Roboto Mono', monospace",
+    fontSize: "11px",
+    fontWeight: 500,
+    color: "#D4AF37",
+  },
+  nextBtn: {
+    display: "flex",
+    alignItems: "center",
+    gap: "6px",
+    padding: "8px 14px",
+    borderRadius: "6px",
+    border: "none",
+    background: "#F9E076",
+    color: "#000",
+    fontFamily: "'Inter', sans-serif",
+    fontSize: "12px",
+    fontWeight: 600,
+    textTransform: "uppercase" as const,
+    letterSpacing: "0.1em",
+    cursor: "pointer",
+    transition: "all 0.15s",
+  },
+  spacer: {
+    width: "76px",
+    visibility: "hidden" as const,
+  },
+  loading: {
+    minHeight: "100vh",
+    background: "#000",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  spinner: {
+    width: "32px",
+    height: "32px",
+    border: "2px solid #D4AF37",
+    borderTopColor: "transparent",
+    borderRadius: "50%",
+    animation: "spin 1s linear infinite",
+  },
+};
 
 const Calculator = () => {
   const navigate = useNavigate();
@@ -48,42 +178,43 @@ const Calculator = () => {
 
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  
-  // ALWAYS DEFAULT TO BUDGET (STEP 1)
-  const [activeTab, setActiveTab] = useState<TabId>('budget');
-  
+
+  // Default to project step (step 00)
+  const [activeTab, setActiveTab] = useState<TabId>('project');
+
   const [inputs, setInputs] = useState<WaterfallInputs>(defaultInputs);
   const [guilds, setGuilds] = useState<GuildState>(defaultGuilds);
+  const [project, setProject] = useState<ProjectDetails>(defaultProject);
   const [showEmailGate, setShowEmailGate] = useState(false);
   const [emailCaptured, setEmailCaptured] = useState(() => {
     return localStorage.getItem(EMAIL_CAPTURED_KEY) === 'true';
   });
   const [sourceSelections, setSourceSelections] = useState<CapitalSourceSelections>(defaultSelections);
+  const [pressedBtn, setPressedBtn] = useState<'back' | 'next' | null>(null);
 
-  // sourceSelections is now the same type as CapitalSelections (unified)
   const capitalSelections = sourceSelections;
 
   const toggleSourceSelection = useCallback((key: keyof CapitalSourceSelections) => {
     setSourceSelections(prev => ({ ...prev, [key]: !prev[key] }));
   }, []);
 
-  // Gate: redirect to landing page if no authenticated session (hard gate — magic link required)
+  // Gate: redirect to landing page if no authenticated session
   useEffect(() => {
-    if (loading) return; // wait for auth check to resolve
+    if (loading) return;
     if (!user) {
       navigate("/", { replace: true });
     }
   }, [user, loading, navigate]);
 
-  // Honor URL ?tab= param if present (e.g., from info pages or post-purchase)
+  // Honor URL ?tab= param if present
   useEffect(() => {
     const urlTab = searchParams.get("tab") as TabId | null;
-    if (urlTab && ['budget', 'stack', 'deal', 'waterfall'].includes(urlTab)) {
+    if (urlTab && ['project', 'budget', 'stack', 'deal', 'waterfall'].includes(urlTab)) {
       setActiveTab(urlTab);
     }
   }, [searchParams]);
 
-  // DERIVE RESULT SYNCHRONOUSLY
+  // Derive result synchronously
   const result = useMemo(() => {
     return calculateWaterfall(inputs, guilds);
   }, [inputs, guilds]);
@@ -121,7 +252,6 @@ const Calculator = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Handle tab change — no gate, let them see their results freely
   const handleTabChange = useCallback((tab: TabId) => {
     haptics.light();
     setActiveTab(tab);
@@ -140,7 +270,6 @@ const Calculator = () => {
     setShowEmailGate(false);
   };
 
-  // Triggered by WaterfallTab's Export CTA
   const handleExportClick = () => {
     if (!user && !emailCaptured) {
       setShowEmailGate(true);
@@ -152,6 +281,7 @@ const Calculator = () => {
   // Determine which tabs are completed
   const getCompletedTabs = (): TabId[] => {
     const completed: TabId[] = [];
+    if (project.title.trim().length > 0) completed.push('project');
     if (inputs.budget > 0) completed.push('budget');
     if (inputs.credits > 0 || inputs.debt > 0 || inputs.mezzanineDebt > 0 || inputs.equity > 0) {
       completed.push('stack');
@@ -161,7 +291,6 @@ const Calculator = () => {
     return completed;
   };
 
-  // No tabs are ever disabled — Waterfall shows "Protocol Locked" + Demo button when empty
   const getDisabledTabs = (): TabId[] => {
     return [];
   };
@@ -182,7 +311,7 @@ const Calculator = () => {
     if (currentIndex === 0) {
       navigate("/");
       return;
-    } 
+    }
     const prevTab = STEP_TO_TAB[currentIndex - 1];
     haptics.light();
     setActiveTab(prevTab);
@@ -193,6 +322,7 @@ const Calculator = () => {
     if (nextTab) {
       handleTabChange(nextTab);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [handleTabChange, activeTab, inputs]);
 
   const isCurrentSectionComplete = (): boolean => {
@@ -202,6 +332,14 @@ const Calculator = () => {
 
   const renderTabContent = () => {
     switch (activeTab) {
+      case 'project':
+        return (
+          <ProjectTab
+            project={project}
+            onUpdateProject={setProject}
+            onAdvance={() => handleTabChange('budget')}
+          />
+        );
       case 'budget':
         return (
           <BudgetTab
@@ -247,86 +385,94 @@ const Calculator = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-black flex flex-col">
-        <div className="flex-1 flex items-center justify-center">
-          <div className="w-8 h-8 border-2 border-gold border-t-transparent rounded-full animate-spin" />
-        </div>
+      <div style={s.loading}>
+        <div style={s.spinner} />
       </div>
     );
   }
 
-  // Progress = number of completed tabs * 25%
+  // Progress = 5 steps at 20% each
   const completedTabs = getCompletedTabs();
-  const progressPercent = completedTabs.length * 25;
+  const progressPercent = completedTabs.length * 20;
+  const circumference = 2 * Math.PI * 18; // ~113
+  const dashArray = `${(progressPercent / 100) * circumference} ${circumference}`;
+
+  const showNext = getNextTab() !== null && isCurrentSectionComplete();
 
   return (
-    <div className="min-h-screen bg-black flex flex-col">
-      <main
-        ref={mainRef}
-        className="flex-1 px-4 py-6 overflow-y-auto"
-        style={{
-          paddingBottom: 'calc(var(--tabbar-h) + var(--bottom-bar-h) + 100px + env(safe-area-inset-bottom))',
-        }}
-      >
-        <div className={cn("max-w-[460px] mx-auto", "animate-fade-in")}>
+    <div style={s.page}>
+      <main ref={mainRef} style={s.main}>
+        <div style={s.col}>
           {renderTabContent()}
         </div>
       </main>
 
-      <div
-        className="fixed left-0 right-0 z-40 flex items-center justify-between px-4 py-2"
-        style={{
-          bottom: 'calc(var(--tabbar-h) + var(--bottom-bar-h) + env(safe-area-inset-bottom))',
-          backgroundColor: 'var(--bg-card)',
-        }}
-      >
+      {/* Control bar */}
+      <div style={s.controlBar}>
         <button
           onClick={handleBack}
-          className={cn(
-            "flex items-center gap-2 px-4 py-2 rounded-md transition-all",
-            "border border-gold-border text-ink-body",
-            "hover:border-gold hover:text-white",
-            "active:scale-95"
-          )}
+          onMouseDown={() => setPressedBtn('back')}
+          onMouseUp={() => setPressedBtn(null)}
+          onMouseLeave={() => setPressedBtn(null)}
+          onTouchStart={() => setPressedBtn('back')}
+          onTouchEnd={() => setPressedBtn(null)}
+          style={{
+            ...s.backBtn,
+            ...(pressedBtn === 'back' ? { transform: "scale(0.95)" } : {}),
+          }}
         >
-          <ArrowLeft className="w-4 h-4" />
-          <span className="text-[12px] font-semibold uppercase tracking-wider">Back</span>
+          <ArrowLeft style={{ width: "16px", height: "16px", color: "rgba(255,255,255,0.65)" }} />
+          Back
         </button>
 
-        <div className="relative w-11 h-11 flex items-center justify-center">
-          <svg className="absolute w-11 h-11 -rotate-90">
-            <circle cx="22" cy="22" r="18" fill="none" stroke="var(--border-subtle)" strokeWidth="2" />
+        {/* Progress ring */}
+        <div style={s.ring}>
+          <svg style={s.ringSvg}>
             <circle
               cx="22"
               cy="22"
               r="18"
               fill="none"
-              stroke="var(--gold)"
+              stroke="rgba(255,255,255,0.06)"
+              strokeWidth="2"
+            />
+            <circle
+              cx="22"
+              cy="22"
+              r="18"
+              fill="none"
+              stroke="#D4AF37"
               strokeWidth="2"
               strokeLinecap="round"
-              strokeDasharray={`${progressPercent * 1.13} 113`}
-              className="transition-all duration-500 ease-out"
-              style={{ filter: 'drop-shadow(0 0 4px rgba(212, 175, 55, 0.5))' }}
+              strokeDasharray={dashArray}
+              style={{
+                transition: "stroke-dasharray 0.5s ease",
+                filter: "drop-shadow(0 0 4px rgba(212,175,55,0.5))",
+              }}
             />
           </svg>
-          <span className="relative z-10 font-mono text-[11px] font-medium text-gold">
-            {progressPercent}%
-          </span>
+          <span style={s.ringText}>{progressPercent}%</span>
         </div>
 
-        {getNextTab() && isCurrentSectionComplete() && (
+        {/* Next button or invisible spacer */}
+        {showNext ? (
           <button
             onClick={handleNext}
-            className={cn(
-              "flex items-center gap-2 px-4 py-2 rounded-md transition-all",
-              "bg-gold-cta-subtle border border-gold-cta-muted text-gold-cta",
-              "hover:border-gold-cta",
-              "active:scale-95 shadow-button"
-            )}
+            onMouseDown={() => setPressedBtn('next')}
+            onMouseUp={() => setPressedBtn(null)}
+            onMouseLeave={() => setPressedBtn(null)}
+            onTouchStart={() => setPressedBtn('next')}
+            onTouchEnd={() => setPressedBtn(null)}
+            style={{
+              ...s.nextBtn,
+              ...(pressedBtn === 'next' ? { transform: "scale(0.95)" } : {}),
+            }}
           >
-            <span className="text-[12px] font-semibold uppercase tracking-wider">Next</span>
-            <ArrowRight className="w-4 h-4" />
+            Next
+            <ArrowRight style={{ width: "16px", height: "16px" }} />
           </button>
+        ) : (
+          <span style={s.spacer} />
         )}
       </div>
 

@@ -1,8 +1,7 @@
-import { cn } from "@/lib/utils";
-import { ReactNode } from "react";
+import React, { ReactNode } from "react";
 
 interface ChapterCardProps {
-  chapter: string;  // "01", "02", etc.
+  chapter: string;  // "00", "01", etc.
   title: string;
   isActive?: boolean;
   children: ReactNode;
@@ -10,40 +9,83 @@ interface ChapterCardProps {
   className?: string;
 }
 
+const s: Record<string, React.CSSProperties> = {
+  eyebrow: {
+    display: "flex",
+    alignItems: "center",
+    gap: "12px",
+    marginBottom: "16px",
+  },
+  eyebrowLine: {
+    flex: 1,
+    height: "1px",
+    background: "rgba(212,175,55,0.40)",
+  },
+  eyebrowLabel: {
+    fontFamily: "'Roboto Mono', monospace",
+    fontSize: "13px",
+    fontWeight: 500,
+    letterSpacing: "0.2em",
+    textTransform: "uppercase" as const,
+    color: "#D4AF37",
+    whiteSpace: "nowrap" as const,
+    display: "flex",
+    alignItems: "center",
+    gap: "8px",
+  },
+  eyebrowNum: {
+    opacity: 0.70,
+  },
+  card: {
+    background: "#0A0A0A",
+    border: "1px solid rgba(255,255,255,0.10)",
+    borderRadius: "12px",
+    overflow: "hidden",
+    boxShadow: "0 16px 40px rgba(0,0,0,0.4)",
+    transition: "border-color 0.25s ease",
+  },
+  cardActive: {
+    background: "#0A0A0A",
+    border: "1px solid rgba(255,255,255,0.12)",
+    borderRadius: "12px",
+    overflow: "hidden",
+    boxShadow: "0 16px 40px rgba(0,0,0,0.4)",
+    transition: "border-color 0.25s ease",
+  },
+  cardTopLine: {
+    height: "1px",
+    background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.4), transparent)",
+  },
+  cardPad: {
+    padding: "24px 20px",
+  },
+};
+
 const ChapterCard = ({
   chapter,
   title,
   isActive = true,
   children,
   glossaryTrigger,
-  className,
 }: ChapterCardProps) => {
   return (
-    <section className={cn("chapter-card", isActive && "is-active", className)}>
-      {/* Header with 4-column grid: gold bar + number + title + glossary */}
-      <header className="chapter-card-header">
-        {/* Gold accent bar */}
-        <div className="chapter-card-gold-bar" />
+    <section>
+      {/* Eyebrow-ruled opener */}
+      <div style={s.eyebrow}>
+        <div style={s.eyebrowLine} />
+        <span style={s.eyebrowLabel}>
+          <span style={s.eyebrowNum}>{chapter}</span> · {title}
+          {glossaryTrigger && <span>{glossaryTrigger}</span>}
+        </span>
+        <div style={s.eyebrowLine} />
+      </div>
 
-        {/* Chapter number */}
-        <div className="chapter-card-number">
-          {chapter}
+      {/* Card body — Store treatment */}
+      <div style={isActive ? s.cardActive : s.card}>
+        <div style={s.cardTopLine} />
+        <div style={s.cardPad}>
+          {children}
         </div>
-
-        {/* Title */}
-        <h2 className="chapter-card-title">
-          {title}
-        </h2>
-
-        {/* Glossary trigger slot */}
-        <div className="pr-3">
-          {glossaryTrigger}
-        </div>
-      </header>
-
-      {/* Body */}
-      <div className="chapter-card-body">
-        {children}
       </div>
     </section>
   );

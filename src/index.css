@@ -264,6 +264,7 @@
 }
 
 @layer components {
+  /* DEPRECATED — pending Phase 2/3 calculator reskin */
   /* ═══════════════════════════════════════════════════════════════════
      CHAPTER CARD — THE "RADIANT GOLD" WRAPPER (Updated)
      Matches Wiki Style: bg-elevated, border-gold-muted, shadow-gold-glow
@@ -325,6 +326,7 @@
     background: var(--bg-void);
   }
 
+  /* DEPRECATED — pending Phase 2/3 calculator reskin */
   /* ═══════════════════════════════════════════════════════════════════
      GLASS CARDS
      ═══════════════════════════════════════════════════════════════════ */
@@ -436,6 +438,7 @@
     background: linear-gradient(90deg, transparent 0%, var(--gold-medium) 50%, transparent 100%);
   }
 
+  /* DEPRECATED — pending Phase 2/3 calculator reskin */
   /* ═══════════════════════════════════════════════════════════════════
      TAB BAR — Fixed bottom navigation
      ═══════════════════════════════════════════════════════════════════ */
@@ -701,6 +704,7 @@
     50% { opacity: 1; transform: translateX(-50%) scale(1.05); }
   }
 
+  /* DEPRECATED — pending Phase 2/3 calculator reskin */
   /* ═══════════════════════════════════════════════════════════════════
      STANDARDISED CTA BUTTONS — single source of truth
      Primary: rich gold gradient, black text — hero + section CTAs
