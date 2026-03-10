@@ -1,7 +1,6 @@
-import { ReactNode } from "react";
+import React, { ReactNode, useState } from "react";
 import ChapterCard from "./ChapterCard";
 import { ArrowRight } from "lucide-react";
-import { cn } from "@/lib/utils";
 
 interface StandardStepLayoutProps {
   chapter: string;
@@ -12,22 +11,46 @@ interface StandardStepLayoutProps {
   nextLabel?: string;
   isComplete?: boolean;
   className?: string;
+  glossaryTrigger?: ReactNode;
 }
 
-/**
- * StandardStepLayout - The "Radiant Gold" container for all calculator steps.
- * 
- * Replaces the inconsistent "Hero Header" + "Matte Section" pattern.
- * Uses ChapterCard for the premium gold-gradient header.
- * 
- * Structure:
- * - ChapterCard Container (Radiant Border + Glow)
- *   - Header (Built-in to ChapterCard)
- *   - Body (bg-elevated to match Wiki style)
- *     - Subtitle (Optional)
- *     - Children (Input fields, etc)
- *     - Action Button (Continue)
- */
+const s: Record<string, React.CSSProperties> = {
+  wrapper: {
+    animation: "stepEnter 0.4s ease-out forwards",
+  },
+  subtitle: {
+    fontSize: "13px",
+    color: "rgba(255,255,255,0.40)",
+    lineHeight: "1.55",
+    paddingBottom: "16px",
+    marginBottom: "16px",
+    borderBottom: "1px solid rgba(255,255,255,0.08)",
+  },
+  cta: {
+    width: "100%",
+    padding: "16px",
+    marginTop: "20px",
+    background: "#F9E076",
+    border: "none",
+    borderRadius: "8px",
+    fontFamily: "'Bebas Neue', sans-serif",
+    fontSize: "20px",
+    letterSpacing: "0.18em",
+    textTransform: "uppercase" as const,
+    color: "#000",
+    cursor: "pointer",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "10px",
+    transition: "transform 0.12s ease, opacity 0.15s",
+    boxShadow: "0 0 20px rgba(249,224,118,0.25), 0 0 60px rgba(249,224,118,0.08)",
+  },
+  ctaPressed: {
+    transform: "scale(0.98)",
+  },
+};
+
 const StandardStepLayout = ({
   chapter,
   title,
@@ -36,50 +59,41 @@ const StandardStepLayout = ({
   onNext,
   nextLabel = "Continue",
   isComplete = false,
-  className,
+  glossaryTrigger,
 }: StandardStepLayoutProps) => {
+  const [pressed, setPressed] = useState(false);
+
   return (
-    <div className={cn("space-y-6 animate-fade-in", className)}>
+    <div style={s.wrapper}>
       <ChapterCard
         chapter={chapter}
         title={title}
         isActive={true}
-        className="overflow-visible" 
+        glossaryTrigger={glossaryTrigger}
       >
-        <div className="flex flex-col h-full justify-between space-y-6">
-          {/* Top Content */}
-          <div className="space-y-6">
-            {/* Context / Subtitle */}
-            {subtitle && (
-              <p className="text-sm text-text-dim border-b border-border-subtle pb-4 leading-relaxed">
-                {subtitle}
-              </p>
-            )}
+        <div>
+          {subtitle && (
+            <p style={s.subtitle}>{subtitle}</p>
+          )}
 
-            {/* Main Content - Direct placement (no inner card needed anymore as ChapterCard body is now bg-elevated) */}
-            <div className="space-y-6">
-              {children}
-            </div>
-          </div>
+          <div>{children}</div>
 
-          {/* Action Button - Pinned to bottom of content flow, but stable */}
           {onNext && isComplete && (
-            <div className="pt-4">
-              <button
-                onClick={onNext}
-                className={cn(
-                  "w-full py-4 flex items-center justify-center gap-3",
-                  "bg-gold-cta-subtle border border-gold-cta-muted text-gold-cta",
-                  "hover:bg-gold-cta-subtle hover:border-gold-cta transition-all",
-                  "active:scale-[0.98]",
-                  "shadow-button"
-                )}
-                style={{ borderRadius: 'var(--radius-md)' }}
-              >
-                <span className="text-sm font-semibold uppercase tracking-wider">{nextLabel}</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
-            </div>
+            <button
+              onClick={onNext}
+              onMouseDown={() => setPressed(true)}
+              onMouseUp={() => setPressed(false)}
+              onMouseLeave={() => setPressed(false)}
+              onTouchStart={() => setPressed(true)}
+              onTouchEnd={() => setPressed(false)}
+              style={{
+                ...s.cta,
+                ...(pressed ? s.ctaPressed : {}),
+              }}
+            >
+              {nextLabel}
+              <ArrowRight style={{ width: "18px", height: "18px" }} />
+            </button>
           )}
         </div>
       </ChapterCard>

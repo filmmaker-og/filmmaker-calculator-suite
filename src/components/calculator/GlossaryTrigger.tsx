@@ -1,12 +1,10 @@
-import { Info } from "lucide-react";
+import React from "react";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { cn } from "@/lib/utils";
-import React from "react";
 
 export interface GlossaryTerm {
   term: string;
@@ -61,7 +59,7 @@ export const GLOSSARY: Record<string, GlossaryTerm> = {
     title: "THE WATERFALL",
     description: "The strict priority order in which revenue flows from the box office to stakeholders.",
     details: (
-      <p>Money trickles down: Theaters → Distributor → Sales Agent → Lenders → Investors → Producers. <a href="/waterfall-info" className="text-gold hover:underline">See full breakdown</a>.</p>
+      <p>Money trickles down: Theaters → Distributor → Sales Agent → Lenders → Investors → Producers. <a href="/waterfall-info" style={{ color: "#D4AF37", textDecoration: "none" }}>See full breakdown</a>.</p>
     ),
   },
   cam: {
@@ -74,48 +72,83 @@ export const GLOSSARY: Record<string, GlossaryTerm> = {
   },
 };
 
-const GlossaryTrigger = ({ 
-  term, 
-  title, 
-  description, 
+const triggerStyle: React.CSSProperties = {
+  display: "inline-flex",
+  alignItems: "center",
+  justifyContent: "center",
+  width: "20px",
+  height: "20px",
+  borderRadius: "50%",
+  border: "1px solid rgba(212,175,55,0.25)",
+  background: "transparent",
+  cursor: "pointer",
+  transition: "border-color 0.2s, background 0.2s",
+  padding: 0,
+  flexShrink: 0,
+};
+
+const triggerHoverStyle: React.CSSProperties = {
+  ...triggerStyle,
+  borderColor: "rgba(212,175,55,0.50)",
+  background: "rgba(212,175,55,0.06)",
+};
+
+const GlossaryTrigger = ({
+  term,
+  title,
+  description,
   details,
-  className 
 }: GlossaryTerm & { className?: string }) => {
-  // Mobile-friendly tooltip interaction
   const [isOpen, setIsOpen] = React.useState(false);
+  const [isHovered, setIsHovered] = React.useState(false);
 
   return (
     <TooltipProvider delayDuration={0}>
       <Tooltip open={isOpen} onOpenChange={setIsOpen}>
         <TooltipTrigger asChild>
           <button
-            className={cn(
-              "inline-flex items-center justify-center p-1 rounded-full text-gold/50 hover:text-gold hover:bg-gold/10 transition-colors",
-              className
-            )}
+            style={isHovered ? triggerHoverStyle : triggerStyle}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
             onClick={(e) => {
               e.preventDefault();
               setIsOpen(!isOpen);
             }}
           >
-            <Info className="w-3.5 h-3.5" />
-            <span className="sr-only">Info about {term}</span>
+            {/* Lucide Info icon — circle + vertical line + dot */}
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="rgba(212,175,55,0.50)"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="16" x2="12" y2="12" />
+              <line x1="12" y1="8" x2="12.01" y2="8" />
+            </svg>
+            <span style={{ position: "absolute", width: "1px", height: "1px", padding: 0, margin: "-1px", overflow: "hidden", clip: "rect(0,0,0,0)", whiteSpace: "nowrap" as const, borderWidth: 0 }}>
+              Info about {term}
+            </span>
           </button>
         </TooltipTrigger>
-        <TooltipContent 
-          side="top" 
+        <TooltipContent
+          side="top"
           className="max-w-[300px] bg-bg-card border border-gold/20 p-4 shadow-xl z-50"
           sideOffset={5}
         >
-          <div className="space-y-2">
-            <h4 className="font-bebas text-lg tracking-wide text-gold">
+          <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+            <h4 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "18px", letterSpacing: "0.05em", color: "#D4AF37" }}>
               {title}
             </h4>
-            <p className="text-sm text-white/90 leading-relaxed font-sans">
+            <p style={{ fontSize: "14px", color: "rgba(255,255,255,0.90)", lineHeight: "1.5", fontFamily: "'Inter', sans-serif" }}>
               {description}
             </p>
             {details && (
-              <div className="text-xs text-white/50 leading-relaxed pt-2 border-t border-white/10 font-sans">
+              <div style={{ fontSize: "12px", color: "rgba(255,255,255,0.50)", lineHeight: "1.5", paddingTop: "8px", borderTop: "1px solid rgba(255,255,255,0.10)", fontFamily: "'Inter', sans-serif" }}>
                 {details}
               </div>
             )}
