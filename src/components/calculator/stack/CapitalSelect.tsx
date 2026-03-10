@@ -103,7 +103,13 @@ const CapitalSelect = ({ selections, onToggle, onNext }: CapitalSelectProps) => 
       <div className="space-y-6">
         
         {/* Selection cards - Matte Look with Sparing Gold */}
-        <div className="bg-bg-elevated border border-border-default rounded-lg overflow-hidden">
+        <div className="bg-bg-elevated border border-border-default rounded-lg overflow-hidden" style={{
+          background: "rgba(8,8,8,0.82)",
+          backdropFilter: "blur(24px)",
+          WebkitBackdropFilter: "blur(24px)",
+          border: "1px solid rgba(220,200,160,0.18)",
+          borderRadius: "12px",
+        }}>
           <div className="px-5 py-3 border-b border-border-subtle flex items-center justify-between bg-bg-surface/50">
             <span className="text-xs uppercase tracking-widest text-text-dim font-semibold">
               Select all that apply
@@ -125,11 +131,17 @@ const CapitalSelect = ({ selections, onToggle, onNext }: CapitalSelectProps) => 
                   onClick={() => handleToggle(option.key)}
                   className={cn(
                     "w-full p-4 text-left transition-all duration-150 group",
-                    isSelected 
+                    isSelected
                       ? "bg-bg-surface" // REMOVED: gold background
                       : "bg-transparent hover:bg-bg-elevated",
                     wasJustToggled && "scale-[1.01]"
                   )}
+                  style={!isSelected ? {
+                    background: "rgba(255,255,255,0.03)",
+                    borderBottom: "1px solid rgba(220,200,160,0.10)",
+                  } : {
+                    background: "rgba(212,175,55,0.07)",
+                  }}
                 >
                   <div className="flex items-center gap-4">
                     {/* Icon - Gold Only When Selected */}
