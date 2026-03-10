@@ -40,25 +40,31 @@ const s: Record<string, React.CSSProperties> = {
     background: "rgba(8,8,8,0.82)",
     backdropFilter: "blur(28px)",
     WebkitBackdropFilter: "blur(28px)",
-    border: "1px solid rgba(220,200,160,0.18)",
+    border: "1px solid rgba(212,175,55,0.15)",
     borderRadius: "16px",
     overflow: "hidden",
-    boxShadow: "0 2px 0 rgba(212,175,55,0.08) inset, 0 24px 48px rgba(0,0,0,0.60), 0 0 0 1px rgba(255,255,255,0.03)",
+    boxShadow: "0 16px 40px rgba(0,0,0,0.60)",
     transition: "border-color 0.25s ease",
   },
   cardActive: {
     background: "rgba(8,8,8,0.82)",
     backdropFilter: "blur(28px)",
     WebkitBackdropFilter: "blur(28px)",
-    border: "1px solid rgba(220,200,160,0.18)",
+    border: "1px solid rgba(212,175,55,0.35)",
     borderRadius: "16px",
     overflow: "hidden",
-    boxShadow: "0 2px 0 rgba(212,175,55,0.08) inset, 0 24px 48px rgba(0,0,0,0.60), 0 0 0 1px rgba(255,255,255,0.03)",
+    boxShadow: "0 24px 50px rgba(0,0,0,0.80)",
     transition: "border-color 0.25s ease",
   },
   cardTopLine: {
     height: "1px",
-    background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.55), transparent)",
+    background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.40), transparent)",
+    pointerEvents: "none" as const,
+  },
+  cardTopLineActive: {
+    height: "2px",
+    background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.60), transparent)",
+    pointerEvents: "none" as const,
   },
   cardPad: {
     padding: "24px 20px",
@@ -86,7 +92,7 @@ const ChapterCard = ({
 
       {/* Card body — Store treatment */}
       <div style={isActive ? s.cardActive : s.card}>
-        <div style={s.cardTopLine} />
+        <div style={isActive ? s.cardTopLineActive : s.cardTopLine} />
         <div style={s.cardPad}>
           {children}
         </div>

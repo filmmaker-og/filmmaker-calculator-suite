@@ -51,7 +51,7 @@ const s: Record<string, React.CSSProperties> = {
   fi: {
     width: "100%",
     background: "rgba(255,255,255,0.04)",
-    border: "1px solid rgba(220,200,160,0.16)",
+    border: "1px solid rgba(212,175,55,0.15)",
     borderRadius: "8px",
     padding: "14px 16px",
     fontFamily: "'Inter', sans-serif",
@@ -60,8 +60,6 @@ const s: Record<string, React.CSSProperties> = {
     outline: "none",
     transition: "border-color 0.2s, box-shadow 0.2s",
     WebkitAppearance: "none" as const,
-    backdropFilter: "blur(8px)",
-    WebkitBackdropFilter: "blur(8px)",
   },
   pills: {
     display: "flex",
@@ -73,23 +71,29 @@ const s: Record<string, React.CSSProperties> = {
     fontSize: "13px",
     fontWeight: 500,
     padding: "9px 16px",
+    minHeight: "44px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
     borderRadius: "8px",
-    border: "1px solid rgba(220,200,160,0.16)",
+    border: "1px solid rgba(212,175,55,0.15)",
     background: "rgba(255,255,255,0.04)",
     color: "rgba(255,255,255,0.65)",
     cursor: "pointer",
     transition: "all 0.15s",
     whiteSpace: "nowrap" as const,
-    backdropFilter: "blur(8px)",
-    WebkitBackdropFilter: "blur(8px)",
   },
   pillOn: {
     fontFamily: "'Inter', sans-serif",
     fontSize: "13px",
     fontWeight: 500,
     padding: "9px 16px",
+    minHeight: "44px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
     borderRadius: "8px",
-    border: "1px solid rgba(212,175,55,0.55)",
+    border: "1px solid rgba(212,175,55,0.40)",
     background: "rgba(212,175,55,0.10)",
     color: "#D4AF37",
     cursor: "pointer",
@@ -168,8 +172,11 @@ const s: Record<string, React.CSSProperties> = {
     boxShadow: "0 0 20px rgba(249,224,118,0.25), 0 0 60px rgba(249,224,118,0.08)",
   },
   skip: {
-    display: "block",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
     textAlign: "center" as const,
+    minHeight: "44px",
     marginTop: "14px",
     fontFamily: "'Inter', sans-serif",
     fontSize: "12px",
@@ -201,12 +208,12 @@ const ProjectTab = ({ project, onUpdateProject, onAdvance }: ProjectTabProps) =>
   };
 
   const handleInputFocus = (e: React.FocusEvent<HTMLInputElement>) => {
-    e.target.style.borderColor = "rgba(212,175,55,0.45)";
+    e.target.style.borderColor = "rgba(212,175,55,0.40)";
     (e.target as HTMLInputElement).style.boxShadow = "0 0 0 3px rgba(212,175,55,0.06)";
   };
 
   const handleInputBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-    e.target.style.borderColor = "rgba(220,200,160,0.16)";
+    e.target.style.borderColor = "rgba(212,175,55,0.15)";
     (e.target as HTMLInputElement).style.boxShadow = "none";
   };
 
