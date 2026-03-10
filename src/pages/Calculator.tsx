@@ -62,9 +62,13 @@ const STEP_TO_TAB: TabId[] = ['project', 'budget', 'stack', 'deal', 'waterfall']
 const s: Record<string, React.CSSProperties> = {
   page: {
     background: "#000",
+    backgroundImage: [
+      "radial-gradient(ellipse 70% 40% at 20% 10%, rgba(212,175,55,0.06) 0%, transparent 60%)",
+      "radial-gradient(ellipse 60% 50% at 80% 60%, rgba(212,175,55,0.03) 0%, transparent 60%)",
+    ].join(", "),
     minHeight: "100vh",
     display: "flex",
-    flexDirection: "column",
+    flexDirection: "column" as const,
   },
   main: {
     flex: 1,

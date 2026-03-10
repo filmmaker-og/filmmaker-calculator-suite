@@ -50,16 +50,18 @@ const s: Record<string, React.CSSProperties> = {
   },
   fi: {
     width: "100%",
-    background: "#000",
-    border: "1px solid rgba(255,255,255,0.08)",
-    borderRadius: "6px",
+    background: "rgba(255,255,255,0.04)",
+    border: "1px solid rgba(220,200,160,0.16)",
+    borderRadius: "8px",
     padding: "14px 16px",
     fontFamily: "'Inter', sans-serif",
     fontSize: "16px",
     color: "rgba(255,255,255,0.85)",
     outline: "none",
-    transition: "border-color 0.2s",
+    transition: "border-color 0.2s, box-shadow 0.2s",
     WebkitAppearance: "none" as const,
+    backdropFilter: "blur(8px)",
+    WebkitBackdropFilter: "blur(8px)",
   },
   pills: {
     display: "flex",
@@ -71,22 +73,24 @@ const s: Record<string, React.CSSProperties> = {
     fontSize: "13px",
     fontWeight: 500,
     padding: "9px 16px",
-    borderRadius: "6px",
-    border: "1px solid rgba(255,255,255,0.08)",
-    background: "transparent",
+    borderRadius: "8px",
+    border: "1px solid rgba(220,200,160,0.16)",
+    background: "rgba(255,255,255,0.04)",
     color: "rgba(255,255,255,0.65)",
     cursor: "pointer",
     transition: "all 0.15s",
     whiteSpace: "nowrap" as const,
+    backdropFilter: "blur(8px)",
+    WebkitBackdropFilter: "blur(8px)",
   },
   pillOn: {
     fontFamily: "'Inter', sans-serif",
     fontSize: "13px",
     fontWeight: 500,
     padding: "9px 16px",
-    borderRadius: "6px",
-    border: "1px solid #D4AF37",
-    background: "rgba(212,175,55,0.08)",
+    borderRadius: "8px",
+    border: "1px solid rgba(212,175,55,0.55)",
+    background: "rgba(212,175,55,0.10)",
     color: "#D4AF37",
     cursor: "pointer",
     transition: "all 0.15s",
@@ -197,11 +201,13 @@ const ProjectTab = ({ project, onUpdateProject, onAdvance }: ProjectTabProps) =>
   };
 
   const handleInputFocus = (e: React.FocusEvent<HTMLInputElement>) => {
-    e.target.style.borderColor = "rgba(212,175,55,0.30)";
+    e.target.style.borderColor = "rgba(212,175,55,0.45)";
+    (e.target as HTMLInputElement).style.boxShadow = "0 0 0 3px rgba(212,175,55,0.06)";
   };
 
   const handleInputBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-    e.target.style.borderColor = "rgba(255,255,255,0.08)";
+    e.target.style.borderColor = "rgba(220,200,160,0.16)";
+    (e.target as HTMLInputElement).style.boxShadow = "none";
   };
 
   const canProceed = project.title.trim().length > 0;

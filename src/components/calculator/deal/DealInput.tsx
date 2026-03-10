@@ -64,7 +64,13 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext }: DealIn
       <div className="space-y-8" ref={mobileRef}>
         
         {/* 1. ACQUISITION AMOUNT (Top Level) */}
-        <div className="bg-bg-elevated border border-border-default rounded-lg p-5 transition-all focus-within:border-gold/50 focus-within:shadow-focus focus-within:bg-bg-surface">
+        <div className="bg-bg-elevated border border-border-default rounded-lg p-5 transition-all focus-within:border-gold/50 focus-within:shadow-focus focus-within:bg-bg-surface" style={{
+          background: "rgba(255,255,255,0.04)",
+          backdropFilter: "blur(8px)",
+          WebkitBackdropFilter: "blur(8px)",
+          border: "1px solid rgba(220,200,160,0.16)",
+          borderRadius: "8px",
+        }}>
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">
               <span className="text-xs uppercase tracking-widest text-text-dim font-semibold">
@@ -84,7 +90,7 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext }: DealIn
           </div>
 
           <div className="flex items-center relative">
-            <span className="font-mono text-xl text-text-dim mr-2">$</span>
+            <span className="font-mono text-text-dim mr-2" style={{ fontSize: "1.2rem" }}>$</span>
             <input
               ref={inputRef}
               type="text"
@@ -93,7 +99,8 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext }: DealIn
               onChange={(e) => onUpdateInput('revenue', parseValue(e.target.value))}
               onFocus={scrollIntoView}
               placeholder="2,000,000"
-              className="flex-1 bg-transparent outline-none font-mono text-[22px] text-text-primary text-right placeholder:text-text-dim placeholder:text-base tabular-nums"
+              className="flex-1 bg-transparent outline-none font-mono text-text-primary text-right placeholder:text-text-dim placeholder:text-base tabular-nums"
+              style={{ fontSize: "1.8rem" }}
             />
           </div>
           <p className="text-[10px] text-text-dim mt-2 leading-relaxed">

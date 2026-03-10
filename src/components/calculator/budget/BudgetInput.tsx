@@ -55,21 +55,21 @@ const s: Record<string, React.CSSProperties> = {
   },
   heroSign: {
     fontFamily: "'Roboto Mono', monospace",
-    fontSize: "2rem",
+    fontSize: "1.6rem",
     fontWeight: 500,
     color: "rgba(212,175,55,0.35)",
     lineHeight: 1,
   },
   heroSignLit: {
     fontFamily: "'Roboto Mono', monospace",
-    fontSize: "2rem",
+    fontSize: "1.6rem",
     fontWeight: 500,
     color: "#D4AF37",
     lineHeight: 1,
   },
   heroInput: {
     fontFamily: "'Roboto Mono', monospace",
-    fontSize: "3rem",
+    fontSize: "2.4rem",
     fontWeight: 500,
     color: "rgba(255,255,255,0.85)",
     lineHeight: 1,
@@ -174,10 +174,12 @@ const s: Record<string, React.CSSProperties> = {
     alignItems: "center",
     gap: "6px",
     padding: "14px 8px",
-    background: "transparent",
-    border: "1px solid rgba(255,255,255,0.08)",
-    borderRadius: "6px",
+    background: "rgba(255,255,255,0.03)",
+    border: "1px solid rgba(220,200,160,0.16)",
+    borderRadius: "10px",
     cursor: "pointer",
+    backdropFilter: "blur(8px)",
+    WebkitBackdropFilter: "blur(8px)",
     transition: "all 0.15s",
   },
   guildOn: {
@@ -258,7 +260,7 @@ const BudgetInput = ({ inputs, guilds, onUpdateInput, onToggleGuild, onNext }: B
 
   const isCompleted = inputs.budget > 0;
   const isLargeNumber = inputs.budget >= 10000000;
-  const heroFontSize = isLargeNumber ? "2.2rem" : "3rem";
+  const heroFontSize = isLargeNumber ? "1.8rem" : "2.4rem";
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
