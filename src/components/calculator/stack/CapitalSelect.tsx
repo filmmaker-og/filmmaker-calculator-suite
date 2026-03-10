@@ -101,29 +101,34 @@ const CapitalSelect = ({ selections, onToggle, onNext }: CapitalSelectProps) => 
       isComplete={true}
     >
       <div className="space-y-6">
-        
-        {/* Selection cards - Matte Look with Sparing Gold */}
-        <div className="bg-bg-elevated border border-border-default rounded-lg overflow-hidden" style={{
-          background: "rgba(8,8,8,0.82)",
-          backdropFilter: "blur(24px)",
-          WebkitBackdropFilter: "blur(24px)",
-          border: "1px solid rgba(212,175,55,0.15)",
-          borderRadius: "12px",
-        }}>
-          <div className="px-5 py-3 border-b border-border-subtle flex items-center justify-between bg-bg-surface/50">
-            <span className="text-xs uppercase tracking-widest text-text-dim font-semibold">
+
+        {/* Selection cards - Store card pattern */}
+        <div
+          className="overflow-hidden"
+          style={{
+            background: "#0A0A0A",
+            border: "1px solid rgba(212,175,55,0.15)",
+            borderRadius: "12px",
+          }}
+        >
+          <div
+            className="px-5 py-3 flex items-center justify-between"
+            style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}
+          >
+            <span className="text-xs uppercase tracking-widest font-semibold" style={{ color: "rgba(255,255,255,0.40)" }}>
               Select all that apply
             </span>
             {selectedCount > 0 && (
-              <span className="text-xs text-text-dim font-mono">{selectedCount} selected</span>
+              <span className="text-xs font-mono" style={{ color: "rgba(255,255,255,0.40)" }}>{selectedCount} selected</span>
             )}
           </div>
 
-          <div className="divide-y divide-border-subtle">
-            {options.map((option) => {
+          <div>
+            {options.map((option, idx) => {
               const isSelected = selections[option.key];
               const wasJustToggled = justToggled === option.key;
               const Icon = option.icon;
+              const isLast = idx === options.length - 1;
 
               return (
                 <button
@@ -131,27 +136,21 @@ const CapitalSelect = ({ selections, onToggle, onNext }: CapitalSelectProps) => 
                   onClick={() => handleToggle(option.key)}
                   className={cn(
                     "w-full p-4 text-left transition-all duration-150 group",
-                    isSelected
-                      ? "bg-bg-surface" // REMOVED: gold background
-                      : "bg-transparent hover:bg-bg-elevated",
                     wasJustToggled && "scale-[1.01]"
                   )}
-                  style={!isSelected ? {
-                    background: "rgba(255,255,255,0.03)",
-                  } : {
-                    background: "rgba(212,175,55,0.07)",
+                  style={{
+                    background: isSelected ? "rgba(212,175,55,0.07)" : "rgba(255,255,255,0.03)",
+                    ...(!isLast ? { borderBottom: "1px solid rgba(255,255,255,0.06)" } : {}),
                   }}
                 >
                   <div className="flex items-center gap-4">
                     {/* Icon - Gold Only When Selected */}
                     <div
-                      className={cn(
-                        "w-10 h-10 flex items-center justify-center border transition-all",
-                        isSelected
-                          ? "border-gold text-gold bg-gold/5" // Subtle gold tint
-                          : "border-border-subtle bg-bg-void text-text-dim group-hover:text-text-mid"
-                      )}
-                      style={{ borderRadius: 'var(--radius-sm)' }}
+                      className="w-10 h-10 flex items-center justify-center transition-all"
+                      style={isSelected
+                        ? { border: "1px solid #D4AF37", color: "#D4AF37", background: "rgba(212,175,55,0.05)", borderRadius: "var(--radius-sm)" }
+                        : { border: "1px solid rgba(255,255,255,0.15)", background: "#000", color: "rgba(255,255,255,0.40)", borderRadius: "var(--radius-sm)" }
+                      }
                     >
                       <Icon className="w-5 h-5 transition-colors" />
                     </div>
@@ -160,27 +159,31 @@ const CapitalSelect = ({ selections, onToggle, onNext }: CapitalSelectProps) => 
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-0.5">
                         <span
-                          className={cn(
-                            "text-sm font-semibold transition-colors",
-                            isSelected ? "text-gold" : "text-text-mid" // Text turns gold when selected
-                          )}
+                          className="text-sm font-semibold transition-colors"
+                          style={{ color: isSelected ? "#D4AF37" : "rgba(255,255,255,0.70)" }}
                         >
                           {option.title}
                         </span>
                         {option.recommended && !isSelected && (
-                          <span className="text-[9px] px-1.5 py-0.5 bg-bg-elevated border border-border-subtle text-text-dim uppercase tracking-wider rounded">
+                          <span
+                            className="text-[9px] px-1.5 py-0.5 uppercase tracking-wider rounded"
+                            style={{ background: "#0A0A0A", border: "1px solid rgba(212,175,55,0.15)", color: "rgba(255,255,255,0.40)" }}
+                          >
                             Common
                           </span>
                         )}
                       </div>
                       <div className="flex items-center gap-2">
-                        <p className="text-xs text-text-dim truncate flex-1">
+                        <p className="text-xs truncate flex-1" style={{ color: "rgba(255,255,255,0.40)" }}>
                           {option.description}
                         </p>
-                        <span className={cn(
-                          "text-[9px] px-1.5 py-0.5 uppercase tracking-wider flex-shrink-0 rounded",
-                          isSelected ? "bg-gold/10 text-gold/70" : "bg-bg-elevated text-text-dim"
-                        )}>
+                        <span
+                          className="text-[9px] px-1.5 py-0.5 uppercase tracking-wider flex-shrink-0 rounded"
+                          style={isSelected
+                            ? { background: "rgba(212,175,55,0.10)", color: "rgba(212,175,55,0.70)" }
+                            : { background: "#0A0A0A", color: "rgba(255,255,255,0.40)" }
+                          }
+                        >
                           {option.priorityLabel}
                         </span>
                       </div>
@@ -188,15 +191,14 @@ const CapitalSelect = ({ selections, onToggle, onNext }: CapitalSelectProps) => 
 
                     {/* Checkbox */}
                     <div
-                      className={cn(
-                        "w-5 h-5 flex items-center justify-center border transition-all duration-150 rounded-sm",
-                        isSelected
-                          ? "bg-gold border-gold"
-                          : "bg-transparent border-border-subtle group-hover:border-text-dim"
-                      )}
+                      className="w-5 h-5 flex items-center justify-center transition-all duration-150 rounded-sm"
+                      style={isSelected
+                        ? { background: "#D4AF37", borderColor: "#D4AF37", border: "1px solid #D4AF37" }
+                        : { background: "transparent", border: "1px solid rgba(255,255,255,0.15)" }
+                      }
                     >
                       {isSelected && (
-                        <Check className="w-3 h-3 text-black" />
+                        <Check className="w-3 h-3" style={{ color: "#000" }} />
                       )}
                     </div>
                   </div>
@@ -207,7 +209,7 @@ const CapitalSelect = ({ selections, onToggle, onNext }: CapitalSelectProps) => 
         </div>
 
         {/* Hint */}
-        <p className="text-center text-xs text-text-dim">
+        <p className="text-center text-xs" style={{ color: "rgba(255,255,255,0.40)" }}>
           Most indie films use Senior Debt + Equity
         </p>
 

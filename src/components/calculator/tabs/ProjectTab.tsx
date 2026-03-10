@@ -200,10 +200,9 @@ const ProjectTab = ({ project, onUpdateProject, onAdvance }: ProjectTabProps) =>
 
   const handleGenreSelect = (genre: string) => {
     if (genre === "Other") {
-      update("genre", "Other");
+      onUpdateProject({ ...project, genre: "Other" });
     } else {
-      update("genre", genre);
-      update("customGenre", "");
+      onUpdateProject({ ...project, genre, customGenre: "" });
     }
   };
 

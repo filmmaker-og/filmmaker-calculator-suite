@@ -17,7 +17,7 @@ interface DealInputProps {
 
 /**
  * DealInput - Acquisition price & Waterfall Levers
- * 
+ *
  * Step 1 of Deal Tab: Collect acquisition/revenue projection AND the key deductions.
  * NOW INCLUDES: "Live Assumptions" block to mirror the Netlify app.
  */
@@ -26,9 +26,6 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext }: DealIn
 
   // Mobile keyboard scroll handling
   const { ref: mobileRef, scrollIntoView } = useMobileKeyboardScroll<HTMLDivElement>();
-
-  // REMOVED: Auto-focus on mount caused keyboard to pop up on mobile.
-  // Let user tap to focus instead.
 
   const formatValue = (value: number | undefined) => {
     if (value === undefined || value === 0) return '';
@@ -62,26 +59,32 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext }: DealIn
       nextLabel="See the Waterfall"
     >
       <div className="space-y-8" ref={mobileRef}>
-        
+
         {/* 1. ACQUISITION AMOUNT (Top Level) */}
-        <div className="bg-bg-elevated border border-border-default rounded-lg p-5 transition-all focus-within:border-gold/50 focus-within:shadow-focus focus-within:bg-bg-surface" style={{
-          background: "rgba(255,255,255,0.04)",
-          backdropFilter: "blur(8px)",
-          WebkitBackdropFilter: "blur(8px)",
-          border: "1px solid rgba(212,175,55,0.15)",
-          borderRadius: "8px",
-        }}>
+        <div
+          className="p-5"
+          style={{
+            background: "#0A0A0A",
+            border: "1px solid rgba(212,175,55,0.15)",
+            borderRadius: "12px",
+            padding: "20px",
+          }}
+        >
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">
-              <span className="text-xs uppercase tracking-widest text-text-dim font-semibold">
+              <span className="text-xs uppercase tracking-widest font-semibold" style={{ color: "rgba(255,255,255,0.40)" }}>
                 Gross Acquisition Price
               </span>
                <TooltipProvider>
                 <Tooltip delayDuration={0}>
                   <TooltipTrigger asChild>
-                    <Info className="w-3.5 h-3.5 text-text-dim/50 hover:text-gold cursor-pointer transition-colors" />
+                    <Info className="w-3.5 h-3.5 cursor-pointer transition-colors" style={{ color: "rgba(255,255,255,0.20)" }} />
                   </TooltipTrigger>
-                  <TooltipContent side="right" className="max-w-[200px] bg-bg-card border-border-subtle text-xs">
+                  <TooltipContent
+                    side="right"
+                    className="max-w-[200px] text-xs"
+                    style={{ background: "#0A0A0A", border: "1px solid rgba(212,175,55,0.15)" }}
+                  >
                     <p>The total amount the distributor pays for the film.</p>
                   </TooltipContent>
                 </Tooltip>
@@ -90,7 +93,7 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext }: DealIn
           </div>
 
           <div className="flex items-center relative">
-            <span className="font-mono text-text-dim mr-2" style={{ fontSize: "1.2rem" }}>$</span>
+            <span className="font-mono mr-2" style={{ fontSize: "1.2rem", color: "rgba(255,255,255,0.40)" }}>$</span>
             <input
               ref={inputRef}
               type="text"
@@ -99,11 +102,11 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext }: DealIn
               onChange={(e) => onUpdateInput('revenue', parseValue(e.target.value))}
               onFocus={scrollIntoView}
               placeholder="2,000,000"
-              className="flex-1 bg-transparent outline-none font-mono text-text-primary text-right placeholder:text-text-dim placeholder:text-base tabular-nums"
-              style={{ fontSize: "1.8rem" }}
+              className="flex-1 bg-transparent outline-none font-mono text-right tabular-nums"
+              style={{ fontSize: "1.8rem", color: "#fff" }}
             />
           </div>
-          <p className="text-[10px] text-text-dim mt-2 leading-relaxed">
+          <p className="text-[10px] mt-2 leading-relaxed" style={{ color: "rgba(255,255,255,0.40)" }}>
             What would a streamer or buyer pay for your film? Typical indie range: $500K–$5M.
             Not sure? Start with 2× your budget as a baseline.
           </p>
@@ -112,17 +115,20 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext }: DealIn
         {/* 2. THE "FIRES" (Deductions Inputs) */}
         <div className="space-y-4">
            <div className="flex items-center gap-2 mb-2">
-             <h3 className="text-sm font-semibold uppercase tracking-widest text-text-dim">Distribution Expenses</h3>
-             <div className="h-px flex-1 bg-border-subtle" />
+             <h3 className="text-sm font-semibold uppercase tracking-widest" style={{ color: "rgba(255,255,255,0.40)" }}>Distribution Expenses</h3>
+             <div style={{ height: "1px", flex: 1, background: "rgba(255,255,255,0.06)" }} />
            </div>
 
            {/* Sales Fee Slider */}
-           <div className="bg-bg-surface border border-border-subtle rounded-lg p-4">
+           <div
+             className="p-4"
+             style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: "8px" }}
+           >
               <div className="flex items-center justify-between mb-4">
-                 <span className="text-xs uppercase tracking-wide text-text-dim font-semibold flex items-center gap-2">
-                   Sales Agent Fee <Percent className="w-3 h-3 text-text-dim/50" />
+                 <span className="text-xs uppercase tracking-wide font-semibold flex items-center gap-2" style={{ color: "rgba(255,255,255,0.40)" }}>
+                   Sales Agent Fee <Percent className="w-3 h-3" style={{ color: "rgba(255,255,255,0.20)" }} />
                  </span>
-                 <span className="font-mono text-sm font-medium text-text-primary">
+                 <span className="font-mono text-sm font-medium" style={{ color: "#fff" }}>
                    {inputs.salesFee}%
                  </span>
               </div>
@@ -134,7 +140,7 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext }: DealIn
                 onValueChange={(vals) => onUpdateInput('salesFee', vals[0])}
                 className="my-2"
               />
-              <div className="flex justify-between text-[9px] text-text-dim uppercase tracking-wider mt-1">
+              <div className="flex justify-between text-[9px] uppercase tracking-wider mt-1" style={{ color: "rgba(255,255,255,0.40)" }}>
                 <span>Direct (0%)</span>
                 <span>Standard (15%)</span>
                 <span>Aggressive (25%+)</span>
@@ -142,12 +148,15 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext }: DealIn
            </div>
 
            {/* Marketing Expenses */}
-           <div className="bg-bg-surface border border-border-subtle rounded-lg p-4 flex items-center justify-between">
+           <div
+             className="p-4 flex items-center justify-between"
+             style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: "8px" }}
+           >
               <div className="flex flex-col gap-1">
-                 <span className="text-xs uppercase tracking-wide text-text-dim font-semibold flex items-center gap-2">
-                   Sales Agent Marketing <DollarSign className="w-3 h-3 text-text-dim/50" />
+                 <span className="text-xs uppercase tracking-wide font-semibold flex items-center gap-2" style={{ color: "rgba(255,255,255,0.40)" }}>
+                   Sales Agent Marketing <DollarSign className="w-3 h-3" style={{ color: "rgba(255,255,255,0.20)" }} />
                  </span>
-                 <span className="text-[10px] text-text-dim/70">Expense Cap (Standard $75k)</span>
+                 <span className="text-[10px]" style={{ color: "rgba(255,255,255,0.28)" }}>Expense Cap (Standard $75k)</span>
               </div>
               <div className="w-32">
                 {/* FIX: Bind to salesExp, NOT marketingExpenses */}
@@ -157,51 +166,63 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext }: DealIn
                   value={formatValue(inputs.salesExp)}
                   onChange={(e) => onUpdateInput('salesExp', parseValue(e.target.value))}
                   placeholder="0"
-                  className="w-full bg-bg-elevated border border-border-subtle rounded px-3 py-2 font-mono text-base text-right text-text-primary focus:border-gold/50 focus:outline-none"
+                  className="w-full font-mono text-base text-right"
+                  style={{
+                    background: "#0A0A0A",
+                    border: "1px solid rgba(255,255,255,0.06)",
+                    borderRadius: "4px",
+                    padding: "8px 12px",
+                    color: "#fff",
+                    outline: "none",
+                  }}
+                  onFocus={(e) => { e.target.style.borderColor = "rgba(212,175,55,0.35)"; }}
+                  onBlur={(e) => { e.target.style.borderColor = "rgba(255,255,255,0.06)"; }}
                 />
               </div>
            </div>
         </div>
 
         {/* 3. LIVE ASSUMPTIONS BLOCK (New) */}
-        {/* This mirrors the Netlify logic */}
         {hasRevenue && (
           <div className="space-y-3 pt-2">
              <div className="flex items-center gap-2">
-               <Calculator className="w-3 h-3 text-gold" />
-               <span className="text-xs font-semibold uppercase tracking-widest text-gold">Live Assumptions</span>
+               <Calculator className="w-3 h-3" style={{ color: "#D4AF37" }} />
+               <span className="text-xs font-semibold uppercase tracking-widest" style={{ color: "#D4AF37" }}>Live Assumptions</span>
              </div>
-             
-             <div className="bg-bg-card border border-border-default rounded-lg overflow-hidden divide-y divide-border-subtle">
+
+             <div
+               className="overflow-hidden"
+               style={{ background: "#0A0A0A", border: "1px solid rgba(212,175,55,0.15)", borderRadius: "12px" }}
+             >
                 {/* CAM (1%) */}
-                <div className="flex items-center justify-between p-3 text-xs">
-                   <span className="text-text-dim">CAM (1%)</span>
-                   <span className="font-mono text-text-mid">{formatCompactCurrency(camFee)}</span>
+                <div className="flex items-center justify-between p-3 text-xs" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+                   <span style={{ color: "rgba(255,255,255,0.40)" }}>CAM (1%)</span>
+                   <span className="font-mono" style={{ color: "rgba(255,255,255,0.70)" }}>{formatCompactCurrency(camFee)}</span>
                 </div>
-                
+
                 {/* Sales Fee */}
-                <div className="flex items-center justify-between p-3 text-xs">
-                   <span className="text-text-dim">Sales Fee ({inputs.salesFee}%)</span>
-                   <span className="font-mono text-text-mid">{formatCompactCurrency(salesAgentFee)}</span>
+                <div className="flex items-center justify-between p-3 text-xs" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+                   <span style={{ color: "rgba(255,255,255,0.40)" }}>Sales Fee ({inputs.salesFee}%)</span>
+                   <span className="font-mono" style={{ color: "rgba(255,255,255,0.70)" }}>{formatCompactCurrency(salesAgentFee)}</span>
                 </div>
-                
+
                 {/* Marketing */}
-                <div className="flex items-center justify-between p-3 text-xs">
-                   <span className="text-text-dim">Sales Agent Marketing</span>
+                <div className="flex items-center justify-between p-3 text-xs" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+                   <span style={{ color: "rgba(255,255,255,0.40)" }}>Sales Agent Marketing</span>
                    {/* FIX: Use salesExp here too */}
-                   <span className="font-mono text-text-mid">{formatCompactCurrency(inputs.salesExp)}</span>
+                   <span className="font-mono" style={{ color: "rgba(255,255,255,0.70)" }}>{formatCompactCurrency(inputs.salesExp)}</span>
                 </div>
-                
+
                 {/* Guilds */}
-                <div className="flex items-center justify-between p-3 text-xs">
-                   <span className="text-text-dim">Guilds (Est.)</span>
-                   <span className="font-mono text-text-mid">{formatCompactCurrency(guildFee)}</span>
+                <div className="flex items-center justify-between p-3 text-xs" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+                   <span style={{ color: "rgba(255,255,255,0.40)" }}>Guilds (Est.)</span>
+                   <span className="font-mono" style={{ color: "rgba(255,255,255,0.70)" }}>{formatCompactCurrency(guildFee)}</span>
                 </div>
 
                 {/* Net to Waterfall */}
-                <div className="flex items-center justify-between p-3 bg-bg-elevated border-t border-border-default">
-                   <span className="text-xs font-semibold text-white uppercase">Net to Waterfall</span>
-                   <span className="font-mono text-sm font-medium text-gold">{formatCompactCurrency(netRevenue)}</span>
+                <div className="flex items-center justify-between p-3" style={{ background: "#0A0A0A", borderTop: "1px solid rgba(212,175,55,0.15)" }}>
+                   <span className="text-xs font-semibold uppercase" style={{ color: "#fff" }}>Net to Waterfall</span>
+                   <span className="font-mono text-sm font-medium" style={{ color: "#D4AF37" }}>{formatCompactCurrency(netRevenue)}</span>
                 </div>
              </div>
           </div>

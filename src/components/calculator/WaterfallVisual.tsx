@@ -126,10 +126,13 @@ const WaterfallVisual = ({
       {/* Gross Revenue Header */}
       <div
         className={cn(
-          "relative flex items-center justify-between p-4 border transition-all duration-300 overflow-hidden",
-          "bg-gold-subtle border-gold/20",
+          "relative flex items-center justify-between p-4 overflow-hidden transition-all duration-300",
           revealCount > 0 ? "opacity-100" : "opacity-0"
         )}
+        style={{
+          background: "rgba(212,175,55,0.08)",
+          border: "1px solid rgba(212,175,55,0.20)",
+        }}
       >
         {/* Gold left accent */}
         <div
@@ -140,12 +143,12 @@ const WaterfallVisual = ({
           }}
         />
         <div className="pl-3">
-          <p className="text-[9px] uppercase tracking-wider text-text-dim mb-1">
+          <p className="text-[9px] uppercase tracking-wider mb-1" style={{ color: "rgba(255,255,255,0.40)" }}>
             GROSS REVENUE
           </p>
-          <p className="text-sm text-text-primary font-semibold">Acquisition Price</p>
+          <p className="text-sm font-semibold" style={{ color: "#fff" }}>Acquisition Price</p>
         </div>
-        <p className="font-mono text-xl text-text-primary font-medium tabular-nums">
+        <p className="font-mono text-xl font-medium tabular-nums" style={{ color: "#fff" }}>
           {formatCompactCurrency(revenue)}
         </p>
       </div>
@@ -156,6 +159,8 @@ const WaterfallVisual = ({
         const percentage = getPercentage(tier);
         const isProfit = tier.label === "Profit Pool";
 
+        const isFilled = tier.status === "filled" || (isProfit && tier.paid > 0);
+
         return (
           <div
             key={tier.label}
@@ -165,21 +170,24 @@ const WaterfallVisual = ({
             )}
           >
             <div
-              className={cn(
-                "relative p-4 border transition-colors",
-                tier.status === "filled" && "bg-gold-subtle border-gold/20",
-                tier.status === "partial" && "bg-bg-elevated border-border-subtle",
-                tier.status === "empty" && "bg-bg-void border-border-subtle",
-                isProfit && tier.paid > 0 && "bg-gold-subtle border-gold/20"
-              )}
+              className="relative p-4"
+              style={{
+                border: "1px solid " + (isFilled ? "rgba(212,175,55,0.20)" : "rgba(255,255,255,0.06)"),
+                background: isFilled
+                  ? "rgba(212,175,55,0.08)"
+                  : tier.status === "partial"
+                    ? "#0A0A0A"
+                    : "#000",
+                transition: "background 0.2s, border-color 0.2s",
+              }}
             >
-              {/* Progress Fill (The "Grass" Visual?) - Making it more prominent */}
+              {/* Progress Fill */}
               <div
-                className={cn(
-                    "absolute inset-0 transition-all duration-500",
-                    tier.status === "filled" ? "bg-gold-subtle/50" : "bg-gold-subtle/20" 
-                )}
-                style={{ width: `${percentage}%` }}
+                className="absolute inset-0 transition-all duration-500"
+                style={{
+                  background: tier.status === "filled" ? "rgba(212,175,55,0.04)" : "rgba(212,175,55,0.02)",
+                  width: `${percentage}%`,
+                }}
               />
 
               {/* Content */}
@@ -187,29 +195,35 @@ const WaterfallVisual = ({
                 <div className="flex items-center gap-4">
                   {/* Phase Badge */}
                   <div
-                    className={cn(
-                      "w-7 h-7 flex items-center justify-center text-[9px] font-mono font-medium",
-                      tier.status === "filled" && "bg-gold text-black",
-                      tier.status === "partial" && "bg-gold/20 text-text-primary border border-gold/20",
-                      tier.status === "empty" && "bg-bg-header text-text-dim border border-border-subtle"
-                    )}
-                    style={tier.status === "filled" ? { boxShadow: '0 0 10px rgba(212,175,55,0.35)' } : undefined}
+                    className="flex items-center justify-center text-[9px] font-mono font-medium"
+                    style={{
+                      width: "28px",
+                      height: "28px",
+                      ...(tier.status === "filled"
+                        ? { background: "#D4AF37", color: "#000", boxShadow: "0 0 10px rgba(212,175,55,0.35)" }
+                        : tier.status === "partial"
+                          ? { background: "rgba(212,175,55,0.20)", color: "#fff", border: "1px solid rgba(212,175,55,0.20)" }
+                          : { background: "#000", color: "rgba(255,255,255,0.40)", border: "1px solid rgba(255,255,255,0.06)" }
+                      ),
+                    }}
                   >
                     {index + 1}
                   </div>
 
                   {/* Labels */}
                   <div>
-                    <p className="text-[9px] uppercase tracking-wider text-text-dim mb-0.5">
+                    <p className="text-[9px] uppercase tracking-wider mb-0.5" style={{ color: "rgba(255,255,255,0.40)" }}>
                       {tier.phase}
                     </p>
                     <p
-                      className={cn(
-                        "text-sm font-semibold",
-                        tier.status === "filled" && "text-text-primary",
-                        tier.status === "partial" && "text-text-mid",
-                        tier.status === "empty" && "text-text-dim"
-                      )}
+                      className="text-sm font-semibold"
+                      style={{
+                        color: tier.status === "filled"
+                          ? "#fff"
+                          : tier.status === "partial"
+                            ? "rgba(255,255,255,0.70)"
+                            : "rgba(255,255,255,0.40)",
+                      }}
                     >
                       {tier.label}
                     </p>
@@ -219,18 +233,21 @@ const WaterfallVisual = ({
                 {/* Amounts */}
                 <div className="text-right">
                   <p
-                    className={cn(
-                      "font-mono text-base font-medium tabular-nums",
-                      isProfit && tier.paid > 0 && "text-gold",
-                      !isProfit && tier.status === "filled" && "text-text-primary",
-                      !isProfit && tier.status === "partial" && "text-text-mid",
-                      tier.status === "empty" && "text-text-dim"
-                    )}
+                    className="font-mono text-base font-medium tabular-nums"
+                    style={{
+                      color: isProfit && tier.paid > 0
+                        ? "#D4AF37"
+                        : !isProfit && tier.status === "filled"
+                          ? "#fff"
+                          : !isProfit && tier.status === "partial"
+                            ? "rgba(255,255,255,0.70)"
+                            : "rgba(255,255,255,0.40)",
+                    }}
                   >
                     {isProfit ? "+" : "-"}{formatCompactCurrency(tier.paid)}
                   </p>
                   {tier.status === "partial" && (
-                    <p className="text-[9px] text-text-dim font-mono">
+                    <p className="text-[9px] font-mono" style={{ color: "rgba(255,255,255,0.40)" }}>
                       of {formatCompactCurrency(tier.amount)}
                     </p>
                   )}
@@ -238,13 +255,13 @@ const WaterfallVisual = ({
               </div>
 
               {/* Progress Bar (Visual Indicator) */}
-              <div className="relative mt-3 h-[4px] bg-bg-header overflow-hidden rounded-full">
+              <div className="relative mt-3 overflow-hidden rounded-full" style={{ height: "4px", background: "#000" }}>
                 <div
-                  className={cn(
-                    "h-full transition-all duration-500 rounded-full",
-                    isProfit ? "bg-gold" : "bg-gold-muted"
-                  )}
-                  style={{ width: `${percentage}%` }}
+                  className="h-full transition-all duration-500 rounded-full"
+                  style={{
+                    background: isProfit ? "#D4AF37" : "rgba(212,175,55,0.50)",
+                    width: `${percentage}%`,
+                  }}
                 />
               </div>
             </div>
@@ -255,9 +272,10 @@ const WaterfallVisual = ({
       {/* Summary Footer — The Big Number */}
       <div
         className={cn(
-          "relative mt-4 pt-5 pb-2 border-t border-border-subtle transition-opacity duration-300",
+          "relative mt-4 pt-5 pb-2 transition-opacity duration-300",
           revealCount > tiers.length ? "opacity-100" : "opacity-0"
         )}
+        style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}
       >
         {/* Radial gold glow behind profit number */}
         {profitPool > 0 && (
@@ -270,19 +288,19 @@ const WaterfallVisual = ({
         )}
         <div className="relative flex items-center justify-between">
           <div>
-            <p className="text-[9px] uppercase tracking-wider text-text-dim mb-1 font-semibold">
+            <p className="text-[9px] uppercase tracking-wider mb-1 font-semibold" style={{ color: "rgba(255,255,255,0.40)" }}>
               REMAINING FOR SPLIT
             </p>
-            <p className="text-xs text-text-dim">
+            <p className="text-xs" style={{ color: "rgba(255,255,255,0.40)" }}>
               50% Producer / 50% Investor
             </p>
           </div>
           <p
-            className={cn(
-              "font-mono text-2xl font-medium tabular-nums",
-              profitPool > 0 ? "text-gold" : "text-text-dim"
-            )}
-            style={profitPool > 0 ? { textShadow: '0 0 20px rgba(212,175,55,0.4)' } : undefined}
+            className="font-mono text-2xl font-medium tabular-nums"
+            style={{
+              color: profitPool > 0 ? "#D4AF37" : "rgba(255,255,255,0.40)",
+              ...(profitPool > 0 ? { textShadow: '0 0 20px rgba(212,175,55,0.4)' } : {}),
+            }}
           >
             {profitPool >= 0 ? "+" : ""}{formatCompactCurrency(profitPool)}
           </p>

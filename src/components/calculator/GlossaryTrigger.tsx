@@ -137,7 +137,8 @@ const GlossaryTrigger = ({
         </TooltipTrigger>
         <TooltipContent
           side="top"
-          className="max-w-[300px] bg-bg-card border border-gold/20 p-4 shadow-xl z-50"
+          className="max-w-[300px] p-4 shadow-xl z-50"
+          style={{ background: "#0A0A0A", border: "1px solid rgba(212,175,55,0.15)" }}
           sideOffset={5}
         >
           <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
