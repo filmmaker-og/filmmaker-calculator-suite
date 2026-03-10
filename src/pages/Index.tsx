@@ -292,6 +292,8 @@ const Index = () => {
                 <p style={styles.tierTitleCore}>The Modeling Engine</p>
                 <p style={styles.tierSubCore}>Your baseline recoupment model.</p>
               </div>
+              {/* Subdivider */}
+              <div style={{ height: "1px", background: "rgba(255,255,255,0.06)", margin: "0 24px" }} />
               <div style={styles.tierFeaturesCore}>
                 <div style={styles.featureItemCore}>
                   <div style={styles.featureTextWrapCore}>
@@ -326,6 +328,8 @@ const Index = () => {
                 <p style={styles.tierTitleAlt}>THE SNAPSHOT</p>
                 <p style={styles.tierSubAlt}>Pick this one if you need the numbers documented — clean and professional</p>
               </div>
+              {/* Subdivider */}
+              <div style={{ height: "1px", background: "rgba(255,255,255,0.06)", margin: "0 24px" }} />
               <p style={styles.tierIntro}>Your financial model. One document. Investor-ready.</p>
               <div style={styles.tierChecklist}>
                 {[
@@ -348,13 +352,15 @@ const Index = () => {
             {/* The Package Card */}
             <div style={{ ...styles.tierCardPackage, ...reveal(arsenalVisible, 3) }}>
               <div style={styles.topLineGoldThick} />
-              <div style={{ ...styles.tierHeaderAlt, paddingTop: "24px", borderBottomColor: "rgba(212,175,55,0.15)" }}>
+              <div style={{ ...styles.tierHeaderAlt, paddingTop: "28px", borderBottomColor: "rgba(212,175,55,0.15)" }}>
                 <div style={{ marginBottom: "12px" }}>
                   <span style={styles.mostPopularBadge}>Most Popular</span>
                 </div>
                 <p style={styles.tierTitleAlt}>THE PACKAGE</p>
                 <p style={styles.tierSubAlt}>Pick this one if you want the full investor package with standalone documents</p>
               </div>
+              {/* Subdivider */}
+              <div style={{ height: "1px", background: "rgba(255,255,255,0.06)", margin: "0 24px" }} />
               <p style={styles.tierIntro}>Your complete investor package — financial presentation, standalone documents, visual design.</p>
               <div style={styles.tierChecklist}>
                 {[
@@ -615,7 +621,7 @@ const styles: Record<string, React.CSSProperties> = {
     boxShadow: "0 16px 40px rgba(0,0,0,0.8), 0 0 20px rgba(212,175,55,0.05)",
   },
   tierHeaderCore: {
-    padding: "24px 24px 20px", borderBottom: "1px solid rgba(212,175,55,0.1)",
+    padding: "28px 24px 20px", borderBottom: "1px solid rgba(212,175,55,0.1)",
   },
   tierTitleCore: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "2rem", color: "#fff", lineHeight: 1, letterSpacing: "0.02em" },
   tierSubCore: { fontFamily: "'Inter', sans-serif", fontSize: "13px", color: "rgba(255,255,255,0.55)", marginTop: "6px" },
@@ -625,7 +631,7 @@ const styles: Record<string, React.CSSProperties> = {
     background: "rgba(212,175,55,0.1)", color: "#D4AF37", border: "1px solid rgba(212,175,55,0.3)",
     whiteSpace: "nowrap", flexShrink: 0,
   },
-  tierFeaturesCore: { padding: "24px", display: "flex", flexDirection: "column", gap: "20px" },
+  tierFeaturesCore: { padding: "28px 24px 24px", display: "flex", flexDirection: "column", gap: "20px" },
   featureItemCore: { display: "flex", gap: "16px", alignItems: "flex-start" },
   featureTextWrapCore: { flex: 1 },
   featureNameCore: { fontFamily: "'Inter', sans-serif", fontSize: "15px", fontWeight: 500, color: "#fff", lineHeight: 1.3, marginBottom: "4px" },
@@ -642,16 +648,16 @@ const styles: Record<string, React.CSSProperties> = {
     boxShadow: "0 16px 40px rgba(0,0,0,0.8), 0 0 40px rgba(212,175,55,0.08)",
   },
   tierHeaderAlt: {
-    padding: "32px 24px 20px", borderBottom: "1px solid rgba(255,255,255,0.06)",
+    padding: "28px 24px 20px", borderBottom: "1px solid rgba(255,255,255,0.06)",
   },
   tierTitleAlt: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "2.2rem", color: "#fff", lineHeight: 1, letterSpacing: "0.04em", marginBottom: "8px" },
   tierSubAlt: { fontFamily: "'Inter', sans-serif", fontSize: "13px", color: "rgba(212,175,55,0.8)", lineHeight: 1.4 },
-  tierIntro: { fontFamily: "'Inter', sans-serif", fontSize: "15px", color: "rgba(255,255,255,0.7)", lineHeight: 1.5, margin: "24px 24px 0" },
+  tierIntro: { fontFamily: "'Inter', sans-serif", fontSize: "15px", color: "rgba(255,255,255,0.7)", lineHeight: 1.5, margin: "28px 24px 0" },
   tierChecklist: { padding: "24px", display: "flex", flexDirection: "column", gap: "16px" },
   checkItem: { display: "flex", gap: "12px", alignItems: "flex-start" },
   checkMark: { color: "#D4AF37", fontSize: "14px", fontWeight: 600, lineHeight: 1.3 },
   checkText: { fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "rgba(255,255,255,0.85)", lineHeight: 1.45 },
-  tierAction: { padding: "0 24px 32px" },
+  tierAction: { padding: "0 24px 36px" },
   btnSnapshot: {
     display: "block", width: "100%", textAlign: "center",
     fontFamily: "'Roboto Mono', monospace", fontSize: "14px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.1em",
