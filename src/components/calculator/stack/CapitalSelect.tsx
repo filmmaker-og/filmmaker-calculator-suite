@@ -107,7 +107,7 @@ const CapitalSelect = ({ selections, onToggle, onNext }: CapitalSelectProps) => 
           background: "rgba(8,8,8,0.82)",
           backdropFilter: "blur(24px)",
           WebkitBackdropFilter: "blur(24px)",
-          border: "1px solid rgba(220,200,160,0.18)",
+          border: "1px solid rgba(212,175,55,0.15)",
           borderRadius: "12px",
         }}>
           <div className="px-5 py-3 border-b border-border-subtle flex items-center justify-between bg-bg-surface/50">
@@ -138,7 +138,6 @@ const CapitalSelect = ({ selections, onToggle, onNext }: CapitalSelectProps) => 
                   )}
                   style={!isSelected ? {
                     background: "rgba(255,255,255,0.03)",
-                    borderBottom: "1px solid rgba(220,200,160,0.10)",
                   } : {
                     background: "rgba(212,175,55,0.07)",
                   }}

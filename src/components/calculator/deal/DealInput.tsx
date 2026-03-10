@@ -68,7 +68,7 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext }: DealIn
           background: "rgba(255,255,255,0.04)",
           backdropFilter: "blur(8px)",
           WebkitBackdropFilter: "blur(8px)",
-          border: "1px solid rgba(220,200,160,0.16)",
+          border: "1px solid rgba(212,175,55,0.15)",
           borderRadius: "8px",
         }}>
           <div className="flex items-center justify-between mb-2">
@@ -157,7 +157,7 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext }: DealIn
                   value={formatValue(inputs.salesExp)}
                   onChange={(e) => onUpdateInput('salesExp', parseValue(e.target.value))}
                   placeholder="0"
-                  className="w-full bg-bg-elevated border border-border-subtle rounded px-3 py-2 font-mono text-sm text-right text-text-primary focus:border-gold/50 focus:outline-none"
+                  className="w-full bg-bg-elevated border border-border-subtle rounded px-3 py-2 font-mono text-base text-right text-text-primary focus:border-gold/50 focus:outline-none"
                 />
               </div>
            </div>
