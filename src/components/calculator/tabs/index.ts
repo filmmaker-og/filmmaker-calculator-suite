@@ -1,3 +1,4 @@
+export { default as ProjectTab } from './ProjectTab';
 export { default as BudgetTab } from './BudgetTab';
 export { default as StackTab } from './StackTab';
 export { default as DealTab } from './DealTab';
