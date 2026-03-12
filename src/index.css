@@ -617,46 +617,6 @@
   /* ═══════════════════════════════════════════════════════════════════
      ATTENTION ANIMATIONS
      ═══════════════════════════════════════════════════════════════════ */
-  .animate-attention-glow {
-    animation: attentionGlow 2s ease-in-out infinite;
-  }
-
-  @keyframes attentionGlow {
-    0%, 100% { opacity: 0.5; transform: scale(1); }
-    50% { opacity: 1; transform: scale(1.05); }
-  }
-
-  .animate-border-glow {
-    animation: borderGlow 1.5s ease-in-out infinite;
-  }
-
-  @keyframes borderGlow {
-    0%, 100% { border-color: var(--gold-strong); }
-    50% { border-color: var(--gold); }
-  }
-
-  .animate-shimmer {
-    animation: shimmer 2s linear infinite;
-  }
-
-  .animate-shimmer-slow {
-    animation: shimmer 3s linear infinite;
-  }
-
-  @keyframes shimmer {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
-  }
-
-  .animate-pulse-slow {
-    animation: pulseSlow 3s ease-in-out infinite;
-  }
-
-  @keyframes pulseSlow {
-    0%, 100% { opacity: 0.6; }
-    50% { opacity: 1; }
-  }
-
   .animate-pulse-subtle {
     animation: pulseSubtle 2s ease-in-out infinite;
   }
@@ -664,15 +624,6 @@
   @keyframes pulseSubtle {
     0%, 100% { opacity: 0.9; transform: scale(1); }
     50% { opacity: 1; transform: scale(1.02); }
-  }
-
-  .animate-bounce-right {
-    animation: bounceRight 1s ease-in-out infinite;
-  }
-
-  @keyframes bounceRight {
-    0%, 100% { transform: translateX(0); }
-    50% { transform: translateX(4px); }
   }
 
   .animate-bounce-chevron {
