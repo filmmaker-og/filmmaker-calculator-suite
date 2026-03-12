@@ -148,8 +148,8 @@ const CapitalSelect = ({ selections, onToggle, onNext }: CapitalSelectProps) => 
                     <div
                       className="w-10 h-10 flex items-center justify-center transition-all"
                       style={isSelected
-                        ? { border: "1px solid #D4AF37", color: "#D4AF37", background: "rgba(212,175,55,0.05)", borderRadius: "var(--radius-sm)" }
-                        : { border: "1px solid rgba(255,255,255,0.15)", background: "#000", color: "rgba(255,255,255,0.40)", borderRadius: "var(--radius-sm)" }
+                        ? { border: "1px solid #D4AF37", color: "#D4AF37", background: "rgba(212,175,55,0.05)", borderRadius: "4px" }
+                        : { border: "1px solid rgba(255,255,255,0.15)", background: "#000", color: "rgba(255,255,255,0.40)", borderRadius: "4px" }
                       }
                     >
                       <Icon className="w-5 h-5 transition-colors" />
