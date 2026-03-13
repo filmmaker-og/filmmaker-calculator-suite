@@ -636,7 +636,7 @@ const styles: Record<string, React.CSSProperties> = {
     marginBottom: "16px", paddingTop: "2px", boxShadow: "0 0 24px rgba(212,175,55,0.55)",
   },
   badgeTitle: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.4rem", color: "#fff", marginBottom: "8px", lineHeight: 1.05, letterSpacing: "0.02em" },
-  badgeBody: { fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "rgba(255,255,255,0.65)", lineHeight: 1.55 },
+  badgeBody: { fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "rgba(255,255,255,0.70)", lineHeight: 1.55 },
 
   /* ── § 7 ARSENAL ── */
   arsenalSection: { background: "#000", textAlign: "center", padding: "64px 0 0" },
