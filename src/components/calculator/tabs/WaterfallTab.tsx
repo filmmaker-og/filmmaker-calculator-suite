@@ -253,14 +253,16 @@ const WaterfallTab = ({ result: initialResult, inputs: initialInputs, project, g
             </div>
           )}
 
-          {/* THE DECK — no ChapterCard wrapper */}
-          <WaterfallDeck
-            result={activeResult}
-            inputs={activeInputs}
-            project={project}
-            guilds={activeGuilds}
-            onExport={isDemoMode ? undefined : onExport}
-          />
+          {/* THE DECK — breakout wrapper escapes s.main 20px padding */}
+          <div style={{ margin: "0 -20px" }}>
+            <WaterfallDeck
+              result={activeResult}
+              inputs={activeInputs}
+              project={project}
+              guilds={activeGuilds}
+              onExport={isDemoMode ? undefined : onExport}
+            />
+          </div>
 
           {/* Wiki link — below pagination */}
           <a

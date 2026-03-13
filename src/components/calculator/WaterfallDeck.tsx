@@ -1009,6 +1009,7 @@ const WaterfallDeck = ({ result, inputs, project, guilds, onExport }: WaterfallD
           scrollbarWidth: "none",
           gap: "12px",
           padding: "0 20px",
+          width: "100%",
         }}
       >
         {cards.map((card, i) => (
