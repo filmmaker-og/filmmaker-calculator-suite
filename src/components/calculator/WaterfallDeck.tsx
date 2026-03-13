@@ -124,7 +124,7 @@ const Watermark = () => (
       letterSpacing: "0.18em",
       color: "rgba(212,175,55,0.25)",
       marginTop: "auto",
-      paddingTop: "24px",
+      paddingTop: "32px",
     }}
   >
     ———— FILMMAKER.OG ————
@@ -136,7 +136,7 @@ const Watermark = () => (
 const styles = {
   sectionLabel: {
     fontFamily: "'Roboto Mono', monospace",
-    fontSize: "10px",
+    fontSize: "12px",
     fontWeight: 500,
     letterSpacing: "0.2em",
     textTransform: "uppercase" as const,
@@ -145,13 +145,24 @@ const styles = {
   } as React.CSSProperties,
   eyebrow: {
     fontFamily: "'Roboto Mono', monospace",
-    fontSize: "10px",
+    fontSize: "12px",
     letterSpacing: "0.2em",
     color: "rgba(212,175,55,0.55)",
     textAlign: "center" as const,
     margin: 0,
   } as React.CSSProperties,
 };
+
+// ─── Legend Dot (for capital bar) ────────────────────────────────
+
+const LegendDot = ({ color, label }: { color: string; label: string }) => (
+  <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+    <div style={{ width: "8px", height: "8px", borderRadius: "2px", background: color, border: "1px solid rgba(212,175,55,0.15)" }} />
+    <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: "rgba(255,255,255,0.55)" }}>
+      {label}
+    </span>
+  </div>
+);
 
 // ─── Card 1: THE PROJECT ─────────────────────────────────────────
 
@@ -179,7 +190,7 @@ const ProjectCard = ({ project }: { project: ProjectDetails }) => {
           flexDirection: "column",
           alignItems: "center",
           textAlign: "center",
-          gap: "14px",
+          gap: "16px",
         }}
       >
         {/* Eyebrow */}
@@ -210,7 +221,7 @@ const ProjectCard = ({ project }: { project: ProjectDetails }) => {
         <h3
           style={{
             fontFamily: "'Bebas Neue', sans-serif",
-            fontSize: "28px",
+            fontSize: "40px",
             color: "#fff",
             margin: 0,
             letterSpacing: "0.06em",
@@ -224,10 +235,10 @@ const ProjectCard = ({ project }: { project: ProjectDetails }) => {
           <p
             style={{
               fontFamily: "'Inter', sans-serif",
-              fontSize: "13px",
+              fontSize: "16px",
               color: "rgba(255,255,255,0.70)",
               margin: 0,
-              lineHeight: 1.5,
+              lineHeight: 1.6,
               display: "-webkit-box",
               WebkitLineClamp: 2,
               WebkitBoxOrient: "vertical" as const,
@@ -245,11 +256,11 @@ const ProjectCard = ({ project }: { project: ProjectDetails }) => {
           <div
             style={{
               display: "inline-flex",
-              padding: "4px 14px",
+              padding: "6px 18px",
               borderRadius: "999px",
               border: "1px solid rgba(212,175,55,0.30)",
               fontFamily: "'Inter', sans-serif",
-              fontSize: "11px",
+              fontSize: "14px",
               letterSpacing: "0.06em",
               color: "#D4AF37",
             }}
@@ -263,7 +274,7 @@ const ProjectCard = ({ project }: { project: ProjectDetails }) => {
           <p
             style={{
               fontFamily: "'Roboto Mono', monospace",
-              fontSize: "11px",
+              fontSize: "14px",
               color: "rgba(255,255,255,0.55)",
               margin: 0,
             }}
@@ -274,7 +285,7 @@ const ProjectCard = ({ project }: { project: ProjectDetails }) => {
 
         {/* Gold divider */}
         {teamFields.length > 0 && (
-          <div style={{ width: "100%", padding: "2px 0" }}>
+          <div style={{ width: "100%", padding: "4px 0" }}>
             <Divider />
           </div>
         )}
@@ -285,7 +296,7 @@ const ProjectCard = ({ project }: { project: ProjectDetails }) => {
             style={{
               display: "grid",
               gridTemplateColumns: teamFields.length === 1 ? "1fr" : "1fr 1fr",
-              gap: "12px 16px",
+              gap: "16px 20px",
               width: "100%",
               textAlign: "left",
             }}
@@ -295,7 +306,7 @@ const ProjectCard = ({ project }: { project: ProjectDetails }) => {
                 <p
                   style={{
                     fontFamily: "'Roboto Mono', monospace",
-                    fontSize: "9px",
+                    fontSize: "11px",
                     letterSpacing: "0.12em",
                     color: "rgba(212,175,55,0.40)",
                     textTransform: "uppercase" as const,
@@ -307,7 +318,7 @@ const ProjectCard = ({ project }: { project: ProjectDetails }) => {
                 <p
                   style={{
                     fontFamily: "'Inter', sans-serif",
-                    fontSize: "12px",
+                    fontSize: "14px",
                     color: "rgba(255,255,255,0.70)",
                     margin: 0,
                     overflow: "hidden",
@@ -327,7 +338,7 @@ const ProjectCard = ({ project }: { project: ProjectDetails }) => {
           <p
             style={{
               fontFamily: "'Inter', sans-serif",
-              fontSize: "12px",
+              fontSize: "14px",
               color: "rgba(255,255,255,0.55)",
               margin: 0,
               width: "100%",
@@ -343,7 +354,7 @@ const ProjectCard = ({ project }: { project: ProjectDetails }) => {
           <p
             style={{
               fontFamily: "'Inter', sans-serif",
-              fontSize: "11px",
+              fontSize: "14px",
               color: "rgba(255,255,255,0.40)",
               margin: 0,
               width: "100%",
@@ -374,6 +385,8 @@ const BudgetCard = ({
   if (guilds.wga) activeGuilds.push("WGA");
   if (guilds.dga) activeGuilds.push("DGA");
 
+  const hasCapitalSources = inputs.debt > 0 || inputs.mezzanineDebt > 0 || inputs.equity > 0 || inputs.deferments > 0;
+
   return (
     <DeckCard temperature="data">
       {/* Section: Total Negative Cost */}
@@ -381,10 +394,10 @@ const BudgetCard = ({
       <p
         style={{
           fontFamily: "'Roboto Mono', monospace",
-          fontSize: "32px",
+          fontSize: "56px",
           color: "#fff",
           textAlign: "center",
-          margin: "8px 0 20px",
+          margin: "8px 0 28px",
         }}
       >
         {formatCompactCurrency(inputs.budget)}
@@ -392,11 +405,74 @@ const BudgetCard = ({
 
       <Divider />
 
+      {/* Proportional capital bar */}
+      {hasCapitalSources && (
+        <div style={{ margin: "24px 0" }}>
+          <div style={{
+            display: "flex",
+            width: "100%",
+            height: "32px",
+            borderRadius: "6px",
+            overflow: "hidden",
+            border: "1px solid rgba(212,175,55,0.15)",
+          }}>
+            {inputs.debt > 0 && (
+              <div style={{
+                flex: inputs.debt / inputs.budget,
+                background: "rgba(212,175,55,0.50)",
+                minWidth: "2px",
+              }} />
+            )}
+            {inputs.mezzanineDebt > 0 && (
+              <div style={{
+                flex: inputs.mezzanineDebt / inputs.budget,
+                background: "rgba(212,175,55,0.35)",
+                minWidth: "2px",
+              }} />
+            )}
+            {inputs.equity > 0 && (
+              <div style={{
+                flex: inputs.equity / inputs.budget,
+                background: "rgba(212,175,55,0.20)",
+                minWidth: "2px",
+              }} />
+            )}
+            {inputs.deferments > 0 && (
+              <div style={{
+                flex: inputs.deferments / inputs.budget,
+                background: "rgba(255,255,255,0.08)",
+                minWidth: "2px",
+              }} />
+            )}
+          </div>
+          {/* Legend row */}
+          <div style={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: "12px",
+            marginTop: "10px",
+          }}>
+            {inputs.debt > 0 && (
+              <LegendDot color="rgba(212,175,55,0.50)" label="Debt" />
+            )}
+            {inputs.mezzanineDebt > 0 && (
+              <LegendDot color="rgba(212,175,55,0.35)" label="Mezz" />
+            )}
+            {inputs.equity > 0 && (
+              <LegendDot color="rgba(212,175,55,0.20)" label="Equity" />
+            )}
+            {inputs.deferments > 0 && (
+              <LegendDot color="rgba(255,255,255,0.08)" label="Deferments" />
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Section: Capital Structure */}
-      <p style={{ ...styles.sectionLabel, color: "#D4AF37", marginTop: "20px" }}>
+      <p style={{ ...styles.sectionLabel, color: "#D4AF37", marginTop: hasCapitalSources ? "4px" : "28px" }}>
         CAPITAL STRUCTURE
       </p>
-      <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginTop: "12px" }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: "12px", marginTop: "16px" }}>
         {inputs.debt > 0 && (
           <>
             <CapitalRow label="Senior Debt" value={formatCompactCurrency(inputs.debt)} />
@@ -429,15 +505,15 @@ const BudgetCard = ({
 
       {activeGuilds.length > 0 && (
         <>
-          <div style={{ marginTop: "20px" }}>
+          <div style={{ marginTop: "28px" }}>
             <Divider />
           </div>
           <p
             style={{
               fontFamily: "'Inter', sans-serif",
-              fontSize: "11px",
+              fontSize: "14px",
               color: "rgba(255,255,255,0.55)",
-              marginTop: "12px",
+              marginTop: "16px",
             }}
           >
             Guilds: {activeGuilds.join(", ")}
@@ -469,7 +545,7 @@ const CapitalRow = ({
     <span
       style={{
         fontFamily: "'Inter', sans-serif",
-        fontSize: "13px",
+        fontSize: "16px",
         color: "rgba(255,255,255,0.70)",
       }}
     >
@@ -478,7 +554,7 @@ const CapitalRow = ({
     <span
       style={{
         fontFamily: "'Roboto Mono', monospace",
-        fontSize: "13px",
+        fontSize: "16px",
         color: valueColor,
       }}
     >
@@ -499,7 +575,7 @@ const CapitalSubRow = ({ label, value }: { label: string; value: string }) => (
     <span
       style={{
         fontFamily: "'Roboto Mono', monospace",
-        fontSize: "11px",
+        fontSize: "14px",
         color: "rgba(255,255,255,0.55)",
       }}
     >
@@ -508,7 +584,7 @@ const CapitalSubRow = ({ label, value }: { label: string; value: string }) => (
     <span
       style={{
         fontFamily: "'Roboto Mono', monospace",
-        fontSize: "11px",
+        fontSize: "14px",
         color: "rgba(255,255,255,0.55)",
       }}
     >
@@ -530,6 +606,8 @@ const RevenueCard = ({
 }) => {
   const netDistributable = inputs.revenue - result.offTopTotal;
   const hasGuilds = guilds.sag || guilds.wga || guilds.dga;
+  const netPct = inputs.revenue > 0 ? ((inputs.revenue - result.offTopTotal) / inputs.revenue) * 100 : 100;
+  const deductedPct = inputs.revenue > 0 ? (result.offTopTotal / inputs.revenue) * 100 : 0;
 
   return (
     <DeckCard temperature="data">
@@ -537,10 +615,10 @@ const RevenueCard = ({
       <p
         style={{
           fontFamily: "'Roboto Mono', monospace",
-          fontSize: "32px",
+          fontSize: "56px",
           color: "#fff",
           textAlign: "center",
-          margin: "8px 0 20px",
+          margin: "8px 0 28px",
         }}
       >
         {formatCompactCurrency(inputs.revenue)}
@@ -548,10 +626,42 @@ const RevenueCard = ({
 
       <Divider />
 
-      <p style={{ ...styles.sectionLabel, color: "#D4AF37", marginTop: "20px" }}>
+      <p style={{ ...styles.sectionLabel, color: "#D4AF37", marginTop: "28px" }}>
         OFF-THE-TOP DEDUCTIONS
       </p>
-      <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginTop: "12px" }}>
+
+      {/* Deduction cascade — visual step-down */}
+      <div style={{ margin: "20px 0" }}>
+        <div style={{
+          width: "100%",
+          height: "20px",
+          borderRadius: "4px",
+          background: "rgba(255,255,255,0.10)",
+          position: "relative",
+          overflow: "hidden",
+        }}>
+          <div style={{
+            width: `${netPct}%`,
+            height: "100%",
+            borderRadius: "4px 0 0 4px",
+            background: "rgba(212,175,55,0.30)",
+          }} />
+        </div>
+        <div style={{
+          display: "flex",
+          justifyContent: "space-between",
+          marginTop: "8px",
+        }}>
+          <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: "rgba(212,175,55,0.55)" }}>
+            Net: {netPct.toFixed(0)}%
+          </span>
+          <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: "rgba(255,255,255,0.40)" }}>
+            Deducted: {deductedPct.toFixed(0)}%
+          </span>
+        </div>
+      </div>
+
+      <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
         {result.cam > 0 && (
           <DeductionRow label="CAM Fee (1%)" value={formatCompactCurrency(result.cam)} />
         )}
@@ -569,17 +679,17 @@ const RevenueCard = ({
         )}
       </div>
 
-      <div style={{ marginTop: "20px" }}>
+      <div style={{ marginTop: "28px" }}>
         <Divider />
       </div>
 
-      <p style={{ ...styles.sectionLabel, color: "#D4AF37", marginTop: "20px" }}>
+      <p style={{ ...styles.sectionLabel, color: "#D4AF37", marginTop: "28px" }}>
         NET DISTRIBUTABLE
       </p>
       <p
         style={{
           fontFamily: "'Roboto Mono', monospace",
-          fontSize: "24px",
+          fontSize: "32px",
           color: "#D4AF37",
           textAlign: "center",
           margin: "8px 0 4px",
@@ -590,7 +700,7 @@ const RevenueCard = ({
       <p
         style={{
           fontFamily: "'Inter', sans-serif",
-          fontSize: "11px",
+          fontSize: "14px",
           color: "rgba(255,255,255,0.55)",
           textAlign: "center",
         }}
@@ -608,7 +718,7 @@ const DeductionRow = ({ label, value }: { label: string; value: string }) => (
     <span
       style={{
         fontFamily: "'Inter', sans-serif",
-        fontSize: "13px",
+        fontSize: "16px",
         color: "rgba(255,255,255,0.70)",
       }}
     >
@@ -617,7 +727,7 @@ const DeductionRow = ({ label, value }: { label: string; value: string }) => (
     <span
       style={{
         fontFamily: "'Roboto Mono', monospace",
-        fontSize: "13px",
+        fontSize: "16px",
         color: "rgba(255,255,255,0.70)",
       }}
     >
@@ -637,35 +747,35 @@ const CompactRevenueHeader = ({
   cam: number;
   netDistributable: number;
 }) => (
-  <div style={{ marginBottom: "16px" }}>
+  <div style={{ marginBottom: "20px" }}>
     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-      <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: "rgba(255,255,255,0.70)" }}>
+      <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "14px", color: "rgba(255,255,255,0.70)" }}>
         GROSS REVENUE
       </span>
-      <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: "#fff" }}>
+      <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "14px", color: "#fff" }}>
         {formatCompactCurrency(revenue)}
       </span>
     </div>
-    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "4px" }}>
-      <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: "rgba(255,255,255,0.70)" }}>
+    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "6px" }}>
+      <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "14px", color: "rgba(255,255,255,0.70)" }}>
         CAM (1%)
       </span>
-      <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: "rgba(255,255,255,0.70)" }}>
+      <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "14px", color: "rgba(255,255,255,0.70)" }}>
         -{formatCompactCurrency(cam)}
       </span>
     </div>
-    <div style={{ margin: "8px 0" }}>
+    <div style={{ margin: "10px 0" }}>
       <Divider />
     </div>
     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-      <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: "#D4AF37" }}>
+      <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "14px", color: "#D4AF37" }}>
         NET DISTRIBUTABLE
       </span>
-      <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: "#D4AF37" }}>
+      <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "14px", color: "#D4AF37" }}>
         {formatCompactCurrency(netDistributable)}
       </span>
     </div>
-    <div style={{ margin: "12px 0" }}>
+    <div style={{ margin: "14px 0" }}>
       <Divider />
     </div>
   </div>
@@ -673,30 +783,29 @@ const CompactRevenueHeader = ({
 
 const TierRow = ({ tier }: { tier: TierData }) => {
   const pct = tier.amount > 0 ? Math.min(100, (tier.paid / tier.amount) * 100) : 0;
-  const remaining = tier.amount - tier.paid;
   const isFullyRecouped = pct >= 100;
   const isUnfunded = tier.paid === 0 && tier.amount > 0;
   const reducedMotion = prefersReducedMotion();
 
   return (
-    <div style={{ padding: "8px 0" }}>
+    <div style={{ padding: "14px 0" }}>
       {/* Phase + Label */}
-      <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "8px" }}>
-        <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "10px", letterSpacing: "0.1em", color: "rgba(212,175,55,0.55)" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "10px" }}>
+        <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "12px", letterSpacing: "0.1em", color: "rgba(212,175,55,0.55)" }}>
           PHASE {tier.phase}
         </span>
-        <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "10px", color: "rgba(255,255,255,0.55)" }}>·</span>
-        <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "10px", letterSpacing: "0.06em", color: "#fff" }}>
+        <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "12px", color: "rgba(255,255,255,0.55)" }}>·</span>
+        <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "14px", letterSpacing: "0.06em", color: "#fff" }}>
           {tier.label.toUpperCase()}
         </span>
       </div>
 
       {/* Progress bar */}
-      <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
         <div
           style={{
             flex: 1,
-            height: "8px",
+            height: "14px",
             borderRadius: "999px",
             background: "rgba(255,255,255,0.06)",
             overflow: "hidden",
@@ -712,18 +821,28 @@ const TierRow = ({ tier }: { tier: TierData }) => {
             }}
           />
         </div>
-        <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "10px", color: isFullyRecouped ? "#D4AF37" : "rgba(255,255,255,0.55)", minWidth: "28px", textAlign: "right" }}>
+        <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "14px", color: isFullyRecouped ? "#D4AF37" : "rgba(255,255,255,0.55)", minWidth: "32px", textAlign: "right" }}>
           {pct.toFixed(0)}%
         </span>
       </div>
 
-      {/* Amounts */}
-      <p style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: isFullyRecouped ? "#D4AF37" : "rgba(255,255,255,0.55)", margin: "6px 0 0" }}>
-        Owed: {formatCompactCurrency(tier.amount)}  ·  Paid: {formatCompactCurrency(tier.paid)}  ·  Remaining: {formatCompactCurrency(remaining)}
-      </p>
+      {/* Amounts — two-column layout */}
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: "1fr 1fr",
+        gap: "4px 16px",
+        marginTop: "8px",
+      }}>
+        <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "14px", color: isFullyRecouped ? "#D4AF37" : "rgba(255,255,255,0.55)" }}>
+          Owed: {formatCompactCurrency(tier.amount)}
+        </span>
+        <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "14px", color: isFullyRecouped ? "#D4AF37" : "rgba(255,255,255,0.55)", textAlign: "right" }}>
+          Paid: {formatCompactCurrency(tier.paid)}
+        </span>
+      </div>
 
       {/* Status badge */}
-      <div style={{ marginTop: "6px" }}>
+      <div style={{ marginTop: "8px" }}>
         {isFullyRecouped ? (
           <span
             style={{
@@ -732,7 +851,7 @@ const TierRow = ({ tier }: { tier: TierData }) => {
               borderRadius: "999px",
               border: "1px solid rgba(212,175,55,0.30)",
               fontFamily: "'Roboto Mono', monospace",
-              fontSize: "9px",
+              fontSize: "11px",
               letterSpacing: "0.12em",
               color: "#D4AF37",
             }}
@@ -743,7 +862,7 @@ const TierRow = ({ tier }: { tier: TierData }) => {
           <span
             style={{
               fontFamily: "'Roboto Mono', monospace",
-              fontSize: "9px",
+              fontSize: "11px",
               letterSpacing: "0.12em",
               color: isUnfunded ? "rgba(255,255,255,0.40)" : "rgba(255,255,255,0.55)",
             }}
@@ -772,7 +891,7 @@ const WaterfallCard = ({
   return (
     <DeckCard temperature="data">
       <p style={styles.sectionLabel}>RECOUPMENT CASCADE</p>
-      <div style={{ marginTop: "16px" }}>
+      <div style={{ marginTop: "20px" }}>
         {showCompactRevenue && (
           <CompactRevenueHeader
             revenue={inputs.revenue}
@@ -828,11 +947,11 @@ const VerdictCard = ({
         <span
           style={{
             display: "inline-block",
-            padding: "4px 14px",
+            padding: "6px 18px",
             borderRadius: "999px",
             background: `${verdict.color}20`,
             fontFamily: "'Roboto Mono', monospace",
-            fontSize: "10px",
+            fontSize: "12px",
             fontWeight: 600,
             letterSpacing: "0.15em",
             textTransform: "uppercase" as const,
@@ -847,7 +966,7 @@ const VerdictCard = ({
       <p
         style={{
           fontFamily: "'Roboto Mono', monospace",
-          fontSize: "48px",
+          fontSize: "64px",
           fontWeight: 500,
           color: verdict.color,
           textAlign: "center",
@@ -860,10 +979,10 @@ const VerdictCard = ({
       <p
         style={{
           fontFamily: "'Inter', sans-serif",
-          fontSize: "13px",
+          fontSize: "16px",
           color: "rgba(255,255,255,0.55)",
           textAlign: "center",
-          margin: "0 0 20px",
+          margin: "0 0 28px",
         }}
       >
         {verdict.description}
@@ -872,13 +991,13 @@ const VerdictCard = ({
       <Divider />
 
       {/* Investor / Producer breakdown */}
-      <div style={{ marginTop: "20px", display: "flex", flexDirection: "column", gap: "16px" }}>
+      <div style={{ marginTop: "28px", display: "flex", flexDirection: "column", gap: "20px" }}>
         <div>
           <p style={styles.sectionLabel}>INVESTOR RETURN</p>
           <p
             style={{
               fontFamily: "'Roboto Mono', monospace",
-              fontSize: "20px",
+              fontSize: "32px",
               color: "#fff",
               margin: "4px 0 0",
             }}
@@ -889,7 +1008,7 @@ const VerdictCard = ({
             <p
               style={{
                 fontFamily: "'Roboto Mono', monospace",
-                fontSize: "11px",
+                fontSize: "14px",
                 color: "rgba(255,255,255,0.55)",
                 margin: "2px 0 0",
               }}
@@ -903,7 +1022,7 @@ const VerdictCard = ({
           <p
             style={{
               fontFamily: "'Roboto Mono', monospace",
-              fontSize: "20px",
+              fontSize: "32px",
               color: "#fff",
               margin: "4px 0 0",
             }}
@@ -913,25 +1032,25 @@ const VerdictCard = ({
         </div>
       </div>
 
-      <div style={{ marginTop: "20px" }}>
+      <div style={{ marginTop: "28px" }}>
         <Divider />
       </div>
 
       {/* Recoupment bar */}
-      <div style={{ marginTop: "20px" }}>
+      <div style={{ marginTop: "28px" }}>
         <p style={styles.sectionLabel}>RECOUPMENT</p>
         <div
           style={{
             display: "flex",
             alignItems: "center",
             gap: "12px",
-            marginTop: "8px",
+            marginTop: "10px",
           }}
         >
           <div
             style={{
               flex: 1,
-              height: "8px",
+              height: "14px",
               borderRadius: "999px",
               background: "rgba(255,255,255,0.06)",
               overflow: "hidden",
@@ -950,7 +1069,7 @@ const VerdictCard = ({
           <span
             style={{
               fontFamily: "'Roboto Mono', monospace",
-              fontSize: "12px",
+              fontSize: "14px",
               color: "rgba(255,255,255,0.55)",
               minWidth: "36px",
               textAlign: "right",
@@ -964,7 +1083,7 @@ const VerdictCard = ({
       {/* Edit escape hatch */}
       {onNavigateTab && (
         <>
-          <div style={{ marginTop: "20px" }}>
+          <div style={{ marginTop: "28px" }}>
             <Divider />
           </div>
           <button
@@ -978,7 +1097,7 @@ const VerdictCard = ({
               border: "none",
               cursor: "pointer",
               fontFamily: "'Inter', sans-serif",
-              fontSize: "12px",
+              fontSize: "14px",
               color: "rgba(212,175,55,0.60)",
               textAlign: "center",
             }}
@@ -1006,13 +1125,13 @@ const ExportCard = ({ onExport }: { onExport: () => void }) => {
           flexDirection: "column",
           alignItems: "center",
           textAlign: "center",
-          gap: "16px",
+          gap: "20px",
         }}
       >
         <h3
           style={{
             fontFamily: "'Bebas Neue', sans-serif",
-            fontSize: "22px",
+            fontSize: "28px",
             letterSpacing: "0.12em",
             color: "#D4AF37",
             margin: 0,
@@ -1024,7 +1143,7 @@ const ExportCard = ({ onExport }: { onExport: () => void }) => {
         <p
           style={{
             fontFamily: "'Inter', sans-serif",
-            fontSize: "14px",
+            fontSize: "16px",
             color: "rgba(255,255,255,0.70)",
             lineHeight: 1.6,
             margin: 0,
@@ -1043,7 +1162,7 @@ const ExportCard = ({ onExport }: { onExport: () => void }) => {
             justifyContent: "center",
             gap: "8px",
             width: "100%",
-            padding: "16px 24px",
+            padding: "20px 24px",
             background: "#F9E076",
             color: "#000",
             border: "none",
@@ -1064,7 +1183,7 @@ const ExportCard = ({ onExport }: { onExport: () => void }) => {
       </div>
 
       {/* Collapsible disclaimer */}
-      <div style={{ marginTop: "16px" }}>
+      <div style={{ marginTop: "20px" }}>
         <button
           onClick={() => setShowDisclaimer(!showDisclaimer)}
           style={{
