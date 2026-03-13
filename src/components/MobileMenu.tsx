@@ -342,7 +342,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
           </div>
 
           {/* Legal disclaimer */}
-          <div className="pt-3" style={{ borderTop: "1px solid rgba(255,255,255,0.04)" }}>
+          <div className="pt-3" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
             <p className="text-[11px] tracking-wide leading-relaxed" style={{ color: "rgba(255,255,255,0.40)" }}>
               For educational and informational purposes only. Not legal, tax, or investment advice.
               Consult a qualified entertainment attorney before making financing decisions.
