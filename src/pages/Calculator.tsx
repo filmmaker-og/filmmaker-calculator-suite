@@ -311,6 +311,7 @@ const Calculator = () => {
               selections={capitalSelections}
               onUpdateInput={updateInput}
               onAdvance={handleNext}
+              genre={selectedGenre}
             />
           </>
         );
