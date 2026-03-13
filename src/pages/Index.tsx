@@ -429,7 +429,6 @@ const Index = () => {
         {/* ═══ § 8 CLOSER ═══ */}
         <section ref={closerRef} style={styles.closerSection}>
           <div style={styles.closerGlowBottom} />
-          <div style={styles.closerGlowTop} />
           <div style={{ ...styles.closerCard, ...reveal(closerVisible) }}>
             <div style={styles.topLineGoldBright} />
             <h2 style={styles.closerH2}>Your Investors<br /><span style={{ color: "#D4AF37", display: "block" }}>Will Ask.</span></h2>
@@ -784,10 +783,6 @@ const styles: Record<string, React.CSSProperties> = {
   closerGlowBottom: {
     position: "absolute", bottom: 0, left: 0, right: 0, height: "80%", pointerEvents: "none",
     background: "radial-gradient(ellipse 90% 60% at 50% 100%, rgba(212,175,55,0.12) 0%, transparent 60%)",
-  },
-  closerGlowTop: {
-    position: "absolute", top: 0, left: 0, right: 0, height: "50%", pointerEvents: "none",
-    background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.05) 0%, transparent 70%)",
   },
   closerCard: {
     position: "relative", zIndex: 1, border: "1px solid rgba(212,175,55,0.42)", borderRadius: "16px",
