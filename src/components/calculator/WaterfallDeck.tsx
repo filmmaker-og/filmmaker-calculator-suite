@@ -10,7 +10,6 @@ import { getVerdictStatus } from "@/lib/design-system";
 import { useEffect, useRef, useState } from "react";
 import { useHaptics } from "@/hooks/use-haptics";
 import {
-  Sparkles,
   FileSpreadsheet,
   AlertTriangle,
   ChevronDown,
@@ -25,6 +24,7 @@ interface WaterfallDeckProps {
   project: ProjectDetails;
   guilds: GuildState;
   onExport?: () => void;
+  onNavigateTab?: (tab: string) => void;
 }
 
 interface TierData {
@@ -34,30 +34,82 @@ interface TierData {
   paid: number;
 }
 
+type CardTemperature = "warm" | "feature" | "data" | "neutral";
+
+// ─── Reduced motion check ────────────────────────────────────────
+
+const prefersReducedMotion = () =>
+  window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false;
+
 // ─── Shared Card Wrapper ─────────────────────────────────────────
 
-const DeckCard = ({ children }: { children: React.ReactNode }) => (
-  <div
-    style={{
-      background: "#0A0A0A",
-      border: "1px solid rgba(212,175,55,0.20)",
-      borderRadius: "12px",
-      padding: "28px 24px",
-      display: "flex",
-      flexDirection: "column" as const,
-      position: "relative" as const,
-      overflow: "hidden",
-    }}
-  >
-    {children}
-  </div>
-);
+const DeckCard = ({
+  children,
+  temperature = "data",
+  glow,
+  breathe = false,
+}: {
+  children: React.ReactNode;
+  temperature?: CardTemperature;
+  glow?: string;
+  breathe?: boolean;
+}) => {
+  const borderOpacity = { warm: 0.35, feature: 0.25, data: 0.20, neutral: 0.15 }[temperature];
+  const hasTopline = temperature === "warm" || temperature === "feature";
+
+  return (
+    <div
+      style={{
+        background: "#0A0A0A",
+        border: `1px solid rgba(212,175,55,${borderOpacity})`,
+        borderRadius: "12px",
+        padding: "32px 24px",
+        display: "flex",
+        flexDirection: "column" as const,
+        position: "relative" as const,
+        overflow: "hidden",
+        minHeight: "calc(100vh - 62px - 48px - 40px)",
+        justifyContent: "center",
+        ...(breathe && !prefersReducedMotion() ? { animation: "deckBreathe 3s ease-in-out infinite" } : {}),
+      }}
+    >
+      {/* Topline for warm/feature cards */}
+      {hasTopline && (
+        <div style={{
+          position: "absolute",
+          top: 0,
+          left: "10%",
+          right: "10%",
+          height: "1px",
+          background: `linear-gradient(90deg, transparent, rgba(212,175,55,${temperature === "warm" ? 0.60 : 0.40}), transparent)`,
+        }} />
+      )}
+
+      {/* State-dependent radial glow */}
+      {glow && (
+        <div style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          height: "50%",
+          background: glow,
+          pointerEvents: "none",
+        }} />
+      )}
+
+      <div style={{ position: "relative", zIndex: 1, flex: 1, display: "flex", flexDirection: "column" as const, justifyContent: "center" }}>
+        {children}
+      </div>
+    </div>
+  );
+};
 
 // ─── Divider ─────────────────────────────────────────────────────
 
 const Divider = () => (
   <div
-    style={{ height: "1px", background: "rgba(255,255,255,0.06)", width: "100%" }}
+    style={{ height: "1px", background: "rgba(212,175,55,0.08)", width: "100%" }}
   />
 );
 
@@ -70,7 +122,7 @@ const Watermark = () => (
       fontFamily: "'Bebas Neue', sans-serif",
       fontSize: "11px",
       letterSpacing: "0.18em",
-      color: "rgba(255,255,255,0.15)",
+      color: "rgba(212,175,55,0.25)",
       marginTop: "auto",
       paddingTop: "24px",
     }}
@@ -79,42 +131,61 @@ const Watermark = () => (
   </div>
 );
 
-// ─── Card 1: Cover ───────────────────────────────────────────────
+// ─── Shared Styles ───────────────────────────────────────────────
 
-const CoverCard = ({ project }: { project: ProjectDetails }) => {
-  const hasTitle = project.title.trim().length > 0;
-  const hasCompany = project.company.trim().length > 0;
+const styles = {
+  sectionLabel: {
+    fontFamily: "'Roboto Mono', monospace",
+    fontSize: "10px",
+    fontWeight: 500,
+    letterSpacing: "0.2em",
+    textTransform: "uppercase" as const,
+    color: "rgba(255,255,255,0.55)",
+    margin: 0,
+  } as React.CSSProperties,
+  eyebrow: {
+    fontFamily: "'Roboto Mono', monospace",
+    fontSize: "10px",
+    letterSpacing: "0.2em",
+    color: "rgba(212,175,55,0.55)",
+    textAlign: "center" as const,
+    margin: 0,
+  } as React.CSSProperties,
+};
+
+// ─── Card 1: THE PROJECT ─────────────────────────────────────────
+
+const ProjectCard = ({ project }: { project: ProjectDetails }) => {
   const genre = project.genre === "Other" ? project.customGenre : project.genre;
   const hasGenre = genre.trim().length > 0;
   const hasStatus = project.status.trim().length > 0;
+  const hasLogline = project.logline.trim().length > 0;
+
+  // Team grid: collect non-empty fields
+  const teamFields: { label: string; value: string }[] = [];
+  if (project.producers.trim()) teamFields.push({ label: "PRODUCER(S)", value: project.producers });
+  if (project.director.trim()) teamFields.push({ label: "DIRECTOR", value: project.director });
+  if (project.writers.trim()) teamFields.push({ label: "WRITER(S)", value: project.writers });
+  if (project.cast.trim()) teamFields.push({ label: "CAST", value: project.cast });
+
+  const hasCompany = project.company.trim().length > 0;
+  const hasLocation = project.location.trim().length > 0;
 
   return (
-    <DeckCard>
+    <DeckCard temperature="neutral">
       <div
         style={{
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          justifyContent: "center",
           textAlign: "center",
-          gap: "16px",
-          minHeight: "280px",
+          gap: "14px",
         }}
       >
-        {/* Header */}
-        <h2
-          style={{
-            fontFamily: "'Bebas Neue', sans-serif",
-            fontSize: "22px",
-            letterSpacing: "0.18em",
-            color: "#D4AF37",
-            margin: 0,
-          }}
-        >
-          RECOUPMENT WATERFALL ANALYSIS
-        </h2>
+        {/* Eyebrow */}
+        <p style={styles.eyebrow}>RECOUPMENT WATERFALL ANALYSIS</p>
 
-        {/* Decorative divider with center dot */}
+        {/* Decorative gold divider with center dot */}
         <div
           style={{
             display: "flex",
@@ -135,36 +206,41 @@ const CoverCard = ({ project }: { project: ProjectDetails }) => {
           <div style={{ flex: 1, height: "1px", background: "rgba(212,175,55,0.40)" }} />
         </div>
 
-        {/* Project details */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-          {hasTitle && (
-            <h3
-              style={{
-                fontFamily: "'Bebas Neue', sans-serif",
-                fontSize: "28px",
-                color: "#fff",
-                margin: 0,
-                letterSpacing: "0.06em",
-              }}
-            >
-              {project.title}
-            </h3>
-          )}
+        {/* Project title as hero */}
+        <h3
+          style={{
+            fontFamily: "'Bebas Neue', sans-serif",
+            fontSize: "28px",
+            color: "#fff",
+            margin: 0,
+            letterSpacing: "0.06em",
+          }}
+        >
+          {project.title}
+        </h3>
 
-          {hasCompany && (
-            <p
-              style={{
-                fontFamily: "'Inter', sans-serif",
-                fontSize: "13px",
-                color: "rgba(255,255,255,0.55)",
-                margin: 0,
-              }}
-            >
-              {project.company}
-            </p>
-          )}
-        </div>
+        {/* Logline */}
+        {hasLogline && (
+          <p
+            style={{
+              fontFamily: "'Inter', sans-serif",
+              fontSize: "13px",
+              color: "rgba(255,255,255,0.70)",
+              margin: 0,
+              lineHeight: 1.5,
+              display: "-webkit-box",
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: "vertical" as const,
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              maxWidth: "100%",
+            }}
+          >
+            {project.logline}
+          </p>
+        )}
 
+        {/* Genre pill */}
         {hasGenre && (
           <div
             style={{
@@ -182,6 +258,7 @@ const CoverCard = ({ project }: { project: ProjectDetails }) => {
           </div>
         )}
 
+        {/* Status badge */}
         {hasStatus && (
           <p
             style={{
@@ -194,6 +271,88 @@ const CoverCard = ({ project }: { project: ProjectDetails }) => {
             Status: {project.status}
           </p>
         )}
+
+        {/* Gold divider */}
+        {teamFields.length > 0 && (
+          <div style={{ width: "100%", padding: "2px 0" }}>
+            <Divider />
+          </div>
+        )}
+
+        {/* Team grid — two-column layout */}
+        {teamFields.length > 0 && (
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: teamFields.length === 1 ? "1fr" : "1fr 1fr",
+              gap: "12px 16px",
+              width: "100%",
+              textAlign: "left",
+            }}
+          >
+            {teamFields.map((field) => (
+              <div key={field.label}>
+                <p
+                  style={{
+                    fontFamily: "'Roboto Mono', monospace",
+                    fontSize: "9px",
+                    letterSpacing: "0.12em",
+                    color: "rgba(212,175,55,0.40)",
+                    textTransform: "uppercase" as const,
+                    margin: "0 0 2px",
+                  }}
+                >
+                  {field.label}
+                </p>
+                <p
+                  style={{
+                    fontFamily: "'Inter', sans-serif",
+                    fontSize: "12px",
+                    color: "rgba(255,255,255,0.70)",
+                    margin: 0,
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {field.value}
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Production company */}
+        {hasCompany && (
+          <p
+            style={{
+              fontFamily: "'Inter', sans-serif",
+              fontSize: "12px",
+              color: "rgba(255,255,255,0.55)",
+              margin: 0,
+              width: "100%",
+              textAlign: "left",
+            }}
+          >
+            {project.company}
+          </p>
+        )}
+
+        {/* Location */}
+        {hasLocation && (
+          <p
+            style={{
+              fontFamily: "'Inter', sans-serif",
+              fontSize: "11px",
+              color: "rgba(255,255,255,0.40)",
+              margin: 0,
+              width: "100%",
+              textAlign: "left",
+            }}
+          >
+            {project.location}
+          </p>
+        )}
       </div>
 
       <Watermark />
@@ -201,16 +360,14 @@ const CoverCard = ({ project }: { project: ProjectDetails }) => {
   );
 };
 
-// ─── Card 2: Budget & Capital Stack ──────────────────────────────
+// ─── Card 2: THE NUMBERS — Budget & Capital Stack ────────────────
 
 const BudgetCard = ({
   inputs,
   guilds,
-  result,
 }: {
   inputs: WaterfallInputs;
   guilds: GuildState;
-  result: WaterfallResult;
 }) => {
   const activeGuilds: string[] = [];
   if (guilds.sag) activeGuilds.push("SAG-AFTRA");
@@ -218,7 +375,7 @@ const BudgetCard = ({
   if (guilds.dga) activeGuilds.push("DGA");
 
   return (
-    <DeckCard>
+    <DeckCard temperature="data">
       {/* Section: Total Negative Cost */}
       <p style={styles.sectionLabel}>TOTAL NEGATIVE COST</p>
       <p
@@ -287,6 +444,8 @@ const BudgetCard = ({
           </p>
         </>
       )}
+
+      <Watermark />
     </DeckCard>
   );
 };
@@ -358,7 +517,7 @@ const CapitalSubRow = ({ label, value }: { label: string; value: string }) => (
   </div>
 );
 
-// ─── Card 3: Revenue & Off-The-Tops ─────────────────────────────
+// ─── Card 3: THE REVENUE — Off-The-Tops ─────────────────────────
 
 const RevenueCard = ({
   inputs,
@@ -373,7 +532,7 @@ const RevenueCard = ({
   const hasGuilds = guilds.sag || guilds.wga || guilds.dga;
 
   return (
-    <DeckCard>
+    <DeckCard temperature="data">
       <p style={styles.sectionLabel}>GROSS REVENUE</p>
       <p
         style={{
@@ -438,6 +597,8 @@ const RevenueCard = ({
       >
         This flows into the waterfall
       </p>
+
+      <Watermark />
     </DeckCard>
   );
 };
@@ -465,36 +626,76 @@ const DeductionRow = ({ label, value }: { label: string; value: string }) => (
   </div>
 );
 
-// ─── Cards 4–N: Waterfall Tier Cards ─────────────────────────────
+// ─── Card 4: THE WATERFALL — Consolidated ────────────────────────
 
-const TierCard = ({ tier }: { tier: TierData }) => {
+const CompactRevenueHeader = ({
+  revenue,
+  cam,
+  netDistributable,
+}: {
+  revenue: number;
+  cam: number;
+  netDistributable: number;
+}) => (
+  <div style={{ marginBottom: "16px" }}>
+    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+      <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: "rgba(255,255,255,0.70)" }}>
+        GROSS REVENUE
+      </span>
+      <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: "#fff" }}>
+        {formatCompactCurrency(revenue)}
+      </span>
+    </div>
+    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "4px" }}>
+      <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: "rgba(255,255,255,0.70)" }}>
+        CAM (1%)
+      </span>
+      <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: "rgba(255,255,255,0.70)" }}>
+        -{formatCompactCurrency(cam)}
+      </span>
+    </div>
+    <div style={{ margin: "8px 0" }}>
+      <Divider />
+    </div>
+    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+      <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: "#D4AF37" }}>
+        NET DISTRIBUTABLE
+      </span>
+      <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: "#D4AF37" }}>
+        {formatCompactCurrency(netDistributable)}
+      </span>
+    </div>
+    <div style={{ margin: "12px 0" }}>
+      <Divider />
+    </div>
+  </div>
+);
+
+const TierRow = ({ tier }: { tier: TierData }) => {
   const pct = tier.amount > 0 ? Math.min(100, (tier.paid / tier.amount) * 100) : 0;
   const remaining = tier.amount - tier.paid;
   const isFullyRecouped = pct >= 100;
-  const isUnfunded = tier.paid === 0;
+  const isUnfunded = tier.paid === 0 && tier.amount > 0;
+  const reducedMotion = prefersReducedMotion();
 
   return (
-    <DeckCard>
-      <p style={styles.sectionLabel}>PHASE {tier.phase}</p>
-      <h3
-        style={{
-          fontFamily: "'Bebas Neue', sans-serif",
-          fontSize: "22px",
-          letterSpacing: "0.12em",
-          color: "#fff",
-          margin: "4px 0 16px",
-        }}
-      >
-        {tier.label}
-      </h3>
-
-      <Divider />
+    <div style={{ padding: "8px 0" }}>
+      {/* Phase + Label */}
+      <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "8px" }}>
+        <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "10px", letterSpacing: "0.1em", color: "rgba(212,175,55,0.55)" }}>
+          PHASE {tier.phase}
+        </span>
+        <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "10px", color: "rgba(255,255,255,0.55)" }}>·</span>
+        <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "10px", letterSpacing: "0.06em", color: "#fff" }}>
+          {tier.label.toUpperCase()}
+        </span>
+      </div>
 
       {/* Progress bar */}
-      <div style={{ margin: "20px 0" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
         <div
           style={{
-            width: "100%",
+            flex: 1,
             height: "8px",
             borderRadius: "999px",
             background: "rgba(255,255,255,0.06)",
@@ -507,83 +708,31 @@ const TierCard = ({ tier }: { tier: TierData }) => {
               height: "100%",
               borderRadius: "999px",
               background: "#D4AF37",
-              transition: "width 0.5s ease",
+              transition: reducedMotion ? "none" : "width 0.5s ease",
             }}
           />
         </div>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            marginTop: "6px",
-          }}
-        >
-          <span
-            style={{
-              fontFamily: "'Roboto Mono', monospace",
-              fontSize: "12px",
-              color: isFullyRecouped ? "#D4AF37" : "rgba(255,255,255,0.55)",
-            }}
-          >
-            {formatCompactCurrency(tier.paid)} of {formatCompactCurrency(tier.amount)}
-          </span>
-          <span
-            style={{
-              fontFamily: "'Roboto Mono', monospace",
-              fontSize: "12px",
-              color: isFullyRecouped ? "#D4AF37" : "rgba(255,255,255,0.55)",
-            }}
-          >
-            {pct.toFixed(0)}%
-          </span>
-        </div>
+        <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "10px", color: isFullyRecouped ? "#D4AF37" : "rgba(255,255,255,0.55)", minWidth: "28px", textAlign: "right" }}>
+          {pct.toFixed(0)}%
+        </span>
       </div>
 
-      <Divider />
-
-      {/* Amount details */}
-      <div style={{ marginTop: "20px", display: "flex", flexDirection: "column", gap: "16px" }}>
-        <div>
-          <p style={styles.sectionLabel}>AMOUNT OWED</p>
-          <p style={{ ...styles.heroSmall, color: "#fff" }}>
-            {formatCompactCurrency(tier.amount)}
-          </p>
-        </div>
-        <div>
-          <p style={styles.sectionLabel}>AMOUNT PAID</p>
-          <p
-            style={{
-              ...styles.heroSmall,
-              color: isFullyRecouped ? "#D4AF37" : "#fff",
-            }}
-          >
-            {formatCompactCurrency(tier.paid)}
-          </p>
-        </div>
-        <div>
-          <p style={styles.sectionLabel}>REMAINING</p>
-          <p
-            style={{
-              ...styles.heroSmall,
-              color: remaining === 0 ? "#D4AF37" : "#fff",
-            }}
-          >
-            {formatCompactCurrency(remaining)}
-          </p>
-        </div>
-      </div>
+      {/* Amounts */}
+      <p style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: isFullyRecouped ? "#D4AF37" : "rgba(255,255,255,0.55)", margin: "6px 0 0" }}>
+        Owed: {formatCompactCurrency(tier.amount)}  ·  Paid: {formatCompactCurrency(tier.paid)}  ·  Remaining: {formatCompactCurrency(remaining)}
+      </p>
 
       {/* Status badge */}
-      <div style={{ marginTop: "20px" }}>
+      <div style={{ marginTop: "6px" }}>
         {isFullyRecouped ? (
           <span
             style={{
               display: "inline-block",
-              padding: "4px 12px",
+              padding: "2px 10px",
               borderRadius: "999px",
               border: "1px solid rgba(212,175,55,0.30)",
               fontFamily: "'Roboto Mono', monospace",
-              fontSize: "10px",
+              fontSize: "9px",
               letterSpacing: "0.12em",
               color: "#D4AF37",
             }}
@@ -594,33 +743,86 @@ const TierCard = ({ tier }: { tier: TierData }) => {
           <span
             style={{
               fontFamily: "'Roboto Mono', monospace",
-              fontSize: "10px",
+              fontSize: "9px",
               letterSpacing: "0.12em",
-              color: "rgba(255,255,255,0.55)",
+              color: isUnfunded ? "rgba(255,255,255,0.40)" : "rgba(255,255,255,0.55)",
             }}
           >
             {isUnfunded ? "UNFUNDED" : `${pct.toFixed(0)}% RECOUPED`}
           </span>
         )}
       </div>
+    </div>
+  );
+};
+
+const WaterfallCard = ({
+  tiers,
+  showCompactRevenue,
+  inputs,
+  result,
+}: {
+  tiers: TierData[];
+  showCompactRevenue: boolean;
+  inputs: WaterfallInputs;
+  result: WaterfallResult;
+}) => {
+  const netDistributable = inputs.revenue - result.offTopTotal;
+
+  return (
+    <DeckCard temperature="data">
+      <p style={styles.sectionLabel}>RECOUPMENT CASCADE</p>
+      <div style={{ marginTop: "16px" }}>
+        {showCompactRevenue && (
+          <CompactRevenueHeader
+            revenue={inputs.revenue}
+            cam={result.cam}
+            netDistributable={netDistributable}
+          />
+        )}
+
+        {tiers.map((tier, i) => (
+          <div key={tier.label}>
+            <TierRow tier={tier} />
+            {i < tiers.length - 1 && (
+              <div style={{ padding: "4px 0" }}>
+                <Divider />
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+
+      <Watermark />
     </DeckCard>
   );
 };
 
-// ─── Card N+1: Verdict ───────────────────────────────────────────
+// ─── Card 5: THE VERDICT ─────────────────────────────────────────
 
 const VerdictCard = ({
   result,
   inputs,
+  onNavigateTab,
 }: {
   result: WaterfallResult;
   inputs: WaterfallInputs;
+  onNavigateTab?: (tab: string) => void;
 }) => {
   const verdict = getVerdictStatus(result.multiple, result.profitPool > 0);
   const recoupPct = Math.min(100, result.recoupPct);
+  const reducedMotion = prefersReducedMotion();
+
+  // State-dependent glow
+  let glow: string | undefined;
+  if (result.multiple > 1.0 && result.profitPool > 0) {
+    glow = "radial-gradient(ellipse at top, rgba(212,175,55,0.06), transparent 60%)";
+  } else if (result.multiple < 1.0 || result.profitPool <= 0) {
+    glow = "radial-gradient(ellipse at top, rgba(220,38,38,0.04), transparent 60%)";
+  }
 
   return (
-    <DeckCard>
+    <DeckCard temperature="warm" glow={glow} breathe>
       {/* Verdict badge */}
       <div style={{ textAlign: "center" }}>
         <span
@@ -741,7 +943,7 @@ const VerdictCard = ({
                 height: "100%",
                 borderRadius: "999px",
                 background: "#D4AF37",
-                transition: "width 0.5s ease",
+                transition: reducedMotion ? "none" : "width 0.5s ease",
               }}
             />
           </div>
@@ -758,17 +960,46 @@ const VerdictCard = ({
           </span>
         </div>
       </div>
+
+      {/* Edit escape hatch */}
+      {onNavigateTab && (
+        <>
+          <div style={{ marginTop: "20px" }}>
+            <Divider />
+          </div>
+          <button
+            onClick={() => onNavigateTab("deal")}
+            style={{
+              display: "block",
+              width: "100%",
+              marginTop: "16px",
+              padding: "8px",
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              fontFamily: "'Inter', sans-serif",
+              fontSize: "12px",
+              color: "rgba(212,175,55,0.60)",
+              textAlign: "center",
+            }}
+          >
+            Adjust your deal →
+          </button>
+        </>
+      )}
+
+      <Watermark />
     </DeckCard>
   );
 };
 
-// ─── Card N+2: Export CTA ────────────────────────────────────────
+// ─── Card 6: NEXT STEPS — Export CTA ─────────────────────────────
 
-const ExportCard = ({ onExport }: { onExport?: () => void }) => {
+const ExportCard = ({ onExport }: { onExport: () => void }) => {
   const [showDisclaimer, setShowDisclaimer] = useState(false);
 
   return (
-    <DeckCard>
+    <DeckCard temperature="feature">
       <div
         style={{
           display: "flex",
@@ -776,8 +1007,6 @@ const ExportCard = ({ onExport }: { onExport?: () => void }) => {
           alignItems: "center",
           textAlign: "center",
           gap: "16px",
-          minHeight: "240px",
-          justifyContent: "center",
         }}
       >
         <h3
@@ -801,8 +1030,8 @@ const ExportCard = ({ onExport }: { onExport?: () => void }) => {
             margin: 0,
           }}
         >
-          Turn these numbers into a professional investor package. Beautifully
-          designed. Presentation-grade.
+          Turn this analysis into a branded investor package — designed for the
+          boardroom, not the back office.
         </p>
 
         {/* CTA Button */}
@@ -893,75 +1122,107 @@ const ExportCard = ({ onExport }: { onExport?: () => void }) => {
   );
 };
 
-// ─── Shared Styles ───────────────────────────────────────────────
-
-const styles = {
-  sectionLabel: {
-    fontFamily: "'Roboto Mono', monospace",
-    fontSize: "10px",
-    fontWeight: 500,
-    letterSpacing: "0.2em",
-    textTransform: "uppercase" as const,
-    color: "rgba(255,255,255,0.55)",
-    margin: 0,
-  } as React.CSSProperties,
-  heroSmall: {
-    fontFamily: "'Roboto Mono', monospace",
-    fontSize: "24px",
-    margin: "4px 0 0",
-  } as React.CSSProperties,
-};
-
 // ─── Main Deck Component ─────────────────────────────────────────
 
-const WaterfallDeck = ({ result, inputs, project, guilds, onExport }: WaterfallDeckProps) => {
+const WaterfallDeck = ({ result, inputs, project, guilds, onExport, onNavigateTab }: WaterfallDeckProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const prevIndex = useRef(0);
   const haptics = useHaptics();
+  const [hasInteracted, setHasInteracted] = useState(false);
 
-  // ── Build tier cards ──────────────────────────────────────────
+  // ── Build tier data ─────────────────────────────────────────
 
   let remaining = inputs.revenue - result.offTopTotal;
-  const tierCards: TierData[] = [];
+  const tierData: TierData[] = [];
   let phaseNum = 1;
 
   if (result.seniorDebtHurdle > 0) {
     const paid = Math.min(result.seniorDebtHurdle, Math.max(0, remaining));
     remaining -= paid;
-    tierCards.push({ phase: phaseNum++, label: "Senior Debt", amount: result.seniorDebtHurdle, paid });
+    tierData.push({ phase: phaseNum++, label: "Senior Debt", amount: result.seniorDebtHurdle, paid });
   }
 
   if (result.mezzDebtHurdle > 0) {
     const paid = Math.min(result.mezzDebtHurdle, Math.max(0, remaining));
     remaining -= paid;
-    tierCards.push({ phase: phaseNum++, label: "Gap / Mezzanine", amount: result.mezzDebtHurdle, paid });
+    tierData.push({ phase: phaseNum++, label: "Gap / Mezzanine", amount: result.mezzDebtHurdle, paid });
   }
 
   if (result.equityHurdle > 0) {
     const paid = Math.min(result.equityHurdle, Math.max(0, remaining));
     remaining -= paid;
-    tierCards.push({ phase: phaseNum++, label: "Equity + Premium", amount: result.equityHurdle, paid });
+    tierData.push({ phase: phaseNum++, label: "Equity + Premium", amount: result.equityHurdle, paid });
   }
 
   if (inputs.deferments > 0) {
     const paid = Math.min(inputs.deferments, Math.max(0, remaining));
     remaining -= paid;
-    tierCards.push({ phase: phaseNum++, label: "Deferments", amount: inputs.deferments, paid });
+    tierData.push({ phase: phaseNum++, label: "Deferments", amount: inputs.deferments, paid });
   }
 
-  // ── Build cards array ─────────────────────────────────────────
+  // ── Determine if revenue card should render ─────────────────
+  // Skip revenue card if the only off-the-top is CAM (i.e., no sales fee, marketing, or guild residuals)
+  const hasMeaningfulOffTops = result.salesFee > 0 || result.marketing > 0 || result.guilds > 0;
+  const showRevenueCard = hasMeaningfulOffTops;
 
-  const cards: React.ReactNode[] = [
-    <CoverCard key="cover" project={project} />,
-    <BudgetCard key="budget" inputs={inputs} guilds={guilds} result={result} />,
-    <RevenueCard key="revenue" inputs={inputs} result={result} guilds={guilds} />,
-    ...tierCards.map((tier) => <TierCard key={tier.label} tier={tier} />),
-    <VerdictCard key="verdict" result={result} inputs={inputs} />,
-    ...(onExport ? [<ExportCard key="export" onExport={onExport} />] : []),
-  ];
+  // ── Build cards array ───────────────────────────────────────
 
-  // ── IntersectionObserver for current card tracking ────────────
+  const hasTitle = project.title.trim().length > 0;
+
+  const cards: React.ReactNode[] = [];
+
+  // Card 1: Project (conditional)
+  if (hasTitle) {
+    cards.push(<ProjectCard key="project" project={project} />);
+  }
+
+  // Card 2: Budget (always)
+  cards.push(<BudgetCard key="budget" inputs={inputs} guilds={guilds} />);
+
+  // Card 3: Revenue (conditional)
+  if (showRevenueCard) {
+    cards.push(<RevenueCard key="revenue" inputs={inputs} result={result} guilds={guilds} />);
+  }
+
+  // Card 4: Consolidated Waterfall (always)
+  cards.push(
+    <WaterfallCard
+      key="waterfall"
+      tiers={tierData}
+      showCompactRevenue={!showRevenueCard}
+      inputs={inputs}
+      result={result}
+    />
+  );
+
+  // Card 5: Verdict (always)
+  cards.push(
+    <VerdictCard
+      key="verdict"
+      result={result}
+      inputs={inputs}
+      onNavigateTab={onNavigateTab}
+    />
+  );
+
+  // Card 6: Export CTA (only when onExport is defined)
+  if (onExport) {
+    cards.push(<ExportCard key="export" onExport={onExport} />);
+  }
+
+  // ── Stop breathing after first interaction ──────────────────
+
+  useEffect(() => {
+    const container = scrollRef.current;
+    if (!container) return;
+
+    const handleInteraction = () => setHasInteracted(true);
+    container.addEventListener("scroll", handleInteraction, { once: true });
+    return () => container.removeEventListener("scroll", handleInteraction);
+  }, []);
+
+  // ── IntersectionObserver for current card tracking ──────────
 
   useEffect(() => {
     const container = scrollRef.current;
@@ -983,7 +1244,7 @@ const WaterfallDeck = ({ result, inputs, project, guilds, onExport }: WaterfallD
     return () => observer.disconnect();
   }, [cards.length]);
 
-  // ── Haptic feedback on card change ────────────────────────────
+  // ── Haptic feedback on card change ──────────────────────────
 
   useEffect(() => {
     if (currentIndex !== prevIndex.current) {
@@ -994,8 +1255,19 @@ const WaterfallDeck = ({ result, inputs, project, guilds, onExport }: WaterfallD
 
   return (
     <div>
-      {/* Scrollbar-hide style */}
-      <style>{`[data-deck-scroll]::-webkit-scrollbar { display: none; }`}</style>
+      {/* Styles */}
+      <style>{`
+        [data-deck-scroll]::-webkit-scrollbar { display: none; }
+        @keyframes deckBreathe {
+          0%, 100% { border-color: rgba(212,175,55,0.35); }
+          50% { border-color: rgba(212,175,55,0.45); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          @keyframes deckBreathe {
+            0%, 100% { border-color: rgba(212,175,55,0.35); }
+          }
+        }
+      `}</style>
 
       {/* Scroll-snap container */}
       <div
@@ -1017,7 +1289,7 @@ const WaterfallDeck = ({ result, inputs, project, guilds, onExport }: WaterfallD
             key={i}
             data-index={i}
             style={{
-              flex: "0 0 calc(100% - 12px)",
+              flex: "0 0 calc(100% - 24px)",
               scrollSnapAlign: "center",
             }}
           >
@@ -1026,7 +1298,7 @@ const WaterfallDeck = ({ result, inputs, project, guilds, onExport }: WaterfallD
         ))}
       </div>
 
-      {/* Dot pagination */}
+      {/* Tappable dot pagination */}
       <div
         style={{
           display: "flex",
@@ -1036,15 +1308,27 @@ const WaterfallDeck = ({ result, inputs, project, guilds, onExport }: WaterfallD
         }}
       >
         {cards.map((_, i) => (
-          <div
+          <button
             key={i}
+            onClick={() => {
+              const container = scrollRef.current;
+              if (!container) return;
+              const target = container.querySelector(`[data-index="${i}"]`);
+              if (target) target.scrollIntoView({ behavior: "smooth", inline: "center" });
+            }}
+            aria-label={`Go to card ${i + 1}`}
             style={{
               width: i === currentIndex ? "20px" : "6px",
               height: "6px",
               borderRadius: "3px",
-              background:
-                i === currentIndex ? "#D4AF37" : "rgba(255,255,255,0.15)",
+              background: i === currentIndex ? "#D4AF37" : "rgba(255,255,255,0.25)",
               transition: "all 0.3s ease",
+              border: "none",
+              padding: 0,
+              cursor: "pointer",
+              boxSizing: "content-box",
+              paddingBlock: "12px",
+              marginBlock: "-12px",
             }}
           />
         ))}

@@ -13,6 +13,7 @@ interface WaterfallTabProps {
   project: ProjectDetails;
   guilds: GuildState;
   onExport?: () => void;
+  onNavigateTab?: (tab: string) => void;
 }
 
 // Demo inputs for when the user lands from Wiki with no data
@@ -33,7 +34,7 @@ const DEMO_INPUTS: WaterfallInputs = {
 
 const DEMO_GUILDS: GuildState = { sag: false, wga: false, dga: false };
 
-const WaterfallTab = ({ result: initialResult, inputs: initialInputs, project, guilds, onExport }: WaterfallTabProps) => {
+const WaterfallTab = ({ result: initialResult, inputs: initialInputs, project, guilds, onExport, onNavigateTab }: WaterfallTabProps) => {
   const haptics = useHaptics();
   // State for Demo Mode (if real inputs are empty)
   const isEmpty = initialInputs.budget === 0 || initialInputs.revenue === 0;
@@ -203,7 +204,7 @@ const WaterfallTab = ({ result: initialResult, inputs: initialInputs, project, g
       {isCalculating && (
         <div
           style={{
-            height: "400px",
+            minHeight: "calc(100vh - 62px - 48px - 40px)",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
@@ -308,6 +309,7 @@ const WaterfallTab = ({ result: initialResult, inputs: initialInputs, project, g
               project={project}
               guilds={activeGuilds}
               onExport={isDemoMode ? undefined : onExport}
+              onNavigateTab={onNavigateTab}
             />
           </div>
 
