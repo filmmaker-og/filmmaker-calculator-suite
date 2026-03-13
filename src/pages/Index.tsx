@@ -429,7 +429,6 @@ const Index = () => {
         {/* ═══ § 8 CLOSER ═══ */}
         <section ref={closerRef} style={styles.closerSection}>
           <div style={styles.closerGlowBottom} />
-          <div style={styles.closerGlowTop} />
           <div style={{ ...styles.closerCard, ...reveal(closerVisible) }}>
             <div style={styles.topLineGoldBright} />
             <h2 style={styles.closerH2}>Your Investors<br /><span style={{ color: "#D4AF37", display: "block" }}>Will Ask.</span></h2>
@@ -534,7 +533,7 @@ const styles: Record<string, React.CSSProperties> = {
 
   /* ── § 4 HOW IT WORKS ── */
   howSection: { background: "#000", padding: "64px 0 0" },
-  howHeader: { textAlign: "center", padding: "16px 20px 28px" },
+  howHeader: { textAlign: "center", padding: "16px 20px 28px", background: "radial-gradient(ellipse 80% 50% at 50% 60%, rgba(212,175,55,0.10) 0%, transparent 70%)" },
   howH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.6rem", color: "#fff", lineHeight: 0.95 },
   stepsContainer: { display: "flex", flexDirection: "column", gap: "1px", background: "rgba(212,175,55,0.10)" },
   step: {
@@ -580,7 +579,7 @@ const styles: Record<string, React.CSSProperties> = {
   waterfallTiersBox: {
     position: "relative", overflow: "hidden", margin: "0 20px",
     border: "1px solid rgba(212,175,55,0.25)", borderRadius: "12px", background: "#050505",
-    boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 24px rgba(212,175,55,0.05)",
+    boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 24px rgba(212,175,55,0.10)",
   },
   tierRow: {
     position: "relative", display: "grid", gridTemplateColumns: "auto 1fr auto",
@@ -627,7 +626,7 @@ const styles: Record<string, React.CSSProperties> = {
   whyH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3rem", color: "#fff", textAlign: "center", lineHeight: 0.95 },
   badgeGridWrapper: {
     margin: "0 20px", borderRadius: "12px", overflow: "hidden", border: "1px solid rgba(212,175,55,0.25)",
-    boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 24px rgba(212,175,55,0.05)", position: "relative",
+    boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 24px rgba(212,175,55,0.10)", position: "relative",
   },
   badgeGrid: { display: "grid", gridTemplateColumns: "1fr", gap: "1px", background: "rgba(212,175,55,0.15)" },
   badgeCard: { background: "radial-gradient(circle at 45px 57px, rgba(212,175,55,0.10) 0%, #050505 65%)", padding: "36px 24px", textAlign: "left" },
@@ -637,7 +636,7 @@ const styles: Record<string, React.CSSProperties> = {
     marginBottom: "16px", paddingTop: "2px", boxShadow: "0 0 24px rgba(212,175,55,0.55)",
   },
   badgeTitle: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.4rem", color: "#fff", marginBottom: "8px", lineHeight: 1.05, letterSpacing: "0.02em" },
-  badgeBody: { fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "rgba(255,255,255,0.65)", lineHeight: 1.55 },
+  badgeBody: { fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "rgba(255,255,255,0.70)", lineHeight: 1.55 },
 
   /* ── § 7 ARSENAL ── */
   arsenalSection: { background: "#000", textAlign: "center", padding: "64px 0 0" },
@@ -650,7 +649,7 @@ const styles: Record<string, React.CSSProperties> = {
     borderRadius: "12px", position: "relative", overflow: "hidden", textAlign: "left",
     background: "radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.06) 0%, #0A0A0A 70%)",
     border: "1px solid rgba(212,175,55,0.3)",
-    boxShadow: "0 16px 40px rgba(0,0,0,0.8), 0 0 20px rgba(212,175,55,0.05)",
+    boxShadow: "0 16px 40px rgba(0,0,0,0.8)",
   },
   tierHeaderCore: {
     padding: "28px 24px 20px", borderBottom: "1px solid rgba(212,175,55,0.1)",
@@ -784,10 +783,6 @@ const styles: Record<string, React.CSSProperties> = {
   closerGlowBottom: {
     position: "absolute", bottom: 0, left: 0, right: 0, height: "80%", pointerEvents: "none",
     background: "radial-gradient(ellipse 90% 60% at 50% 100%, rgba(212,175,55,0.12) 0%, transparent 60%)",
-  },
-  closerGlowTop: {
-    position: "absolute", top: 0, left: 0, right: 0, height: "50%", pointerEvents: "none",
-    background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.05) 0%, transparent 70%)",
   },
   closerCard: {
     position: "relative", zIndex: 1, border: "1px solid rgba(212,175,55,0.42)", borderRadius: "16px",
