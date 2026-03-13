@@ -137,6 +137,8 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
                 <button
                   key={item.path}
                   onClick={() => handleNavigate(item.path)}
+                  onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; }}
+                  onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
                   style={{
                     display: "flex",
                     flexDirection: "column",
@@ -177,6 +179,8 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => haptics.light()}
+                onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; }}
+                onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
                 style={{
                   display: "flex",
                   flexDirection: "column",
@@ -207,6 +211,8 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => haptics.light()}
+                onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; }}
+                onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
                 style={{
                   display: "flex",
                   flexDirection: "column",
@@ -239,6 +245,8 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => haptics.light()}
+                onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; }}
+                onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
                 style={{
                   display: "flex",
                   flexDirection: "column",
@@ -277,6 +285,8 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
               <a
                 href="mailto:thefilmmaker.og@gmail.com"
                 onClick={() => haptics.light()}
+                onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; }}
+                onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
                 style={{
                   display: "flex",
                   alignItems: "center",
@@ -303,6 +313,8 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
               {/* Share */}
               <button
                 onClick={handleShare}
+                onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; }}
+                onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
                 style={{
                   display: "flex",
                   alignItems: "center",
