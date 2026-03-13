@@ -75,7 +75,7 @@ const Index = () => {
   const { ref: arsenalRef, inView: arsenalVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
   const { ref: realityRef, inView: realityVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
   const { ref: closerRef, inView: closerVisible } = useInView<HTMLDivElement>({ threshold: 0.2 });
-  const { ref: footerRef, inView: footerVisible } = useInView<HTMLDivElement>({ threshold: 0.2 });
+
 
   /* ── Data ── */
   const waterfallTiers = [
@@ -259,8 +259,8 @@ const Index = () => {
           <div style={{ ...styles.badgeGridWrapper, ...reveal(whyVisible, 1) }}>
             <div style={styles.topLineGold} />
             <div style={styles.badgeGrid}>
-              {badgeCards.map((card) => (
-                <div key={card.num} style={styles.badgeCard}>
+              {badgeCards.map((card, i) => (
+                <div key={card.num} style={{ ...styles.badgeCard, ...reveal(whyVisible, i + 2) }}>
                   <div style={styles.badgeNum}>{card.num}</div>
                   <p style={styles.badgeTitle}>{card.title}</p>
                   <p style={styles.badgeBody}>{card.body}</p>
@@ -318,6 +318,7 @@ const Index = () => {
 
             {/* The Snapshot Card */}
             <div style={{ ...styles.tierCardSnapshot, ...reveal(arsenalVisible, 2) }}>
+              <div style={styles.topLineGoldHalf} />
               <div style={styles.tierHeaderAlt}>
                 <div style={{ marginBottom: "12px" }}>
                   <span style={styles.trendingBadge}>Trending</span>
@@ -392,6 +393,7 @@ const Index = () => {
           </blockquote>
 
           <div style={{ ...styles.checkGrid, ...reveal(realityVisible, 1) }}>
+            <div style={styles.topLineGoldHalf} />
             {/* Header */}
             <div style={styles.checkHeader}>
               <div style={styles.checkHeaderWith}><span style={styles.checkHeaderWithText}>WITH</span></div>
@@ -429,8 +431,8 @@ const Index = () => {
         </section>
 
         {/* ═══ FOOTER ═══ */}
-        <footer ref={footerRef} style={styles.footer}>
-          <div style={reveal(footerVisible)}>
+        <footer style={styles.footer}>
+          <div>
             <p style={styles.footerText}>
               filmmaker.og provides financial modeling tools for educational purposes. This is not legal or financial advice. Consult qualified counsel before executing any investment structure.
             </p>
@@ -483,7 +485,7 @@ const styles: Record<string, React.CSSProperties> = {
   /* ── § 1 HERO ── */
   hero: {
     position: "relative", textAlign: "center",
-    background: "#000", padding: "24px 24px 32px",
+    background: "#000", padding: "24px 24px 48px",
   },
   heroGlow: {
     position: "absolute", top: "-10%", left: 0, right: 0, height: "65%", pointerEvents: "none",
@@ -514,15 +516,15 @@ const styles: Record<string, React.CSSProperties> = {
     background: "#0a0a0a", paddingTop: "22px",
   },
   stepLine: {
-    position: "absolute", top: "50px", bottom: "-23px", left: "50%", transform: "translateX(-50%)", width: "1px",
+    position: "absolute", top: "53px", bottom: "-23px", left: "50%", transform: "translateX(-50%)", width: "1px",
     background: "linear-gradient(180deg, rgba(212,175,55,0.6) 0%, rgba(212,175,55,0.1) 100%)", zIndex: 0,
   },
   stepNumBadge: {
-    position: "relative", zIndex: 1, width: "28px", height: "28px", borderRadius: "50%",
+    position: "relative", zIndex: 1, width: "34px", height: "34px", borderRadius: "50%",
     background: "#D4AF37", display: "flex", alignItems: "center", justifyContent: "center",
-    boxShadow: "0 0 12px rgba(212,175,55,0.3)",
+    boxShadow: "0 0 20px rgba(212,175,55,0.5)",
   },
-  stepNumText: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.2rem", color: "#000", lineHeight: 1, paddingTop: "2px" },
+  stepNumText: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.35rem", color: "#000", lineHeight: 1, paddingTop: "2px" },
   stepContent: { padding: "22px 18px 22px 24px" },
   stepTitle: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.45rem", color: "#D4AF37", lineHeight: 1, marginBottom: "5px" },
   stepBody: { fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "rgba(255,255,255,0.88)", lineHeight: 1.55 },
@@ -538,7 +540,8 @@ const styles: Record<string, React.CSSProperties> = {
   },
   acquisitionCallout: {
     position: "relative", overflow: "hidden", textAlign: "center", margin: "0 20px 10px",
-    background: "#0a0a0a", border: "1px solid rgba(212,175,55,0.20)", borderRadius: "12px", padding: "18px 16px",
+    background: "#0a0a0a", border: "1px solid rgba(212,175,55,0.25)", borderRadius: "12px", padding: "18px 16px",
+    boxShadow: "0 0 24px rgba(212,175,55,0.06)",
   },
   acqLabel: { fontFamily: "'Roboto Mono', monospace", fontSize: "14px", textTransform: "uppercase", letterSpacing: "0.14em", color: "#D4AF37", marginBottom: "4px" },
   acqSub: { fontFamily: "'Roboto Mono', monospace", fontSize: "14px", color: "rgba(255,255,255,0.70)", marginBottom: "8px" },
@@ -598,9 +601,9 @@ const styles: Record<string, React.CSSProperties> = {
   badgeGrid: { display: "grid", gridTemplateColumns: "1fr", gap: "1px", background: "rgba(255,255,255,0.08)" },
   badgeCard: { background: "#050505", padding: "28px 24px", textAlign: "left" },
   badgeNum: {
-    width: "36px", height: "36px", borderRadius: "50%", background: "#D4AF37", color: "#000",
-    display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.3rem",
-    marginBottom: "16px", paddingTop: "2px", boxShadow: "0 0 12px rgba(212,175,55,0.4)",
+    width: "42px", height: "42px", borderRadius: "50%", background: "#D4AF37", color: "#000",
+    display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.5rem",
+    marginBottom: "16px", paddingTop: "2px", boxShadow: "0 0 24px rgba(212,175,55,0.55)",
   },
   badgeTitle: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.4rem", color: "#fff", marginBottom: "8px", lineHeight: 1.05, letterSpacing: "0.02em" },
   badgeBody: { fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "rgba(255,255,255,0.65)", lineHeight: 1.55 },
@@ -610,7 +613,7 @@ const styles: Record<string, React.CSSProperties> = {
   arsenalHeader: { padding: "0 20px 16px" },
   arsenalH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3rem", color: "#fff", lineHeight: 0.95 },
   arsenalSub: { fontFamily: "'Inter', sans-serif", fontSize: "13px", marginTop: "10px", color: "rgba(255,255,255,0.70)", lineHeight: 1.6 },
-  arsenalCards: { display: "flex", flexDirection: "column", gap: "24px", margin: "0 20px" },
+  arsenalCards: { display: "flex", flexDirection: "column", gap: "28px", margin: "0 20px" },
 
   tierCardCore: {
     borderRadius: "12px", position: "relative", overflow: "hidden", textAlign: "left",
@@ -711,7 +714,7 @@ const styles: Record<string, React.CSSProperties> = {
     borderLeft: "3px solid #D4AF37", paddingLeft: "20px", marginBottom: "32px",
   },
   checkGrid: {
-    border: "1px solid rgba(255,255,255,0.06)", borderRadius: "8px", overflow: "hidden",
+    position: "relative", border: "1px solid rgba(212,175,55,0.20)", borderRadius: "12px", overflow: "hidden",
     boxShadow: "0 8px 32px rgba(0,0,0,0.5)",
   },
   checkHeader: {
