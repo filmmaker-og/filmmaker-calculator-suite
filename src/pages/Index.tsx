@@ -208,15 +208,25 @@ const Index = () => {
           {/* Waterfall tiers */}
           <div style={{ ...styles.waterfallTiersBox, ...reveal(waterfallVisible, 2) }}>
             <div style={styles.topLineGold} />
-            {waterfallTiers.map((tier, i) => (
-              <div key={tier.num} style={{ ...styles.tierRow, borderBottom: i < waterfallTiers.length - 1 ? "1px solid rgba(255,255,255,0.06)" : "none" }}>
-                <div style={styles.tierNum}>{tier.num}</div>
-                <div style={styles.tierName}>{tier.name}</div>
-                <div style={styles.tierAmt}>
-                  <span style={styles.tierMinus}>-</span>{tier.amt}
+            {waterfallTiers.map((tier, i) => {
+              // Group boundaries: after off-the-tops (row 3, i=3), after debt service (row 5, i=5)
+              const isGroupBoundary = i === 3 || i === 5;
+              const isLastRow = i === waterfallTiers.length - 1;
+              const borderBottom = isLastRow
+                ? "none"
+                : isGroupBoundary
+                  ? "2px solid rgba(212,175,55,0.20)"
+                  : "1px solid rgba(255,255,255,0.06)";
+              return (
+                <div key={tier.num} style={{ ...styles.tierRow, borderBottom }}>
+                  <div style={styles.tierNum}>{tier.num}</div>
+                  <div style={styles.tierName}>{tier.name}</div>
+                  <div style={styles.tierAmt}>
+                    <span style={styles.tierMinus}>-</span>{tier.amt}
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           {/* Flow diagram */}
@@ -513,7 +523,8 @@ const styles: Record<string, React.CSSProperties> = {
   },
   stepNumCol: {
     position: "relative", display: "flex", alignItems: "flex-start", justifyContent: "center",
-    background: "#0a0a0a", paddingTop: "22px",
+    background: "radial-gradient(circle at 50% 28px, rgba(212,175,55,0.10) 0%, #0a0a0a 65%)",
+    paddingTop: "22px",
   },
   stepLine: {
     position: "absolute", top: "53px", bottom: "-23px", left: "50%", transform: "translateX(-50%)", width: "1px",
@@ -559,9 +570,10 @@ const styles: Record<string, React.CSSProperties> = {
   },
   tierNum: {
     fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: "#D4AF37",
-    background: "rgba(212,175,55,0.12)", border: "1px solid rgba(212,175,55,0.25)",
+    background: "rgba(212,175,55,0.18)", border: "1px solid rgba(212,175,55,0.35)",
     width: "28px", height: "28px", display: "flex", alignItems: "center", justifyContent: "center",
     borderRadius: "6px", fontWeight: 600,
+    boxShadow: "0 0 16px rgba(212,175,55,0.3)",
   },
   tierName: { fontFamily: "'Inter', sans-serif", fontSize: "15px", fontWeight: 500, color: "rgba(255,255,255,0.95)", lineHeight: 1.3 },
   tierAmt: { fontFamily: "'Roboto Mono', monospace", fontSize: "15px", color: "#fff", textAlign: "right", whiteSpace: "nowrap" },
@@ -598,8 +610,8 @@ const styles: Record<string, React.CSSProperties> = {
     margin: "0 20px", borderRadius: "12px", overflow: "hidden", border: "1px solid rgba(212,175,55,0.25)",
     boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 24px rgba(212,175,55,0.05)", position: "relative",
   },
-  badgeGrid: { display: "grid", gridTemplateColumns: "1fr", gap: "1px", background: "rgba(255,255,255,0.08)" },
-  badgeCard: { background: "#050505", padding: "28px 24px", textAlign: "left" },
+  badgeGrid: { display: "grid", gridTemplateColumns: "1fr", gap: "1px", background: "rgba(212,175,55,0.15)" },
+  badgeCard: { background: "#050505", padding: "36px 24px", textAlign: "left" },
   badgeNum: {
     width: "42px", height: "42px", borderRadius: "50%", background: "#D4AF37", color: "#000",
     display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.5rem",
