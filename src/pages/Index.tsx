@@ -300,7 +300,7 @@ const Index = () => {
                 <p style={styles.tierSubCore}>Your baseline recoupment model.</p>
               </div>
               {/* Subdivider */}
-              <div style={{ height: "1px", background: "rgba(255,255,255,0.06)", margin: "0 24px" }} />
+              <div style={{ height: "1px", background: "rgba(212,175,55,0.12)", margin: "0 24px" }} />
               <div style={styles.tierFeaturesCore}>
                 <div style={styles.featureItemCore}>
                   <div style={styles.featureTextWrapCore}>
@@ -337,7 +337,7 @@ const Index = () => {
                 <p style={styles.tierSubAlt}>Pick this one if you need the numbers documented — clean and professional</p>
               </div>
               {/* Subdivider */}
-              <div style={{ height: "1px", background: "rgba(255,255,255,0.06)", margin: "0 24px" }} />
+              <div style={{ height: "1px", background: "rgba(212,175,55,0.12)", margin: "0 24px" }} />
               <p style={styles.tierIntro}>Your financial model. One document. Investor-ready.</p>
               <div style={styles.tierChecklist}>
                 {[
@@ -368,7 +368,7 @@ const Index = () => {
                 <p style={styles.tierSubAlt}>Pick this one if you want the full investor package with standalone documents</p>
               </div>
               {/* Subdivider */}
-              <div style={{ height: "1px", background: "rgba(255,255,255,0.06)", margin: "0 24px" }} />
+              <div style={{ height: "1px", background: "rgba(212,175,55,0.12)", margin: "0 24px" }} />
               <p style={styles.tierIntro}>Your complete investor package — financial presentation, standalone documents, visual design.</p>
               <div style={styles.tierChecklist}>
                 {[
@@ -629,7 +629,8 @@ const styles: Record<string, React.CSSProperties> = {
 
   tierCardCore: {
     borderRadius: "12px", position: "relative", overflow: "hidden", textAlign: "left",
-    background: "#0A0A0A", border: "1px solid rgba(212,175,55,0.3)",
+    background: "radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.06) 0%, #0A0A0A 70%)",
+    border: "1px solid rgba(212,175,55,0.3)",
     boxShadow: "0 16px 40px rgba(0,0,0,0.8), 0 0 20px rgba(212,175,55,0.05)",
   },
   tierHeaderCore: {
@@ -651,12 +652,14 @@ const styles: Record<string, React.CSSProperties> = {
 
   tierCardSnapshot: {
     borderRadius: "12px", position: "relative", overflow: "hidden", textAlign: "left",
-    border: "1px solid rgba(212,175,55,0.25)", background: "#0A0A0A",
+    border: "1px solid rgba(212,175,55,0.25)",
+    background: "radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.08) 0%, #0A0A0A 70%)",
     boxShadow: "0 16px 40px rgba(0,0,0,0.6)",
   },
   tierCardPackage: {
     borderRadius: "12px", position: "relative", overflow: "hidden", textAlign: "left",
-    border: "1px solid rgba(212,175,55,0.5)", background: "#0A0A0A",
+    border: "1px solid rgba(212,175,55,0.5)",
+    background: "radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.10) 0%, #0A0A0A 65%)",
     boxShadow: "0 16px 40px rgba(0,0,0,0.8), 0 0 40px rgba(212,175,55,0.08)",
   },
   tierHeaderAlt: {
