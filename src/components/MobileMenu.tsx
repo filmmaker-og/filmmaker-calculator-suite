@@ -112,7 +112,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
 
         {/* Drag handle + X close button */}
         <div className="relative flex justify-center pt-4 pb-2">
-          <div className="w-8 h-[3px] rounded-full" style={{ background: "rgba(255,255,255,0.12)" }} />
+          <div className="w-8 h-[3px] rounded-full" style={{ background: "rgba(255,255,255,0.20)" }} />
           <button
             onClick={() => { haptics.light(); setIsOpen(false); }}
             className="absolute top-3 right-4 w-9 h-9 flex items-center justify-center transition-colors"
@@ -137,6 +137,8 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
                 <button
                   key={item.path}
                   onClick={() => handleNavigate(item.path)}
+                  onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; }}
+                  onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
                   style={{
                     display: "flex",
                     flexDirection: "column",
@@ -177,6 +179,8 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => haptics.light()}
+                onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; }}
+                onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
                 style={{
                   display: "flex",
                   flexDirection: "column",
@@ -185,13 +189,13 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
                   gap: "8px",
                   padding: "18px 12px",
                   background: "transparent",
-                  border: "1px solid rgba(255,255,255,0.08)",
+                  border: "1px solid rgba(212,175,55,0.12)",
                   borderRadius: "8px",
                   textDecoration: "none",
                   transition: "transform 0.15s ease, border-color 0.25s ease",
                 }}
               >
-                <Instagram size={20} style={{ color: "rgba(255,255,255,0.65)" }} />
+                <Instagram size={20} style={{ color: "rgba(212,175,55,0.40)" }} />
                 <span style={{
                   fontFamily: "'Inter', sans-serif",
                   fontSize: "11px",
@@ -207,6 +211,8 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => haptics.light()}
+                onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; }}
+                onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
                 style={{
                   display: "flex",
                   flexDirection: "column",
@@ -215,13 +221,13 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
                   gap: "8px",
                   padding: "18px 12px",
                   background: "transparent",
-                  border: "1px solid rgba(255,255,255,0.08)",
+                  border: "1px solid rgba(212,175,55,0.12)",
                   borderRadius: "8px",
                   textDecoration: "none",
                   transition: "transform 0.15s ease, border-color 0.25s ease",
                 }}
               >
-                <svg width={20} height={20} viewBox="0 0 24 24" fill="rgba(255,255,255,0.65)" xmlns="http://www.w3.org/2000/svg">
+                <svg width={20} height={20} viewBox="0 0 24 24" fill="rgba(212,175,55,0.40)" xmlns="http://www.w3.org/2000/svg">
                   <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 0 0-.79-.05A6.34 6.34 0 0 0 3.15 15a6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V8.71a8.2 8.2 0 0 0 4.76 1.52v-3.4a4.85 4.85 0 0 1-1-.14z"/>
                 </svg>
                 <span style={{
@@ -239,6 +245,8 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => haptics.light()}
+                onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; }}
+                onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
                 style={{
                   display: "flex",
                   flexDirection: "column",
@@ -247,13 +255,13 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
                   gap: "8px",
                   padding: "18px 12px",
                   background: "transparent",
-                  border: "1px solid rgba(255,255,255,0.08)",
+                  border: "1px solid rgba(212,175,55,0.12)",
                   borderRadius: "8px",
                   textDecoration: "none",
                   transition: "transform 0.15s ease, border-color 0.25s ease",
                 }}
               >
-                <svg width={20} height={20} viewBox="0 0 24 24" fill="rgba(255,255,255,0.65)" xmlns="http://www.w3.org/2000/svg">
+                <svg width={20} height={20} viewBox="0 0 24 24" fill="rgba(212,175,55,0.40)" xmlns="http://www.w3.org/2000/svg">
                   <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
                 </svg>
                 <span style={{
@@ -277,6 +285,8 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
               <a
                 href="mailto:thefilmmaker.og@gmail.com"
                 onClick={() => haptics.light()}
+                onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; }}
+                onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
                 style={{
                   display: "flex",
                   alignItems: "center",
@@ -284,7 +294,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
                   gap: "10px",
                   padding: "16px",
                   background: "#0A0A0A",
-                  border: "1px solid rgba(212,175,55,0.08)",
+                  border: "1px solid rgba(212,175,55,0.15)",
                   borderRadius: "8px",
                   textDecoration: "none",
                   transition: "transform 0.15s ease, border-color 0.25s ease",
@@ -303,6 +313,8 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
               {/* Share */}
               <button
                 onClick={handleShare}
+                onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; }}
+                onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
                 style={{
                   display: "flex",
                   alignItems: "center",
@@ -310,7 +322,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
                   gap: "10px",
                   padding: "16px",
                   background: "#0A0A0A",
-                  border: "1px solid rgba(212,175,55,0.08)",
+                  border: "1px solid rgba(212,175,55,0.15)",
                   borderRadius: "8px",
                   cursor: "pointer",
                   transition: "transform 0.15s ease, border-color 0.25s ease",
@@ -330,7 +342,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
           </div>
 
           {/* Legal disclaimer */}
-          <div className="pt-3" style={{ borderTop: "1px solid rgba(255,255,255,0.04)" }}>
+          <div className="pt-3" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
             <p className="text-[11px] tracking-wide leading-relaxed" style={{ color: "rgba(255,255,255,0.40)" }}>
               For educational and informational purposes only. Not legal, tax, or investment advice.
               Consult a qualified entertainment attorney before making financing decisions.
