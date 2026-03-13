@@ -517,7 +517,7 @@ const styles: Record<string, React.CSSProperties> = {
   howSection: { background: "#000", padding: "48px 0 0" },
   howHeader: { textAlign: "center", padding: "16px 20px 28px" },
   howH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.6rem", color: "#fff", lineHeight: 0.95 },
-  stepsContainer: { display: "flex", flexDirection: "column", gap: "1px", background: "rgba(255,255,255,0.06)" },
+  stepsContainer: { display: "flex", flexDirection: "column", gap: "1px", background: "rgba(212,175,55,0.10)" },
   step: {
     display: "grid", gridTemplateColumns: "52px 1fr", background: "#000",
   },
@@ -536,7 +536,7 @@ const styles: Record<string, React.CSSProperties> = {
     boxShadow: "0 0 20px rgba(212,175,55,0.5)",
   },
   stepNumText: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.35rem", color: "#000", lineHeight: 1, paddingTop: "2px" },
-  stepContent: { padding: "22px 18px 22px 24px" },
+  stepContent: { padding: "26px 20px 26px 24px", background: "radial-gradient(circle at 0px 50%, rgba(212,175,55,0.08) 0%, transparent 60%)" },
   stepTitle: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.45rem", color: "#D4AF37", lineHeight: 1, marginBottom: "5px" },
   stepBody: { fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "rgba(255,255,255,0.88)", lineHeight: 1.55 },
 
@@ -551,7 +551,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
   acquisitionCallout: {
     position: "relative", overflow: "hidden", textAlign: "center", margin: "0 20px 10px",
-    background: "#0a0a0a", border: "1px solid rgba(212,175,55,0.25)", borderRadius: "12px", padding: "18px 16px",
+    background: "radial-gradient(circle at 50% 75%, rgba(212,175,55,0.12) 0%, #0a0a0a 65%)", border: "1px solid rgba(212,175,55,0.25)", borderRadius: "12px", padding: "18px 16px",
     boxShadow: "0 0 24px rgba(212,175,55,0.06)",
   },
   acqLabel: { fontFamily: "'Roboto Mono', monospace", fontSize: "14px", textTransform: "uppercase", letterSpacing: "0.14em", color: "#D4AF37", marginBottom: "4px" },
