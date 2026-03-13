@@ -112,7 +112,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
 
         {/* Drag handle + X close button */}
         <div className="relative flex justify-center pt-4 pb-2">
-          <div className="w-8 h-[3px] rounded-full" style={{ background: "rgba(255,255,255,0.12)" }} />
+          <div className="w-8 h-[3px] rounded-full" style={{ background: "rgba(255,255,255,0.20)" }} />
           <button
             onClick={() => { haptics.light(); setIsOpen(false); }}
             className="absolute top-3 right-4 w-9 h-9 flex items-center justify-center transition-colors"
