@@ -1,5 +1,5 @@
 import React, { ReactNode, useState } from "react";
-import ChapterCard from "./ChapterCard";
+import ChapterCard, { CardVariant } from "./ChapterCard";
 import { ArrowRight } from "lucide-react";
 
 interface StandardStepLayoutProps {
@@ -12,6 +12,9 @@ interface StandardStepLayoutProps {
   isComplete?: boolean;
   className?: string;
   glossaryTrigger?: ReactNode;
+  variant?: CardVariant;
+  breathing?: boolean;
+  pulsing?: boolean;
 }
 
 const s: Record<string, React.CSSProperties> = {
@@ -20,7 +23,7 @@ const s: Record<string, React.CSSProperties> = {
   },
   subtitle: {
     fontSize: "13px",
-    color: "rgba(255,255,255,0.55)",
+    color: "rgba(255,255,255,0.40)",
     lineHeight: "1.55",
     paddingBottom: "16px",
     marginBottom: "16px",
@@ -45,6 +48,7 @@ const s: Record<string, React.CSSProperties> = {
     gap: "10px",
     transition: "transform 0.12s ease, opacity 0.15s",
     boxShadow: "0 0 20px rgba(249,224,118,0.25), 0 0 60px rgba(249,224,118,0.08)",
+    minHeight: "56px",
   },
   ctaPressed: {
     transform: "scale(0.98)",
@@ -60,6 +64,9 @@ const StandardStepLayout = ({
   nextLabel = "Continue",
   isComplete = false,
   glossaryTrigger,
+  variant,
+  breathing,
+  pulsing,
 }: StandardStepLayoutProps) => {
   const [pressed, setPressed] = useState(false);
 
@@ -70,6 +77,9 @@ const StandardStepLayout = ({
         title={title}
         isActive={true}
         glossaryTrigger={glossaryTrigger}
+        variant={variant}
+        breathing={breathing}
+        pulsing={pulsing}
       >
         <div>
           {subtitle && (
