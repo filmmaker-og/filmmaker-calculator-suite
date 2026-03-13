@@ -523,7 +523,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
   stepNumCol: {
     position: "relative", display: "flex", alignItems: "flex-start", justifyContent: "center",
-    background: "radial-gradient(circle at 50% 28px, rgba(212,175,55,0.10) 0%, #0a0a0a 65%)",
+    background: "radial-gradient(circle at 50% 28px, rgba(212,175,55,0.20) 0%, #0a0a0a 80%)",
     paddingTop: "22px",
   },
   stepLine: {
@@ -536,7 +536,7 @@ const styles: Record<string, React.CSSProperties> = {
     boxShadow: "0 0 20px rgba(212,175,55,0.5)",
   },
   stepNumText: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.35rem", color: "#000", lineHeight: 1, paddingTop: "2px" },
-  stepContent: { padding: "26px 20px 26px 24px", background: "radial-gradient(circle at 0px 50%, rgba(212,175,55,0.08) 0%, transparent 60%)" },
+  stepContent: { padding: "26px 20px 26px 24px", background: "radial-gradient(circle at 0px 50%, rgba(212,175,55,0.14) 0%, transparent 55%)" },
   stepTitle: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.45rem", color: "#D4AF37", lineHeight: 1, marginBottom: "5px" },
   stepBody: { fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "rgba(255,255,255,0.88)", lineHeight: 1.55 },
 
@@ -551,8 +551,8 @@ const styles: Record<string, React.CSSProperties> = {
   },
   acquisitionCallout: {
     position: "relative", overflow: "hidden", textAlign: "center", margin: "0 20px 10px",
-    background: "radial-gradient(circle at 50% 75%, rgba(212,175,55,0.12) 0%, #0a0a0a 65%)", border: "1px solid rgba(212,175,55,0.25)", borderRadius: "12px", padding: "18px 16px",
-    boxShadow: "0 0 24px rgba(212,175,55,0.06)",
+    background: "radial-gradient(circle at 50% 70%, rgba(212,175,55,0.20) 0%, #0a0a0a 75%)", border: "1px solid rgba(212,175,55,0.25)", borderRadius: "12px", padding: "24px 20px",
+    boxShadow: "0 0 24px rgba(212,175,55,0.10)",
   },
   acqLabel: { fontFamily: "'Roboto Mono', monospace", fontSize: "14px", textTransform: "uppercase", letterSpacing: "0.14em", color: "#D4AF37", marginBottom: "4px" },
   acqSub: { fontFamily: "'Roboto Mono', monospace", fontSize: "14px", color: "rgba(255,255,255,0.70)", marginBottom: "8px" },
