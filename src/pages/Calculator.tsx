@@ -13,6 +13,7 @@ import { CapitalSourceSelections, defaultSelections } from "@/components/calcula
 import EmailGateModal from "@/components/EmailGateModal";
 
 import { EMAIL_CAPTURED_KEY } from "@/lib/constants";
+import ContextBar from "@/components/calculator/ContextBar";
 
 export interface ProjectDetails {
   title: string;
@@ -108,6 +109,8 @@ const Calculator = () => {
 
   // Default to project step (step 00)
   const [activeTab, setActiveTab] = useState<TabId>('project');
+  const prevTabRef = useRef<TabId>('project');
+  const [transitionDir, setTransitionDir] = useState<'right' | 'left' | 'same'>('same');
 
   const [inputs, setInputs] = useState<WaterfallInputs>(defaultInputs);
   const [guilds, setGuilds] = useState<GuildState>(defaultGuilds);
@@ -180,6 +183,16 @@ const Calculator = () => {
 
   const handleTabChange = useCallback((tab: TabId) => {
     haptics.light();
+    const prevIndex = STEP_TO_TAB.indexOf(prevTabRef.current);
+    const nextIndex = STEP_TO_TAB.indexOf(tab);
+    if (nextIndex > prevIndex) {
+      setTransitionDir('right');
+    } else if (nextIndex < prevIndex) {
+      setTransitionDir('left');
+    } else {
+      setTransitionDir('same');
+    }
+    prevTabRef.current = tab;
     setActiveTab(tab);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -240,6 +253,33 @@ const Calculator = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [handleTabChange, activeTab, inputs]);
 
+  const stackSourceCount = Object.values(sourceSelections).filter(Boolean).length;
+  const selectedGenre = project.genre && project.genre !== "Other" ? project.genre : project.customGenre || '';
+
+  const renderContextBar = () => {
+    if (activeTab === 'stack') {
+      return <ContextBar budget={inputs.budget} />;
+    }
+    if (activeTab === 'deal') {
+      return (
+        <ContextBar
+          budget={inputs.budget}
+          stackCount={stackSourceCount}
+          genre={selectedGenre}
+        />
+      );
+    }
+    if (activeTab === 'waterfall') {
+      return (
+        <ContextBar
+          budget={inputs.budget}
+          acqPrice={inputs.revenue}
+        />
+      );
+    }
+    return null;
+  };
+
   const renderTabContent = () => {
     switch (activeTab) {
       case 'project':
@@ -262,33 +302,43 @@ const Calculator = () => {
         );
       case 'stack':
         return (
-          <StackTab
-            inputs={inputs}
-            onUpdateInput={updateInput}
-            onAdvance={handleNext}
-            selections={sourceSelections}
-            onToggleSelection={toggleSourceSelection}
-          />
+          <>
+            {renderContextBar()}
+            <StackTab
+              inputs={inputs}
+              onUpdateInput={updateInput}
+              onAdvance={handleNext}
+              selections={sourceSelections}
+              onToggleSelection={toggleSourceSelection}
+            />
+          </>
         );
       case 'deal':
         return (
-          <DealTab
-            inputs={inputs}
-            guilds={guilds}
-            selections={capitalSelections}
-            onUpdateInput={updateInput}
-            onAdvance={handleNext}
-          />
+          <>
+            {renderContextBar()}
+            <DealTab
+              inputs={inputs}
+              guilds={guilds}
+              selections={capitalSelections}
+              onUpdateInput={updateInput}
+              onAdvance={handleNext}
+              genre={selectedGenre}
+            />
+          </>
         );
       case 'waterfall':
         return (
-          <WaterfallTab
-            result={result}
-            inputs={inputs}
-            project={project}
-            guilds={guilds}
-            onExport={handleExportClick}
-          />
+          <>
+            {renderContextBar()}
+            <WaterfallTab
+              result={result}
+              inputs={inputs}
+              project={project}
+              guilds={guilds}
+              onExport={handleExportClick}
+            />
+          </>
         );
       default:
         return null;
@@ -309,7 +359,18 @@ const Calculator = () => {
     <div style={s.page}>
       <main ref={mainRef} style={s.main}>
         <div style={s.col}>
-          {renderTabContent()}
+          <div
+            key={activeTab}
+            style={{
+              animation: transitionDir === 'right'
+                ? 'slideRight 0.35s ease-out'
+                : transitionDir === 'left'
+                  ? 'slideLeft 0.35s ease-out'
+                  : 'stepEnter 0.35s ease-out',
+            }}
+          >
+            {renderTabContent()}
+          </div>
         </div>
       </main>
 

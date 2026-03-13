@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import type { ProjectDetails } from "@/pages/Calculator";
-import ChapterCard from "../ChapterCard";
+import ChapterCard, { cardH, cardHSub } from "../ChapterCard";
 
 interface ProjectTabProps {
   project: ProjectDetails;
@@ -17,15 +17,8 @@ const GENRES = [
 const STATUSES = ["Development", "Pre-Production", "Production", "Post-Production"];
 
 const s: Record<string, React.CSSProperties> = {
-  cardH: {
-    fontFamily: "'Bebas Neue', sans-serif",
-    fontSize: "1.8rem",
-    color: "#fff",
-    letterSpacing: "0.04em",
-    lineHeight: 1,
-    marginBottom: "20px",
-    paddingBottom: "16px",
-    borderBottom: "1px solid rgba(255,255,255,0.08)",
+  wrapper: {
+    animation: "stepEnter 0.4s ease-out forwards",
   },
   fg: {
     marginBottom: "20px",
@@ -36,7 +29,7 @@ const s: Record<string, React.CSSProperties> = {
     fontWeight: 600,
     textTransform: "uppercase" as const,
     letterSpacing: "0.15em",
-    color: "rgba(255,255,255,0.55)",
+    color: "rgba(212,175,55,0.50)",
     marginBottom: "8px",
     display: "block",
   },
@@ -60,6 +53,7 @@ const s: Record<string, React.CSSProperties> = {
     outline: "none",
     transition: "border-color 0.2s, box-shadow 0.2s",
     WebkitAppearance: "none" as const,
+    minHeight: "48px",
   },
   pills: {
     display: "flex",
@@ -71,7 +65,7 @@ const s: Record<string, React.CSSProperties> = {
     fontSize: "13px",
     fontWeight: 500,
     padding: "9px 16px",
-    minHeight: "44px",
+    minHeight: "48px",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
@@ -88,7 +82,7 @@ const s: Record<string, React.CSSProperties> = {
     fontSize: "13px",
     fontWeight: 500,
     padding: "9px 16px",
-    minHeight: "44px",
+    minHeight: "48px",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
@@ -151,9 +145,22 @@ const s: Record<string, React.CSSProperties> = {
     marginTop: "6px",
     lineHeight: 1.4,
   },
+  // CTA reveal
+  reveal: {
+    opacity: 0,
+    transform: "translateY(12px)",
+    transition: "opacity 0.4s ease 0.15s, transform 0.4s ease 0.15s",
+    pointerEvents: "none" as const,
+  },
+  revealVis: {
+    opacity: 1,
+    transform: "translateY(0)",
+    transition: "opacity 0.4s ease 0.15s, transform 0.4s ease 0.15s",
+    pointerEvents: "auto" as const,
+  },
   cta: {
     width: "100%",
-    padding: "16px",
+    padding: "18px",
     marginTop: "24px",
     background: "#F9E076",
     border: "none",
@@ -170,22 +177,31 @@ const s: Record<string, React.CSSProperties> = {
     gap: "10px",
     transition: "transform 0.12s ease, opacity 0.15s",
     boxShadow: "0 0 20px rgba(249,224,118,0.25), 0 0 60px rgba(249,224,118,0.08)",
+    minHeight: "56px",
   },
   skip: {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    textAlign: "center" as const,
-    minHeight: "44px",
+    gap: "4px",
+    minHeight: "48px",
     marginTop: "14px",
     fontFamily: "'Inter', sans-serif",
-    fontSize: "12px",
-    color: "rgba(255,255,255,0.25)",
+    fontSize: "13px",
+    color: "rgba(255,255,255,0.40)",
     cursor: "pointer",
     background: "none",
     border: "none",
     width: "100%",
-    transition: "color 0.15s",
+  },
+  autosave: {
+    textAlign: "center" as const,
+    fontFamily: "'Roboto Mono', monospace",
+    fontSize: "9px",
+    letterSpacing: "0.1em",
+    textTransform: "uppercase" as const,
+    color: "rgba(255,255,255,0.15)",
+    marginTop: "16px",
   },
 };
 
@@ -216,241 +232,257 @@ const ProjectTab = ({ project, onUpdateProject, onAdvance }: ProjectTabProps) =>
     (e.target as HTMLInputElement).style.boxShadow = "none";
   };
 
+  const handleTitleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      (e.target as HTMLInputElement).blur();
+      setTimeout(() => onAdvance(), 100);
+    }
+  };
+
   const canProceed = project.title.trim().length > 0;
 
   return (
-    <ChapterCard chapter="00" title="Project Details" isActive={true}>
-      <h2 style={s.cardH}>Your Project</h2>
+    <div style={s.wrapper}>
+      <ChapterCard chapter="00" title="Project Details" isActive={true} variant="neutral">
+        <div style={cardH}>What Are You Building?</div>
+        <div style={cardHSub}>Tell us about the project — or jump straight to the numbers</div>
 
-      {/* Project Title */}
-      <div style={s.fg}>
-        <label style={s.fl}>Project Title</label>
-        <input
-          style={s.fi}
-          type="text"
-          placeholder="Untitled Feature"
-          value={project.title}
-          onChange={(e) => update("title", e.target.value)}
-          onFocus={handleInputFocus}
-          onBlur={handleInputBlur}
-        />
-      </div>
-
-      {/* Logline */}
-      <div style={s.fg}>
-        <label style={s.fl}>
-          Logline <span style={s.flOpt}>optional</span>
-        </label>
-        <input
-          style={s.fi}
-          type="text"
-          placeholder="One sentence — what's the movie about?"
-          value={project.logline}
-          onChange={(e) => update("logline", e.target.value)}
-          onFocus={handleInputFocus}
-          onBlur={handleInputBlur}
-        />
-      </div>
-
-      {/* Genre */}
-      <div style={s.fg}>
-        <label style={s.fl}>Genre</label>
-        <div style={s.pills}>
-          {GENRES.map((genre) => {
-            const isSelected = project.genre === genre;
-            const isPressed = pressedPill === genre;
-            return (
-              <button
-                key={genre}
-                style={{
-                  ...(isSelected ? s.pillOn : s.pill),
-                  ...(isPressed ? { transform: "scale(0.96)" } : {}),
-                }}
-                onClick={() => handleGenreSelect(genre)}
-                onPointerDown={() => setPressedPill(genre)}
-                onPointerUp={() => setPressedPill(null)}
-                onPointerLeave={() => setPressedPill(null)}
-              >
-                {genre}
-              </button>
-            );
-          })}
+        {/* Project Title */}
+        <div style={s.fg}>
+          <label style={s.fl}>Project Title</label>
+          <input
+            style={s.fi}
+            type="text"
+            placeholder="Untitled Feature"
+            value={project.title}
+            onChange={(e) => update("title", e.target.value)}
+            onFocus={handleInputFocus}
+            onBlur={handleInputBlur}
+            onKeyDown={handleTitleKeyDown}
+            enterKeyHint="next"
+          />
         </div>
-        {project.genre === "Other" && (
-          <div style={{ marginTop: "10px" }}>
-            <input
-              style={s.fi}
-              type="text"
-              placeholder="e.g. Western, Musical, Mockumentary"
-              value={project.customGenre}
-              onChange={(e) => update("customGenre", e.target.value)}
-              onFocus={handleInputFocus}
-              onBlur={handleInputBlur}
-              autoFocus
-            />
-          </div>
-        )}
-      </div>
 
-      {/* Project Status */}
-      <div style={s.fg}>
-        <label style={s.fl}>Project Status</label>
-        <div style={s.pills}>
-          {STATUSES.map((status) => {
-            const isSelected = project.status === status;
-            const isPressed = pressedPill === `status-${status}`;
-            return (
-              <button
-                key={status}
-                style={{
-                  ...(isSelected ? s.pillOn : s.pill),
-                  ...(isPressed ? { transform: "scale(0.96)" } : {}),
-                }}
-                onClick={() => update("status", status)}
-                onPointerDown={() => setPressedPill(`status-${status}`)}
-                onPointerUp={() => setPressedPill(null)}
-                onPointerLeave={() => setPressedPill(null)}
-              >
-                {status}
-              </button>
-            );
-          })}
+        {/* Logline */}
+        <div style={s.fg}>
+          <label style={s.fl}>
+            Logline <span style={s.flOpt}>optional</span>
+          </label>
+          <input
+            style={s.fi}
+            type="text"
+            placeholder="One sentence — what's the movie about?"
+            value={project.logline}
+            onChange={(e) => update("logline", e.target.value)}
+            onFocus={handleInputFocus}
+            onBlur={handleInputBlur}
+            enterKeyHint="next"
+          />
         </div>
-      </div>
 
-      {/* Team Details — collapsible */}
-      <button
-        style={s.expTrigger}
-        onClick={() => setTeamOpen(!teamOpen)}
-      >
-        <div style={s.expLeft}>
-          <span style={s.expTitle}>Team Details</span>
-          <span style={s.expHint}>producer, director, writer, cast</span>
+        {/* Genre */}
+        <div style={s.fg}>
+          <label style={s.fl}>Genre</label>
+          <div style={s.pills}>
+            {GENRES.map((genre) => {
+              const isSelected = project.genre === genre;
+              const isPressed = pressedPill === genre;
+              return (
+                <button
+                  key={genre}
+                  style={{
+                    ...(isSelected ? s.pillOn : s.pill),
+                    ...(isPressed ? { transform: "scale(0.96)" } : {}),
+                  }}
+                  onClick={() => handleGenreSelect(genre)}
+                  onPointerDown={() => setPressedPill(genre)}
+                  onPointerUp={() => setPressedPill(null)}
+                  onPointerLeave={() => setPressedPill(null)}
+                >
+                  {genre}
+                </button>
+              );
+            })}
+          </div>
+          {project.genre === "Other" && (
+            <div style={{ marginTop: "10px" }}>
+              <input
+                style={s.fi}
+                type="text"
+                placeholder="e.g. Western, Musical, Mockumentary"
+                value={project.customGenre}
+                onChange={(e) => update("customGenre", e.target.value)}
+                onFocus={handleInputFocus}
+                onBlur={handleInputBlur}
+                autoFocus
+              />
+            </div>
+          )}
         </div>
-        <ChevronDown
-          style={{
-            width: "16px",
-            height: "16px",
-            color: "rgba(212,175,55,0.40)",
-            transition: "transform 0.25s",
-            transform: teamOpen ? "rotate(180deg)" : "rotate(0deg)",
-          }}
-        />
-      </button>
 
-      <div style={teamOpen ? s.expBodyOpen : s.expBody}>
-        <div style={s.expInner}>
-          {/* Producer(s) */}
-          <div style={s.fg}>
-            <label style={s.fl}>Producer(s) <span style={s.flOpt}>optional</span></label>
-            <input
-              style={s.fi}
-              type="text"
-              placeholder="Producer name(s)"
-              value={project.producers}
-              onChange={(e) => update("producers", e.target.value)}
-              onFocus={handleInputFocus}
-              onBlur={handleInputBlur}
-            />
-          </div>
-
-          {/* Director */}
-          <div style={s.fg}>
-            <label style={s.fl}>Director <span style={s.flOpt}>optional</span></label>
-            <input
-              style={s.fi}
-              type="text"
-              placeholder="Director name"
-              value={project.director}
-              onChange={(e) => update("director", e.target.value)}
-              onFocus={handleInputFocus}
-              onBlur={handleInputBlur}
-            />
-          </div>
-
-          {/* Writer(s) */}
-          <div style={s.fg}>
-            <label style={s.fl}>Writer(s) <span style={s.flOpt}>optional</span></label>
-            <input
-              style={s.fi}
-              type="text"
-              placeholder="Writer name(s)"
-              value={project.writers}
-              onChange={(e) => update("writers", e.target.value)}
-              onFocus={handleInputFocus}
-              onBlur={handleInputBlur}
-            />
-          </div>
-
-          {/* Cast */}
-          <div style={s.fg}>
-            <label style={s.fl}>Attached / Wishlist Cast <span style={s.flOpt}>optional</span></label>
-            <input
-              style={s.fi}
-              type="text"
-              placeholder="Lead cast names"
-              value={project.cast}
-              onChange={(e) => update("cast", e.target.value)}
-              onFocus={handleInputFocus}
-              onBlur={handleInputBlur}
-            />
-            <p style={s.hint}>
-              "Attached" = signed LOI. "Wishlist" = targeting. Be honest — investors will verify.
-            </p>
-          </div>
-
-          {/* Production Company / SPV */}
-          <div style={s.fg}>
-            <label style={s.fl}>Production Company / SPV <span style={s.flOpt}>optional</span></label>
-            <input
-              style={s.fi}
-              type="text"
-              placeholder="Entity name (LLC, Inc, etc.)"
-              value={project.company}
-              onChange={(e) => update("company", e.target.value)}
-              onFocus={handleInputFocus}
-              onBlur={handleInputBlur}
-            />
-          </div>
-
-          {/* Primary Shooting Location */}
-          <div style={{ ...s.fg, marginBottom: 0 }}>
-            <label style={s.fl}>Primary Shooting Location <span style={s.flOpt}>optional</span></label>
-            <input
-              style={s.fi}
-              type="text"
-              placeholder="City, State / Country"
-              value={project.location}
-              onChange={(e) => update("location", e.target.value)}
-              onFocus={handleInputFocus}
-              onBlur={handleInputBlur}
-            />
+        {/* Project Status */}
+        <div style={s.fg}>
+          <label style={s.fl}>Project Status</label>
+          <div style={s.pills}>
+            {STATUSES.map((status) => {
+              const isSelected = project.status === status;
+              const isPressed = pressedPill === `status-${status}`;
+              return (
+                <button
+                  key={status}
+                  style={{
+                    ...(isSelected ? s.pillOn : s.pill),
+                    ...(isPressed ? { transform: "scale(0.96)" } : {}),
+                  }}
+                  onClick={() => update("status", status)}
+                  onPointerDown={() => setPressedPill(`status-${status}`)}
+                  onPointerUp={() => setPressedPill(null)}
+                  onPointerLeave={() => setPressedPill(null)}
+                >
+                  {status}
+                </button>
+              );
+            })}
           </div>
         </div>
-      </div>
 
-      {/* CTA */}
-      {canProceed && (
+        {/* Team Details — collapsible */}
         <button
-          style={{
-            ...s.cta,
-            ...(ctaPressed ? { transform: "scale(0.98)" } : {}),
-          }}
-          onClick={onAdvance}
-          onPointerDown={() => setCtaPressed(true)}
-          onPointerUp={() => setCtaPressed(false)}
-          onPointerLeave={() => setCtaPressed(false)}
+          style={s.expTrigger}
+          onClick={() => setTeamOpen(!teamOpen)}
         >
-          Continue to Budget
-          <ArrowRight style={{ width: "18px", height: "18px" }} />
+          <div style={s.expLeft}>
+            <span style={s.expTitle}>Team Details</span>
+            <span style={s.expHint}>producer, director, writer, cast</span>
+          </div>
+          <ChevronDown
+            style={{
+              width: "16px",
+              height: "16px",
+              color: "rgba(212,175,55,0.40)",
+              transition: "transform 0.25s",
+              transform: teamOpen ? "rotate(180deg)" : "rotate(0deg)",
+            }}
+          />
         </button>
-      )}
 
-      {/* Skip link */}
-      <button style={s.skip} onClick={onAdvance}>
-        Skip for now — I'll add details later
-      </button>
-    </ChapterCard>
+        <div style={teamOpen ? s.expBodyOpen : s.expBody}>
+          <div style={s.expInner}>
+            <div style={s.fg}>
+              <label style={s.fl}>Producer(s) <span style={s.flOpt}>optional</span></label>
+              <input
+                style={s.fi}
+                type="text"
+                placeholder="Producer name(s)"
+                value={project.producers}
+                onChange={(e) => update("producers", e.target.value)}
+                onFocus={handleInputFocus}
+                onBlur={handleInputBlur}
+                enterKeyHint="next"
+              />
+            </div>
+            <div style={s.fg}>
+              <label style={s.fl}>Director <span style={s.flOpt}>optional</span></label>
+              <input
+                style={s.fi}
+                type="text"
+                placeholder="Director name"
+                value={project.director}
+                onChange={(e) => update("director", e.target.value)}
+                onFocus={handleInputFocus}
+                onBlur={handleInputBlur}
+                enterKeyHint="next"
+              />
+            </div>
+            <div style={s.fg}>
+              <label style={s.fl}>Writer(s) <span style={s.flOpt}>optional</span></label>
+              <input
+                style={s.fi}
+                type="text"
+                placeholder="Writer name(s)"
+                value={project.writers}
+                onChange={(e) => update("writers", e.target.value)}
+                onFocus={handleInputFocus}
+                onBlur={handleInputBlur}
+                enterKeyHint="next"
+              />
+            </div>
+            <div style={s.fg}>
+              <label style={s.fl}>Attached / Wishlist Cast <span style={s.flOpt}>optional</span></label>
+              <input
+                style={s.fi}
+                type="text"
+                placeholder="Lead cast names"
+                value={project.cast}
+                onChange={(e) => update("cast", e.target.value)}
+                onFocus={handleInputFocus}
+                onBlur={handleInputBlur}
+                enterKeyHint="next"
+              />
+              <p style={s.hint}>
+                "Attached" = signed LOI. "Wishlist" = targeting. Be honest — investors will verify.
+              </p>
+            </div>
+            <div style={s.fg}>
+              <label style={s.fl}>Production Company / SPV <span style={s.flOpt}>optional</span></label>
+              <input
+                style={s.fi}
+                type="text"
+                placeholder="Entity name (LLC, Inc, etc.)"
+                value={project.company}
+                onChange={(e) => update("company", e.target.value)}
+                onFocus={handleInputFocus}
+                onBlur={handleInputBlur}
+                enterKeyHint="next"
+              />
+            </div>
+            <div style={{ ...s.fg, marginBottom: 0 }}>
+              <label style={s.fl}>Primary Shooting Location <span style={s.flOpt}>optional</span></label>
+              <input
+                style={s.fi}
+                type="text"
+                placeholder="City, State / Country"
+                value={project.location}
+                onChange={(e) => update("location", e.target.value)}
+                onFocus={handleInputFocus}
+                onBlur={handleInputBlur}
+                enterKeyHint="done"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* CTA — reveals when title has text */}
+        <div style={canProceed ? s.revealVis : s.reveal}>
+          <button
+            style={{
+              ...s.cta,
+              ...(ctaPressed ? { transform: "scale(0.98)" } : {}),
+            }}
+            onClick={onAdvance}
+            onPointerDown={() => setCtaPressed(true)}
+            onPointerUp={() => setCtaPressed(false)}
+            onPointerLeave={() => setCtaPressed(false)}
+          >
+            Continue to Budget
+            <ArrowRight style={{ width: "18px", height: "18px" }} />
+          </button>
+        </div>
+
+        {/* Skip link */}
+        <button style={s.skip} onClick={onAdvance}>
+          Jump to Budget
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ opacity: 0.5 }}>
+            <line x1="5" y1="12" x2="19" y2="12" />
+            <polyline points="12 5 19 12 12 19" />
+          </svg>
+        </button>
+      </ChapterCard>
+
+      {/* Autosave indicator */}
+      <p style={s.autosave}>Session data — stays in your browser</p>
+    </div>
   );
 };
 
