@@ -594,7 +594,7 @@ const styles: Record<string, React.CSSProperties> = {
   pipeRight: { flex: 1, height: "18px", borderTop: "2px solid rgba(212,175,55,0.50)", borderRight: "2px solid rgba(212,175,55,0.50)", borderRadius: "0 6px 0 0" },
   buckets: { display: "flex", gap: "10px", marginTop: "-1px" },
   bucket: {
-    flex: 1, textAlign: "center", background: "#0a0a0a", border: "1px solid rgba(212,175,55,0.20)",
+    flex: 1, textAlign: "center", background: "#0a0a0a", border: "1px solid rgba(212,175,55,0.25)",
     borderTop: "2px solid #D4AF37", borderRadius: "0 0 10px 10px", padding: "16px 12px",
   },
   bucketLabel: { fontFamily: "'Roboto Mono', monospace", fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.12em", color: "rgba(255,255,255,0.70)", marginBottom: "8px" },
@@ -723,7 +723,7 @@ const styles: Record<string, React.CSSProperties> = {
   realitySection: { background: "#000", textAlign: "left", padding: "48px 20px 32px" },
   blockquote: {
     fontFamily: "'Bebas Neue', sans-serif", fontSize: "2.4rem", lineHeight: 0.95, color: "rgba(255,255,255,0.92)",
-    borderLeft: "3px solid #D4AF37", paddingLeft: "20px", marginBottom: "32px",
+    borderLeft: "3px solid #D4AF37", paddingLeft: "20px", marginBottom: "24px",
   },
   checkGrid: {
     position: "relative", border: "1px solid rgba(212,175,55,0.20)", borderRadius: "12px", overflow: "hidden",
@@ -731,10 +731,10 @@ const styles: Record<string, React.CSSProperties> = {
   },
   checkHeader: {
     display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1px", background: "rgba(255,255,255,0.06)",
-    borderBottom: "1px solid rgba(255,255,255,0.06)",
+    borderBottom: "1px solid rgba(212,175,55,0.15)",
   },
-  checkHeaderWith: { background: "#000", padding: "11px 16px" },
-  checkHeaderWithout: { background: "#000", padding: "11px 16px", borderLeft: "1px solid rgba(255,255,255,0.06)" },
+  checkHeaderWith: { background: "rgba(212,175,55,0.05)", padding: "16px 20px" },
+  checkHeaderWithout: { background: "#000", padding: "16px 20px", borderLeft: "1px solid rgba(255,255,255,0.06)" },
   checkHeaderWithText: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.5rem", color: "#D4AF37", letterSpacing: "0.04em" },
   checkHeaderWithoutText: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.5rem", color: "rgba(255,255,255,0.55)", letterSpacing: "0.04em" },
   checkRow: {
@@ -742,14 +742,14 @@ const styles: Record<string, React.CSSProperties> = {
     borderBottom: "1px solid rgba(255,255,255,0.06)",
   },
   checkCellLeft: {
-    background: "#000", display: "grid", gridTemplateColumns: "22px 1fr", gap: "10px",
-    padding: "14px 16px", alignItems: "flex-start",
+    background: "rgba(212,175,55,0.05)", display: "grid", gridTemplateColumns: "22px 1fr", gap: "10px",
+    padding: "18px 20px", alignItems: "flex-start",
   },
   checkCellRight: {
     background: "#000", display: "grid", gridTemplateColumns: "22px 1fr", gap: "10px",
-    padding: "14px 16px", alignItems: "flex-start", borderLeft: "1px solid rgba(255,255,255,0.06)",
+    padding: "18px 20px", alignItems: "flex-start", borderLeft: "1px solid rgba(212,175,55,0.08)",
   },
-  checkIconYes: { fontFamily: "'Roboto Mono', monospace", fontSize: "22px", paddingTop: "2px", color: "#D4AF37" },
+  checkIconYes: { fontFamily: "'Roboto Mono', monospace", fontSize: "22px", paddingTop: "2px", color: "#D4AF37", textShadow: "0 0 12px rgba(212,175,55,0.5)" },
   checkIconNo: { fontFamily: "'Roboto Mono', monospace", fontSize: "22px", paddingTop: "2px", color: "rgba(255,80,80,0.85)" },
   checkTextYes: { fontFamily: "'Inter', sans-serif", fontSize: "14px", lineHeight: 1.4, color: "rgba(255,255,255,0.85)" },
   checkTextNo: { fontFamily: "'Inter', sans-serif", fontSize: "14px", lineHeight: 1.4, color: "rgba(255,255,255,0.55)" },
