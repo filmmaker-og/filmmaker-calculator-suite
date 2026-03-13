@@ -76,6 +76,7 @@ const Index = () => {
   const { ref: arsenalRef, inView: arsenalVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
   const { ref: realityRef, inView: realityVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
   const { ref: closerRef, inView: closerVisible } = useInView<HTMLDivElement>({ threshold: 0.2 });
+  const { ref: footerRef, inView: footerVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
 
 
   /* ── Data ── */
@@ -441,26 +442,26 @@ const Index = () => {
         </section>
 
         {/* ═══ FOOTER ═══ */}
-        <footer style={styles.footer}>
+        <footer ref={footerRef} style={{ ...styles.footer, opacity: prefersReducedMotion || footerVisible ? 1 : 0, transition: prefersReducedMotion ? "none" : "opacity 0.8s ease-out" }}>
           <div style={styles.footerLinks}>
-            <a href="https://www.instagram.com/filmmaker.og" target="_blank" rel="noopener noreferrer" style={styles.footerIcon} aria-label="Instagram">
+            <a href="https://www.instagram.com/filmmaker.og" target="_blank" rel="noopener noreferrer" style={styles.footerIcon} aria-label="Instagram" onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.60)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.40)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.12)"; }}>
               <Instagram size={18} />
             </a>
-            <a href="https://www.tiktok.com/@filmmaker.og" target="_blank" rel="noopener noreferrer" style={styles.footerIcon} aria-label="TikTok">
+            <a href="https://www.tiktok.com/@filmmaker.og" target="_blank" rel="noopener noreferrer" style={styles.footerIcon} aria-label="TikTok" onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.60)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.40)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.12)"; }}>
               <svg width={18} height={18} viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                 <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 0 0-.79-.05A6.34 6.34 0 0 0 3.15 15a6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V8.71a8.2 8.2 0 0 0 4.76 1.52v-3.4a4.85 4.85 0 0 1-1-.14z"/>
               </svg>
             </a>
-            <a href="https://www.facebook.com/filmmaker.og" target="_blank" rel="noopener noreferrer" style={styles.footerIcon} aria-label="Facebook">
+            <a href="https://www.facebook.com/filmmaker.og" target="_blank" rel="noopener noreferrer" style={styles.footerIcon} aria-label="Facebook" onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.60)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.40)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.12)"; }}>
               <svg width={18} height={18} viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                 <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
               </svg>
             </a>
           </div>
           <div style={styles.footerNav}>
-            <span onClick={() => navigate("/store")} style={styles.footerNavLink}>Shop</span>
+            <span onClick={() => navigate("/store")} style={styles.footerNavLink} onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.60)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.35)"; }}>Shop</span>
             <span style={styles.footerDot}>·</span>
-            <span onClick={() => navigate("/resources")} style={styles.footerNavLink}>Resources</span>
+            <span onClick={() => navigate("/resources")} style={styles.footerNavLink} onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.60)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.35)"; }}>Resources</span>
           </div>
           <p style={styles.footerText}>
             filmmaker.og provides financial modeling tools for educational purposes. This is not legal or financial advice. Consult qualified counsel before executing any investment structure.
@@ -535,7 +536,7 @@ const styles: Record<string, React.CSSProperties> = {
   howSection: { background: "#000", padding: "64px 0 0" },
   howHeader: { textAlign: "center", padding: "16px 20px 28px", background: "radial-gradient(ellipse 80% 50% at 50% 60%, rgba(212,175,55,0.10) 0%, transparent 70%)" },
   howH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.6rem", color: "#fff", lineHeight: 0.95 },
-  stepsContainer: { display: "flex", flexDirection: "column", gap: "1px", background: "rgba(212,175,55,0.10)" },
+  stepsContainer: { display: "flex", flexDirection: "column", gap: "1px", background: "rgba(212,175,55,0.10)", borderRadius: "12px", overflow: "hidden", margin: "0 20px", border: "1px solid rgba(212,175,55,0.20)" },
   step: {
     display: "grid", gridTemplateColumns: "52px 1fr", background: "#000",
   },
@@ -801,10 +802,10 @@ const styles: Record<string, React.CSSProperties> = {
   /* ── FOOTER ── */
   footer: { background: "#0a0a0a", borderTop: "1px solid rgba(255,255,255,0.06)", padding: "32px 20px 40px" },
   footerLinks: { display: "flex", justifyContent: "center", gap: "20px", marginBottom: "16px" },
-  footerIcon: { color: "rgba(255,255,255,0.40)", textDecoration: "none", display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", borderRadius: "8px", border: "1px solid rgba(255,255,255,0.08)", transition: "border-color 0.2s ease" },
+  footerIcon: { color: "rgba(212,175,55,0.40)", textDecoration: "none", display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", borderRadius: "8px", border: "1px solid rgba(212,175,55,0.12)", transition: "color 0.2s ease, border-color 0.2s ease" },
   footerNav: { display: "flex", justifyContent: "center", alignItems: "center", gap: "10px", marginBottom: "16px" },
-  footerNavLink: { fontFamily: "'Roboto Mono', monospace", fontSize: "12px", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,0.40)", cursor: "pointer" } as React.CSSProperties,
-  footerDot: { color: "rgba(255,255,255,0.20)", fontSize: "12px" },
+  footerNavLink: { fontFamily: "'Roboto Mono', monospace", fontSize: "12px", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(212,175,55,0.35)", cursor: "pointer", transition: "color 0.2s ease" } as React.CSSProperties,
+  footerDot: { color: "rgba(212,175,55,0.20)", fontSize: "12px" },
   footerText: { fontFamily: "'Inter', sans-serif", fontSize: "13px", textAlign: "center", color: "rgba(255,255,255,0.35)", lineHeight: 1.55 },
 };
 
