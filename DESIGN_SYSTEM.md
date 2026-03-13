@@ -18,9 +18,9 @@ These seven principles resolve every visual decision. When you're unsure what to
 
 Every section is its own contained card — rounded corners, gold border, its own background treatment. Cards sit on pure black (#000) with space between them. The black bleeds through the gaps. Think presentation slides in a dark screening room.
 
-### 2. Properly responsive
+### 2. Mobile-first at 430px
 
-Mobile-first, but the page must look natural on every screen. Phone is the primary audience (Instagram traffic). On tablet and desktop, the layout should fill out. Never force a mobile-width column on a desktop screen. Never stretch a mobile layout until it looks wrong on a big monitor.
+The product is built for Instagram and TikTok mobile traffic. All pages render at 430px max-width, centered on larger screens against pure black. This is the production design — not a placeholder for a responsive desktop layout. The centered column on desktop reads as a focused product demo. Phone is the primary validation target. Tablet and desktop inherit mobile — no separate layouts, no wider breakpoints unless explicitly requested.
 
 ### 3. Gold is heat
 
@@ -306,6 +306,8 @@ Two CTA classes defined in `index.css`. Use these — don't hand-roll button sty
 ### Primary: `.btn-cta-primary`
 
 Gold background (`#F9E076`), black text, Bebas Neue 20px, uppercase, tracking `0.18em`, 4px radius. The landing page adds `font-bold` (700).
+
+**Landing page variant:** The inline-styled CTAs on Index.tsx use Roboto Mono 16px at `0.18em` tracking with `8px` radius instead of Bebas Neue. This is an approved variant — Roboto Mono reads as more data-institutional at CTA scale. Both treatments are live; use Roboto Mono for landing page CTAs and Bebas Neue for in-app CTAs.
 
 ```jsx
 <button className="w-full h-14 rounded-sm btn-cta-primary font-bold">
