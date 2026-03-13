@@ -13,6 +13,7 @@ import { CapitalSourceSelections, defaultSelections } from "@/components/calcula
 import EmailGateModal from "@/components/EmailGateModal";
 
 import { EMAIL_CAPTURED_KEY } from "@/lib/constants";
+import ContextBar from "@/components/calculator/ContextBar";
 
 export interface ProjectDetails {
   title: string;
@@ -240,6 +241,33 @@ const Calculator = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [handleTabChange, activeTab, inputs]);
 
+  const stackSourceCount = Object.values(sourceSelections).filter(Boolean).length;
+  const selectedGenre = project.genre && project.genre !== "Other" ? project.genre : project.customGenre || '';
+
+  const renderContextBar = () => {
+    if (activeTab === 'stack') {
+      return <ContextBar budget={inputs.budget} />;
+    }
+    if (activeTab === 'deal') {
+      return (
+        <ContextBar
+          budget={inputs.budget}
+          stackCount={stackSourceCount}
+          genre={selectedGenre}
+        />
+      );
+    }
+    if (activeTab === 'waterfall') {
+      return (
+        <ContextBar
+          budget={inputs.budget}
+          acqPrice={inputs.revenue}
+        />
+      );
+    }
+    return null;
+  };
+
   const renderTabContent = () => {
     switch (activeTab) {
       case 'project':
@@ -262,33 +290,42 @@ const Calculator = () => {
         );
       case 'stack':
         return (
-          <StackTab
-            inputs={inputs}
-            onUpdateInput={updateInput}
-            onAdvance={handleNext}
-            selections={sourceSelections}
-            onToggleSelection={toggleSourceSelection}
-          />
+          <>
+            {renderContextBar()}
+            <StackTab
+              inputs={inputs}
+              onUpdateInput={updateInput}
+              onAdvance={handleNext}
+              selections={sourceSelections}
+              onToggleSelection={toggleSourceSelection}
+            />
+          </>
         );
       case 'deal':
         return (
-          <DealTab
-            inputs={inputs}
-            guilds={guilds}
-            selections={capitalSelections}
-            onUpdateInput={updateInput}
-            onAdvance={handleNext}
-          />
+          <>
+            {renderContextBar()}
+            <DealTab
+              inputs={inputs}
+              guilds={guilds}
+              selections={capitalSelections}
+              onUpdateInput={updateInput}
+              onAdvance={handleNext}
+            />
+          </>
         );
       case 'waterfall':
         return (
-          <WaterfallTab
-            result={result}
-            inputs={inputs}
-            project={project}
-            guilds={guilds}
-            onExport={handleExportClick}
-          />
+          <>
+            {renderContextBar()}
+            <WaterfallTab
+              result={result}
+              inputs={inputs}
+              project={project}
+              guilds={guilds}
+              onExport={handleExportClick}
+            />
+          </>
         );
       default:
         return null;
