@@ -78,7 +78,7 @@ export const products: Product[] = [
     name: "The Package",
     price: 597,
     originalPrice: null,
-    badge: "MOST POPULAR",
+    badge: "COMPLETE",
     featured: true,
     tier: 2,
     category: "product",
