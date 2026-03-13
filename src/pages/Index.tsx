@@ -611,7 +611,7 @@ const styles: Record<string, React.CSSProperties> = {
     boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 24px rgba(212,175,55,0.05)", position: "relative",
   },
   badgeGrid: { display: "grid", gridTemplateColumns: "1fr", gap: "1px", background: "rgba(212,175,55,0.15)" },
-  badgeCard: { background: "#050505", padding: "36px 24px", textAlign: "left" },
+  badgeCard: { background: "radial-gradient(circle at 45px 57px, rgba(212,175,55,0.10) 0%, #050505 65%)", padding: "36px 24px", textAlign: "left" },
   badgeNum: {
     width: "42px", height: "42px", borderRadius: "50%", background: "#D4AF37", color: "#000",
     display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.5rem",
