@@ -331,7 +331,7 @@ const Index = () => {
               <div style={styles.topLineGold} />
               <div style={styles.tierHeaderAlt}>
                 <div style={{ marginBottom: "12px" }}>
-                  <span style={styles.trendingBadge}>Trending</span>
+                  <span style={styles.trendingBadge}>Essential</span>
                 </div>
                 <p style={styles.tierTitleAlt}>THE SNAPSHOT</p>
                 <p style={styles.tierSubAlt}>Pick this one if you need the numbers documented — clean and professional</p>
@@ -362,7 +362,7 @@ const Index = () => {
               <div style={styles.topLineGoldThick} />
               <div style={{ ...styles.tierHeaderAlt, paddingTop: "28px", borderBottomColor: "rgba(212,175,55,0.15)" }}>
                 <div style={{ marginBottom: "12px" }}>
-                  <span style={styles.mostPopularBadge}>Most Popular</span>
+                  <span style={styles.mostPopularBadge}>Complete</span>
                 </div>
                 <p style={styles.tierTitleAlt}>THE PACKAGE</p>
                 <p style={styles.tierSubAlt}>Pick this one if you want the full investor package with standalone documents</p>

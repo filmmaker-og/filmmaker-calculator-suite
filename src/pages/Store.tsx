@@ -458,7 +458,7 @@ const getBadgeStyle = (badge: string | null): React.CSSProperties => {
   if (!badge) return {};
   const base = { ...s.badgeBase };
   switch (badge) {
-    case "MOST POPULAR":
+    case "COMPLETE":
       return { ...base, background: "rgba(212,175,55,0.08)", border: "1px solid rgba(212,175,55,0.4)" };
     case "TURNKEY":
       return { ...base, background: "transparent", border: "1px solid rgba(212,175,55,0.25)" };
