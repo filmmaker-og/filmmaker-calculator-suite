@@ -499,7 +499,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
   heroGlow: {
     position: "absolute", top: "-10%", left: 0, right: 0, height: "65%", pointerEvents: "none",
-    background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.12) 0%, transparent 70%)",
+    background: "radial-gradient(ellipse 70% 55% at 50% 30%, rgba(212,175,55,0.18) 0%, transparent 70%)",
   },
   heroInner: { position: "relative", zIndex: 1 },
   heroH1: {
