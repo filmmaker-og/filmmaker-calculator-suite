@@ -109,6 +109,8 @@ const Calculator = () => {
 
   // Default to project step (step 00)
   const [activeTab, setActiveTab] = useState<TabId>('project');
+  const prevTabRef = useRef<TabId>('project');
+  const [transitionDir, setTransitionDir] = useState<'right' | 'left' | 'same'>('same');
 
   const [inputs, setInputs] = useState<WaterfallInputs>(defaultInputs);
   const [guilds, setGuilds] = useState<GuildState>(defaultGuilds);
@@ -181,6 +183,16 @@ const Calculator = () => {
 
   const handleTabChange = useCallback((tab: TabId) => {
     haptics.light();
+    const prevIndex = STEP_TO_TAB.indexOf(prevTabRef.current);
+    const nextIndex = STEP_TO_TAB.indexOf(tab);
+    if (nextIndex > prevIndex) {
+      setTransitionDir('right');
+    } else if (nextIndex < prevIndex) {
+      setTransitionDir('left');
+    } else {
+      setTransitionDir('same');
+    }
+    prevTabRef.current = tab;
     setActiveTab(tab);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -347,7 +359,18 @@ const Calculator = () => {
     <div style={s.page}>
       <main ref={mainRef} style={s.main}>
         <div style={s.col}>
-          {renderTabContent()}
+          <div
+            key={activeTab}
+            style={{
+              animation: transitionDir === 'right'
+                ? 'slideRight 0.35s ease-out'
+                : transitionDir === 'left'
+                  ? 'slideLeft 0.35s ease-out'
+                  : 'stepEnter 0.35s ease-out',
+            }}
+          >
+            {renderTabContent()}
+          </div>
         </div>
       </main>
 
