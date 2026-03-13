@@ -291,7 +291,7 @@ const Index = () => {
           <div style={styles.arsenalCards}>
             {/* Core Engine Card (Free) */}
             <div style={{ ...styles.tierCardCore, ...reveal(arsenalVisible, 1) }}>
-              <div style={styles.topLineGold} />
+              <div style={styles.topLineGoldHalf} />
               <div style={styles.tierHeaderCore}>
                 <div style={{ marginBottom: "12px" }}>
                   <span style={styles.tierBadgeCore}>Free Access</span>
@@ -328,7 +328,7 @@ const Index = () => {
 
             {/* The Snapshot Card */}
             <div style={{ ...styles.tierCardSnapshot, ...reveal(arsenalVisible, 2) }}>
-              <div style={styles.topLineGoldHalf} />
+              <div style={styles.topLineGold} />
               <div style={styles.tierHeaderAlt}>
                 <div style={{ marginBottom: "12px" }}>
                   <span style={styles.trendingBadge}>Trending</span>
@@ -692,8 +692,8 @@ const styles: Record<string, React.CSSProperties> = {
   },
   trendingBadge: {
     display: "inline-block", fontFamily: "'Roboto Mono', monospace", fontSize: "10px", textTransform: "uppercase",
-    letterSpacing: "0.15em", color: "rgba(255,255,255,0.70)", background: "rgba(255,255,255,0.04)",
-    border: "1px solid rgba(255,255,255,0.15)",
+    letterSpacing: "0.15em", color: "#D4AF37", background: "rgba(212,175,55,0.08)",
+    border: "1px solid rgba(212,175,55,0.35)",
     padding: "6px 12px", borderRadius: "4px", fontWeight: 600, whiteSpace: "nowrap",
   },
   mostPopularBadge: {
