@@ -63,6 +63,7 @@ const PremiumInput = React.forwardRef<HTMLInputElement, PremiumInputProps>(
             onBlur={handleBlur}
             style={{
               flex: 1,
+              minWidth: 0,
               background: "transparent",
               border: "none",
               outline: "none",
@@ -73,8 +74,8 @@ const PremiumInput = React.forwardRef<HTMLInputElement, PremiumInputProps>(
               textAlign: "right" as const,
               lineHeight: 1,
               fontVariantNumeric: "tabular-nums",
-              letterSpacing: "-0.02em",
-              padding: 0,
+              letterSpacing: "0",
+              padding: "0 4px 0 0",
               height: "48px",
             }}
             {...props}
@@ -82,7 +83,7 @@ const PremiumInput = React.forwardRef<HTMLInputElement, PremiumInputProps>(
         </div>
 
         {/* Action hint — static, no animation */}
-        {needsAttention && actionHint && (
+        {needsAttention && actionHint && isEmpty && (
           <div style={{
             display: "flex",
             alignItems: "center",

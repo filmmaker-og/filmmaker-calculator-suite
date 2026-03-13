@@ -24,32 +24,34 @@ const Index = () => {
   const haptics = useHaptics();
 
   const [showLeadCapture, setShowLeadCapture] = useState(false);
-  const [pendingDestination, setPendingDestination] = useState<string | null>(null);
-  const [hasSession, setHasSession] = useState(false);
 
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session?.user) setHasSession(true);
-    });
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (session?.user) setHasSession(true);
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (session?.user) {
+        // Magic link callback landed here instead of /calculator —
+        // catch it and forward. Only fires on fresh sign-in, not
+        // on TOKEN_REFRESHED or returning visitors.
+        if (event === 'SIGNED_IN') {
+          navigate('/calculator');
+        }
+      }
     });
     return () => subscription.unsubscribe();
-  }, []);
+  }, [navigate]);
 
-  const gatedNavigate = useCallback((destination: string) => {
-    if (!hasSession) {
-      setPendingDestination(destination);
-      setShowLeadCapture(true);
-    } else {
+  const gatedNavigate = useCallback(async (destination: string) => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session?.user) {
       navigate(destination);
+    } else {
+      setShowLeadCapture(true);
     }
-  }, [hasSession, navigate]);
+  }, [navigate]);
 
-  const handleCTA = () => {
+  const handleCTA = async () => {
     haptics.medium();
-    gatedNavigate("/calculator");
+    await gatedNavigate("/calculator");
   };
 
   const prefersReducedMotion =
@@ -129,11 +131,6 @@ const Index = () => {
       <LeadCaptureModal
         isOpen={showLeadCapture}
         onClose={() => setShowLeadCapture(false)}
-        onSuccess={() => {
-          setHasSession(true);
-          setShowLeadCapture(false);
-          navigate(pendingDestination || "/calculator");
-        }}
       />
 
       {/* ── Keyframe injection ── */}
