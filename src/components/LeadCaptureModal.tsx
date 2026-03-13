@@ -47,7 +47,7 @@ const LeadCaptureModal = ({ isOpen, onClose }: LeadCaptureModalProps) => {
     setLoading(true);
 
     try {
-      const redirectTo = `${window.location.origin}/calculator?tab=budget`;
+      const redirectTo = `${window.location.origin}/calculator`;
       const { error } = await supabase.auth.signInWithOtp({
         email: email.trim(),
         options: {
@@ -74,7 +74,7 @@ const LeadCaptureModal = ({ isOpen, onClose }: LeadCaptureModalProps) => {
   const handleResend = async () => {
     setLoading(true);
     try {
-      const redirectTo = `${window.location.origin}/calculator?tab=budget`;
+      const redirectTo = `${window.location.origin}/calculator`;
       const { error } = await supabase.auth.signInWithOtp({
         email: email.trim(),
         options: {
