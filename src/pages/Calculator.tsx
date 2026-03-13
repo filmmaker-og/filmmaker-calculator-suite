@@ -381,6 +381,8 @@ const Calculator = () => {
           <WaterfallTab
             result={result}
             inputs={inputs}
+            project={project}
+            guilds={guilds}
             onExport={handleExportClick}
           />
         );
