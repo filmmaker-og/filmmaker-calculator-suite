@@ -103,7 +103,7 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext }: DealIn
               onFocus={scrollIntoView}
               placeholder="2,000,000"
               className="flex-1 bg-transparent outline-none font-mono text-right tabular-nums"
-              style={{ fontSize: "1.8rem", color: "#fff" }}
+              style={{ fontSize: "1.8rem", color: "#fff", minWidth: 0, letterSpacing: "0", padding: "0 4px 0 0" }}
             />
           </div>
           <p className="text-[10px] mt-2 leading-relaxed" style={{ color: "rgba(255,255,255,0.40)" }}>
