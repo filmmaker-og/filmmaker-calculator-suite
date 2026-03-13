@@ -46,48 +46,58 @@ const s: Record<string, React.CSSProperties> = {
     alignItems: "center",
     justifyContent: "center",
     gap: "4px",
-    padding: "6px 0",
     fontFamily: "'Inter', sans-serif",
     fontSize: "11px",
     fontWeight: 600,
     textTransform: "uppercase" as const,
     letterSpacing: "0.05em",
-    color: "rgba(255,255,255,0.55)",
+    color: "rgba(255,255,255,0.40)",
     cursor: "pointer",
-    borderRadius: "6px",
-    transition: "all 0.15s",
+    transition: "all 0.2s",
     border: "none",
     background: "transparent",
     position: "relative",
+    paddingBottom: "6px",
   },
   tabActive: {
     color: "#F9E076",
-    background: "rgba(212,175,55,0.08)",
   },
   tabCompleted: {
     color: "rgba(255,255,255,0.65)",
   },
   iconInactive: {
-    opacity: 0.5,
-    transition: "all 0.15s",
+    opacity: 0.4,
+    transition: "all 0.2s",
   },
   iconActive: {
     opacity: 1,
-    color: "#F9E076",
-    transition: "all 0.15s",
+    transition: "all 0.2s",
   },
   iconCompleted: {
-    opacity: 0.8,
-    color: "rgba(255,255,255,0.65)",
-    transition: "all 0.15s",
+    opacity: 0.7,
+    transition: "all 0.2s",
   },
-  completedDot: {
+  // Gold underline for active tab
+  underlineActive: {
     position: "absolute",
-    top: "8px",
-    width: "5px",
-    height: "5px",
-    borderRadius: "50%",
-    background: "#D4AF37",
+    bottom: 0,
+    left: "20%",
+    right: "20%",
+    height: "2px",
+    background: "linear-gradient(90deg, rgba(212,175,55,0.50), #D4AF37, rgba(212,175,55,0.50))",
+    borderRadius: "1px",
+    transition: "all 0.3s",
+  },
+  // Dimmer gold underline for completed tabs
+  underlineCompleted: {
+    position: "absolute",
+    bottom: 0,
+    left: "20%",
+    right: "20%",
+    height: "2px",
+    background: "rgba(212,175,55,0.30)",
+    borderRadius: "1px",
+    transition: "all 0.3s",
   },
 };
 
@@ -128,15 +138,13 @@ const TabBar = ({ activeTab, onTabChange, completedTabs = [], disabledTabs = [] 
             disabled={isDisabled}
             style={tabStyle}
           >
-            <span style={{ position: "relative" }}>
-              <span style={iconStyle}>
-                {tab.icon}
-              </span>
-              {isCompleted && !isActive && (
-                <span style={s.completedDot} />
-              )}
+            <span style={iconStyle}>
+              {tab.icon}
             </span>
             <span>{tab.label}</span>
+            {/* Gold underline indicators */}
+            {isActive && <span style={s.underlineActive} />}
+            {isCompleted && !isActive && <span style={s.underlineCompleted} />}
           </button>
         );
       })}
