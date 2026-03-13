@@ -54,7 +54,7 @@ const WizardProgress = ({ steps, currentIndex }: { steps: string[]; currentIndex
         );
       })}
     </div>
-    <p className="text-center text-[11px] font-mono mt-2 tracking-wider" style={{ color: "rgba(255,255,255,0.40)" }}>
+    <p className="text-center text-[11px] font-mono mt-2 tracking-wider" style={{ color: "rgba(255,255,255,0.55)" }}>
       Step {currentIndex + 1} of {steps.length}
       {" — "}
       <span style={{ color: "rgba(255,255,255,0.70)" }}>{STEP_LABELS[steps[currentIndex]] ?? steps[currentIndex]}</span>

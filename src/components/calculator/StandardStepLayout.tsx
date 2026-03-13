@@ -20,7 +20,7 @@ const s: Record<string, React.CSSProperties> = {
   },
   subtitle: {
     fontSize: "13px",
-    color: "rgba(255,255,255,0.40)",
+    color: "rgba(255,255,255,0.55)",
     lineHeight: "1.55",
     paddingBottom: "16px",
     marginBottom: "16px",

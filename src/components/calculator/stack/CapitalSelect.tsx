@@ -107,7 +107,7 @@ const CapitalSelect = ({ selections, onToggle, onNext }: CapitalSelectProps) => 
           className="overflow-hidden"
           style={{
             background: "#0A0A0A",
-            border: "1px solid rgba(212,175,55,0.15)",
+            border: "1px solid rgba(212,175,55,0.20)",
             borderRadius: "12px",
           }}
         >
@@ -115,11 +115,11 @@ const CapitalSelect = ({ selections, onToggle, onNext }: CapitalSelectProps) => 
             className="px-5 py-3 flex items-center justify-between"
             style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}
           >
-            <span className="text-xs uppercase tracking-widest font-semibold" style={{ color: "rgba(255,255,255,0.40)" }}>
+            <span className="text-xs uppercase tracking-widest font-semibold" style={{ color: "rgba(255,255,255,0.55)" }}>
               Select all that apply
             </span>
             {selectedCount > 0 && (
-              <span className="text-xs font-mono" style={{ color: "rgba(255,255,255,0.40)" }}>{selectedCount} selected</span>
+              <span className="text-xs font-mono" style={{ color: "rgba(255,255,255,0.55)" }}>{selectedCount} selected</span>
             )}
           </div>
 
@@ -149,7 +149,7 @@ const CapitalSelect = ({ selections, onToggle, onNext }: CapitalSelectProps) => 
                       className="w-10 h-10 flex items-center justify-center transition-all"
                       style={isSelected
                         ? { border: "1px solid #D4AF37", color: "#D4AF37", background: "rgba(212,175,55,0.05)", borderRadius: "4px" }
-                        : { border: "1px solid rgba(255,255,255,0.15)", background: "#000", color: "rgba(255,255,255,0.40)", borderRadius: "4px" }
+                        : { border: "1px solid rgba(255,255,255,0.15)", background: "#000", color: "rgba(255,255,255,0.55)", borderRadius: "4px" }
                       }
                     >
                       <Icon className="w-5 h-5 transition-colors" />
@@ -167,21 +167,21 @@ const CapitalSelect = ({ selections, onToggle, onNext }: CapitalSelectProps) => 
                         {option.recommended && !isSelected && (
                           <span
                             className="text-[9px] px-1.5 py-0.5 uppercase tracking-wider rounded"
-                            style={{ background: "#0A0A0A", border: "1px solid rgba(212,175,55,0.15)", color: "rgba(255,255,255,0.40)" }}
+                            style={{ background: "#0A0A0A", border: "1px solid rgba(212,175,55,0.20)", color: "rgba(255,255,255,0.55)" }}
                           >
                             Common
                           </span>
                         )}
                       </div>
                       <div className="flex items-center gap-2">
-                        <p className="text-xs truncate flex-1" style={{ color: "rgba(255,255,255,0.40)" }}>
+                        <p className="text-xs truncate flex-1" style={{ color: "rgba(255,255,255,0.55)" }}>
                           {option.description}
                         </p>
                         <span
                           className="text-[9px] px-1.5 py-0.5 uppercase tracking-wider flex-shrink-0 rounded"
                           style={isSelected
                             ? { background: "rgba(212,175,55,0.10)", color: "rgba(212,175,55,0.70)" }
-                            : { background: "#0A0A0A", color: "rgba(255,255,255,0.40)" }
+                            : { background: "#0A0A0A", color: "rgba(255,255,255,0.55)" }
                           }
                         >
                           {option.priorityLabel}
@@ -209,7 +209,7 @@ const CapitalSelect = ({ selections, onToggle, onNext }: CapitalSelectProps) => 
         </div>
 
         {/* Hint */}
-        <p className="text-center text-xs" style={{ color: "rgba(255,255,255,0.40)" }}>
+        <p className="text-center text-xs" style={{ color: "rgba(255,255,255,0.55)" }}>
           Most indie films use Senior Debt + Equity
         </p>
 

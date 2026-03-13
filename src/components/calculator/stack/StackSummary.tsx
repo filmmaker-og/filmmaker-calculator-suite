@@ -74,7 +74,7 @@ const StackSummary = ({ inputs, selections, onEdit, onComplete }: StackSummaryPr
               />
             )}
             <div className="relative flex items-center justify-between mb-2">
-              <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: "rgba(255,255,255,0.40)" }}>Total Capital</span>
+              <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: "rgba(255,255,255,0.55)" }}>Total Capital</span>
               <span
                 className="font-mono text-lg font-medium"
                 style={{
@@ -99,7 +99,7 @@ const StackSummary = ({ inputs, selections, onEdit, onComplete }: StackSummaryPr
             </div>
 
             <div className="relative flex items-center justify-between">
-              <span className="text-xs" style={{ color: "rgba(255,255,255,0.40)" }}>Budget: {formatCompactCurrency(inputs.budget)}</span>
+              <span className="text-xs" style={{ color: "rgba(255,255,255,0.55)" }}>Budget: {formatCompactCurrency(inputs.budget)}</span>
               <span
                 className="font-mono text-xs font-medium"
                 style={{ color: gapPercent >= 100 ? "#D4AF37" : "rgba(212,175,55,0.60)" }}
@@ -113,13 +113,13 @@ const StackSummary = ({ inputs, selections, onEdit, onComplete }: StackSummaryPr
         {/* Stack Breakdown - Store card pattern */}
         <div
           className="overflow-hidden"
-          style={{ background: "#0A0A0A", border: "1px solid rgba(212,175,55,0.15)", borderRadius: "12px" }}
+          style={{ background: "#0A0A0A", border: "1px solid rgba(212,175,55,0.20)", borderRadius: "12px" }}
         >
           <div
             className="px-5 py-3"
             style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}
           >
-            <span className="text-xs uppercase tracking-widest font-semibold" style={{ color: "rgba(255,255,255,0.40)" }}>
+            <span className="text-xs uppercase tracking-widest font-semibold" style={{ color: "rgba(255,255,255,0.55)" }}>
               Capital Sources
             </span>
           </div>
@@ -137,11 +137,11 @@ const StackSummary = ({ inputs, selections, onEdit, onComplete }: StackSummaryPr
                   >
                     <div className="flex items-center gap-3">
                       <div style={{ width: "4px", height: "32px", borderRadius: "999px", background: "#D4AF37" }} />
-                      <Icon className="w-4 h-4" style={{ color: "rgba(255,255,255,0.40)" }} />
+                      <Icon className="w-4 h-4" style={{ color: "rgba(255,255,255,0.55)" }} />
                       <div>
                         <span className="text-sm font-semibold" style={{ color: "#fff" }}>{item.label}</span>
                         {item.rate !== undefined && (
-                          <span className="text-xs ml-2" style={{ color: "rgba(255,255,255,0.40)" }}>@ {item.rate}% {item.rateLabel}</span>
+                          <span className="text-xs ml-2" style={{ color: "rgba(255,255,255,0.55)" }}>@ {item.rate}% {item.rateLabel}</span>
                         )}
                       </div>
                     </div>
@@ -150,7 +150,7 @@ const StackSummary = ({ inputs, selections, onEdit, onComplete }: StackSummaryPr
                       <button
                         onClick={() => onEdit(item.sourceKey)}
                         className="p-1.5 transition-colors"
-                        style={{ color: "rgba(255,255,255,0.40)" }}
+                        style={{ color: "rgba(255,255,255,0.55)" }}
                       >
                         <Edit2 className="w-3.5 h-3.5" />
                       </button>
@@ -160,8 +160,8 @@ const StackSummary = ({ inputs, selections, onEdit, onComplete }: StackSummaryPr
               })
             ) : (
               <div className="px-5 py-8 text-center">
-                <p className="text-sm" style={{ color: "rgba(255,255,255,0.40)" }}>No capital sources selected.</p>
-                <p className="text-xs mt-1 leading-relaxed" style={{ color: "rgba(255,255,255,0.28)" }}>
+                <p className="text-sm" style={{ color: "rgba(255,255,255,0.55)" }}>No capital sources selected.</p>
+                <p className="text-xs mt-1 leading-relaxed" style={{ color: "rgba(255,255,255,0.40)" }}>
                   Self-financed? You're all set — continue to model your deal terms.
                 </p>
               </div>

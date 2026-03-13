@@ -116,19 +116,19 @@ const StackInputCard = ({
             style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}
           >
             <div className="flex items-center gap-2">
-              <span className="text-xs uppercase tracking-widest font-semibold" style={{ color: "rgba(255,255,255,0.40)" }}>
+              <span className="text-xs uppercase tracking-widest font-semibold" style={{ color: "rgba(255,255,255,0.55)" }}>
                 {amountLabel}
               </span>
               {helpText && (
                 <TooltipProvider>
                   <Tooltip delayDuration={0}>
                     <TooltipTrigger asChild>
-                      <Info className="w-3.5 h-3.5 cursor-pointer transition-colors" style={{ color: "rgba(255,255,255,0.20)" }} />
+                      <Info className="w-3.5 h-3.5 cursor-pointer transition-colors" style={{ color: "rgba(255,255,255,0.35)" }} />
                     </TooltipTrigger>
                     <TooltipContent
                       side="right"
                       className="max-w-[200px] text-xs"
-                      style={{ background: "#0A0A0A", border: "1px solid rgba(212,175,55,0.15)" }}
+                      style={{ background: "#0A0A0A", border: "1px solid rgba(212,175,55,0.20)" }}
                     >
                       <p>{helpText}</p>
                     </TooltipContent>
@@ -191,11 +191,11 @@ const StackInputCard = ({
               <div className="p-5">
                 <div className="space-y-3">
                   <div className="flex items-center justify-between text-sm">
-                    <span style={{ color: "rgba(255,255,255,0.40)" }}>Principal</span>
+                    <span style={{ color: "rgba(255,255,255,0.55)" }}>Principal</span>
                     <span className="font-mono" style={{ color: "rgba(255,255,255,0.70)" }}>{formatCompactCurrency(amount)}</span>
                   </div>
                   <div className="flex items-center justify-between text-sm">
-                    <span style={{ color: "rgba(255,255,255,0.40)" }}>+ {rateConfig.label} ({rateValue}%)</span>
+                    <span style={{ color: "rgba(255,255,255,0.55)" }}>+ {rateConfig.label} ({rateValue}%)</span>
                     <span className="font-mono" style={{ color: "rgba(255,255,255,0.70)" }}>{formatCompactCurrency(interestAmount)}</span>
                   </div>
                   <div style={{ height: "1px", background: "rgba(212,175,55,0.20)" }} />
@@ -212,7 +212,7 @@ const StackInputCard = ({
           {typicalRangeLabel && (
             <div className="px-5 py-3" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
               <div className="flex items-center justify-between">
-                <span className="text-xs" style={{ color: "rgba(255,255,255,0.40)" }}>Typical range</span>
+                <span className="text-xs" style={{ color: "rgba(255,255,255,0.55)" }}>Typical range</span>
                 <span className="text-xs font-mono" style={{ color: "rgba(255,255,255,0.70)" }}>{typicalRangeLabel}</span>
               </div>
             </div>
@@ -254,7 +254,7 @@ const StackInputCard = ({
                 "flex-[2] py-3 flex items-center justify-center gap-2",
                 "transition-all active:scale-[0.98] rounded-md"
               )}
-              style={{ border: "1px solid rgba(255,255,255,0.10)", color: "rgba(255,255,255,0.40)" }}
+              style={{ border: "1px solid rgba(255,255,255,0.10)", color: "rgba(255,255,255,0.55)" }}
             >
               <span className="text-xs font-semibold uppercase tracking-wider">Skip This</span>
               <SkipForward className="w-4 h-4" />
