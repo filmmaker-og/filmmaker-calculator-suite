@@ -580,7 +580,7 @@ const styles: Record<string, React.CSSProperties> = {
   waterfallTiersBox: {
     position: "relative", overflow: "hidden", margin: "0 20px",
     border: "1px solid rgba(212,175,55,0.25)", borderRadius: "12px", background: "#050505",
-    boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 24px rgba(212,175,55,0.05)",
+    boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 24px rgba(212,175,55,0.10)",
   },
   tierRow: {
     position: "relative", display: "grid", gridTemplateColumns: "auto 1fr auto",
@@ -627,7 +627,7 @@ const styles: Record<string, React.CSSProperties> = {
   whyH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3rem", color: "#fff", textAlign: "center", lineHeight: 0.95 },
   badgeGridWrapper: {
     margin: "0 20px", borderRadius: "12px", overflow: "hidden", border: "1px solid rgba(212,175,55,0.25)",
-    boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 24px rgba(212,175,55,0.05)", position: "relative",
+    boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 24px rgba(212,175,55,0.10)", position: "relative",
   },
   badgeGrid: { display: "grid", gridTemplateColumns: "1fr", gap: "1px", background: "rgba(212,175,55,0.15)" },
   badgeCard: { background: "radial-gradient(circle at 45px 57px, rgba(212,175,55,0.10) 0%, #050505 65%)", padding: "36px 24px", textAlign: "left" },
@@ -650,7 +650,7 @@ const styles: Record<string, React.CSSProperties> = {
     borderRadius: "12px", position: "relative", overflow: "hidden", textAlign: "left",
     background: "radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.06) 0%, #0A0A0A 70%)",
     border: "1px solid rgba(212,175,55,0.3)",
-    boxShadow: "0 16px 40px rgba(0,0,0,0.8), 0 0 20px rgba(212,175,55,0.05)",
+    boxShadow: "0 16px 40px rgba(0,0,0,0.8)",
   },
   tierHeaderCore: {
     padding: "28px 24px 20px", borderBottom: "1px solid rgba(212,175,55,0.1)",
