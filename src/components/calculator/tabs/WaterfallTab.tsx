@@ -1,6 +1,7 @@
 import { WaterfallResult, WaterfallInputs, GuildState, calculateWaterfall } from "@/lib/waterfall";
 import type { ProjectDetails } from "@/pages/Calculator";
 import { Lock, Play, X } from "lucide-react";
+import ChapterCard from "../ChapterCard";
 import StandardStepLayout from "../StandardStepLayout";
 import { useEffect, useState } from "react";
 import { useHaptics } from "@/hooks/use-haptics";
@@ -78,47 +79,93 @@ const WaterfallTab = ({ result: initialResult, inputs: initialInputs, project, g
     setIsDemoMode(true);
   };
 
-  // LOCKED STATE — stays in StandardStepLayout
+  // LOCKED STATE — data card with sell copy
   if (isLocked) {
     return (
-      <StandardStepLayout
-        chapter="04"
-        title="WATERFALL"
-        subtitle="Final position and net distribution"
-        className="pb-24"
-      >
-        <div className="flex flex-col items-center justify-center p-8 space-y-6 text-center h-[50vh] animate-fade-in">
-          <div
-            className="p-4 rounded-full"
-            style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(212,175,55,0.20)", boxShadow: "0 16px 40px rgba(0,0,0,0.4)" }}
-          >
-            <Lock className="w-8 h-8" style={{ color: "rgba(255,255,255,0.55)" }} />
-          </div>
-          <div className="space-y-2">
-            <h3 className="text-xl font-bebas tracking-wide" style={{ color: "#fff" }}>
-              Protocol Locked
-            </h3>
-            <p className="text-sm max-w-[280px] mx-auto" style={{ color: "rgba(255,255,255,0.55)" }}>
-              You haven't entered any data yet. Complete the Budget & Deal tabs first.
-            </p>
-          </div>
+      <div style={{ animation: "stepEnter 0.4s ease-out forwards" }}>
+        <ChapterCard chapter="04" title="Waterfall" variant="data">
+          <div style={{ padding: "48px 0", textAlign: "center" }}>
+            {/* Lock icon with cascade line art */}
+            <div style={{ display: "flex", justifyContent: "center", marginBottom: "24px" }}>
+              <div style={{
+                width: "80px",
+                height: "80px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                borderRadius: "50%",
+                background: "rgba(255,255,255,0.03)",
+                border: "1px solid rgba(212,175,55,0.20)",
+                boxShadow: "0 16px 40px rgba(0,0,0,0.4)",
+                position: "relative",
+              }}>
+                {/* Cascade lines behind lock */}
+                <svg width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="rgba(212,175,55,0.25)" strokeWidth="1" style={{ position: "absolute", opacity: 0.5 }}>
+                  <line x1="8" y1="8" x2="32" y2="8" />
+                  <line x1="10" y1="14" x2="30" y2="14" />
+                  <line x1="12" y1="20" x2="28" y2="20" />
+                  <line x1="14" y1="26" x2="26" y2="26" />
+                  <line x1="16" y1="32" x2="24" y2="32" />
+                </svg>
+                <Lock style={{ width: "28px", height: "28px", color: "rgba(255,255,255,0.55)", position: "relative", zIndex: 1 }} />
+              </div>
+            </div>
 
-          {/* DEMO BUTTON */}
-          <button
-            onClick={handleRunDemo}
-            className="flex items-center gap-2 px-6 py-3 transition-all active:scale-[0.98]"
-            style={{
-              background: "rgba(212,175,55,0.08)",
-              border: "1px solid rgba(212,175,55,0.25)",
+            <div style={{
+              fontFamily: "'Bebas Neue', sans-serif",
+              fontSize: "22px",
+              letterSpacing: "0.08em",
               color: "#D4AF37",
-              borderRadius: "6px",
-            }}
-          >
-            <Play className="w-4 h-4 fill-current" />
-            <span className="text-sm font-semibold uppercase tracking-wider">Run Demo Simulation</span>
-          </button>
-        </div>
-      </StandardStepLayout>
+              marginBottom: "8px",
+            }}>
+              Protocol Locked
+            </div>
+
+            <p style={{
+              fontSize: "13px",
+              color: "rgba(255,255,255,0.55)",
+              maxWidth: "300px",
+              margin: "0 auto 8px",
+              lineHeight: 1.5,
+            }}>
+              Your waterfall models 11 payment tiers from CAM fees to producer net.
+            </p>
+
+            <p style={{
+              fontSize: "11px",
+              color: "rgba(255,255,255,0.35)",
+              maxWidth: "280px",
+              margin: "0 auto 24px",
+              lineHeight: 1.5,
+            }}>
+              Enter a budget and acquisition price to see exactly who gets paid, in what order, and what's left for you.
+            </p>
+
+            <button
+              onClick={handleRunDemo}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "8px",
+                padding: "14px 24px",
+                background: "rgba(212,175,55,0.08)",
+                border: "1px solid rgba(212,175,55,0.25)",
+                color: "#D4AF37",
+                borderRadius: "6px",
+                cursor: "pointer",
+                fontSize: "13px",
+                fontWeight: 600,
+                textTransform: "uppercase",
+                letterSpacing: "0.1em",
+                minHeight: "48px",
+              }}
+            >
+              <Play style={{ width: "16px", height: "16px", fill: "currentColor" }} />
+              See how $2.5M flows through 11 tiers
+            </button>
+          </div>
+        </ChapterCard>
+      </div>
     );
   }
 
