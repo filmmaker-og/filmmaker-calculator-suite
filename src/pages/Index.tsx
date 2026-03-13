@@ -533,7 +533,7 @@ const styles: Record<string, React.CSSProperties> = {
 
   /* ── § 4 HOW IT WORKS ── */
   howSection: { background: "#000", padding: "64px 0 0" },
-  howHeader: { textAlign: "center", padding: "16px 20px 28px" },
+  howHeader: { textAlign: "center", padding: "16px 20px 28px", background: "radial-gradient(ellipse 80% 50% at 50% 60%, rgba(212,175,55,0.10) 0%, transparent 70%)" },
   howH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.6rem", color: "#fff", lineHeight: 0.95 },
   stepsContainer: { display: "flex", flexDirection: "column", gap: "1px", background: "rgba(212,175,55,0.10)" },
   step: {
