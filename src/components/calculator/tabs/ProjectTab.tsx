@@ -36,7 +36,7 @@ const s: Record<string, React.CSSProperties> = {
     fontWeight: 600,
     textTransform: "uppercase" as const,
     letterSpacing: "0.15em",
-    color: "rgba(255,255,255,0.40)",
+    color: "rgba(255,255,255,0.55)",
     marginBottom: "8px",
     display: "block",
   },
@@ -51,7 +51,7 @@ const s: Record<string, React.CSSProperties> = {
   fi: {
     width: "100%",
     background: "rgba(255,255,255,0.04)",
-    border: "1px solid rgba(212,175,55,0.15)",
+    border: "1px solid rgba(212,175,55,0.20)",
     borderRadius: "8px",
     padding: "14px 16px",
     fontFamily: "'Inter', sans-serif",
@@ -76,7 +76,7 @@ const s: Record<string, React.CSSProperties> = {
     alignItems: "center",
     justifyContent: "center",
     borderRadius: "8px",
-    border: "1px solid rgba(212,175,55,0.15)",
+    border: "1px solid rgba(212,175,55,0.20)",
     background: "rgba(255,255,255,0.04)",
     color: "rgba(255,255,255,0.65)",
     cursor: "pointer",
@@ -99,7 +99,7 @@ const s: Record<string, React.CSSProperties> = {
     cursor: "pointer",
     transition: "all 0.15s",
     whiteSpace: "nowrap" as const,
-    boxShadow: "0 0 12px rgba(212,175,55,0.15)",
+    boxShadow: "0 0 12px rgba(212,175,55,0.20)",
   },
   expTrigger: {
     display: "flex",
@@ -212,7 +212,7 @@ const ProjectTab = ({ project, onUpdateProject, onAdvance }: ProjectTabProps) =>
   };
 
   const handleInputBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-    e.target.style.borderColor = "rgba(212,175,55,0.15)";
+    e.target.style.borderColor = "rgba(212,175,55,0.20)";
     (e.target as HTMLInputElement).style.boxShadow = "none";
   };
 

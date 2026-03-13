@@ -65,25 +65,25 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext }: DealIn
           className="p-5"
           style={{
             background: "#0A0A0A",
-            border: "1px solid rgba(212,175,55,0.15)",
+            border: "1px solid rgba(212,175,55,0.20)",
             borderRadius: "12px",
             padding: "20px",
           }}
         >
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">
-              <span className="text-xs uppercase tracking-widest font-semibold" style={{ color: "rgba(255,255,255,0.40)" }}>
+              <span className="text-xs uppercase tracking-widest font-semibold" style={{ color: "rgba(255,255,255,0.55)" }}>
                 Gross Acquisition Price
               </span>
                <TooltipProvider>
                 <Tooltip delayDuration={0}>
                   <TooltipTrigger asChild>
-                    <Info className="w-3.5 h-3.5 cursor-pointer transition-colors" style={{ color: "rgba(255,255,255,0.20)" }} />
+                    <Info className="w-3.5 h-3.5 cursor-pointer transition-colors" style={{ color: "rgba(255,255,255,0.35)" }} />
                   </TooltipTrigger>
                   <TooltipContent
                     side="right"
                     className="max-w-[200px] text-xs"
-                    style={{ background: "#0A0A0A", border: "1px solid rgba(212,175,55,0.15)" }}
+                    style={{ background: "#0A0A0A", border: "1px solid rgba(212,175,55,0.20)" }}
                   >
                     <p>The total amount the distributor pays for the film.</p>
                   </TooltipContent>
@@ -93,7 +93,7 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext }: DealIn
           </div>
 
           <div className="flex items-center relative">
-            <span className="font-mono mr-2" style={{ fontSize: "1.2rem", color: "rgba(255,255,255,0.40)" }}>$</span>
+            <span className="font-mono mr-2" style={{ fontSize: "1.2rem", color: "rgba(255,255,255,0.55)" }}>$</span>
             <input
               ref={inputRef}
               type="text"
@@ -106,7 +106,7 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext }: DealIn
               style={{ fontSize: "1.8rem", color: "#fff", minWidth: 0, letterSpacing: "0", padding: "0 4px 0 0" }}
             />
           </div>
-          <p className="text-[10px] mt-2 leading-relaxed" style={{ color: "rgba(255,255,255,0.40)" }}>
+          <p className="text-[10px] mt-2 leading-relaxed" style={{ color: "rgba(255,255,255,0.55)" }}>
             What would a streamer or buyer pay for your film? Typical indie range: $500K–$5M.
             Not sure? Start with 2× your budget as a baseline.
           </p>
@@ -115,7 +115,7 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext }: DealIn
         {/* 2. THE "FIRES" (Deductions Inputs) */}
         <div className="space-y-4">
            <div className="flex items-center gap-2 mb-2">
-             <h3 className="text-sm font-semibold uppercase tracking-widest" style={{ color: "rgba(255,255,255,0.40)" }}>Distribution Expenses</h3>
+             <h3 className="text-sm font-semibold uppercase tracking-widest" style={{ color: "rgba(255,255,255,0.55)" }}>Distribution Expenses</h3>
              <div style={{ height: "1px", flex: 1, background: "rgba(255,255,255,0.06)" }} />
            </div>
 
@@ -125,8 +125,8 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext }: DealIn
              style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: "8px" }}
            >
               <div className="flex items-center justify-between mb-4">
-                 <span className="text-xs uppercase tracking-wide font-semibold flex items-center gap-2" style={{ color: "rgba(255,255,255,0.40)" }}>
-                   Sales Agent Fee <Percent className="w-3 h-3" style={{ color: "rgba(255,255,255,0.20)" }} />
+                 <span className="text-xs uppercase tracking-wide font-semibold flex items-center gap-2" style={{ color: "rgba(255,255,255,0.55)" }}>
+                   Sales Agent Fee <Percent className="w-3 h-3" style={{ color: "rgba(255,255,255,0.35)" }} />
                  </span>
                  <span className="font-mono text-sm font-medium" style={{ color: "#fff" }}>
                    {inputs.salesFee}%
@@ -140,7 +140,7 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext }: DealIn
                 onValueChange={(vals) => onUpdateInput('salesFee', vals[0])}
                 className="my-2"
               />
-              <div className="flex justify-between text-[9px] uppercase tracking-wider mt-1" style={{ color: "rgba(255,255,255,0.40)" }}>
+              <div className="flex justify-between text-[9px] uppercase tracking-wider mt-1" style={{ color: "rgba(255,255,255,0.55)" }}>
                 <span>Direct (0%)</span>
                 <span>Standard (15%)</span>
                 <span>Aggressive (25%+)</span>
@@ -153,10 +153,10 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext }: DealIn
              style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: "8px" }}
            >
               <div className="flex flex-col gap-1">
-                 <span className="text-xs uppercase tracking-wide font-semibold flex items-center gap-2" style={{ color: "rgba(255,255,255,0.40)" }}>
-                   Sales Agent Marketing <DollarSign className="w-3 h-3" style={{ color: "rgba(255,255,255,0.20)" }} />
+                 <span className="text-xs uppercase tracking-wide font-semibold flex items-center gap-2" style={{ color: "rgba(255,255,255,0.55)" }}>
+                   Sales Agent Marketing <DollarSign className="w-3 h-3" style={{ color: "rgba(255,255,255,0.35)" }} />
                  </span>
-                 <span className="text-[10px]" style={{ color: "rgba(255,255,255,0.28)" }}>Expense Cap (Standard $75k)</span>
+                 <span className="text-[10px]" style={{ color: "rgba(255,255,255,0.40)" }}>Expense Cap (Standard $75k)</span>
               </div>
               <div className="w-32">
                 {/* FIX: Bind to salesExp, NOT marketingExpenses */}
@@ -192,35 +192,35 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext }: DealIn
 
              <div
                className="overflow-hidden"
-               style={{ background: "#0A0A0A", border: "1px solid rgba(212,175,55,0.15)", borderRadius: "12px" }}
+               style={{ background: "#0A0A0A", border: "1px solid rgba(212,175,55,0.20)", borderRadius: "12px" }}
              >
                 {/* CAM (1%) */}
                 <div className="flex items-center justify-between p-3 text-xs" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-                   <span style={{ color: "rgba(255,255,255,0.40)" }}>CAM (1%)</span>
+                   <span style={{ color: "rgba(255,255,255,0.55)" }}>CAM (1%)</span>
                    <span className="font-mono" style={{ color: "rgba(255,255,255,0.70)" }}>{formatCompactCurrency(camFee)}</span>
                 </div>
 
                 {/* Sales Fee */}
                 <div className="flex items-center justify-between p-3 text-xs" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-                   <span style={{ color: "rgba(255,255,255,0.40)" }}>Sales Fee ({inputs.salesFee}%)</span>
+                   <span style={{ color: "rgba(255,255,255,0.55)" }}>Sales Fee ({inputs.salesFee}%)</span>
                    <span className="font-mono" style={{ color: "rgba(255,255,255,0.70)" }}>{formatCompactCurrency(salesAgentFee)}</span>
                 </div>
 
                 {/* Marketing */}
                 <div className="flex items-center justify-between p-3 text-xs" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-                   <span style={{ color: "rgba(255,255,255,0.40)" }}>Sales Agent Marketing</span>
+                   <span style={{ color: "rgba(255,255,255,0.55)" }}>Sales Agent Marketing</span>
                    {/* FIX: Use salesExp here too */}
                    <span className="font-mono" style={{ color: "rgba(255,255,255,0.70)" }}>{formatCompactCurrency(inputs.salesExp)}</span>
                 </div>
 
                 {/* Guilds */}
                 <div className="flex items-center justify-between p-3 text-xs" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-                   <span style={{ color: "rgba(255,255,255,0.40)" }}>Guilds (Est.)</span>
+                   <span style={{ color: "rgba(255,255,255,0.55)" }}>Guilds (Est.)</span>
                    <span className="font-mono" style={{ color: "rgba(255,255,255,0.70)" }}>{formatCompactCurrency(guildFee)}</span>
                 </div>
 
                 {/* Net to Waterfall */}
-                <div className="flex items-center justify-between p-3" style={{ background: "#0A0A0A", borderTop: "1px solid rgba(212,175,55,0.15)" }}>
+                <div className="flex items-center justify-between p-3" style={{ background: "#0A0A0A", borderTop: "1px solid rgba(212,175,55,0.20)" }}>
                    <span className="text-xs font-semibold uppercase" style={{ color: "#fff" }}>Net to Waterfall</span>
                    <span className="font-mono text-sm font-medium" style={{ color: "#D4AF37" }}>{formatCompactCurrency(netRevenue)}</span>
                 </div>

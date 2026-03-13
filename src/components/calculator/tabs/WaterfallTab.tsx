@@ -90,15 +90,15 @@ const WaterfallTab = ({ result: initialResult, inputs: initialInputs, project, g
         <div className="flex flex-col items-center justify-center p-8 space-y-6 text-center h-[50vh] animate-fade-in">
           <div
             className="p-4 rounded-full"
-            style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(212,175,55,0.15)", boxShadow: "0 16px 40px rgba(0,0,0,0.4)" }}
+            style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(212,175,55,0.20)", boxShadow: "0 16px 40px rgba(0,0,0,0.4)" }}
           >
-            <Lock className="w-8 h-8" style={{ color: "rgba(255,255,255,0.40)" }} />
+            <Lock className="w-8 h-8" style={{ color: "rgba(255,255,255,0.55)" }} />
           </div>
           <div className="space-y-2">
             <h3 className="text-xl font-bebas tracking-wide" style={{ color: "#fff" }}>
               Protocol Locked
             </h3>
-            <p className="text-sm max-w-[280px] mx-auto" style={{ color: "rgba(255,255,255,0.40)" }}>
+            <p className="text-sm max-w-[280px] mx-auto" style={{ color: "rgba(255,255,255,0.55)" }}>
               You haven't entered any data yet. Complete the Budget & Deal tabs first.
             </p>
           </div>
@@ -163,7 +163,7 @@ const WaterfallTab = ({ result: initialResult, inputs: initialInputs, project, g
             justifyContent: "center",
             gap: "24px",
             background: "#0A0A0A",
-            border: "1px solid rgba(212,175,55,0.15)",
+            border: "1px solid rgba(212,175,55,0.20)",
             borderRadius: "12px",
           }}
         >
@@ -196,7 +196,7 @@ const WaterfallTab = ({ result: initialResult, inputs: initialInputs, project, g
               style={{
                 fontFamily: "'Roboto Mono', monospace",
                 fontSize: "14px",
-                color: "rgba(255,255,255,0.40)",
+                color: "rgba(255,255,255,0.55)",
                 margin: 0,
               }}
             >
@@ -219,7 +219,7 @@ const WaterfallTab = ({ result: initialResult, inputs: initialInputs, project, g
                 padding: "12px",
                 marginBottom: "12px",
                 borderRadius: "8px",
-                border: "1px solid rgba(212,175,55,0.15)",
+                border: "1px solid rgba(212,175,55,0.20)",
                 background: "rgba(212,175,55,0.04)",
               }}
             >
@@ -244,7 +244,7 @@ const WaterfallTab = ({ result: initialResult, inputs: initialInputs, project, g
                   border: "none",
                   cursor: "pointer",
                   fontSize: "12px",
-                  color: "rgba(255,255,255,0.40)",
+                  color: "rgba(255,255,255,0.55)",
                 }}
               >
                 <X size={12} />
@@ -273,7 +273,7 @@ const WaterfallTab = ({ result: initialResult, inputs: initialInputs, project, g
               textAlign: "center",
               fontSize: "11px",
               letterSpacing: "0.08em",
-              color: "rgba(255,255,255,0.40)",
+              color: "rgba(255,255,255,0.55)",
             }}
           >
             Return to Documentation

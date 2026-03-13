@@ -20,13 +20,13 @@ const s: Record<string, React.CSSProperties> = {
     fontWeight: 500,
     textTransform: "uppercase" as const,
     letterSpacing: "0.15em",
-    color: "rgba(255,255,255,0.40)",
+    color: "rgba(255,255,255,0.55)",
     marginBottom: "6px",
   },
   body: {
     fontFamily: "'Inter', sans-serif",
     fontSize: "12px",
-    color: "rgba(255,255,255,0.40)",
+    color: "rgba(255,255,255,0.55)",
     lineHeight: 1.6,
   },
 };

@@ -40,7 +40,7 @@ const DeckCard = ({ children }: { children: React.ReactNode }) => (
   <div
     style={{
       background: "#0A0A0A",
-      border: "1px solid rgba(212,175,55,0.15)",
+      border: "1px solid rgba(212,175,55,0.20)",
       borderRadius: "12px",
       padding: "28px 24px",
       display: "flex",
@@ -156,7 +156,7 @@ const CoverCard = ({ project }: { project: ProjectDetails }) => {
               style={{
                 fontFamily: "'Inter', sans-serif",
                 fontSize: "13px",
-                color: "rgba(255,255,255,0.40)",
+                color: "rgba(255,255,255,0.55)",
                 margin: 0,
               }}
             >
@@ -187,7 +187,7 @@ const CoverCard = ({ project }: { project: ProjectDetails }) => {
             style={{
               fontFamily: "'Roboto Mono', monospace",
               fontSize: "11px",
-              color: "rgba(255,255,255,0.40)",
+              color: "rgba(255,255,255,0.55)",
               margin: 0,
             }}
           >
@@ -279,7 +279,7 @@ const BudgetCard = ({
             style={{
               fontFamily: "'Inter', sans-serif",
               fontSize: "11px",
-              color: "rgba(255,255,255,0.40)",
+              color: "rgba(255,255,255,0.55)",
               marginTop: "12px",
             }}
           >
@@ -341,7 +341,7 @@ const CapitalSubRow = ({ label, value }: { label: string; value: string }) => (
       style={{
         fontFamily: "'Roboto Mono', monospace",
         fontSize: "11px",
-        color: "rgba(255,255,255,0.40)",
+        color: "rgba(255,255,255,0.55)",
       }}
     >
       {"\u251C\u2500"} {label}
@@ -350,7 +350,7 @@ const CapitalSubRow = ({ label, value }: { label: string; value: string }) => (
       style={{
         fontFamily: "'Roboto Mono', monospace",
         fontSize: "11px",
-        color: "rgba(255,255,255,0.40)",
+        color: "rgba(255,255,255,0.55)",
       }}
     >
       {value}
@@ -432,7 +432,7 @@ const RevenueCard = ({
         style={{
           fontFamily: "'Inter', sans-serif",
           fontSize: "11px",
-          color: "rgba(255,255,255,0.40)",
+          color: "rgba(255,255,255,0.55)",
           textAlign: "center",
         }}
       >
@@ -522,7 +522,7 @@ const TierCard = ({ tier }: { tier: TierData }) => {
             style={{
               fontFamily: "'Roboto Mono', monospace",
               fontSize: "12px",
-              color: isFullyRecouped ? "#D4AF37" : "rgba(255,255,255,0.40)",
+              color: isFullyRecouped ? "#D4AF37" : "rgba(255,255,255,0.55)",
             }}
           >
             {formatCompactCurrency(tier.paid)} of {formatCompactCurrency(tier.amount)}
@@ -531,7 +531,7 @@ const TierCard = ({ tier }: { tier: TierData }) => {
             style={{
               fontFamily: "'Roboto Mono', monospace",
               fontSize: "12px",
-              color: isFullyRecouped ? "#D4AF37" : "rgba(255,255,255,0.40)",
+              color: isFullyRecouped ? "#D4AF37" : "rgba(255,255,255,0.55)",
             }}
           >
             {pct.toFixed(0)}%
@@ -596,7 +596,7 @@ const TierCard = ({ tier }: { tier: TierData }) => {
               fontFamily: "'Roboto Mono', monospace",
               fontSize: "10px",
               letterSpacing: "0.12em",
-              color: "rgba(255,255,255,0.40)",
+              color: "rgba(255,255,255,0.55)",
             }}
           >
             {isUnfunded ? "UNFUNDED" : `${pct.toFixed(0)}% RECOUPED`}
@@ -659,7 +659,7 @@ const VerdictCard = ({
         style={{
           fontFamily: "'Inter', sans-serif",
           fontSize: "13px",
-          color: "rgba(255,255,255,0.40)",
+          color: "rgba(255,255,255,0.55)",
           textAlign: "center",
           margin: "0 0 20px",
         }}
@@ -688,7 +688,7 @@ const VerdictCard = ({
               style={{
                 fontFamily: "'Roboto Mono', monospace",
                 fontSize: "11px",
-                color: "rgba(255,255,255,0.40)",
+                color: "rgba(255,255,255,0.55)",
                 margin: "2px 0 0",
               }}
             >
@@ -749,7 +749,7 @@ const VerdictCard = ({
             style={{
               fontFamily: "'Roboto Mono', monospace",
               fontSize: "12px",
-              color: "rgba(255,255,255,0.40)",
+              color: "rgba(255,255,255,0.55)",
               minWidth: "36px",
               textAlign: "right",
             }}
@@ -846,7 +846,7 @@ const ExportCard = ({ onExport }: { onExport?: () => void }) => {
             border: "none",
             cursor: "pointer",
             padding: "8px 0",
-            color: "rgba(255,255,255,0.40)",
+            color: "rgba(255,255,255,0.55)",
             width: "100%",
           }}
         >
@@ -876,7 +876,7 @@ const ExportCard = ({ onExport }: { onExport?: () => void }) => {
             style={{
               fontFamily: "'Inter', sans-serif",
               fontSize: "11px",
-              color: "rgba(255,255,255,0.40)",
+              color: "rgba(255,255,255,0.55)",
               lineHeight: 1.6,
               padding: "8px 0",
               margin: 0,
@@ -902,7 +902,7 @@ const styles = {
     fontWeight: 500,
     letterSpacing: "0.2em",
     textTransform: "uppercase" as const,
-    color: "rgba(255,255,255,0.40)",
+    color: "rgba(255,255,255,0.55)",
     margin: 0,
   } as React.CSSProperties,
   heroSmall: {
