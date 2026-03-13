@@ -495,7 +495,7 @@ const styles: Record<string, React.CSSProperties> = {
   /* ── § 1 HERO ── */
   hero: {
     position: "relative", textAlign: "center",
-    background: "#000", padding: "24px 24px 48px",
+    background: "#000", padding: "24px 24px 16px",
   },
   heroGlow: {
     position: "absolute", top: "-10%", left: 0, right: 0, height: "65%", pointerEvents: "none",
@@ -514,7 +514,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
 
   /* ── § 4 HOW IT WORKS ── */
-  howSection: { background: "#000", padding: "48px 0 0" },
+  howSection: { background: "#000", padding: "64px 0 0" },
   howHeader: { textAlign: "center", padding: "16px 20px 28px" },
   howH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.6rem", color: "#fff", lineHeight: 0.95 },
   stepsContainer: { display: "flex", flexDirection: "column", gap: "1px", background: "rgba(212,175,55,0.10)" },
