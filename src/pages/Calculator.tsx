@@ -73,7 +73,7 @@ const s: Record<string, React.CSSProperties> = {
     flex: 1,
     padding: "20px",
     overflowY: "auto",
-    paddingBottom: "calc(62px + 52px + 100px + env(safe-area-inset-bottom, 0px))",
+    paddingBottom: "calc(62px + 100px + env(safe-area-inset-bottom, 0px))",
   },
   col: {
     maxWidth: "430px",
