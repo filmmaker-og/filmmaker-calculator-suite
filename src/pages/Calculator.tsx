@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback, useRef, useMemo } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useHaptics } from "@/hooks/use-haptics";
-import { ArrowLeft, ArrowRight } from "lucide-react";
 import { User } from "@supabase/supabase-js";
 import { calculateWaterfall, WaterfallInputs, GuildState } from "@/lib/waterfall";
 
@@ -74,89 +73,11 @@ const s: Record<string, React.CSSProperties> = {
     flex: 1,
     padding: "20px",
     overflowY: "auto",
-    paddingBottom: "calc(62px + 52px + 100px + env(safe-area-inset-bottom, 0px))",
+    paddingBottom: "calc(62px + 100px + env(safe-area-inset-bottom, 0px))",
   },
   col: {
     maxWidth: "430px",
     margin: "0 auto",
-  },
-  controlBar: {
-    position: "fixed",
-    left: 0,
-    right: 0,
-    zIndex: 40,
-    bottom: "62px", // tabbar-h
-    height: "52px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-    padding: "0 16px",
-    background: "rgba(6,6,6,0.92)",
-    backdropFilter: "blur(24px)",
-    WebkitBackdropFilter: "blur(24px)",
-    borderTop: "1px solid rgba(212,175,55,0.15)",
-  },
-  backBtn: {
-    display: "flex",
-    alignItems: "center",
-    gap: "6px",
-    padding: "8px 14px",
-    minHeight: "44px",
-    borderRadius: "6px",
-    border: "1px solid rgba(212,175,55,0.15)",
-    background: "transparent",
-    color: "rgba(255,255,255,0.85)",
-    fontFamily: "'Inter', sans-serif",
-    fontSize: "12px",
-    fontWeight: 600,
-    textTransform: "uppercase" as const,
-    letterSpacing: "0.1em",
-    cursor: "pointer",
-    transition: "all 0.15s",
-  },
-  ring: {
-    position: "relative",
-    width: "44px",
-    height: "44px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  ringSvg: {
-    position: "absolute",
-    width: "44px",
-    height: "44px",
-    transform: "rotate(-90deg)",
-  },
-  ringText: {
-    position: "relative",
-    zIndex: 1,
-    fontFamily: "'Roboto Mono', monospace",
-    fontSize: "11px",
-    fontWeight: 500,
-    color: "#D4AF37",
-  },
-  nextBtn: {
-    display: "flex",
-    alignItems: "center",
-    gap: "6px",
-    padding: "8px 14px",
-    minHeight: "44px",
-    borderRadius: "6px",
-    border: "none",
-    background: "#F9E076",
-    color: "#000",
-    fontFamily: "'Inter', sans-serif",
-    fontSize: "12px",
-    fontWeight: 600,
-    textTransform: "uppercase" as const,
-    letterSpacing: "0.1em",
-    cursor: "pointer",
-    transition: "all 0.15s",
-  },
-  spacer: {
-    width: "76px",
-    visibility: "hidden" as const,
   },
   loading: {
     minHeight: "100vh",
@@ -196,7 +117,6 @@ const Calculator = () => {
     return localStorage.getItem(EMAIL_CAPTURED_KEY) === 'true';
   });
   const [sourceSelections, setSourceSelections] = useState<CapitalSourceSelections>(defaultSelections);
-  const [pressedBtn, setPressedBtn] = useState<'back' | 'next' | null>(null);
 
   const capitalSelections = sourceSelections;
 
@@ -312,17 +232,6 @@ const Calculator = () => {
     return null;
   };
 
-  const handleBack = () => {
-    const currentIndex = STEP_TO_TAB.indexOf(activeTab);
-    if (currentIndex === 0) {
-      navigate("/");
-      return;
-    }
-    const prevTab = STEP_TO_TAB[currentIndex - 1];
-    haptics.light();
-    setActiveTab(prevTab);
-  };
-
   const handleNext = useCallback(() => {
     const nextTab = getNextTab();
     if (nextTab) {
@@ -330,11 +239,6 @@ const Calculator = () => {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [handleTabChange, activeTab, inputs]);
-
-  const isCurrentSectionComplete = (): boolean => {
-    const completed = getCompletedTabs();
-    return completed.includes(activeTab);
-  };
 
   const renderTabContent = () => {
     switch (activeTab) {
@@ -401,12 +305,6 @@ const Calculator = () => {
 
   // Progress = 5 steps at 20% each
   const completedTabs = getCompletedTabs();
-  const progressPercent = completedTabs.length * 20;
-  const circumference = 2 * Math.PI * 18; // ~113
-  const dashArray = `${(progressPercent / 100) * circumference} ${circumference}`;
-
-  const showNext = getNextTab() !== null && isCurrentSectionComplete();
-
   return (
     <div style={s.page}>
       <main ref={mainRef} style={s.main}>
@@ -414,75 +312,6 @@ const Calculator = () => {
           {renderTabContent()}
         </div>
       </main>
-
-      {/* Control bar */}
-      <div style={s.controlBar}>
-        <button
-          onClick={handleBack}
-          onMouseDown={() => setPressedBtn('back')}
-          onMouseUp={() => setPressedBtn(null)}
-          onMouseLeave={() => setPressedBtn(null)}
-          onTouchStart={() => setPressedBtn('back')}
-          onTouchEnd={() => setPressedBtn(null)}
-          style={{
-            ...s.backBtn,
-            ...(pressedBtn === 'back' ? { transform: "scale(0.95)" } : {}),
-          }}
-        >
-          <ArrowLeft style={{ width: "16px", height: "16px", color: "rgba(255,255,255,0.65)" }} />
-          Back
-        </button>
-
-        {/* Progress ring */}
-        <div style={s.ring}>
-          <svg style={s.ringSvg}>
-            <circle
-              cx="22"
-              cy="22"
-              r="18"
-              fill="none"
-              stroke="rgba(255,255,255,0.06)"
-              strokeWidth="2"
-            />
-            <circle
-              cx="22"
-              cy="22"
-              r="18"
-              fill="none"
-              stroke="#D4AF37"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeDasharray={dashArray}
-              style={{
-                transition: "stroke-dasharray 0.5s ease",
-                filter: "drop-shadow(0 0 4px rgba(212,175,55,0.5))",
-              }}
-            />
-          </svg>
-          <span style={s.ringText}>{progressPercent}%</span>
-        </div>
-
-        {/* Next button or invisible spacer */}
-        {showNext ? (
-          <button
-            onClick={handleNext}
-            onMouseDown={() => setPressedBtn('next')}
-            onMouseUp={() => setPressedBtn(null)}
-            onMouseLeave={() => setPressedBtn(null)}
-            onTouchStart={() => setPressedBtn('next')}
-            onTouchEnd={() => setPressedBtn(null)}
-            style={{
-              ...s.nextBtn,
-              ...(pressedBtn === 'next' ? { transform: "scale(0.95)" } : {}),
-            }}
-          >
-            Next
-            <ArrowRight style={{ width: "16px", height: "16px" }} />
-          </button>
-        ) : (
-          <span style={s.spacer} />
-        )}
-      </div>
 
       <TabBar
         activeTab={activeTab}
