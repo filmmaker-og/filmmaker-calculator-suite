@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { Sparkles } from "lucide-react";
 import { useHaptics } from "@/hooks/use-haptics";
 
 /* ═══════════════════════════════════════════════════════════════════
    OgBotFab — floating action button for the OG bot
-   Bottom-right corner, hides when closer section is in viewport
-   to avoid overlapping the conversion CTA.
+   Bottom-right corner. Hidden on /calculator (overlaps TabBar)
+   and when closer section is in viewport on the landing page.
    ═══════════════════════════════════════════════════════════════════ */
 
 interface OgBotFabProps {
@@ -14,19 +15,25 @@ interface OgBotFabProps {
 
 const OgBotFab = ({ onTap }: OgBotFabProps) => {
   const haptics = useHaptics();
-  const [hidden, setHidden] = useState(false);
+  const location = useLocation();
+  const [hiddenByCloser, setHiddenByCloser] = useState(false);
+
+  // Hide on calculator — FAB overlaps TabBar
+  const onCalculator = location.pathname.startsWith("/calculator");
 
   useEffect(() => {
     const closer = document.querySelector('[data-section="closer"]');
     if (!closer) return;
 
     const obs = new IntersectionObserver(
-      ([entry]) => setHidden(entry.isIntersecting),
+      ([entry]) => setHiddenByCloser(entry.isIntersecting),
       { threshold: 0.3 },
     );
     obs.observe(closer);
     return () => obs.disconnect();
   }, []);
+
+  const hidden = onCalculator || hiddenByCloser;
 
   return (
     <button
