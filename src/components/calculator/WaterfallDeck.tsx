@@ -3,1189 +3,1205 @@ import {
   WaterfallResult,
   WaterfallInputs,
   GuildState,
+  CapitalSelections,
   formatCompactCurrency,
   formatMultiple,
+  formatFullCurrency,
+  calculateBreakeven,
+  computeTierPayments,
+  getWaterfallState,
+  CAM_PCT,
+  SAG_PCT,
+  WGA_PCT,
+  DGA_PCT,
 } from "@/lib/waterfall";
-import { getVerdictStatus } from "@/lib/design-system";
-import { useEffect, useRef, useState } from "react";
-import { useHaptics } from "@/hooks/use-haptics";
+import type { TierPayment, WaterfallState } from "@/lib/waterfall-types";
+import { waterfallBadgeStates } from "@/lib/design-system";
+import { INDUSTRY_CONTEXT } from "@/lib/industry-context";
 import {
-  FileSpreadsheet,
-  AlertTriangle,
-  ChevronDown,
-  ChevronUp,
-} from "lucide-react";
+  getTLDR,
+  getStackInterpretation,
+  getCapitalStackIntro,
+  getWaterfallInterpretation,
+  getReturnParagraph,
+  getSensitivityInterpretation,
+} from "@/lib/waterfall-copy";
+import { Lock, Download, ArrowRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 // ─── Types ───────────────────────────────────────────────────────
 
-interface WaterfallDeckProps {
+interface WaterfallBriefProps {
   result: WaterfallResult;
   inputs: WaterfallInputs;
   project: ProjectDetails;
   guilds: GuildState;
+  selections?: CapitalSelections;
   onExport?: () => void;
   onNavigateTab?: (tab: string) => void;
 }
 
-interface TierData {
-  phase: number;
-  label: string;
-  amount: number;
-  paid: number;
-}
+// ─── Section Break ───────────────────────────────────────────────
 
-type CardTemperature = "warm" | "feature" | "data" | "neutral";
-
-// ─── Reduced motion check ────────────────────────────────────────
-
-const prefersReducedMotion = () =>
-  window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false;
-
-// ─── Shared Card Wrapper ─────────────────────────────────────────
-
-const DeckCard = ({
-  children,
-  temperature = "data",
-  glow,
-  breathe = false,
-}: {
-  children: React.ReactNode;
-  temperature?: CardTemperature;
-  glow?: string;
-  breathe?: boolean;
-}) => {
-  const borderOpacity = { warm: 0.35, feature: 0.25, data: 0.20, neutral: 0.15 }[temperature];
-  const hasTopline = temperature === "warm" || temperature === "feature";
-
-  return (
-    <div
-      style={{
-        background: "#0A0A0A",
-        border: `1px solid rgba(212,175,55,${borderOpacity})`,
-        borderRadius: "12px",
-        padding: "32px 24px",
-        display: "flex",
-        flexDirection: "column" as const,
-        position: "relative" as const,
-        overflow: "hidden",
-        minHeight: "calc(100vh - 62px - 48px - 40px)",
-        justifyContent: "center",
-        ...(breathe && !prefersReducedMotion() ? { animation: "deckBreathe 3s ease-in-out infinite" } : {}),
-      }}
-    >
-      {/* Topline for warm/feature cards */}
-      {hasTopline && (
-        <div style={{
-          position: "absolute",
-          top: 0,
-          left: "10%",
-          right: "10%",
-          height: "1px",
-          background: `linear-gradient(90deg, transparent, rgba(212,175,55,${temperature === "warm" ? 0.60 : 0.40}), transparent)`,
-        }} />
-      )}
-
-      {/* State-dependent radial glow */}
-      {glow && (
-        <div style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-          height: "50%",
-          background: glow,
-          pointerEvents: "none",
-        }} />
-      )}
-
-      <div style={{ position: "relative", zIndex: 1, flex: 1, display: "flex", flexDirection: "column" as const, justifyContent: "center" }}>
-        {children}
-      </div>
-    </div>
-  );
-};
-
-// ─── Divider ─────────────────────────────────────────────────────
-
-const Divider = () => (
-  <div
-    style={{ height: "1px", background: "rgba(212,175,55,0.08)", width: "100%" }}
-  />
+const SectionBreak = () => (
+  <div style={{
+    display: "flex", alignItems: "center", gap: "12px",
+    padding: "24px 24px", position: "relative", zIndex: 1,
+  }}>
+    <div style={{ flex: 1, height: "1px", background: "rgba(212,175,55,0.12)" }} />
+    <div style={{ width: "4px", height: "4px", borderRadius: "50%", background: "rgba(212,175,55,0.35)" }} />
+    <div style={{ flex: 1, height: "1px", background: "rgba(212,175,55,0.12)" }} />
+  </div>
 );
 
 // ─── Watermark ───────────────────────────────────────────────────
 
 const Watermark = () => (
-  <div
-    style={{
-      textAlign: "center",
-      fontFamily: "'Bebas Neue', sans-serif",
-      fontSize: "11px",
-      letterSpacing: "0.18em",
-      color: "rgba(212,175,55,0.25)",
-      marginTop: "auto",
-      paddingTop: "32px",
-    }}
-  >
+  <div style={{
+    textAlign: "center",
+    fontFamily: "'Bebas Neue', sans-serif",
+    fontSize: "11px",
+    letterSpacing: "0.18em",
+    color: "rgba(212,175,55,0.25)",
+    padding: "32px 24px 24px",
+  }}>
     ———— FILMMAKER.OG ————
   </div>
 );
 
 // ─── Shared Styles ───────────────────────────────────────────────
 
-const styles = {
+const s = {
   sectionLabel: {
     fontFamily: "'Roboto Mono', monospace",
-    fontSize: "12px",
+    fontSize: "11px",
     fontWeight: 500,
     letterSpacing: "0.2em",
     textTransform: "uppercase" as const,
-    color: "rgba(255,255,255,0.55)",
+    color: "rgba(212,175,55,0.55)",
     margin: 0,
   } as React.CSSProperties,
-  eyebrow: {
-    fontFamily: "'Roboto Mono', monospace",
-    fontSize: "12px",
-    letterSpacing: "0.2em",
-    color: "rgba(212,175,55,0.55)",
-    textAlign: "center" as const,
+  sectionTitle: {
+    fontFamily: "'Bebas Neue', sans-serif",
+    fontSize: "28px",
+    letterSpacing: "0.06em",
+    color: "#FFFFFF",
+    margin: "8px 0 0",
+  } as React.CSSProperties,
+  bodyText: {
+    fontFamily: "'Inter', sans-serif",
+    fontSize: "14px",
+    lineHeight: 1.65,
+    color: "rgba(255,255,255,0.70)",
     margin: 0,
+  } as React.CSSProperties,
+  monoLabel: {
+    fontFamily: "'Roboto Mono', monospace",
+    fontSize: "11px",
+    letterSpacing: "0.15em",
+    textTransform: "uppercase" as const,
+    color: "rgba(255,255,255,0.40)",
+  } as React.CSSProperties,
+  monoValue: {
+    fontFamily: "'Roboto Mono', monospace",
+    fontSize: "14px",
+    fontWeight: 500,
+    color: "#FFFFFF",
+    fontVariantNumeric: "tabular-nums" as const,
+  } as React.CSSProperties,
+  goldDivider: {
+    height: "1px",
+    background: "rgba(212,175,55,0.12)",
+    width: "100%",
+  } as React.CSSProperties,
+  section: {
+    padding: "0 24px",
+    position: "relative" as const,
+    zIndex: 1,
   } as React.CSSProperties,
 };
 
-// ─── Legend Dot (for capital bar) ────────────────────────────────
+// ─── I. Cover Section ────────────────────────────────────────────
 
-const LegendDot = ({ color, label }: { color: string; label: string }) => (
-  <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-    <div style={{ width: "8px", height: "8px", borderRadius: "2px", background: color, border: "1px solid rgba(212,175,55,0.15)" }} />
-    <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: "rgba(255,255,255,0.55)" }}>
-      {label}
-    </span>
-  </div>
-);
-
-// ─── Card 1: THE PROJECT ─────────────────────────────────────────
-
-const ProjectCard = ({ project }: { project: ProjectDetails }) => {
+const CoverSection = ({
+  project, inputs, result, waterfallState, tiers, breakEven, badge, copyNumbers, sourceNames, guilds,
+}: {
+  project: ProjectDetails;
+  inputs: WaterfallInputs;
+  result: WaterfallResult;
+  waterfallState: WaterfallState;
+  tiers: TierPayment[];
+  breakEven: number;
+  badge: typeof waterfallBadgeStates.fully_recouped;
+  copyNumbers: Parameters<typeof getTLDR>[1];
+  sourceNames: string[];
+  guilds: GuildState;
+}) => {
   const genre = project.genre === "Other" ? project.customGenre : project.genre;
+  const hasTitle = project.title.trim().length > 0;
   const hasGenre = genre.trim().length > 0;
   const hasStatus = project.status.trim().length > 0;
   const hasLogline = project.logline.trim().length > 0;
 
-  // Team grid: collect non-empty fields
-  const teamFields: { label: string; value: string }[] = [];
-  if (project.producers.trim()) teamFields.push({ label: "PRODUCER(S)", value: project.producers });
-  if (project.director.trim()) teamFields.push({ label: "DIRECTOR", value: project.director });
-  if (project.writers.trim()) teamFields.push({ label: "WRITER(S)", value: project.writers });
-  if (project.cast.trim()) teamFields.push({ label: "CAST", value: project.cast });
+  // Team/package grid fields
+  const packageFields: { label: string; value: string }[] = [];
+  if (project.producers.trim()) packageFields.push({ label: "PRODUCER(S)", value: project.producers });
+  if (project.director.trim()) packageFields.push({ label: "DIRECTOR", value: project.director });
+  if (project.writers.trim()) packageFields.push({ label: "WRITER(S)", value: project.writers });
+  if (project.cast.trim()) packageFields.push({ label: "CAST", value: project.cast });
+  if (project.company.trim()) packageFields.push({ label: "COMPANY", value: project.company });
+  if (project.location.trim()) packageFields.push({ label: "LOCATION", value: project.location });
 
-  const hasCompany = project.company.trim().length > 0;
-  const hasLocation = project.location.trim().length > 0;
+  // Assumptions chips
+  const assumptions: { label: string; value: string }[] = [
+    { label: "CAM", value: "1%" },
+  ];
+  if (inputs.salesFee > 0) assumptions.push({ label: "SALES AGENT", value: `${inputs.salesFee}%` });
+  if (inputs.salesExp > 0) assumptions.push({ label: "MARKETING CAP", value: formatCompactCurrency(inputs.salesExp) });
+  if (guilds.sag) assumptions.push({ label: "SAG-AFTRA", value: `${(SAG_PCT * 100).toFixed(1)}%` });
+  if (guilds.wga) assumptions.push({ label: "WGA", value: `${(WGA_PCT * 100).toFixed(1)}%` });
+  if (guilds.dga) assumptions.push({ label: "DGA", value: `${(DGA_PCT * 100).toFixed(1)}%` });
+  if (inputs.premium > 0) assumptions.push({ label: "EQUITY PREMIUM", value: `${inputs.premium}%` });
+  if (inputs.credits > 0) assumptions.push({ label: "TAX CREDITS", value: formatCompactCurrency(inputs.credits) });
+
+  const tldr = getTLDR(waterfallState, copyNumbers, sourceNames);
 
   return (
-    <DeckCard temperature="neutral">
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          textAlign: "center",
-          gap: "16px",
-        }}
-      >
-        {/* Eyebrow */}
-        <p style={styles.eyebrow}>RECOUPMENT WATERFALL ANALYSIS</p>
+    <div style={s.section}>
+      {/* Block 1: Document header */}
+      <div style={{ textAlign: "center", padding: "40px 0 24px" }}>
+        <p style={{ ...s.sectionLabel, color: "rgba(212,175,55,0.55)" }}>
+          RECOUPMENT WATERFALL ANALYSIS
+        </p>
 
-        {/* Decorative gold divider with center dot */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "8px",
-            width: "60%",
-          }}
-        >
-          <div style={{ flex: 1, height: "1px", background: "rgba(212,175,55,0.40)" }} />
-          <div
-            style={{
-              width: "4px",
-              height: "4px",
-              borderRadius: "50%",
-              background: "#D4AF37",
-            }}
-          />
-          <div style={{ flex: 1, height: "1px", background: "rgba(212,175,55,0.40)" }} />
+        {/* Gold divider */}
+        <div style={{ display: "flex", alignItems: "center", gap: "12px", margin: "16px auto", maxWidth: "200px" }}>
+          <div style={{ flex: 1, height: "1px", background: "rgba(212,175,55,0.25)" }} />
+          <div style={{ width: "4px", height: "4px", borderRadius: "50%", background: "rgba(212,175,55,0.40)" }} />
+          <div style={{ flex: 1, height: "1px", background: "rgba(212,175,55,0.25)" }} />
         </div>
+      </div>
 
-        {/* Project title as hero */}
-        <h3
-          style={{
+      {/* Block 2: Project identity */}
+      {hasTitle && (
+        <div style={{ textAlign: "center", marginBottom: "24px" }}>
+          <h1 style={{
             fontFamily: "'Bebas Neue', sans-serif",
-            fontSize: "40px",
-            color: "#fff",
-            margin: 0,
-            letterSpacing: "0.06em",
-          }}
-        >
-          {project.title}
-        </h3>
+            fontSize: "36px",
+            letterSpacing: "0.08em",
+            color: "#FFFFFF",
+            margin: "0 0 4px",
+          }}>
+            {project.title.toUpperCase()}
+          </h1>
 
-        {/* Logline */}
-        {hasLogline && (
-          <p
-            style={{
+          {(hasGenre || hasStatus) && (
+            <p style={{
               fontFamily: "'Inter', sans-serif",
-              fontSize: "16px",
-              color: "rgba(255,255,255,0.70)",
+              fontSize: "14px",
+              color: "rgba(255,255,255,0.55)",
               margin: 0,
-              lineHeight: 1.6,
+            }}>
+              {[hasGenre ? genre : null, hasStatus ? project.status : null].filter(Boolean).join(" · ")}
+            </p>
+          )}
+
+          {hasLogline && (
+            <p style={{
+              fontFamily: "'Inter', sans-serif",
+              fontSize: "13px",
+              color: "rgba(255,255,255,0.45)",
+              margin: "12px auto 0",
+              maxWidth: "400px",
+              lineHeight: 1.5,
               display: "-webkit-box",
               WebkitLineClamp: 2,
               WebkitBoxOrient: "vertical" as const,
               overflow: "hidden",
-              textOverflow: "ellipsis",
-              maxWidth: "100%",
-            }}
-          >
-            {project.logline}
-          </p>
-        )}
-
-        {/* Genre pill */}
-        {hasGenre && (
-          <div
-            style={{
-              display: "inline-flex",
-              padding: "6px 18px",
-              borderRadius: "999px",
-              border: "1px solid rgba(212,175,55,0.30)",
-              fontFamily: "'Inter', sans-serif",
-              fontSize: "14px",
-              letterSpacing: "0.06em",
-              color: "#D4AF37",
-            }}
-          >
-            {genre}
-          </div>
-        )}
-
-        {/* Status badge */}
-        {hasStatus && (
-          <p
-            style={{
-              fontFamily: "'Roboto Mono', monospace",
-              fontSize: "14px",
-              color: "rgba(255,255,255,0.55)",
-              margin: 0,
-            }}
-          >
-            Status: {project.status}
-          </p>
-        )}
-
-        {/* Gold divider */}
-        {teamFields.length > 0 && (
-          <div style={{ width: "100%", padding: "4px 0" }}>
-            <Divider />
-          </div>
-        )}
-
-        {/* Team grid — two-column layout */}
-        {teamFields.length > 0 && (
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: teamFields.length === 1 ? "1fr" : "1fr 1fr",
-              gap: "16px 20px",
-              width: "100%",
-              textAlign: "left",
-            }}
-          >
-            {teamFields.map((field) => (
-              <div key={field.label}>
-                <p
-                  style={{
-                    fontFamily: "'Roboto Mono', monospace",
-                    fontSize: "11px",
-                    letterSpacing: "0.12em",
-                    color: "rgba(212,175,55,0.40)",
-                    textTransform: "uppercase" as const,
-                    margin: "0 0 2px",
-                  }}
-                >
-                  {field.label}
-                </p>
-                <p
-                  style={{
-                    fontFamily: "'Inter', sans-serif",
-                    fontSize: "14px",
-                    color: "rgba(255,255,255,0.70)",
-                    margin: 0,
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap",
-                  }}
-                >
-                  {field.value}
-                </p>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {/* Production company */}
-        {hasCompany && (
-          <p
-            style={{
-              fontFamily: "'Inter', sans-serif",
-              fontSize: "14px",
-              color: "rgba(255,255,255,0.55)",
-              margin: 0,
-              width: "100%",
-              textAlign: "left",
-            }}
-          >
-            {project.company}
-          </p>
-        )}
-
-        {/* Location */}
-        {hasLocation && (
-          <p
-            style={{
-              fontFamily: "'Inter', sans-serif",
-              fontSize: "14px",
-              color: "rgba(255,255,255,0.40)",
-              margin: 0,
-              width: "100%",
-              textAlign: "left",
-            }}
-          >
-            {project.location}
-          </p>
-        )}
-      </div>
-
-      <Watermark />
-    </DeckCard>
-  );
-};
-
-// ─── Card 2: THE NUMBERS — Budget & Capital Stack ────────────────
-
-const BudgetCard = ({
-  inputs,
-  guilds,
-}: {
-  inputs: WaterfallInputs;
-  guilds: GuildState;
-}) => {
-  const activeGuilds: string[] = [];
-  if (guilds.sag) activeGuilds.push("SAG-AFTRA");
-  if (guilds.wga) activeGuilds.push("WGA");
-  if (guilds.dga) activeGuilds.push("DGA");
-
-  const hasCapitalSources = inputs.debt > 0 || inputs.mezzanineDebt > 0 || inputs.equity > 0 || inputs.deferments > 0;
-
-  return (
-    <DeckCard temperature="data">
-      {/* Section: Total Negative Cost */}
-      <p style={styles.sectionLabel}>TOTAL NEGATIVE COST</p>
-      <p
-        style={{
-          fontFamily: "'Roboto Mono', monospace",
-          fontSize: "56px",
-          color: "#fff",
-          textAlign: "center",
-          margin: "8px 0 28px",
-        }}
-      >
-        {formatCompactCurrency(inputs.budget)}
-      </p>
-
-      <Divider />
-
-      {/* Proportional capital bar */}
-      {hasCapitalSources && (
-        <div style={{ margin: "24px 0" }}>
-          <div style={{
-            display: "flex",
-            width: "100%",
-            height: "32px",
-            borderRadius: "6px",
-            overflow: "hidden",
-            border: "1px solid rgba(212,175,55,0.15)",
-          }}>
-            {inputs.debt > 0 && (
-              <div style={{
-                flex: inputs.debt / inputs.budget,
-                background: "rgba(212,175,55,0.50)",
-                minWidth: "2px",
-              }} />
-            )}
-            {inputs.mezzanineDebt > 0 && (
-              <div style={{
-                flex: inputs.mezzanineDebt / inputs.budget,
-                background: "rgba(212,175,55,0.35)",
-                minWidth: "2px",
-              }} />
-            )}
-            {inputs.equity > 0 && (
-              <div style={{
-                flex: inputs.equity / inputs.budget,
-                background: "rgba(212,175,55,0.20)",
-                minWidth: "2px",
-              }} />
-            )}
-            {inputs.deferments > 0 && (
-              <div style={{
-                flex: inputs.deferments / inputs.budget,
-                background: "rgba(255,255,255,0.08)",
-                minWidth: "2px",
-              }} />
-            )}
-          </div>
-          {/* Legend row */}
-          <div style={{
-            display: "flex",
-            flexWrap: "wrap",
-            gap: "12px",
-            marginTop: "10px",
-          }}>
-            {inputs.debt > 0 && (
-              <LegendDot color="rgba(212,175,55,0.50)" label="Debt" />
-            )}
-            {inputs.mezzanineDebt > 0 && (
-              <LegendDot color="rgba(212,175,55,0.35)" label="Mezz" />
-            )}
-            {inputs.equity > 0 && (
-              <LegendDot color="rgba(212,175,55,0.20)" label="Equity" />
-            )}
-            {inputs.deferments > 0 && (
-              <LegendDot color="rgba(255,255,255,0.08)" label="Deferments" />
-            )}
-          </div>
+            }}>
+              {project.logline}
+            </p>
+          )}
         </div>
       )}
 
-      {/* Section: Capital Structure */}
-      <p style={{ ...styles.sectionLabel, color: "#D4AF37", marginTop: hasCapitalSources ? "4px" : "28px" }}>
-        CAPITAL STRUCTURE
-      </p>
-      <div style={{ display: "flex", flexDirection: "column", gap: "12px", marginTop: "16px" }}>
-        {inputs.debt > 0 && (
-          <>
-            <CapitalRow label="Senior Debt" value={formatCompactCurrency(inputs.debt)} />
-            <CapitalSubRow label="Interest" value={`${inputs.seniorDebtRate}%`} />
-          </>
-        )}
-        {inputs.mezzanineDebt > 0 && (
-          <>
-            <CapitalRow label="Mezzanine" value={formatCompactCurrency(inputs.mezzanineDebt)} />
-            <CapitalSubRow label="Interest" value={`${inputs.mezzanineRate}%`} />
-          </>
-        )}
-        {inputs.equity > 0 && (
-          <>
-            <CapitalRow label="Equity" value={formatCompactCurrency(inputs.equity)} />
-            <CapitalSubRow label="Premium" value={`${inputs.premium}%`} />
-          </>
-        )}
-        {inputs.deferments > 0 && (
-          <CapitalRow label="Deferments" value={formatCompactCurrency(inputs.deferments)} />
-        )}
-        {inputs.credits > 0 && (
-          <CapitalRow
-            label="Tax Credits"
-            value={`-${formatCompactCurrency(inputs.credits)}`}
-            valueColor="#D4AF37"
-          />
-        )}
-      </div>
-
-      {activeGuilds.length > 0 && (
-        <>
-          <div style={{ marginTop: "28px" }}>
-            <Divider />
-          </div>
-          <p
-            style={{
-              fontFamily: "'Inter', sans-serif",
-              fontSize: "14px",
-              color: "rgba(255,255,255,0.55)",
-              marginTop: "16px",
-            }}
-          >
-            Guilds: {activeGuilds.join(", ")}
-          </p>
-        </>
-      )}
-
-      <Watermark />
-    </DeckCard>
-  );
-};
-
-const CapitalRow = ({
-  label,
-  value,
-  valueColor = "#fff",
-}: {
-  label: string;
-  value: string;
-  valueColor?: string;
-}) => (
-  <div
-    style={{
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "center",
-    }}
-  >
-    <span
-      style={{
-        fontFamily: "'Inter', sans-serif",
-        fontSize: "16px",
-        color: "rgba(255,255,255,0.70)",
-      }}
-    >
-      {label}
-    </span>
-    <span
-      style={{
-        fontFamily: "'Roboto Mono', monospace",
-        fontSize: "16px",
-        color: valueColor,
-      }}
-    >
-      {value}
-    </span>
-  </div>
-);
-
-const CapitalSubRow = ({ label, value }: { label: string; value: string }) => (
-  <div
-    style={{
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "center",
-      paddingLeft: "16px",
-    }}
-  >
-    <span
-      style={{
-        fontFamily: "'Roboto Mono', monospace",
-        fontSize: "14px",
-        color: "rgba(255,255,255,0.55)",
-      }}
-    >
-      {"\u251C\u2500"} {label}
-    </span>
-    <span
-      style={{
-        fontFamily: "'Roboto Mono', monospace",
-        fontSize: "14px",
-        color: "rgba(255,255,255,0.55)",
-      }}
-    >
-      {value}
-    </span>
-  </div>
-);
-
-// ─── Card 3: THE REVENUE — Off-The-Tops ─────────────────────────
-
-const RevenueCard = ({
-  inputs,
-  result,
-  guilds,
-}: {
-  inputs: WaterfallInputs;
-  result: WaterfallResult;
-  guilds: GuildState;
-}) => {
-  const netDistributable = inputs.revenue - result.offTopTotal;
-  const hasGuilds = guilds.sag || guilds.wga || guilds.dga;
-  const netPct = inputs.revenue > 0 ? ((inputs.revenue - result.offTopTotal) / inputs.revenue) * 100 : 100;
-  const deductedPct = inputs.revenue > 0 ? (result.offTopTotal / inputs.revenue) * 100 : 0;
-
-  return (
-    <DeckCard temperature="data">
-      <p style={styles.sectionLabel}>GROSS REVENUE</p>
-      <p
-        style={{
-          fontFamily: "'Roboto Mono', monospace",
-          fontSize: "56px",
-          color: "#fff",
-          textAlign: "center",
-          margin: "8px 0 28px",
-        }}
-      >
-        {formatCompactCurrency(inputs.revenue)}
-      </p>
-
-      <Divider />
-
-      <p style={{ ...styles.sectionLabel, color: "#D4AF37", marginTop: "28px" }}>
-        OFF-THE-TOP DEDUCTIONS
-      </p>
-
-      {/* Deduction cascade — visual step-down */}
-      <div style={{ margin: "20px 0" }}>
+      {/* Badge */}
+      <div style={{ display: "flex", justifyContent: "center", marginBottom: "24px" }}>
         <div style={{
-          width: "100%",
-          height: "20px",
-          borderRadius: "4px",
-          background: "rgba(255,255,255,0.10)",
-          position: "relative",
-          overflow: "hidden",
+          display: "inline-flex",
+          alignItems: "center",
+          padding: "8px 20px",
+          borderRadius: "999px",
+          background: badge.bgColor,
+          border: `1px solid ${badge.borderColor}`,
         }}>
-          <div style={{
-            width: `${netPct}%`,
-            height: "100%",
-            borderRadius: "4px 0 0 4px",
-            background: "rgba(212,175,55,0.30)",
-          }} />
-        </div>
-        <div style={{
-          display: "flex",
-          justifyContent: "space-between",
-          marginTop: "8px",
-        }}>
-          <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: "rgba(212,175,55,0.55)" }}>
-            Net: {netPct.toFixed(0)}%
-          </span>
-          <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: "rgba(255,255,255,0.40)" }}>
-            Deducted: {deductedPct.toFixed(0)}%
-          </span>
-        </div>
-      </div>
-
-      <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-        {result.cam > 0 && (
-          <DeductionRow label="CAM Fee (1%)" value={formatCompactCurrency(result.cam)} />
-        )}
-        {result.salesFee > 0 && (
-          <DeductionRow
-            label={`Sales Agent (${inputs.salesFee}%)`}
-            value={formatCompactCurrency(result.salesFee)}
-          />
-        )}
-        {result.marketing > 0 && (
-          <DeductionRow label="Marketing Cap" value={formatCompactCurrency(result.marketing)} />
-        )}
-        {hasGuilds && result.guilds > 0 && (
-          <DeductionRow label="Guild Residuals" value={formatCompactCurrency(result.guilds)} />
-        )}
-      </div>
-
-      <div style={{ marginTop: "28px" }}>
-        <Divider />
-      </div>
-
-      <p style={{ ...styles.sectionLabel, color: "#D4AF37", marginTop: "28px" }}>
-        NET DISTRIBUTABLE
-      </p>
-      <p
-        style={{
-          fontFamily: "'Roboto Mono', monospace",
-          fontSize: "32px",
-          color: "#D4AF37",
-          textAlign: "center",
-          margin: "8px 0 4px",
-        }}
-      >
-        {formatCompactCurrency(netDistributable)}
-      </p>
-      <p
-        style={{
-          fontFamily: "'Inter', sans-serif",
-          fontSize: "14px",
-          color: "rgba(255,255,255,0.55)",
-          textAlign: "center",
-        }}
-      >
-        This flows into the waterfall
-      </p>
-
-      <Watermark />
-    </DeckCard>
-  );
-};
-
-const DeductionRow = ({ label, value }: { label: string; value: string }) => (
-  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-    <span
-      style={{
-        fontFamily: "'Inter', sans-serif",
-        fontSize: "16px",
-        color: "rgba(255,255,255,0.70)",
-      }}
-    >
-      {label}
-    </span>
-    <span
-      style={{
-        fontFamily: "'Roboto Mono', monospace",
-        fontSize: "16px",
-        color: "rgba(255,255,255,0.70)",
-      }}
-    >
-      -{value}
-    </span>
-  </div>
-);
-
-// ─── Card 4: THE WATERFALL — Consolidated ────────────────────────
-
-const CompactRevenueHeader = ({
-  revenue,
-  cam,
-  netDistributable,
-}: {
-  revenue: number;
-  cam: number;
-  netDistributable: number;
-}) => (
-  <div style={{ marginBottom: "20px" }}>
-    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-      <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "14px", color: "rgba(255,255,255,0.70)" }}>
-        GROSS REVENUE
-      </span>
-      <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "14px", color: "#fff" }}>
-        {formatCompactCurrency(revenue)}
-      </span>
-    </div>
-    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "6px" }}>
-      <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "14px", color: "rgba(255,255,255,0.70)" }}>
-        CAM (1%)
-      </span>
-      <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "14px", color: "rgba(255,255,255,0.70)" }}>
-        -{formatCompactCurrency(cam)}
-      </span>
-    </div>
-    <div style={{ margin: "10px 0" }}>
-      <Divider />
-    </div>
-    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-      <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "14px", color: "#D4AF37" }}>
-        NET DISTRIBUTABLE
-      </span>
-      <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "14px", color: "#D4AF37" }}>
-        {formatCompactCurrency(netDistributable)}
-      </span>
-    </div>
-    <div style={{ margin: "14px 0" }}>
-      <Divider />
-    </div>
-  </div>
-);
-
-const TierRow = ({ tier }: { tier: TierData }) => {
-  const pct = tier.amount > 0 ? Math.min(100, (tier.paid / tier.amount) * 100) : 0;
-  const isFullyRecouped = pct >= 100;
-  const isUnfunded = tier.paid === 0 && tier.amount > 0;
-  const reducedMotion = prefersReducedMotion();
-
-  return (
-    <div style={{ padding: "14px 0" }}>
-      {/* Phase + Label */}
-      <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "10px" }}>
-        <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "12px", letterSpacing: "0.1em", color: "rgba(212,175,55,0.55)" }}>
-          PHASE {tier.phase}
-        </span>
-        <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "12px", color: "rgba(255,255,255,0.55)" }}>·</span>
-        <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "14px", letterSpacing: "0.06em", color: "#fff" }}>
-          {tier.label.toUpperCase()}
-        </span>
-      </div>
-
-      {/* Progress bar */}
-      <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-        <div
-          style={{
-            flex: 1,
-            height: "14px",
-            borderRadius: "999px",
-            background: "rgba(255,255,255,0.06)",
-            overflow: "hidden",
-          }}
-        >
-          <div
-            style={{
-              width: `${pct}%`,
-              height: "100%",
-              borderRadius: "999px",
-              background: "#D4AF37",
-              transition: reducedMotion ? "none" : "width 0.5s ease",
-            }}
-          />
-        </div>
-        <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "14px", color: isFullyRecouped ? "#D4AF37" : "rgba(255,255,255,0.55)", minWidth: "32px", textAlign: "right" }}>
-          {pct.toFixed(0)}%
-        </span>
-      </div>
-
-      {/* Amounts — two-column layout */}
-      <div style={{
-        display: "grid",
-        gridTemplateColumns: "1fr 1fr",
-        gap: "4px 16px",
-        marginTop: "8px",
-      }}>
-        <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "14px", color: isFullyRecouped ? "#D4AF37" : "rgba(255,255,255,0.55)" }}>
-          Owed: {formatCompactCurrency(tier.amount)}
-        </span>
-        <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "14px", color: isFullyRecouped ? "#D4AF37" : "rgba(255,255,255,0.55)", textAlign: "right" }}>
-          Paid: {formatCompactCurrency(tier.paid)}
-        </span>
-      </div>
-
-      {/* Status badge */}
-      <div style={{ marginTop: "8px" }}>
-        {isFullyRecouped ? (
-          <span
-            style={{
-              display: "inline-block",
-              padding: "2px 10px",
-              borderRadius: "999px",
-              border: "1px solid rgba(212,175,55,0.30)",
-              fontFamily: "'Roboto Mono', monospace",
-              fontSize: "11px",
-              letterSpacing: "0.12em",
-              color: "#D4AF37",
-            }}
-          >
-            FULLY RECOUPED
-          </span>
-        ) : (
-          <span
-            style={{
-              fontFamily: "'Roboto Mono', monospace",
-              fontSize: "11px",
-              letterSpacing: "0.12em",
-              color: isUnfunded ? "rgba(255,255,255,0.40)" : "rgba(255,255,255,0.55)",
-            }}
-          >
-            {isUnfunded ? "UNFUNDED" : `${pct.toFixed(0)}% RECOUPED`}
-          </span>
-        )}
-      </div>
-    </div>
-  );
-};
-
-const WaterfallCard = ({
-  tiers,
-  showCompactRevenue,
-  inputs,
-  result,
-}: {
-  tiers: TierData[];
-  showCompactRevenue: boolean;
-  inputs: WaterfallInputs;
-  result: WaterfallResult;
-}) => {
-  const netDistributable = inputs.revenue - result.offTopTotal;
-
-  return (
-    <DeckCard temperature="data">
-      <p style={styles.sectionLabel}>RECOUPMENT CASCADE</p>
-      <div style={{ marginTop: "20px" }}>
-        {showCompactRevenue && (
-          <CompactRevenueHeader
-            revenue={inputs.revenue}
-            cam={result.cam}
-            netDistributable={netDistributable}
-          />
-        )}
-
-        {tiers.map((tier, i) => (
-          <div key={tier.label}>
-            <TierRow tier={tier} />
-            {i < tiers.length - 1 && (
-              <div style={{ padding: "4px 0" }}>
-                <Divider />
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
-
-      <Watermark />
-    </DeckCard>
-  );
-};
-
-// ─── Card 5: THE VERDICT ─────────────────────────────────────────
-
-const VerdictCard = ({
-  result,
-  inputs,
-  onNavigateTab,
-}: {
-  result: WaterfallResult;
-  inputs: WaterfallInputs;
-  onNavigateTab?: (tab: string) => void;
-}) => {
-  const verdict = getVerdictStatus(result.multiple, result.profitPool > 0);
-  const recoupPct = Math.min(100, result.recoupPct);
-  const reducedMotion = prefersReducedMotion();
-
-  // State-dependent glow
-  let glow: string | undefined;
-  if (result.multiple > 1.0 && result.profitPool > 0) {
-    glow = "radial-gradient(ellipse at top, rgba(212,175,55,0.06), transparent 60%)";
-  } else if (result.multiple < 1.0 || result.profitPool <= 0) {
-    glow = "radial-gradient(ellipse at top, rgba(220,38,38,0.04), transparent 60%)";
-  }
-
-  return (
-    <DeckCard temperature="warm" glow={glow} breathe>
-      {/* Verdict badge */}
-      <div style={{ textAlign: "center" }}>
-        <span
-          style={{
-            display: "inline-block",
-            padding: "6px 18px",
-            borderRadius: "999px",
-            background: `${verdict.color}20`,
+          <span style={{
             fontFamily: "'Roboto Mono', monospace",
             fontSize: "12px",
             fontWeight: 600,
             letterSpacing: "0.15em",
-            textTransform: "uppercase" as const,
-            color: verdict.color,
-          }}
-        >
-          {verdict.label}
+            color: badge.color,
+          }}>
+            {badge.label}
+          </span>
+        </div>
+      </div>
+
+      {/* KPI row */}
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(4, 1fr)",
+        gap: "1px",
+        background: "rgba(212,175,55,0.08)",
+        borderRadius: "8px",
+        overflow: "hidden",
+        marginBottom: "24px",
+      }}>
+        {[
+          { label: "BUDGET", value: formatCompactCurrency(inputs.budget) },
+          { label: "REVENUE", value: formatCompactCurrency(inputs.revenue) },
+          { label: "MULTIPLE", value: formatMultiple(result.multiple) },
+          { label: "BREAK-EVEN", value: formatCompactCurrency(breakEven) },
+        ].map((kpi) => (
+          <div key={kpi.label} style={{
+            background: "#0A0A0A",
+            padding: "14px 8px",
+            textAlign: "center",
+          }}>
+            <p style={{ ...s.monoLabel, fontSize: "9px", margin: "0 0 4px" }}>{kpi.label}</p>
+            <p style={{ ...s.monoValue, fontSize: "15px", margin: 0 }}>{kpi.value}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* TLDR */}
+      <div style={{
+        padding: "16px",
+        background: "rgba(212,175,55,0.03)",
+        borderRadius: "8px",
+        border: "1px solid rgba(212,175,55,0.08)",
+        marginBottom: "24px",
+      }}>
+        <p style={{ ...s.bodyText, fontSize: "13px", color: "rgba(255,255,255,0.60)" }}>
+          {tldr}
+        </p>
+      </div>
+
+      {/* Package grid */}
+      {packageFields.length > 0 && (
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(2, 1fr)",
+          gap: "12px",
+          marginBottom: "24px",
+        }}>
+          {packageFields.map((field) => (
+            <div key={field.label}>
+              <p style={{ ...s.monoLabel, fontSize: "9px", margin: "0 0 4px" }}>{field.label}</p>
+              <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "13px", color: "rgba(255,255,255,0.70)", margin: 0 }}>
+                {field.value}
+              </p>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Assumptions strip */}
+      <div>
+        <p style={{ ...s.monoLabel, fontSize: "9px", margin: "0 0 8px" }}>MODEL ASSUMPTIONS</p>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
+          {assumptions.map((a) => (
+            <span key={a.label} style={{
+              display: "inline-block",
+              padding: "4px 10px",
+              borderRadius: "999px",
+              background: "rgba(255,255,255,0.04)",
+              border: "1px solid rgba(255,255,255,0.08)",
+              fontFamily: "'Roboto Mono', monospace",
+              fontSize: "10px",
+              color: "rgba(255,255,255,0.50)",
+              letterSpacing: "0.05em",
+            }}>
+              {a.label}: {a.value}
+            </span>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ─── II. Executive Summary Section ───────────────────────────────
+
+const ExecutiveSummarySection = ({
+  inputs, result, breakEven,
+}: {
+  inputs: WaterfallInputs;
+  result: WaterfallResult;
+  breakEven: number;
+}) => {
+  const netDistributable = inputs.revenue - result.offTopTotal;
+  const revenueRatio = inputs.budget > 0 ? (inputs.revenue / inputs.budget).toFixed(1) : "0.0";
+  const offTopPct = inputs.revenue > 0 ? ((result.offTopTotal / inputs.revenue) * 100).toFixed(0) : "0";
+  const netPct = inputs.revenue > 0 ? ((netDistributable / inputs.revenue) * 100).toFixed(0) : "0";
+
+  // Bar chart data
+  const maxVal = Math.max(inputs.revenue, 1);
+  const barData = [
+    { label: "Revenue", value: inputs.revenue, color: "#D4AF37" },
+    { label: "Off-Tops", value: result.offTopTotal, color: "rgba(212,175,55,0.50)" },
+    { label: "Net Dist.", value: Math.max(0, netDistributable), color: "rgba(212,175,55,0.70)" },
+    { label: "Repayments", value: result.totalHurdle, color: "rgba(255,255,255,0.25)" },
+    ...(result.profitPool > 0 ? [{ label: "Profit", value: result.profitPool, color: "#D4AF37" }] : []),
+  ];
+
+  const chartHeight = 160;
+  const barWidth = 40;
+  const gap = 16;
+  const chartWidth = barData.length * (barWidth + gap) - gap + 60;
+
+  return (
+    <div style={s.section}>
+      <p style={s.sectionLabel}>EXECUTIVE SUMMARY</p>
+      <h2 style={s.sectionTitle}>Deal Positioning</h2>
+
+      <p style={{ ...s.bodyText, margin: "16px 0 24px" }}>
+        This is a {formatCompactCurrency(inputs.budget)} production valued at {revenueRatio}x its negative cost,
+        with an acquisition target of {formatCompactCurrency(inputs.revenue)}.
+        {inputs.revenue >= breakEven
+          ? ` The deal achieves full recoupment at the target price.`
+          : ` The deal does not achieve full recoupment at the target price.`
+        }
+      </p>
+
+      {/* Bar chart */}
+      <div style={{
+        background: "rgba(255,255,255,0.02)",
+        borderRadius: "8px",
+        border: "1px solid rgba(255,255,255,0.06)",
+        padding: "20px 12px 12px",
+        marginBottom: "16px",
+        overflowX: "auto",
+      }}>
+        <svg width={chartWidth} height={chartHeight + 40} viewBox={`0 0 ${chartWidth} ${chartHeight + 40}`}>
+          {barData.map((bar, i) => {
+            const barH = maxVal > 0 ? (bar.value / maxVal) * chartHeight : 0;
+            const x = 30 + i * (barWidth + gap);
+            const y = chartHeight - barH;
+            return (
+              <g key={bar.label}>
+                <rect
+                  x={x}
+                  y={y}
+                  width={barWidth}
+                  height={Math.max(barH, 2)}
+                  fill={bar.color}
+                  rx={3}
+                />
+                <text
+                  x={x + barWidth / 2}
+                  y={chartHeight + 14}
+                  textAnchor="middle"
+                  fill="rgba(255,255,255,0.40)"
+                  fontSize="9"
+                  fontFamily="'Roboto Mono', monospace"
+                >
+                  {bar.label}
+                </text>
+                <text
+                  x={x + barWidth / 2}
+                  y={y - 6}
+                  textAnchor="middle"
+                  fill="rgba(255,255,255,0.55)"
+                  fontSize="10"
+                  fontFamily="'Roboto Mono', monospace"
+                >
+                  {formatCompactCurrency(bar.value)}
+                </text>
+              </g>
+            );
+          })}
+        </svg>
+      </div>
+
+      {/* Chart interpretation */}
+      <p style={{ ...s.bodyText, fontSize: "13px", color: "rgba(255,255,255,0.50)" }}>
+        Off-top deductions consume {offTopPct}% of gross revenue, leaving {netPct}% as net distributable for capital repayment and profit.
+      </p>
+    </div>
+  );
+};
+
+// ─── III. Capital Stack Section ──────────────────────────────────
+
+const SourceCard = ({
+  label, amount, budget, rate, position, explanation, color,
+}: {
+  label: string;
+  amount: number;
+  budget: number;
+  rate: number;
+  position: string;
+  explanation: string;
+  color: string;
+}) => {
+  const share = budget > 0 ? ((amount / budget) * 100).toFixed(0) : "0";
+  const contractualReturn = amount * (1 + rate / 100);
+
+  return (
+    <div style={{
+      padding: "16px",
+      background: "rgba(255,255,255,0.02)",
+      borderRadius: "8px",
+      border: "1px solid rgba(255,255,255,0.06)",
+      marginBottom: "12px",
+    }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "12px" }}>
+        <div>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "4px" }}>
+            <div style={{ width: "10px", height: "10px", borderRadius: "2px", background: color }} />
+            <span style={{ fontFamily: "'Inter', sans-serif", fontSize: "14px", fontWeight: 600, color: "#FFFFFF" }}>
+              {label}
+            </span>
+          </div>
+          <p style={{ ...s.monoLabel, fontSize: "10px", margin: 0 }}>{position}</p>
+        </div>
+        <span style={{ ...s.monoValue, fontSize: "16px" }}>{formatCompactCurrency(amount)}</span>
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "8px", marginBottom: "12px" }}>
+        <div>
+          <p style={{ ...s.monoLabel, fontSize: "9px", margin: "0 0 2px" }}>SHARE OF STACK</p>
+          <p style={{ ...s.monoValue, fontSize: "13px", margin: 0 }}>{share}%</p>
+        </div>
+        <div>
+          <p style={{ ...s.monoLabel, fontSize: "9px", margin: "0 0 2px" }}>CONTRACTUAL RETURN</p>
+          <p style={{ ...s.monoValue, fontSize: "13px", margin: 0 }}>{formatCompactCurrency(contractualReturn)}</p>
+        </div>
+      </div>
+
+      <div style={s.goldDivider} />
+
+      <p style={{ ...s.bodyText, fontSize: "12px", color: "rgba(255,255,255,0.45)", marginTop: "12px" }}>
+        {explanation}
+      </p>
+    </div>
+  );
+};
+
+const CapitalStackSection = ({
+  inputs, result,
+}: {
+  inputs: WaterfallInputs;
+  result: WaterfallResult;
+}) => {
+  const sources: {
+    label: string;
+    amount: number;
+    rate: number;
+    position: string;
+    explanation: string;
+    color: string;
+  }[] = [];
+
+  if (inputs.debt > 0) {
+    sources.push({
+      label: "Senior Debt",
+      amount: inputs.debt,
+      rate: inputs.seniorDebtRate,
+      position: "PRIORITY 1 — FIRST REPAID",
+      explanation: `Senior debt of ${formatCompactCurrency(inputs.debt)} at ${inputs.seniorDebtRate}% interest is repaid first from net distributable revenue. This is the safest position in the capital stack — lenders recover before any equity participant.`,
+      color: "#D4AF37",
+    });
+  }
+
+  if (inputs.mezzanineDebt > 0) {
+    sources.push({
+      label: "Gap / Mezzanine",
+      amount: inputs.mezzanineDebt,
+      rate: inputs.mezzanineRate,
+      position: "PRIORITY 2 — AFTER SENIOR DEBT",
+      explanation: `Mezzanine financing of ${formatCompactCurrency(inputs.mezzanineDebt)} at ${inputs.mezzanineRate}% sits behind senior debt. Higher risk position compensated by higher interest rate.`,
+      color: "rgba(212,175,55,0.70)",
+    });
+  }
+
+  if (inputs.equity > 0) {
+    sources.push({
+      label: "Equity",
+      amount: inputs.equity,
+      rate: inputs.premium,
+      position: sources.length > 0 ? `PRIORITY ${sources.length + 1} — AFTER DEBT` : "PRIORITY 1 — FIRST REPAID",
+      explanation: `Equity investment of ${formatCompactCurrency(inputs.equity)} with a ${inputs.premium}% preferred return. Equity investors bear the most risk — they are repaid only after all debt obligations are satisfied.`,
+      color: "rgba(212,175,55,0.45)",
+    });
+  }
+
+  if (inputs.deferments > 0) {
+    sources.push({
+      label: "Deferments",
+      amount: inputs.deferments,
+      rate: 0,
+      position: `PRIORITY ${sources.length + 1} — LAST REPAID`,
+      explanation: `Deferred compensation of ${formatCompactCurrency(inputs.deferments)} is repaid last before profit participation. These are contractual obligations deferred to improve cash flow during production.`,
+      color: "rgba(255,255,255,0.20)",
+    });
+  }
+
+  if (inputs.credits > 0) {
+    sources.push({
+      label: "Tax Credits",
+      amount: inputs.credits,
+      rate: 0,
+      position: "OFFSET — REDUCES TOTAL HURDLE",
+      explanation: `Tax credits of ${formatCompactCurrency(inputs.credits)} offset the total repayment obligation. These reduce the amount of revenue needed to achieve full recoupment.`,
+      color: "rgba(212,175,55,0.30)",
+    });
+  }
+
+  const sourceCount = sources.filter((src) => src.label !== "Tax Credits").length;
+  const intro = getCapitalStackIntro(sourceCount, inputs.budget);
+  const interpretation = getStackInterpretation(inputs);
+
+  return (
+    <div style={s.section}>
+      <p style={s.sectionLabel}>CAPITAL STRUCTURE</p>
+      <h2 style={s.sectionTitle}>Capital Stack</h2>
+
+      <p style={{ ...s.bodyText, margin: "16px 0 20px" }}>{intro}</p>
+
+      {/* Proportional bar */}
+      {sources.length > 0 ? (
+        <>
+          <div style={{
+            display: "flex",
+            borderRadius: "6px",
+            overflow: "hidden",
+            height: "28px",
+            marginBottom: "8px",
+            border: "1px solid rgba(212,175,55,0.12)",
+          }}>
+            {sources.filter((src) => src.label !== "Tax Credits").map((src) => (
+              <div
+                key={src.label}
+                style={{
+                  flex: src.amount,
+                  background: src.color,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  minWidth: "2px",
+                }}
+              >
+                {src.amount / inputs.budget > 0.15 && (
+                  <span style={{
+                    fontFamily: "'Roboto Mono', monospace",
+                    fontSize: "9px",
+                    color: "#000",
+                    fontWeight: 600,
+                  }}>
+                    {((src.amount / inputs.budget) * 100).toFixed(0)}%
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
+
+          {/* Legend */}
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "12px", marginBottom: "20px" }}>
+            {sources.filter((src) => src.label !== "Tax Credits").map((src) => (
+              <div key={src.label} style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                <div style={{ width: "8px", height: "8px", borderRadius: "2px", background: src.color }} />
+                <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "10px", color: "rgba(255,255,255,0.50)" }}>
+                  {src.label}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          {/* Source cards */}
+          {sources.map((src) => (
+            <SourceCard
+              key={src.label}
+              label={src.label}
+              amount={src.amount}
+              budget={inputs.budget}
+              rate={src.rate}
+              position={src.position}
+              explanation={src.explanation}
+              color={src.color}
+            />
+          ))}
+
+          {/* Stack interpretation */}
+          <div style={{
+            padding: "16px",
+            background: "rgba(212,175,55,0.03)",
+            borderRadius: "8px",
+            border: "1px solid rgba(212,175,55,0.08)",
+            marginTop: "8px",
+          }}>
+            <p style={{ ...s.bodyText, fontSize: "13px", color: "rgba(255,255,255,0.55)" }}>
+              {interpretation}
+            </p>
+          </div>
+        </>
+      ) : (
+        <div style={{
+          padding: "32px 16px",
+          textAlign: "center",
+          background: "rgba(255,255,255,0.02)",
+          borderRadius: "8px",
+          border: "1px solid rgba(255,255,255,0.06)",
+        }}>
+          <p style={{ ...s.bodyText, color: "rgba(255,255,255,0.40)" }}>
+            No financing sources entered.
+          </p>
+        </div>
+      )}
+    </div>
+  );
+};
+
+// ─── IV. Revenue & Deductions Section ────────────────────────────
+
+const RevenueDeductionsSection = ({
+  inputs, result, guilds,
+}: {
+  inputs: WaterfallInputs;
+  result: WaterfallResult;
+  guilds: GuildState;
+}) => {
+  const netDistributable = inputs.revenue - result.offTopTotal;
+  const netPct = inputs.revenue > 0 ? ((netDistributable / inputs.revenue) * 100) : 0;
+
+  // Build deduction rows
+  const deductions: { label: string; detail: string; amount: number; industry?: string }[] = [];
+
+  deductions.push({
+    label: "Collection Account Management",
+    detail: `${(CAM_PCT * 100).toFixed(0)}% of gross`,
+    amount: result.cam,
+    industry: INDUSTRY_CONTEXT.camDescription,
+  });
+
+  if (result.salesFee > 0) {
+    deductions.push({
+      label: "Sales Agent Commission",
+      detail: `${inputs.salesFee}% of gross`,
+      amount: result.salesFee,
+      industry: INDUSTRY_CONTEXT.salesAgentDescription,
+    });
+  }
+
+  if (result.marketing > 0) {
+    deductions.push({
+      label: "Sales & Marketing Expenses",
+      detail: "Expense cap",
+      amount: result.marketing,
+      industry: INDUSTRY_CONTEXT.marketingCapDescription,
+    });
+  }
+
+  if (result.guilds > 0) {
+    const guildParts: string[] = [];
+    if (guilds.sag) guildParts.push(`SAG-AFTRA ${INDUSTRY_CONTEXT.guildRates.sag.rate}`);
+    if (guilds.wga) guildParts.push(`WGA ${INDUSTRY_CONTEXT.guildRates.wga.rate}`);
+    if (guilds.dga) guildParts.push(`DGA ${INDUSTRY_CONTEXT.guildRates.dga.rate}`);
+
+    deductions.push({
+      label: "Guild Residuals & P&H",
+      detail: guildParts.join(" + "),
+      amount: result.guilds,
+    });
+  }
+
+  return (
+    <div style={s.section}>
+      <p style={s.sectionLabel}>REVENUE ANALYSIS</p>
+      <h2 style={s.sectionTitle}>Revenue & Deductions</h2>
+
+      {/* Acquisition price */}
+      <div style={{ textAlign: "center", margin: "20px 0 24px" }}>
+        <p style={{ ...s.monoLabel, fontSize: "10px", margin: "0 0 4px" }}>ACQUISITION PRICE</p>
+        <p style={{
+          fontFamily: "'Roboto Mono', monospace",
+          fontSize: "32px",
+          fontWeight: 600,
+          color: "#D4AF37",
+          margin: 0,
+          fontVariantNumeric: "tabular-nums",
+        }}>
+          {formatFullCurrency(inputs.revenue)}
+        </p>
+      </div>
+
+      {/* Deduction rows */}
+      <div style={{ marginBottom: "20px" }}>
+        {deductions.map((d, i) => (
+          <div key={d.label} style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            padding: "12px 0",
+            borderBottom: i < deductions.length - 1 ? "1px solid rgba(255,255,255,0.06)" : "none",
+          }}>
+            <div>
+              <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "13px", color: "rgba(255,255,255,0.70)", margin: "0 0 2px" }}>
+                {d.label}
+              </p>
+              <p style={{ ...s.monoLabel, fontSize: "10px", margin: 0 }}>{d.detail}</p>
+            </div>
+            <span style={{
+              fontFamily: "'Roboto Mono', monospace",
+              fontSize: "14px",
+              fontWeight: 500,
+              color: "rgba(255,255,255,0.55)",
+              fontVariantNumeric: "tabular-nums",
+            }}>
+              −{formatFullCurrency(d.amount)}
+            </span>
+          </div>
+        ))}
+      </div>
+
+      {/* Gross-to-net bar */}
+      <div style={{ marginBottom: "16px" }}>
+        <div style={{
+          height: "8px",
+          borderRadius: "4px",
+          background: "rgba(255,255,255,0.06)",
+          overflow: "hidden",
+        }}>
+          <div style={{
+            height: "100%",
+            width: `${Math.max(0, Math.min(100, netPct))}%`,
+            background: "linear-gradient(90deg, #D4AF37, rgba(212,175,55,0.60))",
+            borderRadius: "4px",
+            transition: "width 0.5s ease",
+          }} />
+        </div>
+        <div style={{ display: "flex", justifyContent: "space-between", marginTop: "6px" }}>
+          <span style={{ ...s.monoLabel, fontSize: "10px" }}>DEDUCTED: {(100 - netPct).toFixed(0)}%</span>
+          <span style={{ ...s.monoLabel, fontSize: "10px" }}>RETAINED: {netPct.toFixed(0)}%</span>
+        </div>
+      </div>
+
+      {/* Net distributable total */}
+      <div style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        padding: "16px",
+        background: "rgba(212,175,55,0.04)",
+        borderRadius: "8px",
+        border: "1px solid rgba(212,175,55,0.12)",
+      }}>
+        <span style={{ fontFamily: "'Inter', sans-serif", fontSize: "14px", fontWeight: 600, color: "#FFFFFF" }}>
+          Net Distributable
+        </span>
+        <span style={{
+          fontFamily: "'Roboto Mono', monospace",
+          fontSize: "18px",
+          fontWeight: 600,
+          color: "#D4AF37",
+          fontVariantNumeric: "tabular-nums",
+        }}>
+          {formatFullCurrency(Math.max(0, netDistributable))}
         </span>
       </div>
 
-      {/* Hero multiple */}
-      <p
-        style={{
+      {/* Bridge sentence */}
+      <p style={{ ...s.bodyText, fontSize: "13px", color: "rgba(255,255,255,0.45)", marginTop: "12px" }}>
+        After {deductions.length} off-top deduction{deductions.length !== 1 ? "s" : ""} totaling {formatCompactCurrency(result.offTopTotal)},{" "}
+        {netPct.toFixed(0)}% of gross revenue is available for capital repayment.
+      </p>
+    </div>
+  );
+};
+
+// ─── V. Waterfall Cascade Section ────────────────────────────────
+
+const CascadeBlock = ({
+  tier, widthPct, netDistributable,
+}: {
+  tier: TierPayment;
+  widthPct: number;
+  netDistributable: number;
+}) => {
+  const isFunded = tier.status === "funded";
+  const isPartial = tier.status === "partial";
+  const isNarrow = widthPct < 45;
+
+  const bgColor = isFunded
+    ? "rgba(212,175,55,0.15)"
+    : isPartial
+    ? "rgba(212,175,55,0.08)"
+    : "rgba(255,255,255,0.03)";
+
+  const borderColor = isFunded
+    ? "rgba(212,175,55,0.30)"
+    : isPartial
+    ? "rgba(212,175,55,0.15)"
+    : "rgba(255,255,255,0.08)";
+
+  const textColor = isFunded
+    ? "#D4AF37"
+    : isPartial
+    ? "rgba(212,175,55,0.70)"
+    : "rgba(255,255,255,0.30)";
+
+  return (
+    <div style={{
+      width: `${Math.max(widthPct, 40)}%`,
+      minHeight: isNarrow ? "60px" : "48px",
+      background: bgColor,
+      borderRadius: "6px",
+      border: `1px solid ${borderColor}`,
+      padding: "8px 12px",
+      display: "flex",
+      flexDirection: isNarrow ? "column" : "row",
+      alignItems: isNarrow ? "flex-start" : "center",
+      justifyContent: isNarrow ? "center" : "space-between",
+      gap: isNarrow ? "2px" : "8px",
+    }}>
+      <span style={{
+        fontFamily: "'Roboto Mono', monospace",
+        fontSize: "10px",
+        letterSpacing: "0.1em",
+        color: textColor,
+        fontWeight: 600,
+        textTransform: "uppercase" as const,
+        whiteSpace: "nowrap",
+      }}>
+        {tier.label}
+      </span>
+      <span style={{
+        fontFamily: "'Roboto Mono', monospace",
+        fontSize: "12px",
+        color: textColor,
+        fontVariantNumeric: "tabular-nums",
+        fontWeight: 500,
+      }}>
+        {formatCompactCurrency(tier.paid)}
+      </span>
+    </div>
+  );
+};
+
+const TierRow = ({ tier }: { tier: TierPayment }) => {
+  const statusColor = tier.status === "funded"
+    ? "#D4AF37"
+    : tier.status === "partial"
+    ? "rgba(212,175,55,0.70)"
+    : "rgba(255,255,255,0.30)";
+
+  const statusLabel = tier.status === "funded" ? "FUNDED" : tier.status === "partial" ? "PARTIAL" : "UNFUNDED";
+
+  return (
+    <div style={{
+      display: "grid",
+      gridTemplateColumns: "28px 1fr auto auto",
+      gap: "12px",
+      alignItems: "center",
+      padding: "10px 0",
+      borderBottom: "1px solid rgba(255,255,255,0.04)",
+    }}>
+      <span style={{ ...s.monoLabel, fontSize: "11px", color: "rgba(255,255,255,0.30)", textAlign: "center" }}>
+        {tier.phase}
+      </span>
+      <span style={{ fontFamily: "'Inter', sans-serif", fontSize: "13px", color: "rgba(255,255,255,0.70)" }}>
+        {tier.label}
+      </span>
+      <span style={{ ...s.monoValue, fontSize: "13px", textAlign: "right" }}>
+        {formatCompactCurrency(tier.paid)}<span style={{ color: "rgba(255,255,255,0.30)" }}> / {formatCompactCurrency(tier.amount)}</span>
+      </span>
+      <span style={{
+        fontFamily: "'Roboto Mono', monospace",
+        fontSize: "9px",
+        fontWeight: 600,
+        letterSpacing: "0.1em",
+        color: statusColor,
+        textAlign: "right",
+        minWidth: "60px",
+      }}>
+        {statusLabel}
+      </span>
+    </div>
+  );
+};
+
+const WaterfallCascadeSection = ({
+  tiers, result, inputs, waterfallState,
+}: {
+  tiers: TierPayment[];
+  result: WaterfallResult;
+  inputs: WaterfallInputs;
+  waterfallState: WaterfallState;
+}) => {
+  const netDistributable = Math.max(0, inputs.revenue - result.offTopTotal);
+  const interpretation = getWaterfallInterpretation(waterfallState, tiers, result.profitPool);
+
+  // Compute cascade widths
+  let remainingBalance = netDistributable;
+  const cascadeData = tiers.map((tier) => {
+    const widthPct = netDistributable > 0
+      ? (remainingBalance / netDistributable) * 100
+      : 100;
+    remainingBalance = Math.max(0, remainingBalance - tier.paid);
+    return { tier, widthPct };
+  });
+
+  return (
+    <div style={s.section}>
+      <p style={s.sectionLabel}>PAYMENT WATERFALL</p>
+      <h2 style={s.sectionTitle}>Waterfall Cascade</h2>
+
+      <p style={{ ...s.bodyText, margin: "16px 0 20px" }}>
+        Revenue flows through each repayment tier in priority order. Each block narrows as capital is absorbed.
+      </p>
+
+      {/* Cascade blocks */}
+      {tiers.length > 0 && netDistributable > 0 ? (
+        <>
+          <div style={{ display: "flex", flexDirection: "column", gap: "6px", marginBottom: "24px" }}>
+            {/* Net distributable starting bar */}
+            <div style={{
+              width: "100%",
+              height: "32px",
+              background: "rgba(212,175,55,0.08)",
+              borderRadius: "6px",
+              border: "1px solid rgba(212,175,55,0.15)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              padding: "0 12px",
+            }}>
+              <span style={{ ...s.monoLabel, fontSize: "10px", color: "rgba(212,175,55,0.55)" }}>
+                NET DISTRIBUTABLE
+              </span>
+              <span style={{ ...s.monoValue, fontSize: "12px", color: "#D4AF37" }}>
+                {formatCompactCurrency(netDistributable)}
+              </span>
+            </div>
+
+            {cascadeData.map(({ tier, widthPct }) => (
+              <CascadeBlock
+                key={tier.phase}
+                tier={tier}
+                widthPct={widthPct}
+                netDistributable={netDistributable}
+              />
+            ))}
+
+            {/* Profit pool bar (if any) */}
+            {result.profitPool > 0 && (
+              <div style={{
+                width: `${Math.max(netDistributable > 0 ? (remainingBalance / netDistributable) * 100 : 0, 40)}%`,
+                height: "32px",
+                background: "rgba(212,175,55,0.06)",
+                borderRadius: "6px",
+                border: "1px dashed rgba(212,175,55,0.20)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                padding: "0 12px",
+              }}>
+                <span style={{ ...s.monoLabel, fontSize: "10px", color: "rgba(212,175,55,0.45)" }}>
+                  PROFIT POOL
+                </span>
+                <span style={{ ...s.monoValue, fontSize: "12px", color: "rgba(212,175,55,0.60)" }}>
+                  {formatCompactCurrency(result.profitPool)}
+                </span>
+              </div>
+            )}
+          </div>
+
+          {/* Tier breakdown rows */}
+          <div style={{
+            background: "rgba(255,255,255,0.02)",
+            borderRadius: "8px",
+            border: "1px solid rgba(255,255,255,0.06)",
+            padding: "4px 12px",
+            marginBottom: "16px",
+          }}>
+            {tiers.map((tier) => (
+              <TierRow key={tier.phase} tier={tier} />
+            ))}
+          </div>
+
+          {/* Interpretation */}
+          <div style={{
+            padding: "16px",
+            background: "rgba(212,175,55,0.03)",
+            borderRadius: "8px",
+            border: "1px solid rgba(212,175,55,0.08)",
+          }}>
+            <p style={{ ...s.bodyText, fontSize: "13px", color: "rgba(255,255,255,0.55)" }}>
+              {interpretation}
+            </p>
+          </div>
+        </>
+      ) : (
+        <div style={{
+          padding: "32px 16px",
+          textAlign: "center",
+          background: "rgba(255,255,255,0.02)",
+          borderRadius: "8px",
+          border: "1px solid rgba(255,255,255,0.06)",
+        }}>
+          <p style={{ ...s.bodyText, color: "rgba(255,255,255,0.40)" }}>
+            {inputs.revenue === 0
+              ? "Enter an acquisition price to see the payment waterfall."
+              : "No capital tiers to display."
+            }
+          </p>
+        </div>
+      )}
+    </div>
+  );
+};
+
+// ─── VI. Return Profile Section ──────────────────────────────────
+
+const ReturnProfileSection = ({
+  result, inputs, waterfallState, breakEven, copyNumbers, onNavigateTab,
+}: {
+  result: WaterfallResult;
+  inputs: WaterfallInputs;
+  waterfallState: WaterfallState;
+  breakEven: number;
+  copyNumbers: Parameters<typeof getReturnParagraph>[1];
+  onNavigateTab?: (tab: string) => void;
+}) => {
+  const badge = waterfallBadgeStates[waterfallState];
+  const interpretation = getReturnParagraph(waterfallState, copyNumbers);
+  const recoupPct = Math.min(100, result.recoupPct);
+
+  return (
+    <div style={s.section}>
+      <p style={s.sectionLabel}>RETURN ANALYSIS</p>
+      <h2 style={s.sectionTitle}>Return Profile</h2>
+
+      {/* Multiple + Badge */}
+      <div style={{ textAlign: "center", margin: "20px 0 24px" }}>
+        <p style={{
           fontFamily: "'Roboto Mono', monospace",
           fontSize: "64px",
-          fontWeight: 500,
-          color: verdict.color,
-          textAlign: "center",
-          margin: "16px 0 8px",
-        }}
-      >
-        {formatMultiple(result.multiple)}
-      </p>
+          fontWeight: 700,
+          color: "#D4AF37",
+          margin: "0 0 8px",
+          lineHeight: 1,
+          fontVariantNumeric: "tabular-nums",
+        }}>
+          {formatMultiple(result.multiple)}
+        </p>
+        <div style={{
+          display: "inline-flex",
+          alignItems: "center",
+          padding: "6px 16px",
+          borderRadius: "999px",
+          background: badge.bgColor,
+          border: `1px solid ${badge.borderColor}`,
+        }}>
+          <span style={{
+            fontFamily: "'Roboto Mono', monospace",
+            fontSize: "11px",
+            fontWeight: 600,
+            letterSpacing: "0.15em",
+            color: badge.color,
+          }}>
+            {badge.label}
+          </span>
+        </div>
+      </div>
 
-      <p
-        style={{
-          fontFamily: "'Inter', sans-serif",
-          fontSize: "16px",
-          color: "rgba(255,255,255,0.55)",
-          textAlign: "center",
-          margin: "0 0 28px",
-        }}
-      >
-        {verdict.description}
-      </p>
-
-      <Divider />
-
-      {/* Investor / Producer breakdown */}
-      <div style={{ marginTop: "28px", display: "flex", flexDirection: "column", gap: "20px" }}>
-        <div>
-          <p style={styles.sectionLabel}>INVESTOR RETURN</p>
-          <p
-            style={{
-              fontFamily: "'Roboto Mono', monospace",
-              fontSize: "32px",
-              color: "#fff",
-              margin: "4px 0 0",
-            }}
-          >
+      {/* Investor / Producer split */}
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: "1fr 1fr",
+        gap: "1px",
+        background: "rgba(212,175,55,0.08)",
+        borderRadius: "8px",
+        overflow: "hidden",
+        marginBottom: "20px",
+      }}>
+        <div style={{ background: "#0A0A0A", padding: "16px", textAlign: "center" }}>
+          <p style={{ ...s.monoLabel, fontSize: "9px", margin: "0 0 4px" }}>INVESTOR TOTAL</p>
+          <p style={{ ...s.monoValue, fontSize: "18px", margin: 0, color: "#D4AF37" }}>
             {formatCompactCurrency(result.investor)}
           </p>
-          {inputs.equity > 0 && (
-            <p
-              style={{
-                fontFamily: "'Roboto Mono', monospace",
-                fontSize: "14px",
-                color: "rgba(255,255,255,0.55)",
-                margin: "2px 0 0",
-              }}
-            >
-              on {formatCompactCurrency(inputs.equity)} invested
-            </p>
-          )}
         </div>
-        <div>
-          <p style={styles.sectionLabel}>PRODUCER SHARE</p>
-          <p
-            style={{
-              fontFamily: "'Roboto Mono', monospace",
-              fontSize: "32px",
-              color: "#fff",
-              margin: "4px 0 0",
-            }}
-          >
+        <div style={{ background: "#0A0A0A", padding: "16px", textAlign: "center" }}>
+          <p style={{ ...s.monoLabel, fontSize: "9px", margin: "0 0 4px" }}>PRODUCER POOL</p>
+          <p style={{ ...s.monoValue, fontSize: "18px", margin: 0 }}>
             {formatCompactCurrency(result.producer)}
           </p>
         </div>
       </div>
 
-      <div style={{ marginTop: "28px" }}>
-        <Divider />
-      </div>
-
       {/* Recoupment bar */}
-      <div style={{ marginTop: "28px" }}>
-        <p style={styles.sectionLabel}>RECOUPMENT</p>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "12px",
-            marginTop: "10px",
-          }}
-        >
-          <div
-            style={{
-              flex: 1,
-              height: "14px",
-              borderRadius: "999px",
-              background: "rgba(255,255,255,0.06)",
-              overflow: "hidden",
-            }}
-          >
-            <div
-              style={{
-                width: `${recoupPct}%`,
-                height: "100%",
-                borderRadius: "999px",
-                background: "#D4AF37",
-                transition: reducedMotion ? "none" : "width 0.5s ease",
-              }}
-            />
-          </div>
-          <span
-            style={{
-              fontFamily: "'Roboto Mono', monospace",
-              fontSize: "14px",
-              color: "rgba(255,255,255,0.55)",
-              minWidth: "36px",
-              textAlign: "right",
-            }}
-          >
-            {recoupPct.toFixed(0)}%
-          </span>
+      <div style={{ marginBottom: "20px" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "6px" }}>
+          <span style={{ ...s.monoLabel, fontSize: "10px" }}>RECOUPMENT</span>
+          <span style={{ ...s.monoValue, fontSize: "12px" }}>{recoupPct.toFixed(0)}%</span>
+        </div>
+        <div style={{
+          height: "8px",
+          borderRadius: "4px",
+          background: "rgba(255,255,255,0.06)",
+          overflow: "hidden",
+        }}>
+          <div style={{
+            height: "100%",
+            width: `${recoupPct}%`,
+            background: recoupPct >= 100
+              ? "#D4AF37"
+              : recoupPct >= 50
+              ? "rgba(212,175,55,0.70)"
+              : "rgba(220,38,38,0.60)",
+            borderRadius: "4px",
+            transition: "width 0.5s ease",
+          }} />
         </div>
       </div>
 
-      {/* Edit escape hatch */}
-      {onNavigateTab && (
-        <>
-          <div style={{ marginTop: "28px" }}>
-            <Divider />
-          </div>
-          <button
-            onClick={() => onNavigateTab("deal")}
-            style={{
-              display: "block",
-              width: "100%",
-              marginTop: "16px",
-              padding: "8px",
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              fontFamily: "'Inter', sans-serif",
-              fontSize: "14px",
-              color: "rgba(212,175,55,0.60)",
-              textAlign: "center",
-            }}
-          >
-            Adjust your deal →
-          </button>
-        </>
-      )}
-
-      <Watermark />
-    </DeckCard>
-  );
-};
-
-// ─── Card 6: NEXT STEPS — Export CTA ─────────────────────────────
-
-const ExportCard = ({ onExport }: { onExport: () => void }) => {
-  const [showDisclaimer, setShowDisclaimer] = useState(false);
-
-  return (
-    <DeckCard temperature="feature">
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          textAlign: "center",
-          gap: "20px",
-        }}
-      >
-        <h3
-          style={{
-            fontFamily: "'Bebas Neue', sans-serif",
-            fontSize: "28px",
-            letterSpacing: "0.12em",
-            color: "#D4AF37",
-            margin: 0,
-          }}
-        >
-          READY TO SHARE?
-        </h3>
-
-        <p
-          style={{
-            fontFamily: "'Inter', sans-serif",
-            fontSize: "16px",
-            color: "rgba(255,255,255,0.70)",
-            lineHeight: 1.6,
-            margin: 0,
-          }}
-        >
-          Turn this analysis into a branded investor package — designed for the
-          boardroom, not the back office.
-        </p>
-
-        {/* CTA Button */}
-        <button
-          onClick={onExport}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: "8px",
-            width: "100%",
-            padding: "20px 24px",
-            background: "#F9E076",
-            color: "#000",
-            border: "none",
-            borderRadius: "8px",
-            fontFamily: "'Bebas Neue', sans-serif",
-            fontSize: "16px",
-            letterSpacing: "0.12em",
-            cursor: "pointer",
-          }}
-          onMouseDown={(e) => ((e.currentTarget.style.transform = "scale(0.98)"))}
-          onMouseUp={(e) => ((e.currentTarget.style.transform = "scale(1)"))}
-          onTouchStart={(e) => ((e.currentTarget.style.transform = "scale(0.98)"))}
-          onTouchEnd={(e) => ((e.currentTarget.style.transform = "scale(1)"))}
-        >
-          <FileSpreadsheet size={16} />
-          EXPORT YOUR FINANCIAL SNAPSHOT
-        </button>
+      {/* Break-even */}
+      <div style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        padding: "12px 16px",
+        background: "rgba(255,255,255,0.02)",
+        borderRadius: "8px",
+        border: "1px solid rgba(255,255,255,0.06)",
+        marginBottom: "16px",
+      }}>
+        <span style={{ fontFamily: "'Inter', sans-serif", fontSize: "13px", color: "rgba(255,255,255,0.55)" }}>
+          Break-Even Sale Price
+        </span>
+        <span style={{ ...s.monoValue, fontSize: "15px" }}>
+          {formatFullCurrency(breakEven)}
+        </span>
       </div>
 
-      {/* Collapsible disclaimer */}
-      <div style={{ marginTop: "20px" }}>
+      {/* Return interpretation */}
+      <div style={{
+        padding: "16px",
+        background: "rgba(212,175,55,0.03)",
+        borderRadius: "8px",
+        border: "1px solid rgba(212,175,55,0.08)",
+        marginBottom: "16px",
+      }}>
+        <p style={{ ...s.bodyText, fontSize: "13px", color: "rgba(255,255,255,0.55)" }}>
+          {interpretation}
+        </p>
+      </div>
+
+      {/* Adjust deal link */}
+      {onNavigateTab && (
         <button
-          onClick={() => setShowDisclaimer(!showDisclaimer)}
+          onClick={() => onNavigateTab("deal")}
           style={{
             display: "flex",
             alignItems: "center",
@@ -1193,267 +1209,560 @@ const ExportCard = ({ onExport }: { onExport: () => void }) => {
             background: "none",
             border: "none",
             cursor: "pointer",
-            padding: "8px 0",
-            color: "rgba(255,255,255,0.55)",
-            width: "100%",
+            padding: 0,
+            fontFamily: "'Inter', sans-serif",
+            fontSize: "13px",
+            color: "#D4AF37",
           }}
         >
-          <AlertTriangle size={14} />
-          <span
-            style={{
-              fontFamily: "'Roboto Mono', monospace",
-              fontSize: "10px",
-              letterSpacing: "0.12em",
-              textTransform: "uppercase" as const,
-            }}
-          >
-            Legal Disclaimer
-          </span>
-          <span style={{ marginLeft: "auto" }}>
-            {showDisclaimer ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
-          </span>
+          Adjust your deal <ArrowRight size={14} />
         </button>
-        <div
-          style={{
-            maxHeight: showDisclaimer ? "200px" : "0px",
-            overflow: "hidden",
-            transition: "max-height 0.3s ease",
-          }}
-        >
-          <p
-            style={{
-              fontFamily: "'Inter', sans-serif",
-              fontSize: "11px",
-              color: "rgba(255,255,255,0.55)",
-              lineHeight: 1.6,
-              padding: "8px 0",
-              margin: 0,
-            }}
-          >
-            This calculator is for educational purposes only. Consult a qualified
-            entertainment attorney before making any financing decisions.
-          </p>
-        </div>
-      </div>
-
-      <Watermark />
-    </DeckCard>
+      )}
+    </div>
   );
 };
 
-// ─── Main Deck Component ─────────────────────────────────────────
+// ─── VII. Sensitivity Section (Locked Teaser) ────────────────────
 
-const WaterfallDeck = ({ result, inputs, project, guilds, onExport, onNavigateTab }: WaterfallDeckProps) => {
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const prevIndex = useRef(0);
-  const haptics = useHaptics();
-  const [hasInteracted, setHasInteracted] = useState(false);
+const SensitivitySection = () => (
+  <div style={s.section}>
+    <p style={s.sectionLabel}>SCENARIO ANALYSIS</p>
+    <h2 style={s.sectionTitle}>Sensitivity Analysis</h2>
 
-  // ── Build tier data ─────────────────────────────────────────
-
-  let remaining = inputs.revenue - result.offTopTotal;
-  const tierData: TierData[] = [];
-  let phaseNum = 1;
-
-  if (result.seniorDebtHurdle > 0) {
-    const paid = Math.min(result.seniorDebtHurdle, Math.max(0, remaining));
-    remaining -= paid;
-    tierData.push({ phase: phaseNum++, label: "Senior Debt", amount: result.seniorDebtHurdle, paid });
-  }
-
-  if (result.mezzDebtHurdle > 0) {
-    const paid = Math.min(result.mezzDebtHurdle, Math.max(0, remaining));
-    remaining -= paid;
-    tierData.push({ phase: phaseNum++, label: "Gap / Mezzanine", amount: result.mezzDebtHurdle, paid });
-  }
-
-  if (result.equityHurdle > 0) {
-    const paid = Math.min(result.equityHurdle, Math.max(0, remaining));
-    remaining -= paid;
-    tierData.push({ phase: phaseNum++, label: "Equity + Premium", amount: result.equityHurdle, paid });
-  }
-
-  if (inputs.deferments > 0) {
-    const paid = Math.min(inputs.deferments, Math.max(0, remaining));
-    remaining -= paid;
-    tierData.push({ phase: phaseNum++, label: "Deferments", amount: inputs.deferments, paid });
-  }
-
-  // ── Determine if revenue card should render ─────────────────
-  // Skip revenue card if the only off-the-top is CAM (i.e., no sales fee, marketing, or guild residuals)
-  const hasMeaningfulOffTops = result.salesFee > 0 || result.marketing > 0 || result.guilds > 0;
-  const showRevenueCard = hasMeaningfulOffTops;
-
-  // ── Build cards array ───────────────────────────────────────
-
-  const hasTitle = project.title.trim().length > 0;
-
-  const cards: React.ReactNode[] = [];
-
-  // Card 1: Project (conditional)
-  if (hasTitle) {
-    cards.push(<ProjectCard key="project" project={project} />);
-  }
-
-  // Card 2: Budget (always)
-  cards.push(<BudgetCard key="budget" inputs={inputs} guilds={guilds} />);
-
-  // Card 3: Revenue (conditional)
-  if (showRevenueCard) {
-    cards.push(<RevenueCard key="revenue" inputs={inputs} result={result} guilds={guilds} />);
-  }
-
-  // Card 4: Consolidated Waterfall (always)
-  cards.push(
-    <WaterfallCard
-      key="waterfall"
-      tiers={tierData}
-      showCompactRevenue={!showRevenueCard}
-      inputs={inputs}
-      result={result}
-    />
-  );
-
-  // Card 5: Verdict (always)
-  cards.push(
-    <VerdictCard
-      key="verdict"
-      result={result}
-      inputs={inputs}
-      onNavigateTab={onNavigateTab}
-    />
-  );
-
-  // Card 6: Export CTA (only when onExport is defined)
-  if (onExport) {
-    cards.push(<ExportCard key="export" onExport={onExport} />);
-  }
-
-  // ── Stop breathing after first interaction ──────────────────
-
-  useEffect(() => {
-    const container = scrollRef.current;
-    if (!container) return;
-
-    const handleInteraction = () => setHasInteracted(true);
-    container.addEventListener("scroll", handleInteraction, { once: true });
-    return () => container.removeEventListener("scroll", handleInteraction);
-  }, []);
-
-  // ── IntersectionObserver for current card tracking ──────────
-
-  useEffect(() => {
-    const container = scrollRef.current;
-    if (!container) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
-            const index = Number(entry.target.getAttribute("data-index"));
-            if (!isNaN(index)) setCurrentIndex(index);
-          }
-        });
-      },
-      { root: container, threshold: 0.5 }
-    );
-
-    container.querySelectorAll("[data-index]").forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
-  }, [cards.length]);
-
-  // ── Haptic feedback on card change ──────────────────────────
-
-  useEffect(() => {
-    if (currentIndex !== prevIndex.current) {
-      haptics.light();
-      prevIndex.current = currentIndex;
-    }
-  }, [currentIndex, haptics]);
-
-  return (
-    <div>
-      {/* Styles */}
-      <style>{`
-        [data-deck-scroll]::-webkit-scrollbar { display: none; }
-        @keyframes deckBreathe {
-          0%, 100% { border-color: rgba(212,175,55,0.35); }
-          50% { border-color: rgba(212,175,55,0.45); }
-        }
-        @media (prefers-reduced-motion: reduce) {
-          @keyframes deckBreathe {
-            0%, 100% { border-color: rgba(212,175,55,0.35); }
-          }
-        }
-      `}</style>
-
-      {/* Scroll-snap container */}
-      <div
-        ref={scrollRef}
-        data-deck-scroll
-        style={{
-          display: "flex",
-          overflowX: "auto",
-          scrollSnapType: "x mandatory",
-          WebkitOverflowScrolling: "touch",
-          scrollbarWidth: "none",
-          gap: "12px",
-          padding: "0 20px",
-          width: "100%",
-        }}
-      >
-        {cards.map((card, i) => (
-          <div
-            key={i}
-            data-index={i}
-            style={{
-              flex: "0 0 calc(100% - 24px)",
-              scrollSnapAlign: "center",
-            }}
-          >
-            {card}
-          </div>
-        ))}
+    <div style={{
+      marginTop: "16px",
+      padding: "32px 24px",
+      background: "rgba(255,255,255,0.02)",
+      borderRadius: "12px",
+      border: "1px solid rgba(255,255,255,0.08)",
+      textAlign: "center",
+    }}>
+      <div style={{
+        width: "56px",
+        height: "56px",
+        borderRadius: "50%",
+        background: "rgba(212,175,55,0.06)",
+        border: "1px solid rgba(212,175,55,0.15)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        margin: "0 auto 16px",
+      }}>
+        <Lock style={{ width: "22px", height: "22px", color: "rgba(212,175,55,0.50)" }} />
       </div>
 
-      {/* Tappable dot pagination */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          gap: "6px",
-          padding: "16px 0",
-        }}
-      >
-        {cards.map((_, i) => (
-          <button
-            key={i}
-            onClick={() => {
-              const container = scrollRef.current;
-              if (!container) return;
-              const target = container.querySelector(`[data-index="${i}"]`);
-              if (target) target.scrollIntoView({ behavior: "smooth", inline: "center" });
-            }}
-            aria-label={`Go to card ${i + 1}`}
-            style={{
-              width: i === currentIndex ? "20px" : "6px",
-              height: "6px",
-              borderRadius: "3px",
-              background: i === currentIndex ? "#D4AF37" : "rgba(255,255,255,0.25)",
-              transition: "all 0.3s ease",
-              border: "none",
-              padding: 0,
-              cursor: "pointer",
-              boxSizing: "content-box",
-              paddingBlock: "12px",
-              marginBlock: "-12px",
-            }}
-          />
-        ))}
+      <p style={{
+        fontFamily: "'Bebas Neue', sans-serif",
+        fontSize: "20px",
+        letterSpacing: "0.06em",
+        color: "#FFFFFF",
+        margin: "0 0 8px",
+      }}>
+        SENSITIVITY ANALYSIS
+      </p>
+
+      <p style={{
+        fontFamily: "'Inter', sans-serif",
+        fontSize: "13px",
+        color: "rgba(255,255,255,0.50)",
+        lineHeight: 1.6,
+        maxWidth: "320px",
+        margin: "0 auto 20px",
+      }}>
+        See how your deal performs across bear, base, and bull scenarios. Understand which tiers break at lower revenue and where your margin of safety sits.
+      </p>
+
+      <div style={{
+        display: "inline-flex",
+        alignItems: "center",
+        padding: "6px 14px",
+        borderRadius: "999px",
+        background: "rgba(212,175,55,0.06)",
+        border: "1px solid rgba(212,175,55,0.12)",
+      }}>
+        <span style={{
+          fontFamily: "'Roboto Mono', monospace",
+          fontSize: "10px",
+          letterSpacing: "0.1em",
+          color: "rgba(212,175,55,0.60)",
+          fontWeight: 500,
+        }}>
+          INCLUDED IN THE SNAPSHOT
+        </span>
+      </div>
+    </div>
+  </div>
+);
+
+// ─── VIII. Risk Flags Section (Teaser) ───────────────────────────
+
+const RiskFlagsSection = ({
+  inputs, result, guilds, breakEven,
+}: {
+  inputs: WaterfallInputs;
+  result: WaterfallResult;
+  guilds: GuildState;
+  breakEven: number;
+}) => {
+  // Compute flag counts by category
+  const structural: boolean[] = [
+    inputs.salesExp === 0 && inputs.salesFee > 0,
+    (inputs.debt + inputs.mezzanineDebt) / (inputs.budget || 1) > 0.40,
+    inputs.premium > 25,
+    inputs.equity === 0 && inputs.budget > 0,
+    inputs.credits > 0,
+  ];
+
+  const commercial: boolean[] = [
+    inputs.revenue > 0 && (inputs.revenue - breakEven) / inputs.revenue < 0.15,
+    inputs.revenue === 0,
+    inputs.revenue < inputs.budget && inputs.revenue > 0,
+  ];
+
+  const legal: boolean[] = [
+    guilds.sag || guilds.wga || guilds.dga,
+    true, // General legal flag — always fires
+  ];
+
+  const structuralCount = structural.filter(Boolean).length;
+  const commercialCount = commercial.filter(Boolean).length;
+  const legalCount = legal.filter(Boolean).length;
+  const totalCount = structuralCount + commercialCount + legalCount;
+
+  const categories: { label: string; count: number; color: string }[] = [];
+  if (structuralCount > 0) categories.push({ label: "STRUCTURAL", count: structuralCount, color: "#E5A537" });
+  if (commercialCount > 0) categories.push({ label: "COMMERCIAL", count: commercialCount, color: "#E67830" });
+  if (legalCount > 0) categories.push({ label: "LEGAL", count: legalCount, color: "rgba(212,175,55,0.70)" });
+
+  return (
+    <div style={s.section}>
+      <p style={s.sectionLabel}>RISK ASSESSMENT</p>
+      <h2 style={s.sectionTitle}>Risk Flags</h2>
+
+      <div style={{
+        marginTop: "16px",
+        padding: "32px 24px",
+        background: "rgba(255,255,255,0.02)",
+        borderRadius: "12px",
+        border: "1px solid rgba(255,255,255,0.08)",
+        textAlign: "center",
+      }}>
+        {/* Big number */}
+        <p style={{
+          fontFamily: "'Roboto Mono', monospace",
+          fontSize: "48px",
+          fontWeight: 700,
+          color: totalCount > 5 ? "#DC2626" : totalCount > 3 ? "#E67830" : "#E5A537",
+          margin: "0 0 4px",
+          lineHeight: 1,
+        }}>
+          {totalCount}
+        </p>
+        <p style={{
+          fontFamily: "'Roboto Mono', monospace",
+          fontSize: "12px",
+          letterSpacing: "0.15em",
+          color: "rgba(255,255,255,0.50)",
+          margin: "0 0 20px",
+          textTransform: "uppercase",
+        }}>
+          Risk Flags Detected
+        </p>
+
+        {/* Category badges */}
+        <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: "8px", marginBottom: "20px" }}>
+          {categories.map((cat) => (
+            <span key={cat.label} style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "6px",
+              padding: "6px 12px",
+              borderRadius: "999px",
+              background: "rgba(255,255,255,0.04)",
+              border: "1px solid rgba(255,255,255,0.08)",
+              fontFamily: "'Roboto Mono', monospace",
+              fontSize: "10px",
+              letterSpacing: "0.1em",
+              color: cat.color,
+              fontWeight: 500,
+            }}>
+              {cat.label}: {cat.count}
+            </span>
+          ))}
+        </div>
+
+        {/* Locked pill */}
+        <div style={{
+          display: "inline-flex",
+          alignItems: "center",
+          padding: "6px 14px",
+          borderRadius: "999px",
+          background: "rgba(212,175,55,0.06)",
+          border: "1px solid rgba(212,175,55,0.12)",
+        }}>
+          <span style={{
+            fontFamily: "'Roboto Mono', monospace",
+            fontSize: "10px",
+            letterSpacing: "0.1em",
+            color: "rgba(212,175,55,0.60)",
+            fontWeight: 500,
+          }}>
+            FULL DETAIL IN THE SNAPSHOT
+          </span>
+        </div>
       </div>
     </div>
   );
 };
 
-export default WaterfallDeck;
+// ─── IX. Next Steps + CTA Section ────────────────────────────────
+
+const NextStepsSection = ({
+  onExport, onNavigateTab,
+}: {
+  onExport?: () => void;
+  onNavigateTab?: (tab: string) => void;
+}) => {
+  const navigate = useNavigate();
+
+  const steps = [
+    {
+      number: "01",
+      title: "Review Your Numbers",
+      description: "Adjust budget, revenue, and capital stack inputs to model different deal scenarios.",
+    },
+    {
+      number: "02",
+      title: "Download Your Brief",
+      description: "Export a branded PDF to share with your team and potential investors.",
+    },
+    {
+      number: "03",
+      title: "Upgrade for Full Analysis",
+      description: "Unlock sensitivity analysis, risk flags, margin of safety, and remove branding.",
+    },
+  ];
+
+  return (
+    <div style={s.section}>
+      <p style={s.sectionLabel}>WHAT'S NEXT</p>
+      <h2 style={s.sectionTitle}>Next Steps</h2>
+
+      {/* Steps */}
+      <div style={{ margin: "16px 0 24px" }}>
+        {steps.map((step, i) => (
+          <div key={step.number} style={{
+            display: "flex",
+            gap: "12px",
+            padding: "12px 0",
+            borderBottom: i < steps.length - 1 ? "1px solid rgba(255,255,255,0.04)" : "none",
+          }}>
+            <span style={{
+              fontFamily: "'Roboto Mono', monospace",
+              fontSize: "12px",
+              fontWeight: 600,
+              color: "#D4AF37",
+              minWidth: "24px",
+            }}>
+              {step.number}
+            </span>
+            <div>
+              <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "14px", fontWeight: 600, color: "#FFFFFF", margin: "0 0 2px" }}>
+                {step.title}
+              </p>
+              <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "12px", color: "rgba(255,255,255,0.45)", margin: 0, lineHeight: 1.5 }}>
+                {step.description}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Persistence note */}
+      <p style={{
+        fontFamily: "'Inter', sans-serif",
+        fontSize: "12px",
+        color: "rgba(255,255,255,0.35)",
+        margin: "0 0 24px",
+        lineHeight: 1.5,
+      }}>
+        Your data is saved locally in your browser. Return anytime to pick up where you left off.
+      </p>
+
+      {/* Dual CTA */}
+      <div style={{ display: "flex", flexDirection: "column", gap: "12px", marginBottom: "16px" }}>
+        {/* Free button — gold outline */}
+        <button
+          onClick={() => onExport?.()}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "8px",
+            padding: "16px 24px",
+            background: "transparent",
+            border: "1px solid rgba(212,175,55,0.30)",
+            borderRadius: "8px",
+            color: "#D4AF37",
+            cursor: "pointer",
+            fontFamily: "'Bebas Neue', sans-serif",
+            fontSize: "16px",
+            letterSpacing: "0.12em",
+            textTransform: "uppercase",
+          }}
+        >
+          <Download size={16} />
+          DOWNLOAD BRANDED PDF
+        </button>
+
+        {/* Bridge text */}
+        <p style={{
+          textAlign: "center",
+          fontFamily: "'Inter', sans-serif",
+          fontSize: "12px",
+          color: "rgba(255,255,255,0.40)",
+          margin: 0,
+          lineHeight: 1.5,
+        }}>
+          Remove branding and unlock sensitivity analysis, risk flags, and margin of safety.
+        </p>
+
+        {/* Paid button — gold filled */}
+        <button
+          onClick={() => navigate("/store/snapshot")}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "8px",
+            padding: "16px 24px",
+            background: "#F9E076",
+            border: "none",
+            borderRadius: "8px",
+            color: "#000000",
+            cursor: "pointer",
+            fontFamily: "'Bebas Neue', sans-serif",
+            fontSize: "16px",
+            letterSpacing: "0.12em",
+            textTransform: "uppercase",
+            fontWeight: 600,
+          }}
+        >
+          GET THE FULL SNAPSHOT
+        </button>
+      </div>
+
+      {/* Secondary link */}
+      <div style={{ textAlign: "center", marginBottom: "32px" }}>
+        <a
+          href="/store"
+          style={{
+            fontFamily: "'Inter', sans-serif",
+            fontSize: "12px",
+            color: "rgba(212,175,55,0.60)",
+            textDecoration: "none",
+          }}
+        >
+          See all packages →
+        </a>
+      </div>
+
+      {/* Legal disclaimer */}
+      <div style={{
+        padding: "16px",
+        borderTop: "1px solid rgba(255,255,255,0.06)",
+      }}>
+        <p style={{
+          fontFamily: "'Inter', sans-serif",
+          fontSize: "10px",
+          color: "rgba(255,255,255,0.25)",
+          lineHeight: 1.6,
+          margin: 0,
+        }}>
+          This analysis is a financial modeling tool for educational purposes only. It does not constitute financial, legal, or investment advice.
+          All projections are based on user-provided inputs and industry-standard assumptions. Actual results may vary significantly.
+          Consult qualified professionals before making investment decisions. filmmaker.og is not a registered investment advisor.
+        </p>
+      </div>
+    </div>
+  );
+};
+
+// ─── Main Component ──────────────────────────────────────────────
+
+const WaterfallBrief = ({
+  result,
+  inputs,
+  project,
+  guilds,
+  selections,
+  onExport,
+  onNavigateTab,
+}: WaterfallBriefProps) => {
+  // Derive selections from inputs if not provided
+  const effectiveSelections: CapitalSelections = selections ?? {
+    taxCredits: inputs.credits > 0,
+    seniorDebt: inputs.debt > 0,
+    gapLoan: inputs.mezzanineDebt > 0,
+    equity: inputs.equity > 0,
+    deferments: inputs.deferments > 0,
+  };
+
+  // Core computations
+  const breakEven = calculateBreakeven(inputs, guilds, effectiveSelections);
+  const tiers = computeTierPayments(result, inputs);
+  const waterfallState = getWaterfallState(tiers, result.profitPool);
+  const badge = waterfallBadgeStates[waterfallState];
+
+  // Conditional checks
+  const hasRevenue = inputs.revenue > 0;
+  const hasBudget = inputs.budget > 0;
+  const hasAnySources = inputs.debt > 0 || inputs.mezzanineDebt > 0 || inputs.equity > 0 || inputs.deferments > 0;
+
+  // Source names for TLDR
+  const sourceNames: string[] = [];
+  if (inputs.debt > 0) sourceNames.push("senior debt");
+  if (inputs.mezzanineDebt > 0) sourceNames.push("mezzanine financing");
+  if (inputs.equity > 0) sourceNames.push("equity");
+  if (inputs.deferments > 0) sourceNames.push("deferments");
+  if (inputs.credits > 0) sourceNames.push("tax credits");
+  if (sourceNames.length === 0) sourceNames.push("unspecified sources");
+
+  // Genre
+  const genre = project.genre === "Other" ? project.customGenre : project.genre;
+
+  // Copy numbers for TLDR and return paragraph
+  const netDistributable = Math.max(0, inputs.revenue - result.offTopTotal);
+  const offTopPct = inputs.revenue > 0 ? (result.offTopTotal / inputs.revenue) * 100 : 0;
+  const copyNumbers = {
+    title: project.title.trim() || "This project",
+    genre: genre.trim() || "film",
+    budget: inputs.budget,
+    revenue: inputs.revenue,
+    equity: inputs.equity,
+    multiple: result.multiple,
+    producerPool: result.producer,
+    investorReturn: result.investor,
+    breakEven,
+    netDistributable,
+    offTopPct,
+    profitPool: result.profitPool,
+  };
+
+  return (
+    <div style={{
+      margin: "0 -4px",
+      background: "#0A0A0A",
+      border: "1px solid rgba(212,175,55,0.25)",
+      borderRadius: "14px",
+      overflow: "hidden",
+      position: "relative",
+    }}>
+      {/* Top glow */}
+      <div style={{
+        position: "absolute", top: 0, left: 0, right: 0, height: "200px",
+        background: "radial-gradient(ellipse at top, rgba(212,175,55,0.06), transparent 70%)",
+        pointerEvents: "none", zIndex: 0,
+      }} />
+      {/* Topline */}
+      <div style={{
+        position: "absolute", top: 0, left: "10%", right: "10%", height: "1px",
+        background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.50), transparent)",
+        zIndex: 1,
+      }} />
+
+      {/* I. Cover */}
+      <CoverSection
+        project={project}
+        inputs={inputs}
+        result={result}
+        waterfallState={waterfallState}
+        tiers={tiers}
+        breakEven={breakEven}
+        badge={badge}
+        copyNumbers={copyNumbers}
+        sourceNames={sourceNames}
+        guilds={guilds}
+      />
+
+      <SectionBreak />
+
+      {/* II. Executive Summary */}
+      <ExecutiveSummarySection
+        inputs={inputs}
+        result={result}
+        breakEven={breakEven}
+      />
+
+      <SectionBreak />
+
+      {/* III. Capital Stack */}
+      <CapitalStackSection
+        inputs={inputs}
+        result={result}
+      />
+
+      <SectionBreak />
+
+      {/* IV. Revenue & Deductions */}
+      <RevenueDeductionsSection
+        inputs={inputs}
+        result={result}
+        guilds={guilds}
+      />
+
+      <SectionBreak />
+
+      {/* V. Waterfall Cascade */}
+      {hasRevenue && (
+        <>
+          <WaterfallCascadeSection
+            tiers={tiers}
+            result={result}
+            inputs={inputs}
+            waterfallState={waterfallState}
+          />
+          <SectionBreak />
+        </>
+      )}
+
+      {/* VI. Return Profile */}
+      <ReturnProfileSection
+        result={result}
+        inputs={inputs}
+        waterfallState={waterfallState}
+        breakEven={breakEven}
+        copyNumbers={copyNumbers}
+        onNavigateTab={onNavigateTab}
+      />
+
+      <SectionBreak />
+
+      {/* VII. Sensitivity (Locked) */}
+      <SensitivitySection />
+
+      <SectionBreak />
+
+      {/* VIII. Risk Flags (Teaser) */}
+      <RiskFlagsSection
+        inputs={inputs}
+        result={result}
+        guilds={guilds}
+        breakEven={breakEven}
+      />
+
+      <SectionBreak />
+
+      {/* IX. Next Steps + CTA */}
+      <NextStepsSection
+        onExport={onExport}
+        onNavigateTab={onNavigateTab}
+      />
+
+      {/* Watermark */}
+      <Watermark />
+    </div>
+  );
+};
+
+export default WaterfallBrief;
