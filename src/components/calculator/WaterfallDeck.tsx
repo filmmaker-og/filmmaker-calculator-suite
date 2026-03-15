@@ -47,10 +47,21 @@ interface WaterfallBriefProps {
 const SectionBreak = () => (
   <div style={{
     display: "flex", alignItems: "center", gap: "12px",
-    padding: "24px 24px", position: "relative", zIndex: 1,
+    padding: "28px 24px", position: "relative", zIndex: 1,
   }}>
+    {/* Glow behind the divider */}
+    <div style={{
+      position: "absolute",
+      left: "15%",
+      right: "15%",
+      top: "50%",
+      transform: "translateY(-50%)",
+      height: "80px",
+      background: "radial-gradient(ellipse at center, rgba(212,175,55,0.04), transparent 70%)",
+      pointerEvents: "none",
+    }} />
     <div style={{ flex: 1, height: "1px", background: "rgba(212,175,55,0.12)" }} />
-    <div style={{ width: "4px", height: "4px", borderRadius: "50%", background: "rgba(212,175,55,0.35)" }} />
+    <div style={{ width: "5px", height: "5px", borderRadius: "50%", background: "rgba(212,175,55,0.40)" }} />
     <div style={{ flex: 1, height: "1px", background: "rgba(212,175,55,0.12)" }} />
   </div>
 );
@@ -74,11 +85,10 @@ const Watermark = () => (
 
 const LockedTeaser = ({ title, body }: { title: string; body: string }) => (
   <div style={{
-    padding: "14px 16px",
-    margin: "16px 0",
-    border: "1px solid rgba(255,255,255,0.06)",
-    borderRadius: "8px",
-    background: "rgba(255,255,255,0.015)",
+    ...ucardBase,
+    border: "1px solid rgba(212,175,55,0.18)",
+    background: "rgba(212,175,55,0.025)",
+    borderLeft: "3px solid rgba(212,175,55,0.30)",
   }}>
     <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "8px" }}>
       <Lock style={{ width: "14px", height: "14px", color: "rgba(212,175,55,0.40)" }} />
@@ -133,7 +143,7 @@ const s = {
     fontFamily: "'Bebas Neue', sans-serif",
     fontSize: "28px",
     letterSpacing: "0.06em",
-    color: "#FFFFFF",
+    color: "rgba(255,255,255,0.95)",
     margin: "8px 0 0",
     textAlign: "center" as const,
   } as React.CSSProperties,
@@ -141,7 +151,7 @@ const s = {
     fontFamily: "'Inter', sans-serif",
     fontSize: "14px",
     lineHeight: 1.65,
-    color: "rgba(255,255,255,0.70)",
+    color: "rgba(255,255,255,0.75)",
     margin: 0,
   } as React.CSSProperties,
   monoLabel: {
@@ -153,9 +163,9 @@ const s = {
   } as React.CSSProperties,
   monoValue: {
     fontFamily: "'Roboto Mono', monospace",
-    fontSize: "14px",
+    fontSize: "15px",
     fontWeight: 500,
-    color: "#FFFFFF",
+    color: "rgba(255,255,255,0.82)",
     fontVariantNumeric: "tabular-nums" as const,
   } as React.CSSProperties,
   goldDivider: {
@@ -168,6 +178,18 @@ const s = {
     position: "relative" as const,
     zIndex: 1,
   } as React.CSSProperties,
+};
+
+// ─── Unified Card System ─────────────────────────────────────────
+
+const ucardBase: React.CSSProperties = {
+  border: "1px solid rgba(212,175,55,0.12)",
+  borderRadius: "10px",
+  padding: "18px 20px",
+  margin: "14px 0",
+  background: "rgba(212,175,55,0.015)",
+  position: "relative",
+  overflow: "hidden",
 };
 
 // ─── I. Cover Section ────────────────────────────────────────────
@@ -239,7 +261,7 @@ const CoverSection = ({
         </div>
       </div>
 
-      {/* Block 2: Project identity */}
+      {/* Block 2: Title */}
       {hasTitle && (
         <div style={{ textAlign: "center", marginBottom: "24px" }}>
           <h1 style={{
@@ -252,6 +274,7 @@ const CoverSection = ({
             {project.title.toUpperCase()}
           </h1>
 
+          {/* Genre + Status */}
           {(hasGenre || hasStatus) && (
             <p style={{
               fontFamily: "'Inter', sans-serif",
@@ -262,27 +285,78 @@ const CoverSection = ({
               {[hasGenre ? genre : null, hasStatus ? project.status : null].filter(Boolean).join(" · ")}
             </p>
           )}
-
-          {hasLogline && (
-            <p style={{
-              fontFamily: "'Inter', sans-serif",
-              fontSize: "13px",
-              color: "rgba(255,255,255,0.45)",
-              margin: "12px auto 0",
-              maxWidth: "400px",
-              lineHeight: 1.5,
-              display: "-webkit-box",
-              WebkitLineClamp: 2,
-              WebkitBoxOrient: "vertical" as const,
-              overflow: "hidden",
-            }}>
-              {project.logline}
-            </p>
-          )}
         </div>
       )}
 
-      {/* Badge */}
+      {/* Block 3: Logline — labeled, conditional */}
+      {hasLogline && (
+        <div style={{ padding: "14px 0" }}>
+          <p style={{
+            fontFamily: "'Roboto Mono', monospace",
+            fontSize: "9px",
+            letterSpacing: "0.12em",
+            textTransform: "uppercase" as const,
+            color: "rgba(212,175,55,0.45)",
+            marginBottom: "4px",
+          }}>
+            LOGLINE
+          </p>
+          <p style={{
+            fontFamily: "'Inter', sans-serif",
+            fontSize: "14px",
+            lineHeight: 1.6,
+            color: "rgba(255,255,255,0.55)",
+            fontStyle: "italic",
+            margin: 0,
+          }}>
+            {project.logline}
+          </p>
+        </div>
+      )}
+
+      {/* Block 4: Team / Package grid */}
+      {packageFields.length > 0 && (
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(2, 1fr)",
+          gap: "12px",
+          marginBottom: "24px",
+        }}>
+          {packageFields.map((field) => (
+            <div key={field.label}>
+              <p style={{ ...s.monoLabel, fontSize: "9px", margin: "0 0 4px" }}>{field.label}</p>
+              <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "13px", color: "rgba(255,255,255,0.75)", margin: 0 }}>
+                {field.value}
+              </p>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Block 5: Assumptions — two-tone chips */}
+      <div style={{ marginBottom: "24px" }}>
+        <p style={{ ...s.monoLabel, fontSize: "9px", margin: "0 0 8px" }}>MODEL ASSUMPTIONS</p>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
+          {assumptions.map((a) => (
+            <span key={a.label} style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "4px",
+              padding: "4px 10px",
+              borderRadius: "4px",
+              border: "1px solid rgba(212,175,55,0.15)",
+              background: "rgba(212,175,55,0.03)",
+              fontFamily: "'Roboto Mono', monospace",
+              fontSize: "10px",
+            }}>
+              <span style={{ color: "rgba(212,175,55,0.45)" }}>{a.label}</span>
+              <span style={{ color: "rgba(255,255,255,0.70)" }}>{a.value}</span>
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* Block 6: Verdict badge */}
       <div style={{ display: "flex", justifyContent: "center", marginBottom: "24px" }}>
         <div style={{
           display: "inline-flex",
@@ -304,7 +378,7 @@ const CoverSection = ({
         </div>
       </div>
 
-      {/* KPI row */}
+      {/* Block 7: KPI row */}
       <div style={{
         display: "grid",
         gridTemplateColumns: "repeat(4, 1fr)",
@@ -317,7 +391,7 @@ const CoverSection = ({
         {[
           { label: "BUDGET", value: formatCompactCurrency(inputs.budget) },
           { label: "REVENUE", value: formatCompactCurrency(inputs.revenue) },
-          { label: "MULTIPLE", value: formatMultiple(result.multiple), color: result.multiple >= 1.0 ? "#3CB371" : result.multiple >= 0.5 ? "#E5A537" : "#DC2626" },
+          { label: "MULTIPLE", value: formatMultiple(result.multiple), color: result.multiple >= 1.0 ? "#3CB371" : result.multiple >= 0.5 ? "#F0A830" : "#DC2626" },
           { label: "BREAK-EVEN", value: formatCompactCurrency(breakEven) },
         ].map((kpi) => (
           <div key={kpi.label} style={{
@@ -326,12 +400,12 @@ const CoverSection = ({
             textAlign: "center",
           }}>
             <p style={{ ...s.monoLabel, fontSize: "9px", margin: "0 0 4px" }}>{kpi.label}</p>
-            <p style={{ ...s.monoValue, fontSize: "15px", margin: 0, ...('color' in kpi && kpi.color ? { color: kpi.color } : {}) }}>{kpi.value}</p>
+            <p style={{ ...s.monoValue, fontSize: "26px", fontWeight: 700, margin: 0, ...('color' in kpi && kpi.color ? { color: kpi.color } : {}) }}>{kpi.value}</p>
           </div>
         ))}
       </div>
 
-      {/* TLDR */}
+      {/* Block 8: TLDR */}
       <div style={{
         padding: "16px",
         background: "rgba(212,175,55,0.03)",
@@ -344,67 +418,21 @@ const CoverSection = ({
         </p>
       </div>
 
-      {/* Introduction */}
+      {/* Block 9: Disclaimer */}
       <div style={{
-        padding: "16px 0",
-        borderTop: "1px solid rgba(212,175,55,0.08)",
-        borderBottom: "1px solid rgba(212,175,55,0.08)",
-        margin: "8px 0",
+        padding: "12px 0",
+        borderTop: "1px solid rgba(255,255,255,0.06)",
       }}>
         <p style={{
           fontFamily: "'Inter', sans-serif",
-          fontSize: "14px",
-          lineHeight: 1.65,
-          color: "rgba(255,255,255,0.55)",
+          fontSize: "10px",
+          color: "rgba(255,255,255,0.25)",
+          lineHeight: 1.6,
           margin: 0,
         }}>
-          Over the next few sections, this analysis breaks down exactly where your{" "}
-          {formatCompactCurrency(inputs.revenue)} acquisition price goes — what gets
-          deducted before anyone is repaid, who gets paid in what order, and whether
-          the numbers work for your investors. By the end, you'll be able to explain
-          this waterfall to anyone in the room.
+          This analysis is a financial modeling tool for educational purposes only. It does not constitute financial, legal, or investment advice.
+          All projections are based on user-provided inputs and industry-standard assumptions. Actual results may vary significantly.
         </p>
-      </div>
-
-      {/* Package grid */}
-      {packageFields.length > 0 && (
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(2, 1fr)",
-          gap: "12px",
-          marginBottom: "24px",
-        }}>
-          {packageFields.map((field) => (
-            <div key={field.label}>
-              <p style={{ ...s.monoLabel, fontSize: "9px", margin: "0 0 4px" }}>{field.label}</p>
-              <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "13px", color: "rgba(255,255,255,0.70)", margin: 0 }}>
-                {field.value}
-              </p>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* Assumptions strip */}
-      <div>
-        <p style={{ ...s.monoLabel, fontSize: "9px", margin: "0 0 8px" }}>MODEL ASSUMPTIONS</p>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
-          {assumptions.map((a) => (
-            <span key={a.label} style={{
-              display: "inline-block",
-              padding: "4px 10px",
-              borderRadius: "999px",
-              background: "rgba(255,255,255,0.04)",
-              border: "1px solid rgba(255,255,255,0.08)",
-              fontFamily: "'Roboto Mono', monospace",
-              fontSize: "10px",
-              color: "rgba(255,255,255,0.50)",
-              letterSpacing: "0.05em",
-            }}>
-              {a.label}: {a.value}
-            </span>
-          ))}
-        </div>
       </div>
     </div>
   );
@@ -523,11 +551,8 @@ const SourceCard = ({
 
   return (
     <div style={{
-      padding: "16px",
-      background: "rgba(212,175,55,0.02)",
-      borderRadius: "8px",
-      border: "1px solid rgba(212,175,55,0.15)",
-      marginBottom: "12px",
+      ...ucardBase,
+      borderLeft: "3px solid rgba(212,175,55,0.40)",
     }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "12px" }}>
         <div>
@@ -545,11 +570,11 @@ const SourceCard = ({
       <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "8px", marginBottom: "12px" }}>
         <div>
           <p style={{ ...s.monoLabel, fontSize: "9px", margin: "0 0 2px" }}>SHARE OF STACK</p>
-          <p style={{ ...s.monoValue, fontSize: "13px", margin: 0 }}>{share}%</p>
+          <p style={{ ...s.monoValue, fontSize: "15px", margin: 0, opacity: 0.82 }}>{share}%</p>
         </div>
         <div>
           <p style={{ ...s.monoLabel, fontSize: "9px", margin: "0 0 2px" }}>CONTRACTUAL RETURN</p>
-          <p style={{ ...s.monoValue, fontSize: "13px", margin: 0 }}>{formatCompactCurrency(contractualReturn)}</p>
+          <p style={{ ...s.monoValue, fontSize: "15px", margin: 0, opacity: 0.82 }}>{formatCompactCurrency(contractualReturn)}</p>
         </div>
       </div>
 
@@ -720,16 +745,13 @@ const CapitalStackSection = ({
           {/* Tax credit contextual upsell */}
           {showTaxCreditUpsell && (
             <div style={{
-              padding: "16px",
-              margin: "16px 0",
-              border: "1px solid rgba(212,175,55,0.12)",
-              borderRadius: "8px",
-              background: "rgba(212,175,55,0.02)",
+              ...ucardBase,
+              borderLeft: "3px solid rgba(212,175,55,0.30)",
             }}>
               <p style={{
                 fontFamily: "'Inter', sans-serif",
                 fontSize: "13px",
-                color: "rgba(255,255,255,0.55)",
+                color: "rgba(255,255,255,0.58)",
                 lineHeight: 1.6,
                 margin: "0 0 8px",
               }}>
@@ -749,7 +771,7 @@ const CapitalStackSection = ({
               <div style={{
                 padding: "12px",
                 border: "1px solid rgba(255,255,255,0.06)",
-                borderRadius: "6px",
+                borderRadius: "8px",
                 background: "rgba(255,255,255,0.015)",
               }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "6px" }}>
@@ -793,16 +815,13 @@ const CapitalStackSection = ({
           {/* Deferment contextual upsell */}
           {showDefermentUpsell && (
             <div style={{
-              padding: "16px",
-              margin: "16px 0",
-              border: "1px solid rgba(212,175,55,0.12)",
-              borderRadius: "8px",
-              background: "rgba(212,175,55,0.02)",
+              ...ucardBase,
+              borderLeft: "3px solid rgba(212,175,55,0.30)",
             }}>
               <p style={{
                 fontFamily: "'Inter', sans-serif",
                 fontSize: "13px",
-                color: "rgba(255,255,255,0.55)",
+                color: "rgba(255,255,255,0.58)",
                 lineHeight: 1.6,
                 margin: "0 0 8px",
               }}>
@@ -820,7 +839,7 @@ const CapitalStackSection = ({
               <div style={{
                 padding: "12px",
                 border: "1px solid rgba(255,255,255,0.06)",
-                borderRadius: "6px",
+                borderRadius: "8px",
                 background: "rgba(255,255,255,0.015)",
               }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "6px" }}>
@@ -863,13 +882,10 @@ const CapitalStackSection = ({
 
           {/* Stack interpretation */}
           <div style={{
-            padding: "16px",
-            background: "rgba(212,175,55,0.03)",
-            borderRadius: "8px",
-            border: "1px solid rgba(212,175,55,0.08)",
-            marginTop: "8px",
+            ...ucardBase,
+            borderLeft: "3px solid rgba(212,175,55,0.40)",
           }}>
-            <p style={{ ...s.bodyText, fontSize: "13px", color: "rgba(255,255,255,0.55)" }}>
+            <p style={{ ...s.bodyText, fontSize: "13px", color: "rgba(255,255,255,0.58)" }}>
               {interpretation}
             </p>
           </div>
@@ -964,8 +980,8 @@ const RevenueDeductionsSection = ({
         <p style={{ ...s.monoLabel, fontSize: "10px", margin: "0 0 4px" }}>ACQUISITION PRICE</p>
         <p style={{
           fontFamily: "'Roboto Mono', monospace",
-          fontSize: "32px",
-          fontWeight: 600,
+          fontSize: "48px",
+          fontWeight: 700,
           color: "#D4AF37",
           margin: 0,
           fontVariantNumeric: "tabular-nums",
@@ -985,7 +1001,7 @@ const RevenueDeductionsSection = ({
             borderBottom: i < deductions.length - 1 ? "1px solid rgba(255,255,255,0.06)" : "none",
           }}>
             <div>
-              <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "13px", color: "rgba(255,255,255,0.70)", margin: "0 0 2px" }}>
+              <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "13px", color: "rgba(255,255,255,0.78)", margin: "0 0 2px" }}>
                 {d.label}
               </p>
               <p style={{ ...s.monoLabel, fontSize: "10px", margin: 0 }}>{d.detail}</p>
@@ -1027,13 +1043,11 @@ const RevenueDeductionsSection = ({
 
       {/* Net distributable total */}
       <div style={{
+        ...ucardBase,
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        padding: "16px",
-        background: "rgba(212,175,55,0.04)",
-        borderRadius: "8px",
-        border: "1px solid rgba(212,175,55,0.12)",
+        borderLeft: "3px solid rgba(212,175,55,0.40)",
       }}>
         <span style={{ fontFamily: "'Inter', sans-serif", fontSize: "14px", fontWeight: 600, color: "#FFFFFF" }}>
           Net Distributable
@@ -1092,7 +1106,7 @@ const CascadeBlock = ({
   const borderLeftAccent = isFunded
     ? "3px solid rgba(60,179,113,0.50)"
     : isPartial
-    ? "3px solid rgba(229,165,55,0.40)"
+    ? "3px solid rgba(240,168,48,0.40)"
     : "3px solid rgba(220,38,38,0.25)";
 
   const textColor = isFunded
@@ -1144,7 +1158,7 @@ const TierRow = ({ tier }: { tier: TierPayment }) => {
   const statusColor = tier.status === "funded"
     ? "#3CB371"
     : tier.status === "partial"
-    ? "#E5A537"
+    ? "#F0A830"
     : "rgba(220,38,38,0.40)";
 
   const statusLabel = tier.status === "funded" ? "FUNDED" : tier.status === "partial" ? "PARTIAL" : "UNFUNDED";
@@ -1161,7 +1175,7 @@ const TierRow = ({ tier }: { tier: TierPayment }) => {
       <span style={{ ...s.monoLabel, fontSize: "11px", color: "rgba(255,255,255,0.30)", textAlign: "center" }}>
         {tier.phase}
       </span>
-      <span style={{ fontFamily: "'Inter', sans-serif", fontSize: "13px", color: "rgba(255,255,255,0.70)" }}>
+      <span style={{ fontFamily: "'Inter', sans-serif", fontSize: "13px", color: "rgba(255,255,255,0.78)" }}>
         {tier.label}
       </span>
       <span style={{ ...s.monoValue, fontSize: "13px", textAlign: "right" }}>
@@ -1180,12 +1194,12 @@ const TierRow = ({ tier }: { tier: TierPayment }) => {
         background: tier.status === "funded"
           ? "rgba(60,179,113,0.06)"
           : tier.status === "partial"
-          ? "rgba(229,165,55,0.06)"
+          ? "rgba(240,168,48,0.06)"
           : "rgba(220,38,38,0.06)",
         border: tier.status === "funded"
           ? "1px solid rgba(60,179,113,0.25)"
           : tier.status === "partial"
-          ? "1px solid rgba(229,165,55,0.25)"
+          ? "1px solid rgba(240,168,48,0.25)"
           : "1px solid rgba(220,38,38,0.15)",
       }}>
         {statusLabel}
@@ -1295,12 +1309,10 @@ const WaterfallCascadeSection = ({
 
           {/* Interpretation */}
           <div style={{
-            padding: "16px",
-            background: "rgba(212,175,55,0.03)",
-            borderRadius: "8px",
-            border: "1px solid rgba(212,175,55,0.08)",
+            ...ucardBase,
+            borderLeft: "3px solid rgba(212,175,55,0.40)",
           }}>
-            <p style={{ ...s.bodyText, fontSize: "13px", color: "rgba(255,255,255,0.55)" }}>
+            <p style={{ ...s.bodyText, fontSize: "13px", color: "rgba(255,255,255,0.58)" }}>
               {interpretation}
             </p>
           </div>
@@ -1360,9 +1372,9 @@ const ReturnProfileSection = ({
       <div style={{ textAlign: "center", margin: "20px 0 24px" }}>
         <p style={{
           fontFamily: "'Roboto Mono', monospace",
-          fontSize: "64px",
+          fontSize: "72px",
           fontWeight: 700,
-          color: result.multiple >= 1.0 ? "#3CB371" : result.multiple >= 0.5 ? "#E5A537" : "#DC2626",
+          color: result.multiple >= 1.0 ? "#3CB371" : result.multiple >= 0.5 ? "#F0A830" : "#DC2626",
           margin: "0 0 8px",
           lineHeight: 1,
           fontVariantNumeric: "tabular-nums",
@@ -1417,7 +1429,7 @@ const ReturnProfileSection = ({
       <div style={{ marginBottom: "20px" }}>
         <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "6px" }}>
           <span style={{ ...s.monoLabel, fontSize: "10px" }}>RECOUPMENT</span>
-          <span style={{ ...s.monoValue, fontSize: "12px", color: recoupPct >= 100 ? "#3CB371" : recoupPct >= 70 ? "rgba(60,179,113,0.70)" : recoupPct >= 40 ? "#E5A537" : "rgba(220,38,38,0.60)" }}>{recoupPct.toFixed(0)}%</span>
+          <span style={{ ...s.monoValue, fontSize: "12px", color: recoupPct >= 100 ? "#3CB371" : recoupPct >= 70 ? "rgba(60,179,113,0.70)" : recoupPct >= 40 ? "#F0A830" : "rgba(220,38,38,0.60)" }}>{recoupPct.toFixed(0)}%</span>
         </div>
         <div style={{
           height: "8px",
@@ -1433,7 +1445,7 @@ const ReturnProfileSection = ({
               : recoupPct >= 70
               ? "rgba(60,179,113,0.70)"
               : recoupPct >= 40
-              ? "#E5A537"
+              ? "#F0A830"
               : "rgba(220,38,38,0.60)",
             borderRadius: "4px",
             transition: "width 0.5s ease",
@@ -1462,13 +1474,11 @@ const ReturnProfileSection = ({
 
       {/* Return interpretation */}
       <div style={{
-        padding: "16px",
-        background: "rgba(212,175,55,0.03)",
-        borderRadius: "8px",
-        border: "1px solid rgba(212,175,55,0.08)",
+        ...ucardBase,
+        borderLeft: "3px solid rgba(212,175,55,0.40)",
         marginBottom: "16px",
       }}>
-        <p style={{ ...s.bodyText, fontSize: "13px", color: "rgba(255,255,255,0.55)" }}>
+        <p style={{ ...s.bodyText, fontSize: "13px", color: "rgba(255,255,255,0.58)" }}>
           {interpretation}
         </p>
       </div>
@@ -1536,9 +1546,9 @@ const ConclusionSection = ({
     <div style={{ position: "relative", zIndex: 1, padding: "0 24px" }}>
       <h2 style={{
         fontFamily: "'Bebas Neue', sans-serif",
-        fontSize: "24px",
+        fontSize: "28px",
         letterSpacing: "0.08em",
-        color: "rgba(255,255,255,0.90)",
+        color: "rgba(255,255,255,0.95)",
         textAlign: "center",
         marginBottom: "16px",
       }}>
@@ -1549,17 +1559,15 @@ const ConclusionSection = ({
         fontFamily: "'Inter', sans-serif",
         fontSize: "15px",
         lineHeight: 1.7,
-        color: "rgba(255,255,255,0.72)",
+        color: "rgba(255,255,255,0.75)",
         marginBottom: "20px",
       }}>
         {conclusion}
       </p>
 
       <div style={{
-        padding: "12px 16px",
-        border: "1px solid rgba(255,255,255,0.06)",
-        borderRadius: "6px",
-        background: "rgba(255,255,255,0.02)",
+        ...ucardBase,
+        borderLeft: "3px solid rgba(212,175,55,0.30)",
       }}>
         <p style={{
           fontFamily: "'Inter', sans-serif",
@@ -1699,7 +1707,7 @@ const RiskFlagsSection = ({
   const totalCount = structuralCount + commercialCount + legalCount;
 
   const categories: { label: string; count: number; color: string }[] = [];
-  if (structuralCount > 0) categories.push({ label: "STRUCTURAL", count: structuralCount, color: "#E5A537" });
+  if (structuralCount > 0) categories.push({ label: "STRUCTURAL", count: structuralCount, color: "#F0A830" });
   if (commercialCount > 0) categories.push({ label: "COMMERCIAL", count: commercialCount, color: "#E67830" });
   if (legalCount > 0) categories.push({ label: "LEGAL", count: legalCount, color: "rgba(212,175,55,0.70)" });
 
@@ -1724,7 +1732,7 @@ const RiskFlagsSection = ({
           fontFamily: "'Roboto Mono', monospace",
           fontSize: "48px",
           fontWeight: 700,
-          color: totalCount > 5 ? "#DC2626" : totalCount > 3 ? "#E67830" : "#E5A537",
+          color: totalCount > 5 ? "#DC2626" : totalCount > 3 ? "#E67830" : "#F0A830",
           margin: "0 0 4px",
           lineHeight: 1,
         }}>
