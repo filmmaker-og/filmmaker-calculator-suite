@@ -846,19 +846,25 @@ const CascadeBlock = ({
     ? "rgba(212,175,55,0.15)"
     : isPartial
     ? "rgba(212,175,55,0.08)"
-    : "rgba(255,255,255,0.03)";
+    : "rgba(220,38,38,0.04)";
 
-  const borderColor = isFunded
-    ? "rgba(212,175,55,0.30)"
+  const borderBase = isFunded
+    ? "1px solid rgba(212,175,55,0.30)"
     : isPartial
-    ? "rgba(212,175,55,0.15)"
-    : "rgba(255,255,255,0.08)";
+    ? "1px solid rgba(212,175,55,0.15)"
+    : "1px solid rgba(220,38,38,0.10)";
+
+  const borderLeftAccent = isFunded
+    ? "3px solid rgba(60,179,113,0.50)"
+    : isPartial
+    ? "3px solid rgba(229,165,55,0.40)"
+    : "3px solid rgba(220,38,38,0.25)";
 
   const textColor = isFunded
     ? "#D4AF37"
     : isPartial
     ? "rgba(212,175,55,0.70)"
-    : "rgba(255,255,255,0.30)";
+    : "rgba(220,38,38,0.35)";
 
   return (
     <div style={{
@@ -866,7 +872,8 @@ const CascadeBlock = ({
       minHeight: isNarrow ? "60px" : "48px",
       background: bgColor,
       borderRadius: "6px",
-      border: `1px solid ${borderColor}`,
+      border: borderBase,
+      borderLeft: borderLeftAccent,
       padding: "8px 12px",
       display: "flex",
       flexDirection: isNarrow ? "column" : "row",
@@ -900,10 +907,10 @@ const CascadeBlock = ({
 
 const TierRow = ({ tier }: { tier: TierPayment }) => {
   const statusColor = tier.status === "funded"
-    ? "#D4AF37"
+    ? "#3CB371"
     : tier.status === "partial"
-    ? "rgba(212,175,55,0.70)"
-    : "rgba(255,255,255,0.30)";
+    ? "#E5A537"
+    : "rgba(220,38,38,0.40)";
 
   const statusLabel = tier.status === "funded" ? "FUNDED" : tier.status === "partial" ? "PARTIAL" : "UNFUNDED";
 
@@ -931,8 +938,20 @@ const TierRow = ({ tier }: { tier: TierPayment }) => {
         fontWeight: 600,
         letterSpacing: "0.1em",
         color: statusColor,
-        textAlign: "right",
+        textAlign: "center",
         minWidth: "60px",
+        padding: "3px 8px",
+        borderRadius: "999px",
+        background: tier.status === "funded"
+          ? "rgba(60,179,113,0.06)"
+          : tier.status === "partial"
+          ? "rgba(229,165,55,0.06)"
+          : "rgba(220,38,38,0.06)",
+        border: tier.status === "funded"
+          ? "1px solid rgba(60,179,113,0.25)"
+          : tier.status === "partial"
+          ? "1px solid rgba(229,165,55,0.25)"
+          : "1px solid rgba(220,38,38,0.15)",
       }}>
         {statusLabel}
       </span>
@@ -989,7 +1008,7 @@ const WaterfallCascadeSection = ({
               <span style={{ ...s.monoLabel, fontSize: "10px", color: "rgba(212,175,55,0.55)" }}>
                 NET DISTRIBUTABLE
               </span>
-              <span style={{ ...s.monoValue, fontSize: "12px", color: "#D4AF37" }}>
+              <span style={{ ...s.monoValue, fontSize: "12px", color: netDistributable > result.totalHurdle ? "#3CB371" : "rgba(255,255,255,0.85)" }}>
                 {formatCompactCurrency(netDistributable)}
               </span>
             </div>
@@ -1008,18 +1027,19 @@ const WaterfallCascadeSection = ({
               <div style={{
                 width: `${Math.max(netDistributable > 0 ? (remainingBalance / netDistributable) * 100 : 0, 40)}%`,
                 height: "32px",
-                background: "rgba(212,175,55,0.06)",
+                background: "rgba(60,179,113,0.10)",
                 borderRadius: "6px",
-                border: "1px dashed rgba(212,175,55,0.20)",
+                border: "1px solid rgba(60,179,113,0.25)",
+                borderLeft: "3px solid rgba(60,179,113,0.50)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
                 padding: "0 12px",
               }}>
-                <span style={{ ...s.monoLabel, fontSize: "10px", color: "rgba(212,175,55,0.45)" }}>
+                <span style={{ ...s.monoLabel, fontSize: "10px", color: "rgba(60,179,113,0.55)" }}>
                   PROFIT POOL
                 </span>
-                <span style={{ ...s.monoValue, fontSize: "12px", color: "rgba(212,175,55,0.60)" }}>
+                <span style={{ ...s.monoValue, fontSize: "12px", color: "#3CB371" }}>
                   {formatCompactCurrency(result.profitPool)}
                 </span>
               </div>
