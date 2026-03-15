@@ -27,7 +27,7 @@ import {
   getSensitivityInterpretation,
 } from "@/lib/waterfall-copy";
 import { useRef, useEffect } from "react";
-import { Lock, Download, ArrowRight } from "lucide-react";
+import { Lock, Download } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 // ─── Types ───────────────────────────────────────────────────────
@@ -1529,23 +1529,20 @@ const ReturnProfileSection = ({
 
       {/* Adjust deal link */}
       {onNavigateTab && (
-        <button
+        <span
           onClick={() => onNavigateTab("deal")}
           style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "6px",
-            background: "none",
-            border: "none",
-            cursor: "pointer",
-            padding: 0,
+            display: "block",
+            textAlign: "center",
+            padding: "12px 0",
             fontFamily: "'Inter', sans-serif",
             fontSize: "13px",
-            color: "#D4AF37",
+            color: "rgba(212,175,55,0.55)",
+            cursor: "pointer",
           }}
         >
-          Adjust your deal <ArrowRight size={14} />
-        </button>
+          Adjust your deal →
+        </span>
       )}
     </div>
   );
@@ -1602,24 +1599,6 @@ const ConclusionSection = ({
       }}>
         {conclusion}
       </p>
-
-      <div style={{
-        ...ucardBase,
-        borderLeft: "3px solid rgba(212,175,55,0.30)",
-      }}>
-        <p style={{
-          fontFamily: "'Inter', sans-serif",
-          fontSize: "13px",
-          color: "rgba(255,255,255,0.45)",
-          lineHeight: 1.6,
-          margin: 0,
-        }}>
-          This analysis covers your base case. The full Snapshot adds what happens
-          when the base case breaks — sensitivity modeling across five acquisition
-          scenarios, full risk flag detail with mitigation guidance, margin of safety
-          calculations, and a white-label export for investor presentations.
-        </p>
-      </div>
     </div>
   );
 };
@@ -1853,189 +1832,147 @@ const RiskFlagsSection = ({
   );
 };
 
-// ─── IX. Next Steps + CTA Section ────────────────────────────────
+// ─── IX. Next Steps Section ──────────────────────────────────────
 
-const NextStepsSection = ({
-  onExport, onNavigateTab,
-}: {
-  onExport?: () => void;
-  onNavigateTab?: (tab: string) => void;
-}) => {
-  const navigate = useNavigate();
-
+const NextStepsSection = () => {
   const steps = [
-    {
-      number: "01",
-      title: "Review With Counsel",
-      description: "Take the modeled stack and waterfall terms to entertainment counsel — particularly repayment priority, equity premium, and guild obligations.",
-    },
-    {
-      number: "02",
-      title: "Validate Your Price",
-      description: "Check the acquisition price against current market comparables for your genre and budget range. The model is only as good as the revenue assumption.",
-    },
-    {
-      number: "03",
-      title: "Lead With Downside",
-      description: "Use the bear case in investor conversations. Transparency about risk builds more trust than optimistic projections.",
-    },
+    { number: "01", description: "Review with entertainment counsel — repayment priority, equity premium, guild obligations." },
+    { number: "02", description: "Validate your acquisition price against market comparables for your genre and budget tier." },
+    { number: "03", description: "Lead with the downside in investor conversations. Transparency builds trust." },
   ];
 
   return (
     <div style={s.section}>
       <h2 style={s.sectionTitle}>Next Steps</h2>
 
-      {/* Steps */}
-      <div style={{ margin: "16px 0 24px" }}>
+      <div style={{ padding: "8px 0 20px" }}>
         {steps.map((step, i) => (
           <div key={step.number} style={{
             display: "flex",
-            gap: "12px",
-            padding: "12px 0",
+            gap: "14px",
+            padding: "14px 0",
             borderBottom: i < steps.length - 1 ? "1px solid rgba(255,255,255,0.04)" : "none",
           }}>
             <span style={{
               fontFamily: "'Roboto Mono', monospace",
-              fontSize: "12px",
-              fontWeight: 600,
-              color: "#D4AF37",
+              fontSize: "13px",
+              fontWeight: 700,
+              color: "rgba(212,175,55,0.55)",
               minWidth: "24px",
             }}>
               {step.number}
             </span>
-            <div>
-              <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "14px", fontWeight: 600, color: "#FFFFFF", margin: "0 0 2px" }}>
-                {step.title}
-              </p>
-              <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "12px", color: "rgba(255,255,255,0.45)", margin: 0, lineHeight: 1.5 }}>
-                {step.description}
-              </p>
-            </div>
+            <p style={{
+              fontFamily: "'Inter', sans-serif",
+              fontSize: "15px",
+              color: "rgba(255,255,255,0.75)",
+              lineHeight: 1.65,
+              margin: 0,
+            }}>
+              {step.description}
+            </p>
           </div>
         ))}
       </div>
+    </div>
+  );
+};
 
-      {/* Resource Vault link */}
-      <p style={{
-        fontFamily: "'Inter', sans-serif",
-        fontSize: "13px",
-        color: "rgba(212,175,55,0.40)",
-        textAlign: "center",
-        padding: "12px 0",
-      }}>
-        Have questions about your analysis?{" "}
-        <span
-          onClick={() => navigate("/resources")}
-          style={{ color: "rgba(212,175,55,0.55)", cursor: "pointer" }}
-        >
-          Visit our Resource Vault
-        </span>
-      </p>
+// ─── X. CTA Section ─────────────────────────────────────────────
 
-      {/* Persistence note */}
-      <p style={{
-        fontFamily: "'Inter', sans-serif",
-        fontSize: "12px",
-        color: "rgba(255,255,255,0.35)",
-        margin: "0 0 24px",
-        lineHeight: 1.5,
-      }}>
-        This analysis is generated in real-time from your inputs. Export or screenshot to save your results.
-      </p>
+const CTASection = () => {
+  const navigate = useNavigate();
 
-      {/* Dual CTA */}
-      <div style={{ display: "flex", flexDirection: "column", gap: "12px", marginBottom: "16px" }}>
-        {/* Free button — gold outline */}
-        <button
-          onClick={() => onExport?.()}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: "8px",
-            padding: "16px 24px",
-            background: "transparent",
-            border: "1px solid rgba(212,175,55,0.30)",
-            borderRadius: "8px",
-            color: "#D4AF37",
-            cursor: "pointer",
-            fontFamily: "'Bebas Neue', sans-serif",
-            fontSize: "16px",
-            letterSpacing: "0.12em",
-            textTransform: "uppercase",
-          }}
-        >
-          <Download size={16} />
-          EXPORT YOUR ANALYSIS
-        </button>
-
-        {/* Bridge text */}
-        <p style={{
-          textAlign: "center",
-          fontFamily: "'Inter', sans-serif",
-          fontSize: "12px",
-          color: "rgba(255,255,255,0.40)",
-          margin: 0,
-          lineHeight: 1.5,
-        }}>
-          Remove branding and unlock sensitivity analysis, risk flags, and margin of safety.
-        </p>
-
-        {/* Paid button — gold filled */}
-        <button
-          onClick={() => navigate("/store/snapshot")}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: "8px",
-            padding: "16px 24px",
-            background: "#F9E076",
-            border: "none",
-            borderRadius: "8px",
-            color: "#000000",
-            cursor: "pointer",
-            fontFamily: "'Bebas Neue', sans-serif",
-            fontSize: "16px",
-            letterSpacing: "0.12em",
-            textTransform: "uppercase",
-            fontWeight: 600,
-          }}
-        >
-          GET THE FULL SNAPSHOT
-        </button>
-      </div>
-
-      {/* Secondary link */}
-      <div style={{ textAlign: "center", marginBottom: "32px" }}>
-        <a
-          href="/store"
-          style={{
-            fontFamily: "'Inter', sans-serif",
-            fontSize: "12px",
-            color: "rgba(212,175,55,0.60)",
-            textDecoration: "none",
-          }}
-        >
-          See all packages →
-        </a>
-      </div>
-
-      {/* Legal disclaimer */}
+  return (
+    <div style={s.section}>
+      {/* CTA Callout */}
       <div style={{
-        padding: "16px",
-        borderTop: "1px solid rgba(255,255,255,0.06)",
+        padding: "20px",
+        borderRadius: "10px",
+        border: "1px solid rgba(212,175,55,0.20)",
+        borderLeft: "3px solid rgba(212,175,55,0.45)",
+        background: "rgba(212,175,55,0.03)",
+        marginBottom: "20px",
+      }}>
+        <p style={{
+          fontFamily: "'Inter', sans-serif",
+          fontSize: "15px",
+          color: "rgba(255,255,255,0.65)",
+          lineHeight: 1.7,
+          margin: 0,
+        }}>
+          <strong style={{ color: "rgba(255,255,255,0.92)" }}>
+            This analysis covers your base case — for free.
+          </strong>{" "}
+          The full Snapshot unlocks sensitivity modeling across five scenarios,
+          full risk flag detail, margin of safety calculations, and a
+          white-label PDF for investor presentations.
+        </p>
+      </div>
+
+      {/* Primary CTA */}
+      <button
+        onClick={() => navigate("/store/snapshot")}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          width: "100%",
+          padding: "20px 24px",
+          background: "#F9E076",
+          border: "none",
+          borderRadius: "10px",
+          fontFamily: "'Bebas Neue', sans-serif",
+          fontSize: "22px",
+          letterSpacing: "0.10em",
+          color: "#000",
+          cursor: "pointer",
+          fontWeight: 600,
+          boxShadow: "0 0 30px rgba(249,224,118,0.15)",
+        }}
+      >
+        GET THE FULL SNAPSHOT
+      </button>
+
+      {/* Secondary — Print */}
+      <button
+        onClick={() => window.print()}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: "8px",
+          width: "100%",
+          padding: "14px 24px",
+          background: "transparent",
+          border: "1px solid rgba(255,255,255,0.10)",
+          borderRadius: "10px",
+          fontFamily: "'Roboto Mono', monospace",
+          fontSize: "11px",
+          letterSpacing: "0.08em",
+          color: "rgba(255,255,255,0.45)",
+          cursor: "pointer",
+          marginTop: "10px",
+        }}
+      >
+        <Download size={14} />
+        PRINT YOUR ANALYSIS
+      </button>
+
+      {/* Footer — legal only */}
+      <div style={{
+        padding: "20px 24px 8px",
+        borderTop: "1px solid rgba(255,255,255,0.03)",
+        marginTop: "16px",
       }}>
         <p style={{
           fontFamily: "'Inter', sans-serif",
           fontSize: "10px",
-          color: "rgba(255,255,255,0.25)",
+          color: "rgba(255,255,255,0.22)",
           lineHeight: 1.6,
-          margin: 0,
+          textAlign: "center",
         }}>
-          This analysis is a financial modeling tool for educational purposes only. It does not constitute financial, legal, or investment advice.
-          All projections are based on user-provided inputs and industry-standard assumptions. Actual results may vary significantly.
-          Consult qualified professionals before making investment decisions. filmmaker.og is not a registered investment advisor.
+          This calculator is for educational purposes only. Not legal, investment, tax, or financial advice. filmmaker.og is not a registered investment advisor, broker-dealer, or law firm.
         </p>
       </div>
     </div>
@@ -2227,11 +2164,13 @@ const WaterfallBrief = ({
 
       <SectionBreak />
 
-      {/* IX. Next Steps + CTA */}
-      <NextStepsSection
-        onExport={onExport}
-        onNavigateTab={onNavigateTab}
-      />
+      {/* IX. Next Steps */}
+      <NextStepsSection />
+
+      <SectionBreak />
+
+      {/* X. CTA */}
+      <CTASection />
 
       {/* Watermark */}
       <Watermark />
