@@ -269,7 +269,7 @@ const CoverSection = ({
         {[
           { label: "BUDGET", value: formatCompactCurrency(inputs.budget) },
           { label: "REVENUE", value: formatCompactCurrency(inputs.revenue) },
-          { label: "MULTIPLE", value: formatMultiple(result.multiple) },
+          { label: "MULTIPLE", value: formatMultiple(result.multiple), color: result.multiple >= 1.0 ? "#3CB371" : result.multiple >= 0.5 ? "#E5A537" : "#DC2626" },
           { label: "BREAK-EVEN", value: formatCompactCurrency(breakEven) },
         ].map((kpi) => (
           <div key={kpi.label} style={{
@@ -278,7 +278,7 @@ const CoverSection = ({
             textAlign: "center",
           }}>
             <p style={{ ...s.monoLabel, fontSize: "9px", margin: "0 0 4px" }}>{kpi.label}</p>
-            <p style={{ ...s.monoValue, fontSize: "15px", margin: 0 }}>{kpi.value}</p>
+            <p style={{ ...s.monoValue, fontSize: "15px", margin: 0, ...('color' in kpi && kpi.color ? { color: kpi.color } : {}) }}>{kpi.value}</p>
           </div>
         ))}
       </div>
@@ -1098,7 +1098,7 @@ const ReturnProfileSection = ({
           fontFamily: "'Roboto Mono', monospace",
           fontSize: "64px",
           fontWeight: 700,
-          color: "#D4AF37",
+          color: result.multiple >= 1.0 ? "#3CB371" : result.multiple >= 0.5 ? "#E5A537" : "#DC2626",
           margin: "0 0 8px",
           lineHeight: 1,
           fontVariantNumeric: "tabular-nums",
