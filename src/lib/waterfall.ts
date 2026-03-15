@@ -203,6 +203,88 @@ export function calculateWaterfall(inputs: WaterfallInputs, guilds: GuildState):
   };
 }
 
+import type { TierPayment, WaterfallState } from "./waterfall-types";
+
+export function computeTierPayments(result: WaterfallResult, inputs: WaterfallInputs): TierPayment[] {
+  let remaining = inputs.revenue - result.offTopTotal;
+  const tiers: TierPayment[] = [];
+  let phase = 1;
+
+  if (result.seniorDebtHurdle > 0) {
+    const paid = Math.min(result.seniorDebtHurdle, Math.max(0, remaining));
+    remaining -= paid;
+    tiers.push({
+      phase: phase++,
+      label: "Senior Debt",
+      amount: result.seniorDebtHurdle,
+      paid,
+      status: paid >= result.seniorDebtHurdle ? "funded" : paid > 0 ? "partial" : "unfunded",
+    });
+  }
+
+  if (result.mezzDebtHurdle > 0) {
+    const paid = Math.min(result.mezzDebtHurdle, Math.max(0, remaining));
+    remaining -= paid;
+    tiers.push({
+      phase: phase++,
+      label: "Gap / Mezzanine",
+      amount: result.mezzDebtHurdle,
+      paid,
+      status: paid >= result.mezzDebtHurdle ? "funded" : paid > 0 ? "partial" : "unfunded",
+    });
+  }
+
+  if (result.equityHurdle > 0) {
+    const paid = Math.min(result.equityHurdle, Math.max(0, remaining));
+    remaining -= paid;
+    tiers.push({
+      phase: phase++,
+      label: "Equity + Premium",
+      amount: result.equityHurdle,
+      paid,
+      status: paid >= result.equityHurdle ? "funded" : paid > 0 ? "partial" : "unfunded",
+    });
+  }
+
+  if (inputs.deferments > 0) {
+    const paid = Math.min(inputs.deferments, Math.max(0, remaining));
+    remaining -= paid;
+    tiers.push({
+      phase: phase++,
+      label: "Deferments",
+      amount: inputs.deferments,
+      paid,
+      status: paid >= inputs.deferments ? "funded" : paid > 0 ? "partial" : "unfunded",
+    });
+  }
+
+  return tiers;
+}
+
+export function getWaterfallState(tiers: TierPayment[], profitPool: number): WaterfallState {
+  const debtTiers = tiers.filter(
+    (t) => t.label.includes("Debt") || t.label.includes("Mezzanine")
+  );
+  const equityTier = tiers.find((t) => t.label.includes("Equity"));
+
+  // UNDERWATER: any debt tier not fully paid
+  if (debtTiers.some((t) => t.status !== "funded")) return "underwater";
+
+  // EQUITY EXPOSED: debt clears but equity receives 0
+  if (equityTier && equityTier.paid === 0) return "equity_exposed";
+
+  // PARTIALLY RECOUPED: debt clears, equity partial
+  if (equityTier && equityTier.status === "partial") return "partially_recouped";
+
+  // FULLY RECOUPED: all tiers funded
+  return "fully_recouped";
+}
+
+export function formatFullCurrency(value: number): string {
+  if (value < 0) return `-$${Math.abs(Math.round(value)).toLocaleString("en-US")}`;
+  return `$${Math.round(value).toLocaleString("en-US")}`;
+}
+
 export function formatCurrency(value: number): string {
   // Guard against NaN/Infinity
   if (!Number.isFinite(value)) return '$0';
