@@ -336,6 +336,7 @@ const Calculator = () => {
               inputs={inputs}
               project={project}
               guilds={guilds}
+              selections={capitalSelections}
               onExport={handleExportClick}
               onNavigateTab={(tab) => handleTabChange(tab as TabId)}
             />

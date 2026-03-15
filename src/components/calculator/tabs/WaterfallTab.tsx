@@ -1,4 +1,4 @@
-import { WaterfallResult, WaterfallInputs, GuildState, calculateWaterfall } from "@/lib/waterfall";
+import { WaterfallResult, WaterfallInputs, GuildState, CapitalSelections, calculateWaterfall } from "@/lib/waterfall";
 import type { ProjectDetails } from "@/pages/Calculator";
 import { Lock, Play, X } from "lucide-react";
 import ChapterCard from "../ChapterCard";
@@ -12,6 +12,7 @@ interface WaterfallTabProps {
   inputs: WaterfallInputs;
   project: ProjectDetails;
   guilds: GuildState;
+  selections: CapitalSelections;
   onExport?: () => void;
   onNavigateTab?: (tab: string) => void;
 }
@@ -34,7 +35,29 @@ const DEMO_INPUTS: WaterfallInputs = {
 
 const DEMO_GUILDS: GuildState = { sag: false, wga: false, dga: false };
 
-const WaterfallTab = ({ result: initialResult, inputs: initialInputs, project, guilds, onExport, onNavigateTab }: WaterfallTabProps) => {
+const DEMO_PROJECT: ProjectDetails = {
+  title: "Untitled Thriller",
+  genre: "Thriller",
+  customGenre: "",
+  status: "Development",
+  producers: "Jane Smith",
+  director: "Alex Rivera",
+  writers: "Sam Torres",
+  cast: "TBD",
+  company: "Demo Productions",
+  location: "Louisiana",
+  logline: "A retired detective returns to her hometown to investigate a cold case that mirrors her own family's darkest secret.",
+};
+
+const DEMO_SELECTIONS: CapitalSelections = {
+  taxCredits: false,
+  seniorDebt: true,
+  gapLoan: false,
+  equity: true,
+  deferments: false,
+};
+
+const WaterfallTab = ({ result: initialResult, inputs: initialInputs, project, guilds, selections, onExport, onNavigateTab }: WaterfallTabProps) => {
   const haptics = useHaptics();
   // State for Demo Mode (if real inputs are empty)
   const isEmpty = initialInputs.budget === 0 || initialInputs.revenue === 0;
@@ -43,6 +66,8 @@ const WaterfallTab = ({ result: initialResult, inputs: initialInputs, project, g
   // Use Demo data if active, otherwise real data
   const activeInputs = isDemoMode ? DEMO_INPUTS : initialInputs;
   const activeGuilds = isDemoMode ? DEMO_GUILDS : guilds;
+  const activeProject = isDemoMode ? DEMO_PROJECT : project;
+  const activeSelections = isDemoMode ? DEMO_SELECTIONS : selections;
   // Recalculate result if in demo mode, otherwise use passed result
   const activeResult = isDemoMode
     ? calculateWaterfall(DEMO_INPUTS, DEMO_GUILDS)
@@ -69,7 +94,7 @@ const WaterfallTab = ({ result: initialResult, inputs: initialInputs, project, g
       setIsCalculating(false);
       haptics.success();
       setShowResult(true);
-    }, 1200);
+    }, 800);
 
     return () => clearTimeout(timer);
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -204,7 +229,7 @@ const WaterfallTab = ({ result: initialResult, inputs: initialInputs, project, g
       {isCalculating && (
         <div
           style={{
-            minHeight: "calc(100vh - 62px - 48px - 40px)",
+            minHeight: "calc(100vh - 62px - 80px)",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
@@ -306,8 +331,9 @@ const WaterfallTab = ({ result: initialResult, inputs: initialInputs, project, g
             <WaterfallBrief
               result={activeResult}
               inputs={activeInputs}
-              project={project}
+              project={activeProject}
               guilds={activeGuilds}
+              selections={activeSelections}
               onExport={isDemoMode ? undefined : onExport}
               onNavigateTab={onNavigateTab}
             />
