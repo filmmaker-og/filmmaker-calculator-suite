@@ -70,6 +70,53 @@ const Watermark = () => (
   </div>
 );
 
+// ─── Locked Teaser ──────────────────────────────────────────────
+
+const LockedTeaser = ({ title, body }: { title: string; body: string }) => (
+  <div style={{
+    padding: "14px 16px",
+    margin: "16px 0",
+    border: "1px solid rgba(255,255,255,0.06)",
+    borderRadius: "8px",
+    background: "rgba(255,255,255,0.015)",
+  }}>
+    <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "8px" }}>
+      <Lock style={{ width: "14px", height: "14px", color: "rgba(212,175,55,0.40)" }} />
+      <span style={{
+        fontFamily: "'Roboto Mono', monospace",
+        fontSize: "9px",
+        letterSpacing: "0.12em",
+        textTransform: "uppercase" as const,
+        color: "rgba(212,175,55,0.55)",
+      }}>
+        {title}
+      </span>
+    </div>
+    <p style={{
+      fontFamily: "'Inter', sans-serif",
+      fontSize: "13px",
+      color: "rgba(255,255,255,0.45)",
+      lineHeight: 1.5,
+      margin: "0 0 8px",
+    }}>
+      {body}
+    </p>
+    <span style={{
+      display: "inline-block",
+      padding: "3px 12px",
+      borderRadius: "999px",
+      border: "1px solid rgba(212,175,55,0.15)",
+      background: "rgba(212,175,55,0.04)",
+      fontFamily: "'Roboto Mono', monospace",
+      fontSize: "8px",
+      letterSpacing: "0.1em",
+      color: "rgba(212,175,55,0.50)",
+    }}>
+      Available in the Snapshot
+    </span>
+  </div>
+);
+
 // ─── Shared Styles ───────────────────────────────────────────────
 
 const s = {
@@ -589,6 +636,18 @@ const CapitalStackSection = ({
   const intro = getCapitalStackIntro(sourceCount, inputs.budget);
   const interpretation = getStackInterpretation(inputs);
 
+  // Tax credit upsell computation
+  const showTaxCreditUpsell = inputs.credits === 0 && inputs.budget > 0;
+  let taxCreditDelta = 0;
+  if (showTaxCreditUpsell) {
+    const estimatedCredit = Math.round(inputs.budget * 0.25);
+    taxCreditDelta = estimatedCredit;
+  }
+
+  // Deferment upsell computation
+  const showDefermentUpsell = inputs.deferments === 0 && inputs.budget > 0;
+  const defermentEstimate = Math.round(inputs.budget * 0.08);
+
   return (
     <div style={s.section}>
       <h2 style={s.sectionTitle}>Where the Money Comes From</h2>
@@ -658,6 +717,150 @@ const CapitalStackSection = ({
             />
           ))}
 
+          {/* Tax credit contextual upsell */}
+          {showTaxCreditUpsell && (
+            <div style={{
+              padding: "16px",
+              margin: "16px 0",
+              border: "1px solid rgba(212,175,55,0.12)",
+              borderRadius: "8px",
+              background: "rgba(212,175,55,0.02)",
+            }}>
+              <p style={{
+                fontFamily: "'Inter', sans-serif",
+                fontSize: "13px",
+                color: "rgba(255,255,255,0.55)",
+                lineHeight: 1.6,
+                margin: "0 0 8px",
+              }}>
+                You haven't applied tax credits to this structure. In many states — Louisiana,
+                Georgia, New Mexico — qualified production spending generates transferable
+                credits that reduce your cost basis without adding a repayment tier.
+              </p>
+              <p style={{
+                fontFamily: "'Roboto Mono', monospace",
+                fontSize: "15px",
+                color: "#3CB371",
+                fontWeight: 600,
+                margin: "0 0 12px",
+              }}>
+                A 25% credit would lower your break-even by ~{formatCompactCurrency(taxCreditDelta)}
+              </p>
+              <div style={{
+                padding: "12px",
+                border: "1px solid rgba(255,255,255,0.06)",
+                borderRadius: "6px",
+                background: "rgba(255,255,255,0.015)",
+              }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "6px" }}>
+                  <Lock style={{ width: "14px", height: "14px", color: "rgba(212,175,55,0.40)" }} />
+                  <span style={{
+                    fontFamily: "'Roboto Mono', monospace",
+                    fontSize: "9px",
+                    letterSpacing: "0.12em",
+                    textTransform: "uppercase" as const,
+                    color: "rgba(212,175,55,0.55)",
+                  }}>
+                    Tax Credit Impact Modeling
+                  </span>
+                </div>
+                <p style={{
+                  fontFamily: "'Inter', sans-serif",
+                  fontSize: "12px",
+                  color: "rgba(255,255,255,0.40)",
+                  margin: "0 0 8px",
+                  lineHeight: 1.5,
+                }}>
+                  See which incentive programs apply and model the exact impact on your waterfall.
+                </p>
+                <span style={{
+                  display: "inline-block",
+                  padding: "3px 12px",
+                  borderRadius: "999px",
+                  border: "1px solid rgba(212,175,55,0.15)",
+                  background: "rgba(212,175,55,0.04)",
+                  fontFamily: "'Roboto Mono', monospace",
+                  fontSize: "8px",
+                  letterSpacing: "0.1em",
+                  color: "rgba(212,175,55,0.50)",
+                }}>
+                  Available in the Snapshot
+                </span>
+              </div>
+            </div>
+          )}
+
+          {/* Deferment contextual upsell */}
+          {showDefermentUpsell && (
+            <div style={{
+              padding: "16px",
+              margin: "16px 0",
+              border: "1px solid rgba(212,175,55,0.12)",
+              borderRadius: "8px",
+              background: "rgba(212,175,55,0.02)",
+            }}>
+              <p style={{
+                fontFamily: "'Inter', sans-serif",
+                fontSize: "13px",
+                color: "rgba(255,255,255,0.55)",
+                lineHeight: 1.6,
+                margin: "0 0 8px",
+              }}>
+                You haven't modeled any deferred compensation. Deferring producer fees, director fees, or above-the-line talent costs reduces your cash basis — the amount your investors need to recoup before reaching profit.
+              </p>
+              <p style={{
+                fontFamily: "'Roboto Mono', monospace",
+                fontSize: "15px",
+                color: "#3CB371",
+                fontWeight: 600,
+                margin: "0 0 12px",
+              }}>
+                Even {formatCompactCurrency(defermentEstimate)} in deferments would lower your break-even by ~{formatCompactCurrency(defermentEstimate)}
+              </p>
+              <div style={{
+                padding: "12px",
+                border: "1px solid rgba(255,255,255,0.06)",
+                borderRadius: "6px",
+                background: "rgba(255,255,255,0.015)",
+              }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "6px" }}>
+                  <Lock style={{ width: "14px", height: "14px", color: "rgba(212,175,55,0.40)" }} />
+                  <span style={{
+                    fontFamily: "'Roboto Mono', monospace",
+                    fontSize: "9px",
+                    letterSpacing: "0.12em",
+                    textTransform: "uppercase" as const,
+                    color: "rgba(212,175,55,0.55)",
+                  }}>
+                    Deferment Structure Optimization
+                  </span>
+                </div>
+                <p style={{
+                  fontFamily: "'Inter', sans-serif",
+                  fontSize: "12px",
+                  color: "rgba(255,255,255,0.40)",
+                  margin: "0 0 8px",
+                  lineHeight: 1.5,
+                }}>
+                  Model the optimal deferment structure for your deal.
+                </p>
+                <span style={{
+                  display: "inline-block",
+                  padding: "3px 12px",
+                  borderRadius: "999px",
+                  border: "1px solid rgba(212,175,55,0.15)",
+                  background: "rgba(212,175,55,0.04)",
+                  fontFamily: "'Roboto Mono', monospace",
+                  fontSize: "8px",
+                  letterSpacing: "0.1em",
+                  color: "rgba(212,175,55,0.50)",
+                }}>
+                  Available in the Snapshot
+                </span>
+              </div>
+            </div>
+          )}
+
           {/* Stack interpretation */}
           <div style={{
             padding: "16px",
@@ -670,6 +873,12 @@ const CapitalStackSection = ({
               {interpretation}
             </p>
           </div>
+
+          {/* Stack Vulnerability teaser */}
+          <LockedTeaser
+            title="Stack Vulnerability Assessment"
+            body="How exposed is this structure if the sale comes in 30% below target?"
+          />
         </>
       ) : (
         <div style={{
@@ -691,11 +900,12 @@ const CapitalStackSection = ({
 // ─── IV. Revenue & Deductions Section ────────────────────────────
 
 const RevenueDeductionsSection = ({
-  inputs, result, guilds,
+  inputs, result, guilds, genre,
 }: {
   inputs: WaterfallInputs;
   result: WaterfallResult;
   guilds: GuildState;
+  genre: string;
 }) => {
   const netDistributable = inputs.revenue - result.offTopTotal;
   const netPct = inputs.revenue > 0 ? ((netDistributable / inputs.revenue) * 100) : 0;
@@ -844,6 +1054,12 @@ const RevenueDeductionsSection = ({
         After {deductions.length} off-top deduction{deductions.length !== 1 ? "s" : ""} totaling {formatCompactCurrency(result.offTopTotal)},{" "}
         {netPct.toFixed(0)}% of gross revenue is available for capital repayment.
       </p>
+
+      {/* Deduction Benchmarking teaser */}
+      <LockedTeaser
+        title="Deduction Benchmarking"
+        body={`How do your off-the-tops compare to industry benchmarks for ${genre.toLowerCase()}s at the ${formatCompactCurrency(inputs.budget)} level?`}
+      />
     </div>
   );
 };
@@ -1088,6 +1304,12 @@ const WaterfallCascadeSection = ({
               {interpretation}
             </p>
           </div>
+
+          {/* Stress-Test Cascade teaser */}
+          <LockedTeaser
+            title="Stress-Test Cascade"
+            body="See exactly which tier breaks first if revenue drops 30% — and how much your investors lose."
+          />
         </>
       ) : (
         <div style={{
@@ -1112,7 +1334,7 @@ const WaterfallCascadeSection = ({
 // ─── VI. Return Profile Section ──────────────────────────────────
 
 const ReturnProfileSection = ({
-  result, inputs, waterfallState, breakEven, copyNumbers, onNavigateTab,
+  result, inputs, waterfallState, breakEven, copyNumbers, onNavigateTab, genre,
 }: {
   result: WaterfallResult;
   inputs: WaterfallInputs;
@@ -1120,6 +1342,7 @@ const ReturnProfileSection = ({
   breakEven: number;
   copyNumbers: Parameters<typeof getReturnParagraph>[1];
   onNavigateTab?: (tab: string) => void;
+  genre: string;
 }) => {
   const badge = waterfallBadgeStates[waterfallState];
   const interpretation = getReturnParagraph(waterfallState, copyNumbers);
@@ -1249,6 +1472,12 @@ const ReturnProfileSection = ({
           {interpretation}
         </p>
       </div>
+
+      {/* Comparable Returns teaser */}
+      <LockedTeaser
+        title="Market Comparison"
+        body={`How does ${formatMultiple(result.multiple)} compare to similar ${genre.toLowerCase()} deals at the ${formatCompactCurrency(inputs.budget)} level?`}
+      />
 
       {/* Adjust deal link */}
       {onNavigateTab && (
@@ -1876,6 +2105,7 @@ const WaterfallBrief = ({
         inputs={inputs}
         result={result}
         guilds={guilds}
+        genre={genre.trim() || "film"}
       />
 
       <SectionBreak />
@@ -1901,6 +2131,7 @@ const WaterfallBrief = ({
         breakEven={breakEven}
         copyNumbers={copyNumbers}
         onNavigateTab={onNavigateTab}
+        genre={genre.trim() || "film"}
       />
 
       {/* Conclusion */}
