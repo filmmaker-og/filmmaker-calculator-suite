@@ -179,6 +179,34 @@ export const verdictStatus = {
   },
 } as const;
 
+// Waterfall Brief badge states — used by the unified document output
+export const waterfallBadgeStates = {
+  fully_recouped: {
+    label: "FULLY RECOUPED",
+    color: "#D4AF37",
+    bgColor: "rgba(212,175,55,0.08)",
+    borderColor: "rgba(212,175,55,0.20)",
+  },
+  partially_recouped: {
+    label: "PARTIALLY RECOUPED",
+    color: "#E5A537",
+    bgColor: "rgba(229,165,55,0.08)",
+    borderColor: "rgba(229,165,55,0.20)",
+  },
+  equity_exposed: {
+    label: "EQUITY EXPOSED",
+    color: "#E67830",
+    bgColor: "rgba(230,120,48,0.08)",
+    borderColor: "rgba(230,120,48,0.20)",
+  },
+  underwater: {
+    label: "UNDERWATER",
+    color: "#DC2626",
+    bgColor: "rgba(220,38,38,0.08)",
+    borderColor: "rgba(220,38,38,0.20)",
+  },
+} as const;
+
 // ===== HELPER FUNCTIONS =====
 export const getVerdictStatus = (multiple: number, isProfitable: boolean) => {
   if (!isProfitable) return verdictStatus.underwater;
