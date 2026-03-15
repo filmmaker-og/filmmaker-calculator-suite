@@ -88,6 +88,7 @@ const s = {
     letterSpacing: "0.06em",
     color: "#FFFFFF",
     margin: "8px 0 0",
+    textAlign: "center" as const,
   } as React.CSSProperties,
   bodyText: {
     fontFamily: "'Inter', sans-serif",
@@ -296,6 +297,28 @@ const CoverSection = ({
         </p>
       </div>
 
+      {/* Introduction */}
+      <div style={{
+        padding: "16px 0",
+        borderTop: "1px solid rgba(212,175,55,0.08)",
+        borderBottom: "1px solid rgba(212,175,55,0.08)",
+        margin: "8px 0",
+      }}>
+        <p style={{
+          fontFamily: "'Inter', sans-serif",
+          fontSize: "14px",
+          lineHeight: 1.65,
+          color: "rgba(255,255,255,0.55)",
+          margin: 0,
+        }}>
+          Over the next few sections, this analysis breaks down exactly where your{" "}
+          {formatCompactCurrency(inputs.revenue)} acquisition price goes — what gets
+          deducted before anyone is repaid, who gets paid in what order, and whether
+          the numbers work for your investors. By the end, you'll be able to explain
+          this waterfall to anyone in the room.
+        </p>
+      </div>
+
       {/* Package grid */}
       {packageFields.length > 0 && (
         <div style={{
@@ -371,16 +394,10 @@ const ExecutiveSummarySection = ({
 
   return (
     <div style={s.section}>
-      <p style={s.sectionLabel}>EXECUTIVE SUMMARY</p>
-      <h2 style={s.sectionTitle}>Deal Positioning</h2>
+      <h2 style={s.sectionTitle}>The Deal at a Glance</h2>
 
       <p style={{ ...s.bodyText, margin: "16px 0 24px" }}>
-        This is a {formatCompactCurrency(inputs.budget)} production valued at {revenueRatio}x its negative cost,
-        with an acquisition target of {formatCompactCurrency(inputs.revenue)}.
-        {inputs.revenue >= breakEven
-          ? ` The deal achieves full recoupment at the target price.`
-          : ` The deal does not achieve full recoupment at the target price.`
-        }
+        Your production is structured at a {formatCompactCurrency(inputs.budget)} negative cost — the total amount required to produce the finished film. At the modeled acquisition price of {formatCompactCurrency(inputs.revenue)}, the film is valued at {revenueRatio}x its production cost.
       </p>
 
       {/* Bar chart */}
@@ -460,9 +477,9 @@ const SourceCard = ({
   return (
     <div style={{
       padding: "16px",
-      background: "rgba(255,255,255,0.02)",
+      background: "rgba(212,175,55,0.02)",
       borderRadius: "8px",
-      border: "1px solid rgba(255,255,255,0.06)",
+      border: "1px solid rgba(212,175,55,0.15)",
       marginBottom: "12px",
     }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "12px" }}>
@@ -574,8 +591,7 @@ const CapitalStackSection = ({
 
   return (
     <div style={s.section}>
-      <p style={s.sectionLabel}>CAPITAL STRUCTURE</p>
-      <h2 style={s.sectionTitle}>Capital Stack</h2>
+      <h2 style={s.sectionTitle}>Where the Money Comes From</h2>
 
       <p style={{ ...s.bodyText, margin: "16px 0 20px" }}>{intro}</p>
 
@@ -727,8 +743,11 @@ const RevenueDeductionsSection = ({
 
   return (
     <div style={s.section}>
-      <p style={s.sectionLabel}>REVENUE ANALYSIS</p>
-      <h2 style={s.sectionTitle}>Revenue & Deductions</h2>
+      <h2 style={s.sectionTitle}>What Happens Before the Waterfall</h2>
+
+      <p style={{ ...s.bodyText, margin: "16px 0 20px" }}>
+        Your acquisition price — the amount a buyer pays for the finished film — doesn't go straight to investors. Before any capital provider is repaid, the {formatCompactCurrency(inputs.revenue)} passes through standard industry deductions called off-the-tops. Here's what comes off before the waterfall opens.
+      </p>
 
       {/* Acquisition price */}
       <div style={{ textAlign: "center", margin: "20px 0 24px" }}>
@@ -982,11 +1001,10 @@ const WaterfallCascadeSection = ({
 
   return (
     <div style={s.section}>
-      <p style={s.sectionLabel}>PAYMENT WATERFALL</p>
-      <h2 style={s.sectionTitle}>Waterfall Cascade</h2>
+      <h2 style={s.sectionTitle}>Who Gets Paid, In What Order</h2>
 
       <p style={{ ...s.bodyText, margin: "16px 0 20px" }}>
-        Revenue flows through each repayment tier in priority order. Each block narrows as capital is absorbed.
+        This is your recoupment waterfall — the contractual order that determines who gets paid and when. The {formatCompactCurrency(netDistributable)} in net distributable revenue flows from the top tier down. Each tier takes its full allocation before the next gets anything.
       </p>
 
       {/* Cascade blocks */}
@@ -1109,8 +1127,11 @@ const ReturnProfileSection = ({
 
   return (
     <div style={s.section}>
-      <p style={s.sectionLabel}>RETURN ANALYSIS</p>
-      <h2 style={s.sectionTitle}>Return Profile</h2>
+      <h2 style={s.sectionTitle}>The Bottom Line</h2>
+
+      <p style={{ ...s.bodyText, margin: "16px 0 20px" }}>
+        Everything above flows into one question: does this deal work? The return multiple — the ratio of what investors get back to what they put in — is the single number that answers it. Here's where your {formatCompactCurrency(inputs.revenue)} acquisition price lands.
+      </p>
 
       {/* Multiple + Badge */}
       <div style={{ textAlign: "center", margin: "20px 0 24px" }}>
@@ -1253,12 +1274,100 @@ const ReturnProfileSection = ({
   );
 };
 
+// ─── Conclusion Section ──────────────────────────────────────────
+
+const ConclusionSection = ({
+  inputs, result, waterfallState, tiers, breakEven,
+}: {
+  inputs: WaterfallInputs;
+  result: WaterfallResult;
+  waterfallState: WaterfallState;
+  tiers: TierPayment[];
+  breakEven: number;
+}) => {
+  const netDistributable = Math.max(0, inputs.revenue - result.offTopTotal);
+  const fundedCount = tiers.filter(t => t.status === "funded").length;
+  const marginPct = inputs.revenue > 0
+    ? (((inputs.revenue - breakEven) / inputs.revenue) * 100).toFixed(0)
+    : "0";
+
+  // Build conclusion paragraph based on waterfall state
+  let conclusion = "";
+  if (waterfallState === "fully_recouped") {
+    conclusion = `Your ${formatCompactCurrency(inputs.budget)} production is structured to return ${formatMultiple(result.multiple)} to investors at a ${formatCompactCurrency(inputs.revenue)} acquisition price. All ${fundedCount} capital tiers clear, the profit pool is ${formatCompactCurrency(result.profitPool)}, and the break-even threshold is ${formatCompactCurrency(breakEven)}. The deal has headroom — your acquisition target is ${marginPct}% above break-even.`;
+  } else if (waterfallState === "partially_recouped") {
+    conclusion = `Your ${formatCompactCurrency(inputs.budget)} production returns ${formatMultiple(result.multiple)} at a ${formatCompactCurrency(inputs.revenue)} acquisition price. Debt obligations are satisfied, but equity investors recover only a portion of their principal. The break-even for full recoupment is ${formatCompactCurrency(breakEven)} — ${marginPct}% above your current target. The deal structure protects lenders but leaves equity exposed.`;
+  } else if (waterfallState === "equity_exposed") {
+    conclusion = `At a ${formatCompactCurrency(inputs.revenue)} acquisition price, your ${formatCompactCurrency(inputs.budget)} production does not generate enough distributable revenue to reach the equity tier. Debt obligations clear, but equity investors receive nothing. The structure needs either a higher sale price, a lower budget, or a restructured capital stack.`;
+  } else {
+    conclusion = `At a ${formatCompactCurrency(inputs.revenue)} acquisition price, your ${formatCompactCurrency(inputs.budget)} production cannot cover its senior debt obligations. This structure is not financeable at current assumptions. The break-even sale is ${formatCompactCurrency(breakEven)}.`;
+  }
+
+  return (
+    <div style={{ position: "relative", zIndex: 1, padding: "0 24px" }}>
+      <h2 style={{
+        fontFamily: "'Bebas Neue', sans-serif",
+        fontSize: "24px",
+        letterSpacing: "0.08em",
+        color: "rgba(255,255,255,0.90)",
+        textAlign: "center",
+        marginBottom: "16px",
+      }}>
+        Your Deal, Summarized
+      </h2>
+
+      <p style={{
+        fontFamily: "'Inter', sans-serif",
+        fontSize: "15px",
+        lineHeight: 1.7,
+        color: "rgba(255,255,255,0.72)",
+        marginBottom: "20px",
+      }}>
+        {conclusion}
+      </p>
+
+      <div style={{
+        padding: "12px 16px",
+        border: "1px solid rgba(255,255,255,0.06)",
+        borderRadius: "6px",
+        background: "rgba(255,255,255,0.02)",
+      }}>
+        <p style={{
+          fontFamily: "'Inter', sans-serif",
+          fontSize: "13px",
+          color: "rgba(255,255,255,0.45)",
+          lineHeight: 1.6,
+          margin: 0,
+        }}>
+          This analysis covers your base case. The full Snapshot adds what happens
+          when the base case breaks — sensitivity modeling across five acquisition
+          scenarios, full risk flag detail with mitigation guidance, margin of safety
+          calculations, and a white-label export for investor presentations.
+        </p>
+      </div>
+    </div>
+  );
+};
+
 // ─── VII. Sensitivity Section (Locked Teaser) ────────────────────
 
-const SensitivitySection = () => (
+const SensitivitySection = ({
+  inputs,
+}: {
+  inputs: WaterfallInputs;
+}) => (
   <div style={s.section}>
-    <p style={s.sectionLabel}>SCENARIO ANALYSIS</p>
-    <h2 style={s.sectionTitle}>Sensitivity Analysis</h2>
+    <h2 style={s.sectionTitle}>What If the Sale Comes In Different?</h2>
+
+    <p style={{
+      fontFamily: "'Inter', sans-serif",
+      fontSize: "14px",
+      lineHeight: 1.65,
+      color: "rgba(255,255,255,0.70)",
+      margin: "16px 0 0",
+    }}>
+      No acquisition price is guaranteed. The question isn't whether your film sells for exactly {formatCompactCurrency(inputs.revenue)} — it's whether the deal still works if the number comes in lower.
+    </p>
 
     <div style={{
       marginTop: "16px",
@@ -1367,8 +1476,11 @@ const RiskFlagsSection = ({
 
   return (
     <div style={s.section}>
-      <p style={s.sectionLabel}>RISK ASSESSMENT</p>
-      <h2 style={s.sectionTitle}>Risk Flags</h2>
+      <h2 style={s.sectionTitle}>What to Watch For</h2>
+
+      <p style={{ ...s.bodyText, margin: "16px 0 0" }}>
+        Every deal has structural risks. These flags are generated from your model inputs — not generic warnings.
+      </p>
 
       <div style={{
         marginTop: "16px",
@@ -1459,24 +1571,23 @@ const NextStepsSection = ({
   const steps = [
     {
       number: "01",
-      title: "Review Your Numbers",
-      description: "Adjust budget, revenue, and capital stack inputs to model different deal scenarios.",
+      title: "Review With Counsel",
+      description: "Take the modeled stack and waterfall terms to entertainment counsel — particularly repayment priority, equity premium, and guild obligations.",
     },
     {
       number: "02",
-      title: "Download Your Brief",
-      description: "Export a branded PDF to share with your team and potential investors.",
+      title: "Validate Your Price",
+      description: "Check the acquisition price against current market comparables for your genre and budget range. The model is only as good as the revenue assumption.",
     },
     {
       number: "03",
-      title: "Upgrade for Full Analysis",
-      description: "Unlock sensitivity analysis, risk flags, margin of safety, and remove branding.",
+      title: "Lead With Downside",
+      description: "Use the bear case in investor conversations. Transparency about risk builds more trust than optimistic projections.",
     },
   ];
 
   return (
     <div style={s.section}>
-      <p style={s.sectionLabel}>WHAT'S NEXT</p>
       <h2 style={s.sectionTitle}>Next Steps</h2>
 
       {/* Steps */}
@@ -1508,6 +1619,23 @@ const NextStepsSection = ({
           </div>
         ))}
       </div>
+
+      {/* Resource Vault link */}
+      <p style={{
+        fontFamily: "'Inter', sans-serif",
+        fontSize: "13px",
+        color: "rgba(212,175,55,0.40)",
+        textAlign: "center",
+        padding: "12px 0",
+      }}>
+        Have questions about your analysis?{" "}
+        <span
+          onClick={() => navigate("/resources")}
+          style={{ color: "rgba(212,175,55,0.55)", cursor: "pointer" }}
+        >
+          Visit our Resource Vault
+        </span>
+      </p>
 
       {/* Persistence note */}
       <p style={{
@@ -1775,10 +1903,20 @@ const WaterfallBrief = ({
         onNavigateTab={onNavigateTab}
       />
 
+      {/* Conclusion */}
+      <SectionBreak />
+      <ConclusionSection
+        inputs={inputs}
+        result={result}
+        waterfallState={waterfallState}
+        tiers={tiers}
+        breakEven={breakEven}
+      />
+
       <SectionBreak />
 
       {/* VII. Sensitivity (Locked) */}
-      <SensitivitySection />
+      <SensitivitySection inputs={inputs} />
 
       <SectionBreak />
 
