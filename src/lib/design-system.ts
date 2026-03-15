@@ -189,9 +189,9 @@ export const waterfallBadgeStates = {
   },
   partially_recouped: {
     label: "PARTIALLY RECOUPED",
-    color: "#E5A537",
-    bgColor: "rgba(229,165,55,0.08)",
-    borderColor: "rgba(229,165,55,0.20)",
+    color: "#F0A830",
+    bgColor: "rgba(240,168,48,0.10)",
+    borderColor: "rgba(240,168,48,0.25)",
   },
   equity_exposed: {
     label: "EQUITY EXPOSED",

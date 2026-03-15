@@ -27,7 +27,7 @@ import {
   getSensitivityInterpretation,
 } from "@/lib/waterfall-copy";
 import { useRef, useEffect } from "react";
-import { Lock, Download, ArrowRight } from "lucide-react";
+import { Lock, Download } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 // ─── Types ───────────────────────────────────────────────────────
@@ -47,10 +47,21 @@ interface WaterfallBriefProps {
 const SectionBreak = () => (
   <div style={{
     display: "flex", alignItems: "center", gap: "12px",
-    padding: "24px 24px", position: "relative", zIndex: 1,
+    padding: "28px 24px", position: "relative", zIndex: 1,
   }}>
+    {/* Glow behind the divider */}
+    <div style={{
+      position: "absolute",
+      left: "15%",
+      right: "15%",
+      top: "50%",
+      transform: "translateY(-50%)",
+      height: "80px",
+      background: "radial-gradient(ellipse at center, rgba(212,175,55,0.04), transparent 70%)",
+      pointerEvents: "none",
+    }} />
     <div style={{ flex: 1, height: "1px", background: "rgba(212,175,55,0.12)" }} />
-    <div style={{ width: "4px", height: "4px", borderRadius: "50%", background: "rgba(212,175,55,0.35)" }} />
+    <div style={{ width: "5px", height: "5px", borderRadius: "50%", background: "rgba(212,175,55,0.40)" }} />
     <div style={{ flex: 1, height: "1px", background: "rgba(212,175,55,0.12)" }} />
   </div>
 );
@@ -74,11 +85,10 @@ const Watermark = () => (
 
 const LockedTeaser = ({ title, body }: { title: string; body: string }) => (
   <div style={{
-    padding: "14px 16px",
-    margin: "16px 0",
-    border: "1px solid rgba(255,255,255,0.06)",
-    borderRadius: "8px",
-    background: "rgba(255,255,255,0.015)",
+    ...ucardBase,
+    border: "1px solid rgba(212,175,55,0.18)",
+    background: "rgba(212,175,55,0.025)",
+    borderLeft: "3px solid rgba(212,175,55,0.30)",
   }}>
     <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "8px" }}>
       <Lock style={{ width: "14px", height: "14px", color: "rgba(212,175,55,0.40)" }} />
@@ -133,7 +143,7 @@ const s = {
     fontFamily: "'Bebas Neue', sans-serif",
     fontSize: "28px",
     letterSpacing: "0.06em",
-    color: "#FFFFFF",
+    color: "rgba(255,255,255,0.95)",
     margin: "8px 0 0",
     textAlign: "center" as const,
   } as React.CSSProperties,
@@ -141,7 +151,7 @@ const s = {
     fontFamily: "'Inter', sans-serif",
     fontSize: "14px",
     lineHeight: 1.65,
-    color: "rgba(255,255,255,0.70)",
+    color: "rgba(255,255,255,0.75)",
     margin: 0,
   } as React.CSSProperties,
   monoLabel: {
@@ -153,9 +163,9 @@ const s = {
   } as React.CSSProperties,
   monoValue: {
     fontFamily: "'Roboto Mono', monospace",
-    fontSize: "14px",
+    fontSize: "15px",
     fontWeight: 500,
-    color: "#FFFFFF",
+    color: "rgba(255,255,255,0.82)",
     fontVariantNumeric: "tabular-nums" as const,
   } as React.CSSProperties,
   goldDivider: {
@@ -168,6 +178,18 @@ const s = {
     position: "relative" as const,
     zIndex: 1,
   } as React.CSSProperties,
+};
+
+// ─── Unified Card System ─────────────────────────────────────────
+
+const ucardBase: React.CSSProperties = {
+  border: "1px solid rgba(212,175,55,0.12)",
+  borderRadius: "10px",
+  padding: "18px 20px",
+  margin: "14px 0",
+  background: "rgba(212,175,55,0.015)",
+  position: "relative",
+  overflow: "hidden",
 };
 
 // ─── I. Cover Section ────────────────────────────────────────────
@@ -239,7 +261,7 @@ const CoverSection = ({
         </div>
       </div>
 
-      {/* Block 2: Project identity */}
+      {/* Block 2: Title */}
       {hasTitle && (
         <div style={{ textAlign: "center", marginBottom: "24px" }}>
           <h1 style={{
@@ -252,6 +274,7 @@ const CoverSection = ({
             {project.title.toUpperCase()}
           </h1>
 
+          {/* Genre + Status */}
           {(hasGenre || hasStatus) && (
             <p style={{
               fontFamily: "'Inter', sans-serif",
@@ -262,27 +285,78 @@ const CoverSection = ({
               {[hasGenre ? genre : null, hasStatus ? project.status : null].filter(Boolean).join(" · ")}
             </p>
           )}
-
-          {hasLogline && (
-            <p style={{
-              fontFamily: "'Inter', sans-serif",
-              fontSize: "13px",
-              color: "rgba(255,255,255,0.45)",
-              margin: "12px auto 0",
-              maxWidth: "400px",
-              lineHeight: 1.5,
-              display: "-webkit-box",
-              WebkitLineClamp: 2,
-              WebkitBoxOrient: "vertical" as const,
-              overflow: "hidden",
-            }}>
-              {project.logline}
-            </p>
-          )}
         </div>
       )}
 
-      {/* Badge */}
+      {/* Block 3: Logline — labeled, conditional */}
+      {hasLogline && (
+        <div style={{ padding: "14px 0" }}>
+          <p style={{
+            fontFamily: "'Roboto Mono', monospace",
+            fontSize: "9px",
+            letterSpacing: "0.12em",
+            textTransform: "uppercase" as const,
+            color: "rgba(212,175,55,0.45)",
+            marginBottom: "4px",
+          }}>
+            LOGLINE
+          </p>
+          <p style={{
+            fontFamily: "'Inter', sans-serif",
+            fontSize: "14px",
+            lineHeight: 1.6,
+            color: "rgba(255,255,255,0.55)",
+            fontStyle: "italic",
+            margin: 0,
+          }}>
+            {project.logline}
+          </p>
+        </div>
+      )}
+
+      {/* Block 4: Team / Package grid */}
+      {packageFields.length > 0 && (
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(2, 1fr)",
+          gap: "12px",
+          marginBottom: "24px",
+        }}>
+          {packageFields.map((field) => (
+            <div key={field.label}>
+              <p style={{ ...s.monoLabel, fontSize: "9px", margin: "0 0 4px" }}>{field.label}</p>
+              <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "13px", color: "rgba(255,255,255,0.75)", margin: 0 }}>
+                {field.value}
+              </p>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Block 5: Assumptions — two-tone chips */}
+      <div style={{ marginBottom: "24px" }}>
+        <p style={{ ...s.monoLabel, fontSize: "9px", margin: "0 0 8px" }}>MODEL ASSUMPTIONS</p>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
+          {assumptions.map((a) => (
+            <span key={a.label} style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "4px",
+              padding: "4px 10px",
+              borderRadius: "4px",
+              border: "1px solid rgba(212,175,55,0.15)",
+              background: "rgba(212,175,55,0.03)",
+              fontFamily: "'Roboto Mono', monospace",
+              fontSize: "10px",
+            }}>
+              <span style={{ color: "rgba(212,175,55,0.45)" }}>{a.label}</span>
+              <span style={{ color: "rgba(255,255,255,0.70)" }}>{a.value}</span>
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* Block 6: Verdict badge */}
       <div style={{ display: "flex", justifyContent: "center", marginBottom: "24px" }}>
         <div style={{
           display: "inline-flex",
@@ -304,7 +378,7 @@ const CoverSection = ({
         </div>
       </div>
 
-      {/* KPI row */}
+      {/* Block 7: KPI row */}
       <div style={{
         display: "grid",
         gridTemplateColumns: "repeat(4, 1fr)",
@@ -317,7 +391,7 @@ const CoverSection = ({
         {[
           { label: "BUDGET", value: formatCompactCurrency(inputs.budget) },
           { label: "REVENUE", value: formatCompactCurrency(inputs.revenue) },
-          { label: "MULTIPLE", value: formatMultiple(result.multiple), color: result.multiple >= 1.0 ? "#3CB371" : result.multiple >= 0.5 ? "#E5A537" : "#DC2626" },
+          { label: "MULTIPLE", value: formatMultiple(result.multiple), color: result.multiple >= 1.0 ? "#3CB371" : result.multiple >= 0.5 ? "#F0A830" : "#DC2626" },
           { label: "BREAK-EVEN", value: formatCompactCurrency(breakEven) },
         ].map((kpi) => (
           <div key={kpi.label} style={{
@@ -326,12 +400,12 @@ const CoverSection = ({
             textAlign: "center",
           }}>
             <p style={{ ...s.monoLabel, fontSize: "9px", margin: "0 0 4px" }}>{kpi.label}</p>
-            <p style={{ ...s.monoValue, fontSize: "15px", margin: 0, ...('color' in kpi && kpi.color ? { color: kpi.color } : {}) }}>{kpi.value}</p>
+            <p style={{ ...s.monoValue, fontSize: "26px", fontWeight: 700, margin: 0, ...('color' in kpi && kpi.color ? { color: kpi.color } : {}) }}>{kpi.value}</p>
           </div>
         ))}
       </div>
 
-      {/* TLDR */}
+      {/* Block 8: TLDR */}
       <div style={{
         padding: "16px",
         background: "rgba(212,175,55,0.03)",
@@ -344,67 +418,21 @@ const CoverSection = ({
         </p>
       </div>
 
-      {/* Introduction */}
+      {/* Block 9: Disclaimer */}
       <div style={{
-        padding: "16px 0",
-        borderTop: "1px solid rgba(212,175,55,0.08)",
-        borderBottom: "1px solid rgba(212,175,55,0.08)",
-        margin: "8px 0",
+        padding: "12px 0",
+        borderTop: "1px solid rgba(255,255,255,0.06)",
       }}>
         <p style={{
           fontFamily: "'Inter', sans-serif",
-          fontSize: "14px",
-          lineHeight: 1.65,
-          color: "rgba(255,255,255,0.55)",
+          fontSize: "10px",
+          color: "rgba(255,255,255,0.25)",
+          lineHeight: 1.6,
           margin: 0,
         }}>
-          Over the next few sections, this analysis breaks down exactly where your{" "}
-          {formatCompactCurrency(inputs.revenue)} acquisition price goes — what gets
-          deducted before anyone is repaid, who gets paid in what order, and whether
-          the numbers work for your investors. By the end, you'll be able to explain
-          this waterfall to anyone in the room.
+          This analysis is a financial modeling tool for educational purposes only. It does not constitute financial, legal, or investment advice.
+          All projections are based on user-provided inputs and industry-standard assumptions. Actual results may vary significantly.
         </p>
-      </div>
-
-      {/* Package grid */}
-      {packageFields.length > 0 && (
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(2, 1fr)",
-          gap: "12px",
-          marginBottom: "24px",
-        }}>
-          {packageFields.map((field) => (
-            <div key={field.label}>
-              <p style={{ ...s.monoLabel, fontSize: "9px", margin: "0 0 4px" }}>{field.label}</p>
-              <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "13px", color: "rgba(255,255,255,0.70)", margin: 0 }}>
-                {field.value}
-              </p>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* Assumptions strip */}
-      <div>
-        <p style={{ ...s.monoLabel, fontSize: "9px", margin: "0 0 8px" }}>MODEL ASSUMPTIONS</p>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
-          {assumptions.map((a) => (
-            <span key={a.label} style={{
-              display: "inline-block",
-              padding: "4px 10px",
-              borderRadius: "999px",
-              background: "rgba(255,255,255,0.04)",
-              border: "1px solid rgba(255,255,255,0.08)",
-              fontFamily: "'Roboto Mono', monospace",
-              fontSize: "10px",
-              color: "rgba(255,255,255,0.50)",
-              letterSpacing: "0.05em",
-            }}>
-              {a.label}: {a.value}
-            </span>
-          ))}
-        </div>
       </div>
     </div>
   );
@@ -501,6 +529,44 @@ const ExecutiveSummarySection = ({
       <p style={{ ...s.bodyText, fontSize: "13px", color: "rgba(255,255,255,0.50)" }}>
         Off-top deductions consume {offTopPct}% of gross revenue, leaving {netPct}% as net distributable for capital repayment and profit.
       </p>
+
+      {/* Scenario overlay preview — early conversion trigger */}
+      <div style={{
+        ...ucardBase,
+        borderLeft: "3px solid rgba(212,175,55,0.30)",
+        borderColor: "rgba(212,175,55,0.18)",
+        background: "rgba(212,175,55,0.025)",
+      }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "6px" }}>
+          <Lock style={{ width: "16px", height: "16px", color: "rgba(212,175,55,0.50)" }} />
+          <span style={{
+            fontFamily: "'Roboto Mono', monospace",
+            fontSize: "10px",
+            letterSpacing: "0.10em",
+            textTransform: "uppercase" as const,
+            color: "rgba(212,175,55,0.65)",
+          }}>
+            Scenario Overlay
+          </span>
+        </div>
+        <p style={{
+          fontFamily: "'Inter', sans-serif",
+          fontSize: "14px",
+          color: "rgba(255,255,255,0.52)",
+          lineHeight: 1.55,
+          margin: "0 0 8px",
+        }}>
+          See how this chart changes at 70% and 130% of your target acquisition price.
+        </p>
+        <span style={{
+          fontFamily: "'Roboto Mono', monospace",
+          fontSize: "10px",
+          letterSpacing: "0.08em",
+          color: "rgba(212,175,55,0.60)",
+        }}>
+          Available in the Snapshot →
+        </span>
+      </div>
     </div>
   );
 };
@@ -523,11 +589,8 @@ const SourceCard = ({
 
   return (
     <div style={{
-      padding: "16px",
-      background: "rgba(212,175,55,0.02)",
-      borderRadius: "8px",
-      border: "1px solid rgba(212,175,55,0.15)",
-      marginBottom: "12px",
+      ...ucardBase,
+      borderLeft: "3px solid rgba(212,175,55,0.40)",
     }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "12px" }}>
         <div>
@@ -545,11 +608,11 @@ const SourceCard = ({
       <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "8px", marginBottom: "12px" }}>
         <div>
           <p style={{ ...s.monoLabel, fontSize: "9px", margin: "0 0 2px" }}>SHARE OF STACK</p>
-          <p style={{ ...s.monoValue, fontSize: "13px", margin: 0 }}>{share}%</p>
+          <p style={{ ...s.monoValue, fontSize: "15px", margin: 0, opacity: 0.82 }}>{share}%</p>
         </div>
         <div>
           <p style={{ ...s.monoLabel, fontSize: "9px", margin: "0 0 2px" }}>CONTRACTUAL RETURN</p>
-          <p style={{ ...s.monoValue, fontSize: "13px", margin: 0 }}>{formatCompactCurrency(contractualReturn)}</p>
+          <p style={{ ...s.monoValue, fontSize: "15px", margin: 0, opacity: 0.82 }}>{formatCompactCurrency(contractualReturn)}</p>
         </div>
       </div>
 
@@ -720,16 +783,13 @@ const CapitalStackSection = ({
           {/* Tax credit contextual upsell */}
           {showTaxCreditUpsell && (
             <div style={{
-              padding: "16px",
-              margin: "16px 0",
-              border: "1px solid rgba(212,175,55,0.12)",
-              borderRadius: "8px",
-              background: "rgba(212,175,55,0.02)",
+              ...ucardBase,
+              borderLeft: "3px solid rgba(212,175,55,0.30)",
             }}>
               <p style={{
                 fontFamily: "'Inter', sans-serif",
                 fontSize: "13px",
-                color: "rgba(255,255,255,0.55)",
+                color: "rgba(255,255,255,0.58)",
                 lineHeight: 1.6,
                 margin: "0 0 8px",
               }}>
@@ -749,7 +809,7 @@ const CapitalStackSection = ({
               <div style={{
                 padding: "12px",
                 border: "1px solid rgba(255,255,255,0.06)",
-                borderRadius: "6px",
+                borderRadius: "8px",
                 background: "rgba(255,255,255,0.015)",
               }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "6px" }}>
@@ -793,16 +853,13 @@ const CapitalStackSection = ({
           {/* Deferment contextual upsell */}
           {showDefermentUpsell && (
             <div style={{
-              padding: "16px",
-              margin: "16px 0",
-              border: "1px solid rgba(212,175,55,0.12)",
-              borderRadius: "8px",
-              background: "rgba(212,175,55,0.02)",
+              ...ucardBase,
+              borderLeft: "3px solid rgba(212,175,55,0.30)",
             }}>
               <p style={{
                 fontFamily: "'Inter', sans-serif",
                 fontSize: "13px",
-                color: "rgba(255,255,255,0.55)",
+                color: "rgba(255,255,255,0.58)",
                 lineHeight: 1.6,
                 margin: "0 0 8px",
               }}>
@@ -820,7 +877,7 @@ const CapitalStackSection = ({
               <div style={{
                 padding: "12px",
                 border: "1px solid rgba(255,255,255,0.06)",
-                borderRadius: "6px",
+                borderRadius: "8px",
                 background: "rgba(255,255,255,0.015)",
               }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "6px" }}>
@@ -863,13 +920,10 @@ const CapitalStackSection = ({
 
           {/* Stack interpretation */}
           <div style={{
-            padding: "16px",
-            background: "rgba(212,175,55,0.03)",
-            borderRadius: "8px",
-            border: "1px solid rgba(212,175,55,0.08)",
-            marginTop: "8px",
+            ...ucardBase,
+            borderLeft: "3px solid rgba(212,175,55,0.40)",
           }}>
-            <p style={{ ...s.bodyText, fontSize: "13px", color: "rgba(255,255,255,0.55)" }}>
+            <p style={{ ...s.bodyText, fontSize: "13px", color: "rgba(255,255,255,0.58)" }}>
               {interpretation}
             </p>
           </div>
@@ -964,8 +1018,8 @@ const RevenueDeductionsSection = ({
         <p style={{ ...s.monoLabel, fontSize: "10px", margin: "0 0 4px" }}>ACQUISITION PRICE</p>
         <p style={{
           fontFamily: "'Roboto Mono', monospace",
-          fontSize: "32px",
-          fontWeight: 600,
+          fontSize: "48px",
+          fontWeight: 700,
           color: "#D4AF37",
           margin: 0,
           fontVariantNumeric: "tabular-nums",
@@ -985,7 +1039,7 @@ const RevenueDeductionsSection = ({
             borderBottom: i < deductions.length - 1 ? "1px solid rgba(255,255,255,0.06)" : "none",
           }}>
             <div>
-              <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "13px", color: "rgba(255,255,255,0.70)", margin: "0 0 2px" }}>
+              <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "13px", color: "rgba(255,255,255,0.78)", margin: "0 0 2px" }}>
                 {d.label}
               </p>
               <p style={{ ...s.monoLabel, fontSize: "10px", margin: 0 }}>{d.detail}</p>
@@ -1008,7 +1062,7 @@ const RevenueDeductionsSection = ({
         <div style={{
           height: "8px",
           borderRadius: "4px",
-          background: "rgba(220,38,38,0.10)",
+          background: "rgba(220,38,38,0.20)",
           overflow: "hidden",
         }}>
           <div style={{
@@ -1020,20 +1074,18 @@ const RevenueDeductionsSection = ({
           }} />
         </div>
         <div style={{ display: "flex", justifyContent: "space-between", marginTop: "6px" }}>
-          <span style={{ ...s.monoLabel, fontSize: "10px", color: "rgba(220,38,38,0.45)" }}>DEDUCTED: {(100 - netPct).toFixed(0)}%</span>
-          <span style={{ ...s.monoLabel, fontSize: "10px", color: "rgba(60,179,113,0.55)" }}>RETAINED: {netPct.toFixed(0)}%</span>
+          <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "12px", letterSpacing: "0.15em", textTransform: "uppercase" as const, color: "rgba(220,38,38,0.65)", fontWeight: 600 }}>DEDUCTED: {(100 - netPct).toFixed(0)}%</span>
+          <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "12px", letterSpacing: "0.15em", textTransform: "uppercase" as const, color: "rgba(60,179,113,0.65)", fontWeight: 600 }}>RETAINED: {netPct.toFixed(0)}%</span>
         </div>
       </div>
 
       {/* Net distributable total */}
       <div style={{
+        ...ucardBase,
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        padding: "16px",
-        background: "rgba(212,175,55,0.04)",
-        borderRadius: "8px",
-        border: "1px solid rgba(212,175,55,0.12)",
+        borderLeft: "3px solid rgba(212,175,55,0.40)",
       }}>
         <span style={{ fontFamily: "'Inter', sans-serif", fontSize: "14px", fontWeight: 600, color: "#FFFFFF" }}>
           Net Distributable
@@ -1092,7 +1144,7 @@ const CascadeBlock = ({
   const borderLeftAccent = isFunded
     ? "3px solid rgba(60,179,113,0.50)"
     : isPartial
-    ? "3px solid rgba(229,165,55,0.40)"
+    ? "3px solid rgba(240,168,48,0.40)"
     : "3px solid rgba(220,38,38,0.25)";
 
   const textColor = isFunded
@@ -1144,7 +1196,7 @@ const TierRow = ({ tier }: { tier: TierPayment }) => {
   const statusColor = tier.status === "funded"
     ? "#3CB371"
     : tier.status === "partial"
-    ? "#E5A537"
+    ? "#F0A830"
     : "rgba(220,38,38,0.40)";
 
   const statusLabel = tier.status === "funded" ? "FUNDED" : tier.status === "partial" ? "PARTIAL" : "UNFUNDED";
@@ -1161,7 +1213,7 @@ const TierRow = ({ tier }: { tier: TierPayment }) => {
       <span style={{ ...s.monoLabel, fontSize: "11px", color: "rgba(255,255,255,0.30)", textAlign: "center" }}>
         {tier.phase}
       </span>
-      <span style={{ fontFamily: "'Inter', sans-serif", fontSize: "13px", color: "rgba(255,255,255,0.70)" }}>
+      <span style={{ fontFamily: "'Inter', sans-serif", fontSize: "13px", color: "rgba(255,255,255,0.78)" }}>
         {tier.label}
       </span>
       <span style={{ ...s.monoValue, fontSize: "13px", textAlign: "right" }}>
@@ -1180,12 +1232,12 @@ const TierRow = ({ tier }: { tier: TierPayment }) => {
         background: tier.status === "funded"
           ? "rgba(60,179,113,0.06)"
           : tier.status === "partial"
-          ? "rgba(229,165,55,0.06)"
+          ? "rgba(240,168,48,0.06)"
           : "rgba(220,38,38,0.06)",
         border: tier.status === "funded"
           ? "1px solid rgba(60,179,113,0.25)"
           : tier.status === "partial"
-          ? "1px solid rgba(229,165,55,0.25)"
+          ? "1px solid rgba(240,168,48,0.25)"
           : "1px solid rgba(220,38,38,0.15)",
       }}>
         {statusLabel}
@@ -1295,12 +1347,10 @@ const WaterfallCascadeSection = ({
 
           {/* Interpretation */}
           <div style={{
-            padding: "16px",
-            background: "rgba(212,175,55,0.03)",
-            borderRadius: "8px",
-            border: "1px solid rgba(212,175,55,0.08)",
+            ...ucardBase,
+            borderLeft: "3px solid rgba(212,175,55,0.40)",
           }}>
-            <p style={{ ...s.bodyText, fontSize: "13px", color: "rgba(255,255,255,0.55)" }}>
+            <p style={{ ...s.bodyText, fontSize: "13px", color: "rgba(255,255,255,0.58)" }}>
               {interpretation}
             </p>
           </div>
@@ -1360,9 +1410,9 @@ const ReturnProfileSection = ({
       <div style={{ textAlign: "center", margin: "20px 0 24px" }}>
         <p style={{
           fontFamily: "'Roboto Mono', monospace",
-          fontSize: "64px",
+          fontSize: "72px",
           fontWeight: 700,
-          color: result.multiple >= 1.0 ? "#3CB371" : result.multiple >= 0.5 ? "#E5A537" : "#DC2626",
+          color: result.multiple >= 1.0 ? "#3CB371" : result.multiple >= 0.5 ? "#F0A830" : "#DC2626",
           margin: "0 0 8px",
           lineHeight: 1,
           fontVariantNumeric: "tabular-nums",
@@ -1417,7 +1467,7 @@ const ReturnProfileSection = ({
       <div style={{ marginBottom: "20px" }}>
         <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "6px" }}>
           <span style={{ ...s.monoLabel, fontSize: "10px" }}>RECOUPMENT</span>
-          <span style={{ ...s.monoValue, fontSize: "12px", color: recoupPct >= 100 ? "#3CB371" : recoupPct >= 70 ? "rgba(60,179,113,0.70)" : recoupPct >= 40 ? "#E5A537" : "rgba(220,38,38,0.60)" }}>{recoupPct.toFixed(0)}%</span>
+          <span style={{ ...s.monoValue, fontSize: "12px", color: recoupPct >= 100 ? "#3CB371" : recoupPct >= 70 ? "rgba(60,179,113,0.70)" : recoupPct >= 40 ? "#F0A830" : "rgba(220,38,38,0.60)" }}>{recoupPct.toFixed(0)}%</span>
         </div>
         <div style={{
           height: "8px",
@@ -1433,7 +1483,7 @@ const ReturnProfileSection = ({
               : recoupPct >= 70
               ? "rgba(60,179,113,0.70)"
               : recoupPct >= 40
-              ? "#E5A537"
+              ? "#F0A830"
               : "rgba(220,38,38,0.60)",
             borderRadius: "4px",
             transition: "width 0.5s ease",
@@ -1462,13 +1512,11 @@ const ReturnProfileSection = ({
 
       {/* Return interpretation */}
       <div style={{
-        padding: "16px",
-        background: "rgba(212,175,55,0.03)",
-        borderRadius: "8px",
-        border: "1px solid rgba(212,175,55,0.08)",
+        ...ucardBase,
+        borderLeft: "3px solid rgba(212,175,55,0.40)",
         marginBottom: "16px",
       }}>
-        <p style={{ ...s.bodyText, fontSize: "13px", color: "rgba(255,255,255,0.55)" }}>
+        <p style={{ ...s.bodyText, fontSize: "13px", color: "rgba(255,255,255,0.58)" }}>
           {interpretation}
         </p>
       </div>
@@ -1481,23 +1529,20 @@ const ReturnProfileSection = ({
 
       {/* Adjust deal link */}
       {onNavigateTab && (
-        <button
+        <span
           onClick={() => onNavigateTab("deal")}
           style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "6px",
-            background: "none",
-            border: "none",
-            cursor: "pointer",
-            padding: 0,
+            display: "block",
+            textAlign: "center",
+            padding: "12px 0",
             fontFamily: "'Inter', sans-serif",
             fontSize: "13px",
-            color: "#D4AF37",
+            color: "rgba(212,175,55,0.55)",
+            cursor: "pointer",
           }}
         >
-          Adjust your deal <ArrowRight size={14} />
-        </button>
+          Adjust your deal →
+        </span>
       )}
     </div>
   );
@@ -1536,9 +1581,9 @@ const ConclusionSection = ({
     <div style={{ position: "relative", zIndex: 1, padding: "0 24px" }}>
       <h2 style={{
         fontFamily: "'Bebas Neue', sans-serif",
-        fontSize: "24px",
+        fontSize: "28px",
         letterSpacing: "0.08em",
-        color: "rgba(255,255,255,0.90)",
+        color: "rgba(255,255,255,0.95)",
         textAlign: "center",
         marginBottom: "16px",
       }}>
@@ -1549,31 +1594,11 @@ const ConclusionSection = ({
         fontFamily: "'Inter', sans-serif",
         fontSize: "15px",
         lineHeight: 1.7,
-        color: "rgba(255,255,255,0.72)",
+        color: "rgba(255,255,255,0.75)",
         marginBottom: "20px",
       }}>
         {conclusion}
       </p>
-
-      <div style={{
-        padding: "12px 16px",
-        border: "1px solid rgba(255,255,255,0.06)",
-        borderRadius: "6px",
-        background: "rgba(255,255,255,0.02)",
-      }}>
-        <p style={{
-          fontFamily: "'Inter', sans-serif",
-          fontSize: "13px",
-          color: "rgba(255,255,255,0.45)",
-          lineHeight: 1.6,
-          margin: 0,
-        }}>
-          This analysis covers your base case. The full Snapshot adds what happens
-          when the base case breaks — sensitivity modeling across five acquisition
-          scenarios, full risk flag detail with mitigation guidance, margin of safety
-          calculations, and a white-label export for investor presentations.
-        </p>
-      </div>
     </div>
   );
 };
@@ -1699,9 +1724,23 @@ const RiskFlagsSection = ({
   const totalCount = structuralCount + commercialCount + legalCount;
 
   const categories: { label: string; count: number; color: string }[] = [];
-  if (structuralCount > 0) categories.push({ label: "STRUCTURAL", count: structuralCount, color: "#E5A537" });
+  if (structuralCount > 0) categories.push({ label: "STRUCTURAL", count: structuralCount, color: "#F0A830" });
   if (commercialCount > 0) categories.push({ label: "COMMERCIAL", count: commercialCount, color: "#E67830" });
   if (legalCount > 0) categories.push({ label: "LEGAL", count: legalCount, color: "rgba(212,175,55,0.70)" });
+
+  const prefersReducedMotion = typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  useEffect(() => {
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes riskPulse {
+        0%, 100% { text-shadow: 0 0 40px rgba(239,68,68,0.25), 0 0 80px rgba(239,68,68,0.10); }
+        50% { text-shadow: 0 0 50px rgba(239,68,68,0.40), 0 0 100px rgba(239,68,68,0.20); }
+      }
+    `;
+    document.head.appendChild(style);
+    return () => { document.head.removeChild(style); };
+  }, []);
 
   return (
     <div style={s.section}>
@@ -1722,11 +1761,14 @@ const RiskFlagsSection = ({
         {/* Big number */}
         <p style={{
           fontFamily: "'Roboto Mono', monospace",
-          fontSize: "48px",
-          fontWeight: 700,
-          color: totalCount > 5 ? "#DC2626" : totalCount > 3 ? "#E67830" : "#E5A537",
-          margin: "0 0 4px",
+          fontSize: "72px",
+          fontWeight: 800,
+          color: "#EF4444",
           lineHeight: 1,
+          textAlign: "center",
+          textShadow: "0 0 40px rgba(239,68,68,0.30), 0 0 80px rgba(239,68,68,0.15)",
+          animation: prefersReducedMotion ? "none" : "riskPulse 2.5s ease-in-out infinite",
+          margin: "0 0 4px",
         }}>
           {totalCount}
         </p>
@@ -1745,231 +1787,192 @@ const RiskFlagsSection = ({
         <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: "8px", marginBottom: "20px" }}>
           {categories.map((cat) => (
             <span key={cat.label} style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "6px",
-              padding: "6px 12px",
-              borderRadius: "999px",
-              background: "rgba(255,255,255,0.04)",
-              border: "1px solid rgba(255,255,255,0.08)",
               fontFamily: "'Roboto Mono', monospace",
               fontSize: "10px",
-              letterSpacing: "0.1em",
-              color: cat.color,
-              fontWeight: 500,
+              letterSpacing: "0.06em",
+              padding: "5px 14px",
+              borderRadius: "6px",
+              color: cat.label === "STRUCTURAL" ? "#F0A830"
+                   : cat.label === "COMMERCIAL" ? "#E67830"
+                   : "#EF4444",
+              border: `1px solid ${
+                cat.label === "STRUCTURAL" ? "rgba(240,168,48,0.35)"
+                : cat.label === "COMMERCIAL" ? "rgba(230,120,48,0.35)"
+                : "rgba(239,68,68,0.25)"
+              }`,
+              background: cat.label === "STRUCTURAL" ? "rgba(240,168,48,0.08)"
+                        : cat.label === "COMMERCIAL" ? "rgba(230,120,48,0.08)"
+                        : "rgba(239,68,68,0.06)",
             }}>
               {cat.label}: {cat.count}
             </span>
           ))}
         </div>
 
-        {/* Locked pill */}
+        {/* SEE WHAT THEY ARE → button */}
         <div style={{
           display: "inline-flex",
           alignItems: "center",
-          padding: "6px 14px",
-          borderRadius: "999px",
-          background: "rgba(212,175,55,0.06)",
-          border: "1px solid rgba(212,175,55,0.12)",
+          gap: "8px",
+          marginTop: "20px",
+          padding: "12px 28px",
+          borderRadius: "8px",
+          border: "1px solid rgba(239,68,68,0.25)",
+          background: "rgba(239,68,68,0.06)",
+          fontFamily: "'Roboto Mono', monospace",
+          fontSize: "12px",
+          letterSpacing: "0.10em",
+          color: "rgba(239,68,68,0.80)",
+          cursor: "pointer",
         }}>
-          <span style={{
-            fontFamily: "'Roboto Mono', monospace",
-            fontSize: "10px",
-            letterSpacing: "0.1em",
-            color: "rgba(212,175,55,0.60)",
-            fontWeight: 500,
-          }}>
-            FULL DETAIL IN THE SNAPSHOT
-          </span>
+          SEE WHAT THEY ARE →
         </div>
       </div>
     </div>
   );
 };
 
-// ─── IX. Next Steps + CTA Section ────────────────────────────────
+// ─── IX. Next Steps Section ──────────────────────────────────────
 
-const NextStepsSection = ({
-  onExport, onNavigateTab,
-}: {
-  onExport?: () => void;
-  onNavigateTab?: (tab: string) => void;
-}) => {
-  const navigate = useNavigate();
-
+const NextStepsSection = () => {
   const steps = [
-    {
-      number: "01",
-      title: "Review With Counsel",
-      description: "Take the modeled stack and waterfall terms to entertainment counsel — particularly repayment priority, equity premium, and guild obligations.",
-    },
-    {
-      number: "02",
-      title: "Validate Your Price",
-      description: "Check the acquisition price against current market comparables for your genre and budget range. The model is only as good as the revenue assumption.",
-    },
-    {
-      number: "03",
-      title: "Lead With Downside",
-      description: "Use the bear case in investor conversations. Transparency about risk builds more trust than optimistic projections.",
-    },
+    { number: "01", description: "Review with entertainment counsel — repayment priority, equity premium, guild obligations." },
+    { number: "02", description: "Validate your acquisition price against market comparables for your genre and budget tier." },
+    { number: "03", description: "Lead with the downside in investor conversations. Transparency builds trust." },
   ];
 
   return (
     <div style={s.section}>
       <h2 style={s.sectionTitle}>Next Steps</h2>
 
-      {/* Steps */}
-      <div style={{ margin: "16px 0 24px" }}>
+      <div style={{ padding: "8px 0 20px" }}>
         {steps.map((step, i) => (
           <div key={step.number} style={{
             display: "flex",
-            gap: "12px",
-            padding: "12px 0",
+            gap: "14px",
+            padding: "14px 0",
             borderBottom: i < steps.length - 1 ? "1px solid rgba(255,255,255,0.04)" : "none",
           }}>
             <span style={{
               fontFamily: "'Roboto Mono', monospace",
-              fontSize: "12px",
-              fontWeight: 600,
-              color: "#D4AF37",
+              fontSize: "13px",
+              fontWeight: 700,
+              color: "rgba(212,175,55,0.55)",
               minWidth: "24px",
             }}>
               {step.number}
             </span>
-            <div>
-              <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "14px", fontWeight: 600, color: "#FFFFFF", margin: "0 0 2px" }}>
-                {step.title}
-              </p>
-              <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "12px", color: "rgba(255,255,255,0.45)", margin: 0, lineHeight: 1.5 }}>
-                {step.description}
-              </p>
-            </div>
+            <p style={{
+              fontFamily: "'Inter', sans-serif",
+              fontSize: "15px",
+              color: "rgba(255,255,255,0.75)",
+              lineHeight: 1.65,
+              margin: 0,
+            }}>
+              {step.description}
+            </p>
           </div>
         ))}
       </div>
+    </div>
+  );
+};
 
-      {/* Resource Vault link */}
-      <p style={{
-        fontFamily: "'Inter', sans-serif",
-        fontSize: "13px",
-        color: "rgba(212,175,55,0.40)",
-        textAlign: "center",
-        padding: "12px 0",
-      }}>
-        Have questions about your analysis?{" "}
-        <span
-          onClick={() => navigate("/resources")}
-          style={{ color: "rgba(212,175,55,0.55)", cursor: "pointer" }}
-        >
-          Visit our Resource Vault
-        </span>
-      </p>
+// ─── X. CTA Section ─────────────────────────────────────────────
 
-      {/* Persistence note */}
-      <p style={{
-        fontFamily: "'Inter', sans-serif",
-        fontSize: "12px",
-        color: "rgba(255,255,255,0.35)",
-        margin: "0 0 24px",
-        lineHeight: 1.5,
-      }}>
-        This analysis is generated in real-time from your inputs. Export or screenshot to save your results.
-      </p>
+const CTASection = () => {
+  const navigate = useNavigate();
 
-      {/* Dual CTA */}
-      <div style={{ display: "flex", flexDirection: "column", gap: "12px", marginBottom: "16px" }}>
-        {/* Free button — gold outline */}
-        <button
-          onClick={() => onExport?.()}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: "8px",
-            padding: "16px 24px",
-            background: "transparent",
-            border: "1px solid rgba(212,175,55,0.30)",
-            borderRadius: "8px",
-            color: "#D4AF37",
-            cursor: "pointer",
-            fontFamily: "'Bebas Neue', sans-serif",
-            fontSize: "16px",
-            letterSpacing: "0.12em",
-            textTransform: "uppercase",
-          }}
-        >
-          <Download size={16} />
-          EXPORT YOUR ANALYSIS
-        </button>
-
-        {/* Bridge text */}
-        <p style={{
-          textAlign: "center",
-          fontFamily: "'Inter', sans-serif",
-          fontSize: "12px",
-          color: "rgba(255,255,255,0.40)",
-          margin: 0,
-          lineHeight: 1.5,
-        }}>
-          Remove branding and unlock sensitivity analysis, risk flags, and margin of safety.
-        </p>
-
-        {/* Paid button — gold filled */}
-        <button
-          onClick={() => navigate("/store/snapshot")}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: "8px",
-            padding: "16px 24px",
-            background: "#F9E076",
-            border: "none",
-            borderRadius: "8px",
-            color: "#000000",
-            cursor: "pointer",
-            fontFamily: "'Bebas Neue', sans-serif",
-            fontSize: "16px",
-            letterSpacing: "0.12em",
-            textTransform: "uppercase",
-            fontWeight: 600,
-          }}
-        >
-          GET THE FULL SNAPSHOT
-        </button>
-      </div>
-
-      {/* Secondary link */}
-      <div style={{ textAlign: "center", marginBottom: "32px" }}>
-        <a
-          href="/store"
-          style={{
-            fontFamily: "'Inter', sans-serif",
-            fontSize: "12px",
-            color: "rgba(212,175,55,0.60)",
-            textDecoration: "none",
-          }}
-        >
-          See all packages →
-        </a>
-      </div>
-
-      {/* Legal disclaimer */}
+  return (
+    <div style={s.section}>
+      {/* CTA Callout */}
       <div style={{
-        padding: "16px",
-        borderTop: "1px solid rgba(255,255,255,0.06)",
+        padding: "20px",
+        borderRadius: "10px",
+        border: "1px solid rgba(212,175,55,0.20)",
+        borderLeft: "3px solid rgba(212,175,55,0.45)",
+        background: "rgba(212,175,55,0.03)",
+        marginBottom: "20px",
+      }}>
+        <p style={{
+          fontFamily: "'Inter', sans-serif",
+          fontSize: "15px",
+          color: "rgba(255,255,255,0.65)",
+          lineHeight: 1.7,
+          margin: 0,
+        }}>
+          <strong style={{ color: "rgba(255,255,255,0.92)" }}>
+            This analysis covers your base case — for free.
+          </strong>{" "}
+          The full Snapshot unlocks sensitivity modeling across five scenarios,
+          full risk flag detail, margin of safety calculations, and a
+          white-label PDF for investor presentations.
+        </p>
+      </div>
+
+      {/* Primary CTA */}
+      <button
+        onClick={() => navigate("/store/snapshot")}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          width: "100%",
+          padding: "20px 24px",
+          background: "#F9E076",
+          border: "none",
+          borderRadius: "10px",
+          fontFamily: "'Bebas Neue', sans-serif",
+          fontSize: "22px",
+          letterSpacing: "0.10em",
+          color: "#000",
+          cursor: "pointer",
+          fontWeight: 600,
+          boxShadow: "0 0 30px rgba(249,224,118,0.15)",
+        }}
+      >
+        GET THE FULL SNAPSHOT
+      </button>
+
+      {/* Secondary — Print */}
+      <button
+        onClick={() => window.print()}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: "8px",
+          width: "100%",
+          padding: "14px 24px",
+          background: "transparent",
+          border: "1px solid rgba(255,255,255,0.10)",
+          borderRadius: "10px",
+          fontFamily: "'Roboto Mono', monospace",
+          fontSize: "11px",
+          letterSpacing: "0.08em",
+          color: "rgba(255,255,255,0.45)",
+          cursor: "pointer",
+          marginTop: "10px",
+        }}
+      >
+        <Download size={14} />
+        PRINT YOUR ANALYSIS
+      </button>
+
+      {/* Footer — legal only */}
+      <div style={{
+        padding: "20px 24px 8px",
+        borderTop: "1px solid rgba(255,255,255,0.03)",
+        marginTop: "16px",
       }}>
         <p style={{
           fontFamily: "'Inter', sans-serif",
           fontSize: "10px",
-          color: "rgba(255,255,255,0.25)",
+          color: "rgba(255,255,255,0.22)",
           lineHeight: 1.6,
-          margin: 0,
+          textAlign: "center",
         }}>
-          This analysis is a financial modeling tool for educational purposes only. It does not constitute financial, legal, or investment advice.
-          All projections are based on user-provided inputs and industry-standard assumptions. Actual results may vary significantly.
-          Consult qualified professionals before making investment decisions. filmmaker.og is not a registered investment advisor.
+          This calculator is for educational purposes only. Not legal, investment, tax, or financial advice. filmmaker.og is not a registered investment advisor, broker-dealer, or law firm.
         </p>
       </div>
     </div>
@@ -2161,11 +2164,13 @@ const WaterfallBrief = ({
 
       <SectionBreak />
 
-      {/* IX. Next Steps + CTA */}
-      <NextStepsSection
-        onExport={onExport}
-        onNavigateTab={onNavigateTab}
-      />
+      {/* IX. Next Steps */}
+      <NextStepsSection />
+
+      <SectionBreak />
+
+      {/* X. CTA */}
+      <CTASection />
 
       {/* Watermark */}
       <Watermark />
