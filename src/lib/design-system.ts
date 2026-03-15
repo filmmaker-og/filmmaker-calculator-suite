@@ -183,9 +183,9 @@ export const verdictStatus = {
 export const waterfallBadgeStates = {
   fully_recouped: {
     label: "FULLY RECOUPED",
-    color: "#D4AF37",
-    bgColor: "rgba(212,175,55,0.08)",
-    borderColor: "rgba(212,175,55,0.20)",
+    color: "#3CB371",
+    bgColor: "rgba(60,179,113,0.08)",
+    borderColor: "rgba(60,179,113,0.20)",
   },
   partially_recouped: {
     label: "PARTIALLY RECOUPED",
