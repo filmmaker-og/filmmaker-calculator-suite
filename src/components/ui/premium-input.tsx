@@ -40,13 +40,20 @@ const PremiumInput = React.forwardRef<HTMLInputElement, PremiumInputProps>(
     return (
       <div ref={mobileRef}>
         {/* Input row */}
-        <div style={{ display: "flex", alignItems: "center" }}>
+        <div style={{
+          display: "flex",
+          alignItems: "center",
+          background: focused ? "rgba(255,255,255,0.04)" : "transparent",
+          borderRadius: "6px",
+          padding: "0 4px",
+          transition: "background 0.2s ease",
+        }}>
           {showCurrency && (
             <span style={{
               fontFamily: "'Roboto Mono', monospace",
               fontSize: "1.5rem",
               fontWeight: 500,
-              color: hasValue ? "#D4AF37" : "rgba(212,175,55,0.35)",
+              color: hasValue ? "#D4AF37" : "rgba(212,175,55,0.45)",
               lineHeight: 1,
               marginRight: "8px",
               flexShrink: 0,
@@ -70,7 +77,7 @@ const PremiumInput = React.forwardRef<HTMLInputElement, PremiumInputProps>(
               fontFamily: "'Roboto Mono', monospace",
               fontSize: "1.5rem",
               fontWeight: 500,
-              color: hasValue ? "rgba(255,255,255,0.85)" : "rgba(255,255,255,0.15)",
+              color: hasValue ? "rgba(255,255,255,1.0)" : "rgba(255,255,255,0.25)",
               textAlign: "right" as const,
               lineHeight: 1,
               fontVariantNumeric: "tabular-nums",

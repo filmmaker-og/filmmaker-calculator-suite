@@ -34,7 +34,7 @@ const SeniorDebtInput = ({
       subtitle="First-position bank loan with collateral"
       amountField="debt"
       amountLabel="Loan Principal"
-      amountPlaceholder="600,000"
+      amountPlaceholder="0"
       amountHint="How much are you borrowing?"
       rateConfig={{
         field: 'seniorDebtRate',
