@@ -355,8 +355,8 @@ const Index = () => {
                 ))}
               </div>
               <div style={styles.tierAction}>
-                <button onClick={() => navigate("/store/snapshot")} style={styles.btnSnapshot} onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>GET THE SNAPSHOT</button>
-                <a href="/store/snapshot" onClick={(e) => { e.preventDefault(); navigate("/store/snapshot"); }} style={styles.detailsLink} onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,1)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.60)"; }}>See full details →</a>
+                <button onClick={() => gatedNavigate("/store/snapshot")} style={styles.btnSnapshot} onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>GET THE SNAPSHOT</button>
+                <a href="/store/snapshot" onClick={(e) => { e.preventDefault(); gatedNavigate("/store/snapshot"); }} style={styles.detailsLink} onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,1)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.60)"; }}>See full details →</a>
               </div>
             </div>
 
@@ -389,11 +389,11 @@ const Index = () => {
                 ))}
               </div>
               <div style={styles.tierAction}>
-                <button onClick={() => navigate("/store/the-full-package")} style={styles.btnPackage} onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>
+                <button onClick={() => gatedNavigate("/store/the-full-package")} style={styles.btnPackage} onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>
                   <span style={{ position: "relative", zIndex: 1 }}>GET THE PACKAGE</span>
                   <div style={styles.btnPackageShimmer} />
                 </button>
-                <a href="/store/the-full-package" onClick={(e) => { e.preventDefault(); navigate("/store/the-full-package"); }} style={styles.detailsLink} onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,1)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.60)"; }}>See full details →</a>
+                <a href="/store/the-full-package" onClick={(e) => { e.preventDefault(); gatedNavigate("/store/the-full-package"); }} style={styles.detailsLink} onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,1)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.60)"; }}>See full details →</a>
               </div>
             </div>
           </div>
