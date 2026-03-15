@@ -26,6 +26,7 @@ import {
   getReturnParagraph,
   getSensitivityInterpretation,
 } from "@/lib/waterfall-copy";
+import { useRef, useEffect } from "react";
 import { Lock, Download, ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -172,6 +173,14 @@ const CoverSection = ({
       <div style={{ textAlign: "center", padding: "40px 0 24px" }}>
         <p style={{ ...s.sectionLabel, color: "rgba(212,175,55,0.55)" }}>
           RECOUPMENT WATERFALL ANALYSIS
+        </p>
+        <p style={{
+          fontFamily: "'Inter', sans-serif",
+          fontSize: "11px",
+          color: "rgba(255,255,255,0.35)",
+          margin: "8px 0 0",
+        }}>
+          {`Prepared by filmmaker.og · ${new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}`}
         </p>
 
         {/* Gold divider */}
@@ -1486,7 +1495,7 @@ const NextStepsSection = ({
         margin: "0 0 24px",
         lineHeight: 1.5,
       }}>
-        Your data is saved locally in your browser. Return anytime to pick up where you left off.
+        This analysis is generated in real-time from your inputs. Export or screenshot to save your results.
       </p>
 
       {/* Dual CTA */}
@@ -1512,7 +1521,7 @@ const NextStepsSection = ({
           }}
         >
           <Download size={16} />
-          DOWNLOAD BRANDED PDF
+          EXPORT YOUR ANALYSIS
         </button>
 
         {/* Bridge text */}
@@ -1599,6 +1608,14 @@ const WaterfallBrief = ({
   onExport,
   onNavigateTab,
 }: WaterfallBriefProps) => {
+  const documentRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (documentRef.current) {
+      documentRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, []);
+
   // Derive selections from inputs if not provided
   const effectiveSelections: CapitalSelections = selections ?? {
     taxCredits: inputs.credits > 0,
@@ -1650,7 +1667,7 @@ const WaterfallBrief = ({
   };
 
   return (
-    <div style={{
+    <div ref={documentRef} style={{
       margin: "0 -4px",
       background: "#0A0A0A",
       border: "1px solid rgba(212,175,55,0.25)",
