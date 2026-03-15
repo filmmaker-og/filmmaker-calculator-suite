@@ -357,11 +357,11 @@ const ExecutiveSummarySection = ({
   // Bar chart data
   const maxVal = Math.max(inputs.revenue, 1);
   const barData = [
-    { label: "Revenue", value: inputs.revenue, color: "#D4AF37" },
-    { label: "Off-Tops", value: result.offTopTotal, color: "rgba(212,175,55,0.50)" },
-    { label: "Net Dist.", value: Math.max(0, netDistributable), color: "rgba(212,175,55,0.70)" },
-    { label: "Repayments", value: result.totalHurdle, color: "rgba(255,255,255,0.25)" },
-    ...(result.profitPool > 0 ? [{ label: "Profit", value: result.profitPool, color: "#D4AF37" }] : []),
+    { label: "Revenue", value: inputs.revenue, color: "rgba(255,255,255,0.35)" },
+    { label: "Off-Tops", value: result.offTopTotal, color: "rgba(220,38,38,0.30)" },
+    { label: "Net Dist.", value: Math.max(0, netDistributable), color: "rgba(255,255,255,0.20)" },
+    { label: "Repayments", value: result.totalHurdle, color: "rgba(220,38,38,0.22)" },
+    ...(result.profitPool > 0 ? [{ label: "Profit", value: result.profitPool, color: "#3CB371" }] : []),
   ];
 
   const chartHeight = 160;
@@ -421,7 +421,7 @@ const ExecutiveSummarySection = ({
                   x={x + barWidth / 2}
                   y={y - 6}
                   textAnchor="middle"
-                  fill="rgba(255,255,255,0.55)"
+                  fill={bar.color}
                   fontSize="10"
                   fontFamily="'Roboto Mono', monospace"
                 >
@@ -779,20 +779,20 @@ const RevenueDeductionsSection = ({
         <div style={{
           height: "8px",
           borderRadius: "4px",
-          background: "rgba(255,255,255,0.06)",
+          background: "rgba(220,38,38,0.10)",
           overflow: "hidden",
         }}>
           <div style={{
             height: "100%",
             width: `${Math.max(0, Math.min(100, netPct))}%`,
-            background: "linear-gradient(90deg, #D4AF37, rgba(212,175,55,0.60))",
+            background: "linear-gradient(90deg, #3CB371, rgba(60,179,113,0.60))",
             borderRadius: "4px",
             transition: "width 0.5s ease",
           }} />
         </div>
         <div style={{ display: "flex", justifyContent: "space-between", marginTop: "6px" }}>
-          <span style={{ ...s.monoLabel, fontSize: "10px" }}>DEDUCTED: {(100 - netPct).toFixed(0)}%</span>
-          <span style={{ ...s.monoLabel, fontSize: "10px" }}>RETAINED: {netPct.toFixed(0)}%</span>
+          <span style={{ ...s.monoLabel, fontSize: "10px", color: "rgba(220,38,38,0.45)" }}>DEDUCTED: {(100 - netPct).toFixed(0)}%</span>
+          <span style={{ ...s.monoLabel, fontSize: "10px", color: "rgba(60,179,113,0.55)" }}>RETAINED: {netPct.toFixed(0)}%</span>
         </div>
       </div>
 
@@ -813,7 +813,7 @@ const RevenueDeductionsSection = ({
           fontFamily: "'Roboto Mono', monospace",
           fontSize: "18px",
           fontWeight: 600,
-          color: "#D4AF37",
+          color: netDistributable > result.totalHurdle ? "#3CB371" : "rgba(255,255,255,0.85)",
           fontVariantNumeric: "tabular-nums",
         }}>
           {formatFullCurrency(Math.max(0, netDistributable))}
@@ -1153,7 +1153,7 @@ const ReturnProfileSection = ({
       <div style={{ marginBottom: "20px" }}>
         <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "6px" }}>
           <span style={{ ...s.monoLabel, fontSize: "10px" }}>RECOUPMENT</span>
-          <span style={{ ...s.monoValue, fontSize: "12px" }}>{recoupPct.toFixed(0)}%</span>
+          <span style={{ ...s.monoValue, fontSize: "12px", color: recoupPct >= 100 ? "#3CB371" : recoupPct >= 70 ? "rgba(60,179,113,0.70)" : recoupPct >= 40 ? "#E5A537" : "rgba(220,38,38,0.60)" }}>{recoupPct.toFixed(0)}%</span>
         </div>
         <div style={{
           height: "8px",
@@ -1165,9 +1165,11 @@ const ReturnProfileSection = ({
             height: "100%",
             width: `${recoupPct}%`,
             background: recoupPct >= 100
-              ? "#D4AF37"
-              : recoupPct >= 50
-              ? "rgba(212,175,55,0.70)"
+              ? "#3CB371"
+              : recoupPct >= 70
+              ? "rgba(60,179,113,0.70)"
+              : recoupPct >= 40
+              ? "#E5A537"
               : "rgba(220,38,38,0.60)",
             borderRadius: "4px",
             transition: "width 0.5s ease",
