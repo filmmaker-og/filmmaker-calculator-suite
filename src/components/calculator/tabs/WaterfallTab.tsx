@@ -5,7 +5,7 @@ import ChapterCard from "../ChapterCard";
 import StandardStepLayout from "../StandardStepLayout";
 import { useEffect, useState } from "react";
 import { useHaptics } from "@/hooks/use-haptics";
-import WaterfallDeck from "../WaterfallDeck";
+import WaterfallBrief from "../WaterfallDeck";
 
 interface WaterfallTabProps {
   result: WaterfallResult;
@@ -303,7 +303,7 @@ const WaterfallTab = ({ result: initialResult, inputs: initialInputs, project, g
 
           {/* THE DECK — breakout wrapper escapes s.main 20px padding */}
           <div style={{ margin: "0 -20px" }}>
-            <WaterfallDeck
+            <WaterfallBrief
               result={activeResult}
               inputs={activeInputs}
               project={project}
