@@ -34,7 +34,7 @@ const GapMezzInput = ({
       subtitle="Bridge loan between senior debt and equity"
       amountField="mezzanineDebt"
       amountLabel="Loan Principal"
-      amountPlaceholder="200,000"
+      amountPlaceholder="0"
       amountHint="How much gap financing do you need?"
       rateConfig={{
         field: 'mezzanineRate',

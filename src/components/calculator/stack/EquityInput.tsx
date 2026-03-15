@@ -34,7 +34,7 @@ const EquityInput = ({
       subtitle="Cash investment with preferred return"
       amountField="equity"
       amountLabel="Net Equity"
-      amountPlaceholder="1,000,000"
+      amountPlaceholder="0"
       amountHint="How much equity capital are you raising?"
       rateConfig={{
         field: 'premium',

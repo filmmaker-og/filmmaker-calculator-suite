@@ -507,8 +507,7 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext, genre }:
     ? (isPositive ? 'positive' : isNegative ? 'negative' : null)
     : null;
 
-  // Placeholder = 2× budget
-  const placeholder = budget > 0 ? (budget * 2).toLocaleString() : '0';
+  const placeholder = '0';
 
   // Genre range
   const genreRange = genre ? GENRE_RANGES[genre] || GENRE_RANGES['Other'] : null;
