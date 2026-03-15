@@ -529,6 +529,44 @@ const ExecutiveSummarySection = ({
       <p style={{ ...s.bodyText, fontSize: "13px", color: "rgba(255,255,255,0.50)" }}>
         Off-top deductions consume {offTopPct}% of gross revenue, leaving {netPct}% as net distributable for capital repayment and profit.
       </p>
+
+      {/* Scenario overlay preview — early conversion trigger */}
+      <div style={{
+        ...ucardBase,
+        borderLeft: "3px solid rgba(212,175,55,0.30)",
+        borderColor: "rgba(212,175,55,0.18)",
+        background: "rgba(212,175,55,0.025)",
+      }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "6px" }}>
+          <Lock style={{ width: "16px", height: "16px", color: "rgba(212,175,55,0.50)" }} />
+          <span style={{
+            fontFamily: "'Roboto Mono', monospace",
+            fontSize: "10px",
+            letterSpacing: "0.10em",
+            textTransform: "uppercase" as const,
+            color: "rgba(212,175,55,0.65)",
+          }}>
+            Scenario Overlay
+          </span>
+        </div>
+        <p style={{
+          fontFamily: "'Inter', sans-serif",
+          fontSize: "14px",
+          color: "rgba(255,255,255,0.52)",
+          lineHeight: 1.55,
+          margin: "0 0 8px",
+        }}>
+          See how this chart changes at 70% and 130% of your target acquisition price.
+        </p>
+        <span style={{
+          fontFamily: "'Roboto Mono', monospace",
+          fontSize: "10px",
+          letterSpacing: "0.08em",
+          color: "rgba(212,175,55,0.60)",
+        }}>
+          Available in the Snapshot →
+        </span>
+      </div>
     </div>
   );
 };
@@ -1024,7 +1062,7 @@ const RevenueDeductionsSection = ({
         <div style={{
           height: "8px",
           borderRadius: "4px",
-          background: "rgba(220,38,38,0.10)",
+          background: "rgba(220,38,38,0.20)",
           overflow: "hidden",
         }}>
           <div style={{
@@ -1036,8 +1074,8 @@ const RevenueDeductionsSection = ({
           }} />
         </div>
         <div style={{ display: "flex", justifyContent: "space-between", marginTop: "6px" }}>
-          <span style={{ ...s.monoLabel, fontSize: "10px", color: "rgba(220,38,38,0.45)" }}>DEDUCTED: {(100 - netPct).toFixed(0)}%</span>
-          <span style={{ ...s.monoLabel, fontSize: "10px", color: "rgba(60,179,113,0.55)" }}>RETAINED: {netPct.toFixed(0)}%</span>
+          <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "12px", letterSpacing: "0.15em", textTransform: "uppercase" as const, color: "rgba(220,38,38,0.65)", fontWeight: 600 }}>DEDUCTED: {(100 - netPct).toFixed(0)}%</span>
+          <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "12px", letterSpacing: "0.15em", textTransform: "uppercase" as const, color: "rgba(60,179,113,0.65)", fontWeight: 600 }}>RETAINED: {netPct.toFixed(0)}%</span>
         </div>
       </div>
 
@@ -1711,6 +1749,20 @@ const RiskFlagsSection = ({
   if (commercialCount > 0) categories.push({ label: "COMMERCIAL", count: commercialCount, color: "#E67830" });
   if (legalCount > 0) categories.push({ label: "LEGAL", count: legalCount, color: "rgba(212,175,55,0.70)" });
 
+  const prefersReducedMotion = typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  useEffect(() => {
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes riskPulse {
+        0%, 100% { text-shadow: 0 0 40px rgba(239,68,68,0.25), 0 0 80px rgba(239,68,68,0.10); }
+        50% { text-shadow: 0 0 50px rgba(239,68,68,0.40), 0 0 100px rgba(239,68,68,0.20); }
+      }
+    `;
+    document.head.appendChild(style);
+    return () => { document.head.removeChild(style); };
+  }, []);
+
   return (
     <div style={s.section}>
       <h2 style={s.sectionTitle}>What to Watch For</h2>
@@ -1730,11 +1782,14 @@ const RiskFlagsSection = ({
         {/* Big number */}
         <p style={{
           fontFamily: "'Roboto Mono', monospace",
-          fontSize: "48px",
-          fontWeight: 700,
-          color: totalCount > 5 ? "#DC2626" : totalCount > 3 ? "#E67830" : "#F0A830",
-          margin: "0 0 4px",
+          fontSize: "72px",
+          fontWeight: 800,
+          color: "#EF4444",
           lineHeight: 1,
+          textAlign: "center",
+          textShadow: "0 0 40px rgba(239,68,68,0.30), 0 0 80px rgba(239,68,68,0.15)",
+          animation: prefersReducedMotion ? "none" : "riskPulse 2.5s ease-in-out infinite",
+          margin: "0 0 4px",
         }}>
           {totalCount}
         </p>
@@ -1753,42 +1808,45 @@ const RiskFlagsSection = ({
         <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: "8px", marginBottom: "20px" }}>
           {categories.map((cat) => (
             <span key={cat.label} style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "6px",
-              padding: "6px 12px",
-              borderRadius: "999px",
-              background: "rgba(255,255,255,0.04)",
-              border: "1px solid rgba(255,255,255,0.08)",
               fontFamily: "'Roboto Mono', monospace",
               fontSize: "10px",
-              letterSpacing: "0.1em",
-              color: cat.color,
-              fontWeight: 500,
+              letterSpacing: "0.06em",
+              padding: "5px 14px",
+              borderRadius: "6px",
+              color: cat.label === "STRUCTURAL" ? "#F0A830"
+                   : cat.label === "COMMERCIAL" ? "#E67830"
+                   : "#EF4444",
+              border: `1px solid ${
+                cat.label === "STRUCTURAL" ? "rgba(240,168,48,0.35)"
+                : cat.label === "COMMERCIAL" ? "rgba(230,120,48,0.35)"
+                : "rgba(239,68,68,0.25)"
+              }`,
+              background: cat.label === "STRUCTURAL" ? "rgba(240,168,48,0.08)"
+                        : cat.label === "COMMERCIAL" ? "rgba(230,120,48,0.08)"
+                        : "rgba(239,68,68,0.06)",
             }}>
               {cat.label}: {cat.count}
             </span>
           ))}
         </div>
 
-        {/* Locked pill */}
+        {/* SEE WHAT THEY ARE → button */}
         <div style={{
           display: "inline-flex",
           alignItems: "center",
-          padding: "6px 14px",
-          borderRadius: "999px",
-          background: "rgba(212,175,55,0.06)",
-          border: "1px solid rgba(212,175,55,0.12)",
+          gap: "8px",
+          marginTop: "20px",
+          padding: "12px 28px",
+          borderRadius: "8px",
+          border: "1px solid rgba(239,68,68,0.25)",
+          background: "rgba(239,68,68,0.06)",
+          fontFamily: "'Roboto Mono', monospace",
+          fontSize: "12px",
+          letterSpacing: "0.10em",
+          color: "rgba(239,68,68,0.80)",
+          cursor: "pointer",
         }}>
-          <span style={{
-            fontFamily: "'Roboto Mono', monospace",
-            fontSize: "10px",
-            letterSpacing: "0.1em",
-            color: "rgba(212,175,55,0.60)",
-            fontWeight: 500,
-          }}>
-            FULL DETAIL IN THE SNAPSHOT
-          </span>
+          SEE WHAT THEY ARE →
         </div>
       </div>
     </div>
