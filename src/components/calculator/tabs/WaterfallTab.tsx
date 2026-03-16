@@ -13,8 +13,6 @@ interface WaterfallTabProps {
   project: ProjectDetails;
   guilds: GuildState;
   selections: CapitalSelections;
-  onExport?: () => void;
-  onNavigateTab?: (tab: string) => void;
 }
 
 // Demo inputs for when the user lands from Wiki with no data
@@ -28,8 +26,8 @@ const DEMO_INPUTS: WaterfallInputs = {
   mezzanineRate: 0,
   equity: 500000,
   premium: 20,
-  salesFee: 10,
-  salesExp: 50000,
+  salesFee: 15,
+  salesExp: 75000,
   deferments: 0,
 };
 
@@ -57,7 +55,7 @@ const DEMO_SELECTIONS: CapitalSelections = {
   deferments: false,
 };
 
-const WaterfallTab = ({ result: initialResult, inputs: initialInputs, project, guilds, selections, onExport, onNavigateTab }: WaterfallTabProps) => {
+const WaterfallTab = ({ result: initialResult, inputs: initialInputs, project, guilds, selections }: WaterfallTabProps) => {
   const haptics = useHaptics();
   // State for Demo Mode (if real inputs are empty)
   const isEmpty = initialInputs.budget === 0 || initialInputs.revenue === 0;
@@ -334,8 +332,6 @@ const WaterfallTab = ({ result: initialResult, inputs: initialInputs, project, g
               project={activeProject}
               guilds={activeGuilds}
               selections={activeSelections}
-              onExport={isDemoMode ? undefined : onExport}
-              onNavigateTab={onNavigateTab}
             />
           </div>
 
