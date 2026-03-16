@@ -22,8 +22,6 @@ interface WaterfallBriefProps {
   project: ProjectDetails;
   guilds: GuildState;
   selections?: CapitalSelections;
-  onExport?: () => void;
-  onNavigateTab?: (tab: string) => void;
 }
 
 // ─── Locked Type System ──────────────────────────────────────────
@@ -220,7 +218,6 @@ const CoverSection = ({
   if (guildParts.length > 0) assumptionParts.push(guildParts.join(", "));
 
   // Verdict text
-  const cashBasisDelta = inputs.revenue > 0 ? inputs.revenue - result.offTopTotal - cashBasis : 0;
   const netToInvestors = Math.max(0, inputs.revenue - result.offTopTotal);
   const verdictContext = netToInvestors > cashBasis
     ? `Market value exceeds cash basis by ${formatCompactCurrency(netToInvestors - cashBasis)}.`
@@ -242,7 +239,7 @@ const CoverSection = ({
         marginBottom: "24px",
       }}>
         <div style={{ width: "24px", height: "1px", background: G.subtle }} />
-        <span style={{ ...FONT.label, color: G.standard }}>Waterfall Brief</span>
+        <span style={{ ...FONT.label, color: G.standard }}>Waterfall Snapshot</span>
       </div>
 
       {/* 1b. Title */}
@@ -286,7 +283,7 @@ const CoverSection = ({
           background: "rgba(255,255,255,0.06)",
         }}>
           {teamFields.map((f) => (
-            <div key={f.role} style={{ background: "#000", padding: "12px 14px" }}>
+            <div key={f.role} style={{ background: "#0A0A0A", padding: "12px 14px" }}>
               <div style={{
                 ...FONT.fine,
                 color: W.quaternary,
@@ -316,7 +313,7 @@ const CoverSection = ({
         borderRadius: "4px",
         overflow: "hidden",
       }}>
-        <div style={{ flex: 1, background: "#000", padding: "14px" }}>
+        <div style={{ flex: 1, background: "#0A0A0A", padding: "14px" }}>
           <div style={{ ...FONT.fine, color: W.quaternary, marginBottom: "4px" }}>BUDGET</div>
           <div style={{
             fontFamily: "'Roboto Mono', monospace",
@@ -328,7 +325,7 @@ const CoverSection = ({
             {formatCompactCurrency(inputs.budget)}
           </div>
         </div>
-        <div style={{ flex: 1, background: "#000", padding: "14px" }}>
+        <div style={{ flex: 1, background: "#0A0A0A", padding: "14px" }}>
           <div style={{ ...FONT.fine, color: W.quaternary, marginBottom: "4px" }}>CASH BASIS</div>
           <div style={{
             fontFamily: "'Roboto Mono', monospace",
@@ -349,7 +346,7 @@ const CoverSection = ({
         borderRadius: "4px",
         overflow: "hidden",
       }}>
-        <div style={{ flex: 1, background: "#000", padding: "14px" }}>
+        <div style={{ flex: 1, background: "#0A0A0A", padding: "14px" }}>
           <div style={{ ...FONT.fine, color: W.quaternary, marginBottom: "4px" }}>MARKET VALUE</div>
           <div style={{
             fontFamily: "'Roboto Mono', monospace",
@@ -361,7 +358,7 @@ const CoverSection = ({
             {formatCompactCurrency(inputs.revenue)}
           </div>
         </div>
-        <div style={{ flex: 1, background: "#000", padding: "14px" }}>
+        <div style={{ flex: 1, background: "#0A0A0A", padding: "14px" }}>
           <div style={{ ...FONT.fine, color: W.quaternary, marginBottom: "4px" }}>INVESTOR RETURN</div>
           <div style={{
             fontFamily: "'Roboto Mono', monospace",
@@ -433,7 +430,204 @@ const CoverSection = ({
   );
 };
 
-// ─── SECTION 2: REALITY CHECK 1 ─────────────────────────────────
+// ─── SECTION 2: DEAL (Investment Thesis) ────────────────────────
+
+const DealSection = ({
+  inputs, result, guilds, project,
+}: {
+  inputs: WaterfallInputs;
+  result: WaterfallResult;
+  guilds: GuildState;
+  project: ProjectDetails;
+}) => {
+  const cashBasis = computeCashBasis(inputs);
+  const offTopTotal = result.offTopTotal;
+  const netDistributable = Math.max(0, inputs.revenue - offTopTotal);
+  const tiers = computeTierPayments(result, inputs);
+  const backendPool = result.profitPool;
+  const salesFeeAmount = result.salesFee;
+  const multiple = result.multiple;
+
+  // Paragraph 1 — Capital structure
+  const p1Parts: string[] = [];
+  p1Parts.push(`This is a ${formatCompactCurrency(inputs.budget)} production modeled for acquisition at ${formatCompactCurrency(inputs.revenue)}.`);
+  const capitalParts: string[] = [];
+  if (inputs.debt > 0) capitalParts.push(`${formatCompactCurrency(inputs.debt)} in senior debt at ${inputs.seniorDebtRate}%`);
+  if (inputs.mezzanineDebt > 0) capitalParts.push(`${formatCompactCurrency(inputs.mezzanineDebt)} in mezzanine debt at ${inputs.mezzanineRate}%`);
+  if (inputs.equity > 0) capitalParts.push(`${formatCompactCurrency(inputs.equity)} in equity with a ${inputs.premium}% preferred return`);
+  if (capitalParts.length > 0) p1Parts.push(capitalParts.join(", ") + ".");
+  if (inputs.credits > 0) {
+    p1Parts.push(`${formatCompactCurrency(inputs.credits)} in tax credits reduce the investor's cash exposure.`);
+  }
+  if (inputs.deferments > 0) {
+    p1Parts.push(`${formatCompactCurrency(inputs.deferments)} in deferred fees are subordinate to all capital tiers.`);
+  }
+  if (inputs.credits === 0 && inputs.deferments === 0) {
+    p1Parts.push("No tax credits or deferrals reduce the investor's exposure.");
+  }
+
+  // Paragraph 2 — Off-the-top erosion
+  const offTopPct = inputs.revenue > 0 ? Math.round((offTopTotal / inputs.revenue) * 100) : 0;
+  let p2 = `Off-the-top deductions total ${formatCompactCurrency(offTopTotal)} — roughly ${offTopPct}% of gross receipts.`;
+  if (inputs.salesFee > 0) p2 += ` The sales agent's ${inputs.salesFee}% commission accounts for ${formatCompactCurrency(salesFeeAmount)}.`;
+  if (inputs.salesExp > 0) p2 += ` The expense cap is ${formatCompactCurrency(inputs.salesExp)}.`;
+  if (inputs.salesExp > 100000) {
+    p2 += " That expense cap warrants scrutiny.";
+  } else if (inputs.salesExp > 0) {
+    p2 += " Reasonable for a film this size.";
+  }
+
+  // Paragraph 3 — Waterfall flow-through
+  let p3 = `After deductions, ${formatCompactCurrency(netDistributable)} enters the waterfall. `;
+  const fundedTiers = tiers.filter(t => t.status === "funded");
+  const partialTier = tiers.find(t => t.status === "partial");
+  if (fundedTiers.length === tiers.length) {
+    p3 += `All ${tiers.length} capital tiers are fully funded.`;
+    if (backendPool > 0) {
+      p3 += ` A surplus of ${formatCompactCurrency(backendPool)} flows into the backend pool.`;
+    }
+  } else if (partialTier) {
+    p3 += `Revenue exhausts during the ${partialTier.label} tier — investors recover ${Math.round((partialTier.paid / partialTier.amount) * 100)}% of that obligation. Downstream tiers are unfunded.`;
+  } else {
+    p3 += "Revenue does not fully fund any capital tier at this acquisition price.";
+  }
+
+  // Paragraph 4 — Margin analysis
+  const floorPrice = inputs.revenue * 0.875;
+  const distressedPrice = inputs.revenue * 0.46875;
+  const floorScenario = computeScenarioReturn(inputs, guilds, floorPrice);
+  const distressedScenario = computeScenarioReturn(inputs, guilds, distressedPrice);
+  let p4 = `At the modeled price, investors see a ${multiple.toFixed(1)}x cash-on-cash multiple. `;
+  if (floorScenario.returnPct >= 100) {
+    p4 += `Even at the ${formatCompactCurrency(floorPrice)} floor — a 12.5% haircut — investors recoup principal and earn a modest return. `;
+  } else {
+    p4 += `At the ${formatCompactCurrency(floorPrice)} floor — a 12.5% haircut — investors lose ${Math.round(100 - floorScenario.returnPct)}% of principal. `;
+  }
+  if (distressedScenario.returnPct < 100) {
+    p4 += `In a distressed scenario at ${formatCompactCurrency(distressedPrice)}, recovery drops to ${Math.round(distressedScenario.returnPct)}%.`;
+  }
+
+  // Paragraph 5 — Structural risk
+  const risks: string[] = [];
+  if (inputs.credits === 0) risks.push("Without tax credits, the cash basis has no cushion.");
+  if (inputs.credits > 0 && inputs.budget > 0) {
+    const creditConc = Math.round((inputs.credits / inputs.budget) * 100);
+    if (creditConc > 25) risks.push(`${creditConc}% of financing depends on ${project.location.trim() || "your state"}'s incentive program.`);
+  }
+  if (inputs.deferments === 0) risks.push("No deferred fees to reduce cash exposure.");
+  if (inputs.salesFee > 15) risks.push(`The agent's ${inputs.salesFee}% take is above market.`);
+  if (inputs.salesExp > 100000) risks.push("The expense cap warrants negotiation.");
+  if (floorScenario.returnPct < 100) risks.push("The margin between profit and loss is thin.");
+  const p5 = risks.length > 0 ? risks.slice(0, 2).join(" ") : "No outsized structural risks at this configuration.";
+
+  // Paragraph 6 — Verdict
+  let characterization: string;
+  let verdict: string;
+  if (multiple >= 1.5) {
+    characterization = "a clean deal";
+    verdict = "this model works";
+  } else if (multiple >= 1.0) {
+    characterization = "a tight deal";
+    verdict = "this model holds if assumptions survive";
+  } else if (multiple >= 0.7) {
+    characterization = "an aggressive deal";
+    verdict = "this model needs restructuring";
+  } else {
+    characterization = "a deal that needs work";
+    verdict = "this model needs restructuring";
+  }
+  const p6 = `For what it is — ${characterization} — ${verdict}.`;
+
+  // Pull-quote logic
+  const allFunded = tiers.every(t => t.status === "funded");
+  const pullPartialTier = tiers.find(t => t.status === "partial");
+  let verdictText: string;
+  let borderColor: string;
+  if (allFunded && backendPool > 0) {
+    verdictText = `EVERY CAPITAL TIER IS FUNDED. THE SURPLUS IS ${formatCompactCurrency(backendPool)}.`;
+    borderColor = "rgba(60,179,113,0.40)";
+  } else if (allFunded) {
+    verdictText = "EVERY CAPITAL TIER IS FUNDED. NO BACKEND SURPLUS.";
+    borderColor = "rgba(212,175,55,0.40)";
+  } else if (pullPartialTier) {
+    verdictText = `REVENUE EXHAUSTS AT ${pullPartialTier.label.toUpperCase()}. DOWNSTREAM TIERS ARE UNFUNDED.`;
+    borderColor = "rgba(224,82,82,0.40)";
+  } else {
+    verdictText = "REVENUE DOES NOT FULLY FUND ANY TIER.";
+    borderColor = "rgba(224,82,82,0.40)";
+  }
+
+  return (
+    <section style={{ padding: "48px 24px 56px" }}>
+      {/* Provenance mark */}
+      <div style={{
+        display: "flex",
+        alignItems: "center",
+        gap: "10px",
+        marginBottom: "28px",
+      }}>
+        <div style={{
+          width: "10px",
+          height: "10px",
+          border: "1.5px solid rgba(212,175,55,0.45)",
+          borderRadius: "50%",
+          boxShadow: "0 0 8px rgba(212,175,55,0.15)",
+        }} />
+        <span style={{
+          fontSize: "11px",
+          fontWeight: 600,
+          letterSpacing: "0.18em",
+          textTransform: "uppercase" as const,
+          color: "rgba(212,175,55,0.50)",
+        }}>Generated by filmmaker.og</span>
+        <div style={{
+          flex: 1,
+          height: "1px",
+          background: "linear-gradient(90deg, rgba(212,175,55,0.20), transparent)",
+        }} />
+      </div>
+
+      {/* Label */}
+      <div style={{ ...FONT.label, color: G.standard, marginBottom: "24px" }}>Deal Summary</div>
+
+      {/* Headline */}
+      <div style={{ ...FONT.display, color: W.primary, marginBottom: "32px" }}>THE DEAL</div>
+
+      {/* Prose */}
+      <div style={{ ...FONT.body, color: W.secondary }}>
+        <p style={{ marginBottom: "20px" }}>{p1Parts.join(" ")}</p>
+        <p style={{ marginBottom: "20px" }}>{p2}</p>
+        <p style={{ marginBottom: "20px" }}>{p3}</p>
+      </div>
+
+      {/* Pull-quote */}
+      <div style={{
+        borderLeft: `3px solid ${borderColor}`,
+        paddingLeft: "20px",
+        margin: "32px 0",
+      }}>
+        <div style={{
+          fontFamily: "'Bebas Neue', sans-serif",
+          fontSize: "22px",
+          letterSpacing: "0.06em",
+          lineHeight: 1.2,
+          color: W.primary,
+        }}>
+          {verdictText}
+        </div>
+      </div>
+
+      {/* More prose */}
+      <div style={{ ...FONT.body, color: W.secondary }}>
+        <p style={{ marginBottom: "20px" }}>{p4}</p>
+        <p style={{ marginBottom: "20px" }}>{p5}</p>
+        <p style={{ marginBottom: "0" }}>{p6}</p>
+      </div>
+    </section>
+  );
+};
+
+// ─── SECTION 3: REALITY CHECK 1 ─────────────────────────────────
 
 const RealityCheck1Section = ({
   inputs, result, guilds, project,
@@ -452,7 +646,7 @@ const RealityCheck1Section = ({
   const erosionItems: { label: string; amount: number; colorOpacity: number }[] = [];
   if (result.cam > 0) erosionItems.push({ label: "CAM Fee", amount: result.cam, colorOpacity: 0.20 });
   if (result.salesFee > 0) erosionItems.push({ label: "Sales Agent Commission", amount: result.salesFee, colorOpacity: 0.35 });
-  if (result.marketing > 0) erosionItems.push({ label: "Agent Expense Cap", amount: result.marketing, colorOpacity: 0.50 });
+  if (result.marketing > 0) erosionItems.push({ label: "Sales Agent Expenses", amount: result.marketing, colorOpacity: 0.50 });
   if (result.guilds > 0) erosionItems.push({ label: "Guild Reserves", amount: result.guilds, colorOpacity: 0.65 });
 
   const erosionTotal = erosionItems.reduce((sum, item) => sum + item.amount, 0);
@@ -518,11 +712,11 @@ const RealityCheck1Section = ({
   return (
     <section style={{ padding: "48px 24px 56px" }}>
       {/* 2a. Section Label */}
-      <div style={{ ...FONT.label, color: G.standard, marginBottom: "24px" }}>The Analysis</div>
+      <div style={{ ...FONT.label, color: G.standard, marginBottom: "24px" }}>The Erosion</div>
 
       {/* 2b. Headline */}
       <div style={{ ...FONT.display, color: W.primary, marginBottom: "32px" }}>
-        WHERE YOUR MONEY{"\n"}ACTUALLY GOES
+        THE EROSION
       </div>
 
       {/* 2c. Cash Basis Card */}
@@ -883,10 +1077,10 @@ const RealityCheck2Section = ({
   return (
     <section style={{ padding: "48px 24px 56px" }}>
       {/* 4a */}
-      <div style={{ ...FONT.label, color: G.standard, marginBottom: "24px" }}>Risk Analysis</div>
+      <div style={{ ...FONT.label, color: G.standard, marginBottom: "24px" }}>The Risk</div>
 
       {/* 4b */}
-      <div style={{ ...FONT.title, color: W.secondary, marginBottom: "24px" }}>WHAT BREAKS THIS DEAL</div>
+      <div style={{ ...FONT.display, color: W.primary, marginBottom: "24px" }}>THE RISK</div>
 
       {/* 4c. Opening Prose */}
       <div style={{ ...FONT.body, color: W.secondary, marginBottom: "24px" }}>
@@ -1101,7 +1295,7 @@ const DeductionsSection = ({
   rows.push({ label: "Gross Receipts", rate: "", amount: inputs.revenue, isGross: true });
   if (result.cam > 0) rows.push({ label: "CAM Fee", rate: `${(CAM_PCT * 100).toFixed(1)}%`, amount: result.cam });
   if (result.salesFee > 0) rows.push({ label: "Sales Commission", rate: `blended ${inputs.salesFee}%`, amount: result.salesFee });
-  if (result.marketing > 0) rows.push({ label: "Agent Expenses", rate: "capped", amount: result.marketing });
+  if (result.marketing > 0) rows.push({ label: "Sales Agent Expenses", rate: "capped", amount: result.marketing });
   if (result.guilds > 0) {
     const parts: string[] = [];
     if (guilds.sag) parts.push("SAG");
@@ -1113,10 +1307,10 @@ const DeductionsSection = ({
   return (
     <section style={{ padding: "48px 24px 56px" }}>
       {/* 5a */}
-      <div style={{ ...FONT.label, color: G.standard, marginBottom: "24px" }}>Full Breakdown</div>
+      <div style={{ ...FONT.label, color: G.standard, marginBottom: "24px" }}>The Deductions</div>
 
       {/* 5b */}
-      <div style={{ ...FONT.display, color: W.primary, marginBottom: "8px" }}>GROSS TO NET</div>
+      <div style={{ ...FONT.display, color: W.primary, marginBottom: "8px" }}>THE DEDUCTIONS</div>
 
       {/* 5c */}
       <div style={{ fontSize: "14px", color: W.quaternary, marginBottom: "28px" }}>
@@ -1271,10 +1465,10 @@ const CascadeSection = ({
   return (
     <section style={{ padding: "48px 24px 56px" }}>
       {/* 6a */}
-      <div style={{ ...FONT.label, color: G.standard, marginBottom: "24px" }}>Recoupment Cascade</div>
+      <div style={{ ...FONT.label, color: G.standard, marginBottom: "24px" }}>The Cascade</div>
 
       {/* 6b */}
-      <div style={{ ...FONT.display, color: W.primary, marginBottom: "8px" }}>WHO GETS PAID</div>
+      <div style={{ ...FONT.display, color: W.primary, marginBottom: "8px" }}>THE CASCADE</div>
 
       {/* 6c */}
       <div style={{ fontSize: "14px", color: W.quaternary, marginBottom: "28px" }}>
@@ -1411,7 +1605,7 @@ const CascadeSection = ({
               const producerBackend = Math.round(backendPool * 0.5);
               return (
                 <>
-                  Every tier above the line is fully funded. The backend pool — split 50/50 between
+                  Every tier above the line is fully funded. The backend pool — split per the operating agreement between
                   investors and producers — gets what&rsquo;s left: <Num>{formatCompactCurrency(backendPool)}</Num>.
                   Your equity partners collect <Num>{formatCompactCurrency(investorBackend)}</Num> on top of
                   their recoupment. Your creative team splits the other half.
@@ -1438,6 +1632,185 @@ const CascadeSection = ({
     </section>
   );
 };
+
+// ─── SECTION 5b: CAPITAL STACK ───────────────────────────────────
+
+const CapitalStackSection = ({
+  inputs, selections,
+}: {
+  inputs: WaterfallInputs;
+  selections?: CapitalSelections;
+}) => {
+  const sources: { label: string; amount: number; detail: string; pctOfBudget: string; color: string }[] = [];
+
+  if (inputs.debt > 0) sources.push({
+    label: "Senior Debt",
+    amount: inputs.debt,
+    detail: `First position · ${inputs.seniorDebtRate}% interest`,
+    pctOfBudget: `${Math.round((inputs.debt / inputs.budget) * 100)}% of budget`,
+    color: "rgba(255,255,255,0.15)",
+  });
+  if (inputs.mezzanineDebt > 0) sources.push({
+    label: "Mezzanine / Gap",
+    amount: inputs.mezzanineDebt,
+    detail: `Second position · ${inputs.mezzanineRate}% interest`,
+    pctOfBudget: `${Math.round((inputs.mezzanineDebt / inputs.budget) * 100)}% of budget`,
+    color: "rgba(240,168,48,0.30)",
+  });
+  if (inputs.equity > 0) sources.push({
+    label: "Equity",
+    amount: inputs.equity,
+    detail: `${inputs.premium > 0 ? `${inputs.premium}% preferred return` : "Pari passu"}`,
+    pctOfBudget: `${Math.round((inputs.equity / inputs.budget) * 100)}% of budget`,
+    color: "rgba(212,175,55,0.40)",
+  });
+  if (inputs.credits > 0) sources.push({
+    label: "Tax Credits",
+    amount: inputs.credits,
+    detail: "Non-dilutive",
+    pctOfBudget: `${Math.round((inputs.credits / inputs.budget) * 100)}% of budget`,
+    color: "rgba(60,179,113,0.30)",
+  });
+  if (inputs.deferments > 0) sources.push({
+    label: "Deferrals",
+    amount: inputs.deferments,
+    detail: "Subordinate to all capital",
+    pctOfBudget: `${Math.round((inputs.deferments / inputs.budget) * 100)}% of budget`,
+    color: "rgba(255,255,255,0.10)",
+  });
+
+  if (sources.length === 0) return null;
+
+  // Prose
+  const debtTotal = inputs.debt + inputs.mezzanineDebt;
+  const equityTotal = inputs.equity;
+  const deRatio = equityTotal > 0 ? (debtTotal / equityTotal).toFixed(1) : "N/A";
+  const complexity = sources.length <= 2 ? "clean structure" : sources.length === 3 ? "standard structure" : "layered structure";
+
+  let prose = `${sources.length} capital source${sources.length > 1 ? "s" : ""} — a ${complexity}.`;
+  if (debtTotal > 0 && equityTotal > 0) {
+    prose += ` Debt-to-equity ratio of ${deRatio}:1.`;
+  }
+  if (inputs.debt > 0) {
+    prose += " Senior debt holds first position in the recoupment waterfall.";
+  }
+  if (inputs.mezzanineDebt > 0) {
+    prose += " Mezzanine sits behind senior debt but ahead of equity.";
+  }
+
+  return (
+    <section style={{ padding: "48px 24px 56px" }}>
+      {/* Label */}
+      <div style={{ ...FONT.label, color: G.standard, marginBottom: "24px" }}>The Capital Stack</div>
+
+      {/* Headline */}
+      <div style={{ ...FONT.display, color: W.primary, marginBottom: "8px" }}>THE CAPITAL STACK</div>
+
+      {/* Subtitle */}
+      <div style={{ fontSize: "14px", color: W.quaternary, marginBottom: "28px" }}>
+        Your financing structure and what each source costs
+      </div>
+
+      {/* Stack blocks */}
+      <div style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "2px",
+        background: "rgba(255,255,255,0.06)",
+        borderRadius: "4px",
+        overflow: "hidden",
+      }}>
+        {sources.map((s) => (
+          <div key={s.label} style={{ background: "#0A0A0A", padding: "16px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                <div style={{ width: "12px", height: "12px", borderRadius: "2px", background: s.color }} />
+                <span style={{ fontSize: "14px", fontWeight: 500, color: W.secondary }}>{s.label}</span>
+              </div>
+              <span style={{ ...FONT.data, fontSize: "18px", color: W.primary }}>{formatCompactCurrency(s.amount)}</span>
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between", paddingLeft: "20px" }}>
+              <span style={{ fontSize: "12px", color: W.quaternary }}>{s.detail}</span>
+              <span style={{ ...FONT.data, fontSize: "12px", color: W.quaternary }}>{s.pctOfBudget}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Stacked bar */}
+      <div style={{ height: "24px", borderRadius: "4px", display: "flex", overflow: "hidden", margin: "24px 0" }}>
+        {sources.map((s) => {
+          const widthPct = inputs.budget > 0 ? (s.amount / inputs.budget) * 100 : 0;
+          return (
+            <div key={s.label} style={{
+              width: `${widthPct}%`,
+              height: "100%",
+              background: s.color,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}>
+              {widthPct > 15 && (
+                <span style={{ ...FONT.data, fontSize: "10px", color: W.secondary, letterSpacing: "0.08em" }}>
+                  {s.label.split(" ")[0].toUpperCase()}
+                </span>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Prose */}
+      <div style={{ ...FONT.body, color: W.secondary }}>
+        <p>{prose}</p>
+      </div>
+    </section>
+  );
+};
+
+// ─── SECTION 8: LOCKED COMPARABLE (Gate 2) ──────────────────────
+
+const LockedComparableSection = () => (
+  <section style={{ padding: "36px 24px" }}>
+    <div style={{
+      display: "flex",
+      alignItems: "center",
+      gap: "16px",
+      padding: "20px",
+      border: "1px solid rgba(212,175,55,0.15)",
+      borderRadius: "4px",
+      background: "rgba(212,175,55,0.02)",
+    }}>
+      <div style={{
+        width: "36px", height: "36px", flexShrink: 0,
+        border: "1.5px solid rgba(212,175,55,0.35)", borderRadius: "50%",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        boxShadow: "0 0 12px rgba(212,175,55,0.08)",
+      }}>
+        <svg viewBox="0 0 24 24" style={{ width: "14px", height: "14px", fill: G.subtle }}>
+          <path d="M18 10h-1V7c0-2.76-2.24-5-5-5S7 4.24 7 7v3H6c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-8c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3-9H9V7c0-1.66 1.34-3 3-3s3 1.34 3 3v3z" />
+        </svg>
+      </div>
+      <div>
+        <div style={{ fontSize: "13px", fontWeight: 600, color: W.secondary, marginBottom: "3px" }}>
+          Comparable Acquisition Analysis
+        </div>
+        <div style={{ fontSize: "12px", color: W.quaternary, lineHeight: 1.4 }}>
+          Real deals in your genre and budget range. Defend your valuation with data.
+        </div>
+        <div style={{
+          ...FONT.label,
+          fontSize: "11px",
+          letterSpacing: "0.12em",
+          color: G.floor,
+          marginTop: "6px",
+        }}>
+          Included in Comp Report
+        </div>
+      </div>
+    </div>
+  </section>
+);
 
 // ─── SECTION 7: LOCKED TEASER — INVESTOR MEMO ───────────────────
 
@@ -1590,7 +1963,7 @@ const CTASection = () => {
 
       {/* 8e. Footer */}
       <div style={{ marginTop: "32px", ...FONT.fine, color: W.ghost }}>
-        filmmaker.og &middot; Waterfall Intelligence
+        filmmaker.og &middot; Waterfall Snapshot
       </div>
     </section>
   );
@@ -1617,17 +1990,15 @@ const WaterfallBrief = ({
   // Core computations
   const tiers = computeTierPayments(result, inputs);
 
-  // Conditional: RC1 is "substantive" if budget + revenue + at least one deduction
-  const hasDeductions = result.offTopTotal > 0;
-  const rc1Substantive = inputs.budget > 0 && inputs.revenue > 0 && hasDeductions;
-
   return (
     <div style={{
-      background: "#000",
+      background: "#0A0A0A",
       maxWidth: "430px",
       margin: "0 auto",
     }}>
-      {/* SECTION 1: Cover */}
+      {/* ═══ ACT 1 — THE DEAL ═══ */}
+
+      {/* 1. Cover */}
       <CoverSection
         project={project}
         inputs={inputs}
@@ -1637,7 +2008,24 @@ const WaterfallBrief = ({
 
       <GoldGlowBreak />
 
-      {/* SECTION 2: Reality Check 1 */}
+      {/* 2. Deal (Investment Thesis) */}
+      <DealSection
+        inputs={inputs}
+        result={result}
+        guilds={guilds}
+        project={project}
+      />
+
+      <GoldGlowBreak />
+
+      {/* 3. Locked Sensitivity (Gate 1 — always position 3) */}
+      <LockedSensitivitySection />
+
+      <GoldGlowBreak />
+
+      {/* ═══ ACT 2 — THE MATH ═══ */}
+
+      {/* 4. The Erosion (Reality Check 1) */}
       <RealityCheck1Section
         inputs={inputs}
         result={result}
@@ -1647,15 +2035,40 @@ const WaterfallBrief = ({
 
       <GoldGlowBreak />
 
-      {/* SECTION 3: Locked Sensitivity (position 3 if RC1 substantive) */}
-      {rc1Substantive && (
-        <>
-          <LockedSensitivitySection />
-          <GoldGlowBreak />
-        </>
-      )}
+      {/* 5. The Capital Stack */}
+      <CapitalStackSection
+        inputs={inputs}
+        selections={effectiveSelections}
+      />
 
-      {/* SECTION 4: Reality Check 2 */}
+      <GoldGlowBreak />
+
+      {/* 6. The Deductions */}
+      <DeductionsSection
+        inputs={inputs}
+        result={result}
+        guilds={guilds}
+      />
+
+      <GoldGlowBreak />
+
+      {/* 7. The Cascade */}
+      <CascadeSection
+        tiers={tiers}
+        result={result}
+        inputs={inputs}
+      />
+
+      <GoldGlowBreak />
+
+      {/* 8. Locked Comparable (Gate 2) */}
+      <LockedComparableSection />
+
+      <GoldGlowBreak />
+
+      {/* ═══ ACT 3 — THE CLOSE ═══ */}
+
+      {/* 9. The Risk (Reality Check 2) */}
       <RealityCheck2Section
         inputs={inputs}
         result={result}
@@ -1665,38 +2078,12 @@ const WaterfallBrief = ({
 
       <GoldGlowBreak />
 
-      {/* SECTION 3 fallback: Locked Sensitivity (between 4 and 5 if RC1 thin) */}
-      {!rc1Substantive && (
-        <>
-          <LockedSensitivitySection />
-          <GoldGlowBreak />
-        </>
-      )}
-
-      {/* SECTION 5: Deductions */}
-      <DeductionsSection
-        inputs={inputs}
-        result={result}
-        guilds={guilds}
-      />
-
-      <GoldGlowBreak />
-
-      {/* SECTION 6: Cascade */}
-      <CascadeSection
-        tiers={tiers}
-        result={result}
-        inputs={inputs}
-      />
-
-      <GoldGlowBreak />
-
-      {/* SECTION 7: Locked Investor Memo */}
+      {/* 10. Locked Investor Memo */}
       <LockedInvestorMemoSection />
 
       <GoldGlowBreak />
 
-      {/* SECTION 8: CTA */}
+      {/* 11. CTA */}
       <CTASection />
     </div>
   );
