@@ -74,7 +74,7 @@ const Watermark = () => (
     fontFamily: "'Bebas Neue', sans-serif",
     fontSize: "11px",
     letterSpacing: "0.18em",
-    color: "rgba(212,175,55,0.25)",
+    color: "rgba(212,175,55,0.30)",
     padding: "32px 24px 24px",
   }}>
     ———— FILMMAKER.OG ————
@@ -94,8 +94,8 @@ const LockedTeaser = ({ title, body }: { title: string; body: string }) => (
       <Lock style={{ width: "14px", height: "14px", color: "rgba(212,175,55,0.40)" }} />
       <span style={{
         fontFamily: "'Roboto Mono', monospace",
-        fontSize: "9px",
-        letterSpacing: "0.12em",
+        fontSize: "10px",
+        letterSpacing: "0.10em",
         textTransform: "uppercase" as const,
         color: "rgba(212,175,55,0.55)",
       }}>
@@ -104,8 +104,8 @@ const LockedTeaser = ({ title, body }: { title: string; body: string }) => (
     </div>
     <p style={{
       fontFamily: "'Inter', sans-serif",
-      fontSize: "13px",
-      color: "rgba(255,255,255,0.45)",
+      fontSize: "14px",
+      color: "rgba(255,255,255,0.40)",
       lineHeight: 1.5,
       margin: "0 0 8px",
     }}>
@@ -118,9 +118,9 @@ const LockedTeaser = ({ title, body }: { title: string; body: string }) => (
       border: "1px solid rgba(212,175,55,0.15)",
       background: "rgba(212,175,55,0.04)",
       fontFamily: "'Roboto Mono', monospace",
-      fontSize: "8px",
-      letterSpacing: "0.1em",
-      color: "rgba(212,175,55,0.50)",
+      fontSize: "10px",
+      letterSpacing: "0.10em",
+      color: "rgba(212,175,55,0.55)",
     }}>
       Available in the Snapshot
     </span>
@@ -134,7 +134,7 @@ const s = {
     fontFamily: "'Roboto Mono', monospace",
     fontSize: "11px",
     fontWeight: 500,
-    letterSpacing: "0.2em",
+    letterSpacing: "0.20em",
     textTransform: "uppercase" as const,
     color: "rgba(212,175,55,0.55)",
     margin: 0,
@@ -143,7 +143,7 @@ const s = {
     fontFamily: "'Bebas Neue', sans-serif",
     fontSize: "28px",
     letterSpacing: "0.06em",
-    color: "rgba(255,255,255,0.95)",
+    color: "rgba(255,255,255,0.92)",
     margin: "8px 0 0",
     textAlign: "center" as const,
   } as React.CSSProperties,
@@ -165,7 +165,7 @@ const s = {
     fontFamily: "'Roboto Mono', monospace",
     fontSize: "15px",
     fontWeight: 500,
-    color: "rgba(255,255,255,0.82)",
+    color: "rgba(255,255,255,0.92)",
     fontVariantNumeric: "tabular-nums" as const,
   } as React.CSSProperties,
   goldDivider: {
@@ -247,7 +247,7 @@ const CoverSection = ({
         <p style={{
           fontFamily: "'Inter', sans-serif",
           fontSize: "11px",
-          color: "rgba(255,255,255,0.35)",
+          color: "rgba(255,255,255,0.40)",
           margin: "8px 0 0",
         }}>
           {`Prepared by filmmaker.og · ${new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}`}
@@ -267,7 +267,7 @@ const CoverSection = ({
           <h1 style={{
             fontFamily: "'Bebas Neue', sans-serif",
             fontSize: "36px",
-            letterSpacing: "0.08em",
+            letterSpacing: "0.06em",
             color: "#FFFFFF",
             margin: "0 0 4px",
           }}>
@@ -293,10 +293,10 @@ const CoverSection = ({
         <div style={{ padding: "14px 0" }}>
           <p style={{
             fontFamily: "'Roboto Mono', monospace",
-            fontSize: "9px",
-            letterSpacing: "0.12em",
+            fontSize: "10px",
+            letterSpacing: "0.10em",
             textTransform: "uppercase" as const,
-            color: "rgba(212,175,55,0.45)",
+            color: "rgba(212,175,55,0.40)",
             marginBottom: "4px",
           }}>
             LOGLINE
@@ -324,8 +324,8 @@ const CoverSection = ({
         }}>
           {packageFields.map((field) => (
             <div key={field.label}>
-              <p style={{ ...s.monoLabel, fontSize: "9px", margin: "0 0 4px" }}>{field.label}</p>
-              <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "13px", color: "rgba(255,255,255,0.75)", margin: 0 }}>
+              <p style={{ ...s.monoLabel, fontSize: "10px", margin: "0 0 4px" }}>{field.label}</p>
+              <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "rgba(255,255,255,0.75)", margin: 0 }}>
                 {field.value}
               </p>
             </div>
@@ -335,7 +335,7 @@ const CoverSection = ({
 
       {/* Block 5: Assumptions — two-tone chips */}
       <div style={{ marginBottom: "24px" }}>
-        <p style={{ ...s.monoLabel, fontSize: "9px", margin: "0 0 8px" }}>MODEL ASSUMPTIONS</p>
+        <p style={{ ...s.monoLabel, fontSize: "10px", margin: "0 0 8px" }}>MODEL ASSUMPTIONS</p>
         <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
           {assumptions.map((a) => (
             <span key={a.label} style={{
@@ -349,8 +349,8 @@ const CoverSection = ({
               fontFamily: "'Roboto Mono', monospace",
               fontSize: "10px",
             }}>
-              <span style={{ color: "rgba(212,175,55,0.45)" }}>{a.label}</span>
-              <span style={{ color: "rgba(255,255,255,0.70)" }}>{a.value}</span>
+              <span style={{ color: "rgba(212,175,55,0.40)" }}>{a.label}</span>
+              <span style={{ color: "rgba(255,255,255,0.75)" }}>{a.value}</span>
             </span>
           ))}
         </div>
@@ -368,7 +368,7 @@ const CoverSection = ({
         }}>
           <span style={{
             fontFamily: "'Roboto Mono', monospace",
-            fontSize: "12px",
+            fontSize: "11px",
             fontWeight: 600,
             letterSpacing: "0.15em",
             color: badge.color,
@@ -399,8 +399,8 @@ const CoverSection = ({
             padding: "14px 8px",
             textAlign: "center",
           }}>
-            <p style={{ ...s.monoLabel, fontSize: "9px", margin: "0 0 4px" }}>{kpi.label}</p>
-            <p style={{ ...s.monoValue, fontSize: "26px", fontWeight: 700, margin: 0, ...('color' in kpi && kpi.color ? { color: kpi.color } : {}) }}>{kpi.value}</p>
+            <p style={{ ...s.monoLabel, fontSize: "10px", margin: "0 0 4px" }}>{kpi.label}</p>
+            <p style={{ ...s.monoValue, fontSize: "28px", fontWeight: 700, margin: 0, ...('color' in kpi && kpi.color ? { color: kpi.color } : {}) }}>{kpi.value}</p>
           </div>
         ))}
       </div>
@@ -413,7 +413,7 @@ const CoverSection = ({
         border: "1px solid rgba(212,175,55,0.08)",
         marginBottom: "24px",
       }}>
-        <p style={{ ...s.bodyText, fontSize: "13px", color: "rgba(255,255,255,0.60)" }}>
+        <p style={{ ...s.bodyText, fontSize: "14px", color: "rgba(255,255,255,0.55)" }}>
           {tldr}
         </p>
       </div>
@@ -504,7 +504,7 @@ const ExecutiveSummarySection = ({
                   y={chartHeight + 14}
                   textAnchor="middle"
                   fill="rgba(255,255,255,0.40)"
-                  fontSize="9"
+                  fontSize="10"
                   fontFamily="'Roboto Mono', monospace"
                 >
                   {bar.label}
@@ -526,7 +526,7 @@ const ExecutiveSummarySection = ({
       </div>
 
       {/* Chart interpretation */}
-      <p style={{ ...s.bodyText, fontSize: "13px", color: "rgba(255,255,255,0.50)" }}>
+      <p style={{ ...s.bodyText, fontSize: "14px", color: "rgba(255,255,255,0.55)" }}>
         Off-top deductions consume {offTopPct}% of gross revenue, leaving {netPct}% as net distributable for capital repayment and profit.
       </p>
 
@@ -544,7 +544,7 @@ const ExecutiveSummarySection = ({
             fontSize: "10px",
             letterSpacing: "0.10em",
             textTransform: "uppercase" as const,
-            color: "rgba(212,175,55,0.65)",
+            color: "rgba(212,175,55,0.55)",
           }}>
             Scenario Overlay
           </span>
@@ -552,7 +552,7 @@ const ExecutiveSummarySection = ({
         <p style={{
           fontFamily: "'Inter', sans-serif",
           fontSize: "14px",
-          color: "rgba(255,255,255,0.52)",
+          color: "rgba(255,255,255,0.55)",
           lineHeight: 1.55,
           margin: "0 0 8px",
         }}>
@@ -561,8 +561,8 @@ const ExecutiveSummarySection = ({
         <span style={{
           fontFamily: "'Roboto Mono', monospace",
           fontSize: "10px",
-          letterSpacing: "0.08em",
-          color: "rgba(212,175,55,0.60)",
+          letterSpacing: "0.10em",
+          color: "rgba(212,175,55,0.55)",
         }}>
           Available in the Snapshot →
         </span>
@@ -602,23 +602,23 @@ const SourceCard = ({
           </div>
           <p style={{ ...s.monoLabel, fontSize: "10px", margin: 0 }}>{position}</p>
         </div>
-        <span style={{ ...s.monoValue, fontSize: "16px" }}>{formatCompactCurrency(amount)}</span>
+        <span style={{ ...s.monoValue, fontSize: "15px" }}>{formatCompactCurrency(amount)}</span>
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "8px", marginBottom: "12px" }}>
         <div>
-          <p style={{ ...s.monoLabel, fontSize: "9px", margin: "0 0 2px" }}>SHARE OF STACK</p>
+          <p style={{ ...s.monoLabel, fontSize: "10px", margin: "0 0 2px" }}>SHARE OF STACK</p>
           <p style={{ ...s.monoValue, fontSize: "15px", margin: 0, opacity: 0.82 }}>{share}%</p>
         </div>
         <div>
-          <p style={{ ...s.monoLabel, fontSize: "9px", margin: "0 0 2px" }}>CONTRACTUAL RETURN</p>
+          <p style={{ ...s.monoLabel, fontSize: "10px", margin: "0 0 2px" }}>CONTRACTUAL RETURN</p>
           <p style={{ ...s.monoValue, fontSize: "15px", margin: 0, opacity: 0.82 }}>{formatCompactCurrency(contractualReturn)}</p>
         </div>
       </div>
 
       <div style={s.goldDivider} />
 
-      <p style={{ ...s.bodyText, fontSize: "12px", color: "rgba(255,255,255,0.45)", marginTop: "12px" }}>
+      <p style={{ ...s.bodyText, fontSize: "14px", color: "rgba(255,255,255,0.40)", marginTop: "12px" }}>
         {explanation}
       </p>
     </div>
@@ -743,7 +743,7 @@ const CapitalStackSection = ({
                 {src.amount / inputs.budget > 0.15 && (
                   <span style={{
                     fontFamily: "'Roboto Mono', monospace",
-                    fontSize: "9px",
+                    fontSize: "10px",
                     color: "#000",
                     fontWeight: 600,
                   }}>
@@ -759,7 +759,7 @@ const CapitalStackSection = ({
             {sources.filter((src) => src.label !== "Tax Credits").map((src) => (
               <div key={src.label} style={{ display: "flex", alignItems: "center", gap: "6px" }}>
                 <div style={{ width: "8px", height: "8px", borderRadius: "2px", background: src.color }} />
-                <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "10px", color: "rgba(255,255,255,0.50)" }}>
+                <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "10px", color: "rgba(255,255,255,0.55)" }}>
                   {src.label}
                 </span>
               </div>
@@ -788,8 +788,8 @@ const CapitalStackSection = ({
             }}>
               <p style={{
                 fontFamily: "'Inter', sans-serif",
-                fontSize: "13px",
-                color: "rgba(255,255,255,0.58)",
+                fontSize: "14px",
+                color: "rgba(255,255,255,0.55)",
                 lineHeight: 1.6,
                 margin: "0 0 8px",
               }}>
@@ -816,8 +816,8 @@ const CapitalStackSection = ({
                   <Lock style={{ width: "14px", height: "14px", color: "rgba(212,175,55,0.40)" }} />
                   <span style={{
                     fontFamily: "'Roboto Mono', monospace",
-                    fontSize: "9px",
-                    letterSpacing: "0.12em",
+                    fontSize: "10px",
+                    letterSpacing: "0.10em",
                     textTransform: "uppercase" as const,
                     color: "rgba(212,175,55,0.55)",
                   }}>
@@ -826,7 +826,7 @@ const CapitalStackSection = ({
                 </div>
                 <p style={{
                   fontFamily: "'Inter', sans-serif",
-                  fontSize: "12px",
+                  fontSize: "14px",
                   color: "rgba(255,255,255,0.40)",
                   margin: "0 0 8px",
                   lineHeight: 1.5,
@@ -840,9 +840,9 @@ const CapitalStackSection = ({
                   border: "1px solid rgba(212,175,55,0.15)",
                   background: "rgba(212,175,55,0.04)",
                   fontFamily: "'Roboto Mono', monospace",
-                  fontSize: "8px",
-                  letterSpacing: "0.1em",
-                  color: "rgba(212,175,55,0.50)",
+                  fontSize: "10px",
+                  letterSpacing: "0.10em",
+                  color: "rgba(212,175,55,0.55)",
                 }}>
                   Available in the Snapshot
                 </span>
@@ -858,8 +858,8 @@ const CapitalStackSection = ({
             }}>
               <p style={{
                 fontFamily: "'Inter', sans-serif",
-                fontSize: "13px",
-                color: "rgba(255,255,255,0.58)",
+                fontSize: "14px",
+                color: "rgba(255,255,255,0.55)",
                 lineHeight: 1.6,
                 margin: "0 0 8px",
               }}>
@@ -884,8 +884,8 @@ const CapitalStackSection = ({
                   <Lock style={{ width: "14px", height: "14px", color: "rgba(212,175,55,0.40)" }} />
                   <span style={{
                     fontFamily: "'Roboto Mono', monospace",
-                    fontSize: "9px",
-                    letterSpacing: "0.12em",
+                    fontSize: "10px",
+                    letterSpacing: "0.10em",
                     textTransform: "uppercase" as const,
                     color: "rgba(212,175,55,0.55)",
                   }}>
@@ -894,7 +894,7 @@ const CapitalStackSection = ({
                 </div>
                 <p style={{
                   fontFamily: "'Inter', sans-serif",
-                  fontSize: "12px",
+                  fontSize: "14px",
                   color: "rgba(255,255,255,0.40)",
                   margin: "0 0 8px",
                   lineHeight: 1.5,
@@ -908,9 +908,9 @@ const CapitalStackSection = ({
                   border: "1px solid rgba(212,175,55,0.15)",
                   background: "rgba(212,175,55,0.04)",
                   fontFamily: "'Roboto Mono', monospace",
-                  fontSize: "8px",
-                  letterSpacing: "0.1em",
-                  color: "rgba(212,175,55,0.50)",
+                  fontSize: "10px",
+                  letterSpacing: "0.10em",
+                  color: "rgba(212,175,55,0.55)",
                 }}>
                   Available in the Snapshot
                 </span>
@@ -923,7 +923,7 @@ const CapitalStackSection = ({
             ...ucardBase,
             borderLeft: "3px solid rgba(212,175,55,0.40)",
           }}>
-            <p style={{ ...s.bodyText, fontSize: "13px", color: "rgba(255,255,255,0.58)" }}>
+            <p style={{ ...s.bodyText, fontSize: "14px", color: "rgba(255,255,255,0.55)" }}>
               {interpretation}
             </p>
           </div>
@@ -1039,7 +1039,7 @@ const RevenueDeductionsSection = ({
             borderBottom: i < deductions.length - 1 ? "1px solid rgba(255,255,255,0.06)" : "none",
           }}>
             <div>
-              <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "13px", color: "rgba(255,255,255,0.78)", margin: "0 0 2px" }}>
+              <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "rgba(255,255,255,0.75)", margin: "0 0 2px" }}>
                 {d.label}
               </p>
               <p style={{ ...s.monoLabel, fontSize: "10px", margin: 0 }}>{d.detail}</p>
@@ -1074,8 +1074,8 @@ const RevenueDeductionsSection = ({
           }} />
         </div>
         <div style={{ display: "flex", justifyContent: "space-between", marginTop: "6px" }}>
-          <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "12px", letterSpacing: "0.15em", textTransform: "uppercase" as const, color: "rgba(220,38,38,0.65)", fontWeight: 600 }}>DEDUCTED: {(100 - netPct).toFixed(0)}%</span>
-          <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "12px", letterSpacing: "0.15em", textTransform: "uppercase" as const, color: "rgba(60,179,113,0.65)", fontWeight: 600 }}>RETAINED: {netPct.toFixed(0)}%</span>
+          <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "11px", letterSpacing: "0.15em", textTransform: "uppercase" as const, color: "rgba(220,38,38,0.65)", fontWeight: 600 }}>DEDUCTED: {(100 - netPct).toFixed(0)}%</span>
+          <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "11px", letterSpacing: "0.15em", textTransform: "uppercase" as const, color: "rgba(60,179,113,0.65)", fontWeight: 600 }}>RETAINED: {netPct.toFixed(0)}%</span>
         </div>
       </div>
 
@@ -1092,9 +1092,9 @@ const RevenueDeductionsSection = ({
         </span>
         <span style={{
           fontFamily: "'Roboto Mono', monospace",
-          fontSize: "18px",
+          fontSize: "22px",
           fontWeight: 600,
-          color: netDistributable > result.totalHurdle ? "#3CB371" : "rgba(255,255,255,0.85)",
+          color: netDistributable > result.totalHurdle ? "#3CB371" : "rgba(255,255,255,0.92)",
           fontVariantNumeric: "tabular-nums",
         }}>
           {formatFullCurrency(Math.max(0, netDistributable))}
@@ -1102,7 +1102,7 @@ const RevenueDeductionsSection = ({
       </div>
 
       {/* Bridge sentence */}
-      <p style={{ ...s.bodyText, fontSize: "13px", color: "rgba(255,255,255,0.45)", marginTop: "12px" }}>
+      <p style={{ ...s.bodyText, fontSize: "14px", color: "rgba(255,255,255,0.40)", marginTop: "12px" }}>
         After {deductions.length} off-top deduction{deductions.length !== 1 ? "s" : ""} totaling {formatCompactCurrency(result.offTopTotal)},{" "}
         {netPct.toFixed(0)}% of gross revenue is available for capital repayment.
       </p>
@@ -1171,7 +1171,7 @@ const CascadeBlock = ({
       <span style={{
         fontFamily: "'Roboto Mono', monospace",
         fontSize: "10px",
-        letterSpacing: "0.1em",
+        letterSpacing: "0.10em",
         color: textColor,
         fontWeight: 600,
         textTransform: "uppercase" as const,
@@ -1181,7 +1181,7 @@ const CascadeBlock = ({
       </span>
       <span style={{
         fontFamily: "'Roboto Mono', monospace",
-        fontSize: "12px",
+        fontSize: "15px",
         color: textColor,
         fontVariantNumeric: "tabular-nums",
         fontWeight: 500,
@@ -1210,20 +1210,20 @@ const TierRow = ({ tier }: { tier: TierPayment }) => {
       padding: "10px 0",
       borderBottom: "1px solid rgba(255,255,255,0.04)",
     }}>
-      <span style={{ ...s.monoLabel, fontSize: "11px", color: "rgba(255,255,255,0.30)", textAlign: "center" }}>
+      <span style={{ ...s.monoLabel, fontSize: "11px", color: "rgba(255,255,255,0.25)", textAlign: "center" }}>
         {tier.phase}
       </span>
-      <span style={{ fontFamily: "'Inter', sans-serif", fontSize: "13px", color: "rgba(255,255,255,0.78)" }}>
+      <span style={{ fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "rgba(255,255,255,0.75)" }}>
         {tier.label}
       </span>
-      <span style={{ ...s.monoValue, fontSize: "13px", textAlign: "right" }}>
-        {formatCompactCurrency(tier.paid)}<span style={{ color: "rgba(255,255,255,0.30)" }}> / {formatCompactCurrency(tier.amount)}</span>
+      <span style={{ ...s.monoValue, fontSize: "14px", textAlign: "right" }}>
+        {formatCompactCurrency(tier.paid)}<span style={{ color: "rgba(255,255,255,0.25)" }}> / {formatCompactCurrency(tier.amount)}</span>
       </span>
       <span style={{
         fontFamily: "'Roboto Mono', monospace",
-        fontSize: "9px",
+        fontSize: "10px",
         fontWeight: 600,
-        letterSpacing: "0.1em",
+        letterSpacing: "0.10em",
         color: statusColor,
         textAlign: "center",
         minWidth: "60px",
@@ -1294,7 +1294,7 @@ const WaterfallCascadeSection = ({
               <span style={{ ...s.monoLabel, fontSize: "10px", color: "rgba(212,175,55,0.55)" }}>
                 NET DISTRIBUTABLE
               </span>
-              <span style={{ ...s.monoValue, fontSize: "12px", color: netDistributable > result.totalHurdle ? "#3CB371" : "rgba(255,255,255,0.85)" }}>
+              <span style={{ ...s.monoValue, fontSize: "15px", color: netDistributable > result.totalHurdle ? "#3CB371" : "rgba(255,255,255,0.92)" }}>
                 {formatCompactCurrency(netDistributable)}
               </span>
             </div>
@@ -1325,7 +1325,7 @@ const WaterfallCascadeSection = ({
                 <span style={{ ...s.monoLabel, fontSize: "10px", color: "rgba(60,179,113,0.55)" }}>
                   PROFIT POOL
                 </span>
-                <span style={{ ...s.monoValue, fontSize: "12px", color: "#3CB371" }}>
+                <span style={{ ...s.monoValue, fontSize: "15px", color: "#3CB371" }}>
                   {formatCompactCurrency(result.profitPool)}
                 </span>
               </div>
@@ -1350,7 +1350,7 @@ const WaterfallCascadeSection = ({
             ...ucardBase,
             borderLeft: "3px solid rgba(212,175,55,0.40)",
           }}>
-            <p style={{ ...s.bodyText, fontSize: "13px", color: "rgba(255,255,255,0.58)" }}>
+            <p style={{ ...s.bodyText, fontSize: "14px", color: "rgba(255,255,255,0.55)" }}>
               {interpretation}
             </p>
           </div>
@@ -1450,14 +1450,14 @@ const ReturnProfileSection = ({
         marginBottom: "20px",
       }}>
         <div style={{ background: "#0A0A0A", padding: "16px", textAlign: "center" }}>
-          <p style={{ ...s.monoLabel, fontSize: "9px", margin: "0 0 4px" }}>INVESTOR TOTAL</p>
-          <p style={{ ...s.monoValue, fontSize: "18px", margin: 0, color: "#D4AF37" }}>
+          <p style={{ ...s.monoLabel, fontSize: "10px", margin: "0 0 4px" }}>INVESTOR TOTAL</p>
+          <p style={{ ...s.monoValue, fontSize: "22px", margin: 0, color: "#D4AF37" }}>
             {formatCompactCurrency(result.investor)}
           </p>
         </div>
         <div style={{ background: "#0A0A0A", padding: "16px", textAlign: "center" }}>
-          <p style={{ ...s.monoLabel, fontSize: "9px", margin: "0 0 4px" }}>PRODUCER POOL</p>
-          <p style={{ ...s.monoValue, fontSize: "18px", margin: 0 }}>
+          <p style={{ ...s.monoLabel, fontSize: "10px", margin: "0 0 4px" }}>PRODUCER POOL</p>
+          <p style={{ ...s.monoValue, fontSize: "22px", margin: 0 }}>
             {formatCompactCurrency(result.producer)}
           </p>
         </div>
@@ -1467,7 +1467,7 @@ const ReturnProfileSection = ({
       <div style={{ marginBottom: "20px" }}>
         <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "6px" }}>
           <span style={{ ...s.monoLabel, fontSize: "10px" }}>RECOUPMENT</span>
-          <span style={{ ...s.monoValue, fontSize: "12px", color: recoupPct >= 100 ? "#3CB371" : recoupPct >= 70 ? "rgba(60,179,113,0.70)" : recoupPct >= 40 ? "#F0A830" : "rgba(220,38,38,0.60)" }}>{recoupPct.toFixed(0)}%</span>
+          <span style={{ ...s.monoValue, fontSize: "15px", color: recoupPct >= 100 ? "#3CB371" : recoupPct >= 70 ? "rgba(60,179,113,0.70)" : recoupPct >= 40 ? "#F0A830" : "rgba(220,38,38,0.60)" }}>{recoupPct.toFixed(0)}%</span>
         </div>
         <div style={{
           height: "8px",
@@ -1502,7 +1502,7 @@ const ReturnProfileSection = ({
         border: "1px solid rgba(255,255,255,0.06)",
         marginBottom: "16px",
       }}>
-        <span style={{ fontFamily: "'Inter', sans-serif", fontSize: "13px", color: "rgba(255,255,255,0.55)" }}>
+        <span style={{ fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "rgba(255,255,255,0.55)" }}>
           Break-Even Sale Price
         </span>
         <span style={{ ...s.monoValue, fontSize: "15px" }}>
@@ -1516,7 +1516,7 @@ const ReturnProfileSection = ({
         borderLeft: "3px solid rgba(212,175,55,0.40)",
         marginBottom: "16px",
       }}>
-        <p style={{ ...s.bodyText, fontSize: "13px", color: "rgba(255,255,255,0.58)" }}>
+        <p style={{ ...s.bodyText, fontSize: "14px", color: "rgba(255,255,255,0.55)" }}>
           {interpretation}
         </p>
       </div>
@@ -1536,7 +1536,7 @@ const ReturnProfileSection = ({
             textAlign: "center",
             padding: "12px 0",
             fontFamily: "'Inter', sans-serif",
-            fontSize: "13px",
+            fontSize: "14px",
             color: "rgba(212,175,55,0.55)",
             cursor: "pointer",
           }}
@@ -1582,8 +1582,8 @@ const ConclusionSection = ({
       <h2 style={{
         fontFamily: "'Bebas Neue', sans-serif",
         fontSize: "28px",
-        letterSpacing: "0.08em",
-        color: "rgba(255,255,255,0.95)",
+        letterSpacing: "0.06em",
+        color: "rgba(255,255,255,0.92)",
         textAlign: "center",
         marginBottom: "16px",
       }}>
@@ -1617,7 +1617,7 @@ const SensitivitySection = ({
       fontFamily: "'Inter', sans-serif",
       fontSize: "14px",
       lineHeight: 1.65,
-      color: "rgba(255,255,255,0.70)",
+      color: "rgba(255,255,255,0.75)",
       margin: "16px 0 0",
     }}>
       No acquisition price is guaranteed. The question isn't whether your film sells for exactly {formatCompactCurrency(inputs.revenue)} — it's whether the deal still works if the number comes in lower.
@@ -1647,7 +1647,7 @@ const SensitivitySection = ({
 
       <p style={{
         fontFamily: "'Bebas Neue', sans-serif",
-        fontSize: "20px",
+        fontSize: "22px",
         letterSpacing: "0.06em",
         color: "#FFFFFF",
         margin: "0 0 8px",
@@ -1657,8 +1657,8 @@ const SensitivitySection = ({
 
       <p style={{
         fontFamily: "'Inter', sans-serif",
-        fontSize: "13px",
-        color: "rgba(255,255,255,0.50)",
+        fontSize: "14px",
+        color: "rgba(255,255,255,0.55)",
         lineHeight: 1.6,
         maxWidth: "320px",
         margin: "0 auto 20px",
@@ -1677,8 +1677,8 @@ const SensitivitySection = ({
         <span style={{
           fontFamily: "'Roboto Mono', monospace",
           fontSize: "10px",
-          letterSpacing: "0.1em",
-          color: "rgba(212,175,55,0.60)",
+          letterSpacing: "0.10em",
+          color: "rgba(212,175,55,0.55)",
           fontWeight: 500,
         }}>
           INCLUDED IN THE SNAPSHOT
@@ -1774,9 +1774,9 @@ const RiskFlagsSection = ({
         </p>
         <p style={{
           fontFamily: "'Roboto Mono', monospace",
-          fontSize: "12px",
+          fontSize: "11px",
           letterSpacing: "0.15em",
-          color: "rgba(255,255,255,0.50)",
+          color: "rgba(255,255,255,0.55)",
           margin: "0 0 20px",
           textTransform: "uppercase",
         }}>
@@ -1789,7 +1789,7 @@ const RiskFlagsSection = ({
             <span key={cat.label} style={{
               fontFamily: "'Roboto Mono', monospace",
               fontSize: "10px",
-              letterSpacing: "0.06em",
+              letterSpacing: "0.10em",
               padding: "5px 14px",
               borderRadius: "6px",
               color: cat.label === "STRUCTURAL" ? "#F0A830"
@@ -1820,8 +1820,8 @@ const RiskFlagsSection = ({
           border: "1px solid rgba(239,68,68,0.25)",
           background: "rgba(239,68,68,0.06)",
           fontFamily: "'Roboto Mono', monospace",
-          fontSize: "12px",
-          letterSpacing: "0.10em",
+          fontSize: "11px",
+          letterSpacing: "0.15em",
           color: "rgba(239,68,68,0.80)",
           cursor: "pointer",
         }}>
@@ -1855,7 +1855,7 @@ const NextStepsSection = () => {
           }}>
             <span style={{
               fontFamily: "'Roboto Mono', monospace",
-              fontSize: "13px",
+              fontSize: "14px",
               fontWeight: 700,
               color: "rgba(212,175,55,0.55)",
               minWidth: "24px",
@@ -1897,7 +1897,7 @@ const CTASection = () => {
         <p style={{
           fontFamily: "'Inter', sans-serif",
           fontSize: "15px",
-          color: "rgba(255,255,255,0.65)",
+          color: "rgba(255,255,255,0.55)",
           lineHeight: 1.7,
           margin: 0,
         }}>
@@ -1924,7 +1924,7 @@ const CTASection = () => {
           borderRadius: "10px",
           fontFamily: "'Bebas Neue', sans-serif",
           fontSize: "22px",
-          letterSpacing: "0.10em",
+          letterSpacing: "0.06em",
           color: "#000",
           cursor: "pointer",
           fontWeight: 600,
@@ -1949,8 +1949,8 @@ const CTASection = () => {
           borderRadius: "10px",
           fontFamily: "'Roboto Mono', monospace",
           fontSize: "11px",
-          letterSpacing: "0.08em",
-          color: "rgba(255,255,255,0.45)",
+          letterSpacing: "0.15em",
+          color: "rgba(255,255,255,0.40)",
           cursor: "pointer",
           marginTop: "10px",
         }}
@@ -1968,7 +1968,7 @@ const CTASection = () => {
         <p style={{
           fontFamily: "'Inter', sans-serif",
           fontSize: "10px",
-          color: "rgba(255,255,255,0.22)",
+          color: "rgba(255,255,255,0.25)",
           lineHeight: 1.6,
           textAlign: "center",
         }}>
