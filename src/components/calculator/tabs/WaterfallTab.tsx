@@ -196,32 +196,34 @@ const WaterfallTab = ({ result: initialResult, inputs: initialInputs, project, g
   // NON-LOCKED STATE — break out of StandardStepLayout
   return (
     <div style={{ paddingBottom: "96px" }}>
-      {/* EYEBROW — rendered independently */}
-      <div style={{ padding: "0 0 16px" }}>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "12px",
-          }}
-        >
-          <div style={{ flex: 1, height: "1px", background: "rgba(212,175,55,0.40)" }} />
-          <span
+      {/* EYEBROW — only during calculating or before result */}
+      {!showResult && (
+        <div style={{ padding: "0 0 16px" }}>
+          <div
             style={{
-              fontFamily: "'Roboto Mono', monospace",
-              fontSize: "13px",
-              fontWeight: 500,
-              letterSpacing: "0.2em",
-              textTransform: "uppercase",
-              color: "#D4AF37",
-              whiteSpace: "nowrap",
+              display: "flex",
+              alignItems: "center",
+              gap: "12px",
             }}
           >
-            <span style={{ opacity: 0.70 }}>04</span> · WATERFALL
-          </span>
-          <div style={{ flex: 1, height: "1px", background: "rgba(212,175,55,0.40)" }} />
+            <div style={{ flex: 1, height: "1px", background: "rgba(212,175,55,0.40)" }} />
+            <span
+              style={{
+                fontFamily: "'Roboto Mono', monospace",
+                fontSize: "13px",
+                fontWeight: 500,
+                letterSpacing: "0.2em",
+                textTransform: "uppercase",
+                color: "#D4AF37",
+                whiteSpace: "nowrap",
+              }}
+            >
+              <span style={{ opacity: 0.70 }}>04</span> · WATERFALL
+            </span>
+            <div style={{ flex: 1, height: "1px", background: "rgba(212,175,55,0.40)" }} />
+          </div>
         </div>
-      </div>
+      )}
 
       {/* CALCULATING STATE */}
       {isCalculating && (
