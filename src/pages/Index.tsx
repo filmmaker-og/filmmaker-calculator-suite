@@ -112,11 +112,31 @@ const Index = () => {
   ];
 
   const steps = [
-    { n: "1", title: "Enter Your Budget", body: "Total budget, cash basis after deferments and tax credits, investor equity." },
-    { n: "2", title: "Choose Your Scenario", body: "Streamer acquisition or traditional distribution. Guild rates adjust automatically." },
-    { n: "3", title: "See the Full Waterfall", body: "Every tier with accurate rates — off-the-tops through net backend profit." },
-    { n: "4", title: "Stress-Test Your Deal", body: "Adjust price, negotiate fee caps. Run it until you know what you can't give up." },
-    { n: "5", title: "Export & Share", body: "Download a formatted PDF. Share directly with investors, financiers, and co-producers." },
+    {
+      title: "Enter Your Budget",
+      body: "Total budget, cash basis after deferments and tax credits, investor equity.",
+      icon: <svg viewBox="0 0 24 24" fill="#000" width="16" height="16"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>,
+    },
+    {
+      title: "Choose Your Scenario",
+      body: "Streamer acquisition or traditional distribution. Guild rates adjust automatically.",
+      icon: <svg viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="2.5" strokeLinecap="round" width="16" height="16"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="15" cy="8" r="3" fill="#000" stroke="#000"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="9" cy="16" r="3" fill="#000" stroke="#000"/></svg>,
+    },
+    {
+      title: "See the Full Waterfall",
+      body: "Every tier with accurate rates — off-the-tops through net backend profit.",
+      icon: <svg viewBox="0 0 24 24" fill="#000" width="16" height="16"><rect x="3" y="4" width="18" height="3" rx="1"/><rect x="5" y="9" width="14" height="3" rx="1"/><rect x="7" y="14" width="10" height="3" rx="1"/><rect x="9" y="19" width="6" height="3" rx="1"/></svg>,
+    },
+    {
+      title: "Stress-Test Your Deal",
+      body: "Adjust price, negotiate fee caps. Run it until you know what you can't give up.",
+      icon: <svg viewBox="0 0 24 24" fill="#000" width="16" height="16"><path d="M12 2L3 7v5c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-9-5zm-1 14l-3.5-3.5 1.41-1.41L11 13.17l5.09-5.09 1.41 1.41L11 16z"/></svg>,
+    },
+    {
+      title: "Export & Share",
+      body: "Download a formatted PDF. Share directly with investors, financiers, and co-producers.",
+      icon: <svg viewBox="0 0 24 24" fill="#000" width="16" height="16"><path d="M5 20h14v-2H5v2zm7-18L5.33 9h3.34v6h6.66V9h3.34L12 2z"/></svg>,
+    },
   ];
 
   /* ── Eyebrow ruled component ── */
@@ -173,11 +193,11 @@ const Index = () => {
           <div style={styles.stepsContainer}>
             <div style={styles.topLineGoldHalf} />
             {steps.map((step, i) => (
-              <div key={step.n} style={{ ...styles.step, ...reveal(howVisible, i) }}>
+              <div key={step.title} style={{ ...styles.step, ...reveal(howVisible, i) }}>
                 <div style={styles.stepNumCol}>
                   {i < steps.length - 1 && <div style={styles.stepLine} />}
                   <div style={styles.stepNumBadge}>
-                    <span style={styles.stepNumText}>{step.n}</span>
+                    {step.icon}
                   </div>
                 </div>
                 <div style={styles.stepContent}>
@@ -299,8 +319,8 @@ const Index = () => {
                 <div style={{ marginBottom: "12px" }}>
                   <span style={styles.tierBadgeCore}>Free Access</span>
                 </div>
-                <p style={styles.tierTitleCore}>The Modeling Engine</p>
-                <p style={styles.tierSubCore}>Your baseline recoupment model.</p>
+                <p style={styles.tierTitleCore}>The Snapshot</p>
+                <p style={styles.tierSubCore}>Your waterfall. Modeled, visualized, shareable.</p>
               </div>
               {/* Subdivider */}
               <div style={{ height: "1px", background: "rgba(212,175,55,0.12)", margin: "0 24px" }} />
@@ -553,7 +573,6 @@ const styles: Record<string, React.CSSProperties> = {
     background: "#D4AF37", display: "flex", alignItems: "center", justifyContent: "center",
     boxShadow: "0 0 20px rgba(212,175,55,0.5)",
   },
-  stepNumText: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.35rem", color: "#000", lineHeight: 1, paddingTop: "2px" },
   stepContent: { padding: "26px 20px 26px 24px", background: "radial-gradient(circle at 0px 50%, rgba(212,175,55,0.14) 0%, transparent 55%)" },
   stepTitle: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.45rem", color: "#D4AF37", lineHeight: 1, marginBottom: "5px" },
   stepBody: { fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "rgba(255,255,255,0.88)", lineHeight: 1.55 },
@@ -594,8 +613,8 @@ const styles: Record<string, React.CSSProperties> = {
     boxShadow: "0 0 16px rgba(212,175,55,0.3)",
   },
   tierName: { fontFamily: "'Inter', sans-serif", fontSize: "15px", fontWeight: 500, color: "rgba(255,255,255,0.95)", lineHeight: 1.3 },
-  tierAmt: { fontFamily: "'Roboto Mono', monospace", fontSize: "15px", color: "#fff", textAlign: "right", whiteSpace: "nowrap" },
-  tierMinus: { color: "rgba(255,255,255,0.3)", marginRight: "4px", fontWeight: 400 },
+  tierAmt: { fontFamily: "'Roboto Mono', monospace", fontSize: "15px", color: "rgba(220,38,38,0.75)", textAlign: "right", whiteSpace: "nowrap" },
+  tierMinus: { color: "rgba(220,38,38,0.50)", marginRight: "4px", fontWeight: 400 },
 
   /* Flow diagram */
   flowDiagram: { margin: "16px 20px 0" },
@@ -604,7 +623,7 @@ const styles: Record<string, React.CSSProperties> = {
     borderRadius: "12px", padding: "24px 20px", zIndex: 2, boxShadow: "0 8px 24px rgba(0,0,0,0.5)",
   },
   netLabel: { fontFamily: "'Roboto Mono', monospace", fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.18em", color: "rgba(255,255,255,0.70)", marginBottom: "8px" },
-  netAmount: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.2rem", color: "#D4AF37", lineHeight: 0.9, letterSpacing: "0.02em" },
+  netAmount: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.2rem", color: "#3CB371", lineHeight: 0.9, letterSpacing: "0.02em" },
   pipeNetwork: { display: "flex", flexDirection: "column", alignItems: "center", marginTop: "-1px", position: "relative", zIndex: 1 },
   pipeVertical: { width: "2px", height: "18px", background: "rgba(212,175,55,0.50)" },
   pipeFork: { display: "flex", width: "calc(50% + 10px)" },
@@ -616,7 +635,7 @@ const styles: Record<string, React.CSSProperties> = {
     borderTop: "2px solid #D4AF37", borderRadius: "0 0 10px 10px", padding: "16px 12px",
   },
   bucketLabel: { fontFamily: "'Roboto Mono', monospace", fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.12em", color: "rgba(255,255,255,0.70)", marginBottom: "8px" },
-  bucketAmount: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "2rem", color: "#D4AF37", lineHeight: 1 },
+  bucketAmount: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "2rem", color: "#3CB371", lineHeight: 1 },
   bucketPct: { fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: "rgba(255,255,255,0.50)", marginTop: "5px" },
   waterfallNote: { fontFamily: "'Roboto Mono', monospace", fontSize: "11px", textTransform: "uppercase", textAlign: "center", color: "rgba(255,255,255,0.45)", letterSpacing: "0.06em", padding: "16px 20px 0" },
 
