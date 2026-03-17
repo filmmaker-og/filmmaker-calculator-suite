@@ -336,8 +336,8 @@ const Index = () => {
                 <div style={{ marginBottom: "12px" }}>
                   <span style={styles.trendingBadge}>Essential</span>
                 </div>
-                <p style={styles.tierTitleAlt}>THE SNAPSHOT</p>
-                <p style={styles.tierSubAlt}>Pick this one if you need the numbers documented — clean and professional</p>
+                <p style={styles.tierTitleAlt}>THE FULL ANALYSIS</p>
+                <p style={styles.tierSubAlt}>Pick this one if you need the numbers documented — clean, professional, stress-tested</p>
               </div>
               {/* Subdivider */}
               <div style={{ height: "1px", background: "rgba(212,175,55,0.12)", margin: "0 24px" }} />
@@ -355,8 +355,8 @@ const Index = () => {
                 ))}
               </div>
               <div style={styles.tierAction}>
-                <button onClick={() => gatedNavigate("/store/snapshot")} style={styles.btnSnapshot} onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>GET THE SNAPSHOT</button>
-                <a href="/store/snapshot" onClick={(e) => { e.preventDefault(); gatedNavigate("/store/snapshot"); }} style={styles.detailsLink} onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,1)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.60)"; }}>See full details →</a>
+                <button onClick={() => gatedNavigate("/store/the-full-analysis")} style={styles.btnSnapshot} onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>GET THE FULL ANALYSIS</button>
+                <a href="/store/the-full-analysis" onClick={(e) => { e.preventDefault(); gatedNavigate("/store/the-full-analysis"); }} style={styles.detailsLink} onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,1)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.60)"; }}>See full details →</a>
               </div>
             </div>
 
@@ -365,22 +365,22 @@ const Index = () => {
               <div style={styles.topLineGoldThick} />
               <div style={{ ...styles.tierHeaderAlt, paddingTop: "28px", borderBottomColor: "rgba(212,175,55,0.15)" }}>
                 <div style={{ marginBottom: "12px" }}>
-                  <span style={styles.mostPopularBadge}>Complete</span>
+                  <span style={styles.mostPopularBadge}>Turnkey</span>
                 </div>
-                <p style={styles.tierTitleAlt}>THE PACKAGE</p>
-                <p style={styles.tierSubAlt}>Pick this one if you want the full investor package with standalone documents</p>
+                <p style={styles.tierTitleAlt}>THE PRODUCER'S PACKAGE</p>
+                <p style={styles.tierSubAlt}>Pick this one if you want the full treatment — turnkey, custom, ready for the room</p>
               </div>
               {/* Subdivider */}
               <div style={{ height: "1px", background: "rgba(212,175,55,0.12)", margin: "0 24px" }} />
-              <p style={styles.tierIntro}>Your complete investor package — financial presentation, standalone documents, visual design.</p>
+              <p style={styles.tierIntro}>Custom lookbook, financials, pitch deck, 10 comps. We build it. You present it.</p>
               <div style={styles.tierChecklist}>
                 {[
+                  "Custom Lookbook — tone, cast, genre, visual identity",
+                  "Pitch Deck (PowerPoint) with speaker notes",
                   "Enhanced Financial Presentation (PDF)",
+                  "10 Comparable Acquisition Deals",
                   "Individual Investor Return Profiles",
-                  "One-Page Executive Summary",
-                  "Deal Terms Summary",
-                  "Visual design with genre positioning",
-                  "White-labeled with your company and project",
+                  "Everything white-labeled to your project",
                 ].map((text, i) => (
                   <div key={i} style={styles.checkItem}>
                     <span style={styles.checkMark}>✓</span>
@@ -389,11 +389,11 @@ const Index = () => {
                 ))}
               </div>
               <div style={styles.tierAction}>
-                <button onClick={() => gatedNavigate("/store/the-full-package")} style={styles.btnPackage} onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>
-                  <span style={{ position: "relative", zIndex: 1 }}>GET THE PACKAGE</span>
+                <button onClick={() => gatedNavigate("/store/the-producers-package")} style={styles.btnPackage} onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>
+                  <span style={{ position: "relative", zIndex: 1 }}>GET THE PRODUCER'S PACKAGE</span>
                   <div style={styles.btnPackageShimmer} />
                 </button>
-                <a href="/store/the-full-package" onClick={(e) => { e.preventDefault(); gatedNavigate("/store/the-full-package"); }} style={styles.detailsLink} onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,1)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.60)"; }}>See full details →</a>
+                <a href="/store/the-producers-package" onClick={(e) => { e.preventDefault(); gatedNavigate("/store/the-producers-package"); }} style={styles.detailsLink} onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,1)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.60)"; }}>See full details →</a>
               </div>
             </div>
           </div>

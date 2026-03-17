@@ -1,7 +1,18 @@
 /* ═══════════════════════════════════════════════════════════════════
    PRODUCT DATA — filmmaker.og store
-   Four-tier architecture: 2 self-serve products + 2 turnkey services
-   Plus reusable Excel add-on
+   Current architecture (March 2026):
+     1. The Full Analysis ($197) — automated, first paid tier
+     2. Comp Report ($595 / $995) — standalone market data
+     3. The Producer's Package ($1,797) — turnkey service
+     4. Boutique ($2,997+) — custom scope
+     5. The Working Model ($79) — checkout upsell add-on
+
+     Credit upgrade path: prior purchases apply toward next tier.
+
+     DEAD PRODUCT NAMES (do not reintroduce):
+     "The Snapshot" as a paid product (now FREE calculator output)
+     "The Package" at $597 (replaced by Comp Report + Producer's Package)
+     "The Full Package" at $2,497 (replaced by Boutique)
    ═══════════════════════════════════════════════════════════════════ */
 
 export interface Product {
@@ -9,6 +20,7 @@ export interface Product {
   slug: string;
   name: string;
   price: number;
+  priceNote: string | null;
   originalPrice: number | null;
   badge: string | null;
   featured: boolean;
@@ -34,10 +46,11 @@ export interface Product {
 
 export const products: Product[] = [
   {
-    id: "the-snapshot",
-    slug: "the-snapshot",
-    name: "The Snapshot",
+    id: "the-full-analysis",
+    slug: "the-full-analysis",
+    name: "The Full Analysis",
     price: 197,
+    priceNote: null,
     originalPrice: null,
     badge: null,
     featured: false,
@@ -45,102 +58,110 @@ export const products: Product[] = [
     category: "product",
     shortDescription: "Your financial model. One document. Investor-ready.",
     fullDescription:
-      "Your complete financial model — budget, capital stack, waterfall, deal terms, and scenario analysis — presented as a single, designed document that any investor can pick up and understand.\n\nA clean, professional presentation built from your calculator data, formatted for the person across the table who's deciding whether to write a check.\n\nRun your numbers. We make them investor-ready.",
+      "Your complete financial model — budget, capital stack, waterfall, deal terms, and scenario analysis — presented as a single, designed document that any investor can pick up and understand.\n\nSensitivity modeling across five market conditions shows how your deal performs when the price moves. Not a single scenario — a stress-tested range.\n\nRun your numbers. We make them investor-ready.",
     features: [
       "Unified Financial Presentation (PDF)",
       "Budget, capital stack, waterfall, scenarios — one document",
+      "Sensitivity analysis across 5 market conditions",
       "White-labeled with your company and project",
     ],
     whatsIncluded: [
       {
         title: "Unified Financial Presentation (PDF)",
-        body: "Budget overview, capital stack structure, deal terms, full waterfall cascade, three-scenario analysis, and investor return summary. One cohesive document, designed to flow.",
+        body: "Budget overview, capital stack structure, deal terms, full waterfall cascade, scenario analysis, and investor return summary. One cohesive document, designed to flow.",
+      },
+      {
+        title: "Sensitivity Modeling",
+        body: "Five market scenarios showing how your deal performs when the acquisition price moves — from base case to distressed. The analysis that turns a single number into a range.",
       },
       {
         title: "White-Labeled Branding",
         body: "Your production company name and project title on every page. Your project, your brand.",
       },
     ],
-    pickThisIf: "you need the numbers documented — clean and professional",
+    pickThisIf: "you need the numbers documented — clean, professional, stress-tested",
     whoItsFor:
       "Producers who have their numbers modeled and need a professional document to reference, send, or attach. When someone asks for the numbers, this is what you hand them.",
     upgradePrompt: {
-      title: "WANT THE FULL INVESTOR PACKAGE?",
-      body: "The Package adds standalone investor documents, visual design, and genre positioning — everything you need for real conversations with money.",
-      cta: "See The Package →",
-      link: "/store/the-package",
+      title: "NEED TO DEFEND YOUR VALUATION?",
+      body: "The Comp Report adds real comparable acquisition data in your genre and budget range — the evidence that turns your valuation from an assumption into a defensible number.",
+      cta: "See the Comp Report →",
+      link: "/store/comp-report",
     },
-    ctaLabel: "GET MY SNAPSHOT — $197",
+    ctaLabel: "GET THE FULL ANALYSIS — $197",
   },
   {
-    id: "the-package",
-    slug: "the-package",
-    name: "The Package",
-    price: 597,
+    id: "comp-report",
+    slug: "comp-report",
+    name: "Comp Report",
+    price: 595,
+    priceNote: "5 comps · 10 comps for $995",
     originalPrice: null,
-    badge: "COMPLETE",
+    badge: "DATA",
     featured: true,
     tier: 2,
     category: "product",
     shortDescription:
-      "Your complete investor package — financial presentation, standalone documents, visual design.",
+      "Real acquisition deals in your genre and budget range. Defend your valuation with data.",
     fullDescription:
-      "Everything in The Snapshot — elevated.\n\nYour financial model presented with visual hierarchy, genre positioning, and professional design throughout. Plus the standalone documents you need for every stage of the conversation — a one-page executive summary for the leave-behind, individual investor return profiles for each equity participant, and a deal terms summary for attorney review.\n\nThis is an investor package. It looks like one, it reads like one, and it holds up under scrutiny.",
+      "The question every investor asks: \"Why is this film worth that?\"\n\nWe research 5 comparable acquisition deals in your genre, budget range, and cast tier. Each comp includes the buyer, reported price range, key deal characteristics, and why it's relevant to your project.\n\nYou get a defensible valuation range with methodology your investors can follow — not a number you made up, but a number grounded in transactions that actually happened.\n\nUpgrade to 10 comps for $995 for a deeper dataset and broader market coverage.",
     features: [
-      "Enhanced Financial Presentation (PDF)",
-      "Individual Investor Return Profiles",
-      "One-Page Executive Summary",
-      "Deal Terms Summary",
-      "Visual design with genre positioning",
-      "White-labeled with your company and project",
+      "5 comparable acquisition deals (or 10 for $995)",
+      "Buyer, price range, and deal characteristics per comp",
+      "Defensible valuation range with methodology",
+      "Market positioning analysis",
+      "Revenue scenarios tied to real transactions",
     ],
     whatsIncluded: [
       {
-        title: "Enhanced Financial Presentation (PDF)",
-        body: "Everything in The Snapshot with elevated visual design, genre/market positioning section, and visual hierarchy throughout.",
+        title: "Comparable Acquisition Research",
+        body: "5 recent deals in your genre/budget/cast tier with buyer, reported price range, and key deal characteristics. Sourced from trade reporting and market intelligence.",
       },
       {
-        title: "Individual Investor Return Profiles",
-        body: "Per-investor documents showing their specific investment amount, priority position, preferred return, and projected returns across all three scenarios.",
+        title: "Market Valuation Range & Methodology",
+        body: "A defensible valuation range with methodology explained — so your investors understand how the number was derived, not just what it is.",
       },
       {
-        title: "One-Page Executive Summary",
-        body: "The leave-behind. Key financials on a single page, designed for the desk after the meeting ends.",
+        title: "Revenue Scenarios Tied to Real Comps",
+        body: "Three scenarios mapped to actual comparable transactions. Real data behind every number.",
       },
       {
-        title: "Deal Terms Summary",
-        body: "All deal terms structured for attorney review and investor due diligence.",
+        title: "Market Positioning Analysis",
+        body: "Where your project sits in the current acquisition landscape — which buyers are active, what the market supports, and what elements of your package strengthen your position.",
       },
     ],
-    pickThisIf: "you want the full investor package with standalone documents",
+    pickThisIf: "you need to defend a valuation with real transaction data",
     whoItsFor:
-      "Producers preparing to have real conversations with investors or co-financiers. Professional documents for the pitch, the follow-up, and the due diligence.",
+      "Producers who need evidence behind their asking price. The Comp Report turns your valuation from an assumption into a defensible number backed by deals that actually closed.",
     upgradePrompt: {
-      title: "WANT US TO BUILD IT FOR YOU?",
-      body: "The Producer's Package includes a custom lookbook, pitch deck, and complete investor package — turnkey, delivered in 5 business days.",
+      title: "WANT THE FULL INVESTOR PACKAGE?",
+      body: "The Producer's Package includes everything — lookbook, pitch deck, financial presentation, 10 comps, and investor documents. Turnkey, delivered in 3-5 business days.",
       cta: "See The Producer's Package →",
       link: "/store/the-producers-package",
     },
-    ctaLabel: "GET THE PACKAGE — $597",
+    ctaLabel: "GET THE COMP REPORT — $595",
   },
   {
     id: "the-producers-package",
     slug: "the-producers-package",
     name: "The Producer's Package",
-    price: 1497,
+    price: 1797,
+    priceNote: null,
     originalPrice: null,
     badge: "TURNKEY",
     featured: false,
     tier: 3,
     category: "service",
-    turnaround: "5 business days",
-    shortDescription: "Custom lookbook, financials, pitch deck. We build it. You present it.",
+    turnaround: "3-5 business days",
+    shortDescription: "Custom lookbook, financials, pitch deck, 10 comps. We build it. You present it.",
     fullDescription:
-      "Tell us about your project. We build the full investor package.\n\nCustom lookbook with visual identity tailored to your film — tone boards, cast packaging, genre positioning, the visual narrative that shows investors this project is real. Alongside the complete financial package — every document from The Package, plus a presentation-ready PowerPoint pitch deck with speaker notes.\n\nWe build it. You walk into the room.\n\n5 business day turnaround after intake.",
+      "Tell us about your project. We build the full investor package.\n\nCustom lookbook with visual identity tailored to your film — tone boards, cast packaging, genre positioning, the visual narrative that shows investors this project is real. Alongside the complete financial package — every document from The Full Analysis, plus a presentation-ready PowerPoint pitch deck with speaker notes, plus 10 comparable acquisition deals defending your valuation.\n\nWe build it. You walk into the room.\n\n3-5 business day turnaround after intake.",
     features: [
       "Custom Lookbook — tone, cast, genre, visual identity",
       "Pitch Deck (PowerPoint) with speaker notes",
       "Enhanced Financial Presentation (PDF)",
+      "10 Comparable Acquisition Deals",
+      "Market Valuation Range & Methodology",
       "Individual Investor Return Profiles",
       "One-Page Executive Summary",
       "Deal Terms Summary",
@@ -157,7 +178,15 @@ export const products: Product[] = [
       },
       {
         title: "Enhanced Financial Presentation (PDF)",
-        body: "Everything in The Package — budget, capital stack, waterfall, scenarios — with elevated visual design and genre positioning.",
+        body: "Budget, capital stack, waterfall, scenarios — with elevated visual design and genre positioning.",
+      },
+      {
+        title: "Comparable Acquisition Research (10 deals)",
+        body: "10 recent deals in your genre/budget/cast tier with buyer, reported price range, and key deal characteristics.",
+      },
+      {
+        title: "Market Valuation Range & Methodology",
+        body: "A defensible valuation range with methodology your investors can follow.",
       },
       {
         title: "Individual Investor Return Profiles",
@@ -176,68 +205,57 @@ export const products: Product[] = [
     whoItsFor:
       "Producers with an investor meeting on the calendar — or the conviction to go get one. The complete set of materials that institutional capital expects to see, built by someone who knows what belongs in the room.",
     upgradePrompt: {
-      title: "NEED TO DEFEND YOUR VALUATION?",
-      body: "The Full Package adds comparable acquisition research, a defensible valuation range, and a market positioning memo.",
-      cta: "See The Full Package →",
-      link: "/store/the-full-package",
+      title: "NEED SOMETHING CUSTOM?",
+      body: "Boutique engagements cover custom scope beyond the standard package — specialized research, alternative deal structures, extended market analysis.",
+      cta: "See Boutique →",
+      link: "/store/boutique",
     },
-    ctaLabel: "START MY BUILD →",
+    ctaLabel: "START MY BUILD — $1,797",
   },
   {
-    id: "the-full-package",
-    slug: "the-full-package",
-    name: "The Full Package",
-    price: 2497,
+    id: "boutique",
+    slug: "boutique",
+    name: "Boutique",
+    price: 2997,
+    priceNote: "Starting at · custom scope",
     originalPrice: null,
-    badge: "INSTITUTIONAL GRADE",
+    badge: "CUSTOM",
     featured: false,
     tier: 4,
     category: "service",
-    turnaround: "5 business days",
+    turnaround: "Scoped per engagement",
     shortDescription:
-      "The Full Package adds market research and a defensible valuation on top of everything we build for you.",
+      "Custom scope beyond the standard package. Email-based, priced per engagement.",
     fullDescription:
-      "Everything in The Producer's Package — plus the market case that answers the question every serious investor asks: \"Why is this film worth that?\"\n\nWe research 3-5 comparable acquisition deals in your genre, budget range, and cast tier. We build a defensible valuation range with methodology your investors can follow. We write a market positioning memo analyzing where your project sits in the current acquisition landscape — which buyers are active, what the market supports, and what elements of your package strengthen your position.\n\nYour three revenue scenarios are calibrated against real transactions. Not hypotheticals. Documented deals.\n\nThis is what institutional capital expects. We build it.\n\n5 business day turnaround after intake.",
+      "For projects that need more than the standard package covers.\n\nBoutique engagements are scoped per project — specialized research, alternative deal structures, extended market analysis, multi-territory distribution strategies, or anything else that requires custom work.\n\nStarts at $2,997. Priced per engagement based on scope.\n\nReach out to discuss your project.",
     features: [
       "Everything in The Producer's Package",
-      "Comparable Acquisition Research (3–5 deals)",
-      "Market Valuation Range & Methodology",
-      "Revenue Scenarios Tied to Real Comps",
-      "Market Positioning Memo",
+      "Custom scope per engagement",
+      "Specialized research and analysis",
+      "Email-based collaboration",
     ],
     whatsIncluded: [
       {
         title: "Everything in The Producer's Package",
-        body: "Custom lookbook, pitch deck, financial presentation, investor profiles, executive summary, and deal terms summary — all included.",
+        body: "Custom lookbook, pitch deck, financial presentation, investor profiles, executive summary, deal terms summary, and 10 comps — all included as the baseline.",
       },
       {
-        title: "Comparable Acquisition Research",
-        body: "3-5 recent deals in your genre/budget/cast tier with buyer, reported price range, and key deal characteristics. Sourced from trade reporting and market intelligence.",
-      },
-      {
-        title: "Market Valuation Range & Methodology",
-        body: "A defensible valuation range with methodology explained — so your investors understand how the number was derived, not just what it is.",
-      },
-      {
-        title: "Revenue Scenarios Tied to Real Comps",
-        body: "Three scenarios mapped to actual comparable transactions. Real data behind every number.",
-      },
-      {
-        title: "Market Positioning Memo",
-        body: "One-page analysis of where your film sits in the current acquisition landscape — which buyers are active, what price range the market supports, and what elements of your package strengthen your position.",
+        title: "Custom Scope",
+        body: "Additional deliverables scoped to your project — specialized research, alternative deal structures, extended market analysis, multi-territory strategies, or other custom work.",
       },
     ],
-    pickThisIf: "you need to defend a valuation to people who do this for a living",
+    pickThisIf: "your project needs more than the standard deliverables cover",
     whoItsFor:
-      "Producers raising $1M+ who need to defend their valuation to sophisticated investors or institutional co-financiers. The people across the table have seen a hundred pitches. This is how yours holds up.",
+      "Producers with complex financing structures, multi-territory deals, or projects that need specialized analysis beyond the standard package.",
     upgradePrompt: null,
-    ctaLabel: "GET THE FULL PACKAGE →",
+    ctaLabel: "CONTACT US →",
   },
   {
     id: "the-working-model",
     slug: "the-working-model",
     name: "The Working Model",
-    price: 149,
+    price: 79,
+    priceNote: "Checkout upsell",
     originalPrice: null,
     badge: "ADD-ON",
     featured: false,
@@ -245,10 +263,10 @@ export const products: Product[] = [
     category: "product",
     isAddOn: true,
     requiresBase: [
-      "the-snapshot",
-      "the-package",
+      "the-full-analysis",
+      "comp-report",
       "the-producers-package",
-      "the-full-package",
+      "boutique",
     ],
     shortDescription: "The live Excel engine behind your finance plan. Reuse on every project.",
     fullDescription:
@@ -277,7 +295,7 @@ export const products: Product[] = [
     whoItsFor:
       "Producers and production companies who model multiple projects, want to stress-test deal structures before committing, or need a reusable financial tool they can bring to every negotiation.",
     upgradePrompt: null,
-    ctaLabel: "YES, ADD FOR $79",
+    ctaLabel: "ADD THE WORKING MODEL — $79",
   },
 ];
 
