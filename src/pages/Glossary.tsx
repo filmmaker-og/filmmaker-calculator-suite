@@ -189,7 +189,7 @@ const Glossary = () => {
       <Dialog open={!!selectedTerm} onOpenChange={(open) => !open && setSelectedTerm(null)}>
         <DialogContent
           className="p-0 overflow-hidden border-gold/30 max-w-[calc(100vw-2rem)] w-full sm:max-w-lg [&>button:last-child]:hidden"
-          style={{ borderRadius: 0, background: "#0D0900", boxShadow: "0 0 60px rgba(212,175,55,0.10)" }}
+          style={{ borderRadius: 0, background: "#0A0A0A", boxShadow: "0 0 60px rgba(212,175,55,0.10)" }}
         >
           {selectedTerm && (
             <>

@@ -146,7 +146,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
                     justifyContent: "center",
                     gap: "8px",
                     padding: "22px 16px",
-                    background: "#0a0a0a",
+                    background: "#0A0A0A",
                     border: "1px solid rgba(212,175,55,0.15)",
                     borderRadius: "8px",
                     transition: "transform 0.15s ease, border-color 0.25s ease",

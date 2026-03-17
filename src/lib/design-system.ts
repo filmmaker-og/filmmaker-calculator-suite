@@ -9,17 +9,19 @@
  *   Metallic Gold #D4AF37 — borders, icons, dividers, brand elements (non-interactive)
  *   CTA Gold #F9E076 — EXCLUSIVELY for clickable elements (buttons, links, CTAs)
  *
- * GOLD OPACITIES — ONLY THESE 4:
+ * GOLD OPACITIES — Standard 4-tier system:
  *   strong  rgba(212,175,55,0.25) — active borders, hover states
  *   medium  rgba(212,175,55,0.15) — card borders, section dividers
  *   subtle  rgba(212,175,55,0.08) — background tints, hover fills
  *   ghost   rgba(212,175,55,0.03) — ambient glow, large area tints
+ *   Extended values permitted for gradients, animations, and premium treatments.
  *
- * WHITE OPACITIES — ONLY THESE 4:
+ * WHITE OPACITIES — Standard 4-tier system:
  *   strong  rgba(255,255,255,0.70) — secondary text
  *   medium  rgba(255,255,255,0.40) — tertiary text, borders
  *   subtle  rgba(255,255,255,0.15) — dividers, faint borders
  *   ghost   rgba(255,255,255,0.06) — hover backgrounds, surface tints
+ *   Extended values permitted for gradients, animations, and premium treatments.
  */
 
 // ===== COLOR PALETTE =====
@@ -46,11 +48,11 @@ export const colors = {
   goldCta: '#F9E076',
 
   // Red danger — risk/warning indicators
-  redDanger: '#DC3C3C',
-  redStrong: 'rgba(220, 60, 60, 0.25)',
-  redMedium: 'rgba(220, 60, 60, 0.15)',
-  redSubtle: 'rgba(220, 60, 60, 0.08)',
-  redGhost: 'rgba(220, 60, 60, 0.03)',
+  redDanger: '#DC2626',
+  redStrong: 'rgba(220, 38, 38, 0.25)',
+  redMedium: 'rgba(220, 38, 38, 0.15)',
+  redSubtle: 'rgba(220, 38, 38, 0.08)',
+  redGhost: 'rgba(220, 38, 38, 0.03)',
 
   // Text hierarchy — 5 tiers
   textPrimary: '#FFFFFF',
@@ -100,7 +102,7 @@ export const shadows = {
 // ===== GRADIENTS =====
 export const gradients = {
   dividerGold: `linear-gradient(90deg, transparent 0%, ${colors.goldMedium} 20%, ${colors.goldMedium} 80%, transparent 100%)`,
-  fadeBottom: 'linear-gradient(to top, #000000 0%, #000000 85%, transparent 100%)',
+  fadeBottom: 'linear-gradient(to top, #000 0%, #000 85%, transparent 100%)',
 } as const;
 
 // ===== TYPOGRAPHY =====

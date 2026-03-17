@@ -101,7 +101,7 @@ const G = {
 // Semantic colors
 const SEM = {
   green: "#3CB371",
-  red: "#E05252",
+  red: "#DC2626",
   amber: "#F0A830",
   gold: "#D4AF37",
 };
@@ -339,7 +339,7 @@ const CoverSection = ({
             {formatCompactCurrency(inputs.revenue)}
           </div>
         </div>
-        <div style={{ flex: 1, background: "#0A0A0A", padding: "14px", borderLeft: `2px solid ${returnColor === SEM.green ? "rgba(60,179,113,0.25)" : returnColor === SEM.amber ? "rgba(240,168,48,0.25)" : "rgba(224,82,82,0.35)"}` }}>
+        <div style={{ flex: 1, background: "#0A0A0A", padding: "14px", borderLeft: `2px solid ${returnColor === SEM.green ? "rgba(60,179,113,0.25)" : returnColor === SEM.amber ? "rgba(240,168,48,0.25)" : "rgba(220,38,38,0.35)"}` }}>
           <div style={{ ...FONT.fine, color: W.quaternary, marginBottom: "4px" }}>INVESTOR RETURN</div>
           <div style={{
             fontFamily: "'Roboto Mono', monospace",
@@ -541,10 +541,10 @@ const DealSection = ({
     borderColor = "rgba(212,175,55,0.40)";
   } else if (pullPartialTier) {
     verdictText = `REVENUE EXHAUSTS AT ${pullPartialTier.label.toUpperCase()}. DOWNSTREAM TIERS ARE UNFUNDED.`;
-    borderColor = "rgba(224,82,82,0.40)";
+    borderColor = "rgba(220,38,38,0.40)";
   } else {
     verdictText = "REVENUE DOES NOT FULLY FUND ANY TIER.";
-    borderColor = "rgba(224,82,82,0.40)";
+    borderColor = "rgba(220,38,38,0.40)";
   }
 
   return (
@@ -635,8 +635,8 @@ const VisualCluster1 = ({
   const netDistributable = Math.max(0, inputs.revenue - result.offTopTotal);
   const investorReturnPct = computeInvestorReturnPct(result, inputs);
   const netColor = investorReturnPct >= 100 ? SEM.green : investorReturnPct >= 80 ? SEM.amber : SEM.red;
-  const netBg = netColor === SEM.green ? "rgba(60,179,113,0.06)" : netColor === SEM.amber ? "rgba(240,168,48,0.06)" : "rgba(224,82,82,0.06)";
-  const netBorder = netColor === SEM.green ? "rgba(60,179,113,0.20)" : netColor === SEM.amber ? "rgba(240,168,48,0.20)" : "rgba(224,82,82,0.20)";
+  const netBg = netColor === SEM.green ? "rgba(60,179,113,0.06)" : netColor === SEM.amber ? "rgba(240,168,48,0.06)" : "rgba(220,38,38,0.06)";
+  const netBorder = netColor === SEM.green ? "rgba(60,179,113,0.20)" : netColor === SEM.amber ? "rgba(240,168,48,0.20)" : "rgba(220,38,38,0.20)";
 
   // Capital stack sources
   const sources: { label: string; amount: number; detail: string; pctOfBudget: string; color: string }[] = [];
@@ -686,7 +686,7 @@ const VisualCluster1 = ({
                 return (
                   <div key={item.label} style={{
                     width: `${widthPct}%`, height: "100%",
-                    background: `rgba(224,82,82,${item.colorOpacity})`,
+                    background: `rgba(220,38,38,${item.colorOpacity})`,
                     display: "flex", alignItems: "center", justifyContent: "center",
                     ...FONT.data, fontSize: "10px", color: "rgba(255,255,255,0.70)", letterSpacing: "0.06em",
                   }}>
@@ -700,7 +700,7 @@ const VisualCluster1 = ({
               {erosionItems.map((item) => (
                 <div key={item.label} style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                   <span style={{ fontSize: "13px", color: W.tertiary, display: "flex", alignItems: "center", gap: "8px" }}>
-                    <span style={{ width: "8px", height: "8px", borderRadius: "2px", flexShrink: 0, background: `rgba(224,82,82,${item.colorOpacity})` }} />
+                    <span style={{ width: "8px", height: "8px", borderRadius: "2px", flexShrink: 0, background: `rgba(220,38,38,${item.colorOpacity})` }} />
                     {item.label}
                   </span>
                   <span style={{ ...FONT.data, fontSize: "15px", color: W.secondary }}>
@@ -862,8 +862,8 @@ const LockedSensitivitySection = () => (
           <div style={{ flex: 1, height: "80%", borderRadius: "3px 3px 0 0", background: "rgba(60,179,113,0.35)" }} />
           <div style={{ flex: 1, height: "65%", borderRadius: "3px 3px 0 0", background: "rgba(60,179,113,0.28)" }} />
           <div style={{ flex: 1, height: "40%", borderRadius: "3px 3px 0 0", background: "rgba(240,168,48,0.28)" }} />
-          <div style={{ flex: 1, height: "25%", borderRadius: "3px 3px 0 0", background: "rgba(224,82,82,0.25)" }} />
-          <div style={{ flex: 1, height: "15%", borderRadius: "3px 3px 0 0", background: "rgba(224,82,82,0.35)" }} />
+          <div style={{ flex: 1, height: "25%", borderRadius: "3px 3px 0 0", background: "rgba(220,38,38,0.25)" }} />
+          <div style={{ flex: 1, height: "15%", borderRadius: "3px 3px 0 0", background: "rgba(220,38,38,0.35)" }} />
         </div>
         {/* Fake labels */}
         <div style={{ display: "flex", gap: "8px", marginBottom: "16px" }}>
@@ -1052,7 +1052,7 @@ const VisualCluster2 = ({
                 </span>
               )}
             </div>
-            <span style={{ ...FONT.data, fontSize: "15px", color: row.isGross ? W.primary : "rgba(224,82,82,0.75)" }}>
+            <span style={{ ...FONT.data, fontSize: "15px", color: row.isGross ? W.primary : "rgba(220,38,38,0.75)" }}>
               {row.isGross ? formatFullCurrency(row.amount) : `\u2212${formatFullCurrency(row.amount)}`}
             </span>
           </div>
@@ -1093,14 +1093,14 @@ const VisualCluster2 = ({
           const isPartial = tier.status === "partial";
           const isBackend = tier.label === "Backend Pool";
 
-          const borderColor = isFunded ? "rgba(60,179,113,0.15)" : isPartial || isBackend ? "rgba(212,175,55,0.15)" : "rgba(224,82,82,0.10)";
-          const bgColor = isFunded ? "rgba(60,179,113,0.03)" : isPartial || isBackend ? "rgba(212,175,55,0.03)" : "rgba(224,82,82,0.02)";
-          const dotColor = isFunded ? "#3CB371" : isPartial || isBackend ? "rgba(212,175,55,0.70)" : "rgba(224,82,82,0.50)";
-          const dotBorder = isFunded ? "rgba(60,179,113,0.70)" : isPartial || isBackend ? "rgba(212,175,55,0.70)" : "rgba(224,82,82,0.50)";
+          const borderColor = isFunded ? "rgba(60,179,113,0.15)" : isPartial || isBackend ? "rgba(212,175,55,0.15)" : "rgba(220,38,38,0.10)";
+          const bgColor = isFunded ? "rgba(60,179,113,0.03)" : isPartial || isBackend ? "rgba(212,175,55,0.03)" : "rgba(220,38,38,0.02)";
+          const dotColor = isFunded ? "#3CB371" : isPartial || isBackend ? "rgba(212,175,55,0.70)" : "rgba(220,38,38,0.50)";
+          const dotBorder = isFunded ? "rgba(60,179,113,0.70)" : isPartial || isBackend ? "rgba(212,175,55,0.70)" : "rgba(220,38,38,0.50)";
           const dotGlow = isFunded ? "0 0 6px rgba(60,179,113,0.30)" : "none";
-          const barGradient = isFunded ? "linear-gradient(90deg, rgba(60,179,113,0.25), rgba(60,179,113,0.45))" : isPartial || isBackend ? "linear-gradient(90deg, rgba(212,175,55,0.20), rgba(212,175,55,0.40))" : "linear-gradient(90deg, rgba(224,82,82,0.15), rgba(224,82,82,0.30))";
+          const barGradient = isFunded ? "linear-gradient(90deg, rgba(60,179,113,0.25), rgba(60,179,113,0.45))" : isPartial || isBackend ? "linear-gradient(90deg, rgba(212,175,55,0.20), rgba(212,175,55,0.40))" : "linear-gradient(90deg, rgba(220,38,38,0.15), rgba(220,38,38,0.30))";
           const valueColor = isFunded ? SEM.green : isPartial || isBackend ? G.emphasis : SEM.red;
-          const badgeStyle: React.CSSProperties = isFunded ? { background: "rgba(60,179,113,0.15)", color: SEM.green } : isPartial ? { background: "rgba(240,168,48,0.20)", color: SEM.amber } : isBackend ? { background: "rgba(212,175,55,0.12)", color: G.emphasis } : { background: "rgba(224,82,82,0.15)", color: "rgba(224,82,82,0.70)" };
+          const badgeStyle: React.CSSProperties = isFunded ? { background: "rgba(60,179,113,0.15)", color: SEM.green } : isPartial ? { background: "rgba(240,168,48,0.20)", color: SEM.amber } : isBackend ? { background: "rgba(212,175,55,0.12)", color: G.emphasis } : { background: "rgba(220,38,38,0.15)", color: "rgba(220,38,38,0.70)" };
           const badgeText = isFunded ? "FUNDED" : isPartial ? "PARTIAL" : isBackend ? "SURPLUS" : "ZERO";
           const displayLabel = tier.label === "Equity + Premium" && inputs.premium > 0 ? `Equity (${100 + inputs.premium}%)` : tier.label === "Deferments" ? "Deferred Fees" : tier.label;
 
@@ -1218,7 +1218,7 @@ const LockedComparableSection = () => (
         <div style={{ marginTop: "16px", marginBottom: "12px" }}>
           <div style={{ height: "6px", width: "50px", background: "rgba(212,175,55,0.18)", borderRadius: "2px", marginBottom: "8px" }} />
           <div style={{ height: "20px", borderRadius: "4px", display: "flex", overflow: "hidden" }}>
-            <div style={{ width: "25%", height: "100%", background: "rgba(224,82,82,0.20)" }} />
+            <div style={{ width: "25%", height: "100%", background: "rgba(220,38,38,0.20)" }} />
             <div style={{ width: "35%", height: "100%", background: "rgba(240,168,48,0.22)" }} />
             <div style={{ width: "25%", height: "100%", background: "rgba(60,179,113,0.25)" }} />
             <div style={{ width: "15%", height: "100%", background: "rgba(60,179,113,0.15)" }} />
@@ -1417,7 +1417,7 @@ const ConclusionSection = ({
     borderColor = "rgba(240,168,48,0.40)";
   } else {
     verdictText = "YOU'VE FOUND THE GAP BEFORE ANYONE ELSE SAW IT. THAT'S THE POINT OF MODELING.";
-    borderColor = "rgba(224,82,82,0.40)";
+    borderColor = "rgba(220,38,38,0.40)";
   }
 
   return (

@@ -618,7 +618,7 @@ const Resources = () => {
 // ------------------------------------------------------------------
 const s: Record<string, React.CSSProperties> = {
   page: {
-    background: "#000000",
+    background: "#000",
     color: "rgba(255,255,255,0.95)",
     fontFamily: "'Inter', sans-serif",
     WebkitFontSmoothing: "antialiased",

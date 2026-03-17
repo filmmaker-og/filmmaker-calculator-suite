@@ -45,7 +45,7 @@ const OgBotFab = ({ onTap }: OgBotFabProps) => {
         width: "44px",
         height: "44px",
         borderRadius: "8px",
-        background: "#000000",
+        background: "#000",
         border: "1px solid rgba(212,175,55,0.15)",
         boxShadow: "0 4px 20px rgba(0,0,0,0.80)",
         opacity: hidden ? 0 : 1,

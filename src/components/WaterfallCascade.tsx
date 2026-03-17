@@ -100,7 +100,7 @@ const WaterfallCascade = () => {
       <div
         style={{
           borderRadius: "8px",
-          background:   "#000000",
+          background:   "#000",
           border:       "1px solid rgba(212,175,55,0.20)",
           overflow:     "hidden",
         }}
@@ -152,7 +152,7 @@ const WaterfallCascade = () => {
         style={{
           borderRadius:    "8px",
           border:          "1px solid rgba(212,175,55,1.0)",
-          background:      "#000000",
+          background:      "#000",
           opacity:         revealed ? 1 : 0,
           transform:       revealed ? "translateY(0)" : "translateY(16px)",
           transition:      "opacity 500ms ease-out, transform 500ms ease-out",
@@ -178,7 +178,7 @@ const WaterfallCascade = () => {
             style={{
               borderRadius:    "8px",
               border:          "1px solid rgba(212,175,55,0.20)",
-              background:      "#000000",
+              background:      "#000",
               opacity:         splitVisible ? 1 : 0,
               transform:       splitVisible ? "translateY(0)" : "translateY(16px)",
               transition:      "opacity 500ms ease-out, transform 500ms ease-out",
