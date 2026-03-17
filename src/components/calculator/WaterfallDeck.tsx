@@ -110,7 +110,7 @@ const SEM = {
 // ─── Shared Elements ─────────────────────────────────────────────
 
 const GoldGlowBreak = () => (
-  <div style={{ padding: "24px 24px" }}>
+  <div style={{ padding: "16px 24px" }}>
     <div style={{
       height: "1px",
       background: "linear-gradient(90deg, transparent 0%, rgba(212,175,55,0.15) 15%, rgba(212,175,55,0.45) 50%, rgba(212,175,55,0.15) 85%, transparent 100%)",
@@ -300,7 +300,7 @@ const CoverSection = ({
             <div key={f.role} style={{ background: "#0A0A0A", padding: "12px 14px" }}>
               <div style={{
                 ...FONT.fine,
-                color: W.quaternary,
+                color: W.tertiary,
                 marginBottom: "3px",
               }}>
                 {f.role.toUpperCase()}
@@ -426,8 +426,8 @@ const CoverSection = ({
           }}
           onClick={() => setAssumptionsOpen(!assumptionsOpen)}
         >
-          <span style={{ ...FONT.fine, color: W.ghost }}>ASSUMPTIONS</span>
-          <span style={{ color: W.ghost }}>{assumptionsOpen ? "\u25BE" : "\u25B8"}</span>
+          <span style={{ ...FONT.fine, color: W.quaternary }}>ASSUMPTIONS</span>
+          <span style={{ color: W.quaternary }}>{assumptionsOpen ? "\u25BE" : "\u25B8"}</span>
         </div>
         {assumptionsOpen && (
           <div style={{
@@ -572,13 +572,13 @@ const DealSection = ({
   }
 
   return (
-    <section style={{ padding: "48px 24px 56px" }}>
+    <section style={{ padding: "32px 24px 56px" }}>
       {/* Provenance mark */}
       <div style={{
         display: "flex",
         alignItems: "center",
         gap: "10px",
-        marginBottom: "28px",
+        marginBottom: "16px",
       }}>
         <div style={{
           width: "10px",
@@ -602,10 +602,10 @@ const DealSection = ({
       </div>
 
       {/* Label */}
-      <div style={{ ...FONT.label, color: G.standard, marginBottom: "24px" }}>Deal Summary</div>
+      <div style={{ ...FONT.label, color: G.standard, marginBottom: "12px" }}>Deal Summary</div>
 
       {/* Headline */}
-      <div style={{ ...FONT.display, color: W.primary, marginBottom: "32px" }}>THE DEAL</div>
+      <div style={{ ...FONT.display, color: W.primary, marginBottom: "20px" }}>THE DEAL</div>
 
       {/* Prose */}
       <div style={{ ...FONT.body, color: W.secondary }}>
@@ -726,10 +726,10 @@ const RealityCheck1Section = ({
   return (
     <section style={{ padding: "48px 24px 56px" }}>
       {/* 2a. Section Label */}
-      <div style={{ ...FONT.label, color: G.standard, marginBottom: "24px" }}>The Erosion</div>
+      <div style={{ ...FONT.label, color: G.standard, marginBottom: "12px" }}>Off-the-Tops</div>
 
       {/* 2b. Headline */}
-      <div style={{ ...FONT.display, color: W.primary, marginBottom: "32px" }}>
+      <div style={{ ...FONT.display, color: W.primary, marginBottom: "20px" }}>
         THE EROSION
       </div>
 
@@ -971,12 +971,12 @@ const RealityCheck1Section = ({
 // ─── SECTION 3: LOCKED TEASER — SENSITIVITY ──────────────────────
 
 const LockedSensitivitySection = () => (
-  <section style={{ padding: "48px 24px 48px" }}>
+  <section style={{ padding: "36px 24px 36px" }}>
     {/* Label — content-descriptive, not "Premium Analysis" */}
-    <div style={{ ...FONT.label, color: G.floor, marginBottom: "24px" }}>Scenario Modeling</div>
+    <div style={{ ...FONT.label, color: G.standard, marginBottom: "12px" }}>Scenario Modeling</div>
 
     {/* Headline — reads like the next section */}
-    <div style={{ ...FONT.title, color: W.quaternary, marginBottom: "24px" }}>
+    <div style={{ ...FONT.title, color: W.primary, marginBottom: "16px" }}>
       WHAT IF YOUR PRICE MOVES
     </div>
 
@@ -984,6 +984,7 @@ const LockedSensitivitySection = () => (
     <div style={{
       position: "relative",
       border: "1px solid rgba(212,175,55,0.10)",
+
       borderRadius: "4px",
       overflow: "hidden",
     }}>
@@ -1105,7 +1106,7 @@ const RealityCheck2Section = ({
   return (
     <section style={{ padding: "48px 24px 56px" }}>
       {/* 4a */}
-      <div style={{ ...FONT.label, color: G.standard, marginBottom: "24px" }}>The Risk</div>
+      <div style={{ ...FONT.label, color: G.standard, marginBottom: "12px" }}>Risk Analysis</div>
 
       {/* 4b */}
       <div style={{ ...FONT.display, color: W.primary, marginBottom: "24px" }}>THE RISK</div>
@@ -1202,8 +1203,8 @@ const RealityCheck2Section = ({
           </div>
           {/* Col labels */}
           <div style={{ display: "flex", justifyContent: "flex-end", gap: "20px", padding: "10px 20px 0" }}>
-            <span style={{ ...FONT.fine, fontSize: "10px", letterSpacing: "0.10em", color: W.ghost, textAlign: "right", minWidth: "56px" }}>RETURN</span>
-            <span style={{ ...FONT.fine, fontSize: "10px", letterSpacing: "0.10em", color: W.ghost, textAlign: "right", minWidth: "56px" }}>MULTIPLE</span>
+            <span style={{ ...FONT.fine, fontSize: "10px", letterSpacing: "0.10em", color: W.quaternary, textAlign: "right", minWidth: "56px" }}>RETURN</span>
+            <span style={{ ...FONT.fine, fontSize: "10px", letterSpacing: "0.10em", color: W.quaternary, textAlign: "right", minWidth: "56px" }}>MULTIPLE</span>
           </div>
           {/* Rows */}
           <div style={{ padding: "0 20px" }}>
@@ -1219,7 +1220,7 @@ const RealityCheck2Section = ({
               }}>
                 <div>
                   <span style={{ fontSize: "14px", color: W.tertiary }}>{s.label} </span>
-                  <span style={{ color: W.ghost, fontSize: "11px" }}>{s.sub}</span>
+                  <span style={{ color: W.quaternary, fontSize: "11px" }}>{s.sub}</span>
                 </div>
                 <div style={{ display: "flex", gap: "20px" }}>
                   <span style={{
@@ -1337,7 +1338,7 @@ const DeductionsSection = ({
   return (
     <section style={{ padding: "48px 24px 56px" }}>
       {/* 5a */}
-      <div style={{ ...FONT.label, color: G.standard, marginBottom: "24px" }}>The Deductions</div>
+      <div style={{ ...FONT.label, color: G.standard, marginBottom: "12px" }}>Full Breakdown</div>
 
       {/* 5b */}
       <div style={{ ...FONT.display, color: W.primary, marginBottom: "8px" }}>THE DEDUCTIONS</div>
@@ -1363,7 +1364,7 @@ const DeductionsSection = ({
           ...FONT.fine,
           fontSize: "10px",
           letterSpacing: "0.15em",
-          color: W.ghost,
+          color: W.quaternary,
         }}>
           <span>DEDUCTION</span>
           <span>AMOUNT</span>
@@ -1495,7 +1496,7 @@ const CascadeSection = ({
   return (
     <section style={{ padding: "48px 24px 56px" }}>
       {/* 6a */}
-      <div style={{ ...FONT.label, color: G.standard, marginBottom: "24px" }}>The Cascade</div>
+      <div style={{ ...FONT.label, color: G.standard, marginBottom: "12px" }}>Recoupment Waterfall</div>
 
       {/* 6b */}
       <div style={{ ...FONT.display, color: W.primary, marginBottom: "8px" }}>THE CASCADE</div>
@@ -1649,7 +1650,7 @@ const CascadeSection = ({
         {/* Summary line */}
         <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "12px", padding: "8px 0" }}>
           <div style={{ flex: 1, height: "1px", background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.08))" }} />
-          <span style={{ ...FONT.fine, color: W.ghost }}>
+          <span style={{ ...FONT.fine, color: W.quaternary }}>
             {tiers.every(t => t.status === "funded") ? "ALL TIERS FUNDED" : "PARTIAL FUNDING"}
           </span>
           <div style={{ flex: 1, height: "1px", background: "linear-gradient(90deg, rgba(255,255,255,0.08), transparent)" }} />
@@ -1763,7 +1764,7 @@ const CapitalStackSection = ({
   return (
     <section style={{ padding: "48px 24px 56px" }}>
       {/* Label */}
-      <div style={{ ...FONT.label, color: G.standard, marginBottom: "24px" }}>The Capital Stack</div>
+      <div style={{ ...FONT.label, color: G.standard, marginBottom: "12px" }}>Capital Structure</div>
 
       {/* Headline */}
       <div style={{ ...FONT.display, color: W.primary, marginBottom: "8px" }}>THE CAPITAL STACK</div>
@@ -1864,7 +1865,7 @@ const LockedComparableSection = () => (
           ...FONT.label,
           fontSize: "11px",
           letterSpacing: "0.12em",
-          color: G.floor,
+          color: G.standard,
           marginTop: "6px",
         }}>
           Included in Comp Report
@@ -1877,12 +1878,12 @@ const LockedComparableSection = () => (
 // ─── SECTION 7: LOCKED TEASER — INVESTOR MEMO ───────────────────
 
 const LockedInvestorMemoSection = () => (
-  <section style={{ padding: "48px 24px 48px", background: "rgba(212,175,55,0.015)" }}>
+  <section style={{ padding: "36px 24px 36px", background: "rgba(212,175,55,0.015)" }}>
     {/* Label */}
-    <div style={{ ...FONT.label, color: G.subtle, marginBottom: "24px" }}>Investor Documents</div>
+    <div style={{ ...FONT.label, color: G.standard, marginBottom: "12px" }}>Investor Documents</div>
 
     {/* Headline */}
-    <div style={{ ...FONT.title, color: W.tertiary, marginBottom: "24px" }}>THE INVESTOR MEMO</div>
+    <div style={{ ...FONT.title, color: W.primary, marginBottom: "16px" }}>THE INVESTOR MEMO</div>
 
     {/* Locked card */}
     <div style={{
@@ -2102,7 +2103,7 @@ const CTASection = () => {
           <span style={{
             fontSize: "10px", fontWeight: 600,
             letterSpacing: "0.15em", textTransform: "uppercase" as const,
-            color: W.ghost,
+            color: W.quaternary,
           }}>filmmaker.og &middot; Waterfall Snapshot</span>
           <div style={{ flex: 1, maxWidth: "60px", height: "1px", background: "linear-gradient(90deg, rgba(212,175,55,0.20), transparent)" }} />
         </div>
