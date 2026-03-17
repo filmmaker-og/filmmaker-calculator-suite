@@ -226,9 +226,9 @@ const CoverSection = ({
       {/* 1b. Title */}
       <div style={{
         fontFamily: "'Bebas Neue', sans-serif",
-        fontSize: "56px",
+        fontSize: "48px",
         letterSpacing: "0.06em",
-        lineHeight: 0.95,
+        lineHeight: 1.0,
         color: W.primary,
         marginBottom: "10px",
       }}>
@@ -398,21 +398,21 @@ const CoverSection = ({
         }}>
           {inputs.credits > 0 && project.location.trim() && (
             <>
-              <span style={{ fontSize: "12px", color: W.quaternary }}>Location</span>
+              <span style={{ fontSize: "13px", color: W.quaternary }}>Location</span>
               <span style={{ ...FONT.data, fontSize: "14px", color: W.tertiary }}>
                 {project.location}
               </span>
-              <span style={{ fontSize: "12px", color: W.quaternary }}>Tax Credit</span>
+              <span style={{ fontSize: "13px", color: W.quaternary }}>Tax Credit</span>
               <span style={{ ...FONT.data, fontSize: "14px", color: W.tertiary }}>
                 {inputs.budget > 0 ? Math.round((inputs.credits / inputs.budget) * 100) : 0}%
               </span>
             </>
           )}
-          <span style={{ fontSize: "12px", color: W.quaternary }}>Model</span>
+          <span style={{ fontSize: "13px", color: W.quaternary }}>Model</span>
           <span style={{ ...FONT.data, fontSize: "14px", color: W.tertiary }}>Acquisition</span>
           {inputs.deferments > 0 && (
             <>
-              <span style={{ fontSize: "12px", color: W.quaternary }}>Deferrals</span>
+              <span style={{ fontSize: "13px", color: W.quaternary }}>Deferrals</span>
               <span style={{ ...FONT.data, fontSize: "14px", color: W.tertiary }}>
                 {formatCompactCurrency(inputs.deferments)}
               </span>
@@ -420,7 +420,7 @@ const CoverSection = ({
           )}
           {inputs.salesFee > 0 && (
             <>
-              <span style={{ fontSize: "12px", color: W.quaternary }}>Sales Agent</span>
+              <span style={{ fontSize: "13px", color: W.quaternary }}>Sales Agent</span>
               <span style={{ ...FONT.data, fontSize: "14px", color: W.tertiary }}>
                 {inputs.salesFee}%
               </span>
@@ -428,7 +428,7 @@ const CoverSection = ({
           )}
           {inputs.salesExp > 0 && (
             <>
-              <span style={{ fontSize: "12px", color: W.quaternary }}>Expense Cap</span>
+              <span style={{ fontSize: "13px", color: W.quaternary }}>Expense Cap</span>
               <span style={{ ...FONT.data, fontSize: "14px", color: W.tertiary }}>
                 {formatCompactCurrency(inputs.salesExp)}
               </span>
@@ -436,7 +436,7 @@ const CoverSection = ({
           )}
           {(guilds.sag || guilds.wga || guilds.dga) && (
             <>
-              <span style={{ fontSize: "12px", color: W.quaternary }}>Guilds</span>
+              <span style={{ fontSize: "13px", color: W.quaternary }}>Guilds</span>
               <span style={{ ...FONT.data, fontSize: "14px", color: W.tertiary }}>
                 {[guilds.sag && "SAG-AFTRA", guilds.wga && "WGA", guilds.dga && "DGA"].filter(Boolean).join(", ")}
               </span>
@@ -548,12 +548,12 @@ const DealSection = ({
   }
 
   return (
-    <section style={{ padding: "28px 24px 40px" }}>
+    <section style={{ padding: "40px 24px 40px" }}>
       {/* Provenance mark */}
       <div style={{
         display: "flex",
         alignItems: "center",
-        gap: "10px",
+        gap: "8px",
         marginBottom: "12px",
       }}>
         <div style={{
@@ -650,9 +650,9 @@ const VisualCluster1 = ({
   const modeledPrice = inputs.revenue;
   const scenarios = [
     { price: modeledPrice, sub: "modeled", haircut: "0%" },
-    { price: modeledPrice * 0.875, sub: "floor", haircut: "12.5%" },
-    { price: modeledPrice * 0.6875, sub: "weak comps", haircut: "31.25%" },
-    { price: modeledPrice * 0.46875, sub: "distressed", haircut: "53%" },
+    { price: modeledPrice * 0.85, sub: "\u221215%", haircut: "15%" },
+    { price: modeledPrice * 0.70, sub: "\u221230%", haircut: "30%" },
+    { price: modeledPrice * 0.50, sub: "\u221250%", haircut: "50%" },
   ].map((s) => {
     const { returnPct, multiple } = computeScenarioReturn(inputs, guilds, s.price);
     const color = returnPct > 100 ? SEM.green : returnPct > 50 ? SEM.amber : SEM.red;
@@ -673,9 +673,9 @@ const VisualCluster1 = ({
             marginBottom: "20px",
           }}>
             {/* Hero row */}
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "14px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "16px" }}>
               <span style={{ fontSize: "15px", color: W.tertiary }}>Gone before recoupment</span>
-              <span style={{ ...FONT.data, fontSize: "28px", color: "rgba(224,82,82,0.85)" }}>
+              <span style={{ ...FONT.data, fontSize: "28px", color: SEM.red }}>
                 &minus;{formatCompactCurrency(erosionTotal)}
               </span>
             </div>
@@ -731,7 +731,7 @@ const VisualCluster1 = ({
           <div style={{ ...FONT.fine, color: W.quaternary, marginBottom: "12px" }}>CAPITAL STRUCTURE</div>
           <div style={{
             display: "flex", flexDirection: "column", gap: "2px",
-            marginBottom: "12px", border: "1px solid rgba(255,255,255,0.06)",
+            marginBottom: "16px", border: "1px solid rgba(255,255,255,0.06)",
             borderRadius: "4px", overflow: "hidden", background: "rgba(255,255,255,0.06)",
           }}>
             {sources.map((s) => (
@@ -892,7 +892,7 @@ const LockedSensitivitySection = () => (
           border: `1.5px solid ${G.subtle}`,
           borderRadius: "50%",
           display: "flex", alignItems: "center", justifyContent: "center",
-          marginBottom: "14px",
+          marginBottom: "16px",
           boxShadow: "0 0 16px rgba(212,175,55,0.12)",
         }}>
           <svg viewBox="0 0 24 24" style={{ width: "18px", height: "18px", fill: G.standard }}>
@@ -1115,11 +1115,11 @@ const VisualCluster2 = ({
               )}
               <div style={{ padding: "16px", border: `1px solid ${borderColor}`, borderRadius: "6px", background: bgColor }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                     <div style={{ width: "6px", height: "6px", borderRadius: "50%", background: dotColor, boxShadow: dotGlow }} />
                     <span style={{ fontSize: "13px", fontWeight: 500, color: W.secondary }}>{displayLabel}</span>
                   </div>
-                  <span style={{ fontSize: "9px", fontWeight: 700, letterSpacing: "0.10em", textTransform: "uppercase" as const, padding: "3px 8px", borderRadius: "3px", ...badgeStyle }}>{badgeText}</span>
+                  <span style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.10em", textTransform: "uppercase" as const, padding: "3px 8px", borderRadius: "3px", ...badgeStyle }}>{badgeText}</span>
                 </div>
                 <div style={{ height: "8px", background: "rgba(255,255,255,0.04)", borderRadius: "4px", overflow: "hidden", marginBottom: "8px" }}>
                   {fillPct > 0 && <div style={{ height: "100%", width: `${Math.min(100, fillPct)}%`, borderRadius: "4px", background: barGradient }} />}
@@ -1153,45 +1153,113 @@ const VisualCluster2 = ({
   );
 };
 
-// ─── SECTION 8: LOCKED COMPARABLE (Gate 2) ──────────────────────
+// ─── LOCKED COMPARABLE (Gate 2) ─────────────────────────────────
 
 const LockedComparableSection = () => (
   <section style={{ padding: "20px 0px 0px" }}>
+    {/* Label — content-descriptive */}
+    <div style={{ ...FONT.label, color: G.emphasis, marginBottom: "8px" }}>Market Comparables</div>
+
+    {/* Headline — reads like the next section */}
+    <div style={{ ...FONT.title, color: W.primary, marginBottom: "12px" }}>
+      WHAT DID SIMILAR FILMS SELL FOR
+    </div>
+
+    {/* Locked card with blurred content */}
     <div style={{
-      display: "flex",
-      alignItems: "center",
-      gap: "16px",
-      padding: "20px",
+      position: "relative",
       border: "1px solid rgba(212,175,55,0.15)",
       borderRadius: "4px",
-      background: "rgba(212,175,55,0.02)",
+      overflow: "hidden",
     }}>
+      {/* Blurred content — fake comp table */}
       <div style={{
-        width: "36px", height: "36px", flexShrink: 0,
-        border: "1.5px solid rgba(212,175,55,0.35)", borderRadius: "50%",
-        display: "flex", alignItems: "center", justifyContent: "center",
-        boxShadow: "0 0 12px rgba(212,175,55,0.08)",
+        padding: "20px",
+        filter: "blur(3px)",
+        opacity: 0.55,
+        userSelect: "none",
+        pointerEvents: "none",
       }}>
-        <svg viewBox="0 0 24 24" style={{ width: "14px", height: "14px", fill: G.subtle }}>
-          <path d="M18 10h-1V7c0-2.76-2.24-5-5-5S7 4.24 7 7v3H6c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-8c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3-9H9V7c0-1.66 1.34-3 3-3s3 1.34 3 3v3z" />
-        </svg>
-      </div>
-      <div>
-        <div style={{ fontSize: "13px", fontWeight: 600, color: W.secondary, marginBottom: "3px" }}>
-          Comparable Acquisition Analysis
-        </div>
-        <div style={{ fontSize: "12px", color: W.quaternary, lineHeight: 1.4 }}>
-          Real deals in your genre and budget range. Defend your valuation with data.
-        </div>
+        {/* Fake comp table header */}
         <div style={{
-          ...FONT.label,
-          fontSize: "11px",
-          letterSpacing: "0.12em",
+          display: "flex", justifyContent: "space-between", alignItems: "center",
+          paddingBottom: "10px", marginBottom: "12px",
+          borderBottom: "1px solid rgba(255,255,255,0.08)",
+        }}>
+          <div style={{ height: "8px", width: "60px", background: "rgba(212,175,55,0.20)", borderRadius: "2px" }} />
+          <div style={{ display: "flex", gap: "16px" }}>
+            <div style={{ height: "8px", width: "50px", background: "rgba(255,255,255,0.12)", borderRadius: "2px" }} />
+            <div style={{ height: "8px", width: "50px", background: "rgba(255,255,255,0.12)", borderRadius: "2px" }} />
+          </div>
+        </div>
+
+        {/* Fake comp rows */}
+        {[
+          { w1: "100px", w2: "70px", color: "rgba(60,179,113,0.25)" },
+          { w1: "120px", w2: "80px", color: "rgba(60,179,113,0.20)" },
+          { w1: "90px", w2: "65px", color: "rgba(240,168,48,0.22)" },
+        ].map((row, i) => (
+          <div key={i} style={{
+            display: "flex", justifyContent: "space-between", alignItems: "center",
+            padding: "10px 0", borderBottom: "1px solid rgba(255,255,255,0.04)",
+          }}>
+            <div>
+              <div style={{ height: "10px", width: row.w1, background: "rgba(255,255,255,0.14)", borderRadius: "2px", marginBottom: "4px" }} />
+              <div style={{ height: "6px", width: row.w2, background: "rgba(255,255,255,0.08)", borderRadius: "2px" }} />
+            </div>
+            <div style={{ display: "flex", gap: "16px" }}>
+              <div style={{ height: "10px", width: "50px", background: row.color, borderRadius: "2px" }} />
+              <div style={{ height: "10px", width: "40px", background: "rgba(255,255,255,0.10)", borderRadius: "2px" }} />
+            </div>
+          </div>
+        ))}
+
+        {/* Fake valuation range bar */}
+        <div style={{ marginTop: "16px", marginBottom: "12px" }}>
+          <div style={{ height: "6px", width: "50px", background: "rgba(212,175,55,0.18)", borderRadius: "2px", marginBottom: "8px" }} />
+          <div style={{ height: "20px", borderRadius: "4px", display: "flex", overflow: "hidden" }}>
+            <div style={{ width: "25%", height: "100%", background: "rgba(224,82,82,0.20)" }} />
+            <div style={{ width: "35%", height: "100%", background: "rgba(240,168,48,0.22)" }} />
+            <div style={{ width: "25%", height: "100%", background: "rgba(60,179,113,0.25)" }} />
+            <div style={{ width: "15%", height: "100%", background: "rgba(60,179,113,0.15)" }} />
+          </div>
+        </div>
+
+        {/* Fake prose */}
+        <div style={{ height: "8px", width: "90%", background: "rgba(255,255,255,0.10)", borderRadius: "2px", marginBottom: "6px" }} />
+        <div style={{ height: "8px", width: "75%", background: "rgba(255,255,255,0.07)", borderRadius: "2px", marginBottom: "6px" }} />
+        <div style={{ height: "8px", width: "82%", background: "rgba(255,255,255,0.09)", borderRadius: "2px" }} />
+      </div>
+
+      {/* Overlay */}
+      <div style={{
+        position: "absolute",
+        inset: 0,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "radial-gradient(ellipse at center, rgba(212,175,55,0.04) 0%, rgba(0,0,0,0.50) 70%)",
+      }}>
+        <div style={{
+          width: "44px", height: "44px",
+          border: `1.5px solid ${G.subtle}`,
+          borderRadius: "50%",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          marginBottom: "16px",
+          boxShadow: "0 0 16px rgba(212,175,55,0.12)",
+        }}>
+          <svg viewBox="0 0 24 24" style={{ width: "18px", height: "18px", fill: G.standard }}>
+            <path d="M18 10h-1V7c0-2.76-2.24-5-5-5S7 4.24 7 7v3H6c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-8c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3-9H9V7c0-1.66 1.34-3 3-3s3 1.34 3 3v3z" />
+          </svg>
+        </div>
+        <span style={{
+          fontSize: "12px", fontWeight: 600,
+          letterSpacing: "0.15em", textTransform: "uppercase" as const,
           color: G.emphasis,
-          marginTop: "6px",
         }}>
           Included in Comp Report
-        </div>
+        </span>
       </div>
     </div>
   </section>
@@ -1298,7 +1366,7 @@ const LockedInvestorMemoSection = () => (
           border: `1.5px solid ${G.subtle}`,
           borderRadius: "50%",
           display: "flex", alignItems: "center", justifyContent: "center",
-          marginBottom: "14px",
+          marginBottom: "16px",
           boxShadow: "0 0 16px rgba(212,175,55,0.12)",
         }}>
           <svg viewBox="0 0 24 24" style={{ width: "18px", height: "18px", fill: G.standard }}>
