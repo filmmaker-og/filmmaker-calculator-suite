@@ -510,35 +510,7 @@ const DealSection = ({
     p3 += "Revenue does not fully fund any capital tier at this acquisition price.";
   }
 
-  // Paragraph 4 — Margin analysis
-  const floorPrice = inputs.revenue * 0.875;
-  const distressedPrice = inputs.revenue * 0.46875;
-  const floorScenario = computeScenarioReturn(inputs, guilds, floorPrice);
-  const distressedScenario = computeScenarioReturn(inputs, guilds, distressedPrice);
-  let p4 = `At the modeled price, investors see a ${multiple.toFixed(1)}x cash-on-cash multiple. `;
-  if (floorScenario.returnPct >= 100) {
-    p4 += `Even at the ${formatCompactCurrency(floorPrice)} floor — a 12.5% haircut — investors recoup principal and earn a modest return. `;
-  } else {
-    p4 += `At the ${formatCompactCurrency(floorPrice)} floor — a 12.5% haircut — investors lose ${Math.round(100 - floorScenario.returnPct)}% of principal. `;
-  }
-  if (distressedScenario.returnPct < 100) {
-    p4 += `In a distressed scenario at ${formatCompactCurrency(distressedPrice)}, recovery drops to ${Math.round(distressedScenario.returnPct)}%.`;
-  }
-
-  // Paragraph 5 — Structural risk
-  const risks: string[] = [];
-  if (inputs.credits === 0) risks.push("Without tax credits, the cash basis has no cushion.");
-  if (inputs.credits > 0 && inputs.budget > 0) {
-    const creditConc = Math.round((inputs.credits / inputs.budget) * 100);
-    if (creditConc > 25) risks.push(`${creditConc}% of financing depends on ${project.location.trim() || "your state"}'s incentive program.`);
-  }
-  if (inputs.deferments === 0) risks.push("No deferred fees to reduce cash exposure.");
-  if (inputs.salesFee > 15) risks.push(`The agent's ${inputs.salesFee}% take is above market.`);
-  if (inputs.salesExp > 100000) risks.push("The expense cap warrants negotiation.");
-  if (floorScenario.returnPct < 100) risks.push("The margin between profit and loss is thin.");
-  const p5 = risks.length > 0 ? risks.slice(0, 2).join(" ") : "No outsized structural risks at this configuration.";
-
-  // Paragraph 6 — Verdict
+  // Paragraph 4 — Verdict
   let characterization: string;
   let verdict: string;
   if (multiple >= 1.5) {
@@ -554,7 +526,7 @@ const DealSection = ({
     characterization = "a deal that needs work";
     verdict = "this model needs restructuring";
   }
-  const p6 = `For what it is — ${characterization} — ${verdict}.`;
+  const p4 = `For what it is — ${characterization} — ${verdict}.`;
 
   // Pull-quote logic
   const allFunded = tiers.every(t => t.status === "funded");
@@ -635,19 +607,17 @@ const DealSection = ({
         </div>
       </div>
 
-      {/* More prose */}
+      {/* Verdict */}
       <div style={{ ...FONT.body, color: W.secondary }}>
-        <p style={{ marginBottom: "20px" }}>{p4}</p>
-        <p style={{ marginBottom: "20px" }}>{p5}</p>
-        <p style={{ marginBottom: "0" }}>{p6}</p>
+        <p style={{ marginBottom: "0" }}>{p4}</p>
       </div>
     </section>
   );
 };
 
-// ─── SECTION 3: REALITY CHECK 1 ─────────────────────────────────
+// ─── VISUAL CLUSTER 1: THE NUMBERS ──────────────────────────────
 
-const RealityCheck1Section = ({
+const VisualCluster1 = ({
   inputs, result, guilds, project,
 }: {
   inputs: WaterfallInputs;
@@ -655,221 +625,99 @@ const RealityCheck1Section = ({
   guilds: GuildState;
   project: ProjectDetails;
 }) => {
-  const cashBasis = computeCashBasis(inputs);
-  const netDistributable = Math.max(0, inputs.revenue - result.offTopTotal);
-  const investorReturnPct = computeInvestorReturnPct(result, inputs);
-
-  // Erosion items
   const erosionItems: { label: string; amount: number; colorOpacity: number }[] = [];
   if (result.cam > 0) erosionItems.push({ label: "CAM Fee", amount: result.cam, colorOpacity: 0.20 });
   if (result.salesFee > 0) erosionItems.push({ label: "Sales Agent Commission", amount: result.salesFee, colorOpacity: 0.35 });
   if (result.marketing > 0) erosionItems.push({ label: "Sales Agent Expenses", amount: result.marketing, colorOpacity: 0.50 });
   if (result.guilds > 0) erosionItems.push({ label: "Guild Reserves", amount: result.guilds, colorOpacity: 0.65 });
-
   const erosionTotal = erosionItems.reduce((sum, item) => sum + item.amount, 0);
 
-  // Thesis prose
-  const location = project.location.trim();
-  const creditPct = inputs.budget > 0 ? Math.round((inputs.credits / inputs.budget) * 100) : 0;
-  const hasCreditAndDeferral = inputs.credits > 0 && inputs.deferments > 0;
-  const hasCreditOnly = inputs.credits > 0 && inputs.deferments === 0;
-  const hasDeferralOnly = inputs.credits === 0 && inputs.deferments > 0;
-
-  let thesisProse: React.ReactNode;
-  if (hasCreditAndDeferral) {
-    thesisProse = (
-      <p style={{ marginBottom: "20px" }}>
-        Your film budgets at <Num>{formatCompactCurrency(inputs.budget)}</Num> but the number that matters
-        is <Num>{formatCompactCurrency(cashBasis)}</Num> — your cash basis
-        after {location || "your state"}&rsquo;s <Num>{creditPct}%</Num> transferable credit
-        and <Num>{formatCompactCurrency(inputs.deferments)}</Num> in deferred fees.
-        That gap is the entire financial thesis. Every dollar between what you spend in cash and what the
-        market pays for the finished asset is where investor profit lives.
-      </p>
-    );
-  } else if (hasCreditOnly) {
-    thesisProse = (
-      <p style={{ marginBottom: "20px" }}>
-        Your film budgets at <Num>{formatCompactCurrency(inputs.budget)}</Num> but the number that matters
-        is <Num>{formatCompactCurrency(cashBasis)}</Num> — your cash basis
-        after {location || "your state"}&rsquo;s <Num>{creditPct}%</Num> transferable credit.
-        That gap is the entire financial thesis. Every dollar between what you spend in cash and what the
-        market pays for the finished asset is where investor profit lives.
-      </p>
-    );
-  } else if (hasDeferralOnly) {
-    thesisProse = (
-      <p style={{ marginBottom: "20px" }}>
-        Your film budgets at <Num>{formatCompactCurrency(inputs.budget)}</Num> but the number that matters
-        is <Num>{formatCompactCurrency(cashBasis)}</Num> — your cash basis
-        after <Num>{formatCompactCurrency(inputs.deferments)}</Num> in deferred fees.
-        Deferments reduce your immediate cash obligation without adding a repayment tier ahead of investors.
-      </p>
-    );
-  } else {
-    thesisProse = (
-      <p style={{ marginBottom: "20px" }}>
-        Your film budgets at <Num>{formatCompactCurrency(inputs.budget)}</Num> — that is also your full
-        cash basis with no credits or deferrals applied. Every dollar of that budget must be recouped from
-        market revenue before anyone sees profit.
-      </p>
-    );
-  }
-
-  // Erosion prose
-  const biggestErosion = erosionItems.length > 0
-    ? erosionItems.reduce((max, item) => item.amount > max.amount ? item : max, erosionItems[0])
-    : null;
-  const expenseCap = inputs.salesExp;
-  const expenseAssessment = expenseCap > 100000 ? "a red flag" : "reasonable";
-
-  // Net result
+  const netDistributable = Math.max(0, inputs.revenue - result.offTopTotal);
+  const investorReturnPct = computeInvestorReturnPct(result, inputs);
   const netColor = investorReturnPct >= 100 ? SEM.green : investorReturnPct >= 80 ? SEM.amber : SEM.red;
+  const netBg = netColor === SEM.green ? "rgba(60,179,113,0.06)" : netColor === SEM.amber ? "rgba(240,168,48,0.06)" : "rgba(224,82,82,0.06)";
+  const netBorder = netColor === SEM.green ? "rgba(60,179,113,0.20)" : netColor === SEM.amber ? "rgba(240,168,48,0.20)" : "rgba(224,82,82,0.20)";
 
-  // Net strip colors
-  const netBg = netColor === SEM.green
-    ? "rgba(60,179,113,0.06)"
-    : netColor === SEM.amber
-    ? "rgba(240,168,48,0.06)"
-    : "rgba(224,82,82,0.06)";
-  const netBorder = netColor === SEM.green
-    ? "rgba(60,179,113,0.20)"
-    : netColor === SEM.amber
-    ? "rgba(240,168,48,0.20)"
-    : "rgba(224,82,82,0.20)";
+  // Capital stack sources
+  const sources: { label: string; amount: number; detail: string; pctOfBudget: string; color: string }[] = [];
+  if (inputs.debt > 0) sources.push({ label: "Senior Debt", amount: inputs.debt, detail: `First position · ${inputs.seniorDebtRate}% interest`, pctOfBudget: `${Math.round((inputs.debt / inputs.budget) * 100)}% of budget`, color: "rgba(255,255,255,0.15)" });
+  if (inputs.mezzanineDebt > 0) sources.push({ label: "Mezzanine / Gap", amount: inputs.mezzanineDebt, detail: `Second position · ${inputs.mezzanineRate}% interest`, pctOfBudget: `${Math.round((inputs.mezzanineDebt / inputs.budget) * 100)}% of budget`, color: "rgba(240,168,48,0.30)" });
+  if (inputs.equity > 0) sources.push({ label: "Equity", amount: inputs.equity, detail: `${inputs.premium > 0 ? `${inputs.premium}% preferred return` : "Pari passu"}`, pctOfBudget: `${Math.round((inputs.equity / inputs.budget) * 100)}% of budget`, color: "rgba(212,175,55,0.40)" });
+  if (inputs.credits > 0) sources.push({ label: "Tax Credits", amount: inputs.credits, detail: "Non-dilutive", pctOfBudget: `${Math.round((inputs.credits / inputs.budget) * 100)}% of budget`, color: "rgba(60,179,113,0.30)" });
+  if (inputs.deferments > 0) sources.push({ label: "Deferrals", amount: inputs.deferments, detail: "Subordinate to all capital", pctOfBudget: `${Math.round((inputs.deferments / inputs.budget) * 100)}% of budget`, color: "rgba(255,255,255,0.10)" });
+
+  // Scenario data
+  const modeledPrice = inputs.revenue;
+  const scenarios = [
+    { price: modeledPrice, sub: "modeled", haircut: "0%" },
+    { price: modeledPrice * 0.875, sub: "floor", haircut: "12.5%" },
+    { price: modeledPrice * 0.6875, sub: "weak comps", haircut: "31.25%" },
+    { price: modeledPrice * 0.46875, sub: "distressed", haircut: "53%" },
+  ].map((s) => {
+    const { returnPct, multiple } = computeScenarioReturn(inputs, guilds, s.price);
+    const color = returnPct > 100 ? SEM.green : returnPct > 50 ? SEM.amber : SEM.red;
+    return { ...s, label: formatCompactCurrency(s.price), returnPct, multiple, color };
+  });
 
   return (
-    <section style={{ padding: "40px 24px 40px" }}>
-      {/* Label */}
-      <div style={{ ...FONT.label, color: G.emphasis, marginBottom: "8px" }}>Off-the-Tops</div>
+    <section style={{ padding: "32px 24px 40px" }}>
 
-      {/* Headline */}
-      <div style={{ ...FONT.display, color: W.primary, marginBottom: "16px" }}>
-        THE EROSION
-      </div>
-
-      {/* PROSE BLOCK — thesis + erosion context merged */}
-      <div style={{ ...FONT.body, color: W.secondary }}>
-        {thesisProse}
-
-        {erosionTotal > 0 && (
-          <p style={{ marginBottom: "20px" }}>
-            The first <Num>{formatCompactCurrency(erosionTotal)}</Num> of
-            your <Num>{formatCompactCurrency(inputs.revenue)}</Num> never reaches the production entity.
-            {biggestErosion && biggestErosion.label === "Sales Agent Commission" && inputs.salesFee > 0 && (
-              <> Your sales agent&rsquo;s <Num>{inputs.salesFee}%</Num> commission is the biggest line
-              item — <Num>{formatCompactCurrency(result.salesFee)}</Num> off the top.
-              At this budget level, the agent is the right call. Where producers get burned
-              isn&rsquo;t the rate — it&rsquo;s the expense cap. <Num>{formatCompactCurrency(inputs.salesExp)}</Num> is {expenseAssessment}
-              {inputs.salesExp > 100000 ? " for a film this size." : "."}</>
-            )}
-            {biggestErosion && biggestErosion.label !== "Sales Agent Commission" && (
-              <> The largest deduction is {biggestErosion.label.toLowerCase()} at <Num>{formatCompactCurrency(biggestErosion.amount)}</Num>.</>
-            )}
-          </p>
-        )}
-      </div>
-
-      {/* VISUAL — Erosion card */}
+      {/* ── EROSION VISUAL ── */}
       {erosionTotal > 0 && (
-        <div style={{
-          padding: "20px",
-          border: "1px solid rgba(255,255,255,0.08)",
-          borderRadius: "4px",
-          margin: "16px 0",
-        }}>
+        <>
+          <div style={{ ...FONT.fine, color: W.quaternary, marginBottom: "12px" }}>OFF-THE-TOP EROSION</div>
           <div style={{
-            ...FONT.label,
-            fontSize: "11px",
-            letterSpacing: "0.15em",
-            color: W.quaternary,
-            marginBottom: "14px",
-          }}>
-            OFF-THE-TOP EROSION
-          </div>
-          {/* Hero row */}
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "14px" }}>
-            <span style={{ fontSize: "15px", color: W.tertiary }}>Gone before recoupment</span>
-            <span style={{
-              fontFamily: "'Roboto Mono', monospace",
-              fontSize: "28px",
-              fontWeight: 500,
-              color: "rgba(224,82,82,0.85)",
-            }}>
-              &minus;{formatCompactCurrency(erosionTotal)}
-            </span>
-          </div>
-          {/* Stacked bar */}
-          <div style={{
-            height: "28px",
-            background: "rgba(255,255,255,0.04)",
+            padding: "20px",
+            border: "1px solid rgba(255,255,255,0.08)",
             borderRadius: "4px",
-            display: "flex",
-            overflow: "hidden",
-            marginBottom: "16px",
+            marginBottom: "20px",
           }}>
-            {erosionItems.map((item) => {
-              const widthPct = erosionTotal > 0 ? (item.amount / erosionTotal) * 100 : 0;
-              return (
-                <div
-                  key={item.label}
-                  style={{
-                    width: `${widthPct}%`,
-                    height: "100%",
+            {/* Hero row */}
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "14px" }}>
+              <span style={{ fontSize: "15px", color: W.tertiary }}>Gone before recoupment</span>
+              <span style={{ ...FONT.data, fontSize: "28px", color: "rgba(224,82,82,0.85)" }}>
+                &minus;{formatCompactCurrency(erosionTotal)}
+              </span>
+            </div>
+            {/* Stacked bar */}
+            <div style={{ height: "28px", background: "rgba(255,255,255,0.04)", borderRadius: "4px", display: "flex", overflow: "hidden", marginBottom: "16px" }}>
+              {erosionItems.map((item) => {
+                const widthPct = erosionTotal > 0 ? (item.amount / erosionTotal) * 100 : 0;
+                return (
+                  <div key={item.label} style={{
+                    width: `${widthPct}%`, height: "100%",
                     background: `rgba(224,82,82,${item.colorOpacity})`,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontFamily: "'Roboto Mono', monospace",
-                    fontSize: "10px",
-                    fontWeight: 500,
-                    color: "rgba(255,255,255,0.70)",
-                    letterSpacing: "0.06em",
-                  }}
-                >
-                  {widthPct > 10 ? item.label.split(" ")[0] : ""}
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    ...FONT.data, fontSize: "10px", color: "rgba(255,255,255,0.70)", letterSpacing: "0.06em",
+                  }}>
+                    {widthPct > 10 ? item.label.split(" ")[0] : ""}
+                  </div>
+                );
+              })}
+            </div>
+            {/* Item list */}
+            <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+              {erosionItems.map((item) => (
+                <div key={item.label} style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <span style={{ fontSize: "13px", color: W.tertiary, display: "flex", alignItems: "center", gap: "8px" }}>
+                    <span style={{ width: "8px", height: "8px", borderRadius: "2px", flexShrink: 0, background: `rgba(224,82,82,${item.colorOpacity})` }} />
+                    {item.label}
+                  </span>
+                  <span style={{ ...FONT.data, fontSize: "15px", color: W.secondary }}>
+                    {formatCompactCurrency(item.amount)}
+                  </span>
                 </div>
-              );
-            })}
+              ))}
+            </div>
           </div>
-          {/* Item list */}
-          <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-            {erosionItems.map((item) => (
-              <div key={item.label} style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <span style={{ fontSize: "13px", color: W.tertiary, display: "flex", alignItems: "center", gap: "8px" }}>
-                  <span style={{
-                    width: "8px",
-                    height: "8px",
-                    borderRadius: "2px",
-                    flexShrink: 0,
-                    background: `rgba(224,82,82,${item.colorOpacity})`,
-                  }} />
-                  {item.label}
-                </span>
-                <span style={{
-                  fontFamily: "'Roboto Mono', monospace",
-                  fontSize: "15px",
-                  fontWeight: 500,
-                  color: W.secondary,
-                }}>
-                  {formatCompactCurrency(item.amount)}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
+        </>
       )}
 
-      {/* NET STRIP */}
+      {/* Net strip */}
       <div style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        padding: "14px 20px",
-        background: netBg,
-        border: `1px solid ${netBorder}`,
-        borderRadius: "4px",
-        margin: "16px 0",
+        display: "flex", justifyContent: "space-between", alignItems: "center",
+        padding: "14px 20px", background: netBg, border: `1px solid ${netBorder}`,
+        borderRadius: "4px", marginBottom: "28px",
       }}>
         <span style={{ fontSize: "15px", color: W.tertiary }}>Net to Investors</span>
         <span style={{ ...FONT.data, fontSize: "26px", color: netColor }}>
@@ -877,22 +725,98 @@ const RealityCheck1Section = ({
         </span>
       </div>
 
-      {/* CLOSING PROSE */}
-      <div style={{ ...FONT.body, color: W.secondary }}>
-        <p>
-          <Num>{formatCompactCurrency(netDistributable)}</Num> in net receipts
-          against <Num>{formatCompactCurrency(cashBasis)}</Num> in investor principal.{" "}
-          <span style={{
-            color: investorReturnPct >= 100 ? SEM.green : investorReturnPct >= 80 ? SEM.amber : SEM.red,
-            fontWeight: 500,
+      {/* ── CAPITAL STACK VISUAL ── */}
+      {sources.length > 0 && (
+        <>
+          <div style={{ ...FONT.fine, color: W.quaternary, marginBottom: "12px" }}>CAPITAL STRUCTURE</div>
+          <div style={{
+            display: "flex", flexDirection: "column", gap: "2px",
+            marginBottom: "12px", border: "1px solid rgba(255,255,255,0.06)",
+            borderRadius: "4px", overflow: "hidden", background: "rgba(255,255,255,0.06)",
           }}>
-            Investors recoup at {Math.round(investorReturnPct)}% — a {result.multiple.toFixed(1)}&times; cash-on-cash multiple.
-          </span>
-          {inputs.budget > 0 && inputs.budget <= 5000000 && (
-            <> Strong for a sub-<Num>{formatCompactCurrency(Math.ceil(inputs.budget / 1000000) * 1000000)}</Num> production.</>
-          )}
-        </p>
-      </div>
+            {sources.map((s) => (
+              <div key={s.label} style={{ background: "#0A0A0A", padding: "16px" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                    <div style={{ width: "12px", height: "12px", borderRadius: "2px", background: s.color }} />
+                    <span style={{ fontSize: "15px", fontWeight: 500, color: W.secondary }}>{s.label}</span>
+                  </div>
+                  <span style={{ ...FONT.data, fontSize: "18px", color: W.primary }}>{formatCompactCurrency(s.amount)}</span>
+                </div>
+                <div style={{ display: "flex", justifyContent: "space-between", paddingLeft: "20px" }}>
+                  <span style={{ fontSize: "13px", color: W.quaternary }}>{s.detail}</span>
+                  <span style={{ ...FONT.data, fontSize: "13px", color: W.quaternary }}>{s.pctOfBudget}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+          {/* Stacked bar */}
+          <div style={{ height: "24px", borderRadius: "4px", display: "flex", overflow: "hidden", marginBottom: "28px" }}>
+            {sources.map((s) => {
+              const widthPct = inputs.budget > 0 ? (s.amount / inputs.budget) * 100 : 0;
+              return (
+                <div key={s.label} style={{
+                  width: `${widthPct}%`, height: "100%", background: s.color,
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                }}>
+                  {widthPct > 15 && (
+                    <span style={{ ...FONT.data, fontSize: "10px", color: W.secondary, letterSpacing: "0.08em" }}>
+                      {s.label.split(" ")[0].toUpperCase()}
+                    </span>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </>
+      )}
+
+      {/* ── SCENARIO TABLE VISUAL ── */}
+      {inputs.revenue > 0 && (
+        <>
+          <div style={{ ...FONT.fine, color: W.quaternary, marginBottom: "12px" }}>SCENARIO STRESS TEST</div>
+          <div style={{
+            border: "1px solid rgba(255,255,255,0.08)",
+            borderRadius: "4px", overflow: "hidden", marginBottom: "20px",
+          }}>
+            <div style={{
+              padding: "12px 20px", background: "rgba(255,255,255,0.04)",
+              ...FONT.fine, color: W.quaternary,
+            }}>IF YOUR ACQUISITION PRICE DROPS</div>
+            <div style={{ display: "flex", justifyContent: "flex-end", gap: "20px", padding: "10px 20px 0" }}>
+              <span style={{ ...FONT.fine, fontSize: "10px", letterSpacing: "0.10em", color: W.quaternary, textAlign: "right", minWidth: "56px" }}>RETURN</span>
+              <span style={{ ...FONT.fine, fontSize: "10px", letterSpacing: "0.10em", color: W.quaternary, textAlign: "right", minWidth: "56px" }}>MULTIPLE</span>
+            </div>
+            <div style={{ padding: "0 20px" }}>
+              {scenarios.map((s, i) => (
+                <div key={s.sub} style={{
+                  display: "flex", justifyContent: "space-between", alignItems: "center",
+                  padding: "12px 0",
+                  borderBottom: i < scenarios.length - 1 ? "1px solid rgba(255,255,255,0.06)" : "none",
+                  borderLeft: i === 0 ? "3px solid rgba(212,175,55,0.40)" : "none",
+                  paddingLeft: i === 0 ? "17px" : "0",
+                }}>
+                  <div>
+                    <span style={{ fontSize: "15px", color: W.tertiary }}>{s.label} </span>
+                    <span style={{ color: W.quaternary, fontSize: "11px" }}>{s.sub}</span>
+                  </div>
+                  <div style={{ display: "flex", gap: "20px" }}>
+                    <span style={{ ...FONT.data, fontSize: "15px", textAlign: "right", minWidth: "56px", color: s.color }}>
+                      {Math.round(s.returnPct)}%
+                    </span>
+                    <span style={{ ...FONT.data, fontSize: "15px", textAlign: "right", minWidth: "56px", color: s.color }}>
+                      {s.multiple.toFixed(1)}&times;
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* ── GATE 1: Sensitivity ── */}
+      <LockedSensitivitySection />
     </section>
   );
 };
@@ -900,7 +824,7 @@ const RealityCheck1Section = ({
 // ─── SECTION 3: LOCKED TEASER — SENSITIVITY ──────────────────────
 
 const LockedSensitivitySection = () => (
-  <section style={{ padding: "32px 24px 32px" }}>
+  <section style={{ padding: "0px 0px 0px" }}>
     {/* Label — content-descriptive, not "Premium Analysis" */}
     <div style={{ ...FONT.label, color: G.emphasis, marginBottom: "8px" }}>Scenario Modeling</div>
 
@@ -987,9 +911,9 @@ const LockedSensitivitySection = () => (
   </section>
 );
 
-// ─── SECTION 4: REALITY CHECK 2 ─────────────────────────────────
+// ─── LIGHTER TEXT: THE INTERPRETATION ────────────────────────────
 
-const RealityCheck2Section = ({
+const InterpretationSection = ({
   inputs, result, guilds, project,
 }: {
   inputs: WaterfallInputs;
@@ -997,208 +921,92 @@ const RealityCheck2Section = ({
   guilds: GuildState;
   project: ProjectDetails;
 }) => {
-  // Count load-bearing assumptions
-  const assumptions: string[] = [];
-  if (inputs.revenue > 0) assumptions.push("market valuation");
-  if (inputs.deferments > 0) assumptions.push("deferments");
-  if (inputs.credits > 0) assumptions.push("tax credit");
-  if (inputs.salesFee > 0) assumptions.push("agent terms");
-  if (inputs.equity > 0) assumptions.push("equity premium");
-  const assumptionCount = assumptions.length;
-
+  const cashBasis = computeCashBasis(inputs);
+  const investorReturnPct = computeInvestorReturnPct(result, inputs);
+  const netDistributable = Math.max(0, inputs.revenue - result.offTopTotal);
+  const marginOfSafety = inputs.revenue - cashBasis;
+  const erosionTotal = result.offTopTotal;
+  const erosionPct = inputs.revenue > 0 ? Math.round((erosionTotal / inputs.revenue) * 100) : 0;
   const location = project.location.trim();
   const creditPct = inputs.budget > 0 ? Math.round((inputs.credits / inputs.budget) * 100) : 0;
   const creditConcentration = inputs.budget > 0 ? (inputs.credits / inputs.budget) * 100 : 0;
 
-  // Scenario table
-  const modeledPrice = inputs.revenue;
-  const floorPrice = modeledPrice * 0.875;
-  const weakPrice = modeledPrice * 0.6875;
-  const distressedPrice = modeledPrice * 0.46875;
-
-  const scenarios = [
-    { price: modeledPrice, label: formatCompactCurrency(modeledPrice), sub: "modeled", haircut: "0%" },
-    { price: floorPrice, label: formatCompactCurrency(floorPrice), sub: "floor", haircut: "12.5%" },
-    { price: weakPrice, label: formatCompactCurrency(weakPrice), sub: "weak comps", haircut: "31.25%" },
-    { price: distressedPrice, label: formatCompactCurrency(distressedPrice), sub: "distressed", haircut: "53%" },
-  ].map((s) => {
-    const { returnPct, multiple } = computeScenarioReturn(inputs, guilds, s.price);
-    const color = returnPct > 100 ? SEM.green : returnPct > 50 ? SEM.amber : SEM.red;
-    return { ...s, returnPct, multiple, color };
-  });
-
-  // Cash basis and margin
-  const cashBasis = computeCashBasis(inputs);
-  const marginOfSafety = inputs.revenue - cashBasis;
-  const floorReturn = scenarios[1];
-
   return (
     <section style={{ padding: "40px 24px 40px" }}>
-      {/* Label */}
-      <div style={{ ...FONT.label, color: G.emphasis, marginBottom: "8px" }}>Risk Analysis</div>
+      {/* Full headline treatment — this is a text block */}
+      <div style={{ ...FONT.label, color: G.emphasis, marginBottom: "8px" }}>What The Numbers Say</div>
+      <div style={{ ...FONT.display, color: W.primary, marginBottom: "16px" }}>THE INTERPRETATION</div>
 
-      {/* Headline */}
-      <div style={{ ...FONT.display, color: W.primary, marginBottom: "16px" }}>THE RISK</div>
-
-      {/* PROSE BLOCK — assumptions, credit concentration, deferments */}
-      <div style={{ ...FONT.body, color: W.secondary, marginBottom: "20px" }}>
-        <p style={{ marginBottom: "20px" }}>
-          This model holds if {assumptionCount} assumption{assumptionCount !== 1 ? "s" : ""} survive
-          production{assumptions.length > 0 ? `: your ${assumptions.slice(0, 3).join(", your ")}` : ""}.
-          {assumptions.length > 3 && ` and ${assumptions.length - 3} more`}.
-          All are real — and all can collapse.
-        </p>
-
-        {/* Tax credit concentration — inline */}
-        {inputs.credits > 0 && (
-          <p style={{ marginBottom: "20px" }}>
-            {location || "Your state"}&rsquo;s <Num>{creditPct}%</Num> credit
-            converts <Num>{formatCompactCurrency(inputs.credits)}</Num> in qualified spend into
-            transferable credits — but <Num>{Math.round(creditConcentration)}%</Num> of
-            your financing depends on that single incentive program.
-            Remove it and your cash basis jumps
-            to <Num>{formatCompactCurrency(inputs.budget - inputs.deferments)}</Num>,
-            compressing the margin that makes this deal work.
-          </p>
-        )}
-
-        {/* Deferment risk — inline */}
-        {inputs.deferments > 0 && (
-          <p style={{ marginBottom: "20px" }}>
-            &ldquo;Deferred&rdquo; means different things to different lawyers.{" "}
-            <Num>{formatCompactCurrency(inputs.deferments)}</Num> in producer fees pushed past
-            first-day-of-principal doesn&rsquo;t save your investors anything if the production entity pays
-            them from first revenues. If those fees accelerate on delivery rather than on recoupment,
-            they&rsquo;re debt by another name and your cash basis is fiction.
-          </p>
-        )}
-      </div>
-
-      {/* VISUAL — Scenario table */}
-      {inputs.revenue > 0 && (
-        <div style={{
-          margin: "0 0 20px",
-          border: "1px solid rgba(255,255,255,0.08)",
-          borderRadius: "4px",
-          overflow: "hidden",
-        }}>
-          <div style={{
-            padding: "12px 20px",
-            background: "rgba(255,255,255,0.04)",
-            ...FONT.label,
-            fontSize: "11px",
-            letterSpacing: "0.15em",
-            color: W.quaternary,
-          }}>
-            IF YOUR ACQUISITION PRICE DROPS
-          </div>
-          {/* Col labels */}
-          <div style={{ display: "flex", justifyContent: "flex-end", gap: "20px", padding: "10px 20px 0" }}>
-            <span style={{ ...FONT.fine, fontSize: "10px", letterSpacing: "0.10em", color: W.quaternary, textAlign: "right", minWidth: "56px" }}>RETURN</span>
-            <span style={{ ...FONT.fine, fontSize: "10px", letterSpacing: "0.10em", color: W.quaternary, textAlign: "right", minWidth: "56px" }}>MULTIPLE</span>
-          </div>
-          {/* Rows */}
-          <div style={{ padding: "0 20px" }}>
-            {scenarios.map((s, i) => (
-              <div key={s.sub} style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                padding: "12px 0",
-                borderBottom: i < scenarios.length - 1 ? "1px solid rgba(255,255,255,0.06)" : "none",
-                borderLeft: i === 0 ? "3px solid rgba(212,175,55,0.40)" : "none",
-                paddingLeft: i === 0 ? "17px" : "0",
-              }}>
-                <div>
-                  <span style={{ fontSize: "15px", color: W.tertiary }}>{s.label} </span>
-                  <span style={{ color: W.quaternary, fontSize: "11px" }}>{s.sub}</span>
-                </div>
-                <div style={{ display: "flex", gap: "20px" }}>
-                  <span style={{
-                    fontFamily: "'Roboto Mono', monospace",
-                    fontSize: "15px",
-                    fontWeight: 500,
-                    textAlign: "right",
-                    minWidth: "56px",
-                    color: s.color,
-                  }}>
-                    {Math.round(s.returnPct)}%
-                  </span>
-                  <span style={{
-                    fontFamily: "'Roboto Mono', monospace",
-                    fontSize: "15px",
-                    fontWeight: 500,
-                    textAlign: "right",
-                    minWidth: "56px",
-                    color: s.color,
-                  }}>
-                    {s.multiple.toFixed(1)}&times;
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* PROSE — interpret the scenarios */}
       <div style={{ ...FONT.body, color: W.secondary }}>
+        {/* Paragraph 1: Erosion + net distributable interpretation */}
         <p style={{ marginBottom: "20px" }}>
-          Your <Num>{formatCompactCurrency(inputs.revenue)}</Num> valuation is pegged to comparable
-          titles in the current acquisition market. Drop to
-          the <Num>{formatCompactCurrency(distressedPrice)}</Num>–<Num>{formatCompactCurrency(weakPrice)}</Num> bracket
-          and your investors go from <span style={{ color: SEM.green, fontWeight: 500 }}>profit</span> to{" "}
-          <span style={{ color: SEM.red, fontWeight: 500 }}>principal loss</span>.
+          Off-the-top deductions consume <Num>{formatCompactCurrency(erosionTotal)}</Num> — roughly <Num>{erosionPct}%</Num> of
+          your <Num>{formatCompactCurrency(inputs.revenue)}</Num> acquisition price — before a dollar reaches the
+          production entity. What survives is <Num>{formatCompactCurrency(netDistributable)}</Num> in net
+          distributable revenue against <Num>{formatCompactCurrency(cashBasis)}</Num> in investor principal.
+          {investorReturnPct >= 100 && (
+            <> At the base case, investors recoup in full and earn a <Num>{Math.round(investorReturnPct)}%</Num> return.</>
+          )}
+          {investorReturnPct >= 80 && investorReturnPct < 100 && (
+            <> At the base case, investors recover <Num>{Math.round(investorReturnPct)}%</Num> of principal — close to whole, but not there.</>
+          )}
+          {investorReturnPct < 80 && (
+            <> At the base case, investors recover only <Num>{Math.round(investorReturnPct)}%</Num> of principal. The gap is structural.</>
+          )}
         </p>
-      </div>
 
-      {/* CALLOUT — margin of safety */}
-      {marginOfSafety > 0 && (
-        <div style={{
-          background: "rgba(60,179,113,0.06)",
-          borderLeft: "3px solid rgba(60,179,113,0.50)",
-          padding: "16px 20px",
-          borderRadius: "0 4px 4px 0",
-        }}>
-          <div style={{
-            ...FONT.label,
-            fontSize: "11px",
-            letterSpacing: "0.15em",
-            color: "rgba(60,179,113,0.70)",
-            marginBottom: "6px",
-          }}>
-            MARGIN OF SAFETY
-          </div>
-          <div style={{ fontSize: "15px", color: W.secondary, lineHeight: 1.6 }}>
-            Cash basis of {formatCompactCurrency(cashBasis)} against
-            a {formatCompactCurrency(inputs.revenue)} ceiling
-            gives you {formatCompactCurrency(marginOfSafety)} of room.
-            {floorReturn && floorReturn.returnPct >= 100 && (
-              <> Even at the {formatCompactCurrency(floorPrice)} floor, investors recoup principal plus a modest return.</>
-            )}
-          </div>
-        </div>
-      )}
+        {/* Paragraph 2: Risk concentration */}
+        <p style={{ marginBottom: "20px" }}>
+          {inputs.credits > 0 && (
+            <>{location || "Your state"}&rsquo;s <Num>{creditPct}%</Num> credit accounts
+            for <Num>{Math.round(creditConcentration)}%</Num> of your financing.
+            Remove it and your cash basis jumps
+            to <Num>{formatCompactCurrency(inputs.budget - inputs.deferments)}</Num>. </>
+          )}
+          {inputs.deferments > 0 && (
+            <>The <Num>{formatCompactCurrency(inputs.deferments)}</Num> in deferred fees reduces your cash exposure
+            on paper — but only if those fees truly accelerate on recoupment, not on delivery. </>
+          )}
+          {marginOfSafety > 0 ? (
+            <>The margin between cash basis and market value
+            is <Num>{formatCompactCurrency(marginOfSafety)}</Num>. That&rsquo;s where the deal lives or dies.</>
+          ) : (
+            <>There is no margin between cash basis and market value. Every dollar of the budget must be recouped from a sale that hasn&rsquo;t happened yet.</>
+          )}
+        </p>
+
+        {/* Paragraph 3: Scenario interpretation */}
+        {inputs.revenue > 0 && (
+          <p>
+            The scenario table shows what happens when the market moves against you. A <Num>12.5%</Num> haircut
+            from your modeled price is a normal negotiation concession. A <Num>31%</Num> haircut
+            is a weak market. Beyond that, you&rsquo;re in distress territory. The question isn&rsquo;t
+            whether the base case works — it&rsquo;s how far the price can drop before your investors lose money.
+          </p>
+        )}
+      </div>
     </section>
   );
 };
 
-// ─── SECTION 5: FULL VISUAL — DEDUCTIONS ─────────────────────────
+// ─── VISUAL CLUSTER 2: THE WATERFALL ────────────────────────────
 
-const DeductionsSection = ({
-  inputs, result, guilds,
+const VisualCluster2 = ({
+  tiers, result, inputs, guilds,
 }: {
-  inputs: WaterfallInputs;
+  tiers: TierPayment[];
   result: WaterfallResult;
+  inputs: WaterfallInputs;
   guilds: GuildState;
 }) => {
   const netDistributable = Math.max(0, inputs.revenue - result.offTopTotal);
+  const backendPool = result.profitPool;
 
-  // Build ledger rows
-  const rows: { label: string; rate: string; amount: number; isGross?: boolean; isTotal?: boolean }[] = [];
+  // Deductions ledger rows
+  const rows: { label: string; rate: string; amount: number; isGross?: boolean }[] = [];
   rows.push({ label: "Gross Receipts", rate: "", amount: inputs.revenue, isGross: true });
   if (result.cam > 0) rows.push({ label: "CAM Fee", rate: `${(CAM_PCT * 100).toFixed(1)}%`, amount: result.cam });
-  if (result.salesFee > 0) rows.push({ label: "Sales Commission", rate: `blended ${inputs.salesFee}%`, amount: result.salesFee });
+  if (result.salesFee > 0) rows.push({ label: "Sales Commission", rate: `${inputs.salesFee}%`, amount: result.salesFee });
   if (result.marketing > 0) rows.push({ label: "Sales Agent Expenses", rate: "capped", amount: result.marketing });
   if (result.guilds > 0) {
     const parts: string[] = [];
@@ -1208,264 +1016,114 @@ const DeductionsSection = ({
     rows.push({ label: "Guild Reserves", rate: parts.join("+"), amount: result.guilds });
   }
 
+  // Cascade data
+  const cascadeTiers = [
+    ...tiers,
+    ...(backendPool > 0 ? [{ phase: tiers.length + 1, label: "Backend Pool", amount: backendPool, paid: backendPool, status: "partial" as const }] : []),
+  ];
+
   return (
-    <section style={{ padding: "40px 24px 40px" }}>
-      {/* 5a */}
-      <div style={{ ...FONT.label, color: G.emphasis, marginBottom: "8px" }}>Full Breakdown</div>
+    <section style={{ padding: "32px 24px 40px" }}>
 
-      {/* 5b */}
-      <div style={{ ...FONT.display, color: W.primary, marginBottom: "8px" }}>THE DEDUCTIONS</div>
-
-      {/* 5c */}
-      <div style={{ fontSize: "14px", color: W.tertiary, marginBottom: "16px" }}>
-        Every deduction between acquisition price and investor payout
-      </div>
-
-      {/* 5d. Ledger */}
+      {/* ── DEDUCTIONS LEDGER ── */}
+      <div style={{ ...FONT.fine, color: W.quaternary, marginBottom: "12px" }}>GROSS TO NET</div>
       <div style={{
-        border: "1px solid rgba(255,255,255,0.08)",
-        borderRadius: "4px",
-        overflow: "hidden",
-        marginBottom: "24px",
+        border: "1px solid rgba(255,255,255,0.08)", borderRadius: "4px",
+        overflow: "hidden", marginBottom: "28px",
       }}>
         {/* Header */}
         <div style={{
-          display: "flex",
-          justifyContent: "space-between",
-          padding: "12px 16px",
-          background: "rgba(255,255,255,0.04)",
-          ...FONT.fine,
-          fontSize: "10px",
-          letterSpacing: "0.15em",
-          color: W.quaternary,
+          display: "flex", justifyContent: "space-between", padding: "12px 16px",
+          background: "rgba(255,255,255,0.04)", ...FONT.fine, color: W.quaternary,
         }}>
-          <span>DEDUCTION</span>
-          <span>AMOUNT</span>
+          <span>DEDUCTION</span><span>AMOUNT</span>
         </div>
         {/* Rows */}
         {rows.map((row) => (
           <div key={row.label} style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            padding: "14px 16px",
-            borderTop: "1px solid rgba(255,255,255,0.06)",
+            display: "flex", justifyContent: "space-between", alignItems: "center",
+            padding: "14px 16px", borderTop: "1px solid rgba(255,255,255,0.06)",
           }}>
             <div style={{ fontSize: "15px", color: W.tertiary }}>
               {row.label}
               {row.rate && (
-                <span style={{
-                  fontFamily: "'Roboto Mono', monospace",
-                  fontSize: "13px",
-                  color: W.quaternary,
-                  marginLeft: "6px",
-                }}>
+                <span style={{ ...FONT.data, fontSize: "13px", color: W.quaternary, marginLeft: "6px" }}>
                   {row.rate}
                 </span>
               )}
             </div>
-            <span style={{
-              fontFamily: "'Roboto Mono', monospace",
-              fontSize: "15px",
-              fontWeight: 500,
-              color: row.isGross ? W.primary : "rgba(224,82,82,0.75)",
-            }}>
+            <span style={{ ...FONT.data, fontSize: "15px", color: row.isGross ? W.primary : "rgba(224,82,82,0.75)" }}>
               {row.isGross ? formatFullCurrency(row.amount) : `\u2212${formatFullCurrency(row.amount)}`}
             </span>
           </div>
         ))}
         {/* Total */}
         <div style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          padding: "14px 16px",
-          borderTop: "2px solid rgba(255,255,255,0.12)",
+          display: "flex", justifyContent: "space-between", alignItems: "center",
+          padding: "14px 16px", borderTop: "2px solid rgba(255,255,255,0.12)",
           background: "rgba(255,255,255,0.03)",
         }}>
           <span style={{ fontSize: "15px", fontWeight: 600, color: W.secondary }}>Net Distributable</span>
-          <span style={{
-            fontFamily: "'Roboto Mono', monospace",
-            fontSize: "22px",
-            fontWeight: 500,
-            color: SEM.green,
-          }}>
+          <span style={{ ...FONT.data, fontSize: "22px", color: SEM.green }}>
             {formatFullCurrency(netDistributable)}
           </span>
         </div>
       </div>
 
-    </section>
-  );
-};
-
-// ─── SECTION 6: FULL VISUAL — CASCADE ────────────────────────────
-
-const CascadeSection = ({
-  tiers, result, inputs,
-}: {
-  tiers: TierPayment[];
-  result: WaterfallResult;
-  inputs: WaterfallInputs;
-}) => {
-  const netDistributable = Math.max(0, inputs.revenue - result.offTopTotal);
-
-  // Build cascade data: Senior Debt → Equity → Deferred → Backend
-  // Use tiers from computeTierPayments + add backend
-  const backendPool = result.profitPool;
-
-  const cascadeTiers = [
-    ...tiers,
-    ...(backendPool > 0 ? [{
-      phase: tiers.length + 1,
-      label: "Backend Pool",
-      amount: backendPool,
-      paid: backendPool,
-      status: "partial" as const,
-    }] : []),
-  ];
-
-  return (
-    <section style={{ padding: "40px 24px 40px" }}>
-      {/* 6a */}
-      <div style={{ ...FONT.label, color: G.emphasis, marginBottom: "8px" }}>Recoupment Waterfall</div>
-
-      {/* 6b */}
-      <div style={{ ...FONT.display, color: W.primary, marginBottom: "8px" }}>THE CASCADE</div>
-
-      {/* 6c */}
-      <div style={{ fontSize: "14px", color: W.tertiary, marginBottom: "16px" }}>
-        Net distributable: {formatFullCurrency(netDistributable)} flowing through the waterfall
-      </div>
-
-      {/* 6d. Cascade Tier Cards */}
+      {/* ── CASCADE TIER CARDS ── */}
+      <div style={{ ...FONT.fine, color: W.quaternary, marginBottom: "12px" }}>RECOUPMENT CASCADE</div>
       <div style={{
-        margin: "24px 0",
-        display: "flex",
-        flexDirection: "column",
-        gap: "16px",
-        position: "relative",
-        paddingLeft: "16px",
+        display: "flex", flexDirection: "column", gap: "16px",
+        position: "relative", paddingLeft: "16px", marginBottom: "20px",
       }}>
-        {/* Vertical connecting line — only render if 2+ tiers */}
+        {/* Vertical connecting line */}
         {cascadeTiers.length >= 2 && (
           <div style={{
-            position: "absolute",
-            left: "3px",
-            top: "24px",
-            bottom: "24px",
+            position: "absolute", left: "3px", top: "24px", bottom: "24px",
             width: "2px",
             background: "linear-gradient(180deg, rgba(212,175,55,0.30), rgba(212,175,55,0.15))",
             borderRadius: "1px",
           }} />
         )}
 
+        {/* Tier cards */}
         {cascadeTiers.map((tier) => {
           const fillPct = netDistributable > 0 ? (tier.paid / netDistributable) * 100 : 0;
           const isFunded = tier.status === "funded";
           const isPartial = tier.status === "partial";
           const isBackend = tier.label === "Backend Pool";
 
-          // Color scheme
-          const borderColor = isFunded
-            ? "rgba(60,179,113,0.15)"
-            : isPartial || isBackend
-            ? "rgba(212,175,55,0.15)"
-            : "rgba(224,82,82,0.10)";
-          const bgColor = isFunded
-            ? "rgba(60,179,113,0.03)"
-            : isPartial || isBackend
-            ? "rgba(212,175,55,0.03)"
-            : "rgba(224,82,82,0.02)";
-          const dotColor = isFunded
-            ? "#3CB371"
-            : isPartial || isBackend
-            ? "rgba(212,175,55,0.70)"
-            : "rgba(224,82,82,0.50)";
-          const dotBorder = isFunded
-            ? "rgba(60,179,113,0.70)"
-            : isPartial || isBackend
-            ? "rgba(212,175,55,0.70)"
-            : "rgba(224,82,82,0.50)";
+          const borderColor = isFunded ? "rgba(60,179,113,0.15)" : isPartial || isBackend ? "rgba(212,175,55,0.15)" : "rgba(224,82,82,0.10)";
+          const bgColor = isFunded ? "rgba(60,179,113,0.03)" : isPartial || isBackend ? "rgba(212,175,55,0.03)" : "rgba(224,82,82,0.02)";
+          const dotColor = isFunded ? "#3CB371" : isPartial || isBackend ? "rgba(212,175,55,0.70)" : "rgba(224,82,82,0.50)";
+          const dotBorder = isFunded ? "rgba(60,179,113,0.70)" : isPartial || isBackend ? "rgba(212,175,55,0.70)" : "rgba(224,82,82,0.50)";
           const dotGlow = isFunded ? "0 0 6px rgba(60,179,113,0.30)" : "none";
-          const barGradient = isFunded
-            ? "linear-gradient(90deg, rgba(60,179,113,0.25), rgba(60,179,113,0.45))"
-            : isPartial || isBackend
-            ? "linear-gradient(90deg, rgba(212,175,55,0.20), rgba(212,175,55,0.40))"
-            : "linear-gradient(90deg, rgba(224,82,82,0.15), rgba(224,82,82,0.30))";
+          const barGradient = isFunded ? "linear-gradient(90deg, rgba(60,179,113,0.25), rgba(60,179,113,0.45))" : isPartial || isBackend ? "linear-gradient(90deg, rgba(212,175,55,0.20), rgba(212,175,55,0.40))" : "linear-gradient(90deg, rgba(224,82,82,0.15), rgba(224,82,82,0.30))";
           const valueColor = isFunded ? SEM.green : isPartial || isBackend ? G.emphasis : SEM.red;
-
-          const badgeStyle: React.CSSProperties = isFunded
-            ? { background: "rgba(60,179,113,0.15)", color: SEM.green }
-            : isPartial
-            ? { background: "rgba(240,168,48,0.20)", color: SEM.amber }
-            : isBackend
-            ? { background: "rgba(212,175,55,0.12)", color: G.emphasis }
-            : { background: "rgba(224,82,82,0.15)", color: "rgba(224,82,82,0.70)" };
+          const badgeStyle: React.CSSProperties = isFunded ? { background: "rgba(60,179,113,0.15)", color: SEM.green } : isPartial ? { background: "rgba(240,168,48,0.20)", color: SEM.amber } : isBackend ? { background: "rgba(212,175,55,0.12)", color: G.emphasis } : { background: "rgba(224,82,82,0.15)", color: "rgba(224,82,82,0.70)" };
           const badgeText = isFunded ? "FUNDED" : isPartial ? "PARTIAL" : isBackend ? "SURPLUS" : "ZERO";
-
-          // Display label
-          const displayLabel = tier.label === "Equity + Premium" && inputs.premium > 0
-            ? `Equity (${100 + inputs.premium}%)`
-            : tier.label === "Deferments"
-            ? "Deferred Fees"
-            : tier.label;
+          const displayLabel = tier.label === "Equity + Premium" && inputs.premium > 0 ? `Equity (${100 + inputs.premium}%)` : tier.label === "Deferments" ? "Deferred Fees" : tier.label;
 
           return (
             <div key={tier.label} style={{ position: "relative" }}>
-              {/* Node dot on connecting line */}
               {cascadeTiers.length >= 2 && (
                 <div style={{
-                  position: "absolute",
-                  left: "-16px",
-                  top: "20px",
-                  width: "8px",
-                  height: "8px",
-                  borderRadius: "50%",
-                  background: dotColor,
-                  border: `1.5px solid ${dotBorder}`,
-                  boxShadow: dotGlow,
+                  position: "absolute", left: "-16px", top: "20px",
+                  width: "8px", height: "8px", borderRadius: "50%",
+                  background: dotColor, border: `1.5px solid ${dotBorder}`, boxShadow: dotGlow,
                 }} />
               )}
-
-              {/* Tier card */}
-              <div style={{
-                padding: "16px",
-                border: `1px solid ${borderColor}`,
-                borderRadius: "6px",
-                background: bgColor,
-              }}>
-                {/* Row 1: label + badge */}
+              <div style={{ padding: "16px", border: `1px solid ${borderColor}`, borderRadius: "6px", background: bgColor }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                    <div style={{
-                      width: "6px", height: "6px", borderRadius: "50%",
-                      background: dotColor, boxShadow: dotGlow,
-                    }} />
-                    <span style={{ fontSize: "13px", fontWeight: 500, color: W.secondary }}>
-                      {displayLabel}
-                    </span>
+                    <div style={{ width: "6px", height: "6px", borderRadius: "50%", background: dotColor, boxShadow: dotGlow }} />
+                    <span style={{ fontSize: "13px", fontWeight: 500, color: W.secondary }}>{displayLabel}</span>
                   </div>
-                  <span style={{
-                    fontSize: "9px", fontWeight: 700, letterSpacing: "0.10em",
-                    textTransform: "uppercase" as const, padding: "3px 8px", borderRadius: "3px",
-                    ...badgeStyle,
-                  }}>{badgeText}</span>
+                  <span style={{ fontSize: "9px", fontWeight: 700, letterSpacing: "0.10em", textTransform: "uppercase" as const, padding: "3px 8px", borderRadius: "3px", ...badgeStyle }}>{badgeText}</span>
                 </div>
-
-                {/* Row 2: fill bar */}
                 <div style={{ height: "8px", background: "rgba(255,255,255,0.04)", borderRadius: "4px", overflow: "hidden", marginBottom: "8px" }}>
-                  {fillPct > 0 && (
-                    <div style={{
-                      height: "100%",
-                      width: `${Math.min(100, fillPct)}%`,
-                      borderRadius: "4px",
-                      background: barGradient,
-                    }} />
-                  )}
+                  {fillPct > 0 && <div style={{ height: "100%", width: `${Math.min(100, fillPct)}%`, borderRadius: "4px", background: barGradient }} />}
                 </div>
-
-                {/* Row 3: amounts */}
                 <div style={{ display: "flex", justifyContent: "space-between" }}>
                   <span style={{ ...FONT.data, fontSize: "14px", color: W.tertiary }}>
                     {formatCompactCurrency(tier.paid)}{tier.amount > 0 ? ` / ${formatCompactCurrency(tier.amount)}` : ""}
@@ -1489,176 +1147,8 @@ const CascadeSection = ({
         </div>
       </div>
 
-      {/* 6e. Cascade Prose */}
-      <div style={{ ...FONT.body, color: W.secondary }}>
-        <p>
-          {(() => {
-            const fundedTiers = tiers.filter((t) => t.status === "funded");
-            const allFunded = fundedTiers.length === tiers.length;
-            if (allFunded && backendPool > 0) {
-              const investorBackend = Math.round(backendPool * 0.5);
-              const producerBackend = Math.round(backendPool * 0.5);
-              return (
-                <>
-                  Every tier above the line is fully funded. The backend pool — split per the operating agreement between
-                  investors and producers — gets what&rsquo;s left: <Num>{formatCompactCurrency(backendPool)}</Num>.
-                  Your equity partners collect <Num>{formatCompactCurrency(investorBackend)}</Num> on top of
-                  their recoupment. Your creative team splits the other half.
-                </>
-              );
-            }
-            if (allFunded) {
-              return <>All capital tiers are fully funded at the base case acquisition price. No backend surplus remains.</>;
-            }
-            const partialTier = tiers.find((t) => t.status === "partial");
-            if (partialTier) {
-              return (
-                <>
-                  Revenue exhausts during the {partialTier.label} tier — investors
-                  recover {Math.round((partialTier.paid / partialTier.amount) * 100)}% of that
-                  obligation. Downstream tiers are unfunded.
-                </>
-              );
-            }
-            return <>Revenue does not fully fund any capital tier at this acquisition price.</>;
-          })()}
-        </p>
-      </div>
-    </section>
-  );
-};
-
-// ─── SECTION 5b: CAPITAL STACK ───────────────────────────────────
-
-const CapitalStackSection = ({
-  inputs, selections,
-}: {
-  inputs: WaterfallInputs;
-  selections?: CapitalSelections;
-}) => {
-  const sources: { label: string; amount: number; detail: string; pctOfBudget: string; color: string }[] = [];
-
-  if (inputs.debt > 0) sources.push({
-    label: "Senior Debt",
-    amount: inputs.debt,
-    detail: `First position · ${inputs.seniorDebtRate}% interest`,
-    pctOfBudget: `${Math.round((inputs.debt / inputs.budget) * 100)}% of budget`,
-    color: "rgba(255,255,255,0.15)",
-  });
-  if (inputs.mezzanineDebt > 0) sources.push({
-    label: "Mezzanine / Gap",
-    amount: inputs.mezzanineDebt,
-    detail: `Second position · ${inputs.mezzanineRate}% interest`,
-    pctOfBudget: `${Math.round((inputs.mezzanineDebt / inputs.budget) * 100)}% of budget`,
-    color: "rgba(240,168,48,0.30)",
-  });
-  if (inputs.equity > 0) sources.push({
-    label: "Equity",
-    amount: inputs.equity,
-    detail: `${inputs.premium > 0 ? `${inputs.premium}% preferred return` : "Pari passu"}`,
-    pctOfBudget: `${Math.round((inputs.equity / inputs.budget) * 100)}% of budget`,
-    color: "rgba(212,175,55,0.40)",
-  });
-  if (inputs.credits > 0) sources.push({
-    label: "Tax Credits",
-    amount: inputs.credits,
-    detail: "Non-dilutive",
-    pctOfBudget: `${Math.round((inputs.credits / inputs.budget) * 100)}% of budget`,
-    color: "rgba(60,179,113,0.30)",
-  });
-  if (inputs.deferments > 0) sources.push({
-    label: "Deferrals",
-    amount: inputs.deferments,
-    detail: "Subordinate to all capital",
-    pctOfBudget: `${Math.round((inputs.deferments / inputs.budget) * 100)}% of budget`,
-    color: "rgba(255,255,255,0.10)",
-  });
-
-  if (sources.length === 0) return null;
-
-  // Prose
-  const debtTotal = inputs.debt + inputs.mezzanineDebt;
-  const equityTotal = inputs.equity;
-  const deRatio = equityTotal > 0 ? (debtTotal / equityTotal).toFixed(1) : "N/A";
-  const complexity = sources.length <= 2 ? "clean structure" : sources.length === 3 ? "standard structure" : "layered structure";
-
-  let prose = `${sources.length} capital source${sources.length > 1 ? "s" : ""} — a ${complexity}.`;
-  if (debtTotal > 0 && equityTotal > 0) {
-    prose += ` Debt-to-equity ratio of ${deRatio}:1.`;
-  }
-  if (inputs.debt > 0) {
-    prose += " Senior debt holds first position in the recoupment waterfall.";
-  }
-  if (inputs.mezzanineDebt > 0) {
-    prose += " Mezzanine sits behind senior debt but ahead of equity.";
-  }
-
-  return (
-    <section style={{ padding: "40px 24px 40px" }}>
-      {/* Label */}
-      <div style={{ ...FONT.label, color: G.emphasis, marginBottom: "8px" }}>Capital Structure</div>
-
-      {/* Headline */}
-      <div style={{ ...FONT.display, color: W.primary, marginBottom: "8px" }}>THE CAPITAL STACK</div>
-
-      {/* Subtitle */}
-      <div style={{ fontSize: "14px", color: W.tertiary, marginBottom: "16px" }}>
-        Your financing structure and what each source costs
-      </div>
-
-      {/* Stack blocks */}
-      <div style={{
-        display: "flex",
-        flexDirection: "column",
-        gap: "2px",
-        background: "rgba(255,255,255,0.06)",
-        borderRadius: "4px",
-        overflow: "hidden",
-      }}>
-        {sources.map((s) => (
-          <div key={s.label} style={{ background: "#0A0A0A", padding: "16px" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                <div style={{ width: "12px", height: "12px", borderRadius: "2px", background: s.color }} />
-                <span style={{ fontSize: "14px", fontWeight: 500, color: W.secondary }}>{s.label}</span>
-              </div>
-              <span style={{ ...FONT.data, fontSize: "18px", color: W.primary }}>{formatCompactCurrency(s.amount)}</span>
-            </div>
-            <div style={{ display: "flex", justifyContent: "space-between", paddingLeft: "20px" }}>
-              <span style={{ fontSize: "13px", color: W.quaternary }}>{s.detail}</span>
-              <span style={{ ...FONT.data, fontSize: "13px", color: W.quaternary }}>{s.pctOfBudget}</span>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Stacked bar */}
-      <div style={{ height: "24px", borderRadius: "4px", display: "flex", overflow: "hidden", margin: "24px 0" }}>
-        {sources.map((s) => {
-          const widthPct = inputs.budget > 0 ? (s.amount / inputs.budget) * 100 : 0;
-          return (
-            <div key={s.label} style={{
-              width: `${widthPct}%`,
-              height: "100%",
-              background: s.color,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}>
-              {widthPct > 15 && (
-                <span style={{ ...FONT.data, fontSize: "10px", color: W.secondary, letterSpacing: "0.08em" }}>
-                  {s.label.split(" ")[0].toUpperCase()}
-                </span>
-              )}
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Prose */}
-      <div style={{ ...FONT.body, color: W.secondary }}>
-        <p>{prose}</p>
-      </div>
+      {/* ── GATE 2: Comps ── */}
+      <LockedComparableSection />
     </section>
   );
 };
@@ -1666,7 +1156,7 @@ const CapitalStackSection = ({
 // ─── SECTION 8: LOCKED COMPARABLE (Gate 2) ──────────────────────
 
 const LockedComparableSection = () => (
-  <section style={{ padding: "32px 24px" }}>
+  <section style={{ padding: "20px 0px 0px" }}>
     <div style={{
       display: "flex",
       alignItems: "center",
@@ -1710,7 +1200,7 @@ const LockedComparableSection = () => (
 // ─── SECTION 7: LOCKED TEASER — INVESTOR MEMO ───────────────────
 
 const LockedInvestorMemoSection = () => (
-  <section style={{ padding: "32px 24px 32px", background: "rgba(212,175,55,0.015)" }}>
+  <section style={{ padding: "20px 0px 0px" }}>
     {/* Label */}
     <div style={{ ...FONT.label, color: G.emphasis, marginBottom: "8px" }}>Investor Documents</div>
 
@@ -1827,45 +1317,114 @@ const LockedInvestorMemoSection = () => (
   </section>
 );
 
-// ─── SECTION: CLOSING ─────────────────────────────────────────
+// ─── DENSE TEXT: THE CONCLUSION ──────────────────────────────────
 
-const ClosingSection = ({
-  inputs, result,
+const ConclusionSection = ({
+  inputs, result, guilds, project,
 }: {
   inputs: WaterfallInputs;
   result: WaterfallResult;
+  guilds: GuildState;
+  project: ProjectDetails;
 }) => {
   const multiple = result.multiple;
+  const investorReturnPct = inputs.equity > 0 ? (result.investor / inputs.equity) * 100 : 0;
+  const cashBasis = computeCashBasis(inputs);
+  const netDistributable = Math.max(0, inputs.revenue - result.offTopTotal);
+  const tiers = computeTierPayments(result, inputs);
+  const allFunded = tiers.every(t => t.status === "funded");
+  const backendPool = result.profitPool;
 
-  // Conditional tone based on deal quality
-  let toneP3: string;
+  // Verdict pull-quote
+  let verdictText: string;
+  let borderColor: string;
   if (multiple >= 1.5) {
-    toneP3 = "This structure supports a confident presentation. The math is clean, the margin is real, and the waterfall is defensible.";
+    verdictText = "THE MATH SUPPORTS A CONFIDENT PRESENTATION.";
+    borderColor = "rgba(60,179,113,0.40)";
   } else if (multiple >= 1.0) {
-    toneP3 = "The margin is honest. In a room full of inflated projections, an honest model is a competitive advantage.";
+    verdictText = "THE MARGIN IS HONEST. IN A ROOM FULL OF INFLATED PROJECTIONS, THAT'S AN ADVANTAGE.";
+    borderColor = "rgba(212,175,55,0.40)";
   } else if (multiple >= 0.7) {
-    toneP3 = "The structure is tight. That's not a disqualifier — it means the deal depends on execution. The investor who funds this needs to believe in the team, not just the spreadsheet.";
+    verdictText = "THE STRUCTURE IS TIGHT. THE DEAL DEPENDS ON EXECUTION.";
+    borderColor = "rgba(240,168,48,0.40)";
   } else {
-    toneP3 = "You've identified the structural gap before anyone else saw it. That's the point of modeling — finding the problem while you can still fix it.";
+    verdictText = "YOU'VE FOUND THE GAP BEFORE ANYONE ELSE SAW IT. THAT'S THE POINT OF MODELING.";
+    borderColor = "rgba(224,82,82,0.40)";
   }
 
   return (
     <section style={{ padding: "40px 24px 40px" }}>
+      {/* Full headline treatment */}
+      <div style={{ ...FONT.label, color: G.emphasis, marginBottom: "8px" }}>Where You Stand</div>
+      <div style={{ ...FONT.display, color: W.primary, marginBottom: "16px" }}>THE CONCLUSION</div>
+
       <div style={{ ...FONT.body, color: W.secondary }}>
+        {/* Paragraph 1: Restate what they've reviewed */}
         <p style={{ marginBottom: "20px" }}>
           You&rsquo;ve modeled a <Num>{formatCompactCurrency(inputs.budget)}</Num> production
           at <Num>{formatCompactCurrency(inputs.revenue)}</Num> and run it through the full
-          waterfall — how money enters, what gets deducted off the top, who gets paid in what
-          order, and what breaks if the market moves against you.
+          waterfall — how the money enters, what gets deducted off the top, who gets paid in what
+          order, and what happens when the market moves against you.
+          {allFunded && backendPool > 0 && (
+            <> Every capital tier is funded. There&rsquo;s a <Num>{formatCompactCurrency(backendPool)}</Num> backend surplus.</>
+          )}
+          {allFunded && backendPool === 0 && (
+            <> Every capital tier is funded. No surplus remains.</>
+          )}
+          {!allFunded && (
+            <> Not all capital tiers are fully funded at this acquisition price.</>
+          )}
         </p>
+
+        {/* Paragraph 2: The gap between modeling and presenting */}
         <p style={{ marginBottom: "20px" }}>
           The numbers work on screen. The question is whether they work in the room. An investor
           isn&rsquo;t reading your waterfall on a phone — they&rsquo;re reading a document you hand
           them across a table. What they need is the same information you just reviewed, structured
           for due diligence, formatted for decision-making, and presented at the level they expect.
         </p>
+
+        {/* Paragraph 3: What's missing from the free output */}
+        <p style={{ marginBottom: "20px" }}>
+          What you&rsquo;re looking at is the model. What you don&rsquo;t have yet is the presentation —
+          the sensitivity analysis that shows how your deal performs under five different market conditions,
+          the comparable acquisition data that defends your valuation with real transactions, and the
+          investor memo that packages everything into a document built for the person writing the check.
+        </p>
+      </div>
+
+      {/* Pull-quote — verdict */}
+      <div style={{
+        borderLeft: `3px solid ${borderColor}`,
+        paddingLeft: "20px",
+        margin: "24px 0",
+      }}>
+        <div style={{
+          fontFamily: "'Bebas Neue', sans-serif",
+          fontSize: "22px",
+          letterSpacing: "0.06em",
+          lineHeight: 1.2,
+          color: W.primary,
+        }}>
+          {verdictText}
+        </div>
+      </div>
+
+      {/* Gate 3 — embedded as visual evidence of what's missing */}
+      <LockedInvestorMemoSection />
+
+      {/* Paragraph 4: Next steps */}
+      <div style={{ ...FONT.body, color: W.secondary, marginTop: "24px" }}>
         <p>
-          {toneP3}
+          {multiple >= 1.0 ? (
+            <>The structure is there. The next step is turning it into materials that hold up under scrutiny — documents
+            your attorney can review, your investors can underwrite, and your sales agent can use to position
+            the project in the market.</>
+          ) : (
+            <>You&rsquo;ve identified where the deal needs work. The next step is restructuring — adjusting
+            the capital stack, renegotiating terms, or finding soft money that changes the cash basis — and then
+            running the numbers again until the model holds.</>
+          )}
         </p>
       </div>
     </section>
@@ -1998,15 +1557,6 @@ const WaterfallBrief = ({
   guilds,
   selections,
 }: WaterfallBriefProps) => {
-  // Derive selections from inputs if not provided
-  const effectiveSelections: CapitalSelections = selections ?? {
-    taxCredits: inputs.credits > 0,
-    seniorDebt: inputs.debt > 0,
-    gapLoan: inputs.mezzanineDebt > 0,
-    equity: inputs.equity > 0,
-    deferments: inputs.deferments > 0,
-  };
-
   // Core computations
   const tiers = computeTierPayments(result, inputs);
 
@@ -2016,9 +1566,7 @@ const WaterfallBrief = ({
       maxWidth: "430px",
       margin: "0 auto",
     }}>
-      {/* ═══ ACT 1 — THE DEAL ═══ */}
-
-      {/* 1. Cover */}
+      {/* ═══ 1. TITLE PAGE ═══ */}
       <CoverSection
         project={project}
         inputs={inputs}
@@ -2028,7 +1576,7 @@ const WaterfallBrief = ({
 
       <GoldGlowBreak />
 
-      {/* 2. Deal (Investment Thesis) */}
+      {/* ═══ 2. DENSE TEXT: THE DEAL ═══ */}
       <DealSection
         inputs={inputs}
         result={result}
@@ -2038,15 +1586,8 @@ const WaterfallBrief = ({
 
       <GoldGlowBreak />
 
-      {/* 3. Locked Sensitivity (Gate 1 — always position 3) */}
-      <LockedSensitivitySection />
-
-      <GoldGlowBreak />
-
-      {/* ═══ ACT 2 — THE MATH ═══ */}
-
-      {/* 4. The Erosion (Reality Check 1) */}
-      <RealityCheck1Section
+      {/* ═══ 3. VISUAL CLUSTER 1: THE NUMBERS ═══ */}
+      <VisualCluster1
         inputs={inputs}
         result={result}
         guilds={guilds}
@@ -2055,41 +1596,28 @@ const WaterfallBrief = ({
 
       <GoldGlowBreak />
 
-      {/* 5. The Capital Stack */}
-      <CapitalStackSection
-        inputs={inputs}
-        selections={effectiveSelections}
-      />
-
-      <GoldGlowBreak />
-
-      {/* 6. The Deductions */}
-      <DeductionsSection
+      {/* ═══ 4. LIGHTER TEXT: THE INTERPRETATION ═══ */}
+      <InterpretationSection
         inputs={inputs}
         result={result}
         guilds={guilds}
+        project={project}
       />
 
       <GoldGlowBreak />
 
-      {/* 7. The Cascade */}
-      <CascadeSection
+      {/* ═══ 5. VISUAL CLUSTER 2: THE WATERFALL ═══ */}
+      <VisualCluster2
         tiers={tiers}
         result={result}
         inputs={inputs}
+        guilds={guilds}
       />
 
       <GoldGlowBreak />
 
-      {/* 8. Locked Comparable (Gate 2) */}
-      <LockedComparableSection />
-
-      <GoldGlowBreak />
-
-      {/* ═══ ACT 3 — THE CLOSE ═══ */}
-
-      {/* 9. The Risk (Reality Check 2) */}
-      <RealityCheck2Section
+      {/* ═══ 6. DENSE TEXT: THE CONCLUSION ═══ */}
+      <ConclusionSection
         inputs={inputs}
         result={result}
         guilds={guilds}
@@ -2098,20 +1626,7 @@ const WaterfallBrief = ({
 
       <GoldGlowBreak />
 
-      {/* 10. Locked Investor Memo */}
-      <LockedInvestorMemoSection />
-
-      <GoldGlowBreak />
-
-      {/* 11. Closing */}
-      <ClosingSection
-        inputs={inputs}
-        result={result}
-      />
-
-      <GoldGlowBreak />
-
-      {/* 12. CTA */}
+      {/* ═══ 7. CTA ═══ */}
       <CTASection />
     </div>
   );
