@@ -901,6 +901,16 @@
     to { opacity: 1; transform: translateX(0); }
   }
 
+  @keyframes ctaGlow {
+    0%, 100% { box-shadow: 0 0 20px rgba(212,175,55,0.08), 0 0 40px rgba(212,175,55,0.04); }
+    50% { box-shadow: 0 0 28px rgba(212,175,55,0.16), 0 0 56px rgba(212,175,55,0.08); }
+  }
+
+  @keyframes pulseGlow {
+    0%, 100% { opacity: 0.04; }
+    50% { opacity: 0.08; }
+  }
+
   /* ═══════════════════════════════════════════════════════════════════
      CALCULATOR V6 — Mobile-optimized slider thumbs (22px minimum)
      ═══════════════════════════════════════════════════════════════════ */

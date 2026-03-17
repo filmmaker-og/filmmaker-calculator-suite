@@ -972,48 +972,57 @@ const RealityCheck1Section = ({
 
 const LockedSensitivitySection = () => (
   <section style={{ padding: "48px 24px 48px" }}>
-    {/* 3a. Section Label */}
-    <div style={{ ...FONT.label, color: G.subtle, marginBottom: "24px" }}>Premium Analysis</div>
+    {/* Label — content-descriptive, not "Premium Analysis" */}
+    <div style={{ ...FONT.label, color: G.floor, marginBottom: "24px" }}>Scenario Modeling</div>
 
-    {/* 3b. Headline */}
-    <div style={{ ...FONT.title, color: W.tertiary, marginBottom: "24px" }}>SENSITIVITY ANALYSIS</div>
+    {/* Headline — reads like the next section */}
+    <div style={{ ...FONT.title, color: W.quaternary, marginBottom: "24px" }}>
+      WHAT IF YOUR PRICE MOVES
+    </div>
 
-    {/* 3c. Locked Card */}
+    {/* Locked card */}
     <div style={{
       position: "relative",
-      border: "1px solid rgba(255,255,255,0.06)",
+      border: "1px solid rgba(212,175,55,0.10)",
       borderRadius: "4px",
       overflow: "hidden",
     }}>
-      {/* Blurred content */}
+      {/* Blurred content — reduced blur, higher opacity */}
       <div style={{
         padding: "20px",
-        filter: "blur(6px)",
-        opacity: 0.35,
+        filter: "blur(3px)",
+        opacity: 0.55,
         userSelect: "none",
         pointerEvents: "none",
       }}>
+        {/* Fake scenario header */}
+        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "12px" }}>
+          <div style={{ height: "8px", width: "80px", background: "rgba(212,175,55,0.20)", borderRadius: "2px" }} />
+          <div style={{ display: "flex", gap: "12px" }}>
+            <div style={{ height: "8px", width: "40px", background: "rgba(255,255,255,0.12)", borderRadius: "2px" }} />
+            <div style={{ height: "8px", width: "40px", background: "rgba(255,255,255,0.12)", borderRadius: "2px" }} />
+          </div>
+        </div>
         {/* Fake bars */}
         <div style={{ display: "flex", gap: "8px", alignItems: "flex-end", height: "80px", marginBottom: "12px" }}>
-          <div style={{ flex: 1, height: "80%", borderRadius: "3px 3px 0 0", background: "rgba(60,179,113,0.30)" }} />
-          <div style={{ flex: 1, height: "65%", borderRadius: "3px 3px 0 0", background: "rgba(60,179,113,0.25)" }} />
-          <div style={{ flex: 1, height: "40%", borderRadius: "3px 3px 0 0", background: "rgba(240,168,48,0.25)" }} />
+          <div style={{ flex: 1, height: "80%", borderRadius: "3px 3px 0 0", background: "rgba(60,179,113,0.35)" }} />
+          <div style={{ flex: 1, height: "65%", borderRadius: "3px 3px 0 0", background: "rgba(60,179,113,0.28)" }} />
+          <div style={{ flex: 1, height: "40%", borderRadius: "3px 3px 0 0", background: "rgba(240,168,48,0.28)" }} />
           <div style={{ flex: 1, height: "25%", borderRadius: "3px 3px 0 0", background: "rgba(224,82,82,0.25)" }} />
-          <div style={{ flex: 1, height: "15%", borderRadius: "3px 3px 0 0", background: "rgba(224,82,82,0.30)" }} />
+          <div style={{ flex: 1, height: "15%", borderRadius: "3px 3px 0 0", background: "rgba(224,82,82,0.35)" }} />
         </div>
         {/* Fake labels */}
-        <div style={{ display: "flex", gap: "8px" }}>
+        <div style={{ display: "flex", gap: "8px", marginBottom: "16px" }}>
           {[1, 2, 3, 4, 5].map((i) => (
-            <div key={i} style={{ flex: 1, height: "8px", background: "rgba(255,255,255,0.15)", borderRadius: "2px" }} />
+            <div key={i} style={{ flex: 1, height: "6px", background: "rgba(255,255,255,0.12)", borderRadius: "2px" }} />
           ))}
         </div>
-        {/* Fake text */}
-        <div style={{ marginTop: "16px" }}>
-          <div style={{ height: "10px", width: "80%", background: "rgba(255,255,255,0.15)", borderRadius: "2px", marginBottom: "8px" }} />
-          <div style={{ height: "10px", width: "65%", background: "rgba(255,255,255,0.10)", borderRadius: "2px", marginBottom: "8px" }} />
-          <div style={{ height: "10px", width: "90%", background: "rgba(255,255,255,0.12)", borderRadius: "2px" }} />
-        </div>
+        {/* Fake prose */}
+        <div style={{ height: "10px", width: "85%", background: "rgba(255,255,255,0.12)", borderRadius: "2px", marginBottom: "8px" }} />
+        <div style={{ height: "10px", width: "70%", background: "rgba(255,255,255,0.08)", borderRadius: "2px", marginBottom: "8px" }} />
+        <div style={{ height: "10px", width: "92%", background: "rgba(255,255,255,0.10)", borderRadius: "2px" }} />
       </div>
+
       {/* Overlay */}
       <div style={{
         position: "absolute",
@@ -1022,30 +1031,26 @@ const LockedSensitivitySection = () => (
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        background: "rgba(0,0,0,0.50)",
+        background: "radial-gradient(ellipse at center, rgba(212,175,55,0.04) 0%, rgba(0,0,0,0.50) 70%)",
       }}>
         <div style={{
-          width: "40px",
-          height: "40px",
-          border: `2px solid ${G.subtle}`,
+          width: "44px", height: "44px",
+          border: `1.5px solid ${G.subtle}`,
           borderRadius: "50%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          marginBottom: "12px",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          marginBottom: "14px",
+          boxShadow: "0 0 16px rgba(212,175,55,0.12)",
         }}>
           <svg viewBox="0 0 24 24" style={{ width: "18px", height: "18px", fill: G.standard }}>
             <path d="M18 10h-1V7c0-2.76-2.24-5-5-5S7 4.24 7 7v3H6c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-8c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3-9H9V7c0-1.66 1.34-3 3-3s3 1.34 3 3v3z" />
           </svg>
         </div>
         <span style={{
-          fontSize: "12px",
-          fontWeight: 600,
-          letterSpacing: "0.15em",
-          textTransform: "uppercase" as const,
+          fontSize: "12px", fontWeight: 600,
+          letterSpacing: "0.15em", textTransform: "uppercase" as const,
           color: G.standard,
         }}>
-          Included in Snapshot
+          Included in Full Analysis
         </span>
       </div>
     </div>
@@ -1872,44 +1877,90 @@ const LockedComparableSection = () => (
 // ─── SECTION 7: LOCKED TEASER — INVESTOR MEMO ───────────────────
 
 const LockedInvestorMemoSection = () => (
-  <section style={{ padding: "48px 24px 48px" }}>
-    <div style={{ ...FONT.label, color: G.subtle, marginBottom: "24px" }}>Premium Analysis</div>
-    <div style={{ ...FONT.title, color: W.tertiary, marginBottom: "24px" }}>INVESTOR MEMO</div>
+  <section style={{ padding: "48px 24px 48px", background: "rgba(212,175,55,0.015)" }}>
+    {/* Label */}
+    <div style={{ ...FONT.label, color: G.subtle, marginBottom: "24px" }}>Investor Documents</div>
+
+    {/* Headline */}
+    <div style={{ ...FONT.title, color: W.tertiary, marginBottom: "24px" }}>THE INVESTOR MEMO</div>
+
+    {/* Locked card */}
     <div style={{
       position: "relative",
-      border: "1px solid rgba(255,255,255,0.06)",
+      border: "1px solid rgba(212,175,55,0.20)",
       borderRadius: "4px",
       overflow: "hidden",
     }}>
-      {/* Blurred content */}
+      {/* Fake document behind blur — designed to look like a real financial document */}
       <div style={{
-        padding: "20px",
-        filter: "blur(6px)",
-        opacity: 0.35,
+        padding: "24px 20px",
+        filter: "blur(3px)",
+        opacity: 0.55,
         userSelect: "none",
         pointerEvents: "none",
       }}>
-        {[100, 85, 92].map((w, i) => (
-          <div key={i} style={{
-            height: "10px",
-            width: `${w}%`,
-            background: `rgba(255,255,255,${i === 0 ? 0.15 : i === 1 ? 0.12 : 0.10})`,
-            borderRadius: "2px",
-            marginBottom: "8px",
-          }} />
-        ))}
-        <div style={{ height: "16px" }} />
-        {[75, 88, 60].map((w, i) => (
-          <div key={i + 3} style={{
-            height: "10px",
-            width: `${w}%`,
-            background: `rgba(255,255,255,${i === 0 ? 0.12 : i === 1 ? 0.10 : 0.08})`,
-            borderRadius: "2px",
-            marginBottom: i < 2 ? "8px" : "0",
-          }} />
-        ))}
+        {/* Fake document header with gold rule */}
+        <div style={{
+          display: "flex", justifyContent: "space-between", alignItems: "center",
+          borderBottom: "1px solid rgba(212,175,55,0.20)",
+          paddingBottom: "12px", marginBottom: "16px",
+        }}>
+          <div>
+            <div style={{ height: "12px", width: "120px", background: "rgba(212,175,55,0.25)", borderRadius: "2px", marginBottom: "4px" }} />
+            <div style={{ height: "8px", width: "80px", background: "rgba(255,255,255,0.10)", borderRadius: "2px" }} />
+          </div>
+          <div style={{ width: "32px", height: "32px", border: "1.5px solid rgba(212,175,55,0.25)", borderRadius: "50%" }} />
+        </div>
+
+        {/* Fake KPI row — 3 boxes */}
+        <div style={{ display: "flex", gap: "12px", marginBottom: "16px" }}>
+          <div style={{ flex: 1, padding: "10px", border: "1px solid rgba(255,255,255,0.08)", borderRadius: "3px" }}>
+            <div style={{ height: "6px", width: "40px", background: "rgba(255,255,255,0.10)", borderRadius: "2px", marginBottom: "6px" }} />
+            <div style={{ height: "14px", width: "60px", background: "rgba(60,179,113,0.20)", borderRadius: "2px" }} />
+          </div>
+          <div style={{ flex: 1, padding: "10px", border: "1px solid rgba(255,255,255,0.08)", borderRadius: "3px" }}>
+            <div style={{ height: "6px", width: "40px", background: "rgba(255,255,255,0.10)", borderRadius: "2px", marginBottom: "6px" }} />
+            <div style={{ height: "14px", width: "60px", background: "rgba(212,175,55,0.20)", borderRadius: "2px" }} />
+          </div>
+          <div style={{ flex: 1, padding: "10px", border: "1px solid rgba(255,255,255,0.08)", borderRadius: "3px" }}>
+            <div style={{ height: "6px", width: "40px", background: "rgba(255,255,255,0.10)", borderRadius: "2px", marginBottom: "6px" }} />
+            <div style={{ height: "14px", width: "60px", background: "rgba(255,255,255,0.15)", borderRadius: "2px" }} />
+          </div>
+        </div>
+
+        {/* Fake prose paragraph 1 */}
+        <div style={{ marginBottom: "14px" }}>
+          <div style={{ height: "8px", width: "100%", background: "rgba(255,255,255,0.10)", borderRadius: "2px", marginBottom: "6px" }} />
+          <div style={{ height: "8px", width: "92%", background: "rgba(255,255,255,0.08)", borderRadius: "2px", marginBottom: "6px" }} />
+          <div style={{ height: "8px", width: "85%", background: "rgba(255,255,255,0.09)", borderRadius: "2px", marginBottom: "6px" }} />
+          <div style={{ height: "8px", width: "78%", background: "rgba(255,255,255,0.07)", borderRadius: "2px" }} />
+        </div>
+
+        {/* Fake mini data table */}
+        <div style={{ border: "1px solid rgba(255,255,255,0.06)", borderRadius: "3px", overflow: "hidden", marginBottom: "14px" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", padding: "8px 10px", background: "rgba(255,255,255,0.03)" }}>
+            <div style={{ height: "6px", width: "60px", background: "rgba(255,255,255,0.10)", borderRadius: "2px" }} />
+            <div style={{ height: "6px", width: "40px", background: "rgba(255,255,255,0.10)", borderRadius: "2px" }} />
+          </div>
+          <div style={{ display: "flex", justifyContent: "space-between", padding: "8px 10px" }}>
+            <div style={{ height: "6px", width: "70px", background: "rgba(255,255,255,0.07)", borderRadius: "2px" }} />
+            <div style={{ height: "6px", width: "50px", background: "rgba(60,179,113,0.15)", borderRadius: "2px" }} />
+          </div>
+          <div style={{ display: "flex", justifyContent: "space-between", padding: "8px 10px", borderTop: "1px solid rgba(255,255,255,0.04)" }}>
+            <div style={{ height: "6px", width: "55px", background: "rgba(255,255,255,0.07)", borderRadius: "2px" }} />
+            <div style={{ height: "6px", width: "50px", background: "rgba(60,179,113,0.15)", borderRadius: "2px" }} />
+          </div>
+        </div>
+
+        {/* Fake prose paragraph 2 */}
+        <div>
+          <div style={{ height: "8px", width: "95%", background: "rgba(255,255,255,0.09)", borderRadius: "2px", marginBottom: "6px" }} />
+          <div style={{ height: "8px", width: "80%", background: "rgba(255,255,255,0.07)", borderRadius: "2px", marginBottom: "6px" }} />
+          <div style={{ height: "8px", width: "65%", background: "rgba(255,255,255,0.08)", borderRadius: "2px" }} />
+        </div>
       </div>
-      {/* Overlay */}
+
+      {/* Overlay — warmest gate */}
       <div style={{
         position: "absolute",
         inset: 0,
@@ -1917,30 +1968,26 @@ const LockedInvestorMemoSection = () => (
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        background: "rgba(0,0,0,0.50)",
+        background: "radial-gradient(ellipse at center, rgba(212,175,55,0.04) 0%, rgba(0,0,0,0.50) 70%)",
       }}>
         <div style={{
-          width: "40px",
-          height: "40px",
-          border: `2px solid ${G.subtle}`,
+          width: "44px", height: "44px",
+          border: `1.5px solid ${G.subtle}`,
           borderRadius: "50%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          marginBottom: "12px",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          marginBottom: "14px",
+          boxShadow: "0 0 16px rgba(212,175,55,0.12)",
         }}>
           <svg viewBox="0 0 24 24" style={{ width: "18px", height: "18px", fill: G.standard }}>
             <path d="M18 10h-1V7c0-2.76-2.24-5-5-5S7 4.24 7 7v3H6c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-8c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3-9H9V7c0-1.66 1.34-3 3-3s3 1.34 3 3v3z" />
           </svg>
         </div>
         <span style={{
-          fontSize: "12px",
-          fontWeight: 600,
-          letterSpacing: "0.15em",
-          textTransform: "uppercase" as const,
+          fontSize: "12px", fontWeight: 600,
+          letterSpacing: "0.15em", textTransform: "uppercase" as const,
           color: G.standard,
         }}>
-          Included in Package
+          Included in Producer&rsquo;s Package
         </span>
       </div>
     </div>
@@ -1954,73 +2001,111 @@ const CTASection = () => {
 
   return (
     <section style={{
-      padding: "48px 24px 64px",
+      padding: "56px 24px 72px",
       textAlign: "center",
-      borderTop: "1px solid rgba(212,175,55,0.15)",
+      position: "relative",
+      overflow: "hidden",
     }}>
-      {/* 8a */}
-      <div style={{ ...FONT.title, color: W.primary, marginBottom: "12px" }}>
-        YOUR INVESTORS WILL ASK.
-      </div>
-
-      {/* 8b */}
+      {/* Radial gold ambient glow */}
       <div style={{
-        fontSize: "14px",
-        color: W.tertiary,
-        lineHeight: 1.5,
-        maxWidth: "320px",
-        margin: "0 auto 28px",
-      }}>
-        This brief answers what they need to know. The Snapshot gives them everything else.
-      </div>
+        position: "absolute",
+        inset: 0,
+        background: "radial-gradient(ellipse at center 40%, rgba(212,175,55,0.06) 0%, rgba(212,175,55,0.02) 40%, transparent 70%)",
+        animation: "pulseGlow 4s ease-in-out infinite",
+      }} />
 
-      {/* 8c. Primary CTA */}
-      <div style={{ marginBottom: "16px" }}>
-        <span
-          onClick={() => navigate("/store")}
-          style={{
-            display: "inline-block",
-            padding: "14px 32px",
-            background: "rgba(212,175,55,0.12)",
-            border: `1px solid ${G.subtle}`,
-            borderRadius: "8px",
-            fontFamily: "'Bebas Neue', sans-serif",
-            fontSize: "18px",
-            letterSpacing: "0.15em",
-            color: G.emphasis,
-            cursor: "pointer",
-            textDecoration: "none",
-            boxShadow: "0 0 20px rgba(212,175,55,0.08), 0 0 40px rgba(212,175,55,0.04)",
-          }}
-        >
-          GET THE SNAPSHOT
-        </span>
-      </div>
+      {/* Warm top border — stronger than section dividers */}
+      <div style={{
+        position: "absolute",
+        top: 0, left: 0, right: 0,
+        height: "1px",
+        background: "linear-gradient(90deg, transparent 0%, rgba(212,175,55,0.25) 20%, rgba(212,175,55,0.50) 50%, rgba(212,175,55,0.25) 80%, transparent 100%)",
+      }} />
 
-      {/* 8d. Secondary */}
-      <div>
-        <span
-          onClick={() => window.print()}
-          style={{
-            display: "inline-block",
-            padding: "10px 24px",
-            border: "1px solid rgba(255,255,255,0.12)",
-            borderRadius: "8px",
-            fontSize: "13px",
-            fontWeight: 500,
-            letterSpacing: "0.06em",
-            color: W.tertiary,
-            cursor: "pointer",
-            textDecoration: "none",
-          }}
-        >
-          Print This Brief
-        </span>
-      </div>
+      <div style={{ position: "relative", zIndex: 1 }}>
+        {/* Headline */}
+        <div style={{ ...FONT.title, color: W.primary, marginBottom: "14px" }}>
+          YOUR INVESTORS WILL ASK.
+        </div>
 
-      {/* 8e. Footer */}
-      <div style={{ marginTop: "32px", ...FONT.fine, color: W.ghost }}>
-        filmmaker.og &middot; Waterfall Snapshot
+        {/* Subtext */}
+        <div style={{
+          fontSize: "15px",
+          color: W.tertiary,
+          lineHeight: 1.6,
+          maxWidth: "340px",
+          margin: "0 auto 36px",
+        }}>
+          Your numbers are modeled. Now make them investor-ready.
+        </div>
+
+        {/* Primary CTA — revenue conversion */}
+        <div style={{ marginBottom: "16px" }}>
+          <span
+            // TODO: Route through gatedNavigate() to capture anonymous leads before store navigation
+            onClick={() => navigate("/store")}
+            style={{
+              display: "inline-block",
+              padding: "16px 36px",
+              background: "rgba(212,175,55,0.12)",
+              border: "1px solid rgba(212,175,55,0.35)",
+              borderRadius: "8px",
+              fontFamily: "'Bebas Neue', sans-serif",
+              fontSize: "20px",
+              letterSpacing: "0.15em",
+              color: "rgba(212,175,55,0.80)",
+              cursor: "pointer",
+              textDecoration: "none",
+              animation: "ctaGlow 3s ease-in-out infinite",
+            }}
+          >
+            GET THE FULL ANALYSIS
+          </span>
+        </div>
+
+        {/* Secondary CTA — lead capture via PDF export */}
+        <div style={{ marginBottom: "12px" }}>
+          <span
+            // TODO: Implement PDF export with lead capture modal (email + name)
+            onClick={() => {}}
+            style={{
+              display: "inline-block",
+              padding: "10px 24px",
+              border: "1px solid rgba(255,255,255,0.10)",
+              borderRadius: "8px",
+              fontSize: "13px",
+              fontWeight: 500,
+              letterSpacing: "0.06em",
+              color: W.tertiary,
+              cursor: "pointer",
+              textDecoration: "none",
+            }}
+          >
+            Export This PDF
+          </span>
+        </div>
+
+        {/* Footer provenance mark */}
+        <div style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: "10px",
+          marginTop: "40px",
+        }}>
+          <div style={{ flex: 1, maxWidth: "60px", height: "1px", background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.20))" }} />
+          <div style={{
+            width: "8px", height: "8px",
+            border: "1.5px solid rgba(212,175,55,0.35)",
+            borderRadius: "50%",
+          }} />
+          <span style={{
+            fontSize: "10px", fontWeight: 600,
+            letterSpacing: "0.15em", textTransform: "uppercase" as const,
+            color: W.ghost,
+          }}>filmmaker.og &middot; Waterfall Snapshot</span>
+          <div style={{ flex: 1, maxWidth: "60px", height: "1px", background: "linear-gradient(90deg, rgba(212,175,55,0.20), transparent)" }} />
+        </div>
       </div>
     </section>
   );
