@@ -269,6 +269,10 @@ const Calculator = () => {
         />
       );
     }
+    // Don't show context bar on waterfall tab when deck is active
+    if (activeTab === 'waterfall' && inputs.budget > 0 && inputs.revenue > 0) {
+      return null;
+    }
     if (activeTab === 'waterfall') {
       return (
         <ContextBar

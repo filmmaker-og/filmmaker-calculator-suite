@@ -11,7 +11,6 @@ import {
   CAM_PCT,
 } from "@/lib/waterfall";
 import type { TierPayment } from "@/lib/waterfall-types";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 // ─── Types ───────────────────────────────────────────────────────
@@ -118,14 +117,6 @@ const GoldGlowBreak = () => (
   </div>
 );
 
-const SoftBreak = () => (
-  <div style={{ height: "1px", background: "rgba(255,255,255,0.06)" }} />
-);
-
-const GoldSeparator = () => (
-  <div style={{ width: "40px", height: "1px", background: G.floor, margin: "16px 0" }} />
-);
-
 /** Inline mono number span for prose */
 const Num = ({ children, color }: { children: React.ReactNode; color?: string }) => (
   <span style={{
@@ -179,8 +170,6 @@ const CoverSection = ({
   result: WaterfallResult;
   guilds: GuildState;
 }) => {
-  const [assumptionsOpen, setAssumptionsOpen] = useState(false);
-
   const cashBasis = computeCashBasis(inputs);
   const investorReturnPct = computeInvestorReturnPct(result, inputs);
   const returnColor = getReturnColor(investorReturnPct);
@@ -196,28 +185,6 @@ const CoverSection = ({
 
   const hasTeam = teamFields.length > 0;
   const hasLogline = project.logline.trim().length > 0;
-
-  // Assumptions text
-  const assumptionParts: string[] = [];
-  if (inputs.credits > 0 && project.location.trim()) {
-    const creditPct = inputs.budget > 0 ? Math.round((inputs.credits / inputs.budget) * 100) : 0;
-    assumptionParts.push(`${project.location} ${creditPct}% credit`);
-  }
-  assumptionParts.push("Acquisition model");
-  if (inputs.deferments > 0) {
-    assumptionParts.push(`${formatCompactCurrency(inputs.deferments)} deferred fees`);
-  }
-  if (inputs.salesFee > 0) {
-    assumptionParts.push(`${inputs.salesFee}% sales agent`);
-  }
-  if (inputs.salesExp > 0) {
-    assumptionParts.push(`${formatCompactCurrency(inputs.salesExp)} expense cap`);
-  }
-  const guildParts: string[] = [];
-  if (guilds.sag) guildParts.push("SAG-AFTRA");
-  if (guilds.wga) guildParts.push("WGA");
-  if (guilds.dga) guildParts.push("DGA");
-  if (guildParts.length > 0) assumptionParts.push(guildParts.join(", "));
 
   // Verdict text
   const netToInvestors = Math.max(0, inputs.revenue - result.offTopTotal);
@@ -306,7 +273,7 @@ const CoverSection = ({
                 {f.role.toUpperCase()}
               </div>
               <div style={{
-                fontSize: "14px",
+                fontSize: "15px",
                 fontFamily: "'Inter', sans-serif",
                 fontWeight: 500,
                 color: W.secondary,
@@ -403,42 +370,79 @@ const CoverSection = ({
         }}>
           {multiple.toFixed(1)}&times;
         </div>
-        <div style={{ fontSize: "14px", lineHeight: 1.4, color: W.tertiary }}>
+        <div style={{ fontSize: "15px", lineHeight: 1.4, color: W.tertiary }}>
           <strong style={{ color: W.secondary, fontWeight: 600 }}>Cash-on-cash multiple.</strong>
           <br />
           {verdictContext}
         </div>
       </div>
 
-      {/* 1g. Assumptions (collapsible) */}
+      {/* 1g. Assumptions — always-visible grid */}
       <div style={{
         marginTop: "20px",
-        padding: "12px 14px",
+        padding: "14px 16px",
         background: "rgba(255,255,255,0.03)",
         border: "1px solid rgba(255,255,255,0.06)",
         borderRadius: "4px",
       }}>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            cursor: "pointer",
-          }}
-          onClick={() => setAssumptionsOpen(!assumptionsOpen)}
-        >
-          <span style={{ ...FONT.fine, color: W.quaternary }}>ASSUMPTIONS</span>
-          <span style={{ color: W.quaternary }}>{assumptionsOpen ? "\u25BE" : "\u25B8"}</span>
+        <div style={{
+          ...FONT.fine,
+          color: W.quaternary,
+          marginBottom: "10px",
+        }}>ASSUMPTIONS</div>
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "auto 1fr",
+          gap: "6px 12px",
+          alignItems: "baseline",
+        }}>
+          {inputs.credits > 0 && project.location.trim() && (
+            <>
+              <span style={{ fontSize: "12px", color: W.quaternary }}>Location</span>
+              <span style={{ ...FONT.data, fontSize: "14px", color: W.tertiary }}>
+                {project.location}
+              </span>
+              <span style={{ fontSize: "12px", color: W.quaternary }}>Tax Credit</span>
+              <span style={{ ...FONT.data, fontSize: "14px", color: W.tertiary }}>
+                {inputs.budget > 0 ? Math.round((inputs.credits / inputs.budget) * 100) : 0}%
+              </span>
+            </>
+          )}
+          <span style={{ fontSize: "12px", color: W.quaternary }}>Model</span>
+          <span style={{ ...FONT.data, fontSize: "14px", color: W.tertiary }}>Acquisition</span>
+          {inputs.deferments > 0 && (
+            <>
+              <span style={{ fontSize: "12px", color: W.quaternary }}>Deferrals</span>
+              <span style={{ ...FONT.data, fontSize: "14px", color: W.tertiary }}>
+                {formatCompactCurrency(inputs.deferments)}
+              </span>
+            </>
+          )}
+          {inputs.salesFee > 0 && (
+            <>
+              <span style={{ fontSize: "12px", color: W.quaternary }}>Sales Agent</span>
+              <span style={{ ...FONT.data, fontSize: "14px", color: W.tertiary }}>
+                {inputs.salesFee}%
+              </span>
+            </>
+          )}
+          {inputs.salesExp > 0 && (
+            <>
+              <span style={{ fontSize: "12px", color: W.quaternary }}>Expense Cap</span>
+              <span style={{ ...FONT.data, fontSize: "14px", color: W.tertiary }}>
+                {formatCompactCurrency(inputs.salesExp)}
+              </span>
+            </>
+          )}
+          {(guilds.sag || guilds.wga || guilds.dga) && (
+            <>
+              <span style={{ fontSize: "12px", color: W.quaternary }}>Guilds</span>
+              <span style={{ ...FONT.data, fontSize: "14px", color: W.tertiary }}>
+                {[guilds.sag && "SAG-AFTRA", guilds.wga && "WGA", guilds.dga && "DGA"].filter(Boolean).join(", ")}
+              </span>
+            </>
+          )}
         </div>
-        {assumptionsOpen && (
-          <div style={{
-            fontSize: "13px",
-            color: W.quaternary,
-            lineHeight: 1.5,
-            marginTop: "8px",
-          }}>
-            {assumptionParts.join(" \u00B7 ")}
-          </div>
-        )}
       </div>
     </section>
   );
@@ -652,7 +656,6 @@ const RealityCheck1Section = ({
   project: ProjectDetails;
 }) => {
   const cashBasis = computeCashBasis(inputs);
-  const cashBasisPct = inputs.budget > 0 ? (cashBasis / inputs.budget) * 100 : 100;
   const netDistributable = Math.max(0, inputs.revenue - result.offTopTotal);
   const investorReturnPct = computeInvestorReturnPct(result, inputs);
 
@@ -723,99 +726,57 @@ const RealityCheck1Section = ({
   // Net result
   const netColor = investorReturnPct >= 100 ? SEM.green : investorReturnPct >= 80 ? SEM.amber : SEM.red;
 
+  // Net strip colors
+  const netBg = netColor === SEM.green
+    ? "rgba(60,179,113,0.06)"
+    : netColor === SEM.amber
+    ? "rgba(240,168,48,0.06)"
+    : "rgba(224,82,82,0.06)";
+  const netBorder = netColor === SEM.green
+    ? "rgba(60,179,113,0.20)"
+    : netColor === SEM.amber
+    ? "rgba(240,168,48,0.20)"
+    : "rgba(224,82,82,0.20)";
+
   return (
     <section style={{ padding: "40px 24px 40px" }}>
-      {/* 2a. Section Label */}
+      {/* Label */}
       <div style={{ ...FONT.label, color: G.emphasis, marginBottom: "8px" }}>Off-the-Tops</div>
 
-      {/* 2b. Headline */}
+      {/* Headline */}
       <div style={{ ...FONT.display, color: W.primary, marginBottom: "16px" }}>
         THE EROSION
       </div>
 
-      {/* 2c. Cash Basis Card */}
-      <div style={{
-        padding: "20px",
-        border: "1px solid rgba(255,255,255,0.08)",
-        borderRadius: "4px",
-        marginBottom: "20px",
-      }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
-          <span style={{ fontSize: "13px", fontWeight: 500, color: W.tertiary }}>Production Budget</span>
-          <span style={{
-            fontFamily: "'Roboto Mono', monospace",
-            fontSize: "26px",
-            fontWeight: 500,
-            color: W.primary,
-          }}>
-            {formatCompactCurrency(inputs.budget)}
-          </span>
-        </div>
-        {/* Bar track */}
-        <div style={{
-          height: "6px",
-          background: "rgba(255,255,255,0.06)",
-          borderRadius: "3px",
-          margin: "8px 0 14px",
-          position: "relative",
-        }}>
-          <div style={{
-            position: "absolute",
-            left: 0,
-            top: 0,
-            height: "100%",
-            width: "100%",
-            borderRadius: "3px",
-            background: "rgba(255,255,255,0.12)",
-          }} />
-          <div style={{
-            position: "absolute",
-            left: 0,
-            top: 0,
-            height: "100%",
-            width: `${Math.min(100, cashBasisPct)}%`,
-            borderRadius: "3px",
-            background: G.standard,
-          }} />
-        </div>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <span style={{ fontSize: "13px", fontWeight: 500, color: W.tertiary }}>Cash Basis</span>
-          <span style={{
-            fontFamily: "'Roboto Mono', monospace",
-            fontSize: "26px",
-            fontWeight: 500,
-            color: G.emphasis,
-          }}>
-            {formatCompactCurrency(cashBasis)}
-          </span>
-        </div>
-        {/* Legend */}
-        <div style={{ display: "flex", gap: "16px", marginTop: "2px" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "6px", ...FONT.label, fontSize: "11px", color: W.quaternary, letterSpacing: "0.10em" }}>
-            <div style={{ width: "8px", height: "8px", borderRadius: "50%", background: "rgba(255,255,255,0.12)" }} />
-            Budget
-          </div>
-          <div style={{ display: "flex", alignItems: "center", gap: "6px", ...FONT.label, fontSize: "11px", color: W.quaternary, letterSpacing: "0.10em" }}>
-            <div style={{ width: "8px", height: "8px", borderRadius: "50%", background: G.standard }} />
-            After Credits + Deferrals
-          </div>
-        </div>
-      </div>
-
-      {/* 2d. Thesis Prose */}
+      {/* PROSE BLOCK — thesis + erosion context merged */}
       <div style={{ ...FONT.body, color: W.secondary }}>
         {thesisProse}
+
+        {erosionTotal > 0 && (
+          <p style={{ marginBottom: "20px" }}>
+            The first <Num>{formatCompactCurrency(erosionTotal)}</Num> of
+            your <Num>{formatCompactCurrency(inputs.revenue)}</Num> never reaches the production entity.
+            {biggestErosion && biggestErosion.label === "Sales Agent Commission" && inputs.salesFee > 0 && (
+              <> Your sales agent&rsquo;s <Num>{inputs.salesFee}%</Num> commission is the biggest line
+              item — <Num>{formatCompactCurrency(result.salesFee)}</Num> off the top.
+              At this budget level, the agent is the right call. Where producers get burned
+              isn&rsquo;t the rate — it&rsquo;s the expense cap. <Num>{formatCompactCurrency(inputs.salesExp)}</Num> is {expenseAssessment}
+              {inputs.salesExp > 100000 ? " for a film this size." : "."}</>
+            )}
+            {biggestErosion && biggestErosion.label !== "Sales Agent Commission" && (
+              <> The largest deduction is {biggestErosion.label.toLowerCase()} at <Num>{formatCompactCurrency(biggestErosion.amount)}</Num>.</>
+            )}
+          </p>
+        )}
       </div>
 
-      {/* 2e. Separator */}
-      <GoldSeparator />
-
-      {/* 2f. Erosion Card */}
+      {/* VISUAL — Erosion card */}
       {erosionTotal > 0 && (
         <div style={{
           padding: "20px",
           border: "1px solid rgba(255,255,255,0.08)",
           borderRadius: "4px",
+          margin: "16px 0",
         }}>
           <div style={{
             ...FONT.label,
@@ -828,7 +789,7 @@ const RealityCheck1Section = ({
           </div>
           {/* Hero row */}
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "14px" }}>
-            <span style={{ fontSize: "14px", color: W.tertiary }}>Gone before recoupment</span>
+            <span style={{ fontSize: "15px", color: W.tertiary }}>Gone before recoupment</span>
             <span style={{
               fontFamily: "'Roboto Mono', monospace",
               fontSize: "28px",
@@ -849,7 +810,6 @@ const RealityCheck1Section = ({
           }}>
             {erosionItems.map((item) => {
               const widthPct = erosionTotal > 0 ? (item.amount / erosionTotal) * 100 : 0;
-              const widthPx = widthPct; // approximate
               return (
                 <div
                   key={item.label}
@@ -867,7 +827,6 @@ const RealityCheck1Section = ({
                     letterSpacing: "0.06em",
                   }}
                 >
-                  {/* Only label segments > ~40px wide. At 430px max, 40px ≈ 9.3% */}
                   {widthPct > 10 ? item.label.split(" ")[0] : ""}
                 </div>
               );
@@ -889,7 +848,7 @@ const RealityCheck1Section = ({
                 </span>
                 <span style={{
                   fontFamily: "'Roboto Mono', monospace",
-                  fontSize: "14px",
+                  fontSize: "15px",
                   fontWeight: 500,
                   color: W.secondary,
                 }}>
@@ -901,54 +860,24 @@ const RealityCheck1Section = ({
         </div>
       )}
 
-      {/* 2g. Erosion Prose */}
-      {biggestErosion && (
-        <div style={{ ...FONT.body, color: W.secondary, marginTop: "20px" }}>
-          <p style={{ marginBottom: "20px" }}>
-            The first <Num>{formatCompactCurrency(erosionTotal)}</Num> of
-            your <Num>{formatCompactCurrency(inputs.revenue)}</Num> never reaches the production entity.
-            {biggestErosion.label === "Sales Agent Commission" && inputs.salesFee > 0 && (
-              <> Your sales agent&rsquo;s <Num>{inputs.salesFee}%</Num> commission is the biggest line
-              item. At this budget level, the agent is the right call. Where producers get burned
-              isn&rsquo;t the rate — it&rsquo;s the expense cap. <Num>{formatCompactCurrency(expenseCap)}</Num> is {expenseAssessment}
-              {expenseCap > 100000 ? " for a film this size." : "."}</>
-            )}
-          </p>
-        </div>
-      )}
+      {/* NET STRIP */}
+      <div style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        padding: "14px 20px",
+        background: netBg,
+        border: `1px solid ${netBorder}`,
+        borderRadius: "4px",
+        margin: "16px 0",
+      }}>
+        <span style={{ fontSize: "15px", color: W.tertiary }}>Net to Investors</span>
+        <span style={{ ...FONT.data, fontSize: "26px", color: netColor }}>
+          {formatCompactCurrency(netDistributable)}
+        </span>
+      </div>
 
-      {/* 2h. Net Strip */}
-      {(() => {
-        const netBg = netColor === SEM.green
-          ? "rgba(60,179,113,0.06)"
-          : netColor === SEM.amber
-          ? "rgba(240,168,48,0.06)"
-          : "rgba(224,82,82,0.06)";
-        const netBorder = netColor === SEM.green
-          ? "rgba(60,179,113,0.20)"
-          : netColor === SEM.amber
-          ? "rgba(240,168,48,0.20)"
-          : "rgba(224,82,82,0.20)";
-        return (
-          <div style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            padding: "14px 20px",
-            background: netBg,
-            border: `1px solid ${netBorder}`,
-            borderRadius: "4px",
-            margin: "20px 0",
-          }}>
-            <span style={{ fontSize: "14px", color: W.tertiary }}>Net to Investors</span>
-            <span style={{ ...FONT.data, fontSize: "26px", color: netColor }}>
-              {formatCompactCurrency(netDistributable)}
-            </span>
-          </div>
-        );
-      })()}
-
-      {/* 2i. Result Prose */}
+      {/* CLOSING PROSE */}
       <div style={{ ...FONT.body, color: W.secondary }}>
         <p>
           <Num>{formatCompactCurrency(netDistributable)}</Num> in net receipts
@@ -1105,88 +1034,50 @@ const RealityCheck2Section = ({
 
   return (
     <section style={{ padding: "40px 24px 40px" }}>
-      {/* 4a */}
+      {/* Label */}
       <div style={{ ...FONT.label, color: G.emphasis, marginBottom: "8px" }}>Risk Analysis</div>
 
-      {/* 4b */}
+      {/* Headline */}
       <div style={{ ...FONT.display, color: W.primary, marginBottom: "16px" }}>THE RISK</div>
 
-      {/* 4c. Opening Prose */}
-      <div style={{ ...FONT.body, color: W.secondary, marginBottom: "24px" }}>
-        <p>
+      {/* PROSE BLOCK — assumptions, credit concentration, deferments */}
+      <div style={{ ...FONT.body, color: W.secondary, marginBottom: "20px" }}>
+        <p style={{ marginBottom: "20px" }}>
           This model holds if {assumptionCount} assumption{assumptionCount !== 1 ? "s" : ""} survive
-          production{assumptions.length > 0 ? `: your ${assumptions.slice(0, 2).join(" and your ")}` : ""}.
-          Both are real — and both can collapse.
+          production{assumptions.length > 0 ? `: your ${assumptions.slice(0, 3).join(", your ")}` : ""}.
+          {assumptions.length > 3 && ` and ${assumptions.length - 3} more`}.
+          All are real — and all can collapse.
         </p>
-      </div>
 
-      {/* 4d. Concentration Gauge */}
-      {inputs.credits > 0 && (
-        <div style={{
-          margin: "24px 0",
-          padding: "20px",
-          border: "1px solid rgba(224,82,82,0.15)",
-          borderRadius: "4px",
-          background: "rgba(224,82,82,0.03)",
-        }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "10px" }}>
-            <span style={{
-              ...FONT.label,
-              fontSize: "11px",
-              letterSpacing: "0.15em",
-              color: "rgba(224,82,82,0.70)",
-            }}>
-              TAX CREDIT CONCENTRATION
-            </span>
-            <span style={{
-              fontFamily: "'Roboto Mono', monospace",
-              fontSize: "28px",
-              fontWeight: 500,
-              color: "rgba(224,82,82,0.85)",
-            }}>
-              {Math.round(creditConcentration)}%
-            </span>
-          </div>
-          <div style={{
-            height: "8px",
-            background: "rgba(255,255,255,0.06)",
-            borderRadius: "4px",
-            overflow: "hidden",
-            marginBottom: "10px",
-          }}>
-            <div style={{
-              height: "100%",
-              width: `${Math.min(100, creditConcentration)}%`,
-              background: "linear-gradient(90deg, rgba(224,82,82,0.50), rgba(224,82,82,0.80))",
-              borderRadius: "4px",
-            }} />
-          </div>
-          <div style={{ fontSize: "13px", color: W.tertiary, lineHeight: 1.5 }}>
-            of your financing depends on {location || "your state"}&rsquo;s incentive program.
-          </div>
-        </div>
-      )}
-
-      {/* 4e. Tax Credit Prose */}
-      {inputs.credits > 0 && (
-        <div style={{ ...FONT.body, color: W.secondary }}>
+        {/* Tax credit concentration — inline */}
+        {inputs.credits > 0 && (
           <p style={{ marginBottom: "20px" }}>
             {location || "Your state"}&rsquo;s <Num>{creditPct}%</Num> credit
             converts <Num>{formatCompactCurrency(inputs.credits)}</Num> in qualified spend into
-            transferable credits. Remove it and your cash basis jumps
+            transferable credits — but <Num>{Math.round(creditConcentration)}%</Num> of
+            your financing depends on that single incentive program.
+            Remove it and your cash basis jumps
             to <Num>{formatCompactCurrency(inputs.budget - inputs.deferments)}</Num>,
             compressing the margin that makes this deal work.
           </p>
-        </div>
-      )}
+        )}
 
-      {/* 4f. Separator */}
-      <GoldSeparator />
+        {/* Deferment risk — inline */}
+        {inputs.deferments > 0 && (
+          <p style={{ marginBottom: "20px" }}>
+            &ldquo;Deferred&rdquo; means different things to different lawyers.{" "}
+            <Num>{formatCompactCurrency(inputs.deferments)}</Num> in producer fees pushed past
+            first-day-of-principal doesn&rsquo;t save your investors anything if the production entity pays
+            them from first revenues. If those fees accelerate on delivery rather than on recoupment,
+            they&rsquo;re debt by another name and your cash basis is fiction.
+          </p>
+        )}
+      </div>
 
-      {/* 4g. Scenario Table */}
+      {/* VISUAL — Scenario table */}
       {inputs.revenue > 0 && (
         <div style={{
-          margin: "24px 0",
+          margin: "0 0 20px",
           border: "1px solid rgba(255,255,255,0.08)",
           borderRadius: "4px",
           overflow: "hidden",
@@ -1219,7 +1110,7 @@ const RealityCheck2Section = ({
                 paddingLeft: i === 0 ? "17px" : "0",
               }}>
                 <div>
-                  <span style={{ fontSize: "14px", color: W.tertiary }}>{s.label} </span>
+                  <span style={{ fontSize: "15px", color: W.tertiary }}>{s.label} </span>
                   <span style={{ color: W.quaternary, fontSize: "11px" }}>{s.sub}</span>
                 </div>
                 <div style={{ display: "flex", gap: "20px" }}>
@@ -1250,8 +1141,8 @@ const RealityCheck2Section = ({
         </div>
       )}
 
-      {/* 4h. Valuation Prose */}
-      <div style={{ ...FONT.body, color: W.secondary, marginTop: "20px" }}>
+      {/* PROSE — interpret the scenarios */}
+      <div style={{ ...FONT.body, color: W.secondary }}>
         <p style={{ marginBottom: "20px" }}>
           Your <Num>{formatCompactCurrency(inputs.revenue)}</Num> valuation is pegged to comparable
           titles in the current acquisition market. Drop to
@@ -1261,30 +1152,13 @@ const RealityCheck2Section = ({
         </p>
       </div>
 
-      {/* 4i. Separator */}
-      <GoldSeparator />
-
-      {/* 4j. Deferment Prose */}
-      {inputs.deferments > 0 && (
-        <div style={{ ...FONT.body, color: W.secondary }}>
-          <p style={{ marginBottom: "20px" }}>
-            &ldquo;Deferred&rdquo; means different things to different lawyers.{" "}
-            <Num>{formatCompactCurrency(inputs.deferments)}</Num> in producer fees pushed past
-            first-day-of-principal doesn&rsquo;t save your investors anything if the production entity pays
-            them from first revenues. If those fees accelerate on delivery rather than on recoupment,
-            they&rsquo;re debt by another name and your cash basis is fiction.
-          </p>
-        </div>
-      )}
-
-      {/* 4k. Margin of Safety */}
+      {/* CALLOUT — margin of safety */}
       {marginOfSafety > 0 && (
         <div style={{
           background: "rgba(60,179,113,0.06)",
           borderLeft: "3px solid rgba(60,179,113,0.50)",
           padding: "16px 20px",
           borderRadius: "0 4px 4px 0",
-          marginTop: "24px",
         }}>
           <div style={{
             ...FONT.label,
@@ -1295,7 +1169,7 @@ const RealityCheck2Section = ({
           }}>
             MARGIN OF SAFETY
           </div>
-          <div style={{ fontSize: "14px", color: W.secondary, lineHeight: 1.6 }}>
+          <div style={{ fontSize: "15px", color: W.secondary, lineHeight: 1.6 }}>
             Cash basis of {formatCompactCurrency(cashBasis)} against
             a {formatCompactCurrency(inputs.revenue)} ceiling
             gives you {formatCompactCurrency(marginOfSafety)} of room.
@@ -1319,7 +1193,6 @@ const DeductionsSection = ({
   guilds: GuildState;
 }) => {
   const netDistributable = Math.max(0, inputs.revenue - result.offTopTotal);
-  const netPct = inputs.revenue > 0 ? (netDistributable / inputs.revenue) * 100 : 0;
 
   // Build ledger rows
   const rows: { label: string; rate: string; amount: number; isGross?: boolean; isTotal?: boolean }[] = [];
@@ -1378,7 +1251,7 @@ const DeductionsSection = ({
             padding: "14px 16px",
             borderTop: "1px solid rgba(255,255,255,0.06)",
           }}>
-            <div style={{ fontSize: "14px", color: W.tertiary }}>
+            <div style={{ fontSize: "15px", color: W.tertiary }}>
               {row.label}
               {row.rate && (
                 <span style={{
@@ -1410,7 +1283,7 @@ const DeductionsSection = ({
           borderTop: "2px solid rgba(255,255,255,0.12)",
           background: "rgba(255,255,255,0.03)",
         }}>
-          <span style={{ fontSize: "14px", fontWeight: 600, color: W.secondary }}>Net Distributable</span>
+          <span style={{ fontSize: "15px", fontWeight: 600, color: W.secondary }}>Net Distributable</span>
           <span style={{
             fontFamily: "'Roboto Mono', monospace",
             fontSize: "22px",
@@ -1422,47 +1295,6 @@ const DeductionsSection = ({
         </div>
       </div>
 
-      {/* 5e. Gross-to-Net Bar */}
-      <div style={{ margin: "24px 0" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "8px" }}>
-          <span style={{ ...FONT.label, fontSize: "11px", color: W.quaternary, letterSpacing: "0.10em" }}>GROSS</span>
-          <span style={{ ...FONT.label, fontSize: "11px", color: W.quaternary, letterSpacing: "0.10em" }}>NET</span>
-        </div>
-        <div style={{
-          height: "12px",
-          background: "rgba(255,255,255,0.06)",
-          borderRadius: "6px",
-          overflow: "hidden",
-          position: "relative",
-        }}>
-          <div style={{
-            position: "absolute",
-            left: 0,
-            top: 0,
-            height: "100%",
-            width: "100%",
-            borderRadius: "6px",
-            background: "rgba(255,255,255,0.08)",
-          }} />
-          <div style={{
-            position: "absolute",
-            left: 0,
-            top: 0,
-            height: "100%",
-            width: `${Math.min(100, netPct)}%`,
-            borderRadius: "6px",
-            background: "rgba(60,179,113,0.40)",
-          }} />
-        </div>
-        <div style={{ display: "flex", justifyContent: "space-between", marginTop: "8px" }}>
-          <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "14px", fontWeight: 500, color: W.quaternary }}>
-            {formatCompactCurrency(inputs.revenue)}
-          </span>
-          <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "14px", fontWeight: 500, color: SEM.green }}>
-            {formatCompactCurrency(netDistributable)}
-          </span>
-        </div>
-      </div>
     </section>
   );
 };
@@ -1635,10 +1467,10 @@ const CascadeSection = ({
 
                 {/* Row 3: amounts */}
                 <div style={{ display: "flex", justifyContent: "space-between" }}>
-                  <span style={{ ...FONT.data, fontSize: "13px", color: W.tertiary }}>
+                  <span style={{ ...FONT.data, fontSize: "14px", color: W.tertiary }}>
                     {formatCompactCurrency(tier.paid)}{tier.amount > 0 ? ` / ${formatCompactCurrency(tier.amount)}` : ""}
                   </span>
-                  <span style={{ ...FONT.data, fontSize: "13px", color: valueColor }}>
+                  <span style={{ ...FONT.data, fontSize: "14px", color: valueColor }}>
                     {isBackend ? "Split per OA" : tier.amount > 0 ? `${Math.round((tier.paid / tier.amount) * 100)}%` : "0%"}
                   </span>
                 </div>
@@ -1793,8 +1625,8 @@ const CapitalStackSection = ({
               <span style={{ ...FONT.data, fontSize: "18px", color: W.primary }}>{formatCompactCurrency(s.amount)}</span>
             </div>
             <div style={{ display: "flex", justifyContent: "space-between", paddingLeft: "20px" }}>
-              <span style={{ fontSize: "12px", color: W.quaternary }}>{s.detail}</span>
-              <span style={{ ...FONT.data, fontSize: "12px", color: W.quaternary }}>{s.pctOfBudget}</span>
+              <span style={{ fontSize: "13px", color: W.quaternary }}>{s.detail}</span>
+              <span style={{ ...FONT.data, fontSize: "13px", color: W.quaternary }}>{s.pctOfBudget}</span>
             </div>
           </div>
         ))}
@@ -1995,6 +1827,51 @@ const LockedInvestorMemoSection = () => (
   </section>
 );
 
+// ─── SECTION: CLOSING ─────────────────────────────────────────
+
+const ClosingSection = ({
+  inputs, result,
+}: {
+  inputs: WaterfallInputs;
+  result: WaterfallResult;
+}) => {
+  const multiple = result.multiple;
+
+  // Conditional tone based on deal quality
+  let toneP3: string;
+  if (multiple >= 1.5) {
+    toneP3 = "This structure supports a confident presentation. The math is clean, the margin is real, and the waterfall is defensible.";
+  } else if (multiple >= 1.0) {
+    toneP3 = "The margin is honest. In a room full of inflated projections, an honest model is a competitive advantage.";
+  } else if (multiple >= 0.7) {
+    toneP3 = "The structure is tight. That's not a disqualifier — it means the deal depends on execution. The investor who funds this needs to believe in the team, not just the spreadsheet.";
+  } else {
+    toneP3 = "You've identified the structural gap before anyone else saw it. That's the point of modeling — finding the problem while you can still fix it.";
+  }
+
+  return (
+    <section style={{ padding: "40px 24px 40px" }}>
+      <div style={{ ...FONT.body, color: W.secondary }}>
+        <p style={{ marginBottom: "20px" }}>
+          You&rsquo;ve modeled a <Num>{formatCompactCurrency(inputs.budget)}</Num> production
+          at <Num>{formatCompactCurrency(inputs.revenue)}</Num> and run it through the full
+          waterfall — how money enters, what gets deducted off the top, who gets paid in what
+          order, and what breaks if the market moves against you.
+        </p>
+        <p style={{ marginBottom: "20px" }}>
+          The numbers work on screen. The question is whether they work in the room. An investor
+          isn&rsquo;t reading your waterfall on a phone — they&rsquo;re reading a document you hand
+          them across a table. What they need is the same information you just reviewed, structured
+          for due diligence, formatted for decision-making, and presented at the level they expect.
+        </p>
+        <p>
+          {toneP3}
+        </p>
+      </div>
+    </section>
+  );
+};
+
 // ─── SECTION 8: CTA ──────────────────────────────────────────────
 
 const CTASection = () => {
@@ -2074,7 +1951,7 @@ const CTASection = () => {
               padding: "10px 24px",
               border: "1px solid rgba(255,255,255,0.10)",
               borderRadius: "8px",
-              fontSize: "13px",
+              fontSize: "14px",
               fontWeight: 500,
               letterSpacing: "0.06em",
               color: W.tertiary,
@@ -2226,7 +2103,15 @@ const WaterfallBrief = ({
 
       <GoldGlowBreak />
 
-      {/* 11. CTA */}
+      {/* 11. Closing */}
+      <ClosingSection
+        inputs={inputs}
+        result={result}
+      />
+
+      <GoldGlowBreak />
+
+      {/* 12. CTA */}
       <CTASection />
     </div>
   );
