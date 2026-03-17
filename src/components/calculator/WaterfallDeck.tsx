@@ -110,10 +110,12 @@ const SEM = {
 // ─── Shared Elements ─────────────────────────────────────────────
 
 const GoldGlowBreak = () => (
-  <div style={{
-    height: "1px",
-    background: "linear-gradient(90deg, transparent 0%, rgba(212,175,55,0.30) 30%, rgba(212,175,55,0.50) 50%, rgba(212,175,55,0.30) 70%, transparent 100%)",
-  }} />
+  <div style={{ padding: "24px 24px" }}>
+    <div style={{
+      height: "1px",
+      background: "linear-gradient(90deg, transparent 0%, rgba(212,175,55,0.15) 15%, rgba(212,175,55,0.45) 50%, rgba(212,175,55,0.15) 85%, transparent 100%)",
+    }} />
+  </div>
 );
 
 const SoftBreak = () => (
@@ -230,7 +232,19 @@ const CoverSection = ({
       display: "flex",
       flexDirection: "column",
       justifyContent: "center",
+      position: "relative",
+      overflow: "hidden",
     }}>
+      {/* Left accent line */}
+      <div style={{
+        position: "absolute",
+        left: 0,
+        top: "10%",
+        bottom: "10%",
+        width: "2px",
+        background: "linear-gradient(180deg, transparent 0%, rgba(212,175,55,0.15) 20%, rgba(212,175,55,0.25) 50%, rgba(212,175,55,0.15) 80%, transparent 100%)",
+      }} />
+
       {/* 1a. Badge */}
       <div style={{
         display: "inline-flex",
@@ -325,7 +339,7 @@ const CoverSection = ({
             {formatCompactCurrency(inputs.budget)}
           </div>
         </div>
-        <div style={{ flex: 1, background: "#0A0A0A", padding: "14px" }}>
+        <div style={{ flex: 1, background: "#0A0A0A", padding: "14px", borderLeft: "2px solid rgba(212,175,55,0.25)" }}>
           <div style={{ ...FONT.fine, color: W.quaternary, marginBottom: "4px" }}>CASH BASIS</div>
           <div style={{
             fontFamily: "'Roboto Mono', monospace",
@@ -358,7 +372,7 @@ const CoverSection = ({
             {formatCompactCurrency(inputs.revenue)}
           </div>
         </div>
-        <div style={{ flex: 1, background: "#0A0A0A", padding: "14px" }}>
+        <div style={{ flex: 1, background: "#0A0A0A", padding: "14px", borderLeft: `2px solid ${returnColor === SEM.green ? "rgba(60,179,113,0.25)" : returnColor === SEM.amber ? "rgba(240,168,48,0.25)" : "rgba(224,82,82,0.35)"}` }}>
           <div style={{ ...FONT.fine, color: W.quaternary, marginBottom: "4px" }}>INVESTOR RETURN</div>
           <div style={{
             fontFamily: "'Roboto Mono', monospace",
@@ -904,26 +918,35 @@ const RealityCheck1Section = ({
       )}
 
       {/* 2h. Net Strip */}
-      <div style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        padding: "14px 20px",
-        background: "rgba(60,179,113,0.06)",
-        border: "1px solid rgba(60,179,113,0.20)",
-        borderRadius: "4px",
-        margin: "28px 0",
-      }}>
-        <span style={{ fontSize: "14px", color: W.tertiary }}>Net to Investors</span>
-        <span style={{
-          fontFamily: "'Roboto Mono', monospace",
-          fontSize: "22px",
-          fontWeight: 500,
-          color: SEM.green,
-        }}>
-          {formatCompactCurrency(netDistributable)}
-        </span>
-      </div>
+      {(() => {
+        const netBg = netColor === SEM.green
+          ? "rgba(60,179,113,0.06)"
+          : netColor === SEM.amber
+          ? "rgba(240,168,48,0.06)"
+          : "rgba(224,82,82,0.06)";
+        const netBorder = netColor === SEM.green
+          ? "rgba(60,179,113,0.20)"
+          : netColor === SEM.amber
+          ? "rgba(240,168,48,0.20)"
+          : "rgba(224,82,82,0.20)";
+        return (
+          <div style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            padding: "14px 20px",
+            background: netBg,
+            border: `1px solid ${netBorder}`,
+            borderRadius: "4px",
+            margin: "28px 0",
+          }}>
+            <span style={{ fontSize: "14px", color: W.tertiary }}>Net to Investors</span>
+            <span style={{ ...FONT.data, fontSize: "22px", color: netColor }}>
+              {formatCompactCurrency(netDistributable)}
+            </span>
+          </div>
+        );
+      })()}
 
       {/* 2i. Result Prose */}
       <div style={{ ...FONT.body, color: W.secondary }}>
@@ -1186,6 +1209,8 @@ const RealityCheck2Section = ({
                 alignItems: "center",
                 padding: "12px 0",
                 borderBottom: i < scenarios.length - 1 ? "1px solid rgba(255,255,255,0.06)" : "none",
+                borderLeft: i === 0 ? "3px solid rgba(212,175,55,0.40)" : "none",
+                paddingLeft: i === 0 ? "17px" : "0",
               }}>
                 <div>
                   <span style={{ fontSize: "14px", color: W.tertiary }}>{s.label} </span>
@@ -1475,123 +1500,155 @@ const CascadeSection = ({
         Net distributable: {formatFullCurrency(netDistributable)} flowing through the waterfall
       </div>
 
-      {/* 6d. Cascade Bars */}
-      <div style={{ margin: "24px 0" }}>
+      {/* 6d. Cascade Tier Cards */}
+      <div style={{
+        margin: "24px 0",
+        display: "flex",
+        flexDirection: "column",
+        gap: "16px",
+        position: "relative",
+        paddingLeft: "16px",
+      }}>
+        {/* Vertical connecting line — only render if 2+ tiers */}
+        {cascadeTiers.length >= 2 && (
+          <div style={{
+            position: "absolute",
+            left: "3px",
+            top: "24px",
+            bottom: "24px",
+            width: "2px",
+            background: "linear-gradient(180deg, rgba(212,175,55,0.30), rgba(212,175,55,0.15))",
+            borderRadius: "1px",
+          }} />
+        )}
+
         {cascadeTiers.map((tier) => {
           const fillPct = netDistributable > 0 ? (tier.paid / netDistributable) * 100 : 0;
           const isFunded = tier.status === "funded";
           const isPartial = tier.status === "partial";
-          const fillColor = isFunded
-            ? "rgba(60,179,113,0.40)"
-            : isPartial
-            ? "rgba(212,175,55,0.40)"
-            : "transparent";
-          const badgeClass = isFunded ? "funded" : isPartial ? "partial" : "zero";
+          const isBackend = tier.label === "Backend Pool";
+
+          // Color scheme
+          const borderColor = isFunded
+            ? "rgba(60,179,113,0.15)"
+            : isPartial || isBackend
+            ? "rgba(212,175,55,0.15)"
+            : "rgba(224,82,82,0.10)";
+          const bgColor = isFunded
+            ? "rgba(60,179,113,0.03)"
+            : isPartial || isBackend
+            ? "rgba(212,175,55,0.03)"
+            : "rgba(224,82,82,0.02)";
+          const dotColor = isFunded
+            ? "#3CB371"
+            : isPartial || isBackend
+            ? "rgba(212,175,55,0.70)"
+            : "rgba(224,82,82,0.50)";
+          const dotBorder = isFunded
+            ? "rgba(60,179,113,0.70)"
+            : isPartial || isBackend
+            ? "rgba(212,175,55,0.70)"
+            : "rgba(224,82,82,0.50)";
+          const dotGlow = isFunded ? "0 0 6px rgba(60,179,113,0.30)" : "none";
+          const barGradient = isFunded
+            ? "linear-gradient(90deg, rgba(60,179,113,0.25), rgba(60,179,113,0.45))"
+            : isPartial || isBackend
+            ? "linear-gradient(90deg, rgba(212,175,55,0.20), rgba(212,175,55,0.40))"
+            : "linear-gradient(90deg, rgba(224,82,82,0.15), rgba(224,82,82,0.30))";
+          const valueColor = isFunded ? SEM.green : isPartial || isBackend ? G.emphasis : SEM.red;
+
           const badgeStyle: React.CSSProperties = isFunded
-            ? { background: "rgba(60,179,113,0.20)", color: SEM.green }
+            ? { background: "rgba(60,179,113,0.15)", color: SEM.green }
             : isPartial
             ? { background: "rgba(240,168,48,0.20)", color: SEM.amber }
+            : isBackend
+            ? { background: "rgba(212,175,55,0.12)", color: G.emphasis }
             : { background: "rgba(224,82,82,0.15)", color: "rgba(224,82,82,0.70)" };
-          const badgeText = isFunded ? "FUNDED" : isPartial ? "PARTIAL" : "ZERO";
+          const badgeText = isFunded ? "FUNDED" : isPartial ? "PARTIAL" : isBackend ? "SURPLUS" : "ZERO";
 
-          // If fill is narrow (<120px equivalent), badge goes outside
-          // At 430px max, track is ~306px (430-24-24-100-12 gap). 120/306 ≈ 39%
-          const fillIsNarrow = fillPct < 39;
+          // Display label
+          const displayLabel = tier.label === "Equity + Premium" && inputs.premium > 0
+            ? `Equity (${100 + inputs.premium}%)`
+            : tier.label === "Deferments"
+            ? "Deferred Fees"
+            : tier.label;
 
           return (
-            <div key={tier.label} style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "12px",
-              marginBottom: "12px",
-            }}>
+            <div key={tier.label} style={{ position: "relative" }}>
+              {/* Node dot on connecting line */}
+              {cascadeTiers.length >= 2 && (
+                <div style={{
+                  position: "absolute",
+                  left: "-16px",
+                  top: "20px",
+                  width: "8px",
+                  height: "8px",
+                  borderRadius: "50%",
+                  background: dotColor,
+                  border: `1.5px solid ${dotBorder}`,
+                  boxShadow: dotGlow,
+                }} />
+              )}
+
+              {/* Tier card */}
               <div style={{
-                width: "100px",
-                flexShrink: 0,
-                fontSize: "12px",
-                color: W.tertiary,
-                textAlign: "right",
+                padding: "16px",
+                border: `1px solid ${borderColor}`,
+                borderRadius: "6px",
+                background: bgColor,
               }}>
-                {tier.label === "Equity + Premium" && inputs.premium > 0
-                  ? `Equity (${100 + inputs.premium}%)`
-                  : tier.label === "Deferments"
-                  ? "Deferred Fees"
-                  : tier.label}
-              </div>
-              <div style={{
-                flex: 1,
-                height: "24px",
-                background: "rgba(255,255,255,0.04)",
-                borderRadius: "4px",
-                position: "relative",
-                overflow: "visible",
-              }}>
-                {fillPct > 0 && (
-                  <div style={{
-                    position: "absolute",
-                    left: 0,
-                    top: 0,
-                    height: "100%",
-                    width: `${Math.min(100, fillPct)}%`,
-                    borderRadius: "4px",
-                    background: fillColor,
-                    display: "flex",
-                    alignItems: "center",
-                    paddingLeft: "8px",
-                    fontFamily: "'Roboto Mono', monospace",
-                    fontSize: "11px",
-                    fontWeight: 500,
-                    color: W.secondary,
-                    overflow: "hidden",
-                    whiteSpace: "nowrap",
-                  }}>
-                    {!fillIsNarrow && formatCompactCurrency(tier.paid)}
+                {/* Row 1: label + badge */}
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                    <div style={{
+                      width: "6px", height: "6px", borderRadius: "50%",
+                      background: dotColor, boxShadow: dotGlow,
+                    }} />
+                    <span style={{ fontSize: "13px", fontWeight: 500, color: W.secondary }}>
+                      {displayLabel}
+                    </span>
                   </div>
-                )}
-                {/* Badge */}
-                {fillIsNarrow ? (
-                  <div style={{
-                    position: "absolute",
-                    left: `calc(${Math.min(100, fillPct)}% + 8px)`,
-                    top: "50%",
-                    transform: "translateY(-50%)",
-                    fontSize: "9px",
-                    fontWeight: 700,
-                    letterSpacing: "0.10em",
-                    textTransform: "uppercase" as const,
-                    padding: "2px 6px",
-                    borderRadius: "2px",
-                    whiteSpace: "nowrap",
+                  <span style={{
+                    fontSize: "9px", fontWeight: 700, letterSpacing: "0.10em",
+                    textTransform: "uppercase" as const, padding: "3px 8px", borderRadius: "3px",
                     ...badgeStyle,
-                  }}>
-                    {fillIsNarrow && fillPct > 0 && (
-                      <span style={{ marginRight: "4px", fontFamily: "'Roboto Mono', monospace" }}>
-                        {formatCompactCurrency(tier.paid)}
-                      </span>
-                    )}
-                    {badgeText}
-                  </div>
-                ) : (
-                  <div style={{
-                    position: "absolute",
-                    right: "8px",
-                    top: "50%",
-                    transform: "translateY(-50%)",
-                    fontSize: "9px",
-                    fontWeight: 700,
-                    letterSpacing: "0.10em",
-                    textTransform: "uppercase" as const,
-                    padding: "2px 6px",
-                    borderRadius: "2px",
-                    ...badgeStyle,
-                  }}>
-                    {badgeText}
-                  </div>
-                )}
+                  }}>{badgeText}</span>
+                </div>
+
+                {/* Row 2: fill bar */}
+                <div style={{ height: "8px", background: "rgba(255,255,255,0.04)", borderRadius: "4px", overflow: "hidden", marginBottom: "8px" }}>
+                  {fillPct > 0 && (
+                    <div style={{
+                      height: "100%",
+                      width: `${Math.min(100, fillPct)}%`,
+                      borderRadius: "4px",
+                      background: barGradient,
+                    }} />
+                  )}
+                </div>
+
+                {/* Row 3: amounts */}
+                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                  <span style={{ ...FONT.data, fontSize: "13px", color: W.tertiary }}>
+                    {formatCompactCurrency(tier.paid)}{tier.amount > 0 ? ` / ${formatCompactCurrency(tier.amount)}` : ""}
+                  </span>
+                  <span style={{ ...FONT.data, fontSize: "13px", color: valueColor }}>
+                    {isBackend ? "Split per OA" : tier.amount > 0 ? `${Math.round((tier.paid / tier.amount) * 100)}%` : "0%"}
+                  </span>
+                </div>
               </div>
             </div>
           );
         })}
+
+        {/* Summary line */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "12px", padding: "8px 0" }}>
+          <div style={{ flex: 1, height: "1px", background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.08))" }} />
+          <span style={{ ...FONT.fine, color: W.ghost }}>
+            {tiers.every(t => t.status === "funded") ? "ALL TIERS FUNDED" : "PARTIAL FUNDING"}
+          </span>
+          <div style={{ flex: 1, height: "1px", background: "linear-gradient(90deg, rgba(255,255,255,0.08), transparent)" }} />
+        </div>
       </div>
 
       {/* 6e. Cascade Prose */}
