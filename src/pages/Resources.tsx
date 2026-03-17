@@ -415,6 +415,8 @@ const Resources = () => {
               ...s.commandNavTrigger,
               opacity: headerGone ? 1 : 0,
               width: headerGone ? "36px" : "0px",
+              minWidth: headerGone ? "36px" : "0px",
+              marginRight: headerGone ? "0px" : "-8px",
               height: "36px",
               padding: 0,
               overflow: "hidden",
