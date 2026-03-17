@@ -541,7 +541,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
   stepNumCol: {
     position: "relative", display: "flex", alignItems: "flex-start", justifyContent: "center",
-    background: "radial-gradient(circle at 50% 28px, rgba(212,175,55,0.20) 0%, #0a0a0a 80%)",
+    background: "radial-gradient(circle at 50% 28px, rgba(212,175,55,0.20) 0%, #0A0A0A 80%)",
     paddingTop: "22px",
   },
   stepLine: {
@@ -569,7 +569,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
   acquisitionCallout: {
     position: "relative", overflow: "hidden", textAlign: "center", margin: "0 20px 10px",
-    background: "radial-gradient(circle at 50% 70%, rgba(212,175,55,0.20) 0%, #0a0a0a 75%)", border: "1px solid rgba(212,175,55,0.25)", borderRadius: "12px", padding: "24px 20px",
+    background: "radial-gradient(circle at 50% 70%, rgba(212,175,55,0.20) 0%, #0A0A0A 75%)", border: "1px solid rgba(212,175,55,0.25)", borderRadius: "12px", padding: "24px 20px",
     boxShadow: "0 0 24px rgba(212,175,55,0.10)",
   },
   acqLabel: { fontFamily: "'Roboto Mono', monospace", fontSize: "14px", textTransform: "uppercase", letterSpacing: "0.14em", color: "#D4AF37", marginBottom: "4px" },
@@ -578,7 +578,7 @@ const styles: Record<string, React.CSSProperties> = {
 
   waterfallTiersBox: {
     position: "relative", overflow: "hidden", margin: "0 20px",
-    border: "1px solid rgba(212,175,55,0.25)", borderRadius: "12px", background: "#050505",
+    border: "1px solid rgba(212,175,55,0.25)", borderRadius: "12px", background: "#0A0A0A",
     boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 24px rgba(212,175,55,0.10)",
   },
   tierRow: {
@@ -612,7 +612,7 @@ const styles: Record<string, React.CSSProperties> = {
   pipeRight: { flex: 1, height: "18px", borderTop: "2px solid rgba(212,175,55,0.50)", borderRight: "2px solid rgba(212,175,55,0.50)", borderRadius: "0 6px 0 0" },
   buckets: { display: "flex", gap: "10px", marginTop: "-1px" },
   bucket: {
-    flex: 1, textAlign: "center", background: "#0a0a0a", border: "1px solid rgba(212,175,55,0.25)",
+    flex: 1, textAlign: "center", background: "#0A0A0A", border: "1px solid rgba(212,175,55,0.25)",
     borderTop: "2px solid #D4AF37", borderRadius: "0 0 10px 10px", padding: "16px 12px",
   },
   bucketLabel: { fontFamily: "'Roboto Mono', monospace", fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.12em", color: "rgba(255,255,255,0.70)", marginBottom: "8px" },
@@ -629,7 +629,7 @@ const styles: Record<string, React.CSSProperties> = {
     boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 24px rgba(212,175,55,0.10)", position: "relative",
   },
   badgeGrid: { display: "grid", gridTemplateColumns: "1fr", gap: "1px", background: "rgba(212,175,55,0.15)" },
-  badgeCard: { background: "radial-gradient(circle at 45px 57px, rgba(212,175,55,0.10) 0%, #050505 65%)", padding: "36px 24px", textAlign: "left" },
+  badgeCard: { background: "radial-gradient(circle at 45px 57px, rgba(212,175,55,0.10) 0%, #0A0A0A 65%)", padding: "36px 24px", textAlign: "left" },
   badgeNum: {
     width: "42px", height: "42px", borderRadius: "50%", background: "#D4AF37", color: "#000",
     display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.5rem",
@@ -799,7 +799,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
 
   /* ── FOOTER ── */
-  footer: { background: "#0a0a0a", borderTop: "1px solid rgba(255,255,255,0.06)", padding: "32px 20px 40px" },
+  footer: { background: "#0A0A0A", borderTop: "1px solid rgba(255,255,255,0.06)", padding: "32px 20px 40px" },
   footerLinks: { display: "flex", justifyContent: "center", gap: "20px", marginBottom: "16px" },
   footerIcon: { color: "rgba(212,175,55,0.50)", textDecoration: "none", display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", borderRadius: "8px", border: "1px solid rgba(212,175,55,0.15)", transition: "color 0.2s ease, border-color 0.2s ease" },
   footerNav: { display: "flex", justifyContent: "center", alignItems: "center", gap: "10px", marginBottom: "16px" },

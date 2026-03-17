@@ -217,7 +217,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
         style={{
           height: "min(72vh, 580px)",
           paddingBottom: "calc(var(--bottom-bar-h) + env(safe-area-inset-bottom))",
-          background: "#000000",
+          background: "#000",
           borderRadius: "8px 8px 0 0",
           boxShadow: "0 -20px 60px rgba(212,175,55,0.08), 0 -40px 80px rgba(0,0,0,0.95)",
         }}
@@ -345,7 +345,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
                   className="max-w-[95%] border overflow-hidden"
                   style={{
                     borderRadius: "6px",
-                    background: "#000000",
+                    background: "#000",
                     borderColor: "rgba(212,175,55,0.15)",
                     boxShadow: "0 0 30px rgba(212,175,55,0.08)",
                   }}
@@ -385,7 +385,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
         {/* Input area */}
         <div
           className="px-4 pb-3 pt-3 flex-shrink-0 border-t"
-          style={{ borderColor: "rgba(212,175,55,0.15)", background: "#000000" }}
+          style={{ borderColor: "rgba(212,175,55,0.15)", background: "#000" }}
         >
           <form onSubmit={handleOgSubmit}>
             <div
