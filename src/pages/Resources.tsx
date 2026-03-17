@@ -1225,8 +1225,8 @@ if (typeof document !== "undefined" && !document.getElementById(RESPONSIVE_STYLE
         scroll-snap-type: x mandatory !important;
         -webkit-overflow-scrolling: touch !important;
         gap: 12px !important;
-        margin: 0 -24px 0 -20px !important;
-        padding: 0 20px 8px 20px !important;
+        margin: 0 -24px 0 -24px !important;
+        padding: 0 20px 8px 24px !important;
         scrollbar-width: none !important;
       }
       .vault-pinned-grid::-webkit-scrollbar { display: none !important; }

@@ -688,7 +688,7 @@ const styles: Record<string, React.CSSProperties> = {
   tierIntro: { fontFamily: "'Inter', sans-serif", fontSize: "15px", color: "rgba(255,255,255,0.7)", lineHeight: 1.5, margin: "28px 24px 0" },
   tierChecklist: { padding: "24px", display: "flex", flexDirection: "column", gap: "16px" },
   checkItem: { display: "flex", gap: "12px", alignItems: "flex-start" },
-  checkMark: { color: "#D4AF37", fontSize: "14px", fontWeight: 600, lineHeight: 1.3 },
+  checkMark: { color: "#3CB371", fontSize: "14px", fontWeight: 600, lineHeight: 1.3 },
   checkText: { fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "rgba(255,255,255,0.85)", lineHeight: 1.45 },
   tierAction: { padding: "0 24px 36px" },
   btnSnapshot: {
@@ -770,8 +770,8 @@ const styles: Record<string, React.CSSProperties> = {
     background: "#000", display: "grid", gridTemplateColumns: "22px 1fr", gap: "10px",
     padding: "18px 20px", alignItems: "flex-start", borderLeft: "1px solid rgba(212,175,55,0.08)",
   },
-  checkIconYes: { fontFamily: "'Roboto Mono', monospace", fontSize: "22px", paddingTop: "2px", color: "#D4AF37", textShadow: "0 0 12px rgba(212,175,55,0.5)" },
-  checkIconNo: { fontFamily: "'Roboto Mono', monospace", fontSize: "22px", paddingTop: "2px", color: "rgba(255,80,80,0.85)" },
+  checkIconYes: { fontFamily: "'Roboto Mono', monospace", fontSize: "22px", paddingTop: "2px", color: "#3CB371", textShadow: "0 0 12px rgba(60,179,113,0.4)" },
+  checkIconNo: { fontFamily: "'Roboto Mono', monospace", fontSize: "22px", paddingTop: "2px", color: "rgba(220,38,38,0.85)" },
   checkTextYes: { fontFamily: "'Inter', sans-serif", fontSize: "14px", lineHeight: 1.4, color: "rgba(255,255,255,0.85)" },
   checkTextNo: { fontFamily: "'Inter', sans-serif", fontSize: "14px", lineHeight: 1.4, color: "rgba(255,255,255,0.55)" },
 
