@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Check } from "lucide-react";
+import { useHaptics } from "@/hooks/use-haptics";
 import { WaterfallInputs, GuildState } from "@/lib/waterfall";
 import ChapterCard, { cardH, cardHSub } from "../ChapterCard";
 import GlossaryTrigger, { GLOSSARY } from "../GlossaryTrigger";
@@ -229,7 +230,7 @@ const s: Record<string, React.CSSProperties> = {
   innerDivLine: {
     flex: 1,
     height: "1px",
-    background: "rgba(255,255,255,0.06)",
+    background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.25), transparent)",
   },
   // Guild — horizontal layout
   guildRow: {
@@ -383,6 +384,7 @@ const parseValue = (str: string): number => {
 };
 
 const BudgetInput = ({ inputs, guilds, onUpdateInput, onToggleGuild, onNext }: BudgetInputProps) => {
+  const haptics = useHaptics();
   const [pressedGuild, setPressedGuild] = useState<string | null>(null);
   const [hasFocused, setHasFocused] = useState(false);
   const [hasPulsed, setHasPulsed] = useState(false);
@@ -485,7 +487,7 @@ const BudgetInput = ({ inputs, guilds, onUpdateInput, onToggleGuild, onNext }: B
                   opacity: 0,
                   animation: `pillIn 0.3s ease-out ${0.05 + i * 0.05}s forwards`,
                 }}
-                onClick={() => onUpdateInput("budget", qa.value)}
+                onClick={() => { haptics.light(); onUpdateInput("budget", qa.value); }}
               >
                 <span>{qa.label}</span>
                 <span style={isOn ? s.quickLabelOn : s.quickLabel}>{qa.tier}</span>
@@ -512,7 +514,7 @@ const BudgetInput = ({ inputs, guilds, onUpdateInput, onToggleGuild, onNext }: B
                   ...(isSelected ? s.guildOn : s.guild),
                   ...(isPressed ? { transform: "scale(0.96)" } : {}),
                 }}
-                onClick={() => onToggleGuild(guild.key)}
+                onClick={() => { haptics.light(); onToggleGuild(guild.key); }}
                 onPointerDown={() => setPressedGuild(guild.key)}
                 onPointerUp={() => setPressedGuild(null)}
                 onPointerLeave={() => setPressedGuild(null)}
@@ -531,7 +533,7 @@ const BudgetInput = ({ inputs, guilds, onUpdateInput, onToggleGuild, onNext }: B
           })}
         </div>
 
-        <p style={s.guildHint}>Most indie productions are non-union</p>
+        <p style={s.guildHint}>Select any guilds your production is signatory to</p>
 
         {/* CTA — fades in when budget > 0 */}
         <div style={isCompleted ? s.revealVis : s.reveal}>
