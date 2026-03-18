@@ -52,7 +52,7 @@ const s: Record<string, React.CSSProperties> = {
   },
   eyebrowLabel: {
     fontFamily: "'Roboto Mono', monospace", fontSize: "13px",
-    letterSpacing: "0.2em", textTransform: "uppercase", color: "#D4AF37",
+    letterSpacing: "0.15em", textTransform: "uppercase", color: "#D4AF37",
   },
   /* Card base */
   cardStandard: {
@@ -301,7 +301,7 @@ const WorkingModelPopup = ({
     <div
       style={{
         position: "relative", width: "100%", maxWidth: "430px",
-        borderTopLeftRadius: "16px", borderTopRightRadius: "16px",
+        borderTopLeftRadius: "12px", borderTopRightRadius: "12px",
         overflow: "hidden",
         border: "1px solid rgba(212,175,55,0.35)",
         borderBottom: "none",
@@ -335,10 +335,10 @@ const WorkingModelPopup = ({
           border: "1px solid rgba(212,175,55,0.3)",
           color: "#D4AF37",
           fontSize: "11px",
-          letterSpacing: "0.18em",
+          letterSpacing: "0.15em",
           textTransform: "uppercase",
           fontWeight: 700,
-          borderRadius: "12px",
+          borderRadius: "4px",
           marginBottom: "12px",
           fontFamily: "'Roboto Mono', monospace",
         }}>
@@ -531,6 +531,18 @@ const ProductCard = ({
         <span style={isFeatured ? s.priceFeatured : s.priceStandard}>
           ${product.price.toLocaleString()}
         </span>
+        {product.priceNote && (
+          <span style={{
+            display: "block",
+            fontFamily: "'Roboto Mono', monospace",
+            fontSize: "11px",
+            color: "rgba(255,255,255,0.40)",
+            letterSpacing: "0.06em",
+            marginTop: "4px",
+          }}>
+            {product.priceNote}
+          </span>
+        )}
         <p style={s.shortDesc}>{product.shortDescription}</p>
       </div>
 
@@ -649,6 +661,18 @@ const ServiceCard = ({
             </span>
           )}
         </div>
+        {product.priceNote && (
+          <span style={{
+            display: "block",
+            fontFamily: "'Roboto Mono', monospace",
+            fontSize: "11px",
+            color: "rgba(255,255,255,0.40)",
+            letterSpacing: "0.06em",
+            marginTop: "4px",
+          }}>
+            {product.priceNote}
+          </span>
+        )}
         <p style={s.shortDesc}>{product.shortDescription}</p>
       </div>
 
@@ -725,14 +749,14 @@ const FaqItem = ({
       }}
       onMouseLeave={(e) => {
         const t = e.currentTarget.querySelector("span") as HTMLElement;
-        if (t && !isOpen) t.style.color = "rgba(255,255,255,0.9)";
+        if (t && !isOpen) t.style.color = "rgba(255,255,255,0.92)";
       }}
     >
       <span style={{
         fontFamily: "'Bebas Neue', sans-serif",
         fontSize: "1.3rem",
         letterSpacing: "0.04em",
-        color: isOpen ? "#D4AF37" : "rgba(255,255,255,0.9)",
+        color: isOpen ? "#D4AF37" : "rgba(255,255,255,0.92)",
         transition: "color 0.2s",
         lineHeight: 1.2,
       }}>
@@ -755,7 +779,7 @@ const FaqItem = ({
         <p style={{
           fontFamily: "'Inter', sans-serif",
           fontSize: "15px",
-          color: "rgba(255,255,255,0.65)",
+          color: "rgba(255,255,255,0.70)",
           lineHeight: 1.6,
           margin: 0,
         }}>
@@ -898,7 +922,7 @@ const Store = () => {
       <section
         ref={heroRef}
         style={{
-          padding: "40px 20px 48px",
+          padding: "40px 24px 48px",
           textAlign: "center",
           position: "relative",
         }}
@@ -926,7 +950,7 @@ const Store = () => {
           <p style={{
             fontFamily: "'Inter', sans-serif",
             fontSize: "15px",
-            color: "rgba(255,255,255,0.65)",
+            color: "rgba(255,255,255,0.70)",
             lineHeight: 1.6,
             margin: 0,
           }}>
@@ -942,7 +966,7 @@ const Store = () => {
         ref={productsRef}
         style={{
           display: "flex", flexDirection: "column", gap: "24px",
-          padding: "0 20px 48px",
+          padding: "0 24px 48px",
         }}
       >
         {sortedProducts.map((product, i) => (
@@ -961,7 +985,7 @@ const Store = () => {
            DIVIDER — diamond ornament
          ────────────────────────────────────────────────────────── */}
       <div style={{
-        padding: "0 20px", margin: "24px 0 48px",
+        padding: "0 24px", margin: "24px 0 48px",
         display: "flex", alignItems: "center", justifyContent: "center", gap: "16px",
       }}>
         <div style={{ flex: 1, height: "1px", background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.25), transparent)" }} />
@@ -975,7 +999,7 @@ const Store = () => {
       <section
         ref={turnkeyHeroRef}
         style={{
-          padding: "0 20px 32px",
+          padding: "0 24px 32px",
           textAlign: "center",
         }}
       >
@@ -995,7 +1019,7 @@ const Store = () => {
           <p style={{
             fontFamily: "'Inter', sans-serif",
             fontSize: "15px",
-            color: "rgba(255,255,255,0.65)",
+            color: "rgba(255,255,255,0.70)",
             lineHeight: 1.6,
             margin: 0,
           }}>
@@ -1011,7 +1035,7 @@ const Store = () => {
         ref={servicesRef}
         style={{
           display: "flex", flexDirection: "column", gap: "24px",
-          padding: "0 20px 48px",
+          padding: "0 24px 48px",
         }}
       >
         {sortedServices.map((product, i) => (
@@ -1030,7 +1054,7 @@ const Store = () => {
          ────────────────────────────────────────────────────────── */}
       <section
         ref={faqRef}
-        style={{ padding: "48px 20px 24px" }}
+        style={{ padding: "48px 24px 24px" }}
       >
         <div style={reveal(faqVisible)}>
           <EyebrowRuled text="Questions" />
@@ -1066,7 +1090,7 @@ const Store = () => {
       <div
         ref={bespokeRef}
         style={{
-          margin: "0 20px 64px",
+          margin: "0 24px 64px",
           ...reveal(bespokeVisible),
         }}
       >
@@ -1092,7 +1116,7 @@ const Store = () => {
           <p style={{
             fontFamily: "'Inter', sans-serif",
             fontSize: "15px",
-            color: "rgba(255,255,255,0.6)",
+            color: "rgba(255,255,255,0.55)",
             lineHeight: 1.6,
             maxWidth: "90%",
             margin: "0 auto 24px",
@@ -1100,7 +1124,7 @@ const Store = () => {
             Bespoke financial modeling, custom comp research, or institutional-grade investor materials beyond what these packages cover.
           </p>
           <a
-            href="mailto:thefilmmaker.og@gmail.com"
+            href="mailto:hello@filmmakerog.com?subject=Custom%20Inquiry"
             style={{
               display: "inline-flex",
               alignItems: "center",
@@ -1112,7 +1136,7 @@ const Store = () => {
               color: "#D4AF37",
               background: "rgba(212,175,55,0.05)",
               border: "1px solid rgba(212,175,55,0.4)",
-              borderRadius: "6px",
+              borderRadius: "8px",
               padding: "14px 24px",
               textDecoration: "none",
               transition: "background 0.2s, border-color 0.2s",
@@ -1135,7 +1159,7 @@ const Store = () => {
         style={{
           background: "#000",
           borderTop: "1px solid rgba(255,255,255,0.06)",
-          padding: "32px 20px 64px",
+          padding: "32px 24px 64px",
           ...reveal(footerVisible),
         }}
       >
