@@ -96,12 +96,12 @@ const Index = () => {
   /* ── Data ── */
   const waterfallTiers = [
     { num: "01", name: "CAM Fee", amt: "$30,000" },
-    { num: "02", name: "Sales Agent Fee (10%)", amt: "$300,000" },
-    { num: "03", name: "Sales Agent Expenses", amt: "$50,000" },
+    { num: "02", name: "SA Commission (10%)", amt: "$300,000" },
+    { num: "03", name: "SA Expenses", amt: "$50,000" },
     { num: "04", name: "E&O / Delivery", amt: "$18,000" },
-    { num: "05", name: "Senior Debt Recoupment", amt: "$1,200,000" },
+    { num: "05", name: "Senior Debt", amt: "$1,200,000" },
     { num: "06", name: "Mezzanine Debt", amt: "$300,000" },
-    { num: "07", name: "Equity Recoupment", amt: "$450,000" },
+    { num: "07", name: "Equity", amt: "$450,000" },
     { num: "08", name: "Deferments", amt: "$52,000" },
   ];
 
@@ -190,7 +190,7 @@ const Index = () => {
               <em style={styles.heroEm}>Waterfall</em>
             </h1>
             <p style={styles.heroSub}>Your Deal Structure Begins Here.</p>
-            <div style={{ display: "flex", justifyContent: "center" }}>
+            <div style={styles.heroCard}>
               <button onClick={handleCTA} style={styles.ctaBtn} onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>
                 <span style={{ position: "relative", zIndex: 1 }}>RUN MY WATERFALL</span>
                 <div style={styles.ctaShimmer} />
@@ -562,7 +562,7 @@ const styles: Record<string, React.CSSProperties> = {
   hero: {
     position: "relative", textAlign: "center",
     padding: "24px 24px 16px",
-    backgroundImage: "linear-gradient(to bottom, rgba(0,0,0,0.68) 0%, rgba(0,0,0,0.45) 40%, rgba(0,0,0,0.70) 100%), url('/hero-bg.jpg')",
+    backgroundImage: "linear-gradient(to bottom, rgba(0,0,0,0.50) 0%, rgba(0,0,0,0.35) 40%, rgba(0,0,0,0.65) 100%), url('/hero-bg.jpg')",
     backgroundSize: "cover",
     backgroundPosition: "center",
   },
@@ -574,7 +574,7 @@ const styles: Record<string, React.CSSProperties> = {
   heroH1: {
     fontFamily: "'Bebas Neue', sans-serif", fontSize: "4.2rem", color: "#fff",
     textAlign: "center", marginBottom: "4px", lineHeight: 0.86, letterSpacing: "0.01em",
-    textShadow: "0 2px 16px rgba(0,0,0,0.9)",
+    textShadow: "0 2px 20px rgba(0,0,0,0.95), 0 4px 40px rgba(0,0,0,0.5)",
   },
   heroEm: { fontStyle: "normal", color: "#D4AF37", display: "block", textShadow: "0 2px 20px rgba(0,0,0,0.8), 0 0 40px rgba(212,175,55,0.5), 0 0 80px rgba(212,175,55,0.25)" },
   heroMid: { display: "block", color: "#fff", fontStyle: "normal", textShadow: "0 2px 16px rgba(0,0,0,0.9)" },
@@ -582,6 +582,16 @@ const styles: Record<string, React.CSSProperties> = {
     fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.5rem", textAlign: "center",
     marginBottom: "28px", lineHeight: 1.1, color: "#fff",
     marginTop: "8px", textShadow: "0 2px 12px rgba(0,0,0,0.9)",
+  },
+  heroCard: {
+    position: "relative",
+    border: "1px solid rgba(212,175,55,0.45)",
+    borderRadius: "12px",
+    padding: "28px 24px",
+    background: "rgba(0,0,0,0.75)",
+    margin: "8px 24px 0",
+    display: "flex",
+    justifyContent: "center",
   },
 
   /* ── § 2 HOW IT WORKS ── */
@@ -630,7 +640,7 @@ const styles: Record<string, React.CSSProperties> = {
 
   waterfallTiersBox: {
     position: "relative", overflow: "hidden", margin: "0 24px",
-    border: "1px solid rgba(212,175,55,0.25)", borderRadius: "12px", background: "#0A0A0A",
+    border: "1px solid rgba(212,175,55,0.25)", borderRadius: "12px", background: "#000",
     boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 24px rgba(212,175,55,0.10)",
   },
   tierRow: {
@@ -646,9 +656,9 @@ const styles: Record<string, React.CSSProperties> = {
     borderRadius: "6px", fontWeight: 600,
     boxShadow: "0 0 16px rgba(212,175,55,0.3)",
   },
-  tierName: { fontFamily: "'Inter', sans-serif", fontSize: "18px", fontWeight: 600, color: "#fff", lineHeight: 1.3 },
-  tierAmt: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.4rem", color: "rgba(220,38,38,0.85)", textAlign: "right", whiteSpace: "nowrap", letterSpacing: "0.02em" },
-  tierMinus: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.4rem", color: "rgba(220,38,38,0.70)", marginRight: "4px", fontWeight: 400 },
+  tierName: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.4rem", color: "#fff", lineHeight: 1.3, textTransform: "uppercase", letterSpacing: "0.02em" },
+  tierAmt: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "rgba(220,38,38,0.85)", textAlign: "right", whiteSpace: "nowrap", letterSpacing: "0.02em" },
+  tierMinus: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "rgba(220,38,38,0.70)", marginRight: "4px", fontWeight: 400 },
 
   /* Flow diagram */
   flowDiagram: { margin: "16px 24px 0" },
@@ -695,7 +705,7 @@ const styles: Record<string, React.CSSProperties> = {
   arsenalSection: { background: "#000", textAlign: "center", padding: "64px 0 0" },
   arsenalHeader: { padding: "0 24px 24px" },
   arsenalH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.2rem", color: "#fff", lineHeight: 0.95 },
-  arsenalSub: { fontFamily: "'Inter', sans-serif", fontSize: "18px", marginTop: "10px", color: "rgba(255,255,255,0.70)", lineHeight: 1.6 },
+  arsenalSub: { fontFamily: "'Inter', sans-serif", fontSize: "18px", marginTop: "10px", color: "rgba(255,255,255,0.88)", lineHeight: 1.6 },
   arsenalCards: { display: "flex", flexDirection: "column", gap: "28px", margin: "0 24px" },
 
   tierCardCore: {
@@ -767,7 +777,7 @@ const styles: Record<string, React.CSSProperties> = {
     border: "1px solid rgba(212,175,55,0.35)",
     padding: "6px 12px", borderRadius: "4px", fontWeight: 600, whiteSpace: "nowrap",
   },
-  detailsLink: { display: "block", textAlign: "center", fontFamily: "'Inter', sans-serif", fontSize: "12px", color: "rgba(212,175,55,0.60)", textDecoration: "none", marginTop: "16px", cursor: "pointer", padding: "8px 0" },
+  detailsLink: { display: "block", textAlign: "center", fontFamily: "'Inter', sans-serif", fontSize: "15px", color: "rgba(255,255,255,0.85)", textDecoration: "none", marginTop: "16px", cursor: "pointer", padding: "8px 0" },
 
   /* ── Top line helpers ── */
   topLineGold: {
@@ -803,7 +813,7 @@ const styles: Record<string, React.CSSProperties> = {
     borderBottom: "1px solid rgba(212,175,55,0.15)",
   },
   checkHeaderWith: { background: "rgba(60,179,113,0.07)", padding: "14px 16px" },
-  checkHeaderWithout: { background: "rgba(220,38,38,0.04)", padding: "14px 16px", borderLeft: "1px solid rgba(255,255,255,0.06)" },
+  checkHeaderWithout: { background: "#000", padding: "14px 16px", borderLeft: "1px solid rgba(255,255,255,0.06)" },
   checkHeaderWithText: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.7rem", color: "#3CB371", letterSpacing: "0.04em" },
   checkHeaderWithoutText: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.7rem", color: "rgba(255,255,255,0.55)", letterSpacing: "0.04em" },
   checkRow: {
@@ -815,7 +825,7 @@ const styles: Record<string, React.CSSProperties> = {
     padding: "14px 16px", alignItems: "flex-start",
   },
   checkCellRight: {
-    background: "rgba(220,38,38,0.03)", display: "grid", gridTemplateColumns: "22px 1fr", gap: "10px",
+    background: "#000", display: "grid", gridTemplateColumns: "22px 1fr", gap: "10px",
     padding: "14px 16px", alignItems: "flex-start", borderLeft: "1px solid rgba(255,255,255,0.06)",
   },
   checkIconYes: { fontFamily: "'Roboto Mono', monospace", fontSize: "22px", paddingTop: "2px", color: "#3CB371", textShadow: "0 0 12px rgba(60,179,113,0.4)" },
@@ -837,7 +847,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
   closerCard: {
     position: "relative", zIndex: 1, border: "1px solid rgba(212,175,55,0.65)", borderRadius: "12px",
-    padding: "24px 24px 36px", background: "rgba(0,0,0,0.85)", maxWidth: "320px", margin: "0 auto",
+    padding: "24px 24px 36px", background: "rgba(0,0,0,0.85)", margin: "0 24px",
     boxShadow: "0 16px 40px rgba(0,0,0,0.8), 0 0 60px rgba(212,175,55,0.1), 0 0 80px rgba(120,60,180,0.08)",
   },
   closerH2: {
@@ -846,7 +856,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
   closerBody: {
     fontFamily: "'Inter', sans-serif", fontSize: "19px", color: "rgba(255,255,255,0.75)",
-    lineHeight: 1.5, maxWidth: "280px", margin: "0 auto 24px", textShadow: "0 2px 8px rgba(0,0,0,0.8)",
+    lineHeight: 1.5, margin: "0 auto 24px", textShadow: "0 2px 8px rgba(0,0,0,0.8)",
   },
 
   /* ── FOOTER ── */
