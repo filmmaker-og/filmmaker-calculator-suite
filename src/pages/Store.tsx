@@ -476,11 +476,13 @@ const getBadgeStyle = (badge: string | null): React.CSSProperties => {
 const ProductCard = ({
   product,
   onBuy,
+  onBuy10,
   visible,
   index,
 }: {
   product: Product;
   onBuy: () => void;
+  onBuy10?: () => void;
   visible: boolean;
   index: number;
 }) => {
@@ -553,6 +555,16 @@ const ProductCard = ({
         >
           {product.ctaLabel}
         </button>
+        {onBuy10 && (
+          <button
+            onClick={onBuy10}
+            style={{ ...s.btnOutline, marginTop: "8px", fontSize: "12px" }}
+            onMouseDown={(e) => { (e.currentTarget.style.transform = "scale(0.98)"); }}
+            onMouseUp={(e) => { (e.currentTarget.style.transform = "scale(1)"); }}
+          >
+            OR GET 10 COMPS — $995
+          </button>
+        )}
         <button
           onClick={(e) => {
             e.stopPropagation();
@@ -814,6 +826,10 @@ const Store = () => {
 
   const handleBuyService = (product: Product) => {
     haptics.medium();
+    if (product.id === "boutique") {
+      window.location.href = "mailto:hello@filmmakerog.com?subject=Boutique%20Inquiry&body=I%27m%20interested%20in%20a%20custom%20engagement.";
+      return;
+    }
     setShowPopup(product);
   };
 
@@ -932,6 +948,7 @@ const Store = () => {
             key={product.id}
             product={product}
             onBuy={() => handleBuyProduct(product)}
+            onBuy10={product.id === "comp-report" ? () => startCheckout("comp-report-10") : undefined}
             visible={productsVisible}
             index={i}
           />

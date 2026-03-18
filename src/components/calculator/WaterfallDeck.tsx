@@ -3,7 +3,6 @@ import {
   WaterfallResult,
   WaterfallInputs,
   GuildState,
-  CapitalSelections,
   formatCompactCurrency,
   formatFullCurrency,
   computeTierPayments,
@@ -12,6 +11,9 @@ import {
 } from "@/lib/waterfall";
 import type { TierPayment } from "@/lib/waterfall-types";
 import { useNavigate } from "react-router-dom";
+import { useState, useCallback } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import LeadCaptureModal from "@/components/LeadCaptureModal";
 
 // ─── Types ───────────────────────────────────────────────────────
 
@@ -20,7 +22,6 @@ interface WaterfallBriefProps {
   inputs: WaterfallInputs;
   project: ProjectDetails;
   guilds: GuildState;
-  selections?: CapitalSelections;
 }
 
 // ─── Locked Type System ──────────────────────────────────────────
@@ -1503,116 +1504,109 @@ const ConclusionSection = ({
 
 const CTASection = () => {
   const navigate = useNavigate();
+  const [showLeadCapture, setShowLeadCapture] = useState(false);
+
+  const gatedNavigate = useCallback(async (destination: string) => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session?.user) {
+      navigate(destination);
+    } else {
+      setShowLeadCapture(true);
+    }
+  }, [navigate]);
 
   return (
-    <section style={{
-      padding: "56px 24px 48px",
-      textAlign: "center",
-      position: "relative",
-      overflow: "hidden",
-    }}>
-      {/* Radial gold ambient glow */}
-      <div style={{
-        position: "absolute",
-        inset: 0,
-        background: "radial-gradient(ellipse at center 40%, rgba(212,175,55,0.06) 0%, rgba(212,175,55,0.02) 40%, transparent 70%)",
-        animation: "pulseGlow 4s ease-in-out infinite",
-      }} />
-
-      {/* Warm top border — stronger than section dividers */}
-      <div style={{
-        position: "absolute",
-        top: 0, left: 0, right: 0,
-        height: "1px",
-        background: "linear-gradient(90deg, transparent 0%, rgba(212,175,55,0.25) 20%, rgba(212,175,55,0.50) 50%, rgba(212,175,55,0.25) 80%, transparent 100%)",
-      }} />
-
-      <div style={{ position: "relative", zIndex: 1 }}>
-        {/* Headline */}
-        <div style={{ ...FONT.title, color: W.primary, marginBottom: "14px" }}>
-          YOUR INVESTORS WILL ASK.
-        </div>
-
-        {/* Subtext */}
+    <>
+      <LeadCaptureModal
+        isOpen={showLeadCapture}
+        onClose={() => setShowLeadCapture(false)}
+      />
+      <section style={{
+        padding: "56px 24px 48px",
+        textAlign: "center",
+        position: "relative",
+        overflow: "hidden",
+      }}>
+        {/* Radial gold ambient glow */}
         <div style={{
-          fontSize: "15px",
-          color: W.tertiary,
-          lineHeight: 1.6,
-          maxWidth: "340px",
-          margin: "0 auto 36px",
-        }}>
-          Your numbers are modeled. Now make them investor-ready.
-        </div>
+          position: "absolute",
+          inset: 0,
+          background: "radial-gradient(ellipse at center 40%, rgba(212,175,55,0.06) 0%, rgba(212,175,55,0.02) 40%, transparent 70%)",
+          animation: "pulseGlow 4s ease-in-out infinite",
+        }} />
 
-        {/* Primary CTA — revenue conversion */}
-        <div style={{ marginBottom: "16px" }}>
-          <span
-            // TODO: Route through gatedNavigate() to capture anonymous leads before store navigation
-            onClick={() => navigate("/store")}
-            style={{
-              display: "inline-block",
-              padding: "16px 36px",
-              background: "rgba(212,175,55,0.15)",
-              border: "1px solid rgba(212,175,55,0.50)",
-              borderRadius: "8px",
-              fontFamily: "'Bebas Neue', sans-serif",
-              fontSize: "20px",
-              letterSpacing: "0.15em",
-              color: "#F9E076",
-              cursor: "pointer",
-              textDecoration: "none",
-              animation: "ctaGlow 3s ease-in-out infinite",
-            }}
-          >
-            GET THE FULL ANALYSIS
-          </span>
-        </div>
-
-        {/* Secondary CTA — lead capture via PDF export */}
-        <div style={{ marginBottom: "12px" }}>
-          <span
-            // TODO: Implement PDF export with lead capture modal (email + name)
-            onClick={() => {}}
-            style={{
-              display: "inline-block",
-              padding: "10px 24px",
-              border: "1px solid rgba(255,255,255,0.10)",
-              borderRadius: "8px",
-              fontSize: "14px",
-              fontWeight: 500,
-              letterSpacing: "0.06em",
-              color: W.tertiary,
-              cursor: "pointer",
-              textDecoration: "none",
-            }}
-          >
-            Export This PDF
-          </span>
-        </div>
-
-        {/* Footer provenance mark */}
+        {/* Warm top border */}
         <div style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: "10px",
-          marginTop: "40px",
-        }}>
-          <div style={{ flex: 1, maxWidth: "60px", height: "1px", background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.20))" }} />
+          position: "absolute",
+          top: 0, left: 0, right: 0,
+          height: "1px",
+          background: "linear-gradient(90deg, transparent 0%, rgba(212,175,55,0.25) 20%, rgba(212,175,55,0.50) 50%, rgba(212,175,55,0.25) 80%, transparent 100%)",
+        }} />
+
+        <div style={{ position: "relative", zIndex: 1 }}>
+          {/* Headline */}
+          <div style={{ ...FONT.title, color: W.primary, marginBottom: "14px" }}>
+            YOUR INVESTORS WILL ASK.
+          </div>
+
+          {/* Subtext */}
           <div style={{
-            width: "8px", height: "8px",
-            border: "1.5px solid rgba(212,175,55,0.35)",
-            borderRadius: "50%",
-          }} />
-          <span style={{
-            fontSize: "10px", fontWeight: 600,
-            letterSpacing: "0.15em", textTransform: "uppercase" as const,
-            color: W.quaternary,
-          }}>filmmaker.og &middot; Waterfall Snapshot</span>
-          <div style={{ flex: 1, maxWidth: "60px", height: "1px", background: "linear-gradient(90deg, rgba(212,175,55,0.20), transparent)" }} />
+            fontSize: "15px",
+            color: W.tertiary,
+            lineHeight: 1.6,
+            maxWidth: "340px",
+            margin: "0 auto 36px",
+          }}>
+            Your numbers are modeled. Now make them investor-ready.
+          </div>
+
+          {/* Primary CTA — gated */}
+          <div style={{ marginBottom: "16px" }}>
+            <span
+              onClick={() => gatedNavigate("/store/the-full-analysis")}
+              style={{
+                display: "inline-block",
+                padding: "16px 36px",
+                background: "rgba(212,175,55,0.15)",
+                border: "1px solid rgba(212,175,55,0.50)",
+                borderRadius: "8px",
+                fontFamily: "'Bebas Neue', sans-serif",
+                fontSize: "20px",
+                letterSpacing: "0.15em",
+                color: "#F9E076",
+                cursor: "pointer",
+                textDecoration: "none",
+                animation: "ctaGlow 3s ease-in-out infinite",
+              }}
+            >
+              GET THE FULL ANALYSIS
+            </span>
+          </div>
+
+          {/* Footer provenance mark */}
+          <div style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "10px",
+            marginTop: "40px",
+          }}>
+            <div style={{ flex: 1, maxWidth: "60px", height: "1px", background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.20))" }} />
+            <div style={{
+              width: "8px", height: "8px",
+              border: "1.5px solid rgba(212,175,55,0.35)",
+              borderRadius: "50%",
+            }} />
+            <span style={{
+              fontSize: "10px", fontWeight: 600,
+              letterSpacing: "0.15em", textTransform: "uppercase" as const,
+              color: W.quaternary,
+            }}>filmmaker.og · Waterfall Snapshot</span>
+            <div style={{ flex: 1, maxWidth: "60px", height: "1px", background: "linear-gradient(90deg, rgba(212,175,55,0.20), transparent)" }} />
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 };
 
@@ -1623,7 +1617,6 @@ const WaterfallBrief = ({
   inputs,
   project,
   guilds,
-  selections,
 }: WaterfallBriefProps) => {
   // Core computations
   const tiers = computeTierPayments(result, inputs);
