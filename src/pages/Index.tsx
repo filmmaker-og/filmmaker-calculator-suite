@@ -173,9 +173,10 @@ const Index = () => {
           <div style={{ ...styles.heroInner, ...reveal(heroVisible) }}>
             <h1 style={styles.heroH1}>
               Model Your
+              <span style={styles.heroMid}>Recoupment</span>
               <em style={styles.heroEm}>Waterfall</em>
             </h1>
-            <p style={styles.heroSub}>Your Recoupment Structure Starts Here.</p>
+            <p style={styles.heroSub}>Your Deal Structure Begins Here.</p>
             <div style={{ display: "flex", justifyContent: "center" }}>
               <button onClick={handleCTA} style={styles.ctaBtn} onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>
                 <span style={{ position: "relative", zIndex: 1 }}>RUN MY WATERFALL</span>
@@ -538,14 +539,15 @@ const styles: Record<string, React.CSSProperties> = {
   },
   heroGlow: {
     position: "absolute", top: "-10%", left: 0, right: 0, height: "65%", pointerEvents: "none",
-    background: "radial-gradient(ellipse 70% 55% at 50% 30%, rgba(212,175,55,0.18) 0%, transparent 70%)",
+    background: "radial-gradient(ellipse 70% 55% at 50% 30%, rgba(212,175,55,0.30) 0%, transparent 70%)",
   },
   heroInner: { position: "relative", zIndex: 1 },
   heroH1: {
-    fontFamily: "'Bebas Neue', sans-serif", fontSize: "4.6rem", color: "#fff",
+    fontFamily: "'Bebas Neue', sans-serif", fontSize: "4rem", color: "#fff",
     textAlign: "center", marginBottom: "4px", lineHeight: 0.86, letterSpacing: "0.01em",
   },
   heroEm: { fontStyle: "normal", color: "#D4AF37", display: "block" },
+  heroMid: { display: "block", color: "#fff", fontStyle: "normal" },
   heroSub: {
     fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.5rem", textAlign: "center",
     marginBottom: "28px", lineHeight: 1.1, color: colors.textSubhead,
