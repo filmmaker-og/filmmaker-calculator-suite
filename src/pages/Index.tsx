@@ -535,7 +535,10 @@ const styles: Record<string, React.CSSProperties> = {
   /* ── § 1 HERO ── */
   hero: {
     position: "relative", textAlign: "center",
-    background: "#000", padding: "24px 24px 16px",
+    padding: "24px 24px 16px",
+    backgroundImage: "linear-gradient(to bottom, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.70) 40%, rgba(0,0,0,0.85) 100%), url('/hero-bg.jpg')",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
   },
   heroGlow: {
     position: "absolute", top: "-10%", left: 0, right: 0, height: "65%", pointerEvents: "none",
