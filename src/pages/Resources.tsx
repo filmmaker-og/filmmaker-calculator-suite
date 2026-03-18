@@ -266,7 +266,7 @@ const VaultCard: React.FC<{
   const [hovered, setHovered] = useState(false);
   const isNeutral = entry.cardState === "neutral";
 
-  const formattedDate = new Date(entry.date + "T00:00:00").toLocaleDateString("en-US", {
+  const formattedDate = new Date(entry.date.includes("T") ? entry.date : entry.date + "T00:00:00").toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
     year: "numeric",
@@ -386,25 +386,29 @@ const VaultCard: React.FC<{
           borderTop: "1px solid rgba(255,255,255,0.06)",
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <span style={{
-              fontFamily: "'Roboto Mono', monospace",
-              fontSize: 12,
-              letterSpacing: "0.08em",
-              color: metaColor,
-            }}>
-              {formattedDate}
-            </span>
-            {entry.readTime !== "Definition" && (
+            {!isNeutral && (
               <>
-                <span style={{ fontSize: 8, color: dotColor }}>&bull;</span>
                 <span style={{
                   fontFamily: "'Roboto Mono', monospace",
                   fontSize: 12,
                   letterSpacing: "0.08em",
                   color: metaColor,
                 }}>
-                  {entry.readTime}
+                  {formattedDate}
                 </span>
+                {entry.readTime !== "Definition" && (
+                  <>
+                    <span style={{ fontSize: 8, color: dotColor }}>&bull;</span>
+                    <span style={{
+                      fontFamily: "'Roboto Mono', monospace",
+                      fontSize: 12,
+                      letterSpacing: "0.08em",
+                      color: metaColor,
+                    }}>
+                      {entry.readTime}
+                    </span>
+                  </>
+                )}
               </>
             )}
           </div>
@@ -519,13 +523,9 @@ const Resources = () => {
     ? allGlossary.map(glossaryToVaultEntry)
     : dailyGlossary.map(glossaryToVaultEntry);
 
-  const allEntries = activeFilter === "glossary"
-    ? glossaryEntries
-    : [...VAULT_ENTRIES, ...glossaryEntries];
-
-  const filteredEntries = allEntries
+  const editorialFiltered = (activeFilter === "glossary" ? [] : VAULT_ENTRIES)
     .filter((entry) => {
-      const matchFilter = activeFilter === "all" || activeFilter === "glossary" || entry.category === activeFilter;
+      const matchFilter = activeFilter === "all" || entry.category === activeFilter;
       const matchSearch = !search || [entry.title, entry.excerpt, entry.category, entry.badgeLabel, entry.readTime]
         .join(" ").toLowerCase().includes(search.toLowerCase());
       return matchFilter && matchSearch;
@@ -535,6 +535,15 @@ const Resources = () => {
       const db = new Date(b.date).getTime();
       return activeSort === "newest" ? db - da : da - db;
     });
+
+  const glossaryFiltered = (activeFilter === "all" || activeFilter === "glossary")
+    ? glossaryEntries.filter((entry) => {
+        return !search || [entry.title, entry.excerpt, entry.category, entry.badgeLabel]
+          .join(" ").toLowerCase().includes(search.toLowerCase());
+      })
+    : [];
+
+  const filteredEntries = [...editorialFiltered, ...glossaryFiltered];
 
   const resultsText = search
     ? `${filteredEntries.length} result${filteredEntries.length === 1 ? "" : "s"} for \u201c${search}\u201d`
