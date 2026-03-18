@@ -587,7 +587,7 @@ const Resources = () => {
       }} />
 
       {/* ---- EDITOR'S CHOICE (PINNED) ---- */}
-      <section ref={pinnedRef} className="pinned-section" style={{ padding: "28px 24px 16px" }}>
+      <section ref={pinnedRef} className="pinned-section" style={{ padding: "28px 24px 16px", maxWidth: 1000, margin: "0 auto" }}>
         <div className="pinned-label" style={{
           fontFamily: "'Roboto Mono', monospace",
           fontSize: 12,
@@ -595,7 +595,6 @@ const Resources = () => {
           textTransform: "uppercase",
           color: "rgba(255,255,255,0.95)",
           marginBottom: 20,
-          textAlign: "center",
         }}>
           Editor&apos;s Choice
         </div>
