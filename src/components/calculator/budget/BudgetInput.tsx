@@ -35,7 +35,7 @@ const s: Record<string, React.CSSProperties> = {
   },
   heroZone: {
     textAlign: "center" as const,
-    padding: "28px 20px 20px",
+    padding: "28px 24px 20px",
     position: "relative" as const,
     zIndex: 1,
   },
@@ -146,7 +146,7 @@ const s: Record<string, React.CSSProperties> = {
     textAlign: "center" as const,
     marginTop: "14px",
     fontSize: "11px",
-    color: "rgba(255,255,255,0.30)",
+    color: "rgba(255,255,255,0.25)",
     lineHeight: 1.5,
   },
   // Quick pills
@@ -154,7 +154,7 @@ const s: Record<string, React.CSSProperties> = {
     display: "flex",
     justifyContent: "center",
     gap: "6px",
-    padding: "16px 20px 4px",
+    padding: "16px 24px 4px",
     flexWrap: "wrap" as const,
   },
   quickBtn: {
@@ -199,13 +199,13 @@ const s: Record<string, React.CSSProperties> = {
     boxShadow: "0 0 12px rgba(212,175,55,0.18)",
   },
   quickLabel: {
-    fontSize: "8px",
+    fontSize: "10px",
     textTransform: "uppercase" as const,
     letterSpacing: "0.1em",
-    color: "rgba(255,255,255,0.30)",
+    color: "rgba(255,255,255,0.25)",
   },
   quickLabelOn: {
-    fontSize: "8px",
+    fontSize: "10px",
     textTransform: "uppercase" as const,
     letterSpacing: "0.1em",
     color: "rgba(212,175,55,0.60)",
@@ -215,7 +215,7 @@ const s: Record<string, React.CSSProperties> = {
     display: "flex",
     alignItems: "center",
     gap: "8px",
-    padding: "20px 20px 12px",
+    padding: "20px 24px 12px",
   },
   innerDivLabel: {
     fontFamily: "'Inter', sans-serif",
@@ -235,7 +235,7 @@ const s: Record<string, React.CSSProperties> = {
   guildRow: {
     display: "flex",
     gap: "8px",
-    padding: "0 20px",
+    padding: "0 24px",
   },
   guild: {
     flex: 1,
@@ -245,7 +245,7 @@ const s: Record<string, React.CSSProperties> = {
     padding: "12px 10px",
     background: "rgba(212,175,55,0.02)",
     border: "1px solid rgba(212,175,55,0.18)",
-    borderRadius: "10px",
+    borderRadius: "8px",
     cursor: "pointer",
     transition: "all 0.15s",
     minHeight: "48px",
@@ -258,7 +258,7 @@ const s: Record<string, React.CSSProperties> = {
     padding: "12px 10px",
     background: "rgba(212,175,55,0.08)",
     border: "1px solid rgba(212,175,55,0.50)",
-    borderRadius: "10px",
+    borderRadius: "8px",
     cursor: "pointer",
     transition: "all 0.15s",
     minHeight: "48px",
@@ -311,14 +311,14 @@ const s: Record<string, React.CSSProperties> = {
   },
   guildDesc: {
     fontFamily: "'Inter', sans-serif",
-    fontSize: "9px",
+    fontSize: "10px",
     color: "rgba(255,255,255,0.25)",
   },
   guildHint: {
     textAlign: "center" as const,
     fontSize: "11px",
     color: "rgba(255,255,255,0.35)",
-    padding: "10px 20px 0",
+    padding: "10px 24px 0",
   },
   // CTA reveal
   reveal: {

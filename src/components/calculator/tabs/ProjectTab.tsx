@@ -35,9 +35,9 @@ const s: Record<string, React.CSSProperties> = {
   },
   flOpt: {
     fontWeight: 400,
-    letterSpacing: "0.05em",
+    letterSpacing: "0.06em",
     textTransform: "none" as const,
-    color: "rgba(255,255,255,0.22)",
+    color: "rgba(255,255,255,0.25)",
     marginLeft: "6px",
     fontSize: "10px",
   },
@@ -121,7 +121,7 @@ const s: Record<string, React.CSSProperties> = {
   expHint: {
     fontFamily: "'Inter', sans-serif",
     fontSize: "11px",
-    color: "rgba(255,255,255,0.22)",
+    color: "rgba(255,255,255,0.25)",
   },
   expBody: {
     maxHeight: 0,
@@ -141,7 +141,7 @@ const s: Record<string, React.CSSProperties> = {
   hint: {
     fontFamily: "'Inter', sans-serif",
     fontSize: "11px",
-    color: "rgba(255,255,255,0.22)",
+    color: "rgba(255,255,255,0.25)",
     marginTop: "6px",
     lineHeight: 1.4,
   },
@@ -197,7 +197,7 @@ const s: Record<string, React.CSSProperties> = {
   autosave: {
     textAlign: "center" as const,
     fontFamily: "'Roboto Mono', monospace",
-    fontSize: "9px",
+    fontSize: "10px",
     letterSpacing: "0.1em",
     textTransform: "uppercase" as const,
     color: "rgba(255,255,255,0.15)",

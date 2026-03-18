@@ -27,7 +27,7 @@ const eyebrowS: Record<string, React.CSSProperties> = {
     display: "flex",
     alignItems: "center",
     gap: "12px",
-    margin: "0 -20px 16px",
+    margin: "0 -24px 16px",
   },
   eyebrowLine: {
     flex: 1,
@@ -118,7 +118,7 @@ const featureTopline: React.CSSProperties = {
 };
 
 const cardPad: React.CSSProperties = {
-  padding: "24px 20px",
+  padding: "24px 24px",
 };
 
 const cardH: React.CSSProperties = {
