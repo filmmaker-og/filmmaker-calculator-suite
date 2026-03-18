@@ -258,12 +258,8 @@ const Index = () => {
                 : isGroupBoundary
                   ? "2px solid rgba(212,175,55,0.20)"
                   : "1px solid rgba(255,255,255,0.06)";
-              const redTint = i <= 2 ? 0 : Math.min((i - 2) * 0.008, 0.05);
-              const rowBg = redTint > 0
-                ? `rgba(220,38,38,${redTint})`
-                : "transparent";
               return (
-                <div key={tier.num} style={{ ...styles.tierRow, borderBottom, background: rowBg }}>
+                <div key={tier.num} style={{ ...styles.tierRow, borderBottom }}>
                   <div style={styles.tierNum}>{tier.num}</div>
                   <div style={styles.tierName}>{tier.name}</div>
                   <div style={styles.tierAmt}>
@@ -650,9 +646,9 @@ const styles: Record<string, React.CSSProperties> = {
     borderRadius: "6px", fontWeight: 600,
     boxShadow: "0 0 16px rgba(212,175,55,0.3)",
   },
-  tierName: { fontFamily: "'Inter', sans-serif", fontSize: "16px", fontWeight: 600, color: "#fff", lineHeight: 1.3 },
-  tierAmt: { fontFamily: "'Roboto Mono', monospace", fontSize: "16px", fontWeight: 600, color: "rgba(220,38,38,0.85)", textAlign: "right", whiteSpace: "nowrap" },
-  tierMinus: { color: "rgba(220,38,38,0.70)", marginRight: "4px", fontWeight: 400 },
+  tierName: { fontFamily: "'Inter', sans-serif", fontSize: "18px", fontWeight: 600, color: "#fff", lineHeight: 1.3 },
+  tierAmt: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.4rem", color: "rgba(220,38,38,0.85)", textAlign: "right", whiteSpace: "nowrap", letterSpacing: "0.02em" },
+  tierMinus: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.4rem", color: "rgba(220,38,38,0.70)", marginRight: "4px", fontWeight: 400 },
 
   /* Flow diagram */
   flowDiagram: { margin: "16px 24px 0" },
