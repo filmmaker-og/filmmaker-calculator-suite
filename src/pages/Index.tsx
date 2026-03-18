@@ -610,6 +610,7 @@ const styles: Record<string, React.CSSProperties> = {
     position: "relative", display: "grid", gridTemplateColumns: "auto 1fr auto",
     gap: "16px", padding: "16px 20px", alignItems: "center",
     borderBottom: "1px solid rgba(255,255,255,0.06)", cursor: "default",
+    borderLeft: "2px solid rgba(220,38,38,0.15)",
   },
   tierNum: {
     fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: "#D4AF37",
@@ -618,9 +619,9 @@ const styles: Record<string, React.CSSProperties> = {
     borderRadius: "6px", fontWeight: 600,
     boxShadow: "0 0 16px rgba(212,175,55,0.3)",
   },
-  tierName: { fontFamily: "'Inter', sans-serif", fontSize: "15px", fontWeight: 500, color: "#fff", lineHeight: 1.3 },
-  tierAmt: { fontFamily: "'Roboto Mono', monospace", fontSize: "15px", color: "rgba(220,38,38,0.75)", textAlign: "right", whiteSpace: "nowrap" },
-  tierMinus: { color: "rgba(220,38,38,0.50)", marginRight: "4px", fontWeight: 400 },
+  tierName: { fontFamily: "'Inter', sans-serif", fontSize: "16px", fontWeight: 600, color: "#fff", lineHeight: 1.3 },
+  tierAmt: { fontFamily: "'Roboto Mono', monospace", fontSize: "16px", color: "rgba(220,38,38,0.85)", textAlign: "right", whiteSpace: "nowrap" },
+  tierMinus: { color: "rgba(220,38,38,0.70)", marginRight: "4px", fontWeight: 400 },
 
   /* Flow diagram */
   flowDiagram: { margin: "16px 24px 0" },
