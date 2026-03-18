@@ -96,12 +96,12 @@ const Index = () => {
   /* ── Data ── */
   const waterfallTiers = [
     { num: "01", name: "CAM Fee", amt: "$30,000" },
-    { num: "02", name: "Sales Agent Fee (10%)", amt: "$300,000" },
-    { num: "03", name: "Sales Agent Expenses", amt: "$50,000" },
+    { num: "02", name: "SA Commission (10%)", amt: "$300,000" },
+    { num: "03", name: "SA Expenses", amt: "$50,000" },
     { num: "04", name: "E&O / Delivery", amt: "$18,000" },
-    { num: "05", name: "Senior Debt Recoupment", amt: "$1,200,000" },
+    { num: "05", name: "Senior Debt", amt: "$1,200,000" },
     { num: "06", name: "Mezzanine Debt", amt: "$300,000" },
-    { num: "07", name: "Equity Recoupment", amt: "$450,000" },
+    { num: "07", name: "Equity", amt: "$450,000" },
     { num: "08", name: "Deferments", amt: "$52,000" },
   ];
 
@@ -640,7 +640,7 @@ const styles: Record<string, React.CSSProperties> = {
 
   waterfallTiersBox: {
     position: "relative", overflow: "hidden", margin: "0 24px",
-    border: "1px solid rgba(212,175,55,0.25)", borderRadius: "12px", background: "#0A0A0A",
+    border: "1px solid rgba(212,175,55,0.25)", borderRadius: "12px", background: "#000",
     boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 24px rgba(212,175,55,0.10)",
   },
   tierRow: {
@@ -656,9 +656,9 @@ const styles: Record<string, React.CSSProperties> = {
     borderRadius: "6px", fontWeight: 600,
     boxShadow: "0 0 16px rgba(212,175,55,0.3)",
   },
-  tierName: { fontFamily: "'Inter', sans-serif", fontSize: "18px", fontWeight: 600, color: "#fff", lineHeight: 1.3 },
-  tierAmt: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.4rem", color: "rgba(220,38,38,0.85)", textAlign: "right", whiteSpace: "nowrap", letterSpacing: "0.02em" },
-  tierMinus: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.4rem", color: "rgba(220,38,38,0.70)", marginRight: "4px", fontWeight: 400 },
+  tierName: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.4rem", color: "#fff", lineHeight: 1.3, textTransform: "uppercase", letterSpacing: "0.02em" },
+  tierAmt: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "rgba(220,38,38,0.85)", textAlign: "right", whiteSpace: "nowrap", letterSpacing: "0.02em" },
+  tierMinus: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "rgba(220,38,38,0.70)", marginRight: "4px", fontWeight: 400 },
 
   /* Flow diagram */
   flowDiagram: { margin: "16px 24px 0" },
