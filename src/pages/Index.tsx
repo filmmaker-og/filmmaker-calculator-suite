@@ -849,7 +849,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
 
   /* ── § 6 REALITY ── */
-  realitySection: { background: "#000", textAlign: "left", padding: "48px 24px 32px" },
+  realitySection: { background: "#000", textAlign: "left", padding: "64px 24px 32px" },
   blockquote: {
     fontFamily: "'Bebas Neue', sans-serif", fontSize: "2.4rem", lineHeight: 0.95, color: "#fff",
     borderLeft: "3px solid #D4AF37", paddingLeft: "20px", marginBottom: "24px",
@@ -888,7 +888,7 @@ const styles: Record<string, React.CSSProperties> = {
   closerSection: {
     position: "relative", overflow: "hidden", textAlign: "center", marginTop: "48px",
     padding: "48px 24px 80px", borderTop: "1px solid rgba(212,175,55,0.25)",
-    backgroundImage: "linear-gradient(to bottom, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.48) 50%, rgba(0,0,0,0.75) 100%), url('/closer-bg.jpg')",
+    backgroundImage: "linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.35) 50%, rgba(0,0,0,0.60) 100%), url('/closer-bg.jpg')",
     backgroundSize: "cover",
     backgroundPosition: "center top",
   },
