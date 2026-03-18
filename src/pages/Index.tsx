@@ -696,15 +696,15 @@ const styles: Record<string, React.CSSProperties> = {
 
   tierCardSnapshot: {
     borderRadius: "12px", position: "relative", overflow: "hidden", textAlign: "left",
-    border: "1px solid rgba(212,175,55,0.35)",
-    background: "radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.08) 0%, #0A0A0A 70%)",
+    border: "1px solid rgba(212,175,55,0.45)",
+    background: "radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.12) 0%, #0A0A0A 70%)",
     boxShadow: "0 16px 40px rgba(0,0,0,0.6)",
   },
   tierCardPackage: {
     borderRadius: "12px", position: "relative", overflow: "hidden", textAlign: "left",
-    border: "1px solid rgba(212,175,55,0.5)",
-    background: "radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.10) 0%, #0A0A0A 65%)",
-    boxShadow: "0 16px 40px rgba(0,0,0,0.8), 0 0 40px rgba(212,175,55,0.08)",
+    border: "1px solid rgba(212,175,55,0.60)",
+    background: "radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.15) 0%, #0A0A0A 65%)",
+    boxShadow: "0 16px 40px rgba(0,0,0,0.8), 0 0 60px rgba(212,175,55,0.12), 0 0 120px rgba(212,175,55,0.06)",
   },
   tierHeaderAlt: {
     padding: "28px 24px 20px", borderBottom: "1px solid rgba(255,255,255,0.06)",
