@@ -798,15 +798,18 @@ const styles: Record<string, React.CSSProperties> = {
   /* ── § 8 CLOSER ── */
   closerSection: {
     position: "relative", overflow: "hidden", textAlign: "center", marginTop: "48px",
-    padding: "48px 24px 80px", borderTop: "1px solid rgba(212,175,55,0.20)", background: "#000",
+    padding: "48px 24px 80px", borderTop: "1px solid rgba(212,175,55,0.25)",
+    backgroundImage: "linear-gradient(to bottom, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.72) 50%, rgba(0,0,0,0.90) 100%), url('/closer-bg.jpg')",
+    backgroundSize: "cover",
+    backgroundPosition: "center top",
   },
   closerGlowBottom: {
     position: "absolute", bottom: 0, left: 0, right: 0, height: "80%", pointerEvents: "none",
-    background: "radial-gradient(ellipse 90% 60% at 50% 100%, rgba(212,175,55,0.12) 0%, transparent 60%)",
+    background: "radial-gradient(ellipse 90% 60% at 50% 100%, rgba(212,175,55,0.22) 0%, transparent 60%)",
   },
   closerCard: {
-    position: "relative", zIndex: 1, border: "1px solid rgba(212,175,55,0.42)", borderRadius: "12px",
-    padding: "24px 24px 36px", background: "#000", maxWidth: "320px", margin: "0 auto",
+    position: "relative", zIndex: 1, border: "1px solid rgba(212,175,55,0.50)", borderRadius: "12px",
+    padding: "24px 24px 36px", background: "rgba(0,0,0,0.85)", maxWidth: "320px", margin: "0 auto",
     boxShadow: "0 16px 40px rgba(0,0,0,0.8), 0 0 60px rgba(212,175,55,0.1)",
   },
   closerH2: {
