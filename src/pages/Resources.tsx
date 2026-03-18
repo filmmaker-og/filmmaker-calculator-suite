@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useInView } from "@/hooks/useInView";
 import { useHaptics } from "@/hooks/use-haptics";
 import { getDailyGlossary, getAllGlossary, type GlossaryTerm } from "@/lib/glossary-rotation";
-import filmmakerFIcon from "@/assets/filmmaker-f-icon.png";
 
 // ------------------------------------------------------------------
 // DATA
@@ -235,22 +234,22 @@ function getBadgeStyle(state: CardState): React.CSSProperties {
 function getMetaColor(state: CardState): string {
   switch (state) {
     case "gold-featured":
-      return "rgba(212,175,55,0.65)";
+      return "rgba(212,175,55,0.80)";
     case "neutral":
-      return "rgba(255,255,255,0.45)";
+      return "rgba(255,255,255,0.55)";
     default:
-      return "rgba(212,175,55,0.55)";
+      return "rgba(212,175,55,0.75)";
   }
 }
 
 function getDotColor(state: CardState): string {
   switch (state) {
     case "gold-featured":
-      return "rgba(212,175,55,0.30)";
+      return "rgba(212,175,55,0.45)";
     case "neutral":
-      return "rgba(255,255,255,0.15)";
+      return "rgba(255,255,255,0.25)";
     default:
-      return "rgba(212,175,55,0.25)";
+      return "rgba(212,175,55,0.40)";
   }
 }
 
@@ -390,7 +389,7 @@ const VaultCard: React.FC<{
               <>
                 <span style={{
                   fontFamily: "'Roboto Mono', monospace",
-                  fontSize: 12,
+                  fontSize: 14,
                   letterSpacing: "0.08em",
                   color: metaColor,
                 }}>
@@ -401,7 +400,7 @@ const VaultCard: React.FC<{
                     <span style={{ fontSize: 8, color: dotColor }}>&bull;</span>
                     <span style={{
                       fontFamily: "'Roboto Mono', monospace",
-                      fontSize: 12,
+                      fontSize: 14,
                       letterSpacing: "0.08em",
                       color: metaColor,
                     }}>
@@ -414,9 +413,9 @@ const VaultCard: React.FC<{
           </div>
           <span style={{
             color: hovered
-              ? (isNeutral ? "rgba(255,255,255,0.65)" : "#D4AF37")
-              : "rgba(255,255,255,0.35)",
-            fontSize: 18,
+              ? (isNeutral ? "rgba(255,255,255,0.75)" : "#D4AF37")
+              : "rgba(255,255,255,0.55)",
+            fontSize: 22,
             transition: "all 0.3s",
             transform: hovered ? "translateX(6px)" : "translateX(0)",
             display: "inline-block",
@@ -436,23 +435,6 @@ const Resources = () => {
   const haptics = useHaptics();
 
   useEffect(() => { window.scrollTo(0, 0); }, []);
-
-  const [headerGone, setHeaderGone] = useState(false);
-  const lastScrollYRef = useRef(0);
-
-  useEffect(() => {
-    const handler = () => {
-      const currentY = window.scrollY;
-      if (currentY > 80 && currentY > lastScrollYRef.current) {
-        setHeaderGone(true);
-      } else {
-        setHeaderGone(false);
-      }
-      lastScrollYRef.current = currentY;
-    };
-    window.addEventListener("scroll", handler, { passive: true });
-    return () => window.removeEventListener("scroll", handler);
-  }, []);
 
   const prefersReducedMotion =
     typeof window !== "undefined" &&
@@ -613,6 +595,7 @@ const Resources = () => {
           textTransform: "uppercase",
           color: "rgba(255,255,255,0.95)",
           marginBottom: 20,
+          textAlign: "center",
         }}>
           Editor&apos;s Choice
         </div>
@@ -844,39 +827,6 @@ const Resources = () => {
           maxWidth: 1000,
           margin: "0 auto",
         }}>
-          {/* Nav escape */}
-          <button
-            onClick={() => {
-              haptics.light();
-              window.scrollTo({ top: 0, behavior: "smooth" });
-            }}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              borderRadius: "50%",
-              background: "rgba(212,175,55,0.06)",
-              border: "1px solid rgba(212,175,55,0.20)",
-              cursor: "pointer",
-              flexShrink: 0,
-              opacity: headerGone ? 1 : 0,
-              width: headerGone ? 36 : 0,
-              minWidth: headerGone ? 36 : 0,
-              marginRight: headerGone ? 0 : -8,
-              height: 36,
-              padding: 0,
-              overflow: "hidden",
-              transition: "all 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
-            }}
-            aria-label="Back to top"
-          >
-            <img
-              src={filmmakerFIcon}
-              alt="F"
-              style={{ width: 20, height: 20, objectFit: "contain" }}
-            />
-          </button>
-
           {/* Search */}
           <div className="vault-search-wrap" style={{ flex: 1, position: "relative" }}>
             <svg
@@ -1121,7 +1071,7 @@ const Resources = () => {
         }}>
           <span style={{
             fontFamily: "'Roboto Mono', monospace",
-            fontSize: 12,
+            fontSize: 14,
             color: "rgba(255,255,255,0.95)",
             letterSpacing: "0.1em",
             textTransform: "uppercase",
