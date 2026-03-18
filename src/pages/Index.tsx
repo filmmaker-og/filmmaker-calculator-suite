@@ -72,10 +72,23 @@ const Index = () => {
   /* ── Scroll refs ── */
   const { ref: heroRef, inView: heroVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
   const { ref: howRef, inView: howVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
-  const { ref: waterfallRef, inView: waterfallVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
+  // Waterfall — three independent pieces
+  const { ref: waterfallHeaderRef, inView: waterfallHeaderVisible } = useInView<HTMLDivElement>({ threshold: 0.3 });
+  const { ref: waterfallCalloutRef, inView: waterfallCalloutVisible } = useInView<HTMLDivElement>({ threshold: 0.3 });
+  const { ref: waterfallTableRef, inView: waterfallTableVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
+  const { ref: waterfallFlowRef, inView: waterfallFlowVisible } = useInView<HTMLDivElement>({ threshold: 0.2 });
+
   const { ref: whyRef, inView: whyVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
-  const { ref: arsenalRef, inView: arsenalVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
-  const { ref: realityRef, inView: realityVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
+
+  // Arsenal — three independent cards
+  const { ref: arsenalHeaderRef, inView: arsenalHeaderVisible } = useInView<HTMLDivElement>({ threshold: 0.3 });
+  const { ref: arsenalCoreRef, inView: arsenalCoreVisible } = useInView<HTMLDivElement>({ threshold: 0.2 });
+  const { ref: arsenalSnapshotRef, inView: arsenalSnapshotVisible } = useInView<HTMLDivElement>({ threshold: 0.2 });
+  const { ref: arsenalPackageRef, inView: arsenalPackageVisible } = useInView<HTMLDivElement>({ threshold: 0.2 });
+
+  // Reality — blockquote and grid separately
+  const { ref: realityQuoteRef, inView: realityQuoteVisible } = useInView<HTMLDivElement>({ threshold: 0.3 });
+  const { ref: realityGridRef, inView: realityGridVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
   const { ref: closerRef, inView: closerVisible } = useInView<HTMLDivElement>({ threshold: 0.2 });
   const { ref: footerRef, inView: footerVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
 
@@ -212,18 +225,18 @@ const Index = () => {
         </section>
 
         {/* ═══ § 3 WATERFALL ═══ */}
-        <section ref={waterfallRef} style={styles.waterfallSection}>
-          <div style={{ ...styles.waterfallHeader, ...reveal(waterfallVisible) }}>
+        <section style={styles.waterfallSection}>
+          <div ref={waterfallHeaderRef} style={{ ...styles.waterfallHeader, ...reveal(waterfallHeaderVisible) }}>
             <EyebrowRuled text="How the money flows" />
             <h2 style={styles.waterfallH2}>The Recoupment<br /><span style={{ color: "#D4AF37" }}>Waterfall</span></h2>
           </div>
 
-          <p style={{ ...styles.waterfallExplainer, ...reveal(waterfallVisible) }}>
+          <p style={{ ...styles.waterfallExplainer, ...reveal(waterfallHeaderVisible) }}>
             A recoupment waterfall maps who gets paid, in what order, and how much — before you see a dollar of profit.
           </p>
 
           {/* Acquisition callout */}
-          <div style={{ ...styles.acquisitionCallout, ...reveal(waterfallVisible, 1) }}>
+          <div ref={waterfallCalloutRef} style={{ ...styles.acquisitionCallout, ...reveal(waterfallCalloutVisible) }}>
             <div style={styles.topLineGoldHalf} />
             <p style={styles.acqLabel}>Streamer Acquisition Price</p>
             <p style={styles.acqSub}>Tier 2 Action Thriller — Example</p>
@@ -231,7 +244,7 @@ const Index = () => {
           </div>
 
           {/* Waterfall tiers */}
-          <div style={{ ...styles.waterfallTiersBox, ...reveal(waterfallVisible, 2) }}>
+          <div ref={waterfallTableRef} style={{ ...styles.waterfallTiersBox, ...reveal(waterfallTableVisible) }}>
             <div style={styles.topLineGold} />
             {waterfallTiers.map((tier, i) => {
               // Group boundaries: after off-the-tops (row 3, i=3), after debt service (row 5, i=5)
@@ -255,7 +268,7 @@ const Index = () => {
           </div>
 
           {/* Flow diagram */}
-          <div style={{ ...styles.flowDiagram, ...reveal(waterfallVisible, 3) }}>
+          <div ref={waterfallFlowRef} style={{ ...styles.flowDiagram, ...reveal(waterfallFlowVisible) }}>
             <div style={styles.netBackend}>
               <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "1px", background: `linear-gradient(90deg, transparent, ${colors.greenAccent}, transparent)` }} />
               <p style={styles.netLabel}>Net Backend Profit</p>
@@ -281,7 +294,7 @@ const Index = () => {
               ))}
             </div>
           </div>
-          <p style={{ ...styles.waterfallNote, ...reveal(waterfallVisible, 3) }}>Model only — your numbers will differ</p>
+          <p style={{ ...styles.waterfallNote, ...reveal(waterfallFlowVisible) }}>Model only — your numbers will differ</p>
         </section>
 
         {/* ═══ § 4 WHY THIS MATTERS ═══ */}
@@ -306,8 +319,8 @@ const Index = () => {
         </section>
 
         {/* ═══ § 5 ARSENAL ═══ */}
-        <section ref={arsenalRef} style={styles.arsenalSection}>
-          <div style={{ ...styles.arsenalHeader, ...reveal(arsenalVisible) }}>
+        <section style={styles.arsenalSection}>
+          <div ref={arsenalHeaderRef} style={{ ...styles.arsenalHeader, ...reveal(arsenalHeaderVisible) }}>
             <EyebrowRuled text="What you get" />
             <h2 style={styles.arsenalH2}>The <span style={{ color: "#D4AF37" }}>Arsenal</span></h2>
             <p style={styles.arsenalSub}>Start with the math. Upgrade when you need the documents.</p>
@@ -315,7 +328,7 @@ const Index = () => {
 
           <div style={styles.arsenalCards}>
             {/* Core Engine Card (Free) */}
-            <div style={{ ...styles.tierCardCore, ...reveal(arsenalVisible, 1) }}>
+            <div ref={arsenalCoreRef} style={{ ...styles.tierCardCore, ...reveal(arsenalCoreVisible) }}>
               <div style={styles.topLineGoldHalf} />
               <div style={styles.tierHeaderCore}>
                 <div style={{ marginBottom: "12px" }}>
@@ -352,7 +365,7 @@ const Index = () => {
             </div>
 
             {/* The Snapshot Card */}
-            <div style={{ ...styles.tierCardSnapshot, ...reveal(arsenalVisible, 2) }}>
+            <div ref={arsenalSnapshotRef} style={{ ...styles.tierCardSnapshot, ...reveal(arsenalSnapshotVisible) }}>
               <div style={styles.topLineGold} />
               <div style={styles.tierHeaderAlt}>
                 <div style={{ marginBottom: "12px" }}>
@@ -383,7 +396,7 @@ const Index = () => {
             </div>
 
             {/* The Package Card */}
-            <div style={{ ...styles.tierCardPackage, ...reveal(arsenalVisible, 3) }}>
+            <div ref={arsenalPackageRef} style={{ ...styles.tierCardPackage, ...reveal(arsenalPackageVisible) }}>
               <div style={styles.topLineGoldThick} />
               <div style={{ ...styles.tierHeaderAlt, paddingTop: "28px", borderBottomColor: "rgba(212,175,55,0.15)" }}>
                 <div style={{ marginBottom: "12px" }}>
@@ -422,12 +435,12 @@ const Index = () => {
         </section>
 
         {/* ═══ § 6 REALITY ═══ */}
-        <section ref={realityRef} style={styles.realitySection}>
-          <blockquote style={{ ...styles.blockquote, ...reveal(realityVisible) }}>
+        <section style={styles.realitySection}>
+          <blockquote ref={realityQuoteRef} style={{ ...styles.blockquote, ...reveal(realityQuoteVisible) }}>
             The waterfall either costs you now — or costs you everything <span style={{ color: "#D4AF37" }}>later</span>.
           </blockquote>
 
-          <div style={{ ...styles.checkGrid, ...reveal(realityVisible, 1) }}>
+          <div ref={realityGridRef} style={{ ...styles.checkGrid, ...reveal(realityGridVisible) }}>
             <div style={styles.topLineGoldHalf} />
             {/* Header */}
             <div style={styles.checkHeader}>
