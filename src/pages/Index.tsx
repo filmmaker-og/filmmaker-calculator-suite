@@ -532,11 +532,11 @@ const styles: Record<string, React.CSSProperties> = {
     display: "flex", alignItems: "center", justifyContent: "center", gap: "12px", marginBottom: "14px",
   },
   eyebrowLine: {
-    flex: 1, height: "1px", background: "rgba(212,175,55,0.40)",
+    flex: 1, height: "1px", background: "rgba(212,175,55,0.40)", boxShadow: "0 0 8px rgba(212,175,55,0.15)",
   },
   eyebrowLabel: {
-    fontFamily: "'Roboto Mono', monospace", fontSize: "13px",
-    letterSpacing: "0.2em", textTransform: "uppercase", color: "#D4AF37",
+    fontFamily: "'Roboto Mono', monospace", fontSize: "15px",
+    letterSpacing: "0.18em", textTransform: "uppercase", color: "#D4AF37",
     whiteSpace: "nowrap",
   },
 
@@ -611,7 +611,7 @@ const styles: Record<string, React.CSSProperties> = {
     boxShadow: "0 0 20px rgba(212,175,55,0.5)",
   },
   stepContent: { padding: "26px 24px 26px 24px", background: "radial-gradient(circle at 0px 50%, rgba(212,175,55,0.14) 0%, transparent 55%)" },
-  stepTitle: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.45rem", color: "#D4AF37", lineHeight: 1, marginBottom: "5px" },
+  stepTitle: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "#D4AF37", lineHeight: 1, marginBottom: "5px" },
   stepBody: { fontFamily: "'Inter', sans-serif", fontSize: "19px", color: "rgba(255,255,255,0.88)", lineHeight: 1.55 },
 
   /* ── § 3 WATERFALL ── */
@@ -692,7 +692,7 @@ const styles: Record<string, React.CSSProperties> = {
     display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.5rem",
     marginBottom: "16px", paddingTop: "2px", boxShadow: "0 0 24px rgba(212,175,55,0.55)",
   },
-  badgeTitle: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.4rem", color: "#fff", marginBottom: "8px", lineHeight: 1.05, letterSpacing: "0.02em" },
+  badgeTitle: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "#fff", marginBottom: "8px", lineHeight: 1.05, letterSpacing: "0.02em" },
   badgeBody: { fontFamily: "'Inter', sans-serif", fontSize: "19px", color: "rgba(255,255,255,0.70)", lineHeight: 1.55 },
 
   /* ── § 5 ARSENAL ── */
@@ -711,7 +711,7 @@ const styles: Record<string, React.CSSProperties> = {
   tierHeaderCore: {
     padding: "28px 24px 20px", borderBottom: "1px solid rgba(212,175,55,0.1)",
   },
-  tierTitleCore: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "2rem", color: "#fff", lineHeight: 1, letterSpacing: "0.02em" },
+  tierTitleCore: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "2.4rem", color: "#fff", lineHeight: 1, letterSpacing: "0.02em" },
   tierSubCore: { fontFamily: "'Inter', sans-serif", fontSize: "18px", color: "rgba(255,255,255,0.72)", marginTop: "6px" },
   tierBadgeCore: {
     fontFamily: "'Roboto Mono', monospace", fontSize: "11px", textTransform: "uppercase",
@@ -740,7 +740,7 @@ const styles: Record<string, React.CSSProperties> = {
   tierHeaderAlt: {
     padding: "28px 24px 20px", borderBottom: "1px solid rgba(255,255,255,0.06)",
   },
-  tierTitleAlt: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "2.2rem", color: "#fff", lineHeight: 1, letterSpacing: "0.04em", marginBottom: "8px" },
+  tierTitleAlt: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "2.6rem", color: "#fff", lineHeight: 1, letterSpacing: "0.04em", marginBottom: "8px" },
   tierSubAlt: { fontFamily: "'Inter', sans-serif", fontSize: "18px", color: "rgba(212,175,55,0.8)", lineHeight: 1.4 },
   tierIntro: { fontFamily: "'Inter', sans-serif", fontSize: "19px", color: "rgba(255,255,255,0.7)", lineHeight: 1.5, margin: "28px 24px 0" },
   tierChecklist: { padding: "24px", display: "flex", flexDirection: "column", gap: "16px" },
