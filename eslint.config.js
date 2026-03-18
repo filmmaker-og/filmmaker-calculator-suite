@@ -21,6 +21,25 @@ export default tseslint.config(
       ...reactHooks.configs.recommended.rules,
       "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
       "@typescript-eslint/no-unused-vars": "off",
+      "no-restricted-syntax": [
+        "warn",
+        {
+          selector: "Literal[value=/rgba\\(212,175,55/]",
+          message: "Use gold() from @/lib/tokens instead of raw rgba(212,175,55,...)"
+        },
+        {
+          selector: "Literal[value=/rgba\\(255,255,255/]",
+          message: "Use white() from @/lib/tokens instead of raw rgba(255,255,255,...)"
+        },
+        {
+          selector: "Literal[value=/rgba\\(220,38,38/]",
+          message: "Use red() from @/lib/tokens instead of raw rgba(220,38,38,...)"
+        },
+        {
+          selector: "Literal[value=/rgba\\(60,179,113/]",
+          message: "Use green() from @/lib/tokens instead of raw rgba(60,179,113,...)"
+        },
+      ],
     },
   },
 );
