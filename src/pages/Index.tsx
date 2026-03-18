@@ -549,7 +549,7 @@ const styles: Record<string, React.CSSProperties> = {
   hero: {
     position: "relative", textAlign: "center",
     padding: "24px 24px 16px",
-    backgroundImage: "linear-gradient(to bottom, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.55) 40%, rgba(0,0,0,0.72) 100%), url('/hero-bg.jpg')",
+    backgroundImage: "linear-gradient(to bottom, rgba(0,0,0,0.68) 0%, rgba(0,0,0,0.45) 40%, rgba(0,0,0,0.70) 100%), url('/hero-bg.jpg')",
     backgroundSize: "cover",
     backgroundPosition: "center",
   },
@@ -561,13 +561,14 @@ const styles: Record<string, React.CSSProperties> = {
   heroH1: {
     fontFamily: "'Bebas Neue', sans-serif", fontSize: "4.2rem", color: "#fff",
     textAlign: "center", marginBottom: "4px", lineHeight: 0.86, letterSpacing: "0.01em",
+    textShadow: "0 2px 16px rgba(0,0,0,0.9)",
   },
-  heroEm: { fontStyle: "normal", color: "#D4AF37", display: "block" },
-  heroMid: { display: "block", color: "#fff", fontStyle: "normal" },
+  heroEm: { fontStyle: "normal", color: "#D4AF37", display: "block", textShadow: "0 2px 20px rgba(0,0,0,0.8), 0 0 40px rgba(212,175,55,0.3)" },
+  heroMid: { display: "block", color: "#fff", fontStyle: "normal", textShadow: "0 2px 16px rgba(0,0,0,0.9)" },
   heroSub: {
     fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.5rem", textAlign: "center",
     marginBottom: "28px", lineHeight: 1.1, color: "#fff",
-    marginTop: "8px",
+    marginTop: "8px", textShadow: "0 2px 12px rgba(0,0,0,0.9)",
   },
 
   /* ── § 2 HOW IT WORKS ── */
@@ -812,7 +813,7 @@ const styles: Record<string, React.CSSProperties> = {
   closerSection: {
     position: "relative", overflow: "hidden", textAlign: "center", marginTop: "48px",
     padding: "48px 24px 80px", borderTop: "1px solid rgba(212,175,55,0.25)",
-    backgroundImage: "linear-gradient(to bottom, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.55) 50%, rgba(0,0,0,0.78) 100%), url('/closer-bg.jpg')",
+    backgroundImage: "linear-gradient(to bottom, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.48) 50%, rgba(0,0,0,0.75) 100%), url('/closer-bg.jpg')",
     backgroundSize: "cover",
     backgroundPosition: "center top",
   },
@@ -827,11 +828,11 @@ const styles: Record<string, React.CSSProperties> = {
   },
   closerH2: {
     fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.4rem", color: "#fff", textAlign: "center",
-    lineHeight: 0.95, margin: "4px 0 14px",
+    lineHeight: 0.95, margin: "4px 0 14px", textShadow: "0 2px 16px rgba(0,0,0,0.9)",
   },
   closerBody: {
     fontFamily: "'Inter', sans-serif", fontSize: "18px", color: "rgba(255,255,255,0.75)",
-    lineHeight: 1.5, maxWidth: "280px", margin: "0 auto 24px",
+    lineHeight: 1.5, maxWidth: "280px", margin: "0 auto 24px", textShadow: "0 2px 8px rgba(0,0,0,0.8)",
   },
 
   /* ── FOOTER ── */
