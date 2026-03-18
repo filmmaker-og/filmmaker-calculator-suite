@@ -72,10 +72,23 @@ const Index = () => {
   /* ── Scroll refs ── */
   const { ref: heroRef, inView: heroVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
   const { ref: howRef, inView: howVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
-  const { ref: waterfallRef, inView: waterfallVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
+  // Waterfall — three independent pieces
+  const { ref: waterfallHeaderRef, inView: waterfallHeaderVisible } = useInView<HTMLDivElement>({ threshold: 0.3 });
+  const { ref: waterfallCalloutRef, inView: waterfallCalloutVisible } = useInView<HTMLDivElement>({ threshold: 0.3 });
+  const { ref: waterfallTableRef, inView: waterfallTableVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
+  const { ref: waterfallFlowRef, inView: waterfallFlowVisible } = useInView<HTMLDivElement>({ threshold: 0.2 });
+
   const { ref: whyRef, inView: whyVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
-  const { ref: arsenalRef, inView: arsenalVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
-  const { ref: realityRef, inView: realityVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
+
+  // Arsenal — three independent cards
+  const { ref: arsenalHeaderRef, inView: arsenalHeaderVisible } = useInView<HTMLDivElement>({ threshold: 0.3 });
+  const { ref: arsenalCoreRef, inView: arsenalCoreVisible } = useInView<HTMLDivElement>({ threshold: 0.2 });
+  const { ref: arsenalSnapshotRef, inView: arsenalSnapshotVisible } = useInView<HTMLDivElement>({ threshold: 0.2 });
+  const { ref: arsenalPackageRef, inView: arsenalPackageVisible } = useInView<HTMLDivElement>({ threshold: 0.2 });
+
+  // Reality — blockquote and grid separately
+  const { ref: realityQuoteRef, inView: realityQuoteVisible } = useInView<HTMLDivElement>({ threshold: 0.3 });
+  const { ref: realityGridRef, inView: realityGridVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
   const { ref: closerRef, inView: closerVisible } = useInView<HTMLDivElement>({ threshold: 0.2 });
   const { ref: footerRef, inView: footerVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
 
@@ -100,16 +113,16 @@ const Index = () => {
   ];
 
   const withItems = [
-    "Model fees before they hit you",
-    "Show investors exact recoupment",
-    "Know what's negotiable",
-    "Know break-even before you raise",
+    "Model every fee",
+    "Show exact returns",
+    "Know your leverage",
+    "Know break-even first",
   ];
   const withoutItems = [
-    "Guessing when investors ask",
+    "Guessing at the table",
     "Overpromising returns",
-    "Leaving leverage on the table",
-    "Backend killed after signing",
+    "Giving away leverage",
+    "Backend gone at signing",
   ];
 
   const steps = [
@@ -212,18 +225,18 @@ const Index = () => {
         </section>
 
         {/* ═══ § 3 WATERFALL ═══ */}
-        <section ref={waterfallRef} style={styles.waterfallSection}>
-          <div style={{ ...styles.waterfallHeader, ...reveal(waterfallVisible) }}>
+        <section style={styles.waterfallSection}>
+          <div ref={waterfallHeaderRef} style={{ ...styles.waterfallHeader, ...reveal(waterfallHeaderVisible) }}>
             <EyebrowRuled text="How the money flows" />
             <h2 style={styles.waterfallH2}>The Recoupment<br /><span style={{ color: "#D4AF37" }}>Waterfall</span></h2>
           </div>
 
-          <p style={{ ...styles.waterfallExplainer, ...reveal(waterfallVisible) }}>
+          <p style={{ ...styles.waterfallExplainer, ...reveal(waterfallHeaderVisible) }}>
             A recoupment waterfall maps who gets paid, in what order, and how much — before you see a dollar of profit.
           </p>
 
           {/* Acquisition callout */}
-          <div style={{ ...styles.acquisitionCallout, ...reveal(waterfallVisible, 1) }}>
+          <div ref={waterfallCalloutRef} style={{ ...styles.acquisitionCallout, ...reveal(waterfallCalloutVisible) }}>
             <div style={styles.topLineGoldHalf} />
             <p style={styles.acqLabel}>Streamer Acquisition Price</p>
             <p style={styles.acqSub}>Tier 2 Action Thriller — Example</p>
@@ -231,7 +244,7 @@ const Index = () => {
           </div>
 
           {/* Waterfall tiers */}
-          <div style={{ ...styles.waterfallTiersBox, ...reveal(waterfallVisible, 2) }}>
+          <div ref={waterfallTableRef} style={{ ...styles.waterfallTiersBox, ...reveal(waterfallTableVisible) }}>
             <div style={styles.topLineGold} />
             {waterfallTiers.map((tier, i) => {
               // Group boundaries: after off-the-tops (row 3, i=3), after debt service (row 5, i=5)
@@ -255,7 +268,7 @@ const Index = () => {
           </div>
 
           {/* Flow diagram */}
-          <div style={{ ...styles.flowDiagram, ...reveal(waterfallVisible, 3) }}>
+          <div ref={waterfallFlowRef} style={{ ...styles.flowDiagram, ...reveal(waterfallFlowVisible) }}>
             <div style={styles.netBackend}>
               <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "1px", background: `linear-gradient(90deg, transparent, ${colors.greenAccent}, transparent)` }} />
               <p style={styles.netLabel}>Net Backend Profit</p>
@@ -281,7 +294,7 @@ const Index = () => {
               ))}
             </div>
           </div>
-          <p style={{ ...styles.waterfallNote, ...reveal(waterfallVisible, 3) }}>Model only — your numbers will differ</p>
+          <p style={{ ...styles.waterfallNote, ...reveal(waterfallFlowVisible) }}>Model only — your numbers will differ</p>
         </section>
 
         {/* ═══ § 4 WHY THIS MATTERS ═══ */}
@@ -306,8 +319,8 @@ const Index = () => {
         </section>
 
         {/* ═══ § 5 ARSENAL ═══ */}
-        <section ref={arsenalRef} style={styles.arsenalSection}>
-          <div style={{ ...styles.arsenalHeader, ...reveal(arsenalVisible) }}>
+        <section style={styles.arsenalSection}>
+          <div ref={arsenalHeaderRef} style={{ ...styles.arsenalHeader, ...reveal(arsenalHeaderVisible) }}>
             <EyebrowRuled text="What you get" />
             <h2 style={styles.arsenalH2}>The <span style={{ color: "#D4AF37" }}>Arsenal</span></h2>
             <p style={styles.arsenalSub}>Start with the math. Upgrade when you need the documents.</p>
@@ -315,7 +328,7 @@ const Index = () => {
 
           <div style={styles.arsenalCards}>
             {/* Core Engine Card (Free) */}
-            <div style={{ ...styles.tierCardCore, ...reveal(arsenalVisible, 1) }}>
+            <div ref={arsenalCoreRef} style={{ ...styles.tierCardCore, ...reveal(arsenalCoreVisible) }}>
               <div style={styles.topLineGoldHalf} />
               <div style={styles.tierHeaderCore}>
                 <div style={{ marginBottom: "12px" }}>
@@ -352,7 +365,7 @@ const Index = () => {
             </div>
 
             {/* The Snapshot Card */}
-            <div style={{ ...styles.tierCardSnapshot, ...reveal(arsenalVisible, 2) }}>
+            <div ref={arsenalSnapshotRef} style={{ ...styles.tierCardSnapshot, ...reveal(arsenalSnapshotVisible) }}>
               <div style={styles.topLineGold} />
               <div style={styles.tierHeaderAlt}>
                 <div style={{ marginBottom: "12px" }}>
@@ -383,7 +396,7 @@ const Index = () => {
             </div>
 
             {/* The Package Card */}
-            <div style={{ ...styles.tierCardPackage, ...reveal(arsenalVisible, 3) }}>
+            <div ref={arsenalPackageRef} style={{ ...styles.tierCardPackage, ...reveal(arsenalPackageVisible) }}>
               <div style={styles.topLineGoldThick} />
               <div style={{ ...styles.tierHeaderAlt, paddingTop: "28px", borderBottomColor: "rgba(212,175,55,0.15)" }}>
                 <div style={{ marginBottom: "12px" }}>
@@ -422,12 +435,12 @@ const Index = () => {
         </section>
 
         {/* ═══ § 6 REALITY ═══ */}
-        <section ref={realityRef} style={styles.realitySection}>
-          <blockquote style={{ ...styles.blockquote, ...reveal(realityVisible) }}>
+        <section style={styles.realitySection}>
+          <blockquote ref={realityQuoteRef} style={{ ...styles.blockquote, ...reveal(realityQuoteVisible) }}>
             The waterfall either costs you now — or costs you everything <span style={{ color: "#D4AF37" }}>later</span>.
           </blockquote>
 
-          <div style={{ ...styles.checkGrid, ...reveal(realityVisible, 1) }}>
+          <div ref={realityGridRef} style={{ ...styles.checkGrid, ...reveal(realityGridVisible) }}>
             <div style={styles.topLineGoldHalf} />
             {/* Header */}
             <div style={styles.checkHeader}>
@@ -536,7 +549,7 @@ const styles: Record<string, React.CSSProperties> = {
   hero: {
     position: "relative", textAlign: "center",
     padding: "24px 24px 16px",
-    backgroundImage: "linear-gradient(to bottom, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.70) 40%, rgba(0,0,0,0.85) 100%), url('/hero-bg.jpg')",
+    backgroundImage: "linear-gradient(to bottom, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.55) 40%, rgba(0,0,0,0.72) 100%), url('/hero-bg.jpg')",
     backgroundSize: "cover",
     backgroundPosition: "center",
   },
@@ -588,7 +601,7 @@ const styles: Record<string, React.CSSProperties> = {
   waterfallHeader: { textAlign: "center", padding: "0 24px 24px" },
   waterfallH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3rem", color: "#fff", lineHeight: 0.95 },
   waterfallExplainer: {
-    fontFamily: "'Inter', sans-serif", fontSize: "16px", color: "rgba(255,255,255,0.55)",
+    fontFamily: "'Inter', sans-serif", fontSize: "16px", color: "rgba(255,255,255,0.88)",
     lineHeight: 1.55, textAlign: "center", padding: "0 24px", marginBottom: "24px",
     maxWidth: "380px", marginLeft: "auto", marginRight: "auto",
   },
@@ -643,7 +656,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
   bucketLabel: { fontFamily: "'Roboto Mono', monospace", fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.15em", color: colors.textPrimary, marginBottom: "8px" },
   bucketAmount: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "2rem", color: "#3CB371", lineHeight: 1 },
-  bucketPct: { fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: colors.textMuted, marginTop: "5px" },
+  bucketPct: { fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: "rgba(255,255,255,0.85)", marginTop: "5px" },
   waterfallNote: { fontFamily: "'Roboto Mono', monospace", fontSize: "11px", textTransform: "uppercase", textAlign: "center", color: "rgba(255,255,255,0.45)", letterSpacing: "0.06em", padding: "16px 24px 0" },
 
   /* ── § 4 WHY THIS MATTERS ── */
@@ -681,7 +694,7 @@ const styles: Record<string, React.CSSProperties> = {
     padding: "28px 24px 20px", borderBottom: "1px solid rgba(212,175,55,0.1)",
   },
   tierTitleCore: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "2rem", color: "#fff", lineHeight: 1, letterSpacing: "0.02em" },
-  tierSubCore: { fontFamily: "'Inter', sans-serif", fontSize: "13px", color: "rgba(255,255,255,0.55)", marginTop: "6px" },
+  tierSubCore: { fontFamily: "'Inter', sans-serif", fontSize: "15px", color: "rgba(255,255,255,0.55)", marginTop: "6px" },
   tierBadgeCore: {
     fontFamily: "'Roboto Mono', monospace", fontSize: "11px", textTransform: "uppercase",
     padding: "6px 12px", borderRadius: "4px", letterSpacing: "0.15em",
@@ -774,8 +787,8 @@ const styles: Record<string, React.CSSProperties> = {
     display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1px", background: "rgba(255,255,255,0.06)",
     borderBottom: "1px solid rgba(212,175,55,0.15)",
   },
-  checkHeaderWith: { background: "rgba(60,179,113,0.05)", padding: "16px 24px" },
-  checkHeaderWithout: { background: "#000", padding: "16px 24px", borderLeft: "1px solid rgba(255,255,255,0.06)" },
+  checkHeaderWith: { background: "rgba(60,179,113,0.05)", padding: "14px 16px" },
+  checkHeaderWithout: { background: "#000", padding: "14px 16px", borderLeft: "1px solid rgba(255,255,255,0.06)" },
   checkHeaderWithText: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.5rem", color: "#3CB371", letterSpacing: "0.04em" },
   checkHeaderWithoutText: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.5rem", color: "rgba(255,255,255,0.55)", letterSpacing: "0.04em" },
   checkRow: {
@@ -784,11 +797,11 @@ const styles: Record<string, React.CSSProperties> = {
   },
   checkCellLeft: {
     background: "rgba(60,179,113,0.03)", display: "grid", gridTemplateColumns: "22px 1fr", gap: "10px",
-    padding: "18px 20px", alignItems: "flex-start",
+    padding: "14px 16px", alignItems: "flex-start",
   },
   checkCellRight: {
     background: "#000", display: "grid", gridTemplateColumns: "22px 1fr", gap: "10px",
-    padding: "18px 20px", alignItems: "flex-start", borderLeft: "1px solid rgba(255,255,255,0.06)",
+    padding: "14px 16px", alignItems: "flex-start", borderLeft: "1px solid rgba(255,255,255,0.06)",
   },
   checkIconYes: { fontFamily: "'Roboto Mono', monospace", fontSize: "22px", paddingTop: "2px", color: "#3CB371", textShadow: "0 0 12px rgba(60,179,113,0.4)" },
   checkIconNo: { fontFamily: "'Roboto Mono', monospace", fontSize: "22px", paddingTop: "2px", color: "rgba(220,38,38,0.85)", textShadow: "0 0 8px rgba(220,38,38,0.25)" },
@@ -799,7 +812,7 @@ const styles: Record<string, React.CSSProperties> = {
   closerSection: {
     position: "relative", overflow: "hidden", textAlign: "center", marginTop: "48px",
     padding: "48px 24px 80px", borderTop: "1px solid rgba(212,175,55,0.25)",
-    backgroundImage: "linear-gradient(to bottom, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.72) 50%, rgba(0,0,0,0.90) 100%), url('/closer-bg.jpg')",
+    backgroundImage: "linear-gradient(to bottom, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.55) 50%, rgba(0,0,0,0.78) 100%), url('/closer-bg.jpg')",
     backgroundSize: "cover",
     backgroundPosition: "center top",
   },
