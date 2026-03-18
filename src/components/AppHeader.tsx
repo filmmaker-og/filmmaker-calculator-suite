@@ -70,7 +70,7 @@ const AppHeader = ({ onMoreOpen }: AppHeaderProps) => {
             marginTop: "max(12px, env(safe-area-inset-top, 12px))",
             marginLeft: "16px",
             marginRight: "16px",
-            borderRadius: "999px",
+            borderRadius: "12px",
             background: "rgba(6,6,6,0.85)",
             border: "1px solid rgba(212,175,55,0.38)",
             boxShadow: "0 2px 24px rgba(0,0,0,0.8)",

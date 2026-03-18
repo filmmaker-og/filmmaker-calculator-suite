@@ -115,12 +115,12 @@ const Index = () => {
     {
       title: "Enter Your Budget",
       body: "Total budget, cash basis after deferments and tax credits, investor equity.",
-      icon: <svg viewBox="0 0 24 24" fill="#000" width="16" height="16"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>,
+      icon: <svg viewBox="0 0 24 24" fill="#000" width="16" height="16"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>,
     },
     {
       title: "Choose Your Scenario",
       body: "Streamer acquisition or traditional distribution. Guild rates adjust automatically.",
-      icon: <svg viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="2.5" strokeLinecap="round" width="16" height="16"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="15" cy="8" r="3" fill="#000" stroke="#000"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="9" cy="16" r="3" fill="#000" stroke="#000"/></svg>,
+      icon: <svg viewBox="0 0 24 24" fill="#000" width="16" height="16"><path d="M5 9.2h3V19H5V9.2zM10.6 5h2.8v14h-2.8V5zm5.6 8H19v6h-2.8v-6z"/></svg>,
     },
     {
       title: "See the Full Waterfall",
@@ -135,7 +135,7 @@ const Index = () => {
     {
       title: "Export & Share",
       body: "Download a formatted PDF. Share directly with investors, financiers, and co-producers.",
-      icon: <svg viewBox="0 0 24 24" fill="#000" width="16" height="16"><path d="M5 20h14v-2H5v2zm7-18L5.33 9h3.34v6h6.66V9h3.34L12 2z"/></svg>,
+      icon: <svg viewBox="0 0 24 24" fill="#000" width="16" height="16"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>,
     },
   ];
 
