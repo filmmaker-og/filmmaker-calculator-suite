@@ -96,8 +96,8 @@ const Index = () => {
   /* ── Data ── */
   const waterfallTiers = [
     { num: "01", name: "CAM Fee", amt: "$30,000" },
-    { num: "02", name: "SA Commission (10%)", amt: "$300,000" },
-    { num: "03", name: "SA Expenses", amt: "$50,000" },
+    { num: "02", name: "Agent Commission (10%)", amt: "$300,000" },
+    { num: "03", name: "Agent Expenses", amt: "$50,000" },
     { num: "04", name: "E&O / Delivery", amt: "$18,000" },
     { num: "05", name: "Senior Debt", amt: "$1,200,000" },
     { num: "06", name: "Mezzanine Debt", amt: "$300,000" },
@@ -236,7 +236,7 @@ const Index = () => {
           </div>
 
           <p style={{ ...styles.waterfallExplainer, ...reveal(waterfallHeaderVisible) }}>
-            A recoupment waterfall maps who gets paid, in what order, and how much — before you see a dollar of profit.
+            A recoupment waterfall maps who gets paid, in what order, and how much before you see a dollar of profit.
           </p>
 
           {/* Acquisition callout */}
@@ -482,7 +482,7 @@ const Index = () => {
           <div style={{ ...styles.closerCard, ...reveal(closerVisible) }}>
             <div style={styles.topLineGoldBright} />
             <h2 style={styles.closerH2}>Your Investors<br /><span style={{ color: "#D4AF37", display: "block", textShadow: "0 0 40px rgba(212,175,55,0.6), 0 0 80px rgba(212,175,55,0.25)" }}>Will Ask.</span></h2>
-            <p style={styles.closerBody}>Stop guessing your backend. Build the model before the pitch.</p>
+            <p style={styles.closerBody}>Stop guessing your backend. Build your model before the pitch.</p>
             <button onClick={handleCTA} style={styles.ctaBtn} onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>
               <span style={{ position: "relative", zIndex: 1 }}>RUN MY WATERFALL</span>
               <div style={styles.ctaShimmer} />
@@ -587,7 +587,7 @@ const styles: Record<string, React.CSSProperties> = {
     position: "relative",
     border: "1px solid rgba(212,175,55,0.45)",
     borderRadius: "12px",
-    padding: "28px 24px",
+    padding: "20px 20px",
     background: "rgba(0,0,0,0.75)",
     margin: "8px 24px 0",
     display: "flex",
