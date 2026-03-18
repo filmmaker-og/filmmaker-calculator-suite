@@ -527,7 +527,7 @@ const Index = () => {
             <span onClick={() => gatedNavigate("/store")} style={styles.footerNavLink} onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.60)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.35)"; }}>Shop</span>
           </div>
           <p style={styles.footerText}>
-            filmmaker.og provides financial modeling tools for educational purposes. This is not legal or financial advice. Consult qualified counsel before executing any investment structure.
+            Filmmaker.og provides financial modeling tools for educational purposes. This is not legal or financial advice. Consult qualified counsel before executing any investment structure.
           </p>
         </footer>
       </div>
@@ -580,7 +580,7 @@ const styles: Record<string, React.CSSProperties> = {
     padding: "24px 24px 16px",
     backgroundImage: "linear-gradient(to bottom, rgba(0,0,0,0.50) 0%, rgba(0,0,0,0.35) 40%, rgba(0,0,0,0.65) 100%), url('/hero-bg.jpg')",
     backgroundSize: "cover",
-    backgroundPosition: "center",
+    backgroundPosition: "center 30%",
   },
   heroGlow: {
     position: "absolute", top: "-10%", left: 0, right: 0, height: "65%", pointerEvents: "none",
@@ -898,7 +898,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
   closerCard: {
     position: "relative", zIndex: 1, border: "1px solid rgba(212,175,55,0.65)", borderRadius: "12px",
-    padding: "24px 24px 36px", background: "rgba(0,0,0,0.85)", margin: "0 24px",
+    padding: "24px 24px 36px", background: "rgba(0,0,0,0.85)", margin: "0",
     boxShadow: "0 16px 40px rgba(0,0,0,0.8), 0 0 60px rgba(212,175,55,0.1), 0 0 80px rgba(120,60,180,0.08)",
   },
   closerH2: {

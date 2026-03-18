@@ -863,7 +863,7 @@ const Store = () => {
   const handleBuyService = (product: Product) => {
     haptics.medium();
     if (product.id === "boutique") {
-      window.location.href = "mailto:hello@filmmakerog.com?subject=Boutique%20Inquiry&body=I%27m%20interested%20in%20a%20custom%20engagement.";
+      window.location.href = "mailto:thefilmmaker.og@gmail.com?subject=Boutique%20Inquiry&body=I%27m%20interested%20in%20a%20custom%20engagement.";
       return;
     }
     setShowPopup(product);
@@ -1131,7 +1131,7 @@ const Store = () => {
             Bespoke financial modeling, custom comp research, or institutional-grade investor materials beyond what these packages cover.
           </p>
           <a
-            href="mailto:hello@filmmakerog.com?subject=Custom%20Inquiry"
+            href="mailto:thefilmmaker.og@gmail.com?subject=Custom%20Inquiry"
             style={{
               display: "inline-flex",
               alignItems: "center",
