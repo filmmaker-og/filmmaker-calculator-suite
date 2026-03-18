@@ -100,16 +100,16 @@ const Index = () => {
   ];
 
   const withItems = [
-    "Model fees before they hit you",
-    "Show investors exact recoupment",
-    "Know what's negotiable",
-    "Know break-even before you raise",
+    "Model every fee",
+    "Show exact returns",
+    "Know your leverage",
+    "Know break-even first",
   ];
   const withoutItems = [
-    "Guessing when investors ask",
+    "Guessing at the table",
     "Overpromising returns",
-    "Leaving leverage on the table",
-    "Backend killed after signing",
+    "Giving away leverage",
+    "Backend gone at signing",
   ];
 
   const steps = [
@@ -774,8 +774,8 @@ const styles: Record<string, React.CSSProperties> = {
     display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1px", background: "rgba(255,255,255,0.06)",
     borderBottom: "1px solid rgba(212,175,55,0.15)",
   },
-  checkHeaderWith: { background: "rgba(60,179,113,0.05)", padding: "16px 24px" },
-  checkHeaderWithout: { background: "#000", padding: "16px 24px", borderLeft: "1px solid rgba(255,255,255,0.06)" },
+  checkHeaderWith: { background: "rgba(60,179,113,0.05)", padding: "14px 16px" },
+  checkHeaderWithout: { background: "#000", padding: "14px 16px", borderLeft: "1px solid rgba(255,255,255,0.06)" },
   checkHeaderWithText: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.5rem", color: "#3CB371", letterSpacing: "0.04em" },
   checkHeaderWithoutText: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.5rem", color: "rgba(255,255,255,0.55)", letterSpacing: "0.04em" },
   checkRow: {
@@ -784,11 +784,11 @@ const styles: Record<string, React.CSSProperties> = {
   },
   checkCellLeft: {
     background: "rgba(60,179,113,0.03)", display: "grid", gridTemplateColumns: "22px 1fr", gap: "10px",
-    padding: "18px 20px", alignItems: "flex-start",
+    padding: "14px 16px", alignItems: "flex-start",
   },
   checkCellRight: {
     background: "#000", display: "grid", gridTemplateColumns: "22px 1fr", gap: "10px",
-    padding: "18px 20px", alignItems: "flex-start", borderLeft: "1px solid rgba(255,255,255,0.06)",
+    padding: "14px 16px", alignItems: "flex-start", borderLeft: "1px solid rgba(255,255,255,0.06)",
   },
   checkIconYes: { fontFamily: "'Roboto Mono', monospace", fontSize: "22px", paddingTop: "2px", color: "#3CB371", textShadow: "0 0 12px rgba(60,179,113,0.4)" },
   checkIconNo: { fontFamily: "'Roboto Mono', monospace", fontSize: "22px", paddingTop: "2px", color: "rgba(220,38,38,0.85)", textShadow: "0 0 8px rgba(220,38,38,0.25)" },
