@@ -70,7 +70,7 @@ const s: Record<string, React.CSSProperties> = {
     animation: "stepEnter 0.4s ease-out forwards",
   },
   headerPad: {
-    padding: "20px 16px 0",
+    padding: "20px 24px 0",
   },
   subLine: {
     marginBottom: "16px",

@@ -55,7 +55,7 @@ const s: Record<string, React.CSSProperties> = {
   },
   heroZone: {
     textAlign: "center" as const,
-    padding: "28px 20px 20px",
+    padding: "28px 24px 20px",
     position: "relative" as const,
     zIndex: 1,
   },
@@ -164,7 +164,7 @@ const s: Record<string, React.CSSProperties> = {
     textAlign: "center" as const,
     marginTop: "14px",
     fontSize: "11px",
-    color: "rgba(255,255,255,0.30)",
+    color: "rgba(255,255,255,0.25)",
     lineHeight: 1.5,
   },
   // Market context
@@ -199,7 +199,7 @@ const s: Record<string, React.CSSProperties> = {
     pointerEvents: "auto" as const,
   },
   vHero: {
-    padding: "24px 20px 20px",
+    padding: "24px 24px 20px",
     textAlign: "center" as const,
     position: "relative" as const,
   },
@@ -299,7 +299,7 @@ const s: Record<string, React.CSSProperties> = {
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
-    padding: "16px 20px",
+    padding: "16px 24px",
     background: "rgba(212,175,55,0.04)",
     borderTop: "1px solid rgba(212,175,55,0.15)",
   },
@@ -343,7 +343,7 @@ const s: Record<string, React.CSSProperties> = {
   levVals: {
     fontFamily: "'Roboto Mono', monospace",
     fontSize: "10px",
-    color: "rgba(255,255,255,0.30)",
+    color: "rgba(255,255,255,0.25)",
   },
   levBody: {
     maxHeight: 0,
@@ -398,7 +398,7 @@ const s: Record<string, React.CSSProperties> = {
     justifyContent: "space-between",
     marginTop: "6px",
     fontFamily: "'Roboto Mono', monospace",
-    fontSize: "9px",
+    fontSize: "10px",
     letterSpacing: "0.08em",
     textTransform: "uppercase" as const,
     color: "rgba(255,255,255,0.25)",

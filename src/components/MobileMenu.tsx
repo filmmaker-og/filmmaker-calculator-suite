@@ -66,7 +66,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
       <span style={{
         fontFamily: "'Roboto Mono', monospace",
         fontSize: "11px",
-        letterSpacing: "0.18em",
+        letterSpacing: "0.15em",
         textTransform: "uppercase" as const,
         color: "#D4AF37",
         whiteSpace: "nowrap" as const,
@@ -96,7 +96,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
           background: "rgba(6,6,6,0.92)",
           backdropFilter: "blur(40px)",
           WebkitBackdropFilter: "blur(40px)",
-          borderRadius: "16px 16px 0 0",
+          borderRadius: "12px 12px 0 0",
           boxShadow: "0 -4px 60px rgba(212,175,55,0.08), 0 -2px 20px rgba(0,0,0,0.80)",
         }}
         onTouchStart={handleTouchStart}
@@ -123,7 +123,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
           </button>
         </div>
 
-        <div style={{ padding: "8px 20px 28px" }}>
+        <div style={{ padding: "8px 24px 28px" }}>
           {/* Primary Nav — 2×2 grid */}
           <div style={{ marginBottom: "16px" }}>
             <SectionLabel>Navigate</SectionLabel>
