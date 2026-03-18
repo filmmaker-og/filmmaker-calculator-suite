@@ -213,7 +213,7 @@ const Calculator = () => {
     if (!user && !emailCaptured) {
       setShowEmailGate(true);
     } else {
-      navigate('/store');
+      navigate('/store/the-full-analysis');
     }
   };
 
