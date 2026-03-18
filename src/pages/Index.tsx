@@ -96,8 +96,8 @@ const Index = () => {
   /* ── Data ── */
   const waterfallTiers = [
     { num: "01", name: "CAM Fee", amt: "$30,000" },
-    { num: "02", name: "SA Commission (10%)", amt: "$300,000" },
-    { num: "03", name: "SA Expenses", amt: "$50,000" },
+    { num: "02", name: "Agent Commission", amt: "$300,000" },
+    { num: "03", name: "Agent Expenses", amt: "$50,000" },
     { num: "04", name: "E&O / Delivery", amt: "$18,000" },
     { num: "05", name: "Senior Debt", amt: "$1,200,000" },
     { num: "06", name: "Mezzanine Debt", amt: "$300,000" },
@@ -236,7 +236,7 @@ const Index = () => {
           </div>
 
           <p style={{ ...styles.waterfallExplainer, ...reveal(waterfallHeaderVisible) }}>
-            A recoupment waterfall maps who gets paid, in what order, and how much — before you see a dollar of profit.
+            A recoupment waterfall maps who gets paid, in what order & how much before you see a dollar of profit.
           </p>
 
           {/* Acquisition callout */}
@@ -337,99 +337,115 @@ const Index = () => {
           </div>
 
           <div style={styles.arsenalCards}>
-            {/* Core Engine Card (Free) */}
-            <div ref={arsenalCoreRef} style={{ ...styles.tierCardCore, ...reveal(arsenalCoreVisible) }}>
-              <div style={styles.topLineGoldHalf} />
-              <div style={styles.tierHeaderCore}>
+            {/* ── Card 1: The Snapshot (Free) — GREEN ── */}
+            <div ref={arsenalCoreRef} style={{ ...styles.tierCardFree, ...reveal(arsenalCoreVisible) }}>
+              {/* Gradient border */}
+              <div style={{ position: "absolute", inset: 0, borderRadius: "12px", padding: "1px", pointerEvents: "none", background: "linear-gradient(180deg, rgba(60,179,113,0.50) 0%, rgba(60,179,113,0.20) 50%, rgba(60,179,113,0.35) 100%)", WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)", WebkitMaskComposite: "xor", maskComposite: "exclude" }} />
+              {/* Top line */}
+              <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "1px", background: "linear-gradient(90deg, transparent, rgba(60,179,113,0.50), transparent)", zIndex: 1 }} />
+              <div style={styles.tierHeaderFree}>
                 <div style={{ marginBottom: "12px" }}>
-                  <span style={styles.tierBadgeCore}>Free Access</span>
+                  <span style={styles.tierBadgeFree}>Free Access</span>
                 </div>
-                <p style={styles.tierTitleCore}>The Snapshot</p>
-                <p style={styles.tierSubCore}>Your waterfall. Modeled, visualized, shareable.</p>
+                <p style={styles.tierTitleCard}>The Snapshot</p>
+                <p style={styles.tierSubFree}>Your waterfall. Modeled, visualized, shareable.</p>
               </div>
-              {/* Subdivider */}
-              <div style={{ height: "1px", background: "rgba(212,175,55,0.12)", margin: "0 24px" }} />
-              <div style={styles.tierFeaturesCore}>
-                <div style={styles.featureItemCore}>
-                  <div style={styles.featureTextWrapCore}>
-                    <p style={styles.featureNameCore}>11-Tier Recoupment Logic</p>
-                    <p style={styles.featureDescCore}>Accurate calculations from gross receipts down to net backend profit.</p>
-                  </div>
-                </div>
-                <div style={styles.featureItemCore}>
-                  <div style={styles.featureTextWrapCore}>
-                    <p style={styles.featureNameCore}>Profit & Break-Even Scenarios</p>
-                    <p style={styles.featureDescCore}>Calculate exactly what your acquisition price needs to be to make investors whole.</p>
-                  </div>
-                </div>
-                <div style={styles.featureItemCore}>
-                  <div style={styles.featureTextWrapCore}>
-                    <p style={styles.featureNameCore}>Web Sharing & PDF Export</p>
-                    <p style={styles.featureDescCore}>Generate a live link or download a clean, formatted PDF to send directly to your financiers.</p>
-                  </div>
-                </div>
+              {/* Value statement */}
+              <div style={styles.valueStatementFree}>
+                <p style={styles.valueTextFree}>Your Numbers. No Credit Card.</p>
               </div>
-              <div style={styles.tierAction}>
-                <button onClick={handleCTA} style={styles.btnSnapshot} onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>START MODELING</button>
-              </div>
-            </div>
-
-            {/* The Snapshot Card */}
-            <div ref={arsenalSnapshotRef} style={{ ...styles.tierCardSnapshot, ...reveal(arsenalSnapshotVisible) }}>
-              <div style={styles.topLineGold} />
-              <div style={styles.tierHeaderAlt}>
-                <div style={{ marginBottom: "12px" }}>
-                  <span style={styles.trendingBadge}>Essential</span>
-                </div>
-                <p style={styles.tierTitleAlt}>THE FULL ANALYSIS</p>
-                <p style={styles.tierSubAlt}>Pick this one if you need the numbers documented — clean, professional, stress-tested</p>
-              </div>
-              {/* Subdivider */}
-              <div style={{ height: "1px", background: "rgba(212,175,55,0.12)", margin: "0 24px" }} />
-              <p style={styles.tierIntro}>Your financial model. One document. Investor-ready.</p>
-              <div style={styles.tierChecklist}>
+              {/* Features */}
+              <div style={styles.tierFeatures}>
                 {[
-                  "Unified Financial Presentation (PDF)",
-                  "Budget, capital stack, waterfall, scenarios — one document",
-                  "White-labeled with your company and project",
-                ].map((text, i) => (
-                  <div key={i} style={styles.checkItem}>
-                    <span style={styles.checkMark}>✓</span>
-                    <p style={styles.checkText}>{text}</p>
+                  { name: "11-Tier Recoupment Logic" },
+                  { name: "Profit & Break-Even Scenarios" },
+                  { name: "Web Sharing & PDF Export" },
+                ].map((f, i) => (
+                  <div key={i} style={{ display: "flex", gap: "14px", alignItems: "flex-start" }}>
+                    <span style={{ fontSize: "20px", color: "#3CB371", flexShrink: 0, marginTop: "1px", textShadow: "0 0 12px rgba(60,179,113,0.4)" }}>✓</span>
+                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "18px", fontWeight: 500, color: "#fff", lineHeight: 1.3 }}>{f.name}</p>
                   </div>
                 ))}
               </div>
               <div style={styles.tierAction}>
-                <button onClick={() => gatedNavigate("/store/the-full-analysis")} style={styles.btnSnapshot} onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>GET THE FULL ANALYSIS</button>
-                <a href="/store/the-full-analysis" onClick={(e) => { e.preventDefault(); gatedNavigate("/store/the-full-analysis"); }} style={styles.detailsLink} onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,1)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.60)"; }}>See full details →</a>
+                <button onClick={handleCTA} style={styles.btnFree} onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>START MODELING</button>
               </div>
             </div>
 
-            {/* The Package Card */}
-            <div ref={arsenalPackageRef} style={{ ...styles.tierCardPackage, ...reveal(arsenalPackageVisible) }}>
-              <div style={styles.topLineGoldThick} />
-              <div style={{ ...styles.tierHeaderAlt, paddingTop: "28px", borderBottomColor: "rgba(212,175,55,0.15)" }}>
+            {/* ── Card 2: The Full Analysis — GOLD ── */}
+            <div ref={arsenalSnapshotRef} style={{ ...styles.tierCardAnalysis, ...reveal(arsenalSnapshotVisible) }}>
+              {/* Gradient border */}
+              <div style={{ position: "absolute", inset: 0, borderRadius: "12px", padding: "1px", pointerEvents: "none", background: "linear-gradient(180deg, rgba(212,175,55,0.55) 0%, rgba(212,175,55,0.20) 50%, rgba(212,175,55,0.40) 100%)", WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)", WebkitMaskComposite: "xor", maskComposite: "exclude" }} />
+              {/* Top line */}
+              <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.6), transparent)", zIndex: 1 }} />
+              <div style={styles.tierHeaderAlt}>
                 <div style={{ marginBottom: "12px" }}>
-                  <span style={styles.trendingBadge}>Turnkey</span>
+                  <span style={styles.trendingBadge}>Essential</span>
                 </div>
-                <p style={styles.tierTitleAlt}>THE PRODUCER'S PACKAGE</p>
-                <p style={styles.tierSubAlt}>Pick this one if you want the full treatment — turnkey, custom, ready for the room</p>
+                <p style={styles.tierTitleCard}>THE FULL ANALYSIS</p>
+                <p style={styles.tierSubGold}>Your numbers documented & stress-tested.</p>
               </div>
-              {/* Subdivider */}
-              <div style={{ height: "1px", background: "rgba(212,175,55,0.12)", margin: "0 24px" }} />
-              <p style={styles.tierIntro}>Custom lookbook, financials, pitch deck, 10 comps. We build it. You present it.</p>
-              <div style={styles.tierChecklist}>
+              {/* Value statement */}
+              <div style={styles.valueStatementGold}>
+                <p style={styles.valueTextGold}>One Document. Every Answer.</p>
+              </div>
+              {/* Features */}
+              <div style={styles.tierFeatures}>
                 {[
-                  "Custom Lookbook — tone, cast, genre, visual identity",
-                  "Pitch Deck (PowerPoint) with speaker notes",
-                  "Enhanced Financial Presentation (PDF)",
-                  "10 Comparable Acquisition Deals",
-                  "Individual Investor Return Profiles",
-                  "Everything white-labeled to your project",
-                ].map((text, i) => (
-                  <div key={i} style={styles.checkItem}>
-                    <span style={styles.checkMark}>✓</span>
-                    <p style={styles.checkText}>{text}</p>
+                  { name: "Unified Financial Presentation", desc: "One PDF with everything an investor needs." },
+                  { name: "Budget, Stack, Waterfall & Scenarios", desc: "All four pillars in a single document." },
+                  { name: "Sensitivity Analysis", desc: "Multiple scenarios stress-tested." },
+                  { name: "White-Labeled to Your Project", desc: "Your company, your title, your brand." },
+                ].map((f, i) => (
+                  <div key={i} style={{ display: "flex", gap: "14px", alignItems: "flex-start" }}>
+                    <span style={{ fontSize: "20px", color: "#D4AF37", flexShrink: 0, marginTop: "1px", textShadow: "0 0 12px rgba(212,175,55,0.4)" }}>✓</span>
+                    <div>
+                      <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "18px", fontWeight: 500, color: "#fff", lineHeight: 1.3, marginBottom: "3px" }}>{f.name}</p>
+                      <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "16px", color: "rgba(255,255,255,0.65)", lineHeight: 1.45 }}>{f.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div style={styles.tierAction}>
+                <button onClick={() => gatedNavigate("/store/the-full-analysis")} style={styles.btnGold} onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>GET THE FULL ANALYSIS</button>
+                <a href="/store/the-full-analysis" onClick={(e) => { e.preventDefault(); gatedNavigate("/store/the-full-analysis"); }} style={styles.detailsLink} onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(255,255,255,1)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(255,255,255,0.85)"; }}>See full details →</a>
+              </div>
+            </div>
+
+            {/* ── Card 3: The Producer's Package — PURPLE-GOLD ── */}
+            <div ref={arsenalPackageRef} style={{ ...styles.tierCardPackage, ...reveal(arsenalPackageVisible) }}>
+              {/* Gradient border */}
+              <div style={{ position: "absolute", inset: 0, borderRadius: "12px", padding: "1px", pointerEvents: "none", background: "linear-gradient(180deg, rgb(110,50,170) 0%, rgba(120,60,180,0.5) 30%, rgba(212,175,55,0.4) 70%, #D4AF37 100%)", WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)", WebkitMaskComposite: "xor", maskComposite: "exclude" }} />
+              {/* Top line */}
+              <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "3px", background: "linear-gradient(90deg, transparent, rgb(110,50,170), #D4AF37, transparent)", zIndex: 1 }} />
+              <div style={{ ...styles.tierHeaderAlt, background: "radial-gradient(ellipse at 50% 100%, rgba(120,60,180,0.06) 0%, transparent 70%)" }}>
+                <div style={{ marginBottom: "12px" }}>
+                  <span style={styles.badgePurple}>Turnkey</span>
+                </div>
+                <p style={styles.tierTitleCard}>THE PRODUCER'S PACKAGE</p>
+                <p style={styles.tierSubGold}>The full treatment, delivered in 3-5 days.</p>
+              </div>
+              {/* Value statement */}
+              <div style={styles.valueStatementPurple}>
+                <p style={styles.valueTextPurple}>Custom-Built. Investor-Ready.</p>
+              </div>
+              {/* Features */}
+              <div style={styles.tierFeatures}>
+                {[
+                  { name: "Custom Lookbook", desc: "Tone, cast, genre, visual identity." },
+                  { name: "Pitch Deck with Speaker Notes" },
+                  { name: "Enhanced Financial Presentation" },
+                  { name: "10 Comparable Acquisitions" },
+                  { name: "Individual Investor Profiles" },
+                  { name: "Everything White-Labeled" },
+                  { name: "Revision Round Included" },
+                ].map((f, i) => (
+                  <div key={i} style={{ display: "flex", gap: "14px", alignItems: "flex-start" }}>
+                    <span style={{ fontSize: "20px", color: "rgb(160,100,255)", flexShrink: 0, marginTop: "1px", textShadow: "0 0 14px rgba(140,80,240,0.5)" }}>✓</span>
+                    <div>
+                      <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "18px", fontWeight: 500, color: "#fff", lineHeight: 1.3, marginBottom: f.desc ? "3px" : "0" }}>{f.name}</p>
+                      {f.desc && <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "16px", color: "rgba(255,255,255,0.65)", lineHeight: 1.45 }}>{f.desc}</p>}
+                    </div>
                   </div>
                 ))}
               </div>
@@ -438,7 +454,7 @@ const Index = () => {
                   <span style={{ position: "relative", zIndex: 1 }}>GET THE PRODUCER'S PACKAGE</span>
                   <div style={styles.btnPackageShimmer} />
                 </button>
-                <a href="/store/the-producers-package" onClick={(e) => { e.preventDefault(); gatedNavigate("/store/the-producers-package"); }} style={styles.detailsLink} onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,1)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.60)"; }}>See full details →</a>
+                <a href="/store/the-producers-package" onClick={(e) => { e.preventDefault(); gatedNavigate("/store/the-producers-package"); }} style={styles.detailsLink} onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(255,255,255,1)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(255,255,255,0.85)"; }}>See full details →</a>
               </div>
             </div>
           </div>
@@ -482,7 +498,7 @@ const Index = () => {
           <div style={{ ...styles.closerCard, ...reveal(closerVisible) }}>
             <div style={styles.topLineGoldBright} />
             <h2 style={styles.closerH2}>Your Investors<br /><span style={{ color: "#D4AF37", display: "block", textShadow: "0 0 40px rgba(212,175,55,0.6), 0 0 80px rgba(212,175,55,0.25)" }}>Will Ask.</span></h2>
-            <p style={styles.closerBody}>Stop guessing your backend. Build the model before the pitch.</p>
+            <p style={styles.closerBody}>Stop guessing. Model your waterfall before the pitch.</p>
             <button onClick={handleCTA} style={styles.ctaBtn} onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>
               <span style={{ position: "relative", zIndex: 1 }}>RUN MY WATERFALL</span>
               <div style={styles.ctaShimmer} />
@@ -541,10 +557,10 @@ const styles: Record<string, React.CSSProperties> = {
     position: "relative", overflow: "hidden",
     fontFamily: "'Roboto Mono', monospace", fontWeight: 600,
     textTransform: "uppercase", color: "#fff",
-    background: "linear-gradient(135deg, rgb(75,30,130) 0%, rgb(110,50,170) 100%)", padding: "20px 56px",
+    background: "linear-gradient(135deg, rgb(75,30,130) 0%, rgb(110,50,170) 100%)", padding: "22px 0",
     letterSpacing: "0.12em", fontSize: "18px",
     borderRadius: "8px", border: "none", cursor: "pointer",
-    display: "inline-block",
+    display: "block", width: "100%", textAlign: "center",
     boxShadow:
       "0 0 0 1px rgba(212,175,55,0.25), " +
       "0 0 24px rgba(120,60,180,0.40), " +
@@ -587,11 +603,9 @@ const styles: Record<string, React.CSSProperties> = {
     position: "relative",
     border: "1px solid rgba(212,175,55,0.45)",
     borderRadius: "12px",
-    padding: "28px 24px",
+    padding: "16px 20px",
     background: "rgba(0,0,0,0.75)",
     margin: "8px 24px 0",
-    display: "flex",
-    justifyContent: "center",
   },
 
   /* ── § 2 HOW IT WORKS ── */
@@ -708,56 +722,99 @@ const styles: Record<string, React.CSSProperties> = {
   arsenalSub: { fontFamily: "'Inter', sans-serif", fontSize: "18px", marginTop: "10px", color: "rgba(255,255,255,0.88)", lineHeight: 1.6 },
   arsenalCards: { display: "flex", flexDirection: "column", gap: "28px", margin: "0 24px" },
 
-  tierCardCore: {
-    borderRadius: "12px", position: "relative", overflow: "hidden", textAlign: "left",
-    background: "radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.06) 0%, #0A0A0A 70%)",
-    border: "1px solid rgba(212,175,55,0.20)",
-    boxShadow: "0 16px 40px rgba(0,0,0,0.5)",
+  /* Card containers */
+  tierCardFree: {
+    position: "relative", borderRadius: "12px", overflow: "hidden", textAlign: "left",
+    border: "none",
+    background: "radial-gradient(ellipse at 50% 0%, rgba(60,179,113,0.07) 0%, #0A0A0A 70%)",
+    boxShadow: "0 16px 40px rgba(0,0,0,0.5), 0 0 40px rgba(60,179,113,0.04)",
   },
-  tierHeaderCore: {
-    padding: "28px 24px 20px", borderBottom: "1px solid rgba(212,175,55,0.1)",
-  },
-  tierTitleCore: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "2.4rem", color: "#fff", lineHeight: 1, letterSpacing: "0.02em" },
-  tierSubCore: { fontFamily: "'Inter', sans-serif", fontSize: "18px", color: "rgba(255,255,255,0.72)", marginTop: "6px" },
-  tierBadgeCore: {
-    fontFamily: "'Roboto Mono', monospace", fontSize: "11px", textTransform: "uppercase",
-    padding: "6px 12px", borderRadius: "4px", letterSpacing: "0.15em",
-    background: "rgba(212,175,55,0.1)", color: "#D4AF37", border: "1px solid rgba(212,175,55,0.3)",
-    whiteSpace: "nowrap", flexShrink: 0,
-  },
-  tierFeaturesCore: { padding: "28px 24px 24px", display: "flex", flexDirection: "column", gap: "20px" },
-  featureItemCore: { display: "flex", gap: "16px", alignItems: "flex-start" },
-  featureTextWrapCore: { flex: 1 },
-  featureNameCore: { fontFamily: "'Inter', sans-serif", fontSize: "18px", fontWeight: 500, color: "#fff", lineHeight: 1.3, marginBottom: "4px" },
-  featureDescCore: { fontFamily: "'Inter', sans-serif", fontSize: "18px", color: "rgba(255,255,255,0.72)", lineHeight: 1.45 },
-
-  tierCardSnapshot: {
-    borderRadius: "12px", position: "relative", overflow: "hidden", textAlign: "left",
-    border: "1px solid rgba(212,175,55,0.45)",
-    background: "radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.12) 0%, #0A0A0A 70%)",
+  tierCardAnalysis: {
+    position: "relative", borderRadius: "12px", overflow: "hidden", textAlign: "left",
+    border: "none",
+    background: "radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.08) 0%, #0A0A0A 70%)",
     boxShadow: "0 16px 40px rgba(0,0,0,0.6)",
   },
   tierCardPackage: {
-    borderRadius: "12px", position: "relative", overflow: "hidden", textAlign: "left",
-    border: "1px solid rgba(212,175,55,0.60)",
-    background: "radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.15) 0%, #0A0A0A 65%)",
-    boxShadow: "0 16px 40px rgba(0,0,0,0.8), 0 0 60px rgba(120,60,180,0.12), 0 0 120px rgba(212,175,55,0.10), 0 0 200px rgba(120,60,180,0.06)",
+    position: "relative", borderRadius: "12px", overflow: "hidden", textAlign: "left",
+    border: "none",
+    background: "radial-gradient(ellipse at 50% 0%, rgba(120,60,180,0.08) 0%, rgba(212,175,55,0.06) 30%, #0A0A0A 70%)",
+    boxShadow: "0 16px 40px rgba(0,0,0,0.8), 0 0 60px rgba(120,60,180,0.10), 0 0 120px rgba(212,175,55,0.06)",
+  },
+
+  /* Headers */
+  tierHeaderFree: {
+    padding: "28px 24px 20px", borderBottom: "1px solid rgba(60,179,113,0.12)",
   },
   tierHeaderAlt: {
     padding: "28px 24px 20px", borderBottom: "1px solid rgba(255,255,255,0.06)",
   },
-  tierTitleAlt: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "2.6rem", color: "#fff", lineHeight: 1, letterSpacing: "0.04em", marginBottom: "8px" },
-  tierSubAlt: { fontFamily: "'Inter', sans-serif", fontSize: "18px", color: "rgba(212,175,55,0.8)", lineHeight: 1.4 },
-  tierIntro: { fontFamily: "'Inter', sans-serif", fontSize: "19px", color: "rgba(255,255,255,0.7)", lineHeight: 1.5, margin: "28px 24px 0" },
-  tierChecklist: { padding: "24px", display: "flex", flexDirection: "column", gap: "16px" },
-  checkItem: { display: "flex", gap: "12px", alignItems: "flex-start" },
-  checkMark: { color: "#3CB371", fontSize: "14px", fontWeight: 600, lineHeight: 1.3 },
-  checkText: { fontFamily: "'Inter', sans-serif", fontSize: "19px", color: "rgba(255,255,255,0.85)", lineHeight: 1.45 },
+  tierTitleCard: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "2.6rem", color: "#fff", lineHeight: 1, letterSpacing: "0.04em", marginBottom: "8px" },
+  tierSubFree: { fontFamily: "'Inter', sans-serif", fontSize: "18px", color: "rgba(255,255,255,0.72)", marginTop: "6px" },
+  tierSubGold: { fontFamily: "'Inter', sans-serif", fontSize: "18px", color: "rgba(212,175,55,0.80)", lineHeight: 1.4 },
+
+  /* Badges */
+  tierBadgeFree: {
+    fontFamily: "'Roboto Mono', monospace", fontSize: "11px", textTransform: "uppercase",
+    padding: "6px 12px", borderRadius: "4px", letterSpacing: "0.15em",
+    background: "rgba(60,179,113,0.08)", color: "#3CB371", border: "1px solid rgba(60,179,113,0.30)",
+    whiteSpace: "nowrap", flexShrink: 0,
+  },
+  trendingBadge: {
+    display: "inline-block", fontFamily: "'Roboto Mono', monospace", fontSize: "11px", textTransform: "uppercase",
+    letterSpacing: "0.15em", color: "#D4AF37", background: "rgba(212,175,55,0.08)",
+    border: "1px solid rgba(212,175,55,0.35)",
+    padding: "6px 12px", borderRadius: "4px", fontWeight: 600, whiteSpace: "nowrap",
+  },
+  badgePurple: {
+    display: "inline-block", fontFamily: "'Roboto Mono', monospace", fontSize: "11px", textTransform: "uppercase",
+    letterSpacing: "0.15em", color: "rgb(180,140,255)", background: "rgba(120,60,180,0.10)",
+    border: "1px solid rgba(120,60,180,0.35)",
+    padding: "6px 12px", borderRadius: "4px", fontWeight: 600, whiteSpace: "nowrap",
+  },
+
+  /* Value statements */
+  valueStatementFree: {
+    padding: "20px 24px", textAlign: "center",
+    borderTop: "1px solid rgba(60,179,113,0.12)", borderBottom: "1px solid rgba(60,179,113,0.12)",
+  },
+  valueTextFree: {
+    fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "#3CB371", lineHeight: 1,
+    letterSpacing: "0.02em", textShadow: "0 0 20px rgba(60,179,113,0.15)",
+  },
+  valueStatementGold: {
+    padding: "20px 24px", textAlign: "center",
+    borderTop: "1px solid rgba(212,175,55,0.12)", borderBottom: "1px solid rgba(212,175,55,0.12)",
+  },
+  valueTextGold: {
+    fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "#D4AF37", lineHeight: 1,
+    letterSpacing: "0.02em", textShadow: "0 0 20px rgba(212,175,55,0.15)",
+  },
+  valueStatementPurple: {
+    padding: "20px 24px", textAlign: "center",
+    background: "linear-gradient(135deg, rgba(120,60,180,0.06) 0%, rgba(212,175,55,0.04) 100%)",
+    borderTop: "1px solid rgba(120,60,180,0.15)", borderBottom: "1px solid rgba(120,60,180,0.15)",
+  },
+  valueTextPurple: {
+    fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "rgb(200,170,255)", lineHeight: 1,
+    letterSpacing: "0.02em", textShadow: "0 0 20px rgba(120,60,180,0.20)",
+  },
+
+  /* Features list */
+  tierFeatures: { padding: "24px", display: "flex", flexDirection: "column", gap: "16px" },
+
+  /* Actions */
   tierAction: { padding: "0 24px 36px" },
-  btnSnapshot: {
+  btnFree: {
     display: "block", width: "100%", textAlign: "center",
     fontFamily: "'Roboto Mono', monospace", fontSize: "16px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.10em",
-    color: "#D4AF37", background: "rgba(212,175,55,0.05)", border: "1px solid rgba(212,175,55,0.3)",
+    color: "#3CB371", background: "rgba(60,179,113,0.05)", border: "1px solid rgba(60,179,113,0.25)",
+    padding: "18px", borderRadius: "6px", cursor: "pointer",
+  },
+  btnGold: {
+    display: "block", width: "100%", textAlign: "center",
+    fontFamily: "'Roboto Mono', monospace", fontSize: "16px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.10em",
+    color: "#D4AF37", background: "rgba(212,175,55,0.05)", border: "1px solid rgba(212,175,55,0.30)",
     padding: "18px", borderRadius: "6px", cursor: "pointer",
   },
   btnPackage: {
@@ -770,12 +827,6 @@ const styles: Record<string, React.CSSProperties> = {
     position: "absolute", top: 0, left: "-100%", width: "50%", height: "100%",
     background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.20), transparent)",
     transform: "skewX(-20deg)", animation: "lp-shimmer 4s infinite",
-  },
-  trendingBadge: {
-    display: "inline-block", fontFamily: "'Roboto Mono', monospace", fontSize: "11px", textTransform: "uppercase",
-    letterSpacing: "0.15em", color: "#D4AF37", background: "rgba(212,175,55,0.08)",
-    border: "1px solid rgba(212,175,55,0.35)",
-    padding: "6px 12px", borderRadius: "4px", fontWeight: 600, whiteSpace: "nowrap",
   },
   detailsLink: { display: "block", textAlign: "center", fontFamily: "'Inter', sans-serif", fontSize: "15px", color: "rgba(255,255,255,0.85)", textDecoration: "none", marginTop: "16px", cursor: "pointer", padding: "8px 0" },
 
