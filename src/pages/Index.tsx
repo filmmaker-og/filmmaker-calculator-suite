@@ -847,7 +847,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
   closerCard: {
     position: "relative", zIndex: 1, border: "1px solid rgba(212,175,55,0.65)", borderRadius: "12px",
-    padding: "24px 24px 36px", background: "rgba(0,0,0,0.85)", maxWidth: "320px", margin: "0 auto",
+    padding: "24px 24px 36px", background: "rgba(0,0,0,0.85)", margin: "0 24px",
     boxShadow: "0 16px 40px rgba(0,0,0,0.8), 0 0 60px rgba(212,175,55,0.1), 0 0 80px rgba(120,60,180,0.08)",
   },
   closerH2: {
@@ -856,7 +856,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
   closerBody: {
     fontFamily: "'Inter', sans-serif", fontSize: "19px", color: "rgba(255,255,255,0.75)",
-    lineHeight: 1.5, maxWidth: "280px", margin: "0 auto 24px", textShadow: "0 2px 8px rgba(0,0,0,0.8)",
+    lineHeight: 1.5, margin: "0 auto 24px", textShadow: "0 2px 8px rgba(0,0,0,0.8)",
   },
 
   /* ── FOOTER ── */
