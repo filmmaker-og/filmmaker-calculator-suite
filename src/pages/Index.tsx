@@ -813,7 +813,7 @@ const styles: Record<string, React.CSSProperties> = {
     borderBottom: "1px solid rgba(212,175,55,0.15)",
   },
   checkHeaderWith: { background: "rgba(60,179,113,0.07)", padding: "14px 16px" },
-  checkHeaderWithout: { background: "rgba(220,38,38,0.04)", padding: "14px 16px", borderLeft: "1px solid rgba(255,255,255,0.06)" },
+  checkHeaderWithout: { background: "#000", padding: "14px 16px", borderLeft: "1px solid rgba(255,255,255,0.06)" },
   checkHeaderWithText: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.7rem", color: "#3CB371", letterSpacing: "0.04em" },
   checkHeaderWithoutText: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.7rem", color: "rgba(255,255,255,0.55)", letterSpacing: "0.04em" },
   checkRow: {
@@ -825,7 +825,7 @@ const styles: Record<string, React.CSSProperties> = {
     padding: "14px 16px", alignItems: "flex-start",
   },
   checkCellRight: {
-    background: "rgba(220,38,38,0.03)", display: "grid", gridTemplateColumns: "22px 1fr", gap: "10px",
+    background: "#000", display: "grid", gridTemplateColumns: "22px 1fr", gap: "10px",
     padding: "14px 16px", alignItems: "flex-start", borderLeft: "1px solid rgba(255,255,255,0.06)",
   },
   checkIconYes: { fontFamily: "'Roboto Mono', monospace", fontSize: "22px", paddingTop: "2px", color: "#3CB371", textShadow: "0 0 12px rgba(60,179,113,0.4)" },
