@@ -612,14 +612,14 @@ const styles: Record<string, React.CSSProperties> = {
   },
   stepContent: { padding: "26px 24px 26px 24px", background: "radial-gradient(circle at 0px 50%, rgba(212,175,55,0.14) 0%, transparent 55%)" },
   stepTitle: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.45rem", color: "#D4AF37", lineHeight: 1, marginBottom: "5px" },
-  stepBody: { fontFamily: "'Inter', sans-serif", fontSize: "18px", color: "rgba(255,255,255,0.88)", lineHeight: 1.55 },
+  stepBody: { fontFamily: "'Inter', sans-serif", fontSize: "19px", color: "rgba(255,255,255,0.88)", lineHeight: 1.55 },
 
   /* ── § 3 WATERFALL ── */
   waterfallSection: { background: "#000", padding: "64px 0 0" },
   waterfallHeader: { textAlign: "center", padding: "0 24px 24px" },
   waterfallH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.2rem", color: "#fff", lineHeight: 0.95 },
   waterfallExplainer: {
-    fontFamily: "'Inter', sans-serif", fontSize: "18px", color: "rgba(255,255,255,0.88)",
+    fontFamily: "'Inter', sans-serif", fontSize: "19px", color: "rgba(255,255,255,0.88)",
     lineHeight: 1.55, textAlign: "center", padding: "0 24px", marginBottom: "24px",
     maxWidth: "380px", marginLeft: "auto", marginRight: "auto",
   },
@@ -693,13 +693,13 @@ const styles: Record<string, React.CSSProperties> = {
     marginBottom: "16px", paddingTop: "2px", boxShadow: "0 0 24px rgba(212,175,55,0.55)",
   },
   badgeTitle: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.4rem", color: "#fff", marginBottom: "8px", lineHeight: 1.05, letterSpacing: "0.02em" },
-  badgeBody: { fontFamily: "'Inter', sans-serif", fontSize: "18px", color: "rgba(255,255,255,0.70)", lineHeight: 1.55 },
+  badgeBody: { fontFamily: "'Inter', sans-serif", fontSize: "19px", color: "rgba(255,255,255,0.70)", lineHeight: 1.55 },
 
   /* ── § 5 ARSENAL ── */
   arsenalSection: { background: "#000", textAlign: "center", padding: "64px 0 0" },
   arsenalHeader: { padding: "0 24px 24px" },
   arsenalH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.2rem", color: "#fff", lineHeight: 0.95 },
-  arsenalSub: { fontFamily: "'Inter', sans-serif", fontSize: "16px", marginTop: "10px", color: "rgba(255,255,255,0.70)", lineHeight: 1.6 },
+  arsenalSub: { fontFamily: "'Inter', sans-serif", fontSize: "18px", marginTop: "10px", color: "rgba(255,255,255,0.70)", lineHeight: 1.6 },
   arsenalCards: { display: "flex", flexDirection: "column", gap: "28px", margin: "0 24px" },
 
   tierCardCore: {
@@ -712,7 +712,7 @@ const styles: Record<string, React.CSSProperties> = {
     padding: "28px 24px 20px", borderBottom: "1px solid rgba(212,175,55,0.1)",
   },
   tierTitleCore: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "2rem", color: "#fff", lineHeight: 1, letterSpacing: "0.02em" },
-  tierSubCore: { fontFamily: "'Inter', sans-serif", fontSize: "16px", color: "rgba(255,255,255,0.72)", marginTop: "6px" },
+  tierSubCore: { fontFamily: "'Inter', sans-serif", fontSize: "18px", color: "rgba(255,255,255,0.72)", marginTop: "6px" },
   tierBadgeCore: {
     fontFamily: "'Roboto Mono', monospace", fontSize: "11px", textTransform: "uppercase",
     padding: "6px 12px", borderRadius: "4px", letterSpacing: "0.15em",
@@ -722,8 +722,8 @@ const styles: Record<string, React.CSSProperties> = {
   tierFeaturesCore: { padding: "28px 24px 24px", display: "flex", flexDirection: "column", gap: "20px" },
   featureItemCore: { display: "flex", gap: "16px", alignItems: "flex-start" },
   featureTextWrapCore: { flex: 1 },
-  featureNameCore: { fontFamily: "'Inter', sans-serif", fontSize: "16px", fontWeight: 500, color: "#fff", lineHeight: 1.3, marginBottom: "4px" },
-  featureDescCore: { fontFamily: "'Inter', sans-serif", fontSize: "16px", color: "rgba(255,255,255,0.72)", lineHeight: 1.45 },
+  featureNameCore: { fontFamily: "'Inter', sans-serif", fontSize: "18px", fontWeight: 500, color: "#fff", lineHeight: 1.3, marginBottom: "4px" },
+  featureDescCore: { fontFamily: "'Inter', sans-serif", fontSize: "18px", color: "rgba(255,255,255,0.72)", lineHeight: 1.45 },
 
   tierCardSnapshot: {
     borderRadius: "12px", position: "relative", overflow: "hidden", textAlign: "left",
@@ -741,12 +741,12 @@ const styles: Record<string, React.CSSProperties> = {
     padding: "28px 24px 20px", borderBottom: "1px solid rgba(255,255,255,0.06)",
   },
   tierTitleAlt: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "2.2rem", color: "#fff", lineHeight: 1, letterSpacing: "0.04em", marginBottom: "8px" },
-  tierSubAlt: { fontFamily: "'Inter', sans-serif", fontSize: "16px", color: "rgba(212,175,55,0.8)", lineHeight: 1.4 },
-  tierIntro: { fontFamily: "'Inter', sans-serif", fontSize: "18px", color: "rgba(255,255,255,0.7)", lineHeight: 1.5, margin: "28px 24px 0" },
+  tierSubAlt: { fontFamily: "'Inter', sans-serif", fontSize: "18px", color: "rgba(212,175,55,0.8)", lineHeight: 1.4 },
+  tierIntro: { fontFamily: "'Inter', sans-serif", fontSize: "19px", color: "rgba(255,255,255,0.7)", lineHeight: 1.5, margin: "28px 24px 0" },
   tierChecklist: { padding: "24px", display: "flex", flexDirection: "column", gap: "16px" },
   checkItem: { display: "flex", gap: "12px", alignItems: "flex-start" },
   checkMark: { color: "#3CB371", fontSize: "14px", fontWeight: 600, lineHeight: 1.3 },
-  checkText: { fontFamily: "'Inter', sans-serif", fontSize: "18px", color: "rgba(255,255,255,0.85)", lineHeight: 1.45 },
+  checkText: { fontFamily: "'Inter', sans-serif", fontSize: "19px", color: "rgba(255,255,255,0.85)", lineHeight: 1.45 },
   tierAction: { padding: "0 24px 36px" },
   btnSnapshot: {
     display: "block", width: "100%", textAlign: "center",
@@ -849,7 +849,7 @@ const styles: Record<string, React.CSSProperties> = {
     lineHeight: 0.95, margin: "4px 0 14px", textShadow: "0 2px 16px rgba(0,0,0,0.9)",
   },
   closerBody: {
-    fontFamily: "'Inter', sans-serif", fontSize: "18px", color: "rgba(255,255,255,0.75)",
+    fontFamily: "'Inter', sans-serif", fontSize: "19px", color: "rgba(255,255,255,0.75)",
     lineHeight: 1.5, maxWidth: "280px", margin: "0 auto 24px", textShadow: "0 2px 8px rgba(0,0,0,0.8)",
   },
 
