@@ -138,7 +138,7 @@ function getCardBorderStyle(state: CardState, hovered: boolean): React.CSSProper
       };
     case "neutral":
       return {
-        border: hovered ? "1px solid rgba(255,255,255,0.20)" : "1px solid rgba(255,255,255,0.10)",
+        border: hovered ? "1px solid rgba(255,255,255,0.35)" : "1px solid rgba(255,255,255,0.20)",
         boxShadow: hovered ? "0 20px 50px rgba(0,0,0,0.6)" : "none",
       };
     default: // gold
@@ -171,8 +171,8 @@ function getToplineStyle(state: CardState, hovered: boolean): React.CSSPropertie
         ...base,
         height: 1,
         background: hovered
-          ? "linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent)"
-          : "linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent)",
+          ? "linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent)"
+          : "linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent)",
       };
     default:
       return {
@@ -205,7 +205,7 @@ function getHazeStyle(state: CardState): React.CSSProperties {
 }
 
 function getEyebrowColor(state: CardState): string {
-  return state === "neutral" ? "rgba(255,255,255,0.45)" : "#D4AF37";
+  return state === "neutral" ? "rgba(255,255,255,0.55)" : "#D4AF37";
 }
 
 function getBadgeStyle(state: CardState): React.CSSProperties {
@@ -218,9 +218,9 @@ function getBadgeStyle(state: CardState): React.CSSProperties {
       };
     case "neutral":
       return {
-        color: "rgba(255,255,255,0.40)",
+        color: "rgba(255,255,255,0.50)",
         background: "rgba(255,255,255,0.04)",
-        border: "1px solid rgba(255,255,255,0.08)",
+        border: "1px solid rgba(255,255,255,0.15)",
       };
     default:
       return {
@@ -366,7 +366,7 @@ const VaultCard: React.FC<{
         <p style={{
           fontFamily: "'Inter', sans-serif",
           fontSize: isNeutral ? 16 : 17,
-          color: isNeutral ? "rgba(255,255,255,0.60)" : "rgba(255,255,255,0.75)",
+          color: isNeutral ? "rgba(255,255,255,0.65)" : "rgba(255,255,255,0.75)",
           lineHeight: 1.55,
           display: "-webkit-box",
           WebkitLineClamp: isNeutral ? 2 : 3,
@@ -549,7 +549,7 @@ const Resources = () => {
     }}>
       {/* ---- HEADER ---- */}
       <header ref={headerRef} style={{
-        padding: "48px 0 28px",
+        padding: "48px 0 32px",
         textAlign: "center",
         position: "relative",
       }}>
@@ -587,7 +587,7 @@ const Resources = () => {
       }} />
 
       {/* ---- EDITOR'S CHOICE (PINNED) ---- */}
-      <section ref={pinnedRef} className="pinned-section" style={{ padding: "28px 24px 16px", maxWidth: 1000, margin: "0 auto" }}>
+      <section ref={pinnedRef} className="pinned-section" style={{ padding: "32px 24px 32px", maxWidth: 1000, margin: "0 auto" }}>
         <div className="pinned-label" style={{
           fontFamily: "'Roboto Mono', monospace",
           fontSize: 12,
@@ -1061,7 +1061,7 @@ const Resources = () => {
       </div>
 
       {/* ---- RESULTS BAR ---- */}
-      <div style={{ padding: "20px 24px 0", maxWidth: 1000, margin: "0 auto" }}>
+      <div style={{ padding: "24px 24px 0", maxWidth: 1000, margin: "0 auto" }}>
         <div style={{
           display: "flex",
           justifyContent: "space-between",
@@ -1100,7 +1100,7 @@ const Resources = () => {
         display: "flex",
         flexDirection: "column",
         gap: 16,
-        padding: "0 24px 120px",
+        padding: "0 24px 60px",
         maxWidth: 1000,
         margin: "0 auto",
       }}>
@@ -1134,7 +1134,7 @@ const Resources = () => {
       {/* ---- FOOTER ---- */}
       <footer ref={footerRef} style={{
         textAlign: "center",
-        padding: "80px 20px",
+        padding: "48px 20px 80px",
         ...reveal(footerVisible),
       }}>
         <div style={{
@@ -1236,7 +1236,7 @@ if (typeof document !== "undefined" && !document.getElementById(RESPONSIVE_STYLE
       .vault-dropdown-chevron { display: none !important; }
       .vault-dropdown-panel { width: calc(100vw - 48px) !important; right: 0 !important; }
       .vault-header { padding-top: 36px !important; }
-      .pinned-section { padding-bottom: 8px !important; }
+      .pinned-section { padding-bottom: 24px !important; }
       .card-excerpt { -webkit-line-clamp: 2 !important; }
     }
     @media (min-width: 768px) {
