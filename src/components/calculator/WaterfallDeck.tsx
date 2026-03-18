@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import LeadCaptureModal from "@/components/LeadCaptureModal";
+import { useHaptics } from "@/hooks/use-haptics";
 
 // ─── Types ───────────────────────────────────────────────────────
 
@@ -1498,6 +1499,7 @@ const ConclusionSection = ({
 
 const CTASection = () => {
   const navigate = useNavigate();
+  const haptics = useHaptics();
   const [showLeadCapture, setShowLeadCapture] = useState(false);
 
   const gatedNavigate = useCallback(async (destination: string) => {
@@ -1578,7 +1580,7 @@ const CTASection = () => {
           {/* Primary CTA — gated */}
           <div style={{ marginBottom: "16px" }}>
             <span
-              onClick={() => gatedNavigate("/store/the-full-analysis")}
+              onClick={(e) => { haptics.medium(e); gatedNavigate("/store/the-full-analysis"); }}
               style={{
                 display: "inline-block",
                 padding: "16px 36px",
@@ -1602,7 +1604,7 @@ const CTASection = () => {
           {/* Free snapshot — lead capture */}
           <div style={{ marginTop: "12px" }}>
             <span
-              onClick={() => setShowLeadCapture(true)}
+              onClick={(e) => { haptics.light(e); setShowLeadCapture(true); }}
               style={{
                 display: "inline-block",
                 padding: "12px 28px",

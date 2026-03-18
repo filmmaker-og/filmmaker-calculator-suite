@@ -487,7 +487,7 @@ const BudgetInput = ({ inputs, guilds, onUpdateInput, onToggleGuild, onNext }: B
                   opacity: 0,
                   animation: `pillIn 0.3s ease-out ${0.05 + i * 0.05}s forwards`,
                 }}
-                onClick={() => { haptics.light(); onUpdateInput("budget", qa.value); }}
+                onClick={(e) => { haptics.light(e); onUpdateInput("budget", qa.value); }}
               >
                 <span>{qa.label}</span>
                 <span style={isOn ? s.quickLabelOn : s.quickLabel}>{qa.tier}</span>
@@ -514,7 +514,7 @@ const BudgetInput = ({ inputs, guilds, onUpdateInput, onToggleGuild, onNext }: B
                   ...(isSelected ? s.guildOn : s.guild),
                   ...(isPressed ? { transform: "scale(0.96)" } : {}),
                 }}
-                onClick={() => { haptics.light(); onToggleGuild(guild.key); }}
+                onClick={(e) => { haptics.light(e); onToggleGuild(guild.key); }}
                 onPointerDown={() => setPressedGuild(guild.key)}
                 onPointerUp={() => setPressedGuild(null)}
                 onPointerLeave={() => setPressedGuild(null)}

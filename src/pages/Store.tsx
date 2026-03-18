@@ -286,7 +286,9 @@ const WorkingModelPopup = ({
   onDecline: () => void;
   onClose: () => void;
   loading: boolean;
-}) => (
+}) => {
+  const haptics = useHaptics();
+  return (
   <div style={{
     position: "fixed", inset: 0, zIndex: 200,
     display: "flex", alignItems: "flex-end", justifyContent: "center",
@@ -312,7 +314,7 @@ const WorkingModelPopup = ({
     >
       {/* Close */}
       <button
-        onClick={onClose}
+        onClick={(e) => { haptics.light(e); onClose(); }}
         disabled={loading}
         style={{
           position: "absolute", top: "16px", right: "16px", zIndex: 10,
@@ -416,7 +418,7 @@ const WorkingModelPopup = ({
         {/* CTAs */}
         <div style={{ display: "flex", flexDirection: "column", gap: "10px", paddingTop: "4px" }}>
           <button
-            onClick={onAccept}
+            onClick={(e) => { haptics.medium(e); onAccept(); }}
             disabled={loading}
             style={{
               ...s.btnCta,
@@ -430,7 +432,7 @@ const WorkingModelPopup = ({
             {loading ? "CONNECTING..." : "YES, ADD FOR $79"}
           </button>
           <button
-            onClick={onDecline}
+            onClick={(e) => { haptics.light(e); onDecline(); }}
             disabled={loading}
             style={{
               background: "none", border: "none", cursor: "pointer",
@@ -448,7 +450,8 @@ const WorkingModelPopup = ({
       </div>
     </div>
   </div>
-);
+  );
+};
 
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -489,6 +492,7 @@ const ProductCard = ({
   index: number;
 }) => {
   const [hovered, setHovered] = useState(false);
+  const haptics = useHaptics();
   const isFeatured = product.featured;
 
   const cardStyle: React.CSSProperties = {
@@ -562,7 +566,7 @@ const ProductCard = ({
       {/* Action */}
       <div style={s.actionBlock}>
         <button
-          onClick={onBuy}
+          onClick={(e) => { haptics.medium(e); onBuy(); }}
           style={isFeatured ? s.btnCta : s.btnOutline}
           onMouseDown={(e) => { (e.currentTarget.style.transform = "scale(0.98)"); }}
           onMouseUp={(e) => { (e.currentTarget.style.transform = "scale(1)"); }}
@@ -571,7 +575,7 @@ const ProductCard = ({
         </button>
         {onBuy10 && (
           <button
-            onClick={onBuy10}
+            onClick={(e) => { haptics.medium(e); onBuy10(); }}
             style={{ ...s.btnOutline, marginTop: "8px", fontSize: "12px" }}
             onMouseDown={(e) => { (e.currentTarget.style.transform = "scale(0.98)"); }}
             onMouseUp={(e) => { (e.currentTarget.style.transform = "scale(1)"); }}
@@ -581,6 +585,7 @@ const ProductCard = ({
         )}
         <button
           onClick={(e) => {
+            haptics.light(e);
             e.stopPropagation();
             window.location.href = `/store/${product.slug}`;
           }}
@@ -611,6 +616,7 @@ const ServiceCard = ({
   index: number;
 }) => {
   const [hovered, setHovered] = useState(false);
+  const haptics = useHaptics();
   const isTop = product.tier === 4;
 
   const cardStyle: React.CSSProperties = {
@@ -692,7 +698,7 @@ const ServiceCard = ({
       {/* Action */}
       <div style={s.actionBlock}>
         <button
-          onClick={onBuy}
+          onClick={(e) => { haptics.medium(e); onBuy(); }}
           style={isTop ? s.btnCta : s.btnOutline}
           onMouseDown={(e) => { (e.currentTarget.style.transform = "scale(0.98)"); }}
           onMouseUp={(e) => { (e.currentTarget.style.transform = "scale(1)"); }}
@@ -701,6 +707,7 @@ const ServiceCard = ({
         </button>
         <button
           onClick={(e) => {
+            haptics.light(e);
             e.stopPropagation();
             window.location.href = `/store/${product.slug}`;
           }}
@@ -727,10 +734,12 @@ const FaqItem = ({
   faq: { q: string; a: string };
   isOpen: boolean;
   onToggle: () => void;
-}) => (
+}) => {
+  const haptics = useHaptics();
+  return (
   <div style={{ borderBottom: "1px solid rgba(255,255,255,0.1)" }}>
     <button
-      onClick={onToggle}
+      onClick={(e) => { haptics.light(e); onToggle(); }}
       style={{
         width: "100%",
         display: "flex",
@@ -788,7 +797,8 @@ const FaqItem = ({
       </div>
     )}
   </div>
-);
+  );
+};
 
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -1139,7 +1149,7 @@ const Store = () => {
               transition: "background 0.2s, border-color 0.2s",
               cursor: "pointer",
             }}
-            onMouseDown={(e) => { (e.currentTarget.style.transform = "scale(0.98)"); }}
+            onMouseDown={(e) => { haptics.medium(e); (e.currentTarget.style.transform = "scale(0.98)"); }}
             onMouseUp={(e) => { (e.currentTarget.style.transform = "scale(1)"); }}
           >
             <Mail style={{ width: "16px", height: "16px" }} />

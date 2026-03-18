@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from "react";
 import { ChevronDown } from "lucide-react";
 import { WaterfallInputs, GuildState, CapitalSelections, CAM_PCT } from "@/lib/waterfall";
 import ChapterCard, { cardH, cardHSub } from "../ChapterCard";
+import { useHaptics } from "@/hooks/use-haptics";
 
 interface DealInputProps {
   inputs: WaterfallInputs;
@@ -479,6 +480,7 @@ const s: Record<string, React.CSSProperties> = {
 };
 
 const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext, genre }: DealInputProps) => {
+  const haptics = useHaptics();
   const inputRef = useRef<HTMLInputElement>(null);
   const [hasFocused, setHasFocused] = useState(false);
   const [hasPulsed, setHasPulsed] = useState(false);
@@ -676,7 +678,7 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext, genre }:
       </div>
 
       {/* Adjust Assumptions lever */}
-      <button style={s.levTrigger} onClick={() => setLeversOpen(!leversOpen)}>
+      <button style={s.levTrigger} onClick={(e) => { haptics.light(e); setLeversOpen(!leversOpen); }}>
         <div style={s.levLeft}>
           <span style={s.levTitle}>Adjust Assumptions</span>
           <span style={s.levVals}>Sales fee {inputs.salesFee}% · Marketing {formatShort(inputs.salesExp)}</span>
@@ -739,7 +741,7 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext, genre }:
 
       {/* CTA */}
       <div style={hasRevenue ? s.revealVis : s.reveal}>
-        <button style={s.cta} onClick={onNext}>
+        <button style={s.cta} onClick={(e) => { haptics.medium(e); onNext(); }}>
           See the Waterfall
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <line x1="5" y1="12" x2="19" y2="12" />

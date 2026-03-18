@@ -297,7 +297,7 @@ const ProjectTab = ({ project, onUpdateProject, onAdvance }: ProjectTabProps) =>
                     ...(isSelected ? s.pillOn : s.pill),
                     ...(isPressed ? { transform: "scale(0.96)" } : {}),
                   }}
-                  onClick={() => { haptics.light(); handleGenreSelect(genre); }}
+                  onClick={(e) => { haptics.light(e); handleGenreSelect(genre); }}
                   onPointerDown={() => setPressedPill(genre)}
                   onPointerUp={() => setPressedPill(null)}
                   onPointerLeave={() => setPressedPill(null)}
@@ -337,7 +337,7 @@ const ProjectTab = ({ project, onUpdateProject, onAdvance }: ProjectTabProps) =>
                     ...(isSelected ? s.pillOn : s.pill),
                     ...(isPressed ? { transform: "scale(0.96)" } : {}),
                   }}
-                  onClick={() => { haptics.light(); update("status", status); }}
+                  onClick={(e) => { haptics.light(e); update("status", status); }}
                   onPointerDown={() => setPressedPill(`status-${status}`)}
                   onPointerUp={() => setPressedPill(null)}
                   onPointerLeave={() => setPressedPill(null)}
@@ -352,7 +352,7 @@ const ProjectTab = ({ project, onUpdateProject, onAdvance }: ProjectTabProps) =>
         {/* Team Details — collapsible */}
         <button
           style={s.expTrigger}
-          onClick={() => { haptics.light(); setTeamOpen(!teamOpen); }}
+          onClick={(e) => { haptics.light(e); setTeamOpen(!teamOpen); }}
         >
           <div style={s.expLeft}>
             <span style={s.expTitle}>Team Details</span>
