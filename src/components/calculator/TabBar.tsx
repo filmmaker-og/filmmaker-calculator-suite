@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { DollarSign, Layers, Handshake, ArrowDownUp } from "lucide-react";
+import { DollarSign, Layers, Handshake, ArrowDownUp, ClipboardList } from "lucide-react";
 
 export type TabId = 'budget' | 'stack' | 'deal' | 'waterfall' | 'project';
 
@@ -10,6 +10,7 @@ interface Tab {
 }
 
 const tabs: Tab[] = [
+  { id: 'project', label: 'PROJECT', icon: <ClipboardList style={{ width: 20, height: 20 }} /> },
   { id: 'budget', label: 'BUDGET', icon: <DollarSign style={{ width: 20, height: 20 }} /> },
   { id: 'stack', label: 'STACK', icon: <Layers style={{ width: 20, height: 20 }} /> },
   { id: 'deal', label: 'DEAL', icon: <Handshake style={{ width: 20, height: 20 }} /> },
@@ -32,7 +33,7 @@ const s: Record<string, React.CSSProperties> = {
     zIndex: 50,
     height: "62px",
     display: "grid",
-    gridTemplateColumns: "repeat(4, 1fr)",
+    gridTemplateColumns: "repeat(5, 1fr)",
     background: "rgba(6,6,6,0.92)",
     backdropFilter: "blur(24px)",
     WebkitBackdropFilter: "blur(24px)",

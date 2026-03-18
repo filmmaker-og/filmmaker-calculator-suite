@@ -17,7 +17,7 @@ import { toast } from "sonner";
    ═══════════════════════════════════════════════════════════════════ */
 const storeFaqs = [
   {
-    q: "How do the self-serve products work?",
+    q: "How do the on-demand products work?",
     a: "After purchase, your calculator data is used to generate your deliverables automatically. Professional, white-labeled documents delivered to your email.",
   },
   {
@@ -935,7 +935,7 @@ const Store = () => {
         }} />
 
         <div style={{ position: "relative", ...reveal(heroVisible) }}>
-          <EyebrowRuled text="Self-Serve" />
+          <EyebrowRuled text="On Demand" />
           <h1 style={{
             fontFamily: "'Bebas Neue', sans-serif",
             fontSize: "3.5rem",
@@ -985,13 +985,10 @@ const Store = () => {
            DIVIDER — diamond ornament
          ────────────────────────────────────────────────────────── */}
       <div style={{
-        padding: "0 24px", margin: "24px 0 48px",
-        display: "flex", alignItems: "center", justifyContent: "center", gap: "16px",
-      }}>
-        <div style={{ flex: 1, height: "1px", background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.25), transparent)" }} />
-        <span style={{ color: "rgba(212,175,55,0.4)", fontSize: "10px" }}>◆</span>
-        <div style={{ flex: 1, height: "1px", background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.25), transparent)" }} />
-      </div>
+        margin: "24px 24px 48px",
+        height: "1px",
+        background: "linear-gradient(90deg, transparent 0%, rgba(212,175,55,0.20) 20%, rgba(212,175,55,0.35) 50%, rgba(212,175,55,0.20) 80%, transparent 100%)",
+      }} />
 
       {/* ──────────────────────────────────────────────────────────
            § 2  TURNKEY — Hero
@@ -1014,7 +1011,7 @@ const Store = () => {
           }}>
             <span style={{ color: "rgba(255,255,255,0.95)" }}>We Build It</span>
             <br />
-            <span style={{ color: "#D4AF37" }}>For You.</span>
+            <span style={{ color: "#D4AF37" }}>With You.</span>
           </h2>
           <p style={{
             fontFamily: "'Inter', sans-serif",

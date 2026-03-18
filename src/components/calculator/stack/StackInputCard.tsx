@@ -4,6 +4,7 @@ import { PremiumInput } from "@/components/ui/premium-input";
 import { PercentStepper } from "@/components/ui/percent-stepper";
 import { cn } from "@/lib/utils";
 import { useRef, useState } from "react";
+import { useHaptics } from "@/hooks/use-haptics";
 import StandardStepLayout from "../StandardStepLayout";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
@@ -60,6 +61,7 @@ const StackInputCard = ({
   typicalRangeLabel,
   helpText,
 }: StackInputCardProps) => {
+  const haptics = useHaptics();
   const inputRef = useRef<HTMLInputElement>(null);
   const [focused, setFocused] = useState(false);
 
@@ -223,7 +225,7 @@ const StackInputCard = ({
         <div className="flex items-center gap-3 pt-2">
           {/* Back */}
           <button
-            onClick={onBack}
+            onClick={() => { haptics.light(); onBack(); }}
             className={cn(
               "flex-1 py-3 flex items-center justify-center gap-2",
               "transition-all active:scale-[0.98] rounded-md"
@@ -237,7 +239,7 @@ const StackInputCard = ({
           {/* Skip (if no value) or Next (if has value) */}
           {hasAmount ? (
             <button
-              onClick={onNext}
+              onClick={() => { haptics.light(); onNext(); }}
               className={cn(
                 "flex-[2] py-3 flex items-center justify-center gap-2",
                 "transition-all active:scale-[0.98] rounded-md"
@@ -249,7 +251,7 @@ const StackInputCard = ({
             </button>
           ) : showSkip && onSkip ? (
             <button
-              onClick={onSkip}
+              onClick={() => { haptics.light(); onSkip?.(); }}
               className={cn(
                 "flex-[2] py-3 flex items-center justify-center gap-2",
                 "transition-all active:scale-[0.98] rounded-md"

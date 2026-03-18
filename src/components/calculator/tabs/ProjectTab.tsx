@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { ArrowRight, ChevronDown } from "lucide-react";
+import { useHaptics } from "@/hooks/use-haptics";
 import type { ProjectDetails } from "@/pages/Calculator";
 import ChapterCard, { cardH, cardHSub } from "../ChapterCard";
 
@@ -206,6 +207,7 @@ const s: Record<string, React.CSSProperties> = {
 };
 
 const ProjectTab = ({ project, onUpdateProject, onAdvance }: ProjectTabProps) => {
+  const haptics = useHaptics();
   const [teamOpen, setTeamOpen] = useState(false);
   const [pressedPill, setPressedPill] = useState<string | null>(null);
   const [ctaPressed, setCtaPressed] = useState(false);
@@ -295,7 +297,7 @@ const ProjectTab = ({ project, onUpdateProject, onAdvance }: ProjectTabProps) =>
                     ...(isSelected ? s.pillOn : s.pill),
                     ...(isPressed ? { transform: "scale(0.96)" } : {}),
                   }}
-                  onClick={() => handleGenreSelect(genre)}
+                  onClick={() => { haptics.light(); handleGenreSelect(genre); }}
                   onPointerDown={() => setPressedPill(genre)}
                   onPointerUp={() => setPressedPill(null)}
                   onPointerLeave={() => setPressedPill(null)}
@@ -335,7 +337,7 @@ const ProjectTab = ({ project, onUpdateProject, onAdvance }: ProjectTabProps) =>
                     ...(isSelected ? s.pillOn : s.pill),
                     ...(isPressed ? { transform: "scale(0.96)" } : {}),
                   }}
-                  onClick={() => update("status", status)}
+                  onClick={() => { haptics.light(); update("status", status); }}
                   onPointerDown={() => setPressedPill(`status-${status}`)}
                   onPointerUp={() => setPressedPill(null)}
                   onPointerLeave={() => setPressedPill(null)}
@@ -350,7 +352,7 @@ const ProjectTab = ({ project, onUpdateProject, onAdvance }: ProjectTabProps) =>
         {/* Team Details — collapsible */}
         <button
           style={s.expTrigger}
-          onClick={() => setTeamOpen(!teamOpen)}
+          onClick={() => { haptics.light(); setTeamOpen(!teamOpen); }}
         >
           <div style={s.expLeft}>
             <span style={s.expTitle}>Team Details</span>

@@ -64,18 +64,18 @@ const FONT = {
   } as React.CSSProperties,
   body: {
     fontFamily: "'Inter', sans-serif",
-    fontSize: "16px",
+    fontSize: "17px",
     fontWeight: 400,
     lineHeight: 1.75,
   } as React.CSSProperties,
   label: {
-    fontSize: "11px",
+    fontSize: "12px",
     fontWeight: 600,
     letterSpacing: "0.20em",
     textTransform: "uppercase" as const,
   } as React.CSSProperties,
   fine: {
-    fontSize: "10px",
+    fontSize: "11px",
     fontWeight: 600,
     letterSpacing: "0.15em",
     textTransform: "uppercase" as const,
@@ -183,6 +183,7 @@ const CoverSection = ({
   if (project.writers.trim()) teamFields.push({ role: "Writer", name: project.writers });
   if (project.producers.trim()) teamFields.push({ role: "Producer", name: project.producers });
   if (project.cast.trim()) teamFields.push({ role: "Lead Cast", name: project.cast });
+  if (project.company.trim()) teamFields.push({ role: "Production Co.", name: project.company });
 
   const hasTeam = teamFields.length > 0;
   const hasLogline = project.logline.trim().length > 0;
@@ -239,7 +240,7 @@ const CoverSection = ({
       {/* 1c. Logline */}
       {hasLogline && (
         <div style={{
-          fontSize: "15px",
+          fontSize: "16px",
           fontFamily: "'Inter', sans-serif",
           fontWeight: 400,
           color: W.tertiary,
@@ -274,7 +275,7 @@ const CoverSection = ({
                 {f.role.toUpperCase()}
               </div>
               <div style={{
-                fontSize: "15px",
+                fontSize: "16px",
                 fontFamily: "'Inter', sans-serif",
                 fontWeight: 500,
                 color: W.secondary,
@@ -371,7 +372,7 @@ const CoverSection = ({
         }}>
           {multiple.toFixed(1)}&times;
         </div>
-        <div style={{ fontSize: "15px", lineHeight: 1.4, color: W.tertiary }}>
+        <div style={{ fontSize: "16px", lineHeight: 1.5, color: W.tertiary }}>
           <strong style={{ color: W.secondary, fontWeight: 600 }}>Cash-on-cash multiple.</strong>
           <br />
           {verdictContext}
@@ -399,46 +400,46 @@ const CoverSection = ({
         }}>
           {inputs.credits > 0 && project.location.trim() && (
             <>
-              <span style={{ fontSize: "13px", color: W.quaternary }}>Location</span>
-              <span style={{ ...FONT.data, fontSize: "14px", color: W.tertiary }}>
+              <span style={{ fontSize: "14px", color: W.tertiary }}>Location</span>
+              <span style={{ ...FONT.data, fontSize: "15px", color: W.secondary }}>
                 {project.location}
               </span>
-              <span style={{ fontSize: "13px", color: W.quaternary }}>Tax Credit</span>
-              <span style={{ ...FONT.data, fontSize: "14px", color: W.tertiary }}>
+              <span style={{ fontSize: "14px", color: W.tertiary }}>Tax Credit</span>
+              <span style={{ ...FONT.data, fontSize: "15px", color: W.secondary }}>
                 {inputs.budget > 0 ? Math.round((inputs.credits / inputs.budget) * 100) : 0}%
               </span>
             </>
           )}
-          <span style={{ fontSize: "13px", color: W.quaternary }}>Model</span>
-          <span style={{ ...FONT.data, fontSize: "14px", color: W.tertiary }}>Acquisition</span>
+          <span style={{ fontSize: "14px", color: W.tertiary }}>Model</span>
+          <span style={{ ...FONT.data, fontSize: "15px", color: W.secondary }}>Acquisition</span>
           {inputs.deferments > 0 && (
             <>
-              <span style={{ fontSize: "13px", color: W.quaternary }}>Deferrals</span>
-              <span style={{ ...FONT.data, fontSize: "14px", color: W.tertiary }}>
+              <span style={{ fontSize: "14px", color: W.tertiary }}>Deferrals</span>
+              <span style={{ ...FONT.data, fontSize: "15px", color: W.secondary }}>
                 {formatCompactCurrency(inputs.deferments)}
               </span>
             </>
           )}
           {inputs.salesFee > 0 && (
             <>
-              <span style={{ fontSize: "13px", color: W.quaternary }}>Sales Agent</span>
-              <span style={{ ...FONT.data, fontSize: "14px", color: W.tertiary }}>
+              <span style={{ fontSize: "14px", color: W.tertiary }}>Sales Agent</span>
+              <span style={{ ...FONT.data, fontSize: "15px", color: W.secondary }}>
                 {inputs.salesFee}%
               </span>
             </>
           )}
           {inputs.salesExp > 0 && (
             <>
-              <span style={{ fontSize: "13px", color: W.quaternary }}>Expense Cap</span>
-              <span style={{ ...FONT.data, fontSize: "14px", color: W.tertiary }}>
+              <span style={{ fontSize: "14px", color: W.tertiary }}>Expense Cap</span>
+              <span style={{ ...FONT.data, fontSize: "15px", color: W.secondary }}>
                 {formatCompactCurrency(inputs.salesExp)}
               </span>
             </>
           )}
           {(guilds.sag || guilds.wga || guilds.dga) && (
             <>
-              <span style={{ fontSize: "13px", color: W.quaternary }}>Guilds</span>
-              <span style={{ ...FONT.data, fontSize: "14px", color: W.tertiary }}>
+              <span style={{ fontSize: "14px", color: W.tertiary }}>Guilds</span>
+              <span style={{ ...FONT.data, fontSize: "15px", color: W.secondary }}>
                 {[guilds.sag && "SAG-AFTRA", guilds.wga && "WGA", guilds.dga && "DGA"].filter(Boolean).join(", ")}
               </span>
             </>
@@ -557,13 +558,6 @@ const DealSection = ({
         gap: "8px",
         marginBottom: "12px",
       }}>
-        <div style={{
-          width: "10px",
-          height: "10px",
-          border: "1.5px solid rgba(212,175,55,0.45)",
-          borderRadius: "50%",
-          boxShadow: "0 0 8px rgba(212,175,55,0.15)",
-        }} />
         <span style={{
           fontSize: "11px",
           fontWeight: 600,
@@ -585,7 +579,7 @@ const DealSection = ({
       <div style={{ ...FONT.display, color: W.primary, marginBottom: "16px" }}>THE DEAL</div>
 
       {/* Prose */}
-      <div style={{ ...FONT.body, color: W.secondary }}>
+      <div style={{ ...FONT.body, color: "rgba(255,255,255,0.85)" }}>
         <p style={{ marginBottom: "20px" }}>{p1Parts.join(" ")}</p>
         <p style={{ marginBottom: "20px" }}>{p2}</p>
         <p style={{ marginBottom: "20px" }}>{p3}</p>
@@ -609,7 +603,7 @@ const DealSection = ({
       </div>
 
       {/* Verdict */}
-      <div style={{ ...FONT.body, color: W.secondary }}>
+      <div style={{ ...FONT.body, color: "rgba(255,255,255,0.85)" }}>
         <p style={{ marginBottom: "0" }}>{p4}</p>
       </div>
     </section>
@@ -666,7 +660,7 @@ const VisualCluster1 = ({
       {/* ── EROSION VISUAL ── */}
       {erosionTotal > 0 && (
         <>
-          <div style={{ ...FONT.fine, color: W.quaternary, marginBottom: "12px" }}>OFF-THE-TOP EROSION</div>
+          <div style={{ ...FONT.fine, color: W.tertiary, marginBottom: "12px" }}>OFF-THE-TOP EROSION</div>
           <div style={{
             padding: "20px",
             border: "1px solid rgba(255,255,255,0.08)",
@@ -675,7 +669,7 @@ const VisualCluster1 = ({
           }}>
             {/* Hero row */}
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "16px" }}>
-              <span style={{ fontSize: "15px", color: W.tertiary }}>Gone before recoupment</span>
+              <span style={{ fontSize: "16px", color: W.tertiary }}>Gone before recoupment</span>
               <span style={{ ...FONT.data, fontSize: "28px", color: SEM.red }}>
                 &minus;{formatCompactCurrency(erosionTotal)}
               </span>
@@ -720,7 +714,7 @@ const VisualCluster1 = ({
         padding: "14px 20px", background: netBg, border: `1px solid ${netBorder}`,
         borderRadius: "4px", marginBottom: "28px",
       }}>
-        <span style={{ fontSize: "15px", color: W.tertiary }}>Net to Investors</span>
+        <span style={{ fontSize: "16px", color: W.tertiary }}>Net to Investors</span>
         <span style={{ ...FONT.data, fontSize: "26px", color: netColor }}>
           {formatCompactCurrency(netDistributable)}
         </span>
@@ -729,7 +723,7 @@ const VisualCluster1 = ({
       {/* ── CAPITAL STACK VISUAL ── */}
       {sources.length > 0 && (
         <>
-          <div style={{ ...FONT.fine, color: W.quaternary, marginBottom: "12px" }}>CAPITAL STRUCTURE</div>
+          <div style={{ ...FONT.fine, color: W.tertiary, marginBottom: "12px" }}>CAPITAL STRUCTURE</div>
           <div style={{
             display: "flex", flexDirection: "column", gap: "2px",
             marginBottom: "16px", border: "1px solid rgba(255,255,255,0.06)",
@@ -740,13 +734,13 @@ const VisualCluster1 = ({
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                     <div style={{ width: "12px", height: "12px", borderRadius: "2px", background: s.color }} />
-                    <span style={{ fontSize: "15px", fontWeight: 500, color: W.secondary }}>{s.label}</span>
+                    <span style={{ fontSize: "16px", fontWeight: 500, color: W.secondary }}>{s.label}</span>
                   </div>
                   <span style={{ ...FONT.data, fontSize: "18px", color: W.primary }}>{formatCompactCurrency(s.amount)}</span>
                 </div>
                 <div style={{ display: "flex", justifyContent: "space-between", paddingLeft: "20px" }}>
-                  <span style={{ fontSize: "13px", color: W.quaternary }}>{s.detail}</span>
-                  <span style={{ ...FONT.data, fontSize: "13px", color: W.quaternary }}>{s.pctOfBudget}</span>
+                  <span style={{ fontSize: "14px", color: W.tertiary }}>{s.detail}</span>
+                  <span style={{ ...FONT.data, fontSize: "15px", color: W.secondary }}>{s.pctOfBudget}</span>
                 </div>
               </div>
             ))}
@@ -775,7 +769,7 @@ const VisualCluster1 = ({
       {/* ── SCENARIO TABLE VISUAL ── */}
       {inputs.revenue > 0 && (
         <>
-          <div style={{ ...FONT.fine, color: W.quaternary, marginBottom: "12px" }}>SCENARIO STRESS TEST</div>
+          <div style={{ ...FONT.fine, color: W.tertiary, marginBottom: "12px" }}>SCENARIO STRESS TEST</div>
           <div style={{
             border: "1px solid rgba(255,255,255,0.08)",
             borderRadius: "4px", overflow: "hidden", marginBottom: "20px",
@@ -785,8 +779,8 @@ const VisualCluster1 = ({
               ...FONT.fine, color: W.quaternary,
             }}>IF YOUR ACQUISITION PRICE DROPS</div>
             <div style={{ display: "flex", justifyContent: "flex-end", gap: "20px", padding: "10px 20px 0" }}>
-              <span style={{ ...FONT.fine, fontSize: "10px", letterSpacing: "0.10em", color: W.quaternary, textAlign: "right", minWidth: "56px" }}>RETURN</span>
-              <span style={{ ...FONT.fine, fontSize: "10px", letterSpacing: "0.10em", color: W.quaternary, textAlign: "right", minWidth: "56px" }}>MULTIPLE</span>
+              <span style={{ ...FONT.fine, fontSize: "11px", letterSpacing: "0.10em", color: W.quaternary, textAlign: "right", minWidth: "56px" }}>RETURN</span>
+              <span style={{ ...FONT.fine, fontSize: "11px", letterSpacing: "0.10em", color: W.quaternary, textAlign: "right", minWidth: "56px" }}>MULTIPLE</span>
             </div>
             <div style={{ padding: "0 20px" }}>
               {scenarios.map((s, i) => (
@@ -798,7 +792,7 @@ const VisualCluster1 = ({
                   paddingLeft: i === 0 ? "17px" : "0",
                 }}>
                   <div>
-                    <span style={{ fontSize: "15px", color: W.tertiary }}>{s.label} </span>
+                    <span style={{ fontSize: "16px", color: W.tertiary }}>{s.label} </span>
                     <span style={{ color: W.quaternary, fontSize: "11px" }}>{s.sub}</span>
                   </div>
                   <div style={{ display: "flex", gap: "20px" }}>
@@ -938,7 +932,7 @@ const InterpretationSection = ({
       <div style={{ ...FONT.label, color: G.emphasis, marginBottom: "8px" }}>What The Numbers Say</div>
       <div style={{ ...FONT.display, color: W.primary, marginBottom: "16px" }}>THE INTERPRETATION</div>
 
-      <div style={{ ...FONT.body, color: W.secondary }}>
+      <div style={{ ...FONT.body, color: "rgba(255,255,255,0.85)" }}>
         {/* Paragraph 1: Erosion + net distributable interpretation */}
         <p style={{ marginBottom: "20px" }}>
           Off-the-top deductions consume <Num>{formatCompactCurrency(erosionTotal)}</Num> — roughly <Num>{erosionPct}%</Num> of
@@ -1027,7 +1021,7 @@ const VisualCluster2 = ({
     <section style={{ padding: "32px 24px 40px" }}>
 
       {/* ── DEDUCTIONS LEDGER ── */}
-      <div style={{ ...FONT.fine, color: W.quaternary, marginBottom: "12px" }}>GROSS TO NET</div>
+      <div style={{ ...FONT.fine, color: W.tertiary, marginBottom: "12px" }}>GROSS TO NET</div>
       <div style={{
         border: "1px solid rgba(255,255,255,0.08)", borderRadius: "4px",
         overflow: "hidden", marginBottom: "28px",
@@ -1045,10 +1039,10 @@ const VisualCluster2 = ({
             display: "flex", justifyContent: "space-between", alignItems: "center",
             padding: "14px 16px", borderTop: "1px solid rgba(255,255,255,0.06)",
           }}>
-            <div style={{ fontSize: "15px", color: W.tertiary }}>
+            <div style={{ fontSize: "16px", color: W.tertiary }}>
               {row.label}
               {row.rate && (
-                <span style={{ ...FONT.data, fontSize: "13px", color: W.quaternary, marginLeft: "6px" }}>
+                <span style={{ ...FONT.data, fontSize: "15px", color: W.secondary, marginLeft: "6px" }}>
                   {row.rate}
                 </span>
               )}
@@ -1064,7 +1058,7 @@ const VisualCluster2 = ({
           padding: "14px 16px", borderTop: "2px solid rgba(255,255,255,0.12)",
           background: "rgba(255,255,255,0.03)",
         }}>
-          <span style={{ fontSize: "15px", fontWeight: 600, color: W.secondary }}>Net Distributable</span>
+          <span style={{ fontSize: "16px", fontWeight: 600, color: W.secondary }}>Net Distributable</span>
           <span style={{ ...FONT.data, fontSize: "22px", color: SEM.green }}>
             {formatFullCurrency(netDistributable)}
           </span>
@@ -1072,7 +1066,7 @@ const VisualCluster2 = ({
       </div>
 
       {/* ── CASCADE TIER CARDS ── */}
-      <div style={{ ...FONT.fine, color: W.quaternary, marginBottom: "12px" }}>RECOUPMENT CASCADE</div>
+      <div style={{ ...FONT.fine, color: W.tertiary, marginBottom: "12px" }}>RECOUPMENT CASCADE</div>
       <div style={{
         display: "flex", flexDirection: "column", gap: "16px",
         position: "relative", paddingLeft: "16px", marginBottom: "20px",
@@ -1120,13 +1114,13 @@ const VisualCluster2 = ({
                     <div style={{ width: "6px", height: "6px", borderRadius: "50%", background: dotColor, boxShadow: dotGlow }} />
                     <span style={{ fontSize: "13px", fontWeight: 500, color: W.secondary }}>{displayLabel}</span>
                   </div>
-                  <span style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.10em", textTransform: "uppercase" as const, padding: "3px 8px", borderRadius: "3px", ...badgeStyle }}>{badgeText}</span>
+                  <span style={{ fontSize: "11px", fontWeight: 700, letterSpacing: "0.10em", textTransform: "uppercase" as const, padding: "3px 8px", borderRadius: "3px", ...badgeStyle }}>{badgeText}</span>
                 </div>
                 <div style={{ height: "8px", background: "rgba(255,255,255,0.04)", borderRadius: "4px", overflow: "hidden", marginBottom: "8px" }}>
                   {fillPct > 0 && <div style={{ height: "100%", width: `${Math.min(100, fillPct)}%`, borderRadius: "4px", background: barGradient }} />}
                 </div>
                 <div style={{ display: "flex", justifyContent: "space-between" }}>
-                  <span style={{ ...FONT.data, fontSize: "14px", color: W.tertiary }}>
+                  <span style={{ ...FONT.data, fontSize: "15px", color: W.secondary }}>
                     {formatCompactCurrency(tier.paid)}{tier.amount > 0 ? ` / ${formatCompactCurrency(tier.amount)}` : ""}
                   </span>
                   <span style={{ ...FONT.data, fontSize: "14px", color: valueColor }}>
@@ -1427,7 +1421,7 @@ const ConclusionSection = ({
       <div style={{ ...FONT.label, color: G.emphasis, marginBottom: "8px" }}>Where You Stand</div>
       <div style={{ ...FONT.display, color: W.primary, marginBottom: "16px" }}>THE CONCLUSION</div>
 
-      <div style={{ ...FONT.body, color: W.secondary }}>
+      <div style={{ ...FONT.body, color: "rgba(255,255,255,0.85)" }}>
         {/* Paragraph 1: Restate what they've reviewed */}
         <p style={{ marginBottom: "20px" }}>
           You&rsquo;ve modeled a <Num>{formatCompactCurrency(inputs.budget)}</Num> production
@@ -1483,7 +1477,7 @@ const ConclusionSection = ({
       <LockedInvestorMemoSection />
 
       {/* Paragraph 4: Next steps */}
-      <div style={{ ...FONT.body, color: W.secondary, marginTop: "24px" }}>
+      <div style={{ ...FONT.body, color: "rgba(255,255,255,0.85)", marginTop: "24px" }}>
         <p>
           {multiple >= 1.0 ? (
             <>The structure is there. The next step is turning it into materials that hold up under scrutiny — documents
@@ -1551,13 +1545,34 @@ const CTASection = () => {
 
           {/* Subtext */}
           <div style={{
-            fontSize: "15px",
-            color: W.tertiary,
+            fontSize: "16px",
+            color: W.secondary,
             lineHeight: 1.6,
             maxWidth: "340px",
-            margin: "0 auto 36px",
+            margin: "0 auto 24px",
           }}>
             Your numbers are modeled. Now make them investor-ready.
+          </div>
+
+          {/* What you get */}
+          <div style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "10px",
+            maxWidth: "300px",
+            margin: "0 auto 32px",
+            textAlign: "left",
+          }}>
+            {[
+              "Sensitivity analysis across 5 market conditions",
+              "Budget, stack, waterfall — one investor-ready PDF",
+              "White-labeled with your project and company",
+            ].map((item) => (
+              <div key={item} style={{ display: "flex", gap: "10px", alignItems: "flex-start" }}>
+                <span style={{ color: "#3CB371", fontSize: "14px", marginTop: "2px", flexShrink: 0 }}>✓</span>
+                <span style={{ fontSize: "14px", color: W.secondary, lineHeight: 1.5, fontFamily: "'Inter', sans-serif" }}>{item}</span>
+              </div>
+            ))}
           </div>
 
           {/* Primary CTA — gated */}
@@ -1567,19 +1582,43 @@ const CTASection = () => {
               style={{
                 display: "inline-block",
                 padding: "16px 36px",
-                background: "rgba(212,175,55,0.15)",
-                border: "1px solid rgba(212,175,55,0.50)",
+                background: "#F9E076",
+                border: "none",
                 borderRadius: "8px",
                 fontFamily: "'Bebas Neue', sans-serif",
                 fontSize: "20px",
                 letterSpacing: "0.15em",
-                color: "#F9E076",
+                color: "#000",
+                fontWeight: 700,
                 cursor: "pointer",
                 textDecoration: "none",
-                animation: "ctaGlow 3s ease-in-out infinite",
+                boxShadow: "0 0 20px rgba(249,224,118,0.3), 0 0 60px rgba(249,224,118,0.1)",
               }}
             >
               GET THE FULL ANALYSIS
+            </span>
+          </div>
+
+          {/* Free snapshot — lead capture */}
+          <div style={{ marginTop: "12px" }}>
+            <span
+              onClick={() => setShowLeadCapture(true)}
+              style={{
+                display: "inline-block",
+                padding: "12px 28px",
+                border: "1px solid rgba(255,255,255,0.12)",
+                borderRadius: "8px",
+                fontSize: "14px",
+                fontFamily: "'Inter', sans-serif",
+                fontWeight: 500,
+                letterSpacing: "0.04em",
+                color: W.tertiary,
+                cursor: "pointer",
+                textDecoration: "none",
+                transition: "border-color 0.2s, color 0.2s",
+              }}
+            >
+              Export Free Snapshot
             </span>
           </div>
 
@@ -1592,13 +1631,8 @@ const CTASection = () => {
             marginTop: "40px",
           }}>
             <div style={{ flex: 1, maxWidth: "60px", height: "1px", background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.20))" }} />
-            <div style={{
-              width: "8px", height: "8px",
-              border: "1.5px solid rgba(212,175,55,0.35)",
-              borderRadius: "50%",
-            }} />
             <span style={{
-              fontSize: "10px", fontWeight: 600,
+              fontSize: "11px", fontWeight: 600,
               letterSpacing: "0.15em", textTransform: "uppercase" as const,
               color: W.quaternary,
             }}>filmmaker.og · Waterfall Snapshot</span>
