@@ -129,7 +129,7 @@ const s: Record<string, React.CSSProperties> = {
     gap: "10px",
   },
   featureCheck: {
-    color: "#D4AF37",
+    color: "#3CB371",
     opacity: 0.9,
     flexShrink: 0,
     marginTop: "2px",
@@ -405,7 +405,7 @@ const WorkingModelPopup = ({
             "Reusable across unlimited projects",
           ].map((feat) => (
             <li key={feat} style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
-              <Check style={{ width: "14px", height: "14px", marginTop: "2px", flexShrink: 0, color: "#D4AF37" }} />
+              <Check style={{ width: "14px", height: "14px", marginTop: "2px", flexShrink: 0, color: "#3CB371" }} />
               <span style={{ fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "rgba(255,255,255,0.85)", lineHeight: 1.5 }}>
                 {feat}
               </span>
@@ -458,12 +458,14 @@ const getBadgeStyle = (badge: string | null): React.CSSProperties => {
   if (!badge) return {};
   const base = { ...s.badgeBase };
   switch (badge) {
-    case "COMPLETE":
-      return { ...base, background: "rgba(212,175,55,0.08)", border: "1px solid rgba(212,175,55,0.4)" };
+    case "DATA":
+      return { ...base, color: "#3CB371", background: "rgba(60,179,113,0.06)", border: "1px solid rgba(60,179,113,0.25)" };
     case "TURNKEY":
-      return { ...base, background: "transparent", border: "1px solid rgba(212,175,55,0.25)" };
-    case "INSTITUTIONAL GRADE":
-      return { ...base, background: "rgba(212,175,55,0.12)", border: "1px solid rgba(212,175,55,0.6)", boxShadow: "0 0 12px rgba(212,175,55,0.15)" };
+      return { ...base, background: "rgba(212,175,55,0.08)", border: "1px solid rgba(212,175,55,0.35)" };
+    case "CUSTOM":
+      return { ...base, background: "rgba(212,175,55,0.12)", border: "1px solid rgba(212,175,55,0.50)", boxShadow: "0 0 12px rgba(212,175,55,0.10)" };
+    case "ADD-ON":
+      return { ...base, color: "rgba(255,255,255,0.70)", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.12)" };
     default:
       return { ...base, background: "transparent", border: "1px solid rgba(212,175,55,0.25)" };
   }

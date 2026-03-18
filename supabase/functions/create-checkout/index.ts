@@ -9,25 +9,39 @@ const corsHeaders = {
 
 // Product configuration
 const PRODUCTS: Record<string, { name: string; price: number }> = {
-  "the-blueprint": {
-    name: "The Blueprint",
-    price: 34900, // $349 in cents
+  // Current products
+  "the-full-analysis": {
+    name: "The Full Analysis",
+    price: 19700, // $197
   },
-  "the-pitch-package": {
-    name: "The Pitch Package",
-    price: 74900, // $749 in cents
+  "comp-report": {
+    name: "Comp Report (5 Comps)",
+    price: 59500, // $595
   },
-  "the-market-case": {
-    name: "The Market Case",
-    price: 199700, // $1,997 in cents
+  "comp-report-10": {
+    name: "Comp Report (10 Comps)",
+    price: 99500, // $995
+  },
+  "the-producers-package": {
+    name: "The Producer's Package",
+    price: 179700, // $1,797
   },
   "the-working-model": {
     name: "The Working Model",
-    price: 14900, // $149 in cents
+    price: 7900, // $79
   },
   "the-working-model-discount": {
     name: "The Working Model (Bundle Discount)",
-    price: 7900, // $79 in cents
+    price: 7900, // $79
+  },
+  // Legacy IDs (backward compat)
+  "the-blueprint": {
+    name: "The Full Analysis (Legacy)",
+    price: 19700,
+  },
+  "the-pitch-package": {
+    name: "The Producer's Package (Legacy)",
+    price: 179700,
   },
 };
 

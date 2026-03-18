@@ -235,9 +235,9 @@ const s: Record<string, React.CSSProperties> = {
     padding: "4px 12px",
     borderRadius: "4px",
     marginBottom: "12px",
-    color: "rgba(255,100,100,0.85)",
-    background: "rgba(255,100,100,0.06)",
-    border: "1px solid rgba(255,100,100,0.15)",
+    color: "rgba(220,38,38,0.85)",
+    background: "rgba(220,38,38,0.06)",
+    border: "1px solid rgba(220,38,38,0.15)",
   },
   vAmtPos: {
     fontFamily: "'Roboto Mono', monospace",
@@ -254,7 +254,7 @@ const s: Record<string, React.CSSProperties> = {
     fontWeight: 600,
     lineHeight: 1,
     marginBottom: "6px",
-    color: "rgba(255,100,100,0.85)",
+    color: "rgba(220,38,38,0.85)",
   },
   vSub: {
     fontSize: "12px",
@@ -293,7 +293,7 @@ const s: Record<string, React.CSSProperties> = {
     fontFamily: "'Roboto Mono', monospace",
     fontSize: "13px",
     fontWeight: 500,
-    color: "rgba(255,100,100,0.60)",
+    color: "rgba(220,38,38,0.60)",
   },
   vbNet: {
     display: "flex",
@@ -655,7 +655,7 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext, genre }:
             </div>
             <div style={{ ...s.vbRow, borderBottom: "none" }}>
               <div style={s.vbLeft}>
-                <div style={{ width: "3px", height: "24px", borderRadius: "2px", background: "rgba(255,100,100,0.40)", flexShrink: 0 }} />
+                <div style={{ width: "3px", height: "24px", borderRadius: "2px", background: "rgba(220,38,38,0.40)", flexShrink: 0 }} />
                 <div>
                   <div style={s.vbLbl}>Off-the-Tops</div>
                   <div style={s.vbDetail}>

@@ -171,7 +171,7 @@ const ChapterCard = ({
       if (glowState === 'positive') {
         cardStyle.boxShadow = "0 16px 40px rgba(0,0,0,0.6), 0 0 40px rgba(212,175,55,0.08)";
       } else if (glowState === 'negative') {
-        cardStyle.boxShadow = "0 16px 40px rgba(0,0,0,0.6), 0 0 40px rgba(255,100,100,0.06)";
+        cardStyle.boxShadow = "0 16px 40px rgba(0,0,0,0.6), 0 0 40px rgba(220,38,38,0.06)";
       }
     }
   } else {
