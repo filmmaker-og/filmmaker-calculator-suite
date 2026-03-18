@@ -258,12 +258,8 @@ const Index = () => {
                 : isGroupBoundary
                   ? "2px solid rgba(212,175,55,0.20)"
                   : "1px solid rgba(255,255,255,0.06)";
-              const redTint = i <= 2 ? 0 : Math.min((i - 2) * 0.008, 0.05);
-              const rowBg = redTint > 0
-                ? `rgba(220,38,38,${redTint})`
-                : "transparent";
               return (
-                <div key={tier.num} style={{ ...styles.tierRow, borderBottom, background: rowBg }}>
+                <div key={tier.num} style={{ ...styles.tierRow, borderBottom }}>
                   <div style={styles.tierNum}>{tier.num}</div>
                   <div style={styles.tierName}>{tier.name}</div>
                   <div style={styles.tierAmt}>
@@ -485,7 +481,7 @@ const Index = () => {
           <div style={styles.closerGlowBottom} />
           <div style={{ ...styles.closerCard, ...reveal(closerVisible) }}>
             <div style={styles.topLineGoldBright} />
-            <h2 style={styles.closerH2}>Your Investors<br /><span style={{ color: "#D4AF37", display: "block", textShadow: "0 0 30px rgba(212,175,55,0.5), 0 0 60px rgba(212,175,55,0.2)" }}>Will Ask.</span></h2>
+            <h2 style={styles.closerH2}>Your Investors<br /><span style={{ color: "#D4AF37", display: "block", textShadow: "0 0 40px rgba(212,175,55,0.6), 0 0 80px rgba(212,175,55,0.25)" }}>Will Ask.</span></h2>
             <p style={styles.closerBody}>Stop guessing your backend. Build the model before the pitch.</p>
             <button onClick={handleCTA} style={styles.ctaBtn} onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>
               <span style={{ position: "relative", zIndex: 1 }}>RUN MY WATERFALL</span>
@@ -532,11 +528,11 @@ const styles: Record<string, React.CSSProperties> = {
     display: "flex", alignItems: "center", justifyContent: "center", gap: "12px", marginBottom: "14px",
   },
   eyebrowLine: {
-    flex: 1, height: "1px", background: "rgba(212,175,55,0.40)",
+    flex: 1, height: "1px", background: "rgba(212,175,55,0.40)", boxShadow: "0 0 8px rgba(212,175,55,0.15)",
   },
   eyebrowLabel: {
-    fontFamily: "'Roboto Mono', monospace", fontSize: "13px",
-    letterSpacing: "0.2em", textTransform: "uppercase", color: "#D4AF37",
+    fontFamily: "'Roboto Mono', monospace", fontSize: "15px",
+    letterSpacing: "0.18em", textTransform: "uppercase", color: "#D4AF37",
     whiteSpace: "nowrap",
   },
 
@@ -545,19 +541,19 @@ const styles: Record<string, React.CSSProperties> = {
     position: "relative", overflow: "hidden",
     fontFamily: "'Roboto Mono', monospace", fontWeight: 600,
     textTransform: "uppercase", color: "#fff",
-    background: "linear-gradient(135deg, rgb(90,40,150) 0%, #D4AF37 100%)", padding: "20px 56px",
+    background: "linear-gradient(135deg, rgb(75,30,130) 0%, rgb(110,50,170) 100%)", padding: "20px 56px",
     letterSpacing: "0.12em", fontSize: "18px",
     borderRadius: "8px", border: "none", cursor: "pointer",
     display: "inline-block",
     boxShadow:
-      "0 0 0 1px rgba(120,60,180,0.35), " +
-      "0 0 24px rgba(120,60,180,0.30), " +
-      "0 0 60px rgba(212,175,55,0.20), " +
-      "0 0 100px rgba(120,60,180,0.10)",
+      "0 0 0 1px rgba(212,175,55,0.25), " +
+      "0 0 24px rgba(120,60,180,0.40), " +
+      "0 0 60px rgba(120,60,180,0.20), " +
+      "0 0 100px rgba(212,175,55,0.10)",
   },
   ctaShimmer: {
     position: "absolute", top: 0, left: "-100%", width: "50%", height: "100%",
-    background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.30), transparent)",
+    background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.20), transparent)",
     transform: "skewX(-20deg)",
     animation: "lp-shimmer 5s cubic-bezier(0.16, 1, 0.3, 1) infinite",
   },
@@ -611,15 +607,15 @@ const styles: Record<string, React.CSSProperties> = {
     boxShadow: "0 0 20px rgba(212,175,55,0.5)",
   },
   stepContent: { padding: "26px 24px 26px 24px", background: "radial-gradient(circle at 0px 50%, rgba(212,175,55,0.14) 0%, transparent 55%)" },
-  stepTitle: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.45rem", color: "#D4AF37", lineHeight: 1, marginBottom: "5px" },
-  stepBody: { fontFamily: "'Inter', sans-serif", fontSize: "18px", color: "rgba(255,255,255,0.88)", lineHeight: 1.55 },
+  stepTitle: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "#D4AF37", lineHeight: 1, marginBottom: "5px" },
+  stepBody: { fontFamily: "'Inter', sans-serif", fontSize: "19px", color: "rgba(255,255,255,0.88)", lineHeight: 1.55 },
 
   /* ── § 3 WATERFALL ── */
   waterfallSection: { background: "#000", padding: "64px 0 0" },
   waterfallHeader: { textAlign: "center", padding: "0 24px 24px" },
   waterfallH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.2rem", color: "#fff", lineHeight: 0.95 },
   waterfallExplainer: {
-    fontFamily: "'Inter', sans-serif", fontSize: "18px", color: "rgba(255,255,255,0.88)",
+    fontFamily: "'Inter', sans-serif", fontSize: "19px", color: "rgba(255,255,255,0.88)",
     lineHeight: 1.55, textAlign: "center", padding: "0 24px", marginBottom: "24px",
     maxWidth: "380px", marginLeft: "auto", marginRight: "auto",
   },
@@ -628,9 +624,9 @@ const styles: Record<string, React.CSSProperties> = {
     background: "radial-gradient(circle at 50% 70%, rgba(212,175,55,0.20) 0%, #0A0A0A 75%)", border: "1px solid rgba(212,175,55,0.25)", borderRadius: "12px", padding: "24px 20px",
     boxShadow: "0 0 24px rgba(212,175,55,0.10)",
   },
-  acqLabel: { fontFamily: "'Roboto Mono', monospace", fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.15em", color: "#D4AF37", marginBottom: "4px" },
-  acqSub: { fontFamily: "'Roboto Mono', monospace", fontSize: "12px", color: colors.textSecondary, marginBottom: "8px" },
-  acqAmount: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "2.4rem", color: "#D4AF37", lineHeight: 1, letterSpacing: "0.02em", textShadow: "0 0 30px rgba(212,175,55,0.4), 0 0 60px rgba(212,175,55,0.15)" },
+  acqLabel: { fontFamily: "'Roboto Mono', monospace", fontSize: "14px", textTransform: "uppercase", letterSpacing: "0.15em", color: "#D4AF37", marginBottom: "4px" },
+  acqSub: { fontFamily: "'Roboto Mono', monospace", fontSize: "15px", color: colors.textSecondary, marginBottom: "8px" },
+  acqAmount: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.2rem", color: "#D4AF37", lineHeight: 1, letterSpacing: "0.02em", textShadow: "0 0 30px rgba(212,175,55,0.4), 0 0 60px rgba(212,175,55,0.15)" },
 
   waterfallTiersBox: {
     position: "relative", overflow: "hidden", margin: "0 24px",
@@ -650,9 +646,9 @@ const styles: Record<string, React.CSSProperties> = {
     borderRadius: "6px", fontWeight: 600,
     boxShadow: "0 0 16px rgba(212,175,55,0.3)",
   },
-  tierName: { fontFamily: "'Inter', sans-serif", fontSize: "16px", fontWeight: 600, color: "#fff", lineHeight: 1.3 },
-  tierAmt: { fontFamily: "'Roboto Mono', monospace", fontSize: "16px", fontWeight: 600, color: "rgba(220,38,38,0.85)", textAlign: "right", whiteSpace: "nowrap" },
-  tierMinus: { color: "rgba(220,38,38,0.70)", marginRight: "4px", fontWeight: 400 },
+  tierName: { fontFamily: "'Inter', sans-serif", fontSize: "18px", fontWeight: 600, color: "#fff", lineHeight: 1.3 },
+  tierAmt: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.4rem", color: "rgba(220,38,38,0.85)", textAlign: "right", whiteSpace: "nowrap", letterSpacing: "0.02em" },
+  tierMinus: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.4rem", color: "rgba(220,38,38,0.70)", marginRight: "4px", fontWeight: 400 },
 
   /* Flow diagram */
   flowDiagram: { margin: "16px 24px 0" },
@@ -692,14 +688,14 @@ const styles: Record<string, React.CSSProperties> = {
     display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.5rem",
     marginBottom: "16px", paddingTop: "2px", boxShadow: "0 0 24px rgba(212,175,55,0.55)",
   },
-  badgeTitle: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.4rem", color: "#fff", marginBottom: "8px", lineHeight: 1.05, letterSpacing: "0.02em" },
-  badgeBody: { fontFamily: "'Inter', sans-serif", fontSize: "18px", color: "rgba(255,255,255,0.70)", lineHeight: 1.55 },
+  badgeTitle: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "#fff", marginBottom: "8px", lineHeight: 1.05, letterSpacing: "0.02em" },
+  badgeBody: { fontFamily: "'Inter', sans-serif", fontSize: "19px", color: "rgba(255,255,255,0.70)", lineHeight: 1.55 },
 
   /* ── § 5 ARSENAL ── */
   arsenalSection: { background: "#000", textAlign: "center", padding: "64px 0 0" },
   arsenalHeader: { padding: "0 24px 24px" },
   arsenalH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.2rem", color: "#fff", lineHeight: 0.95 },
-  arsenalSub: { fontFamily: "'Inter', sans-serif", fontSize: "16px", marginTop: "10px", color: "rgba(255,255,255,0.70)", lineHeight: 1.6 },
+  arsenalSub: { fontFamily: "'Inter', sans-serif", fontSize: "18px", marginTop: "10px", color: "rgba(255,255,255,0.70)", lineHeight: 1.6 },
   arsenalCards: { display: "flex", flexDirection: "column", gap: "28px", margin: "0 24px" },
 
   tierCardCore: {
@@ -711,8 +707,8 @@ const styles: Record<string, React.CSSProperties> = {
   tierHeaderCore: {
     padding: "28px 24px 20px", borderBottom: "1px solid rgba(212,175,55,0.1)",
   },
-  tierTitleCore: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "2rem", color: "#fff", lineHeight: 1, letterSpacing: "0.02em" },
-  tierSubCore: { fontFamily: "'Inter', sans-serif", fontSize: "16px", color: "rgba(255,255,255,0.72)", marginTop: "6px" },
+  tierTitleCore: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "2.4rem", color: "#fff", lineHeight: 1, letterSpacing: "0.02em" },
+  tierSubCore: { fontFamily: "'Inter', sans-serif", fontSize: "18px", color: "rgba(255,255,255,0.72)", marginTop: "6px" },
   tierBadgeCore: {
     fontFamily: "'Roboto Mono', monospace", fontSize: "11px", textTransform: "uppercase",
     padding: "6px 12px", borderRadius: "4px", letterSpacing: "0.15em",
@@ -722,8 +718,8 @@ const styles: Record<string, React.CSSProperties> = {
   tierFeaturesCore: { padding: "28px 24px 24px", display: "flex", flexDirection: "column", gap: "20px" },
   featureItemCore: { display: "flex", gap: "16px", alignItems: "flex-start" },
   featureTextWrapCore: { flex: 1 },
-  featureNameCore: { fontFamily: "'Inter', sans-serif", fontSize: "16px", fontWeight: 500, color: "#fff", lineHeight: 1.3, marginBottom: "4px" },
-  featureDescCore: { fontFamily: "'Inter', sans-serif", fontSize: "16px", color: "rgba(255,255,255,0.72)", lineHeight: 1.45 },
+  featureNameCore: { fontFamily: "'Inter', sans-serif", fontSize: "18px", fontWeight: 500, color: "#fff", lineHeight: 1.3, marginBottom: "4px" },
+  featureDescCore: { fontFamily: "'Inter', sans-serif", fontSize: "18px", color: "rgba(255,255,255,0.72)", lineHeight: 1.45 },
 
   tierCardSnapshot: {
     borderRadius: "12px", position: "relative", overflow: "hidden", textAlign: "left",
@@ -740,13 +736,13 @@ const styles: Record<string, React.CSSProperties> = {
   tierHeaderAlt: {
     padding: "28px 24px 20px", borderBottom: "1px solid rgba(255,255,255,0.06)",
   },
-  tierTitleAlt: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "2.2rem", color: "#fff", lineHeight: 1, letterSpacing: "0.04em", marginBottom: "8px" },
-  tierSubAlt: { fontFamily: "'Inter', sans-serif", fontSize: "16px", color: "rgba(212,175,55,0.8)", lineHeight: 1.4 },
-  tierIntro: { fontFamily: "'Inter', sans-serif", fontSize: "18px", color: "rgba(255,255,255,0.7)", lineHeight: 1.5, margin: "28px 24px 0" },
+  tierTitleAlt: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "2.6rem", color: "#fff", lineHeight: 1, letterSpacing: "0.04em", marginBottom: "8px" },
+  tierSubAlt: { fontFamily: "'Inter', sans-serif", fontSize: "18px", color: "rgba(212,175,55,0.8)", lineHeight: 1.4 },
+  tierIntro: { fontFamily: "'Inter', sans-serif", fontSize: "19px", color: "rgba(255,255,255,0.7)", lineHeight: 1.5, margin: "28px 24px 0" },
   tierChecklist: { padding: "24px", display: "flex", flexDirection: "column", gap: "16px" },
   checkItem: { display: "flex", gap: "12px", alignItems: "flex-start" },
   checkMark: { color: "#3CB371", fontSize: "14px", fontWeight: 600, lineHeight: 1.3 },
-  checkText: { fontFamily: "'Inter', sans-serif", fontSize: "18px", color: "rgba(255,255,255,0.85)", lineHeight: 1.45 },
+  checkText: { fontFamily: "'Inter', sans-serif", fontSize: "19px", color: "rgba(255,255,255,0.85)", lineHeight: 1.45 },
   tierAction: { padding: "0 24px 36px" },
   btnSnapshot: {
     display: "block", width: "100%", textAlign: "center",
@@ -757,12 +753,12 @@ const styles: Record<string, React.CSSProperties> = {
   btnPackage: {
     position: "relative", overflow: "hidden", display: "block", width: "100%", textAlign: "center",
     fontFamily: "'Roboto Mono', monospace", fontSize: "18px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.12em",
-    color: "#fff", background: "linear-gradient(135deg, rgb(90,40,150) 0%, #D4AF37 100%)", border: "none", padding: "18px", borderRadius: "6px", cursor: "pointer",
-    boxShadow: "0 0 24px rgba(120,60,180,0.25), 0 0 60px rgba(212,175,55,0.12)",
+    color: "#fff", background: "linear-gradient(135deg, rgb(75,30,130) 0%, rgb(110,50,170) 100%)", border: "none", padding: "18px", borderRadius: "6px", cursor: "pointer",
+    boxShadow: "0 0 24px rgba(120,60,180,0.35), 0 0 60px rgba(212,175,55,0.10)",
   },
   btnPackageShimmer: {
     position: "absolute", top: 0, left: "-100%", width: "50%", height: "100%",
-    background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.30), transparent)",
+    background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.20), transparent)",
     transform: "skewX(-20deg)", animation: "lp-shimmer 4s infinite",
   },
   trendingBadge: {
@@ -849,7 +845,7 @@ const styles: Record<string, React.CSSProperties> = {
     lineHeight: 0.95, margin: "4px 0 14px", textShadow: "0 2px 16px rgba(0,0,0,0.9)",
   },
   closerBody: {
-    fontFamily: "'Inter', sans-serif", fontSize: "18px", color: "rgba(255,255,255,0.75)",
+    fontFamily: "'Inter', sans-serif", fontSize: "19px", color: "rgba(255,255,255,0.75)",
     lineHeight: 1.5, maxWidth: "280px", margin: "0 auto 24px", textShadow: "0 2px 8px rgba(0,0,0,0.8)",
   },
 
