@@ -5,6 +5,7 @@ import { useHaptics } from "@/hooks/use-haptics";
 import { useInView } from "@/hooks/useInView";
 import LeadCaptureModal from "@/components/LeadCaptureModal";
 import { Instagram } from "lucide-react";
+import { colors } from "@/lib/design-system";
 /*
   PAGE STACK — v12 Producer's Cut:
     1. PILL NAV     — fixed floating, logo + hamburger
@@ -255,7 +256,7 @@ const Index = () => {
           {/* Flow diagram */}
           <div style={{ ...styles.flowDiagram, ...reveal(waterfallVisible, 3) }}>
             <div style={styles.netBackend}>
-              <div style={styles.topLineGold} />
+              <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "1px", background: `linear-gradient(90deg, transparent, ${colors.greenAccent}, transparent)` }} />
               <p style={styles.netLabel}>Net Backend Profit</p>
               <p style={styles.netAmount}>$600,000</p>
             </div>
@@ -385,7 +386,7 @@ const Index = () => {
               <div style={styles.topLineGoldThick} />
               <div style={{ ...styles.tierHeaderAlt, paddingTop: "28px", borderBottomColor: "rgba(212,175,55,0.15)" }}>
                 <div style={{ marginBottom: "12px" }}>
-                  <span style={styles.mostPopularBadge}>Turnkey</span>
+                  <span style={styles.trendingBadge}>Turnkey</span>
                 </div>
                 <p style={styles.tierTitleAlt}>THE PRODUCER'S PACKAGE</p>
                 <p style={styles.tierSubAlt}>Pick this one if you want the full treatment — turnkey, custom, ready for the room</p>
@@ -547,15 +548,15 @@ const styles: Record<string, React.CSSProperties> = {
   heroEm: { fontStyle: "normal", color: "#D4AF37", display: "block" },
   heroSub: {
     fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.5rem", textAlign: "center",
-    marginBottom: "28px", lineHeight: 1.1, color: "rgba(255,255,255,0.78)",
+    marginBottom: "28px", lineHeight: 1.1, color: colors.textSubhead,
     marginTop: "8px",
   },
 
   /* ── § 4 HOW IT WORKS ── */
   howSection: { background: "#000", padding: "64px 0 0" },
-  howHeader: { textAlign: "center", padding: "16px 20px 28px", background: "radial-gradient(ellipse 80% 50% at 50% 60%, rgba(212,175,55,0.10) 0%, transparent 70%)" },
+  howHeader: { textAlign: "center", padding: "16px 24px 24px", background: "radial-gradient(ellipse 80% 50% at 50% 60%, rgba(212,175,55,0.10) 0%, transparent 70%)" },
   howH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.6rem", color: "#fff", lineHeight: 0.95 },
-  stepsContainer: { position: "relative", display: "flex", flexDirection: "column", gap: "1px", background: "rgba(212,175,55,0.10)", borderRadius: "12px", overflow: "hidden", margin: "0 20px", border: "1px solid rgba(212,175,55,0.20)" },
+  stepsContainer: { position: "relative", display: "flex", flexDirection: "column", gap: "1px", background: "rgba(212,175,55,0.10)", borderRadius: "12px", overflow: "hidden", margin: "0 24px", border: "1px solid rgba(212,175,55,0.20)" },
   step: {
     display: "grid", gridTemplateColumns: "52px 1fr", background: "#000",
   },
@@ -573,13 +574,13 @@ const styles: Record<string, React.CSSProperties> = {
     background: "#D4AF37", display: "flex", alignItems: "center", justifyContent: "center",
     boxShadow: "0 0 20px rgba(212,175,55,0.5)",
   },
-  stepContent: { padding: "26px 20px 26px 24px", background: "radial-gradient(circle at 0px 50%, rgba(212,175,55,0.14) 0%, transparent 55%)" },
+  stepContent: { padding: "26px 24px 26px 24px", background: "radial-gradient(circle at 0px 50%, rgba(212,175,55,0.14) 0%, transparent 55%)" },
   stepTitle: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.45rem", color: "#D4AF37", lineHeight: 1, marginBottom: "5px" },
   stepBody: { fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "rgba(255,255,255,0.88)", lineHeight: 1.55 },
 
   /* ── § 5 WATERFALL ── */
   waterfallSection: { background: "#000", padding: "64px 0 0" },
-  waterfallHeader: { textAlign: "center", padding: "0 20px 24px" },
+  waterfallHeader: { textAlign: "center", padding: "0 24px 24px" },
   waterfallH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3rem", color: "#fff", lineHeight: 0.95 },
   waterfallExplainer: {
     fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "rgba(255,255,255,0.55)",
@@ -587,16 +588,16 @@ const styles: Record<string, React.CSSProperties> = {
     maxWidth: "380px", marginLeft: "auto", marginRight: "auto",
   },
   acquisitionCallout: {
-    position: "relative", overflow: "hidden", textAlign: "center", margin: "0 20px 10px",
+    position: "relative", overflow: "hidden", textAlign: "center", margin: "0 24px 10px",
     background: "radial-gradient(circle at 50% 70%, rgba(212,175,55,0.20) 0%, #0A0A0A 75%)", border: "1px solid rgba(212,175,55,0.25)", borderRadius: "12px", padding: "24px 20px",
     boxShadow: "0 0 24px rgba(212,175,55,0.10)",
   },
-  acqLabel: { fontFamily: "'Roboto Mono', monospace", fontSize: "14px", textTransform: "uppercase", letterSpacing: "0.14em", color: "#D4AF37", marginBottom: "4px" },
-  acqSub: { fontFamily: "'Roboto Mono', monospace", fontSize: "14px", color: "rgba(255,255,255,0.70)", marginBottom: "8px" },
+  acqLabel: { fontFamily: "'Roboto Mono', monospace", fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.15em", color: "#D4AF37", marginBottom: "4px" },
+  acqSub: { fontFamily: "'Roboto Mono', monospace", fontSize: "12px", color: colors.textSecondary, marginBottom: "8px" },
   acqAmount: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "2.4rem", color: "#D4AF37", lineHeight: 1, letterSpacing: "0.02em" },
 
   waterfallTiersBox: {
-    position: "relative", overflow: "hidden", margin: "0 20px",
+    position: "relative", overflow: "hidden", margin: "0 24px",
     border: "1px solid rgba(212,175,55,0.25)", borderRadius: "12px", background: "#0A0A0A",
     boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 24px rgba(212,175,55,0.10)",
   },
@@ -617,12 +618,12 @@ const styles: Record<string, React.CSSProperties> = {
   tierMinus: { color: "rgba(220,38,38,0.50)", marginRight: "4px", fontWeight: 400 },
 
   /* Flow diagram */
-  flowDiagram: { margin: "16px 20px 0" },
+  flowDiagram: { margin: "16px 24px 0" },
   netBackend: {
     position: "relative", textAlign: "center", background: "#000", border: "1px solid rgba(60,179,113,0.35)",
     borderRadius: "12px", padding: "24px 20px", zIndex: 2, boxShadow: "0 8px 24px rgba(0,0,0,0.5)",
   },
-  netLabel: { fontFamily: "'Roboto Mono', monospace", fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.18em", color: "#fff", marginBottom: "8px" },
+  netLabel: { fontFamily: "'Roboto Mono', monospace", fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.15em", color: colors.textPrimary, marginBottom: "8px" },
   netAmount: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.2rem", color: "#3CB371", lineHeight: 0.9, letterSpacing: "0.02em" },
   pipeNetwork: { display: "flex", flexDirection: "column", alignItems: "center", marginTop: "-1px", position: "relative", zIndex: 1 },
   pipeVertical: { width: "2px", height: "18px", background: "rgba(60,179,113,0.50)" },
@@ -634,17 +635,17 @@ const styles: Record<string, React.CSSProperties> = {
     flex: 1, textAlign: "center", background: "#0A0A0A", border: "1px solid rgba(60,179,113,0.25)",
     borderTop: "2px solid #3CB371", borderRadius: "0 0 10px 10px", padding: "16px 12px",
   },
-  bucketLabel: { fontFamily: "'Roboto Mono', monospace", fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.12em", color: "#fff", marginBottom: "8px" },
+  bucketLabel: { fontFamily: "'Roboto Mono', monospace", fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.15em", color: colors.textPrimary, marginBottom: "8px" },
   bucketAmount: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "2rem", color: "#3CB371", lineHeight: 1 },
-  bucketPct: { fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: "#fff", marginTop: "5px" },
-  waterfallNote: { fontFamily: "'Roboto Mono', monospace", fontSize: "11px", textTransform: "uppercase", textAlign: "center", color: "rgba(255,255,255,0.45)", letterSpacing: "0.06em", padding: "16px 20px 0" },
+  bucketPct: { fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: colors.textMuted, marginTop: "5px" },
+  waterfallNote: { fontFamily: "'Roboto Mono', monospace", fontSize: "11px", textTransform: "uppercase", textAlign: "center", color: "rgba(255,255,255,0.45)", letterSpacing: "0.06em", padding: "16px 24px 0" },
 
   /* ── § 3 WHY THIS MATTERS ── */
   whySection: { background: "#000", textAlign: "center", padding: "64px 0 0" },
-  whyHeader: { padding: "20px 20px 24px" },
+  whyHeader: { padding: "20px 24px 24px" },
   whyH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3rem", color: "#fff", textAlign: "center", lineHeight: 0.95 },
   badgeGridWrapper: {
-    margin: "0 20px", borderRadius: "12px", overflow: "hidden", border: "1px solid rgba(212,175,55,0.25)",
+    margin: "0 24px", borderRadius: "12px", overflow: "hidden", border: "1px solid rgba(212,175,55,0.25)",
     boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 24px rgba(212,175,55,0.10)", position: "relative",
   },
   badgeGrid: { display: "grid", gridTemplateColumns: "1fr", gap: "1px", background: "rgba(212,175,55,0.15)" },
@@ -659,16 +660,16 @@ const styles: Record<string, React.CSSProperties> = {
 
   /* ── § 7 ARSENAL ── */
   arsenalSection: { background: "#000", textAlign: "center", padding: "64px 0 0" },
-  arsenalHeader: { padding: "0 20px 16px" },
+  arsenalHeader: { padding: "0 24px 24px" },
   arsenalH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3rem", color: "#fff", lineHeight: 0.95 },
   arsenalSub: { fontFamily: "'Inter', sans-serif", fontSize: "13px", marginTop: "10px", color: "rgba(255,255,255,0.70)", lineHeight: 1.6 },
-  arsenalCards: { display: "flex", flexDirection: "column", gap: "28px", margin: "0 20px" },
+  arsenalCards: { display: "flex", flexDirection: "column", gap: "28px", margin: "0 24px" },
 
   tierCardCore: {
     borderRadius: "12px", position: "relative", overflow: "hidden", textAlign: "left",
     background: "radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.06) 0%, #0A0A0A 70%)",
-    border: "1px solid rgba(212,175,55,0.3)",
-    boxShadow: "0 16px 40px rgba(0,0,0,0.8)",
+    border: "1px solid rgba(212,175,55,0.20)",
+    boxShadow: "0 16px 40px rgba(0,0,0,0.5)",
   },
   tierHeaderCore: {
     padding: "28px 24px 20px", borderBottom: "1px solid rgba(212,175,55,0.1)",
@@ -677,7 +678,7 @@ const styles: Record<string, React.CSSProperties> = {
   tierSubCore: { fontFamily: "'Inter', sans-serif", fontSize: "13px", color: "rgba(255,255,255,0.55)", marginTop: "6px" },
   tierBadgeCore: {
     fontFamily: "'Roboto Mono', monospace", fontSize: "10px", textTransform: "uppercase",
-    padding: "6px 12px", borderRadius: "4px", letterSpacing: "0.1em",
+    padding: "6px 12px", borderRadius: "4px", letterSpacing: "0.15em",
     background: "rgba(212,175,55,0.1)", color: "#D4AF37", border: "1px solid rgba(212,175,55,0.3)",
     whiteSpace: "nowrap", flexShrink: 0,
   },
@@ -689,7 +690,7 @@ const styles: Record<string, React.CSSProperties> = {
 
   tierCardSnapshot: {
     borderRadius: "12px", position: "relative", overflow: "hidden", textAlign: "left",
-    border: "1px solid rgba(212,175,55,0.25)",
+    border: "1px solid rgba(212,175,55,0.35)",
     background: "radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.08) 0%, #0A0A0A 70%)",
     boxShadow: "0 16px 40px rgba(0,0,0,0.6)",
   },
@@ -733,12 +734,6 @@ const styles: Record<string, React.CSSProperties> = {
     border: "1px solid rgba(212,175,55,0.35)",
     padding: "6px 12px", borderRadius: "4px", fontWeight: 600, whiteSpace: "nowrap",
   },
-  mostPopularBadge: {
-    display: "inline-block", fontFamily: "'Roboto Mono', monospace", fontSize: "10px", textTransform: "uppercase",
-    letterSpacing: "0.15em", color: "#D4AF37", background: "rgba(212,175,55,0.08)",
-    border: "1px solid rgba(212,175,55,0.4)",
-    padding: "6px 12px", borderRadius: "4px", fontWeight: 600, whiteSpace: "nowrap",
-  },
   detailsLink: { display: "block", textAlign: "center", fontFamily: "'Inter', sans-serif", fontSize: "12px", color: "rgba(212,175,55,0.60)", textDecoration: "none", marginTop: "16px", cursor: "pointer", padding: "8px 0" },
 
   /* ── Top line helpers ── */
@@ -760,7 +755,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
 
   /* ── § 6 REALITY ── */
-  realitySection: { background: "#000", textAlign: "left", padding: "48px 20px 32px" },
+  realitySection: { background: "#000", textAlign: "left", padding: "48px 24px 32px" },
   blockquote: {
     fontFamily: "'Bebas Neue', sans-serif", fontSize: "2.4rem", lineHeight: 0.95, color: "#fff",
     borderLeft: "3px solid #D4AF37", paddingLeft: "20px", marginBottom: "24px",
@@ -773,8 +768,8 @@ const styles: Record<string, React.CSSProperties> = {
     display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1px", background: "rgba(255,255,255,0.06)",
     borderBottom: "1px solid rgba(212,175,55,0.15)",
   },
-  checkHeaderWith: { background: "rgba(212,175,55,0.05)", padding: "16px 20px" },
-  checkHeaderWithout: { background: "#000", padding: "16px 20px", borderLeft: "1px solid rgba(255,255,255,0.06)" },
+  checkHeaderWith: { background: "rgba(212,175,55,0.05)", padding: "16px 24px" },
+  checkHeaderWithout: { background: "#000", padding: "16px 24px", borderLeft: "1px solid rgba(255,255,255,0.06)" },
   checkHeaderWithText: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.5rem", color: "#D4AF37", letterSpacing: "0.04em" },
   checkHeaderWithoutText: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.5rem", color: "rgba(255,255,255,0.55)", letterSpacing: "0.04em" },
   checkRow: {
@@ -804,7 +799,7 @@ const styles: Record<string, React.CSSProperties> = {
     background: "radial-gradient(ellipse 90% 60% at 50% 100%, rgba(212,175,55,0.12) 0%, transparent 60%)",
   },
   closerCard: {
-    position: "relative", zIndex: 1, border: "1px solid rgba(212,175,55,0.42)", borderRadius: "16px",
+    position: "relative", zIndex: 1, border: "1px solid rgba(212,175,55,0.42)", borderRadius: "12px",
     padding: "24px 24px 36px", background: "#000", maxWidth: "320px", margin: "0 auto",
     boxShadow: "0 16px 40px rgba(0,0,0,0.8), 0 0 60px rgba(212,175,55,0.1)",
   },
@@ -818,7 +813,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
 
   /* ── FOOTER ── */
-  footer: { background: "#0A0A0A", borderTop: "1px solid rgba(255,255,255,0.06)", padding: "32px 20px 40px" },
+  footer: { background: "#0A0A0A", borderTop: "1px solid rgba(255,255,255,0.06)", padding: "32px 24px 40px" },
   footerLinks: { display: "flex", justifyContent: "center", gap: "20px", marginBottom: "16px" },
   footerIcon: { color: "rgba(212,175,55,0.50)", textDecoration: "none", display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", borderRadius: "8px", border: "1px solid rgba(212,175,55,0.15)", transition: "color 0.2s ease, border-color 0.2s ease" },
   footerNav: { display: "flex", justifyContent: "center", alignItems: "center", gap: "10px", marginBottom: "16px" },

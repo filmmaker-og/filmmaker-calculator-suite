@@ -54,12 +54,16 @@ export const colors = {
   redSubtle: 'rgba(220, 38, 38, 0.08)',
   redGhost: 'rgba(220, 38, 38, 0.03)',
 
-  // Text hierarchy — 5 tiers
+  // Text hierarchy — 6 tiers
   textPrimary: '#FFFFFF',
+  textSubhead: 'rgba(255, 255, 255, 0.75)',
   textSecondary: 'rgba(255, 255, 255, 0.70)',
   textMuted: 'rgba(255, 255, 255, 0.55)',
   textTertiary: 'rgba(255, 255, 255, 0.40)',
   textGhost: 'rgba(255, 255, 255, 0.06)',
+
+  // Green accent — profit/positive indicators
+  greenAccent: 'rgba(60, 179, 113, 0.50)',
 
   // Gold label text
   goldText: 'rgba(212, 175, 55, 0.60)',
