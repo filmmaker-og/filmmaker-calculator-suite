@@ -8,15 +8,15 @@ import { Instagram } from "lucide-react";
 import { colors } from "@/lib/design-system";
 /*
   PAGE STACK — v12 Producer's Cut:
-    1. PILL NAV     — fixed floating, logo + hamburger
-    2. HERO         — Bebas hierarchy, primary CTA
-    3. HOW IT WORKS — 5-step vertical stepper
-    4. WATERFALL    — acquisition callout, tier table, flow diagram
-    5. WHY THIS MATTERS — 4 badge cards
-    6. ARSENAL      — 3 tier cards (core/snapshot/package)
-    7. REALITY      — blockquote + WITH/WITHOUT grid
-    8. CLOSER       — final CTA card
-    9. FOOTER
+    PILL NAV        — fixed floating, logo + hamburger
+    § 1. HERO         — Bebas hierarchy, primary CTA
+    § 2. HOW IT WORKS — 5-step vertical stepper
+    § 3. WATERFALL    — acquisition callout, tier table, flow diagram
+    § 4. WHY THIS MATTERS — 4 badge cards
+    § 5. ARSENAL      — 3 tier cards (core/snapshot/package)
+    § 6. REALITY      — blockquote + WITH/WITHOUT grid
+    § 7. CLOSER       — final CTA card
+    FOOTER
 
   CTA: All go through auth check → LeadCaptureModal if no session.
 */
@@ -186,7 +186,7 @@ const Index = () => {
           </div>
         </section>
 
-        {/* ═══ § 4 HOW IT WORKS ═══ */}
+        {/* ═══ § 2 HOW IT WORKS ═══ */}
         <section ref={howRef} style={styles.howSection}>
           <div style={{ ...styles.howHeader, ...reveal(howVisible) }}>
             <EyebrowRuled text="The Process" />
@@ -211,7 +211,7 @@ const Index = () => {
           </div>
         </section>
 
-        {/* ═══ § 5 WATERFALL ═══ */}
+        {/* ═══ § 3 WATERFALL ═══ */}
         <section ref={waterfallRef} style={styles.waterfallSection}>
           <div style={{ ...styles.waterfallHeader, ...reveal(waterfallVisible) }}>
             <EyebrowRuled text="How the money flows" />
@@ -284,7 +284,7 @@ const Index = () => {
           <p style={{ ...styles.waterfallNote, ...reveal(waterfallVisible, 3) }}>Model only — your numbers will differ</p>
         </section>
 
-        {/* ═══ § 3 WHY THIS MATTERS ═══ */}
+        {/* ═══ § 4 WHY THIS MATTERS ═══ */}
         <section ref={whyRef} style={styles.whySection}>
           <div style={{ ...styles.whyHeader, ...reveal(whyVisible) }}>
             <EyebrowRuled text="Why This Matters" />
@@ -305,7 +305,7 @@ const Index = () => {
           </div>
         </section>
 
-        {/* ═══ § 7 ARSENAL ═══ */}
+        {/* ═══ § 5 ARSENAL ═══ */}
         <section ref={arsenalRef} style={styles.arsenalSection}>
           <div style={{ ...styles.arsenalHeader, ...reveal(arsenalVisible) }}>
             <EyebrowRuled text="What you get" />
@@ -450,7 +450,7 @@ const Index = () => {
           </div>
         </section>
 
-        {/* ═══ § 8 CLOSER ═══ */}
+        {/* ═══ § 7 CLOSER ═══ */}
         <section ref={closerRef} style={styles.closerSection}>
           <div style={styles.closerGlowBottom} />
           <div style={{ ...styles.closerCard, ...reveal(closerVisible) }}>
@@ -557,7 +557,7 @@ const styles: Record<string, React.CSSProperties> = {
     marginTop: "8px",
   },
 
-  /* ── § 4 HOW IT WORKS ── */
+  /* ── § 2 HOW IT WORKS ── */
   howSection: { background: "#000", padding: "64px 0 0" },
   howHeader: { textAlign: "center", padding: "16px 24px 24px", background: "radial-gradient(ellipse 80% 50% at 50% 60%, rgba(212,175,55,0.10) 0%, transparent 70%)" },
   howH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.6rem", color: "#fff", lineHeight: 0.95 },
@@ -583,7 +583,7 @@ const styles: Record<string, React.CSSProperties> = {
   stepTitle: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.45rem", color: "#D4AF37", lineHeight: 1, marginBottom: "5px" },
   stepBody: { fontFamily: "'Inter', sans-serif", fontSize: "16px", color: "rgba(255,255,255,0.88)", lineHeight: 1.55 },
 
-  /* ── § 5 WATERFALL ── */
+  /* ── § 3 WATERFALL ── */
   waterfallSection: { background: "#000", padding: "64px 0 0" },
   waterfallHeader: { textAlign: "center", padding: "0 24px 24px" },
   waterfallH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3rem", color: "#fff", lineHeight: 0.95 },
@@ -646,7 +646,7 @@ const styles: Record<string, React.CSSProperties> = {
   bucketPct: { fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: colors.textMuted, marginTop: "5px" },
   waterfallNote: { fontFamily: "'Roboto Mono', monospace", fontSize: "11px", textTransform: "uppercase", textAlign: "center", color: "rgba(255,255,255,0.45)", letterSpacing: "0.06em", padding: "16px 24px 0" },
 
-  /* ── § 3 WHY THIS MATTERS ── */
+  /* ── § 4 WHY THIS MATTERS ── */
   whySection: { background: "#000", textAlign: "center", padding: "64px 0 0" },
   whyHeader: { padding: "20px 24px 24px" },
   whyH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3rem", color: "#fff", textAlign: "center", lineHeight: 0.95 },
@@ -664,7 +664,7 @@ const styles: Record<string, React.CSSProperties> = {
   badgeTitle: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.4rem", color: "#fff", marginBottom: "8px", lineHeight: 1.05, letterSpacing: "0.02em" },
   badgeBody: { fontFamily: "'Inter', sans-serif", fontSize: "16px", color: "rgba(255,255,255,0.70)", lineHeight: 1.55 },
 
-  /* ── § 7 ARSENAL ── */
+  /* ── § 5 ARSENAL ── */
   arsenalSection: { background: "#000", textAlign: "center", padding: "64px 0 0" },
   arsenalHeader: { padding: "0 24px 24px" },
   arsenalH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3rem", color: "#fff", lineHeight: 0.95 },
@@ -795,7 +795,7 @@ const styles: Record<string, React.CSSProperties> = {
   checkTextYes: { fontFamily: "'Inter', sans-serif", fontSize: "16px", lineHeight: 1.4, color: "rgba(255,255,255,0.85)" },
   checkTextNo: { fontFamily: "'Inter', sans-serif", fontSize: "16px", lineHeight: 1.4, color: "rgba(255,255,255,0.55)" },
 
-  /* ── § 8 CLOSER ── */
+  /* ── § 7 CLOSER ── */
   closerSection: {
     position: "relative", overflow: "hidden", textAlign: "center", marginTop: "48px",
     padding: "48px 24px 80px", borderTop: "1px solid rgba(212,175,55,0.25)",
