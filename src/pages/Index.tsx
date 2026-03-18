@@ -190,7 +190,7 @@ const Index = () => {
               <em style={styles.heroEm}>Waterfall</em>
             </h1>
             <p style={styles.heroSub}>Your Deal Structure Begins Here.</p>
-            <div style={{ display: "flex", justifyContent: "center" }}>
+            <div style={styles.heroCard}>
               <button onClick={handleCTA} style={styles.ctaBtn} onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>
                 <span style={{ position: "relative", zIndex: 1 }}>RUN MY WATERFALL</span>
                 <div style={styles.ctaShimmer} />
@@ -582,6 +582,16 @@ const styles: Record<string, React.CSSProperties> = {
     fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.5rem", textAlign: "center",
     marginBottom: "28px", lineHeight: 1.1, color: "#fff",
     marginTop: "8px", textShadow: "0 2px 12px rgba(0,0,0,0.9)",
+  },
+  heroCard: {
+    position: "relative",
+    border: "1px solid rgba(212,175,55,0.45)",
+    borderRadius: "12px",
+    padding: "28px 24px",
+    background: "rgba(0,0,0,0.75)",
+    margin: "8px 24px 0",
+    display: "flex",
+    justifyContent: "center",
   },
 
   /* ── § 2 HOW IT WORKS ── */
