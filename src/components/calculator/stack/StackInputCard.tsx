@@ -225,7 +225,7 @@ const StackInputCard = ({
         <div className="flex items-center gap-3 pt-2">
           {/* Back */}
           <button
-            onClick={() => { haptics.light(); onBack(); }}
+            onClick={(e) => { haptics.light(e); onBack(); }}
             className={cn(
               "flex-1 py-3 flex items-center justify-center gap-2",
               "transition-all active:scale-[0.98] rounded-md"
@@ -239,7 +239,7 @@ const StackInputCard = ({
           {/* Skip (if no value) or Next (if has value) */}
           {hasAmount ? (
             <button
-              onClick={() => { haptics.light(); onNext(); }}
+              onClick={(e) => { haptics.light(e); onNext(); }}
               className={cn(
                 "flex-[2] py-3 flex items-center justify-center gap-2",
                 "transition-all active:scale-[0.98] rounded-md"
@@ -251,7 +251,7 @@ const StackInputCard = ({
             </button>
           ) : showSkip && onSkip ? (
             <button
-              onClick={() => { haptics.light(); onSkip?.(); }}
+              onClick={(e) => { haptics.light(e); onSkip?.(); }}
               className={cn(
                 "flex-[2] py-3 flex items-center justify-center gap-2",
                 "transition-all active:scale-[0.98] rounded-md"

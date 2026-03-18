@@ -262,7 +262,6 @@ const CapitalSelect = ({ selections, onToggle, onNext }: CapitalSelectProps) => 
   const selectedCount = Object.values(selections).filter(Boolean).length;
 
   const handleToggle = (key: keyof CapitalSourceSelections) => {
-    haptics.light();
     setJustToggled(key);
     onToggle(key);
     setTimeout(() => setJustToggled(null), 200);
@@ -296,7 +295,7 @@ const CapitalSelect = ({ selections, onToggle, onNext }: CapitalSelectProps) => 
             return (
               <button
                 key={option.key}
-                onClick={() => handleToggle(option.key)}
+                onClick={(e) => { haptics.light(e); handleToggle(option.key); }}
                 style={{
                   ...(isSelected ? s.siOn : s.si),
                   // Re-apply borderBottom separately since si/siOn override border

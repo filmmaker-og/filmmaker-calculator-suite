@@ -99,7 +99,8 @@ const WaterfallTab = ({ result: initialResult, inputs: initialInputs, project, g
   }, [isLocked, isDemoMode]);
 
   // Handler for "Run Demo" button on Locked Screen
-  const handleRunDemo = () => {
+  const handleRunDemo = (e?: React.MouseEvent) => {
+    haptics.medium(e);
     setIsDemoMode(true);
   };
 
@@ -166,7 +167,7 @@ const WaterfallTab = ({ result: initialResult, inputs: initialInputs, project, g
             </p>
 
             <button
-              onClick={handleRunDemo}
+              onClick={(e) => handleRunDemo(e)}
               style={{
                 display: "inline-flex",
                 alignItems: "center",
@@ -308,7 +309,7 @@ const WaterfallTab = ({ result: initialResult, inputs: initialInputs, project, g
                 Demo Mode
               </span>
               <button
-                onClick={() => setIsDemoMode(false)}
+                onClick={(e) => { haptics.light(e); setIsDemoMode(false); }}
                 style={{
                   display: "flex",
                   alignItems: "center",

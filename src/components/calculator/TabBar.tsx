@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { DollarSign, Layers, Handshake, ArrowDownUp, ClipboardList } from "lucide-react";
+import { useHaptics } from "@/hooks/use-haptics";
 
 export type TabId = 'budget' | 'stack' | 'deal' | 'waterfall' | 'project';
 
@@ -104,6 +105,7 @@ const s: Record<string, React.CSSProperties> = {
 
 const TabBar = ({ activeTab, onTabChange, completedTabs = [], disabledTabs = [] }: TabBarProps) => {
   const [pressedId, setPressedId] = useState<TabId | null>(null);
+  const haptics = useHaptics();
 
   return (
     <nav style={s.container}>
@@ -130,7 +132,7 @@ const TabBar = ({ activeTab, onTabChange, completedTabs = [], disabledTabs = [] 
         return (
           <button
             key={tab.id}
-            onClick={() => !isDisabled && onTabChange(tab.id)}
+            onClick={(e) => { if (!isDisabled) { haptics.light(e); onTabChange(tab.id); } }}
             onMouseDown={() => setPressedId(tab.id)}
             onMouseUp={() => setPressedId(null)}
             onMouseLeave={() => setPressedId(null)}
