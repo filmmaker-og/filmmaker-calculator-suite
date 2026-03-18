@@ -612,31 +612,31 @@ const styles: Record<string, React.CSSProperties> = {
     borderRadius: "6px", fontWeight: 600,
     boxShadow: "0 0 16px rgba(212,175,55,0.3)",
   },
-  tierName: { fontFamily: "'Inter', sans-serif", fontSize: "15px", fontWeight: 500, color: "rgba(255,255,255,0.95)", lineHeight: 1.3 },
+  tierName: { fontFamily: "'Inter', sans-serif", fontSize: "15px", fontWeight: 500, color: "#fff", lineHeight: 1.3 },
   tierAmt: { fontFamily: "'Roboto Mono', monospace", fontSize: "15px", color: "rgba(220,38,38,0.75)", textAlign: "right", whiteSpace: "nowrap" },
   tierMinus: { color: "rgba(220,38,38,0.50)", marginRight: "4px", fontWeight: 400 },
 
   /* Flow diagram */
   flowDiagram: { margin: "16px 20px 0" },
   netBackend: {
-    position: "relative", textAlign: "center", background: "#000", border: "1px solid rgba(212,175,55,0.35)",
+    position: "relative", textAlign: "center", background: "#000", border: "1px solid rgba(60,179,113,0.35)",
     borderRadius: "12px", padding: "24px 20px", zIndex: 2, boxShadow: "0 8px 24px rgba(0,0,0,0.5)",
   },
-  netLabel: { fontFamily: "'Roboto Mono', monospace", fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.18em", color: "rgba(255,255,255,0.70)", marginBottom: "8px" },
+  netLabel: { fontFamily: "'Roboto Mono', monospace", fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.18em", color: "#fff", marginBottom: "8px" },
   netAmount: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.2rem", color: "#3CB371", lineHeight: 0.9, letterSpacing: "0.02em" },
   pipeNetwork: { display: "flex", flexDirection: "column", alignItems: "center", marginTop: "-1px", position: "relative", zIndex: 1 },
-  pipeVertical: { width: "2px", height: "18px", background: "rgba(212,175,55,0.50)" },
+  pipeVertical: { width: "2px", height: "18px", background: "rgba(60,179,113,0.50)" },
   pipeFork: { display: "flex", width: "calc(50% + 10px)" },
-  pipeLeft: { flex: 1, height: "18px", borderTop: "2px solid rgba(212,175,55,0.50)", borderLeft: "2px solid rgba(212,175,55,0.50)", borderRadius: "6px 0 0 0" },
-  pipeRight: { flex: 1, height: "18px", borderTop: "2px solid rgba(212,175,55,0.50)", borderRight: "2px solid rgba(212,175,55,0.50)", borderRadius: "0 6px 0 0" },
+  pipeLeft: { flex: 1, height: "18px", borderTop: "2px solid rgba(60,179,113,0.50)", borderLeft: "2px solid rgba(60,179,113,0.50)", borderRadius: "6px 0 0 0" },
+  pipeRight: { flex: 1, height: "18px", borderTop: "2px solid rgba(60,179,113,0.50)", borderRight: "2px solid rgba(60,179,113,0.50)", borderRadius: "0 6px 0 0" },
   buckets: { display: "flex", gap: "10px", marginTop: "-1px" },
   bucket: {
-    flex: 1, textAlign: "center", background: "#0A0A0A", border: "1px solid rgba(212,175,55,0.25)",
-    borderTop: "2px solid #D4AF37", borderRadius: "0 0 10px 10px", padding: "16px 12px",
+    flex: 1, textAlign: "center", background: "#0A0A0A", border: "1px solid rgba(60,179,113,0.25)",
+    borderTop: "2px solid #3CB371", borderRadius: "0 0 10px 10px", padding: "16px 12px",
   },
-  bucketLabel: { fontFamily: "'Roboto Mono', monospace", fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.12em", color: "rgba(255,255,255,0.70)", marginBottom: "8px" },
+  bucketLabel: { fontFamily: "'Roboto Mono', monospace", fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.12em", color: "#fff", marginBottom: "8px" },
   bucketAmount: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "2rem", color: "#3CB371", lineHeight: 1 },
-  bucketPct: { fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: "rgba(255,255,255,0.50)", marginTop: "5px" },
+  bucketPct: { fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: "#fff", marginTop: "5px" },
   waterfallNote: { fontFamily: "'Roboto Mono', monospace", fontSize: "11px", textTransform: "uppercase", textAlign: "center", color: "rgba(255,255,255,0.45)", letterSpacing: "0.06em", padding: "16px 20px 0" },
 
   /* ── § 3 WHY THIS MATTERS ── */
@@ -762,7 +762,7 @@ const styles: Record<string, React.CSSProperties> = {
   /* ── § 6 REALITY ── */
   realitySection: { background: "#000", textAlign: "left", padding: "48px 20px 32px" },
   blockquote: {
-    fontFamily: "'Bebas Neue', sans-serif", fontSize: "2.4rem", lineHeight: 0.95, color: "rgba(255,255,255,0.92)",
+    fontFamily: "'Bebas Neue', sans-serif", fontSize: "2.4rem", lineHeight: 0.95, color: "#fff",
     borderLeft: "3px solid #D4AF37", paddingLeft: "20px", marginBottom: "24px",
   },
   checkGrid: {
