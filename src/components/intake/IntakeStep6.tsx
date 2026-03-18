@@ -84,7 +84,9 @@ const IntakeStep6 = ({
   };
 
   const tierLabel =
-    tier === "the-pitch-package" ? "The Pitch Package" : "The Blueprint";
+    (tier === "the-pitch-package" || tier === "the-producers-package")
+      ? "The Producer's Package"
+      : "The Full Analysis";
 
   // Collect defaults
   const defaults: { field: string; value: string; range: string }[] = [];
@@ -341,21 +343,21 @@ const IntakeStep6 = ({
         <div className="space-y-1.5 text-sm">
           <p className="text-text-primary">
             {tierLabel} —{" "}
-            {tier === "the-pitch-package"
+            {(tier === "the-pitch-package" || tier === "the-producers-package")
               ? "Full Investor Materials"
               : "Finance Plan PDF"}
           </p>
-          {tier === "the-blueprint" && (
+          {(tier === "the-blueprint" || tier === "the-full-analysis") && (
             <ul className="text-text-dim text-xs space-y-1 pl-4">
-              <li>Finance Plan Summary PDF</li>
+              <li>Financial Presentation PDF</li>
               <li>Capital Stack Breakdown</li>
-              <li>Scenario Comparison Sheet</li>
-              <li>Assumptions Reference</li>
+              <li>Sensitivity Analysis</li>
+              <li>Scenario Comparison</li>
             </ul>
           )}
-          {tier === "the-pitch-package" && (
+          {(tier === "the-pitch-package" || tier === "the-producers-package") && (
             <ul className="text-text-dim text-xs space-y-1 pl-4">
-              <li>Everything in The Blueprint</li>
+              <li>Everything in The Full Analysis</li>
               <li>Individual Investor Return Profiles</li>
               <li>Pitch Deck (PowerPoint)</li>
               <li>One-Page Executive Summary</li>

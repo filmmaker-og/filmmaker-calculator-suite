@@ -131,7 +131,7 @@ const BuildYourPlan = () => {
   const [loading, setLoading] = useState(true);
   const [purchaseId, setPurchaseId] = useState<string | null>(null);
   const [submissionId, setSubmissionId] = useState<string | null>(null);
-  const [tier, setTier] = useState<string>("the-blueprint");
+  const [tier, setTier] = useState<string>("the-full-analysis");
   const [includesWorkingModel, setIncludesWorkingModel] = useState(false);
   const [email, setEmail] = useState("");
   const [userId, setUserId] = useState<string | null>(null);
@@ -172,12 +172,18 @@ const BuildYourPlan = () => {
             .eq("user_id", user.id)
             .eq("status", "completed")
             .in("product_id", [
+              // Legacy IDs (backward compat for existing purchases)
               "the-blueprint",
               "the-pitch-package",
               "the-blueprint,the-working-model-discount",
               "the-pitch-package,the-working-model-discount",
               "the-blueprint,the-working-model",
               "the-pitch-package,the-working-model",
+              // Current IDs
+              "the-full-analysis",
+              "the-producers-package",
+              "the-full-analysis,the-working-model",
+              "the-producers-package,the-working-model",
             ])
             .order("created_at", { ascending: false })
             .limit(1)
@@ -197,8 +203,10 @@ const BuildYourPlan = () => {
         // Determine tier from product_id
         const productIds = (purchase.product_id as string).split(",");
         const baseTier = productIds.find(
-          (id: string) => id === "the-blueprint" || id === "the-pitch-package"
-        ) || "the-blueprint";
+          (id: string) =>
+            id === "the-blueprint" || id === "the-pitch-package" ||
+            id === "the-full-analysis" || id === "the-producers-package"
+        ) || "the-full-analysis";
         setTier(baseTier);
         setIncludesWorkingModel(
           productIds.some(
@@ -392,7 +400,9 @@ const BuildYourPlan = () => {
   }
 
   const tierLabel =
-    tier === "the-pitch-package" ? "The Pitch Package" : "The Blueprint";
+    (tier === "the-pitch-package" || tier === "the-producers-package")
+      ? "The Producer's Package"
+      : "The Full Analysis";
 
   return (
     <div className="min-h-screen bg-black flex flex-col">

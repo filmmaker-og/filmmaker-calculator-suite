@@ -1,4 +1,12 @@
 /**
+ * ⚠️ DEPRECATED — Use @/lib/tokens instead for new code.
+ *
+ * Index.tsx still imports `colors` from here.
+ * For all new code: import { gold, white, red, green, GOLD, BG } from '@/lib/tokens';
+ * Do not add new exports to this file.
+ */
+
+/**
  * FILMMAKER.OG Design System Constants
  *
  * Aligned to index.css (single source of truth)
