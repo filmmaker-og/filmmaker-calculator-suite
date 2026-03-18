@@ -65,7 +65,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
       <div style={{ flex: 1, height: "1px", background: "rgba(212,175,55,0.25)" }} />
       <span style={{
         fontFamily: "'Roboto Mono', monospace",
-        fontSize: "11px",
+        fontSize: "13px",
         letterSpacing: "0.15em",
         textTransform: "uppercase" as const,
         color: "#D4AF37",
@@ -188,7 +188,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
                   justifyContent: "center",
                   gap: "8px",
                   padding: "18px 12px",
-                  background: "transparent",
+                  background: "#0A0A0A",
                   border: "1px solid rgba(212,175,55,0.12)",
                   borderRadius: "8px",
                   textDecoration: "none",
@@ -197,11 +197,10 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
               >
                 <Instagram size={20} style={{ color: "rgba(212,175,55,0.40)" }} />
                 <span style={{
-                  fontFamily: "'Inter', sans-serif",
-                  fontSize: "11px",
-                  letterSpacing: "0.08em",
-                  textTransform: "uppercase" as const,
-                  color: "rgba(255,255,255,0.40)",
+                  fontFamily: "'Bebas Neue', sans-serif",
+                  fontSize: "1.2rem",
+                  letterSpacing: "0.1em",
+                  color: "rgba(255,255,255,0.85)",
                 }}>Instagram</span>
               </a>
 
@@ -220,7 +219,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
                   justifyContent: "center",
                   gap: "8px",
                   padding: "18px 12px",
-                  background: "transparent",
+                  background: "#0A0A0A",
                   border: "1px solid rgba(212,175,55,0.12)",
                   borderRadius: "8px",
                   textDecoration: "none",
@@ -231,11 +230,10 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
                   <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 0 0-.79-.05A6.34 6.34 0 0 0 3.15 15a6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V8.71a8.2 8.2 0 0 0 4.76 1.52v-3.4a4.85 4.85 0 0 1-1-.14z"/>
                 </svg>
                 <span style={{
-                  fontFamily: "'Inter', sans-serif",
-                  fontSize: "11px",
-                  letterSpacing: "0.08em",
-                  textTransform: "uppercase" as const,
-                  color: "rgba(255,255,255,0.40)",
+                  fontFamily: "'Bebas Neue', sans-serif",
+                  fontSize: "1.2rem",
+                  letterSpacing: "0.1em",
+                  color: "rgba(255,255,255,0.85)",
                 }}>TikTok</span>
               </a>
 
@@ -254,7 +252,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
                   justifyContent: "center",
                   gap: "8px",
                   padding: "18px 12px",
-                  background: "transparent",
+                  background: "#0A0A0A",
                   border: "1px solid rgba(212,175,55,0.12)",
                   borderRadius: "8px",
                   textDecoration: "none",
@@ -265,11 +263,10 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
                   <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
                 </svg>
                 <span style={{
-                  fontFamily: "'Inter', sans-serif",
-                  fontSize: "11px",
-                  letterSpacing: "0.08em",
-                  textTransform: "uppercase" as const,
-                  color: "rgba(255,255,255,0.40)",
+                  fontFamily: "'Bebas Neue', sans-serif",
+                  fontSize: "1.2rem",
+                  letterSpacing: "0.1em",
+                  color: "rgba(255,255,255,0.85)",
                 }}>Facebook</span>
               </a>
 
@@ -303,7 +300,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
                 <Mail size={18} style={{ color: "#D4AF37", flexShrink: 0 }} />
                 <span style={{
                   fontFamily: "'Bebas Neue', sans-serif",
-                  fontSize: "1.05rem",
+                  fontSize: "1.2rem",
                   letterSpacing: "0.1em",
                   color: "rgba(255,255,255,0.85)",
                   lineHeight: 1,
@@ -331,7 +328,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
                 <Share2 size={18} style={{ color: "#D4AF37", flexShrink: 0 }} />
                 <span style={{
                   fontFamily: "'Bebas Neue', sans-serif",
-                  fontSize: "1.05rem",
+                  fontSize: "1.2rem",
                   letterSpacing: "0.1em",
                   color: "rgba(255,255,255,0.85)",
                   lineHeight: 1,
@@ -343,7 +340,13 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
 
           {/* Legal disclaimer */}
           <div className="pt-3" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
-            <p className="text-[11px] tracking-wide leading-relaxed" style={{ color: "rgba(255,255,255,0.40)" }}>
+            <p style={{
+              fontFamily: "'Inter', sans-serif",
+              fontSize: "11px",
+              letterSpacing: "0.05em",
+              lineHeight: 1.6,
+              color: "rgba(255,255,255,0.40)",
+            }}>
               For educational and informational purposes only. Not legal, tax, or investment advice.
               Consult a qualified entertainment attorney before making financing decisions.
             </p>

@@ -1,6 +1,6 @@
 {
   "name": "FILMMAKER.OG",
-  "short_name": "FILMMAKER",
+  "short_name": "film.og",
   "description": "Free film budget calculator and recoupment waterfall simulator. See where every dollar goes.",
   "start_url": "/",
   "display": "standalone",

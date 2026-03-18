@@ -109,7 +109,7 @@ const EmailGateModal = ({ isOpen, onClose, onSuccess, onSkip }: EmailGateModalPr
                 inputMode="email"
                 autoComplete="email"
                 autoFocus
-                placeholder="you@email.com"
+                placeholder="thefilmmaker.og@gmail.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full h-12 px-4 bg-bg-header border border-border-subtle text-text-primary placeholder:text-text-dim font-mono text-sm focus:border-gold focus:outline-none transition-colors"

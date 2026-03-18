@@ -171,7 +171,7 @@ const Auth = () => {
                       autoCorrect="off"
                       spellCheck="false"
                       enterKeyHint="send"
-                      placeholder="you@company.com"
+                      placeholder="thefilmmaker.og@gmail.com"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       onKeyDown={(e) => {
