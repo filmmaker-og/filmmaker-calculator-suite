@@ -528,19 +528,19 @@ const styles: Record<string, React.CSSProperties> = {
     position: "relative", overflow: "hidden",
     fontFamily: "'Roboto Mono', monospace", fontWeight: 600,
     textTransform: "uppercase", color: "#fff",
-    background: "linear-gradient(135deg, #B8962E 0%, #D4AF37 100%)", padding: "20px 56px",
+    background: "linear-gradient(135deg, rgb(90,40,150) 0%, #D4AF37 100%)", padding: "20px 56px",
     letterSpacing: "0.12em", fontSize: "18px",
     borderRadius: "8px", border: "none", cursor: "pointer",
     display: "inline-block",
     boxShadow:
-      "0 0 0 1px rgba(212,175,55,0.45), " +
-      "0 0 24px rgba(212,175,55,0.40), " +
+      "0 0 0 1px rgba(120,60,180,0.35), " +
+      "0 0 24px rgba(120,60,180,0.30), " +
       "0 0 60px rgba(212,175,55,0.20), " +
-      "0 0 100px rgba(212,175,55,0.08)",
+      "0 0 100px rgba(120,60,180,0.10)",
   },
   ctaShimmer: {
     position: "absolute", top: 0, left: "-100%", width: "50%", height: "100%",
-    background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent)",
+    background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.30), transparent)",
     transform: "skewX(-20deg)",
     animation: "lp-shimmer 5s cubic-bezier(0.16, 1, 0.3, 1) infinite",
   },
@@ -740,12 +740,12 @@ const styles: Record<string, React.CSSProperties> = {
   btnPackage: {
     position: "relative", overflow: "hidden", display: "block", width: "100%", textAlign: "center",
     fontFamily: "'Roboto Mono', monospace", fontSize: "18px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.12em",
-    color: "#fff", background: "linear-gradient(135deg, #B8962E 0%, #D4AF37 100%)", border: "none", padding: "18px", borderRadius: "6px", cursor: "pointer",
-    boxShadow: "0 0 20px rgba(212,175,55,0.25), 0 0 60px rgba(212,175,55,0.08)",
+    color: "#fff", background: "linear-gradient(135deg, rgb(90,40,150) 0%, #D4AF37 100%)", border: "none", padding: "18px", borderRadius: "6px", cursor: "pointer",
+    boxShadow: "0 0 24px rgba(120,60,180,0.25), 0 0 60px rgba(212,175,55,0.12)",
   },
   btnPackageShimmer: {
     position: "absolute", top: 0, left: "-100%", width: "50%", height: "100%",
-    background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent)",
+    background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.30), transparent)",
     transform: "skewX(-20deg)", animation: "lp-shimmer 4s infinite",
   },
   trendingBadge: {
