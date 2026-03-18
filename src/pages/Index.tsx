@@ -247,7 +247,6 @@ const Index = () => {
           <div ref={waterfallTableRef} style={{ ...styles.waterfallTiersBox, ...reveal(waterfallTableVisible) }}>
             <div style={styles.topLineGold} />
             {waterfallTiers.map((tier, i) => {
-              // Group boundaries: after off-the-tops (row 3, i=3), after debt service (row 5, i=5)
               const isGroupBoundary = i === 3 || i === 5;
               const isLastRow = i === waterfallTiers.length - 1;
               const borderBottom = isLastRow
@@ -255,8 +254,12 @@ const Index = () => {
                 : isGroupBoundary
                   ? "2px solid rgba(212,175,55,0.20)"
                   : "1px solid rgba(255,255,255,0.06)";
+              const redTint = i <= 2 ? 0 : Math.min((i - 2) * 0.008, 0.05);
+              const rowBg = redTint > 0
+                ? `rgba(220,38,38,${redTint})`
+                : "transparent";
               return (
-                <div key={tier.num} style={{ ...styles.tierRow, borderBottom }}>
+                <div key={tier.num} style={{ ...styles.tierRow, borderBottom, background: rowBg }}>
                   <div style={styles.tierNum}>{tier.num}</div>
                   <div style={styles.tierName}>{tier.name}</div>
                   <div style={styles.tierAmt}>
