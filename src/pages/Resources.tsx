@@ -1225,6 +1225,7 @@ if (typeof document !== "undefined" && !document.getElementById(RESPONSIVE_STYLE
         display: flex !important;
         overflow-x: auto !important;
         scroll-snap-type: x mandatory !important;
+        scroll-padding-left: 24px !important;
         -webkit-overflow-scrolling: touch !important;
         gap: 12px !important;
         margin: 0 -24px 0 -24px !important;
