@@ -199,6 +199,8 @@ const Index = () => {
           </div>
         </section>
 
+        <div style={{ height: "1px", background: "linear-gradient(90deg, transparent 5%, rgba(212,175,55,0.35) 50%, transparent 95%)", boxShadow: "0 0 12px rgba(212,175,55,0.2)", margin: "0 24px" }} />
+
         {/* ═══ § 2 HOW IT WORKS ═══ */}
         <section ref={howRef} style={styles.howSection}>
           <div style={{ ...styles.howHeader, ...reveal(howVisible) }}>
@@ -223,6 +225,8 @@ const Index = () => {
             ))}
           </div>
         </section>
+
+        <div style={{ height: "1px", background: "linear-gradient(90deg, transparent 5%, rgba(212,175,55,0.35) 50%, transparent 95%)", boxShadow: "0 0 12px rgba(212,175,55,0.2)", margin: "0 24px" }} />
 
         {/* ═══ § 3 WATERFALL ═══ */}
         <section style={styles.waterfallSection}>
@@ -300,6 +304,8 @@ const Index = () => {
           <p style={{ ...styles.waterfallNote, ...reveal(waterfallFlowVisible) }}>Model only — your numbers will differ</p>
         </section>
 
+        <div style={{ height: "1px", background: "linear-gradient(90deg, transparent 5%, rgba(212,175,55,0.35) 50%, transparent 95%)", boxShadow: "0 0 12px rgba(212,175,55,0.2)", margin: "0 24px" }} />
+
         {/* ═══ § 4 WHY THIS MATTERS ═══ */}
         <section ref={whyRef} style={styles.whySection}>
           <div style={{ ...styles.whyHeader, ...reveal(whyVisible) }}>
@@ -310,16 +316,21 @@ const Index = () => {
           <div style={{ ...styles.badgeGridWrapper, ...reveal(whyVisible, 1) }}>
             <div style={styles.topLineGold} />
             <div style={styles.badgeGrid}>
-              {badgeCards.map((card, i) => (
-                <div key={card.num} style={{ ...styles.badgeCard, ...reveal(whyVisible, i + 2) }}>
+              {badgeCards.map((card, i) => {
+                const warmth = 0.10 + (i * 0.04);
+                return (
+                <div key={card.num} style={{ ...styles.badgeCard, background: `radial-gradient(circle at 45px 57px, rgba(212,175,55,${warmth}) 0%, #0A0A0A 65%)`, ...reveal(whyVisible, i + 2) }}>
                   <div style={styles.badgeNum}>{card.num}</div>
                   <p style={styles.badgeTitle}>{card.title}</p>
                   <p style={styles.badgeBody}>{card.body}</p>
                 </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </section>
+
+        <div style={{ height: "1px", background: "linear-gradient(90deg, transparent 5%, rgba(212,175,55,0.35) 50%, transparent 95%)", boxShadow: "0 0 12px rgba(212,175,55,0.2)", margin: "0 24px" }} />
 
         {/* ═══ § 5 ARSENAL ═══ */}
         <section style={styles.arsenalSection}>
@@ -437,6 +448,8 @@ const Index = () => {
           </div>
         </section>
 
+        <div style={{ height: "1px", background: "linear-gradient(90deg, transparent 5%, rgba(212,175,55,0.35) 50%, transparent 95%)", boxShadow: "0 0 12px rgba(212,175,55,0.2)", margin: "0 24px" }} />
+
         {/* ═══ § 6 REALITY ═══ */}
         <section style={styles.realitySection}>
           <blockquote ref={realityQuoteRef} style={{ ...styles.blockquote, ...reveal(realityQuoteVisible) }}>
@@ -472,7 +485,7 @@ const Index = () => {
           <div style={styles.closerGlowBottom} />
           <div style={{ ...styles.closerCard, ...reveal(closerVisible) }}>
             <div style={styles.topLineGoldBright} />
-            <h2 style={styles.closerH2}>Your Investors<br /><span style={{ color: "#D4AF37", display: "block" }}>Will Ask.</span></h2>
+            <h2 style={styles.closerH2}>Your Investors<br /><span style={{ color: "#D4AF37", display: "block", textShadow: "0 0 30px rgba(212,175,55,0.5), 0 0 60px rgba(212,175,55,0.2)" }}>Will Ask.</span></h2>
             <p style={styles.closerBody}>Stop guessing your backend. Build the model before the pitch.</p>
             <button onClick={handleCTA} style={styles.ctaBtn} onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>
               <span style={{ position: "relative", zIndex: 1 }}>RUN MY WATERFALL</span>
@@ -722,7 +735,7 @@ const styles: Record<string, React.CSSProperties> = {
     borderRadius: "12px", position: "relative", overflow: "hidden", textAlign: "left",
     border: "1px solid rgba(212,175,55,0.60)",
     background: "radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.15) 0%, #0A0A0A 65%)",
-    boxShadow: "0 16px 40px rgba(0,0,0,0.8), 0 0 60px rgba(212,175,55,0.12), 0 0 120px rgba(212,175,55,0.06)",
+    boxShadow: "0 16px 40px rgba(0,0,0,0.8), 0 0 60px rgba(120,60,180,0.12), 0 0 120px rgba(212,175,55,0.10), 0 0 200px rgba(120,60,180,0.06)",
   },
   tierHeaderAlt: {
     padding: "28px 24px 20px", borderBottom: "1px solid rgba(255,255,255,0.06)",
@@ -824,12 +837,12 @@ const styles: Record<string, React.CSSProperties> = {
   },
   closerGlowBottom: {
     position: "absolute", bottom: 0, left: 0, right: 0, height: "80%", pointerEvents: "none",
-    background: "radial-gradient(ellipse 90% 60% at 50% 100%, rgba(212,175,55,0.22) 0%, transparent 60%)",
+    background: "radial-gradient(ellipse 90% 60% at 50% 100%, rgba(120,60,180,0.15) 0%, rgba(212,175,55,0.18) 30%, transparent 65%)",
   },
   closerCard: {
-    position: "relative", zIndex: 1, border: "1px solid rgba(212,175,55,0.50)", borderRadius: "12px",
+    position: "relative", zIndex: 1, border: "1px solid rgba(212,175,55,0.65)", borderRadius: "12px",
     padding: "24px 24px 36px", background: "rgba(0,0,0,0.85)", maxWidth: "320px", margin: "0 auto",
-    boxShadow: "0 16px 40px rgba(0,0,0,0.8), 0 0 60px rgba(212,175,55,0.1)",
+    boxShadow: "0 16px 40px rgba(0,0,0,0.8), 0 0 60px rgba(212,175,55,0.1), 0 0 80px rgba(120,60,180,0.08)",
   },
   closerH2: {
     fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.4rem", color: "#fff", textAlign: "center",
