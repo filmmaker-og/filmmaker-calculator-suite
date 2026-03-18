@@ -628,9 +628,9 @@ const styles: Record<string, React.CSSProperties> = {
     background: "radial-gradient(circle at 50% 70%, rgba(212,175,55,0.20) 0%, #0A0A0A 75%)", border: "1px solid rgba(212,175,55,0.25)", borderRadius: "12px", padding: "24px 20px",
     boxShadow: "0 0 24px rgba(212,175,55,0.10)",
   },
-  acqLabel: { fontFamily: "'Roboto Mono', monospace", fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.15em", color: "#D4AF37", marginBottom: "4px" },
-  acqSub: { fontFamily: "'Roboto Mono', monospace", fontSize: "12px", color: colors.textSecondary, marginBottom: "8px" },
-  acqAmount: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "2.4rem", color: "#D4AF37", lineHeight: 1, letterSpacing: "0.02em", textShadow: "0 0 30px rgba(212,175,55,0.4), 0 0 60px rgba(212,175,55,0.15)" },
+  acqLabel: { fontFamily: "'Roboto Mono', monospace", fontSize: "14px", textTransform: "uppercase", letterSpacing: "0.15em", color: "#D4AF37", marginBottom: "4px" },
+  acqSub: { fontFamily: "'Roboto Mono', monospace", fontSize: "15px", color: colors.textSecondary, marginBottom: "8px" },
+  acqAmount: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.2rem", color: "#D4AF37", lineHeight: 1, letterSpacing: "0.02em", textShadow: "0 0 30px rgba(212,175,55,0.4), 0 0 60px rgba(212,175,55,0.15)" },
 
   waterfallTiersBox: {
     position: "relative", overflow: "hidden", margin: "0 24px",
