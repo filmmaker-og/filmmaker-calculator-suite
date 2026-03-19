@@ -62,7 +62,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
 
   /* ─── Section label ─────────────────────────────────────────── */
   const SectionLabel = ({ children }: { children: React.ReactNode }) => (
-    <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "16px" }}>
+    <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
       <div style={{ flex: 1, height: "1px", background: "rgba(212,175,55,0.25)" }} />
       <span style={{
         fontFamily: "'Roboto Mono', monospace",
@@ -111,6 +111,24 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
           }}
         />
 
+        <style>{`
+          @keyframes menu-shimmer {
+            0% { left: -100%; }
+            30% { left: 200%; }
+            100% { left: 200%; }
+          }
+        `}</style>
+
+        {/* Purple atmospheric bleed behind ASK THE OG zone */}
+        <div
+          className="absolute top-0 left-0 right-0 pointer-events-none"
+          style={{
+            height: "140px",
+            background: "radial-gradient(ellipse 100% 80% at 50% 0%, rgba(120,60,180,0.15) 0%, transparent 70%)",
+            borderRadius: "12px 12px 0 0",
+          }}
+        />
+
         {/* Drag handle + X close button */}
         <div className="relative flex justify-center pt-4 pb-4">
           <div className="w-8 h-[3px] rounded-full" style={{ background: "rgba(255,255,255,0.25)" }} />
@@ -124,7 +142,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
           </button>
         </div>
 
-        <div style={{ padding: "12px 24px 32px" }}>
+        <div style={{ padding: "8px 24px 24px" }}>
           {/* Ask the OG — prominent bot CTA */}
           {onOpenBot && (
             <button
@@ -132,13 +150,15 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
               onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; e.currentTarget.style.boxShadow = "0 0 30px rgba(120,60,180,0.50), 0 0 60px rgba(120,60,180,0.20)"; }}
               onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.boxShadow = "0 0 20px rgba(120,60,180,0.30), 0 0 50px rgba(120,60,180,0.10)"; }}
               style={{
+                position: "relative",
+                overflow: "hidden",
                 width: "100%",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 gap: "10px",
                 padding: "18px",
-                marginBottom: "20px",
+                marginBottom: "12px",
                 background: "linear-gradient(135deg, rgb(75,30,130) 0%, rgb(110,50,170) 100%)",
                 border: "none",
                 borderRadius: "8px",
@@ -147,55 +167,33 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                 transition: "transform 0.15s ease, box-shadow 0.3s ease",
               }}
             >
-              <Sparkles style={{ width: "20px", height: "20px", color: "#D4AF37", filter: "drop-shadow(0 0 6px rgba(212,175,55,0.40))" }} />
+              <Sparkles style={{ width: "20px", height: "20px", color: "#D4AF37", filter: "drop-shadow(0 0 6px rgba(212,175,55,0.40))", position: "relative", zIndex: 1 }} />
               <span style={{
                 fontFamily: "'Bebas Neue', sans-serif",
                 fontSize: "1.4rem",
                 letterSpacing: "0.10em",
                 color: "#fff",
+                position: "relative",
+                zIndex: 1,
               }}>
                 ASK THE OG
               </span>
+              <div style={{
+                position: "absolute", top: 0, left: "-100%", width: "55%", height: "100%",
+                background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent)",
+                transform: "skewX(-20deg)",
+                animation: "menu-shimmer 2.5s ease-in-out infinite",
+              }} />
             </button>
           )}
 
-          {/* Home — full-width gold outline (subordinate to ASK THE OG) */}
-          <button
-            onClick={() => handleNavigate("/")}
-            onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; }}
-            onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
-            style={{
-              width: "100%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "10px",
-              padding: "18px",
-              marginBottom: "16px",
-              background: "#0A0A0A",
-              border: "1px solid rgba(212,175,55,0.30)",
-              borderRadius: "8px",
-              cursor: "pointer",
-              transition: "transform 0.15s ease, border-color 0.25s ease",
-            }}
-          >
-            <Home size={20} color="#D4AF37" />
-            <span style={{
-              fontFamily: "'Bebas Neue', sans-serif",
-              fontSize: "1.3rem",
-              letterSpacing: "0.10em",
-              color: "rgba(255,255,255,0.88)",
-            }}>
-              HOME
-            </span>
-          </button>
-
-          {/* Nav — 3-col compact (matches social row) */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "10px", marginBottom: "20px" }}>
+          {/* Nav — 2×2 compact grid */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px", marginBottom: "12px" }}>
             {([
-              { path: "/calculator", label: "Calculator", icon: <Calculator size={20} color="#D4AF37" /> },
-              { path: "/store",      label: "Shop",       icon: <ShoppingBag size={20} color="#D4AF37" /> },
-              { path: "/resources",  label: "Resources",  icon: <BarChart2 size={20} color="#D4AF37" /> },
+              { path: "/",           label: "Home",       icon: <Home size={16} color="#D4AF37" /> },
+              { path: "/calculator", label: "Calculator", icon: <Calculator size={16} color="#D4AF37" /> },
+              { path: "/store",      label: "Shop",       icon: <ShoppingBag size={16} color="#D4AF37" /> },
+              { path: "/resources",  label: "Resources",  icon: <BarChart2 size={16} color="#D4AF37" /> },
             ] as const).map((item) => (
               <button
                 key={item.path}
@@ -207,18 +205,18 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   flexDirection: "column",
                   alignItems: "center",
                   justifyContent: "center",
-                  gap: "8px",
-                  padding: "18px 12px",
+                  gap: "6px",
+                  padding: "12px 8px",
                   background: "#0A0A0A",
                   border: "1px solid rgba(212,175,55,0.15)",
-                  borderRadius: "8px",
+                  borderRadius: "6px",
                   transition: "transform 0.15s ease, border-color 0.25s ease",
                 }}
               >
                 {item.icon}
                 <span style={{
                   fontFamily: "'Bebas Neue', sans-serif",
-                  fontSize: "1.2rem",
+                  fontSize: "1.0rem",
                   letterSpacing: "0.1em",
                   color: "rgba(255,255,255,0.88)",
                 }}>
@@ -229,9 +227,9 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
           </div>
 
           {/* Follow — social links */}
-          <div style={{ paddingTop: "4px" }}>
+          <div>
             <SectionLabel>Follow</SectionLabel>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "10px", marginBottom: "16px" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "8px", marginBottom: "10px" }}>
 
               {/* Instagram */}
               <a
@@ -246,19 +244,19 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   flexDirection: "column",
                   alignItems: "center",
                   justifyContent: "center",
-                  gap: "8px",
-                  padding: "18px 12px",
+                  gap: "6px",
+                  padding: "12px 8px",
                   background: "#0A0A0A",
                   border: "1px solid rgba(212,175,55,0.15)",
-                  borderRadius: "8px",
+                  borderRadius: "6px",
                   textDecoration: "none",
                   transition: "transform 0.15s ease, border-color 0.25s ease",
                 }}
               >
-                <Instagram size={20} style={{ color: "#D4AF37" }} />
+                <Instagram size={16} style={{ color: "#D4AF37" }} />
                 <span style={{
                   fontFamily: "'Bebas Neue', sans-serif",
-                  fontSize: "1.2rem",
+                  fontSize: "1.0rem",
                   letterSpacing: "0.1em",
                   color: "rgba(255,255,255,0.85)",
                 }}>Instagram</span>
@@ -277,21 +275,21 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   flexDirection: "column",
                   alignItems: "center",
                   justifyContent: "center",
-                  gap: "8px",
-                  padding: "18px 12px",
+                  gap: "6px",
+                  padding: "12px 8px",
                   background: "#0A0A0A",
                   border: "1px solid rgba(212,175,55,0.15)",
-                  borderRadius: "8px",
+                  borderRadius: "6px",
                   textDecoration: "none",
                   transition: "transform 0.15s ease, border-color 0.25s ease",
                 }}
               >
-                <svg width={20} height={20} viewBox="0 0 24 24" fill="#D4AF37" xmlns="http://www.w3.org/2000/svg">
+                <svg width={16} height={16} viewBox="0 0 24 24" fill="#D4AF37" xmlns="http://www.w3.org/2000/svg">
                   <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 0 0-.79-.05A6.34 6.34 0 0 0 3.15 15a6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V8.71a8.2 8.2 0 0 0 4.76 1.52v-3.4a4.85 4.85 0 0 1-1-.14z"/>
                 </svg>
                 <span style={{
                   fontFamily: "'Bebas Neue', sans-serif",
-                  fontSize: "1.2rem",
+                  fontSize: "1.0rem",
                   letterSpacing: "0.1em",
                   color: "rgba(255,255,255,0.85)",
                 }}>TikTok</span>
@@ -310,21 +308,21 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   flexDirection: "column",
                   alignItems: "center",
                   justifyContent: "center",
-                  gap: "8px",
-                  padding: "18px 12px",
+                  gap: "6px",
+                  padding: "12px 8px",
                   background: "#0A0A0A",
                   border: "1px solid rgba(212,175,55,0.15)",
-                  borderRadius: "8px",
+                  borderRadius: "6px",
                   textDecoration: "none",
                   transition: "transform 0.15s ease, border-color 0.25s ease",
                 }}
               >
-                <svg width={20} height={20} viewBox="0 0 24 24" fill="#D4AF37" xmlns="http://www.w3.org/2000/svg">
+                <svg width={16} height={16} viewBox="0 0 24 24" fill="#D4AF37" xmlns="http://www.w3.org/2000/svg">
                   <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
                 </svg>
                 <span style={{
                   fontFamily: "'Bebas Neue', sans-serif",
-                  fontSize: "1.2rem",
+                  fontSize: "1.0rem",
                   letterSpacing: "0.1em",
                   color: "rgba(255,255,255,0.85)",
                 }}>Facebook</span>
@@ -336,7 +334,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
           {/* Connect — email + share */}
           <div>
             <SectionLabel>Connect</SectionLabel>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", marginBottom: "24px" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px", marginBottom: "12px" }}>
 
               {/* Email */}
               <a
@@ -349,18 +347,18 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   alignItems: "center",
                   justifyContent: "center",
                   gap: "10px",
-                  padding: "16px",
+                  padding: "12px",
                   background: "#0A0A0A",
                   border: "1px solid rgba(212,175,55,0.15)",
-                  borderRadius: "8px",
+                  borderRadius: "6px",
                   textDecoration: "none",
                   transition: "transform 0.15s ease, border-color 0.25s ease",
                 }}
               >
-                <Mail size={18} style={{ color: "#D4AF37", flexShrink: 0 }} />
+                <Mail size={16} style={{ color: "#D4AF37", flexShrink: 0 }} />
                 <span style={{
                   fontFamily: "'Bebas Neue', sans-serif",
-                  fontSize: "1.2rem",
+                  fontSize: "1.0rem",
                   letterSpacing: "0.1em",
                   color: "rgba(255,255,255,0.85)",
                   lineHeight: 1,
@@ -377,18 +375,18 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   alignItems: "center",
                   justifyContent: "center",
                   gap: "10px",
-                  padding: "16px",
+                  padding: "12px",
                   background: "#0A0A0A",
                   border: "1px solid rgba(212,175,55,0.15)",
-                  borderRadius: "8px",
+                  borderRadius: "6px",
                   cursor: "pointer",
                   transition: "transform 0.15s ease, border-color 0.25s ease",
                 }}
               >
-                <Share2 size={18} style={{ color: "#D4AF37", flexShrink: 0 }} />
+                <Share2 size={16} style={{ color: "#D4AF37", flexShrink: 0 }} />
                 <span style={{
                   fontFamily: "'Bebas Neue', sans-serif",
-                  fontSize: "1.2rem",
+                  fontSize: "1.0rem",
                   letterSpacing: "0.1em",
                   color: "rgba(255,255,255,0.85)",
                   lineHeight: 1,

@@ -568,7 +568,7 @@ const styles: Record<string, React.CSSProperties> = {
     position: "absolute", top: 0, left: "-100%", width: "55%", height: "100%",
     background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent)",
     transform: "skewX(-20deg)",
-    animation: "lp-shimmer 2.5s ease-in-out infinite",
+    animation: "lp-shimmer 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite",
   },
 
   /* ── § 1 HERO ── */
