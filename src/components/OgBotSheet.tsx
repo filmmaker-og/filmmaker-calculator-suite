@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { useHaptics } from "@/hooks/use-haptics";
-import { SendHorizonal, RotateCcw, X } from "lucide-react";
+import { SendHorizonal, RotateCcw, X, Sparkles } from "lucide-react";
 import filmmakerFIcon from "@/assets/filmmaker-f-icon.png";
 import { cn } from "@/lib/utils";
 
@@ -246,7 +246,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
 
         <style>{`
           .og-input::placeholder {
-            color: rgba(180,140,255,0.45) !important;
+            color: rgba(255,255,255,0.40) !important;
           }
         `}</style>
 
@@ -258,7 +258,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
         {/* ── Sheet header ── */}
         <div
           className="px-6 pt-3 pb-5 flex-shrink-0 border-b"
-          style={{ borderColor: "rgba(212,175,55,0.15)" }}
+          style={{ borderColor: "rgba(212,175,55,0.25)" }}
         >
           <div className="flex items-end justify-between">
             <h2 className="font-bebas text-[32px] tracking-[0.12em] leading-none" style={{ color: "#D4AF37", textShadow: "0 0 20px rgba(212,175,55,0.25)" }}>
@@ -295,7 +295,18 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
           {/* Empty state — example chips with eyebrow */}
           {ogMessages.length === 0 && (
             <div className="flex flex-col items-center justify-center gap-5" style={{ minHeight: "100%" }}>
-              <img src={filmmakerFIcon} alt="" className="w-8 h-8 object-contain" style={{ opacity: 0.70 }} />
+              <div style={{
+                width: "48px",
+                height: "48px",
+                borderRadius: "10px",
+                background: "linear-gradient(135deg, rgb(75,30,130) 0%, rgb(110,50,170) 100%)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                boxShadow: "0 0 20px rgba(120,60,180,0.30)",
+              }}>
+                <Sparkles style={{ width: "26px", height: "26px", color: "#D4AF37", filter: "drop-shadow(0 0 4px rgba(212,175,55,0.40))" }} />
+              </div>
               <span className="font-bebas text-[22px] tracking-[0.14em] uppercase" style={{ color: "rgb(180,140,255)" }}>
                 What do you want to know
               </span>
@@ -314,7 +325,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
                       e.currentTarget.style.color = "#FFFFFF";
                     }}
                     onMouseLeave={e => {
-                      e.currentTarget.style.borderColor = "rgba(120,60,180,0.25)";
+                      e.currentTarget.style.borderColor = "rgba(120,60,180,0.35)";
                       e.currentTarget.style.background = "rgba(120,60,180,0.06)";
                       e.currentTarget.style.color = "rgba(255,255,255,0.75)";
                     }}
@@ -323,12 +334,12 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
                       e.currentTarget.style.background = "rgba(120,60,180,0.12)";
                     }}
                     onTouchEnd={e => {
-                      e.currentTarget.style.borderColor = "rgba(120,60,180,0.25)";
+                      e.currentTarget.style.borderColor = "rgba(120,60,180,0.35)";
                       e.currentTarget.style.background = "rgba(120,60,180,0.06)";
                     }}
                     style={{
                       borderRadius: "6px",
-                      borderColor: "rgba(120,60,180,0.25)",
+                      borderColor: "rgba(120,60,180,0.35)",
                       background: "rgba(120,60,180,0.06)",
                       color: "rgba(255,255,255,0.75)",
                     }}
@@ -403,7 +414,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
         {/* Input area */}
         <div
           className="px-5 pb-4 pt-3 flex-shrink-0 border-t"
-          style={{ borderColor: "rgba(212,175,55,0.15)", background: "transparent" }}
+          style={{ borderColor: "rgba(212,175,55,0.25)", background: "transparent" }}
         >
           <form onSubmit={handleOgSubmit}>
             <div

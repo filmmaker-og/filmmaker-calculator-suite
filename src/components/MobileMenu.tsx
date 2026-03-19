@@ -167,10 +167,10 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                 transition: "transform 0.15s ease, box-shadow 0.3s ease",
               }}
             >
-              <Sparkles style={{ width: "20px", height: "20px", color: "#D4AF37", filter: "drop-shadow(0 0 6px rgba(212,175,55,0.40))", position: "relative", zIndex: 1 }} />
+              <Sparkles style={{ width: "24px", height: "24px", color: "#D4AF37", filter: "drop-shadow(0 0 6px rgba(212,175,55,0.40))", position: "relative", zIndex: 1 }} />
               <span style={{
                 fontFamily: "'Bebas Neue', sans-serif",
-                fontSize: "1.4rem",
+                fontSize: "1.6rem",
                 letterSpacing: "0.10em",
                 color: "#fff",
                 position: "relative",
@@ -187,10 +187,9 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
             </button>
           )}
 
-          {/* Nav — 2×2 compact grid */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px", marginBottom: "12px" }}>
+          {/* Nav — 3-col (matches social row) */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "8px", marginBottom: "12px" }}>
             {([
-              { path: "/",           label: "Home",       icon: <Home size={16} color="#D4AF37" /> },
               { path: "/calculator", label: "Calculator", icon: <Calculator size={16} color="#D4AF37" /> },
               { path: "/store",      label: "Shop",       icon: <ShoppingBag size={16} color="#D4AF37" /> },
               { path: "/resources",  label: "Resources",  icon: <BarChart2 size={16} color="#D4AF37" /> },
@@ -331,10 +330,39 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
             </div>
           </div>
 
-          {/* Connect — email + share */}
+          {/* Connect — home + email + share */}
           <div>
             <SectionLabel>Connect</SectionLabel>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px", marginBottom: "12px" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "8px", marginBottom: "12px" }}>
+
+              {/* Home */}
+              <button
+                onClick={() => handleNavigate("/")}
+                onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; }}
+                onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "6px",
+                  padding: "12px 8px",
+                  background: "rgba(255,255,255,0.03)",
+                  border: "1px solid rgba(212,175,55,0.20)",
+                  borderRadius: "6px",
+                  cursor: "pointer",
+                  transition: "transform 0.15s ease, border-color 0.25s ease",
+                }}
+              >
+                <Home size={16} color="#D4AF37" />
+                <span style={{
+                  fontFamily: "'Bebas Neue', sans-serif",
+                  fontSize: "1.0rem",
+                  letterSpacing: "0.1em",
+                  color: "rgba(255,255,255,0.85)",
+                  lineHeight: 1,
+                }}>Home</span>
+              </button>
 
               {/* Email */}
               <a
@@ -344,10 +372,11 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                 onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
                 style={{
                   display: "flex",
+                  flexDirection: "column",
                   alignItems: "center",
                   justifyContent: "center",
-                  gap: "10px",
-                  padding: "12px",
+                  gap: "6px",
+                  padding: "12px 8px",
                   background: "rgba(255,255,255,0.03)",
                   border: "1px solid rgba(212,175,55,0.20)",
                   borderRadius: "6px",
@@ -355,7 +384,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   transition: "transform 0.15s ease, border-color 0.25s ease",
                 }}
               >
-                <Mail size={16} style={{ color: "#D4AF37", flexShrink: 0 }} />
+                <Mail size={16} style={{ color: "#D4AF37" }} />
                 <span style={{
                   fontFamily: "'Bebas Neue', sans-serif",
                   fontSize: "1.0rem",
@@ -372,10 +401,11 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                 onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
                 style={{
                   display: "flex",
+                  flexDirection: "column",
                   alignItems: "center",
                   justifyContent: "center",
-                  gap: "10px",
-                  padding: "12px",
+                  gap: "6px",
+                  padding: "12px 8px",
                   background: "rgba(255,255,255,0.03)",
                   border: "1px solid rgba(212,175,55,0.20)",
                   borderRadius: "6px",
@@ -383,7 +413,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   transition: "transform 0.15s ease, border-color 0.25s ease",
                 }}
               >
-                <Share2 size={16} style={{ color: "#D4AF37", flexShrink: 0 }} />
+                <Share2 size={16} style={{ color: "#D4AF37" }} />
                 <span style={{
                   fontFamily: "'Bebas Neue', sans-serif",
                   fontSize: "1.0rem",
