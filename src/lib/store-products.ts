@@ -25,7 +25,7 @@ export interface Product {
   badge: string | null;
   featured: boolean;
   tier: number;
-  category: "product" | "service";
+  category: "product" | "service" | "research";
   isAddOn?: boolean;
   requiresBase?: string[];
   turnaround?: string;
@@ -100,7 +100,7 @@ export const products: Product[] = [
     badge: "DATA",
     featured: true,
     tier: 2,
-    category: "product",
+    category: "research",
     shortDescription:
       "Real acquisition deals in your genre and budget range. Defend your valuation with data.",
     fullDescription:
@@ -301,6 +301,9 @@ export const products: Product[] = [
 
 export const selfServeProducts: Product[] = products.filter(
   (p) => p.category === "product" && !p.isAddOn
+);
+export const researchProducts: Product[] = products.filter(
+  (p) => p.category === "research"
 );
 export const turnkeyServices: Product[] = products.filter(
   (p) => p.category === "service"
