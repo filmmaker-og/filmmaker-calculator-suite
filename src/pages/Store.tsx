@@ -64,11 +64,12 @@ const s: Record<string, React.CSSProperties> = {
     letterSpacing: "0.18em",
     textTransform: "uppercase",
     color: "#D4AF37",
+    whiteSpace: "nowrap" as const,
   },
   /* ── Card base ── */
   cardBase: {
     background: "#0A0A0A",
-    border: "1px solid rgba(212,175,55,0.15)",
+    border: "none",
     borderRadius: "12px",
     boxShadow: "0 16px 40px rgba(0,0,0,0.6)",
     overflow: "hidden",
@@ -321,6 +322,8 @@ const tierStyles = {
     price: { color: "#D4AF37" },
     badge: { color: "#D4AF37", background: "rgba(212,175,55,0.08)", border: "1px solid rgba(212,175,55,0.35)" },
     btn: "btnOutline" as const,
+    btnHover: { background: "rgba(212,175,55,0.10)", borderColor: "rgba(212,175,55,0.45)" } as Record<string, string>,
+    btnRest: { background: "rgba(212,175,55,0.05)", borderColor: "rgba(212,175,55,0.30)" } as Record<string, string>,
     hoverLift: "-2px",
   },
   green: {
@@ -343,6 +346,8 @@ const tierStyles = {
     price: { color: "#3CB371" },
     badge: { color: "#3CB371", background: "rgba(60,179,113,0.08)", border: "1px solid rgba(60,179,113,0.30)" },
     btn: "btnGreen" as const,
+    btnHover: { background: "rgba(60,179,113,0.10)", borderColor: "rgba(60,179,113,0.40)" } as Record<string, string>,
+    btnRest: { background: "rgba(60,179,113,0.05)", borderColor: "rgba(60,179,113,0.25)" } as Record<string, string>,
     hoverLift: "-4px",
   },
   purple: {
@@ -364,6 +369,8 @@ const tierStyles = {
     price: {},
     badge: { color: "rgb(180,140,255)", background: "rgba(120,60,180,0.10)", border: "1px solid rgba(120,60,180,0.35)" },
     btn: "btnPurpleOutline" as const,
+    btnHover: { background: "rgba(120,60,180,0.10)", borderColor: "rgba(120,60,180,0.45)" } as Record<string, string>,
+    btnRest: { background: "rgba(120,60,180,0.05)", borderColor: "rgba(120,60,180,0.30)" } as Record<string, string>,
     hoverLift: "-2px",
   },
   purpleTop: {
@@ -385,9 +392,13 @@ const tierStyles = {
     price: {},
     badge: { color: "rgb(180,140,255)", background: "rgba(120,60,180,0.10)", border: "1px solid rgba(120,60,180,0.35)", boxShadow: "0 0 12px rgba(120,60,180,0.10)" },
     btn: "btnPurple" as const,
+    btnHover: { boxShadow: "0 0 32px rgba(120,60,180,0.50), 0 0 80px rgba(212,175,55,0.15)" } as Record<string, string>,
+    btnRest: { boxShadow: "0 0 24px rgba(120,60,180,0.35), 0 0 60px rgba(212,175,55,0.10)" } as Record<string, string>,
     hoverLift: "-4px",
   },
 };
+
+const z2: React.CSSProperties = { position: "relative", zIndex: 2 };
 
 const getTier = (product: Product) => {
   if (product.id === "the-full-analysis") return tierStyles.gold;
@@ -531,6 +542,7 @@ const WorkingModelPopup = ({
       <button
         onClick={(e) => { haptics.light(e); onClose(); }}
         disabled={loading}
+        aria-label="Close"
         style={{
           position: "absolute", top: "16px", right: "16px", zIndex: 10,
           background: "none", border: "none", cursor: "pointer",
@@ -701,8 +713,6 @@ const ProductCard = ({
     transitionDelay: visible ? `${index * 120}ms` : "0ms",
   };
 
-  const z2: React.CSSProperties = { position: "relative", zIndex: 2 };
-
   return (
     <div
       style={cardStyle}
@@ -767,6 +777,8 @@ const ProductCard = ({
           style={isComp ? s.btnGreen : s[tier.btn]}
           onMouseDown={(e) => { (e.currentTarget.style.transform = "scale(0.98)"); }}
           onMouseUp={(e) => { (e.currentTarget.style.transform = "scale(1)"); }}
+          onMouseEnter={(e) => { if (tier.btnHover.background) e.currentTarget.style.background = tier.btnHover.background; if (tier.btnHover.borderColor) e.currentTarget.style.borderColor = tier.btnHover.borderColor; if (tier.btnHover.boxShadow) e.currentTarget.style.boxShadow = tier.btnHover.boxShadow; }}
+          onMouseLeave={(e) => { if (tier.btnRest.background) e.currentTarget.style.background = tier.btnRest.background; if (tier.btnRest.borderColor) e.currentTarget.style.borderColor = tier.btnRest.borderColor; if (tier.btnRest.boxShadow) e.currentTarget.style.boxShadow = tier.btnRest.boxShadow; }}
         >
           {product.ctaLabel}
         </button>
@@ -776,6 +788,8 @@ const ProductCard = ({
             style={s.btnGreenSecondary}
             onMouseDown={(e) => { (e.currentTarget.style.transform = "scale(0.98)"); }}
             onMouseUp={(e) => { (e.currentTarget.style.transform = "scale(1)"); }}
+            onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(60,179,113,0.08)"; e.currentTarget.style.borderColor = "rgba(60,179,113,0.25)"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(60,179,113,0.03)"; e.currentTarget.style.borderColor = "rgba(60,179,113,0.15)"; }}
           >
             OR GET 10 COMPS — $995
           </button>
@@ -826,8 +840,6 @@ const ServiceCard = ({
     transition: "opacity 700ms ease-out, transform 400ms ease-out, box-shadow 0.3s ease",
     transitionDelay: visible ? `${index * 120}ms` : "0ms",
   };
-
-  const z2: React.CSSProperties = { position: "relative", zIndex: 2 };
 
   return (
     <div
@@ -900,6 +912,8 @@ const ServiceCard = ({
           style={s[tier.btn]}
           onMouseDown={(e) => { (e.currentTarget.style.transform = "scale(0.98)"); }}
           onMouseUp={(e) => { (e.currentTarget.style.transform = "scale(1)"); }}
+          onMouseEnter={(e) => { if (tier.btnHover.background) e.currentTarget.style.background = tier.btnHover.background; if (tier.btnHover.borderColor) e.currentTarget.style.borderColor = tier.btnHover.borderColor; if (tier.btnHover.boxShadow) e.currentTarget.style.boxShadow = tier.btnHover.boxShadow; }}
+          onMouseLeave={(e) => { if (tier.btnRest.background) e.currentTarget.style.background = tier.btnRest.background; if (tier.btnRest.borderColor) e.currentTarget.style.borderColor = tier.btnRest.borderColor; if (tier.btnRest.boxShadow) e.currentTarget.style.boxShadow = tier.btnRest.boxShadow; }}
         >
           {product.ctaLabel}
         </button>
@@ -938,6 +952,7 @@ const FaqItem = ({
   <div style={{ borderBottom: "1px solid rgba(212,175,55,0.15)" }}>
     <button
       onClick={(e) => { haptics.light(e); onToggle(); }}
+      aria-expanded={isOpen}
       style={{
         width: "100%",
         display: "flex",
@@ -1356,7 +1371,11 @@ const Store = () => {
           padding: "36px 24px",
           textAlign: "center",
           position: "relative",
-        }}>
+          transition: "border-color 0.3s ease",
+        }}
+          onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.40)"; }}
+          onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; }}
+        >
           <div style={{
             position: "absolute", inset: "6px", borderRadius: "8px",
             border: "1px solid rgba(212,175,55,0.08)", pointerEvents: "none",
@@ -1402,6 +1421,8 @@ const Store = () => {
             }}
             onMouseDown={(e) => { haptics.medium(e); (e.currentTarget.style.transform = "scale(0.98)"); }}
             onMouseUp={(e) => { (e.currentTarget.style.transform = "scale(1)"); }}
+            onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(212,175,55,0.08)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.55)"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(212,175,55,0.05)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.4)"; }}
           >
             <Mail style={{ width: "16px", height: "16px" }} />
             Get In Touch →
@@ -1422,20 +1443,20 @@ const Store = () => {
         }}
       >
         <div style={{ display: "flex", justifyContent: "center", gap: "20px", marginBottom: "16px" }}>
-          <a href="https://www.instagram.com/filmmaker.og" target="_blank" rel="noopener noreferrer" style={{ color: "rgba(212,175,55,0.50)", textDecoration: "none", display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", borderRadius: "8px", border: "1px solid rgba(212,175,55,0.15)", transition: "color 0.2s ease, border-color 0.2s ease" }} aria-label="Instagram">
+          <a href="https://www.instagram.com/filmmaker.og" target="_blank" rel="noopener noreferrer" style={{ color: "rgba(212,175,55,0.50)", textDecoration: "none", display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", borderRadius: "8px", border: "1px solid rgba(212,175,55,0.15)", transition: "color 0.2s ease, border-color 0.2s ease" }} aria-label="Instagram" onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.60)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.50)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.15)"; }}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
           </a>
-          <a href="https://www.tiktok.com/@filmmaker.og" target="_blank" rel="noopener noreferrer" style={{ color: "rgba(212,175,55,0.50)", textDecoration: "none", display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", borderRadius: "8px", border: "1px solid rgba(212,175,55,0.15)", transition: "color 0.2s ease, border-color 0.2s ease" }} aria-label="TikTok">
+          <a href="https://www.tiktok.com/@filmmaker.og" target="_blank" rel="noopener noreferrer" style={{ color: "rgba(212,175,55,0.50)", textDecoration: "none", display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", borderRadius: "8px", border: "1px solid rgba(212,175,55,0.15)", transition: "color 0.2s ease, border-color 0.2s ease" }} aria-label="TikTok" onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.60)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.50)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.15)"; }}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 0 0-.79-.05A6.34 6.34 0 0 0 3.15 15a6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V8.71a8.2 8.2 0 0 0 4.76 1.52v-3.4a4.85 4.85 0 0 1-1-.14z"/></svg>
           </a>
-          <a href="https://www.facebook.com/filmmaker.og" target="_blank" rel="noopener noreferrer" style={{ color: "rgba(212,175,55,0.50)", textDecoration: "none", display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", borderRadius: "8px", border: "1px solid rgba(212,175,55,0.15)", transition: "color 0.2s ease, border-color 0.2s ease" }} aria-label="Facebook">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+          <a href="https://www.facebook.com/filmmaker.og" target="_blank" rel="noopener noreferrer" style={{ color: "rgba(212,175,55,0.50)", textDecoration: "none", display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", borderRadius: "8px", border: "1px solid rgba(212,175,55,0.15)", transition: "color 0.2s ease, border-color 0.2s ease" }} aria-label="Facebook" onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.60)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.50)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.15)"; }}>
+            <svg width={18} height={18} viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
           </a>
         </div>
         <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "10px", marginBottom: "16px" }}>
-          <span onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "12px", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(212,175,55,0.35)", cursor: "pointer" }}>Shop</span>
+          <span onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "12px", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(212,175,55,0.35)", cursor: "pointer", transition: "color 0.2s ease" }} onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.60)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.35)"; }}>Shop</span>
           <span style={{ color: "rgba(212,175,55,0.20)", fontSize: "12px" }}>·</span>
-          <span onClick={() => window.location.href = "/resources"} style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "12px", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(212,175,55,0.35)", cursor: "pointer" }}>Resources</span>
+          <span onClick={() => window.location.href = "/resources"} style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "12px", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(212,175,55,0.35)", cursor: "pointer", transition: "color 0.2s ease" }} onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.60)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.35)"; }}>Resources</span>
         </div>
         <p style={{
           fontFamily: "'Inter', sans-serif",
