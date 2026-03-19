@@ -42,23 +42,23 @@ const OgBotFab = ({ onTap }: OgBotFabProps) => {
       style={{
         bottom: "calc(20px + env(safe-area-inset-bottom))",
         right: "20px",
-        width: "44px",
-        height: "44px",
-        borderRadius: "8px",
-        background: "#000",
-        border: "1px solid rgba(212,175,55,0.15)",
-        boxShadow: "0 4px 20px rgba(0,0,0,0.80)",
+        width: "52px",
+        height: "52px",
+        borderRadius: "10px",
+        background: "linear-gradient(135deg, rgb(75,30,130) 0%, rgb(110,50,170) 100%)",
+        border: "none",
+        boxShadow: "0 4px 16px rgba(120,60,180,0.40), 0 0 40px rgba(120,60,180,0.15)",
         opacity: hidden ? 0 : 1,
         pointerEvents: hidden ? "none" : "auto",
       }}
       aria-label="Open OG assistant"
     >
       <Sparkles
-        className="text-gold"
         style={{
-          width: "26px",
-          height: "26px",
-          filter: "drop-shadow(0 0 4px rgba(212,175,55,0.25))",
+          width: "28px",
+          height: "28px",
+          color: "#fff",
+          filter: "drop-shadow(0 0 6px rgba(255,255,255,0.30))",
         }}
       />
     </button>

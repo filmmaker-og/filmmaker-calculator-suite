@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { X as CloseIcon, Home, Calculator, ShoppingBag, BarChart2, Mail, Instagram, Share2 } from "lucide-react";
+import { X as CloseIcon, Home, Calculator, ShoppingBag, BarChart2, Mail, Instagram, Share2, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { getShareUrl, SHARE_TEXT, SHARE_TITLE } from "@/lib/constants";
 import { useHaptics } from "@/hooks/use-haptics";
@@ -8,9 +8,10 @@ import { useHaptics } from "@/hooks/use-haptics";
 interface MobileMenuProps {
   isOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
+  onOpenBot?: () => void;
 }
 
-const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) => {
+const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileMenuProps) => {
   const [internalOpen, setInternalOpen] = useState(false);
   const isOpen = controlledOpen !== undefined ? controlledOpen : internalOpen;
   const setIsOpen = (v: boolean) => {
@@ -124,6 +125,40 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange }: MobileMenuProps) =
         </div>
 
         <div style={{ padding: "8px 24px 28px" }}>
+          {/* Ask the OG — prominent bot CTA */}
+          {onOpenBot && (
+            <button
+              onClick={() => { haptics.medium(); onOpenBot(); }}
+              onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; }}
+              onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
+              style={{
+                width: "100%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "10px",
+                padding: "18px",
+                marginBottom: "20px",
+                background: "linear-gradient(135deg, rgb(75,30,130) 0%, rgb(110,50,170) 100%)",
+                border: "none",
+                borderRadius: "8px",
+                cursor: "pointer",
+                boxShadow: "0 0 20px rgba(120,60,180,0.30), 0 0 50px rgba(120,60,180,0.10)",
+                transition: "transform 0.15s ease, box-shadow 0.3s ease",
+              }}
+            >
+              <Sparkles style={{ width: "20px", height: "20px", color: "#fff", filter: "drop-shadow(0 0 6px rgba(255,255,255,0.30))" }} />
+              <span style={{
+                fontFamily: "'Bebas Neue', sans-serif",
+                fontSize: "1.4rem",
+                letterSpacing: "0.10em",
+                color: "#fff",
+              }}>
+                ASK THE OG
+              </span>
+            </button>
+          )}
+
           {/* Primary Nav — 2×2 grid */}
           <div style={{ marginBottom: "16px" }}>
             <SectionLabel>Navigate</SectionLabel>
