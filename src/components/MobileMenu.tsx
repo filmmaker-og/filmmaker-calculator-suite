@@ -167,7 +167,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                 transition: "transform 0.15s ease, box-shadow 0.3s ease",
               }}
             >
-              <Sparkles style={{ width: "24px", height: "24px", color: "#D4AF37", filter: "drop-shadow(0 0 6px rgba(212,175,55,0.40))", position: "relative", zIndex: 1 }} />
+              <Sparkles style={{ width: "26px", height: "26px", color: "#D4AF37", filter: "drop-shadow(0 0 6px rgba(212,175,55,0.40))", position: "relative", zIndex: 1 }} />
               <span style={{
                 fontFamily: "'Bebas Neue', sans-serif",
                 fontSize: "1.6rem",
@@ -190,9 +190,9 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
           {/* Nav — 3-col (matches social row) */}
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "8px", marginBottom: "12px" }}>
             {([
-              { path: "/calculator", label: "Calculator", icon: <Calculator size={16} color="#D4AF37" /> },
-              { path: "/store",      label: "Shop",       icon: <ShoppingBag size={16} color="#D4AF37" /> },
-              { path: "/resources",  label: "Resources",  icon: <BarChart2 size={16} color="#D4AF37" /> },
+              { path: "/calculator", label: "Calculator", icon: <Calculator size={18} color="#D4AF37" /> },
+              { path: "/store",      label: "Shop",       icon: <ShoppingBag size={18} color="#D4AF37" /> },
+              { path: "/resources",  label: "Resources",  icon: <BarChart2 size={18} color="#D4AF37" /> },
             ] as const).map((item) => (
               <button
                 key={item.path}
@@ -215,7 +215,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                 {item.icon}
                 <span style={{
                   fontFamily: "'Bebas Neue', sans-serif",
-                  fontSize: "1.0rem",
+                  fontSize: "1.1rem",
                   letterSpacing: "0.1em",
                   color: "rgba(255,255,255,0.88)",
                 }}>
@@ -252,10 +252,10 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   transition: "transform 0.15s ease, border-color 0.25s ease",
                 }}
               >
-                <Instagram size={16} style={{ color: "#D4AF37" }} />
+                <Instagram size={18} style={{ color: "#D4AF37" }} />
                 <span style={{
                   fontFamily: "'Bebas Neue', sans-serif",
-                  fontSize: "1.0rem",
+                  fontSize: "1.1rem",
                   letterSpacing: "0.1em",
                   color: "rgba(255,255,255,0.85)",
                 }}>Instagram</span>
@@ -283,12 +283,12 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   transition: "transform 0.15s ease, border-color 0.25s ease",
                 }}
               >
-                <svg width={16} height={16} viewBox="0 0 24 24" fill="#D4AF37" xmlns="http://www.w3.org/2000/svg">
+                <svg width={18} height={18} viewBox="0 0 24 24" fill="#D4AF37" xmlns="http://www.w3.org/2000/svg">
                   <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 0 0-.79-.05A6.34 6.34 0 0 0 3.15 15a6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V8.71a8.2 8.2 0 0 0 4.76 1.52v-3.4a4.85 4.85 0 0 1-1-.14z"/>
                 </svg>
                 <span style={{
                   fontFamily: "'Bebas Neue', sans-serif",
-                  fontSize: "1.0rem",
+                  fontSize: "1.1rem",
                   letterSpacing: "0.1em",
                   color: "rgba(255,255,255,0.85)",
                 }}>TikTok</span>
@@ -316,12 +316,12 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   transition: "transform 0.15s ease, border-color 0.25s ease",
                 }}
               >
-                <svg width={16} height={16} viewBox="0 0 24 24" fill="#D4AF37" xmlns="http://www.w3.org/2000/svg">
+                <svg width={18} height={18} viewBox="0 0 24 24" fill="#D4AF37" xmlns="http://www.w3.org/2000/svg">
                   <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
                 </svg>
                 <span style={{
                   fontFamily: "'Bebas Neue', sans-serif",
-                  fontSize: "1.0rem",
+                  fontSize: "1.1rem",
                   letterSpacing: "0.1em",
                   color: "rgba(255,255,255,0.85)",
                 }}>Facebook</span>
@@ -354,10 +354,10 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   transition: "transform 0.15s ease, border-color 0.25s ease",
                 }}
               >
-                <Home size={16} color="#D4AF37" />
+                <Home size={18} color="#D4AF37" />
                 <span style={{
                   fontFamily: "'Bebas Neue', sans-serif",
-                  fontSize: "1.0rem",
+                  fontSize: "1.1rem",
                   letterSpacing: "0.1em",
                   color: "rgba(255,255,255,0.85)",
                   lineHeight: 1,
@@ -384,10 +384,10 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   transition: "transform 0.15s ease, border-color 0.25s ease",
                 }}
               >
-                <Mail size={16} style={{ color: "#D4AF37" }} />
+                <Mail size={18} style={{ color: "#D4AF37" }} />
                 <span style={{
                   fontFamily: "'Bebas Neue', sans-serif",
-                  fontSize: "1.0rem",
+                  fontSize: "1.1rem",
                   letterSpacing: "0.1em",
                   color: "rgba(255,255,255,0.85)",
                   lineHeight: 1,
@@ -413,10 +413,10 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   transition: "transform 0.15s ease, border-color 0.25s ease",
                 }}
               >
-                <Share2 size={16} style={{ color: "#D4AF37" }} />
+                <Share2 size={18} style={{ color: "#D4AF37" }} />
                 <span style={{
                   fontFamily: "'Bebas Neue', sans-serif",
-                  fontSize: "1.0rem",
+                  fontSize: "1.1rem",
                   letterSpacing: "0.1em",
                   color: "rgba(255,255,255,0.85)",
                   lineHeight: 1,
@@ -434,6 +434,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
               letterSpacing: "0.05em",
               lineHeight: 1.6,
               color: "rgba(255,255,255,0.40)",
+              textAlign: "center",
             }}>
               For educational and informational purposes only. Not legal, tax, or investment advice.
               Consult a qualified entertainment attorney before making financing decisions.

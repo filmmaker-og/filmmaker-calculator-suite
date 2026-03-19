@@ -1,7 +1,6 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { useHaptics } from "@/hooks/use-haptics";
 import { SendHorizonal, RotateCcw, X, Sparkles } from "lucide-react";
-import filmmakerFIcon from "@/assets/filmmaker-f-icon.png";
 import { cn } from "@/lib/utils";
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -261,9 +260,24 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
           style={{ borderColor: "rgba(212,175,55,0.25)" }}
         >
           <div className="flex items-end justify-between">
-            <h2 className="font-bebas text-[32px] tracking-[0.12em] leading-none" style={{ color: "#D4AF37", textShadow: "0 0 20px rgba(212,175,55,0.25)" }}>
-              ASK THE OG
-            </h2>
+            <div className="flex items-center gap-3">
+              <div style={{
+                width: "32px",
+                height: "32px",
+                borderRadius: "8px",
+                background: "linear-gradient(135deg, rgb(75,30,130) 0%, rgb(110,50,170) 100%)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                boxShadow: "0 0 12px rgba(120,60,180,0.25)",
+                flexShrink: 0,
+              }}>
+                <Sparkles style={{ width: "18px", height: "18px", color: "#D4AF37", filter: "drop-shadow(0 0 3px rgba(212,175,55,0.40))" }} />
+              </div>
+              <h2 className="font-bebas text-[32px] tracking-[0.12em] leading-none" style={{ color: "#D4AF37", textShadow: "0 0 20px rgba(212,175,55,0.25)" }}>
+                ASK THE OG
+              </h2>
+            </div>
             <div className="flex items-center gap-3 pb-0.5">
               {ogMessages.length > 0 && (
                 <button
@@ -295,19 +309,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
           {/* Empty state — example chips with eyebrow */}
           {ogMessages.length === 0 && (
             <div className="flex flex-col items-center justify-center gap-5" style={{ minHeight: "100%" }}>
-              <div style={{
-                width: "48px",
-                height: "48px",
-                borderRadius: "10px",
-                background: "linear-gradient(135deg, rgb(75,30,130) 0%, rgb(110,50,170) 100%)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                boxShadow: "0 0 20px rgba(120,60,180,0.30)",
-              }}>
-                <Sparkles style={{ width: "26px", height: "26px", color: "#D4AF37", filter: "drop-shadow(0 0 4px rgba(212,175,55,0.40))" }} />
-              </div>
-              <span className="font-bebas text-[22px] tracking-[0.14em] uppercase" style={{ color: "rgb(180,140,255)" }}>
+              <span className="font-bebas text-[24px] tracking-[0.14em] uppercase" style={{ color: "rgb(180,140,255)" }}>
                 What do you want to know
               </span>
 
@@ -318,7 +320,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
                     key={chip}
                     onClick={() => handleAsk(chip)}
                     disabled={ogLoading}
-                    className="font-bebas text-[16px] tracking-[0.10em] px-5 py-3.5 transition-all disabled:opacity-40 disabled:cursor-not-allowed border"
+                    className="font-bebas text-[17px] tracking-[0.10em] px-5 py-3.5 transition-all disabled:opacity-40 disabled:cursor-not-allowed border"
                     onMouseEnter={e => {
                       e.currentTarget.style.borderColor = "rgba(120,60,180,0.40)";
                       e.currentTarget.style.background = "rgba(120,60,180,0.12)";
@@ -383,7 +385,18 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
                   <div className="px-5 py-5">
                     {/* Inline attribution header */}
                     <div className="flex items-center gap-2 mb-3">
-                      <img src={filmmakerFIcon} alt="OG" className="w-4 h-4 object-contain" />
+                      <div style={{
+                        width: "20px",
+                        height: "20px",
+                        borderRadius: "5px",
+                        background: "linear-gradient(135deg, rgb(75,30,130) 0%, rgb(110,50,170) 100%)",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        flexShrink: 0,
+                      }}>
+                        <Sparkles style={{ width: "12px", height: "12px", color: "#D4AF37" }} />
+                      </div>
                       <span className="font-bebas text-[15px] tracking-[0.15em] leading-none" style={{ color: "#D4AF37" }}>OG</span>
                       {msg.streaming && (
                         <div className="flex gap-1 ml-1">
@@ -449,6 +462,8 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
                   className="px-5 font-bebas tracking-wider transition-all flex items-center gap-2 flex-shrink-0 disabled:opacity-30 disabled:cursor-not-allowed"
                   onMouseEnter={e => !e.currentTarget.disabled && (e.currentTarget.style.opacity = "0.8")}
                   onMouseLeave={e => (e.currentTarget.style.opacity = "1")}
+                  onMouseDown={e => { e.currentTarget.style.transform = "scale(0.95)"; }}
+                  onMouseUp={e => { e.currentTarget.style.transform = "scale(1)"; }}
                   style={{ background: "linear-gradient(135deg, rgb(75,30,130) 0%, rgb(110,50,170) 100%)", color: "#fff", borderRadius: "0 7px 7px 0" }}
                 >
                 <SendHorizonal className="w-4 h-4" />
@@ -459,7 +474,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
                 "text-[11px] tabular-nums",
                 ogInput.length > 1350 ? "text-gold" : ""
               )}
-              style={ogInput.length <= 1350 ? { color: "rgba(120,60,180,0.50)" } : undefined}
+              style={ogInput.length <= 1350 ? { color: "rgba(212,175,55,0.40)" } : undefined}
             >
                 {ogInput.length}/1500
               </span>
