@@ -299,6 +299,127 @@ const s: Record<string, React.CSSProperties> = {
 
 
 /* ═══════════════════════════════════════════════════════════════════
+   TIER COLOR SYSTEM
+   ═══════════════════════════════════════════════════════════════════ */
+const tierStyles = {
+  gold: {
+    card: {
+      border: "none",
+      background: "radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.08) 0%, #0A0A0A 70%)",
+      boxShadow: "0 16px 40px rgba(0,0,0,0.6)",
+    },
+    gradientBorder: "linear-gradient(180deg, rgba(212,175,55,0.55) 0%, rgba(212,175,55,0.20) 50%, rgba(212,175,55,0.40) 100%)",
+    topline: {
+      height: "1px",
+      background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.50), transparent)",
+    },
+    headerBorder: "1px solid rgba(212,175,55,0.12)",
+    headerBg: undefined as string | undefined,
+    subdivider: "linear-gradient(90deg, transparent, rgba(212,175,55,0.12), transparent)",
+    featureCheck: { color: "#D4AF37", textShadow: "0 0 12px rgba(212,175,55,0.4)" },
+    pickThis: { color: "rgba(212,175,55,0.80)" },
+    price: { color: "#D4AF37" },
+    badge: { color: "#D4AF37", background: "rgba(212,175,55,0.08)", border: "1px solid rgba(212,175,55,0.35)" },
+    btn: "btnOutline" as const,
+    hoverLift: "-2px",
+  },
+  green: {
+    card: {
+      border: "none",
+      background: "radial-gradient(ellipse at 50% 0%, rgba(60,179,113,0.07) 0%, #0A0A0A 70%)",
+      boxShadow: "0 16px 40px rgba(0,0,0,0.5), 0 0 40px rgba(60,179,113,0.04)",
+    },
+    gradientBorder: "linear-gradient(180deg, rgba(60,179,113,0.50) 0%, rgba(60,179,113,0.20) 50%, rgba(60,179,113,0.35) 100%)",
+    topline: {
+      height: "1px",
+      background: "linear-gradient(90deg, transparent, rgba(60,179,113,0.50), transparent)",
+      boxShadow: "0 0 12px rgba(60,179,113,0.3)",
+    },
+    headerBorder: "1px solid rgba(60,179,113,0.12)",
+    headerBg: undefined as string | undefined,
+    subdivider: "linear-gradient(90deg, transparent, rgba(60,179,113,0.12), transparent)",
+    featureCheck: { color: "#3CB371", textShadow: "0 0 12px rgba(60,179,113,0.4)" },
+    pickThis: { color: "rgba(60,179,113,0.80)" },
+    price: { color: "#3CB371" },
+    badge: { color: "#3CB371", background: "rgba(60,179,113,0.08)", border: "1px solid rgba(60,179,113,0.30)" },
+    btn: "btnGreen" as const,
+    hoverLift: "-4px",
+  },
+  purple: {
+    card: {
+      border: "none",
+      background: "radial-gradient(ellipse at 50% 0%, rgba(120,60,180,0.08) 0%, rgba(212,175,55,0.04) 30%, #0A0A0A 70%)",
+      boxShadow: "0 16px 40px rgba(0,0,0,0.6)",
+    },
+    gradientBorder: "linear-gradient(180deg, rgba(212,175,55,0.45) 0%, rgba(212,175,55,0.15) 40%, rgba(120,60,180,0.30) 70%, rgba(120,60,180,0.50) 100%)",
+    topline: {
+      height: "2px",
+      background: "linear-gradient(90deg, transparent, rgba(120,60,180,0.50), rgba(212,175,55,0.40), transparent)",
+    },
+    headerBorder: "1px solid rgba(120,60,180,0.12)",
+    headerBg: undefined as string | undefined,
+    subdivider: "linear-gradient(90deg, transparent, rgba(120,60,180,0.12), transparent)",
+    featureCheck: { color: "rgb(160,100,255)", textShadow: "0 0 14px rgba(140,80,240,0.5)" },
+    pickThis: { color: "rgba(180,140,255,0.80)" },
+    price: {},
+    badge: { color: "rgb(180,140,255)", background: "rgba(120,60,180,0.10)", border: "1px solid rgba(120,60,180,0.35)" },
+    btn: "btnPurpleOutline" as const,
+    hoverLift: "-2px",
+  },
+  purpleTop: {
+    card: {
+      border: "none",
+      background: "radial-gradient(ellipse at 50% 0%, rgba(120,60,180,0.10) 0%, rgba(212,175,55,0.06) 30%, #0A0A0A 70%)",
+      boxShadow: "0 16px 40px rgba(0,0,0,0.8), 0 0 60px rgba(120,60,180,0.10), 0 0 120px rgba(212,175,55,0.06)",
+    },
+    gradientBorder: "linear-gradient(180deg, rgb(110,50,170) 0%, rgba(120,60,180,0.5) 30%, rgba(212,175,55,0.4) 70%, #D4AF37 100%)",
+    topline: {
+      height: "3px",
+      background: "linear-gradient(90deg, transparent, rgb(110,50,170), #D4AF37, transparent)",
+    },
+    headerBorder: "1px solid rgba(120,60,180,0.15)",
+    headerBg: "radial-gradient(ellipse at 50% 100%, rgba(120,60,180,0.06) 0%, transparent 70%)",
+    subdivider: "linear-gradient(90deg, transparent, rgba(120,60,180,0.15), transparent)",
+    featureCheck: { color: "rgb(160,100,255)", textShadow: "0 0 14px rgba(140,80,240,0.5)" },
+    pickThis: { color: "rgba(180,140,255,0.80)" },
+    price: {},
+    badge: { color: "rgb(180,140,255)", background: "rgba(120,60,180,0.10)", border: "1px solid rgba(120,60,180,0.35)", boxShadow: "0 0 12px rgba(120,60,180,0.10)" },
+    btn: "btnPurple" as const,
+    hoverLift: "-4px",
+  },
+};
+
+const getTier = (product: Product) => {
+  if (product.id === "the-full-analysis") return tierStyles.gold;
+  if (product.id === "comp-report") return tierStyles.green;
+  if (product.id === "boutique") return tierStyles.purpleTop;
+  if (product.category === "service") return tierStyles.purple;
+  return tierStyles.gold; // fallback
+};
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   GRADIENT BORDER (CSS-mask technique)
+   ═══════════════════════════════════════════════════════════════════ */
+const GradientBorder = ({ gradient }: { gradient: string }) => (
+  <div
+    style={{
+      position: "absolute",
+      inset: 0,
+      borderRadius: "12px",
+      padding: "1px",
+      pointerEvents: "none",
+      background: gradient,
+      WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+      WebkitMaskComposite: "xor",
+      maskComposite: "exclude",
+      zIndex: 1,
+    } as React.CSSProperties}
+  />
+);
+
+
+/* ═══════════════════════════════════════════════════════════════════
    SHIMMER KEYFRAMES (injected once)
    ═══════════════════════════════════════════════════════════════════ */
 const shimmerCSS = `
@@ -606,17 +727,20 @@ const ProductCard = ({
   const [hovered, setHovered] = useState(false);
   const haptics = useHaptics();
   const isComp = product.id === "comp-report";
+  const tier = getTier(product);
 
   const cardStyle: React.CSSProperties = {
     ...s.cardBase,
+    ...tier.card,
     opacity: visible ? 1 : 0,
     transform: visible
-      ? (hovered ? "translateY(-2px)" : "translateY(0)")
+      ? (hovered ? `translateY(${tier.hoverLift})` : "translateY(0)")
       : "translateY(20px)",
-    transition: "opacity 700ms ease-out, transform 400ms ease-out, border-color 0.3s ease",
+    transition: "opacity 700ms ease-out, transform 400ms ease-out, box-shadow 0.3s ease",
     transitionDelay: visible ? `${index * 120}ms` : "0ms",
-    borderColor: hovered ? "rgba(212,175,55,0.25)" : undefined,
   };
+
+  const z2: React.CSSProperties = { position: "relative", zIndex: 2 };
 
   return (
     <div
@@ -624,26 +748,32 @@ const ProductCard = ({
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
+      {/* Gradient border overlay */}
+      <GradientBorder gradient={tier.gradientBorder} />
+
+      {/* Topline */}
+      <div style={{ ...tier.topline, ...z2 }} />
+
       {/* Header */}
-      <div style={s.cardHeader}>
+      <div style={{ ...s.cardHeader, borderBottom: tier.headerBorder, ...z2 }}>
         {product.badge && (
           <div style={{ marginBottom: "12px" }}>
-            <span style={getBadgeStyle(product.badge)}>{product.badge}</span>
+            <span style={{ ...s.badgeBase, ...tier.badge }}>{product.badge}</span>
           </div>
         )}
         <h3 style={s.cardName}>{product.name.toUpperCase()}</h3>
         {product.pickThisIf && (
-          <p style={s.pickThisIf}>Pick this one if {product.pickThisIf}</p>
+          <p style={{ ...s.pickThisIf, ...tier.pickThis }}>Pick this one if {product.pickThisIf}</p>
         )}
       </div>
 
       {/* Price block */}
-      <div style={s.priceBlock}>
+      <div style={{ ...s.priceBlock, ...z2 }}>
         {isComp ? (
           <CompPricingBlock />
         ) : (
           <>
-            <span style={s.priceStandard}>
+            <span style={{ ...s.priceStandard, ...tier.price }}>
               ${product.price.toLocaleString()}
             </span>
             {product.priceNote && (
@@ -657,23 +787,23 @@ const ProductCard = ({
       </div>
 
       {/* Subdivider */}
-      <div style={s.subdivider} />
+      <div style={{ ...s.subdivider, background: tier.subdivider, ...z2 }} />
 
       {/* Features */}
-      <div style={s.featuresBlock}>
+      <div style={{ ...s.featuresBlock, ...z2 }}>
         {product.features.map((feature) => (
           <div key={feature} style={s.featureRow}>
-            <span style={s.featureCheck}>✓</span>
+            <span style={{ ...s.featureCheck, ...tier.featureCheck }}>✓</span>
             <span style={s.featureText}>{feature}</span>
           </div>
         ))}
       </div>
 
       {/* Action */}
-      <div style={s.actionBlock}>
+      <div style={{ ...s.actionBlock, ...z2 }}>
         <button
           onClick={(e) => { haptics.medium(e); onBuy(); }}
-          style={isComp ? s.btnGreen : s.btnOutline}
+          style={isComp ? s.btnGreen : s[tier.btn]}
           onMouseDown={(e) => { (e.currentTarget.style.transform = "scale(0.98)"); }}
           onMouseUp={(e) => { (e.currentTarget.style.transform = "scale(1)"); }}
         >
@@ -723,17 +853,20 @@ const ServiceCard = ({
 }) => {
   const [hovered, setHovered] = useState(false);
   const haptics = useHaptics();
+  const tier = getTier(product);
 
   const cardStyle: React.CSSProperties = {
     ...s.cardBase,
+    ...tier.card,
     opacity: visible ? 1 : 0,
     transform: visible
-      ? (hovered ? "translateY(-2px)" : "translateY(0)")
+      ? (hovered ? `translateY(${tier.hoverLift})` : "translateY(0)")
       : "translateY(20px)",
-    transition: "opacity 700ms ease-out, transform 400ms ease-out, border-color 0.3s ease",
+    transition: "opacity 700ms ease-out, transform 400ms ease-out, box-shadow 0.3s ease",
     transitionDelay: visible ? `${index * 120}ms` : "0ms",
-    borderColor: hovered ? "rgba(212,175,55,0.25)" : undefined,
   };
+
+  const z2: React.CSSProperties = { position: "relative", zIndex: 2 };
 
   return (
     <div
@@ -741,22 +874,33 @@ const ServiceCard = ({
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
+      {/* Gradient border overlay */}
+      <GradientBorder gradient={tier.gradientBorder} />
+
+      {/* Topline */}
+      <div style={{ ...tier.topline, ...z2 }} />
+
       {/* Header */}
-      <div style={s.cardHeader}>
+      <div style={{
+        ...s.cardHeader,
+        borderBottom: tier.headerBorder,
+        ...(tier.headerBg ? { background: tier.headerBg } : {}),
+        ...z2,
+      }}>
         {product.badge && (
           <div style={{ marginBottom: "12px" }}>
-            <span style={getBadgeStyle(product.badge)}>{product.badge}</span>
+            <span style={{ ...s.badgeBase, ...tier.badge }}>{product.badge}</span>
           </div>
         )}
         <h3 style={s.cardName}>{product.name.toUpperCase()}</h3>
         {product.pickThisIf && (
-          <p style={s.pickThisIf}>Pick this one if {product.pickThisIf}</p>
+          <p style={{ ...s.pickThisIf, ...tier.pickThis }}>Pick this one if {product.pickThisIf}</p>
         )}
       </div>
 
       {/* Price block + turnaround */}
-      <div style={s.priceBlock}>
-        <span style={s.priceStandard}>
+      <div style={{ ...s.priceBlock, ...z2 }}>
+        <span style={{ ...s.priceStandard, ...tier.price }}>
           ${product.price.toLocaleString()}
         </span>
         {product.priceNote && (
@@ -776,23 +920,23 @@ const ServiceCard = ({
       </div>
 
       {/* Subdivider */}
-      <div style={s.subdivider} />
+      <div style={{ ...s.subdivider, background: tier.subdivider, ...z2 }} />
 
       {/* Features */}
-      <div style={s.featuresBlock}>
+      <div style={{ ...s.featuresBlock, ...z2 }}>
         {product.features.map((feature) => (
           <div key={feature} style={s.featureRow}>
-            <span style={s.featureCheck}>✓</span>
+            <span style={{ ...s.featureCheck, ...tier.featureCheck }}>✓</span>
             <span style={s.featureText}>{feature}</span>
           </div>
         ))}
       </div>
 
       {/* Action */}
-      <div style={s.actionBlock}>
+      <div style={{ ...s.actionBlock, ...z2 }}>
         <button
           onClick={(e) => { haptics.medium(e); onBuy(); }}
-          style={s.btnOutline}
+          style={s[tier.btn]}
           onMouseDown={(e) => { (e.currentTarget.style.transform = "scale(0.98)"); }}
           onMouseUp={(e) => { (e.currentTarget.style.transform = "scale(1)"); }}
         >
