@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef } from "react";
-import { Check, Mail, X as XIcon, Clock, ChevronDown } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Mail, X as XIcon, Clock, ChevronDown } from "lucide-react";
 
 import { useHaptics } from "@/hooks/use-haptics";
 import { useInView } from "@/hooks/useInView";
@@ -460,24 +460,6 @@ const EyebrowRuled = ({ text }: { text: string }) => (
 
 
 /* ═══════════════════════════════════════════════════════════════════
-   BREATH LINE
-   ═══════════════════════════════════════════════════════════════════ */
-const BreathLine = () => (
-  <div style={{ padding: "32px 0" }}>
-    <div
-      style={{
-        height: "1px",
-        background:
-          "linear-gradient(90deg, transparent 5%, rgba(212,175,55,0.35) 50%, transparent 95%)",
-        boxShadow: "0 0 12px rgba(212,175,55,0.2)",
-        margin: "0 24px",
-      }}
-    />
-  </div>
-);
-
-
-/* ═══════════════════════════════════════════════════════════════════
    COMP PRICING BLOCK
    ═══════════════════════════════════════════════════════════════════ */
 const CompPricingBlock = () => (
@@ -565,7 +547,7 @@ const WorkingModelPopup = ({
       }}>
         <span style={{
           display: "inline-block",
-          padding: "4px 12px",
+          padding: "6px 12px",
           background: "rgba(212,175,55,0.08)",
           border: "1px solid rgba(212,175,55,0.3)",
           color: "#D4AF37",
@@ -581,9 +563,9 @@ const WorkingModelPopup = ({
         </span>
         <h3 style={{
           fontFamily: "'Bebas Neue', sans-serif",
-          fontSize: "26px",
+          fontSize: "2.2rem",
           letterSpacing: "0.06em",
-          color: "rgba(255,255,255,0.95)",
+          color: "#fff",
           lineHeight: 1.1,
           margin: 0,
         }}>
@@ -608,7 +590,7 @@ const WorkingModelPopup = ({
               fontFamily: "'Roboto Mono', monospace",
               fontSize: "1.8rem",
               fontWeight: 600,
-              color: "rgba(255,255,255,0.95)",
+              color: "#fff",
             }}>
               $79
             </span>
@@ -630,18 +612,18 @@ const WorkingModelPopup = ({
         </div>
 
         {/* Divider */}
-        <div style={{ height: "1px", background: "rgba(255,255,255,0.06)", marginBottom: "16px" }} />
+        <div style={{ height: "1px", background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.12), transparent)", marginBottom: "16px" }} />
 
         {/* Feature list */}
-        <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: "10px", marginBottom: "16px" }}>
+        <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: "16px", marginBottom: "16px" }}>
           {[
             "Formula-driven Excel engine",
             "Change any input \u2014 everything recalculates",
             "Reusable across unlimited projects",
           ].map((feat) => (
-            <li key={feat} style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
-              <Check style={{ width: "14px", height: "14px", marginTop: "2px", flexShrink: 0, color: "#3CB371" }} />
-              <span style={{ fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "rgba(255,255,255,0.85)", lineHeight: 1.5 }}>
+            <li key={feat} style={{ display: "flex", alignItems: "flex-start", gap: "14px" }}>
+              <span style={{ fontSize: "20px", color: "#3CB371", flexShrink: 0, marginTop: "1px", fontFamily: "'Roboto Mono', monospace", textShadow: "0 0 12px rgba(60,179,113,0.4)" }}>✓</span>
+              <span style={{ fontFamily: "'Inter', sans-serif", fontSize: "18px", fontWeight: 500, color: "#fff", lineHeight: 1.3 }}>
                 {feat}
               </span>
             </li>
@@ -656,7 +638,7 @@ const WorkingModelPopup = ({
             style={{
               ...s.btnCta,
               height: "52px",
-              fontSize: "15px",
+              fontSize: "16px",
               opacity: loading ? 0.7 : 1,
             }}
             onMouseDown={(e) => { (e.currentTarget.style.transform = "scale(0.98)"); }}
@@ -671,7 +653,7 @@ const WorkingModelPopup = ({
               background: "none", border: "none", cursor: "pointer",
               color: "rgba(255,255,255,0.55)",
               fontFamily: "'Inter', sans-serif",
-              fontSize: "13px",
+              fontSize: "14px",
               letterSpacing: "0.04em",
               padding: "8px",
               transition: "color 0.2s",
@@ -684,27 +666,6 @@ const WorkingModelPopup = ({
     </div>
   </div>
   );
-};
-
-
-/* ═══════════════════════════════════════════════════════════════════
-   BADGE RENDERER
-   ═══════════════════════════════════════════════════════════════════ */
-const getBadgeStyle = (badge: string | null): React.CSSProperties => {
-  if (!badge) return {};
-  const base = { ...s.badgeBase };
-  switch (badge) {
-    case "DATA":
-      return { ...base, color: "#3CB371", background: "rgba(60,179,113,0.06)", border: "1px solid rgba(60,179,113,0.25)" };
-    case "TURNKEY":
-      return { ...base, background: "rgba(212,175,55,0.08)", border: "1px solid rgba(212,175,55,0.35)" };
-    case "CUSTOM":
-      return { ...base, background: "rgba(212,175,55,0.12)", border: "1px solid rgba(212,175,55,0.50)", boxShadow: "0 0 12px rgba(212,175,55,0.10)" };
-    case "ADD-ON":
-      return { ...base, color: "rgba(255,255,255,0.70)", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.12)" };
-    default:
-      return { ...base, background: "transparent", border: "1px solid rgba(212,175,55,0.25)" };
-  }
 };
 
 
@@ -1221,7 +1182,7 @@ const Store = () => {
       >
         <div style={{
           position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
-          background: "radial-gradient(ellipse 80% 50% at 50% 60%, rgba(212,175,55,0.10) 0%, transparent 70%)",
+          background: "radial-gradient(ellipse 80% 50% at 50% 60%, rgba(60,179,113,0.08) 0%, transparent 70%)",
           pointerEvents: "none",
         }} />
         <div style={{ position: "relative", ...reveal(turnkeyHeroVisible) }}>
@@ -1321,8 +1282,15 @@ const Store = () => {
         ))}
       </div>
 
-      {/* ── Breath Line ── */}
-      <BreathLine />
+      {/* ── Breath Line (tightened: §3→§4) ── */}
+      <div style={{ padding: "24px 0" }}>
+        <div style={{
+          height: "1px",
+          background: "linear-gradient(90deg, transparent 5%, rgba(212,175,55,0.35) 50%, transparent 95%)",
+          boxShadow: "0 0 12px rgba(212,175,55,0.2)",
+          margin: "0 24px",
+        }} />
+      </div>
 
       {/* ═══════════════════════════════════════
            § 4 — FAQ
@@ -1364,8 +1332,15 @@ const Store = () => {
         </div>
       </section>
 
-      {/* ── Breath Line ── */}
-      <BreathLine />
+      {/* ── Breath Line (compressed: §4→CTA) ── */}
+      <div style={{ padding: "16px 0" }}>
+        <div style={{
+          height: "1px",
+          background: "linear-gradient(90deg, transparent 5%, rgba(212,175,55,0.35) 50%, transparent 95%)",
+          boxShadow: "0 0 12px rgba(212,175,55,0.2)",
+          margin: "0 24px",
+        }} />
+      </div>
 
       {/* ═══════════════════════════════════════
            BESPOKE CLOSER
@@ -1458,7 +1433,7 @@ const Store = () => {
           </a>
         </div>
         <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "10px", marginBottom: "16px" }}>
-          <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "12px", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(212,175,55,0.35)", cursor: "pointer" }}>Shop</span>
+          <span onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "12px", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(212,175,55,0.35)", cursor: "pointer" }}>Shop</span>
           <span style={{ color: "rgba(212,175,55,0.20)", fontSize: "12px" }}>·</span>
           <span onClick={() => window.location.href = "/resources"} style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "12px", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(212,175,55,0.35)", cursor: "pointer" }}>Resources</span>
         </div>
