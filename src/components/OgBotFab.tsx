@@ -57,8 +57,8 @@ const OgBotFab = ({ onTap }: OgBotFabProps) => {
         style={{
           width: "28px",
           height: "28px",
-          color: "#fff",
-          filter: "drop-shadow(0 0 6px rgba(255,255,255,0.30))",
+          color: "#D4AF37",
+          filter: "drop-shadow(0 0 6px rgba(212,175,55,0.40))",
         }}
       />
     </button>

@@ -18,9 +18,9 @@ type AiMessage = {
 };
 
 const EXAMPLE_CHIPS = [
-  "What is a waterfall?",
-  "How does gap financing work?",
-  "What is a CAM?",
+  "How do I model my deal?",
+  "What package is right for me?",
+  "What is a recoupment waterfall?",
 ];
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
@@ -215,11 +215,11 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
           isOpen ? "translate-y-0" : "translate-y-full"
         )}
         style={{
-          height: "min(72vh, 580px)",
+          height: "min(75vh, 620px)",
           paddingBottom: "calc(var(--bottom-bar-h) + env(safe-area-inset-bottom))",
           background: "#000",
-          borderRadius: "8px 8px 0 0",
-          boxShadow: "0 -20px 60px rgba(212,175,55,0.08), 0 -40px 80px rgba(0,0,0,0.95)",
+          borderRadius: "12px 12px 0 0",
+          boxShadow: "0 -20px 60px rgba(120,60,180,0.12), 0 -40px 80px rgba(0,0,0,0.95)",
         }}
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
@@ -228,32 +228,32 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
         <div
           className="absolute top-0 left-0 right-0 h-[1px] pointer-events-none z-10"
           style={{
-            background: "linear-gradient(to right, transparent 0%, rgba(212,175,55,0.25) 30%, rgba(212,175,55,0.25) 70%, transparent 100%)",
-            borderRadius: "8px 8px 0 0",
+            background: "linear-gradient(to right, transparent 0%, rgba(120,60,180,0.35) 30%, rgba(120,60,180,0.35) 70%, transparent 100%)",
+            borderRadius: "12px 12px 0 0",
           }}
         />
 
         {/* Drag handle */}
-        <div className="flex justify-center pt-3 pb-1 flex-shrink-0">
-          <div className="w-10 h-[3px] rounded-full" style={{ background: "rgba(255,255,255,0.15)" }} />
+        <div className="flex justify-center pt-3 pb-2 flex-shrink-0">
+          <div className="w-10 h-[3px] rounded-full" style={{ background: "rgba(255,255,255,0.20)" }} />
         </div>
 
         {/* ── Sheet header ── */}
         <div
-          className="px-5 pt-3 pb-4 flex-shrink-0 border-b"
-          style={{ borderColor: "rgba(212,175,55,0.15)" }}
+          className="px-6 pt-3 pb-5 flex-shrink-0 border-b"
+          style={{ borderColor: "rgba(120,60,180,0.15)" }}
         >
           <div className="flex items-end justify-between">
-            <h2 className="font-bebas text-[28px] tracking-[0.15em] leading-none text-gold">
+            <h2 className="font-bebas text-[32px] tracking-[0.12em] leading-none text-white">
               ASK THE OG
             </h2>
             <div className="flex items-center gap-3 pb-0.5">
               {ogMessages.length > 0 && (
                 <button
                   onClick={handleReset}
-                  className="flex items-center gap-1.5 font-bebas text-[11px] uppercase tracking-[0.15em] transition-colors tabular-nums"
+                  className="flex items-center gap-1.5 font-bebas text-[12px] uppercase tracking-[0.15em] transition-colors tabular-nums"
                   style={{ color: "rgba(255,255,255,0.40)" }}
-                  onMouseEnter={e => (e.currentTarget.style.color = "rgba(212,175,55,0.25)")}
+                  onMouseEnter={e => (e.currentTarget.style.color = "rgba(120,60,180,0.50)")}
                   onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,0.40)")}
                 >
                   <RotateCcw className="w-3 h-3" />
@@ -274,44 +274,44 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
         </div>
 
         {/* Messages area */}
-        <div className="flex-1 overflow-y-auto px-5 py-4 space-y-5">
+        <div className="flex-1 overflow-y-auto px-6 py-5 space-y-6">
           {/* Empty state — example chips with eyebrow */}
           {ogMessages.length === 0 && (
             <div className="flex flex-col items-center gap-5 pt-3">
-              <span className="font-bebas text-[20px] tracking-[0.16em] uppercase" style={{ color: "rgba(255,255,255,0.40)" }}>
+              <span className="font-bebas text-[22px] tracking-[0.14em] uppercase" style={{ color: "rgba(255,255,255,0.50)" }}>
                 What do you want to know
               </span>
 
               {/* Chips */}
-              <div className="flex flex-wrap gap-2.5 justify-center">
+              <div className="flex flex-wrap gap-3 justify-center">
                 {EXAMPLE_CHIPS.map(chip => (
                   <button
                     key={chip}
                     onClick={() => handleAsk(chip)}
                     disabled={ogLoading}
-                    className="font-bebas text-[15px] tracking-[0.10em] px-5 py-3 transition-all disabled:opacity-40 disabled:cursor-not-allowed border"
+                    className="font-bebas text-[16px] tracking-[0.10em] px-5 py-3.5 transition-all disabled:opacity-40 disabled:cursor-not-allowed border"
                     onMouseEnter={e => {
-                      e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)";
-                      e.currentTarget.style.background = "rgba(212,175,55,0.08)";
+                      e.currentTarget.style.borderColor = "rgba(120,60,180,0.30)";
+                      e.currentTarget.style.background = "rgba(120,60,180,0.08)";
                       e.currentTarget.style.color = "#FFFFFF";
                     }}
                     onMouseLeave={e => {
-                      e.currentTarget.style.borderColor = "rgba(212,175,55,0.15)";
-                      e.currentTarget.style.background = "rgba(212,175,55,0.03)";
+                      e.currentTarget.style.borderColor = "rgba(120,60,180,0.15)";
+                      e.currentTarget.style.background = "rgba(120,60,180,0.03)";
                       e.currentTarget.style.color = "rgba(255,255,255,0.70)";
                     }}
                     onTouchStart={e => {
-                      e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)";
-                      e.currentTarget.style.background = "rgba(212,175,55,0.08)";
+                      e.currentTarget.style.borderColor = "rgba(120,60,180,0.30)";
+                      e.currentTarget.style.background = "rgba(120,60,180,0.08)";
                     }}
                     onTouchEnd={e => {
-                      e.currentTarget.style.borderColor = "rgba(212,175,55,0.15)";
-                      e.currentTarget.style.background = "rgba(212,175,55,0.03)";
+                      e.currentTarget.style.borderColor = "rgba(120,60,180,0.15)";
+                      e.currentTarget.style.background = "rgba(120,60,180,0.03)";
                     }}
                     style={{
-                      borderRadius: "4px",
-                      borderColor: "rgba(212,175,55,0.15)",
-                      background: "rgba(212,175,55,0.03)",
+                      borderRadius: "6px",
+                      borderColor: "rgba(120,60,180,0.15)",
+                      background: "rgba(120,60,180,0.03)",
                       color: "rgba(255,255,255,0.70)",
                     }}
                   >
@@ -330,12 +330,12 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
                 <div
                   className="relative max-w-[85%] px-4 py-3 border overflow-hidden"
                   style={{
-                    borderRadius: "6px",
-                    background: "rgba(255,255,255,0.06)",
-                    borderColor: "rgba(212,175,55,0.15)",
+                    borderRadius: "8px",
+                    background: "rgba(120,60,180,0.08)",
+                    borderColor: "rgba(120,60,180,0.12)",
                   }}
                 >
-                  <p className="text-base text-white leading-relaxed">{msg.question}</p>
+                  <p className="text-[18px] text-white leading-relaxed">{msg.question}</p>
                 </div>
               </div>
 
@@ -344,30 +344,30 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
                 <div
                   className="max-w-[95%] border overflow-hidden"
                   style={{
-                    borderRadius: "6px",
+                    borderRadius: "8px",
                     background: "#000",
-                    borderColor: "rgba(212,175,55,0.15)",
-                    boxShadow: "0 0 30px rgba(212,175,55,0.08)",
+                    borderColor: "rgba(120,60,180,0.15)",
+                    boxShadow: "0 0 30px rgba(120,60,180,0.10)",
                   }}
                 >
                   {/* Answer body */}
-                  <div className="px-4 py-4">
+                  <div className="px-5 py-5">
                     {/* Inline attribution header */}
                     <div className="flex items-center gap-2 mb-3">
                       <img src={filmmakerFIcon} alt="OG" className="w-4 h-4 object-contain" />
-                      <span className="font-bebas text-[14px] tracking-[0.14em] leading-none text-gold">OG</span>
+                      <span className="font-bebas text-[15px] tracking-[0.15em] leading-none" style={{ color: "rgb(180,140,255)" }}>OG</span>
                       {msg.streaming && (
                         <div className="flex gap-1 ml-1">
-                          <div className="w-1.5 h-1.5 rounded-full animate-bounce" style={{ background: "rgba(212,175,55,0.25)", animationDelay: "0ms" }} />
-                          <div className="w-1.5 h-1.5 rounded-full animate-bounce" style={{ background: "rgba(212,175,55,0.25)", animationDelay: "150ms" }} />
-                          <div className="w-1.5 h-1.5 rounded-full animate-bounce" style={{ background: "rgba(212,175,55,0.25)", animationDelay: "300ms" }} />
+                          <div className="w-1.5 h-1.5 rounded-full animate-bounce" style={{ background: "rgba(120,60,180,0.40)", animationDelay: "0ms" }} />
+                          <div className="w-1.5 h-1.5 rounded-full animate-bounce" style={{ background: "rgba(120,60,180,0.40)", animationDelay: "150ms" }} />
+                          <div className="w-1.5 h-1.5 rounded-full animate-bounce" style={{ background: "rgba(120,60,180,0.40)", animationDelay: "300ms" }} />
                         </div>
                       )}
                     </div>
                     {msg.error ? (
-                      <p className="text-[15px] leading-relaxed" style={{ color: "rgba(255,255,255,0.40)" }}>{msg.error}</p>
+                      <p className="text-[16px] leading-relaxed" style={{ color: "rgba(255,255,255,0.50)" }}>{msg.error}</p>
                     ) : (
-                      <p className="text-base text-white leading-[1.8] whitespace-pre-wrap">
+                      <p className="text-[18px] text-white leading-[1.75] whitespace-pre-wrap">
                         {msg.answer}
                         {msg.streaming && !msg.answer && (
                           <span style={{ color: "rgba(255,255,255,0.40)" }}>Thinking…</span>
@@ -384,18 +384,18 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
 
         {/* Input area */}
         <div
-          className="px-4 pb-3 pt-3 flex-shrink-0 border-t"
-          style={{ borderColor: "rgba(212,175,55,0.15)", background: "#000" }}
+          className="px-5 pb-4 pt-3 flex-shrink-0 border-t"
+          style={{ borderColor: "rgba(120,60,180,0.15)", background: "#000" }}
         >
           <form onSubmit={handleOgSubmit}>
             <div
               className="flex gap-0 transition-colors"
               style={{
-                borderRadius: "6px",
-                border: "1px solid rgba(212,175,55,0.15)",
+                borderRadius: "8px",
+                border: "1px solid rgba(120,60,180,0.15)",
               }}
-              onFocus={e => (e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)")}
-              onBlur={e => (e.currentTarget.style.borderColor = "rgba(212,175,55,0.15)")}
+              onFocus={e => (e.currentTarget.style.borderColor = "rgba(120,60,180,0.35)")}
+              onBlur={e => (e.currentTarget.style.borderColor = "rgba(120,60,180,0.15)")}
             >
               <textarea
                 ref={inputRef}
@@ -407,9 +407,9 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
                 placeholder="Ask a film industry question…"
                 rows={2}
                 disabled={ogLoading}
-                className="flex-1 px-4 py-3 focus:outline-none text-base text-white resize-none disabled:opacity-50 min-h-[52px]"
+                className="flex-1 px-4 py-3 focus:outline-none text-[18px] text-white resize-none disabled:opacity-50 min-h-[56px]"
                 style={{
-                  borderRadius: "6px 0 0 6px",
+                  borderRadius: "8px 0 0 8px",
                   background: "transparent",
                   color: "#FFFFFF",
                 }}
@@ -420,14 +420,14 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
                   className="px-5 font-bebas tracking-wider transition-all flex items-center gap-2 flex-shrink-0 disabled:opacity-30 disabled:cursor-not-allowed"
                   onMouseEnter={e => !e.currentTarget.disabled && (e.currentTarget.style.opacity = "0.8")}
                   onMouseLeave={e => (e.currentTarget.style.opacity = "1")}
-                  style={{ background: "#D4AF37", color: "#000", borderRadius: "0 5px 5px 0" }}
+                  style={{ background: "linear-gradient(135deg, rgb(75,30,130) 0%, rgb(110,50,170) 100%)", color: "#fff", borderRadius: "0 7px 7px 0" }}
                 >
                 <SendHorizonal className="w-4 h-4" />
               </button>
             </div>
             <div className="flex items-center justify-end mt-1.5 px-1">
               <span className={cn(
-                "text-[10px] tabular-nums",
+                "text-[11px] tabular-nums",
                 ogInput.length > 1350 ? "text-gold" : "text-ink-secondary"
               )}>
                 {ogInput.length}/1500
