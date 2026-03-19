@@ -173,7 +173,7 @@ const Index = () => {
       <style>{`
         @keyframes lp-shimmer {
           0% { left: -100%; }
-          20% { left: 200%; }
+          30% { left: 200%; }
           100% { left: 200%; }
         }
       `}</style>
@@ -190,7 +190,7 @@ const Index = () => {
               <em style={styles.heroEm}>Waterfall</em>
             </h1>
             <p style={styles.heroSub}>Your Deal Structure Begins Here.</p>
-            <div style={styles.heroCard}>
+            <div style={{ margin: "8px 24px 0" }}>
               <button onClick={handleCTA} style={styles.ctaBtn} onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>
                 <span style={{ position: "relative", zIndex: 1 }}>RUN MY WATERFALL</span>
                 <div style={styles.ctaShimmer} />
@@ -566,9 +566,9 @@ const styles: Record<string, React.CSSProperties> = {
   },
   ctaShimmer: {
     position: "absolute", top: 0, left: "-100%", width: "55%", height: "100%",
-    background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.28), transparent)",
+    background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent)",
     transform: "skewX(-20deg)",
-    animation: "lp-shimmer 3s cubic-bezier(0.16, 1, 0.3, 1) infinite",
+    animation: "lp-shimmer 2.5s ease-in-out infinite",
   },
 
   /* ── § 1 HERO ── */
@@ -595,14 +595,6 @@ const styles: Record<string, React.CSSProperties> = {
     fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.5rem", textAlign: "center",
     marginBottom: "28px", lineHeight: 1.1, color: "#fff",
     marginTop: "8px", textShadow: "0 2px 12px rgba(0,0,0,0.9)",
-  },
-  heroCard: {
-    position: "relative",
-    border: "1px solid rgba(212,175,55,0.45)",
-    borderRadius: "12px",
-    padding: "16px 20px",
-    background: "rgba(0,0,0,0.75)",
-    margin: "8px 24px 0",
   },
 
   /* ── § 2 HOW IT WORKS ── */

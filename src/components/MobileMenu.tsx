@@ -129,8 +129,8 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
           {onOpenBot && (
             <button
               onClick={() => { haptics.medium(); onOpenBot(); }}
-              onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; }}
-              onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
+              onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; e.currentTarget.style.boxShadow = "0 0 30px rgba(120,60,180,0.50), 0 0 60px rgba(120,60,180,0.20)"; }}
+              onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.boxShadow = "0 0 20px rgba(120,60,180,0.30), 0 0 50px rgba(120,60,180,0.10)"; }}
               style={{
                 width: "100%",
                 display: "flex",
@@ -147,7 +147,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                 transition: "transform 0.15s ease, box-shadow 0.3s ease",
               }}
             >
-              <Sparkles style={{ width: "20px", height: "20px", color: "#fff", filter: "drop-shadow(0 0 6px rgba(255,255,255,0.30))" }} />
+              <Sparkles style={{ width: "20px", height: "20px", color: "#D4AF37", filter: "drop-shadow(0 0 6px rgba(212,175,55,0.40))" }} />
               <span style={{
                 fontFamily: "'Bebas Neue', sans-serif",
                 fontSize: "1.4rem",

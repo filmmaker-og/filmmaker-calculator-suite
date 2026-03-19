@@ -5,8 +5,8 @@ import { useHaptics } from "@/hooks/use-haptics";
 
 /* ═══════════════════════════════════════════════════════════════════
    OgBotFab — floating action button for the OG bot
-   Bottom-right corner. Hidden on /calculator (overlaps TabBar)
-   and when closer section is in viewport on the landing page.
+   Bottom-right corner. Repositioned above TabBar on /calculator.
+   Hidden when closer section is in viewport on the landing page.
    ═══════════════════════════════════════════════════════════════════ */
 
 interface OgBotFabProps {
@@ -17,9 +17,6 @@ const OgBotFab = ({ onTap }: OgBotFabProps) => {
   const haptics = useHaptics();
   const location = useLocation();
   const [hiddenByCloser, setHiddenByCloser] = useState(false);
-
-  // Hide on calculator — FAB overlaps TabBar
-  const onCalculator = location.pathname.startsWith("/calculator");
 
   useEffect(() => {
     const closer = document.querySelector('[data-section="closer"]');
@@ -33,14 +30,15 @@ const OgBotFab = ({ onTap }: OgBotFabProps) => {
     return () => obs.disconnect();
   }, []);
 
-  const hidden = onCalculator || hiddenByCloser;
+  const onCalculator = location.pathname.startsWith("/calculator");
+  const hidden = hiddenByCloser;
 
   return (
     <button
       onClick={() => { haptics.medium(); onTap?.(); }}
       className="fixed z-[140] flex items-center justify-center active:scale-90 transition-all duration-300"
       style={{
-        bottom: "calc(20px + env(safe-area-inset-bottom))",
+        bottom: onCalculator ? "calc(82px + env(safe-area-inset-bottom))" : "calc(20px + env(safe-area-inset-bottom))",
         right: "20px",
         width: "52px",
         height: "52px",
