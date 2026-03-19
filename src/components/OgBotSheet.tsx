@@ -316,7 +316,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
                     onMouseLeave={e => {
                       e.currentTarget.style.borderColor = "rgba(120,60,180,0.25)";
                       e.currentTarget.style.background = "rgba(120,60,180,0.06)";
-                      e.currentTarget.style.color = "rgba(180,140,255,0.85)";
+                      e.currentTarget.style.color = "rgba(255,255,255,0.75)";
                     }}
                     onTouchStart={e => {
                       e.currentTarget.style.borderColor = "rgba(120,60,180,0.40)";
@@ -330,7 +330,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
                       borderRadius: "6px",
                       borderColor: "rgba(120,60,180,0.25)",
                       background: "rgba(120,60,180,0.06)",
-                      color: "rgba(180,140,255,0.85)",
+                      color: "rgba(255,255,255,0.75)",
                     }}
                   >
                     {chip}
