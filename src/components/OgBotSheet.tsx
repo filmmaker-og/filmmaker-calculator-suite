@@ -230,7 +230,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
         <div
           className="absolute top-0 left-0 right-0 h-[3px] pointer-events-none z-10"
           style={{
-            background: "linear-gradient(to right, transparent 0%, rgba(120,60,180,0.50) 30%, rgba(120,60,180,0.50) 70%, transparent 100%)",
+            background: "linear-gradient(to right, transparent 0%, rgba(120,60,180,0.50) 20%, rgba(212,175,55,0.40) 50%, rgba(120,60,180,0.50) 80%, transparent 100%)",
             borderRadius: "12px 12px 0 0",
           }}
         />
@@ -240,7 +240,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
           className="absolute top-0 left-0 right-0 pointer-events-none z-0"
           style={{
             height: "200px",
-            background: "radial-gradient(ellipse 100% 70% at 50% 0%, rgba(120,60,180,0.12) 0%, transparent 70%)",
+            background: "radial-gradient(ellipse 100% 70% at 50% 0%, rgba(120,60,180,0.25) 0%, transparent 70%)",
           }}
         />
 
@@ -258,10 +258,10 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
         {/* ── Sheet header ── */}
         <div
           className="px-6 pt-3 pb-5 flex-shrink-0 border-b"
-          style={{ borderColor: "rgba(120,60,180,0.25)" }}
+          style={{ borderColor: "rgba(212,175,55,0.15)" }}
         >
           <div className="flex items-end justify-between">
-            <h2 className="font-bebas text-[32px] tracking-[0.12em] leading-none text-white">
+            <h2 className="font-bebas text-[32px] tracking-[0.12em] leading-none" style={{ color: "#D4AF37", textShadow: "0 0 20px rgba(212,175,55,0.25)" }}>
               ASK THE OG
             </h2>
             <div className="flex items-center gap-3 pb-0.5">
@@ -295,7 +295,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
           {/* Empty state — example chips with eyebrow */}
           {ogMessages.length === 0 && (
             <div className="flex flex-col items-center justify-center gap-5" style={{ minHeight: "100%" }}>
-              <img src={filmmakerFIcon} alt="" className="w-6 h-6 object-contain" style={{ opacity: 0.25 }} />
+              <img src={filmmakerFIcon} alt="" className="w-8 h-8 object-contain" style={{ opacity: 0.70 }} />
               <span className="font-bebas text-[22px] tracking-[0.14em] uppercase" style={{ color: "rgb(180,140,255)" }}>
                 What do you want to know
               </span>
@@ -373,12 +373,12 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
                     {/* Inline attribution header */}
                     <div className="flex items-center gap-2 mb-3">
                       <img src={filmmakerFIcon} alt="OG" className="w-4 h-4 object-contain" />
-                      <span className="font-bebas text-[15px] tracking-[0.15em] leading-none" style={{ color: "rgb(180,140,255)" }}>OG</span>
+                      <span className="font-bebas text-[15px] tracking-[0.15em] leading-none" style={{ color: "#D4AF37" }}>OG</span>
                       {msg.streaming && (
                         <div className="flex gap-1 ml-1">
-                          <div className="w-1.5 h-1.5 rounded-full animate-bounce" style={{ background: "rgba(120,60,180,0.60)", animationDelay: "0ms" }} />
-                          <div className="w-1.5 h-1.5 rounded-full animate-bounce" style={{ background: "rgba(120,60,180,0.60)", animationDelay: "150ms" }} />
-                          <div className="w-1.5 h-1.5 rounded-full animate-bounce" style={{ background: "rgba(120,60,180,0.60)", animationDelay: "300ms" }} />
+                          <div className="w-1.5 h-1.5 rounded-full animate-bounce" style={{ background: "rgba(212,175,55,0.50)", animationDelay: "0ms" }} />
+                          <div className="w-1.5 h-1.5 rounded-full animate-bounce" style={{ background: "rgba(212,175,55,0.50)", animationDelay: "150ms" }} />
+                          <div className="w-1.5 h-1.5 rounded-full animate-bounce" style={{ background: "rgba(212,175,55,0.50)", animationDelay: "300ms" }} />
                         </div>
                       )}
                     </div>
@@ -403,7 +403,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
         {/* Input area */}
         <div
           className="px-5 pb-4 pt-3 flex-shrink-0 border-t"
-          style={{ borderColor: "rgba(120,60,180,0.25)", background: "transparent" }}
+          style={{ borderColor: "rgba(212,175,55,0.15)", background: "transparent" }}
         >
           <form onSubmit={handleOgSubmit}>
             <div
