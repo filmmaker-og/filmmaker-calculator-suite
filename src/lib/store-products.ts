@@ -52,7 +52,7 @@ export const products: Product[] = [
     price: 197,
     priceNote: null,
     originalPrice: null,
-    badge: null,
+    badge: "TRENDING",
     featured: false,
     tier: 1,
     category: "product",
@@ -106,7 +106,6 @@ export const products: Product[] = [
     fullDescription:
       "The question every investor asks: \"Why is this film worth that?\"\n\nWe research 5 comparable acquisition deals in your genre, budget range, and cast tier. Each comp includes the buyer, reported price range, key deal characteristics, and why it's relevant to your project.\n\nYou get a defensible valuation range with methodology your investors can follow — not a number you made up, but a number grounded in transactions that actually happened.\n\nUpgrade to 10 comps for $995 for a deeper dataset and broader market coverage.",
     features: [
-      "5 comparable acquisition deals (or 10 for $995)",
       "Buyer, price range, and deal characteristics per comp",
       "Defensible valuation range with methodology",
       "Market positioning analysis",
@@ -139,7 +138,7 @@ export const products: Product[] = [
       cta: "See The Producer's Package →",
       link: "/store/the-producers-package",
     },
-    ctaLabel: "GET THE COMP REPORT — $595",
+    ctaLabel: "GET 10 COMPS — $995",
   },
   {
     id: "the-producers-package",
@@ -217,7 +216,7 @@ export const products: Product[] = [
     slug: "boutique",
     name: "Boutique",
     price: 2997,
-    priceNote: "Starting at · custom scope",
+    priceNote: null,
     originalPrice: null,
     badge: "CUSTOM",
     featured: false,

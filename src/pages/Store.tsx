@@ -19,11 +19,11 @@ import { toast } from "sonner";
 const storeFaqs = [
   {
     q: "What do you need from me?",
-    a: "For on-demand products, your calculator data does the work \u2014 run your numbers, purchase, and we generate the documents. For the Comp Report, we\u2019ll ask a few additional questions (genre, cast tier, tone) so we can research the right deals. Turnkey services start with a short intake form after purchase.",
+    a: "Depends on the product. The Full Analysis pulls straight from your calculator \u2014 buy it, it builds. The Comp Report needs a few details from you (genre, cast tier, budget range) so we research the right deals. Turnkey builds start with a short intake after checkout.",
   },
   {
     q: "Can I see what I\u2019m getting before I buy?",
-    a: "The free calculator output shows you the modeling engine in action. Paid products use the same engine with professional formatting, sensitivity analysis, and white-labeled branding. The store detail pages show exactly what each deliverable includes.",
+    a: "Run the free calculator. That\u2019s the engine. Paid products take those same numbers and present them at the quality you\u2019d hand an investor without thinking twice. Tap \u2018See full details\u2019 on any product for the complete breakdown.",
   },
   {
     q: "What happens if the deliverables don\u2019t hold up?",
@@ -368,7 +368,7 @@ const tierStyles = {
     pickThis: { color: "rgba(180,140,255,0.80)" },
     price: {},
     badge: { color: "rgb(180,140,255)", background: "rgba(120,60,180,0.10)", border: "1px solid rgba(120,60,180,0.35)" },
-    btn: "btnPurpleOutline" as const,
+    btn: "btnPurple" as const,
     btnHover: { background: "rgba(120,60,180,0.10)", borderColor: "rgba(120,60,180,0.45)" } as Record<string, string>,
     btnRest: { background: "rgba(120,60,180,0.05)", borderColor: "rgba(120,60,180,0.30)" } as Record<string, string>,
     hoverLift: "-2px",
@@ -487,13 +487,13 @@ const CompPricingBlock = () => (
     }}
   >
     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-      <span style={{ fontFamily: "'Inter', sans-serif", fontSize: "16px", color: "rgba(255,255,255,0.88)", fontWeight: 500 }}>5 Comparable Deals</span>
-      <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "18px", color: "#3CB371", fontWeight: 700 }}>$595</span>
+      <span style={{ fontFamily: "'Inter', sans-serif", fontSize: "16px", color: "rgba(255,255,255,0.88)", fontWeight: 500 }}>10 Comparable Deals</span>
+      <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "18px", color: "#3CB371", fontWeight: 700 }}>$995</span>
     </div>
     <div style={{ height: "1px", background: "rgba(60,179,113,0.10)" }} />
     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-      <span style={{ fontFamily: "'Inter', sans-serif", fontSize: "16px", color: "rgba(255,255,255,0.88)", fontWeight: 500 }}>10 Comparable Deals</span>
-      <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "18px", color: "#3CB371", fontWeight: 700 }}>$995</span>
+      <span style={{ fontFamily: "'Inter', sans-serif", fontSize: "16px", color: "rgba(255,255,255,0.88)", fontWeight: 500 }}>5 Comparable Deals</span>
+      <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "18px", color: "#3CB371", fontWeight: 700 }}>$595</span>
     </div>
   </div>
 );
@@ -791,7 +791,7 @@ const ProductCard = ({
             onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(60,179,113,0.08)"; e.currentTarget.style.borderColor = "rgba(60,179,113,0.25)"; }}
             onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(60,179,113,0.03)"; e.currentTarget.style.borderColor = "rgba(60,179,113,0.15)"; }}
           >
-            OR GET 10 COMPS — $995
+            OR GET 5 COMPS — $595
           </button>
         )}
         <button
@@ -1164,7 +1164,7 @@ const Store = () => {
             lineHeight: 1.55,
             margin: 0,
           }}>
-            Professional financial documents generated from your calculator data. Ready to send.
+            Professional financial documents. Investor-grade. Yours.
           </p>
         </div>
       </section>
@@ -1231,8 +1231,8 @@ const Store = () => {
           <ProductCard
             key={product.id}
             product={product}
-            onBuy={() => handleBuyProduct(product)}
-            onBuy10={product.id === "comp-report" ? () => startCheckout("comp-report-10") : undefined}
+            onBuy={product.id === "comp-report" ? () => handleBuyProduct({ ...product, id: "comp-report-10" }) : () => handleBuyProduct(product)}
+            onBuy10={product.id === "comp-report" ? () => handleBuyProduct(product) : undefined}
             visible={turnkeyHeroVisible}
             index={i}
           />
@@ -1334,7 +1334,7 @@ const Store = () => {
             </h2>
           </div>
 
-          <div style={{ borderTop: "1px solid rgba(212,175,55,0.15)" }}>
+          <div>
             {storeFaqs.map((faq, i) => (
               <FaqItem
                 key={faq.q}
