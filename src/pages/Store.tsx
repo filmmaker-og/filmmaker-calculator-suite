@@ -5,6 +5,7 @@ import { useHaptics } from "@/hooks/use-haptics";
 import { useInView } from "@/hooks/useInView";
 import {
   selfServeProducts,
+  researchProducts,
   turnkeyServices,
   type Product,
 } from "@/lib/store-products";
@@ -17,24 +18,24 @@ import { toast } from "sonner";
    ═══════════════════════════════════════════════════════════════════ */
 const storeFaqs = [
   {
-    q: "How do the on-demand products work?",
-    a: "After purchase, your calculator data is used to generate your deliverables automatically. Professional, white-labeled documents delivered to your email.",
+    q: "What do you need from me?",
+    a: "For on-demand products, your calculator data does the work \u2014 run your numbers, purchase, and we generate the documents. For the Comp Report, we\u2019ll ask a few additional questions (genre, cast tier, tone) so we can research the right deals. Turnkey services start with a short intake form after purchase.",
   },
   {
-    q: "How do the turnkey services work?",
-    a: "After purchase, you complete a short intake form with your project details — logline, genre, budget, cast, tone references, and raise amount. We build your complete investor package and deliver it within 5 business days.",
+    q: "Can I see what I\u2019m getting before I buy?",
+    a: "The free calculator output shows you the modeling engine in action. Paid products use the same engine with professional formatting, sensitivity analysis, and white-labeled branding. The store detail pages show exactly what each deliverable includes.",
   },
   {
-    q: "What is The Working Model?",
-    a: "A live, formula-driven Excel workbook. Change any input and every downstream calculation updates instantly. It\u2019s the engine behind your finance plan — reusable across unlimited future projects. Add it at checkout for $79 when bundled with any package.",
+    q: "What happens if the deliverables don\u2019t hold up?",
+    a: "If your deliverables don\u2019t meet the institutional standard described, we\u2019ll revise them. These are the same financial models used in real production financing \u2014 if something doesn\u2019t hold up, we fix it.",
   },
   {
-    q: "What if the deliverables don\u2019t meet my expectations?",
-    a: "If your deliverables don\u2019t meet the institutional standard described, we\u2019ll revise them. These are the same financial models used in real production financing — if something doesn\u2019t hold up, we fix it.",
+    q: "What\u2019s The Working Model and when do I see it?",
+    a: "A live, formula-driven Excel workbook where every output cell is connected to every input. Change any assumption and the entire model recalculates. It appears as a $79 add-on at checkout when you purchase any product.",
   },
   {
-    q: "Can I upgrade later?",
-    a: "Contact us and we\u2019ll apply what you\u2019ve already paid toward the higher tier.",
+    q: "Can I upgrade and apply what I\u2019ve already paid?",
+    a: "Yes. Contact us and we\u2019ll apply your prior purchase toward the higher tier. The credit upgrade path works across all products.",
   },
 ];
 
@@ -43,55 +44,73 @@ const storeFaqs = [
    DESIGN TOKENS & STYLES
    ═══════════════════════════════════════════════════════════════════ */
 const s: Record<string, React.CSSProperties> = {
-  /* Eyebrow */
+  /* ── Eyebrow (matches Index.tsx eyebrow) ── */
   eyebrowRuled: {
-    display: "flex", alignItems: "center", justifyContent: "center", gap: "12px", marginBottom: "14px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "12px",
+    marginBottom: "14px",
   },
   eyebrowLine: {
-    flex: 1, height: "1px", background: "rgba(212,175,55,0.40)",
+    flex: 1,
+    height: "1px",
+    background: "rgba(212,175,55,0.40)",
+    boxShadow: "0 0 8px rgba(212,175,55,0.15)",
   },
   eyebrowLabel: {
-    fontFamily: "'Roboto Mono', monospace", fontSize: "13px",
-    letterSpacing: "0.15em", textTransform: "uppercase", color: "#D4AF37",
+    fontFamily: "'Roboto Mono', monospace",
+    fontSize: "15px",
+    letterSpacing: "0.18em",
+    textTransform: "uppercase",
+    color: "#D4AF37",
   },
-  /* Card base */
-  cardStandard: {
+  /* ── Card base ── */
+  cardBase: {
     background: "#0A0A0A",
     border: "1px solid rgba(212,175,55,0.15)",
     borderRadius: "12px",
-    boxShadow: "0 16px 40px rgba(0,0,0,0.4)",
+    boxShadow: "0 16px 40px rgba(0,0,0,0.6)",
     overflow: "hidden",
     transition: "transform 0.3s ease, border-color 0.3s ease",
     position: "relative" as const,
   },
-  cardFeatured: {
-    background: "#0A0A0A",
-    border: "1px solid rgba(212,175,55,0.35)",
-    borderRadius: "12px",
-    boxShadow: "0 24px 50px rgba(0,0,0,0.8)",
-    overflow: "hidden",
-    transition: "transform 0.3s ease, border-color 0.3s ease",
-    position: "relative" as const,
+  /* ── Card header (matches Index.tsx tierHeaderAlt: 28px 24px 20px) ── */
+  cardHeader: {
+    padding: "28px 24px 20px",
+    borderBottom: "1px solid rgba(212,175,55,0.12)",
   },
-  /* Card top line */
-  topLineStandard: {
-    height: "1px",
-    background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.4), transparent)",
+  /* ── Card name (matches Index.tsx tierTitleCard: 2.6rem) ── */
+  cardName: {
+    fontFamily: "'Bebas Neue', sans-serif",
+    fontSize: "2.6rem",
+    letterSpacing: "0.04em",
+    color: "#fff",
+    textTransform: "uppercase" as const,
+    lineHeight: 1,
+    marginBottom: "8px",
   },
-  topLineFeatured: {
-    height: "2px",
-    background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.6), transparent)",
+  /* ── Pick this if (matches feature desc tier: 16px) ── */
+  pickThisIf: {
+    fontFamily: "'Inter', sans-serif",
+    fontSize: "16px",
+    color: "rgba(212,175,55,0.80)",
+    marginTop: "6px",
+    lineHeight: 1.45,
   },
-  /* Card header */
-  cardHeaderStandard: {
-    padding: "24px 24px 20px",
-    borderBottom: "1px solid rgba(255,255,255,0.06)",
+  /* ── Badge (matches Index.tsx trendingBadge: 6px 12px) ── */
+  badgeBase: {
+    fontFamily: "'Roboto Mono', monospace",
+    fontSize: "11px",
+    letterSpacing: "0.15em",
+    textTransform: "uppercase" as const,
+    fontWeight: 700,
+    padding: "6px 12px",
+    borderRadius: "4px",
+    color: "#D4AF37",
+    whiteSpace: "nowrap" as const,
   },
-  cardHeaderFeatured: {
-    padding: "24px 24px 20px",
-    borderBottom: "1px solid rgba(212,175,55,0.15)",
-  },
-  /* Price block */
+  /* ── Price block ── */
   priceBlock: {
     padding: "24px 24px 20px",
   },
@@ -99,136 +118,182 @@ const s: Record<string, React.CSSProperties> = {
     fontFamily: "'Roboto Mono', monospace",
     fontSize: "2.4rem",
     fontWeight: 700,
-    color: "rgba(255,255,255,0.95)",
+    color: "#fff",
     lineHeight: 1,
   },
-  priceFeatured: {
+  priceNote: {
+    display: "block",
     fontFamily: "'Roboto Mono', monospace",
-    fontSize: "3.2rem",
-    fontWeight: 700,
-    color: "#D4AF37",
-    lineHeight: 1,
+    fontSize: "12px",
+    color: "rgba(255,255,255,0.45)",
+    letterSpacing: "0.06em",
+    marginTop: "4px",
   },
+  /* ── Short desc (matches Index.tsx tierSubFree: 18px, 0.72) ── */
   shortDesc: {
     fontFamily: "'Inter', sans-serif",
-    fontSize: "14px",
-    color: "rgba(255,255,255,0.55)",
+    fontSize: "18px",
+    color: "rgba(255,255,255,0.72)",
     marginTop: "8px",
-    lineHeight: 1.5,
+    lineHeight: 1.55,
   },
-  /* Features */
+  /* ── Subdivider (gold, not white) ── */
+  subdivider: {
+    height: "1px",
+    background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.12), transparent)",
+    margin: "0 24px",
+  },
+  /* ── Features (matches Index.tsx tierFeatures: padding 24px, gap 16px) ── */
   featuresBlock: {
-    padding: "0 24px 28px",
+    padding: "24px",
     display: "flex",
     flexDirection: "column" as const,
-    gap: "14px",
+    gap: "16px",
   },
   featureRow: {
     display: "flex",
     alignItems: "flex-start",
-    gap: "10px",
+    gap: "14px",
   },
   featureCheck: {
-    color: "#3CB371",
-    opacity: 0.9,
+    color: "#D4AF37",
+    fontSize: "20px",
     flexShrink: 0,
-    marginTop: "2px",
+    marginTop: "1px",
+    fontFamily: "'Roboto Mono', monospace",
+    textShadow: "0 0 12px rgba(212,175,55,0.4)",
   },
   featureText: {
     fontFamily: "'Inter', sans-serif",
-    fontSize: "14px",
-    color: "rgba(255,255,255,0.85)",
-    lineHeight: 1.5,
+    fontSize: "18px",
+    fontWeight: 500,
+    color: "#fff",
+    lineHeight: 1.3,
   },
-  /* Actions */
-  actionBlock: {
-    padding: "0 24px 28px",
-  },
-  btnOutline: {
-    width: "100%",
-    padding: "16px",
-    fontFamily: "'Roboto Mono', monospace",
-    fontSize: "13px",
-    letterSpacing: "0.06em",
-    textTransform: "uppercase" as const,
-    color: "#D4AF37",
-    background: "rgba(212,175,55,0.03)",
-    border: "1px solid rgba(212,175,55,0.3)",
-    borderRadius: "8px",
-    cursor: "pointer",
-    transition: "background 0.2s, border-color 0.2s",
-  },
-  btnCta: {
-    width: "100%",
-    padding: "16px",
-    fontFamily: "'Roboto Mono', monospace",
-    fontSize: "13px",
-    letterSpacing: "0.06em",
-    textTransform: "uppercase" as const,
-    color: "#000",
-    background: "#F9E076",
-    border: "none",
-    borderRadius: "8px",
-    cursor: "pointer",
-    fontWeight: 700,
-    boxShadow: "0 0 20px rgba(249,224,118,0.3), 0 0 60px rgba(249,224,118,0.1)",
-    transition: "transform 0.15s, box-shadow 0.3s",
-  },
-  detailsLink: {
-    display: "block",
-    textAlign: "center" as const,
-    fontFamily: "'Inter', sans-serif",
-    fontSize: "13px",
-    color: "rgba(212,175,55,0.60)",
-    padding: "8px 0",
-    background: "none",
-    border: "none",
-    cursor: "pointer",
-    transition: "color 0.2s",
-    marginTop: "4px",
-  },
-  /* Badge base */
-  badgeBase: {
-    fontFamily: "'Roboto Mono', monospace",
-    fontSize: "11px",
-    letterSpacing: "0.15em",
-    textTransform: "uppercase" as const,
-    fontWeight: 700,
-    padding: "4px 10px",
-    borderRadius: "4px",
-    color: "#D4AF37",
-    whiteSpace: "nowrap" as const,
-  },
-  /* Pick this if */
-  pickThisIf: {
-    fontFamily: "'Inter', sans-serif",
-    fontSize: "13px",
-    color: "rgba(212,175,55,0.7)",
-    fontStyle: "normal",
-    marginTop: "4px",
-    lineHeight: 1.4,
-  },
-  /* Name */
-  cardName: {
-    fontFamily: "'Bebas Neue', sans-serif",
-    fontSize: "2rem",
-    letterSpacing: "0.06em",
-    color: "rgba(255,255,255,0.95)",
-    textTransform: "uppercase" as const,
-    lineHeight: 1.1,
-    margin: 0,
-  },
-  /* Turnaround badge */
+  /* ── Turnaround badge ── */
   turnaroundBadge: {
     display: "inline-flex",
     alignItems: "center",
     gap: "6px",
     fontFamily: "'Roboto Mono', monospace",
-    fontSize: "11px",
-    color: "rgba(255,255,255,0.5)",
-    background: "rgba(255,255,255,0.03)",
-    padding: "4px 8px",
+    fontSize: "12px",
+    color: "rgba(255,255,255,0.55)",
+    background: "rgba(255,255,255,0.04)",
+    padding: "5px 10px",
     borderRadius: "4px",
+    border: "1px solid rgba(255,255,255,0.08)",
+  },
+  /* ── Action block (matches Index.tsx tierAction: 0 24px 36px) ── */
+  actionBlock: {
+    padding: "0 24px 36px",
+  },
+  /* ── Buttons (matches Index.tsx btnGold: 16px, 0.10em, radius 6px) ── */
+  btnOutline: {
+    width: "100%",
+    padding: "18px",
+    fontFamily: "'Roboto Mono', monospace",
+    fontSize: "16px",
+    fontWeight: 600,
+    letterSpacing: "0.10em",
+    textTransform: "uppercase" as const,
+    color: "#D4AF37",
+    background: "rgba(212,175,55,0.05)",
+    border: "1px solid rgba(212,175,55,0.30)",
+    borderRadius: "6px",
+    cursor: "pointer",
+    transition: "background 0.2s, border-color 0.2s",
+  },
+  btnGreen: {
+    width: "100%",
+    padding: "18px",
+    fontFamily: "'Roboto Mono', monospace",
+    fontSize: "16px",
+    fontWeight: 600,
+    letterSpacing: "0.10em",
+    textTransform: "uppercase" as const,
+    color: "#3CB371",
+    background: "rgba(60,179,113,0.05)",
+    border: "1px solid rgba(60,179,113,0.25)",
+    borderRadius: "6px",
+    cursor: "pointer",
+    transition: "background 0.2s, border-color 0.2s",
+  },
+  btnGreenSecondary: {
+    width: "100%",
+    padding: "16px",
+    fontFamily: "'Roboto Mono', monospace",
+    fontSize: "14px",
+    letterSpacing: "0.06em",
+    textTransform: "uppercase" as const,
+    color: "#3CB371",
+    background: "rgba(60,179,113,0.03)",
+    border: "1px solid rgba(60,179,113,0.15)",
+    borderRadius: "6px",
+    cursor: "pointer",
+    marginTop: "10px",
+    transition: "background 0.2s, border-color 0.2s",
+  },
+  btnPurpleOutline: {
+    width: "100%",
+    padding: "18px",
+    fontFamily: "'Roboto Mono', monospace",
+    fontSize: "16px",
+    fontWeight: 600,
+    letterSpacing: "0.10em",
+    textTransform: "uppercase" as const,
+    color: "rgb(180,140,255)",
+    background: "rgba(120,60,180,0.05)",
+    border: "1px solid rgba(120,60,180,0.30)",
+    borderRadius: "6px",
+    cursor: "pointer",
+    transition: "background 0.2s, border-color 0.2s",
+  },
+  btnPurple: {
+    width: "100%",
+    padding: "18px",
+    fontFamily: "'Roboto Mono', monospace",
+    fontSize: "18px",
+    fontWeight: 600,
+    letterSpacing: "0.12em",
+    textTransform: "uppercase" as const,
+    color: "#fff",
+    background: "linear-gradient(135deg, rgb(75,30,130) 0%, rgb(110,50,170) 100%)",
+    border: "none",
+    borderRadius: "6px",
+    cursor: "pointer",
+    boxShadow: "0 0 24px rgba(120,60,180,0.35), 0 0 60px rgba(212,175,55,0.10)",
+    transition: "transform 0.15s, box-shadow 0.3s",
+  },
+  btnCta: {
+    width: "100%",
+    padding: "18px",
+    fontFamily: "'Roboto Mono', monospace",
+    fontSize: "16px",
+    fontWeight: 700,
+    letterSpacing: "0.10em",
+    textTransform: "uppercase" as const,
+    color: "#000",
+    background: "#F9E076",
+    border: "none",
+    borderRadius: "6px",
+    cursor: "pointer",
+    boxShadow: "0 0 20px rgba(249,224,118,0.3), 0 0 60px rgba(249,224,118,0.1)",
+    transition: "transform 0.15s, box-shadow 0.3s",
+  },
+  /* ── Details link (matches Index.tsx detailsLink: 15px Inter, white 0.85) ── */
+  detailsLink: {
+    display: "block",
+    width: "100%",
+    textAlign: "center" as const,
+    fontFamily: "'Inter', sans-serif",
+    fontSize: "15px",
+    color: "rgba(255,255,255,0.85)",
+    padding: "8px 0",
+    background: "none",
+    border: "none",
+    cursor: "pointer",
+    transition: "color 0.2s",
+    marginTop: "16px",
   },
 };
 
@@ -269,6 +334,53 @@ const EyebrowRuled = ({ text }: { text: string }) => (
     <div style={s.eyebrowLine} />
     <span style={s.eyebrowLabel}>{text}</span>
     <div style={s.eyebrowLine} />
+  </div>
+);
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   BREATH LINE
+   ═══════════════════════════════════════════════════════════════════ */
+const BreathLine = () => (
+  <div style={{ padding: "32px 0" }}>
+    <div
+      style={{
+        height: "1px",
+        background:
+          "linear-gradient(90deg, transparent 5%, rgba(212,175,55,0.35) 50%, transparent 95%)",
+        boxShadow: "0 0 12px rgba(212,175,55,0.2)",
+        margin: "0 24px",
+      }}
+    />
+  </div>
+);
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   COMP PRICING BLOCK
+   ═══════════════════════════════════════════════════════════════════ */
+const CompPricingBlock = () => (
+  <div
+    style={{
+      display: "flex",
+      flexDirection: "column",
+      gap: "10px",
+      marginTop: "12px",
+      padding: "16px",
+      background: "rgba(60,179,113,0.04)",
+      border: "1px solid rgba(60,179,113,0.12)",
+      borderRadius: "8px",
+    }}
+  >
+    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+      <span style={{ fontFamily: "'Inter', sans-serif", fontSize: "16px", color: "rgba(255,255,255,0.88)", fontWeight: 500 }}>5 Comparable Deals</span>
+      <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "18px", color: "#3CB371", fontWeight: 700 }}>$595</span>
+    </div>
+    <div style={{ height: "1px", background: "rgba(60,179,113,0.10)" }} />
+    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+      <span style={{ fontFamily: "'Inter', sans-serif", fontSize: "16px", color: "rgba(255,255,255,0.88)", fontWeight: 500 }}>10 Comparable Deals</span>
+      <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "18px", color: "#3CB371", fontWeight: 700 }}>$995</span>
+    </div>
   </div>
 );
 
@@ -493,19 +605,17 @@ const ProductCard = ({
 }) => {
   const [hovered, setHovered] = useState(false);
   const haptics = useHaptics();
-  const isFeatured = product.featured;
+  const isComp = product.id === "comp-report";
 
   const cardStyle: React.CSSProperties = {
-    ...(isFeatured ? s.cardFeatured : s.cardStandard),
+    ...s.cardBase,
     opacity: visible ? 1 : 0,
     transform: visible
-      ? (hovered ? (isFeatured ? "translateY(-4px)" : "translateY(-2px)") : "translateY(0)")
+      ? (hovered ? "translateY(-2px)" : "translateY(0)")
       : "translateY(20px)",
     transition: "opacity 700ms ease-out, transform 400ms ease-out, border-color 0.3s ease",
     transitionDelay: visible ? `${index * 120}ms` : "0ms",
-    borderColor: hovered
-      ? (isFeatured ? "rgba(212,175,55,0.5)" : "rgba(212,175,55,0.25)")
-      : undefined,
+    borderColor: hovered ? "rgba(212,175,55,0.25)" : undefined,
   };
 
   return (
@@ -514,11 +624,8 @@ const ProductCard = ({
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      {/* Top line */}
-      <div style={isFeatured ? s.topLineFeatured : s.topLineStandard} />
-
       {/* Header */}
-      <div style={isFeatured ? s.cardHeaderFeatured : s.cardHeaderStandard}>
+      <div style={s.cardHeader}>
         {product.badge && (
           <div style={{ marginBottom: "12px" }}>
             <span style={getBadgeStyle(product.badge)}>{product.badge}</span>
@@ -532,32 +639,31 @@ const ProductCard = ({
 
       {/* Price block */}
       <div style={s.priceBlock}>
-        <span style={isFeatured ? s.priceFeatured : s.priceStandard}>
-          ${product.price.toLocaleString()}
-        </span>
-        {product.priceNote && (
-          <span style={{
-            display: "block",
-            fontFamily: "'Roboto Mono', monospace",
-            fontSize: "11px",
-            color: "rgba(255,255,255,0.40)",
-            letterSpacing: "0.06em",
-            marginTop: "4px",
-          }}>
-            {product.priceNote}
-          </span>
+        {isComp ? (
+          <CompPricingBlock />
+        ) : (
+          <>
+            <span style={s.priceStandard}>
+              ${product.price.toLocaleString()}
+            </span>
+            {product.priceNote && (
+              <span style={s.priceNote}>
+                {product.priceNote}
+              </span>
+            )}
+          </>
         )}
         <p style={s.shortDesc}>{product.shortDescription}</p>
       </div>
 
       {/* Subdivider */}
-      <div style={{ height: "1px", background: "rgba(255,255,255,0.06)", margin: "0 24px" }} />
+      <div style={s.subdivider} />
 
       {/* Features */}
-      <div style={{ ...s.featuresBlock, paddingTop: "20px" }}>
+      <div style={s.featuresBlock}>
         {product.features.map((feature) => (
           <div key={feature} style={s.featureRow}>
-            <Check style={{ width: "13px", height: "13px", ...s.featureCheck }} />
+            <span style={s.featureCheck}>✓</span>
             <span style={s.featureText}>{feature}</span>
           </div>
         ))}
@@ -567,7 +673,7 @@ const ProductCard = ({
       <div style={s.actionBlock}>
         <button
           onClick={(e) => { haptics.medium(e); onBuy(); }}
-          style={isFeatured ? s.btnCta : s.btnOutline}
+          style={isComp ? s.btnGreen : s.btnOutline}
           onMouseDown={(e) => { (e.currentTarget.style.transform = "scale(0.98)"); }}
           onMouseUp={(e) => { (e.currentTarget.style.transform = "scale(1)"); }}
         >
@@ -576,7 +682,7 @@ const ProductCard = ({
         {onBuy10 && (
           <button
             onClick={(e) => { haptics.medium(e); onBuy10(); }}
-            style={{ ...s.btnOutline, marginTop: "8px", fontSize: "12px" }}
+            style={s.btnGreenSecondary}
             onMouseDown={(e) => { (e.currentTarget.style.transform = "scale(0.98)"); }}
             onMouseUp={(e) => { (e.currentTarget.style.transform = "scale(1)"); }}
           >
@@ -590,8 +696,8 @@ const ProductCard = ({
             window.location.href = `/store/${product.slug}`;
           }}
           style={s.detailsLink}
-          onMouseEnter={(e) => { (e.currentTarget.style.color = "rgba(212,175,55,1)"); }}
-          onMouseLeave={(e) => { (e.currentTarget.style.color = "rgba(212,175,55,0.60)"); }}
+          onMouseEnter={(e) => { (e.currentTarget.style.color = "#fff"); }}
+          onMouseLeave={(e) => { (e.currentTarget.style.color = "rgba(255,255,255,0.85)"); }}
         >
           See full details →
         </button>
@@ -617,19 +723,16 @@ const ServiceCard = ({
 }) => {
   const [hovered, setHovered] = useState(false);
   const haptics = useHaptics();
-  const isTop = product.tier === 4;
 
   const cardStyle: React.CSSProperties = {
-    ...(isTop ? s.cardFeatured : s.cardStandard),
+    ...s.cardBase,
     opacity: visible ? 1 : 0,
     transform: visible
-      ? (hovered ? (isTop ? "translateY(-4px)" : "translateY(-2px)") : "translateY(0)")
+      ? (hovered ? "translateY(-2px)" : "translateY(0)")
       : "translateY(20px)",
     transition: "opacity 700ms ease-out, transform 400ms ease-out, border-color 0.3s ease",
     transitionDelay: visible ? `${index * 120}ms` : "0ms",
-    borderColor: hovered
-      ? (isTop ? "rgba(212,175,55,0.5)" : "rgba(212,175,55,0.25)")
-      : undefined,
+    borderColor: hovered ? "rgba(212,175,55,0.25)" : undefined,
   };
 
   return (
@@ -638,11 +741,8 @@ const ServiceCard = ({
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      {/* Top line */}
-      <div style={isTop ? s.topLineFeatured : s.topLineStandard} />
-
       {/* Header */}
-      <div style={isTop ? s.cardHeaderFeatured : s.cardHeaderStandard}>
+      <div style={s.cardHeader}>
         {product.badge && (
           <div style={{ marginBottom: "12px" }}>
             <span style={getBadgeStyle(product.badge)}>{product.badge}</span>
@@ -656,40 +756,33 @@ const ServiceCard = ({
 
       {/* Price block + turnaround */}
       <div style={s.priceBlock}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <span style={isTop ? s.priceFeatured : s.priceStandard}>
-            ${product.price.toLocaleString()}
+        <span style={s.priceStandard}>
+          ${product.price.toLocaleString()}
+        </span>
+        {product.priceNote && (
+          <span style={s.priceNote}>
+            {product.priceNote}
           </span>
-          {product.turnaround && (
+        )}
+        {product.turnaround && (
+          <div style={{ marginTop: "8px" }}>
             <span style={s.turnaroundBadge}>
               <Clock style={{ width: "12px", height: "12px", color: "rgba(212,175,55,0.7)" }} />
               {product.turnaround}
             </span>
-          )}
-        </div>
-        {product.priceNote && (
-          <span style={{
-            display: "block",
-            fontFamily: "'Roboto Mono', monospace",
-            fontSize: "11px",
-            color: "rgba(255,255,255,0.40)",
-            letterSpacing: "0.06em",
-            marginTop: "4px",
-          }}>
-            {product.priceNote}
-          </span>
+          </div>
         )}
         <p style={s.shortDesc}>{product.shortDescription}</p>
       </div>
 
       {/* Subdivider */}
-      <div style={{ height: "1px", background: "rgba(255,255,255,0.06)", margin: "0 24px" }} />
+      <div style={s.subdivider} />
 
       {/* Features */}
-      <div style={{ ...s.featuresBlock, paddingTop: "20px" }}>
+      <div style={s.featuresBlock}>
         {product.features.map((feature) => (
           <div key={feature} style={s.featureRow}>
-            <Check style={{ width: "13px", height: "13px", ...s.featureCheck }} />
+            <span style={s.featureCheck}>✓</span>
             <span style={s.featureText}>{feature}</span>
           </div>
         ))}
@@ -699,7 +792,7 @@ const ServiceCard = ({
       <div style={s.actionBlock}>
         <button
           onClick={(e) => { haptics.medium(e); onBuy(); }}
-          style={isTop ? s.btnCta : s.btnOutline}
+          style={s.btnOutline}
           onMouseDown={(e) => { (e.currentTarget.style.transform = "scale(0.98)"); }}
           onMouseUp={(e) => { (e.currentTarget.style.transform = "scale(1)"); }}
         >
@@ -712,8 +805,8 @@ const ServiceCard = ({
             window.location.href = `/store/${product.slug}`;
           }}
           style={s.detailsLink}
-          onMouseEnter={(e) => { (e.currentTarget.style.color = "rgba(212,175,55,1)"); }}
-          onMouseLeave={(e) => { (e.currentTarget.style.color = "rgba(212,175,55,0.60)"); }}
+          onMouseEnter={(e) => { (e.currentTarget.style.color = "#fff"); }}
+          onMouseLeave={(e) => { (e.currentTarget.style.color = "rgba(255,255,255,0.85)"); }}
         >
           See full details →
         </button>
@@ -737,7 +830,7 @@ const FaqItem = ({
 }) => {
   const haptics = useHaptics();
   return (
-  <div style={{ borderBottom: "1px solid rgba(255,255,255,0.1)" }}>
+  <div style={{ borderBottom: "1px solid rgba(212,175,55,0.15)" }}>
     <button
       onClick={(e) => { haptics.light(e); onToggle(); }}
       style={{
@@ -758,22 +851,22 @@ const FaqItem = ({
       }}
       onMouseLeave={(e) => {
         const t = e.currentTarget.querySelector("span") as HTMLElement;
-        if (t && !isOpen) t.style.color = "rgba(255,255,255,0.92)";
+        if (t && !isOpen) t.style.color = "#fff";
       }}
     >
       <span style={{
         fontFamily: "'Bebas Neue', sans-serif",
-        fontSize: "1.3rem",
+        fontSize: "1.5rem",
         letterSpacing: "0.04em",
-        color: isOpen ? "#D4AF37" : "rgba(255,255,255,0.92)",
+        color: isOpen ? "#D4AF37" : "#fff",
         transition: "color 0.2s",
         lineHeight: 1.2,
       }}>
         {faq.q}
       </span>
       <ChevronDown style={{
-        width: "18px",
-        height: "18px",
+        width: "20px",
+        height: "20px",
         color: isOpen ? "#D4AF37" : "rgba(212,175,55,0.5)",
         transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
         transition: "transform 0.3s ease, color 0.2s",
@@ -787,7 +880,7 @@ const FaqItem = ({
       }}>
         <p style={{
           fontFamily: "'Inter', sans-serif",
-          fontSize: "15px",
+          fontSize: "19px",
           color: "rgba(255,255,255,0.70)",
           lineHeight: 1.6,
           margin: 0,
@@ -881,14 +974,7 @@ const Store = () => {
     startCheckout(showPopup.id);
   };
 
-  // Mobile sort: featured first for products
-  const sortedProducts = [...selfServeProducts].sort((a, b) => {
-    if (a.featured) return -1;
-    if (b.featured) return 1;
-    return a.tier - b.tier;
-  });
-
-  // Services: highest tier first
+  // Services: lowest tier first
   const sortedServices = [...turnkeyServices].sort(
     (a, b) => a.tier - b.tier
   );
@@ -926,91 +1012,129 @@ const Store = () => {
         </div>
       )}
 
-      {/* ──────────────────────────────────────────────────────────
-           § 1  SELF-SERVE — Hero
-         ────────────────────────────────────────────────────────── */}
+      {/* ═══════════════════════════════════════
+           § 1 — ON DEMAND
+         ═══════════════════════════════════════ */}
       <section
         ref={heroRef}
-        style={{
-          padding: "40px 24px 48px",
-          textAlign: "center",
-          position: "relative",
-        }}
+        style={{ padding: "40px 24px 32px", textAlign: "center", position: "relative" }}
       >
-        {/* Radial glow */}
         <div style={{
           position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
-          background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.08) 0%, transparent 70%)",
+          background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.25) 0%, transparent 70%)",
           pointerEvents: "none",
         }} />
-
         <div style={{ position: "relative", ...reveal(heroVisible) }}>
           <EyebrowRuled text="On Demand" />
           <h1 style={{
             fontFamily: "'Bebas Neue', sans-serif",
-            fontSize: "3.5rem",
+            fontSize: "3.8rem",
             lineHeight: 0.95,
             margin: "0 0 16px 0",
             letterSpacing: "0.04em",
+            color: "#fff",
           }}>
-            <span style={{ color: "rgba(255,255,255,0.95)" }}>Your Numbers.</span>
-            <br />
+            Your Numbers.<br />
             <span style={{ color: "#D4AF37" }}>Investor-Ready.</span>
           </h1>
           <p style={{
             fontFamily: "'Inter', sans-serif",
-            fontSize: "15px",
-            color: "rgba(255,255,255,0.70)",
-            lineHeight: 1.6,
+            fontSize: "19px",
+            color: "rgba(255,255,255,0.88)",
+            lineHeight: 1.55,
             margin: 0,
           }}>
-            Professional financial documents built from your calculator data. Purchase and download.
+            Professional financial documents generated from your calculator data. Ready to send.
           </p>
         </div>
       </section>
 
-      {/* ──────────────────────────────────────────────────────────
-           § 1  SELF-SERVE — Cards
-         ────────────────────────────────────────────────────────── */}
+      {/* § 1 — On Demand Card (Full Analysis only) */}
       <div
         ref={productsRef}
-        style={{
-          display: "flex", flexDirection: "column", gap: "24px",
-          padding: "0 24px 48px",
-        }}
+        style={{ padding: "0 24px" }}
       >
-        {sortedProducts.map((product, i) => (
+        {selfServeProducts.map((product, i) => (
           <ProductCard
             key={product.id}
             product={product}
             onBuy={() => handleBuyProduct(product)}
-            onBuy10={product.id === "comp-report" ? () => startCheckout("comp-report-10") : undefined}
             visible={productsVisible}
             index={i}
           />
         ))}
       </div>
 
-      {/* ──────────────────────────────────────────────────────────
-           DIVIDER — diamond ornament
-         ────────────────────────────────────────────────────────── */}
-      <div style={{
-        margin: "24px 24px 48px",
-        height: "1px",
-        background: "linear-gradient(90deg, transparent 0%, rgba(212,175,55,0.20) 20%, rgba(212,175,55,0.35) 50%, rgba(212,175,55,0.20) 80%, transparent 100%)",
-      }} />
+      {/* §1 → §2 spacer (no breath line) */}
+      <div style={{ height: "48px" }} />
 
-      {/* ──────────────────────────────────────────────────────────
-           § 2  TURNKEY — Hero
-         ────────────────────────────────────────────────────────── */}
+      {/* ═══════════════════════════════════════
+           § 2 — RESEARCH
+         ═══════════════════════════════════════ */}
       <section
         ref={turnkeyHeroRef}
-        style={{
-          padding: "0 24px 32px",
-          textAlign: "center",
-        }}
+        style={{ padding: "16px 24px 32px", textAlign: "center", position: "relative" }}
       >
-        <div style={reveal(turnkeyHeroVisible)}>
+        <div style={{
+          position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
+          background: "radial-gradient(ellipse 80% 50% at 50% 60%, rgba(212,175,55,0.10) 0%, transparent 70%)",
+          pointerEvents: "none",
+        }} />
+        <div style={{ position: "relative", ...reveal(turnkeyHeroVisible) }}>
+          <EyebrowRuled text="Research" />
+          <h2 style={{
+            fontFamily: "'Bebas Neue', sans-serif",
+            fontSize: "3.2rem",
+            lineHeight: 0.95,
+            margin: "0 0 16px 0",
+            letterSpacing: "0.04em",
+            color: "#fff",
+          }}>
+            Defend Your<br />
+            <span style={{ color: "#3CB371" }}>Valuation.</span>
+          </h2>
+          <p style={{
+            fontFamily: "'Inter', sans-serif",
+            fontSize: "19px",
+            color: "rgba(255,255,255,0.88)",
+            lineHeight: 1.55,
+            margin: 0,
+          }}>
+            Real comparable acquisition data in your genre and budget range. We research it. You present the evidence.
+          </p>
+        </div>
+      </section>
+
+      {/* § 2 — Research Card (Comp Report) */}
+      <div style={{ padding: "0 24px" }}>
+        {researchProducts.map((product, i) => (
+          <ProductCard
+            key={product.id}
+            product={product}
+            onBuy={() => handleBuyProduct(product)}
+            onBuy10={product.id === "comp-report" ? () => startCheckout("comp-report-10") : undefined}
+            visible={turnkeyHeroVisible}
+            index={i}
+          />
+        ))}
+      </div>
+
+      {/* §2 → §3 spacer (no breath line) */}
+      <div style={{ height: "48px" }} />
+
+      {/* ═══════════════════════════════════════
+           § 3 — TURNKEY
+         ═══════════════════════════════════════ */}
+      <section
+        ref={servicesRef}
+        style={{ padding: "16px 24px 32px", textAlign: "center", position: "relative" }}
+      >
+        <div style={{
+          position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
+          background: "radial-gradient(ellipse 80% 50% at 50% 60%, rgba(212,175,55,0.10) 0%, transparent 70%)",
+          pointerEvents: "none",
+        }} />
+        <div style={{ position: "relative", ...reveal(servicesVisible) }}>
           <EyebrowRuled text="Turnkey" />
           <h2 style={{
             fontFamily: "'Bebas Neue', sans-serif",
@@ -1018,16 +1142,16 @@ const Store = () => {
             lineHeight: 0.95,
             margin: "0 0 16px 0",
             letterSpacing: "0.04em",
+            color: "#fff",
           }}>
-            <span style={{ color: "rgba(255,255,255,0.95)" }}>We Build It</span>
-            <br />
+            We Build It<br />
             <span style={{ color: "#D4AF37" }}>With You.</span>
           </h2>
           <p style={{
             fontFamily: "'Inter', sans-serif",
-            fontSize: "15px",
-            color: "rgba(255,255,255,0.70)",
-            lineHeight: 1.6,
+            fontSize: "19px",
+            color: "rgba(255,255,255,0.88)",
+            lineHeight: 1.55,
             margin: 0,
           }}>
             Tell us about your project. We build the complete investor package — turnkey, custom, delivered in 5 business days.
@@ -1035,14 +1159,11 @@ const Store = () => {
         </div>
       </section>
 
-      {/* ──────────────────────────────────────────────────────────
-           § 2  TURNKEY — Cards
-         ────────────────────────────────────────────────────────── */}
+      {/* § 3 — Turnkey Cards */}
       <div
-        ref={servicesRef}
         style={{
-          display: "flex", flexDirection: "column", gap: "24px",
-          padding: "0 24px 48px",
+          display: "flex", flexDirection: "column", gap: "28px",
+          padding: "0 24px",
         }}
       >
         {sortedServices.map((product, i) => (
@@ -1056,14 +1177,22 @@ const Store = () => {
         ))}
       </div>
 
-      {/* ──────────────────────────────────────────────────────────
-           § 3  FAQ
-         ────────────────────────────────────────────────────────── */}
+      {/* ── Breath Line ── */}
+      <BreathLine />
+
+      {/* ═══════════════════════════════════════
+           § 4 — FAQ
+         ═══════════════════════════════════════ */}
       <section
         ref={faqRef}
-        style={{ padding: "48px 24px 24px" }}
+        style={{ padding: "0 24px 32px", position: "relative" }}
       >
-        <div style={reveal(faqVisible)}>
+        <div style={{
+          position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
+          background: "radial-gradient(ellipse 80% 50% at 50% 60%, rgba(212,175,55,0.10) 0%, transparent 70%)",
+          pointerEvents: "none",
+        }} />
+        <div style={{ position: "relative", ...reveal(faqVisible) }}>
           <EyebrowRuled text="Questions" />
           <div style={{ textAlign: "center", marginBottom: "32px" }}>
             <h2 style={{
@@ -1072,13 +1201,13 @@ const Store = () => {
               lineHeight: 0.95,
               margin: 0,
               letterSpacing: "0.04em",
+              color: "#fff",
             }}>
-              <span style={{ color: "rgba(255,255,255,0.95)" }}>Common</span>{" "}
-              <span style={{ color: "#D4AF37" }}>Questions</span>
+              Before You <span style={{ color: "#D4AF37" }}>Buy</span>
             </h2>
           </div>
 
-          <div style={{ borderTop: "1px solid rgba(255,255,255,0.1)" }}>
+          <div style={{ borderTop: "1px solid rgba(212,175,55,0.15)" }}>
             {storeFaqs.map((faq, i) => (
               <FaqItem
                 key={faq.q}
@@ -1091,30 +1220,33 @@ const Store = () => {
         </div>
       </section>
 
-      {/* ──────────────────────────────────────────────────────────
-           BESPOKE CARD (Closer)
-         ────────────────────────────────────────────────────────── */}
+      {/* ── Breath Line ── */}
+      <BreathLine />
+
+      {/* ═══════════════════════════════════════
+           BESPOKE CLOSER
+         ═══════════════════════════════════════ */}
       <div
         ref={bespokeRef}
-        style={{
-          margin: "0 24px 64px",
-          ...reveal(bespokeVisible),
-        }}
+        style={{ margin: "0 24px 48px", ...reveal(bespokeVisible) }}
       >
         <div style={{
           background: "#0A0A0A",
           border: "1px solid rgba(212,175,55,0.25)",
           borderRadius: "12px",
-          padding: "40px 24px",
+          padding: "36px 24px",
           textAlign: "center",
-          outline: "1px solid rgba(212,175,55,0.08)",
-          outlineOffset: "-6px",
+          position: "relative",
         }}>
+          <div style={{
+            position: "absolute", inset: "6px", borderRadius: "8px",
+            border: "1px solid rgba(212,175,55,0.08)", pointerEvents: "none",
+          }} />
           <h3 style={{
             fontFamily: "'Bebas Neue', sans-serif",
-            fontSize: "1.8rem",
+            fontSize: "2.2rem",
             letterSpacing: "0.06em",
-            color: "rgba(255,255,255,0.95)",
+            color: "#fff",
             margin: "0 0 12px 0",
             lineHeight: 1.1,
           }}>
@@ -1122,8 +1254,8 @@ const Store = () => {
           </h3>
           <p style={{
             fontFamily: "'Inter', sans-serif",
-            fontSize: "15px",
-            color: "rgba(255,255,255,0.55)",
+            fontSize: "19px",
+            color: "rgba(255,255,255,0.75)",
             lineHeight: 1.6,
             maxWidth: "90%",
             margin: "0 auto 24px",
@@ -1137,14 +1269,14 @@ const Store = () => {
               alignItems: "center",
               gap: "8px",
               fontFamily: "'Roboto Mono', monospace",
-              fontSize: "13px",
+              fontSize: "15px",
               letterSpacing: "0.06em",
               textTransform: "uppercase",
               color: "#D4AF37",
               background: "rgba(212,175,55,0.05)",
               border: "1px solid rgba(212,175,55,0.4)",
-              borderRadius: "8px",
-              padding: "14px 24px",
+              borderRadius: "6px",
+              padding: "16px 24px",
               textDecoration: "none",
               transition: "background 0.2s, border-color 0.2s",
               cursor: "pointer",
@@ -1158,24 +1290,40 @@ const Store = () => {
         </div>
       </div>
 
-      {/* ──────────────────────────────────────────────────────────
-           FOOTER
-         ────────────────────────────────────────────────────────── */}
+      {/* ═══════════════════════════════════════
+           FOOTER (synced with Index.tsx)
+         ═══════════════════════════════════════ */}
       <footer
         ref={footerRef}
         style={{
-          background: "#000",
-          borderTop: "1px solid rgba(255,255,255,0.06)",
-          padding: "32px 24px 64px",
+          background: "#0A0A0A",
+          borderTop: "1px solid rgba(212,175,55,0.12)",
+          padding: "32px 24px 40px",
           ...reveal(footerVisible),
         }}
       >
+        <div style={{ display: "flex", justifyContent: "center", gap: "20px", marginBottom: "16px" }}>
+          <a href="https://www.instagram.com/filmmaker.og" target="_blank" rel="noopener noreferrer" style={{ color: "rgba(212,175,55,0.50)", textDecoration: "none", display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", borderRadius: "8px", border: "1px solid rgba(212,175,55,0.15)", transition: "color 0.2s ease, border-color 0.2s ease" }} aria-label="Instagram">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+          </a>
+          <a href="https://www.tiktok.com/@filmmaker.og" target="_blank" rel="noopener noreferrer" style={{ color: "rgba(212,175,55,0.50)", textDecoration: "none", display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", borderRadius: "8px", border: "1px solid rgba(212,175,55,0.15)", transition: "color 0.2s ease, border-color 0.2s ease" }} aria-label="TikTok">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 0 0-.79-.05A6.34 6.34 0 0 0 3.15 15a6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V8.71a8.2 8.2 0 0 0 4.76 1.52v-3.4a4.85 4.85 0 0 1-1-.14z"/></svg>
+          </a>
+          <a href="https://www.facebook.com/filmmaker.og" target="_blank" rel="noopener noreferrer" style={{ color: "rgba(212,175,55,0.50)", textDecoration: "none", display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", borderRadius: "8px", border: "1px solid rgba(212,175,55,0.15)", transition: "color 0.2s ease, border-color 0.2s ease" }} aria-label="Facebook">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+          </a>
+        </div>
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "10px", marginBottom: "16px" }}>
+          <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "12px", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(212,175,55,0.35)", cursor: "pointer" }}>Shop</span>
+          <span style={{ color: "rgba(212,175,55,0.20)", fontSize: "12px" }}>·</span>
+          <span onClick={() => window.location.href = "/resources"} style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "12px", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(212,175,55,0.35)", cursor: "pointer" }}>Resources</span>
+        </div>
         <p style={{
           fontFamily: "'Inter', sans-serif",
-          fontSize: "13px",
-          color: "rgba(255,255,255,0.4)",
+          fontSize: "14px",
+          color: "rgba(255,255,255,0.48)",
           textAlign: "center",
-          lineHeight: 1.6,
+          lineHeight: 1.55,
           margin: 0,
         }}>
           For educational and informational purposes only. Not legal, tax, or investment advice. Consult a qualified entertainment attorney before making financing decisions.
