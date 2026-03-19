@@ -67,7 +67,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
       <span style={{
         fontFamily: "'Roboto Mono', monospace",
         fontSize: "13px",
-        letterSpacing: "0.15em",
+        letterSpacing: "0.18em",
         textTransform: "uppercase" as const,
         color: "#D4AF37",
         whiteSpace: "nowrap" as const,
@@ -112,8 +112,8 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
         />
 
         {/* Drag handle + X close button */}
-        <div className="relative flex justify-center pt-4 pb-2">
-          <div className="w-8 h-[3px] rounded-full" style={{ background: "rgba(255,255,255,0.20)" }} />
+        <div className="relative flex justify-center pt-4 pb-4">
+          <div className="w-8 h-[3px] rounded-full" style={{ background: "rgba(255,255,255,0.25)" }} />
           <button
             onClick={() => { haptics.light(); setIsOpen(false); }}
             className="absolute top-3 right-4 w-9 h-9 flex items-center justify-center transition-colors"
@@ -124,7 +124,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
           </button>
         </div>
 
-        <div style={{ padding: "8px 24px 28px" }}>
+        <div style={{ padding: "12px 24px 32px" }}>
           {/* Ask the OG — prominent bot CTA */}
           {onOpenBot && (
             <button
@@ -159,48 +159,73 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
             </button>
           )}
 
-          {/* Primary Nav — 2×2 grid */}
-          <div style={{ marginBottom: "16px" }}>
-            <SectionLabel>Navigate</SectionLabel>
-            <div className="grid grid-cols-2 gap-2.5">
-              {([
-                { path: "/",           label: "Home",       icon: <Home size={20} color="#D4AF37" /> },
-                { path: "/calculator", label: "Calculator", icon: <Calculator size={20} color="#D4AF37" /> },
-                { path: "/store",      label: "Shop",       icon: <ShoppingBag size={20} color="#D4AF37" /> },
-                { path: "/resources",  label: "Resources",  icon: <BarChart2 size={20} color="#D4AF37" /> },
-              ] as const).map((item) => (
-                <button
-                  key={item.path}
-                  onClick={() => handleNavigate(item.path)}
-                  onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; }}
-                  onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    gap: "8px",
-                    padding: "22px 16px",
-                    background: "#0A0A0A",
-                    border: "1px solid rgba(212,175,55,0.15)",
-                    borderRadius: "8px",
-                    transition: "transform 0.15s ease, border-color 0.25s ease",
-                  }}
-                >
-                  {item.icon}
-                  <span
-                    style={{
-                      fontFamily: "'Bebas Neue', sans-serif",
-                      fontSize: "1.2rem",
-                      letterSpacing: "0.1em",
-                      color: "rgba(255,255,255,0.85)",
-                    }}
-                  >
-                    {item.label}
-                  </span>
-                </button>
-              ))}
-            </div>
+          {/* Home — full-width gold outline (subordinate to ASK THE OG) */}
+          <button
+            onClick={() => handleNavigate("/")}
+            onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; }}
+            onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
+            style={{
+              width: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "10px",
+              padding: "18px",
+              marginBottom: "16px",
+              background: "#0A0A0A",
+              border: "1px solid rgba(212,175,55,0.30)",
+              borderRadius: "8px",
+              cursor: "pointer",
+              transition: "transform 0.15s ease, border-color 0.25s ease",
+            }}
+          >
+            <Home size={20} color="#D4AF37" />
+            <span style={{
+              fontFamily: "'Bebas Neue', sans-serif",
+              fontSize: "1.3rem",
+              letterSpacing: "0.10em",
+              color: "rgba(255,255,255,0.88)",
+            }}>
+              HOME
+            </span>
+          </button>
+
+          {/* Nav — 3-col compact (matches social row) */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "10px", marginBottom: "20px" }}>
+            {([
+              { path: "/calculator", label: "Calculator", icon: <Calculator size={20} color="#D4AF37" /> },
+              { path: "/store",      label: "Shop",       icon: <ShoppingBag size={20} color="#D4AF37" /> },
+              { path: "/resources",  label: "Resources",  icon: <BarChart2 size={20} color="#D4AF37" /> },
+            ] as const).map((item) => (
+              <button
+                key={item.path}
+                onClick={() => handleNavigate(item.path)}
+                onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; }}
+                onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "8px",
+                  padding: "18px 12px",
+                  background: "#0A0A0A",
+                  border: "1px solid rgba(212,175,55,0.15)",
+                  borderRadius: "8px",
+                  transition: "transform 0.15s ease, border-color 0.25s ease",
+                }}
+              >
+                {item.icon}
+                <span style={{
+                  fontFamily: "'Bebas Neue', sans-serif",
+                  fontSize: "1.2rem",
+                  letterSpacing: "0.1em",
+                  color: "rgba(255,255,255,0.88)",
+                }}>
+                  {item.label}
+                </span>
+              </button>
+            ))}
           </div>
 
           {/* Follow — social links */}
@@ -224,7 +249,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   gap: "8px",
                   padding: "18px 12px",
                   background: "#0A0A0A",
-                  border: "1px solid rgba(212,175,55,0.12)",
+                  border: "1px solid rgba(212,175,55,0.15)",
                   borderRadius: "8px",
                   textDecoration: "none",
                   transition: "transform 0.15s ease, border-color 0.25s ease",
@@ -255,7 +280,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   gap: "8px",
                   padding: "18px 12px",
                   background: "#0A0A0A",
-                  border: "1px solid rgba(212,175,55,0.12)",
+                  border: "1px solid rgba(212,175,55,0.15)",
                   borderRadius: "8px",
                   textDecoration: "none",
                   transition: "transform 0.15s ease, border-color 0.25s ease",
@@ -288,7 +313,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   gap: "8px",
                   padding: "18px 12px",
                   background: "#0A0A0A",
-                  border: "1px solid rgba(212,175,55,0.12)",
+                  border: "1px solid rgba(212,175,55,0.15)",
                   borderRadius: "8px",
                   textDecoration: "none",
                   transition: "transform 0.15s ease, border-color 0.25s ease",
@@ -374,10 +399,10 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
           </div>
 
           {/* Legal disclaimer */}
-          <div className="pt-3" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+          <div className="pt-3" style={{ borderTop: "1px solid rgba(212,175,55,0.08)" }}>
             <p style={{
               fontFamily: "'Inter', sans-serif",
-              fontSize: "11px",
+              fontSize: "12px",
               letterSpacing: "0.05em",
               lineHeight: 1.6,
               color: "rgba(255,255,255,0.40)",
