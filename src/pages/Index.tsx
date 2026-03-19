@@ -173,7 +173,7 @@ const Index = () => {
       <style>{`
         @keyframes lp-shimmer {
           0% { left: -100%; }
-          15% { left: 200%; }
+          20% { left: 200%; }
           100% { left: 200%; }
         }
       `}</style>
@@ -450,10 +450,7 @@ const Index = () => {
                 ))}
               </div>
               <div style={styles.tierAction}>
-                <button onClick={() => gatedNavigate("/store/the-producers-package")} style={styles.btnPackage} onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>
-                  <span style={{ position: "relative", zIndex: 1 }}>GET THE PRODUCER'S PACKAGE</span>
-                  <div style={styles.btnPackageShimmer} />
-                </button>
+                <button onClick={() => gatedNavigate("/store/the-producers-package")} style={styles.btnPurpleOutline} onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>GET THE PRODUCER'S PACKAGE</button>
                 <a href="/store/the-producers-package" onClick={(e) => { e.preventDefault(); gatedNavigate("/store/the-producers-package"); }} style={styles.detailsLink} onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(255,255,255,1)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(255,255,255,0.85)"; }}>See full details →</a>
               </div>
             </div>
@@ -568,10 +565,10 @@ const styles: Record<string, React.CSSProperties> = {
       "0 0 100px rgba(212,175,55,0.10)",
   },
   ctaShimmer: {
-    position: "absolute", top: 0, left: "-100%", width: "50%", height: "100%",
-    background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.20), transparent)",
+    position: "absolute", top: 0, left: "-100%", width: "55%", height: "100%",
+    background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.28), transparent)",
     transform: "skewX(-20deg)",
-    animation: "lp-shimmer 5s cubic-bezier(0.16, 1, 0.3, 1) infinite",
+    animation: "lp-shimmer 3s cubic-bezier(0.16, 1, 0.3, 1) infinite",
   },
 
   /* ── § 1 HERO ── */
@@ -823,10 +820,11 @@ const styles: Record<string, React.CSSProperties> = {
     color: "#fff", background: "linear-gradient(135deg, rgb(75,30,130) 0%, rgb(110,50,170) 100%)", border: "none", padding: "18px", borderRadius: "6px", cursor: "pointer",
     boxShadow: "0 0 24px rgba(120,60,180,0.35), 0 0 60px rgba(212,175,55,0.10)",
   },
-  btnPackageShimmer: {
-    position: "absolute", top: 0, left: "-100%", width: "50%", height: "100%",
-    background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.20), transparent)",
-    transform: "skewX(-20deg)", animation: "lp-shimmer 4s infinite",
+  btnPurpleOutline: {
+    display: "block", width: "100%", textAlign: "center",
+    fontFamily: "'Roboto Mono', monospace", fontSize: "16px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.10em",
+    color: "rgb(180,140,255)", background: "rgba(120,60,180,0.05)", border: "1px solid rgba(120,60,180,0.30)",
+    padding: "18px", borderRadius: "6px", cursor: "pointer",
   },
   detailsLink: { display: "block", textAlign: "center", fontFamily: "'Inter', sans-serif", fontSize: "15px", color: "rgba(255,255,255,0.85)", textDecoration: "none", marginTop: "16px", cursor: "pointer", padding: "8px 0" },
 

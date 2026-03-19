@@ -74,7 +74,7 @@ const AppShell = () => {
 
       {/* Global persistent UI — always mounted */}
       <OgBotSheet isOpen={isBotOpen} onOpenChange={setIsBotOpen} />
-      <MobileMenu isOpen={isMenuOpen} onOpenChange={setIsMenuOpen} />
+      <MobileMenu isOpen={isMenuOpen} onOpenChange={setIsMenuOpen} onOpenBot={() => { setIsMenuOpen(false); setTimeout(() => setIsBotOpen(true), 200); }} />
       <OgBotFab onTap={() => setIsBotOpen(true)} />
     </>
   );
