@@ -98,16 +98,17 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
           backdropFilter: "blur(40px)",
           WebkitBackdropFilter: "blur(40px)",
           borderRadius: "12px 12px 0 0",
-          boxShadow: "0 -4px 60px rgba(212,175,55,0.08), 0 -2px 20px rgba(0,0,0,0.80)",
+          boxShadow: "0 -16px 50px rgba(120,60,180,0.16), 0 -30px 70px rgba(0,0,0,0.90)",
         }}
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
-        {/* Gold top edge line */}
+        {/* Bicolor top edge line — matches OgBotSheet */}
         <div
-          className="h-[1px] w-full"
+          className="absolute top-0 left-0 right-0 h-[3px] pointer-events-none z-10"
           style={{
-            background: "linear-gradient(90deg, transparent 0%, rgba(212,175,55,0.30) 20%, rgba(212,175,55,0.40) 50%, rgba(212,175,55,0.30) 80%, transparent 100%)",
+            background: "linear-gradient(to right, transparent 0%, rgba(120,60,180,0.50) 20%, rgba(212,175,55,0.40) 50%, rgba(120,60,180,0.50) 80%, transparent 100%)",
+            borderRadius: "12px 12px 0 0",
           }}
         />
 
@@ -119,19 +120,19 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
           }
         `}</style>
 
-        {/* Purple atmospheric bleed behind ASK THE OG zone */}
+        {/* Purple atmospheric glow — pure purple, no gold contamination */}
         <div
-          className="absolute top-0 left-0 right-0 pointer-events-none"
+          className="absolute top-0 left-0 right-0 pointer-events-none z-0"
           style={{
-            height: "140px",
-            background: "radial-gradient(ellipse 100% 60% at 50% 0%, rgba(120,60,180,0.18) 0%, rgba(212,175,55,0.06) 50%, transparent 100%)",
+            height: "180px",
+            background: "radial-gradient(ellipse 100% 70% at 50% 0%, rgba(120,60,180,0.20) 0%, transparent 70%)",
             borderRadius: "12px 12px 0 0",
           }}
         />
 
         {/* Drag handle + X close button */}
-        <div className="relative flex justify-center pt-4 pb-4">
-          <div className="w-8 h-[3px] rounded-full" style={{ background: "rgba(255,255,255,0.25)" }} />
+        <div className="relative flex justify-center pt-3 pb-2">
+          <div className="w-10 h-[3px] rounded-full" style={{ background: "rgba(255,255,255,0.25)" }} />
           <button
             onClick={() => { haptics.light(); setIsOpen(false); }}
             className="absolute top-3 right-4 w-9 h-9 flex items-center justify-center transition-colors"
@@ -199,6 +200,9 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
               }} />
             </button>
           )}
+
+          {/* Separator — premium CTA zone / utility navigation */}
+          <div style={{ height: "1px", background: "rgba(212,175,55,0.15)", marginBottom: "10px" }} />
 
           {/* Nav — 3-col (matches social row) */}
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "6px", marginBottom: "10px" }}>
