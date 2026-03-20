@@ -129,27 +129,27 @@ const Index = () => {
     {
       title: "Enter Your Budget",
       body: "Total budget, cash basis after deferments and tax credits, investor equity.",
-      icon: <svg viewBox="0 0 24 24" fill="#000" width="16" height="16"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>,
+      icon: <svg viewBox="0 0 24 24" fill="#fff" width="16" height="16"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>,
     },
     {
       title: "Choose Your Scenario",
       body: "Streamer acquisition or traditional distribution. Guild rates adjust automatically.",
-      icon: <svg viewBox="0 0 24 24" fill="#000" width="16" height="16"><path d="M5 9.2h3V19H5V9.2zM10.6 5h2.8v14h-2.8V5zm5.6 8H19v6h-2.8v-6z"/></svg>,
+      icon: <svg viewBox="0 0 24 24" fill="#fff" width="16" height="16"><path d="M5 9.2h3V19H5V9.2zM10.6 5h2.8v14h-2.8V5zm5.6 8H19v6h-2.8v-6z"/></svg>,
     },
     {
       title: "See the Full Waterfall",
       body: "Every tier with accurate rates — off-the-tops through net backend profit.",
-      icon: <svg viewBox="0 0 24 24" fill="#000" width="16" height="16"><rect x="3" y="4" width="18" height="3" rx="1"/><rect x="5" y="9" width="14" height="3" rx="1"/><rect x="7" y="14" width="10" height="3" rx="1"/><rect x="9" y="19" width="6" height="3" rx="1"/></svg>,
+      icon: <svg viewBox="0 0 24 24" fill="#fff" width="16" height="16"><rect x="3" y="4" width="18" height="3" rx="1"/><rect x="5" y="9" width="14" height="3" rx="1"/><rect x="7" y="14" width="10" height="3" rx="1"/><rect x="9" y="19" width="6" height="3" rx="1"/></svg>,
     },
     {
       title: "Stress-Test Your Deal",
       body: "Adjust price, negotiate fee caps. Run it until you know what you can't give up.",
-      icon: <svg viewBox="0 0 24 24" fill="#000" width="16" height="16"><path d="M12 2L3 7v5c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-9-5zm-1 14l-3.5-3.5 1.41-1.41L11 13.17l5.09-5.09 1.41 1.41L11 16z"/></svg>,
+      icon: <svg viewBox="0 0 24 24" fill="#fff" width="16" height="16"><path d="M12 2L3 7v5c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-9-5zm-1 14l-3.5-3.5 1.41-1.41L11 13.17l5.09-5.09 1.41 1.41L11 16z"/></svg>,
     },
     {
       title: "Export & Share",
       body: "Download a formatted PDF. Share directly with investors, financiers, and co-producers.",
-      icon: <svg viewBox="0 0 24 24" fill="#000" width="16" height="16"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>,
+      icon: <svg viewBox="0 0 24 24" fill="#fff" width="16" height="16"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>,
     },
   ];
 
@@ -190,7 +190,7 @@ const Index = () => {
               <em style={styles.heroEm}>Waterfall</em>
             </h1>
             <p style={styles.heroSub}>Your Deal Structure Begins Here.</p>
-            <div style={{ margin: "8px 24px 0" }}>
+            <div style={{ margin: "8px 0 0" }}>
               <button onClick={handleCTA} style={styles.ctaBtn} onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>
                 <span style={{ position: "relative", zIndex: 1 }}>RUN MY WATERFALL</span>
                 <div style={styles.ctaShimmer} />
@@ -206,7 +206,8 @@ const Index = () => {
           <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "200px", background: "radial-gradient(ellipse 100% 70% at 50% 0%, rgba(120,60,180,0.20) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
           <div style={{ ...styles.howHeader, ...reveal(howVisible) }}>
             <EyebrowRuled text="The Process" />
-            <h2 style={styles.howH2}>Build in <span style={{ color: "#D4AF37" }}>Minutes</span></h2>
+            <h2 style={styles.howH2}>Build in <span style={{ color: "rgb(180,140,255)" }}>Minutes</span></h2>
+            <p style={styles.sectionSub}>Four steps. Five minutes. One waterfall.</p>
           </div>
           <div style={styles.stepsContainer}>
             <div style={styles.topLineGoldHalf} />
@@ -309,16 +310,17 @@ const Index = () => {
           <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "200px", background: "radial-gradient(ellipse 100% 70% at 50% 0%, rgba(120,60,180,0.20) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
           <div style={{ ...styles.whyHeader, ...reveal(whyVisible) }}>
             <EyebrowRuled text="Why This Matters" />
-            <h2 style={styles.whyH2}><span style={{ color: "#D4AF37" }}>4</span> Reasons<br />You Can't Skip This</h2>
+            <h2 style={styles.whyH2}><span style={{ color: "rgb(180,140,255)" }}>4</span> Reasons<br />You Can't Skip This</h2>
+            <p style={styles.sectionSub}>The math behind every deal you'll ever structure.</p>
           </div>
 
           <div style={{ ...styles.badgeGridWrapper, ...reveal(whyVisible, 1) }}>
             <div style={styles.topLineGold} />
             <div style={styles.badgeGrid}>
               {badgeCards.map((card, i) => {
-                const warmth = 0.10 + (i * 0.04);
+                const warmth = 0.15 + (i * 0.04);
                 return (
-                <div key={card.num} style={{ ...styles.badgeCard, background: `radial-gradient(circle at 45px 57px, rgba(212,175,55,${warmth}) 0%, rgba(6,6,6,0.92) 65%)`, ...reveal(whyVisible, i + 2) }}>
+                <div key={card.num} style={{ ...styles.badgeCard, background: `radial-gradient(circle at 45px 57px, rgba(120,60,180,${warmth}) 0%, rgba(6,6,6,0.92) 65%)`, ...reveal(whyVisible, i + 2) }}>
                   <div style={styles.badgeNum}>{card.num}</div>
                   <p style={styles.badgeTitle}>{card.title}</p>
                   <p style={styles.badgeBody}>{card.body}</p>
@@ -580,13 +582,16 @@ const styles: Record<string, React.CSSProperties> = {
   hero: {
     position: "relative", textAlign: "center",
     padding: "24px 24px 16px",
+    margin: "0 24px",
+    borderRadius: "12px",
+    overflow: "hidden",
     backgroundImage: "linear-gradient(to bottom, rgba(0,0,0,0.50) 0%, rgba(0,0,0,0.35) 40%, rgba(0,0,0,0.65) 100%), url('/hero-bg.jpg')",
     backgroundSize: "cover",
     backgroundPosition: "center 30%",
   },
   heroGlow: {
-    position: "absolute", top: "-10%", left: 0, right: 0, height: "65%", pointerEvents: "none",
-    background: "radial-gradient(ellipse 70% 55% at 50% 30%, rgba(212,175,55,0.30) 0%, transparent 70%)",
+    position: "absolute", top: 0, left: 0, right: 0, height: "65%", pointerEvents: "none",
+    background: "radial-gradient(ellipse 70% 55% at 50% 15%, rgba(212,175,55,0.30) 0%, transparent 70%)",
   },
   heroInner: { position: "relative", zIndex: 1 },
   heroH1: {
@@ -604,28 +609,28 @@ const styles: Record<string, React.CSSProperties> = {
 
   /* ── § 2 HOW IT WORKS ── */
   howSection: { position: "relative", background: "#000", padding: "64px 0 0" },
-  howHeader: { textAlign: "center", padding: "16px 24px 24px", background: "radial-gradient(ellipse 80% 50% at 50% 60%, rgba(212,175,55,0.10) 0%, transparent 70%)" },
+  howHeader: { textAlign: "center", padding: "16px 24px 24px", background: "radial-gradient(ellipse 80% 50% at 50% 60%, rgba(120,60,180,0.18) 0%, transparent 70%)" },
   howH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.6rem", color: "#fff", lineHeight: 0.95 },
-  stepsContainer: { position: "relative", display: "flex", flexDirection: "column", gap: "1px", background: "rgba(212,175,55,0.10)", borderRadius: "12px", overflow: "hidden", margin: "0 24px", border: "1px solid rgba(212,175,55,0.25)", boxShadow: "0 16px 40px rgba(0,0,0,0.5), 0 0 20px rgba(120,60,180,0.15)" },
+  stepsContainer: { position: "relative", display: "flex", flexDirection: "column", gap: "1px", background: "rgba(120,60,180,0.10)", borderRadius: "12px", overflow: "hidden", margin: "0 24px", border: "1px solid rgba(120,60,180,0.25)", boxShadow: "0 16px 40px rgba(0,0,0,0.5), 0 0 20px rgba(120,60,180,0.15)" },
   step: {
     display: "grid", gridTemplateColumns: "52px 1fr", background: "rgba(6,6,6,0.92)",
   },
   stepNumCol: {
     position: "relative", display: "flex", alignItems: "flex-start", justifyContent: "center",
-    background: "radial-gradient(circle at 50% 28px, rgba(212,175,55,0.20) 0%, rgba(6,6,6,0.92) 80%)",
+    background: "radial-gradient(circle at 50% 28px, rgba(120,60,180,0.28) 0%, rgba(6,6,6,0.92) 80%)",
     paddingTop: "22px",
   },
   stepLine: {
     position: "absolute", top: "53px", bottom: "-23px", left: "50%", transform: "translateX(-50%)", width: "1px",
-    background: "linear-gradient(180deg, rgba(212,175,55,0.6) 0%, rgba(212,175,55,0.1) 100%)", zIndex: 0,
+    background: "linear-gradient(180deg, rgba(120,60,180,0.6) 0%, rgba(120,60,180,0.1) 100%)", zIndex: 0,
   },
   stepNumBadge: {
     position: "relative", zIndex: 1, width: "34px", height: "34px", borderRadius: "50%",
-    background: "#D4AF37", display: "flex", alignItems: "center", justifyContent: "center",
-    boxShadow: "0 0 20px rgba(212,175,55,0.5), 0 0 40px rgba(120,60,180,0.25)",
+    background: "linear-gradient(135deg, rgb(75,30,130) 0%, rgb(110,50,170) 100%)", display: "flex", alignItems: "center", justifyContent: "center",
+    boxShadow: "0 0 20px rgba(120,60,180,0.50), 0 0 40px rgba(120,60,180,0.25)",
   },
-  stepContent: { padding: "26px 24px 26px 24px", background: "radial-gradient(circle at 0px 50%, rgba(212,175,55,0.14) 0%, transparent 55%)" },
-  stepTitle: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "#D4AF37", lineHeight: 1, marginBottom: "5px" },
+  stepContent: { padding: "26px 24px 26px 24px" },
+  stepTitle: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "rgb(180,140,255)", lineHeight: 1, marginBottom: "5px" },
   stepBody: { fontFamily: "'Inter', sans-serif", fontSize: "19px", color: "rgba(255,255,255,0.88)", lineHeight: 1.55 },
 
   /* ── § 3 WATERFALL ── */
@@ -696,15 +701,15 @@ const styles: Record<string, React.CSSProperties> = {
   whyHeader: { padding: "20px 24px 24px" },
   whyH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.2rem", color: "#fff", textAlign: "center", lineHeight: 0.95 },
   badgeGridWrapper: {
-    margin: "0 24px", borderRadius: "12px", overflow: "hidden", border: "1px solid rgba(212,175,55,0.25)",
+    margin: "0 24px", borderRadius: "12px", overflow: "hidden", border: "1px solid rgba(120,60,180,0.25)",
     boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 24px rgba(212,175,55,0.10), 0 0 20px rgba(120,60,180,0.15)", position: "relative",
   },
-  badgeGrid: { display: "grid", gridTemplateColumns: "1fr", gap: "1px", background: "rgba(212,175,55,0.15)" },
-  badgeCard: { background: "radial-gradient(circle at 45px 57px, rgba(212,175,55,0.10) 0%, rgba(6,6,6,0.92) 65%)", padding: "36px 24px", textAlign: "left" },
+  badgeGrid: { display: "grid", gridTemplateColumns: "1fr", gap: "1px", background: "rgba(120,60,180,0.15)" },
+  badgeCard: { background: "radial-gradient(circle at 45px 57px, rgba(120,60,180,0.15) 0%, rgba(6,6,6,0.92) 65%)", padding: "36px 24px", textAlign: "left" },
   badgeNum: {
-    width: "42px", height: "42px", borderRadius: "50%", background: "#D4AF37", color: "#000",
+    width: "42px", height: "42px", borderRadius: "50%", background: "linear-gradient(135deg, rgb(75,30,130) 0%, rgb(110,50,170) 100%)", color: "#fff",
     display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.5rem",
-    marginBottom: "16px", paddingTop: "2px", boxShadow: "0 0 24px rgba(212,175,55,0.55), 0 0 48px rgba(120,60,180,0.25)",
+    marginBottom: "16px", paddingTop: "2px", boxShadow: "0 0 24px rgba(120,60,180,0.55), 0 0 48px rgba(120,60,180,0.25)",
   },
   badgeTitle: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "#fff", marginBottom: "8px", lineHeight: 1.05, letterSpacing: "0.02em" },
   badgeBody: { fontFamily: "'Inter', sans-serif", fontSize: "19px", color: "rgba(255,255,255,0.70)", lineHeight: 1.55 },
@@ -714,6 +719,7 @@ const styles: Record<string, React.CSSProperties> = {
   arsenalHeader: { padding: "0 24px 24px" },
   arsenalH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.2rem", color: "#fff", lineHeight: 0.95 },
   arsenalSub: { fontFamily: "'Inter', sans-serif", fontSize: "18px", marginTop: "10px", color: "rgba(255,255,255,0.88)", lineHeight: 1.6 },
+  sectionSub: { fontFamily: "'Inter', sans-serif", fontSize: "18px", marginTop: "10px", color: "rgba(255,255,255,0.70)", lineHeight: 1.5 },
   arsenalCards: { display: "flex", flexDirection: "column", gap: "28px", margin: "0 24px" },
 
   /* Card containers */
@@ -839,8 +845,8 @@ const styles: Record<string, React.CSSProperties> = {
     background: "linear-gradient(90deg, transparent, #D4AF37, transparent)",
   },
   topLineGoldBright: {
-    position: "absolute", top: 0, left: 0, right: 0, height: "1px",
-    background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.8), transparent)",
+    position: "absolute", top: 0, left: 0, right: 0, height: "2px",
+    background: "linear-gradient(to right, transparent 0%, rgba(120,60,180,0.50) 20%, rgba(212,175,55,0.60) 50%, rgba(120,60,180,0.50) 80%, transparent 100%)",
   },
 
   /* ── § 6 REALITY ── */
@@ -881,8 +887,10 @@ const styles: Record<string, React.CSSProperties> = {
 
   /* ── § 7 CLOSER ── */
   closerSection: {
-    position: "relative", overflow: "hidden", textAlign: "center", marginTop: "48px",
-    padding: "48px 24px 80px", borderTop: "1px solid rgba(212,175,55,0.25)",
+    position: "relative", overflow: "hidden", textAlign: "center",
+    padding: "48px 24px 80px", borderTop: "none",
+    margin: "48px 24px 0",
+    borderRadius: "12px",
     backgroundImage: "linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.35) 50%, rgba(0,0,0,0.60) 100%), url('/closer-bg.jpg')",
     backgroundSize: "cover",
     backgroundPosition: "center top",
