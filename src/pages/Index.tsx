@@ -191,7 +191,7 @@ const Index = () => {
             </h1>
             <p style={styles.heroSub}>Your Deal Structure Begins Here.</p>
             <div style={{ margin: "8px 0 0" }}>
-              <button onClick={handleCTA} style={styles.ctaBtn} onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>
+              <button onClick={handleCTA} style={styles.ctaBtn} aria-label="Run my waterfall" onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>
                 <span style={{ position: "relative", zIndex: 1 }}>RUN MY WATERFALL</span>
                 <div style={styles.ctaShimmer} />
               </button>
@@ -260,7 +260,7 @@ const Index = () => {
                 ? "none"
                 : isGroupBoundary
                   ? "2px solid rgba(212,175,55,0.20)"
-                  : "1px solid rgba(255,255,255,0.06)";
+                  : "1px solid rgba(255,255,255,0.12)";
               return (
                 <div key={tier.num} style={{ ...styles.tierRow, borderBottom }}>
                   <div style={styles.tierNum}>{tier.num}</div>
@@ -307,7 +307,7 @@ const Index = () => {
 
         {/* ═══ § 4 WHY THIS MATTERS ═══ */}
         <section ref={whyRef} style={styles.whySection}>
-          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "200px", background: "radial-gradient(ellipse 100% 70% at 50% 0%, rgba(120,60,180,0.20) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
+          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "220px", background: "radial-gradient(ellipse 120% 80% at 50% 0%, rgba(120,60,180,0.22) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
           <div style={{ ...styles.whyHeader, ...reveal(whyVisible) }}>
             <EyebrowRuled text="Why This Matters" />
             <h2 style={styles.whyH2}><span style={{ color: "#D4AF37" }}>(4) Four</span> Reasons<br />You Can't Skip This</h2>
@@ -335,7 +335,7 @@ const Index = () => {
 
         {/* ═══ § 5 ARSENAL ═══ */}
         <section style={styles.arsenalSection}>
-          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "200px", background: "radial-gradient(ellipse 100% 70% at 50% 0%, rgba(120,60,180,0.20) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
+          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "240px", background: "radial-gradient(ellipse 100% 70% at 50% 0%, rgba(120,60,180,0.25) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
           <div ref={arsenalHeaderRef} style={{ ...styles.arsenalHeader, ...reveal(arsenalHeaderVisible) }}>
             <EyebrowRuled text="What you get" />
             <h2 style={styles.arsenalH2}>The <span style={{ color: "#D4AF37" }}>Arsenal</span></h2>
@@ -374,7 +374,7 @@ const Index = () => {
                 ))}
               </div>
               <div style={styles.tierAction}>
-                <button onClick={handleCTA} style={styles.btnFree} onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>START MODELING</button>
+                <button onClick={handleCTA} style={styles.btnFree} aria-label="Start modeling your waterfall" onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>START MODELING</button>
               </div>
             </div>
 
@@ -386,7 +386,7 @@ const Index = () => {
               <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.6), transparent)", zIndex: 1 }} />
               <div style={styles.tierHeaderAlt}>
                 <div style={{ marginBottom: "12px" }}>
-                  <span style={styles.trendingBadge}>Essential</span>
+                  <span style={styles.badgeGold}>Essential</span>
                 </div>
                 <p style={styles.tierTitleCard}>THE FULL ANALYSIS</p>
                 <p style={styles.tierSubGold}>Your numbers documented & stress-tested.</p>
@@ -413,7 +413,7 @@ const Index = () => {
                 ))}
               </div>
               <div style={styles.tierAction}>
-                <button onClick={() => gatedNavigate("/store/the-full-analysis")} style={styles.btnGold} onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>GET THE FULL ANALYSIS</button>
+                <button onClick={() => { haptics.light(); gatedNavigate("/store/the-full-analysis"); }} style={styles.btnGold} aria-label="Get the Full Analysis" onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>GET THE FULL ANALYSIS</button>
                 <a href="/store/the-full-analysis" onClick={(e) => { e.preventDefault(); gatedNavigate("/store/the-full-analysis"); }} style={styles.detailsLink} onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(255,255,255,1)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(255,255,255,0.85)"; }}>See full details →</a>
               </div>
             </div>
@@ -456,7 +456,7 @@ const Index = () => {
                 ))}
               </div>
               <div style={styles.tierAction}>
-                <button onClick={() => gatedNavigate("/store/the-producers-package")} style={styles.btnPurpleOutline} onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>GET THE PRODUCER'S PACKAGE</button>
+                <button onClick={() => { haptics.light(); gatedNavigate("/store/the-producers-package"); }} style={styles.btnPurpleOutline} aria-label="Get the Producer's Package" onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>GET THE PRODUCER'S PACKAGE</button>
                 <a href="/store/the-producers-package" onClick={(e) => { e.preventDefault(); gatedNavigate("/store/the-producers-package"); }} style={styles.detailsLink} onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(255,255,255,1)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(255,255,255,0.85)"; }}>See full details →</a>
               </div>
             </div>
@@ -467,7 +467,7 @@ const Index = () => {
 
         {/* ═══ § 6 REALITY ═══ */}
         <section style={styles.realitySection}>
-          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "200px", background: "radial-gradient(ellipse 100% 70% at 50% 0%, rgba(120,60,180,0.20) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
+          <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "240px", background: "radial-gradient(ellipse 80% 100% at 30% 100%, rgba(120,60,180,0.18) 0%, transparent 65%)", pointerEvents: "none", zIndex: 0 }} />
           <div style={{ position: "relative" }}>
             <div style={{ position: "absolute", top: "-20px", left: "-20px", right: "-20px", bottom: "-20px", background: "radial-gradient(ellipse 120% 100% at 20% 50%, rgba(120,60,180,0.22) 0%, transparent 60%)", pointerEvents: "none", zIndex: 0 }} />
             <blockquote ref={realityQuoteRef} style={{ ...styles.blockquote, position: "relative", zIndex: 1, ...reveal(realityQuoteVisible) }}>
@@ -485,7 +485,7 @@ const Index = () => {
             </div>
             {/* Rows */}
             {withItems.map((withItem, i) => (
-              <div key={i} style={{ ...styles.checkRow, borderBottom: i < withItems.length - 1 ? "1px solid rgba(255,255,255,0.06)" : "none" }}>
+              <div key={i} style={{ ...styles.checkRow, borderBottom: i < withItems.length - 1 ? "1px solid rgba(255,255,255,0.12)" : "none" }}>
                 <div style={styles.checkCellLeft}>
                   <span style={styles.checkIconYes}>✓</span>
                   <span style={styles.checkTextYes}>{withItem}</span>
@@ -508,7 +508,7 @@ const Index = () => {
             <div style={styles.topLineGoldBright} />
             <h2 style={styles.closerH2}>Your Investors<br /><span style={{ color: "#D4AF37", display: "block", textShadow: "0 0 40px rgba(212,175,55,0.6), 0 0 80px rgba(212,175,55,0.25)" }}>Will Ask.</span></h2>
             <p style={styles.closerBody}>Stop guessing. Model your waterfall before the pitch.</p>
-            <button onClick={handleCTA} style={styles.ctaBtn} onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>
+            <button onClick={handleCTA} style={styles.ctaBtn} aria-label="Run my waterfall" onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>
               <span style={{ position: "relative", zIndex: 1 }}>RUN MY WATERFALL</span>
               <div style={styles.ctaShimmer} />
             </button>
@@ -533,7 +533,7 @@ const Index = () => {
             </a>
           </div>
           <div style={styles.footerNav}>
-            <span onClick={() => gatedNavigate("/store")} style={styles.footerNavLink} onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.60)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.35)"; }}>Shop</span>
+            <span onClick={() => gatedNavigate("/store")} style={styles.footerNavLink} onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.60)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.50)"; }}>Shop</span>
           </div>
           <p style={styles.footerText}>
             Filmmaker.og provides financial modeling tools for educational purposes. This is not legal or financial advice. Consult qualified counsel before executing any investment structure.
@@ -586,7 +586,7 @@ const styles: Record<string, React.CSSProperties> = {
   /* ── § 1 HERO ── */
   hero: {
     position: "relative", textAlign: "center",
-    padding: "24px 24px 0",
+    padding: "24px 24px 16px",
     margin: "0 24px",
     borderRadius: "12px",
     overflow: "hidden",
@@ -664,7 +664,7 @@ const styles: Record<string, React.CSSProperties> = {
   tierRow: {
     position: "relative", display: "grid", gridTemplateColumns: "auto 1fr auto",
     gap: "16px", padding: "18px 20px", alignItems: "center",
-    borderBottom: "1px solid rgba(255,255,255,0.06)", cursor: "default",
+    borderBottom: "1px solid rgba(255,255,255,0.12)", cursor: "default",
     borderLeft: "2px solid rgba(220,38,38,0.15)",
   },
   tierNum: {
@@ -684,7 +684,7 @@ const styles: Record<string, React.CSSProperties> = {
     position: "relative", textAlign: "center", background: "rgba(6,6,6,0.92)", border: "1px solid rgba(60,179,113,0.35)",
     borderRadius: "12px", padding: "24px 20px", zIndex: 2, boxShadow: "0 8px 24px rgba(0,0,0,0.5), 0 0 30px rgba(60,179,113,0.15), 0 0 20px rgba(120,60,180,0.15)",
   },
-  netLabel: { fontFamily: "'Roboto Mono', monospace", fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.15em", color: colors.textPrimary, marginBottom: "8px" },
+  netLabel: { fontFamily: "'Roboto Mono', monospace", fontSize: "13px", textTransform: "uppercase", letterSpacing: "0.15em", color: colors.textPrimary, marginBottom: "8px" },
   netAmount: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.2rem", color: "#3CB371", lineHeight: 0.9, letterSpacing: "0.02em", textShadow: "0 0 24px rgba(60,179,113,0.35)" },
   pipeNetwork: { display: "flex", flexDirection: "column", alignItems: "center", marginTop: "-1px", position: "relative", zIndex: 1 },
   pipeVertical: { width: "2px", height: "18px", background: "rgba(60,179,113,0.50)", boxShadow: "0 0 8px rgba(120,60,180,0.15)" },
@@ -696,10 +696,10 @@ const styles: Record<string, React.CSSProperties> = {
     flex: 1, textAlign: "center", background: "rgba(6,6,6,0.92)", border: "1px solid rgba(60,179,113,0.25)",
     borderTop: "2px solid #3CB371", borderRadius: "0 0 10px 10px", padding: "16px 12px",
   },
-  bucketLabel: { fontFamily: "'Roboto Mono', monospace", fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.15em", color: colors.textPrimary, marginBottom: "8px" },
+  bucketLabel: { fontFamily: "'Roboto Mono', monospace", fontSize: "13px", textTransform: "uppercase", letterSpacing: "0.15em", color: colors.textPrimary, marginBottom: "8px" },
   bucketAmount: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "2rem", color: "#3CB371", lineHeight: 1, textShadow: "0 0 20px rgba(60,179,113,0.30)" },
-  bucketPct: { fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: "rgba(255,255,255,0.85)", marginTop: "5px" },
-  waterfallNote: { fontFamily: "'Roboto Mono', monospace", fontSize: "11px", textTransform: "uppercase", textAlign: "center", color: "rgba(255,255,255,0.45)", letterSpacing: "0.06em", padding: "16px 24px 0" },
+  bucketPct: { fontFamily: "'Roboto Mono', monospace", fontSize: "13px", color: "rgba(255,255,255,0.85)", marginTop: "5px" },
+  waterfallNote: { fontFamily: "'Roboto Mono', monospace", fontSize: "13px", textTransform: "uppercase", textAlign: "center", color: "rgba(255,255,255,0.55)", letterSpacing: "0.06em", padding: "16px 24px 0" },
 
   /* ── § 4 WHY THIS MATTERS ── */
   whySection: { position: "relative", background: "#000", textAlign: "center", padding: "48px 0 0" },
@@ -752,10 +752,10 @@ const styles: Record<string, React.CSSProperties> = {
     padding: "28px 24px 20px", borderBottom: "1px solid rgba(60,179,113,0.12)",
   },
   tierHeaderAlt: {
-    padding: "28px 24px 20px", borderBottom: "1px solid rgba(255,255,255,0.06)",
+    padding: "28px 24px 20px", borderBottom: "1px solid rgba(255,255,255,0.12)",
   },
   tierTitleCard: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "2.6rem", color: "#fff", lineHeight: 1, letterSpacing: "0.04em", marginBottom: "8px" },
-  tierSubFree: { fontFamily: "'Inter', sans-serif", fontSize: "18px", color: "rgba(255,255,255,0.72)", marginTop: "6px" },
+  tierSubFree: { fontFamily: "'Inter', sans-serif", fontSize: "18px", color: "rgba(255,255,255,0.85)", marginTop: "6px" },
   tierSubGold: { fontFamily: "'Inter', sans-serif", fontSize: "18px", color: "rgba(212,175,55,0.80)", lineHeight: 1.4 },
 
   /* Badges */
@@ -765,7 +765,7 @@ const styles: Record<string, React.CSSProperties> = {
     background: "rgba(60,179,113,0.08)", color: "#3CB371", border: "1px solid rgba(60,179,113,0.30)",
     whiteSpace: "nowrap", flexShrink: 0,
   },
-  trendingBadge: {
+  badgeGold: {
     display: "inline-block", fontFamily: "'Roboto Mono', monospace", fontSize: "11px", textTransform: "uppercase",
     letterSpacing: "0.15em", color: "#D4AF37", background: "rgba(212,175,55,0.08)",
     border: "1px solid rgba(212,175,55,0.35)",
@@ -773,7 +773,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
   badgePurple: {
     display: "inline-block", fontFamily: "'Roboto Mono', monospace", fontSize: "11px", textTransform: "uppercase",
-    letterSpacing: "0.15em", color: "rgb(180,140,255)", background: "rgba(120,60,180,0.10)",
+    letterSpacing: "0.15em", color: "rgb(180,140,255)", background: "rgba(120,60,180,0.15)",
     border: "1px solid rgba(120,60,180,0.35)",
     padding: "6px 12px", borderRadius: "4px", fontWeight: 600, whiteSpace: "nowrap",
   },
@@ -781,7 +781,7 @@ const styles: Record<string, React.CSSProperties> = {
   /* Value statements */
   valueStatementFree: {
     padding: "20px 24px", textAlign: "center",
-    background: "rgba(60,179,113,0.04)",
+    background: "rgba(60,179,113,0.08)",
     borderTop: "1px solid rgba(60,179,113,0.15)", borderBottom: "1px solid rgba(60,179,113,0.15)",
   },
   valueTextFree: {
@@ -790,7 +790,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
   valueStatementGold: {
     padding: "20px 24px", textAlign: "center",
-    background: "rgba(212,175,55,0.04)",
+    background: "rgba(212,175,55,0.08)",
     borderTop: "1px solid rgba(212,175,55,0.15)", borderBottom: "1px solid rgba(212,175,55,0.15)",
   },
   valueTextGold: {
@@ -799,7 +799,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
   valueStatementPurple: {
     padding: "20px 24px", textAlign: "center",
-    background: "rgba(120,60,180,0.06)",
+    background: "rgba(120,60,180,0.12)",
     borderTop: "1px solid rgba(120,60,180,0.15)", borderBottom: "1px solid rgba(120,60,180,0.15)",
   },
   valueTextPurple: {
@@ -815,13 +815,13 @@ const styles: Record<string, React.CSSProperties> = {
   btnFree: {
     display: "block", width: "100%", textAlign: "center",
     fontFamily: "'Roboto Mono', monospace", fontSize: "16px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.10em",
-    color: "#3CB371", background: "rgba(60,179,113,0.05)", border: "1px solid rgba(60,179,113,0.25)",
+    color: "#3CB371", background: "rgba(60,179,113,0.10)", border: "1px solid rgba(60,179,113,0.25)",
     padding: "18px", borderRadius: "6px", cursor: "pointer",
   },
   btnGold: {
     display: "block", width: "100%", textAlign: "center",
     fontFamily: "'Roboto Mono', monospace", fontSize: "16px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.10em",
-    color: "#D4AF37", background: "rgba(212,175,55,0.05)", border: "1px solid rgba(212,175,55,0.30)",
+    color: "#D4AF37", background: "rgba(212,175,55,0.10)", border: "1px solid rgba(212,175,55,0.30)",
     padding: "18px", borderRadius: "6px", cursor: "pointer",
   },
   btnPackage: {
@@ -833,10 +833,10 @@ const styles: Record<string, React.CSSProperties> = {
   btnPurpleOutline: {
     display: "block", width: "100%", textAlign: "center",
     fontFamily: "'Roboto Mono', monospace", fontSize: "16px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.10em",
-    color: "rgb(180,140,255)", background: "rgba(120,60,180,0.05)", border: "1px solid rgba(120,60,180,0.30)",
+    color: "rgb(180,140,255)", background: "rgba(120,60,180,0.12)", border: "1px solid rgba(120,60,180,0.30)",
     padding: "18px", borderRadius: "6px", cursor: "pointer",
   },
-  detailsLink: { display: "block", textAlign: "center", fontFamily: "'Inter', sans-serif", fontSize: "15px", color: "rgba(255,255,255,0.85)", textDecoration: "none", marginTop: "16px", cursor: "pointer", padding: "8px 0" },
+  detailsLink: { display: "block", textAlign: "center", fontFamily: "'Inter', sans-serif", fontSize: "16px", color: "rgba(255,255,255,0.85)", textDecoration: "none", marginTop: "16px", cursor: "pointer", padding: "8px 0" },
 
   /* ── Top line helpers ── */
   topLineGold: {
@@ -868,16 +868,16 @@ const styles: Record<string, React.CSSProperties> = {
     boxShadow: "0 8px 32px rgba(0,0,0,0.5), 0 0 20px rgba(120,60,180,0.15)",
   },
   checkHeader: {
-    display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1px", background: "rgba(255,255,255,0.06)",
+    display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1px", background: "rgba(255,255,255,0.12)",
     borderBottom: "1px solid rgba(212,175,55,0.15)",
   },
   checkHeaderWith: { background: "rgba(60,179,113,0.07)", padding: "14px 16px" },
-  checkHeaderWithout: { background: "rgba(6,6,6,0.92)", padding: "14px 16px", borderLeft: "1px solid rgba(255,255,255,0.06)" },
+  checkHeaderWithout: { background: "rgba(6,6,6,0.92)", padding: "14px 16px", borderLeft: "1px solid rgba(255,255,255,0.12)" },
   checkHeaderWithText: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.7rem", color: "#3CB371", letterSpacing: "0.04em" },
   checkHeaderWithoutText: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.7rem", color: "rgba(255,255,255,0.55)", letterSpacing: "0.04em" },
   checkRow: {
-    display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1px", background: "rgba(255,255,255,0.06)",
-    borderBottom: "1px solid rgba(255,255,255,0.06)",
+    display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1px", background: "rgba(255,255,255,0.12)",
+    borderBottom: "1px solid rgba(255,255,255,0.12)",
   },
   checkCellLeft: {
     background: "rgba(60,179,113,0.06)", display: "grid", gridTemplateColumns: "22px 1fr", gap: "10px",
@@ -885,12 +885,12 @@ const styles: Record<string, React.CSSProperties> = {
   },
   checkCellRight: {
     background: "rgba(6,6,6,0.92)", display: "grid", gridTemplateColumns: "22px 1fr", gap: "10px",
-    padding: "14px 16px", alignItems: "flex-start", borderLeft: "1px solid rgba(255,255,255,0.06)",
+    padding: "14px 16px", alignItems: "flex-start", borderLeft: "1px solid rgba(255,255,255,0.12)",
   },
   checkIconYes: { fontFamily: "'Roboto Mono', monospace", fontSize: "24px", paddingTop: "2px", color: "#3CB371", textShadow: "0 0 8px rgba(60,179,113,0.6), 0 0 20px rgba(60,179,113,0.3)" },
   checkIconNo: { fontFamily: "'Roboto Mono', monospace", fontSize: "24px", paddingTop: "2px", color: "rgba(220,38,38,0.85)", textShadow: "0 0 8px rgba(220,38,38,0.6), 0 0 20px rgba(220,38,38,0.3)" },
   checkTextYes: { fontFamily: "'Inter', sans-serif", fontSize: "16px", lineHeight: 1.4, color: "rgba(255,255,255,0.85)" },
-  checkTextNo: { fontFamily: "'Inter', sans-serif", fontSize: "16px", lineHeight: 1.4, color: "rgba(255,255,255,0.72)" },
+  checkTextNo: { fontFamily: "'Inter', sans-serif", fontSize: "16px", lineHeight: 1.4, color: "rgba(255,255,255,0.85)" },
 
   /* ── § 7 CLOSER ── */
   closerSection: {
@@ -898,7 +898,7 @@ const styles: Record<string, React.CSSProperties> = {
     padding: "24px 0 80px", borderTop: "none",
     margin: "0 24px 0",
     borderRadius: "12px",
-    backgroundImage: "linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.35) 50%, rgba(0,0,0,0.60) 100%), url('/closer-bg.jpg')",
+    backgroundImage: "linear-gradient(to bottom, rgba(0,0,0,0.40) 0%, rgba(0,0,0,0.20) 50%, rgba(0,0,0,0.50) 100%), url('/closer-bg.jpg')",
     backgroundSize: "cover",
     backgroundPosition: "center 55%",
   },
@@ -908,7 +908,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
   closerCard: {
     position: "relative", zIndex: 1, border: "1px solid rgba(212,175,55,0.65)", borderRadius: "12px",
-    padding: "24px 24px 36px", background: "rgba(0,0,0,0.85)", backdropFilter: "blur(40px)", WebkitBackdropFilter: "blur(40px)", margin: "0",
+    padding: "24px 24px 36px", background: "rgba(0,0,0,0.85)", backdropFilter: "blur(40px)", WebkitBackdropFilter: "blur(40px)", margin: "0 1px",
     boxShadow: "0 16px 40px rgba(0,0,0,0.8), 0 0 60px rgba(120,60,180,0.15), 0 0 80px rgba(120,60,180,0.15)",
   },
   closerH2: {
@@ -921,11 +921,11 @@ const styles: Record<string, React.CSSProperties> = {
   },
 
   /* ── FOOTER ── */
-  footer: { background: "#0A0A0A", borderTop: "1px solid rgba(255,255,255,0.06)", padding: "32px 24px 40px" },
+  footer: { background: "#0A0A0A", borderTop: "1px solid rgba(255,255,255,0.12)", padding: "32px 24px 40px" },
   footerLinks: { display: "flex", justifyContent: "center", gap: "20px", marginBottom: "16px" },
   footerIcon: { color: "rgba(212,175,55,0.50)", textDecoration: "none", display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", borderRadius: "8px", border: "1px solid rgba(212,175,55,0.15)", transition: "color 0.2s ease, border-color 0.2s ease" },
   footerNav: { display: "flex", justifyContent: "center", alignItems: "center", gap: "10px", marginBottom: "16px" },
-  footerNavLink: { fontFamily: "'Roboto Mono', monospace", fontSize: "12px", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(212,175,55,0.35)", cursor: "pointer", transition: "color 0.2s ease" } as React.CSSProperties,
+  footerNavLink: { fontFamily: "'Roboto Mono', monospace", fontSize: "13px", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(212,175,55,0.50)", cursor: "pointer", transition: "color 0.2s ease" } as React.CSSProperties,
   footerDot: { color: "rgba(212,175,55,0.20)", fontSize: "12px" },
   footerText: { fontFamily: "'Inter', sans-serif", fontSize: "14px", textAlign: "center", color: "rgba(255,255,255,0.48)", lineHeight: 1.55 },
 };
