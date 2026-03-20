@@ -167,7 +167,20 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                 transition: "transform 0.15s ease, box-shadow 0.3s ease",
               }}
             >
-              <Sparkles style={{ width: "30px", height: "30px", color: "#D4AF37", filter: "drop-shadow(0 0 6px rgba(212,175,55,0.40))", position: "relative", zIndex: 1, marginTop: "1px" }} />
+              <div style={{
+                width: "36px",
+                height: "36px",
+                borderRadius: "8px",
+                background: "rgba(55,20,100,0.80)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                flexShrink: 0,
+                position: "relative",
+                zIndex: 1,
+              }}>
+                <Sparkles style={{ width: "22px", height: "22px", color: "#D4AF37", filter: "drop-shadow(0 0 6px rgba(212,175,55,0.40))" }} />
+              </div>
               <span style={{
                 fontFamily: "'Bebas Neue', sans-serif",
                 fontSize: "1.8rem",
@@ -198,8 +211,8 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                 key={item.path}
                 aria-label={item.label}
                 onClick={() => handleNavigate(item.path)}
-                onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; }}
-                onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
+                onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.40)"; e.currentTarget.style.background = "rgba(212,175,55,0.04)"; }}
+                onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; e.currentTarget.style.background = "transparent"; }}
                 style={{
                   display: "flex",
                   flexDirection: "column",
@@ -207,10 +220,10 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   justifyContent: "center",
                   gap: "6px",
                   padding: "10px 8px",
-                  background: "rgba(255,255,255,0.05)",
+                  background: "transparent",
                   border: "1px solid rgba(212,175,55,0.25)",
                   borderRadius: "6px",
-                  transition: "transform 0.15s ease, border-color 0.25s ease",
+                  transition: "transform 0.15s ease, border-color 0.25s ease, background 0.25s ease",
                 }}
               >
                 {item.icon}
@@ -238,8 +251,8 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                 rel="noopener noreferrer"
                 aria-label="Instagram"
                 onClick={() => haptics.light()}
-                onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; }}
-                onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
+                onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.40)"; e.currentTarget.style.background = "rgba(212,175,55,0.04)"; }}
+                onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; e.currentTarget.style.background = "transparent"; }}
                 style={{
                   display: "flex",
                   flexDirection: "column",
@@ -247,11 +260,11 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   justifyContent: "center",
                   gap: "6px",
                   padding: "10px 8px",
-                  background: "rgba(255,255,255,0.05)",
+                  background: "transparent",
                   border: "1px solid rgba(212,175,55,0.25)",
                   borderRadius: "6px",
                   textDecoration: "none",
-                  transition: "transform 0.15s ease, border-color 0.25s ease",
+                  transition: "transform 0.15s ease, border-color 0.25s ease, background 0.25s ease",
                 }}
               >
                 <Instagram size={18} style={{ color: "#D4AF37" }} />
@@ -270,8 +283,8 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                 rel="noopener noreferrer"
                 aria-label="TikTok"
                 onClick={() => haptics.light()}
-                onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; }}
-                onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
+                onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.40)"; e.currentTarget.style.background = "rgba(212,175,55,0.04)"; }}
+                onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; e.currentTarget.style.background = "transparent"; }}
                 style={{
                   display: "flex",
                   flexDirection: "column",
@@ -279,11 +292,11 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   justifyContent: "center",
                   gap: "6px",
                   padding: "10px 8px",
-                  background: "rgba(255,255,255,0.05)",
+                  background: "transparent",
                   border: "1px solid rgba(212,175,55,0.25)",
                   borderRadius: "6px",
                   textDecoration: "none",
-                  transition: "transform 0.15s ease, border-color 0.25s ease",
+                  transition: "transform 0.15s ease, border-color 0.25s ease, background 0.25s ease",
                 }}
               >
                 <svg width={18} height={18} viewBox="0 0 24 24" fill="#D4AF37" xmlns="http://www.w3.org/2000/svg">
@@ -304,8 +317,8 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                 rel="noopener noreferrer"
                 aria-label="Facebook"
                 onClick={() => haptics.light()}
-                onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; }}
-                onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
+                onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.40)"; e.currentTarget.style.background = "rgba(212,175,55,0.04)"; }}
+                onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; e.currentTarget.style.background = "transparent"; }}
                 style={{
                   display: "flex",
                   flexDirection: "column",
@@ -313,11 +326,11 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   justifyContent: "center",
                   gap: "6px",
                   padding: "10px 8px",
-                  background: "rgba(255,255,255,0.05)",
+                  background: "transparent",
                   border: "1px solid rgba(212,175,55,0.25)",
                   borderRadius: "6px",
                   textDecoration: "none",
-                  transition: "transform 0.15s ease, border-color 0.25s ease",
+                  transition: "transform 0.15s ease, border-color 0.25s ease, background 0.25s ease",
                 }}
               >
                 <svg width={18} height={18} viewBox="0 0 24 24" fill="#D4AF37" xmlns="http://www.w3.org/2000/svg">
@@ -343,8 +356,8 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
               <button
                 aria-label="Home"
                 onClick={() => handleNavigate("/")}
-                onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; }}
-                onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
+                onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.40)"; e.currentTarget.style.background = "rgba(212,175,55,0.04)"; }}
+                onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; e.currentTarget.style.background = "transparent"; }}
                 style={{
                   display: "flex",
                   flexDirection: "column",
@@ -352,11 +365,11 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   justifyContent: "center",
                   gap: "6px",
                   padding: "10px 8px",
-                  background: "rgba(255,255,255,0.05)",
+                  background: "transparent",
                   border: "1px solid rgba(212,175,55,0.25)",
                   borderRadius: "6px",
                   cursor: "pointer",
-                  transition: "transform 0.15s ease, border-color 0.25s ease",
+                  transition: "transform 0.15s ease, border-color 0.25s ease, background 0.25s ease",
                 }}
               >
                 <Home size={18} color="#D4AF37" />
@@ -374,8 +387,8 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                 aria-label="Email"
                 href="mailto:thefilmmaker.og@gmail.com"
                 onClick={() => haptics.light()}
-                onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; }}
-                onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
+                onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.40)"; e.currentTarget.style.background = "rgba(212,175,55,0.04)"; }}
+                onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; e.currentTarget.style.background = "transparent"; }}
                 style={{
                   display: "flex",
                   flexDirection: "column",
@@ -383,11 +396,11 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   justifyContent: "center",
                   gap: "6px",
                   padding: "10px 8px",
-                  background: "rgba(255,255,255,0.05)",
+                  background: "transparent",
                   border: "1px solid rgba(212,175,55,0.25)",
                   borderRadius: "6px",
                   textDecoration: "none",
-                  transition: "transform 0.15s ease, border-color 0.25s ease",
+                  transition: "transform 0.15s ease, border-color 0.25s ease, background 0.25s ease",
                 }}
               >
                 <Mail size={18} style={{ color: "#D4AF37" }} />
@@ -404,8 +417,8 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
               <button
                 aria-label="Share"
                 onClick={handleShare}
-                onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; }}
-                onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
+                onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.40)"; e.currentTarget.style.background = "rgba(212,175,55,0.04)"; }}
+                onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; e.currentTarget.style.background = "transparent"; }}
                 style={{
                   display: "flex",
                   flexDirection: "column",
@@ -413,11 +426,11 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   justifyContent: "center",
                   gap: "6px",
                   padding: "10px 8px",
-                  background: "rgba(255,255,255,0.05)",
+                  background: "transparent",
                   border: "1px solid rgba(212,175,55,0.25)",
                   borderRadius: "6px",
                   cursor: "pointer",
-                  transition: "transform 0.15s ease, border-color 0.25s ease",
+                  transition: "transform 0.15s ease, border-color 0.25s ease, background 0.25s ease",
                 }}
               >
                 <Share2 size={18} style={{ color: "#D4AF37" }} />
