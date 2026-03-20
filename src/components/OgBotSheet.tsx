@@ -282,6 +282,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
               {ogMessages.length > 0 && (
                 <button
                   onClick={handleReset}
+                  aria-label="Clear chat history"
                   className="flex items-center gap-1.5 font-bebas text-[12px] uppercase tracking-[0.15em] transition-colors tabular-nums"
                   style={{ color: "rgba(180,140,255,0.50)" }}
                   onMouseEnter={e => (e.currentTarget.style.color = "rgba(180,140,255,0.80)")}
@@ -295,9 +296,9 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
                 onClick={() => { haptics.light(); setIsOpen(false); }}
                 aria-label="Close chat"
                 className="transition-colors p-1"
-                style={{ color: "rgba(255,255,255,0.40)" }}
+                style={{ color: "rgba(255,255,255,0.50)" }}
                 onMouseEnter={e => (e.currentTarget.style.color = "rgba(255,255,255,0.70)")}
-                onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,0.40)")}
+                onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,0.50)")}
               >
                 <X className="w-4 h-4" />
               </button>
@@ -460,6 +461,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
                 <button
                   type="submit"
                   disabled={!ogInput.trim() || ogLoading}
+                  aria-label="Send message"
                   className="px-5 font-bebas tracking-wider transition-all flex items-center gap-2 flex-shrink-0 disabled:opacity-30 disabled:cursor-not-allowed"
                   onMouseEnter={e => !e.currentTarget.disabled && (e.currentTarget.style.opacity = "0.8")}
                   onMouseLeave={e => (e.currentTarget.style.opacity = "1")}
