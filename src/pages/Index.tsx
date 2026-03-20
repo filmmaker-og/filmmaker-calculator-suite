@@ -199,7 +199,7 @@ const Index = () => {
           </div>
         </section>
 
-        <div style={{ height: "3px", background: "linear-gradient(to right, transparent 0%, rgba(120,60,180,0.50) 20%, rgba(212,175,55,0.40) 50%, rgba(120,60,180,0.50) 80%, transparent 100%)", boxShadow: "0 0 16px rgba(120,60,180,0.25)", margin: "0 24px" }} />
+        <div style={{ height: "3px", background: "linear-gradient(to right, transparent 0%, rgba(120,60,180,0.50) 20%, rgba(212,175,55,0.40) 50%, rgba(120,60,180,0.50) 80%, transparent 100%)", boxShadow: "0 0 8px rgba(120,60,180,0.35), 0 0 20px rgba(120,60,180,0.20)", margin: "0 24px" }} />
 
         {/* ═══ § 2 HOW IT WORKS ═══ */}
         <section ref={howRef} style={styles.howSection}>
@@ -228,7 +228,7 @@ const Index = () => {
           </div>
         </section>
 
-        <div style={{ height: "3px", background: "linear-gradient(to right, transparent 0%, rgba(120,60,180,0.50) 20%, rgba(212,175,55,0.40) 50%, rgba(120,60,180,0.50) 80%, transparent 100%)", boxShadow: "0 0 16px rgba(120,60,180,0.25)", margin: "0 24px" }} />
+        <div style={{ height: "3px", background: "linear-gradient(to right, transparent 0%, rgba(120,60,180,0.50) 20%, rgba(212,175,55,0.40) 50%, rgba(120,60,180,0.50) 80%, transparent 100%)", boxShadow: "0 0 8px rgba(120,60,180,0.35), 0 0 20px rgba(120,60,180,0.20)", margin: "0 24px" }} />
 
         {/* ═══ § 3 WATERFALL ═══ */}
         <section style={styles.waterfallSection}>
@@ -303,7 +303,7 @@ const Index = () => {
           <p style={{ ...styles.waterfallNote, ...reveal(waterfallFlowVisible) }}>Model only — your numbers will differ</p>
         </section>
 
-        <div style={{ height: "3px", background: "linear-gradient(to right, transparent 0%, rgba(120,60,180,0.50) 20%, rgba(212,175,55,0.40) 50%, rgba(120,60,180,0.50) 80%, transparent 100%)", boxShadow: "0 0 16px rgba(120,60,180,0.25)", margin: "0 24px" }} />
+        <div style={{ height: "3px", background: "linear-gradient(to right, transparent 0%, rgba(120,60,180,0.50) 20%, rgba(212,175,55,0.40) 50%, rgba(120,60,180,0.50) 80%, transparent 100%)", boxShadow: "0 0 8px rgba(120,60,180,0.35), 0 0 20px rgba(120,60,180,0.20)", margin: "0 24px" }} />
 
         {/* ═══ § 4 WHY THIS MATTERS ═══ */}
         <section ref={whyRef} style={styles.whySection}>
@@ -331,7 +331,7 @@ const Index = () => {
           </div>
         </section>
 
-        <div style={{ height: "3px", background: "linear-gradient(to right, transparent 0%, rgba(120,60,180,0.50) 20%, rgba(212,175,55,0.40) 50%, rgba(120,60,180,0.50) 80%, transparent 100%)", boxShadow: "0 0 16px rgba(120,60,180,0.25)", margin: "0 24px" }} />
+        <div style={{ height: "3px", background: "linear-gradient(to right, transparent 0%, rgba(120,60,180,0.50) 20%, rgba(212,175,55,0.40) 50%, rgba(120,60,180,0.50) 80%, transparent 100%)", boxShadow: "0 0 8px rgba(120,60,180,0.35), 0 0 20px rgba(120,60,180,0.20)", margin: "0 24px" }} />
 
         {/* ═══ § 5 ARSENAL ═══ */}
         <section style={styles.arsenalSection}>
@@ -463,13 +463,15 @@ const Index = () => {
           </div>
         </section>
 
-        <div style={{ height: "3px", background: "linear-gradient(to right, transparent 0%, rgba(120,60,180,0.50) 20%, rgba(212,175,55,0.40) 50%, rgba(120,60,180,0.50) 80%, transparent 100%)", boxShadow: "0 0 16px rgba(120,60,180,0.25)", margin: "0 24px" }} />
+        <div style={{ height: "3px", background: "linear-gradient(to right, transparent 0%, rgba(120,60,180,0.50) 20%, rgba(212,175,55,0.40) 50%, rgba(120,60,180,0.50) 80%, transparent 100%)", boxShadow: "0 0 8px rgba(120,60,180,0.35), 0 0 20px rgba(120,60,180,0.20)", margin: "0 24px" }} />
 
         {/* ═══ § 6 REALITY ═══ */}
         <section style={styles.realitySection}>
+          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "180px", background: "radial-gradient(ellipse 100% 70% at 50% 0%, rgba(120,60,180,0.20) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
+          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "180px", background: "radial-gradient(ellipse 100% 70% at 50% 0%, rgba(120,60,180,0.20) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
           <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "240px", background: "radial-gradient(ellipse 80% 100% at 30% 100%, rgba(120,60,180,0.18) 0%, transparent 65%)", pointerEvents: "none", zIndex: 0 }} />
           <div style={{ position: "relative" }}>
-            <div style={{ position: "absolute", top: "-20px", left: "-20px", right: "-20px", bottom: "-20px", background: "radial-gradient(ellipse 120% 100% at 20% 50%, rgba(120,60,180,0.22) 0%, transparent 60%)", pointerEvents: "none", zIndex: 0 }} />
+            <div style={{ position: "absolute", top: "-30px", left: "-24px", right: "-24px", bottom: "-20px", background: "linear-gradient(to bottom, rgba(120,60,180,0.18) 0%, rgba(120,60,180,0.10) 60%, transparent 100%)", pointerEvents: "none", zIndex: 0 }} />
             <blockquote ref={realityQuoteRef} style={{ ...styles.blockquote, position: "relative", zIndex: 1, ...reveal(realityQuoteVisible) }}>
             The waterfall either costs you now — or costs you everything <span style={{ color: "#D4AF37" }}>later</span>.
           </blockquote>
@@ -499,7 +501,7 @@ const Index = () => {
           </div>
         </section>
 
-        <div style={{ height: "3px", background: "linear-gradient(to right, transparent 0%, rgba(120,60,180,0.50) 20%, rgba(212,175,55,0.40) 50%, rgba(120,60,180,0.50) 80%, transparent 100%)", boxShadow: "0 0 16px rgba(120,60,180,0.25)", margin: "0 24px" }} />
+        <div style={{ height: "3px", background: "linear-gradient(to right, transparent 0%, rgba(120,60,180,0.50) 20%, rgba(212,175,55,0.40) 50%, rgba(120,60,180,0.50) 80%, transparent 100%)", boxShadow: "0 0 8px rgba(120,60,180,0.35), 0 0 20px rgba(120,60,180,0.20)", margin: "0 24px" }} />
 
         {/* ═══ § 7 CLOSER ═══ */}
         <section ref={closerRef} style={styles.closerSection}>
@@ -871,7 +873,7 @@ const styles: Record<string, React.CSSProperties> = {
     display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1px", background: "rgba(255,255,255,0.12)",
     borderBottom: "1px solid rgba(212,175,55,0.15)",
   },
-  checkHeaderWith: { background: "rgba(60,179,113,0.07)", padding: "14px 16px" },
+  checkHeaderWith: { background: "rgba(60,179,113,0.14)", padding: "14px 16px" },
   checkHeaderWithout: { background: "rgba(6,6,6,0.92)", padding: "14px 16px", borderLeft: "1px solid rgba(255,255,255,0.12)" },
   checkHeaderWithText: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.7rem", color: "#3CB371", letterSpacing: "0.04em" },
   checkHeaderWithoutText: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.7rem", color: "rgba(255,255,255,0.55)", letterSpacing: "0.04em" },
@@ -880,7 +882,7 @@ const styles: Record<string, React.CSSProperties> = {
     borderBottom: "1px solid rgba(255,255,255,0.12)",
   },
   checkCellLeft: {
-    background: "rgba(60,179,113,0.06)", display: "grid", gridTemplateColumns: "22px 1fr", gap: "10px",
+    background: "rgba(60,179,113,0.10)", display: "grid", gridTemplateColumns: "22px 1fr", gap: "10px",
     padding: "14px 16px", alignItems: "flex-start",
   },
   checkCellRight: {
@@ -908,7 +910,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
   closerCard: {
     position: "relative", zIndex: 1, border: "1px solid rgba(212,175,55,0.65)", borderRadius: "12px",
-    padding: "24px 24px 36px", background: "rgba(0,0,0,0.85)", backdropFilter: "blur(40px)", WebkitBackdropFilter: "blur(40px)", margin: "0 1px",
+    padding: "24px 24px 36px", background: "rgba(0,0,0,0.78)", backdropFilter: "blur(40px)", WebkitBackdropFilter: "blur(40px)", margin: "0 1px",
     boxShadow: "0 16px 40px rgba(0,0,0,0.8), 0 0 60px rgba(120,60,180,0.15), 0 0 80px rgba(120,60,180,0.15)",
   },
   closerH2: {
