@@ -66,7 +66,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
       <div style={{ flex: 1, height: "1px", background: "rgba(212,175,55,0.25)" }} />
       <span style={{
         fontFamily: "'Roboto Mono', monospace",
-        fontSize: "13px",
+        fontSize: "14px",
         letterSpacing: "0.18em",
         textTransform: "uppercase" as const,
         color: "#D4AF37",
@@ -130,20 +130,24 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
           }}
         />
 
-        {/* Drag handle + X close button */}
-        <div className="relative flex justify-center pt-3 pb-2">
+        {/* Drag handle */}
+        <div className="flex justify-center pt-3 pb-2">
           <div className="w-10 h-[3px] rounded-full" style={{ background: "rgba(255,255,255,0.25)" }} />
-          <button
-            onClick={() => { haptics.light(); setIsOpen(false); }}
-            className="absolute top-3 right-4 w-9 h-9 flex items-center justify-center transition-colors"
-            style={{ color: "rgba(255,255,255,0.40)" }}
-            aria-label="Close menu"
-          >
-            <CloseIcon className="w-5 h-5" />
-          </button>
         </div>
 
-        <div style={{ padding: "8px 24px 24px" }}>
+        {/* Close button — anchored to sheet, clear of ASK THE OG tap zone */}
+        <button
+          onClick={() => { haptics.light(); setIsOpen(false); }}
+          className="absolute top-3 right-4 w-9 h-9 flex items-center justify-center transition-colors z-20"
+          style={{ color: "rgba(255,255,255,0.50)" }}
+          aria-label="Close menu"
+          onMouseEnter={e => (e.currentTarget.style.color = "rgba(255,255,255,0.70)")}
+          onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,0.50)")}
+        >
+          <CloseIcon className="w-5 h-5" />
+        </button>
+
+        <div style={{ padding: "16px 24px 24px" }}>
           {/* Ask the OG — prominent bot CTA */}
           {onOpenBot && (
             <button
@@ -199,10 +203,10 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                 animation: "menu-shimmer 2.5s ease-in-out infinite",
               }} />
             </button>
-          )}
 
-          {/* Separator — premium CTA zone / utility navigation */}
-          <div style={{ height: "1px", background: "rgba(212,175,55,0.15)", marginBottom: "10px" }} />
+            {/* Separator — premium CTA zone / utility navigation */}
+            <div style={{ height: "1px", background: "rgba(212,175,55,0.25)", marginTop: "10px", marginBottom: "10px" }} />
+          )}
 
           {/* Nav — 3-col (matches social row) */}
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "6px", marginBottom: "10px" }}>
@@ -215,6 +219,8 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                 key={item.path}
                 aria-label={item.label}
                 onClick={() => handleNavigate(item.path)}
+                onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.35)"; e.currentTarget.style.background = "rgba(212,175,55,0.03)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; e.currentTarget.style.background = "transparent"; }}
                 onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.40)"; e.currentTarget.style.background = "rgba(212,175,55,0.04)"; }}
                 onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; e.currentTarget.style.background = "transparent"; }}
                 style={{
@@ -227,6 +233,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   background: "transparent",
                   border: "1px solid rgba(212,175,55,0.25)",
                   borderRadius: "6px",
+                  cursor: "pointer",
                   transition: "transform 0.15s ease, border-color 0.25s ease, background 0.25s ease",
                 }}
               >
@@ -255,6 +262,8 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                 rel="noopener noreferrer"
                 aria-label="Instagram"
                 onClick={() => haptics.light()}
+                onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.35)"; e.currentTarget.style.background = "rgba(212,175,55,0.03)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; e.currentTarget.style.background = "transparent"; }}
                 onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.40)"; e.currentTarget.style.background = "rgba(212,175,55,0.04)"; }}
                 onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; e.currentTarget.style.background = "transparent"; }}
                 style={{
@@ -268,6 +277,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   border: "1px solid rgba(212,175,55,0.25)",
                   borderRadius: "6px",
                   textDecoration: "none",
+                  cursor: "pointer",
                   transition: "transform 0.15s ease, border-color 0.25s ease, background 0.25s ease",
                 }}
               >
@@ -287,6 +297,8 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                 rel="noopener noreferrer"
                 aria-label="TikTok"
                 onClick={() => haptics.light()}
+                onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.35)"; e.currentTarget.style.background = "rgba(212,175,55,0.03)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; e.currentTarget.style.background = "transparent"; }}
                 onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.40)"; e.currentTarget.style.background = "rgba(212,175,55,0.04)"; }}
                 onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; e.currentTarget.style.background = "transparent"; }}
                 style={{
@@ -300,6 +312,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   border: "1px solid rgba(212,175,55,0.25)",
                   borderRadius: "6px",
                   textDecoration: "none",
+                  cursor: "pointer",
                   transition: "transform 0.15s ease, border-color 0.25s ease, background 0.25s ease",
                 }}
               >
@@ -321,6 +334,8 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                 rel="noopener noreferrer"
                 aria-label="Facebook"
                 onClick={() => haptics.light()}
+                onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.35)"; e.currentTarget.style.background = "rgba(212,175,55,0.03)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; e.currentTarget.style.background = "transparent"; }}
                 onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.40)"; e.currentTarget.style.background = "rgba(212,175,55,0.04)"; }}
                 onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; e.currentTarget.style.background = "transparent"; }}
                 style={{
@@ -334,6 +349,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   border: "1px solid rgba(212,175,55,0.25)",
                   borderRadius: "6px",
                   textDecoration: "none",
+                  cursor: "pointer",
                   transition: "transform 0.15s ease, border-color 0.25s ease, background 0.25s ease",
                 }}
               >
@@ -360,6 +376,8 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
               <button
                 aria-label="Home"
                 onClick={() => handleNavigate("/")}
+                onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.35)"; e.currentTarget.style.background = "rgba(212,175,55,0.03)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; e.currentTarget.style.background = "transparent"; }}
                 onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.40)"; e.currentTarget.style.background = "rgba(212,175,55,0.04)"; }}
                 onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; e.currentTarget.style.background = "transparent"; }}
                 style={{
@@ -391,6 +409,8 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                 aria-label="Email"
                 href="mailto:thefilmmaker.og@gmail.com"
                 onClick={() => haptics.light()}
+                onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.35)"; e.currentTarget.style.background = "rgba(212,175,55,0.03)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; e.currentTarget.style.background = "transparent"; }}
                 onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.40)"; e.currentTarget.style.background = "rgba(212,175,55,0.04)"; }}
                 onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; e.currentTarget.style.background = "transparent"; }}
                 style={{
@@ -404,6 +424,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   border: "1px solid rgba(212,175,55,0.25)",
                   borderRadius: "6px",
                   textDecoration: "none",
+                  cursor: "pointer",
                   transition: "transform 0.15s ease, border-color 0.25s ease, background 0.25s ease",
                 }}
               >
@@ -421,6 +442,8 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
               <button
                 aria-label="Share"
                 onClick={handleShare}
+                onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.35)"; e.currentTarget.style.background = "rgba(212,175,55,0.03)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; e.currentTarget.style.background = "transparent"; }}
                 onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.40)"; e.currentTarget.style.background = "rgba(212,175,55,0.04)"; }}
                 onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; e.currentTarget.style.background = "transparent"; }}
                 style={{
@@ -451,7 +474,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
           </div>
 
           {/* Legal disclaimer */}
-          <div className="pt-3" style={{ borderTop: "1px solid rgba(212,175,55,0.15)" }}>
+          <div className="pt-3" style={{ borderTop: "1px solid rgba(212,175,55,0.20)" }}>
             <p style={{
               fontFamily: "'Inter', sans-serif",
               fontSize: "12px",
