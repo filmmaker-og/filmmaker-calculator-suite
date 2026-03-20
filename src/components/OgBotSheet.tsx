@@ -245,7 +245,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
 
         <style>{`
           .og-input::placeholder {
-            color: rgba(255,255,255,0.40) !important;
+            color: rgba(255,255,255,0.55) !important;
           }
         `}</style>
 
@@ -436,10 +436,10 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
               className="flex gap-0 transition-colors"
               style={{
                 borderRadius: "8px",
-                border: "1px solid rgba(120,60,180,0.30)",
+                border: "1px solid rgba(120,60,180,0.40)",
               }}
-              onFocus={e => (e.currentTarget.style.borderColor = "rgba(120,60,180,0.50)")}
-              onBlur={e => (e.currentTarget.style.borderColor = "rgba(120,60,180,0.30)")}
+              onFocus={e => (e.currentTarget.style.borderColor = "rgba(120,60,180,0.60)")}
+              onBlur={e => (e.currentTarget.style.borderColor = "rgba(120,60,180,0.40)")}
             >
               <textarea
                 ref={inputRef}
