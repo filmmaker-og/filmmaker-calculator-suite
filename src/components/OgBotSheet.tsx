@@ -201,7 +201,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
       {/* ── Overlay ── */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black/75 backdrop-blur-sm z-[170] animate-fade-in"
+          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[170] animate-fade-in"
           onClick={() => setIsOpen(false)}
         />
       )}
@@ -225,7 +225,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
-        {/* 1px gold gradient top-edge line */}
+        {/* 3px purple-gold gradient top-edge line */}
         <div
           className="absolute top-0 left-0 right-0 h-[3px] pointer-events-none z-10"
           style={{
@@ -251,7 +251,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
 
         {/* Drag handle */}
         <div className="flex justify-center pt-3 pb-2 flex-shrink-0">
-          <div className="w-10 h-[3px] rounded-full" style={{ background: "rgba(255,255,255,0.20)" }} />
+          <div className="w-10 h-[3px] rounded-full" style={{ background: "rgba(255,255,255,0.25)" }} />
         </div>
 
         {/* ── Sheet header ── */}
@@ -262,8 +262,8 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
           <div className="flex items-end justify-between">
             <div className="flex items-center gap-3">
               <div style={{
-                width: "32px",
-                height: "32px",
+                width: "36px",
+                height: "36px",
                 borderRadius: "8px",
                 background: "linear-gradient(135deg, rgb(75,30,130) 0%, rgb(110,50,170) 100%)",
                 display: "flex",
@@ -272,7 +272,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
                 boxShadow: "0 0 12px rgba(120,60,180,0.25)",
                 flexShrink: 0,
               }}>
-                <Sparkles style={{ width: "18px", height: "18px", color: "#D4AF37", filter: "drop-shadow(0 0 3px rgba(212,175,55,0.40))" }} />
+                <Sparkles style={{ width: "22px", height: "22px", color: "#D4AF37", filter: "drop-shadow(0 0 3px rgba(212,175,55,0.40))" }} />
               </div>
               <h2 className="font-bebas text-[32px] tracking-[0.12em] leading-none" style={{ color: "#D4AF37", textShadow: "0 0 20px rgba(212,175,55,0.25)" }}>
                 ASK THE OG
@@ -293,6 +293,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
               )}
               <button
                 onClick={() => { haptics.light(); setIsOpen(false); }}
+                aria-label="Close chat"
                 className="transition-colors p-1"
                 style={{ color: "rgba(255,255,255,0.40)" }}
                 onMouseEnter={e => (e.currentTarget.style.color = "rgba(255,255,255,0.70)")}
@@ -305,16 +306,16 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
         </div>
 
         {/* Messages area */}
-        <div className="flex-1 overflow-y-auto px-6 py-5 space-y-6">
+        <div className="flex-1 px-6 py-5 space-y-6" style={{ overflowY: ogMessages.length > 0 ? 'auto' : 'hidden' }}>
           {/* Empty state — example chips with eyebrow */}
           {ogMessages.length === 0 && (
-            <div className="flex flex-col items-center justify-center gap-5" style={{ minHeight: "100%" }}>
-              <span className="font-bebas text-[24px] tracking-[0.14em] uppercase" style={{ color: "rgb(180,140,255)" }}>
-                What do you want to know
+            <div className="flex flex-col items-start gap-5" style={{ paddingTop: "32px" }}>
+              <span className="font-bebas text-[28px] tracking-[0.14em] uppercase" style={{ color: "rgb(180,140,255)" }}>
+                What do you want to know?
               </span>
 
               {/* Chips */}
-              <div className="flex flex-wrap gap-3 justify-center">
+              <div className="flex flex-wrap gap-3 justify-start">
                 {EXAMPLE_CHIPS.map(chip => (
                   <button
                     key={chip}
@@ -434,10 +435,10 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
               className="flex gap-0 transition-colors"
               style={{
                 borderRadius: "8px",
-                border: "1px solid rgba(120,60,180,0.25)",
+                border: "1px solid rgba(120,60,180,0.30)",
               }}
               onFocus={e => (e.currentTarget.style.borderColor = "rgba(120,60,180,0.50)")}
-              onBlur={e => (e.currentTarget.style.borderColor = "rgba(120,60,180,0.25)")}
+              onBlur={e => (e.currentTarget.style.borderColor = "rgba(120,60,180,0.30)")}
             >
               <textarea
                 ref={inputRef}
@@ -466,7 +467,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
                   onMouseUp={e => { e.currentTarget.style.transform = "scale(1)"; }}
                   style={{ background: "linear-gradient(135deg, rgb(75,30,130) 0%, rgb(110,50,170) 100%)", color: "#fff", borderRadius: "0 7px 7px 0" }}
                 >
-                <SendHorizonal className="w-4 h-4" />
+                <SendHorizonal className="w-5 h-5" />
               </button>
             </div>
             <div className="flex items-center justify-end mt-1.5 px-1">
@@ -474,7 +475,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
                 "text-[11px] tabular-nums",
                 ogInput.length > 1350 ? "text-gold" : ""
               )}
-              style={ogInput.length <= 1350 ? { color: "rgba(212,175,55,0.40)" } : undefined}
+              style={ogInput.length <= 1350 ? { color: "rgba(212,175,55,0.50)" } : undefined}
             >
                 {ogInput.length}/1500
               </span>
