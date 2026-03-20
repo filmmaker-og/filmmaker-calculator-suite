@@ -479,8 +479,8 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
           <div className="pt-3" style={{ borderTop: "1px solid rgba(212,175,55,0.20)" }}>
             <p style={{
               fontFamily: "'Inter', sans-serif",
-              fontSize: "12px",
-              letterSpacing: "0.05em",
+              fontSize: "11px",
+              letterSpacing: "0.02em",
               lineHeight: 1.6,
               color: "rgba(255,255,255,0.40)",
               textAlign: "center",
