@@ -209,7 +209,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
       {/* ── Bottom Sheet ── */}
       <div
         className={cn(
-          "fixed bottom-0 left-2 right-2 z-[180] transition-transform duration-300 ease-out",
+          "fixed bottom-0 left-3 right-3 z-[180] transition-transform duration-300 ease-out",
           "flex flex-col",
           isOpen ? "translate-y-0" : "translate-y-full"
         )}
@@ -287,6 +287,8 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
                   style={{ color: "rgba(180,140,255,0.50)" }}
                   onMouseEnter={e => (e.currentTarget.style.color = "rgba(180,140,255,0.80)")}
                   onMouseLeave={e => (e.currentTarget.style.color = "rgba(180,140,255,0.50)")}
+                  onMouseDown={e => (e.currentTarget.style.transform = "scale(0.90)")}
+                  onMouseUp={e => (e.currentTarget.style.transform = "scale(1)")}
                 >
                   <RotateCcw className="w-3 h-3" />
                   Reset
@@ -299,6 +301,8 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
                 style={{ color: "rgba(255,255,255,0.50)" }}
                 onMouseEnter={e => (e.currentTarget.style.color = "rgba(255,255,255,0.70)")}
                 onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,0.50)")}
+                onMouseDown={e => (e.currentTarget.style.transform = "scale(0.90)")}
+                onMouseUp={e => (e.currentTarget.style.transform = "scale(1)")}
               >
                 <X className="w-4 h-4" />
               </button>
@@ -330,7 +334,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
                     }}
                     onMouseLeave={e => {
                       e.currentTarget.style.borderColor = "rgba(120,60,180,0.35)";
-                      e.currentTarget.style.background = "rgba(120,60,180,0.06)";
+                      e.currentTarget.style.background = "rgba(120,60,180,0.10)";
                       e.currentTarget.style.color = "rgba(255,255,255,0.75)";
                     }}
                     onTouchStart={e => {
@@ -339,12 +343,12 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
                     }}
                     onTouchEnd={e => {
                       e.currentTarget.style.borderColor = "rgba(120,60,180,0.35)";
-                      e.currentTarget.style.background = "rgba(120,60,180,0.06)";
+                      e.currentTarget.style.background = "rgba(120,60,180,0.10)";
                     }}
                     style={{
                       borderRadius: "6px",
                       borderColor: "rgba(120,60,180,0.35)",
-                      background: "rgba(120,60,180,0.06)",
+                      background: "rgba(120,60,180,0.10)",
                       color: "rgba(255,255,255,0.75)",
                     }}
                   >
