@@ -157,8 +157,8 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                 alignItems: "center",
                 justifyContent: "center",
                 gap: "10px",
-                padding: "18px",
-                marginBottom: "12px",
+                padding: "16px",
+                marginBottom: "10px",
                 background: "linear-gradient(135deg, rgb(75,30,130) 0%, rgb(110,50,170) 100%)",
                 border: "none",
                 borderRadius: "8px",
@@ -167,10 +167,10 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                 transition: "transform 0.15s ease, box-shadow 0.3s ease",
               }}
             >
-              <Sparkles style={{ width: "26px", height: "26px", color: "#D4AF37", filter: "drop-shadow(0 0 6px rgba(212,175,55,0.40))", position: "relative", zIndex: 1 }} />
+              <Sparkles style={{ width: "30px", height: "30px", color: "#D4AF37", filter: "drop-shadow(0 0 6px rgba(212,175,55,0.40))", position: "relative", zIndex: 1, marginTop: "1px" }} />
               <span style={{
                 fontFamily: "'Bebas Neue', sans-serif",
-                fontSize: "1.6rem",
+                fontSize: "1.8rem",
                 letterSpacing: "0.10em",
                 color: "#fff",
                 position: "relative",
@@ -188,7 +188,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
           )}
 
           {/* Nav — 3-col (matches social row) */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "8px", marginBottom: "12px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "6px", marginBottom: "10px" }}>
             {([
               { path: "/calculator", label: "Calculator", icon: <Calculator size={18} color="#D4AF37" /> },
               { path: "/store",      label: "Shop",       icon: <ShoppingBag size={18} color="#D4AF37" /> },
@@ -196,6 +196,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
             ] as const).map((item) => (
               <button
                 key={item.path}
+                aria-label={item.label}
                 onClick={() => handleNavigate(item.path)}
                 onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; }}
                 onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
@@ -205,9 +206,9 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   alignItems: "center",
                   justifyContent: "center",
                   gap: "6px",
-                  padding: "12px 8px",
-                  background: "rgba(255,255,255,0.03)",
-                  border: "1px solid rgba(212,175,55,0.20)",
+                  padding: "10px 8px",
+                  background: "rgba(255,255,255,0.05)",
+                  border: "1px solid rgba(212,175,55,0.25)",
                   borderRadius: "6px",
                   transition: "transform 0.15s ease, border-color 0.25s ease",
                 }}
@@ -228,13 +229,14 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
           {/* Follow — social links */}
           <div>
             <SectionLabel>Follow</SectionLabel>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "8px", marginBottom: "10px" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "6px", marginBottom: "10px" }}>
 
               {/* Instagram */}
               <a
                 href="https://www.instagram.com/filmmaker.og"
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="Instagram"
                 onClick={() => haptics.light()}
                 onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; }}
                 onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
@@ -244,9 +246,9 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   alignItems: "center",
                   justifyContent: "center",
                   gap: "6px",
-                  padding: "12px 8px",
-                  background: "rgba(255,255,255,0.03)",
-                  border: "1px solid rgba(212,175,55,0.20)",
+                  padding: "10px 8px",
+                  background: "rgba(255,255,255,0.05)",
+                  border: "1px solid rgba(212,175,55,0.25)",
                   borderRadius: "6px",
                   textDecoration: "none",
                   transition: "transform 0.15s ease, border-color 0.25s ease",
@@ -257,7 +259,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   fontFamily: "'Bebas Neue', sans-serif",
                   fontSize: "1.1rem",
                   letterSpacing: "0.1em",
-                  color: "rgba(255,255,255,0.85)",
+                  color: "rgba(255,255,255,0.88)",
                 }}>Instagram</span>
               </a>
 
@@ -266,6 +268,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                 href="https://www.tiktok.com/@filmmaker.og"
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="TikTok"
                 onClick={() => haptics.light()}
                 onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; }}
                 onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
@@ -275,9 +278,9 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   alignItems: "center",
                   justifyContent: "center",
                   gap: "6px",
-                  padding: "12px 8px",
-                  background: "rgba(255,255,255,0.03)",
-                  border: "1px solid rgba(212,175,55,0.20)",
+                  padding: "10px 8px",
+                  background: "rgba(255,255,255,0.05)",
+                  border: "1px solid rgba(212,175,55,0.25)",
                   borderRadius: "6px",
                   textDecoration: "none",
                   transition: "transform 0.15s ease, border-color 0.25s ease",
@@ -290,7 +293,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   fontFamily: "'Bebas Neue', sans-serif",
                   fontSize: "1.1rem",
                   letterSpacing: "0.1em",
-                  color: "rgba(255,255,255,0.85)",
+                  color: "rgba(255,255,255,0.88)",
                 }}>TikTok</span>
               </a>
 
@@ -299,6 +302,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                 href="https://www.facebook.com/filmmaker.og"
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="Facebook"
                 onClick={() => haptics.light()}
                 onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; }}
                 onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
@@ -308,9 +312,9 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   alignItems: "center",
                   justifyContent: "center",
                   gap: "6px",
-                  padding: "12px 8px",
-                  background: "rgba(255,255,255,0.03)",
-                  border: "1px solid rgba(212,175,55,0.20)",
+                  padding: "10px 8px",
+                  background: "rgba(255,255,255,0.05)",
+                  border: "1px solid rgba(212,175,55,0.25)",
                   borderRadius: "6px",
                   textDecoration: "none",
                   transition: "transform 0.15s ease, border-color 0.25s ease",
@@ -323,7 +327,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   fontFamily: "'Bebas Neue', sans-serif",
                   fontSize: "1.1rem",
                   letterSpacing: "0.1em",
-                  color: "rgba(255,255,255,0.85)",
+                  color: "rgba(255,255,255,0.88)",
                 }}>Facebook</span>
               </a>
 
@@ -333,10 +337,11 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
           {/* Connect — home + email + share */}
           <div>
             <SectionLabel>Connect</SectionLabel>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "8px", marginBottom: "12px" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "6px", marginBottom: "10px" }}>
 
               {/* Home */}
               <button
+                aria-label="Home"
                 onClick={() => handleNavigate("/")}
                 onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; }}
                 onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
@@ -346,9 +351,9 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   alignItems: "center",
                   justifyContent: "center",
                   gap: "6px",
-                  padding: "12px 8px",
-                  background: "rgba(255,255,255,0.03)",
-                  border: "1px solid rgba(212,175,55,0.20)",
+                  padding: "10px 8px",
+                  background: "rgba(255,255,255,0.05)",
+                  border: "1px solid rgba(212,175,55,0.25)",
                   borderRadius: "6px",
                   cursor: "pointer",
                   transition: "transform 0.15s ease, border-color 0.25s ease",
@@ -359,13 +364,14 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   fontFamily: "'Bebas Neue', sans-serif",
                   fontSize: "1.1rem",
                   letterSpacing: "0.1em",
-                  color: "rgba(255,255,255,0.85)",
+                  color: "rgba(255,255,255,0.88)",
                   lineHeight: 1,
                 }}>Home</span>
               </button>
 
               {/* Email */}
               <a
+                aria-label="Email"
                 href="mailto:thefilmmaker.og@gmail.com"
                 onClick={() => haptics.light()}
                 onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; }}
@@ -376,9 +382,9 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   alignItems: "center",
                   justifyContent: "center",
                   gap: "6px",
-                  padding: "12px 8px",
-                  background: "rgba(255,255,255,0.03)",
-                  border: "1px solid rgba(212,175,55,0.20)",
+                  padding: "10px 8px",
+                  background: "rgba(255,255,255,0.05)",
+                  border: "1px solid rgba(212,175,55,0.25)",
                   borderRadius: "6px",
                   textDecoration: "none",
                   transition: "transform 0.15s ease, border-color 0.25s ease",
@@ -389,13 +395,14 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   fontFamily: "'Bebas Neue', sans-serif",
                   fontSize: "1.1rem",
                   letterSpacing: "0.1em",
-                  color: "rgba(255,255,255,0.85)",
+                  color: "rgba(255,255,255,0.88)",
                   lineHeight: 1,
                 }}>Email</span>
               </a>
 
               {/* Share */}
               <button
+                aria-label="Share"
                 onClick={handleShare}
                 onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; }}
                 onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
@@ -405,9 +412,9 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   alignItems: "center",
                   justifyContent: "center",
                   gap: "6px",
-                  padding: "12px 8px",
-                  background: "rgba(255,255,255,0.03)",
-                  border: "1px solid rgba(212,175,55,0.20)",
+                  padding: "10px 8px",
+                  background: "rgba(255,255,255,0.05)",
+                  border: "1px solid rgba(212,175,55,0.25)",
                   borderRadius: "6px",
                   cursor: "pointer",
                   transition: "transform 0.15s ease, border-color 0.25s ease",
@@ -418,7 +425,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   fontFamily: "'Bebas Neue', sans-serif",
                   fontSize: "1.1rem",
                   letterSpacing: "0.1em",
-                  color: "rgba(255,255,255,0.85)",
+                  color: "rgba(255,255,255,0.88)",
                   lineHeight: 1,
                 }}>Share</span>
               </button>
@@ -427,7 +434,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
           </div>
 
           {/* Legal disclaimer */}
-          <div className="pt-3" style={{ borderTop: "1px solid rgba(212,175,55,0.08)" }}>
+          <div className="pt-3" style={{ borderTop: "1px solid rgba(212,175,55,0.15)" }}>
             <p style={{
               fontFamily: "'Inter', sans-serif",
               fontSize: "12px",
