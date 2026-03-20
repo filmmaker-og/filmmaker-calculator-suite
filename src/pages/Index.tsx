@@ -129,27 +129,27 @@ const Index = () => {
     {
       title: "Enter Your Budget",
       body: "Total budget, cash basis after deferments and tax credits, investor equity.",
-      icon: <svg viewBox="0 0 24 24" fill="#fff" width="16" height="16"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>,
+      icon: <svg viewBox="0 0 24 24" fill="#fff" width="18" height="18"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>,
     },
     {
       title: "Choose Your Scenario",
       body: "Streamer acquisition or traditional distribution. Guild rates adjust automatically.",
-      icon: <svg viewBox="0 0 24 24" fill="#fff" width="16" height="16"><path d="M5 9.2h3V19H5V9.2zM10.6 5h2.8v14h-2.8V5zm5.6 8H19v6h-2.8v-6z"/></svg>,
+      icon: <svg viewBox="0 0 24 24" fill="#fff" width="18" height="18"><path d="M5 9.2h3V19H5V9.2zM10.6 5h2.8v14h-2.8V5zm5.6 8H19v6h-2.8v-6z"/></svg>,
     },
     {
       title: "See the Full Waterfall",
       body: "Every tier with accurate rates — off-the-tops through net backend profit.",
-      icon: <svg viewBox="0 0 24 24" fill="#fff" width="16" height="16"><rect x="3" y="4" width="18" height="3" rx="1"/><rect x="5" y="9" width="14" height="3" rx="1"/><rect x="7" y="14" width="10" height="3" rx="1"/><rect x="9" y="19" width="6" height="3" rx="1"/></svg>,
+      icon: <svg viewBox="0 0 24 24" fill="#fff" width="18" height="18"><rect x="3" y="4" width="18" height="3" rx="1"/><rect x="5" y="9" width="14" height="3" rx="1"/><rect x="7" y="14" width="10" height="3" rx="1"/><rect x="9" y="19" width="6" height="3" rx="1"/></svg>,
     },
     {
       title: "Stress-Test Your Deal",
       body: "Adjust price, negotiate fee caps. Run it until you know what you can't give up.",
-      icon: <svg viewBox="0 0 24 24" fill="#fff" width="16" height="16"><path d="M12 2L3 7v5c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-9-5zm-1 14l-3.5-3.5 1.41-1.41L11 13.17l5.09-5.09 1.41 1.41L11 16z"/></svg>,
+      icon: <svg viewBox="0 0 24 24" fill="#fff" width="18" height="18"><path d="M12 2L3 7v5c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-9-5zm-1 14l-3.5-3.5 1.41-1.41L11 13.17l5.09-5.09 1.41 1.41L11 16z"/></svg>,
     },
     {
       title: "Export & Share",
       body: "Download a formatted PDF. Share directly with investors, financiers, and co-producers.",
-      icon: <svg viewBox="0 0 24 24" fill="#fff" width="16" height="16"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>,
+      icon: <svg viewBox="0 0 24 24" fill="#fff" width="18" height="18"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>,
     },
   ];
 
@@ -206,7 +206,7 @@ const Index = () => {
           <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "200px", background: "radial-gradient(ellipse 100% 70% at 50% 0%, rgba(120,60,180,0.20) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
           <div style={{ ...styles.howHeader, ...reveal(howVisible) }}>
             <EyebrowRuled text="The Process" />
-            <h2 style={styles.howH2}>Build in <span style={{ color: "rgb(180,140,255)" }}>Minutes</span></h2>
+            <h2 style={styles.howH2}>Build in <span style={{ color: "#D4AF37" }}>Minutes</span></h2>
             <p style={styles.sectionSub}>Four steps. Five minutes. One waterfall.</p>
           </div>
           <div style={styles.stepsContainer}>
@@ -310,7 +310,7 @@ const Index = () => {
           <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "200px", background: "radial-gradient(ellipse 100% 70% at 50% 0%, rgba(120,60,180,0.20) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
           <div style={{ ...styles.whyHeader, ...reveal(whyVisible) }}>
             <EyebrowRuled text="Why This Matters" />
-            <h2 style={styles.whyH2}><span style={{ color: "rgb(180,140,255)" }}>4</span> Reasons<br />You Can't Skip This</h2>
+            <h2 style={styles.whyH2}><span style={{ color: "#D4AF37" }}>(4) Four</span> Reasons<br />You Can't Skip This</h2>
             <p style={styles.sectionSub}>The math behind every deal you'll ever structure.</p>
           </div>
 
@@ -581,7 +581,7 @@ const styles: Record<string, React.CSSProperties> = {
   /* ── § 1 HERO ── */
   hero: {
     position: "relative", textAlign: "center",
-    padding: "24px 24px 16px",
+    padding: "24px 24px 8px",
     margin: "0 24px",
     borderRadius: "12px",
     overflow: "hidden",
@@ -625,7 +625,7 @@ const styles: Record<string, React.CSSProperties> = {
     background: "linear-gradient(180deg, rgba(120,60,180,0.6) 0%, rgba(120,60,180,0.1) 100%)", zIndex: 0,
   },
   stepNumBadge: {
-    position: "relative", zIndex: 1, width: "34px", height: "34px", borderRadius: "50%",
+    position: "relative", zIndex: 1, width: "40px", height: "40px", borderRadius: "50%",
     background: "linear-gradient(135deg, rgb(75,30,130) 0%, rgb(110,50,170) 100%)", display: "flex", alignItems: "center", justifyContent: "center",
     boxShadow: "0 0 20px rgba(120,60,180,0.50), 0 0 40px rgba(120,60,180,0.25)",
   },
@@ -647,8 +647,8 @@ const styles: Record<string, React.CSSProperties> = {
     background: "radial-gradient(circle at 50% 70%, rgba(212,175,55,0.20) 0%, rgba(6,6,6,0.92) 75%)", border: "1px solid rgba(212,175,55,0.25)", borderRadius: "12px", padding: "24px 20px",
     boxShadow: "0 0 24px rgba(212,175,55,0.10), 0 0 20px rgba(120,60,180,0.15)",
   },
-  acqLabel: { fontFamily: "'Roboto Mono', monospace", fontSize: "14px", textTransform: "uppercase", letterSpacing: "0.15em", color: "#D4AF37", marginBottom: "4px" },
-  acqSub: { fontFamily: "'Roboto Mono', monospace", fontSize: "15px", color: colors.textSecondary, marginBottom: "8px" },
+  acqLabel: { fontFamily: "'Roboto Mono', monospace", fontSize: "15px", textTransform: "uppercase", letterSpacing: "0.15em", color: "#D4AF37", marginBottom: "4px" },
+  acqSub: { fontFamily: "'Roboto Mono', monospace", fontSize: "16px", color: colors.textSecondary, marginBottom: "8px" },
   acqAmount: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.2rem", color: "#D4AF37", lineHeight: 1, letterSpacing: "0.02em", textShadow: "0 0 30px rgba(212,175,55,0.4), 0 0 60px rgba(212,175,55,0.15)" },
 
   waterfallTiersBox: {
@@ -707,7 +707,7 @@ const styles: Record<string, React.CSSProperties> = {
   badgeGrid: { display: "grid", gridTemplateColumns: "1fr", gap: "1px", background: "rgba(120,60,180,0.15)" },
   badgeCard: { background: "radial-gradient(circle at 45px 57px, rgba(120,60,180,0.15) 0%, rgba(6,6,6,0.92) 65%)", padding: "36px 24px", textAlign: "left" },
   badgeNum: {
-    width: "42px", height: "42px", borderRadius: "50%", background: "linear-gradient(135deg, rgb(75,30,130) 0%, rgb(110,50,170) 100%)", color: "#fff",
+    width: "40px", height: "40px", borderRadius: "50%", background: "linear-gradient(135deg, rgb(75,30,130) 0%, rgb(110,50,170) 100%)", color: "#fff",
     display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.5rem",
     marginBottom: "16px", paddingTop: "2px", boxShadow: "0 0 24px rgba(120,60,180,0.55), 0 0 48px rgba(120,60,180,0.25)",
   },
@@ -854,10 +854,10 @@ const styles: Record<string, React.CSSProperties> = {
   blockquote: {
     fontFamily: "'Bebas Neue', sans-serif", fontSize: "2.4rem", lineHeight: 0.95, color: "#fff",
     borderLeft: "3px solid #D4AF37", paddingLeft: "20px", marginBottom: "24px",
-    boxShadow: "-4px 0 24px rgba(212,175,55,0.25)",
+    boxShadow: "-4px 0 24px rgba(212,175,55,0.25), -8px 0 40px rgba(120,60,180,0.15)",
   },
   checkGrid: {
-    position: "relative", border: "1px solid rgba(212,175,55,0.25)", borderRadius: "12px", overflow: "hidden",
+    position: "relative", border: "1px solid rgba(120,60,180,0.30)", borderRadius: "12px", overflow: "hidden",
     boxShadow: "0 8px 32px rgba(0,0,0,0.5), 0 0 20px rgba(120,60,180,0.15)",
   },
   checkHeader: {
@@ -888,7 +888,7 @@ const styles: Record<string, React.CSSProperties> = {
   /* ── § 7 CLOSER ── */
   closerSection: {
     position: "relative", overflow: "hidden", textAlign: "center",
-    padding: "48px 24px 80px", borderTop: "none",
+    padding: "48px 0 80px", borderTop: "none",
     margin: "48px 24px 0",
     borderRadius: "12px",
     backgroundImage: "linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.35) 50%, rgba(0,0,0,0.60) 100%), url('/closer-bg.jpg')",
