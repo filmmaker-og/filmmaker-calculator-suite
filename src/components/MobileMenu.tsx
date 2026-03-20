@@ -138,7 +138,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
         {/* Close button — anchored to sheet, clear of ASK THE OG tap zone */}
         <button
           onClick={() => { haptics.light(); setIsOpen(false); }}
-          className="absolute top-3 right-4 w-9 h-9 flex items-center justify-center transition-colors z-20"
+          className="absolute top-2 right-4 w-8 h-8 flex items-center justify-center transition-colors z-20"
           style={{ color: "rgba(255,255,255,0.50)" }}
           aria-label="Close menu"
           onMouseEnter={e => (e.currentTarget.style.color = "rgba(255,255,255,0.70)")}
@@ -147,9 +147,10 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
           <CloseIcon className="w-5 h-5" />
         </button>
 
-        <div style={{ padding: "16px 24px 24px" }}>
+        <div style={{ padding: "28px 24px 24px" }}>
           {/* Ask the OG — prominent bot CTA */}
           {onOpenBot && (
+            <>
             <button
               onClick={() => { haptics.medium(); onOpenBot(); }}
               onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; e.currentTarget.style.boxShadow = "0 0 30px rgba(120,60,180,0.50), 0 0 60px rgba(120,60,180,0.20)"; }}
@@ -206,6 +207,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
 
             {/* Separator — premium CTA zone / utility navigation */}
             <div style={{ height: "1px", background: "rgba(212,175,55,0.25)", marginTop: "10px", marginBottom: "10px" }} />
+            </>
           )}
 
           {/* Nav — 3-col (matches social row) */}
