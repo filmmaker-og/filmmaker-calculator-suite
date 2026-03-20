@@ -209,7 +209,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
       {/* ── Bottom Sheet ── */}
       <div
         className={cn(
-          "fixed bottom-0 left-0 right-0 z-[180] transition-transform duration-300 ease-out",
+          "fixed bottom-0 left-2 right-2 z-[180] transition-transform duration-300 ease-out",
           "flex flex-col",
           isOpen ? "translate-y-0" : "translate-y-full"
         )}
@@ -310,7 +310,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
         <div className="flex-1 px-6 py-5 space-y-6" style={{ overflowY: ogMessages.length > 0 ? 'auto' : 'hidden' }}>
           {/* Empty state — example chips with eyebrow */}
           {ogMessages.length === 0 && (
-            <div className="flex flex-col items-start gap-5" style={{ paddingTop: "32px" }}>
+            <div className="flex flex-col items-start gap-3" style={{ paddingTop: "16px" }}>
               <span className="font-bebas text-[28px] tracking-[0.14em] uppercase" style={{ color: "rgb(180,140,255)" }}>
                 What do you want to know?
               </span>
