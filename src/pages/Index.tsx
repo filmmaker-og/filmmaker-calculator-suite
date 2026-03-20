@@ -132,18 +132,18 @@ const Index = () => {
       icon: <svg viewBox="0 0 24 24" fill="#fff" width="18" height="18"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>,
     },
     {
-      title: "Choose Your Scenario",
-      body: "Streamer acquisition or traditional distribution. Guild rates adjust automatically.",
+      title: "Build Your Capital Stack",
+      body: "Equity, debt, tax credits, deferments. Structure your financing the way real deals close.",
       icon: <svg viewBox="0 0 24 24" fill="#fff" width="18" height="18"><path d="M5 9.2h3V19H5V9.2zM10.6 5h2.8v14h-2.8V5zm5.6 8H19v6h-2.8v-6z"/></svg>,
     },
     {
-      title: "See the Full Waterfall",
-      body: "Every tier with accurate rates — off-the-tops through net backend profit.",
+      title: "Set Your Deal Terms",
+      body: "Fees, guild rates, distribution costs. Every line between revenue and profit.",
       icon: <svg viewBox="0 0 24 24" fill="#fff" width="18" height="18"><rect x="3" y="4" width="18" height="3" rx="1"/><rect x="5" y="9" width="14" height="3" rx="1"/><rect x="7" y="14" width="10" height="3" rx="1"/><rect x="9" y="19" width="6" height="3" rx="1"/></svg>,
     },
     {
-      title: "Stress-Test Your Deal",
-      body: "Adjust price, negotiate fee caps. Run it until you know what you can't give up.",
+      title: "See the Full Waterfall",
+      body: "Every tier with accurate rates — off-the-tops through net backend profit. Adjust and stress-test until you know what you can't give up.",
       icon: <svg viewBox="0 0 24 24" fill="#fff" width="18" height="18"><path d="M12 2L3 7v5c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-9-5zm-1 14l-3.5-3.5 1.41-1.41L11 13.17l5.09-5.09 1.41 1.41L11 16z"/></svg>,
     },
     {
@@ -311,7 +311,7 @@ const Index = () => {
           <div style={{ ...styles.whyHeader, ...reveal(whyVisible) }}>
             <EyebrowRuled text="Why This Matters" />
             <h2 style={styles.whyH2}><span style={{ color: "#D4AF37" }}>(4) Four</span> Reasons<br />You Can't Skip This</h2>
-            <p style={styles.sectionSub}>The math behind every deal you'll ever structure.</p>
+            <p style={styles.sectionSub}>The math behind every deal you'll ever make.</p>
           </div>
 
           <div style={{ ...styles.badgeGridWrapper, ...reveal(whyVisible, 1) }}>
@@ -368,7 +368,7 @@ const Index = () => {
                   { name: "Web Sharing & PDF Export" },
                 ].map((f, i) => (
                   <div key={i} style={{ display: "flex", gap: "14px", alignItems: "flex-start" }}>
-                    <span style={{ fontSize: "20px", color: "#3CB371", flexShrink: 0, marginTop: "1px", textShadow: "0 0 12px rgba(60,179,113,0.4)" }}>✓</span>
+                    <span style={{ fontSize: "24px", color: "#3CB371", flexShrink: 0, marginTop: "1px", textShadow: "0 0 8px rgba(60,179,113,0.6), 0 0 20px rgba(60,179,113,0.3)" }}>✓</span>
                     <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "18px", fontWeight: 500, color: "#fff", lineHeight: 1.3 }}>{f.name}</p>
                   </div>
                 ))}
@@ -404,7 +404,7 @@ const Index = () => {
                   { name: "White-Labeled to Your Project", desc: "Your company, your title, your brand." },
                 ].map((f, i) => (
                   <div key={i} style={{ display: "flex", gap: "14px", alignItems: "flex-start" }}>
-                    <span style={{ fontSize: "20px", color: "#D4AF37", flexShrink: 0, marginTop: "1px", textShadow: "0 0 12px rgba(212,175,55,0.4)" }}>✓</span>
+                    <span style={{ fontSize: "24px", color: "#D4AF37", flexShrink: 0, marginTop: "1px", textShadow: "0 0 8px rgba(212,175,55,0.6), 0 0 20px rgba(212,175,55,0.3)" }}>✓</span>
                     <div>
                       <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "18px", fontWeight: 500, color: "#fff", lineHeight: 1.3, marginBottom: "3px" }}>{f.name}</p>
                       <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "16px", color: "rgba(255,255,255,0.65)", lineHeight: 1.45 }}>{f.desc}</p>
@@ -447,7 +447,7 @@ const Index = () => {
                   { name: "Revision Round Included" },
                 ].map((f, i) => (
                   <div key={i} style={{ display: "flex", gap: "14px", alignItems: "flex-start" }}>
-                    <span style={{ fontSize: "20px", color: "rgb(160,100,255)", flexShrink: 0, marginTop: "1px", textShadow: "0 0 14px rgba(140,80,240,0.5)" }}>✓</span>
+                    <span style={{ fontSize: "24px", color: "rgb(160,100,255)", flexShrink: 0, marginTop: "1px", textShadow: "0 0 8px rgba(140,80,240,0.6), 0 0 20px rgba(140,80,240,0.3)" }}>✓</span>
                     <div>
                       <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "18px", fontWeight: 500, color: "#fff", lineHeight: 1.3, marginBottom: f.desc ? "3px" : "0" }}>{f.name}</p>
                       {f.desc && <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "16px", color: "rgba(255,255,255,0.65)", lineHeight: 1.45 }}>{f.desc}</p>}
@@ -495,6 +495,8 @@ const Index = () => {
             ))}
           </div>
         </section>
+
+        <div style={{ height: "3px", background: "linear-gradient(to right, transparent 0%, rgba(120,60,180,0.50) 20%, rgba(212,175,55,0.40) 50%, rgba(120,60,180,0.50) 80%, transparent 100%)", boxShadow: "0 0 16px rgba(120,60,180,0.15)", margin: "0 24px" }} />
 
         {/* ═══ § 7 CLOSER ═══ */}
         <section ref={closerRef} style={styles.closerSection}>
@@ -551,7 +553,7 @@ const styles: Record<string, React.CSSProperties> = {
     flex: 1, height: "1px", background: "rgba(212,175,55,0.40)", boxShadow: "0 0 8px rgba(212,175,55,0.15)",
   },
   eyebrowLabel: {
-    fontFamily: "'Roboto Mono', monospace", fontSize: "15px",
+    fontFamily: "'Roboto Mono', monospace", fontSize: "17px",
     letterSpacing: "0.18em", textTransform: "uppercase", color: "#D4AF37",
     whiteSpace: "nowrap",
   },
@@ -581,7 +583,7 @@ const styles: Record<string, React.CSSProperties> = {
   /* ── § 1 HERO ── */
   hero: {
     position: "relative", textAlign: "center",
-    padding: "24px 24px 8px",
+    padding: "24px 24px 0",
     margin: "0 24px",
     borderRadius: "12px",
     overflow: "hidden",
@@ -610,7 +612,7 @@ const styles: Record<string, React.CSSProperties> = {
   /* ── § 2 HOW IT WORKS ── */
   howSection: { position: "relative", background: "#000", padding: "64px 0 0" },
   howHeader: { textAlign: "center", padding: "16px 24px 24px", background: "radial-gradient(ellipse 80% 50% at 50% 60%, rgba(120,60,180,0.18) 0%, transparent 70%)" },
-  howH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.6rem", color: "#fff", lineHeight: 0.95 },
+  howH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.2rem", color: "#fff", lineHeight: 0.95 },
   stepsContainer: { position: "relative", display: "flex", flexDirection: "column", gap: "1px", background: "rgba(120,60,180,0.10)", borderRadius: "12px", overflow: "hidden", margin: "0 24px", border: "1px solid rgba(120,60,180,0.25)", boxShadow: "0 16px 40px rgba(0,0,0,0.5), 0 0 20px rgba(120,60,180,0.15)" },
   step: {
     display: "grid", gridTemplateColumns: "52px 1fr", background: "rgba(6,6,6,0.92)",
@@ -630,7 +632,7 @@ const styles: Record<string, React.CSSProperties> = {
     boxShadow: "0 0 20px rgba(120,60,180,0.50), 0 0 40px rgba(120,60,180,0.25)",
   },
   stepContent: { padding: "26px 24px 26px 24px" },
-  stepTitle: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "rgb(180,140,255)", lineHeight: 1, marginBottom: "5px" },
+  stepTitle: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "#fff", lineHeight: 1, marginBottom: "5px" },
   stepBody: { fontFamily: "'Inter', sans-serif", fontSize: "19px", color: "rgba(255,255,255,0.88)", lineHeight: 1.55 },
 
   /* ── § 3 WATERFALL ── */
@@ -647,8 +649,8 @@ const styles: Record<string, React.CSSProperties> = {
     background: "radial-gradient(circle at 50% 70%, rgba(212,175,55,0.20) 0%, rgba(6,6,6,0.92) 75%)", border: "1px solid rgba(212,175,55,0.25)", borderRadius: "12px", padding: "24px 20px",
     boxShadow: "0 0 24px rgba(212,175,55,0.10), 0 0 20px rgba(120,60,180,0.15)",
   },
-  acqLabel: { fontFamily: "'Roboto Mono', monospace", fontSize: "15px", textTransform: "uppercase", letterSpacing: "0.15em", color: "#D4AF37", marginBottom: "4px" },
-  acqSub: { fontFamily: "'Roboto Mono', monospace", fontSize: "16px", color: colors.textSecondary, marginBottom: "8px" },
+  acqLabel: { fontFamily: "'Roboto Mono', monospace", fontSize: "16px", textTransform: "uppercase", letterSpacing: "0.15em", color: "#D4AF37", marginBottom: "4px" },
+  acqSub: { fontFamily: "'Roboto Mono', monospace", fontSize: "17px", color: colors.textSecondary, marginBottom: "8px" },
   acqAmount: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.2rem", color: "#D4AF37", lineHeight: 1, letterSpacing: "0.02em", textShadow: "0 0 30px rgba(212,175,55,0.4), 0 0 60px rgba(212,175,55,0.15)" },
 
   waterfallTiersBox: {
@@ -712,14 +714,14 @@ const styles: Record<string, React.CSSProperties> = {
     marginBottom: "16px", paddingTop: "2px", boxShadow: "0 0 24px rgba(120,60,180,0.55), 0 0 48px rgba(120,60,180,0.25)",
   },
   badgeTitle: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "#fff", marginBottom: "8px", lineHeight: 1.05, letterSpacing: "0.02em" },
-  badgeBody: { fontFamily: "'Inter', sans-serif", fontSize: "19px", color: "rgba(255,255,255,0.70)", lineHeight: 1.55 },
+  badgeBody: { fontFamily: "'Inter', sans-serif", fontSize: "19px", color: "rgba(255,255,255,0.85)", lineHeight: 1.55 },
 
   /* ── § 5 ARSENAL ── */
   arsenalSection: { position: "relative", background: "#000", textAlign: "center", padding: "64px 0 0" },
   arsenalHeader: { padding: "0 24px 24px" },
   arsenalH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.2rem", color: "#fff", lineHeight: 0.95 },
   arsenalSub: { fontFamily: "'Inter', sans-serif", fontSize: "18px", marginTop: "10px", color: "rgba(255,255,255,0.88)", lineHeight: 1.6 },
-  sectionSub: { fontFamily: "'Inter', sans-serif", fontSize: "18px", marginTop: "10px", color: "rgba(255,255,255,0.70)", lineHeight: 1.5 },
+  sectionSub: { fontFamily: "'Inter', sans-serif", fontSize: "18px", marginTop: "10px", color: "rgba(255,255,255,0.85)", lineHeight: 1.5 },
   arsenalCards: { display: "flex", flexDirection: "column", gap: "28px", margin: "0 24px" },
 
   /* Card containers */
@@ -776,7 +778,8 @@ const styles: Record<string, React.CSSProperties> = {
   /* Value statements */
   valueStatementFree: {
     padding: "20px 24px", textAlign: "center",
-    borderTop: "1px solid rgba(60,179,113,0.12)", borderBottom: "1px solid rgba(60,179,113,0.12)",
+    background: "rgba(60,179,113,0.04)",
+    borderTop: "1px solid rgba(60,179,113,0.15)", borderBottom: "1px solid rgba(60,179,113,0.15)",
   },
   valueTextFree: {
     fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "#3CB371", lineHeight: 1,
@@ -784,7 +787,8 @@ const styles: Record<string, React.CSSProperties> = {
   },
   valueStatementGold: {
     padding: "20px 24px", textAlign: "center",
-    borderTop: "1px solid rgba(212,175,55,0.12)", borderBottom: "1px solid rgba(212,175,55,0.12)",
+    background: "rgba(212,175,55,0.04)",
+    borderTop: "1px solid rgba(212,175,55,0.15)", borderBottom: "1px solid rgba(212,175,55,0.15)",
   },
   valueTextGold: {
     fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "#D4AF37", lineHeight: 1,
@@ -792,7 +796,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
   valueStatementPurple: {
     padding: "20px 24px", textAlign: "center",
-    background: "linear-gradient(135deg, rgba(120,60,180,0.06) 0%, rgba(212,175,55,0.04) 100%)",
+    background: "rgba(120,60,180,0.06)",
     borderTop: "1px solid rgba(120,60,180,0.15)", borderBottom: "1px solid rgba(120,60,180,0.15)",
   },
   valueTextPurple: {
@@ -880,16 +884,16 @@ const styles: Record<string, React.CSSProperties> = {
     background: "rgba(6,6,6,0.92)", display: "grid", gridTemplateColumns: "22px 1fr", gap: "10px",
     padding: "14px 16px", alignItems: "flex-start", borderLeft: "1px solid rgba(255,255,255,0.06)",
   },
-  checkIconYes: { fontFamily: "'Roboto Mono', monospace", fontSize: "22px", paddingTop: "2px", color: "#3CB371", textShadow: "0 0 12px rgba(60,179,113,0.4)" },
-  checkIconNo: { fontFamily: "'Roboto Mono', monospace", fontSize: "22px", paddingTop: "2px", color: "rgba(220,38,38,0.85)", textShadow: "0 0 12px rgba(220,38,38,0.40)" },
+  checkIconYes: { fontFamily: "'Roboto Mono', monospace", fontSize: "24px", paddingTop: "2px", color: "#3CB371", textShadow: "0 0 8px rgba(60,179,113,0.6), 0 0 20px rgba(60,179,113,0.3)" },
+  checkIconNo: { fontFamily: "'Roboto Mono', monospace", fontSize: "24px", paddingTop: "2px", color: "rgba(220,38,38,0.85)", textShadow: "0 0 8px rgba(220,38,38,0.6), 0 0 20px rgba(220,38,38,0.3)" },
   checkTextYes: { fontFamily: "'Inter', sans-serif", fontSize: "16px", lineHeight: 1.4, color: "rgba(255,255,255,0.85)" },
   checkTextNo: { fontFamily: "'Inter', sans-serif", fontSize: "16px", lineHeight: 1.4, color: "rgba(255,255,255,0.72)" },
 
   /* ── § 7 CLOSER ── */
   closerSection: {
     position: "relative", overflow: "hidden", textAlign: "center",
-    padding: "48px 0 80px", borderTop: "none",
-    margin: "48px 24px 0",
+    padding: "32px 0 80px", borderTop: "none",
+    margin: "0 24px 0",
     borderRadius: "12px",
     backgroundImage: "linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.35) 50%, rgba(0,0,0,0.60) 100%), url('/closer-bg.jpg')",
     backgroundSize: "cover",
@@ -909,7 +913,7 @@ const styles: Record<string, React.CSSProperties> = {
     lineHeight: 0.95, margin: "4px 0 14px", textShadow: "0 2px 16px rgba(0,0,0,0.9)",
   },
   closerBody: {
-    fontFamily: "'Inter', sans-serif", fontSize: "19px", color: "rgba(255,255,255,0.75)",
+    fontFamily: "'Inter', sans-serif", fontSize: "19px", color: "rgba(255,255,255,0.85)",
     lineHeight: 1.5, margin: "0 auto 24px", textShadow: "0 2px 8px rgba(0,0,0,0.8)",
   },
 
