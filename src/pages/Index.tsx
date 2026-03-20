@@ -199,10 +199,11 @@ const Index = () => {
           </div>
         </section>
 
-        <div style={{ height: "1px", background: "linear-gradient(90deg, transparent 5%, rgba(212,175,55,0.35) 50%, transparent 95%)", boxShadow: "0 0 12px rgba(212,175,55,0.2)", margin: "0 24px" }} />
+        <div style={{ height: "3px", background: "linear-gradient(to right, transparent 0%, rgba(120,60,180,0.50) 20%, rgba(212,175,55,0.40) 50%, rgba(120,60,180,0.50) 80%, transparent 100%)", boxShadow: "0 0 16px rgba(120,60,180,0.15)", margin: "0 24px" }} />
 
         {/* ═══ § 2 HOW IT WORKS ═══ */}
         <section ref={howRef} style={styles.howSection}>
+          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "200px", background: "radial-gradient(ellipse 100% 70% at 50% 0%, rgba(120,60,180,0.20) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
           <div style={{ ...styles.howHeader, ...reveal(howVisible) }}>
             <EyebrowRuled text="The Process" />
             <h2 style={styles.howH2}>Build in <span style={{ color: "#D4AF37" }}>Minutes</span></h2>
@@ -226,10 +227,11 @@ const Index = () => {
           </div>
         </section>
 
-        <div style={{ height: "1px", background: "linear-gradient(90deg, transparent 5%, rgba(212,175,55,0.35) 50%, transparent 95%)", boxShadow: "0 0 12px rgba(212,175,55,0.2)", margin: "0 24px" }} />
+        <div style={{ height: "3px", background: "linear-gradient(to right, transparent 0%, rgba(120,60,180,0.50) 20%, rgba(212,175,55,0.40) 50%, rgba(120,60,180,0.50) 80%, transparent 100%)", boxShadow: "0 0 16px rgba(120,60,180,0.15)", margin: "0 24px" }} />
 
         {/* ═══ § 3 WATERFALL ═══ */}
         <section style={styles.waterfallSection}>
+          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "200px", background: "radial-gradient(ellipse 100% 70% at 50% 0%, rgba(120,60,180,0.20) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
           <div ref={waterfallHeaderRef} style={{ ...styles.waterfallHeader, ...reveal(waterfallHeaderVisible) }}>
             <EyebrowRuled text="How the money flows" />
             <h2 style={styles.waterfallH2}>The Recoupment<br /><span style={{ color: "#D4AF37" }}>Waterfall</span></h2>
@@ -300,10 +302,11 @@ const Index = () => {
           <p style={{ ...styles.waterfallNote, ...reveal(waterfallFlowVisible) }}>Model only — your numbers will differ</p>
         </section>
 
-        <div style={{ height: "1px", background: "linear-gradient(90deg, transparent 5%, rgba(212,175,55,0.35) 50%, transparent 95%)", boxShadow: "0 0 12px rgba(212,175,55,0.2)", margin: "0 24px" }} />
+        <div style={{ height: "3px", background: "linear-gradient(to right, transparent 0%, rgba(120,60,180,0.50) 20%, rgba(212,175,55,0.40) 50%, rgba(120,60,180,0.50) 80%, transparent 100%)", boxShadow: "0 0 16px rgba(120,60,180,0.15)", margin: "0 24px" }} />
 
         {/* ═══ § 4 WHY THIS MATTERS ═══ */}
         <section ref={whyRef} style={styles.whySection}>
+          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "200px", background: "radial-gradient(ellipse 100% 70% at 50% 0%, rgba(120,60,180,0.20) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
           <div style={{ ...styles.whyHeader, ...reveal(whyVisible) }}>
             <EyebrowRuled text="Why This Matters" />
             <h2 style={styles.whyH2}><span style={{ color: "#D4AF37" }}>4</span> Reasons<br />You Can't Skip This</h2>
@@ -315,7 +318,7 @@ const Index = () => {
               {badgeCards.map((card, i) => {
                 const warmth = 0.10 + (i * 0.04);
                 return (
-                <div key={card.num} style={{ ...styles.badgeCard, background: `radial-gradient(circle at 45px 57px, rgba(212,175,55,${warmth}) 0%, #0A0A0A 65%)`, ...reveal(whyVisible, i + 2) }}>
+                <div key={card.num} style={{ ...styles.badgeCard, background: `radial-gradient(circle at 45px 57px, rgba(212,175,55,${warmth}) 0%, rgba(6,6,6,0.92) 65%)`, ...reveal(whyVisible, i + 2) }}>
                   <div style={styles.badgeNum}>{card.num}</div>
                   <p style={styles.badgeTitle}>{card.title}</p>
                   <p style={styles.badgeBody}>{card.body}</p>
@@ -326,10 +329,11 @@ const Index = () => {
           </div>
         </section>
 
-        <div style={{ height: "1px", background: "linear-gradient(90deg, transparent 5%, rgba(212,175,55,0.35) 50%, transparent 95%)", boxShadow: "0 0 12px rgba(212,175,55,0.2)", margin: "0 24px" }} />
+        <div style={{ height: "3px", background: "linear-gradient(to right, transparent 0%, rgba(120,60,180,0.50) 20%, rgba(212,175,55,0.40) 50%, rgba(120,60,180,0.50) 80%, transparent 100%)", boxShadow: "0 0 16px rgba(120,60,180,0.15)", margin: "0 24px" }} />
 
         {/* ═══ § 5 ARSENAL ═══ */}
         <section style={styles.arsenalSection}>
+          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "200px", background: "radial-gradient(ellipse 100% 70% at 50% 0%, rgba(120,60,180,0.20) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
           <div ref={arsenalHeaderRef} style={{ ...styles.arsenalHeader, ...reveal(arsenalHeaderVisible) }}>
             <EyebrowRuled text="What you get" />
             <h2 style={styles.arsenalH2}>The <span style={{ color: "#D4AF37" }}>Arsenal</span></h2>
@@ -457,10 +461,11 @@ const Index = () => {
           </div>
         </section>
 
-        <div style={{ height: "1px", background: "linear-gradient(90deg, transparent 5%, rgba(212,175,55,0.35) 50%, transparent 95%)", boxShadow: "0 0 12px rgba(212,175,55,0.2)", margin: "0 24px" }} />
+        <div style={{ height: "3px", background: "linear-gradient(to right, transparent 0%, rgba(120,60,180,0.50) 20%, rgba(212,175,55,0.40) 50%, rgba(120,60,180,0.50) 80%, transparent 100%)", boxShadow: "0 0 16px rgba(120,60,180,0.15)", margin: "0 24px" }} />
 
         {/* ═══ § 6 REALITY ═══ */}
         <section style={styles.realitySection}>
+          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "200px", background: "radial-gradient(ellipse 100% 70% at 50% 0%, rgba(120,60,180,0.20) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
           <blockquote ref={realityQuoteRef} style={{ ...styles.blockquote, ...reveal(realityQuoteVisible) }}>
             The waterfall either costs you now — or costs you everything <span style={{ color: "#D4AF37" }}>later</span>.
           </blockquote>
@@ -598,16 +603,16 @@ const styles: Record<string, React.CSSProperties> = {
   },
 
   /* ── § 2 HOW IT WORKS ── */
-  howSection: { background: "#000", padding: "64px 0 0" },
+  howSection: { position: "relative", background: "#000", padding: "64px 0 0" },
   howHeader: { textAlign: "center", padding: "16px 24px 24px", background: "radial-gradient(ellipse 80% 50% at 50% 60%, rgba(212,175,55,0.10) 0%, transparent 70%)" },
   howH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.6rem", color: "#fff", lineHeight: 0.95 },
-  stepsContainer: { position: "relative", display: "flex", flexDirection: "column", gap: "1px", background: "rgba(212,175,55,0.10)", borderRadius: "12px", overflow: "hidden", margin: "0 24px", border: "1px solid rgba(212,175,55,0.20)" },
+  stepsContainer: { position: "relative", display: "flex", flexDirection: "column", gap: "1px", background: "rgba(212,175,55,0.10)", borderRadius: "12px", overflow: "hidden", margin: "0 24px", border: "1px solid rgba(212,175,55,0.25)", boxShadow: "0 16px 40px rgba(0,0,0,0.5), 0 0 20px rgba(120,60,180,0.15)" },
   step: {
-    display: "grid", gridTemplateColumns: "52px 1fr", background: "#000",
+    display: "grid", gridTemplateColumns: "52px 1fr", background: "rgba(6,6,6,0.92)",
   },
   stepNumCol: {
     position: "relative", display: "flex", alignItems: "flex-start", justifyContent: "center",
-    background: "radial-gradient(circle at 50% 28px, rgba(212,175,55,0.20) 0%, #0A0A0A 80%)",
+    background: "radial-gradient(circle at 50% 28px, rgba(212,175,55,0.20) 0%, rgba(6,6,6,0.92) 80%)",
     paddingTop: "22px",
   },
   stepLine: {
@@ -617,14 +622,14 @@ const styles: Record<string, React.CSSProperties> = {
   stepNumBadge: {
     position: "relative", zIndex: 1, width: "34px", height: "34px", borderRadius: "50%",
     background: "#D4AF37", display: "flex", alignItems: "center", justifyContent: "center",
-    boxShadow: "0 0 20px rgba(212,175,55,0.5)",
+    boxShadow: "0 0 20px rgba(212,175,55,0.5), 0 0 40px rgba(120,60,180,0.25)",
   },
   stepContent: { padding: "26px 24px 26px 24px", background: "radial-gradient(circle at 0px 50%, rgba(212,175,55,0.14) 0%, transparent 55%)" },
   stepTitle: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "#D4AF37", lineHeight: 1, marginBottom: "5px" },
   stepBody: { fontFamily: "'Inter', sans-serif", fontSize: "19px", color: "rgba(255,255,255,0.88)", lineHeight: 1.55 },
 
   /* ── § 3 WATERFALL ── */
-  waterfallSection: { background: "#000", padding: "64px 0 0" },
+  waterfallSection: { position: "relative", background: "#000", padding: "64px 0 0" },
   waterfallHeader: { textAlign: "center", padding: "0 24px 24px" },
   waterfallH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.2rem", color: "#fff", lineHeight: 0.95 },
   waterfallExplainer: {
@@ -634,8 +639,8 @@ const styles: Record<string, React.CSSProperties> = {
   },
   acquisitionCallout: {
     position: "relative", overflow: "hidden", textAlign: "center", margin: "0 24px 10px",
-    background: "radial-gradient(circle at 50% 70%, rgba(212,175,55,0.20) 0%, #0A0A0A 75%)", border: "1px solid rgba(212,175,55,0.25)", borderRadius: "12px", padding: "24px 20px",
-    boxShadow: "0 0 24px rgba(212,175,55,0.10)",
+    background: "radial-gradient(circle at 50% 70%, rgba(212,175,55,0.20) 0%, rgba(6,6,6,0.92) 75%)", border: "1px solid rgba(212,175,55,0.25)", borderRadius: "12px", padding: "24px 20px",
+    boxShadow: "0 0 24px rgba(212,175,55,0.10), 0 0 20px rgba(120,60,180,0.15)",
   },
   acqLabel: { fontFamily: "'Roboto Mono', monospace", fontSize: "14px", textTransform: "uppercase", letterSpacing: "0.15em", color: "#D4AF37", marginBottom: "4px" },
   acqSub: { fontFamily: "'Roboto Mono', monospace", fontSize: "15px", color: colors.textSecondary, marginBottom: "8px" },
@@ -643,8 +648,8 @@ const styles: Record<string, React.CSSProperties> = {
 
   waterfallTiersBox: {
     position: "relative", overflow: "hidden", margin: "0 24px",
-    border: "1px solid rgba(212,175,55,0.25)", borderRadius: "12px", background: "#000",
-    boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 24px rgba(212,175,55,0.10)",
+    border: "1px solid rgba(212,175,55,0.25)", borderRadius: "12px", background: "rgba(6,6,6,0.92)",
+    boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 24px rgba(212,175,55,0.10), 0 0 20px rgba(120,60,180,0.15)",
   },
   tierRow: {
     position: "relative", display: "grid", gridTemplateColumns: "auto 1fr auto",
@@ -657,7 +662,7 @@ const styles: Record<string, React.CSSProperties> = {
     background: "rgba(212,175,55,0.18)", border: "1px solid rgba(212,175,55,0.35)",
     width: "28px", height: "28px", display: "flex", alignItems: "center", justifyContent: "center",
     borderRadius: "6px", fontWeight: 600,
-    boxShadow: "0 0 16px rgba(212,175,55,0.3)",
+    boxShadow: "0 0 16px rgba(212,175,55,0.3), 0 0 32px rgba(120,60,180,0.25)",
   },
   tierName: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.4rem", color: "#fff", lineHeight: 1.3, textTransform: "uppercase", letterSpacing: "0.02em" },
   tierAmt: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "rgba(220,38,38,0.85)", textAlign: "right", whiteSpace: "nowrap", letterSpacing: "0.02em" },
@@ -666,7 +671,7 @@ const styles: Record<string, React.CSSProperties> = {
   /* Flow diagram */
   flowDiagram: { margin: "16px 24px 0" },
   netBackend: {
-    position: "relative", textAlign: "center", background: "#000", border: "1px solid rgba(60,179,113,0.35)",
+    position: "relative", textAlign: "center", background: "rgba(6,6,6,0.92)", border: "1px solid rgba(60,179,113,0.35)",
     borderRadius: "12px", padding: "24px 20px", zIndex: 2, boxShadow: "0 8px 24px rgba(0,0,0,0.5), 0 0 30px rgba(60,179,113,0.15)",
   },
   netLabel: { fontFamily: "'Roboto Mono', monospace", fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.15em", color: colors.textPrimary, marginBottom: "8px" },
@@ -678,7 +683,7 @@ const styles: Record<string, React.CSSProperties> = {
   pipeRight: { flex: 1, height: "18px", borderTop: "2px solid rgba(60,179,113,0.50)", borderRight: "2px solid rgba(60,179,113,0.50)", borderRadius: "0 6px 0 0" },
   buckets: { display: "flex", gap: "10px", marginTop: "-1px" },
   bucket: {
-    flex: 1, textAlign: "center", background: "#0A0A0A", border: "1px solid rgba(60,179,113,0.25)",
+    flex: 1, textAlign: "center", background: "rgba(6,6,6,0.92)", border: "1px solid rgba(60,179,113,0.25)",
     borderTop: "2px solid #3CB371", borderRadius: "0 0 10px 10px", padding: "16px 12px",
   },
   bucketLabel: { fontFamily: "'Roboto Mono', monospace", fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.15em", color: colors.textPrimary, marginBottom: "8px" },
@@ -687,25 +692,25 @@ const styles: Record<string, React.CSSProperties> = {
   waterfallNote: { fontFamily: "'Roboto Mono', monospace", fontSize: "11px", textTransform: "uppercase", textAlign: "center", color: "rgba(255,255,255,0.45)", letterSpacing: "0.06em", padding: "16px 24px 0" },
 
   /* ── § 4 WHY THIS MATTERS ── */
-  whySection: { background: "#000", textAlign: "center", padding: "64px 0 0" },
+  whySection: { position: "relative", background: "#000", textAlign: "center", padding: "64px 0 0" },
   whyHeader: { padding: "20px 24px 24px" },
   whyH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.2rem", color: "#fff", textAlign: "center", lineHeight: 0.95 },
   badgeGridWrapper: {
     margin: "0 24px", borderRadius: "12px", overflow: "hidden", border: "1px solid rgba(212,175,55,0.25)",
-    boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 24px rgba(212,175,55,0.10)", position: "relative",
+    boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 24px rgba(212,175,55,0.10), 0 0 20px rgba(120,60,180,0.15)", position: "relative",
   },
   badgeGrid: { display: "grid", gridTemplateColumns: "1fr", gap: "1px", background: "rgba(212,175,55,0.15)" },
-  badgeCard: { background: "radial-gradient(circle at 45px 57px, rgba(212,175,55,0.10) 0%, #0A0A0A 65%)", padding: "36px 24px", textAlign: "left" },
+  badgeCard: { background: "radial-gradient(circle at 45px 57px, rgba(212,175,55,0.10) 0%, rgba(6,6,6,0.92) 65%)", padding: "36px 24px", textAlign: "left" },
   badgeNum: {
     width: "42px", height: "42px", borderRadius: "50%", background: "#D4AF37", color: "#000",
     display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.5rem",
-    marginBottom: "16px", paddingTop: "2px", boxShadow: "0 0 24px rgba(212,175,55,0.55)",
+    marginBottom: "16px", paddingTop: "2px", boxShadow: "0 0 24px rgba(212,175,55,0.55), 0 0 48px rgba(120,60,180,0.25)",
   },
   badgeTitle: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "#fff", marginBottom: "8px", lineHeight: 1.05, letterSpacing: "0.02em" },
   badgeBody: { fontFamily: "'Inter', sans-serif", fontSize: "19px", color: "rgba(255,255,255,0.70)", lineHeight: 1.55 },
 
   /* ── § 5 ARSENAL ── */
-  arsenalSection: { background: "#000", textAlign: "center", padding: "64px 0 0" },
+  arsenalSection: { position: "relative", background: "#000", textAlign: "center", padding: "64px 0 0" },
   arsenalHeader: { padding: "0 24px 24px" },
   arsenalH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.2rem", color: "#fff", lineHeight: 0.95 },
   arsenalSub: { fontFamily: "'Inter', sans-serif", fontSize: "18px", marginTop: "10px", color: "rgba(255,255,255,0.88)", lineHeight: 1.6 },
@@ -715,20 +720,20 @@ const styles: Record<string, React.CSSProperties> = {
   tierCardFree: {
     position: "relative", borderRadius: "12px", overflow: "hidden", textAlign: "left",
     border: "none",
-    background: "radial-gradient(ellipse at 50% 0%, rgba(60,179,113,0.07) 0%, #0A0A0A 70%)",
-    boxShadow: "0 16px 40px rgba(0,0,0,0.5), 0 0 40px rgba(60,179,113,0.04)",
+    background: "radial-gradient(ellipse at 50% 0%, rgba(60,179,113,0.07) 0%, rgba(6,6,6,0.92) 70%)",
+    boxShadow: "0 16px 40px rgba(0,0,0,0.5), 0 0 40px rgba(60,179,113,0.06), 0 0 20px rgba(120,60,180,0.15)",
   },
   tierCardAnalysis: {
     position: "relative", borderRadius: "12px", overflow: "hidden", textAlign: "left",
     border: "none",
-    background: "radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.08) 0%, #0A0A0A 70%)",
-    boxShadow: "0 16px 40px rgba(0,0,0,0.6)",
+    background: "radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.08) 0%, rgba(6,6,6,0.92) 70%)",
+    boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 30px rgba(120,60,180,0.15)",
   },
   tierCardPackage: {
     position: "relative", borderRadius: "12px", overflow: "hidden", textAlign: "left",
     border: "none",
-    background: "radial-gradient(ellipse at 50% 0%, rgba(120,60,180,0.08) 0%, rgba(212,175,55,0.06) 30%, #0A0A0A 70%)",
-    boxShadow: "0 16px 40px rgba(0,0,0,0.8), 0 0 60px rgba(120,60,180,0.10), 0 0 120px rgba(212,175,55,0.06)",
+    background: "radial-gradient(ellipse at 50% 0%, rgba(120,60,180,0.08) 0%, rgba(212,175,55,0.06) 30%, rgba(6,6,6,0.92) 70%)",
+    boxShadow: "0 16px 40px rgba(0,0,0,0.8), 0 0 60px rgba(120,60,180,0.15), 0 0 120px rgba(120,60,180,0.12)",
   },
 
   /* Headers */
@@ -822,12 +827,12 @@ const styles: Record<string, React.CSSProperties> = {
 
   /* ── Top line helpers ── */
   topLineGold: {
-    position: "absolute", top: 0, left: 0, right: 0, height: "1px",
-    background: "linear-gradient(90deg, transparent, #D4AF37, transparent)",
+    position: "absolute", top: 0, left: 0, right: 0, height: "2px",
+    background: "linear-gradient(to right, transparent 0%, rgba(120,60,180,0.40) 20%, rgba(212,175,55,0.50) 50%, rgba(120,60,180,0.40) 80%, transparent 100%)",
   },
   topLineGoldHalf: {
-    position: "absolute", top: 0, left: 0, right: 0, height: "1px",
-    background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.50), transparent)",
+    position: "absolute", top: 0, left: 0, right: 0, height: "2px",
+    background: "linear-gradient(to right, transparent 0%, rgba(120,60,180,0.30) 20%, rgba(212,175,55,0.35) 50%, rgba(120,60,180,0.30) 80%, transparent 100%)",
   },
   topLineGoldThick: {
     position: "absolute", top: 0, left: 0, right: 0, height: "2px",
@@ -839,22 +844,22 @@ const styles: Record<string, React.CSSProperties> = {
   },
 
   /* ── § 6 REALITY ── */
-  realitySection: { background: "#000", textAlign: "left", padding: "64px 24px 32px" },
+  realitySection: { position: "relative", background: "#000", textAlign: "left", padding: "64px 24px 32px" },
   blockquote: {
     fontFamily: "'Bebas Neue', sans-serif", fontSize: "2.4rem", lineHeight: 0.95, color: "#fff",
     borderLeft: "3px solid #D4AF37", paddingLeft: "20px", marginBottom: "24px",
     boxShadow: "-4px 0 24px rgba(212,175,55,0.25)",
   },
   checkGrid: {
-    position: "relative", border: "1px solid rgba(212,175,55,0.20)", borderRadius: "12px", overflow: "hidden",
-    boxShadow: "0 8px 32px rgba(0,0,0,0.5)",
+    position: "relative", border: "1px solid rgba(212,175,55,0.25)", borderRadius: "12px", overflow: "hidden",
+    boxShadow: "0 8px 32px rgba(0,0,0,0.5), 0 0 20px rgba(120,60,180,0.15)",
   },
   checkHeader: {
     display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1px", background: "rgba(255,255,255,0.06)",
     borderBottom: "1px solid rgba(212,175,55,0.15)",
   },
   checkHeaderWith: { background: "rgba(60,179,113,0.07)", padding: "14px 16px" },
-  checkHeaderWithout: { background: "#000", padding: "14px 16px", borderLeft: "1px solid rgba(255,255,255,0.06)" },
+  checkHeaderWithout: { background: "rgba(6,6,6,0.92)", padding: "14px 16px", borderLeft: "1px solid rgba(255,255,255,0.06)" },
   checkHeaderWithText: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.7rem", color: "#3CB371", letterSpacing: "0.04em" },
   checkHeaderWithoutText: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.7rem", color: "rgba(255,255,255,0.55)", letterSpacing: "0.04em" },
   checkRow: {
@@ -866,7 +871,7 @@ const styles: Record<string, React.CSSProperties> = {
     padding: "14px 16px", alignItems: "flex-start",
   },
   checkCellRight: {
-    background: "#000", display: "grid", gridTemplateColumns: "22px 1fr", gap: "10px",
+    background: "rgba(6,6,6,0.92)", display: "grid", gridTemplateColumns: "22px 1fr", gap: "10px",
     padding: "14px 16px", alignItems: "flex-start", borderLeft: "1px solid rgba(255,255,255,0.06)",
   },
   checkIconYes: { fontFamily: "'Roboto Mono', monospace", fontSize: "22px", paddingTop: "2px", color: "#3CB371", textShadow: "0 0 12px rgba(60,179,113,0.4)" },
@@ -884,12 +889,12 @@ const styles: Record<string, React.CSSProperties> = {
   },
   closerGlowBottom: {
     position: "absolute", bottom: 0, left: 0, right: 0, height: "80%", pointerEvents: "none",
-    background: "radial-gradient(ellipse 90% 60% at 50% 100%, rgba(120,60,180,0.15) 0%, rgba(212,175,55,0.18) 30%, transparent 65%)",
+    background: "radial-gradient(ellipse 90% 60% at 50% 100%, rgba(120,60,180,0.18) 0%, rgba(120,60,180,0.08) 40%, transparent 65%)",
   },
   closerCard: {
     position: "relative", zIndex: 1, border: "1px solid rgba(212,175,55,0.65)", borderRadius: "12px",
-    padding: "24px 24px 36px", background: "rgba(0,0,0,0.85)", margin: "0",
-    boxShadow: "0 16px 40px rgba(0,0,0,0.8), 0 0 60px rgba(212,175,55,0.1), 0 0 80px rgba(120,60,180,0.08)",
+    padding: "24px 24px 36px", background: "rgba(0,0,0,0.85)", backdropFilter: "blur(40px)", WebkitBackdropFilter: "blur(40px)", margin: "0",
+    boxShadow: "0 16px 40px rgba(0,0,0,0.8), 0 0 60px rgba(120,60,180,0.15), 0 0 80px rgba(120,60,180,0.15)",
   },
   closerH2: {
     fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.4rem", color: "#fff", textAlign: "center",
