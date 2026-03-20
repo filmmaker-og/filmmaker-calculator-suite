@@ -274,7 +274,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
               }}>
                 <Sparkles style={{ width: "22px", height: "22px", color: "#D4AF37", filter: "drop-shadow(0 0 3px rgba(212,175,55,0.40))" }} />
               </div>
-              <h2 className="font-bebas text-[32px] tracking-[0.12em] leading-none" style={{ color: "#D4AF37", textShadow: "0 0 20px rgba(212,175,55,0.25)" }}>
+              <h2 className="font-bebas text-[32px] tracking-[0.12em] leading-none" style={{ color: "#D4AF37", textShadow: "0 0 20px rgba(212,175,55,0.25)", marginTop: "2px" }}>
                 ASK THE OG
               </h2>
             </div>
