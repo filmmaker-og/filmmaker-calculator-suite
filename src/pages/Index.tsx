@@ -143,7 +143,7 @@ const Index = () => {
     },
     {
       title: "See the Full Waterfall",
-      body: "Every tier with accurate rates — off-the-tops through net backend profit. Adjust and stress-test until you know what you can't give up.",
+      body: "Every tier with accurate rates, off-the-tops through net backend profit. Adjust and stress-test until you know what you can't give up.",
       icon: <svg viewBox="0 0 24 24" fill="#fff" width="22" height="22"><path d="M12 2L3 7v5c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-9-5zm-1 14l-3.5-3.5 1.41-1.41L11 13.17l5.09-5.09 1.41 1.41L11 16z"/></svg>,
     },
     {
@@ -199,7 +199,7 @@ const Index = () => {
           </div>
         </section>
 
-        <div style={{ height: "3px", background: "linear-gradient(to right, transparent 0%, rgba(120,60,180,0.50) 20%, rgba(212,175,55,0.40) 50%, rgba(120,60,180,0.50) 80%, transparent 100%)", boxShadow: "0 0 16px rgba(120,60,180,0.15)", margin: "0 24px" }} />
+        <div style={{ height: "3px", background: "linear-gradient(to right, transparent 0%, rgba(120,60,180,0.50) 20%, rgba(212,175,55,0.40) 50%, rgba(120,60,180,0.50) 80%, transparent 100%)", boxShadow: "0 0 16px rgba(120,60,180,0.25)", margin: "0 24px" }} />
 
         {/* ═══ § 2 HOW IT WORKS ═══ */}
         <section ref={howRef} style={styles.howSection}>
@@ -228,7 +228,7 @@ const Index = () => {
           </div>
         </section>
 
-        <div style={{ height: "3px", background: "linear-gradient(to right, transparent 0%, rgba(120,60,180,0.50) 20%, rgba(212,175,55,0.40) 50%, rgba(120,60,180,0.50) 80%, transparent 100%)", boxShadow: "0 0 16px rgba(120,60,180,0.15)", margin: "0 24px" }} />
+        <div style={{ height: "3px", background: "linear-gradient(to right, transparent 0%, rgba(120,60,180,0.50) 20%, rgba(212,175,55,0.40) 50%, rgba(120,60,180,0.50) 80%, transparent 100%)", boxShadow: "0 0 16px rgba(120,60,180,0.25)", margin: "0 24px" }} />
 
         {/* ═══ § 3 WATERFALL ═══ */}
         <section style={styles.waterfallSection}>
@@ -303,7 +303,7 @@ const Index = () => {
           <p style={{ ...styles.waterfallNote, ...reveal(waterfallFlowVisible) }}>Model only — your numbers will differ</p>
         </section>
 
-        <div style={{ height: "3px", background: "linear-gradient(to right, transparent 0%, rgba(120,60,180,0.50) 20%, rgba(212,175,55,0.40) 50%, rgba(120,60,180,0.50) 80%, transparent 100%)", boxShadow: "0 0 16px rgba(120,60,180,0.15)", margin: "0 24px" }} />
+        <div style={{ height: "3px", background: "linear-gradient(to right, transparent 0%, rgba(120,60,180,0.50) 20%, rgba(212,175,55,0.40) 50%, rgba(120,60,180,0.50) 80%, transparent 100%)", boxShadow: "0 0 16px rgba(120,60,180,0.25)", margin: "0 24px" }} />
 
         {/* ═══ § 4 WHY THIS MATTERS ═══ */}
         <section ref={whyRef} style={styles.whySection}>
@@ -331,7 +331,7 @@ const Index = () => {
           </div>
         </section>
 
-        <div style={{ height: "3px", background: "linear-gradient(to right, transparent 0%, rgba(120,60,180,0.50) 20%, rgba(212,175,55,0.40) 50%, rgba(120,60,180,0.50) 80%, transparent 100%)", boxShadow: "0 0 16px rgba(120,60,180,0.15)", margin: "0 24px" }} />
+        <div style={{ height: "3px", background: "linear-gradient(to right, transparent 0%, rgba(120,60,180,0.50) 20%, rgba(212,175,55,0.40) 50%, rgba(120,60,180,0.50) 80%, transparent 100%)", boxShadow: "0 0 16px rgba(120,60,180,0.25)", margin: "0 24px" }} />
 
         {/* ═══ § 5 ARSENAL ═══ */}
         <section style={styles.arsenalSection}>
@@ -463,13 +463,13 @@ const Index = () => {
           </div>
         </section>
 
-        <div style={{ height: "3px", background: "linear-gradient(to right, transparent 0%, rgba(120,60,180,0.50) 20%, rgba(212,175,55,0.40) 50%, rgba(120,60,180,0.50) 80%, transparent 100%)", boxShadow: "0 0 16px rgba(120,60,180,0.15)", margin: "0 24px" }} />
+        <div style={{ height: "3px", background: "linear-gradient(to right, transparent 0%, rgba(120,60,180,0.50) 20%, rgba(212,175,55,0.40) 50%, rgba(120,60,180,0.50) 80%, transparent 100%)", boxShadow: "0 0 16px rgba(120,60,180,0.25)", margin: "0 24px" }} />
 
         {/* ═══ § 6 REALITY ═══ */}
         <section style={styles.realitySection}>
           <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "200px", background: "radial-gradient(ellipse 100% 70% at 50% 0%, rgba(120,60,180,0.20) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
           <div style={{ position: "relative" }}>
-            <div style={{ position: "absolute", top: "-20px", left: "-20px", right: "-20px", bottom: "-20px", background: "radial-gradient(ellipse 100% 80% at 20% 50%, rgba(120,60,180,0.12) 0%, transparent 60%)", pointerEvents: "none", zIndex: 0 }} />
+            <div style={{ position: "absolute", top: "-20px", left: "-20px", right: "-20px", bottom: "-20px", background: "radial-gradient(ellipse 120% 100% at 20% 50%, rgba(120,60,180,0.22) 0%, transparent 60%)", pointerEvents: "none", zIndex: 0 }} />
             <blockquote ref={realityQuoteRef} style={{ ...styles.blockquote, position: "relative", zIndex: 1, ...reveal(realityQuoteVisible) }}>
             The waterfall either costs you now — or costs you everything <span style={{ color: "#D4AF37" }}>later</span>.
           </blockquote>
@@ -499,7 +499,7 @@ const Index = () => {
           </div>
         </section>
 
-        <div style={{ height: "3px", background: "linear-gradient(to right, transparent 0%, rgba(120,60,180,0.50) 20%, rgba(212,175,55,0.40) 50%, rgba(120,60,180,0.50) 80%, transparent 100%)", boxShadow: "0 0 16px rgba(120,60,180,0.15)", margin: "0 24px" }} />
+        <div style={{ height: "3px", background: "linear-gradient(to right, transparent 0%, rgba(120,60,180,0.50) 20%, rgba(212,175,55,0.40) 50%, rgba(120,60,180,0.50) 80%, transparent 100%)", boxShadow: "0 0 16px rgba(120,60,180,0.25)", margin: "0 24px" }} />
 
         {/* ═══ § 7 CLOSER ═══ */}
         <section ref={closerRef} style={styles.closerSection}>
@@ -586,7 +586,7 @@ const styles: Record<string, React.CSSProperties> = {
   /* ── § 1 HERO ── */
   hero: {
     position: "relative", textAlign: "center",
-    padding: "24px 24px 12px",
+    padding: "24px 24px 0",
     margin: "0 24px",
     borderRadius: "12px",
     overflow: "hidden",
@@ -618,7 +618,7 @@ const styles: Record<string, React.CSSProperties> = {
   howH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.2rem", color: "#fff", lineHeight: 0.95 },
   stepsContainer: { position: "relative", display: "flex", flexDirection: "column", gap: "1px", background: "rgba(120,60,180,0.10)", borderRadius: "12px", overflow: "hidden", margin: "0 24px", border: "1px solid rgba(120,60,180,0.25)", boxShadow: "0 16px 40px rgba(0,0,0,0.5), 0 0 20px rgba(120,60,180,0.15)" },
   step: {
-    display: "grid", gridTemplateColumns: "52px 1fr", background: "rgba(6,6,6,0.92)",
+    display: "grid", gridTemplateColumns: "56px 1fr", background: "rgba(6,6,6,0.92)",
   },
   stepNumCol: {
     position: "relative", display: "flex", alignItems: "flex-start", justifyContent: "center",
@@ -626,7 +626,7 @@ const styles: Record<string, React.CSSProperties> = {
     paddingTop: "22px",
   },
   stepLine: {
-    position: "absolute", top: "53px", bottom: "-23px", left: "50%", transform: "translateX(-50%)", width: "1px",
+    position: "absolute", top: "57px", bottom: "-23px", left: "50%", transform: "translateX(-50%)", width: "1px",
     background: "linear-gradient(180deg, rgba(120,60,180,0.6) 0%, rgba(120,60,180,0.1) 100%)", zIndex: 0,
   },
   stepNumBadge: {
@@ -649,7 +649,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
   acquisitionCallout: {
     position: "relative", overflow: "hidden", textAlign: "center", margin: "0 24px 10px",
-    background: "radial-gradient(circle at 50% 70%, rgba(212,175,55,0.20) 0%, rgba(6,6,6,0.92) 75%), radial-gradient(circle at 50% 50%, rgba(120,60,180,0.10) 0%, transparent 60%)", border: "1px solid rgba(212,175,55,0.25)", borderRadius: "12px", padding: "24px 20px",
+    background: "radial-gradient(circle at 50% 70%, rgba(212,175,55,0.20) 0%, rgba(6,6,6,0.92) 75%), radial-gradient(circle at 50% 50%, rgba(120,60,180,0.15) 0%, transparent 60%)", border: "1px solid rgba(212,175,55,0.25)", borderRadius: "12px", padding: "24px 20px",
     boxShadow: "0 0 24px rgba(212,175,55,0.10), 0 0 20px rgba(120,60,180,0.15)",
   },
   acqLabel: { fontFamily: "'Roboto Mono', monospace", fontSize: "16px", textTransform: "uppercase", letterSpacing: "0.15em", color: "#D4AF37", marginBottom: "4px" },
@@ -663,18 +663,18 @@ const styles: Record<string, React.CSSProperties> = {
   },
   tierRow: {
     position: "relative", display: "grid", gridTemplateColumns: "auto 1fr auto",
-    gap: "16px", padding: "16px 20px", alignItems: "center",
+    gap: "16px", padding: "18px 20px", alignItems: "center",
     borderBottom: "1px solid rgba(255,255,255,0.06)", cursor: "default",
     borderLeft: "2px solid rgba(220,38,38,0.15)",
   },
   tierNum: {
-    fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: "rgb(180,140,255)",
-    background: "rgba(120,60,180,0.18)", border: "1px solid rgba(120,60,180,0.35)",
-    width: "28px", height: "28px", display: "flex", alignItems: "center", justifyContent: "center",
+    fontFamily: "'Roboto Mono', monospace", fontSize: "13px", color: "rgb(180,140,255)",
+    background: "rgba(120,60,180,0.25)", border: "1px solid rgba(120,60,180,0.35)",
+    width: "34px", height: "34px", display: "flex", alignItems: "center", justifyContent: "center",
     borderRadius: "6px", fontWeight: 600,
-    boxShadow: "0 0 16px rgba(120,60,180,0.3), 0 0 32px rgba(120,60,180,0.25)",
+    boxShadow: "0 0 16px rgba(120,60,180,0.35), 0 0 32px rgba(120,60,180,0.25)",
   },
-  tierName: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.4rem", color: "#fff", lineHeight: 1.3, textTransform: "uppercase", letterSpacing: "0.02em" },
+  tierName: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.6rem", color: "#fff", lineHeight: 1.3, textTransform: "uppercase", letterSpacing: "0.02em" },
   tierAmt: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "rgba(220,38,38,0.85)", textAlign: "right", whiteSpace: "nowrap", letterSpacing: "0.02em" },
   tierMinus: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "rgba(220,38,38,0.70)", marginRight: "4px", fontWeight: 400 },
 
@@ -682,12 +682,12 @@ const styles: Record<string, React.CSSProperties> = {
   flowDiagram: { margin: "16px 24px 0" },
   netBackend: {
     position: "relative", textAlign: "center", background: "rgba(6,6,6,0.92)", border: "1px solid rgba(60,179,113,0.35)",
-    borderRadius: "12px", padding: "24px 20px", zIndex: 2, boxShadow: "0 8px 24px rgba(0,0,0,0.5), 0 0 30px rgba(60,179,113,0.15), 0 0 20px rgba(120,60,180,0.12)",
+    borderRadius: "12px", padding: "24px 20px", zIndex: 2, boxShadow: "0 8px 24px rgba(0,0,0,0.5), 0 0 30px rgba(60,179,113,0.15), 0 0 20px rgba(120,60,180,0.15)",
   },
   netLabel: { fontFamily: "'Roboto Mono', monospace", fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.15em", color: colors.textPrimary, marginBottom: "8px" },
   netAmount: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.2rem", color: "#3CB371", lineHeight: 0.9, letterSpacing: "0.02em", textShadow: "0 0 24px rgba(60,179,113,0.35)" },
   pipeNetwork: { display: "flex", flexDirection: "column", alignItems: "center", marginTop: "-1px", position: "relative", zIndex: 1 },
-  pipeVertical: { width: "2px", height: "18px", background: "rgba(60,179,113,0.50)", boxShadow: "0 0 8px rgba(120,60,180,0.10)" },
+  pipeVertical: { width: "2px", height: "18px", background: "rgba(60,179,113,0.50)", boxShadow: "0 0 8px rgba(120,60,180,0.15)" },
   pipeFork: { display: "flex", width: "calc(50% + 10px)" },
   pipeLeft: { flex: 1, height: "18px", borderTop: "2px solid rgba(60,179,113,0.50)", borderLeft: "2px solid rgba(60,179,113,0.50)", borderRadius: "6px 0 0 0" },
   pipeRight: { flex: 1, height: "18px", borderTop: "2px solid rgba(60,179,113,0.50)", borderRight: "2px solid rgba(60,179,113,0.50)", borderRadius: "0 6px 0 0" },
@@ -857,7 +857,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
 
   /* ── § 6 REALITY ── */
-  realitySection: { position: "relative", background: "#000", textAlign: "left", padding: "40px 24px 32px" },
+  realitySection: { position: "relative", background: "#000", textAlign: "left", padding: "48px 24px 24px" },
   blockquote: {
     fontFamily: "'Bebas Neue', sans-serif", fontSize: "2.4rem", lineHeight: 0.95, color: "#fff",
     borderLeft: "3px solid #D4AF37", paddingLeft: "20px", marginBottom: "24px",
@@ -895,12 +895,12 @@ const styles: Record<string, React.CSSProperties> = {
   /* ── § 7 CLOSER ── */
   closerSection: {
     position: "relative", overflow: "hidden", textAlign: "center",
-    padding: "32px 0 80px", borderTop: "none",
+    padding: "24px 0 80px", borderTop: "none",
     margin: "0 24px 0",
     borderRadius: "12px",
     backgroundImage: "linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.35) 50%, rgba(0,0,0,0.60) 100%), url('/closer-bg.jpg')",
     backgroundSize: "cover",
-    backgroundPosition: "center 30%",
+    backgroundPosition: "center 55%",
   },
   closerGlowBottom: {
     position: "absolute", bottom: 0, left: 0, right: 0, height: "80%", pointerEvents: "none",
