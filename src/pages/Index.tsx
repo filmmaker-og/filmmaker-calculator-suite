@@ -80,11 +80,9 @@ const Index = () => {
 
   const { ref: whyRef, inView: whyVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
 
-  // Arsenal — three independent cards
+  // Arsenal — snapshot only
   const { ref: arsenalHeaderRef, inView: arsenalHeaderVisible } = useInView<HTMLDivElement>({ threshold: 0.3 });
   const { ref: arsenalCoreRef, inView: arsenalCoreVisible } = useInView<HTMLDivElement>({ threshold: 0.2 });
-  const { ref: arsenalSnapshotRef, inView: arsenalSnapshotVisible } = useInView<HTMLDivElement>({ threshold: 0.2 });
-  const { ref: arsenalPackageRef, inView: arsenalPackageVisible } = useInView<HTMLDivElement>({ threshold: 0.2 });
 
   // Reality — blockquote and grid separately
   const { ref: realityQuoteRef, inView: realityQuoteVisible } = useInView<HTMLDivElement>({ threshold: 0.3 });
@@ -116,12 +114,14 @@ const Index = () => {
 
   // Refs for HUD tier tracking
   const waterfallSectionRef = useRef<HTMLElement | null>(null);
+  const waterfallContextRef = useRef<HTMLDivElement | null>(null);
   const tierCardRefs = useRef<(HTMLDivElement | null)[]>([]);
   const tierAmounts = WATERFALL_TIERS.map(t => t.amount);
 
   // Profit celebration state
   const [profitCelebrated, setProfitCelebrated] = useState(false);
   const [profitCountUp, setProfitCountUp] = useState(0);
+  const [profitGlowIntensity, setProfitGlowIntensity] = useState(0.12);
   const profitAnimRef = useRef<number>(0);
   const profitCardRef = useRef<HTMLDivElement | null>(null);
 
@@ -181,6 +181,8 @@ const Index = () => {
       if (entry.isIntersecting && !profitCelebrated) {
         setProfitCelebrated(true);
         haptics.success();
+        setProfitGlowIntensity(0.20);
+        setTimeout(() => setProfitGlowIntensity(0.12), 500);
         // Count up from 0 to NET_PROFIT over 600ms
         const duration = 600;
         const startTime = performance.now();
@@ -262,7 +264,7 @@ const Index = () => {
       green: "rgba(60,179,113,0.30)",
     };
     const isGradient = color.includes('-to-');
-    const height = color === 'gold-to-red' || color === 'red-to-green' ? "28px" : "20px";
+    const height = color === 'gold-to-red' ? "36px" : color === 'red-to-green' ? "28px" : "20px";
     return (
       <div style={{ display: "flex", justifyContent: "center", padding: "0 24px" }}>
         <div style={{
@@ -343,6 +345,7 @@ const Index = () => {
                 <span style={{ position: "relative", zIndex: 1 }}>RUN MY WATERFALL</span>
                 <div style={styles.ctaShimmer} />
               </button>
+              <p style={styles.ctaReassurance}>No Credit Card · Instant Results</p>
             </div>
           </div>
         </section>
@@ -355,7 +358,7 @@ const Index = () => {
           <div style={{ ...styles.howHeader, ...reveal(howVisible) }}>
             <EyebrowRuled text="The Process" />
             <h2 style={styles.howH2}>Build in <span style={{ color: "#D4AF37" }}>Minutes</span></h2>
-            <p style={styles.sectionSub}>Four steps. Five minutes. One waterfall.</p>
+            <p style={styles.sectionSub}>Five steps. Five minutes. One waterfall.</p>
           </div>
           <div style={styles.stepsContainer}>
             <div style={styles.topLineGoldHalf} />
@@ -383,7 +386,7 @@ const Index = () => {
           <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "200px", background: "radial-gradient(ellipse 100% 70% at 50% 0%, rgba(120,60,180,0.20) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
 
           {/* HUD */}
-          <WaterfallHUD sectionRef={waterfallSectionRef} tierRefs={tierCardRefs} tierAmounts={tierAmounts} />
+          <WaterfallHUD sectionRef={waterfallContextRef} tierRefs={tierCardRefs} tierAmounts={tierAmounts} />
 
           {/* Header */}
           <div ref={waterfallHeaderRef} style={{ ...styles.waterfallHeader, ...reveal(waterfallHeaderVisible) }}>
@@ -396,7 +399,7 @@ const Index = () => {
           </p>
 
           {/* ── Context Block: "The Project" ── */}
-          <div style={{ margin: "0 24px 0", ...reveal(waterfallHeaderVisible, 1) }}>
+          <div ref={waterfallContextRef} style={{ margin: "0 24px 0", ...reveal(waterfallHeaderVisible, 1) }}>
             <WaterfallGroupLabel text="The Project" color="gold" />
             <div style={{
               position: "relative", overflow: "hidden", borderRadius: "12px",
@@ -505,8 +508,8 @@ const Index = () => {
                           >
                             <div style={wfBadgeGlow('pair')} />
                             <div style={wfBadge('pair')}>{tier.tier}</div>
-                            <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.3rem", color: "#fff", textTransform: "uppercase", marginBottom: "6px" }}>{tier.name}</div>
-                            <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.5rem", color: "rgba(220,38,38,0.85)" }}>${tier.amount.toLocaleString()}</div>
+                            <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.3rem", color: "#fff", textTransform: "uppercase", marginBottom: "6px", textAlign: "center" }}>{tier.name}</div>
+                            <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.5rem", color: "rgba(220,38,38,0.85)", textAlign: "center" }}>–${tier.amount.toLocaleString()}</div>
                             <div style={{ marginTop: "8px", height: "4px", background: "rgba(255,255,255,0.06)", borderRadius: "4px", overflow: "hidden" }}>
                               <div style={{ height: "100%", width: `${Math.min(erosionPct(tier.erosionPct), 100)}%`, background: "rgba(220,38,38,0.50)", borderRadius: "4px" }} />
                             </div>
@@ -534,13 +537,15 @@ const Index = () => {
                             fontFamily: "'Bebas Neue', sans-serif",
                             fontSize: tier.mode === 'featured' ? "1.7rem" : "1.5rem",
                             color: "#fff", textTransform: "uppercase", marginBottom: "8px",
+                            textAlign: "center",
                           }}>{tier.name}</div>
                           <div style={{
                             fontFamily: "'Bebas Neue', sans-serif",
                             fontSize: tier.mode === 'featured' ? "2.2rem" : "1.8rem",
                             color: tier.mode === 'featured' ? "rgba(220,38,38,0.95)" : "rgba(220,38,38,0.85)",
+                            textAlign: "center",
                             ...(tier.mode === 'featured' ? { textShadow: "0 0 20px rgba(220,38,38,0.20)" } : {}),
-                          }}>${tier.amount.toLocaleString()}</div>
+                          }}>–${tier.amount.toLocaleString()}</div>
                           <div style={{
                             marginTop: "10px",
                             height: tier.mode === 'featured' ? "8px" : "6px",
@@ -570,7 +575,7 @@ const Index = () => {
               background: "radial-gradient(ellipse at 50% 0%, rgba(220,38,38,0.06) 0%, rgba(6,6,6,0.92) 70%)",
             }}>
               <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: "linear-gradient(90deg, transparent, rgba(220,38,38,0.30), transparent)" }} />
-              <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "2.2rem", color: "rgba(220,38,38,0.85)" }}>${TOTAL_DEDUCTED.toLocaleString()}</div>
+              <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "2.2rem", color: "rgba(220,38,38,0.85)" }}>–${TOTAL_DEDUCTED.toLocaleString()}</div>
               {/* Summary bar */}
               <div style={{ marginTop: "12px", height: "8px", background: "rgba(255,255,255,0.06)", borderRadius: "4px", overflow: "hidden", display: "flex" }}>
                 <div style={{ height: "100%", width: `${((TOTAL_ACQUISITION - TOTAL_DEDUCTED) / TOTAL_ACQUISITION) * 100}%`, background: "rgba(60,179,113,0.50)", borderRadius: "4px 0 0 4px" }} />
@@ -590,7 +595,7 @@ const Index = () => {
               style={{
                 position: "relative", overflow: "hidden", borderRadius: "12px", padding: "20px 16px", textAlign: "center",
                 border: "1px solid rgba(60,179,113,0.50)",
-                background: `radial-gradient(ellipse at 50% 0%, rgba(60,179,113,${profitCelebrated ? 0.12 : 0.12}) 0%, rgba(6,6,6,0.92) 70%)`,
+                background: `radial-gradient(ellipse at 50% 0%, rgba(60,179,113,${profitGlowIntensity}) 0%, rgba(6,6,6,0.92) 70%)`,
                 boxShadow: "0 8px 24px rgba(0,0,0,0.5), 0 0 30px rgba(60,179,113,0.15)",
                 transition: "background 500ms ease",
               }}
@@ -627,7 +632,7 @@ const Index = () => {
             </div>
           </div>
 
-          <p style={styles.waterfallNote}>Based on a $2.5M indie feature. Run your own numbers.</p>
+          <p style={styles.waterfallNote}>Based on a $2.5M indie feature.</p>
         </section>
 
         <div style={{ height: "3px", background: "linear-gradient(to right, transparent 0%, rgba(120,60,180,0.50) 20%, rgba(212,175,55,0.40) 50%, rgba(120,60,180,0.50) 80%, transparent 100%)", boxShadow: "0 0 8px rgba(120,60,180,0.35), 0 0 20px rgba(120,60,180,0.20)", margin: "0 24px" }} />
@@ -665,8 +670,8 @@ const Index = () => {
           <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "240px", background: "radial-gradient(ellipse 100% 70% at 50% 0%, rgba(120,60,180,0.25) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
           <div ref={arsenalHeaderRef} style={{ ...styles.arsenalHeader, ...reveal(arsenalHeaderVisible) }}>
             <EyebrowRuled text="What you get" />
-            <h2 style={styles.arsenalH2}>The <span style={{ color: "#D4AF37" }}>Arsenal</span></h2>
-            <p style={styles.arsenalSub}>Start with the math. Upgrade when you need the documents.</p>
+            <h2 style={styles.arsenalH2}>The <span style={{ color: "#D4AF37" }}>Snapshot</span></h2>
+            <p style={styles.arsenalSub}>Everything you need to model your deal. Free.</p>
           </div>
 
           <div style={styles.arsenalCards}>
@@ -687,107 +692,52 @@ const Index = () => {
               <div style={styles.valueStatementFree}>
                 <p style={styles.valueTextFree}>Your Numbers. No Credit Card.</p>
               </div>
-              {/* Features */}
+              {/* Features — 3 groups */}
               <div style={styles.tierFeatures}>
-                {[
-                  { name: "11-Tier Recoupment Logic" },
-                  { name: "Profit & Break-Even Scenarios" },
-                  { name: "Web Sharing & PDF Export" },
-                ].map((f, i) => (
-                  <div key={i} style={{ display: "flex", gap: "14px", alignItems: "flex-start" }}>
-                    <span style={{ fontSize: "24px", color: "#3CB371", flexShrink: 0, marginTop: "1px", textShadow: "0 0 8px rgba(60,179,113,0.6), 0 0 20px rgba(60,179,113,0.3)" }}>✓</span>
-                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "18px", fontWeight: 500, color: "#fff", lineHeight: 1.3 }}>{f.name}</p>
-                  </div>
-                ))}
+                {/* Group: Model */}
+                <div>
+                  <p style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.3rem", color: "rgba(60,179,113,0.70)", letterSpacing: "0.06em", marginBottom: "12px", paddingLeft: "38px" }}>Model</p>
+                  {["11-Tier Recoupment Waterfall", "Capital Stack Breakdown", "Investor / Producer Profit Split"].map((f, i) => (
+                    <div key={i} style={{ display: "flex", gap: "14px", alignItems: "flex-start", marginBottom: i < 2 ? "12px" : "0" }}>
+                      <span style={{ fontSize: "24px", color: "#3CB371", flexShrink: 0, marginTop: "1px", textShadow: "0 0 8px rgba(60,179,113,0.6), 0 0 20px rgba(60,179,113,0.3)" }}>✓</span>
+                      <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "18px", fontWeight: 500, color: "#fff", lineHeight: 1.3 }}>{f}</p>
+                    </div>
+                  ))}
+                </div>
+                {/* Separator */}
+                <div style={{ height: "1px", background: "rgba(60,179,113,0.12)", margin: "4px 0" }} />
+                {/* Group: Analyze */}
+                <div>
+                  <p style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.3rem", color: "rgba(60,179,113,0.70)", letterSpacing: "0.06em", marginBottom: "12px", paddingLeft: "38px" }}>Analyze</p>
+                  {["Break-Even Scenario Analysis", "Sensitivity on Key Variables", "Off-the-Top Fee Mapping"].map((f, i) => (
+                    <div key={i} style={{ display: "flex", gap: "14px", alignItems: "flex-start", marginBottom: i < 2 ? "12px" : "0" }}>
+                      <span style={{ fontSize: "24px", color: "#3CB371", flexShrink: 0, marginTop: "1px", textShadow: "0 0 8px rgba(60,179,113,0.6), 0 0 20px rgba(60,179,113,0.3)" }}>✓</span>
+                      <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "18px", fontWeight: 500, color: "#fff", lineHeight: 1.3 }}>{f}</p>
+                    </div>
+                  ))}
+                </div>
+                {/* Separator */}
+                <div style={{ height: "1px", background: "rgba(60,179,113,0.12)", margin: "4px 0" }} />
+                {/* Group: Share */}
+                <div>
+                  <p style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.3rem", color: "rgba(60,179,113,0.70)", letterSpacing: "0.06em", marginBottom: "12px", paddingLeft: "38px" }}>Share</p>
+                  {["Formatted PDF Export", "Shareable Web Link", "White-Labeled to Your Project"].map((f, i) => (
+                    <div key={i} style={{ display: "flex", gap: "14px", alignItems: "flex-start", marginBottom: i < 2 ? "12px" : "0" }}>
+                      <span style={{ fontSize: "24px", color: "#3CB371", flexShrink: 0, marginTop: "1px", textShadow: "0 0 8px rgba(60,179,113,0.6), 0 0 20px rgba(60,179,113,0.3)" }}>✓</span>
+                      <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "18px", fontWeight: 500, color: "#fff", lineHeight: 1.3 }}>{f}</p>
+                    </div>
+                  ))}
+                </div>
               </div>
               <div style={styles.tierAction}>
                 <button onClick={handleCTA} style={styles.btnFree} aria-label="Start modeling your waterfall" onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>START MODELING</button>
               </div>
             </div>
-
-            {/* ── Card 2: The Full Analysis — GOLD ── */}
-            <div ref={arsenalSnapshotRef} style={{ ...styles.tierCardAnalysis, ...reveal(arsenalSnapshotVisible) }}>
-              {/* Gradient border */}
-              <div style={{ position: "absolute", inset: 0, borderRadius: "12px", padding: "1px", pointerEvents: "none", background: "linear-gradient(180deg, rgba(212,175,55,0.55) 0%, rgba(212,175,55,0.20) 50%, rgba(212,175,55,0.40) 100%)", WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)", WebkitMaskComposite: "xor", maskComposite: "exclude" }} />
-              {/* Top line */}
-              <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.6), transparent)", zIndex: 1 }} />
-              <div style={styles.tierHeaderAlt}>
-                <div style={{ marginBottom: "12px" }}>
-                  <span style={styles.badgeGold}>Essential</span>
-                </div>
-                <p style={styles.tierTitleCard}>THE FULL ANALYSIS</p>
-                <p style={styles.tierSubGold}>Your numbers documented & stress-tested.</p>
-              </div>
-              {/* Value statement */}
-              <div style={styles.valueStatementGold}>
-                <p style={styles.valueTextGold}>One Document. Every Answer.</p>
-              </div>
-              {/* Features */}
-              <div style={styles.tierFeatures}>
-                {[
-                  { name: "Unified Financial Presentation", desc: "One PDF with everything an investor needs." },
-                  { name: "Budget, Stack, Waterfall & Scenarios", desc: "All four pillars in a single document." },
-                  { name: "Sensitivity Analysis", desc: "Multiple scenarios stress-tested." },
-                  { name: "White-Labeled to Your Project", desc: "Your company, your title, your brand." },
-                ].map((f, i) => (
-                  <div key={i} style={{ display: "flex", gap: "14px", alignItems: "flex-start" }}>
-                    <span style={{ fontSize: "24px", color: "#D4AF37", flexShrink: 0, marginTop: "1px", textShadow: "0 0 8px rgba(212,175,55,0.6), 0 0 20px rgba(212,175,55,0.3)" }}>✓</span>
-                    <div>
-                      <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "18px", fontWeight: 500, color: "#fff", lineHeight: 1.3, marginBottom: "3px" }}>{f.name}</p>
-                      <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "16px", color: "rgba(255,255,255,0.65)", lineHeight: 1.45 }}>{f.desc}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <div style={styles.tierAction}>
-                <button onClick={() => { haptics.light(); gatedNavigate("/store/the-full-analysis"); }} style={styles.btnGold} aria-label="Get the Full Analysis" onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>GET THE FULL ANALYSIS</button>
-                <a href="/store/the-full-analysis" onClick={(e) => { e.preventDefault(); gatedNavigate("/store/the-full-analysis"); }} style={styles.detailsLink} onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(255,255,255,1)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(255,255,255,0.88)"; }}>See full details →</a>
-              </div>
-            </div>
-
-            {/* ── Card 3: The Producer's Package — PURPLE-GOLD ── */}
-            <div ref={arsenalPackageRef} style={{ ...styles.tierCardPackage, ...reveal(arsenalPackageVisible) }}>
-              {/* Gradient border */}
-              <div style={{ position: "absolute", inset: 0, borderRadius: "12px", padding: "1px", pointerEvents: "none", background: "linear-gradient(180deg, rgb(110,50,170) 0%, rgba(120,60,180,0.5) 30%, rgba(212,175,55,0.4) 70%, #D4AF37 100%)", WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)", WebkitMaskComposite: "xor", maskComposite: "exclude" }} />
-              {/* Top line */}
-              <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "3px", background: "linear-gradient(90deg, transparent, rgb(110,50,170), #D4AF37, transparent)", zIndex: 1 }} />
-              <div style={{ ...styles.tierHeaderAlt, background: "radial-gradient(circle at 80px 40px, rgba(120,60,180,0.12) 0%, transparent 50%), radial-gradient(ellipse at 50% 100%, rgba(120,60,180,0.06) 0%, transparent 70%)" }}>
-                <div style={{ marginBottom: "12px" }}>
-                  <span style={styles.badgePurple}>Turnkey</span>
-                </div>
-                <p style={styles.tierTitleCard}>THE PRODUCER'S PACKAGE</p>
-                <p style={styles.tierSubGold}>The full treatment, delivered in 3-5 days.</p>
-              </div>
-              {/* Value statement */}
-              <div style={styles.valueStatementPurple}>
-                <p style={styles.valueTextPurple}>Custom-Built. Investor-Ready.</p>
-              </div>
-              {/* Features */}
-              <div style={styles.tierFeatures}>
-                {[
-                  { name: "Custom Lookbook", desc: "Tone, cast, genre, visual identity." },
-                  { name: "Pitch Deck with Speaker Notes" },
-                  { name: "Enhanced Financial Presentation" },
-                  { name: "10 Comparable Acquisitions" },
-                  { name: "Individual Investor Profiles" },
-                  { name: "Everything White-Labeled" },
-                  { name: "Revision Round Included" },
-                ].map((f, i) => (
-                  <div key={i} style={{ display: "flex", gap: "14px", alignItems: "flex-start" }}>
-                    <span style={{ fontSize: "24px", color: "rgb(160,100,255)", flexShrink: 0, marginTop: "1px", textShadow: "0 0 8px rgba(140,80,240,0.6), 0 0 20px rgba(140,80,240,0.3)" }}>✓</span>
-                    <div>
-                      <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "18px", fontWeight: 500, color: "#fff", lineHeight: 1.3, marginBottom: f.desc ? "3px" : "0" }}>{f.name}</p>
-                      {f.desc && <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "16px", color: "rgba(255,255,255,0.65)", lineHeight: 1.45 }}>{f.desc}</p>}
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <div style={styles.tierAction}>
-                <button onClick={() => { haptics.light(); gatedNavigate("/store/the-producers-package"); }} style={styles.btnPurpleOutline} aria-label="Get the Producer's Package" onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>GET THE PRODUCER'S PACKAGE</button>
-                <a href="/store/the-producers-package" onClick={(e) => { e.preventDefault(); gatedNavigate("/store/the-producers-package"); }} style={styles.detailsLink} onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(255,255,255,1)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(255,255,255,0.88)"; }}>See full details →</a>
-              </div>
-            </div>
           </div>
+          {/* Shop bridge link */}
+          <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "16px", color: "rgba(255,255,255,0.88)", textAlign: "center", marginTop: "24px", cursor: "pointer", padding: "8px 24px" }} onClick={() => gatedNavigate("/store")}>
+            Need investor-grade documents? <span style={{ color: "#D4AF37" }}>See the shop →</span>
+          </p>
         </section>
 
         <div style={{ height: "3px", background: "linear-gradient(to right, transparent 0%, rgba(120,60,180,0.50) 20%, rgba(212,175,55,0.40) 50%, rgba(120,60,180,0.50) 80%, transparent 100%)", boxShadow: "0 0 8px rgba(120,60,180,0.35), 0 0 20px rgba(120,60,180,0.20)", margin: "0 24px" }} />
@@ -836,11 +786,12 @@ const Index = () => {
           <div style={{ ...styles.closerCard, ...reveal(closerVisible) }}>
             <div style={styles.topLineGoldBright} />
             <h2 style={styles.closerH2}>Your Investors<br /><span style={{ color: "#D4AF37", display: "block", textShadow: "0 0 40px rgba(212,175,55,0.6), 0 0 80px rgba(212,175,55,0.25)" }}>Will Ask.</span></h2>
-            <p style={styles.closerBody}>Stop guessing. Model your waterfall before the pitch.</p>
+            <p style={styles.closerBody}>Stop guessing your backend. Walk into every pitch knowing exactly where the money goes.</p>
             <button onClick={handleCTA} style={styles.ctaBtn} aria-label="Run my waterfall" onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>
               <span style={{ position: "relative", zIndex: 1 }}>RUN MY WATERFALL</span>
               <div style={styles.ctaShimmer} />
             </button>
+            <p style={styles.ctaReassurance}>No Credit Card · Instant Results</p>
           </div>
         </section>
 
@@ -862,7 +813,11 @@ const Index = () => {
             </a>
           </div>
           <div style={styles.footerNav}>
+            <span onClick={() => gatedNavigate("/calculator")} style={styles.footerNavLink} onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.60)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.50)"; }}>Calculator</span>
+            <span style={{ color: "rgba(212,175,55,0.25)", fontSize: "14px" }}>·</span>
             <span onClick={() => gatedNavigate("/store")} style={styles.footerNavLink} onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.60)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.50)"; }}>Shop</span>
+            <span style={{ color: "rgba(212,175,55,0.25)", fontSize: "14px" }}>·</span>
+            <span onClick={() => navigate("/resources")} style={styles.footerNavLink} onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.60)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.50)"; }}>Resources</span>
           </div>
           <p style={styles.footerText}>
             Filmmaker.og provides financial modeling tools for educational purposes. This is not legal or financial advice. Consult qualified counsel before executing any investment structure.
@@ -911,6 +866,11 @@ const styles: Record<string, React.CSSProperties> = {
     transform: "skewX(-20deg)",
     animation: "lp-shimmer 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite",
   },
+  ctaReassurance: {
+    fontFamily: "'Roboto Mono', monospace", fontSize: "13px",
+    color: "rgba(212,175,55,0.65)", letterSpacing: "0.12em",
+    textTransform: "uppercase", textAlign: "center", marginTop: "14px",
+  },
 
   /* ── § 1 HERO ── */
   hero: {
@@ -919,13 +879,14 @@ const styles: Record<string, React.CSSProperties> = {
     margin: "0 24px",
     borderRadius: "12px",
     overflow: "hidden",
-    backgroundImage: "linear-gradient(to bottom, rgba(0,0,0,0.50) 0%, rgba(0,0,0,0.35) 40%, rgba(0,0,0,0.65) 100%), url('/hero-bg.jpg')",
-    backgroundSize: "cover",
-    backgroundPosition: "center 30%",
+    background: "rgba(6,6,6,0.92)",
+    backdropFilter: "blur(40px)",
+    WebkitBackdropFilter: "blur(40px)",
+    border: "1px solid rgba(212,175,55,0.20)",
   },
   heroGlow: {
-    position: "absolute", top: 0, left: 0, right: 0, height: "65%", pointerEvents: "none",
-    background: "radial-gradient(ellipse 70% 55% at 50% 15%, rgba(212,175,55,0.30) 0%, transparent 70%)",
+    position: "absolute", top: 0, left: 0, right: 0, bottom: 0, pointerEvents: "none",
+    background: "radial-gradient(ellipse 80% 60% at 50% 10%, rgba(212,175,55,0.25) 0%, transparent 65%), radial-gradient(ellipse 100% 80% at 50% 100%, rgba(120,60,180,0.18) 0%, transparent 65%)",
   },
   heroInner: { position: "relative", zIndex: 1 },
   heroH1: {
@@ -1229,13 +1190,14 @@ const styles: Record<string, React.CSSProperties> = {
     padding: "24px 0 80px", borderTop: "none",
     margin: "0 24px 0",
     borderRadius: "12px",
-    backgroundImage: "linear-gradient(to bottom, rgba(0,0,0,0.40) 0%, rgba(0,0,0,0.20) 50%, rgba(0,0,0,0.50) 100%), url('/closer-bg.jpg')",
-    backgroundSize: "cover",
-    backgroundPosition: "center 55%",
+    background: "rgba(6,6,6,0.92)",
+    backdropFilter: "blur(40px)",
+    WebkitBackdropFilter: "blur(40px)",
+    border: "1px solid rgba(212,175,55,0.55)",
   },
   closerGlowBottom: {
-    position: "absolute", bottom: 0, left: 0, right: 0, height: "80%", pointerEvents: "none",
-    background: "radial-gradient(ellipse 90% 60% at 50% 100%, rgba(120,60,180,0.18) 0%, rgba(120,60,180,0.08) 40%, transparent 65%)",
+    position: "absolute", top: 0, left: 0, right: 0, bottom: 0, pointerEvents: "none",
+    background: "radial-gradient(ellipse 70% 50% at 50% 0%, rgba(212,175,55,0.18) 0%, transparent 60%), radial-gradient(ellipse 90% 60% at 50% 100%, rgba(120,60,180,0.22) 0%, transparent 65%)",
   },
   closerCard: {
     position: "relative", zIndex: 1, border: "1px solid rgba(212,175,55,0.65)", borderRadius: "12px",
