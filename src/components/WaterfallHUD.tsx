@@ -139,7 +139,7 @@ export default function WaterfallHUD({ sectionRef, tierRefs, tierAmounts }: Wate
     <div
       style={{
         position: "sticky",
-        top: 56,
+        top: 52,
         zIndex: 39,
         background: "rgba(6,6,6,0.92)",
         backdropFilter: "blur(24px)",
@@ -164,7 +164,7 @@ export default function WaterfallHUD({ sectionRef, tierRefs, tierAmounts }: Wate
             <div
               style={{
                 fontFamily: "'Bebas Neue', sans-serif",
-                fontSize: "1.4rem",
+                fontSize: "1.5rem",
                 color: "rgba(120,60,180,0.70)",
                 letterSpacing: "0.04em",
                 lineHeight: 1,
@@ -175,7 +175,7 @@ export default function WaterfallHUD({ sectionRef, tierRefs, tierAmounts }: Wate
             <div
               style={{
                 fontFamily: "'Bebas Neue', sans-serif",
-                fontSize: "2.2rem",
+                fontSize: "2.6rem",
                 color: "rgba(255,255,255,0.88)",
                 lineHeight: 1,
                 marginTop: "2px",
@@ -188,7 +188,7 @@ export default function WaterfallHUD({ sectionRef, tierRefs, tierAmounts }: Wate
             <div
               style={{
                 fontFamily: "'Bebas Neue', sans-serif",
-                fontSize: "1.4rem",
+                fontSize: "1.5rem",
                 color: "rgba(120,60,180,0.70)",
                 letterSpacing: "0.04em",
                 lineHeight: 1,
@@ -199,7 +199,7 @@ export default function WaterfallHUD({ sectionRef, tierRefs, tierAmounts }: Wate
             <div
               style={{
                 fontFamily: "'Bebas Neue', sans-serif",
-                fontSize: "2.2rem",
+                fontSize: "2.6rem",
                 color: color,
                 lineHeight: 1,
                 marginTop: "2px",
@@ -218,9 +218,9 @@ export default function WaterfallHUD({ sectionRef, tierRefs, tierAmounts }: Wate
           <div
             style={{
               flex: 1,
-              height: "6px",
+              height: "8px",
               background: "rgba(255,255,255,0.06)",
-              borderRadius: "4px",
+              borderRadius: "5px",
               overflow: "hidden",
             }}
           >
@@ -229,7 +229,7 @@ export default function WaterfallHUD({ sectionRef, tierRefs, tierAmounts }: Wate
                 height: "100%",
                 width: `${gaugePct}%`,
                 background: gaugeGradient,
-                borderRadius: "4px",
+                borderRadius: "5px",
                 transition: "width 0.4s ease-out",
               }}
             />
@@ -237,7 +237,7 @@ export default function WaterfallHUD({ sectionRef, tierRefs, tierAmounts }: Wate
           <div
             style={{
               fontFamily: "'Bebas Neue', sans-serif",
-              fontSize: "1.4rem",
+              fontSize: "1.8rem",
               color: color,
               whiteSpace: "nowrap",
               transition: "color 0.3s ease",
@@ -253,9 +253,9 @@ export default function WaterfallHUD({ sectionRef, tierRefs, tierAmounts }: Wate
         <div
           style={{
             marginTop: "10px",
-            height: "6px",
+            height: "8px",
             background: "rgba(255,255,255,0.06)",
-            borderRadius: "4px",
+            borderRadius: "5px",
             overflow: "hidden",
           }}
         >
@@ -264,7 +264,7 @@ export default function WaterfallHUD({ sectionRef, tierRefs, tierAmounts }: Wate
               height: "100%",
               width: `${gaugePct}%`,
               background: gaugeGradient,
-              borderRadius: "4px",
+              borderRadius: "5px",
               transition: "width 0.4s ease-out",
             }}
           />
