@@ -1,13 +1,14 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useHaptics } from "@/hooks/use-haptics";
 import { useInView } from "@/hooks/useInView";
 import LeadCaptureModal from "@/components/LeadCaptureModal";
+import WaterfallHUD from "@/components/WaterfallHUD";
 import { Instagram } from "lucide-react";
 import { colors } from "@/lib/design-system";
 /*
-  PAGE STACK — v12 Producer's Cut:
+  PAGE STACK — v14 Waterfall Rebuild:
     PILL NAV        — fixed floating, logo + hamburger
     § 1. HERO         — Bebas hierarchy, primary CTA
     § 2. HOW IT WORKS — 5-step vertical stepper
@@ -75,8 +76,7 @@ const Index = () => {
   // Waterfall — three independent pieces
   const { ref: waterfallHeaderRef, inView: waterfallHeaderVisible } = useInView<HTMLDivElement>({ threshold: 0.3 });
   const { ref: waterfallCalloutRef, inView: waterfallCalloutVisible } = useInView<HTMLDivElement>({ threshold: 0.3 });
-  const { ref: waterfallTableRef, inView: waterfallTableVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
-  const { ref: waterfallFlowRef, inView: waterfallFlowVisible } = useInView<HTMLDivElement>({ threshold: 0.2 });
+  // waterfallTableRef and waterfallFlowRef removed in v14 (card-based rebuild)
 
   const { ref: whyRef, inView: whyVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
 
@@ -93,17 +93,37 @@ const Index = () => {
   const { ref: footerRef, inView: footerVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
 
 
-  /* ── Data ── */
-  const waterfallTiers = [
-    { num: "01", name: "CAM Fee", amt: "$30,000" },
-    { num: "02", name: "Agent Commission", amt: "$300,000" },
-    { num: "03", name: "Agent Expenses", amt: "$50,000" },
-    { num: "04", name: "E&O / Delivery", amt: "$18,000" },
-    { num: "05", name: "Senior Debt", amt: "$1,200,000" },
-    { num: "06", name: "Mezzanine Debt", amt: "$300,000" },
-    { num: "07", name: "Equity", amt: "$450,000" },
-    { num: "08", name: "Deferments", amt: "$52,000" },
+  /* ── Waterfall Data — v14 ── */
+  const WATERFALL_TIERS = [
+    { tier: '01', name: 'CAM Fee', amount: 30_000, group: 'cam', mode: 'full' as const },
+    { tier: '02', name: 'Guild Residuals', amount: 165_000, group: 'residuals', mode: 'full' as const },
+    { tier: '03', name: 'Agent Commission', amount: 300_000, group: 'sales', mode: 'pair' as const },
+    { tier: '04', name: 'Agent Expenses', amount: 75_000, group: 'sales', mode: 'pair' as const },
+    { tier: '05', name: 'E&O / Delivery', amount: 18_000, group: 'delivery', mode: 'full' as const },
+    { tier: '06', name: 'Senior Debt', amount: 800_000, group: 'debt', mode: 'featured' as const },
+    { tier: '07', name: 'Mezzanine Debt', amount: 200_000, group: 'debt', mode: 'full' as const },
+    { tier: '08', name: 'Equity Recoupment', amount: 1_000_000, group: 'equity', mode: 'pair' as const },
+    { tier: '09', name: 'Deferments', amount: 12_000, group: 'equity', mode: 'pair' as const },
   ];
+  const TOTAL_ACQUISITION = 3_000_000;
+  const TOTAL_DEDUCTED = 2_600_000;
+  const NET_PROFIT = 400_000;
+  const SPLIT = 200_000;
+  const PRODUCTION_BUDGET = 2_500_000;
+  const TAX_CREDIT = 500_000;
+  const CASH_BASIS = 2_000_000;
+  const MARKET_SPREAD = 1_000_000;
+
+  // Refs for HUD tier tracking
+  const waterfallSectionRef = useRef<HTMLElement | null>(null);
+  const tierCardRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const tierAmounts = WATERFALL_TIERS.map(t => t.amount);
+
+  // Profit celebration state
+  const [profitCelebrated, setProfitCelebrated] = useState(false);
+  const [profitCountUp, setProfitCountUp] = useState(0);
+  const profitAnimRef = useRef<number>(0);
+  const profitCardRef = useRef<HTMLDivElement | null>(null);
 
   const badgeCards = [
     { num: "1", title: "Don't Sell The Same Dollar Twice", body: "Track exactly where the money goes so you never over-promise equity and accidentally collapse your own backend." },
@@ -153,6 +173,60 @@ const Index = () => {
     },
   ];
 
+  // Profit celebration observer
+  useEffect(() => {
+    const el = profitCardRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && !profitCelebrated) {
+        setProfitCelebrated(true);
+        haptics.success();
+        // Count up from 0 to NET_PROFIT over 600ms
+        const duration = 600;
+        const startTime = performance.now();
+        const tick = (now: number) => {
+          const elapsed = now - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          setProfitCountUp(Math.round(NET_PROFIT * eased));
+          if (progress < 1) {
+            profitAnimRef.current = requestAnimationFrame(tick);
+          }
+        };
+        profitAnimRef.current = requestAnimationFrame(tick);
+      }
+    }, { threshold: 0.5 });
+    observer.observe(el);
+    return () => { observer.disconnect(); cancelAnimationFrame(profitAnimRef.current); };
+  }, [profitCelebrated, haptics]);
+
+  // Card entrance animation helper
+  const [enteredCards, setEnteredCards] = useState<Set<number>>(new Set());
+  const cardObserverRefs = useRef<(HTMLDivElement | null)[]>([]);
+  useEffect(() => {
+    const observers: IntersectionObserver[] = [];
+    cardObserverRefs.current.forEach((el, i) => {
+      if (!el) return;
+      const observer = new IntersectionObserver(([entry]) => {
+        if (entry.isIntersecting) {
+          setEnteredCards(prev => new Set(prev).add(i));
+          observer.unobserve(entry.target);
+        }
+      }, { threshold: 0.3 });
+      observer.observe(el);
+      observers.push(observer);
+    });
+    return () => observers.forEach(o => o.disconnect());
+  }, []);
+
+  const cardReveal = (entered: boolean, delay = 0): React.CSSProperties => ({
+    opacity: prefersReducedMotion || entered ? 1 : 0,
+    transform: prefersReducedMotion || entered ? "translateY(0)" : "translateY(20px)",
+    transition: prefersReducedMotion
+      ? "none"
+      : `opacity 0.4s ease-out ${delay}ms, transform 0.4s ease-out ${delay}ms`,
+  });
+
   /* ── Eyebrow ruled component ── */
   const EyebrowRuled = ({ text }: { text: string }) => (
     <div style={styles.eyebrowRuled}>
@@ -161,6 +235,80 @@ const Index = () => {
       <div style={styles.eyebrowLine} />
     </div>
   );
+
+  /* ── Waterfall helper components ── */
+  const erosionPct = (pct: number) => pct;
+
+  const WaterfallGroupLabel = ({ text, color }: { text: string; color: 'gold' | 'red' | 'green' }) => {
+    const lineColor = color === 'gold' ? 'rgba(212,175,55,0.25)' : color === 'red' ? 'rgba(220,38,38,0.25)' : 'rgba(60,179,113,0.25)';
+    const textColor = color === 'gold' ? '#D4AF37' : color === 'red' ? 'rgba(220,38,38,0.85)' : '#3CB371';
+    const glowColor = color === 'gold' ? 'rgba(212,175,55,0.15)' : color === 'red' ? 'rgba(220,38,38,0.15)' : 'rgba(60,179,113,0.15)';
+    return (
+      <div style={{ display: "flex", alignItems: "center", gap: "12px", margin: "20px 0 12px", justifyContent: "center" }}>
+        <div style={{ flex: 1, height: "1px", background: lineColor, boxShadow: `0 0 6px ${glowColor}` }} />
+        <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.6rem", color: textColor, whiteSpace: "nowrap", letterSpacing: "0.04em" }}>{text}</span>
+        <div style={{ flex: 1, height: "1px", background: lineColor, boxShadow: `0 0 6px ${glowColor}` }} />
+      </div>
+    );
+  };
+
+  const WaterfallConnector = ({ color }: { color: 'gold' | 'gold-to-red' | 'red' | 'red-strong' | 'red-to-green' | 'green' }) => {
+    const colorMap: Record<string, string> = {
+      gold: "rgba(212,175,55,0.30)",
+      'gold-to-red': "linear-gradient(180deg, rgba(212,175,55,0.30), rgba(220,38,38,0.30))",
+      red: "rgba(220,38,38,0.25)",
+      'red-strong': "rgba(220,38,38,0.35)",
+      'red-to-green': "linear-gradient(180deg, rgba(220,38,38,0.30), rgba(60,179,113,0.30))",
+      green: "rgba(60,179,113,0.30)",
+    };
+    const isGradient = color.includes('-to-');
+    const height = color === 'gold-to-red' || color === 'red-to-green' ? "28px" : "20px";
+    return (
+      <div style={{ display: "flex", justifyContent: "center", padding: "0 24px" }}>
+        <div style={{
+          width: "2px", height,
+          background: isGradient ? colorMap[color] : colorMap[color],
+        }} />
+      </div>
+    );
+  };
+
+  const wfCardStyle = (mode: string): React.CSSProperties => {
+    const base: React.CSSProperties = {
+      position: "relative", overflow: "hidden", borderRadius: "12px",
+      background: "radial-gradient(circle at 50% 40px, rgba(220,38,38,0.10) 0%, transparent 60%), rgba(6,6,6,0.92)",
+      border: mode === 'featured' ? "1px solid rgba(220,38,38,0.35)" : "1px solid rgba(220,38,38,0.25)",
+    };
+    if (mode === 'pair') {
+      return { ...base, padding: "16px 12px" };
+    }
+    if (mode === 'featured') {
+      return { ...base, padding: "20px 16px" };
+    }
+    return { ...base, padding: "20px 16px" };
+  };
+
+  const wfBadge = (mode: string): React.CSSProperties => {
+    const size = mode === 'featured' ? "48px" : mode === 'pair' ? "32px" : "40px";
+    const fontSize = mode === 'featured' ? "1.35rem" : mode === 'pair' ? "1rem" : "1.15rem";
+    return {
+      width: size, height: size, borderRadius: "50%",
+      background: "linear-gradient(135deg, rgb(75,30,130) 0%, rgb(110,50,170) 100%)",
+      display: "flex", alignItems: "center", justifyContent: "center",
+      fontFamily: "'Bebas Neue', sans-serif", fontSize, color: "#fff",
+      marginBottom: mode === 'pair' ? "8px" : "10px",
+      margin: "0 auto",
+      marginTop: "0",
+      boxShadow: "0 0 16px rgba(120,60,180,0.50), 0 0 32px rgba(120,60,180,0.25)",
+      position: "relative", zIndex: 1,
+    };
+  };
+
+  const wfBadgeGlow = (mode: string): React.CSSProperties => ({
+    position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
+    background: `radial-gradient(circle at 50% ${mode === 'pair' ? '32px' : '40px'}, rgba(220,38,38,${mode === 'featured' ? '0.12' : '0.10'}) 0%, transparent 60%)`,
+    pointerEvents: "none",
+  });
 
   return (
     <>
@@ -178,7 +326,7 @@ const Index = () => {
         }
       `}</style>
 
-      <div style={{ minHeight: "100vh", background: "#000", paddingTop: "0px", maxWidth: "430px", margin: "0 auto" }}>
+      <div style={{ minHeight: "100vh", background: "#000", paddingTop: "32px", maxWidth: "430px", margin: "0 auto" }}>
 
         {/* ═══ § 1 HERO ═══ */}
         <section ref={heroRef} style={styles.hero}>
@@ -230,9 +378,14 @@ const Index = () => {
 
         <div style={{ height: "3px", background: "linear-gradient(to right, transparent 0%, rgba(120,60,180,0.50) 20%, rgba(212,175,55,0.40) 50%, rgba(120,60,180,0.50) 80%, transparent 100%)", boxShadow: "0 0 8px rgba(120,60,180,0.35), 0 0 20px rgba(120,60,180,0.20)", margin: "0 24px" }} />
 
-        {/* ═══ § 3 WATERFALL ═══ */}
-        <section style={styles.waterfallSection}>
+        {/* ═══ § 3 WATERFALL — v14 Card-Based Rebuild ═══ */}
+        <section ref={(el) => { waterfallSectionRef.current = el; }} style={styles.waterfallSection}>
           <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "200px", background: "radial-gradient(ellipse 100% 70% at 50% 0%, rgba(120,60,180,0.20) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
+
+          {/* HUD */}
+          <WaterfallHUD sectionRef={waterfallSectionRef} tierRefs={tierCardRefs} tierAmounts={tierAmounts} />
+
+          {/* Header */}
           <div ref={waterfallHeaderRef} style={{ ...styles.waterfallHeader, ...reveal(waterfallHeaderVisible) }}>
             <EyebrowRuled text="How the money flows" />
             <h2 style={styles.waterfallH2}>The Recoupment<br /><span style={{ color: "#D4AF37" }}>Waterfall</span></h2>
@@ -242,65 +395,239 @@ const Index = () => {
             A recoupment waterfall maps who gets paid, in what order & how much before you see a dollar of profit.
           </p>
 
-          {/* Acquisition callout */}
-          <div ref={waterfallCalloutRef} style={{ ...styles.acquisitionCallout, ...reveal(waterfallCalloutVisible) }}>
-            <div style={styles.topLineGoldHalf} />
-            <p style={styles.acqLabel}>Streamer Acquisition Price</p>
-            <p style={styles.acqSub}>Tier 2 Action Thriller — Example</p>
-            <p style={styles.acqAmount}>$3,000,000</p>
-          </div>
-
-          {/* Waterfall tiers */}
-          <div ref={waterfallTableRef} style={{ ...styles.waterfallTiersBox, ...reveal(waterfallTableVisible) }}>
-            <div style={styles.topLineGold} />
-            {waterfallTiers.map((tier, i) => {
-              const isGroupBoundary = i === 3 || i === 5;
-              const isLastRow = i === waterfallTiers.length - 1;
-              const borderBottom = isLastRow
-                ? "none"
-                : isGroupBoundary
-                  ? "2px solid rgba(212,175,55,0.20)"
-                  : "1px solid rgba(255,255,255,0.12)";
-              return (
-                <div key={tier.num} style={{ ...styles.tierRow, borderBottom }}>
-                  <div style={styles.tierNum}>{tier.num}</div>
-                  <div style={styles.tierName}>{tier.name}</div>
-                  <div style={styles.tierAmt}>
-                    <span style={styles.tierMinus}>-</span>{tier.amt}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Flow diagram */}
-          <div ref={waterfallFlowRef} style={{ ...styles.flowDiagram, ...reveal(waterfallFlowVisible) }}>
-            <div style={styles.netBackend}>
-              <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "1px", background: `linear-gradient(90deg, transparent, ${colors.greenAccent}, transparent)`, boxShadow: "0 0 12px rgba(60,179,113,0.3)" }} />
-              <p style={styles.netLabel}>Net Backend Profit</p>
-              <p style={styles.netAmount}>$600,000</p>
-            </div>
-            <div style={styles.pipeNetwork}>
-              <div style={styles.pipeVertical} />
-              <div style={styles.pipeFork}>
-                <div style={styles.pipeLeft} />
-                <div style={styles.pipeRight} />
+          {/* ── Context Block: "The Project" ── */}
+          <div style={{ margin: "0 24px 0", ...reveal(waterfallHeaderVisible, 1) }}>
+            <WaterfallGroupLabel text="The Project" color="gold" />
+            <div style={{
+              position: "relative", overflow: "hidden", borderRadius: "12px",
+              border: "1px solid rgba(212,175,55,0.25)",
+              background: "radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.08) 0%, rgba(6,6,6,0.92) 70%)",
+              boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 24px rgba(212,175,55,0.10)",
+            }}>
+              <div style={styles.topLineGoldHalf} />
+              {/* Row 1: Production Budget */}
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "18px 20px", borderBottom: "1px solid rgba(212,175,55,0.15)" }}>
+                <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.5rem", color: "#fff" }}>Production Budget</span>
+                <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "#fff" }}>${PRODUCTION_BUDGET.toLocaleString()}</span>
+              </div>
+              {/* Row 2: Tax Credit */}
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "18px 20px", borderBottom: "1px solid rgba(212,175,55,0.15)" }}>
+                <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.5rem", color: "#3CB371" }}>Tax Credit (20%)</span>
+                <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "#3CB371", textShadow: "0 0 20px rgba(60,179,113,0.30)" }}>+${TAX_CREDIT.toLocaleString()}</span>
+              </div>
+              {/* Row 3: Cash Basis */}
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "18px 20px" }}>
+                <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.5rem", color: "#D4AF37" }}>Cash Basis</span>
+                <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "2rem", color: "#D4AF37", textShadow: "0 0 20px rgba(212,175,55,0.30)" }}>${CASH_BASIS.toLocaleString()}</span>
               </div>
             </div>
-            <div style={styles.buckets}>
+          </div>
+
+          {/* Connector gold → gold */}
+          <WaterfallConnector color="gold" />
+
+          {/* ── Arbitrage Callout ── */}
+          <div style={{ textAlign: "center", padding: "0 24px", position: "relative" }}>
+            <div style={{
+              position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)",
+              width: "200px", height: "200px",
+              background: "radial-gradient(circle, rgba(212,175,55,0.08) 0%, transparent 50%)",
+              pointerEvents: "none",
+            }} />
+            <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.3rem", color: "#D4AF37", letterSpacing: "0.06em", marginBottom: "4px" }}>MARKET SPREAD</div>
+            <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.6rem", color: "#D4AF37", textShadow: "0 0 20px rgba(212,175,55,0.30)" }}>+${MARKET_SPREAD.toLocaleString()}</div>
+          </div>
+
+          {/* Connector gold → gold */}
+          <WaterfallConnector color="gold" />
+
+          {/* ── Acquisition Offer ── */}
+          <div style={{ margin: "0 24px 0", ...reveal(waterfallCalloutVisible) }}>
+            <WaterfallGroupLabel text="Streamer Acquisition Offer" color="gold" />
+            <div ref={waterfallCalloutRef} style={{
+              position: "relative", overflow: "hidden", textAlign: "center",
+              background: "radial-gradient(circle at 50% 70%, rgba(212,175,55,0.20) 0%, rgba(6,6,6,0.92) 75%)",
+              border: "1px solid rgba(212,175,55,0.25)", borderRadius: "12px", padding: "24px 20px",
+              boxShadow: "0 0 24px rgba(212,175,55,0.10), 0 0 20px rgba(120,60,180,0.15)",
+            }}>
+              <div style={styles.topLineGoldHalf} />
+              <p style={styles.acqAmount}>${TOTAL_ACQUISITION.toLocaleString()}</p>
+            </div>
+          </div>
+
+          {/* Connector gold → red */}
+          <WaterfallConnector color="gold-to-red" />
+
+          {/* ── Tier Cards ── */}
+          {(() => {
+            let cardIndex = 0;
+            let cumulativeDeducted = 0;
+            const groups: { label: string; tiers: typeof WATERFALL_TIERS }[] = [
+              { label: "Collection & Management", tiers: WATERFALL_TIERS.filter(t => t.group === 'cam') },
+              { label: "Guild Residuals", tiers: WATERFALL_TIERS.filter(t => t.group === 'residuals') },
+              { label: "Sales Agency", tiers: WATERFALL_TIERS.filter(t => t.group === 'sales') },
+              { label: "Delivery & Insurance", tiers: WATERFALL_TIERS.filter(t => t.group === 'delivery') },
+              { label: "Debt Service", tiers: WATERFALL_TIERS.filter(t => t.group === 'debt') },
+              { label: "Equity & Deferments", tiers: WATERFALL_TIERS.filter(t => t.group === 'equity') },
+            ];
+
+            return groups.map((group, gi) => {
+              const groupCards = group.tiers.map((tier) => {
+                const ci = cardIndex;
+                const tierIdx = WATERFALL_TIERS.indexOf(tier);
+                cumulativeDeducted += tier.amount;
+                const erosionPct = (cumulativeDeducted / TOTAL_ACQUISITION) * 100;
+                cardIndex++;
+                return { ...tier, ci, tierIdx, erosionPct };
+              });
+
+              const isPair = groupCards.length === 2 && groupCards[0].mode === 'pair';
+              const hasFeatured = groupCards.some(t => t.mode === 'featured');
+
+              return (
+                <div key={group.label}>
+                  <div style={{ margin: "0 24px" }}>
+                    <WaterfallGroupLabel text={group.label} color="gold" />
+                    {isPair ? (
+                      <div style={{ display: "flex", gap: "10px" }}>
+                        {groupCards.map((tier, pi) => (
+                          <div
+                            key={tier.tier}
+                            ref={(el) => {
+                              tierCardRefs.current[tier.tierIdx] = el;
+                              cardObserverRefs.current[tier.ci] = el;
+                            }}
+                            style={{
+                              flex: 1,
+                              ...wfCardStyle('pair'),
+                              ...cardReveal(enteredCards.has(tier.ci), pi * 100),
+                            }}
+                          >
+                            <div style={wfBadgeGlow('pair')} />
+                            <div style={wfBadge('pair')}>{tier.tier}</div>
+                            <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.3rem", color: "#fff", textTransform: "uppercase", marginBottom: "6px" }}>{tier.name}</div>
+                            <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.5rem", color: "rgba(220,38,38,0.85)" }}>${tier.amount.toLocaleString()}</div>
+                            <div style={{ marginTop: "8px", height: "4px", background: "rgba(255,255,255,0.06)", borderRadius: "4px", overflow: "hidden" }}>
+                              <div style={{ height: "100%", width: `${Math.min(erosionPct(tier.erosionPct), 100)}%`, background: "rgba(220,38,38,0.50)", borderRadius: "4px" }} />
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      groupCards.map((tier) => (
+                        <div
+                          key={tier.tier}
+                          ref={(el) => {
+                            tierCardRefs.current[tier.tierIdx] = el;
+                            cardObserverRefs.current[tier.ci] = el;
+                          }}
+                          style={{
+                            ...wfCardStyle(tier.mode),
+                            ...cardReveal(enteredCards.has(tier.ci)),
+                            ...(hasFeatured && tier.mode === 'featured' ? { borderLeft: "2px solid rgba(220,38,38,0.30)" } : {}),
+                            marginBottom: groupCards.indexOf(tier) < groupCards.length - 1 ? "10px" : "0",
+                          }}
+                        >
+                          <div style={wfBadgeGlow(tier.mode)} />
+                          <div style={wfBadge(tier.mode)}>{tier.tier}</div>
+                          <div style={{
+                            fontFamily: "'Bebas Neue', sans-serif",
+                            fontSize: tier.mode === 'featured' ? "1.7rem" : "1.5rem",
+                            color: "#fff", textTransform: "uppercase", marginBottom: "8px",
+                          }}>{tier.name}</div>
+                          <div style={{
+                            fontFamily: "'Bebas Neue', sans-serif",
+                            fontSize: tier.mode === 'featured' ? "2.2rem" : "1.8rem",
+                            color: tier.mode === 'featured' ? "rgba(220,38,38,0.95)" : "rgba(220,38,38,0.85)",
+                            ...(tier.mode === 'featured' ? { textShadow: "0 0 20px rgba(220,38,38,0.20)" } : {}),
+                          }}>${tier.amount.toLocaleString()}</div>
+                          <div style={{
+                            marginTop: "10px",
+                            height: tier.mode === 'featured' ? "8px" : "6px",
+                            background: "rgba(255,255,255,0.06)", borderRadius: "4px", overflow: "hidden",
+                          }}>
+                            <div style={{ height: "100%", width: `${Math.min(erosionPct(tier.erosionPct), 100)}%`, background: "rgba(220,38,38,0.50)", borderRadius: "4px" }} />
+                          </div>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                  {gi < groups.length - 1 && <WaterfallConnector color="red" />}
+                </div>
+              );
+            });
+          })()}
+
+          {/* Connector red → red (stronger) */}
+          <WaterfallConnector color="red-strong" />
+
+          {/* ── Total Off The Top ── */}
+          <div style={{ margin: "0 24px" }}>
+            <WaterfallGroupLabel text="Total Off The Top" color="red" />
+            <div style={{
+              position: "relative", overflow: "hidden", borderRadius: "12px", padding: "20px 16px", textAlign: "center",
+              border: "1px solid rgba(220,38,38,0.25)",
+              background: "radial-gradient(ellipse at 50% 0%, rgba(220,38,38,0.06) 0%, rgba(6,6,6,0.92) 70%)",
+            }}>
+              <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: "linear-gradient(90deg, transparent, rgba(220,38,38,0.30), transparent)" }} />
+              <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "2.2rem", color: "rgba(220,38,38,0.85)" }}>${TOTAL_DEDUCTED.toLocaleString()}</div>
+              {/* Summary bar */}
+              <div style={{ marginTop: "12px", height: "8px", background: "rgba(255,255,255,0.06)", borderRadius: "4px", overflow: "hidden", display: "flex" }}>
+                <div style={{ height: "100%", width: `${((TOTAL_ACQUISITION - TOTAL_DEDUCTED) / TOTAL_ACQUISITION) * 100}%`, background: "rgba(60,179,113,0.50)", borderRadius: "4px 0 0 4px" }} />
+                <div style={{ height: "100%", flex: 1, background: "rgba(220,38,38,0.50)", borderRadius: "0 4px 4px 0" }} />
+              </div>
+            </div>
+          </div>
+
+          {/* Connector red → green transition */}
+          <WaterfallConnector color="red-to-green" />
+
+          {/* ── Net Backend Profit ── */}
+          <div style={{ margin: "0 24px" }}>
+            <WaterfallGroupLabel text="Net Backend Profit" color="green" />
+            <div
+              ref={profitCardRef}
+              style={{
+                position: "relative", overflow: "hidden", borderRadius: "12px", padding: "20px 16px", textAlign: "center",
+                border: "1px solid rgba(60,179,113,0.50)",
+                background: `radial-gradient(ellipse at 50% 0%, rgba(60,179,113,${profitCelebrated ? 0.12 : 0.12}) 0%, rgba(6,6,6,0.92) 70%)`,
+                boxShadow: "0 8px 24px rgba(0,0,0,0.5), 0 0 30px rgba(60,179,113,0.15)",
+                transition: "background 500ms ease",
+              }}
+            >
+              <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: "linear-gradient(90deg, transparent, #3CB371, transparent)", boxShadow: "0 0 12px rgba(60,179,113,0.3)" }} />
+              <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "3rem", color: "#3CB371", lineHeight: 1, textShadow: "0 0 24px rgba(60,179,113,0.35)" }}>
+                ${profitCountUp.toLocaleString()}
+              </div>
+            </div>
+          </div>
+
+          {/* Connector green → green */}
+          <WaterfallConnector color="green" />
+
+          {/* ── Profit Split ── */}
+          <div style={{ margin: "0 24px" }}>
+            <WaterfallGroupLabel text="Profit Split" color="green" />
+            <div style={{ display: "flex", gap: "10px" }}>
               {[
-                { label: "Investor", amount: "$300,000", pct: "50% of backend" },
-                { label: "Producer", amount: "$300,000", pct: "50% of backend" },
+                { label: "Investor", amount: SPLIT },
+                { label: "Producer", amount: SPLIT },
               ].map((b) => (
-                <div key={b.label} style={styles.bucket}>
-                  <p style={styles.bucketLabel}>{b.label}</p>
-                  <p style={styles.bucketAmount}>{b.amount}</p>
-                  <p style={styles.bucketPct}>{b.pct}</p>
+                <div key={b.label} style={{
+                  flex: 1, textAlign: "center", borderRadius: "12px", padding: "16px 12px",
+                  border: "1px solid rgba(60,179,113,0.50)",
+                  background: "radial-gradient(ellipse at 50% 0%, rgba(60,179,113,0.12) 0%, rgba(6,6,6,0.92) 70%)",
+                  position: "relative", overflow: "hidden",
+                }}>
+                  <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: "linear-gradient(90deg, transparent, #3CB371, transparent)" }} />
+                  <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.3rem", color: "rgba(255,255,255,0.88)", marginBottom: "6px" }}>{b.label}</div>
+                  <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "#3CB371" }}>${b.amount.toLocaleString()}</div>
                 </div>
               ))}
             </div>
           </div>
-          <p style={{ ...styles.waterfallNote, ...reveal(waterfallFlowVisible) }}>Model only — your numbers will differ</p>
+
+          <p style={styles.waterfallNote}>Based on a $2.5M indie feature. Run your own numbers.</p>
         </section>
 
         <div style={{ height: "3px", background: "linear-gradient(to right, transparent 0%, rgba(120,60,180,0.50) 20%, rgba(212,175,55,0.40) 50%, rgba(120,60,180,0.50) 80%, transparent 100%)", boxShadow: "0 0 8px rgba(120,60,180,0.35), 0 0 20px rgba(120,60,180,0.20)", margin: "0 24px" }} />
@@ -414,7 +741,7 @@ const Index = () => {
               </div>
               <div style={styles.tierAction}>
                 <button onClick={() => { haptics.light(); gatedNavigate("/store/the-full-analysis"); }} style={styles.btnGold} aria-label="Get the Full Analysis" onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>GET THE FULL ANALYSIS</button>
-                <a href="/store/the-full-analysis" onClick={(e) => { e.preventDefault(); gatedNavigate("/store/the-full-analysis"); }} style={styles.detailsLink} onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(255,255,255,1)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(255,255,255,0.85)"; }}>See full details →</a>
+                <a href="/store/the-full-analysis" onClick={(e) => { e.preventDefault(); gatedNavigate("/store/the-full-analysis"); }} style={styles.detailsLink} onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(255,255,255,1)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(255,255,255,0.88)"; }}>See full details →</a>
               </div>
             </div>
 
@@ -424,7 +751,7 @@ const Index = () => {
               <div style={{ position: "absolute", inset: 0, borderRadius: "12px", padding: "1px", pointerEvents: "none", background: "linear-gradient(180deg, rgb(110,50,170) 0%, rgba(120,60,180,0.5) 30%, rgba(212,175,55,0.4) 70%, #D4AF37 100%)", WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)", WebkitMaskComposite: "xor", maskComposite: "exclude" }} />
               {/* Top line */}
               <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "3px", background: "linear-gradient(90deg, transparent, rgb(110,50,170), #D4AF37, transparent)", zIndex: 1 }} />
-              <div style={{ ...styles.tierHeaderAlt, background: "radial-gradient(ellipse at 50% 100%, rgba(120,60,180,0.06) 0%, transparent 70%)" }}>
+              <div style={{ ...styles.tierHeaderAlt, background: "radial-gradient(circle at 80px 40px, rgba(120,60,180,0.12) 0%, transparent 50%), radial-gradient(ellipse at 50% 100%, rgba(120,60,180,0.06) 0%, transparent 70%)" }}>
                 <div style={{ marginBottom: "12px" }}>
                   <span style={styles.badgePurple}>Turnkey</span>
                 </div>
@@ -457,7 +784,7 @@ const Index = () => {
               </div>
               <div style={styles.tierAction}>
                 <button onClick={() => { haptics.light(); gatedNavigate("/store/the-producers-package"); }} style={styles.btnPurpleOutline} aria-label="Get the Producer's Package" onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>GET THE PRODUCER'S PACKAGE</button>
-                <a href="/store/the-producers-package" onClick={(e) => { e.preventDefault(); gatedNavigate("/store/the-producers-package"); }} style={styles.detailsLink} onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(255,255,255,1)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(255,255,255,0.85)"; }}>See full details →</a>
+                <a href="/store/the-producers-package" onClick={(e) => { e.preventDefault(); gatedNavigate("/store/the-producers-package"); }} style={styles.detailsLink} onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(255,255,255,1)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(255,255,255,0.88)"; }}>See full details →</a>
               </div>
             </div>
           </div>
@@ -700,8 +1027,8 @@ const styles: Record<string, React.CSSProperties> = {
   },
   bucketLabel: { fontFamily: "'Roboto Mono', monospace", fontSize: "13px", textTransform: "uppercase", letterSpacing: "0.15em", color: colors.textPrimary, marginBottom: "8px" },
   bucketAmount: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "2rem", color: "#3CB371", lineHeight: 1, textShadow: "0 0 20px rgba(60,179,113,0.30)" },
-  bucketPct: { fontFamily: "'Roboto Mono', monospace", fontSize: "13px", color: "rgba(255,255,255,0.85)", marginTop: "5px" },
-  waterfallNote: { fontFamily: "'Roboto Mono', monospace", fontSize: "13px", textTransform: "uppercase", textAlign: "center", color: "rgba(255,255,255,0.55)", letterSpacing: "0.06em", padding: "16px 24px 0" },
+  bucketPct: { fontFamily: "'Roboto Mono', monospace", fontSize: "13px", color: "rgba(255,255,255,0.88)", marginTop: "5px" },
+  waterfallNote: { fontFamily: "'Inter', sans-serif", fontSize: "14px", textAlign: "center", color: "rgba(255,255,255,0.55)", letterSpacing: "0.02em", padding: "20px 24px 0" },
 
   /* ── § 4 WHY THIS MATTERS ── */
   whySection: { position: "relative", background: "#000", textAlign: "center", padding: "48px 0 0" },
@@ -719,14 +1046,14 @@ const styles: Record<string, React.CSSProperties> = {
     marginBottom: "16px", paddingTop: "2px", boxShadow: "0 0 24px rgba(120,60,180,0.55), 0 0 48px rgba(120,60,180,0.25)",
   },
   badgeTitle: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "#fff", marginBottom: "8px", lineHeight: 1.05, letterSpacing: "0.02em" },
-  badgeBody: { fontFamily: "'Inter', sans-serif", fontSize: "19px", color: "rgba(255,255,255,0.85)", lineHeight: 1.55 },
+  badgeBody: { fontFamily: "'Inter', sans-serif", fontSize: "19px", color: "rgba(255,255,255,0.88)", lineHeight: 1.55 },
 
   /* ── § 5 ARSENAL ── */
   arsenalSection: { position: "relative", background: "#000", textAlign: "center", padding: "48px 0 0" },
   arsenalHeader: { padding: "0 24px 24px" },
   arsenalH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.2rem", color: "#fff", lineHeight: 0.95 },
   arsenalSub: { fontFamily: "'Inter', sans-serif", fontSize: "18px", marginTop: "10px", color: "rgba(255,255,255,0.88)", lineHeight: 1.6 },
-  sectionSub: { fontFamily: "'Inter', sans-serif", fontSize: "18px", marginTop: "10px", color: "rgba(255,255,255,0.85)", lineHeight: 1.5 },
+  sectionSub: { fontFamily: "'Inter', sans-serif", fontSize: "18px", marginTop: "10px", color: "rgba(255,255,255,0.88)", lineHeight: 1.5 },
   arsenalCards: { display: "flex", flexDirection: "column", gap: "28px", margin: "0 24px" },
 
   /* Card containers */
@@ -752,12 +1079,14 @@ const styles: Record<string, React.CSSProperties> = {
   /* Headers */
   tierHeaderFree: {
     padding: "28px 24px 20px", borderBottom: "1px solid rgba(60,179,113,0.12)",
+    background: "radial-gradient(circle at 80px 40px, rgba(60,179,113,0.12) 0%, transparent 50%)",
   },
   tierHeaderAlt: {
     padding: "28px 24px 20px", borderBottom: "1px solid rgba(255,255,255,0.12)",
+    background: "radial-gradient(circle at 80px 40px, rgba(212,175,55,0.10) 0%, transparent 50%)",
   },
   tierTitleCard: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "2.6rem", color: "#fff", lineHeight: 1, letterSpacing: "0.04em", marginBottom: "8px" },
-  tierSubFree: { fontFamily: "'Inter', sans-serif", fontSize: "18px", color: "rgba(255,255,255,0.85)", marginTop: "6px" },
+  tierSubFree: { fontFamily: "'Inter', sans-serif", fontSize: "18px", color: "rgba(255,255,255,0.88)", marginTop: "6px" },
   tierSubGold: { fontFamily: "'Inter', sans-serif", fontSize: "18px", color: "rgba(212,175,55,0.80)", lineHeight: 1.4 },
 
   /* Badges */
@@ -783,12 +1112,12 @@ const styles: Record<string, React.CSSProperties> = {
   /* Value statements */
   valueStatementFree: {
     padding: "20px 24px", textAlign: "center",
-    background: "rgba(60,179,113,0.08)",
-    borderTop: "1px solid rgba(60,179,113,0.15)", borderBottom: "1px solid rgba(60,179,113,0.15)",
+    background: "rgba(60,179,113,0.12)",
+    borderTop: "1px solid rgba(60,179,113,0.20)", borderBottom: "1px solid rgba(60,179,113,0.20)",
   },
   valueTextFree: {
     fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "#3CB371", lineHeight: 1,
-    letterSpacing: "0.02em", textShadow: "0 0 20px rgba(60,179,113,0.15)",
+    letterSpacing: "0.02em", textShadow: "0 0 20px rgba(60,179,113,0.25)",
   },
   valueStatementGold: {
     padding: "20px 24px", textAlign: "center",
@@ -838,7 +1167,7 @@ const styles: Record<string, React.CSSProperties> = {
     color: "rgb(180,140,255)", background: "rgba(120,60,180,0.12)", border: "1px solid rgba(120,60,180,0.30)",
     padding: "18px", borderRadius: "6px", cursor: "pointer",
   },
-  detailsLink: { display: "block", textAlign: "center", fontFamily: "'Inter', sans-serif", fontSize: "16px", color: "rgba(255,255,255,0.85)", textDecoration: "none", marginTop: "16px", cursor: "pointer", padding: "8px 0" },
+  detailsLink: { display: "block", textAlign: "center", fontFamily: "'Inter', sans-serif", fontSize: "16px", color: "rgba(255,255,255,0.88)", textDecoration: "none", marginTop: "16px", cursor: "pointer", padding: "8px 0" },
 
   /* ── Top line helpers ── */
   topLineGold: {
@@ -891,8 +1220,8 @@ const styles: Record<string, React.CSSProperties> = {
   },
   checkIconYes: { fontFamily: "'Roboto Mono', monospace", fontSize: "24px", paddingTop: "2px", color: "#3CB371", textShadow: "0 0 8px rgba(60,179,113,0.6), 0 0 20px rgba(60,179,113,0.3)" },
   checkIconNo: { fontFamily: "'Roboto Mono', monospace", fontSize: "24px", paddingTop: "2px", color: "rgba(220,38,38,0.85)", textShadow: "0 0 8px rgba(220,38,38,0.6), 0 0 20px rgba(220,38,38,0.3)" },
-  checkTextYes: { fontFamily: "'Inter', sans-serif", fontSize: "16px", lineHeight: 1.4, color: "rgba(255,255,255,0.85)" },
-  checkTextNo: { fontFamily: "'Inter', sans-serif", fontSize: "16px", lineHeight: 1.4, color: "rgba(255,255,255,0.85)" },
+  checkTextYes: { fontFamily: "'Inter', sans-serif", fontSize: "16px", lineHeight: 1.4, color: "rgba(255,255,255,0.88)" },
+  checkTextNo: { fontFamily: "'Inter', sans-serif", fontSize: "16px", lineHeight: 1.4, color: "rgba(255,255,255,0.88)" },
 
   /* ── § 7 CLOSER ── */
   closerSection: {
@@ -918,14 +1247,14 @@ const styles: Record<string, React.CSSProperties> = {
     lineHeight: 0.95, margin: "4px 0 14px", textShadow: "0 2px 16px rgba(0,0,0,0.9)",
   },
   closerBody: {
-    fontFamily: "'Inter', sans-serif", fontSize: "19px", color: "rgba(255,255,255,0.85)",
-    lineHeight: 1.5, margin: "0 auto 24px", textShadow: "0 2px 8px rgba(0,0,0,0.8)",
+    fontFamily: "'Inter', sans-serif", fontSize: "19px", color: "rgba(255,255,255,0.88)",
+    lineHeight: 1.55, margin: "0 auto 24px", textShadow: "0 2px 8px rgba(0,0,0,0.8)",
   },
 
   /* ── FOOTER ── */
   footer: { background: "#0A0A0A", borderTop: "1px solid rgba(255,255,255,0.12)", padding: "32px 24px 40px" },
   footerLinks: { display: "flex", justifyContent: "center", gap: "20px", marginBottom: "16px" },
-  footerIcon: { color: "rgba(212,175,55,0.50)", textDecoration: "none", display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", borderRadius: "8px", border: "1px solid rgba(212,175,55,0.15)", transition: "color 0.2s ease, border-color 0.2s ease" },
+  footerIcon: { color: "rgba(212,175,55,0.50)", textDecoration: "none", display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", padding: "4px", borderRadius: "8px", border: "1px solid rgba(212,175,55,0.15)", transition: "color 0.2s ease, border-color 0.2s ease", boxSizing: "content-box" },
   footerNav: { display: "flex", justifyContent: "center", alignItems: "center", gap: "10px", marginBottom: "16px" },
   footerNavLink: { fontFamily: "'Roboto Mono', monospace", fontSize: "13px", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(212,175,55,0.50)", cursor: "pointer", transition: "color 0.2s ease" } as React.CSSProperties,
   footerDot: { color: "rgba(212,175,55,0.20)", fontSize: "12px" },
