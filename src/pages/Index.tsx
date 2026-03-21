@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useHaptics } from "@/hooks/use-haptics";
 import { useInView } from "@/hooks/useInView";
 import LeadCaptureModal from "@/components/LeadCaptureModal";
-import WaterfallHUD from "@/components/WaterfallHUD";
+
 import { Instagram } from "lucide-react";
 import { colors } from "@/lib/design-system";
 /*
@@ -98,8 +98,8 @@ const Index = () => {
     { tier: '03', name: 'Agent Commission', amount: 300_000, group: 'sales', mode: 'pair' as const },
     { tier: '04', name: 'Agent Expenses', amount: 75_000, group: 'sales', mode: 'pair' as const },
     { tier: '05', name: 'E&O / Delivery', amount: 18_000, group: 'delivery', mode: 'full' as const },
-    { tier: '06', name: 'Senior Debt', amount: 800_000, group: 'debt', mode: 'featured' as const },
-    { tier: '07', name: 'Mezzanine Debt', amount: 200_000, group: 'debt', mode: 'full' as const },
+    { tier: '06', name: 'Senior Debt', amount: 800_000, group: 'debt', mode: 'pair' as const },
+    { tier: '07', name: 'Mezzanine Debt', amount: 200_000, group: 'debt', mode: 'pair' as const },
     { tier: '08', name: 'Equity Recoupment', amount: 1_000_000, group: 'equity', mode: 'pair' as const },
     { tier: '09', name: 'Deferments', amount: 12_000, group: 'equity', mode: 'pair' as const },
   ];
@@ -110,13 +110,8 @@ const Index = () => {
   const PRODUCTION_BUDGET = 2_500_000;
   const TAX_CREDIT = 500_000;
   const CASH_BASIS = 2_000_000;
-  const MARKET_SPREAD = 1_000_000;
 
-  // Refs for HUD tier tracking
   const waterfallSectionRef = useRef<HTMLElement | null>(null);
-  const waterfallContextRef = useRef<HTMLDivElement | null>(null);
-  const tierCardRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const tierAmounts = WATERFALL_TIERS.map(t => t.amount);
 
   // Profit celebration state
   const [profitCelebrated, setProfitCelebrated] = useState(false);
@@ -239,15 +234,11 @@ const Index = () => {
   );
 
   /* ── Waterfall helper components ── */
-  const WaterfallGroupLabel = ({ text, color }: { text: string; color: 'gold' | 'red' | 'green' }) => {
-    const lineColor = color === 'gold' ? 'rgba(212,175,55,0.25)' : color === 'red' ? 'rgba(220,38,38,0.25)' : 'rgba(60,179,113,0.25)';
-    const textColor = color === 'gold' ? '#D4AF37' : color === 'red' ? 'rgba(220,38,38,0.85)' : '#3CB371';
-    const glowColor = color === 'gold' ? 'rgba(212,175,55,0.15)' : color === 'red' ? 'rgba(220,38,38,0.15)' : 'rgba(60,179,113,0.15)';
+  const WaterfallGroupLabel = ({ text, color }: { text: string; color: 'gold' | 'red' | 'green' | 'neutral' }) => {
+    const textColor = color === 'gold' ? '#D4AF37' : color === 'red' ? 'rgba(220,38,38,0.85)' : color === 'green' ? '#3CB371' : 'rgba(255,255,255,0.88)';
     return (
-      <div style={{ display: "flex", alignItems: "center", gap: "12px", margin: "14px 0 10px", justifyContent: "center" }}>
-        <div style={{ flex: 1, height: "1px", background: lineColor, boxShadow: `0 0 6px ${glowColor}` }} />
-        <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.6rem", color: textColor, whiteSpace: "nowrap", letterSpacing: "0.04em" }}>{text}</span>
-        <div style={{ flex: 1, height: "1px", background: lineColor, boxShadow: `0 0 6px ${glowColor}` }} />
+      <div style={{ textAlign: "center", margin: "12px 0 8px" }}>
+        <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.6rem", color: textColor, letterSpacing: "0.04em" }}>{text}</span>
       </div>
     );
   };
@@ -277,23 +268,18 @@ const Index = () => {
     const base: React.CSSProperties = {
       position: "relative", overflow: "hidden", borderRadius: "12px",
       background: "radial-gradient(circle at 50% 40px, rgba(220,38,38,0.15) 0%, transparent 60%), rgba(6,6,6,0.92)",
-      border: mode === 'featured' ? "1px solid rgba(220,38,38,0.35)" : "1px solid rgba(220,38,38,0.25)",
-      boxShadow: mode === 'featured'
-        ? "0 12px 32px rgba(0,0,0,0.5), 0 0 24px rgba(220,38,38,0.10)"
-        : "0 12px 32px rgba(0,0,0,0.5), 0 0 16px rgba(220,38,38,0.06)",
+      border: "1px solid rgba(220,38,38,0.25)",
+      boxShadow: "0 12px 32px rgba(0,0,0,0.5), 0 0 16px rgba(220,38,38,0.06)",
     };
     if (mode === 'pair') {
       return { ...base, padding: "16px 12px" };
-    }
-    if (mode === 'featured') {
-      return { ...base, padding: "20px 16px" };
     }
     return { ...base, padding: "20px 16px" };
   };
 
   const wfBadge = (mode: string): React.CSSProperties => {
-    const size = mode === 'featured' ? "48px" : mode === 'pair' ? "32px" : "40px";
-    const fontSize = mode === 'featured' ? "1.35rem" : mode === 'pair' ? "1rem" : "1.15rem";
+    const size = mode === 'pair' ? "32px" : "40px";
+    const fontSize = mode === 'pair' ? "1rem" : "1.15rem";
     return {
       width: size, height: size, borderRadius: "50%",
       background: "linear-gradient(135deg, rgb(75,30,130) 0%, rgb(110,50,170) 100%)",
@@ -309,7 +295,7 @@ const Index = () => {
 
   const wfBadgeGlow = (mode: string): React.CSSProperties => ({
     position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
-    background: `radial-gradient(circle at 50% ${mode === 'pair' ? '32px' : '40px'}, rgba(220,38,38,${mode === 'featured' ? '0.18' : '0.15'}) 0%, transparent 60%)`,
+    background: `radial-gradient(circle at 50% ${mode === 'pair' ? '32px' : '40px'}, rgba(220,38,38,0.15) 0%, transparent 60%)`,
     pointerEvents: "none",
   });
 
@@ -386,9 +372,6 @@ const Index = () => {
         <section ref={(el) => { waterfallSectionRef.current = el; }} style={styles.waterfallSection}>
           <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "200px", background: "radial-gradient(ellipse 100% 70% at 50% 0%, rgba(120,60,180,0.20) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
 
-          {/* HUD */}
-          <WaterfallHUD sectionRef={waterfallContextRef} tierRefs={tierCardRefs} tierAmounts={tierAmounts} />
-
           {/* Header */}
           <div ref={waterfallHeaderRef} style={{ ...styles.waterfallHeader, ...reveal(waterfallHeaderVisible) }}>
             <EyebrowRuled text="How the money flows" />
@@ -400,7 +383,7 @@ const Index = () => {
           </p>
 
           {/* ── Context Block: "The Project" ── */}
-          <div ref={waterfallContextRef} style={{ margin: "0 24px 0", ...reveal(waterfallHeaderVisible, 1) }}>
+          <div style={{ margin: "0 24px 0", ...reveal(waterfallHeaderVisible, 1) }}>
             <WaterfallGroupLabel text="The Project" color="gold" />
             <div style={{
               position: "relative", overflow: "hidden", borderRadius: "12px",
@@ -425,21 +408,6 @@ const Index = () => {
                 <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "2rem", color: "#D4AF37", textShadow: "0 0 20px rgba(212,175,55,0.30)" }}>${CASH_BASIS.toLocaleString()}</span>
               </div>
             </div>
-          </div>
-
-          {/* Connector gold → gold */}
-          <WaterfallConnector color="gold" />
-
-          {/* ── Arbitrage Callout ── */}
-          <div style={{ textAlign: "center", padding: "0 24px", position: "relative" }}>
-            <div style={{
-              position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)",
-              width: "200px", height: "200px",
-              background: "radial-gradient(circle, rgba(212,175,55,0.08) 0%, transparent 50%)",
-              pointerEvents: "none",
-            }} />
-            <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.3rem", color: "#D4AF37", letterSpacing: "0.06em", marginBottom: "4px" }}>MARKET SPREAD</div>
-            <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.6rem", color: "#D4AF37", textShadow: "0 0 20px rgba(212,175,55,0.30)" }}>+${MARKET_SPREAD.toLocaleString()}</div>
           </div>
 
           {/* Connector gold → gold */}
@@ -478,80 +446,90 @@ const Index = () => {
             return groups.map((group, gi) => {
               const groupCards = group.tiers.map((tier) => {
                 const ci = cardIndex;
-                const tierIdx = WATERFALL_TIERS.indexOf(tier);
                 cumulativeDeducted += tier.amount;
                 const erosionPct = (cumulativeDeducted / TOTAL_ACQUISITION) * 100;
                 cardIndex++;
-                return { ...tier, ci, tierIdx, erosionPct };
+                return { ...tier, ci, erosionPct };
               });
 
               const isPair = groupCards.length === 2 && groupCards[0].mode === 'pair';
-              const hasFeatured = groupCards.some(t => t.mode === 'featured');
 
               return (
                 <div key={group.label}>
                   <div style={{ margin: "0 24px" }}>
-                    <WaterfallGroupLabel text={group.label} color="gold" />
+                    <WaterfallGroupLabel text={group.label} color="neutral" />
                     {isPair ? (
-                      <div style={{ display: "flex", gap: "10px" }}>
-                        {groupCards.map((tier, pi) => (
-                          <div
-                            key={tier.tier}
-                            ref={(el) => {
-                              tierCardRefs.current[tier.tierIdx] = el;
-                              cardObserverRefs.current[tier.ci] = el;
-                            }}
-                            style={{
-                              flex: 1,
-                              ...wfCardStyle('pair'),
-                              ...cardReveal(enteredCards.has(tier.ci), pi * 100),
-                            }}
-                          >
-                            <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: "linear-gradient(90deg, transparent, rgba(220,38,38,0.35), transparent)", zIndex: 1 }} />
-                            <div style={wfBadgeGlow('pair')} />
-                            <div style={wfBadge('pair')}>{tier.tier}</div>
-                            <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.3rem", color: "#fff", textTransform: "uppercase", marginBottom: "6px", textAlign: "center" }}>{tier.name}</div>
-                            <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.6rem", color: "rgba(220,38,38,0.85)", textAlign: "center" }}>–${tier.amount.toLocaleString()}</div>
-                            <div style={{ marginTop: "8px", height: "4px", background: "rgba(255,255,255,0.06)", borderRadius: "4px", overflow: "hidden" }}>
-                              <div style={{ height: "100%", width: `${Math.min(tier.erosionPct, 100)}%`, background: "rgba(220,38,38,0.50)", borderRadius: "4px" }} />
-                            </div>
+                      <div style={{ display: "flex", gap: "10px", alignItems: "stretch" }}>
+                        <div
+                          key={groupCards[0].tier}
+                          ref={(el) => { cardObserverRefs.current[groupCards[0].ci] = el; }}
+                          style={{
+                            flex: 1,
+                            ...wfCardStyle('pair'),
+                            ...cardReveal(enteredCards.has(groupCards[0].ci), 0),
+                          }}
+                        >
+                          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: "linear-gradient(90deg, transparent, rgba(220,38,38,0.35), transparent)", zIndex: 1 }} />
+                          <div style={wfBadgeGlow('pair')} />
+                          <div style={wfBadge('pair')}>{groupCards[0].tier}</div>
+                          <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.3rem", color: "#fff", textTransform: "uppercase", marginBottom: "6px", textAlign: "center" }}>{groupCards[0].name}</div>
+                          <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.6rem", color: "rgba(220,38,38,0.85)", textAlign: "center" }}>–${groupCards[0].amount.toLocaleString()}</div>
+                          <div style={{ marginTop: "8px", height: "4px", background: "rgba(255,255,255,0.06)", borderRadius: "4px", overflow: "hidden" }}>
+                            <div style={{ height: "100%", width: `${Math.min(groupCards[0].erosionPct, 100)}%`, background: "rgba(220,38,38,0.50)", borderRadius: "4px" }} />
                           </div>
-                        ))}
+                        </div>
+                        {/* Horizontal connector */}
+                        <div style={{ display: "flex", alignItems: "center", width: "0px", position: "relative" }}>
+                          <div style={{ position: "absolute", left: "-5px", right: "-5px", height: "1px", background: "rgba(220,38,38,0.25)" }} />
+                        </div>
+                        <div
+                          key={groupCards[1].tier}
+                          ref={(el) => { cardObserverRefs.current[groupCards[1].ci] = el; }}
+                          style={{
+                            flex: 1,
+                            ...wfCardStyle('pair'),
+                            ...cardReveal(enteredCards.has(groupCards[1].ci), 100),
+                          }}
+                        >
+                          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: "linear-gradient(90deg, transparent, rgba(220,38,38,0.35), transparent)", zIndex: 1 }} />
+                          <div style={wfBadgeGlow('pair')} />
+                          <div style={wfBadge('pair')}>{groupCards[1].tier}</div>
+                          <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.3rem", color: "#fff", textTransform: "uppercase", marginBottom: "6px", textAlign: "center" }}>{groupCards[1].name}</div>
+                          <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.6rem", color: "rgba(220,38,38,0.85)", textAlign: "center" }}>–${groupCards[1].amount.toLocaleString()}</div>
+                          <div style={{ marginTop: "8px", height: "4px", background: "rgba(255,255,255,0.06)", borderRadius: "4px", overflow: "hidden" }}>
+                            <div style={{ height: "100%", width: `${Math.min(groupCards[1].erosionPct, 100)}%`, background: "rgba(220,38,38,0.50)", borderRadius: "4px" }} />
+                          </div>
+                        </div>
                       </div>
                     ) : (
                       groupCards.map((tier) => (
                         <div
                           key={tier.tier}
-                          ref={(el) => {
-                            tierCardRefs.current[tier.tierIdx] = el;
-                            cardObserverRefs.current[tier.ci] = el;
-                          }}
+                          ref={(el) => { cardObserverRefs.current[tier.ci] = el; }}
                           style={{
                             ...wfCardStyle(tier.mode),
                             ...cardReveal(enteredCards.has(tier.ci)),
-                            ...(hasFeatured && tier.mode === 'featured' ? { borderLeft: "2px solid rgba(220,38,38,0.30)" } : {}),
                             marginBottom: groupCards.indexOf(tier) < groupCards.length - 1 ? "10px" : "0",
                           }}
                         >
-                          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: `linear-gradient(90deg, transparent, rgba(220,38,38,${tier.mode === 'featured' ? '0.45' : '0.35'}), transparent)`, zIndex: 1 }} />
+                          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: "linear-gradient(90deg, transparent, rgba(220,38,38,0.35), transparent)", zIndex: 1 }} />
                           <div style={wfBadgeGlow(tier.mode)} />
                           <div style={wfBadge(tier.mode)}>{tier.tier}</div>
                           <div style={{
                             fontFamily: "'Bebas Neue', sans-serif",
-                            fontSize: tier.mode === 'featured' ? "1.7rem" : "1.5rem",
+                            fontSize: "1.5rem",
                             color: "#fff", textTransform: "uppercase", marginBottom: "8px",
                             textAlign: "center",
                           }}>{tier.name}</div>
                           <div style={{
                             fontFamily: "'Bebas Neue', sans-serif",
-                            fontSize: tier.mode === 'featured' ? "2.4rem" : "2rem",
-                            color: tier.mode === 'featured' ? "rgba(220,38,38,0.95)" : "rgba(220,38,38,0.85)",
+                            fontSize: "2rem",
+                            color: "rgba(220,38,38,0.85)",
                             textAlign: "center",
-                            ...(tier.mode === 'featured' ? { textShadow: "0 0 24px rgba(220,38,38,0.25)" } : {}),
                           }}>–${tier.amount.toLocaleString()}</div>
                           <div style={{
                             marginTop: "10px",
-                            height: tier.mode === 'featured' ? "8px" : "6px",
+                            height: "6px",
                             background: "rgba(255,255,255,0.06)", borderRadius: "4px", overflow: "hidden",
                           }}>
                             <div style={{ height: "100%", width: `${Math.min(tier.erosionPct, 100)}%`, background: "rgba(220,38,38,0.50)", borderRadius: "4px" }} />
@@ -617,23 +595,33 @@ const Index = () => {
           {/* ── Profit Split ── */}
           <div style={{ margin: "0 24px" }}>
             <WaterfallGroupLabel text="Profit Split" color="green" />
-            <div style={{ display: "flex", gap: "10px" }}>
-              {[
-                { label: "Investor", amount: SPLIT },
-                { label: "Producer", amount: SPLIT },
-              ].map((b) => (
-                <div key={b.label} style={{
-                  flex: 1, textAlign: "center", borderRadius: "12px", padding: "16px 12px",
-                  border: "1px solid rgba(60,179,113,0.50)",
-                  background: "radial-gradient(ellipse at 50% 0%, rgba(60,179,113,0.12) 0%, rgba(6,6,6,0.92) 70%)",
-                  position: "relative", overflow: "hidden",
-                  boxShadow: "0 8px 24px rgba(0,0,0,0.4), 0 0 16px rgba(60,179,113,0.10)",
-                }}>
-                  <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: "linear-gradient(90deg, transparent, #3CB371, transparent)" }} />
-                  <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.3rem", color: "rgba(255,255,255,0.88)", marginBottom: "6px" }}>{b.label}</div>
-                  <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "#3CB371" }}>${b.amount.toLocaleString()}</div>
-                </div>
-              ))}
+            <div style={{ display: "flex", gap: "10px", alignItems: "stretch" }}>
+              <div style={{
+                flex: 1, textAlign: "center", borderRadius: "12px", padding: "16px 12px",
+                border: "1px solid rgba(60,179,113,0.50)",
+                background: "radial-gradient(ellipse at 50% 0%, rgba(60,179,113,0.12) 0%, rgba(6,6,6,0.92) 70%)",
+                position: "relative", overflow: "hidden",
+                boxShadow: "0 8px 24px rgba(0,0,0,0.4), 0 0 16px rgba(60,179,113,0.10)",
+              }}>
+                <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: "linear-gradient(90deg, transparent, #3CB371, transparent)" }} />
+                <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.3rem", color: "rgba(255,255,255,0.88)", marginBottom: "6px" }}>Investor</div>
+                <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "#3CB371" }}>${SPLIT.toLocaleString()}</div>
+              </div>
+              {/* Horizontal connector */}
+              <div style={{ display: "flex", alignItems: "center", width: "0px", position: "relative" }}>
+                <div style={{ position: "absolute", left: "-5px", right: "-5px", height: "1px", background: "rgba(60,179,113,0.30)" }} />
+              </div>
+              <div style={{
+                flex: 1, textAlign: "center", borderRadius: "12px", padding: "16px 12px",
+                border: "1px solid rgba(60,179,113,0.50)",
+                background: "radial-gradient(ellipse at 50% 0%, rgba(60,179,113,0.12) 0%, rgba(6,6,6,0.92) 70%)",
+                position: "relative", overflow: "hidden",
+                boxShadow: "0 8px 24px rgba(0,0,0,0.4), 0 0 16px rgba(60,179,113,0.10)",
+              }}>
+                <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: "linear-gradient(90deg, transparent, #3CB371, transparent)" }} />
+                <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.3rem", color: "rgba(255,255,255,0.88)", marginBottom: "6px" }}>Producer</div>
+                <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "#3CB371" }}>${SPLIT.toLocaleString()}</div>
+              </div>
             </div>
           </div>
 
@@ -676,7 +664,7 @@ const Index = () => {
           <div ref={arsenalHeaderRef} style={{ ...styles.arsenalHeader, ...reveal(arsenalHeaderVisible) }}>
             <EyebrowRuled text="What you get" />
             <h2 style={styles.arsenalH2}>The <span style={{ color: "#D4AF37" }}>Snapshot</span></h2>
-            <p style={styles.arsenalSub}>Everything you need to model your deal. Free.</p>
+            <p style={styles.arsenalSub}>Your complete deal structure. Modeled for free.</p>
           </div>
 
           <div style={styles.arsenalCards}>
@@ -740,8 +728,8 @@ const Index = () => {
             </div>
           </div>
           {/* Shop bridge link */}
-          <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "16px", color: "rgba(255,255,255,0.88)", textAlign: "center", marginTop: "24px", cursor: "pointer", padding: "8px 24px" }} onClick={() => gatedNavigate("/store")}>
-            Need investor-grade documents? <span style={{ color: "#D4AF37" }}>See the shop →</span>
+          <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "18px", color: "rgba(255,255,255,0.88)", textAlign: "center", marginTop: "24px", cursor: "pointer", padding: "8px 24px" }} onClick={() => gatedNavigate("/store")}>
+            Need investor-grade documents? <span style={{ color: "#D4AF37", fontSize: "20px" }}>See the shop →</span>
           </p>
         </section>
 
@@ -786,18 +774,15 @@ const Index = () => {
         <div style={{ height: "3px", background: "linear-gradient(to right, transparent 0%, rgba(120,60,180,0.50) 20%, rgba(212,175,55,0.40) 50%, rgba(120,60,180,0.50) 80%, transparent 100%)", boxShadow: "0 0 8px rgba(120,60,180,0.35), 0 0 20px rgba(120,60,180,0.20)", margin: "0 24px" }} />
 
         {/* ═══ § 7 CLOSER ═══ */}
-        <section ref={closerRef} style={styles.closerSection}>
-          <div style={styles.closerGlowBottom} />
-          <div style={{ ...styles.closerCard, ...reveal(closerVisible) }}>
-            <div style={styles.topLineGoldBright} />
-            <h2 style={styles.closerH2}>Your Investors<br /><span style={{ color: "#D4AF37", display: "block", textShadow: "0 0 40px rgba(212,175,55,0.6), 0 0 80px rgba(212,175,55,0.25)" }}>Will Ask.</span></h2>
-            <p style={styles.closerBody}>Stop guessing your backend. Walk into every pitch knowing exactly where the money goes.</p>
-            <button onClick={handleCTA} style={styles.ctaBtn} aria-label="Run my waterfall" onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>
-              <span style={{ position: "relative", zIndex: 1 }}>RUN MY WATERFALL</span>
-              <div style={styles.ctaShimmer} />
-            </button>
-            <p style={styles.ctaReassurance}>No Credit Card · Instant Results</p>
-          </div>
+        <section ref={closerRef} style={{ ...styles.closerSection, ...reveal(closerVisible) }}>
+          <div style={styles.closerGlowOverlay} />
+          <h2 style={styles.closerH2}>Your Investors<br /><span style={{ color: "#D4AF37", display: "block", textShadow: "0 0 40px rgba(212,175,55,0.6), 0 0 80px rgba(212,175,55,0.25)" }}>Will Ask.</span></h2>
+          <p style={styles.closerBody}>Stop guessing your backend. Walk into every pitch knowing exactly where the money goes.</p>
+          <button onClick={handleCTA} style={styles.ctaBtn} aria-label="Run my waterfall" onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>
+            <span style={{ position: "relative", zIndex: 1 }}>RUN MY WATERFALL</span>
+            <div style={styles.ctaShimmer} />
+          </button>
+          <p style={styles.ctaReassurance}>No Credit Card · Instant Results</p>
         </section>
 
         {/* ═══ FOOTER ═══ */}
@@ -845,7 +830,7 @@ const styles: Record<string, React.CSSProperties> = {
     flex: 1, height: "1px", background: "rgba(212,175,55,0.40)", boxShadow: "0 0 8px rgba(212,175,55,0.15)",
   },
   eyebrowLabel: {
-    fontFamily: "'Roboto Mono', monospace", fontSize: "17px",
+    fontFamily: "'Roboto Mono', monospace", fontSize: "16px",
     letterSpacing: "0.18em", textTransform: "uppercase", color: "#D4AF37",
     whiteSpace: "nowrap",
   },
@@ -931,14 +916,14 @@ const styles: Record<string, React.CSSProperties> = {
   },
   stepContent: { padding: "26px 24px 26px 24px" },
   stepTitle: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "#fff", lineHeight: 1, marginBottom: "5px" },
-  stepBody: { fontFamily: "'Inter', sans-serif", fontSize: "19px", color: "rgba(255,255,255,0.88)", lineHeight: 1.55 },
+  stepBody: { fontFamily: "'Inter', sans-serif", fontSize: "18px", color: "rgba(255,255,255,0.88)", lineHeight: 1.55 },
 
   /* ── § 3 WATERFALL ── */
-  waterfallSection: { position: "relative", background: "#000", padding: "48px 0 0" },
+  waterfallSection: { position: "relative", background: "#000", padding: "32px 0 0" },
   waterfallHeader: { textAlign: "center", padding: "0 24px 24px" },
   waterfallH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.2rem", color: "#fff", lineHeight: 0.95 },
   waterfallExplainer: {
-    fontFamily: "'Inter', sans-serif", fontSize: "19px", color: "rgba(255,255,255,0.88)",
+    fontFamily: "'Inter', sans-serif", fontSize: "18px", color: "rgba(255,255,255,0.88)",
     lineHeight: 1.55, textAlign: "center", padding: "0 24px", marginBottom: "24px",
     maxWidth: "380px", marginLeft: "auto", marginRight: "auto",
   },
@@ -958,17 +943,17 @@ const styles: Record<string, React.CSSProperties> = {
   badgeCard: { background: "radial-gradient(circle at 45px 57px, rgba(120,60,180,0.15) 0%, rgba(6,6,6,0.92) 65%)", padding: "36px 24px", textAlign: "left" },
   badgeNum: {
     width: "48px", height: "48px", borderRadius: "50%", background: "linear-gradient(135deg, rgb(75,30,130) 0%, rgb(110,50,170) 100%)", color: "#fff",
-    display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.7rem",
+    display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.6rem",
     marginBottom: "16px", paddingTop: "2px", boxShadow: "0 0 24px rgba(120,60,180,0.55), 0 0 48px rgba(120,60,180,0.25)",
   },
   badgeTitle: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "#fff", marginBottom: "8px", lineHeight: 1.05, letterSpacing: "0.02em" },
-  badgeBody: { fontFamily: "'Inter', sans-serif", fontSize: "19px", color: "rgba(255,255,255,0.88)", lineHeight: 1.55 },
+  badgeBody: { fontFamily: "'Inter', sans-serif", fontSize: "18px", color: "rgba(255,255,255,0.88)", lineHeight: 1.55 },
 
   /* ── § 5 ARSENAL ── */
   arsenalSection: { position: "relative", background: "#000", textAlign: "center", padding: "48px 0 0" },
   arsenalHeader: { padding: "0 24px 24px" },
   arsenalH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.2rem", color: "#fff", lineHeight: 0.95 },
-  arsenalSub: { fontFamily: "'Inter', sans-serif", fontSize: "18px", marginTop: "10px", color: "rgba(255,255,255,0.88)", lineHeight: 1.6 },
+  arsenalSub: { fontFamily: "'Inter', sans-serif", fontSize: "18px", marginTop: "10px", color: "rgba(255,255,255,0.88)", lineHeight: 1.5 },
   sectionSub: { fontFamily: "'Inter', sans-serif", fontSize: "18px", marginTop: "10px", color: "rgba(255,255,255,0.88)", lineHeight: 1.5 },
   arsenalCards: { display: "flex", flexDirection: "column", gap: "28px", margin: "0 24px" },
 
@@ -1028,10 +1013,6 @@ const styles: Record<string, React.CSSProperties> = {
     position: "absolute", top: 0, left: 0, right: 0, height: "2px",
     background: "linear-gradient(to right, transparent 0%, rgba(120,60,180,0.30) 20%, rgba(212,175,55,0.35) 50%, rgba(120,60,180,0.30) 80%, transparent 100%)",
   },
-  topLineGoldBright: {
-    position: "absolute", top: 0, left: 0, right: 0, height: "2px",
-    background: "linear-gradient(to right, transparent 0%, rgba(120,60,180,0.50) 20%, rgba(212,175,55,0.60) 50%, rgba(120,60,180,0.50) 80%, transparent 100%)",
-  },
 
   /* ── § 6 REALITY ── */
   realitySection: { position: "relative", background: "#000", textAlign: "left", padding: "48px 24px 24px" },
@@ -1050,8 +1031,8 @@ const styles: Record<string, React.CSSProperties> = {
   },
   checkHeaderWith: { background: "rgba(60,179,113,0.14)", padding: "14px 16px" },
   checkHeaderWithout: { background: "rgba(6,6,6,0.92)", padding: "14px 16px", borderLeft: "1px solid rgba(255,255,255,0.12)" },
-  checkHeaderWithText: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.7rem", color: "#3CB371", letterSpacing: "0.04em" },
-  checkHeaderWithoutText: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.7rem", color: "rgba(255,255,255,0.55)", letterSpacing: "0.04em" },
+  checkHeaderWithText: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.6rem", color: "#3CB371", letterSpacing: "0.04em" },
+  checkHeaderWithoutText: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.6rem", color: "rgba(255,255,255,0.55)", letterSpacing: "0.04em" },
   checkRow: {
     display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1px", background: "rgba(255,255,255,0.12)",
     borderBottom: "1px solid rgba(255,255,255,0.12)",
@@ -1072,29 +1053,25 @@ const styles: Record<string, React.CSSProperties> = {
   /* ── § 7 CLOSER ── */
   closerSection: {
     position: "relative", overflow: "hidden", textAlign: "center",
-    padding: "24px 0 80px", borderTop: "none",
-    margin: "0 24px 0",
+    padding: "32px 24px 40px",
+    margin: "0 24px",
     borderRadius: "12px",
     background: "rgba(6,6,6,0.92)",
     backdropFilter: "blur(40px)",
     WebkitBackdropFilter: "blur(40px)",
     border: "1px solid rgba(212,175,55,0.55)",
+    boxShadow: "0 16px 40px rgba(0,0,0,0.8), 0 0 60px rgba(120,60,180,0.15)",
   },
-  closerGlowBottom: {
+  closerGlowOverlay: {
     position: "absolute", top: 0, left: 0, right: 0, bottom: 0, pointerEvents: "none",
     background: "radial-gradient(ellipse 70% 50% at 50% 0%, rgba(212,175,55,0.18) 0%, transparent 60%), radial-gradient(ellipse 90% 60% at 50% 100%, rgba(120,60,180,0.22) 0%, transparent 65%)",
-  },
-  closerCard: {
-    position: "relative", zIndex: 1, border: "1px solid rgba(212,175,55,0.65)", borderRadius: "12px",
-    padding: "24px 24px 36px", background: "rgba(0,0,0,0.78)", backdropFilter: "blur(40px)", WebkitBackdropFilter: "blur(40px)", margin: "0 1px",
-    boxShadow: "0 16px 40px rgba(0,0,0,0.8), 0 0 60px rgba(120,60,180,0.15), 0 0 80px rgba(120,60,180,0.15)",
   },
   closerH2: {
     fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.4rem", color: "#fff", textAlign: "center",
     lineHeight: 0.95, margin: "4px 0 14px", textShadow: "0 2px 16px rgba(0,0,0,0.9)",
   },
   closerBody: {
-    fontFamily: "'Inter', sans-serif", fontSize: "19px", color: "rgba(255,255,255,0.88)",
+    fontFamily: "'Inter', sans-serif", fontSize: "18px", color: "rgba(255,255,255,0.88)",
     lineHeight: 1.55, margin: "0 auto 24px", textShadow: "0 2px 8px rgba(0,0,0,0.8)",
   },
 
@@ -1104,7 +1081,7 @@ const styles: Record<string, React.CSSProperties> = {
   footerIcon: { color: "rgba(212,175,55,0.50)", textDecoration: "none", display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", padding: "4px", borderRadius: "8px", border: "1px solid rgba(212,175,55,0.15)", transition: "color 0.2s ease, border-color 0.2s ease", boxSizing: "content-box" },
   footerNav: { display: "flex", justifyContent: "center", alignItems: "center", gap: "10px", marginBottom: "16px" },
   footerNavLink: { fontFamily: "'Roboto Mono', monospace", fontSize: "13px", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(212,175,55,0.50)", cursor: "pointer", transition: "color 0.2s ease" } as React.CSSProperties,
-  footerDot: { color: "rgba(212,175,55,0.20)", fontSize: "12px" },
+  footerDot: { color: "rgba(212,175,55,0.20)", fontSize: "11px" },
   footerText: { fontFamily: "'Inter', sans-serif", fontSize: "14px", textAlign: "center", color: "rgba(255,255,255,0.48)", lineHeight: 1.55 },
 };
 
