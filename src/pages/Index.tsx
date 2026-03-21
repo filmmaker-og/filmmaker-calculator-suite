@@ -35,7 +35,7 @@ const Index = () => {
         // Magic link callback landed here instead of /calculator —
         // catch it and forward. Only fires on fresh sign-in, not
         // on TOKEN_REFRESHED or returning visitors.
-        if (event === 'SIGNED_IN') {
+        if (event === 'SIGNED_IN' && window.location.hash.includes('access_token')) {
           navigate('/calculator');
         }
       }
@@ -181,8 +181,8 @@ const Index = () => {
       if (entry.isIntersecting && !profitCelebrated) {
         setProfitCelebrated(true);
         haptics.success();
-        setProfitGlowIntensity(0.20);
-        setTimeout(() => setProfitGlowIntensity(0.12), 500);
+        setProfitGlowIntensity(0.22);
+        setTimeout(() => setProfitGlowIntensity(0.12), 600);
         // Count up from 0 to NET_PROFIT over 600ms
         const duration = 600;
         const startTime = performance.now();
@@ -239,14 +239,12 @@ const Index = () => {
   );
 
   /* ── Waterfall helper components ── */
-  const erosionPct = (pct: number) => pct;
-
   const WaterfallGroupLabel = ({ text, color }: { text: string; color: 'gold' | 'red' | 'green' }) => {
     const lineColor = color === 'gold' ? 'rgba(212,175,55,0.25)' : color === 'red' ? 'rgba(220,38,38,0.25)' : 'rgba(60,179,113,0.25)';
     const textColor = color === 'gold' ? '#D4AF37' : color === 'red' ? 'rgba(220,38,38,0.85)' : '#3CB371';
     const glowColor = color === 'gold' ? 'rgba(212,175,55,0.15)' : color === 'red' ? 'rgba(220,38,38,0.15)' : 'rgba(60,179,113,0.15)';
     return (
-      <div style={{ display: "flex", alignItems: "center", gap: "12px", margin: "20px 0 12px", justifyContent: "center" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: "12px", margin: "14px 0 10px", justifyContent: "center" }}>
         <div style={{ flex: 1, height: "1px", background: lineColor, boxShadow: `0 0 6px ${glowColor}` }} />
         <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.6rem", color: textColor, whiteSpace: "nowrap", letterSpacing: "0.04em" }}>{text}</span>
         <div style={{ flex: 1, height: "1px", background: lineColor, boxShadow: `0 0 6px ${glowColor}` }} />
@@ -258,13 +256,13 @@ const Index = () => {
     const colorMap: Record<string, string> = {
       gold: "rgba(212,175,55,0.30)",
       'gold-to-red': "linear-gradient(180deg, rgba(212,175,55,0.30), rgba(220,38,38,0.30))",
-      red: "rgba(220,38,38,0.25)",
-      'red-strong': "rgba(220,38,38,0.35)",
+      red: "rgba(220,38,38,0.30)",
+      'red-strong': "rgba(220,38,38,0.40)",
       'red-to-green': "linear-gradient(180deg, rgba(220,38,38,0.30), rgba(60,179,113,0.30))",
       green: "rgba(60,179,113,0.30)",
     };
     const isGradient = color.includes('-to-');
-    const height = color === 'gold-to-red' ? "36px" : color === 'red-to-green' ? "28px" : "20px";
+    const height = color === 'gold-to-red' ? "28px" : color === 'red-to-green' ? "24px" : "14px";
     return (
       <div style={{ display: "flex", justifyContent: "center", padding: "0 24px" }}>
         <div style={{
@@ -278,8 +276,11 @@ const Index = () => {
   const wfCardStyle = (mode: string): React.CSSProperties => {
     const base: React.CSSProperties = {
       position: "relative", overflow: "hidden", borderRadius: "12px",
-      background: "radial-gradient(circle at 50% 40px, rgba(220,38,38,0.10) 0%, transparent 60%), rgba(6,6,6,0.92)",
+      background: "radial-gradient(circle at 50% 40px, rgba(220,38,38,0.15) 0%, transparent 60%), rgba(6,6,6,0.92)",
       border: mode === 'featured' ? "1px solid rgba(220,38,38,0.35)" : "1px solid rgba(220,38,38,0.25)",
+      boxShadow: mode === 'featured'
+        ? "0 12px 32px rgba(0,0,0,0.5), 0 0 24px rgba(220,38,38,0.10)"
+        : "0 12px 32px rgba(0,0,0,0.5), 0 0 16px rgba(220,38,38,0.06)",
     };
     if (mode === 'pair') {
       return { ...base, padding: "16px 12px" };
@@ -299,8 +300,8 @@ const Index = () => {
       display: "flex", alignItems: "center", justifyContent: "center",
       fontFamily: "'Bebas Neue', sans-serif", fontSize, color: "#fff",
       marginBottom: mode === 'pair' ? "8px" : "10px",
-      margin: "0 auto",
-      marginTop: "0",
+      marginLeft: "auto",
+      marginRight: "auto",
       boxShadow: "0 0 16px rgba(120,60,180,0.50), 0 0 32px rgba(120,60,180,0.25)",
       position: "relative", zIndex: 1,
     };
@@ -308,7 +309,7 @@ const Index = () => {
 
   const wfBadgeGlow = (mode: string): React.CSSProperties => ({
     position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
-    background: `radial-gradient(circle at 50% ${mode === 'pair' ? '32px' : '40px'}, rgba(220,38,38,${mode === 'featured' ? '0.12' : '0.10'}) 0%, transparent 60%)`,
+    background: `radial-gradient(circle at 50% ${mode === 'pair' ? '32px' : '40px'}, rgba(220,38,38,${mode === 'featured' ? '0.18' : '0.15'}) 0%, transparent 60%)`,
     pointerEvents: "none",
   });
 
@@ -506,12 +507,13 @@ const Index = () => {
                               ...cardReveal(enteredCards.has(tier.ci), pi * 100),
                             }}
                           >
+                            <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: "linear-gradient(90deg, transparent, rgba(220,38,38,0.35), transparent)", zIndex: 1 }} />
                             <div style={wfBadgeGlow('pair')} />
                             <div style={wfBadge('pair')}>{tier.tier}</div>
                             <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.3rem", color: "#fff", textTransform: "uppercase", marginBottom: "6px", textAlign: "center" }}>{tier.name}</div>
-                            <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.5rem", color: "rgba(220,38,38,0.85)", textAlign: "center" }}>–${tier.amount.toLocaleString()}</div>
+                            <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.6rem", color: "rgba(220,38,38,0.85)", textAlign: "center" }}>–${tier.amount.toLocaleString()}</div>
                             <div style={{ marginTop: "8px", height: "4px", background: "rgba(255,255,255,0.06)", borderRadius: "4px", overflow: "hidden" }}>
-                              <div style={{ height: "100%", width: `${Math.min(erosionPct(tier.erosionPct), 100)}%`, background: "rgba(220,38,38,0.50)", borderRadius: "4px" }} />
+                              <div style={{ height: "100%", width: `${Math.min(tier.erosionPct, 100)}%`, background: "rgba(220,38,38,0.50)", borderRadius: "4px" }} />
                             </div>
                           </div>
                         ))}
@@ -531,6 +533,7 @@ const Index = () => {
                             marginBottom: groupCards.indexOf(tier) < groupCards.length - 1 ? "10px" : "0",
                           }}
                         >
+                          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: `linear-gradient(90deg, transparent, rgba(220,38,38,${tier.mode === 'featured' ? '0.45' : '0.35'}), transparent)`, zIndex: 1 }} />
                           <div style={wfBadgeGlow(tier.mode)} />
                           <div style={wfBadge(tier.mode)}>{tier.tier}</div>
                           <div style={{
@@ -541,17 +544,17 @@ const Index = () => {
                           }}>{tier.name}</div>
                           <div style={{
                             fontFamily: "'Bebas Neue', sans-serif",
-                            fontSize: tier.mode === 'featured' ? "2.2rem" : "1.8rem",
+                            fontSize: tier.mode === 'featured' ? "2.4rem" : "2rem",
                             color: tier.mode === 'featured' ? "rgba(220,38,38,0.95)" : "rgba(220,38,38,0.85)",
                             textAlign: "center",
-                            ...(tier.mode === 'featured' ? { textShadow: "0 0 20px rgba(220,38,38,0.20)" } : {}),
+                            ...(tier.mode === 'featured' ? { textShadow: "0 0 24px rgba(220,38,38,0.25)" } : {}),
                           }}>–${tier.amount.toLocaleString()}</div>
                           <div style={{
                             marginTop: "10px",
                             height: tier.mode === 'featured' ? "8px" : "6px",
                             background: "rgba(255,255,255,0.06)", borderRadius: "4px", overflow: "hidden",
                           }}>
-                            <div style={{ height: "100%", width: `${Math.min(erosionPct(tier.erosionPct), 100)}%`, background: "rgba(220,38,38,0.50)", borderRadius: "4px" }} />
+                            <div style={{ height: "100%", width: `${Math.min(tier.erosionPct, 100)}%`, background: "rgba(220,38,38,0.50)", borderRadius: "4px" }} />
                           </div>
                         </div>
                       ))
@@ -572,10 +575,11 @@ const Index = () => {
             <div style={{
               position: "relative", overflow: "hidden", borderRadius: "12px", padding: "20px 16px", textAlign: "center",
               border: "1px solid rgba(220,38,38,0.25)",
-              background: "radial-gradient(ellipse at 50% 0%, rgba(220,38,38,0.06) 0%, rgba(6,6,6,0.92) 70%)",
+              background: "radial-gradient(ellipse at 50% 0%, rgba(220,38,38,0.10) 0%, rgba(6,6,6,0.92) 70%)",
+              boxShadow: "0 12px 32px rgba(0,0,0,0.5), 0 0 20px rgba(220,38,38,0.08)",
             }}>
               <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: "linear-gradient(90deg, transparent, rgba(220,38,38,0.30), transparent)" }} />
-              <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "2.2rem", color: "rgba(220,38,38,0.85)" }}>–${TOTAL_DEDUCTED.toLocaleString()}</div>
+              <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "2.4rem", color: "rgba(220,38,38,0.85)" }}>–${TOTAL_DEDUCTED.toLocaleString()}</div>
               {/* Summary bar */}
               <div style={{ marginTop: "12px", height: "8px", background: "rgba(255,255,255,0.06)", borderRadius: "4px", overflow: "hidden", display: "flex" }}>
                 <div style={{ height: "100%", width: `${((TOTAL_ACQUISITION - TOTAL_DEDUCTED) / TOTAL_ACQUISITION) * 100}%`, background: "rgba(60,179,113,0.50)", borderRadius: "4px 0 0 4px" }} />
@@ -623,6 +627,7 @@ const Index = () => {
                   border: "1px solid rgba(60,179,113,0.50)",
                   background: "radial-gradient(ellipse at 50% 0%, rgba(60,179,113,0.12) 0%, rgba(6,6,6,0.92) 70%)",
                   position: "relative", overflow: "hidden",
+                  boxShadow: "0 8px 24px rgba(0,0,0,0.4), 0 0 16px rgba(60,179,113,0.10)",
                 }}>
                   <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: "linear-gradient(90deg, transparent, #3CB371, transparent)" }} />
                   <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.3rem", color: "rgba(255,255,255,0.88)", marginBottom: "6px" }}>{b.label}</div>
@@ -829,7 +834,7 @@ const Index = () => {
 };
 
 /* ══════════════════════════════════════════════════════════════════
-   STYLES — matches HTML v12 exactly
+   STYLES — v14.2 — card-based waterfall
    ══════════════════════════════════════════════════════════════════ */
 const styles: Record<string, React.CSSProperties> = {
   /* ── Eyebrow ── */
@@ -937,58 +942,8 @@ const styles: Record<string, React.CSSProperties> = {
     lineHeight: 1.55, textAlign: "center", padding: "0 24px", marginBottom: "24px",
     maxWidth: "380px", marginLeft: "auto", marginRight: "auto",
   },
-  acquisitionCallout: {
-    position: "relative", overflow: "hidden", textAlign: "center", margin: "0 24px 10px",
-    background: "radial-gradient(circle at 50% 70%, rgba(212,175,55,0.20) 0%, rgba(6,6,6,0.92) 75%), radial-gradient(circle at 50% 50%, rgba(120,60,180,0.15) 0%, transparent 60%)", border: "1px solid rgba(212,175,55,0.25)", borderRadius: "12px", padding: "24px 20px",
-    boxShadow: "0 0 24px rgba(212,175,55,0.10), 0 0 20px rgba(120,60,180,0.15)",
-  },
-  acqLabel: { fontFamily: "'Roboto Mono', monospace", fontSize: "16px", textTransform: "uppercase", letterSpacing: "0.15em", color: "#D4AF37", marginBottom: "4px" },
-  acqSub: { fontFamily: "'Roboto Mono', monospace", fontSize: "17px", color: colors.textSecondary, marginBottom: "8px" },
-  acqAmount: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.2rem", color: "#D4AF37", lineHeight: 1, letterSpacing: "0.02em", textShadow: "0 0 30px rgba(212,175,55,0.4), 0 0 60px rgba(212,175,55,0.15)" },
+  acqAmount: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.4rem", color: "#D4AF37", lineHeight: 1, letterSpacing: "0.02em", textShadow: "0 0 30px rgba(212,175,55,0.4), 0 0 60px rgba(212,175,55,0.15)" },
 
-  waterfallTiersBox: {
-    position: "relative", overflow: "hidden", margin: "0 24px",
-    border: "1px solid rgba(212,175,55,0.25)", borderRadius: "12px", background: "rgba(6,6,6,0.92)",
-    boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 24px rgba(212,175,55,0.10), 0 0 20px rgba(120,60,180,0.15)",
-  },
-  tierRow: {
-    position: "relative", display: "grid", gridTemplateColumns: "auto 1fr auto",
-    gap: "16px", padding: "18px 20px", alignItems: "center",
-    borderBottom: "1px solid rgba(255,255,255,0.12)", cursor: "default",
-    borderLeft: "2px solid rgba(220,38,38,0.15)",
-  },
-  tierNum: {
-    fontFamily: "'Roboto Mono', monospace", fontSize: "13px", color: "rgb(180,140,255)",
-    background: "rgba(120,60,180,0.25)", border: "1px solid rgba(120,60,180,0.35)",
-    width: "34px", height: "34px", display: "flex", alignItems: "center", justifyContent: "center",
-    borderRadius: "6px", fontWeight: 600,
-    boxShadow: "0 0 16px rgba(120,60,180,0.35), 0 0 32px rgba(120,60,180,0.25)",
-  },
-  tierName: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.6rem", color: "#fff", lineHeight: 1.3, textTransform: "uppercase", letterSpacing: "0.02em" },
-  tierAmt: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "rgba(220,38,38,0.85)", textAlign: "right", whiteSpace: "nowrap", letterSpacing: "0.02em" },
-  tierMinus: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "rgba(220,38,38,0.70)", marginRight: "4px", fontWeight: 400 },
-
-  /* Flow diagram */
-  flowDiagram: { margin: "16px 24px 0" },
-  netBackend: {
-    position: "relative", textAlign: "center", background: "rgba(6,6,6,0.92)", border: "1px solid rgba(60,179,113,0.35)",
-    borderRadius: "12px", padding: "24px 20px", zIndex: 2, boxShadow: "0 8px 24px rgba(0,0,0,0.5), 0 0 30px rgba(60,179,113,0.15), 0 0 20px rgba(120,60,180,0.15)",
-  },
-  netLabel: { fontFamily: "'Roboto Mono', monospace", fontSize: "13px", textTransform: "uppercase", letterSpacing: "0.15em", color: colors.textPrimary, marginBottom: "8px" },
-  netAmount: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.2rem", color: "#3CB371", lineHeight: 0.9, letterSpacing: "0.02em", textShadow: "0 0 24px rgba(60,179,113,0.35)" },
-  pipeNetwork: { display: "flex", flexDirection: "column", alignItems: "center", marginTop: "-1px", position: "relative", zIndex: 1 },
-  pipeVertical: { width: "2px", height: "18px", background: "rgba(60,179,113,0.50)", boxShadow: "0 0 8px rgba(120,60,180,0.15)" },
-  pipeFork: { display: "flex", width: "calc(50% + 10px)" },
-  pipeLeft: { flex: 1, height: "18px", borderTop: "2px solid rgba(60,179,113,0.50)", borderLeft: "2px solid rgba(60,179,113,0.50)", borderRadius: "6px 0 0 0" },
-  pipeRight: { flex: 1, height: "18px", borderTop: "2px solid rgba(60,179,113,0.50)", borderRight: "2px solid rgba(60,179,113,0.50)", borderRadius: "0 6px 0 0" },
-  buckets: { display: "flex", gap: "10px", marginTop: "-1px" },
-  bucket: {
-    flex: 1, textAlign: "center", background: "rgba(6,6,6,0.92)", border: "1px solid rgba(60,179,113,0.25)",
-    borderTop: "2px solid #3CB371", borderRadius: "0 0 10px 10px", padding: "16px 12px",
-  },
-  bucketLabel: { fontFamily: "'Roboto Mono', monospace", fontSize: "13px", textTransform: "uppercase", letterSpacing: "0.15em", color: colors.textPrimary, marginBottom: "8px" },
-  bucketAmount: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "2rem", color: "#3CB371", lineHeight: 1, textShadow: "0 0 20px rgba(60,179,113,0.30)" },
-  bucketPct: { fontFamily: "'Roboto Mono', monospace", fontSize: "13px", color: "rgba(255,255,255,0.88)", marginTop: "5px" },
   waterfallNote: { fontFamily: "'Inter', sans-serif", fontSize: "14px", textAlign: "center", color: "rgba(255,255,255,0.55)", letterSpacing: "0.02em", padding: "20px 24px 0" },
 
   /* ── § 4 WHY THIS MATTERS ── */
@@ -1024,31 +979,14 @@ const styles: Record<string, React.CSSProperties> = {
     background: "radial-gradient(ellipse at 50% 0%, rgba(60,179,113,0.07) 0%, rgba(6,6,6,0.92) 70%)",
     boxShadow: "0 16px 40px rgba(0,0,0,0.5), 0 0 40px rgba(60,179,113,0.06), 0 0 20px rgba(120,60,180,0.15)",
   },
-  tierCardAnalysis: {
-    position: "relative", borderRadius: "12px", overflow: "hidden", textAlign: "left",
-    border: "none",
-    background: "radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.08) 0%, rgba(6,6,6,0.92) 70%)",
-    boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 30px rgba(120,60,180,0.15)",
-  },
-  tierCardPackage: {
-    position: "relative", borderRadius: "12px", overflow: "hidden", textAlign: "left",
-    border: "none",
-    background: "radial-gradient(ellipse at 50% 0%, rgba(120,60,180,0.08) 0%, rgba(212,175,55,0.06) 30%, rgba(6,6,6,0.92) 70%)",
-    boxShadow: "0 16px 40px rgba(0,0,0,0.8), 0 0 60px rgba(120,60,180,0.15), 0 0 120px rgba(120,60,180,0.12)",
-  },
 
   /* Headers */
   tierHeaderFree: {
     padding: "28px 24px 20px", borderBottom: "1px solid rgba(60,179,113,0.12)",
     background: "radial-gradient(circle at 80px 40px, rgba(60,179,113,0.12) 0%, transparent 50%)",
   },
-  tierHeaderAlt: {
-    padding: "28px 24px 20px", borderBottom: "1px solid rgba(255,255,255,0.12)",
-    background: "radial-gradient(circle at 80px 40px, rgba(212,175,55,0.10) 0%, transparent 50%)",
-  },
   tierTitleCard: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "2.6rem", color: "#fff", lineHeight: 1, letterSpacing: "0.04em", marginBottom: "8px" },
   tierSubFree: { fontFamily: "'Inter', sans-serif", fontSize: "18px", color: "rgba(255,255,255,0.88)", marginTop: "6px" },
-  tierSubGold: { fontFamily: "'Inter', sans-serif", fontSize: "18px", color: "rgba(212,175,55,0.80)", lineHeight: 1.4 },
 
   /* Badges */
   tierBadgeFree: {
@@ -1056,18 +994,6 @@ const styles: Record<string, React.CSSProperties> = {
     padding: "6px 12px", borderRadius: "4px", letterSpacing: "0.15em",
     background: "rgba(60,179,113,0.08)", color: "#3CB371", border: "1px solid rgba(60,179,113,0.30)",
     whiteSpace: "nowrap", flexShrink: 0,
-  },
-  badgeGold: {
-    display: "inline-block", fontFamily: "'Roboto Mono', monospace", fontSize: "11px", textTransform: "uppercase",
-    letterSpacing: "0.15em", color: "#D4AF37", background: "rgba(212,175,55,0.08)",
-    border: "1px solid rgba(212,175,55,0.35)",
-    padding: "6px 12px", borderRadius: "4px", fontWeight: 600, whiteSpace: "nowrap",
-  },
-  badgePurple: {
-    display: "inline-block", fontFamily: "'Roboto Mono', monospace", fontSize: "11px", textTransform: "uppercase",
-    letterSpacing: "0.15em", color: "rgb(180,140,255)", background: "rgba(120,60,180,0.15)",
-    border: "1px solid rgba(120,60,180,0.35)",
-    padding: "6px 12px", borderRadius: "4px", fontWeight: 600, whiteSpace: "nowrap",
   },
 
   /* Value statements */
@@ -1079,24 +1005,6 @@ const styles: Record<string, React.CSSProperties> = {
   valueTextFree: {
     fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "#3CB371", lineHeight: 1,
     letterSpacing: "0.02em", textShadow: "0 0 20px rgba(60,179,113,0.25)",
-  },
-  valueStatementGold: {
-    padding: "20px 24px", textAlign: "center",
-    background: "rgba(212,175,55,0.08)",
-    borderTop: "1px solid rgba(212,175,55,0.15)", borderBottom: "1px solid rgba(212,175,55,0.15)",
-  },
-  valueTextGold: {
-    fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "#D4AF37", lineHeight: 1,
-    letterSpacing: "0.02em", textShadow: "0 0 20px rgba(212,175,55,0.15)",
-  },
-  valueStatementPurple: {
-    padding: "20px 24px", textAlign: "center",
-    background: "rgba(120,60,180,0.12)",
-    borderTop: "1px solid rgba(120,60,180,0.15)", borderBottom: "1px solid rgba(120,60,180,0.15)",
-  },
-  valueTextPurple: {
-    fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "rgb(200,170,255)", lineHeight: 1,
-    letterSpacing: "0.02em", textShadow: "0 0 20px rgba(120,60,180,0.20)",
   },
 
   /* Features list */
@@ -1110,25 +1018,6 @@ const styles: Record<string, React.CSSProperties> = {
     color: "#3CB371", background: "rgba(60,179,113,0.10)", border: "1px solid rgba(60,179,113,0.25)",
     padding: "18px", borderRadius: "6px", cursor: "pointer",
   },
-  btnGold: {
-    display: "block", width: "100%", textAlign: "center",
-    fontFamily: "'Roboto Mono', monospace", fontSize: "16px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.10em",
-    color: "#D4AF37", background: "rgba(212,175,55,0.10)", border: "1px solid rgba(212,175,55,0.30)",
-    padding: "18px", borderRadius: "6px", cursor: "pointer",
-  },
-  btnPackage: {
-    position: "relative", overflow: "hidden", display: "block", width: "100%", textAlign: "center",
-    fontFamily: "'Roboto Mono', monospace", fontSize: "18px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.12em",
-    color: "#fff", background: "linear-gradient(135deg, rgb(75,30,130) 0%, rgb(110,50,170) 100%)", border: "none", padding: "18px", borderRadius: "6px", cursor: "pointer",
-    boxShadow: "0 0 24px rgba(120,60,180,0.35), 0 0 60px rgba(212,175,55,0.10)",
-  },
-  btnPurpleOutline: {
-    display: "block", width: "100%", textAlign: "center",
-    fontFamily: "'Roboto Mono', monospace", fontSize: "16px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.10em",
-    color: "rgb(180,140,255)", background: "rgba(120,60,180,0.12)", border: "1px solid rgba(120,60,180,0.30)",
-    padding: "18px", borderRadius: "6px", cursor: "pointer",
-  },
-  detailsLink: { display: "block", textAlign: "center", fontFamily: "'Inter', sans-serif", fontSize: "16px", color: "rgba(255,255,255,0.88)", textDecoration: "none", marginTop: "16px", cursor: "pointer", padding: "8px 0" },
 
   /* ── Top line helpers ── */
   topLineGold: {
@@ -1138,10 +1027,6 @@ const styles: Record<string, React.CSSProperties> = {
   topLineGoldHalf: {
     position: "absolute", top: 0, left: 0, right: 0, height: "2px",
     background: "linear-gradient(to right, transparent 0%, rgba(120,60,180,0.30) 20%, rgba(212,175,55,0.35) 50%, rgba(120,60,180,0.30) 80%, transparent 100%)",
-  },
-  topLineGoldThick: {
-    position: "absolute", top: 0, left: 0, right: 0, height: "2px",
-    background: "linear-gradient(90deg, transparent, #D4AF37, transparent)",
   },
   topLineGoldBright: {
     position: "absolute", top: 0, left: 0, right: 0, height: "2px",

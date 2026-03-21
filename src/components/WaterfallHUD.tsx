@@ -37,25 +37,27 @@ export default function WaterfallHUD({ sectionRef, tierRefs, tierAmounts }: Wate
   const animFrameRef = useRef<number>(0);
   const deductedTiers = useRef<Set<number>>(new Set());
 
-  // Mount/unmount based on section visibility
+  // Mount/unmount based on context block top reaching pill nav
   useEffect(() => {
     const el = sectionRef.current;
     if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setVisible(entry.isIntersecting);
-        if (entry.isIntersecting && !mountedHaptic.current) {
-          haptics.medium();
-          mountedHaptic.current = true;
-        }
-        if (!entry.isIntersecting) {
-          mountedHaptic.current = false;
-        }
-      },
-      { threshold: 0.01 }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
+
+    const checkPosition = () => {
+      const rect = el.getBoundingClientRect();
+      const shouldShow = rect.top <= 56 && rect.bottom > 200;
+      setVisible(shouldShow);
+      if (shouldShow && !mountedHaptic.current) {
+        haptics.medium();
+        mountedHaptic.current = true;
+      }
+      if (!shouldShow) {
+        mountedHaptic.current = false;
+      }
+    };
+
+    window.addEventListener('scroll', checkPosition, { passive: true });
+    checkPosition();
+    return () => window.removeEventListener('scroll', checkPosition);
   }, [sectionRef, haptics]);
 
   // Track tier card intersections for HUD deduction
@@ -128,8 +130,6 @@ export default function WaterfallHUD({ sectionRef, tierRefs, tierAmounts }: Wate
     return () => cancelAnimationFrame(animFrameRef.current);
   }, [targetValue]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  if (!visible) return null;
-
   const pct = displayValue / TOTAL_ACQUISITION;
   const color = getColorForPercent(pct);
   const gaugeGradient = getGaugeGradient(pct);
@@ -146,8 +146,9 @@ export default function WaterfallHUD({ sectionRef, tierRefs, tierAmounts }: Wate
         WebkitBackdropFilter: "blur(24px)",
         borderBottom: "2px solid rgba(120,60,180,0.40)",
         padding: collapsed ? "8px 24px" : "16px 24px 12px",
-        transition: "opacity 300ms ease, padding 300ms ease-out, height 300ms ease-out",
-        opacity: 1,
+        transform: visible ? "translateY(0)" : "translateY(-100%)",
+        opacity: visible ? 1 : 0,
+        transition: "transform 300ms ease-out, opacity 200ms ease-out, padding 300ms ease-out",
       }}
     >
       {/* Full mode: labels + values */}
@@ -157,7 +158,6 @@ export default function WaterfallHUD({ sectionRef, tierRefs, tierAmounts }: Wate
             display: "flex",
             justifyContent: "space-between",
             alignItems: "flex-end",
-            transition: "opacity 300ms ease-out",
           }}
         >
           <div>
