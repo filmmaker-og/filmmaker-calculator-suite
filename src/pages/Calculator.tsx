@@ -413,13 +413,6 @@ const Calculator = () => {
         return (
           <>
             <ProgressBar activeTab={activeTab} />
-            <CalcHero
-              stepLabel="Step 01 · Budget"
-              title="What Does It"
-              titleGold="Cost?"
-              subtitle="Total negative cost — everything to deliver the film."
-              visible={true}
-            />
             {renderContextBar()}
             <BudgetTab
               inputs={inputs}
@@ -434,13 +427,6 @@ const Calculator = () => {
         return (
           <>
             <ProgressBar activeTab={activeTab} />
-            <CalcHero
-              stepLabel="Step 02 · Capital Stack"
-              title="How's It"
-              titleGold="Funded?"
-              subtitle="Select the capital sources in your deal."
-              visible={true}
-            />
             {renderContextBar()}
             <StackTab
               inputs={inputs}
@@ -455,13 +441,6 @@ const Calculator = () => {
         return (
           <>
             <ProgressBar activeTab={activeTab} />
-            <CalcHero
-              stepLabel="Step 03 · Deal Terms"
-              title="What's The"
-              titleGold="Deal?"
-              subtitle="Acquisition price and distribution assumptions."
-              visible={true}
-            />
             {renderContextBar()}
             <DealTab
               inputs={inputs}
