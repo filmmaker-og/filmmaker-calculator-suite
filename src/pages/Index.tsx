@@ -293,7 +293,7 @@ const Index = () => {
       position: "relative", overflow: "hidden", borderRadius: "12px",
       background: "radial-gradient(circle at 50% 40px, rgba(220,38,38,0.15) 0%, transparent 60%), rgba(6,6,6,0.92)",
       border: "1px solid rgba(220,38,38,0.25)",
-      boxShadow: "0 12px 32px rgba(0,0,0,0.5), 0 0 16px rgba(220,38,38,0.06)",
+      boxShadow: "0 12px 32px rgba(0,0,0,0.5), 0 0 16px rgba(220,38,38,0.10)",
     };
     if (mode === 'pair') {
       return { ...base, padding: "10px 8px" };
@@ -492,8 +492,8 @@ const Index = () => {
                           <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: "linear-gradient(90deg, transparent, rgba(220,38,38,0.35), transparent)", zIndex: 1 }} />
                           <div style={wfBadgeGlow()} />
                           <div style={wfBadge()}>{groupCards[0].tier}</div>
-                          <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.25rem", color: "#fff", textTransform: "uppercase", marginBottom: "3px", textAlign: "center" }}>{groupCards[0].name}</div>
-                          <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.5rem", color: "rgba(220,38,38,0.88)", textAlign: "center" }}>–${groupCards[0].amount.toLocaleString()}</div>
+                          <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.3rem", color: "#fff", textTransform: "uppercase", marginBottom: "3px", textAlign: "center" }}>{groupCards[0].name}</div>
+                          <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.5rem", color: "rgba(220,38,38,0.88)", textAlign: "center", textShadow: "0 0 16px rgba(220,38,38,0.20)" }}>–${groupCards[0].amount.toLocaleString()}</div>
                         </div>
                         <div
                           key={groupCards[1].tier}
@@ -507,8 +507,8 @@ const Index = () => {
                           <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: "linear-gradient(90deg, transparent, rgba(220,38,38,0.35), transparent)", zIndex: 1 }} />
                           <div style={wfBadgeGlow()} />
                           <div style={wfBadge()}>{groupCards[1].tier}</div>
-                          <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.25rem", color: "#fff", textTransform: "uppercase", marginBottom: "3px", textAlign: "center" }}>{groupCards[1].name}</div>
-                          <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.5rem", color: "rgba(220,38,38,0.88)", textAlign: "center" }}>–${groupCards[1].amount.toLocaleString()}</div>
+                          <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.3rem", color: "#fff", textTransform: "uppercase", marginBottom: "3px", textAlign: "center" }}>{groupCards[1].name}</div>
+                          <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.5rem", color: "rgba(220,38,38,0.88)", textAlign: "center", textShadow: "0 0 16px rgba(220,38,38,0.20)" }}>–${groupCards[1].amount.toLocaleString()}</div>
                         </div>
                       </div>
                     ) : (
@@ -527,15 +527,16 @@ const Index = () => {
                           <div style={wfBadge()}>{tier.tier}</div>
                           <div style={{
                             fontFamily: "'Bebas Neue', sans-serif",
-                            fontSize: "1.35rem",
+                            fontSize: "1.3rem",
                             color: "#fff", textTransform: "uppercase", marginBottom: "3px",
                             textAlign: "center",
                           }}>{tier.name}</div>
                           <div style={{
                             fontFamily: "'Bebas Neue', sans-serif",
-                            fontSize: "1.7rem",
+                            fontSize: "1.6rem",
                             color: "rgba(220,38,38,0.88)",
                             textAlign: "center",
+                            textShadow: "0 0 16px rgba(220,38,38,0.20)",
                           }}>–${tier.amount.toLocaleString()}</div>
                         </div>
                       ))
@@ -556,7 +557,7 @@ const Index = () => {
             <div style={{
               position: "relative", overflow: "hidden", borderRadius: "12px", padding: "20px 16px", textAlign: "center",
               border: "1px solid rgba(220,38,38,0.25)",
-              background: "radial-gradient(ellipse at 50% 0%, rgba(220,38,38,0.10) 0%, rgba(6,6,6,0.92) 70%)",
+              background: "radial-gradient(ellipse at 50% 0%, rgba(220,38,38,0.15) 0%, rgba(6,6,6,0.92) 70%)",
               boxShadow: "0 12px 32px rgba(0,0,0,0.5), 0 0 20px rgba(220,38,38,0.08)",
             }}>
               <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: "linear-gradient(90deg, transparent, rgba(220,38,38,0.30), transparent)" }} />
@@ -589,7 +590,7 @@ const Index = () => {
                 transition: "background 500ms ease",
               }}
             >
-              <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: "linear-gradient(90deg, transparent, #3CB371, transparent)", boxShadow: "0 0 12px rgba(60,179,113,0.3)" }} />
+              <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: "linear-gradient(90deg, transparent, #3CB371, transparent)", boxShadow: "0 0 12px rgba(60,179,113,0.30)" }} />
               <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "3rem", color: "#3CB371", lineHeight: 1, textShadow: "0 0 24px rgba(60,179,113,0.35)" }}>
                 ${profitCountUp.toLocaleString()}
               </div>
@@ -680,11 +681,11 @@ const Index = () => {
               {/* Top line */}
               <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "1px", background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.50), transparent)", zIndex: 1 }} />
               <div style={styles.tierHeaderFree}>
-                <div style={{ marginBottom: "12px", textAlign: "center" }}>
+                <div style={{ marginBottom: "12px" }}>
                   <span style={styles.tierBadgeFree}>Free Access</span>
                 </div>
-                <p style={{ ...styles.tierTitleCard, textAlign: "center" }}>The Snapshot</p>
-                <p style={{ ...styles.tierSubFree, textAlign: "center" }}>Your waterfall. Modeled, visualized,{"\u00a0"}shareable.</p>
+                <p style={styles.tierTitleCard}>The Snapshot</p>
+                <p style={styles.tierSubFree}>Your waterfall. Modeled, visualized,{"\u00a0"}shareable.</p>
               </div>
               {/* Value statement */}
               <div style={styles.valueStatementFree}>
@@ -693,73 +694,42 @@ const Index = () => {
               {/* Features — 3 groups */}
               <div style={{ ...styles.tierFeatures, textAlign: "center" }}>
                 {/* Group: Model */}
-                <div style={{ display: "inline-block", textAlign: "left" }}>
+                <div style={{ display: "inline-block", textAlign: "left", marginBottom: "20px" }}>
                   <p style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.4rem", color: "#D4AF37", letterSpacing: "0.06em", marginBottom: "12px" }}>Model</p>
                   {["11-Tier Recoupment Waterfall", "Capital Stack Breakdown", "Investor / Producer Profit Split"].map((f, i) => (
                     <div key={i} style={{ display: "flex", gap: "14px", alignItems: "flex-start", marginBottom: i < 2 ? "12px" : "0" }}>
-                      <span style={{ fontSize: "20px", color: "#3CB371", flexShrink: 0, marginTop: "1px", textShadow: "0 0 10px rgba(60,179,113,0.6), 0 0 20px rgba(60,179,113,0.25)" }}>✓</span>
-                      <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "17px", fontWeight: 600, color: "rgba(255,255,255,0.92)", lineHeight: 1.3 }}>{f}</p>
+                      <span style={{ fontSize: "20px", color: "#3CB371", flexShrink: 0, marginTop: "1px", textShadow: "0 0 10px rgba(60,179,113,0.60), 0 0 20px rgba(60,179,113,0.25)" }}>✓</span>
+                      <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "18px", fontWeight: 500, color: "rgba(255,255,255,0.90)", lineHeight: 1.3 }}>{f}</p>
                     </div>
                   ))}
                 </div>
                 {/* Separator */}
-                <div style={{ height: "1px", background: "rgba(212,175,55,0.20)", margin: "4px 0" }} />
+                <div style={{ height: "1px", background: "rgba(212,175,55,0.20)", margin: "0 32px 20px" }} />
                 {/* Group: Analyze */}
-                <div style={{ display: "inline-block", textAlign: "left" }}>
+                <div style={{ display: "inline-block", textAlign: "left", marginBottom: "20px" }}>
                   <p style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.4rem", color: "#D4AF37", letterSpacing: "0.06em", marginBottom: "12px" }}>Analyze</p>
                   {["Break-Even Scenario Analysis", "Sensitivity on Key Variables", "Off-the-Top Fee Mapping"].map((f, i) => (
                     <div key={i} style={{ display: "flex", gap: "14px", alignItems: "flex-start", marginBottom: i < 2 ? "12px" : "0" }}>
-                      <span style={{ fontSize: "20px", color: "#3CB371", flexShrink: 0, marginTop: "1px", textShadow: "0 0 10px rgba(60,179,113,0.6), 0 0 20px rgba(60,179,113,0.25)" }}>✓</span>
-                      <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "17px", fontWeight: 600, color: "rgba(255,255,255,0.92)", lineHeight: 1.3 }}>{f}</p>
+                      <span style={{ fontSize: "20px", color: "#3CB371", flexShrink: 0, marginTop: "1px", textShadow: "0 0 10px rgba(60,179,113,0.60), 0 0 20px rgba(60,179,113,0.25)" }}>✓</span>
+                      <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "18px", fontWeight: 500, color: "rgba(255,255,255,0.90)", lineHeight: 1.3 }}>{f}</p>
                     </div>
                   ))}
                 </div>
                 {/* Separator */}
-                <div style={{ height: "1px", background: "rgba(212,175,55,0.20)", margin: "4px 0" }} />
+                <div style={{ height: "1px", background: "rgba(212,175,55,0.20)", margin: "0 32px 20px" }} />
                 {/* Group: Share */}
                 <div style={{ display: "inline-block", textAlign: "left" }}>
                   <p style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.4rem", color: "#D4AF37", letterSpacing: "0.06em", marginBottom: "12px" }}>Share</p>
                   {["Formatted PDF Export", "Shareable Web Link", "White-Labeled to Your Project"].map((f, i) => (
                     <div key={i} style={{ display: "flex", gap: "14px", alignItems: "flex-start", marginBottom: i < 2 ? "12px" : "0" }}>
-                      <span style={{ fontSize: "20px", color: "#3CB371", flexShrink: 0, marginTop: "1px", textShadow: "0 0 10px rgba(60,179,113,0.6), 0 0 20px rgba(60,179,113,0.25)" }}>✓</span>
-                      <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "17px", fontWeight: 600, color: "rgba(255,255,255,0.92)", lineHeight: 1.3 }}>{f}</p>
+                      <span style={{ fontSize: "20px", color: "#3CB371", flexShrink: 0, marginTop: "1px", textShadow: "0 0 10px rgba(60,179,113,0.60), 0 0 20px rgba(60,179,113,0.25)" }}>✓</span>
+                      <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "18px", fontWeight: 500, color: "rgba(255,255,255,0.90)", lineHeight: 1.3 }}>{f}</p>
                     </div>
                   ))}
                 </div>
               </div>
               <div style={styles.tierAction}>
                 <button onClick={handleCTA} style={styles.btnFree} aria-label="Run my waterfall" onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>RUN MY WATERFALL</button>
-              </div>
-            </div>
-          </div>
-          {/* Shop bridge card */}
-          <div style={{ margin: "28px 24px 32px" }}>
-            <div onClick={() => gatedNavigate("/store")} style={{
-              position: "relative", overflow: "hidden",
-              padding: "24px", textAlign: "center",
-              border: "1px solid rgba(120,60,180,0.30)",
-              borderRadius: "12px",
-              background: "radial-gradient(ellipse at 50% 100%, rgba(120,60,180,0.12) 0%, rgba(6,6,6,0.92) 70%)",
-              boxShadow: "0 12px 32px rgba(0,0,0,0.5), 0 0 30px rgba(120,60,180,0.12), 0 0 60px rgba(120,60,180,0.06)",
-              cursor: "pointer",
-            }}>
-              {/* Purple topline */}
-              <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px",
-                background: "linear-gradient(90deg, transparent, rgba(120,60,180,0.45), transparent)" }} />
-              {/* Purple atmospheric from bottom */}
-              <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "100%",
-                background: "radial-gradient(ellipse 80% 60% at 50% 100%, rgba(120,60,180,0.15) 0%, transparent 60%)",
-                pointerEvents: "none" }} />
-              <div style={{ position: "relative" }}>
-                <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "18px",
-                  color: "rgba(255,255,255,0.80)", lineHeight: 1.4, marginBottom: "10px" }}>
-                  Need investor-grade documents?
-                </p>
-                <p style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "2rem",
-                  color: "#D4AF37", letterSpacing: "0.04em", lineHeight: 1,
-                  textShadow: "0 0 20px rgba(212,175,55,0.20)" }}>
-                  See the Shop <span style={{ fontSize: "2.2rem" }}>→</span>
-                </p>
               </div>
             </div>
           </div>
@@ -770,18 +740,42 @@ const Index = () => {
         {/* ═══ § 6 REALITY ═══ */}
         <section style={styles.realitySection}>
           <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "180px", background: "radial-gradient(ellipse 100% 70% at 50% 0%, rgba(120,60,180,0.20) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
-          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "180px", background: "radial-gradient(ellipse 100% 70% at 50% 0%, rgba(120,60,180,0.20) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
           <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "240px", background: "radial-gradient(ellipse 80% 100% at 30% 100%, rgba(120,60,180,0.18) 0%, transparent 65%)", pointerEvents: "none", zIndex: 0 }} />
-          <div style={{ position: "relative" }}>
-            <div style={{ position: "absolute", top: "-30px", left: "-24px", right: "-24px", bottom: "-20px", background: "linear-gradient(to bottom, rgba(120,60,180,0.18) 0%, rgba(120,60,180,0.10) 60%, transparent 100%)", pointerEvents: "none", zIndex: 0 }} />
-            <blockquote ref={realityQuoteRef} style={{ ...styles.blockquote, position: "relative", zIndex: 1, ...reveal(realityQuoteVisible) }}>
-            The waterfall either costs you now — or costs you everything <span style={{ color: "#D4AF37" }}>later</span>.
-          </blockquote>
+          <div
+            ref={realityQuoteRef}
+            style={{
+              position: "relative",
+              overflow: "hidden",
+              borderRadius: "12px",
+              border: "1px solid rgba(212,175,55,0.25)",
+              padding: "28px 24px",
+              textAlign: "center",
+              background: "radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.10) 0%, rgba(6,6,6,0.92) 65%)",
+              boxShadow: "0 12px 32px rgba(0,0,0,0.6), 0 0 24px rgba(212,175,55,0.08), 0 0 20px rgba(120,60,180,0.10)",
+              marginBottom: "24px",
+              ...reveal(realityQuoteVisible),
+            }}
+          >
+            {/* Topline */}
+            <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.40), transparent)" }} />
+            {/* Purple atmospheric from bottom */}
+            <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "100%", background: "radial-gradient(ellipse 80% 60% at 50% 100%, rgba(120,60,180,0.12) 0%, transparent 60%)", pointerEvents: "none" }} />
+            <p style={{
+              position: "relative",
+              fontFamily: "'Bebas Neue', sans-serif",
+              fontSize: "2.2rem",
+              color: "#fff",
+              lineHeight: 1,
+              letterSpacing: "0.02em",
+            }}>
+              The waterfall either costs you now — or costs you everything{" "}
+              <span style={{ color: "#D4AF37", textShadow: "0 0 20px rgba(212,175,55,0.30)" }}>later.</span>
+            </p>
           </div>
 
           <div ref={realityGridRef} style={{ ...styles.checkGrid, ...reveal(realityGridVisible) }}>
-            <div style={{ position: "absolute", top: 0, left: 0, right: "50%", height: "1px", background: "linear-gradient(90deg, transparent, rgba(60,179,113,0.5), transparent)", zIndex: 1 }} />
-            <div style={{ position: "absolute", top: 0, left: "50%", right: 0, height: "1px", background: "linear-gradient(90deg, transparent, rgba(220,38,38,0.4), transparent)", zIndex: 1 }} />
+            <div style={{ position: "absolute", top: 0, left: 0, right: "50%", height: "1px", background: "linear-gradient(90deg, transparent, rgba(60,179,113,0.60), transparent)", zIndex: 1 }} />
+            <div style={{ position: "absolute", top: 0, left: "50%", right: 0, height: "1px", background: "linear-gradient(90deg, transparent, rgba(220,38,38,0.50), transparent)", zIndex: 1 }} />
             {/* Header */}
             <div style={styles.checkHeader}>
               <div style={styles.checkHeaderWith}><span style={styles.checkHeaderWithText}>WITH</span></div>
@@ -789,7 +783,7 @@ const Index = () => {
             </div>
             {/* Rows */}
             {withItems.map((withItem, i) => (
-              <div key={i} style={{ ...styles.checkRow, borderBottom: i < withItems.length - 1 ? "1px solid rgba(255,255,255,0.12)" : "none" }}>
+              <div key={i} style={{ ...styles.checkRow, borderBottom: i < withItems.length - 1 ? "1px solid rgba(255,255,255,0.08)" : "none" }}>
                 <div style={styles.checkCellLeft}>
                   <span style={styles.checkIconYes}>✓</span>
                   <span style={styles.checkTextYes}>{withItem}</span>
@@ -808,7 +802,7 @@ const Index = () => {
         {/* ═══ § 7 CLOSER ═══ */}
         <section ref={closerRef} style={{ ...styles.closerSection, ...reveal(closerVisible) }}>
           <div style={styles.closerGlowOverlay} />
-          <h2 style={styles.closerH2}>Your Investors<br /><span style={{ color: "#D4AF37", display: "block", textShadow: "0 0 40px rgba(212,175,55,0.6), 0 0 80px rgba(212,175,55,0.25)" }}>Will Ask.</span></h2>
+          <h2 style={styles.closerH2}>Your Investors<br /><span style={{ color: "#D4AF37", display: "block", textShadow: "0 0 40px rgba(212,175,55,0.60), 0 0 80px rgba(212,175,55,0.25)" }}>Will Ask.</span></h2>
           <p style={styles.closerBody}>Stop guessing your backend. Walk into every pitch knowing exactly where the money goes.</p>
           <button onClick={handleCTA} style={styles.ctaBtn} aria-label="Run my waterfall" onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>
             <span style={{ position: "relative", zIndex: 1 }}>RUN MY WATERFALL</span>
@@ -905,6 +899,7 @@ const styles: Record<string, React.CSSProperties> = {
     backdropFilter: "blur(40px)",
     WebkitBackdropFilter: "blur(40px)",
     border: "1px solid rgba(212,175,55,0.20)",
+    boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 24px rgba(212,175,55,0.10), 0 0 20px rgba(120,60,180,0.15)",
   },
   heroGlow: {
     position: "absolute", top: 0, left: 0, right: 0, bottom: 0, pointerEvents: "none",
@@ -916,7 +911,7 @@ const styles: Record<string, React.CSSProperties> = {
     textAlign: "center", marginBottom: "4px", lineHeight: 0.86, letterSpacing: "0.01em",
     textShadow: "0 2px 20px rgba(0,0,0,0.95), 0 4px 40px rgba(0,0,0,0.5)",
   },
-  heroEm: { fontStyle: "normal", color: "#D4AF37", display: "block", textShadow: "0 2px 20px rgba(0,0,0,0.8), 0 0 40px rgba(212,175,55,0.5), 0 0 80px rgba(212,175,55,0.25)" },
+  heroEm: { fontStyle: "normal", color: "#D4AF37", display: "block", textShadow: "0 2px 20px rgba(0,0,0,0.8), 0 0 40px rgba(212,175,55,0.50), 0 0 80px rgba(212,175,55,0.25)" },
   heroMid: { display: "block", color: "#fff", fontStyle: "normal", textShadow: "0 2px 16px rgba(0,0,0,0.9)" },
   heroSub: {
     fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.5rem", textAlign: "center",
@@ -939,7 +934,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
   stepLine: {
     position: "absolute", top: "57px", bottom: "-23px", left: "50%", transform: "translateX(-50%)", width: "1px",
-    background: "linear-gradient(180deg, rgba(120,60,180,0.6) 0%, rgba(120,60,180,0.1) 100%)", zIndex: 0,
+    background: "linear-gradient(180deg, rgba(120,60,180,0.60) 0%, rgba(120,60,180,0.10) 100%)", zIndex: 0,
   },
   stepNumBadge: {
     position: "relative", zIndex: 1, width: "48px", height: "48px", borderRadius: "50%",
@@ -959,7 +954,7 @@ const styles: Record<string, React.CSSProperties> = {
     lineHeight: 1.55, textAlign: "center", padding: "0 24px", marginBottom: "24px",
     maxWidth: "380px", marginLeft: "auto", marginRight: "auto",
   },
-  acqAmount: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.2rem", color: "#D4AF37", lineHeight: 1, letterSpacing: "0.02em", textShadow: "0 0 30px rgba(212,175,55,0.4), 0 0 60px rgba(212,175,55,0.15)" },
+  acqAmount: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.2rem", color: "#D4AF37", lineHeight: 1, letterSpacing: "0.02em", textShadow: "0 0 30px rgba(212,175,55,0.40), 0 0 60px rgba(212,175,55,0.15)" },
 
 
   /* ── § 4 WHY THIS MATTERS ── */
@@ -990,10 +985,10 @@ const styles: Record<string, React.CSSProperties> = {
 
   /* Card containers */
   tierCardFree: {
-    position: "relative", borderRadius: "12px", overflow: "hidden", textAlign: "left",
+    position: "relative", borderRadius: "12px", overflow: "hidden", textAlign: "center",
     border: "none",
-    background: "radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.07) 0%, rgba(6,6,6,0.92) 70%)",
-    boxShadow: "0 16px 40px rgba(0,0,0,0.5), 0 0 40px rgba(212,175,55,0.08), 0 0 20px rgba(120,60,180,0.15)",
+    background: "radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.12) 0%, rgba(6,6,6,0.92) 70%)",
+    boxShadow: "0 16px 40px rgba(0,0,0,0.5), 0 0 40px rgba(212,175,55,0.12), 0 0 20px rgba(120,60,180,0.15)",
   },
 
   /* Headers */
@@ -1002,7 +997,7 @@ const styles: Record<string, React.CSSProperties> = {
     background: "radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.10) 0%, transparent 60%), rgba(6,6,6,0.92)",
     textAlign: "center",
   },
-  tierTitleCard: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "2.6rem", color: "#fff", lineHeight: 1, letterSpacing: "0.04em", marginBottom: "8px" },
+  tierTitleCard: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "2.4rem", color: "#fff", lineHeight: 1, letterSpacing: "0.04em", marginBottom: "8px" },
   tierSubFree: { fontFamily: "'Inter', sans-serif", fontSize: "18px", color: "rgba(255,255,255,0.88)", marginTop: "6px" },
 
   /* Badges */
@@ -1050,39 +1045,34 @@ const styles: Record<string, React.CSSProperties> = {
 
   /* ── § 6 REALITY ── */
   realitySection: { position: "relative", background: "#000", textAlign: "left", padding: "48px 24px 24px" },
-  blockquote: {
-    fontFamily: "'Bebas Neue', sans-serif", fontSize: "2.4rem", lineHeight: 0.95, color: "#fff",
-    borderLeft: "3px solid #D4AF37", paddingLeft: "20px", marginBottom: "24px",
-    boxShadow: "-4px 0 24px rgba(212,175,55,0.25), -8px 0 40px rgba(120,60,180,0.15)",
-  },
   checkGrid: {
     position: "relative", border: "1px solid rgba(120,60,180,0.30)", borderRadius: "12px", overflow: "hidden",
     boxShadow: "0 8px 32px rgba(0,0,0,0.5), 0 0 20px rgba(120,60,180,0.15)",
   },
   checkHeader: {
-    display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1px", background: "rgba(255,255,255,0.12)",
+    display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1px", background: "rgba(255,255,255,0.08)",
     borderBottom: "1px solid rgba(212,175,55,0.15)",
   },
-  checkHeaderWith: { background: "rgba(60,179,113,0.14)", padding: "14px 16px" },
-  checkHeaderWithout: { background: "rgba(6,6,6,0.92)", padding: "14px 16px", borderLeft: "1px solid rgba(255,255,255,0.12)" },
+  checkHeaderWith: { background: "radial-gradient(ellipse 80% 100% at 50% 100%, rgba(60,179,113,0.20) 0%, rgba(6,6,6,0.92) 70%)", padding: "14px 16px", borderBottom: "1px solid rgba(60,179,113,0.20)" },
+  checkHeaderWithout: { background: "radial-gradient(ellipse 80% 100% at 50% 100%, rgba(220,38,38,0.10) 0%, rgba(6,6,6,0.92) 70%)", padding: "14px 16px", borderLeft: "1px solid rgba(255,255,255,0.08)", borderBottom: "1px solid rgba(220,38,38,0.12)" },
   checkHeaderWithText: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.6rem", color: "#3CB371", letterSpacing: "0.04em" },
-  checkHeaderWithoutText: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.6rem", color: "rgba(255,255,255,0.55)", letterSpacing: "0.04em" },
+  checkHeaderWithoutText: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.6rem", color: "rgba(220,38,38,0.70)", letterSpacing: "0.04em" },
   checkRow: {
-    display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1px", background: "rgba(255,255,255,0.12)",
-    borderBottom: "1px solid rgba(255,255,255,0.12)",
+    display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1px", background: "rgba(255,255,255,0.08)",
+    borderBottom: "1px solid rgba(255,255,255,0.08)",
   },
   checkCellLeft: {
-    background: "rgba(60,179,113,0.10)", display: "grid", gridTemplateColumns: "22px 1fr", gap: "10px",
+    background: "radial-gradient(circle at 16px 50%, rgba(60,179,113,0.12) 0%, transparent 50%)", display: "grid", gridTemplateColumns: "22px 1fr", gap: "10px",
     padding: "14px 16px", alignItems: "flex-start",
   },
   checkCellRight: {
-    background: "rgba(6,6,6,0.92)", display: "grid", gridTemplateColumns: "22px 1fr", gap: "10px",
-    padding: "14px 16px", alignItems: "flex-start", borderLeft: "1px solid rgba(255,255,255,0.12)",
+    background: "radial-gradient(circle at 16px 50%, rgba(220,38,38,0.08) 0%, transparent 50%)", display: "grid", gridTemplateColumns: "22px 1fr", gap: "10px",
+    padding: "14px 16px", alignItems: "flex-start", borderLeft: "1px solid rgba(255,255,255,0.08)",
   },
-  checkIconYes: { fontFamily: "'Roboto Mono', monospace", fontSize: "24px", paddingTop: "2px", color: "#3CB371", textShadow: "0 0 8px rgba(60,179,113,0.6), 0 0 20px rgba(60,179,113,0.3)" },
-  checkIconNo: { fontFamily: "'Roboto Mono', monospace", fontSize: "24px", paddingTop: "2px", color: "rgba(220,38,38,0.85)", textShadow: "0 0 8px rgba(220,38,38,0.6), 0 0 20px rgba(220,38,38,0.3)" },
+  checkIconYes: { fontFamily: "'Roboto Mono', monospace", fontSize: "24px", paddingTop: "2px", color: "#3CB371", textShadow: "0 0 8px rgba(60,179,113,0.60), 0 0 20px rgba(60,179,113,0.30)" },
+  checkIconNo: { fontFamily: "'Roboto Mono', monospace", fontSize: "24px", paddingTop: "2px", color: "rgba(220,38,38,0.85)", textShadow: "0 0 8px rgba(220,38,38,0.60), 0 0 20px rgba(220,38,38,0.30)" },
   checkTextYes: { fontFamily: "'Inter', sans-serif", fontSize: "16px", lineHeight: 1.4, color: "rgba(255,255,255,0.88)" },
-  checkTextNo: { fontFamily: "'Inter', sans-serif", fontSize: "16px", lineHeight: 1.4, color: "rgba(255,255,255,0.88)" },
+  checkTextNo: { fontFamily: "'Inter', sans-serif", fontSize: "16px", lineHeight: 1.4, color: "rgba(255,255,255,0.70)" },
 
   /* ── § 7 CLOSER ── */
   closerSection: {
