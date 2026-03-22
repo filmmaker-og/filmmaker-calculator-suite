@@ -302,8 +302,8 @@ const s: Record<string, React.CSSProperties> = {
     alignItems: "center",
     justifyContent: "center",
     gap: 4,
-    minHeight: 48,
-    marginTop: 14,
+    minHeight: 44,
+    marginTop: 10,
     fontFamily: "'Inter', sans-serif",
     fontSize: 13,
     color: "rgba(255,255,255,0.40)",
@@ -313,13 +313,14 @@ const s: Record<string, React.CSSProperties> = {
     width: "100%",
   },
   autosave: {
-    textAlign: "right",
+    textAlign: "center",
     fontFamily: "'Roboto Mono', monospace",
     fontSize: 9,
     letterSpacing: "0.1em",
     textTransform: "uppercase",
     color: "rgba(255,255,255,0.30)",
-    marginTop: 16,
+    marginTop: 12,
+    marginBottom: 80,
   },
 };
 
