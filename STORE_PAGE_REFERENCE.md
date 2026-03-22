@@ -219,6 +219,8 @@ All primary CTAs on the Store are solid fills. Base pattern:
 | `btnCta` | `#000` | `#F9E076` | `0 0 20px rgba(249,224,118,0.3), 0 0 60px rgba(249,224,118,0.1)` |
 | `btnPurple` | `#fff` | gradient | `0 0 24px rgba(120,60,180,0.35), 0 0 60px rgba(212,175,55,0.10)` |
 
+Purple CTA differentiation (intentional): btnPurple uses fontSize: 18px and fontWeight: 600 — deliberately different from the 16px/700 standard on gold and green CTAs. The slightly larger, lighter weight gives turnkey-tier buttons (Producer's Package, Boutique) a more luxurious, less transactional presence. This is a brand signal, not an inconsistency. Do not normalize to 16px/700.
+
 ### Outline Buttons (secondary actions)
 
 ```tsx

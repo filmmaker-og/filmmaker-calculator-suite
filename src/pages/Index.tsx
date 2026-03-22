@@ -674,9 +674,9 @@ const Index = () => {
             {/* ── Card 1: The Snapshot (Free) — GOLD ── */}
             <div ref={arsenalCoreRef} style={{ ...styles.tierCardFree, ...reveal(arsenalCoreVisible) }}>
               {/* Gradient border */}
-              <div style={{ position: "absolute", inset: 0, borderRadius: "12px", padding: "1px", pointerEvents: "none", background: "linear-gradient(180deg, rgba(212,175,55,0.45) 0%, rgba(212,175,55,0.18) 50%, rgba(212,175,55,0.30) 100%)", WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)", WebkitMaskComposite: "xor", maskComposite: "exclude" }} />
+              <div style={{ position: "absolute", inset: 0, borderRadius: "12px", padding: "1px", pointerEvents: "none", background: "linear-gradient(180deg, rgba(212,175,55,0.55) 0%, rgba(212,175,55,0.20) 50%, rgba(212,175,55,0.40) 100%)", WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)", WebkitMaskComposite: "xor", maskComposite: "exclude" }} />
               {/* Top line */}
-              <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "1px", background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.50), transparent)", zIndex: 1 }} />
+              <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "1px", background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.50), transparent)", boxShadow: "0 0 12px rgba(212,175,55,0.25)", zIndex: 1 }} />
               {/* Value statement */}
               <div style={styles.valueStatementFree}>
                 <p style={styles.valueTextFree}>Your Numbers. No Credit Card.</p>
@@ -979,15 +979,15 @@ const styles: Record<string, React.CSSProperties> = {
   tierCardFree: {
     position: "relative", borderRadius: "12px", overflow: "hidden", textAlign: "center",
     border: "none",
-    background: "radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.12) 0%, rgba(6,6,6,0.92) 70%)",
-    boxShadow: "0 16px 40px rgba(0,0,0,0.5), 0 0 40px rgba(212,175,55,0.12), 0 0 20px rgba(120,60,180,0.15)",
+    background: "radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.16) 0%, rgba(6,6,6,0.92) 70%)",
+    boxShadow: "0 16px 40px rgba(0,0,0,0.5), 0 0 40px rgba(212,175,55,0.16), 0 0 20px rgba(120,60,180,0.18)",
   },
 
   /* Headers */
   /* Value statements */
   valueStatementFree: {
     padding: "24px 24px", textAlign: "center",
-    background: "radial-gradient(ellipse 100% 100% at 50% 50%, rgba(212,175,55,0.10) 0%, rgba(6,6,6,0.92) 80%)",
+    background: "radial-gradient(ellipse 100% 100% at 50% 50%, rgba(212,175,55,0.14) 0%, rgba(6,6,6,0.92) 80%)",
     borderBottom: "1px solid rgba(212,175,55,0.15)",
   },
   valueTextFree: {
