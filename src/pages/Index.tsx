@@ -87,6 +87,7 @@ const Index = () => {
   // Reality — blockquote and grid separately
   const { ref: realityQuoteRef, inView: realityQuoteVisible } = useInView<HTMLDivElement>({ threshold: 0.3 });
   const { ref: realityGridRef, inView: realityGridVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
+  const { ref: profitCardRef, inView: profitCardVisible } = useInView<HTMLDivElement>({ threshold: 0.1 });
   const { ref: closerRef, inView: closerVisible } = useInView<HTMLDivElement>({ threshold: 0.2 });
   const { ref: footerRef, inView: footerVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
 
@@ -116,7 +117,7 @@ const Index = () => {
   const [profitCountUp, setProfitCountUp] = useState(0);
   const [profitGlowIntensity, setProfitGlowIntensity] = useState(0.18);
   const profitAnimRef = useRef<number>(0);
-  const profitCardRef = useRef<HTMLDivElement | null>(null);
+
 
   const badgeCards = [
     { num: "1", title: "Don't Sell The Same Dollar Twice", body: "Track exactly where the money goes so you never over-promise equity and accidentally collapse your own backend." },
@@ -166,34 +167,26 @@ const Index = () => {
     },
   ];
 
-  // Profit celebration observer
   useEffect(() => {
-    const el = profitCardRef.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting && !profitCelebrated) {
-        setProfitCelebrated(true);
-        haptics.success();
-        setProfitGlowIntensity(0.28);
-        setTimeout(() => setProfitGlowIntensity(0.18), 600);
-        // Count up from 0 to NET_PROFIT over 600ms
-        const duration = 600;
-        const startTime = performance.now();
-        const tick = (now: number) => {
-          const elapsed = now - startTime;
-          const progress = Math.min(elapsed / duration, 1);
-          const eased = 1 - Math.pow(1 - progress, 3);
-          setProfitCountUp(Math.round(NET_PROFIT * eased));
-          if (progress < 1) {
-            profitAnimRef.current = requestAnimationFrame(tick);
-          }
-        };
-        profitAnimRef.current = requestAnimationFrame(tick);
-      }
-    }, { threshold: 0.1, rootMargin: "0px 0px 80px 0px" });
-    observer.observe(el);
-    return () => { observer.disconnect(); cancelAnimationFrame(profitAnimRef.current); };
-  }, [profitCelebrated, haptics]);
+    if (profitCardVisible && !profitCelebrated) {
+      setProfitCelebrated(true);
+      haptics.success();
+      setProfitGlowIntensity(0.28);
+      setTimeout(() => setProfitGlowIntensity(0.18), 600);
+      const duration = 600;
+      const startTime = performance.now();
+      const tick = (now: number) => {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        setProfitCountUp(Math.round(NET_PROFIT * eased));
+        if (progress < 1) {
+          profitAnimRef.current = requestAnimationFrame(tick);
+        }
+      };
+      profitAnimRef.current = requestAnimationFrame(tick);
+    }
+  }, [profitCardVisible, profitCelebrated, haptics]);
 
   // Card entrance animation helper
   const [enteredCards, setEnteredCards] = useState<Set<number>>(new Set());
@@ -691,7 +684,7 @@ const Index = () => {
               {/* Features — 3 groups */}
               <div style={{ ...styles.tierFeatures, textAlign: "center" }}>
                 {/* Group: Model */}
-                <div style={{ display: "inline-block", textAlign: "left", marginBottom: "20px" }}>
+                <div style={{ display: "inline-block", textAlign: "left", marginBottom: "8px" }}>
                   <p style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.4rem", color: "#D4AF37", letterSpacing: "0.06em", marginBottom: "12px" }}>Model</p>
                   {["11-Tier Recoupment Waterfall", "Capital Stack Breakdown", "Investor / Producer Profit Split"].map((f, i) => (
                     <div key={i} style={{ display: "flex", gap: "14px", alignItems: "flex-start", marginBottom: i < 2 ? "12px" : "0" }}>
@@ -701,9 +694,9 @@ const Index = () => {
                   ))}
                 </div>
                 {/* Separator */}
-                <div style={{ height: "1px", background: "rgba(212,175,55,0.20)", margin: "0 32px 20px" }} />
+                <div style={{ height: "1px", background: "rgba(212,175,55,0.20)", margin: "0 32px 0" }} />
                 {/* Group: Analyze */}
-                <div style={{ display: "inline-block", textAlign: "left", marginBottom: "20px" }}>
+                <div style={{ display: "inline-block", textAlign: "left", marginBottom: "8px" }}>
                   <p style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.4rem", color: "#D4AF37", letterSpacing: "0.06em", marginBottom: "12px" }}>Analyze</p>
                   {["Break-Even Scenario Analysis", "Sensitivity on Key Variables", "Off-the-Top Fee Mapping"].map((f, i) => (
                     <div key={i} style={{ display: "flex", gap: "14px", alignItems: "flex-start", marginBottom: i < 2 ? "12px" : "0" }}>
@@ -713,7 +706,7 @@ const Index = () => {
                   ))}
                 </div>
                 {/* Separator */}
-                <div style={{ height: "1px", background: "rgba(212,175,55,0.20)", margin: "0 32px 20px" }} />
+                <div style={{ height: "1px", background: "rgba(212,175,55,0.20)", margin: "0 32px 0" }} />
                 {/* Group: Share */}
                 <div style={{ display: "inline-block", textAlign: "left" }}>
                   <p style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.4rem", color: "#D4AF37", letterSpacing: "0.06em", marginBottom: "12px" }}>Share</p>
@@ -747,7 +740,7 @@ const Index = () => {
               border: "1px solid rgba(212,175,55,0.25)",
               padding: "28px 24px",
               textAlign: "center",
-              background: "radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.10) 0%, rgba(6,6,6,0.92) 65%)",
+              background: "radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.15) 0%, rgba(6,6,6,0.92) 65%)",
               backdropFilter: "blur(20px)",
               WebkitBackdropFilter: "blur(20px)",
               boxShadow: "0 12px 32px rgba(0,0,0,0.6), 0 0 24px rgba(212,175,55,0.08), 0 0 20px rgba(120,60,180,0.10)",
@@ -758,7 +751,7 @@ const Index = () => {
             {/* Topline */}
             <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.40), transparent)" }} />
             {/* Purple atmospheric from bottom */}
-            <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "100%", background: "radial-gradient(ellipse 80% 60% at 50% 100%, rgba(120,60,180,0.12) 0%, transparent 60%)", pointerEvents: "none" }} />
+            <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "100%", background: "radial-gradient(ellipse 80% 60% at 50% 100%, rgba(120,60,180,0.18) 0%, transparent 60%)", pointerEvents: "none" }} />
             <p style={{
               position: "relative",
               fontFamily: "'Bebas Neue', sans-serif",
@@ -902,7 +895,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
   heroGlow: {
     position: "absolute", top: 0, left: 0, right: 0, bottom: 0, pointerEvents: "none",
-    background: "radial-gradient(ellipse 80% 50% at 50% 10%, rgba(212,175,55,0.22) 0%, transparent 60%), radial-gradient(ellipse 60% 40% at 50% 50%, rgba(120,60,180,0.10) 0%, transparent 60%), radial-gradient(ellipse 100% 70% at 50% 100%, rgba(120,60,180,0.20) 0%, transparent 60%)",
+    background: "radial-gradient(ellipse 80% 50% at 50% 10%, rgba(212,175,55,0.22) 0%, transparent 60%), radial-gradient(ellipse 60% 40% at 50% 50%, rgba(120,60,180,0.16) 0%, transparent 60%), radial-gradient(ellipse 100% 70% at 50% 100%, rgba(120,60,180,0.20) 0%, transparent 60%)",
   },
   heroInner: { position: "relative", zIndex: 1 },
   heroH1: {
@@ -1003,7 +996,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
 
   /* Features list */
-  tierFeatures: { padding: "24px", display: "flex", flexDirection: "column", gap: "16px" },
+  tierFeatures: { padding: "24px", display: "flex", flexDirection: "column", gap: "12px" },
 
   /* Actions */
   tierAction: { padding: "0 24px 36px" },
