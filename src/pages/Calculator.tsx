@@ -64,8 +64,8 @@ const s: Record<string, React.CSSProperties> = {
   page: {
     background: "#000",
     backgroundImage: [
-      "radial-gradient(ellipse 70% 40% at 20% 10%, rgba(212,175,55,0.06) 0%, transparent 60%)",
-      "radial-gradient(ellipse 60% 50% at 80% 60%, rgba(212,175,55,0.03) 0%, transparent 60%)",
+      "radial-gradient(ellipse 70% 40% at 20% 10%, rgba(212,175,55,0.15) 0%, transparent 60%)",
+      "radial-gradient(ellipse 60% 50% at 80% 60%, rgba(212,175,55,0.10) 0%, transparent 60%)",
     ].join(", "),
     minHeight: "100vh",
     display: "flex",
@@ -96,6 +96,47 @@ const s: Record<string, React.CSSProperties> = {
     borderTopColor: "transparent",
     borderRadius: "50%",
     animation: "spin 1s linear infinite",
+  },
+  glassHero: {
+    position: "relative" as const,
+    background: "rgba(6,6,6,0.92)",
+    backdropFilter: "blur(40px)",
+    WebkitBackdropFilter: "blur(40px)",
+    border: "1px solid rgba(212,175,55,0.20)",
+    borderRadius: "12px",
+    overflow: "hidden",
+    boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 24px rgba(212,175,55,0.10), 0 0 20px rgba(120,60,180,0.15)",
+    padding: "40px 24px 36px",
+    marginBottom: "24px",
+    textAlign: "center" as const,
+  },
+  glassHeroGlow: {
+    position: "absolute" as const,
+    inset: 0,
+    background: [
+      "radial-gradient(ellipse 80% 50% at 50% 10%, rgba(212,175,55,0.22) 0%, transparent 60%)",
+      "radial-gradient(ellipse 60% 40% at 50% 50%, rgba(120,60,180,0.16) 0%, transparent 60%)",
+      "radial-gradient(ellipse 100% 70% at 50% 100%, rgba(120,60,180,0.20) 0%, transparent 60%)",
+    ].join(", "),
+    pointerEvents: "none" as const,
+  },
+  glassHeroH1: {
+    fontFamily: "'Bebas Neue', sans-serif",
+    fontSize: "4.2rem",
+    lineHeight: 0.86,
+    letterSpacing: "0.04em",
+    color: "#F9E076",
+    position: "relative" as const,
+    zIndex: 1,
+    marginBottom: "16px",
+  },
+  glassHeroSub: {
+    fontFamily: "'Bebas Neue', sans-serif",
+    fontSize: "1.5rem",
+    letterSpacing: "0.06em",
+    color: "rgba(255,255,255,0.55)",
+    position: "relative" as const,
+    zIndex: 1,
   },
 };
 
@@ -258,19 +299,29 @@ const Calculator = () => {
   const selectedGenre = project.genre && project.genre !== "Other" ? project.genre : project.customGenre || '';
 
   const renderContextBar = () => {
-    if (activeTab === 'stack') {
+    // Project tab: no context bar (no numbers yet)
+    if (activeTab === 'project') return null;
+    // Budget tab: show budget only (if set)
+    if (activeTab === 'budget') {
+      if (inputs.budget <= 0) return null;
       return <ContextBar budget={inputs.budget} />;
     }
+    // Stack tab: budget + source count
+    if (activeTab === 'stack') {
+      return <ContextBar budget={inputs.budget} stackCount={stackSourceCount} />;
+    }
+    // Deal tab: budget + sources + genre + acq price
     if (activeTab === 'deal') {
       return (
         <ContextBar
           budget={inputs.budget}
           stackCount={stackSourceCount}
           genre={selectedGenre}
+          acqPrice={inputs.revenue}
         />
       );
     }
-    // Don't show context bar on waterfall tab when deck is active
+    // Waterfall tab: hidden when deck is active (full data)
     if (activeTab === 'waterfall' && inputs.budget > 0 && inputs.revenue > 0) {
       return null;
     }
@@ -297,13 +348,16 @@ const Calculator = () => {
         );
       case 'budget':
         return (
-          <BudgetTab
-            inputs={inputs}
-            guilds={guilds}
-            onUpdateInput={updateInput}
-            onToggleGuild={toggleGuild}
-            onAdvance={handleNext}
-          />
+          <>
+            {renderContextBar()}
+            <BudgetTab
+              inputs={inputs}
+              guilds={guilds}
+              onUpdateInput={updateInput}
+              onToggleGuild={toggleGuild}
+              onAdvance={handleNext}
+            />
+          </>
         );
       case 'stack':
         return (
@@ -364,6 +418,18 @@ const Calculator = () => {
     <div style={s.page}>
       <main ref={mainRef} style={s.main}>
         <div style={s.col}>
+          {/* Glass Hero — welcome surface on Project tab */}
+          {activeTab === 'project' && (
+            <div style={s.glassHero}>
+              <div style={s.glassHeroGlow} />
+              <div style={s.glassHeroH1}>
+                MODEL YOUR<br />NUMBERS
+              </div>
+              <div style={s.glassHeroSub}>
+                Five Steps. One Waterfall. Investor-Ready.
+              </div>
+            </div>
+          )}
           <div
             key={activeTab}
             style={{
