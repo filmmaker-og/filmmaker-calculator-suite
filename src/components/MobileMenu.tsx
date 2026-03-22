@@ -88,7 +88,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
       {/* Bottom Sheet */}
       <div
         className={cn(
-          "fixed bottom-0 left-3 right-3 z-[201] max-h-[85vh] overflow-y-auto",
+          "fixed bottom-0 left-2 right-2 z-[201] max-h-[85vh] overflow-y-auto",
           "transition-transform duration-300 ease-out",
           isOpen ? "translate-y-0" : "translate-y-full"
         )}
