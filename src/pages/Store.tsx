@@ -1179,7 +1179,7 @@ const Store = () => {
           background: "rgba(6,6,6,0.92)",
           backdropFilter: "blur(40px)",
           WebkitBackdropFilter: "blur(40px)",
-          border: "1px solid rgba(212,175,55,0.20)",
+          border: "1px solid rgba(212,175,55,0.12)",
           boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 24px rgba(212,175,55,0.10), 0 0 20px rgba(120,60,180,0.15)",
           ...reveal(heroVisible),
         }}>
