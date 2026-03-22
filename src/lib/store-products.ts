@@ -243,7 +243,7 @@ export const products: Product[] = [
         body: "Additional deliverables scoped to your project — specialized research, alternative deal structures, extended market analysis, multi-territory strategies, or other custom work.",
       },
     ],
-    pickThisIf: "your project needs more than the standard deliverables cover",
+    pickThisIf: "your deal is complex enough that standard packages don\u2019t fit \u2014 multi-territory, unusual structures, custom research scope",
     whoItsFor:
       "Producers with complex financing structures, multi-territory deals, or projects that need specialized analysis beyond the standard package.",
     upgradePrompt: null,

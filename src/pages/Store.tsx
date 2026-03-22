@@ -27,7 +27,7 @@ const storeFaqs = [
   },
   {
     q: "What happens if the deliverables don\u2019t hold up?",
-    a: "If your deliverables don\u2019t meet the institutional standard described, we\u2019ll revise them. These are the same financial models used in real production financing \u2014 if something doesn\u2019t hold up, we fix it.",
+    a: "If the work doesn\u2019t hold up, we revise it. These models are built on the same waterfall and capital stack mechanics used in real production deals \u2014 if something\u2019s off, we fix it until it\u2019s right.",
   },
   {
     q: "What\u2019s The Working Model and when do I see it?",
@@ -168,7 +168,7 @@ const s: Record<string, React.CSSProperties> = {
     fontFamily: "'Inter', sans-serif",
     fontSize: "18px",
     fontWeight: 500,
-    color: "#fff",
+    color: "rgba(255,255,255,0.92)",
     lineHeight: 1.3,
   },
   /* ── Turnaround badge ── */
@@ -179,10 +179,10 @@ const s: Record<string, React.CSSProperties> = {
     fontFamily: "'Roboto Mono', monospace",
     fontSize: "12px",
     color: "rgba(255,255,255,0.55)",
-    background: "rgba(255,255,255,0.04)",
+    background: "rgba(255,255,255,0.08)",
     padding: "5px 10px",
     borderRadius: "4px",
-    border: "1px solid rgba(255,255,255,0.08)",
+    border: "1px solid rgba(255,255,255,0.15)",
   },
   /* ── Action block (matches Index.tsx tierAction: 0 24px 36px) ── */
   actionBlock: {
@@ -338,13 +338,14 @@ const tierStyles = {
   gold: {
     card: {
       border: "none",
-      background: "radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.08) 0%, #0A0A0A 70%)",
-      boxShadow: "0 16px 40px rgba(0,0,0,0.6)",
+      background: "radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.16) 0%, #0A0A0A 70%)",
+      boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 40px rgba(212,175,55,0.12)",
     },
     gradientBorder: "linear-gradient(180deg, rgba(212,175,55,0.55) 0%, rgba(212,175,55,0.20) 50%, rgba(212,175,55,0.40) 100%)",
     topline: {
       height: "1px",
       background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.50), transparent)",
+      boxShadow: "0 0 12px rgba(212,175,55,0.25)",
     },
     headerBorder: "1px solid rgba(212,175,55,0.12)",
     headerBg: undefined as string | undefined,
@@ -361,8 +362,8 @@ const tierStyles = {
   green: {
     card: {
       border: "none",
-      background: "radial-gradient(ellipse at 50% 0%, rgba(60,179,113,0.07) 0%, #0A0A0A 70%)",
-      boxShadow: "0 16px 40px rgba(0,0,0,0.5), 0 0 40px rgba(60,179,113,0.04)",
+      background: "radial-gradient(ellipse at 50% 0%, rgba(60,179,113,0.15) 0%, #0A0A0A 70%)",
+      boxShadow: "0 16px 40px rgba(0,0,0,0.5), 0 0 40px rgba(60,179,113,0.10)",
     },
     gradientBorder: "linear-gradient(180deg, rgba(60,179,113,0.50) 0%, rgba(60,179,113,0.20) 50%, rgba(60,179,113,0.35) 100%)",
     topline: {
@@ -385,8 +386,8 @@ const tierStyles = {
   purple: {
     card: {
       border: "none",
-      background: "radial-gradient(ellipse at 50% 0%, rgba(120,60,180,0.08) 0%, rgba(212,175,55,0.04) 30%, #0A0A0A 70%)",
-      boxShadow: "0 16px 40px rgba(0,0,0,0.6)",
+      background: "radial-gradient(ellipse at 50% 0%, rgba(120,60,180,0.22) 0%, rgba(212,175,55,0.06) 30%, #0A0A0A 70%)",
+      boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 50px rgba(120,60,180,0.18)",
     },
     gradientBorder: "linear-gradient(180deg, rgba(212,175,55,0.45) 0%, rgba(212,175,55,0.15) 40%, rgba(120,60,180,0.30) 70%, rgba(120,60,180,0.50) 100%)",
     topline: {
@@ -408,8 +409,8 @@ const tierStyles = {
   purpleTop: {
     card: {
       border: "none",
-      background: "radial-gradient(ellipse at 50% 0%, rgba(120,60,180,0.10) 0%, rgba(212,175,55,0.06) 30%, #0A0A0A 70%)",
-      boxShadow: "0 16px 40px rgba(0,0,0,0.8), 0 0 60px rgba(120,60,180,0.10), 0 0 120px rgba(212,175,55,0.06)",
+      background: "radial-gradient(ellipse at 50% 0%, rgba(120,60,180,0.25) 0%, rgba(212,175,55,0.08) 30%, #0A0A0A 70%)",
+      boxShadow: "0 16px 40px rgba(0,0,0,0.8), 0 0 60px rgba(120,60,180,0.25), 0 0 120px rgba(212,175,55,0.10)",
     },
     gradientBorder: "linear-gradient(180deg, rgb(110,50,170) 0%, rgba(120,60,180,0.5) 30%, rgba(212,175,55,0.4) 70%, #D4AF37 100%)",
     topline: {
@@ -719,13 +720,13 @@ const WorkingModelPopup = ({
 const ProductCard = ({
   product,
   onBuy,
-  onBuy10,
+  onBuySecondary,
   visible,
   index,
 }: {
   product: Product;
   onBuy: () => void;
-  onBuy10?: () => void;
+  onBuySecondary?: () => void;
   visible: boolean;
   index: number;
 }) => {
@@ -806,7 +807,7 @@ const ProductCard = ({
       <div style={{ ...s.actionBlock, ...z2 }}>
         <button
           onClick={(e) => { haptics.medium(e); onBuy(); }}
-          style={isComp ? s.btnGreen : s[tier.btn]}
+          style={s[tier.btn]}
           onMouseDown={(e) => { (e.currentTarget.style.transform = "scale(0.98)"); }}
           onMouseUp={(e) => { (e.currentTarget.style.transform = "scale(1)"); }}
           onMouseEnter={(e) => { if (tier.btnHover.background) e.currentTarget.style.background = tier.btnHover.background; if (tier.btnHover.borderColor) e.currentTarget.style.borderColor = tier.btnHover.borderColor; if (tier.btnHover.boxShadow) e.currentTarget.style.boxShadow = tier.btnHover.boxShadow; }}
@@ -814,9 +815,9 @@ const ProductCard = ({
         >
           {product.ctaLabel}
         </button>
-        {onBuy10 && (
+        {onBuySecondary && (
           <button
-            onClick={(e) => { haptics.medium(e); onBuy10(); }}
+            onClick={(e) => { haptics.medium(e); onBuySecondary(); }}
             style={s.btnGreenSecondary}
             onMouseDown={(e) => { (e.currentTarget.style.transform = "scale(0.98)"); }}
             onMouseUp={(e) => { (e.currentTarget.style.transform = "scale(1)"); }}
@@ -1072,7 +1073,7 @@ const Store = () => {
   // Reveal refs
   const { ref: heroRef, inView: heroVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
   const { ref: productsRef, inView: productsVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
-  const { ref: turnkeyHeroRef, inView: turnkeyHeroVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
+  const { ref: researchHeroRef, inView: researchHeroVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
   const { ref: servicesRef, inView: servicesVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
   const { ref: faqRef, inView: faqVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
   const { ref: bespokeRef, inView: bespokeVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
@@ -1224,15 +1225,15 @@ const Store = () => {
            § 2 — RESEARCH
          ═══════════════════════════════════════ */}
       <section
-        ref={turnkeyHeroRef}
+        ref={researchHeroRef}
         style={{ padding: "16px 24px 32px", textAlign: "center", position: "relative" }}
       >
         <div style={{
           position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
-          background: "radial-gradient(ellipse 80% 50% at 50% 60%, rgba(60,179,113,0.08) 0%, transparent 70%)",
+          background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(60,179,113,0.15) 0%, transparent 70%)",
           pointerEvents: "none",
         }} />
-        <div style={{ position: "relative", ...reveal(turnkeyHeroVisible) }}>
+        <div style={{ position: "relative", ...reveal(researchHeroVisible) }}>
           <EyebrowRuled text="Research" />
           <h2 style={{
             fontFamily: "'Bebas Neue', sans-serif",
@@ -1264,8 +1265,8 @@ const Store = () => {
             key={product.id}
             product={product}
             onBuy={product.id === "comp-report" ? () => handleBuyProduct({ ...product, id: "comp-report-10" }) : () => handleBuyProduct(product)}
-            onBuy10={product.id === "comp-report" ? () => handleBuyProduct(product) : undefined}
-            visible={turnkeyHeroVisible}
+            onBuySecondary={product.id === "comp-report" ? () => handleBuyProduct(product) : undefined}
+            visible={researchHeroVisible}
             index={i}
           />
         ))}
@@ -1283,7 +1284,7 @@ const Store = () => {
       >
         <div style={{
           position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
-          background: "radial-gradient(ellipse 80% 50% at 50% 60%, rgba(212,175,55,0.10) 0%, transparent 70%)",
+          background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.18) 0%, transparent 70%)",
           pointerEvents: "none",
         }} />
         <div style={{ position: "relative", ...reveal(servicesVisible) }}>
@@ -1348,7 +1349,7 @@ const Store = () => {
       >
         <div style={{
           position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
-          background: "radial-gradient(ellipse 80% 50% at 50% 60%, rgba(212,175,55,0.10) 0%, transparent 70%)",
+          background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.15) 0%, transparent 70%)",
           pointerEvents: "none",
         }} />
         <div style={{ position: "relative", ...reveal(faqVisible) }}>
@@ -1394,8 +1395,17 @@ const Store = () => {
          ═══════════════════════════════════════ */}
       <div
         ref={bespokeRef}
-        style={{ margin: "0 24px 48px", ...reveal(bespokeVisible) }}
+        style={{ margin: "0 24px 48px", position: "relative", ...reveal(bespokeVisible) }}
       >
+        {/* Closer atmospheric canopy */}
+        <div style={{
+          position: "absolute",
+          inset: 0,
+          borderRadius: "12px",
+          pointerEvents: "none",
+          zIndex: 0,
+          background: "radial-gradient(ellipse 70% 50% at 50% 0%, rgba(212,175,55,0.18) 0%, transparent 60%), radial-gradient(ellipse 90% 60% at 50% 100%, rgba(120,60,180,0.15) 0%, transparent 65%)",
+        }} />
         <div style={{
           background: "#0A0A0A",
           border: "1px solid rgba(212,175,55,0.25)",
@@ -1430,7 +1440,7 @@ const Store = () => {
             maxWidth: "90%",
             margin: "0 auto 24px",
           }}>
-            Bespoke financial modeling, custom comp research, or institutional-grade investor materials beyond what these packages cover.
+            Custom financial modeling, specialized comp research, or investor materials beyond what these packages cover — scoped to your project.
           </p>
           <a
             href="mailto:thefilmmaker.og@gmail.com?subject=Custom%20Inquiry"
