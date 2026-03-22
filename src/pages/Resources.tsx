@@ -559,7 +559,7 @@ const Resources = () => {
           background: "rgba(6,6,6,0.92)",
           backdropFilter: "blur(40px)",
           WebkitBackdropFilter: "blur(40px)",
-          border: "1px solid rgba(212,175,55,0.20)",
+          border: "1px solid rgba(212,175,55,0.12)",
           boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 24px rgba(212,175,55,0.10), 0 0 20px rgba(120,60,180,0.15)",
           ...reveal(headerVisible),
         }}>
@@ -588,14 +588,13 @@ const Resources = () => {
             </h1>
             <p style={{
               fontFamily: "'Bebas Neue', sans-serif",
-              fontSize: "1.5rem",
+              fontSize: "1.25rem",
               lineHeight: 1.1,
               color: "#fff",
               textAlign: "center",
               marginTop: 8,
               textShadow: "0 2px 12px rgba(0,0,0,0.9)",
             }}>
-              Deal Structures. Waterfall Mechanics.<br />
               The Intelligence Behind Films That Close.
             </p>
           </div>
@@ -671,8 +670,8 @@ const Resources = () => {
               }}
               style={{
                 width: "100%",
-                background: searchInputFocused ? "rgba(212,175,55,0.06)" : "rgba(212,175,55,0.04)",
-                border: searchInputFocused ? "1px solid rgba(120,60,180,0.50)" : "1px solid rgba(120,60,180,0.30)",
+                background: searchInputFocused ? "rgba(212,175,55,0.08)" : "rgba(212,175,55,0.06)",
+                border: searchInputFocused ? "1px solid rgba(212,175,55,0.40)" : "1px solid rgba(212,175,55,0.25)",
                 borderRadius: 12,
                 color: "rgba(255,255,255,0.95)",
                 fontFamily: "'Inter', sans-serif",
