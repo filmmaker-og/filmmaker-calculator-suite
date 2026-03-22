@@ -1170,15 +1170,9 @@ const Store = () => {
          ═══════════════════════════════════════ */}
       {/* Glass hero card */}
       <div ref={heroRef} style={{ padding: "32px 0 0", position: "relative" }}>
-        {/* Page-level canopy */}
-        <div style={{
-          position: "absolute", top: 0, left: 0, right: 0, height: "120%",
-          background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.25) 0%, transparent 70%)",
-          pointerEvents: "none",
-        }} />
         <section style={{
           position: "relative", textAlign: "center",
-          padding: "28px 24px 24px",
+          padding: "24px 24px 16px",
           margin: "0 24px",
           borderRadius: 12,
           overflow: "hidden",
@@ -1198,10 +1192,10 @@ const Store = () => {
             <EyebrowRuled text="On Demand" />
             <h1 style={{
               fontFamily: "'Bebas Neue', sans-serif",
-              fontSize: "3.8rem",
-              lineHeight: 0.95,
-              margin: "0 0 16px 0",
-              letterSpacing: "0.04em",
+              fontSize: "4.2rem",
+              lineHeight: 0.86,
+              margin: "0 0 4px 0",
+              letterSpacing: "0.01em",
               color: "#fff",
               textShadow: "0 2px 20px rgba(0,0,0,0.95), 0 4px 40px rgba(0,0,0,0.5)",
             }}>
@@ -1212,14 +1206,15 @@ const Store = () => {
               }}>Investor-Ready.</span>
             </h1>
             <p style={{
-              fontFamily: "'Inter', sans-serif",
-              fontSize: "19px",
-              color: "rgba(255,255,255,0.88)",
-              lineHeight: 1.55,
-              margin: 0,
+              fontFamily: "'Bebas Neue', sans-serif",
+              fontSize: "1.5rem",
+              lineHeight: 1.1,
+              color: "#fff",
+              textAlign: "center",
+              marginTop: 8,
               textShadow: "0 2px 12px rgba(0,0,0,0.9)",
             }}>
-              Professional financial documents. Investor-grade. Yours.
+              Run The Numbers. Own The Presentation.
             </p>
           </div>
         </section>
