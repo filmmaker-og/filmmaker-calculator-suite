@@ -111,7 +111,7 @@ const SEM = {
 // ─── Shared Elements ─────────────────────────────────────────────
 
 const GoldGlowBreak = () => (
-  <div style={{ padding: "16px 24px" }}>
+  <div style={{ padding: "10px 24px" }}>
     <div style={{
       height: "1px",
       background: "linear-gradient(90deg, transparent 0%, rgba(212,175,55,0.15) 15%, rgba(212,175,55,0.45) 50%, rgba(212,175,55,0.15) 85%, transparent 100%)",
@@ -191,14 +191,25 @@ const CoverSection = ({
 
   // Verdict text
   const netToInvestors = Math.max(0, inputs.revenue - result.offTopTotal);
-  const verdictContext = netToInvestors > cashBasis
-    ? `Market value exceeds cash basis by ${formatCompactCurrency(netToInvestors - cashBasis)}.`
-    : `Net distributable falls short of cash basis by ${formatCompactCurrency(cashBasis - netToInvestors)}.`;
+  const offTopCoverPct = inputs.revenue > 0 ? Math.round((result.offTopTotal / inputs.revenue) * 100) : 0;
+  const creditCoverPct = inputs.budget > 0 ? Math.round((inputs.credits / inputs.budget) * 100) : 0;
+  let verdictContext: string;
+  if (netToInvestors > cashBasis) {
+    verdictContext = `Market value exceeds cash basis by ${formatCompactCurrency(netToInvestors - cashBasis)}.`;
+    if (inputs.credits > 0) {
+      verdictContext += ` Your capital stack covers the budget with room to absorb execution risk, and ${creditCoverPct}% in tax credits keeps the investor's cash exposure at ${formatCompactCurrency(cashBasis)}.`;
+    } else {
+      verdictContext += ` Your capital stack covers the budget with margin to absorb a negotiation haircut.`;
+    }
+    verdictContext += ` Off-the-top deductions consume ${offTopCoverPct}% before recoupment.`;
+  } else {
+    verdictContext = `Net distributable falls short of cash basis by ${formatCompactCurrency(cashBasis - netToInvestors)}. At this acquisition price, investors are not made whole before the waterfall runs dry. The structure below shows where the money stops.`;
+  }
 
   return (
     <section style={{
       minHeight: "85dvh",
-      padding: "40px 24px 32px",
+      padding: "40px 24px 28px",
       display: "flex",
       flexDirection: "column",
       justifyContent: "center",
@@ -401,11 +412,11 @@ const CoverSection = ({
         }}>
           {inputs.credits > 0 && project.location.trim() && (
             <>
-              <span style={{ fontSize: "14px", color: W.tertiary }}>Location</span>
+              <span style={{ fontSize: "16px", color: W.tertiary }}>Location</span>
               <span style={{ ...FONT.data, fontSize: "15px", color: W.secondary }}>
                 {project.location}
               </span>
-              <span style={{ fontSize: "14px", color: W.tertiary }}>Tax Credit</span>
+              <span style={{ fontSize: "16px", color: W.tertiary }}>Tax Credit</span>
               <span style={{ ...FONT.data, fontSize: "15px", color: W.secondary }}>
                 {inputs.budget > 0 ? Math.round((inputs.credits / inputs.budget) * 100) : 0}%
               </span>
@@ -415,7 +426,7 @@ const CoverSection = ({
           <span style={{ ...FONT.data, fontSize: "15px", color: W.secondary }}>Acquisition</span>
           {inputs.deferments > 0 && (
             <>
-              <span style={{ fontSize: "14px", color: W.tertiary }}>Deferrals</span>
+              <span style={{ fontSize: "16px", color: W.tertiary }}>Deferrals</span>
               <span style={{ ...FONT.data, fontSize: "15px", color: W.secondary }}>
                 {formatCompactCurrency(inputs.deferments)}
               </span>
@@ -423,7 +434,7 @@ const CoverSection = ({
           )}
           {inputs.salesFee > 0 && (
             <>
-              <span style={{ fontSize: "14px", color: W.tertiary }}>Sales Agent</span>
+              <span style={{ fontSize: "16px", color: W.tertiary }}>Sales Agent</span>
               <span style={{ ...FONT.data, fontSize: "15px", color: W.secondary }}>
                 {inputs.salesFee}%
               </span>
@@ -431,7 +442,7 @@ const CoverSection = ({
           )}
           {inputs.salesExp > 0 && (
             <>
-              <span style={{ fontSize: "14px", color: W.tertiary }}>Expense Cap</span>
+              <span style={{ fontSize: "16px", color: W.tertiary }}>Expense Cap</span>
               <span style={{ ...FONT.data, fontSize: "15px", color: W.secondary }}>
                 {formatCompactCurrency(inputs.salesExp)}
               </span>
@@ -439,7 +450,7 @@ const CoverSection = ({
           )}
           {(guilds.sag || guilds.wga || guilds.dga) && (
             <>
-              <span style={{ fontSize: "14px", color: W.tertiary }}>Guilds</span>
+              <span style={{ fontSize: "16px", color: W.tertiary }}>Guilds</span>
               <span style={{ ...FONT.data, fontSize: "15px", color: W.secondary }}>
                 {[guilds.sag && "SAG-AFTRA", guilds.wga && "WGA", guilds.dga && "DGA"].filter(Boolean).join(", ")}
               </span>
@@ -476,60 +487,61 @@ const DealSection = ({
   if (inputs.debt > 0) capitalParts.push(`${formatCompactCurrency(inputs.debt)} in senior debt at ${inputs.seniorDebtRate}%`);
   if (inputs.mezzanineDebt > 0) capitalParts.push(`${formatCompactCurrency(inputs.mezzanineDebt)} in mezzanine debt at ${inputs.mezzanineRate}%`);
   if (inputs.equity > 0) capitalParts.push(`${formatCompactCurrency(inputs.equity)} in equity with a ${inputs.premium}% preferred return`);
-  if (capitalParts.length > 0) p1Parts.push(capitalParts.join(", ") + ".");
-  if (inputs.credits > 0) {
-    p1Parts.push(`${formatCompactCurrency(inputs.credits)} in tax credits reduce the investor's cash exposure.`);
-  }
-  if (inputs.deferments > 0) {
-    p1Parts.push(`${formatCompactCurrency(inputs.deferments)} in deferred fees are subordinate to all capital tiers.`);
+  if (capitalParts.length > 0) p1Parts.push("The capital stack: " + capitalParts.join(", ") + ".");
+  if (inputs.credits > 0 || inputs.deferments > 0) {
+    const softParts: string[] = [];
+    if (inputs.credits > 0) softParts.push(`tax credits (${formatCompactCurrency(inputs.credits)})`);
+    if (inputs.deferments > 0) softParts.push(`deferred fees (${formatCompactCurrency(inputs.deferments)})`);
+    p1Parts.push(`${softParts.join(" and ")} bring the investor's cash exposure down to ${formatCompactCurrency(cashBasis)}, which is the number your deal actually has to beat.`);
   }
   if (inputs.credits === 0 && inputs.deferments === 0) {
-    p1Parts.push("No tax credits or deferrals reduce the investor's exposure.");
+    p1Parts.push(`No tax credits or deferrals reduce the investor's exposure. Cash basis equals ${formatCompactCurrency(cashBasis)}.`);
   }
 
   // Paragraph 2 — Off-the-top erosion
   const offTopPct = inputs.revenue > 0 ? Math.round((offTopTotal / inputs.revenue) * 100) : 0;
-  let p2 = `Off-the-top deductions total ${formatCompactCurrency(offTopTotal)} — roughly ${offTopPct}% of gross receipts.`;
-  if (inputs.salesFee > 0) p2 += ` The sales agent's ${inputs.salesFee}% commission accounts for ${formatCompactCurrency(salesFeeAmount)}.`;
-  if (inputs.salesExp > 0) p2 += ` The expense cap is ${formatCompactCurrency(inputs.salesExp)}.`;
+  let p2 = `Off-the-top deductions total ${formatCompactCurrency(offTopTotal)}, roughly ${offTopPct}% of gross receipts.`;
+  if (inputs.salesFee > 0) p2 += ` The sales agent's ${inputs.salesFee}% commission is the largest single cut at ${formatCompactCurrency(salesFeeAmount)}.`;
+  if (inputs.salesExp > 0) p2 += ` Expense cap sits at ${formatCompactCurrency(inputs.salesExp)}`;
   if (inputs.salesExp > 100000) {
-    p2 += " That expense cap warrants scrutiny.";
+    p2 += " (worth scrutinizing at that level).";
   } else if (inputs.salesExp > 0) {
-    p2 += " Reasonable for a film this size.";
+    p2 += " (in line for a film this size).";
+  }
+  if (offTopPct <= 20) {
+    p2 += " Most independent deals lose 15\u201325% off the top; yours is on the low end.";
+  } else if (offTopPct <= 30) {
+    p2 += " That erosion rate is within normal range, but every point above 20% compresses your margin.";
+  } else {
+    p2 += ` That erosion rate is heavy. At ${offTopPct}%, more than a quarter of your gross is gone before recoupment starts.`;
   }
 
   // Paragraph 3 — Waterfall flow-through
-  let p3 = `After deductions, ${formatCompactCurrency(netDistributable)} enters the waterfall. `;
+  let p3 = `After deductions, ${formatCompactCurrency(netDistributable)} flows into the waterfall`;
   const fundedTiers = tiers.filter(t => t.status === "funded");
   const partialTier = tiers.find(t => t.status === "partial");
   if (fundedTiers.length === tiers.length) {
-    p3 += `All ${tiers.length} capital tiers are fully funded.`;
+    p3 += ` and funds all ${tiers.length} capital tiers in full.`;
     if (backendPool > 0) {
-      p3 += ` A surplus of ${formatCompactCurrency(backendPool)} flows into the backend pool.`;
+      p3 += ` The remaining ${formatCompactCurrency(backendPool)} enters the backend pool, split per the operating agreement.`;
     }
   } else if (partialTier) {
-    p3 += `Revenue exhausts during the ${partialTier.label} tier — investors recover ${Math.round((partialTier.paid / partialTier.amount) * 100)}% of that obligation. Downstream tiers are unfunded.`;
+    p3 += `. Revenue runs out at the ${partialTier.label} tier: investors recover ${Math.round((partialTier.paid / partialTier.amount) * 100)}% of that obligation, and everything downstream goes unfunded.`;
   } else {
-    p3 += "Revenue does not fully fund any capital tier at this acquisition price.";
+    p3 += `. At this acquisition price, revenue does not fully fund any capital tier. The structure needs work before this is presentable.`;
   }
 
-  // Paragraph 4 — Verdict
-  let characterization: string;
-  let verdict: string;
+  // Paragraph 4 — Verdict (3 sentences: verdict, specifics, forward look)
+  let p4: string;
   if (multiple >= 1.5) {
-    characterization = "a clean deal";
-    verdict = "this model works";
+    p4 = "At these terms, this is a clean deal. The margin between cash basis and market value gives your investors room to absorb a negotiation haircut without losing principal. The scenario analysis below shows exactly how much room.";
   } else if (multiple >= 1.0) {
-    characterization = "a tight deal";
-    verdict = "this model holds if assumptions survive";
+    p4 = "This is a tight deal, and tight deals can work if the assumptions hold. Your margin between cash basis and acquisition price leaves limited room for negotiation concessions. The scenario table below shows where the math starts to compress.";
   } else if (multiple >= 0.7) {
-    characterization = "an aggressive deal";
-    verdict = "this model needs restructuring";
+    p4 = "This deal is aggressive. The gap between cash basis and market value is narrow enough that a single negotiation concession could push investors below full recoupment. Before presenting this structure, look at the scenario table below and decide how much risk you are asking them to carry.";
   } else {
-    characterization = "a deal that needs work";
-    verdict = "this model needs restructuring";
+    p4 = "The math does not support this structure at the current acquisition price. Investors are looking at a loss on paper before the film even sells. The move is to restructure: lower the cash basis with more soft money, renegotiate the capital stack, or find a higher-confidence sale price. Then run the numbers again.";
   }
-  const p4 = `For what it is — ${characterization} — ${verdict}.`;
 
   // Pull-quote logic
   const allFunded = tiers.every(t => t.status === "funded");
@@ -551,7 +563,11 @@ const DealSection = ({
   }
 
   return (
-    <section style={{ padding: "40px 24px 40px" }}>
+    <section style={{ padding: "32px 24px 28px", position: "relative", overflow: "hidden" }}>
+      {/* Gold top canopy */}
+      <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "180px", background: "radial-gradient(ellipse 80% 50% at 50% 0%, rgba(212,175,55,0.08) 0%, transparent 70%)", pointerEvents: "none" }} />
+      {/* Purple bottom canopy */}
+      <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "120px", background: "radial-gradient(ellipse 60% 40% at 50% 100%, rgba(120,60,180,0.05) 0%, transparent 60%)", pointerEvents: "none" }} />
       {/* Provenance mark */}
       <div style={{
         display: "flex",
@@ -580,7 +596,7 @@ const DealSection = ({
       <div style={{ ...FONT.display, color: W.primary, marginBottom: "16px" }}>THE DEAL</div>
 
       {/* Prose */}
-      <div style={{ ...FONT.body, color: "rgba(255,255,255,0.85)" }}>
+      <div style={{ ...FONT.body, color: W.primary }}>
         <p style={{ marginBottom: "20px" }}>{p1Parts.join(" ")}</p>
         <p style={{ marginBottom: "20px" }}>{p2}</p>
         <p style={{ marginBottom: "20px" }}>{p3}</p>
@@ -604,7 +620,7 @@ const DealSection = ({
       </div>
 
       {/* Verdict */}
-      <div style={{ ...FONT.body, color: "rgba(255,255,255,0.85)" }}>
+      <div style={{ ...FONT.body, color: W.primary }}>
         <p style={{ marginBottom: "0" }}>{p4}</p>
       </div>
     </section>
@@ -656,7 +672,9 @@ const VisualCluster1 = ({
   });
 
   return (
-    <section style={{ padding: "32px 24px 40px" }}>
+    <section style={{ padding: "28px 24px 28px", position: "relative", overflow: "hidden" }}>
+      {/* Gold top canopy */}
+      <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "140px", background: "radial-gradient(ellipse 80% 50% at 50% 0%, rgba(212,175,55,0.06) 0%, transparent 70%)", pointerEvents: "none" }} />
 
       {/* ── EROSION VISUAL ── */}
       {erosionTotal > 0 && (
@@ -684,7 +702,7 @@ const VisualCluster1 = ({
                     width: `${widthPct}%`, height: "100%",
                     background: `rgba(220,38,38,${item.colorOpacity})`,
                     display: "flex", alignItems: "center", justifyContent: "center",
-                    ...FONT.data, fontSize: "10px", color: "rgba(255,255,255,0.70)", letterSpacing: "0.06em",
+                    ...FONT.data, fontSize: "11px", color: "rgba(255,255,255,0.70)", letterSpacing: "0.06em",
                   }}>
                     {widthPct > 10 ? item.label.split(" ")[0] : ""}
                   </div>
@@ -740,7 +758,7 @@ const VisualCluster1 = ({
                   <span style={{ ...FONT.data, fontSize: "18px", color: W.primary }}>{formatCompactCurrency(s.amount)}</span>
                 </div>
                 <div style={{ display: "flex", justifyContent: "space-between", paddingLeft: "20px" }}>
-                  <span style={{ fontSize: "14px", color: W.tertiary }}>{s.detail}</span>
+                  <span style={{ fontSize: "16px", color: W.tertiary }}>{s.detail}</span>
                   <span style={{ ...FONT.data, fontSize: "15px", color: W.secondary }}>{s.pctOfBudget}</span>
                 </div>
               </div>
@@ -756,7 +774,7 @@ const VisualCluster1 = ({
                   display: "flex", alignItems: "center", justifyContent: "center",
                 }}>
                   {widthPct > 15 && (
-                    <span style={{ ...FONT.data, fontSize: "10px", color: W.secondary, letterSpacing: "0.08em" }}>
+                    <span style={{ ...FONT.data, fontSize: "11px", color: W.secondary, letterSpacing: "0.08em" }}>
                       {s.label.split(" ")[0].toUpperCase()}
                     </span>
                   )}
@@ -832,8 +850,7 @@ const LockedSensitivitySection = () => (
     {/* Locked card */}
     <div style={{
       position: "relative",
-      border: "1px solid rgba(212,175,55,0.10)",
-
+      border: "1px solid rgba(212,175,55,0.15)",
       borderRadius: "4px",
       overflow: "hidden",
     }}>
@@ -881,15 +898,15 @@ const LockedSensitivitySection = () => (
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        background: "radial-gradient(ellipse at center, rgba(212,175,55,0.04) 0%, rgba(0,0,0,0.50) 70%)",
+        background: "radial-gradient(ellipse at center, rgba(212,175,55,0.05) 0%, rgba(0,0,0,0.55) 70%)",
       }}>
         <div style={{
           width: "44px", height: "44px",
-          border: `1.5px solid ${G.subtle}`,
+          border: "1.5px solid rgba(212,175,55,0.45)",
           borderRadius: "50%",
           display: "flex", alignItems: "center", justifyContent: "center",
           marginBottom: "16px",
-          boxShadow: "0 0 16px rgba(212,175,55,0.12)",
+          boxShadow: "0 0 16px rgba(212,175,55,0.15)",
         }}>
           <svg viewBox="0 0 24 24" style={{ width: "18px", height: "18px", fill: G.standard }}>
             <path d="M18 10h-1V7c0-2.76-2.24-5-5-5S7 4.24 7 7v3H6c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-8c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3-9H9V7c0-1.66 1.34-3 3-3s3 1.34 3 3v3z" />
@@ -928,23 +945,28 @@ const InterpretationSection = ({
   const creditConcentration = inputs.budget > 0 ? (inputs.credits / inputs.budget) * 100 : 0;
 
   return (
-    <section style={{ padding: "40px 24px 40px" }}>
+    <section style={{ padding: "32px 24px 28px", position: "relative", overflow: "hidden" }}>
+      {/* Gold top canopy */}
+      <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "140px", background: "radial-gradient(ellipse 80% 50% at 50% 0%, rgba(212,175,55,0.06) 0%, transparent 70%)", pointerEvents: "none" }} />
+      {/* Purple bottom canopy */}
+      <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "100px", background: "radial-gradient(ellipse 60% 40% at 50% 100%, rgba(120,60,180,0.04) 0%, transparent 60%)", pointerEvents: "none" }} />
       {/* Full headline treatment — this is a text block */}
       <div style={{ ...FONT.label, color: G.emphasis, marginBottom: "8px" }}>What The Numbers Say</div>
       <div style={{ ...FONT.display, color: W.primary, marginBottom: "16px" }}>THE INTERPRETATION</div>
 
-      <div style={{ ...FONT.body, color: "rgba(255,255,255,0.85)" }}>
+      <div style={{ ...FONT.body, color: W.primary }}>
         {/* Paragraph 1: Erosion + net distributable interpretation */}
         <p style={{ marginBottom: "20px" }}>
-          Off-the-top deductions consume <Num>{formatCompactCurrency(erosionTotal)}</Num> — roughly <Num>{erosionPct}%</Num> of
-          your <Num>{formatCompactCurrency(inputs.revenue)}</Num> acquisition price — before a dollar reaches the
-          production entity. What survives is <Num>{formatCompactCurrency(netDistributable)}</Num> in net
+          Off-the-top deductions consume <Num>{formatCompactCurrency(erosionTotal)}</Num>. That
+          is <Num>{erosionPct}%</Num> of
+          your <Num>{formatCompactCurrency(inputs.revenue)}</Num> acquisition price, gone before a dollar reaches the
+          production entity. What survives: <Num>{formatCompactCurrency(netDistributable)}</Num> in net
           distributable revenue against <Num>{formatCompactCurrency(cashBasis)}</Num> in investor principal.
           {investorReturnPct >= 100 && (
             <> At the base case, investors recoup in full and earn a <Num>{Math.round(investorReturnPct)}%</Num> return.</>
           )}
           {investorReturnPct >= 80 && investorReturnPct < 100 && (
-            <> At the base case, investors recover <Num>{Math.round(investorReturnPct)}%</Num> of principal — close to whole, but not there.</>
+            <> At the base case, investors recover <Num>{Math.round(investorReturnPct)}%</Num> of principal. Close, but not whole.</>
           )}
           {investorReturnPct < 80 && (
             <> At the base case, investors recover only <Num>{Math.round(investorReturnPct)}%</Num> of principal. The gap is structural.</>
@@ -957,15 +979,17 @@ const InterpretationSection = ({
             <>{location || "Your state"}&rsquo;s <Num>{creditPct}%</Num> credit accounts
             for <Num>{Math.round(creditConcentration)}%</Num> of your financing.
             Remove it and your cash basis jumps
-            to <Num>{formatCompactCurrency(inputs.budget - inputs.deferments)}</Num>. </>
+            to <Num>{formatCompactCurrency(inputs.budget - inputs.deferments)}</Num> (which
+            is why tax credit insurance exists, and why most institutional investors require it). </>
           )}
           {inputs.deferments > 0 && (
             <>The <Num>{formatCompactCurrency(inputs.deferments)}</Num> in deferred fees reduces your cash exposure
-            on paper — but only if those fees truly accelerate on recoupment, not on delivery. </>
+            on paper, but that only holds if those fees accelerate on recoupment, not on delivery.
+            Check the language in your talent agreements. </>
           )}
           {marginOfSafety > 0 ? (
             <>The margin between cash basis and market value
-            is <Num>{formatCompactCurrency(marginOfSafety)}</Num>. That&rsquo;s where the deal lives or dies.</>
+            is <Num>{formatCompactCurrency(marginOfSafety)}</Num>. That is where this deal lives or dies.</>
           ) : (
             <>There is no margin between cash basis and market value. Every dollar of the budget must be recouped from a sale that hasn&rsquo;t happened yet.</>
           )}
@@ -974,10 +998,14 @@ const InterpretationSection = ({
         {/* Paragraph 3: Scenario interpretation */}
         {inputs.revenue > 0 && (
           <p>
-            The scenario table shows what happens when the market moves against you. A <Num>12.5%</Num> haircut
-            from your modeled price is a normal negotiation concession. A <Num>31%</Num> haircut
-            is a weak market. Beyond that, you&rsquo;re in distress territory. The question isn&rsquo;t
-            whether the base case works — it&rsquo;s how far the price can drop before your investors lose money.
+            The scenario table shows what happens when the market moves against you. A <Num>15%</Num> haircut
+            from your modeled price is a normal negotiation concession. A <Num>30%</Num> haircut
+            is a weak market or a buyer with leverage. Beyond that, you are in distress territory.
+            {investorReturnPct >= 100 ? (
+              <> At this capital structure, your deal absorbs the negotiation haircut and still funds investors. The question is how deep into weak-market territory you can go before the math breaks.</>
+            ) : (
+              <> At this capital structure, even the base case is tight. A negotiation concession pushes investors further underwater. The question is not whether the deal works at your modeled price. It is whether the modeled price is real.</>
+            )}
           </p>
         )}
       </div>
@@ -1019,7 +1047,9 @@ const VisualCluster2 = ({
   ];
 
   return (
-    <section style={{ padding: "32px 24px 40px" }}>
+    <section style={{ padding: "28px 24px 28px", position: "relative", overflow: "hidden" }}>
+      {/* Gold top canopy */}
+      <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "140px", background: "radial-gradient(ellipse 80% 50% at 50% 0%, rgba(212,175,55,0.06) 0%, transparent 70%)", pointerEvents: "none" }} />
 
       {/* ── DEDUCTIONS LEDGER ── */}
       <div style={{ ...FONT.fine, color: W.tertiary, marginBottom: "12px" }}>GROSS TO NET</div>
@@ -1164,7 +1194,7 @@ const LockedComparableSection = () => (
     {/* Locked card with blurred content */}
     <div style={{
       position: "relative",
-      border: "1px solid rgba(212,175,55,0.15)",
+      border: "1px solid rgba(212,175,55,0.22)",
       borderRadius: "4px",
       overflow: "hidden",
     }}>
@@ -1235,15 +1265,15 @@ const LockedComparableSection = () => (
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        background: "radial-gradient(ellipse at center, rgba(212,175,55,0.04) 0%, rgba(0,0,0,0.50) 70%)",
+        background: "radial-gradient(ellipse at center, rgba(120,60,180,0.04) 0%, rgba(212,175,55,0.05) 30%, rgba(0,0,0,0.55) 70%)",
       }}>
         <div style={{
           width: "44px", height: "44px",
-          border: `1.5px solid ${G.subtle}`,
+          border: "1.5px solid rgba(212,175,55,0.55)",
           borderRadius: "50%",
           display: "flex", alignItems: "center", justifyContent: "center",
           marginBottom: "16px",
-          boxShadow: "0 0 16px rgba(212,175,55,0.12)",
+          boxShadow: "0 0 20px rgba(212,175,55,0.18), 0 0 40px rgba(120,60,180,0.08)",
         }}>
           <svg viewBox="0 0 24 24" style={{ width: "18px", height: "18px", fill: G.standard }}>
             <path d="M18 10h-1V7c0-2.76-2.24-5-5-5S7 4.24 7 7v3H6c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-8c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3-9H9V7c0-1.66 1.34-3 3-3s3 1.34 3 3v3z" />
@@ -1274,9 +1304,10 @@ const LockedInvestorMemoSection = () => (
     {/* Locked card */}
     <div style={{
       position: "relative",
-      border: "1px solid rgba(212,175,55,0.20)",
+      border: "1px solid rgba(212,175,55,0.30)",
       borderRadius: "4px",
       overflow: "hidden",
+      boxShadow: "0 0 30px rgba(212,175,55,0.08), 0 0 60px rgba(120,60,180,0.06)",
     }}>
       {/* Fake document behind blur — designed to look like a real financial document */}
       <div style={{
@@ -1355,15 +1386,15 @@ const LockedInvestorMemoSection = () => (
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        background: "radial-gradient(ellipse at center, rgba(212,175,55,0.04) 0%, rgba(0,0,0,0.50) 70%)",
+        background: "radial-gradient(ellipse at center, rgba(120,60,180,0.06) 0%, rgba(212,175,55,0.06) 30%, rgba(0,0,0,0.50) 70%)",
       }}>
         <div style={{
           width: "44px", height: "44px",
-          border: `1.5px solid ${G.subtle}`,
+          border: "1.5px solid rgba(212,175,55,0.70)",
           borderRadius: "50%",
           display: "flex", alignItems: "center", justifyContent: "center",
           marginBottom: "16px",
-          boxShadow: "0 0 16px rgba(212,175,55,0.12)",
+          boxShadow: "0 0 24px rgba(212,175,55,0.25), 0 0 48px rgba(120,60,180,0.12)",
         }}>
           <svg viewBox="0 0 24 24" style={{ width: "18px", height: "18px", fill: G.standard }}>
             <path d="M18 10h-1V7c0-2.76-2.24-5-5-5S7 4.24 7 7v3H6c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-8c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3-9H9V7c0-1.66 1.34-3 3-3s3 1.34 3 3v3z" />
@@ -1403,57 +1434,50 @@ const ConclusionSection = ({
   let verdictText: string;
   let borderColor: string;
   if (multiple >= 1.5) {
-    verdictText = "THE MATH SUPPORTS A CONFIDENT PRESENTATION.";
+    verdictText = "THE MATH WORKS. THE PRESENTATION IS WHAT CLOSES IT.";
     borderColor = "rgba(60,179,113,0.40)";
   } else if (multiple >= 1.0) {
-    verdictText = "THE MARGIN IS HONEST. IN A ROOM FULL OF INFLATED PROJECTIONS, THAT'S AN ADVANTAGE.";
+    verdictText = "HONEST MARGINS IN A ROOM FULL OF INFLATED PROJECTIONS. THAT IS YOUR EDGE.";
     borderColor = "rgba(212,175,55,0.40)";
   } else if (multiple >= 0.7) {
-    verdictText = "THE STRUCTURE IS TIGHT. THE DEAL DEPENDS ON EXECUTION.";
+    verdictText = "TIGHT STRUCTURE. THE DEAL LIVES OR DIES ON EXECUTION.";
     borderColor = "rgba(240,168,48,0.40)";
   } else {
-    verdictText = "YOU'VE FOUND THE GAP BEFORE ANYONE ELSE SAW IT. THAT'S THE POINT OF MODELING.";
+    verdictText = "YOU FOUND THE GAP BEFORE YOUR INVESTORS DID. THAT IS THE POINT OF MODELING.";
     borderColor = "rgba(220,38,38,0.40)";
   }
 
   return (
-    <section style={{ padding: "40px 24px 40px" }}>
+    <section style={{ padding: "32px 24px 28px", position: "relative", overflow: "hidden" }}>
+      {/* Gold top canopy — warmer (approaching CTA) */}
+      <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "200px", background: "radial-gradient(ellipse 80% 50% at 50% 0%, rgba(212,175,55,0.10) 0%, transparent 70%)", pointerEvents: "none" }} />
+      {/* Purple bottom canopy */}
+      <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "140px", background: "radial-gradient(ellipse 60% 40% at 50% 100%, rgba(120,60,180,0.06) 0%, transparent 60%)", pointerEvents: "none" }} />
       {/* Full headline treatment */}
       <div style={{ ...FONT.label, color: G.emphasis, marginBottom: "8px" }}>Where You Stand</div>
       <div style={{ ...FONT.display, color: W.primary, marginBottom: "16px" }}>THE CONCLUSION</div>
 
-      <div style={{ ...FONT.body, color: "rgba(255,255,255,0.85)" }}>
-        {/* Paragraph 1: Restate what they've reviewed */}
+      <div style={{ ...FONT.body, color: W.primary }}>
+        {/* Paragraph 1: Consequence-first verdict */}
         <p style={{ marginBottom: "20px" }}>
-          You&rsquo;ve modeled a <Num>{formatCompactCurrency(inputs.budget)}</Num> production
-          at <Num>{formatCompactCurrency(inputs.revenue)}</Num> and run it through the full
-          waterfall — how the money enters, what gets deducted off the top, who gets paid in what
-          order, and what happens when the market moves against you.
           {allFunded && backendPool > 0 && (
-            <> Every capital tier is funded. There&rsquo;s a <Num>{formatCompactCurrency(backendPool)}</Num> backend surplus.</>
+            <>Every capital tier is funded, with <Num>{formatCompactCurrency(backendPool)}</Num> flowing into the backend pool. That puts this deal in the minority of independent structures that can present to investors with math that works at multiple price points.</>
           )}
           {allFunded && backendPool === 0 && (
-            <> Every capital tier is funded. No surplus remains.</>
+            <>Every capital tier is funded, but there is no backend surplus. The deal works, but there is zero cushion. Every dollar of the acquisition price is spoken for.</>
           )}
           {!allFunded && (
-            <> Not all capital tiers are fully funded at this acquisition price.</>
+            <>Not all capital tiers are funded at this acquisition price. The waterfall ran dry before reaching full recoupment. That is a structural problem, not a pricing problem.</>
           )}
         </p>
 
-        {/* Paragraph 2: The gap between modeling and presenting */}
+        {/* Paragraph 2: Modeling vs presenting */}
         <p style={{ marginBottom: "20px" }}>
           The numbers work on screen. The question is whether they work in the room. An investor
-          isn&rsquo;t reading your waterfall on a phone — they&rsquo;re reading a document you hand
-          them across a table. What they need is the same information you just reviewed, structured
-          for due diligence, formatted for decision-making, and presented at the level they expect.
-        </p>
-
-        {/* Paragraph 3: What's missing from the free output */}
-        <p style={{ marginBottom: "20px" }}>
-          What you&rsquo;re looking at is the model. What you don&rsquo;t have yet is the presentation —
-          the sensitivity analysis that shows how your deal performs under five different market conditions,
-          the comparable acquisition data that defends your valuation with real transactions, and the
-          investor memo that packages everything into a document built for the person writing the check.
+          is not reading your waterfall on a phone. They are reading a document you hand them across
+          a table, and that document needs sensitivity analysis they can underwrite, comparable
+          transactions that justify your valuation, and formatting that looks like it was prepared
+          by someone who has done this before.
         </p>
       </div>
 
@@ -1465,7 +1489,7 @@ const ConclusionSection = ({
       }}>
         <div style={{
           fontFamily: "'Bebas Neue', sans-serif",
-          fontSize: "22px",
+          fontSize: "26px",
           letterSpacing: "0.06em",
           lineHeight: 1.2,
           color: W.primary,
@@ -1477,17 +1501,13 @@ const ConclusionSection = ({
       {/* Gate 3 — embedded as visual evidence of what's missing */}
       <LockedInvestorMemoSection />
 
-      {/* Paragraph 4: Next steps */}
-      <div style={{ ...FONT.body, color: "rgba(255,255,255,0.85)", marginTop: "24px" }}>
+      {/* Post-gate close */}
+      <div style={{ ...FONT.body, color: W.primary, marginTop: "24px" }}>
         <p>
           {multiple >= 1.0 ? (
-            <>The structure is there. The next step is turning it into materials that hold up under scrutiny — documents
-            your attorney can review, your investors can underwrite, and your sales agent can use to position
-            the project in the market.</>
+            <>The model is the foundation. Without the presentation layer, you are asking investors to underwrite a spreadsheet, and that is not how deals close.</>
           ) : (
-            <>You&rsquo;ve identified where the deal needs work. The next step is restructuring — adjusting
-            the capital stack, renegotiating terms, or finding soft money that changes the cash basis — and then
-            running the numbers again until the model holds.</>
+            <>You have identified where the deal breaks. Restructure the stack, find soft money that changes the cash basis, or renegotiate terms. Then run it again. The model is free. Use it until the math works.</>
           )}
         </p>
       </div>
@@ -1518,17 +1538,16 @@ const CTASection = () => {
         onClose={() => setShowLeadCapture(false)}
       />
       <section style={{
-        padding: "56px 24px 48px",
+        padding: "36px 24px 48px",
         textAlign: "center",
         position: "relative",
         overflow: "hidden",
       }}>
-        {/* Radial gold ambient glow */}
+        {/* Dual gold + purple ambient glow */}
         <div style={{
           position: "absolute",
           inset: 0,
-          background: "radial-gradient(ellipse at center 40%, rgba(212,175,55,0.06) 0%, rgba(212,175,55,0.02) 40%, transparent 70%)",
-          animation: "pulseGlow 4s ease-in-out infinite",
+          background: "radial-gradient(ellipse 80% 50% at 50% 20%, rgba(120,60,180,0.10) 0%, transparent 55%), radial-gradient(ellipse at center 40%, rgba(212,175,55,0.08) 0%, rgba(212,175,55,0.03) 40%, transparent 70%)",
         }} />
 
         {/* Warm top border */}
@@ -1540,61 +1559,71 @@ const CTASection = () => {
         }} />
 
         <div style={{ position: "relative", zIndex: 1 }}>
-          {/* Headline */}
-          <div style={{ ...FONT.title, color: W.primary, marginBottom: "14px" }}>
+          {/* Headline — gold gradient text */}
+          <div style={{
+            ...FONT.title,
+            marginBottom: "28px",
+            background: "linear-gradient(135deg, #D4AF37, #F9E076)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            backgroundClip: "text",
+          }}>
             YOUR INVESTORS WILL ASK.
           </div>
 
-          {/* Subtext */}
+          {/* Section label */}
           <div style={{
-            fontSize: "16px",
-            color: W.secondary,
-            lineHeight: 1.6,
-            maxWidth: "340px",
-            margin: "0 auto 24px",
-          }}>
-            Your numbers are modeled. Now make them investor-ready.
-          </div>
+            ...FONT.label,
+            color: G.emphasis,
+            textAlign: "left",
+            paddingLeft: "24px",
+            marginBottom: "14px",
+          }}>What the Full Analysis gives you</div>
 
-          {/* What you get */}
+          {/* 6 benefit bullets — left-aligned */}
           <div style={{
             display: "flex",
             flexDirection: "column",
             gap: "10px",
-            maxWidth: "300px",
+            padding: "0 24px",
             margin: "0 auto 32px",
             textAlign: "left",
           }}>
             {[
-              "Sensitivity analysis across 5 market conditions",
-              "Budget, stack, waterfall — one investor-ready PDF",
-              "White-labeled with your project and company",
+              "Show investors your deal holds when the market drops 30%",
+              "Five scenario stress tests with return and multiple at each price point",
+              "Full waterfall, capital stack, and budget in one PDF",
+              "Formatted for due diligence, not just display",
+              "White-labeled with your project name and production company",
+              "Ready to hand across the table or attach to an email",
             ].map((item) => (
               <div key={item} style={{ display: "flex", gap: "10px", alignItems: "flex-start" }}>
-                <span style={{ color: "#3CB371", fontSize: "14px", marginTop: "2px", flexShrink: 0 }}>✓</span>
+                <span style={{ color: "#3CB371", fontSize: "14px", marginTop: "2px", flexShrink: 0, width: "14px", textAlign: "center" }}>✓</span>
                 <span style={{ fontSize: "14px", color: W.secondary, lineHeight: 1.5, fontFamily: "'Inter', sans-serif" }}>{item}</span>
               </div>
             ))}
           </div>
 
-          {/* Primary CTA — gated */}
+          {/* Primary CTA — purple gradient + shimmer, gated */}
           <div style={{ marginBottom: "16px" }}>
             <span
               onClick={(e) => { haptics.medium(e); gatedNavigate("/store/the-full-analysis"); }}
               style={{
                 display: "inline-block",
                 padding: "16px 36px",
-                background: "#F9E076",
+                background: "linear-gradient(135deg, rgb(75,30,130), rgb(110,50,170))",
                 border: "none",
                 borderRadius: "8px",
                 fontFamily: "'Bebas Neue', sans-serif",
                 fontSize: "20px",
                 letterSpacing: "0.15em",
-                color: "#000",
+                color: "#fff",
                 fontWeight: 700,
                 cursor: "pointer",
                 textDecoration: "none",
-                boxShadow: "0 0 20px rgba(249,224,118,0.3), 0 0 60px rgba(249,224,118,0.1)",
+                boxShadow: "0 0 20px rgba(120,60,180,0.35), 0 0 60px rgba(120,60,180,0.15)",
+                position: "relative",
+                overflow: "hidden",
               }}
             >
               GET THE FULL ANALYSIS
