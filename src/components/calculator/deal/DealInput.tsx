@@ -739,6 +739,59 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext, genre }:
         </div>
       </div>
 
+      {/* Backend Profit Split */}
+      <div style={{ marginTop: 24, paddingTop: 20, borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+        <div style={{
+          display: "flex", justifyContent: "space-between", alignItems: "center",
+          marginBottom: 12,
+        }}>
+          <span style={{
+            fontFamily: "'Inter', sans-serif", fontSize: 11, fontWeight: 600,
+            textTransform: "uppercase", letterSpacing: "0.15em",
+            color: "rgba(212,175,55,0.50)",
+          }}>Backend Split</span>
+          <span style={{
+            fontFamily: "'Roboto Mono', monospace", fontSize: 14,
+            color: "rgba(255,255,255,0.70)",
+          }}>
+            {inputs.profitSplit ?? 50} / {100 - (inputs.profitSplit ?? 50)}
+          </span>
+        </div>
+        <div style={{
+          display: "flex", alignItems: "center", gap: 12,
+        }}>
+          <span style={{
+            fontFamily: "'Roboto Mono', monospace", fontSize: 10,
+            textTransform: "uppercase", letterSpacing: "0.1em",
+            color: "rgba(212,175,55,0.40)", whiteSpace: "nowrap",
+          }}>Investor</span>
+          <input
+            type="range"
+            min={0}
+            max={100}
+            step={5}
+            value={inputs.profitSplit ?? 50}
+            onChange={(e) => onUpdateInput("profitSplit", Number(e.target.value))}
+            style={{
+              flex: 1, height: 2, appearance: "none", WebkitAppearance: "none",
+              background: `linear-gradient(to right, rgba(212,175,55,0.40) 0%, rgba(212,175,55,0.40) ${inputs.profitSplit ?? 50}%, rgba(255,255,255,0.10) ${inputs.profitSplit ?? 50}%, rgba(255,255,255,0.10) 100%)`,
+              borderRadius: 1, outline: "none", cursor: "pointer",
+            }}
+          />
+          <span style={{
+            fontFamily: "'Roboto Mono', monospace", fontSize: 10,
+            textTransform: "uppercase", letterSpacing: "0.1em",
+            color: "rgba(255,255,255,0.40)", whiteSpace: "nowrap",
+          }}>Producer</span>
+        </div>
+        <p style={{
+          fontFamily: "'Inter', sans-serif", fontSize: 11,
+          color: "rgba(255,255,255,0.40)", marginTop: 8, lineHeight: 1.4,
+        }}>
+          How the backend pool splits after all tiers are paid. Standard is 50/50 — leverage and risk allocation determine the actual number.
+        </p>
+      </div>
+
       {/* CTA */}
       <div style={hasRevenue ? s.revealVis : s.reveal}>
         <button style={s.cta} onClick={(e) => { haptics.medium(e); onNext(); }}>

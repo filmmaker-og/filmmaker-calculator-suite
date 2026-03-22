@@ -20,6 +20,7 @@ export interface WaterfallInputs {
   salesFee: number;
   salesExp: number;  // Sales & Marketing expenses cap (AFM, markets, deliverables)
   deferments: number; // Deferred compensation (producer fees, talent, etc.)
+  profitSplit: number; // Investor share of backend pool (0-100, default 50)
 }
 
 export interface GuildState {
@@ -43,6 +44,7 @@ export interface WaterfallResult {
   marketing: number;
   deferments: number;
   credits: number;
+  creditsApplied: number; // Actual credits used (capped at max deductible)
   recouped: number;
   recoupPct: number;
   investor: number;
@@ -55,6 +57,7 @@ export interface WaterfallResult {
   seniorDebtHurdle: number;
   mezzDebtHurdle: number;
   equityHurdle: number;
+  profitSplit: number; // Investor % of backend (for display)
 }
 
 // Calculate the algebraic breakeven point
@@ -162,8 +165,9 @@ export function calculateWaterfall(inputs: WaterfallInputs, guilds: GuildState):
   const recoupPct = totalHurdle > 0 ? Math.min(100, (revenue / totalHurdle) * 100) : 0;
 
   const investorRecoup = Math.min(equityHurdle, Math.max(0, revenue - offTop - totalDebtHurdle));
-  const investorTotal = investorRecoup + (profitPool * 0.5);
-  const producerShare = profitPool * 0.5;
+  const splitPct = Math.max(0, Math.min(100, inputs.profitSplit ?? 50)) / 100;
+  const investorTotal = investorRecoup + (profitPool * splitPct);
+  const producerShare = profitPool * (1 - splitPct);
   const multiple = equity > 0 ? investorTotal / equity : 0;
 
   // 6. Ledger Construction
@@ -188,6 +192,8 @@ export function calculateWaterfall(inputs: WaterfallInputs, guilds: GuildState):
     marketing,
     deferments,
     credits,
+    creditsApplied,
+    profitSplit: Math.max(0, Math.min(100, inputs.profitSplit ?? 50)),
     recouped,
     recoupPct,
     investor: investorTotal,
@@ -206,7 +212,8 @@ export function calculateWaterfall(inputs: WaterfallInputs, guilds: GuildState):
 import type { TierPayment, WaterfallState } from "./waterfall-types";
 
 export function computeTierPayments(result: WaterfallResult, inputs: WaterfallInputs): TierPayment[] {
-  let remaining = inputs.revenue - result.offTopTotal;
+  // Start with revenue after off-the-tops, then add back credits
+  let remaining = inputs.revenue - result.offTopTotal + result.creditsApplied;
   const tiers: TierPayment[] = [];
   let phase = 1;
 

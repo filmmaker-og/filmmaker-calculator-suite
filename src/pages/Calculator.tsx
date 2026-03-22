@@ -48,6 +48,7 @@ const defaultInputs: WaterfallInputs = {
   salesFee: 15,
   salesExp: 75000,
   deferments: 0,
+  profitSplit: 50,
 };
 
 const defaultGuilds: GuildState = {
