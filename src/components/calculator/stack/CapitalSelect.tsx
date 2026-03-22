@@ -31,7 +31,7 @@ const options: {
   {
     key: 'taxCredits',
     title: 'Tax Credits',
-    description: 'Louisiana, Georgia, New York, etc.',
+    description: 'LA, Georgia, New York, etc.',
     icon: Receipt,
     priorityLabel: 'Off-waterfall',
   },
@@ -165,8 +165,9 @@ const s: Record<string, React.CSSProperties> = {
   },
   siLeft: {
     display: "flex",
-    alignItems: "center",
+    alignItems: "flex-start",
     gap: "12px",
+    paddingTop: "2px",
   },
   siIcon: {
     width: "40px",
@@ -359,7 +360,7 @@ const CapitalSelect = ({ selections, onToggle, onNext }: CapitalSelectProps) => 
               >
                 <div style={s.siLeft}>
                   <div style={isSelected ? s.siIconOn : s.siIcon}>
-                    <Icon style={{ width: "20px", height: "20px" }} />
+                    <Icon style={{ width: "24px", height: "24px" }} />
                   </div>
                   <div>
                     <div style={isSelected ? s.siTitleOn : s.siTitle}>{option.title}</div>

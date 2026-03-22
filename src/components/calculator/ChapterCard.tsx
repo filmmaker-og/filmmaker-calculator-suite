@@ -93,8 +93,11 @@ const warmGlow: React.CSSProperties = {
   top: 0,
   left: 0,
   right: 0,
-  height: "220px",
-  background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.18) 0%, transparent 70%)",
+  height: "280px",
+  background: [
+    "radial-gradient(ellipse 80% 50% at 50% 0%, rgba(212,175,55,0.18) 0%, transparent 70%)",
+    "radial-gradient(ellipse 60% 40% at 50% 100%, rgba(120,60,180,0.08) 0%, transparent 60%)",
+  ].join(", "),
   pointerEvents: "none",
 };
 
@@ -103,8 +106,11 @@ const featureGlow: React.CSSProperties = {
   top: 0,
   left: 0,
   right: 0,
-  height: "180px",
-  background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.14) 0%, transparent 70%)",
+  height: "220px",
+  background: [
+    "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.14) 0%, transparent 70%)",
+    "radial-gradient(ellipse 60% 40% at 50% 100%, rgba(120,60,180,0.06) 0%, transparent 60%)",
+  ].join(", "),
   pointerEvents: "none",
 };
 
@@ -113,8 +119,11 @@ const dataGlow: React.CSSProperties = {
   top: 0,
   left: 0,
   right: 0,
-  height: "140px",
-  background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.10) 0%, transparent 70%)",
+  height: "180px",
+  background: [
+    "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.10) 0%, transparent 70%)",
+    "radial-gradient(ellipse 60% 40% at 50% 100%, rgba(120,60,180,0.06) 0%, transparent 60%)",
+  ].join(", "),
   pointerEvents: "none",
 };
 
@@ -123,8 +132,11 @@ const neutralGlow: React.CSSProperties = {
   top: 0,
   left: 0,
   right: 0,
-  height: "100px",
-  background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.08) 0%, transparent 70%)",
+  height: "140px",
+  background: [
+    "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.08) 0%, transparent 70%)",
+    "radial-gradient(ellipse 60% 40% at 50% 100%, rgba(120,60,180,0.04) 0%, transparent 60%)",
+  ].join(", "),
   pointerEvents: "none",
 };
 

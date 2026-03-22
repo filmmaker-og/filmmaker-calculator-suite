@@ -266,20 +266,24 @@ const s: Record<string, React.CSSProperties> = {
   // CTA
   reveal: {
     opacity: 0,
+    maxHeight: 0,
+    overflow: "hidden" as const,
     transform: "translateY(12px)",
-    transition: "opacity 0.4s ease 0.15s, transform 0.4s ease 0.15s",
+    transition: "opacity 0.4s ease 0.15s, transform 0.4s ease 0.15s, max-height 0.35s ease",
     pointerEvents: "none" as const,
   },
   revealVis: {
     opacity: 1,
+    maxHeight: 120,
+    overflow: "hidden" as const,
     transform: "translateY(0)",
-    transition: "opacity 0.4s ease 0.15s, transform 0.4s ease 0.15s",
+    transition: "opacity 0.4s ease 0.15s, transform 0.4s ease 0.15s, max-height 0.35s ease",
     pointerEvents: "auto" as const,
   },
   cta: {
     width: "100%",
     padding: 16,
-    marginTop: 24,
+    marginTop: 16,
     background: "#F9E076",
     border: "none",
     borderRadius: 8,
