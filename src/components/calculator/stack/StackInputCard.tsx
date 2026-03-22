@@ -119,7 +119,7 @@ const StackInputCard = ({
             style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}
           >
             <div className="flex items-center gap-2">
-              <span className="text-xs uppercase tracking-widest font-semibold" style={{ color: "rgba(255,255,255,0.55)" }}>
+              <span className="text-xs uppercase tracking-widest font-semibold" style={{ color: "rgba(212,175,55,0.75)" }}>
                 {amountLabel}
               </span>
               {helpText && (
@@ -194,12 +194,12 @@ const StackInputCard = ({
               <div className="p-5">
                 <div className="space-y-3">
                   <div className="flex items-center justify-between text-sm">
-                    <span style={{ color: "rgba(255,255,255,0.55)" }}>Principal</span>
-                    <span className="font-mono" style={{ color: "rgba(255,255,255,0.70)" }}>{formatCompactCurrency(amount)}</span>
+                    <span style={{ color: "rgba(255,255,255,0.60)" }}>Principal</span>
+                    <span className="font-mono" style={{ color: "rgba(255,255,255,0.85)" }}>{formatCompactCurrency(amount)}</span>
                   </div>
                   <div className="flex items-center justify-between text-sm">
-                    <span style={{ color: "rgba(255,255,255,0.55)" }}>+ {rateConfig.label} ({rateValue}%)</span>
-                    <span className="font-mono" style={{ color: "rgba(255,255,255,0.70)" }}>{formatCompactCurrency(interestAmount)}</span>
+                    <span style={{ color: "rgba(255,255,255,0.60)" }}>+ {rateConfig.label} ({rateValue}%)</span>
+                    <span className="font-mono" style={{ color: "rgba(255,255,255,0.85)" }}>{formatCompactCurrency(interestAmount)}</span>
                   </div>
                   <div style={{ height: "1px", background: "rgba(212,175,55,0.20)" }} />
                   <div className="flex items-center justify-between">
@@ -215,7 +215,7 @@ const StackInputCard = ({
           {typicalRangeLabel && (
             <div className="px-5 py-3" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
               <div className="flex items-center justify-between">
-                <span className="text-xs" style={{ color: "rgba(255,255,255,0.55)" }}>Typical range</span>
+                <span className="text-xs" style={{ color: "rgba(255,255,255,0.60)" }}>Typical range</span>
                 <span className="text-xs font-mono" style={{ color: "rgba(255,255,255,0.70)" }}>{typicalRangeLabel}</span>
               </div>
             </div>

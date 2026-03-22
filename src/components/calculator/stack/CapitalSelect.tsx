@@ -1,7 +1,7 @@
 import { Check, Receipt, Landmark, Coins, Users2, Clock } from "lucide-react";
 import { useHaptics } from "@/hooks/use-haptics";
 import { useState } from "react";
-import ChapterCard, { cardH, cardHSub } from "../ChapterCard";
+import ChapterCard from "../ChapterCard";
 import { CapitalSelections } from "@/lib/waterfall";
 
 // Re-export as alias for backward compatibility
@@ -69,13 +69,50 @@ const s: Record<string, React.CSSProperties> = {
   wrapper: {
     animation: "stepEnter 0.4s ease-out forwards",
   },
-  headerPad: {
-    padding: "20px 24px 0",
+  /* ── Glass Hero ── */
+  heroOuter: { position: "relative" as const, marginBottom: 20 },
+  heroCanopy: {
+    position: "absolute" as const, top: 0, left: 0, right: 0, height: "120%",
+    background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.25) 0%, transparent 70%)",
+    pointerEvents: "none" as const,
   },
-  subLine: {
-    marginBottom: "16px",
-    paddingBottom: "16px",
-    borderBottom: "1px solid rgba(255,255,255,0.06)",
+  heroCard: {
+    position: "relative" as const, textAlign: "center" as const,
+    padding: "24px 20px 20px", borderRadius: 12, overflow: "hidden" as const,
+    background: "rgba(6,6,6,0.92)",
+    backdropFilter: "blur(40px)", WebkitBackdropFilter: "blur(40px)",
+    border: "1px solid rgba(212,175,55,0.20)",
+    boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 24px rgba(212,175,55,0.10), 0 0 20px rgba(120,60,180,0.15)",
+  },
+  heroGlowBg: {
+    position: "absolute" as const, top: 0, left: 0, right: 0, bottom: 0, pointerEvents: "none" as const,
+    background: [
+      "radial-gradient(ellipse 80% 50% at 50% 10%, rgba(212,175,55,0.22) 0%, transparent 60%)",
+      "radial-gradient(ellipse 60% 40% at 50% 50%, rgba(120,60,180,0.16) 0%, transparent 60%)",
+      "radial-gradient(ellipse 100% 70% at 50% 100%, rgba(120,60,180,0.20) 0%, transparent 60%)",
+    ].join(", "),
+  },
+  heroInner: { position: "relative" as const, zIndex: 1 },
+  heroEyebrow: { display: "flex", alignItems: "center", gap: "10px", marginBottom: "12px", padding: "0 8px" },
+  heroEyebrowLine: { flex: 1, height: "1px", background: "rgba(212,175,55,0.35)" },
+  heroEyebrowLabel: {
+    fontFamily: "'Roboto Mono', monospace", fontSize: "10px",
+    letterSpacing: "0.15em", textTransform: "uppercase" as const,
+    color: "rgba(212,175,55,0.65)", whiteSpace: "nowrap" as const,
+  },
+  heroH1: {
+    fontFamily: "'Bebas Neue', sans-serif", fontSize: "2.8rem",
+    letterSpacing: "0.02em", lineHeight: 0.90, color: "#fff", marginBottom: "8px",
+    textShadow: "0 2px 20px rgba(0,0,0,0.95), 0 4px 40px rgba(0,0,0,0.5)",
+  },
+  heroGoldSpan: {
+    color: "#D4AF37",
+    textShadow: "0 2px 20px rgba(0,0,0,0.8), 0 0 40px rgba(212,175,55,0.50), 0 0 80px rgba(212,175,55,0.25)",
+  },
+  heroSubtext: {
+    fontFamily: "'Inter', sans-serif", fontSize: "15px",
+    color: "rgba(255,255,255,0.75)", lineHeight: 1.45,
+    textShadow: "0 2px 12px rgba(0,0,0,0.9)",
   },
   stackHdr: {
     padding: "12px 16px",
@@ -89,12 +126,12 @@ const s: Record<string, React.CSSProperties> = {
     fontWeight: 600,
     textTransform: "uppercase" as const,
     letterSpacing: "0.15em",
-    color: "rgba(255,255,255,0.55)",
+    color: "rgba(212,175,55,0.75)",
   },
   stackCnt: {
     fontFamily: "'Roboto Mono', monospace",
     fontSize: "11px",
-    color: "rgba(212,175,55,0.60)",
+    color: "rgba(212,175,55,0.75)",
   },
   si: {
     padding: "16px",
@@ -119,9 +156,9 @@ const s: Record<string, React.CSSProperties> = {
     borderBottom: "1px solid rgba(255,255,255,0.04)",
     cursor: "pointer",
     transition: "all 0.15s",
-    borderLeft: "3px solid #D4AF37",
+    borderLeft: "3px solid rgba(120,60,180,0.60)",
     minHeight: "64px",
-    background: "rgba(212,175,55,0.02)",
+    background: "rgba(120,60,180,0.04)",
     width: "100%",
     border: "none",
     textAlign: "left" as const,
@@ -137,9 +174,9 @@ const s: Record<string, React.CSSProperties> = {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    border: "1px solid rgba(212,175,55,0.15)",
+    border: "1px solid rgba(255,255,255,0.12)",
     borderRadius: "4px",
-    color: "rgba(212,175,55,0.30)",
+    color: "rgba(255,255,255,0.30)",
     background: "#000",
     transition: "all 0.15s",
   },
@@ -149,27 +186,27 @@ const s: Record<string, React.CSSProperties> = {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    border: "1px solid #D4AF37",
+    border: "1px solid rgba(120,60,180,0.50)",
     borderRadius: "4px",
-    color: "#D4AF37",
-    background: "rgba(212,175,55,0.05)",
+    color: "rgba(190,160,240,1.0)",
+    background: "rgba(120,60,180,0.12)",
     transition: "all 0.15s",
   },
   siTitle: {
     fontSize: "14px",
     fontWeight: 600,
-    color: "rgba(255,255,255,0.70)",
+    color: "rgba(255,255,255,0.80)",
     transition: "color 0.15s",
   },
   siTitleOn: {
     fontSize: "14px",
     fontWeight: 600,
-    color: "#D4AF37",
+    color: "rgba(190,160,240,1.0)",
     transition: "color 0.15s",
   },
   siDesc: {
     fontSize: "11px",
-    color: "rgba(255,255,255,0.35)",
+    color: "rgba(255,255,255,0.40)",
     marginTop: "2px",
   },
   siRight: {
@@ -185,8 +222,8 @@ const s: Record<string, React.CSSProperties> = {
     letterSpacing: "0.08em",
     padding: "4px 8px",
     borderRadius: "4px",
-    background: "rgba(212,175,55,0.04)",
-    color: "rgba(212,175,55,0.40)",
+    background: "rgba(255,255,255,0.04)",
+    color: "rgba(255,255,255,0.45)",
     transition: "all 0.15s",
     whiteSpace: "nowrap" as const,
   },
@@ -198,8 +235,8 @@ const s: Record<string, React.CSSProperties> = {
     letterSpacing: "0.08em",
     padding: "4px 8px",
     borderRadius: "4px",
-    background: "rgba(212,175,55,0.10)",
-    color: "rgba(212,175,55,0.80)",
+    background: "rgba(120,60,180,0.14)",
+    color: "rgba(190,160,240,0.90)",
     transition: "all 0.15s",
     whiteSpace: "nowrap" as const,
   },
@@ -207,7 +244,7 @@ const s: Record<string, React.CSSProperties> = {
     width: "22px",
     height: "22px",
     borderRadius: "4px",
-    border: "1px solid rgba(212,175,55,0.15)",
+    border: "1px solid rgba(255,255,255,0.15)",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
@@ -218,8 +255,8 @@ const s: Record<string, React.CSSProperties> = {
     width: "22px",
     height: "22px",
     borderRadius: "4px",
-    background: "#D4AF37",
-    border: "1px solid #D4AF37",
+    background: "rgba(120,60,180,0.85)",
+    border: "1px solid rgba(120,60,180,0.85)",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
@@ -229,7 +266,7 @@ const s: Record<string, React.CSSProperties> = {
   hint: {
     textAlign: "center" as const,
     fontSize: "11px",
-    color: "rgba(255,255,255,0.35)",
+    color: "rgba(255,255,255,0.40)",
     padding: "16px",
   },
   cta: {
@@ -250,7 +287,7 @@ const s: Record<string, React.CSSProperties> = {
     justifyContent: "center",
     gap: "10px",
     transition: "transform 0.12s",
-    boxShadow: "0 0 20px rgba(249,224,118,0.25), 0 0 60px rgba(249,224,118,0.08)",
+    boxShadow: "0 0 20px rgba(249,224,118,0.25), 0 0 60px rgba(249,224,118,0.15)",
     minHeight: "56px",
   },
 };
@@ -269,13 +306,29 @@ const CapitalSelect = ({ selections, onToggle, onNext }: CapitalSelectProps) => 
 
   return (
     <div style={s.wrapper}>
-      <ChapterCard chapter="02" title="Capital Stack" variant="data" noPad>
-        <div style={s.headerPad}>
-          <div style={cardH}>How's It Funded?</div>
-          <div style={{ ...cardHSub, ...s.subLine }}>
-            Select the capital sources in your deal
+      {/* Glass Hero */}
+      <div style={s.heroOuter}>
+        <div style={s.heroCanopy} />
+        <section style={s.heroCard}>
+          <div style={s.heroGlowBg} />
+          <div style={s.heroInner}>
+            <div style={s.heroEyebrow}>
+              <div style={s.heroEyebrowLine} />
+              <span style={s.heroEyebrowLabel}>Step 02 · Capital Stack</span>
+              <div style={s.heroEyebrowLine} />
+            </div>
+            <h1 style={s.heroH1}>
+              How's It<br />
+              <span style={s.heroGoldSpan}>Funded?</span>
+            </h1>
+            <p style={s.heroSubtext}>
+              Select the capital sources in your deal.
+            </p>
           </div>
-        </div>
+        </section>
+      </div>
+
+      <ChapterCard chapter="02" title="Capital Stack" variant="data" noPad hideEyebrow>
 
         {/* Header */}
         <div style={s.stackHdr}>
@@ -300,7 +353,7 @@ const CapitalSelect = ({ selections, onToggle, onNext }: CapitalSelectProps) => 
                   ...(isSelected ? s.siOn : s.si),
                   // Re-apply borderBottom separately since si/siOn override border
                   borderBottom: isLast ? "none" : "1px solid rgba(255,255,255,0.04)",
-                  borderLeft: isSelected ? "3px solid #D4AF37" : "3px solid transparent",
+                  borderLeft: isSelected ? "3px solid rgba(120,60,180,0.60)" : "3px solid transparent",
                   ...(justToggled === option.key ? { transform: "scale(1.01)" } : {}),
                 }}
               >
@@ -329,8 +382,8 @@ const CapitalSelect = ({ selections, onToggle, onNext }: CapitalSelectProps) => 
         <p style={s.hint}>Most indie films use Senior Debt + Equity</p>
       </ChapterCard>
 
-      <button style={s.cta} onClick={onNext}>
-        {selectedCount > 0 ? "Continue" : "Skip — Self-Financed"}
+      <button style={s.cta} onClick={(e) => { haptics.medium(e); onNext(); }}>
+        {selectedCount > 0 ? "Enter Your Stack Details" : "Skip — Self-Financed"}
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <line x1="5" y1="12" x2="19" y2="12" />
           <polyline points="12 5 19 12 12 19" />

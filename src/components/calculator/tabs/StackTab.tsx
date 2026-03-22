@@ -21,46 +21,25 @@ const STEP_LABELS: Record<string, string> = {
   summary: 'Review',
 };
 
-/* ── Wizard progress pip row ───────────────────── */
-const WizardProgress = ({ steps, currentIndex }: { steps: string[]; currentIndex: number }) => (
-  <div className="px-6 pt-4 pb-2">
-    <div className="flex items-center justify-center">
-      {steps.map((step, i) => {
-        const isCompleted = i < currentIndex;
-        const isCurrent = i === currentIndex;
-        return (
-          <div key={step} className="flex items-center">
-            {i > 0 && (
-              <div
-                className="transition-colors duration-300"
-                style={{
-                  height: "1.5px",
-                  width: steps.length <= 4 ? "24px" : "16px",
-                  background: isCompleted ? "rgba(212,175,55,0.60)" : "rgba(255,255,255,0.10)",
-                }}
-              />
-            )}
-            <div
-              className="rounded-full transition-all duration-300"
-              style={
-                isCurrent
-                  ? { width: "10px", height: "10px", background: "#D4AF37", boxShadow: "0 0 6px rgba(212,175,55,0.6)" }
-                  : isCompleted
-                    ? { width: "8px", height: "8px", background: "rgba(212,175,55,0.50)" }
-                    : { width: "8px", height: "8px", background: "rgba(255,255,255,0.15)" }
-              }
-            />
-          </div>
-        );
-      })}
-    </div>
-    <p className="text-center text-[11px] font-mono mt-2 tracking-wider" style={{ color: "rgba(255,255,255,0.55)" }}>
+/* ── Sub-step text indicator ──────────────────── */
+const SubStepIndicator = ({ steps, currentIndex }: { steps: string[]; currentIndex: number }) => {
+  const currentLabel = STEP_LABELS[steps[currentIndex]] ?? steps[currentIndex];
+  return (
+    <div style={{
+      textAlign: "center",
+      padding: "16px 24px 8px",
+      fontFamily: "'Roboto Mono', monospace",
+      fontSize: 10,
+      letterSpacing: "0.12em",
+      textTransform: "uppercase" as const,
+      color: "rgba(212,175,55,0.55)",
+    }}>
       Step {currentIndex + 1} of {steps.length}
       {" — "}
-      <span style={{ color: "rgba(255,255,255,0.70)" }}>{STEP_LABELS[steps[currentIndex]] ?? steps[currentIndex]}</span>
-    </p>
-  </div>
-);
+      <span style={{ color: "rgba(255,255,255,0.70)" }}>{currentLabel}</span>
+    </div>
+  );
+};
 
 interface StackTabProps {
   inputs: WaterfallInputs;
@@ -185,7 +164,7 @@ const StackTab = ({ inputs, onUpdateInput, onAdvance, selections, onToggleSelect
 
   return (
     <div className="pb-8">
-      <WizardProgress steps={steps} currentIndex={safeIndex} />
+      <SubStepIndicator steps={steps} currentIndex={safeIndex} />
       {renderStep()}
     </div>
   );
