@@ -97,47 +97,100 @@ const s: Record<string, React.CSSProperties> = {
     borderRadius: "50%",
     animation: "spin 1s linear infinite",
   },
-  glassHero: {
-    position: "relative" as const,
-    background: "rgba(6,6,6,0.92)",
-    backdropFilter: "blur(40px)",
-    WebkitBackdropFilter: "blur(40px)",
-    border: "1px solid rgba(212,175,55,0.20)",
-    borderRadius: "12px",
-    overflow: "hidden",
-    boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 24px rgba(212,175,55,0.10), 0 0 20px rgba(120,60,180,0.15)",
-    padding: "40px 24px 36px",
-    marginBottom: "24px",
-    textAlign: "center" as const,
-  },
-  glassHeroGlow: {
-    position: "absolute" as const,
-    inset: 0,
-    background: [
-      "radial-gradient(ellipse 80% 50% at 50% 10%, rgba(212,175,55,0.22) 0%, transparent 60%)",
-      "radial-gradient(ellipse 60% 40% at 50% 50%, rgba(120,60,180,0.16) 0%, transparent 60%)",
-      "radial-gradient(ellipse 100% 70% at 50% 100%, rgba(120,60,180,0.20) 0%, transparent 60%)",
-    ].join(", "),
-    pointerEvents: "none" as const,
-  },
-  glassHeroH1: {
-    fontFamily: "'Bebas Neue', sans-serif",
-    fontSize: "4.2rem",
-    lineHeight: 0.86,
-    letterSpacing: "0.04em",
-    color: "#F9E076",
-    position: "relative" as const,
-    zIndex: 1,
-    marginBottom: "16px",
-  },
-  glassHeroSub: {
-    fontFamily: "'Bebas Neue', sans-serif",
-    fontSize: "1.5rem",
-    letterSpacing: "0.06em",
-    color: "rgba(255,255,255,0.55)",
-    position: "relative" as const,
-    zIndex: 1,
-  },
+};
+
+/* ═══ Progress micro-bar — 5 segments ═══ */
+const ProgressBar = ({ activeTab }: { activeTab: TabId }) => {
+  const steps: TabId[] = ['project', 'budget', 'stack', 'deal', 'waterfall'];
+  const activeIdx = steps.indexOf(activeTab);
+  return (
+    <div style={{ display: "flex", gap: 3, marginBottom: 20, height: 3 }}>
+      {steps.map((step, i) => (
+        <div
+          key={step}
+          style={{
+            flex: 1,
+            borderRadius: 2,
+            background: i < activeIdx
+              ? "rgba(212,175,55,0.50)"
+              : i === activeIdx
+                ? "rgba(212,175,55,0.60)"
+                : "rgba(255,255,255,0.08)",
+            transition: "background 0.4s",
+            ...(i === activeIdx ? { animation: "segPulse 2s ease-in-out infinite" } : {}),
+          }}
+        />
+      ))}
+    </div>
+  );
+};
+
+/* ═══ Glass hero — per-step welcome surface ═══ */
+const CalcHero = ({ stepLabel, title, titleGold, subtitle, visible }: {
+  stepLabel: string;
+  title: string;
+  titleGold: string;
+  subtitle: string;
+  visible: boolean;
+}) => {
+  const prefersReducedMotion = typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const heroReveal: React.CSSProperties = {
+    opacity: prefersReducedMotion || visible ? 1 : 0,
+    transform: prefersReducedMotion || visible ? "translateY(0)" : "translateY(20px)",
+    transition: prefersReducedMotion ? "none" : "opacity 0.6s cubic-bezier(0.16,1,0.3,1), transform 0.6s cubic-bezier(0.16,1,0.3,1)",
+  };
+  return (
+    <div style={{ position: "relative", marginBottom: 20, ...heroReveal }}>
+      <div style={{
+        position: "absolute", top: 0, left: 0, right: 0, height: "120%",
+        background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.25) 0%, transparent 70%)",
+        pointerEvents: "none",
+      }} />
+      <section style={{
+        position: "relative", textAlign: "center",
+        padding: "24px 20px 20px",
+        borderRadius: 12, overflow: "hidden",
+        background: "rgba(6,6,6,0.92)",
+        backdropFilter: "blur(40px)",
+        WebkitBackdropFilter: "blur(40px)",
+        border: "1px solid rgba(212,175,55,0.20)",
+        boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 24px rgba(212,175,55,0.10), 0 0 20px rgba(120,60,180,0.15)",
+      }}>
+        <div style={{
+          position: "absolute", top: 0, left: 0, right: 0, bottom: 0, pointerEvents: "none",
+          background: "radial-gradient(ellipse 80% 50% at 50% 10%, rgba(212,175,55,0.22) 0%, transparent 60%), radial-gradient(ellipse 60% 40% at 50% 50%, rgba(120,60,180,0.16) 0%, transparent 60%), radial-gradient(ellipse 100% 70% at 50% 100%, rgba(120,60,180,0.20) 0%, transparent 60%)",
+        }} />
+        <div style={{ position: "relative", zIndex: 1 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12, padding: "0 8px" }}>
+            <div style={{ flex: 1, height: 1, background: "rgba(212,175,55,0.35)" }} />
+            <span style={{
+              fontFamily: "'Roboto Mono', monospace", fontSize: 10,
+              letterSpacing: "0.15em", textTransform: "uppercase",
+              color: "rgba(212,175,55,0.65)", whiteSpace: "nowrap",
+            }}>{stepLabel}</span>
+            <div style={{ flex: 1, height: 1, background: "rgba(212,175,55,0.35)" }} />
+          </div>
+          <h1 style={{
+            fontFamily: "'Bebas Neue', sans-serif", fontSize: "2.8rem",
+            letterSpacing: "0.02em", lineHeight: 0.90, color: "#fff",
+            marginBottom: 8,
+            textShadow: "0 2px 20px rgba(0,0,0,0.95), 0 4px 40px rgba(0,0,0,0.5)",
+          }}>
+            {title}<br />
+            <span style={{
+              color: "#D4AF37",
+              textShadow: "0 2px 20px rgba(0,0,0,0.8), 0 0 40px rgba(212,175,55,0.50), 0 0 80px rgba(212,175,55,0.25)",
+            }}>{titleGold}</span>
+          </h1>
+          <p style={{
+            fontFamily: "'Inter', sans-serif", fontSize: 15,
+            color: "rgba(255,255,255,0.75)", lineHeight: 1.45,
+            textShadow: "0 2px 12px rgba(0,0,0,0.9)",
+          }}>{subtitle}</p>
+        </div>
+      </section>
+    </div>
+  );
 };
 
 const Calculator = () => {
@@ -340,15 +393,33 @@ const Calculator = () => {
     switch (activeTab) {
       case 'project':
         return (
-          <ProjectTab
-            project={project}
-            onUpdateProject={setProject}
-            onAdvance={() => handleTabChange('budget')}
-          />
+          <>
+            <ProgressBar activeTab={activeTab} />
+            <CalcHero
+              stepLabel="Step 00 · Project"
+              title="What Are You"
+              titleGold="Building?"
+              subtitle="Tell us about the project — or jump straight to the numbers."
+              visible={true}
+            />
+            <ProjectTab
+              project={project}
+              onUpdateProject={setProject}
+              onAdvance={() => handleTabChange('budget')}
+            />
+          </>
         );
       case 'budget':
         return (
           <>
+            <ProgressBar activeTab={activeTab} />
+            <CalcHero
+              stepLabel="Step 01 · Budget"
+              title="What Does It"
+              titleGold="Cost?"
+              subtitle="Total negative cost — everything to deliver the film."
+              visible={true}
+            />
             {renderContextBar()}
             <BudgetTab
               inputs={inputs}
@@ -362,6 +433,14 @@ const Calculator = () => {
       case 'stack':
         return (
           <>
+            <ProgressBar activeTab={activeTab} />
+            <CalcHero
+              stepLabel="Step 02 · Capital Stack"
+              title="How's It"
+              titleGold="Funded?"
+              subtitle="Select the capital sources in your deal."
+              visible={true}
+            />
             {renderContextBar()}
             <StackTab
               inputs={inputs}
@@ -375,6 +454,14 @@ const Calculator = () => {
       case 'deal':
         return (
           <>
+            <ProgressBar activeTab={activeTab} />
+            <CalcHero
+              stepLabel="Step 03 · Deal Terms"
+              title="What's The"
+              titleGold="Deal?"
+              subtitle="Acquisition price and distribution assumptions."
+              visible={true}
+            />
             {renderContextBar()}
             <DealTab
               inputs={inputs}
@@ -389,6 +476,7 @@ const Calculator = () => {
       case 'waterfall':
         return (
           <>
+            <ProgressBar activeTab={activeTab} />
             {renderContextBar()}
             <WaterfallTab
               result={result}
@@ -418,18 +506,6 @@ const Calculator = () => {
     <div style={s.page}>
       <main ref={mainRef} style={s.main}>
         <div style={s.col}>
-          {/* Glass Hero — welcome surface on Project tab */}
-          {activeTab === 'project' && (
-            <div style={s.glassHero}>
-              <div style={s.glassHeroGlow} />
-              <div style={s.glassHeroH1}>
-                MODEL YOUR<br />NUMBERS
-              </div>
-              <div style={s.glassHeroSub}>
-                Five Steps. One Waterfall. Investor-Ready.
-              </div>
-            </div>
-          )}
           <div
             key={activeTab}
             style={{
