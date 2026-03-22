@@ -3,6 +3,7 @@
 **Source of truth:** `src/pages/Resources.tsx` (1,256 lines), `src/lib/glossary-rotation.ts`
 **Last extracted:** March 21, 2026 (commit d293e0e)
 **Companion docs:** `LANDING_PAGE_REFERENCE.md`, `UNIVERSAL_PATTERN_LIBRARY.md`
+**Audit shipped:** March 22, 2026 (PR #TBD) — glass hero, pinned cards below command center with purple pins, purple command center, standard footer, atmospheric bumps across all card states. See session brief for full proposal list.
 
 ---
 
@@ -24,14 +25,14 @@
 ### Section Stack (render order)
 
 ```
-HEADER — "Resource Vault" hero headline
+HERO — Glass card: "RESOURCE / VAULT" + subtext (matches Index.tsx hero pattern)
 ── breath line ──
-EDITOR'S CHOICE — 2 pinned cornerstone cards (horizontal scroll on mobile)
-── breath line ──
-COMMAND CENTER — sticky search + filter bar
+COMMAND CENTER — sticky search + filter bar (purple atmospheric + purple search border)
+PINNED CARDS — 2 cornerstone entries, stacked vertically, purple pin indicators
+── purple separator ──
 RESULTS BAR — count + sort toggle
 VAULT GRID — filtered VaultCard list
-FOOTER — branded ruled footer
+FOOTER — standard social + nav + disclaimer (synced with Index.tsx / Store.tsx)
 ```
 
 ### Styling Convention
@@ -125,12 +126,11 @@ Two featured entries in a horizontal scroll container:
 // Content: "Start Here" eyebrow → "What Is a Recoupment Waterfall" title → "Editor's Choice" gold solid badge
 ```
 
-### Secondary Pinned Card (auto width)
+### Secondary Pinned Card (stacked, full width)
 
 ```tsx
 {
-  flex: "0 0 auto",
-  minWidth: "65%",
+  // No flex sizing — stacked vertically below primary
   scrollSnapAlign: "start",
   borderRadius: 12,
   padding: "22px 20px",
@@ -304,17 +304,9 @@ Appears between header and pinned section, and between pinned section and comman
 
 ---
 
-## 10. FOOTER (unique to Resources)
+## 10. FOOTER (synced with Index.tsx / Store.tsx)
 
-NOT the standard landing page/store footer. Resources has its own branded footer:
-
-```tsx
-// Ruled brand mark: gold line + "Filmmaker.og" mono label + gold line
-// Subtitle: "Film finance intelligence" in muted mono
-// Extra generous padding: 80px top/bottom
-```
-
-No social icons, no nav links, no disclaimer. This is a minimal brand-only closer.
+Standard shared footer with social icons (Instagram, TikTok, Facebook), nav links (Home, Shop, Resources), and legal disclaimer. `#0A0A0A` background, gold `0.12` border-top, `32px 24px 40px` padding.
 
 ---
 
@@ -344,13 +336,15 @@ Resources is the only page with explicit responsive CSS. Injected via script blo
 | `4.2rem` | Bebas | Page header "Resource Vault" |
 | `1.9rem` | Bebas | Primary pinned card title |
 | `1.6rem` | Bebas | Secondary pinned card title |
-| `1.5rem` | Bebas | Vault card titles |
+| `1.8rem` | Bebas | Vault card titles (gold/gold-featured) |
+| `1.6rem` | Bebas | Vault card titles (neutral) |
 | `22px` | — | Hover arrow (→ / ↗) |
 | `16px` | Inter | Card excerpt, search input |
 | `14px` | Mono | Card meta (date, read time) |
 | `13px` | Mono | Footer brand label, dropdown items |
 | `12px` | Mono | Badges, pinned labels, "Editor's Choice", filter, results bar |
-| `11px` | Mono | Card eyebrow, dropdown button |
+| `12px` | Mono | Card eyebrow |
+| `11px` | Mono | Badge text, dropdown button |
 | `8px` | — | Meta dot separator |
 
 ---
@@ -361,6 +355,6 @@ Resources is the only page with explicit responsive CSS. Injected via script blo
 - Do NOT remove the responsive CSS injection — it controls mobile behavior
 - Do NOT change glossary rotation to cron-based — deterministic date seeding is by design
 - Do NOT use glass blur on vault cards — they're opaque `#0A0A0A` (consistent with Store)
-- Do NOT add the standard landing page/store footer — Resources has its own minimal footer
+- Do NOT diverge the footer from Store.tsx / Index.tsx — Resources now uses the standard shared footer
 - Do NOT put editorial content href links to "#" in production — they're placeholder
 - Do NOT change card state assignment logic without updating all dependent style functions

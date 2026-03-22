@@ -1168,39 +1168,62 @@ const Store = () => {
       {/* ═══════════════════════════════════════
            § 1 — ON DEMAND
          ═══════════════════════════════════════ */}
-      <section
-        ref={heroRef}
-        style={{ padding: "40px 24px 32px", textAlign: "center", position: "relative" }}
-      >
+      {/* Glass hero card */}
+      <div ref={heroRef} style={{ padding: "32px 0 0", position: "relative" }}>
+        {/* Page-level canopy */}
         <div style={{
-          position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
+          position: "absolute", top: 0, left: 0, right: 0, height: "120%",
           background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.25) 0%, transparent 70%)",
           pointerEvents: "none",
         }} />
-        <div style={{ position: "relative", ...reveal(heroVisible) }}>
-          <EyebrowRuled text="On Demand" />
-          <h1 style={{
-            fontFamily: "'Bebas Neue', sans-serif",
-            fontSize: "3.8rem",
-            lineHeight: 0.95,
-            margin: "0 0 16px 0",
-            letterSpacing: "0.04em",
-            color: "#fff",
-          }}>
-            Your Numbers.<br />
-            <span style={{ color: "#D4AF37" }}>Investor-Ready.</span>
-          </h1>
-          <p style={{
-            fontFamily: "'Inter', sans-serif",
-            fontSize: "19px",
-            color: "rgba(255,255,255,0.88)",
-            lineHeight: 1.55,
-            margin: 0,
-          }}>
-            Professional financial documents. Investor-grade. Yours.
-          </p>
-        </div>
-      </section>
+        <section style={{
+          position: "relative", textAlign: "center",
+          padding: "28px 24px 24px",
+          margin: "0 24px",
+          borderRadius: 12,
+          overflow: "hidden",
+          background: "rgba(6,6,6,0.92)",
+          backdropFilter: "blur(40px)",
+          WebkitBackdropFilter: "blur(40px)",
+          border: "1px solid rgba(212,175,55,0.20)",
+          boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 24px rgba(212,175,55,0.10), 0 0 20px rgba(120,60,180,0.15)",
+          ...reveal(heroVisible),
+        }}>
+          {/* Triple radial glow */}
+          <div style={{
+            position: "absolute", top: 0, left: 0, right: 0, bottom: 0, pointerEvents: "none",
+            background: "radial-gradient(ellipse 80% 50% at 50% 10%, rgba(212,175,55,0.22) 0%, transparent 60%), radial-gradient(ellipse 60% 40% at 50% 50%, rgba(120,60,180,0.16) 0%, transparent 60%), radial-gradient(ellipse 100% 70% at 50% 100%, rgba(120,60,180,0.20) 0%, transparent 60%)",
+          }} />
+          <div style={{ position: "relative", zIndex: 1 }}>
+            <EyebrowRuled text="On Demand" />
+            <h1 style={{
+              fontFamily: "'Bebas Neue', sans-serif",
+              fontSize: "3.8rem",
+              lineHeight: 0.95,
+              margin: "0 0 16px 0",
+              letterSpacing: "0.04em",
+              color: "#fff",
+              textShadow: "0 2px 20px rgba(0,0,0,0.95), 0 4px 40px rgba(0,0,0,0.5)",
+            }}>
+              Your Numbers.<br />
+              <span style={{
+                color: "#D4AF37",
+                textShadow: "0 2px 20px rgba(0,0,0,0.8), 0 0 40px rgba(212,175,55,0.50), 0 0 80px rgba(212,175,55,0.25)",
+              }}>Investor-Ready.</span>
+            </h1>
+            <p style={{
+              fontFamily: "'Inter', sans-serif",
+              fontSize: "19px",
+              color: "rgba(255,255,255,0.88)",
+              lineHeight: 1.55,
+              margin: 0,
+              textShadow: "0 2px 12px rgba(0,0,0,0.9)",
+            }}>
+              Professional financial documents. Investor-grade. Yours.
+            </p>
+          </div>
+        </section>
+      </div>
 
       {/* § 1 — On Demand Card (Full Analysis only) */}
       <div
