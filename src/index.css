@@ -913,6 +913,12 @@
     50% { opacity: 0.08; }
   }
 
+  /* Progress bar segment pulse */
+  @keyframes segPulse {
+    0%, 100% { opacity: 0.60; }
+    50% { opacity: 1.0; }
+  }
+
   /* ═══════════════════════════════════════════════════════════════════
      CALCULATOR V6 — Mobile-optimized slider thumbs (22px minimum)
      ═══════════════════════════════════════════════════════════════════ */
