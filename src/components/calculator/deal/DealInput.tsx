@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { ChevronDown } from "lucide-react";
 import { WaterfallInputs, GuildState, CapitalSelections, CAM_PCT } from "@/lib/waterfall";
-import ChapterCard, { cardH, cardHSub } from "../ChapterCard";
+import ChapterCard from "../ChapterCard";
 import { useHaptics } from "@/hooks/use-haptics";
 
 interface DealInputProps {
@@ -24,6 +24,7 @@ const GENRE_RANGES: Record<string, string> = {
   'Sci-Fi / Fantasy': '$1M – $4M',
   'Sci-Fi': '$1M – $4M',
   Documentary: '$200K – $1.2M',
+  Doc: '$200K – $1.2M',
   Animation: '$800K – $3.5M',
   Other: '$500K – $3M',
 };
@@ -53,6 +54,56 @@ const parseValue = (str: string) => {
 const s: Record<string, React.CSSProperties> = {
   wrapper: {
     animation: "stepEnter 0.4s ease-out forwards",
+  },
+  /* ── Glass Hero ── */
+  heroOuter: {
+    position: "relative" as const,
+    marginBottom: 20,
+  },
+  heroCanopy: {
+    position: "absolute" as const, top: 0, left: 0, right: 0, height: "120%",
+    background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.25) 0%, transparent 70%)",
+    pointerEvents: "none" as const,
+  },
+  heroCardGlass: {
+    position: "relative" as const, textAlign: "center" as const,
+    padding: "24px 20px 20px", borderRadius: 12, overflow: "hidden" as const,
+    background: "rgba(6,6,6,0.92)",
+    backdropFilter: "blur(40px)", WebkitBackdropFilter: "blur(40px)",
+    border: "1px solid rgba(212,175,55,0.20)",
+    boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 24px rgba(212,175,55,0.10), 0 0 20px rgba(120,60,180,0.15)",
+  },
+  heroGlowBg: {
+    position: "absolute" as const, top: 0, left: 0, right: 0, bottom: 0, pointerEvents: "none" as const,
+    background: [
+      "radial-gradient(ellipse 80% 50% at 50% 10%, rgba(212,175,55,0.22) 0%, transparent 60%)",
+      "radial-gradient(ellipse 60% 40% at 50% 50%, rgba(120,60,180,0.16) 0%, transparent 60%)",
+      "radial-gradient(ellipse 100% 70% at 50% 100%, rgba(120,60,180,0.20) 0%, transparent 60%)",
+    ].join(", "),
+  },
+  heroInnerGlass: { position: "relative" as const, zIndex: 1 },
+  heroEyebrow: {
+    display: "flex", alignItems: "center", gap: "10px", marginBottom: "12px", padding: "0 8px",
+  },
+  heroEyebrowLine: { flex: 1, height: "1px", background: "rgba(212,175,55,0.35)" },
+  heroEyebrowLabel: {
+    fontFamily: "'Roboto Mono', monospace", fontSize: "10px",
+    letterSpacing: "0.15em", textTransform: "uppercase" as const,
+    color: "rgba(212,175,55,0.65)", whiteSpace: "nowrap" as const,
+  },
+  heroH1: {
+    fontFamily: "'Bebas Neue', sans-serif", fontSize: "2.8rem",
+    letterSpacing: "0.02em", lineHeight: 0.90, color: "#fff", marginBottom: "8px",
+    textShadow: "0 2px 20px rgba(0,0,0,0.95), 0 4px 40px rgba(0,0,0,0.5)",
+  },
+  heroGoldSpan: {
+    color: "#D4AF37",
+    textShadow: "0 2px 20px rgba(0,0,0,0.8), 0 0 40px rgba(212,175,55,0.50), 0 0 80px rgba(212,175,55,0.25)",
+  },
+  heroSubGlass: {
+    fontFamily: "'Inter', sans-serif", fontSize: "15px",
+    color: "rgba(255,255,255,0.75)", lineHeight: 1.45,
+    textShadow: "0 2px 12px rgba(0,0,0,0.9)",
   },
   heroZone: {
     textAlign: "center" as const,
@@ -88,7 +139,7 @@ const s: Record<string, React.CSSProperties> = {
     fontFamily: "'Roboto Mono', monospace",
     fontSize: "3.4rem",
     fontWeight: 500,
-    color: "#fff",
+    color: "rgba(255,255,255,0.95)",
     lineHeight: 1,
     fontVariantNumeric: "tabular-nums",
     background: "transparent",
@@ -276,7 +327,7 @@ const s: Record<string, React.CSSProperties> = {
   },
   vbLbl: {
     fontSize: "12px",
-    color: "rgba(255,255,255,0.55)",
+    color: "rgba(255,255,255,0.65)",
   },
   vbDetail: {
     fontFamily: "'Roboto Mono', monospace",
@@ -288,13 +339,13 @@ const s: Record<string, React.CSSProperties> = {
     fontFamily: "'Roboto Mono', monospace",
     fontSize: "13px",
     fontWeight: 500,
-    color: "rgba(255,255,255,0.70)",
+    color: "rgba(255,255,255,0.85)",
   },
   vbValNeg: {
     fontFamily: "'Roboto Mono', monospace",
     fontSize: "13px",
     fontWeight: 500,
-    color: "rgba(220,38,38,0.60)",
+    color: "rgba(220,38,38,0.75)",
   },
   vbNet: {
     display: "flex",
@@ -328,7 +379,9 @@ const s: Record<string, React.CSSProperties> = {
     cursor: "pointer",
     background: "#0A0A0A",
     borderRadius: "8px",
-    border: "1px solid rgba(212,175,55,0.15)",
+    border: "1px solid rgba(212,175,55,0.20)",
+    position: "relative" as const,
+    overflow: "hidden" as const,
   },
   levLeft: {
     display: "flex",
@@ -339,7 +392,7 @@ const s: Record<string, React.CSSProperties> = {
   levTitle: {
     fontSize: "12px",
     fontWeight: 500,
-    color: "rgba(255,255,255,0.55)",
+    color: "rgba(255,255,255,0.70)",
   },
   levVals: {
     fontFamily: "'Roboto Mono', monospace",
@@ -376,7 +429,7 @@ const s: Record<string, React.CSSProperties> = {
     fontWeight: 600,
     textTransform: "uppercase" as const,
     letterSpacing: "0.1em",
-    color: "rgba(255,255,255,0.55)",
+    color: "rgba(212,175,55,0.75)",
   },
   levVal: {
     fontFamily: "'Roboto Mono', monospace",
@@ -444,7 +497,7 @@ const s: Record<string, React.CSSProperties> = {
   },
   cta: {
     width: "100%",
-    padding: "16px",
+    padding: "18px",
     background: "#F9E076",
     border: "none",
     borderRadius: "8px",
@@ -469,13 +522,16 @@ const s: Record<string, React.CSSProperties> = {
     padding: "16px",
     marginTop: "24px",
     background: "#0A0A0A",
-    border: "1px solid rgba(255,255,255,0.06)",
-    borderRadius: "8px",
+    border: "1px solid rgba(212,175,55,0.12)",
+    borderRadius: "10px",
+    position: "relative" as const,
+    overflow: "hidden" as const,
   },
   discText: {
     fontSize: "11px",
-    color: "rgba(255,255,255,0.35)",
+    color: "rgba(255,255,255,0.40)",
     lineHeight: 1.5,
+    position: "relative" as const,
   },
 };
 
@@ -552,6 +608,28 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext, genre }:
 
   return (
     <div style={s.wrapper}>
+      {/* Glass Hero */}
+      <div style={s.heroOuter}>
+        <div style={s.heroCanopy} />
+        <section style={s.heroCardGlass}>
+          <div style={s.heroGlowBg} />
+          <div style={s.heroInnerGlass}>
+            <div style={s.heroEyebrow}>
+              <div style={s.heroEyebrowLine} />
+              <span style={s.heroEyebrowLabel}>Step 03 · Deal Terms</span>
+              <div style={s.heroEyebrowLine} />
+            </div>
+            <h1 style={s.heroH1}>
+              What's It<br />
+              <span style={s.heroGoldSpan}>Worth?</span>
+            </h1>
+            <p style={s.heroSubGlass}>
+              Set your acquisition price and model the deal.
+            </p>
+          </div>
+        </section>
+      </div>
+
       <ChapterCard
         chapter="03"
         title="The Market"
@@ -559,12 +637,15 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext, genre }:
         breathing={isBreathing}
         pulsing={isPulsing}
         noPad
+        hideEyebrow
       >
         <div style={s.heroZone}>
-          <div style={cardH}>What's It Worth?</div>
-          <div style={cardHSub}>
+          {/* Budget reference line — stays inside the warm card */}
+          <div style={{
+            fontSize: 13, color: "rgba(255,255,255,0.75)", marginBottom: 16,
+          }}>
             You're building for{' '}
-            <span style={{ fontFamily: "'Roboto Mono', monospace", color: "rgba(255,255,255,0.70)" }}>
+            <span style={{ fontFamily: "'Roboto Mono', monospace", color: "#D4AF37" }}>
               {budget > 0 ? formatCurrency(budget) : '$0'}
             </span>
           </div>
@@ -611,7 +692,7 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext, genre }:
             <line x1="12" y1="8" x2="12.01" y2="8" />
           </svg>
           <span style={s.mktText}>
-            Recent indie <strong style={{ color: "rgba(255,255,255,0.65)", fontWeight: 600 }}>{genre.toLowerCase()}</strong> acquisitions: {genreRange}
+            Recent indie <strong style={{ color: "rgba(255,255,255,0.80)", fontWeight: 600 }}>{genre.toLowerCase()}</strong> acquisitions: {genreRange}
           </span>
         </div>
       )}
@@ -679,6 +760,11 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext, genre }:
 
       {/* Adjust Assumptions lever */}
       <button style={s.levTrigger} onClick={(e) => { haptics.light(e); setLeversOpen(!leversOpen); }}>
+        <div style={{
+          position: "absolute", top: 0, left: 0, right: 0, height: 60,
+          background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.08) 0%, transparent 70%)",
+          pointerEvents: "none",
+        }} />
         <div style={s.levLeft}>
           <span style={s.levTitle}>Adjust Assumptions</span>
           <span style={s.levVals}>Sales fee {inputs.salesFee}% · Marketing {formatShort(inputs.salesExp)}</span>
@@ -748,11 +834,11 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext, genre }:
           <span style={{
             fontFamily: "'Inter', sans-serif", fontSize: 11, fontWeight: 600,
             textTransform: "uppercase", letterSpacing: "0.15em",
-            color: "rgba(212,175,55,0.50)",
+            color: "rgba(212,175,55,0.75)",
           }}>Backend Split</span>
           <span style={{
             fontFamily: "'Roboto Mono', monospace", fontSize: 14,
-            color: "rgba(255,255,255,0.70)",
+            color: "rgba(255,255,255,0.85)",
           }}>
             {inputs.profitSplit ?? 50} / {100 - (inputs.profitSplit ?? 50)}
           </span>
@@ -763,7 +849,7 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext, genre }:
           <span style={{
             fontFamily: "'Roboto Mono', monospace", fontSize: 10,
             textTransform: "uppercase", letterSpacing: "0.1em",
-            color: "rgba(212,175,55,0.40)", whiteSpace: "nowrap",
+            color: "rgba(120,60,180,0.55)", whiteSpace: "nowrap",
           }}>Investor</span>
           <input
             type="range"
@@ -781,7 +867,7 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext, genre }:
           <span style={{
             fontFamily: "'Roboto Mono', monospace", fontSize: 10,
             textTransform: "uppercase", letterSpacing: "0.1em",
-            color: "rgba(255,255,255,0.40)", whiteSpace: "nowrap",
+            color: "rgba(120,60,180,0.55)", whiteSpace: "nowrap",
           }}>Producer</span>
         </div>
         <p style={{
@@ -805,7 +891,12 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext, genre }:
 
       {/* Disclaimer */}
       <div style={s.disc}>
-        <svg style={{ color: "rgba(212,175,55,0.35)", flexShrink: 0, marginTop: "1px" }} width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <div style={{
+          position: "absolute", top: 0, left: 0, right: 0, height: 60,
+          background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.06) 0%, transparent 70%)",
+          pointerEvents: "none",
+        }} />
+        <svg style={{ color: "rgba(212,175,55,0.45)", flexShrink: 0, marginTop: "1px", position: "relative" as const }} width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
           <line x1="12" y1="9" x2="12" y2="13" />
           <line x1="12" y1="17" x2="12.01" y2="17" />
