@@ -114,7 +114,7 @@ const Index = () => {
   // Profit celebration state
   const [profitCelebrated, setProfitCelebrated] = useState(false);
   const [profitCountUp, setProfitCountUp] = useState(0);
-  const [profitGlowIntensity, setProfitGlowIntensity] = useState(0.12);
+  const [profitGlowIntensity, setProfitGlowIntensity] = useState(0.18);
   const profitAnimRef = useRef<number>(0);
   const profitCardRef = useRef<HTMLDivElement | null>(null);
 
@@ -174,8 +174,8 @@ const Index = () => {
       if (entry.isIntersecting && !profitCelebrated) {
         setProfitCelebrated(true);
         haptics.success();
-        setProfitGlowIntensity(0.22);
-        setTimeout(() => setProfitGlowIntensity(0.12), 600);
+        setProfitGlowIntensity(0.28);
+        setTimeout(() => setProfitGlowIntensity(0.18), 600);
         // Count up from 0 to NET_PROFIT over 600ms
         const duration = 600;
         const startTime = performance.now();
@@ -411,12 +411,14 @@ const Index = () => {
                 flex: 1, position: "relative", overflow: "hidden", borderRadius: "12px",
                 padding: "10px 8px", textAlign: "center",
                 border: "1px solid rgba(212,175,55,0.30)",
-                background: "radial-gradient(circle at 50% 24px, rgba(212,175,55,0.12) 0%, transparent 55%), rgba(6,6,6,0.92)",
+                background: "radial-gradient(circle at 50% 24px, rgba(212,175,55,0.15) 0%, transparent 55%), rgba(6,6,6,0.92)",
+                backdropFilter: "blur(20px)",
+                WebkitBackdropFilter: "blur(20px)",
                 boxShadow: "0 8px 24px rgba(0,0,0,0.5), 0 0 12px rgba(212,175,55,0.08)",
               }}>
                 <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.45), transparent)", zIndex: 1 }} />
                 <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.1rem", color: "rgba(255,255,255,0.70)", marginBottom: "4px" }}>Production Budget</div>
-                <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.6rem", color: "#fff" }}>${PRODUCTION_BUDGET.toLocaleString()}</div>
+                <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.6rem", color: "#D4AF37", textShadow: "0 0 16px rgba(212,175,55,0.20)" }}>${PRODUCTION_BUDGET.toLocaleString()}</div>
               </div>
               {/* Tax Credit */}
               <div style={{
@@ -424,10 +426,12 @@ const Index = () => {
                 padding: "10px 8px", textAlign: "center",
                 border: "1px solid rgba(212,175,55,0.30)",
                 background: "radial-gradient(circle at 50% 24px, rgba(60,179,113,0.10) 0%, transparent 55%), rgba(6,6,6,0.92)",
+                backdropFilter: "blur(20px)",
+                WebkitBackdropFilter: "blur(20px)",
                 boxShadow: "0 8px 24px rgba(0,0,0,0.5), 0 0 12px rgba(212,175,55,0.08)",
               }}>
                 <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: "linear-gradient(90deg, transparent, rgba(60,179,113,0.40), transparent)", zIndex: 1 }} />
-                <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.1rem", color: "rgba(60,179,113,0.80)", marginBottom: "4px" }}>Tax Credit (20%)</div>
+                <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.1rem", color: "rgba(255,255,255,0.70)", marginBottom: "4px" }}>Tax Credit (20%)</div>
                 <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.5rem", color: "#3CB371", textShadow: "0 0 16px rgba(60,179,113,0.25)" }}>+${TAX_CREDIT.toLocaleString()}</div>
               </div>
             </div>
@@ -607,24 +611,24 @@ const Index = () => {
               <div style={{
                 flex: 1, textAlign: "center", borderRadius: "12px", padding: "16px 12px",
                 border: "1px solid rgba(60,179,113,0.50)",
-                background: "radial-gradient(ellipse at 50% 0%, rgba(60,179,113,0.12) 0%, rgba(6,6,6,0.92) 70%)",
+                background: "radial-gradient(ellipse at 50% 0%, rgba(60,179,113,0.15) 0%, rgba(6,6,6,0.92) 70%)",
                 position: "relative", overflow: "hidden",
                 boxShadow: "0 8px 24px rgba(0,0,0,0.4), 0 0 16px rgba(60,179,113,0.10)",
               }}>
                 <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: "linear-gradient(90deg, transparent, #3CB371, transparent)" }} />
                 <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.3rem", color: "rgba(255,255,255,0.88)", marginBottom: "6px" }}>Investor</div>
-                <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "#3CB371" }}>${SPLIT.toLocaleString()}</div>
+                <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "#3CB371", textShadow: "0 0 16px rgba(60,179,113,0.25)" }}>${SPLIT.toLocaleString()}</div>
               </div>
               <div style={{
                 flex: 1, textAlign: "center", borderRadius: "12px", padding: "16px 12px",
                 border: "1px solid rgba(60,179,113,0.50)",
-                background: "radial-gradient(ellipse at 50% 0%, rgba(60,179,113,0.12) 0%, rgba(6,6,6,0.92) 70%)",
+                background: "radial-gradient(ellipse at 50% 0%, rgba(60,179,113,0.15) 0%, rgba(6,6,6,0.92) 70%)",
                 position: "relative", overflow: "hidden",
                 boxShadow: "0 8px 24px rgba(0,0,0,0.4), 0 0 16px rgba(60,179,113,0.10)",
               }}>
                 <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: "linear-gradient(90deg, transparent, #3CB371, transparent)" }} />
                 <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.3rem", color: "rgba(255,255,255,0.88)", marginBottom: "6px" }}>Producer</div>
-                <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "#3CB371" }}>${SPLIT.toLocaleString()}</div>
+                <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "#3CB371", textShadow: "0 0 16px rgba(60,179,113,0.25)" }}>${SPLIT.toLocaleString()}</div>
               </div>
             </div>
           </div>
@@ -680,13 +684,6 @@ const Index = () => {
               <div style={{ position: "absolute", inset: 0, borderRadius: "12px", padding: "1px", pointerEvents: "none", background: "linear-gradient(180deg, rgba(212,175,55,0.45) 0%, rgba(212,175,55,0.18) 50%, rgba(212,175,55,0.30) 100%)", WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)", WebkitMaskComposite: "xor", maskComposite: "exclude" }} />
               {/* Top line */}
               <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "1px", background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.50), transparent)", zIndex: 1 }} />
-              <div style={styles.tierHeaderFree}>
-                <div style={{ marginBottom: "12px" }}>
-                  <span style={styles.tierBadgeFree}>Free Access</span>
-                </div>
-                <p style={styles.tierTitleCard}>The Snapshot</p>
-                <p style={styles.tierSubFree}>Your waterfall. Modeled, visualized,{"\u00a0"}shareable.</p>
-              </div>
               {/* Value statement */}
               <div style={styles.valueStatementFree}>
                 <p style={styles.valueTextFree}>Your Numbers. No Credit Card.</p>
@@ -751,6 +748,8 @@ const Index = () => {
               padding: "28px 24px",
               textAlign: "center",
               background: "radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.10) 0%, rgba(6,6,6,0.92) 65%)",
+              backdropFilter: "blur(20px)",
+              WebkitBackdropFilter: "blur(20px)",
               boxShadow: "0 12px 32px rgba(0,0,0,0.6), 0 0 24px rgba(212,175,55,0.08), 0 0 20px rgba(120,60,180,0.10)",
               marginBottom: "24px",
               ...reveal(realityQuoteVisible),
@@ -903,7 +902,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
   heroGlow: {
     position: "absolute", top: 0, left: 0, right: 0, bottom: 0, pointerEvents: "none",
-    background: "radial-gradient(ellipse 80% 60% at 50% 10%, rgba(212,175,55,0.25) 0%, transparent 65%), radial-gradient(ellipse 100% 80% at 50% 100%, rgba(120,60,180,0.18) 0%, transparent 65%)",
+    background: "radial-gradient(ellipse 80% 50% at 50% 10%, rgba(212,175,55,0.22) 0%, transparent 60%), radial-gradient(ellipse 60% 40% at 50% 50%, rgba(120,60,180,0.10) 0%, transparent 60%), radial-gradient(ellipse 100% 70% at 50% 100%, rgba(120,60,180,0.20) 0%, transparent 60%)",
   },
   heroInner: { position: "relative", zIndex: 1 },
   heroH1: {
@@ -992,27 +991,11 @@ const styles: Record<string, React.CSSProperties> = {
   },
 
   /* Headers */
-  tierHeaderFree: {
-    padding: "28px 24px 20px", borderBottom: "1px solid rgba(212,175,55,0.12)",
-    background: "radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.10) 0%, transparent 60%), rgba(6,6,6,0.92)",
-    textAlign: "center",
-  },
-  tierTitleCard: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "2.4rem", color: "#fff", lineHeight: 1, letterSpacing: "0.04em", marginBottom: "8px" },
-  tierSubFree: { fontFamily: "'Inter', sans-serif", fontSize: "18px", color: "rgba(255,255,255,0.88)", marginTop: "6px" },
-
-  /* Badges */
-  tierBadgeFree: {
-    fontFamily: "'Roboto Mono', monospace", fontSize: "11px", textTransform: "uppercase",
-    padding: "6px 12px", borderRadius: "4px", letterSpacing: "0.15em",
-    background: "rgba(60,179,113,0.08)", color: "#3CB371", border: "1px solid rgba(60,179,113,0.30)",
-    whiteSpace: "nowrap", flexShrink: 0,
-  },
-
   /* Value statements */
   valueStatementFree: {
-    padding: "20px 24px", textAlign: "center",
+    padding: "24px 24px", textAlign: "center",
     background: "radial-gradient(ellipse 100% 100% at 50% 50%, rgba(212,175,55,0.10) 0%, rgba(6,6,6,0.92) 80%)",
-    borderTop: "1px solid rgba(212,175,55,0.15)", borderBottom: "1px solid rgba(212,175,55,0.15)",
+    borderBottom: "1px solid rgba(212,175,55,0.15)",
   },
   valueTextFree: {
     fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "#D4AF37", lineHeight: 1,
