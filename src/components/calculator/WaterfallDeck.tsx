@@ -1006,7 +1006,7 @@ const VisualCluster2 = ({
   if (result.marketing > 0) rows.push({ label: "Sales Agent Expenses", rate: "capped", amount: result.marketing });
   if (result.guilds > 0) {
     const parts: string[] = [];
-    if (guilds.sag) parts.push("SAG");
+    if (guilds.sag) parts.push("SAG-AFTRA");
     if (guilds.wga) parts.push("WGA");
     if (guilds.dga) parts.push("DGA");
     rows.push({ label: "Guild Reserves", rate: parts.join("+"), amount: result.guilds });

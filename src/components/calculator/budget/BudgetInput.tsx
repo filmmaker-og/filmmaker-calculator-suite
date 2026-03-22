@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { Check } from "lucide-react";
 import { useHaptics } from "@/hooks/use-haptics";
 import { WaterfallInputs, GuildState } from "@/lib/waterfall";
-import ChapterCard, { cardH, cardHSub } from "../ChapterCard";
+import ChapterCard from "../ChapterCard";
 import GlossaryTrigger, { GLOSSARY } from "../GlossaryTrigger";
 
 interface BudgetInputProps {
@@ -15,15 +15,15 @@ interface BudgetInputProps {
 }
 
 const quickAmounts = [
-  { value: 250000, label: "$250K", tier: "Micro" },
-  { value: 750000, label: "$750K", tier: "Low" },
-  { value: 1500000, label: "$1.5M", tier: "Mid" },
-  { value: 2500000, label: "$2.5M", tier: "Standard" },
-  { value: 5000000, label: "$5M", tier: "Premium" },
+  { value: 250000, label: "$250K" },
+  { value: 750000, label: "$750K" },
+  { value: 1500000, label: "$1.5M" },
+  { value: 2500000, label: "$2.5M" },
+  { value: 5000000, label: "$5M" },
 ];
 
 const guildItems = [
-  { key: "sag" as const, label: "SAG", desc: "Actors" },
+  { key: "sag" as const, label: "SAG-AFTRA", desc: "Actors" },
   { key: "dga" as const, label: "DGA", desc: "Directors" },
   { key: "wga" as const, label: "WGA", desc: "Writers" },
 ];
@@ -33,6 +33,53 @@ const MAX_BUDGET = 5000000;
 const s: Record<string, React.CSSProperties> = {
   wrapper: {
     animation: "stepEnter 0.4s ease-out forwards",
+  },
+  /* ── Glass Hero ── */
+  heroOuter: { position: "relative", marginBottom: 20 },
+  heroCanopy: {
+    position: "absolute", top: 0, left: 0, right: 0, height: "120%",
+    background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.25) 0%, transparent 70%)",
+    pointerEvents: "none",
+  },
+  heroCard: {
+    position: "relative", textAlign: "center",
+    padding: "24px 20px 20px", borderRadius: 12, overflow: "hidden",
+    background: "rgba(6,6,6,0.92)",
+    backdropFilter: "blur(40px)", WebkitBackdropFilter: "blur(40px)",
+    border: "1px solid rgba(212,175,55,0.20)",
+    boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 24px rgba(212,175,55,0.10), 0 0 20px rgba(120,60,180,0.15)",
+  },
+  heroGlowBg: {
+    position: "absolute", top: 0, left: 0, right: 0, bottom: 0, pointerEvents: "none",
+    background: [
+      "radial-gradient(ellipse 80% 50% at 50% 10%, rgba(212,175,55,0.22) 0%, transparent 60%)",
+      "radial-gradient(ellipse 60% 40% at 50% 50%, rgba(120,60,180,0.16) 0%, transparent 60%)",
+      "radial-gradient(ellipse 100% 70% at 50% 100%, rgba(120,60,180,0.20) 0%, transparent 60%)",
+    ].join(", "),
+  },
+  heroInner: { position: "relative", zIndex: 1 },
+  heroEyebrow: {
+    display: "flex", alignItems: "center", gap: 10, marginBottom: 12, padding: "0 8px",
+  },
+  heroEyebrowLine: { flex: 1, height: 1, background: "rgba(212,175,55,0.35)" },
+  heroEyebrowLabel: {
+    fontFamily: "'Roboto Mono', monospace", fontSize: 10,
+    letterSpacing: "0.15em", textTransform: "uppercase",
+    color: "rgba(212,175,55,0.65)", whiteSpace: "nowrap",
+  },
+  heroH1: {
+    fontFamily: "'Bebas Neue', sans-serif", fontSize: "2.8rem",
+    letterSpacing: "0.02em", lineHeight: 0.90, color: "#fff", marginBottom: 8,
+    textShadow: "0 2px 20px rgba(0,0,0,0.95), 0 4px 40px rgba(0,0,0,0.5)",
+  },
+  heroGoldSpan: {
+    color: "#D4AF37",
+    textShadow: "0 2px 20px rgba(0,0,0,0.8), 0 0 40px rgba(212,175,55,0.50), 0 0 80px rgba(212,175,55,0.25)",
+  },
+  heroSubtext: {
+    fontFamily: "'Inter', sans-serif", fontSize: 15,
+    color: "rgba(255,255,255,0.75)", lineHeight: 1.45,
+    textShadow: "0 2px 12px rgba(0,0,0,0.9)",
   },
   heroZone: {
     textAlign: "center" as const,
@@ -68,7 +115,7 @@ const s: Record<string, React.CSSProperties> = {
     fontFamily: "'Roboto Mono', monospace",
     fontSize: "3.4rem",
     fontWeight: 500,
-    color: "#fff",
+    color: "rgba(255,255,255,0.95)",
     lineHeight: 1,
     fontVariantNumeric: "tabular-nums",
     background: "transparent",
@@ -160,56 +207,40 @@ const s: Record<string, React.CSSProperties> = {
   },
   quickBtn: {
     fontFamily: "'Roboto Mono', monospace",
-    fontSize: "11px",
+    fontSize: 12,
     fontWeight: 500,
-    padding: "8px 6px",
-    minHeight: "48px",
-    borderRadius: "8px",
-    border: "1px solid rgba(212,175,55,0.15)",
-    background: "rgba(212,175,55,0.03)",
-    color: "rgba(255,255,255,0.55)",
+    padding: "12px 6px",
+    minHeight: 44,
+    borderRadius: 8,
+    border: "1px solid rgba(255,255,255,0.12)",
+    background: "rgba(255,255,255,0.03)",
+    color: "rgba(255,255,255,0.60)",
     cursor: "pointer",
-    transition: "all 0.2s",
+    transition: "all 0.15s",
     display: "flex",
-    flexDirection: "column" as const,
     alignItems: "center",
     justifyContent: "center",
-    gap: "2px",
     flex: 1,
     minWidth: 0,
   },
   quickBtnOn: {
     fontFamily: "'Roboto Mono', monospace",
-    fontSize: "11px",
-    fontWeight: 500,
-    padding: "8px 6px",
-    minHeight: "48px",
-    borderRadius: "8px",
-    border: "1px solid rgba(120,60,180,0.40)",
-    background: "rgba(120,60,180,0.08)",
-    color: "rgba(120,60,180,0.85)",
+    fontSize: 12,
+    fontWeight: 600,
+    padding: "12px 6px",
+    minHeight: 44,
+    borderRadius: 8,
+    border: "1px solid rgba(120,60,180,0.50)",
+    background: "rgba(120,60,180,0.14)",
+    color: "rgba(190,160,240,1.0)",
     cursor: "pointer",
-    transition: "all 0.2s",
+    transition: "all 0.15s",
     display: "flex",
-    flexDirection: "column" as const,
     alignItems: "center",
     justifyContent: "center",
-    gap: "2px",
     flex: 1,
     minWidth: 0,
-    boxShadow: "0 0 12px rgba(120,60,180,0.15)",
-  },
-  quickLabel: {
-    fontSize: "10px",
-    textTransform: "uppercase" as const,
-    letterSpacing: "0.1em",
-    color: "rgba(255,255,255,0.40)",
-  },
-  quickLabelOn: {
-    fontSize: "10px",
-    textTransform: "uppercase" as const,
-    letterSpacing: "0.1em",
-    color: "rgba(120,60,180,0.60)",
+    boxShadow: "0 0 14px rgba(120,60,180,0.20)",
   },
   // Divider
   innerDiv: {
@@ -224,7 +255,7 @@ const s: Record<string, React.CSSProperties> = {
     fontWeight: 600,
     textTransform: "uppercase" as const,
     letterSpacing: "0.15em",
-    color: "rgba(255,255,255,0.55)",
+    color: "rgba(212,175,55,0.75)",
     whiteSpace: "nowrap" as const,
   },
   innerDivLine: {
@@ -257,13 +288,13 @@ const s: Record<string, React.CSSProperties> = {
     alignItems: "center",
     gap: "8px",
     padding: "12px 10px",
-    background: "rgba(120,60,180,0.08)",
-    border: "1px solid rgba(120,60,180,0.40)",
+    background: "rgba(120,60,180,0.14)",
+    border: "1px solid rgba(120,60,180,0.50)",
     borderRadius: "8px",
     cursor: "pointer",
     transition: "all 0.15s",
     minHeight: "48px",
-    boxShadow: "0 0 12px rgba(120,60,180,0.15)",
+    boxShadow: "0 0 14px rgba(120,60,180,0.20)",
   },
   checkbox: {
     width: "16px",
@@ -306,7 +337,7 @@ const s: Record<string, React.CSSProperties> = {
     fontFamily: "'Inter', sans-serif",
     fontSize: "11px",
     fontWeight: 600,
-    color: "rgba(120,60,180,0.85)",
+    color: "rgba(190,160,240,1.0)",
     transition: "color 0.15s",
     whiteSpace: "nowrap" as const,
   },
@@ -318,7 +349,7 @@ const s: Record<string, React.CSSProperties> = {
   guildHint: {
     textAlign: "center" as const,
     fontSize: "11px",
-    color: "rgba(255,255,255,0.35)",
+    color: "rgba(255,255,255,0.40)",
     padding: "10px 24px 0",
   },
   // CTA reveal
@@ -364,13 +395,16 @@ const s: Record<string, React.CSSProperties> = {
     padding: "16px",
     marginTop: "24px",
     background: "#0A0A0A",
-    border: "1px solid rgba(255,255,255,0.06)",
-    borderRadius: "8px",
+    border: "1px solid rgba(212,175,55,0.12)",
+    borderRadius: "10px",
+    position: "relative" as const,
+    overflow: "hidden",
   },
   discText: {
     fontSize: "11px",
-    color: "rgba(255,255,255,0.35)",
+    color: "rgba(255,255,255,0.40)",
     lineHeight: 1.5,
+    position: "relative" as const,
   },
 };
 
@@ -390,6 +424,7 @@ const BudgetInput = ({ inputs, guilds, onUpdateInput, onToggleGuild, onNext }: B
   const [hasPulsed, setHasPulsed] = useState(false);
   const [isPulsing, setIsPulsing] = useState(false);
   const [ctaHovered, setCtaHovered] = useState(false);
+  const [ctaPressed, setCtaPressed] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const isCompleted = inputs.budget > 0;
@@ -429,6 +464,28 @@ const BudgetInput = ({ inputs, guilds, onUpdateInput, onToggleGuild, onNext }: B
 
   return (
     <div style={s.wrapper}>
+      {/* ═══ GLASS HERO ═══ */}
+      <div style={s.heroOuter}>
+        <div style={s.heroCanopy as React.CSSProperties} />
+        <section style={s.heroCard}>
+          <div style={s.heroGlowBg as React.CSSProperties} />
+          <div style={s.heroInner}>
+            <div style={s.heroEyebrow}>
+              <div style={s.heroEyebrowLine} />
+              <span style={s.heroEyebrowLabel as React.CSSProperties}>Step 01 · Budget</span>
+              <div style={s.heroEyebrowLine} />
+            </div>
+            <h1 style={s.heroH1}>
+              What Does It<br />
+              <span style={s.heroGoldSpan}>Cost?</span>
+            </h1>
+            <p style={s.heroSubtext}>
+              Every dollar it takes to deliver the finished film.
+            </p>
+          </div>
+        </section>
+      </div>
+
       <ChapterCard
         chapter="01"
         title="Production Budget"
@@ -436,13 +493,11 @@ const BudgetInput = ({ inputs, guilds, onUpdateInput, onToggleGuild, onNext }: B
         breathing={isBreathing}
         pulsing={isPulsing}
         noPad
+        hideEyebrow
         glossaryTrigger={<GlossaryTrigger {...GLOSSARY.negativeCost} />}
       >
-        {/* Hero zone */}
+        {/* Hero zone — number input only, no headline (moved to glass hero) */}
         <div style={s.heroZone}>
-          <div style={cardH}>What Does It Cost?</div>
-          <div style={cardHSub}>Total negative cost — everything to deliver the film</div>
-
           <div style={s.heroPrice}>
             <span style={isCompleted ? s.heroSignLit : s.heroSign}>$</span>
             <input
@@ -490,12 +545,14 @@ const BudgetInput = ({ inputs, guilds, onUpdateInput, onToggleGuild, onNext }: B
                 }}
                 onClick={(e) => { haptics.light(e); onUpdateInput("budget", qa.value); }}
               >
-                <span>{qa.label}</span>
-                <span style={isOn ? s.quickLabelOn : s.quickLabel}>{qa.tier}</span>
+                {qa.label}
               </button>
             );
           })}
         </div>
+
+        {/* Separator: budget selection → guild selection */}
+        <div style={{ height: 1, background: "rgba(255,255,255,0.06)", margin: "20px 0 0" }} />
 
         {/* Union Signatories divider */}
         <div style={s.innerDiv}>
@@ -542,13 +599,17 @@ const BudgetInput = ({ inputs, guilds, onUpdateInput, onToggleGuild, onNext }: B
             style={{
               ...s.cta,
               ...(ctaHovered ? { boxShadow: "0 0 30px rgba(249,224,118,0.35), 0 0 80px rgba(249,224,118,0.20)" } : {}),
+              ...(ctaPressed ? { transform: "scale(0.98)" } : {}),
             }}
             onClick={(e) => { haptics.medium(e); onNext(); }}
             onMouseEnter={() => setCtaHovered(true)}
             onMouseLeave={() => setCtaHovered(false)}
             onTouchStart={() => setCtaHovered(false)}
+            onPointerDown={() => setCtaPressed(true)}
+            onPointerUp={() => setCtaPressed(false)}
+            onPointerLeave={() => { setCtaPressed(false); setCtaHovered(false); }}
           >
-            Continue to Capital Stack
+            Build Your Capital Stack
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <line x1="5" y1="12" x2="19" y2="12" />
               <polyline points="12 5 19 12 12 19" />
@@ -559,7 +620,13 @@ const BudgetInput = ({ inputs, guilds, onUpdateInput, onToggleGuild, onNext }: B
 
       {/* Disclaimer */}
       <div style={s.disc}>
-        <svg style={{ color: "rgba(212,175,55,0.35)", flexShrink: 0, marginTop: "1px" }} width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        {/* Atmospheric */}
+        <div style={{
+          position: "absolute", top: 0, left: 0, right: 0, height: 60,
+          background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.06) 0%, transparent 70%)",
+          pointerEvents: "none" as const,
+        }} />
+        <svg style={{ color: "rgba(212,175,55,0.35)", flexShrink: 0, marginTop: "1px", position: "relative" }} width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
           <line x1="12" y1="9" x2="12" y2="13" />
           <line x1="12" y1="17" x2="12.01" y2="17" />
