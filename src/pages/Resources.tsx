@@ -549,16 +549,10 @@ const Resources = () => {
     }}>
       {/* ---- HERO (glass card) ---- */}
       <div ref={headerRef} style={{ padding: "32px 0 0", position: "relative" }}>
-        {/* Page-level canopy behind the card */}
-        <div style={{
-          position: "absolute", top: 0, left: 0, right: 0, height: "120%",
-          background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.25) 0%, transparent 70%)",
-          pointerEvents: "none",
-        }} />
         {/* Glass hero card */}
         <section style={{
           position: "relative", textAlign: "center",
-          padding: "28px 24px 24px",
+          padding: "24px 24px 16px",
           margin: "0 24px",
           borderRadius: 12,
           overflow: "hidden",
