@@ -2,6 +2,7 @@ import { Receipt, Landmark, CreditCard, Users, Clock, Edit2 } from "lucide-react
 import { WaterfallInputs, formatCompactCurrency } from "@/lib/waterfall";
 import { CapitalSourceSelections } from "./CapitalSelect";
 import StandardStepLayout from "../StandardStepLayout";
+import { useHaptics } from "@/hooks/use-haptics";
 
 interface StackSummaryProps {
   inputs: WaterfallInputs;
@@ -25,6 +26,7 @@ interface StackItem {
  * Shows selected sources with amounts. Edit routes by source key.
  */
 const StackSummary = ({ inputs, selections, onEdit, onComplete }: StackSummaryProps) => {
+  const haptics = useHaptics();
   const totalCapital = inputs.credits + inputs.debt + inputs.mezzanineDebt + inputs.equity;
   const gapPercent = inputs.budget > 0 ? (totalCapital / inputs.budget) * 100 : 0;
   const isFullyFunded = gapPercent >= 100;
@@ -50,7 +52,7 @@ const StackSummary = ({ inputs, selections, onEdit, onComplete }: StackSummaryPr
       title={title}
       subtitle={subtitle}
       onNext={onComplete}
-      nextLabel="Continue to Deal Terms"
+      nextLabel="Set Your Deal Terms"
       isComplete={true}
     >
       <div className="space-y-6">
@@ -74,7 +76,7 @@ const StackSummary = ({ inputs, selections, onEdit, onComplete }: StackSummaryPr
               />
             )}
             <div className="relative flex items-center justify-between mb-2">
-              <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: "rgba(255,255,255,0.55)" }}>Total Capital</span>
+              <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: "rgba(212,175,55,0.75)" }}>Total Capital</span>
               <span
                 className="font-mono text-lg font-medium"
                 style={{
@@ -102,7 +104,10 @@ const StackSummary = ({ inputs, selections, onEdit, onComplete }: StackSummaryPr
               <span className="text-xs" style={{ color: "rgba(255,255,255,0.55)" }}>Budget: {formatCompactCurrency(inputs.budget)}</span>
               <span
                 className="font-mono text-xs font-medium"
-                style={{ color: gapPercent >= 100 ? "#D4AF37" : "rgba(212,175,55,0.60)" }}
+                style={{
+                  color: gapPercent >= 100 ? "#D4AF37" : "rgba(212,175,55,0.60)",
+                  fontWeight: gapPercent >= 100 ? 600 : 500,
+                }}
               >
                 {gapPercent.toFixed(0)}% Funded
               </span>
@@ -119,7 +124,7 @@ const StackSummary = ({ inputs, selections, onEdit, onComplete }: StackSummaryPr
             className="px-5 py-3"
             style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}
           >
-            <span className="text-xs uppercase tracking-widest font-semibold" style={{ color: "rgba(255,255,255,0.55)" }}>
+            <span className="text-xs uppercase tracking-widest font-semibold" style={{ color: "rgba(212,175,55,0.75)" }}>
               Capital Sources
             </span>
           </div>
@@ -148,7 +153,7 @@ const StackSummary = ({ inputs, selections, onEdit, onComplete }: StackSummaryPr
                     <div className="flex items-center gap-3">
                       <span className="font-mono" style={{ color: "#D4AF37" }}>{formatCompactCurrency(item.amount)}</span>
                       <button
-                        onClick={() => onEdit(item.sourceKey)}
+                        onClick={(e) => { haptics.light(e); onEdit(item.sourceKey); }}
                         className="p-1.5 transition-colors"
                         style={{ color: "rgba(255,255,255,0.55)" }}
                       >
