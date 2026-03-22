@@ -165,7 +165,7 @@ const s: Record<string, React.CSSProperties> = {
     textAlign: "center" as const,
     marginTop: "14px",
     fontSize: "11px",
-    color: "rgba(255,255,255,0.25)",
+    color: "rgba(255,255,255,0.40)",
     lineHeight: 1.5,
   },
   // Market context
@@ -281,7 +281,7 @@ const s: Record<string, React.CSSProperties> = {
   vbDetail: {
     fontFamily: "'Roboto Mono', monospace",
     fontSize: "10px",
-    color: "rgba(255,255,255,0.25)",
+    color: "rgba(255,255,255,0.40)",
     marginTop: "2px",
   },
   vbVal: {
@@ -344,7 +344,7 @@ const s: Record<string, React.CSSProperties> = {
   levVals: {
     fontFamily: "'Roboto Mono', monospace",
     fontSize: "10px",
-    color: "rgba(255,255,255,0.25)",
+    color: "rgba(255,255,255,0.40)",
   },
   levBody: {
     maxHeight: 0,
@@ -402,7 +402,7 @@ const s: Record<string, React.CSSProperties> = {
     fontSize: "10px",
     letterSpacing: "0.08em",
     textTransform: "uppercase" as const,
-    color: "rgba(255,255,255,0.25)",
+    color: "rgba(255,255,255,0.40)",
   },
   levInline: {
     display: "flex",
@@ -426,7 +426,7 @@ const s: Record<string, React.CSSProperties> = {
   },
   levSub: {
     fontSize: "10px",
-    color: "rgba(255,255,255,0.25)",
+    color: "rgba(255,255,255,0.40)",
     marginTop: "2px",
   },
   // CTA reveal
@@ -444,7 +444,7 @@ const s: Record<string, React.CSSProperties> = {
   },
   cta: {
     width: "100%",
-    padding: "18px",
+    padding: "16px",
     background: "#F9E076",
     border: "none",
     borderRadius: "8px",
@@ -458,8 +458,8 @@ const s: Record<string, React.CSSProperties> = {
     alignItems: "center",
     justifyContent: "center",
     gap: "10px",
-    transition: "transform 0.12s",
-    boxShadow: "0 0 20px rgba(249,224,118,0.25), 0 0 60px rgba(249,224,118,0.08)",
+    transition: "transform 0.12s, box-shadow 0.2s",
+    boxShadow: "0 0 20px rgba(249,224,118,0.25), 0 0 60px rgba(249,224,118,0.15)",
     minHeight: "56px",
   },
   disc: {
@@ -731,8 +731,8 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext, genre }:
                 onChange={handleMktInputChange}
                 placeholder="75,000"
                 style={s.levInput}
-                onFocus={(e) => { e.target.style.borderColor = "rgba(212,175,55,0.35)"; }}
-                onBlur={(e) => { e.target.style.borderColor = "rgba(255,255,255,0.06)"; }}
+                onFocus={(e) => { e.target.style.borderColor = "rgba(212,175,55,0.45)"; e.target.style.boxShadow = "0 0 16px rgba(212,175,55,0.12)"; }}
+                onBlur={(e) => { e.target.style.borderColor = "rgba(255,255,255,0.06)"; e.target.style.boxShadow = "none"; }}
               />
             </div>
           </div>
@@ -774,7 +774,7 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext, genre }:
             onChange={(e) => onUpdateInput("profitSplit", Number(e.target.value))}
             style={{
               flex: 1, height: 2, appearance: "none", WebkitAppearance: "none",
-              background: `linear-gradient(to right, rgba(212,175,55,0.40) 0%, rgba(212,175,55,0.40) ${inputs.profitSplit ?? 50}%, rgba(255,255,255,0.10) ${inputs.profitSplit ?? 50}%, rgba(255,255,255,0.10) 100%)`,
+              background: `linear-gradient(to right, rgba(120,60,180,0.50) 0%, rgba(120,60,180,0.50) ${inputs.profitSplit ?? 50}%, rgba(255,255,255,0.10) ${inputs.profitSplit ?? 50}%, rgba(255,255,255,0.10) 100%)`,
               borderRadius: 1, outline: "none", cursor: "pointer",
             }}
           />

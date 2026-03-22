@@ -107,9 +107,10 @@ const StackInputCard = ({
           onBlurCapture={() => setFocused(false)}
           style={{
             background: "#0A0A0A",
-            border: `1px solid rgba(212,175,55,${focused ? "0.35" : "0.15"})`,
+            border: `1px solid rgba(212,175,55,${focused ? "0.45" : "0.15"})`,
             borderRadius: "12px",
-            transition: "border-color 0.25s ease",
+            transition: "border-color 0.25s ease, box-shadow 0.25s ease",
+            boxShadow: focused ? "0 0 16px rgba(212,175,55,0.12)" : "none",
           }}
         >
           {/* Section header */}

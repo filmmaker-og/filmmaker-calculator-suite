@@ -147,7 +147,7 @@ const s: Record<string, React.CSSProperties> = {
     textAlign: "center" as const,
     marginTop: "14px",
     fontSize: "11px",
-    color: "rgba(255,255,255,0.25)",
+    color: "rgba(255,255,255,0.40)",
     lineHeight: 1.5,
   },
   // Quick pills
@@ -185,9 +185,9 @@ const s: Record<string, React.CSSProperties> = {
     padding: "8px 6px",
     minHeight: "48px",
     borderRadius: "8px",
-    border: "1px solid rgba(212,175,55,0.40)",
-    background: "rgba(212,175,55,0.10)",
-    color: "#D4AF37",
+    border: "1px solid rgba(120,60,180,0.40)",
+    background: "rgba(120,60,180,0.08)",
+    color: "rgba(120,60,180,0.85)",
     cursor: "pointer",
     transition: "all 0.2s",
     display: "flex",
@@ -197,19 +197,19 @@ const s: Record<string, React.CSSProperties> = {
     gap: "2px",
     flex: 1,
     minWidth: 0,
-    boxShadow: "0 0 12px rgba(212,175,55,0.18)",
+    boxShadow: "0 0 12px rgba(120,60,180,0.15)",
   },
   quickLabel: {
     fontSize: "10px",
     textTransform: "uppercase" as const,
     letterSpacing: "0.1em",
-    color: "rgba(255,255,255,0.25)",
+    color: "rgba(255,255,255,0.40)",
   },
   quickLabelOn: {
     fontSize: "10px",
     textTransform: "uppercase" as const,
     letterSpacing: "0.1em",
-    color: "rgba(212,175,55,0.60)",
+    color: "rgba(120,60,180,0.60)",
   },
   // Divider
   innerDiv: {
@@ -257,13 +257,13 @@ const s: Record<string, React.CSSProperties> = {
     alignItems: "center",
     gap: "8px",
     padding: "12px 10px",
-    background: "rgba(212,175,55,0.08)",
-    border: "1px solid rgba(212,175,55,0.50)",
+    background: "rgba(120,60,180,0.08)",
+    border: "1px solid rgba(120,60,180,0.40)",
     borderRadius: "8px",
     cursor: "pointer",
     transition: "all 0.15s",
     minHeight: "48px",
-    boxShadow: "0 0 16px rgba(212,175,55,0.18)",
+    boxShadow: "0 0 12px rgba(120,60,180,0.15)",
   },
   checkbox: {
     width: "16px",
@@ -280,8 +280,8 @@ const s: Record<string, React.CSSProperties> = {
     width: "16px",
     height: "16px",
     borderRadius: "3px",
-    border: "1.5px solid #D4AF37",
-    background: "#D4AF37",
+    border: "1.5px solid rgba(120,60,180,0.85)",
+    background: "rgba(120,60,180,0.85)",
     transition: "all 0.15s",
     display: "flex",
     alignItems: "center",
@@ -306,14 +306,14 @@ const s: Record<string, React.CSSProperties> = {
     fontFamily: "'Inter', sans-serif",
     fontSize: "11px",
     fontWeight: 600,
-    color: "#D4AF37",
+    color: "rgba(120,60,180,0.85)",
     transition: "color 0.15s",
     whiteSpace: "nowrap" as const,
   },
   guildDesc: {
     fontFamily: "'Inter', sans-serif",
     fontSize: "10px",
-    color: "rgba(255,255,255,0.25)",
+    color: "rgba(255,255,255,0.40)",
   },
   guildHint: {
     textAlign: "center" as const,
@@ -338,7 +338,7 @@ const s: Record<string, React.CSSProperties> = {
   },
   cta: {
     width: "100%",
-    padding: "18px",
+    padding: "16px",
     background: "#F9E076",
     border: "none",
     borderRadius: "8px",
@@ -352,8 +352,8 @@ const s: Record<string, React.CSSProperties> = {
     alignItems: "center",
     justifyContent: "center",
     gap: "10px",
-    transition: "transform 0.12s",
-    boxShadow: "0 0 20px rgba(249,224,118,0.25), 0 0 60px rgba(249,224,118,0.08)",
+    transition: "transform 0.12s, box-shadow 0.2s",
+    boxShadow: "0 0 20px rgba(249,224,118,0.25), 0 0 60px rgba(249,224,118,0.15)",
     minHeight: "56px",
   },
   // Disclaimer
@@ -389,6 +389,7 @@ const BudgetInput = ({ inputs, guilds, onUpdateInput, onToggleGuild, onNext }: B
   const [hasFocused, setHasFocused] = useState(false);
   const [hasPulsed, setHasPulsed] = useState(false);
   const [isPulsing, setIsPulsing] = useState(false);
+  const [ctaHovered, setCtaHovered] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const isCompleted = inputs.budget > 0;
@@ -537,7 +538,16 @@ const BudgetInput = ({ inputs, guilds, onUpdateInput, onToggleGuild, onNext }: B
 
         {/* CTA — fades in when budget > 0 */}
         <div style={isCompleted ? s.revealVis : s.reveal}>
-          <button style={s.cta} onClick={onNext}>
+          <button
+            style={{
+              ...s.cta,
+              ...(ctaHovered ? { boxShadow: "0 0 30px rgba(249,224,118,0.35), 0 0 80px rgba(249,224,118,0.20)" } : {}),
+            }}
+            onClick={(e) => { haptics.medium(e); onNext(); }}
+            onMouseEnter={() => setCtaHovered(true)}
+            onMouseLeave={() => setCtaHovered(false)}
+            onTouchStart={() => setCtaHovered(false)}
+          >
             Continue to Capital Stack
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <line x1="5" y1="12" x2="19" y2="12" />

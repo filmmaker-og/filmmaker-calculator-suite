@@ -70,18 +70,21 @@ const cardStyles: Record<CardVariant, React.CSSProperties> = {
     overflow: "hidden",
     boxShadow: "0 16px 40px rgba(0,0,0,0.6)",
     transition: "box-shadow 0.5s",
+    position: "relative",
   },
   data: {
     background: "#0A0A0A",
     border: "1px solid rgba(212,175,55,0.20)",
     borderRadius: "12px",
     overflow: "hidden",
+    position: "relative",
   },
   neutral: {
     background: "#0A0A0A",
     border: "1px solid rgba(212,175,55,0.15)",
     borderRadius: "12px",
     overflow: "hidden",
+    position: "relative",
   },
 };
 
@@ -91,7 +94,37 @@ const warmGlow: React.CSSProperties = {
   left: 0,
   right: 0,
   height: "220px",
-  background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.12) 0%, transparent 70%)",
+  background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.18) 0%, transparent 70%)",
+  pointerEvents: "none",
+};
+
+const featureGlow: React.CSSProperties = {
+  position: "absolute",
+  top: 0,
+  left: 0,
+  right: 0,
+  height: "180px",
+  background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.14) 0%, transparent 70%)",
+  pointerEvents: "none",
+};
+
+const dataGlow: React.CSSProperties = {
+  position: "absolute",
+  top: 0,
+  left: 0,
+  right: 0,
+  height: "140px",
+  background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.10) 0%, transparent 70%)",
+  pointerEvents: "none",
+};
+
+const neutralGlow: React.CSSProperties = {
+  position: "absolute",
+  top: 0,
+  left: 0,
+  right: 0,
+  height: "100px",
+  background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.08) 0%, transparent 70%)",
   pointerEvents: "none",
 };
 
@@ -169,9 +202,9 @@ const ChapterCard = ({
     // Feature card state-dependent glow
     if (effectiveVariant === 'feature' && glowState) {
       if (glowState === 'positive') {
-        cardStyle.boxShadow = "0 16px 40px rgba(0,0,0,0.6), 0 0 40px rgba(212,175,55,0.08)";
+        cardStyle.boxShadow = "0 16px 40px rgba(0,0,0,0.6), 0 0 40px rgba(212,175,55,0.15)";
       } else if (glowState === 'negative') {
-        cardStyle.boxShadow = "0 16px 40px rgba(0,0,0,0.6), 0 0 40px rgba(220,38,38,0.06)";
+        cardStyle.boxShadow = "0 16px 40px rgba(0,0,0,0.6), 0 0 40px rgba(220,38,38,0.18)";
       }
     }
   } else {
@@ -199,6 +232,13 @@ const ChapterCard = ({
   const showFeatureTopline = effectiveVariant === 'feature';
   const showLegacyTopline = !effectiveVariant;
 
+  // Determine which atmospheric glow to render
+  const glowLayer = effectiveVariant === 'warm' ? warmGlow
+    : effectiveVariant === 'feature' ? featureGlow
+    : effectiveVariant === 'data' ? dataGlow
+    : effectiveVariant === 'neutral' ? neutralGlow
+    : null;
+
   return (
     <section>
       {/* Eyebrow-ruled opener */}
@@ -215,14 +255,14 @@ const ChapterCard = ({
 
       {/* Card body */}
       <div style={cardStyle}>
-        {/* Warm card extras: glow + topline */}
+        {/* Atmospheric glow layer for all variants */}
+        {glowLayer && <div style={glowLayer} />}
+
+        {/* Warm card extras: topline */}
         {showWarmExtras && (
-          <>
-            <div style={warmGlow} />
-            <div style={warmTopline}>
-              <div style={warmToplineShimmer} />
-            </div>
-          </>
+          <div style={warmTopline}>
+            <div style={warmToplineShimmer} />
+          </div>
         )}
 
         {/* Feature card topline */}

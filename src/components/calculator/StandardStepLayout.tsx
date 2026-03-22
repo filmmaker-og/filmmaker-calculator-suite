@@ -1,6 +1,7 @@
 import React, { ReactNode, useState } from "react";
 import ChapterCard, { CardVariant } from "./ChapterCard";
 import { ArrowRight } from "lucide-react";
+import { useHaptics } from "@/hooks/use-haptics";
 
 interface StandardStepLayoutProps {
   chapter: string;
@@ -47,8 +48,11 @@ const s: Record<string, React.CSSProperties> = {
     justifyContent: "center",
     gap: "10px",
     transition: "transform 0.12s ease, opacity 0.15s",
-    boxShadow: "0 0 20px rgba(249,224,118,0.25), 0 0 60px rgba(249,224,118,0.08)",
+    boxShadow: "0 0 20px rgba(249,224,118,0.25), 0 0 60px rgba(249,224,118,0.15)",
     minHeight: "56px",
+  },
+  ctaHover: {
+    boxShadow: "0 0 30px rgba(249,224,118,0.35), 0 0 80px rgba(249,224,118,0.20)",
   },
   ctaPressed: {
     transform: "scale(0.98)",
@@ -68,7 +72,9 @@ const StandardStepLayout = ({
   breathing,
   pulsing,
 }: StandardStepLayoutProps) => {
+  const haptics = useHaptics();
   const [pressed, setPressed] = useState(false);
+  const [hovered, setHovered] = useState(false);
 
   return (
     <div style={s.wrapper}>
@@ -90,14 +96,16 @@ const StandardStepLayout = ({
 
           {onNext && isComplete && (
             <button
-              onClick={onNext}
+              onClick={(e) => { haptics.medium(e); onNext(); }}
               onMouseDown={() => setPressed(true)}
               onMouseUp={() => setPressed(false)}
-              onMouseLeave={() => setPressed(false)}
+              onMouseLeave={() => { setPressed(false); setHovered(false); }}
+              onMouseEnter={() => setHovered(true)}
               onTouchStart={() => setPressed(true)}
               onTouchEnd={() => setPressed(false)}
               style={{
                 ...s.cta,
+                ...(hovered ? s.ctaHover : {}),
                 ...(pressed ? s.ctaPressed : {}),
               }}
             >

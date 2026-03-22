@@ -38,7 +38,7 @@ const s: Record<string, React.CSSProperties> = {
     fontWeight: 400,
     letterSpacing: "0.06em",
     textTransform: "none" as const,
-    color: "rgba(255,255,255,0.25)",
+    color: "rgba(255,255,255,0.40)",
     marginLeft: "6px",
     fontSize: "10px",
   },
@@ -88,13 +88,13 @@ const s: Record<string, React.CSSProperties> = {
     alignItems: "center",
     justifyContent: "center",
     borderRadius: "8px",
-    border: "1px solid rgba(212,175,55,0.40)",
-    background: "rgba(212,175,55,0.10)",
-    color: "#D4AF37",
+    border: "1px solid rgba(120,60,180,0.40)",
+    background: "rgba(120,60,180,0.08)",
+    color: "rgba(120,60,180,0.85)",
     cursor: "pointer",
     transition: "all 0.15s",
     whiteSpace: "nowrap" as const,
-    boxShadow: "0 0 12px rgba(212,175,55,0.20)",
+    boxShadow: "0 0 12px rgba(120,60,180,0.15)",
   },
   expTrigger: {
     display: "flex",
@@ -122,7 +122,7 @@ const s: Record<string, React.CSSProperties> = {
   expHint: {
     fontFamily: "'Inter', sans-serif",
     fontSize: "11px",
-    color: "rgba(255,255,255,0.25)",
+    color: "rgba(255,255,255,0.40)",
   },
   expBody: {
     maxHeight: 0,
@@ -142,7 +142,7 @@ const s: Record<string, React.CSSProperties> = {
   hint: {
     fontFamily: "'Inter', sans-serif",
     fontSize: "11px",
-    color: "rgba(255,255,255,0.25)",
+    color: "rgba(255,255,255,0.40)",
     marginTop: "6px",
     lineHeight: 1.4,
   },
@@ -161,7 +161,7 @@ const s: Record<string, React.CSSProperties> = {
   },
   cta: {
     width: "100%",
-    padding: "18px",
+    padding: "16px",
     marginTop: "24px",
     background: "#F9E076",
     border: "none",
@@ -176,8 +176,8 @@ const s: Record<string, React.CSSProperties> = {
     alignItems: "center",
     justifyContent: "center",
     gap: "10px",
-    transition: "transform 0.12s ease, opacity 0.15s",
-    boxShadow: "0 0 20px rgba(249,224,118,0.25), 0 0 60px rgba(249,224,118,0.08)",
+    transition: "transform 0.12s ease, opacity 0.15s, box-shadow 0.2s ease",
+    boxShadow: "0 0 20px rgba(249,224,118,0.25), 0 0 60px rgba(249,224,118,0.15)",
     minHeight: "56px",
   },
   skip: {
@@ -201,7 +201,7 @@ const s: Record<string, React.CSSProperties> = {
     fontSize: "10px",
     letterSpacing: "0.1em",
     textTransform: "uppercase" as const,
-    color: "rgba(255,255,255,0.15)",
+    color: "rgba(255,255,255,0.40)",
     marginTop: "16px",
   },
 };
@@ -211,6 +211,7 @@ const ProjectTab = ({ project, onUpdateProject, onAdvance }: ProjectTabProps) =>
   const [teamOpen, setTeamOpen] = useState(false);
   const [pressedPill, setPressedPill] = useState<string | null>(null);
   const [ctaPressed, setCtaPressed] = useState(false);
+  const [ctaHovered, setCtaHovered] = useState(false);
 
   const update = (key: keyof ProjectDetails, value: string) => {
     onUpdateProject({ ...project, [key]: value });
@@ -225,13 +226,13 @@ const ProjectTab = ({ project, onUpdateProject, onAdvance }: ProjectTabProps) =>
   };
 
   const handleInputFocus = (e: React.FocusEvent<HTMLInputElement>) => {
-    e.target.style.borderColor = "rgba(212,175,55,0.40)";
-    (e.target as HTMLInputElement).style.boxShadow = "0 0 0 3px rgba(212,175,55,0.06)";
+    e.target.style.borderColor = "rgba(212,175,55,0.45)";
+    e.target.style.boxShadow = "0 0 16px rgba(212,175,55,0.12)";
   };
 
   const handleInputBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     e.target.style.borderColor = "rgba(212,175,55,0.20)";
-    (e.target as HTMLInputElement).style.boxShadow = "none";
+    e.target.style.boxShadow = "none";
   };
 
   const handleTitleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -460,12 +461,14 @@ const ProjectTab = ({ project, onUpdateProject, onAdvance }: ProjectTabProps) =>
           <button
             style={{
               ...s.cta,
+              ...(ctaHovered ? { boxShadow: "0 0 30px rgba(249,224,118,0.35), 0 0 80px rgba(249,224,118,0.20)" } : {}),
               ...(ctaPressed ? { transform: "scale(0.98)" } : {}),
             }}
-            onClick={onAdvance}
+            onClick={(e) => { haptics.medium(e); onAdvance(); }}
             onPointerDown={() => setCtaPressed(true)}
             onPointerUp={() => setCtaPressed(false)}
-            onPointerLeave={() => setCtaPressed(false)}
+            onPointerLeave={() => { setCtaPressed(false); setCtaHovered(false); }}
+            onMouseEnter={() => setCtaHovered(true)}
           >
             Continue to Budget
             <ArrowRight style={{ width: "18px", height: "18px" }} />
