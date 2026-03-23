@@ -352,12 +352,12 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
           isOpen ? "translate-y-0" : "translate-y-full"
         )}
         style={{
-          height: "min(75vh, 620px)",
+          height: "100dvh",
           paddingBottom: "calc(var(--bottom-bar-h) + env(safe-area-inset-bottom))",
           background: "rgba(6,6,6,0.92)",
           backdropFilter: "blur(40px)",
           WebkitBackdropFilter: "blur(40px)",
-          borderRadius: "12px 12px 0 0",
+          borderRadius: "0",
           boxShadow: "0 -20px 60px rgba(120,60,180,0.20), 0 -40px 80px rgba(0,0,0,0.95)",
         }}
       >
@@ -366,7 +366,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
           className="absolute top-0 left-0 right-0 h-[3px] pointer-events-none z-10"
           style={{
             background: "linear-gradient(to right, transparent 0%, rgba(120,60,180,0.50) 20%, rgba(212,175,55,0.40) 50%, rgba(120,60,180,0.50) 80%, transparent 100%)",
-            borderRadius: "12px 12px 0 0",
+            borderRadius: "0",
           }}
         />
 
