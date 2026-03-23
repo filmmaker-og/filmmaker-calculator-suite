@@ -11,7 +11,7 @@ import {
 } from "@/lib/waterfall";
 import type { TierPayment } from "@/lib/waterfall-types";
 import { useNavigate } from "react-router-dom";
-import { useState, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import LeadCaptureModal from "@/components/LeadCaptureModal";
 import { useHaptics } from "@/hooks/use-haptics";
@@ -172,6 +172,71 @@ const CoverSection = ({
   result: WaterfallResult;
   guilds: GuildState;
 }) => {
+  const [dealInsight, setDealInsight] = useState<string | null>(null);
+  const [insightLoading, setInsightLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchInsight = async () => {
+      const cacheKey = `deal-insight-${JSON.stringify({
+        budget: inputs.budget,
+        credits: inputs.credits,
+        deferments: inputs.deferments,
+        acquisitionPrice: inputs.revenue,
+      })}`;
+
+      const cached = localStorage.getItem(cacheKey);
+      if (cached) {
+        setDealInsight(cached);
+        return;
+      }
+
+      setInsightLoading(true);
+      try {
+        const resp = await fetch(
+          `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/deal-insight`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+            },
+            body: JSON.stringify({
+              dealData: {
+                projectName: project?.title,
+                genre: project?.genre,
+                budget: inputs.budget,
+                cashBasis: computeCashBasis(inputs),
+                taxCredits: inputs.credits,
+                deferments: inputs.deferments,
+                acquisitionPrice: inputs.revenue,
+                totalDeductions: result?.offTopTotal,
+                erosionPct:
+                  inputs.revenue > 0
+                    ? Math.round((result.offTopTotal / inputs.revenue) * 100)
+                    : 0,
+                investorReturnPct: computeInvestorReturnPct(result, inputs),
+                investorReturnMultiple: result?.multiple,
+                netDistributable: Math.max(0, inputs.revenue - result.offTopTotal),
+                profitSplit: inputs.profitSplit,
+              },
+            }),
+          },
+        );
+        const data = await resp.json();
+        if (data.insight) {
+          setDealInsight(data.insight);
+          localStorage.setItem(cacheKey, data.insight);
+        }
+      } catch {
+        // Silently fail — the output works without this
+      } finally {
+        setInsightLoading(false);
+      }
+    };
+
+    if (result) fetchInsight();
+  }, [result, inputs, project]);
+
   const cashBasis = computeCashBasis(inputs);
   const investorReturnPct = computeInvestorReturnPct(result, inputs);
   const returnColor = getReturnColor(investorReturnPct);
@@ -390,6 +455,34 @@ const CoverSection = ({
           {verdictContext}
         </div>
       </div>
+
+      {/* 1f-b. AI Deal Insight */}
+      {dealInsight && (
+        <div style={{
+          margin: "16px 0",
+          padding: "12px 16px",
+          borderLeft: "2px solid rgba(212,175,55,0.30)",
+          fontFamily: "'Inter', sans-serif",
+          fontSize: "17px",
+          fontStyle: "italic",
+          color: "rgba(255,255,255,0.88)",
+          lineHeight: 1.55,
+        }}>
+          {dealInsight}
+        </div>
+      )}
+      {insightLoading && (
+        <div style={{
+          margin: "16px 0",
+          padding: "12px 16px",
+          fontFamily: "'Inter', sans-serif",
+          fontSize: "15px",
+          color: "rgba(255,255,255,0.40)",
+          fontStyle: "italic",
+        }}>
+          Analyzing your deal...
+        </div>
+      )}
 
       {/* 1g. Assumptions — always-visible grid */}
       <div style={{
