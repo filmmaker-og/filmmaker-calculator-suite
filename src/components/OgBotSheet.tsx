@@ -290,8 +290,21 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
   };
 
   const handleReset = () => {
-    setOgMessages([]);
     setOgInput("");
+    const hasProjectData = (() => {
+      try {
+        return !!localStorage.getItem("og_project_context");
+      } catch { return false; }
+    })();
+    const greeting = hasProjectData
+      ? "Hey, I\u2019m the OG \u{1F916} Your film finance copilot. I can see you\u2019ve been running numbers \u2014 want me to help interpret your model, or ask me anything about deals, waterfalls, or packaging."
+      : "Hey, I\u2019m the OG \u{1F916} Your film finance copilot. Ask me anything about deals, waterfalls, packaging, or how to get your film financed. What\u2019s on your mind?";
+    setOgMessages([{
+      id: "greeting",
+      question: "",
+      answer: greeting,
+      streaming: false,
+    }]);
   };
 
   // ── Chip rendering helper ──
