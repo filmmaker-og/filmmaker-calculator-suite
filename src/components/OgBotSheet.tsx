@@ -520,9 +520,12 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
                       <p className="text-[16px] leading-relaxed" style={{ color: "rgba(255,255,255,0.50)" }}>{msg.error}</p>
                     ) : (
                       <p className="text-[18px] text-white leading-[1.75] whitespace-pre-wrap">
-                        {msg.answer.split(/(https?:\/\/[^\s]+)/g).map((part, i) =>
+                        {msg.answer.split(/(https?:\/\/[^\s]+|[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g).map((part, i) =>
                           part.match(/^https?:\/\//) ? (
                             <a key={i} href={part} target="_blank" rel="noopener noreferrer"
+                               style={{ color: "#D4AF37", textDecoration: "underline" }}>{part}</a>
+                          ) : part.match(/@/) && part.includes(".") ? (
+                            <a key={i} href={`mailto:${part}`}
                                style={{ color: "#D4AF37", textDecoration: "underline" }}>{part}</a>
                           ) : part
                         )}
