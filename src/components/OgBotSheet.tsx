@@ -44,18 +44,6 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
-  // Swipe-to-dismiss
-  const touchStartY = useRef<number | null>(null);
-  const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartY.current = e.touches[0].clientY;
-  };
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    if (touchStartY.current === null) return;
-    const delta = e.changedTouches[0].clientY - touchStartY.current;
-    if (delta > 60) setIsOpen(false);
-    touchStartY.current = null;
-  };
-
   // Scroll to bottom when sheet opens with existing messages
   useEffect(() => {
     if (isOpen && ogMessages.length > 0) {
@@ -230,8 +218,6 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
           borderRadius: "12px 12px 0 0",
           boxShadow: "0 -20px 60px rgba(120,60,180,0.20), 0 -40px 80px rgba(0,0,0,0.95)",
         }}
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
       >
         {/* 3px purple-gold gradient top-edge line */}
         <div
