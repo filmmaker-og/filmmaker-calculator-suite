@@ -57,13 +57,20 @@ const extractSuggestedChips = (answer: string): string[] => {
   const lines = answer.split("\n");
   let inSuggestions = false;
   for (const line of lines) {
-    if (line.includes("\u{1F449}") || line.includes("might also want to ask") || line.includes("You could also ask")) {
+    if (line.includes("\u{1F449}") || line.includes("might also want") || line.includes("could also ask") || line.includes("might want to ask") || line.includes("try asking")) {
       inSuggestions = true;
       continue;
     }
-    if (inSuggestions) {
-      const match = line.match(/"([^"]+)"/);
-      if (match) chips.push(match[1]);
+    if (inSuggestions && line.trim()) {
+      const match = line.match(/[\u201c\u201d""\u00ab\u00bb]([^"\u201c\u201d\u00ab\u00bb]+)[\u201c\u201d""\u00ab\u00bb]/);
+      if (match) {
+        chips.push(match[1].trim());
+      } else {
+        const fallback = line.replace(/^[\s•\-\d.)\u2022]+/, "").replace(/[?"'"\u201d]+$/, "").trim();
+        if (fallback.length > 10 && fallback.length < 80) {
+          chips.push(fallback.endsWith("?") ? fallback : fallback + "?");
+        }
+      }
     }
   }
   return chips.slice(0, 3);
@@ -88,7 +95,18 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const latestAnswerRef = useRef<HTMLDivElement>(null);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+
+  const scrollToLatestAnswer = () => {
+    setTimeout(() => {
+      if (messagesContainerRef.current && latestAnswerRef.current) {
+        const container = messagesContainerRef.current;
+        const answerTop = latestAnswerRef.current.offsetTop - container.offsetTop;
+        container.scrollTo({ top: answerTop - 10, behavior: "smooth" });
+      }
+    }, 150);
+  };
 
   // ── Auto-greeting on open ──
   useEffect(() => {
@@ -116,7 +134,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
   // Scroll to latest when sheet opens with existing messages
   useEffect(() => {
     if (isOpen && ogMessages.length > 1) {
-      setTimeout(() => latestAnswerRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 350);
+      setTimeout(scrollToLatestAnswer, 350);
     }
   }, [isOpen, ogMessages.length]);
 
@@ -150,9 +168,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
     setOgLoading(true);
     setOgInput("");
 
-    setTimeout(() => {
-      latestAnswerRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }, 100);
+    setTimeout(scrollToLatestAnswer, 100);
 
     try {
       const resp = await fetch(`${SUPABASE_URL}/functions/v1/ask-the-og`, {
@@ -257,9 +273,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
       );
     } finally {
       setOgLoading(false);
-      setTimeout(() => {
-        latestAnswerRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-      }, 100);
+      setTimeout(scrollToLatestAnswer, 100);
     }
   }, [ogLoading, ogMessages]);
 
@@ -433,7 +447,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
         </div>
 
         {/* Messages area */}
-        <div className="flex-1 px-6 py-5 space-y-6" style={{ overflowY: "auto" }}>
+        <div ref={messagesContainerRef} className="flex-1 px-6 py-5 space-y-6" style={{ overflowY: "auto" }}>
           {/* Message thread */}
           {ogMessages.map((msg, msgIndex) => (
             <div key={msg.id} className="space-y-3">
