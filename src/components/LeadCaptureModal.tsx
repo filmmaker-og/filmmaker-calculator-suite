@@ -16,9 +16,10 @@ const nameSchema = z.string().min(1, "Name is required").max(100);
 interface LeadCaptureModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onEmailSubmitted?: (email: string) => void;
 }
 
-const LeadCaptureModal = ({ isOpen, onClose }: LeadCaptureModalProps) => {
+const LeadCaptureModal = ({ isOpen, onClose, onEmailSubmitted }: LeadCaptureModalProps) => {
   const { toast } = useToast();
   const haptics = useHaptics();
   const [name, setName] = useState("");
@@ -59,6 +60,7 @@ const LeadCaptureModal = ({ isOpen, onClose }: LeadCaptureModalProps) => {
 
       haptics.success();
       setSent(true);
+      onEmailSubmitted?.(email.trim());
     } catch (error) {
       haptics.error();
       toast({
