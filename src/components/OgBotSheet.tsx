@@ -42,12 +42,13 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
   const [ogMessages, setOgMessages] = useState<AiMessage[]>([]);
   const [ogLoading, setOgLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const latestAnswerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
   // Scroll to bottom when sheet opens with existing messages
   useEffect(() => {
     if (isOpen && ogMessages.length > 0) {
-      setTimeout(() => messagesEndRef.current?.scrollIntoView({ behavior: "smooth" }), 350);
+      setTimeout(() => latestAnswerRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 350);
     }
   }, [isOpen, ogMessages.length]);
 
@@ -63,7 +64,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
     setOgInput("");
 
     setTimeout(() => {
-      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+      latestAnswerRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
     }, 100);
 
     try {
@@ -170,7 +171,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
     } finally {
       setOgLoading(false);
       setTimeout(() => {
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+        latestAnswerRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
       }, 100);
     }
   }, [ogLoading]);
@@ -371,7 +372,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
               </div>
 
               {/* Answer card */}
-              <div className="flex justify-start">
+              <div className="flex justify-start" ref={msg.id === ogMessages[ogMessages.length - 1]?.id ? latestAnswerRef : undefined}>
                 <div
                   className="max-w-[95%] border overflow-hidden"
                   style={{
