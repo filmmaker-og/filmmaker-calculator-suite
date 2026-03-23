@@ -1614,6 +1614,12 @@ const CTASection = () => {
   const navigate = useNavigate();
   const haptics = useHaptics();
   const [showLeadCapture, setShowLeadCapture] = useState(false);
+  const [pendingExport, setPendingExport] = useState(false);
+
+  // TODO: Serving 5 will implement the full PDF export pipeline
+  const handleExportPdf = useCallback((_email: string) => {
+    setPendingExport(false);
+  }, []);
 
   const gatedNavigate = useCallback(async (destination: string) => {
     const { data: { session } } = await supabase.auth.getSession();
@@ -1628,7 +1634,16 @@ const CTASection = () => {
     <>
       <LeadCaptureModal
         isOpen={showLeadCapture}
-        onClose={() => setShowLeadCapture(false)}
+        onClose={() => {
+          setShowLeadCapture(false);
+          setPendingExport(false);
+        }}
+        onEmailSubmitted={(email) => {
+          if (pendingExport) {
+            setShowLeadCapture(false);
+            handleExportPdf(email);
+          }
+        }}
       />
       <section style={{
         padding: "36px 24px 48px",
