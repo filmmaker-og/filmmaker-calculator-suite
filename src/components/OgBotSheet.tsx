@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { useHaptics } from "@/hooks/use-haptics";
-import { SendHorizonal, RotateCcw, X, Sparkles } from "lucide-react";
+import { SendHorizonal, RotateCcw, X, Sparkles, Share2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -16,14 +16,58 @@ type AiMessage = {
   error?: string;
 };
 
-const EXAMPLE_CHIPS = [
-  "How do I model my deal?",
-  "What package is right for me?",
-  "What is a recoupment waterfall?",
-];
-
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+/* ── Page-aware initial chips ── */
+const getInitialChips = (): string[] => {
+  const path = window.location.pathname;
+  if (path.includes("/store")) {
+    return [
+      "Which package is right for me?",
+      "What's the difference between the tiers?",
+      "Can I upgrade later?",
+    ];
+  }
+  if (path.includes("/calculator") || path.includes("/waterfall")) {
+    return [
+      "Explain my results",
+      "Is my deal healthy?",
+      "What should I change?",
+    ];
+  }
+  if (path.includes("/resources")) {
+    return [
+      "What is a recoupment waterfall?",
+      "How do tax credits work?",
+      "Explain deal structures",
+    ];
+  }
+  // Default (landing page)
+  return [
+    "How do I model my deal?",
+    "What package is right for me?",
+    "What is a recoupment waterfall?",
+  ];
+};
+
+/* ── Extract follow-up chips from bot answer ── */
+const extractSuggestedChips = (answer: string): string[] => {
+  const chips: string[] = [];
+  const lines = answer.split("\n");
+  let inSuggestions = false;
+  for (const line of lines) {
+    if (line.includes("\u{1F449}") || line.includes("might also want to ask") || line.includes("You could also ask")) {
+      inSuggestions = true;
+      continue;
+    }
+    if (inSuggestions) {
+      const match = line.match(/"([^"]+)"/);
+      if (match) chips.push(match[1]);
+    }
+  }
+  return chips.slice(0, 3);
+};
 
 interface OgBotSheetProps {
   isOpen?: boolean;
@@ -41,16 +85,59 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
   const [ogInput, setOgInput] = useState("");
   const [ogMessages, setOgMessages] = useState<AiMessage[]>([]);
   const [ogLoading, setOgLoading] = useState(false);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const latestAnswerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
-  // Scroll to bottom when sheet opens with existing messages
+  // ── Auto-greeting on open ──
   useEffect(() => {
-    if (isOpen && ogMessages.length > 0) {
+    if (isOpen && ogMessages.length === 0) {
+      const hasProjectData = (() => {
+        try {
+          return !!localStorage.getItem("og_project_context");
+        } catch { return false; }
+      })();
+
+      const greeting = hasProjectData
+        ? "Hey, I\u2019m the OG \u{1F916} Your film finance copilot. I can see you\u2019ve been running numbers \u2014 want me to help interpret your model, or ask me anything about deals, waterfalls, or packaging."
+        : "Hey, I\u2019m the OG \u{1F916} Your film finance copilot. Ask me anything about deals, waterfalls, packaging, or how to get your film financed. What\u2019s on your mind?";
+
+      setOgMessages([{
+        id: "greeting",
+        question: "",
+        answer: greeting,
+        streaming: false,
+      }]);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen]);
+
+  // Scroll to latest when sheet opens with existing messages
+  useEffect(() => {
+    if (isOpen && ogMessages.length > 1) {
       setTimeout(() => latestAnswerRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 350);
     }
   }, [isOpen, ogMessages.length]);
+
+  // ── Share / Copy handler ──
+  const handleShareCopy = async (msg: AiMessage) => {
+    try {
+      if (navigator.share) {
+        await navigator.share({ text: msg.answer });
+        return;
+      }
+    } catch {
+      // share cancelled or unavailable, fall through to clipboard
+    }
+    try {
+      await navigator.clipboard.writeText(msg.answer);
+      setCopiedId(msg.id);
+      setTimeout(() => setCopiedId(null), 2000);
+    } catch {
+      // clipboard unavailable
+    }
+  };
 
   // ── Streaming ask ──
   const handleAsk = useCallback(async (question: string) => {
@@ -76,7 +163,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
         },
         body: JSON.stringify({
           messages: [
-            ...ogMessages.map(m => [
+            ...ogMessages.filter(m => m.id !== "greeting").map(m => [
               { role: "user", content: m.question },
               ...(m.answer ? [{ role: "assistant", content: m.answer }] : []),
             ]).flat(),
@@ -174,7 +261,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
         latestAnswerRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
       }, 100);
     }
-  }, [ogLoading]);
+  }, [ogLoading, ogMessages]);
 
   const handleOgSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -192,6 +279,46 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
     setOgMessages([]);
     setOgInput("");
   };
+
+  // ── Chip rendering helper ──
+  const renderChips = (chips: string[]) => (
+    <div className="flex flex-wrap gap-3 justify-start">
+      {chips.map(chip => (
+        <button
+          key={chip}
+          onClick={() => { haptics.medium(); handleAsk(chip); }}
+          disabled={ogLoading}
+          className="font-bebas text-[17px] tracking-[0.10em] px-5 py-3.5 transition-all disabled:opacity-40 disabled:cursor-not-allowed border"
+          onMouseEnter={e => {
+            e.currentTarget.style.borderColor = "rgba(120,60,180,0.40)";
+            e.currentTarget.style.background = "rgba(120,60,180,0.12)";
+            e.currentTarget.style.color = "#FFFFFF";
+          }}
+          onMouseLeave={e => {
+            e.currentTarget.style.borderColor = "rgba(120,60,180,0.35)";
+            e.currentTarget.style.background = "rgba(120,60,180,0.10)";
+            e.currentTarget.style.color = "rgba(255,255,255,0.75)";
+          }}
+          onTouchStart={e => {
+            e.currentTarget.style.borderColor = "rgba(120,60,180,0.40)";
+            e.currentTarget.style.background = "rgba(120,60,180,0.12)";
+          }}
+          onTouchEnd={e => {
+            e.currentTarget.style.borderColor = "rgba(120,60,180,0.35)";
+            e.currentTarget.style.background = "rgba(120,60,180,0.10)";
+          }}
+          style={{
+            borderRadius: "6px",
+            borderColor: "rgba(120,60,180,0.35)",
+            background: "rgba(120,60,180,0.10)",
+            color: "rgba(255,255,255,0.75)",
+          }}
+        >
+          {chip}
+        </button>
+      ))}
+    </div>
+  );
 
   return (
     <>
@@ -306,75 +433,30 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
         </div>
 
         {/* Messages area */}
-        <div className="flex-1 px-6 py-5 space-y-6" style={{ overflowY: ogMessages.length > 0 ? 'auto' : 'hidden' }}>
-          {/* Empty state — example chips with eyebrow */}
-          {ogMessages.length === 0 && (
-            <div className="flex flex-col items-start gap-3" style={{ paddingTop: "16px" }}>
-              <span className="font-bebas text-[28px] tracking-[0.14em] uppercase" style={{ color: "rgb(180,140,255)" }}>
-                What do you want to know?
-              </span>
-
-              {/* Chips */}
-              <div className="flex flex-wrap gap-3 justify-start">
-                {EXAMPLE_CHIPS.map(chip => (
-                  <button
-                    key={chip}
-                    onClick={() => handleAsk(chip)}
-                    disabled={ogLoading}
-                    className="font-bebas text-[17px] tracking-[0.10em] px-5 py-3.5 transition-all disabled:opacity-40 disabled:cursor-not-allowed border"
-                    onMouseEnter={e => {
-                      e.currentTarget.style.borderColor = "rgba(120,60,180,0.40)";
-                      e.currentTarget.style.background = "rgba(120,60,180,0.12)";
-                      e.currentTarget.style.color = "#FFFFFF";
-                    }}
-                    onMouseLeave={e => {
-                      e.currentTarget.style.borderColor = "rgba(120,60,180,0.35)";
-                      e.currentTarget.style.background = "rgba(120,60,180,0.10)";
-                      e.currentTarget.style.color = "rgba(255,255,255,0.75)";
-                    }}
-                    onTouchStart={e => {
-                      e.currentTarget.style.borderColor = "rgba(120,60,180,0.40)";
-                      e.currentTarget.style.background = "rgba(120,60,180,0.12)";
-                    }}
-                    onTouchEnd={e => {
-                      e.currentTarget.style.borderColor = "rgba(120,60,180,0.35)";
-                      e.currentTarget.style.background = "rgba(120,60,180,0.10)";
-                    }}
+        <div className="flex-1 px-6 py-5 space-y-6" style={{ overflowY: "auto" }}>
+          {/* Message thread */}
+          {ogMessages.map((msg, msgIndex) => (
+            <div key={msg.id} className="space-y-3">
+              {/* Question bubble (skip for greeting) */}
+              {msg.question && (
+                <div className="flex justify-end">
+                  <div
+                    className="relative max-w-[85%] px-4 py-3 border overflow-hidden"
                     style={{
-                      borderRadius: "6px",
-                      borderColor: "rgba(120,60,180,0.35)",
-                      background: "rgba(120,60,180,0.10)",
-                      color: "rgba(255,255,255,0.75)",
+                      borderRadius: "8px",
+                      background: "rgba(120,60,180,0.12)",
+                      borderColor: "rgba(120,60,180,0.20)",
                     }}
                   >
-                    {chip}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Message thread */}
-          {ogMessages.map(msg => (
-            <div key={msg.id} className="space-y-3">
-              {/* Question bubble */}
-              <div className="flex justify-end">
-                <div
-                  className="relative max-w-[85%] px-4 py-3 border overflow-hidden"
-                  style={{
-                    borderRadius: "8px",
-                    background: "rgba(120,60,180,0.12)",
-                    borderColor: "rgba(120,60,180,0.20)",
-                  }}
-                >
-                  <p className="text-[18px] text-white leading-relaxed">{msg.question}</p>
+                    <p className="text-[18px] text-white leading-relaxed">{msg.question}</p>
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* Answer card */}
               <div className="flex justify-start" ref={msg.id === ogMessages[ogMessages.length - 1]?.id ? latestAnswerRef : undefined}>
                 <div
-                  className="max-w-[95%] border overflow-hidden"
+                  className="max-w-[95%] border overflow-hidden relative"
                   style={{
                     borderRadius: "8px",
                     background: "rgba(10,10,10,0.80)",
@@ -423,8 +505,45 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
                       </p>
                     )}
                   </div>
+
+                  {/* Share / Copy button (not on greeting) */}
+                  {msg.id !== "greeting" && !msg.streaming && msg.answer && (
+                    <div className="flex justify-end px-4 pb-3">
+                      <button
+                        onClick={() => handleShareCopy(msg)}
+                        aria-label="Share or copy answer"
+                        className="flex items-center gap-1.5 transition-opacity"
+                        style={{ opacity: 0.6 }}
+                        onMouseEnter={e => (e.currentTarget.style.opacity = "1")}
+                        onMouseLeave={e => (e.currentTarget.style.opacity = "0.6")}
+                      >
+                        {copiedId === msg.id ? (
+                          <span className="text-[13px]" style={{ color: "rgba(255,255,255,0.70)" }}>Copied ✅</span>
+                        ) : (
+                          <Share2 style={{ width: "15px", height: "15px", color: "rgba(255,255,255,0.30)" }} />
+                        )}
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
+
+              {/* Initial chips after greeting */}
+              {ogMessages.length === 1 && msg.id === "greeting" && (
+                <div style={{ paddingTop: "8px" }}>
+                  {renderChips(getInitialChips())}
+                </div>
+              )}
+
+              {/* Follow-up chips after bot answer (last message, done streaming, not greeting) */}
+              {msg.id !== "greeting" && !msg.streaming && msg.answer && msgIndex === ogMessages.length - 1 && (() => {
+                const suggested = extractSuggestedChips(msg.answer);
+                return suggested.length > 0 ? (
+                  <div style={{ paddingTop: "4px" }}>
+                    {renderChips(suggested)}
+                  </div>
+                ) : null;
+              })()}
             </div>
           ))}
           <div ref={messagesEndRef} />
