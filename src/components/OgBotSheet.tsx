@@ -51,29 +51,29 @@ const getInitialChips = (): string[] => {
   ];
 };
 
-/* ── Extract follow-up chips from bot answer ── */
-const extractSuggestedChips = (answer: string): string[] => {
-  const chips: string[] = [];
+/* ── Extract follow-up chips from bot answer (tail lines starting with "- ") ── */
+const extractSuggestedChips = (answer: string): { chips: string[]; cleanedAnswer: string } => {
   const lines = answer.split("\n");
-  let inSuggestions = false;
-  for (const line of lines) {
-    if (line.includes("\u{1F449}") || line.includes("might also want") || line.includes("could also ask") || line.includes("might want to ask") || line.includes("try asking")) {
-      inSuggestions = true;
-      continue;
-    }
-    if (inSuggestions && line.trim()) {
-      const match = line.match(/[\u201c\u201d""\u00ab\u00bb]([^"\u201c\u201d\u00ab\u00bb]+)[\u201c\u201d""\u00ab\u00bb]/);
-      if (match) {
-        chips.push(match[1].trim());
-      } else {
-        const fallback = line.replace(/^[\s•\-\d.)\u2022]+/, "").replace(/[?"'"\u201d]+$/, "").trim();
-        if (fallback.length > 10 && fallback.length < 80) {
-          chips.push(fallback.endsWith("?") ? fallback : fallback + "?");
-        }
-      }
-    }
+  // Walk backward from the end, collecting lines that start with "- "
+  const chipLines: string[] = [];
+  let i = lines.length - 1;
+  // Skip trailing empty lines
+  while (i >= 0 && lines[i].trim() === "") i--;
+  // Collect suggestion lines from the tail
+  while (i >= 0 && lines[i].trim().startsWith("- ")) {
+    chipLines.unshift(lines[i].trim().replace(/^- /, "").trim());
+    i--;
   }
-  return chips.slice(0, 3);
+  if (chipLines.length === 0) {
+    return { chips: [], cleanedAnswer: answer };
+  }
+  // Remove collected lines (and any blank lines between content and suggestions) from answer
+  const cleanedLines = lines.slice(0, i + 1);
+  // Trim trailing empty lines from cleaned answer
+  while (cleanedLines.length > 0 && cleanedLines[cleanedLines.length - 1].trim() === "") {
+    cleanedLines.pop();
+  }
+  return { chips: chipLines.slice(0, 3), cleanedAnswer: cleanedLines.join("\n") };
 };
 
 interface OgBotSheetProps {
@@ -520,15 +520,15 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
                       <p className="text-[16px] leading-relaxed" style={{ color: "rgba(255,255,255,0.50)" }}>{msg.error}</p>
                     ) : (
                       <p className="text-[18px] text-white leading-[1.75] whitespace-pre-wrap">
-                        {msg.answer.split(/(https?:\/\/[^\s]+|[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g).map((part, i) =>
-                          part.match(/^https?:\/\//) ? (
-                            <a key={i} href={part} target="_blank" rel="noopener noreferrer"
-                               style={{ color: "#D4AF37", textDecoration: "underline" }}>{part}</a>
-                          ) : part.match(/@/) && part.includes(".") ? (
-                            <a key={i} href={`mailto:${part}`}
-                               style={{ color: "#D4AF37", textDecoration: "underline" }}>{part}</a>
-                          ) : part
-                        )}
+                        {(() => {
+                          const displayText = !msg.streaming ? extractSuggestedChips(msg.answer).cleanedAnswer : msg.answer;
+                          return displayText.split(/(https?:\/\/[^\s]+)/g).map((part, i) =>
+                            part.match(/^https?:\/\//) ? (
+                              <a key={i} href={part} target="_blank" rel="noopener noreferrer"
+                                 style={{ color: "#D4AF37", textDecoration: "underline" }}>{part}</a>
+                            ) : part
+                          );
+                        })()}
                         {msg.streaming && !msg.answer && (
                           <span style={{ color: "rgba(255,255,255,0.40)" }}>Thinking…</span>
                         )}
@@ -567,10 +567,10 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
 
               {/* Follow-up chips after bot answer (last message, done streaming, not greeting) */}
               {msg.id !== "greeting" && !msg.streaming && msg.answer && msgIndex === ogMessages.length - 1 && (() => {
-                const suggested = extractSuggestedChips(msg.answer);
-                return suggested.length > 0 ? (
+                const { chips } = extractSuggestedChips(msg.answer);
+                return chips.length > 0 ? (
                   <div style={{ paddingTop: "4px" }}>
-                    {renderChips(suggested)}
+                    {renderChips(chips)}
                   </div>
                 ) : null;
               })()}
