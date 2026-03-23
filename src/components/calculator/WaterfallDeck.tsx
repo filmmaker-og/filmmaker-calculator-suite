@@ -15,6 +15,7 @@ import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import LeadCaptureModal from "@/components/LeadCaptureModal";
 import { useHaptics } from "@/hooks/use-haptics";
+import { serializeSnapshot } from "@/lib/serialize-snapshot";
 
 // ─── Types ───────────────────────────────────────────────────────
 
@@ -1610,16 +1611,81 @@ const ConclusionSection = ({
 
 // ─── SECTION 8: CTA ──────────────────────────────────────────────
 
-const CTASection = () => {
+const CTASection = ({ result, inputs, project, guilds }: {
+  result: WaterfallResult;
+  inputs: WaterfallInputs;
+  project: ProjectDetails;
+  guilds: GuildState;
+}) => {
   const navigate = useNavigate();
   const haptics = useHaptics();
   const [showLeadCapture, setShowLeadCapture] = useState(false);
   const [pendingExport, setPendingExport] = useState(false);
+  const [exporting, setExporting] = useState(false);
 
-  // TODO: Serving 5 will implement the full PDF export pipeline
-  const handleExportPdf = useCallback((_email: string) => {
-    setPendingExport(false);
-  }, []);
+  const handleExportPdf = useCallback(async (email?: string) => {
+    setExporting(true);
+    try {
+      // 1. Serialize calculator state
+      const payload = serializeSnapshot(result, inputs, project, guilds);
+
+      // 2. Determine user email
+      let userEmail = email;
+      if (!userEmail) {
+        const { data: { session } } = await supabase.auth.getSession();
+        userEmail = session?.user?.email;
+      }
+
+      if (!userEmail) {
+        setExporting(false);
+        return;
+      }
+
+      // 3. Save snapshot to Supabase
+      const { data: snapshot, error: dbError } = await supabase
+        .from('waterfall_snapshots')
+        .insert({
+          user_email: userEmail,
+          project_name: project.title || 'Untitled Project',
+          snapshot_data: payload,
+          product_tier: 'snapshot',
+        })
+        .select('id')
+        .single();
+
+      if (dbError || !snapshot) {
+        console.error('Snapshot save error:', dbError);
+        haptics.error();
+        setExporting(false);
+        return;
+      }
+
+      // 4. Trigger PDF download
+      const pdfUrl = `/api/generate-pdf?id=${snapshot.id}`;
+      const response = await fetch(pdfUrl);
+
+      if (!response.ok) {
+        throw new Error('PDF generation failed');
+      }
+
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${(project.title || 'Waterfall_Snapshot').replace(/[^a-zA-Z0-9_-]/g, '_')}_Snapshot.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      haptics.success();
+    } catch (err) {
+      console.error('Export error:', err);
+      haptics.error();
+    } finally {
+      setExporting(false);
+      setPendingExport(false);
+    }
+  }, [result, inputs, project, guilds, haptics]);
 
   const gatedNavigate = useCallback(async (destination: string) => {
     const { data: { session } } = await supabase.auth.getSession();
@@ -1636,7 +1702,7 @@ const CTASection = () => {
         isOpen={showLeadCapture}
         onClose={() => {
           setShowLeadCapture(false);
-          setPendingExport(false);
+          if (!pendingExport) setPendingExport(false);
         }}
         onEmailSubmitted={(email) => {
           if (pendingExport) {
@@ -1738,26 +1804,40 @@ const CTASection = () => {
             </span>
           </div>
 
-          {/* Free snapshot — lead capture */}
+          {/* Free snapshot — export PDF */}
           <div style={{ marginTop: "12px" }}>
             <span
-              onClick={(e) => { haptics.light(e); setShowLeadCapture(true); }}
+              onClick={async (e) => {
+                haptics.light(e);
+                if (exporting) return;
+                // Check if user is authenticated
+                const { data: { session } } = await supabase.auth.getSession();
+                if (session?.user?.email) {
+                  // Already authed — export directly
+                  handleExportPdf(session.user.email);
+                } else {
+                  // Need email first — open lead capture
+                  setPendingExport(true);
+                  setShowLeadCapture(true);
+                }
+              }}
               style={{
                 display: "inline-block",
                 padding: "12px 28px",
-                border: "1px solid rgba(255,255,255,0.12)",
+                border: `1px solid ${exporting ? 'rgba(212,175,55,0.25)' : 'rgba(255,255,255,0.12)'}`,
                 borderRadius: "8px",
                 fontSize: "14px",
                 fontFamily: "'Inter', sans-serif",
                 fontWeight: 500,
                 letterSpacing: "0.04em",
-                color: W.tertiary,
-                cursor: "pointer",
+                color: exporting ? '#D4AF37' : W.tertiary,
+                cursor: exporting ? 'wait' : 'pointer',
                 textDecoration: "none",
                 transition: "border-color 0.2s, color 0.2s",
+                opacity: exporting ? 0.7 : 1,
               }}
             >
-              Export Free Snapshot
+              {exporting ? 'Generating PDF...' : 'Export Free Snapshot'}
             </span>
           </div>
 
@@ -1861,7 +1941,7 @@ const WaterfallBrief = ({
       <GoldGlowBreak />
 
       {/* ═══ 7. CTA ═══ */}
-      <CTASection />
+      <CTASection result={result} inputs={inputs} project={project} guilds={guilds} />
     </div>
   );
 };
