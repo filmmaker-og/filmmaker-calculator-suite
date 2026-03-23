@@ -2,10 +2,11 @@
 // Vercel Serverless Function: generates a PDF from a waterfall snapshot
 // GET /api/generate-pdf?id={snapshotId}
 //
-// Uses dynamic imports to avoid ESM/CJS module resolution issues
-// with puppeteer-core and @sparticuz/chromium on Node 24 + "type": "module"
+// Requires Vercel env var: AWS_LAMBDA_JS_RUNTIME=nodejs20.x
+// (set in Dashboard, not in code — chromium reads it on module load)
 
 import type { VercelRequest, VercelResponse } from "@vercel/node";
+import path from "path";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== "GET") {
@@ -18,15 +19,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    // Dynamic imports — avoids top-level ESM/CJS resolution failures
     const { createClient } = await import("@supabase/supabase-js");
     const { generatePdfHtml } = await import("./_pdf-template.js");
-    const chromiumModule = await import("@sparticuz/chromium");
-    const puppeteerModule = await import("puppeteer-core");
-    const chromium = chromiumModule.default;
-    const puppeteer = puppeteerModule.default;
+    const chromium = (await import("@sparticuz/chromium")).default;
+    const puppeteer = (await import("puppeteer-core")).default;
 
-    // 1. Supabase client (server-side — uses process.env)
+    // Supabase client (server-side)
     const supabaseUrl =
       process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
     const supabaseKey =
@@ -34,16 +32,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       process.env.VITE_SUPABASE_ANON_KEY;
 
     if (!supabaseUrl || !supabaseKey) {
-      console.error("Missing Supabase env vars:", {
-        hasUrl: !!supabaseUrl,
-        hasKey: !!supabaseKey,
-      });
       return res.status(500).json({ error: "Server misconfigured" });
     }
 
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // 2. Fetch snapshot
+    // Fetch snapshot
     const { data: snapshot, error: dbError } = await supabase
       .from("waterfall_snapshots")
       .select("*")
@@ -54,24 +48,35 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(404).json({ error: "Snapshot not found" });
     }
 
-    // 3. Generate HTML from snapshot data
+    // Generate HTML
     const html = generatePdfHtml(snapshot.snapshot_data);
 
-    // 4. Launch Puppeteer with serverless Chromium
+    // Get chromium executable path — this extracts the binary to /tmp
+    const executablePath = await chromium.executablePath();
+
+    // Set LD_LIBRARY_PATH to the directory containing the chromium binary
+    // This is the critical fix — the shared libraries (libnss3.so, etc.)
+    // are extracted alongside the binary but the loader doesn't know
+    // to look in /tmp for them
+    const chromiumDir = path.dirname(executablePath);
+    process.env.LD_LIBRARY_PATH = `${chromiumDir}:${process.env.LD_LIBRARY_PATH || ""}`;
+
+    // Launch browser
+    chromium.setHeadlessMode = true;
+    chromium.setGraphicsMode = false;
+
     const browser = await puppeteer.launch({
       args: chromium.args,
-      defaultViewport: { width: 612, height: 792 },
-      executablePath: await chromium.executablePath(),
-      headless: true,
+      defaultViewport: chromium.defaultViewport,
+      executablePath,
+      headless: chromium.headless,
     });
 
     const page = await browser.newPage();
+    await page.setViewport({ width: 612, height: 792 });
     await page.setContent(html, { waitUntil: "networkidle0" });
-
-    // Wait for Google Fonts to load
     await page.evaluateHandle("document.fonts.ready");
 
-    // 5. Render PDF
     const pdfBuffer = await page.pdf({
       width: "612px",
       height: "792px",
@@ -81,7 +86,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     await browser.close();
 
-    // 6. Return PDF as file download
     const projectName = snapshot.project_name || "Waterfall_Snapshot";
     const safeFilename = projectName.replace(/[^a-zA-Z0-9_-]/g, "_");
 
