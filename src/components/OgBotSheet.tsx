@@ -636,6 +636,26 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
               </span>
             </div>
           </form>
+          <div style={{
+            display: "flex",
+            justifyContent: "center",
+            gap: "16px",
+            paddingBottom: "8px",
+            paddingTop: "4px",
+          }}>
+            <a href="https://instagram.com/filmmaker.og" target="_blank" rel="noopener noreferrer"
+               style={{ color: "rgba(255,255,255,0.35)", fontSize: "11px", textDecoration: "none" }}>
+              IG
+            </a>
+            <a href="https://tiktok.com/@filmmaker.og" target="_blank" rel="noopener noreferrer"
+               style={{ color: "rgba(255,255,255,0.35)", fontSize: "11px", textDecoration: "none" }}>
+              TikTok
+            </a>
+            <a href="https://facebook.com/filmmaker.og" target="_blank" rel="noopener noreferrer"
+               style={{ color: "rgba(255,255,255,0.35)", fontSize: "11px", textDecoration: "none" }}>
+              FB
+            </a>
+          </div>
         </div>
       </div>
     </>
