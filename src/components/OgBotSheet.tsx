@@ -79,13 +79,21 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
     }, 100);
 
     try {
-      const resp = await fetch(`${SUPABASE_URL}/functions/v1/film-search`, {
+      const resp = await fetch(`${SUPABASE_URL}/functions/v1/ask-the-og`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${SUPABASE_KEY}`,
         },
-        body: JSON.stringify({ question: q }),
+        body: JSON.stringify({
+          messages: [
+            ...ogMessages.map(m => [
+              { role: "user", content: m.question },
+              ...(m.answer ? [{ role: "assistant", content: m.answer }] : []),
+            ]).flat(),
+            { role: "user", content: q },
+          ],
+        }),
       });
 
       if (!resp.ok) {
@@ -209,7 +217,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
       {/* ── Bottom Sheet ── */}
       <div
         className={cn(
-          "fixed bottom-0 left-2 right-2 z-[180] transition-transform duration-300 ease-out",
+          "fixed bottom-0 left-0 right-0 z-[180] transition-transform duration-300 ease-out",
           "flex flex-col",
           isOpen ? "translate-y-0" : "translate-y-full"
         )}
