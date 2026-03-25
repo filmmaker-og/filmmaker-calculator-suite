@@ -118,8 +118,8 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
       })();
 
       const greeting = hasProjectData
-        ? "Hey, I\u2019m the OG \u{1F916} Your film finance copilot. I can see you\u2019ve been running numbers \u2014 want me to help interpret your model, or ask me anything about deals, waterfalls, or packaging."
-        : "Hey, I\u2019m the OG \u{1F916} Your film finance copilot. Ask me anything about deals, waterfalls, packaging, or how to get your film financed. What\u2019s on your mind?";
+        ? "Hey \u{1F44B}, I\u2019m your film-finance OG!\n\nYour deal analyst on call.\n\nI can see you\u2019ve been running numbers \u2014 want me to help interpret your model?\n\nOr ask me anything about deals, waterfalls, packaging, or how to get your film financed."
+        : "Hey \u{1F44B}, I\u2019m your film-finance OG!\n\nYour deal analyst on call.\n\nAsk me anything about waterfalls, deal structures, packaging, or how to get your film financed.\n\nNeed help picking the right package? Just tell me what\u2019s on your mind below \u{1F447}";
 
       setOgMessages([{
         id: "greeting",
@@ -297,8 +297,8 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
       } catch { return false; }
     })();
     const greeting = hasProjectData
-      ? "Hey, I\u2019m the OG \u{1F916} Your film finance copilot. I can see you\u2019ve been running numbers \u2014 want me to help interpret your model, or ask me anything about deals, waterfalls, or packaging."
-      : "Hey, I\u2019m the OG \u{1F916} Your film finance copilot. Ask me anything about deals, waterfalls, packaging, or how to get your film financed. What\u2019s on your mind?";
+      ? "Hey \u{1F44B}, I\u2019m your film-finance OG!\n\nYour deal analyst on call.\n\nI can see you\u2019ve been running numbers \u2014 want me to help interpret your model?\n\nOr ask me anything about deals, waterfalls, packaging, or how to get your film financed."
+      : "Hey \u{1F44B}, I\u2019m your film-finance OG!\n\nYour deal analyst on call.\n\nAsk me anything about waterfalls, deal structures, packaging, or how to get your film financed.\n\nNeed help picking the right package? Just tell me what\u2019s on your mind below \u{1F447}";
     setOgMessages([{
       id: "greeting",
       question: "",
