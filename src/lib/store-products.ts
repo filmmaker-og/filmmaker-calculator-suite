@@ -1,6 +1,7 @@
 /* ═══════════════════════════════════════════════════════════════════
    PRODUCT DATA — filmmaker.og store
    Current architecture (March 2026):
+     0. Snapshot+ ($49) — diagnostic upgrade, credit toward Full Analysis
      1. The Full Analysis ($197) — automated, first paid tier
      2. Comp Report ($595 / $995) — standalone market data
      3. The Producer's Package ($1,797) — turnkey service
@@ -42,10 +43,49 @@ export interface Product {
     cta: string;
     link: string;
   } | null;
+  priceAnchor?: string;
   ctaLabel: string;
 }
 
 export const products: Product[] = [
+  {
+    id: "snapshot-plus",
+    slug: "snapshot-plus",
+    name: "Snapshot+",
+    price: 49,
+    priceNote: null,
+    originalPrice: null,
+    badge: "UPGRADE",
+    featured: false,
+    tier: 0,
+    category: "product",
+    turnaround: "Instant",
+    shortDescription: "The diagnostic layer behind your free Snapshot.",
+    fullDescription:
+      "The free Snapshot shows you the waterfall. Snapshot+ tells you whether it holds up.\n\nFour diagnostic metrics that separate a deal that works from a deal that looks like it works: Margin of Safety, Erosion Rate, Off-the-Top Total, and Cost of Capital.\n\nInstant delivery. Applies as credit toward The Full Analysis.",
+    features: [
+      { title: "Margin of Safety", subtitle: "How much room your deal has before it breaks", group: "Unlock" },
+      { title: "Erosion Rate", subtitle: "What the off-the-tops actually cost you", group: "Unlock" },
+      { title: "Off-the-Top Total", subtitle: "Combined fees before investors see a dollar", group: "Unlock" },
+      { title: "Cost of Capital", subtitle: "The real price of every dollar in your stack", group: "Unlock" },
+    ],
+    reassurance: "Applies as credit toward The Full Analysis",
+    whatsIncluded: [
+      { title: "Margin of Safety", body: "The gap between your break-even point and projected revenue." },
+      { title: "Erosion Rate", body: "Percentage of gross revenue consumed by off-the-top deductions." },
+      { title: "Off-the-Top Total", body: "Combined dollar amount of all fees before the waterfall begins." },
+      { title: "Cost of Capital", body: "Blended cost of every dollar in your capital stack." },
+    ],
+    pickThisIf: "Find out whether your deal actually works.",
+    whoItsFor: "Producers who ran the free calculator and want to know if the deal structure is sound before committing to full documentation.",
+    upgradePrompt: {
+      title: "NEED THE FULL DOCUMENT?",
+      body: "The Full Analysis builds the complete investor-ready financial presentation. Your Snapshot+ purchase applies as credit.",
+      cta: "See The Full Analysis →",
+      link: "/store/the-full-analysis",
+    },
+    ctaLabel: "UNLOCK SNAPSHOT+",
+  },
   {
     id: "the-full-analysis",
     slug: "the-full-analysis",
@@ -53,7 +93,7 @@ export const products: Product[] = [
     price: 197,
     priceNote: null,
     originalPrice: null,
-    badge: "TRENDING",
+    badge: "LAUNCH PRICING",
     featured: false,
     tier: 1,
     category: "product",
@@ -68,6 +108,7 @@ export const products: Product[] = [
       { title: "Institutional Design", subtitle: "Hand it to your attorney. Hand it to your investor. It holds up.", group: "Present" },
     ],
     reassurance: "Instant delivery",
+    priceAnchor: "An entertainment attorney charges $500–850/hr for this work",
     whatsIncluded: [
       {
         title: "Unified Financial Presentation (PDF)",
@@ -97,8 +138,8 @@ export const products: Product[] = [
     id: "comp-report",
     slug: "comp-report",
     name: "Comp Report",
-    price: 595,
-    priceNote: "5 comps · 10 comps for $995",
+    price: 995,
+    priceNote: "Or get 5 comps for $595",
     originalPrice: null,
     badge: "DATA",
     featured: true,
@@ -143,7 +184,7 @@ export const products: Product[] = [
       cta: "See The Producer's Package →",
       link: "/store/the-producers-package",
     },
-    ctaLabel: "GET 10 COMPS \u00B7 $995",
+    ctaLabel: "GET 10 COMPS",
   },
   {
     id: "the-producers-package",
@@ -211,7 +252,7 @@ export const products: Product[] = [
       cta: "See Boutique →",
       link: "/store/boutique",
     },
-    ctaLabel: "GET THE PRODUCER'S PACKAGE",
+    ctaLabel: "PRODUCER'S PACKAGE",
   },
   {
     id: "boutique",

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Mail, X as XIcon, Clock, ChevronDown } from "lucide-react";
+import { X as XIcon, Clock, ChevronDown } from "lucide-react";
 
 import { useHaptics } from "@/hooks/use-haptics";
 import { useInView } from "@/hooks/useInView";
@@ -60,7 +60,7 @@ const s: Record<string, React.CSSProperties> = {
   },
   eyebrowLabel: {
     fontFamily: "'Roboto Mono', monospace",
-    fontSize: "15px",
+    fontSize: "16px",
     letterSpacing: "0.18em",
     textTransform: "uppercase",
     color: "#D4AF37",
@@ -78,7 +78,7 @@ const s: Record<string, React.CSSProperties> = {
   },
   /* ── Card header (matches Index.tsx tierHeaderAlt: 28px 24px 20px) ── */
   cardHeader: {
-    padding: "28px 24px 20px",
+    padding: "28px 24px 24px",
     borderBottom: "1px solid rgba(212,175,55,0.12)",
   },
   /* ── Card name (matches Index.tsx tierTitleCard: 2.6rem) ── */
@@ -91,10 +91,10 @@ const s: Record<string, React.CSSProperties> = {
     lineHeight: 1,
     marginBottom: "8px",
   },
-  /* ── Pick this if (matches feature desc tier: 16px) ── */
+  /* ── Pick this if ── */
   pickThisIf: {
     fontFamily: "'Inter', sans-serif",
-    fontSize: "16px",
+    fontSize: "18px",
     color: "rgba(212,175,55,0.80)",
     marginTop: "6px",
     lineHeight: 1.45,
@@ -105,44 +105,11 @@ const s: Record<string, React.CSSProperties> = {
     fontSize: "11px",
     letterSpacing: "0.15em",
     textTransform: "uppercase" as const,
-    fontWeight: 700,
+    fontWeight: 600,
     padding: "6px 12px",
     borderRadius: "4px",
     color: "#D4AF37",
     whiteSpace: "nowrap" as const,
-  },
-  /* ── Price block ── */
-  priceBlock: {
-    padding: "24px 24px 20px",
-  },
-  priceStandard: {
-    fontFamily: "'Roboto Mono', monospace",
-    fontSize: "2.4rem",
-    fontWeight: 700,
-    color: "#fff",
-    lineHeight: 1,
-  },
-  priceNote: {
-    display: "block",
-    fontFamily: "'Roboto Mono', monospace",
-    fontSize: "12px",
-    color: "rgba(255,255,255,0.45)",
-    letterSpacing: "0.06em",
-    marginTop: "4px",
-  },
-  /* ── Short desc (matches Index.tsx tierSubFree: 18px, 0.72) ── */
-  shortDesc: {
-    fontFamily: "'Inter', sans-serif",
-    fontSize: "18px",
-    color: "rgba(255,255,255,0.72)",
-    marginTop: "8px",
-    lineHeight: 1.55,
-  },
-  /* ── Subdivider (gold, not white) ── */
-  subdivider: {
-    height: "1px",
-    background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.12), transparent)",
-    margin: "0 24px",
   },
   /* ── Features (matches Index.tsx tierFeatures: padding 24px, gap 16px) ── */
   featuresBlock: {
@@ -188,83 +155,7 @@ const s: Record<string, React.CSSProperties> = {
   actionBlock: {
     padding: "0 24px 36px",
   },
-  /* ── Buttons (matches Index.tsx btnGold: 16px, 0.10em, radius 6px) ── */
-  btnOutline: {
-    width: "100%",
-    padding: "18px",
-    fontFamily: "'Roboto Mono', monospace",
-    fontSize: "16px",
-    fontWeight: 600,
-    letterSpacing: "0.10em",
-    textTransform: "uppercase" as const,
-    color: "#D4AF37",
-    background: "rgba(212,175,55,0.05)",
-    border: "1px solid rgba(212,175,55,0.30)",
-    borderRadius: "6px",
-    cursor: "pointer",
-    transition: "background 0.2s, border-color 0.2s",
-  },
-  btnGreen: {
-    width: "100%",
-    padding: "18px",
-    fontFamily: "'Roboto Mono', monospace",
-    fontSize: "16px",
-    fontWeight: 600,
-    letterSpacing: "0.10em",
-    textTransform: "uppercase" as const,
-    color: "#3CB371",
-    background: "rgba(60,179,113,0.05)",
-    border: "1px solid rgba(60,179,113,0.25)",
-    borderRadius: "6px",
-    cursor: "pointer",
-    transition: "background 0.2s, border-color 0.2s",
-  },
-  btnGreenSecondary: {
-    width: "100%",
-    padding: "16px",
-    fontFamily: "'Roboto Mono', monospace",
-    fontSize: "14px",
-    letterSpacing: "0.06em",
-    textTransform: "uppercase" as const,
-    color: "#3CB371",
-    background: "rgba(60,179,113,0.03)",
-    border: "1px solid rgba(60,179,113,0.15)",
-    borderRadius: "6px",
-    cursor: "pointer",
-    marginTop: "10px",
-    transition: "background 0.2s, border-color 0.2s",
-  },
-  btnPurpleOutline: {
-    width: "100%",
-    padding: "18px",
-    fontFamily: "'Roboto Mono', monospace",
-    fontSize: "16px",
-    fontWeight: 600,
-    letterSpacing: "0.10em",
-    textTransform: "uppercase" as const,
-    color: "rgb(180,140,255)",
-    background: "rgba(120,60,180,0.05)",
-    border: "1px solid rgba(120,60,180,0.30)",
-    borderRadius: "6px",
-    cursor: "pointer",
-    transition: "background 0.2s, border-color 0.2s",
-  },
-  btnPurple: {
-    width: "100%",
-    padding: "18px",
-    fontFamily: "'Roboto Mono', monospace",
-    fontSize: "18px",
-    fontWeight: 600,
-    letterSpacing: "0.12em",
-    textTransform: "uppercase" as const,
-    color: "#fff",
-    background: "linear-gradient(135deg, rgb(75,30,130) 0%, rgb(110,50,170) 100%)",
-    border: "none",
-    borderRadius: "6px",
-    cursor: "pointer",
-    boxShadow: "0 0 24px rgba(120,60,180,0.35), 0 0 60px rgba(212,175,55,0.10)",
-    transition: "transform 0.15s, box-shadow 0.3s",
-  },
+  /* ── Buttons ── */
   btnCta: {
     width: "100%",
     padding: "18px",
@@ -280,53 +171,6 @@ const s: Record<string, React.CSSProperties> = {
     cursor: "pointer",
     boxShadow: "0 0 20px rgba(249,224,118,0.3), 0 0 60px rgba(249,224,118,0.1)",
     transition: "transform 0.15s, box-shadow 0.3s",
-  },
-  btnGoldSolid: {
-    width: "100%",
-    padding: "18px",
-    fontFamily: "'Roboto Mono', monospace",
-    fontSize: "16px",
-    fontWeight: 700,
-    letterSpacing: "0.10em",
-    textTransform: "uppercase" as const,
-    color: "#000",
-    background: "#D4AF37",
-    border: "none",
-    borderRadius: "6px",
-    cursor: "pointer",
-    boxShadow: "0 0 20px rgba(212,175,55,0.35), 0 0 50px rgba(212,175,55,0.10)",
-    transition: "transform 0.15s, box-shadow 0.3s",
-  },
-  btnGreenSolid: {
-    width: "100%",
-    padding: "18px",
-    fontFamily: "'Roboto Mono', monospace",
-    fontSize: "16px",
-    fontWeight: 700,
-    letterSpacing: "0.10em",
-    textTransform: "uppercase" as const,
-    color: "#000",
-    background: "#3CB371",
-    border: "none",
-    borderRadius: "6px",
-    cursor: "pointer",
-    boxShadow: "0 0 20px rgba(60,179,113,0.35), 0 0 50px rgba(60,179,113,0.10)",
-    transition: "transform 0.15s, box-shadow 0.3s",
-  },
-  /* ── Details link (matches Index.tsx detailsLink: 15px Inter, white 0.85) ── */
-  detailsLink: {
-    display: "block",
-    width: "100%",
-    textAlign: "center" as const,
-    fontFamily: "'Inter', sans-serif",
-    fontSize: "15px",
-    color: "rgba(255,255,255,0.85)",
-    padding: "8px 0",
-    background: "none",
-    border: "none",
-    cursor: "pointer",
-    transition: "color 0.2s",
-    marginTop: "16px",
   },
 };
 
@@ -373,8 +217,8 @@ const tierStyles = {
       WebkitBackdropFilter: "blur(40px)",
       boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 30px rgba(120,60,180,0.12), 0 0 20px rgba(212,175,55,0.06)",
     },
-    atmosphericTop: "radial-gradient(ellipse 100% 80% at 50% 0%, rgba(120,60,180,0.10) 0%, transparent 70%)",
-    atmosphericBottom: "radial-gradient(ellipse 100% 80% at 50% 100%, rgba(212,175,55,0.08) 0%, transparent 70%)",
+    atmosphericTop: "radial-gradient(ellipse 100% 80% at 50% 0%, rgba(120,60,180,0.22) 0%, transparent 70%)",
+    atmosphericBottom: "radial-gradient(ellipse 100% 80% at 50% 100%, rgba(212,175,55,0.12) 0%, transparent 70%)",
     gradientBorder: "linear-gradient(180deg, rgba(212,175,55,0.45) 0%, rgba(212,175,55,0.15) 40%, rgba(120,60,180,0.30) 70%, rgba(120,60,180,0.50) 100%)",
     topline: {
       height: "2px",
@@ -532,19 +376,19 @@ const CompPricingBlock = () => (
       gap: "10px",
       marginTop: "12px",
       padding: "16px",
-      background: "rgba(60,179,113,0.04)",
-      border: "1px solid rgba(60,179,113,0.12)",
+      background: "rgba(212,175,55,0.04)",
+      border: "1px solid rgba(212,175,55,0.12)",
       borderRadius: "8px",
     }}
   >
     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
       <span style={{ fontFamily: "'Inter', sans-serif", fontSize: "16px", color: "rgba(255,255,255,0.88)", fontWeight: 500 }}>10 Comparable Deals</span>
-      <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "18px", color: "#3CB371", fontWeight: 700 }}>$995</span>
+      <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "18px", color: "#D4AF37", fontWeight: 700 }}>$995</span>
     </div>
-    <div style={{ height: "1px", background: "rgba(60,179,113,0.10)" }} />
+    <div style={{ height: "1px", background: "rgba(212,175,55,0.10)" }} />
     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
       <span style={{ fontFamily: "'Inter', sans-serif", fontSize: "16px", color: "rgba(255,255,255,0.88)", fontWeight: 500 }}>5 Comparable Deals</span>
-      <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "18px", color: "#3CB371", fontWeight: 700 }}>$595</span>
+      <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "18px", color: "#D4AF37", fontWeight: 700 }}>$595</span>
     </div>
   </div>
 );
@@ -749,7 +593,7 @@ const btnGoldVol: React.CSSProperties = {
 
 const btnGoldVolSecondary: React.CSSProperties = {
   ...btnGoldVol,
-  padding: "16px 0", fontSize: "16px",
+  padding: "18px 0", fontSize: "16px",
   background: "linear-gradient(180deg, rgba(212,175,55,0.80) 0%, rgba(184,150,46,0.80) 100%)",
   boxShadow: "inset 0 1px 1px rgba(255,255,255,0.20), inset 0 -2px 4px rgba(0,0,0,0.2), 0 0 0 1px rgba(212,175,55,0.40), 0 4px 16px rgba(0,0,0,0.4), 0 0 20px rgba(212,175,55,0.15)",
   marginTop: "10px",
@@ -769,7 +613,7 @@ const btnPurpleVol: React.CSSProperties = {
 
 const btnSnapshotOutline: React.CSSProperties = {
   width: "100%", padding: "22px 0", borderRadius: "8px",
-  border: "1px solid rgba(212,175,55,0.30)", cursor: "pointer",
+  border: "1px solid rgba(212,175,55,0.40)", cursor: "pointer",
   fontFamily: "'Inter', sans-serif", fontSize: "18px", fontWeight: 700,
   letterSpacing: "0.08em", textTransform: "uppercase" as const,
   color: "#D4AF37", textAlign: "center" as const, display: "block" as const,
@@ -794,12 +638,14 @@ const ProductCard = ({
   const isComp = product.id === "comp-report";
   const tier = getTier(product);
   const isSnapshot = product.id === "snapshot-plus";
+  const isHero = product.id === "the-full-analysis";
   const tierPriceColor = tier.id === "purple" ? "rgb(180,140,255)" : "#D4AF37";
   const tierReassuranceColor = tier.id === "purple" ? "rgba(180,140,255,0.50)" : "rgba(212,175,55,0.50)";
 
   const cardStyle: React.CSSProperties = {
     ...s.cardBase,
     ...tier.card,
+    ...(isHero ? { boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 35px rgba(212,175,55,0.14), 0 0 24px rgba(120,60,180,0.12), 0 0 60px rgba(212,175,55,0.06)" } : {}),
     opacity: visible ? 1 : 0,
     transform: visible
       ? (hovered ? `translateY(${tier.hoverLift})` : "translateY(0)")
@@ -811,6 +657,7 @@ const ProductCard = ({
   return (
     <div
       style={cardStyle}
+      data-product={product.id}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
@@ -878,6 +725,18 @@ const ProductCard = ({
             ${product.price.toLocaleString()}
           </span>
         </div>
+
+        {/* Price anchor */}
+        {product.priceAnchor && (
+          <p style={{
+            fontFamily: "'Roboto Mono', monospace",
+            fontSize: "13px",
+            color: "rgba(212,175,55,0.50)",
+            letterSpacing: "0.06em",
+            textAlign: "center",
+            margin: "0 0 16px 0",
+          }}>{product.priceAnchor}</p>
+        )}
 
         {/* CTA */}
         {isSnapshot ? (
@@ -1133,7 +992,7 @@ const FaqItem = ({
         <p style={{
           fontFamily: "'Inter', sans-serif",
           fontSize: "19px",
-          color: "rgba(255,255,255,0.80)",
+          color: "rgba(255,255,255,0.92)",
           lineHeight: 1.6,
           margin: 0,
         }}>
@@ -1275,7 +1134,7 @@ const Store = () => {
           margin: "0 24px",
           borderRadius: 12,
           overflow: "hidden",
-          background: "rgba(6,6,6,0.92)",
+          background: "rgba(6,6,6,0.85)",
           backdropFilter: "blur(40px)",
           WebkitBackdropFilter: "blur(40px)",
           border: "1px solid rgba(212,175,55,0.20)",
@@ -1285,9 +1144,10 @@ const Store = () => {
           {/* Triple radial glow */}
           <div style={{
             position: "absolute", top: 0, left: 0, right: 0, bottom: 0, pointerEvents: "none",
-            background: "radial-gradient(ellipse 80% 50% at 50% 10%, rgba(212,175,55,0.28) 0%, transparent 60%), radial-gradient(ellipse 60% 40% at 50% 50%, rgba(120,60,180,0.28) 0%, transparent 60%), radial-gradient(ellipse 100% 70% at 50% 100%, rgba(120,60,180,0.24) 0%, transparent 60%)",
+            background: "radial-gradient(ellipse 80% 50% at 50% 10%, rgba(212,175,55,0.35) 0%, transparent 60%), radial-gradient(ellipse 60% 40% at 50% 50%, rgba(120,60,180,0.35) 0%, transparent 60%), radial-gradient(ellipse 100% 70% at 50% 100%, rgba(120,60,180,0.30) 0%, transparent 60%)",
           }} />
           <div style={{ position: "relative", zIndex: 1 }}>
+            <EyebrowRuled text="Shop" />
             <h1 style={{
               fontFamily: "'Bebas Neue', sans-serif",
               fontSize: "4.2rem",
@@ -1303,6 +1163,16 @@ const Store = () => {
                 textShadow: "0 2px 20px rgba(0,0,0,0.8), 0 0 40px rgba(212,175,55,0.50), 0 0 80px rgba(212,175,55,0.25)",
               }}>Investor Ready</span>
             </h1>
+            <p style={{
+              fontFamily: "'Inter', sans-serif",
+              fontSize: "19px",
+              color: "rgba(255,255,255,0.92)",
+              lineHeight: 1.55,
+              margin: "12px 0 0 0",
+              textShadow: "0 2px 12px rgba(0,0,0,0.9)",
+            }}>
+              Your deal structure modeled and documented. From diagnostics to investor-ready packages.
+            </p>
           </div>
         </section>
       </div>
@@ -1312,7 +1182,7 @@ const Store = () => {
         ref={productsRef}
         style={{ padding: "0 24px" }}
       >
-        {selfServeProducts.map((product, i) => (
+        {selfServeProducts.filter(p => p.id !== "snapshot-plus").map((product, i) => (
           <ProductCard
             key={product.id}
             product={product}
@@ -1321,6 +1191,24 @@ const Store = () => {
             index={i}
           />
         ))}
+      </div>
+
+      {/* Snapshot+ compact mention */}
+      <div style={{ padding: "16px 24px 0", textAlign: "center" }}>
+        <p style={{
+          fontFamily: "'Roboto Mono', monospace",
+          fontSize: "13px",
+          color: "rgba(212,175,55,0.50)",
+          letterSpacing: "0.06em",
+        }}>
+          Just need the diagnostics?{" "}
+          <span
+            onClick={() => window.location.href = "/store/snapshot-plus"}
+            style={{ color: "#D4AF37", cursor: "pointer", textDecoration: "underline", textUnderlineOffset: "3px" }}
+          >
+            Snapshot+ — $49
+          </span>
+        </p>
       </div>
 
       {/* §1 → §2 spacer (no breath line) */}
@@ -1354,11 +1242,11 @@ const Store = () => {
           <p style={{
             fontFamily: "'Inter', sans-serif",
             fontSize: "19px",
-            color: "rgba(255,255,255,0.88)",
+            color: "rgba(255,255,255,0.92)",
             lineHeight: 1.55,
             margin: 0,
           }}>
-            Real comparable acquisition data in your genre and budget range. We research it. You present the evidence.
+            Walk into the room with evidence, not assumptions. We research comparable deals in your genre and budget range. You present the data.
           </p>
         </div>
       </section>
@@ -1389,7 +1277,7 @@ const Store = () => {
       >
         <div style={{
           position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
-          background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.15) 0%, transparent 70%), radial-gradient(ellipse 80% 50% at 50% 30%, rgba(120,60,180,0.12) 0%, transparent 70%)",
+          background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.15) 0%, transparent 70%), radial-gradient(ellipse 80% 50% at 50% 30%, rgba(120,60,180,0.18) 0%, transparent 70%)",
           pointerEvents: "none",
         }} />
         <div style={{ position: "relative", ...reveal(servicesVisible) }}>
@@ -1408,11 +1296,11 @@ const Store = () => {
           <p style={{
             fontFamily: "'Inter', sans-serif",
             fontSize: "19px",
-            color: "rgba(255,255,255,0.88)",
+            color: "rgba(255,255,255,0.92)",
             lineHeight: 1.55,
             margin: 0,
           }}>
-            Tell us about your project. We build the complete investor package. Turnkey, custom, delivered in 5 business days.
+            Your investor meeting is on the calendar. Tell us about your project and we build everything you need for it. Delivered in 5 business days.
           </p>
         </div>
       </section>
@@ -1485,6 +1373,26 @@ const Store = () => {
         </div>
       </section>
 
+      {/* Post-FAQ conversion prompt */}
+      <div style={{ padding: "8px 24px 24px", textAlign: "center" }}>
+        <span
+          onClick={() => {
+            const el = document.querySelector('[data-product="the-full-analysis"]');
+            if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+          }}
+          style={{
+            fontFamily: "'Roboto Mono', monospace",
+            fontSize: "14px",
+            color: "#D4AF37",
+            letterSpacing: "0.06em",
+            cursor: "pointer",
+            textDecoration: "none",
+          }}
+        >
+          Ready? Start with The Full Analysis →
+        </span>
+      </div>
+
       {/* ── Breath Line (compressed: §4→CTA) ── */}
       <div style={{ padding: "16px 0" }}>
         <div style={{
@@ -1535,7 +1443,7 @@ const Store = () => {
             margin: "0 0 12px 0",
             lineHeight: 1.1,
           }}>
-            NEED SOMETHING <span style={{ color: "#D4AF37" }}>DIFFERENT?</span>
+            NOT SURE WHICH <span style={{ color: "#D4AF37" }}>PRODUCT FITS?</span>
           </h3>
           <p style={{
             fontFamily: "'Inter', sans-serif",
@@ -1545,10 +1453,13 @@ const Store = () => {
             maxWidth: "90%",
             margin: "0 auto 24px",
           }}>
-            Custom financial modeling, specialized comp research, or investor materials beyond what these packages cover. Scoped to your project.
+            Tell us about your project and we'll recommend the right product.
           </p>
-          <a
-            href="mailto:thefilmmaker.og@gmail.com?subject=Custom%20Inquiry"
+          <button
+            onClick={(e) => {
+              haptics.medium(e);
+              window.dispatchEvent(new CustomEvent("open-og-bot"));
+            }}
             style={{
               display: "inline-flex",
               alignItems: "center",
@@ -1560,20 +1471,16 @@ const Store = () => {
               color: "#D4AF37",
               background: "rgba(212,175,55,0.05)",
               border: "1px solid rgba(212,175,55,0.4)",
-              borderRadius: "6px",
+              borderRadius: "8px",
               padding: "16px 24px",
-              textDecoration: "none",
-              transition: "background 0.2s, border-color 0.2s",
               cursor: "pointer",
+              transition: "background 0.2s, border-color 0.2s",
             }}
-            onMouseDown={(e) => { haptics.medium(e); (e.currentTarget.style.transform = "scale(0.98)"); }}
+            onMouseDown={(e) => { (e.currentTarget.style.transform = "scale(0.98)"); }}
             onMouseUp={(e) => { (e.currentTarget.style.transform = "scale(1)"); }}
-            onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(212,175,55,0.08)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.55)"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(212,175,55,0.05)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.4)"; }}
           >
-            <Mail style={{ width: "16px", height: "16px" }} />
-            Get In Touch →
-          </a>
+            ✦ ASK THE OG
+          </button>
         </div>
       </div>
 
@@ -1608,7 +1515,7 @@ const Store = () => {
         <p style={{
           fontFamily: "'Inter', sans-serif",
           fontSize: "14px",
-          color: "rgba(255,255,255,0.48)",
+          color: "rgba(255,255,255,0.55)",
           textAlign: "center",
           lineHeight: 1.55,
           margin: 0,
