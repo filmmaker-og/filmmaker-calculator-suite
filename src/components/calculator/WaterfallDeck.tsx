@@ -348,7 +348,7 @@ const CoverSection = ({
           gap: "2px",
           marginBottom: "20px",
           border: "1px solid rgba(255,255,255,0.06)",
-          borderRadius: "4px",
+          borderRadius: "12px",
           overflow: "hidden",
           background: "rgba(255,255,255,0.06)",
         }}>
@@ -380,7 +380,7 @@ const CoverSection = ({
         gap: "2px",
         marginBottom: "2px",
         background: "rgba(255,255,255,0.06)",
-        borderRadius: "4px",
+        borderRadius: "12px",
         overflow: "hidden",
       }}>
         <div style={{ flex: 1, background: "#0A0A0A", padding: "14px" }}>
@@ -413,7 +413,7 @@ const CoverSection = ({
         gap: "2px",
         marginBottom: "2px",
         background: "rgba(255,255,255,0.06)",
-        borderRadius: "4px",
+        borderRadius: "12px",
         overflow: "hidden",
       }}>
         <div style={{ flex: 1, background: "#0A0A0A", padding: "14px" }}>
@@ -448,7 +448,7 @@ const CoverSection = ({
         gap: "2px",
         marginBottom: "24px",
         background: "rgba(255,255,255,0.06)",
-        borderRadius: "4px",
+        borderRadius: "12px",
         overflow: "hidden",
       }}>
         <div style={{
@@ -537,7 +537,7 @@ const CoverSection = ({
         padding: "14px 16px",
         background: "rgba(255,255,255,0.03)",
         border: "1px solid rgba(255,255,255,0.06)",
-        borderRadius: "4px",
+        borderRadius: "12px",
       }}>
         <div style={{
           ...FONT.fine,
@@ -823,7 +823,7 @@ const VisualCluster1 = ({
           <div style={{
             padding: "20px",
             border: "1px solid rgba(255,255,255,0.08)",
-            borderRadius: "4px",
+            borderRadius: "12px",
             marginBottom: "20px",
           }}>
             {/* Hero row */}
@@ -834,7 +834,7 @@ const VisualCluster1 = ({
               </span>
             </div>
             {/* Stacked bar */}
-            <div style={{ height: "28px", background: "rgba(255,255,255,0.04)", borderRadius: "4px", display: "flex", overflow: "hidden", marginBottom: "16px" }}>
+            <div style={{ height: "28px", background: "rgba(255,255,255,0.04)", borderRadius: "12px", display: "flex", overflow: "hidden", marginBottom: "16px" }}>
               {erosionItems.map((item) => {
                 const widthPct = erosionTotal > 0 ? (item.amount / erosionTotal) * 100 : 0;
                 return (
@@ -871,7 +871,7 @@ const VisualCluster1 = ({
       <div style={{
         display: "flex", justifyContent: "space-between", alignItems: "center",
         padding: "14px 20px", background: netBg, border: `1px solid ${netBorder}`,
-        borderRadius: "4px", marginBottom: "28px",
+        borderRadius: "12px", marginBottom: "28px",
       }}>
         <span style={{ fontSize: "16px", color: W.tertiary }}>Net to Investors</span>
         <span style={{ ...FONT.data, fontSize: "26px", color: netColor }}>
@@ -886,7 +886,7 @@ const VisualCluster1 = ({
           <div style={{
             display: "flex", flexDirection: "column", gap: "2px",
             marginBottom: "16px", border: "1px solid rgba(255,255,255,0.06)",
-            borderRadius: "4px", overflow: "hidden", background: "rgba(255,255,255,0.06)",
+            borderRadius: "12px", overflow: "hidden", background: "rgba(255,255,255,0.06)",
           }}>
             {sources.map((s) => (
               <div key={s.label} style={{ background: "#0A0A0A", padding: "16px" }}>
@@ -905,7 +905,7 @@ const VisualCluster1 = ({
             ))}
           </div>
           {/* Stacked bar */}
-          <div style={{ height: "24px", borderRadius: "4px", display: "flex", overflow: "hidden", marginBottom: "28px" }}>
+          <div style={{ height: "24px", borderRadius: "12px", display: "flex", overflow: "hidden", marginBottom: "28px" }}>
             {sources.map((s) => {
               const widthPct = inputs.budget > 0 ? (s.amount / inputs.budget) * 100 : 0;
               return (
@@ -931,7 +931,7 @@ const VisualCluster1 = ({
           <div style={{ ...FONT.fine, color: W.tertiary, marginBottom: "12px" }}>SCENARIO STRESS TEST</div>
           <div style={{
             border: "1px solid rgba(255,255,255,0.08)",
-            borderRadius: "4px", overflow: "hidden", marginBottom: "20px",
+            borderRadius: "12px", overflow: "hidden", marginBottom: "20px",
           }}>
             <div style={{
               padding: "12px 20px", background: "rgba(255,255,255,0.04)",
@@ -991,7 +991,7 @@ const LockedSensitivitySection = () => (
     <div style={{
       position: "relative",
       border: "1px solid rgba(212,175,55,0.15)",
-      borderRadius: "4px",
+      borderRadius: "12px",
       overflow: "hidden",
     }}>
       {/* Blurred content — reduced blur, higher opacity */}
@@ -1096,7 +1096,7 @@ const LockedSnapshotPlusSection = ({ onUnlock }: { onUnlock: () => void }) => (
       gridTemplateColumns: "1fr 1fr",
       gap: "2px",
       background: "rgba(255,255,255,0.06)",
-      borderRadius: "4px",
+      borderRadius: "12px",
       overflow: "hidden",
       position: "relative",
     }}>
@@ -1139,7 +1139,7 @@ const LockedSnapshotPlusSection = ({ onUnlock }: { onUnlock: () => void }) => (
         alignItems: "center",
         justifyContent: "center",
         background: "radial-gradient(ellipse at center, rgba(212,175,55,0.03) 0%, rgba(0,0,0,0.45) 70%)",
-        borderRadius: "4px",
+        borderRadius: "12px",
       }}>
         <div style={{
           width: "38px",
@@ -1340,7 +1340,7 @@ const VisualCluster2 = ({
       {/* ── DEDUCTIONS LEDGER ── */}
       <div style={{ ...FONT.fine, color: W.tertiary, marginBottom: "12px" }}>GROSS TO NET</div>
       <div style={{
-        border: "1px solid rgba(255,255,255,0.08)", borderRadius: "4px",
+        border: "1px solid rgba(255,255,255,0.08)", borderRadius: "12px",
         overflow: "hidden", marginBottom: "28px",
       }}>
         {/* Header */}
@@ -1433,8 +1433,8 @@ const VisualCluster2 = ({
                   </div>
                   <span style={{ fontSize: "11px", fontWeight: 700, letterSpacing: "0.10em", textTransform: "uppercase" as const, padding: "3px 8px", borderRadius: "3px", ...badgeStyle }}>{badgeText}</span>
                 </div>
-                <div style={{ height: "8px", background: "rgba(255,255,255,0.04)", borderRadius: "4px", overflow: "hidden", marginBottom: "8px" }}>
-                  {fillPct > 0 && <div style={{ height: "100%", width: `${Math.min(100, fillPct)}%`, borderRadius: "4px", background: barGradient }} />}
+                <div style={{ height: "8px", background: "rgba(255,255,255,0.04)", borderRadius: "12px", overflow: "hidden", marginBottom: "8px" }}>
+                  {fillPct > 0 && <div style={{ height: "100%", width: `${Math.min(100, fillPct)}%`, borderRadius: "12px", background: barGradient }} />}
                 </div>
                 <div style={{ display: "flex", justifyContent: "space-between" }}>
                   <span style={{ ...FONT.data, fontSize: "15px", color: W.secondary }}>
@@ -1481,7 +1481,7 @@ const LockedComparableSection = () => (
     <div style={{
       position: "relative",
       border: "1px solid rgba(212,175,55,0.22)",
-      borderRadius: "4px",
+      borderRadius: "12px",
       overflow: "hidden",
     }}>
       {/* Blurred content — fake comp table */}
@@ -1529,7 +1529,7 @@ const LockedComparableSection = () => (
         {/* Fake valuation range bar */}
         <div style={{ marginTop: "16px", marginBottom: "12px" }}>
           <div style={{ height: "6px", width: "50px", background: "rgba(212,175,55,0.18)", borderRadius: "2px", marginBottom: "8px" }} />
-          <div style={{ height: "20px", borderRadius: "4px", display: "flex", overflow: "hidden" }}>
+          <div style={{ height: "20px", borderRadius: "12px", display: "flex", overflow: "hidden" }}>
             <div style={{ width: "25%", height: "100%", background: "rgba(220,38,38,0.20)" }} />
             <div style={{ width: "35%", height: "100%", background: "rgba(240,168,48,0.22)" }} />
             <div style={{ width: "25%", height: "100%", background: "rgba(60,179,113,0.25)" }} />
@@ -1591,7 +1591,7 @@ const LockedInvestorMemoSection = () => (
     <div style={{
       position: "relative",
       border: "1px solid rgba(212,175,55,0.30)",
-      borderRadius: "4px",
+      borderRadius: "12px",
       overflow: "hidden",
       boxShadow: "0 0 30px rgba(212,175,55,0.08), 0 0 60px rgba(120,60,180,0.06)",
     }}>

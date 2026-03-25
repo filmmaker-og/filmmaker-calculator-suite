@@ -11,7 +11,11 @@ const FilmLeaderCountdown = ({ projectTitle, onComplete }: FilmLeaderCountdownPr
   const flashRef = useRef<HTMLDivElement>(null);
   const cueDotRef = useRef<HTMLDivElement>(null);
   const grainRef = useRef<HTMLDivElement>(null);
+  const onCompleteRef = useRef(onComplete);
   const [isPlaying, setIsPlaying] = useState(true);
+
+  // Keep ref current without retriggering effects
+  useEffect(() => { onCompleteRef.current = onComplete; }, [onComplete]);
 
   const displayTitle = projectTitle.trim() || "WATERFALL SNAPSHOT";
 
@@ -30,8 +34,8 @@ const FilmLeaderCountdown = ({ projectTitle, onComplete }: FilmLeaderCountdownPr
   const handleSkip = useCallback(() => {
     if (!isPlaying) return;
     setIsPlaying(false);
-    onComplete();
-  }, [isPlaying, onComplete]);
+    onCompleteRef.current();
+  }, [isPlaying]);
 
   // Run countdown
   useEffect(() => {
@@ -57,7 +61,7 @@ const FilmLeaderCountdown = ({ projectTitle, onComplete }: FilmLeaderCountdownPr
           "radial-gradient(circle at 50% 50%, rgba(249,224,118,0.15) 0%, rgba(212,175,55,0.06) 50%, transparent 70%)";
         flash.style.opacity = "1";
         setTimeout(() => { if (!cancelled) flash.style.opacity = "0"; }, 200);
-        setTimeout(() => { if (!cancelled) onComplete(); }, 600);
+        setTimeout(() => { if (!cancelled) onCompleteRef.current(); }, 600);
         return;
       }
 
@@ -118,7 +122,7 @@ const FilmLeaderCountdown = ({ projectTitle, onComplete }: FilmLeaderCountdownPr
       clearTimeout(kickoff);
       clearTimeout(beatTimeout);
     };
-  }, [isPlaying, onComplete]);
+  }, [isPlaying]);
 
   // Sprocket holes
   const sprockets = Array.from({ length: 28 }, (_, i) => (
