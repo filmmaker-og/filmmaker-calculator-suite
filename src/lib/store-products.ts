@@ -164,7 +164,7 @@ export const products: Product[] = [
       "Individual Investor Return Profiles",
       "One-Page Executive Summary",
       "Deal Terms Summary",
-      "Everything white-labeled to your project",
+      "Everything branded to your project",
     ],
     whatsIncluded: [
       {
