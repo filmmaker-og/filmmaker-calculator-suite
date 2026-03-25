@@ -62,7 +62,7 @@ const WaterfallTab = ({ result: initialResult, inputs: initialInputs, project, g
   const isEmpty = initialInputs.budget === 0 || initialInputs.revenue === 0;
   const [isDemoMode, setIsDemoMode] = useState(false);
   const [shouldPlayCountdown] = useState(
-    () => !sessionStorage.getItem("og-leader-played")
+    () => !sessionStorage.getItem("og-leader-v2")
   );
   const [countdownPlaying, setCountdownPlaying] = useState(false);
 
@@ -91,7 +91,7 @@ const WaterfallTab = ({ result: initialResult, inputs: initialInputs, project, g
     }
 
     // If countdown should play, skip the spinner — countdown IS the loading animation
-    if (shouldPlayCountdown && !sessionStorage.getItem("og-leader-played")) {
+    if (shouldPlayCountdown && !sessionStorage.getItem("og-leader-v2")) {
       setIsCalculating(false);
       setShowResult(false);
       setCountdownPlaying(true);
@@ -120,7 +120,7 @@ const WaterfallTab = ({ result: initialResult, inputs: initialInputs, project, g
 
   const handleCountdownComplete = () => {
     setCountdownPlaying(false);
-    sessionStorage.setItem("og-leader-played", "1");
+    sessionStorage.setItem("og-leader-v2", "1");
     haptics.success();
     setShowResult(true);
   };
