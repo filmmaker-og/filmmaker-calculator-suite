@@ -17,7 +17,7 @@ import { supabase } from "@/integrations/supabase/client";
 import LeadCaptureModal from "@/components/LeadCaptureModal";
 import { useHaptics } from "@/hooks/use-haptics";
 import { serializeSnapshot } from "@/lib/serialize-snapshot";
-import FilmLeaderCountdown from "@/components/calculator/FilmLeaderCountdown";
+
 
 // ─── Types ───────────────────────────────────────────────────────
 
@@ -2063,10 +2063,6 @@ const WaterfallBrief = ({
   project,
   guilds,
 }: WaterfallBriefProps) => {
-  const [showCountdown, setShowCountdown] = useState(
-    () => !sessionStorage.getItem("og-leader-played")
-  );
-
   // Core computations
   const tiers = computeTierPayments(result, inputs);
 
@@ -2076,16 +2072,6 @@ const WaterfallBrief = ({
       maxWidth: "430px",
       margin: "0 auto",
     }}>
-      {showCountdown && (
-        <FilmLeaderCountdown
-          projectTitle={project.title}
-          onComplete={() => {
-            setShowCountdown(false);
-            sessionStorage.setItem("og-leader-played", "1");
-          }}
-        />
-      )}
-
       {/* ═══ 1. TITLE PAGE ═══ */}
       <CoverSection
         project={project}
