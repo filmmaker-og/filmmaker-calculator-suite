@@ -1,6 +1,7 @@
 import { WaterfallResult, WaterfallInputs, GuildState, CapitalSelections, calculateWaterfall } from "@/lib/waterfall";
 import type { ProjectDetails } from "@/pages/Calculator";
 import { Lock, Play, X } from "lucide-react";
+import FilmLeaderCountdown from "@/components/calculator/FilmLeaderCountdown";
 import ChapterCard from "../ChapterCard";
 import StandardStepLayout from "../StandardStepLayout";
 import { useEffect, useState } from "react";
@@ -60,6 +61,10 @@ const WaterfallTab = ({ result: initialResult, inputs: initialInputs, project, g
   // State for Demo Mode (if real inputs are empty)
   const isEmpty = initialInputs.budget === 0 || initialInputs.revenue === 0;
   const [isDemoMode, setIsDemoMode] = useState(false);
+  const [shouldPlayCountdown] = useState(
+    () => !sessionStorage.getItem("og-leader-played")
+  );
+  const [countdownPlaying, setCountdownPlaying] = useState(false);
 
   // Use Demo data if active, otherwise real data
   const activeInputs = isDemoMode ? DEMO_INPUTS : initialInputs;
@@ -81,10 +86,19 @@ const WaterfallTab = ({ result: initialResult, inputs: initialInputs, project, g
   useEffect(() => {
     if (isLocked) {
       setShowResult(false);
+      setCountdownPlaying(false);
       return;
     }
 
-    // Start Sequence
+    // If countdown should play, skip the spinner — countdown IS the loading animation
+    if (shouldPlayCountdown && !sessionStorage.getItem("og-leader-played")) {
+      setIsCalculating(false);
+      setShowResult(false);
+      setCountdownPlaying(true);
+      return;
+    }
+
+    // Otherwise use the standard spinner
     setIsCalculating(true);
     setShowResult(false);
 
@@ -102,6 +116,13 @@ const WaterfallTab = ({ result: initialResult, inputs: initialInputs, project, g
   const handleRunDemo = (e?: React.MouseEvent) => {
     haptics.medium(e);
     setIsDemoMode(true);
+  };
+
+  const handleCountdownComplete = () => {
+    setCountdownPlaying(false);
+    sessionStorage.setItem("og-leader-played", "1");
+    haptics.success();
+    setShowResult(true);
   };
 
   // LOCKED STATE — data card with sell copy
@@ -226,6 +247,14 @@ const WaterfallTab = ({ result: initialResult, inputs: initialInputs, project, g
         </div>
       )}
 
+      {/* COUNTDOWN STATE — replaces spinner on first visit */}
+      {countdownPlaying && (
+        <FilmLeaderCountdown
+          projectTitle={activeProject.title}
+          onComplete={handleCountdownComplete}
+        />
+      )}
+
       {/* CALCULATING STATE */}
       {isCalculating && (
         <div
@@ -281,7 +310,7 @@ const WaterfallTab = ({ result: initialResult, inputs: initialInputs, project, g
       )}
 
       {/* RESULT STATE — deck at full width */}
-      {!isCalculating && showResult && (
+      {!isCalculating && !countdownPlaying && showResult && (
         <div className="animate-reveal-up">
           {/* Demo banner */}
           {isDemoMode && (
