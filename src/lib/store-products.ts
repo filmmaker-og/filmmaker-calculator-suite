@@ -31,7 +31,8 @@ export interface Product {
   turnaround?: string;
   shortDescription: string;
   fullDescription: string;
-  features: string[];
+  features: (string | { title: string; subtitle: string; group: string })[];
+  reassurance?: string;
   whatsIncluded: { title: string; body: string }[];
   whoItsFor: string;
   pickThisIf: string | null;
@@ -60,11 +61,13 @@ export const products: Product[] = [
     fullDescription:
       "Your complete financial model — budget, capital stack, waterfall, deal terms, and scenario analysis — presented as a single, designed document that any investor can pick up and understand.\n\nSensitivity modeling across five market conditions shows how your deal performs when the price moves. Not a single scenario — a stress-tested range.\n\nRun your numbers. We make them investor-ready.",
     features: [
-      "Unified Financial Presentation (PDF)",
-      "Budget, capital stack, waterfall, scenarios — one document",
-      "Sensitivity analysis across 5 market conditions",
-      "White-labeled with your company and project",
+      { title: "Complete Financial Model", subtitle: "Every section of your deal in one document", group: "Analyze" },
+      { title: "Sensitivity Modeling", subtitle: "What happens when the acquisition price changes", group: "Analyze" },
+      { title: "Investor Return Profiles", subtitle: "How your investors make money and when", group: "Analyze" },
+      { title: "White-Labeled Branding", subtitle: "Your company name on every page", group: "Present" },
+      { title: "Institutional Design", subtitle: "Hand it to your attorney. Hand it to your investor. It holds up.", group: "Present" },
     ],
+    reassurance: "ONE-TIME PURCHASE · INSTANT DELIVERY",
     whatsIncluded: [
       {
         title: "Unified Financial Presentation (PDF)",
@@ -79,7 +82,7 @@ export const products: Product[] = [
         body: "Your production company name and project title on every page. Your project, your brand.",
       },
     ],
-    pickThisIf: "you need the numbers documented — clean, professional, stress-tested",
+    pickThisIf: "Your numbers documented, stress-tested, investor-ready.",
     whoItsFor:
       "Producers who have their numbers modeled and need a professional document to reference, send, or attach. When someone asks for the numbers, this is what you hand them.",
     upgradePrompt: {
@@ -106,11 +109,12 @@ export const products: Product[] = [
     fullDescription:
       "The question every investor asks: \"Why is this film worth that?\"\n\nWe research 5 comparable acquisition deals in your genre, budget range, and cast tier. Each comp includes the buyer, reported price range, key deal characteristics, and why it's relevant to your project.\n\nYou get a defensible valuation range with methodology your investors can follow — not a number you made up, but a number grounded in transactions that actually happened.\n\nUpgrade to 10 comps for $995 for a deeper dataset and broader market coverage.",
     features: [
-      "Buyer, price range, and deal characteristics per comp",
-      "Defensible valuation range with methodology",
-      "Market positioning analysis",
-      "Revenue scenarios tied to real transactions",
+      { title: "Comparable Acquisition Deals", subtitle: "Buyer, price range, and deal terms per comp", group: "Research" },
+      { title: "Defensible Valuation Range", subtitle: "Methodology your investors can follow, not a number you made up", group: "Research" },
+      { title: "Market Positioning Analysis", subtitle: "Where your project sits in the current landscape", group: "Evidence" },
+      { title: "Revenue Scenarios", subtitle: "Three scenarios mapped to actual transactions", group: "Evidence" },
     ],
+    reassurance: "ONE-TIME PURCHASE · DELIVERED IN 48 HOURS",
     whatsIncluded: [
       {
         title: "Comparable Acquisition Research",
@@ -129,7 +133,7 @@ export const products: Product[] = [
         body: "Where your project sits in the current acquisition landscape — which buyers are active, what the market supports, and what elements of your package strengthen your position.",
       },
     ],
-    pickThisIf: "you need to defend a valuation with real transaction data",
+    pickThisIf: "Defend a valuation with deals that actually closed.",
     whoItsFor:
       "Producers who need evidence behind their asking price. The Comp Report turns your valuation from an assumption into a defensible number backed by deals that actually closed.",
     upgradePrompt: {
@@ -156,16 +160,13 @@ export const products: Product[] = [
     fullDescription:
       "Tell us about your project. We build the full investor package.\n\nCustom lookbook with visual identity tailored to your film — tone boards, cast packaging, genre positioning, the visual narrative that shows investors this project is real. Alongside the complete financial package — every document from The Full Analysis, plus a presentation-ready PowerPoint pitch deck with speaker notes, plus 10 comparable acquisition deals defending your valuation.\n\nWe build it. You walk into the room.\n\n3-5 business day turnaround after intake.",
     features: [
-      "Custom Lookbook — tone, cast, genre, visual identity",
-      "Pitch Deck (PowerPoint) with speaker notes",
-      "Enhanced Financial Presentation (PDF)",
-      "10 Comparable Acquisition Deals",
-      "Market Valuation Range & Methodology",
-      "Individual Investor Return Profiles",
-      "One-Page Executive Summary",
-      "Deal Terms Summary",
-      "Everything branded to your project",
+      { title: "Custom Lookbook", subtitle: "Tone, cast, genre, visual identity for your film", group: "Build" },
+      { title: "Pitch Deck With Speaker Notes", subtitle: "10-12 slides ready for the room", group: "Build" },
+      { title: "Enhanced Financial Presentation", subtitle: "Elevated design beyond the standard PDF", group: "Build" },
+      { title: "10 Comparable Acquisition Deals", subtitle: "Real transactions defending your valuation", group: "Defend" },
+      { title: "Everything Branded to Your Project", subtitle: "Your company and project name throughout", group: "Defend" },
     ],
+    reassurance: "3-5 BUSINESS DAY TURNAROUND",
     whatsIncluded: [
       {
         title: "Custom Lookbook",
@@ -200,7 +201,7 @@ export const products: Product[] = [
         body: "All deal terms structured for attorney review and investor due diligence.",
       },
     ],
-    pickThisIf: "you want the full treatment — turnkey, custom, ready for the room",
+    pickThisIf: "The complete investor package, built for your project.",
     whoItsFor:
       "Producers with an investor meeting on the calendar — or the conviction to go get one. The complete set of materials that institutional capital expects to see, built by someone who knows what belongs in the room.",
     upgradePrompt: {
@@ -228,11 +229,11 @@ export const products: Product[] = [
     fullDescription:
       "For projects that need more than the standard package covers.\n\nBoutique engagements are scoped per project — specialized research, alternative deal structures, extended market analysis, multi-territory distribution strategies, or anything else that requires custom work.\n\nStarts at $2,997. Priced per engagement based on scope.\n\nReach out to discuss your project.",
     features: [
-      "Everything in The Producer's Package",
-      "Custom scope per engagement",
-      "Specialized research and analysis",
-      "Email-based collaboration",
+      { title: "Everything in The Producer's Package", subtitle: "Full baseline included", group: "Includes" },
+      { title: "Custom Scope Per Engagement", subtitle: "Tailored to your project's specific needs", group: "Includes" },
+      { title: "Specialized Research and Analysis", subtitle: "Multi-territory, alternative structures, extended market work", group: "Includes" },
     ],
+    reassurance: "SCOPED PER ENGAGEMENT",
     whatsIncluded: [
       {
         title: "Everything in The Producer's Package",
@@ -243,7 +244,7 @@ export const products: Product[] = [
         body: "Additional deliverables scoped to your project — specialized research, alternative deal structures, extended market analysis, multi-territory strategies, or other custom work.",
       },
     ],
-    pickThisIf: "your deal is complex enough that standard packages don\u2019t fit \u2014 multi-territory, unusual structures, custom research scope",
+    pickThisIf: "Custom scope beyond the standard package.",
     whoItsFor:
       "Producers with complex financing structures, multi-territory deals, or projects that need specialized analysis beyond the standard package.",
     upgradePrompt: null,
