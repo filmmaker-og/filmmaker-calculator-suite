@@ -118,8 +118,8 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
       })();
 
       const greeting = hasProjectData
-        ? "Hey \u{1F44B}, I\u2019m your film-finance OG!\n\nYour deal analyst on call.\n\nI can see you\u2019ve been running numbers \u2014 want me to help interpret your model?\n\nOr ask me anything about deals, waterfalls, packaging, or how to get your film financed."
-        : "Hey \u{1F44B}, I\u2019m your film-finance OG!\n\nYour deal analyst on call.\n\nAsk me anything about waterfalls, deal structures, packaging, or how to get your film financed.\n\nNeed help picking the right package? Just tell me what\u2019s on your mind below \u{1F447}";
+        ? "Hey \u{1F44B}, I\u2019m your film-finance OG!\n\nI can see you\u2019ve been running numbers \u2014 want me to help interpret your model?\n\nOr ask me anything about deals, waterfalls, packaging, or how to get your film financed."
+        : "Hey \u{1F44B}, I\u2019m your film-finance OG!\n\nAsk me anything about waterfalls, deal structures, packaging, or how to get your film financed.\n\nNeed help picking the right package? Just tell me what\u2019s on your mind below \u{1F447}";
 
       setOgMessages([{
         id: "greeting",
@@ -297,8 +297,8 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
       } catch { return false; }
     })();
     const greeting = hasProjectData
-      ? "Hey \u{1F44B}, I\u2019m your film-finance OG!\n\nYour deal analyst on call.\n\nI can see you\u2019ve been running numbers \u2014 want me to help interpret your model?\n\nOr ask me anything about deals, waterfalls, packaging, or how to get your film financed."
-      : "Hey \u{1F44B}, I\u2019m your film-finance OG!\n\nYour deal analyst on call.\n\nAsk me anything about waterfalls, deal structures, packaging, or how to get your film financed.\n\nNeed help picking the right package? Just tell me what\u2019s on your mind below \u{1F447}";
+      ? "Hey \u{1F44B}, I\u2019m your film-finance OG!\n\nI can see you\u2019ve been running numbers \u2014 want me to help interpret your model?\n\nOr ask me anything about deals, waterfalls, packaging, or how to get your film financed."
+      : "Hey \u{1F44B}, I\u2019m your film-finance OG!\n\nAsk me anything about waterfalls, deal structures, packaging, or how to get your film financed.\n\nNeed help picking the right package? Just tell me what\u2019s on your mind below \u{1F447}";
     setOgMessages([{
       id: "greeting",
       question: "",
@@ -338,7 +338,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
             borderRadius: "6px",
             borderColor: "rgba(120,60,180,0.35)",
             background: "rgba(120,60,180,0.10)",
-            color: "rgba(255,255,255,0.75)",
+            color: "rgba(255,255,255,0.85)",
           }}
         >
           {chip}
@@ -432,10 +432,10 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
                 <button
                   onClick={handleReset}
                   aria-label="Clear chat history"
-                  className="flex items-center gap-1.5 font-bebas text-[12px] uppercase tracking-[0.15em] transition-colors tabular-nums"
-                  style={{ color: "rgba(180,140,255,0.50)" }}
-                  onMouseEnter={e => (e.currentTarget.style.color = "rgba(180,140,255,0.80)")}
-                  onMouseLeave={e => (e.currentTarget.style.color = "rgba(180,140,255,0.50)")}
+                  className="flex items-center gap-1.5 font-bebas text-[13px] uppercase tracking-[0.15em] transition-colors tabular-nums"
+                  style={{ color: "rgba(180,140,255,0.65)" }}
+                  onMouseEnter={e => (e.currentTarget.style.color = "rgba(180,140,255,0.90)")}
+                  onMouseLeave={e => (e.currentTarget.style.color = "rgba(180,140,255,0.65)")}
                   onMouseDown={e => (e.currentTarget.style.transform = "scale(0.90)")}
                   onMouseUp={e => (e.currentTarget.style.transform = "scale(1)")}
                 >
@@ -447,9 +447,9 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
                 onClick={() => { haptics.light(); setIsOpen(false); }}
                 aria-label="Close chat"
                 className="transition-colors p-1"
-                style={{ color: "rgba(255,255,255,0.50)" }}
-                onMouseEnter={e => (e.currentTarget.style.color = "rgba(255,255,255,0.70)")}
-                onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,0.50)")}
+                style={{ color: "rgba(255,255,255,0.60)" }}
+                onMouseEnter={e => (e.currentTarget.style.color = "rgba(255,255,255,0.80)")}
+                onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,0.60)")}
                 onMouseDown={e => (e.currentTarget.style.transform = "scale(0.90)")}
                 onMouseUp={e => (e.currentTarget.style.transform = "scale(1)")}
               >
@@ -519,7 +519,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
                     {msg.error ? (
                       <p className="text-[16px] leading-relaxed" style={{ color: "rgba(255,255,255,0.50)" }}>{msg.error}</p>
                     ) : (
-                      <p className="text-[18px] text-white leading-[1.75] whitespace-pre-wrap">
+                      <p className="text-[18px] text-white leading-[1.6] whitespace-pre-wrap">
                         {(() => {
                           const displayText = !msg.streaming ? extractSuggestedChips(msg.answer).cleanedAnswer : msg.answer;
                           return displayText.split(/(https?:\/\/[^\s]+)/g).map((part, i) =>
@@ -530,7 +530,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
                           );
                         })()}
                         {msg.streaming && !msg.answer && (
-                          <span style={{ color: "rgba(255,255,255,0.40)" }}>Thinking…</span>
+                          <span style={{ color: "rgba(255,255,255,0.55)" }}>Thinking…</span>
                         )}
                       </p>
                     )}
@@ -550,7 +550,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
                         {copiedId === msg.id ? (
                           <span className="text-[13px]" style={{ color: "rgba(255,255,255,0.70)" }}>Copied ✅</span>
                         ) : (
-                          <Share2 style={{ width: "15px", height: "15px", color: "rgba(255,255,255,0.30)" }} />
+                          <Share2 style={{ width: "15px", height: "15px", color: "rgba(255,255,255,0.45)" }} />
                         )}
                       </button>
                     </div>
@@ -620,7 +620,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
                   onMouseLeave={e => (e.currentTarget.style.opacity = "1")}
                   onMouseDown={e => { e.currentTarget.style.transform = "scale(0.95)"; }}
                   onMouseUp={e => { e.currentTarget.style.transform = "scale(1)"; }}
-                  style={{ background: "linear-gradient(135deg, rgb(75,30,130) 0%, rgb(110,50,170) 100%)", color: "#fff", borderRadius: "0 7px 7px 0" }}
+                  style={{ background: "linear-gradient(180deg, rgb(110,50,170) 0%, rgb(75,30,130) 100%)", color: "#fff", borderRadius: "0 7px 7px 0", boxShadow: "inset 0 1px 1px rgba(255,255,255,0.20), inset 0 -2px 4px rgba(0,0,0,0.3)" }}
                 >
                 <SendHorizonal className="w-5 h-5" />
               </button>
@@ -644,15 +644,15 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
             paddingTop: "4px",
           }}>
             <a href="https://instagram.com/filmmaker.og" target="_blank" rel="noopener noreferrer"
-               style={{ color: "rgba(255,255,255,0.35)", fontSize: "11px", textDecoration: "none" }}>
+               style={{ color: "rgba(255,255,255,0.45)", fontSize: "11px", textDecoration: "none" }}>
               IG
             </a>
             <a href="https://tiktok.com/@filmmaker.og" target="_blank" rel="noopener noreferrer"
-               style={{ color: "rgba(255,255,255,0.35)", fontSize: "11px", textDecoration: "none" }}>
+               style={{ color: "rgba(255,255,255,0.45)", fontSize: "11px", textDecoration: "none" }}>
               TikTok
             </a>
             <a href="https://facebook.com/filmmaker.og" target="_blank" rel="noopener noreferrer"
-               style={{ color: "rgba(255,255,255,0.35)", fontSize: "11px", textDecoration: "none" }}>
+               style={{ color: "rgba(255,255,255,0.45)", fontSize: "11px", textDecoration: "none" }}>
               FB
             </a>
           </div>

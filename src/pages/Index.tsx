@@ -512,7 +512,7 @@ const Index = () => {
                           <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: "linear-gradient(90deg, transparent, rgba(220,38,38,0.35), transparent)", zIndex: 1 }} />
                           <div style={wfBadgeGlow()} />
                           <div style={wfBadge()}>{groupCards[0].tier}</div>
-                          <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.3rem", color: "#fff", textTransform: "uppercase", marginBottom: "3px", textAlign: "center" }}>{groupCards[0].name}</div>
+                          <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.4rem", color: "#fff", textTransform: "uppercase", marginBottom: "3px", textAlign: "center" }}>{groupCards[0].name}</div>
                           <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.5rem", color: "rgba(220,38,38,0.88)", textAlign: "center", textShadow: "0 0 16px rgba(220,38,38,0.20)" }}>–${groupCards[0].amount.toLocaleString()}</div>
                         </div>
                         <div
@@ -527,7 +527,7 @@ const Index = () => {
                           <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: "linear-gradient(90deg, transparent, rgba(220,38,38,0.35), transparent)", zIndex: 1 }} />
                           <div style={wfBadgeGlow()} />
                           <div style={wfBadge()}>{groupCards[1].tier}</div>
-                          <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.3rem", color: "#fff", textTransform: "uppercase", marginBottom: "3px", textAlign: "center" }}>{groupCards[1].name}</div>
+                          <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.4rem", color: "#fff", textTransform: "uppercase", marginBottom: "3px", textAlign: "center" }}>{groupCards[1].name}</div>
                           <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.5rem", color: "rgba(220,38,38,0.88)", textAlign: "center", textShadow: "0 0 16px rgba(220,38,38,0.20)" }}>–${groupCards[1].amount.toLocaleString()}</div>
                         </div>
                       </div>
@@ -547,7 +547,7 @@ const Index = () => {
                           <div style={wfBadge()}>{tier.tier}</div>
                           <div style={{
                             fontFamily: "'Bebas Neue', sans-serif",
-                            fontSize: "1.3rem",
+                            fontSize: "1.4rem",
                             color: "#fff", textTransform: "uppercase", marginBottom: "3px",
                             textAlign: "center",
                           }}>{tier.name}</div>
@@ -632,7 +632,7 @@ const Index = () => {
                 boxShadow: "0 8px 24px rgba(0,0,0,0.4), 0 0 16px rgba(60,179,113,0.10)",
               }}>
                 <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: "linear-gradient(90deg, transparent, #3CB371, transparent)" }} />
-                <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.3rem", color: "rgba(255,255,255,0.88)", marginBottom: "6px" }}>Investor</div>
+                <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.4rem", color: "rgba(255,255,255,0.88)", marginBottom: "6px" }}>Investor</div>
                 <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "#3CB371", textShadow: "0 0 16px rgba(60,179,113,0.25)" }}>${splitCountUp.toLocaleString()}</div>
               </div>
               <div style={{
@@ -643,10 +643,31 @@ const Index = () => {
                 boxShadow: "0 8px 24px rgba(0,0,0,0.4), 0 0 16px rgba(60,179,113,0.10)",
               }}>
                 <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: "linear-gradient(90deg, transparent, #3CB371, transparent)" }} />
-                <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.3rem", color: "rgba(255,255,255,0.88)", marginBottom: "6px" }}>Producer</div>
+                <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.4rem", color: "rgba(255,255,255,0.88)", marginBottom: "6px" }}>Producer</div>
                 <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "#3CB371", textShadow: "0 0 16px rgba(60,179,113,0.25)" }}>${splitCountUp.toLocaleString()}</div>
               </div>
             </div>
+          </div>
+
+          {/* Micro-CTA — catch engagement at profit reveal */}
+          <div style={{ textAlign: "center", padding: "20px 24px 8px" }}>
+            <span
+              onClick={handleCTA}
+              style={{
+                fontFamily: "'Roboto Mono', monospace",
+                fontSize: "14px",
+                fontWeight: 500,
+                color: "rgba(212,175,55,0.70)",
+                letterSpacing: "0.08em",
+                textTransform: "uppercase",
+                textShadow: "0 0 12px rgba(212,175,55,0.20)",
+                cursor: "pointer",
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.90)"; e.currentTarget.style.textShadow = "0 0 16px rgba(212,175,55,0.35)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.70)"; e.currentTarget.style.textShadow = "0 0 12px rgba(212,175,55,0.20)"; }}
+            >
+              Run your own numbers →
+            </span>
           </div>
 
         </section>
@@ -721,8 +742,8 @@ const Index = () => {
                     </div>
                   </div>
                   <div style={{ padding: "2px 0 2px 8px", textAlign: "left" }}>
-                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "17px", fontWeight: 600, color: "rgba(255,255,255,0.92)", lineHeight: 1.35 }}>11-Tier Recoupment Waterfall</p>
-                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "rgba(255,255,255,0.50)", lineHeight: 1.4, marginTop: "3px" }}>Every deduction from revenue to profit</p>
+                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "18px", fontWeight: 600, color: "rgba(255,255,255,0.92)", lineHeight: 1.35 }}>11-Tier Recoupment Waterfall</p>
+                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "15px", color: "rgba(255,255,255,0.55)", lineHeight: 1.4, marginTop: "3px" }}>Every deduction from revenue to profit</p>
                   </div>
                 </div>
 
@@ -733,8 +754,8 @@ const Index = () => {
                     </div>
                   </div>
                   <div style={{ padding: "2px 0 2px 8px", textAlign: "left" }}>
-                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "17px", fontWeight: 600, color: "rgba(255,255,255,0.92)", lineHeight: 1.35 }}>Capital Stack Breakdown</p>
-                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "rgba(255,255,255,0.50)", lineHeight: 1.4, marginTop: "3px" }}>Equity, debt, tax credits, soft money</p>
+                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "18px", fontWeight: 600, color: "rgba(255,255,255,0.92)", lineHeight: 1.35 }}>Capital Stack Breakdown</p>
+                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "15px", color: "rgba(255,255,255,0.55)", lineHeight: 1.4, marginTop: "3px" }}>Equity, debt, tax credits, soft money</p>
                   </div>
                 </div>
 
@@ -745,8 +766,8 @@ const Index = () => {
                     </div>
                   </div>
                   <div style={{ padding: "2px 0 2px 8px", textAlign: "left" }}>
-                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "17px", fontWeight: 600, color: "rgba(255,255,255,0.92)", lineHeight: 1.35 }}>Investor / Producer Profit Split</p>
-                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "rgba(255,255,255,0.50)", lineHeight: 1.4, marginTop: "3px" }}>See who gets what after recoupment</p>
+                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "18px", fontWeight: 600, color: "rgba(255,255,255,0.92)", lineHeight: 1.35 }}>Investor / Producer Profit Split</p>
+                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "15px", color: "rgba(255,255,255,0.55)", lineHeight: 1.4, marginTop: "3px" }}>See who gets what after recoupment</p>
                   </div>
                 </div>
 
@@ -763,8 +784,8 @@ const Index = () => {
                     </div>
                   </div>
                   <div style={{ padding: "2px 0 2px 8px", textAlign: "left" }}>
-                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "17px", fontWeight: 600, color: "rgba(255,255,255,0.92)", lineHeight: 1.35 }}>Off-the-Top Fee Mapping</p>
-                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "rgba(255,255,255,0.50)", lineHeight: 1.4, marginTop: "3px" }}>Where the money goes before you see a dime</p>
+                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "18px", fontWeight: 600, color: "rgba(255,255,255,0.92)", lineHeight: 1.35 }}>Off-the-Top Fee Mapping</p>
+                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "15px", color: "rgba(255,255,255,0.55)", lineHeight: 1.4, marginTop: "3px" }}>Where the money goes before you see a dime</p>
                   </div>
                 </div>
 
@@ -775,8 +796,8 @@ const Index = () => {
                     </div>
                   </div>
                   <div style={{ padding: "2px 0 2px 8px", textAlign: "left" }}>
-                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "17px", fontWeight: 600, color: "rgba(255,255,255,0.92)", lineHeight: 1.35 }}>Deal Quality Verdict</p>
-                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "rgba(255,255,255,0.50)", lineHeight: 1.4, marginTop: "3px" }}>Instant read on whether your deal works</p>
+                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "18px", fontWeight: 600, color: "rgba(255,255,255,0.92)", lineHeight: 1.35 }}>Deal Quality Verdict</p>
+                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "15px", color: "rgba(255,255,255,0.55)", lineHeight: 1.4, marginTop: "3px" }}>Instant read on whether your deal works</p>
                   </div>
                 </div>
 
@@ -787,8 +808,8 @@ const Index = () => {
                     </div>
                   </div>
                   <div style={{ padding: "2px 0 2px 8px", textAlign: "left" }}>
-                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "17px", fontWeight: 600, color: "rgba(255,255,255,0.92)", lineHeight: 1.35 }}>Profit & Loss Breakdown</p>
-                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "rgba(255,255,255,0.50)", lineHeight: 1.4, marginTop: "3px" }}>Total deductions vs. net backend</p>
+                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "18px", fontWeight: 600, color: "rgba(255,255,255,0.92)", lineHeight: 1.35 }}>Profit & Loss Breakdown</p>
+                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "15px", color: "rgba(255,255,255,0.55)", lineHeight: 1.4, marginTop: "3px" }}>Total deductions vs. net backend</p>
                   </div>
                 </div>
 
@@ -805,8 +826,8 @@ const Index = () => {
                     </div>
                   </div>
                   <div style={{ padding: "2px 0 2px 8px", textAlign: "left" }}>
-                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "17px", fontWeight: 600, color: "rgba(255,255,255,0.92)", lineHeight: 1.35 }}>Formatted PDF Export</p>
-                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "rgba(255,255,255,0.50)", lineHeight: 1.4, marginTop: "3px" }}>Print-ready for meetings and pitches</p>
+                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "18px", fontWeight: 600, color: "rgba(255,255,255,0.92)", lineHeight: 1.35 }}>Formatted PDF Export</p>
+                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "15px", color: "rgba(255,255,255,0.55)", lineHeight: 1.4, marginTop: "3px" }}>Print-ready for meetings and pitches</p>
                   </div>
                 </div>
 
@@ -817,8 +838,8 @@ const Index = () => {
                     </div>
                   </div>
                   <div style={{ padding: "2px 0 2px 8px", textAlign: "left" }}>
-                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "17px", fontWeight: 600, color: "rgba(255,255,255,0.92)", lineHeight: 1.35 }}>Investor-Ready Presentation</p>
-                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "rgba(255,255,255,0.50)", lineHeight: 1.4, marginTop: "3px" }}>Full waterfall output, presentation-grade</p>
+                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "18px", fontWeight: 600, color: "rgba(255,255,255,0.92)", lineHeight: 1.35 }}>Investor-Ready Presentation</p>
+                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "15px", color: "rgba(255,255,255,0.55)", lineHeight: 1.4, marginTop: "3px" }}>Full waterfall output, presentation-grade</p>
                   </div>
                 </div>
 
@@ -829,8 +850,8 @@ const Index = () => {
                     </div>
                   </div>
                   <div style={{ padding: "2px 0 2px 8px", textAlign: "left" }}>
-                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "17px", fontWeight: 600, color: "rgba(255,255,255,0.92)", lineHeight: 1.35 }}>Deal-Specific Calculations</p>
-                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "rgba(255,255,255,0.50)", lineHeight: 1.4, marginTop: "3px" }}>Every number from your inputs, not templates</p>
+                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "18px", fontWeight: 600, color: "rgba(255,255,255,0.92)", lineHeight: 1.35 }}>Deal-Specific Calculations</p>
+                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "15px", color: "rgba(255,255,255,0.55)", lineHeight: 1.4, marginTop: "3px" }}>Every number from your inputs, not templates</p>
                   </div>
                 </div>
 
