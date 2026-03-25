@@ -8,18 +8,18 @@ import LeadCaptureModal from "@/components/LeadCaptureModal";
 import { Instagram } from "lucide-react";
 import { colors } from "@/lib/design-system";
 /*
-  PAGE STACK — v14 Waterfall Rebuild:
+  PAGE STACK — v16.4:
     PILL NAV        — fixed floating, logo + hamburger
     § 1. HERO         — Bebas hierarchy, primary CTA
     § 2. HOW IT WORKS — 5-step vertical stepper
-    § 3. WATERFALL    — acquisition callout, tier table, flow diagram
+    § 3. WATERFALL    — card-based money flow (pair cards + arrow connectors)
     § 4. WHY THIS MATTERS — 4 badge cards
-    § 5. ARSENAL      — 3 tier cards (core/snapshot/package)
+    § 5. ARSENAL      — single Snapshot card (free tier only)
     § 6. REALITY      — blockquote + WITH/WITHOUT grid
     § 7. CLOSER       — final CTA card
     FOOTER
 
-  CTA: All go through auth check → LeadCaptureModal if no session.
+  CTA: All go through gatedNavigate → auth check → LeadCaptureModal if no session.
 */
 
 const Index = () => {
@@ -121,8 +121,8 @@ const Index = () => {
 
   const badgeCards = [
     { num: "1", title: "Don't Sell The Same Dollar Twice", body: "Track exactly where the money goes so you never over-promise equity and accidentally collapse your own backend." },
-    { num: "2", title: "Know What You're Giving Away", body: "Every sales fee, CAMA, and deferment eats into the profit before you see a dime. See the reality before you sign." },
-    { num: "3", title: "Explain The Deal Clearly", body: "Walk into the pitch with institutional-grade math. Answer recoupment questions with absolute confidence and look professional." },
+    { num: "2", title: "Know What You're Giving Away", body: "Every sales fee, CAM, and deferment eats into the profit before you see a dime. See the reality before you sign." },
+    { num: "3", title: "Explain The Deal Clearly", body: "Walk into the pitch with institutional-grade math. Answer recoupment questions before they're asked." },
     { num: "4", title: "Protect Early Investors", body: "Keep your earliest, riskiest backers from getting blindsided by senior debt and off-the-top distribution deductions." },
   ];
 
@@ -157,7 +157,7 @@ const Index = () => {
     },
     {
       title: "See the Full Waterfall",
-      body: "Every tier with accurate rates, off-the-tops through net backend profit. Adjust and stress-test until you know what you can't give up.",
+      body: "Every tier with accurate rates, off-the-tops through net backend profit. Adjust and stress-test until you know what you can't afford to give away.",
       icon: <svg viewBox="0 0 24 24" fill="#fff" width="22" height="22"><path d="M12 2L3 7v5c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-9-5zm-1 14l-3.5-3.5 1.41-1.41L11 13.17l5.09-5.09 1.41 1.41L11 16z"/></svg>,
     },
     {
@@ -677,46 +677,140 @@ const Index = () => {
               <div style={{ position: "absolute", inset: 0, borderRadius: "12px", padding: "1px", pointerEvents: "none", background: "linear-gradient(180deg, rgba(212,175,55,0.55) 0%, rgba(212,175,55,0.20) 50%, rgba(212,175,55,0.40) 100%)", WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)", WebkitMaskComposite: "xor", maskComposite: "exclude" }} />
               {/* Top line */}
               <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "1px", background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.50), transparent)", boxShadow: "0 0 12px rgba(212,175,55,0.25)", zIndex: 1 }} />
+              {/* Gold atmospheric (top) */}
+              <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "50%", background: "radial-gradient(ellipse 100% 80% at 50% 0%, rgba(212,175,55,0.12) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
+              {/* Purple atmospheric (bottom) */}
+              <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "50%", background: "radial-gradient(ellipse 100% 80% at 50% 100%, rgba(120,60,180,0.15) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
               {/* Value statement */}
               <div style={styles.valueStatementFree}>
                 <p style={styles.valueTextFree}>Your Numbers. No Credit Card.</p>
               </div>
-              {/* Features — 3 groups */}
-              <div style={{ ...styles.tierFeatures, textAlign: "center" }}>
+              {/* Features — grid layout with checkmark circles */}
+              <div style={{ position: "relative", zIndex: 1, padding: "20px 24px 16px 0" }}>
+
                 {/* Group: Model */}
-                <div style={{ display: "inline-block", textAlign: "left", marginBottom: "8px" }}>
-                  <p style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.4rem", color: "#D4AF37", letterSpacing: "0.06em", marginBottom: "12px" }}>Model</p>
-                  {["11-Tier Recoupment Waterfall", "Capital Stack Breakdown", "Investor / Producer Profit Split"].map((f, i) => (
-                    <div key={i} style={{ display: "flex", gap: "14px", alignItems: "flex-start", marginBottom: i < 2 ? "12px" : "0" }}>
-                      <span style={{ fontSize: "20px", color: "#3CB371", flexShrink: 0, marginTop: "1px", textShadow: "0 0 10px rgba(60,179,113,0.60), 0 0 20px rgba(60,179,113,0.25)" }}>✓</span>
-                      <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "18px", fontWeight: 500, color: "rgba(255,255,255,0.90)", lineHeight: 1.3 }}>{f}</p>
+                <p style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.4rem", color: "#D4AF37", letterSpacing: "0.06em", marginBottom: "16px", paddingLeft: "52px", textAlign: "left", textShadow: "0 0 12px rgba(212,175,55,0.15)" }}>Model</p>
+
+                <div style={{ display: "grid", gridTemplateColumns: "50px 1fr", alignItems: "start", marginBottom: "14px" }}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", paddingTop: "4px" }}>
+                    <div style={{ width: "34px", height: "34px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", background: "radial-gradient(circle at 50% 40%, rgba(60,179,113,0.20) 0%, rgba(60,179,113,0.06) 100%)", border: "1px solid rgba(60,179,113,0.30)", boxShadow: "0 0 12px rgba(60,179,113,0.25), 0 0 24px rgba(60,179,113,0.10)" }}>
+                      <span style={{ fontSize: "18px", color: "#3CB371", textShadow: "0 0 8px rgba(60,179,113,0.70), 0 0 16px rgba(60,179,113,0.35)" }}>✓</span>
                     </div>
-                  ))}
+                  </div>
+                  <div style={{ padding: "2px 0 2px 8px", textAlign: "left" }}>
+                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "17px", fontWeight: 600, color: "rgba(255,255,255,0.92)", lineHeight: 1.35 }}>11-Tier Recoupment Waterfall</p>
+                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "rgba(255,255,255,0.50)", lineHeight: 1.4, marginTop: "3px" }}>Every deduction from revenue to profit</p>
+                  </div>
                 </div>
-                {/* Separator */}
-                <div style={{ height: "1px", background: "rgba(212,175,55,0.20)", margin: "0 32px 0" }} />
+
+                <div style={{ display: "grid", gridTemplateColumns: "50px 1fr", alignItems: "start", marginBottom: "14px" }}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", paddingTop: "4px" }}>
+                    <div style={{ width: "34px", height: "34px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", background: "radial-gradient(circle at 50% 40%, rgba(60,179,113,0.20) 0%, rgba(60,179,113,0.06) 100%)", border: "1px solid rgba(60,179,113,0.30)", boxShadow: "0 0 12px rgba(60,179,113,0.25), 0 0 24px rgba(60,179,113,0.10)" }}>
+                      <span style={{ fontSize: "18px", color: "#3CB371", textShadow: "0 0 8px rgba(60,179,113,0.70), 0 0 16px rgba(60,179,113,0.35)" }}>✓</span>
+                    </div>
+                  </div>
+                  <div style={{ padding: "2px 0 2px 8px", textAlign: "left" }}>
+                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "17px", fontWeight: 600, color: "rgba(255,255,255,0.92)", lineHeight: 1.35 }}>Capital Stack Breakdown</p>
+                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "rgba(255,255,255,0.50)", lineHeight: 1.4, marginTop: "3px" }}>Equity, debt, tax credits, soft money</p>
+                  </div>
+                </div>
+
+                <div style={{ display: "grid", gridTemplateColumns: "50px 1fr", alignItems: "start" }}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", paddingTop: "4px" }}>
+                    <div style={{ width: "34px", height: "34px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", background: "radial-gradient(circle at 50% 40%, rgba(60,179,113,0.20) 0%, rgba(60,179,113,0.06) 100%)", border: "1px solid rgba(60,179,113,0.30)", boxShadow: "0 0 12px rgba(60,179,113,0.25), 0 0 24px rgba(60,179,113,0.10)" }}>
+                      <span style={{ fontSize: "18px", color: "#3CB371", textShadow: "0 0 8px rgba(60,179,113,0.70), 0 0 16px rgba(60,179,113,0.35)" }}>✓</span>
+                    </div>
+                  </div>
+                  <div style={{ padding: "2px 0 2px 8px", textAlign: "left" }}>
+                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "17px", fontWeight: 600, color: "rgba(255,255,255,0.92)", lineHeight: 1.35 }}>Investor / Producer Profit Split</p>
+                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "rgba(255,255,255,0.50)", lineHeight: 1.4, marginTop: "3px" }}>See who gets what after recoupment</p>
+                  </div>
+                </div>
+
+                {/* Comet tail divider */}
+                <div style={{ height: "1px", background: "linear-gradient(90deg, rgba(212,175,55,0.25) 0%, transparent 100%)", margin: "20px 0 20px 50px" }} />
+
                 {/* Group: Analyze */}
-                <div style={{ display: "inline-block", textAlign: "left", marginBottom: "8px" }}>
-                  <p style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.4rem", color: "#D4AF37", letterSpacing: "0.06em", marginBottom: "12px" }}>Analyze</p>
-                  {["Break-Even Scenario Analysis", "Sensitivity on Key Variables", "Off-the-Top Fee Mapping"].map((f, i) => (
-                    <div key={i} style={{ display: "flex", gap: "14px", alignItems: "flex-start", marginBottom: i < 2 ? "12px" : "0" }}>
-                      <span style={{ fontSize: "20px", color: "#3CB371", flexShrink: 0, marginTop: "1px", textShadow: "0 0 10px rgba(60,179,113,0.60), 0 0 20px rgba(60,179,113,0.25)" }}>✓</span>
-                      <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "18px", fontWeight: 500, color: "rgba(255,255,255,0.90)", lineHeight: 1.3 }}>{f}</p>
+                <p style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.4rem", color: "#D4AF37", letterSpacing: "0.06em", marginBottom: "16px", paddingLeft: "52px", textAlign: "left", textShadow: "0 0 12px rgba(212,175,55,0.15)" }}>Analyze</p>
+
+                <div style={{ display: "grid", gridTemplateColumns: "50px 1fr", alignItems: "start", marginBottom: "14px" }}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", paddingTop: "4px" }}>
+                    <div style={{ width: "34px", height: "34px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", background: "radial-gradient(circle at 50% 40%, rgba(60,179,113,0.20) 0%, rgba(60,179,113,0.06) 100%)", border: "1px solid rgba(60,179,113,0.30)", boxShadow: "0 0 12px rgba(60,179,113,0.25), 0 0 24px rgba(60,179,113,0.10)" }}>
+                      <span style={{ fontSize: "18px", color: "#3CB371", textShadow: "0 0 8px rgba(60,179,113,0.70), 0 0 16px rgba(60,179,113,0.35)" }}>✓</span>
                     </div>
-                  ))}
+                  </div>
+                  <div style={{ padding: "2px 0 2px 8px", textAlign: "left" }}>
+                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "17px", fontWeight: 600, color: "rgba(255,255,255,0.92)", lineHeight: 1.35 }}>Off-the-Top Fee Mapping</p>
+                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "rgba(255,255,255,0.50)", lineHeight: 1.4, marginTop: "3px" }}>Where the money goes before you touch it</p>
+                  </div>
                 </div>
-                {/* Separator */}
-                <div style={{ height: "1px", background: "rgba(212,175,55,0.20)", margin: "0 32px 0" }} />
+
+                <div style={{ display: "grid", gridTemplateColumns: "50px 1fr", alignItems: "start", marginBottom: "14px" }}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", paddingTop: "4px" }}>
+                    <div style={{ width: "34px", height: "34px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", background: "radial-gradient(circle at 50% 40%, rgba(60,179,113,0.20) 0%, rgba(60,179,113,0.06) 100%)", border: "1px solid rgba(60,179,113,0.30)", boxShadow: "0 0 12px rgba(60,179,113,0.25), 0 0 24px rgba(60,179,113,0.10)" }}>
+                      <span style={{ fontSize: "18px", color: "#3CB371", textShadow: "0 0 8px rgba(60,179,113,0.70), 0 0 16px rgba(60,179,113,0.35)" }}>✓</span>
+                    </div>
+                  </div>
+                  <div style={{ padding: "2px 0 2px 8px", textAlign: "left" }}>
+                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "17px", fontWeight: 600, color: "rgba(255,255,255,0.92)", lineHeight: 1.35 }}>Deal Quality Verdict</p>
+                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "rgba(255,255,255,0.50)", lineHeight: 1.4, marginTop: "3px" }}>Instant read on whether your deal works</p>
+                  </div>
+                </div>
+
+                <div style={{ display: "grid", gridTemplateColumns: "50px 1fr", alignItems: "start" }}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", paddingTop: "4px" }}>
+                    <div style={{ width: "34px", height: "34px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", background: "radial-gradient(circle at 50% 40%, rgba(60,179,113,0.20) 0%, rgba(60,179,113,0.06) 100%)", border: "1px solid rgba(60,179,113,0.30)", boxShadow: "0 0 12px rgba(60,179,113,0.25), 0 0 24px rgba(60,179,113,0.10)" }}>
+                      <span style={{ fontSize: "18px", color: "#3CB371", textShadow: "0 0 8px rgba(60,179,113,0.70), 0 0 16px rgba(60,179,113,0.35)" }}>✓</span>
+                    </div>
+                  </div>
+                  <div style={{ padding: "2px 0 2px 8px", textAlign: "left" }}>
+                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "17px", fontWeight: 600, color: "rgba(255,255,255,0.92)", lineHeight: 1.35 }}>Profit & Loss Breakdown</p>
+                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "rgba(255,255,255,0.50)", lineHeight: 1.4, marginTop: "3px" }}>Total deductions vs. net backend</p>
+                  </div>
+                </div>
+
+                {/* Comet tail divider */}
+                <div style={{ height: "1px", background: "linear-gradient(90deg, rgba(212,175,55,0.25) 0%, transparent 100%)", margin: "20px 0 20px 50px" }} />
+
                 {/* Group: Share */}
-                <div style={{ display: "inline-block", textAlign: "left" }}>
-                  <p style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.4rem", color: "#D4AF37", letterSpacing: "0.06em", marginBottom: "12px" }}>Share</p>
-                  {["Formatted PDF Export", "Shareable Web Link", "White-Labeled to Your Project"].map((f, i) => (
-                    <div key={i} style={{ display: "flex", gap: "14px", alignItems: "flex-start", marginBottom: i < 2 ? "12px" : "0" }}>
-                      <span style={{ fontSize: "20px", color: "#3CB371", flexShrink: 0, marginTop: "1px", textShadow: "0 0 10px rgba(60,179,113,0.60), 0 0 20px rgba(60,179,113,0.25)" }}>✓</span>
-                      <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "18px", fontWeight: 500, color: "rgba(255,255,255,0.90)", lineHeight: 1.3 }}>{f}</p>
+                <p style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.4rem", color: "#D4AF37", letterSpacing: "0.06em", marginBottom: "16px", paddingLeft: "52px", textAlign: "left", textShadow: "0 0 12px rgba(212,175,55,0.15)" }}>Share</p>
+
+                <div style={{ display: "grid", gridTemplateColumns: "50px 1fr", alignItems: "start", marginBottom: "14px" }}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", paddingTop: "4px" }}>
+                    <div style={{ width: "34px", height: "34px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", background: "radial-gradient(circle at 50% 40%, rgba(60,179,113,0.20) 0%, rgba(60,179,113,0.06) 100%)", border: "1px solid rgba(60,179,113,0.30)", boxShadow: "0 0 12px rgba(60,179,113,0.25), 0 0 24px rgba(60,179,113,0.10)" }}>
+                      <span style={{ fontSize: "18px", color: "#3CB371", textShadow: "0 0 8px rgba(60,179,113,0.70), 0 0 16px rgba(60,179,113,0.35)" }}>✓</span>
                     </div>
-                  ))}
+                  </div>
+                  <div style={{ padding: "2px 0 2px 8px", textAlign: "left" }}>
+                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "17px", fontWeight: 600, color: "rgba(255,255,255,0.92)", lineHeight: 1.35 }}>Formatted PDF Export</p>
+                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "rgba(255,255,255,0.50)", lineHeight: 1.4, marginTop: "3px" }}>Print-ready for meetings and pitches</p>
+                  </div>
                 </div>
+
+                <div style={{ display: "grid", gridTemplateColumns: "50px 1fr", alignItems: "start", marginBottom: "14px" }}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", paddingTop: "4px" }}>
+                    <div style={{ width: "34px", height: "34px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", background: "radial-gradient(circle at 50% 40%, rgba(60,179,113,0.20) 0%, rgba(60,179,113,0.06) 100%)", border: "1px solid rgba(60,179,113,0.30)", boxShadow: "0 0 12px rgba(60,179,113,0.25), 0 0 24px rgba(60,179,113,0.10)" }}>
+                      <span style={{ fontSize: "18px", color: "#3CB371", textShadow: "0 0 8px rgba(60,179,113,0.70), 0 0 16px rgba(60,179,113,0.35)" }}>✓</span>
+                    </div>
+                  </div>
+                  <div style={{ padding: "2px 0 2px 8px", textAlign: "left" }}>
+                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "17px", fontWeight: 600, color: "rgba(255,255,255,0.92)", lineHeight: 1.35 }}>Investor-Ready Presentation</p>
+                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "rgba(255,255,255,0.50)", lineHeight: 1.4, marginTop: "3px" }}>Full waterfall output, presentation-grade</p>
+                  </div>
+                </div>
+
+                <div style={{ display: "grid", gridTemplateColumns: "50px 1fr", alignItems: "start" }}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", paddingTop: "4px" }}>
+                    <div style={{ width: "34px", height: "34px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", background: "radial-gradient(circle at 50% 40%, rgba(60,179,113,0.20) 0%, rgba(60,179,113,0.06) 100%)", border: "1px solid rgba(60,179,113,0.30)", boxShadow: "0 0 12px rgba(60,179,113,0.25), 0 0 24px rgba(60,179,113,0.10)" }}>
+                      <span style={{ fontSize: "18px", color: "#3CB371", textShadow: "0 0 8px rgba(60,179,113,0.70), 0 0 16px rgba(60,179,113,0.35)" }}>✓</span>
+                    </div>
+                  </div>
+                  <div style={{ padding: "2px 0 2px 8px", textAlign: "left" }}>
+                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "17px", fontWeight: 600, color: "rgba(255,255,255,0.92)", lineHeight: 1.35 }}>Deal-Specific Calculations</p>
+                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "rgba(255,255,255,0.50)", lineHeight: 1.4, marginTop: "3px" }}>Every number from your inputs, not templates</p>
+                  </div>
+                </div>
+
               </div>
               <div style={styles.tierAction}>
                 <button onClick={handleCTA} style={styles.btnFree} aria-label="Run my waterfall" onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>RUN MY WATERFALL</button>
@@ -837,7 +931,7 @@ const Index = () => {
 };
 
 /* ══════════════════════════════════════════════════════════════════
-   STYLES — v14.2 — card-based waterfall
+   STYLES — v16.4
    ══════════════════════════════════════════════════════════════════ */
 const styles: Record<string, React.CSSProperties> = {
   /* ── Eyebrow ── */
@@ -856,17 +950,20 @@ const styles: Record<string, React.CSSProperties> = {
   /* ── CTA Button ── */
   ctaBtn: {
     position: "relative", overflow: "hidden",
-    fontFamily: "'Roboto Mono', monospace", fontWeight: 600,
+    fontFamily: "'Inter', sans-serif", fontWeight: 700,
     textTransform: "uppercase", color: "#fff",
-    background: "linear-gradient(135deg, rgb(75,30,130) 0%, rgb(110,50,170) 100%)", padding: "22px 0",
-    letterSpacing: "0.12em", fontSize: "18px",
+    background: "linear-gradient(180deg, rgb(110,50,170) 0%, rgb(75,30,130) 100%)", padding: "22px 0",
+    letterSpacing: "0.08em", fontSize: "18px",
     borderRadius: "8px", border: "none", cursor: "pointer",
     display: "block", width: "100%", textAlign: "center",
     boxShadow:
-      "0 0 0 1px rgba(212,175,55,0.25), " +
-      "0 0 24px rgba(120,60,180,0.40), " +
-      "0 0 60px rgba(120,60,180,0.20), " +
-      "0 0 100px rgba(212,175,55,0.10)",
+      "inset 0 1px 1px rgba(255,255,255,0.25), " +
+      "inset 0 -2px 4px rgba(0,0,0,0.4), " +
+      "0 0 0 1px rgba(212,175,55,0.30), " +
+      "0 8px 24px rgba(0,0,0,0.5), " +
+      "0 0 40px rgba(120,60,180,0.45), " +
+      "0 0 20px rgba(212,175,55,0.12)",
+    textShadow: "0 2px 4px rgba(0,0,0,0.5)",
   },
   ctaShimmer: {
     position: "absolute", top: 0, left: "-100%", width: "55%", height: "100%",
@@ -890,7 +987,7 @@ const styles: Record<string, React.CSSProperties> = {
     background: "rgba(6,6,6,0.92)",
     backdropFilter: "blur(40px)",
     WebkitBackdropFilter: "blur(40px)",
-    border: "1px solid rgba(212,175,55,0.12)",
+    border: "1px solid rgba(212,175,55,0.20)",
     boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 24px rgba(212,175,55,0.10), 0 0 20px rgba(120,60,180,0.15)",
   },
   heroGlow: {
@@ -980,12 +1077,13 @@ const styles: Record<string, React.CSSProperties> = {
     position: "relative", borderRadius: "12px", overflow: "hidden", textAlign: "center",
     border: "none",
     background: "radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.16) 0%, rgba(6,6,6,0.92) 70%)",
-    boxShadow: "0 16px 40px rgba(0,0,0,0.5), 0 0 40px rgba(212,175,55,0.16), 0 0 20px rgba(120,60,180,0.18)",
+    boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 40px rgba(212,175,55,0.22), 0 0 30px rgba(120,60,180,0.22), 0 0 80px rgba(212,175,55,0.08)",
   },
 
   /* Headers */
   /* Value statements */
   valueStatementFree: {
+    position: "relative", zIndex: 1,
     padding: "24px 24px", textAlign: "center",
     background: "radial-gradient(ellipse 100% 100% at 50% 50%, rgba(212,175,55,0.14) 0%, rgba(6,6,6,0.92) 80%)",
     borderBottom: "1px solid rgba(212,175,55,0.15)",
@@ -996,17 +1094,24 @@ const styles: Record<string, React.CSSProperties> = {
   },
 
   /* Features list */
-  tierFeatures: { padding: "24px", display: "flex", flexDirection: "column", gap: "12px" },
+  /* tierFeatures removed — features block uses inline grid layout */
 
   /* Actions */
-  tierAction: { padding: "0 24px 36px" },
+  tierAction: { position: "relative", zIndex: 1, padding: "0 24px 36px" },
   btnFree: {
     display: "block", width: "100%", textAlign: "center",
-    fontFamily: "'Roboto Mono', monospace", fontSize: "18px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.12em",
+    fontFamily: "'Inter', sans-serif", fontSize: "18px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em",
     color: "#fff",
-    background: "linear-gradient(135deg, rgb(75,30,130), rgb(110,50,170))",
+    background: "linear-gradient(180deg, rgb(110,50,170) 0%, rgb(75,30,130) 100%)",
     border: "none", padding: "20px", borderRadius: "8px", cursor: "pointer",
-    boxShadow: "0 0 0 1px rgba(212,175,55,0.25), 0 0 24px rgba(120,60,180,0.40), 0 0 60px rgba(120,60,180,0.20)",
+    boxShadow:
+      "inset 0 1px 1px rgba(255,255,255,0.25), " +
+      "inset 0 -2px 4px rgba(0,0,0,0.4), " +
+      "0 0 0 1px rgba(212,175,55,0.30), " +
+      "0 8px 24px rgba(0,0,0,0.5), " +
+      "0 0 40px rgba(120,60,180,0.45), " +
+      "0 0 20px rgba(212,175,55,0.12)",
+    textShadow: "0 2px 4px rgba(0,0,0,0.5)",
   },
 
   /* ── Top line helpers ── */
