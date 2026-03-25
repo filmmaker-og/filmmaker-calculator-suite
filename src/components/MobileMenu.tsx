@@ -211,6 +211,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
           )}
 
           {/* Nav — 3-col (matches social row) */}
+          <SectionLabel>Navigate</SectionLabel>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "6px", marginBottom: "10px" }}>
             {([
               { path: "/calculator", label: "Calculator", icon: <Calculator size={18} color="#D4AF37" /> },
@@ -232,11 +233,12 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   justifyContent: "center",
                   gap: "6px",
                   padding: "10px 8px",
-                  background: "transparent",
+                  background: "radial-gradient(ellipse 80% 60% at 50% 30%, rgba(212,175,55,0.06) 0%, transparent 70%)",
                   border: "1px solid rgba(212,175,55,0.25)",
                   borderRadius: "6px",
                   cursor: "pointer",
                   transition: "transform 0.15s ease, border-color 0.25s ease, background 0.25s ease",
+                  boxShadow: "0 0 16px rgba(212,175,55,0.04)",
                 }}
               >
                 {item.icon}
@@ -245,6 +247,8 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   fontSize: "1.1rem",
                   letterSpacing: "0.1em",
                   color: "rgba(255,255,255,0.88)",
+                  borderBottom: "1px solid rgba(212,175,55,0.20)",
+                  paddingBottom: "2px",
                 }}>
                   {item.label}
                 </span>

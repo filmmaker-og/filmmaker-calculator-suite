@@ -88,6 +88,7 @@ const Index = () => {
   const { ref: realityQuoteRef, inView: realityQuoteVisible } = useInView<HTMLDivElement>({ threshold: 0.3 });
   const { ref: realityGridRef, inView: realityGridVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
   const { ref: profitCardRef, inView: profitCardVisible } = useInView<HTMLDivElement>({ threshold: 0.1 });
+  const { ref: splitRef, inView: splitVisible } = useInView<HTMLDivElement>({ threshold: 0.3 });
   const { ref: closerRef, inView: closerVisible } = useInView<HTMLDivElement>({ threshold: 0.2 });
   const { ref: footerRef, inView: footerVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
 
@@ -117,6 +118,10 @@ const Index = () => {
   const [profitCountUp, setProfitCountUp] = useState(0);
   const [profitGlowIntensity, setProfitGlowIntensity] = useState(0.18);
   const profitAnimRef = useRef<number>(0);
+
+  const [splitCelebrated, setSplitCelebrated] = useState(false);
+  const [splitCountUp, setSplitCountUp] = useState(0);
+  const splitAnimRef = useRef<number>(0);
 
 
   const badgeCards = [
@@ -172,8 +177,8 @@ const Index = () => {
       setProfitCelebrated(true);
       haptics.success();
       setProfitGlowIntensity(0.28);
-      setTimeout(() => setProfitGlowIntensity(0.18), 600);
-      const duration = 600;
+      setTimeout(() => setProfitGlowIntensity(0.18), 2000);
+      const duration = 1800;
       const startTime = performance.now();
       const tick = (now: number) => {
         const elapsed = now - startTime;
@@ -187,6 +192,24 @@ const Index = () => {
       profitAnimRef.current = requestAnimationFrame(tick);
     }
   }, [profitCardVisible, profitCelebrated, haptics]);
+
+  useEffect(() => {
+    if (splitVisible && !splitCelebrated) {
+      setSplitCelebrated(true);
+      const duration = 1200;
+      const startTime = performance.now();
+      const tick = (now: number) => {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        setSplitCountUp(Math.round(SPLIT * eased));
+        if (progress < 1) {
+          splitAnimRef.current = requestAnimationFrame(tick);
+        }
+      };
+      splitAnimRef.current = requestAnimationFrame(tick);
+    }
+  }, [splitVisible, splitCelebrated]);
 
   // Card entrance animation helper
   const [enteredCards, setEnteredCards] = useState<Set<number>>(new Set());
@@ -328,7 +351,7 @@ const Index = () => {
         }
       `}</style>
 
-      <div style={{ minHeight: "100vh", background: "#000", paddingTop: "32px", maxWidth: "430px", margin: "0 auto" }}>
+      <div style={{ minHeight: "100vh", background: "#000", paddingTop: "24px", maxWidth: "430px", margin: "0 auto" }}>
 
         {/* ═══ § 1 HERO ═══ */}
         <section ref={heroRef} style={styles.hero}>
@@ -598,7 +621,7 @@ const Index = () => {
           <WaterfallConnector color="green" />
 
           {/* ── Profit Split ── */}
-          <div style={{ margin: "0 24px" }}>
+          <div ref={splitRef} style={{ margin: "0 24px" }}>
             <WaterfallGroupLabel text="Profit Split" color="neutral" />
             <div style={{ display: "flex", gap: "8px", alignItems: "stretch" }}>
               <div style={{
@@ -610,7 +633,7 @@ const Index = () => {
               }}>
                 <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: "linear-gradient(90deg, transparent, #3CB371, transparent)" }} />
                 <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.3rem", color: "rgba(255,255,255,0.88)", marginBottom: "6px" }}>Investor</div>
-                <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "#3CB371", textShadow: "0 0 16px rgba(60,179,113,0.25)" }}>${SPLIT.toLocaleString()}</div>
+                <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "#3CB371", textShadow: "0 0 16px rgba(60,179,113,0.25)" }}>${splitCountUp.toLocaleString()}</div>
               </div>
               <div style={{
                 flex: 1, textAlign: "center", borderRadius: "12px", padding: "16px 12px",
@@ -621,7 +644,7 @@ const Index = () => {
               }}>
                 <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: "linear-gradient(90deg, transparent, #3CB371, transparent)" }} />
                 <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.3rem", color: "rgba(255,255,255,0.88)", marginBottom: "6px" }}>Producer</div>
-                <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "#3CB371", textShadow: "0 0 16px rgba(60,179,113,0.25)" }}>${SPLIT.toLocaleString()}</div>
+                <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "#3CB371", textShadow: "0 0 16px rgba(60,179,113,0.25)" }}>${splitCountUp.toLocaleString()}</div>
               </div>
             </div>
           </div>
@@ -741,7 +764,7 @@ const Index = () => {
                   </div>
                   <div style={{ padding: "2px 0 2px 8px", textAlign: "left" }}>
                     <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "17px", fontWeight: 600, color: "rgba(255,255,255,0.92)", lineHeight: 1.35 }}>Off-the-Top Fee Mapping</p>
-                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "rgba(255,255,255,0.50)", lineHeight: 1.4, marginTop: "3px" }}>Where the money goes before you touch it</p>
+                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "rgba(255,255,255,0.50)", lineHeight: 1.4, marginTop: "3px" }}>Where the money goes before you see a dime</p>
                   </div>
                 </div>
 
@@ -988,11 +1011,11 @@ const styles: Record<string, React.CSSProperties> = {
     backdropFilter: "blur(40px)",
     WebkitBackdropFilter: "blur(40px)",
     border: "1px solid rgba(212,175,55,0.20)",
-    boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 24px rgba(212,175,55,0.10), 0 0 20px rgba(120,60,180,0.15)",
+    boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 24px rgba(212,175,55,0.10), 0 0 20px rgba(120,60,180,0.15), 0 0 60px rgba(120,60,180,0.12)",
   },
   heroGlow: {
     position: "absolute", top: 0, left: 0, right: 0, bottom: 0, pointerEvents: "none",
-    background: "radial-gradient(ellipse 80% 50% at 50% 10%, rgba(212,175,55,0.22) 0%, transparent 60%), radial-gradient(ellipse 60% 40% at 50% 50%, rgba(120,60,180,0.22) 0%, transparent 60%), radial-gradient(ellipse 100% 70% at 50% 100%, rgba(120,60,180,0.20) 0%, transparent 60%)",
+    background: "radial-gradient(ellipse 80% 50% at 50% 10%, rgba(212,175,55,0.28) 0%, transparent 60%), radial-gradient(ellipse 60% 40% at 50% 50%, rgba(120,60,180,0.28) 0%, transparent 60%), radial-gradient(ellipse 100% 70% at 50% 100%, rgba(120,60,180,0.24) 0%, transparent 60%)",
   },
   heroInner: { position: "relative", zIndex: 1 },
   heroH1: {
@@ -1009,7 +1032,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
 
   /* ── § 2 HOW IT WORKS ── */
-  howSection: { position: "relative", background: "#000", padding: "48px 0 0" },
+  howSection: { position: "relative", background: "#000", padding: "36px 0 0" },
   howHeader: { textAlign: "center", padding: "16px 24px 24px", background: "radial-gradient(ellipse 80% 50% at 50% 60%, rgba(120,60,180,0.18) 0%, transparent 70%)" },
   howH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.2rem", color: "#fff", lineHeight: 0.95 },
   stepsContainer: { position: "relative", display: "flex", flexDirection: "column", gap: "1px", background: "rgba(120,60,180,0.10)", borderRadius: "12px", overflow: "hidden", margin: "0 24px", border: "1px solid rgba(120,60,180,0.25)", boxShadow: "0 16px 40px rgba(0,0,0,0.5), 0 0 20px rgba(120,60,180,0.15)" },
