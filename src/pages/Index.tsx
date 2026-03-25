@@ -349,6 +349,23 @@ const Index = () => {
           30% { left: 200%; }
           100% { left: 200%; }
         }
+        @keyframes badge-pop {
+          0% { transform: scale(0); opacity: 0; }
+          70% { transform: scale(1.15); opacity: 1; }
+          100% { transform: scale(1); opacity: 1; }
+        }
+        @keyframes check-cascade {
+          0% { opacity: 0; transform: translateY(8px); }
+          100% { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slide-from-left {
+          0% { opacity: 0; transform: translateX(-22px); }
+          100% { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes slide-from-right {
+          0% { opacity: 0; transform: translateX(22px); }
+          100% { opacity: 1; transform: translateX(0); }
+        }
       `}</style>
 
       <div style={{ minHeight: "100vh", background: "#000", paddingTop: "24px", maxWidth: "430px", margin: "0 auto" }}>
@@ -649,25 +666,14 @@ const Index = () => {
             </div>
           </div>
 
-          {/* Micro-CTA — catch engagement at profit reveal */}
-          <div style={{ textAlign: "center", padding: "20px 24px 8px" }}>
-            <span
-              onClick={handleCTA}
-              style={{
-                fontFamily: "'Roboto Mono', monospace",
-                fontSize: "14px",
-                fontWeight: 500,
-                color: "rgba(212,175,55,0.70)",
-                letterSpacing: "0.08em",
-                textTransform: "uppercase",
-                textShadow: "0 0 12px rgba(212,175,55,0.20)",
-                cursor: "pointer",
-              }}
-              onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.90)"; e.currentTarget.style.textShadow = "0 0 16px rgba(212,175,55,0.35)"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.70)"; e.currentTarget.style.textShadow = "0 0 12px rgba(212,175,55,0.20)"; }}
-            >
-              Run your own numbers →
-            </span>
+          {/* CTA — catch engagement at profit reveal */}
+          <div style={{ padding: "24px 24px 8px", position: "relative" }}>
+            <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 100% 80% at 50% 50%, rgba(120,60,180,0.10) 0%, transparent 70%)", pointerEvents: "none" }} />
+            <button onClick={handleCTA} style={styles.ctaBtn} aria-label="Run my waterfall" onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>
+              <span style={{ position: "relative", zIndex: 1 }}>RUN MY WATERFALL</span>
+              <div style={styles.ctaShimmer} />
+            </button>
+            <p style={styles.ctaReassurance}>No Credit Card · Instant Results</p>
           </div>
 
         </section>
@@ -690,7 +696,12 @@ const Index = () => {
                 const warmth = 0.15 + (i * 0.04);
                 return (
                 <div key={card.num} style={{ ...styles.badgeCard, background: `radial-gradient(circle at 45px 57px, rgba(120,60,180,${warmth}) 0%, rgba(6,6,6,0.92) 65%)`, ...reveal(whyVisible, i + 2) }}>
-                  <div style={styles.badgeNum}>{card.num}</div>
+                  <div style={{
+                    ...styles.badgeNum,
+                    opacity: prefersReducedMotion || whyVisible ? 1 : 0,
+                    transform: prefersReducedMotion || whyVisible ? "scale(1)" : "scale(0)",
+                    animation: !prefersReducedMotion && whyVisible ? `badge-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) ${(i + 2) * 100 + 50}ms both` : "none",
+                  }}>{card.num}</div>
                   <p style={styles.badgeTitle}>{card.title}</p>
                   <p style={styles.badgeBody}>{card.body}</p>
                 </div>
@@ -735,7 +746,7 @@ const Index = () => {
                 {/* Group: Model */}
                 <p style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.4rem", color: "#D4AF37", letterSpacing: "0.06em", marginBottom: "16px", paddingLeft: "52px", textAlign: "left", textShadow: "0 0 12px rgba(212,175,55,0.15)" }}>Model</p>
 
-                <div style={{ display: "grid", gridTemplateColumns: "50px 1fr", alignItems: "start", marginBottom: "14px" }}>
+                <div style={{ display: "grid", gridTemplateColumns: "50px 1fr", alignItems: "start", marginBottom: "14px", opacity: prefersReducedMotion || arsenalCoreVisible ? 1 : 0, animation: !prefersReducedMotion && arsenalCoreVisible ? `check-cascade 0.4s ease-out ${0 * 80}ms both` : "none" }}>
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "center", paddingTop: "4px" }}>
                     <div style={{ width: "34px", height: "34px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", background: "radial-gradient(circle at 50% 40%, rgba(60,179,113,0.20) 0%, rgba(60,179,113,0.06) 100%)", border: "1px solid rgba(60,179,113,0.30)", boxShadow: "0 0 12px rgba(60,179,113,0.25), 0 0 24px rgba(60,179,113,0.10)" }}>
                       <span style={{ fontSize: "18px", color: "#3CB371", textShadow: "0 0 8px rgba(60,179,113,0.70), 0 0 16px rgba(60,179,113,0.35)" }}>✓</span>
@@ -747,7 +758,7 @@ const Index = () => {
                   </div>
                 </div>
 
-                <div style={{ display: "grid", gridTemplateColumns: "50px 1fr", alignItems: "start", marginBottom: "14px" }}>
+                <div style={{ display: "grid", gridTemplateColumns: "50px 1fr", alignItems: "start", marginBottom: "14px", opacity: prefersReducedMotion || arsenalCoreVisible ? 1 : 0, animation: !prefersReducedMotion && arsenalCoreVisible ? `check-cascade 0.4s ease-out ${1 * 80}ms both` : "none" }}>
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "center", paddingTop: "4px" }}>
                     <div style={{ width: "34px", height: "34px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", background: "radial-gradient(circle at 50% 40%, rgba(60,179,113,0.20) 0%, rgba(60,179,113,0.06) 100%)", border: "1px solid rgba(60,179,113,0.30)", boxShadow: "0 0 12px rgba(60,179,113,0.25), 0 0 24px rgba(60,179,113,0.10)" }}>
                       <span style={{ fontSize: "18px", color: "#3CB371", textShadow: "0 0 8px rgba(60,179,113,0.70), 0 0 16px rgba(60,179,113,0.35)" }}>✓</span>
@@ -759,7 +770,7 @@ const Index = () => {
                   </div>
                 </div>
 
-                <div style={{ display: "grid", gridTemplateColumns: "50px 1fr", alignItems: "start" }}>
+                <div style={{ display: "grid", gridTemplateColumns: "50px 1fr", alignItems: "start", opacity: prefersReducedMotion || arsenalCoreVisible ? 1 : 0, animation: !prefersReducedMotion && arsenalCoreVisible ? `check-cascade 0.4s ease-out ${2 * 80}ms both` : "none" }}>
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "center", paddingTop: "4px" }}>
                     <div style={{ width: "34px", height: "34px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", background: "radial-gradient(circle at 50% 40%, rgba(60,179,113,0.20) 0%, rgba(60,179,113,0.06) 100%)", border: "1px solid rgba(60,179,113,0.30)", boxShadow: "0 0 12px rgba(60,179,113,0.25), 0 0 24px rgba(60,179,113,0.10)" }}>
                       <span style={{ fontSize: "18px", color: "#3CB371", textShadow: "0 0 8px rgba(60,179,113,0.70), 0 0 16px rgba(60,179,113,0.35)" }}>✓</span>
@@ -777,7 +788,7 @@ const Index = () => {
                 {/* Group: Analyze */}
                 <p style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.4rem", color: "#D4AF37", letterSpacing: "0.06em", marginBottom: "16px", paddingLeft: "52px", textAlign: "left", textShadow: "0 0 12px rgba(212,175,55,0.15)" }}>Analyze</p>
 
-                <div style={{ display: "grid", gridTemplateColumns: "50px 1fr", alignItems: "start", marginBottom: "14px" }}>
+                <div style={{ display: "grid", gridTemplateColumns: "50px 1fr", alignItems: "start", marginBottom: "14px", opacity: prefersReducedMotion || arsenalCoreVisible ? 1 : 0, animation: !prefersReducedMotion && arsenalCoreVisible ? `check-cascade 0.4s ease-out ${3 * 80}ms both` : "none" }}>
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "center", paddingTop: "4px" }}>
                     <div style={{ width: "34px", height: "34px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", background: "radial-gradient(circle at 50% 40%, rgba(60,179,113,0.20) 0%, rgba(60,179,113,0.06) 100%)", border: "1px solid rgba(60,179,113,0.30)", boxShadow: "0 0 12px rgba(60,179,113,0.25), 0 0 24px rgba(60,179,113,0.10)" }}>
                       <span style={{ fontSize: "18px", color: "#3CB371", textShadow: "0 0 8px rgba(60,179,113,0.70), 0 0 16px rgba(60,179,113,0.35)" }}>✓</span>
@@ -789,7 +800,7 @@ const Index = () => {
                   </div>
                 </div>
 
-                <div style={{ display: "grid", gridTemplateColumns: "50px 1fr", alignItems: "start", marginBottom: "14px" }}>
+                <div style={{ display: "grid", gridTemplateColumns: "50px 1fr", alignItems: "start", marginBottom: "14px", opacity: prefersReducedMotion || arsenalCoreVisible ? 1 : 0, animation: !prefersReducedMotion && arsenalCoreVisible ? `check-cascade 0.4s ease-out ${4 * 80}ms both` : "none" }}>
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "center", paddingTop: "4px" }}>
                     <div style={{ width: "34px", height: "34px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", background: "radial-gradient(circle at 50% 40%, rgba(60,179,113,0.20) 0%, rgba(60,179,113,0.06) 100%)", border: "1px solid rgba(60,179,113,0.30)", boxShadow: "0 0 12px rgba(60,179,113,0.25), 0 0 24px rgba(60,179,113,0.10)" }}>
                       <span style={{ fontSize: "18px", color: "#3CB371", textShadow: "0 0 8px rgba(60,179,113,0.70), 0 0 16px rgba(60,179,113,0.35)" }}>✓</span>
@@ -801,7 +812,7 @@ const Index = () => {
                   </div>
                 </div>
 
-                <div style={{ display: "grid", gridTemplateColumns: "50px 1fr", alignItems: "start" }}>
+                <div style={{ display: "grid", gridTemplateColumns: "50px 1fr", alignItems: "start", opacity: prefersReducedMotion || arsenalCoreVisible ? 1 : 0, animation: !prefersReducedMotion && arsenalCoreVisible ? `check-cascade 0.4s ease-out ${5 * 80}ms both` : "none" }}>
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "center", paddingTop: "4px" }}>
                     <div style={{ width: "34px", height: "34px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", background: "radial-gradient(circle at 50% 40%, rgba(60,179,113,0.20) 0%, rgba(60,179,113,0.06) 100%)", border: "1px solid rgba(60,179,113,0.30)", boxShadow: "0 0 12px rgba(60,179,113,0.25), 0 0 24px rgba(60,179,113,0.10)" }}>
                       <span style={{ fontSize: "18px", color: "#3CB371", textShadow: "0 0 8px rgba(60,179,113,0.70), 0 0 16px rgba(60,179,113,0.35)" }}>✓</span>
@@ -819,7 +830,7 @@ const Index = () => {
                 {/* Group: Share */}
                 <p style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.4rem", color: "#D4AF37", letterSpacing: "0.06em", marginBottom: "16px", paddingLeft: "52px", textAlign: "left", textShadow: "0 0 12px rgba(212,175,55,0.15)" }}>Share</p>
 
-                <div style={{ display: "grid", gridTemplateColumns: "50px 1fr", alignItems: "start", marginBottom: "14px" }}>
+                <div style={{ display: "grid", gridTemplateColumns: "50px 1fr", alignItems: "start", marginBottom: "14px", opacity: prefersReducedMotion || arsenalCoreVisible ? 1 : 0, animation: !prefersReducedMotion && arsenalCoreVisible ? `check-cascade 0.4s ease-out ${6 * 80}ms both` : "none" }}>
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "center", paddingTop: "4px" }}>
                     <div style={{ width: "34px", height: "34px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", background: "radial-gradient(circle at 50% 40%, rgba(60,179,113,0.20) 0%, rgba(60,179,113,0.06) 100%)", border: "1px solid rgba(60,179,113,0.30)", boxShadow: "0 0 12px rgba(60,179,113,0.25), 0 0 24px rgba(60,179,113,0.10)" }}>
                       <span style={{ fontSize: "18px", color: "#3CB371", textShadow: "0 0 8px rgba(60,179,113,0.70), 0 0 16px rgba(60,179,113,0.35)" }}>✓</span>
@@ -831,7 +842,7 @@ const Index = () => {
                   </div>
                 </div>
 
-                <div style={{ display: "grid", gridTemplateColumns: "50px 1fr", alignItems: "start", marginBottom: "14px" }}>
+                <div style={{ display: "grid", gridTemplateColumns: "50px 1fr", alignItems: "start", marginBottom: "14px", opacity: prefersReducedMotion || arsenalCoreVisible ? 1 : 0, animation: !prefersReducedMotion && arsenalCoreVisible ? `check-cascade 0.4s ease-out ${7 * 80}ms both` : "none" }}>
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "center", paddingTop: "4px" }}>
                     <div style={{ width: "34px", height: "34px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", background: "radial-gradient(circle at 50% 40%, rgba(60,179,113,0.20) 0%, rgba(60,179,113,0.06) 100%)", border: "1px solid rgba(60,179,113,0.30)", boxShadow: "0 0 12px rgba(60,179,113,0.25), 0 0 24px rgba(60,179,113,0.10)" }}>
                       <span style={{ fontSize: "18px", color: "#3CB371", textShadow: "0 0 8px rgba(60,179,113,0.70), 0 0 16px rgba(60,179,113,0.35)" }}>✓</span>
@@ -843,7 +854,7 @@ const Index = () => {
                   </div>
                 </div>
 
-                <div style={{ display: "grid", gridTemplateColumns: "50px 1fr", alignItems: "start" }}>
+                <div style={{ display: "grid", gridTemplateColumns: "50px 1fr", alignItems: "start", opacity: prefersReducedMotion || arsenalCoreVisible ? 1 : 0, animation: !prefersReducedMotion && arsenalCoreVisible ? `check-cascade 0.4s ease-out ${8 * 80}ms both` : "none" }}>
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "center", paddingTop: "4px" }}>
                     <div style={{ width: "34px", height: "34px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", background: "radial-gradient(circle at 50% 40%, rgba(60,179,113,0.20) 0%, rgba(60,179,113,0.06) 100%)", border: "1px solid rgba(60,179,113,0.30)", boxShadow: "0 0 12px rgba(60,179,113,0.25), 0 0 24px rgba(60,179,113,0.10)" }}>
                       <span style={{ fontSize: "18px", color: "#3CB371", textShadow: "0 0 8px rgba(60,179,113,0.70), 0 0 16px rgba(60,179,113,0.35)" }}>✓</span>
@@ -856,9 +867,7 @@ const Index = () => {
                 </div>
 
               </div>
-              <div style={styles.tierAction}>
-                <button onClick={handleCTA} style={styles.btnFree} aria-label="Run my waterfall" onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>RUN MY WATERFALL</button>
-              </div>
+              <div style={{ padding: "8px 24px 28px" }} />
             </div>
           </div>
         </section>
@@ -914,11 +923,19 @@ const Index = () => {
             {/* Rows */}
             {withItems.map((withItem, i) => (
               <div key={i} style={{ ...styles.checkRow, borderBottom: i < withItems.length - 1 ? "1px solid rgba(255,255,255,0.08)" : "none" }}>
-                <div style={styles.checkCellLeft}>
+                <div style={{
+                  ...styles.checkCellLeft,
+                  opacity: prefersReducedMotion || realityGridVisible ? 1 : 0,
+                  animation: !prefersReducedMotion && realityGridVisible ? `slide-from-left 0.5s ease-out ${i * 120}ms both` : "none",
+                }}>
                   <span style={styles.checkIconYes}>✓</span>
                   <span style={styles.checkTextYes}>{withItem}</span>
                 </div>
-                <div style={styles.checkCellRight}>
+                <div style={{
+                  ...styles.checkCellRight,
+                  opacity: prefersReducedMotion || realityGridVisible ? 1 : 0,
+                  animation: !prefersReducedMotion && realityGridVisible ? `slide-from-right 0.5s ease-out ${i * 120}ms both` : "none",
+                }}>
                   <span style={styles.checkIconNo}>✗</span>
                   <span style={styles.checkTextNo}>{withoutItems[i]}</span>
                 </div>
@@ -1141,22 +1158,8 @@ const styles: Record<string, React.CSSProperties> = {
   /* tierFeatures removed — features block uses inline grid layout */
 
   /* Actions */
-  tierAction: { position: "relative", zIndex: 1, padding: "0 24px 36px" },
-  btnFree: {
-    display: "block", width: "100%", textAlign: "center",
-    fontFamily: "'Inter', sans-serif", fontSize: "18px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em",
-    color: "#fff",
-    background: "linear-gradient(180deg, rgb(110,50,170) 0%, rgb(75,30,130) 100%)",
-    border: "none", padding: "20px", borderRadius: "8px", cursor: "pointer",
-    boxShadow:
-      "inset 0 1px 1px rgba(255,255,255,0.25), " +
-      "inset 0 -2px 4px rgba(0,0,0,0.4), " +
-      "0 0 0 1px rgba(212,175,55,0.30), " +
-      "0 8px 24px rgba(0,0,0,0.5), " +
-      "0 0 40px rgba(120,60,180,0.45), " +
-      "0 0 20px rgba(212,175,55,0.12)",
-    textShadow: "0 2px 4px rgba(0,0,0,0.5)",
-  },
+  /* tierAction removed — Arsenal CTA killed */
+  /* btnFree removed — Arsenal CTA killed, post-waterfall CTA uses ctaBtn */
 
   /* ── Top line helpers ── */
   topLineGold: {
