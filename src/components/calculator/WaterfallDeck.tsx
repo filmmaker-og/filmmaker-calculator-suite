@@ -7,6 +7,7 @@ import {
   formatFullCurrency,
   computeTierPayments,
   calculateWaterfall,
+  calculateBreakeven,
   CAM_PCT,
 } from "@/lib/waterfall";
 import type { TierPayment } from "@/lib/waterfall-types";
@@ -16,6 +17,7 @@ import { supabase } from "@/integrations/supabase/client";
 import LeadCaptureModal from "@/components/LeadCaptureModal";
 import { useHaptics } from "@/hooks/use-haptics";
 import { serializeSnapshot } from "@/lib/serialize-snapshot";
+import FilmLeaderCountdown from "@/components/calculator/FilmLeaderCountdown";
 
 // ─── Types ───────────────────────────────────────────────────────
 
@@ -241,6 +243,13 @@ const CoverSection = ({
   const cashBasis = computeCashBasis(inputs);
   const investorReturnPct = computeInvestorReturnPct(result, inputs);
   const returnColor = getReturnColor(investorReturnPct);
+  const breakeven = calculateBreakeven(inputs, guilds, {
+    taxCredits: inputs.credits > 0,
+    seniorDebt: inputs.debt > 0,
+    gapLoan: inputs.mezzanineDebt > 0,
+    equity: inputs.equity > 0,
+    deferments: inputs.deferments > 0,
+  });
   const multiple = result.multiple;
   const multipleColor = returnColor;
 
@@ -402,7 +411,7 @@ const CoverSection = ({
       <div style={{
         display: "flex",
         gap: "2px",
-        marginBottom: "24px",
+        marginBottom: "2px",
         background: "rgba(255,255,255,0.06)",
         borderRadius: "4px",
         overflow: "hidden",
@@ -429,6 +438,43 @@ const CoverSection = ({
             color: returnColor,
           }}>
             {Math.round(investorReturnPct)}%
+          </div>
+        </div>
+      </div>
+
+      {/* 1e-b. Break-Even Revenue (free metric) */}
+      <div style={{
+        display: "flex",
+        gap: "2px",
+        marginBottom: "24px",
+        background: "rgba(255,255,255,0.06)",
+        borderRadius: "4px",
+        overflow: "hidden",
+      }}>
+        <div style={{
+          flex: 1,
+          background: "#0A0A0A",
+          padding: "14px",
+          borderTop: "2px solid rgba(212,175,55,0.18)",
+        }}>
+          <div style={{ ...FONT.fine, color: G.emphasis, marginBottom: "4px" }}>
+            BREAK-EVEN REVENUE
+          </div>
+          <div style={{
+            fontFamily: "'Roboto Mono', monospace",
+            fontSize: "26px",
+            fontWeight: 500,
+            letterSpacing: "0.06em",
+            color: G.standard,
+          }}>
+            {breakeven === Infinity ? "N/A" : formatCompactCurrency(breakeven)}
+          </div>
+          <div style={{
+            fontSize: "12px",
+            color: W.quaternary,
+            marginTop: "3px",
+          }}>
+            Revenue needed to repay all obligations
           </div>
         </div>
       </div>
@@ -1015,6 +1061,152 @@ const LockedSensitivitySection = () => (
         </span>
       </div>
     </div>
+  </section>
+);
+
+// ─── LOCKED TEASER — SNAPSHOT+ (Gate 0) ─────────────────────────
+
+const LockedSnapshotPlusSection = ({ onUnlock }: { onUnlock: () => void }) => (
+  <section style={{ padding: "28px 0 0", position: "relative" }}>
+    {/* Gold top canopy (subtle — coolest gate) */}
+    <div style={{
+      position: "absolute", top: 0, left: 0, right: 0, height: "100px",
+      background: "radial-gradient(ellipse 80% 50% at 50% 0%, rgba(212,175,55,0.04) 0%, transparent 70%)",
+      pointerEvents: "none",
+    }} />
+
+    <div style={{ ...FONT.label, color: G.emphasis, marginBottom: "8px" }}>Deal Diagnostics</div>
+    <div style={{ ...FONT.title, color: W.primary, marginBottom: "12px" }}>
+      DOES YOUR DEAL ACTUALLY WORK
+    </div>
+
+    <p style={{
+      fontSize: "15px",
+      color: W.tertiary,
+      lineHeight: 1.55,
+      marginBottom: "20px",
+    }}>
+      The waterfall shows where the money goes. These metrics tell you whether
+      there&rsquo;s enough money to begin with.
+    </p>
+
+    {/* 2×2 Locked metric grid */}
+    <div style={{
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr",
+      gap: "2px",
+      background: "rgba(255,255,255,0.06)",
+      borderRadius: "4px",
+      overflow: "hidden",
+      position: "relative",
+    }}>
+      {[
+        { label: "MARGIN OF SAFETY", fakeValue: "+$2.4M" },
+        { label: "EROSION RATE", fakeValue: "18.2%" },
+        { label: "OFF-THE-TOP TOTAL", fakeValue: "$810K" },
+        { label: "COST OF CAPITAL", fakeValue: "$347K" },
+      ].map((metric) => (
+        <div key={metric.label} style={{ background: "#0A0A0A", padding: "14px" }}>
+          <div style={{
+            ...FONT.fine,
+            color: "rgba(255,255,255,0.30)",
+            marginBottom: "4px",
+          }}>
+            {metric.label}
+          </div>
+          <div style={{
+            fontFamily: "'Roboto Mono', monospace",
+            fontSize: "22px",
+            fontWeight: 500,
+            letterSpacing: "0.06em",
+            color: "rgba(255,255,255,0.12)",
+            filter: "blur(4px)",
+            userSelect: "none",
+            marginTop: "4px",
+          }}>
+            {metric.fakeValue}
+          </div>
+        </div>
+      ))}
+
+      {/* Lock overlay */}
+      <div style={{
+        position: "absolute",
+        inset: 0,
+        zIndex: 5,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "radial-gradient(ellipse at center, rgba(212,175,55,0.03) 0%, rgba(0,0,0,0.45) 70%)",
+        borderRadius: "4px",
+      }}>
+        <div style={{
+          width: "38px",
+          height: "38px",
+          border: "1.5px solid rgba(212,175,55,0.35)",
+          borderRadius: "50%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          marginBottom: "10px",
+          boxShadow: "0 0 12px rgba(212,175,55,0.10)",
+        }}>
+          <svg viewBox="0 0 24 24" style={{ width: "16px", height: "16px", fill: G.emphasis }}>
+            <path d="M18 10h-1V7c0-2.76-2.24-5-5-5S7 4.24 7 7v3H6c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-8c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3-9H9V7c0-1.66 1.34-3 3-3s3 1.34 3 3v3z" />
+          </svg>
+        </div>
+        <span style={{
+          fontSize: "11px",
+          fontWeight: 600,
+          letterSpacing: "0.15em",
+          textTransform: "uppercase" as const,
+          color: G.emphasis,
+        }}>
+          4 metrics locked
+        </span>
+      </div>
+    </div>
+
+    {/* CTA — gold outline, coolest gate */}
+    <button
+      onClick={onUnlock}
+      style={{
+        display: "block",
+        width: "100%",
+        marginTop: "16px",
+        padding: "14px",
+        border: "1.5px solid rgba(212,175,55,0.30)",
+        borderRadius: "6px",
+        background: "rgba(212,175,55,0.04)",
+        fontFamily: "'Bebas Neue', sans-serif",
+        fontSize: "18px",
+        letterSpacing: "0.10em",
+        color: "#D4AF37",
+        textAlign: "center",
+        cursor: "pointer",
+        WebkitTapHighlightColor: "transparent",
+      }}
+    >
+      UNLOCK SNAPSHOT+ —{" "}
+      <span style={{
+        fontFamily: "'Roboto Mono', monospace",
+        fontSize: "16px",
+        fontWeight: 500,
+        letterSpacing: "0.06em",
+      }}>
+        $49
+      </span>
+    </button>
+
+    <p style={{
+      textAlign: "center",
+      fontSize: "12px",
+      color: W.quaternary,
+      marginTop: "8px",
+    }}>
+      Applies as credit toward The Full Analysis
+    </p>
   </section>
 );
 
@@ -1871,6 +2063,10 @@ const WaterfallBrief = ({
   project,
   guilds,
 }: WaterfallBriefProps) => {
+  const [showCountdown, setShowCountdown] = useState(
+    () => !sessionStorage.getItem("og-leader-played")
+  );
+
   // Core computations
   const tiers = computeTierPayments(result, inputs);
 
@@ -1880,6 +2076,16 @@ const WaterfallBrief = ({
       maxWidth: "430px",
       margin: "0 auto",
     }}>
+      {showCountdown && (
+        <FilmLeaderCountdown
+          projectTitle={project.title}
+          onComplete={() => {
+            setShowCountdown(false);
+            sessionStorage.setItem("og-leader-played", "1");
+          }}
+        />
+      )}
+
       {/* ═══ 1. TITLE PAGE ═══ */}
       <CoverSection
         project={project}
@@ -1887,6 +2093,14 @@ const WaterfallBrief = ({
         result={result}
         guilds={guilds}
       />
+
+      {/* ── GATE 0: Snapshot+ ── */}
+      <div style={{ padding: "0 24px" }}>
+        <LockedSnapshotPlusSection onUnlock={() => {
+          // TODO: Wire to Stripe checkout for snapshot-plus product
+          console.log("Snapshot+ unlock tapped");
+        }} />
+      </div>
 
       <GoldGlowBreak />
 
