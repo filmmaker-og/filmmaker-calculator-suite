@@ -67,7 +67,7 @@ export const products: Product[] = [
       { title: "White-Labeled Branding", subtitle: "Your company name on every page", group: "Present" },
       { title: "Institutional Design", subtitle: "Hand it to your attorney. Hand it to your investor. It holds up.", group: "Present" },
     ],
-    reassurance: "Credit applies to upgrades",
+    reassurance: "Instant delivery",
     whatsIncluded: [
       {
         title: "Unified Financial Presentation (PDF)",
@@ -114,7 +114,8 @@ export const products: Product[] = [
       { title: "Market Positioning Analysis", subtitle: "Where your project sits in the current landscape", group: "Evidence" },
       { title: "Revenue Scenarios", subtitle: "Three scenarios mapped to actual transactions", group: "Evidence" },
     ],
-    reassurance: "Credit applies to upgrades",
+    turnaround: "Delivered in 48 hours",
+    reassurance: "Delivered in 48 hours",
     whatsIncluded: [
       {
         title: "Comparable Acquisition Research",
@@ -233,7 +234,7 @@ export const products: Product[] = [
       { title: "Custom Scope Per Engagement", subtitle: "Tailored to your project's specific needs", group: "Includes" },
       { title: "Specialized Research and Analysis", subtitle: "Multi-territory, alternative structures, extended market work", group: "Includes" },
     ],
-    reassurance: "SCOPED PER ENGAGEMENT",
+    reassurance: undefined,
     whatsIncluded: [
       {
         title: "Everything in The Producer's Package",
