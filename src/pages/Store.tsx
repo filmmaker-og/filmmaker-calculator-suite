@@ -1030,7 +1030,7 @@ const ServiceCard = ({
         {/* Price */}
         <div style={{ textAlign: "center", marginBottom: "20px" }}>
           <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "3rem", fontWeight: 700, color: tierPriceColor, letterSpacing: "0.02em" }}>
-            ${product.price.toLocaleString()}+
+            ${product.price.toLocaleString()}{isBoutique && '+'}
           </span>
         </div>
 
@@ -1301,7 +1301,7 @@ const Store = () => {
               <span style={{
                 color: "#D4AF37",
                 textShadow: "0 2px 20px rgba(0,0,0,0.8), 0 0 40px rgba(212,175,55,0.50), 0 0 80px rgba(212,175,55,0.25)",
-              }}>Investor-Ready.</span>
+              }}>Investor Ready</span>
             </h1>
           </div>
         </section>

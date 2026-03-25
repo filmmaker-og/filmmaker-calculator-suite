@@ -67,7 +67,7 @@ export const products: Product[] = [
       { title: "White-Labeled Branding", subtitle: "Your company name on every page", group: "Present" },
       { title: "Institutional Design", subtitle: "Hand it to your attorney. Hand it to your investor. It holds up.", group: "Present" },
     ],
-    reassurance: "ONE-TIME PURCHASE · INSTANT DELIVERY",
+    reassurance: "Credit applies to upgrades",
     whatsIncluded: [
       {
         title: "Unified Financial Presentation (PDF)",
@@ -91,7 +91,7 @@ export const products: Product[] = [
       cta: "See the Comp Report →",
       link: "/store/comp-report",
     },
-    ctaLabel: "GET THE FULL ANALYSIS — $197",
+    ctaLabel: "GET THE FULL ANALYSIS",
   },
   {
     id: "comp-report",
@@ -114,7 +114,7 @@ export const products: Product[] = [
       { title: "Market Positioning Analysis", subtitle: "Where your project sits in the current landscape", group: "Evidence" },
       { title: "Revenue Scenarios", subtitle: "Three scenarios mapped to actual transactions", group: "Evidence" },
     ],
-    reassurance: "ONE-TIME PURCHASE · DELIVERED IN 48 HOURS",
+    reassurance: "Credit applies to upgrades",
     whatsIncluded: [
       {
         title: "Comparable Acquisition Research",
@@ -142,7 +142,7 @@ export const products: Product[] = [
       cta: "See The Producer's Package →",
       link: "/store/the-producers-package",
     },
-    ctaLabel: "GET 10 COMPS — $995",
+    ctaLabel: "GET 10 COMPS \u00B7 $995",
   },
   {
     id: "the-producers-package",
@@ -166,7 +166,7 @@ export const products: Product[] = [
       { title: "10 Comparable Acquisition Deals", subtitle: "Real transactions defending your valuation", group: "Defend" },
       { title: "Everything Branded to Your Project", subtitle: "Your company and project name throughout", group: "Defend" },
     ],
-    reassurance: "3-5 BUSINESS DAY TURNAROUND",
+    reassurance: "5-day turnaround \u00B7 Revision included",
     whatsIncluded: [
       {
         title: "Custom Lookbook",
@@ -210,7 +210,7 @@ export const products: Product[] = [
       cta: "See Boutique →",
       link: "/store/boutique",
     },
-    ctaLabel: "START MY BUILD — $1,797",
+    ctaLabel: "GET THE PRODUCER'S PACKAGE",
   },
   {
     id: "boutique",
@@ -219,7 +219,7 @@ export const products: Product[] = [
     price: 2997,
     priceNote: null,
     originalPrice: null,
-    badge: "CUSTOM",
+    badge: "BESPOKE",
     featured: false,
     tier: 4,
     category: "service",
