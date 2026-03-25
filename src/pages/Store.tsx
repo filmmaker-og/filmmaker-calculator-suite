@@ -23,7 +23,7 @@ const storeFaqs = [
   },
   {
     q: "Can I see what I\u2019m getting before I buy?",
-    a: "Run the free calculator. That\u2019s the engine. Paid products take those same numbers and present them at the quality you\u2019d hand an investor without thinking twice. Tap \u2018See full details\u2019 on any product for the complete breakdown.",
+    a: "Run the free calculator. That\u2019s the engine. Paid products take those same numbers and present them at the quality you\u2019d hand an investor without thinking twice.",
   },
   {
     q: "What happens if the deliverables don\u2019t hold up?",
@@ -473,7 +473,7 @@ const EyebrowRuled = ({ text }: { text: string }) => (
 const FeatureGroup = ({ features, groupName }: { features: { title: string; subtitle: string }[]; groupName: string }) => (
   <>
     <p style={{
-      fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.4rem",
+      fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.6rem",
       color: "#D4AF37", letterSpacing: "0.06em",
       margin: 0, marginBottom: "16px", paddingLeft: "52px", textAlign: "left" as const,
       textShadow: "0 0 12px rgba(212,175,55,0.15)",
@@ -481,7 +481,7 @@ const FeatureGroup = ({ features, groupName }: { features: { title: string; subt
     {features.map((feat, i) => (
       <div key={feat.title} style={{
         display: "grid", gridTemplateColumns: "50px 1fr", alignItems: "start",
-        marginBottom: i === features.length - 1 ? "4px" : "14px",
+        marginBottom: i === features.length - 1 ? "4px" : "12px",
       }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "center", paddingTop: "4px" }}>
           <div style={{
@@ -516,7 +516,7 @@ const CometTail = () => (
   <div style={{
     height: "1px",
     background: "linear-gradient(90deg, rgba(212,175,55,0.25) 0%, transparent 100%)",
-    margin: "20px 0 20px 50px",
+    margin: "16px 0 16px 50px",
   }} />
 );
 
@@ -1133,7 +1133,7 @@ const FaqItem = ({
         <p style={{
           fontFamily: "'Inter', sans-serif",
           fontSize: "19px",
-          color: "rgba(255,255,255,0.70)",
+          color: "rgba(255,255,255,0.80)",
           lineHeight: 1.6,
           margin: 0,
         }}>
@@ -1268,7 +1268,7 @@ const Store = () => {
            § 1 — ON DEMAND
          ═══════════════════════════════════════ */}
       {/* Glass hero card */}
-      <div ref={heroRef} style={{ padding: "32px 0 0", position: "relative" }}>
+      <div ref={heroRef} style={{ padding: "32px 0 24px", position: "relative" }}>
         <section style={{
           position: "relative", textAlign: "center",
           padding: "24px 24px 16px",
@@ -1279,13 +1279,13 @@ const Store = () => {
           backdropFilter: "blur(40px)",
           WebkitBackdropFilter: "blur(40px)",
           border: "1px solid rgba(212,175,55,0.20)",
-          boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 24px rgba(212,175,55,0.10), 0 0 20px rgba(120,60,180,0.15)",
+          boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 24px rgba(212,175,55,0.10), 0 0 20px rgba(120,60,180,0.15), 0 0 60px rgba(120,60,180,0.12)",
           ...reveal(heroVisible),
         }}>
           {/* Triple radial glow */}
           <div style={{
             position: "absolute", top: 0, left: 0, right: 0, bottom: 0, pointerEvents: "none",
-            background: "radial-gradient(ellipse 80% 50% at 50% 10%, rgba(212,175,55,0.22) 0%, transparent 60%), radial-gradient(ellipse 60% 40% at 50% 50%, rgba(120,60,180,0.16) 0%, transparent 60%), radial-gradient(ellipse 100% 70% at 50% 100%, rgba(120,60,180,0.20) 0%, transparent 60%)",
+            background: "radial-gradient(ellipse 80% 50% at 50% 10%, rgba(212,175,55,0.28) 0%, transparent 60%), radial-gradient(ellipse 60% 40% at 50% 50%, rgba(120,60,180,0.28) 0%, transparent 60%), radial-gradient(ellipse 100% 70% at 50% 100%, rgba(120,60,180,0.24) 0%, transparent 60%)",
           }} />
           <div style={{ position: "relative", zIndex: 1 }}>
             <h1 style={{
@@ -1335,7 +1335,7 @@ const Store = () => {
       >
         <div style={{
           position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
-          background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(60,179,113,0.15) 0%, transparent 70%)",
+          background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.15) 0%, transparent 70%)",
           pointerEvents: "none",
         }} />
         <div style={{ position: "relative", ...reveal(researchHeroVisible) }}>
@@ -1349,7 +1349,7 @@ const Store = () => {
             color: "#fff",
           }}>
             Defend Your<br />
-            <span style={{ color: "#3CB371" }}>Valuation.</span>
+            <span style={{ color: "#D4AF37" }}>Valuation.</span>
           </h2>
           <p style={{
             fontFamily: "'Inter', sans-serif",
@@ -1389,7 +1389,7 @@ const Store = () => {
       >
         <div style={{
           position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
-          background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.18) 0%, transparent 70%)",
+          background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.15) 0%, transparent 70%), radial-gradient(ellipse 80% 50% at 50% 30%, rgba(120,60,180,0.12) 0%, transparent 70%)",
           pointerEvents: "none",
         }} />
         <div style={{ position: "relative", ...reveal(servicesVisible) }}>
@@ -1412,7 +1412,7 @@ const Store = () => {
             lineHeight: 1.55,
             margin: 0,
           }}>
-            Tell us about your project. We build the complete investor package — turnkey, custom, delivered in 5 business days.
+            Tell us about your project. We build the complete investor package. Turnkey, custom, delivered in 5 business days.
           </p>
         </div>
       </section>
@@ -1545,7 +1545,7 @@ const Store = () => {
             maxWidth: "90%",
             margin: "0 auto 24px",
           }}>
-            Custom financial modeling, specialized comp research, or investor materials beyond what these packages cover — scoped to your project.
+            Custom financial modeling, specialized comp research, or investor materials beyond what these packages cover. Scoped to your project.
           </p>
           <a
             href="mailto:thefilmmaker.og@gmail.com?subject=Custom%20Inquiry"
