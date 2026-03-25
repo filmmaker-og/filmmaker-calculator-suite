@@ -106,7 +106,7 @@ const WaterfallTab = ({ result: initialResult, inputs: initialInputs, project, g
       setIsCalculating(false);
       haptics.success();
       setShowResult(true);
-    }, 1500);
+    }, 2500);
 
     return () => clearTimeout(timer);
   // eslint-disable-next-line react-hooks/exhaustive-deps
