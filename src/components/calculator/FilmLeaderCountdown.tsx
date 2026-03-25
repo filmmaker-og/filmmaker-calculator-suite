@@ -1,4 +1,5 @@
 import { useEffect, useRef, useCallback, useState } from "react";
+import { createPortal } from "react-dom";
 
 interface FilmLeaderCountdownProps {
   projectTitle: string;
@@ -133,7 +134,7 @@ const FilmLeaderCountdown = ({ projectTitle, onComplete }: FilmLeaderCountdownPr
     }} />
   ));
 
-  return (
+  return createPortal(
     <div
       onClick={handleSkip}
       style={{
@@ -320,7 +321,8 @@ const FilmLeaderCountdown = ({ projectTitle, onComplete }: FilmLeaderCountdownPr
           100% { transform: translateY(100vh); }
         }
       `}</style>
-    </div>
+    </div>,
+    document.body
   );
 };
 
