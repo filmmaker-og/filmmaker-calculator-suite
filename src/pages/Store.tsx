@@ -129,7 +129,7 @@ const s: Record<string, React.CSSProperties> = {
     flexShrink: 0,
     marginTop: "1px",
     fontFamily: "'Roboto Mono', monospace",
-    textShadow: "0 0 12px rgba(212,175,55,0.4)",
+    textShadow: "0 0 12px rgba(212,175,55,0.40)",
   },
   featureText: {
     fontFamily: "'Inter', sans-serif",
@@ -199,7 +199,7 @@ const tierStyles = {
     headerBorder: "1px solid rgba(212,175,55,0.12)",
     headerBg: undefined as string | undefined,
     subdivider: "linear-gradient(90deg, transparent, rgba(212,175,55,0.12), transparent)",
-    featureCheck: { color: "#D4AF37", textShadow: "0 0 12px rgba(212,175,55,0.4)" },
+    featureCheck: { color: "#D4AF37", textShadow: "0 0 12px rgba(212,175,55,0.40)" },
     pickThis: { color: "rgba(212,175,55,0.80)" },
     price: { color: "#D4AF37" },
     badge: { color: "#D4AF37", background: "rgba(212,175,55,0.08)", border: "1px solid rgba(212,175,55,0.35)" },
@@ -212,12 +212,12 @@ const tierStyles = {
     id: "purple" as const,
     card: {
       border: "none",
-      background: "radial-gradient(ellipse at 50% 0%, rgba(120,60,180,0.12) 0%, rgba(6,6,6,0.92) 70%)",
+      background: "radial-gradient(ellipse at 50% 0%, rgba(120,60,180,0.18) 0%, rgba(6,6,6,0.92) 70%)",
       backdropFilter: "blur(40px)",
       WebkitBackdropFilter: "blur(40px)",
-      boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 30px rgba(120,60,180,0.12), 0 0 20px rgba(212,175,55,0.06)",
+      boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 30px rgba(120,60,180,0.18), 0 0 20px rgba(212,175,55,0.06)",
     },
-    atmosphericTop: "radial-gradient(ellipse 100% 80% at 50% 0%, rgba(120,60,180,0.22) 0%, transparent 70%)",
+    atmosphericTop: "radial-gradient(ellipse 100% 80% at 50% 0%, rgba(120,60,180,0.28) 0%, transparent 70%)",
     atmosphericBottom: "radial-gradient(ellipse 100% 80% at 50% 100%, rgba(212,175,55,0.12) 0%, transparent 70%)",
     gradientBorder: "linear-gradient(180deg, rgba(212,175,55,0.45) 0%, rgba(212,175,55,0.15) 40%, rgba(120,60,180,0.30) 70%, rgba(120,60,180,0.50) 100%)",
     topline: {
@@ -227,7 +227,7 @@ const tierStyles = {
     headerBorder: "1px solid rgba(120,60,180,0.12)",
     headerBg: undefined as string | undefined,
     subdivider: "linear-gradient(90deg, transparent, rgba(120,60,180,0.12), transparent)",
-    featureCheck: { color: "rgb(160,100,255)", textShadow: "0 0 14px rgba(140,80,240,0.5)" },
+    featureCheck: { color: "rgb(180,140,255)", textShadow: "0 0 14px rgba(120,60,180,0.50)" },
     pickThis: { color: "rgba(180,140,255,0.80)" },
     price: {},
     badge: { color: "rgb(180,140,255)", background: "rgba(120,60,180,0.10)", border: "1px solid rgba(120,60,180,0.35)" },
@@ -428,7 +428,7 @@ const WorkingModelPopup = ({
           display: "inline-block",
           padding: "6px 12px",
           background: "rgba(212,175,55,0.08)",
-          border: "1px solid rgba(212,175,55,0.3)",
+          border: "1px solid rgba(212,175,55,0.30)",
           color: "#D4AF37",
           fontSize: "11px",
           letterSpacing: "0.15em",
@@ -478,7 +478,7 @@ const WorkingModelPopup = ({
             marginLeft: "auto",
             padding: "4px 10px",
             background: "rgba(212,175,55,0.08)",
-            border: "1px solid rgba(212,175,55,0.2)",
+            border: "1px solid rgba(212,175,55,0.20)",
             color: "#D4AF37",
             fontSize: "12px",
             letterSpacing: "0.08em",
@@ -491,7 +491,7 @@ const WorkingModelPopup = ({
         </div>
 
         {/* Divider */}
-        <div style={{ height: "1px", background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.12), transparent)", marginBottom: "16px" }} />
+        <div style={{ height: "1px", background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.20), transparent)", marginBottom: "16px" }} />
 
         {/* Feature list */}
         <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: "16px", marginBottom: "16px" }}>
@@ -630,6 +630,13 @@ const ProductCard = ({
     ...tier.card,
     ...(isHero ? { boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 35px rgba(212,175,55,0.14), 0 0 24px rgba(120,60,180,0.12), 0 0 60px rgba(212,175,55,0.06)" } : {}),
     ...(product.id === "comp-report" ? { boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 30px rgba(212,175,55,0.12), 0 0 20px rgba(212,175,55,0.08)" } : {}),
+    ...(isSnapshot ? {
+      background: "#0A0A0A",
+      backdropFilter: "none",
+      WebkitBackdropFilter: "none",
+      border: "1px solid rgba(255,255,255,0.25)",
+      boxShadow: "0 8px 24px rgba(0,0,0,0.4)",
+    } : {}),
     opacity: visible ? 1 : 0,
     transform: visible
       ? (hovered ? `translateY(${tier.hoverLift})` : "translateY(0)")
@@ -645,32 +652,45 @@ const ProductCard = ({
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      {/* Gradient border overlay */}
-      <GradientBorder gradient={tier.gradientBorder} />
+      {/* Gradient border overlay (skip for Snapshot+) */}
+      {!isSnapshot && <GradientBorder gradient={tier.gradientBorder} />}
 
-      {/* Topline */}
-      <div style={{ ...tier.topline, ...z2 }} />
+      {/* Topline (skip for Snapshot+) */}
+      {!isSnapshot && <div style={{ ...tier.topline, ...z2 }} />}
 
-      {/* Atmospheric canopies */}
-      <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "50%", background: tier.atmosphericTop, pointerEvents: "none" }} />
-      <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "50%", background: tier.atmosphericBottom, pointerEvents: "none" }} />
+      {/* Atmospheric canopies (skip for Snapshot+) */}
+      {!isSnapshot && (
+        <>
+          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "50%", background: tier.atmosphericTop, pointerEvents: "none" }} />
+          <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "50%", background: tier.atmosphericBottom, pointerEvents: "none" }} />
+        </>
+      )}
 
       {/* === FAST TOP === */}
-      <div style={{ ...s.cardHeader, borderBottom: "1px solid rgba(212,175,55,0.20)", ...z2 }}>
+      <div style={{ ...s.cardHeader, borderBottom: isSnapshot ? "1px solid rgba(255,255,255,0.12)" : "1px solid rgba(212,175,55,0.20)", ...z2 }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
           {product.badge && (
-            <span style={{ ...s.badgeBase, ...tier.badge }}>{product.badge}</span>
+            <span style={{
+              ...s.badgeBase,
+              ...(isSnapshot
+                ? { color: "#fff", background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.22)" }
+                : tier.badge),
+            }}>{product.badge}</span>
           )}
           {product.turnaround && (
             <span style={s.turnaroundBadge}>
-              <Clock style={{ width: "12px", height: "12px", color: "rgba(212,175,55,0.7)" }} />
+              <Clock style={{ width: "12px", height: "12px", color: "rgba(212,175,55,0.70)" }} />
               {product.turnaround}
             </span>
           )}
         </div>
         <h3 style={s.cardName}>{product.name.toUpperCase()}</h3>
         {product.pickThisIf && (
-          <p style={{ ...s.pickThisIf, ...tier.pickThis, fontSize: "18px" }}>{product.pickThisIf}</p>
+          <p style={{
+            ...s.pickThisIf,
+            ...(isSnapshot ? { color: "rgba(255,255,255,0.55)" } : tier.pickThis),
+            fontSize: "18px",
+          }}>{product.pickThisIf}</p>
         )}
       </div>
 
@@ -681,7 +701,7 @@ const ProductCard = ({
           <p style={{
             fontFamily: "'Roboto Mono', monospace",
             fontSize: "14px",
-            color: "rgba(212,175,55,0.55)",
+            color: "rgba(255,255,255,0.65)",
             letterSpacing: "0.04em",
             lineHeight: 1.6,
             textAlign: "center",
@@ -719,7 +739,7 @@ const ProductCard = ({
       <div style={{ ...s.actionBlock, padding: "24px 24px 36px", ...z2 }}>
         {/* Price */}
         <div style={{ textAlign: "center", marginBottom: "20px" }}>
-          <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "3rem", fontWeight: 700, color: tierPriceColor, letterSpacing: "0.02em" }}>
+          <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "3rem", fontWeight: 700, color: isSnapshot ? "#fff" : tierPriceColor, letterSpacing: "0.02em" }}>
             ${product.price.toLocaleString()}
           </span>
         </div>
@@ -778,7 +798,7 @@ const ProductCard = ({
         {product.reassurance && (
           <p style={{
             fontFamily: "'Roboto Mono', monospace", fontSize: "13px",
-            color: tierReassuranceColor, letterSpacing: "0.12em",
+            color: isSnapshot ? "rgba(255,255,255,0.55)" : tierReassuranceColor, letterSpacing: "0.12em",
             textTransform: "uppercase", textAlign: "center", margin: "14px 0 0 0",
           }}>{product.reassurance}</p>
         )}
@@ -869,7 +889,7 @@ const ServiceCard = ({
           )}
           {product.turnaround && (
             <span style={s.turnaroundBadge}>
-              <Clock style={{ width: "12px", height: "12px", color: "rgba(212,175,55,0.7)" }} />
+              <Clock style={{ width: "12px", height: "12px", color: "rgba(212,175,55,0.70)" }} />
               {product.turnaround}
             </span>
           )}
@@ -1025,7 +1045,7 @@ const FaqItem = ({
       <ChevronDown style={{
         width: "20px",
         height: "20px",
-        color: isOpen ? "#D4AF37" : "rgba(212,175,55,0.5)",
+        color: isOpen ? "#D4AF37" : "rgba(212,175,55,0.50)",
         transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
         transition: "transform 0.3s ease, color 0.2s",
         flexShrink: 0,
@@ -1076,6 +1096,7 @@ const Store = () => {
   });
 
   // Reveal refs
+  const { ref: onDemandHeroRef, inView: onDemandHeroVisible } = useInView<HTMLElement>({ threshold: 0.2 });
   const { ref: heroRef, inView: heroVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
   const { ref: productsRef, inView: productsVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
   const { ref: researchHeroRef, inView: researchHeroVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
@@ -1107,6 +1128,10 @@ const Store = () => {
 
   /* ─── BUY HANDLERS ─── */
   const handleBuyProduct = (product: Product) => {
+    if (product.id === "snapshot-plus") {
+      toast.info("Snapshot+ coming soon");
+      return;
+    }
     haptics.medium();
     setShowPopup(product);
   };
@@ -1215,17 +1240,27 @@ const Store = () => {
       </div>
 
       {/* § 1 — ON DEMAND section hero */}
-      <section style={{ padding: "0 24px 16px", textAlign: "center" }}>
-        <EyebrowRuled text="On Demand" />
-        <p style={{
-          fontFamily: "'Inter', sans-serif",
-          fontSize: "19px",
-          color: "rgba(255,255,255,0.92)",
-          lineHeight: 1.55,
-          margin: "4px 0 0 0",
-        }}>
-          Run the numbers for free. Buy the document when you need it on paper.
-        </p>
+      <section
+        ref={onDemandHeroRef}
+        style={{ padding: "32px 24px 16px", textAlign: "center", position: "relative" }}
+      >
+        <div style={{
+          position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
+          background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.15) 0%, transparent 70%)",
+          pointerEvents: "none",
+        }} />
+        <div style={{ position: "relative", ...reveal(onDemandHeroVisible) }}>
+          <EyebrowRuled text="On Demand" />
+          <p style={{
+            fontFamily: "'Inter', sans-serif",
+            fontSize: "19px",
+            color: "rgba(255,255,255,0.92)",
+            lineHeight: 1.55,
+            margin: "4px 0 0 0",
+          }}>
+            Run the numbers for free. Buy the document when you need it on paper.
+          </p>
+        </div>
       </section>
 
       {/* § 1 — On Demand Cards (Snapshot+ and Full Analysis) */}
@@ -1362,7 +1397,7 @@ const Store = () => {
         <div style={{
           height: "1px",
           background: "linear-gradient(90deg, transparent 5%, rgba(212,175,55,0.35) 50%, transparent 95%)",
-          boxShadow: "0 0 12px rgba(212,175,55,0.2)",
+          boxShadow: "0 0 12px rgba(212,175,55,0.20)",
           margin: "0 24px",
         }} />
       </div>
@@ -1432,7 +1467,7 @@ const Store = () => {
         <div style={{
           height: "1px",
           background: "linear-gradient(90deg, transparent 5%, rgba(212,175,55,0.35) 50%, transparent 95%)",
-          boxShadow: "0 0 12px rgba(212,175,55,0.2)",
+          boxShadow: "0 0 12px rgba(212,175,55,0.20)",
           margin: "0 24px",
         }} />
       </div>

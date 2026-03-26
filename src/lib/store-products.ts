@@ -84,7 +84,7 @@ export const products: Product[] = [
       cta: "See The Full Analysis →",
       link: "/store/the-full-analysis",
     },
-    ctaLabel: "UNLOCK SNAPSHOT+",
+    ctaLabel: "GET SNAPSHOT+",
   },
   {
     id: "the-full-analysis",
