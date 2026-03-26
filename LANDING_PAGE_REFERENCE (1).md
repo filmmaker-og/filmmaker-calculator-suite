@@ -239,9 +239,9 @@ Purple is NOT a hex constant. It lives as `rgba(120,60,180,opacity)` or as the C
 | 0.15 | Section canopy base, badge grid bg, closer glow, eyebrow glow, reality bottom canopy, arsenal atmospheric (bottom) |
 | 0.18 | How header bg, badge card warmth base, blockquote bottom atmospheric, reality bottom canopy |
 | 0.20 | Section canopy standard, hero glow (bottom radial) |
-| 0.22 | Why canopy (warmer), closer glow overlay (bottom), arsenal card boxShadow |
+| 0.22 | Why canopy (warmer), closer glow overlay (bottom), arsenal card boxShadow, **hero page-top wash (new — 120px, 140% wide)** |
 | 0.24 | Hero glow (bottom radial — **increased from 0.20**) |
-| 0.25 | Section borders, stepper border, arsenal canopy (warmest) |
+| 0.25 | Section borders, stepper border, arsenal canopy (warmest), **hero canopy (new — 220px, boosted from 0.18)** |
 | 0.28 | Hero glow (center bridge — **increased from 0.16**), step icon bg radial |
 | 0.30 | Reality check grid border |
 | 0.40 | Arsenal gradient border |
@@ -827,7 +827,7 @@ Footer text: Inter 14px, white 0.48.
 - Do NOT use the old Arsenal feature names (list was rewritten — see §5 data above)
 - Do NOT remove the mid-waterfall CTA (it's at the emotional peak of the profit reveal)
 - Do NOT change "CAM Fee" back to "CAMA Fee" (corrected terminology)
-- Do NOT add a page-level canopy to §1 hero — all atmospheric warmth comes from internal glass card glow
+- §1 hero now uses a two-layer canopy system: page-top wash (0.22, 120px) + hero canopy (0.25, 220px) — stacks additively with internal glass card glow
 - Do NOT change §1 hero padding away from 24/24/16 — this is the canonical standard
 
 ---
