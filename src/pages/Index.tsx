@@ -6,7 +6,6 @@ import { useInView } from "@/hooks/useInView";
 import LeadCaptureModal from "@/components/LeadCaptureModal";
 
 import { Instagram } from "lucide-react";
-import { colors } from "@/lib/design-system";
 /*
   PAGE STACK — v16.4:
     PILL NAV        — fixed floating, logo + hamburger
@@ -377,6 +376,9 @@ const Index = () => {
       <div style={{ minHeight: "100vh", background: "#000", paddingTop: "24px", maxWidth: "430px", margin: "0 auto" }}>
 
         {/* ═══ § 1 HERO ═══ */}
+        <div style={{ position: "relative" }}>
+          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "160px", background: "radial-gradient(ellipse 120% 100% at 50% 0%, rgba(120,60,180,0.18) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
+        </div>
         <section ref={heroRef} style={styles.hero}>
           <div style={styles.heroGlow} />
           <div style={{ ...styles.heroInner, ...reveal(heroVisible) }}>
@@ -688,7 +690,7 @@ const Index = () => {
           </div>
 
           {/* CTA — catch engagement at profit reveal */}
-          <div style={{ padding: "24px 24px 8px", position: "relative" }}>
+          <div style={{ padding: "24px 48px 8px", position: "relative" }}>
             <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 100% 80% at 50% 50%, rgba(120,60,180,0.10) 0%, transparent 70%)", pointerEvents: "none" }} />
             <button onClick={handleCTA} style={styles.ctaBtn} aria-label="Run my waterfall" onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>
               <span style={{ position: "relative", zIndex: 1 }}>RUN MY WATERFALL</span>
@@ -922,7 +924,7 @@ const Index = () => {
                 </div>
 
               </div>
-              <div style={{ padding: "16px 24px 28px", textAlign: "center", position: "relative", zIndex: 1 }}>
+              <div style={{ padding: "16px 24px 16px", textAlign: "center", position: "relative", zIndex: 1 }}>
                 <span
                   onClick={handleCTA}
                   style={{
@@ -930,12 +932,13 @@ const Index = () => {
                     fontSize: "15px",
                     letterSpacing: "0.10em",
                     textTransform: "uppercase",
-                    color: "rgba(212,175,55,0.65)",
+                    color: "#D4AF37",
                     cursor: "pointer",
-                    transition: "color 0.2s ease",
+                    transition: "color 0.2s ease, text-shadow 0.2s ease",
+                    textShadow: "0 0 12px rgba(212,175,55,0.15)",
                   }}
-                  onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.88)"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.65)"; }}
+                  onMouseEnter={(e) => { e.currentTarget.style.color = "#D4AF37"; e.currentTarget.style.textShadow = "0 0 20px rgba(212,175,55,0.35)"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.color = "#D4AF37"; e.currentTarget.style.textShadow = "0 0 12px rgba(212,175,55,0.15)"; }}
                 >
                   Run Your Numbers →
                 </span>
@@ -1055,7 +1058,7 @@ const Index = () => {
             <span onClick={() => navigate("/resources")} style={styles.footerNavLink} onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.60)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.50)"; }}>Resources</span>
           </div>
           <p style={styles.footerText}>
-            Filmmaker.og provides financial modeling tools for educational purposes. This is not legal or financial advice. Consult qualified counsel before executing any investment structure.
+            For educational and informational purposes only. Not legal, tax, or investment advice. Consult a qualified entertainment attorney before making financing decisions.
           </p>
         </footer>
       </div>
@@ -1135,11 +1138,6 @@ const styles: Record<string, React.CSSProperties> = {
   },
   heroEm: { fontStyle: "normal", color: "#D4AF37", display: "block", textShadow: "0 2px 20px rgba(0,0,0,0.8), 0 0 40px rgba(212,175,55,0.50), 0 0 80px rgba(212,175,55,0.25)" },
   heroMid: { display: "block", color: "#fff", fontStyle: "normal", textShadow: "0 2px 16px rgba(0,0,0,0.9)" },
-  heroSub: {
-    fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.5rem", textAlign: "center",
-    marginBottom: "16px", lineHeight: 1.1, color: "#fff",
-    marginTop: "8px", textShadow: "0 2px 12px rgba(0,0,0,0.9)",
-  },
 
   /* ── § 2 HOW IT WORKS ── */
   howSection: { position: "relative", background: "#000", padding: "36px 0 0" },
@@ -1226,13 +1224,6 @@ const styles: Record<string, React.CSSProperties> = {
     letterSpacing: "0.02em", textShadow: "0 0 20px rgba(212,175,55,0.25)",
   },
 
-  /* Features list */
-  /* tierFeatures removed — features block uses inline grid layout */
-
-  /* Actions */
-  /* tierAction removed — Arsenal CTA killed */
-  /* btnFree removed — Arsenal CTA killed, post-waterfall CTA uses ctaBtn */
-
   /* ── Top line helpers ── */
   topLineGold: {
     position: "absolute", top: 0, left: 0, right: 0, height: "2px",
@@ -1244,7 +1235,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
 
   /* ── § 6 REALITY ── */
-  realitySection: { position: "relative", background: "#000", textAlign: "left", padding: "48px 24px 24px" },
+  realitySection: { position: "relative", background: "#000", textAlign: "left", padding: "36px 24px 24px" },
   checkGrid: {
     position: "relative", border: "1px solid rgba(120,60,180,0.30)", borderRadius: "12px", overflow: "hidden",
     boxShadow: "0 8px 32px rgba(0,0,0,0.5), 0 0 20px rgba(120,60,180,0.15)",
@@ -1305,7 +1296,6 @@ const styles: Record<string, React.CSSProperties> = {
   footerIcon: { color: "rgba(212,175,55,0.50)", textDecoration: "none", display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", padding: "4px", borderRadius: "8px", border: "1px solid rgba(212,175,55,0.15)", transition: "color 0.2s ease, border-color 0.2s ease", boxSizing: "content-box" },
   footerNav: { display: "flex", justifyContent: "center", alignItems: "center", gap: "10px", marginBottom: "16px" },
   footerNavLink: { fontFamily: "'Roboto Mono', monospace", fontSize: "13px", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(212,175,55,0.50)", cursor: "pointer", transition: "color 0.2s ease" } as React.CSSProperties,
-  footerDot: { color: "rgba(212,175,55,0.20)", fontSize: "11px" },
   footerText: { fontFamily: "'Inter', sans-serif", fontSize: "14px", textAlign: "center", color: "rgba(255,255,255,0.55)", lineHeight: 1.55 },
 };
 

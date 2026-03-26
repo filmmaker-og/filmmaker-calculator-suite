@@ -1209,7 +1209,7 @@ const Resources = () => {
           lineHeight: 1.55,
           margin: 0,
         }}>
-          Filmmaker.og provides financial modeling tools for educational purposes. This is not legal or financial advice. Consult qualified counsel before executing any investment structure.
+          For educational and informational purposes only. Not legal, tax, or investment advice. Consult a qualified entertainment attorney before making financing decisions.
         </p>
       </footer>
     </div>
