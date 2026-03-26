@@ -78,7 +78,7 @@ const s: Record<string, React.CSSProperties> = {
   },
   /* ── Card header (matches Index.tsx tierHeaderAlt: 28px 24px 20px) ── */
   cardHeader: {
-    padding: "28px 24px 24px",
+    padding: "20px 24px 16px",
     borderBottom: "1px solid rgba(212,175,55,0.12)",
   },
   /* ── Card name (matches Index.tsx tierTitleCard: 2.6rem) ── */
@@ -319,13 +319,13 @@ const FeatureGroup = ({ features, groupName }: { features: { title: string; subt
     <p style={{
       fontFamily: "'Bebas Neue', sans-serif", fontSize: "2.0rem",
       color: "#D4AF37", letterSpacing: "0.06em",
-      margin: 0, marginBottom: "16px", paddingLeft: "52px", textAlign: "left" as const,
+      margin: 0, marginBottom: "10px", paddingLeft: "52px", textAlign: "left" as const,
       textShadow: "0 0 12px rgba(212,175,55,0.15)",
     }}>{groupName}</p>
     {features.map((feat, i) => (
       <div key={feat.title} style={{
         display: "grid", gridTemplateColumns: "50px 1fr", alignItems: "start",
-        marginBottom: i === features.length - 1 ? "4px" : "12px",
+        marginBottom: i === features.length - 1 ? "4px" : "8px",
       }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "center", paddingTop: "4px" }}>
           <div style={{
@@ -360,7 +360,7 @@ const CometTail = () => (
   <div style={{
     height: "1px",
     background: "linear-gradient(90deg, rgba(212,175,55,0.25) 0%, transparent 100%)",
-    margin: "16px 0 16px 50px",
+    margin: "10px 0 10px 50px",
   }} />
 );
 
@@ -631,11 +631,8 @@ const ProductCard = ({
     ...(isHero ? { boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 35px rgba(212,175,55,0.14), 0 0 24px rgba(120,60,180,0.12), 0 0 60px rgba(212,175,55,0.06)" } : {}),
     ...(product.id === "comp-report" ? { boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 30px rgba(212,175,55,0.12), 0 0 20px rgba(212,175,55,0.08)" } : {}),
     ...(isSnapshot ? {
-      background: "#0A0A0A",
-      backdropFilter: "none",
-      WebkitBackdropFilter: "none",
-      border: "1px solid rgba(255,255,255,0.25)",
-      boxShadow: "0 8px 24px rgba(0,0,0,0.4)",
+      background: "radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.08) 0%, rgba(6,6,6,0.92) 70%)",
+      boxShadow: "0 8px 24px rgba(0,0,0,0.4), 0 0 20px rgba(212,175,55,0.06)",
     } : {}),
     opacity: visible ? 1 : 0,
     transform: visible
@@ -652,30 +649,24 @@ const ProductCard = ({
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      {/* Gradient border overlay (skip for Snapshot+) */}
-      {!isSnapshot && <GradientBorder gradient={tier.gradientBorder} />}
+      {/* Gradient border overlay (dimmed for Snapshot+) */}
+      <GradientBorder gradient={isSnapshot ? "linear-gradient(180deg, rgba(212,175,55,0.30) 0%, rgba(212,175,55,0.10) 50%, rgba(212,175,55,0.20) 100%)" : tier.gradientBorder} />
 
-      {/* Topline (skip for Snapshot+) */}
-      {!isSnapshot && <div style={{ ...tier.topline, ...z2 }} />}
+      {/* Topline (dimmed for Snapshot+) */}
+      <div style={{
+        ...(isSnapshot ? { height: "1px", background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.25), transparent)", boxShadow: "0 0 8px rgba(212,175,55,0.10)" } : tier.topline),
+        ...z2,
+      }} />
 
-      {/* Atmospheric canopies (skip for Snapshot+) */}
-      {!isSnapshot && (
-        <>
-          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "50%", background: tier.atmosphericTop, pointerEvents: "none" }} />
-          <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "50%", background: tier.atmosphericBottom, pointerEvents: "none" }} />
-        </>
-      )}
+      {/* Atmospheric canopies (dimmed for Snapshot+) */}
+      <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "50%", background: isSnapshot ? "radial-gradient(ellipse 100% 80% at 50% 0%, rgba(212,175,55,0.06) 0%, transparent 70%)" : tier.atmosphericTop, pointerEvents: "none" }} />
+      <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "50%", background: isSnapshot ? "radial-gradient(ellipse 100% 80% at 50% 100%, rgba(120,60,180,0.04) 0%, transparent 70%)" : tier.atmosphericBottom, pointerEvents: "none" }} />
 
       {/* === FAST TOP === */}
-      <div style={{ ...s.cardHeader, borderBottom: isSnapshot ? "1px solid rgba(255,255,255,0.12)" : "1px solid rgba(212,175,55,0.20)", ...z2 }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
+      <div style={{ ...s.cardHeader, borderBottom: isSnapshot ? "1px solid rgba(212,175,55,0.12)" : "1px solid rgba(212,175,55,0.20)", ...z2 }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "8px" }}>
           {product.badge && (
-            <span style={{
-              ...s.badgeBase,
-              ...(isSnapshot
-                ? { color: "#fff", background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.22)" }
-                : tier.badge),
-            }}>{product.badge}</span>
+            <span style={{ ...s.badgeBase, ...tier.badge }}>{product.badge}</span>
           )}
           {product.turnaround && (
             <span style={s.turnaroundBadge}>
@@ -686,22 +677,18 @@ const ProductCard = ({
         </div>
         <h3 style={s.cardName}>{product.name.toUpperCase()}</h3>
         {product.pickThisIf && (
-          <p style={{
-            ...s.pickThisIf,
-            ...(isSnapshot ? { color: "rgba(255,255,255,0.55)" } : tier.pickThis),
-            fontSize: "18px",
-          }}>{product.pickThisIf}</p>
+          <p style={{ ...s.pickThisIf, ...tier.pickThis, fontSize: "18px" }}>{product.pickThisIf}</p>
         )}
       </div>
 
       {/* === EDITORIAL MIDDLE — Features === */}
-      <div style={{ ...s.featuresBlock, padding: "24px 0 0 0", ...z2 }}>
+      <div style={{ ...s.featuresBlock, padding: "16px 0 0 0", ...z2 }}>
         {isSnapshot ? (
           /* Compact feature list for Snapshot+ — metric names only, no checkmarks */
           <p style={{
             fontFamily: "'Roboto Mono', monospace",
             fontSize: "14px",
-            color: "rgba(255,255,255,0.65)",
+            color: "rgba(212,175,55,0.45)",
             letterSpacing: "0.04em",
             lineHeight: 1.6,
             textAlign: "center",
@@ -736,10 +723,10 @@ const ProductCard = ({
       </div>
 
       {/* === COMMERCE BOTTOM === */}
-      <div style={{ ...s.actionBlock, padding: "24px 24px 36px", ...z2 }}>
+      <div style={{ ...s.actionBlock, padding: "16px 24px 24px", ...z2 }}>
         {/* Price */}
         <div style={{ textAlign: "center", marginBottom: "20px" }}>
-          <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "3rem", fontWeight: 700, color: isSnapshot ? "#fff" : tierPriceColor, letterSpacing: "0.02em" }}>
+          <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "3rem", fontWeight: 700, color: tierPriceColor, letterSpacing: "0.02em" }}>
             ${product.price.toLocaleString()}
           </span>
         </div>
@@ -798,34 +785,11 @@ const ProductCard = ({
         {product.reassurance && (
           <p style={{
             fontFamily: "'Roboto Mono', monospace", fontSize: "13px",
-            color: isSnapshot ? "rgba(255,255,255,0.55)" : tierReassuranceColor, letterSpacing: "0.12em",
+            color: tierReassuranceColor, letterSpacing: "0.12em",
             textTransform: "uppercase", textAlign: "center", margin: "14px 0 0 0",
           }}>{product.reassurance}</p>
         )}
 
-        {/* Cross-sell upgrade link */}
-        {product.upgradePrompt && (
-          <p
-            onClick={() => {
-              const target = document.querySelector(`[data-product="${product.upgradePrompt!.link.split('/').pop()}"]`);
-              if (target) target.scrollIntoView({ behavior: "smooth", block: "center" });
-            }}
-            style={{
-              fontFamily: "'Roboto Mono', monospace",
-              fontSize: "13px",
-              color: "rgba(212,175,55,0.50)",
-              letterSpacing: "0.04em",
-              textAlign: "center",
-              margin: "12px 0 0 0",
-              cursor: "pointer",
-              transition: "color 0.2s",
-            }}
-            onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.70)"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.50)"; }}
-          >
-            {product.upgradePrompt.cta}
-          </p>
-        )}
       </div>
     </div>
   );
@@ -883,7 +847,7 @@ const ServiceCard = ({
 
       {/* === FAST TOP === */}
       <div style={{ ...s.cardHeader, borderBottom: "1px solid rgba(120,60,180,0.20)", ...z2 }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "8px" }}>
           {product.badge && (
             <span style={{ ...s.badgeBase, ...tier.badge }}>{product.badge}</span>
           )}
@@ -901,7 +865,7 @@ const ServiceCard = ({
       </div>
 
       {/* === EDITORIAL MIDDLE — Features === */}
-      <div style={{ ...s.featuresBlock, padding: "24px 0 0 0", ...z2 }}>
+      <div style={{ ...s.featuresBlock, padding: "16px 0 0 0", ...z2 }}>
         {(() => {
           const structured = product.features.filter(
             (f): f is { title: string; subtitle: string; group: string } => typeof f !== "string"
@@ -928,7 +892,7 @@ const ServiceCard = ({
       </div>
 
       {/* === COMMERCE BOTTOM === */}
-      <div style={{ ...s.actionBlock, padding: "24px 24px 36px", ...z2 }}>
+      <div style={{ ...s.actionBlock, padding: "16px 24px 24px", ...z2 }}>
         {/* Price */}
         <div style={{ textAlign: "center", marginBottom: "20px" }}>
           <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "3rem", fontWeight: 700, color: tierPriceColor, letterSpacing: "0.02em" }}>
@@ -964,29 +928,6 @@ const ServiceCard = ({
           }}>{product.reassurance}</p>
         )}
 
-        {/* Cross-sell upgrade link */}
-        {product.upgradePrompt && (
-          <p
-            onClick={() => {
-              const target = document.querySelector(`[data-product="${product.upgradePrompt!.link.split('/').pop()}"]`);
-              if (target) target.scrollIntoView({ behavior: "smooth", block: "center" });
-            }}
-            style={{
-              fontFamily: "'Roboto Mono', monospace",
-              fontSize: "13px",
-              color: "rgba(212,175,55,0.50)",
-              letterSpacing: "0.04em",
-              textAlign: "center",
-              margin: "12px 0 0 0",
-              cursor: "pointer",
-              transition: "color 0.2s",
-            }}
-            onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.70)"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.50)"; }}
-          >
-            {product.upgradePrompt.cta}
-          </p>
-        )}
       </div>
     </div>
   );
@@ -1199,7 +1140,7 @@ const Store = () => {
            § 1 — ON DEMAND
          ═══════════════════════════════════════ */}
       {/* Glass hero card */}
-      <div ref={heroRef} style={{ padding: "32px 0 24px", position: "relative" }}>
+      <div ref={heroRef} style={{ padding: "12px 0 16px", position: "relative" }}>
         <section style={{
           position: "relative", textAlign: "center",
           padding: "24px 24px 16px",
@@ -1216,7 +1157,7 @@ const Store = () => {
           {/* Triple radial glow */}
           <div style={{
             position: "absolute", top: 0, left: 0, right: 0, bottom: 0, pointerEvents: "none",
-            background: "radial-gradient(ellipse 80% 50% at 50% 10%, rgba(212,175,55,0.35) 0%, transparent 60%), radial-gradient(ellipse 40% 40% at 80% 20%, rgba(120,60,180,0.25) 0%, transparent 60%), radial-gradient(ellipse 60% 40% at 50% 50%, rgba(120,60,180,0.35) 0%, transparent 60%), radial-gradient(ellipse 100% 70% at 50% 100%, rgba(120,60,180,0.30) 0%, transparent 60%)",
+            background: "radial-gradient(ellipse 80% 50% at 50% 10%, rgba(212,175,55,0.35) 0%, transparent 60%), radial-gradient(ellipse 40% 40% at 80% 20%, rgba(120,60,180,0.35) 0%, transparent 60%), radial-gradient(ellipse 60% 40% at 50% 50%, rgba(120,60,180,0.40) 0%, transparent 60%), radial-gradient(ellipse 100% 70% at 50% 100%, rgba(120,60,180,0.30) 0%, transparent 60%)",
           }} />
           <div style={{ position: "relative", zIndex: 1 }}>
             <EyebrowRuled text="Shop" />
@@ -1233,7 +1174,7 @@ const Store = () => {
               <span style={{
                 color: "#D4AF37",
                 textShadow: "0 2px 20px rgba(0,0,0,0.8), 0 0 40px rgba(212,175,55,0.50), 0 0 80px rgba(212,175,55,0.25)",
-              }}>Investor Ready</span>
+              }}>Investor Ready.</span>
             </h1>
           </div>
         </section>
@@ -1266,7 +1207,7 @@ const Store = () => {
       {/* § 1 — On Demand Cards (Snapshot+ and Full Analysis) */}
       <div
         ref={productsRef}
-        style={{ padding: "0 24px", display: "flex", flexDirection: "column", gap: "28px" }}
+        style={{ padding: "0 24px", display: "flex", flexDirection: "column", gap: "20px" }}
       >
         {selfServeProducts.map((product, i) => (
           <ProductCard
@@ -1369,7 +1310,7 @@ const Store = () => {
             lineHeight: 1.55,
             margin: 0,
           }}>
-            Your investor meeting is on the calendar. Tell us about your project and we build everything you need for it. Delivered in 5 business days.
+            Your investor meeting is on the calendar. Tell us about your project and we build everything you need for it.
           </p>
         </div>
       </section>
@@ -1377,7 +1318,7 @@ const Store = () => {
       {/* § 3 — Turnkey Cards */}
       <div
         style={{
-          display: "flex", flexDirection: "column", gap: "28px",
+          display: "flex", flexDirection: "column", gap: "20px",
           padding: "0 24px",
         }}
       >
@@ -1486,7 +1427,7 @@ const Store = () => {
           borderRadius: "12px",
           pointerEvents: "none",
           zIndex: 0,
-          background: "radial-gradient(ellipse 70% 50% at 50% 0%, rgba(212,175,55,0.18) 0%, transparent 60%), radial-gradient(ellipse 90% 60% at 50% 100%, rgba(120,60,180,0.15) 0%, transparent 65%)",
+          background: "radial-gradient(ellipse 70% 50% at 50% 0%, rgba(212,175,55,0.25) 0%, transparent 60%), radial-gradient(ellipse 90% 60% at 50% 100%, rgba(120,60,180,0.22) 0%, transparent 65%)",
         }} />
         <div style={{
           background: "#0A0A0A",
@@ -1500,10 +1441,6 @@ const Store = () => {
           onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.40)"; }}
           onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; }}
         >
-          <div style={{
-            position: "absolute", inset: "6px", borderRadius: "8px",
-            border: "1px solid rgba(212,175,55,0.08)", pointerEvents: "none",
-          }} />
           <h3 style={{
             fontFamily: "'Bebas Neue', sans-serif",
             fontSize: "2.2rem",
@@ -1512,7 +1449,7 @@ const Store = () => {
             margin: "0 0 12px 0",
             lineHeight: 1.1,
           }}>
-            NOT SURE WHICH <span style={{ color: "#D4AF37" }}>PRODUCT FITS?</span>
+            NOT SURE WHERE<br /><span style={{ color: "#D4AF37" }}>TO START?</span>
           </h3>
           <p style={{
             fontFamily: "'Inter', sans-serif",
