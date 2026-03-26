@@ -177,12 +177,13 @@ Opacity varies by section importance: 0.20 standard, 0.22 for Why, 0.25 for Arse
 ### Glass (the elevated surface material)
 
 ```
-background: rgba(6,6,6,0.92)
+background: rgba(6,6,6,0.85)   // Hero card (0.85 — more translucent, lets atmosphere through)
+background: rgba(6,6,6,0.92)   // Closer card, Blockquote, Context pair cards (0.92 — denser/more contained)
 backdropFilter: blur(40px)
 WebkitBackdropFilter: blur(40px)
 ```
 
-Used on: Hero card, Closer card, Blockquote, Context pair cards. This is the primary surface material for any card that "floats."
+Used on: Hero card (0.85), Closer card (0.92), Blockquote, Context pair cards. Hero and Closer intentionally use different glass opacities — hero is more translucent to let the warm atmosphere bleed through, closer is denser/more contained.
 
 ### Purple Gradient (interaction/premium color)
 
@@ -242,9 +243,10 @@ Purple is NOT a hex constant. It lives as `rgba(120,60,180,opacity)` or as the C
 | 0.22 | Why canopy (warmer), closer glow overlay (bottom), arsenal card boxShadow, **hero page-top wash (new — 120px, 140% wide)** |
 | 0.24 | Hero glow (bottom radial — **increased from 0.20**) |
 | 0.25 | Section borders, stepper border, arsenal canopy (warmest), **hero canopy (new — 220px, boosted from 0.18)** |
-| 0.28 | Hero glow (center bridge — **increased from 0.16**), step icon bg radial |
-| 0.30 | Reality check grid border |
-| 0.40 | Arsenal gradient border |
+| 0.28 | Step icon bg radial |
+| 0.30 | Hero glow (bottom radial — **increased from 0.24**), reality check grid border |
+| 0.35 | Hero glow (gold top — **increased from 0.28**), hero glow (off-center purple accent at 80% 20% — **NEW 4th layer**) |
+| 0.40 | Hero glow (purple center — **increased from 0.28**), arsenal gradient border |
 | 0.45 | CTA boxShadow (tight glow — **increased from 0.40**) |
 | 0.50 | Section divider, tier badge boxShadow |
 | 0.55 | Badge num boxShadow |
@@ -311,7 +313,7 @@ The hottest surface. Reserved for CTA-carrying sections.
   textAlign: "center",
   overflow: "hidden",
   borderRadius: "12px",
-  background: "rgba(6,6,6,0.92)",       // glass material
+  background: "rgba(6,6,6,0.85)",       // hero glass (0.85 — translucent); closer uses 0.92
   backdropFilter: "blur(40px)",
   WebkitBackdropFilter: "blur(40px)",
   border: "1px solid rgba(212,175,55,0.20)",  // hero: 0.20, closer: 0.55
@@ -323,14 +325,14 @@ The hottest surface. Reserved for CTA-carrying sections.
 
 **Plus atmospheric overlay** — a separate div covering the card:
 ```tsx
-// Hero: 3-layer radial (INTENSIFIED in PR #525)
-background: "radial-gradient(ellipse 80% 50% at 50% 10%, rgba(212,175,55,0.28) 0%, transparent 60%), radial-gradient(ellipse 60% 40% at 50% 50%, rgba(120,60,180,0.28) 0%, transparent 60%), radial-gradient(ellipse 100% 70% at 50% 100%, rgba(120,60,180,0.24) 0%, transparent 60%)"
+// Hero: 4-layer radial (INTENSIFIED — matches Store hero warmth)
+background: "radial-gradient(ellipse 80% 50% at 50% 10%, rgba(212,175,55,0.35) 0%, transparent 60%), radial-gradient(ellipse 40% 40% at 80% 20%, rgba(120,60,180,0.35) 0%, transparent 60%), radial-gradient(ellipse 60% 40% at 50% 50%, rgba(120,60,180,0.40) 0%, transparent 60%), radial-gradient(ellipse 100% 70% at 50% 100%, rgba(120,60,180,0.30) 0%, transparent 60%)"
 
 // Closer: 2-layer radial (unchanged)
 background: "radial-gradient(ellipse 70% 50% at 50% 0%, rgba(212,175,55,0.18) 0%, transparent 60%), radial-gradient(ellipse 90% 60% at 50% 100%, rgba(120,60,180,0.22) 0%, transparent 65%)"
 ```
 
-Hero glow was intensified: gold 0.22→0.28, purple center 0.16→0.28, purple bottom 0.20→0.24. The hero now has more atmospheric depth on OLED screens.
+Hero glow is a 4-layer system: (1) gold top 0.35, (2) off-center purple accent at 80% 20% 0.35 (creates asymmetric depth — right side slightly warmer), (3) purple center 0.40, (4) purple bottom 0.30. The 4th layer (off-center accent) is what gives the hero its visual interest — centered radials feel flat.
 
 Hero uses `margin: 0 24px` + `padding: 24px 24px 16px`.
 
@@ -829,6 +831,8 @@ Footer text: Inter 14px, white 0.48.
 - Do NOT change "CAM Fee" back to "CAMA Fee" (corrected terminology)
 - §1 hero now uses a two-layer canopy system: page-top wash (0.22, 120px) + hero canopy (0.25, 220px) — stacks additively with internal glass card glow
 - Do NOT change §1 hero padding away from 24/24/16 — this is the canonical standard
+- Hero glass is 0.85, closer glass is 0.92 — this difference is intentional (hero is more translucent to let warm atmosphere through; closer is denser/more contained). Do NOT unify them.
+- Hero glow is a 4-layer system (gold top 0.35, off-center purple 0.35, purple center 0.40, purple bottom 0.30). Do NOT remove the off-center accent layer — it creates the asymmetric depth.
 
 ---
 
