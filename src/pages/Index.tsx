@@ -1121,7 +1121,7 @@ const styles: Record<string, React.CSSProperties> = {
     margin: "0 24px",
     borderRadius: "12px",
     overflow: "hidden",
-    background: "rgba(6,6,6,0.92)",
+    background: "rgba(6,6,6,0.85)",
     backdropFilter: "blur(40px)",
     WebkitBackdropFilter: "blur(40px)",
     border: "1px solid rgba(212,175,55,0.20)",
@@ -1129,7 +1129,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
   heroGlow: {
     position: "absolute", top: 0, left: 0, right: 0, bottom: 0, pointerEvents: "none",
-    background: "radial-gradient(ellipse 80% 50% at 50% 10%, rgba(212,175,55,0.28) 0%, transparent 60%), radial-gradient(ellipse 60% 40% at 50% 50%, rgba(120,60,180,0.28) 0%, transparent 60%), radial-gradient(ellipse 100% 70% at 50% 100%, rgba(120,60,180,0.24) 0%, transparent 60%)",
+    background: "radial-gradient(ellipse 80% 50% at 50% 10%, rgba(212,175,55,0.35) 0%, transparent 60%), radial-gradient(ellipse 40% 40% at 80% 20%, rgba(120,60,180,0.35) 0%, transparent 60%), radial-gradient(ellipse 60% 40% at 50% 50%, rgba(120,60,180,0.40) 0%, transparent 60%), radial-gradient(ellipse 100% 70% at 50% 100%, rgba(120,60,180,0.30) 0%, transparent 60%)",
   },
   heroInner: { position: "relative", zIndex: 1 },
   heroH1: {
