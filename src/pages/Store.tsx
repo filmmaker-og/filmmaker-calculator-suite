@@ -19,7 +19,7 @@ import { toast } from "sonner";
 const storeFaqs = [
   {
     q: "What do you need from me?",
-    a: "Depends on the product. The Full Analysis pulls straight from your calculator \u2014 buy it, it builds. The Comp Report needs a few details from you (genre, cast tier, budget range) so we research the right deals. Turnkey builds start with a short intake after checkout.",
+    a: "Depends on the product. The Full Analysis pulls straight from your calculator. Buy it, it builds. The Comp Report needs a few details from you (genre, cast tier, budget range) so we research the right deals. Turnkey builds start with a short intake after checkout.",
   },
   {
     q: "Can I see what I\u2019m getting before I buy?",
@@ -27,7 +27,7 @@ const storeFaqs = [
   },
   {
     q: "What happens if the deliverables don\u2019t hold up?",
-    a: "If the work doesn\u2019t hold up, we revise it. These models are built on the same waterfall and capital stack mechanics used in real production deals \u2014 if something\u2019s off, we fix it until it\u2019s right.",
+    a: "If the work doesn\u2019t hold up, we revise it. These models are built on the same waterfall and capital stack mechanics used in real production deals. If something\u2019s off, we fix it until it\u2019s right.",
   },
   {
     q: "What\u2019s The Working Model and when do I see it?",
@@ -60,7 +60,7 @@ const s: Record<string, React.CSSProperties> = {
   },
   eyebrowLabel: {
     fontFamily: "'Roboto Mono', monospace",
-    fontSize: "16px",
+    fontSize: "20px",
     letterSpacing: "0.18em",
     textTransform: "uppercase",
     color: "#D4AF37",
@@ -646,6 +646,7 @@ const ProductCard = ({
     ...s.cardBase,
     ...tier.card,
     ...(isHero ? { boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 35px rgba(212,175,55,0.14), 0 0 24px rgba(120,60,180,0.12), 0 0 60px rgba(212,175,55,0.06)" } : {}),
+    ...(product.id === "comp-report" ? { boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 30px rgba(212,175,55,0.12), 0 0 20px rgba(212,175,55,0.08)" } : {}),
     opacity: visible ? 1 : 0,
     transform: visible
       ? (hovered ? `translateY(${tier.hoverLift})` : "translateY(0)")
@@ -1144,7 +1145,7 @@ const Store = () => {
           {/* Triple radial glow */}
           <div style={{
             position: "absolute", top: 0, left: 0, right: 0, bottom: 0, pointerEvents: "none",
-            background: "radial-gradient(ellipse 80% 50% at 50% 10%, rgba(212,175,55,0.35) 0%, transparent 60%), radial-gradient(ellipse 60% 40% at 50% 50%, rgba(120,60,180,0.35) 0%, transparent 60%), radial-gradient(ellipse 100% 70% at 50% 100%, rgba(120,60,180,0.30) 0%, transparent 60%)",
+            background: "radial-gradient(ellipse 80% 50% at 50% 10%, rgba(212,175,55,0.35) 0%, transparent 60%), radial-gradient(ellipse 40% 40% at 80% 20%, rgba(120,60,180,0.25) 0%, transparent 60%), radial-gradient(ellipse 60% 40% at 50% 50%, rgba(120,60,180,0.35) 0%, transparent 60%), radial-gradient(ellipse 100% 70% at 50% 100%, rgba(120,60,180,0.30) 0%, transparent 60%)",
           }} />
           <div style={{ position: "relative", zIndex: 1 }}>
             <EyebrowRuled text="Shop" />
@@ -1153,7 +1154,7 @@ const Store = () => {
               fontSize: "4.2rem",
               lineHeight: 0.86,
               margin: "0 0 4px 0",
-              letterSpacing: "0.01em",
+              letterSpacing: "-0.01em",
               color: "#fff",
               textShadow: "0 2px 20px rgba(0,0,0,0.95), 0 4px 40px rgba(0,0,0,0.5)",
             }}>
@@ -1163,26 +1164,21 @@ const Store = () => {
                 textShadow: "0 2px 20px rgba(0,0,0,0.8), 0 0 40px rgba(212,175,55,0.50), 0 0 80px rgba(212,175,55,0.25)",
               }}>Investor Ready</span>
             </h1>
-            <p style={{
-              fontFamily: "'Inter', sans-serif",
-              fontSize: "19px",
-              color: "rgba(255,255,255,0.92)",
-              lineHeight: 1.55,
-              margin: "12px 0 0 0",
-              textShadow: "0 2px 12px rgba(0,0,0,0.9)",
-            }}>
-              Your deal structure modeled and documented. From diagnostics to investor-ready packages.
-            </p>
           </div>
         </section>
       </div>
 
-      {/* § 1 — On Demand Card (Full Analysis only) */}
+      {/* § 1 — ON DEMAND section hero */}
+      <section style={{ padding: "0 24px 16px", textAlign: "center" }}>
+        <EyebrowRuled text="On Demand" />
+      </section>
+
+      {/* § 1 — On Demand Cards (Snapshot+ and Full Analysis) */}
       <div
         ref={productsRef}
         style={{ padding: "0 24px" }}
       >
-        {selfServeProducts.filter(p => p.id !== "snapshot-plus").map((product, i) => (
+        {selfServeProducts.map((product, i) => (
           <ProductCard
             key={product.id}
             product={product}
@@ -1193,23 +1189,6 @@ const Store = () => {
         ))}
       </div>
 
-      {/* Snapshot+ compact mention */}
-      <div style={{ padding: "16px 24px 0", textAlign: "center" }}>
-        <p style={{
-          fontFamily: "'Roboto Mono', monospace",
-          fontSize: "13px",
-          color: "rgba(212,175,55,0.50)",
-          letterSpacing: "0.06em",
-        }}>
-          Just need the diagnostics?{" "}
-          <span
-            onClick={() => window.location.href = "/store/snapshot-plus"}
-            style={{ color: "#D4AF37", cursor: "pointer", textDecoration: "underline", textUnderlineOffset: "3px" }}
-          >
-            Snapshot+ — $49
-          </span>
-        </p>
-      </div>
 
       {/* §1 → §2 spacer (no breath line) */}
       <div style={{ height: "48px" }} />
@@ -1219,7 +1198,7 @@ const Store = () => {
          ═══════════════════════════════════════ */}
       <section
         ref={researchHeroRef}
-        style={{ padding: "16px 24px 32px", textAlign: "center", position: "relative" }}
+        style={{ padding: "32px 24px 32px", textAlign: "center", position: "relative" }}
       >
         <div style={{
           position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
@@ -1246,7 +1225,7 @@ const Store = () => {
             lineHeight: 1.55,
             margin: 0,
           }}>
-            Walk into the room with evidence, not assumptions. We research comparable deals in your genre and budget range. You present the data.
+            Walk into the room with evidence, not assumptions. We research comparable deals in your genre and budget range.
           </p>
         </div>
       </section>
@@ -1273,7 +1252,7 @@ const Store = () => {
          ═══════════════════════════════════════ */}
       <section
         ref={servicesRef}
-        style={{ padding: "16px 24px 32px", textAlign: "center", position: "relative" }}
+        style={{ padding: "32px 24px 32px", textAlign: "center", position: "relative" }}
       >
         <div style={{
           position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
@@ -1453,7 +1432,7 @@ const Store = () => {
             maxWidth: "90%",
             margin: "0 auto 24px",
           }}>
-            Tell us about your project and we'll recommend the right product.
+            Tell us about your project and we will recommend the right product.
           </p>
           <button
             onClick={(e) => {
@@ -1461,25 +1440,37 @@ const Store = () => {
               window.dispatchEvent(new CustomEvent("open-og-bot"));
             }}
             style={{
+              position: "relative",
+              overflow: "hidden",
               display: "inline-flex",
               alignItems: "center",
               gap: "8px",
-              fontFamily: "'Roboto Mono', monospace",
-              fontSize: "15px",
-              letterSpacing: "0.06em",
+              fontFamily: "'Inter', sans-serif",
+              fontSize: "18px",
+              fontWeight: 700,
+              letterSpacing: "0.08em",
               textTransform: "uppercase",
-              color: "#D4AF37",
-              background: "rgba(212,175,55,0.05)",
-              border: "1px solid rgba(212,175,55,0.4)",
+              color: "#fff",
+              background: "linear-gradient(180deg, rgb(110,50,170) 0%, rgb(75,30,130) 100%)",
+              border: "none",
               borderRadius: "8px",
-              padding: "16px 24px",
+              padding: "18px 32px",
               cursor: "pointer",
-              transition: "background 0.2s, border-color 0.2s",
+              boxShadow: "inset 0 1px 1px rgba(255,255,255,0.25), inset 0 -2px 4px rgba(0,0,0,0.4), 0 0 0 1px rgba(212,175,55,0.30), 0 8px 24px rgba(0,0,0,0.5), 0 0 40px rgba(120,60,180,0.45), 0 0 20px rgba(212,175,55,0.12)",
+              textShadow: "0 2px 4px rgba(0,0,0,0.5)",
+              transition: "transform 0.15s, box-shadow 0.3s",
             }}
             onMouseDown={(e) => { (e.currentTarget.style.transform = "scale(0.98)"); }}
             onMouseUp={(e) => { (e.currentTarget.style.transform = "scale(1)"); }}
           >
-            ✦ ASK THE OG
+            <span style={{ position: "relative", zIndex: 1 }}>✦ ASK THE OG</span>
+            <div style={{
+              position: "absolute", top: 0, left: "-100%", width: "55%", height: "100%",
+              pointerEvents: "none",
+              background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.20), transparent)",
+              transform: "skewX(-20deg)",
+              animation: "storeShimmer 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite",
+            }} />
           </button>
         </div>
       </div>
