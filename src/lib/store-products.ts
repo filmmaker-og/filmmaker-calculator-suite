@@ -153,10 +153,10 @@ export const products: Product[] = [
       { title: "Comparable Acquisition Deals", subtitle: "Buyer, price range, and deal terms per comp", group: "Research" },
       { title: "Defensible Valuation Range", subtitle: "Methodology your investors can follow, not a number you made up", group: "Research" },
       { title: "Market Positioning Analysis", subtitle: "Where your project sits in the current landscape", group: "Evidence" },
-      { title: "Revenue Scenarios", subtitle: "Three scenarios mapped to actual transactions", group: "Evidence" },
+      { title: "Revenue Scenarios", subtitle: "Three price scenarios based on real closed deals", group: "Evidence" },
     ],
-    turnaround: "Delivered in 48 hours",
-    reassurance: "Delivered in 48 hours",
+    turnaround: "Delivered in 72 hours",
+    reassurance: "Delivered in 72 hours",
     whatsIncluded: [
       {
         title: "Comparable Acquisition Research",
