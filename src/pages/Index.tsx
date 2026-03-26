@@ -376,8 +376,9 @@ const Index = () => {
       <div style={{ minHeight: "100vh", background: "#000", paddingTop: "24px", maxWidth: "430px", margin: "0 auto" }}>
 
         {/* ═══ § 1 HERO ═══ */}
+        <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "120px", background: "radial-gradient(ellipse 140% 100% at 50% 0%, rgba(120,60,180,0.22) 0%, transparent 80%)", pointerEvents: "none", zIndex: 0 }} />
         <div style={{ position: "relative" }}>
-          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "160px", background: "radial-gradient(ellipse 120% 100% at 50% 0%, rgba(120,60,180,0.18) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
+          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "220px", background: "radial-gradient(ellipse 120% 100% at 50% 0%, rgba(120,60,180,0.25) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
         </div>
         <section ref={heroRef} style={styles.hero}>
           <div style={styles.heroGlow} />
