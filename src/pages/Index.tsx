@@ -252,7 +252,7 @@ const Index = () => {
   const WaterfallGroupLabel = ({ text, color }: { text: string; color: 'gold' | 'red' | 'green' | 'neutral' }) => {
     const textColor = color === 'gold' ? '#D4AF37' : color === 'red' ? 'rgba(220,38,38,0.85)' : color === 'green' ? '#3CB371' : 'rgba(255,255,255,0.88)';
     return (
-      <div style={{ textAlign: "center", margin: "12px 0 6px" }}>
+      <div style={{ textAlign: "center", margin: "8px 0 5px" }}>
         <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.6rem", color: textColor, letterSpacing: "0.04em" }}>{text}</span>
       </div>
     );
@@ -288,7 +288,7 @@ const Index = () => {
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "0 24px" }}>
         <div style={{
           width: "2px",
-          height: "20px",
+          height: "16px",
           background: lineColor[color],
           boxShadow: shadowMap[color],
           borderRadius: "1px",
@@ -625,8 +625,8 @@ const Index = () => {
                 <div style={{ height: "100%", flex: 1, background: "rgba(220,38,38,0.50)", borderRadius: "0 4px 4px 0" }} />
               </div>
               <div style={{ display: "flex", justifyContent: "space-between", marginTop: "4px" }}>
-                <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: "rgba(60,179,113,0.50)", letterSpacing: "0.08em", textTransform: "uppercase" }}>Remaining</span>
-                <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: "rgba(220,38,38,0.50)", letterSpacing: "0.08em", textTransform: "uppercase" }}>Deducted</span>
+                <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: "rgba(255,255,255,0.55)", letterSpacing: "0.08em", textTransform: "uppercase" }}>Remaining</span>
+                <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: "rgba(255,255,255,0.55)", letterSpacing: "0.08em", textTransform: "uppercase" }}>Deducted</span>
               </div>
             </div>
           </div>
@@ -698,27 +698,6 @@ const Index = () => {
 
         </section>
 
-        <div style={{ height: "3px", background: "linear-gradient(to right, transparent 0%, rgba(120,60,180,0.50) 20%, rgba(212,175,55,0.40) 50%, rgba(120,60,180,0.50) 80%, transparent 100%)", boxShadow: "0 0 8px rgba(120,60,180,0.35), 0 0 20px rgba(120,60,180,0.20)", margin: "0 24px" }} />
-
-        {/* ═══ SOCIAL PROOF ═══ */}
-        <div style={{ textAlign: "center", padding: "32px 24px" }}>
-          <p style={{
-            fontFamily: "'Roboto Mono', monospace",
-            fontSize: "13px",
-            letterSpacing: "0.18em",
-            textTransform: "uppercase",
-            color: "rgba(212,175,55,0.55)",
-            marginBottom: "6px",
-          }}>Modeling Engine</p>
-          <p style={{
-            fontFamily: "'Bebas Neue', sans-serif",
-            fontSize: "1.8rem",
-            color: "#D4AF37",
-            letterSpacing: "0.02em",
-            lineHeight: 1,
-            textShadow: "0 0 20px rgba(212,175,55,0.25)",
-          }}>$1M – $10M Indie Budgets</p>
-        </div>
 
         {/* ═══ § 4 WHY THIS MATTERS ═══ */}
         <section ref={whyRef} style={styles.whySection}>
@@ -1033,15 +1012,15 @@ const Index = () => {
         {/* ═══ FOOTER ═══ */}
         <footer ref={footerRef} style={{ ...styles.footer, opacity: prefersReducedMotion || footerVisible ? 1 : 0, transition: prefersReducedMotion ? "none" : "opacity 0.8s ease-out" }}>
           <div style={styles.footerLinks}>
-            <a href="https://www.instagram.com/filmmaker.og" target="_blank" rel="noopener noreferrer" style={styles.footerIcon} aria-label="Instagram" onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.60)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.50)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.15)"; }}>
+            <a href="https://www.instagram.com/filmmaker.og" target="_blank" rel="noopener noreferrer" style={styles.footerIcon} aria-label="Instagram" onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.65)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.50)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.15)"; }}>
               <Instagram size={18} />
             </a>
-            <a href="https://www.tiktok.com/@filmmaker.og" target="_blank" rel="noopener noreferrer" style={styles.footerIcon} aria-label="TikTok" onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.60)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.50)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.15)"; }}>
+            <a href="https://www.tiktok.com/@filmmaker.og" target="_blank" rel="noopener noreferrer" style={styles.footerIcon} aria-label="TikTok" onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.65)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.50)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.15)"; }}>
               <svg width={18} height={18} viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                 <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 0 0-.79-.05A6.34 6.34 0 0 0 3.15 15a6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V8.71a8.2 8.2 0 0 0 4.76 1.52v-3.4a4.85 4.85 0 0 1-1-.14z"/>
               </svg>
             </a>
-            <a href="https://www.facebook.com/filmmaker.og" target="_blank" rel="noopener noreferrer" style={styles.footerIcon} aria-label="Facebook" onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.60)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.50)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.15)"; }}>
+            <a href="https://www.facebook.com/filmmaker.og" target="_blank" rel="noopener noreferrer" style={styles.footerIcon} aria-label="Facebook" onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.65)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.50)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.15)"; }}>
               <svg width={18} height={18} viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                 <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
               </svg>
@@ -1052,7 +1031,7 @@ const Index = () => {
             <span style={{ color: "rgba(212,175,55,0.25)", fontSize: "14px" }}>·</span>
             <span onClick={() => gatedNavigate("/store")} style={styles.footerNavLink} onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.60)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.50)"; }}>Shop</span>
             <span style={{ color: "rgba(212,175,55,0.25)", fontSize: "14px" }}>·</span>
-            <span onClick={() => navigate("/resources")} style={styles.footerNavLink} onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.60)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.50)"; }}>Resources</span>
+            <span onClick={() => gatedNavigate("/resources")} style={styles.footerNavLink} onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.60)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.50)"; }}>Resources</span>
           </div>
           <p style={styles.footerText}>
             For educational and informational purposes only. Not legal, tax, or investment advice. Consult a qualified entertainment attorney before making financing decisions.
@@ -1106,7 +1085,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
   ctaReassurance: {
     fontFamily: "'Roboto Mono', monospace", fontSize: "13px",
-    color: "rgba(212,175,55,0.65)", letterSpacing: "0.12em",
+    color: "rgba(212,175,55,0.70)", letterSpacing: "0.12em",
     textTransform: "uppercase", textAlign: "center", marginTop: "14px",
   },
 
@@ -1240,7 +1219,7 @@ const styles: Record<string, React.CSSProperties> = {
   checkHeaderWith: { background: "radial-gradient(ellipse 80% 100% at 50% 100%, rgba(60,179,113,0.20) 0%, rgba(6,6,6,0.92) 70%)", padding: "14px 16px", borderBottom: "1px solid rgba(60,179,113,0.20)" },
   checkHeaderWithout: { background: "radial-gradient(ellipse 80% 100% at 50% 100%, rgba(220,38,38,0.10) 0%, rgba(6,6,6,0.92) 70%)", padding: "14px 16px", borderLeft: "1px solid rgba(255,255,255,0.08)", borderBottom: "1px solid rgba(220,38,38,0.12)" },
   checkHeaderWithText: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.6rem", color: "#3CB371", letterSpacing: "0.04em" },
-  checkHeaderWithoutText: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.6rem", color: "rgba(220,38,38,0.70)", letterSpacing: "0.04em" },
+  checkHeaderWithoutText: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.6rem", color: "rgba(220,38,38,0.85)", letterSpacing: "0.04em" },
   checkRow: {
     display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1px", background: "rgba(255,255,255,0.08)",
     borderBottom: "1px solid rgba(255,255,255,0.08)",
