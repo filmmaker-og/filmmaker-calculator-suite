@@ -123,6 +123,8 @@ const Index = () => {
   const [splitCountUp, setSplitCountUp] = useState(0);
   const splitAnimRef = useRef<number>(0);
 
+  const [pressedBadge, setPressedBadge] = useState<number | null>(null);
+  const [pressedTier, setPressedTier] = useState<string | null>(null);
 
   const badgeCards = [
     { num: "1", title: "Don't Sell The Same Dollar Twice", body: "Track exactly where the money goes so you never over-promise equity and accidentally collapse your own backend." },
@@ -304,12 +306,16 @@ const Index = () => {
     );
   };
 
-  const wfCardStyle = (mode: string): React.CSSProperties => {
+  const wfCardStyle = (mode: string, tier?: string): React.CSSProperties => {
+    const isPressed = tier != null && pressedTier === tier;
     const base: React.CSSProperties = {
       position: "relative", overflow: "hidden", borderRadius: "12px",
       background: "radial-gradient(circle at 50% 40px, rgba(220,38,38,0.15) 0%, transparent 60%), rgba(6,6,6,0.92)",
-      border: "1px solid rgba(220,38,38,0.25)",
-      boxShadow: "0 12px 32px rgba(0,0,0,0.5), 0 0 16px rgba(220,38,38,0.10)",
+      border: `1px solid rgba(220,38,38,${isPressed ? 0.40 : 0.25})`,
+      boxShadow: isPressed
+        ? "0 12px 32px rgba(0,0,0,0.5), 0 0 16px rgba(220,38,38,0.10), inset 0 0 20px rgba(220,38,38,0.06)"
+        : "0 12px 32px rgba(0,0,0,0.5), 0 0 16px rgba(220,38,38,0.10)",
+      transition: "border-color 0.15s ease-out, box-shadow 0.15s ease-out",
     };
     if (mode === 'pair') {
       return { ...base, padding: "10px 8px" };
@@ -520,9 +526,14 @@ const Index = () => {
                         <div
                           key={groupCards[0].tier}
                           ref={(el) => { cardObserverRefs.current[groupCards[0].ci] = el; }}
+                          onMouseDown={() => setPressedTier(groupCards[0].tier)}
+                          onMouseUp={() => setPressedTier(null)}
+                          onMouseLeave={() => setPressedTier(null)}
+                          onTouchStart={() => setPressedTier(groupCards[0].tier)}
+                          onTouchEnd={() => setPressedTier(null)}
                           style={{
                             flex: 1,
-                            ...wfCardStyle('pair'),
+                            ...wfCardStyle('pair', groupCards[0].tier),
                             ...cardReveal(enteredCards.has(groupCards[0].ci), 0),
                           }}
                         >
@@ -535,9 +546,14 @@ const Index = () => {
                         <div
                           key={groupCards[1].tier}
                           ref={(el) => { cardObserverRefs.current[groupCards[1].ci] = el; }}
+                          onMouseDown={() => setPressedTier(groupCards[1].tier)}
+                          onMouseUp={() => setPressedTier(null)}
+                          onMouseLeave={() => setPressedTier(null)}
+                          onTouchStart={() => setPressedTier(groupCards[1].tier)}
+                          onTouchEnd={() => setPressedTier(null)}
                           style={{
                             flex: 1,
-                            ...wfCardStyle('pair'),
+                            ...wfCardStyle('pair', groupCards[1].tier),
                             ...cardReveal(enteredCards.has(groupCards[1].ci), 100),
                           }}
                         >
@@ -553,8 +569,13 @@ const Index = () => {
                         <div
                           key={tier.tier}
                           ref={(el) => { cardObserverRefs.current[tier.ci] = el; }}
+                          onMouseDown={() => setPressedTier(tier.tier)}
+                          onMouseUp={() => setPressedTier(null)}
+                          onMouseLeave={() => setPressedTier(null)}
+                          onTouchStart={() => setPressedTier(tier.tier)}
+                          onTouchEnd={() => setPressedTier(null)}
                           style={{
-                            ...wfCardStyle(tier.mode),
+                            ...wfCardStyle(tier.mode, tier.tier),
                             ...cardReveal(enteredCards.has(tier.ci)),
                             marginBottom: groupCards.indexOf(tier) < groupCards.length - 1 ? "10px" : "0",
                           }}
@@ -680,6 +701,26 @@ const Index = () => {
 
         <div style={{ height: "3px", background: "linear-gradient(to right, transparent 0%, rgba(120,60,180,0.50) 20%, rgba(212,175,55,0.40) 50%, rgba(120,60,180,0.50) 80%, transparent 100%)", boxShadow: "0 0 8px rgba(120,60,180,0.35), 0 0 20px rgba(120,60,180,0.20)", margin: "0 24px" }} />
 
+        {/* ═══ SOCIAL PROOF ═══ */}
+        <div style={{ textAlign: "center", padding: "32px 24px" }}>
+          <p style={{
+            fontFamily: "'Roboto Mono', monospace",
+            fontSize: "13px",
+            letterSpacing: "0.18em",
+            textTransform: "uppercase",
+            color: "rgba(212,175,55,0.55)",
+            marginBottom: "6px",
+          }}>Modeling Engine</p>
+          <p style={{
+            fontFamily: "'Bebas Neue', sans-serif",
+            fontSize: "1.8rem",
+            color: "#D4AF37",
+            letterSpacing: "0.02em",
+            lineHeight: 1,
+            textShadow: "0 0 20px rgba(212,175,55,0.25)",
+          }}>$1M – $10M Indie Budgets</p>
+        </div>
+
         {/* ═══ § 4 WHY THIS MATTERS ═══ */}
         <section ref={whyRef} style={styles.whySection}>
           <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "220px", background: "radial-gradient(ellipse 120% 80% at 50% 0%, rgba(120,60,180,0.22) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
@@ -695,7 +736,21 @@ const Index = () => {
               {badgeCards.map((card, i) => {
                 const warmth = 0.15 + (i * 0.04);
                 return (
-                <div key={card.num} style={{ ...styles.badgeCard, background: `radial-gradient(circle at 45px 57px, rgba(120,60,180,${warmth}) 0%, rgba(6,6,6,0.92) 65%)`, ...reveal(whyVisible, i + 2) }}>
+                <div
+                  key={card.num}
+                  onMouseDown={() => setPressedBadge(i)}
+                  onMouseUp={() => setPressedBadge(null)}
+                  onMouseLeave={() => setPressedBadge(null)}
+                  onTouchStart={() => setPressedBadge(i)}
+                  onTouchEnd={() => setPressedBadge(null)}
+                  style={{
+                    ...styles.badgeCard,
+                    background: `radial-gradient(circle at 45px 57px, rgba(120,60,180,${pressedBadge === i ? warmth + 0.07 : warmth}) 0%, rgba(6,6,6,0.92) 65%)`,
+                    boxShadow: pressedBadge === i ? "inset 0 0 30px rgba(120,60,180,0.08)" : "none",
+                    transition: "box-shadow 0.15s ease-out",
+                    ...reveal(whyVisible, i + 2),
+                  }}
+                >
                   <div style={{
                     ...styles.badgeNum,
                     opacity: prefersReducedMotion || whyVisible ? 1 : 0,
@@ -735,7 +790,7 @@ const Index = () => {
               {/* Gold atmospheric (top) */}
               <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "50%", background: "radial-gradient(ellipse 100% 80% at 50% 0%, rgba(212,175,55,0.12) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
               {/* Purple atmospheric (bottom) */}
-              <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "50%", background: "radial-gradient(ellipse 100% 80% at 50% 100%, rgba(120,60,180,0.15) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
+              <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "50%", background: "radial-gradient(ellipse 100% 80% at 50% 100%, rgba(120,60,180,0.18) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
               {/* Value statement */}
               <div style={styles.valueStatementFree}>
                 <p style={styles.valueTextFree}>Your Numbers. No Credit Card.</p>
@@ -867,7 +922,24 @@ const Index = () => {
                 </div>
 
               </div>
-              <div style={{ padding: "8px 24px 28px" }} />
+              <div style={{ padding: "16px 24px 28px", textAlign: "center", position: "relative", zIndex: 1 }}>
+                <span
+                  onClick={handleCTA}
+                  style={{
+                    fontFamily: "'Roboto Mono', monospace",
+                    fontSize: "15px",
+                    letterSpacing: "0.10em",
+                    textTransform: "uppercase",
+                    color: "rgba(212,175,55,0.65)",
+                    cursor: "pointer",
+                    transition: "color 0.2s ease",
+                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.88)"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.65)"; }}
+                >
+                  Run Your Numbers →
+                </span>
+              </div>
             </div>
           </div>
         </section>
@@ -1089,7 +1161,7 @@ const styles: Record<string, React.CSSProperties> = {
   stepNumBadge: {
     position: "relative", zIndex: 1, width: "48px", height: "48px", borderRadius: "50%",
     background: "linear-gradient(135deg, rgb(75,30,130) 0%, rgb(110,50,170) 100%)", display: "flex", alignItems: "center", justifyContent: "center",
-    boxShadow: "0 0 20px rgba(120,60,180,0.50), 0 0 40px rgba(120,60,180,0.25)",
+    boxShadow: "0 0 20px rgba(120,60,180,0.55), 0 0 40px rgba(120,60,180,0.25)",
   },
   stepContent: { padding: "26px 24px 26px 24px" },
   stepTitle: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "#fff", lineHeight: 1, marginBottom: "5px" },
@@ -1115,8 +1187,8 @@ const styles: Record<string, React.CSSProperties> = {
     margin: "0 24px", borderRadius: "12px", overflow: "hidden", border: "1px solid rgba(120,60,180,0.25)",
     boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 24px rgba(212,175,55,0.10), 0 0 20px rgba(120,60,180,0.15)", position: "relative",
   },
-  badgeGrid: { display: "grid", gridTemplateColumns: "1fr", gap: "1px", background: "rgba(120,60,180,0.15)" },
-  badgeCard: { background: "radial-gradient(circle at 45px 57px, rgba(120,60,180,0.15) 0%, rgba(6,6,6,0.92) 65%)", padding: "36px 24px", textAlign: "left" },
+  badgeGrid: { display: "grid", gridTemplateColumns: "1fr", gap: "1px", background: "rgba(120,60,180,0.18)" },
+  badgeCard: { background: "radial-gradient(circle at 45px 57px, rgba(120,60,180,0.18) 0%, rgba(6,6,6,0.92) 65%)", padding: "36px 24px", textAlign: "left" },
   badgeNum: {
     width: "48px", height: "48px", borderRadius: "50%", background: "linear-gradient(135deg, rgb(75,30,130) 0%, rgb(110,50,170) 100%)", color: "#fff",
     display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.6rem",
@@ -1228,13 +1300,13 @@ const styles: Record<string, React.CSSProperties> = {
   },
 
   /* ── FOOTER ── */
-  footer: { background: "#0A0A0A", borderTop: "1px solid rgba(255,255,255,0.12)", padding: "32px 24px 40px" },
+  footer: { background: "#0A0A0A", borderTop: "1px solid rgba(255,255,255,0.15)", padding: "32px 24px 40px" },
   footerLinks: { display: "flex", justifyContent: "center", gap: "20px", marginBottom: "16px" },
   footerIcon: { color: "rgba(212,175,55,0.50)", textDecoration: "none", display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", padding: "4px", borderRadius: "8px", border: "1px solid rgba(212,175,55,0.15)", transition: "color 0.2s ease, border-color 0.2s ease", boxSizing: "content-box" },
   footerNav: { display: "flex", justifyContent: "center", alignItems: "center", gap: "10px", marginBottom: "16px" },
   footerNavLink: { fontFamily: "'Roboto Mono', monospace", fontSize: "13px", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(212,175,55,0.50)", cursor: "pointer", transition: "color 0.2s ease" } as React.CSSProperties,
   footerDot: { color: "rgba(212,175,55,0.20)", fontSize: "11px" },
-  footerText: { fontFamily: "'Inter', sans-serif", fontSize: "14px", textAlign: "center", color: "rgba(255,255,255,0.48)", lineHeight: 1.55 },
+  footerText: { fontFamily: "'Inter', sans-serif", fontSize: "14px", textAlign: "center", color: "rgba(255,255,255,0.55)", lineHeight: 1.55 },
 };
 
 export default Index;
