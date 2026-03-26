@@ -35,7 +35,7 @@ const storeFaqs = [
   },
   {
     q: "Can I upgrade and apply what I\u2019ve already paid?",
-    a: "Yes. Contact us and we\u2019ll apply your prior purchase toward the higher tier. The credit upgrade path works across all products.",
+    a: "Yes. Contact us and we will apply your prior purchase toward the higher tier. The credit upgrade path works across all products.",
   },
 ];
 
@@ -167,7 +167,7 @@ const s: Record<string, React.CSSProperties> = {
     color: "#000",
     background: "#F9E076",
     border: "none",
-    borderRadius: "6px",
+    borderRadius: "8px",
     cursor: "pointer",
     boxShadow: "0 0 20px rgba(249,224,118,0.3), 0 0 60px rgba(249,224,118,0.1)",
     transition: "transform 0.15s, box-shadow 0.3s",
@@ -317,7 +317,7 @@ const EyebrowRuled = ({ text }: { text: string }) => (
 const FeatureGroup = ({ features, groupName }: { features: { title: string; subtitle: string }[]; groupName: string }) => (
   <>
     <p style={{
-      fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.6rem",
+      fontFamily: "'Bebas Neue', sans-serif", fontSize: "2.0rem",
       color: "#D4AF37", letterSpacing: "0.06em",
       margin: 0, marginBottom: "16px", paddingLeft: "52px", textAlign: "left" as const,
       textShadow: "0 0 12px rgba(212,175,55,0.15)",
@@ -364,34 +364,6 @@ const CometTail = () => (
   }} />
 );
 
-
-/* ═══════════════════════════════════════════════════════════════════
-   COMP PRICING BLOCK
-   ═══════════════════════════════════════════════════════════════════ */
-const CompPricingBlock = () => (
-  <div
-    style={{
-      display: "flex",
-      flexDirection: "column",
-      gap: "10px",
-      marginTop: "12px",
-      padding: "16px",
-      background: "rgba(212,175,55,0.04)",
-      border: "1px solid rgba(212,175,55,0.12)",
-      borderRadius: "8px",
-    }}
-  >
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-      <span style={{ fontFamily: "'Inter', sans-serif", fontSize: "16px", color: "rgba(255,255,255,0.88)", fontWeight: 500 }}>10 Comparable Deals</span>
-      <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "18px", color: "#D4AF37", fontWeight: 700 }}>$995</span>
-    </div>
-    <div style={{ height: "1px", background: "rgba(212,175,55,0.10)" }} />
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-      <span style={{ fontFamily: "'Inter', sans-serif", fontSize: "16px", color: "rgba(255,255,255,0.88)", fontWeight: 500 }}>5 Comparable Deals</span>
-      <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "18px", color: "#D4AF37", fontWeight: 700 }}>$595</span>
-    </div>
-  </div>
-);
 
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -461,7 +433,7 @@ const WorkingModelPopup = ({
           fontSize: "11px",
           letterSpacing: "0.15em",
           textTransform: "uppercase",
-          fontWeight: 700,
+          fontWeight: 600,
           borderRadius: "4px",
           marginBottom: "12px",
           fontFamily: "'Roboto Mono', monospace",
@@ -511,7 +483,7 @@ const WorkingModelPopup = ({
             fontSize: "12px",
             letterSpacing: "0.08em",
             fontWeight: 600,
-            borderRadius: "6px",
+            borderRadius: "4px",
             fontFamily: "'Roboto Mono', monospace",
           }}>
             SAVE $70
@@ -525,11 +497,22 @@ const WorkingModelPopup = ({
         <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: "16px", marginBottom: "16px" }}>
           {[
             "Formula-driven Excel engine",
-            "Change any input \u2014 everything recalculates",
+            "Change any input. Everything recalculates",
             "Reusable across unlimited projects",
           ].map((feat) => (
             <li key={feat} style={{ display: "flex", alignItems: "flex-start", gap: "14px" }}>
-              <span style={{ fontSize: "20px", color: "#3CB371", flexShrink: 0, marginTop: "1px", fontFamily: "'Roboto Mono', monospace", textShadow: "0 0 12px rgba(60,179,113,0.4)" }}>✓</span>
+              <div style={{
+                width: "34px", height: "34px", borderRadius: "50%",
+                display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
+                background: "radial-gradient(circle at 50% 40%, rgba(60,179,113,0.20) 0%, rgba(60,179,113,0.06) 100%)",
+                border: "1px solid rgba(60,179,113,0.30)",
+                boxShadow: "0 0 12px rgba(60,179,113,0.25), 0 0 24px rgba(60,179,113,0.10)",
+              }}>
+                <span style={{
+                  fontSize: "18px", color: "#3CB371",
+                  textShadow: "0 0 8px rgba(60,179,113,0.70), 0 0 16px rgba(60,179,113,0.35)",
+                }}>&#10003;</span>
+              </div>
               <span style={{ fontFamily: "'Inter', sans-serif", fontSize: "18px", fontWeight: 500, color: "#fff", lineHeight: 1.3 }}>
                 {feat}
               </span>
@@ -693,7 +676,21 @@ const ProductCard = ({
 
       {/* === EDITORIAL MIDDLE — Features === */}
       <div style={{ ...s.featuresBlock, padding: "24px 0 0 0", ...z2 }}>
-        {(() => {
+        {isSnapshot ? (
+          /* Compact feature list for Snapshot+ — metric names only, no checkmarks */
+          <p style={{
+            fontFamily: "'Roboto Mono', monospace",
+            fontSize: "14px",
+            color: "rgba(212,175,55,0.55)",
+            letterSpacing: "0.04em",
+            lineHeight: 1.6,
+            textAlign: "center",
+            padding: "0 12px",
+            margin: 0,
+          }}>
+            {(product.features as { title: string }[]).map(f => f.title).join(" · ")}
+          </p>
+        ) : (() => {
           const structured = product.features.filter(
             (f): f is { title: string; subtitle: string; group: string } => typeof f !== "string"
           );
@@ -785,6 +782,30 @@ const ProductCard = ({
             textTransform: "uppercase", textAlign: "center", margin: "14px 0 0 0",
           }}>{product.reassurance}</p>
         )}
+
+        {/* Cross-sell upgrade link */}
+        {product.upgradePrompt && (
+          <p
+            onClick={() => {
+              const target = document.querySelector(`[data-product="${product.upgradePrompt!.link.split('/').pop()}"]`);
+              if (target) target.scrollIntoView({ behavior: "smooth", block: "center" });
+            }}
+            style={{
+              fontFamily: "'Roboto Mono', monospace",
+              fontSize: "13px",
+              color: "rgba(212,175,55,0.50)",
+              letterSpacing: "0.04em",
+              textAlign: "center",
+              margin: "12px 0 0 0",
+              cursor: "pointer",
+              transition: "color 0.2s",
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.70)"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.50)"; }}
+          >
+            {product.upgradePrompt.cta}
+          </p>
+        )}
       </div>
     </div>
   );
@@ -826,6 +847,7 @@ const ServiceCard = ({
   return (
     <div
       style={cardStyle}
+      data-product={product.id}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
@@ -920,6 +942,30 @@ const ServiceCard = ({
             color: tierReassuranceColor, letterSpacing: "0.12em",
             textTransform: "uppercase", textAlign: "center", margin: "14px 0 0 0",
           }}>{product.reassurance}</p>
+        )}
+
+        {/* Cross-sell upgrade link */}
+        {product.upgradePrompt && (
+          <p
+            onClick={() => {
+              const target = document.querySelector(`[data-product="${product.upgradePrompt!.link.split('/').pop()}"]`);
+              if (target) target.scrollIntoView({ behavior: "smooth", block: "center" });
+            }}
+            style={{
+              fontFamily: "'Roboto Mono', monospace",
+              fontSize: "13px",
+              color: "rgba(212,175,55,0.50)",
+              letterSpacing: "0.04em",
+              textAlign: "center",
+              margin: "12px 0 0 0",
+              cursor: "pointer",
+              transition: "color 0.2s",
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.70)"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.50)"; }}
+          >
+            {product.upgradePrompt.cta}
+          </p>
         )}
       </div>
     </div>
@@ -1151,7 +1197,7 @@ const Store = () => {
             <EyebrowRuled text="Shop" />
             <h1 style={{
               fontFamily: "'Bebas Neue', sans-serif",
-              fontSize: "4.2rem",
+              fontSize: "3.8rem",
               lineHeight: 0.86,
               margin: "0 0 4px 0",
               letterSpacing: "-0.01em",
@@ -1171,12 +1217,21 @@ const Store = () => {
       {/* § 1 — ON DEMAND section hero */}
       <section style={{ padding: "0 24px 16px", textAlign: "center" }}>
         <EyebrowRuled text="On Demand" />
+        <p style={{
+          fontFamily: "'Inter', sans-serif",
+          fontSize: "19px",
+          color: "rgba(255,255,255,0.92)",
+          lineHeight: 1.55,
+          margin: "4px 0 0 0",
+        }}>
+          Run the numbers for free. Buy the document when you need it on paper.
+        </p>
       </section>
 
       {/* § 1 — On Demand Cards (Snapshot+ and Full Analysis) */}
       <div
         ref={productsRef}
-        style={{ padding: "0 24px" }}
+        style={{ padding: "0 24px", display: "flex", flexDirection: "column", gap: "28px" }}
       >
         {selfServeProducts.map((product, i) => (
           <ProductCard
@@ -1191,7 +1246,7 @@ const Store = () => {
 
 
       {/* §1 → §2 spacer (no breath line) */}
-      <div style={{ height: "48px" }} />
+      <div style={{ height: "32px" }} />
 
       {/* ═══════════════════════════════════════
            § 2 — RESEARCH
@@ -1245,7 +1300,7 @@ const Store = () => {
       </div>
 
       {/* §2 → §3 spacer (no breath line) */}
-      <div style={{ height: "48px" }} />
+      <div style={{ height: "32px" }} />
 
       {/* ═══════════════════════════════════════
            § 3 — TURNKEY
@@ -1427,7 +1482,7 @@ const Store = () => {
           <p style={{
             fontFamily: "'Inter', sans-serif",
             fontSize: "19px",
-            color: "rgba(255,255,255,0.75)",
+            color: "rgba(255,255,255,0.92)",
             lineHeight: 1.6,
             maxWidth: "90%",
             margin: "0 auto 24px",
