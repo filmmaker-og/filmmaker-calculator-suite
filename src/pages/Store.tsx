@@ -1141,29 +1141,26 @@ const Store = () => {
          ═══════════════════════════════════════ */}
       {/* Glass hero card */}
       <div ref={heroRef} style={{ padding: "12px 0 16px", position: "relative" }}>
+        {/* Page-top canopy (matches landing page 280px) */}
+        <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "280px", background: "radial-gradient(ellipse 150% 80% at 50% 0%, rgba(120,60,180,0.30) 0%, transparent 65%), radial-gradient(ellipse 60% 50% at 80% 10%, rgba(212,175,55,0.12) 0%, transparent 60%)", pointerEvents: "none", zIndex: 0 }} />
         <section style={{
           position: "relative", textAlign: "center",
           padding: "24px 24px 16px",
           margin: "0 24px",
           borderRadius: 12,
           overflow: "hidden",
-          background: "rgba(6,6,6,0.85)",
+          background: "radial-gradient(ellipse 70% 30% at 50% 0%, rgba(212,175,55,0.20) 0%, transparent 55%), radial-gradient(ellipse 100% 40% at 50% 0%, rgba(120,60,180,0.22) 0%, transparent 60%), radial-gradient(circle at 50% 50%, rgba(120,60,180,0.35) 0%, transparent 60%), radial-gradient(ellipse 100% 50% at 50% 100%, rgba(120,60,180,0.22) 0%, transparent 65%), rgba(6,6,6,0.85)",
           backdropFilter: "blur(40px)",
           WebkitBackdropFilter: "blur(40px)",
           border: "1px solid rgba(212,175,55,0.20)",
-          boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 24px rgba(212,175,55,0.10), 0 0 20px rgba(120,60,180,0.15), 0 0 60px rgba(120,60,180,0.12)",
+          boxShadow: "0 -16px 50px rgba(120,60,180,0.18), 0 20px 50px rgba(120,60,180,0.18), 0 -10px 35px rgba(212,175,55,0.10), 0 16px 40px rgba(0,0,0,0.6), 0 0 30px rgba(120,60,180,0.22), 0 0 80px rgba(120,60,180,0.15)",
           ...reveal(heroVisible),
         }}>
-          {/* Triple radial glow */}
-          <div style={{
-            position: "absolute", top: 0, left: 0, right: 0, bottom: 0, pointerEvents: "none",
-            background: "radial-gradient(ellipse 80% 50% at 50% 10%, rgba(212,175,55,0.35) 0%, transparent 60%), radial-gradient(ellipse 40% 40% at 80% 20%, rgba(120,60,180,0.35) 0%, transparent 60%), radial-gradient(ellipse 60% 40% at 50% 50%, rgba(120,60,180,0.40) 0%, transparent 60%), radial-gradient(ellipse 100% 70% at 50% 100%, rgba(120,60,180,0.30) 0%, transparent 60%)",
-          }} />
           <div style={{ position: "relative", zIndex: 1 }}>
             <EyebrowRuled text="Shop" />
             <h1 style={{
               fontFamily: "'Bebas Neue', sans-serif",
-              fontSize: "3.8rem",
+              fontSize: "4.2rem",
               lineHeight: 0.86,
               margin: "0 0 4px 0",
               letterSpacing: "-0.01em",
@@ -1186,8 +1183,8 @@ const Store = () => {
         style={{ padding: "32px 24px 16px", textAlign: "center", position: "relative" }}
       >
         <div style={{
-          position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
-          background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.15) 0%, transparent 70%)",
+          position: "absolute", top: 0, left: 0, right: 0, height: "200px",
+          background: "radial-gradient(ellipse 100% 70% at 50% 0%, rgba(120,60,180,0.15) 0%, transparent 70%)",
           pointerEvents: "none",
         }} />
         <div style={{ position: "relative", ...reveal(onDemandHeroVisible) }}>
