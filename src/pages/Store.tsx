@@ -1081,7 +1081,7 @@ const Store = () => {
 
   /* ─── RENDER ─── */
   return (
-    <div style={{ minHeight: "100vh", background: "#000", maxWidth: "430px", margin: "0 auto", position: "relative" }}>
+    <div style={{ minHeight: "100vh", background: "#000", maxWidth: "430px", margin: "0 auto" }}>
       <StyleInjector />
 
       {/* Working Model Popup */}
