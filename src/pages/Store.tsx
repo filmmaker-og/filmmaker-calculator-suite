@@ -318,36 +318,36 @@ const FeatureGroup = ({ features, groupName }: { features: { title: string; subt
     <p style={{
       fontFamily: "'Bebas Neue', sans-serif", fontSize: "2.0rem",
       color: "#D4AF37", letterSpacing: "0.06em",
-      margin: 0, marginBottom: "10px", paddingLeft: "52px", textAlign: "left" as const,
+      margin: 0, marginBottom: "6px", paddingLeft: "40px", textAlign: "left" as const,
       textShadow: "0 0 12px rgba(212,175,55,0.15)",
     }}>{groupName}</p>
     {features.map((feat, i) => (
       <div key={feat.title} style={{
-        display: "grid", gridTemplateColumns: "50px 1fr", alignItems: "start",
-        marginBottom: i === features.length - 1 ? "4px" : "8px",
+        display: "grid", gridTemplateColumns: "38px 1fr", alignItems: "start",
+        marginBottom: i === features.length - 1 ? "4px" : "6px",
       }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", paddingTop: "4px" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", paddingTop: "2px" }}>
           <div style={{
-            width: "34px", height: "34px", borderRadius: "50%",
+            width: "26px", height: "26px", borderRadius: "50%",
             display: "flex", alignItems: "center", justifyContent: "center",
             background: "radial-gradient(circle at 50% 40%, rgba(60,179,113,0.20) 0%, rgba(60,179,113,0.06) 100%)",
             border: "1px solid rgba(60,179,113,0.30)",
             boxShadow: "0 0 12px rgba(60,179,113,0.25), 0 0 24px rgba(60,179,113,0.10)",
           }}>
             <span style={{
-              fontSize: "18px", color: "#3CB371",
+              fontSize: "14px", color: "#3CB371",
               textShadow: "0 0 8px rgba(60,179,113,0.70), 0 0 16px rgba(60,179,113,0.35)",
             }}>&#10003;</span>
           </div>
         </div>
-        <div style={{ padding: "2px 24px 2px 8px", textAlign: "left" as const }}>
+        <div style={{ padding: "0px 16px 0px 6px", textAlign: "left" as const }}>
           <p style={{
             fontFamily: "'Inter', sans-serif", fontSize: "18px", fontWeight: 600,
             color: "rgba(255,255,255,0.92)", lineHeight: 1.35, margin: 0,
           }}>{feat.title}</p>
           <p style={{
-            fontFamily: "'Inter', sans-serif", fontSize: "15px",
-            color: "rgba(255,255,255,0.55)", lineHeight: 1.4, margin: "3px 0 0 0",
+            fontFamily: "'Inter', sans-serif", fontSize: "13px",
+            color: "rgba(255,255,255,0.55)", lineHeight: 1.35, margin: "2px 0 0 0",
           }}>{feat.subtitle}</p>
         </div>
       </div>
@@ -359,7 +359,7 @@ const CometTail = () => (
   <div style={{
     height: "1px",
     background: "linear-gradient(90deg, rgba(212,175,55,0.25) 0%, transparent 100%)",
-    margin: "10px 0 10px 50px",
+    margin: "6px 0 6px 38px",
   }} />
 );
 
@@ -501,14 +501,14 @@ const WorkingModelPopup = ({
           ].map((feat) => (
             <li key={feat} style={{ display: "flex", alignItems: "flex-start", gap: "14px" }}>
               <div style={{
-                width: "34px", height: "34px", borderRadius: "50%",
+                width: "26px", height: "26px", borderRadius: "50%",
                 display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
                 background: "radial-gradient(circle at 50% 40%, rgba(60,179,113,0.20) 0%, rgba(60,179,113,0.06) 100%)",
                 border: "1px solid rgba(60,179,113,0.30)",
                 boxShadow: "0 0 12px rgba(60,179,113,0.25), 0 0 24px rgba(60,179,113,0.10)",
               }}>
                 <span style={{
-                  fontSize: "18px", color: "#3CB371",
+                  fontSize: "14px", color: "#3CB371",
                   textShadow: "0 0 8px rgba(60,179,113,0.70), 0 0 16px rgba(60,179,113,0.35)",
                 }}>&#10003;</span>
               </div>
@@ -563,7 +563,7 @@ const WorkingModelPopup = ({
    ═══════════════════════════════════════════════════════════════════ */
 const btnGoldVol: React.CSSProperties = {
   position: "relative" as const, overflow: "hidden" as const,
-  width: "100%", padding: "22px 0", borderRadius: "8px",
+  width: "100%", padding: "16px 0", borderRadius: "8px",
   border: "none", cursor: "pointer",
   fontFamily: "'Inter', sans-serif", fontSize: "18px", fontWeight: 700,
   letterSpacing: "0.08em", textTransform: "uppercase" as const,
@@ -575,7 +575,7 @@ const btnGoldVol: React.CSSProperties = {
 
 const btnGoldVolSecondary: React.CSSProperties = {
   ...btnGoldVol,
-  padding: "18px 0", fontSize: "16px",
+  padding: "14px 0", fontSize: "16px",
   background: "linear-gradient(180deg, rgba(212,175,55,0.80) 0%, rgba(184,150,46,0.80) 100%)",
   boxShadow: "inset 0 1px 1px rgba(255,255,255,0.20), inset 0 -2px 4px rgba(0,0,0,0.2), 0 0 0 1px rgba(212,175,55,0.40), 0 4px 16px rgba(0,0,0,0.4), 0 0 20px rgba(212,175,55,0.15)",
   marginTop: "10px",
@@ -583,7 +583,7 @@ const btnGoldVolSecondary: React.CSSProperties = {
 
 const btnPurpleVol: React.CSSProperties = {
   position: "relative" as const, overflow: "hidden" as const,
-  width: "100%", padding: "22px 0", borderRadius: "8px",
+  width: "100%", padding: "16px 0", borderRadius: "8px",
   border: "none", cursor: "pointer",
   fontFamily: "'Inter', sans-serif", fontSize: "18px", fontWeight: 700,
   letterSpacing: "0.08em", textTransform: "uppercase" as const,
@@ -594,7 +594,7 @@ const btnPurpleVol: React.CSSProperties = {
 };
 
 const btnSnapshotOutline: React.CSSProperties = {
-  width: "100%", padding: "22px 0", borderRadius: "8px",
+  width: "100%", padding: "16px 0", borderRadius: "8px",
   border: "1px solid rgba(212,175,55,0.40)", cursor: "pointer",
   fontFamily: "'Inter', sans-serif", fontSize: "18px", fontWeight: 700,
   letterSpacing: "0.08em", textTransform: "uppercase" as const,
@@ -725,7 +725,7 @@ const ProductCard = ({
       <div style={{ ...s.actionBlock, padding: "12px 24px 20px", ...z2 }}>
         {/* Price */}
         <div style={{ textAlign: "center", marginBottom: "14px" }}>
-          <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "3rem", fontWeight: 700, color: tierPriceColor, letterSpacing: "0.02em" }}>
+          <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "2.4rem", fontWeight: 700, color: tierPriceColor, letterSpacing: "0.02em" }}>
             ${product.price.toLocaleString()}
           </span>
         </div>
@@ -894,7 +894,7 @@ const ServiceCard = ({
       <div style={{ ...s.actionBlock, padding: "12px 24px 20px", ...z2 }}>
         {/* Price */}
         <div style={{ textAlign: "center", marginBottom: "14px" }}>
-          <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "3rem", fontWeight: 700, color: tierPriceColor, letterSpacing: "0.02em" }}>
+          <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "2.4rem", fontWeight: 700, color: tierPriceColor, letterSpacing: "0.02em" }}>
             ${product.price.toLocaleString()}{isBoutique && '+'}
           </span>
         </div>
@@ -1135,7 +1135,7 @@ const Store = () => {
             <EyebrowRuled text="Shop" />
             <h1 style={{
               fontFamily: "'Bebas Neue', sans-serif",
-              fontSize: "4.2rem",
+              fontSize: "3.0rem",
               lineHeight: 0.86,
               margin: "0 0 4px 0",
               letterSpacing: "-0.01em",
@@ -1409,11 +1409,11 @@ const Store = () => {
         >
           <h3 style={{
             fontFamily: "'Bebas Neue', sans-serif",
-            fontSize: "2.2rem",
+            fontSize: "3.0rem",
             letterSpacing: "0.06em",
             color: "#fff",
             margin: "0 0 12px 0",
-            lineHeight: 1.1,
+            lineHeight: 0.95,
           }}>
             NOT SURE WHERE<br /><span style={{ color: "#D4AF37" }}>TO START?</span>
           </h3>
