@@ -18,7 +18,7 @@ import { toast } from "sonner";
 const storeFaqs = [
   {
     q: "What do you need from me?",
-    a: "Depends on the product. The Full Analysis pulls straight from your calculator. Buy it, it builds. The Comp Report needs a few details from you (genre, cast tier, budget range) so we research the right deals. Turnkey builds start with a short intake after checkout.",
+    a: "Depends on the product. The Full Analysis uses your calculator inputs directly — nothing extra from you. The Comp Report needs a few details (genre, cast tier, budget range) so we pull the right comparables. Turnkey products start with a short intake form after checkout.",
   },
   {
     q: "Can I see what I\u2019m getting before I buy?",
@@ -1170,7 +1170,7 @@ const Store = () => {
             lineHeight: 1.55,
             margin: "4px 0 0 0",
           }}>
-            Run the numbers for free. Buy the document when you need it on paper.
+            Run the numbers for free. Get the extended version, on brand, for your investor presentation.
           </p>
         </div>
       </section>
@@ -1218,15 +1218,6 @@ const Store = () => {
             Defend Your<br />
             <span style={{ color: "#D4AF37" }}>Valuation.</span>
           </h2>
-          <p style={{
-            fontFamily: "'Inter', sans-serif",
-            fontSize: "19px",
-            color: "rgba(255,255,255,0.92)",
-            lineHeight: 1.55,
-            margin: 0,
-          }}>
-            Walk into the room with evidence, not assumptions. We research comparable deals in your genre and budget range.
-          </p>
         </div>
       </section>
 
@@ -1271,15 +1262,6 @@ const Store = () => {
             We Build It<br />
             <span style={{ color: "#D4AF37" }}>With You.</span>
           </h2>
-          <p style={{
-            fontFamily: "'Inter', sans-serif",
-            fontSize: "19px",
-            color: "rgba(255,255,255,0.92)",
-            lineHeight: 1.55,
-            margin: 0,
-          }}>
-            Your investor meeting is on the calendar. Tell us about your project and we build everything you need for it.
-          </p>
         </div>
       </section>
 
