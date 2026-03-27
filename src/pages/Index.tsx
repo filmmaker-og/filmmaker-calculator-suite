@@ -765,10 +765,6 @@ const Index = () => {
               <div style={{ position: "absolute", inset: 0, borderRadius: "12px", padding: "1px", pointerEvents: "none", background: "linear-gradient(180deg, rgba(212,175,55,0.55) 0%, rgba(212,175,55,0.20) 50%, rgba(212,175,55,0.40) 100%)", WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)", WebkitMaskComposite: "xor", maskComposite: "exclude" }} />
               {/* Top line */}
               <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "1px", background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.50), transparent)", boxShadow: "0 0 12px rgba(212,175,55,0.25)", zIndex: 1 }} />
-              {/* Gold atmospheric (top) */}
-              <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "50%", background: "radial-gradient(ellipse 100% 80% at 50% 0%, rgba(212,175,55,0.12) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
-              {/* Purple atmospheric (bottom) */}
-              <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "50%", background: "radial-gradient(ellipse 100% 80% at 50% 100%, rgba(120,60,180,0.18) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
               {/* Value statement */}
               <div style={styles.valueStatementFree}>
                 <p style={styles.valueTextFree}>Your Numbers. No Credit Card.</p>
@@ -999,7 +995,6 @@ const Index = () => {
 
         {/* ═══ § 7 CLOSER ═══ */}
         <section ref={closerRef} style={{ ...styles.closerSection, ...reveal(closerVisible) }}>
-          <div style={styles.closerGlowOverlay} />
           <h2 style={styles.closerH2}>Your Investors<br /><span style={{ color: "#D4AF37", display: "block", textShadow: "0 0 40px rgba(212,175,55,0.60), 0 0 80px rgba(212,175,55,0.25)" }}>Will Ask.</span></h2>
           <p style={styles.closerBody}>Stop guessing your backend. Walk into every pitch knowing exactly where the money goes.</p>
           <button onClick={handleCTA} style={styles.ctaBtn} aria-label="Run my waterfall" onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>
@@ -1179,7 +1174,7 @@ const styles: Record<string, React.CSSProperties> = {
   tierCardFree: {
     position: "relative", borderRadius: "12px", overflow: "hidden", textAlign: "center",
     border: "none",
-    background: "radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.16) 0%, rgba(6,6,6,0.92) 70%)",
+    background: "radial-gradient(ellipse 100% 50% at 50% 0%, rgba(212,175,55,0.14) 0%, transparent 60%), radial-gradient(ellipse 100% 50% at 50% 100%, rgba(120,60,180,0.18) 0%, transparent 60%), rgba(6,6,6,0.92)",
     boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 40px rgba(212,175,55,0.22), 0 0 30px rgba(120,60,180,0.22), 0 0 80px rgba(212,175,55,0.08)",
   },
 
@@ -1243,15 +1238,11 @@ const styles: Record<string, React.CSSProperties> = {
     padding: "32px 24px 40px",
     margin: "0 24px 28px",
     borderRadius: "12px",
-    background: "rgba(6,6,6,0.92)",
+    background: "radial-gradient(ellipse 70% 30% at 50% 0%, rgba(212,175,55,0.18) 0%, transparent 55%), radial-gradient(ellipse 100% 40% at 50% 0%, rgba(120,60,180,0.20) 0%, transparent 60%), radial-gradient(circle at 50% 55%, rgba(120,60,180,0.28) 0%, transparent 60%), radial-gradient(ellipse 100% 50% at 50% 100%, rgba(120,60,180,0.20) 0%, transparent 65%), rgba(6,6,6,0.85)",
     backdropFilter: "blur(40px)",
     WebkitBackdropFilter: "blur(40px)",
-    border: "1px solid rgba(212,175,55,0.55)",
-    boxShadow: "0 16px 40px rgba(0,0,0,0.8), 0 0 60px rgba(120,60,180,0.15)",
-  },
-  closerGlowOverlay: {
-    position: "absolute", top: 0, left: 0, right: 0, bottom: 0, pointerEvents: "none",
-    background: "radial-gradient(ellipse 70% 50% at 50% 0%, rgba(212,175,55,0.18) 0%, transparent 60%), radial-gradient(ellipse 90% 60% at 50% 100%, rgba(120,60,180,0.22) 0%, transparent 65%)",
+    border: "1px solid rgba(212,175,55,0.30)",
+    boxShadow: "0 -16px 50px rgba(120,60,180,0.15), 0 20px 50px rgba(120,60,180,0.15), 0 -10px 35px rgba(212,175,55,0.08), 0 16px 40px rgba(0,0,0,0.8), 0 0 30px rgba(120,60,180,0.18), 0 0 80px rgba(120,60,180,0.12)",
   },
   closerH2: {
     fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.4rem", color: "#fff", textAlign: "center",
