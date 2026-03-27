@@ -2,7 +2,7 @@
 
 Film finance simulator for independent producers. Model your recoupment waterfall, capital stack, and investor returns before you shoot.
 
-**Live:** https://filmmaker-calculator-suite.vercel.app
+**Live:** https://filmmakerog.com
 
 ## Stack
 
