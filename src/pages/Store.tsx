@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { X as XIcon, Clock, ChevronDown } from "lucide-react";
 
 import { useHaptics } from "@/hooks/use-haptics";
-import { useInView } from "@/hooks/useInView";
 import {
   selfServeProducts,
   researchProducts,
@@ -78,7 +77,7 @@ const s: Record<string, React.CSSProperties> = {
   },
   /* ── Card header (matches Index.tsx tierHeaderAlt: 28px 24px 20px) ── */
   cardHeader: {
-    padding: "20px 24px 16px",
+    padding: "16px 24px 12px",
     borderBottom: "1px solid rgba(212,175,55,0.12)",
   },
   /* ── Card name (matches Index.tsx tierTitleCard: 2.6rem) ── */
@@ -116,7 +115,7 @@ const s: Record<string, React.CSSProperties> = {
     padding: "24px",
     display: "flex",
     flexDirection: "column" as const,
-    gap: "16px",
+    gap: "12px",
   },
   featureRow: {
     display: "flex",
@@ -664,7 +663,7 @@ const ProductCard = ({
 
       {/* === FAST TOP === */}
       <div style={{ ...s.cardHeader, borderBottom: isSnapshot ? "1px solid rgba(212,175,55,0.12)" : "1px solid rgba(212,175,55,0.20)", ...z2 }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "8px" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "6px" }}>
           {product.badge && (
             <span style={{ ...s.badgeBase, ...tier.badge }}>{product.badge}</span>
           )}
@@ -682,13 +681,13 @@ const ProductCard = ({
       </div>
 
       {/* === EDITORIAL MIDDLE — Features === */}
-      <div style={{ ...s.featuresBlock, padding: "16px 0 0 0", ...z2 }}>
+      <div style={{ ...s.featuresBlock, padding: "12px 0 0 0", ...z2 }}>
         {isSnapshot ? (
           /* Compact feature list for Snapshot+ — metric names only, no checkmarks */
           <p style={{
             fontFamily: "'Roboto Mono', monospace",
             fontSize: "14px",
-            color: "rgba(212,175,55,0.45)",
+            color: "rgba(212,175,55,0.65)",
             letterSpacing: "0.04em",
             lineHeight: 1.6,
             textAlign: "center",
@@ -723,9 +722,9 @@ const ProductCard = ({
       </div>
 
       {/* === COMMERCE BOTTOM === */}
-      <div style={{ ...s.actionBlock, padding: "16px 24px 24px", ...z2 }}>
+      <div style={{ ...s.actionBlock, padding: "12px 24px 20px", ...z2 }}>
         {/* Price */}
-        <div style={{ textAlign: "center", marginBottom: "20px" }}>
+        <div style={{ textAlign: "center", marginBottom: "14px" }}>
           <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "3rem", fontWeight: 700, color: tierPriceColor, letterSpacing: "0.02em" }}>
             ${product.price.toLocaleString()}
           </span>
@@ -736,10 +735,10 @@ const ProductCard = ({
           <p style={{
             fontFamily: "'Roboto Mono', monospace",
             fontSize: "13px",
-            color: "rgba(212,175,55,0.50)",
+            color: "rgba(212,175,55,0.70)",
             letterSpacing: "0.06em",
             textAlign: "center",
-            margin: "0 0 16px 0",
+            margin: "0 0 12px 0",
           }}>{product.priceAnchor}</p>
         )}
 
@@ -847,7 +846,7 @@ const ServiceCard = ({
 
       {/* === FAST TOP === */}
       <div style={{ ...s.cardHeader, borderBottom: "1px solid rgba(120,60,180,0.20)", ...z2 }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "8px" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "6px" }}>
           {product.badge && (
             <span style={{ ...s.badgeBase, ...tier.badge }}>{product.badge}</span>
           )}
@@ -865,7 +864,7 @@ const ServiceCard = ({
       </div>
 
       {/* === EDITORIAL MIDDLE — Features === */}
-      <div style={{ ...s.featuresBlock, padding: "16px 0 0 0", ...z2 }}>
+      <div style={{ ...s.featuresBlock, padding: "12px 0 0 0", ...z2 }}>
         {(() => {
           const structured = product.features.filter(
             (f): f is { title: string; subtitle: string; group: string } => typeof f !== "string"
@@ -892,9 +891,9 @@ const ServiceCard = ({
       </div>
 
       {/* === COMMERCE BOTTOM === */}
-      <div style={{ ...s.actionBlock, padding: "16px 24px 24px", ...z2 }}>
+      <div style={{ ...s.actionBlock, padding: "12px 24px 20px", ...z2 }}>
         {/* Price */}
-        <div style={{ textAlign: "center", marginBottom: "20px" }}>
+        <div style={{ textAlign: "center", marginBottom: "14px" }}>
           <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "3rem", fontWeight: 700, color: tierPriceColor, letterSpacing: "0.02em" }}>
             ${product.price.toLocaleString()}{isBoutique && '+'}
           </span>
@@ -1022,29 +1021,6 @@ const Store = () => {
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
-  // Reduced motion check
-  const prefersReducedMotion =
-    typeof window !== "undefined" &&
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  const reveal = (visible: boolean, delay = 0): React.CSSProperties => ({
-    opacity: prefersReducedMotion || visible ? 1 : 0,
-    transform: prefersReducedMotion || visible ? "translateY(0)" : "translateY(30px)",
-    transition: prefersReducedMotion
-      ? "none"
-      : "opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1)",
-    transitionDelay: prefersReducedMotion || delay === 0 ? "0ms" : `${delay * 100}ms`,
-  });
-
-  // Reveal refs
-  const { ref: onDemandHeroRef, inView: onDemandHeroVisible } = useInView<HTMLElement>({ threshold: 0.2 });
-  const { ref: heroRef, inView: heroVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
-  const { ref: productsRef, inView: productsVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
-  const { ref: researchHeroRef, inView: researchHeroVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
-  const { ref: servicesRef, inView: servicesVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
-  const { ref: faqRef, inView: faqVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
-  const { ref: bespokeRef, inView: bespokeVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
-  const { ref: footerRef, inView: footerVisible } = useInView<HTMLDivElement>({ threshold: 0.2 });
 
   /* ─── CHECKOUT — DIRECT TO STRIPE ─── */
   const startCheckout = async (productId: string, addonId?: string) => {
@@ -1105,7 +1081,7 @@ const Store = () => {
 
   /* ─── RENDER ─── */
   return (
-    <div style={{ minHeight: "100vh", background: "#000", maxWidth: "430px", margin: "0 auto" }}>
+    <div style={{ minHeight: "100vh", background: "#000", maxWidth: "430px", margin: "0 auto", position: "relative" }}>
       <StyleInjector />
 
       {/* Working Model Popup */}
@@ -1140,9 +1116,9 @@ const Store = () => {
            § 1 — ON DEMAND
          ═══════════════════════════════════════ */}
       {/* Glass hero card */}
-      <div ref={heroRef} style={{ padding: "12px 0 16px", position: "relative" }}>
-        {/* Page-top canopy (matches landing page 280px) */}
-        <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "280px", background: "radial-gradient(ellipse 150% 80% at 50% 0%, rgba(120,60,180,0.30) 0%, transparent 65%), radial-gradient(ellipse 60% 50% at 80% 10%, rgba(212,175,55,0.12) 0%, transparent 60%)", pointerEvents: "none", zIndex: 0 }} />
+      {/* Page-top canopy — direct child of outer container so it bleeds behind nav */}
+      <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "280px", background: "radial-gradient(ellipse 150% 80% at 50% 0%, rgba(120,60,180,0.30) 0%, transparent 65%), radial-gradient(ellipse 60% 50% at 80% 10%, rgba(212,175,55,0.12) 0%, transparent 60%)", pointerEvents: "none", zIndex: 0 }} />
+      <div style={{ padding: "12px 0 16px", position: "relative" }}>
         <section style={{
           position: "relative", textAlign: "center",
           padding: "24px 24px 16px",
@@ -1154,7 +1130,6 @@ const Store = () => {
           WebkitBackdropFilter: "blur(40px)",
           border: "1px solid rgba(212,175,55,0.20)",
           boxShadow: "0 -16px 50px rgba(120,60,180,0.18), 0 20px 50px rgba(120,60,180,0.18), 0 -10px 35px rgba(212,175,55,0.10), 0 16px 40px rgba(0,0,0,0.6), 0 0 30px rgba(120,60,180,0.22), 0 0 80px rgba(120,60,180,0.15)",
-          ...reveal(heroVisible),
         }}>
           <div style={{ position: "relative", zIndex: 1 }}>
             <EyebrowRuled text="Shop" />
@@ -1179,15 +1154,14 @@ const Store = () => {
 
       {/* § 1 — ON DEMAND section hero */}
       <section
-        ref={onDemandHeroRef}
-        style={{ padding: "32px 24px 16px", textAlign: "center", position: "relative" }}
+        style={{ padding: "24px 24px 16px", textAlign: "center", position: "relative" }}
       >
         <div style={{
           position: "absolute", top: 0, left: 0, right: 0, height: "200px",
           background: "radial-gradient(ellipse 100% 70% at 50% 0%, rgba(120,60,180,0.15) 0%, transparent 70%)",
           pointerEvents: "none",
         }} />
-        <div style={{ position: "relative", ...reveal(onDemandHeroVisible) }}>
+        <div style={{ position: "relative" }}>
           <EyebrowRuled text="On Demand" />
           <p style={{
             fontFamily: "'Inter', sans-serif",
@@ -1203,15 +1177,14 @@ const Store = () => {
 
       {/* § 1 — On Demand Cards (Snapshot+ and Full Analysis) */}
       <div
-        ref={productsRef}
-        style={{ padding: "0 24px", display: "flex", flexDirection: "column", gap: "20px" }}
+        style={{ padding: "0 24px", display: "flex", flexDirection: "column", gap: "16px" }}
       >
         {selfServeProducts.map((product, i) => (
           <ProductCard
             key={product.id}
             product={product}
             onBuy={() => handleBuyProduct(product)}
-            visible={productsVisible}
+            visible={true}
             index={i}
           />
         ))}
@@ -1219,21 +1192,20 @@ const Store = () => {
 
 
       {/* §1 → §2 spacer (no breath line) */}
-      <div style={{ height: "32px" }} />
+      <div style={{ height: "24px" }} />
 
       {/* ═══════════════════════════════════════
            § 2 — RESEARCH
          ═══════════════════════════════════════ */}
       <section
-        ref={researchHeroRef}
-        style={{ padding: "32px 24px 32px", textAlign: "center", position: "relative" }}
+        style={{ padding: "24px 24px 16px", textAlign: "center", position: "relative" }}
       >
         <div style={{
-          position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
-          background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.15) 0%, transparent 70%)",
+          position: "absolute", top: 0, left: 0, right: 0, height: "200px",
+          background: "radial-gradient(ellipse 100% 70% at 50% 0%, rgba(120,60,180,0.18) 0%, transparent 70%)",
           pointerEvents: "none",
         }} />
-        <div style={{ position: "relative", ...reveal(researchHeroVisible) }}>
+        <div style={{ position: "relative" }}>
           <EyebrowRuled text="Research" />
           <h2 style={{
             fontFamily: "'Bebas Neue', sans-serif",
@@ -1266,28 +1238,27 @@ const Store = () => {
             product={product}
             onBuy={product.id === "comp-report" ? () => handleBuyProduct({ ...product, id: "comp-report-10" }) : () => handleBuyProduct(product)}
             onBuySecondary={product.id === "comp-report" ? () => handleBuyProduct(product) : undefined}
-            visible={researchHeroVisible}
+            visible={true}
             index={i}
           />
         ))}
       </div>
 
       {/* §2 → §3 spacer (no breath line) */}
-      <div style={{ height: "32px" }} />
+      <div style={{ height: "24px" }} />
 
       {/* ═══════════════════════════════════════
            § 3 — TURNKEY
          ═══════════════════════════════════════ */}
       <section
-        ref={servicesRef}
-        style={{ padding: "32px 24px 32px", textAlign: "center", position: "relative" }}
+        style={{ padding: "24px 24px 16px", textAlign: "center", position: "relative" }}
       >
         <div style={{
-          position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
-          background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.15) 0%, transparent 70%), radial-gradient(ellipse 80% 50% at 50% 30%, rgba(120,60,180,0.18) 0%, transparent 70%)",
+          position: "absolute", top: 0, left: 0, right: 0, height: "260px",
+          background: "radial-gradient(ellipse 100% 70% at 50% 0%, rgba(120,60,180,0.25) 0%, transparent 70%), radial-gradient(ellipse 80% 50% at 50% 30%, rgba(212,175,55,0.15) 0%, transparent 70%)",
           pointerEvents: "none",
         }} />
-        <div style={{ position: "relative", ...reveal(servicesVisible) }}>
+        <div style={{ position: "relative" }}>
           <EyebrowRuled text="Turnkey" />
           <h2 style={{
             fontFamily: "'Bebas Neue', sans-serif",
@@ -1315,7 +1286,7 @@ const Store = () => {
       {/* § 3 — Turnkey Cards */}
       <div
         style={{
-          display: "flex", flexDirection: "column", gap: "20px",
+          display: "flex", flexDirection: "column", gap: "16px",
           padding: "0 24px",
         }}
       >
@@ -1324,7 +1295,7 @@ const Store = () => {
             key={product.id}
             product={product}
             onBuy={() => handleBuyService(product)}
-            visible={servicesVisible}
+            visible={true}
             index={i}
           />
         ))}
@@ -1344,15 +1315,14 @@ const Store = () => {
            § 4 — FAQ
          ═══════════════════════════════════════ */}
       <section
-        ref={faqRef}
         style={{ padding: "0 24px 32px", position: "relative" }}
       >
         <div style={{
-          position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
-          background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.15) 0%, transparent 70%)",
+          position: "absolute", top: 0, left: 0, right: 0, height: "200px",
+          background: "radial-gradient(ellipse 100% 70% at 50% 0%, rgba(120,60,180,0.10) 0%, transparent 70%)",
           pointerEvents: "none",
         }} />
-        <div style={{ position: "relative", ...reveal(faqVisible) }}>
+        <div style={{ position: "relative" }}>
           <EyebrowRuled text="Questions" />
           <div style={{ textAlign: "center", marginBottom: "32px" }}>
             <h2 style={{
@@ -1414,8 +1384,7 @@ const Store = () => {
            BESPOKE CLOSER
          ═══════════════════════════════════════ */}
       <div
-        ref={bespokeRef}
-        style={{ margin: "0 24px 48px", position: "relative", ...reveal(bespokeVisible) }}
+        style={{ margin: "0 24px 48px", position: "relative" }}
       >
         {/* Closer atmospheric canopy */}
         <div style={{
@@ -1503,29 +1472,27 @@ const Store = () => {
            FOOTER (synced with Index.tsx)
          ═══════════════════════════════════════ */}
       <footer
-        ref={footerRef}
         style={{
           background: "#0A0A0A",
-          borderTop: "1px solid rgba(212,175,55,0.20)",
+          borderTop: "1px solid rgba(255,255,255,0.15)",
           padding: "32px 24px 40px",
-          ...reveal(footerVisible),
         }}
       >
         <div style={{ display: "flex", justifyContent: "center", gap: "20px", marginBottom: "16px" }}>
-          <a href="https://www.instagram.com/filmmaker.og" target="_blank" rel="noopener noreferrer" style={{ color: "rgba(212,175,55,0.50)", textDecoration: "none", display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", borderRadius: "8px", border: "1px solid rgba(212,175,55,0.15)", transition: "color 0.2s ease, border-color 0.2s ease" }} aria-label="Instagram" onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.60)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.50)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.15)"; }}>
+          <a href="https://www.instagram.com/filmmaker.og" target="_blank" rel="noopener noreferrer" style={{ color: "rgba(212,175,55,0.50)", textDecoration: "none", display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", borderRadius: "8px", border: "1px solid rgba(212,175,55,0.15)", transition: "color 0.2s ease, border-color 0.2s ease" }} aria-label="Instagram" onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.65)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.50)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.15)"; }}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
           </a>
-          <a href="https://www.tiktok.com/@filmmaker.og" target="_blank" rel="noopener noreferrer" style={{ color: "rgba(212,175,55,0.50)", textDecoration: "none", display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", borderRadius: "8px", border: "1px solid rgba(212,175,55,0.15)", transition: "color 0.2s ease, border-color 0.2s ease" }} aria-label="TikTok" onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.60)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.50)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.15)"; }}>
+          <a href="https://www.tiktok.com/@filmmaker.og" target="_blank" rel="noopener noreferrer" style={{ color: "rgba(212,175,55,0.50)", textDecoration: "none", display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", borderRadius: "8px", border: "1px solid rgba(212,175,55,0.15)", transition: "color 0.2s ease, border-color 0.2s ease" }} aria-label="TikTok" onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.65)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.50)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.15)"; }}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 0 0-.79-.05A6.34 6.34 0 0 0 3.15 15a6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V8.71a8.2 8.2 0 0 0 4.76 1.52v-3.4a4.85 4.85 0 0 1-1-.14z"/></svg>
           </a>
-          <a href="https://www.facebook.com/filmmaker.og" target="_blank" rel="noopener noreferrer" style={{ color: "rgba(212,175,55,0.50)", textDecoration: "none", display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", borderRadius: "8px", border: "1px solid rgba(212,175,55,0.15)", transition: "color 0.2s ease, border-color 0.2s ease" }} aria-label="Facebook" onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.60)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.50)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.15)"; }}>
+          <a href="https://www.facebook.com/filmmaker.og" target="_blank" rel="noopener noreferrer" style={{ color: "rgba(212,175,55,0.50)", textDecoration: "none", display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", borderRadius: "8px", border: "1px solid rgba(212,175,55,0.15)", transition: "color 0.2s ease, border-color 0.2s ease" }} aria-label="Facebook" onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.65)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.50)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.15)"; }}>
             <svg width={18} height={18} viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
           </a>
         </div>
         <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "10px", marginBottom: "16px" }}>
-          <span onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "13px", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(212,175,55,0.50)", cursor: "pointer", transition: "color 0.2s ease" }} onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.60)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.50)"; }}>Shop</span>
+          <span onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "13px", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(212,175,55,0.50)", cursor: "pointer", transition: "color 0.2s ease" }} onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.65)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.50)"; }}>Shop</span>
           <span style={{ color: "rgba(212,175,55,0.20)", fontSize: "13px" }}>·</span>
-          <span onClick={() => window.location.href = "/resources"} style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "13px", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(212,175,55,0.50)", cursor: "pointer", transition: "color 0.2s ease" }} onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.60)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.50)"; }}>Resources</span>
+          <span onClick={() => window.location.href = "/resources"} style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "13px", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(212,175,55,0.50)", cursor: "pointer", transition: "color 0.2s ease" }} onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.65)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.50)"; }}>Resources</span>
         </div>
         <p style={{
           fontFamily: "'Inter', sans-serif",
