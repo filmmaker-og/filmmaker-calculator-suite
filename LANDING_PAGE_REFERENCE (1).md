@@ -178,12 +178,13 @@ Opacity varies by section importance: 0.20 standard, 0.22 for Why, 0.25 for Arse
 
 ```
 background: rgba(6,6,6,0.85)   // Hero card (0.85 — more translucent, lets atmosphere through)
-background: rgba(6,6,6,0.92)   // Closer card, Blockquote, Context pair cards (0.92 — denser/more contained)
+background: rgba(6,6,6,0.85) + 4 baked-in radials   // Closer card (0.85 — atmospheric haze baked in, overlay killed)
+background: rgba(6,6,6,0.92)   // Blockquote, Context pair cards (0.92 — denser/more contained)
 backdropFilter: blur(40px)
 WebkitBackdropFilter: blur(40px)
 ```
 
-Used on: Hero card (0.85), Closer card (0.92), Blockquote, Context pair cards. Hero and Closer intentionally use different glass opacities — hero is more translucent to let the warm atmosphere bleed through, closer is denser/more contained.
+Used on: Hero card (0.85), Closer card (0.85 with baked-in haze), Blockquote, Context pair cards (0.92). Hero and Closer now share the same glass opacity (0.85) — both use baked-in atmospheric radials rather than overlay divs. Blockquote/Context cards use 0.92 (denser/more contained).
 
 ### Purple Gradient (interaction/premium color)
 
@@ -216,8 +217,8 @@ Purple is NOT a hex constant. It lives as `rgba(120,60,180,opacity)` or as the C
 | 0.12 | Arsenal card ambient glow, CTA outer gold glow |
 | 0.14 | Arsenal value statement radial bg |
 | 0.15 | Gold medium tier, borders, gradient stops, blockquote bg, arsenal card border bottom |
-| 0.16 | Arsenal card radial bg (top) |
-| 0.18 | Closer glow overlay (top) |
+| 0.14 | Arsenal card baked-in gold radial (top) |
+| 0.18 | Closer baked-in gold radial (top) |
 | 0.20 | Hero card border, feature separators, acquisition glow |
 | 0.22 | Arsenal card boxShadow (increased from 0.12) |
 | 0.25 | Gold strong tier, acquisition card border, blockquote border, topline glow, comet dividers, arsenal atmospheric (top) |
@@ -227,7 +228,8 @@ Purple is NOT a hex constant. It lives as `rgba(120,60,180,opacity)` or as the C
 | 0.40 | Eyebrow ruled lines, divider midpoint, blockquote topline, arsenal gradient border |
 | 0.45 | Snapshot gradient border stop |
 | 0.50 | Eyebrow ruled line, Snapshot topline, divider midpoint, hero gold em text-shadow |
-| 0.55 | Closer card border, arsenal gradient border top |
+| 0.30 | Closer card border (atmospheric compensates) |
+| 0.55 | Arsenal gradient border top |
 | 0.60 | Closer gold text-shadow, footer hover |
 | 0.65 | CTA reassurance text |
 
@@ -237,10 +239,11 @@ Purple is NOT a hex constant. It lives as `rgba(120,60,180,opacity)` or as the C
 |---------|-------------|
 | 0.10 | Stepper container bg, mid-waterfall CTA atmospheric |
 | 0.12 | Hero boxShadow outermost layer (**new — 4th shadow layer**) |
-| 0.15 | Section canopy base, badge grid bg, closer glow, eyebrow glow, reality bottom canopy, arsenal atmospheric (bottom) |
+| 0.15 | Section canopy base, badge grid bg, closer contour emission (top/bottom), eyebrow glow, reality bottom canopy |
 | 0.18 | How header bg, badge card warmth base, blockquote bottom atmospheric, reality bottom canopy |
 | 0.20 | Section canopy standard, hero glow (bottom radial) |
-| 0.22 | Why canopy (warmer), closer glow overlay (bottom), arsenal card boxShadow, **hero page-top wash (new — 120px, 140% wide)** |
+| 0.20 | Closer baked-in purple radials (top, bottom) |
+| 0.22 | Why canopy (warmer), arsenal card boxShadow, **hero page-top wash (new — 120px, 140% wide)** |
 | 0.24 | Hero glow (bottom radial — **increased from 0.20**) |
 | 0.25 | Section borders, stepper border, arsenal canopy (warmest), **hero canopy (new — 220px, boosted from 0.18)** |
 | 0.28 | Step icon bg radial |
@@ -313,10 +316,10 @@ The hottest surface. Reserved for CTA-carrying sections.
   textAlign: "center",
   overflow: "hidden",
   borderRadius: "12px",
-  background: "rgba(6,6,6,0.85)",       // hero glass (0.85 — translucent); closer uses 0.92
+  background: "rgba(6,6,6,0.85)",       // hero glass (0.85 — translucent); closer also 0.85 now
   backdropFilter: "blur(40px)",
   WebkitBackdropFilter: "blur(40px)",
-  border: "1px solid rgba(212,175,55,0.20)",  // hero: 0.20, closer: 0.55
+  border: "1px solid rgba(212,175,55,0.20)",  // hero: 0.20, closer: 0.30
   boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 24px rgba(212,175,55,0.10), 0 0 20px rgba(120,60,180,0.15), 0 0 60px rgba(120,60,180,0.12)",
 }
 ```
@@ -328,11 +331,15 @@ The hottest surface. Reserved for CTA-carrying sections.
 // Hero: 4-layer radial (INTENSIFIED — matches Store hero warmth)
 background: "radial-gradient(ellipse 80% 50% at 50% 10%, rgba(212,175,55,0.35) 0%, transparent 60%), radial-gradient(ellipse 40% 40% at 80% 20%, rgba(120,60,180,0.35) 0%, transparent 60%), radial-gradient(ellipse 60% 40% at 50% 50%, rgba(120,60,180,0.40) 0%, transparent 60%), radial-gradient(ellipse 100% 70% at 50% 100%, rgba(120,60,180,0.30) 0%, transparent 60%)"
 
-// Closer: 2-layer radial (unchanged)
-background: "radial-gradient(ellipse 70% 50% at 50% 0%, rgba(212,175,55,0.18) 0%, transparent 60%), radial-gradient(ellipse 90% 60% at 50% 100%, rgba(120,60,180,0.22) 0%, transparent 65%)"
+// Closer: baked into background (no overlay div) — 4 radials ~15% softer than hero
+background: "radial-gradient(ellipse 70% 30% at 50% 0%, rgba(212,175,55,0.18) 0%, transparent 55%), radial-gradient(ellipse 100% 40% at 50% 0%, rgba(120,60,180,0.20) 0%, transparent 60%), radial-gradient(circle at 50% 55%, rgba(120,60,180,0.28) 0%, transparent 60%), radial-gradient(ellipse 100% 50% at 50% 100%, rgba(120,60,180,0.20) 0%, transparent 65%), rgba(6,6,6,0.85)"
+// Closer border: 0.30 (atmospheric compensates for lighter border)
+// Closer boxShadow: 6-layer contour emission (purple top/bottom + gold accent + ambient)
 ```
 
 Hero glow is a 4-layer system: (1) gold top 0.35, (2) off-center purple accent at 80% 20% 0.35 (creates asymmetric depth — right side slightly warmer), (3) purple center 0.40, (4) purple bottom 0.30. The 4th layer (off-center accent) is what gives the hero its visual interest — centered radials feel flat.
+
+**Atmospheric warmth hierarchy:** Hero (richest — 0.35/0.40 intensities) > Closer (slightly quieter — 0.18/0.20/0.28 intensities) > Arsenal (product-specific gold+purple split — 0.14/0.18).
 
 Hero uses `margin: 0 24px` + `padding: 24px 24px 16px`.
 
@@ -405,7 +412,7 @@ Uses CSS mask for gradient border instead of solid `border`:
 {
   position: "relative", borderRadius: "12px", overflow: "hidden", textAlign: "center",
   border: "none",
-  background: "radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.16) 0%, rgba(6,6,6,0.92) 70%)",
+  background: "radial-gradient(ellipse 100% 50% at 50% 0%, rgba(212,175,55,0.14) 0%, transparent 60%), radial-gradient(ellipse 100% 50% at 50% 100%, rgba(120,60,180,0.18) 0%, transparent 60%), rgba(6,6,6,0.92)",
   boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 40px rgba(212,175,55,0.22), 0 0 30px rgba(120,60,180,0.22), 0 0 80px rgba(212,175,55,0.08)",
 }
 
@@ -419,7 +426,7 @@ Uses CSS mask for gradient border instead of solid `border`:
 }
 ```
 
-**New atmospherics (PR #525):** Arsenal card now has dual atmospheric layers — gold at top (0.12, 50% height) and purple at bottom (0.15, 50% height). These sit behind the feature content for depth.
+**Baked-in atmospherics:** Arsenal card has gold top (0.14) + purple bottom (0.18) baked into the background — overlay divs killed. Gradient border and topline divs remain (structural, not atmospheric).
 
 ---
 
@@ -831,7 +838,7 @@ Footer text: Inter 14px, white 0.48.
 - Do NOT change "CAM Fee" back to "CAMA Fee" (corrected terminology)
 - §1 hero now uses a two-layer canopy system: page-top wash (0.22, 120px) + hero canopy (0.25, 220px) — stacks additively with internal glass card glow
 - Do NOT change §1 hero padding away from 24/24/16 — this is the canonical standard
-- Hero glass is 0.85, closer glass is 0.92 — this difference is intentional (hero is more translucent to let warm atmosphere through; closer is denser/more contained). Do NOT unify them.
+- Hero glass is 0.85, closer glass is 0.85 — both use baked-in atmospheric radials. Closer is ~15% softer than hero (0.18/0.20/0.28 vs 0.35/0.40). Do NOT boost closer to hero intensity — the hierarchy is intentional.
 - Hero glow is a 4-layer system (gold top 0.35, off-center purple 0.35, purple center 0.40, purple bottom 0.30). Do NOT remove the off-center accent layer — it creates the asymmetric depth.
 
 ---
@@ -842,3 +849,4 @@ Footer text: Inter 14px, white 0.48.
 |------|-----|-------------|
 | March 21 | — | Initial extraction (v16.4, commit d293e0e) |
 | March 25 | #519-526 | CTA volumetric redesign (Inter 700, 180deg, inset shadows), hero glow boost, hero subtitle killed, container paddingTop 24px, How padding 36px, Arsenal card rebuild (grid checkmarks, title+subtitle features, dual atmospheric, comet dividers, cascade animations), Arsenal CTA killed, mid-waterfall CTA added, profit split count-up animation, WITH/WITHOUT slide animations, 4 new keyframes, copy corrections (CAM, feature rewrites), waterfall tier names 1.3→1.4rem |
+| March 27 | — | Closer: baked-in haze (4 radials, glass 0.85, border 0.30, 6-layer contour boxShadow, closerGlowOverlay killed). Arsenal: baked-in atmospheric (gold top 0.14 + purple bottom 0.18, overlay divs killed). Atmospheric warmth hierarchy documented: Hero > Closer > Arsenal |
