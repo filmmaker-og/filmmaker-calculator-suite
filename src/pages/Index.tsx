@@ -440,8 +440,25 @@ const Index = () => {
             A recoupment waterfall maps who gets paid, in what order & how much before you see a dollar of profit.
           </p>
 
-          {/* ── Context Block: "The Project" — pair layout ── */}
+          {/* ── Acquisition Offer (the money entering the waterfall) ── */}
           <div style={{ margin: "0 24px 0", ...reveal(waterfallHeaderVisible, 1) }}>
+            <WaterfallGroupLabel text="Streamer Acquisition Offer" color="neutral" />
+            <div ref={waterfallCalloutRef} style={{
+              position: "relative", overflow: "hidden", textAlign: "center",
+              background: "radial-gradient(circle at 50% 70%, rgba(212,175,55,0.20) 0%, rgba(6,6,6,0.92) 75%)",
+              border: "1px solid rgba(212,175,55,0.25)", borderRadius: "12px", padding: "18px 16px",
+              boxShadow: "0 0 24px rgba(212,175,55,0.10), 0 0 20px rgba(120,60,180,0.15)",
+            }}>
+              <div style={styles.topLineGoldHalf} />
+              <p style={styles.acqAmount}>${TOTAL_ACQUISITION.toLocaleString()}</p>
+            </div>
+          </div>
+
+          {/* Connector gold → gold */}
+          <WaterfallConnector color="gold" />
+
+          {/* ── Context Block: "The Project" — pair layout ── */}
+          <div style={{ margin: "0 24px 0", ...reveal(waterfallCalloutVisible) }}>
             <WaterfallGroupLabel text="The Project" color="neutral" />
             <div style={{ display: "flex", gap: "8px", alignItems: "stretch" }}>
               {/* Production Budget */}
@@ -455,7 +472,7 @@ const Index = () => {
                 boxShadow: "0 8px 24px rgba(0,0,0,0.5), 0 0 12px rgba(212,175,55,0.08)",
               }}>
                 <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.45), transparent)", zIndex: 1 }} />
-                <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.1rem", color: "rgba(255,255,255,0.70)", marginBottom: "4px" }}>Production Budget</div>
+                <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.1rem", color: "rgba(255,255,255,0.88)", marginBottom: "4px" }}>Production Budget</div>
                 <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.6rem", color: "#D4AF37", textShadow: "0 0 16px rgba(212,175,55,0.20)" }}>${PRODUCTION_BUDGET.toLocaleString()}</div>
               </div>
               {/* Tax Credit */}
@@ -469,26 +486,9 @@ const Index = () => {
                 boxShadow: "0 8px 24px rgba(0,0,0,0.5), 0 0 12px rgba(212,175,55,0.08)",
               }}>
                 <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: "linear-gradient(90deg, transparent, rgba(60,179,113,0.40), transparent)", zIndex: 1 }} />
-                <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.1rem", color: "rgba(255,255,255,0.70)", marginBottom: "4px" }}>Tax Credit (20%)</div>
+                <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.1rem", color: "rgba(255,255,255,0.88)", marginBottom: "4px" }}>Tax Credit (20%)</div>
                 <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.5rem", color: "#3CB371", textShadow: "0 0 16px rgba(60,179,113,0.25)" }}>+${TAX_CREDIT.toLocaleString()}</div>
               </div>
-            </div>
-          </div>
-
-          {/* Connector gold → gold */}
-          <WaterfallConnector color="gold" />
-
-          {/* ── Acquisition Offer ── */}
-          <div style={{ margin: "0 24px 0", ...reveal(waterfallCalloutVisible) }}>
-            <WaterfallGroupLabel text="Streamer Acquisition Offer" color="neutral" />
-            <div ref={waterfallCalloutRef} style={{
-              position: "relative", overflow: "hidden", textAlign: "center",
-              background: "radial-gradient(circle at 50% 70%, rgba(212,175,55,0.20) 0%, rgba(6,6,6,0.92) 75%)",
-              border: "1px solid rgba(212,175,55,0.25)", borderRadius: "12px", padding: "18px 16px",
-              boxShadow: "0 0 24px rgba(212,175,55,0.10), 0 0 20px rgba(120,60,180,0.15)",
-            }}>
-              <div style={styles.topLineGoldHalf} />
-              <p style={styles.acqAmount}>${TOTAL_ACQUISITION.toLocaleString()}</p>
             </div>
           </div>
 
@@ -625,8 +625,8 @@ const Index = () => {
                 <div style={{ height: "100%", flex: 1, background: "rgba(220,38,38,0.50)", borderRadius: "0 4px 4px 0" }} />
               </div>
               <div style={{ display: "flex", justifyContent: "space-between", marginTop: "4px" }}>
-                <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: "rgba(255,255,255,0.55)", letterSpacing: "0.08em", textTransform: "uppercase" }}>Remaining</span>
-                <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: "rgba(255,255,255,0.55)", letterSpacing: "0.08em", textTransform: "uppercase" }}>Deducted</span>
+                <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: "rgba(255,255,255,0.75)", letterSpacing: "0.08em", textTransform: "uppercase" }}>Remaining</span>
+                <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: "rgba(255,255,255,0.75)", letterSpacing: "0.08em", textTransform: "uppercase" }}>Deducted</span>
               </div>
             </div>
           </div>
@@ -1108,7 +1108,7 @@ const styles: Record<string, React.CSSProperties> = {
 
   /* ── § 2 HOW IT WORKS ── */
   howSection: { position: "relative", background: "#000", padding: "36px 0 0" },
-  howHeader: { textAlign: "center", padding: "16px 24px 24px", background: "radial-gradient(ellipse 80% 50% at 50% 60%, rgba(120,60,180,0.18) 0%, transparent 70%)" },
+  howHeader: { textAlign: "center", padding: "16px 24px 24px", background: "radial-gradient(ellipse 80% 40% at 50% 30%, rgba(212,175,55,0.06) 0%, transparent 60%), radial-gradient(ellipse 80% 50% at 50% 60%, rgba(120,60,180,0.18) 0%, transparent 70%)" },
   howH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.2rem", color: "#fff", lineHeight: 0.95 },
   stepsContainer: { position: "relative", display: "flex", flexDirection: "column", gap: "1px", background: "rgba(120,60,180,0.10)", borderRadius: "12px", overflow: "hidden", margin: "0 24px", border: "1px solid rgba(120,60,180,0.25)", boxShadow: "0 16px 40px rgba(0,0,0,0.5), 0 0 20px rgba(120,60,180,0.15)" },
   step: {
@@ -1134,7 +1134,7 @@ const styles: Record<string, React.CSSProperties> = {
 
   /* ── § 3 WATERFALL ── */
   waterfallSection: { position: "relative", background: "#000", padding: "32px 0 0" },
-  waterfallHeader: { textAlign: "center", padding: "0 24px 24px" },
+  waterfallHeader: { textAlign: "center", padding: "0 24px 24px", background: "radial-gradient(ellipse 80% 40% at 50% 30%, rgba(212,175,55,0.06) 0%, transparent 60%)" },
   waterfallH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.2rem", color: "#fff", lineHeight: 0.95 },
   waterfallExplainer: {
     fontFamily: "'Inter', sans-serif", fontSize: "18px", color: "rgba(255,255,255,0.88)",
@@ -1146,7 +1146,7 @@ const styles: Record<string, React.CSSProperties> = {
 
   /* ── § 4 WHY THIS MATTERS ── */
   whySection: { position: "relative", background: "#000", textAlign: "center", padding: "48px 0 0" },
-  whyHeader: { padding: "20px 24px 24px" },
+  whyHeader: { padding: "20px 24px 24px", background: "radial-gradient(ellipse 80% 40% at 50% 30%, rgba(212,175,55,0.06) 0%, transparent 60%)" },
   whyH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.2rem", color: "#fff", textAlign: "center", lineHeight: 0.95 },
   badgeGridWrapper: {
     margin: "0 24px", borderRadius: "12px", overflow: "hidden", border: "1px solid rgba(120,60,180,0.25)",
@@ -1164,7 +1164,7 @@ const styles: Record<string, React.CSSProperties> = {
 
   /* ── § 5 ARSENAL ── */
   arsenalSection: { position: "relative", background: "#000", textAlign: "center", padding: "48px 0 0" },
-  arsenalHeader: { padding: "0 24px 24px" },
+  arsenalHeader: { padding: "0 24px 24px", background: "radial-gradient(ellipse 80% 40% at 50% 30%, rgba(212,175,55,0.06) 0%, transparent 60%)" },
   arsenalH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.2rem", color: "#fff", lineHeight: 0.95 },
   arsenalSub: { fontFamily: "'Inter', sans-serif", fontSize: "18px", marginTop: "10px", color: "rgba(255,255,255,0.88)", lineHeight: 1.5 },
   sectionSub: { fontFamily: "'Inter', sans-serif", fontSize: "18px", marginTop: "10px", color: "rgba(255,255,255,0.88)", lineHeight: 1.5 },
