@@ -399,7 +399,7 @@ const Index = () => {
 
         {/* ═══ § 2 HOW IT WORKS ═══ */}
         <section ref={howRef} style={styles.howSection}>
-          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "200px", background: "radial-gradient(ellipse 100% 70% at 50% 0%, rgba(120,60,180,0.20) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
+          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "200px", background: "radial-gradient(ellipse 100% 70% at 50% 0%, rgba(120,60,180,0.15) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
           <div style={{ ...styles.howHeader, ...reveal(howVisible) }}>
             <EyebrowRuled text="The Process" />
             <h2 style={styles.howH2}>Build in <span style={{ color: "#D4AF37" }}>Minutes</span></h2>
@@ -428,7 +428,7 @@ const Index = () => {
 
         {/* ═══ § 3 WATERFALL — v14 Card-Based Rebuild ═══ */}
         <section ref={(el) => { waterfallSectionRef.current = el; }} style={styles.waterfallSection}>
-          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "200px", background: "radial-gradient(ellipse 100% 70% at 50% 0%, rgba(120,60,180,0.20) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
+          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "200px", background: "radial-gradient(ellipse 100% 70% at 50% 0%, rgba(120,60,180,0.18) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
 
           {/* Header */}
           <div ref={waterfallHeaderRef} style={{ ...styles.waterfallHeader, ...reveal(waterfallHeaderVisible) }}>
@@ -748,7 +748,7 @@ const Index = () => {
 
         {/* ═══ § 5 ARSENAL ═══ */}
         <section style={styles.arsenalSection}>
-          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "240px", background: "radial-gradient(ellipse 100% 70% at 50% 0%, rgba(120,60,180,0.25) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
+          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "260px", background: "radial-gradient(ellipse 100% 70% at 50% 0%, rgba(120,60,180,0.28) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
           <div ref={arsenalHeaderRef} style={{ ...styles.arsenalHeader, ...reveal(arsenalHeaderVisible) }}>
             <EyebrowRuled text="What you get" />
             <h2 style={styles.arsenalH2}>The <span style={{ color: "#D4AF37" }}>Snapshot</span></h2>
@@ -923,8 +923,7 @@ const Index = () => {
 
         {/* ═══ § 6 REALITY ═══ */}
         <section style={styles.realitySection}>
-          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "180px", background: "radial-gradient(ellipse 100% 70% at 50% 0%, rgba(120,60,180,0.20) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
-          <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "240px", background: "radial-gradient(ellipse 80% 100% at 30% 100%, rgba(120,60,180,0.18) 0%, transparent 65%)", pointerEvents: "none", zIndex: 0 }} />
+          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "160px", background: "radial-gradient(ellipse 100% 70% at 50% 0%, rgba(120,60,180,0.10) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
           <div
             ref={realityQuoteRef}
             style={{
@@ -994,6 +993,9 @@ const Index = () => {
         <div style={{ height: "3px", background: "linear-gradient(to right, transparent 0%, rgba(120,60,180,0.50) 20%, rgba(212,175,55,0.40) 50%, rgba(120,60,180,0.50) 80%, transparent 100%)", boxShadow: "0 0 8px rgba(120,60,180,0.35), 0 0 20px rgba(120,60,180,0.20)", margin: "0 24px" }} />
 
         {/* ═══ § 7 CLOSER ═══ */}
+        <div style={{ position: "relative" }}>
+          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "200px", background: "radial-gradient(ellipse 120% 80% at 50% 0%, rgba(120,60,180,0.22) 0%, transparent 65%)", pointerEvents: "none", zIndex: 0 }} />
+        </div>
         <section ref={closerRef} style={{ ...styles.closerSection, ...reveal(closerVisible) }}>
           <h2 style={styles.closerH2}>Your Investors<br /><span style={{ color: "#D4AF37", display: "block", textShadow: "0 0 40px rgba(212,175,55,0.60), 0 0 80px rgba(212,175,55,0.25)" }}>Will Ask.</span></h2>
           <p style={styles.closerBody}>Stop guessing your backend. Walk into every pitch knowing exactly where the money goes.</p>
@@ -1108,7 +1110,7 @@ const styles: Record<string, React.CSSProperties> = {
 
   /* ── § 2 HOW IT WORKS ── */
   howSection: { position: "relative", background: "#000", padding: "36px 0 0" },
-  howHeader: { textAlign: "center", padding: "16px 24px 24px", background: "radial-gradient(ellipse 80% 40% at 50% 30%, rgba(212,175,55,0.06) 0%, transparent 60%), radial-gradient(ellipse 80% 50% at 50% 60%, rgba(120,60,180,0.18) 0%, transparent 70%)" },
+  howHeader: { textAlign: "center", padding: "16px 24px 24px", background: "radial-gradient(ellipse 80% 40% at 50% 30%, rgba(212,175,55,0.08) 0%, transparent 60%), radial-gradient(ellipse 80% 50% at 50% 60%, rgba(120,60,180,0.18) 0%, transparent 70%)" },
   howH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.2rem", color: "#fff", lineHeight: 0.95 },
   stepsContainer: { position: "relative", display: "flex", flexDirection: "column", gap: "1px", background: "rgba(120,60,180,0.10)", borderRadius: "12px", overflow: "hidden", margin: "0 24px", border: "1px solid rgba(120,60,180,0.25)", boxShadow: "0 16px 40px rgba(0,0,0,0.5), 0 0 20px rgba(120,60,180,0.15)" },
   step: {
@@ -1134,7 +1136,7 @@ const styles: Record<string, React.CSSProperties> = {
 
   /* ── § 3 WATERFALL ── */
   waterfallSection: { position: "relative", background: "#000", padding: "32px 0 0" },
-  waterfallHeader: { textAlign: "center", padding: "0 24px 24px", background: "radial-gradient(ellipse 80% 40% at 50% 30%, rgba(212,175,55,0.06) 0%, transparent 60%)" },
+  waterfallHeader: { textAlign: "center", padding: "0 24px 24px", background: "radial-gradient(ellipse 80% 40% at 50% 30%, rgba(212,175,55,0.08) 0%, transparent 60%)" },
   waterfallH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.2rem", color: "#fff", lineHeight: 0.95 },
   waterfallExplainer: {
     fontFamily: "'Inter', sans-serif", fontSize: "18px", color: "rgba(255,255,255,0.88)",
@@ -1146,7 +1148,7 @@ const styles: Record<string, React.CSSProperties> = {
 
   /* ── § 4 WHY THIS MATTERS ── */
   whySection: { position: "relative", background: "#000", textAlign: "center", padding: "48px 0 0" },
-  whyHeader: { padding: "20px 24px 24px", background: "radial-gradient(ellipse 80% 40% at 50% 30%, rgba(212,175,55,0.06) 0%, transparent 60%)" },
+  whyHeader: { padding: "20px 24px 24px", background: "radial-gradient(ellipse 80% 40% at 50% 30%, rgba(212,175,55,0.10) 0%, transparent 60%)" },
   whyH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.2rem", color: "#fff", textAlign: "center", lineHeight: 0.95 },
   badgeGridWrapper: {
     margin: "0 24px", borderRadius: "12px", overflow: "hidden", border: "1px solid rgba(120,60,180,0.25)",
@@ -1164,7 +1166,7 @@ const styles: Record<string, React.CSSProperties> = {
 
   /* ── § 5 ARSENAL ── */
   arsenalSection: { position: "relative", background: "#000", textAlign: "center", padding: "48px 0 0" },
-  arsenalHeader: { padding: "0 24px 24px", background: "radial-gradient(ellipse 80% 40% at 50% 30%, rgba(212,175,55,0.06) 0%, transparent 60%)" },
+  arsenalHeader: { padding: "0 24px 24px", background: "radial-gradient(ellipse 80% 40% at 50% 30%, rgba(212,175,55,0.12) 0%, transparent 60%)" },
   arsenalH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.2rem", color: "#fff", lineHeight: 0.95 },
   arsenalSub: { fontFamily: "'Inter', sans-serif", fontSize: "18px", marginTop: "10px", color: "rgba(255,255,255,0.88)", lineHeight: 1.5 },
   sectionSub: { fontFamily: "'Inter', sans-serif", fontSize: "18px", marginTop: "10px", color: "rgba(255,255,255,0.88)", lineHeight: 1.5 },

@@ -70,7 +70,7 @@ Most sections have an atmospheric gradient at the top — a purple radial that c
 }} />
 ```
 
-Opacity varies by section importance: 0.20 standard, 0.22 for Why, 0.25 for Arsenal. Height varies: 200px standard, 180px for Reality (tighter), 240px for Arsenal (most dramatic).
+Opacity and height follow the **Atmospheric Arc** (see §12A below). Values range from 0.10 (Reality — coldest) to 0.28 (Arsenal — hottest). Height ranges from 160px (Reality) to 260px (Arsenal). Reality has NO bottom canopy. Closer has a NEW canopy (0.22, 120% wide ellipse).
 
 ---
 
@@ -849,4 +849,40 @@ Footer text: Inter 14px, white 0.48.
 |------|-----|-------------|
 | March 21 | — | Initial extraction (v16.4, commit d293e0e) |
 | March 25 | #519-526 | CTA volumetric redesign (Inter 700, 180deg, inset shadows), hero glow boost, hero subtitle killed, container paddingTop 24px, How padding 36px, Arsenal card rebuild (grid checkmarks, title+subtitle features, dual atmospheric, comet dividers, cascade animations), Arsenal CTA killed, mid-waterfall CTA added, profit split count-up animation, WITH/WITHOUT slide animations, 4 new keyframes, copy corrections (CAM, feature rewrites), waterfall tier names 1.3→1.4rem |
-| March 27 | — | Closer: baked-in haze (4 radials, glass 0.85, border 0.30, 6-layer contour boxShadow, closerGlowOverlay killed). Arsenal: baked-in atmospheric (gold top 0.14 + purple bottom 0.18, overlay divs killed). Atmospheric warmth hierarchy documented: Hero > Closer > Arsenal |
+| March 27 | — | Closer: baked-in haze (4 radials, glass 0.85, border 0.30, 6-layer contour boxShadow, closerGlowOverlay killed). Arsenal: baked-in atmospheric (gold top 0.14 + purple bottom 0.18, overlay divs killed). Atmospheric warmth hierarchy documented: Hero > Closer > Arsenal. **Atmospheric Arc system** — canopy opacities retuned per scroll position (PEAK→dip→build→build→PEAK→DROP→PEAK), gold header haze escalation (0.08→0.08→0.10→0.12), Reality bottom canopy killed, Closer canopy added |
+
+---
+
+## 12A. ATMOSPHERIC ARC SYSTEM
+
+The landing page uses a deliberate atmospheric arc that controls emotional temperature through scroll position. The pattern is: **PEAK → dip → build → build → PEAK → DROP → PEAK**.
+
+### Canopy Scroll Map (top-to-bottom)
+
+| Section | Opacity | Height | Arc Position | Notes |
+|---------|---------|--------|--------------|-------|
+| §1 Hero | rich (reference) | — | PEAK | No change — baked-in multi-layer system |
+| §2 How | 0.15 | 200px | dip | Cool breather after hero intensity |
+| §3 Waterfall | 0.18 | 200px | build | Slight warmth increase — dread building |
+| §4 Why | 0.22 | 200px | build | Stakes escalating (unchanged from prior) |
+| §5 Arsenal | 0.28 | 260px | PEAK | Hottest non-bookend section — peak before the drop |
+| §6 Reality | 0.10 | 160px | DROP | Clinical cold. Top canopy barely visible. **No bottom canopy** (intentionally killed) |
+| §7 Closer | 0.22 | 200px | PEAK | Warmth floods back. NEW canopy (120% wide ellipse, 80% tall) |
+
+### Gold Header Haze (escalating scale)
+
+| Section | Gold Opacity | Label |
+|---------|-------------|-------|
+| §2 How | 0.08 | "THE PROCESS" |
+| §3 Waterfall | 0.08 | "HOW THE MONEY FLOWS" |
+| §4 Why | 0.10 | "WHY THIS MATTERS" |
+| §5 Arsenal | 0.12 | "WHAT YOU GET" |
+| §6 Reality | none | Clinical — no gold haze |
+| §7 Closer | none | Gold baked into card, not header |
+
+### Design Intent
+
+- **The Drop:** Arsenal → Reality is the key emotional beat. Arsenal is the warmest (0.28, 260px), then Reality strips nearly everything (0.10, 160px, no bottom canopy). This temperature shock makes the WITH/WITHOUT grid feel clinical and stark.
+- **The Return:** Reality → Closer brings warmth back (0.22 canopy). The CTA lives in restored warmth after the cold truth.
+- **Gold escalation** builds subconscious "value accumulation" — by the time you reach Arsenal (0.12), the gold feels earned.
+- **Reality has no gold** — intentional. The truth section should feel unadorned.
