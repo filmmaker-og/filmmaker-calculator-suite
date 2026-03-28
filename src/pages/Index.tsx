@@ -332,11 +332,11 @@ const Index = () => {
     const isPressed = tier != null && pressedTier === tier;
     const base: React.CSSProperties = {
       position: "relative", overflow: "hidden", borderRadius: "8px",
-      background: "rgba(26,26,30,0.95)",
+      background: "#1E1E22",
       border: `1px solid rgba(220,38,38,${isPressed ? 0.40 : 0.25})`,
       boxShadow: isPressed
-        ? "0 12px 32px rgba(0,0,0,0.5), 0 0 16px rgba(220,38,38,0.10)"
-        : "0 12px 32px rgba(0,0,0,0.5)",
+        ? "0 4px 16px rgba(0,0,0,0.30), 0 0 16px rgba(220,38,38,0.10)"
+        : "0 4px 16px rgba(0,0,0,0.30)",
       transition: "border-color 0.15s ease-out, box-shadow 0.15s ease-out",
     };
     if (mode === 'pair') {
@@ -420,10 +420,10 @@ const Index = () => {
             ...reveal(heroVisible, 1),
             marginTop: "24px",
             background: "#1E1E22",
-            border: "1px solid rgba(212,175,55,0.18)",
+            border: "1px solid rgba(212,175,55,0.20)",
             borderRadius: "8px",
             padding: "20px 16px",
-            boxShadow: "0 4px 16px rgba(0,0,0,0.25)",
+            boxShadow: "0 4px 16px rgba(0,0,0,0.30)",
           }}>
             {/* Slider: Budget */}
             <div style={{ marginBottom: "16px" }}>
@@ -486,7 +486,7 @@ const Index = () => {
               ].map((item) => (
                 <div key={item.label} style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "6px" }}>
                   <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: "rgba(255,255,255,0.50)", width: "80px", textAlign: "right", flexShrink: 0 }}>{item.label}</span>
-                  <div style={{ flex: 1, height: "6px", background: "rgba(255,255,255,0.06)", borderRadius: "3px", overflow: "hidden" }}>
+                  <div style={{ flex: 1, height: "6px", background: "rgba(255,255,255,0.12)", borderRadius: "3px", overflow: "hidden" }}>
                     <div style={{
                       height: "100%",
                       width: `${Math.min((item.amount / acquisitionValue) * 100, 100)}%`,
@@ -532,7 +532,7 @@ const Index = () => {
         </section>
 
         {/* ── Section divider ── */}
-        <div style={{ maxWidth: "120px", height: "1px", background: "rgba(212,175,55,0.25)", margin: "40px auto" }} />
+        <div style={{ maxWidth: "120px", height: "1px", background: "rgba(212,175,55,0.30)", margin: "40px auto" }} />
 
         {/* ═══ § 2 WATERFALL ═══ */}
         <section ref={(el) => { waterfallSectionRef.current = el; }} style={{ position: "relative", background: "#0C0C0E", padding: "0 0 0" }}>
@@ -548,13 +548,15 @@ const Index = () => {
 
           {/* ── Running Balance Counter ── */}
           <div style={{ textAlign: "center", marginBottom: "16px", ...reveal(waterfallHeaderVisible, 1) }}>
-            <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "12px", color: "rgba(255,255,255,0.40)", letterSpacing: "0.12em", textTransform: "uppercase" }}>REMAINING: </span>
-            <span style={{
-              fontFamily: "'Bebas Neue', sans-serif",
-              fontSize: "1.6rem",
-              color: runningBalance > 0 ? "#D4AF37" : "#DC2626",
-              transition: "color 0.3s ease",
-            }}>{fmtFull(runningBalance)}</span>
+            <div style={{ display: "inline-block", background: "rgba(212,175,55,0.04)", border: "1px solid rgba(212,175,55,0.12)", borderRadius: "999px", padding: "6px 16px" }}>
+              <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "12px", color: "rgba(255,255,255,0.40)", letterSpacing: "0.12em", textTransform: "uppercase" }}>REMAINING: </span>
+              <span style={{
+                fontFamily: "'Bebas Neue', sans-serif",
+                fontSize: "1.6rem",
+                color: runningBalance > 0 ? "#D4AF37" : "#DC2626",
+                transition: "color 0.3s ease",
+              }}>{fmtFull(runningBalance)}</span>
+            </div>
           </div>
 
           {/* ── Acquisition Offer ── */}
@@ -563,7 +565,8 @@ const Index = () => {
             <div ref={waterfallCalloutRef} style={{
               position: "relative", overflow: "hidden", textAlign: "center",
               background: "#1E1E22",
-              border: "1px solid rgba(212,175,55,0.18)", borderRadius: "8px", padding: "18px 16px",
+              border: "1px solid rgba(212,175,55,0.20)", borderRadius: "8px", padding: "18px 16px",
+              boxShadow: "0 8px 24px rgba(0,0,0,0.35)",
             }}>
               <p style={styles.acqAmount}>${TOTAL_ACQUISITION.toLocaleString()}</p>
             </div>
@@ -577,14 +580,14 @@ const Index = () => {
             <div style={{ display: "flex", gap: "8px", alignItems: "stretch" }}>
               <div style={{
                 flex: 1, borderRadius: "8px", padding: "10px 8px", textAlign: "center",
-                border: "1px solid rgba(212,175,55,0.18)", background: "#1E1E22",
+                border: "1px solid rgba(212,175,55,0.20)", background: "#1E1E22",
               }}>
                 <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.1rem", color: "rgba(255,255,255,0.88)", marginBottom: "4px" }}>Production Budget</div>
                 <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.6rem", color: "#D4AF37" }}>${PRODUCTION_BUDGET.toLocaleString()}</div>
               </div>
               <div style={{
                 flex: 1, borderRadius: "8px", padding: "10px 8px", textAlign: "center",
-                border: "1px solid rgba(212,175,55,0.18)", background: "#1E1E22",
+                border: "1px solid rgba(212,175,55,0.20)", background: "#1E1E22",
               }}>
                 <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.1rem", color: "rgba(255,255,255,0.88)", marginBottom: "4px" }}>Tax Credit (20%)</div>
                 <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.5rem", color: "#3CB371" }}>+${TAX_CREDIT.toLocaleString()}</div>
@@ -711,13 +714,13 @@ const Index = () => {
               background: "#1E1E22",
             }}>
               <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "2.4rem", color: "rgba(220,38,38,0.85)" }}>–${TOTAL_DEDUCTED.toLocaleString()}</div>
-              <div style={{ marginTop: "12px", height: "8px", background: "rgba(255,255,255,0.06)", borderRadius: "4px", overflow: "hidden", display: "flex" }}>
+              <div style={{ marginTop: "12px", height: "8px", background: "rgba(255,255,255,0.10)", borderRadius: "4px", overflow: "hidden", display: "flex" }}>
                 <div style={{ height: "100%", width: `${((TOTAL_ACQUISITION - TOTAL_DEDUCTED) / TOTAL_ACQUISITION) * 100}%`, background: "rgba(60,179,113,0.50)", borderRadius: "4px 0 0 4px" }} />
                 <div style={{ height: "100%", flex: 1, background: "rgba(220,38,38,0.50)", borderRadius: "0 4px 4px 0" }} />
               </div>
               <div style={{ display: "flex", justifyContent: "space-between", marginTop: "4px" }}>
-                <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: "rgba(255,255,255,0.75)", letterSpacing: "0.08em", textTransform: "uppercase" }}>Remaining</span>
-                <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: "rgba(255,255,255,0.75)", letterSpacing: "0.08em", textTransform: "uppercase" }}>Deducted</span>
+                <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: "rgba(255,255,255,0.78)", letterSpacing: "0.08em", textTransform: "uppercase" }}>Remaining</span>
+                <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: "rgba(255,255,255,0.78)", letterSpacing: "0.08em", textTransform: "uppercase" }}>Deducted</span>
               </div>
             </div>
           </div>
@@ -732,7 +735,8 @@ const Index = () => {
               style={{
                 borderRadius: "8px", padding: "20px 16px", textAlign: "center",
                 border: "1px solid rgba(60,179,113,0.50)",
-                background: `radial-gradient(ellipse at 50% 0%, rgba(60,179,113,${profitGlowIntensity}) 0%, #0A0A0A 70%)`,
+                background: `radial-gradient(ellipse at 50% 0%, rgba(60,179,113,${profitGlowIntensity}) 0%, #1E1E22 70%)`,
+                boxShadow: "0 8px 24px rgba(0,0,0,0.35)",
                 transition: "background 500ms ease",
               }}
             >
@@ -778,7 +782,7 @@ const Index = () => {
         </section>
 
         {/* ── Section divider ── */}
-        <div style={{ maxWidth: "120px", height: "1px", background: "rgba(212,175,55,0.25)", margin: "48px auto" }} />
+        <div style={{ maxWidth: "120px", height: "1px", background: "rgba(212,175,55,0.30)", margin: "48px auto" }} />
 
         {/* ═══ § 3 SOCIAL PROOF ═══ */}
         <section ref={socialRef} style={{ position: "relative", background: "#0C0C0E", padding: "0 24px 0" }}>
@@ -789,11 +793,11 @@ const Index = () => {
           {/* Testimonial blockquote */}
           <div style={{
             ...reveal(socialVisible, 1),
-            borderLeft: "3px solid rgba(212,175,55,0.50)",
+            borderLeft: "3px solid rgba(212,175,55,0.55)",
             paddingLeft: "16px",
             margin: "16px 0 24px",
           }}>
-            <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "16px", color: "rgba(255,255,255,0.75)", lineHeight: 1.55, fontStyle: "italic" }}>
+            <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "16px", color: "rgba(255,255,255,0.85)", lineHeight: 1.55, fontStyle: "italic" }}>
               "Finally, a tool that speaks the language of independent film finance. I walked into my investor meeting with real numbers."
             </p>
             <p style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "12px", color: "rgba(255,255,255,0.40)", marginTop: "8px", letterSpacing: "0.06em" }}>
@@ -817,7 +821,7 @@ const Index = () => {
         </section>
 
         {/* ── Section divider ── */}
-        <div style={{ maxWidth: "120px", height: "1px", background: "rgba(212,175,55,0.25)", margin: "40px auto" }} />
+        <div style={{ maxWidth: "120px", height: "1px", background: "rgba(212,175,55,0.30)", margin: "40px auto" }} />
 
         {/* ═══ § 4 WHAT'S AT STAKE ═══ */}
         <section ref={stakeRef} style={{ position: "relative", background: "#0C0C0E", padding: "0 24px 0" }}>
@@ -833,11 +837,11 @@ const Index = () => {
                 style={{
                   ...reveal(stakeVisible, i + 1),
                   background: "#1E1E22",
-                  border: "1px solid rgba(212,175,55,0.18)",
+                  border: "1px solid rgba(212,175,55,0.20)",
                   borderRadius: "8px",
-                  borderLeft: "3px solid rgba(212,175,55,0.50)",
+                  borderLeft: "3px solid rgba(212,175,55,0.55)",
                   padding: "20px 16px",
-                  boxShadow: "0 4px 16px rgba(0,0,0,0.25)",
+                  boxShadow: "0 4px 16px rgba(0,0,0,0.30)",
                 }}
               >
                 <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "2rem", color: "#D4AF37", lineHeight: 1 }}>{card.num}</span>
@@ -849,7 +853,7 @@ const Index = () => {
         </section>
 
         {/* ── Section divider ── */}
-        <div style={{ maxWidth: "120px", height: "1px", background: "rgba(212,175,55,0.25)", margin: "40px auto" }} />
+        <div style={{ maxWidth: "120px", height: "1px", background: "rgba(212,175,55,0.30)", margin: "40px auto" }} />
 
         {/* ═══ § 5 REALITY ═══ */}
         <section style={{ position: "relative", background: "#0C0C0E", textAlign: "left", padding: "0 24px 0" }}>
@@ -858,13 +862,13 @@ const Index = () => {
             ref={realityQuoteRef}
             style={{
               background: "#1E1E22",
-              border: "1px solid rgba(212,175,55,0.18)",
+              border: "1px solid rgba(212,175,55,0.20)",
               borderRadius: "8px",
-              borderLeft: "3px solid rgba(212,175,55,0.50)",
+              borderLeft: "3px solid rgba(212,175,55,0.55)",
               padding: "24px 20px",
               textAlign: "center",
               marginBottom: "24px",
-              boxShadow: "0 4px 16px rgba(0,0,0,0.25)",
+              boxShadow: "0 4px 16px rgba(0,0,0,0.30)",
               ...reveal(realityQuoteVisible),
             }}
           >
@@ -886,10 +890,10 @@ const Index = () => {
           {/* WITH/WITHOUT grid — 3 rows */}
           <div ref={realityGridRef} style={{
             ...reveal(realityGridVisible),
-            border: "1px solid rgba(212,175,55,0.18)",
+            border: "1px solid rgba(212,175,55,0.20)",
             borderRadius: "8px",
             overflow: "hidden",
-            boxShadow: "0 4px 16px rgba(0,0,0,0.25)",
+            boxShadow: "0 4px 16px rgba(0,0,0,0.30)",
           }}>
             {/* Header */}
             <div style={{
@@ -911,21 +915,21 @@ const Index = () => {
               }}>
                 <div style={{
                   ...reveal(realityGridVisible, i + 1),
-                  background: "#1E1E22",
+                  background: "#242428",
                   display: "grid", gridTemplateColumns: "22px 1fr", gap: "10px",
                   padding: "14px 16px", alignItems: "flex-start",
                 }}>
-                  <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "20px", paddingTop: "2px", color: "#3CB371", textShadow: "0 0 8px rgba(60,179,113,0.30)" }}>✓</span>
+                  <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "20px", paddingTop: "2px", color: "#3CB371", textShadow: "0 0 8px rgba(60,179,113,0.20)" }}>✓</span>
                   <span style={{ fontFamily: "'Inter', sans-serif", fontSize: "16px", lineHeight: 1.4, color: "rgba(255,255,255,0.88)" }}>{withItem}</span>
                 </div>
                 <div style={{
                   ...reveal(realityGridVisible, i + 1),
-                  background: "#1E1E22",
+                  background: "#242428",
                   display: "grid", gridTemplateColumns: "22px 1fr", gap: "10px",
                   padding: "14px 16px", alignItems: "flex-start",
                   borderLeft: "1px solid rgba(255,255,255,0.08)",
                 }}>
-                  <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "20px", paddingTop: "2px", color: "rgba(220,38,38,0.85)", textShadow: "0 0 8px rgba(220,38,38,0.30)" }}>✗</span>
+                  <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "20px", paddingTop: "2px", color: "rgba(220,38,38,0.85)", textShadow: "0 0 8px rgba(220,38,38,0.20)" }}>✗</span>
                   <span style={{ fontFamily: "'Inter', sans-serif", fontSize: "16px", lineHeight: 1.4, color: "rgba(255,255,255,0.70)" }}>{withoutItems[i]}</span>
                 </div>
               </div>
@@ -934,7 +938,7 @@ const Index = () => {
         </section>
 
         {/* ── Section divider ── */}
-        <div style={{ maxWidth: "120px", height: "1px", background: "rgba(212,175,55,0.25)", margin: "40px auto" }} />
+        <div style={{ maxWidth: "120px", height: "1px", background: "rgba(212,175,55,0.30)", margin: "40px auto" }} />
 
         {/* ═══ § 6 CLOSER ═══ */}
         <section ref={closerRef} style={{ ...reveal(closerVisible), textAlign: "center", padding: "0 24px 0" }}>
@@ -952,7 +956,7 @@ const Index = () => {
             <span style={{ color: "#D4AF37", textShadow: "0 0 40px rgba(212,175,55,0.50), 0 0 80px rgba(212,175,55,0.20)" }}>IS COMING.</span>
           </h2>
           <p style={{
-            fontFamily: "'Inter', sans-serif", fontSize: "16px", color: "rgba(255,255,255,0.75)",
+            fontFamily: "'Inter', sans-serif", fontSize: "16px", color: "rgba(255,255,255,0.78)",
             lineHeight: 1.55, margin: "0 auto 28px",
           }}>
             Will you have the answer? Build your waterfall model now and walk into every meeting with confidence.
@@ -966,7 +970,7 @@ const Index = () => {
         </section>
 
         {/* ── Section divider ── */}
-        <div style={{ maxWidth: "120px", height: "1px", background: "rgba(212,175,55,0.25)", margin: "40px auto" }} />
+        <div style={{ maxWidth: "120px", height: "1px", background: "rgba(212,175,55,0.30)", margin: "40px auto" }} />
 
         {/* ═══ § 6.5 PRODUCT PREVIEW — Real Output ═══ */}
         <section ref={previewRef} style={{ position: "relative", background: "#0C0C0E", padding: "0 24px 0" }}>
@@ -1002,7 +1006,7 @@ const Index = () => {
                     </div>
                     <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "9px", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", padding: "2px 6px", borderRadius: "2px", background: row.color === "#3CB371" ? "rgba(60,179,113,0.15)" : row.color === "#F0A830" ? "rgba(240,168,48,0.15)" : "rgba(220,38,38,0.12)", color: row.color }}>{row.badge}</span>
                   </div>
-                  <div style={{ height: "4px", background: "rgba(255,255,255,0.04)", borderRadius: "2px", overflow: "hidden" }}>
+                  <div style={{ height: "4px", background: "rgba(255,255,255,0.08)", borderRadius: "2px", overflow: "hidden" }}>
                     <div style={{ height: "100%", width: `${row.pct}%`, borderRadius: "2px", background: row.color === "#3CB371" ? "rgba(60,179,113,0.40)" : row.color === "#F0A830" ? "rgba(240,168,48,0.35)" : "rgba(220,38,38,0.25)" }} />
                   </div>
                 </div>
@@ -1032,11 +1036,11 @@ const Index = () => {
             }}>
               <p style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "10px", color: "rgba(212,175,55,0.60)", letterSpacing: "0.10em", textTransform: "uppercase", marginBottom: "12px" }}>Profit Split</p>
               <div style={{ display: "flex", gap: "8px", marginBottom: "12px" }}>
-                <div style={{ flex: 1, textAlign: "center", padding: "10px 8px", borderRadius: "6px", background: "rgba(60,179,113,0.06)", border: "1px solid rgba(60,179,113,0.15)" }}>
+                <div style={{ flex: 1, textAlign: "center", padding: "10px 8px", borderRadius: "6px", background: "#242428", border: "1px solid rgba(60,179,113,0.15)" }}>
                   <p style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "9px", color: "rgba(255,255,255,0.45)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "4px" }}>Investor</p>
                   <p style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.3rem", color: "#3CB371" }}>$209K</p>
                 </div>
-                <div style={{ flex: 1, textAlign: "center", padding: "10px 8px", borderRadius: "6px", background: "rgba(60,179,113,0.06)", border: "1px solid rgba(60,179,113,0.15)" }}>
+                <div style={{ flex: 1, textAlign: "center", padding: "10px 8px", borderRadius: "6px", background: "#242428", border: "1px solid rgba(60,179,113,0.15)" }}>
                   <p style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "9px", color: "rgba(255,255,255,0.45)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "4px" }}>Producer</p>
                   <p style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.3rem", color: "#3CB371" }}>$209K</p>
                 </div>
@@ -1148,7 +1152,7 @@ const styles: Record<string, React.CSSProperties> = {
     width: "100%", height: "6px",
     WebkitAppearance: "none",
     appearance: "none",
-    background: "rgba(255,255,255,0.08)",
+    background: "rgba(255,255,255,0.14)",
     borderRadius: "3px",
     outline: "none",
     cursor: "pointer",
@@ -1159,16 +1163,16 @@ const styles: Record<string, React.CSSProperties> = {
 
   /* ── § 2 WATERFALL ── */
   waterfallExplainer: {
-    fontFamily: "'Inter', sans-serif", fontSize: "16px", color: "rgba(255,255,255,0.75)",
+    fontFamily: "'Inter', sans-serif", fontSize: "16px", color: "rgba(255,255,255,0.78)",
     lineHeight: 1.55, textAlign: "center", padding: "0 24px", marginBottom: "24px",
     maxWidth: "380px", marginLeft: "auto", marginRight: "auto",
   },
   acqAmount: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.2rem", color: "#D4AF37", lineHeight: 1, letterSpacing: "0.02em", textShadow: "0 0 30px rgba(212,175,55,0.40)" },
 
   /* ── FOOTER ── */
-  footer: { background: "#1A1A1E", borderTop: "1px solid rgba(212,175,55,0.12)", padding: "32px 24px 40px" },
+  footer: { background: "#1E1E22", borderTop: "1px solid rgba(212,175,55,0.15)", padding: "32px 24px 40px" },
   footerLinks: { display: "flex", justifyContent: "center", gap: "20px", marginBottom: "16px" },
-  footerIcon: { color: "rgba(212,175,55,0.50)", textDecoration: "none", display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", padding: "4px", borderRadius: "8px", border: "1px solid rgba(212,175,55,0.18)", transition: "color 0.2s ease, border-color 0.2s ease", boxSizing: "content-box" },
+  footerIcon: { color: "rgba(212,175,55,0.50)", textDecoration: "none", display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", padding: "4px", borderRadius: "8px", border: "1px solid rgba(212,175,55,0.20)", transition: "color 0.2s ease, border-color 0.2s ease", boxSizing: "content-box" },
   footerNav: { display: "flex", justifyContent: "center", alignItems: "center", gap: "10px", marginBottom: "16px" },
   footerNavLink: { fontFamily: "'Roboto Mono', monospace", fontSize: "13px", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(212,175,55,0.50)", cursor: "pointer", transition: "color 0.2s ease" } as React.CSSProperties,
   footerText: { fontFamily: "'Inter', sans-serif", fontSize: "14px", textAlign: "center", color: "rgba(255,255,255,0.50)", lineHeight: 1.55 },
