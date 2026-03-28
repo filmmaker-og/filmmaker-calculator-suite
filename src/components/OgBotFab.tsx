@@ -43,9 +43,9 @@ const OgBotFab = ({ onTap }: OgBotFabProps) => {
         width: "52px",
         height: "52px",
         borderRadius: "10px",
-        background: "linear-gradient(135deg, rgb(75,30,130) 0%, rgb(110,50,170) 100%)",
+        background: "linear-gradient(135deg, rgba(212,175,55,0.20) 0%, rgba(212,175,55,0.10) 100%)",
         border: "none",
-        boxShadow: "0 4px 16px rgba(120,60,180,0.40), 0 0 40px rgba(120,60,180,0.15)",
+        boxShadow: "0 4px 16px rgba(212,175,55,0.20), 0 0 40px rgba(212,175,55,0.08)",
         opacity: hidden ? 0 : 1,
         pointerEvents: hidden ? "none" : "auto",
       }}
