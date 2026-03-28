@@ -1025,7 +1025,14 @@ const Store = () => {
       return;
     }
     haptics.medium();
-    setShowPopup(product);
+    // Only show the Working Model upsell popup for self-serve (instant) products
+    const instantProducts = ["the-full-analysis"];
+    if (instantProducts.includes(product.id)) {
+      setShowPopup(product);
+    } else {
+      // Comp report and others go straight to checkout
+      startCheckout(product.id);
+    }
   };
 
   const handleBuyService = (product: Product) => {
