@@ -38,8 +38,10 @@ const Index = () => {
   }, [navigate]);
 
   const gatedNavigate = useCallback(async (destination: string) => {
+    // Check if they've already given their info (localStorage) or have a session
+    const hasLead = localStorage.getItem('og_lead_email');
     const { data: { session } } = await supabase.auth.getSession();
-    if (session?.user) {
+    if (session?.user || hasLead) {
       navigate(destination);
     } else {
       setShowLeadCapture(true);
