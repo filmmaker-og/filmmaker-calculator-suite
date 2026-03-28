@@ -1,10 +1,10 @@
 # FILMMAKER.OG — Brand System
 
-**Version:** 1.0
-**Last updated:** March 27, 2026
+**Version:** 2.0
+**Last updated:** March 28, 2026
 **Source of truth for:** Every page, component, and visual decision in the product.
 
-This document codifies every design decision proven on the landing page (`feature/hero-calculator` branch). When building or reskinning any page, reference this file — not memory, not other pages. If a decision isn't in here, it hasn't been made yet.
+This document codifies every design decision proven on the landing page (`mockup/dark-gray` branch). When building or reskinning any page, reference this file — not memory, not other pages. If a decision isn't in here, it hasn't been made yet.
 
 ---
 
@@ -13,14 +13,18 @@ This document codifies every design decision proven on the landing page (`featur
 ### The Rule
 Gold + black + white. That's it. Every other color is semantic (communicates data) or an earned exception.
 
-### Backgrounds
-| Token | Hex | Use |
+### Surface Hierarchy (7 layers)
+| Token | Value | Use |
 |---|---|---|
-| `BG.void` | `#000000` | Page wrappers, true black canvas |
-| `BG.elevated` | `#0A0A0A` | Cards, modals, elevated surfaces |
-| `BG.surface` | `#1A1A1A` | Input fields, form backgrounds |
+| Page | `#0C0C0E` | `<body>` / outermost wrapper — near-black with a warm hint |
+| Container | `#1E1E22` | Section containers — warm dark gray with `grain-surface` overlay |
+| Header Band | `linear-gradient(180deg, rgba(212,175,55,0.06), #242428)` | First child inside every container — visible gold warmth |
+| Inner Card | `linear-gradient(180deg, rgba(212,175,55,0.02), #242428)` | Content cards inside sections — subtle gold warmth |
+| Inner Surface | `#242428` | Calculator areas, data surfaces inside containers |
+| Input Surface | `#1A1A1A` | Input fields, form backgrounds |
+| Footer | `#161618` | Footer background |
 
-Use `#000` for the page. Use `#0A0A0A` for everything that sits on top of it. Never use `#111`, `#121212`, or any other gray — only the three above.
+Each layer is progressively lighter. Container (`#1E1E22`) lifts off the page (`#0C0C0E`). Header bands and inner cards add gold warmth via gradients. Never use `#000`, `#0A0A0A`, `#111`, or `#121212`.
 
 ### Gold — The Brand Color
 | Token | Value | Use |
@@ -55,11 +59,17 @@ These appear **only** when communicating data — waterfall tiers, profit/loss, 
 ### White — Text Hierarchy
 | Role | Value | Use |
 |---|---|---|
-| Primary | `white(0.92)` or `#fff` | Headlines, primary text |
-| Secondary | `white(0.75)` | Body text, descriptions |
-| Muted | `white(0.55)` | Secondary descriptions |
-| Tertiary | `white(0.40)` | Labels, metadata, placeholders |
+| Headlines | `white(0.95)` or `#fff` | Section headlines, hero headline |
+| Testimonial | `white(0.88)` | Blockquote text, social proof |
+| Body | `white(0.85)` | All body text, descriptions |
+| Supporting body | `white(0.75)` | Value props, secondary descriptions |
+| Labels | `white(0.70)` | Slider labels, metadata, data labels |
+| Tertiary | `white(0.60)` | Minimum for readable text — floor for opacity |
+| Footer | `white(0.55)` | Footer text, disclaimers |
+| Easter egg | `white(0.35)` | "Best viewed in the dark." — decorative only |
 | Ghost | `white(0.06)` | Dividers within cards, track backgrounds |
+
+**Opacity floor:** No text intended to be read may go below `0.60`. Below that is decorative only.
 
 ### Import Rule
 Always import from `@/lib/tokens`. Never write raw `rgba()` in `.tsx` files.
@@ -84,16 +94,18 @@ All three loaded via Google Fonts in `index.css`.
 ### Size Scale
 | Element | Font | Size | Color | Notes |
 |---|---|---|---|---|
-| Hero headline | Bebas Neue | 4.2rem | `#fff` | Landing page hero only |
-| Section headline | Bebas Neue | 3.2rem | `#fff` | One per section, gold accent on key word |
+| Hero headline | Bebas Neue | 3.6rem | `#fff` | Landing page hero only |
+| Section headline | Bebas Neue | 2.8rem | `#fff` | One per section, gold accent on key word |
+| Closer headline | Bebas Neue | 3.0rem | `#fff` | Inside closer container |
 | Card title | Bebas Neue | 1.4–1.8rem | `#fff` | Inside cards |
 | Data callout | Bebas Neue | 2.4–3.2rem | Semantic color | Large numbers (profit, totals) |
-| Body | Inter | 16px | `white(0.75)` | All descriptions. Not 15px. Not 18px. |
-| Body secondary | Inter | 14–15px | `white(0.60)` | Supporting text beneath body |
+| Body | Inter | 16px | `white(0.85)` | All descriptions. Not 15px. Not 18px. |
+| Body secondary | Inter | 14–15px | `white(0.75)` | Supporting text beneath body |
 | Eyebrow label | Roboto Mono | 12px | `#D4AF37` | `letter-spacing: 0.18em`, uppercase |
-| Slider/field label | Roboto Mono | 11px | `white(0.50)` | `letter-spacing: 0.08em`, uppercase |
+| EyebrowPill | Roboto Mono | 14px | `#D4AF37` | Uppercase, first element in header bands |
+| Slider/field label | Roboto Mono | 11px | `white(0.70)` | `letter-spacing: 0.08em`, uppercase |
 | Badge/tag text | Roboto Mono | 10–11px | Varies | `letter-spacing: 0.06–0.08em`, uppercase |
-| Footer text | Inter | 14px | `white(0.50)` | Disclaimer, legal |
+| Footer text | Inter | 14px | `white(0.55)` | Disclaimer, legal |
 
 ### Rules
 - Bebas Neue is always uppercase (it only has uppercase glyphs)
@@ -105,15 +117,56 @@ All three loaded via Google Fonts in `index.css`.
 
 ## 3. COMPONENTS
 
-### Card
-The one card style used everywhere:
+### Section Container
+The structural wrapper for every content section:
 ```css
-background: #0A0A0A;
-border: 1px solid rgba(212,175,55,0.15);
+background: #1E1E22;
+border: 1px solid rgba(212,175,55,0.20);
+border-top: 1px solid rgba(255,255,255,0.06);
 border-radius: 8px;
-padding: 20–24px;
+padding: 32px 16px;
+box-shadow: 0 4px 16px rgba(0,0,0,0.30);
 ```
-No radial gradients. No glassmorphism. No layered box-shadows. The border does the work.
+Always add `className="grain-surface"` for SVG noise texture overlay. First child is always a **Header Band**.
+
+### Header Band
+First child inside every Section Container:
+```css
+background: linear-gradient(180deg, rgba(212,175,55,0.06), #242428);
+border: 1px solid rgba(255,255,255,0.04);
+border-bottom: 1px solid rgba(212,175,55,0.10);
+border-radius: 6px;
+padding: 24px 20px;
+margin-bottom: 16px;
+text-align: center;
+```
+Contains: EyebrowPill → section headline → optional subtitle. Gold warmth at `0.06` provides visible tinting.
+
+### EyebrowPill
+The first element inside every header band:
+```css
+font-family: 'Roboto Mono', monospace;
+font-size: 14px;
+color: #D4AF37;
+letter-spacing: 0.10em;
+text-transform: uppercase;
+display: inline-block;
+background: rgba(212,175,55,0.08);
+border: 1px solid rgba(212,175,55,0.18);
+padding: 4px 14px;
+border-radius: 999px;
+margin-bottom: 10px;
+```
+
+### Inner Card
+Content cards inside sections use a gold-tinted gradient:
+```css
+background: linear-gradient(180deg, rgba(212,175,55,0.02), #242428);
+border: 1px solid rgba(212,175,55,0.15);
+border-radius: 6px;
+padding: 14px;
+```
+The `0.02` gold tint is subtle — just enough to differentiate from the container.
 
 **Variants:**
 | Variant | Modification |
@@ -163,12 +216,12 @@ Horizontal gold lines flanking a centered label:
 - Margin-bottom: 14px
 
 ### Film Slate Line
-Decorative horizontal line used **only** in hero and closer:
+Decorative horizontal line used **only** in hero header band:
 ```css
 height: 1px;
 width: 60%;
 margin: 0 auto;
-background: rgba(212,175,55,0.12);
+background: rgba(212,175,55,0.22);
 ```
 
 ### Pill Nav (AppHeader)
@@ -181,7 +234,7 @@ background: rgba(212,175,55,0.12);
 - Logo: "FILMMAKER" in gold, ".OG" in white, Bebas Neue 28px
 
 ### Footer
-- Background: `#0A0A0A`
+- Background: `#161618`
 - Border-top: `1px solid white(0.08)`
 - Social icons: gold at 0.50, 36px square with gold border at 0.15
 - Nav links: Roboto Mono 13px, gold at 0.50
@@ -239,13 +292,16 @@ Applied when tier cards enter viewport. One-shot.
 
 ## 5. LAYOUT
 
-### Container
+### Page Container
 ```css
 max-width: 430px;
 margin: 0 auto;
-background: #000;
+background: #0C0C0E;
 ```
-430px is the product viewport. Desktop renders the same column centered on black. This is intentional, not a responsive compromise.
+430px is the product viewport. Desktop renders the same column centered on the page color. This is intentional, not a responsive compromise.
+
+### Surface Nesting Rule
+Page (`#0C0C0E`) → Section Container (`#1E1E22` + grain-surface) → Header Band (gold `0.06` gradient) → Inner Cards (gold `0.02` gradient). Each layer lifts visually from the one beneath it. Never skip a layer.
 
 ### Section Padding
 | Context | Padding |
@@ -281,7 +337,7 @@ Barely visible — just enough to prevent the desktop from feeling like pure voi
 ## 6. FORM INPUTS
 
 ### Lead Capture Modal
-- Modal background: `#000` with `1px solid gold(0.15)`, 6px radius
+- Modal background: `#0C0C0E` with `1px solid gold(0.15)`, 6px radius
 - Gold accent line at top: `linear-gradient(90deg, transparent, #D4AF37, transparent)`
 - Input fields: **white background** (`rgba(255,255,255,0.95)`), black text, 4px radius
 - Focus state: gold border (`#D4AF37`) with `0 0 0 3px gold(0.15)` ring
@@ -323,7 +379,7 @@ Tier number badges are always purple gradient circles regardless of group.
 - Interactive hero with sliders — the product IS the marketing
 - No "How It Works" section (hero demonstrates it)
 - No "Arsenal" checklist (features become badge pills)
-- Sections: Hero → Waterfall → Social Proof → What's At Stake → Reality → Closer → Product Preview → Footer
+- Sections: Hero → Waterfall → Social Proof → What's At Stake → Reality → Product Preview → Closer → Footer
 
 ### Calculator (Calculator.tsx)
 - **Stress-test target for this system.** If the card style works here with dense data tables, it works everywhere.
