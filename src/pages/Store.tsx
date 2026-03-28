@@ -66,8 +66,9 @@ const s: Record<string, React.CSSProperties> = {
   },
   /* ── Card base ── */
   cardBase: {
-    background: "#1A1A1E",
+    background: "#1A1A1C",
     border: "1px solid rgba(212,175,55,0.15)",
+    borderTop: "1px solid rgba(255,255,255,0.08)",
     borderRadius: "8px",
     overflow: "hidden",
     transition: "transform 0.3s ease, border-color 0.3s ease",
@@ -132,7 +133,7 @@ const s: Record<string, React.CSSProperties> = {
     fontFamily: "'Inter', sans-serif",
     fontSize: "18px",
     fontWeight: 500,
-    color: "rgba(255,255,255,0.92)",
+    color: "rgba(250,248,244,0.90)",
     lineHeight: 1.3,
   },
   /* ── Turnaround badge ── */
@@ -180,7 +181,7 @@ const tierStyles = {
     id: "gold" as const,
     card: {
       border: "1px solid rgba(212,175,55,0.15)",
-      background: "#1A1A1E",
+      background: "#1A1A1C",
     },
     atmosphericTop: "none",
     atmosphericBottom: "none",
@@ -205,7 +206,7 @@ const tierStyles = {
     id: "purple" as const,
     card: {
       border: "1px solid rgba(212,175,55,0.25)",
-      background: "#1A1A1E",
+      background: "#1A1A1C",
     },
     atmosphericTop: "none",
     atmosphericBottom: "none",
@@ -334,7 +335,7 @@ const FeatureGroup = ({ features, groupName }: { features: { title: string; subt
         <div style={{ padding: "0px 16px 0px 6px", textAlign: "left" as const }}>
           <p style={{
             fontFamily: "'Inter', sans-serif", fontSize: "18px", fontWeight: 600,
-            color: "rgba(255,255,255,0.92)", lineHeight: 1.35, margin: 0,
+            color: "rgba(250,248,244,0.90)", lineHeight: 1.35, margin: 0,
           }}>{feat.title}</p>
           <p style={{
             fontFamily: "'Inter', sans-serif", fontSize: "13px",
@@ -388,9 +389,10 @@ const WorkingModelPopup = ({
         position: "relative", width: "100%", maxWidth: "430px",
         borderTopLeftRadius: "8px", borderTopRightRadius: "8px",
         overflow: "hidden",
-        border: "1px solid rgba(212,175,55,0.25)",
+        border: "1px solid rgba(212,175,55,0.15)",
+        borderTop: "1px solid rgba(255,255,255,0.08)",
         borderBottom: "none",
-        background: "#1A1A1E",
+        background: "#1A1A1C",
         animation: "faqOpen 0.3s ease-out",
       }}
     >
@@ -974,7 +976,7 @@ const FaqItem = ({
         <p style={{
           fontFamily: "'Inter', sans-serif",
           fontSize: "19px",
-          color: "rgba(255,255,255,0.92)",
+          color: "rgba(250,248,244,0.90)",
           lineHeight: 1.6,
           margin: 0,
         }}>
@@ -1102,8 +1104,9 @@ const Store = () => {
           margin: "0 24px",
           borderRadius: 8,
           overflow: "hidden",
-          background: "#1A1A1E",
-          border: "1px solid rgba(212,175,55,0.25)",
+          background: "#1A1A1C",
+          border: "1px solid rgba(212,175,55,0.15)",
+          borderTop: "1px solid rgba(255,255,255,0.08)",
         }}>
           <div style={{ position: "relative", zIndex: 1 }}>
             <EyebrowRuled text="Shop" />
@@ -1135,8 +1138,8 @@ const Store = () => {
           <p style={{
             fontFamily: "'Inter', sans-serif",
             fontSize: "19px",
-            color: "rgba(255,255,255,0.92)",
-            lineHeight: 1.55,
+            color: "rgba(250,248,244,0.90)",
+            lineHeight: 1.6,
             margin: "4px 0 0 0",
           }}>
             Run the numbers for free. Get the extended version, on brand, for your investor presentation.
@@ -1322,8 +1325,9 @@ const Store = () => {
       >
         {/* Closer atmospheric canopy — removed per brand system */}
         <div style={{
-          background: "#1A1A1E",
-          border: "1px solid rgba(212,175,55,0.25)",
+          background: "#1A1A1C",
+          border: "1px solid rgba(212,175,55,0.15)",
+          borderTop: "1px solid rgba(255,255,255,0.08)",
           borderRadius: "8px",
           padding: "36px 24px",
           textAlign: "center",
@@ -1331,7 +1335,7 @@ const Store = () => {
           transition: "border-color 0.3s ease",
         }}
           onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.40)"; }}
-          onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; }}
+          onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.15)"; }}
         >
           <h3 style={{
             fontFamily: "'Bebas Neue', sans-serif",
@@ -1346,7 +1350,7 @@ const Store = () => {
           <p style={{
             fontFamily: "'Inter', sans-serif",
             fontSize: "19px",
-            color: "rgba(255,255,255,0.92)",
+            color: "rgba(250,248,244,0.90)",
             lineHeight: 1.6,
             maxWidth: "90%",
             margin: "0 auto 24px",
@@ -1397,8 +1401,8 @@ const Store = () => {
          ═══════════════════════════════════════ */}
       <footer
         style={{
-          background: "#1A1A1E",
-          borderTop: "1px solid rgba(255,255,255,0.15)",
+          background: "#161618",
+          borderTop: "1px solid rgba(255,255,255,0.08)",
           padding: "32px 24px 40px",
         }}
       >
@@ -1423,7 +1427,7 @@ const Store = () => {
           fontSize: "14px",
           color: "rgba(255,255,255,0.55)",
           textAlign: "center",
-          lineHeight: 1.55,
+          lineHeight: 1.6,
           margin: 0,
         }}>
           For educational and informational purposes only. Not legal, tax, or investment advice. Consult a qualified entertainment attorney before making financing decisions.

@@ -35,7 +35,7 @@ const StorePackage = () => {
 
   if (!product) {
     return (
-      <div className="min-h-screen bg-black flex flex-col">
+      <div className="min-h-screen bg-bg-void flex flex-col">
         <main className="flex-1 flex items-center justify-center">
           <div className="text-center">
             <p className="text-ink-body text-[16px] mb-4">Package not found.</p>
@@ -57,7 +57,7 @@ const StorePackage = () => {
   const descParagraphs = product.fullDescription.split("\n\n");
 
   return (
-    <div className="min-h-screen bg-black flex flex-col grain-overlay">
+    <div className="min-h-screen bg-bg-void flex flex-col grain-overlay">
       <main className="flex-1 pb-24" style={{ paddingBottom: "env(safe-area-inset-bottom)" }}>
 
         {/* BACK NAV */}
@@ -136,7 +136,7 @@ const StorePackage = () => {
             </div>
 
             <div
-              className="border border-gold-border bg-black overflow-hidden rounded-lg"
+              className="border border-gold-border bg-bg-void overflow-hidden rounded-lg"
 
             >
               {product.whatsIncluded.map((item, i) => (
@@ -225,7 +225,7 @@ const StorePackage = () => {
       <div
         className="fixed bottom-0 left-0 right-0 z-50 backdrop-blur-md"
         style={{
-          background: "rgba(0,0,0,0.92)",
+          background: "rgba(12,12,14,0.92)",
           borderTop: "1px solid rgba(212,175,55,0.15)",
         }}
       >
