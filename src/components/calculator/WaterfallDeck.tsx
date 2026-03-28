@@ -307,6 +307,107 @@ function computeScenarioReturn(
   return { returnPct, multiple };
 }
 
+// ─── COLD OPEN (screen only) ─────────────────────────────────────
+
+const ColdOpen = ({ multiple, result }: { multiple: number; result: WaterfallResult }) => {
+  const multipleColor = multiple >= 1.0 ? SEM.green : multiple >= 0.5 ? SEM.amber : SEM.red;
+  const verdictWord = result.recoupPct >= 100 ? "FUNDED" : result.recoupPct >= 50 ? "PARTIAL" : "UNDERWATER";
+  const verdictColor = result.recoupPct >= 100 ? SEM.green : result.recoupPct >= 50 ? SEM.amber : SEM.red;
+
+  const glowRgba = multipleColor === SEM.green
+    ? "rgba(60,179,113,0.08)"
+    : multipleColor === SEM.amber
+      ? "rgba(240,168,48,0.08)"
+      : "rgba(220,38,38,0.08)";
+  const shadowRgba = multipleColor === SEM.green
+    ? "rgba(60,179,113,0.30)"
+    : multipleColor === SEM.amber
+      ? "rgba(240,168,48,0.30)"
+      : "rgba(220,38,38,0.30)";
+
+  // Handle edge: no equity → multiple may be Infinity or NaN
+  const safeMultiple = !isFinite(multiple) || isNaN(multiple) ? 0 : multiple;
+
+  return (
+    <section style={{
+      minHeight: "85dvh",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center",
+      position: "relative",
+    }}>
+      {/* Subtle radial glow behind the number */}
+      <div style={{
+        position: "absolute",
+        width: "300px", height: "300px",
+        borderRadius: "50%",
+        background: `radial-gradient(circle, ${glowRgba}, transparent 70%)`,
+        pointerEvents: "none",
+      }} />
+
+      {/* The number — massive */}
+      <RevealSection>
+      <div style={{
+        fontFamily: "'Roboto Mono', monospace",
+        fontSize: "clamp(100px, 25vw, 140px)",
+        fontWeight: 500,
+        lineHeight: 1,
+        color: multipleColor,
+        textShadow: `0 0 60px ${shadowRgba}`,
+        textAlign: "center",
+      }}>
+        {safeMultiple.toFixed(1)}&times;
+      </div>
+      </RevealSection>
+
+      {/* Verdict word */}
+      <RevealSection delay={300}>
+      <div style={{
+        fontFamily: "'Bebas Neue', sans-serif",
+        fontSize: "clamp(1.4rem, 4vw, 1.8rem)",
+        letterSpacing: "0.25em",
+        color: verdictColor,
+        marginTop: "12px",
+      }}>
+        {verdictWord}
+      </div>
+      </RevealSection>
+
+      {/* Scroll indicator */}
+      <div style={{
+        position: "absolute",
+        bottom: "24px",
+        fontFamily: "'Roboto Mono', monospace",
+        fontSize: "11px",
+        letterSpacing: "0.15em",
+        color: "rgba(212,175,55,0.40)",
+        textTransform: "uppercase" as const,
+      }}>
+        Scroll to explore
+      </div>
+    </section>
+  );
+};
+
+// ─── TRANSITION BRIDGE ───────────────────────────────────────────
+
+const TransitionBridge = ({ text, height = 48 }: { text?: string; height?: number }) => (
+  <div style={{ height: `${height}px`, display: "flex", alignItems: "center", justifyContent: "center" }}>
+    {text && (
+      <p style={{
+        fontFamily: "'Inter', sans-serif",
+        fontSize: "14px",
+        fontStyle: "italic",
+        color: "rgba(250,248,244,0.45)",
+        letterSpacing: "0.02em",
+      }}>
+        {text}
+      </p>
+    )}
+  </div>
+);
+
 // ─── SECTION 1: COVER ────────────────────────────────────────────
 
 const CoverSection = ({
@@ -538,17 +639,18 @@ const CoverSection = ({
         </RevealSection>
       )}
 
-      {/* 1e. KPI Rows */}
+      {/* 1e. ThirtySecondCard — 2×2 grid */}
       <RevealSection delay={400}>
       <div style={{
-        display: "flex",
+        display: "grid",
+        gridTemplateColumns: "1fr 1fr",
         gap: "2px",
         marginBottom: "2px",
         background: "rgba(255,255,255,0.06)",
         borderRadius: "12px",
         overflow: "hidden",
       }}>
-        <div style={{ flex: 1, background: BG.elevated, padding: "14px" }}>
+        <div style={{ background: BG.elevated, padding: "14px" }}>
           <div style={{ ...FONT.fine, color: W.quaternary, marginBottom: "4px" }}>BUDGET</div>
           <div style={{
             fontFamily: "'Roboto Mono', monospace",
@@ -560,31 +662,8 @@ const CoverSection = ({
             <CountUp value={inputs.budget} format="compact" trigger={coverInView} />
           </div>
         </div>
-        <div style={{ flex: 1, background: BG.elevated, padding: "14px", borderLeft: `2px solid ${gold(0.25)}` }}>
-          <div style={{ ...FONT.fine, color: W.quaternary, marginBottom: "4px" }}>CASH BASIS</div>
-          <div style={{
-            fontFamily: "'Roboto Mono', monospace",
-            fontSize: "26px",
-            fontWeight: 500,
-            letterSpacing: "0.06em",
-            color: G.emphasis,
-          }}>
-            <CountUp value={cashBasis} format="compact" trigger={coverInView} />
-          </div>
-        </div>
-      </div>
-      </RevealSection>
-      <RevealSection delay={500}>
-      <div style={{
-        display: "flex",
-        gap: "2px",
-        marginBottom: "2px",
-        background: "rgba(255,255,255,0.06)",
-        borderRadius: "12px",
-        overflow: "hidden",
-      }}>
-        <div style={{ flex: 1, background: BG.elevated, padding: "14px" }}>
-          <div style={{ ...FONT.fine, color: W.quaternary, marginBottom: "4px" }}>MARKET VALUE</div>
+        <div style={{ background: BG.elevated, padding: "14px", borderLeft: `2px solid ${gold(0.25)}` }}>
+          <div style={{ ...FONT.fine, color: W.quaternary, marginBottom: "4px" }}>ACQUISITION PRICE</div>
           <div style={{
             fontFamily: "'Roboto Mono', monospace",
             fontSize: "26px",
@@ -595,23 +674,38 @@ const CoverSection = ({
             <CountUp value={inputs.revenue} format="compact" trigger={coverInView} />
           </div>
         </div>
-        <div style={{ flex: 1, background: BG.elevated, padding: "14px", borderLeft: `2px solid ${returnColor === SEM.green ? "rgba(60,179,113,0.25)" : returnColor === SEM.amber ? "rgba(240,168,48,0.25)" : "rgba(220,38,38,0.35)"}` }}>
-          <div style={{ ...FONT.fine, color: W.quaternary, marginBottom: "4px" }}>INVESTOR RETURN</div>
+        <div style={{ background: BG.elevated, padding: "14px" }}>
+          <div style={{ ...FONT.fine, color: W.quaternary, marginBottom: "4px" }}>NET PROFIT</div>
           <div style={{
             fontFamily: "'Roboto Mono', monospace",
             fontSize: "26px",
             fontWeight: 500,
             letterSpacing: "0.06em",
-            color: returnColor,
+            color: result.profitPool > 0 ? SEM.green : SEM.red,
           }}>
-            <CountUp value={investorReturnPct} format="percent" trigger={coverInView} />
+            {result.profitPool > 0
+              ? <CountUp value={result.producer} format="compact" trigger={coverInView} />
+              : <>{"\u2212"}<CountUp value={Math.abs(result.profitPool)} format="compact" trigger={coverInView} /></>
+            }
+          </div>
+        </div>
+        <div style={{ background: BG.elevated, padding: "14px", borderLeft: `2px solid ${multipleColor === SEM.green ? "rgba(60,179,113,0.25)" : multipleColor === SEM.amber ? "rgba(240,168,48,0.25)" : "rgba(220,38,38,0.35)"}` }}>
+          <div style={{ ...FONT.fine, color: W.quaternary, marginBottom: "4px" }}>MULTIPLE</div>
+          <div style={{
+            fontFamily: "'Roboto Mono', monospace",
+            fontSize: "26px",
+            fontWeight: 500,
+            letterSpacing: "0.06em",
+            color: multipleColor,
+          }}>
+            <CountUp value={!isFinite(multiple) || isNaN(multiple) ? 0 : multiple} format="multiple" trigger={coverInView} />
           </div>
         </div>
       </div>
       </RevealSection>
 
-      {/* 1e-b. Break-Even Revenue (free metric) */}
-      <RevealSection delay={600}>
+      {/* 1e-b. Supplementary row: Break-Even + Cash Basis */}
+      <RevealSection delay={500}>
       <div style={{
         display: "flex",
         gap: "2px",
@@ -623,40 +717,50 @@ const CoverSection = ({
         <div style={{
           flex: 1,
           background: "#1A1A1C",
-          padding: "14px",
+          padding: "12px 14px",
           borderTop: "2px solid rgba(212,175,55,0.18)",
         }}>
-          <div style={{ ...FONT.fine, color: G.emphasis, marginBottom: "4px" }}>
-            BREAK-EVEN REVENUE
-          </div>
+          <div style={{ ...FONT.fine, color: G.emphasis, marginBottom: "3px" }}>BREAK-EVEN</div>
           <div style={{
             fontFamily: "'Roboto Mono', monospace",
-            fontSize: "26px",
+            fontSize: "20px",
             fontWeight: 500,
             letterSpacing: "0.06em",
             color: G.standard,
           }}>
             {breakeven === Infinity ? "N/A" : <CountUp value={breakeven} format="compact" trigger={coverInView} />}
           </div>
+        </div>
+        <div style={{
+          flex: 1,
+          background: "#1A1A1C",
+          padding: "12px 14px",
+          borderTop: "2px solid rgba(212,175,55,0.18)",
+        }}>
+          <div style={{ ...FONT.fine, color: G.emphasis, marginBottom: "3px" }}>CASH BASIS</div>
           <div style={{
-            fontSize: "12px",
-            color: W.quaternary,
-            marginTop: "3px",
+            fontFamily: "'Roboto Mono', monospace",
+            fontSize: "20px",
+            fontWeight: 500,
+            letterSpacing: "0.06em",
+            color: G.standard,
           }}>
-            Revenue needed to repay all obligations
+            <CountUp value={cashBasis} format="compact" trigger={coverInView} />
           </div>
         </div>
       </div>
       </RevealSection>
 
       {/* 1f. Verdict Strip — dramatic reveal */}
-      <RevealSection delay={800}>
+      <RevealSection delay={700}>
       <div style={{
         display: "flex",
         alignItems: "center",
         gap: "14px",
+        padding: "20px",
+        borderRadius: "12px",
         borderTop: `1px solid ${gold(0.15)}`,
-        paddingTop: "16px",
+        background: `radial-gradient(ellipse at 20% 50%, ${multipleColor === SEM.green ? "rgba(60,179,113,0.04)" : multipleColor === SEM.amber ? "rgba(240,168,48,0.04)" : "rgba(220,38,38,0.04)"}, transparent 70%)`,
       }}>
         <div style={{
           fontFamily: "'Roboto Mono', monospace",
@@ -798,23 +902,8 @@ const DealSection = ({
   const salesFeeAmount = result.salesFee;
   const multiple = result.multiple;
 
-  // Paragraph 1 — Capital structure
-  const p1Parts: string[] = [];
-  p1Parts.push(`This is a ${formatCompactCurrency(inputs.budget)} production modeled for acquisition at ${formatCompactCurrency(inputs.revenue)}.`);
-  const capitalParts: string[] = [];
-  if (inputs.debt > 0) capitalParts.push(`${formatCompactCurrency(inputs.debt)} in senior debt at ${inputs.seniorDebtRate}%`);
-  if (inputs.mezzanineDebt > 0) capitalParts.push(`${formatCompactCurrency(inputs.mezzanineDebt)} in mezzanine debt at ${inputs.mezzanineRate}%`);
-  if (inputs.equity > 0) capitalParts.push(`${formatCompactCurrency(inputs.equity)} in equity with a ${inputs.premium}% preferred return`);
-  if (capitalParts.length > 0) p1Parts.push("The capital stack: " + capitalParts.join(", ") + ".");
-  if (inputs.credits > 0 || inputs.deferments > 0) {
-    const softParts: string[] = [];
-    if (inputs.credits > 0) softParts.push(`tax credits (${formatCompactCurrency(inputs.credits)})`);
-    if (inputs.deferments > 0) softParts.push(`deferred fees (${formatCompactCurrency(inputs.deferments)})`);
-    p1Parts.push(`${softParts.join(" and ")} bring the investor's cash exposure down to ${formatCompactCurrency(cashBasis)}, which is the number your deal actually has to beat.`);
-  }
-  if (inputs.credits === 0 && inputs.deferments === 0) {
-    p1Parts.push(`No tax credits or deferrals reduce the investor's exposure. Cash basis equals ${formatCompactCurrency(cashBasis)}.`);
-  }
+  // Paragraph 1 — One-line capital structure (numbers already shown in 30-Second Card)
+  const p1 = `The investor's cash exposure is ${formatCompactCurrency(cashBasis)}, which is the number this deal has to beat.`;
 
   // Paragraph 2 — Off-the-top erosion
   const offTopPct = inputs.revenue > 0 ? Math.round((offTopTotal / inputs.revenue) * 100) : 0;
@@ -919,7 +1008,7 @@ const DealSection = ({
       {/* Prose */}
       <RevealSection delay={200}>
       <div style={{ ...FONT.body, color: "rgba(250,248,244,0.88)" }}>
-        <p style={{ marginBottom: "20px" }}>{p1Parts.join(" ")}</p>
+        <p style={{ marginBottom: "20px" }}>{p1}</p>
         <p style={{ marginBottom: "20px" }}>{p2}</p>
         <p style={{ marginBottom: "20px" }}>{p3}</p>
       </div>
@@ -952,6 +1041,170 @@ const DealSection = ({
       </RevealSection>
     </section>
     </SectionContainer>
+  );
+};
+
+// ─── REVENUE DONUT (SVG) ─────────────────────────────────────────
+
+const RevenueDonut = ({
+  inputs, result, inView,
+}: {
+  inputs: WaterfallInputs;
+  result: WaterfallResult;
+  inView: boolean;
+}) => {
+  const revenue = inputs.revenue;
+  if (revenue <= 0) return null;
+
+  // Build segments — order: off-the-top fees, debt, equity+premium, deferments, profit/shortfall
+  const rawSegments: { label: string; amount: number; color: string }[] = [];
+
+  // Off-the-top fees (broken out)
+  if (result.cam > 0) rawSegments.push({ label: "CAM Fee", amount: result.cam, color: "rgba(220,38,38,0.50)" });
+  if (result.salesFee > 0) rawSegments.push({ label: "Sales Commission", amount: result.salesFee, color: "rgba(220,38,38,0.65)" });
+  if (result.marketing > 0) rawSegments.push({ label: "Sales Expenses", amount: result.marketing, color: "rgba(220,38,38,0.80)" });
+  if (result.guilds > 0) rawSegments.push({ label: "Guild Reserves", amount: result.guilds, color: "rgba(220,38,38,0.35)" });
+
+  // Capital tiers
+  if (result.seniorDebtHurdle > 0) rawSegments.push({ label: "Senior Debt", amount: result.seniorDebtHurdle, color: "rgba(255,255,255,0.22)" });
+  if (result.mezzDebtHurdle > 0) rawSegments.push({ label: "Mezzanine Debt", amount: result.mezzDebtHurdle, color: "rgba(240,168,48,0.50)" });
+  if (result.equityHurdle > 0) rawSegments.push({ label: "Equity + Premium", amount: result.equityHurdle, color: "rgba(212,175,55,0.55)" });
+
+  // Deferments
+  if (inputs.deferments > 0) rawSegments.push({ label: "Deferments", amount: inputs.deferments, color: "rgba(255,255,255,0.12)" });
+
+  // Profit pool or shortfall
+  const profitPool = result.profitPool;
+  if (profitPool > 0) {
+    rawSegments.push({ label: "What's Left", amount: profitPool, color: "rgba(60,179,113,0.60)" });
+  } else if (revenue > result.totalHurdle) {
+    // No shortfall if profitPool === 0 but everything is covered
+  } else {
+    // Shortfall — the gap between what we have and what we need
+    const allocated = rawSegments.reduce((sum, s) => sum + s.amount, 0);
+    if (allocated < revenue) {
+      // Some gap
+    }
+  }
+
+  // Normalize: total of segments should approximate revenue
+  // Clamp segments so they don't exceed revenue
+  const segmentTotal = rawSegments.reduce((sum, s) => sum + s.amount, 0);
+  const normalizer = segmentTotal > 0 ? revenue / segmentTotal : 0;
+  const segments = rawSegments.map(s => ({
+    ...s,
+    normalized: s.amount * normalizer,
+    pct: segmentTotal > 0 ? (s.amount / revenue) * 100 : 0,
+    perDollar: revenue > 0 ? s.amount / revenue : 0,
+  }));
+
+  // If profitPool <= 0 and total allocated > revenue, we show shortfall
+  const showShortfall = profitPool <= 0;
+
+  // SVG donut math
+  const r = 80;
+  const circumference = 2 * Math.PI * r;
+  let cumulativeOffset = 0;
+
+  return (
+    <div style={{
+      background: BG.elevated,
+      borderRadius: "12px",
+      padding: "24px 20px",
+      marginBottom: "20px",
+      border: "1px solid rgba(255,255,255,0.06)",
+    }}>
+      <div style={{ ...FONT.fine, color: W.tertiary, marginBottom: "16px" }}>WHERE YOUR DOLLAR GOES</div>
+
+      {/* Donut container */}
+      <div style={{
+        display: "flex",
+        justifyContent: "center",
+        marginBottom: "20px",
+      }}>
+        <div style={{ position: "relative", width: "280px", height: "280px" }}>
+          <svg viewBox="0 0 200 200" style={{ width: "100%", height: "100%" }}>
+            {/* Background track */}
+            <circle
+              cx={100} cy={100} r={r}
+              fill="none"
+              stroke="rgba(255,255,255,0.04)"
+              strokeWidth={30}
+            />
+            {/* Segments */}
+            {segments.map((seg) => {
+              const segLength = (seg.pct / 100) * circumference;
+              const offset = circumference - segLength;
+              const rotation = (cumulativeOffset / circumference) * 360 - 90;
+              cumulativeOffset += segLength;
+              if (segLength <= 0) return null;
+              return (
+                <circle
+                  key={seg.label}
+                  cx={100} cy={100} r={r}
+                  fill="none"
+                  stroke={seg.color}
+                  strokeWidth={30}
+                  strokeDasharray={`${segLength} ${circumference - segLength}`}
+                  strokeDashoffset={0}
+                  transform={`rotate(${rotation} 100 100)`}
+                  style={{ transition: inView ? "stroke-dasharray 0.8s ease-out" : "none" }}
+                />
+              );
+            })}
+          </svg>
+          {/* Center label */}
+          <div style={{
+            position: "absolute",
+            inset: 0,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            pointerEvents: "none",
+          }}>
+            <div style={{
+              ...FONT.fine,
+              color: showShortfall ? "rgba(220,38,38,0.70)" : W.tertiary,
+              marginBottom: "4px",
+            }}>
+              {showShortfall ? "SHORTFALL" : "WHAT'S LEFT"}
+            </div>
+            <div style={{
+              fontFamily: "'Roboto Mono', monospace",
+              fontSize: "22px",
+              fontWeight: 500,
+              color: showShortfall ? SEM.red : SEM.green,
+            }}>
+              {showShortfall
+                ? `\u2212${formatCompactCurrency(Math.abs(profitPool))}`
+                : formatCompactCurrency(profitPool)
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Per-Dollar Legend */}
+      <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+        {segments.filter(s => s.amount > 0).map((seg) => (
+          <div key={seg.label} style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <span style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "13px", color: "rgba(250,248,244,0.70)" }}>
+              <span style={{ width: "8px", height: "8px", borderRadius: "50%", flexShrink: 0, background: seg.color }} />
+              {seg.label}
+            </span>
+            <span style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "13px", color: seg.color }}>
+                ${seg.perDollar.toFixed(2)}
+              </span>
+              <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: "rgba(255,255,255,0.50)" }}>
+                ({seg.pct.toFixed(0)}%)
+              </span>
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 };
 
@@ -1060,8 +1313,13 @@ const VisualCluster1 = ({
         </>
       )}
 
-      {/* Net strip */}
+      {/* ── REVENUE DONUT ── */}
       <RevealSection delay={100}>
+      <RevenueDonut inputs={inputs} result={result} inView={vc1InView} />
+      </RevealSection>
+
+      {/* Net strip */}
+      <RevealSection delay={200}>
       <div style={{
         display: "flex", justifyContent: "space-between", alignItems: "center",
         padding: "14px 20px", background: netBg, border: `1px solid ${netBorder}`,
@@ -1077,7 +1335,7 @@ const VisualCluster1 = ({
       {/* ── CAPITAL STACK VISUAL ── */}
       {sources.length > 0 && (
         <>
-          <RevealSection delay={200}>
+          <RevealSection delay={300}>
           <div style={{ ...FONT.fine, color: W.tertiary, marginBottom: "12px" }}>CAPITAL STRUCTURE</div>
           <div style={{
             display: "flex", flexDirection: "column", gap: "2px",
@@ -1125,7 +1383,7 @@ const VisualCluster1 = ({
       {/* ── SCENARIO TABLE VISUAL ── */}
       {inputs.revenue > 0 && (
         <>
-          <RevealSection delay={300}>
+          <RevealSection delay={400}>
           <div style={{ ...FONT.fine, color: W.tertiary, marginBottom: "12px" }}>SCENARIO STRESS TEST</div>
           <div style={{
             border: "1px solid rgba(255,255,255,0.08)",
@@ -1169,7 +1427,7 @@ const VisualCluster1 = ({
       )}
 
       {/* ── GATE 1: Sensitivity ── */}
-      <RevealSection delay={400}>
+      <RevealSection delay={500}>
         <LockedSensitivitySection />
       </RevealSection>
     </section>
@@ -1443,6 +1701,140 @@ const LockedSnapshotPlusSection = ({ onUnlock }: { onUnlock: () => void }) => (
   </section>
 );
 
+// ─── MARGIN RULER ────────────────────────────────────────────────
+
+const MarginRuler = ({
+  inputs, breakeven,
+}: {
+  inputs: WaterfallInputs;
+  breakeven: number;
+}) => {
+  const revenue = inputs.revenue;
+
+  // Edge: breakeven is Infinity or revenue is 0
+  if (!isFinite(breakeven) || revenue <= 0) {
+    return (
+      <div style={{
+        background: "linear-gradient(180deg, rgba(212,175,55,0.02), #232326)",
+        border: "1px solid rgba(212,175,55,0.12)",
+        borderRadius: "8px",
+        padding: "16px",
+        marginBottom: "20px",
+      }}>
+        <div style={{
+          fontFamily: "'Roboto Mono', monospace",
+          fontSize: "13px",
+          color: G.emphasis,
+        }}>
+          {breakeven === Infinity
+            ? "N/A \u2014 revenue does not cover off-the-tops"
+            : "N/A"
+          }
+        </div>
+      </div>
+    );
+  }
+
+  const margin = revenue - breakeven;
+  const isAbove = margin >= 0;
+  const maxVal = Math.max(revenue, breakeven);
+  const revenuePct = maxVal > 0 ? (revenue / maxVal) * 100 : 0;
+  const breakevenPct = maxVal > 0 ? (breakeven / maxVal) * 100 : 0;
+
+  return (
+    <div style={{
+      background: "linear-gradient(180deg, rgba(212,175,55,0.02), #232326)",
+      border: "1px solid rgba(212,175,55,0.12)",
+      borderRadius: "8px",
+      padding: "16px",
+      marginBottom: "20px",
+    }}>
+      {/* Labels above bar */}
+      <div style={{
+        display: "flex",
+        justifyContent: "space-between",
+        marginBottom: "10px",
+      }}>
+        <div style={{
+          fontFamily: "'Roboto Mono', monospace",
+          fontSize: "13px",
+          color: G.emphasis,
+        }}>
+          BREAK-EVEN: {formatCompactCurrency(breakeven)}
+        </div>
+        <div style={{
+          fontFamily: "'Roboto Mono', monospace",
+          fontSize: "13px",
+          color: isAbove ? SEM.green : SEM.red,
+        }}>
+          {formatCompactCurrency(Math.abs(margin))} {isAbove ? "above" : "below"}
+        </div>
+      </div>
+
+      {/* The bar */}
+      <div style={{
+        position: "relative",
+        height: "28px",
+        background: "rgba(255,255,255,0.04)",
+        borderRadius: "6px",
+        overflow: "hidden",
+      }}>
+        {isAbove ? (
+          <>
+            {/* Green fill from 0 to breakeven */}
+            <div style={{
+              position: "absolute",
+              left: 0, top: 0, bottom: 0,
+              width: `${breakevenPct}%`,
+              background: "rgba(60,179,113,0.30)",
+              borderRadius: "6px 0 0 6px",
+            }} />
+            {/* Brighter green from breakeven to revenue */}
+            <div style={{
+              position: "absolute",
+              left: `${breakevenPct}%`, top: 0, bottom: 0,
+              width: `${revenuePct - breakevenPct}%`,
+              background: "rgba(60,179,113,0.50)",
+              borderRadius: "0 6px 6px 0",
+            }} />
+          </>
+        ) : (
+          <>
+            {/* Green fill from 0 to revenue */}
+            <div style={{
+              position: "absolute",
+              left: 0, top: 0, bottom: 0,
+              width: `${revenuePct}%`,
+              background: "rgba(60,179,113,0.30)",
+              borderRadius: "6px 0 0 6px",
+            }} />
+            {/* Dark/red gap showing shortfall */}
+            <div style={{
+              position: "absolute",
+              left: `${revenuePct}%`, top: 0, bottom: 0,
+              width: `${breakevenPct - revenuePct}%`,
+              background: "rgba(220,38,38,0.20)",
+              borderRadius: "0 6px 6px 0",
+            }} />
+          </>
+        )}
+
+        {/* Gold vertical marker at breakeven */}
+        <div style={{
+          position: "absolute",
+          left: `${breakevenPct}%`,
+          top: "-2px",
+          bottom: "-2px",
+          width: "2px",
+          background: GOLD,
+          boxShadow: `0 0 6px ${gold(0.40)}`,
+          transform: "translateX(-1px)",
+        }} />
+      </div>
+    </div>
+  );
+};
+
 // ─── LIGHTER TEXT: THE INTERPRETATION ────────────────────────────
 
 const InterpretationSection = ({
@@ -1462,6 +1854,13 @@ const InterpretationSection = ({
   const location = project.location.trim();
   const creditPct = inputs.budget > 0 ? Math.round((inputs.credits / inputs.budget) * 100) : 0;
   const creditConcentration = inputs.budget > 0 ? (inputs.credits / inputs.budget) * 100 : 0;
+  const breakeven = calculateBreakeven(inputs, guilds, {
+    taxCredits: inputs.credits > 0,
+    seniorDebt: inputs.debt > 0,
+    gapLoan: inputs.mezzanineDebt > 0,
+    equity: inputs.equity > 0,
+    deferments: inputs.deferments > 0,
+  });
 
   return (
     <SectionContainer>
@@ -1495,6 +1894,9 @@ const InterpretationSection = ({
             <> At the base case, investors recover only <Num>{Math.round(investorReturnPct)}%</Num> of principal. The gap is structural.</>
           )}
         </p>
+
+        {/* Margin Ruler callout */}
+        <MarginRuler inputs={inputs} breakeven={breakeven} />
 
         {/* Paragraph 2: Risk concentration */}
         <p style={{ marginBottom: "20px" }}>
@@ -2407,7 +2809,10 @@ const WaterfallBrief = ({
       margin: "0 auto",
       padding: "0 clamp(12px, 3vw, 24px)",
     }}>
-      {/* ═══ 1. TITLE PAGE ═══ */}
+      {/* ═══ COLD OPEN — screen only, full viewport ═══ */}
+      <ColdOpen multiple={result.multiple} result={result} />
+
+      {/* ═══ 1. COVER — with ThirtySecondCard ═══ */}
       <CoverSection
         project={project}
         inputs={inputs}
@@ -2424,10 +2829,9 @@ const WaterfallBrief = ({
         </RevealSection>
       </div>
 
-      {/* Section spacing: 48px */}
-      <div style={{ height: "48px" }} />
+      <TransitionBridge text="The structure behind the numbers." height={48} />
 
-      {/* ═══ 2. DENSE TEXT: THE DEAL ═══ */}
+      {/* ═══ 2. THE DEAL ═══ */}
       <DealSection
         inputs={inputs}
         result={result}
@@ -2435,10 +2839,9 @@ const WaterfallBrief = ({
         project={project}
       />
 
-      {/* Section spacing: 56px */}
-      <div style={{ height: "56px" }} />
+      <TransitionBridge text="Now let's see where the money actually goes." height={56} />
 
-      {/* ═══ 3. VISUAL CLUSTER 1: THE NUMBERS ═══ */}
+      {/* ═══ 3. THE NUMBERS — with revenue donut ═══ */}
       <VisualCluster1
         inputs={inputs}
         result={result}
@@ -2446,10 +2849,9 @@ const WaterfallBrief = ({
         project={project}
       />
 
-      {/* Section spacing: 48px */}
-      <div style={{ height: "48px" }} />
+      <TransitionBridge text="What this means for your investors." height={48} />
 
-      {/* ═══ 4. LIGHTER TEXT: THE INTERPRETATION ═══ */}
+      {/* ═══ 4. THE INTERPRETATION — with margin ruler ═══ */}
       <InterpretationSection
         inputs={inputs}
         result={result}
@@ -2457,10 +2859,9 @@ const WaterfallBrief = ({
         project={project}
       />
 
-      {/* Section spacing: 56px */}
-      <div style={{ height: "56px" }} />
+      <TransitionBridge height={56} />
 
-      {/* ═══ 5. VISUAL CLUSTER 2: THE WATERFALL ═══ */}
+      {/* ═══ 5. THE WATERFALL ═══ */}
       <VisualCluster2
         tiers={tiers}
         result={result}
@@ -2468,10 +2869,9 @@ const WaterfallBrief = ({
         guilds={guilds}
       />
 
-      {/* Section spacing: 64px — dramatic pause before conclusion */}
-      <div style={{ height: "64px" }} />
+      <TransitionBridge height={64} />
 
-      {/* ═══ 6. DENSE TEXT: THE CONCLUSION ═══ */}
+      {/* ═══ 6. THE CONCLUSION ═══ */}
       <ConclusionSection
         inputs={inputs}
         result={result}
@@ -2479,8 +2879,7 @@ const WaterfallBrief = ({
         project={project}
       />
 
-      {/* Section spacing: 72px — biggest pause before CTA */}
-      <div style={{ height: "72px" }} />
+      <TransitionBridge height={72} />
 
       {/* ═══ 7. CTA ═══ */}
       <CTASection result={result} inputs={inputs} project={project} guilds={guilds} />
