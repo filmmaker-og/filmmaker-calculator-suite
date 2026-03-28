@@ -38,14 +38,22 @@ const Index = () => {
   }, [navigate]);
 
   const gatedNavigate = useCallback(async (destination: string) => {
-    // Check if they've already given their info (localStorage) or have a session
-    const hasLead = localStorage.getItem('og_lead_email');
-    const { data: { session } } = await supabase.auth.getSession();
-    if (session?.user || hasLead) {
-      navigate(destination);
-    } else {
-      setShowLeadCapture(true);
+    try {
+      // Check if they've already given their info (localStorage) or have a session
+      const hasLead = localStorage.getItem('og_lead_email');
+      if (hasLead) {
+        navigate(destination);
+        return;
+      }
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user) {
+        navigate(destination);
+        return;
+      }
+    } catch {
+      // If Supabase fails, fall through to show modal
     }
+    setShowLeadCapture(true);
   }, [navigate]);
 
   const handleCTA = async () => {
