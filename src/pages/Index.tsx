@@ -406,13 +406,13 @@ const Index = () => {
         <section ref={heroRef} style={{ position: "relative", padding: "0 24px 0" }}>
           <div style={{ ...reveal(heroVisible), textAlign: "center" }}>
             {/* Film slate lines */}
-            <div style={{ height: "1px", width: "60%", margin: "0 auto 12px", background: "rgba(212,175,55,0.10)" }} />
+            <div style={{ height: "1px", width: "60%", margin: "0 auto 12px", background: "rgba(212,175,55,0.16)" }} />
             <h1 style={styles.heroH1}>
               Model Your
               <span style={styles.heroMid}>Recoupment</span>
               <em style={styles.heroEm}>Waterfall</em>
             </h1>
-            <div style={{ height: "1px", width: "60%", margin: "12px auto 0", background: "rgba(212,175,55,0.10)" }} />
+            <div style={{ height: "1px", width: "60%", margin: "12px auto 0", background: "rgba(212,175,55,0.16)" }} />
           </div>
 
           {/* ── Mini Calculator ── */}
@@ -420,7 +420,7 @@ const Index = () => {
             ...reveal(heroVisible, 1),
             marginTop: "24px",
             background: "#1A1A1E",
-            border: "1px solid rgba(212,175,55,0.15)",
+            border: "1px solid rgba(212,175,55,0.18)",
             borderRadius: "8px",
             padding: "20px 16px",
           }}>
@@ -531,7 +531,7 @@ const Index = () => {
         </section>
 
         {/* ── Section divider ── */}
-        <div style={{ maxWidth: "120px", height: "1px", background: "rgba(212,175,55,0.15)", margin: "32px auto" }} />
+        <div style={{ maxWidth: "120px", height: "1px", background: "rgba(212,175,55,0.25)", margin: "40px auto" }} />
 
         {/* ═══ § 2 WATERFALL ═══ */}
         <section ref={(el) => { waterfallSectionRef.current = el; }} style={{ position: "relative", background: "#0C0C0E", padding: "0 0 0" }}>
@@ -562,7 +562,7 @@ const Index = () => {
             <div ref={waterfallCalloutRef} style={{
               position: "relative", overflow: "hidden", textAlign: "center",
               background: "#1A1A1E",
-              border: "1px solid rgba(212,175,55,0.15)", borderRadius: "8px", padding: "18px 16px",
+              border: "1px solid rgba(212,175,55,0.18)", borderRadius: "8px", padding: "18px 16px",
             }}>
               <p style={styles.acqAmount}>${TOTAL_ACQUISITION.toLocaleString()}</p>
             </div>
@@ -576,14 +576,14 @@ const Index = () => {
             <div style={{ display: "flex", gap: "8px", alignItems: "stretch" }}>
               <div style={{
                 flex: 1, borderRadius: "8px", padding: "10px 8px", textAlign: "center",
-                border: "1px solid rgba(212,175,55,0.15)", background: "#1A1A1E",
+                border: "1px solid rgba(212,175,55,0.18)", background: "#1A1A1E",
               }}>
                 <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.1rem", color: "rgba(255,255,255,0.88)", marginBottom: "4px" }}>Production Budget</div>
                 <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.6rem", color: "#D4AF37" }}>${PRODUCTION_BUDGET.toLocaleString()}</div>
               </div>
               <div style={{
                 flex: 1, borderRadius: "8px", padding: "10px 8px", textAlign: "center",
-                border: "1px solid rgba(212,175,55,0.15)", background: "#1A1A1E",
+                border: "1px solid rgba(212,175,55,0.18)", background: "#1A1A1E",
               }}>
                 <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.1rem", color: "rgba(255,255,255,0.88)", marginBottom: "4px" }}>Tax Credit (20%)</div>
                 <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.5rem", color: "#3CB371" }}>+${TAX_CREDIT.toLocaleString()}</div>
@@ -777,7 +777,7 @@ const Index = () => {
         </section>
 
         {/* ── Section divider ── */}
-        <div style={{ maxWidth: "120px", height: "1px", background: "rgba(212,175,55,0.15)", margin: "48px auto" }} />
+        <div style={{ maxWidth: "120px", height: "1px", background: "rgba(212,175,55,0.25)", margin: "48px auto" }} />
 
         {/* ═══ § 3 SOCIAL PROOF ═══ */}
         <section ref={socialRef} style={{ position: "relative", background: "#0C0C0E", padding: "0 24px 0" }}>
@@ -788,7 +788,7 @@ const Index = () => {
           {/* Testimonial blockquote */}
           <div style={{
             ...reveal(socialVisible, 1),
-            borderLeft: "3px solid #D4AF37",
+            borderLeft: "3px solid rgba(212,175,55,0.50)",
             paddingLeft: "16px",
             margin: "16px 0 24px",
           }}>
@@ -816,7 +816,7 @@ const Index = () => {
         </section>
 
         {/* ── Section divider ── */}
-        <div style={{ maxWidth: "120px", height: "1px", background: "rgba(212,175,55,0.15)", margin: "32px auto" }} />
+        <div style={{ maxWidth: "120px", height: "1px", background: "rgba(212,175,55,0.25)", margin: "40px auto" }} />
 
         {/* ═══ § 4 WHAT'S AT STAKE ═══ */}
         <section ref={stakeRef} style={{ position: "relative", background: "#0C0C0E", padding: "0 24px 0" }}>
@@ -832,9 +832,9 @@ const Index = () => {
                 style={{
                   ...reveal(stakeVisible, i + 1),
                   background: "#1A1A1E",
-                  border: "1px solid rgba(212,175,55,0.15)",
+                  border: "1px solid rgba(212,175,55,0.18)",
                   borderRadius: "8px",
-                  borderLeft: "3px solid #D4AF37",
+                  borderLeft: "3px solid rgba(212,175,55,0.50)",
                   padding: "20px 16px",
                 }}
               >
@@ -847,7 +847,7 @@ const Index = () => {
         </section>
 
         {/* ── Section divider ── */}
-        <div style={{ maxWidth: "120px", height: "1px", background: "rgba(212,175,55,0.15)", margin: "32px auto" }} />
+        <div style={{ maxWidth: "120px", height: "1px", background: "rgba(212,175,55,0.25)", margin: "40px auto" }} />
 
         {/* ═══ § 5 REALITY ═══ */}
         <section style={{ position: "relative", background: "#0C0C0E", textAlign: "left", padding: "0 24px 0" }}>
@@ -856,9 +856,9 @@ const Index = () => {
             ref={realityQuoteRef}
             style={{
               background: "#1A1A1E",
-              border: "1px solid rgba(212,175,55,0.15)",
+              border: "1px solid rgba(212,175,55,0.18)",
               borderRadius: "8px",
-              borderLeft: "3px solid #D4AF37",
+              borderLeft: "3px solid rgba(212,175,55,0.50)",
               padding: "24px 20px",
               textAlign: "center",
               marginBottom: "24px",
@@ -883,7 +883,7 @@ const Index = () => {
           {/* WITH/WITHOUT grid — 3 rows */}
           <div ref={realityGridRef} style={{
             ...reveal(realityGridVisible),
-            border: "1px solid rgba(212,175,55,0.15)",
+            border: "1px solid rgba(212,175,55,0.18)",
             borderRadius: "8px",
             overflow: "hidden",
           }}>
@@ -930,12 +930,12 @@ const Index = () => {
         </section>
 
         {/* ── Section divider ── */}
-        <div style={{ maxWidth: "120px", height: "1px", background: "rgba(212,175,55,0.15)", margin: "32px auto" }} />
+        <div style={{ maxWidth: "120px", height: "1px", background: "rgba(212,175,55,0.25)", margin: "40px auto" }} />
 
         {/* ═══ § 6 CLOSER ═══ */}
         <section ref={closerRef} style={{ ...reveal(closerVisible), textAlign: "center", padding: "0 24px 0" }}>
           {/* Film slate lines */}
-          <div style={{ height: "1px", width: "60%", margin: "0 auto 16px", background: "rgba(212,175,55,0.10)" }} />
+          <div style={{ height: "1px", width: "60%", margin: "0 auto 16px", background: "rgba(212,175,55,0.16)" }} />
           <h2 style={{
             fontFamily: "'Bebas Neue', sans-serif",
             fontSize: "3.4rem",
@@ -958,11 +958,11 @@ const Index = () => {
             <div style={styles.ctaShimmer} />
           </button>
           <p style={styles.ctaReassurance}>No Credit Card · Instant Results</p>
-          <div style={{ height: "1px", width: "60%", margin: "16px auto 0", background: "rgba(212,175,55,0.10)" }} />
+          <div style={{ height: "1px", width: "60%", margin: "16px auto 0", background: "rgba(212,175,55,0.16)" }} />
         </section>
 
         {/* ── Section divider ── */}
-        <div style={{ maxWidth: "120px", height: "1px", background: "rgba(212,175,55,0.15)", margin: "32px auto" }} />
+        <div style={{ maxWidth: "120px", height: "1px", background: "rgba(212,175,55,0.25)", margin: "40px auto" }} />
 
         {/* ═══ § 6.5 PRODUCT PREVIEW — Real Output ═══ */}
         <section ref={previewRef} style={{ position: "relative", background: "#0C0C0E", padding: "0 24px 0" }}>
@@ -1037,7 +1037,7 @@ const Index = () => {
                   <p style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.3rem", color: "#3CB371" }}>$209K</p>
                 </div>
               </div>
-              <div style={{ height: "1px", background: "rgba(212,175,55,0.10)", marginBottom: "10px" }} />
+              <div style={{ height: "1px", background: "rgba(212,175,55,0.16)", marginBottom: "10px" }} />
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "10px", color: "rgba(255,255,255,0.40)", letterSpacing: "0.06em" }}>NET BACKEND</span>
                 <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "10px", color: "#3CB371", letterSpacing: "0.06em" }}>$418,000</span>
@@ -1091,12 +1091,13 @@ const styles: Record<string, React.CSSProperties> = {
     display: "flex", alignItems: "center", justifyContent: "center", gap: "12px", marginBottom: "14px",
   },
   eyebrowLine: {
-    flex: 1, height: "1px", background: "rgba(212,175,55,0.40)",
+    flex: 1, height: "1px", background: "rgba(212,175,55,0.55)",
   },
   eyebrowLabel: {
-    fontFamily: "'Roboto Mono', monospace", fontSize: "12px",
+    fontFamily: "'Roboto Mono', monospace", fontSize: "13px",
     letterSpacing: "0.18em", textTransform: "uppercase", color: "#D4AF37",
     whiteSpace: "nowrap",
+    textShadow: "0 0 20px rgba(212,175,55,0.15)",
   },
 
   /* ── CTA Button — gold with black text ── */
@@ -1150,7 +1151,7 @@ const styles: Record<string, React.CSSProperties> = {
   } as React.CSSProperties,
 
   /* ── Section header ── */
-  sectionH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.2rem", color: "#fff", lineHeight: 0.95 },
+  sectionH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.4rem", color: "#fff", lineHeight: 0.95, textShadow: "0 2px 20px rgba(0,0,0,0.5)" },
 
   /* ── § 2 WATERFALL ── */
   waterfallExplainer: {
@@ -1163,7 +1164,7 @@ const styles: Record<string, React.CSSProperties> = {
   /* ── FOOTER ── */
   footer: { background: "#1A1A1E", borderTop: "1px solid rgba(255,255,255,0.08)", padding: "32px 24px 40px" },
   footerLinks: { display: "flex", justifyContent: "center", gap: "20px", marginBottom: "16px" },
-  footerIcon: { color: "rgba(212,175,55,0.50)", textDecoration: "none", display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", padding: "4px", borderRadius: "8px", border: "1px solid rgba(212,175,55,0.15)", transition: "color 0.2s ease, border-color 0.2s ease", boxSizing: "content-box" },
+  footerIcon: { color: "rgba(212,175,55,0.50)", textDecoration: "none", display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", padding: "4px", borderRadius: "8px", border: "1px solid rgba(212,175,55,0.18)", transition: "color 0.2s ease, border-color 0.2s ease", boxSizing: "content-box" },
   footerNav: { display: "flex", justifyContent: "center", alignItems: "center", gap: "10px", marginBottom: "16px" },
   footerNavLink: { fontFamily: "'Roboto Mono', monospace", fontSize: "13px", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(212,175,55,0.50)", cursor: "pointer", transition: "color 0.2s ease" } as React.CSSProperties,
   footerText: { fontFamily: "'Inter', sans-serif", fontSize: "14px", textAlign: "center", color: "rgba(255,255,255,0.50)", lineHeight: 1.55 },
