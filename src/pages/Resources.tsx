@@ -543,7 +543,7 @@ const Resources = () => {
       minHeight: "100vh",
     }}>
       {/* ---- HERO (glass card) ---- */}
-      <div ref={headerRef} style={{ padding: "32px 0 0", position: "relative" }}>
+      <div ref={headerRef} style={{ padding: "32px 0 0", marginBottom: "16px", position: "relative" }}>
         {/* Glass hero card */}
         <section style={{
           position: "relative", textAlign: "center",

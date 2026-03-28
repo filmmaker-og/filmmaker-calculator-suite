@@ -386,7 +386,7 @@ const WorkingModelPopup = ({
     />
     <div
       style={{
-        position: "relative", width: "100%", maxWidth: "430px",
+        position: "relative", width: "100%", maxWidth: "780px",
         borderTopLeftRadius: "8px", borderTopRightRadius: "8px",
         overflow: "hidden",
         border: "1px solid rgba(212,175,55,0.15)",
@@ -1061,7 +1061,7 @@ const Store = () => {
 
   /* ─── RENDER ─── */
   return (
-    <div style={{ minHeight: "100vh", background: "#0C0C0E", maxWidth: "430px", margin: "0 auto" }}>
+    <div style={{ minHeight: "100vh", background: "#0C0C0E", maxWidth: "780px", margin: "0 auto" }}>
       <StyleInjector />
 
       {/* Working Model Popup */}
@@ -1260,7 +1260,13 @@ const Store = () => {
       <section
         style={{ padding: "0 24px 32px", position: "relative" }}
       >
-        <div style={{ position: "relative" }}>
+        <div style={{
+          background: "#1A1A1C",
+          border: "1px solid rgba(212,175,55,0.15)",
+          borderTop: "1px solid rgba(255,255,255,0.08)",
+          borderRadius: "8px",
+          padding: "32px 24px",
+        }}>
           <EyebrowRuled text="Questions" />
           <div style={{ textAlign: "center", marginBottom: "32px" }}>
             <h2 style={{

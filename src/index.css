@@ -11,6 +11,10 @@
 }
 .scrollbar-hide::-webkit-scrollbar { display: none; }
 
+/* Scroll thread — hidden on narrow viewports */
+.scroll-thread { display: none; }
+@media (min-width: 840px) { .scroll-thread { display: block; } }
+
 /* ═══════════════════════════════════════════════════════════════════
    SNAP SCROLL — proximity-based section snapping (mobile-first)
    ═══════════════════════════════════════════════════════════════════ */

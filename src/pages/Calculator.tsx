@@ -74,7 +74,7 @@ const s: Record<string, React.CSSProperties> = {
     paddingBottom: "calc(62px + 100px + env(safe-area-inset-bottom, 0px))",
   },
   col: {
-    maxWidth: "430px",
+    maxWidth: "780px",
     margin: "0 auto",
   },
   loading: {

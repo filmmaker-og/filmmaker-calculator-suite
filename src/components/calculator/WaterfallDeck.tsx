@@ -2069,7 +2069,7 @@ const WaterfallBrief = ({
   return (
     <div style={{
       background: "#1A1A1C",
-      maxWidth: "430px",
+      maxWidth: "780px",
       margin: "0 auto",
     }}>
       {/* ═══ 1. TITLE PAGE ═══ */}

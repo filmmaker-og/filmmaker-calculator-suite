@@ -9,12 +9,12 @@ import { Instagram } from "lucide-react";
 /*
   PAGE STACK — v17 (Interactive Hero Restructure):
     § 1. HERO         — Interactive mini-calculator (3 sliders + live output)
-    § 2. WATERFALL    — Card-based money flow (pair cards + arrow connectors)
-    § 3. SOCIAL PROOF — Testimonial + stats pills + feature badges
+    § 2. PREVIEW      — 5 horizontally scrollable output cards
+    § 3. WATERFALL    — Card-based money flow (pair cards + arrow connectors)
     § 4. WHAT'S AT STAKE — 4 tight reason cards (gold left border)
     § 5. REALITY      — Typing reveal + WITH/WITHOUT grid (3 rows)
-    § 5.5 PRODUCT PREVIEW — 5 horizontally scrollable cards
-    § 6. CLOSER       — "YOUR NEXT PITCH / IS COMING."
+    § 6. SOCIAL PROOF — Testimonial + feature badges
+    § 7. CLOSER       — "YOUR NEXT PITCH / IS COMING."
     FOOTER
 
   CTA: All go through gatedNavigate → auth check → LeadCaptureModal if no session.
@@ -99,9 +99,10 @@ const Index = () => {
 
   // Live calculation
   const salesFee = acquisitionValue * (salesFeePercent / 100);
-  const guilds = acquisitionValue * 0.055;
-  const camFee = acquisitionValue * 0.01;
-  const debtService = budgetValue * 0.40;
+  const guilds = budgetValue * 0.055; // guilds are on production budget
+  const camFee = acquisitionValue * 0.01; // CAM is on revenue
+  const debtAmount = budgetValue * 0.50; // 50% of budget financed by debt
+  const debtService = debtAmount * 0.12; // 12% interest on the debt
   const totalDeductions = salesFee + guilds + camFee + debtService;
   const heroNetProfit = acquisitionValue - totalDeductions;
 
@@ -396,7 +397,7 @@ const Index = () => {
 
       {/* ── Scroll progress gold thread ── */}
       {!footerVisible && (
-        <div style={{
+        <div className="scroll-thread" style={{
           position: "fixed",
           top: 0,
           left: "max(8px, calc(50% - 390px))",
@@ -435,25 +436,23 @@ const Index = () => {
               <span style={styles.heroMid}>Recoupment</span>
               <em style={styles.heroEm}>Waterfall</em>
             </h1>
-            <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "rgba(255,255,255,0.70)", marginTop: "8px", letterSpacing: "0.02em" }}>The free waterfall calculator for independent producers</p>
+            <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "clamp(14px, 2vw, 16px)", color: "rgba(255,255,255,0.70)", marginTop: "8px", letterSpacing: "0.02em" }}>The free waterfall calculator for independent producers</p>
             <div style={{ height: "1px", width: "60%", margin: "12px auto 0", background: "rgba(212,175,55,0.22)" }} />
           </div>
 
           {/* ── CTA ── */}
           <div style={{ marginTop: "20px" }}>
             <button onClick={handleCTA} style={styles.ctaBtn} className="cta-gold-btn" aria-label="Build my waterfall" onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>
-              <span style={{ position: "relative", zIndex: 1 }}>BUILD THE FULL MODEL</span>
+              <span style={{ position: "relative", zIndex: 1 }}>BUILD MY WATERFALL — FREE</span>
               <div style={styles.ctaShimmer} />
             </button>
-            <p style={styles.ctaReassurance}>No Credit Card · Instant Results</p>
+            <p style={styles.ctaReassurance}>See your full waterfall in 60 seconds</p>
           </div>
-
-          <div style={{ height: "24px" }} />
 
           {/* ── Mini Calculator ── */}
           <div style={{
             ...reveal(heroVisible, 1),
-            marginTop: "24px",
+            marginTop: "20px",
             background: "#232326",
             border: "1px solid rgba(212,175,55,0.15)",
             borderRadius: "6px",
@@ -559,7 +558,7 @@ const Index = () => {
         <div style={{ height: "32px" }} />
 
         {/* ═══ § 5.5 PRODUCT PREVIEW — Real Output ═══ */}
-        <section ref={previewRef} style={{ padding: "0 clamp(20px, 5vw, 48px)", marginBottom: "8px" }}>
+        <section ref={previewRef} style={{ padding: "0 clamp(20px, 5vw, 48px)", marginBottom: "0" }}>
           <div style={{
             ...reveal(previewVisible),
             position: "relative",
@@ -945,7 +944,7 @@ const Index = () => {
               <span style={{ position: "relative", zIndex: 1 }}>BUILD MY WATERFALL</span>
               <div style={styles.ctaShimmer} />
             </button>
-            <p style={styles.ctaReassurance}>No Credit Card · Instant Results</p>
+            <p style={styles.ctaReassurance}>See your full waterfall in 60 seconds</p>
           </div>
           </div>
         </section>
@@ -986,7 +985,7 @@ const Index = () => {
                   <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "#D4AF37", lineHeight: 1, flexShrink: 0 }}>{card.num}</span>
                   <p style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.3rem", color: "rgba(255,255,255,0.95)", lineHeight: 1.1, margin: 0 }}>{card.title}</p>
                 </div>
-                <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "15px", color: "rgba(255,255,255,0.75)", lineHeight: 1.45 }}>{card.body}</p>
+                <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "15px", color: "rgba(250,248,244,0.78)", lineHeight: 1.6 }}>{card.body}</p>
               </div>
             ))}
           </div>
@@ -1100,7 +1099,7 @@ const Index = () => {
                   borderTop: "1px solid rgba(255,255,255,0.08)",
                 }}>
                   <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "20px", lineHeight: "22px", flexShrink: 0, color: "rgba(220,38,38,0.85)", textShadow: "0 0 8px rgba(220,38,38,0.20)" }}>✗</span>
-                  <span style={{ fontFamily: "'Inter', sans-serif", fontSize: "16px", lineHeight: 1.4, color: "rgba(255,255,255,0.78)" }}>{withoutItems[i]}</span>
+                  <span style={{ fontFamily: "'Inter', sans-serif", fontSize: "16px", lineHeight: 1.4, color: "rgba(250,248,244,0.78)" }}>{withoutItems[i]}</span>
                 </div>
               </React.Fragment>
             ))}
@@ -1133,6 +1132,7 @@ const Index = () => {
             ...reveal(socialVisible, 1),
             paddingLeft: "16px",
             margin: "16px 0 24px",
+            borderLeft: "2px solid rgba(212,175,55,0.25)",
           }}>
             <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "16px", color: "rgba(250,248,244,0.90)", lineHeight: 1.6, fontStyle: "italic" }}>
               "Finally, a tool that speaks the language of independent film finance. I walked into my investor meeting with real numbers."
@@ -1142,15 +1142,13 @@ const Index = () => {
             </p>
           </div>
 
-          <div style={{ marginBottom: "24px" }} />
-
           {/* Feature badges — text only, no emojis */}
           <div style={{ ...reveal(socialVisible, 3), display: "flex", flexWrap: "wrap", gap: "8px", justifyContent: "center" }}>
             {["11-Tier Waterfall", "PDF Export", "Profit Split", "Deal Verdict"].map((feat) => (
               <div key={feat} style={{
                 fontFamily: "'Roboto Mono', monospace", fontSize: "11px",
                 color: "rgba(212,175,55,0.70)", letterSpacing: "0.06em",
-                textTransform: "uppercase", padding: "8px 14px", borderRadius: "999px",
+                textTransform: "uppercase", padding: "6px 12px", borderRadius: "999px",
                 border: "1px solid rgba(212,175,55,0.20)", background: "rgba(212,175,55,0.03)",
               }}>{feat}</div>
             ))}
@@ -1199,12 +1197,12 @@ const Index = () => {
               <span style={{ position: "relative", zIndex: 1 }}>BUILD MY WATERFALL — FREE</span>
               <div style={styles.ctaShimmer} />
             </button>
-            <p style={styles.ctaReassurance}>No Credit Card · Instant Results</p>
+            <p style={styles.ctaReassurance}>See your full waterfall in 60 seconds</p>
           </div>
         </section>
 
         {/* ═══ FOOTER ═══ */}
-        <footer ref={footerRef} style={{ ...styles.footer, opacity: prefersReducedMotion || footerVisible ? 1 : 0, transition: prefersReducedMotion ? "none" : "opacity 0.8s ease-out", marginTop: "40px" }}>
+        <footer ref={footerRef} style={{ ...styles.footer, opacity: prefersReducedMotion || footerVisible ? 1 : 0, transition: prefersReducedMotion ? "none" : "opacity 0.8s ease-out", marginTop: "24px" }}>
           <div style={styles.footerLinks}>
             <a href="https://www.instagram.com/filmmaker.og" target="_blank" rel="noopener noreferrer" style={styles.footerIcon} aria-label="Instagram" onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.65)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.50)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.15)"; }}>
               <Instagram size={18} />
@@ -1298,7 +1296,7 @@ const styles: Record<string, React.CSSProperties> = {
 
   /* ── § 2 WATERFALL ── */
   waterfallExplainer: {
-    fontFamily: "'Inter', sans-serif", fontSize: "16px", color: "rgba(255,255,255,0.75)",
+    fontFamily: "'Inter', sans-serif", fontSize: "16px", color: "rgba(250,248,244,0.78)",
     lineHeight: 1.6, textAlign: "center", padding: "0", marginBottom: "24px",
     maxWidth: "380px", marginLeft: "auto", marginRight: "auto",
   },
