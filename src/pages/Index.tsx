@@ -972,45 +972,53 @@ const Index = () => {
             border: "1px solid rgba(212,175,55,0.12)",
             borderRadius: "8px",
             overflow: "hidden",
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
           }}>
-            {/* Header */}
+            {/* Header — WITH */}
             <div style={{
-              display: "grid", gridTemplateColumns: "1fr 1fr",
-              borderBottom: "1px solid rgba(255,255,255,0.08)",
+              background: "#242428",
+              padding: "14px 16px",
+              borderBottom: "1px solid rgba(60,179,113,0.20)",
+              display: "flex", alignItems: "center",
             }}>
-              <div style={{ background: "#242428", padding: "14px 16px", borderBottom: "1px solid rgba(60,179,113,0.20)" }}>
-                <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.6rem", color: "#3CB371", letterSpacing: "0.04em" }}>WITH</span>
-              </div>
-              <div style={{ background: "#242428", padding: "14px 16px", borderLeft: "1px solid rgba(255,255,255,0.08)", borderBottom: "1px solid rgba(220,38,38,0.12)" }}>
-                <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.6rem", color: "rgba(220,38,38,0.85)", letterSpacing: "0.04em" }}>WITHOUT</span>
-              </div>
+              <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.6rem", color: "#3CB371", letterSpacing: "0.04em" }}>WITH</span>
+            </div>
+            {/* Header — WITHOUT */}
+            <div style={{
+              background: "#242428",
+              padding: "14px 16px",
+              borderLeft: "1px solid rgba(255,255,255,0.08)",
+              borderBottom: "1px solid rgba(220,38,38,0.12)",
+              display: "flex", alignItems: "center",
+            }}>
+              <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.6rem", color: "rgba(220,38,38,0.85)", letterSpacing: "0.04em" }}>WITHOUT</span>
             </div>
             {/* Rows */}
             {withItems.map((withItem, i) => (
-              <div key={i} style={{
-                display: "grid", gridTemplateColumns: "1fr 1fr",
-                borderBottom: i < withItems.length - 1 ? "1px solid rgba(255,255,255,0.08)" : "none",
-              }}>
+              <React.Fragment key={i}>
                 <div style={{
                   ...reveal(realityGridVisible, i + 1),
                   background: "#242428",
-                  display: "grid", gridTemplateColumns: "22px 1fr", gap: "10px",
+                  display: "flex", gap: "10px",
                   padding: "14px 16px", alignItems: "flex-start",
+                  borderTop: "1px solid rgba(255,255,255,0.08)",
                 }}>
-                  <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "20px", paddingTop: "2px", color: "#3CB371", textShadow: "0 0 8px rgba(60,179,113,0.20)" }}>✓</span>
+                  <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "20px", lineHeight: "22px", flexShrink: 0, color: "#3CB371", textShadow: "0 0 8px rgba(60,179,113,0.20)" }}>✓</span>
                   <span style={{ fontFamily: "'Inter', sans-serif", fontSize: "16px", lineHeight: 1.4, color: "rgba(255,255,255,0.88)" }}>{withItem}</span>
                 </div>
                 <div style={{
                   ...reveal(realityGridVisible, i + 1),
                   background: "#242428",
-                  display: "grid", gridTemplateColumns: "22px 1fr", gap: "10px",
+                  display: "flex", gap: "10px",
                   padding: "14px 16px", alignItems: "flex-start",
                   borderLeft: "1px solid rgba(255,255,255,0.08)",
+                  borderTop: "1px solid rgba(255,255,255,0.08)",
                 }}>
-                  <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "20px", paddingTop: "2px", color: "rgba(220,38,38,0.85)", textShadow: "0 0 8px rgba(220,38,38,0.20)" }}>✗</span>
+                  <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "20px", lineHeight: "22px", flexShrink: 0, color: "rgba(220,38,38,0.85)", textShadow: "0 0 8px rgba(220,38,38,0.20)" }}>✗</span>
                   <span style={{ fontFamily: "'Inter', sans-serif", fontSize: "16px", lineHeight: 1.4, color: "rgba(255,255,255,0.78)" }}>{withoutItems[i]}</span>
                 </div>
-              </div>
+              </React.Fragment>
             ))}
           </div>
           </div>
