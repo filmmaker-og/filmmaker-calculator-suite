@@ -89,7 +89,7 @@ const ProgressBar = ({
    CONFIRMATION SCREEN
    ═══════════════════════════════════════════════════════════════════ */
 const ConfirmationScreen = ({ email }: { email: string }) => (
-  <div className="min-h-screen bg-black flex flex-col items-center justify-center px-6 animate-fade-in">
+  <div className="min-h-screen bg-bg-void flex flex-col items-center justify-center px-6 animate-fade-in">
     <div className="text-center max-w-md">
       <div className="w-20 h-20 border-2 border-gold mx-auto mb-6 rounded-lg flex items-center justify-center">
         <Check className="w-10 h-10 text-gold" />
@@ -385,7 +385,7 @@ const BuildYourPlan = () => {
   // Loading state
   if (loading) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="min-h-screen bg-bg-void flex items-center justify-center">
         <div className="text-center">
           <div className="w-8 h-8 border-2 border-gold border-t-transparent rounded-full animate-spin mx-auto mb-4" />
           <p className="text-ink-secondary text-[14px]">Loading your plan...</p>
@@ -405,7 +405,7 @@ const BuildYourPlan = () => {
       : "The Full Analysis";
 
   return (
-    <div className="min-h-screen bg-black flex flex-col">
+    <div className="min-h-screen bg-bg-void flex flex-col">
       {/* Header */}
       <header className="sticky top-0 z-50 bg-bg-header/95 backdrop-blur-sm border-b border-white/[0.06]">
         <div className="max-w-[640px] mx-auto px-6 py-4">
