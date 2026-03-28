@@ -448,7 +448,7 @@ const Index = () => {
             <p style={styles.ctaReassurance}>No Credit Card · Instant Results</p>
           </div>
 
-          <p style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: "rgba(212,175,55,0.50)", letterSpacing: "0.10em", textTransform: "uppercase", textAlign: "center", margin: "24px 0 8px" }}>Or try it right now</p>
+          <div style={{ height: "24px" }} />
 
           {/* ── Mini Calculator ── */}
           <div style={{
