@@ -942,3 +942,54 @@
     border: none;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+   LANDING PAGE v17 — Keyframes & Ambient Effects
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* Desktop ambient glow — fixed blurred circles */
+@media (min-width: 768px) {
+  body::before {
+    content: '';
+    position: fixed;
+    top: 15%;
+    left: -120px;
+    width: 320px;
+    height: 320px;
+    background: radial-gradient(circle, rgba(120,60,180,0.08) 0%, transparent 70%);
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+    z-index: 0;
+  }
+  body::after {
+    content: '';
+    position: fixed;
+    bottom: 20%;
+    right: -100px;
+    width: 280px;
+    height: 280px;
+    background: radial-gradient(circle, rgba(212,175,55,0.06) 0%, transparent 70%);
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+    z-index: 0;
+  }
+}
+
+/* Stamp micro-interaction for waterfall tier cards */
+@keyframes stamp {
+  0% { transform: scale(1.08) translateX(-2px); opacity: 0.7; }
+  40% { transform: scale(1) translateX(2px); }
+  70% { transform: scale(1.02) translateX(-1px); }
+  100% { transform: scale(1) translateX(0); opacity: 1; }
+}
+.stamp-animate {
+  animation: stamp 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* Typing cursor blink for Reality section */
+@keyframes cursor-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}

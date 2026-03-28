@@ -115,9 +115,12 @@ const LeadCaptureModal = ({ isOpen, onClose, onEmailSubmitted }: LeadCaptureModa
           .lead-capture-input:-webkit-autofill,
           .lead-capture-input:-webkit-autofill:hover,
           .lead-capture-input:-webkit-autofill:focus {
-            -webkit-box-shadow: 0 0 0 1000px #1A1A1A inset !important;
-            -webkit-text-fill-color: #FFFFFF !important;
-            caret-color: #FFFFFF;
+            -webkit-box-shadow: 0 0 0 1000px rgba(255,255,255,0.95) inset !important;
+            -webkit-text-fill-color: #000 !important;
+            caret-color: #000;
+          }
+          .lead-capture-input::placeholder {
+            color: rgba(0,0,0,0.40);
           }
         `}</style>
         {/* Gold accent */}
@@ -188,10 +191,11 @@ const LeadCaptureModal = ({ isOpen, onClose, onEmailSubmitted }: LeadCaptureModa
                     (e.currentTarget.nextElementSibling as HTMLInputElement)?.focus();
                   }
                 }}
-                className="lead-capture-input w-full h-12 px-4 text-white text-[14px] focus:outline-none transition-all"
+                className="lead-capture-input w-full h-12 px-4 text-[14px] focus:outline-none transition-all"
                 style={{
-                  background: "#1A1A1A",
-                  border: "1px solid rgba(255,255,255,0.15)",
+                  background: "rgba(255,255,255,0.95)",
+                  color: "#000",
+                  border: "1px solid rgba(0,0,0,0.12)",
                   borderRadius: "4px",
                 }}
                 onFocus={e => {
@@ -199,7 +203,7 @@ const LeadCaptureModal = ({ isOpen, onClose, onEmailSubmitted }: LeadCaptureModa
                   e.currentTarget.style.boxShadow = "0 0 0 3px rgba(212,175,55,0.08)";
                 }}
                 onBlur={e => {
-                  e.currentTarget.style.borderColor = "rgba(255,255,255,0.15)";
+                  e.currentTarget.style.borderColor = "rgba(0,0,0,0.12)";
                   e.currentTarget.style.boxShadow = "none";
                 }}
               />
@@ -220,10 +224,11 @@ const LeadCaptureModal = ({ isOpen, onClose, onEmailSubmitted }: LeadCaptureModa
                     handleSubmit(e as unknown as React.FormEvent);
                   }
                 }}
-                className="lead-capture-input w-full h-12 px-4 font-mono text-white text-[14px] focus:outline-none transition-all"
+                className="lead-capture-input w-full h-12 px-4 font-mono text-[14px] focus:outline-none transition-all"
                 style={{
-                  background: "#1A1A1A",
-                  border: "1px solid rgba(255,255,255,0.15)",
+                  background: "rgba(255,255,255,0.95)",
+                  color: "#000",
+                  border: "1px solid rgba(0,0,0,0.12)",
                   borderRadius: "4px",
                 }}
                 onFocus={e => {
@@ -231,7 +236,7 @@ const LeadCaptureModal = ({ isOpen, onClose, onEmailSubmitted }: LeadCaptureModa
                   e.currentTarget.style.boxShadow = "0 0 0 3px rgba(212,175,55,0.08)";
                 }}
                 onBlur={e => {
-                  e.currentTarget.style.borderColor = "rgba(255,255,255,0.15)";
+                  e.currentTarget.style.borderColor = "rgba(0,0,0,0.12)";
                   e.currentTarget.style.boxShadow = "none";
                 }}
               />

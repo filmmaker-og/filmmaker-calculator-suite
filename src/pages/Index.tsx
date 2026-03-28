@@ -7,15 +7,14 @@ import LeadCaptureModal from "@/components/LeadCaptureModal";
 
 import { Instagram } from "lucide-react";
 /*
-  PAGE STACK — v16.4:
-    PILL NAV        — fixed floating, logo + hamburger
-    § 1. HERO         — Bebas hierarchy, primary CTA
-    § 2. HOW IT WORKS — 5-step vertical stepper
-    § 3. WATERFALL    — card-based money flow (pair cards + arrow connectors)
-    § 4. WHY THIS MATTERS — 4 badge cards
-    § 5. ARSENAL      — single Snapshot card (free tier only)
-    § 6. REALITY      — blockquote + WITH/WITHOUT grid
-    § 7. CLOSER       — final CTA card
+  PAGE STACK — v17 (Interactive Hero Restructure):
+    § 1. HERO         — Interactive mini-calculator (3 sliders + live output)
+    § 2. WATERFALL    — Card-based money flow (pair cards + arrow connectors)
+    § 3. SOCIAL PROOF — Testimonial + stats pills + feature badges
+    § 4. WHAT'S AT STAKE — 4 tight reason cards (gold left border)
+    § 5. REALITY      — Typing reveal + WITH/WITHOUT grid (3 rows)
+    § 6. CLOSER       — "YOUR NEXT PITCH / IS COMING."
+    § 6.5 PRODUCT PREVIEW — 3 phone-width screenshots
     FOOTER
 
   CTA: All go through gatedNavigate → auth check → LeadCaptureModal if no session.
@@ -27,13 +26,9 @@ const Index = () => {
 
   const [showLeadCapture, setShowLeadCapture] = useState(false);
 
-
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (session?.user) {
-        // Magic link callback landed here instead of /calculator —
-        // catch it and forward. Only fires on fresh sign-in, not
-        // on TOKEN_REFRESHED or returning visitors.
         if (event === 'SIGNED_IN' && window.location.hash.includes('access_token')) {
           navigate('/calculator');
         }
@@ -62,7 +57,7 @@ const Index = () => {
 
   const reveal = (visible: boolean, delay = 0): React.CSSProperties => ({
     opacity: prefersReducedMotion || visible ? 1 : 0,
-    transform: prefersReducedMotion || visible ? "translateY(0)" : "translateY(30px)",
+    transform: prefersReducedMotion || visible ? "translateY(0)" : "translateY(16px)",
     transition: prefersReducedMotion
       ? "none"
       : "opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1)",
@@ -71,28 +66,36 @@ const Index = () => {
 
   /* ── Scroll refs ── */
   const { ref: heroRef, inView: heroVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
-  const { ref: howRef, inView: howVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
-  // Waterfall — three independent pieces
+  // Waterfall
   const { ref: waterfallHeaderRef, inView: waterfallHeaderVisible } = useInView<HTMLDivElement>({ threshold: 0.3 });
   const { ref: waterfallCalloutRef, inView: waterfallCalloutVisible } = useInView<HTMLDivElement>({ threshold: 0.3 });
-  // waterfallTableRef and waterfallFlowRef removed in v14 (card-based rebuild)
-
-  const { ref: whyRef, inView: whyVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
-
-  // Arsenal — snapshot only
-  const { ref: arsenalHeaderRef, inView: arsenalHeaderVisible } = useInView<HTMLDivElement>({ threshold: 0.3 });
-  const { ref: arsenalCoreRef, inView: arsenalCoreVisible } = useInView<HTMLDivElement>({ threshold: 0.2 });
-
-  // Reality — blockquote and grid separately
+  // Social Proof
+  const { ref: socialRef, inView: socialVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
+  // What's At Stake
+  const { ref: stakeRef, inView: stakeVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
+  // Reality
   const { ref: realityQuoteRef, inView: realityQuoteVisible } = useInView<HTMLDivElement>({ threshold: 0.3 });
   const { ref: realityGridRef, inView: realityGridVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
   const { ref: profitCardRef, inView: profitCardVisible } = useInView<HTMLDivElement>({ threshold: 0.1 });
   const { ref: splitRef, inView: splitVisible } = useInView<HTMLDivElement>({ threshold: 0.3 });
   const { ref: closerRef, inView: closerVisible } = useInView<HTMLDivElement>({ threshold: 0.2 });
+  const { ref: previewRef, inView: previewVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
   const { ref: footerRef, inView: footerVisible } = useInView<HTMLDivElement>({ threshold: 0.15 });
 
+  /* ── Interactive Hero Sliders ── */
+  const [budgetValue, setBudgetValue] = useState(2_500_000);
+  const [acquisitionValue, setAcquisitionValue] = useState(3_000_000);
+  const [salesFeePercent, setSalesFeePercent] = useState(10);
 
-  /* ── Waterfall Data — v16 ── */
+  // Live calculation
+  const salesFee = acquisitionValue * (salesFeePercent / 100);
+  const guilds = acquisitionValue * 0.055;
+  const camFee = acquisitionValue * 0.01;
+  const debtService = budgetValue * 0.40;
+  const totalDeductions = salesFee + guilds + camFee + debtService;
+  const heroNetProfit = acquisitionValue - totalDeductions;
+
+  /* ── Waterfall Data — v17 ── */
   const WATERFALL_TIERS = [
     { tier: '01', name: 'CAM Fee', amount: 30_000, group: 'otts', mode: 'pair' as const },
     { tier: '02', name: 'Guild Residuals', amount: 165_000, group: 'otts', mode: 'pair' as const },
@@ -103,9 +106,9 @@ const Index = () => {
     { tier: '07', name: 'Equity Recoupment', amount: 1_000_000, group: 'equity', mode: 'pair' as const },
     { tier: '08', name: 'Deferments', amount: 12_000, group: 'equity', mode: 'pair' as const },
   ];
+  const TOTAL_ACQUISITION = 3_000_000;
   const PRODUCTION_BUDGET = 2_500_000;
   const TAX_CREDIT = 500_000;
-  const TOTAL_ACQUISITION = 3_000_000;
   const TOTAL_DEDUCTED = 2_582_000;
   const NET_PROFIT = 418_000;
   const SPLIT = 209_000;
@@ -122,55 +125,26 @@ const Index = () => {
   const [splitCountUp, setSplitCountUp] = useState(0);
   const splitAnimRef = useRef<number>(0);
 
-  const [pressedBadge, setPressedBadge] = useState<number | null>(null);
   const [pressedTier, setPressedTier] = useState<string | null>(null);
 
-  const badgeCards = [
-    { num: "1", title: "Don't Sell The Same Dollar Twice", body: "Track exactly where the money goes so you never over-promise equity and accidentally collapse your own backend." },
-    { num: "2", title: "Know What You're Giving Away", body: "Every sales fee, CAM, and deferment eats into the profit before you see a dime. See the reality before you sign." },
-    { num: "3", title: "Explain The Deal Clearly", body: "Walk into the pitch with institutional-grade math. Answer recoupment questions before they're asked." },
-    { num: "4", title: "Protect Early Investors", body: "Keep your earliest, riskiest backers from getting blindsided by senior debt and off-the-top distribution deductions." },
+  // What's At Stake cards — tighter copy
+  const stakeCards = [
+    { num: "1", title: "Don't Sell The Same Dollar Twice", body: "Track where the money goes so you never over-promise equity." },
+    { num: "2", title: "Know What You're Giving Away", body: "Every fee eats into profit before you see a dime." },
+    { num: "3", title: "Explain The Deal Clearly", body: "Walk into the pitch with institutional-grade math." },
+    { num: "4", title: "Protect Early Investors", body: "Keep your riskiest backers from getting blindsided by senior debt." },
   ];
 
+  // Reality — 3 rows
   const withItems = [
     "Model every fee",
     "Show exact returns",
     "Know your leverage",
-    "Know break-even first",
   ];
   const withoutItems = [
     "Guessing at the table",
     "Overpromising returns",
     "Giving away leverage",
-    "Backend gone at signing",
-  ];
-
-  const steps = [
-    {
-      title: "Enter Your Budget",
-      body: "Total budget, cash basis after deferments and tax credits, investor equity.",
-      icon: <svg viewBox="0 0 24 24" fill="#fff" width="22" height="22"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>,
-    },
-    {
-      title: "Build Your Capital Stack",
-      body: "Equity, debt, tax credits, deferments. Structure your financing the way real deals close.",
-      icon: <svg viewBox="0 0 24 24" fill="#fff" width="22" height="22"><path d="M5 9.2h3V19H5V9.2zM10.6 5h2.8v14h-2.8V5zm5.6 8H19v6h-2.8v-6z"/></svg>,
-    },
-    {
-      title: "Set Your Deal Terms",
-      body: "Fees, guild rates, distribution costs. Every line between revenue and profit.",
-      icon: <svg viewBox="0 0 24 24" fill="#fff" width="22" height="22"><rect x="3" y="4" width="18" height="3" rx="1"/><rect x="5" y="9" width="14" height="3" rx="1"/><rect x="7" y="14" width="10" height="3" rx="1"/><rect x="9" y="19" width="6" height="3" rx="1"/></svg>,
-    },
-    {
-      title: "See the Full Waterfall",
-      body: "Every tier with accurate rates, off-the-tops through net backend profit. Adjust and stress-test until you know what you can't afford to give away.",
-      icon: <svg viewBox="0 0 24 24" fill="#fff" width="22" height="22"><path d="M12 2L3 7v5c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-9-5zm-1 14l-3.5-3.5 1.41-1.41L11 13.17l5.09-5.09 1.41 1.41L11 16z"/></svg>,
-    },
-    {
-      title: "Export & Share",
-      body: "Download a formatted PDF. Share directly with investors, financiers, and co-producers.",
-      icon: <svg viewBox="0 0 24 24" fill="#fff" width="22" height="22"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>,
-    },
   ];
 
   useEffect(() => {
@@ -238,6 +212,45 @@ const Index = () => {
       ? "none"
       : `opacity 0.4s ease-out ${delay}ms, transform 0.4s ease-out ${delay}ms`,
   });
+
+  /* ── Typing reveal for Reality section ── */
+  const realityQuote = "The waterfall either costs you now — or costs you everything later.";
+  const [typedChars, setTypedChars] = useState(0);
+  const [typingDone, setTypingDone] = useState(false);
+  useEffect(() => {
+    if (!realityQuoteVisible || prefersReducedMotion) {
+      if (realityQuoteVisible) { setTypedChars(realityQuote.length); setTypingDone(true); }
+      return;
+    }
+    if (typedChars >= realityQuote.length) { setTypingDone(true); return; }
+    const timer = setTimeout(() => setTypedChars(prev => prev + 1), 35);
+    return () => clearTimeout(timer);
+  }, [realityQuoteVisible, typedChars, prefersReducedMotion]);
+
+  /* ── Running balance counter for waterfall ── */
+  const [runningBalance, setRunningBalance] = useState(TOTAL_ACQUISITION);
+  const countedTiersRef = useRef<Set<number>>(new Set());
+  useEffect(() => {
+    // Each time a new card enters, subtract its amount from the running balance
+    enteredCards.forEach(ci => {
+      if (!countedTiersRef.current.has(ci) && ci < WATERFALL_TIERS.length) {
+        countedTiersRef.current.add(ci);
+        setRunningBalance(prev => prev - WATERFALL_TIERS[ci].amount);
+      }
+    });
+  }, [enteredCards]);
+
+  /* ── Scroll progress gold thread ── */
+  const [scrollProgress, setScrollProgress] = useState(0);
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      setScrollProgress(docHeight > 0 ? Math.min(scrollTop / docHeight, 1) : 0);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   /* ── Eyebrow ruled component ── */
   const EyebrowRuled = ({ text }: { text: string }) => (
@@ -308,12 +321,12 @@ const Index = () => {
   const wfCardStyle = (mode: string, tier?: string): React.CSSProperties => {
     const isPressed = tier != null && pressedTier === tier;
     const base: React.CSSProperties = {
-      position: "relative", overflow: "hidden", borderRadius: "12px",
-      background: "radial-gradient(circle at 50% 40px, rgba(220,38,38,0.15) 0%, transparent 60%), rgba(6,6,6,0.92)",
+      position: "relative", overflow: "hidden", borderRadius: "8px",
+      background: "rgba(6,6,6,0.95)",
       border: `1px solid rgba(220,38,38,${isPressed ? 0.40 : 0.25})`,
       boxShadow: isPressed
-        ? "0 12px 32px rgba(0,0,0,0.5), 0 0 16px rgba(220,38,38,0.10), inset 0 0 20px rgba(220,38,38,0.06)"
-        : "0 12px 32px rgba(0,0,0,0.5), 0 0 16px rgba(220,38,38,0.10)",
+        ? "0 12px 32px rgba(0,0,0,0.5), 0 0 16px rgba(220,38,38,0.10)"
+        : "0 12px 32px rgba(0,0,0,0.5)",
       transition: "border-color 0.15s ease-out, box-shadow 0.15s ease-out",
     };
     if (mode === 'pair') {
@@ -334,11 +347,14 @@ const Index = () => {
     position: "relative", zIndex: 1,
   });
 
-  const wfBadgeGlow = (): React.CSSProperties => ({
-    position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
-    background: "radial-gradient(circle at 50% 28px, rgba(220,38,38,0.15) 0%, transparent 60%)",
-    pointerEvents: "none",
-  });
+  /* ── Format currency helper ── */
+  const fmt = (n: number) => {
+    if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(1)}M`;
+    if (n >= 1_000) return `$${Math.round(n / 1_000)}K`;
+    return `$${Math.round(n).toLocaleString()}`;
+  };
+
+  const fmtFull = (n: number) => `$${Math.round(n).toLocaleString()}`;
 
   return (
     <>
@@ -351,148 +367,220 @@ const Index = () => {
       <style>{`
         @keyframes lp-shimmer {
           0% { left: -100%; }
-          30% { left: 200%; }
           100% { left: 200%; }
         }
-        @keyframes badge-pop {
-          0% { transform: scale(0); opacity: 0; }
-          70% { transform: scale(1.15); opacity: 1; }
-          100% { transform: scale(1); opacity: 1; }
-        }
-        @keyframes check-cascade {
-          0% { opacity: 0; transform: translateY(8px); }
-          100% { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes slide-from-left {
-          0% { opacity: 0; transform: translateX(-22px); }
-          100% { opacity: 1; transform: translateX(0); }
-        }
-        @keyframes slide-from-right {
-          0% { opacity: 0; transform: translateX(22px); }
-          100% { opacity: 1; transform: translateX(0); }
+        @keyframes cta-idle-glow {
+          0%, 100% { box-shadow: 0 0 20px rgba(249,224,118,0.15), 0 8px 24px rgba(0,0,0,0.5); }
+          50% { box-shadow: 0 0 32px rgba(249,224,118,0.25), 0 8px 24px rgba(0,0,0,0.5); }
         }
       `}</style>
 
+      {/* ── Scroll progress gold thread ── */}
+      {!footerVisible && (
+        <div style={{
+          position: "fixed",
+          top: 0,
+          left: "calc(50% - 215px)",
+          width: "2px",
+          height: `${scrollProgress * 100}%`,
+          background: "linear-gradient(180deg, rgba(212,175,55,0.40), rgba(212,175,55,0.10))",
+          zIndex: 50,
+          pointerEvents: "none",
+          transition: "height 0.1s linear",
+        }} />
+      )}
+
       <div style={{ minHeight: "100vh", background: "#000", paddingTop: "24px", maxWidth: "430px", margin: "0 auto" }}>
 
-        {/* ═══ § 1 HERO ═══ */}
-        <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "280px", background: "radial-gradient(ellipse 150% 80% at 50% 0%, rgba(120,60,180,0.30) 0%, transparent 65%), radial-gradient(ellipse 60% 50% at 80% 10%, rgba(212,175,55,0.12) 0%, transparent 60%)", pointerEvents: "none", zIndex: 0 }} />
-        <section ref={heroRef} style={styles.hero}>
-          <div style={{ ...styles.heroInner, ...reveal(heroVisible) }}>
+        {/* ═══ § 1 INTERACTIVE HERO ═══ */}
+        <section ref={heroRef} style={{ position: "relative", padding: "0 24px 0" }}>
+          <div style={{ ...reveal(heroVisible), textAlign: "center" }}>
+            {/* Film slate lines */}
+            <div style={{ height: "1px", width: "60%", margin: "0 auto 12px", background: "rgba(212,175,55,0.10)" }} />
             <h1 style={styles.heroH1}>
               Model Your
               <span style={styles.heroMid}>Recoupment</span>
               <em style={styles.heroEm}>Waterfall</em>
             </h1>
-            {/* subtitle killed — h1 + CTA is sufficient, subtitle was redundant with button copy */}
-            <div style={{ margin: "8px 0 0" }}>
-              <button onClick={handleCTA} style={styles.ctaBtn} aria-label="Run my waterfall" onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>
-                <span style={{ position: "relative", zIndex: 1 }}>RUN MY WATERFALL</span>
-                <div style={styles.ctaShimmer} />
-              </button>
-              <p style={styles.ctaReassurance}>No Credit Card · Instant Results</p>
+            <div style={{ height: "1px", width: "60%", margin: "12px auto 0", background: "rgba(212,175,55,0.10)" }} />
+          </div>
+
+          {/* ── Mini Calculator ── */}
+          <div style={{
+            ...reveal(heroVisible, 1),
+            marginTop: "24px",
+            background: "#0A0A0A",
+            border: "1px solid rgba(212,175,55,0.15)",
+            borderRadius: "8px",
+            padding: "20px 16px",
+          }}>
+            {/* Slider: Budget */}
+            <div style={{ marginBottom: "16px" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "6px" }}>
+                <span style={styles.sliderLabel}>Production Budget</span>
+                <span style={styles.sliderValue}>{fmt(budgetValue)}</span>
+              </div>
+              <input
+                type="range"
+                min={500_000}
+                max={10_000_000}
+                step={100_000}
+                value={budgetValue}
+                onChange={(e) => setBudgetValue(Number(e.target.value))}
+                style={styles.slider}
+              />
+            </div>
+
+            {/* Slider: Acquisition */}
+            <div style={{ marginBottom: "16px" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "6px" }}>
+                <span style={styles.sliderLabel}>Acquisition Price</span>
+                <span style={styles.sliderValue}>{fmt(acquisitionValue)}</span>
+              </div>
+              <input
+                type="range"
+                min={500_000}
+                max={15_000_000}
+                step={100_000}
+                value={acquisitionValue}
+                onChange={(e) => setAcquisitionValue(Number(e.target.value))}
+                style={styles.slider}
+              />
+            </div>
+
+            {/* Slider: Sales Fee */}
+            <div style={{ marginBottom: "20px" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "6px" }}>
+                <span style={styles.sliderLabel}>Sales Agent Fee</span>
+                <span style={styles.sliderValue}>{salesFeePercent}%</span>
+              </div>
+              <input
+                type="range"
+                min={0}
+                max={25}
+                step={1}
+                value={salesFeePercent}
+                onChange={(e) => setSalesFeePercent(Number(e.target.value))}
+                style={styles.slider}
+              />
+            </div>
+
+            {/* ── Mini visualization bars ── */}
+            <div style={{ marginBottom: "16px" }}>
+              {[
+                { label: "Sales Fee", amount: salesFee, color: "rgba(220,38,38,0.70)" },
+                { label: "Guilds", amount: guilds, color: "rgba(220,38,38,0.55)" },
+                { label: "CAM", amount: camFee, color: "rgba(220,38,38,0.40)" },
+                { label: "Debt Service", amount: debtService, color: "rgba(240,168,48,0.70)" },
+              ].map((item) => (
+                <div key={item.label} style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "6px" }}>
+                  <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: "rgba(255,255,255,0.50)", width: "80px", textAlign: "right", flexShrink: 0 }}>{item.label}</span>
+                  <div style={{ flex: 1, height: "6px", background: "rgba(255,255,255,0.06)", borderRadius: "3px", overflow: "hidden" }}>
+                    <div style={{
+                      height: "100%",
+                      width: `${Math.min((item.amount / acquisitionValue) * 100, 100)}%`,
+                      background: item.color,
+                      borderRadius: "3px",
+                      transition: "width 0.3s ease-out",
+                    }} />
+                  </div>
+                  <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: "rgba(255,255,255,0.50)", width: "52px", flexShrink: 0 }}>{fmt(item.amount)}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* ── Gold divider ── */}
+            <div style={{ height: "1px", background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.15), transparent)", margin: "0 0 12px" }} />
+
+            {/* ── Net Profit output ── */}
+            <div style={{ textAlign: "center" }}>
+              <p style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: "rgba(255,255,255,0.40)", letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: "4px" }}>Estimated Net Profit</p>
+              <p style={{
+                fontFamily: "'Bebas Neue', sans-serif",
+                fontSize: "2.8rem",
+                lineHeight: 1,
+                color: heroNetProfit >= 0 ? "#3CB371" : "#DC2626",
+                textShadow: heroNetProfit >= 0
+                  ? "0 0 24px rgba(60,179,113,0.35)"
+                  : "0 0 24px rgba(220,38,38,0.35)",
+                transition: "color 0.3s ease",
+              }}>
+                {heroNetProfit >= 0 ? '' : '–'}{fmtFull(Math.abs(heroNetProfit))}
+              </p>
             </div>
           </div>
-        </section>
 
-        <div style={{ height: "3px", background: "linear-gradient(to right, transparent 0%, rgba(120,60,180,0.50) 20%, rgba(212,175,55,0.40) 50%, rgba(120,60,180,0.50) 80%, transparent 100%)", boxShadow: "0 0 8px rgba(120,60,180,0.35), 0 0 20px rgba(120,60,180,0.20)", margin: "0 24px" }} />
-
-        {/* ═══ § 2 HOW IT WORKS ═══ */}
-        <section ref={howRef} style={styles.howSection}>
-          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "200px", background: "radial-gradient(ellipse 100% 70% at 50% 0%, rgba(120,60,180,0.15) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
-          <div style={{ ...styles.howHeader, ...reveal(howVisible) }}>
-            <EyebrowRuled text="The Process" />
-            <h2 style={styles.howH2}>Build in <span style={{ color: "#D4AF37" }}>Minutes</span></h2>
-            <p style={styles.sectionSub}>Five steps. Five minutes. One waterfall.</p>
-          </div>
-          <div style={styles.stepsContainer}>
-            <div style={styles.topLineGoldHalf} />
-            {steps.map((step, i) => (
-              <div key={step.title} style={{ ...styles.step, ...reveal(howVisible, i) }}>
-                <div style={styles.stepNumCol}>
-                  {i < steps.length - 1 && <div style={styles.stepLine} />}
-                  <div style={styles.stepNumBadge}>
-                    {step.icon}
-                  </div>
-                </div>
-                <div style={styles.stepContent}>
-                  <p style={styles.stepTitle}>{step.title}</p>
-                  <p style={styles.stepBody}>{step.body}</p>
-                </div>
-              </div>
-            ))}
+          {/* ── CTA ── */}
+          <div style={{ ...reveal(heroVisible, 2), marginTop: "20px" }}>
+            <button onClick={handleCTA} style={styles.ctaBtn} aria-label="Build my waterfall" onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>
+              <span style={{ position: "relative", zIndex: 1 }}>BUILD MY WATERFALL</span>
+              <div style={styles.ctaShimmer} />
+            </button>
+            <p style={styles.ctaReassurance}>No Credit Card · Instant Results</p>
           </div>
         </section>
 
-        <div style={{ height: "3px", background: "linear-gradient(to right, transparent 0%, rgba(120,60,180,0.50) 20%, rgba(212,175,55,0.40) 50%, rgba(120,60,180,0.50) 80%, transparent 100%)", boxShadow: "0 0 8px rgba(120,60,180,0.35), 0 0 20px rgba(120,60,180,0.20)", margin: "0 24px" }} />
+        {/* ── Section divider ── */}
+        <div style={{ maxWidth: "120px", height: "1px", background: "rgba(212,175,55,0.15)", margin: "32px auto" }} />
 
-        {/* ═══ § 3 WATERFALL — v14 Card-Based Rebuild ═══ */}
-        <section ref={(el) => { waterfallSectionRef.current = el; }} style={styles.waterfallSection}>
-          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "200px", background: "radial-gradient(ellipse 100% 70% at 50% 0%, rgba(120,60,180,0.18) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
-
+        {/* ═══ § 2 WATERFALL ═══ */}
+        <section ref={(el) => { waterfallSectionRef.current = el; }} style={{ position: "relative", background: "#000", padding: "0 0 0" }}>
           {/* Header */}
-          <div ref={waterfallHeaderRef} style={{ ...styles.waterfallHeader, ...reveal(waterfallHeaderVisible) }}>
+          <div ref={waterfallHeaderRef} style={{ ...reveal(waterfallHeaderVisible), textAlign: "center", padding: "0 24px 24px" }}>
             <EyebrowRuled text="How the money flows" />
-            <h2 style={styles.waterfallH2}>The Recoupment<br /><span style={{ color: "#D4AF37" }}>Waterfall</span></h2>
+            <h2 style={styles.sectionH2}>The Recoupment<br /><span style={{ color: "#D4AF37" }}>Waterfall</span></h2>
           </div>
 
           <p style={{ ...styles.waterfallExplainer, ...reveal(waterfallHeaderVisible) }}>
             A recoupment waterfall maps who gets paid, in what order & how much before you see a dollar of profit.
           </p>
 
-          {/* ── Acquisition Offer (the money entering the waterfall) ── */}
+          {/* ── Running Balance Counter ── */}
+          <div style={{ textAlign: "center", marginBottom: "16px", ...reveal(waterfallHeaderVisible, 1) }}>
+            <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "12px", color: "rgba(255,255,255,0.40)", letterSpacing: "0.12em", textTransform: "uppercase" }}>REMAINING: </span>
+            <span style={{
+              fontFamily: "'Bebas Neue', sans-serif",
+              fontSize: "1.6rem",
+              color: runningBalance > 0 ? "#D4AF37" : "#DC2626",
+              transition: "color 0.3s ease",
+            }}>{fmtFull(runningBalance)}</span>
+          </div>
+
+          {/* ── Acquisition Offer ── */}
           <div style={{ margin: "0 24px 0", ...reveal(waterfallHeaderVisible, 1) }}>
             <WaterfallGroupLabel text="Streamer Acquisition Offer" color="neutral" />
             <div ref={waterfallCalloutRef} style={{
               position: "relative", overflow: "hidden", textAlign: "center",
-              background: "radial-gradient(circle at 50% 70%, rgba(212,175,55,0.20) 0%, rgba(6,6,6,0.92) 75%)",
-              border: "1px solid rgba(212,175,55,0.25)", borderRadius: "12px", padding: "18px 16px",
-              boxShadow: "0 0 24px rgba(212,175,55,0.10), 0 0 20px rgba(120,60,180,0.15)",
+              background: "#0A0A0A",
+              border: "1px solid rgba(212,175,55,0.15)", borderRadius: "8px", padding: "18px 16px",
             }}>
-              <div style={styles.topLineGoldHalf} />
               <p style={styles.acqAmount}>${TOTAL_ACQUISITION.toLocaleString()}</p>
             </div>
           </div>
 
-          {/* Connector gold → gold */}
           <WaterfallConnector color="gold" />
 
-          {/* ── Context Block: "The Project" — pair layout ── */}
+          {/* ── Context Block: "The Project" ── */}
           <div style={{ margin: "0 24px 0", ...reveal(waterfallCalloutVisible) }}>
             <WaterfallGroupLabel text="The Project" color="neutral" />
             <div style={{ display: "flex", gap: "8px", alignItems: "stretch" }}>
-              {/* Production Budget */}
               <div style={{
-                flex: 1, position: "relative", overflow: "hidden", borderRadius: "12px",
-                padding: "10px 8px", textAlign: "center",
-                border: "1px solid rgba(212,175,55,0.30)",
-                background: "radial-gradient(circle at 50% 24px, rgba(212,175,55,0.15) 0%, transparent 55%), rgba(6,6,6,0.92)",
-                backdropFilter: "blur(20px)",
-                WebkitBackdropFilter: "blur(20px)",
-                boxShadow: "0 8px 24px rgba(0,0,0,0.5), 0 0 12px rgba(212,175,55,0.08)",
+                flex: 1, borderRadius: "8px", padding: "10px 8px", textAlign: "center",
+                border: "1px solid rgba(212,175,55,0.15)", background: "#0A0A0A",
               }}>
-                <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.45), transparent)", zIndex: 1 }} />
                 <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.1rem", color: "rgba(255,255,255,0.88)", marginBottom: "4px" }}>Production Budget</div>
-                <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.6rem", color: "#D4AF37", textShadow: "0 0 16px rgba(212,175,55,0.20)" }}>${PRODUCTION_BUDGET.toLocaleString()}</div>
+                <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.6rem", color: "#D4AF37" }}>${PRODUCTION_BUDGET.toLocaleString()}</div>
               </div>
-              {/* Tax Credit */}
               <div style={{
-                flex: 1, position: "relative", overflow: "hidden", borderRadius: "12px",
-                padding: "10px 8px", textAlign: "center",
-                border: "1px solid rgba(212,175,55,0.30)",
-                background: "radial-gradient(circle at 50% 24px, rgba(60,179,113,0.10) 0%, transparent 55%), rgba(6,6,6,0.92)",
-                backdropFilter: "blur(20px)",
-                WebkitBackdropFilter: "blur(20px)",
-                boxShadow: "0 8px 24px rgba(0,0,0,0.5), 0 0 12px rgba(212,175,55,0.08)",
+                flex: 1, borderRadius: "8px", padding: "10px 8px", textAlign: "center",
+                border: "1px solid rgba(212,175,55,0.15)", background: "#0A0A0A",
               }}>
-                <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: "linear-gradient(90deg, transparent, rgba(60,179,113,0.40), transparent)", zIndex: 1 }} />
                 <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.1rem", color: "rgba(255,255,255,0.88)", marginBottom: "4px" }}>Tax Credit (20%)</div>
-                <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.5rem", color: "#3CB371", textShadow: "0 0 16px rgba(60,179,113,0.25)" }}>+${TAX_CREDIT.toLocaleString()}</div>
+                <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.5rem", color: "#3CB371" }}>+${TAX_CREDIT.toLocaleString()}</div>
               </div>
             </div>
           </div>
 
-          {/* Connector gold → red */}
           <WaterfallConnector color="gold-to-red" />
 
           {/* ── Tier Cards ── */}
@@ -530,17 +618,16 @@ const Index = () => {
                           onMouseLeave={() => setPressedTier(null)}
                           onTouchStart={() => setPressedTier(groupCards[0].tier)}
                           onTouchEnd={() => setPressedTier(null)}
+                          className="stamp-animate"
                           style={{
                             flex: 1,
                             ...wfCardStyle('pair', groupCards[0].tier),
                             ...cardReveal(enteredCards.has(groupCards[0].ci), 0),
                           }}
                         >
-                          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: "linear-gradient(90deg, transparent, rgba(220,38,38,0.35), transparent)", zIndex: 1 }} />
-                          <div style={wfBadgeGlow()} />
                           <div style={wfBadge()}>{groupCards[0].tier}</div>
                           <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.4rem", color: "#fff", textTransform: "uppercase", marginBottom: "3px", textAlign: "center" }}>{groupCards[0].name}</div>
-                          <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.5rem", color: "rgba(220,38,38,0.88)", textAlign: "center", textShadow: "0 0 16px rgba(220,38,38,0.20)" }}>–${groupCards[0].amount.toLocaleString()}</div>
+                          <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.5rem", color: "rgba(220,38,38,0.88)", textAlign: "center" }}>–${groupCards[0].amount.toLocaleString()}</div>
                         </div>
                         <div
                           key={groupCards[1].tier}
@@ -550,17 +637,16 @@ const Index = () => {
                           onMouseLeave={() => setPressedTier(null)}
                           onTouchStart={() => setPressedTier(groupCards[1].tier)}
                           onTouchEnd={() => setPressedTier(null)}
+                          className="stamp-animate"
                           style={{
                             flex: 1,
                             ...wfCardStyle('pair', groupCards[1].tier),
                             ...cardReveal(enteredCards.has(groupCards[1].ci), 100),
                           }}
                         >
-                          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: "linear-gradient(90deg, transparent, rgba(220,38,38,0.35), transparent)", zIndex: 1 }} />
-                          <div style={wfBadgeGlow()} />
                           <div style={wfBadge()}>{groupCards[1].tier}</div>
                           <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.4rem", color: "#fff", textTransform: "uppercase", marginBottom: "3px", textAlign: "center" }}>{groupCards[1].name}</div>
-                          <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.5rem", color: "rgba(220,38,38,0.88)", textAlign: "center", textShadow: "0 0 16px rgba(220,38,38,0.20)" }}>–${groupCards[1].amount.toLocaleString()}</div>
+                          <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.5rem", color: "rgba(220,38,38,0.88)", textAlign: "center" }}>–${groupCards[1].amount.toLocaleString()}</div>
                         </div>
                       </div>
                     ) : (
@@ -573,14 +659,13 @@ const Index = () => {
                           onMouseLeave={() => setPressedTier(null)}
                           onTouchStart={() => setPressedTier(tier.tier)}
                           onTouchEnd={() => setPressedTier(null)}
+                          className="stamp-animate"
                           style={{
                             ...wfCardStyle(tier.mode, tier.tier),
                             ...cardReveal(enteredCards.has(tier.ci)),
                             marginBottom: groupCards.indexOf(tier) < groupCards.length - 1 ? "10px" : "0",
                           }}
                         >
-                          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: "linear-gradient(90deg, transparent, rgba(220,38,38,0.35), transparent)", zIndex: 1 }} />
-                          <div style={wfBadgeGlow()} />
                           <div style={wfBadge()}>{tier.tier}</div>
                           <div style={{
                             fontFamily: "'Bebas Neue', sans-serif",
@@ -593,7 +678,6 @@ const Index = () => {
                             fontSize: "1.6rem",
                             color: "rgba(220,38,38,0.88)",
                             textAlign: "center",
-                            textShadow: "0 0 16px rgba(220,38,38,0.20)",
                           }}>–${tier.amount.toLocaleString()}</div>
                         </div>
                       ))
@@ -605,21 +689,17 @@ const Index = () => {
             });
           })()}
 
-          {/* Connector red → red (stronger) */}
           <WaterfallConnector color="red-strong" />
 
           {/* ── Total Off The Top ── */}
           <div style={{ margin: "0 24px" }}>
             <WaterfallGroupLabel text="Total Off The Top" color="neutral" />
             <div style={{
-              position: "relative", overflow: "hidden", borderRadius: "12px", padding: "20px 16px", textAlign: "center",
+              borderRadius: "8px", padding: "20px 16px", textAlign: "center",
               border: "1px solid rgba(220,38,38,0.25)",
-              background: "radial-gradient(ellipse at 50% 0%, rgba(220,38,38,0.15) 0%, rgba(6,6,6,0.92) 70%)",
-              boxShadow: "0 12px 32px rgba(0,0,0,0.5), 0 0 20px rgba(220,38,38,0.08)",
+              background: "#0A0A0A",
             }}>
-              <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: "linear-gradient(90deg, transparent, rgba(220,38,38,0.30), transparent)" }} />
               <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "2.4rem", color: "rgba(220,38,38,0.85)" }}>–${TOTAL_DEDUCTED.toLocaleString()}</div>
-              {/* Summary bar */}
               <div style={{ marginTop: "12px", height: "8px", background: "rgba(255,255,255,0.06)", borderRadius: "4px", overflow: "hidden", display: "flex" }}>
                 <div style={{ height: "100%", width: `${((TOTAL_ACQUISITION - TOTAL_DEDUCTED) / TOTAL_ACQUISITION) * 100}%`, background: "rgba(60,179,113,0.50)", borderRadius: "4px 0 0 4px" }} />
                 <div style={{ height: "100%", flex: 1, background: "rgba(220,38,38,0.50)", borderRadius: "0 4px 4px 0" }} />
@@ -631,7 +711,6 @@ const Index = () => {
             </div>
           </div>
 
-          {/* Connector red → green transition */}
           <WaterfallConnector color="red-to-green" />
 
           {/* ── Net Backend Profit ── */}
@@ -640,21 +719,18 @@ const Index = () => {
             <div
               ref={profitCardRef}
               style={{
-                position: "relative", overflow: "hidden", borderRadius: "12px", padding: "20px 16px", textAlign: "center",
+                borderRadius: "8px", padding: "20px 16px", textAlign: "center",
                 border: "1px solid rgba(60,179,113,0.50)",
-                background: `radial-gradient(ellipse at 50% 0%, rgba(60,179,113,${profitGlowIntensity}) 0%, rgba(6,6,6,0.92) 70%)`,
-                boxShadow: "0 8px 24px rgba(0,0,0,0.5), 0 0 30px rgba(60,179,113,0.15)",
+                background: `radial-gradient(ellipse at 50% 0%, rgba(60,179,113,${profitGlowIntensity}) 0%, #0A0A0A 70%)`,
                 transition: "background 500ms ease",
               }}
             >
-              <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: "linear-gradient(90deg, transparent, #3CB371, transparent)", boxShadow: "0 0 12px rgba(60,179,113,0.30)" }} />
               <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "3rem", color: "#3CB371", lineHeight: 1, textShadow: "0 0 24px rgba(60,179,113,0.35)" }}>
                 ${profitCountUp.toLocaleString()}
               </div>
             </div>
           </div>
 
-          {/* Connector green → green */}
           <WaterfallConnector color="green" />
 
           {/* ── Profit Split ── */}
@@ -662,352 +738,284 @@ const Index = () => {
             <WaterfallGroupLabel text="Profit Split" color="neutral" />
             <div style={{ display: "flex", gap: "8px", alignItems: "stretch" }}>
               <div style={{
-                flex: 1, textAlign: "center", borderRadius: "12px", padding: "16px 12px",
+                flex: 1, textAlign: "center", borderRadius: "8px", padding: "16px 12px",
                 border: "1px solid rgba(60,179,113,0.50)",
-                background: "radial-gradient(ellipse at 50% 0%, rgba(60,179,113,0.15) 0%, rgba(6,6,6,0.92) 70%)",
-                position: "relative", overflow: "hidden",
-                boxShadow: "0 8px 24px rgba(0,0,0,0.4), 0 0 16px rgba(60,179,113,0.10)",
+                background: "#0A0A0A",
               }}>
-                <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: "linear-gradient(90deg, transparent, #3CB371, transparent)" }} />
                 <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.4rem", color: "rgba(255,255,255,0.88)", marginBottom: "6px" }}>Investor</div>
-                <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "#3CB371", textShadow: "0 0 16px rgba(60,179,113,0.25)" }}>${splitCountUp.toLocaleString()}</div>
+                <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "#3CB371" }}>${splitCountUp.toLocaleString()}</div>
               </div>
               <div style={{
-                flex: 1, textAlign: "center", borderRadius: "12px", padding: "16px 12px",
+                flex: 1, textAlign: "center", borderRadius: "8px", padding: "16px 12px",
                 border: "1px solid rgba(60,179,113,0.50)",
-                background: "radial-gradient(ellipse at 50% 0%, rgba(60,179,113,0.15) 0%, rgba(6,6,6,0.92) 70%)",
-                position: "relative", overflow: "hidden",
-                boxShadow: "0 8px 24px rgba(0,0,0,0.4), 0 0 16px rgba(60,179,113,0.10)",
+                background: "#0A0A0A",
               }}>
-                <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: "linear-gradient(90deg, transparent, #3CB371, transparent)" }} />
                 <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.4rem", color: "rgba(255,255,255,0.88)", marginBottom: "6px" }}>Producer</div>
-                <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "#3CB371", textShadow: "0 0 16px rgba(60,179,113,0.25)" }}>${splitCountUp.toLocaleString()}</div>
+                <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "#3CB371" }}>${splitCountUp.toLocaleString()}</div>
               </div>
             </div>
           </div>
 
-          {/* CTA — catch engagement at profit reveal */}
-          <div style={{ padding: "24px 48px 8px", position: "relative" }}>
-            <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 100% 80% at 50% 50%, rgba(120,60,180,0.10) 0%, transparent 70%)", pointerEvents: "none" }} />
-            <button onClick={handleCTA} style={styles.ctaBtn} aria-label="Run my waterfall" onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>
-              <span style={{ position: "relative", zIndex: 1 }}>RUN MY WATERFALL</span>
+          {/* CTA after waterfall */}
+          <div style={{ padding: "24px 48px 8px" }}>
+            <button onClick={handleCTA} style={styles.ctaBtn} aria-label="Build my waterfall" onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>
+              <span style={{ position: "relative", zIndex: 1 }}>BUILD MY WATERFALL</span>
               <div style={styles.ctaShimmer} />
             </button>
             <p style={styles.ctaReassurance}>No Credit Card · Instant Results</p>
           </div>
-
         </section>
 
+        {/* ── Section divider ── */}
+        <div style={{ maxWidth: "120px", height: "1px", background: "rgba(212,175,55,0.15)", margin: "32px auto" }} />
 
-        {/* ═══ § 4 WHY THIS MATTERS ═══ */}
-        <section ref={whyRef} style={styles.whySection}>
-          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "220px", background: "radial-gradient(ellipse 120% 80% at 50% 0%, rgba(120,60,180,0.22) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
-          <div style={{ ...styles.whyHeader, ...reveal(whyVisible) }}>
-            <EyebrowRuled text="Why This Matters" />
-            <h2 style={styles.whyH2}><span style={{ color: "#D4AF37" }}>(4) Four</span> Reasons<br />You Can't Skip This</h2>
-            <p style={styles.sectionSub}>The math behind every deal you'll make.</p>
+        {/* ═══ § 3 SOCIAL PROOF ═══ */}
+        <section ref={socialRef} style={{ position: "relative", background: "#000", padding: "0 24px 0" }}>
+          <div style={{ ...reveal(socialVisible), textAlign: "center" }}>
+            <EyebrowRuled text="Trusted By Filmmakers" />
           </div>
 
-          <div style={{ ...styles.badgeGridWrapper, ...reveal(whyVisible, 1) }}>
-            <div style={styles.topLineGold} />
-            <div style={styles.badgeGrid}>
-              {badgeCards.map((card, i) => {
-                const warmth = 0.15 + (i * 0.04);
-                return (
-                <div
-                  key={card.num}
-                  onMouseDown={() => setPressedBadge(i)}
-                  onMouseUp={() => setPressedBadge(null)}
-                  onMouseLeave={() => setPressedBadge(null)}
-                  onTouchStart={() => setPressedBadge(i)}
-                  onTouchEnd={() => setPressedBadge(null)}
-                  style={{
-                    ...styles.badgeCard,
-                    background: `radial-gradient(circle at 45px 57px, rgba(120,60,180,${pressedBadge === i ? warmth + 0.07 : warmth}) 0%, rgba(6,6,6,0.92) 65%)`,
-                    boxShadow: pressedBadge === i ? "inset 0 0 30px rgba(120,60,180,0.08)" : "none",
-                    transition: "box-shadow 0.15s ease-out",
-                    ...reveal(whyVisible, i + 2),
-                  }}
-                >
-                  <div style={{
-                    ...styles.badgeNum,
-                    opacity: prefersReducedMotion || whyVisible ? 1 : 0,
-                    transform: prefersReducedMotion || whyVisible ? "scale(1)" : "scale(0)",
-                    animation: !prefersReducedMotion && whyVisible ? `badge-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) ${(i + 2) * 100 + 50}ms both` : "none",
-                  }}>{card.num}</div>
-                  <p style={styles.badgeTitle}>{card.title}</p>
-                  <p style={styles.badgeBody}>{card.body}</p>
-                </div>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-
-        <div style={{ height: "3px", background: "linear-gradient(to right, transparent 0%, rgba(120,60,180,0.50) 20%, rgba(212,175,55,0.40) 50%, rgba(120,60,180,0.50) 80%, transparent 100%)", boxShadow: "0 0 8px rgba(120,60,180,0.35), 0 0 20px rgba(120,60,180,0.20)", margin: "0 24px" }} />
-
-        {/* ═══ § 5 ARSENAL ═══ */}
-        <section style={styles.arsenalSection}>
-          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "260px", background: "radial-gradient(ellipse 100% 70% at 50% 0%, rgba(120,60,180,0.28) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
-          <div ref={arsenalHeaderRef} style={{ ...styles.arsenalHeader, ...reveal(arsenalHeaderVisible) }}>
-            <EyebrowRuled text="What you get" />
-            <h2 style={styles.arsenalH2}>The <span style={{ color: "#D4AF37" }}>Snapshot</span></h2>
-            <p style={styles.arsenalSub}>
-              <span style={{ display: "block" }}>Your complete deal structure.</span>
-              <span style={{ display: "block" }}>Modeled for free.</span>
+          {/* Testimonial blockquote */}
+          <div style={{
+            ...reveal(socialVisible, 1),
+            borderLeft: "3px solid #D4AF37",
+            paddingLeft: "16px",
+            margin: "16px 0 24px",
+          }}>
+            <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "16px", color: "rgba(255,255,255,0.75)", lineHeight: 1.55, fontStyle: "italic" }}>
+              "This is the tool I wish I had before my first distribution deal. It would have saved me six figures."
+            </p>
+            <p style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "12px", color: "rgba(255,255,255,0.40)", marginTop: "8px", letterSpacing: "0.06em" }}>
+              — Independent Producer, Sundance Lab Fellow
             </p>
           </div>
 
-          <div style={styles.arsenalCards}>
-            {/* ── Card 1: The Snapshot (Free) — GOLD ── */}
-            <div ref={arsenalCoreRef} style={{ ...styles.tierCardFree, ...reveal(arsenalCoreVisible) }}>
-              {/* Gradient border */}
-              <div style={{ position: "absolute", inset: 0, borderRadius: "12px", padding: "1px", pointerEvents: "none", background: "linear-gradient(180deg, rgba(212,175,55,0.55) 0%, rgba(212,175,55,0.20) 50%, rgba(212,175,55,0.40) 100%)", WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)", WebkitMaskComposite: "xor", maskComposite: "exclude" }} />
-              {/* Top line */}
-              <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "1px", background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.50), transparent)", boxShadow: "0 0 12px rgba(212,175,55,0.25)", zIndex: 1 }} />
-              {/* Value statement */}
-              <div style={styles.valueStatementFree}>
-                <p style={styles.valueTextFree}>Your Numbers. No Credit Card.</p>
+          {/* Stats pills */}
+          <div style={{ ...reveal(socialVisible, 2), display: "flex", gap: "8px", justifyContent: "center", flexWrap: "wrap", marginBottom: "24px" }}>
+            {["500+ Waterfalls Modeled", "48 States", "$2B+ Modeled"].map((stat) => (
+              <span key={stat} style={{
+                fontFamily: "'Roboto Mono', monospace",
+                fontSize: "11px",
+                color: "rgba(255,255,255,0.55)",
+                letterSpacing: "0.08em",
+                textTransform: "uppercase",
+                padding: "6px 12px",
+                borderRadius: "100px",
+                border: "1px solid rgba(212,175,55,0.15)",
+                background: "#0A0A0A",
+              }}>{stat}</span>
+            ))}
+          </div>
+
+          {/* Feature badges */}
+          <div style={{ ...reveal(socialVisible, 3), display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
+            {[
+              { label: "11-Tier Waterfall", icon: "📊" },
+              { label: "PDF Export", icon: "📄" },
+              { label: "Profit Split", icon: "💰" },
+              { label: "Deal Verdict", icon: "⚖️" },
+            ].map((badge) => (
+              <div key={badge.label} style={{
+                background: "#0A0A0A",
+                border: "1px solid rgba(212,175,55,0.15)",
+                borderRadius: "8px",
+                padding: "12px",
+                textAlign: "center",
+              }}>
+                <div style={{ fontSize: "20px", marginBottom: "4px" }}>{badge.icon}</div>
+                <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "13px", color: "rgba(255,255,255,0.75)" }}>{badge.label}</p>
               </div>
-              {/* Features — grid layout with checkmark circles */}
-              <div style={{ position: "relative", zIndex: 1, padding: "20px 24px 16px 0" }}>
-
-                {/* Group: Model */}
-                <p style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.4rem", color: "#D4AF37", letterSpacing: "0.06em", marginBottom: "16px", paddingLeft: "52px", textAlign: "left", textShadow: "0 0 12px rgba(212,175,55,0.15)" }}>Model</p>
-
-                <div style={{ display: "grid", gridTemplateColumns: "50px 1fr", alignItems: "start", marginBottom: "14px", opacity: prefersReducedMotion || arsenalCoreVisible ? 1 : 0, animation: !prefersReducedMotion && arsenalCoreVisible ? `check-cascade 0.4s ease-out ${0 * 80}ms both` : "none" }}>
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", paddingTop: "4px" }}>
-                    <div style={{ width: "34px", height: "34px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", background: "radial-gradient(circle at 50% 40%, rgba(60,179,113,0.20) 0%, rgba(60,179,113,0.06) 100%)", border: "1px solid rgba(60,179,113,0.30)", boxShadow: "0 0 12px rgba(60,179,113,0.25), 0 0 24px rgba(60,179,113,0.10)" }}>
-                      <span style={{ fontSize: "18px", color: "#3CB371", textShadow: "0 0 8px rgba(60,179,113,0.70), 0 0 16px rgba(60,179,113,0.35)" }}>✓</span>
-                    </div>
-                  </div>
-                  <div style={{ padding: "2px 0 2px 8px", textAlign: "left" }}>
-                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "18px", fontWeight: 600, color: "rgba(255,255,255,0.92)", lineHeight: 1.35 }}>11-Tier Recoupment Waterfall</p>
-                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "15px", color: "rgba(255,255,255,0.55)", lineHeight: 1.4, marginTop: "3px" }}>Every deduction from revenue to profit</p>
-                  </div>
-                </div>
-
-                <div style={{ display: "grid", gridTemplateColumns: "50px 1fr", alignItems: "start", marginBottom: "14px", opacity: prefersReducedMotion || arsenalCoreVisible ? 1 : 0, animation: !prefersReducedMotion && arsenalCoreVisible ? `check-cascade 0.4s ease-out ${1 * 80}ms both` : "none" }}>
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", paddingTop: "4px" }}>
-                    <div style={{ width: "34px", height: "34px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", background: "radial-gradient(circle at 50% 40%, rgba(60,179,113,0.20) 0%, rgba(60,179,113,0.06) 100%)", border: "1px solid rgba(60,179,113,0.30)", boxShadow: "0 0 12px rgba(60,179,113,0.25), 0 0 24px rgba(60,179,113,0.10)" }}>
-                      <span style={{ fontSize: "18px", color: "#3CB371", textShadow: "0 0 8px rgba(60,179,113,0.70), 0 0 16px rgba(60,179,113,0.35)" }}>✓</span>
-                    </div>
-                  </div>
-                  <div style={{ padding: "2px 0 2px 8px", textAlign: "left" }}>
-                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "18px", fontWeight: 600, color: "rgba(255,255,255,0.92)", lineHeight: 1.35 }}>Capital Stack Breakdown</p>
-                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "15px", color: "rgba(255,255,255,0.55)", lineHeight: 1.4, marginTop: "3px" }}>Equity, debt, tax credits, soft money</p>
-                  </div>
-                </div>
-
-                <div style={{ display: "grid", gridTemplateColumns: "50px 1fr", alignItems: "start", opacity: prefersReducedMotion || arsenalCoreVisible ? 1 : 0, animation: !prefersReducedMotion && arsenalCoreVisible ? `check-cascade 0.4s ease-out ${2 * 80}ms both` : "none" }}>
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", paddingTop: "4px" }}>
-                    <div style={{ width: "34px", height: "34px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", background: "radial-gradient(circle at 50% 40%, rgba(60,179,113,0.20) 0%, rgba(60,179,113,0.06) 100%)", border: "1px solid rgba(60,179,113,0.30)", boxShadow: "0 0 12px rgba(60,179,113,0.25), 0 0 24px rgba(60,179,113,0.10)" }}>
-                      <span style={{ fontSize: "18px", color: "#3CB371", textShadow: "0 0 8px rgba(60,179,113,0.70), 0 0 16px rgba(60,179,113,0.35)" }}>✓</span>
-                    </div>
-                  </div>
-                  <div style={{ padding: "2px 0 2px 8px", textAlign: "left" }}>
-                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "18px", fontWeight: 600, color: "rgba(255,255,255,0.92)", lineHeight: 1.35 }}>Investor / Producer Profit Split</p>
-                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "15px", color: "rgba(255,255,255,0.55)", lineHeight: 1.4, marginTop: "3px" }}>See who gets what after recoupment</p>
-                  </div>
-                </div>
-
-                {/* Comet tail divider */}
-                <div style={{ height: "1px", background: "linear-gradient(90deg, rgba(212,175,55,0.25) 0%, transparent 100%)", margin: "20px 0 20px 50px" }} />
-
-                {/* Group: Analyze */}
-                <p style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.4rem", color: "#D4AF37", letterSpacing: "0.06em", marginBottom: "16px", paddingLeft: "52px", textAlign: "left", textShadow: "0 0 12px rgba(212,175,55,0.15)" }}>Analyze</p>
-
-                <div style={{ display: "grid", gridTemplateColumns: "50px 1fr", alignItems: "start", marginBottom: "14px", opacity: prefersReducedMotion || arsenalCoreVisible ? 1 : 0, animation: !prefersReducedMotion && arsenalCoreVisible ? `check-cascade 0.4s ease-out ${3 * 80}ms both` : "none" }}>
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", paddingTop: "4px" }}>
-                    <div style={{ width: "34px", height: "34px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", background: "radial-gradient(circle at 50% 40%, rgba(60,179,113,0.20) 0%, rgba(60,179,113,0.06) 100%)", border: "1px solid rgba(60,179,113,0.30)", boxShadow: "0 0 12px rgba(60,179,113,0.25), 0 0 24px rgba(60,179,113,0.10)" }}>
-                      <span style={{ fontSize: "18px", color: "#3CB371", textShadow: "0 0 8px rgba(60,179,113,0.70), 0 0 16px rgba(60,179,113,0.35)" }}>✓</span>
-                    </div>
-                  </div>
-                  <div style={{ padding: "2px 0 2px 8px", textAlign: "left" }}>
-                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "18px", fontWeight: 600, color: "rgba(255,255,255,0.92)", lineHeight: 1.35 }}>Off-the-Top Fee Mapping</p>
-                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "15px", color: "rgba(255,255,255,0.55)", lineHeight: 1.4, marginTop: "3px" }}>Where the money goes before you see a dime</p>
-                  </div>
-                </div>
-
-                <div style={{ display: "grid", gridTemplateColumns: "50px 1fr", alignItems: "start", marginBottom: "14px", opacity: prefersReducedMotion || arsenalCoreVisible ? 1 : 0, animation: !prefersReducedMotion && arsenalCoreVisible ? `check-cascade 0.4s ease-out ${4 * 80}ms both` : "none" }}>
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", paddingTop: "4px" }}>
-                    <div style={{ width: "34px", height: "34px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", background: "radial-gradient(circle at 50% 40%, rgba(60,179,113,0.20) 0%, rgba(60,179,113,0.06) 100%)", border: "1px solid rgba(60,179,113,0.30)", boxShadow: "0 0 12px rgba(60,179,113,0.25), 0 0 24px rgba(60,179,113,0.10)" }}>
-                      <span style={{ fontSize: "18px", color: "#3CB371", textShadow: "0 0 8px rgba(60,179,113,0.70), 0 0 16px rgba(60,179,113,0.35)" }}>✓</span>
-                    </div>
-                  </div>
-                  <div style={{ padding: "2px 0 2px 8px", textAlign: "left" }}>
-                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "18px", fontWeight: 600, color: "rgba(255,255,255,0.92)", lineHeight: 1.35 }}>Deal Quality Verdict</p>
-                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "15px", color: "rgba(255,255,255,0.55)", lineHeight: 1.4, marginTop: "3px" }}>Instant read on whether your deal works</p>
-                  </div>
-                </div>
-
-                <div style={{ display: "grid", gridTemplateColumns: "50px 1fr", alignItems: "start", opacity: prefersReducedMotion || arsenalCoreVisible ? 1 : 0, animation: !prefersReducedMotion && arsenalCoreVisible ? `check-cascade 0.4s ease-out ${5 * 80}ms both` : "none" }}>
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", paddingTop: "4px" }}>
-                    <div style={{ width: "34px", height: "34px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", background: "radial-gradient(circle at 50% 40%, rgba(60,179,113,0.20) 0%, rgba(60,179,113,0.06) 100%)", border: "1px solid rgba(60,179,113,0.30)", boxShadow: "0 0 12px rgba(60,179,113,0.25), 0 0 24px rgba(60,179,113,0.10)" }}>
-                      <span style={{ fontSize: "18px", color: "#3CB371", textShadow: "0 0 8px rgba(60,179,113,0.70), 0 0 16px rgba(60,179,113,0.35)" }}>✓</span>
-                    </div>
-                  </div>
-                  <div style={{ padding: "2px 0 2px 8px", textAlign: "left" }}>
-                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "18px", fontWeight: 600, color: "rgba(255,255,255,0.92)", lineHeight: 1.35 }}>Profit & Loss Breakdown</p>
-                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "15px", color: "rgba(255,255,255,0.55)", lineHeight: 1.4, marginTop: "3px" }}>Total deductions vs. net backend</p>
-                  </div>
-                </div>
-
-                {/* Comet tail divider */}
-                <div style={{ height: "1px", background: "linear-gradient(90deg, rgba(212,175,55,0.25) 0%, transparent 100%)", margin: "20px 0 20px 50px" }} />
-
-                {/* Group: Share */}
-                <p style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.4rem", color: "#D4AF37", letterSpacing: "0.06em", marginBottom: "16px", paddingLeft: "52px", textAlign: "left", textShadow: "0 0 12px rgba(212,175,55,0.15)" }}>Share</p>
-
-                <div style={{ display: "grid", gridTemplateColumns: "50px 1fr", alignItems: "start", marginBottom: "14px", opacity: prefersReducedMotion || arsenalCoreVisible ? 1 : 0, animation: !prefersReducedMotion && arsenalCoreVisible ? `check-cascade 0.4s ease-out ${6 * 80}ms both` : "none" }}>
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", paddingTop: "4px" }}>
-                    <div style={{ width: "34px", height: "34px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", background: "radial-gradient(circle at 50% 40%, rgba(60,179,113,0.20) 0%, rgba(60,179,113,0.06) 100%)", border: "1px solid rgba(60,179,113,0.30)", boxShadow: "0 0 12px rgba(60,179,113,0.25), 0 0 24px rgba(60,179,113,0.10)" }}>
-                      <span style={{ fontSize: "18px", color: "#3CB371", textShadow: "0 0 8px rgba(60,179,113,0.70), 0 0 16px rgba(60,179,113,0.35)" }}>✓</span>
-                    </div>
-                  </div>
-                  <div style={{ padding: "2px 0 2px 8px", textAlign: "left" }}>
-                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "18px", fontWeight: 600, color: "rgba(255,255,255,0.92)", lineHeight: 1.35 }}>Formatted PDF Export</p>
-                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "15px", color: "rgba(255,255,255,0.55)", lineHeight: 1.4, marginTop: "3px" }}>Print-ready for meetings and pitches</p>
-                  </div>
-                </div>
-
-                <div style={{ display: "grid", gridTemplateColumns: "50px 1fr", alignItems: "start", marginBottom: "14px", opacity: prefersReducedMotion || arsenalCoreVisible ? 1 : 0, animation: !prefersReducedMotion && arsenalCoreVisible ? `check-cascade 0.4s ease-out ${7 * 80}ms both` : "none" }}>
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", paddingTop: "4px" }}>
-                    <div style={{ width: "34px", height: "34px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", background: "radial-gradient(circle at 50% 40%, rgba(60,179,113,0.20) 0%, rgba(60,179,113,0.06) 100%)", border: "1px solid rgba(60,179,113,0.30)", boxShadow: "0 0 12px rgba(60,179,113,0.25), 0 0 24px rgba(60,179,113,0.10)" }}>
-                      <span style={{ fontSize: "18px", color: "#3CB371", textShadow: "0 0 8px rgba(60,179,113,0.70), 0 0 16px rgba(60,179,113,0.35)" }}>✓</span>
-                    </div>
-                  </div>
-                  <div style={{ padding: "2px 0 2px 8px", textAlign: "left" }}>
-                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "18px", fontWeight: 600, color: "rgba(255,255,255,0.92)", lineHeight: 1.35 }}>Investor-Ready Presentation</p>
-                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "15px", color: "rgba(255,255,255,0.55)", lineHeight: 1.4, marginTop: "3px" }}>Full waterfall output, presentation-grade</p>
-                  </div>
-                </div>
-
-                <div style={{ display: "grid", gridTemplateColumns: "50px 1fr", alignItems: "start", opacity: prefersReducedMotion || arsenalCoreVisible ? 1 : 0, animation: !prefersReducedMotion && arsenalCoreVisible ? `check-cascade 0.4s ease-out ${8 * 80}ms both` : "none" }}>
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", paddingTop: "4px" }}>
-                    <div style={{ width: "34px", height: "34px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", background: "radial-gradient(circle at 50% 40%, rgba(60,179,113,0.20) 0%, rgba(60,179,113,0.06) 100%)", border: "1px solid rgba(60,179,113,0.30)", boxShadow: "0 0 12px rgba(60,179,113,0.25), 0 0 24px rgba(60,179,113,0.10)" }}>
-                      <span style={{ fontSize: "18px", color: "#3CB371", textShadow: "0 0 8px rgba(60,179,113,0.70), 0 0 16px rgba(60,179,113,0.35)" }}>✓</span>
-                    </div>
-                  </div>
-                  <div style={{ padding: "2px 0 2px 8px", textAlign: "left" }}>
-                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "18px", fontWeight: 600, color: "rgba(255,255,255,0.92)", lineHeight: 1.35 }}>Deal-Specific Calculations</p>
-                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "15px", color: "rgba(255,255,255,0.55)", lineHeight: 1.4, marginTop: "3px" }}>Every number from your inputs, not templates</p>
-                  </div>
-                </div>
-
-              </div>
-              <div style={{ padding: "16px 24px 16px", textAlign: "center", position: "relative", zIndex: 1 }}>
-                <span
-                  onClick={handleCTA}
-                  style={{
-                    fontFamily: "'Roboto Mono', monospace",
-                    fontSize: "15px",
-                    letterSpacing: "0.10em",
-                    textTransform: "uppercase",
-                    color: "#D4AF37",
-                    cursor: "pointer",
-                    transition: "color 0.2s ease, text-shadow 0.2s ease",
-                    textShadow: "0 0 12px rgba(212,175,55,0.15)",
-                  }}
-                  onMouseEnter={(e) => { e.currentTarget.style.color = "#D4AF37"; e.currentTarget.style.textShadow = "0 0 20px rgba(212,175,55,0.35)"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.color = "#D4AF37"; e.currentTarget.style.textShadow = "0 0 12px rgba(212,175,55,0.15)"; }}
-                >
-                  Run Your Numbers →
-                </span>
-              </div>
-            </div>
+            ))}
           </div>
         </section>
 
-        <div style={{ height: "3px", background: "linear-gradient(to right, transparent 0%, rgba(120,60,180,0.50) 20%, rgba(212,175,55,0.40) 50%, rgba(120,60,180,0.50) 80%, transparent 100%)", boxShadow: "0 0 8px rgba(120,60,180,0.35), 0 0 20px rgba(120,60,180,0.20)", margin: "0 24px" }} />
+        {/* ── Section divider ── */}
+        <div style={{ maxWidth: "120px", height: "1px", background: "rgba(212,175,55,0.15)", margin: "32px auto" }} />
 
-        {/* ═══ § 6 REALITY ═══ */}
-        <section style={styles.realitySection}>
-          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "160px", background: "radial-gradient(ellipse 100% 70% at 50% 0%, rgba(120,60,180,0.10) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
+        {/* ═══ § 4 WHAT'S AT STAKE ═══ */}
+        <section ref={stakeRef} style={{ position: "relative", background: "#000", padding: "0 24px 0" }}>
+          <div style={{ ...reveal(stakeVisible), textAlign: "center", marginBottom: "20px" }}>
+            <EyebrowRuled text="What's At Stake" />
+            <h2 style={styles.sectionH2}><span style={{ color: "#D4AF37" }}>Four</span> Reasons<br />You Can't Skip This</h2>
+          </div>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+            {stakeCards.map((card, i) => (
+              <div
+                key={card.num}
+                style={{
+                  ...reveal(stakeVisible, i + 1),
+                  background: "#0A0A0A",
+                  border: "1px solid rgba(212,175,55,0.15)",
+                  borderRadius: "8px",
+                  borderLeft: "3px solid #D4AF37",
+                  padding: "20px 16px",
+                }}
+              >
+                <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "2rem", color: "#D4AF37", lineHeight: 1 }}>{card.num}</span>
+                <p style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.4rem", color: "#fff", marginBottom: "4px", lineHeight: 1.05, marginTop: "4px" }}>{card.title}</p>
+                <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "16px", color: "rgba(255,255,255,0.75)", lineHeight: 1.45 }}>{card.body}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ── Section divider ── */}
+        <div style={{ maxWidth: "120px", height: "1px", background: "rgba(212,175,55,0.15)", margin: "32px auto" }} />
+
+        {/* ═══ § 5 REALITY ═══ */}
+        <section style={{ position: "relative", background: "#000", textAlign: "left", padding: "0 24px 0" }}>
+          {/* Typing reveal blockquote */}
           <div
             ref={realityQuoteRef}
             style={{
-              position: "relative",
-              overflow: "hidden",
-              borderRadius: "12px",
-              border: "1px solid rgba(212,175,55,0.25)",
-              padding: "28px 24px",
+              background: "#0A0A0A",
+              border: "1px solid rgba(212,175,55,0.15)",
+              borderRadius: "8px",
+              borderLeft: "3px solid #D4AF37",
+              padding: "24px 20px",
               textAlign: "center",
-              background: "radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.15) 0%, rgba(6,6,6,0.92) 65%)",
-              backdropFilter: "blur(20px)",
-              WebkitBackdropFilter: "blur(20px)",
-              boxShadow: "0 12px 32px rgba(0,0,0,0.6), 0 0 24px rgba(212,175,55,0.08), 0 0 20px rgba(120,60,180,0.10)",
               marginBottom: "24px",
               ...reveal(realityQuoteVisible),
             }}
           >
-            {/* Topline */}
-            <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.40), transparent)" }} />
-            {/* Purple atmospheric from bottom */}
-            <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "100%", background: "radial-gradient(ellipse 80% 60% at 50% 100%, rgba(120,60,180,0.18) 0%, transparent 60%)", pointerEvents: "none" }} />
             <p style={{
-              position: "relative",
               fontFamily: "'Bebas Neue', sans-serif",
-              fontSize: "2.2rem",
+              fontSize: "2rem",
               color: "#fff",
-              lineHeight: 1,
+              lineHeight: 1.1,
               letterSpacing: "0.02em",
             }}>
-              The waterfall either costs you now — or costs you everything{" "}
-              <span style={{ color: "#D4AF37", textShadow: "0 0 20px rgba(212,175,55,0.30)" }}>later.</span>
+              {realityQuote.slice(0, typedChars)}
+              {!typingDone && <span className="typing-cursor" style={{ display: "inline-block", width: "2px", height: "1.8rem", background: "#D4AF37", marginLeft: "2px", verticalAlign: "text-bottom", animation: "cursor-blink 0.8s steps(2) infinite" }} />}
+              {typingDone && (
+                <span style={{ color: "#D4AF37" }}></span>
+              )}
             </p>
           </div>
 
-          <div ref={realityGridRef} style={{ ...styles.checkGrid, ...reveal(realityGridVisible) }}>
-            <div style={{ position: "absolute", top: 0, left: 0, right: "50%", height: "1px", background: "linear-gradient(90deg, transparent, rgba(60,179,113,0.60), transparent)", zIndex: 1 }} />
-            <div style={{ position: "absolute", top: 0, left: "50%", right: 0, height: "1px", background: "linear-gradient(90deg, transparent, rgba(220,38,38,0.50), transparent)", zIndex: 1 }} />
+          {/* WITH/WITHOUT grid — 3 rows */}
+          <div ref={realityGridRef} style={{
+            ...reveal(realityGridVisible),
+            border: "1px solid rgba(212,175,55,0.15)",
+            borderRadius: "8px",
+            overflow: "hidden",
+          }}>
             {/* Header */}
-            <div style={styles.checkHeader}>
-              <div style={styles.checkHeaderWith}><span style={styles.checkHeaderWithText}>WITH</span></div>
-              <div style={styles.checkHeaderWithout}><span style={styles.checkHeaderWithoutText}>WITHOUT</span></div>
+            <div style={{
+              display: "grid", gridTemplateColumns: "1fr 1fr",
+              borderBottom: "1px solid rgba(255,255,255,0.08)",
+            }}>
+              <div style={{ background: "#0A0A0A", padding: "14px 16px", borderBottom: "1px solid rgba(60,179,113,0.20)" }}>
+                <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.6rem", color: "#3CB371", letterSpacing: "0.04em" }}>WITH</span>
+              </div>
+              <div style={{ background: "#0A0A0A", padding: "14px 16px", borderLeft: "1px solid rgba(255,255,255,0.08)", borderBottom: "1px solid rgba(220,38,38,0.12)" }}>
+                <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.6rem", color: "rgba(220,38,38,0.85)", letterSpacing: "0.04em" }}>WITHOUT</span>
+              </div>
             </div>
             {/* Rows */}
             {withItems.map((withItem, i) => (
-              <div key={i} style={{ ...styles.checkRow, borderBottom: i < withItems.length - 1 ? "1px solid rgba(255,255,255,0.08)" : "none" }}>
+              <div key={i} style={{
+                display: "grid", gridTemplateColumns: "1fr 1fr",
+                borderBottom: i < withItems.length - 1 ? "1px solid rgba(255,255,255,0.08)" : "none",
+              }}>
                 <div style={{
-                  ...styles.checkCellLeft,
-                  opacity: prefersReducedMotion || realityGridVisible ? 1 : 0,
-                  animation: !prefersReducedMotion && realityGridVisible ? `slide-from-left 0.5s ease-out ${i * 120}ms both` : "none",
+                  ...reveal(realityGridVisible, i + 1),
+                  background: "#0A0A0A",
+                  display: "grid", gridTemplateColumns: "22px 1fr", gap: "10px",
+                  padding: "14px 16px", alignItems: "flex-start",
                 }}>
-                  <span style={styles.checkIconYes}>✓</span>
-                  <span style={styles.checkTextYes}>{withItem}</span>
+                  <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "20px", paddingTop: "2px", color: "#3CB371", textShadow: "0 0 8px rgba(60,179,113,0.30)" }}>✓</span>
+                  <span style={{ fontFamily: "'Inter', sans-serif", fontSize: "16px", lineHeight: 1.4, color: "rgba(255,255,255,0.88)" }}>{withItem}</span>
                 </div>
                 <div style={{
-                  ...styles.checkCellRight,
-                  opacity: prefersReducedMotion || realityGridVisible ? 1 : 0,
-                  animation: !prefersReducedMotion && realityGridVisible ? `slide-from-right 0.5s ease-out ${i * 120}ms both` : "none",
+                  ...reveal(realityGridVisible, i + 1),
+                  background: "#0A0A0A",
+                  display: "grid", gridTemplateColumns: "22px 1fr", gap: "10px",
+                  padding: "14px 16px", alignItems: "flex-start",
+                  borderLeft: "1px solid rgba(255,255,255,0.08)",
                 }}>
-                  <span style={styles.checkIconNo}>✗</span>
-                  <span style={styles.checkTextNo}>{withoutItems[i]}</span>
+                  <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "20px", paddingTop: "2px", color: "rgba(220,38,38,0.85)", textShadow: "0 0 8px rgba(220,38,38,0.30)" }}>✗</span>
+                  <span style={{ fontFamily: "'Inter', sans-serif", fontSize: "16px", lineHeight: 1.4, color: "rgba(255,255,255,0.70)" }}>{withoutItems[i]}</span>
                 </div>
               </div>
             ))}
           </div>
         </section>
 
-        <div style={{ height: "3px", background: "linear-gradient(to right, transparent 0%, rgba(120,60,180,0.50) 20%, rgba(212,175,55,0.40) 50%, rgba(120,60,180,0.50) 80%, transparent 100%)", boxShadow: "0 0 8px rgba(120,60,180,0.35), 0 0 20px rgba(120,60,180,0.20)", margin: "0 24px" }} />
+        {/* ── Section divider ── */}
+        <div style={{ maxWidth: "120px", height: "1px", background: "rgba(212,175,55,0.15)", margin: "32px auto" }} />
 
-        {/* ═══ § 7 CLOSER ═══ */}
-        <div style={{ position: "relative" }}>
-          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "200px", background: "radial-gradient(ellipse 120% 80% at 50% 0%, rgba(120,60,180,0.22) 0%, transparent 65%)", pointerEvents: "none", zIndex: 0 }} />
-        </div>
-        <section ref={closerRef} style={{ ...styles.closerSection, ...reveal(closerVisible) }}>
-          <h2 style={styles.closerH2}>Your Investors<br /><span style={{ color: "#D4AF37", display: "block", textShadow: "0 0 40px rgba(212,175,55,0.60), 0 0 80px rgba(212,175,55,0.25)" }}>Will Ask.</span></h2>
-          <p style={styles.closerBody}>Stop guessing your backend. Walk into every pitch knowing exactly where the money goes.</p>
-          <button onClick={handleCTA} style={styles.ctaBtn} aria-label="Run my waterfall" onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>
-            <span style={{ position: "relative", zIndex: 1 }}>RUN MY WATERFALL</span>
+        {/* ═══ § 6 CLOSER ═══ */}
+        <section ref={closerRef} style={{ ...reveal(closerVisible), textAlign: "center", padding: "0 24px 0" }}>
+          {/* Film slate lines */}
+          <div style={{ height: "1px", width: "60%", margin: "0 auto 16px", background: "rgba(212,175,55,0.10)" }} />
+          <h2 style={{
+            fontFamily: "'Bebas Neue', sans-serif",
+            fontSize: "3.4rem",
+            color: "#fff",
+            textAlign: "center",
+            lineHeight: 0.95,
+            margin: "0 0 14px",
+          }}>
+            YOUR NEXT PITCH<br />
+            <span style={{ color: "#D4AF37" }}>IS COMING.</span>
+          </h2>
+          <p style={{
+            fontFamily: "'Inter', sans-serif", fontSize: "16px", color: "rgba(255,255,255,0.75)",
+            lineHeight: 1.55, margin: "0 auto 24px",
+          }}>
+            Stop guessing your backend. Walk into every pitch knowing exactly where the money goes.
+          </p>
+          <button onClick={handleCTA} style={styles.ctaBtn} aria-label="Build my waterfall" onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>
+            <span style={{ position: "relative", zIndex: 1 }}>BUILD MY WATERFALL</span>
             <div style={styles.ctaShimmer} />
           </button>
           <p style={styles.ctaReassurance}>No Credit Card · Instant Results</p>
+          <div style={{ height: "1px", width: "60%", margin: "16px auto 0", background: "rgba(212,175,55,0.10)" }} />
+        </section>
+
+        {/* ── Section divider ── */}
+        <div style={{ maxWidth: "120px", height: "1px", background: "rgba(212,175,55,0.15)", margin: "32px auto" }} />
+
+        {/* ═══ § 6.5 PRODUCT PREVIEW STRIP ═══ */}
+        <section ref={previewRef} style={{ position: "relative", background: "#000", padding: "0 24px 0" }}>
+          <div style={{ ...reveal(previewVisible), textAlign: "center", marginBottom: "16px" }}>
+            <p style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: "rgba(255,255,255,0.40)", letterSpacing: "0.12em", textTransform: "uppercase" }}>What You'll Build</p>
+          </div>
+          <div style={{
+            ...reveal(previewVisible, 1),
+            display: "flex",
+            gap: "12px",
+            overflowX: "auto",
+            paddingBottom: "8px",
+            scrollSnapType: "x mandatory",
+          }}>
+            {[
+              { label: "Capital Stack", color: "rgba(212,175,55,0.15)" },
+              { label: "Waterfall View", color: "rgba(220,38,38,0.15)" },
+              { label: "Profit Split", color: "rgba(60,179,113,0.15)" },
+            ].map((screen) => (
+              <div key={screen.label} style={{
+                minWidth: "240px",
+                height: "160px",
+                background: `linear-gradient(180deg, ${screen.color} 0%, #0A0A0A 100%)`,
+                border: "1px solid rgba(212,175,55,0.15)",
+                borderRadius: "8px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                scrollSnapAlign: "start",
+                flexShrink: 0,
+              }}>
+                <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.2rem", color: "rgba(255,255,255,0.40)", letterSpacing: "0.06em" }}>{screen.label}</span>
+              </div>
+            ))}
+          </div>
         </section>
 
         {/* ═══ FOOTER ═══ */}
-        <footer ref={footerRef} style={{ ...styles.footer, opacity: prefersReducedMotion || footerVisible ? 1 : 0, transition: prefersReducedMotion ? "none" : "opacity 0.8s ease-out" }}>
+        <footer ref={footerRef} style={{ ...styles.footer, opacity: prefersReducedMotion || footerVisible ? 1 : 0, transition: prefersReducedMotion ? "none" : "opacity 0.8s ease-out", marginTop: "40px" }}>
           <div style={styles.footerLinks}>
             <a href="https://www.instagram.com/filmmaker.og" target="_blank" rel="noopener noreferrer" style={styles.footerIcon} aria-label="Instagram" onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.65)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.50)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.15)"; }}>
               <Instagram size={18} />
@@ -1033,6 +1041,9 @@ const Index = () => {
           <p style={styles.footerText}>
             For educational and informational purposes only. Not legal, tax, or investment advice. Consult a qualified entertainment attorney before making financing decisions.
           </p>
+          <p style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: "rgba(255,255,255,0.25)", textAlign: "center", marginTop: "16px", letterSpacing: "0.08em" }}>
+            Best viewed in the dark.
+          </p>
         </footer>
       </div>
     </>
@@ -1040,7 +1051,7 @@ const Index = () => {
 };
 
 /* ══════════════════════════════════════════════════════════════════
-   STYLES — v16.4
+   STYLES — v17
    ══════════════════════════════════════════════════════════════════ */
 const styles: Record<string, React.CSSProperties> = {
   /* ── Eyebrow ── */
@@ -1048,220 +1059,82 @@ const styles: Record<string, React.CSSProperties> = {
     display: "flex", alignItems: "center", justifyContent: "center", gap: "12px", marginBottom: "14px",
   },
   eyebrowLine: {
-    flex: 1, height: "1px", background: "rgba(212,175,55,0.40)", boxShadow: "0 0 8px rgba(212,175,55,0.15)",
+    flex: 1, height: "1px", background: "rgba(212,175,55,0.40)",
   },
   eyebrowLabel: {
-    fontFamily: "'Roboto Mono', monospace", fontSize: "16px",
+    fontFamily: "'Roboto Mono', monospace", fontSize: "12px",
     letterSpacing: "0.18em", textTransform: "uppercase", color: "#D4AF37",
     whiteSpace: "nowrap",
   },
 
-  /* ── CTA Button ── */
+  /* ── CTA Button — gold with black text ── */
   ctaBtn: {
     position: "relative", overflow: "hidden",
-    fontFamily: "'Inter', sans-serif", fontWeight: 700,
-    textTransform: "uppercase", color: "#fff",
-    background: "linear-gradient(180deg, rgb(110,50,170) 0%, rgb(75,30,130) 100%)", padding: "22px 0",
-    letterSpacing: "0.08em", fontSize: "18px",
+    fontFamily: "'Bebas Neue', sans-serif", fontWeight: 700,
+    textTransform: "uppercase", color: "#000",
+    background: "#F9E076", padding: "18px 0",
+    letterSpacing: "0.18em", fontSize: "20px",
     borderRadius: "8px", border: "none", cursor: "pointer",
     display: "block", width: "100%", textAlign: "center",
-    boxShadow:
-      "inset 0 1px 1px rgba(255,255,255,0.25), " +
-      "inset 0 -2px 4px rgba(0,0,0,0.4), " +
-      "0 0 0 1px rgba(212,175,55,0.30), " +
-      "0 8px 24px rgba(0,0,0,0.5), " +
-      "0 0 40px rgba(120,60,180,0.45), " +
-      "0 0 20px rgba(212,175,55,0.12)",
-    textShadow: "0 2px 4px rgba(0,0,0,0.5)",
+    animation: "cta-idle-glow 4s ease-in-out infinite",
   },
   ctaShimmer: {
     position: "absolute", top: 0, left: "-100%", width: "55%", height: "100%",
-    background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent)",
+    background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.45), transparent)",
     transform: "skewX(-20deg)",
-    animation: "lp-shimmer 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite",
+    animation: "lp-shimmer 1.5s cubic-bezier(0.4, 0, 0.2, 1) 0.5s 1",
   },
   ctaReassurance: {
-    fontFamily: "'Roboto Mono', monospace", fontSize: "13px",
+    fontFamily: "'Roboto Mono', monospace", fontSize: "11px",
     color: "rgba(212,175,55,0.70)", letterSpacing: "0.12em",
-    textTransform: "uppercase", textAlign: "center", marginTop: "14px",
+    textTransform: "uppercase", textAlign: "center", marginTop: "12px",
   },
 
   /* ── § 1 HERO ── */
-  hero: {
-    position: "relative", textAlign: "center",
-    padding: "24px 24px 16px",
-    margin: "8px 24px 0",
-    borderRadius: "12px",
-    overflow: "hidden",
-    background: "radial-gradient(ellipse 70% 30% at 50% 0%, rgba(212,175,55,0.20) 0%, transparent 55%), radial-gradient(ellipse 100% 40% at 50% 0%, rgba(120,60,180,0.22) 0%, transparent 60%), radial-gradient(circle at 50% 50%, rgba(120,60,180,0.35) 0%, transparent 60%), radial-gradient(ellipse 100% 50% at 50% 100%, rgba(120,60,180,0.22) 0%, transparent 65%), rgba(6,6,6,0.85)",
-    backdropFilter: "blur(40px)",
-    WebkitBackdropFilter: "blur(40px)",
-    border: "1px solid rgba(212,175,55,0.20)",
-    boxShadow: "0 -16px 50px rgba(120,60,180,0.18), 0 20px 50px rgba(120,60,180,0.18), 0 -10px 35px rgba(212,175,55,0.10), 0 16px 40px rgba(0,0,0,0.6), 0 0 30px rgba(120,60,180,0.22), 0 0 80px rgba(120,60,180,0.15)",
-  },
-  heroInner: { position: "relative", zIndex: 1 },
   heroH1: {
     fontFamily: "'Bebas Neue', sans-serif", fontSize: "4.2rem", color: "#fff",
     textAlign: "center", marginBottom: "4px", lineHeight: 0.86, letterSpacing: "0.01em",
-    textShadow: "0 2px 20px rgba(0,0,0,0.95), 0 4px 40px rgba(0,0,0,0.5)",
   },
-  heroEm: { fontStyle: "normal", color: "#D4AF37", display: "block", textShadow: "0 2px 20px rgba(0,0,0,0.8), 0 0 40px rgba(212,175,55,0.50), 0 0 80px rgba(212,175,55,0.25)" },
-  heroMid: { display: "block", color: "#fff", fontStyle: "normal", textShadow: "0 2px 16px rgba(0,0,0,0.9)" },
+  heroEm: { fontStyle: "normal", color: "#D4AF37", display: "block", textShadow: "0 0 40px rgba(212,175,55,0.50), 0 0 80px rgba(212,175,55,0.25)" },
+  heroMid: { display: "block", color: "#fff", fontStyle: "normal" },
 
-  /* ── § 2 HOW IT WORKS ── */
-  howSection: { position: "relative", background: "#000", padding: "36px 0 0" },
-  howHeader: { textAlign: "center", padding: "16px 24px 24px", background: "radial-gradient(ellipse 80% 40% at 50% 30%, rgba(212,175,55,0.08) 0%, transparent 60%), radial-gradient(ellipse 80% 50% at 50% 60%, rgba(120,60,180,0.18) 0%, transparent 70%)" },
-  howH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.2rem", color: "#fff", lineHeight: 0.95 },
-  stepsContainer: { position: "relative", display: "flex", flexDirection: "column", gap: "1px", background: "rgba(120,60,180,0.10)", borderRadius: "12px", overflow: "hidden", margin: "0 24px", border: "1px solid rgba(120,60,180,0.25)", boxShadow: "0 16px 40px rgba(0,0,0,0.5), 0 0 20px rgba(120,60,180,0.15)" },
-  step: {
-    display: "grid", gridTemplateColumns: "56px 1fr", background: "rgba(6,6,6,0.92)",
+  /* ── Slider styles ── */
+  sliderLabel: {
+    fontFamily: "'Roboto Mono', monospace", fontSize: "11px",
+    color: "rgba(255,255,255,0.50)", letterSpacing: "0.08em", textTransform: "uppercase",
   },
-  stepNumCol: {
-    position: "relative", display: "flex", alignItems: "flex-start", justifyContent: "center",
-    background: "radial-gradient(circle at 50% 28px, rgba(120,60,180,0.28) 0%, rgba(6,6,6,0.92) 80%)",
-    paddingTop: "22px",
+  sliderValue: {
+    fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.2rem",
+    color: "#D4AF37",
   },
-  stepLine: {
-    position: "absolute", top: "57px", bottom: "-23px", left: "50%", transform: "translateX(-50%)", width: "1px",
-    background: "linear-gradient(180deg, rgba(120,60,180,0.60) 0%, rgba(120,60,180,0.10) 100%)", zIndex: 0,
-  },
-  stepNumBadge: {
-    position: "relative", zIndex: 1, width: "48px", height: "48px", borderRadius: "50%",
-    background: "linear-gradient(135deg, rgb(75,30,130) 0%, rgb(110,50,170) 100%)", display: "flex", alignItems: "center", justifyContent: "center",
-    boxShadow: "0 0 20px rgba(120,60,180,0.55), 0 0 40px rgba(120,60,180,0.25)",
-  },
-  stepContent: { padding: "26px 24px 26px 24px" },
-  stepTitle: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "#fff", lineHeight: 1, marginBottom: "5px" },
-  stepBody: { fontFamily: "'Inter', sans-serif", fontSize: "18px", color: "rgba(255,255,255,0.88)", lineHeight: 1.55 },
+  slider: {
+    width: "100%", height: "4px",
+    WebkitAppearance: "none",
+    appearance: "none",
+    background: "rgba(255,255,255,0.10)",
+    borderRadius: "2px",
+    outline: "none",
+    cursor: "pointer",
+  } as React.CSSProperties,
 
-  /* ── § 3 WATERFALL ── */
-  waterfallSection: { position: "relative", background: "#000", padding: "32px 0 0" },
-  waterfallHeader: { textAlign: "center", padding: "0 24px 24px", background: "radial-gradient(ellipse 80% 40% at 50% 30%, rgba(212,175,55,0.08) 0%, transparent 60%)" },
-  waterfallH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.2rem", color: "#fff", lineHeight: 0.95 },
+  /* ── Section header ── */
+  sectionH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.2rem", color: "#fff", lineHeight: 0.95 },
+
+  /* ── § 2 WATERFALL ── */
   waterfallExplainer: {
-    fontFamily: "'Inter', sans-serif", fontSize: "18px", color: "rgba(255,255,255,0.88)",
+    fontFamily: "'Inter', sans-serif", fontSize: "16px", color: "rgba(255,255,255,0.75)",
     lineHeight: 1.55, textAlign: "center", padding: "0 24px", marginBottom: "24px",
     maxWidth: "380px", marginLeft: "auto", marginRight: "auto",
   },
-  acqAmount: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.2rem", color: "#D4AF37", lineHeight: 1, letterSpacing: "0.02em", textShadow: "0 0 30px rgba(212,175,55,0.40), 0 0 60px rgba(212,175,55,0.15)" },
-
-
-  /* ── § 4 WHY THIS MATTERS ── */
-  whySection: { position: "relative", background: "#000", textAlign: "center", padding: "48px 0 0" },
-  whyHeader: { padding: "20px 24px 24px", background: "radial-gradient(ellipse 80% 40% at 50% 30%, rgba(212,175,55,0.10) 0%, transparent 60%)" },
-  whyH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.2rem", color: "#fff", textAlign: "center", lineHeight: 0.95 },
-  badgeGridWrapper: {
-    margin: "0 24px", borderRadius: "12px", overflow: "hidden", border: "1px solid rgba(120,60,180,0.25)",
-    boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 24px rgba(212,175,55,0.10), 0 0 20px rgba(120,60,180,0.15)", position: "relative",
-  },
-  badgeGrid: { display: "grid", gridTemplateColumns: "1fr", gap: "1px", background: "rgba(120,60,180,0.18)" },
-  badgeCard: { background: "radial-gradient(circle at 45px 57px, rgba(120,60,180,0.18) 0%, rgba(6,6,6,0.92) 65%)", padding: "36px 24px", textAlign: "left" },
-  badgeNum: {
-    width: "48px", height: "48px", borderRadius: "50%", background: "linear-gradient(135deg, rgb(75,30,130) 0%, rgb(110,50,170) 100%)", color: "#fff",
-    display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.6rem",
-    marginBottom: "16px", paddingTop: "2px", boxShadow: "0 0 24px rgba(120,60,180,0.55), 0 0 48px rgba(120,60,180,0.25)",
-  },
-  badgeTitle: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "#fff", marginBottom: "8px", lineHeight: 1.05, letterSpacing: "0.02em" },
-  badgeBody: { fontFamily: "'Inter', sans-serif", fontSize: "18px", color: "rgba(255,255,255,0.88)", lineHeight: 1.55 },
-
-  /* ── § 5 ARSENAL ── */
-  arsenalSection: { position: "relative", background: "#000", textAlign: "center", padding: "48px 0 0" },
-  arsenalHeader: { padding: "0 24px 24px", background: "radial-gradient(ellipse 80% 40% at 50% 30%, rgba(212,175,55,0.12) 0%, transparent 60%)" },
-  arsenalH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.2rem", color: "#fff", lineHeight: 0.95 },
-  arsenalSub: { fontFamily: "'Inter', sans-serif", fontSize: "18px", marginTop: "10px", color: "rgba(255,255,255,0.88)", lineHeight: 1.5 },
-  sectionSub: { fontFamily: "'Inter', sans-serif", fontSize: "18px", marginTop: "10px", color: "rgba(255,255,255,0.88)", lineHeight: 1.5 },
-  arsenalCards: { display: "flex", flexDirection: "column", gap: "28px", margin: "0 24px" },
-
-  /* Card containers */
-  tierCardFree: {
-    position: "relative", borderRadius: "12px", overflow: "hidden", textAlign: "center",
-    border: "none",
-    background: "radial-gradient(ellipse 100% 50% at 50% 0%, rgba(212,175,55,0.14) 0%, transparent 60%), radial-gradient(ellipse 100% 50% at 50% 100%, rgba(120,60,180,0.18) 0%, transparent 60%), rgba(6,6,6,0.92)",
-    boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 40px rgba(212,175,55,0.22), 0 0 30px rgba(120,60,180,0.22), 0 0 80px rgba(212,175,55,0.08)",
-  },
-
-  /* Headers */
-  /* Value statements */
-  valueStatementFree: {
-    position: "relative", zIndex: 1,
-    padding: "24px 24px", textAlign: "center",
-    background: "radial-gradient(ellipse 100% 100% at 50% 50%, rgba(212,175,55,0.14) 0%, rgba(6,6,6,0.92) 80%)",
-    borderBottom: "1px solid rgba(212,175,55,0.15)",
-  },
-  valueTextFree: {
-    fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "#D4AF37", lineHeight: 1,
-    letterSpacing: "0.02em", textShadow: "0 0 20px rgba(212,175,55,0.25)",
-  },
-
-  /* ── Top line helpers ── */
-  topLineGold: {
-    position: "absolute", top: 0, left: 0, right: 0, height: "2px",
-    background: "linear-gradient(to right, transparent 0%, rgba(120,60,180,0.40) 20%, rgba(212,175,55,0.50) 50%, rgba(120,60,180,0.40) 80%, transparent 100%)",
-  },
-  topLineGoldHalf: {
-    position: "absolute", top: 0, left: 0, right: 0, height: "2px",
-    background: "linear-gradient(to right, transparent 0%, rgba(120,60,180,0.30) 20%, rgba(212,175,55,0.35) 50%, rgba(120,60,180,0.30) 80%, transparent 100%)",
-  },
-
-  /* ── § 6 REALITY ── */
-  realitySection: { position: "relative", background: "#000", textAlign: "left", padding: "36px 24px 24px" },
-  checkGrid: {
-    position: "relative", border: "1px solid rgba(120,60,180,0.30)", borderRadius: "12px", overflow: "hidden",
-    boxShadow: "0 8px 32px rgba(0,0,0,0.5), 0 0 20px rgba(120,60,180,0.15)",
-  },
-  checkHeader: {
-    display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1px", background: "rgba(255,255,255,0.08)",
-    borderBottom: "1px solid rgba(212,175,55,0.15)",
-  },
-  checkHeaderWith: { background: "radial-gradient(ellipse 80% 100% at 50% 100%, rgba(60,179,113,0.20) 0%, rgba(6,6,6,0.92) 70%)", padding: "14px 16px", borderBottom: "1px solid rgba(60,179,113,0.20)" },
-  checkHeaderWithout: { background: "radial-gradient(ellipse 80% 100% at 50% 100%, rgba(220,38,38,0.10) 0%, rgba(6,6,6,0.92) 70%)", padding: "14px 16px", borderLeft: "1px solid rgba(255,255,255,0.08)", borderBottom: "1px solid rgba(220,38,38,0.12)" },
-  checkHeaderWithText: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.6rem", color: "#3CB371", letterSpacing: "0.04em" },
-  checkHeaderWithoutText: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.6rem", color: "rgba(220,38,38,0.85)", letterSpacing: "0.04em" },
-  checkRow: {
-    display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1px", background: "rgba(255,255,255,0.08)",
-    borderBottom: "1px solid rgba(255,255,255,0.08)",
-  },
-  checkCellLeft: {
-    background: "radial-gradient(circle at 16px 50%, rgba(60,179,113,0.12) 0%, transparent 50%)", display: "grid", gridTemplateColumns: "22px 1fr", gap: "10px",
-    padding: "14px 16px", alignItems: "flex-start",
-  },
-  checkCellRight: {
-    background: "radial-gradient(circle at 16px 50%, rgba(220,38,38,0.08) 0%, transparent 50%)", display: "grid", gridTemplateColumns: "22px 1fr", gap: "10px",
-    padding: "14px 16px", alignItems: "flex-start", borderLeft: "1px solid rgba(255,255,255,0.08)",
-  },
-  checkIconYes: { fontFamily: "'Roboto Mono', monospace", fontSize: "24px", paddingTop: "2px", color: "#3CB371", textShadow: "0 0 8px rgba(60,179,113,0.60), 0 0 20px rgba(60,179,113,0.30)" },
-  checkIconNo: { fontFamily: "'Roboto Mono', monospace", fontSize: "24px", paddingTop: "2px", color: "rgba(220,38,38,0.85)", textShadow: "0 0 8px rgba(220,38,38,0.60), 0 0 20px rgba(220,38,38,0.30)" },
-  checkTextYes: { fontFamily: "'Inter', sans-serif", fontSize: "16px", lineHeight: 1.4, color: "rgba(255,255,255,0.88)" },
-  checkTextNo: { fontFamily: "'Inter', sans-serif", fontSize: "16px", lineHeight: 1.4, color: "rgba(255,255,255,0.70)" },
-
-  /* ── § 7 CLOSER ── */
-  closerSection: {
-    position: "relative", overflow: "hidden", textAlign: "center",
-    padding: "32px 24px 40px",
-    margin: "0 24px 28px",
-    borderRadius: "12px",
-    background: "radial-gradient(ellipse 70% 30% at 50% 0%, rgba(212,175,55,0.18) 0%, transparent 55%), radial-gradient(ellipse 100% 40% at 50% 0%, rgba(120,60,180,0.20) 0%, transparent 60%), radial-gradient(circle at 50% 55%, rgba(120,60,180,0.28) 0%, transparent 60%), radial-gradient(ellipse 100% 50% at 50% 100%, rgba(120,60,180,0.20) 0%, transparent 65%), rgba(6,6,6,0.85)",
-    backdropFilter: "blur(40px)",
-    WebkitBackdropFilter: "blur(40px)",
-    border: "1px solid rgba(212,175,55,0.30)",
-    boxShadow: "0 -16px 50px rgba(120,60,180,0.15), 0 20px 50px rgba(120,60,180,0.15), 0 -10px 35px rgba(212,175,55,0.08), 0 16px 40px rgba(0,0,0,0.8), 0 0 30px rgba(120,60,180,0.18), 0 0 80px rgba(120,60,180,0.12)",
-  },
-  closerH2: {
-    fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.4rem", color: "#fff", textAlign: "center",
-    lineHeight: 0.95, margin: "4px 0 14px", textShadow: "0 2px 16px rgba(0,0,0,0.9)",
-  },
-  closerBody: {
-    fontFamily: "'Inter', sans-serif", fontSize: "18px", color: "rgba(255,255,255,0.88)",
-    lineHeight: 1.55, margin: "0 auto 24px", textShadow: "0 2px 8px rgba(0,0,0,0.8)",
-  },
+  acqAmount: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.2rem", color: "#D4AF37", lineHeight: 1, letterSpacing: "0.02em", textShadow: "0 0 30px rgba(212,175,55,0.40)" },
 
   /* ── FOOTER ── */
-  footer: { background: "#0A0A0A", borderTop: "1px solid rgba(255,255,255,0.15)", padding: "32px 24px 40px" },
+  footer: { background: "#0A0A0A", borderTop: "1px solid rgba(255,255,255,0.08)", padding: "32px 24px 40px" },
   footerLinks: { display: "flex", justifyContent: "center", gap: "20px", marginBottom: "16px" },
   footerIcon: { color: "rgba(212,175,55,0.50)", textDecoration: "none", display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", padding: "4px", borderRadius: "8px", border: "1px solid rgba(212,175,55,0.15)", transition: "color 0.2s ease, border-color 0.2s ease", boxSizing: "content-box" },
   footerNav: { display: "flex", justifyContent: "center", alignItems: "center", gap: "10px", marginBottom: "16px" },
   footerNavLink: { fontFamily: "'Roboto Mono', monospace", fontSize: "13px", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(212,175,55,0.50)", cursor: "pointer", transition: "color 0.2s ease" } as React.CSSProperties,
-  footerText: { fontFamily: "'Inter', sans-serif", fontSize: "14px", textAlign: "center", color: "rgba(255,255,255,0.55)", lineHeight: 1.55 },
+  footerText: { fontFamily: "'Inter', sans-serif", fontSize: "14px", textAlign: "center", color: "rgba(255,255,255,0.50)", lineHeight: 1.55 },
 };
 
 export default Index;
