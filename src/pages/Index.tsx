@@ -13,8 +13,8 @@ import { Instagram } from "lucide-react";
     § 3. SOCIAL PROOF — Testimonial + stats pills + feature badges
     § 4. WHAT'S AT STAKE — 4 tight reason cards (gold left border)
     § 5. REALITY      — Typing reveal + WITH/WITHOUT grid (3 rows)
+    § 5.5 PRODUCT PREVIEW — 5 horizontally scrollable cards
     § 6. CLOSER       — "YOUR NEXT PITCH / IS COMING."
-    § 6.5 PRODUCT PREVIEW — 3 phone-width screenshots
     FOOTER
 
   CTA: All go through gatedNavigate → auth check → LeadCaptureModal if no session.
@@ -435,7 +435,7 @@ const Index = () => {
               <span style={styles.heroMid}>Recoupment</span>
               <em style={styles.heroEm}>Waterfall</em>
             </h1>
-            <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "rgba(255,255,255,0.60)", marginTop: "8px", letterSpacing: "0.02em" }}>The free waterfall calculator for independent producers</p>
+            <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "rgba(255,255,255,0.70)", marginTop: "8px", letterSpacing: "0.02em" }}>The free waterfall calculator for independent producers</p>
             <div style={{ height: "1px", width: "60%", margin: "12px auto 0", background: "rgba(212,175,55,0.22)" }} />
             <div style={{ display: "flex", justifyContent: "center", marginTop: "14px" }}>
               <p style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "13px", color: "rgba(212,175,55,0.70)", letterSpacing: "0.10em", textTransform: "uppercase", textAlign: "center", display: "inline-block", background: "rgba(212,175,55,0.08)", border: "1px solid rgba(212,175,55,0.18)", padding: "4px 14px", borderRadius: "999px" }}>Drag to model your deal</p>
@@ -531,7 +531,7 @@ const Index = () => {
 
             {/* ── Net Profit output ── */}
             <div style={{ textAlign: "center" }}>
-              <p style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "12px", color: "rgba(255,255,255,0.60)", letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: "4px" }}>Estimated Net Profit</p>
+              <p style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "12px", color: "rgba(255,255,255,0.70)", letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: "4px" }}>Estimated Net Profit</p>
               <p style={{
                 fontFamily: "'Bebas Neue', sans-serif",
                 fontSize: Math.abs(heroNetProfit) >= 500000 ? "3.8rem" : "3.2rem",
@@ -574,7 +574,7 @@ const Index = () => {
             boxShadow: "0 4px 16px rgba(0,0,0,0.30)",
           }} className="grain-surface">
           {/* Header band */}
-          <div ref={waterfallHeaderRef} style={{ ...reveal(waterfallHeaderVisible), background: "#242428", borderRadius: "6px", padding: "20px 16px", marginBottom: "16px", textAlign: "center" }}>
+          <div ref={waterfallHeaderRef} style={{ ...reveal(waterfallHeaderVisible), background: "#2A2A2E", border: "1px solid rgba(255,255,255,0.04)", borderBottom: "1px solid rgba(212,175,55,0.10)", borderRadius: "6px", padding: "24px 20px", marginBottom: "16px", textAlign: "center" }}>
             <EyebrowPill text="How the money flows" />
             <h2 style={styles.sectionH2}>The Recoupment<br /><span style={{ color: "#D4AF37", textShadow: "0 0 30px rgba(212,175,55,0.50), 0 0 80px rgba(212,175,55,0.10)" }}>Waterfall</span></h2>
           </div>
@@ -586,7 +586,7 @@ const Index = () => {
           {/* ── Running Balance Counter ── */}
           <div style={{ textAlign: "center", marginBottom: "16px", ...reveal(waterfallHeaderVisible, 1) }}>
             <div style={{ display: "inline-block", background: "rgba(212,175,55,0.04)", border: "1px solid rgba(212,175,55,0.12)", borderRadius: "999px", padding: "6px 16px" }}>
-              <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "12px", color: "rgba(255,255,255,0.60)", letterSpacing: "0.12em", textTransform: "uppercase" }}>REMAINING: </span>
+              <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "12px", color: "rgba(255,255,255,0.70)", letterSpacing: "0.12em", textTransform: "uppercase" }}>REMAINING:</span>
               <span style={{
                 fontFamily: "'Roboto Mono', monospace",
                 fontSize: "16px",
@@ -835,7 +835,7 @@ const Index = () => {
             padding: "32px 16px",
             boxShadow: "0 4px 16px rgba(0,0,0,0.30)",
           }} className="grain-surface">
-          <div style={{ ...reveal(socialVisible), background: "#242428", borderRadius: "6px", padding: "20px 16px", marginBottom: "16px", textAlign: "center" }}>
+          <div style={{ ...reveal(socialVisible), background: "#2A2A2E", border: "1px solid rgba(255,255,255,0.04)", borderBottom: "1px solid rgba(212,175,55,0.10)", borderRadius: "6px", padding: "24px 20px", marginBottom: "16px", textAlign: "center" }}>
             <EyebrowPill text="Trusted By Filmmakers" />
             <h2 style={styles.sectionH2}>Real Numbers.<br /><span style={{ color: "#D4AF37", textShadow: "0 0 30px rgba(212,175,55,0.50), 0 0 80px rgba(212,175,55,0.10)" }}>Real Meetings.</span></h2>
           </div>
@@ -849,7 +849,7 @@ const Index = () => {
             <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "16px", color: "rgba(255,255,255,0.88)", lineHeight: 1.55, fontStyle: "italic" }}>
               "Finally, a tool that speaks the language of independent film finance. I walked into my investor meeting with real numbers."
             </p>
-            <p style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "12px", color: "rgba(255,255,255,0.60)", marginTop: "8px", letterSpacing: "0.06em" }}>
+            <p style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "12px", color: "rgba(255,255,255,0.70)", marginTop: "8px", letterSpacing: "0.06em" }}>
               — Independent Producer, Sundance Lab Fellow
             </p>
           </div>
@@ -885,7 +885,7 @@ const Index = () => {
             padding: "32px 16px",
             boxShadow: "0 4px 16px rgba(0,0,0,0.30)",
           }} className="grain-surface">
-          <div style={{ ...reveal(stakeVisible), background: "#242428", borderRadius: "6px", padding: "20px 16px", marginBottom: "16px", textAlign: "center" }}>
+          <div style={{ ...reveal(stakeVisible), background: "#2A2A2E", border: "1px solid rgba(255,255,255,0.04)", borderBottom: "1px solid rgba(212,175,55,0.10)", borderRadius: "6px", padding: "24px 20px", marginBottom: "16px", textAlign: "center" }}>
             <EyebrowPill text="What's At Stake" />
             <h2 style={styles.sectionH2}><span style={{ color: "#D4AF37", textShadow: "0 0 30px rgba(212,175,55,0.50), 0 0 80px rgba(212,175,55,0.10)" }}>(4) Four</span> Reasons<br />You Can't Skip</h2>
           </div>
@@ -930,7 +930,7 @@ const Index = () => {
             textAlign: "left",
           }} className="grain-surface">
           {/* Header band */}
-          <div style={{ background: "#242428", borderRadius: "6px", padding: "20px 16px", marginBottom: "16px", textAlign: "center" }}>
+          <div style={{ background: "#2A2A2E", border: "1px solid rgba(255,255,255,0.04)", borderBottom: "1px solid rgba(212,175,55,0.10)", borderRadius: "6px", padding: "24px 20px", marginBottom: "16px", textAlign: "center" }}>
             <EyebrowPill text="The Reality" />
             <h2 style={styles.sectionH2}>Know Before You <span style={{ color: "#D4AF37", textShadow: "0 0 30px rgba(212,175,55,0.50), 0 0 80px rgba(212,175,55,0.10)" }}>Negotiate</span></h2>
           </div>
@@ -1023,41 +1023,9 @@ const Index = () => {
         </section>
 
         {/* ── Section divider ── */}
-        <div style={{ height: "56px" }} />
-
-        {/* ═══ § 6 CLOSER ═══ */}
-        <section ref={closerRef} style={{ ...reveal(closerVisible), textAlign: "center", padding: "32px 24px 24px", background: "linear-gradient(180deg, rgba(212,175,55,0.03) 0%, transparent 50%)" }}>
-          {/* Film slate lines */}
-          <div style={{ height: "1px", width: "60%", margin: "0 auto 16px", background: "rgba(212,175,55,0.22)" }} />
-          <h2 style={{
-            fontFamily: "'Bebas Neue', sans-serif",
-            fontSize: "3.4rem",
-            color: "#fff",
-            textAlign: "center",
-            lineHeight: 0.95,
-            margin: "0 0 14px",
-          }}>
-            YOUR NEXT PITCH<br />
-            <span style={{ color: "#D4AF37", textShadow: "0 0 40px rgba(212,175,55,0.50), 0 0 80px rgba(212,175,55,0.20)" }}>IS COMING.</span>
-          </h2>
-          <p style={{
-            fontFamily: "'Inter', sans-serif", fontSize: "16px", color: "rgba(255,255,255,0.85)",
-            lineHeight: 1.55, margin: "0 auto 28px",
-          }}>
-            Will you have the answer? Build your waterfall now and walk in prepared.
-          </p>
-          <button onClick={handleCTA} style={styles.ctaBtn} aria-label="Build my waterfall" onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>
-            <span style={{ position: "relative", zIndex: 1 }}>BUILD MY WATERFALL — FREE</span>
-            <div style={styles.ctaShimmer} />
-          </button>
-          <p style={styles.ctaReassurance}>No Credit Card · Instant Results</p>
-          <div style={{ height: "1px", width: "60%", margin: "16px auto 0", background: "rgba(212,175,55,0.22)" }} />
-        </section>
-
-        {/* ── Section divider ── */}
         <div style={{ height: "40px" }} />
 
-        {/* ═══ § 6.5 PRODUCT PREVIEW — Real Output ═══ */}
+        {/* ═══ § 5.5 PRODUCT PREVIEW — Real Output ═══ */}
         <section ref={previewRef} style={{ padding: "0 24px", marginBottom: "8px" }}>
           <div style={{
             ...reveal(previewVisible),
@@ -1070,7 +1038,7 @@ const Index = () => {
             padding: "28px 16px",
             boxShadow: "0 4px 16px rgba(0,0,0,0.30)",
           }} className="grain-surface">
-            <div style={{ background: "#242428", borderRadius: "6px", padding: "16px", marginBottom: "16px", textAlign: "center" }}>
+            <div style={{ background: "#2A2A2E", border: "1px solid rgba(255,255,255,0.04)", borderBottom: "1px solid rgba(212,175,55,0.10)", borderRadius: "6px", padding: "24px 20px", marginBottom: "16px", textAlign: "center" }}>
               <EyebrowPill text="What You'll Build" />
             </div>
             <div style={{
@@ -1118,7 +1086,7 @@ const Index = () => {
               <p style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "48px", fontWeight: 500, color: "#3CB371", lineHeight: 1 }}>
                 1.2<span style={{ fontSize: "28px" }}>&times;</span>
               </p>
-              <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "11px", color: "rgba(255,255,255,0.50)", marginTop: "6px" }}>Cash-on-cash multiple</p>
+              <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "11px", color: "rgba(255,255,255,0.70)", marginTop: "6px" }}>Cash-on-cash multiple</p>
               <div style={{ marginTop: "10px", padding: "4px 10px", borderRadius: "3px", background: "rgba(60,179,113,0.12)" }}>
                 <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "10px", fontWeight: 700, color: "#3CB371", letterSpacing: "0.08em", textTransform: "uppercase" }}>SOLID DEAL</span>
               </div>
@@ -1132,17 +1100,17 @@ const Index = () => {
               <p style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "10px", color: "rgba(212,175,55,0.60)", letterSpacing: "0.10em", textTransform: "uppercase", marginBottom: "12px" }}>Profit Split</p>
               <div style={{ display: "flex", gap: "8px", marginBottom: "12px" }}>
                 <div style={{ flex: 1, textAlign: "center", padding: "10px 8px", borderRadius: "6px", background: "#242428", border: "1px solid rgba(60,179,113,0.15)" }}>
-                  <p style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "9px", color: "rgba(255,255,255,0.60)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "4px" }}>Investor</p>
+                  <p style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "9px", color: "rgba(255,255,255,0.70)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "4px" }}>Investor</p>
                   <p style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.3rem", color: "#3CB371" }}>$209K</p>
                 </div>
                 <div style={{ flex: 1, textAlign: "center", padding: "10px 8px", borderRadius: "6px", background: "#242428", border: "1px solid rgba(60,179,113,0.15)" }}>
-                  <p style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "9px", color: "rgba(255,255,255,0.60)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "4px" }}>Producer</p>
+                  <p style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "9px", color: "rgba(255,255,255,0.70)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "4px" }}>Producer</p>
                   <p style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.3rem", color: "#3CB371" }}>$209K</p>
                 </div>
               </div>
               <div style={{ height: "1px", background: "rgba(212,175,55,0.16)", marginBottom: "10px" }} />
               <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "10px", color: "rgba(255,255,255,0.60)", letterSpacing: "0.06em" }}>NET BACKEND</span>
+                <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "10px", color: "rgba(255,255,255,0.70)", letterSpacing: "0.06em" }}>NET BACKEND</span>
                 <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "10px", color: "#3CB371", letterSpacing: "0.06em" }}>$418,000</span>
               </div>
             </div>
@@ -1179,18 +1147,50 @@ const Index = () => {
             }} className="preview-card">
               <p style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "10px", color: "rgba(60,179,113,0.60)", letterSpacing: "0.10em", textTransform: "uppercase", marginBottom: "8px" }}>Break-Even</p>
               <p style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "2.4rem", color: "#3CB371", lineHeight: 1 }}>$2.1M</p>
-              <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "11px", color: "rgba(255,255,255,0.50)", marginTop: "6px", marginBottom: "12px" }}>Revenue needed to recoup</p>
+              <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "11px", color: "rgba(255,255,255,0.70)", marginTop: "6px", marginBottom: "12px" }}>Revenue needed to recoup</p>
               <div style={{ width: "100%", height: "6px", background: "rgba(255,255,255,0.08)", borderRadius: "3px", overflow: "hidden", position: "relative" }}>
                 <div style={{ height: "100%", width: "70%", borderRadius: "3px", background: "rgba(60,179,113,0.40)" }} />
                 <div style={{ position: "absolute", top: "-2px", left: "70%", width: "2px", height: "10px", background: "#D4AF37", borderRadius: "1px", transform: "translateX(-50%)" }} />
               </div>
               <div style={{ display: "flex", justifyContent: "space-between", width: "100%", marginTop: "4px" }}>
-                <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "9px", color: "rgba(255,255,255,0.40)" }}>$0</span>
-                <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "9px", color: "rgba(255,255,255,0.40)" }}>$3M</span>
+                <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "9px", color: "rgba(255,255,255,0.60)" }}>$0</span>
+                <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "9px", color: "rgba(255,255,255,0.60)" }}>$3M</span>
               </div>
             </div>
           </div>
           </div>
+        </section>
+
+        {/* ── Section divider ── */}
+        <div style={{ height: "56px" }} />
+
+        {/* ═══ § 6 CLOSER ═══ */}
+        <section ref={closerRef} style={{ ...reveal(closerVisible), textAlign: "center", padding: "32px 24px 24px", background: "linear-gradient(180deg, rgba(212,175,55,0.03) 0%, transparent 50%)" }}>
+          {/* Film slate lines */}
+          <div style={{ height: "1px", width: "60%", margin: "0 auto 16px", background: "rgba(212,175,55,0.22)" }} />
+          <h2 style={{
+            fontFamily: "'Bebas Neue', sans-serif",
+            fontSize: "3.4rem",
+            color: "#fff",
+            textAlign: "center",
+            lineHeight: 0.95,
+            margin: "0 0 14px",
+          }}>
+            YOUR NEXT PITCH<br />
+            <span style={{ color: "#D4AF37", textShadow: "0 0 40px rgba(212,175,55,0.50), 0 0 80px rgba(212,175,55,0.20)" }}>IS COMING.</span>
+          </h2>
+          <p style={{
+            fontFamily: "'Inter', sans-serif", fontSize: "16px", color: "rgba(255,255,255,0.85)",
+            lineHeight: 1.55, margin: "0 auto 28px",
+          }}>
+            Will you have the answer? Build your waterfall now and walk in prepared.
+          </p>
+          <button onClick={handleCTA} style={styles.ctaBtn} aria-label="Build my waterfall" onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>
+            <span style={{ position: "relative", zIndex: 1 }}>BUILD MY WATERFALL — FREE</span>
+            <div style={styles.ctaShimmer} />
+          </button>
+          <p style={styles.ctaReassurance}>No Credit Card · Instant Results</p>
+          <div style={{ height: "1px", width: "60%", margin: "16px auto 0", background: "rgba(212,175,55,0.22)" }} />
         </section>
 
         {/* ═══ FOOTER ═══ */}
@@ -1300,7 +1300,7 @@ const styles: Record<string, React.CSSProperties> = {
   footerIcon: { color: "rgba(212,175,55,0.50)", textDecoration: "none", display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", padding: "4px", borderRadius: "8px", border: "1px solid rgba(212,175,55,0.20)", transition: "color 0.2s ease, border-color 0.2s ease", boxSizing: "content-box" },
   footerNav: { display: "flex", justifyContent: "center", alignItems: "center", gap: "10px", marginBottom: "16px" },
   footerNavLink: { fontFamily: "'Roboto Mono', monospace", fontSize: "13px", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(212,175,55,0.60)", cursor: "pointer", transition: "color 0.2s ease", padding: "8px 4px", minHeight: "44px", display: "flex", alignItems: "center" } as React.CSSProperties,
-  footerText: { fontFamily: "'Inter', sans-serif", fontSize: "14px", textAlign: "center", color: "rgba(255,255,255,0.50)", lineHeight: 1.55 },
+  footerText: { fontFamily: "'Inter', sans-serif", fontSize: "14px", textAlign: "center", color: "rgba(255,255,255,0.55)", lineHeight: 1.55 },
 };
 
 export default Index;
