@@ -1,6 +1,6 @@
 # FILMMAKER.OG — Brand System
 
-**Version:** 3.0
+**Version:** 3.1
 **Last updated:** March 28, 2026
 **Source of truth for:** Every page, component, and visual decision in the product.
 
@@ -285,7 +285,48 @@ debtService = debtAmount * 0.12     // 12% interest
 
 ---
 
-## 7. PAGE NOTES
+## 7. CALCULATOR OUTPUT (WaterfallDeck)
+
+The calculator output is a cinematic financial brief displayed after the user completes all 4 input tabs. It reads like a film — cold open, rising action, climax, resolution.
+
+### Screen Output Structure
+1. **Cold Open** (screen only) — Full-viewport dramatic reveal. Giant multiple number (100-140px), color-coded verdict word (FUNDED/PARTIAL/UNDERWATER), "Scroll to explore" prompt.
+2. **Cover / Executive Summary** — 2x2 "30-Second Card" (Budget, Acquisition, Net Profit, Multiple) + supplementary metrics (Break-Even, Cash Basis) + verdict strip with radial glow + AI deal insight.
+3. **Gate 0: Snapshot+** — Locked diagnostic metrics ($49)
+4. **The Deal** — Investment thesis prose (capital structure narrative, verdict context)
+5. **Visual Cluster: The Numbers** — Off-the-top erosion bar, Revenue Donut (SVG, per-dollar breakdown), net-to-investors strip, capital stack visual, scenario stress test (4 price points), Gate 1: Sensitivity locked
+6. **The Interpretation** — Prose explaining cascade mechanics, Margin of Safety ruler (breakeven visual with dollar gap), recoupment waterfall cascade, Gate 2: Comps locked
+7. **The Waterfall** — Tier-by-tier cascade with funded/unfunded status
+8. **The Conclusion** — Enhanced verdict, closing context, Gate 3: Investor Memo locked
+9. **CTA** — Export Free Snapshot PDF + upsell
+
+### Transition Bridges
+Italic one-liners between sections guide the narrative flow:
+- "The structure behind the numbers."
+- "Now let's see where the money actually goes."
+- "What this means for your investors."
+
+### Key Visual Components
+| Component | Type | Description |
+|---|---|---|
+| Cold Open | Screen only | Full-viewport multiple + verdict reveal |
+| 30-Second Card | Both | 2x2 metric grid — the screenshot moment |
+| Revenue Donut | Both | SVG donut — where every dollar goes, with per-dollar legend |
+| Margin Ruler | Both | Horizontal bar with breakeven marker + dollar gap |
+| TransitionBridge | Screen only | Italic narrative connectors between sections |
+
+### PDF Export (5 pages, zero upsell)
+1. Executive Summary — title, 2x2 metrics, verdict, "The Deal" prose
+2. Revenue Allocation — SVG donut, per-dollar table, erosion bar
+3. The Waterfall — tier cards, net profit, "The Margin" prose, margin ruler
+4. Capital Stack + Scenarios — "The Structure" prose, sources, stress test, assumptions
+5. Back Page — "Prepared using FILMMAKER.OG" + date + URL
+
+PDF branding: FILMMAKER.OG header, gold bar, watermark, and filmmakerog.com footer on every page. No upsell. No gate cards.
+
+---
+
+## 8. PAGE NOTES
 
 ### Calculator (Calculator.tsx)
 - 780px max-width, matches landing page
@@ -310,7 +351,7 @@ debtService = debtAmount * 0.12     // 12% interest
 
 ---
 
-## 8. HOVER / INTERACTION CLASSES (CSS)
+## 9. HOVER / INTERACTION CLASSES (CSS)
 | Class | Effect | Where |
 |---|---|---|
 | `cta-gold-btn` | Hover brightens to `#FBE88A` | All CTA buttons |
@@ -322,7 +363,7 @@ debtService = debtAmount * 0.12     // 12% interest
 
 ---
 
-## 9. FILES THAT IMPLEMENT THIS SYSTEM
+## 10. FILES THAT IMPLEMENT THIS SYSTEM
 | File | Role |
 |---|---|
 | `src/lib/tokens.ts` | Color functions and hex constants (single source of truth) |
@@ -330,6 +371,8 @@ debtService = debtAmount * 0.12     // 12% interest
 | `src/pages/Index.tsx` | Landing page (reference implementation) |
 | `src/components/AppHeader.tsx` | Pill nav |
 | `src/components/LeadCaptureModal.tsx` | Lead capture with white inputs |
+| `src/components/calculator/WaterfallDeck.tsx` | Waterfall output (~2890 lines) |
+| `api/_pdf-template.ts` | PDF export template (5-page branded document) (~659 lines) |
 | `src/components/OgBotFab.tsx` | Floating action button (gold gradient, border) |
 | `BRAND_SYSTEM.md` | This document |
 

@@ -6,11 +6,13 @@ Free film budget calculator and recoupment waterfall simulator for independent p
 
 ## What It Does
 
-- **Interactive Calculator** — Slide three inputs (budget, equity %, sales estimate) and instantly see your full financial picture
+- **Interactive Calculator** — 4-step input wizard (Project, Budget, Capital Stack, Deal Terms) with live calculations
+- **Cinematic Output** — Cold open reveal, revenue donut, margin ruler, per-dollar breakdown, animated waterfall cascade
+- **Free PDF Export** — 5-page branded financial analysis document, no paywall
 - **8-Tier Waterfall** — Visualize exactly who gets paid first, from distribution fees through producer profit
 - **Capital Stack Modeling** — Structure debt, equity, and gap financing with real fee calculations
-- **Store** — Premium report packages (Cascade, Verdict, Split, Stack, Break-Even)
-- **Educational Resources** — Resource Vault with glossary, budget breakdowns, capital structure guides, fee explainers
+- **Store** — Branded templates ($49), comp reports ($595+), turnkey producer packages ($1,797)
+- **Educational Resources** — Resource Vault with glossary, budget breakdowns, capital structure guides
 
 ## Stack
 
@@ -22,7 +24,7 @@ Free film budget calculator and recoupment waterfall simulator for independent p
 
 ## Design System
 
-The visual system is documented in [`BRAND_SYSTEM.md`](./BRAND_SYSTEM.md) (v3.0). Key principles:
+The visual system is documented in [`BRAND_SYSTEM.md`](./BRAND_SYSTEM.md) (v3.1). Key principles:
 
 - **Dark-first** — `#0C0C0E` page background, warm `#1A1A1C` containers, `#232326` surfaces
 - **Two-gold system** — Metallic `#D4AF37` for brand elements, `#F9E076` for CTAs only
@@ -71,8 +73,9 @@ src/
 
 | File | Purpose |
 |---|---|
-| `BRAND_SYSTEM.md` | Design system documentation (v3.0) |
+| `BRAND_SYSTEM.md` | Design system documentation (v3.1) |
 | `src/lib/tokens.ts` | Color token functions — single source of truth for all colors |
 | `src/index.css` | Global styles, keyframes, hover classes, responsive utilities |
 | `src/pages/Index.tsx` | Landing page (~1300 lines, reference implementation) |
-| `src/components/calculator/WaterfallDeck.tsx` | Waterfall output (~2100 lines) |
+| `src/components/calculator/WaterfallDeck.tsx` | Waterfall output (~2890 lines) |
+| `api/_pdf-template.ts` | PDF export template (~660 lines) |

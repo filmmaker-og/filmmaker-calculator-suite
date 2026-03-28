@@ -46,7 +46,7 @@ These are in Vercel's environment config. `.env` is gitignored. `.env.example` h
 
 ## 3. DESIGN SYSTEM (v3.0)
 
-Full documentation: `BRAND_SYSTEM.md` in the repo root.
+Full documentation: `BRAND_SYSTEM.md` in the repo root. (v3.1)
 
 ### Quick Reference
 | Token | Value |
@@ -113,7 +113,8 @@ BG.surface  // #232326
 ### Calculator Components
 | File | Lines | What it is |
 |---|---|---|
-| `src/components/calculator/WaterfallDeck.tsx` | ~2149 | Waterfall output deck — largest component |
+| `src/components/calculator/WaterfallDeck.tsx` | ~2890 | Waterfall output deck — largest component |
+| `api/_pdf-template.ts` | ~660 | PDF export template — 5-page branded document |
 | `src/components/calculator/ChapterCard.tsx` | ~251 | Accordion-style step cards |
 | `src/components/calculator/TabBar.tsx` | ~158 | Bottom tab navigation |
 | `src/components/calculator/ContextBar.tsx` | ~95 | Top context/status bar |
@@ -127,7 +128,7 @@ BG.surface  // #232326
 | `src/lib/tokens.ts` | Color token functions — single source of truth |
 | `src/index.css` | Global styles, keyframes, CSS variables, hover classes |
 | `src/App.tsx` | Router with lazy-loaded pages, ErrorBoundary |
-| `BRAND_SYSTEM.md` | Design system documentation (v3.0) |
+| `BRAND_SYSTEM.md` | Design system documentation (v3.1) |
 | `vercel.json` | Vercel config — SPA rewrites, caching headers |
 
 ---
@@ -237,11 +238,33 @@ heroNetProfit = acquisitionValue - totalDeductions
 - Differentiated post-waterfall reassurance text
 - Updated page comment block to reflect actual section order
 
+### Deck + PDF Overhaul (Second Session)
+
+**WaterfallDeck.tsx** — 7 new components + structural reorganization:
+- **Cold Open** — Full-viewport dramatic reveal (multiple + verdict word), screen only
+- **30-Second Card** — 2x2 metric grid replacing old 6-cell KPI rows (Budget, Acquisition, Net Profit, Multiple)
+- **Revenue Donut** — Pure SVG (no Recharts), stroke-dasharray segments showing where every dollar goes, per-dollar legend below
+- **Margin Ruler** — Horizontal bar with gold breakeven marker + dollar gap, in callout card
+- **TransitionBridge** — Italic one-liners between sections for narrative flow
+- **Enhanced Verdict** — Existing verdict strip wrapped in card with radial glow
+- **DealSection shortened** — First paragraph no longer recaps numbers visible in 30-Second Card
+
+**api/_pdf-template.ts** — Complete rebuild:
+- 5 pages: Executive Summary, Revenue Allocation, Waterfall, Capital Stack + Scenarios, Back Page
+- 3 prose sections: "The Deal" (page 1), "The Margin" (page 3), "The Structure" (page 4)
+- Heavy FILMMAKER.OG branding: gold header bar, brand name header, watermark, filmmakerog.com footer on every page
+- Zero upsell — no gate cards, no "Full Analysis" pitch inside the PDF
+- Static SVG donut + per-dollar table + margin ruler for print
+
+**Product strategy shift**: Free PDF gets everything (donut, waterfall, scenarios, prose, margin ruler). Paid Snapshot+ ($49) becomes branded template (user's company name replaces FILMMAKER.OG). Full Analysis ($197) may be folded into free tier.
+
 ---
 
 ## 8. KNOWN REMAINING ITEMS
 
 - **Stripe checkout** — `TODO` in WaterfallDeck.tsx for Snapshot+ product. Not wired to Stripe yet.
+- **Snapshot+ Stripe checkout** — Not wired yet. Product pivot: Snapshot+ becomes "Branded Snapshot" ($49) — same data, user's company branding replaces FILMMAKER.OG
+- **Full Analysis product** — May be removed or folded into free tier. Its differentiators (sensitivity + branding) are now split between free (sensitivity) and Snapshot+ (branding)
 - **OgBot** — The chatbot sheet (OgBotSheet.tsx) exists but the AI backend isn't connected.
 - **BuildYourPlan** — Post-purchase flow exists but may need polish to match the new system fully.
 - **WaterfallDeck FONT constant** — Has its own type system that predates the brand system. Aligned where possible, some exceptions documented in BRAND_SYSTEM.md.
