@@ -1,6 +1,6 @@
 // api/_pdf-template.ts
 // Generates the HTML string for the PDF snapshot
-// This file is imported by generate-pdf.ts, NOT served as an API route
+// Aligned to BRAND_SYSTEM v3.0 — gold + black + warm white, no purple
 
 interface SnapshotData {
   project: {
@@ -79,11 +79,11 @@ export function generatePdfHtml(data: SnapshotData): string {
   const paPct = inputs.revenue > 0 ? (inputs.salesExp / inputs.revenue) * 100 : 8;
   const remainPct = 100 - computed.erosionPct;
 
-  // Build tier cards HTML
+  // Build tier cards HTML — gold-rimmed badges, warm surfaces
   const tierCardsHtml = tiers
     .map((tier, i) => {
       const isProfit = tier.remaining === 0 && i === tiers.length - 1;
-      const amountColor = isProfit ? '#3CB371' : 'rgba(255,255,255,0.92)';
+      const amountColor = isProfit ? '#3CB371' : 'rgba(250,248,244,0.92)';
       const borderColor = isProfit
         ? 'rgba(60,179,113,0.25)'
         : 'rgba(220,38,38,0.18)';
@@ -100,13 +100,12 @@ export function generatePdfHtml(data: SnapshotData): string {
       </div>`
           : ''
       }
-    <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:8px;background:rgba(6,6,6,0.92);border:1px solid ${borderColor};position:relative;">
-      <div style="position:absolute;top:0;left:0;bottom:0;width:60px;background:radial-gradient(circle at 24px 50%, rgba(120,60,180,0.12) 0%, transparent 60%);border-radius:8px 0 0 8px;pointer-events:none;"></div>
-      <div style="width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,rgb(75,30,130),rgb(110,50,170));display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:12px;color:#fff;box-shadow:0 0 12px rgba(120,60,180,0.45);flex-shrink:0;position:relative;z-index:1;">
+    <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:8px;background:#232326;border:1px solid ${borderColor};border-top:1px solid rgba(255,255,255,0.04);position:relative;">
+      <div style="width:28px;height:28px;border-radius:50%;background:rgba(212,175,55,0.12);border:1px solid rgba(212,175,55,0.30);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:13px;color:#fff;flex-shrink:0;">
         ${String(i + 1).padStart(2, '0')}
       </div>
       <div style="flex:1;">
-        <div style="font-family:'Inter',sans-serif;font-size:11px;font-weight:500;color:rgba(255,255,255,0.85);">${tier.name}</div>
+        <div style="font-family:'Inter',sans-serif;font-size:11px;font-weight:500;color:rgba(250,248,244,0.88);">${tier.name}</div>
         <div style="font-family:'Roboto Mono',monospace;font-size:9px;color:rgba(212,175,55,0.55);margin-top:2px;">${tier.rate}</div>
       </div>
       <div style="text-align:right;">
@@ -117,26 +116,25 @@ export function generatePdfHtml(data: SnapshotData): string {
     })
     .join('');
 
-  // Gate card builder
+  // Gate card builder — v3.0 compliant, no purple
   const gateCard = (
     badge: string,
     headline: string,
     desc: string,
     iconSvg: string,
-    borderColor: string,
-    atmosColor: string,
-    badgeColor: string,
+    accentColor: string,
+    accentGlow: string,
   ) =>
-    `<div style="border-radius:12px;padding:32px 28px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden;border:1px solid ${borderColor};background:rgba(6,6,6,0.92);box-shadow:0 16px 40px rgba(0,0,0,0.6),0 0 24px ${atmosColor};min-height:220px;">
-      <div style="position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse 80% 50% at 50% 20%,${atmosColor} 0%,transparent 55%);pointer-events:none;"></div>
-      <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,${borderColor},transparent);"></div>
-      <div style="width:44px;height:44px;border-radius:50%;border:1px solid ${borderColor};display:flex;align-items:center;justify-content:center;margin-bottom:14px;position:relative;z-index:1;">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="${badgeColor}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${iconSvg}</svg>
+    `<div style="border-radius:8px;padding:32px 28px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden;border:1px solid rgba(212,175,55,0.15);border-top:1px solid rgba(255,255,255,0.08);background:#1A1A1C;box-shadow:0 4px 16px rgba(0,0,0,0.30);min-height:220px;">
+      <div style="position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse 80% 50% at 50% 20%,${accentGlow} 0%,transparent 55%);pointer-events:none;"></div>
+      <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(212,175,55,0.35),transparent);"></div>
+      <div style="width:44px;height:44px;border-radius:50%;border:1px solid ${accentColor};display:flex;align-items:center;justify-content:center;margin-bottom:14px;position:relative;z-index:1;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="${accentColor}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${iconSvg}</svg>
       </div>
-      <div style="font-family:'Roboto Mono',monospace;font-size:8px;letter-spacing:3px;text-transform:uppercase;border:1px solid ${borderColor};color:${badgeColor};padding:4px 14px;border-radius:2px;margin-bottom:14px;position:relative;z-index:1;">${badge}</div>
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:rgba(255,255,255,0.92);text-align:center;line-height:1.15;letter-spacing:1px;margin-bottom:10px;position:relative;z-index:1;">${headline}</div>
-      <div style="font-family:'Inter',sans-serif;font-size:10.5px;color:rgba(255,255,255,0.45);text-align:center;line-height:1.75;max-width:320px;font-weight:300;margin-bottom:18px;position:relative;z-index:1;">${desc}</div>
-      <div style="font-family:'Roboto Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:8px 20px;border-radius:3px;border:1px solid ${borderColor};color:${badgeColor};background:rgba(255,255,255,0.02);position:relative;z-index:1;">Available at filmmakerog.com</div>
+      <div style="font-family:'Roboto Mono',monospace;font-size:8px;letter-spacing:3px;text-transform:uppercase;border:1px solid ${accentColor};color:${accentColor};padding:4px 14px;border-radius:2px;margin-bottom:14px;position:relative;z-index:1;">${badge}</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:rgba(250,248,244,0.92);text-align:center;line-height:1.15;letter-spacing:1px;margin-bottom:10px;position:relative;z-index:1;">${headline}</div>
+      <div style="font-family:'Inter',sans-serif;font-size:10.5px;color:rgba(250,248,244,0.55);text-align:center;line-height:1.75;max-width:320px;font-weight:300;margin-bottom:18px;position:relative;z-index:1;">${desc}</div>
+      <div style="font-family:'Roboto Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:8px 20px;border-radius:3px;border:1px solid rgba(212,175,55,0.25);color:rgba(212,175,55,0.65);background:rgba(212,175,55,0.03);position:relative;z-index:1;">Available at filmmakerog.com</div>
     </div>`;
 
   return `<!DOCTYPE html>
@@ -146,9 +144,9 @@ export function generatePdfHtml(data: SnapshotData): string {
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&family=Roboto+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: #000; font-family: 'Inter', sans-serif; width: 612px; }
+    body { background: #0C0C0E; font-family: 'Inter', sans-serif; width: 612px; }
     .page {
-      width: 612px; min-height: 792px; background: #000;
+      width: 612px; min-height: 792px; background: #0C0C0E;
       position: relative; overflow: hidden;
       page-break-after: always; padding: 28px 0;
     }
@@ -171,14 +169,13 @@ export function generatePdfHtml(data: SnapshotData): string {
       white-space: nowrap;
     }
     .section-divider {
-      height: 3px;
-      background: linear-gradient(to right,transparent 0%,rgba(120,60,180,0.50) 20%,rgba(212,175,55,0.40) 50%,rgba(120,60,180,0.50) 80%,transparent 100%);
-      box-shadow: 0 0 8px rgba(120,60,180,0.35);
+      height: 1px;
+      background: linear-gradient(to right, transparent 0%, rgba(212,175,55,0.35) 20%, rgba(212,175,55,0.40) 50%, rgba(212,175,55,0.35) 80%, transparent 100%);
       margin: 0 36px;
     }
     .gold-break {
       height: 1px;
-      background: linear-gradient(90deg,transparent,rgba(212,175,55,0.35),transparent);
+      background: linear-gradient(90deg, transparent, rgba(212,175,55,0.35), transparent);
       margin: 16px 48px;
     }
     .footer {
@@ -199,45 +196,45 @@ export function generatePdfHtml(data: SnapshotData): string {
 
   <!-- PAGE 1: COVER -->
   <div class="page" style="display:flex;flex-direction:column;padding:0;">
-    <div style="position:absolute;top:0;left:0;right:0;height:300px;background:radial-gradient(ellipse 80% 50% at 50% 10%,rgba(212,175,55,0.14) 0%,transparent 60%);pointer-events:none;"></div>
-    <div style="position:absolute;bottom:0;left:0;right:0;height:250px;background:radial-gradient(ellipse 100% 70% at 50% 100%,rgba(120,60,180,0.12) 0%,transparent 60%);pointer-events:none;"></div>
+    <div style="position:absolute;top:0;left:0;right:0;height:300px;background:radial-gradient(ellipse 80% 50% at 50% 10%,rgba(212,175,55,0.10) 0%,transparent 60%);pointer-events:none;"></div>
+    <div style="position:absolute;bottom:0;left:0;right:0;height:250px;background:radial-gradient(ellipse 100% 70% at 50% 100%,rgba(212,175,55,0.06) 0%,transparent 60%);pointer-events:none;"></div>
 
-    <div style="margin:100px 36px 0;padding:32px 28px 28px;border-radius:12px;background:rgba(6,6,6,0.92);border:1px solid rgba(212,175,55,0.20);box-shadow:0 16px 40px rgba(0,0,0,0.6),0 0 24px rgba(212,175,55,0.10),0 0 20px rgba(120,60,180,0.15);position:relative;overflow:hidden;z-index:5;">
-      <div style="position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse 80% 50% at 50% 10%,rgba(212,175,55,0.18) 0%,transparent 60%),radial-gradient(ellipse 60% 40% at 50% 50%,rgba(120,60,180,0.12) 0%,transparent 60%),radial-gradient(ellipse 100% 70% at 50% 100%,rgba(120,60,180,0.16) 0%,transparent 60%);pointer-events:none;"></div>
-      <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(to right,transparent 0%,rgba(120,60,180,0.40) 20%,rgba(212,175,55,0.50) 50%,rgba(120,60,180,0.40) 80%,transparent 100%);z-index:3;"></div>
+    <div style="margin:100px 36px 0;padding:32px 28px 28px;border-radius:8px;background:#1A1A1C;border:1px solid rgba(212,175,55,0.15);border-top:1px solid rgba(255,255,255,0.08);box-shadow:0 4px 16px rgba(0,0,0,0.30);position:relative;overflow:hidden;z-index:5;">
+      <div style="position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse 80% 50% at 50% 10%,rgba(212,175,55,0.10) 0%,transparent 60%);pointer-events:none;"></div>
+      <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(212,175,55,0.45),transparent);z-index:3;"></div>
 
       <div style="font-family:'Roboto Mono',monospace;font-size:9px;letter-spacing:5px;color:rgba(212,175,55,0.60);text-transform:uppercase;text-align:center;margin-bottom:16px;position:relative;z-index:2;">Waterfall Snapshot</div>
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:48px;color:rgba(255,255,255,0.96);line-height:0.95;letter-spacing:2px;text-align:center;margin-bottom:10px;position:relative;z-index:2;">${project.title.toUpperCase()}</div>
-      <div style="font-family:'Inter',sans-serif;font-size:12px;color:rgba(255,255,255,0.45);font-weight:300;line-height:1.7;text-align:center;margin-bottom:24px;position:relative;z-index:2;padding:0 12px;">Recoupment waterfall analysis for a ${formatCurrency(inputs.budget)} independent feature film</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:48px;color:#fff;line-height:0.95;letter-spacing:2px;text-align:center;margin-bottom:10px;position:relative;z-index:2;">${project.title.toUpperCase()}</div>
+      <div style="font-family:'Inter',sans-serif;font-size:12px;color:rgba(250,248,244,0.55);font-weight:300;line-height:1.7;text-align:center;margin-bottom:24px;position:relative;z-index:2;padding:0 12px;">Recoupment waterfall analysis for a ${formatCurrency(inputs.budget)} independent feature film</div>
 
       <div style="padding:0 8px;margin-bottom:0;position:relative;z-index:2;">
         <div class="eyebrow"><div class="rule"></div><span>Project Details</span><div class="rule"></div></div>
       </div>
 
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(120,60,180,0.12);border-radius:8px;overflow:hidden;position:relative;z-index:2;">
-        <div style="background:rgba(6,6,6,0.92);padding:14px 16px;"><div style="font-family:'Roboto Mono',monospace;font-size:8px;letter-spacing:2.5px;color:rgba(212,175,55,0.45);text-transform:uppercase;margin-bottom:4px;">Genre</div><div style="font-family:'Inter',sans-serif;font-size:13px;color:rgba(255,255,255,0.88);font-weight:500;">${project.genre}</div></div>
-        <div style="background:rgba(6,6,6,0.92);padding:14px 16px;"><div style="font-family:'Roboto Mono',monospace;font-size:8px;letter-spacing:2.5px;color:rgba(212,175,55,0.45);text-transform:uppercase;margin-bottom:4px;">Total Budget</div><div style="font-family:'Inter',sans-serif;font-size:13px;color:rgba(255,255,255,0.88);font-weight:500;">${formatFullCurrency(inputs.budget)}</div></div>
-        <div style="background:rgba(6,6,6,0.92);padding:14px 16px;"><div style="font-family:'Roboto Mono',monospace;font-size:8px;letter-spacing:2.5px;color:rgba(212,175,55,0.45);text-transform:uppercase;margin-bottom:4px;">Cast</div><div style="font-family:'Inter',sans-serif;font-size:13px;color:rgba(255,255,255,0.88);font-weight:500;">${project.cast || 'Not specified'}</div></div>
-        <div style="background:rgba(6,6,6,0.92);padding:14px 16px;"><div style="font-family:'Roboto Mono',monospace;font-size:8px;letter-spacing:2.5px;color:rgba(212,175,55,0.45);text-transform:uppercase;margin-bottom:4px;">Location</div><div style="font-family:'Inter',sans-serif;font-size:13px;color:rgba(255,255,255,0.88);font-weight:500;">${project.location || 'Not specified'}</div></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(212,175,55,0.10);border-radius:8px;overflow:hidden;position:relative;z-index:2;">
+        <div style="background:#232326;padding:14px 16px;"><div style="font-family:'Roboto Mono',monospace;font-size:8px;letter-spacing:2.5px;color:rgba(212,175,55,0.45);text-transform:uppercase;margin-bottom:4px;">Genre</div><div style="font-family:'Inter',sans-serif;font-size:13px;color:rgba(250,248,244,0.88);font-weight:500;">${project.genre}</div></div>
+        <div style="background:#232326;padding:14px 16px;"><div style="font-family:'Roboto Mono',monospace;font-size:8px;letter-spacing:2.5px;color:rgba(212,175,55,0.45);text-transform:uppercase;margin-bottom:4px;">Total Budget</div><div style="font-family:'Inter',sans-serif;font-size:13px;color:rgba(250,248,244,0.88);font-weight:500;">${formatFullCurrency(inputs.budget)}</div></div>
+        <div style="background:#232326;padding:14px 16px;"><div style="font-family:'Roboto Mono',monospace;font-size:8px;letter-spacing:2.5px;color:rgba(212,175,55,0.45);text-transform:uppercase;margin-bottom:4px;">Cast</div><div style="font-family:'Inter',sans-serif;font-size:13px;color:rgba(250,248,244,0.88);font-weight:500;">${project.cast || 'Not specified'}</div></div>
+        <div style="background:#232326;padding:14px 16px;"><div style="font-family:'Roboto Mono',monospace;font-size:8px;letter-spacing:2.5px;color:rgba(212,175,55,0.45);text-transform:uppercase;margin-bottom:4px;">Location</div><div style="font-family:'Inter',sans-serif;font-size:13px;color:rgba(250,248,244,0.88);font-weight:500;">${project.location || 'Not specified'}</div></div>
       </div>
     </div>
 
     <!-- KPI row -->
     <div style="display:flex;gap:8px;margin:20px 36px 0;position:relative;z-index:5;">
-      <div style="flex:1;padding:14px 12px;border:1px solid rgba(212,175,55,0.12);border-radius:8px;text-align:center;">
+      <div style="flex:1;padding:14px 12px;background:#232326;border:1px solid rgba(212,175,55,0.12);border-top:1px solid rgba(255,255,255,0.04);border-radius:8px;text-align:center;">
         <div style="font-family:'Roboto Mono',monospace;font-size:7.5px;letter-spacing:2px;color:rgba(212,175,55,0.45);text-transform:uppercase;margin-bottom:6px;">Investor ROI</div>
         <div style="font-family:'Roboto Mono',monospace;font-size:20px;font-weight:500;color:${returnColor};">${computed.investorROI.toFixed(1)}%</div>
-        <div style="font-family:'Inter',sans-serif;font-size:9px;color:rgba(255,255,255,0.3);margin-top:3px;font-weight:300;">Cash-on-cash</div>
+        <div style="font-family:'Inter',sans-serif;font-size:9px;color:rgba(250,248,244,0.35);margin-top:3px;font-weight:300;">Cash-on-cash</div>
       </div>
-      <div style="flex:1;padding:14px 12px;border:1px solid rgba(212,175,55,0.12);border-radius:8px;text-align:center;">
+      <div style="flex:1;padding:14px 12px;background:#232326;border:1px solid rgba(212,175,55,0.12);border-top:1px solid rgba(255,255,255,0.04);border-radius:8px;text-align:center;">
         <div style="font-family:'Roboto Mono',monospace;font-size:7.5px;letter-spacing:2px;color:rgba(212,175,55,0.45);text-transform:uppercase;margin-bottom:6px;">Break-Even</div>
         <div style="font-family:'Roboto Mono',monospace;font-size:20px;font-weight:500;color:#F0A830;">${formatCurrency(computed.breakEvenRevenue)}</div>
-        <div style="font-family:'Inter',sans-serif;font-size:9px;color:rgba(255,255,255,0.3);margin-top:3px;font-weight:300;">Revenue needed</div>
+        <div style="font-family:'Inter',sans-serif;font-size:9px;color:rgba(250,248,244,0.35);margin-top:3px;font-weight:300;">Revenue needed</div>
       </div>
-      <div style="flex:1;padding:14px 12px;border:1px solid rgba(212,175,55,0.12);border-radius:8px;text-align:center;">
+      <div style="flex:1;padding:14px 12px;background:#232326;border:1px solid rgba(212,175,55,0.12);border-top:1px solid rgba(255,255,255,0.04);border-radius:8px;text-align:center;">
         <div style="font-family:'Roboto Mono',monospace;font-size:7.5px;letter-spacing:2px;color:rgba(212,175,55,0.45);text-transform:uppercase;margin-bottom:6px;">Producer Net</div>
         <div style="font-family:'Roboto Mono',monospace;font-size:20px;font-weight:500;color:#D4AF37;">${formatCurrency(result.producer)}</div>
-        <div style="font-family:'Inter',sans-serif;font-size:9px;color:rgba(255,255,255,0.3);margin-top:3px;font-weight:300;">After all tiers</div>
+        <div style="font-family:'Inter',sans-serif;font-size:9px;color:rgba(250,248,244,0.35);margin-top:3px;font-weight:300;">After all tiers</div>
       </div>
     </div>
 
@@ -245,7 +242,7 @@ export function generatePdfHtml(data: SnapshotData): string {
       <div style="font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:6px;color:rgba(212,175,55,0.35);">FILMMAKER.OG</div>
       <div style="font-family:'Roboto Mono',monospace;font-size:8px;color:rgba(255,255,255,0.2);letter-spacing:1.5px;margin-top:4px;">${date}</div>
     </div>
-    <div style="position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(to right,transparent 0%,rgba(120,60,180,0.50) 20%,rgba(212,175,55,0.40) 50%,rgba(120,60,180,0.50) 80%,transparent 100%);box-shadow:0 0 8px rgba(120,60,180,0.35);z-index:10;"></div>
+    <div style="position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(to right,transparent 0%,rgba(212,175,55,0.40) 50%,transparent 100%);z-index:10;"></div>
   </div>
 
   <!-- PAGE 2: WATERFALL -->
@@ -275,9 +272,10 @@ export function generatePdfHtml(data: SnapshotData): string {
       ${tierCardsHtml}
     </div>
 
-    <div style="margin:16px 36px 0;padding:14px 16px;border-radius:8px;border:1px solid rgba(60,179,113,0.35);background:radial-gradient(ellipse at 50% 0%,rgba(60,179,113,0.12) 0%,rgba(6,6,6,0.92) 70%);box-shadow:0 0 20px rgba(60,179,113,0.10);display:flex;justify-content:space-between;align-items:center;position:relative;z-index:2;">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:#3CB371;letter-spacing:1px;">Net Backend Profit</div>
-      <div style="font-family:'Roboto Mono',monospace;font-size:20px;font-weight:500;color:#3CB371;text-shadow:0 0 12px rgba(60,179,113,0.4);">${formatFullCurrency(result.producer)}</div>
+    <div style="margin:16px 36px 0;padding:14px 16px;border-radius:8px;border:1px solid rgba(60,179,113,0.35);border-top:1px solid rgba(60,179,113,0.15);background:#232326;box-shadow:0 0 20px rgba(60,179,113,0.06);display:flex;justify-content:space-between;align-items:center;position:relative;z-index:2;overflow:hidden;">
+      <div style="position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at 50% 0%,rgba(60,179,113,0.08) 0%,transparent 70%);pointer-events:none;"></div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:#3CB371;letter-spacing:1px;position:relative;z-index:1;">Net Backend Profit</div>
+      <div style="font-family:'Roboto Mono',monospace;font-size:20px;font-weight:500;color:#3CB371;position:relative;z-index:1;">${formatFullCurrency(result.producer)}</div>
     </div>
 
     <div class="footer">
@@ -298,12 +296,12 @@ export function generatePdfHtml(data: SnapshotData): string {
     </div>
 
     <div style="padding:0 36px;position:relative;z-index:2;">
-      <div style="border-radius:12px;background:rgba(6,6,6,0.92);border:1px solid rgba(212,175,55,0.20);padding:24px;margin-bottom:16px;position:relative;overflow:hidden;">
-        <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(212,175,55,0.45),transparent);"></div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+      <div style="border-radius:8px;background:#1A1A1C;border:1px solid rgba(212,175,55,0.15);border-top:1px solid rgba(255,255,255,0.08);padding:24px;margin-bottom:16px;position:relative;overflow:hidden;">
+        <div style="position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(180deg,rgba(212,175,55,0.06),#232326);pointer-events:none;border-radius:8px;"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;position:relative;z-index:1;">
           <div>
             <div style="font-family:'Roboto Mono',monospace;font-size:8px;letter-spacing:2px;color:rgba(212,175,55,0.45);text-transform:uppercase;margin-bottom:6px;">Total Investment</div>
-            <div style="font-family:'Roboto Mono',monospace;font-size:22px;font-weight:500;color:rgba(255,255,255,0.92);">${formatFullCurrency(inputs.equity)}</div>
+            <div style="font-family:'Roboto Mono',monospace;font-size:22px;font-weight:500;color:rgba(250,248,244,0.92);">${formatFullCurrency(inputs.equity)}</div>
           </div>
           <div>
             <div style="font-family:'Roboto Mono',monospace;font-size:8px;letter-spacing:2px;color:rgba(212,175,55,0.45);text-transform:uppercase;margin-bottom:6px;">Total Returned</div>
@@ -320,8 +318,8 @@ export function generatePdfHtml(data: SnapshotData): string {
         </div>
       </div>
 
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:rgba(255,255,255,0.92);letter-spacing:1px;margin:24px 0 12px;">Assumptions</div>
-      <div style="border-radius:8px;background:rgba(6,6,6,0.92);border:1px solid rgba(212,175,55,0.12);overflow:hidden;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:rgba(250,248,244,0.92);letter-spacing:1px;margin:24px 0 12px;">Assumptions</div>
+      <div style="border-radius:8px;background:#232326;border:1px solid rgba(212,175,55,0.12);border-top:1px solid rgba(255,255,255,0.04);overflow:hidden;">
         ${[
           ['Projected Revenue', formatFullCurrency(inputs.revenue)],
           ['Sales Agent Fee', `${inputs.salesFee}%`],
@@ -336,7 +334,7 @@ export function generatePdfHtml(data: SnapshotData): string {
               `<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 16px;${
                 i > 0 ? 'border-top:1px solid rgba(255,255,255,0.03);' : ''
               }">
-            <span style="font-family:'Inter',sans-serif;font-size:11px;color:rgba(255,255,255,0.55);font-weight:400;">${label}</span>
+            <span style="font-family:'Inter',sans-serif;font-size:11px;color:rgba(250,248,244,0.55);font-weight:400;">${label}</span>
             <span style="font-family:'Roboto Mono',monospace;font-size:11px;color:rgba(255,255,255,0.85);font-weight:500;">${value}</span>
           </div>`,
           )
@@ -352,9 +350,8 @@ export function generatePdfHtml(data: SnapshotData): string {
         'See How Your Deal Performs Under Pressure',
         'Multi-scenario sensitivity modeling, break-even analysis, and investor return projections across five revenue outcomes.',
         '<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>',
-        'rgba(212,175,55,0.20)',
-        'rgba(212,175,55,0.08)',
-        'rgba(212,175,55,0.65)',
+        'rgba(212,175,55,0.55)',
+        'rgba(212,175,55,0.06)',
       )}
     </div>
 
@@ -380,9 +377,8 @@ export function generatePdfHtml(data: SnapshotData): string {
         'Know What Your Film Is Worth Before You Shoot',
         'Five comparable transactions from the current market — matched by genre, budget range, and cast tier. Real deal data, not estimates.',
         '<rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line>',
-        'rgba(80,200,120,0.22)',
-        'rgba(80,200,120,0.08)',
-        'rgba(80,200,120,0.65)',
+        'rgba(60,179,113,0.55)',
+        'rgba(60,179,113,0.06)',
       )}
     </div>
 
@@ -394,9 +390,8 @@ export function generatePdfHtml(data: SnapshotData): string {
         'Your Investor Memo. Built to Close.',
         'Form intake, 10 market comps, lookbook, and a presentation-ready investment memo. Delivered in 3-5 business days.',
         '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line>',
-        'rgba(120,60,180,0.30)',
-        'rgba(120,60,180,0.10)',
-        'rgba(120,60,180,0.7)',
+        'rgba(212,175,55,0.55)',
+        'rgba(212,175,55,0.06)',
       )}
     </div>
 
@@ -408,14 +403,14 @@ export function generatePdfHtml(data: SnapshotData): string {
 
   <!-- PAGE 5: BACK PAGE -->
   <div class="page" style="display:flex;flex-direction:column;align-items:center;justify-content:center;">
-    <div style="position:absolute;top:0;left:0;right:0;height:300px;background:radial-gradient(ellipse 80% 50% at 50% 10%,rgba(212,175,55,0.10) 0%,transparent 60%);pointer-events:none;"></div>
-    <div style="position:absolute;bottom:0;left:0;right:0;height:250px;background:radial-gradient(ellipse 100% 70% at 50% 100%,rgba(120,60,180,0.10) 0%,transparent 60%);pointer-events:none;"></div>
+    <div style="position:absolute;top:0;left:0;right:0;height:300px;background:radial-gradient(ellipse 80% 50% at 50% 10%,rgba(212,175,55,0.08) 0%,transparent 60%);pointer-events:none;"></div>
+    <div style="position:absolute;bottom:0;left:0;right:0;height:250px;background:radial-gradient(ellipse 100% 70% at 50% 100%,rgba(212,175,55,0.05) 0%,transparent 60%);pointer-events:none;"></div>
 
     <div style="text-align:center;position:relative;z-index:2;">
       <div style="font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:8px;color:#D4AF37;margin-bottom:8px;">FILMMAKER.OG</div>
       <div style="width:48px;height:1px;background:linear-gradient(90deg,transparent,rgba(212,175,55,0.5),transparent);margin:0 auto 32px;"></div>
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:rgba(255,255,255,0.92);letter-spacing:1px;line-height:1.1;margin-bottom:12px;">YOUR INVESTORS<br>WILL ASK.</div>
-      <div style="font-family:'Inter',sans-serif;font-size:13px;color:rgba(255,255,255,0.45);font-weight:300;line-height:1.7;max-width:380px;margin:0 auto 40px;">Run your numbers. Model your waterfall. Know your deal before you pitch it.</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:rgba(250,248,244,0.92);letter-spacing:1px;line-height:1.1;margin-bottom:12px;">YOUR INVESTORS<br>WILL ASK.</div>
+      <div style="font-family:'Inter',sans-serif;font-size:13px;color:rgba(250,248,244,0.45);font-weight:300;line-height:1.7;max-width:380px;margin:0 auto 40px;">Run your numbers. Model your waterfall. Know your deal before you pitch it.</div>
       <div style="font-family:'Roboto Mono',monospace;font-size:11px;letter-spacing:2px;color:rgba(212,175,55,0.6);text-transform:uppercase;">filmmakerog.com</div>
     </div>
 
