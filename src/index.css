@@ -60,8 +60,8 @@
        BACKGROUND LAYERS — Brand spec: #000, #111, #1A1A1A only
        ═══════════════════════════════════════════════════════════════════ */
     --bg-void: #0C0C0E;
-    --bg-elevated: #1A1A1E;
-    --bg-surface: #242428;
+    --bg-elevated: #1A1A1C;
+    --bg-surface: #232326;
 
     /* ═══════════════════════════════════════════════════════════════════
        TWO-GOLD SYSTEM
@@ -278,7 +278,7 @@
     top: 0; left: 0; right: 0; bottom: 0;
     pointer-events: none;
     border-radius: 8px;
-    opacity: 0.03;
+    opacity: 0.035;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
     background-repeat: repeat;
     background-size: 256px 256px;
@@ -958,6 +958,67 @@
     box-shadow: 0 0 8px rgba(212,175,55,0.4);
     cursor: grab;
     border: none;
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════
+     PREMIUM OVERHAUL — CTA hover
+     ═══════════════════════════════════════════════════════════════════ */
+  .cta-gold-btn {
+    transition: background 0.15s ease, transform 0.1s ease;
+  }
+  @media (hover: hover) {
+    .cta-gold-btn:hover {
+      background: #FBE88A !important;
+    }
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════
+     PREMIUM OVERHAUL — waterfall card hover
+     ═══════════════════════════════════════════════════════════════════ */
+  .wf-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.15s ease;
+  }
+  @media (hover: hover) {
+    .wf-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.40), 0 0 12px rgba(212,175,55,0.08);
+    }
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════
+     PREMIUM OVERHAUL — preview cards responsive
+     ═══════════════════════════════════════════════════════════════════ */
+  .preview-scroll {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 8px;
+  }
+  @media (min-width: 640px) {
+    .preview-scroll {
+      flex-wrap: wrap;
+      overflow-x: visible;
+      scroll-snap-type: none;
+    }
+    .preview-scroll > * {
+      min-width: 0 !important;
+      flex: 1 1 200px;
+    }
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════
+     PREMIUM OVERHAUL — preview card hover
+     ═══════════════════════════════════════════════════════════════════ */
+  .preview-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+  @media (hover: hover) {
+    .preview-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+      border-color: rgba(212,175,55,0.35) !important;
+    }
   }
 }
 

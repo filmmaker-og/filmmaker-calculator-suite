@@ -89,9 +89,9 @@ export const BG = {
   /** Near-black warm — page wrappers */
   void: '#0C0C0E',
   /** Elevated surface — cards, clearly visible on page bg */
-  elevated: '#1A1A1E',
+  elevated: '#1A1A1C',
   /** Input surface — distinct interactive layer */
-  surface: '#242428',
+  surface: '#232326',
 } as const;
 
 // ─── Standard Tier Presets ──────────────────────────────────────
