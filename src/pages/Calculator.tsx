@@ -218,10 +218,11 @@ const Calculator = () => {
     setSourceSelections(prev => ({ ...prev, [key]: !prev[key] }));
   }, []);
 
-  // Gate: redirect to landing page if no authenticated session
+  // Gate: redirect to landing page if no session AND no lead capture
   useEffect(() => {
     if (loading) return;
-    if (!user) {
+    const hasLead = localStorage.getItem('og_lead_email');
+    if (!user && !hasLead) {
       navigate("/", { replace: true });
     }
   }, [user, loading, navigate]);
