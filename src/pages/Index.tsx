@@ -414,7 +414,7 @@ const Index = () => {
       <div style={{ minHeight: "100vh", background: "#0C0C0E", paddingTop: "24px", maxWidth: "430px", margin: "0 auto" }}>
 
         {/* ═══ § 1 INTERACTIVE HERO ═══ */}
-        <section ref={heroRef} style={{ position: "relative", padding: "0 24px 8px", background: "linear-gradient(180deg, rgba(212,175,55,0.03) 0%, transparent 70%)" }}>
+        <section ref={heroRef} style={{ position: "relative", padding: "0 24px 8px" }}>
           {/* ── Hero Container ── */}
           <div style={{
             ...reveal(heroVisible),
@@ -427,8 +427,9 @@ const Index = () => {
             padding: "24px 16px",
             boxShadow: "0 4px 16px rgba(0,0,0,0.30)",
           }} className="grain-surface">
-          <div style={{ textAlign: "center", padding: "0 4px" }}>
-            {/* Film slate lines */}
+          {/* Hero header band */}
+          <div style={{ background: "linear-gradient(180deg, rgba(212,175,55,0.03), #242428)", border: "1px solid rgba(255,255,255,0.04)", borderBottom: "1px solid rgba(212,175,55,0.10)", borderRadius: "6px", padding: "24px 20px", marginBottom: "16px", textAlign: "center" }}>
+            {/* Film slate line */}
             <div style={{ height: "1px", width: "60%", margin: "0 auto 12px", background: "rgba(212,175,55,0.22)" }} />
             <h1 style={styles.heroH1}>
               Model Your
@@ -546,15 +547,15 @@ const Index = () => {
               </p>
             </div>
           </div>
-          </div>
 
           {/* ── CTA ── */}
-          <div style={{ ...reveal(heroVisible, 2), marginTop: "20px" }}>
+          <div style={{ marginTop: "20px" }}>
             <button onClick={handleCTA} style={styles.ctaBtn} aria-label="Build my waterfall" onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>
               <span style={{ position: "relative", zIndex: 1 }}>BUILD THE FULL MODEL</span>
               <div style={styles.ctaShimmer} />
             </button>
             <p style={styles.ctaReassurance}>No Credit Card · Instant Results</p>
+          </div>
           </div>
         </section>
 
@@ -1165,32 +1166,45 @@ const Index = () => {
         <div style={{ height: "56px" }} />
 
         {/* ═══ § 6 CLOSER ═══ */}
-        <section ref={closerRef} style={{ ...reveal(closerVisible), textAlign: "center", padding: "32px 24px 24px", background: "linear-gradient(180deg, rgba(212,175,55,0.03) 0%, transparent 50%)" }}>
-          {/* Film slate lines */}
-          <div style={{ height: "1px", width: "60%", margin: "0 auto 16px", background: "rgba(212,175,55,0.22)" }} />
-          <h2 style={{
-            fontFamily: "'Bebas Neue', sans-serif",
-            fontSize: "3.4rem",
-            color: "#fff",
-            textAlign: "center",
-            lineHeight: 0.95,
-            margin: "0 0 14px",
-          }}>
-            YOUR NEXT PITCH<br />
-            <span style={{ color: "#D4AF37", textShadow: "0 0 40px rgba(212,175,55,0.50), 0 0 80px rgba(212,175,55,0.20)" }}>IS COMING.</span>
-          </h2>
-          <p style={{
-            fontFamily: "'Inter', sans-serif", fontSize: "16px", color: "rgba(255,255,255,0.85)",
-            lineHeight: 1.55, margin: "0 auto 28px",
-          }}>
-            Will you have the answer? Build your waterfall now and walk in prepared.
-          </p>
-          <button onClick={handleCTA} style={styles.ctaBtn} aria-label="Build my waterfall" onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>
-            <span style={{ position: "relative", zIndex: 1 }}>BUILD MY WATERFALL — FREE</span>
-            <div style={styles.ctaShimmer} />
-          </button>
-          <p style={styles.ctaReassurance}>No Credit Card · Instant Results</p>
-          <div style={{ height: "1px", width: "60%", margin: "16px auto 0", background: "rgba(212,175,55,0.22)" }} />
+        <section ref={closerRef} style={{ padding: "0 24px" }}>
+          <div style={{
+            ...reveal(closerVisible),
+            position: "relative",
+            overflow: "hidden",
+            background: "#1E1E22",
+            border: "1px solid rgba(212,175,55,0.20)",
+            borderTop: "1px solid rgba(255,255,255,0.06)",
+            borderRadius: "8px",
+            padding: "32px 16px",
+            boxShadow: "0 4px 16px rgba(0,0,0,0.30)",
+          }} className="grain-surface">
+            {/* Header band */}
+            <div style={{ background: "linear-gradient(180deg, rgba(212,175,55,0.03), #242428)", border: "1px solid rgba(255,255,255,0.04)", borderBottom: "1px solid rgba(212,175,55,0.10)", borderRadius: "6px", padding: "24px 20px", marginBottom: "20px", textAlign: "center" }}>
+              <h2 style={{
+                fontFamily: "'Bebas Neue', sans-serif",
+                fontSize: "3.0rem",
+                color: "#fff",
+                textAlign: "center",
+                lineHeight: 0.95,
+                margin: "0",
+              }}>
+                YOUR NEXT PITCH<br />
+                <span style={{ color: "#D4AF37", textShadow: "0 0 40px rgba(212,175,55,0.50), 0 0 80px rgba(212,175,55,0.20)" }}>IS COMING.</span>
+              </h2>
+            </div>
+            {/* Body + CTA */}
+            <p style={{
+              fontFamily: "'Inter', sans-serif", fontSize: "16px", color: "rgba(255,255,255,0.85)",
+              lineHeight: 1.55, margin: "0 auto 24px", textAlign: "center",
+            }}>
+              Will you have the answer? Build your waterfall now and walk in prepared.
+            </p>
+            <button onClick={handleCTA} style={styles.ctaBtn} aria-label="Build my waterfall" onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>
+              <span style={{ position: "relative", zIndex: 1 }}>BUILD MY WATERFALL — FREE</span>
+              <div style={styles.ctaShimmer} />
+            </button>
+            <p style={styles.ctaReassurance}>No Credit Card · Instant Results</p>
+          </div>
         </section>
 
         {/* ═══ FOOTER ═══ */}
@@ -1252,7 +1266,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
   ctaReassurance: {
     fontFamily: "'Roboto Mono', monospace", fontSize: "11px",
-    color: "rgba(212,175,55,0.80)", letterSpacing: "0.12em",
+    color: "rgba(212,175,55,0.90)", letterSpacing: "0.12em",
     textTransform: "uppercase", textAlign: "center", marginTop: "12px",
   },
 
