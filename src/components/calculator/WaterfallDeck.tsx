@@ -353,7 +353,7 @@ const CoverSection = ({
           background: "rgba(255,255,255,0.06)",
         }}>
           {teamFields.map((f) => (
-            <div key={f.role} style={{ background: "#1A1A1E", padding: "12px 14px" }}>
+            <div key={f.role} style={{ background: "#1A1A1C", padding: "12px 14px" }}>
               <div style={{
                 ...FONT.fine,
                 color: W.tertiary,
@@ -383,7 +383,7 @@ const CoverSection = ({
         borderRadius: "12px",
         overflow: "hidden",
       }}>
-        <div style={{ flex: 1, background: "#1A1A1E", padding: "14px" }}>
+        <div style={{ flex: 1, background: "#1A1A1C", padding: "14px" }}>
           <div style={{ ...FONT.fine, color: W.quaternary, marginBottom: "4px" }}>BUDGET</div>
           <div style={{
             fontFamily: "'Roboto Mono', monospace",
@@ -395,7 +395,7 @@ const CoverSection = ({
             {formatCompactCurrency(inputs.budget)}
           </div>
         </div>
-        <div style={{ flex: 1, background: "#1A1A1E", padding: "14px", borderLeft: "2px solid rgba(212,175,55,0.25)" }}>
+        <div style={{ flex: 1, background: "#1A1A1C", padding: "14px", borderLeft: "2px solid rgba(212,175,55,0.25)" }}>
           <div style={{ ...FONT.fine, color: W.quaternary, marginBottom: "4px" }}>CASH BASIS</div>
           <div style={{
             fontFamily: "'Roboto Mono', monospace",
@@ -416,7 +416,7 @@ const CoverSection = ({
         borderRadius: "12px",
         overflow: "hidden",
       }}>
-        <div style={{ flex: 1, background: "#1A1A1E", padding: "14px" }}>
+        <div style={{ flex: 1, background: "#1A1A1C", padding: "14px" }}>
           <div style={{ ...FONT.fine, color: W.quaternary, marginBottom: "4px" }}>MARKET VALUE</div>
           <div style={{
             fontFamily: "'Roboto Mono', monospace",
@@ -428,7 +428,7 @@ const CoverSection = ({
             {formatCompactCurrency(inputs.revenue)}
           </div>
         </div>
-        <div style={{ flex: 1, background: "#1A1A1E", padding: "14px", borderLeft: `2px solid ${returnColor === SEM.green ? "rgba(60,179,113,0.25)" : returnColor === SEM.amber ? "rgba(240,168,48,0.25)" : "rgba(220,38,38,0.35)"}` }}>
+        <div style={{ flex: 1, background: "#1A1A1C", padding: "14px", borderLeft: `2px solid ${returnColor === SEM.green ? "rgba(60,179,113,0.25)" : returnColor === SEM.amber ? "rgba(240,168,48,0.25)" : "rgba(220,38,38,0.35)"}` }}>
           <div style={{ ...FONT.fine, color: W.quaternary, marginBottom: "4px" }}>INVESTOR RETURN</div>
           <div style={{
             fontFamily: "'Roboto Mono', monospace",
@@ -453,7 +453,7 @@ const CoverSection = ({
       }}>
         <div style={{
           flex: 1,
-          background: "#1A1A1E",
+          background: "#1A1A1C",
           padding: "14px",
           borderTop: "2px solid rgba(212,175,55,0.18)",
         }}>
@@ -512,8 +512,8 @@ const CoverSection = ({
           fontFamily: "'Inter', sans-serif",
           fontSize: "17px",
           fontStyle: "italic",
-          color: "rgba(255,255,255,0.88)",
-          lineHeight: 1.55,
+          color: "rgba(250,248,244,0.90)",
+          lineHeight: 1.6,
         }}>
           {dealInsight}
         </div>
@@ -706,8 +706,8 @@ const DealSection = ({
     <section style={{ padding: "32px 24px 28px", position: "relative", overflow: "hidden" }}>
       {/* Gold top canopy */}
       <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "180px", background: "radial-gradient(ellipse 80% 50% at 50% 0%, rgba(212,175,55,0.08) 0%, transparent 70%)", pointerEvents: "none" }} />
-      {/* Purple bottom canopy */}
-      <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "120px", background: "radial-gradient(ellipse 60% 40% at 50% 100%, rgba(120,60,180,0.05) 0%, transparent 60%)", pointerEvents: "none" }} />
+      {/* Gold bottom canopy */}
+      <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "120px", background: "radial-gradient(ellipse 60% 40% at 50% 100%, rgba(212,175,55,0.04) 0%, transparent 60%)", pointerEvents: "none" }} />
       {/* Provenance mark */}
       <div style={{
         display: "flex",
@@ -889,7 +889,7 @@ const VisualCluster1 = ({
             borderRadius: "12px", overflow: "hidden", background: "rgba(255,255,255,0.06)",
           }}>
             {sources.map((s) => (
-              <div key={s.label} style={{ background: "#1A1A1E", padding: "16px" }}>
+              <div key={s.label} style={{ background: "#1A1A1C", padding: "16px" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                     <div style={{ width: "12px", height: "12px", borderRadius: "2px", background: s.color }} />
@@ -1083,7 +1083,7 @@ const LockedSnapshotPlusSection = ({ onUnlock }: { onUnlock: () => void }) => (
     <p style={{
       fontSize: "15px",
       color: W.tertiary,
-      lineHeight: 1.55,
+      lineHeight: 1.6,
       marginBottom: "20px",
     }}>
       The waterfall shows where the money goes. These metrics tell you whether
@@ -1106,7 +1106,7 @@ const LockedSnapshotPlusSection = ({ onUnlock }: { onUnlock: () => void }) => (
         { label: "OFF-THE-TOP TOTAL", fakeValue: "$810K" },
         { label: "COST OF CAPITAL", fakeValue: "$347K" },
       ].map((metric) => (
-        <div key={metric.label} style={{ background: "#1A1A1E", padding: "14px" }}>
+        <div key={metric.label} style={{ background: "#1A1A1C", padding: "14px" }}>
           <div style={{
             ...FONT.fine,
             color: "rgba(255,255,255,0.30)",
@@ -1234,8 +1234,8 @@ const InterpretationSection = ({
     <section style={{ padding: "32px 24px 28px", position: "relative", overflow: "hidden" }}>
       {/* Gold top canopy */}
       <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "140px", background: "radial-gradient(ellipse 80% 50% at 50% 0%, rgba(212,175,55,0.06) 0%, transparent 70%)", pointerEvents: "none" }} />
-      {/* Purple bottom canopy */}
-      <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "100px", background: "radial-gradient(ellipse 60% 40% at 50% 100%, rgba(120,60,180,0.04) 0%, transparent 60%)", pointerEvents: "none" }} />
+      {/* Gold bottom canopy */}
+      <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "100px", background: "radial-gradient(ellipse 60% 40% at 50% 100%, rgba(212,175,55,0.03) 0%, transparent 60%)", pointerEvents: "none" }} />
       {/* Full headline treatment — this is a text block */}
       <div style={{ ...FONT.label, color: G.emphasis, marginBottom: "8px" }}>What The Numbers Say</div>
       <div style={{ ...FONT.display, color: W.primary, marginBottom: "16px" }}>THE INTERPRETATION</div>
@@ -1551,7 +1551,7 @@ const LockedComparableSection = () => (
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        background: "radial-gradient(ellipse at center, rgba(120,60,180,0.04) 0%, rgba(212,175,55,0.05) 30%, rgba(0,0,0,0.55) 70%)",
+        background: "radial-gradient(ellipse at center, rgba(212,175,55,0.05) 0%, rgba(0,0,0,0.55) 70%)",
       }}>
         <div style={{
           width: "44px", height: "44px",
@@ -1559,7 +1559,7 @@ const LockedComparableSection = () => (
           borderRadius: "50%",
           display: "flex", alignItems: "center", justifyContent: "center",
           marginBottom: "16px",
-          boxShadow: "0 0 20px rgba(212,175,55,0.18), 0 0 40px rgba(120,60,180,0.08)",
+          boxShadow: "0 0 20px rgba(212,175,55,0.18)",
         }}>
           <svg viewBox="0 0 24 24" style={{ width: "18px", height: "18px", fill: G.standard }}>
             <path d="M18 10h-1V7c0-2.76-2.24-5-5-5S7 4.24 7 7v3H6c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-8c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3-9H9V7c0-1.66 1.34-3 3-3s3 1.34 3 3v3z" />
@@ -1593,7 +1593,7 @@ const LockedInvestorMemoSection = () => (
       border: "1px solid rgba(212,175,55,0.30)",
       borderRadius: "12px",
       overflow: "hidden",
-      boxShadow: "0 0 30px rgba(212,175,55,0.08), 0 0 60px rgba(120,60,180,0.06)",
+      boxShadow: "0 0 30px rgba(212,175,55,0.08)",
     }}>
       {/* Fake document behind blur — designed to look like a real financial document */}
       <div style={{
@@ -1672,7 +1672,7 @@ const LockedInvestorMemoSection = () => (
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        background: "radial-gradient(ellipse at center, rgba(120,60,180,0.06) 0%, rgba(212,175,55,0.06) 30%, rgba(0,0,0,0.50) 70%)",
+        background: "radial-gradient(ellipse at center, rgba(212,175,55,0.06) 0%, rgba(0,0,0,0.50) 70%)",
       }}>
         <div style={{
           width: "44px", height: "44px",
@@ -1680,7 +1680,7 @@ const LockedInvestorMemoSection = () => (
           borderRadius: "50%",
           display: "flex", alignItems: "center", justifyContent: "center",
           marginBottom: "16px",
-          boxShadow: "0 0 24px rgba(212,175,55,0.25), 0 0 48px rgba(120,60,180,0.12)",
+          boxShadow: "0 0 24px rgba(212,175,55,0.25)",
         }}>
           <svg viewBox="0 0 24 24" style={{ width: "18px", height: "18px", fill: G.standard }}>
             <path d="M18 10h-1V7c0-2.76-2.24-5-5-5S7 4.24 7 7v3H6c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-8c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3-9H9V7c0-1.66 1.34-3 3-3s3 1.34 3 3v3z" />
@@ -1737,8 +1737,8 @@ const ConclusionSection = ({
     <section style={{ padding: "32px 24px 28px", position: "relative", overflow: "hidden" }}>
       {/* Gold top canopy — warmer (approaching CTA) */}
       <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "200px", background: "radial-gradient(ellipse 80% 50% at 50% 0%, rgba(212,175,55,0.10) 0%, transparent 70%)", pointerEvents: "none" }} />
-      {/* Purple bottom canopy */}
-      <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "140px", background: "radial-gradient(ellipse 60% 40% at 50% 100%, rgba(120,60,180,0.06) 0%, transparent 60%)", pointerEvents: "none" }} />
+      {/* Gold bottom canopy */}
+      <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "140px", background: "radial-gradient(ellipse 60% 40% at 50% 100%, rgba(212,175,55,0.04) 0%, transparent 60%)", pointerEvents: "none" }} />
       {/* Full headline treatment */}
       <div style={{ ...FONT.label, color: G.emphasis, marginBottom: "8px" }}>Where You Stand</div>
       <div style={{ ...FONT.display, color: W.primary, marginBottom: "16px" }}>THE CONCLUSION</div>
@@ -1909,11 +1909,11 @@ const CTASection = ({ result, inputs, project, guilds }: {
         position: "relative",
         overflow: "hidden",
       }}>
-        {/* Dual gold + purple ambient glow */}
+        {/* Gold ambient glow */}
         <div style={{
           position: "absolute",
           inset: 0,
-          background: "radial-gradient(ellipse 80% 50% at 50% 20%, rgba(120,60,180,0.10) 0%, transparent 55%), radial-gradient(ellipse at center 40%, rgba(212,175,55,0.08) 0%, rgba(212,175,55,0.03) 40%, transparent 70%)",
+          background: "radial-gradient(ellipse 80% 50% at 50% 20%, rgba(212,175,55,0.10) 0%, transparent 55%), radial-gradient(ellipse at center 40%, rgba(212,175,55,0.08) 0%, rgba(212,175,55,0.03) 40%, transparent 70%)",
         }} />
 
         {/* Warm top border */}
@@ -1970,24 +1970,24 @@ const CTASection = ({ result, inputs, project, guilds }: {
             ))}
           </div>
 
-          {/* Primary CTA — purple gradient + shimmer, gated */}
+          {/* Primary CTA — gold, gated */}
           <div style={{ marginBottom: "16px" }}>
             <span
               onClick={(e) => { haptics.medium(e); gatedNavigate("/store/the-full-analysis"); }}
               style={{
                 display: "inline-block",
                 padding: "16px 36px",
-                background: "linear-gradient(135deg, rgb(75,30,130), rgb(110,50,170))",
+                background: "#F9E076",
                 border: "none",
                 borderRadius: "8px",
                 fontFamily: "'Bebas Neue', sans-serif",
                 fontSize: "20px",
                 letterSpacing: "0.15em",
-                color: "#fff",
+                color: "#000",
                 fontWeight: 700,
                 cursor: "pointer",
                 textDecoration: "none",
-                boxShadow: "0 0 20px rgba(120,60,180,0.35), 0 0 60px rgba(120,60,180,0.15)",
+                boxShadow: "0 0 20px rgba(249,224,118,0.30), 0 0 60px rgba(249,224,118,0.15)",
                 position: "relative",
                 overflow: "hidden",
               }}
@@ -2068,7 +2068,7 @@ const WaterfallBrief = ({
 
   return (
     <div style={{
-      background: "#1A1A1E",
+      background: "#1A1A1C",
       maxWidth: "430px",
       margin: "0 auto",
     }}>
