@@ -83,7 +83,7 @@ const LeadCaptureModal = ({ isOpen, onClose, onEmailSubmitted }: LeadCaptureModa
       <DialogContent
         className="w-[calc(100%-2rem)] max-w-sm mx-auto p-0 gap-0"
         style={{
-          background: "#000",
+          background: "#121212",
           border: "1px solid rgba(212,175,55,0.15)",
           borderRadius: "6px",
         }}

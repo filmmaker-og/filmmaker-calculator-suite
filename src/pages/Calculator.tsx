@@ -62,7 +62,7 @@ const STEP_TO_TAB: TabId[] = ['project', 'budget', 'stack', 'deal', 'waterfall']
 /* ═══ Inline styles — Store pattern ═══ */
 const s: Record<string, React.CSSProperties> = {
   page: {
-    background: "#000",
+    background: "#121212",
     minHeight: "100vh",
     display: "flex",
     flexDirection: "column" as const,
@@ -79,7 +79,7 @@ const s: Record<string, React.CSSProperties> = {
   },
   loading: {
     minHeight: "100vh",
-    background: "#000",
+    background: "#121212",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -141,7 +141,7 @@ const CalcHero = ({ stepLabel, title, titleGold, subtitle, visible }: {
         position: "relative", textAlign: "center",
         padding: "24px 20px 20px",
         borderRadius: 8, overflow: "hidden",
-        background: "#0A0A0A",
+        background: "#1A1A1A",
         border: "1px solid rgba(212,175,55,0.15)",
       }}>
         <div style={{ position: "relative", zIndex: 1 }}>

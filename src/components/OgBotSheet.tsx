@@ -367,7 +367,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
         style={{
           height: "100dvh",
           paddingBottom: "calc(var(--bottom-bar-h) + env(safe-area-inset-bottom))",
-          background: "rgba(6,6,6,0.92)",
+          background: "rgba(26,26,26,0.92)",
           backdropFilter: "blur(40px)",
           WebkitBackdropFilter: "blur(40px)",
           borderRadius: "0",

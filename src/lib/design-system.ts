@@ -35,9 +35,9 @@
 // ===== COLOR PALETTE =====
 export const colors = {
   // Backgrounds — #000, #111, #1A1A1A only
-  void: '#000000',
-  elevated: '#111111',
-  surface: '#1A1A1A',
+  void: '#121212',
+  elevated: '#1A1A1A',
+  surface: '#222222',
 
   // Borders
   borderDefault: 'rgba(212, 175, 55, 0.15)',   // gold-medium

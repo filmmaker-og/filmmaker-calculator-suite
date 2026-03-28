@@ -86,12 +86,12 @@ export const GOLD_DEEP = '#7A5C12';
 // ─── Backgrounds ────────────────────────────────────────────────
 
 export const BG = {
-  /** True black — page wrappers, OLED optimal */
-  void: '#000',
-  /** Near-black — elevated cards, data cells */
-  elevated: '#0A0A0A',
-  /** Dark surface — input fields, modals */
-  surface: '#1A1A1A',
+  /** Dark gray — page wrappers, readable on OLED */
+  void: '#121212',
+  /** Elevated surface — cards, data cells */
+  elevated: '#1A1A1A',
+  /** Deep surface — input fields, modals */
+  surface: '#222222',
 } as const;
 
 // ─── Standard Tier Presets ──────────────────────────────────────

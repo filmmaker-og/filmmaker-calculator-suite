@@ -353,7 +353,7 @@ const CoverSection = ({
           background: "rgba(255,255,255,0.06)",
         }}>
           {teamFields.map((f) => (
-            <div key={f.role} style={{ background: "#0A0A0A", padding: "12px 14px" }}>
+            <div key={f.role} style={{ background: "#1A1A1A", padding: "12px 14px" }}>
               <div style={{
                 ...FONT.fine,
                 color: W.tertiary,
@@ -383,7 +383,7 @@ const CoverSection = ({
         borderRadius: "12px",
         overflow: "hidden",
       }}>
-        <div style={{ flex: 1, background: "#0A0A0A", padding: "14px" }}>
+        <div style={{ flex: 1, background: "#1A1A1A", padding: "14px" }}>
           <div style={{ ...FONT.fine, color: W.quaternary, marginBottom: "4px" }}>BUDGET</div>
           <div style={{
             fontFamily: "'Roboto Mono', monospace",
@@ -395,7 +395,7 @@ const CoverSection = ({
             {formatCompactCurrency(inputs.budget)}
           </div>
         </div>
-        <div style={{ flex: 1, background: "#0A0A0A", padding: "14px", borderLeft: "2px solid rgba(212,175,55,0.25)" }}>
+        <div style={{ flex: 1, background: "#1A1A1A", padding: "14px", borderLeft: "2px solid rgba(212,175,55,0.25)" }}>
           <div style={{ ...FONT.fine, color: W.quaternary, marginBottom: "4px" }}>CASH BASIS</div>
           <div style={{
             fontFamily: "'Roboto Mono', monospace",
@@ -416,7 +416,7 @@ const CoverSection = ({
         borderRadius: "12px",
         overflow: "hidden",
       }}>
-        <div style={{ flex: 1, background: "#0A0A0A", padding: "14px" }}>
+        <div style={{ flex: 1, background: "#1A1A1A", padding: "14px" }}>
           <div style={{ ...FONT.fine, color: W.quaternary, marginBottom: "4px" }}>MARKET VALUE</div>
           <div style={{
             fontFamily: "'Roboto Mono', monospace",
@@ -428,7 +428,7 @@ const CoverSection = ({
             {formatCompactCurrency(inputs.revenue)}
           </div>
         </div>
-        <div style={{ flex: 1, background: "#0A0A0A", padding: "14px", borderLeft: `2px solid ${returnColor === SEM.green ? "rgba(60,179,113,0.25)" : returnColor === SEM.amber ? "rgba(240,168,48,0.25)" : "rgba(220,38,38,0.35)"}` }}>
+        <div style={{ flex: 1, background: "#1A1A1A", padding: "14px", borderLeft: `2px solid ${returnColor === SEM.green ? "rgba(60,179,113,0.25)" : returnColor === SEM.amber ? "rgba(240,168,48,0.25)" : "rgba(220,38,38,0.35)"}` }}>
           <div style={{ ...FONT.fine, color: W.quaternary, marginBottom: "4px" }}>INVESTOR RETURN</div>
           <div style={{
             fontFamily: "'Roboto Mono', monospace",
@@ -453,7 +453,7 @@ const CoverSection = ({
       }}>
         <div style={{
           flex: 1,
-          background: "#0A0A0A",
+          background: "#1A1A1A",
           padding: "14px",
           borderTop: "2px solid rgba(212,175,55,0.18)",
         }}>
@@ -889,7 +889,7 @@ const VisualCluster1 = ({
             borderRadius: "12px", overflow: "hidden", background: "rgba(255,255,255,0.06)",
           }}>
             {sources.map((s) => (
-              <div key={s.label} style={{ background: "#0A0A0A", padding: "16px" }}>
+              <div key={s.label} style={{ background: "#1A1A1A", padding: "16px" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                     <div style={{ width: "12px", height: "12px", borderRadius: "2px", background: s.color }} />
@@ -1106,7 +1106,7 @@ const LockedSnapshotPlusSection = ({ onUnlock }: { onUnlock: () => void }) => (
         { label: "OFF-THE-TOP TOTAL", fakeValue: "$810K" },
         { label: "COST OF CAPITAL", fakeValue: "$347K" },
       ].map((metric) => (
-        <div key={metric.label} style={{ background: "#0A0A0A", padding: "14px" }}>
+        <div key={metric.label} style={{ background: "#1A1A1A", padding: "14px" }}>
           <div style={{
             ...FONT.fine,
             color: "rgba(255,255,255,0.30)",
@@ -2068,7 +2068,7 @@ const WaterfallBrief = ({
 
   return (
     <div style={{
-      background: "#0A0A0A",
+      background: "#1A1A1A",
       maxWidth: "430px",
       margin: "0 auto",
     }}>
