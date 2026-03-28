@@ -783,7 +783,7 @@ const Index = () => {
             margin: "16px 0 24px",
           }}>
             <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "16px", color: "rgba(255,255,255,0.75)", lineHeight: 1.55, fontStyle: "italic" }}>
-              "This is the tool I wish I had before my first distribution deal. It would have saved me six figures."
+              "Finally, a tool that speaks the language of independent film finance. I walked into my investor meeting with real numbers."
             </p>
             <p style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "12px", color: "rgba(255,255,255,0.40)", marginTop: "8px", letterSpacing: "0.06em" }}>
               — Independent Producer, Sundance Lab Fellow
@@ -836,7 +836,7 @@ const Index = () => {
         <section ref={stakeRef} style={{ position: "relative", background: "#000", padding: "0 24px 0" }}>
           <div style={{ ...reveal(stakeVisible), textAlign: "center", marginBottom: "20px" }}>
             <EyebrowRuled text="What's At Stake" />
-            <h2 style={styles.sectionH2}><span style={{ color: "#D4AF37" }}>Four</span> Reasons<br />You Can't Skip This</h2>
+            <h2 style={styles.sectionH2}><span style={{ color: "#D4AF37" }}>(4) Four</span> Reasons<br />You Can't Skip This</h2>
           </div>
 
           <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
@@ -854,7 +854,7 @@ const Index = () => {
               >
                 <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "2rem", color: "#D4AF37", lineHeight: 1 }}>{card.num}</span>
                 <p style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.4rem", color: "#fff", marginBottom: "4px", lineHeight: 1.05, marginTop: "4px" }}>{card.title}</p>
-                <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "16px", color: "rgba(255,255,255,0.75)", lineHeight: 1.45 }}>{card.body}</p>
+                <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "15px", color: "rgba(255,255,255,0.60)", lineHeight: 1.45 }}>{card.body}</p>
               </div>
             ))}
           </div>
@@ -959,16 +959,16 @@ const Index = () => {
             margin: "0 0 14px",
           }}>
             YOUR NEXT PITCH<br />
-            <span style={{ color: "#D4AF37" }}>IS COMING.</span>
+            <span style={{ color: "#D4AF37", textShadow: "0 0 40px rgba(212,175,55,0.50), 0 0 80px rgba(212,175,55,0.20)" }}>IS COMING.</span>
           </h2>
           <p style={{
             fontFamily: "'Inter', sans-serif", fontSize: "16px", color: "rgba(255,255,255,0.75)",
-            lineHeight: 1.55, margin: "0 auto 24px",
+            lineHeight: 1.55, margin: "0 auto 28px",
           }}>
-            Stop guessing your backend. Walk into every pitch knowing exactly where the money goes.
+            Will you have the answer? Build your waterfall model now and walk into every meeting with confidence.
           </p>
           <button onClick={handleCTA} style={styles.ctaBtn} aria-label="Build my waterfall" onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>
-            <span style={{ position: "relative", zIndex: 1 }}>BUILD MY WATERFALL</span>
+            <span style={{ position: "relative", zIndex: 1 }}>BUILD MY WATERFALL — FREE</span>
             <div style={styles.ctaShimmer} />
           </button>
           <p style={styles.ctaReassurance}>No Credit Card · Instant Results</p>
@@ -1108,11 +1108,11 @@ const styles: Record<string, React.CSSProperties> = {
     color: "#D4AF37",
   },
   slider: {
-    width: "100%", height: "4px",
+    width: "100%", height: "6px",
     WebkitAppearance: "none",
     appearance: "none",
-    background: "rgba(255,255,255,0.10)",
-    borderRadius: "2px",
+    background: "rgba(255,255,255,0.08)",
+    borderRadius: "3px",
     outline: "none",
     cursor: "pointer",
   } as React.CSSProperties,
