@@ -66,7 +66,7 @@ const s: Record<string, React.CSSProperties> = {
   },
   /* ── Card base ── */
   cardBase: {
-    background: "#1A1A1A",
+    background: "#1A1A1E",
     border: "1px solid rgba(212,175,55,0.15)",
     borderRadius: "8px",
     overflow: "hidden",
@@ -180,7 +180,7 @@ const tierStyles = {
     id: "gold" as const,
     card: {
       border: "1px solid rgba(212,175,55,0.15)",
-      background: "#1A1A1A",
+      background: "#1A1A1E",
     },
     atmosphericTop: "none",
     atmosphericBottom: "none",
@@ -205,7 +205,7 @@ const tierStyles = {
     id: "purple" as const,
     card: {
       border: "1px solid rgba(212,175,55,0.25)",
-      background: "#1A1A1A",
+      background: "#1A1A1E",
     },
     atmosphericTop: "none",
     atmosphericBottom: "none",
@@ -390,7 +390,7 @@ const WorkingModelPopup = ({
         overflow: "hidden",
         border: "1px solid rgba(212,175,55,0.25)",
         borderBottom: "none",
-        background: "#1A1A1A",
+        background: "#1A1A1E",
         animation: "faqOpen 0.3s ease-out",
       }}
     >
@@ -1059,7 +1059,7 @@ const Store = () => {
 
   /* ─── RENDER ─── */
   return (
-    <div style={{ minHeight: "100vh", background: "#121212", maxWidth: "430px", margin: "0 auto" }}>
+    <div style={{ minHeight: "100vh", background: "#0C0C0E", maxWidth: "430px", margin: "0 auto" }}>
       <StyleInjector />
 
       {/* Working Model Popup */}
@@ -1102,7 +1102,7 @@ const Store = () => {
           margin: "0 24px",
           borderRadius: 8,
           overflow: "hidden",
-          background: "#1A1A1A",
+          background: "#1A1A1E",
           border: "1px solid rgba(212,175,55,0.25)",
         }}>
           <div style={{ position: "relative", zIndex: 1 }}>
@@ -1322,7 +1322,7 @@ const Store = () => {
       >
         {/* Closer atmospheric canopy — removed per brand system */}
         <div style={{
-          background: "#1A1A1A",
+          background: "#1A1A1E",
           border: "1px solid rgba(212,175,55,0.25)",
           borderRadius: "8px",
           padding: "36px 24px",
@@ -1397,7 +1397,7 @@ const Store = () => {
          ═══════════════════════════════════════ */}
       <footer
         style={{
-          background: "#1A1A1A",
+          background: "#1A1A1E",
           borderTop: "1px solid rgba(255,255,255,0.15)",
           padding: "32px 24px 40px",
         }}

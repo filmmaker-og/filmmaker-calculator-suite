@@ -35,7 +35,7 @@ const s: Record<string, React.CSSProperties> = {
     height: "62px",
     display: "grid",
     gridTemplateColumns: "repeat(5, 1fr)",
-    background: "rgba(26,26,26,0.92)",
+    background: "rgba(26,26,30,0.92)",
     backdropFilter: "blur(24px)",
     WebkitBackdropFilter: "blur(24px)",
     borderTop: "1px solid rgba(212,175,55,0.20)",

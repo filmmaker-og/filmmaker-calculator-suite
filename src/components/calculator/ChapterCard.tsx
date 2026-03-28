@@ -56,14 +56,14 @@ const eyebrowS: Record<string, React.CSSProperties> = {
 
 const cardStyles: Record<CardVariant, React.CSSProperties> = {
   warm: {
-    background: "#1A1A1A",
+    background: "#1A1A1E",
     border: "1px solid rgba(212,175,55,0.25)",
     borderRadius: "8px",
     overflow: "hidden",
     position: "relative",
   },
   feature: {
-    background: "#1A1A1A",
+    background: "#1A1A1E",
     border: "1px solid rgba(212,175,55,0.20)",
     borderRadius: "8px",
     overflow: "hidden",
@@ -71,14 +71,14 @@ const cardStyles: Record<CardVariant, React.CSSProperties> = {
     position: "relative",
   },
   data: {
-    background: "#1A1A1A",
+    background: "#1A1A1E",
     border: "1px solid rgba(212,175,55,0.15)",
     borderRadius: "8px",
     overflow: "hidden",
     position: "relative",
   },
   neutral: {
-    background: "#1A1A1A",
+    background: "#1A1A1E",
     border: "1px solid rgba(212,175,55,0.15)",
     borderRadius: "8px",
     overflow: "hidden",
@@ -175,14 +175,14 @@ const ChapterCard = ({
     // Legacy fallback for non-variant usage
     cardStyle = isActive
       ? {
-          background: "#1A1A1A",
+          background: "#1A1A1E",
           border: "1px solid rgba(212,175,55,0.25)",
           borderRadius: "8px",
           overflow: "hidden",
           transition: "border-color 0.25s ease",
         }
       : {
-          background: "#1A1A1A",
+          background: "#1A1A1E",
           border: "1px solid rgba(212,175,55,0.15)",
           borderRadius: "8px",
           overflow: "hidden",

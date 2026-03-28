@@ -191,11 +191,11 @@ function getHazeStyle(state: CardState): React.CSSProperties {
   };
   switch (state) {
     case "gold-featured":
-      return { ...base, background: "#1A1A1A" };
+      return { ...base, background: "#1A1A1E" };
     case "neutral":
       return { ...base, display: "none" };
     default:
-      return { ...base, background: "#1A1A1A" };
+      return { ...base, background: "#1A1A1E" };
   }
 }
 
@@ -291,7 +291,7 @@ const VaultCard: React.FC<{
         borderRadius: 8,
         position: "relative",
         overflow: "hidden",
-        background: "#1A1A1A",
+        background: "#1A1A1E",
         display: "flex",
         flexDirection: "column",
         cursor: "pointer",
@@ -535,7 +535,7 @@ const Resources = () => {
 
   return (
     <div style={{
-      background: "#121212",
+      background: "#0C0C0E",
       color: "rgba(255,255,255,0.95)",
       fontFamily: "'Inter', sans-serif",
       WebkitFontSmoothing: "antialiased",
@@ -551,14 +551,14 @@ const Resources = () => {
           margin: "0 24px",
           borderRadius: 8,
           overflow: "hidden",
-          background: "#1A1A1A",
+          background: "#1A1A1E",
           border: "1px solid rgba(212,175,55,0.15)",
           ...reveal(headerVisible),
         }}>
           {/* Triple radial glow */}
           <div style={{
             position: "absolute", top: 0, left: 0, right: 0, bottom: 0, pointerEvents: "none",
-            background: "#1A1A1A",
+            background: "#1A1A1E",
           }} />
           <div style={{ position: "relative", zIndex: 1 }}>
             <h1 style={{
@@ -605,7 +605,7 @@ const Resources = () => {
         position: "sticky",
         top: 0,
         zIndex: 50,
-        background: "#121212",
+        background: "#0C0C0E",
         backdropFilter: "blur(24px)",
         WebkitBackdropFilter: "blur(24px)",
         borderTop: "1px solid rgba(212,175,55,0.10)",
@@ -879,7 +879,7 @@ const Resources = () => {
               position: "relative",
               overflow: "hidden",
               padding: "22px 20px",
-              background: "#1A1A1A",
+              background: "#1A1A1E",
               cursor: "pointer",
               textDecoration: "none",
               color: "inherit",
@@ -989,7 +989,7 @@ const Resources = () => {
               position: "relative",
               overflow: "hidden",
               padding: "22px 18px",
-              background: "#1A1A1A",
+              background: "#1A1A1E",
               border: "1px solid rgba(212,175,55,0.20)",
               boxShadow: "none",
               cursor: "pointer",
@@ -1163,7 +1163,7 @@ const Resources = () => {
 
       {/* ---- FOOTER (synced with Index.tsx / Store.tsx) ---- */}
       <footer ref={footerRef} style={{
-        background: "#1A1A1A",
+        background: "#1A1A1E",
         borderTop: "1px solid rgba(212,175,55,0.12)",
         padding: "32px 24px 40px",
         maxWidth: 1000,

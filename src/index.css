@@ -59,9 +59,9 @@
     /* ═══════════════════════════════════════════════════════════════════
        BACKGROUND LAYERS — Brand spec: #000, #111, #1A1A1A only
        ═══════════════════════════════════════════════════════════════════ */
-    --bg-void: #121212;
-    --bg-elevated: #1A1A1A;
-    --bg-surface: #222222;
+    --bg-void: #0C0C0E;
+    --bg-elevated: #1A1A1E;
+    --bg-surface: #242428;
 
     /* ═══════════════════════════════════════════════════════════════════
        TWO-GOLD SYSTEM
@@ -97,8 +97,8 @@
     --red-ghost: rgba(220, 38, 38, 0.03);
 
     /* Legacy aliases — map old tokens to new spec for non-landing pages */
-    --bg-card: #1A1A1A;
-    --bg-header: #121212;
+    --bg-card: #1A1A1E;
+    --bg-header: #0C0C0E;
     --gold-label: rgba(212, 175, 55, 0.25);
     --gold-muted: rgba(212, 175, 55, 0.15);
     --gold-glow: rgba(212, 175, 55, 0.25);
@@ -162,9 +162,9 @@
     /* ═══════════════════════════════════════════════════════════════════
        SHADCN/UI COMPATIBILITY LAYER
        ═══════════════════════════════════════════════════════════════════ */
-    --background: 0 0% 7%;
+    --background: 240 8% 4%;
     --foreground: 0 0% 100%;
-    --card: 0 0% 10%;
+    --card: 240 5% 10%;
     --card-foreground: 0 0% 100%;
     --popover: 0 0% 3.5%;
     --popover-foreground: 0 0% 100%;
@@ -186,7 +186,7 @@
 
   /* Force true black + base font */
   html, body {
-    background-color: #121212;
+    background-color: #0C0C0E;
     color: #FFFFFF;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     /* Suppress iOS pull-to-refresh and bounce scroll */

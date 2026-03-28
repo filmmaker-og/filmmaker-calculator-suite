@@ -169,7 +169,7 @@ const s: Record<string, React.CSSProperties> = {
     border: "1px solid rgba(255,255,255,0.18)",
     borderRadius: "4px",
     color: "rgba(255,255,255,0.40)",
-    background: "#121212",
+    background: "#0C0C0E",
     transition: "all 0.15s",
   },
   siIconOn: {
