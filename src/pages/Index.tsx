@@ -262,18 +262,26 @@ const Index = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  /* ── Eyebrow ruled component ── */
-  const EyebrowRuled = ({ text }: { text: string }) => (
-    <div style={styles.eyebrowRuled}>
-      <div style={styles.eyebrowLine} />
-      <span style={styles.eyebrowLabel}>{text}</span>
-      <div style={styles.eyebrowLine} />
+  /* ── Eyebrow pill component ── */
+  const EyebrowPill = ({ text }: { text: string }) => (
+    <div style={{ display: "flex", justifyContent: "center", marginBottom: "12px" }}>
+      <span style={{
+        fontFamily: "'Roboto Mono', monospace",
+        fontSize: "13px",
+        letterSpacing: "0.14em",
+        textTransform: "uppercase",
+        color: "#D4AF37",
+        background: "rgba(212,175,55,0.10)",
+        border: "1px solid rgba(212,175,55,0.25)",
+        padding: "5px 16px",
+        borderRadius: "999px",
+      }}>{text}</span>
     </div>
   );
 
   /* ── Waterfall helper components ── */
   const WaterfallGroupLabel = ({ text, color }: { text: string; color: 'gold' | 'red' | 'green' | 'neutral' }) => {
-    const textColor = color === 'gold' ? '#D4AF37' : color === 'red' ? 'rgba(220,38,38,0.85)' : color === 'green' ? '#3CB371' : 'rgba(255,255,255,0.88)';
+    const textColor = color === 'gold' ? '#D4AF37' : color === 'red' ? 'rgba(220,38,38,0.85)' : color === 'green' ? '#3CB371' : 'rgba(255,255,255,0.95)';
     return (
       <div style={{ textAlign: "center", margin: "8px 0 5px" }}>
         <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.6rem", color: textColor, letterSpacing: "0.04em" }}>{text}</span>
@@ -308,7 +316,7 @@ const Index = () => {
     };
     const arrowColor = colorMap[color];
     return (
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "0 24px" }}>
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
         <div style={{
           width: "2px",
           height: "16px",
@@ -332,7 +340,7 @@ const Index = () => {
     const isPressed = tier != null && pressedTier === tier;
     const base: React.CSSProperties = {
       position: "relative", overflow: "hidden", borderRadius: "8px",
-      background: "#1E1E22",
+      background: "#242428",
       border: `1px solid rgba(220,38,38,${isPressed ? 0.40 : 0.25})`,
       boxShadow: isPressed
         ? "0 4px 16px rgba(0,0,0,0.30), 0 0 16px rgba(220,38,38,0.10)"
@@ -532,14 +540,21 @@ const Index = () => {
         </section>
 
         {/* ── Section divider ── */}
-        <div style={{ maxWidth: "120px", height: "1px", background: "rgba(212,175,55,0.30)", margin: "40px auto" }} />
+        <div style={{ height: "40px" }} />
 
         {/* ═══ § 2 WATERFALL ═══ */}
-        <section ref={(el) => { waterfallSectionRef.current = el; }} style={{ position: "relative", background: "#0C0C0E", padding: "0 0 0" }}>
+        <section ref={(el) => { waterfallSectionRef.current = el; }} style={{ padding: "0 24px" }}>
+          <div style={{
+            background: "#1E1E22",
+            border: "1px solid rgba(212,175,55,0.20)",
+            borderRadius: "8px",
+            padding: "28px 20px",
+            boxShadow: "0 4px 16px rgba(0,0,0,0.30)",
+          }}>
           {/* Header */}
-          <div ref={waterfallHeaderRef} style={{ ...reveal(waterfallHeaderVisible), textAlign: "center", padding: "0 24px 24px" }}>
-            <EyebrowRuled text="How the money flows" />
-            <h2 style={styles.sectionH2}>The Recoupment<br /><span style={{ color: "#D4AF37" }}>Waterfall</span></h2>
+          <div ref={waterfallHeaderRef} style={{ ...reveal(waterfallHeaderVisible), textAlign: "center", paddingBottom: "24px" }}>
+            <EyebrowPill text="How the money flows" />
+            <h2 style={styles.sectionH2}>The Recoupment<br /><span style={{ color: "#D4AF37", textShadow: "0 0 30px rgba(212,175,55,0.50), 0 0 80px rgba(212,175,55,0.20)" }}>Waterfall</span></h2>
           </div>
 
           <p style={{ ...styles.waterfallExplainer, ...reveal(waterfallHeaderVisible) }}>
@@ -560,7 +575,7 @@ const Index = () => {
           </div>
 
           {/* ── Acquisition Offer ── */}
-          <div style={{ margin: "0 24px 0", ...reveal(waterfallHeaderVisible, 1) }}>
+          <div style={{ margin: "0", ...reveal(waterfallHeaderVisible, 1) }}>
             <WaterfallGroupLabel text="Streamer Acquisition Offer" color="neutral" />
             <div ref={waterfallCalloutRef} style={{
               position: "relative", overflow: "hidden", textAlign: "center",
@@ -575,19 +590,19 @@ const Index = () => {
           <WaterfallConnector color="gold" />
 
           {/* ── Context Block: "The Project" ── */}
-          <div style={{ margin: "0 24px 0", ...reveal(waterfallCalloutVisible) }}>
+          <div style={{ margin: "0", ...reveal(waterfallCalloutVisible) }}>
             <WaterfallGroupLabel text="The Project" color="neutral" />
             <div style={{ display: "flex", gap: "8px", alignItems: "stretch" }}>
               <div style={{
                 flex: 1, borderRadius: "8px", padding: "10px 8px", textAlign: "center",
-                border: "1px solid rgba(212,175,55,0.20)", background: "#1E1E22",
+                border: "1px solid rgba(212,175,55,0.20)", background: "#242428",
               }}>
                 <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.1rem", color: "rgba(255,255,255,0.88)", marginBottom: "4px" }}>Production Budget</div>
                 <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.6rem", color: "#D4AF37" }}>${PRODUCTION_BUDGET.toLocaleString()}</div>
               </div>
               <div style={{
                 flex: 1, borderRadius: "8px", padding: "10px 8px", textAlign: "center",
-                border: "1px solid rgba(212,175,55,0.20)", background: "#1E1E22",
+                border: "1px solid rgba(212,175,55,0.20)", background: "#242428",
               }}>
                 <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.1rem", color: "rgba(255,255,255,0.88)", marginBottom: "4px" }}>Tax Credit (20%)</div>
                 <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.5rem", color: "#3CB371" }}>+${TAX_CREDIT.toLocaleString()}</div>
@@ -620,7 +635,7 @@ const Index = () => {
 
               return (
                 <div key={group.label}>
-                  <div style={{ margin: "0 24px" }}>
+                  <div style={{ margin: "0" }}>
                     <WaterfallGroupLabel text={group.label} color="neutral" />
                     {isPair ? (
                       <div style={{ display: "flex", gap: "8px", alignItems: "stretch" }}>
@@ -706,12 +721,12 @@ const Index = () => {
           <WaterfallConnector color="red-strong" />
 
           {/* ── Total Off The Top ── */}
-          <div style={{ margin: "0 24px" }}>
+          <div style={{ margin: "0" }}>
             <WaterfallGroupLabel text="Total Off The Top" color="neutral" />
             <div style={{
               borderRadius: "8px", padding: "20px 16px", textAlign: "center",
               border: "1px solid rgba(220,38,38,0.25)",
-              background: "#1E1E22",
+              background: "#242428",
             }}>
               <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "2.4rem", color: "rgba(220,38,38,0.85)" }}>–${TOTAL_DEDUCTED.toLocaleString()}</div>
               <div style={{ marginTop: "12px", height: "8px", background: "rgba(255,255,255,0.10)", borderRadius: "4px", overflow: "hidden", display: "flex" }}>
@@ -728,7 +743,7 @@ const Index = () => {
           <WaterfallConnector color="red-to-green" />
 
           {/* ── Net Backend Profit ── */}
-          <div style={{ margin: "0 24px" }}>
+          <div style={{ margin: "0" }}>
             <WaterfallGroupLabel text="Net Backend Profit" color="neutral" />
             <div
               ref={profitCardRef}
@@ -749,13 +764,13 @@ const Index = () => {
           <WaterfallConnector color="green" />
 
           {/* ── Profit Split ── */}
-          <div ref={splitRef} style={{ margin: "0 24px" }}>
+          <div ref={splitRef} style={{ margin: "0" }}>
             <WaterfallGroupLabel text="Profit Split" color="neutral" />
             <div style={{ display: "flex", gap: "8px", alignItems: "stretch" }}>
               <div style={{
                 flex: 1, textAlign: "center", borderRadius: "8px", padding: "16px 12px",
                 border: "1px solid rgba(60,179,113,0.50)",
-                background: "#1E1E22",
+                background: "#242428",
               }}>
                 <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.4rem", color: "rgba(255,255,255,0.88)", marginBottom: "6px" }}>Investor</div>
                 <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "#3CB371" }}>${splitCountUp.toLocaleString()}</div>
@@ -763,7 +778,7 @@ const Index = () => {
               <div style={{
                 flex: 1, textAlign: "center", borderRadius: "8px", padding: "16px 12px",
                 border: "1px solid rgba(60,179,113,0.50)",
-                background: "#1E1E22",
+                background: "#242428",
               }}>
                 <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.4rem", color: "rgba(255,255,255,0.88)", marginBottom: "6px" }}>Producer</div>
                 <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "#3CB371" }}>${splitCountUp.toLocaleString()}</div>
@@ -772,22 +787,30 @@ const Index = () => {
           </div>
 
           {/* CTA after waterfall */}
-          <div style={{ padding: "24px 48px 8px" }}>
+          <div style={{ padding: "20px 0 0" }}>
             <button onClick={handleCTA} style={styles.ctaBtn} aria-label="Build my waterfall" onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>
               <span style={{ position: "relative", zIndex: 1 }}>BUILD MY WATERFALL</span>
               <div style={styles.ctaShimmer} />
             </button>
             <p style={styles.ctaReassurance}>No Credit Card · Instant Results</p>
           </div>
+          </div>
         </section>
 
         {/* ── Section divider ── */}
-        <div style={{ maxWidth: "120px", height: "1px", background: "rgba(212,175,55,0.30)", margin: "48px auto" }} />
+        <div style={{ height: "40px" }} />
 
         {/* ═══ § 3 SOCIAL PROOF ═══ */}
-        <section ref={socialRef} style={{ position: "relative", background: "#0C0C0E", padding: "0 24px 0" }}>
+        <section ref={socialRef} style={{ padding: "0 24px" }}>
+          <div style={{
+            background: "#1E1E22",
+            border: "1px solid rgba(212,175,55,0.20)",
+            borderRadius: "8px",
+            padding: "28px 20px",
+            boxShadow: "0 4px 16px rgba(0,0,0,0.30)",
+          }}>
           <div style={{ ...reveal(socialVisible), textAlign: "center" }}>
-            <EyebrowRuled text="Trusted By Filmmakers" />
+            <EyebrowPill text="Trusted By Filmmakers" />
           </div>
 
           {/* Testimonial blockquote */}
@@ -818,16 +841,24 @@ const Index = () => {
               }}>{feat}</div>
             ))}
           </div>
+          </div>
         </section>
 
         {/* ── Section divider ── */}
-        <div style={{ maxWidth: "120px", height: "1px", background: "rgba(212,175,55,0.30)", margin: "40px auto" }} />
+        <div style={{ height: "40px" }} />
 
         {/* ═══ § 4 WHAT'S AT STAKE ═══ */}
-        <section ref={stakeRef} style={{ position: "relative", background: "#0C0C0E", padding: "0 24px 0" }}>
+        <section ref={stakeRef} style={{ padding: "0 24px" }}>
+          <div style={{
+            background: "#1E1E22",
+            border: "1px solid rgba(212,175,55,0.20)",
+            borderRadius: "8px",
+            padding: "28px 20px",
+            boxShadow: "0 4px 16px rgba(0,0,0,0.30)",
+          }}>
           <div style={{ ...reveal(stakeVisible), textAlign: "center", marginBottom: "20px" }}>
-            <EyebrowRuled text="What's At Stake" />
-            <h2 style={styles.sectionH2}><span style={{ color: "#D4AF37" }}>(4) Four</span> Reasons<br />You Can't Skip This</h2>
+            <EyebrowPill text="What's At Stake" />
+            <h2 style={styles.sectionH2}><span style={{ color: "#D4AF37", textShadow: "0 0 30px rgba(212,175,55,0.50), 0 0 80px rgba(212,175,55,0.20)" }}>(4) Four</span> Reasons<br />You Can't Skip This</h2>
           </div>
 
           <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
@@ -836,39 +867,46 @@ const Index = () => {
                 key={card.num}
                 style={{
                   ...reveal(stakeVisible, i + 1),
-                  background: "#1E1E22",
+                  background: "#242428",
                   border: "1px solid rgba(212,175,55,0.20)",
                   borderRadius: "8px",
                   borderLeft: "3px solid rgba(212,175,55,0.55)",
                   padding: "20px 16px",
-                  boxShadow: "0 4px 16px rgba(0,0,0,0.30)",
                 }}
               >
                 <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "2rem", color: "#D4AF37", lineHeight: 1 }}>{card.num}</span>
-                <p style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.4rem", color: "#fff", marginBottom: "4px", lineHeight: 1.05, marginTop: "4px" }}>{card.title}</p>
+                <p style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.4rem", color: "rgba(255,255,255,0.95)", marginBottom: "4px", lineHeight: 1.05, marginTop: "4px" }}>{card.title}</p>
                 <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "15px", color: "rgba(255,255,255,0.60)", lineHeight: 1.45 }}>{card.body}</p>
               </div>
             ))}
           </div>
+          </div>
         </section>
 
         {/* ── Section divider ── */}
-        <div style={{ maxWidth: "120px", height: "1px", background: "rgba(212,175,55,0.30)", margin: "40px auto" }} />
+        <div style={{ height: "40px" }} />
 
         {/* ═══ § 5 REALITY ═══ */}
-        <section style={{ position: "relative", background: "#0C0C0E", textAlign: "left", padding: "0 24px 0" }}>
+        <section style={{ padding: "0 24px" }}>
+          <div style={{
+            background: "#1E1E22",
+            border: "1px solid rgba(212,175,55,0.20)",
+            borderRadius: "8px",
+            padding: "28px 20px",
+            boxShadow: "0 4px 16px rgba(0,0,0,0.30)",
+            textAlign: "left",
+          }}>
           {/* Typing reveal blockquote */}
           <div
             ref={realityQuoteRef}
             style={{
-              background: "#1E1E22",
+              background: "#242428",
               border: "1px solid rgba(212,175,55,0.20)",
               borderRadius: "8px",
               borderLeft: "3px solid rgba(212,175,55,0.55)",
               padding: "24px 20px",
               textAlign: "center",
               marginBottom: "24px",
-              boxShadow: "0 4px 16px rgba(0,0,0,0.30)",
               ...reveal(realityQuoteVisible),
             }}
           >
@@ -890,10 +928,10 @@ const Index = () => {
           {/* WITH/WITHOUT grid — 3 rows */}
           <div ref={realityGridRef} style={{
             ...reveal(realityGridVisible),
+            background: "#242428",
             border: "1px solid rgba(212,175,55,0.20)",
             borderRadius: "8px",
             overflow: "hidden",
-            boxShadow: "0 4px 16px rgba(0,0,0,0.30)",
           }}>
             {/* Header */}
             <div style={{
@@ -935,10 +973,11 @@ const Index = () => {
               </div>
             ))}
           </div>
+          </div>
         </section>
 
         {/* ── Section divider ── */}
-        <div style={{ maxWidth: "120px", height: "1px", background: "rgba(212,175,55,0.30)", margin: "40px auto" }} />
+        <div style={{ height: "40px" }} />
 
         {/* ═══ § 6 CLOSER ═══ */}
         <section ref={closerRef} style={{ ...reveal(closerVisible), textAlign: "center", padding: "0 24px 0" }}>
@@ -970,7 +1009,7 @@ const Index = () => {
         </section>
 
         {/* ── Section divider ── */}
-        <div style={{ maxWidth: "120px", height: "1px", background: "rgba(212,175,55,0.30)", margin: "40px auto" }} />
+        <div style={{ height: "40px" }} />
 
         {/* ═══ § 6.5 PRODUCT PREVIEW — Real Output ═══ */}
         <section ref={previewRef} style={{ position: "relative", background: "#0C0C0E", padding: "0 24px 0" }}>
@@ -988,7 +1027,7 @@ const Index = () => {
 
             {/* Card 1: Mini Waterfall Cascade */}
             <div style={{
-              minWidth: "280px", background: "#1E1E22", border: "1px solid rgba(212,175,55,0.20)",
+              minWidth: "280px", background: "#242428", border: "1px solid rgba(212,175,55,0.20)",
               borderRadius: "8px", padding: "16px", scrollSnapAlign: "start", flexShrink: 0,
             }}>
               <p style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "10px", color: "rgba(212,175,55,0.60)", letterSpacing: "0.10em", textTransform: "uppercase", marginBottom: "12px" }}>Recoupment Cascade</p>
@@ -1015,7 +1054,7 @@ const Index = () => {
 
             {/* Card 2: Verdict / Deal Score */}
             <div style={{
-              minWidth: "200px", background: "#1E1E22", border: "1px solid rgba(60,179,113,0.20)",
+              minWidth: "200px", background: "#242428", border: "1px solid rgba(60,179,113,0.20)",
               borderRadius: "8px", padding: "20px 16px", scrollSnapAlign: "start", flexShrink: 0,
               display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center",
             }}>
@@ -1031,7 +1070,7 @@ const Index = () => {
 
             {/* Card 3: Profit Split */}
             <div style={{
-              minWidth: "220px", background: "#1E1E22", border: "1px solid rgba(212,175,55,0.20)",
+              minWidth: "220px", background: "#242428", border: "1px solid rgba(212,175,55,0.20)",
               borderRadius: "8px", padding: "16px", scrollSnapAlign: "start", flexShrink: 0,
             }}>
               <p style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "10px", color: "rgba(212,175,55,0.60)", letterSpacing: "0.10em", textTransform: "uppercase", marginBottom: "12px" }}>Profit Split</p>
@@ -1094,20 +1133,6 @@ const Index = () => {
    STYLES — v17
    ══════════════════════════════════════════════════════════════════ */
 const styles: Record<string, React.CSSProperties> = {
-  /* ── Eyebrow ── */
-  eyebrowRuled: {
-    display: "flex", alignItems: "center", justifyContent: "center", gap: "16px", marginBottom: "16px",
-  },
-  eyebrowLine: {
-    flex: 1, height: "1px", background: "rgba(212,175,55,0.55)",
-  },
-  eyebrowLabel: {
-    fontFamily: "'Roboto Mono', monospace", fontSize: "13px",
-    letterSpacing: "0.18em", textTransform: "uppercase", color: "#D4AF37",
-    whiteSpace: "nowrap",
-    textShadow: "0 0 20px rgba(212,175,55,0.15)",
-  },
-
   /* ── CTA Button — gold with black text ── */
   ctaBtn: {
     position: "relative", overflow: "hidden",
@@ -1159,12 +1184,12 @@ const styles: Record<string, React.CSSProperties> = {
   } as React.CSSProperties,
 
   /* ── Section header ── */
-  sectionH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.4rem", color: "#fff", lineHeight: 0.95, textShadow: "0 2px 20px rgba(0,0,0,0.5)", marginBottom: "8px" },
+  sectionH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.6rem", color: "#fff", lineHeight: 0.95, textShadow: "0 2px 24px rgba(0,0,0,0.6)", marginBottom: "8px" },
 
   /* ── § 2 WATERFALL ── */
   waterfallExplainer: {
-    fontFamily: "'Inter', sans-serif", fontSize: "16px", color: "rgba(255,255,255,0.78)",
-    lineHeight: 1.55, textAlign: "center", padding: "0 24px", marginBottom: "24px",
+    fontFamily: "'Inter', sans-serif", fontSize: "15px", color: "rgba(255,255,255,0.55)",
+    lineHeight: 1.55, textAlign: "center", padding: "0", marginBottom: "24px",
     maxWidth: "380px", marginLeft: "auto", marginRight: "auto",
   },
   acqAmount: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.2rem", color: "#D4AF37", lineHeight: 1, letterSpacing: "0.02em", textShadow: "0 0 30px rgba(212,175,55,0.40)" },
