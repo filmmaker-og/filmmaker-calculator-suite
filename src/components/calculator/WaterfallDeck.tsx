@@ -2084,7 +2084,7 @@ const WaterfallBrief = ({
       <div style={{ padding: "0 24px" }}>
         <LockedSnapshotPlusSection onUnlock={() => {
           // TODO: Wire to Stripe checkout for snapshot-plus product
-          console.log("Snapshot+ unlock tapped");
+          // Snapshot+ unlock tapped — wire to Stripe checkout
         }} />
       </div>
 
