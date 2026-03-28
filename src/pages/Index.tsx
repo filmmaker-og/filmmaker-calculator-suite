@@ -790,22 +790,7 @@ const Index = () => {
             </p>
           </div>
 
-          {/* Stats pills */}
-          <div style={{ ...reveal(socialVisible, 2), display: "flex", gap: "8px", justifyContent: "center", flexWrap: "wrap", marginBottom: "24px" }}>
-            {["500+ Waterfalls Modeled", "48 States", "$2B+ Modeled"].map((stat) => (
-              <span key={stat} style={{
-                fontFamily: "'Roboto Mono', monospace",
-                fontSize: "11px",
-                color: "rgba(255,255,255,0.55)",
-                letterSpacing: "0.08em",
-                textTransform: "uppercase",
-                padding: "6px 12px",
-                borderRadius: "100px",
-                border: "1px solid rgba(212,175,55,0.15)",
-                background: "#0A0A0A",
-              }}>{stat}</span>
-            ))}
-          </div>
+          <div style={{ marginBottom: "24px" }} />
 
           {/* Feature badges — text only, no emojis */}
           <div style={{ ...reveal(socialVisible, 3), display: "flex", flexWrap: "wrap", gap: "8px", justifyContent: "center" }}>
