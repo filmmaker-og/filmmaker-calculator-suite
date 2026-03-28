@@ -992,23 +992,29 @@ const Index = () => {
             scrollSnapType: "x mandatory",
           }}>
             {[
-              { label: "Capital Stack", color: "rgba(212,175,55,0.15)" },
-              { label: "Waterfall View", color: "rgba(220,38,38,0.15)" },
-              { label: "Profit Split", color: "rgba(60,179,113,0.15)" },
+              { label: "Capital Stack", accent: "#D4AF37", border: "rgba(212,175,55,0.25)" },
+              { label: "Waterfall View", accent: "#DC2626", border: "rgba(220,38,38,0.25)" },
+              { label: "Profit Split", accent: "#3CB371", border: "rgba(60,179,113,0.25)" },
             ].map((screen) => (
               <div key={screen.label} style={{
                 minWidth: "240px",
                 height: "160px",
-                background: `linear-gradient(180deg, ${screen.color} 0%, #0A0A0A 100%)`,
-                border: "1px solid rgba(212,175,55,0.15)",
+                background: "#0A0A0A",
+                border: `1px solid ${screen.border}`,
                 borderRadius: "8px",
                 display: "flex",
+                flexDirection: "column",
                 alignItems: "center",
                 justifyContent: "center",
+                gap: "8px",
                 scrollSnapAlign: "start",
                 flexShrink: 0,
+                position: "relative",
+                overflow: "hidden",
               }}>
-                <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.2rem", color: "rgba(255,255,255,0.40)", letterSpacing: "0.06em" }}>{screen.label}</span>
+                <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: `linear-gradient(90deg, transparent, ${screen.border}, transparent)` }} />
+                <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.4rem", color: "rgba(255,255,255,0.85)", letterSpacing: "0.06em" }}>{screen.label}</span>
+                <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "10px", color: screen.accent, letterSpacing: "0.08em", textTransform: "uppercase", opacity: 0.70 }}>Preview</span>
               </div>
             ))}
           </div>
