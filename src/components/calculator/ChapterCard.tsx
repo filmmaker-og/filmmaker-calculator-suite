@@ -57,88 +57,40 @@ const eyebrowS: Record<string, React.CSSProperties> = {
 const cardStyles: Record<CardVariant, React.CSSProperties> = {
   warm: {
     background: "#0A0A0A",
-    border: "1px solid rgba(212,175,55,0.35)",
-    borderRadius: "12px",
+    border: "1px solid rgba(212,175,55,0.25)",
+    borderRadius: "8px",
     overflow: "hidden",
-    boxShadow: "0 24px 50px rgba(0,0,0,0.8), inset 0 1px 0 rgba(212,175,55,0.10)",
     position: "relative",
   },
   feature: {
     background: "#0A0A0A",
-    border: "1px solid rgba(212,175,55,0.25)",
-    borderRadius: "12px",
+    border: "1px solid rgba(212,175,55,0.20)",
+    borderRadius: "8px",
     overflow: "hidden",
-    boxShadow: "0 16px 40px rgba(0,0,0,0.6)",
     transition: "box-shadow 0.5s",
     position: "relative",
   },
   data: {
     background: "#0A0A0A",
-    border: "1px solid rgba(212,175,55,0.20)",
-    borderRadius: "12px",
+    border: "1px solid rgba(212,175,55,0.15)",
+    borderRadius: "8px",
     overflow: "hidden",
     position: "relative",
   },
   neutral: {
     background: "#0A0A0A",
     border: "1px solid rgba(212,175,55,0.15)",
-    borderRadius: "12px",
+    borderRadius: "8px",
     overflow: "hidden",
     position: "relative",
   },
 };
 
-const warmGlow: React.CSSProperties = {
-  position: "absolute",
-  top: 0,
-  left: 0,
-  right: 0,
-  height: "280px",
-  background: [
-    "radial-gradient(ellipse 80% 50% at 50% 0%, rgba(212,175,55,0.18) 0%, transparent 70%)",
-    "radial-gradient(ellipse 60% 40% at 50% 100%, rgba(120,60,180,0.08) 0%, transparent 60%)",
-  ].join(", "),
-  pointerEvents: "none",
-};
-
-const featureGlow: React.CSSProperties = {
-  position: "absolute",
-  top: 0,
-  left: 0,
-  right: 0,
-  height: "220px",
-  background: [
-    "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.14) 0%, transparent 70%)",
-    "radial-gradient(ellipse 60% 40% at 50% 100%, rgba(120,60,180,0.06) 0%, transparent 60%)",
-  ].join(", "),
-  pointerEvents: "none",
-};
-
-const dataGlow: React.CSSProperties = {
-  position: "absolute",
-  top: 0,
-  left: 0,
-  right: 0,
-  height: "180px",
-  background: [
-    "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.10) 0%, transparent 70%)",
-    "radial-gradient(ellipse 60% 40% at 50% 100%, rgba(120,60,180,0.06) 0%, transparent 60%)",
-  ].join(", "),
-  pointerEvents: "none",
-};
-
-const neutralGlow: React.CSSProperties = {
-  position: "absolute",
-  top: 0,
-  left: 0,
-  right: 0,
-  height: "140px",
-  background: [
-    "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.08) 0%, transparent 70%)",
-    "radial-gradient(ellipse 60% 40% at 50% 100%, rgba(120,60,180,0.04) 0%, transparent 60%)",
-  ].join(", "),
-  pointerEvents: "none",
-};
+// No atmospheric glow layers — flat card style per brand system
+const warmGlow: React.CSSProperties | null = null;
+const featureGlow: React.CSSProperties | null = null;
+const dataGlow: React.CSSProperties | null = null;
+const neutralGlow: React.CSSProperties | null = null;
 
 const warmTopline: React.CSSProperties = {
   height: "2px",
@@ -224,18 +176,16 @@ const ChapterCard = ({
     cardStyle = isActive
       ? {
           background: "#0A0A0A",
-          border: "1px solid rgba(212,175,55,0.35)",
-          borderRadius: "12px",
+          border: "1px solid rgba(212,175,55,0.25)",
+          borderRadius: "8px",
           overflow: "hidden",
-          boxShadow: "0 24px 50px rgba(0,0,0,0.8)",
           transition: "border-color 0.25s ease",
         }
       : {
           background: "#0A0A0A",
-          border: "1px solid rgba(212,175,55,0.20)",
-          borderRadius: "12px",
+          border: "1px solid rgba(212,175,55,0.15)",
+          borderRadius: "8px",
           overflow: "hidden",
-          boxShadow: "0 16px 40px rgba(0,0,0,0.4)",
           transition: "border-color 0.25s ease",
         };
   }

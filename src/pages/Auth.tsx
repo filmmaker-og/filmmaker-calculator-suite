@@ -115,14 +115,27 @@ const Auth = () => {
                 </p>
               </div>
 
+              {/* Autofill + placeholder overrides for white inputs */}
+              <style>{`
+                .auth-form input:-webkit-autofill,
+                .auth-form input:-webkit-autofill:hover,
+                .auth-form input:-webkit-autofill:focus {
+                  -webkit-box-shadow: 0 0 0 1000px rgba(255,255,255,0.95) inset !important;
+                  -webkit-text-fill-color: #000 !important;
+                  caret-color: #000;
+                }
+                .auth-form input::placeholder {
+                  color: rgba(0,0,0,0.40) !important;
+                }
+              `}</style>
+
               {/* Form */}
               <form
                 onSubmit={handleSubmit}
-                className="rounded-xl overflow-hidden"
+                className="auth-form rounded-xl overflow-hidden"
                 style={{
-                  border: '1px solid rgba(212,175,55,0.25)',
+                  border: '1px solid rgba(212,175,55,0.15)',
                   background: '#000',
-                  boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)',
                 }}
               >
                 <div className="p-6 space-y-6">
@@ -149,7 +162,20 @@ const Auth = () => {
                           document.getElementById('email')?.focus();
                         }
                       }}
-                      className="h-12 bg-bg-surface border border-gold-border text-white placeholder:text-ink-ghost focus:border-gold focus:ring-0 focus:ring-offset-0 transition-colors rounded-lg"
+                      className="h-12 border text-black rounded focus:ring-0 focus:ring-offset-0 transition-colors"
+                      style={{
+                        background: "rgba(255,255,255,0.95)",
+                        borderColor: "rgba(0,0,0,0.12)",
+                        color: "#000",
+                      }}
+                      onFocus={(e) => {
+                        e.currentTarget.style.borderColor = "#D4AF37";
+                        e.currentTarget.style.boxShadow = "0 0 0 3px rgba(212,175,55,0.15)";
+                      }}
+                      onBlur={(e) => {
+                        e.currentTarget.style.borderColor = "rgba(0,0,0,0.12)";
+                        e.currentTarget.style.boxShadow = "none";
+                      }}
                       required
                     />
                   </div>
@@ -180,7 +206,20 @@ const Auth = () => {
                           handleSubmit(e as any);
                         }
                       }}
-                      className="h-12 bg-bg-surface border border-gold-border text-white placeholder:text-ink-ghost font-mono focus:border-gold focus:ring-0 focus:ring-offset-0 transition-colors rounded-lg"
+                      className="h-12 border text-black font-mono rounded focus:ring-0 focus:ring-offset-0 transition-colors"
+                      style={{
+                        background: "rgba(255,255,255,0.95)",
+                        borderColor: "rgba(0,0,0,0.12)",
+                        color: "#000",
+                      }}
+                      onFocus={(e) => {
+                        e.currentTarget.style.borderColor = "#D4AF37";
+                        e.currentTarget.style.boxShadow = "0 0 0 3px rgba(212,175,55,0.15)";
+                      }}
+                      onBlur={(e) => {
+                        e.currentTarget.style.borderColor = "rgba(0,0,0,0.12)";
+                        e.currentTarget.style.boxShadow = "none";
+                      }}
                       required
                     />
                   </div>
@@ -219,11 +258,10 @@ const Auth = () => {
           ) : (
             /* Email Sent Confirmation */
             <div
-              className="rounded-xl p-8"
+              className="rounded-lg p-8"
               style={{
-                border: '1px solid rgba(212,175,55,0.25)',
+                border: '1px solid rgba(212,175,55,0.15)',
                 background: '#000',
-                boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)',
               }}
             >
               <div className="text-center">

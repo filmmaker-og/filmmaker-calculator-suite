@@ -35,7 +35,7 @@ const s: Record<string, React.CSSProperties> = {
     height: "62px",
     display: "grid",
     gridTemplateColumns: "repeat(5, 1fr)",
-    background: "linear-gradient(0deg, rgba(120,60,180,0.20) 0%, rgba(6,6,6,0.92) 100%)",
+    background: "rgba(6,6,6,0.92)",
     backdropFilter: "blur(24px)",
     WebkitBackdropFilter: "blur(24px)",
     borderTop: "1px solid rgba(212,175,55,0.20)",
@@ -53,7 +53,7 @@ const s: Record<string, React.CSSProperties> = {
     fontWeight: 600,
     textTransform: "uppercase" as const,
     letterSpacing: "0.05em",
-    color: "rgba(255,255,255,0.45)",
+    color: "rgba(255,255,255,0.40)",
     cursor: "pointer",
     transition: "all 0.2s",
     border: "none",
@@ -62,7 +62,7 @@ const s: Record<string, React.CSSProperties> = {
     paddingBottom: "6px",
   },
   tabActive: {
-    color: "#F9E076",
+    color: "#D4AF37",
   },
   tabCompleted: {
     color: "rgba(255,255,255,0.65)",
@@ -79,7 +79,7 @@ const s: Record<string, React.CSSProperties> = {
     opacity: 0.7,
     transition: "all 0.2s",
   },
-  // Gold underline for active tab with purple glow
+  // Gold underline for active tab
   underlineActive: {
     position: "absolute",
     bottom: 0,
@@ -89,7 +89,6 @@ const s: Record<string, React.CSSProperties> = {
     background: "linear-gradient(90deg, rgba(212,175,55,0.50), #D4AF37, rgba(212,175,55,0.50))",
     borderRadius: "1px",
     transition: "all 0.3s",
-    boxShadow: "0 -2px 12px rgba(120,60,180,0.15)",
   },
   // Dimmer gold underline for completed tabs
   underlineCompleted: {

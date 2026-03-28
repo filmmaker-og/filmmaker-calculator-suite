@@ -55,7 +55,6 @@ const s: Record<string, React.CSSProperties> = {
     flex: 1,
     height: "1px",
     background: "rgba(212,175,55,0.40)",
-    boxShadow: "0 0 8px rgba(212,175,55,0.15)",
   },
   eyebrowLabel: {
     fontFamily: "'Roboto Mono', monospace",
@@ -68,9 +67,8 @@ const s: Record<string, React.CSSProperties> = {
   /* ── Card base ── */
   cardBase: {
     background: "#0A0A0A",
-    border: "none",
-    borderRadius: "12px",
-    boxShadow: "0 16px 40px rgba(0,0,0,0.6)",
+    border: "1px solid rgba(212,175,55,0.15)",
+    borderRadius: "8px",
     overflow: "hidden",
     transition: "transform 0.3s ease, border-color 0.3s ease",
     position: "relative" as const,
@@ -181,19 +179,15 @@ const tierStyles = {
   gold: {
     id: "gold" as const,
     card: {
-      border: "none",
-      background: "radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.16) 0%, rgba(6,6,6,0.92) 70%)",
-      backdropFilter: "blur(40px)",
-      WebkitBackdropFilter: "blur(40px)",
-      boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 30px rgba(212,175,55,0.12), 0 0 20px rgba(120,60,180,0.10), 0 0 60px rgba(212,175,55,0.04)",
+      border: "1px solid rgba(212,175,55,0.15)",
+      background: "#0A0A0A",
     },
-    atmosphericTop: "radial-gradient(ellipse 100% 80% at 50% 0%, rgba(212,175,55,0.12) 0%, transparent 70%)",
-    atmosphericBottom: "radial-gradient(ellipse 100% 80% at 50% 100%, rgba(120,60,180,0.08) 0%, transparent 70%)",
-    gradientBorder: "linear-gradient(180deg, rgba(212,175,55,0.55) 0%, rgba(212,175,55,0.20) 50%, rgba(212,175,55,0.40) 100%)",
+    atmosphericTop: "none",
+    atmosphericBottom: "none",
+    gradientBorder: "linear-gradient(180deg, rgba(212,175,55,0.35) 0%, rgba(212,175,55,0.10) 50%, rgba(212,175,55,0.25) 100%)",
     topline: {
       height: "1px",
       background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.50), transparent)",
-      boxShadow: "0 0 12px rgba(212,175,55,0.25)",
     },
     headerBorder: "1px solid rgba(212,175,55,0.12)",
     headerBg: undefined as string | undefined,
@@ -210,29 +204,26 @@ const tierStyles = {
   purple: {
     id: "purple" as const,
     card: {
-      border: "none",
-      background: "radial-gradient(ellipse at 50% 0%, rgba(120,60,180,0.18) 0%, rgba(6,6,6,0.92) 70%)",
-      backdropFilter: "blur(40px)",
-      WebkitBackdropFilter: "blur(40px)",
-      boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 30px rgba(120,60,180,0.18), 0 0 20px rgba(212,175,55,0.06)",
+      border: "1px solid rgba(212,175,55,0.25)",
+      background: "#0A0A0A",
     },
-    atmosphericTop: "radial-gradient(ellipse 100% 80% at 50% 0%, rgba(120,60,180,0.28) 0%, transparent 70%)",
-    atmosphericBottom: "radial-gradient(ellipse 100% 80% at 50% 100%, rgba(212,175,55,0.12) 0%, transparent 70%)",
-    gradientBorder: "linear-gradient(180deg, rgba(212,175,55,0.45) 0%, rgba(212,175,55,0.15) 40%, rgba(120,60,180,0.30) 70%, rgba(120,60,180,0.50) 100%)",
+    atmosphericTop: "none",
+    atmosphericBottom: "none",
+    gradientBorder: "linear-gradient(180deg, rgba(212,175,55,0.45) 0%, rgba(212,175,55,0.15) 50%, rgba(212,175,55,0.30) 100%)",
     topline: {
-      height: "2px",
-      background: "linear-gradient(90deg, transparent, rgba(120,60,180,0.50), rgba(212,175,55,0.40), transparent)",
+      height: "1px",
+      background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.40), transparent)",
     },
-    headerBorder: "1px solid rgba(120,60,180,0.12)",
+    headerBorder: "1px solid rgba(212,175,55,0.12)",
     headerBg: undefined as string | undefined,
-    subdivider: "linear-gradient(90deg, transparent, rgba(120,60,180,0.12), transparent)",
-    featureCheck: { color: "rgb(180,140,255)", textShadow: "0 0 14px rgba(120,60,180,0.50)" },
-    pickThis: { color: "rgba(180,140,255,0.80)" },
-    price: {},
-    badge: { color: "rgb(180,140,255)", background: "rgba(120,60,180,0.10)", border: "1px solid rgba(120,60,180,0.35)" },
-    btn: "btnPurple" as const,
-    btnHover: { background: "rgba(120,60,180,0.10)", borderColor: "rgba(120,60,180,0.45)" } as Record<string, string>,
-    btnRest: { background: "rgba(120,60,180,0.05)", borderColor: "rgba(120,60,180,0.30)" } as Record<string, string>,
+    subdivider: "linear-gradient(90deg, transparent, rgba(212,175,55,0.12), transparent)",
+    featureCheck: { color: "#D4AF37", textShadow: "0 0 12px rgba(212,175,55,0.40)" },
+    pickThis: { color: "rgba(212,175,55,0.80)" },
+    price: { color: "#D4AF37" },
+    badge: { color: "#D4AF37", background: "rgba(212,175,55,0.08)", border: "1px solid rgba(212,175,55,0.35)" },
+    btn: "btnGoldSolid" as const,
+    btnHover: { boxShadow: "0 0 28px rgba(212,175,55,0.50), 0 0 70px rgba(212,175,55,0.15)" } as Record<string, string>,
+    btnRest: { boxShadow: "0 0 20px rgba(212,175,55,0.35), 0 0 50px rgba(212,175,55,0.10)" } as Record<string, string>,
     hoverLift: "-2px",
   },
 };
@@ -253,7 +244,7 @@ const GradientBorder = ({ gradient }: { gradient: string }) => (
     style={{
       position: "absolute",
       inset: 0,
-      borderRadius: "12px",
+      borderRadius: "8px",
       padding: "1px",
       pointerEvents: "none",
       background: gradient,
@@ -395,12 +386,11 @@ const WorkingModelPopup = ({
     <div
       style={{
         position: "relative", width: "100%", maxWidth: "430px",
-        borderTopLeftRadius: "12px", borderTopRightRadius: "12px",
+        borderTopLeftRadius: "8px", borderTopRightRadius: "8px",
         overflow: "hidden",
-        border: "1px solid rgba(212,175,55,0.35)",
+        border: "1px solid rgba(212,175,55,0.25)",
         borderBottom: "none",
         background: "#0A0A0A",
-        boxShadow: "0 -8px 40px rgba(0,0,0,0.5), 0 0 60px rgba(212,175,55,0.06)",
         animation: "faqOpen 0.3s ease-out",
       }}
     >
@@ -585,12 +575,10 @@ const btnPurpleVol: React.CSSProperties = {
   position: "relative" as const, overflow: "hidden" as const,
   width: "100%", padding: "16px 0", borderRadius: "8px",
   border: "none", cursor: "pointer",
-  fontFamily: "'Inter', sans-serif", fontSize: "18px", fontWeight: 700,
-  letterSpacing: "0.08em", textTransform: "uppercase" as const,
-  color: "#fff", textAlign: "center" as const, display: "block" as const,
-  background: "linear-gradient(180deg, rgb(110,50,170) 0%, rgb(75,30,130) 100%)",
-  boxShadow: "inset 0 1px 1px rgba(255,255,255,0.25), inset 0 -2px 4px rgba(0,0,0,0.4), 0 0 0 1px rgba(212,175,55,0.30), 0 8px 24px rgba(0,0,0,0.5), 0 0 40px rgba(120,60,180,0.45), 0 0 20px rgba(212,175,55,0.12)",
-  textShadow: "0 2px 4px rgba(0,0,0,0.5)",
+  fontFamily: "'Bebas Neue', sans-serif", fontSize: "20px", fontWeight: 400,
+  letterSpacing: "0.18em", textTransform: "uppercase" as const,
+  color: "#000", textAlign: "center" as const, display: "block" as const,
+  background: "#F9E076",
 };
 
 const btnSnapshotOutline: React.CSSProperties = {
@@ -621,18 +609,13 @@ const ProductCard = ({
   const tier = getTier(product);
   const isSnapshot = product.id === "snapshot-plus";
   const isHero = product.id === "the-full-analysis";
-  const tierPriceColor = tier.id === "purple" ? "rgb(180,140,255)" : "#D4AF37";
-  const tierReassuranceColor = tier.id === "purple" ? "rgba(180,140,255,0.50)" : "rgba(212,175,55,0.50)";
+  const tierPriceColor = "#D4AF37";
+  const tierReassuranceColor = "rgba(212,175,55,0.50)";
 
   const cardStyle: React.CSSProperties = {
     ...s.cardBase,
     ...tier.card,
-    ...(isHero ? { boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 35px rgba(212,175,55,0.14), 0 0 24px rgba(120,60,180,0.12), 0 0 60px rgba(212,175,55,0.06)" } : {}),
-    ...(product.id === "comp-report" ? { boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 30px rgba(212,175,55,0.12), 0 0 20px rgba(212,175,55,0.08)" } : {}),
-    ...(isSnapshot ? {
-      background: "radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.08) 0%, rgba(6,6,6,0.92) 70%)",
-      boxShadow: "0 8px 24px rgba(0,0,0,0.4), 0 0 20px rgba(212,175,55,0.06)",
-    } : {}),
+    ...(isHero ? { border: "1px solid rgba(212,175,55,0.25)" } : {}),
     opacity: visible ? 1 : 0,
     transform: visible
       ? (hovered ? `translateY(${tier.hoverLift})` : "translateY(0)")
@@ -648,21 +631,16 @@ const ProductCard = ({
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      {/* Gradient border overlay (dimmed for Snapshot+) */}
-      <GradientBorder gradient={isSnapshot ? "linear-gradient(180deg, rgba(212,175,55,0.30) 0%, rgba(212,175,55,0.10) 50%, rgba(212,175,55,0.20) 100%)" : tier.gradientBorder} />
+      {/* Gradient border overlay */}
+      <GradientBorder gradient={tier.gradientBorder} />
 
-      {/* Topline (dimmed for Snapshot+) */}
-      <div style={{
-        ...(isSnapshot ? { height: "1px", background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.25), transparent)", boxShadow: "0 0 8px rgba(212,175,55,0.10)" } : tier.topline),
-        ...z2,
-      }} />
+      {/* Topline */}
+      <div style={{ ...tier.topline, ...z2 }} />
 
-      {/* Atmospheric canopies (dimmed for Snapshot+) */}
-      <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "50%", background: isSnapshot ? "radial-gradient(ellipse 100% 80% at 50% 0%, rgba(212,175,55,0.06) 0%, transparent 70%)" : tier.atmosphericTop, pointerEvents: "none" }} />
-      <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "50%", background: isSnapshot ? "radial-gradient(ellipse 100% 80% at 50% 100%, rgba(120,60,180,0.04) 0%, transparent 70%)" : tier.atmosphericBottom, pointerEvents: "none" }} />
+      {/* Atmospheric canopies — removed per brand system */}
 
       {/* === FAST TOP === */}
-      <div style={{ ...s.cardHeader, borderBottom: isSnapshot ? "1px solid rgba(212,175,55,0.12)" : "1px solid rgba(212,175,55,0.20)", ...z2 }}>
+      <div style={{ ...s.cardHeader, borderBottom: "1px solid rgba(212,175,55,0.15)", ...z2 }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "6px" }}>
           {product.badge && (
             <span style={{ ...s.badgeBase, ...tier.badge }}>{product.badge}</span>
@@ -813,8 +791,8 @@ const ServiceCard = ({
   const haptics = useHaptics();
   const tier = getTier(product);
   const isBoutique = product.id === "boutique";
-  const tierPriceColor = "rgb(180,140,255)";
-  const tierReassuranceColor = "rgba(180,140,255,0.50)";
+  const tierPriceColor = "#D4AF37";
+  const tierReassuranceColor = "rgba(212,175,55,0.50)";
 
   const cardStyle: React.CSSProperties = {
     ...s.cardBase,
@@ -840,12 +818,10 @@ const ServiceCard = ({
       {/* Topline */}
       <div style={{ ...tier.topline, ...z2 }} />
 
-      {/* Atmospheric canopies */}
-      <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "50%", background: tier.atmosphericTop, pointerEvents: "none" }} />
-      <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "50%", background: tier.atmosphericBottom, pointerEvents: "none" }} />
+      {/* Atmospheric canopies — removed per brand system */}
 
       {/* === FAST TOP === */}
-      <div style={{ ...s.cardHeader, borderBottom: "1px solid rgba(120,60,180,0.20)", ...z2 }}>
+      <div style={{ ...s.cardHeader, borderBottom: "1px solid rgba(212,175,55,0.15)", ...z2 }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "6px" }}>
           {product.badge && (
             <span style={{ ...s.badgeBase, ...tier.badge }}>{product.badge}</span>
@@ -1116,20 +1092,16 @@ const Store = () => {
            § 1 — ON DEMAND
          ═══════════════════════════════════════ */}
       {/* Glass hero card */}
-      {/* Page-top canopy — direct child of outer container so it bleeds behind nav */}
-      <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "280px", background: "radial-gradient(ellipse 150% 80% at 50% 0%, rgba(120,60,180,0.30) 0%, transparent 65%), radial-gradient(ellipse 60% 50% at 80% 10%, rgba(212,175,55,0.12) 0%, transparent 60%)", pointerEvents: "none", zIndex: 0 }} />
+      {/* Page-top canopy — removed per brand system (flat #000 background) */}
       <div style={{ padding: "12px 0 16px", position: "relative" }}>
         <section style={{
           position: "relative", textAlign: "center",
           padding: "24px 24px 16px",
           margin: "0 24px",
-          borderRadius: 12,
+          borderRadius: 8,
           overflow: "hidden",
-          background: "radial-gradient(ellipse 70% 30% at 50% 0%, rgba(212,175,55,0.20) 0%, transparent 55%), radial-gradient(ellipse 100% 40% at 50% 0%, rgba(120,60,180,0.22) 0%, transparent 60%), radial-gradient(circle at 50% 50%, rgba(120,60,180,0.35) 0%, transparent 60%), radial-gradient(ellipse 100% 50% at 50% 100%, rgba(120,60,180,0.22) 0%, transparent 65%), rgba(6,6,6,0.85)",
-          backdropFilter: "blur(40px)",
-          WebkitBackdropFilter: "blur(40px)",
-          border: "1px solid rgba(212,175,55,0.20)",
-          boxShadow: "0 -16px 50px rgba(120,60,180,0.18), 0 20px 50px rgba(120,60,180,0.18), 0 -10px 35px rgba(212,175,55,0.10), 0 16px 40px rgba(0,0,0,0.6), 0 0 30px rgba(120,60,180,0.22), 0 0 80px rgba(120,60,180,0.15)",
+          background: "#0A0A0A",
+          border: "1px solid rgba(212,175,55,0.25)",
         }}>
           <div style={{ position: "relative", zIndex: 1 }}>
             <EyebrowRuled text="Shop" />
@@ -1156,11 +1128,6 @@ const Store = () => {
       <section
         style={{ padding: "24px 24px 16px", textAlign: "center", position: "relative" }}
       >
-        <div style={{
-          position: "absolute", top: 0, left: 0, right: 0, height: "200px",
-          background: "radial-gradient(ellipse 100% 70% at 50% 0%, rgba(120,60,180,0.15) 0%, transparent 70%)",
-          pointerEvents: "none",
-        }} />
         <div style={{ position: "relative" }}>
           <EyebrowRuled text="On Demand" />
           <p style={{
@@ -1200,11 +1167,6 @@ const Store = () => {
       <section
         style={{ padding: "24px 24px 16px", textAlign: "center", position: "relative" }}
       >
-        <div style={{
-          position: "absolute", top: 0, left: 0, right: 0, height: "200px",
-          background: "radial-gradient(ellipse 100% 70% at 50% 0%, rgba(120,60,180,0.18) 0%, transparent 70%)",
-          pointerEvents: "none",
-        }} />
         <div style={{ position: "relative" }}>
           <EyebrowRuled text="Research" />
           <h2 style={{
@@ -1244,11 +1206,6 @@ const Store = () => {
       <section
         style={{ padding: "24px 24px 16px", textAlign: "center", position: "relative" }}
       >
-        <div style={{
-          position: "absolute", top: 0, left: 0, right: 0, height: "260px",
-          background: "radial-gradient(ellipse 100% 70% at 50% 0%, rgba(120,60,180,0.25) 0%, transparent 70%), radial-gradient(ellipse 80% 50% at 50% 30%, rgba(212,175,55,0.15) 0%, transparent 70%)",
-          pointerEvents: "none",
-        }} />
         <div style={{ position: "relative" }}>
           <EyebrowRuled text="Turnkey" />
           <h2 style={{
@@ -1287,8 +1244,7 @@ const Store = () => {
       <div style={{ padding: "24px 0" }}>
         <div style={{
           height: "1px",
-          background: "linear-gradient(90deg, transparent 5%, rgba(212,175,55,0.35) 50%, transparent 95%)",
-          boxShadow: "0 0 12px rgba(212,175,55,0.20)",
+          background: "linear-gradient(90deg, transparent 5%, rgba(212,175,55,0.15) 50%, transparent 95%)",
           margin: "0 24px",
         }} />
       </div>
@@ -1299,11 +1255,6 @@ const Store = () => {
       <section
         style={{ padding: "0 24px 32px", position: "relative" }}
       >
-        <div style={{
-          position: "absolute", top: 0, left: 0, right: 0, height: "200px",
-          background: "radial-gradient(ellipse 100% 70% at 50% 0%, rgba(120,60,180,0.10) 0%, transparent 70%)",
-          pointerEvents: "none",
-        }} />
         <div style={{ position: "relative" }}>
           <EyebrowRuled text="Questions" />
           <div style={{ textAlign: "center", marginBottom: "32px" }}>
@@ -1356,8 +1307,7 @@ const Store = () => {
       <div style={{ padding: "16px 0" }}>
         <div style={{
           height: "1px",
-          background: "linear-gradient(90deg, transparent 5%, rgba(212,175,55,0.35) 50%, transparent 95%)",
-          boxShadow: "0 0 12px rgba(212,175,55,0.20)",
+          background: "linear-gradient(90deg, transparent 5%, rgba(212,175,55,0.15) 50%, transparent 95%)",
           margin: "0 24px",
         }} />
       </div>
@@ -1368,19 +1318,11 @@ const Store = () => {
       <div
         style={{ margin: "0 24px 48px", position: "relative" }}
       >
-        {/* Closer atmospheric canopy */}
-        <div style={{
-          position: "absolute",
-          inset: 0,
-          borderRadius: "12px",
-          pointerEvents: "none",
-          zIndex: 0,
-          background: "radial-gradient(ellipse 70% 50% at 50% 0%, rgba(212,175,55,0.25) 0%, transparent 60%), radial-gradient(ellipse 90% 60% at 50% 100%, rgba(120,60,180,0.22) 0%, transparent 65%)",
-        }} />
+        {/* Closer atmospheric canopy — removed per brand system */}
         <div style={{
           background: "#0A0A0A",
           border: "1px solid rgba(212,175,55,0.25)",
-          borderRadius: "12px",
+          borderRadius: "8px",
           padding: "36px 24px",
           textAlign: "center",
           position: "relative",
@@ -1420,20 +1362,18 @@ const Store = () => {
               display: "inline-flex",
               alignItems: "center",
               gap: "8px",
-              fontFamily: "'Inter', sans-serif",
-              fontSize: "18px",
-              fontWeight: 700,
-              letterSpacing: "0.08em",
+              fontFamily: "'Bebas Neue', sans-serif",
+              fontSize: "20px",
+              fontWeight: 400,
+              letterSpacing: "0.18em",
               textTransform: "uppercase",
-              color: "#fff",
-              background: "linear-gradient(180deg, rgb(110,50,170) 0%, rgb(75,30,130) 100%)",
+              color: "#000",
+              background: "#F9E076",
               border: "none",
               borderRadius: "8px",
               padding: "18px 32px",
               cursor: "pointer",
-              boxShadow: "inset 0 1px 1px rgba(255,255,255,0.25), inset 0 -2px 4px rgba(0,0,0,0.4), 0 0 0 1px rgba(212,175,55,0.30), 0 8px 24px rgba(0,0,0,0.5), 0 0 40px rgba(120,60,180,0.45), 0 0 20px rgba(212,175,55,0.12)",
-              textShadow: "0 2px 4px rgba(0,0,0,0.5)",
-              transition: "transform 0.15s, box-shadow 0.3s",
+              transition: "transform 0.15s",
             }}
             onMouseDown={(e) => { (e.currentTarget.style.transform = "scale(0.98)"); }}
             onMouseUp={(e) => { (e.currentTarget.style.transform = "scale(1)"); }}
