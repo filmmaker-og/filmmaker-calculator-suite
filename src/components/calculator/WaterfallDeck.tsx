@@ -12,11 +12,13 @@ import {
 } from "@/lib/waterfall";
 import type { TierPayment } from "@/lib/waterfall-types";
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import LeadCaptureModal from "@/components/LeadCaptureModal";
 import { useHaptics } from "@/hooks/use-haptics";
 import { serializeSnapshot } from "@/lib/serialize-snapshot";
+import { useInView } from "@/hooks/useInView";
+import { gold, white, GOLD, CTA, BG } from "@/lib/tokens";
 
 
 // ─── Types ───────────────────────────────────────────────────────
@@ -113,12 +115,152 @@ const SEM = {
 
 // ─── Shared Elements ─────────────────────────────────────────────
 
-const GoldGlowBreak = () => (
-  <div style={{ padding: "10px 24px" }}>
+/** Scroll-reveal wrapper — fades + slides up when entering viewport */
+const RevealSection = ({
+  children,
+  delay = 0,
+  style,
+  className,
+}: {
+  children: React.ReactNode;
+  delay?: number;
+  style?: React.CSSProperties;
+  className?: string;
+}) => {
+  const { ref, inView } = useInView<HTMLDivElement>({ threshold: 0.12 });
+  return (
+    <div
+      ref={ref}
+      className={className}
+      style={{
+        opacity: inView ? 1 : 0,
+        transform: inView ? "translateY(0)" : "translateY(16px)",
+        transition: `opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms`,
+        willChange: "opacity, transform",
+        ...style,
+      }}
+    >
+      {children}
+    </div>
+  );
+};
+
+/** Animated count-up for financial numbers */
+const CountUp = ({
+  value,
+  duration = 1400,
+  format = "currency",
+  trigger = true,
+  style,
+}: {
+  value: number;
+  duration?: number;
+  format?: "currency" | "compact" | "percent" | "multiple";
+  trigger?: boolean;
+  style?: React.CSSProperties;
+}) => {
+  const [display, setDisplay] = useState(0);
+  const animRef = useRef<number>(0);
+  const hasAnimated = useRef(false);
+
+  useEffect(() => {
+    if (!trigger || hasAnimated.current) return;
+    hasAnimated.current = true;
+    const startTime = performance.now();
+    const tick = (now: number) => {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3); // cubic ease-out
+      setDisplay(value * eased);
+      if (progress < 1) {
+        animRef.current = requestAnimationFrame(tick);
+      }
+    };
+    animRef.current = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(animRef.current);
+  }, [trigger, value, duration]);
+
+  let formatted: string;
+  const current = trigger && hasAnimated.current ? display : (trigger ? 0 : value);
+  switch (format) {
+    case "compact":
+      formatted = formatCompactCurrency(Math.round(current));
+      break;
+    case "percent":
+      formatted = `${Math.round(current)}%`;
+      break;
+    case "multiple":
+      formatted = `${current.toFixed(1)}×`;
+      break;
+    default:
+      formatted = formatFullCurrency(Math.round(current));
+  }
+
+  return <span style={style}>{formatted}</span>;
+};
+
+/** Brand-system section container */
+const SectionContainer = ({
+  children,
+  hot = false,
+  style,
+}: {
+  children: React.ReactNode;
+  hot?: boolean;
+  style?: React.CSSProperties;
+}) => (
+  <div
+    className="grain-surface"
+    style={{
+      background: BG.elevated,
+      border: `1px solid ${gold(0.15)}`,
+      borderTop: `1px solid ${white(0.08)}`,
+      borderRadius: "8px",
+      boxShadow: `0 4px 16px rgba(0,0,0,0.30)`,
+      overflow: "hidden",
+      ...style,
+    }}
+  >
+    {children}
+  </div>
+);
+
+/** Brand-system header band — first child inside SectionContainer */
+const HeaderBand = ({
+  eyebrow,
+  title,
+  hot = false,
+}: {
+  eyebrow: string;
+  title: string;
+  hot?: boolean;
+}) => (
+  <div style={{
+    background: `linear-gradient(180deg, ${gold(hot ? 0.10 : 0.06)}, ${BG.surface})`,
+    border: `1px solid ${white(0.04)}`,
+    borderBottom: `1px solid ${gold(0.10)}`,
+    borderRadius: "6px",
+    padding: "24px 20px",
+    marginBottom: "16px",
+    textAlign: "center",
+  }}>
+    {/* EyebrowPill */}
     <div style={{
-      height: "1px",
-      background: "linear-gradient(90deg, transparent 0%, rgba(212,175,55,0.15) 15%, rgba(212,175,55,0.45) 50%, rgba(212,175,55,0.15) 85%, transparent 100%)",
-    }} />
+      display: "inline-block",
+      fontFamily: "'Roboto Mono', monospace",
+      fontSize: "13px",
+      color: GOLD,
+      letterSpacing: "0.16em",
+      textTransform: "uppercase" as const,
+      background: gold(0.10),
+      border: `1px solid ${gold(0.25)}`,
+      padding: "6px 18px",
+      borderRadius: "999px",
+      marginBottom: "12px",
+    }}>
+      {eyebrow}
+    </div>
+    <div style={{ ...FONT.display, color: W.primary }}>{title}</div>
   </div>
 );
 
@@ -281,16 +423,21 @@ const CoverSection = ({
     verdictContext = `Net distributable falls short of cash basis by ${formatCompactCurrency(cashBasis - netToInvestors)}. At this acquisition price, investors are not made whole before the waterfall runs dry. The structure below shows where the money stops.`;
   }
 
+  const { ref: coverRef, inView: coverInView } = useInView<HTMLElement>({ threshold: 0.12 });
+
   return (
-    <section style={{
-      minHeight: "85dvh",
-      padding: "40px 24px 28px",
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "center",
-      position: "relative",
-      overflow: "hidden",
-    }}>
+    <section
+      ref={coverRef}
+      style={{
+        minHeight: "85dvh",
+        padding: "40px 24px 28px",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        position: "relative",
+        overflow: "hidden",
+      }}
+    >
       {/* Left accent line */}
       <div style={{
         position: "absolute",
@@ -298,50 +445,66 @@ const CoverSection = ({
         top: "10%",
         bottom: "10%",
         width: "2px",
-        background: "linear-gradient(180deg, transparent 0%, rgba(212,175,55,0.15) 20%, rgba(212,175,55,0.25) 50%, rgba(212,175,55,0.15) 80%, transparent 100%)",
+        background: `linear-gradient(180deg, transparent 0%, ${gold(0.15)} 20%, ${gold(0.25)} 50%, ${gold(0.15)} 80%, transparent 100%)`,
       }} />
 
-      {/* 1a. Badge */}
-      <div style={{
-        display: "inline-flex",
-        alignItems: "center",
-        gap: "8px",
-        marginBottom: "24px",
-      }}>
-        <div style={{ width: "24px", height: "1px", background: G.subtle }} />
-        <span style={{ ...FONT.label, color: G.emphasis }}>Waterfall Snapshot</span>
-      </div>
+      {/* 1a. EyebrowPill Badge */}
+      <RevealSection delay={0}>
+        <div style={{
+          display: "inline-block",
+          fontFamily: "'Roboto Mono', monospace",
+          fontSize: "13px",
+          color: GOLD,
+          letterSpacing: "0.16em",
+          textTransform: "uppercase" as const,
+          background: gold(0.10),
+          border: `1px solid ${gold(0.25)}`,
+          padding: "6px 18px",
+          borderRadius: "999px",
+          marginBottom: "24px",
+        }}>
+          Waterfall Snapshot
+        </div>
+      </RevealSection>
 
-      {/* 1b. Title */}
-      <div style={{
-        fontFamily: "'Bebas Neue', sans-serif",
-        fontSize: "48px",
-        letterSpacing: "0.06em",
-        lineHeight: 1.0,
-        color: W.primary,
-        marginBottom: "10px",
-      }}>
-        {(project.title.trim() || "UNTITLED PROJECT").toUpperCase()}
-      </div>
+      {/* 1b. Title — gold gradient text */}
+      <RevealSection delay={100}>
+        <div style={{
+          fontFamily: "'Bebas Neue', sans-serif",
+          fontSize: "clamp(2.8rem, 7vw, 3.6rem)",
+          letterSpacing: "0.06em",
+          lineHeight: 0.95,
+          background: "linear-gradient(135deg, #D4AF37, #F9E076)",
+          WebkitBackgroundClip: "text",
+          WebkitTextFillColor: "transparent",
+          backgroundClip: "text",
+          marginBottom: "10px",
+        }}>
+          {(project.title.trim() || "UNTITLED PROJECT").toUpperCase()}
+        </div>
+      </RevealSection>
 
       {/* 1c. Logline */}
       {hasLogline && (
-        <div style={{
-          fontSize: "16px",
-          fontFamily: "'Inter', sans-serif",
-          fontWeight: 400,
-          color: W.tertiary,
-          fontStyle: "italic",
-          maxWidth: "360px",
-          lineHeight: 1.5,
-          marginBottom: "20px",
-        }}>
-          {project.logline}
-        </div>
+        <RevealSection delay={200}>
+          <div style={{
+            fontSize: "16px",
+            fontFamily: "'Inter', sans-serif",
+            fontWeight: 400,
+            color: "rgba(250,248,244,0.78)",
+            fontStyle: "italic",
+            maxWidth: "360px",
+            lineHeight: 1.5,
+            marginBottom: "20px",
+          }}>
+            {project.logline}
+          </div>
+        </RevealSection>
       )}
 
       {/* 1d. Team Grid */}
       {hasTeam && (
+        <RevealSection delay={300}>
         <div style={{
           display: "grid",
           gridTemplateColumns: "1fr 1fr",
@@ -372,9 +535,11 @@ const CoverSection = ({
             </div>
           ))}
         </div>
+        </RevealSection>
       )}
 
       {/* 1e. KPI Rows */}
+      <RevealSection delay={400}>
       <div style={{
         display: "flex",
         gap: "2px",
@@ -383,7 +548,7 @@ const CoverSection = ({
         borderRadius: "12px",
         overflow: "hidden",
       }}>
-        <div style={{ flex: 1, background: "#1A1A1C", padding: "14px" }}>
+        <div style={{ flex: 1, background: BG.elevated, padding: "14px" }}>
           <div style={{ ...FONT.fine, color: W.quaternary, marginBottom: "4px" }}>BUDGET</div>
           <div style={{
             fontFamily: "'Roboto Mono', monospace",
@@ -392,10 +557,10 @@ const CoverSection = ({
             letterSpacing: "0.06em",
             color: W.primary,
           }}>
-            {formatCompactCurrency(inputs.budget)}
+            <CountUp value={inputs.budget} format="compact" trigger={coverInView} />
           </div>
         </div>
-        <div style={{ flex: 1, background: "#1A1A1C", padding: "14px", borderLeft: "2px solid rgba(212,175,55,0.25)" }}>
+        <div style={{ flex: 1, background: BG.elevated, padding: "14px", borderLeft: `2px solid ${gold(0.25)}` }}>
           <div style={{ ...FONT.fine, color: W.quaternary, marginBottom: "4px" }}>CASH BASIS</div>
           <div style={{
             fontFamily: "'Roboto Mono', monospace",
@@ -404,10 +569,12 @@ const CoverSection = ({
             letterSpacing: "0.06em",
             color: G.emphasis,
           }}>
-            {formatCompactCurrency(cashBasis)}
+            <CountUp value={cashBasis} format="compact" trigger={coverInView} />
           </div>
         </div>
       </div>
+      </RevealSection>
+      <RevealSection delay={500}>
       <div style={{
         display: "flex",
         gap: "2px",
@@ -416,7 +583,7 @@ const CoverSection = ({
         borderRadius: "12px",
         overflow: "hidden",
       }}>
-        <div style={{ flex: 1, background: "#1A1A1C", padding: "14px" }}>
+        <div style={{ flex: 1, background: BG.elevated, padding: "14px" }}>
           <div style={{ ...FONT.fine, color: W.quaternary, marginBottom: "4px" }}>MARKET VALUE</div>
           <div style={{
             fontFamily: "'Roboto Mono', monospace",
@@ -425,10 +592,10 @@ const CoverSection = ({
             letterSpacing: "0.06em",
             color: W.primary,
           }}>
-            {formatCompactCurrency(inputs.revenue)}
+            <CountUp value={inputs.revenue} format="compact" trigger={coverInView} />
           </div>
         </div>
-        <div style={{ flex: 1, background: "#1A1A1C", padding: "14px", borderLeft: `2px solid ${returnColor === SEM.green ? "rgba(60,179,113,0.25)" : returnColor === SEM.amber ? "rgba(240,168,48,0.25)" : "rgba(220,38,38,0.35)"}` }}>
+        <div style={{ flex: 1, background: BG.elevated, padding: "14px", borderLeft: `2px solid ${returnColor === SEM.green ? "rgba(60,179,113,0.25)" : returnColor === SEM.amber ? "rgba(240,168,48,0.25)" : "rgba(220,38,38,0.35)"}` }}>
           <div style={{ ...FONT.fine, color: W.quaternary, marginBottom: "4px" }}>INVESTOR RETURN</div>
           <div style={{
             fontFamily: "'Roboto Mono', monospace",
@@ -437,12 +604,14 @@ const CoverSection = ({
             letterSpacing: "0.06em",
             color: returnColor,
           }}>
-            {Math.round(investorReturnPct)}%
+            <CountUp value={investorReturnPct} format="percent" trigger={coverInView} />
           </div>
         </div>
       </div>
+      </RevealSection>
 
       {/* 1e-b. Break-Even Revenue (free metric) */}
+      <RevealSection delay={600}>
       <div style={{
         display: "flex",
         gap: "2px",
@@ -467,7 +636,7 @@ const CoverSection = ({
             letterSpacing: "0.06em",
             color: G.standard,
           }}>
-            {breakeven === Infinity ? "N/A" : formatCompactCurrency(breakeven)}
+            {breakeven === Infinity ? "N/A" : <CountUp value={breakeven} format="compact" trigger={coverInView} />}
           </div>
           <div style={{
             fontSize: "12px",
@@ -478,37 +647,43 @@ const CoverSection = ({
           </div>
         </div>
       </div>
+      </RevealSection>
 
-      {/* 1f. Verdict Strip */}
+      {/* 1f. Verdict Strip — dramatic reveal */}
+      <RevealSection delay={800}>
       <div style={{
         display: "flex",
         alignItems: "center",
         gap: "14px",
-        borderTop: `1px solid rgba(212,175,55,0.15)`,
+        borderTop: `1px solid ${gold(0.15)}`,
         paddingTop: "16px",
       }}>
         <div style={{
           fontFamily: "'Roboto Mono', monospace",
-          fontSize: "52px",
+          fontSize: "80px",
           fontWeight: 500,
           lineHeight: 1,
           color: multipleColor,
+          textShadow: `0 0 30px ${multipleColor === SEM.green ? "rgba(60,179,113,0.25)" : multipleColor === SEM.amber ? "rgba(240,168,48,0.25)" : "rgba(220,38,38,0.25)"}`,
+          animation: coverInView ? "stamp 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards" : "none",
         }}>
-          {multiple.toFixed(1)}&times;
+          <CountUp value={multiple} format="multiple" trigger={coverInView} duration={1800} />
         </div>
-        <div style={{ fontSize: "16px", lineHeight: 1.5, color: W.tertiary }}>
-          <strong style={{ color: W.secondary, fontWeight: 600 }}>Cash-on-cash multiple.</strong>
+        <div style={{ fontSize: "16px", lineHeight: 1.5, color: "rgba(250,248,244,0.78)" }}>
+          <strong style={{ color: "rgba(250,248,244,0.90)", fontWeight: 600 }}>Cash-on-cash multiple.</strong>
           <br />
           {verdictContext}
         </div>
       </div>
+      </RevealSection>
 
       {/* 1f-b. AI Deal Insight */}
       {dealInsight && (
+        <RevealSection delay={900}>
         <div style={{
           margin: "16px 0",
           padding: "12px 16px",
-          borderLeft: "2px solid rgba(212,175,55,0.30)",
+          borderLeft: `2px solid ${gold(0.30)}`,
           fontFamily: "'Inter', sans-serif",
           fontSize: "17px",
           fontStyle: "italic",
@@ -517,6 +692,7 @@ const CoverSection = ({
         }}>
           {dealInsight}
         </div>
+        </RevealSection>
       )}
       {insightLoading && (
         <div style={{
@@ -532,11 +708,12 @@ const CoverSection = ({
       )}
 
       {/* 1g. Assumptions — always-visible grid */}
+      <RevealSection delay={1000}>
       <div style={{
         marginTop: "20px",
         padding: "14px 16px",
-        background: "rgba(255,255,255,0.03)",
-        border: "1px solid rgba(255,255,255,0.06)",
+        background: white(0.03),
+        border: `1px solid ${white(0.06)}`,
         borderRadius: "12px",
       }}>
         <div style={{
@@ -598,6 +775,7 @@ const CoverSection = ({
           )}
         </div>
       </div>
+      </RevealSection>
     </section>
   );
 };
@@ -703,12 +881,20 @@ const DealSection = ({
   }
 
   return (
+    <SectionContainer>
     <section style={{ padding: "32px 24px 28px", position: "relative", overflow: "hidden" }}>
       {/* Gold top canopy */}
-      <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "180px", background: "radial-gradient(ellipse 80% 50% at 50% 0%, rgba(212,175,55,0.08) 0%, transparent 70%)", pointerEvents: "none" }} />
+      <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "180px", background: `radial-gradient(ellipse 80% 50% at 50% 0%, ${gold(0.08)} 0%, transparent 70%)`, pointerEvents: "none" }} />
       {/* Gold bottom canopy */}
-      <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "120px", background: "radial-gradient(ellipse 60% 40% at 50% 100%, rgba(212,175,55,0.04) 0%, transparent 60%)", pointerEvents: "none" }} />
+      <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "120px", background: `radial-gradient(ellipse 60% 40% at 50% 100%, ${gold(0.04)} 0%, transparent 60%)`, pointerEvents: "none" }} />
+
+      {/* Header Band */}
+      <RevealSection>
+        <HeaderBand eyebrow="Deal Summary" title="THE DEAL" />
+      </RevealSection>
+
       {/* Provenance mark */}
+      <RevealSection delay={100}>
       <div style={{
         display: "flex",
         alignItems: "center",
@@ -725,24 +911,22 @@ const DealSection = ({
         <div style={{
           flex: 1,
           height: "1px",
-          background: "linear-gradient(90deg, rgba(212,175,55,0.20), transparent)",
+          background: `linear-gradient(90deg, ${gold(0.20)}, transparent)`,
         }} />
       </div>
-
-      {/* Label */}
-      <div style={{ ...FONT.label, color: G.emphasis, marginBottom: "8px" }}>Deal Summary</div>
-
-      {/* Headline */}
-      <div style={{ ...FONT.display, color: W.primary, marginBottom: "16px" }}>THE DEAL</div>
+      </RevealSection>
 
       {/* Prose */}
-      <div style={{ ...FONT.body, color: W.primary }}>
+      <RevealSection delay={200}>
+      <div style={{ ...FONT.body, color: "rgba(250,248,244,0.88)" }}>
         <p style={{ marginBottom: "20px" }}>{p1Parts.join(" ")}</p>
         <p style={{ marginBottom: "20px" }}>{p2}</p>
         <p style={{ marginBottom: "20px" }}>{p3}</p>
       </div>
+      </RevealSection>
 
       {/* Pull-quote */}
+      <RevealSection delay={300}>
       <div style={{
         borderLeft: `3px solid ${borderColor}`,
         paddingLeft: "20px",
@@ -758,12 +942,16 @@ const DealSection = ({
           {verdictText}
         </div>
       </div>
+      </RevealSection>
 
       {/* Verdict */}
-      <div style={{ ...FONT.body, color: W.primary }}>
+      <RevealSection delay={400}>
+      <div style={{ ...FONT.body, color: "rgba(250,248,244,0.88)" }}>
         <p style={{ marginBottom: "0" }}>{p4}</p>
       </div>
+      </RevealSection>
     </section>
+    </SectionContainer>
   );
 };
 
@@ -811,14 +999,18 @@ const VisualCluster1 = ({
     return { ...s, label: formatCompactCurrency(s.price), returnPct, multiple, color };
   });
 
+  const { ref: vc1Ref, inView: vc1InView } = useInView<HTMLElement>({ threshold: 0.08 });
+
   return (
-    <section style={{ padding: "28px 24px 28px", position: "relative", overflow: "hidden" }}>
+    <SectionContainer>
+    <section ref={vc1Ref} style={{ padding: "28px 24px 28px", position: "relative", overflow: "hidden" }}>
       {/* Gold top canopy */}
-      <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "140px", background: "radial-gradient(ellipse 80% 50% at 50% 0%, rgba(212,175,55,0.06) 0%, transparent 70%)", pointerEvents: "none" }} />
+      <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "140px", background: `radial-gradient(ellipse 80% 50% at 50% 0%, ${gold(0.06)} 0%, transparent 70%)`, pointerEvents: "none" }} />
 
       {/* ── EROSION VISUAL ── */}
       {erosionTotal > 0 && (
         <>
+          <RevealSection>
           <div style={{ ...FONT.fine, color: W.tertiary, marginBottom: "12px" }}>OFF-THE-TOP EROSION</div>
           <div style={{
             padding: "20px",
@@ -828,9 +1020,9 @@ const VisualCluster1 = ({
           }}>
             {/* Hero row */}
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "16px" }}>
-              <span style={{ fontSize: "16px", color: W.tertiary }}>Gone before recoupment</span>
+              <span style={{ fontSize: "16px", color: "rgba(250,248,244,0.78)" }}>Gone before recoupment</span>
               <span style={{ ...FONT.data, fontSize: "28px", color: SEM.red }}>
-                &minus;{formatCompactCurrency(erosionTotal)}
+                &minus;<CountUp value={erosionTotal} format="compact" trigger={vc1InView} />
               </span>
             </div>
             {/* Stacked bar */}
@@ -864,24 +1056,28 @@ const VisualCluster1 = ({
               ))}
             </div>
           </div>
+          </RevealSection>
         </>
       )}
 
       {/* Net strip */}
+      <RevealSection delay={100}>
       <div style={{
         display: "flex", justifyContent: "space-between", alignItems: "center",
         padding: "14px 20px", background: netBg, border: `1px solid ${netBorder}`,
         borderRadius: "12px", marginBottom: "28px",
       }}>
-        <span style={{ fontSize: "16px", color: W.tertiary }}>Net to Investors</span>
+        <span style={{ fontSize: "16px", color: "rgba(250,248,244,0.78)" }}>Net to Investors</span>
         <span style={{ ...FONT.data, fontSize: "26px", color: netColor }}>
-          {formatCompactCurrency(netDistributable)}
+          <CountUp value={netDistributable} format="compact" trigger={vc1InView} />
         </span>
       </div>
+      </RevealSection>
 
       {/* ── CAPITAL STACK VISUAL ── */}
       {sources.length > 0 && (
         <>
+          <RevealSection delay={200}>
           <div style={{ ...FONT.fine, color: W.tertiary, marginBottom: "12px" }}>CAPITAL STRUCTURE</div>
           <div style={{
             display: "flex", flexDirection: "column", gap: "2px",
@@ -922,12 +1118,14 @@ const VisualCluster1 = ({
               );
             })}
           </div>
+          </RevealSection>
         </>
       )}
 
       {/* ── SCENARIO TABLE VISUAL ── */}
       {inputs.revenue > 0 && (
         <>
+          <RevealSection delay={300}>
           <div style={{ ...FONT.fine, color: W.tertiary, marginBottom: "12px" }}>SCENARIO STRESS TEST</div>
           <div style={{
             border: "1px solid rgba(255,255,255,0.08)",
@@ -966,12 +1164,16 @@ const VisualCluster1 = ({
               ))}
             </div>
           </div>
+          </RevealSection>
         </>
       )}
 
       {/* ── GATE 1: Sensitivity ── */}
-      <LockedSensitivitySection />
+      <RevealSection delay={400}>
+        <LockedSensitivitySection />
+      </RevealSection>
     </section>
+    </SectionContainer>
   );
 };
 
@@ -979,8 +1181,22 @@ const VisualCluster1 = ({
 
 const LockedSensitivitySection = () => (
   <section style={{ padding: "0px 0px 0px" }}>
-    {/* Label — content-descriptive, not "Premium Analysis" */}
-    <div style={{ ...FONT.label, color: G.emphasis, marginBottom: "8px" }}>Scenario Modeling</div>
+    {/* EyebrowPill */}
+    <div style={{
+      display: "inline-block",
+      fontFamily: "'Roboto Mono', monospace",
+      fontSize: "13px",
+      color: GOLD,
+      letterSpacing: "0.16em",
+      textTransform: "uppercase" as const,
+      background: gold(0.10),
+      border: `1px solid ${gold(0.25)}`,
+      padding: "6px 18px",
+      borderRadius: "999px",
+      marginBottom: "12px",
+    }}>
+      Scenario Modeling
+    </div>
 
     {/* Headline — reads like the next section */}
     <div style={{ ...FONT.title, color: W.primary, marginBottom: "12px" }}>
@@ -1042,11 +1258,12 @@ const LockedSensitivitySection = () => (
       }}>
         <div style={{
           width: "44px", height: "44px",
-          border: "1.5px solid rgba(212,175,55,0.45)",
+          border: `1.5px solid ${gold(0.45)}`,
           borderRadius: "50%",
           display: "flex", alignItems: "center", justifyContent: "center",
           marginBottom: "16px",
-          boxShadow: "0 0 16px rgba(212,175,55,0.15)",
+          boxShadow: `0 0 16px ${gold(0.15)}`,
+          animation: "pulse-gold 3s ease-in-out infinite",
         }}>
           <svg viewBox="0 0 24 24" style={{ width: "18px", height: "18px", fill: G.standard }}>
             <path d="M18 10h-1V7c0-2.76-2.24-5-5-5S7 4.24 7 7v3H6c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-8c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3-9H9V7c0-1.66 1.34-3 3-3s3 1.34 3 3v3z" />
@@ -1071,11 +1288,26 @@ const LockedSnapshotPlusSection = ({ onUnlock }: { onUnlock: () => void }) => (
     {/* Gold top canopy (subtle — coolest gate) */}
     <div style={{
       position: "absolute", top: 0, left: 0, right: 0, height: "100px",
-      background: "radial-gradient(ellipse 80% 50% at 50% 0%, rgba(212,175,55,0.04) 0%, transparent 70%)",
+      background: `radial-gradient(ellipse 80% 50% at 50% 0%, ${gold(0.04)} 0%, transparent 70%)`,
       pointerEvents: "none",
     }} />
 
-    <div style={{ ...FONT.label, color: G.emphasis, marginBottom: "8px" }}>Deal Diagnostics</div>
+    {/* EyebrowPill */}
+    <div style={{
+      display: "inline-block",
+      fontFamily: "'Roboto Mono', monospace",
+      fontSize: "13px",
+      color: GOLD,
+      letterSpacing: "0.16em",
+      textTransform: "uppercase" as const,
+      background: gold(0.10),
+      border: `1px solid ${gold(0.25)}`,
+      padding: "6px 18px",
+      borderRadius: "999px",
+      marginBottom: "12px",
+    }}>
+      Deal Diagnostics
+    </div>
     <div style={{ ...FONT.title, color: W.primary, marginBottom: "12px" }}>
       DOES YOUR DEAL ACTUALLY WORK
     </div>
@@ -1144,13 +1376,14 @@ const LockedSnapshotPlusSection = ({ onUnlock }: { onUnlock: () => void }) => (
         <div style={{
           width: "38px",
           height: "38px",
-          border: "1.5px solid rgba(212,175,55,0.35)",
+          border: `1.5px solid ${gold(0.35)}`,
           borderRadius: "50%",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           marginBottom: "10px",
-          boxShadow: "0 0 12px rgba(212,175,55,0.10)",
+          boxShadow: `0 0 12px ${gold(0.10)}`,
+          animation: "pulse-gold 3s ease-in-out infinite",
         }}>
           <svg viewBox="0 0 24 24" style={{ width: "16px", height: "16px", fill: G.emphasis }}>
             <path d="M18 10h-1V7c0-2.76-2.24-5-5-5S7 4.24 7 7v3H6c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-8c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3-9H9V7c0-1.66 1.34-3 3-3s3 1.34 3 3v3z" />
@@ -1231,16 +1464,20 @@ const InterpretationSection = ({
   const creditConcentration = inputs.budget > 0 ? (inputs.credits / inputs.budget) * 100 : 0;
 
   return (
+    <SectionContainer>
     <section style={{ padding: "32px 24px 28px", position: "relative", overflow: "hidden" }}>
       {/* Gold top canopy */}
-      <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "140px", background: "radial-gradient(ellipse 80% 50% at 50% 0%, rgba(212,175,55,0.06) 0%, transparent 70%)", pointerEvents: "none" }} />
+      <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "140px", background: `radial-gradient(ellipse 80% 50% at 50% 0%, ${gold(0.06)} 0%, transparent 70%)`, pointerEvents: "none" }} />
       {/* Gold bottom canopy */}
-      <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "100px", background: "radial-gradient(ellipse 60% 40% at 50% 100%, rgba(212,175,55,0.03) 0%, transparent 60%)", pointerEvents: "none" }} />
-      {/* Full headline treatment — this is a text block */}
-      <div style={{ ...FONT.label, color: G.emphasis, marginBottom: "8px" }}>What The Numbers Say</div>
-      <div style={{ ...FONT.display, color: W.primary, marginBottom: "16px" }}>THE INTERPRETATION</div>
+      <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "100px", background: `radial-gradient(ellipse 60% 40% at 50% 100%, ${gold(0.03)} 0%, transparent 60%)`, pointerEvents: "none" }} />
 
-      <div style={{ ...FONT.body, color: W.primary }}>
+      {/* Header Band */}
+      <RevealSection>
+        <HeaderBand eyebrow="What The Numbers Say" title="THE INTERPRETATION" />
+      </RevealSection>
+
+      <RevealSection delay={200}>
+      <div style={{ ...FONT.body, color: "rgba(250,248,244,0.88)" }}>
         {/* Paragraph 1: Erosion + net distributable interpretation */}
         <p style={{ marginBottom: "20px" }}>
           Off-the-top deductions consume <Num>{formatCompactCurrency(erosionTotal)}</Num>. That
@@ -1295,7 +1532,9 @@ const InterpretationSection = ({
           </p>
         )}
       </div>
+      </RevealSection>
     </section>
+    </SectionContainer>
   );
 };
 
@@ -1332,12 +1571,16 @@ const VisualCluster2 = ({
     ...(backendPool > 0 ? [{ phase: tiers.length + 1, label: "Backend Pool", amount: backendPool, paid: backendPool, status: "partial" as const }] : []),
   ];
 
+  const { ref: vc2Ref, inView: vc2InView } = useInView<HTMLElement>({ threshold: 0.08 });
+
   return (
-    <section style={{ padding: "28px 24px 28px", position: "relative", overflow: "hidden" }}>
+    <SectionContainer>
+    <section ref={vc2Ref} style={{ padding: "28px 24px 28px", position: "relative", overflow: "hidden" }}>
       {/* Gold top canopy */}
-      <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "140px", background: "radial-gradient(ellipse 80% 50% at 50% 0%, rgba(212,175,55,0.06) 0%, transparent 70%)", pointerEvents: "none" }} />
+      <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "140px", background: `radial-gradient(ellipse 80% 50% at 50% 0%, ${gold(0.06)} 0%, transparent 70%)`, pointerEvents: "none" }} />
 
       {/* ── DEDUCTIONS LEDGER ── */}
+      <RevealSection>
       <div style={{ ...FONT.fine, color: W.tertiary, marginBottom: "12px" }}>GROSS TO NET</div>
       <div style={{
         border: "1px solid rgba(255,255,255,0.08)", borderRadius: "12px",
@@ -1372,17 +1615,19 @@ const VisualCluster2 = ({
         {/* Total */}
         <div style={{
           display: "flex", justifyContent: "space-between", alignItems: "center",
-          padding: "14px 16px", borderTop: "2px solid rgba(255,255,255,0.12)",
-          background: "rgba(255,255,255,0.03)",
+          padding: "14px 16px", borderTop: `2px solid ${white(0.12)}`,
+          background: white(0.03),
         }}>
           <span style={{ fontSize: "16px", fontWeight: 600, color: W.secondary }}>Net Distributable</span>
           <span style={{ ...FONT.data, fontSize: "22px", color: SEM.green }}>
-            {formatFullCurrency(netDistributable)}
+            <CountUp value={netDistributable} format="currency" trigger={vc2InView} />
           </span>
         </div>
       </div>
+      </RevealSection>
 
       {/* ── CASCADE TIER CARDS ── */}
+      <RevealSection delay={200}>
       <div style={{ ...FONT.fine, color: W.tertiary, marginBottom: "12px" }}>RECOUPMENT CASCADE</div>
       <div style={{
         display: "flex", flexDirection: "column", gap: "16px",
@@ -1425,7 +1670,7 @@ const VisualCluster2 = ({
                   background: dotColor, border: `1.5px solid ${dotBorder}`, boxShadow: dotGlow,
                 }} />
               )}
-              <div style={{ padding: "16px", border: `1px solid ${borderColor}`, borderRadius: "6px", background: bgColor }}>
+              <div className="wf-card" style={{ padding: "16px", border: `1px solid ${borderColor}`, borderRadius: "6px", background: bgColor }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                     <div style={{ width: "6px", height: "6px", borderRadius: "50%", background: dotColor, boxShadow: dotGlow }} />
@@ -1458,10 +1703,14 @@ const VisualCluster2 = ({
           <div style={{ flex: 1, height: "1px", background: "linear-gradient(90deg, rgba(255,255,255,0.08), transparent)" }} />
         </div>
       </div>
+      </RevealSection>
 
       {/* ── GATE 2: Comps ── */}
-      <LockedComparableSection />
+      <RevealSection delay={400}>
+        <LockedComparableSection />
+      </RevealSection>
     </section>
+    </SectionContainer>
   );
 };
 
@@ -1469,8 +1718,22 @@ const VisualCluster2 = ({
 
 const LockedComparableSection = () => (
   <section style={{ padding: "20px 0px 0px" }}>
-    {/* Label — content-descriptive */}
-    <div style={{ ...FONT.label, color: G.emphasis, marginBottom: "8px" }}>Market Comparables</div>
+    {/* EyebrowPill */}
+    <div style={{
+      display: "inline-block",
+      fontFamily: "'Roboto Mono', monospace",
+      fontSize: "13px",
+      color: GOLD,
+      letterSpacing: "0.16em",
+      textTransform: "uppercase" as const,
+      background: gold(0.10),
+      border: `1px solid ${gold(0.25)}`,
+      padding: "6px 18px",
+      borderRadius: "999px",
+      marginBottom: "12px",
+    }}>
+      Market Comparables
+    </div>
 
     {/* Headline — reads like the next section */}
     <div style={{ ...FONT.title, color: W.primary, marginBottom: "12px" }}>
@@ -1555,11 +1818,12 @@ const LockedComparableSection = () => (
       }}>
         <div style={{
           width: "44px", height: "44px",
-          border: "1.5px solid rgba(212,175,55,0.55)",
+          border: `1.5px solid ${gold(0.55)}`,
           borderRadius: "50%",
           display: "flex", alignItems: "center", justifyContent: "center",
           marginBottom: "16px",
-          boxShadow: "0 0 20px rgba(212,175,55,0.18)",
+          boxShadow: `0 0 20px ${gold(0.18)}`,
+          animation: "pulse-gold 3s ease-in-out infinite",
         }}>
           <svg viewBox="0 0 24 24" style={{ width: "18px", height: "18px", fill: G.standard }}>
             <path d="M18 10h-1V7c0-2.76-2.24-5-5-5S7 4.24 7 7v3H6c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-8c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3-9H9V7c0-1.66 1.34-3 3-3s3 1.34 3 3v3z" />
@@ -1581,8 +1845,22 @@ const LockedComparableSection = () => (
 
 const LockedInvestorMemoSection = () => (
   <section style={{ padding: "20px 0px 0px" }}>
-    {/* Label */}
-    <div style={{ ...FONT.label, color: G.emphasis, marginBottom: "8px" }}>Investor Documents</div>
+    {/* EyebrowPill */}
+    <div style={{
+      display: "inline-block",
+      fontFamily: "'Roboto Mono', monospace",
+      fontSize: "13px",
+      color: GOLD,
+      letterSpacing: "0.16em",
+      textTransform: "uppercase" as const,
+      background: gold(0.10),
+      border: `1px solid ${gold(0.25)}`,
+      padding: "6px 18px",
+      borderRadius: "999px",
+      marginBottom: "12px",
+    }}>
+      Investor Documents
+    </div>
 
     {/* Headline */}
     <div style={{ ...FONT.title, color: W.primary, marginBottom: "12px" }}>THE INVESTOR MEMO</div>
@@ -1676,11 +1954,12 @@ const LockedInvestorMemoSection = () => (
       }}>
         <div style={{
           width: "44px", height: "44px",
-          border: "1.5px solid rgba(212,175,55,0.70)",
+          border: `1.5px solid ${gold(0.70)}`,
           borderRadius: "50%",
           display: "flex", alignItems: "center", justifyContent: "center",
           marginBottom: "16px",
-          boxShadow: "0 0 24px rgba(212,175,55,0.25)",
+          boxShadow: `0 0 24px ${gold(0.25)}`,
+          animation: "pulse-gold 3s ease-in-out infinite",
         }}>
           <svg viewBox="0 0 24 24" style={{ width: "18px", height: "18px", fill: G.standard }}>
             <path d="M18 10h-1V7c0-2.76-2.24-5-5-5S7 4.24 7 7v3H6c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-8c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3-9H9V7c0-1.66 1.34-3 3-3s3 1.34 3 3v3z" />
@@ -1734,16 +2013,20 @@ const ConclusionSection = ({
   }
 
   return (
+    <SectionContainer>
     <section style={{ padding: "32px 24px 28px", position: "relative", overflow: "hidden" }}>
       {/* Gold top canopy — warmer (approaching CTA) */}
-      <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "200px", background: "radial-gradient(ellipse 80% 50% at 50% 0%, rgba(212,175,55,0.10) 0%, transparent 70%)", pointerEvents: "none" }} />
+      <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "200px", background: `radial-gradient(ellipse 80% 50% at 50% 0%, ${gold(0.10)} 0%, transparent 70%)`, pointerEvents: "none" }} />
       {/* Gold bottom canopy */}
-      <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "140px", background: "radial-gradient(ellipse 60% 40% at 50% 100%, rgba(212,175,55,0.04) 0%, transparent 60%)", pointerEvents: "none" }} />
-      {/* Full headline treatment */}
-      <div style={{ ...FONT.label, color: G.emphasis, marginBottom: "8px" }}>Where You Stand</div>
-      <div style={{ ...FONT.display, color: W.primary, marginBottom: "16px" }}>THE CONCLUSION</div>
+      <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "140px", background: `radial-gradient(ellipse 60% 40% at 50% 100%, ${gold(0.04)} 0%, transparent 60%)`, pointerEvents: "none" }} />
 
-      <div style={{ ...FONT.body, color: W.primary }}>
+      {/* Header Band — hot (approaching CTA) */}
+      <RevealSection>
+        <HeaderBand eyebrow="Where You Stand" title="THE CONCLUSION" hot />
+      </RevealSection>
+
+      <RevealSection delay={200}>
+      <div style={{ ...FONT.body, color: "rgba(250,248,244,0.88)" }}>
         {/* Paragraph 1: Consequence-first verdict */}
         <p style={{ marginBottom: "20px" }}>
           {allFunded && backendPool > 0 && (
@@ -1766,8 +2049,10 @@ const ConclusionSection = ({
           by someone who has done this before.
         </p>
       </div>
+      </RevealSection>
 
       {/* Pull-quote — verdict */}
+      <RevealSection delay={300}>
       <div style={{
         borderLeft: `3px solid ${borderColor}`,
         paddingLeft: "20px",
@@ -1783,12 +2068,16 @@ const ConclusionSection = ({
           {verdictText}
         </div>
       </div>
+      </RevealSection>
 
       {/* Gate 3 — embedded as visual evidence of what's missing */}
-      <LockedInvestorMemoSection />
+      <RevealSection delay={400}>
+        <LockedInvestorMemoSection />
+      </RevealSection>
 
       {/* Post-gate close */}
-      <div style={{ ...FONT.body, color: W.primary, marginTop: "24px" }}>
+      <RevealSection delay={500}>
+      <div style={{ ...FONT.body, color: "rgba(250,248,244,0.88)", marginTop: "24px" }}>
         <p>
           {multiple >= 1.0 ? (
             <>The model is the foundation. Without the presentation layer, you are asking investors to underwrite a spreadsheet, and that is not how deals close.</>
@@ -1797,7 +2086,9 @@ const ConclusionSection = ({
           )}
         </p>
       </div>
+      </RevealSection>
     </section>
+    </SectionContainer>
   );
 };
 
@@ -1903,17 +2194,18 @@ const CTASection = ({ result, inputs, project, guilds }: {
           }
         }}
       />
+      <SectionContainer hot style={{ marginTop: "8px" }}>
       <section style={{
         padding: "36px 24px 48px",
         textAlign: "center",
         position: "relative",
         overflow: "hidden",
       }}>
-        {/* Gold ambient glow */}
+        {/* Gold ambient glow — hotter for CTA */}
         <div style={{
           position: "absolute",
           inset: 0,
-          background: "radial-gradient(ellipse 80% 50% at 50% 20%, rgba(212,175,55,0.10) 0%, transparent 55%), radial-gradient(ellipse at center 40%, rgba(212,175,55,0.08) 0%, rgba(212,175,55,0.03) 40%, transparent 70%)",
+          background: `radial-gradient(ellipse 80% 50% at 50% 20%, ${gold(0.12)} 0%, transparent 55%), radial-gradient(ellipse at center 40%, ${gold(0.08)} 0%, ${gold(0.03)} 40%, transparent 70%)`,
         }} />
 
         {/* Warm top border */}
@@ -1921,23 +2213,29 @@ const CTASection = ({ result, inputs, project, guilds }: {
           position: "absolute",
           top: 0, left: 0, right: 0,
           height: "1px",
-          background: "linear-gradient(90deg, transparent 0%, rgba(212,175,55,0.25) 20%, rgba(212,175,55,0.50) 50%, rgba(212,175,55,0.25) 80%, transparent 100%)",
+          background: `linear-gradient(90deg, transparent 0%, ${gold(0.25)} 20%, ${gold(0.50)} 50%, ${gold(0.25)} 80%, transparent 100%)`,
         }} />
 
         <div style={{ position: "relative", zIndex: 1 }}>
-          {/* Headline — gold gradient text */}
+          {/* Headline — gold gradient text, larger */}
+          <RevealSection>
           <div style={{
-            ...FONT.title,
+            fontFamily: "'Bebas Neue', sans-serif",
+            fontSize: "clamp(2.4rem, 6vw, 3.0rem)",
+            letterSpacing: "0.10em",
+            lineHeight: 1.05,
             marginBottom: "28px",
-            background: "linear-gradient(135deg, #D4AF37, #F9E076)",
+            background: `linear-gradient(135deg, ${GOLD}, ${CTA})`,
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent",
             backgroundClip: "text",
           }}>
             YOUR INVESTORS WILL ASK.
           </div>
+          </RevealSection>
 
           {/* Section label */}
+          <RevealSection delay={100}>
           <div style={{
             ...FONT.label,
             color: G.emphasis,
@@ -1945,8 +2243,9 @@ const CTASection = ({ result, inputs, project, guilds }: {
             paddingLeft: "24px",
             marginBottom: "14px",
           }}>What the Full Analysis gives you</div>
+          </RevealSection>
 
-          {/* 6 benefit bullets — left-aligned */}
+          {/* 6 benefit bullets — staggered reveals */}
           <div style={{
             display: "flex",
             flexDirection: "column",
@@ -1962,32 +2261,37 @@ const CTASection = ({ result, inputs, project, guilds }: {
               "Formatted for due diligence, not just display",
               "White-labeled with your project name and production company",
               "Ready to hand across the table or attach to an email",
-            ].map((item) => (
-              <div key={item} style={{ display: "flex", gap: "10px", alignItems: "flex-start" }}>
-                <span style={{ color: "#3CB371", fontSize: "14px", marginTop: "2px", flexShrink: 0, width: "14px", textAlign: "center" }}>✓</span>
-                <span style={{ fontSize: "14px", color: W.secondary, lineHeight: 1.5, fontFamily: "'Inter', sans-serif" }}>{item}</span>
+            ].map((item, i) => (
+              <RevealSection key={item} delay={200 + i * 100}>
+              <div style={{ display: "flex", gap: "10px", alignItems: "flex-start" }}>
+                <span style={{ color: "#3CB371", fontSize: "14px", marginTop: "2px", flexShrink: 0, width: "14px", textAlign: "center", textShadow: "0 0 8px rgba(60,179,113,0.35)" }}>✓</span>
+                <span style={{ fontSize: "14px", color: "rgba(250,248,244,0.88)", lineHeight: 1.5, fontFamily: "'Inter', sans-serif" }}>{item}</span>
               </div>
+              </RevealSection>
             ))}
           </div>
 
-          {/* Primary CTA — gold, gated */}
+          {/* Primary CTA — gold with shimmer + idle glow */}
+          <RevealSection delay={900}>
           <div style={{ marginBottom: "16px" }}>
             <span
+              className="cta-gold-btn"
               onClick={(e) => { haptics.medium(e); gatedNavigate("/store/the-full-analysis"); }}
               style={{
                 display: "inline-block",
-                padding: "16px 36px",
-                background: "#F9E076",
+                padding: "18px 36px",
+                background: CTA,
                 border: "none",
+                borderTop: `1px solid ${white(0.15)}`,
                 borderRadius: "8px",
                 fontFamily: "'Bebas Neue', sans-serif",
                 fontSize: "20px",
-                letterSpacing: "0.15em",
+                letterSpacing: "0.18em",
                 color: "#000",
                 fontWeight: 700,
                 cursor: "pointer",
                 textDecoration: "none",
-                boxShadow: "0 0 20px rgba(249,224,118,0.30), 0 0 60px rgba(249,224,118,0.15)",
+                boxShadow: `0 0 20px rgba(249,224,118,0.30), 0 0 60px rgba(249,224,118,0.15)`,
                 position: "relative",
                 overflow: "hidden",
               }}
@@ -1995,20 +2299,34 @@ const CTASection = ({ result, inputs, project, guilds }: {
               GET THE FULL ANALYSIS
             </span>
           </div>
+          </RevealSection>
+
+          {/* Brand copy */}
+          <RevealSection delay={1000}>
+          <div style={{
+            fontFamily: "'Roboto Mono', monospace",
+            fontSize: "12px",
+            letterSpacing: "0.12em",
+            textTransform: "uppercase" as const,
+            color: GOLD,
+            marginBottom: "16px",
+            opacity: 0.7,
+          }}>
+            Built for independent producers.
+          </div>
+          </RevealSection>
 
           {/* Free snapshot — export PDF */}
-          <div style={{ marginTop: "12px" }}>
+          <RevealSection delay={1100}>
+          <div style={{ marginTop: "4px" }}>
             <span
               onClick={async (e) => {
                 haptics.light(e);
                 if (exporting) return;
-                // Check if user is authenticated
                 const { data: { session } } = await supabase.auth.getSession();
                 if (session?.user?.email) {
-                  // Already authed — export directly
                   handleExportPdf(session.user.email);
                 } else {
-                  // Need email first — open lead capture
                   setPendingExport(true);
                   setShowLeadCapture(true);
                 }
@@ -2016,13 +2334,13 @@ const CTASection = ({ result, inputs, project, guilds }: {
               style={{
                 display: "inline-block",
                 padding: "12px 28px",
-                border: `1px solid ${exporting ? 'rgba(212,175,55,0.25)' : 'rgba(255,255,255,0.12)'}`,
+                border: `1px solid ${exporting ? gold(0.25) : white(0.12)}`,
                 borderRadius: "8px",
                 fontSize: "14px",
                 fontFamily: "'Inter', sans-serif",
                 fontWeight: 500,
                 letterSpacing: "0.04em",
-                color: exporting ? '#D4AF37' : W.tertiary,
+                color: exporting ? GOLD : W.tertiary,
                 cursor: exporting ? 'wait' : 'pointer',
                 textDecoration: "none",
                 transition: "border-color 0.2s, color 0.2s",
@@ -2032,8 +2350,22 @@ const CTASection = ({ result, inputs, project, guilds }: {
               {exporting ? 'Generating PDF...' : 'Export Free Snapshot'}
             </span>
           </div>
+          </RevealSection>
+
+          {/* Urgency line */}
+          <RevealSection delay={1200}>
+          <div style={{
+            fontSize: "12px",
+            color: white(0.40),
+            marginTop: "12px",
+            fontFamily: "'Inter', sans-serif",
+          }}>
+            Your model is saved for 30 days
+          </div>
+          </RevealSection>
 
           {/* Footer provenance mark */}
+          <RevealSection delay={1300}>
           <div style={{
             display: "flex",
             alignItems: "center",
@@ -2041,16 +2373,18 @@ const CTASection = ({ result, inputs, project, guilds }: {
             gap: "10px",
             marginTop: "40px",
           }}>
-            <div style={{ flex: 1, maxWidth: "60px", height: "1px", background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.20))" }} />
+            <div style={{ flex: 1, maxWidth: "60px", height: "1px", background: `linear-gradient(90deg, transparent, ${gold(0.20)})` }} />
             <span style={{
               fontSize: "11px", fontWeight: 600,
               letterSpacing: "0.15em", textTransform: "uppercase" as const,
               color: W.quaternary,
             }}>filmmaker.og · Waterfall Snapshot</span>
-            <div style={{ flex: 1, maxWidth: "60px", height: "1px", background: "linear-gradient(90deg, rgba(212,175,55,0.20), transparent)" }} />
+            <div style={{ flex: 1, maxWidth: "60px", height: "1px", background: `linear-gradient(90deg, ${gold(0.20)}, transparent)` }} />
           </div>
+          </RevealSection>
         </div>
       </section>
+      </SectionContainer>
     </>
   );
 };
@@ -2068,9 +2402,10 @@ const WaterfallBrief = ({
 
   return (
     <div style={{
-      background: "#1A1A1C",
+      background: BG.void,
       maxWidth: "780px",
       margin: "0 auto",
+      padding: "0 clamp(12px, 3vw, 24px)",
     }}>
       {/* ═══ 1. TITLE PAGE ═══ */}
       <CoverSection
@@ -2082,13 +2417,15 @@ const WaterfallBrief = ({
 
       {/* ── GATE 0: Snapshot+ ── */}
       <div style={{ padding: "0 24px" }}>
-        <LockedSnapshotPlusSection onUnlock={() => {
-          // TODO: Wire to Stripe checkout for snapshot-plus product
-          // Snapshot+ unlock tapped — wire to Stripe checkout
-        }} />
+        <RevealSection>
+          <LockedSnapshotPlusSection onUnlock={() => {
+            // TODO: Wire to Stripe checkout for snapshot-plus product
+          }} />
+        </RevealSection>
       </div>
 
-      <GoldGlowBreak />
+      {/* Section spacing: 48px */}
+      <div style={{ height: "48px" }} />
 
       {/* ═══ 2. DENSE TEXT: THE DEAL ═══ */}
       <DealSection
@@ -2098,7 +2435,8 @@ const WaterfallBrief = ({
         project={project}
       />
 
-      <GoldGlowBreak />
+      {/* Section spacing: 56px */}
+      <div style={{ height: "56px" }} />
 
       {/* ═══ 3. VISUAL CLUSTER 1: THE NUMBERS ═══ */}
       <VisualCluster1
@@ -2108,7 +2446,8 @@ const WaterfallBrief = ({
         project={project}
       />
 
-      <GoldGlowBreak />
+      {/* Section spacing: 48px */}
+      <div style={{ height: "48px" }} />
 
       {/* ═══ 4. LIGHTER TEXT: THE INTERPRETATION ═══ */}
       <InterpretationSection
@@ -2118,7 +2457,8 @@ const WaterfallBrief = ({
         project={project}
       />
 
-      <GoldGlowBreak />
+      {/* Section spacing: 56px */}
+      <div style={{ height: "56px" }} />
 
       {/* ═══ 5. VISUAL CLUSTER 2: THE WATERFALL ═══ */}
       <VisualCluster2
@@ -2128,7 +2468,8 @@ const WaterfallBrief = ({
         guilds={guilds}
       />
 
-      <GoldGlowBreak />
+      {/* Section spacing: 64px — dramatic pause before conclusion */}
+      <div style={{ height: "64px" }} />
 
       {/* ═══ 6. DENSE TEXT: THE CONCLUSION ═══ */}
       <ConclusionSection
@@ -2138,7 +2479,8 @@ const WaterfallBrief = ({
         project={project}
       />
 
-      <GoldGlowBreak />
+      {/* Section spacing: 72px — biggest pause before CTA */}
+      <div style={{ height: "72px" }} />
 
       {/* ═══ 7. CTA ═══ */}
       <CTASection result={result} inputs={inputs} project={project} guilds={guilds} />
