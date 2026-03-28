@@ -307,18 +307,18 @@ const Index = () => {
       green: "rgba(60,179,113,0.55)",
     };
     const shadowMap: Record<string, string> = {
-      gold: "0 0 8px rgba(212,175,55,0.30)",
-      'gold-to-red': "0 0 8px rgba(220,38,38,0.20)",
-      red: "0 0 8px rgba(220,38,38,0.20)",
-      'red-strong': "0 0 10px rgba(220,38,38,0.25)",
-      'red-to-green': "0 0 8px rgba(60,179,113,0.20)",
-      green: "0 0 8px rgba(60,179,113,0.25)",
+      gold: "0 0 8px rgba(212,175,55,0.40)",
+      'gold-to-red': "0 0 8px rgba(220,38,38,0.30)",
+      red: "0 0 8px rgba(220,38,38,0.30)",
+      'red-strong': "0 0 10px rgba(220,38,38,0.35)",
+      'red-to-green': "0 0 8px rgba(60,179,113,0.30)",
+      green: "0 0 8px rgba(60,179,113,0.35)",
     };
     const arrowColor = colorMap[color];
     return (
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
         <div style={{
-          width: "2px",
+          width: "3px",
           height: "16px",
           background: lineColor[color],
           boxShadow: shadowMap[color],
@@ -404,7 +404,8 @@ const Index = () => {
           background: "linear-gradient(180deg, rgba(212,175,55,0.40), rgba(212,175,55,0.10))",
           zIndex: 50,
           pointerEvents: "none",
-          transition: "height 0.1s linear",
+          transition: "height 0.1s linear, opacity 0.3s ease",
+          opacity: scrollProgress < 0.15 ? scrollProgress / 0.15 : scrollProgress > 0.85 ? (1 - scrollProgress) / 0.15 : 1,
         }} />
       )}
 
@@ -414,13 +415,13 @@ const Index = () => {
         <section ref={heroRef} style={{ position: "relative", padding: "0 24px 0", background: "linear-gradient(180deg, rgba(212,175,55,0.03) 0%, transparent 70%)" }}>
           <div style={{ ...reveal(heroVisible), textAlign: "center" }}>
             {/* Film slate lines */}
-            <div style={{ height: "1px", width: "60%", margin: "0 auto 12px", background: "rgba(212,175,55,0.16)" }} />
+            <div style={{ height: "1px", width: "60%", margin: "0 auto 12px", background: "rgba(212,175,55,0.22)" }} />
             <h1 style={styles.heroH1}>
               Model Your
               <span style={styles.heroMid}>Recoupment</span>
               <em style={styles.heroEm}>Waterfall</em>
             </h1>
-            <div style={{ height: "1px", width: "60%", margin: "12px auto 0", background: "rgba(212,175,55,0.16)" }} />
+            <div style={{ height: "1px", width: "60%", margin: "12px auto 0", background: "rgba(212,175,55,0.22)" }} />
           </div>
 
           {/* ── Mini Calculator ── */}
@@ -516,7 +517,7 @@ const Index = () => {
               <p style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: "rgba(255,255,255,0.40)", letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: "4px" }}>Estimated Net Profit</p>
               <p style={{
                 fontFamily: "'Bebas Neue', sans-serif",
-                fontSize: "2.8rem",
+                fontSize: Math.abs(heroNetProfit) >= 500000 ? "3.4rem" : "3.0rem",
                 lineHeight: 1,
                 color: heroNetProfit >= 0 ? "#3CB371" : "#DC2626",
                 textShadow: heroNetProfit >= 0
@@ -540,21 +541,25 @@ const Index = () => {
         </section>
 
         {/* ── Section divider ── */}
-        <div style={{ height: "40px" }} />
+        <div style={{ height: "48px" }} />
 
         {/* ═══ § 2 WATERFALL ═══ */}
         <section ref={(el) => { waterfallSectionRef.current = el; }} style={{ padding: "0 24px" }}>
           <div style={{
-            background: "#1E1E22",
+            position: "relative",
+            overflow: "hidden",
+            background: "linear-gradient(180deg, rgba(212,175,55,0.02) 0%, #1E1E22 20%)",
             border: "1px solid rgba(212,175,55,0.20)",
+            borderTop: "1px solid rgba(255,255,255,0.06)",
             borderRadius: "8px",
-            padding: "28px 20px",
+            padding: "32px 16px",
             boxShadow: "0 4px 16px rgba(0,0,0,0.30)",
           }}>
+          <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, pointerEvents: "none", borderRadius: "8px", opacity: 0.03, backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E\")", backgroundRepeat: "repeat", backgroundSize: "256px 256px" }} />
           {/* Header */}
           <div ref={waterfallHeaderRef} style={{ ...reveal(waterfallHeaderVisible), textAlign: "center", paddingBottom: "24px" }}>
             <EyebrowPill text="How the money flows" />
-            <h2 style={styles.sectionH2}>The Recoupment<br /><span style={{ color: "#D4AF37", textShadow: "0 0 30px rgba(212,175,55,0.50), 0 0 80px rgba(212,175,55,0.20)" }}>Waterfall</span></h2>
+            <h2 style={styles.sectionH2}>The Recoupment<br /><span style={{ color: "#D4AF37", textShadow: "0 0 30px rgba(212,175,55,0.50), 0 0 80px rgba(212,175,55,0.10)" }}>Waterfall</span></h2>
           </div>
 
           <p style={{ ...styles.waterfallExplainer, ...reveal(waterfallHeaderVisible) }}>
@@ -566,8 +571,9 @@ const Index = () => {
             <div style={{ display: "inline-block", background: "rgba(212,175,55,0.04)", border: "1px solid rgba(212,175,55,0.12)", borderRadius: "999px", padding: "6px 16px" }}>
               <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "12px", color: "rgba(255,255,255,0.40)", letterSpacing: "0.12em", textTransform: "uppercase" }}>REMAINING: </span>
               <span style={{
-                fontFamily: "'Bebas Neue', sans-serif",
-                fontSize: "1.6rem",
+                fontFamily: "'Roboto Mono', monospace",
+                fontSize: "16px",
+                fontWeight: 600,
                 color: runningBalance > 0 ? "#D4AF37" : "#DC2626",
                 transition: "color 0.3s ease",
               }}>{fmtFull(runningBalance)}</span>
@@ -803,12 +809,16 @@ const Index = () => {
         {/* ═══ § 3 SOCIAL PROOF ═══ */}
         <section ref={socialRef} style={{ padding: "0 24px" }}>
           <div style={{
-            background: "#1E1E22",
+            position: "relative",
+            overflow: "hidden",
+            background: "linear-gradient(180deg, rgba(212,175,55,0.03) 0%, #1E1E22 25%)",
             border: "1px solid rgba(212,175,55,0.20)",
+            borderTop: "1px solid rgba(255,255,255,0.06)",
             borderRadius: "8px",
-            padding: "28px 20px",
+            padding: "32px 16px",
             boxShadow: "0 4px 16px rgba(0,0,0,0.30)",
           }}>
+          <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, pointerEvents: "none", borderRadius: "8px", opacity: 0.03, backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E\")", backgroundRepeat: "repeat", backgroundSize: "256px 256px" }} />
           <div style={{ ...reveal(socialVisible), textAlign: "center" }}>
             <EyebrowPill text="Trusted By Filmmakers" />
           </div>
@@ -816,7 +826,6 @@ const Index = () => {
           {/* Testimonial blockquote */}
           <div style={{
             ...reveal(socialVisible, 1),
-            borderLeft: "3px solid rgba(212,175,55,0.55)",
             paddingLeft: "16px",
             margin: "16px 0 24px",
           }}>
@@ -850,15 +859,19 @@ const Index = () => {
         {/* ═══ § 4 WHAT'S AT STAKE ═══ */}
         <section ref={stakeRef} style={{ padding: "0 24px" }}>
           <div style={{
+            position: "relative",
+            overflow: "hidden",
             background: "#1E1E22",
             border: "1px solid rgba(212,175,55,0.20)",
+            borderTop: "1px solid rgba(255,255,255,0.06)",
             borderRadius: "8px",
-            padding: "28px 20px",
+            padding: "32px 16px",
             boxShadow: "0 4px 16px rgba(0,0,0,0.30)",
           }}>
+          <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, pointerEvents: "none", borderRadius: "8px", opacity: 0.03, backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E\")", backgroundRepeat: "repeat", backgroundSize: "256px 256px" }} />
           <div style={{ ...reveal(stakeVisible), textAlign: "center", marginBottom: "20px" }}>
             <EyebrowPill text="What's At Stake" />
-            <h2 style={styles.sectionH2}><span style={{ color: "#D4AF37", textShadow: "0 0 30px rgba(212,175,55,0.50), 0 0 80px rgba(212,175,55,0.20)" }}>(4) Four</span> Reasons<br />You Can't Skip This</h2>
+            <h2 style={styles.sectionH2}><span style={{ color: "#D4AF37", textShadow: "0 0 30px rgba(212,175,55,0.50), 0 0 80px rgba(212,175,55,0.10)" }}>(4) Four</span> Reasons<br />You Can't Skip This</h2>
           </div>
 
           <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
@@ -870,13 +883,14 @@ const Index = () => {
                   background: "#242428",
                   border: "1px solid rgba(212,175,55,0.20)",
                   borderRadius: "8px",
-                  borderLeft: "3px solid rgba(212,175,55,0.55)",
-                  padding: "20px 16px",
+                  padding: "16px 14px",
                 }}
               >
-                <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "2rem", color: "#D4AF37", lineHeight: 1 }}>{card.num}</span>
-                <p style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.4rem", color: "rgba(255,255,255,0.95)", marginBottom: "4px", lineHeight: 1.05, marginTop: "4px" }}>{card.title}</p>
-                <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "15px", color: "rgba(255,255,255,0.60)", lineHeight: 1.45 }}>{card.body}</p>
+                <div style={{ display: "flex", alignItems: "baseline", gap: "10px", marginBottom: "6px" }}>
+                  <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "#D4AF37", lineHeight: 1, flexShrink: 0 }}>{card.num}</span>
+                  <p style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.3rem", color: "rgba(255,255,255,0.95)", lineHeight: 1.1, margin: 0 }}>{card.title}</p>
+                </div>
+                <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "15px", color: "rgba(255,255,255,0.65)", lineHeight: 1.45 }}>{card.body}</p>
               </div>
             ))}
           </div>
@@ -889,13 +903,17 @@ const Index = () => {
         {/* ═══ § 5 REALITY ═══ */}
         <section style={{ padding: "0 24px" }}>
           <div style={{
-            background: "#1E1E22",
+            position: "relative",
+            overflow: "hidden",
+            background: "linear-gradient(180deg, rgba(220,38,38,0.015) 0%, #1E1E22 25%)",
             border: "1px solid rgba(212,175,55,0.20)",
+            borderTop: "1px solid rgba(255,255,255,0.06)",
             borderRadius: "8px",
-            padding: "28px 20px",
+            padding: "32px 16px",
             boxShadow: "0 4px 16px rgba(0,0,0,0.30)",
             textAlign: "left",
           }}>
+          <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, pointerEvents: "none", borderRadius: "8px", opacity: 0.03, backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E\")", backgroundRepeat: "repeat", backgroundSize: "256px 256px" }} />
           {/* Typing reveal blockquote */}
           <div
             ref={realityQuoteRef}
@@ -903,8 +921,7 @@ const Index = () => {
               background: "#242428",
               border: "1px solid rgba(212,175,55,0.20)",
               borderRadius: "8px",
-              borderLeft: "3px solid rgba(212,175,55,0.55)",
-              padding: "24px 20px",
+              padding: "16px 14px",
               textAlign: "center",
               marginBottom: "24px",
               ...reveal(realityQuoteVisible),
@@ -917,10 +934,16 @@ const Index = () => {
               lineHeight: 1.1,
               letterSpacing: "0.02em",
             }}>
-              {realityQuote.slice(0, typedChars)}
-              {!typingDone && <span className="typing-cursor" style={{ display: "inline-block", width: "2px", height: "1.8rem", background: "#D4AF37", marginLeft: "2px", verticalAlign: "text-bottom", animation: "cursor-blink 0.8s steps(2) infinite" }} />}
-              {typingDone && (
-                <span style={{ color: "#D4AF37" }}></span>
+              {typingDone ? (
+                <>
+                  {realityQuote.slice(0, realityQuote.lastIndexOf("later."))}
+                  <span style={{ color: "#D4AF37", textShadow: "0 0 20px rgba(212,175,55,0.30)" }}>later.</span>
+                </>
+              ) : (
+                <>
+                  {realityQuote.slice(0, typedChars)}
+                  <span className="typing-cursor" style={{ display: "inline-block", width: "2px", height: "1.8rem", background: "#D4AF37", marginLeft: "2px", verticalAlign: "text-bottom", animation: "cursor-blink 0.8s steps(2) infinite" }} />
+                </>
               )}
             </p>
           </div>
@@ -938,10 +961,10 @@ const Index = () => {
               display: "grid", gridTemplateColumns: "1fr 1fr",
               borderBottom: "1px solid rgba(255,255,255,0.08)",
             }}>
-              <div style={{ background: "#1E1E22", padding: "14px 16px", borderBottom: "1px solid rgba(60,179,113,0.20)" }}>
+              <div style={{ background: "#242428", padding: "14px 16px", borderBottom: "1px solid rgba(60,179,113,0.20)" }}>
                 <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.6rem", color: "#3CB371", letterSpacing: "0.04em" }}>WITH</span>
               </div>
-              <div style={{ background: "#1E1E22", padding: "14px 16px", borderLeft: "1px solid rgba(255,255,255,0.08)", borderBottom: "1px solid rgba(220,38,38,0.12)" }}>
+              <div style={{ background: "#242428", padding: "14px 16px", borderLeft: "1px solid rgba(255,255,255,0.08)", borderBottom: "1px solid rgba(220,38,38,0.12)" }}>
                 <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.6rem", color: "rgba(220,38,38,0.85)", letterSpacing: "0.04em" }}>WITHOUT</span>
               </div>
             </div>
@@ -977,12 +1000,12 @@ const Index = () => {
         </section>
 
         {/* ── Section divider ── */}
-        <div style={{ height: "40px" }} />
+        <div style={{ height: "56px" }} />
 
         {/* ═══ § 6 CLOSER ═══ */}
-        <section ref={closerRef} style={{ ...reveal(closerVisible), textAlign: "center", padding: "0 24px 0" }}>
+        <section ref={closerRef} style={{ ...reveal(closerVisible), textAlign: "center", padding: "32px 24px 24px" }}>
           {/* Film slate lines */}
-          <div style={{ height: "1px", width: "60%", margin: "0 auto 16px", background: "rgba(212,175,55,0.16)" }} />
+          <div style={{ height: "1px", width: "60%", margin: "0 auto 16px", background: "rgba(212,175,55,0.22)" }} />
           <h2 style={{
             fontFamily: "'Bebas Neue', sans-serif",
             fontSize: "3.4rem",
@@ -998,14 +1021,14 @@ const Index = () => {
             fontFamily: "'Inter', sans-serif", fontSize: "16px", color: "rgba(255,255,255,0.78)",
             lineHeight: 1.55, margin: "0 auto 28px",
           }}>
-            Will you have the answer? Build your waterfall model now and walk into every meeting with confidence.
+            Will you have the answer? Build your waterfall now and walk in prepared.
           </p>
           <button onClick={handleCTA} style={styles.ctaBtn} aria-label="Build my waterfall" onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>
             <span style={{ position: "relative", zIndex: 1 }}>BUILD MY WATERFALL — FREE</span>
             <div style={styles.ctaShimmer} />
           </button>
           <p style={styles.ctaReassurance}>No Credit Card · Instant Results</p>
-          <div style={{ height: "1px", width: "60%", margin: "16px auto 0", background: "rgba(212,175,55,0.16)" }} />
+          <div style={{ height: "1px", width: "60%", margin: "16px auto 0", background: "rgba(212,175,55,0.22)" }} />
         </section>
 
         {/* ── Section divider ── */}
@@ -1014,7 +1037,7 @@ const Index = () => {
         {/* ═══ § 6.5 PRODUCT PREVIEW — Real Output ═══ */}
         <section ref={previewRef} style={{ position: "relative", background: "#0C0C0E", padding: "0 24px 0" }}>
           <div style={{ ...reveal(previewVisible), textAlign: "center", marginBottom: "16px" }}>
-            <p style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: "rgba(255,255,255,0.40)", letterSpacing: "0.12em", textTransform: "uppercase" }}>What You'll Build</p>
+            <EyebrowPill text="What You'll Build" />
           </div>
           <div style={{
             ...reveal(previewVisible, 1),
@@ -1140,7 +1163,7 @@ const styles: Record<string, React.CSSProperties> = {
     textTransform: "uppercase", color: "#000",
     background: "#F9E076", padding: "18px 0",
     letterSpacing: "0.18em", fontSize: "20px",
-    borderRadius: "8px", border: "none", cursor: "pointer",
+    borderRadius: "8px", border: "none", borderTop: "1px solid rgba(255,255,255,0.15)", cursor: "pointer",
     display: "block", width: "100%", textAlign: "center",
     animation: "cta-idle-glow 4s ease-in-out infinite",
   },
@@ -1184,7 +1207,7 @@ const styles: Record<string, React.CSSProperties> = {
   } as React.CSSProperties,
 
   /* ── Section header ── */
-  sectionH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.6rem", color: "#fff", lineHeight: 0.95, textShadow: "0 2px 24px rgba(0,0,0,0.6)", marginBottom: "8px" },
+  sectionH2: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.2rem", color: "#fff", lineHeight: 0.95, textShadow: "0 2px 24px rgba(0,0,0,0.6)", marginBottom: "8px" },
 
   /* ── § 2 WATERFALL ── */
   waterfallExplainer: {
@@ -1196,7 +1219,7 @@ const styles: Record<string, React.CSSProperties> = {
 
   /* ── FOOTER ── */
   footer: { background: "#1E1E22", borderTop: "1px solid rgba(212,175,55,0.15)", padding: "32px 24px 40px" },
-  footerLinks: { display: "flex", justifyContent: "center", gap: "20px", marginBottom: "16px" },
+  footerLinks: { display: "flex", justifyContent: "center", gap: "24px", marginBottom: "16px" },
   footerIcon: { color: "rgba(212,175,55,0.50)", textDecoration: "none", display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", padding: "4px", borderRadius: "8px", border: "1px solid rgba(212,175,55,0.20)", transition: "color 0.2s ease, border-color 0.2s ease", boxSizing: "content-box" },
   footerNav: { display: "flex", justifyContent: "center", alignItems: "center", gap: "10px", marginBottom: "16px" },
   footerNavLink: { fontFamily: "'Roboto Mono', monospace", fontSize: "13px", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(212,175,55,0.50)", cursor: "pointer", transition: "color 0.2s ease" } as React.CSSProperties,
