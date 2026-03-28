@@ -131,20 +131,15 @@ function getCardBorderStyle(state: CardState, hovered: boolean): React.CSSProper
   switch (state) {
     case "gold-featured":
       return {
-        border: hovered ? "1px solid rgba(212,175,55,0.50)" : "1px solid rgba(212,175,55,0.30)",
-        boxShadow: hovered
-          ? "0 20px 50px rgba(0,0,0,0.9), 0 0 40px rgba(212,175,55,0.18)"
-          : "0 16px 40px rgba(0,0,0,0.8), 0 0 30px rgba(212,175,55,0.14)",
+        border: hovered ? "1px solid rgba(212,175,55,0.50)" : "1px solid rgba(212,175,55,0.25)",
       };
     case "neutral":
       return {
         border: hovered ? "1px solid rgba(255,255,255,0.20)" : "1px solid rgba(255,255,255,0.10)",
-        boxShadow: hovered ? "0 20px 50px rgba(0,0,0,0.6)" : "none",
       };
     default: // gold
       return {
-        border: hovered ? "1px solid rgba(212,175,55,0.35)" : "1px solid rgba(212,175,55,0.20)",
-        boxShadow: hovered ? "0 20px 50px rgba(0,0,0,0.8), 0 0 20px rgba(212,175,55,0.12)" : "0 8px 24px rgba(0,0,0,0.6), 0 0 20px rgba(212,175,55,0.08)",
+        border: hovered ? "1px solid rgba(212,175,55,0.35)" : "1px solid rgba(212,175,55,0.15)",
       };
   }
 }
@@ -556,11 +551,8 @@ const Resources = () => {
           margin: "0 24px",
           borderRadius: 8,
           overflow: "hidden",
-          background: "rgba(6,6,6,0.92)",
-          backdropFilter: "blur(40px)",
-          WebkitBackdropFilter: "blur(40px)",
-          border: "1px solid rgba(212,175,55,0.12)",
-          boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 24px rgba(212,175,55,0.10)",
+          background: "#0A0A0A",
+          border: "1px solid rgba(212,175,55,0.15)",
           ...reveal(headerVisible),
         }}>
           {/* Triple radial glow */}
@@ -604,8 +596,7 @@ const Resources = () => {
       {/* ---- BREATH LINE ---- */}
       <div style={{
         height: 1,
-        background: "linear-gradient(90deg, transparent 5%, rgba(212,175,55,0.35) 50%, transparent 95%)",
-        boxShadow: "0 0 12px rgba(212,175,55,0.2)",
+        background: "linear-gradient(90deg, transparent 5%, rgba(212,175,55,0.15) 50%, transparent 95%)",
         margin: "0 24px",
       }} />
 
@@ -888,16 +879,14 @@ const Resources = () => {
               position: "relative",
               overflow: "hidden",
               padding: "22px 20px",
-              background: "radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.08) 0%, #0A0A0A 70%)",
+              background: "#0A0A0A",
               cursor: "pointer",
               textDecoration: "none",
               color: "inherit",
               display: "block",
               transition: "all 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
               transform: pinnedPrimaryHover ? "translateY(-3px)" : "translateY(0)",
-              boxShadow: pinnedPrimaryHover
-                ? "0 20px 50px rgba(0,0,0,0.9), 0 0 50px rgba(212,175,55,0.12)"
-                : "none",
+              boxShadow: "none",
               ...reveal(pinnedVisible),
             }}
             onMouseEnter={() => setPinnedPrimaryHover(true)}
@@ -976,7 +965,7 @@ const Resources = () => {
                 padding: "6px 14px",
                 borderRadius: 4,
                 fontWeight: 600,
-                boxShadow: "0 0 12px rgba(212,175,55,0.4)",
+                boxShadow: "none",
               }}>
                 Editor&apos;s Choice
               </span>
@@ -1002,9 +991,7 @@ const Resources = () => {
               padding: "22px 18px",
               background: "#0A0A0A",
               border: "1px solid rgba(212,175,55,0.20)",
-              boxShadow: pinnedSecondaryHover
-                ? "0 20px 50px rgba(0,0,0,0.8), 0 0 20px rgba(212,175,55,0.05)"
-                : "0 16px 40px rgba(0,0,0,0.6)",
+              boxShadow: "none",
               cursor: "pointer",
               textDecoration: "none",
               color: "inherit",

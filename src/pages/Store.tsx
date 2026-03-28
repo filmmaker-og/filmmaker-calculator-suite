@@ -559,15 +559,14 @@ const btnGoldVol: React.CSSProperties = {
   letterSpacing: "0.08em", textTransform: "uppercase" as const,
   color: "#000", textAlign: "center" as const, display: "block" as const,
   background: "linear-gradient(180deg, #D4AF37 0%, #B8962E 100%)",
-  boxShadow: "inset 0 1px 1px rgba(255,255,255,0.30), inset 0 -2px 4px rgba(0,0,0,0.3), 0 0 0 1px rgba(212,175,55,0.60), 0 8px 24px rgba(0,0,0,0.5), 0 0 40px rgba(212,175,55,0.45), 0 0 20px rgba(212,175,55,0.15)",
-  textShadow: "0 1px 0 rgba(255,255,255,0.15)",
+  boxShadow: "0 0 20px rgba(212,175,55,0.25), 0 0 60px rgba(212,175,55,0.10)",
 };
 
 const btnGoldVolSecondary: React.CSSProperties = {
   ...btnGoldVol,
   padding: "14px 0", fontSize: "16px",
   background: "linear-gradient(180deg, rgba(212,175,55,0.80) 0%, rgba(184,150,46,0.80) 100%)",
-  boxShadow: "inset 0 1px 1px rgba(255,255,255,0.20), inset 0 -2px 4px rgba(0,0,0,0.2), 0 0 0 1px rgba(212,175,55,0.40), 0 4px 16px rgba(0,0,0,0.4), 0 0 20px rgba(212,175,55,0.15)",
+  boxShadow: "0 0 16px rgba(212,175,55,0.15), 0 0 40px rgba(212,175,55,0.08)",
   marginTop: "10px",
 };
 
