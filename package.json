@@ -1,7 +1,10 @@
 {
-  "name": "vite_react_shadcn_ts",
+  "name": "filmmaker-calculator-suite",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "Film finance simulator — budget calculator, recoupment waterfall, and capital stack modeling for independent producers.",
+  "author": "Filmmaker.OG",
+  "homepage": "https://filmmakerog.com",
   "type": "module",
   "scripts": {
     "dev": "vite",

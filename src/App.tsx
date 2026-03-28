@@ -19,8 +19,8 @@ import Index from "./pages/Index";
 const BudgetInfo = lazy(() => import("./pages/BudgetInfo"));
 const CapitalInfo = lazy(() => import("./pages/CapitalInfo"));
 const FeesInfo = lazy(() => import("./pages/FeesInfo"));
-const WaterfallInfo = lazy(() => import("./pages/WaterfallInfo"));
-const Glossary = lazy(() => import("./pages/Glossary"));
+// WaterfallInfo removed — /waterfall-info redirects to /resources?tab=waterfall
+// Glossary removed — /glossary redirects to /resources?tab=terms
 const Resources = lazy(() => import("./pages/Resources"));
 const Auth = lazy(() => import("./pages/Auth"));
 const Calculator = lazy(() => import("./pages/Calculator"));
