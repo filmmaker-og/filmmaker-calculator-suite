@@ -150,11 +150,11 @@ const CalcHero = ({ stepLabel, title, titleGold, subtitle, visible }: {
         backdropFilter: "blur(40px)",
         WebkitBackdropFilter: "blur(40px)",
         border: "1px solid rgba(212,175,55,0.20)",
-        boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 24px rgba(212,175,55,0.10), 0 0 20px rgba(120,60,180,0.15)",
+        boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 24px rgba(212,175,55,0.10)",
       }}>
         <div style={{
           position: "absolute", top: 0, left: 0, right: 0, bottom: 0, pointerEvents: "none",
-          background: "radial-gradient(ellipse 80% 50% at 50% 10%, rgba(212,175,55,0.22) 0%, transparent 60%), radial-gradient(ellipse 60% 40% at 50% 50%, rgba(120,60,180,0.16) 0%, transparent 60%), radial-gradient(ellipse 100% 70% at 50% 100%, rgba(120,60,180,0.20) 0%, transparent 60%)",
+          background: "#0A0A0A",
         }} />
         <div style={{ position: "relative", zIndex: 1 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12, padding: "0 8px" }}>

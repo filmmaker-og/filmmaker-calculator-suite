@@ -236,7 +236,7 @@ const WaterfallInfo = () => {
 
             <div className="relative bg-white/[0.04] border border-white/[0.10] p-8 md:p-10 overflow-hidden"
               style={{ boxShadow: '0 0 30px rgba(212,175,55,0.06)' }}>
-              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_center,_rgba(212,175,55,0.08)_0%,_transparent_60%)]" />
+              {/* atmospheric gradient removed per brand system */}
 
               <div className="relative z-10 flex flex-col items-center text-center space-y-6">
                 <h3 className="font-bebas text-[32px] md:text-[40px] tracking-[0.06em] leading-[1.1] text-white">

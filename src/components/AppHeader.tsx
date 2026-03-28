@@ -73,7 +73,7 @@ const AppHeader = ({ onMoreOpen }: AppHeaderProps) => {
             borderRadius: "12px",
             background: "rgba(6,6,6,0.85)",
             border: "1px solid rgba(212,175,55,0.35)",
-            boxShadow: "0 2px 24px rgba(0,0,0,0.8), 0 0 12px rgba(212,175,55,0.06), 0 0 8px rgba(120,60,180,0.08)",
+            boxShadow: "0 2px 24px rgba(0,0,0,0.8), 0 0 12px rgba(212,175,55,0.06)",
             backdropFilter: "blur(24px)",
             WebkitBackdropFilter: "blur(24px)",
             paddingLeft: "20px",

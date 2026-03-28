@@ -196,11 +196,11 @@ function getHazeStyle(state: CardState): React.CSSProperties {
   };
   switch (state) {
     case "gold-featured":
-      return { ...base, background: "radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.18) 0%, transparent 70%)" };
+      return { ...base, background: "#0A0A0A" };
     case "neutral":
       return { ...base, display: "none" };
     default:
-      return { ...base, background: "radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.14) 0%, transparent 70%)" };
+      return { ...base, background: "#0A0A0A" };
   }
 }
 
@@ -293,7 +293,7 @@ const VaultCard: React.FC<{
       target={entry.external ? "_blank" : undefined}
       rel={entry.external ? "noopener noreferrer" : undefined}
       style={{
-        borderRadius: 12,
+        borderRadius: 8,
         position: "relative",
         overflow: "hidden",
         background: "#0A0A0A",
@@ -554,19 +554,19 @@ const Resources = () => {
           position: "relative", textAlign: "center",
           padding: "24px 24px 16px",
           margin: "0 24px",
-          borderRadius: 12,
+          borderRadius: 8,
           overflow: "hidden",
           background: "rgba(6,6,6,0.92)",
           backdropFilter: "blur(40px)",
           WebkitBackdropFilter: "blur(40px)",
           border: "1px solid rgba(212,175,55,0.12)",
-          boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 24px rgba(212,175,55,0.10), 0 0 20px rgba(120,60,180,0.15)",
+          boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 24px rgba(212,175,55,0.10)",
           ...reveal(headerVisible),
         }}>
           {/* Triple radial glow */}
           <div style={{
             position: "absolute", top: 0, left: 0, right: 0, bottom: 0, pointerEvents: "none",
-            background: "radial-gradient(ellipse 80% 50% at 50% 10%, rgba(212,175,55,0.22) 0%, transparent 60%), radial-gradient(ellipse 60% 40% at 50% 50%, rgba(120,60,180,0.16) 0%, transparent 60%), radial-gradient(ellipse 100% 70% at 50% 100%, rgba(120,60,180,0.20) 0%, transparent 60%)",
+            background: "#0A0A0A",
           }} />
           <div style={{ position: "relative", zIndex: 1 }}>
             <h1 style={{
@@ -614,7 +614,7 @@ const Resources = () => {
         position: "sticky",
         top: 0,
         zIndex: 50,
-        background: "linear-gradient(180deg, rgba(120,60,180,0.08) 0%, rgba(0,0,0,0.88) 100%)",
+        background: "#000",
         backdropFilter: "blur(24px)",
         WebkitBackdropFilter: "blur(24px)",
         borderTop: "1px solid rgba(212,175,55,0.10)",
@@ -672,7 +672,7 @@ const Resources = () => {
                 width: "100%",
                 background: searchInputFocused ? "rgba(212,175,55,0.08)" : "rgba(212,175,55,0.06)",
                 border: searchInputFocused ? "1px solid rgba(212,175,55,0.40)" : "1px solid rgba(212,175,55,0.25)",
-                borderRadius: 12,
+                borderRadius: 8,
                 color: "rgba(255,255,255,0.95)",
                 fontFamily: "'Inter', sans-serif",
                 fontSize: 16,
@@ -681,7 +681,7 @@ const Resources = () => {
                 outline: "none",
                 transition: "all 0.3s",
                 boxSizing: "border-box",
-                boxShadow: searchInputFocused ? "0 0 20px rgba(120,60,180,0.15)" : "0 0 12px rgba(120,60,180,0.06)",
+                boxShadow: searchInputFocused ? "0 0 12px rgba(212,175,55,0.06)" : "0 0 8px rgba(212,175,55,0.04)",
               }}
               autoComplete="off"
             />
@@ -733,7 +733,7 @@ const Resources = () => {
                 color: dropdownOpen ? "#D4AF37" : "rgba(255,255,255,0.75)",
                 background: "rgba(255,255,255,0.04)",
                 border: dropdownOpen ? "1px solid rgba(212,175,55,0.20)" : "1px solid rgba(255,255,255,0.10)",
-                borderRadius: 12,
+                borderRadius: 8,
                 height: 48,
                 width: 48,
                 padding: 0,
@@ -768,7 +768,7 @@ const Resources = () => {
                 width: 240,
                 background: "rgba(8,8,8,0.98)",
                 border: "1px solid rgba(255,255,255,0.08)",
-                borderRadius: 12,
+                borderRadius: 8,
                 backdropFilter: "blur(20px)",
                 boxShadow: "0 15px 40px rgba(0,0,0,0.9)",
                 display: "flex",
@@ -884,7 +884,7 @@ const Resources = () => {
           <a
             href="#"
             style={{
-              borderRadius: 12,
+              borderRadius: 8,
               position: "relative",
               overflow: "hidden",
               padding: "22px 20px",
@@ -907,7 +907,7 @@ const Resources = () => {
             <div style={{
               position: "absolute",
               inset: 0,
-              borderRadius: 12,
+              borderRadius: 8,
               border: "1px solid rgba(212,175,55,0.40)",
               pointerEvents: "none",
             }} />
@@ -926,14 +926,14 @@ const Resources = () => {
               position: "absolute", top: 12, right: 14,
               display: "flex", alignItems: "center", gap: 6, zIndex: 2,
             }}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(120,60,180,0.85)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(212,175,55,0.70)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M12 17v5" />
                 <path d="M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V6h1a2 2 0 0 0 0-4H8a2 2 0 0 0 0 4h1v4.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24Z" />
               </svg>
               <span style={{
                 fontFamily: "'Roboto Mono', monospace", fontSize: 10,
                 letterSpacing: "0.12em", textTransform: "uppercase",
-                color: "rgba(120,60,180,0.75)", fontWeight: 600,
+                color: "rgba(212,175,55,0.65)", fontWeight: 600,
               }}>Pinned</span>
             </div>
             <span style={{
@@ -996,7 +996,7 @@ const Resources = () => {
           <a
             href="#"
             style={{
-              borderRadius: 12,
+              borderRadius: 8,
               position: "relative",
               overflow: "hidden",
               padding: "22px 18px",
@@ -1032,14 +1032,14 @@ const Resources = () => {
               position: "absolute", top: 12, right: 14,
               display: "flex", alignItems: "center", gap: 6, zIndex: 2,
             }}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(120,60,180,0.85)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(212,175,55,0.70)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M12 17v5" />
                 <path d="M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V6h1a2 2 0 0 0 0-4H8a2 2 0 0 0 0 4h1v4.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24Z" />
               </svg>
               <span style={{
                 fontFamily: "'Roboto Mono', monospace", fontSize: 10,
                 letterSpacing: "0.12em", textTransform: "uppercase",
-                color: "rgba(120,60,180,0.75)", fontWeight: 600,
+                color: "rgba(212,175,55,0.65)", fontWeight: 600,
               }}>Pinned</span>
             </div>
             <span style={{
@@ -1099,7 +1099,7 @@ const Resources = () => {
       {/* Purple separator — pinned → grid */}
       <div style={{
         height: 1,
-        background: "linear-gradient(90deg, transparent 10%, rgba(120,60,180,0.20) 50%, transparent 90%)",
+        background: "linear-gradient(90deg, transparent 10%, rgba(212,175,55,0.12) 50%, transparent 90%)",
         margin: "12px 24px 0",
       }} />
 
@@ -1166,7 +1166,7 @@ const Resources = () => {
             letterSpacing: "0.1em",
             textTransform: "uppercase",
             background: "rgba(255,255,255,0.02)",
-            borderRadius: 12,
+            borderRadius: 8,
             border: "1px dashed rgba(255,255,255,0.08)",
           }}>
             No assets found matching those parameters.
