@@ -767,7 +767,7 @@ const Index = () => {
         </section>
 
         {/* ── Section divider ── */}
-        <div style={{ maxWidth: "120px", height: "1px", background: "rgba(212,175,55,0.15)", margin: "32px auto" }} />
+        <div style={{ maxWidth: "120px", height: "1px", background: "rgba(212,175,55,0.15)", margin: "48px auto" }} />
 
         {/* ═══ § 3 SOCIAL PROOF ═══ */}
         <section ref={socialRef} style={{ position: "relative", background: "#000", padding: "0 24px 0" }}>
@@ -807,24 +807,15 @@ const Index = () => {
             ))}
           </div>
 
-          {/* Feature badges */}
-          <div style={{ ...reveal(socialVisible, 3), display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
-            {[
-              { label: "11-Tier Waterfall", icon: "📊" },
-              { label: "PDF Export", icon: "📄" },
-              { label: "Profit Split", icon: "💰" },
-              { label: "Deal Verdict", icon: "⚖️" },
-            ].map((badge) => (
-              <div key={badge.label} style={{
-                background: "#0A0A0A",
-                border: "1px solid rgba(212,175,55,0.15)",
-                borderRadius: "8px",
-                padding: "12px",
-                textAlign: "center",
-              }}>
-                <div style={{ fontSize: "20px", marginBottom: "4px" }}>{badge.icon}</div>
-                <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "13px", color: "rgba(255,255,255,0.75)" }}>{badge.label}</p>
-              </div>
+          {/* Feature badges — text only, no emojis */}
+          <div style={{ ...reveal(socialVisible, 3), display: "flex", flexWrap: "wrap", gap: "8px", justifyContent: "center" }}>
+            {["11-Tier Waterfall", "PDF Export", "Profit Split", "Deal Verdict"].map((feat) => (
+              <div key={feat} style={{
+                fontFamily: "'Roboto Mono', monospace", fontSize: "11px",
+                color: "rgba(212,175,55,0.70)", letterSpacing: "0.06em",
+                textTransform: "uppercase", padding: "8px 14px", borderRadius: "999px",
+                border: "1px solid rgba(212,175,55,0.20)", background: "rgba(212,175,55,0.03)",
+              }}>{feat}</div>
             ))}
           </div>
         </section>
@@ -978,7 +969,7 @@ const Index = () => {
         {/* ── Section divider ── */}
         <div style={{ maxWidth: "120px", height: "1px", background: "rgba(212,175,55,0.15)", margin: "32px auto" }} />
 
-        {/* ═══ § 6.5 PRODUCT PREVIEW STRIP ═══ */}
+        {/* ═══ § 6.5 PRODUCT PREVIEW — Real Output ═══ */}
         <section ref={previewRef} style={{ position: "relative", background: "#000", padding: "0 24px 0" }}>
           <div style={{ ...reveal(previewVisible), textAlign: "center", marginBottom: "16px" }}>
             <p style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: "rgba(255,255,255,0.40)", letterSpacing: "0.12em", textTransform: "uppercase" }}>What You'll Build</p>
@@ -990,33 +981,73 @@ const Index = () => {
             overflowX: "auto",
             paddingBottom: "8px",
             scrollSnapType: "x mandatory",
-          }}>
-            {[
-              { label: "Capital Stack", accent: "#D4AF37", border: "rgba(212,175,55,0.25)" },
-              { label: "Waterfall View", accent: "#DC2626", border: "rgba(220,38,38,0.25)" },
-              { label: "Profit Split", accent: "#3CB371", border: "rgba(60,179,113,0.25)" },
-            ].map((screen) => (
-              <div key={screen.label} style={{
-                minWidth: "240px",
-                height: "160px",
-                background: "#0A0A0A",
-                border: `1px solid ${screen.border}`,
-                borderRadius: "8px",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: "8px",
-                scrollSnapAlign: "start",
-                flexShrink: 0,
-                position: "relative",
-                overflow: "hidden",
-              }}>
-                <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: `linear-gradient(90deg, transparent, ${screen.border}, transparent)` }} />
-                <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.4rem", color: "rgba(255,255,255,0.85)", letterSpacing: "0.06em" }}>{screen.label}</span>
-                <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "10px", color: screen.accent, letterSpacing: "0.08em", textTransform: "uppercase", opacity: 0.70 }}>Preview</span>
+          }} className="scrollbar-hide">
+
+            {/* Card 1: Mini Waterfall Cascade */}
+            <div style={{
+              minWidth: "280px", background: "#0A0A0A", border: "1px solid rgba(212,175,55,0.20)",
+              borderRadius: "8px", padding: "16px", scrollSnapAlign: "start", flexShrink: 0,
+            }}>
+              <p style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "10px", color: "rgba(212,175,55,0.60)", letterSpacing: "0.10em", textTransform: "uppercase", marginBottom: "12px" }}>Recoupment Cascade</p>
+              {[
+                { label: "Sales Agent", pct: 100, color: "#3CB371", badge: "FUNDED" },
+                { label: "Senior Debt", pct: 100, color: "#3CB371", badge: "FUNDED" },
+                { label: "Equity + Premium", pct: 72, color: "#F0A830", badge: "PARTIAL" },
+                { label: "Deferments", pct: 0, color: "#DC2626", badge: "ZERO" },
+              ].map((row) => (
+                <div key={row.label} style={{ marginBottom: "10px" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "4px" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                      <div style={{ width: "5px", height: "5px", borderRadius: "50%", background: row.color }} />
+                      <span style={{ fontFamily: "'Inter', sans-serif", fontSize: "11px", color: "rgba(255,255,255,0.65)" }}>{row.label}</span>
+                    </div>
+                    <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "9px", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", padding: "2px 6px", borderRadius: "2px", background: row.color === "#3CB371" ? "rgba(60,179,113,0.15)" : row.color === "#F0A830" ? "rgba(240,168,48,0.15)" : "rgba(220,38,38,0.12)", color: row.color }}>{row.badge}</span>
+                  </div>
+                  <div style={{ height: "4px", background: "rgba(255,255,255,0.04)", borderRadius: "2px", overflow: "hidden" }}>
+                    <div style={{ height: "100%", width: `${row.pct}%`, borderRadius: "2px", background: row.color === "#3CB371" ? "rgba(60,179,113,0.40)" : row.color === "#F0A830" ? "rgba(240,168,48,0.35)" : "rgba(220,38,38,0.25)" }} />
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Card 2: Verdict / Deal Score */}
+            <div style={{
+              minWidth: "200px", background: "#0A0A0A", border: "1px solid rgba(60,179,113,0.20)",
+              borderRadius: "8px", padding: "20px 16px", scrollSnapAlign: "start", flexShrink: 0,
+              display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center",
+            }}>
+              <p style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "10px", color: "rgba(60,179,113,0.60)", letterSpacing: "0.10em", textTransform: "uppercase", marginBottom: "8px" }}>Deal Verdict</p>
+              <p style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "48px", fontWeight: 500, color: "#3CB371", lineHeight: 1 }}>
+                1.2<span style={{ fontSize: "28px" }}>&times;</span>
+              </p>
+              <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "11px", color: "rgba(255,255,255,0.50)", marginTop: "6px" }}>Cash-on-cash multiple</p>
+              <div style={{ marginTop: "10px", padding: "4px 10px", borderRadius: "3px", background: "rgba(60,179,113,0.12)" }}>
+                <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "10px", fontWeight: 700, color: "#3CB371", letterSpacing: "0.08em", textTransform: "uppercase" }}>SOLID DEAL</span>
               </div>
-            ))}
+            </div>
+
+            {/* Card 3: Profit Split */}
+            <div style={{
+              minWidth: "220px", background: "#0A0A0A", border: "1px solid rgba(212,175,55,0.20)",
+              borderRadius: "8px", padding: "16px", scrollSnapAlign: "start", flexShrink: 0,
+            }}>
+              <p style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "10px", color: "rgba(212,175,55,0.60)", letterSpacing: "0.10em", textTransform: "uppercase", marginBottom: "12px" }}>Profit Split</p>
+              <div style={{ display: "flex", gap: "8px", marginBottom: "12px" }}>
+                <div style={{ flex: 1, textAlign: "center", padding: "10px 8px", borderRadius: "6px", background: "rgba(60,179,113,0.06)", border: "1px solid rgba(60,179,113,0.15)" }}>
+                  <p style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "9px", color: "rgba(255,255,255,0.45)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "4px" }}>Investor</p>
+                  <p style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.3rem", color: "#3CB371" }}>$209K</p>
+                </div>
+                <div style={{ flex: 1, textAlign: "center", padding: "10px 8px", borderRadius: "6px", background: "rgba(60,179,113,0.06)", border: "1px solid rgba(60,179,113,0.15)" }}>
+                  <p style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "9px", color: "rgba(255,255,255,0.45)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "4px" }}>Producer</p>
+                  <p style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.3rem", color: "#3CB371" }}>$209K</p>
+                </div>
+              </div>
+              <div style={{ height: "1px", background: "rgba(212,175,55,0.10)", marginBottom: "10px" }} />
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "10px", color: "rgba(255,255,255,0.40)", letterSpacing: "0.06em" }}>NET BACKEND</span>
+                <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "10px", color: "#3CB371", letterSpacing: "0.06em" }}>$418,000</span>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -1047,7 +1078,7 @@ const Index = () => {
           <p style={styles.footerText}>
             For educational and informational purposes only. Not legal, tax, or investment advice. Consult a qualified entertainment attorney before making financing decisions.
           </p>
-          <p style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: "rgba(255,255,255,0.25)", textAlign: "center", marginTop: "16px", letterSpacing: "0.08em" }}>
+          <p style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: "rgba(255,255,255,0.35)", textAlign: "center", marginTop: "16px", letterSpacing: "0.08em" }}>
             Best viewed in the dark.
           </p>
         </footer>
