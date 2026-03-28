@@ -1,41 +1,41 @@
 # FILMMAKER.OG — Brand System
 
-**Version:** 2.0
+**Version:** 3.0
 **Last updated:** March 28, 2026
 **Source of truth for:** Every page, component, and visual decision in the product.
 
-This document codifies every design decision proven on the landing page (`mockup/dark-gray` branch). When building or reskinning any page, reference this file — not memory, not other pages. If a decision isn't in here, it hasn't been made yet.
+When building or reskinning any page, reference this file — not memory, not other pages. If a decision isn't in here, it hasn't been made yet.
 
 ---
 
 ## 1. COLOR
 
 ### The Rule
-Gold + black + white. That's it. Every other color is semantic (communicates data) or an earned exception.
+Gold + black + warm white. That's it. Every other color is semantic (communicates data) or an earned exception. No purple anywhere.
 
-### Surface Hierarchy (7 layers)
+### Surface Hierarchy (6 layers)
 | Token | Value | Use |
 |---|---|---|
-| Page | `#0C0C0E` | `<body>` / outermost wrapper — near-black with a warm hint |
-| Container | `#1E1E22` | Section containers — warm dark gray with `grain-surface` overlay |
-| Header Band | `linear-gradient(180deg, rgba(212,175,55,0.06), #242428)` | First child inside every container — visible gold warmth |
-| Inner Card | `linear-gradient(180deg, rgba(212,175,55,0.02), #242428)` | Content cards inside sections — subtle gold warmth |
-| Inner Surface | `#242428` | Calculator areas, data surfaces inside containers |
-| Input Surface | `#1A1A1A` | Input fields, form backgrounds |
+| Page (Void) | `#0C0C0E` | `<body>` / outermost wrapper — near-black with a warm hint |
+| Container | `#1A1A1C` | Section containers — warm dark gray with `grain-surface` overlay |
+| Header Band | `linear-gradient(180deg, rgba(212,175,55,0.06), #232326)` | First child inside every container — visible gold warmth. Hero + closer run hotter at `0.10`. |
+| Inner Card | `linear-gradient(180deg, rgba(212,175,55,0.02), #232326)` | Content cards inside sections — subtle gold warmth |
+| Inner Surface | `#232326` | Calculator areas, data surfaces, WITH/WITHOUT grid cells |
 | Footer | `#161618` | Footer background |
 
-Each layer is progressively lighter. Container (`#1E1E22`) lifts off the page (`#0C0C0E`). Header bands and inner cards add gold warmth via gradients. Never use `#000`, `#0A0A0A`, `#111`, or `#121212`.
+Each layer is progressively lighter. Container (`#1A1A1C`) lifts off the page (`#0C0C0E`). Header bands and inner cards add gold warmth via gradients. Never use `#000`, `#111`, `#121212`, `#1E1E22`, or `#242428` (these are deprecated values).
 
 ### Gold — The Brand Color
 | Token | Value | Use |
 |---|---|---|
 | `GOLD` | `#D4AF37` | Borders, icons, dividers, brand elements |
 | `CTA` / `#F9E076` | CTA Gold | **Exclusively** for clickable elements (buttons, links) |
-| `gold(0.15)` | `rgba(212,175,55,0.15)` | Card borders (default) |
-| `gold(0.25)` | `rgba(212,175,55,0.25)` | Active/hover borders |
-| `gold(0.40)` | `rgba(212,175,55,0.40)` | Eyebrow ruled lines, strong accents |
-| `gold(0.08)` | `rgba(212,175,55,0.08)` | Background tints |
-| `gold(0.03)` | `rgba(212,175,55,0.03)` | Ghost/ambient fill |
+| `gold(0.15)` | Container borders (sides) |
+| `gold(0.25)` | Active/hover borders, OgBotFab border |
+| `gold(0.30)` | Waterfall tier number badge border |
+| `gold(0.12)` | Inner card borders, waterfall tier badge background |
+| `gold(0.08)` | Background tints, eyebrow pill bg |
+| `gold(0.03)` | Ghost/ambient fill |
 
 **The two-gold rule:** If it's not clickable, it's not `#F9E076`. Metallic gold (`#D4AF37`) is for brand elements. CTA gold is for buttons and links only.
 
@@ -48,26 +48,22 @@ Each layer is progressively lighter. Container (`#1E1E22`) lifts off the page (`
 
 These appear **only** when communicating data — waterfall tiers, profit/loss, status badges. Never decorative.
 
-### Purple — The Exception
-| Token | Value | Where it lives |
-|---|---|---|
-| `purple()` | `rgb(120,60,180)` | Waterfall tier number badges (01, 02, etc.) |
-| | | Pill nav box-shadow (very subtle, `0.08` opacity) |
+### Purple — ELIMINATED
+Purple has been fully removed from the codebase. Waterfall tier number badges are now gold-rimmed white circles. No purple gradients, shadows, or accents exist anywhere.
 
-**That's it.** Purple does not appear in section headers, card backgrounds, atmospheric gradients, step badges, or dividers. Its scarcity is what makes the waterfall section distinctive.
+### White — Text Hierarchy (Warm)
+Body text uses warm-white (`rgba(250,248,244,...)`) not cold-white (`rgba(255,255,255,...)`). Labels and mono text stay cold-white for crispness.
 
-### White — Text Hierarchy
 | Role | Value | Use |
 |---|---|---|
-| Headlines | `white(0.95)` or `#fff` | Section headlines, hero headline |
-| Testimonial | `white(0.88)` | Blockquote text, social proof |
-| Body | `white(0.85)` | All body text, descriptions |
-| Supporting body | `white(0.75)` | Value props, secondary descriptions |
-| Labels | `white(0.70)` | Slider labels, metadata, data labels |
-| Tertiary | `white(0.60)` | Minimum for readable text — floor for opacity |
-| Footer | `white(0.55)` | Footer text, disclaimers |
-| Easter egg | `white(0.35)` | "Best viewed in the dark." — decorative only |
-| Ghost | `white(0.06)` | Dividers within cards, track backgrounds |
+| Headlines | `#fff` or `white(0.95)` | Section headlines, hero headline |
+| Body (primary) | `rgba(250,248,244,0.90)` | Testimonials, WITH column text |
+| Body (standard) | `rgba(250,248,244,0.88)` | All Inter body text, descriptions |
+| Body (secondary) | `rgba(250,248,244,0.78)` | Supporting text, WITHOUT column, stake card body |
+| Labels | `rgba(255,255,255,0.70)` | Slider labels, metadata (cold-white, Roboto Mono) |
+| Tertiary | `rgba(255,255,255,0.60)` | Minimum for readable text — floor |
+| Footer | `rgba(255,255,255,0.55)` | Footer text, disclaimers |
+| Easter egg | `rgba(255,255,255,0.35)` | "Best viewed in the dark." — decorative only |
 
 **Opacity floor:** No text intended to be read may go below `0.60`. Below that is decorative only.
 
@@ -91,48 +87,47 @@ import { gold, white, GOLD, CTA, BG } from '@/lib/tokens';
 
 All three loaded via Google Fonts in `index.css`.
 
-### Size Scale
+### Size Scale (Responsive)
 | Element | Font | Size | Color | Notes |
 |---|---|---|---|---|
-| Hero headline | Bebas Neue | 3.6rem | `#fff` | Landing page hero only |
-| Section headline | Bebas Neue | 2.8rem | `#fff` | One per section, gold accent on key word |
-| Closer headline | Bebas Neue | 3.0rem | `#fff` | Inside closer container |
+| Hero headline | Bebas Neue | `clamp(3.2rem, 8vw, 4.4rem)` | `#fff` | line-height: 0.90 |
+| Section headline | Bebas Neue | `clamp(2.4rem, 6vw, 3.0rem)` | `#fff` | One per section, gold accent on key word |
+| Closer headline | Bebas Neue | `clamp(2.8rem, 7vw, 3.6rem)` | `#fff` | Inside closer container |
+| Hero subtitle | Inter | `clamp(14px, 2vw, 16px)` | `white(0.70)` | Below hero headline |
 | Card title | Bebas Neue | 1.4–1.8rem | `#fff` | Inside cards |
 | Data callout | Bebas Neue | 2.4–3.2rem | Semantic color | Large numbers (profit, totals) |
-| Body | Inter | 16px | `white(0.85)` | All descriptions. Not 15px. Not 18px. |
-| Body secondary | Inter | 14–15px | `white(0.75)` | Supporting text beneath body |
-| Eyebrow label | Roboto Mono | 12px | `#D4AF37` | `letter-spacing: 0.18em`, uppercase |
-| EyebrowPill | Roboto Mono | 14px | `#D4AF37` | Uppercase, first element in header bands |
-| Slider/field label | Roboto Mono | 11px | `white(0.70)` | `letter-spacing: 0.08em`, uppercase |
+| Body | Inter | 16px | `rgba(250,248,244,0.88)` | line-height: 1.6. Not 1.45. Not 1.55. |
+| EyebrowPill | Roboto Mono | 13px | `#D4AF37` | `letter-spacing: 0.16em`, uppercase |
+| Slider/field label | Roboto Mono | 11-12px | `white(0.70-0.75)` | uppercase, tracked |
 | Badge/tag text | Roboto Mono | 10–11px | Varies | `letter-spacing: 0.06–0.08em`, uppercase |
 | Footer text | Inter | 14px | `white(0.55)` | Disclaimer, legal |
 
 ### Rules
 - Bebas Neue is always uppercase (it only has uppercase glyphs)
-- Inter body text is always 16px with `line-height: 1.45–1.55`
+- Inter body text is always 16px with `line-height: 1.6`
 - Roboto Mono labels are always uppercase with tracked letter-spacing
 - Never use `font-weight: 700` on Bebas Neue (it only has 400)
+- Use `clamp()` for responsive sizing on headlines
 
 ---
 
 ## 3. COMPONENTS
 
 ### Section Container
-The structural wrapper for every content section:
 ```css
-background: #1E1E22;
-border: 1px solid rgba(212,175,55,0.20);
-border-top: 1px solid rgba(255,255,255,0.06);
+background: #1A1A1C;
+border: 1px solid rgba(212,175,55,0.15);
+border-top: 1px solid rgba(255,255,255,0.08);
 border-radius: 8px;
-padding: 32px 16px;
+padding: 32px clamp(16px, 4vw, 32px);
 box-shadow: 0 4px 16px rgba(0,0,0,0.30);
 ```
-Always add `className="grain-surface"` for SVG noise texture overlay. First child is always a **Header Band**.
+Always add `className="grain-surface"` for SVG noise texture overlay (opacity: 0.035). First child is always a **Header Band**.
 
 ### Header Band
 First child inside every Section Container:
 ```css
-background: linear-gradient(180deg, rgba(212,175,55,0.06), #242428);
+background: linear-gradient(180deg, rgba(212,175,55,0.06), #232326);
 border: 1px solid rgba(255,255,255,0.04);
 border-bottom: 1px solid rgba(212,175,55,0.10);
 border-radius: 6px;
@@ -140,41 +135,28 @@ padding: 24px 20px;
 margin-bottom: 16px;
 text-align: center;
 ```
-Contains: EyebrowPill → section headline → optional subtitle. Gold warmth at `0.06` provides visible tinting.
+Hero and closer header bands use `rgba(212,175,55,0.10)` instead of `0.06` — hotter bookends.
 
 ### EyebrowPill
-The first element inside every header band:
 ```css
 font-family: 'Roboto Mono', monospace;
-font-size: 14px;
+font-size: 13px;
 color: #D4AF37;
-letter-spacing: 0.10em;
+letter-spacing: 0.16em;
 text-transform: uppercase;
-display: inline-block;
-background: rgba(212,175,55,0.08);
-border: 1px solid rgba(212,175,55,0.18);
-padding: 4px 14px;
+background: rgba(212,175,55,0.10);
+border: 1px solid rgba(212,175,55,0.25);
+padding: 6px 18px;
 border-radius: 999px;
-margin-bottom: 10px;
 ```
 
 ### Inner Card
-Content cards inside sections use a gold-tinted gradient:
 ```css
-background: linear-gradient(180deg, rgba(212,175,55,0.02), #242428);
-border: 1px solid rgba(212,175,55,0.15);
-border-radius: 6px;
-padding: 14px;
+background: linear-gradient(180deg, rgba(212,175,55,0.02), #232326);
+border: 1px solid rgba(212,175,55,0.12);
+border-radius: 8px;
+padding: 16px 14px;
 ```
-The `0.02` gold tint is subtle — just enough to differentiate from the container.
-
-**Variants:**
-| Variant | Modification |
-|---|---|
-| Default | As above |
-| Gold left accent | Add `border-left: 3px solid rgba(212,175,55,0.40)` |
-| Semantic border | Replace gold border with semantic color (green/red/amber) at 0.20–0.25 opacity |
-| Glassmorphic | Use **only** for 1–2 premium moments per page: `background: rgba(10,10,10,0.85); backdrop-filter: blur(20px)` |
 
 ### CTA Button
 ```css
@@ -183,62 +165,39 @@ color: #000;
 font-family: 'Bebas Neue', sans-serif;
 font-size: 20px;
 letter-spacing: 0.18em;
-font-weight: 400;
-text-transform: uppercase;
 border-radius: 8px;
-border: none;
-padding: 18–22px 0;
-display: block;
+border-top: 1px solid rgba(255,255,255,0.15);
+padding: 18px 0;
 width: 100%;
-text-align: center;
 ```
-- One-shot shimmer animation (runs once on first view, not infinite)
-- Idle glow pulse: `box-shadow` breathing at 4s cycle, very subtle
-- Press state: `scale(0.98)` on mouseDown/touchStart
-- Always full-width within its container
+- Add `className="cta-gold-btn"` for hover brightening (#FBE88A)
+- One-shot shimmer animation
+- Idle glow pulse: 4s cycle breathing box-shadow
+- Press: `scale(0.98)` on mouseDown
 
-### Section Divider
+### Waterfall Tier Badge (gold-rimmed)
 ```css
-height: 1px;
-max-width: 120px;
-margin: 32px auto; /* or 48px after dense sections */
-background: rgba(212,175,55,0.15);
+width: 30px; height: 30px; border-radius: 50%;
+background: rgba(212,175,55,0.12);
+border: 1px solid rgba(212,175,55,0.30);
+color: #fff;
+font-family: 'Bebas Neue', sans-serif;
+font-size: 0.95rem;
 ```
+Add `className="wf-card"` to waterfall cards for hover lift effect.
 
-### Eyebrow Ruled
-Horizontal gold lines flanking a centered label:
-```
-──── gold line ──── LABEL TEXT ──── gold line ────
-```
-- Lines: `gold(0.40)`, 1px height
-- Label: Roboto Mono, 12px, `#D4AF37`, `letter-spacing: 0.18em`, uppercase
-- Gap: 12px between lines and label
-- Margin-bottom: 14px
-
-### Film Slate Line
-Decorative horizontal line used **only** in hero header band:
+### Testimonial Blockquote
 ```css
-height: 1px;
-width: 60%;
-margin: 0 auto;
-background: rgba(212,175,55,0.22);
+padding-left: 16px;
+border-left: 2px solid rgba(212,175,55,0.25);
 ```
-
-### Pill Nav (AppHeader)
-- Max-width: 382px, height: 54px
-- Background: `rgba(6,6,6,0.85)` with `backdrop-filter: blur(24px)`
-- Border: `1px solid gold(0.35)`
-- Border-radius: 12px
-- Auto-hides on scroll down, reappears on scroll up
-- z-index: 150
-- Logo: "FILMMAKER" in gold, ".OG" in white, Bebas Neue 28px
 
 ### Footer
 - Background: `#161618`
-- Border-top: `1px solid white(0.08)`
-- Social icons: gold at 0.50, 36px square with gold border at 0.15
-- Nav links: Roboto Mono 13px, gold at 0.50
-- Disclaimer: Inter 14px, white at 0.50
+- Border-top: `1px solid rgba(212,175,55,0.15)`
+- Social icons: gold at 0.50, 36px square with gold border at 0.20
+- Nav links: Roboto Mono 13px, gold at 0.60
+- Disclaimer: Inter 14px, white at 0.55
 - "Best viewed in the dark." — Roboto Mono 11px, white at 0.35
 
 ---
@@ -246,209 +205,132 @@ background: rgba(212,175,55,0.22);
 ## 4. MOTION
 
 ### Scroll Reveal (default entrance)
-```typescript
-opacity: 0 → 1
-transform: translateY(16px) → translateY(0)
-transition: 0.8s cubic-bezier(0.16, 1, 0.3, 1)
 ```
-- Triggered once via IntersectionObserver, does not replay
-- Staggered delays: `delay * 100ms` for sequential elements
-- Always respect `prefers-reduced-motion` — skip to final state
-
-### One-Shot Shimmer (CTA buttons)
-```css
-animation: lp-shimmer 1.5s cubic-bezier(0.4, 0, 0.2, 1) 0.5s 1;
+opacity: 0 → 1; translateY(16px) → 0; 0.8s cubic-bezier(0.16, 1, 0.3, 1)
 ```
-Runs once after 0.5s delay. Does not loop.
+Staggered delays: `delay * 100ms`. Respects `prefers-reduced-motion`.
 
-### Stamp (waterfall tier amounts)
-```css
-@keyframes stamp {
-  0% { transform: scale(1.08) translateX(2px); opacity: 0; }
-  40% { transform: scale(1.02) translateX(-2px); opacity: 1; }
-  70% { transform: scale(1) translateX(1px); opacity: 1; }
-  100% { transform: scale(1) translateX(0); opacity: 1; }
-}
-```
-Applied when tier cards enter viewport. One-shot.
-
-### Typing Reveal (Reality blockquote)
-- 35ms per character
-- Blinking cursor (`|`) via CSS animation, disappears when complete
-- One-shot, does not replay
-
-### Count-Up (profit, split numbers)
-- `requestAnimationFrame` with cubic ease-out
-- Duration: 1200–1800ms
-- Triggered once on IntersectionObserver
+### CTA Shimmer — one-shot, 1.5s, 0.5s delay
+### Stamp — one-shot on waterfall card enter
+### Typing Reveal — 35ms/char, Reality section
+### Count-Up — rAF with cubic ease-out, 1200–1800ms
+### Card Hover — `translateY(-2px)` + enhanced shadow (desktop only, via CSS class)
 
 ### Rules
-- **No infinite animations** except the CTA idle glow (4s, barely perceptible)
-- **No purple glow pulses, no breathing borders, no looping shimmers**
-- Every animation earns its existence by communicating information or providing feedback
-- Touch feedback: `scale(0.97–0.98)` on press, 80ms transition
+- No infinite animations except CTA idle glow (4s, barely perceptible)
+- Every animation earns its existence by communicating information
+- Touch feedback: `scale(0.97–0.98)` on press
 
 ---
 
 ## 5. LAYOUT
 
-### Page Container
+### Responsive Page Container
 ```css
-max-width: 430px;
+max-width: 780px;
 margin: 0 auto;
 background: #0C0C0E;
 ```
-430px is the product viewport. Desktop renders the same column centered on the page color. This is intentional, not a responsive compromise.
+Mobile stays tight via `clamp()` padding. Desktop breathes wider. This applies to ALL pages (landing, calculator, store, resources).
 
-### Surface Nesting Rule
-Page (`#0C0C0E`) → Section Container (`#1E1E22` + grain-surface) → Header Band (gold `0.06` gradient) → Inner Cards (gold `0.02` gradient). Each layer lifts visually from the one beneath it. Never skip a layer.
+### Section Padding (Responsive)
+```css
+padding: 0 clamp(20px, 5vw, 48px);  /* section wrapper */
+padding: 32px clamp(16px, 4vw, 32px);  /* container inner */
+```
 
-### Section Padding
-| Context | Padding |
-|---|---|
-| Standard section | `48px 24px 0` top/sides/bottom |
-| Dense section (waterfall) | `0 24px 0` (let content density speak) |
-| Closer section | `64px 24px 24px` (extra top space for breathing) |
-| Cards within sections | `margin: 0 24px` (align with section padding) |
+### Section Spacing (Variable — Landing Page)
+| Transition | Spacer | Reason |
+|---|---|---|
+| Hero → Preview | 32px | Fast, keep momentum |
+| Preview → Waterfall | 64px | Big shift, give air |
+| Waterfall → Stakes | 48px | Continuation |
+| Stakes → Reality | 40px | Tight, building tension |
+| Reality → Social | 56px | Mood shift |
+| Social → Closer | 72px | Dramatic pause |
 
-### Spacing Between Sections
-- Standard: 32px (via section divider margin)
-- After dense sections (waterfall): 48px
-- Before footer: 40px margin-top
-
-### Scroll Progress Gold Thread
-- 2px wide, fixed to left edge of 430px column
-- `background: linear-gradient(180deg, gold(0.40), gold(0.10))`
-- Grows from 0% to 100% height as user scrolls
-- Hidden when footer is visible
-- z-index: 50
+### Desktop Responsive
+- What's At Stake: `grid-template-columns: repeat(auto-fit, minmax(260px, 1fr))` — 2x2 on desktop
+- Product Preview: CSS class `preview-scroll` wraps into row at 640px+
+- Scroll progress thread: hidden on mobile, visible at 840px+ via `.scroll-thread` class
 
 ### Desktop Ambient Glow
 ```css
 @media (min-width: 768px) {
-  body::before { /* purple, top-left, 400px, blur 120px, 0.06 opacity */ }
-  body::after  { /* gold, bottom-right, 350px, blur 120px, 0.04 opacity */ }
+  body::before { /* purple radial, top-left */ }
+  body::after  { /* gold radial, bottom-right */ }
 }
 ```
-Barely visible — just enough to prevent the desktop from feeling like pure void.
 
 ---
 
-## 6. FORM INPUTS
+## 6. LANDING PAGE STRUCTURE (v18)
+1. **Hero** — Headline + CTA above fold, interactive 3-slider calculator below fold
+2. **Product Preview** — "What You'll Build" — 5 scrollable/wrapping preview cards
+3. **Waterfall** — Full 8-tier money flow with running balance counter
+4. **What's At Stake** — 4 reason cards (2x2 on desktop)
+5. **Reality** — Typing reveal blockquote + WITH/WITHOUT grid
+6. **Social Proof** — Testimonial (gold left border) + feature badges
+7. **Closer** — "YOUR NEXT PITCH IS COMING." + CTA
+8. **Footer**
 
-### Lead Capture Modal
-- Modal background: `#0C0C0E` with `1px solid gold(0.15)`, 6px radius
-- Gold accent line at top: `linear-gradient(90deg, transparent, #D4AF37, transparent)`
-- Input fields: **white background** (`rgba(255,255,255,0.95)`), black text, 4px radius
-- Focus state: gold border (`#D4AF37`) with `0 0 0 3px gold(0.15)` ring
-- Placeholder text: `rgba(0,0,0,0.40)`
-- Submit button: uses standard CTA button style
-
-### Calculator Inputs
-- Background: `BG.surface` (`#1A1A1A`)
-- Border: `1px solid white(0.15)`
-- Focus: gold border + gold shadow ring
-- Font: Roboto Mono, 22px, right-aligned
-- These stay dark because they're part of the product UI, not a conversion form
-
-### Sliders
-- Track: 6px height, `white(0.08)` background, 3px radius
-- Thumb: 22px gold circle (styled in index.css)
-- Labels: Roboto Mono 11px uppercase on left, Bebas Neue 1.2rem gold value on right
+### Hero Slider Math
+```typescript
+salesFee = acquisitionValue * (salesFeePercent / 100)
+guilds = budgetValue * 0.055        // on production budget
+camFee = acquisitionValue * 0.01    // on revenue
+debtAmount = budgetValue * 0.50     // 50% leverage
+debtService = debtAmount * 0.12     // 12% interest
+```
 
 ---
 
-## 7. WATERFALL TIER COLORS
-
-When displaying waterfall tiers by group, use these border/topline colors:
-
-| Group | RGB | Use |
-|---|---|---|
-| Off-the-Tops | `240,168,48` (amber) | Border, topline, amount text |
-| Sales Agency | `220,120,48` (orange-red) | Border, topline, amount text |
-| Debt Service | `220,38,38` (red) | Border, topline, amount text |
-| Equity & Deferments | `120,60,180` (purple) | Border, topline, amount text |
-
-Tier number badges are always purple gradient circles regardless of group.
-
----
-
-## 8. PAGE-SPECIFIC NOTES
-
-### Landing Page (Index.tsx)
-- Interactive hero with sliders — the product IS the marketing
-- No "How It Works" section (hero demonstrates it)
-- No "Arsenal" checklist (features become badge pills)
-- Sections: Hero → Waterfall → Social Proof → What's At Stake → Reality → Product Preview → Closer → Footer
+## 7. PAGE NOTES
 
 ### Calculator (Calculator.tsx)
-- **Stress-test target for this system.** If the card style works here with dense data tables, it works everywhere.
-- Chapter cards with gold accent bars may need a documented exception for the numbered header pattern
-- The WaterfallDeck output uses its own locked type system (FONT constant) — align with this guide where possible, document exceptions where not
+- 780px max-width, matches landing page
+- ChapterCard headers with gold accent bars
+- WaterfallDeck uses its own FONT constant — aligned with system where possible
 
 ### Store (Store.tsx)
+- 780px max-width
+- FAQ section wrapped in standard container (not floating on void)
 - Featured product card may use glassmorphic variant
 - Price text: Bebas Neue in gold
-- Comparison table: maintain current structure, apply flat card style
-
-### Auth (Auth.tsx)
-- White input fields (same as LeadCaptureModal)
-- Minimal — logo, form, done
-
-### Info Pages (BudgetInfo, CapitalInfo, FeesInfo, WaterfallInfo)
-- Template pages — same structure, different content
-- Use flat cards for content sections
-- Eyebrow + headline pattern for each section
-- Body text at 16px Inter
 
 ### Resources (Resources.tsx)
-- Tab-based layout
-- Content cards use standard flat card style
-- Educational content at 16px Inter, generous line-height
+- Glass hero card with "Resource Vault" title
+- Sticky command center (search + filter)
+- Vault cards with expandable detail
 
-### Glossary (Glossary.tsx)
-- Alphabetical list — simplest page
-- Term: Bebas Neue 1.4rem
-- Definition: Inter 16px
-
----
-
-## 9. WHEN TO DEVIATE
-
-Not every element will fit the system perfectly. Document exceptions here rather than silently breaking rules.
-
-**Current documented exceptions:**
-- Waterfall tier cards use group-specific border colors instead of standard gold
-- WaterfallDeck output component has its own type scale (FONT constant) — this predates the system and will be aligned incrementally
-- Pill nav uses glassmorphism — this is the one persistent glass element
-- Calculator chapter card headers use a gold accent bar + numbered grid layout — this is a product pattern, not a brand violation
-
-**Rule for new exceptions:** If a component needs to break a rule, add it to this list with a one-line reason. If the list grows past 10 items, the system needs to evolve.
+### Auth (Auth.tsx) + Info Pages
+- White input fields for forms
+- Standard container patterns
+- Minimal, functional
 
 ---
 
-## 10. IMPLEMENTATION PRIORITY
-
-Apply this system to pages in this order:
-
-1. **Calculator** — highest usage, stress-test for the system
-2. **Store / StorePackage** — revenue page, must feel premium
-3. **Auth** — first impression after CTA, should feel seamless
-4. **Resources** — content page, straightforward reskin
-5. **Info pages** (Budget, Capital, Fees, Waterfall) — similar template, batch them
-6. **Glossary** — simplest page, lowest priority
+## 8. HOVER / INTERACTION CLASSES (CSS)
+| Class | Effect | Where |
+|---|---|---|
+| `cta-gold-btn` | Hover brightens to `#FBE88A` | All CTA buttons |
+| `wf-card` | Hover lifts `translateY(-2px)` + enhanced shadow | Waterfall tier cards |
+| `preview-card` | Hover lifts + gold border brightens | Product preview cards |
+| `preview-scroll` | Horizontal scroll mobile, wrap on 640px+ | Preview card container |
+| `scroll-thread` | Hidden mobile, visible 840px+ | Scroll progress gold line |
+| `grain-surface` | SVG noise overlay at 0.035 opacity | All section containers |
 
 ---
 
-## 11. FILES THAT IMPLEMENT THIS SYSTEM
-
+## 9. FILES THAT IMPLEMENT THIS SYSTEM
 | File | Role |
 |---|---|
-| `src/lib/tokens.ts` | Color functions and hex constants (single source of truth for colors) |
-| `src/index.css` | Global styles, keyframes, base typography, desktop ambient glow |
-| `src/pages/Index.tsx` | Landing page (reference implementation of the system) |
+| `src/lib/tokens.ts` | Color functions and hex constants (single source of truth) |
+| `src/index.css` | Global styles, keyframes, hover classes, desktop ambient glow |
+| `src/pages/Index.tsx` | Landing page (reference implementation) |
 | `src/components/AppHeader.tsx` | Pill nav |
 | `src/components/LeadCaptureModal.tsx` | Lead capture with white inputs |
+| `src/components/OgBotFab.tsx` | Floating action button (gold gradient, border) |
 | `BRAND_SYSTEM.md` | This document |
 
 ---

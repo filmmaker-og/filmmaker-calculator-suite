@@ -1,0 +1,275 @@
+# FILMMAKER.OG — Session Brief for Claude Code
+
+**Date:** March 28, 2026
+**Purpose:** Comprehensive context handoff. Everything you need to work on this codebase.
+
+---
+
+## 1. WHAT THIS IS
+
+A film finance simulator for independent producers. The product helps filmmakers model recoupment waterfalls, capital stacks, and investor returns before signing deals. It's a React SPA hosted on Vercel at [filmmakerog.com](https://filmmakerog.com).
+
+The user is a "vibe coder" — gives creative direction, expects proactive complete solutions. Frustrated by incremental fixes. Wants complete lists upfront and holistic thinking.
+
+---
+
+## 2. TECH STACK
+
+| Layer | Tech |
+|---|---|
+| Framework | React 18 + TypeScript + Vite |
+| Styling | Tailwind CSS + shadcn/ui + heavy inline React CSSProperties |
+| Backend | Supabase (auth, database, `intake_submissions` table) |
+| Hosting | Vercel (auto-deploys from `main` branch) |
+| Fonts | Bebas Neue, Inter, Roboto Mono (Google Fonts) |
+| State | React hooks (useState, useEffect, useRef). No Redux/Zustand. |
+
+### Git
+- **Repo:** `filmmaker-og/filmmaker-calculator-suite` (private)
+- **Branch:** `main` is production. Always branch for changes, merge after build passes.
+- **Config:** `user.email="thefilmmaker.og@gmail.com"`, `user.name="filmmaker-og"`
+- **Safety tag:** `pre-refresh` on main saves the state before the major overhaul sessions began
+
+### Auth Flow
+- Lead capture: collect name + email → save to localStorage (`og_lead_name`, `og_lead_email`) + fire Supabase `auth.signInWithOtp` in background (doesn't wait for it) → navigate straight to `/calculator`
+- Calculator auth gate: checks `localStorage.getItem('og_lead_email')` OR `supabase.auth.getSession()`. If neither, shows LeadCaptureModal.
+- Magic link auth is NOT used for gating (removed) — it fires in background for Supabase records only
+
+### Environment Variables
+```
+VITE_SUPABASE_URL=...
+VITE_SUPABASE_ANON_KEY=...
+```
+These are in Vercel's environment config. `.env` is gitignored. `.env.example` has placeholders.
+
+---
+
+## 3. DESIGN SYSTEM (v3.0)
+
+Full documentation: `BRAND_SYSTEM.md` in the repo root.
+
+### Quick Reference
+| Token | Value |
+|---|---|
+| Page bg | `#0C0C0E` |
+| Container bg | `#1A1A1C` |
+| Surface bg | `#232326` |
+| Footer bg | `#161618` |
+| Gold (brand) | `#D4AF37` |
+| Gold (CTA) | `#F9E076` |
+| Body text | `rgba(250,248,244,0.88)` (warm white) |
+| Labels | `rgba(255,255,255,0.70)` (cold white, Roboto Mono) |
+| Green (positive) | `#3CB371` |
+| Red (negative) | `#DC2626` |
+
+### Color Functions (tokens.ts)
+```typescript
+import { gold, white, red, green, GOLD, CTA, BG } from '@/lib/tokens';
+gold(0.15)  // rgba(212,175,55,0.15)
+white(0.70) // rgba(255,255,255,0.70)
+BG.void     // #0C0C0E
+BG.elevated // #1A1A1C
+BG.surface  // #232326
+```
+
+### Key Rules
+- **No purple anywhere** — fully eliminated
+- **Two-gold rule** — #D4AF37 for brand, #F9E076 for buttons only
+- **Warm-white body text** — `rgba(250,248,244,...)`, not `rgba(255,255,255,...)`
+- **Body line-height: 1.6** everywhere
+- **Responsive layout** — 780px max-width, `clamp()` padding
+- **Grain texture** — `className="grain-surface"` on all section containers (0.035 opacity)
+- **Container border pattern** — `border: 1px solid rgba(212,175,55,0.15)` + `borderTop: 1px solid rgba(255,255,255,0.08)`
+
+---
+
+## 4. FILE MAP
+
+### Pages
+| File | Lines | What it is |
+|---|---|---|
+| `src/pages/Index.tsx` | ~1317 | Landing page — reference implementation of the design system. 7 sections + footer. |
+| `src/pages/Calculator.tsx` | ~505 | Main product — step-based calculator with auth gate |
+| `src/pages/Store.tsx` | ~1440 | Product store — packages, FAQ, pricing |
+| `src/pages/StorePackage.tsx` | ~256 | Individual package detail page |
+| `src/pages/Resources.tsx` | ~1255 | Resource Vault — search/filter, glossary, educational cards |
+| `src/pages/Auth.tsx` | ~312 | Auth page (mostly superseded by LeadCaptureModal) |
+| `src/pages/BudgetInfo.tsx` | ~298 | Info page — production budget education |
+| `src/pages/CapitalInfo.tsx` | ~285 | Info page — capital stack education |
+| `src/pages/FeesInfo.tsx` | ~317 | Info page — fee structures education |
+| `src/pages/BuildYourPlan.tsx` | ~495 | Post-purchase plan builder |
+| `src/pages/NotFound.tsx` | ~30 | 404 page |
+
+### Components
+| File | Lines | What it is |
+|---|---|---|
+| `src/components/AppHeader.tsx` | ~108 | Pill-style floating nav bar |
+| `src/components/MobileMenu.tsx` | ~514 | Slide-out mobile navigation |
+| `src/components/LeadCaptureModal.tsx` | ~204 | Name + email capture modal (white inputs) |
+| `src/components/EmailGateModal.tsx` | ~149 | Secondary email gate (used in Calculator) |
+| `src/components/OgBotSheet.tsx` | ~665 | AI chatbot bottom sheet |
+| `src/components/OgBotFab.tsx` | ~65 | Floating action button for OG bot |
+
+### Calculator Components
+| File | Lines | What it is |
+|---|---|---|
+| `src/components/calculator/WaterfallDeck.tsx` | ~2149 | Waterfall output deck — largest component |
+| `src/components/calculator/ChapterCard.tsx` | ~251 | Accordion-style step cards |
+| `src/components/calculator/TabBar.tsx` | ~158 | Bottom tab navigation |
+| `src/components/calculator/ContextBar.tsx` | ~95 | Top context/status bar |
+| `src/components/calculator/GlossaryTrigger.tsx` | ~163 | (i) info button with term definitions |
+| `src/components/calculator/StandardStepLayout.tsx` | ~122 | Layout wrapper for calculator steps |
+| `src/components/calculator/FilmLeaderCountdown.tsx` | ~329 | Film countdown loading animation |
+
+### Core Files
+| File | Purpose |
+|---|---|
+| `src/lib/tokens.ts` | Color token functions — single source of truth |
+| `src/index.css` | Global styles, keyframes, CSS variables, hover classes |
+| `src/App.tsx` | Router with lazy-loaded pages, ErrorBoundary |
+| `BRAND_SYSTEM.md` | Design system documentation (v3.0) |
+| `vercel.json` | Vercel config — SPA rewrites, caching headers |
+
+---
+
+## 5. ROUTES
+
+```
+/               → Index.tsx (landing page)
+/calculator     → Calculator.tsx (auth-gated)
+/store          → Store.tsx
+/store/:slug    → StorePackage.tsx
+/resources      → Resources.tsx
+/build-your-plan → BuildYourPlan.tsx
+/auth           → Auth.tsx
+/budget-info    → BudgetInfo.tsx
+/capital-info   → CapitalInfo.tsx
+/fees-info      → FeesInfo.tsx
+/waterfall-info → REDIRECT → /resources?tab=waterfall
+/glossary       → REDIRECT → /resources?tab=terms
+*               → NotFound.tsx (404)
+```
+
+---
+
+## 6. LANDING PAGE ARCHITECTURE (Index.tsx)
+
+### Section Order (v18)
+1. **Hero** — Headline ("Model Your Recoupment Waterfall") + CTA above fold, interactive 3-slider calculator below fold
+2. **Product Preview** — 5 horizontally scrollable cards showing output types (Cascade, Verdict, Split, Stack, Break-Even)
+3. **Waterfall** — Full 8-tier money flow: Acquisition → Off-the-Tops → Sales → Debt → Equity → Total Off Top → Net Profit → Split
+4. **What's At Stake** — 4 reason cards with gold numeral + title + body
+5. **Reality** — Typing reveal blockquote + 3-row WITH/WITHOUT comparison grid
+6. **Social Proof** — Testimonial with gold left border + 4 feature badges
+7. **Closer** — "YOUR NEXT PITCH IS COMING." + final CTA
+
+### Hero Slider Math
+```
+salesFee = acquisitionValue * (salesFeePercent / 100)
+guilds = budgetValue * 0.055         // on production budget
+camFee = acquisitionValue * 0.01     // on revenue
+debtAmount = budgetValue * 0.50      // 50% leverage
+debtService = debtAmount * 0.12      // 12% interest
+totalDeductions = salesFee + guilds + camFee + debtService
+heroNetProfit = acquisitionValue - totalDeductions
+```
+
+### Animations
+- Scroll reveal on every section (IntersectionObserver, one-shot)
+- Stamp animation on waterfall cards
+- Typing reveal on Reality blockquote (35ms/char)
+- Count-up on Net Profit and Split numbers
+- CTA shimmer (one-shot) + idle glow (4s infinite, subtle)
+- Scroll progress gold thread (desktop only, 840px+)
+
+---
+
+## 7. WHAT WAS DONE IN THIS SESSION
+
+### Repo Health
+- Made repo private (was public — business logic exposed)
+- Deleted 75+ stale branches (only `main` remains)
+- `npm audit fix` — patched dependency vulnerabilities
+- Removed dead pages (Glossary.tsx, WaterfallInfo.tsx — routes are redirects)
+- Removed stale docs (LANDING_PAGE_REFERENCE, RESOURCES_PAGE_REFERENCE)
+- Removed deprecated `design-system.ts` (replaced by `tokens.ts`)
+- Removed orphaned images (hero-bg.jpg, closer-bg.jpg, brand-icon-f.jpg, og-image.svg)
+- Cleaned `package.json` metadata (was `vite_react_shadcn_ts` v0.0.0, now `filmmaker-calculator-suite` v1.0.0)
+- Fixed sitemap.xml (wrong domain `filmmaker.og` → `filmmakerog.com`)
+- Fixed robots.txt (added sitemap reference)
+- Updated vercel.json (asset caching headers)
+- Removed stray `console.log` in WaterfallDeck
+
+### Visual System Overhaul
+- Created `mockup/dark-gray` branch → iterated through 4-layer surface hierarchy
+- Established containerized section pattern with warm gold header bands
+- Built EyebrowPill component for consistent section headers
+- Gold tints: 0.06 standard header bands, 0.10 hero/closer (hotter bookends)
+- Updated BRAND_SYSTEM.md from v1.0 → v2.0 → v3.0
+
+### Premium Overhaul
+- Broke the 430px cage → responsive 780px max-width with `clamp()` padding
+- Warmed all colors: containers `#1A1A1C`, surfaces `#232326`, text `rgba(250,248,244,...)`
+- Reordered landing page sections: Hero → Preview → Waterfall → Stakes → Reality → Social → Closer
+- Shortened hero: CTA above fold, calculator below
+- Responsive typography via `clamp()` on all headlines
+- Killed all purple → gold-rimmed white waterfall badges
+- Variable section spacing (32px–72px) matching emotional weight
+- Desktop layouts: 2x2 stake cards, preview cards wrap into row
+- Hover micro-interactions via CSS classes (CTA brighten, card lift)
+- Scroll thread hidden on mobile, desktop-only
+
+### Brand System Sweep (19 files)
+- Applied warm colors across every page and component
+- Store, Calculator, WaterfallDeck widened from 430px → 780px
+- Store FAQ wrapped in proper container
+- OG Fab visibility boosted (stronger bg, border, repositioned)
+- Resources vault hero spacing fixed
+- All purple remnants eliminated (including OgBotFab)
+
+### Holistic Polish (23 fixes)
+- Fixed hero slider math (guilds on budget, realistic debt service)
+- Fixed hero double gap (48px → 20px)
+- Fixed warm-white consistency (4 cold-white remnants)
+- Added testimonial gold left border
+- Tightened feature badge padding
+- CTA text consistency across all 3 buttons
+- Differentiated post-waterfall reassurance text
+- Updated page comment block to reflect actual section order
+
+---
+
+## 8. KNOWN REMAINING ITEMS
+
+- **Stripe checkout** — `TODO` in WaterfallDeck.tsx for Snapshot+ product. Not wired to Stripe yet.
+- **OgBot** — The chatbot sheet (OgBotSheet.tsx) exists but the AI backend isn't connected.
+- **BuildYourPlan** — Post-purchase flow exists but may need polish to match the new system fully.
+- **WaterfallDeck FONT constant** — Has its own type system that predates the brand system. Aligned where possible, some exceptions documented in BRAND_SYSTEM.md.
+- **npm audit** — 5 remaining low/moderate vulnerabilities in dev dependencies (esbuild, jsdom) that require major version bumps to fix.
+
+---
+
+## 9. USER PREFERENCES
+
+- "It cannot feel mustard" — gold tints must be subtle
+- Expects proactive, complete solutions — no incremental drip
+- "Vibe coder" — gives creative direction, not line-by-line specs
+- Research says: never mid-grey on dark grey (high contrast white)
+- Prefers clear visual hierarchy with elevation differences
+- User timezone: America/Chicago (CDT)
+- Git user: `filmmaker-og` / `thefilmmaker.og@gmail.com`
+
+---
+
+## 10. HOW TO WORK ON THIS CODEBASE
+
+1. Always branch from `main`. Never commit directly to `main`.
+2. Read `BRAND_SYSTEM.md` before making visual changes.
+3. Use `tokens.ts` for colors — never hardcode rgba values.
+4. Run `npx tsc --noEmit` before committing — must pass clean.
+5. The landing page (`Index.tsx`) is the reference implementation. When in doubt, match its patterns.
+6. All pages use 780px max-width with `clamp()` responsive padding.
+7. All containers get `className="grain-surface"` + gold borders + white top border.
+8. Body text is warm-white (`rgba(250,248,244,...)`), labels are cold-white (`rgba(255,255,255,...)`).
+9. No purple. Anywhere. Ever.
+10. Test on mobile (390px) AND desktop — the `clamp()` values handle the gap.
