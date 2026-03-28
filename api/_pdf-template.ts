@@ -293,6 +293,90 @@ export function generatePdfHtml(data: SnapshotData): string {
     </div>`
   ).join('');
 
+  // ── Prose: "The Deal" (Page 1) ──
+  const capitalSourceNames: string[] = [];
+  if (inputs.equity > 0) capitalSourceNames.push('equity');
+  if (inputs.debt > 0) capitalSourceNames.push('senior debt');
+  if (inputs.credits > 0) capitalSourceNames.push('tax credits');
+  if (inputs.deferments > 0) capitalSourceNames.push('deferrals');
+  const sourcesList = capitalSourceNames.join(', ');
+
+  let dealProseText: string;
+  if (result.recoupPct >= 100) {
+    dealProseText = `This is a ${formatCurrency(inputs.budget)} independent feature financed through ${sourcesList || 'available capital'}. At the modeled acquisition price of ${formatCurrency(revenue)}, all capital tiers are funded with a ${safeMultiple.toFixed(1)}x return to investors after off-the-top deductions consume ${erosionPct.toFixed(0)}% of gross revenue.`;
+  } else if (result.recoupPct > 0) {
+    dealProseText = `This is a ${formatCurrency(inputs.budget)} independent feature. At the modeled acquisition price of ${formatCurrency(revenue)}, investors recoup ${result.recoupPct.toFixed(0)}% of their capital. Off-the-top deductions consume ${erosionPct.toFixed(0)}% of gross revenue before the waterfall begins.`;
+  } else {
+    dealProseText = `At the modeled acquisition price of ${formatCurrency(revenue)}, net distributable revenue does not cover capital obligations. The structure below shows where the money stops.`;
+  }
+
+  // ── Prose: "The Margin" (Page 3) ──
+  let marginProseHtml = '';
+  if (isBreakevenValid && revenue > 0) {
+    if (revenue > breakeven) {
+      const marginDollar = revenue - breakeven;
+      const marginPctVal = Math.round((marginDollar / revenue) * 100);
+      marginProseHtml = `<div style="padding:0 36px;margin-bottom:12px;position:relative;z-index:2;">
+        <div style="font-family:'Inter',sans-serif;font-size:11px;color:rgba(250,248,244,0.60);line-height:1.6;font-style:italic;">At the modeled price, revenue exceeds the break-even threshold by ${formatCurrency(marginDollar)} &mdash; a ${marginPctVal}% margin of safety. The acquisition price could drop ${marginPctVal}% before investor capital is at risk.</div>
+      </div>`;
+    } else {
+      const shortfall = breakeven - revenue;
+      marginProseHtml = `<div style="padding:0 36px;margin-bottom:12px;position:relative;z-index:2;">
+        <div style="font-family:'Inter',sans-serif;font-size:11px;color:rgba(250,248,244,0.60);line-height:1.6;font-style:italic;">Revenue falls ${formatCurrency(shortfall)} short of the break-even point. At this price, investor recoupment is incomplete.</div>
+      </div>`;
+    }
+  }
+
+  // ── Prose: "The Structure" (Page 4) ──
+  const structureParts: string[] = [];
+  if (inputs.equity > 0) {
+    const eqPct = inputs.budget > 0 ? Math.round((inputs.equity / inputs.budget) * 100) : 0;
+    const premiumNote = inputs.premium > 0 ? ` at ${inputs.premium}% preferred return` : '';
+    structureParts.push(`${eqPct}% equity (${formatCurrency(inputs.equity)}${premiumNote})`);
+  }
+  if (inputs.debt > 0) {
+    const dPct = inputs.budget > 0 ? Math.round((inputs.debt / inputs.budget) * 100) : 0;
+    structureParts.push(`${dPct}% senior debt (${formatCurrency(inputs.debt)} at ${inputs.seniorDebtRate}%)`);
+  }
+  if (inputs.mezzanineDebt > 0) {
+    const mPct = inputs.budget > 0 ? Math.round((inputs.mezzanineDebt / inputs.budget) * 100) : 0;
+    structureParts.push(`${mPct}% mezzanine debt (${formatCurrency(inputs.mezzanineDebt)} at ${inputs.mezzanineRate}%)`);
+  }
+  if (inputs.credits > 0) {
+    const cPct = inputs.budget > 0 ? Math.round((inputs.credits / inputs.budget) * 100) : 0;
+    structureParts.push(`${cPct}% tax credits (${formatCurrency(inputs.credits)} non-dilutive)`);
+  }
+  if (inputs.deferments > 0) {
+    const dfPct = inputs.budget > 0 ? Math.round((inputs.deferments / inputs.budget) * 100) : 0;
+    structureParts.push(`${dfPct}% in deferred compensation (${formatCurrency(inputs.deferments)})`);
+  }
+
+  let structureProseHtml = '';
+  if (structureParts.length > 0) {
+    let positionSentence = '';
+    if (inputs.debt > 0 && inputs.mezzanineDebt > 0) {
+      positionSentence = ' The lender holds first position in the recoupment waterfall, meaning equity investors do not see returns until all senior creditors are made whole.';
+    } else if (inputs.debt > 0) {
+      positionSentence = ' Senior debt holds first position in the recoupment waterfall, meaning equity investors do not see returns until the lender is made whole.';
+    }
+    structureProseHtml = `<div style="padding:0 36px;margin-bottom:16px;position:relative;z-index:2;">
+      <div style="font-family:'Inter',sans-serif;font-size:11px;color:rgba(250,248,244,0.60);line-height:1.6;">The production is financed with ${structureParts.join(', ')}.${positionSentence}</div>
+    </div>`;
+  }
+
+  // ── Reusable HTML fragments ──
+  const goldTopBar = '<div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent 5%,rgba(212,175,55,0.50) 30%,rgba(212,175,55,0.70) 50%,rgba(212,175,55,0.50) 70%,transparent 95%);z-index:10;"></div>';
+  const watermarkHtml = '<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-30deg);font-family:\'Bebas Neue\',sans-serif;font-size:80px;letter-spacing:12px;color:rgba(212,175,55,0.03);pointer-events:none;z-index:0;">FILMMAKER.OG</div>';
+  const pageHeader = (pageNum: string) => `<div style="display:flex;justify-content:space-between;align-items:center;padding:0 36px;margin-bottom:16px;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:4px;color:rgba(212,175,55,0.50);">FILMMAKER.OG</div>
+      <div style="font-family:'Roboto Mono',monospace;font-size:8px;letter-spacing:2px;color:rgba(255,255,255,0.30);text-transform:uppercase;">PAGE ${pageNum}</div>
+    </div>`;
+  const pageFooter = (pageNum: string) => `<div style="position:absolute;bottom:20px;left:36px;right:36px;display:flex;justify-content:space-between;align-items:center;">
+      <div style="font-family:'Roboto Mono',monospace;font-size:8px;letter-spacing:1.5px;color:rgba(212,175,55,0.35);">FILMMAKER.OG</div>
+      <div style="font-family:'Roboto Mono',monospace;font-size:8px;color:rgba(255,255,255,0.25);">filmmakerog.com</div>
+      <div style="font-family:'Roboto Mono',monospace;font-size:8px;color:rgba(255,255,255,0.20);">${pageNum} / 5</div>
+    </div>`;
+
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -347,13 +431,15 @@ export function generatePdfHtml(data: SnapshotData): string {
 
   <!-- PAGE 1: EXECUTIVE SUMMARY -->
   <div class="page" style="display:flex;flex-direction:column;padding:0;">
-    <div class="watermark">FILMMAKER.OG</div>
+    ${goldTopBar}
+    ${watermarkHtml}
     <div style="position:absolute;top:0;left:0;right:0;height:300px;background:radial-gradient(ellipse 80% 50% at 50% 10%,rgba(212,175,55,0.10) 0%,transparent 60%);pointer-events:none;"></div>
     <div style="position:absolute;bottom:0;left:0;right:0;height:250px;background:radial-gradient(ellipse 100% 70% at 50% 100%,rgba(212,175,55,0.06) 0%,transparent 60%);pointer-events:none;"></div>
 
     <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:0 36px;position:relative;z-index:2;">
-      <!-- Eyebrow -->
-      <div style="font-family:'Roboto Mono',monospace;font-size:9px;letter-spacing:5px;color:rgba(212,175,55,0.60);text-transform:uppercase;text-align:center;margin-bottom:16px;">Waterfall Snapshot</div>
+      <!-- Brand + Eyebrow -->
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:6px;color:rgba(212,175,55,0.60);text-align:center;margin-bottom:4px;">FILMMAKER.OG</div>
+      <div style="font-family:'Roboto Mono',monospace;font-size:9px;letter-spacing:5px;color:rgba(212,175,55,0.40);text-transform:uppercase;text-align:center;margin-bottom:20px;">Waterfall Snapshot</div>
 
       <!-- Title -->
       <div style="font-family:'Bebas Neue',sans-serif;font-size:48px;color:#fff;line-height:0.95;letter-spacing:2px;text-align:center;margin-bottom:10px;">${project.title.toUpperCase()}</div>
@@ -399,24 +485,24 @@ export function generatePdfHtml(data: SnapshotData): string {
       </div>
 
       <!-- Verdict -->
-      <div style="text-align:center;font-family:'Inter',sans-serif;font-size:12px;color:rgba(250,248,244,0.65);font-weight:400;line-height:1.6;">${verdictText}</div>
+      <div style="text-align:center;font-family:'Inter',sans-serif;font-size:12px;color:rgba(250,248,244,0.65);font-weight:400;line-height:1.6;margin-bottom:16px;">${verdictText}</div>
+
+      <!-- The Deal prose -->
+      <div style="text-align:center;max-width:400px;margin:0 auto;">
+        <div style="font-family:'Inter',sans-serif;font-size:12px;color:rgba(250,248,244,0.70);font-weight:400;font-style:italic;line-height:1.7;">${dealProseText}</div>
+      </div>
     </div>
 
-    <div style="position:absolute;bottom:44px;left:0;right:0;text-align:center;z-index:5;">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:6px;color:rgba(212,175,55,0.35);">FILMMAKER.OG</div>
-      <div style="font-family:'Roboto Mono',monospace;font-size:8px;color:rgba(255,255,255,0.2);letter-spacing:1.5px;margin-top:4px;">${date}</div>
-    </div>
+    ${pageFooter('1')}
     <div style="position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(to right,transparent 0%,rgba(212,175,55,0.40) 50%,transparent 100%);z-index:10;"></div>
   </div>
 
   <!-- PAGE 2: REVENUE ALLOCATION -->
   <div class="page">
-    <div class="watermark">FILMMAKER.OG</div>
+    ${goldTopBar}
+    ${watermarkHtml}
+    ${pageHeader('02')}
     <div style="padding:0 36px;margin-bottom:4px;position:relative;z-index:2;">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
-        <div class="footer-brand">FILMMAKER.OG</div>
-        <div class="footer-page">PAGE 02</div>
-      </div>
       <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:rgba(250,248,244,0.92);letter-spacing:1px;margin-bottom:4px;">WHERE YOUR DOLLAR GOES</div>
     </div>
 
@@ -450,20 +536,15 @@ export function generatePdfHtml(data: SnapshotData): string {
       </div>
     </div>
 
-    <div class="footer">
-      <div class="footer-brand">FILMMAKER.OG</div>
-      <div class="footer-page">2 / 5</div>
-    </div>
+    ${pageFooter('2')}
   </div>
 
   <!-- PAGE 3: THE WATERFALL -->
   <div class="page">
-    <div class="watermark">FILMMAKER.OG</div>
+    ${goldTopBar}
+    ${watermarkHtml}
+    ${pageHeader('03')}
     <div style="padding:0 36px;margin-bottom:4px;position:relative;z-index:2;">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
-        <div class="footer-brand">FILMMAKER.OG</div>
-        <div class="footer-page">PAGE 03</div>
-      </div>
       <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:rgba(250,248,244,0.92);letter-spacing:1px;margin-bottom:4px;">HOW THE MONEY FLOWS</div>
     </div>
 
@@ -480,27 +561,28 @@ export function generatePdfHtml(data: SnapshotData): string {
       <div style="font-family:'Roboto Mono',monospace;font-size:20px;font-weight:500;color:#3CB371;position:relative;z-index:1;">${formatFullCurrency(result.producer)}</div>
     </div>
 
+    <!-- The Margin prose -->
+    ${marginProseHtml}
+
     <!-- Margin of Safety strip -->
     <div style="margin:16px 36px 0;position:relative;z-index:2;">
       ${marginBarHtml}
     </div>
 
-    <div class="footer">
-      <div class="footer-brand">FILMMAKER.OG</div>
-      <div class="footer-page">3 / 5</div>
-    </div>
+    ${pageFooter('3')}
   </div>
 
   <!-- PAGE 4: CAPITAL STACK + SCENARIOS -->
   <div class="page">
-    <div class="watermark">FILMMAKER.OG</div>
+    ${goldTopBar}
+    ${watermarkHtml}
+    ${pageHeader('04')}
     <div style="padding:0 36px;margin-bottom:4px;position:relative;z-index:2;">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
-        <div class="footer-brand">FILMMAKER.OG</div>
-        <div class="footer-page">PAGE 04</div>
-      </div>
       <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:rgba(250,248,244,0.92);letter-spacing:1px;margin-bottom:12px;">CAPITAL STRUCTURE</div>
     </div>
+
+    <!-- The Structure prose -->
+    ${structureProseHtml}
 
     <!-- Capital sources table -->
     <div style="padding:0 36px;position:relative;z-index:2;margin-bottom:20px;">
@@ -552,14 +634,12 @@ export function generatePdfHtml(data: SnapshotData): string {
       </div>
     </div>
 
-    <div class="footer">
-      <div class="footer-brand">FILMMAKER.OG</div>
-      <div class="footer-page">4 / 5</div>
-    </div>
+    ${pageFooter('4')}
   </div>
 
   <!-- PAGE 5: BACK PAGE -->
   <div class="page" style="display:flex;flex-direction:column;align-items:center;justify-content:center;">
+    ${goldTopBar}
     <div style="position:absolute;top:0;left:0;right:0;height:300px;background:radial-gradient(ellipse 80% 50% at 50% 10%,rgba(212,175,55,0.08) 0%,transparent 60%);pointer-events:none;"></div>
     <div style="position:absolute;bottom:0;left:0;right:0;height:250px;background:radial-gradient(ellipse 100% 70% at 50% 100%,rgba(212,175,55,0.05) 0%,transparent 60%);pointer-events:none;"></div>
 
@@ -571,10 +651,7 @@ export function generatePdfHtml(data: SnapshotData): string {
       <div style="font-family:'Roboto Mono',monospace;font-size:11px;letter-spacing:2px;color:rgba(212,175,55,0.60);text-transform:uppercase;">filmmakerog.com</div>
     </div>
 
-    <div class="footer">
-      <div class="footer-brand">FILMMAKER.OG</div>
-      <div class="footer-page">5 / 5</div>
-    </div>
+    ${pageFooter('5')}
   </div>
 
 </body>
