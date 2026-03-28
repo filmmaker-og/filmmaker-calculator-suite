@@ -1020,13 +1020,9 @@ const Store = () => {
 
   /* ─── BUY HANDLERS ─── */
   const handleBuyProduct = (product: Product) => {
-    if (product.id === "snapshot-plus") {
-      toast.info("Snapshot+ coming soon");
-      return;
-    }
     haptics.medium();
     // Only show the Working Model upsell popup for self-serve (instant) products
-    const instantProducts = ["the-full-analysis"];
+    const instantProducts = ["snapshot-plus", "the-full-analysis"];
     if (instantProducts.includes(product.id)) {
       setShowPopup(product);
     } else {
