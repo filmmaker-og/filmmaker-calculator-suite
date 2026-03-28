@@ -71,7 +71,7 @@ const AppHeader = ({ onMoreOpen }: AppHeaderProps) => {
             marginLeft: "24px",
             marginRight: "24px",
             borderRadius: "12px",
-            background: "rgba(18,18,20,0.90)",
+            background: "rgba(26,26,28,0.90)",
             border: "1px solid rgba(212,175,55,0.25)",
             boxShadow: "0 2px 24px rgba(0,0,0,0.8), 0 0 12px rgba(212,175,55,0.06)",
             backdropFilter: "blur(24px)",

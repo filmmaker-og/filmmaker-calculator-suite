@@ -94,7 +94,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
         )}
         style={{
           paddingBottom: "env(safe-area-inset-bottom)",
-          background: "rgba(26,26,30,0.92)",
+          background: "rgba(26,26,28,0.92)",
           backdropFilter: "blur(40px)",
           WebkitBackdropFilter: "blur(40px)",
           borderRadius: "12px 12px 0 0",
@@ -186,7 +186,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                 width: "36px",
                 height: "36px",
                 borderRadius: "8px",
-                background: "rgba(55,20,100,0.80)",
+                background: "rgba(212,175,55,0.18)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -242,7 +242,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   justifyContent: "center",
                   gap: "6px",
                   padding: "10px 8px",
-                  background: "#1A1A1E",
+                  background: "#1A1A1C",
                   border: "1px solid rgba(212,175,55,0.15)",
                   borderRadius: "8px",
                   cursor: "pointer",
