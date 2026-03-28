@@ -61,25 +61,16 @@ const s: Record<string, React.CSSProperties> = {
     marginBottom: 20,
   },
   heroCanopy: {
-    position: "absolute" as const, top: 0, left: 0, right: 0, height: "120%",
-    background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.25) 0%, transparent 70%)",
-    pointerEvents: "none" as const,
+    display: "none" as const,
   },
   heroCardGlass: {
     position: "relative" as const, textAlign: "center" as const,
-    padding: "24px 20px 20px", borderRadius: 12, overflow: "hidden" as const,
-    background: "rgba(6,6,6,0.92)",
-    backdropFilter: "blur(40px)", WebkitBackdropFilter: "blur(40px)",
-    border: "1px solid rgba(212,175,55,0.20)",
-    boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 24px rgba(212,175,55,0.10), 0 0 20px rgba(120,60,180,0.15)",
+    padding: "24px 20px 20px", borderRadius: 8, overflow: "hidden" as const,
+    background: "#0A0A0A",
+    border: "1px solid rgba(212,175,55,0.15)",
   },
   heroGlowBg: {
-    position: "absolute" as const, top: 0, left: 0, right: 0, bottom: 0, pointerEvents: "none" as const,
-    background: [
-      "radial-gradient(ellipse 80% 50% at 50% 10%, rgba(212,175,55,0.22) 0%, transparent 60%)",
-      "radial-gradient(ellipse 60% 40% at 50% 50%, rgba(120,60,180,0.16) 0%, transparent 60%)",
-      "radial-gradient(ellipse 100% 70% at 50% 100%, rgba(120,60,180,0.20) 0%, transparent 60%)",
-    ].join(", "),
+    display: "none" as const,
   },
   heroInnerGlass: { position: "relative" as const, zIndex: 1 },
   heroEyebrow: {
@@ -849,7 +840,7 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext, genre }:
           <span style={{
             fontFamily: "'Roboto Mono', monospace", fontSize: 10,
             textTransform: "uppercase", letterSpacing: "0.1em",
-            color: "rgba(120,60,180,0.55)", whiteSpace: "nowrap",
+            color: "rgba(212,175,55,0.55)", whiteSpace: "nowrap",
           }}>Investor</span>
           <input
             type="range"
@@ -860,14 +851,14 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext, genre }:
             onChange={(e) => onUpdateInput("profitSplit", Number(e.target.value))}
             style={{
               flex: 1, height: 2, appearance: "none", WebkitAppearance: "none",
-              background: `linear-gradient(to right, rgba(120,60,180,0.50) 0%, rgba(120,60,180,0.50) ${inputs.profitSplit ?? 50}%, rgba(255,255,255,0.10) ${inputs.profitSplit ?? 50}%, rgba(255,255,255,0.10) 100%)`,
+              background: `linear-gradient(to right, rgba(212,175,55,0.50) 0%, rgba(212,175,55,0.50) ${inputs.profitSplit ?? 50}%, rgba(255,255,255,0.10) ${inputs.profitSplit ?? 50}%, rgba(255,255,255,0.10) 100%)`,
               borderRadius: 1, outline: "none", cursor: "pointer",
             }}
           />
           <span style={{
             fontFamily: "'Roboto Mono', monospace", fontSize: 10,
             textTransform: "uppercase", letterSpacing: "0.1em",
-            color: "rgba(120,60,180,0.55)", whiteSpace: "nowrap",
+            color: "rgba(212,175,55,0.55)", whiteSpace: "nowrap",
           }}>Producer</span>
         </div>
         <p style={{

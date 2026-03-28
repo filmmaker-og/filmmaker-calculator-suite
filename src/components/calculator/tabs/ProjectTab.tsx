@@ -22,20 +22,13 @@ const warmCard: React.CSSProperties = {
   position: "relative",
   background: "#0A0A0A",
   border: "1px solid rgba(212,175,55,0.35)",
-  borderRadius: 12,
+  borderRadius: 8,
   overflow: "hidden",
-  boxShadow: "0 24px 50px rgba(0,0,0,0.8), inset 0 1px 0 rgba(212,175,55,0.10)",
   marginBottom: 16,
 };
 
 const warmGlow: React.CSSProperties = {
-  position: "absolute",
-  top: 0,
-  left: 0,
-  right: 0,
-  height: 220,
-  background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.18) 0%, transparent 70%)",
-  pointerEvents: "none",
+  display: "none",
 };
 
 const warmTopline: React.CSSProperties = {
@@ -59,19 +52,13 @@ const dataCard: React.CSSProperties = {
   position: "relative",
   background: "#0A0A0A",
   border: "1px solid rgba(212,175,55,0.20)",
-  borderRadius: 12,
+  borderRadius: 8,
   overflow: "hidden",
   marginBottom: 16,
 };
 
 const dataGlow: React.CSSProperties = {
-  position: "absolute",
-  top: 0,
-  left: 0,
-  right: 0,
-  height: 140,
-  background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.10) 0%, transparent 70%)",
-  pointerEvents: "none",
+  display: "none",
 };
 
 const dataTopline: React.CSSProperties = {
@@ -160,13 +147,12 @@ const s: Record<string, React.CSSProperties> = {
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 8,
-    border: "1px solid rgba(120,60,180,0.50)",
-    background: "rgba(120,60,180,0.14)",
-    color: "rgba(190,160,240,1.0)",
+    border: "1px solid rgba(212,175,55,0.40)",
+    background: "rgba(212,175,55,0.08)",
+    color: "#D4AF37",
     cursor: "pointer",
     transition: "all 0.15s",
     whiteSpace: "nowrap",
-    boxShadow: "0 0 14px rgba(120,60,180,0.20)",
   },
   statusPills: {
     display: "flex",

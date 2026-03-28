@@ -118,7 +118,7 @@ const StackSummary = ({ inputs, selections, onEdit, onComplete }: StackSummaryPr
         {/* Stack Breakdown - Store card pattern */}
         <div
           className="overflow-hidden"
-          style={{ background: "#0A0A0A", border: "1px solid rgba(212,175,55,0.20)", borderRadius: "12px" }}
+          style={{ background: "#0A0A0A", border: "1px solid rgba(212,175,55,0.20)", borderRadius: "8px" }}
         >
           <div
             className="px-5 py-3"

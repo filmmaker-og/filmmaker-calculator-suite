@@ -137,25 +137,13 @@ const CalcHero = ({ stepLabel, title, titleGold, subtitle, visible }: {
   };
   return (
     <div style={{ position: "relative", marginBottom: 20, ...heroReveal }}>
-      <div style={{
-        position: "absolute", top: 0, left: 0, right: 0, height: "120%",
-        background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.25) 0%, transparent 70%)",
-        pointerEvents: "none",
-      }} />
       <section style={{
         position: "relative", textAlign: "center",
         padding: "24px 20px 20px",
-        borderRadius: 12, overflow: "hidden",
-        background: "rgba(6,6,6,0.92)",
-        backdropFilter: "blur(40px)",
-        WebkitBackdropFilter: "blur(40px)",
-        border: "1px solid rgba(212,175,55,0.20)",
-        boxShadow: "0 16px 40px rgba(0,0,0,0.6), 0 0 24px rgba(212,175,55,0.10)",
+        borderRadius: 8, overflow: "hidden",
+        background: "#0A0A0A",
+        border: "1px solid rgba(212,175,55,0.15)",
       }}>
-        <div style={{
-          position: "absolute", top: 0, left: 0, right: 0, bottom: 0, pointerEvents: "none",
-          background: "#0A0A0A",
-        }} />
         <div style={{ position: "relative", zIndex: 1 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12, padding: "0 8px" }}>
             <div style={{ flex: 1, height: 1, background: "rgba(212,175,55,0.35)" }} />

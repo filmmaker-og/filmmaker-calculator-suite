@@ -136,8 +136,8 @@ const StorePackage = () => {
             </div>
 
             <div
-              className="border border-gold-border bg-black overflow-hidden rounded-xl"
-              style={{ boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06)" }}
+              className="border border-gold-border bg-black overflow-hidden rounded-lg"
+
             >
               {product.whatsIncluded.map((item, i) => (
                 <div
@@ -180,11 +180,10 @@ const StorePackage = () => {
             {/* Upgrade prompt */}
             {product.upgradePrompt && (
               <div
-                className="mt-8 p-6 rounded-xl"
+                className="mt-8 p-6 rounded-lg"
                 style={{
                   border: "1px solid rgba(212,175,55,0.15)",
                   background: "rgba(212,175,55,0.03)",
-                  boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06)",
                 }}
               >
                 <h3 className="font-bebas text-[16px] tracking-[0.08em] text-gold mb-2">
