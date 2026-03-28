@@ -317,27 +317,27 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
           disabled={ogLoading}
           className="font-bebas text-[17px] tracking-[0.10em] px-5 py-3.5 transition-all disabled:opacity-40 disabled:cursor-not-allowed border"
           onMouseEnter={e => {
-            e.currentTarget.style.borderColor = "rgba(120,60,180,0.40)";
-            e.currentTarget.style.background = "rgba(120,60,180,0.12)";
+            e.currentTarget.style.borderColor = "rgba(212,175,55,0.40)";
+            e.currentTarget.style.background = "rgba(212,175,55,0.12)";
             e.currentTarget.style.color = "#FFFFFF";
           }}
           onMouseLeave={e => {
-            e.currentTarget.style.borderColor = "rgba(120,60,180,0.35)";
-            e.currentTarget.style.background = "rgba(120,60,180,0.10)";
+            e.currentTarget.style.borderColor = "rgba(212,175,55,0.30)";
+            e.currentTarget.style.background = "rgba(212,175,55,0.08)";
             e.currentTarget.style.color = "rgba(255,255,255,0.85)";
           }}
           onTouchStart={e => {
-            e.currentTarget.style.borderColor = "rgba(120,60,180,0.40)";
-            e.currentTarget.style.background = "rgba(120,60,180,0.12)";
+            e.currentTarget.style.borderColor = "rgba(212,175,55,0.40)";
+            e.currentTarget.style.background = "rgba(212,175,55,0.12)";
           }}
           onTouchEnd={e => {
-            e.currentTarget.style.borderColor = "rgba(120,60,180,0.35)";
-            e.currentTarget.style.background = "rgba(120,60,180,0.10)";
+            e.currentTarget.style.borderColor = "rgba(212,175,55,0.30)";
+            e.currentTarget.style.background = "rgba(212,175,55,0.08)";
           }}
           style={{
             borderRadius: "6px",
-            borderColor: "rgba(120,60,180,0.35)",
-            background: "rgba(120,60,180,0.10)",
+            borderColor: "rgba(212,175,55,0.30)",
+            background: "rgba(212,175,55,0.08)",
             color: "rgba(255,255,255,0.85)",
           }}
         >
@@ -367,28 +367,28 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
         style={{
           height: "100dvh",
           paddingBottom: "calc(var(--bottom-bar-h) + env(safe-area-inset-bottom))",
-          background: "rgba(26,26,30,0.92)",
+          background: "rgba(26,26,28,0.92)",
           backdropFilter: "blur(40px)",
           WebkitBackdropFilter: "blur(40px)",
           borderRadius: "0",
-          boxShadow: "0 -20px 60px rgba(120,60,180,0.20), 0 -40px 80px rgba(0,0,0,0.95)",
+          boxShadow: "0 -20px 60px rgba(212,175,55,0.08), 0 -40px 80px rgba(0,0,0,0.95)",
         }}
       >
         {/* 3px purple-gold gradient top-edge line */}
         <div
           className="absolute top-0 left-0 right-0 h-[3px] pointer-events-none z-10"
           style={{
-            background: "linear-gradient(to right, transparent 0%, rgba(120,60,180,0.50) 20%, rgba(212,175,55,0.40) 50%, rgba(120,60,180,0.50) 80%, transparent 100%)",
+            background: "linear-gradient(to right, transparent 0%, rgba(212,175,55,0.40) 20%, rgba(212,175,55,0.50) 50%, rgba(212,175,55,0.40) 80%, transparent 100%)",
             borderRadius: "0",
           }}
         />
 
-        {/* Purple atmospheric glow */}
+        {/* Gold atmospheric glow */}
         <div
           className="absolute top-0 left-0 right-0 pointer-events-none z-0"
           style={{
             height: "200px",
-            background: "radial-gradient(ellipse 100% 70% at 50% 0%, rgba(120,60,180,0.25) 0%, transparent 70%)",
+            background: "radial-gradient(ellipse 100% 70% at 50% 0%, rgba(212,175,55,0.10) 0%, transparent 70%)",
           }}
         />
 
@@ -414,11 +414,12 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
                 width: "36px",
                 height: "36px",
                 borderRadius: "8px",
-                background: "linear-gradient(135deg, rgb(75,30,130) 0%, rgb(110,50,170) 100%)",
+                background: "rgba(212,175,55,0.12)",
+                border: "1px solid rgba(212,175,55,0.30)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                boxShadow: "0 0 12px rgba(120,60,180,0.25)",
+                boxShadow: "0 0 12px rgba(212,175,55,0.10)",
                 flexShrink: 0,
               }}>
                 <Sparkles style={{ width: "22px", height: "22px", color: "#D4AF37", filter: "drop-shadow(0 0 3px rgba(212,175,55,0.40))" }} />
@@ -433,9 +434,9 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
                   onClick={handleReset}
                   aria-label="Clear chat history"
                   className="flex items-center gap-1.5 font-bebas text-[13px] uppercase tracking-[0.15em] transition-colors tabular-nums"
-                  style={{ color: "rgba(180,140,255,0.65)" }}
-                  onMouseEnter={e => (e.currentTarget.style.color = "rgba(180,140,255,0.90)")}
-                  onMouseLeave={e => (e.currentTarget.style.color = "rgba(180,140,255,0.65)")}
+                  style={{ color: "rgba(212,175,55,0.55)" }}
+                  onMouseEnter={e => (e.currentTarget.style.color = "rgba(212,175,55,0.80)")}
+                  onMouseLeave={e => (e.currentTarget.style.color = "rgba(212,175,55,0.55)")}
                   onMouseDown={e => (e.currentTarget.style.transform = "scale(0.90)")}
                   onMouseUp={e => (e.currentTarget.style.transform = "scale(1)")}
                 >
@@ -471,8 +472,8 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
                     className="relative max-w-[85%] px-4 py-3 border overflow-hidden"
                     style={{
                       borderRadius: "8px",
-                      background: "rgba(120,60,180,0.12)",
-                      borderColor: "rgba(120,60,180,0.20)",
+                      background: "rgba(212,175,55,0.08)",
+                      borderColor: "rgba(212,175,55,0.20)",
                     }}
                   >
                     <p className="text-[18px] text-white leading-relaxed">{msg.question}</p>
@@ -487,8 +488,8 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
                   style={{
                     borderRadius: "8px",
                     background: "rgba(10,10,10,0.80)",
-                    borderColor: "rgba(120,60,180,0.25)",
-                    boxShadow: "0 0 30px rgba(120,60,180,0.18)",
+                    borderColor: "rgba(212,175,55,0.15)",
+                    boxShadow: "0 0 30px rgba(212,175,55,0.06)",
                   }}
                 >
                   {/* Answer body */}
@@ -499,7 +500,8 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
                         width: "20px",
                         height: "20px",
                         borderRadius: "5px",
-                        background: "linear-gradient(135deg, rgb(75,30,130) 0%, rgb(110,50,170) 100%)",
+                        background: "rgba(212,175,55,0.12)",
+                        border: "1px solid rgba(212,175,55,0.30)",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
@@ -589,10 +591,10 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
               className="flex gap-0 transition-colors"
               style={{
                 borderRadius: "8px",
-                border: "1px solid rgba(120,60,180,0.40)",
+                border: "1px solid rgba(212,175,55,0.25)",
               }}
-              onFocus={e => (e.currentTarget.style.borderColor = "rgba(120,60,180,0.60)")}
-              onBlur={e => (e.currentTarget.style.borderColor = "rgba(120,60,180,0.40)")}
+              onFocus={e => (e.currentTarget.style.borderColor = "rgba(212,175,55,0.45)")}
+              onBlur={e => (e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)")}
             >
               <textarea
                 ref={inputRef}
@@ -620,7 +622,7 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
                   onMouseLeave={e => (e.currentTarget.style.opacity = "1")}
                   onMouseDown={e => { e.currentTarget.style.transform = "scale(0.95)"; }}
                   onMouseUp={e => { e.currentTarget.style.transform = "scale(1)"; }}
-                  style={{ background: "linear-gradient(180deg, rgb(110,50,170) 0%, rgb(75,30,130) 100%)", color: "#fff", borderRadius: "0 7px 7px 0", boxShadow: "inset 0 1px 1px rgba(255,255,255,0.20), inset 0 -2px 4px rgba(0,0,0,0.3)" }}
+                  style={{ background: "#F9E076", color: "#000", borderRadius: "0 7px 7px 0", boxShadow: "0 0 12px rgba(249,224,118,0.20)" }}
                 >
                 <SendHorizonal className="w-5 h-5" />
               </button>
