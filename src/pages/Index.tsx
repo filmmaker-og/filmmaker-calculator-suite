@@ -430,7 +430,7 @@ const Index = () => {
             border: "1px solid rgba(255,255,255,0.08)",
             borderTop: "1px solid rgba(255,255,255,0.18)",
             borderRadius: "8px",
-            padding: "28px clamp(20px, 5vw, 36px)",
+            padding: "28px clamp(24px, 5vw, 40px)",
             boxShadow: "0 8px 32px rgba(0,0,0,0.50), 0 0 1px rgba(212,175,55,0.08), 0 0 60px rgba(212,175,55,0.04), 0 0 80px rgba(212,175,55,0.06)",
             backdropFilter: "blur(20px)",
             WebkitBackdropFilter: "blur(20px)",
@@ -580,7 +580,7 @@ const Index = () => {
             border: "1px solid rgba(255,255,255,0.07)",
             borderTop: "1px solid rgba(255,255,255,0.18)",
             borderRadius: "8px",
-            padding: "32px clamp(20px, 5vw, 36px)",
+            padding: "32px clamp(24px, 5vw, 40px)",
             boxShadow: "0 4px 24px rgba(0,0,0,0.30)",
             backdropFilter: "blur(20px)",
             WebkitBackdropFilter: "blur(20px)",
@@ -644,11 +644,11 @@ const Index = () => {
             }} className="preview-card">
               <p style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "10px", color: "rgba(212,175,55,0.60)", letterSpacing: "0.10em", textTransform: "uppercase", marginBottom: "12px" }}>Profit Split</p>
               <div style={{ display: "flex", gap: "8px", marginBottom: "12px" }}>
-                <div style={{ flex: 1, textAlign: "center", padding: "10px 8px", borderRadius: "6px", background: "#232326", border: "1px solid rgba(60,179,113,0.15)" }}>
+                <div style={{ flex: 1, textAlign: "center", padding: "10px 8px", borderRadius: "6px", background: "rgba(35,35,38,0.50)", border: "1px solid rgba(60,179,113,0.15)" }}>
                   <p style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "9px", color: "rgba(250,248,244,0.70)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "4px" }}>Investor</p>
                   <p style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.3rem", color: "#3CB371" }}>$209K</p>
                 </div>
-                <div style={{ flex: 1, textAlign: "center", padding: "10px 8px", borderRadius: "6px", background: "#232326", border: "1px solid rgba(60,179,113,0.15)" }}>
+                <div style={{ flex: 1, textAlign: "center", padding: "10px 8px", borderRadius: "6px", background: "rgba(35,35,38,0.50)", border: "1px solid rgba(60,179,113,0.15)" }}>
                   <p style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "9px", color: "rgba(250,248,244,0.70)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "4px" }}>Producer</p>
                   <p style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.3rem", color: "#3CB371" }}>$209K</p>
                 </div>
@@ -727,7 +727,7 @@ const Index = () => {
             border: "1px solid rgba(255,255,255,0.07)",
             borderTop: "1px solid rgba(255,255,255,0.18)",
             borderRadius: "8px",
-            padding: "36px clamp(20px, 5vw, 36px)",
+            padding: "36px clamp(24px, 5vw, 40px)",
             boxShadow: "0 4px 24px rgba(0,0,0,0.30)",
             backdropFilter: "blur(20px)",
             WebkitBackdropFilter: "blur(20px)",
@@ -979,7 +979,7 @@ const Index = () => {
               <span style={{ position: "relative", zIndex: 1 }}>BUILD MY WATERFALL</span>
               <div style={styles.ctaShimmer} />
             </button>
-            <p style={styles.ctaReassurance}>See your full waterfall in 60 seconds</p>
+            <p style={styles.ctaReassurance}>See your full waterfall in 90 seconds</p>
           </div>
           </div>
         </section>
@@ -998,7 +998,7 @@ const Index = () => {
             border: "1px solid rgba(255,255,255,0.07)",
             borderTop: "1px solid rgba(255,255,255,0.18)",
             borderRadius: "8px",
-            padding: "36px clamp(20px, 5vw, 36px)",
+            padding: "36px clamp(24px, 5vw, 40px)",
             boxShadow: "0 4px 24px rgba(0,0,0,0.30)",
             backdropFilter: "blur(20px)",
             WebkitBackdropFilter: "blur(20px)",
@@ -1008,7 +1008,7 @@ const Index = () => {
             <h2 style={styles.sectionH2}><span style={{ color: "#D4AF37", textShadow: "0 0 30px rgba(212,175,55,0.50), 0 0 80px rgba(212,175,55,0.10)" }}>(4) Four</span> Reasons<br />You Can't Skip</h2>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "16px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "16px" }}>
             {stakeCards.map((card, i) => (
               <div
                 key={card.num}
@@ -1046,7 +1046,7 @@ const Index = () => {
             border: "1px solid rgba(255,255,255,0.07)",
             borderTop: "1px solid rgba(255,255,255,0.18)",
             borderRadius: "8px",
-            padding: "36px clamp(20px, 5vw, 36px)",
+            padding: "36px clamp(24px, 5vw, 40px)",
             boxShadow: "0 4px 24px rgba(0,0,0,0.30)",
             backdropFilter: "blur(20px)",
             WebkitBackdropFilter: "blur(20px)",
@@ -1166,7 +1166,7 @@ const Index = () => {
             border: "1px solid rgba(255,255,255,0.07)",
             borderTop: "1px solid rgba(255,255,255,0.18)",
             borderRadius: "8px",
-            padding: "36px clamp(20px, 5vw, 36px)",
+            padding: "36px clamp(24px, 5vw, 40px)",
             boxShadow: "0 4px 24px rgba(0,0,0,0.30)",
             backdropFilter: "blur(20px)",
             WebkitBackdropFilter: "blur(20px)",
@@ -1181,11 +1181,11 @@ const Index = () => {
             ...reveal(socialVisible, 1),
             padding: "24px 24px",
             margin: "16px 0 24px",
-            borderLeft: "3px solid rgba(212,175,55,0.40)",
             background: "rgba(212,175,55,0.04)",
             borderRadius: "8px",
             boxShadow: "0 4px 16px rgba(0,0,0,0.20), inset 0 1px 0 rgba(255,255,255,0.04)",
             border: "1px solid rgba(255,255,255,0.06)",
+            borderLeft: "3px solid rgba(212,175,55,0.40)",
           }}>
             <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "16px", color: "rgba(250,248,244,0.90)", lineHeight: 1.6, fontStyle: "italic" }}>
               "Finally, a tool that speaks the language of independent film finance. I walked into my investor meeting with real numbers."
@@ -1212,7 +1212,7 @@ const Index = () => {
           <div style={{ height: "1px", background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.12), transparent)", margin: "0 0 20px" }} />
 
           {/* Feature badges — text only, no emojis */}
-          <div style={{ ...reveal(socialVisible, 3), display: "flex", flexWrap: "wrap", gap: "10px 10px", rowGap: "14px", justifyContent: "center" }}>
+          <div style={{ ...reveal(socialVisible, 3), display: "flex", flexWrap: "wrap", gap: "12px", rowGap: "14px", justifyContent: "center" }}>
             {["11-Tier Waterfall", "PDF Export", "Profit Split", "Deal Verdict"].map((feat) => (
               <div key={feat} style={{
                 fontFamily: "'Roboto Mono', monospace", fontSize: "11px",
@@ -1261,8 +1261,8 @@ const Index = () => {
             </div>
             {/* Body + CTA */}
             <p style={{
-              fontFamily: "'Inter', sans-serif", fontSize: "16px", color: "rgba(250,248,244,0.88)",
-              lineHeight: 1.6, margin: "0 auto 24px", textAlign: "center",
+              fontFamily: "'Inter', sans-serif", fontSize: "17px", color: "rgba(250,248,244,0.88)",
+              lineHeight: 1.6, margin: "0 auto 28px", textAlign: "center", maxWidth: "420px",
             }}>
               Will you have the answer? Build your waterfall now and walk in prepared.
             </p>
@@ -1274,7 +1274,7 @@ const Index = () => {
         </section>
 
         {/* ═══ FOOTER ═══ */}
-        <footer ref={footerRef} style={{ ...styles.footer, position: "relative", overflow: "hidden", opacity: prefersReducedMotion || footerVisible ? 1 : 0, transition: prefersReducedMotion ? "none" : "opacity 0.8s ease-out", marginTop: "32px" }}>
+        <footer ref={footerRef} style={{ ...styles.footer, position: "relative", overflow: "hidden", opacity: prefersReducedMotion || footerVisible ? 1 : 0, transition: prefersReducedMotion ? "none" : "opacity 0.8s ease-out", marginTop: "40px" }}>
           {/* Footer warm glow */}
           <div style={{ position: "absolute", bottom: "0", left: "50%", transform: "translateX(-50%)", width: "300px", height: "120px", background: "radial-gradient(ellipse, rgba(212,175,55,0.06) 0%, transparent 70%)", pointerEvents: "none", filter: "blur(40px)" }} />
           {/* Premium divider */}
