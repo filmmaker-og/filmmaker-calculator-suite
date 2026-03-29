@@ -419,83 +419,107 @@ function page3(data: SnapshotData): string {
   const { inputs, result, computed } = data;
   const revenue = inputs.revenue;
 
-  // Build deduction rows dynamically
-  const deductionRows: string[] = [];
-
-  if (result.cam > 0) {
-    deductionRows.push(`
-      <div class="row" style="padding:8px 16px;">
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:rgba(255,255,255,0.90);">CAM Fee <span style="font-family:'Roboto Mono',monospace;font-size:10px;color:rgba(212,175,55,0.45);margin-left:8px;">1% OF GROSS</span></div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:rgba(220,38,38,0.88);">–${formatFullCurrency(result.cam)}</div>
-      </div>
-      <div class="divider" style="background:rgba(255,255,255,0.04);"></div>`);
-  }
-
-  if (result.guilds > 0) {
-    deductionRows.push(`
-      <div class="row" style="padding:8px 16px;">
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:rgba(255,255,255,0.90);">Guild Residuals <span style="font-family:'Roboto Mono',monospace;font-size:10px;color:rgba(212,175,55,0.45);margin-left:8px;">SAG · WGA · DGA</span></div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:rgba(220,38,38,0.88);">–${formatFullCurrency(result.guilds)}</div>
-      </div>
-      <div class="divider" style="background:rgba(255,255,255,0.04);"></div>`);
-  }
-
-  if (result.salesFee > 0) {
-    const salesFeePct = revenue > 0 ? Math.round((result.salesFee / revenue) * 100) : 0;
-    deductionRows.push(`
-      <div class="row" style="padding:8px 16px;">
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:rgba(255,255,255,0.90);">Sales Commission <span style="font-family:'Roboto Mono',monospace;font-size:10px;color:rgba(212,175,55,0.45);margin-left:8px;">${salesFeePct}%</span></div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:rgba(220,38,38,0.88);">–${formatFullCurrency(result.salesFee)}</div>
-      </div>
-      <div class="divider" style="background:rgba(255,255,255,0.04);"></div>`);
-  }
-
-  if (result.marketing > 0) {
-    deductionRows.push(`
-      <div class="row" style="padding:8px 16px;">
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:rgba(255,255,255,0.90);">Sales Expenses <span style="font-family:'Roboto Mono',monospace;font-size:10px;color:rgba(212,175,55,0.45);margin-left:8px;">EXPENSE CAP</span></div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:rgba(220,38,38,0.88);">–${formatFullCurrency(result.marketing)}</div>
-      </div>
-      <div class="divider" style="background:rgba(255,255,255,0.04);"></div>`);
-  }
-
-  // Remove trailing divider from last row
-  const deductionRowsHtml = deductionRows.join('').replace(/<div class="divider"[^>]*><\/div>\s*$/, '');
-
-  // Erosion bar: green portion = 100 - erosionPct, red = erosionPct
+  // Erosion bar
   const erosionPct = Math.min(100, Math.max(0, computed.erosionPct));
   const greenPct = Math.round(100 - erosionPct);
   const redPct = Math.round(erosionPct);
 
-  // Tax credits connector + card (only if credits > 0)
-  const netDistributable = revenue - result.offTopTotal + result.creditsApplied;
+  // Tax credits
   const hasCredits = inputs.credits > 0;
 
-  const taxCreditsSection = hasCredits ? `
-    <!-- Connector red→green -->
-    <div class="conn" style="height:10px;">
-      <div style="width:2px;height:6px;background:linear-gradient(180deg,rgba(220,38,38,0.50),rgba(60,179,113,0.50));border-radius:1px;"></div>
-      <div style="width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid rgba(60,179,113,0.55);margin-top:-1px;"></div>
-    </div>
+  // ── Build deduction cards dynamically ──
+  // CAM is always solo. Sales Commission + Expenses are paired.
+  // Guilds solo. Each renders only if > 0.
+  const hasCam = result.cam > 0;
+  const hasSalesFee = result.salesFee > 0;
+  const hasSalesExp = result.marketing > 0;
+  const hasGuilds = result.guilds > 0;
 
-    <!-- TAX CREDITS -->
-    <div class="card" style="width:55%;padding:12px 20px;border:1px solid rgba(60,179,113,0.22);">
-      <div style="display:flex;justify-content:space-between;align-items:center;">
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:rgba(60,179,113,0.88);">Tax Credits <span style="font-family:'Roboto Mono',monospace;font-size:10px;color:rgba(212,175,55,0.45);margin-left:8px;">NON-DILUTIVE</span></div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:#3CB371;">+${formatFullCurrency(result.creditsApplied > 0 ? result.creditsApplied : inputs.credits)}</div>
+  const salesFeePct = revenue > 0 ? Math.round((result.salesFee / revenue) * 100) : 0;
+
+  const camCard = hasCam ? `
+      <!-- CAM — solo card -->
+      <div class="wf-label" style="font-size:10px;color:rgba(220,38,38,0.50);margin-bottom:3px;">COLLECTION & ADMIN</div>
+      <div class="wf-card" style="width:45%;padding:12px 14px;border:1px solid rgba(220,38,38,0.25);">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:#fff;text-transform:uppercase;margin-bottom:2px;">CAM Fee</div>
+        <div style="font-family:'Roboto Mono',monospace;font-size:9px;color:rgba(212,175,55,0.50);margin-bottom:3px;">1% OF GROSS</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:rgba(220,38,38,0.88);">–${formatFullCurrency(result.cam)}</div>
       </div>
-    </div>
+      <div class="conn" style="height:20px;">
+        <div style="width:3px;height:9px;background:rgba(220,38,38,0.50);box-shadow:0 0 6px rgba(220,38,38,0.25);border-radius:1px;"></div>
+        <div style="width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid rgba(220,38,38,0.50);margin-top:-1px;"></div>
+      </div>` : '';
 
-    <!-- Connector green→gold -->
-    <div class="conn" style="height:10px;">
-      <div style="width:3px;height:6px;background:linear-gradient(180deg,rgba(60,179,113,0.50),rgba(212,175,55,0.55));box-shadow:0 0 8px rgba(212,175,55,0.25);border-radius:1px;"></div>
-      <div style="width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:6px solid rgba(212,175,55,0.55);margin-top:-1px;"></div>
-    </div>` : `
-    <!-- Connector red→gold (no credits) -->
-    <div class="conn" style="height:10px;">
-      <div style="width:3px;height:6px;background:linear-gradient(180deg,rgba(220,38,38,0.50),rgba(212,175,55,0.55));box-shadow:0 0 8px rgba(212,175,55,0.25);border-radius:1px;"></div>
-      <div style="width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:6px solid rgba(212,175,55,0.55);margin-top:-1px;"></div>
-    </div>`;
+  // Sales pair: if both exist → side-by-side. If only one → solo card.
+  let salesSection = '';
+  if (hasSalesFee && hasSalesExp) {
+    salesSection = `
+      <div class="wf-label" style="font-size:10px;color:rgba(220,38,38,0.50);margin-bottom:3px;">SALES AGENCY</div>
+      <div style="width:100%;display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <div class="wf-card" style="padding:12px 10px;border:1px solid rgba(220,38,38,0.25);">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:#fff;text-transform:uppercase;margin-bottom:2px;">Commission</div>
+          <div style="font-family:'Roboto Mono',monospace;font-size:9px;color:rgba(212,175,55,0.50);margin-bottom:3px;">${salesFeePct}% OF GROSS</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:rgba(220,38,38,0.88);">–${formatFullCurrency(result.salesFee)}</div>
+        </div>
+        <div class="wf-card" style="padding:12px 10px;border:1px solid rgba(220,38,38,0.25);">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:#fff;text-transform:uppercase;margin-bottom:2px;">Expenses</div>
+          <div style="font-family:'Roboto Mono',monospace;font-size:9px;color:rgba(212,175,55,0.50);margin-bottom:3px;">EXPENSE CAP</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:rgba(220,38,38,0.88);">–${formatFullCurrency(result.marketing)}</div>
+        </div>
+      </div>
+      <div class="conn" style="height:20px;">
+        <div style="width:3px;height:9px;background:rgba(220,38,38,0.50);box-shadow:0 0 6px rgba(220,38,38,0.25);border-radius:1px;"></div>
+        <div style="width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid rgba(220,38,38,0.50);margin-top:-1px;"></div>
+      </div>`;
+  } else if (hasSalesFee) {
+    salesSection = `
+      <div class="wf-label" style="font-size:10px;color:rgba(220,38,38,0.50);margin-bottom:3px;">SALES AGENCY</div>
+      <div class="wf-card" style="width:45%;padding:12px 14px;border:1px solid rgba(220,38,38,0.25);">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:#fff;text-transform:uppercase;margin-bottom:2px;">Commission</div>
+        <div style="font-family:'Roboto Mono',monospace;font-size:9px;color:rgba(212,175,55,0.50);margin-bottom:3px;">${salesFeePct}% OF GROSS</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:rgba(220,38,38,0.88);">–${formatFullCurrency(result.salesFee)}</div>
+      </div>
+      <div class="conn" style="height:20px;">
+        <div style="width:3px;height:9px;background:rgba(220,38,38,0.50);box-shadow:0 0 6px rgba(220,38,38,0.25);border-radius:1px;"></div>
+        <div style="width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid rgba(220,38,38,0.50);margin-top:-1px;"></div>
+      </div>`;
+  } else if (hasSalesExp) {
+    salesSection = `
+      <div class="wf-label" style="font-size:10px;color:rgba(220,38,38,0.50);margin-bottom:3px;">SALES AGENCY</div>
+      <div class="wf-card" style="width:45%;padding:12px 14px;border:1px solid rgba(220,38,38,0.25);">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:#fff;text-transform:uppercase;margin-bottom:2px;">Expenses</div>
+        <div style="font-family:'Roboto Mono',monospace;font-size:9px;color:rgba(212,175,55,0.50);margin-bottom:3px;">EXPENSE CAP</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:rgba(220,38,38,0.88);">–${formatFullCurrency(result.marketing)}</div>
+      </div>
+      <div class="conn" style="height:20px;">
+        <div style="width:3px;height:9px;background:rgba(220,38,38,0.50);box-shadow:0 0 6px rgba(220,38,38,0.25);border-radius:1px;"></div>
+        <div style="width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid rgba(220,38,38,0.50);margin-top:-1px;"></div>
+      </div>`;
+  }
+
+  const guildCard = hasGuilds ? `
+      <div class="wf-label" style="font-size:10px;color:rgba(220,38,38,0.50);margin-bottom:3px;">GUILD RESERVES</div>
+      <div class="wf-card" style="width:45%;padding:12px 14px;border:1px solid rgba(220,38,38,0.25);">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:#fff;text-transform:uppercase;margin-bottom:2px;">Guild Residuals</div>
+        <div style="font-family:'Roboto Mono',monospace;font-size:9px;color:rgba(212,175,55,0.50);margin-bottom:3px;">SAG · WGA · DGA</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:rgba(220,38,38,0.88);">–${formatFullCurrency(result.guilds)}</div>
+      </div>
+      <div class="conn" style="height:22px;">
+        <div style="width:3px;height:12px;background:rgba(220,38,38,0.60);box-shadow:0 0 8px rgba(220,38,38,0.30);border-radius:1px;"></div>
+        <div style="width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:6px solid rgba(220,38,38,0.60);margin-top:-1px;"></div>
+      </div>` : '';
+
+  const taxCreditsCard = hasCredits ? `
+      <!-- Connector: red → green -->
+      <div class="conn" style="height:22px;">
+        <div style="width:3px;height:12px;background:linear-gradient(180deg,rgba(220,38,38,0.50),rgba(60,179,113,0.50));box-shadow:0 0 6px rgba(60,179,113,0.20);border-radius:1px;"></div>
+        <div style="width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid rgba(60,179,113,0.55);margin-top:-1px;"></div>
+      </div>
+      <div class="wf-card" style="width:50%;padding:10px 16px;border:1px solid rgba(60,179,113,0.22);">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:rgba(60,179,113,0.90);text-transform:uppercase;margin-bottom:2px;">Tax Credits</div>
+        <div style="font-family:'Roboto Mono',monospace;font-size:9px;color:rgba(212,175,55,0.50);margin-bottom:3px;">NON-DILUTIVE</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:#3CB371;">+${formatFullCurrency(result.creditsApplied > 0 ? result.creditsApplied : inputs.credits)}</div>
+      </div>` : '';
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -504,11 +528,18 @@ function page3(data: SnapshotData): string {
   ${FONTS}
   <style>
     ${BASE_CSS}
-    .card { background: linear-gradient(180deg, rgba(212,175,55,0.02), #232326); border-radius: 8px; box-shadow: 0 4px 14px rgba(0,0,0,0.35); }
-    .label { font-family: 'Bebas Neue', sans-serif; letter-spacing: 3px; text-align: center; }
+    .wf-card {
+      text-align: center;
+      background: linear-gradient(180deg, rgba(212,175,55,0.02), #232326);
+      border-radius: 8px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.30);
+    }
+    .wf-label {
+      font-family: 'Bebas Neue', sans-serif;
+      letter-spacing: 3px;
+      text-align: center;
+    }
     .conn { display: flex; flex-direction: column; align-items: center; justify-content: center; }
-    .row { display: flex; justify-content: space-between; align-items: center; padding: 8px 16px; }
-    .divider { height: 1px; margin: 0 20px; }
   </style>
 </head>
 <body>
@@ -522,46 +553,39 @@ function page3(data: SnapshotData): string {
       <div style="font-family:'Inter',sans-serif;font-size:11px;color:rgba(250,248,244,0.50);margin-top:4px;font-style:italic;">Every dollar of acquisition revenue passes through these gates before reaching the capital stack.</div>
     </div>
 
-    <div style="flex:1;padding:0 36px 24px;position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;">
+    <div style="flex:1;padding:4px 48px 44px;position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;">
 
       <!-- ACQUISITION REVENUE -->
-      <div class="label" style="font-size:12px;color:rgba(212,175,55,0.50);margin-bottom:6px;">ACQUISITION REVENUE</div>
-      <div class="card" style="width:50%;padding:16px 20px;border:1px solid rgba(212,175,55,0.22);text-align:center;">
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:rgba(255,255,255,0.94);letter-spacing:1px;">${formatFullCurrency(revenue)}</div>
+      <div class="wf-label" style="font-size:11px;color:rgba(212,175,55,0.50);margin-bottom:4px;">ACQUISITION REVENUE</div>
+      <div class="wf-card" style="width:55%;padding:14px 16px;border:1px solid rgba(212,175,55,0.22);">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:34px;color:rgba(255,255,255,0.94);letter-spacing:1px;">${formatFullCurrency(revenue)}</div>
       </div>
 
-      <!-- Connector gold→red -->
-      <div class="conn" style="height:10px;">
-        <div style="width:2px;height:6px;background:linear-gradient(180deg,rgba(212,175,55,0.55),rgba(220,38,38,0.50));border-radius:1px;"></div>
+      <!-- Connector: gold → red -->
+      <div class="conn" style="height:22px;">
+        <div style="width:3px;height:12px;background:linear-gradient(180deg,rgba(212,175,55,0.55),rgba(220,38,38,0.50));box-shadow:0 0 6px rgba(220,38,38,0.20);border-radius:1px;"></div>
         <div style="width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid rgba(220,38,38,0.55);margin-top:-1px;"></div>
       </div>
 
-      <!-- OFF-THE-TOP DEDUCTIONS -->
-      <div class="label" style="font-size:11px;color:rgba(220,38,38,0.50);margin-bottom:6px;">OFF-THE-TOP DEDUCTIONS</div>
-      <div class="card" style="width:100%;border:1px solid rgba(220,38,38,0.22);overflow:hidden;">
-        ${deductionRowsHtml}
-        <!-- TOTAL footer -->
-        <div style="border-top:1px solid rgba(220,38,38,0.15);background:rgba(220,38,38,0.03);padding:10px 20px;display:flex;justify-content:space-between;align-items:center;">
-          <div style="display:flex;align-items:center;gap:14px;">
-            <div style="font-family:'Roboto Mono',monospace;font-size:10px;color:rgba(220,38,38,0.60);letter-spacing:1px;">TOTAL</div>
-            <div style="width:100px;height:8px;background:rgba(255,255,255,0.06);border-radius:4px;overflow:hidden;display:flex;">
-              <div style="height:100%;width:${greenPct}%;background:rgba(60,179,113,0.40);border-radius:4px 0 0 4px;"></div>
-              <div style="height:100%;flex:1;background:rgba(220,38,38,0.35);border-radius:0 4px 4px 0;"></div>
-            </div>
-            <div style="font-family:'Roboto Mono',monospace;font-size:9px;color:rgba(255,255,255,0.40);">${redPct}% OF GROSS</div>
-          </div>
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:rgba(220,38,38,0.88);">–${formatFullCurrency(result.offTopTotal)}</div>
+      ${camCard}
+      ${salesSection}
+      ${guildCard}
+
+      <!-- TOTAL OFF THE TOP -->
+      <div class="wf-label" style="font-size:11px;color:rgba(220,38,38,0.55);margin-bottom:4px;">TOTAL OFF THE TOP</div>
+      <div class="wf-card" style="width:100%;padding:12px 20px;border:1px solid rgba(220,38,38,0.25);">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:rgba(220,38,38,0.88);">–${formatFullCurrency(result.offTopTotal)}</div>
+        <div style="margin-top:6px;height:8px;background:rgba(255,255,255,0.08);border-radius:4px;overflow:hidden;display:flex;">
+          <div style="height:100%;width:${greenPct}%;background:rgba(60,179,113,0.45);border-radius:4px 0 0 4px;"></div>
+          <div style="height:100%;flex:1;background:rgba(220,38,38,0.40);border-radius:0 4px 4px 0;"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-top:4px;">
+          <span style="font-family:'Roboto Mono',monospace;font-size:9px;color:rgba(60,179,113,0.60);">REMAINING ${greenPct}%</span>
+          <span style="font-family:'Roboto Mono',monospace;font-size:9px;color:rgba(220,38,38,0.60);">DEDUCTED ${redPct}%</span>
         </div>
       </div>
 
-      ${taxCreditsSection}
-
-      <!-- NET DISTRIBUTABLE REVENUE -->
-      <div class="label" style="font-size:12px;color:rgba(212,175,55,0.50);margin-bottom:6px;">NET DISTRIBUTABLE REVENUE</div>
-      <div class="card" style="width:60%;padding:16px 24px;border:1px solid rgba(212,175,55,0.25);text-align:center;">
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:rgba(255,255,255,0.94);letter-spacing:1px;">${formatFullCurrency(netDistributable)}</div>
-        <div style="font-family:'Roboto Mono',monospace;font-size:9px;color:rgba(212,175,55,0.40);margin-top:6px;letter-spacing:1px;">FLOWS INTO CAPITAL RECOUPMENT →</div>
-      </div>
+      ${taxCreditsCard}
 
     </div>
 
@@ -571,7 +595,7 @@ function page3(data: SnapshotData): string {
 </html>`;
 }
 
-// ─────────────────────────────────────────────────────────
+
 // PAGE 4 — WATERFALL RECOUPMENT
 // ─────────────────────────────────────────────────────────
 
@@ -587,7 +611,7 @@ function page4(data: SnapshotData): string {
   if (inputs.deferments > 0) capSources.push({ label: 'Deferrals', detail: 'Subordinate', amount: inputs.deferments, pct: inputs.budget > 0 ? `${Math.round((inputs.deferments / inputs.budget) * 100)}%` : '' });
 
   const capRows = capSources.map((s, i) =>
-    `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 16px;${i > 0 ? 'border-top:1px solid rgba(212,175,55,0.06);' : ''}">
+    `<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 14px;${i > 0 ? 'border-top:1px solid rgba(212,175,55,0.06);' : ''}">
       <div>
         <div style="font-family:'Inter',sans-serif;font-size:11px;color:rgba(250,248,244,0.88);font-weight:500;">${s.label}</div>
         <div style="font-family:'Roboto Mono',monospace;font-size:8px;color:rgba(212,175,55,0.40);">${s.detail}</div>
@@ -606,27 +630,46 @@ function page4(data: SnapshotData): string {
   const investorBackend = profitPool * (profitSplitPct / 100);
   const producerBackend = profitPool * (producerSplitPct / 100);
 
-  // Build tier rows from data.tiers
-  const tierRows = tiers.map((tier, i) => {
+  const profitPoolColor = profitPool > 0 ? '#3CB371' : 'rgba(220,38,38,0.85)';
+  const profitPoolDisplay = formatFullCurrency(profitPool);
+
+  // ── Build tier cards in paired rows with badges ──
+  // Each tier gets its own card with a numbered badge, arranged in 2-column grid
+  const tierCards = tiers.map((tier, i) => {
     const badgeNum = i + 1;
     const isDeferred = tier.name.toLowerCase().includes('defer');
     const amountColor = isDeferred ? 'rgba(240,168,48,0.88)' : 'rgba(255,255,255,0.92)';
-    const divider = i < tiers.length - 1
-      ? `<div class="divider" style="background:rgba(212,175,55,0.06);"></div>`
-      : '';
     return `
-      <div class="row" style="padding:14px 20px;">
-        <div style="display:flex;align-items:center;gap:14px;">
+        <div class="wf-card" style="padding:14px 12px;border:1px solid rgba(212,175,55,0.18);">
           <div class="badge">${badgeNum}</div>
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:rgba(255,255,255,0.92);">${tier.name} <span style="font-family:'Roboto Mono',monospace;font-size:10px;color:rgba(212,175,55,0.45);margin-left:8px;">${tier.rate}</span></div>
-        </div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:${amountColor};">${formatFullCurrency(tier.amount)}</div>
-      </div>
-      ${divider}`;
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;color:#fff;text-transform:uppercase;margin-bottom:2px;">${tier.name}</div>
+          <div style="font-family:'Roboto Mono',monospace;font-size:9px;color:rgba(212,175,55,0.50);margin-bottom:4px;">${tier.rate}</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:${amountColor};">${formatFullCurrency(tier.amount)}</div>
+        </div>`;
   }).join('');
 
-  const profitPoolColor = profitPool > 0 ? '#3CB371' : 'rgba(220,38,38,0.85)';
-  const profitPoolDisplay = formatFullCurrency(profitPool);
+  // Arrange tier cards in rows of 2
+  const tierGrids: string[] = [];
+  for (let i = 0; i < tiers.length; i += 2) {
+    const isFirst = i === 0;
+    const cols = (i + 1 < tiers.length) ? '1fr 1fr' : '1fr';
+    const cards = [tiers[i]].concat(i + 1 < tiers.length ? [tiers[i + 1]] : []).map((tier, j) => {
+      const idx = i + j;
+      const badgeNum = idx + 1;
+      const isDeferred = tier.name.toLowerCase().includes('defer');
+      const amountColor = isDeferred ? 'rgba(240,168,48,0.88)' : 'rgba(255,255,255,0.92)';
+      return `
+        <div class="wf-card" style="padding:10px 10px;border:1px solid rgba(212,175,55,0.18);">
+          <div class="badge">${badgeNum}</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:#fff;text-transform:uppercase;margin-bottom:1px;">${tier.name}</div>
+          <div style="font-family:'Roboto Mono',monospace;font-size:9px;color:rgba(212,175,55,0.50);margin-bottom:3px;">${tier.rate}</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:${amountColor};">${formatFullCurrency(tier.amount)}</div>
+        </div>`;
+    }).join('');
+    tierGrids.push(`
+      <div style="width:100%;display:grid;grid-template-columns:${cols};gap:8px;${!isFirst ? 'margin-top:8px;' : ''}">${cards}</div>`);
+  }
+  const tierSection = tierGrids.join('');
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -635,17 +678,24 @@ function page4(data: SnapshotData): string {
   ${FONTS}
   <style>
     ${BASE_CSS}
-    .card { background: linear-gradient(180deg, rgba(212,175,55,0.02), #232326); border-radius: 8px; box-shadow: 0 4px 14px rgba(0,0,0,0.35); }
-    .label { font-family: 'Bebas Neue', sans-serif; letter-spacing: 3px; text-align: center; }
+    .wf-card {
+      text-align: center;
+      background: linear-gradient(180deg, rgba(212,175,55,0.02), #232326);
+      border-radius: 8px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.30);
+    }
+    .wf-label {
+      font-family: 'Bebas Neue', sans-serif;
+      letter-spacing: 3px;
+      text-align: center;
+    }
     .conn { display: flex; flex-direction: column; align-items: center; justify-content: center; }
-    .row { display: flex; justify-content: space-between; align-items: center; padding: 14px 20px; }
-    .divider { height: 1px; margin: 0 20px; }
     .badge {
-      width: 30px; height: 30px; border-radius: 50%;
+      width: 26px; height: 26px; border-radius: 50%;
       background: rgba(212,175,55,0.12); border: 1px solid rgba(212,175,55,0.30);
-      display: flex; align-items: center; justify-content: center;
-      font-family: 'Bebas Neue', sans-serif; font-size: 15px; color: #fff;
-      flex-shrink: 0; line-height: 1;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-family: 'Bebas Neue', sans-serif; font-size: 14px; color: #fff;
+      line-height: 1; margin-bottom: 4px;
     }
   </style>
 </head>
@@ -660,58 +710,56 @@ function page4(data: SnapshotData): string {
       <div style="font-family:'Inter',sans-serif;font-size:11px;color:rgba(250,248,244,0.50);margin-top:4px;font-style:italic;">After deductions, revenue flows through the capital stack in priority order.</div>
     </div>
 
-    <div style="flex:1;padding:8px 36px 48px;position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;">
+    <div style="flex:1;padding:0 48px 40px;position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;">
 
-      <!-- CAPITAL STRUCTURE -->
       ${capSources.length > 0 ? `
-      <div style="width:100%;margin-bottom:12px;">
-        <div style="font-family:'Roboto Mono',monospace;font-size:9px;color:rgba(212,175,55,0.40);letter-spacing:2px;margin-bottom:6px;">CAPITAL STRUCTURE</div>
+      <!-- CAPITAL STRUCTURE -->
+      <div style="width:100%;margin-bottom:6px;">
+        <div style="font-family:'Roboto Mono',monospace;font-size:9px;color:rgba(212,175,55,0.40);letter-spacing:2px;margin-bottom:4px;">CAPITAL STRUCTURE</div>
         <div style="background:linear-gradient(180deg,rgba(212,175,55,0.02),#232326);border:1px solid rgba(212,175,55,0.12);border-radius:5px;overflow:hidden;">
           ${capRows}
         </div>
       </div>
 
       <!-- Connector -->
-      <div class="conn" style="height:16px;">
-        <div style="width:2px;height:10px;background:rgba(212,175,55,0.50);border-radius:1px;"></div>
+      <div class="conn" style="height:12px;">
+        <div style="width:2px;height:7px;background:rgba(212,175,55,0.50);border-radius:1px;"></div>
         <div style="width:0;height:0;border-left:3px solid transparent;border-right:3px solid transparent;border-top:4px solid rgba(212,175,55,0.55);margin-top:-1px;"></div>
       </div>
       ` : ''}
 
       <!-- CAPITAL RECOUPMENT -->
-      <div class="label" style="font-size:12px;color:rgba(212,175,55,0.50);margin-bottom:8px;">CAPITAL RECOUPMENT</div>
-      <div class="card" style="width:100%;border:1px solid rgba(212,175,55,0.18);overflow:hidden;">
-        ${tierRows}
-      </div>
+      <div class="wf-label" style="font-size:11px;color:rgba(212,175,55,0.50);margin-bottom:4px;">CAPITAL RECOUPMENT</div>
+      ${tierSection}
 
-      <!-- Connector gold→green -->
-      <div class="conn" style="height:28px;">
-        <div style="width:3px;height:18px;background:linear-gradient(180deg,rgba(212,175,55,0.55),rgba(60,179,113,0.60));box-shadow:0 0 8px rgba(60,179,113,0.25);border-radius:1px;"></div>
+      <!-- Connector gold → green -->
+      <div class="conn" style="height:14px;">
+        <div style="width:3px;height:10px;background:linear-gradient(180deg,rgba(212,175,55,0.55),rgba(60,179,113,0.60));box-shadow:0 0 8px rgba(60,179,113,0.25);border-radius:1px;"></div>
         <div style="width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:6px solid rgba(60,179,113,0.60);margin-top:-1px;"></div>
       </div>
 
       <!-- NET BACKEND PROFIT -->
-      <div class="label" style="font-size:12px;color:rgba(60,179,113,0.55);margin-bottom:8px;">NET BACKEND PROFIT</div>
-      <div class="card" style="width:100%;padding:20px 24px;border:1px solid rgba(60,179,113,0.40);text-align:center;background:radial-gradient(ellipse at 50% 0%,rgba(60,179,113,0.06) 0%,#232326 70%);box-shadow:0 4px 20px rgba(0,0,0,0.35),0 0 24px rgba(60,179,113,0.06);">
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:42px;color:${profitPoolColor};text-shadow:0 0 24px rgba(60,179,113,0.30);letter-spacing:2px;">${profitPoolDisplay}</div>
+      <div class="wf-label" style="font-size:12px;color:rgba(60,179,113,0.55);margin-bottom:4px;">NET BACKEND PROFIT</div>
+      <div class="wf-card" style="width:100%;padding:12px 24px;border:1px solid rgba(60,179,113,0.40);background:radial-gradient(ellipse at 50% 0%,rgba(60,179,113,0.06) 0%,#232326 70%);box-shadow:0 4px 20px rgba(0,0,0,0.35),0 0 24px rgba(60,179,113,0.06);">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:38px;color:${profitPoolColor};text-shadow:0 0 24px rgba(60,179,113,0.30);letter-spacing:2px;">${profitPoolDisplay}</div>
       </div>
 
-      <!-- Connector green→green -->
-      <div class="conn" style="height:24px;">
-        <div style="width:2px;height:16px;background:rgba(60,179,113,0.55);box-shadow:0 0 6px rgba(60,179,113,0.30);border-radius:1px;"></div>
+      <!-- Connector green -->
+      <div class="conn" style="height:12px;">
+        <div style="width:3px;height:7px;background:rgba(60,179,113,0.55);box-shadow:0 0 6px rgba(60,179,113,0.30);border-radius:1px;"></div>
         <div style="width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid rgba(60,179,113,0.60);margin-top:-1px;"></div>
       </div>
 
       <!-- PROFIT SPLIT -->
-      <div class="label" style="font-size:11px;color:rgba(60,179,113,0.45);margin-bottom:8px;">PROFIT SPLIT · ${profitSplitPct}/${producerSplitPct}</div>
-      <div style="width:100%;display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-        <div class="card" style="padding:16px 20px;border:1px solid rgba(60,179,113,0.22);text-align:center;">
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:rgba(255,255,255,0.70);margin-bottom:6px;">INVESTOR</div>
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#3CB371;">${formatFullCurrency(investorBackend)}</div>
+      <div class="wf-label" style="font-size:10px;color:rgba(60,179,113,0.45);margin-bottom:3px;">PROFIT SPLIT · ${profitSplitPct}/${producerSplitPct}</div>
+      <div style="width:100%;display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <div class="wf-card" style="padding:10px 14px;border:1px solid rgba(60,179,113,0.22);">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:rgba(255,255,255,0.70);margin-bottom:2px;">INVESTOR</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:#3CB371;">${formatFullCurrency(investorBackend)}</div>
         </div>
-        <div class="card" style="padding:16px 20px;border:1px solid rgba(60,179,113,0.22);text-align:center;">
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:rgba(255,255,255,0.70);margin-bottom:6px;">PRODUCER</div>
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#3CB371;">${formatFullCurrency(producerBackend)}</div>
+        <div class="wf-card" style="padding:10px 14px;border:1px solid rgba(60,179,113,0.22);">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:rgba(255,255,255,0.70);margin-bottom:2px;">PRODUCER</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:#3CB371;">${formatFullCurrency(producerBackend)}</div>
         </div>
       </div>
 
@@ -723,7 +771,6 @@ function page4(data: SnapshotData): string {
 </html>`;
 }
 
-// ─────────────────────────────────────────────────────────
 // PAGE 5 — RISK ANALYSIS
 // ─────────────────────────────────────────────────────────
 
