@@ -292,6 +292,9 @@ export function generatePdfHtml(data: SnapshotData): string {
   // PROSE GENERATION — all text derived from deal data, no filler
   // ═══════════════════════════════════════════════════════════════
 
+  // ── Empty state guard ──
+  const isEmptyDeal = inputs.revenue <= 0 && inputs.budget <= 0;
+
   // ── Capital source names (for prose) ──
   const capitalSourceNames: string[] = [];
   if (inputs.equity > 0) capitalSourceNames.push('equity');
@@ -304,6 +307,9 @@ export function generatePdfHtml(data: SnapshotData): string {
   // ── EXECUTIVE SUMMARY (Page 1) — 4-6 sentences ──
   const execSummaryParts: string[] = [];
 
+  if (isEmptyDeal) {
+    execSummaryParts.push('No deal data has been entered. Complete the calculator inputs to generate an executive summary.');
+  } else {
   // Sentence 1: What this is
   execSummaryParts.push(`${project.title} is a ${formatCurrency(inputs.budget)} independent ${project.genre ? project.genre.toLowerCase() + ' ' : ''}feature${sourcesList ? ' financed through ' + sourcesList : ''}.`);
 
@@ -344,6 +350,7 @@ export function generatePdfHtml(data: SnapshotData): string {
   if (netProfit > 0) {
     execSummaryParts.push(`The producer\u2019s net backend is ${formatCurrency(netProfit)}.`);
   }
+  } // end isEmptyDeal else
 
   const execSummaryText = execSummaryParts.join(' ');
 
