@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
 import { useHaptics } from "@/hooks/use-haptics";
 import { useInView } from "@/hooks/useInView";
 import LeadCaptureModal from "@/components/LeadCaptureModal";
@@ -26,32 +25,11 @@ const Index = () => {
 
   const [showLeadCapture, setShowLeadCapture] = useState(false);
 
-  useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (session?.user) {
-        if (event === 'SIGNED_IN' && window.location.hash.includes('access_token')) {
-          navigate('/calculator');
-        }
-      }
-    });
-    return () => subscription.unsubscribe();
-  }, [navigate]);
-
   const gatedNavigate = useCallback(async (destination: string) => {
-    try {
-      // Check if they've already given their info (localStorage) or have a session
-      const hasLead = localStorage.getItem('og_lead_email');
-      if (hasLead) {
-        navigate(destination);
-        return;
-      }
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session?.user) {
-        navigate(destination);
-        return;
-      }
-    } catch {
-      // If Supabase fails, fall through to show modal
+    const hasLead = localStorage.getItem('og_lead_email');
+    if (hasLead) {
+      navigate(destination);
+      return;
     }
     setShowLeadCapture(true);
   }, [navigate]);

@@ -47,33 +47,26 @@ const LeadCaptureModal = ({ isOpen, onClose, onEmailSubmitted }: LeadCaptureModa
     setLoading(true);
 
     try {
-      // Store lead in Supabase auth (OTP sent in background, but we don't wait for click)
-      await supabase.auth.signInWithOtp({
+      // Best-effort lead capture — insert to leads table
+      await supabase.from('leads').insert({
+        name: name.trim(),
         email: email.trim(),
-        options: {
-          data: { full_name: name.trim() },
-          emailRedirectTo: `${window.location.origin}/calculator`,
-        },
+        source: 'calculator',
       });
-      // Save to localStorage so calculator can greet them
-      localStorage.setItem('og_lead_name', name.trim());
-      localStorage.setItem('og_lead_email', email.trim());
-
-      haptics.success();
-      onEmailSubmitted?.(email.trim());
-      onClose();
-      // Navigate straight to calculator — no magic link wait
-      window.location.href = '/calculator';
-    } catch (error) {
-      // Even if OTP fails, let them through — lead capture is best-effort
-      localStorage.setItem('og_lead_name', name.trim());
-      localStorage.setItem('og_lead_email', email.trim());
-      haptics.success();
-      onClose();
-      window.location.href = '/calculator';
-    } finally {
-      setLoading(false);
+    } catch {
+      // Lead capture is best-effort — let them through even if insert fails
     }
+
+    // Save to localStorage so calculator can greet them
+    localStorage.setItem('og_lead_name', name.trim());
+    localStorage.setItem('og_lead_email', email.trim());
+
+    haptics.success();
+    onEmailSubmitted?.(email.trim());
+    onClose();
+    setLoading(false);
+    // Navigate straight to calculator
+    window.location.href = '/calculator';
   };
 
 
@@ -153,7 +146,7 @@ const LeadCaptureModal = ({ isOpen, onClose, onEmailSubmitted }: LeadCaptureModa
                 autoCapitalize="none"
                 autoCorrect="off"
                 spellCheck={false}
-                placeholder="thefilmmaker.og@gmail.com"
+                placeholder="you@company.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 onKeyDown={(e) => {
