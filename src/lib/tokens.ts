@@ -31,7 +31,6 @@ const _RED = '220,38,38';
 const _GREEN = '60,179,113';
 const _AMBER = '240,168,48';
 const _CTA_GOLD = '249,224,118';
-const _PURPLE = '120,60,180';
 const _GLASS = '6,6,6';
 
 // ─── Color Functions ────────────────────────────────────────────
@@ -56,9 +55,6 @@ export const amber = (opacity: number): string => `rgba(${_AMBER},${opacity})`;
 
 /** CTA gold at any opacity. */
 export const ctaGold = (opacity: number): string => `rgba(${_CTA_GOLD},${opacity})`;
-
-/** Purple accent at any opacity. For interactive selections + navigation atmosphere. */
-export const purple = (opacity: number): string => `rgba(${_PURPLE},${opacity})`;
 
 /** Glass-effect near-black. For blur backgrounds (TabBar, AppHeader, MobileMenu). */
 export const glass = (opacity: number): string => `rgba(${_GLASS},${opacity})`;
