@@ -54,7 +54,7 @@ const s: Record<string, React.CSSProperties> = {
   },
   heroEyebrowLine: { flex: 1, height: 1, background: "rgba(212,175,55,0.35)" },
   heroEyebrowLabel: {
-    fontFamily: "'Roboto Mono', monospace", fontSize: 10,
+    fontFamily: "'Roboto Mono', monospace", fontSize: 11,
     letterSpacing: "0.15em", textTransform: "uppercase",
     color: "rgba(212,175,55,0.65)", whiteSpace: "nowrap",
   },
@@ -185,7 +185,7 @@ const s: Record<string, React.CSSProperties> = {
     textAlign: "center" as const,
     marginTop: "14px",
     fontSize: "11px",
-    color: "rgba(255,255,255,0.40)",
+    color: "rgba(255,255,255,0.48)",
     lineHeight: 1.5,
   },
   // Quick pills
@@ -332,13 +332,13 @@ const s: Record<string, React.CSSProperties> = {
   },
   guildDesc: {
     fontFamily: "'Inter', sans-serif",
-    fontSize: "10px",
-    color: "rgba(255,255,255,0.40)",
+    fontSize: "11px",
+    color: "rgba(255,255,255,0.48)",
   },
   guildHint: {
     textAlign: "center" as const,
     fontSize: "11px",
-    color: "rgba(255,255,255,0.40)",
+    color: "rgba(255,255,255,0.48)",
     padding: "10px 24px 0",
   },
   // CTA reveal
@@ -391,7 +391,7 @@ const s: Record<string, React.CSSProperties> = {
   },
   discText: {
     fontSize: "11px",
-    color: "rgba(255,255,255,0.40)",
+    color: "rgba(255,255,255,0.48)",
     lineHeight: 1.5,
     position: "relative" as const,
   },

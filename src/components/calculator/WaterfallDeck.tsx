@@ -92,8 +92,8 @@ const FONT = {
 const W = {
   primary: "rgba(255,255,255,0.92)",
   secondary: "rgba(255,255,255,0.75)",
-  tertiary: "rgba(255,255,255,0.55)",
-  quaternary: "rgba(255,255,255,0.40)",
+  tertiary: "rgba(255,255,255,0.72)",
+  quaternary: "rgba(255,255,255,0.48)",
   ghost: "rgba(255,255,255,0.25)",
 };
 
@@ -107,8 +107,8 @@ const G = {
 
 // Semantic colors
 const SEM = {
-  green: "#3CB371",
-  red: "#DC2626",
+  green: "#4DAF78",
+  red: "#C84040",
   amber: "#F0A830",
   gold: "#D4AF37",
 };
@@ -321,7 +321,7 @@ const TransitionBridge = ({ text, height = 48 }: { text?: string; height?: numbe
         fontFamily: "'Inter', sans-serif",
         fontSize: "14px",
         fontStyle: "italic",
-        color: "rgba(250,248,244,0.45)",
+        color: "rgba(250,248,244,0.65)",
         letterSpacing: "0.02em",
       }}>
         {text}
@@ -613,7 +613,7 @@ const CoverSection = ({
             }
           </div>
         </div>
-        <div style={{ background: BG.elevated, padding: "14px", borderLeft: `2px solid ${multipleColor === SEM.green ? "rgba(60,179,113,0.25)" : multipleColor === SEM.amber ? "rgba(240,168,48,0.25)" : "rgba(220,38,38,0.35)"}` }}>
+        <div style={{ background: BG.elevated, padding: "14px", borderLeft: `2px solid ${multipleColor === SEM.green ? "rgba(77,175,120,0.25)" : multipleColor === SEM.amber ? "rgba(240,168,48,0.25)" : "rgba(200,64,64,0.35)"}` }}>
           <div style={{ ...FONT.fine, color: W.quaternary, marginBottom: "4px" }}>MULTIPLE</div>
           <div style={{
             fontFamily: "'Roboto Mono', monospace",
@@ -684,7 +684,7 @@ const CoverSection = ({
         padding: "20px",
         borderRadius: "12px",
         borderTop: `1px solid ${gold(0.15)}`,
-        background: `radial-gradient(ellipse at 20% 50%, ${multipleColor === SEM.green ? "rgba(60,179,113,0.04)" : multipleColor === SEM.amber ? "rgba(240,168,48,0.04)" : "rgba(220,38,38,0.04)"}, transparent 70%)`,
+        background: `radial-gradient(ellipse at 20% 50%, ${multipleColor === SEM.green ? "rgba(77,175,120,0.04)" : multipleColor === SEM.amber ? "rgba(240,168,48,0.04)" : "rgba(200,64,64,0.04)"}, transparent 70%)`,
       }}>
         <div style={{
           fontFamily: "'Roboto Mono', monospace",
@@ -692,7 +692,7 @@ const CoverSection = ({
           fontWeight: 500,
           lineHeight: 1,
           color: multipleColor,
-          textShadow: `0 0 30px ${multipleColor === SEM.green ? "rgba(60,179,113,0.25)" : multipleColor === SEM.amber ? "rgba(240,168,48,0.25)" : "rgba(220,38,38,0.25)"}`,
+          textShadow: `0 0 30px ${multipleColor === SEM.green ? "rgba(77,175,120,0.25)" : multipleColor === SEM.amber ? "rgba(240,168,48,0.25)" : "rgba(200,64,64,0.25)"}`,
           animation: coverInView ? "stamp 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards" : "none",
         }}>
           <CountUp value={multiple} format="multiple" trigger={coverInView} duration={1800} />
@@ -728,7 +728,7 @@ const CoverSection = ({
           padding: "12px 16px",
           fontFamily: "'Inter', sans-serif",
           fontSize: "15px",
-          color: "rgba(255,255,255,0.40)",
+          color: "rgba(255,255,255,0.48)",
           fontStyle: "italic",
         }}>
           Analyzing your deal...
@@ -905,16 +905,16 @@ const DealSection = ({
   let borderColor: string;
   if (allFunded && backendPool > 0) {
     verdictText = `EVERY CAPITAL TIER IS FUNDED. THE SURPLUS IS ${formatCompactCurrency(backendPool)}.`;
-    borderColor = "rgba(60,179,113,0.40)";
+    borderColor = "rgba(77,175,120,0.40)";
   } else if (allFunded) {
     verdictText = "EVERY CAPITAL TIER IS FUNDED. NO BACKEND SURPLUS.";
     borderColor = "rgba(212,175,55,0.40)";
   } else if (pullPartialTier) {
     verdictText = `REVENUE EXHAUSTS AT ${pullPartialTier.label.toUpperCase()}. DOWNSTREAM TIERS ARE UNFUNDED.`;
-    borderColor = "rgba(220,38,38,0.40)";
+    borderColor = "rgba(200,64,64,0.40)";
   } else {
     verdictText = "REVENUE DOES NOT FULLY FUND ANY TIER.";
-    borderColor = "rgba(220,38,38,0.40)";
+    borderColor = "rgba(200,64,64,0.40)";
   }
 
   return (
@@ -1008,10 +1008,10 @@ const RevenueDonut = ({
   const rawSegments: { label: string; amount: number; color: string }[] = [];
 
   // Off-the-top fees (broken out)
-  if (result.cam > 0) rawSegments.push({ label: "CAM Fee", amount: result.cam, color: "rgba(220,38,38,0.50)" });
-  if (result.salesFee > 0) rawSegments.push({ label: "Sales Commission", amount: result.salesFee, color: "rgba(220,38,38,0.65)" });
-  if (result.marketing > 0) rawSegments.push({ label: "Sales Expenses", amount: result.marketing, color: "rgba(220,38,38,0.80)" });
-  if (result.guilds > 0) rawSegments.push({ label: "Guild Reserves", amount: result.guilds, color: "rgba(220,38,38,0.35)" });
+  if (result.cam > 0) rawSegments.push({ label: "CAM Fee", amount: result.cam, color: "rgba(200,64,64,0.50)" });
+  if (result.salesFee > 0) rawSegments.push({ label: "Sales Commission", amount: result.salesFee, color: "rgba(200,64,64,0.65)" });
+  if (result.marketing > 0) rawSegments.push({ label: "Sales Expenses", amount: result.marketing, color: "rgba(200,64,64,0.80)" });
+  if (result.guilds > 0) rawSegments.push({ label: "Guild Reserves", amount: result.guilds, color: "rgba(200,64,64,0.35)" });
 
   // Capital tiers
   if (result.seniorDebtHurdle > 0) rawSegments.push({ label: "Senior Debt", amount: result.seniorDebtHurdle, color: "rgba(255,255,255,0.22)" });
@@ -1019,12 +1019,12 @@ const RevenueDonut = ({
   if (result.equityHurdle > 0) rawSegments.push({ label: "Equity + Premium", amount: result.equityHurdle, color: "rgba(212,175,55,0.55)" });
 
   // Deferments
-  if (inputs.deferments > 0) rawSegments.push({ label: "Deferments", amount: inputs.deferments, color: "rgba(255,255,255,0.12)" });
+  if (inputs.deferments > 0) rawSegments.push({ label: "Deferments", amount: inputs.deferments, color: "rgba(255,255,255,0.35)" });
 
   // Profit pool or shortfall
   const profitPool = result.profitPool;
   if (profitPool > 0) {
-    rawSegments.push({ label: "What's Left", amount: profitPool, color: "rgba(60,179,113,0.60)" });
+    rawSegments.push({ label: "What's Left", amount: profitPool, color: "rgba(77,175,120,0.60)" });
   } else if (revenue > result.totalHurdle) {
     // No shortfall if profitPool === 0 but everything is covered
   } else {
@@ -1113,7 +1113,7 @@ const RevenueDonut = ({
           }}>
             <div style={{
               ...FONT.fine,
-              color: showShortfall ? "rgba(220,38,38,0.70)" : W.tertiary,
+              color: showShortfall ? "rgba(200,64,64,0.70)" : W.tertiary,
               marginBottom: "4px",
             }}>
               {showShortfall ? "SHORTFALL" : "WHAT'S LEFT"}
@@ -1176,15 +1176,15 @@ const VisualCluster1 = ({
   const netDistributable = Math.max(0, inputs.revenue - result.offTopTotal);
   const investorReturnPct = computeInvestorReturnPct(result, inputs);
   const netColor = investorReturnPct >= 100 ? SEM.green : investorReturnPct >= 80 ? SEM.amber : SEM.red;
-  const netBg = netColor === SEM.green ? "rgba(60,179,113,0.06)" : netColor === SEM.amber ? "rgba(240,168,48,0.06)" : "rgba(220,38,38,0.06)";
-  const netBorder = netColor === SEM.green ? "rgba(60,179,113,0.20)" : netColor === SEM.amber ? "rgba(240,168,48,0.20)" : "rgba(220,38,38,0.20)";
+  const netBg = netColor === SEM.green ? "rgba(77,175,120,0.06)" : netColor === SEM.amber ? "rgba(240,168,48,0.06)" : "rgba(200,64,64,0.06)";
+  const netBorder = netColor === SEM.green ? "rgba(77,175,120,0.20)" : netColor === SEM.amber ? "rgba(240,168,48,0.20)" : "rgba(200,64,64,0.20)";
 
   // Capital stack sources
   const sources: { label: string; amount: number; detail: string; pctOfBudget: string; color: string }[] = [];
   if (inputs.debt > 0) sources.push({ label: "Senior Debt", amount: inputs.debt, detail: `First position · ${inputs.seniorDebtRate}% interest`, pctOfBudget: `${Math.round((inputs.debt / inputs.budget) * 100)}% of budget`, color: "rgba(255,255,255,0.15)" });
   if (inputs.mezzanineDebt > 0) sources.push({ label: "Mezzanine / Gap", amount: inputs.mezzanineDebt, detail: `Second position · ${inputs.mezzanineRate}% interest`, pctOfBudget: `${Math.round((inputs.mezzanineDebt / inputs.budget) * 100)}% of budget`, color: "rgba(240,168,48,0.30)" });
   if (inputs.equity > 0) sources.push({ label: "Equity", amount: inputs.equity, detail: `${inputs.premium > 0 ? `${inputs.premium}% preferred return` : "Pari passu"}`, pctOfBudget: `${Math.round((inputs.equity / inputs.budget) * 100)}% of budget`, color: "rgba(212,175,55,0.40)" });
-  if (inputs.credits > 0) sources.push({ label: "Tax Credits", amount: inputs.credits, detail: "Non-dilutive", pctOfBudget: `${Math.round((inputs.credits / inputs.budget) * 100)}% of budget`, color: "rgba(60,179,113,0.30)" });
+  if (inputs.credits > 0) sources.push({ label: "Tax Credits", amount: inputs.credits, detail: "Non-dilutive", pctOfBudget: `${Math.round((inputs.credits / inputs.budget) * 100)}% of budget`, color: "rgba(77,175,120,0.30)" });
   if (inputs.deferments > 0) sources.push({ label: "Deferrals", amount: inputs.deferments, detail: "Subordinate to all capital", pctOfBudget: `${Math.round((inputs.deferments / inputs.budget) * 100)}% of budget`, color: "rgba(255,255,255,0.10)" });
 
   // Scenario data
@@ -1233,7 +1233,7 @@ const VisualCluster1 = ({
                 return (
                   <div key={item.label} style={{
                     width: `${widthPct}%`, height: "100%",
-                    background: `rgba(220,38,38,${item.colorOpacity})`,
+                    background: `rgba(200,64,64,${item.colorOpacity})`,
                     display: "flex", alignItems: "center", justifyContent: "center",
                     ...FONT.data, fontSize: "11px", color: "rgba(255,255,255,0.70)", letterSpacing: "0.06em",
                   }}>
@@ -1247,7 +1247,7 @@ const VisualCluster1 = ({
               {erosionItems.map((item) => (
                 <div key={item.label} style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                   <span style={{ fontSize: "13px", color: W.tertiary, display: "flex", alignItems: "center", gap: "8px" }}>
-                    <span style={{ width: "8px", height: "8px", borderRadius: "2px", flexShrink: 0, background: `rgba(220,38,38,${item.colorOpacity})` }} />
+                    <span style={{ width: "8px", height: "8px", borderRadius: "2px", flexShrink: 0, background: `rgba(200,64,64,${item.colorOpacity})` }} />
                     {item.label}
                   </span>
                   <span style={{ ...FONT.data, fontSize: "15px", color: W.secondary }}>
@@ -1434,11 +1434,11 @@ const LockedSensitivitySection = () => (
         </div>
         {/* Fake bars */}
         <div style={{ display: "flex", gap: "8px", alignItems: "flex-end", height: "80px", marginBottom: "12px" }}>
-          <div style={{ flex: 1, height: "80%", borderRadius: "3px 3px 0 0", background: "rgba(60,179,113,0.35)" }} />
-          <div style={{ flex: 1, height: "65%", borderRadius: "3px 3px 0 0", background: "rgba(60,179,113,0.28)" }} />
+          <div style={{ flex: 1, height: "80%", borderRadius: "3px 3px 0 0", background: "rgba(77,175,120,0.35)" }} />
+          <div style={{ flex: 1, height: "65%", borderRadius: "3px 3px 0 0", background: "rgba(77,175,120,0.28)" }} />
           <div style={{ flex: 1, height: "40%", borderRadius: "3px 3px 0 0", background: "rgba(240,168,48,0.28)" }} />
-          <div style={{ flex: 1, height: "25%", borderRadius: "3px 3px 0 0", background: "rgba(220,38,38,0.25)" }} />
-          <div style={{ flex: 1, height: "15%", borderRadius: "3px 3px 0 0", background: "rgba(220,38,38,0.35)" }} />
+          <div style={{ flex: 1, height: "25%", borderRadius: "3px 3px 0 0", background: "rgba(200,64,64,0.25)" }} />
+          <div style={{ flex: 1, height: "15%", borderRadius: "3px 3px 0 0", background: "rgba(200,64,64,0.35)" }} />
         </div>
         {/* Fake labels */}
         <div style={{ display: "flex", gap: "8px", marginBottom: "16px" }}>
@@ -1547,7 +1547,7 @@ const LockedSnapshotPlusSection = ({ onUnlock }: { onUnlock: () => void }) => (
         <div key={metric.label} style={{ background: "#222226", padding: "14px" }}>
           <div style={{
             ...FONT.fine,
-            color: "rgba(255,255,255,0.30)",
+            color: "rgba(255,255,255,0.48)",
             marginBottom: "4px",
           }}>
             {metric.label}
@@ -1557,7 +1557,7 @@ const LockedSnapshotPlusSection = ({ onUnlock }: { onUnlock: () => void }) => (
             fontSize: "22px",
             fontWeight: 500,
             letterSpacing: "0.06em",
-            color: "rgba(255,255,255,0.12)",
+            color: "rgba(255,255,255,0.35)",
             filter: "blur(4px)",
             userSelect: "none",
             marginTop: "4px",
@@ -1663,7 +1663,7 @@ const MarginRuler = ({
   if (!isFinite(breakeven) || revenue <= 0) {
     return (
       <div style={{
-        background: "linear-gradient(180deg, rgba(212,175,55,0.02), #121214)",
+        background: "linear-gradient(180deg, rgba(212,175,55,0.02), #141416)",
         border: "1px solid rgba(212,175,55,0.12)",
         borderRadius: "8px",
         padding: "16px",
@@ -1691,7 +1691,7 @@ const MarginRuler = ({
 
   return (
     <div style={{
-      background: "linear-gradient(180deg, rgba(212,175,55,0.02), #121214)",
+      background: "linear-gradient(180deg, rgba(212,175,55,0.02), #141416)",
       border: "1px solid rgba(212,175,55,0.12)",
       borderRadius: "8px",
       padding: "16px",
@@ -1734,7 +1734,7 @@ const MarginRuler = ({
               position: "absolute",
               left: 0, top: 0, bottom: 0,
               width: `${breakevenPct}%`,
-              background: "rgba(60,179,113,0.30)",
+              background: "rgba(77,175,120,0.30)",
               borderRadius: "6px 0 0 6px",
             }} />
             {/* Brighter green from breakeven to revenue */}
@@ -1742,7 +1742,7 @@ const MarginRuler = ({
               position: "absolute",
               left: `${breakevenPct}%`, top: 0, bottom: 0,
               width: `${revenuePct - breakevenPct}%`,
-              background: "rgba(60,179,113,0.50)",
+              background: "rgba(77,175,120,0.50)",
               borderRadius: "0 6px 6px 0",
             }} />
           </>
@@ -1753,7 +1753,7 @@ const MarginRuler = ({
               position: "absolute",
               left: 0, top: 0, bottom: 0,
               width: `${revenuePct}%`,
-              background: "rgba(60,179,113,0.30)",
+              background: "rgba(77,175,120,0.30)",
               borderRadius: "6px 0 0 6px",
             }} />
             {/* Dark/red gap showing shortfall */}
@@ -1761,7 +1761,7 @@ const MarginRuler = ({
               position: "absolute",
               left: `${revenuePct}%`, top: 0, bottom: 0,
               width: `${breakevenPct - revenuePct}%`,
-              background: "rgba(220,38,38,0.20)",
+              background: "rgba(200,64,64,0.20)",
               borderRadius: "0 6px 6px 0",
             }} />
           </>
@@ -1962,7 +1962,7 @@ const VisualCluster2 = ({
                 </span>
               )}
             </div>
-            <span style={{ ...FONT.data, fontSize: "15px", color: row.isGross ? W.primary : "rgba(220,38,38,0.75)" }}>
+            <span style={{ ...FONT.data, fontSize: "15px", color: row.isGross ? W.primary : "rgba(200,64,64,0.75)" }}>
               {row.isGross ? formatFullCurrency(row.amount) : `\u2212${formatFullCurrency(row.amount)}`}
             </span>
           </div>
@@ -2005,14 +2005,14 @@ const VisualCluster2 = ({
           const isPartial = tier.status === "partial";
           const isBackend = tier.label === "Backend Pool";
 
-          const borderColor = isFunded ? "rgba(60,179,113,0.15)" : isPartial || isBackend ? "rgba(212,175,55,0.15)" : "rgba(220,38,38,0.10)";
-          const bgColor = isFunded ? "rgba(60,179,113,0.03)" : isPartial || isBackend ? "rgba(212,175,55,0.03)" : "rgba(220,38,38,0.02)";
-          const dotColor = isFunded ? "#3CB371" : isPartial || isBackend ? "rgba(212,175,55,0.70)" : "rgba(220,38,38,0.50)";
-          const dotBorder = isFunded ? "rgba(60,179,113,0.70)" : isPartial || isBackend ? "rgba(212,175,55,0.70)" : "rgba(220,38,38,0.50)";
-          const dotGlow = isFunded ? "0 0 6px rgba(60,179,113,0.30)" : "none";
-          const barGradient = isFunded ? "linear-gradient(90deg, rgba(60,179,113,0.25), rgba(60,179,113,0.45))" : isPartial || isBackend ? "linear-gradient(90deg, rgba(212,175,55,0.20), rgba(212,175,55,0.40))" : "linear-gradient(90deg, rgba(220,38,38,0.15), rgba(220,38,38,0.30))";
+          const borderColor = isFunded ? "rgba(77,175,120,0.15)" : isPartial || isBackend ? "rgba(212,175,55,0.15)" : "rgba(200,64,64,0.10)";
+          const bgColor = isFunded ? "rgba(77,175,120,0.03)" : isPartial || isBackend ? "rgba(212,175,55,0.03)" : "rgba(200,64,64,0.02)";
+          const dotColor = isFunded ? "#4DAF78" : isPartial || isBackend ? "rgba(212,175,55,0.70)" : "rgba(200,64,64,0.50)";
+          const dotBorder = isFunded ? "rgba(77,175,120,0.70)" : isPartial || isBackend ? "rgba(212,175,55,0.70)" : "rgba(200,64,64,0.50)";
+          const dotGlow = isFunded ? "0 0 6px rgba(77,175,120,0.30)" : "none";
+          const barGradient = isFunded ? "linear-gradient(90deg, rgba(77,175,120,0.25), rgba(77,175,120,0.45))" : isPartial || isBackend ? "linear-gradient(90deg, rgba(212,175,55,0.20), rgba(212,175,55,0.40))" : "linear-gradient(90deg, rgba(200,64,64,0.15), rgba(200,64,64,0.30))";
           const valueColor = isFunded ? SEM.green : isPartial || isBackend ? G.emphasis : SEM.red;
-          const badgeStyle: React.CSSProperties = isFunded ? { background: "rgba(60,179,113,0.15)", color: SEM.green } : isPartial ? { background: "rgba(240,168,48,0.20)", color: SEM.amber } : isBackend ? { background: "rgba(212,175,55,0.12)", color: G.emphasis } : { background: "rgba(220,38,38,0.15)", color: "rgba(220,38,38,0.70)" };
+          const badgeStyle: React.CSSProperties = isFunded ? { background: "rgba(77,175,120,0.15)", color: SEM.green } : isPartial ? { background: "rgba(240,168,48,0.20)", color: SEM.amber } : isBackend ? { background: "rgba(212,175,55,0.12)", color: G.emphasis } : { background: "rgba(200,64,64,0.15)", color: "rgba(200,64,64,0.70)" };
           const badgeText = isFunded ? "FUNDED" : isPartial ? "PARTIAL" : isBackend ? "SURPLUS" : "ZERO";
           const displayLabel = tier.label === "Equity + Premium" && inputs.premium > 0 ? `Equity (${100 + inputs.premium}%)` : tier.label === "Deferments" ? "Deferred Fees" : tier.label;
 
@@ -2125,8 +2125,8 @@ const LockedComparableSection = () => (
 
         {/* Fake comp rows */}
         {[
-          { w1: "100px", w2: "70px", color: "rgba(60,179,113,0.25)" },
-          { w1: "120px", w2: "80px", color: "rgba(60,179,113,0.20)" },
+          { w1: "100px", w2: "70px", color: "rgba(77,175,120,0.25)" },
+          { w1: "120px", w2: "80px", color: "rgba(77,175,120,0.20)" },
           { w1: "90px", w2: "65px", color: "rgba(240,168,48,0.22)" },
         ].map((row, i) => (
           <div key={i} style={{
@@ -2148,10 +2148,10 @@ const LockedComparableSection = () => (
         <div style={{ marginTop: "16px", marginBottom: "12px" }}>
           <div style={{ height: "6px", width: "50px", background: "rgba(212,175,55,0.18)", borderRadius: "2px", marginBottom: "8px" }} />
           <div style={{ height: "20px", borderRadius: "12px", display: "flex", overflow: "hidden" }}>
-            <div style={{ width: "25%", height: "100%", background: "rgba(220,38,38,0.20)" }} />
+            <div style={{ width: "25%", height: "100%", background: "rgba(200,64,64,0.20)" }} />
             <div style={{ width: "35%", height: "100%", background: "rgba(240,168,48,0.22)" }} />
-            <div style={{ width: "25%", height: "100%", background: "rgba(60,179,113,0.25)" }} />
-            <div style={{ width: "15%", height: "100%", background: "rgba(60,179,113,0.15)" }} />
+            <div style={{ width: "25%", height: "100%", background: "rgba(77,175,120,0.25)" }} />
+            <div style={{ width: "15%", height: "100%", background: "rgba(77,175,120,0.15)" }} />
           </div>
         </div>
 
@@ -2253,7 +2253,7 @@ const LockedInvestorMemoSection = () => (
         <div style={{ display: "flex", gap: "12px", marginBottom: "16px" }}>
           <div style={{ flex: 1, padding: "10px", border: "1px solid rgba(255,255,255,0.08)", borderRadius: "3px" }}>
             <div style={{ height: "6px", width: "40px", background: "rgba(255,255,255,0.10)", borderRadius: "2px", marginBottom: "6px" }} />
-            <div style={{ height: "14px", width: "60px", background: "rgba(60,179,113,0.20)", borderRadius: "2px" }} />
+            <div style={{ height: "14px", width: "60px", background: "rgba(77,175,120,0.20)", borderRadius: "2px" }} />
           </div>
           <div style={{ flex: 1, padding: "10px", border: "1px solid rgba(255,255,255,0.08)", borderRadius: "3px" }}>
             <div style={{ height: "6px", width: "40px", background: "rgba(255,255,255,0.10)", borderRadius: "2px", marginBottom: "6px" }} />
@@ -2281,11 +2281,11 @@ const LockedInvestorMemoSection = () => (
           </div>
           <div style={{ display: "flex", justifyContent: "space-between", padding: "8px 10px" }}>
             <div style={{ height: "6px", width: "70px", background: "rgba(255,255,255,0.07)", borderRadius: "2px" }} />
-            <div style={{ height: "6px", width: "50px", background: "rgba(60,179,113,0.15)", borderRadius: "2px" }} />
+            <div style={{ height: "6px", width: "50px", background: "rgba(77,175,120,0.15)", borderRadius: "2px" }} />
           </div>
           <div style={{ display: "flex", justifyContent: "space-between", padding: "8px 10px", borderTop: "1px solid rgba(255,255,255,0.04)" }}>
             <div style={{ height: "6px", width: "55px", background: "rgba(255,255,255,0.07)", borderRadius: "2px" }} />
-            <div style={{ height: "6px", width: "50px", background: "rgba(60,179,113,0.15)", borderRadius: "2px" }} />
+            <div style={{ height: "6px", width: "50px", background: "rgba(77,175,120,0.15)", borderRadius: "2px" }} />
           </div>
         </div>
 
@@ -2355,13 +2355,13 @@ const ConclusionSection = ({
   let borderColor: string;
   if (inputs.equity <= 0 && allFunded) {
     verdictText = "DEBT SERVICED. THE STRUCTURE HOLDS AT THIS PRICE.";
-    borderColor = "rgba(60,179,113,0.40)";
+    borderColor = "rgba(77,175,120,0.40)";
   } else if (inputs.equity <= 0) {
     verdictText = "DEBT IS NOT FULLY SERVICED. RESTRUCTURE BEFORE PRESENTING.";
-    borderColor = "rgba(220,38,38,0.40)";
+    borderColor = "rgba(200,64,64,0.40)";
   } else if (multiple >= 1.5) {
     verdictText = "THE MATH WORKS. THE PRESENTATION IS WHAT CLOSES IT.";
-    borderColor = "rgba(60,179,113,0.40)";
+    borderColor = "rgba(77,175,120,0.40)";
   } else if (multiple >= 1.0) {
     verdictText = "HONEST MARGINS IN A ROOM FULL OF INFLATED PROJECTIONS. THAT IS YOUR EDGE.";
     borderColor = "rgba(212,175,55,0.40)";
@@ -2370,7 +2370,7 @@ const ConclusionSection = ({
     borderColor = "rgba(240,168,48,0.40)";
   } else {
     verdictText = "YOU FOUND THE GAP BEFORE YOUR INVESTORS DID. THAT IS THE POINT OF MODELING.";
-    borderColor = "rgba(220,38,38,0.40)";
+    borderColor = "rgba(200,64,64,0.40)";
   }
 
   return (
@@ -2624,7 +2624,7 @@ const CTASection = ({ result, inputs, project, guilds }: {
             ].map((item, i) => (
               <RevealSection key={item} delay={200 + i * 100}>
               <div style={{ display: "flex", gap: "10px", alignItems: "flex-start" }}>
-                <span style={{ color: "#3CB371", fontSize: "14px", marginTop: "2px", flexShrink: 0, width: "14px", textAlign: "center", textShadow: "0 0 8px rgba(60,179,113,0.35)" }}>✓</span>
+                <svg width="14" height="14" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginTop: "2px", flexShrink: 0, filter: "drop-shadow(0 0 6px rgba(77,175,120,0.25))" }}><path d="M3.5 9.5L7 13L14.5 5.5" stroke="#4DAF78" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
                 <span style={{ fontSize: "14px", color: "rgba(250,248,244,0.88)", lineHeight: 1.5, fontFamily: "'Inter', sans-serif" }}>{item}</span>
               </div>
               </RevealSection>

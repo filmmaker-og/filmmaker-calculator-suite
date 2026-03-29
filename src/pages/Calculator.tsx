@@ -61,7 +61,7 @@ const STEP_TO_TAB: TabId[] = ['project', 'budget', 'stack', 'deal', 'waterfall']
 /* ═══ Inline styles — Store pattern ═══ */
 const s: Record<string, React.CSSProperties> = {
   page: {
-    background: "#0C0C0E",
+    background: "#141416",
     minHeight: "100vh",
     display: "flex",
     flexDirection: "column" as const,
@@ -78,7 +78,7 @@ const s: Record<string, React.CSSProperties> = {
   },
   loading: {
     minHeight: "100vh",
-    background: "#0C0C0E",
+    background: "#141416",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -148,7 +148,7 @@ const CalcHero = ({ stepLabel, title, titleGold, subtitle, visible }: {
       }}>
         {/* Inner header band — dark well (matches landing page header bands) */}
         <div style={{
-          background: "linear-gradient(180deg, rgba(212,175,55,0.08), #121214)",
+          background: "linear-gradient(180deg, rgba(212,175,55,0.08), #141416)",
           border: "1px solid rgba(255,255,255,0.06)",
           borderTop: "1px solid rgba(255,255,255,0.10)",
           borderRadius: 6,
@@ -159,7 +159,7 @@ const CalcHero = ({ stepLabel, title, titleGold, subtitle, visible }: {
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12, padding: "0 8px" }}>
             <div style={{ flex: 1, height: 1, background: "rgba(212,175,55,0.35)" }} />
             <span style={{
-              fontFamily: "'Roboto Mono', monospace", fontSize: 10,
+              fontFamily: "'Roboto Mono', monospace", fontSize: 11,
               letterSpacing: "0.15em", textTransform: "uppercase",
               color: "rgba(212,175,55,0.75)", whiteSpace: "nowrap",
             }}>{stepLabel}</span>

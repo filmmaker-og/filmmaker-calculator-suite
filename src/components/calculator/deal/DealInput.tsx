@@ -78,7 +78,7 @@ const s: Record<string, React.CSSProperties> = {
   },
   heroEyebrowLine: { flex: 1, height: "1px", background: "rgba(212,175,55,0.35)" },
   heroEyebrowLabel: {
-    fontFamily: "'Roboto Mono', monospace", fontSize: "10px",
+    fontFamily: "'Roboto Mono', monospace", fontSize: "11px",
     letterSpacing: "0.15em", textTransform: "uppercase" as const,
     color: "rgba(212,175,55,0.65)", whiteSpace: "nowrap" as const,
   },
@@ -207,7 +207,7 @@ const s: Record<string, React.CSSProperties> = {
     textAlign: "center" as const,
     marginTop: "14px",
     fontSize: "11px",
-    color: "rgba(255,255,255,0.40)",
+    color: "rgba(255,255,255,0.48)",
     lineHeight: 1.5,
   },
   // Market context
@@ -223,7 +223,7 @@ const s: Record<string, React.CSSProperties> = {
   },
   mktText: {
     fontSize: "11px",
-    color: "rgba(255,255,255,0.45)",
+    color: "rgba(255,255,255,0.65)",
     lineHeight: 1.4,
   },
   // Verdict card
@@ -256,7 +256,7 @@ const s: Record<string, React.CSSProperties> = {
   },
   vTagPos: {
     fontFamily: "'Roboto Mono', monospace",
-    fontSize: "10px",
+    fontSize: "11px",
     fontWeight: 500,
     letterSpacing: "0.2em",
     textTransform: "uppercase" as const,
@@ -270,7 +270,7 @@ const s: Record<string, React.CSSProperties> = {
   },
   vTagNeg: {
     fontFamily: "'Roboto Mono', monospace",
-    fontSize: "10px",
+    fontSize: "11px",
     fontWeight: 500,
     letterSpacing: "0.2em",
     textTransform: "uppercase" as const,
@@ -278,9 +278,9 @@ const s: Record<string, React.CSSProperties> = {
     padding: "4px 12px",
     borderRadius: "4px",
     marginBottom: "12px",
-    color: "rgba(220,38,38,0.85)",
-    background: "rgba(220,38,38,0.06)",
-    border: "1px solid rgba(220,38,38,0.15)",
+    color: "rgba(200,64,64,0.85)",
+    background: "rgba(200,64,64,0.06)",
+    border: "1px solid rgba(200,64,64,0.15)",
   },
   vAmtPos: {
     fontFamily: "'Roboto Mono', monospace",
@@ -297,11 +297,11 @@ const s: Record<string, React.CSSProperties> = {
     fontWeight: 600,
     lineHeight: 1,
     marginBottom: "6px",
-    color: "rgba(220,38,38,0.85)",
+    color: "rgba(200,64,64,0.85)",
   },
   vSub: {
     fontSize: "12px",
-    color: "rgba(255,255,255,0.40)",
+    color: "rgba(255,255,255,0.48)",
   },
   // Breakdown rows
   vbRow: {
@@ -322,8 +322,8 @@ const s: Record<string, React.CSSProperties> = {
   },
   vbDetail: {
     fontFamily: "'Roboto Mono', monospace",
-    fontSize: "10px",
-    color: "rgba(255,255,255,0.40)",
+    fontSize: "11px",
+    color: "rgba(255,255,255,0.48)",
     marginTop: "2px",
   },
   vbVal: {
@@ -336,7 +336,7 @@ const s: Record<string, React.CSSProperties> = {
     fontFamily: "'Roboto Mono', monospace",
     fontSize: "13px",
     fontWeight: 500,
-    color: "rgba(220,38,38,0.75)",
+    color: "rgba(200,64,64,0.75)",
   },
   vbNet: {
     display: "flex",
@@ -387,8 +387,8 @@ const s: Record<string, React.CSSProperties> = {
   },
   levVals: {
     fontFamily: "'Roboto Mono', monospace",
-    fontSize: "10px",
-    color: "rgba(255,255,255,0.40)",
+    fontSize: "11px",
+    color: "rgba(255,255,255,0.48)",
   },
   levBody: {
     maxHeight: 0,
@@ -443,10 +443,10 @@ const s: Record<string, React.CSSProperties> = {
     justifyContent: "space-between",
     marginTop: "6px",
     fontFamily: "'Roboto Mono', monospace",
-    fontSize: "10px",
+    fontSize: "11px",
     letterSpacing: "0.08em",
     textTransform: "uppercase" as const,
-    color: "rgba(255,255,255,0.40)",
+    color: "rgba(255,255,255,0.48)",
   },
   levInline: {
     display: "flex",
@@ -469,8 +469,8 @@ const s: Record<string, React.CSSProperties> = {
     minHeight: "44px",
   },
   levSub: {
-    fontSize: "10px",
-    color: "rgba(255,255,255,0.40)",
+    fontSize: "11px",
+    color: "rgba(255,255,255,0.48)",
     marginTop: "2px",
   },
   // CTA reveal
@@ -520,7 +520,7 @@ const s: Record<string, React.CSSProperties> = {
   },
   discText: {
     fontSize: "11px",
-    color: "rgba(255,255,255,0.40)",
+    color: "rgba(255,255,255,0.48)",
     lineHeight: 1.5,
     position: "relative" as const,
   },
@@ -729,7 +729,7 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext, genre }:
             </div>
             <div style={{ ...s.vbRow, borderBottom: "none" }}>
               <div style={s.vbLeft}>
-                <div style={{ width: "3px", height: "24px", borderRadius: "2px", background: "rgba(220,38,38,0.40)", flexShrink: 0 }} />
+                <div style={{ width: "3px", height: "24px", borderRadius: "2px", background: "rgba(200,64,64,0.40)", flexShrink: 0 }} />
                 <div>
                   <div style={s.vbLbl}>Off-the-Tops</div>
                   <div style={s.vbDetail}>
@@ -838,7 +838,7 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext, genre }:
           display: "flex", alignItems: "center", gap: 12,
         }}>
           <span style={{
-            fontFamily: "'Roboto Mono', monospace", fontSize: 10,
+            fontFamily: "'Roboto Mono', monospace", fontSize: 11,
             textTransform: "uppercase", letterSpacing: "0.1em",
             color: "rgba(212,175,55,0.55)", whiteSpace: "nowrap",
           }}>Investor</span>
@@ -856,14 +856,14 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext, genre }:
             }}
           />
           <span style={{
-            fontFamily: "'Roboto Mono', monospace", fontSize: 10,
+            fontFamily: "'Roboto Mono', monospace", fontSize: 11,
             textTransform: "uppercase", letterSpacing: "0.1em",
             color: "rgba(212,175,55,0.55)", whiteSpace: "nowrap",
           }}>Producer</span>
         </div>
         <p style={{
           fontFamily: "'Inter', sans-serif", fontSize: 11,
-          color: "rgba(255,255,255,0.40)", marginTop: 8, lineHeight: 1.4,
+          color: "rgba(255,255,255,0.48)", marginTop: 8, lineHeight: 1.4,
         }}>
           How the backend pool splits after all tiers are paid. Standard is 50/50 — leverage and risk allocation determine the actual number.
         </p>

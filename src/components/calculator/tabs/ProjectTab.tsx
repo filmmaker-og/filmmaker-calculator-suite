@@ -99,7 +99,7 @@ const s: Record<string, React.CSSProperties> = {
     textTransform: "none",
     color: "rgba(255,255,255,0.40)",
     marginLeft: 6,
-    fontSize: 10,
+    fontSize: 11,
   },
   fi: {
     width: "100%",
@@ -188,7 +188,7 @@ const s: Record<string, React.CSSProperties> = {
   },
   teamOptional: {
     fontFamily: "'Inter', sans-serif",
-    fontSize: 10,
+    fontSize: 11,
     color: "rgba(255,255,255,0.40)",
   },
   teamRight: {
@@ -224,7 +224,7 @@ const s: Record<string, React.CSSProperties> = {
   },
   teamFl: {
     fontFamily: "'Inter', sans-serif",
-    fontSize: 10,
+    fontSize: 11,
     fontWeight: 600,
     textTransform: "uppercase",
     letterSpacing: "0.12em",

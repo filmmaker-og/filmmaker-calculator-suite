@@ -133,7 +133,7 @@ const cardH: React.CSSProperties = {
 
 const cardHSub: React.CSSProperties = {
   fontSize: "13px",
-  color: "rgba(255,255,255,0.40)",
+  color: "rgba(255,255,255,0.48)",
   marginBottom: "24px",
 };
 
@@ -172,7 +172,7 @@ const ChapterCard = ({
       if (glowState === 'positive') {
         cardStyle.boxShadow = "0 16px 40px rgba(0,0,0,0.6), 0 0 40px rgba(212,175,55,0.15)";
       } else if (glowState === 'negative') {
-        cardStyle.boxShadow = "0 16px 40px rgba(0,0,0,0.6), 0 0 40px rgba(220,38,38,0.18)";
+        cardStyle.boxShadow = "0 16px 40px rgba(0,0,0,0.6), 0 0 40px rgba(200,64,64,0.18)";
       }
     }
   } else {

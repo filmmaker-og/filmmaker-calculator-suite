@@ -30,10 +30,10 @@ const s: Record<string, React.CSSProperties> = {
   },
   lbl: {
     fontFamily: "'Inter', sans-serif",
-    fontSize: "10px",
+    fontSize: "11px",
     textTransform: "uppercase" as const,
     letterSpacing: "0.1em",
-    color: "rgba(212,175,55,0.40)",
+    color: "rgba(212,175,55,0.65)",
   },
   val: {
     fontFamily: "'Roboto Mono', monospace",

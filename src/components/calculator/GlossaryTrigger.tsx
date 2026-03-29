@@ -149,7 +149,7 @@ const GlossaryTrigger = ({
               {description}
             </p>
             {details && (
-              <div style={{ fontSize: "12px", color: "rgba(255,255,255,0.50)", lineHeight: "1.5", paddingTop: "8px", borderTop: "1px solid rgba(255,255,255,0.10)", fontFamily: "'Inter', sans-serif" }}>
+              <div style={{ fontSize: "12px", color: "rgba(255,255,255,0.72)", lineHeight: "1.5", paddingTop: "8px", borderTop: "1px solid rgba(255,255,255,0.10)", fontFamily: "'Inter', sans-serif" }}>
                 {details}
               </div>
             )}

@@ -29,7 +29,7 @@ const SubStepIndicator = ({ steps, currentIndex }: { steps: string[]; currentInd
       textAlign: "center",
       padding: "16px 24px 8px",
       fontFamily: "'Roboto Mono', monospace",
-      fontSize: 10,
+      fontSize: 11,
       letterSpacing: "0.12em",
       textTransform: "uppercase" as const,
       color: "rgba(212,175,55,0.55)",

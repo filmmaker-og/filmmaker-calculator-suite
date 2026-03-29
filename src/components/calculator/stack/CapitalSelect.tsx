@@ -87,7 +87,7 @@ const s: Record<string, React.CSSProperties> = {
   heroEyebrow: { display: "flex", alignItems: "center", gap: "10px", marginBottom: "12px", padding: "0 8px" },
   heroEyebrowLine: { flex: 1, height: "1px", background: "rgba(212,175,55,0.35)" },
   heroEyebrowLabel: {
-    fontFamily: "'Roboto Mono', monospace", fontSize: "10px",
+    fontFamily: "'Roboto Mono', monospace", fontSize: "11px",
     letterSpacing: "0.15em", textTransform: "uppercase" as const,
     color: "rgba(212,175,55,0.65)", whiteSpace: "nowrap" as const,
   },
@@ -168,8 +168,8 @@ const s: Record<string, React.CSSProperties> = {
     justifyContent: "center",
     border: "1px solid rgba(255,255,255,0.18)",
     borderRadius: "4px",
-    color: "rgba(255,255,255,0.40)",
-    background: "#0C0C0E",
+    color: "rgba(255,255,255,0.48)",
+    background: "#141416",
     transition: "all 0.15s",
   },
   siIconOn: {
@@ -198,7 +198,7 @@ const s: Record<string, React.CSSProperties> = {
   },
   siDesc: {
     fontSize: "11px",
-    color: "rgba(255,255,255,0.40)",
+    color: "rgba(255,255,255,0.48)",
     marginTop: "2px",
   },
   siRight: {
@@ -208,7 +208,7 @@ const s: Record<string, React.CSSProperties> = {
   },
   siPri: {
     fontFamily: "'Roboto Mono', monospace",
-    fontSize: "10px",
+    fontSize: "11px",
     fontWeight: 500,
     textTransform: "uppercase" as const,
     letterSpacing: "0.08em",
@@ -221,7 +221,7 @@ const s: Record<string, React.CSSProperties> = {
   },
   siPriOn: {
     fontFamily: "'Roboto Mono', monospace",
-    fontSize: "10px",
+    fontSize: "11px",
     fontWeight: 500,
     textTransform: "uppercase" as const,
     letterSpacing: "0.08em",
@@ -258,7 +258,7 @@ const s: Record<string, React.CSSProperties> = {
   hint: {
     textAlign: "center" as const,
     fontSize: "11px",
-    color: "rgba(255,255,255,0.40)",
+    color: "rgba(255,255,255,0.48)",
     padding: "16px",
   },
   cta: {
