@@ -20,6 +20,8 @@ Free film budget calculator and recoupment waterfall simulator for independent p
 - **Styling:** Tailwind CSS + shadcn/ui + custom design system
 - **Backend:** Supabase (auth, database)
 - **Hosting:** Vercel (deploys from `main`)
+- **Domain:** filmmakerog.com (Vercel Domains)
+- **Email:** Google Workspace — og@filmmakerog.com
 - **Fonts:** Bebas Neue, Inter, Roboto Mono (Google Fonts)
 
 ## Design System

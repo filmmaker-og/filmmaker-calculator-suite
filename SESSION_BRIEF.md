@@ -21,6 +21,8 @@ The user is a "vibe coder" — gives creative direction, expects proactive compl
 | Styling | Tailwind CSS + shadcn/ui + heavy inline React CSSProperties |
 | Backend | Supabase (auth, database, `intake_submissions` table) |
 | Hosting | Vercel (auto-deploys from `main` branch) |
+| Domain | filmmakerog.com (Vercel Domains) |
+| Email | Google Workspace — og@filmmakerog.com |
 | Fonts | Bebas Neue, Inter, Roboto Mono (Google Fonts) |
 | State | React hooks (useState, useEffect, useRef). No Redux/Zustand. |
 
@@ -281,6 +283,8 @@ heroNetProfit = acquisitionValue - totalDeductions
 - Prefers clear visual hierarchy with elevation differences
 - User timezone: America/Chicago (CDT)
 - Git user: `filmmaker-og` / `thefilmmaker.og@gmail.com`
+- Business email: `og@filmmakerog.com` (Google Workspace)
+- Domain registrar: Vercel Domains
 
 ---
 
