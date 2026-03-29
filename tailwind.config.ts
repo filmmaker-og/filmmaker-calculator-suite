@@ -52,19 +52,19 @@ export default {
 
         // ── RED DANGER: risk/warning — 4-tier opacity system ──
         danger: {
-          DEFAULT:   "#DC3C3C",
-          strong:    "rgba(220, 60, 60, 0.25)",
-          medium:    "rgba(220, 60, 60, 0.15)",
-          subtle:    "rgba(220, 60, 60, 0.08)",
-          ghost:     "rgba(220, 60, 60, 0.03)",
+          DEFAULT:   "#C84040",
+          strong:    "rgba(200, 64, 64, 0.25)",
+          medium:    "rgba(200, 64, 64, 0.15)",
+          subtle:    "rgba(200, 64, 64, 0.08)",
+          ghost:     "rgba(200, 64, 64, 0.03)",
         },
 
         // ── INK: active text tier system (use these) ──
         ink: {
           DEFAULT:   "#FFFFFF",                          // headlines, key numbers — FULL
-          body:      "rgba(255, 255, 255, 0.70)",        // secondary / paragraph text
-          muted:     "rgba(255, 255, 255, 0.55)",        // readable subordinate text
-          secondary: "rgba(255, 255, 255, 0.40)",        // tertiary, metadata
+          body:      "rgba(255, 255, 255, 0.78)",        // secondary / paragraph text
+          muted:     "rgba(255, 255, 255, 0.72)",        // readable subordinate text (OLED floor)
+          secondary: "rgba(255, 255, 255, 0.48)",        // tertiary, metadata (OLED floor)
           ghost:     "rgba(255, 255, 255, 0.06)",        // hover bg, surface tints
         },
 
@@ -82,10 +82,10 @@ export default {
 
         // ── BACKGROUNDS — #000, #111, #1A1A1A only ──
         bg: {
-          void:      "#000000",
-          elevated:  "#111111",
+          void:      "#141416",
+          elevated:  "#1A1A1C",
           surface:   "#1A1A1A",
-          card:      "#111111",                          // legacy alias
+          card:      "#1A1A1C",                          // legacy alias
           "card-border": "rgba(255, 255, 255, 0.15)",   // legacy alias
           "card-rule":   "rgba(255, 255, 255, 0.06)",   // legacy alias
           overlay:   "rgba(0, 0, 0, 0.85)",
@@ -105,8 +105,8 @@ export default {
         },
         text: {
           primary: "#FFFFFF",
-          mid:     "rgba(255, 255, 255, 0.70)",
-          dim:     "rgba(255, 255, 255, 0.40)",
+          mid:     "rgba(255, 255, 255, 0.78)",
+          dim:     "rgba(255, 255, 255, 0.48)",
         },
       },
       borderRadius: {

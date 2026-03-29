@@ -38,7 +38,7 @@ const OgBotFab = ({ onTap }: OgBotFabProps) => {
       onClick={() => { haptics.medium(); onTap?.(); }}
       className="fixed z-[140] flex items-center justify-center active:scale-90 transition-all duration-300"
       style={{
-        bottom: onCalculator ? "calc(90px + env(safe-area-inset-bottom))" : "calc(28px + env(safe-area-inset-bottom))",
+        bottom: onCalculator ? "calc(90px + env(safe-area-inset-bottom))" : "calc(36px + env(safe-area-inset-bottom))",
         right: "24px",
         width: "52px",
         height: "52px",

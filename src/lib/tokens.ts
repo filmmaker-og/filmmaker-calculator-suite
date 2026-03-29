@@ -27,8 +27,8 @@
 const _GOLD = '212,175,55';
 const _WHITE = '255,255,255';
 const _BLACK = '0,0,0';
-const _RED = '220,38,38';
-const _GREEN = '60,179,113';
+const _RED = '200,64,64';
+const _GREEN = '77,175,120';
 const _AMBER = '240,168,48';
 const _CTA_GOLD = '249,224,118';
 const _GLASS = '6,6,6';
@@ -67,11 +67,11 @@ export const GOLD = '#D4AF37';
 /** CTA gold hex — EXCLUSIVELY for clickable elements */
 export const CTA = '#F9E076';
 
-/** Canonical red hex — risk, danger, negative values */
-export const RED = '#DC2626';
+/** Canonical red hex — risk, danger, negative values (OLED-desaturated) */
+export const RED = '#C84040';
 
-/** Semantic green hex — positive, funded, profit */
-export const GREEN = '#3CB371';
+/** Semantic green hex — positive, funded, profit (OLED-desaturated) */
+export const GREEN = '#4DAF78';
 
 /** Semantic amber hex — partial, warning, caution */
 export const AMBER = '#F0A830';
@@ -101,9 +101,9 @@ export const GOLD_TIERS = {
 
 export const WHITE_TIERS = {
   primary: white(0.92),
-  secondary: white(0.75),
-  muted: white(0.55),
-  tertiary: white(0.40),
+  secondary: white(0.78),
+  muted: white(0.72),
+  tertiary: white(0.48),
   ghost: white(0.06),
 } as const;
 

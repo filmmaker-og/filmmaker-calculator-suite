@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600&family=Roboto+Mono:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600&family=Roboto+Mono:wght@500&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -63,9 +63,11 @@
     /* ═══════════════════════════════════════════════════════════════════
        BACKGROUND LAYERS — Brand spec: #000, #111, #1A1A1A only
        ═══════════════════════════════════════════════════════════════════ */
-    --bg-void: #0C0C0E;
+    color-scheme: dark;
+
+    --bg-void: #141416;
     --bg-elevated: #222226;
-    --bg-surface: #121214;
+    --bg-surface: #141416;
 
     /* ═══════════════════════════════════════════════════════════════════
        TWO-GOLD SYSTEM
@@ -119,9 +121,9 @@
          Extended values permitted for gradients, animations, and premium treatments.
        ═══════════════════════════════════════════════════════════════════ */
     --text-primary: #FFFFFF;
-    --text-secondary: rgba(255, 255, 255, 0.70);
-    --text-muted: rgba(255, 255, 255, 0.55);
-    --text-tertiary: rgba(255, 255, 255, 0.40);
+    --text-secondary: rgba(255, 255, 255, 0.75);
+    --text-muted: rgba(255, 255, 255, 0.72);
+    --text-tertiary: rgba(255, 255, 255, 0.48);
     /* --gold-text removed: not in 4-tier system, never consumed */
 
     /* BORDERS */
@@ -190,10 +192,13 @@
 
   /* Force true black + base font */
   html, body {
-    background: linear-gradient(180deg, #0C0C0E 0%, #111113 40%, #0E0E10 100%);
-    background-color: #0C0C0E;
+    background: linear-gradient(180deg, #141416 0%, #151517 40%, #141416 100%);
+    background-color: #141416;
     color: #FFFFFF;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-optical-sizing: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     /* Suppress iOS pull-to-refresh and bounce scroll */
     overscroll-behavior: none;
   }
@@ -266,6 +271,11 @@
       transform: none !important;
       opacity: 1 !important;
       will-change: auto !important;
+    }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
     }
   }
 }
@@ -1082,12 +1092,32 @@
    LANDING PAGE v17 — Keyframes & Ambient Effects
    ═══════════════════════════════════════════════════════════════════ */
 
-/* Mobile: reduce backdrop-filter for performance */
+/* Mobile: reduce backdrop-filter & grain for performance */
 @media (max-width: 767px) {
   .grain-surface {
     backdrop-filter: blur(10px) !important;
     -webkit-backdrop-filter: blur(10px) !important;
   }
+  .grain-overlay::before {
+    opacity: 0.07;
+  }
+  .grain-surface::before {
+    opacity: 0.06;
+  }
+}
+
+/* HDR OLED: tame glow intensities on high dynamic range panels */
+@media (dynamic-range: high) {
+  :root {
+    --gold-glow-intensity: 0.10;
+    --gold-text-shadow-spread: 20px;
+  }
+}
+
+/* Content-visibility: skip off-screen rendering for waterfall */
+.cv-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 2000px;
 }
 
 /* Desktop ambient glow — removed; centered container orbs handle atmosphere */
