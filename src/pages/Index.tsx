@@ -465,7 +465,7 @@ const Index = () => {
             <div style={{ marginBottom: "16px" }}>
               <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "6px" }}>
                 <span style={styles.sliderLabel}>Production Budget</span>
-                <span style={styles.sliderValue}>{fmt(budgetValue)}</span>
+                <span style={{ ...styles.sliderValue, color: "#FFFFFF" }}>{fmt(budgetValue)}</span>
               </div>
               <input
                 type="range"
@@ -501,7 +501,7 @@ const Index = () => {
             <div style={{ marginBottom: "20px" }}>
               <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "6px" }}>
                 <span style={styles.sliderLabel}>Sales Agent Fee</span>
-                <span style={styles.sliderValue}>{salesFeePercent}%</span>
+                <span style={{ ...styles.sliderValue, color: "#DC2626" }}>{salesFeePercent}%</span>
               </div>
               <input
                 type="range"
@@ -518,8 +518,8 @@ const Index = () => {
             {/* ── Summary deduction bar ── */}
             <div style={{ marginBottom: "16px" }}>
               <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "6px" }}>
-                <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: "rgba(250,248,244,0.70)", letterSpacing: "0.06em", textTransform: "uppercase" }}>Total Deductions</span>
-                <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: "rgba(220,38,38,0.85)" }}>{fmt(totalDeductions)}</span>
+                <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "13px", color: "rgba(250,248,244,0.75)", letterSpacing: "0.06em", textTransform: "uppercase" }}>Total Deductions</span>
+                <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.2rem", color: "rgba(220,38,38,0.90)" }}>{fmt(totalDeductions)}</span>
               </div>
               <div style={{ height: "10px", background: "rgba(255,255,255,0.12)", borderRadius: "5px", overflow: "hidden" }}>
                 <div style={{
