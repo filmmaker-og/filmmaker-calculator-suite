@@ -19,10 +19,12 @@ The user is a "vibe coder" — gives creative direction, expects proactive compl
 |---|---|
 | Framework | React 18 + TypeScript + Vite |
 | Styling | Tailwind CSS + shadcn/ui + heavy inline React CSSProperties |
-| Backend | Supabase (auth, database, `intake_submissions` table) |
+| Backend | Supabase (database, edge functions) |
 | Hosting | Vercel (auto-deploys from `main` branch) |
 | Domain | filmmakerog.com (Vercel Domains) |
 | Email | Google Workspace — og@filmmakerog.com |
+| Email Marketing | Loops.so (transactional + nurture sequences) |
+| Payments | Stripe (one-time checkout) |
 | Fonts | Bebas Neue, Inter, Roboto Mono (Google Fonts) |
 | State | React hooks (useState, useEffect, useRef). No Redux/Zustand. |
 
@@ -32,10 +34,32 @@ The user is a "vibe coder" — gives creative direction, expects proactive compl
 - **Config:** `user.email="og@filmmakerog.com"`, `user.name="filmmaker-og"`
 - **Safety tag:** `pre-refresh` on main saves the state before the major overhaul sessions began
 
-### Auth Flow
-- Lead capture: collect name + email → save to localStorage (`og_lead_name`, `og_lead_email`) + fire Supabase `auth.signInWithOtp` in background (doesn't wait for it) → navigate straight to `/calculator`
-- Calculator auth gate: checks `localStorage.getItem('og_lead_email')` OR `supabase.auth.getSession()`. If neither, shows LeadCaptureModal.
-- Magic link auth is NOT used for gating (removed) — it fires in background for Supabase records only
+### Lead Capture Flow
+- Lead capture: collect name + email → insert to Supabase `leads` table + save to localStorage (`og_lead_name`, `og_lead_email`) → navigate straight to `/calculator`
+- Supabase database webhook fires on INSERT → calls `sync-lead-to-loops` edge function → creates contact in Loops
+- Calculator auth gate: checks `localStorage.getItem('og_lead_email')`. If missing, shows LeadCaptureModal.
+- **NO OTP. NO MAGIC LINK. NO SUPABASE AUTH.** Lead capture is best-effort — users get through even if insert fails.
+
+### Product Ladder
+| Product | Price | Stripe Product ID |
+|---------|-------|-------------------|
+| Free Snapshot | $0 | — |
+| Snapshot+ | $19 | `prod_UEmfhPqL9VPQXt` |
+| Comp Report | $595 / $995 | TBD |
+| Producer's Package | $1,797 | TBD |
+| Boutique | $2,997+ | TBD |
+| Working Model | +$79 (add-on) | TBD |
+
+### Supabase Edge Functions
+| Function | Purpose |
+|----------|--------|
+| `ask-the-og` | AI chatbot (Claude) — streaming SSE |
+| `sync-lead-to-loops` | Webhook receiver — pushes new leads to Loops |
+
+### Email Marketing (Loops)
+- **Lead nurture**: welcome → Day 2 Snapshot+ pitch → Day 5 education → Day 10 urgency
+- **Post-purchase**: per-product confirmation + upsell sequences
+- **Integration**: Supabase webhook → Edge Function → Loops API + Stripe webhook → Loops
 
 ### Environment Variables
 ```
@@ -264,13 +288,33 @@ heroNetProfit = acquisitionValue - totalDeductions
 
 ## 8. KNOWN REMAINING ITEMS
 
-- **Stripe checkout** — `TODO` in WaterfallDeck.tsx for Snapshot+ product. Not wired to Stripe yet.
-- **Snapshot+ Stripe checkout** — Not wired yet. Product pivot: Snapshot+ becomes "Branded Snapshot" ($49) — same data, user's company branding replaces FILMMAKER.OG
-- **Full Analysis product** — May be removed or folded into free tier. Its differentiators (sensitivity + branding) are now split between free (sensitivity) and Snapshot+ (branding)
-- **OgBot** — The chatbot sheet (OgBotSheet.tsx) exists but the AI backend isn't connected.
+- **Snapshot+ checkout wiring** — Stripe product exists (`prod_UEmfhPqL9VPQXt`, $19). `TODO` in WaterfallDeck.tsx needs to call `create-checkout` edge function.
+- **Loops LOOPS_API_KEY** — Must be set in Supabase Edge Function secrets via dashboard.
+- **Loops database webhook** — Must be created in Supabase dashboard: `leads` table INSERT → `sync-lead-to-loops`.
+- **Loops email sequences** — Welcome + nurture + post-purchase sequences need to be built in Loops dashboard.
+- **Stripe webhook → Loops** — Connect Stripe to Loops for post-purchase email triggers.
+- **Comp Report / Producer's Package / Boutique Stripe products** — Not yet created in Stripe.
+- **Store page redesign** — Remove dead Full Analysis references, restructure layout for new product ladder.
 - **BuildYourPlan** — Post-purchase flow exists but may need polish to match the new system fully.
 - **WaterfallDeck FONT constant** — Has its own type system that predates the brand system. Aligned where possible, some exceptions documented in BRAND_SYSTEM.md.
+- **Analytics** — No analytics in codebase. Recommended: Vercel Analytics, Plausible, or PostHog.
 - **npm audit** — 5 remaining low/moderate vulnerabilities in dev dependencies (esbuild, jsdom) that require major version bumps to fix.
+
+## COMPLETED (March 29, 2026)
+
+- ✅ Supabase `leads` table created with RLS (anonymous inserts)
+- ✅ OTP auth killed from LeadCaptureModal — replaced with leads table insert
+- ✅ Calculator/Index/WaterfallDeck auth gates simplified to localStorage only
+- ✅ Full Analysis ($197) removed from product ladder
+- ✅ Snapshot+ repriced from $49 → $19
+- ✅ Working Model restricted to Producer's Package add-on only
+- ✅ Stripe product + price + payment link created for Snapshot+
+- ✅ Loops.so connected — admin contact created
+- ✅ `sync-lead-to-loops` edge function deployed to Supabase
+- ✅ OgBot switched from Gemini to Claude (ask-the-og edge function)
+- ✅ Google Workspace verified — og@filmmakerog.com live
+- ✅ MX + SPF + DMARC + DKIM records configured for Loops sending domain
+- ✅ GitHub + Vercel accounts updated to og@filmmakerog.com
 
 ---
 
