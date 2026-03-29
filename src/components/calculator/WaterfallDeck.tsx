@@ -312,10 +312,26 @@ function computeScenarioReturn(
 
 // ─── COLD OPEN (screen only) ─────────────────────────────────────
 
-const ColdOpen = ({ multiple, result }: { multiple: number; result: WaterfallResult }) => {
+const ColdOpen = ({ multiple, result, inputs }: { multiple: number; result: WaterfallResult; inputs: WaterfallInputs }) => {
   const multipleColor = multiple >= 1.0 ? SEM.green : multiple >= 0.5 ? SEM.amber : SEM.red;
   const verdictWord = result.recoupPct >= 100 ? "FUNDED" : result.recoupPct >= 50 ? "PARTIAL" : "UNDERWATER";
   const verdictColor = result.recoupPct >= 100 ? SEM.green : result.recoupPct >= 50 ? SEM.amber : SEM.red;
+
+  // Subtitle contextualizes the verdict — bridges to DealSection tone
+  let verdictSubtitle: string;
+  if (inputs.equity <= 0 && result.recoupPct >= 100) {
+    verdictSubtitle = "All obligations serviced";
+  } else if (inputs.equity <= 0) {
+    verdictSubtitle = "Debt not fully serviced";
+  } else if (multiple >= 1.5) {
+    verdictSubtitle = "Clean structure";
+  } else if (multiple >= 1.0) {
+    verdictSubtitle = "Tight margins";
+  } else if (multiple >= 0.7) {
+    verdictSubtitle = "Aggressive structure";
+  } else {
+    verdictSubtitle = "Restructure needed";
+  }
 
   const glowRgba = multipleColor === SEM.green
     ? "rgba(60,179,113,0.08)"
@@ -366,14 +382,24 @@ const ColdOpen = ({ multiple, result }: { multiple: number; result: WaterfallRes
 
       {/* Verdict word */}
       <RevealSection delay={300}>
-      <div style={{
-        fontFamily: "'Bebas Neue', sans-serif",
-        fontSize: "clamp(1.4rem, 4vw, 1.8rem)",
-        letterSpacing: "0.25em",
-        color: verdictColor,
-        marginTop: "12px",
-      }}>
-        {verdictWord}
+      <div style={{ textAlign: "center", marginTop: "12px" }}>
+        <div style={{
+          fontFamily: "'Bebas Neue', sans-serif",
+          fontSize: "clamp(1.4rem, 4vw, 1.8rem)",
+          letterSpacing: "0.25em",
+          color: verdictColor,
+        }}>
+          {verdictWord}
+        </div>
+        <div style={{
+          fontFamily: "'Roboto Mono', monospace",
+          fontSize: "11px",
+          letterSpacing: "0.12em",
+          color: "rgba(255,255,255,0.45)",
+          marginTop: "6px",
+        }}>
+          {verdictSubtitle}
+        </div>
       </div>
       </RevealSection>
 
@@ -523,6 +549,8 @@ const CoverSection = ({
       verdictContext += ` Your capital stack covers the budget with margin to absorb a negotiation haircut.`;
     }
     verdictContext += ` Off-the-top deductions consume ${offTopCoverPct}% before recoupment.`;
+  } else if (netToInvestors === cashBasis) {
+    verdictContext = `Net distributable matches cash basis exactly. Investors recoup in full with no surplus. Off-the-top deductions consume ${offTopCoverPct}% before recoupment.`;
   } else {
     verdictContext = `Net distributable falls short of cash basis by ${formatCompactCurrency(cashBasis - netToInvestors)}. At this acquisition price, investors are not made whole before the waterfall runs dry. The structure below shows where the money stops.`;
   }
@@ -678,17 +706,17 @@ const CoverSection = ({
           </div>
         </div>
         <div style={{ background: BG.elevated, padding: "14px" }}>
-          <div style={{ ...FONT.fine, color: W.quaternary, marginBottom: "4px" }}>NET PROFIT</div>
+          <div style={{ ...FONT.fine, color: W.quaternary, marginBottom: "4px" }}>PRODUCER NET</div>
           <div style={{
             fontFamily: "'Roboto Mono', monospace",
             fontSize: "26px",
             fontWeight: 500,
             letterSpacing: "0.06em",
-            color: result.profitPool > 0 ? SEM.green : SEM.red,
+            color: result.producer > 0 ? SEM.green : SEM.red,
           }}>
-            {result.profitPool > 0
+            {result.producer > 0
               ? <CountUp value={result.producer} format="compact" trigger={coverInView} />
-              : <>{"\u2212"}<CountUp value={Math.abs(result.profitPool)} format="compact" trigger={coverInView} /></>
+              : <>{"\u2212"}<CountUp value={Math.abs(result.producer)} format="compact" trigger={coverInView} /></>
             }
           </div>
         </div>
@@ -2825,7 +2853,7 @@ const WaterfallBrief = ({
       padding: "0 clamp(12px, 3vw, 24px)",
     }}>
       {/* ═══ COLD OPEN — screen only, full viewport ═══ */}
-      <ColdOpen multiple={result.multiple} result={result} />
+      <ColdOpen multiple={result.multiple} result={result} inputs={inputs} />
 
       {/* ═══ 1. COVER — with ThirtySecondCard ═══ */}
       <CoverSection
