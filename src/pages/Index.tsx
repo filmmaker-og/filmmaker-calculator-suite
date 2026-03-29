@@ -412,7 +412,7 @@ const Index = () => {
         }} />
       )}
 
-      <div style={{ minHeight: "100vh", background: "linear-gradient(180deg, #0C0C0E 0%, #111113 50%, #0E0E10 100%)", paddingTop: "24px", maxWidth: "860px", margin: "0 auto", position: "relative", overflow: "hidden" }}>
+      <div style={{ minHeight: "100vh", background: "linear-gradient(180deg, #0C0C0E 0%, #111113 50%, #0E0E10 100%)", paddingTop: "24px", maxWidth: "1000px", margin: "0 auto", position: "relative", overflow: "hidden" }}>
 
         {/* ── Atmospheric glow orbs ── */}
         <div style={{ position: "absolute", top: "0px", left: "50%", transform: "translateX(-50%)", width: "min(550px, 100vw)", height: "550px", background: "radial-gradient(ellipse, rgba(212,175,55,0.14) 0%, transparent 60%)", pointerEvents: "none", filter: "blur(40px)", zIndex: 0 }} />
@@ -706,7 +706,7 @@ const Index = () => {
             </div>
           </div>
             {/* Swipe indicator */}
-            <div className="swipe-hint" style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "8px", marginTop: "16px" }}>
+            <div className={previewVisible ? "swipe-hint" : ""} style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "8px", marginTop: "16px", opacity: previewVisible ? 0.45 : 0 }}>
               <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "12px", color: "rgba(250,248,244,0.55)", letterSpacing: "0.10em", textTransform: "uppercase" }}>Swipe</span>
               <svg width="20" height="12" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M1 6h15M12 1l5 5-5 5" stroke="rgba(212,175,55,0.55)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
