@@ -140,9 +140,10 @@ const CalcHero = ({ stepLabel, title, titleGold, subtitle, visible }: {
         position: "relative", textAlign: "center",
         padding: "24px 20px 20px",
         borderRadius: 8, overflow: "hidden",
-        background: "#222226",
-        border: "1px solid rgba(212,175,55,0.15)",
-        borderTop: "1px solid rgba(255,255,255,0.08)",
+        background: "linear-gradient(180deg, rgba(212,175,55,0.06), #121214)",
+        border: "1px solid rgba(255,255,255,0.06)",
+        borderTop: "1px solid rgba(255,255,255,0.10)",
+        boxShadow: "inset 0 2px 6px rgba(0,0,0,0.25)",
       }}>
         <div style={{ position: "relative", zIndex: 1 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12, padding: "0 8px" }}>
