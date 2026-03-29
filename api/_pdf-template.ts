@@ -602,27 +602,6 @@ function page3(data: SnapshotData): string {
 function page4(data: SnapshotData): string {
   const { inputs, result, tiers } = data;
 
-  // Capital structure rows
-  const capSources: { label: string; detail: string; amount: number; pct: string }[] = [];
-  if (inputs.debt > 0) capSources.push({ label: 'Senior Debt', detail: `First position · ${inputs.seniorDebtRate}%`, amount: inputs.debt, pct: inputs.budget > 0 ? `${Math.round((inputs.debt / inputs.budget) * 100)}%` : '' });
-  if (inputs.mezzanineDebt > 0) capSources.push({ label: 'Mezzanine', detail: `Second position · ${inputs.mezzanineRate}%`, amount: inputs.mezzanineDebt, pct: inputs.budget > 0 ? `${Math.round((inputs.mezzanineDebt / inputs.budget) * 100)}%` : '' });
-  if (inputs.equity > 0) capSources.push({ label: 'Equity', detail: inputs.premium > 0 ? `${inputs.premium}% preferred` : 'Pari passu', amount: inputs.equity, pct: inputs.budget > 0 ? `${Math.round((inputs.equity / inputs.budget) * 100)}%` : '' });
-  if (inputs.credits > 0) capSources.push({ label: 'Tax Credits', detail: 'Non-dilutive', amount: inputs.credits, pct: inputs.budget > 0 ? `${Math.round((inputs.credits / inputs.budget) * 100)}%` : '' });
-  if (inputs.deferments > 0) capSources.push({ label: 'Deferrals', detail: 'Subordinate', amount: inputs.deferments, pct: inputs.budget > 0 ? `${Math.round((inputs.deferments / inputs.budget) * 100)}%` : '' });
-
-  const capRows = capSources.map((s, i) =>
-    `<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 14px;${i > 0 ? 'border-top:1px solid rgba(212,175,55,0.06);' : ''}">
-      <div>
-        <div style="font-family:'Inter',sans-serif;font-size:11px;color:rgba(250,248,244,0.88);font-weight:500;">${s.label}</div>
-        <div style="font-family:'Roboto Mono',monospace;font-size:8px;color:rgba(212,175,55,0.40);">${s.detail}</div>
-      </div>
-      <div style="text-align:right;">
-        <div style="font-family:'Roboto Mono',monospace;font-size:12px;color:rgba(250,248,244,0.92);font-weight:500;">${formatFullCurrency(s.amount)}</div>
-        <div style="font-family:'Roboto Mono',monospace;font-size:8px;color:rgba(255,255,255,0.35);">${s.pct} of budget</div>
-      </div>
-    </div>`
-  ).join('');
-
   const profitSplitPct = Math.max(0, Math.min(100, inputs.profitSplit ?? 50));
   const producerSplitPct = 100 - profitSplitPct;
 
@@ -633,22 +612,7 @@ function page4(data: SnapshotData): string {
   const profitPoolColor = profitPool > 0 ? '#3CB371' : 'rgba(220,38,38,0.85)';
   const profitPoolDisplay = formatFullCurrency(profitPool);
 
-  // ── Build tier cards in paired rows with badges ──
-  // Each tier gets its own card with a numbered badge, arranged in 2-column grid
-  const tierCards = tiers.map((tier, i) => {
-    const badgeNum = i + 1;
-    const isDeferred = tier.name.toLowerCase().includes('defer');
-    const amountColor = isDeferred ? 'rgba(240,168,48,0.88)' : 'rgba(255,255,255,0.92)';
-    return `
-        <div class="wf-card" style="padding:14px 12px;border:1px solid rgba(212,175,55,0.18);">
-          <div class="badge">${badgeNum}</div>
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;color:#fff;text-transform:uppercase;margin-bottom:2px;">${tier.name}</div>
-          <div style="font-family:'Roboto Mono',monospace;font-size:9px;color:rgba(212,175,55,0.50);margin-bottom:4px;">${tier.rate}</div>
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:${amountColor};">${formatFullCurrency(tier.amount)}</div>
-        </div>`;
-  }).join('');
-
-  // Arrange tier cards in rows of 2
+  // Build tier cards in paired rows with badges, arranged in 2-column grid
   const tierGrids: string[] = [];
   for (let i = 0; i < tiers.length; i += 2) {
     const isFirst = i === 0;
@@ -661,13 +625,13 @@ function page4(data: SnapshotData): string {
       return `
         <div class="wf-card" style="padding:10px 10px;border:1px solid rgba(212,175,55,0.18);">
           <div class="badge">${badgeNum}</div>
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:#fff;text-transform:uppercase;margin-bottom:1px;">${tier.name}</div>
-          <div style="font-family:'Roboto Mono',monospace;font-size:9px;color:rgba(212,175,55,0.50);margin-bottom:3px;">${tier.rate}</div>
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:${amountColor};">${formatFullCurrency(tier.amount)}</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;color:#fff;text-transform:uppercase;margin-bottom:2px;">${tier.name}</div>
+          <div style="font-family:'Roboto Mono',monospace;font-size:9px;color:rgba(212,175,55,0.50);margin-bottom:4px;">${tier.rate}</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:${amountColor};">${formatFullCurrency(tier.amount)}</div>
         </div>`;
     }).join('');
     tierGrids.push(`
-      <div style="width:100%;display:grid;grid-template-columns:${cols};gap:8px;${!isFirst ? 'margin-top:8px;' : ''}">${cards}</div>`);
+      <div style="width:100%;display:grid;grid-template-columns:${cols};gap:10px;${!isFirst ? 'margin-top:10px;' : ''}">${cards}</div>`);
   }
   const tierSection = tierGrids.join('');
 
@@ -691,11 +655,11 @@ function page4(data: SnapshotData): string {
     }
     .conn { display: flex; flex-direction: column; align-items: center; justify-content: center; }
     .badge {
-      width: 26px; height: 26px; border-radius: 50%;
+      width: 30px; height: 30px; border-radius: 50%;
       background: rgba(212,175,55,0.12); border: 1px solid rgba(212,175,55,0.30);
       display: inline-flex; align-items: center; justify-content: center;
-      font-family: 'Bebas Neue', sans-serif; font-size: 14px; color: #fff;
-      line-height: 1; margin-bottom: 4px;
+      font-family: 'Bebas Neue', sans-serif; font-size: 15px; color: #fff;
+      line-height: 1; margin-bottom: 6px;
     }
   </style>
 </head>
@@ -710,56 +674,40 @@ function page4(data: SnapshotData): string {
       <div style="font-family:'Inter',sans-serif;font-size:11px;color:rgba(250,248,244,0.50);margin-top:4px;font-style:italic;">After deductions, revenue flows through the capital stack in priority order.</div>
     </div>
 
-    <div style="flex:1;padding:0 48px 40px;position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;">
-
-      ${capSources.length > 0 ? `
-      <!-- CAPITAL STRUCTURE -->
-      <div style="width:100%;margin-bottom:6px;">
-        <div style="font-family:'Roboto Mono',monospace;font-size:9px;color:rgba(212,175,55,0.40);letter-spacing:2px;margin-bottom:4px;">CAPITAL STRUCTURE</div>
-        <div style="background:linear-gradient(180deg,rgba(212,175,55,0.02),#232326);border:1px solid rgba(212,175,55,0.12);border-radius:5px;overflow:hidden;">
-          ${capRows}
-        </div>
-      </div>
-
-      <!-- Connector -->
-      <div class="conn" style="height:12px;">
-        <div style="width:2px;height:7px;background:rgba(212,175,55,0.50);border-radius:1px;"></div>
-        <div style="width:0;height:0;border-left:3px solid transparent;border-right:3px solid transparent;border-top:4px solid rgba(212,175,55,0.55);margin-top:-1px;"></div>
-      </div>
-      ` : ''}
+    <div style="flex:1;padding:6px 48px 44px;position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;">
 
       <!-- CAPITAL RECOUPMENT -->
       <div class="wf-label" style="font-size:11px;color:rgba(212,175,55,0.50);margin-bottom:4px;">CAPITAL RECOUPMENT</div>
       ${tierSection}
 
       <!-- Connector gold → green -->
-      <div class="conn" style="height:14px;">
+      <div class="conn" style="height:24px;">
         <div style="width:3px;height:10px;background:linear-gradient(180deg,rgba(212,175,55,0.55),rgba(60,179,113,0.60));box-shadow:0 0 8px rgba(60,179,113,0.25);border-radius:1px;"></div>
         <div style="width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:6px solid rgba(60,179,113,0.60);margin-top:-1px;"></div>
       </div>
 
       <!-- NET BACKEND PROFIT -->
       <div class="wf-label" style="font-size:12px;color:rgba(60,179,113,0.55);margin-bottom:4px;">NET BACKEND PROFIT</div>
-      <div class="wf-card" style="width:100%;padding:12px 24px;border:1px solid rgba(60,179,113,0.40);background:radial-gradient(ellipse at 50% 0%,rgba(60,179,113,0.06) 0%,#232326 70%);box-shadow:0 4px 20px rgba(0,0,0,0.35),0 0 24px rgba(60,179,113,0.06);">
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:38px;color:${profitPoolColor};text-shadow:0 0 24px rgba(60,179,113,0.30);letter-spacing:2px;">${profitPoolDisplay}</div>
+      <div class="wf-card" style="width:100%;padding:18px 24px;border:1px solid rgba(60,179,113,0.40);background:radial-gradient(ellipse at 50% 0%,rgba(60,179,113,0.06) 0%,#232326 70%);box-shadow:0 4px 20px rgba(0,0,0,0.35),0 0 24px rgba(60,179,113,0.06);">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:44px;color:${profitPoolColor};text-shadow:0 0 24px rgba(60,179,113,0.30);letter-spacing:2px;">${profitPoolDisplay}</div>
       </div>
 
       <!-- Connector green -->
-      <div class="conn" style="height:12px;">
-        <div style="width:3px;height:7px;background:rgba(60,179,113,0.55);box-shadow:0 0 6px rgba(60,179,113,0.30);border-radius:1px;"></div>
+      <div class="conn" style="height:20px;">
+        <div style="width:3px;height:12px;background:rgba(60,179,113,0.55);box-shadow:0 0 6px rgba(60,179,113,0.30);border-radius:1px;"></div>
         <div style="width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid rgba(60,179,113,0.60);margin-top:-1px;"></div>
       </div>
 
       <!-- PROFIT SPLIT -->
-      <div class="wf-label" style="font-size:10px;color:rgba(60,179,113,0.45);margin-bottom:3px;">PROFIT SPLIT · ${profitSplitPct}/${producerSplitPct}</div>
-      <div style="width:100%;display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-        <div class="wf-card" style="padding:10px 14px;border:1px solid rgba(60,179,113,0.22);">
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:rgba(255,255,255,0.70);margin-bottom:2px;">INVESTOR</div>
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:#3CB371;">${formatFullCurrency(investorBackend)}</div>
+      <div class="wf-label" style="font-size:11px;color:rgba(60,179,113,0.45);margin-bottom:5px;">PROFIT SPLIT · ${profitSplitPct}/${producerSplitPct}</div>
+      <div style="width:100%;display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div class="wf-card" style="padding:14px 16px;border:1px solid rgba(60,179,113,0.22);">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:15px;color:rgba(255,255,255,0.70);margin-bottom:4px;">INVESTOR</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#3CB371;">${formatFullCurrency(investorBackend)}</div>
         </div>
-        <div class="wf-card" style="padding:10px 14px;border:1px solid rgba(60,179,113,0.22);">
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:rgba(255,255,255,0.70);margin-bottom:2px;">PRODUCER</div>
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:#3CB371;">${formatFullCurrency(producerBackend)}</div>
+        <div class="wf-card" style="padding:14px 16px;border:1px solid rgba(60,179,113,0.22);">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:15px;color:rgba(255,255,255,0.70);margin-bottom:4px;">PRODUCER</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#3CB371;">${formatFullCurrency(producerBackend)}</div>
         </div>
       </div>
 
