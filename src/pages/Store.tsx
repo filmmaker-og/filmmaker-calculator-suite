@@ -658,21 +658,7 @@ const ProductCard = ({
 
       {/* === EDITORIAL MIDDLE — Features === */}
       <div style={{ ...s.featuresBlock, padding: "12px 0 0 0", ...z2 }}>
-        {isSnapshot ? (
-          /* Compact feature list for Snapshot+ — metric names only, no checkmarks */
-          <p style={{
-            fontFamily: "'Roboto Mono', monospace",
-            fontSize: "14px",
-            color: "rgba(212,175,55,0.65)",
-            letterSpacing: "0.04em",
-            lineHeight: 1.6,
-            textAlign: "center",
-            padding: "0 12px",
-            margin: 0,
-          }}>
-            {(product.features as { title: string }[]).map(f => f.title).join(" · ")}
-          </p>
-        ) : (() => {
+        {(() => {
           const structured = product.features.filter(
             (f): f is { title: string; subtitle: string; group: string } => typeof f !== "string"
           );
@@ -1021,7 +1007,7 @@ const Store = () => {
   const handleBuyProduct = (product: Product) => {
     haptics.medium();
     // Only show the Working Model upsell popup for self-serve (instant) products
-    const instantProducts = ["snapshot-plus", "the-full-analysis"];
+    const instantProducts = ["the-full-analysis"];
     if (instantProducts.includes(product.id)) {
       setShowPopup(product);
     } else {
@@ -1132,12 +1118,23 @@ const Store = () => {
       >
         <div style={{ position: "relative" }}>
           <EyebrowRuled text="On Demand" />
+          <h2 style={{
+            fontFamily: "'Bebas Neue', sans-serif",
+            fontSize: "3.2rem",
+            lineHeight: 0.95,
+            margin: "0 0 12px 0",
+            letterSpacing: "0.04em",
+            color: "#fff",
+          }}>
+            Your Deal.<br />
+            <span style={{ color: "#D4AF37" }}>White-Labeled.</span>
+          </h2>
           <p style={{
             fontFamily: "'Inter', sans-serif",
-            fontSize: "19px",
-            color: "rgba(250,248,244,0.90)",
+            fontSize: "16px",
+            color: "rgba(250,248,244,0.70)",
             lineHeight: 1.6,
-            margin: "4px 0 0 0",
+            margin: "0",
           }}>
             Run the numbers for free. Get the white-labeled version for your investor presentation.
           </p>
