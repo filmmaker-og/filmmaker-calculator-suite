@@ -254,16 +254,22 @@ export function generatePdfHtml(data: SnapshotData): string {
   ).join('');
 
   // ── Scenario stress test ──
-  const offTopRatio = revenue > 0 ? result.offTopTotal / revenue : 0;
+  // Separate variable off-tops (scale with revenue) from fixed off-tops (don't scale)
+  const variableOffTops = result.cam + result.salesFee + result.guilds; // CAM%, sales%, guild%
+  const fixedOffTops = result.marketing; // marketing/expense cap is fixed
+  const variableOffTopRate = revenue > 0 ? variableOffTops / revenue : 0;
+  const totalHurdle = result.seniorDebtHurdle + result.mezzDebtHurdle + result.equityHurdle + inputs.deferments - result.creditsApplied;
+
   const scenarioData = [
     { label: formatCurrency(revenue), sub: 'modeled', haircut: '0%', price: revenue },
     { label: formatCurrency(revenue * 0.85), sub: '−15%', haircut: '15%', price: revenue * 0.85 },
     { label: formatCurrency(revenue * 0.70), sub: '−30%', haircut: '30%', price: revenue * 0.70 },
     { label: formatCurrency(revenue * 0.50), sub: '−50%', haircut: '50%', price: revenue * 0.50 },
   ].map(s => {
-    const newOffTops = s.price * offTopRatio;
+    const newVariableOffTops = s.price * variableOffTopRate;
+    const newOffTops = newVariableOffTops + fixedOffTops;
     const newDistributable = Math.max(0, s.price - newOffTops);
-    const returnPct = cashBasis > 0 ? Math.min(100, (newDistributable / cashBasis) * 100) : 0;
+    const returnPct = totalHurdle > 0 ? Math.min(100, (newDistributable / totalHurdle) * 100) : 0;
     const multiple = cashBasis > 0 ? newDistributable / cashBasis : 0;
     const color = getReturnColor(returnPct);
     return { ...s, returnPct, multiple, color };

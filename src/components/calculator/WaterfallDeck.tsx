@@ -279,7 +279,10 @@ const Num = ({ children, color }: { children: React.ReactNode; color?: string })
 // ─── Helper: format investor return % ────────────────────────────
 
 function computeInvestorReturnPct(result: WaterfallResult, inputs: WaterfallInputs): number {
-  if (inputs.equity <= 0) return 0;
+  if (inputs.equity <= 0) {
+    // No equity: use recoupPct as the health metric (debt service coverage)
+    return result.recoupPct;
+  }
   return (result.investor / inputs.equity) * 100;
 }
 
@@ -940,7 +943,13 @@ const DealSection = ({
 
   // Paragraph 4 — Verdict (3 sentences: verdict, specifics, forward look)
   let p4: string;
-  if (multiple >= 1.5) {
+  if (inputs.equity <= 0 && result.recoupPct >= 100) {
+    // Zero-equity deal (pure debt/credits) that fully services obligations
+    p4 = "This is a debt-financed structure with no equity component. All capital obligations are fully serviced at the modeled price. The scenario table below shows how much room the deal has before debt service breaks.";
+  } else if (inputs.equity <= 0) {
+    // Zero-equity deal that doesn't fully service
+    p4 = "This is a debt-financed structure with no equity component. At the current acquisition price, revenue does not fully cover debt obligations. The move is to restructure: reduce the debt load, find additional soft money, or secure a higher acquisition price.";
+  } else if (multiple >= 1.5) {
     p4 = "At these terms, this is a clean deal. The margin between cash basis and market value gives your investors room to absorb a negotiation haircut without losing principal. The scenario analysis below shows exactly how much room.";
   } else if (multiple >= 1.0) {
     p4 = "This is a tight deal, and tight deals can work if the assumptions hold. Your margin between cash basis and acquisition price leaves limited room for negotiation concessions. The scenario table below shows where the math starts to compress.";
@@ -2397,10 +2406,16 @@ const ConclusionSection = ({
   const allFunded = tiers.every(t => t.status === "funded");
   const backendPool = result.profitPool;
 
-  // Verdict pull-quote
+  // Verdict pull-quote — handle zero-equity deals first
   let verdictText: string;
   let borderColor: string;
-  if (multiple >= 1.5) {
+  if (inputs.equity <= 0 && allFunded) {
+    verdictText = "DEBT SERVICED. THE STRUCTURE HOLDS AT THIS PRICE.";
+    borderColor = "rgba(60,179,113,0.40)";
+  } else if (inputs.equity <= 0) {
+    verdictText = "DEBT IS NOT FULLY SERVICED. RESTRUCTURE BEFORE PRESENTING.";
+    borderColor = "rgba(220,38,38,0.40)";
+  } else if (multiple >= 1.5) {
     verdictText = "THE MATH WORKS. THE PRESENTATION IS WHAT CLOSES IT.";
     borderColor = "rgba(60,179,113,0.40)";
   } else if (multiple >= 1.0) {
