@@ -316,13 +316,20 @@ Italic one-liners between sections guide the narrative flow:
 | TransitionBridge | Screen only | Italic narrative connectors between sections |
 
 ### PDF Export (5 pages, zero upsell)
-1. Executive Summary — title, 2x2 metrics, verdict, "The Deal" prose
-2. Revenue Allocation — SVG donut, per-dollar table, erosion bar
-3. The Waterfall — tier cards, net profit, "The Margin" prose, margin ruler
-4. Capital Stack + Scenarios — "The Structure" prose, sources, stress test, assumptions
-5. Back Page — "Prepared using FILMMAKER.OG" + date + URL
+1. Executive Summary — title, genre, logline, team grid (Director, Writer, Producers, Production Co., Cast, Location), 2x2 metrics, supplementary row (Break-Even, Cash Basis, Investor ROI), 4-6 sentence executive summary prose
+2. Revenue Allocation — bridge line, SVG donut, per-dollar table, erosion bar with external labels
+3. The Waterfall — bridge line, tier cards, net backend profit bar, waterfall narrative (3-4 sentences), gold break, margin prose (italic), margin of safety ruler
+4. Capital Structure + Scenarios — structure prose, capital sources table, bridge line, scenario stress test (variable + fixed off-top separation), scenario interpretation (2-3 sentences), assumptions table
+5. Back Page — project title, gold divider, "MODEL YOUR WATERFALL BEFORE YOU SIGN." headline, value prop, FILMMAKER.OG brand mark, URL, date
 
 PDF branding: FILMMAKER.OG header, gold bar, watermark, and filmmakerog.com footer on every page. No upsell. No gate cards.
+
+### PDF Prose Rules
+- All prose is generated from deal data — zero fabrication, zero filler
+- Bridge lines are italic, at `rgba(250,248,244,0.60)` (opacity floor)
+- No readable text below 0.60 opacity (footer page numbers are decorative)
+- Minimum font size: 8px (for labels and metadata)
+- Team grid includes `writers` field (serialized from intake, renders if present)
 
 ---
 
@@ -372,7 +379,8 @@ PDF branding: FILMMAKER.OG header, gold bar, watermark, and filmmakerog.com foot
 | `src/components/AppHeader.tsx` | Pill nav |
 | `src/components/LeadCaptureModal.tsx` | Lead capture with white inputs |
 | `src/components/calculator/WaterfallDeck.tsx` | Waterfall output (~2890 lines) |
-| `api/_pdf-template.ts` | PDF export template (5-page branded document) (~659 lines) |
+| `api/_pdf-template.ts` | PDF export template (5-page narrative document) (~749 lines) |
+| `docs/deal-insight-edge-function.md` | Documentation for external AI insight edge function |
 | `src/components/OgBotFab.tsx` | Floating action button (gold gradient, border) |
 | `BRAND_SYSTEM.md` | This document |
 
