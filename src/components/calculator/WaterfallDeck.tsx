@@ -2583,8 +2583,7 @@ const CTASection = ({ result, inputs, project, guilds }: {
       // 2. Determine user email
       let userEmail = email;
       if (!userEmail) {
-        const { data: { session } } = await supabase.auth.getSession();
-        userEmail = session?.user?.email;
+        userEmail = localStorage.getItem('og_lead_email') ?? undefined;
       }
 
       if (!userEmail) {
@@ -2639,8 +2638,8 @@ const CTASection = ({ result, inputs, project, guilds }: {
   }, [result, inputs, project, guilds, haptics]);
 
   const gatedNavigate = useCallback(async (destination: string) => {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (session?.user) {
+    const hasLead = localStorage.getItem('og_lead_email');
+    if (hasLead) {
       navigate(destination);
     } else {
       setShowLeadCapture(true);
@@ -2791,9 +2790,9 @@ const CTASection = ({ result, inputs, project, guilds }: {
               onClick={async (e) => {
                 haptics.light(e);
                 if (exporting) return;
-                const { data: { session } } = await supabase.auth.getSession();
-                if (session?.user?.email) {
-                  handleExportPdf(session.user.email);
+                const leadEmail = localStorage.getItem('og_lead_email');
+                if (leadEmail) {
+                  handleExportPdf(leadEmail);
                 } else {
                   setPendingExport(true);
                   setShowLeadCapture(true);

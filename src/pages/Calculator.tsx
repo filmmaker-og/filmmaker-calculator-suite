@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
 import { useHaptics } from "@/hooks/use-haptics";
-import { User } from "@supabase/supabase-js";
 import { calculateWaterfall, WaterfallInputs, GuildState } from "@/lib/waterfall";
 
 // New Tab Components
@@ -184,7 +182,6 @@ const Calculator = () => {
   const haptics = useHaptics();
   const mainRef = useRef<HTMLDivElement>(null);
 
-  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
   // Default to project step (step 00)
@@ -207,14 +204,14 @@ const Calculator = () => {
     setSourceSelections(prev => ({ ...prev, [key]: !prev[key] }));
   }, []);
 
-  // Gate: redirect to landing page if no session AND no lead capture
+  // Gate: redirect to landing page if no lead capture
   useEffect(() => {
     if (loading) return;
     const hasLead = localStorage.getItem('og_lead_email');
-    if (!user && !hasLead) {
+    if (!hasLead) {
       navigate("/", { replace: true });
     }
-  }, [user, loading, navigate]);
+  }, [loading, navigate]);
 
   // Honor URL ?tab= param if present
   useEffect(() => {
@@ -229,19 +226,9 @@ const Calculator = () => {
     return calculateWaterfall(inputs, guilds);
   }, [inputs, guilds]);
 
-  // Auth
+  // Check lead status on mount
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      setUser(session?.user ?? null);
-      setLoading(false);
-    });
-
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
-      setLoading(false);
-    });
-
-    return () => subscription.unsubscribe();
+    setLoading(false);
   }, []);
 
   // Scroll to top when switching tabs
@@ -291,7 +278,7 @@ const Calculator = () => {
   };
 
   const handleExportClick = () => {
-    if (!user && !emailCaptured) {
+    if (!emailCaptured) {
       setShowEmailGate(true);
     } else {
       navigate('/store/the-full-analysis');

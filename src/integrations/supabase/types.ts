@@ -76,6 +76,30 @@ export type Database = {
         }
         Relationships: []
       }
+      leads: {
+        Row: {
+          id: string
+          name: string
+          email: string
+          source: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          name: string
+          email: string
+          source?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          name?: string
+          email?: string
+          source?: string | null
+          created_at?: string
+        }
+        Relationships: []
+      }
       intake_submissions: {
         Row: {
           cam_fee_is_default: boolean | null
@@ -268,6 +292,33 @@ export type Database = {
           stripe_session_id?: string
           updated_at?: string | null
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      waterfall_snapshots: {
+        Row: {
+          id: string
+          user_email: string
+          project_name: string
+          snapshot_data: Json
+          product_tier: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_email: string
+          project_name: string
+          snapshot_data: Json
+          product_tier: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_email?: string
+          project_name?: string
+          snapshot_data?: Json
+          product_tier?: string
+          created_at?: string
         }
         Relationships: []
       }

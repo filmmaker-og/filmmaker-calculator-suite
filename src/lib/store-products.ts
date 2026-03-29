@@ -1,12 +1,11 @@
 /* ═══════════════════════════════════════════════════════════════════
    PRODUCT DATA — filmmaker.og store
    Current architecture (March 2026):
-     0. Snapshot+ ($49) — diagnostic upgrade, credit toward Full Analysis
-     1. The Full Analysis ($197) — automated, first paid tier
-     2. Comp Report ($595 / $995) — standalone market data
-     3. The Producer's Package ($1,797) — turnkey service
-     4. Boutique ($2,997+) — custom scope
-     5. The Working Model ($79) — checkout upsell add-on
+     0. Snapshot+ ($19) — white-labeled snapshot with diagnostics, credit toward Comp Report
+     1. Comp Report ($595 / $995) — standalone market data
+     2. The Producer's Package ($1,797) — turnkey service
+     3. Boutique ($2,997+) — custom scope
+     4. The Working Model ($79) — checkout upsell add-on (requires Producer's Package)
 
      Credit upgrade path: prior purchases apply toward next tier.
 
@@ -14,6 +13,7 @@
      "The Snapshot" as a paid product (now FREE calculator output)
      "The Package" at $597 (replaced by Comp Report + Producer's Package)
      "The Full Package" at $2,497 (replaced by Boutique)
+     "The Full Analysis" at $197 (removed — Snapshot+ now upgrades to Comp Report)
    ═══════════════════════════════════════════════════════════════════ */
 
 export interface Product {
@@ -52,7 +52,7 @@ export const products: Product[] = [
     id: "snapshot-plus",
     slug: "snapshot-plus",
     name: "Snapshot+",
-    price: 49,
+    price: 19,
     priceNote: null,
     originalPrice: null,
     badge: "UPGRADE",
@@ -60,16 +60,16 @@ export const products: Product[] = [
     tier: 0,
     category: "product",
     turnaround: "Instant",
-    shortDescription: "The diagnostic layer behind your free Snapshot.",
+    shortDescription: "Your Snapshot, white-labeled with deal diagnostics.",
     fullDescription:
-      "The free Snapshot shows you the waterfall. Snapshot+ tells you whether it holds up.\n\nFour diagnostic metrics that separate a deal that works from a deal that looks like it works: Margin of Safety, Erosion Rate, Off-the-Top Total, and Cost of Capital.\n\nInstant delivery. Applies as credit toward The Full Analysis.",
+      "The free Snapshot shows you the waterfall. Snapshot+ puts your company name on every page and unlocks four diagnostic metrics that separate a deal that works from a deal that looks like it works: Margin of Safety, Erosion Rate, Off-the-Top Total, and Cost of Capital.\n\nInstant delivery. Applies as credit toward the Comp Report.",
     features: [
       { title: "Margin of Safety", subtitle: "How much room your deal has before it breaks", group: "Unlock" },
       { title: "Erosion Rate", subtitle: "What the off-the-tops actually cost you", group: "Unlock" },
       { title: "Off-the-Top Total", subtitle: "Combined fees before investors see a dollar", group: "Unlock" },
       { title: "Cost of Capital", subtitle: "The real price of every dollar in your stack", group: "Unlock" },
     ],
-    reassurance: "Applies as credit toward The Full Analysis",
+    reassurance: "Applies as credit toward the Comp Report",
     whatsIncluded: [
       { title: "Margin of Safety", body: "The gap between your break-even point and projected revenue." },
       { title: "Erosion Rate", body: "Percentage of gross revenue consumed by off-the-top deductions." },
@@ -79,60 +79,12 @@ export const products: Product[] = [
     pickThisIf: "Find out whether your deal actually works.",
     whoItsFor: "Producers who ran the free calculator and want to know if the deal structure is sound before committing to full documentation.",
     upgradePrompt: {
-      title: "NEED THE FULL DOCUMENT?",
-      body: "The Full Analysis builds the complete investor-ready financial presentation. Your Snapshot+ purchase applies as credit.",
-      cta: "See The Full Analysis →",
-      link: "/store/the-full-analysis",
-    },
-    ctaLabel: "GET SNAPSHOT+",
-  },
-  {
-    id: "the-full-analysis",
-    slug: "the-full-analysis",
-    name: "The Full Analysis",
-    price: 197,
-    priceNote: null,
-    originalPrice: null,
-    badge: "LAUNCH PRICING",
-    featured: false,
-    tier: 1,
-    category: "product",
-    shortDescription: "Your financial model. One document. Investor-ready.",
-    fullDescription:
-      "Your complete financial model — budget, capital stack, waterfall, deal terms, and scenario analysis — presented as a single, designed document that any investor can pick up and understand.\n\nSensitivity modeling across five market conditions shows how your deal performs when the price moves. Not a single scenario — a stress-tested range.\n\nRun your numbers. We make them investor-ready.",
-    features: [
-      { title: "Complete Financial Model", subtitle: "Every section of your deal in one document", group: "Analyze" },
-      { title: "Sensitivity Modeling", subtitle: "What happens when the acquisition price changes", group: "Analyze" },
-      { title: "Investor Return Profiles", subtitle: "How your investors make money and when", group: "Analyze" },
-      { title: "White-Labeled Branding", subtitle: "Your company name on every page", group: "Present" },
-      { title: "Institutional Design", subtitle: "Hand it to your attorney. Hand it to your investor. It holds up.", group: "Present" },
-    ],
-    reassurance: "Instant delivery",
-    priceAnchor: "An entertainment attorney charges $500–850/hr for this work",
-    whatsIncluded: [
-      {
-        title: "Unified Financial Presentation (PDF)",
-        body: "Budget overview, capital stack structure, deal terms, full waterfall cascade, scenario analysis, and investor return summary. One cohesive document, designed to flow.",
-      },
-      {
-        title: "Sensitivity Modeling",
-        body: "Five market scenarios showing how your deal performs when the acquisition price moves — from base case to distressed. The analysis that turns a single number into a range.",
-      },
-      {
-        title: "White-Labeled Branding",
-        body: "Your production company name and project title on every page. Your project, your brand.",
-      },
-    ],
-    pickThisIf: "Your numbers documented, stress-tested, investor-ready.",
-    whoItsFor:
-      "Producers who have their numbers modeled and need a professional document to reference, send, or attach. When someone asks for the numbers, this is what you hand them.",
-    upgradePrompt: {
       title: "NEED TO DEFEND YOUR VALUATION?",
       body: "The Comp Report adds real comparable acquisition data in your genre and budget range — the evidence that turns your valuation from an assumption into a defensible number.",
       cta: "See the Comp Report →",
       link: "/store/comp-report",
     },
-    ctaLabel: "GET THE FULL ANALYSIS",
+    ctaLabel: "GET SNAPSHOT+",
   },
   {
     id: "comp-report",
@@ -304,12 +256,7 @@ export const products: Product[] = [
     tier: 0,
     category: "product",
     isAddOn: true,
-    requiresBase: [
-      "the-full-analysis",
-      "comp-report",
-      "the-producers-package",
-      "boutique",
-    ],
+    requiresBase: ["the-producers-package"],
     shortDescription: "The live Excel engine behind your finance plan. Reuse on every project.",
     fullDescription:
       "The formula-driven Excel engine behind your finance plan.\n\nEvery output cell is connected to every input. Change your budget — the waterfall recalculates. Adjust the sales agent commission — every downstream tier updates. Swap your equity split — investor returns recompute instantly.\n\nThis isn't a snapshot of one deal. It's a financial modeling tool you'll use for years. Buy it once, use it on every project going forward.",
