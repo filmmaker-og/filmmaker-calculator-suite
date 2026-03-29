@@ -29,7 +29,7 @@ The user is a "vibe coder" — gives creative direction, expects proactive compl
 ### Git
 - **Repo:** `filmmaker-og/filmmaker-calculator-suite` (private)
 - **Branch:** `main` is production. Always branch for changes, merge after build passes.
-- **Config:** `user.email="thefilmmaker.og@gmail.com"`, `user.name="filmmaker-og"`
+- **Config:** `user.email="og@filmmakerog.com"`, `user.name="filmmaker-og"`
 - **Safety tag:** `pre-refresh` on main saves the state before the major overhaul sessions began
 
 ### Auth Flow
@@ -282,8 +282,8 @@ heroNetProfit = acquisitionValue - totalDeductions
 - Research says: never mid-grey on dark grey (high contrast white)
 - Prefers clear visual hierarchy with elevation differences
 - User timezone: America/Chicago (CDT)
-- Git user: `filmmaker-og` / `thefilmmaker.og@gmail.com`
-- Business email: `og@filmmakerog.com` (Google Workspace)
+- Git user: `filmmaker-og` / `og@filmmakerog.com`
+- Personal email: `thefilmmaker.og@gmail.com` (legacy/backup)
 - Domain registrar: Vercel Domains
 
 ---
