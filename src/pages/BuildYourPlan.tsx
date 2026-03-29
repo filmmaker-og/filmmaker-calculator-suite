@@ -402,7 +402,7 @@ const BuildYourPlan = () => {
   const tierLabel =
     (tier === "the-pitch-package" || tier === "the-producers-package")
       ? "The Producer's Package"
-      : "The Full Analysis";
+      : "Snapshot+";
 
   return (
     <div className="min-h-screen bg-bg-void flex flex-col">

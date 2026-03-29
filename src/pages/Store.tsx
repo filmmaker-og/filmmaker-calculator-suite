@@ -18,7 +18,7 @@ import { toast } from "sonner";
 const storeFaqs = [
   {
     q: "What do you need from me?",
-    a: "Depends on the product. The Full Analysis uses your calculator inputs directly — nothing extra from you. The Comp Report needs a few details (genre, cast tier, budget range) so we pull the right comparables. Turnkey products start with a short intake form after checkout.",
+    a: "Depends on the product. Snapshot+ uses your calculator inputs directly — nothing extra from you. The Comp Report needs a few details (genre, cast tier, budget range) so we pull the right comparables. Turnkey products start with a short intake form after checkout.",
   },
   {
     q: "Can I see what I\u2019m getting before I buy?",
@@ -1144,7 +1144,7 @@ const Store = () => {
         </div>
       </section>
 
-      {/* § 1 — On Demand Cards (Snapshot+ and Full Analysis) */}
+      {/* § 1 — On Demand Cards (Snapshot+) */}
       <div
         style={{ padding: "0 24px", display: "flex", flexDirection: "column", gap: "16px" }}
       >

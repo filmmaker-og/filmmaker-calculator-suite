@@ -312,113 +312,6 @@ function computeScenarioReturn(
 
 // ─── COLD OPEN (screen only) ─────────────────────────────────────
 
-const ColdOpen = ({ multiple, result, inputs }: { multiple: number; result: WaterfallResult; inputs: WaterfallInputs }) => {
-  const multipleColor = multiple >= 1.0 ? SEM.green : multiple >= 0.5 ? SEM.amber : SEM.red;
-  const verdictWord = result.recoupPct >= 100 ? "FUNDED" : result.recoupPct >= 50 ? "PARTIAL" : "UNDERWATER";
-  const verdictColor = result.recoupPct >= 100 ? SEM.green : result.recoupPct >= 50 ? SEM.amber : SEM.red;
-
-  // Subtitle contextualizes the verdict — bridges to DealSection tone
-  let verdictSubtitle: string;
-  if (inputs.equity <= 0 && result.recoupPct >= 100) {
-    verdictSubtitle = "All obligations serviced";
-  } else if (inputs.equity <= 0) {
-    verdictSubtitle = "Debt not fully serviced";
-  } else if (multiple >= 1.5) {
-    verdictSubtitle = "Clean structure";
-  } else if (multiple >= 1.0) {
-    verdictSubtitle = "Tight margins";
-  } else if (multiple >= 0.7) {
-    verdictSubtitle = "Aggressive structure";
-  } else {
-    verdictSubtitle = "Restructure needed";
-  }
-
-  const glowRgba = multipleColor === SEM.green
-    ? "rgba(60,179,113,0.08)"
-    : multipleColor === SEM.amber
-      ? "rgba(240,168,48,0.08)"
-      : "rgba(220,38,38,0.08)";
-  const shadowRgba = multipleColor === SEM.green
-    ? "rgba(60,179,113,0.30)"
-    : multipleColor === SEM.amber
-      ? "rgba(240,168,48,0.30)"
-      : "rgba(220,38,38,0.30)";
-
-  // Handle edge: no equity → multiple may be Infinity or NaN
-  const safeMultiple = !isFinite(multiple) || isNaN(multiple) ? 0 : multiple;
-
-  return (
-    <section style={{
-      minHeight: "85dvh",
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      justifyContent: "center",
-      position: "relative",
-    }}>
-      {/* Subtle radial glow behind the number */}
-      <div style={{
-        position: "absolute",
-        width: "300px", height: "300px",
-        borderRadius: "50%",
-        background: `radial-gradient(circle, ${glowRgba}, transparent 70%)`,
-        pointerEvents: "none",
-      }} />
-
-      {/* The number — massive */}
-      <RevealSection>
-      <div style={{
-        fontFamily: "'Roboto Mono', monospace",
-        fontSize: "clamp(100px, 25vw, 140px)",
-        fontWeight: 500,
-        lineHeight: 1,
-        color: multipleColor,
-        textShadow: `0 0 60px ${shadowRgba}`,
-        textAlign: "center",
-      }}>
-        {safeMultiple.toFixed(1)}&times;
-      </div>
-      </RevealSection>
-
-      {/* Verdict word */}
-      <RevealSection delay={300}>
-      <div style={{ textAlign: "center", marginTop: "12px" }}>
-        <div style={{
-          fontFamily: "'Bebas Neue', sans-serif",
-          fontSize: "clamp(1.4rem, 4vw, 1.8rem)",
-          letterSpacing: "0.25em",
-          color: verdictColor,
-        }}>
-          {verdictWord}
-        </div>
-        <div style={{
-          fontFamily: "'Roboto Mono', monospace",
-          fontSize: "11px",
-          letterSpacing: "0.12em",
-          color: "rgba(255,255,255,0.45)",
-          marginTop: "6px",
-        }}>
-          {verdictSubtitle}
-        </div>
-      </div>
-      </RevealSection>
-
-      {/* Scroll indicator */}
-      <div style={{
-        position: "absolute",
-        bottom: "24px",
-        fontFamily: "'Roboto Mono', monospace",
-        fontSize: "11px",
-        letterSpacing: "0.15em",
-        color: "rgba(212,175,55,0.40)",
-        textTransform: "uppercase" as const,
-      }}>
-        Scroll to explore
-      </div>
-    </section>
-  );
-};
-
 // ─── TRANSITION BRIDGE ───────────────────────────────────────────
 
 const TransitionBridge = ({ text, height = 48 }: { text?: string; height?: number }) => (
@@ -2727,7 +2620,7 @@ const CTASection = ({ result, inputs, project, guilds }: {
               "Erosion Rate — what off-the-tops actually cost you",
               "Off-the-Top Total — combined fees before investors see a dollar",
               "Cost of Capital — the real price of every dollar in your stack",
-              "Applies as credit toward the Comp Report",
+              "Delivered instantly — no wait, no intake form",
             ].map((item, i) => (
               <RevealSection key={item} delay={200 + i * 100}>
               <div style={{ display: "flex", gap: "10px", alignItems: "flex-start" }}>

@@ -1,19 +1,17 @@
 /* ═══════════════════════════════════════════════════════════════════
    PRODUCT DATA — filmmaker.og store
    Current architecture (March 2026):
-     0. Snapshot+ ($19) — white-labeled snapshot with diagnostics, credit toward Comp Report
+     0. Snapshot+ ($19) — white-labeled snapshot with 4 diagnostics, instant delivery
      1. Comp Report ($595 / $995) — standalone market data
      2. The Producer's Package ($1,797) — turnkey service
      3. Boutique ($2,997+) — custom scope
      4. The Working Model ($79) — checkout upsell add-on (requires Producer's Package)
 
-     Credit upgrade path: prior purchases apply toward next tier.
-
      DEAD PRODUCT NAMES (do not reintroduce):
      "The Snapshot" as a paid product (now FREE calculator output)
      "The Package" at $597 (replaced by Comp Report + Producer's Package)
      "The Full Package" at $2,497 (replaced by Boutique)
-     "The Full Analysis" at $197 (removed — Snapshot+ now upgrades to Comp Report)
+     "The Full Analysis" at $197 (removed — replaced by Snapshot+)
    ═══════════════════════════════════════════════════════════════════ */
 
 export interface Product {
@@ -153,7 +151,7 @@ export const products: Product[] = [
     turnaround: "3-5 business days",
     shortDescription: "Custom lookbook, financials, pitch deck, 10 comps. We build it. You present it.",
     fullDescription:
-      "Tell us about your project. We build the full investor package.\n\nCustom lookbook with visual identity tailored to your film — tone boards, cast packaging, genre positioning, the visual narrative that shows investors this project is real. Alongside the complete financial package — every document from The Full Analysis, plus a presentation-ready PowerPoint pitch deck with speaker notes, plus 10 comparable acquisition deals defending your valuation.\n\nWe build it. You walk into the room.\n\n3-5 business day turnaround after intake.",
+      "Tell us about your project. We build the full investor package.\n\nCustom lookbook with visual identity tailored to your film — tone boards, cast packaging, genre positioning, the visual narrative that shows investors this project is real. Alongside the complete financial package — every document from Snapshot+, plus a presentation-ready PowerPoint pitch deck with speaker notes, plus 10 comparable acquisition deals defending your valuation.\n\nWe build it. You walk into the room.\n\n3-5 business day turnaround after intake.",
     features: [
       { title: "Custom Lookbook", subtitle: "Tone, cast, genre, visual identity for your film", group: "Build" },
       { title: "Pitch Deck With Speaker Notes", subtitle: "10-12 slides ready for the room", group: "Build" },

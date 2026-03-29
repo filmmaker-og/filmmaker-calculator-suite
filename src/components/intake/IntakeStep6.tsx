@@ -86,7 +86,7 @@ const IntakeStep6 = ({
   const tierLabel =
     (tier === "the-pitch-package" || tier === "the-producers-package")
       ? "The Producer's Package"
-      : "The Full Analysis";
+      : "Snapshot+";
 
   // Collect defaults
   const defaults: { field: string; value: string; range: string }[] = [];
@@ -357,7 +357,7 @@ const IntakeStep6 = ({
           )}
           {(tier === "the-pitch-package" || tier === "the-producers-package") && (
             <ul className="text-text-dim text-xs space-y-1 pl-4">
-              <li>Everything in The Full Analysis</li>
+              <li>Everything in Snapshot+</li>
               <li>Individual Investor Return Profiles</li>
               <li>Pitch Deck (PowerPoint)</li>
               <li>One-Page Executive Summary</li>
