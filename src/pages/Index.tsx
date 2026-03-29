@@ -335,8 +335,8 @@ const Index = () => {
 
   const wfBadge = (): React.CSSProperties => ({
     width: "32px", height: "32px", borderRadius: "50%",
-    background: "rgba(212,175,55,0.15)",
-    border: "1px solid rgba(212,175,55,0.35)",
+    background: "rgba(212,175,55,0.18)",
+    border: "1px solid rgba(212,175,55,0.40)",
     display: "flex", alignItems: "center", justifyContent: "center",
     fontFamily: "'Bebas Neue', sans-serif", fontSize: "0.95rem", color: "#D4AF37",
     marginBottom: "5px",
@@ -412,7 +412,7 @@ const Index = () => {
             boxShadow: "0 8px 32px rgba(0,0,0,0.55), 0 0 1px rgba(255,255,255,0.05), 0 0 1px rgba(212,175,55,0.06)",
           }} className="grain-surface">
           {/* Hero header band — poster composition: headline → subtitle → CTA */}
-          <div style={{ background: "linear-gradient(180deg, rgba(212,175,55,0.06), #121214)", border: "1px solid rgba(255,255,255,0.06)", borderTop: "1px solid rgba(255,255,255,0.10)", borderRadius: "6px", padding: "32px 24px 28px", textAlign: "center", boxShadow: "inset 0 2px 6px rgba(0,0,0,0.25)" }}>
+          <div style={{ background: "linear-gradient(180deg, rgba(212,175,55,0.08), #121214)", border: "1px solid rgba(255,255,255,0.06)", borderTop: "1px solid rgba(255,255,255,0.10)", borderRadius: "6px", padding: "32px 24px 28px", textAlign: "center", boxShadow: "inset 0 2px 6px rgba(0,0,0,0.25)" }}>
             <h1 style={styles.heroH1}>
               Model Your
               <span style={styles.heroMid}>Recoupment</span>
@@ -442,7 +442,7 @@ const Index = () => {
             boxShadow: "inset 0 2px 6px rgba(0,0,0,0.25)",
           }}>
             <div style={{ display: "flex", justifyContent: "center", marginBottom: "14px" }}>
-              <p style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "13px", color: "rgba(212,175,55,0.70)", letterSpacing: "0.10em", textTransform: "uppercase", textAlign: "center", display: "inline-block", background: "rgba(212,175,55,0.08)", border: "1px solid rgba(212,175,55,0.18)", padding: "3px 10px", borderRadius: "999px" }} className="pill-breathe">Drag to model your deal</p>
+              <p style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "13px", color: "rgba(212,175,55,0.80)", letterSpacing: "0.10em", textTransform: "uppercase", textAlign: "center", display: "inline-block", background: "rgba(212,175,55,0.10)", border: "1px solid rgba(212,175,55,0.22)", padding: "3px 10px", borderRadius: "999px" }} className="pill-breathe">Drag to model your deal</p>
             </div>
             {/* Slider: Budget */}
             <div style={{ marginBottom: "16px" }}>
@@ -501,7 +501,7 @@ const Index = () => {
             {/* ── Summary deduction bar ── */}
             <div style={{ marginBottom: "16px" }}>
               <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "6px" }}>
-                <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "13px", color: "rgba(250,248,244,0.75)", letterSpacing: "0.06em", textTransform: "uppercase" }}>Total Deductions</span>
+                <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "13px", color: "rgba(250,248,244,0.80)", letterSpacing: "0.06em", textTransform: "uppercase" }}>Total Deductions</span>
                 <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.2rem", color: "rgba(220,38,38,0.90)" }}>{fmt(totalDeductions)}</span>
               </div>
               <div style={{ height: "10px", background: "rgba(255,255,255,0.12)", borderRadius: "5px", overflow: "hidden" }}>
@@ -521,7 +521,7 @@ const Index = () => {
 
             {/* ── Net Profit output ── */}
             <div style={{ textAlign: "center" }}>
-              <p style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "12px", color: "rgba(250,248,244,0.70)", letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: "4px" }}>Estimated Net Profit</p>
+              <p style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "12px", color: "rgba(250,248,244,0.75)", letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: "4px" }}>Estimated Net Profit</p>
               <p style={{
                 fontFamily: "'Bebas Neue', sans-serif",
                 fontVariantNumeric: "tabular-nums",
@@ -558,9 +558,9 @@ const Index = () => {
             padding: "32px clamp(24px, 5vw, 40px)",
             boxShadow: "0 6px 28px rgba(0,0,0,0.50), 0 0 1px rgba(255,255,255,0.04), 0 0 1px rgba(212,175,55,0.06)",
           }} className="grain-surface">
-            <div style={{ background: "linear-gradient(180deg, rgba(212,175,55,0.06), #121214)", border: "1px solid rgba(255,255,255,0.06)", borderTop: "1px solid rgba(255,255,255,0.10)", borderRadius: "6px", padding: "28px 24px", marginBottom: "20px", textAlign: "center", boxShadow: "inset 0 2px 6px rgba(0,0,0,0.25)" }}>
+            <div style={{ background: "linear-gradient(180deg, rgba(212,175,55,0.08), #121214)", border: "1px solid rgba(255,255,255,0.06)", borderTop: "1px solid rgba(255,255,255,0.10)", borderRadius: "6px", padding: "28px 24px", marginBottom: "20px", textAlign: "center", boxShadow: "inset 0 2px 6px rgba(0,0,0,0.25)" }}>
               <EyebrowPill text="What You'll Build" />
-              <h2 style={styles.sectionH2}>Your Complete<br /><span style={{ color: "#D4AF37", textShadow: "0 0 30px rgba(212,175,55,0.50), 0 0 80px rgba(212,175,55,0.10)" }}>Deal Brief</span></h2>
+              <h2 style={styles.sectionH2}>Your Complete<br /><span style={{ color: "#D4AF37", textShadow: "0 0 30px rgba(212,175,55,0.55), 0 0 80px rgba(212,175,55,0.18)" }}>Deal Brief</span></h2>
             </div>
             <div className="scrollbar-hide preview-scroll">
 
@@ -570,7 +570,7 @@ const Index = () => {
               borderRadius: "6px", padding: "24px", scrollSnapAlign: "start", flexShrink: 0,
               boxShadow: "0 4px 16px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.05)",
             }} className="preview-card">
-              <p style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "10px", color: "rgba(212,175,55,0.60)", letterSpacing: "0.10em", textTransform: "uppercase", marginBottom: "12px" }}>Recoupment Cascade</p>
+              <p style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "10px", color: "rgba(212,175,55,0.75)", letterSpacing: "0.10em", textTransform: "uppercase", marginBottom: "12px" }}>Recoupment Cascade</p>
               {[
                 { label: "Sales Agent", pct: 100, color: "#3CB371", badge: "FUNDED" },
                 { label: "Senior Debt", pct: 100, color: "#3CB371", badge: "FUNDED" },
@@ -615,7 +615,7 @@ const Index = () => {
               borderRadius: "6px", padding: "24px", scrollSnapAlign: "start", flexShrink: 0,
               boxShadow: "0 4px 16px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.05)",
             }} className="preview-card">
-              <p style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "10px", color: "rgba(212,175,55,0.60)", letterSpacing: "0.10em", textTransform: "uppercase", marginBottom: "12px" }}>Profit Split</p>
+              <p style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "10px", color: "rgba(212,175,55,0.75)", letterSpacing: "0.10em", textTransform: "uppercase", marginBottom: "12px" }}>Profit Split</p>
               <div style={{ display: "flex", gap: "8px", marginBottom: "12px" }}>
                 <div style={{ flex: 1, textAlign: "center", padding: "10px 8px", borderRadius: "6px", background: "#121214", border: "1px solid rgba(60,179,113,0.15)", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
                   <p style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "9px", color: "rgba(250,248,244,0.70)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "4px" }}>Investor</p>
@@ -626,7 +626,7 @@ const Index = () => {
                   <p style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.3rem", color: "#3CB371" }}>$209K</p>
                 </div>
               </div>
-              <div style={{ height: "1px", background: "rgba(212,175,55,0.16)", marginBottom: "10px" }} />
+              <div style={{ height: "1px", background: "rgba(212,175,55,0.22)", marginBottom: "10px" }} />
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "10px", color: "rgba(250,248,244,0.70)", letterSpacing: "0.06em" }}>NET BACKEND</span>
                 <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "10px", color: "#3CB371", letterSpacing: "0.06em" }}>$418,000</span>
@@ -639,7 +639,7 @@ const Index = () => {
               borderRadius: "6px", padding: "24px", scrollSnapAlign: "start", flexShrink: 0,
               boxShadow: "0 4px 16px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.05)",
             }} className="preview-card">
-              <p style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "10px", color: "rgba(212,175,55,0.60)", letterSpacing: "0.10em", textTransform: "uppercase", marginBottom: "12px" }}>Capital Stack</p>
+              <p style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "10px", color: "rgba(212,175,55,0.75)", letterSpacing: "0.10em", textTransform: "uppercase", marginBottom: "12px" }}>Capital Stack</p>
               {[
                 { label: "Equity", pct: 50, color: "#D4AF37" },
                 { label: "Senior Debt", pct: 30, color: "#F0A830" },
@@ -704,13 +704,13 @@ const Index = () => {
             boxShadow: "0 6px 28px rgba(0,0,0,0.50), 0 0 1px rgba(255,255,255,0.04), 0 0 1px rgba(212,175,55,0.06)",
           }} className="grain-surface">
           {/* Header band */}
-          <div ref={waterfallHeaderRef} style={{ ...reveal(waterfallHeaderVisible), background: "linear-gradient(180deg, rgba(212,175,55,0.06), #121214)", border: "1px solid rgba(255,255,255,0.06)", borderTop: "1px solid rgba(255,255,255,0.10)", borderRadius: "6px", padding: "28px 24px", marginBottom: "20px", textAlign: "center", boxShadow: "inset 0 2px 6px rgba(0,0,0,0.25)" }}>
+          <div ref={waterfallHeaderRef} style={{ ...reveal(waterfallHeaderVisible), background: "linear-gradient(180deg, rgba(212,175,55,0.08), #121214)", border: "1px solid rgba(255,255,255,0.06)", borderTop: "1px solid rgba(255,255,255,0.10)", borderRadius: "6px", padding: "28px 24px", marginBottom: "20px", textAlign: "center", boxShadow: "inset 0 2px 6px rgba(0,0,0,0.25)" }}>
             <EyebrowPill text="How the money flows" />
-            <h2 style={styles.sectionH2}>The Recoupment<br /><span style={{ color: "#D4AF37", textShadow: "0 0 30px rgba(212,175,55,0.50), 0 0 80px rgba(212,175,55,0.10)" }}>Waterfall</span></h2>
+            <h2 style={styles.sectionH2}>The Recoupment<br /><span style={{ color: "#D4AF37", textShadow: "0 0 30px rgba(212,175,55,0.55), 0 0 80px rgba(212,175,55,0.18)" }}>Waterfall</span></h2>
           </div>
 
           <p style={{ ...styles.waterfallExplainer, ...reveal(waterfallHeaderVisible) }}>
-            A recoupment waterfall maps who gets paid, in what order & how much{" "}<span style={{ color: "#D4AF37", fontWeight: 600, background: "rgba(212,175,55,0.08)", padding: "2px 8px", borderRadius: "4px", boxDecorationBreak: "clone", WebkitBoxDecorationBreak: "clone" }}>before you see a dollar of profit.</span>
+            A recoupment waterfall maps who gets paid, in what order & how much{" "}<span style={{ color: "#D4AF37", fontWeight: 600, background: "rgba(212,175,55,0.12)", padding: "2px 8px", borderRadius: "4px", boxDecorationBreak: "clone", WebkitBoxDecorationBreak: "clone" }}>before you see a dollar of profit.</span>
           </p>
 
           {/* Gold divider — separates context from data */}
@@ -719,7 +719,7 @@ const Index = () => {
           {/* ── Running Balance Counter ── */}
           <div style={{ textAlign: "center", marginBottom: "16px", ...reveal(waterfallHeaderVisible, 1) }}>
             <div style={{ display: "inline-block", background: "rgba(212,175,55,0.08)", border: "1px solid rgba(212,175,55,0.18)", borderRadius: "999px", padding: "8px 20px", boxShadow: "0 2px 8px rgba(0,0,0,0.20)" }}>
-              <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "12px", color: "rgba(250,248,244,0.70)", letterSpacing: "0.12em", textTransform: "uppercase" }}>REMAINING:</span>
+              <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "12px", color: "rgba(250,248,244,0.75)", letterSpacing: "0.12em", textTransform: "uppercase" }}>REMAINING:</span>
               <span style={{
                 fontFamily: "'Roboto Mono', monospace",
                 fontSize: "16px",
@@ -751,14 +751,14 @@ const Index = () => {
             <div style={{ display: "flex", gap: "12px", alignItems: "stretch" }}>
               <div style={{
                 flex: 1, borderRadius: "8px", padding: "10px 8px", textAlign: "center",
-                border: "1px solid rgba(212,175,55,0.12)", background: "linear-gradient(180deg, rgba(212,175,55,0.02), #232326)",
+                border: "1px solid rgba(212,175,55,0.12)", background: "linear-gradient(180deg, rgba(212,175,55,0.02), #121214)",
               }}>
                 <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.1rem", color: "rgba(250,248,244,0.92)", marginBottom: "4px" }}>Production Budget</div>
                 <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.6rem", color: "#D4AF37" }}>${PRODUCTION_BUDGET.toLocaleString()}</div>
               </div>
               <div style={{
                 flex: 1, borderRadius: "8px", padding: "10px 8px", textAlign: "center",
-                border: "1px solid rgba(212,175,55,0.12)", background: "linear-gradient(180deg, rgba(212,175,55,0.02), #232326)",
+                border: "1px solid rgba(212,175,55,0.12)", background: "linear-gradient(180deg, rgba(212,175,55,0.02), #121214)",
               }}>
                 <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.1rem", color: "rgba(250,248,244,0.92)", marginBottom: "4px" }}>Tax Credit (20%)</div>
                 <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.5rem", color: "#3CB371" }}>+${TAX_CREDIT.toLocaleString()}</div>
@@ -927,7 +927,7 @@ const Index = () => {
               <div style={{
                 flex: 1, textAlign: "center", borderRadius: "8px", padding: "16px 12px",
                 border: "1px solid rgba(60,179,113,0.25)",
-                background: "linear-gradient(180deg, rgba(212,175,55,0.02), #232326)",
+                background: "linear-gradient(180deg, rgba(212,175,55,0.02), #121214)",
               }}>
                 <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.4rem", color: "rgba(250,248,244,0.92)", marginBottom: "6px" }}>Investor</div>
                 <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "#3CB371" }}>${splitCountUp.toLocaleString()}</div>
@@ -935,7 +935,7 @@ const Index = () => {
               <div style={{
                 flex: 1, textAlign: "center", borderRadius: "8px", padding: "16px 12px",
                 border: "1px solid rgba(60,179,113,0.25)",
-                background: "linear-gradient(180deg, rgba(212,175,55,0.02), #232326)",
+                background: "linear-gradient(180deg, rgba(212,175,55,0.02), #121214)",
               }}>
                 <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.4rem", color: "rgba(250,248,244,0.92)", marginBottom: "6px" }}>Producer</div>
                 <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "#3CB371" }}>${splitCountUp.toLocaleString()}</div>
@@ -972,9 +972,9 @@ const Index = () => {
             padding: "36px clamp(24px, 5vw, 40px)",
             boxShadow: "0 6px 28px rgba(0,0,0,0.50), 0 0 1px rgba(255,255,255,0.04), 0 0 1px rgba(212,175,55,0.06)",
           }} className="grain-surface">
-          <div style={{ ...reveal(stakeVisible), background: "linear-gradient(180deg, rgba(212,175,55,0.06), #121214)", border: "1px solid rgba(255,255,255,0.06)", borderTop: "1px solid rgba(255,255,255,0.10)", borderRadius: "6px", padding: "28px 24px", marginBottom: "20px", textAlign: "center", boxShadow: "inset 0 2px 6px rgba(0,0,0,0.25)" }}>
+          <div style={{ ...reveal(stakeVisible), background: "linear-gradient(180deg, rgba(212,175,55,0.08), #121214)", border: "1px solid rgba(255,255,255,0.06)", borderTop: "1px solid rgba(255,255,255,0.10)", borderRadius: "6px", padding: "28px 24px", marginBottom: "20px", textAlign: "center", boxShadow: "inset 0 2px 6px rgba(0,0,0,0.25)" }}>
             <EyebrowPill text="What's At Stake" />
-            <h2 style={styles.sectionH2}><span style={{ color: "#D4AF37", textShadow: "0 0 30px rgba(212,175,55,0.50), 0 0 80px rgba(212,175,55,0.10)" }}>(4) Four</span> Reasons<br />You Can't Skip</h2>
+            <h2 style={styles.sectionH2}><span style={{ color: "#D4AF37", textShadow: "0 0 30px rgba(212,175,55,0.55), 0 0 80px rgba(212,175,55,0.18)" }}>(4) Four</span> Reasons<br />You Can't Skip</h2>
           </div>
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "16px" }}>
@@ -993,7 +993,7 @@ const Index = () => {
                 }}
               >
                 <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "10px" }}>
-                  <div style={{ width: "36px", height: "36px", borderRadius: "50%", background: "rgba(212,175,55,0.15)", border: "1px solid rgba(212,175,55,0.35)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                  <div style={{ width: "36px", height: "36px", borderRadius: "50%", background: "rgba(212,175,55,0.18)", border: "1px solid rgba(212,175,55,0.40)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                     <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.1rem", color: "#D4AF37", lineHeight: 1 }}>{card.num}</span>
                   </div>
                   <p style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.3rem", color: "rgba(250,248,244,0.95)", lineHeight: 1.1, margin: 0 }}>{card.title}</p>
@@ -1022,9 +1022,9 @@ const Index = () => {
             textAlign: "left",
           }} className="grain-surface">
           {/* Header band */}
-          <div style={{ background: "linear-gradient(180deg, rgba(212,175,55,0.06), #121214)", border: "1px solid rgba(255,255,255,0.06)", borderTop: "1px solid rgba(255,255,255,0.10)", borderRadius: "6px", padding: "28px 24px", marginBottom: "20px", textAlign: "center", boxShadow: "inset 0 2px 6px rgba(0,0,0,0.25)" }}>
+          <div style={{ background: "linear-gradient(180deg, rgba(212,175,55,0.08), #121214)", border: "1px solid rgba(255,255,255,0.06)", borderTop: "1px solid rgba(255,255,255,0.10)", borderRadius: "6px", padding: "28px 24px", marginBottom: "20px", textAlign: "center", boxShadow: "inset 0 2px 6px rgba(0,0,0,0.25)" }}>
             <EyebrowPill text="The Reality" />
-            <h2 style={styles.sectionH2}>Know Before You <span style={{ color: "#D4AF37", textShadow: "0 0 30px rgba(212,175,55,0.50), 0 0 80px rgba(212,175,55,0.10)" }}>Negotiate</span></h2>
+            <h2 style={styles.sectionH2}>Know Before You <span style={{ color: "#D4AF37", textShadow: "0 0 30px rgba(212,175,55,0.55), 0 0 80px rgba(212,175,55,0.18)" }}>Negotiate</span></h2>
           </div>
 
           {/* Typing reveal blockquote */}
@@ -1139,9 +1139,9 @@ const Index = () => {
             padding: "36px clamp(24px, 5vw, 40px)",
             boxShadow: "0 6px 28px rgba(0,0,0,0.50), 0 0 1px rgba(255,255,255,0.04), 0 0 1px rgba(212,175,55,0.06)",
           }} className="grain-surface">
-          <div style={{ ...reveal(socialVisible), background: "linear-gradient(180deg, rgba(212,175,55,0.06), #121214)", border: "1px solid rgba(255,255,255,0.06)", borderTop: "1px solid rgba(255,255,255,0.10)", borderRadius: "6px", padding: "28px 24px", marginBottom: "20px", textAlign: "center", boxShadow: "inset 0 2px 6px rgba(0,0,0,0.25)" }}>
+          <div style={{ ...reveal(socialVisible), background: "linear-gradient(180deg, rgba(212,175,55,0.08), #121214)", border: "1px solid rgba(255,255,255,0.06)", borderTop: "1px solid rgba(255,255,255,0.10)", borderRadius: "6px", padding: "28px 24px", marginBottom: "20px", textAlign: "center", boxShadow: "inset 0 2px 6px rgba(0,0,0,0.25)" }}>
             <EyebrowPill text="Trusted By Filmmakers" />
-            <h2 style={styles.sectionH2}>Real Numbers.<br /><span style={{ color: "#D4AF37", textShadow: "0 0 30px rgba(212,175,55,0.50), 0 0 80px rgba(212,175,55,0.10)" }}>Real Meetings.</span></h2>
+            <h2 style={styles.sectionH2}>Real Numbers.<br /><span style={{ color: "#D4AF37", textShadow: "0 0 30px rgba(212,175,55,0.55), 0 0 80px rgba(212,175,55,0.18)" }}>Real Meetings.</span></h2>
           </div>
 
           {/* Testimonial blockquote */}
@@ -1170,7 +1170,7 @@ const Index = () => {
               { number: "500+", label: "Waterfalls Built" },
               { number: "90s", label: "Time to Model" },
             ].map((stat) => (
-              <div key={stat.label} style={{ textAlign: "center", minWidth: "100px", padding: "16px 24px", background: "rgba(212,175,55,0.04)", border: "1px solid rgba(212,175,55,0.12)", borderRadius: "8px", boxShadow: "0 2px 8px rgba(0,0,0,0.15)" }}>
+              <div key={stat.label} style={{ textAlign: "center", minWidth: "100px", padding: "16px 24px", background: "rgba(212,175,55,0.06)", border: "1px solid rgba(212,175,55,0.15)", borderRadius: "8px", boxShadow: "0 2px 8px rgba(0,0,0,0.15)" }}>
                 <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "#D4AF37", lineHeight: 1 }}>{stat.number}</div>
                 <div style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "10px", color: "rgba(250,248,244,0.60)", letterSpacing: "0.08em", textTransform: "uppercase", marginTop: "4px" }}>{stat.label}</div>
               </div>
@@ -1187,7 +1187,7 @@ const Index = () => {
                 fontFamily: "'Roboto Mono', monospace", fontSize: "11px",
                 color: "rgba(212,175,55,0.70)", letterSpacing: "0.06em",
                 textTransform: "uppercase", padding: "6px 12px", borderRadius: "999px",
-                border: "1px solid rgba(212,175,55,0.20)", background: "rgba(212,175,55,0.03)",
+                border: "1px solid rgba(212,175,55,0.22)", background: "rgba(212,175,55,0.05)",
               }} className="badge-stagger">{feat}</div>
             ))}
           </div>
@@ -1228,7 +1228,7 @@ const Index = () => {
             </div>
             {/* Body + CTA */}
             <p style={{
-              fontFamily: "'Inter', sans-serif", fontSize: "17px", color: "rgba(250,248,244,0.88)",
+              fontFamily: "'Inter', sans-serif", fontSize: "17px", color: "rgba(250,248,244,0.92)",
               lineHeight: 1.6, margin: "0 auto 28px", textAlign: "center", maxWidth: "420px",
             }}>
               Will you have the answer? Build your waterfall now and walk in prepared.
@@ -1351,7 +1351,7 @@ const styles: Record<string, React.CSSProperties> = {
   footerLinks: { display: "flex", justifyContent: "center", gap: "24px", marginBottom: "16px" },
   footerIcon: { color: "rgba(212,175,55,0.50)", textDecoration: "none", display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", padding: "4px", borderRadius: "8px", border: "1px solid rgba(212,175,55,0.20)", transition: "color 0.2s ease, border-color 0.2s ease", boxSizing: "content-box" },
   footerNav: { display: "flex", justifyContent: "center", alignItems: "center", gap: "10px", marginBottom: "16px" },
-  footerNavLink: { fontFamily: "'Roboto Mono', monospace", fontSize: "13px", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(212,175,55,0.60)", cursor: "pointer", transition: "color 0.2s ease", padding: "8px 4px", minHeight: "44px", display: "flex", alignItems: "center" } as React.CSSProperties,
+  footerNavLink: { fontFamily: "'Roboto Mono', monospace", fontSize: "13px", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(212,175,55,0.75)", cursor: "pointer", transition: "color 0.2s ease", padding: "8px 4px", minHeight: "44px", display: "flex", alignItems: "center" } as React.CSSProperties,
   footerText: { fontFamily: "'Inter', sans-serif", fontSize: "14px", textAlign: "center", color: "rgba(255,255,255,0.55)", lineHeight: 1.6 },
 };
 
