@@ -261,7 +261,7 @@ const Index = () => {
 
   /* ── Waterfall helper components ── */
   const WaterfallGroupLabel = ({ text, color }: { text: string; color: 'gold' | 'red' | 'green' | 'neutral' }) => {
-    const textColor = color === 'gold' ? '#D4AF37' : color === 'red' ? 'rgba(220,38,38,0.85)' : color === 'green' ? '#3CB371' : 'rgba(212,175,55,0.70)';
+    const textColor = color === 'gold' ? '#D4AF37' : color === 'red' ? 'rgba(220,38,38,0.85)' : color === 'green' ? '#3CB371' : 'rgba(212,175,55,0.85)';
     return (
       <div style={{ textAlign: "center", margin: "8px 0 5px" }}>
         <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.6rem", color: textColor, letterSpacing: "0.04em" }}>{text}</span>
@@ -271,28 +271,28 @@ const Index = () => {
 
   const WaterfallConnector = ({ color }: { color: 'gold' | 'gold-to-red' | 'red' | 'red-strong' | 'red-to-green' | 'green' }) => {
     const colorMap: Record<string, string> = {
-      gold: "rgba(212,175,55,0.55)",
-      'gold-to-red': "rgba(220,38,38,0.50)",
-      red: "rgba(220,38,38,0.50)",
-      'red-strong': "rgba(220,38,38,0.60)",
-      'red-to-green': "rgba(60,179,113,0.55)",
-      green: "rgba(60,179,113,0.55)",
+      gold: "rgba(212,175,55,0.70)",
+      'gold-to-red': "rgba(220,38,38,0.60)",
+      red: "rgba(220,38,38,0.60)",
+      'red-strong': "rgba(220,38,38,0.70)",
+      'red-to-green': "rgba(60,179,113,0.65)",
+      green: "rgba(60,179,113,0.65)",
     };
     const lineColor: Record<string, string> = {
-      gold: "rgba(212,175,55,0.55)",
-      'gold-to-red': "linear-gradient(180deg, rgba(212,175,55,0.55), rgba(220,38,38,0.50))",
-      red: "rgba(220,38,38,0.50)",
-      'red-strong': "rgba(220,38,38,0.60)",
-      'red-to-green': "linear-gradient(180deg, rgba(220,38,38,0.50), rgba(60,179,113,0.55))",
-      green: "rgba(60,179,113,0.55)",
+      gold: "rgba(212,175,55,0.70)",
+      'gold-to-red': "linear-gradient(180deg, rgba(212,175,55,0.70), rgba(220,38,38,0.60))",
+      red: "rgba(220,38,38,0.60)",
+      'red-strong': "rgba(220,38,38,0.70)",
+      'red-to-green': "linear-gradient(180deg, rgba(220,38,38,0.60), rgba(60,179,113,0.65))",
+      green: "rgba(60,179,113,0.65)",
     };
     const shadowMap: Record<string, string> = {
-      gold: "0 0 8px rgba(212,175,55,0.40)",
-      'gold-to-red': "0 0 8px rgba(220,38,38,0.30)",
-      red: "0 0 8px rgba(220,38,38,0.30)",
-      'red-strong': "0 0 10px rgba(220,38,38,0.35)",
-      'red-to-green': "0 0 8px rgba(60,179,113,0.30)",
-      green: "0 0 8px rgba(60,179,113,0.35)",
+      gold: "0 0 10px rgba(212,175,55,0.50)",
+      'gold-to-red': "0 0 10px rgba(220,38,38,0.35)",
+      red: "0 0 10px rgba(220,38,38,0.35)",
+      'red-strong': "0 0 12px rgba(220,38,38,0.40)",
+      'red-to-green': "0 0 10px rgba(60,179,113,0.35)",
+      green: "0 0 10px rgba(60,179,113,0.40)",
     };
     const arrowColor = colorMap[color];
     return (
@@ -679,10 +679,13 @@ const Index = () => {
             </div>
           </div>
             {/* Swipe indicator */}
-            <div className={previewVisible ? "swipe-hint" : ""} style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "8px", marginTop: "16px", opacity: previewVisible ? 0.45 : 0 }}>
-              <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "12px", color: "rgba(250,248,244,0.55)", letterSpacing: "0.10em", textTransform: "uppercase" }}>Swipe</span>
-              <svg width="20" height="12" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M1 6h15M12 1l5 5-5 5" stroke="rgba(212,175,55,0.55)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "10px", marginTop: "18px", opacity: 0.50 }}>
+              <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ opacity: 0.4 }}>
+                <path d="M13 5H2M5 1L1 5l4 4" stroke="rgba(212,175,55,0.60)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+              <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "13px", color: "rgba(250,248,244,0.55)", letterSpacing: "0.12em", textTransform: "uppercase" }}>Swipe</span>
+              <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1 5h11M9 1l4 4-4 4" stroke="rgba(212,175,55,0.60)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </div>
           </div>
@@ -718,7 +721,7 @@ const Index = () => {
 
           {/* ── Running Balance Counter ── */}
           <div style={{ textAlign: "center", marginBottom: "16px", ...reveal(waterfallHeaderVisible, 1) }}>
-            <div style={{ display: "inline-block", background: "rgba(212,175,55,0.08)", border: "1px solid rgba(212,175,55,0.18)", borderRadius: "999px", padding: "8px 20px", boxShadow: "0 2px 8px rgba(0,0,0,0.20)" }}>
+            <div style={{ display: "inline-block", background: "rgba(212,175,55,0.10)", border: "1px solid rgba(212,175,55,0.25)", borderRadius: "999px", padding: "8px 20px", boxShadow: "0 2px 8px rgba(0,0,0,0.20)" }}>
               <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "12px", color: "rgba(250,248,244,0.75)", letterSpacing: "0.12em", textTransform: "uppercase" }}>REMAINING:</span>
               <span style={{
                 fontFamily: "'Roboto Mono', monospace",
@@ -945,12 +948,12 @@ const Index = () => {
 
           {/* CTA after waterfall */}
           <div style={{ padding: "24px 0 8px" }}>
-            <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "rgba(250,248,244,0.55)", textAlign: "center", marginBottom: "14px", letterSpacing: "0.02em" }}>Ready to model your own deal?</p>
+            <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "rgba(250,248,244,0.65)", textAlign: "center", marginBottom: "14px", letterSpacing: "0.02em" }}>Ready to model your own deal?</p>
             <button onClick={handleCTA} style={styles.ctaBtn} className="cta-gold-btn animate-cta-glow-pulse" aria-label="Build my waterfall" onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>
               <span style={{ position: "relative", zIndex: 1 }}>BUILD MY WATERFALL</span>
               <div style={styles.ctaShimmer} />
             </button>
-            <p style={styles.ctaReassurance}>See your full waterfall in 90 seconds</p>
+
           </div>
           </div>
         </section>

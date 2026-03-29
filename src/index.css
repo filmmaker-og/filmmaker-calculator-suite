@@ -1092,14 +1092,7 @@
 
 /* Desktop ambient glow — removed; centered container orbs handle atmosphere */
 
-/* Swipe indicator auto-fade */
-@keyframes swipe-fade {
-  0%, 70% { opacity: 0.45; }
-  100% { opacity: 0; }
-}
-.swipe-hint {
-  animation: swipe-fade 4s ease-out forwards;
-}
+/* Swipe indicator — persistent */
 
 /* Stamp micro-interaction for waterfall tier cards */
 @keyframes stamp {
