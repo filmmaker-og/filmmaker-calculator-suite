@@ -401,7 +401,7 @@ const Index = () => {
         <div className="scroll-thread" style={{
           position: "fixed",
           top: 0,
-          left: "max(8px, calc(50% - 390px))",
+          left: "max(8px, calc(50% - 500px))",
           width: "3px",
           height: `${scrollProgress * 100}%`,
           background: "linear-gradient(180deg, rgba(212,175,55,0.55), rgba(212,175,55,0.15))",
@@ -1008,7 +1008,7 @@ const Index = () => {
             <h2 style={styles.sectionH2}><span style={{ color: "#D4AF37", textShadow: "0 0 30px rgba(212,175,55,0.50), 0 0 80px rgba(212,175,55,0.10)" }}>(4) Four</span> Reasons<br />You Can't Skip</h2>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "16px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "16px" }}>
             {stakeCards.map((card, i) => (
               <div
                 key={card.num}
