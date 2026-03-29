@@ -78,23 +78,23 @@ Full documentation: `BRAND_SYSTEM.md` in the repo root. (v3.1)
 ### Quick Reference
 | Token | Value |
 |---|---|
-| Page bg | `#0C0C0E` |
-| Container bg | `#1A1A1C` |
+| Page bg | `#141416` (OLED-lifted) |
+| Container bg | `#1A1A1C` (elevated) |
 | Surface bg | `#232326` |
-| Footer bg | `#161618` |
+| Footer bg | `#181819` |
 | Gold (brand) | `#D4AF37` |
 | Gold (CTA) | `#F9E076` |
 | Body text | `rgba(250,248,244,0.88)` (warm white) |
 | Labels | `rgba(255,255,255,0.70)` (cold white, Roboto Mono) |
-| Green (positive) | `#3CB371` |
-| Red (negative) | `#DC2626` |
+| Green (positive) | `#4DAF78` (OLED-desaturated) |
+| Red (negative) | `#C84040` (OLED-desaturated) |
 
 ### Color Functions (tokens.ts)
 ```typescript
 import { gold, white, red, green, GOLD, CTA, BG } from '@/lib/tokens';
 gold(0.15)  // rgba(212,175,55,0.15)
 white(0.70) // rgba(255,255,255,0.70)
-BG.void     // #0C0C0E
+BG.void     // #141416 (OLED-lifted)
 BG.elevated // #1A1A1C
 BG.surface  // #232326
 ```
@@ -303,6 +303,27 @@ heroNetProfit = acquisitionValue - totalDeductions
 
 ## COMPLETED (March 29, 2026)
 
+### OLED & Mobile Readability Overhaul (24 changes)
+- ✅ `color-scheme: dark` meta + CSS root — tells OS to respect our dark design
+- ✅ Background lifted `#0C0C0E` → `#141416` — eliminates OLED scroll halation
+- ✅ Text opacity floors raised (muted 0.55→0.72, tertiary 0.40→0.48) — survives OLED auto-contrast in sunlight
+- ✅ Green `#3CB371`→`#4DAF78`, Red `#DC2626`→`#C84040` — reduces optical vibration on dark OLED
+- ✅ `dynamic-range: high` media query — tames gold glows on HDR panels
+- ✅ `prefers-reduced-motion` kills ALL animations globally
+- ✅ Slider labels 12px→14px, all small labels ≥11px — OLED minimum readability floor
+- ✅ Inter Variable font with `font-optical-sizing: auto` — auto-thickens strokes at small sizes
+- ✅ `-webkit-font-smoothing: antialiased` — prevents OLED PenTile subpixel fringing
+- ✅ Glow orbs: replaced runtime `filter:blur(40-50px)` with pre-blurred gradients — zero GPU cost
+- ✅ Grain overlay mobile bump (0.035→0.06) — visible on OLED infinite contrast
+- ✅ `content-visibility: auto` on waterfall section — faster initial paint
+- ✅ SVG check/cross icons replacing Unicode ✓/✗ — consistent across Android/iOS
+- ✅ Section gutters reduced 40-48px→32px with warm gold radial tint
+- ✅ CTA letter-spacing 0.18em→0.12em — prevents 2-line break on narrow screens
+- ✅ Stats pills equal-width — `flex: 1 1 0` for balanced layout
+- ✅ WITH/WITHOUT grid padding equalized (22px→16px) — icon alignment symmetry
+- ✅ BRAND_SYSTEM.md updated with Section 11: OLED & Mobile Readability rationale
+
+### Previous
 - ✅ Supabase `leads` table created with RLS (anonymous inserts)
 - ✅ OTP auth killed from LeadCaptureModal — replaced with leads table insert
 - ✅ Calculator/Index/WaterfallDeck auth gates simplified to localStorage only

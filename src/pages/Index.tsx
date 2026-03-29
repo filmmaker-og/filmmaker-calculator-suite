@@ -1080,17 +1080,17 @@ const Index = () => {
           }}>
             {/* Header — WITH */}
             <div style={{
-              background: "linear-gradient(180deg, rgba(60,179,113,0.05), #121214)",
-              padding: "18px 22px",
-              borderBottom: "1px solid rgba(60,179,113,0.15)",
+              background: "linear-gradient(180deg, rgba(77,175,120,0.05), #141416)",
+              padding: "18px 16px",
+              borderBottom: "1px solid rgba(77,175,120,0.15)",
               display: "flex", alignItems: "center",
             }}>
               <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.6rem", color: "#4DAF78", letterSpacing: "0.04em" }}>WITH</span>
             </div>
             {/* Header — WITHOUT */}
             <div style={{
-              background: "linear-gradient(180deg, rgba(220,38,38,0.05), #121214)",
-              padding: "18px 22px",
+              background: "linear-gradient(180deg, rgba(200,64,64,0.05), #141416)",
+              padding: "18px 16px",
               borderLeft: "1px solid rgba(255,255,255,0.06)",
               borderBottom: "1px solid rgba(220,38,38,0.12)",
               display: "flex", alignItems: "center",
@@ -1104,7 +1104,7 @@ const Index = () => {
                   ...reveal(realityGridVisible, i + 1),
                   background: "rgba(60,179,113,0.04)",
                   display: "flex", gap: "10px",
-                  padding: "18px 20px", alignItems: "flex-start",
+                  padding: "18px 16px", alignItems: "flex-start",
                   borderTop: "1px solid rgba(255,255,255,0.06)",
                 }}>
                   <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ flexShrink: 0, filter: "drop-shadow(0 0 6px rgba(77,175,120,0.25))" }}><path d="M3.5 9.5L7 13L14.5 5.5" stroke="#4DAF78" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
@@ -1114,7 +1114,7 @@ const Index = () => {
                   ...reveal(realityGridVisible, i + 1),
                   background: "rgba(220,38,38,0.04)",
                   display: "flex", gap: "10px",
-                  padding: "18px 20px", alignItems: "flex-start",
+                  padding: "18px 16px", alignItems: "flex-start",
                   borderLeft: "1px solid rgba(255,255,255,0.06)",
                   borderTop: "1px solid rgba(255,255,255,0.06)",
                 }}>
@@ -1173,7 +1173,7 @@ const Index = () => {
               { number: "500+", label: "Waterfalls Built" },
               { number: "90s", label: "Time to Model" },
             ].map((stat) => (
-              <div key={stat.label} style={{ textAlign: "center", minWidth: "100px", padding: "16px 24px", background: "rgba(212,175,55,0.06)", border: "1px solid rgba(212,175,55,0.15)", borderRadius: "8px", boxShadow: "0 2px 8px rgba(0,0,0,0.15)" }}>
+              <div key={stat.label} style={{ textAlign: "center", flex: "1 1 0", maxWidth: "180px", padding: "16px 24px", background: "rgba(212,175,55,0.06)", border: "1px solid rgba(212,175,55,0.15)", borderRadius: "8px", boxShadow: "0 2px 8px rgba(0,0,0,0.15)" }}>
                 <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "#D4AF37", lineHeight: 1 }}>{stat.number}</div>
                 <div style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: "rgba(250,248,244,0.65)", letterSpacing: "0.08em", textTransform: "uppercase", marginTop: "4px" }}>{stat.label}</div>
               </div>

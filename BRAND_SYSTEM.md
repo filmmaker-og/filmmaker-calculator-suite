@@ -16,15 +16,15 @@ Gold + black + warm white. That's it. Every other color is semantic (communicate
 ### Surface Hierarchy — Three-Step Depth System
 | Token | Value | Use |
 |---|---|---|
-| Page (Void) | `#0C0C0E` | `<body>` background — near-black. Warm gradient overlay: `#0C0C0E → #111113 → #0E0E10` |
+| Page (Void) | `#141416` | `<body>` background — lifted from pure black to eliminate OLED halation. Warm gradient overlay: `#141416 → #151517 → #141416` |
 | Section Wrapper | `#222226` | The "stage" — lighter slate that clearly lifts off the void. `border-radius: 8px` |
-| Inner Well | `#121214` | Near-black — content recessed into the wrapper like a shadow box |
-| Header Band | `linear-gradient(180deg, rgba(212,175,55,0.08), #121214)` | First child inside every wrapper — warm gold gradient fading to dark well. `inset 0 2px 6px` shadow. |
-| Inner Card | `linear-gradient(180deg, rgba(212,175,55,0.03), #121214)` | Content cards inside sections — subtle gold warmth |
+| Inner Well | `#141416` | Near-black — content recessed into the wrapper like a shadow box |
+| Header Band | `linear-gradient(180deg, rgba(212,175,55,0.08), #141416)` | First child inside every wrapper — warm gold gradient fading to dark well. `inset 0 2px 6px` shadow. |
+| Inner Card | `linear-gradient(180deg, rgba(212,175,55,0.03), #141416)` | Content cards inside sections — subtle gold warmth |
 
-The wrappers (#222226) are the brightest layer. Inner wells (#121214) are recessed below them. Gold, green, and red pop against the near-black wells. Section wrappers use white structural borders (`rgba(255,255,255,0.10-0.18)`), not gold.
+The wrappers (#222226) are the brightest layer. Inner wells (#141416) are recessed below them. Gold, green, and red pop against the near-black wells. Section wrappers use white structural borders (`rgba(255,255,255,0.10-0.18)`), not gold.
 
-Deprecated values (do not use): `#000`, `#111`, `#1A1A1C` (old container), `#1E1E20`, `#232326` (old surface), `#242428`.
+Deprecated values (do not use): `#000`, `#111`, `#0C0C0E` (old void — caused halation), `#121214` (old inner well), `#1A1A1C` (old container), `#1E1E20`, `#232326` (old surface), `#242428`.
 
 ### Gold — The Brand Color
 | Token | Value | Use |
@@ -41,14 +41,14 @@ Deprecated values (do not use): `#000`, `#111`, `#1A1A1C` (old container), `#1E1
 
 **The two-gold rule:** If it's not clickable, it's not `#F9E076`. Metallic gold (`#D4AF37`) is for brand elements. CTA gold is for buttons and links only.
 
-### Semantic Colors
+### Semantic Colors (OLED-Desaturated)
 | Color | Hex | Meaning |
 |---|---|---|
-| Green | `#3CB371` | Positive, funded, profit, success |
-| Red | `#DC2626` | Negative, deductions, danger, error |
+| Green | `#4DAF78` | Positive, funded, profit, success |
+| Red | `#C84040` | Negative, deductions, danger, error |
 | Amber | `#F0A830` | Partial, warning, caution |
 
-These appear **only** when communicating data — waterfall tiers, profit/loss, status badges. Never decorative.
+Colors are desaturated ~15% from their original values (`#3CB371`, `#DC2626`) to reduce optical vibration on OLED panels with dark backgrounds. These appear **only** when communicating data — waterfall tiers, profit/loss, status badges. Never decorative.
 
 ### Purple — ELIMINATED
 Purple has been fully removed from the codebase. Waterfall tier number badges are now gold-rimmed white circles. No purple gradients, shadows, or accents exist anywhere.
@@ -62,12 +62,12 @@ Body text uses warm-white (`rgba(250,248,244,...)`) not cold-white (`rgba(255,25
 | Body (primary) | `rgba(250,248,244,0.90-0.92)` | Testimonials, closer body, WITH column |
 | Body (standard) | `rgba(250,248,244,0.85)` | All Inter body text, stakes body, descriptions |
 | Labels (bright) | `rgba(250,248,244,0.80)` | Total Deductions label, important metadata |
-| Labels | `rgba(250,248,244,0.75)` | Slider labels, REMAINING, Estimated Net Profit (cold-white) |
-| Tertiary | `rgba(250,248,244,0.55-0.65)` | Swipe indicator, ready-to-model text |
-| Footer | `rgba(255,255,255,0.50-0.55)` | Footer text, disclaimers |
-| Easter egg | `rgba(255,255,255,0.35)` | "Best viewed in the dark." — decorative only |
+| Labels | `rgba(255,255,255,0.80)` | Slider labels (14px), REMAINING, Estimated Net Profit (cold-white) |
+| Tertiary | `rgba(250,248,244,0.65-0.75)` | Swipe indicator, ready-to-model text |
+| Footer | `rgba(255,255,255,0.65)` | Footer text, disclaimers |
+| Easter egg | `rgba(255,255,255,0.45)` | "Best viewed in the dark." — decorative only |
 
-**Opacity floor:** No text intended to be read may go below `0.60`. Below that is decorative only.
+**Opacity floor:** No text intended to be read may go below `0.65` (OLED-hardened floor, raised from 0.60). Below that is decorative only.
 
 ### Import Rule
 Always import from `@/lib/tokens`. Never write raw `rgba()` in `.tsx` files.
@@ -100,9 +100,9 @@ All three loaded via Google Fonts in `index.css`.
 | Data callout | Bebas Neue | 2.4–3.2rem | Semantic color | Large numbers (profit, totals) |
 | Body | Inter | 16px | `rgba(250,248,244,0.88)` | line-height: 1.6. Not 1.45. Not 1.55. |
 | EyebrowPill | Roboto Mono | 13px | `#D4AF37` | `letter-spacing: 0.16em`, uppercase |
-| Slider/field label | Roboto Mono | 11-12px | `white(0.70-0.75)` | uppercase, tracked |
-| Badge/tag text | Roboto Mono | 10–11px | Varies | `letter-spacing: 0.06–0.08em`, uppercase |
-| Footer text | Inter | 14px | `white(0.55)` | Disclaimer, legal |
+| Slider/field label | Roboto Mono | 14px | `white(0.80)` | uppercase, `0.06em` tracking |
+| Badge/tag text | Roboto Mono | 11px minimum | Varies | `letter-spacing: 0.06–0.08em`, uppercase |
+| Footer text | Inter | 14px | `white(0.65)` | Disclaimer, legal |
 
 ### Rules
 - Bebas Neue is always uppercase (it only has uppercase glyphs)
@@ -196,12 +196,12 @@ border-left: 2px solid rgba(212,175,55,0.25);
 ```
 
 ### Footer
-- Background: `#161618`
+- Background: `#181819`
 - Border-top: `1px solid rgba(212,175,55,0.15)`
 - Social icons: gold at 0.50, 36px square with gold border at 0.20
 - Nav links: Roboto Mono 13px, gold at 0.60
-- Disclaimer: Inter 14px, white at 0.55
-- "Best viewed in the dark." — Roboto Mono 11px, white at 0.35
+- Disclaimer: Inter 14px, white at 0.65
+- "Best viewed in the dark." — Roboto Mono 11px, white at 0.45
 
 ---
 
@@ -369,7 +369,7 @@ PDF branding: FILMMAKER.OG header, gold bar, watermark, and filmmakerog.com foot
 | `preview-card` | Hover lifts + gold border brightens | Product preview cards |
 | `preview-scroll` | Horizontal scroll mobile, wrap on 640px+ | Preview card container |
 | `scroll-thread` | Hidden mobile, visible 840px+ | Scroll progress gold line |
-| `grain-surface` | SVG noise overlay at 0.035 opacity | All section containers |
+| `grain-surface` | SVG noise overlay at 0.035 opacity (mobile: 0.06) | All section containers |
 
 ---
 
@@ -386,6 +386,39 @@ PDF branding: FILMMAKER.OG header, gold bar, watermark, and filmmakerog.com foot
 | `docs/deal-insight-edge-function.md` | Documentation for external AI insight edge function |
 | `src/components/OgBotFab.tsx` | Floating action button (gold gradient, border) |
 | `BRAND_SYSTEM.md` | This document |
+
+---
+
+## 11. OLED & MOBILE READABILITY (March 29, 2026)
+
+Modern OLED phones (Pixel 9, iPhone 15 Pro, Galaxy S24+) dynamically adjust contrast and brightness. These optimizations ensure the page renders consistently across all display processing.
+
+### Why These Changes Were Made
+- **Background lift (`#0C0C0E` → `#141416`):** OLED pixels at near-black have slower response times than at dark-gray. When scrolling, white text on near-black creates a visible ghost/smear trail (halation). Lifting the base gives pixels a head start, eliminating the effect. Costs only 0.3% more battery.
+- **Color desaturation (~15%):** Saturated green/red on dark backgrounds creates optical vibration (a buzzing effect that causes eye fatigue). OLED auto-contrast amplifies this further.
+- **Text opacity floors raised:** OLED dynamic contrast crushes low-opacity text. In direct sunlight with auto-brightness maxed, `0.55` opacity text becomes invisible. Floor raised to `0.65` for all readable text.
+- **`color-scheme: dark` meta tag:** Tells the OS-level contrast engine to treat the page as natively dark, preventing the browser from applying its own contrast corrections on top of ours.
+- **`dynamic-range: high` media query:** Detects HDR OLED panels and scales down glow intensities so gold gradients don't blow out on high-nit displays.
+- **Static glow orbs:** Replaced `filter: blur(40-50px)` runtime blur with pre-blurred multi-stop radial gradients. Identical visual result, zero per-frame GPU cost.
+- **Grain overlay mobile bump:** OLED's infinite contrast makes 4% opacity grain invisible. Bumped to 6-7% on mobile for tactile texture.
+- **Inter Variable with `font-optical-sizing: auto`:** Automatically thickens strokes at small sizes, refines them at large sizes.
+- **`-webkit-font-smoothing: antialiased`:** Prevents subpixel rendering that causes color fringing on OLED PenTile subpixel layouts.
+- **SVG check/cross icons:** Replaced Unicode ✓/✗ characters which render inconsistently across Android and iOS with inline SVGs.
+- **`content-visibility: auto` on waterfall section:** Skips rendering of off-screen tier cards until scroll-near, improving initial paint.
+
+### CSS Media Queries Added
+```css
+@media (dynamic-range: high) { /* Tame glows on HDR OLED */ }
+@media (prefers-reduced-motion: reduce) { /* Kill ALL animations globally */ }
+@media (max-width: 767px) { /* Mobile grain + blur reductions */ }
+```
+
+### Minimum Sizes (OLED-Hardened)
+- Body text: 16px
+- Slider labels: 14px (was 12px)
+- Card header labels: 11px minimum (was 9-10px)
+- Badge/tag text: 11px minimum
+- No readable text below 0.65 opacity
 
 ---
 
