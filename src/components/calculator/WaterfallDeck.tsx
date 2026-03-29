@@ -1938,7 +1938,7 @@ const InterpretationSection = ({
           is <Num>{erosionPct}%</Num> of
           your <Num>{formatCompactCurrency(inputs.revenue)}</Num> acquisition price, gone before a dollar reaches the
           production entity. What survives: <Num>{formatCompactCurrency(netDistributable)}</Num> in net
-          distributable revenue against <Num>{formatCompactCurrency(cashBasis)}</Num> in investor principal.
+          distributable revenue against <Num>{formatCompactCurrency(cashBasis)}</Num> in cash exposure (the investor's actual out-of-pocket).
           {investorReturnPct >= 100 && (
             <> At the base case, investors recoup in full and earn a <Num>{Math.round(investorReturnPct)}%</Num> return.</>
           )}
@@ -1958,9 +1958,14 @@ const InterpretationSection = ({
           {inputs.credits > 0 && (
             <>{location || "Your state"}&rsquo;s <Num>{creditPct}%</Num> credit accounts
             for <Num>{Math.round(creditConcentration)}%</Num> of your financing.
-            Remove it and your cash basis jumps
+            Remove it and cash exposure jumps
             to <Num>{formatCompactCurrency(inputs.budget - inputs.deferments)}</Num> (which
             is why tax credit insurance exists, and why most institutional investors require it). </>
+          )}
+          {inputs.mezzanineDebt > 0 && (
+            <>Mezzanine debt at <Num>{inputs.mezzanineRate}%</Num> adds <Num>{formatCompactCurrency(inputs.mezzanineDebt * (1 + inputs.mezzanineRate / 100))}</Num> to
+            the hurdle and sits between senior debt and equity in the waterfall. That is expensive capital
+            {inputs.mezzanineRate >= 15 ? ' \u2014 rates above 15% compress margins fast' : ''}. </>
           )}
           {inputs.deferments > 0 && (
             <>The <Num>{formatCompactCurrency(inputs.deferments)}</Num> in deferred fees reduces your cash exposure
@@ -1968,10 +1973,10 @@ const InterpretationSection = ({
             Check the language in your talent agreements. </>
           )}
           {marginOfSafety > 0 ? (
-            <>The margin between cash basis and market value
+            <>The margin between cash exposure and market value
             is <Num>{formatCompactCurrency(marginOfSafety)}</Num>. That is where this deal lives or dies.</>
           ) : (
-            <>There is no margin between cash basis and market value. Every dollar of the budget must be recouped from a sale that hasn&rsquo;t happened yet.</>
+            <>There is no margin between cash exposure and market value. Every dollar of the budget must be recouped from a sale that hasn&rsquo;t happened yet.</>
           )}
         </p>
 
