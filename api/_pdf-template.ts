@@ -1,6 +1,7 @@
 // api/_pdf-template.ts
 // Generates the HTML string for the PDF snapshot
-// Aligned to BRAND_SYSTEM v3.0 — gold + black + warm white, no purple
+// BRAND_SYSTEM v3.1 — gold + black + warm white, zero purple
+// Narrative document: 3 long-form prose sections + 4 bridge lines + closer
 
 interface SnapshotData {
   project: {
@@ -9,6 +10,7 @@ interface SnapshotData {
     logline: string;
     cast: string;
     director: string;
+    writers: string;
     producers: string;
     company: string;
     location: string;
@@ -107,17 +109,9 @@ export function generatePdfHtml(data: SnapshotData): string {
   const safeMultiple = isFinite(result.multiple) && !isNaN(result.multiple) ? result.multiple : 0;
   const netProfit = result.producer;
   const netProfitColor = netProfit > 0 ? '#3CB371' : 'rgba(220,38,38,0.85)';
-
-  // Verdict text
-  let verdictText: string;
-  if (result.recoupPct >= 100) {
-    const surplus = result.profitPool > 0 ? formatCurrency(result.profitPool) : '$0';
-    verdictText = `All capital tiers funded. Surplus of ${surplus}.`;
-  } else if (result.recoupPct > 50) {
-    verdictText = `Partial recoupment at ${result.recoupPct.toFixed(0)}%.`;
-  } else {
-    verdictText = 'Revenue does not cover capital obligations.';
-  }
+  const erosionPct = computed.erosionPct;
+  const remainPct = 100 - erosionPct;
+  const isBreakevenValid = isFinite(breakeven) && breakeven > 0;
 
   // ── SVG Donut segments ──
   const donutSegments: { label: string; amount: number; color: string }[] = [];
@@ -170,10 +164,6 @@ export function generatePdfHtml(data: SnapshotData): string {
             </div>`;
   }).join('') : '<div style="font-family:\'Inter\',sans-serif;font-size:11px;color:rgba(255,255,255,0.35);padding:12px 0;">No revenue to allocate.</div>';
 
-  // Erosion bar (existing pattern)
-  const erosionPct = computed.erosionPct;
-  const remainPct = 100 - erosionPct;
-
   // ── Tier cards HTML ──
   const tierCardsHtml = tiers
     .map((tier, i) => {
@@ -212,12 +202,11 @@ export function generatePdfHtml(data: SnapshotData): string {
     .join('');
 
   // ── Margin of Safety ──
-  const isBreakevenValid = isFinite(breakeven) && breakeven > 0;
   const margin = revenue - breakeven;
   const isAbove = margin >= 0;
   let marginBarHtml: string;
   if (!isBreakevenValid || revenue <= 0) {
-    marginBarHtml = `<div style="padding:12px 16px;border-radius:8px;border:1px solid rgba(212,175,55,0.12);background:linear-gradient(180deg,rgba(212,175,55,0.02),#232326);">
+    marginBarHtml = `<div style="padding:12px 16px;border-radius:8px;border:1px solid rgba(212,175,55,0.12);border-top:1px solid rgba(255,255,255,0.04);background:linear-gradient(180deg,rgba(212,175,55,0.02),#232326);">
       <div style="font-family:'Roboto Mono',monospace;font-size:11px;color:rgba(212,175,55,0.55);">MARGIN OF SAFETY: N/A</div>
     </div>`;
   } else {
@@ -229,7 +218,7 @@ export function generatePdfHtml(data: SnapshotData): string {
       : `SHORTFALL: ${formatCurrency(Math.abs(margin))} below break-even`;
     const labelColor = isAbove ? '#3CB371' : 'rgba(220,38,38,0.85)';
 
-    marginBarHtml = `<div style="padding:12px 16px;border-radius:8px;border:1px solid rgba(212,175,55,0.12);background:linear-gradient(180deg,rgba(212,175,55,0.02),#232326);">
+    marginBarHtml = `<div style="padding:12px 16px;border-radius:8px;border:1px solid rgba(212,175,55,0.12);border-top:1px solid rgba(255,255,255,0.04);background:linear-gradient(180deg,rgba(212,175,55,0.02),#232326);">
       <div style="font-family:'Roboto Mono',monospace;font-size:10px;color:${labelColor};margin-bottom:8px;">${labelText}</div>
       <div style="position:relative;height:20px;background:rgba(255,255,255,0.04);border-radius:4px;overflow:hidden;">
         ${isAbove
@@ -268,9 +257,9 @@ export function generatePdfHtml(data: SnapshotData): string {
   const offTopRatio = revenue > 0 ? result.offTopTotal / revenue : 0;
   const scenarioData = [
     { label: formatCurrency(revenue), sub: 'modeled', haircut: '0%', price: revenue },
-    { label: formatCurrency(revenue * 0.85), sub: '\u221215%', haircut: '15%', price: revenue * 0.85 },
-    { label: formatCurrency(revenue * 0.70), sub: '\u221230%', haircut: '30%', price: revenue * 0.70 },
-    { label: formatCurrency(revenue * 0.50), sub: '\u221250%', haircut: '50%', price: revenue * 0.50 },
+    { label: formatCurrency(revenue * 0.85), sub: '−15%', haircut: '15%', price: revenue * 0.85 },
+    { label: formatCurrency(revenue * 0.70), sub: '−30%', haircut: '30%', price: revenue * 0.70 },
+    { label: formatCurrency(revenue * 0.50), sub: '−50%', haircut: '50%', price: revenue * 0.50 },
   ].map(s => {
     const newOffTops = s.price * offTopRatio;
     const newDistributable = Math.max(0, s.price - newOffTops);
@@ -293,75 +282,161 @@ export function generatePdfHtml(data: SnapshotData): string {
     </div>`
   ).join('');
 
-  // ── Prose: "The Deal" (Page 1) ──
+  // ═══════════════════════════════════════════════════════════════
+  // PROSE GENERATION — all text derived from deal data, no filler
+  // ═══════════════════════════════════════════════════════════════
+
+  // ── Capital source names (for prose) ──
   const capitalSourceNames: string[] = [];
   if (inputs.equity > 0) capitalSourceNames.push('equity');
   if (inputs.debt > 0) capitalSourceNames.push('senior debt');
+  if (inputs.mezzanineDebt > 0) capitalSourceNames.push('mezzanine financing');
   if (inputs.credits > 0) capitalSourceNames.push('tax credits');
   if (inputs.deferments > 0) capitalSourceNames.push('deferrals');
-  const sourcesList = capitalSourceNames.join(', ');
+  const sourcesList = capitalSourceNames.join(', ').replace(/, ([^,]*)$/, ' and $1');
 
-  let dealProseText: string;
+  // ── EXECUTIVE SUMMARY (Page 1) — 4-6 sentences ──
+  const execSummaryParts: string[] = [];
+
+  // Sentence 1: What this is
+  execSummaryParts.push(`${project.title} is a ${formatCurrency(inputs.budget)} independent ${project.genre ? project.genre.toLowerCase() + ' ' : ''}feature${sourcesList ? ' financed through ' + sourcesList : ''}.`);
+
+  // Sentence 2: Return outcome
   if (result.recoupPct >= 100) {
-    dealProseText = `This is a ${formatCurrency(inputs.budget)} independent feature financed through ${sourcesList || 'available capital'}. At the modeled acquisition price of ${formatCurrency(revenue)}, all capital tiers are funded with a ${safeMultiple.toFixed(1)}x return to investors after off-the-top deductions consume ${erosionPct.toFixed(0)}% of gross revenue.`;
+    execSummaryParts.push(`At the modeled acquisition price of ${formatCurrency(revenue)}, all capital tiers are fully funded with a ${safeMultiple.toFixed(1)}x return to investors.`);
   } else if (result.recoupPct > 0) {
-    dealProseText = `This is a ${formatCurrency(inputs.budget)} independent feature. At the modeled acquisition price of ${formatCurrency(revenue)}, investors recoup ${result.recoupPct.toFixed(0)}% of their capital. Off-the-top deductions consume ${erosionPct.toFixed(0)}% of gross revenue before the waterfall begins.`;
+    execSummaryParts.push(`At the modeled acquisition price of ${formatCurrency(revenue)}, investors recoup ${result.recoupPct.toFixed(0)}% of their capital with a ${safeMultiple.toFixed(1)}x return.`);
   } else {
-    dealProseText = `At the modeled acquisition price of ${formatCurrency(revenue)}, net distributable revenue does not cover capital obligations. The structure below shows where the money stops.`;
+    execSummaryParts.push(`At the modeled acquisition price of ${formatCurrency(revenue)}, net distributable revenue does not cover capital obligations.`);
   }
 
-  // ── Prose: "The Margin" (Page 3) ──
-  let marginProseHtml = '';
+  // Sentence 3: Erosion
+  execSummaryParts.push(`Off-the-top deductions\u2009\u2014\u2009distribution fees, sales expenses, guild reserves, and collection costs\u2009\u2014\u2009consume ${erosionPct.toFixed(0)}% of gross revenue before the waterfall begins.`);
+
+  // Sentence 4: Margin of safety or shortfall
   if (isBreakevenValid && revenue > 0) {
     if (revenue > breakeven) {
       const marginDollar = revenue - breakeven;
       const marginPctVal = Math.round((marginDollar / revenue) * 100);
-      marginProseHtml = `<div style="padding:0 36px;margin-bottom:12px;position:relative;z-index:2;">
-        <div style="font-family:'Inter',sans-serif;font-size:11px;color:rgba(250,248,244,0.60);line-height:1.6;font-style:italic;">At the modeled price, revenue exceeds the break-even threshold by ${formatCurrency(marginDollar)} &mdash; a ${marginPctVal}% margin of safety. The acquisition price could drop ${marginPctVal}% before investor capital is at risk.</div>
-      </div>`;
+      execSummaryParts.push(`The deal carries a ${formatCurrency(marginDollar)} margin of safety above break-even, meaning the acquisition price could drop ${marginPctVal}% before investor capital is at risk.`);
     } else {
       const shortfall = breakeven - revenue;
-      marginProseHtml = `<div style="padding:0 36px;margin-bottom:12px;position:relative;z-index:2;">
-        <div style="font-family:'Inter',sans-serif;font-size:11px;color:rgba(250,248,244,0.60);line-height:1.6;font-style:italic;">Revenue falls ${formatCurrency(shortfall)} short of the break-even point. At this price, investor recoupment is incomplete.</div>
-      </div>`;
+      execSummaryParts.push(`Revenue falls ${formatCurrency(shortfall)} short of the break-even point at this price.`);
     }
   }
 
-  // ── Prose: "The Structure" (Page 4) ──
-  const structureParts: string[] = [];
-  if (inputs.equity > 0) {
-    const eqPct = inputs.budget > 0 ? Math.round((inputs.equity / inputs.budget) * 100) : 0;
-    const premiumNote = inputs.premium > 0 ? ` at ${inputs.premium}% preferred return` : '';
-    structureParts.push(`${eqPct}% equity (${formatCurrency(inputs.equity)}${premiumNote})`);
-  }
-  if (inputs.debt > 0) {
-    const dPct = inputs.budget > 0 ? Math.round((inputs.debt / inputs.budget) * 100) : 0;
-    structureParts.push(`${dPct}% senior debt (${formatCurrency(inputs.debt)} at ${inputs.seniorDebtRate}%)`);
-  }
-  if (inputs.mezzanineDebt > 0) {
-    const mPct = inputs.budget > 0 ? Math.round((inputs.mezzanineDebt / inputs.budget) * 100) : 0;
-    structureParts.push(`${mPct}% mezzanine debt (${formatCurrency(inputs.mezzanineDebt)} at ${inputs.mezzanineRate}%)`);
-  }
-  if (inputs.credits > 0) {
-    const cPct = inputs.budget > 0 ? Math.round((inputs.credits / inputs.budget) * 100) : 0;
-    structureParts.push(`${cPct}% tax credits (${formatCurrency(inputs.credits)} non-dilutive)`);
-  }
-  if (inputs.deferments > 0) {
-    const dfPct = inputs.budget > 0 ? Math.round((inputs.deferments / inputs.budget) * 100) : 0;
-    structureParts.push(`${dfPct}% in deferred compensation (${formatCurrency(inputs.deferments)})`);
+  // Sentence 5: Waterfall priority
+  if (inputs.debt > 0 && inputs.mezzanineDebt > 0 && inputs.equity > 0) {
+    execSummaryParts.push(`The waterfall prioritizes senior debt repayment, followed by mezzanine financing, then equity recoupment${inputs.premium > 0 ? ' at a ' + inputs.premium + '% preferred return' : ''}, with remaining profits split ${inputs.profitSplit}/${100 - inputs.profitSplit} between investors and producers.`);
+  } else if (inputs.debt > 0 && inputs.equity > 0) {
+    execSummaryParts.push(`The waterfall prioritizes senior debt repayment, followed by equity recoupment${inputs.premium > 0 ? ' at a ' + inputs.premium + '% preferred return' : ''}, with remaining profits split ${inputs.profitSplit}/${100 - inputs.profitSplit} between investors and producers.`);
+  } else if (inputs.equity > 0) {
+    execSummaryParts.push(`After off-the-top deductions, equity investors recoup their capital${inputs.premium > 0 ? ' plus a ' + inputs.premium + '% premium' : ''}, with remaining profits split ${inputs.profitSplit}/${100 - inputs.profitSplit} between investors and producers.`);
   }
 
-  let structureProseHtml = '';
-  if (structureParts.length > 0) {
+  // Sentence 6: Net to producer
+  if (netProfit > 0) {
+    execSummaryParts.push(`The producer\u2019s net backend is ${formatCurrency(netProfit)}.`);
+  }
+
+  const execSummaryText = execSummaryParts.join(' ');
+
+  // ── WATERFALL NARRATIVE (Page 3) — 3-4 sentences ──
+  const waterfallNarrativeParts: string[] = [];
+
+  waterfallNarrativeParts.push(`Revenue flows through ${tiers.length} tiers before reaching the profit split.`);
+
+  // Find the largest recoupment obligation
+  const obligationTiers = tiers.filter((_, i) => i < tiers.length - 1 && tiers[i].amount > 0);
+  if (obligationTiers.length > 0) {
+    const largest = obligationTiers.reduce((max, t) => t.amount > max.amount ? t : max, obligationTiers[0]);
+    if (largest.amount > 0) {
+      const largePct = revenue > 0 ? Math.round((largest.amount / revenue) * 100) : 0;
+      waterfallNarrativeParts.push(`The largest single obligation is ${largest.name.toLowerCase()} at ${formatCurrency(largest.amount)}${largePct > 0 ? ' (' + largePct + '% of gross)' : ''}.`);
+    }
+  }
+
+  if (result.profitPool > 0) {
+    waterfallNarrativeParts.push(`After all obligations are met, ${formatCurrency(result.profitPool)} remains in the profit pool\u2009\u2014\u2009split ${inputs.profitSplit}/${100 - inputs.profitSplit} between investors and producers.`);
+    if (netProfit > 0) {
+      waterfallNarrativeParts.push(`The filmmaker\u2019s net backend is ${formatCurrency(netProfit)}.`);
+    }
+  } else {
+    waterfallNarrativeParts.push(`At this price, revenue is exhausted before all capital tiers are satisfied. No profit pool is generated.`);
+  }
+
+  const waterfallNarrativeText = waterfallNarrativeParts.join(' ');
+
+  // ── MARGIN PROSE (Page 3) ──
+  let marginProseText = '';
+  if (isBreakevenValid && revenue > 0) {
+    if (revenue > breakeven) {
+      const marginDollar = revenue - breakeven;
+      const marginPctVal = Math.round((marginDollar / revenue) * 100);
+      marginProseText = `At the modeled price, revenue exceeds the break-even threshold by ${formatCurrency(marginDollar)}\u2009\u2014\u2009a ${marginPctVal}% margin of safety. The acquisition price could drop ${marginPctVal}% before investor capital is at risk.`;
+    } else {
+      const shortfall = breakeven - revenue;
+      marginProseText = `Revenue falls ${formatCurrency(shortfall)} short of the break-even point. At this price, investor recoupment is incomplete.`;
+    }
+  }
+
+  // ── SCENARIO INTERPRETATION (Page 4) — 2-3 sentences ──
+  const scenarioInterpParts: string[] = [];
+
+  const modeledScenario = scenarioData[0];
+  const mild = scenarioData[1];
+  const moderate = scenarioData[2];
+  const severe = scenarioData[3];
+
+  if (modeledScenario.returnPct >= 100) {
+    scenarioInterpParts.push(`At the modeled price, the deal returns ${modeledScenario.multiple.toFixed(1)}x.`);
+    if (mild.returnPct >= 100) {
+      scenarioInterpParts.push(`A 15% haircut still delivers full recoupment at ${mild.multiple.toFixed(1)}x.`);
+    } else if (mild.returnPct >= 50) {
+      scenarioInterpParts.push(`A 15% haircut reduces the return to ${mild.multiple.toFixed(1)}x with ${Math.round(mild.returnPct)}% recoupment.`);
+    }
+    if (moderate.returnPct < 100) {
+      scenarioInterpParts.push(`At a 30% discount, investor return drops to ${moderate.multiple.toFixed(1)}x\u2009\u2014\u2009${Math.round(moderate.returnPct) >= 50 ? 'partial recoupment' : 'significant capital loss'}.`);
+    }
+    if (severe.returnPct < 50) {
+      scenarioInterpParts.push(`The structure does not survive a 50% reduction.`);
+    }
+  } else {
+    scenarioInterpParts.push(`At the modeled price, the deal returns ${modeledScenario.multiple.toFixed(1)}x with ${Math.round(modeledScenario.returnPct)}% recoupment.`);
+    scenarioInterpParts.push(`Any reduction in acquisition price further erodes investor returns.`);
+  }
+
+  const scenarioInterpText = scenarioInterpParts.join(' ');
+
+  // ── Team grid rows ──
+  const teamFields: { role: string; name: string }[] = [];
+  if (project.director) teamFields.push({ role: 'Director', name: project.director });
+  if (project.writers) teamFields.push({ role: 'Writer', name: project.writers });
+  if (project.producers) teamFields.push({ role: 'Producers', name: project.producers });
+  if (project.company) teamFields.push({ role: 'Production Co.', name: project.company });
+  if (project.cast) teamFields.push({ role: 'Cast', name: project.cast });
+  if (project.location) teamFields.push({ role: 'Location', name: project.location });
+
+  const teamGridHtml = teamFields.length > 0 ? `
+    <div style="display:grid;grid-template-columns:${teamFields.length <= 3 ? 'repeat(' + teamFields.length + ', 1fr)' : '1fr 1fr'};gap:1px;background:rgba(212,175,55,0.08);border-radius:6px;overflow:hidden;margin-bottom:16px;">
+      ${teamFields.map(f => `<div style="background:#232326;padding:10px 14px;">
+        <div style="font-family:'Roboto Mono',monospace;font-size:8px;letter-spacing:2px;color:rgba(212,175,55,0.40);text-transform:uppercase;margin-bottom:3px;">${f.role}</div>
+        <div style="font-family:'Inter',sans-serif;font-size:11px;color:rgba(250,248,244,0.85);font-weight:500;line-height:1.3;">${f.name}</div>
+      </div>`).join('')}
+    </div>` : '';
+
+  // ── Structure prose ──
+  let structureProseText = '';
+  if (capitalSources.length > 0) {
+    const structParts = capitalSources.map(s => `${s.pct} ${s.label.toLowerCase()} (${formatFullCurrency(s.amount)})`);
+    const structList = structParts.join(', ').replace(/, ([^,]*)$/, ' and $1');
     let positionSentence = '';
     if (inputs.debt > 0 && inputs.mezzanineDebt > 0) {
-      positionSentence = ' The lender holds first position in the recoupment waterfall, meaning equity investors do not see returns until all senior creditors are made whole.';
+      positionSentence = ' The lender holds first position in the recoupment waterfall, followed by mezzanine debt, meaning equity investors do not see returns until all senior creditors are made whole.';
     } else if (inputs.debt > 0) {
       positionSentence = ' Senior debt holds first position in the recoupment waterfall, meaning equity investors do not see returns until the lender is made whole.';
     }
-    structureProseHtml = `<div style="padding:0 36px;margin-bottom:16px;position:relative;z-index:2;">
-      <div style="font-family:'Inter',sans-serif;font-size:11px;color:rgba(250,248,244,0.60);line-height:1.6;">The production is financed with ${structureParts.join(', ')}.${positionSentence}</div>
-    </div>`;
+    structureProseText = `The production is financed with ${structList}.${positionSentence}`;
   }
 
   // ── Reusable HTML fragments ──
@@ -377,6 +452,16 @@ export function generatePdfHtml(data: SnapshotData): string {
       <div style="font-family:'Roboto Mono',monospace;font-size:8px;color:rgba(255,255,255,0.20);">${pageNum} / 5</div>
     </div>`;
 
+  // Bridge line helper
+  const bridge = (text: string) => `<div style="padding:0 36px;margin-bottom:12px;position:relative;z-index:2;">
+    <div style="font-family:'Inter',sans-serif;font-size:11px;color:rgba(250,248,244,0.60);font-style:italic;line-height:1.6;letter-spacing:0.01em;">${text}</div>
+  </div>`;
+
+  // Prose block helper
+  const proseBlock = (text: string, marginBottom = '16px') => `<div style="padding:0 36px;margin-bottom:${marginBottom};position:relative;z-index:2;">
+    <div style="font-family:'Inter',sans-serif;font-size:11px;color:rgba(250,248,244,0.65);line-height:1.7;font-weight:400;">${text}</div>
+  </div>`;
+
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -391,39 +476,10 @@ export function generatePdfHtml(data: SnapshotData): string {
       page-break-after: always; padding: 28px 0;
     }
     .page:last-child { page-break-after: avoid; }
-    .watermark {
-      position: absolute; top: 50%; left: 50%;
-      transform: translate(-50%,-50%) rotate(-35deg);
-      font-family: 'Bebas Neue',sans-serif; font-size: 80px;
-      letter-spacing: 20px; color: rgba(212,175,55,0.02);
-      white-space: nowrap; pointer-events: none; z-index: 0;
-    }
-    .eyebrow {
-      display: flex; align-items: center; justify-content: center;
-      gap: 10px; margin-bottom: 14px;
-    }
-    .eyebrow .rule { flex: 1; height: 1px; background: rgba(212,175,55,0.35); }
-    .eyebrow span {
-      font-family: 'Roboto Mono',monospace; font-size: 9px;
-      letter-spacing: 3px; text-transform: uppercase; color: #D4AF37;
-      white-space: nowrap;
-    }
     .gold-break {
       height: 1px;
       background: linear-gradient(90deg, transparent, rgba(212,175,55,0.35), transparent);
-      margin: 16px 48px;
-    }
-    .footer {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 0 36px; position: absolute; bottom: 16px; left: 0; right: 0;
-    }
-    .footer-brand {
-      font-family: 'Bebas Neue',sans-serif; font-size: 9px;
-      letter-spacing: 4px; color: rgba(212,175,55,0.2);
-    }
-    .footer-page {
-      font-family: 'Roboto Mono',monospace; font-size: 8px;
-      color: rgba(255,255,255,0.2);
+      margin: 14px 48px;
     }
   </style>
 </head>
@@ -442,55 +498,53 @@ export function generatePdfHtml(data: SnapshotData): string {
       <div style="font-family:'Roboto Mono',monospace;font-size:9px;letter-spacing:5px;color:rgba(212,175,55,0.40);text-transform:uppercase;text-align:center;margin-bottom:20px;">Waterfall Snapshot</div>
 
       <!-- Title -->
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:48px;color:#fff;line-height:0.95;letter-spacing:2px;text-align:center;margin-bottom:10px;">${project.title.toUpperCase()}</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:48px;color:#fff;line-height:0.95;letter-spacing:2px;text-align:center;margin-bottom:8px;">${project.title.toUpperCase()}</div>
 
       <!-- Genre + Logline -->
       ${project.genre ? `<div style="font-family:'Roboto Mono',monospace;font-size:10px;letter-spacing:2px;color:rgba(212,175,55,0.50);text-transform:uppercase;text-align:center;margin-bottom:8px;">${project.genre}</div>` : ''}
-      ${project.logline ? `<div style="font-family:'Inter',sans-serif;font-size:11px;color:rgba(250,248,244,0.55);font-style:italic;font-weight:300;line-height:1.6;text-align:center;max-width:420px;margin:0 auto 24px;">${project.logline}</div>` : '<div style="margin-bottom:24px;"></div>'}
+      ${project.logline ? `<div style="font-family:'Inter',sans-serif;font-size:11px;color:rgba(250,248,244,0.60);font-style:italic;font-weight:300;line-height:1.6;text-align:center;max-width:420px;margin:0 auto 16px;">${project.logline}</div>` : '<div style="margin-bottom:16px;"></div>'}
+
+      <!-- Team Grid -->
+      ${teamGridHtml}
 
       <!-- 2x2 Metric Grid -->
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(212,175,55,0.10);border-radius:8px;overflow:hidden;margin-bottom:8px;">
-        <div style="background:#1A1A1C;padding:16px;text-align:center;">
-          <div style="font-family:'Roboto Mono',monospace;font-size:8px;letter-spacing:2.5px;color:rgba(212,175,55,0.45);text-transform:uppercase;margin-bottom:6px;">Budget</div>
-          <div style="font-family:'Roboto Mono',monospace;font-size:22px;font-weight:500;color:rgba(250,248,244,0.92);">${formatCurrency(inputs.budget)}</div>
+        <div style="background:#1A1A1C;padding:14px;text-align:center;">
+          <div style="font-family:'Roboto Mono',monospace;font-size:8px;letter-spacing:2.5px;color:rgba(212,175,55,0.45);text-transform:uppercase;margin-bottom:5px;">Budget</div>
+          <div style="font-family:'Roboto Mono',monospace;font-size:20px;font-weight:500;color:rgba(250,248,244,0.92);">${formatCurrency(inputs.budget)}</div>
         </div>
-        <div style="background:#1A1A1C;padding:16px;text-align:center;">
-          <div style="font-family:'Roboto Mono',monospace;font-size:8px;letter-spacing:2.5px;color:rgba(212,175,55,0.45);text-transform:uppercase;margin-bottom:6px;">Acquisition Price</div>
-          <div style="font-family:'Roboto Mono',monospace;font-size:22px;font-weight:500;color:rgba(250,248,244,0.92);">${formatCurrency(revenue)}</div>
+        <div style="background:#1A1A1C;padding:14px;text-align:center;">
+          <div style="font-family:'Roboto Mono',monospace;font-size:8px;letter-spacing:2.5px;color:rgba(212,175,55,0.45);text-transform:uppercase;margin-bottom:5px;">Acquisition</div>
+          <div style="font-family:'Roboto Mono',monospace;font-size:20px;font-weight:500;color:rgba(250,248,244,0.92);">${formatCurrency(revenue)}</div>
         </div>
-        <div style="background:#1A1A1C;padding:16px;text-align:center;">
-          <div style="font-family:'Roboto Mono',monospace;font-size:8px;letter-spacing:2.5px;color:rgba(212,175,55,0.45);text-transform:uppercase;margin-bottom:6px;">Net Profit</div>
-          <div style="font-family:'Roboto Mono',monospace;font-size:22px;font-weight:500;color:${netProfitColor};">${netProfit > 0 ? formatCurrency(netProfit) : `&minus;${formatCurrency(Math.abs(netProfit))}`}</div>
+        <div style="background:#1A1A1C;padding:14px;text-align:center;">
+          <div style="font-family:'Roboto Mono',monospace;font-size:8px;letter-spacing:2.5px;color:rgba(212,175,55,0.45);text-transform:uppercase;margin-bottom:5px;">Net Profit</div>
+          <div style="font-family:'Roboto Mono',monospace;font-size:20px;font-weight:500;color:${netProfitColor};">${netProfit >= 0 ? formatCurrency(netProfit) : `&minus;${formatCurrency(Math.abs(netProfit))}`}</div>
         </div>
-        <div style="background:#1A1A1C;padding:16px;text-align:center;">
-          <div style="font-family:'Roboto Mono',monospace;font-size:8px;letter-spacing:2.5px;color:rgba(212,175,55,0.45);text-transform:uppercase;margin-bottom:6px;">Multiple</div>
-          <div style="font-family:'Roboto Mono',monospace;font-size:22px;font-weight:500;color:${multipleColor};">${safeMultiple.toFixed(1)}&times;</div>
-        </div>
-      </div>
-
-      <!-- Supplementary row: 3 cells -->
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:rgba(212,175,55,0.08);border-radius:8px;overflow:hidden;margin-bottom:20px;">
-        <div style="background:#232326;padding:12px;text-align:center;">
-          <div style="font-family:'Roboto Mono',monospace;font-size:7px;letter-spacing:2px;color:rgba(212,175,55,0.40);text-transform:uppercase;margin-bottom:4px;">Break-Even</div>
-          <div style="font-family:'Roboto Mono',monospace;font-size:14px;font-weight:500;color:#F0A830;">${isBreakevenValid ? formatCurrency(breakeven) : 'N/A'}</div>
-        </div>
-        <div style="background:#232326;padding:12px;text-align:center;">
-          <div style="font-family:'Roboto Mono',monospace;font-size:7px;letter-spacing:2px;color:rgba(212,175,55,0.40);text-transform:uppercase;margin-bottom:4px;">Cash Basis</div>
-          <div style="font-family:'Roboto Mono',monospace;font-size:14px;font-weight:500;color:rgba(212,175,55,0.80);">${formatCurrency(cashBasis)}</div>
-        </div>
-        <div style="background:#232326;padding:12px;text-align:center;">
-          <div style="font-family:'Roboto Mono',monospace;font-size:7px;letter-spacing:2px;color:rgba(212,175,55,0.40);text-transform:uppercase;margin-bottom:4px;">Investor ROI</div>
-          <div style="font-family:'Roboto Mono',monospace;font-size:14px;font-weight:500;color:${returnColor};">${computed.investorROI.toFixed(1)}%</div>
+        <div style="background:#1A1A1C;padding:14px;text-align:center;">
+          <div style="font-family:'Roboto Mono',monospace;font-size:8px;letter-spacing:2.5px;color:rgba(212,175,55,0.45);text-transform:uppercase;margin-bottom:5px;">Multiple</div>
+          <div style="font-family:'Roboto Mono',monospace;font-size:20px;font-weight:500;color:${multipleColor};">${safeMultiple.toFixed(1)}&times;</div>
         </div>
       </div>
 
-      <!-- Verdict -->
-      <div style="text-align:center;font-family:'Inter',sans-serif;font-size:12px;color:rgba(250,248,244,0.65);font-weight:400;line-height:1.6;margin-bottom:16px;">${verdictText}</div>
-
-      <!-- The Deal prose -->
-      <div style="text-align:center;max-width:400px;margin:0 auto;">
-        <div style="font-family:'Inter',sans-serif;font-size:12px;color:rgba(250,248,244,0.70);font-weight:400;font-style:italic;line-height:1.7;">${dealProseText}</div>
+      <!-- Supplementary row -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:rgba(212,175,55,0.08);border-radius:8px;overflow:hidden;margin-bottom:16px;">
+        <div style="background:#232326;padding:10px;text-align:center;">
+          <div style="font-family:'Roboto Mono',monospace;font-size:8px;letter-spacing:2px;color:rgba(212,175,55,0.40);text-transform:uppercase;margin-bottom:4px;">Break-Even</div>
+          <div style="font-family:'Roboto Mono',monospace;font-size:13px;font-weight:500;color:#F0A830;">${isBreakevenValid ? formatCurrency(breakeven) : 'N/A'}</div>
+        </div>
+        <div style="background:#232326;padding:10px;text-align:center;">
+          <div style="font-family:'Roboto Mono',monospace;font-size:8px;letter-spacing:2px;color:rgba(212,175,55,0.40);text-transform:uppercase;margin-bottom:4px;">Cash Basis</div>
+          <div style="font-family:'Roboto Mono',monospace;font-size:13px;font-weight:500;color:rgba(212,175,55,0.80);">${formatCurrency(cashBasis)}</div>
+        </div>
+        <div style="background:#232326;padding:10px;text-align:center;">
+          <div style="font-family:'Roboto Mono',monospace;font-size:8px;letter-spacing:2px;color:rgba(212,175,55,0.40);text-transform:uppercase;margin-bottom:4px;">Investor ROI</div>
+          <div style="font-family:'Roboto Mono',monospace;font-size:13px;font-weight:500;color:${returnColor};">${computed.investorROI.toFixed(1)}%</div>
+        </div>
       </div>
+
+      <!-- Executive Summary prose -->
+      <div style="font-family:'Inter',sans-serif;font-size:11px;color:rgba(250,248,244,0.65);line-height:1.7;font-weight:400;">${execSummaryText}</div>
     </div>
 
     ${pageFooter('1')}
@@ -502,9 +556,12 @@ export function generatePdfHtml(data: SnapshotData): string {
     ${goldTopBar}
     ${watermarkHtml}
     ${pageHeader('02')}
+
     <div style="padding:0 36px;margin-bottom:4px;position:relative;z-index:2;">
       <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:rgba(250,248,244,0.92);letter-spacing:1px;margin-bottom:4px;">WHERE YOUR DOLLAR GOES</div>
     </div>
+
+    ${bridge('Every dollar of revenue passes through multiple gates before it reaches the filmmaker.')}
 
     <!-- SVG Donut -->
     <div style="padding:0 36px;position:relative;z-index:2;display:flex;justify-content:center;margin-bottom:16px;">
@@ -514,7 +571,7 @@ export function generatePdfHtml(data: SnapshotData): string {
           ${donutCircles}
         </svg>
         <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;">
-          <div style="font-family:'Roboto Mono',monospace;font-size:7px;letter-spacing:2px;text-transform:uppercase;color:${donutCenterLabelColor};margin-bottom:3px;">${donutCenterLabel}</div>
+          <div style="font-family:'Roboto Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:${donutCenterLabelColor};margin-bottom:3px;">${donutCenterLabel}</div>
           <div style="font-family:'Roboto Mono',monospace;font-size:16px;font-weight:500;color:${donutCenterColor};">${donutCenterValue}</div>
         </div>
       </div>
@@ -522,7 +579,7 @@ export function generatePdfHtml(data: SnapshotData): string {
 
     <!-- Per-Dollar Breakdown -->
     <div style="padding:0 36px;position:relative;z-index:2;margin-bottom:16px;">
-      <div style="border-radius:8px;background:#1A1A1C;border:1px solid rgba(212,175,55,0.12);padding:12px 16px;">
+      <div style="border-radius:8px;background:#1A1A1C;border:1px solid rgba(212,175,55,0.12);border-top:1px solid rgba(255,255,255,0.04);padding:12px 16px;">
         ${perDollarRows}
       </div>
     </div>
@@ -531,8 +588,12 @@ export function generatePdfHtml(data: SnapshotData): string {
     <div style="padding:0 36px;position:relative;z-index:2;">
       <div style="font-family:'Roboto Mono',monospace;font-size:8px;letter-spacing:2px;color:rgba(255,255,255,0.4);text-transform:uppercase;margin-bottom:8px;">TOTAL OFF-THE-TOP EROSION: <span style="color:rgba(220,38,38,0.85);">${erosionPct.toFixed(1)}%</span></div>
       <div style="height:20px;border-radius:4px;overflow:hidden;display:flex;border:1px solid rgba(220,38,38,0.15);">
-        <div style="height:100%;background:rgba(220,38,38,0.45);width:${Math.min(erosionPct, 100)}%;display:flex;align-items:center;justify-content:center;font-family:'Roboto Mono',monospace;font-size:8px;color:rgba(255,255,255,0.7);">${erosionPct > 10 ? `${erosionPct.toFixed(0)}%` : ''}</div>
-        <div style="height:100%;background:rgba(60,179,113,0.15);width:${Math.max(remainPct, 0)}%;display:flex;align-items:center;justify-content:center;font-family:'Roboto Mono',monospace;font-size:8px;color:rgba(255,255,255,0.7);">${remainPct > 10 ? `${remainPct.toFixed(0)}%` : ''}</div>
+        <div style="height:100%;background:rgba(220,38,38,0.45);width:${Math.min(erosionPct, 100)}%;"></div>
+        <div style="height:100%;background:rgba(60,179,113,0.15);width:${Math.max(remainPct, 0)}%;"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-top:4px;">
+        <span style="font-family:'Roboto Mono',monospace;font-size:8px;color:rgba(220,38,38,0.65);">Deductions: ${erosionPct.toFixed(0)}%</span>
+        <span style="font-family:'Roboto Mono',monospace;font-size:8px;color:rgba(60,179,113,0.65);">Distributable: ${remainPct.toFixed(0)}%</span>
       </div>
     </div>
 
@@ -544,11 +605,12 @@ export function generatePdfHtml(data: SnapshotData): string {
     ${goldTopBar}
     ${watermarkHtml}
     ${pageHeader('03')}
+
     <div style="padding:0 36px;margin-bottom:4px;position:relative;z-index:2;">
       <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:rgba(250,248,244,0.92);letter-spacing:1px;margin-bottom:4px;">HOW THE MONEY FLOWS</div>
     </div>
 
-    <div class="gold-break"></div>
+    ${bridge('The waterfall determines priority\u2009\u2014\u2009who gets paid first, and how much is left.')}
 
     <div style="padding:0 36px;position:relative;z-index:2;">
       ${tierCardsHtml}
@@ -561,28 +623,38 @@ export function generatePdfHtml(data: SnapshotData): string {
       <div style="font-family:'Roboto Mono',monospace;font-size:20px;font-weight:500;color:#3CB371;position:relative;z-index:1;">${formatFullCurrency(result.producer)}</div>
     </div>
 
-    <!-- The Margin prose -->
-    ${marginProseHtml}
+    <!-- Waterfall narrative prose -->
+    <div style="padding:0 36px;margin-top:16px;position:relative;z-index:2;">
+      <div style="font-family:'Inter',sans-serif;font-size:11px;color:rgba(250,248,244,0.65);line-height:1.7;font-weight:400;">${waterfallNarrativeText}</div>
+    </div>
+
+    <div class="gold-break"></div>
+
+    <!-- Margin prose -->
+    ${marginProseText ? `<div style="padding:0 36px;margin-bottom:12px;position:relative;z-index:2;">
+      <div style="font-family:'Inter',sans-serif;font-size:11px;color:rgba(250,248,244,0.60);line-height:1.6;font-style:italic;">${marginProseText}</div>
+    </div>` : ''}
 
     <!-- Margin of Safety strip -->
-    <div style="margin:16px 36px 0;position:relative;z-index:2;">
+    <div style="padding:0 36px;position:relative;z-index:2;">
       ${marginBarHtml}
     </div>
 
     ${pageFooter('3')}
   </div>
 
-  <!-- PAGE 4: CAPITAL STACK + SCENARIOS -->
+  <!-- PAGE 4: CAPITAL STRUCTURE + SCENARIOS -->
   <div class="page">
     ${goldTopBar}
     ${watermarkHtml}
     ${pageHeader('04')}
+
     <div style="padding:0 36px;margin-bottom:4px;position:relative;z-index:2;">
       <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:rgba(250,248,244,0.92);letter-spacing:1px;margin-bottom:12px;">CAPITAL STRUCTURE</div>
     </div>
 
-    <!-- The Structure prose -->
-    ${structureProseHtml}
+    <!-- Structure prose -->
+    ${structureProseText ? proseBlock(structureProseText, '12px') : ''}
 
     <!-- Capital sources table -->
     <div style="padding:0 36px;position:relative;z-index:2;margin-bottom:20px;">
@@ -593,20 +665,27 @@ export function generatePdfHtml(data: SnapshotData): string {
 
     <!-- Scenario stress test -->
     <div style="padding:0 36px;position:relative;z-index:2;">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:rgba(250,248,244,0.92);letter-spacing:1px;margin-bottom:12px;">SCENARIO STRESS TEST</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:rgba(250,248,244,0.92);letter-spacing:1px;margin-bottom:4px;">SCENARIO STRESS TEST</div>
+    </div>
 
-      <div style="border-radius:8px;background:#1A1A1C;border:1px solid rgba(212,175,55,0.15);border-top:1px solid rgba(255,255,255,0.08);overflow:hidden;margin-bottom:20px;">
+    ${bridge('What happens when the acquisition price drops.')}
+
+    <div style="padding:0 36px;position:relative;z-index:2;margin-bottom:12px;">
+      <div style="border-radius:8px;background:#1A1A1C;border:1px solid rgba(212,175,55,0.15);border-top:1px solid rgba(255,255,255,0.08);overflow:hidden;">
         <!-- Header -->
         <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 16px;background:rgba(255,255,255,0.03);">
-          <span style="font-family:'Roboto Mono',monospace;font-size:8px;letter-spacing:2px;color:rgba(255,255,255,0.35);text-transform:uppercase;">If your price drops</span>
+          <span style="font-family:'Roboto Mono',monospace;font-size:8px;letter-spacing:2px;color:rgba(255,255,255,0.60);text-transform:uppercase;">If your price drops</span>
           <div style="display:flex;gap:16px;">
-            <span style="font-family:'Roboto Mono',monospace;font-size:8px;letter-spacing:1.5px;color:rgba(255,255,255,0.35);text-transform:uppercase;min-width:50px;text-align:right;">Return</span>
-            <span style="font-family:'Roboto Mono',monospace;font-size:8px;letter-spacing:1.5px;color:rgba(255,255,255,0.35);text-transform:uppercase;min-width:50px;text-align:right;">Multiple</span>
+            <span style="font-family:'Roboto Mono',monospace;font-size:8px;letter-spacing:1.5px;color:rgba(255,255,255,0.60);text-transform:uppercase;min-width:50px;text-align:right;">Return</span>
+            <span style="font-family:'Roboto Mono',monospace;font-size:8px;letter-spacing:1.5px;color:rgba(255,255,255,0.60);text-transform:uppercase;min-width:50px;text-align:right;">Multiple</span>
           </div>
         </div>
         ${scenarioRowsHtml}
       </div>
     </div>
+
+    <!-- Scenario interpretation prose -->
+    ${proseBlock(scenarioInterpText, '16px')}
 
     <!-- Assumptions -->
     <div style="padding:0 36px;position:relative;z-index:2;">
@@ -623,11 +702,11 @@ export function generatePdfHtml(data: SnapshotData): string {
         ]
           .map(
             ([label, value], i) =>
-              `<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 16px;${
+              `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 16px;${
                 i > 0 ? 'border-top:1px solid rgba(255,255,255,0.03);' : ''
               }">
-            <span style="font-family:'Inter',sans-serif;font-size:11px;color:rgba(250,248,244,0.55);font-weight:400;">${label}</span>
-            <span style="font-family:'Roboto Mono',monospace;font-size:11px;color:rgba(255,255,255,0.85);font-weight:500;">${value}</span>
+            <span style="font-family:'Inter',sans-serif;font-size:10px;color:rgba(250,248,244,0.60);font-weight:400;">${label}</span>
+            <span style="font-family:'Roboto Mono',monospace;font-size:10px;color:rgba(255,255,255,0.85);font-weight:500;">${value}</span>
           </div>`,
           )
           .join('')}
@@ -643,12 +722,16 @@ export function generatePdfHtml(data: SnapshotData): string {
     <div style="position:absolute;top:0;left:0;right:0;height:300px;background:radial-gradient(ellipse 80% 50% at 50% 10%,rgba(212,175,55,0.08) 0%,transparent 60%);pointer-events:none;"></div>
     <div style="position:absolute;bottom:0;left:0;right:0;height:250px;background:radial-gradient(ellipse 100% 70% at 50% 100%,rgba(212,175,55,0.05) 0%,transparent 60%);pointer-events:none;"></div>
 
-    <div style="text-align:center;position:relative;z-index:2;">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:6px;color:rgba(212,175,55,0.50);margin-bottom:16px;">${project.title.toUpperCase()}</div>
-      <div style="width:48px;height:1px;background:linear-gradient(90deg,transparent,rgba(212,175,55,0.5),transparent);margin:0 auto 32px;"></div>
-      <div style="font-family:'Inter',sans-serif;font-size:13px;color:rgba(250,248,244,0.45);font-weight:300;line-height:1.7;margin-bottom:12px;">Prepared using FILMMAKER.OG</div>
-      <div style="font-family:'Inter',sans-serif;font-size:12px;color:rgba(250,248,244,0.35);font-weight:300;margin-bottom:32px;">${date}</div>
-      <div style="font-family:'Roboto Mono',monospace;font-size:11px;letter-spacing:2px;color:rgba(212,175,55,0.60);text-transform:uppercase;">filmmakerog.com</div>
+    <div style="text-align:center;position:relative;z-index:2;max-width:400px;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:6px;color:rgba(212,175,55,0.50);margin-bottom:4px;">${project.title.toUpperCase()}</div>
+      <div style="width:48px;height:1px;background:linear-gradient(90deg,transparent,rgba(212,175,55,0.5),transparent);margin:0 auto 28px;"></div>
+
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:rgba(250,248,244,0.88);letter-spacing:1px;line-height:1.1;margin-bottom:16px;">MODEL YOUR WATERFALL<br>BEFORE YOU SIGN.</div>
+      <div style="font-family:'Inter',sans-serif;font-size:12px;color:rgba(250,248,244,0.60);font-weight:300;line-height:1.7;margin-bottom:32px;">Run your numbers. Structure your capital stack. Know your deal inside out before you walk into the room.</div>
+
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:6px;color:rgba(212,175,55,0.60);margin-bottom:8px;">FILMMAKER.OG</div>
+      <div style="font-family:'Roboto Mono',monospace;font-size:10px;letter-spacing:2px;color:rgba(212,175,55,0.45);text-transform:uppercase;">filmmakerog.com</div>
+      <div style="font-family:'Roboto Mono',monospace;font-size:9px;color:rgba(255,255,255,0.25);margin-top:12px;">${date}</div>
     </div>
 
     ${pageFooter('5')}
