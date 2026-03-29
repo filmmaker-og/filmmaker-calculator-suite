@@ -1129,15 +1129,7 @@ const Store = () => {
             Your Deal.<br />
             <span style={{ color: "#D4AF37" }}>White-Labeled.</span>
           </h2>
-          <p style={{
-            fontFamily: "'Inter', sans-serif",
-            fontSize: "16px",
-            color: "rgba(250,248,244,0.70)",
-            lineHeight: 1.6,
-            margin: "0",
-          }}>
-            Run the numbers for free. Get the white-labeled version for your investor presentation.
-          </p>
+
         </div>
       </section>
 

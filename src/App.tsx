@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState } from "react";
+import { lazy, Suspense, useState, useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -47,6 +47,14 @@ const queryClient = new QueryClient();
 const AppShell = () => {
   const [isBotOpen, setIsBotOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  // Listen for open-og-bot custom event (fired from Store closer CTA)
+  useEffect(() => {
+    const handler = () => setIsBotOpen(true);
+    window.addEventListener('open-og-bot', handler);
+    return () => window.removeEventListener('open-og-bot', handler);
+  }, []);
+
   return (
     <>
       <AppHeader
