@@ -62,14 +62,14 @@ export const products: Product[] = [
     turnaround: "Instant",
     shortDescription: "Your Snapshot, white-labeled with deal diagnostics.",
     fullDescription:
-      "The free Snapshot shows you the waterfall. Snapshot+ puts your company name on every page and unlocks four diagnostic metrics that separate a deal that works from a deal that looks like it works: Margin of Safety, Erosion Rate, Off-the-Top Total, and Cost of Capital.\n\nInstant delivery. Applies as credit toward the Comp Report.",
+      "The free Snapshot shows you the waterfall. Snapshot+ puts your company name on every page and unlocks four diagnostic metrics that separate a deal that works from a deal that looks like it works: Margin of Safety, Erosion Rate, Off-the-Top Total, and Cost of Capital.\n\nInstant delivery.",
     features: [
       { title: "Margin of Safety", subtitle: "How much room your deal has before it breaks", group: "Unlock" },
       { title: "Erosion Rate", subtitle: "What the off-the-tops actually cost you", group: "Unlock" },
       { title: "Off-the-Top Total", subtitle: "Combined fees before investors see a dollar", group: "Unlock" },
       { title: "Cost of Capital", subtitle: "The real price of every dollar in your stack", group: "Unlock" },
     ],
-    reassurance: "Applies as credit toward the Comp Report",
+    reassurance: "Instant delivery",
     whatsIncluded: [
       { title: "Margin of Safety", body: "The gap between your break-even point and projected revenue." },
       { title: "Erosion Rate", body: "Percentage of gross revenue consumed by off-the-top deductions." },

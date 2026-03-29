@@ -181,9 +181,6 @@ function page1(data: SnapshotData): string {
       <!-- Team grid -->
       ${teamGrid}
 
-      <!-- URL -->
-      <div style="font-family:'Roboto Mono',monospace;font-size:10px;color:rgba(212,175,55,0.40);letter-spacing:1px;">filmmakerog.com</div>
-
     </div>
 
     ${FOOTER}

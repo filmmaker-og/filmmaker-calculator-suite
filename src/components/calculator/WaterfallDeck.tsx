@@ -1587,7 +1587,7 @@ const LockedSensitivitySection = () => (
           letterSpacing: "0.15em", textTransform: "uppercase" as const,
           color: G.emphasis,
         }}>
-          Included in Full Analysis
+          Included in Snapshot+
         </span>
       </div>
     </div>
@@ -1741,7 +1741,7 @@ const LockedSnapshotPlusSection = ({ onUnlock }: { onUnlock: () => void }) => (
         fontWeight: 500,
         letterSpacing: "0.06em",
       }}>
-        $49
+        $19
       </span>
     </button>
 
@@ -1751,7 +1751,7 @@ const LockedSnapshotPlusSection = ({ onUnlock }: { onUnlock: () => void }) => (
       color: W.quaternary,
       marginTop: "8px",
     }}>
-      Applies as credit toward The Full Analysis
+      Instant delivery after purchase
     </p>
   </section>
 );
@@ -2709,7 +2709,7 @@ const CTASection = ({ result, inputs, project, guilds }: {
             textAlign: "left",
             paddingLeft: "24px",
             marginBottom: "14px",
-          }}>What the Full Analysis gives you</div>
+          }}>What Snapshot+ gives you</div>
           </RevealSection>
 
           {/* 6 benefit bullets — staggered reveals */}
@@ -2722,12 +2722,12 @@ const CTASection = ({ result, inputs, project, guilds }: {
             textAlign: "left",
           }}>
             {[
-              "Show investors your deal holds when the market drops 30%",
-              "Five scenario stress tests with return and multiple at each price point",
-              "Full waterfall, capital stack, and budget in one PDF",
-              "Formatted for due diligence, not just display",
-              "White-labeled with your project name and production company",
-              "Ready to hand across the table or attach to an email",
+              "Your company name on every page — white-labeled and professional",
+              "Margin of Safety — how much room your deal has before it breaks",
+              "Erosion Rate — what off-the-tops actually cost you",
+              "Off-the-Top Total — combined fees before investors see a dollar",
+              "Cost of Capital — the real price of every dollar in your stack",
+              "Applies as credit toward the Comp Report",
             ].map((item, i) => (
               <RevealSection key={item} delay={200 + i * 100}>
               <div style={{ display: "flex", gap: "10px", alignItems: "flex-start" }}>
@@ -2743,7 +2743,7 @@ const CTASection = ({ result, inputs, project, guilds }: {
           <div style={{ marginBottom: "16px" }}>
             <span
               className="cta-gold-btn"
-              onClick={(e) => { haptics.medium(e); gatedNavigate("/store/the-full-analysis"); }}
+              onClick={(e) => { haptics.medium(e); gatedNavigate("/store/snapshot-plus"); }}
               style={{
                 display: "inline-block",
                 padding: "18px 36px",
@@ -2763,7 +2763,7 @@ const CTASection = ({ result, inputs, project, guilds }: {
                 overflow: "hidden",
               }}
             >
-              GET THE FULL ANALYSIS
+              GET SNAPSHOT+
             </span>
           </div>
           </RevealSection>
@@ -2874,9 +2874,6 @@ const WaterfallBrief = ({
       margin: "0 auto",
       padding: "0 clamp(12px, 3vw, 24px)",
     }}>
-      {/* ═══ COLD OPEN — screen only, full viewport ═══ */}
-      <ColdOpen multiple={result.multiple} result={result} inputs={inputs} />
-
       {/* ═══ 1. COVER — with ThirtySecondCard ═══ */}
       <CoverSection
         project={project}
