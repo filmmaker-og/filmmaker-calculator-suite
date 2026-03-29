@@ -442,8 +442,6 @@ const Index = () => {
               <span style={styles.heroMid}>Recoupment</span>
               <em style={styles.heroEm}>Waterfall</em>
             </h1>
-            <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "clamp(14px, 2vw, 16px)", color: "rgba(250,248,244,0.60)", marginTop: "10px", letterSpacing: "0.02em" }}>The free waterfall calculator for independent producers</p>
-
             {/* CTA inside the poster */}
             <div style={{ marginTop: "24px" }}>
               <button onClick={handleCTA} style={styles.ctaBtn} className="cta-gold-btn animate-cta-glow-pulse" aria-label="Build my waterfall" onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.98)"; }} onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}>
@@ -708,10 +706,10 @@ const Index = () => {
             </div>
           </div>
             {/* Swipe indicator */}
-            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "6px", marginTop: "16px", opacity: 0.45 }}>
-              <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "10px", color: "rgba(250,248,244,0.55)", letterSpacing: "0.10em", textTransform: "uppercase" }}>Swipe</span>
-              <svg width="16" height="10" viewBox="0 0 16 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M1 5h12M10 1l4 4-4 4" stroke="rgba(212,175,55,0.50)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            <div className="swipe-hint" style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "8px", marginTop: "16px" }}>
+              <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "12px", color: "rgba(250,248,244,0.55)", letterSpacing: "0.10em", textTransform: "uppercase" }}>Swipe</span>
+              <svg width="20" height="12" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1 6h15M12 1l5 5-5 5" stroke="rgba(212,175,55,0.55)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </div>
           </div>
@@ -741,7 +739,7 @@ const Index = () => {
           </div>
 
           <p style={{ ...styles.waterfallExplainer, ...reveal(waterfallHeaderVisible) }}>
-            A recoupment waterfall maps who gets paid, in what order & how much <span style={{ color: "#D4AF37", fontWeight: 600 }}>before you see a dollar of profit.</span>
+            A recoupment waterfall maps who gets paid, in what order & how much{" "}<span style={{ color: "#D4AF37", fontWeight: 600, background: "rgba(212,175,55,0.08)", padding: "2px 8px", borderRadius: "4px", boxDecorationBreak: "clone", WebkitBoxDecorationBreak: "clone" }}>before you see a dollar of profit.</span>
           </p>
 
           {/* Gold divider — separates context from data */}
@@ -1375,8 +1373,8 @@ const styles: Record<string, React.CSSProperties> = {
 
   /* ── § 2 WATERFALL ── */
   waterfallExplainer: {
-    fontFamily: "'Inter', sans-serif", fontSize: "16px", color: "rgba(250,248,244,0.78)",
-    lineHeight: 1.6, textAlign: "center", padding: "0", marginBottom: "24px",
+    fontFamily: "'Inter', sans-serif", fontSize: "18px", color: "rgba(250,248,244,0.82)",
+    lineHeight: 1.65, textAlign: "center", padding: "0", marginBottom: "24px",
     maxWidth: "380px", marginLeft: "auto", marginRight: "auto",
   },
   acqAmount: { fontFamily: "'Bebas Neue', sans-serif", fontSize: "3.2rem", color: "#D4AF37", lineHeight: 1, letterSpacing: "0.02em", textShadow: "0 0 30px rgba(212,175,55,0.40)" },

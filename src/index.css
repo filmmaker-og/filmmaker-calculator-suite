@@ -1090,34 +1090,15 @@
   }
 }
 
-/* Desktop ambient glow — fixed blurred circles */
-@media (min-width: 768px) {
-  body::before {
-    content: '';
-    position: fixed;
-    top: 10%;
-    left: -80px;
-    width: 500px;
-    height: 500px;
-    background: radial-gradient(circle, rgba(212,175,55,0.14) 0%, transparent 70%);
-    border-radius: 50%;
-    filter: blur(80px);
-    pointer-events: none;
-    z-index: 0;
-  }
-  body::after {
-    content: '';
-    position: fixed;
-    bottom: 15%;
-    right: -60px;
-    width: 460px;
-    height: 460px;
-    background: radial-gradient(circle, rgba(212,175,55,0.16) 0%, transparent 70%);
-    border-radius: 50%;
-    filter: blur(80px);
-    pointer-events: none;
-    z-index: 0;
-  }
+/* Desktop ambient glow — removed; centered container orbs handle atmosphere */
+
+/* Swipe indicator auto-fade */
+@keyframes swipe-fade {
+  0%, 70% { opacity: 0.45; }
+  100% { opacity: 0; }
+}
+.swipe-hint {
+  animation: swipe-fade 4s ease-out forwards;
 }
 
 /* Stamp micro-interaction for waterfall tier cards */
