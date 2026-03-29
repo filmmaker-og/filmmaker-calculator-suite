@@ -25,8 +25,8 @@ const getInitialChips = (): string[] => {
   if (path.includes("/store")) {
     return [
       "Which package is right for me?",
-      "What's the difference between the tiers?",
-      "Can I upgrade later?",
+      "What does Snapshot+ include?",
+      "How do comps defend my valuation?",
     ];
   }
   if (path.includes("/calculator") || path.includes("/waterfall")) {
@@ -46,7 +46,7 @@ const getInitialChips = (): string[] => {
   // Default (landing page)
   return [
     "How do I model my deal?",
-    "What package is right for me?",
+    "What do I get for free?",
     "What is a recoupment waterfall?",
   ];
 };
