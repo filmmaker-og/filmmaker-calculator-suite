@@ -940,11 +940,22 @@ const DealSection = ({
   const offTopPct = inputs.revenue > 0 ? Math.round((offTopTotal / inputs.revenue) * 100) : 0;
   let p2 = `Off-the-top deductions total ${formatCompactCurrency(offTopTotal)}, roughly ${offTopPct}% of gross receipts.`;
   if (inputs.salesFee > 0) p2 += ` The sales agent's ${inputs.salesFee}% commission is the largest single cut at ${formatCompactCurrency(salesFeeAmount)}.`;
+  const salesExpPctOfBudget = inputs.budget > 0 ? (inputs.salesExp / inputs.budget) * 100 : 0;
   if (inputs.salesExp > 0) p2 += ` Expense cap sits at ${formatCompactCurrency(inputs.salesExp)}`;
-  if (inputs.salesExp > 100000) {
-    p2 += " (worth scrutinizing at that level).";
+  if (inputs.salesExp > 0 && salesExpPctOfBudget > 5) {
+    p2 += ` (${Math.round(salesExpPctOfBudget)}% of budget \u2014 worth scrutinizing at that level).`;
   } else if (inputs.salesExp > 0) {
     p2 += " (in line for a film this size).";
+  }
+  // Guild cost commentary
+  const guildTotal = result.guilds;
+  if (guildTotal > 0) {
+    const guildPctOfRevenue = inputs.revenue > 0 ? Math.round((guildTotal / inputs.revenue) * 100) : 0;
+    if (guildTotal > salesFeeAmount && salesFeeAmount > 0) {
+      p2 += ` Guild residuals add ${formatCompactCurrency(guildTotal)} (${guildPctOfRevenue}% of gross) \u2014 more than the sales commission.`;
+    } else if (guildPctOfRevenue >= 5) {
+      p2 += ` Guild residuals account for ${formatCompactCurrency(guildTotal)}, roughly ${guildPctOfRevenue}% of gross.`;
+    }
   }
   if (offTopPct <= 20) {
     p2 += " Most independent deals lose 15\u201325% off the top; yours is on the low end.";
@@ -965,6 +976,11 @@ const DealSection = ({
     }
   } else if (partialTier) {
     p3 += `. Revenue runs out at the ${partialTier.label} tier: investors recover ${Math.round((partialTier.paid / partialTier.amount) * 100)}% of that obligation, and everything downstream goes unfunded.`;
+    // Call out deferments specifically if they're the unfunded tier
+    const defermentTier = tiers.find(t => t.label === "Deferments");
+    if (defermentTier && defermentTier.status === "unfunded") {
+      p3 += ` Deferred compensation (${formatCompactCurrency(inputs.deferments)}) is the first casualty \u2014 talent and producer fees are not recoverable at this price.`;
+    }
   } else {
     p3 += `. At this acquisition price, revenue does not fully fund any capital tier. The structure needs work before this is presentable.`;
   }
@@ -981,8 +997,10 @@ const DealSection = ({
     p4 = "At these terms, this is a clean deal. The margin between cash basis and market value gives your investors room to absorb a negotiation haircut without losing principal. The scenario analysis below shows exactly how much room.";
   } else if (multiple >= 1.0) {
     p4 = "This is a tight deal, and tight deals can work if the assumptions hold. Your margin between cash basis and acquisition price leaves limited room for negotiation concessions. The scenario table below shows where the math starts to compress.";
+  } else if (multiple >= 0.85) {
+    p4 = "This deal is tight but defensible. Investors lose a small amount on paper, but if the acquisition price holds, the gap is narrow enough to close with a modest renegotiation. The scenario table below shows exactly where the breakpoint is.";
   } else if (multiple >= 0.7) {
-    p4 = "This deal is aggressive. The gap between cash basis and market value is narrow enough that a single negotiation concession could push investors below full recoupment. Before presenting this structure, look at the scenario table below and decide how much risk you are asking them to carry.";
+    p4 = "This deal is aggressive. The gap between cash basis and market value is wide enough that investors are carrying real downside. Before presenting this structure, look at the scenario table below and decide how much risk you are asking them to absorb.";
   } else {
     p4 = "The math does not support this structure at the current acquisition price. Investors are looking at a loss on paper before the film even sells. The move is to restructure: lower the cash basis with more soft money, renegotiate the capital stack, or find a higher-confidence sale price. Then run the numbers again.";
   }
