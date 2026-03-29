@@ -128,7 +128,7 @@ function page1(data: SnapshotData): string {
   // Build team grid cells — only include fields that have values
   const teamFields: Array<{ label: string; value: string }> = [];
   if (project.director) teamFields.push({ label: 'Director', value: project.director });
-  if (project.writers) teamFields.push({ label: 'Writer', value: project.writers });
+  if (project.writers) teamFields.push({ label: 'Writers', value: project.writers });
   if (project.producers) teamFields.push({ label: 'Producers', value: project.producers });
   if (project.company) teamFields.push({ label: 'Production Co.', value: project.company });
   if (project.cast) teamFields.push({ label: 'Cast', value: project.cast });
@@ -792,7 +792,7 @@ function page5(data: SnapshotData): string {
   }
 
   // Assumptions line
-  const salesFeePctDisplay = inputs.salesFee ? `${Math.round(inputs.salesFee * 100)}% sales fee` : '';
+  const salesFeePctDisplay = inputs.salesFee ? `${Math.round(inputs.salesFee)}% sales fee` : '';
   const salesExpDisplay = inputs.salesExp ? `${formatCurrency(inputs.salesExp)} expense cap` : '';
   const premiumDisplay = inputs.premium ? `${inputs.premium}% investor premium` : '';
   const splitDisplay = `${profitSplitPct}/${producerSplitPct} backend split`;
