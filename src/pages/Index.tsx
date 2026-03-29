@@ -404,14 +404,12 @@ const Index = () => {
             ...reveal(heroVisible),
             position: "relative",
             overflow: "hidden",
-            background: "radial-gradient(ellipse at 50% 20%, rgba(212,175,55,0.14), transparent 60%), rgba(26,26,28,0.45)",
+            background: "radial-gradient(ellipse at 50% 20%, rgba(212,175,55,0.10), transparent 60%), #1A1A1C",
             border: "1px solid rgba(255,255,255,0.08)",
             borderTop: "1px solid rgba(255,255,255,0.18)",
             borderRadius: "8px",
             padding: "28px clamp(24px, 5vw, 40px)",
             boxShadow: "0 8px 32px rgba(0,0,0,0.50), 0 0 1px rgba(212,175,55,0.08), 0 0 60px rgba(212,175,55,0.04), 0 0 80px rgba(212,175,55,0.06)",
-            backdropFilter: "blur(20px)",
-            WebkitBackdropFilter: "blur(20px)",
           }} className="grain-surface">
           {/* Hero header band — poster composition: headline → subtitle → CTA */}
           <div style={{ background: "linear-gradient(180deg, rgba(212,175,55,0.10), rgba(35,35,38,0.42))", border: "1px solid rgba(255,255,255,0.06)", borderTop: "1px solid rgba(255,255,255,0.15)", boxShadow: "inset 0 -1px 0 rgba(212,175,55,0.06)", borderRadius: "6px", padding: "32px 24px 28px", textAlign: "center", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)" }}>
@@ -554,14 +552,12 @@ const Index = () => {
             ...reveal(previewVisible),
             position: "relative",
             overflow: "hidden",
-            background: "rgba(26,26,28,0.42)",
+            background: "#1A1A1C",
             border: "1px solid rgba(255,255,255,0.07)",
             borderTop: "1px solid rgba(255,255,255,0.18)",
             borderRadius: "8px",
             padding: "32px clamp(24px, 5vw, 40px)",
             boxShadow: "0 4px 24px rgba(0,0,0,0.30)",
-            backdropFilter: "blur(20px)",
-            WebkitBackdropFilter: "blur(20px)",
           }} className="grain-surface">
             <div style={{ background: "linear-gradient(180deg, rgba(212,175,55,0.06), rgba(35,35,38,0.40))", border: "1px solid rgba(255,255,255,0.06)", borderTop: "1px solid rgba(255,255,255,0.15)", boxShadow: "inset 0 -1px 0 rgba(212,175,55,0.06)", borderRadius: "6px", padding: "28px 24px", marginBottom: "20px", textAlign: "center" }}>
               <EyebrowPill text="What You'll Build" />
@@ -701,14 +697,12 @@ const Index = () => {
           <div style={{
             position: "relative",
             overflow: "hidden",
-            background: "rgba(26,26,28,0.42)",
+            background: "#1A1A1C",
             border: "1px solid rgba(255,255,255,0.07)",
             borderTop: "1px solid rgba(255,255,255,0.18)",
             borderRadius: "8px",
             padding: "36px clamp(24px, 5vw, 40px)",
             boxShadow: "0 4px 24px rgba(0,0,0,0.30)",
-            backdropFilter: "blur(20px)",
-            WebkitBackdropFilter: "blur(20px)",
           }} className="grain-surface">
           {/* Header band */}
           <div ref={waterfallHeaderRef} style={{ ...reveal(waterfallHeaderVisible), background: "linear-gradient(180deg, rgba(212,175,55,0.06), rgba(35,35,38,0.40))", border: "1px solid rgba(255,255,255,0.06)", borderTop: "1px solid rgba(255,255,255,0.15)", boxShadow: "inset 0 -1px 0 rgba(212,175,55,0.06)", borderRadius: "6px", padding: "28px 24px", marginBottom: "20px", textAlign: "center" }}>
@@ -972,14 +966,12 @@ const Index = () => {
           <div style={{
             position: "relative",
             overflow: "hidden",
-            background: "rgba(26,26,28,0.42)",
+            background: "#1A1A1C",
             border: "1px solid rgba(255,255,255,0.07)",
             borderTop: "1px solid rgba(255,255,255,0.18)",
             borderRadius: "8px",
             padding: "36px clamp(24px, 5vw, 40px)",
             boxShadow: "0 4px 24px rgba(0,0,0,0.30)",
-            backdropFilter: "blur(20px)",
-            WebkitBackdropFilter: "blur(20px)",
           }} className="grain-surface">
           <div style={{ ...reveal(stakeVisible), background: "linear-gradient(180deg, rgba(212,175,55,0.06), rgba(35,35,38,0.40))", border: "1px solid rgba(255,255,255,0.06)", borderTop: "1px solid rgba(255,255,255,0.15)", boxShadow: "inset 0 -1px 0 rgba(212,175,55,0.06)", borderRadius: "6px", padding: "28px 24px", marginBottom: "20px", textAlign: "center" }}>
             <EyebrowPill text="What's At Stake" />
@@ -1022,14 +1014,12 @@ const Index = () => {
           <div style={{
             position: "relative",
             overflow: "hidden",
-            background: "rgba(26,26,28,0.42)",
+            background: "#1A1A1C",
             border: "1px solid rgba(255,255,255,0.07)",
             borderTop: "1px solid rgba(255,255,255,0.18)",
             borderRadius: "8px",
             padding: "36px clamp(24px, 5vw, 40px)",
             boxShadow: "0 4px 24px rgba(0,0,0,0.30)",
-            backdropFilter: "blur(20px)",
-            WebkitBackdropFilter: "blur(20px)",
             textAlign: "left",
           }} className="grain-surface">
           {/* Header band */}
@@ -1142,14 +1132,12 @@ const Index = () => {
           <div style={{
             position: "relative",
             overflow: "hidden",
-            background: "rgba(26,26,28,0.42)",
+            background: "#1A1A1C",
             border: "1px solid rgba(255,255,255,0.07)",
             borderTop: "1px solid rgba(255,255,255,0.18)",
             borderRadius: "8px",
             padding: "36px clamp(24px, 5vw, 40px)",
             boxShadow: "0 4px 24px rgba(0,0,0,0.30)",
-            backdropFilter: "blur(20px)",
-            WebkitBackdropFilter: "blur(20px)",
           }} className="grain-surface">
           <div style={{ ...reveal(socialVisible), background: "linear-gradient(180deg, rgba(212,175,55,0.06), rgba(35,35,38,0.40))", border: "1px solid rgba(255,255,255,0.06)", borderTop: "1px solid rgba(255,255,255,0.15)", boxShadow: "inset 0 -1px 0 rgba(212,175,55,0.06)", borderRadius: "6px", padding: "28px 24px", marginBottom: "20px", textAlign: "center" }}>
             <EyebrowPill text="Trusted By Filmmakers" />
@@ -1216,14 +1204,12 @@ const Index = () => {
             ...reveal(closerVisible),
             position: "relative",
             overflow: "hidden",
-            background: "rgba(26,26,28,0.42)",
+            background: "#1A1A1C",
             border: "1px solid rgba(255,255,255,0.08)",
             borderTop: "1px solid rgba(255,255,255,0.18)",
             borderRadius: "8px",
             padding: "40px clamp(24px, 5vw, 40px)",
             boxShadow: "0 8px 32px rgba(0,0,0,0.50), 0 0 1px rgba(212,175,55,0.08), 0 0 80px rgba(212,175,55,0.08)",
-            backdropFilter: "blur(20px)",
-            WebkitBackdropFilter: "blur(20px)",
           }} className="grain-surface">
             {/* Header band */}
             <div style={{ background: "linear-gradient(180deg, rgba(212,175,55,0.08), rgba(35,35,38,0.42))", border: "1px solid rgba(255,255,255,0.06)", borderTop: "1px solid rgba(255,255,255,0.15)", boxShadow: "inset 0 -1px 0 rgba(212,175,55,0.06)", borderRadius: "6px", padding: "32px 24px", marginBottom: "24px", textAlign: "center" }}>

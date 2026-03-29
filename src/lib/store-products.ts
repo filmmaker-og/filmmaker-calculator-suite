@@ -60,10 +60,11 @@ export const products: Product[] = [
     tier: 0,
     category: "product",
     turnaround: "Instant",
-    shortDescription: "Your Snapshot, white-labeled with deal diagnostics.",
+    shortDescription: "White-labeled with deal diagnostics.",
     fullDescription:
       "The free Snapshot shows you the waterfall. Snapshot+ puts your company name on every page and unlocks four diagnostic metrics that separate a deal that works from a deal that looks like it works: Margin of Safety, Erosion Rate, Off-the-Top Total, and Cost of Capital.\n\nInstant delivery.",
     features: [
+      { title: "White-Labeled", subtitle: "Your company name on every page", group: "Unlock" },
       { title: "Margin of Safety", subtitle: "How much room your deal has before it breaks", group: "Unlock" },
       { title: "Erosion Rate", subtitle: "What the off-the-tops actually cost you", group: "Unlock" },
       { title: "Off-the-Top Total", subtitle: "Combined fees before investors see a dollar", group: "Unlock" },

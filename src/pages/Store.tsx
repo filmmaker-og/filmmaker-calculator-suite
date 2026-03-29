@@ -32,10 +32,7 @@ const storeFaqs = [
     q: "What\u2019s The Working Model and when do I see it?",
     a: "A live, formula-driven Excel workbook where every output cell is connected to every input. Change any assumption and the entire model recalculates. It appears as a $79 add-on at checkout when you purchase any product.",
   },
-  {
-    q: "Can I upgrade and apply what I\u2019ve already paid?",
-    a: "Yes. Contact us and we will apply your prior purchase toward the higher tier. The credit upgrade path works across all products.",
-  },
+
 ];
 
 
@@ -1142,7 +1139,7 @@ const Store = () => {
             lineHeight: 1.6,
             margin: "4px 0 0 0",
           }}>
-            Run the numbers for free. Get the extended version, on brand, for your investor presentation.
+            Run the numbers for free. Get the white-labeled version for your investor presentation.
           </p>
         </div>
       </section>
@@ -1298,7 +1295,7 @@ const Store = () => {
       <div style={{ padding: "8px 24px 24px", textAlign: "center" }}>
         <span
           onClick={() => {
-            const el = document.querySelector('[data-product="the-full-analysis"]');
+            const el = document.querySelector('[data-product="snapshot-plus"]');
             if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
           }}
           style={{
@@ -1310,7 +1307,7 @@ const Store = () => {
             textDecoration: "none",
           }}
         >
-          Ready? Start with The Full Analysis →
+          Ready? Start with Snapshot+ →
         </span>
       </div>
 
