@@ -1001,8 +1001,10 @@ const Index = () => {
                   boxShadow: "0 4px 16px rgba(0,0,0,0.25), 0 1px 3px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.05)",
                 }}
               >
-                <div style={{ display: "flex", alignItems: "baseline", gap: "10px", marginBottom: "8px" }}>
-                  <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "2.2rem", color: "#D4AF37", lineHeight: 1, flexShrink: 0 }}>{card.num}</span>
+                <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "10px" }}>
+                  <div style={{ width: "36px", height: "36px", borderRadius: "50%", background: "rgba(212,175,55,0.15)", border: "1px solid rgba(212,175,55,0.35)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                    <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.1rem", color: "#D4AF37", lineHeight: 1 }}>{card.num}</span>
+                  </div>
                   <p style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.3rem", color: "rgba(250,248,244,0.95)", lineHeight: 1.1, margin: 0 }}>{card.title}</p>
                 </div>
                 <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "16px", color: "rgba(250,248,244,0.78)", lineHeight: 1.6 }}>{card.body}</p>
