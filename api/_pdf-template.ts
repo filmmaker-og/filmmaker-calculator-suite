@@ -1,7 +1,11 @@
-// api/_pdf-template.ts
-// Generates the HTML string for the PDF snapshot
-// BRAND_SYSTEM v4.0 — gold + black + warm white, zero purple
-// Hybrid: deck-like structure with memo-level density
+// api/_pdf-template.ts  v10
+// Generates HTML for a 6-page PDF rendered by Puppeteer at 612×792px.
+// Brand: Gold (#D4AF37) + near-black (#0C0C0E) + warm white (rgba(250,248,244,x))
+// Fonts: Bebas Neue (headlines), Inter (body/prose), Roboto Mono (data/numbers)
+
+// ─────────────────────────────────────────────────────────
+// INTERFACE
+// ─────────────────────────────────────────────────────────
 
 interface SnapshotData {
   project: {
@@ -52,12 +56,7 @@ interface SnapshotData {
     debtTotal: number;
     profitSplit: number;
   };
-  tiers: Array<{
-    name: string;
-    rate: string;
-    amount: number;
-    remaining: number;
-  }>;
+  tiers: Array<{ name: string; rate: string; amount: number; remaining: number }>;
   computed: {
     erosionPct: number;
     cashBasis: number;
@@ -67,24 +66,25 @@ interface SnapshotData {
   generatedAt: string;
 }
 
+// ─────────────────────────────────────────────────────────
+// HELPERS
+// ─────────────────────────────────────────────────────────
+
 function formatCurrency(n: number): string {
   if (!isFinite(n) || isNaN(n)) return 'N/A';
   if (Math.abs(n) >= 1_000_000) return `$${(n / 1_000_000).toFixed(1)}M`;
   if (Math.abs(n) >= 1_000) return `$${Math.round(n).toLocaleString('en-US')}`;
   return `$${n.toFixed(0)}`;
 }
-
 function formatFullCurrency(n: number): string {
   if (!isFinite(n) || isNaN(n)) return 'N/A';
   return `$${Math.round(n).toLocaleString('en-US')}`;
 }
-
 function getReturnColor(pct: number): string {
   if (pct >= 100) return '#3CB371';
   if (pct >= 50) return '#F0A830';
   return 'rgba(220,38,38,0.85)';
 }
-
 function getMultipleColor(m: number): string {
   if (!isFinite(m) || isNaN(m)) return 'rgba(220,38,38,0.85)';
   if (m >= 1.0) return '#3CB371';
@@ -92,720 +92,979 @@ function getMultipleColor(m: number): string {
   return 'rgba(220,38,38,0.85)';
 }
 
-export function generatePdfHtml(data: SnapshotData): string {
-  const { project, inputs, result, tiers, computed } = data;
+// ─────────────────────────────────────────────────────────
+// SHARED FRAGMENTS
+// ─────────────────────────────────────────────────────────
 
-  const date = new Date(data.generatedAt).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
+const FONTS = `<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&family=Roboto+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">`;
 
-  // ── BUG FIX 1: profitSplit safe fallback ──
-  const profitSplitPct = Math.max(0, Math.min(100, inputs.profitSplit ?? 50));
-  const producerSplitPct = 100 - profitSplitPct;
+const GOLD_BAR = `<div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent 5%,rgba(212,175,55,0.50) 35%,rgba(212,175,55,0.70) 50%,rgba(212,175,55,0.50) 65%,transparent 95%);z-index:10;"></div>`;
 
-  const returnColor = getReturnColor(result.recoupPct);
-  const multipleColor = getMultipleColor(result.multiple);
-  const revenue = inputs.revenue;
-  const cashBasis = computed.cashBasis;
-  const breakeven = computed.breakEvenRevenue;
-  const safeMultiple = isFinite(result.multiple) && !isNaN(result.multiple) ? result.multiple : 0;
-  const netProfit = result.producer;
-  const netProfitColor = netProfit > 0 ? '#3CB371' : 'rgba(220,38,38,0.85)';
-  const erosionPct = computed.erosionPct;
-  const remainPct = 100 - erosionPct;
-  const isBreakevenValid = isFinite(breakeven) && breakeven > 0;
-  const isEmptyDeal = inputs.revenue <= 0 && inputs.budget <= 0;
+const WATERMARK = `<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-30deg);font-family:'Bebas Neue',sans-serif;font-size:88px;letter-spacing:16px;color:rgba(212,175,55,0.025);pointer-events:none;z-index:0;white-space:nowrap;">FILMMAKER.OG</div>`;
 
-  // ── BUG FIX 2: margin uses >= for the "above" branch ──
-  const margin = revenue - breakeven;
-  const isAbove = margin >= 0; // fixed: was > 0, now >= 0
+const FOOTER = `<div style="position:absolute;bottom:18px;left:36px;right:36px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(212,175,55,0.10);padding-top:10px;">
+  <div style="font-family:'Roboto Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(212,175,55,0.45);">FILMMAKER.OG</div>
+  <div style="font-family:'Roboto Mono',monospace;font-size:9px;color:rgba(255,255,255,0.35);">filmmakerog.com</div>
+</div>`;
 
-  // ── SVG Donut segments ──
-  const donutSegments: { label: string; amount: number; color: string }[] = [];
-  if (result.cam > 0) donutSegments.push({ label: 'CAM Fee', amount: result.cam, color: 'rgba(220,38,38,0.50)' });
-  if (result.salesFee > 0) donutSegments.push({ label: 'Sales Commission', amount: result.salesFee, color: 'rgba(220,38,38,0.65)' });
-  if (result.marketing > 0) donutSegments.push({ label: 'Sales Expenses', amount: result.marketing, color: 'rgba(220,38,38,0.80)' });
-  if (result.guilds > 0) donutSegments.push({ label: 'Guild Reserves', amount: result.guilds, color: 'rgba(220,38,38,0.35)' });
-  if (result.seniorDebtHurdle > 0) donutSegments.push({ label: 'Senior Debt', amount: result.seniorDebtHurdle, color: 'rgba(255,255,255,0.22)' });
-  if (result.mezzDebtHurdle > 0) donutSegments.push({ label: 'Mezzanine Debt', amount: result.mezzDebtHurdle, color: 'rgba(240,168,48,0.50)' });
-  if (result.equityHurdle > 0) donutSegments.push({ label: 'Equity + Premium', amount: result.equityHurdle, color: 'rgba(212,175,55,0.55)' });
-  if (inputs.deferments > 0) donutSegments.push({ label: 'Deferments', amount: inputs.deferments, color: 'rgba(255,255,255,0.12)' });
-  if (result.profitPool > 0) donutSegments.push({ label: "What's Left", amount: result.profitPool, color: 'rgba(60,179,113,0.60)' });
+function pageHeader(pageNum: string): string {
+  return `<div style="display:flex;justify-content:space-between;align-items:center;padding:14px 36px 10px;position:relative;z-index:2;">
+  <div style="font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:4px;color:rgba(212,175,55,0.50);">FILMMAKER.OG</div>
+  <div style="font-family:'Roboto Mono',monospace;font-size:8px;letter-spacing:2px;color:rgba(255,255,255,0.30);">${pageNum}</div>
+</div>`;
+}
 
-  const r = 70;
-  const circumference = 2 * Math.PI * r;
-  let cumulativeAngle = 0;
-  const donutCircles = revenue > 0 ? donutSegments.map((seg) => {
-    const pct = revenue > 0 ? (seg.amount / revenue) * 100 : 0;
-    const segLength = (pct / 100) * circumference;
-    if (segLength <= 0) return '';
-    const rotation = (cumulativeAngle / 360) * 360 - 90;
-    cumulativeAngle += (pct / 100) * 360;
-    return `<circle cx="100" cy="100" r="${r}" fill="none" stroke="${seg.color}" stroke-width="25" stroke-dasharray="${segLength.toFixed(2)} ${(circumference - segLength).toFixed(2)}" stroke-dashoffset="0" transform="rotate(${rotation.toFixed(2)} 100 100)"/>`;
-  }).join('\n            ') : '';
+const BASE_CSS = `* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #0C0C0E; font-family: 'Inter', sans-serif; width: 612px; }
+.page { width: 612px; height: 792px; background: #0C0C0E; position: relative; overflow: hidden; display: flex; flex-direction: column; }`;
 
-  const showShortfall = result.profitPool <= 0;
-  const donutCenterLabel = showShortfall ? 'SHORTFALL' : "WHAT'S LEFT";
-  const donutCenterValue = showShortfall
-    ? `&minus;${formatCurrency(Math.abs(result.profitPool))}`
-    : formatCurrency(result.profitPool);
-  const donutCenterColor = showShortfall ? 'rgba(220,38,38,0.85)' : '#3CB371';
-  const donutCenterLabelColor = showShortfall ? 'rgba(220,38,38,0.70)' : 'rgba(255,255,255,0.45)';
+// ─────────────────────────────────────────────────────────
+// PAGE 1 — THE PROJECT (cover)
+// ─────────────────────────────────────────────────────────
 
-  // Per-dollar breakdown rows (Page 3)
-  const perDollarRows = revenue > 0 ? donutSegments.filter(s => s.amount > 0).map(seg => {
-    const perDollar = seg.amount / revenue;
-    const pct = (seg.amount / revenue) * 100;
-    return `<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.04);">
-              <span style="display:flex;align-items:center;gap:8px;font-family:'Inter',sans-serif;font-size:10px;color:rgba(250,248,244,0.70);">
-                <span style="width:7px;height:7px;border-radius:50%;background:${seg.color};flex-shrink:0;display:inline-block;"></span>
-                ${seg.label}
-              </span>
-              <span style="display:flex;align-items:center;gap:8px;">
-                <span style="font-family:'Roboto Mono',monospace;font-size:10px;color:${seg.color};">$${perDollar.toFixed(2)}</span>
-                <span style="font-family:'Roboto Mono',monospace;font-size:9px;color:rgba(255,255,255,0.40);">(${pct.toFixed(0)}%)</span>
-              </span>
-            </div>`;
-  }).join('') : '<div style="font-family:\'Inter\',sans-serif;font-size:11px;color:rgba(255,255,255,0.35);padding:12px 0;">No revenue to allocate.</div>';
+function page1(data: SnapshotData): string {
+  const { project } = data;
 
-  // ── Tier cards HTML ──
-  const tierCardsHtml = tiers
-    .map((tier, i) => {
-      const isLast = i === tiers.length - 1;
-      const amountColor = isLast && tier.remaining === 0 ? '#3CB371' : 'rgba(250,248,244,0.92)';
-      const borderColor = isLast && tier.remaining === 0
-        ? 'rgba(60,179,113,0.25)'
-        : 'rgba(220,38,38,0.18)';
-      const connectorColor = isLast && tier.remaining === 0 ? 'rgba(60,179,113,0.3)' : 'rgba(220,38,38,0.3)';
+  // Build team grid cells — only include fields that have values
+  const teamFields: Array<{ label: string; value: string }> = [];
+  if (project.director) teamFields.push({ label: 'Director', value: project.director });
+  if (project.writers) teamFields.push({ label: 'Writer', value: project.writers });
+  if (project.producers) teamFields.push({ label: 'Producers', value: project.producers });
+  if (project.company) teamFields.push({ label: 'Production Co.', value: project.company });
+  if (project.cast) teamFields.push({ label: 'Cast', value: project.cast });
+  if (project.location) teamFields.push({ label: 'Location', value: project.location });
 
-      return `${
-        i > 0
-          ? `<div style="display:flex;flex-direction:column;align-items:center;margin:-2px 0;">
-        <div style="width:2px;height:6px;background:${connectorColor};border-radius:1px;"></div>
-        <div style="width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid ${connectorColor};margin-top:-1px;"></div>
-      </div>`
-          : ''
-      }
-    <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:6px;background:#232326;border:1px solid ${borderColor};border-top:1px solid rgba(255,255,255,0.04);">
-      <div style="width:24px;height:24px;border-radius:50%;background:rgba(212,175,55,0.12);border:1px solid rgba(212,175,55,0.30);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:12px;color:#fff;flex-shrink:0;">
-        ${String(i + 1).padStart(2, '0')}
-      </div>
-      <div style="flex:1;">
-        <div style="font-family:'Inter',sans-serif;font-size:11px;font-weight:500;color:rgba(250,248,244,0.88);">${tier.name}</div>
-        <div style="font-family:'Roboto Mono',monospace;font-size:8px;color:rgba(212,175,55,0.55);margin-top:1px;">${tier.rate}</div>
-      </div>
-      <div style="text-align:right;">
-        <div style="font-family:'Roboto Mono',monospace;font-size:12px;font-weight:500;color:${amountColor};">${formatFullCurrency(tier.amount)}</div>
-        <div style="font-family:'Roboto Mono',monospace;font-size:8px;color:rgba(255,255,255,0.35);margin-top:1px;">&rarr; ${formatFullCurrency(tier.remaining)}</div>
-      </div>
-    </div>`;
-    })
-    .join('');
+  const teamCells = teamFields.map(f => `
+    <div style="background:#232326;padding:12px 16px;">
+      <div style="font-family:'Roboto Mono',monospace;font-size:8px;color:rgba(212,175,55,0.40);text-transform:uppercase;letter-spacing:2px;margin-bottom:4px;">${f.label}</div>
+      <div style="font-family:'Inter',sans-serif;font-size:13px;color:rgba(250,248,244,0.85);font-weight:500;">${f.value}</div>
+    </div>`).join('');
 
-  // ── Margin of Safety ruler ──
-  let marginBarHtml: string;
-  if (!isBreakevenValid || revenue <= 0) {
-    marginBarHtml = `<div style="padding:10px 14px;border-radius:6px;border:1px solid rgba(212,175,55,0.12);border-top:1px solid rgba(255,255,255,0.04);background:linear-gradient(180deg,rgba(212,175,55,0.02),#232326);">
-      <div style="font-family:'Roboto Mono',monospace;font-size:10px;color:rgba(212,175,55,0.55);">MARGIN OF SAFETY: N/A</div>
-    </div>`;
-  } else {
-    const maxVal = Math.max(revenue, breakeven);
-    const revPct = (revenue / maxVal) * 100;
-    const bePct = (breakeven / maxVal) * 100;
-    // BUG FIX 2: isAbove uses >=, so when revenue === breakeven we show "above" with $0 margin
-    const labelText = isAbove
-      ? `MARGIN OF SAFETY: ${formatCurrency(Math.abs(margin))} above break-even`
-      : `SHORTFALL: ${formatCurrency(Math.abs(margin))} below break-even`;
-    const labelColor = isAbove ? '#3CB371' : 'rgba(220,38,38,0.85)';
-
-    marginBarHtml = `<div style="padding:10px 14px;border-radius:6px;border:1px solid rgba(212,175,55,0.12);border-top:1px solid rgba(255,255,255,0.04);background:linear-gradient(180deg,rgba(212,175,55,0.02),#232326);">
-      <div style="font-family:'Roboto Mono',monospace;font-size:10px;color:${labelColor};margin-bottom:7px;">${labelText}</div>
-      <div style="position:relative;height:18px;background:rgba(255,255,255,0.04);border-radius:4px;overflow:hidden;">
-        ${isAbove
-          ? `<div style="position:absolute;left:0;top:0;bottom:0;width:${bePct.toFixed(1)}%;background:rgba(60,179,113,0.30);border-radius:4px 0 0 4px;"></div>
-             <div style="position:absolute;left:${bePct.toFixed(1)}%;top:0;bottom:0;width:${(revPct - bePct).toFixed(1)}%;background:rgba(60,179,113,0.50);border-radius:0 4px 4px 0;"></div>`
-          : `<div style="position:absolute;left:0;top:0;bottom:0;width:${revPct.toFixed(1)}%;background:rgba(60,179,113,0.30);border-radius:4px 0 0 4px;"></div>
-             <div style="position:absolute;left:${revPct.toFixed(1)}%;top:0;bottom:0;width:${(bePct - revPct).toFixed(1)}%;background:rgba(220,38,38,0.20);border-radius:0 4px 4px 0;"></div>`
-        }
-        <div style="position:absolute;left:${bePct.toFixed(1)}%;top:-2px;bottom:-2px;width:2px;background:#D4AF37;box-shadow:0 0 6px rgba(212,175,55,0.40);transform:translateX(-1px);"></div>
-      </div>
-    </div>`;
-  }
-
-  // ── Capital sources ──
-  const capitalSources: { label: string; amount: number; pct: string; detail: string }[] = [];
-  if (inputs.debt > 0) capitalSources.push({ label: 'Senior Debt', amount: inputs.debt, pct: `${inputs.budget > 0 ? Math.round((inputs.debt / inputs.budget) * 100) : 0}%`, detail: `First position · ${inputs.seniorDebtRate}%` });
-  if (inputs.mezzanineDebt > 0) capitalSources.push({ label: 'Mezzanine / Gap', amount: inputs.mezzanineDebt, pct: `${inputs.budget > 0 ? Math.round((inputs.mezzanineDebt / inputs.budget) * 100) : 0}%`, detail: `Second position · ${inputs.mezzanineRate}%` });
-  if (inputs.equity > 0) capitalSources.push({ label: 'Equity', amount: inputs.equity, pct: `${inputs.budget > 0 ? Math.round((inputs.equity / inputs.budget) * 100) : 0}%`, detail: inputs.premium > 0 ? `${inputs.premium}% preferred return` : 'Pari passu' });
-  if (inputs.credits > 0) capitalSources.push({ label: 'Tax Credits', amount: inputs.credits, pct: `${inputs.budget > 0 ? Math.round((inputs.credits / inputs.budget) * 100) : 0}%`, detail: 'Non-dilutive' });
-  if (inputs.deferments > 0) capitalSources.push({ label: 'Deferrals', amount: inputs.deferments, pct: `${inputs.budget > 0 ? Math.round((inputs.deferments / inputs.budget) * 100) : 0}%`, detail: 'Subordinate to all capital' });
-
-  const capitalRowsHtml = capitalSources.map((s, i) =>
-    `<div style="display:flex;justify-content:space-between;align-items:center;padding:9px 14px;${i > 0 ? 'border-top:1px solid rgba(255,255,255,0.04);' : ''}">
-      <div>
-        <div style="font-family:'Inter',sans-serif;font-size:11px;font-weight:500;color:rgba(250,248,244,0.88);">${s.label}</div>
-        <div style="font-family:'Roboto Mono',monospace;font-size:9px;color:rgba(255,255,255,0.40);margin-top:2px;">${s.detail}</div>
-      </div>
-      <div style="text-align:right;">
-        <div style="font-family:'Roboto Mono',monospace;font-size:12px;font-weight:500;color:rgba(250,248,244,0.92);">${formatFullCurrency(s.amount)}</div>
-        <div style="font-family:'Roboto Mono',monospace;font-size:9px;color:rgba(255,255,255,0.40);margin-top:2px;">${s.pct} of budget</div>
-      </div>
-    </div>`
-  ).join('');
-
-  // ── Scenario stress test ──
-  const variableOffTops = result.cam + result.salesFee + result.guilds;
-  const fixedOffTops = result.marketing;
-  const variableOffTopRate = revenue > 0 ? variableOffTops / revenue : 0;
-  const totalHurdleAmount = result.seniorDebtHurdle + result.mezzDebtHurdle + result.equityHurdle + inputs.deferments - result.creditsApplied;
-
-  const scenarioData = [
-    { label: formatCurrency(revenue), sub: 'modeled', price: revenue },
-    { label: formatCurrency(revenue * 0.85), sub: '\u221215%', price: revenue * 0.85 },
-    { label: formatCurrency(revenue * 0.70), sub: '\u221230%', price: revenue * 0.70 },
-    { label: formatCurrency(revenue * 0.50), sub: '\u221250%', price: revenue * 0.50 },
-  ].map(s => {
-    const newVariableOffTops = s.price * variableOffTopRate;
-    const newOffTops = newVariableOffTops + fixedOffTops;
-    const newDistributable = Math.max(0, s.price - newOffTops);
-    const returnPct = totalHurdleAmount > 0 ? Math.min(100, (newDistributable / totalHurdleAmount) * 100) : 0;
-    const multiple = cashBasis > 0 ? newDistributable / cashBasis : 0;
-    const color = getReturnColor(returnPct);
-    return { ...s, returnPct, multiple, color };
-  });
-
-  const scenarioRowsHtml = scenarioData.map((s, i) =>
-    `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 14px;${i > 0 ? 'border-top:1px solid rgba(255,255,255,0.04);' : ''}${i === 0 ? 'border-left:3px solid rgba(212,175,55,0.40);' : ''}">
-      <div>
-        <span style="font-family:'Roboto Mono',monospace;font-size:11px;color:rgba(250,248,244,0.88);">${s.label}</span>
-        <span style="font-family:'Roboto Mono',monospace;font-size:9px;color:rgba(255,255,255,0.40);margin-left:6px;">${s.sub}</span>
-      </div>
-      <div style="display:flex;gap:14px;">
-        <span style="font-family:'Roboto Mono',monospace;font-size:11px;font-weight:500;color:${s.color};min-width:46px;text-align:right;">${Math.round(s.returnPct)}%</span>
-        <span style="font-family:'Roboto Mono',monospace;font-size:11px;font-weight:500;color:${s.color};min-width:46px;text-align:right;">${s.multiple.toFixed(1)}&times;</span>
-      </div>
-    </div>`
-  ).join('');
-
-  // ═══════════════════════════════════════════════════════════════
-  // PROSE GENERATION
-  // ═══════════════════════════════════════════════════════════════
-
-  // Capital source names (for prose)
-  const capitalSourceNames: string[] = [];
-  if (inputs.equity > 0) capitalSourceNames.push('equity');
-  if (inputs.debt > 0) capitalSourceNames.push('senior debt');
-  if (inputs.mezzanineDebt > 0) capitalSourceNames.push('mezzanine financing');
-  if (inputs.credits > 0) capitalSourceNames.push('tax credits');
-  if (inputs.deferments > 0) capitalSourceNames.push('deferrals');
-  const sourcesList = capitalSourceNames.join(', ').replace(/, ([^,]*)$/, ' and $1');
-
-  // ── EXECUTIVE SUMMARY (Page 2) ──
-  const execSummaryParts: string[] = [];
-
-  if (isEmptyDeal) {
-    execSummaryParts.push('No deal data has been entered. Complete the calculator inputs to generate an executive summary.');
-  } else {
-    // Sentence 1: What this is
-    execSummaryParts.push(`${project.title} is a ${formatCurrency(inputs.budget)} independent ${project.genre ? project.genre.toLowerCase() + ' ' : ''}feature${sourcesList ? ' financed through ' + sourcesList : ''}.`);
-
-    // Sentence 2: Return outcome
-    if (result.recoupPct >= 100) {
-      execSummaryParts.push(`At the modeled acquisition price of ${formatCurrency(revenue)}, all capital tiers are fully funded with a ${safeMultiple.toFixed(1)}x return to investors.`);
-    } else if (result.recoupPct > 0) {
-      execSummaryParts.push(`At the modeled acquisition price of ${formatCurrency(revenue)}, investors recoup ${result.recoupPct.toFixed(0)}% of their capital with a ${safeMultiple.toFixed(1)}x return.`);
-    } else {
-      execSummaryParts.push(`At the modeled acquisition price of ${formatCurrency(revenue)}, net distributable revenue does not cover capital obligations.`);
-    }
-
-    // Sentence 3: Erosion
-    execSummaryParts.push(`Off-the-top deductions\u2009\u2014\u2009distribution fees, sales expenses, guild reserves, and collection costs\u2009\u2014\u2009consume ${erosionPct.toFixed(0)}% of gross revenue before the waterfall begins.`);
-
-    // Sentence 4: Margin (BUG FIX 2 applied to prose as well)
-    if (isBreakevenValid && revenue > 0) {
-      if (isAbove && margin > 0) {
-        const marginPctVal = Math.round((margin / revenue) * 100);
-        execSummaryParts.push(`The deal carries a ${formatCurrency(margin)} margin of safety above break-even, meaning the acquisition price could drop ${marginPctVal}% before investor capital is at risk.`);
-      } else if (isAbove && margin === 0) {
-        execSummaryParts.push(`Revenue exactly meets the break-even threshold\u2009\u2014\u2009there is no margin of safety at this price.`);
-      } else {
-        const shortfall = breakeven - revenue;
-        execSummaryParts.push(`Revenue falls ${formatCurrency(shortfall)} short of the break-even point at this price.`);
-      }
-    }
-
-    // Sentence 5: Waterfall priority — uses profitSplitPct
-    if (inputs.debt > 0 && inputs.mezzanineDebt > 0 && inputs.equity > 0) {
-      execSummaryParts.push(`The waterfall prioritizes senior debt repayment, followed by mezzanine financing, then equity recoupment${inputs.premium > 0 ? ' at a ' + inputs.premium + '% preferred return' : ''}, with remaining profits split ${profitSplitPct}/${producerSplitPct} between investors and producers.`);
-    } else if (inputs.debt > 0 && inputs.equity > 0) {
-      execSummaryParts.push(`The waterfall prioritizes senior debt repayment, followed by equity recoupment${inputs.premium > 0 ? ' at a ' + inputs.premium + '% preferred return' : ''}, with remaining profits split ${profitSplitPct}/${producerSplitPct} between investors and producers.`);
-    } else if (inputs.equity > 0) {
-      execSummaryParts.push(`After off-the-top deductions, equity investors recoup their capital${inputs.premium > 0 ? ' plus a ' + inputs.premium + '% premium' : ''}, with remaining profits split ${profitSplitPct}/${producerSplitPct} between investors and producers.`);
-    }
-
-    // Sentence 6: Net to producer
-    if (netProfit > 0) {
-      execSummaryParts.push(`The producer\u2019s net backend is ${formatCurrency(netProfit)}.`);
-    }
-  }
-  const execSummaryText = execSummaryParts.join(' ');
-
-  // ── WATERFALL NARRATIVE (Page 4) ──
-  const waterfallNarrativeParts: string[] = [];
-  waterfallNarrativeParts.push(`Revenue flows through ${tiers.length} tiers before reaching the profit split.`);
-
-  const obligationTiers = tiers.filter((_, i) => i < tiers.length - 1 && tiers[i].amount > 0);
-  if (obligationTiers.length > 0) {
-    const largest = obligationTiers.reduce((max, t) => t.amount > max.amount ? t : max, obligationTiers[0]);
-    if (largest.amount > 0) {
-      const largePct = revenue > 0 ? Math.round((largest.amount / revenue) * 100) : 0;
-      waterfallNarrativeParts.push(`The largest single obligation is ${largest.name.toLowerCase()} at ${formatCurrency(largest.amount)}${largePct > 0 ? ' (' + largePct + '% of gross)' : ''}.`);
-    }
-  }
-
-  if (result.profitPool > 0) {
-    // Uses profitSplitPct
-    waterfallNarrativeParts.push(`After all obligations are met, ${formatCurrency(result.profitPool)} remains in the profit pool\u2009\u2014\u2009split ${profitSplitPct}/${producerSplitPct} between investors and producers.`);
-    if (netProfit > 0) {
-      waterfallNarrativeParts.push(`The filmmaker\u2019s net backend is ${formatCurrency(netProfit)}.`);
-    }
-  } else {
-    waterfallNarrativeParts.push(`At this price, revenue is exhausted before all capital tiers are satisfied. No profit pool is generated.`);
-  }
-  const waterfallNarrativeText = waterfallNarrativeParts.join(' ');
-
-  // ── MARGIN PROSE (Page 4) ── BUG FIX 2 applied
-  let marginProseText = '';
-  if (isBreakevenValid && revenue > 0) {
-    if (isAbove && margin > 0) {
-      const marginPctVal = Math.round((margin / revenue) * 100);
-      marginProseText = `At the modeled price, revenue exceeds the break-even threshold by ${formatCurrency(margin)}\u2009\u2014\u2009a ${marginPctVal}% margin of safety. The acquisition price could fall ${marginPctVal}% before investor capital is at risk.`;
-    } else if (isAbove && margin === 0) {
-      marginProseText = `Revenue exactly matches the break-even threshold. Any reduction in acquisition price will leave investor capital partially exposed.`;
-    } else {
-      const shortfall = breakeven - revenue;
-      marginProseText = `Revenue falls ${formatCurrency(shortfall)} short of the break-even point. At this price, investor recoupment is incomplete.`;
-    }
-  }
-
-  // ── SCENARIO INTERPRETATION (Page 4) ──
-  const scenarioInterpParts: string[] = [];
-  const modeledScenario = scenarioData[0];
-  const mild = scenarioData[1];
-  const moderate = scenarioData[2];
-  const severe = scenarioData[3];
-
-  if (modeledScenario.returnPct >= 100) {
-    scenarioInterpParts.push(`At the modeled price, the deal returns ${modeledScenario.multiple.toFixed(1)}x.`);
-    if (mild.returnPct >= 100) {
-      scenarioInterpParts.push(`A 15% haircut still delivers full recoupment at ${mild.multiple.toFixed(1)}x.`);
-    } else if (mild.returnPct >= 50) {
-      scenarioInterpParts.push(`A 15% haircut reduces the return to ${mild.multiple.toFixed(1)}x with ${Math.round(mild.returnPct)}% recoupment.`);
-    }
-    if (moderate.returnPct < 100) {
-      scenarioInterpParts.push(`At a 30% discount, investor return drops to ${moderate.multiple.toFixed(1)}x\u2009\u2014\u2009${Math.round(moderate.returnPct) >= 50 ? 'partial recoupment' : 'significant capital loss'}.`);
-    }
-    if (severe.returnPct < 50) {
-      scenarioInterpParts.push(`The structure does not survive a 50% reduction.`);
-    }
-  } else {
-    scenarioInterpParts.push(`At the modeled price, the deal returns ${modeledScenario.multiple.toFixed(1)}x with ${Math.round(modeledScenario.returnPct)}% recoupment.`);
-    scenarioInterpParts.push(`Any reduction in acquisition price further erodes investor returns.`);
-  }
-  const scenarioInterpText = scenarioInterpParts.join(' ');
-
-  // ── Team grid (Page 2) ──
-  const teamFields: { role: string; name: string }[] = [];
-  if (project.director) teamFields.push({ role: 'Director', name: project.director });
-  if (project.writers) teamFields.push({ role: 'Writer', name: project.writers });
-  if (project.producers) teamFields.push({ role: 'Producers', name: project.producers });
-  if (project.company) teamFields.push({ role: 'Production Co.', name: project.company });
-  if (project.cast) teamFields.push({ role: 'Cast', name: project.cast });
-  if (project.location) teamFields.push({ role: 'Location', name: project.location });
-
-  const teamGridHtml = teamFields.length > 0 ? `
-    <div style="display:grid;grid-template-columns:${teamFields.length <= 3 ? 'repeat(' + teamFields.length + ', 1fr)' : '1fr 1fr'};gap:1px;background:rgba(212,175,55,0.08);border-radius:6px;overflow:hidden;">
-      ${teamFields.map(f => `<div style="background:#1A1A1C;padding:9px 12px;">
-        <div style="font-family:'Roboto Mono',monospace;font-size:8px;letter-spacing:2px;color:rgba(212,175,55,0.40);text-transform:uppercase;margin-bottom:2px;">${f.role}</div>
-        <div style="font-family:'Inter',sans-serif;font-size:10px;color:rgba(250,248,244,0.85);font-weight:500;line-height:1.3;">${f.name}</div>
-      </div>`).join('')}
+  const teamGrid = teamFields.length > 0 ? `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(212,175,55,0.06);border-radius:6px;overflow:hidden;margin-bottom:28px;">
+      ${teamCells}
     </div>` : '';
-
-  // ── Structure prose (Page 2) ──
-  let structureProseText = '';
-  if (capitalSources.length > 0) {
-    const structParts = capitalSources.map(s => `${s.pct} ${s.label.toLowerCase()} (${formatFullCurrency(s.amount)})`);
-    const structList = structParts.join(', ').replace(/, ([^,]*)$/, ' and $1');
-    let positionSentence = '';
-    if (inputs.debt > 0 && inputs.mezzanineDebt > 0) {
-      positionSentence = ' The lender holds first position in the recoupment waterfall, followed by mezzanine debt, meaning equity investors do not see returns until all senior creditors are made whole.';
-    } else if (inputs.debt > 0) {
-      positionSentence = ' Senior debt holds first position in the recoupment waterfall, meaning equity investors do not see returns until the lender is made whole.';
-    }
-    structureProseText = `The production is financed with ${structList}.${positionSentence}`;
-  }
-
-  // ── Reusable HTML fragments ──
-  const goldTopBar = '<div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent 5%,rgba(212,175,55,0.50) 30%,rgba(212,175,55,0.70) 50%,rgba(212,175,55,0.50) 70%,transparent 95%);z-index:10;"></div>';
-  const watermarkHtml = '<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-30deg);font-family:\'Bebas Neue\',sans-serif;font-size:80px;letter-spacing:12px;color:rgba(212,175,55,0.03);pointer-events:none;z-index:0;white-space:nowrap;">FILMMAKER.OG</div>';
-
-  const pageHeader = (pageNum: string) => `<div style="display:flex;justify-content:space-between;align-items:center;padding:14px 36px 12px;position:relative;z-index:2;">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:4px;color:rgba(212,175,55,0.50);">FILMMAKER.OG</div>
-      <div style="font-family:'Roboto Mono',monospace;font-size:8px;letter-spacing:2px;color:rgba(255,255,255,0.30);text-transform:uppercase;">PAGE ${pageNum}</div>
-    </div>`;
-
-  const pageFooter = () => `<div style="position:absolute;bottom:16px;left:36px;right:36px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(212,175,55,0.10);padding-top:8px;">
-      <div style="font-family:'Roboto Mono',monospace;font-size:8px;letter-spacing:1.5px;color:rgba(212,175,55,0.35);">FILMMAKER.OG</div>
-      <div style="font-family:'Roboto Mono',monospace;font-size:8px;color:rgba(255,255,255,0.25);">filmmakerog.com</div>
-    </div>`;
-
-  const goldDivider = `<div style="height:1px;background:linear-gradient(90deg,transparent,rgba(212,175,55,0.35),transparent);margin:12px 48px;position:relative;z-index:2;"></div>`;
-
-  const sectionTitle = (text: string, mb = '4px') =>
-    `<div style="padding:0 36px;margin-bottom:${mb};position:relative;z-index:2;">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:rgba(250,248,244,0.92);letter-spacing:1px;">${text}</div>
-    </div>`;
-
-  const bridge = (text: string) =>
-    `<div style="padding:0 36px;margin-bottom:10px;position:relative;z-index:2;">
-      <div style="font-family:'Inter',sans-serif;font-size:11px;color:rgba(250,248,244,0.60);font-style:italic;line-height:1.6;letter-spacing:0.01em;">${text}</div>
-    </div>`;
-
-  const proseBlock = (text: string, mb = '12px') =>
-    `<div style="padding:0 36px;margin-bottom:${mb};position:relative;z-index:2;">
-      <div style="font-family:'Inter',sans-serif;font-size:11px;color:rgba(250,248,244,0.65);line-height:1.7;font-weight:400;">${text}</div>
-    </div>`;
-
-  // ── Verdict for Page 5 closer ──
-  let verdict: string;
-  let verdictColor: string;
-  if (result.recoupPct >= 100 && result.multiple >= 1.0) {
-    verdict = 'FUNDED';
-    verdictColor = '#3CB371';
-  } else if (result.recoupPct >= 50) {
-    verdict = 'PARTIAL';
-    verdictColor = '#F0A830';
-  } else {
-    verdict = 'SHORTFALL';
-    verdictColor = 'rgba(220,38,38,0.85)';
-  }
 
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&family=Roboto+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+  ${FONTS}
+  <style>${BASE_CSS}</style>
+</head>
+<body>
+  <div class="page">
+    ${GOLD_BAR}
+    ${WATERMARK}
+
+    <!-- Content — vertically centered -->
+    <div style="display:flex;flex-direction:column;justify-content:center;flex:1;padding:0 36px 48px;position:relative;z-index:2;">
+
+      <!-- Brand mark -->
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:5px;color:rgba(212,175,55,0.55);margin-bottom:20px;">FILMMAKER.OG</div>
+
+      <!-- Gold rule -->
+      <div style="width:40px;height:1px;background:rgba(212,175,55,0.35);margin-bottom:28px;"></div>
+
+      <!-- Project title -->
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:38px;color:rgba(255,255,255,0.96);letter-spacing:1px;line-height:1.0;margin-bottom:8px;">${project.title}</div>
+
+      <!-- Genre -->
+      <div style="font-family:'Roboto Mono',monospace;font-size:10px;color:rgba(212,175,55,0.50);text-transform:uppercase;letter-spacing:2px;margin-bottom:14px;">${project.genre}</div>
+
+      <!-- Logline -->
+      <div style="font-family:'Inter',sans-serif;font-size:13px;color:rgba(250,248,244,0.60);font-style:italic;max-width:440px;line-height:1.65;margin-bottom:28px;">${project.logline}</div>
+
+      <!-- Gold divider -->
+      <div style="height:1px;background:rgba(212,175,55,0.15);margin-bottom:24px;"></div>
+
+      <!-- Team grid -->
+      ${teamGrid}
+
+      <!-- URL -->
+      <div style="font-family:'Roboto Mono',monospace;font-size:10px;color:rgba(212,175,55,0.40);letter-spacing:1px;">filmmakerog.com</div>
+
+    </div>
+
+    ${FOOTER}
+  </div>
+</body>
+</html>`;
+}
+
+// ─────────────────────────────────────────────────────────
+// PAGE 2 — THE DEAL
+// ─────────────────────────────────────────────────────────
+
+function page2(data: SnapshotData): string {
+  const { project, inputs, result, computed } = data;
+
+  // Safe defaults
+  const profitSplitPct = Math.max(0, Math.min(100, inputs.profitSplit ?? 50));
+  const producerSplitPct = 100 - profitSplitPct;
+  const safeMultiple = isFinite(result.multiple) && !isNaN(result.multiple) ? result.multiple : 0;
+
+  // S1: financing sources
+  const sources: string[] = [];
+  if (inputs.equity > 0) sources.push('equity');
+  if (inputs.debt > 0) sources.push('senior debt');
+  if (inputs.mezzanineDebt > 0) sources.push('mezzanine financing');
+  if (inputs.credits > 0) sources.push('tax credits');
+  if (inputs.deferments > 0) sources.push('deferrals');
+
+  let sourceStr = '';
+  if (sources.length === 0) sourceStr = 'internal financing';
+  else if (sources.length === 1) sourceStr = sources[0];
+  else if (sources.length === 2) sourceStr = `${sources[0]} and ${sources[1]}`;
+  else sourceStr = sources.slice(0, -1).join(', ') + ', and ' + sources[sources.length - 1];
+
+  const s1 = `${project.title} is a ${formatCurrency(inputs.budget)} independent ${project.genre} feature financed through ${sourceStr}.`;
+
+  // S2: recoup status
+  let s2 = '';
+  if (result.recoupPct >= 100) {
+    s2 = `At the modeled acquisition price of ${formatCurrency(inputs.revenue)}, all capital tiers are fully funded with a ${safeMultiple.toFixed(2)}x return to investors.`;
+  } else if (result.recoupPct > 0) {
+    s2 = `At the modeled acquisition price of ${formatCurrency(inputs.revenue)}, investors recoup ${Math.round(result.recoupPct)}% of their capital obligations.`;
+  } else {
+    s2 = `At the modeled acquisition price of ${formatCurrency(inputs.revenue)}, the deal does not cover capital obligations.`;
+  }
+
+  // S3: erosion
+  const erosionPct = Math.round(computed.erosionPct);
+  const s3 = `Off-the-top deductions — distribution fees, sales expenses, guild reserves, and collection costs — consume ${erosionPct}% of gross revenue before the waterfall begins.`;
+
+  // S4: margin of safety
+  const margin = inputs.revenue - computed.breakEvenRevenue;
+  let s4 = '';
+  if (margin > 0) {
+    const marginPct = Math.round((margin / inputs.revenue) * 100);
+    s4 = `The deal carries a ${formatFullCurrency(margin)} margin of safety above break-even, meaning the acquisition price could fall ${marginPct}% before investor capital is at risk.`;
+  } else if (margin === 0) {
+    s4 = `Revenue exactly meets break-even — there is no margin of safety.`;
+  } else {
+    s4 = `Revenue falls ${formatFullCurrency(Math.abs(margin))} short of break-even.`;
+  }
+
+  // S5: structure description
+  let s5 = '';
+  const hasDebt = inputs.debt > 0;
+  const hasMezz = inputs.mezzanineDebt > 0;
+  const hasEquity = inputs.equity > 0;
+
+  if ((hasDebt || hasMezz) && hasEquity) {
+    const debtDesc = hasMezz ? 'senior debt repayment followed by mezzanine, then' : 'senior debt repayment, followed by';
+    s5 = `The waterfall prioritizes ${debtDesc} equity recoupment at a ${inputs.premium}% preferred return, with remaining profits split ${profitSplitPct}/${producerSplitPct} between investors and producers.`;
+  } else if (hasDebt && !hasMezz && !hasEquity) {
+    s5 = `The waterfall prioritizes senior debt repayment at a ${inputs.seniorDebtRate}% rate, with remaining profits split ${profitSplitPct}/${producerSplitPct} between investors and producers.`;
+  } else {
+    s5 = `The waterfall is structured around equity recoupment at a ${inputs.premium}% preferred return, with remaining profits split ${profitSplitPct}/${producerSplitPct} between investors and producers.`;
+  }
+
+  // S6: producer backend
+  let s6 = '';
+  if (result.producer > 0) {
+    s6 = `The producer's net backend is ${formatFullCurrency(result.producer)}.`;
+  }
+
+  // Prose paragraphs
+  const para1 = `${s1} ${s2}`;
+  const para2 = `${s3} ${s4}`;
+  const para3 = `${s5}${s6 ? ' ' + s6 : ''}`;
+
+  // Pull-quote
+  let pullQuote = '';
+  if (result.recoupPct >= 100) {
+    pullQuote = `All capital tiers funded. ${safeMultiple.toFixed(2)}x return at modeled price.`;
+  } else if (result.recoupPct > 0) {
+    pullQuote = `Partial recoupment at ${Math.round(result.recoupPct)}%.`;
+  } else {
+    pullQuote = `Revenue does not cover capital obligations.`;
+  }
+
+  // Capital structure table rows
+  const capRows: string[] = [];
+  let positionIndex = 1;
+  const positionLabels = ['FIRST POSITION', 'SECOND POSITION', 'THIRD POSITION', 'FOURTH POSITION', 'FIFTH POSITION'];
+
+  if (inputs.debt > 0) {
+    const pct = inputs.budget > 0 ? Math.round((inputs.debt / inputs.budget) * 100) : 0;
+    capRows.push(`
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 16px;">
+        <div>
+          <div style="font-family:'Inter',sans-serif;font-size:12px;color:rgba(250,248,244,0.88);font-weight:500;">Senior Debt</div>
+          <div style="font-family:'Roboto Mono',monospace;font-size:8px;color:rgba(212,175,55,0.45);">${positionLabels[positionIndex - 1]} · ${inputs.seniorDebtRate}%</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-family:'Roboto Mono',monospace;font-size:13px;color:rgba(250,248,244,0.92);font-weight:500;">${formatFullCurrency(inputs.debt)}</div>
+          <div style="font-family:'Roboto Mono',monospace;font-size:8px;color:rgba(255,255,255,0.35);">${pct}% of budget</div>
+        </div>
+      </div>`);
+    positionIndex++;
+  }
+
+  if (inputs.mezzanineDebt > 0) {
+    const pct = inputs.budget > 0 ? Math.round((inputs.mezzanineDebt / inputs.budget) * 100) : 0;
+    capRows.push(`
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 16px;">
+        <div>
+          <div style="font-family:'Inter',sans-serif;font-size:12px;color:rgba(250,248,244,0.88);font-weight:500;">Mezzanine Debt</div>
+          <div style="font-family:'Roboto Mono',monospace;font-size:8px;color:rgba(212,175,55,0.45);">${positionLabels[positionIndex - 1]} · ${inputs.mezzanineRate}%</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-family:'Roboto Mono',monospace;font-size:13px;color:rgba(250,248,244,0.92);font-weight:500;">${formatFullCurrency(inputs.mezzanineDebt)}</div>
+          <div style="font-family:'Roboto Mono',monospace;font-size:8px;color:rgba(255,255,255,0.35);">${pct}% of budget</div>
+        </div>
+      </div>`);
+    positionIndex++;
+  }
+
+  if (inputs.equity > 0) {
+    const pct = inputs.budget > 0 ? Math.round((inputs.equity / inputs.budget) * 100) : 0;
+    capRows.push(`
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 16px;">
+        <div>
+          <div style="font-family:'Inter',sans-serif;font-size:12px;color:rgba(250,248,244,0.88);font-weight:500;">Equity</div>
+          <div style="font-family:'Roboto Mono',monospace;font-size:8px;color:rgba(212,175,55,0.45);">${inputs.premium}% PREFERRED RETURN</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-family:'Roboto Mono',monospace;font-size:13px;color:rgba(250,248,244,0.92);font-weight:500;">${formatFullCurrency(inputs.equity)}</div>
+          <div style="font-family:'Roboto Mono',monospace;font-size:8px;color:rgba(255,255,255,0.35);">${pct}% of budget</div>
+        </div>
+      </div>`);
+    positionIndex++;
+  }
+
+  if (inputs.credits > 0) {
+    capRows.push(`
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 16px;">
+        <div>
+          <div style="font-family:'Inter',sans-serif;font-size:12px;color:rgba(250,248,244,0.88);font-weight:500;">Tax Credits</div>
+          <div style="font-family:'Roboto Mono',monospace;font-size:8px;color:rgba(212,175,55,0.45);">NON-DILUTIVE</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-family:'Roboto Mono',monospace;font-size:13px;color:rgba(250,248,244,0.92);font-weight:500;">${formatFullCurrency(inputs.credits)}</div>
+          <div style="font-family:'Roboto Mono',monospace;font-size:8px;color:rgba(255,255,255,0.35);">applied off-top</div>
+        </div>
+      </div>`);
+    positionIndex++;
+  }
+
+  if (inputs.deferments > 0) {
+    capRows.push(`
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 16px;">
+        <div>
+          <div style="font-family:'Inter',sans-serif;font-size:12px;color:rgba(250,248,244,0.88);font-weight:500;">Deferrals</div>
+          <div style="font-family:'Roboto Mono',monospace;font-size:8px;color:rgba(212,175,55,0.45);">DEFERRED COMPENSATION</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-family:'Roboto Mono',monospace;font-size:13px;color:rgba(250,248,244,0.92);font-weight:500;">${formatFullCurrency(inputs.deferments)}</div>
+          <div style="font-family:'Roboto Mono',monospace;font-size:8px;color:rgba(255,255,255,0.35);">backend obligation</div>
+        </div>
+      </div>`);
+  }
+
+  // Interleave dividers between rows
+  const capRowsWithDividers = capRows.map((row, i) =>
+    i < capRows.length - 1 ? row + `\n<div style="height:1px;background:rgba(212,175,55,0.06);margin:0 16px;"></div>` : row
+  ).join('');
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  ${FONTS}
+  <style>${BASE_CSS}</style>
+</head>
+<body>
+  <div class="page">
+    ${GOLD_BAR}
+    ${WATERMARK}
+    ${pageHeader('PAGE 02')}
+
+    <!-- Content -->
+    <div style="flex:1;padding:0 36px 48px;position:relative;z-index:2;display:flex;flex-direction:column;">
+
+      <!-- Title -->
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:rgba(250,248,244,0.92);letter-spacing:1px;margin-bottom:20px;">THE DEAL</div>
+
+      <!-- TLDR Pull-quote -->
+      <div style="border-left:3px solid rgba(212,175,55,0.35);padding:14px 20px;background:rgba(212,175,55,0.02);border-radius:0 5px 5px 0;margin-bottom:24px;">
+        <div style="font-family:'Inter',sans-serif;font-size:14px;color:rgba(250,248,244,0.85);font-weight:500;line-height:1.5;">${pullQuote}</div>
+      </div>
+
+      <!-- Gold divider -->
+      <div style="height:1px;background:linear-gradient(90deg,rgba(212,175,55,0.25),transparent);margin-bottom:24px;"></div>
+
+      <!-- Prose -->
+      <div style="font-family:'Inter',sans-serif;font-size:12px;color:rgba(250,248,244,0.70);line-height:1.85;">
+        <p style="margin-bottom:18px;">${para1}</p>
+        <p style="margin-bottom:18px;">${para2}</p>
+        <p style="margin-bottom:18px;">${para3}</p>
+      </div>
+
+      <!-- Spacer -->
+      <div style="flex:1;"></div>
+
+      <!-- Capital structure summary -->
+      <div style="margin-top:auto;">
+        <div style="font-family:'Roboto Mono',monospace;font-size:9px;color:rgba(212,175,55,0.40);letter-spacing:2px;margin-bottom:8px;">CAPITAL STRUCTURE</div>
+        <div style="background:linear-gradient(180deg,rgba(212,175,55,0.02),#232326);border:1px solid rgba(212,175,55,0.12);border-radius:5px;overflow:hidden;">
+          ${capRowsWithDividers}
+        </div>
+      </div>
+
+    </div>
+
+    ${FOOTER}
+  </div>
+</body>
+</html>`;
+}
+
+// ─────────────────────────────────────────────────────────
+// PAGE 3 — WATERFALL DEDUCTIONS
+// ─────────────────────────────────────────────────────────
+
+function page3(data: SnapshotData): string {
+  const { inputs, result, computed } = data;
+  const revenue = inputs.revenue;
+
+  // Build deduction rows dynamically
+  const deductionRows: string[] = [];
+
+  if (result.cam > 0) {
+    deductionRows.push(`
+      <div class="row" style="padding:8px 16px;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:rgba(255,255,255,0.90);">CAM Fee <span style="font-family:'Roboto Mono',monospace;font-size:10px;color:rgba(212,175,55,0.45);margin-left:8px;">1% OF GROSS</span></div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:rgba(220,38,38,0.88);">–${formatFullCurrency(result.cam)}</div>
+      </div>
+      <div class="divider" style="background:rgba(255,255,255,0.04);"></div>`);
+  }
+
+  if (result.guilds > 0) {
+    deductionRows.push(`
+      <div class="row" style="padding:8px 16px;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:rgba(255,255,255,0.90);">Guild Residuals <span style="font-family:'Roboto Mono',monospace;font-size:10px;color:rgba(212,175,55,0.45);margin-left:8px;">SAG · WGA · DGA</span></div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:rgba(220,38,38,0.88);">–${formatFullCurrency(result.guilds)}</div>
+      </div>
+      <div class="divider" style="background:rgba(255,255,255,0.04);"></div>`);
+  }
+
+  if (result.salesFee > 0) {
+    const salesFeePct = revenue > 0 ? Math.round((result.salesFee / revenue) * 100) : 0;
+    deductionRows.push(`
+      <div class="row" style="padding:8px 16px;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:rgba(255,255,255,0.90);">Sales Commission <span style="font-family:'Roboto Mono',monospace;font-size:10px;color:rgba(212,175,55,0.45);margin-left:8px;">${salesFeePct}%</span></div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:rgba(220,38,38,0.88);">–${formatFullCurrency(result.salesFee)}</div>
+      </div>
+      <div class="divider" style="background:rgba(255,255,255,0.04);"></div>`);
+  }
+
+  if (result.marketing > 0) {
+    deductionRows.push(`
+      <div class="row" style="padding:8px 16px;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:rgba(255,255,255,0.90);">Sales Expenses <span style="font-family:'Roboto Mono',monospace;font-size:10px;color:rgba(212,175,55,0.45);margin-left:8px;">EXPENSE CAP</span></div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:rgba(220,38,38,0.88);">–${formatFullCurrency(result.marketing)}</div>
+      </div>
+      <div class="divider" style="background:rgba(255,255,255,0.04);"></div>`);
+  }
+
+  // Remove trailing divider from last row
+  const deductionRowsHtml = deductionRows.join('').replace(/<div class="divider"[^>]*><\/div>\s*$/, '');
+
+  // Erosion bar: green portion = 100 - erosionPct, red = erosionPct
+  const erosionPct = Math.min(100, Math.max(0, computed.erosionPct));
+  const greenPct = Math.round(100 - erosionPct);
+  const redPct = Math.round(erosionPct);
+
+  // Tax credits connector + card (only if credits > 0)
+  const netDistributable = revenue - result.offTopTotal + result.creditsApplied;
+  const hasCredits = inputs.credits > 0;
+
+  const taxCreditsSection = hasCredits ? `
+    <!-- Connector red→green -->
+    <div class="conn" style="height:10px;">
+      <div style="width:2px;height:6px;background:linear-gradient(180deg,rgba(220,38,38,0.50),rgba(60,179,113,0.50));border-radius:1px;"></div>
+      <div style="width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid rgba(60,179,113,0.55);margin-top:-1px;"></div>
+    </div>
+
+    <!-- TAX CREDITS -->
+    <div class="card" style="width:55%;padding:12px 20px;border:1px solid rgba(60,179,113,0.22);">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:rgba(60,179,113,0.88);">Tax Credits <span style="font-family:'Roboto Mono',monospace;font-size:10px;color:rgba(212,175,55,0.45);margin-left:8px;">NON-DILUTIVE</span></div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:#3CB371;">+${formatFullCurrency(result.creditsApplied > 0 ? result.creditsApplied : inputs.credits)}</div>
+      </div>
+    </div>
+
+    <!-- Connector green→gold -->
+    <div class="conn" style="height:10px;">
+      <div style="width:3px;height:6px;background:linear-gradient(180deg,rgba(60,179,113,0.50),rgba(212,175,55,0.55));box-shadow:0 0 8px rgba(212,175,55,0.25);border-radius:1px;"></div>
+      <div style="width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:6px solid rgba(212,175,55,0.55);margin-top:-1px;"></div>
+    </div>` : `
+    <!-- Connector red→gold (no credits) -->
+    <div class="conn" style="height:10px;">
+      <div style="width:3px;height:6px;background:linear-gradient(180deg,rgba(220,38,38,0.50),rgba(212,175,55,0.55));box-shadow:0 0 8px rgba(212,175,55,0.25);border-radius:1px;"></div>
+      <div style="width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:6px solid rgba(212,175,55,0.55);margin-top:-1px;"></div>
+    </div>`;
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  ${FONTS}
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: #0C0C0E; font-family: 'Inter', sans-serif; width: 612px; }
-    .page {
-      width: 612px; height: 792px; background: #0C0C0E;
-      position: relative; overflow: hidden;
-      page-break-after: always;
-    }
-    .page:last-child { page-break-after: avoid; }
+    ${BASE_CSS}
+    .card { background: linear-gradient(180deg, rgba(212,175,55,0.02), #232326); border-radius: 8px; box-shadow: 0 4px 14px rgba(0,0,0,0.35); }
+    .label { font-family: 'Bebas Neue', sans-serif; letter-spacing: 3px; text-align: center; }
+    .conn { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .row { display: flex; justify-content: space-between; align-items: center; padding: 8px 16px; }
+    .divider { height: 1px; margin: 0 20px; }
   </style>
 </head>
 <body>
-
-  <!-- ═══════════════════════════════════════════════════════════════ -->
-  <!-- PAGE 1: TITLE PAGE — clean, cinematic, breathing room          -->
-  <!-- ═══════════════════════════════════════════════════════════════ -->
-  <div class="page" style="display:flex;flex-direction:column;">
-    ${goldTopBar}
-    ${watermarkHtml}
-    <!-- Radial glows -->
-    <div style="position:absolute;top:0;left:0;right:0;height:280px;background:radial-gradient(ellipse 80% 50% at 50% 10%,rgba(212,175,55,0.10) 0%,transparent 60%);pointer-events:none;z-index:0;"></div>
-    <div style="position:absolute;bottom:0;left:0;right:0;height:220px;background:radial-gradient(ellipse 100% 70% at 50% 100%,rgba(212,175,55,0.06) 0%,transparent 60%);pointer-events:none;z-index:0;"></div>
-
-    <!-- Central content block, vertically centered -->
-    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:36px 36px 60px;position:relative;z-index:2;">
-
-      <!-- Brand mark + eyebrow -->
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:6px;color:rgba(212,175,55,0.60);text-align:center;margin-bottom:4px;">FILMMAKER.OG</div>
-      <div style="font-family:'Roboto Mono',monospace;font-size:9px;letter-spacing:5px;color:rgba(212,175,55,0.40);text-transform:uppercase;text-align:center;margin-bottom:24px;">Waterfall Snapshot</div>
-
-      <!-- Project title -->
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:48px;color:#fff;line-height:0.95;letter-spacing:2px;text-align:center;margin-bottom:10px;">${project.title.toUpperCase()}</div>
-
-      <!-- Genre pill -->
-      ${project.genre ? `<div style="font-family:'Roboto Mono',monospace;font-size:10px;letter-spacing:2px;color:rgba(212,175,55,0.50);text-transform:uppercase;text-align:center;margin-bottom:10px;">${project.genre}</div>` : '<div style="margin-bottom:10px;"></div>'}
-
-      <!-- Logline -->
-      ${project.logline
-        ? `<div style="font-family:'Inter',sans-serif;font-size:11px;color:rgba(250,248,244,0.60);font-style:italic;font-weight:300;line-height:1.6;text-align:center;max-width:420px;margin:0 auto 24px;">${project.logline}</div>`
-        : '<div style="margin-bottom:24px;"></div>'
-      }
-
-      <!-- 2×2 headline metric grid -->
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(212,175,55,0.10);border-radius:8px;overflow:hidden;width:100%;margin-bottom:6px;">
-        <div style="background:#1A1A1C;padding:16px;text-align:center;">
-          <div style="font-family:'Roboto Mono',monospace;font-size:8px;letter-spacing:2.5px;color:rgba(212,175,55,0.45);text-transform:uppercase;margin-bottom:6px;">Budget</div>
-          <div style="font-family:'Roboto Mono',monospace;font-size:22px;font-weight:500;color:rgba(250,248,244,0.92);">${formatCurrency(inputs.budget)}</div>
-        </div>
-        <div style="background:#1A1A1C;padding:16px;text-align:center;">
-          <div style="font-family:'Roboto Mono',monospace;font-size:8px;letter-spacing:2.5px;color:rgba(212,175,55,0.45);text-transform:uppercase;margin-bottom:6px;">Acquisition Price</div>
-          <div style="font-family:'Roboto Mono',monospace;font-size:22px;font-weight:500;color:rgba(250,248,244,0.92);">${formatCurrency(revenue)}</div>
-        </div>
-        <div style="background:#1A1A1C;padding:16px;text-align:center;">
-          <div style="font-family:'Roboto Mono',monospace;font-size:8px;letter-spacing:2.5px;color:rgba(212,175,55,0.45);text-transform:uppercase;margin-bottom:6px;">Producer Net</div>
-          <div style="font-family:'Roboto Mono',monospace;font-size:22px;font-weight:500;color:${netProfitColor};">${netProfit >= 0 ? formatCurrency(netProfit) : `&minus;${formatCurrency(Math.abs(netProfit))}`}</div>
-        </div>
-        <div style="background:#1A1A1C;padding:16px;text-align:center;">
-          <div style="font-family:'Roboto Mono',monospace;font-size:8px;letter-spacing:2.5px;color:rgba(212,175,55,0.45);text-transform:uppercase;margin-bottom:6px;">Multiple</div>
-          <div style="font-family:'Roboto Mono',monospace;font-size:22px;font-weight:500;color:${multipleColor};">${safeMultiple.toFixed(1)}&times;</div>
-        </div>
-      </div>
-
-      <!-- Supplementary 3-column strip -->
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:rgba(212,175,55,0.08);border-radius:6px;overflow:hidden;width:100%;">
-        <div style="background:#232326;padding:10px;text-align:center;">
-          <div style="font-family:'Roboto Mono',monospace;font-size:8px;letter-spacing:2px;color:rgba(212,175,55,0.40);text-transform:uppercase;margin-bottom:3px;">Break-Even</div>
-          <div style="font-family:'Roboto Mono',monospace;font-size:13px;font-weight:500;color:#F0A830;">${isBreakevenValid ? formatCurrency(breakeven) : 'N/A'}</div>
-        </div>
-        <div style="background:#232326;padding:10px;text-align:center;">
-          <div style="font-family:'Roboto Mono',monospace;font-size:8px;letter-spacing:2px;color:rgba(212,175,55,0.40);text-transform:uppercase;margin-bottom:3px;">Cash Basis</div>
-          <div style="font-family:'Roboto Mono',monospace;font-size:13px;font-weight:500;color:rgba(212,175,55,0.80);">${formatCurrency(cashBasis)}</div>
-        </div>
-        <div style="background:#232326;padding:10px;text-align:center;">
-          <div style="font-family:'Roboto Mono',monospace;font-size:8px;letter-spacing:2px;color:rgba(212,175,55,0.40);text-transform:uppercase;margin-bottom:3px;">Investor ROI</div>
-          <div style="font-family:'Roboto Mono',monospace;font-size:13px;font-weight:500;color:${returnColor};">${computed.investorROI.toFixed(1)}%</div>
-        </div>
-      </div>
-    </div>
-
-    ${pageFooter()}
-  </div>
-
-  <!-- ═══════════════════════════════════════════════════════════════ -->
-  <!-- PAGE 2: THE DEAL — prose + team + capital structure            -->
-  <!-- ═══════════════════════════════════════════════════════════════ -->
   <div class="page">
-    ${goldTopBar}
-    ${watermarkHtml}
-    ${pageHeader('02')}
+    ${GOLD_BAR}
+    ${WATERMARK}
+    ${pageHeader('PAGE 03')}
 
-    ${sectionTitle('THE DEAL')}
-    ${proseBlock(execSummaryText, '10px')}
-
-    ${goldDivider}
-
-    <!-- Team grid -->
-    ${teamGridHtml ? `<div style="padding:0 36px;margin-bottom:10px;position:relative;z-index:2;">${teamGridHtml}</div>` : ''}
-
-    ${goldDivider}
-
-    <!-- Capital Structure -->
-    <div style="padding:0 36px;margin-bottom:4px;position:relative;z-index:2;">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:rgba(250,248,244,0.92);letter-spacing:1px;">Capital Structure</div>
+    <div style="padding:0 36px 6px;position:relative;z-index:2;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:rgba(250,248,244,0.92);letter-spacing:1px;">THE WATERFALL</div>
+      <div style="font-family:'Inter',sans-serif;font-size:11px;color:rgba(250,248,244,0.50);margin-top:4px;font-style:italic;">Every dollar of acquisition revenue passes through these gates before reaching the capital stack.</div>
     </div>
 
-    ${structureProseText ? proseBlock(structureProseText, '10px') : ''}
+    <div style="flex:1;padding:0 36px 24px;position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;">
 
-    <!-- Capital sources table -->
-    <div style="padding:0 36px;position:relative;z-index:2;">
-      <div style="border-radius:8px;background:#1A1A1C;border:1px solid rgba(212,175,55,0.15);border-top:1px solid rgba(255,255,255,0.08);overflow:hidden;">
-        ${capitalRowsHtml || '<div style="padding:14px;font-family:\'Inter\',sans-serif;font-size:11px;color:rgba(255,255,255,0.35);">No capital sources entered.</div>'}
+      <!-- ACQUISITION REVENUE -->
+      <div class="label" style="font-size:12px;color:rgba(212,175,55,0.50);margin-bottom:6px;">ACQUISITION REVENUE</div>
+      <div class="card" style="width:50%;padding:16px 20px;border:1px solid rgba(212,175,55,0.22);text-align:center;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:rgba(255,255,255,0.94);letter-spacing:1px;">${formatFullCurrency(revenue)}</div>
       </div>
-    </div>
 
-    ${pageFooter()}
-  </div>
-
-  <!-- ═══════════════════════════════════════════════════════════════ -->
-  <!-- PAGE 3: WHERE THE MONEY GOES — visual data page               -->
-  <!-- ═══════════════════════════════════════════════════════════════ -->
-  <div class="page">
-    ${goldTopBar}
-    ${watermarkHtml}
-    ${pageHeader('03')}
-
-    ${sectionTitle('WHERE YOUR DOLLAR GOES')}
-    ${bridge('Every dollar of revenue passes through multiple gates before it reaches the filmmaker.')}
-
-    <!-- SVG Donut + per-dollar breakdown side by side -->
-    <div style="padding:0 36px;position:relative;z-index:2;display:flex;gap:16px;align-items:flex-start;margin-bottom:12px;">
-      <!-- Donut -->
-      <div style="flex-shrink:0;position:relative;width:160px;height:160px;">
-        <svg viewBox="0 0 200 200" width="160" height="160">
-          <circle cx="100" cy="100" r="${r}" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="25"/>
-          ${donutCircles}
-        </svg>
-        <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;">
-          <div style="font-family:'Roboto Mono',monospace;font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:${donutCenterLabelColor};margin-bottom:2px;">${donutCenterLabel}</div>
-          <div style="font-family:'Roboto Mono',monospace;font-size:14px;font-weight:500;color:${donutCenterColor};">${donutCenterValue}</div>
-        </div>
+      <!-- Connector gold→red -->
+      <div class="conn" style="height:10px;">
+        <div style="width:2px;height:6px;background:linear-gradient(180deg,rgba(212,175,55,0.55),rgba(220,38,38,0.50));border-radius:1px;"></div>
+        <div style="width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid rgba(220,38,38,0.55);margin-top:-1px;"></div>
       </div>
-      <!-- Per-dollar breakdown -->
-      <div style="flex:1;border-radius:8px;background:#1A1A1C;border:1px solid rgba(212,175,55,0.12);border-top:1px solid rgba(255,255,255,0.04);padding:10px 12px;">
-        ${perDollarRows}
-      </div>
-    </div>
 
-    <!-- Erosion bar -->
-    <div style="padding:0 36px;position:relative;z-index:2;margin-bottom:12px;">
-      <div style="font-family:'Roboto Mono',monospace;font-size:8px;letter-spacing:2px;color:rgba(255,255,255,0.4);text-transform:uppercase;margin-bottom:6px;">TOTAL OFF-THE-TOP EROSION: <span style="color:rgba(220,38,38,0.85);">${erosionPct.toFixed(1)}%</span></div>
-      <div style="height:18px;border-radius:4px;overflow:hidden;display:flex;border:1px solid rgba(220,38,38,0.15);">
-        <div style="height:100%;background:rgba(220,38,38,0.45);width:${Math.min(erosionPct, 100)}%;"></div>
-        <div style="height:100%;background:rgba(60,179,113,0.15);width:${Math.max(remainPct, 0)}%;"></div>
-      </div>
-      <div style="display:flex;justify-content:space-between;margin-top:3px;">
-        <span style="font-family:'Roboto Mono',monospace;font-size:8px;color:rgba(220,38,38,0.65);">Deductions: ${erosionPct.toFixed(0)}%</span>
-        <span style="font-family:'Roboto Mono',monospace;font-size:8px;color:rgba(60,179,113,0.65);">Distributable: ${remainPct.toFixed(0)}%</span>
-      </div>
-    </div>
-
-    ${goldDivider}
-
-    <!-- Tier waterfall cards -->
-    <div style="padding:0 36px;position:relative;z-index:2;margin-bottom:10px;">
-      ${tierCardsHtml}
-    </div>
-
-    <!-- Net Backend Profit bar -->
-    <div style="margin:0 36px;padding:12px 14px;border-radius:6px;border:1px solid rgba(60,179,113,0.35);border-top:1px solid rgba(60,179,113,0.15);background:#232326;box-shadow:0 0 16px rgba(60,179,113,0.05);display:flex;justify-content:space-between;align-items:center;position:relative;z-index:2;overflow:hidden;">
-      <div style="position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at 50% 0%,rgba(60,179,113,0.07) 0%,transparent 70%);pointer-events:none;"></div>
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:15px;color:#3CB371;letter-spacing:1px;position:relative;z-index:1;">Net Backend Profit</div>
-      <div style="font-family:'Roboto Mono',monospace;font-size:18px;font-weight:500;color:#3CB371;position:relative;z-index:1;">${formatFullCurrency(result.producer)}</div>
-    </div>
-
-    ${pageFooter()}
-  </div>
-
-  <!-- ═══════════════════════════════════════════════════════════════ -->
-  <!-- PAGE 4: RISK ANALYSIS — scenarios + margin + assumptions       -->
-  <!-- ═══════════════════════════════════════════════════════════════ -->
-  <div class="page">
-    ${goldTopBar}
-    ${watermarkHtml}
-    ${pageHeader('04')}
-
-    ${sectionTitle('RISK ANALYSIS')}
-
-    <!-- Waterfall narrative -->
-    ${proseBlock(waterfallNarrativeText, '10px')}
-
-    <!-- Margin of Safety ruler -->
-    <div style="padding:0 36px;position:relative;z-index:2;margin-bottom:6px;">
-      ${marginBarHtml}
-    </div>
-
-    <!-- Margin prose -->
-    ${marginProseText ? `<div style="padding:0 36px;margin-bottom:10px;position:relative;z-index:2;">
-      <div style="font-family:'Inter',sans-serif;font-size:10px;color:rgba(250,248,244,0.60);line-height:1.6;font-style:italic;">${marginProseText}</div>
-    </div>` : ''}
-
-    ${goldDivider}
-
-    <!-- Scenario stress test -->
-    <div style="padding:0 36px;margin-bottom:4px;position:relative;z-index:2;">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:rgba(250,248,244,0.92);letter-spacing:1px;">Scenario Stress Test</div>
-    </div>
-    ${bridge('What happens when the acquisition price drops.')}
-
-    <div style="padding:0 36px;position:relative;z-index:2;margin-bottom:8px;">
-      <div style="border-radius:6px;background:#1A1A1C;border:1px solid rgba(212,175,55,0.15);border-top:1px solid rgba(255,255,255,0.08);overflow:hidden;">
-        <!-- Header row -->
-        <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 14px;background:rgba(255,255,255,0.03);">
-          <span style="font-family:'Roboto Mono',monospace;font-size:8px;letter-spacing:2px;color:rgba(255,255,255,0.60);text-transform:uppercase;">If your price drops</span>
-          <div style="display:flex;gap:14px;">
-            <span style="font-family:'Roboto Mono',monospace;font-size:8px;letter-spacing:1.5px;color:rgba(255,255,255,0.60);text-transform:uppercase;min-width:46px;text-align:right;">Return</span>
-            <span style="font-family:'Roboto Mono',monospace;font-size:8px;letter-spacing:1.5px;color:rgba(255,255,255,0.60);text-transform:uppercase;min-width:46px;text-align:right;">Multiple</span>
+      <!-- OFF-THE-TOP DEDUCTIONS -->
+      <div class="label" style="font-size:11px;color:rgba(220,38,38,0.50);margin-bottom:6px;">OFF-THE-TOP DEDUCTIONS</div>
+      <div class="card" style="width:100%;border:1px solid rgba(220,38,38,0.22);overflow:hidden;">
+        ${deductionRowsHtml}
+        <!-- TOTAL footer -->
+        <div style="border-top:1px solid rgba(220,38,38,0.15);background:rgba(220,38,38,0.03);padding:10px 20px;display:flex;justify-content:space-between;align-items:center;">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <div style="font-family:'Roboto Mono',monospace;font-size:10px;color:rgba(220,38,38,0.60);letter-spacing:1px;">TOTAL</div>
+            <div style="width:100px;height:8px;background:rgba(255,255,255,0.06);border-radius:4px;overflow:hidden;display:flex;">
+              <div style="height:100%;width:${greenPct}%;background:rgba(60,179,113,0.40);border-radius:4px 0 0 4px;"></div>
+              <div style="height:100%;flex:1;background:rgba(220,38,38,0.35);border-radius:0 4px 4px 0;"></div>
+            </div>
+            <div style="font-family:'Roboto Mono',monospace;font-size:9px;color:rgba(255,255,255,0.40);">${redPct}% OF GROSS</div>
           </div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:rgba(220,38,38,0.88);">–${formatFullCurrency(result.offTopTotal)}</div>
         </div>
-        ${scenarioRowsHtml}
       </div>
+
+      ${taxCreditsSection}
+
+      <!-- NET DISTRIBUTABLE REVENUE -->
+      <div class="label" style="font-size:12px;color:rgba(212,175,55,0.50);margin-bottom:6px;">NET DISTRIBUTABLE REVENUE</div>
+      <div class="card" style="width:60%;padding:16px 24px;border:1px solid rgba(212,175,55,0.25);text-align:center;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:rgba(255,255,255,0.94);letter-spacing:1px;">${formatFullCurrency(netDistributable)}</div>
+        <div style="font-family:'Roboto Mono',monospace;font-size:9px;color:rgba(212,175,55,0.40);margin-top:6px;letter-spacing:1px;">FLOWS INTO CAPITAL RECOUPMENT →</div>
+      </div>
+
     </div>
 
-    <!-- Scenario interpretation -->
-    ${proseBlock(scenarioInterpText, '8px')}
-
-    <!-- BUG FIX 3: Assumptions table — tightened padding, 8px font, compact rows -->
-    <div style="padding:0 36px;position:relative;z-index:2;">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:rgba(250,248,244,0.70);letter-spacing:1px;margin-bottom:5px;">Assumptions</div>
-      <div style="border-radius:6px;background:#1E1E20;border:1px solid rgba(212,175,55,0.10);border-top:1px solid rgba(255,255,255,0.03);overflow:hidden;">
-        ${[
-          ['Revenue', formatFullCurrency(inputs.revenue)],
-          ['Sales Agent Fee', `${inputs.salesFee}%`],
-          ['Marketing Cap', formatFullCurrency(inputs.salesExp)],
-          ['Investor Premium', `${inputs.premium}%`],
-          ['Deferred Fees', formatFullCurrency(inputs.deferments)],
-          ['Tax Credits', formatFullCurrency(inputs.credits)],
-          ['Backend Split', `${profitSplitPct}/${producerSplitPct} (Investor/Producer)`],
-        ]
-          .map(
-            ([label, value], i) =>
-              `<div style="display:flex;justify-content:space-between;align-items:center;padding:5px 12px;${
-                i > 0 ? 'border-top:1px solid rgba(255,255,255,0.025);' : ''
-              }">
-            <span style="font-family:'Inter',sans-serif;font-size:9px;color:rgba(250,248,244,0.55);font-weight:400;">${label}</span>
-            <span style="font-family:'Roboto Mono',monospace;font-size:9px;color:rgba(255,255,255,0.80);font-weight:500;">${value}</span>
-          </div>`,
-          )
-          .join('')}
-      </div>
-    </div>
-
-    ${pageFooter()}
+    ${FOOTER}
   </div>
-
-  <!-- ═══════════════════════════════════════════════════════════════ -->
-  <!-- PAGE 5: CLOSER — brand value page                              -->
-  <!-- ═══════════════════════════════════════════════════════════════ -->
-  <div class="page" style="display:flex;flex-direction:column;align-items:center;justify-content:center;">
-    ${goldTopBar}
-    ${watermarkHtml}
-    <!-- Radial glows -->
-    <div style="position:absolute;top:0;left:0;right:0;height:280px;background:radial-gradient(ellipse 80% 50% at 50% 10%,rgba(212,175,55,0.08) 0%,transparent 60%);pointer-events:none;z-index:0;"></div>
-    <div style="position:absolute;bottom:0;left:0;right:0;height:220px;background:radial-gradient(ellipse 100% 70% at 50% 100%,rgba(212,175,55,0.05) 0%,transparent 60%);pointer-events:none;z-index:0;"></div>
-
-    <div style="text-align:center;position:relative;z-index:2;max-width:440px;padding:0 24px;">
-      <!-- Project reference -->
-      <div style="font-family:'Roboto Mono',monospace;font-size:9px;letter-spacing:3px;color:rgba(212,175,55,0.50);text-transform:uppercase;margin-bottom:8px;">${project.title.toUpperCase()}</div>
-
-      <!-- Gold divider -->
-      <div style="width:48px;height:1px;background:linear-gradient(90deg,transparent,rgba(212,175,55,0.5),transparent);margin:0 auto 20px;"></div>
-
-      <!-- Headline -->
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:rgba(250,248,244,0.88);letter-spacing:1px;line-height:1.1;margin-bottom:14px;">MODEL YOUR WATERFALL<br>BEFORE YOU SIGN.</div>
-
-      <!-- Value prop -->
-      <div style="font-family:'Inter',sans-serif;font-size:12px;color:rgba(250,248,244,0.60);font-weight:300;line-height:1.7;margin-bottom:24px;">Run your numbers. Structure your capital stack. Know your deal inside out before you walk into the room.</div>
-
-      <!-- Mini deal recap strip -->
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:1px;background:rgba(212,175,55,0.10);border-radius:6px;overflow:hidden;margin-bottom:24px;">
-        <div style="background:#1A1A1C;padding:10px 6px;text-align:center;">
-          <div style="font-family:'Roboto Mono',monospace;font-size:7px;letter-spacing:1.5px;color:rgba(212,175,55,0.40);text-transform:uppercase;margin-bottom:3px;">Budget</div>
-          <div style="font-family:'Roboto Mono',monospace;font-size:11px;font-weight:500;color:rgba(250,248,244,0.85);">${formatCurrency(inputs.budget)}</div>
-        </div>
-        <div style="background:#1A1A1C;padding:10px 6px;text-align:center;">
-          <div style="font-family:'Roboto Mono',monospace;font-size:7px;letter-spacing:1.5px;color:rgba(212,175,55,0.40);text-transform:uppercase;margin-bottom:3px;">Acquisition</div>
-          <div style="font-family:'Roboto Mono',monospace;font-size:11px;font-weight:500;color:rgba(250,248,244,0.85);">${formatCurrency(revenue)}</div>
-        </div>
-        <div style="background:#1A1A1C;padding:10px 6px;text-align:center;">
-          <div style="font-family:'Roboto Mono',monospace;font-size:7px;letter-spacing:1.5px;color:rgba(212,175,55,0.40);text-transform:uppercase;margin-bottom:3px;">Multiple</div>
-          <div style="font-family:'Roboto Mono',monospace;font-size:11px;font-weight:500;color:${multipleColor};">${safeMultiple.toFixed(1)}&times;</div>
-        </div>
-        <div style="background:#1A1A1C;padding:10px 6px;text-align:center;">
-          <div style="font-family:'Roboto Mono',monospace;font-size:7px;letter-spacing:1.5px;color:rgba(212,175,55,0.40);text-transform:uppercase;margin-bottom:3px;">Verdict</div>
-          <div style="font-family:'Roboto Mono',monospace;font-size:10px;font-weight:500;color:${verdictColor};">${verdict}</div>
-        </div>
-      </div>
-
-      <!-- Brand mark -->
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:6px;color:rgba(212,175,55,0.60);margin-bottom:6px;">FILMMAKER.OG</div>
-      <div style="font-family:'Roboto Mono',monospace;font-size:10px;letter-spacing:2px;color:rgba(212,175,55,0.45);text-transform:uppercase;margin-bottom:10px;">filmmakerog.com</div>
-      <div style="font-family:'Roboto Mono',monospace;font-size:9px;color:rgba(255,255,255,0.25);margin-bottom:14px;">${date}</div>
-
-      <!-- Disclaimer -->
-      <div style="font-family:'Inter',sans-serif;font-size:9px;color:rgba(250,248,244,0.40);line-height:1.5;max-width:360px;margin:0 auto;">This document is a financial model, not investment advice. All projections are based on user-provided inputs.</div>
-    </div>
-
-    ${pageFooter()}
-  </div>
-
 </body>
 </html>`;
+}
+
+// ─────────────────────────────────────────────────────────
+// PAGE 4 — WATERFALL RECOUPMENT
+// ─────────────────────────────────────────────────────────
+
+function page4(data: SnapshotData): string {
+  const { inputs, result, tiers } = data;
+
+  const profitSplitPct = Math.max(0, Math.min(100, inputs.profitSplit ?? 50));
+  const producerSplitPct = 100 - profitSplitPct;
+
+  const profitPool = result.profitPool > 0 ? result.profitPool : 0;
+  const investorBackend = profitPool * (profitSplitPct / 100);
+  const producerBackend = profitPool * (producerSplitPct / 100);
+
+  // Build tier rows from data.tiers
+  const tierRows = tiers.map((tier, i) => {
+    const badgeNum = i + 1;
+    const isDeferred = tier.name.toLowerCase().includes('defer');
+    const amountColor = isDeferred ? 'rgba(240,168,48,0.88)' : 'rgba(255,255,255,0.92)';
+    const divider = i < tiers.length - 1
+      ? `<div class="divider" style="background:rgba(212,175,55,0.06);"></div>`
+      : '';
+    return `
+      <div class="row" style="padding:14px 20px;">
+        <div style="display:flex;align-items:center;gap:14px;">
+          <div class="badge">${badgeNum}</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:rgba(255,255,255,0.92);">${tier.name} <span style="font-family:'Roboto Mono',monospace;font-size:10px;color:rgba(212,175,55,0.45);margin-left:8px;">${tier.rate}</span></div>
+        </div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:${amountColor};">${formatFullCurrency(tier.amount)}</div>
+      </div>
+      ${divider}`;
+  }).join('');
+
+  const profitPoolColor = profitPool > 0 ? '#3CB371' : 'rgba(220,38,38,0.85)';
+  const profitPoolDisplay = formatFullCurrency(profitPool);
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  ${FONTS}
+  <style>
+    ${BASE_CSS}
+    .card { background: linear-gradient(180deg, rgba(212,175,55,0.02), #232326); border-radius: 8px; box-shadow: 0 4px 14px rgba(0,0,0,0.35); }
+    .label { font-family: 'Bebas Neue', sans-serif; letter-spacing: 3px; text-align: center; }
+    .conn { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .row { display: flex; justify-content: space-between; align-items: center; padding: 14px 20px; }
+    .divider { height: 1px; margin: 0 20px; }
+    .badge {
+      width: 30px; height: 30px; border-radius: 50%;
+      background: rgba(212,175,55,0.12); border: 1px solid rgba(212,175,55,0.30);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Bebas Neue', sans-serif; font-size: 15px; color: #fff;
+      flex-shrink: 0; line-height: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    ${GOLD_BAR}
+    ${WATERMARK}
+    ${pageHeader('PAGE 04')}
+
+    <div style="padding:0 36px 6px;position:relative;z-index:2;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:rgba(250,248,244,0.92);letter-spacing:1px;">THE WATERFALL</div>
+      <div style="font-family:'Inter',sans-serif;font-size:11px;color:rgba(250,248,244,0.50);margin-top:4px;font-style:italic;">After deductions, revenue flows through the capital stack in priority order.</div>
+    </div>
+
+    <div style="flex:1;padding:8px 36px 48px;position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;">
+
+      <!-- CAPITAL RECOUPMENT -->
+      <div class="label" style="font-size:12px;color:rgba(212,175,55,0.50);margin-bottom:8px;">CAPITAL RECOUPMENT</div>
+      <div class="card" style="width:100%;border:1px solid rgba(212,175,55,0.18);overflow:hidden;">
+        ${tierRows}
+      </div>
+
+      <!-- Connector gold→green -->
+      <div class="conn" style="height:28px;">
+        <div style="width:3px;height:18px;background:linear-gradient(180deg,rgba(212,175,55,0.55),rgba(60,179,113,0.60));box-shadow:0 0 8px rgba(60,179,113,0.25);border-radius:1px;"></div>
+        <div style="width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:6px solid rgba(60,179,113,0.60);margin-top:-1px;"></div>
+      </div>
+
+      <!-- NET BACKEND PROFIT -->
+      <div class="label" style="font-size:12px;color:rgba(60,179,113,0.55);margin-bottom:8px;">NET BACKEND PROFIT</div>
+      <div class="card" style="width:100%;padding:20px 24px;border:1px solid rgba(60,179,113,0.40);text-align:center;background:radial-gradient(ellipse at 50% 0%,rgba(60,179,113,0.06) 0%,#232326 70%);box-shadow:0 4px 20px rgba(0,0,0,0.35),0 0 24px rgba(60,179,113,0.06);">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:42px;color:${profitPoolColor};text-shadow:0 0 24px rgba(60,179,113,0.30);letter-spacing:2px;">${profitPoolDisplay}</div>
+      </div>
+
+      <!-- Connector green→green -->
+      <div class="conn" style="height:24px;">
+        <div style="width:2px;height:16px;background:rgba(60,179,113,0.55);box-shadow:0 0 6px rgba(60,179,113,0.30);border-radius:1px;"></div>
+        <div style="width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid rgba(60,179,113,0.60);margin-top:-1px;"></div>
+      </div>
+
+      <!-- PROFIT SPLIT -->
+      <div class="label" style="font-size:11px;color:rgba(60,179,113,0.45);margin-bottom:8px;">PROFIT SPLIT · ${profitSplitPct}/${producerSplitPct}</div>
+      <div style="width:100%;display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div class="card" style="padding:16px 20px;border:1px solid rgba(60,179,113,0.22);text-align:center;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:rgba(255,255,255,0.70);margin-bottom:6px;">INVESTOR</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#3CB371;">${formatFullCurrency(investorBackend)}</div>
+        </div>
+        <div class="card" style="padding:16px 20px;border:1px solid rgba(60,179,113,0.22);text-align:center;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:rgba(255,255,255,0.70);margin-bottom:6px;">PRODUCER</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#3CB371;">${formatFullCurrency(producerBackend)}</div>
+        </div>
+      </div>
+
+    </div>
+
+    ${FOOTER}
+  </div>
+</body>
+</html>`;
+}
+
+// ─────────────────────────────────────────────────────────
+// PAGE 5 — RISK ANALYSIS
+// ─────────────────────────────────────────────────────────
+
+function page5(data: SnapshotData): string {
+  const { inputs, result, computed } = data;
+
+  const revenue = inputs.revenue;
+  const { cashBasis, breakEvenRevenue } = computed;
+  const profitSplitPct = Math.max(0, Math.min(100, inputs.profitSplit ?? 50));
+  const producerSplitPct = 100 - profitSplitPct;
+  const safeMultiple = isFinite(result.multiple) && !isNaN(result.multiple) ? result.multiple : 0;
+
+  // Variable off-tops (scale with revenue) and fixed off-tops
+  const variableOffTops = result.cam + result.salesFee + result.guilds;
+  const fixedOffTops = result.marketing;
+  const variableOffTopRate = revenue > 0 ? variableOffTops / revenue : 0;
+
+  // Total hurdle for scenario calculations
+  const totalHurdleAmount = result.seniorDebtHurdle + result.mezzDebtHurdle + result.equityHurdle + inputs.deferments - result.creditsApplied;
+
+  // Scenario calculation helper
+  function calcScenario(price: number): { recoupPct: number; mult: number } {
+    const newVarOff = price * variableOffTopRate;
+    const newOff = newVarOff + fixedOffTops;
+    const newDist = Math.max(0, price - newOff + result.creditsApplied);
+    const recoupPct = totalHurdleAmount > 0 ? Math.min(100, (newDist / totalHurdleAmount) * 100) : 0;
+    const mult = cashBasis > 0 ? newDist / cashBasis : 0;
+    return { recoupPct: Math.round(recoupPct), mult: parseFloat(mult.toFixed(2)) };
+  }
+
+  const scenarioMinus15 = calcScenario(revenue * 0.85);
+  const scenarioMinus30 = calcScenario(revenue * 0.70);
+  const scenarioMinus50 = calcScenario(revenue * 0.50);
+
+  // Margin of safety
+  const margin = revenue - breakEvenRevenue;
+  const marginPct = revenue > 0 ? Math.round((margin / revenue) * 100) : 0;
+  const breakEvenBarPct = revenue > 0 ? Math.min(100, Math.round((breakEvenRevenue / revenue) * 100)) : 100;
+  const marginBarPct = 100 - breakEvenBarPct;
+
+  let marginLabel = '';
+  let marginProse = '';
+  if (margin > 0) {
+    marginLabel = `MARGIN OF SAFETY: ${formatFullCurrency(margin)} ABOVE BREAK-EVEN`;
+    marginProse = `Revenue exceeds the break-even threshold by ${formatFullCurrency(margin)} — a ${marginPct}% margin of safety. The acquisition price could fall ${marginPct}% before investor capital is at risk.`;
+  } else if (margin === 0) {
+    marginLabel = `MARGIN OF SAFETY: $0 — AT BREAK-EVEN`;
+    marginProse = `Revenue exactly meets break-even — there is no margin of safety.`;
+  } else {
+    marginLabel = `SHORTFALL: ${formatFullCurrency(Math.abs(margin))} BELOW BREAK-EVEN`;
+    marginProse = `Revenue falls ${formatFullCurrency(Math.abs(margin))} short of break-even — investor capital is not fully covered at the modeled price.`;
+  }
+  const marginLabelColor = margin >= 0 ? '#3CB371' : 'rgba(220,38,38,0.85)';
+
+  // Scenario interpretation prose
+  let scenarioInterpretation = '';
+  if (safeMultiple >= 1.0) {
+    scenarioInterpretation = `At the modeled price, the deal returns ${safeMultiple.toFixed(2)}x.`;
+    if (scenarioMinus15.recoupPct >= 100) {
+      scenarioInterpretation += ` A 15% haircut still delivers full recoupment at ${scenarioMinus15.mult.toFixed(2)}x.`;
+    }
+    if (scenarioMinus50.recoupPct < 100) {
+      scenarioInterpretation += ` At a 50% discount, investors recover ${scenarioMinus50.recoupPct}% of capital — the structure survives significant downward pressure.`;
+    } else {
+      scenarioInterpretation += ` The deal survives even a 50% price reduction with full capital recovery.`;
+    }
+  } else if (safeMultiple >= 0.5) {
+    scenarioInterpretation = `At the modeled price, investors recoup ${Math.round(result.recoupPct)}% of capital at ${safeMultiple.toFixed(2)}x. A 15% haircut reduces recovery to ${scenarioMinus15.recoupPct}%. The structure is sensitive to downward price pressure.`;
+  } else {
+    scenarioInterpretation = `At the modeled price, the deal does not fully cover capital obligations. Further price reductions would accelerate capital erosion. A 50% haircut leaves investors with ${scenarioMinus50.recoupPct}% recovery.`;
+  }
+
+  // Assumptions line
+  const salesFeePctDisplay = inputs.salesFee ? `${Math.round(inputs.salesFee * 100)}% sales fee` : '';
+  const salesExpDisplay = inputs.salesExp ? `${formatCurrency(inputs.salesExp)} expense cap` : '';
+  const premiumDisplay = inputs.premium ? `${inputs.premium}% investor premium` : '';
+  const splitDisplay = `${profitSplitPct}/${producerSplitPct} backend split`;
+  const assumptionParts = [salesFeePctDisplay, salesExpDisplay, premiumDisplay, splitDisplay].filter(Boolean);
+  const assumptionsLine = `Assumptions: ${assumptionParts.join(' · ')}`;
+
+  function scenarioRow(price: number, label: string, isModeled: boolean, scenarioResult: { recoupPct: number; mult: number }) {
+    const rColor = getReturnColor(scenarioResult.recoupPct);
+    const mColor = getMultipleColor(scenarioResult.mult);
+    const borderLeft = isModeled ? 'border-left:3px solid rgba(212,175,55,0.40);' : '';
+    return `
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 20px;border-top:1px solid rgba(255,255,255,0.04);${borderLeft}">
+        <div>
+          <span style="font-family:'Roboto Mono',monospace;font-size:14px;color:rgba(250,248,244,0.90);">${formatCurrency(price)}</span>
+          <span style="font-family:'Roboto Mono',monospace;font-size:10px;color:rgba(255,255,255,0.40);margin-left:8px;">${label}</span>
+        </div>
+        <div style="display:flex;gap:24px;">
+          <span style="font-family:'Roboto Mono',monospace;font-size:14px;color:${rColor};min-width:60px;text-align:right;font-weight:500;">${scenarioResult.recoupPct}%</span>
+          <span style="font-family:'Roboto Mono',monospace;font-size:14px;color:${mColor};min-width:60px;text-align:right;font-weight:500;">${scenarioResult.mult.toFixed(2)}x</span>
+        </div>
+      </div>`;
+  }
+
+  const modeledResult = calcScenario(revenue);
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  ${FONTS}
+  <style>
+    ${BASE_CSS}
+    .card { background: linear-gradient(180deg, rgba(212,175,55,0.02), #232326); border-radius: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.30); }
+  </style>
+</head>
+<body>
+  <div class="page">
+    ${GOLD_BAR}
+    ${WATERMARK}
+    ${pageHeader('PAGE 05')}
+
+    <div style="flex:1;padding:0 36px 48px;position:relative;z-index:2;display:flex;flex-direction:column;">
+
+      <!-- Title -->
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:rgba(250,248,244,0.92);letter-spacing:1px;margin-bottom:16px;">RISK ANALYSIS</div>
+
+      <!-- Margin of Safety -->
+      <div style="margin-bottom:20px;">
+        <div style="font-family:'Roboto Mono',monospace;font-size:10px;color:${marginLabelColor};margin-bottom:8px;letter-spacing:0.5px;">${marginLabel}</div>
+        <div style="position:relative;height:20px;background:rgba(255,255,255,0.04);border-radius:5px;overflow:hidden;">
+          <div style="position:absolute;left:0;top:0;bottom:0;width:${breakEvenBarPct}%;background:rgba(60,179,113,0.30);border-radius:5px 0 0 5px;"></div>
+          <div style="position:absolute;left:${breakEvenBarPct}%;top:0;bottom:0;width:${marginBarPct}%;background:rgba(60,179,113,0.50);border-radius:0 5px 5px 0;"></div>
+          <div style="position:absolute;left:${breakEvenBarPct}%;top:-3px;bottom:-3px;width:2px;background:#D4AF37;box-shadow:0 0 6px rgba(212,175,55,0.40);transform:translateX(-1px);"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-top:5px;">
+          <span style="font-family:'Roboto Mono',monospace;font-size:9px;color:rgba(255,255,255,0.35);">Break-even: ${formatCurrency(breakEvenRevenue)}</span>
+          <span style="font-family:'Roboto Mono',monospace;font-size:9px;color:rgba(255,255,255,0.35);">Modeled: ${formatCurrency(revenue)}</span>
+        </div>
+      </div>
+
+      <!-- Margin prose -->
+      <div style="font-family:'Inter',sans-serif;font-size:11px;color:rgba(250,248,244,0.60);line-height:1.6;font-style:italic;margin-bottom:24px;">${marginProse}</div>
+
+      <!-- Gold divider -->
+      <div style="height:1px;background:linear-gradient(90deg,rgba(212,175,55,0.20),transparent);margin-bottom:24px;"></div>
+
+      <!-- Scenario Stress Test -->
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:rgba(250,248,244,0.90);letter-spacing:1px;margin-bottom:6px;">SCENARIO STRESS TEST</div>
+      <div style="font-family:'Inter',sans-serif;font-size:11px;color:rgba(250,248,244,0.50);font-style:italic;margin-bottom:16px;">What happens when the acquisition price drops.</div>
+
+      <!-- Scenario table -->
+      <div style="background:#1A1A1C;border:1px solid rgba(212,175,55,0.12);border-radius:6px;overflow:hidden;margin-bottom:16px;">
+        <!-- Header -->
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 20px;background:rgba(255,255,255,0.02);">
+          <span style="font-family:'Roboto Mono',monospace;font-size:9px;color:rgba(255,255,255,0.50);text-transform:uppercase;letter-spacing:1.5px;">Price Scenario</span>
+          <div style="display:flex;gap:24px;">
+            <span style="font-family:'Roboto Mono',monospace;font-size:9px;color:rgba(255,255,255,0.50);text-transform:uppercase;letter-spacing:1.5px;min-width:60px;text-align:right;">Recoup</span>
+            <span style="font-family:'Roboto Mono',monospace;font-size:9px;color:rgba(255,255,255,0.50);text-transform:uppercase;letter-spacing:1.5px;min-width:60px;text-align:right;">Multiple</span>
+          </div>
+        </div>
+        ${scenarioRow(revenue, 'MODELED', true, modeledResult)}
+        ${scenarioRow(revenue * 0.85, '−15%', false, scenarioMinus15)}
+        ${scenarioRow(revenue * 0.70, '−30%', false, scenarioMinus30)}
+        ${scenarioRow(revenue * 0.50, '−50%', false, scenarioMinus50)}
+      </div>
+
+      <!-- Interpretation -->
+      <div style="font-family:'Inter',sans-serif;font-size:11px;color:rgba(250,248,244,0.60);line-height:1.65;margin-bottom:20px;">${scenarioInterpretation}</div>
+
+      <!-- Spacer -->
+      <div style="flex:1;"></div>
+
+      <!-- Assumptions line -->
+      <div style="font-family:'Roboto Mono',monospace;font-size:9px;color:rgba(250,248,244,0.38);line-height:1.5;">${assumptionsLine}</div>
+
+    </div>
+
+    ${FOOTER}
+  </div>
+</body>
+</html>`;
+}
+
+// ─────────────────────────────────────────────────────────
+// PAGE 6 — THE VERDICT
+// ─────────────────────────────────────────────────────────
+
+function page6(data: SnapshotData): string {
+  const { project, inputs, result, tiers, computed } = data;
+
+  const profitSplitPct = Math.max(0, Math.min(100, inputs.profitSplit ?? 50));
+  const producerSplitPct = 100 - profitSplitPct;
+  const safeMultiple = isFinite(result.multiple) && !isNaN(result.multiple) ? result.multiple : 0;
+  const { cashBasis } = computed;
+  const revenue = inputs.revenue;
+
+  // Verdict determination
+  let verdictText = '';
+  let verdictColor = '';
+  if (result.recoupPct >= 100 && safeMultiple >= 1.0) {
+    verdictText = 'FUNDED';
+    verdictColor = '#3CB371';
+  } else if (result.recoupPct >= 50) {
+    verdictText = 'PARTIAL';
+    verdictColor = '#F0A830';
+  } else {
+    verdictText = 'SHORTFALL';
+    verdictColor = 'rgba(220,38,38,0.85)';
+  }
+
+  const multipleColor = getMultipleColor(safeMultiple);
+
+  // Scenario stress for summary prose (same logic as page 5)
+  const variableOffTops = result.cam + result.salesFee + result.guilds;
+  const fixedOffTops = result.marketing;
+  const variableOffTopRate = revenue > 0 ? variableOffTops / revenue : 0;
+  const totalHurdleAmount = result.seniorDebtHurdle + result.mezzDebtHurdle + result.equityHurdle + inputs.deferments - result.creditsApplied;
+
+  function calcScenario(price: number): { recoupPct: number; mult: number } {
+    const newVarOff = price * variableOffTopRate;
+    const newOff = newVarOff + fixedOffTops;
+    const newDist = Math.max(0, price - newOff + result.creditsApplied);
+    const recoupPct = totalHurdleAmount > 0 ? Math.min(100, (newDist / totalHurdleAmount) * 100) : 0;
+    const mult = cashBasis > 0 ? newDist / cashBasis : 0;
+    return { recoupPct: Math.round(recoupPct), mult: parseFloat(mult.toFixed(2)) };
+  }
+
+  const scenarioMinus15 = calcScenario(revenue * 0.85);
+  const scenarioMinus30 = calcScenario(revenue * 0.70);
+  const scenarioMinus50 = calcScenario(revenue * 0.50);
+
+  // Summary prose
+  let summaryProse = '';
+  if (safeMultiple >= 1.0) {
+    summaryProse = `At the modeled price, the deal returns ${safeMultiple.toFixed(2)}x with all capital tiers fully funded.`;
+    if (scenarioMinus15.recoupPct >= 100) {
+      summaryProse += ` A 15% haircut still delivers full recoupment at ${scenarioMinus15.mult.toFixed(2)}x.`;
+    }
+    if (scenarioMinus30.mult >= 1.0) {
+      summaryProse += ` The structure survives a 30% reduction while maintaining investor returns above 1.0x.`;
+    }
+    if (scenarioMinus50.recoupPct < 100) {
+      summaryProse += ` At a 50% discount, investors recover ${scenarioMinus50.recoupPct}% of capital.`;
+    } else {
+      summaryProse += ` The deal survives even a 50% price reduction with full capital recovery.`;
+    }
+  } else if (safeMultiple >= 0.5) {
+    summaryProse = `At the modeled price, investors recoup ${Math.round(result.recoupPct)}% of capital. A 15% haircut reduces recovery to ${scenarioMinus15.recoupPct}%. A 50% reduction leaves ${scenarioMinus50.recoupPct}% recovery. The deal carries meaningful downside risk.`;
+  } else {
+    summaryProse = `The deal does not cover capital obligations at the modeled price — investors recover ${Math.round(result.recoupPct)}% of capital. A 15% haircut reduces recovery further to ${scenarioMinus15.recoupPct}%. Careful consideration of pricing assumptions is warranted.`;
+  }
+
+  // Waterfall narrative
+  const tierCount = tiers.length;
+  let largestTier = tiers.reduce((a, b) => (a.amount > b.amount ? a : b), { name: '', rate: '', amount: 0, remaining: 0 });
+  const profitPool = result.profitPool > 0 ? result.profitPool : 0;
+  const producerBackend = profitPool * (producerSplitPct / 100);
+
+  let waterfallNarrative = `Revenue flows through the capital stack in ${tierCount} ${tierCount === 1 ? 'tier' : 'tiers'}.`;
+  if (largestTier.amount > 0) {
+    const largestPct = revenue > 0 ? Math.round((largestTier.amount / revenue) * 100) : 0;
+    waterfallNarrative += ` ${largestTier.name} at ${formatFullCurrency(largestTier.amount)} (${largestPct}% of gross) holds first position.`;
+  }
+  if (profitPool > 0) {
+    waterfallNarrative += ` After all obligations are met, ${formatFullCurrency(profitPool)} remains in the profit pool — split ${profitSplitPct}/${producerSplitPct}.`;
+    if (producerBackend > 0) {
+      waterfallNarrative += ` The producer's net backend is ${formatFullCurrency(producerBackend)}.`;
+    }
+  } else {
+    waterfallNarrative += ` After obligations are applied, no backend profit remains at this acquisition price.`;
+  }
+
+  // Format date
+  let displayDate = data.generatedAt;
+  try {
+    displayDate = new Date(data.generatedAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+  } catch (_) {}
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  ${FONTS}
+  <style>${BASE_CSS}</style>
+</head>
+<body>
+  <div class="page">
+    ${GOLD_BAR}
+    ${WATERMARK}
+    ${pageHeader('PAGE 06')}
+
+    <div style="flex:1;padding:0 36px 48px;position:relative;z-index:2;display:flex;flex-direction:column;">
+
+      <!-- Project title -->
+      <div style="font-family:'Roboto Mono',monospace;font-size:11px;color:rgba(212,175,55,0.45);text-transform:uppercase;letter-spacing:3px;margin-bottom:8px;">${project.title}</div>
+
+      <!-- Gold rule -->
+      <div style="width:40px;height:1px;background:rgba(212,175,55,0.30);margin-bottom:16px;"></div>
+
+      <!-- Verdict strip -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:1px;background:rgba(212,175,55,0.06);border-radius:6px;overflow:hidden;margin-bottom:20px;">
+        <div style="background:#1A1A1C;padding:14px 16px;">
+          <div style="font-family:'Roboto Mono',monospace;font-size:8px;color:rgba(212,175,55,0.35);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:5px;">Budget</div>
+          <div style="font-family:'Roboto Mono',monospace;font-size:18px;color:rgba(255,255,255,0.88);">${formatCurrency(inputs.budget)}</div>
+        </div>
+        <div style="background:#1A1A1C;padding:14px 16px;">
+          <div style="font-family:'Roboto Mono',monospace;font-size:8px;color:rgba(212,175,55,0.35);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:5px;">Acquisition</div>
+          <div style="font-family:'Roboto Mono',monospace;font-size:18px;color:rgba(255,255,255,0.88);">${formatCurrency(revenue)}</div>
+        </div>
+        <div style="background:#1A1A1C;padding:14px 16px;">
+          <div style="font-family:'Roboto Mono',monospace;font-size:8px;color:rgba(212,175,55,0.35);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:5px;">Multiple</div>
+          <div style="font-family:'Roboto Mono',monospace;font-size:18px;color:${multipleColor};">${safeMultiple.toFixed(2)}x</div>
+        </div>
+        <div style="background:#1A1A1C;padding:14px 16px;">
+          <div style="font-family:'Roboto Mono',monospace;font-size:8px;color:rgba(212,175,55,0.35);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:5px;">Verdict</div>
+          <div style="font-family:'Roboto Mono',monospace;font-size:18px;color:${verdictColor};font-weight:600;">${verdictText}</div>
+        </div>
+      </div>
+
+      <!-- Summary prose -->
+      <div style="font-family:'Inter',sans-serif;font-size:12px;color:rgba(250,248,244,0.65);line-height:1.7;margin-bottom:24px;">${summaryProse}</div>
+
+      <!-- Gold divider -->
+      <div style="height:1px;background:linear-gradient(90deg,rgba(212,175,55,0.20),transparent);margin-bottom:24px;"></div>
+
+      <!-- Waterfall narrative -->
+      <div style="font-family:'Inter',sans-serif;font-size:11px;color:rgba(250,248,244,0.55);line-height:1.7;margin-bottom:20px;">${waterfallNarrative}</div>
+
+      <!-- Spacer -->
+      <div style="flex:1;"></div>
+
+      <!-- Closer -->
+      <div>
+        <!-- Gold divider -->
+        <div style="height:1px;background:linear-gradient(90deg,rgba(212,175,55,0.15),transparent);margin-bottom:20px;"></div>
+
+        <!-- CTA -->
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:rgba(250,248,244,0.82);letter-spacing:0.5px;margin-bottom:6px;">MODEL YOUR WATERFALL BEFORE YOU SIGN.</div>
+        <div style="font-family:'Inter',sans-serif;font-size:11px;color:rgba(250,248,244,0.48);margin-bottom:14px;">Know your deal inside out before you walk into the room.</div>
+
+        <!-- Seed -->
+        <div style="font-family:'Inter',sans-serif;font-size:10px;color:rgba(250,248,244,0.42);font-style:italic;margin-bottom:20px;">This snapshot covers the base case. Full sensitivity analysis available at filmmakerog.com.</div>
+
+        <!-- Brand -->
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:rgba(212,175,55,0.55);letter-spacing:2px;margin-bottom:3px;">FILMMAKER.OG</div>
+        <div style="font-family:'Roboto Mono',monospace;font-size:10px;color:rgba(212,175,55,0.42);margin-bottom:10px;">filmmakerog.com</div>
+
+        <!-- Date -->
+        <div style="font-family:'Roboto Mono',monospace;font-size:9px;color:rgba(255,255,255,0.25);margin-bottom:8px;">${displayDate}</div>
+
+        <!-- Disclaimer -->
+        <div style="font-family:'Inter',sans-serif;font-size:8px;color:rgba(250,248,244,0.38);line-height:1.5;">This document is a financial model, not investment advice. All projections are based on user-provided inputs.</div>
+      </div>
+
+    </div>
+
+    ${FOOTER}
+  </div>
+</body>
+</html>`;
+}
+
+// ─────────────────────────────────────────────────────────
+// MAIN EXPORT
+// ─────────────────────────────────────────────────────────
+
+export function generatePdfHtml(data: SnapshotData): string {
+  return [
+    page1(data),
+    page2(data),
+    page3(data),
+    page4(data),
+    page5(data),
+    page6(data),
+  ].join('\n');
 }
