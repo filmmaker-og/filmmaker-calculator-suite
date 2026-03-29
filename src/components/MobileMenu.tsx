@@ -242,7 +242,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   justifyContent: "center",
                   gap: "6px",
                   padding: "10px 8px",
-                  background: "#121214",
+                  background: "#222226",
                   border: "1px solid rgba(212,175,55,0.15)",
                   borderRadius: "8px",
                   cursor: "pointer",
