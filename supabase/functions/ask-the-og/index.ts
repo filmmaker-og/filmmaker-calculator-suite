@@ -301,7 +301,7 @@ async function callClaude(
         "anthropic-version": "2023-06-01",
       },
       body: JSON.stringify({
-        model: "claude-sonnet-4-20250514",
+        model: "claude-sonnet-4-6-20250627",
         max_tokens: 1024,
         temperature: 0.7,
         stream: true,
