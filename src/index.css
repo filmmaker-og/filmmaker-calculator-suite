@@ -190,6 +190,7 @@
 
   /* Force true black + base font */
   html, body {
+    background: linear-gradient(180deg, #0C0C0E 0%, #111113 40%, #0E0E10 100%);
     background-color: #0C0C0E;
     color: #FFFFFF;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -854,10 +855,10 @@
      ═══════════════════════════════════════════════════════════════════ */
   @keyframes cta-glow-pulse {
     0%, 100% {
-      box-shadow: none;
+      box-shadow: 0 0 20px rgba(249,224,118,0.12), 0 8px 24px rgba(0,0,0,0.40);
     }
     50% {
-      box-shadow: 0 0 24px var(--gold-subtle);
+      box-shadow: 0 0 36px rgba(249,224,118,0.25), 0 8px 24px rgba(0,0,0,0.40);
     }
   }
   .animate-cta-glow-pulse {
@@ -1004,6 +1005,15 @@
     }
   }
 
+  /* Header glass nav */
+  .header-glass {
+    background: rgba(12,12,14,0.70) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(212,175,55,0.12) !important;
+    box-shadow: 0 1px 12px rgba(0,0,0,0.30), 0 1px 0 rgba(212,175,55,0.06) !important;
+  }
+
   /* ═══════════════════════════════════════════════════════════════════
      PREMIUM OVERHAUL — waterfall card hover
      ═══════════════════════════════════════════════════════════════════ */
@@ -1072,6 +1082,14 @@
    LANDING PAGE v17 — Keyframes & Ambient Effects
    ═══════════════════════════════════════════════════════════════════ */
 
+/* Mobile: reduce backdrop-filter for performance */
+@media (max-width: 767px) {
+  .grain-surface {
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+  }
+}
+
 /* Desktop ambient glow — fixed blurred circles */
 @media (min-width: 768px) {
   body::before {
@@ -1079,11 +1097,11 @@
     position: fixed;
     top: 10%;
     left: -80px;
-    width: 420px;
-    height: 420px;
-    background: radial-gradient(circle, rgba(212,175,55,0.10) 0%, transparent 70%);
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(212,175,55,0.14) 0%, transparent 70%);
     border-radius: 50%;
-    filter: blur(100px);
+    filter: blur(80px);
     pointer-events: none;
     z-index: 0;
   }
@@ -1092,11 +1110,11 @@
     position: fixed;
     bottom: 15%;
     right: -60px;
-    width: 380px;
-    height: 380px;
-    background: radial-gradient(circle, rgba(212,175,55,0.12) 0%, transparent 70%);
+    width: 460px;
+    height: 460px;
+    background: radial-gradient(circle, rgba(212,175,55,0.16) 0%, transparent 70%);
     border-radius: 50%;
-    filter: blur(100px);
+    filter: blur(80px);
     pointer-events: none;
     z-index: 0;
   }
@@ -1117,4 +1135,32 @@
 @keyframes cursor-blink {
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
+}
+
+/* DRAG TO MODEL pill breathing glow */
+@keyframes pill-breathe {
+  0%, 100% { box-shadow: 0 0 8px rgba(212,175,55,0.08); }
+  50% { box-shadow: 0 0 16px rgba(212,175,55,0.18); }
+}
+.pill-breathe {
+  animation: pill-breathe 3s ease-in-out infinite;
+}
+
+/* Feature badge stagger entrance */
+@keyframes badge-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.badge-stagger { animation: badge-in 0.4s ease-out forwards; opacity: 0; }
+.badge-stagger:nth-child(1) { animation-delay: 0ms; }
+.badge-stagger:nth-child(2) { animation-delay: 80ms; }
+.badge-stagger:nth-child(3) { animation-delay: 160ms; }
+.badge-stagger:nth-child(4) { animation-delay: 240ms; }
+
+/* WITH/WITHOUT row tints */
+.with-row-tint {
+  background: rgba(60,179,113,0.04) !important;
+}
+.without-row-tint {
+  background: rgba(220,38,38,0.04) !important;
 }
