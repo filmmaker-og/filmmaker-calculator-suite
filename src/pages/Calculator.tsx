@@ -9,6 +9,7 @@ import { BudgetTab, StackTab, DealTab, WaterfallTab } from "@/components/calcula
 import ProjectTab from "@/components/calculator/tabs/ProjectTab";
 import { CapitalSourceSelections, defaultSelections } from "@/components/calculator/stack/CapitalSelect";
 import EmailGateModal from "@/components/EmailGateModal";
+import LeadCaptureModal from "@/components/LeadCaptureModal";
 
 import { EMAIL_CAPTURED_KEY } from "@/lib/constants";
 import ContextBar from "@/components/calculator/ContextBar";
@@ -193,6 +194,7 @@ const Calculator = () => {
   const [guilds, setGuilds] = useState<GuildState>(defaultGuilds);
   const [project, setProject] = useState<ProjectDetails>(defaultProject);
   const [showEmailGate, setShowEmailGate] = useState(false);
+  const [showLeadGate, setShowLeadGate] = useState(false);
   const [emailCaptured, setEmailCaptured] = useState(() => {
     return localStorage.getItem(EMAIL_CAPTURED_KEY) === 'true';
   });
@@ -204,14 +206,14 @@ const Calculator = () => {
     setSourceSelections(prev => ({ ...prev, [key]: !prev[key] }));
   }, []);
 
-  // Gate: redirect to landing page if no lead capture
+  // Gate: show LeadCaptureModal if no lead capture (instead of redirecting away)
   useEffect(() => {
     if (loading) return;
     const hasLead = localStorage.getItem('og_lead_email');
     if (!hasLead) {
-      navigate("/", { replace: true });
+      setShowLeadGate(true);
     }
-  }, [loading, navigate]);
+  }, [loading]);
 
   // Honor URL ?tab= param if present
   useEffect(() => {
@@ -485,6 +487,12 @@ const Calculator = () => {
         onClose={() => setShowEmailGate(false)}
         onSuccess={handleEmailSuccess}
         onSkip={handleEmailSkip}
+      />
+
+      <LeadCaptureModal
+        isOpen={showLeadGate}
+        onClose={() => setShowLeadGate(false)}
+        onSuccess={() => setShowLeadGate(false)}
       />
     </div>
   );

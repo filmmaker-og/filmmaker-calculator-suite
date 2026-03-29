@@ -17,9 +17,10 @@ interface LeadCaptureModalProps {
   isOpen: boolean;
   onClose: () => void;
   onEmailSubmitted?: (email: string) => void;
+  onSuccess?: () => void;
 }
 
-const LeadCaptureModal = ({ isOpen, onClose, onEmailSubmitted }: LeadCaptureModalProps) => {
+const LeadCaptureModal = ({ isOpen, onClose, onEmailSubmitted, onSuccess }: LeadCaptureModalProps) => {
   const { toast } = useToast();
   const haptics = useHaptics();
   const [name, setName] = useState("");
@@ -65,8 +66,12 @@ const LeadCaptureModal = ({ isOpen, onClose, onEmailSubmitted }: LeadCaptureModa
     onEmailSubmitted?.(email.trim());
     onClose();
     setLoading(false);
-    // Navigate straight to calculator
-    window.location.href = '/calculator';
+    // If onSuccess callback provided (e.g. already on /calculator), use it instead of hard redirect
+    if (onSuccess) {
+      onSuccess();
+    } else {
+      window.location.href = '/calculator';
+    }
   };
 
 

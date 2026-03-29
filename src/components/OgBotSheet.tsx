@@ -524,12 +524,56 @@ const OgBotSheet = ({ isOpen: controlledOpen, onOpenChange }: OgBotSheetProps) =
                       <p className="text-[18px] text-white leading-[1.6] whitespace-pre-wrap">
                         {(() => {
                           const displayText = !msg.streaming ? extractSuggestedChips(msg.answer).cleanedAnswer : msg.answer;
-                          return displayText.split(/(https?:\/\/[^\s]+)/g).map((part, i) =>
-                            part.match(/^https?:\/\//) ? (
+                          return displayText.split(/(https?:\/\/[^\s]+)/g).map((part, i) => {
+                            if (!part.match(/^https?:\/\//)) return part;
+                            const isSameSite = part.includes('filmmakerog.com') || part.includes('filmmaker-og');
+                            if (isSameSite) {
+                              return (
+                                <a key={i} href={part}
+                                   onClick={(e) => {
+                                     e.preventDefault();
+                                     // Extract email from user messages in conversation
+                                     const emailRegex = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/;
+                                     for (const m of ogMessages) {
+                                       if (!m.question) continue;
+                                       const emailMatch = m.question.match(emailRegex);
+                                       if (emailMatch) {
+                                         localStorage.setItem('og_lead_email', emailMatch[0]);
+                                         break;
+                                       }
+                                     }
+                                     // Also scan for name patterns in user messages
+                                     const namePatterns = [
+                                       /(?:my name is|i'm|i am|this is|name's|call me)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)/i,
+                                       /^([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)$/,
+                                     ];
+                                     for (const m of ogMessages) {
+                                       if (!m.question) continue;
+                                       for (const pattern of namePatterns) {
+                                         const nameMatch = m.question.match(pattern);
+                                         if (nameMatch?.[1]) {
+                                           localStorage.setItem('og_lead_name', nameMatch[1].trim());
+                                           break;
+                                         }
+                                       }
+                                       if (localStorage.getItem('og_lead_name')) break;
+                                     }
+                                     // Navigate same-tab using pathname
+                                     try {
+                                       const url = new URL(part);
+                                       window.location.href = url.pathname;
+                                     } catch {
+                                       window.location.href = part;
+                                     }
+                                   }}
+                                   style={{ color: "#D4AF37", textDecoration: "underline", cursor: "pointer" }}>{part}</a>
+                              );
+                            }
+                            return (
                               <a key={i} href={part} target="_blank" rel="noopener noreferrer"
                                  style={{ color: "#D4AF37", textDecoration: "underline" }}>{part}</a>
-                            ) : part
-                          );
+                            );
+                          });
                         })()}
                         {msg.streaming && !msg.answer && (
                           <span style={{ color: "rgba(255,255,255,0.55)" }}>Thinking…</span>
