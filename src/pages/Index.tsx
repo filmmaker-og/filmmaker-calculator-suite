@@ -320,10 +320,10 @@ const Index = () => {
     const isPressed = tier != null && pressedTier === tier;
     const base: React.CSSProperties = {
       position: "relative", overflow: "hidden", borderRadius: "8px",
-      background: "linear-gradient(180deg, rgba(212,175,55,0.02), #232326)",
-      border: `1px solid rgba(220,38,38,${isPressed ? 0.40 : 0.25})`,
+      background: "linear-gradient(180deg, rgba(220,38,38,0.03), rgba(35,35,38,0.50))",
+      border: `1px solid rgba(220,38,38,${isPressed ? 0.50 : 0.30})`,
       boxShadow: isPressed
-        ? "0 6px 20px rgba(0,0,0,0.40), 0 1px 3px rgba(0,0,0,0.20), 0 0 16px rgba(220,38,38,0.10)"
+        ? "0 6px 20px rgba(0,0,0,0.40), 0 1px 3px rgba(0,0,0,0.20), 0 0 20px rgba(220,38,38,0.15)"
         : "0 4px 16px rgba(0,0,0,0.30), 0 1px 3px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.03)",
       transition: "border-color 0.15s ease-out, box-shadow 0.15s ease-out",
     };
@@ -393,9 +393,9 @@ const Index = () => {
       <div style={{ minHeight: "100vh", background: "linear-gradient(180deg, #0C0C0E 0%, #111113 50%, #0E0E10 100%)", paddingTop: "24px", maxWidth: "1000px", margin: "0 auto", position: "relative", overflow: "hidden" }}>
 
         {/* ── Atmospheric glow orbs ── */}
-        <div style={{ position: "absolute", top: "0px", left: "50%", transform: "translateX(-50%)", width: "min(550px, 100vw)", height: "550px", background: "radial-gradient(ellipse, rgba(212,175,55,0.14) 0%, transparent 60%)", pointerEvents: "none", filter: "blur(40px)", zIndex: 0 }} />
-        <div style={{ position: "absolute", top: "2000px", left: "50%", transform: "translateX(-50%)", width: "min(600px, 100vw)", height: "400px", background: "radial-gradient(ellipse, rgba(212,175,55,0.10) 0%, transparent 60%)", pointerEvents: "none", filter: "blur(50px)", zIndex: 0 }} />
-        <div style={{ position: "absolute", top: "4000px", left: "50%", transform: "translateX(-50%)", width: "min(550px, 100vw)", height: "450px", background: "radial-gradient(ellipse, rgba(212,175,55,0.12) 0%, transparent 60%)", pointerEvents: "none", filter: "blur(45px)", zIndex: 0 }} />
+        <div style={{ position: "absolute", top: "0px", left: "50%", transform: "translateX(-50%)", width: "min(550px, 100vw)", height: "600px", background: "radial-gradient(ellipse, rgba(212,175,55,0.18) 0%, transparent 60%)", pointerEvents: "none", filter: "blur(40px)", zIndex: 0 }} />
+        <div style={{ position: "absolute", top: "2000px", left: "50%", transform: "translateX(-50%)", width: "min(600px, 100vw)", height: "450px", background: "radial-gradient(ellipse, rgba(212,175,55,0.14) 0%, transparent 60%)", pointerEvents: "none", filter: "blur(50px)", zIndex: 0 }} />
+        <div style={{ position: "absolute", top: "4000px", left: "50%", transform: "translateX(-50%)", width: "min(550px, 100vw)", height: "500px", background: "radial-gradient(ellipse, rgba(212,175,55,0.16) 0%, transparent 60%)", pointerEvents: "none", filter: "blur(45px)", zIndex: 0 }} />
 
         {/* ═══ § 1 INTERACTIVE HERO ═══ */}
         <section ref={heroRef} style={{ position: "relative", padding: "0 clamp(14px, 4vw, 40px) 8px" }}>
@@ -404,7 +404,7 @@ const Index = () => {
             ...reveal(heroVisible),
             position: "relative",
             overflow: "hidden",
-            background: "radial-gradient(ellipse at 50% 20%, rgba(212,175,55,0.14), transparent 60%), rgba(26,26,28,0.60)",
+            background: "radial-gradient(ellipse at 50% 20%, rgba(212,175,55,0.14), transparent 60%), rgba(26,26,28,0.45)",
             border: "1px solid rgba(255,255,255,0.08)",
             borderTop: "1px solid rgba(255,255,255,0.18)",
             borderRadius: "8px",
@@ -414,7 +414,7 @@ const Index = () => {
             WebkitBackdropFilter: "blur(20px)",
           }} className="grain-surface">
           {/* Hero header band — poster composition: headline → subtitle → CTA */}
-          <div style={{ background: "linear-gradient(180deg, rgba(212,175,55,0.10), rgba(35,35,38,0.55))", border: "1px solid rgba(255,255,255,0.06)", borderTop: "1px solid rgba(255,255,255,0.15)", boxShadow: "inset 0 -1px 0 rgba(212,175,55,0.06)", borderRadius: "6px", padding: "32px 24px 28px", textAlign: "center", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)" }}>
+          <div style={{ background: "linear-gradient(180deg, rgba(212,175,55,0.10), rgba(35,35,38,0.42))", border: "1px solid rgba(255,255,255,0.06)", borderTop: "1px solid rgba(255,255,255,0.15)", boxShadow: "inset 0 -1px 0 rgba(212,175,55,0.06)", borderRadius: "6px", padding: "32px 24px 28px", textAlign: "center", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)" }}>
             <h1 style={styles.heroH1}>
               Model Your
               <span style={styles.heroMid}>Recoupment</span>
@@ -554,7 +554,7 @@ const Index = () => {
             ...reveal(previewVisible),
             position: "relative",
             overflow: "hidden",
-            background: "rgba(26,26,28,0.55)",
+            background: "rgba(26,26,28,0.42)",
             border: "1px solid rgba(255,255,255,0.07)",
             borderTop: "1px solid rgba(255,255,255,0.18)",
             borderRadius: "8px",
@@ -563,7 +563,7 @@ const Index = () => {
             backdropFilter: "blur(20px)",
             WebkitBackdropFilter: "blur(20px)",
           }} className="grain-surface">
-            <div style={{ background: "linear-gradient(180deg, rgba(212,175,55,0.06), rgba(35,35,38,0.50))", border: "1px solid rgba(255,255,255,0.06)", borderTop: "1px solid rgba(255,255,255,0.15)", boxShadow: "inset 0 -1px 0 rgba(212,175,55,0.06)", borderRadius: "6px", padding: "28px 24px", marginBottom: "20px", textAlign: "center" }}>
+            <div style={{ background: "linear-gradient(180deg, rgba(212,175,55,0.06), rgba(35,35,38,0.40))", border: "1px solid rgba(255,255,255,0.06)", borderTop: "1px solid rgba(255,255,255,0.15)", boxShadow: "inset 0 -1px 0 rgba(212,175,55,0.06)", borderRadius: "6px", padding: "28px 24px", marginBottom: "20px", textAlign: "center" }}>
               <EyebrowPill text="What You'll Build" />
               <h2 style={styles.sectionH2}>Your Complete<br /><span style={{ color: "#D4AF37", textShadow: "0 0 30px rgba(212,175,55,0.50), 0 0 80px rgba(212,175,55,0.10)" }}>Deal Brief</span></h2>
             </div>
@@ -571,7 +571,7 @@ const Index = () => {
 
             {/* Card 1: Mini Waterfall Cascade */}
             <div style={{
-              minWidth: "280px", background: "linear-gradient(180deg, rgba(212,175,55,0.03), rgba(35,35,38,0.50))", border: "1px solid rgba(255,255,255,0.06)",
+              minWidth: "280px", background: "linear-gradient(180deg, rgba(212,175,55,0.03), rgba(35,35,38,0.40))", border: "1px solid rgba(255,255,255,0.06)",
               borderRadius: "8px", padding: "24px", scrollSnapAlign: "start", flexShrink: 0,
               boxShadow: "0 4px 16px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.05)",
             }} className="preview-card">
@@ -588,10 +588,10 @@ const Index = () => {
                       <div style={{ width: "5px", height: "5px", borderRadius: "50%", background: row.color }} />
                       <span style={{ fontFamily: "'Inter', sans-serif", fontSize: "11px", color: "rgba(250,248,244,0.70)" }}>{row.label}</span>
                     </div>
-                    <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "9px", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", padding: "2px 6px", borderRadius: "2px", background: row.color === "#3CB371" ? "rgba(60,179,113,0.15)" : row.color === "#F0A830" ? "rgba(240,168,48,0.15)" : "rgba(220,38,38,0.12)", color: row.color }}>{row.badge}</span>
+                    <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "9px", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", padding: "2px 6px", borderRadius: "2px", background: row.color === "#3CB371" ? "rgba(60,179,113,0.20)" : row.color === "#F0A830" ? "rgba(240,168,48,0.20)" : "rgba(220,38,38,0.18)", color: row.color }}>{row.badge}</span>
                   </div>
                   <div style={{ height: "4px", background: "rgba(255,255,255,0.08)", borderRadius: "2px", overflow: "hidden" }}>
-                    <div style={{ height: "100%", width: `${row.pct}%`, borderRadius: "2px", background: row.color === "#3CB371" ? "rgba(60,179,113,0.40)" : row.color === "#F0A830" ? "rgba(240,168,48,0.35)" : "rgba(220,38,38,0.25)" }} />
+                    <div style={{ height: "100%", width: `${row.pct}%`, borderRadius: "2px", background: row.color === "#3CB371" ? "rgba(60,179,113,0.55)" : row.color === "#F0A830" ? "rgba(240,168,48,0.45)" : "rgba(220,38,38,0.35)" }} />
                   </div>
                 </div>
               ))}
@@ -599,7 +599,7 @@ const Index = () => {
 
             {/* Card 2: Verdict / Deal Score */}
             <div style={{
-              minWidth: "200px", background: "linear-gradient(180deg, rgba(60,179,113,0.03), rgba(35,35,38,0.50))", border: "1px solid rgba(255,255,255,0.06)",
+              minWidth: "200px", background: "linear-gradient(180deg, rgba(60,179,113,0.03), rgba(35,35,38,0.40))", border: "1px solid rgba(255,255,255,0.06)",
               borderRadius: "8px", padding: "28px 24px", scrollSnapAlign: "start", flexShrink: 0,
               boxShadow: "0 4px 16px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.05)",
               display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center",
@@ -609,14 +609,14 @@ const Index = () => {
                 1.2<span style={{ fontSize: "28px" }}>&times;</span>
               </p>
               <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "11px", color: "rgba(250,248,244,0.70)", marginTop: "6px" }}>Cash-on-cash multiple</p>
-              <div style={{ marginTop: "10px", padding: "4px 10px", borderRadius: "3px", background: "rgba(60,179,113,0.12)" }}>
+              <div style={{ marginTop: "10px", padding: "4px 10px", borderRadius: "3px", background: "rgba(60,179,113,0.18)" }}>
                 <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "10px", fontWeight: 700, color: "#3CB371", letterSpacing: "0.08em", textTransform: "uppercase" }}>SOLID DEAL</span>
               </div>
             </div>
 
             {/* Card 3: Profit Split */}
             <div style={{
-              minWidth: "220px", background: "linear-gradient(180deg, rgba(212,175,55,0.03), rgba(35,35,38,0.50))", border: "1px solid rgba(255,255,255,0.06)",
+              minWidth: "220px", background: "linear-gradient(180deg, rgba(212,175,55,0.03), rgba(35,35,38,0.40))", border: "1px solid rgba(255,255,255,0.06)",
               borderRadius: "8px", padding: "24px", scrollSnapAlign: "start", flexShrink: 0,
               boxShadow: "0 4px 16px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.05)",
             }} className="preview-card">
@@ -640,7 +640,7 @@ const Index = () => {
 
             {/* Card 4: Capital Stack */}
             <div style={{
-              minWidth: "240px", background: "linear-gradient(180deg, rgba(212,175,55,0.03), rgba(35,35,38,0.50))", border: "1px solid rgba(255,255,255,0.06)",
+              minWidth: "240px", background: "linear-gradient(180deg, rgba(212,175,55,0.03), rgba(35,35,38,0.40))", border: "1px solid rgba(255,255,255,0.06)",
               borderRadius: "8px", padding: "24px", scrollSnapAlign: "start", flexShrink: 0,
               boxShadow: "0 4px 16px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.05)",
             }} className="preview-card">
@@ -665,7 +665,7 @@ const Index = () => {
 
             {/* Card 5: Break-Even */}
             <div style={{
-              minWidth: "200px", background: "linear-gradient(180deg, rgba(60,179,113,0.03), rgba(35,35,38,0.50))", border: "1px solid rgba(255,255,255,0.06)",
+              minWidth: "200px", background: "linear-gradient(180deg, rgba(60,179,113,0.03), rgba(35,35,38,0.40))", border: "1px solid rgba(255,255,255,0.06)",
               borderRadius: "8px", padding: "28px 24px", scrollSnapAlign: "start", flexShrink: 0,
               boxShadow: "0 4px 16px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.05)",
               display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center",
@@ -701,7 +701,7 @@ const Index = () => {
           <div style={{
             position: "relative",
             overflow: "hidden",
-            background: "rgba(26,26,28,0.55)",
+            background: "rgba(26,26,28,0.42)",
             border: "1px solid rgba(255,255,255,0.07)",
             borderTop: "1px solid rgba(255,255,255,0.18)",
             borderRadius: "8px",
@@ -711,7 +711,7 @@ const Index = () => {
             WebkitBackdropFilter: "blur(20px)",
           }} className="grain-surface">
           {/* Header band */}
-          <div ref={waterfallHeaderRef} style={{ ...reveal(waterfallHeaderVisible), background: "linear-gradient(180deg, rgba(212,175,55,0.06), rgba(35,35,38,0.50))", border: "1px solid rgba(255,255,255,0.06)", borderTop: "1px solid rgba(255,255,255,0.15)", boxShadow: "inset 0 -1px 0 rgba(212,175,55,0.06)", borderRadius: "6px", padding: "28px 24px", marginBottom: "20px", textAlign: "center" }}>
+          <div ref={waterfallHeaderRef} style={{ ...reveal(waterfallHeaderVisible), background: "linear-gradient(180deg, rgba(212,175,55,0.06), rgba(35,35,38,0.40))", border: "1px solid rgba(255,255,255,0.06)", borderTop: "1px solid rgba(255,255,255,0.15)", boxShadow: "inset 0 -1px 0 rgba(212,175,55,0.06)", borderRadius: "6px", padding: "28px 24px", marginBottom: "20px", textAlign: "center" }}>
             <EyebrowPill text="How the money flows" />
             <h2 style={styles.sectionH2}>The Recoupment<br /><span style={{ color: "#D4AF37", textShadow: "0 0 30px rgba(212,175,55,0.50), 0 0 80px rgba(212,175,55,0.10)" }}>Waterfall</span></h2>
           </div>
@@ -819,7 +819,7 @@ const Index = () => {
                         >
                           <div style={wfBadge()}>{groupCards[0].tier}</div>
                           <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.4rem", color: "#fff", textTransform: "uppercase", marginBottom: "3px", textAlign: "center" }}>{groupCards[0].name}</div>
-                          <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.5rem", color: "rgba(220,38,38,0.88)", textShadow: "0 0 12px rgba(220,38,38,0.25)", textAlign: "center" }}>–${groupCards[0].amount.toLocaleString()}</div>
+                          <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.5rem", color: "rgba(220,38,38,0.90)", textShadow: "0 0 16px rgba(220,38,38,0.35)", textAlign: "center" }}>–${groupCards[0].amount.toLocaleString()}</div>
                         </div>
                         <div
                           key={groupCards[1].tier}
@@ -838,7 +838,7 @@ const Index = () => {
                         >
                           <div style={wfBadge()}>{groupCards[1].tier}</div>
                           <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.4rem", color: "#fff", textTransform: "uppercase", marginBottom: "3px", textAlign: "center" }}>{groupCards[1].name}</div>
-                          <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.5rem", color: "rgba(220,38,38,0.88)", textShadow: "0 0 12px rgba(220,38,38,0.25)", textAlign: "center" }}>–${groupCards[1].amount.toLocaleString()}</div>
+                          <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.5rem", color: "rgba(220,38,38,0.90)", textShadow: "0 0 16px rgba(220,38,38,0.35)", textAlign: "center" }}>–${groupCards[1].amount.toLocaleString()}</div>
                         </div>
                       </div>
                     ) : (
@@ -913,13 +913,13 @@ const Index = () => {
               ref={profitCardRef}
               style={{
                 borderRadius: "8px", padding: "20px 16px", textAlign: "center",
-                border: "1px solid rgba(60,179,113,0.50)",
+                border: "1px solid rgba(60,179,113,0.55)",
                 background: `radial-gradient(ellipse at 50% 0%, rgba(60,179,113,${profitGlowIntensity}) 0%, #1A1A1C 70%)`,
-                boxShadow: "0 8px 24px rgba(0,0,0,0.35), 0 0 30px rgba(60,179,113,0.08)",
+                boxShadow: "0 8px 24px rgba(0,0,0,0.35), 0 0 40px rgba(60,179,113,0.12)",
                 transition: "background 500ms ease",
               }}
             >
-              <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "3rem", color: "#3CB371", lineHeight: 1, textShadow: "0 0 24px rgba(60,179,113,0.45), 0 0 60px rgba(60,179,113,0.15)" }}>
+              <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "3rem", color: "#3CB371", lineHeight: 1, textShadow: "0 0 28px rgba(60,179,113,0.55), 0 0 60px rgba(60,179,113,0.20)" }}>
                 ${profitCountUp.toLocaleString()}
               </div>
             </div>
@@ -972,7 +972,7 @@ const Index = () => {
           <div style={{
             position: "relative",
             overflow: "hidden",
-            background: "rgba(26,26,28,0.55)",
+            background: "rgba(26,26,28,0.42)",
             border: "1px solid rgba(255,255,255,0.07)",
             borderTop: "1px solid rgba(255,255,255,0.18)",
             borderRadius: "8px",
@@ -981,7 +981,7 @@ const Index = () => {
             backdropFilter: "blur(20px)",
             WebkitBackdropFilter: "blur(20px)",
           }} className="grain-surface">
-          <div style={{ ...reveal(stakeVisible), background: "linear-gradient(180deg, rgba(212,175,55,0.06), rgba(35,35,38,0.50))", border: "1px solid rgba(255,255,255,0.06)", borderTop: "1px solid rgba(255,255,255,0.15)", boxShadow: "inset 0 -1px 0 rgba(212,175,55,0.06)", borderRadius: "6px", padding: "28px 24px", marginBottom: "20px", textAlign: "center" }}>
+          <div style={{ ...reveal(stakeVisible), background: "linear-gradient(180deg, rgba(212,175,55,0.06), rgba(35,35,38,0.40))", border: "1px solid rgba(255,255,255,0.06)", borderTop: "1px solid rgba(255,255,255,0.15)", boxShadow: "inset 0 -1px 0 rgba(212,175,55,0.06)", borderRadius: "6px", padding: "28px 24px", marginBottom: "20px", textAlign: "center" }}>
             <EyebrowPill text="What's At Stake" />
             <h2 style={styles.sectionH2}><span style={{ color: "#D4AF37", textShadow: "0 0 30px rgba(212,175,55,0.50), 0 0 80px rgba(212,175,55,0.10)" }}>(4) Four</span> Reasons<br />You Can't Skip</h2>
           </div>
@@ -993,7 +993,7 @@ const Index = () => {
                 className="stake-card"
                 style={{
                   ...reveal(stakeVisible, i + 1),
-                  background: "linear-gradient(180deg, rgba(212,175,55,0.03), rgba(35,35,38,0.50))",
+                  background: "linear-gradient(180deg, rgba(212,175,55,0.03), rgba(35,35,38,0.40))",
                   border: "1px solid rgba(255,255,255,0.07)",
                   borderTop: "1px solid rgba(255,255,255,0.15)",
                   borderRadius: "8px",
@@ -1020,7 +1020,7 @@ const Index = () => {
           <div style={{
             position: "relative",
             overflow: "hidden",
-            background: "rgba(26,26,28,0.55)",
+            background: "rgba(26,26,28,0.42)",
             border: "1px solid rgba(255,255,255,0.07)",
             borderTop: "1px solid rgba(255,255,255,0.18)",
             borderRadius: "8px",
@@ -1031,7 +1031,7 @@ const Index = () => {
             textAlign: "left",
           }} className="grain-surface">
           {/* Header band */}
-          <div style={{ background: "linear-gradient(180deg, rgba(212,175,55,0.06), rgba(35,35,38,0.50))", border: "1px solid rgba(255,255,255,0.06)", borderTop: "1px solid rgba(255,255,255,0.15)", boxShadow: "inset 0 -1px 0 rgba(212,175,55,0.06)", borderRadius: "6px", padding: "28px 24px", marginBottom: "20px", textAlign: "center" }}>
+          <div style={{ background: "linear-gradient(180deg, rgba(212,175,55,0.06), rgba(35,35,38,0.40))", border: "1px solid rgba(255,255,255,0.06)", borderTop: "1px solid rgba(255,255,255,0.15)", boxShadow: "inset 0 -1px 0 rgba(212,175,55,0.06)", borderRadius: "6px", padding: "28px 24px", marginBottom: "20px", textAlign: "center" }}>
             <EyebrowPill text="The Reality" />
             <h2 style={styles.sectionH2}>Know Before You <span style={{ color: "#D4AF37", textShadow: "0 0 30px rgba(212,175,55,0.50), 0 0 80px rgba(212,175,55,0.10)" }}>Negotiate</span></h2>
           </div>
@@ -1107,7 +1107,7 @@ const Index = () => {
               <React.Fragment key={i}>
                 <div style={{
                   ...reveal(realityGridVisible, i + 1),
-                  background: "rgba(60,179,113,0.04)",
+                  background: "rgba(60,179,113,0.06)",
                   display: "flex", gap: "10px",
                   padding: "18px 20px", alignItems: "flex-start",
                   borderTop: "1px solid rgba(255,255,255,0.06)",
@@ -1117,7 +1117,7 @@ const Index = () => {
                 </div>
                 <div style={{
                   ...reveal(realityGridVisible, i + 1),
-                  background: "rgba(220,38,38,0.04)",
+                  background: "rgba(220,38,38,0.06)",
                   display: "flex", gap: "10px",
                   padding: "18px 20px", alignItems: "flex-start",
                   borderLeft: "1px solid rgba(255,255,255,0.06)",
@@ -1140,7 +1140,7 @@ const Index = () => {
           <div style={{
             position: "relative",
             overflow: "hidden",
-            background: "rgba(26,26,28,0.55)",
+            background: "rgba(26,26,28,0.42)",
             border: "1px solid rgba(255,255,255,0.07)",
             borderTop: "1px solid rgba(255,255,255,0.18)",
             borderRadius: "8px",
@@ -1149,7 +1149,7 @@ const Index = () => {
             backdropFilter: "blur(20px)",
             WebkitBackdropFilter: "blur(20px)",
           }} className="grain-surface">
-          <div style={{ ...reveal(socialVisible), background: "linear-gradient(180deg, rgba(212,175,55,0.06), rgba(35,35,38,0.50))", border: "1px solid rgba(255,255,255,0.06)", borderTop: "1px solid rgba(255,255,255,0.15)", boxShadow: "inset 0 -1px 0 rgba(212,175,55,0.06)", borderRadius: "6px", padding: "28px 24px", marginBottom: "20px", textAlign: "center" }}>
+          <div style={{ ...reveal(socialVisible), background: "linear-gradient(180deg, rgba(212,175,55,0.06), rgba(35,35,38,0.40))", border: "1px solid rgba(255,255,255,0.06)", borderTop: "1px solid rgba(255,255,255,0.15)", boxShadow: "inset 0 -1px 0 rgba(212,175,55,0.06)", borderRadius: "6px", padding: "28px 24px", marginBottom: "20px", textAlign: "center" }}>
             <EyebrowPill text="Trusted By Filmmakers" />
             <h2 style={styles.sectionH2}>Real Numbers.<br /><span style={{ color: "#D4AF37", textShadow: "0 0 30px rgba(212,175,55,0.50), 0 0 80px rgba(212,175,55,0.10)" }}>Real Meetings.</span></h2>
           </div>
@@ -1214,7 +1214,7 @@ const Index = () => {
             ...reveal(closerVisible),
             position: "relative",
             overflow: "hidden",
-            background: "rgba(26,26,28,0.55)",
+            background: "rgba(26,26,28,0.42)",
             border: "1px solid rgba(255,255,255,0.08)",
             borderTop: "1px solid rgba(255,255,255,0.18)",
             borderRadius: "8px",
@@ -1224,7 +1224,7 @@ const Index = () => {
             WebkitBackdropFilter: "blur(20px)",
           }} className="grain-surface">
             {/* Header band */}
-            <div style={{ background: "linear-gradient(180deg, rgba(212,175,55,0.08), rgba(35,35,38,0.55))", border: "1px solid rgba(255,255,255,0.06)", borderTop: "1px solid rgba(255,255,255,0.15)", boxShadow: "inset 0 -1px 0 rgba(212,175,55,0.06)", borderRadius: "6px", padding: "32px 24px", marginBottom: "24px", textAlign: "center" }}>
+            <div style={{ background: "linear-gradient(180deg, rgba(212,175,55,0.08), rgba(35,35,38,0.42))", border: "1px solid rgba(255,255,255,0.06)", borderTop: "1px solid rgba(255,255,255,0.15)", boxShadow: "inset 0 -1px 0 rgba(212,175,55,0.06)", borderRadius: "6px", padding: "32px 24px", marginBottom: "24px", textAlign: "center" }}>
               <h2 style={{
                 fontFamily: "'Bebas Neue', sans-serif",
                 fontSize: "clamp(2.8rem, 7vw, 3.6rem)",

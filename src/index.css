@@ -495,7 +495,7 @@
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    color: var(--text-tertiary);
+    color: rgba(255, 255, 255, 0.55);
     transition: all var(--timing-fast) ease;
     cursor: pointer;
     border-radius: var(--radius-sm);
@@ -513,7 +513,7 @@
   .tab-bar-item .tab-icon {
     width: 20px;
     height: 20px;
-    opacity: 0.6;
+    opacity: 0.75;
   }
 
   .tab-bar-item.is-active .tab-icon {
