@@ -30,6 +30,7 @@ const DEMO_INPUTS: WaterfallInputs = {
   salesFee: 15,
   salesExp: 75000,
   deferments: 0,
+  profitSplit: 50,
 };
 
 const DEMO_GUILDS: GuildState = { sag: false, wga: false, dga: false };
