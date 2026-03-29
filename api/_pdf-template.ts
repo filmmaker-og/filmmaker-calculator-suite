@@ -100,7 +100,7 @@ const FONTS = `<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&f
 
 const GOLD_BAR = `<div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent 5%,rgba(212,175,55,0.50) 35%,rgba(212,175,55,0.70) 50%,rgba(212,175,55,0.50) 65%,transparent 95%);z-index:10;"></div>`;
 
-const WATERMARK = `<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-30deg);font-family:'Bebas Neue',sans-serif;font-size:88px;letter-spacing:16px;color:rgba(212,175,55,0.025);pointer-events:none;z-index:0;white-space:nowrap;">FILMMAKER.OG</div>`;
+const WATERMARK = `<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-30deg);font-family:'Bebas Neue',sans-serif;font-size:88px;letter-spacing:16px;color:rgba(212,175,55,0.04);pointer-events:none;z-index:1;white-space:nowrap;user-select:none;">FILMMAKER.OG</div>`;
 
 const FOOTER = `<div style="position:absolute;bottom:18px;left:36px;right:36px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(212,175,55,0.10);padding-top:10px;">
   <div style="font-family:'Roboto Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(212,175,55,0.45);">FILMMAKER.OG</div>
@@ -406,14 +406,6 @@ function page2(data: SnapshotData): string {
       <!-- Spacer -->
       <div style="flex:1;"></div>
 
-      <!-- Capital structure summary -->
-      <div style="margin-top:auto;">
-        <div style="font-family:'Roboto Mono',monospace;font-size:9px;color:rgba(212,175,55,0.40);letter-spacing:2px;margin-bottom:8px;">CAPITAL STRUCTURE</div>
-        <div style="background:linear-gradient(180deg,rgba(212,175,55,0.02),#232326);border:1px solid rgba(212,175,55,0.12);border-radius:5px;overflow:hidden;">
-          ${capRowsWithDividers}
-        </div>
-      </div>
-
     </div>
 
     ${FOOTER}
@@ -589,6 +581,27 @@ function page3(data: SnapshotData): string {
 function page4(data: SnapshotData): string {
   const { inputs, result, tiers } = data;
 
+  // Capital structure rows
+  const capSources: { label: string; detail: string; amount: number; pct: string }[] = [];
+  if (inputs.debt > 0) capSources.push({ label: 'Senior Debt', detail: `First position · ${inputs.seniorDebtRate}%`, amount: inputs.debt, pct: inputs.budget > 0 ? `${Math.round((inputs.debt / inputs.budget) * 100)}%` : '' });
+  if (inputs.mezzanineDebt > 0) capSources.push({ label: 'Mezzanine', detail: `Second position · ${inputs.mezzanineRate}%`, amount: inputs.mezzanineDebt, pct: inputs.budget > 0 ? `${Math.round((inputs.mezzanineDebt / inputs.budget) * 100)}%` : '' });
+  if (inputs.equity > 0) capSources.push({ label: 'Equity', detail: inputs.premium > 0 ? `${inputs.premium}% preferred` : 'Pari passu', amount: inputs.equity, pct: inputs.budget > 0 ? `${Math.round((inputs.equity / inputs.budget) * 100)}%` : '' });
+  if (inputs.credits > 0) capSources.push({ label: 'Tax Credits', detail: 'Non-dilutive', amount: inputs.credits, pct: inputs.budget > 0 ? `${Math.round((inputs.credits / inputs.budget) * 100)}%` : '' });
+  if (inputs.deferments > 0) capSources.push({ label: 'Deferrals', detail: 'Subordinate', amount: inputs.deferments, pct: inputs.budget > 0 ? `${Math.round((inputs.deferments / inputs.budget) * 100)}%` : '' });
+
+  const capRows = capSources.map((s, i) =>
+    `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 16px;${i > 0 ? 'border-top:1px solid rgba(212,175,55,0.06);' : ''}">
+      <div>
+        <div style="font-family:'Inter',sans-serif;font-size:11px;color:rgba(250,248,244,0.88);font-weight:500;">${s.label}</div>
+        <div style="font-family:'Roboto Mono',monospace;font-size:8px;color:rgba(212,175,55,0.40);">${s.detail}</div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-family:'Roboto Mono',monospace;font-size:12px;color:rgba(250,248,244,0.92);font-weight:500;">${formatFullCurrency(s.amount)}</div>
+        <div style="font-family:'Roboto Mono',monospace;font-size:8px;color:rgba(255,255,255,0.35);">${s.pct} of budget</div>
+      </div>
+    </div>`
+  ).join('');
+
   const profitSplitPct = Math.max(0, Math.min(100, inputs.profitSplit ?? 50));
   const producerSplitPct = 100 - profitSplitPct;
 
@@ -651,6 +664,22 @@ function page4(data: SnapshotData): string {
     </div>
 
     <div style="flex:1;padding:8px 36px 48px;position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;">
+
+      <!-- CAPITAL STRUCTURE -->
+      ${capSources.length > 0 ? `
+      <div style="width:100%;margin-bottom:12px;">
+        <div style="font-family:'Roboto Mono',monospace;font-size:9px;color:rgba(212,175,55,0.40);letter-spacing:2px;margin-bottom:6px;">CAPITAL STRUCTURE</div>
+        <div style="background:linear-gradient(180deg,rgba(212,175,55,0.02),#232326);border:1px solid rgba(212,175,55,0.12);border-radius:5px;overflow:hidden;">
+          ${capRows}
+        </div>
+      </div>
+
+      <!-- Connector -->
+      <div class="conn" style="height:16px;">
+        <div style="width:2px;height:10px;background:rgba(212,175,55,0.50);border-radius:1px;"></div>
+        <div style="width:0;height:0;border-left:3px solid transparent;border-right:3px solid transparent;border-top:4px solid rgba(212,175,55,0.55);margin-top:-1px;"></div>
+      </div>
+      ` : ''}
 
       <!-- CAPITAL RECOUPMENT -->
       <div class="label" style="font-size:12px;color:rgba(212,175,55,0.50);margin-bottom:8px;">CAPITAL RECOUPMENT</div>
@@ -1026,24 +1055,23 @@ function page6(data: SnapshotData): string {
       <!-- Closer -->
       <div>
         <!-- Gold divider -->
-        <div style="height:1px;background:linear-gradient(90deg,rgba(212,175,55,0.15),transparent);margin-bottom:20px;"></div>
+        <div style="height:1px;background:linear-gradient(90deg,rgba(212,175,55,0.15),transparent);margin-bottom:16px;"></div>
 
-        <!-- CTA -->
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:rgba(250,248,244,0.82);letter-spacing:0.5px;margin-bottom:6px;">MODEL YOUR WATERFALL BEFORE YOU SIGN.</div>
-        <div style="font-family:'Inter',sans-serif;font-size:11px;color:rgba(250,248,244,0.48);margin-bottom:14px;">Know your deal inside out before you walk into the room.</div>
-
-        <!-- Seed -->
-        <div style="font-family:'Inter',sans-serif;font-size:10px;color:rgba(250,248,244,0.42);font-style:italic;margin-bottom:20px;">This snapshot covers the base case. Full sensitivity analysis available at filmmakerog.com.</div>
+        <!-- Prepared by -->
+        <div style="font-family:'Roboto Mono',monospace;font-size:9px;color:rgba(212,175,55,0.40);letter-spacing:2px;margin-bottom:12px;">PREPARED USING</div>
 
         <!-- Brand -->
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:rgba(212,175,55,0.55);letter-spacing:2px;margin-bottom:3px;">FILMMAKER.OG</div>
-        <div style="font-family:'Roboto Mono',monospace;font-size:10px;color:rgba(212,175,55,0.42);margin-bottom:10px;">filmmakerog.com</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:rgba(212,175,55,0.55);letter-spacing:2px;margin-bottom:3px;">FILMMAKER.OG</div>
+        <div style="font-family:'Roboto Mono',monospace;font-size:10px;color:rgba(212,175,55,0.42);margin-bottom:12px;">filmmakerog.com</div>
+
+        <!-- Seed -->
+        <div style="font-family:'Inter',sans-serif;font-size:10px;color:rgba(250,248,244,0.40);font-style:italic;margin-bottom:12px;">This snapshot covers the base case. Full sensitivity analysis available at filmmakerog.com.</div>
 
         <!-- Date -->
-        <div style="font-family:'Roboto Mono',monospace;font-size:9px;color:rgba(255,255,255,0.25);margin-bottom:8px;">${displayDate}</div>
+        <div style="font-family:'Roboto Mono',monospace;font-size:9px;color:rgba(255,255,255,0.25);margin-bottom:6px;">${displayDate}</div>
 
         <!-- Disclaimer -->
-        <div style="font-family:'Inter',sans-serif;font-size:8px;color:rgba(250,248,244,0.38);line-height:1.5;">This document is a financial model, not investment advice. All projections are based on user-provided inputs.</div>
+        <div style="font-family:'Inter',sans-serif;font-size:8px;color:rgba(250,248,244,0.35);line-height:1.5;">This document is a financial model, not investment advice. All projections are based on user-provided inputs.</div>
       </div>
 
     </div>
