@@ -136,22 +136,32 @@ const CalcHero = ({ stepLabel, title, titleGold, subtitle, visible }: {
   };
   return (
     <div style={{ position: "relative", marginBottom: 20, ...heroReveal }}>
+      {/* Outer wrapper — #222226 slate stage (matches landing page section wrappers) */}
       <section style={{
-        position: "relative", textAlign: "center",
-        padding: "24px 20px 20px",
+        position: "relative",
         borderRadius: 8, overflow: "hidden",
-        background: "linear-gradient(180deg, rgba(212,175,55,0.06), #121214)",
-        border: "1px solid rgba(255,255,255,0.06)",
-        borderTop: "1px solid rgba(255,255,255,0.10)",
-        boxShadow: "inset 0 2px 6px rgba(0,0,0,0.25)",
+        background: "#222226",
+        border: "1px solid rgba(255,255,255,0.10)",
+        borderTop: "1px solid rgba(255,255,255,0.18)",
+        padding: "20px",
+        boxShadow: "0 6px 28px rgba(0,0,0,0.50), 0 0 1px rgba(255,255,255,0.04), 0 0 1px rgba(212,175,55,0.06)",
       }}>
-        <div style={{ position: "relative", zIndex: 1 }}>
+        {/* Inner header band — dark well (matches landing page header bands) */}
+        <div style={{
+          background: "linear-gradient(180deg, rgba(212,175,55,0.08), #121214)",
+          border: "1px solid rgba(255,255,255,0.06)",
+          borderTop: "1px solid rgba(255,255,255,0.10)",
+          borderRadius: 6,
+          padding: "28px 24px 24px",
+          textAlign: "center",
+          boxShadow: "inset 0 2px 6px rgba(0,0,0,0.25)",
+        }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12, padding: "0 8px" }}>
             <div style={{ flex: 1, height: 1, background: "rgba(212,175,55,0.35)" }} />
             <span style={{
               fontFamily: "'Roboto Mono', monospace", fontSize: 10,
               letterSpacing: "0.15em", textTransform: "uppercase",
-              color: "rgba(212,175,55,0.65)", whiteSpace: "nowrap",
+              color: "rgba(212,175,55,0.75)", whiteSpace: "nowrap",
             }}>{stepLabel}</span>
             <div style={{ flex: 1, height: 1, background: "rgba(212,175,55,0.35)" }} />
           </div>
@@ -164,13 +174,12 @@ const CalcHero = ({ stepLabel, title, titleGold, subtitle, visible }: {
             {title}<br />
             <span style={{
               color: "#D4AF37",
-              textShadow: "0 2px 20px rgba(0,0,0,0.8), 0 0 40px rgba(212,175,55,0.50), 0 0 80px rgba(212,175,55,0.25)",
+              textShadow: "0 2px 20px rgba(0,0,0,0.8), 0 0 40px rgba(212,175,55,0.55), 0 0 80px rgba(212,175,55,0.18)",
             }}>{titleGold}</span>
           </h1>
           <p style={{
             fontFamily: "'Inter', sans-serif", fontSize: 15,
-            color: "rgba(255,255,255,0.75)", lineHeight: 1.45,
-            textShadow: "0 2px 12px rgba(0,0,0,0.9)",
+            color: "rgba(255,255,255,0.80)", lineHeight: 1.45,
           }}>{subtitle}</p>
         </div>
       </section>
