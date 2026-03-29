@@ -412,7 +412,7 @@ const Index = () => {
             boxShadow: "0 8px 32px rgba(0,0,0,0.55), 0 0 1px rgba(212,175,55,0.06)",
           }} className="grain-surface">
           {/* Hero header band — poster composition: headline → subtitle → CTA */}
-          <div style={{ background: "#121214", border: "1px solid rgba(255,255,255,0.06)", borderTop: "1px solid rgba(255,255,255,0.10)", borderRadius: "6px", padding: "32px 24px 28px", textAlign: "center" }}>
+          <div style={{ background: "linear-gradient(180deg, rgba(212,175,55,0.06), #121214)", border: "1px solid rgba(255,255,255,0.06)", borderTop: "1px solid rgba(255,255,255,0.10)", borderRadius: "6px", padding: "32px 24px 28px", textAlign: "center" }}>
             <h1 style={styles.heroH1}>
               Model Your
               <span style={styles.heroMid}>Recoupment</span>
@@ -557,7 +557,7 @@ const Index = () => {
             padding: "32px clamp(24px, 5vw, 40px)",
             boxShadow: "0 6px 28px rgba(0,0,0,0.45), 0 0 1px rgba(212,175,55,0.06)",
           }} className="grain-surface">
-            <div style={{ background: "#121214", border: "1px solid rgba(255,255,255,0.06)", borderTop: "1px solid rgba(255,255,255,0.10)", borderRadius: "6px", padding: "28px 24px", marginBottom: "20px", textAlign: "center" }}>
+            <div style={{ background: "linear-gradient(180deg, rgba(212,175,55,0.06), #121214)", border: "1px solid rgba(255,255,255,0.06)", borderTop: "1px solid rgba(255,255,255,0.10)", borderRadius: "6px", padding: "28px 24px", marginBottom: "20px", textAlign: "center" }}>
               <EyebrowPill text="What You'll Build" />
               <h2 style={styles.sectionH2}>Your Complete<br /><span style={{ color: "#D4AF37", textShadow: "0 0 30px rgba(212,175,55,0.50), 0 0 80px rgba(212,175,55,0.10)" }}>Deal Brief</span></h2>
             </div>
@@ -703,7 +703,7 @@ const Index = () => {
             boxShadow: "0 6px 28px rgba(0,0,0,0.45), 0 0 1px rgba(212,175,55,0.06)",
           }} className="grain-surface">
           {/* Header band */}
-          <div ref={waterfallHeaderRef} style={{ ...reveal(waterfallHeaderVisible), background: "#121214", border: "1px solid rgba(255,255,255,0.06)", borderTop: "1px solid rgba(255,255,255,0.10)", borderRadius: "6px", padding: "28px 24px", marginBottom: "20px", textAlign: "center" }}>
+          <div ref={waterfallHeaderRef} style={{ ...reveal(waterfallHeaderVisible), background: "linear-gradient(180deg, rgba(212,175,55,0.06), #121214)", border: "1px solid rgba(255,255,255,0.06)", borderTop: "1px solid rgba(255,255,255,0.10)", borderRadius: "6px", padding: "28px 24px", marginBottom: "20px", textAlign: "center" }}>
             <EyebrowPill text="How the money flows" />
             <h2 style={styles.sectionH2}>The Recoupment<br /><span style={{ color: "#D4AF37", textShadow: "0 0 30px rgba(212,175,55,0.50), 0 0 80px rgba(212,175,55,0.10)" }}>Waterfall</span></h2>
           </div>
@@ -971,7 +971,7 @@ const Index = () => {
             padding: "36px clamp(24px, 5vw, 40px)",
             boxShadow: "0 6px 28px rgba(0,0,0,0.45), 0 0 1px rgba(212,175,55,0.06)",
           }} className="grain-surface">
-          <div style={{ ...reveal(stakeVisible), background: "#121214", border: "1px solid rgba(255,255,255,0.06)", borderTop: "1px solid rgba(255,255,255,0.10)", borderRadius: "6px", padding: "28px 24px", marginBottom: "20px", textAlign: "center" }}>
+          <div style={{ ...reveal(stakeVisible), background: "linear-gradient(180deg, rgba(212,175,55,0.06), #121214)", border: "1px solid rgba(255,255,255,0.06)", borderTop: "1px solid rgba(255,255,255,0.10)", borderRadius: "6px", padding: "28px 24px", marginBottom: "20px", textAlign: "center" }}>
             <EyebrowPill text="What's At Stake" />
             <h2 style={styles.sectionH2}><span style={{ color: "#D4AF37", textShadow: "0 0 30px rgba(212,175,55,0.50), 0 0 80px rgba(212,175,55,0.10)" }}>(4) Four</span> Reasons<br />You Can't Skip</h2>
           </div>
@@ -1021,7 +1021,7 @@ const Index = () => {
             textAlign: "left",
           }} className="grain-surface">
           {/* Header band */}
-          <div style={{ background: "#121214", border: "1px solid rgba(255,255,255,0.06)", borderTop: "1px solid rgba(255,255,255,0.10)", borderRadius: "6px", padding: "28px 24px", marginBottom: "20px", textAlign: "center" }}>
+          <div style={{ background: "linear-gradient(180deg, rgba(212,175,55,0.06), #121214)", border: "1px solid rgba(255,255,255,0.06)", borderTop: "1px solid rgba(255,255,255,0.10)", borderRadius: "6px", padding: "28px 24px", marginBottom: "20px", textAlign: "center" }}>
             <EyebrowPill text="The Reality" />
             <h2 style={styles.sectionH2}>Know Before You <span style={{ color: "#D4AF37", textShadow: "0 0 30px rgba(212,175,55,0.50), 0 0 80px rgba(212,175,55,0.10)" }}>Negotiate</span></h2>
           </div>
@@ -1030,7 +1030,7 @@ const Index = () => {
           <div
             ref={realityQuoteRef}
             style={{
-              background: "#121214",
+              background: "linear-gradient(180deg, rgba(212,175,55,0.04), #121214)",
               border: "1px solid rgba(255,255,255,0.10)",
               borderTop: "1px solid rgba(255,255,255,0.15)",
               borderRadius: "8px",
@@ -1138,7 +1138,7 @@ const Index = () => {
             padding: "36px clamp(24px, 5vw, 40px)",
             boxShadow: "0 6px 28px rgba(0,0,0,0.45), 0 0 1px rgba(212,175,55,0.06)",
           }} className="grain-surface">
-          <div style={{ ...reveal(socialVisible), background: "#121214", border: "1px solid rgba(255,255,255,0.06)", borderTop: "1px solid rgba(255,255,255,0.10)", borderRadius: "6px", padding: "28px 24px", marginBottom: "20px", textAlign: "center" }}>
+          <div style={{ ...reveal(socialVisible), background: "linear-gradient(180deg, rgba(212,175,55,0.06), #121214)", border: "1px solid rgba(255,255,255,0.06)", borderTop: "1px solid rgba(255,255,255,0.10)", borderRadius: "6px", padding: "28px 24px", marginBottom: "20px", textAlign: "center" }}>
             <EyebrowPill text="Trusted By Filmmakers" />
             <h2 style={styles.sectionH2}>Real Numbers.<br /><span style={{ color: "#D4AF37", textShadow: "0 0 30px rgba(212,175,55,0.50), 0 0 80px rgba(212,175,55,0.10)" }}>Real Meetings.</span></h2>
           </div>
@@ -1148,7 +1148,7 @@ const Index = () => {
             ...reveal(socialVisible, 1),
             padding: "24px 24px",
             margin: "16px 0 24px",
-            background: "#121214",
+            background: "linear-gradient(180deg, rgba(212,175,55,0.03), #121214)",
             borderRadius: "6px",
             boxShadow: "0 4px 16px rgba(0,0,0,0.20)",
             border: "1px solid rgba(255,255,255,0.06)",
@@ -1212,7 +1212,7 @@ const Index = () => {
             boxShadow: "0 8px 32px rgba(0,0,0,0.55), 0 0 1px rgba(212,175,55,0.08), 0 0 80px rgba(212,175,55,0.08)",
           }} className="grain-surface">
             {/* Header band */}
-            <div style={{ background: "#121214", border: "1px solid rgba(255,255,255,0.08)", borderTop: "1px solid rgba(255,255,255,0.12)", borderRadius: "6px", padding: "32px 24px", marginBottom: "24px", textAlign: "center" }}>
+            <div style={{ background: "linear-gradient(180deg, rgba(212,175,55,0.08), #121214)", border: "1px solid rgba(255,255,255,0.08)", borderTop: "1px solid rgba(255,255,255,0.12)", borderRadius: "6px", padding: "32px 24px", marginBottom: "24px", textAlign: "center" }}>
               <h2 style={{
                 fontFamily: "'Bebas Neue', sans-serif",
                 fontSize: "clamp(2.8rem, 7vw, 3.6rem)",
