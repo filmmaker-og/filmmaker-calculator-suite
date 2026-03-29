@@ -10,9 +10,9 @@ const corsHeaders = {
 // Product configuration
 const PRODUCTS: Record<string, { name: string; price: number }> = {
   // Current products
-  "the-full-analysis": {
-    name: "The Full Analysis",
-    price: 19700, // $197
+  "snapshot-plus": {
+    name: "Snapshot+",
+    price: 1900, // $19
   },
   "comp-report": {
     name: "Comp Report (5 Comps)",
@@ -28,10 +28,6 @@ const PRODUCTS: Record<string, { name: string; price: number }> = {
   },
   "the-working-model": {
     name: "The Working Model",
-    price: 7900, // $79
-  },
-  "the-working-model-discount": {
-    name: "The Working Model (Bundle Discount)",
     price: 7900, // $79
   },
   // Legacy IDs (backward compat)

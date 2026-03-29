@@ -606,7 +606,7 @@ const ProductCard = ({
   const isComp = product.id === "comp-report";
   const tier = getTier(product);
   const isSnapshot = product.id === "snapshot-plus";
-  const isHero = product.id === "the-full-analysis";
+  const isHero = false;
   const tierPriceColor = "#D4AF37";
   const tierReassuranceColor = "rgba(212,175,55,0.50)";
 
@@ -977,7 +977,6 @@ const FaqItem = ({
    ═══════════════════════════════════════════════════════════════════ */
 const Store = () => {
   const haptics = useHaptics();
-  const [showPopup, setShowPopup] = useState<Product | null>(null);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
@@ -1006,14 +1005,8 @@ const Store = () => {
   /* ─── BUY HANDLERS ─── */
   const handleBuyProduct = (product: Product) => {
     haptics.medium();
-    // Only show the Working Model upsell popup for self-serve (instant) products
-    const instantProducts = ["the-full-analysis"];
-    if (instantProducts.includes(product.id)) {
-      setShowPopup(product);
-    } else {
-      // Comp report and others go straight to checkout
-      startCheckout(product.id);
-    }
+    // All products go straight to checkout
+    startCheckout(product.id);
   };
 
   const handleBuyService = (product: Product) => {
@@ -1022,19 +1015,7 @@ const Store = () => {
       window.location.href = "mailto:thefilmmaker.og@gmail.com?subject=Boutique%20Inquiry&body=I%27m%20interested%20in%20a%20custom%20engagement.";
       return;
     }
-    setShowPopup(product);
-  };
-
-  const handlePopupAccept = () => {
-    if (!showPopup) return;
-    haptics.medium();
-    startCheckout(showPopup.id, "the-working-model-discount");
-  };
-
-  const handlePopupDecline = () => {
-    if (!showPopup) return;
-    haptics.light();
-    startCheckout(showPopup.id);
+    startCheckout(product.id);
   };
 
   // Services: lowest tier first
@@ -1047,18 +1028,8 @@ const Store = () => {
     <div style={{ minHeight: "100vh", background: "#0C0C0E", maxWidth: "780px", margin: "0 auto" }}>
       <StyleInjector />
 
-      {/* Working Model Popup */}
-      {showPopup && (
-        <WorkingModelPopup
-          onAccept={handlePopupAccept}
-          onDecline={handlePopupDecline}
-          onClose={() => !checkoutLoading && setShowPopup(null)}
-          loading={checkoutLoading}
-        />
-      )}
-
       {/* Checkout loading overlay */}
-      {checkoutLoading && !showPopup && (
+      {checkoutLoading && (
         <div style={{
           position: "fixed", inset: 0, zIndex: 300,
           background: "rgba(0,0,0,0.6)",
