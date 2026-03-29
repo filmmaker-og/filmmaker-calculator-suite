@@ -22,7 +22,7 @@ const s: Record<string, React.CSSProperties> = {
     gap: "8px",
     padding: "10px 16px",
     marginBottom: "16px",
-    background: "#1A1A1C",
+    background: "#222226",
     border: "1px solid rgba(212,175,55,0.15)",
     borderTop: "1px solid rgba(255,255,255,0.08)",
     borderRadius: "8px",

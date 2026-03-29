@@ -56,7 +56,7 @@ const eyebrowS: Record<string, React.CSSProperties> = {
 
 const cardStyles: Record<CardVariant, React.CSSProperties> = {
   warm: {
-    background: "#1A1A1C",
+    background: "#222226",
     border: "1px solid rgba(212,175,55,0.25)",
     borderTop: "1px solid rgba(255,255,255,0.08)",
     borderRadius: "8px",
@@ -64,7 +64,7 @@ const cardStyles: Record<CardVariant, React.CSSProperties> = {
     position: "relative",
   },
   feature: {
-    background: "#1A1A1C",
+    background: "#222226",
     border: "1px solid rgba(212,175,55,0.20)",
     borderTop: "1px solid rgba(255,255,255,0.08)",
     borderRadius: "8px",
@@ -73,7 +73,7 @@ const cardStyles: Record<CardVariant, React.CSSProperties> = {
     position: "relative",
   },
   data: {
-    background: "#1A1A1C",
+    background: "#222226",
     border: "1px solid rgba(212,175,55,0.15)",
     borderTop: "1px solid rgba(255,255,255,0.08)",
     borderRadius: "8px",
@@ -81,7 +81,7 @@ const cardStyles: Record<CardVariant, React.CSSProperties> = {
     position: "relative",
   },
   neutral: {
-    background: "#1A1A1C",
+    background: "#222226",
     border: "1px solid rgba(212,175,55,0.15)",
     borderTop: "1px solid rgba(255,255,255,0.08)",
     borderRadius: "8px",
@@ -179,14 +179,14 @@ const ChapterCard = ({
     // Legacy fallback for non-variant usage
     cardStyle = isActive
       ? {
-          background: "#1A1A1C",
+          background: "#222226",
           border: "1px solid rgba(212,175,55,0.25)",
           borderRadius: "8px",
           overflow: "hidden",
           transition: "border-color 0.25s ease",
         }
       : {
-          background: "#1A1A1C",
+          background: "#222226",
           border: "1px solid rgba(212,175,55,0.15)",
           borderRadius: "8px",
           overflow: "hidden",

@@ -242,7 +242,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   justifyContent: "center",
                   gap: "6px",
                   padding: "10px 8px",
-                  background: "#1A1A1C",
+                  background: "#222226",
                   border: "1px solid rgba(212,175,55,0.15)",
                   borderRadius: "8px",
                   cursor: "pointer",
@@ -423,7 +423,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
               {/* Email */}
               <a
                 aria-label="Email"
-                href="mailto:thefilmmaker.og@gmail.com"
+                href="mailto:og@filmmakerog.com"
                 onClick={() => haptics.light()}
                 onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.08)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.16) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 24px rgba(212,175,55,0.08), 0 0 12px rgba(212,175,55,0.08)"; }}
                 onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.08)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.12) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 20px rgba(212,175,55,0.08), 0 0 10px rgba(212,175,55,0.06)"; }}

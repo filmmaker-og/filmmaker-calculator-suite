@@ -1012,7 +1012,7 @@ const Store = () => {
   const handleBuyService = (product: Product) => {
     haptics.medium();
     if (product.id === "boutique") {
-      window.location.href = "mailto:thefilmmaker.og@gmail.com?subject=Boutique%20Inquiry&body=I%27m%20interested%20in%20a%20custom%20engagement.";
+      window.location.href = "mailto:og@filmmakerog.com?subject=Boutique%20Inquiry&body=I%27m%20interested%20in%20a%20custom%20engagement.";
       return;
     }
     startCheckout(product.id);

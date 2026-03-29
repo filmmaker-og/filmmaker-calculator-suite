@@ -140,7 +140,7 @@ const CalcHero = ({ stepLabel, title, titleGold, subtitle, visible }: {
         position: "relative", textAlign: "center",
         padding: "24px 20px 20px",
         borderRadius: 8, overflow: "hidden",
-        background: "#1A1A1C",
+        background: "#222226",
         border: "1px solid rgba(212,175,55,0.15)",
         borderTop: "1px solid rgba(255,255,255,0.08)",
       }}>

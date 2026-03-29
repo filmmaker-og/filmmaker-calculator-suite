@@ -108,10 +108,10 @@ const ConfirmationScreen = ({ email }: { email: string }) => (
       <p className="text-ink-secondary text-[12px] leading-relaxed">
         Questions? Email{" "}
         <a
-          href="mailto:thefilmmaker.og@gmail.com"
+          href="mailto:og@filmmakerog.com"
           className="text-gold hover:text-gold/80 transition-colors"
         >
-          thefilmmaker.og@gmail.com
+          og@filmmakerog.com
         </a>
       </p>
     </div>

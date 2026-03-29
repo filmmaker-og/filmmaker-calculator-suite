@@ -93,7 +93,7 @@ CALCULATOR NUDGE: Run your numbers through the free calculator. Takes 5 minutes.
 SNAPSHOT+ NUDGE: Snapshot+ adds deal diagnostics and your company branding for $19. Instant. https://filmmakerog.com/store/snapshot-plus
 COMP REPORT NUDGE: The Comp Report gives you real comparable deals to defend your valuation. https://filmmakerog.com/store/comp-report
 STORE NUDGE: See all options at https://filmmakerog.com/store
-CONTACT NUDGE: For complex deals, email thefilmmaker.og@gmail.com
+CONTACT NUDGE: For complex deals, email og@filmmakerog.com
 
 IMPORTANT: The calculator lives at https://filmmakerog.com/calculator - always use this URL.
 The store lives at https://filmmakerog.com/store
@@ -172,7 +172,7 @@ PRODUCTS (CURRENT — March 2026):
 - Comp Report ($595 for 5 comps / $995 for 10 comps): Real comparable acquisition deals in user's genre, budget, cast tier. Defensible valuation. 72-hour delivery. https://filmmakerog.com/store/comp-report
 - Producer's Package ($1,797): Everything in Comp Report + custom lookbook, pitch deck with speaker notes, enhanced financial presentation, 10 comps, investor docs. 3-5 business days. https://filmmakerog.com/store/the-producers-package
 - Working Model ($79): Live Excel engine. Add-on at Producer's Package checkout ONLY.
-- Boutique ($2,997+): Custom scope. thefilmmaker.og@gmail.com
+- Boutique ($2,997+): Custom scope. og@filmmakerog.com
 
 DEAD PRODUCTS (never mention these):
 - "The Full Analysis" ($197) — this product no longer exists. Its features are now included in the FREE Snapshot.
