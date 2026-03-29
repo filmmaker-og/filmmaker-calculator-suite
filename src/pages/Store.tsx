@@ -63,9 +63,9 @@ const s: Record<string, React.CSSProperties> = {
   },
   /* ── Card base ── */
   cardBase: {
-    background: "#1A1A1C",
-    border: "1px solid rgba(212,175,55,0.15)",
-    borderTop: "1px solid rgba(255,255,255,0.08)",
+    background: "#222226",
+    border: "1px solid rgba(255,255,255,0.10)",
+    borderTop: "1px solid rgba(255,255,255,0.15)",
     borderRadius: "8px",
     overflow: "hidden",
     transition: "transform 0.3s ease, border-color 0.3s ease",
@@ -177,8 +177,8 @@ const tierStyles = {
   gold: {
     id: "gold" as const,
     card: {
-      border: "1px solid rgba(212,175,55,0.15)",
-      background: "#1A1A1C",
+      border: "1px solid rgba(255,255,255,0.10)",
+      background: "#222226",
     },
     atmosphericTop: "none",
     atmosphericBottom: "none",
@@ -202,8 +202,8 @@ const tierStyles = {
   purple: {
     id: "purple" as const,
     card: {
-      border: "1px solid rgba(212,175,55,0.25)",
-      background: "#1A1A1C",
+      border: "1px solid rgba(255,255,255,0.12)",
+      background: "#222226",
     },
     atmosphericTop: "none",
     atmosphericBottom: "none",
@@ -389,7 +389,7 @@ const WorkingModelPopup = ({
         border: "1px solid rgba(212,175,55,0.15)",
         borderTop: "1px solid rgba(255,255,255,0.08)",
         borderBottom: "none",
-        background: "#1A1A1C",
+        background: "#222226",
         animation: "faqOpen 0.3s ease-out",
       }}
     >
@@ -1058,7 +1058,7 @@ const Store = () => {
           margin: "0 24px",
           borderRadius: 8,
           overflow: "hidden",
-          background: "#1A1A1C",
+          background: "#222226",
           border: "1px solid rgba(212,175,55,0.15)",
           borderTop: "1px solid rgba(255,255,255,0.08)",
         }}>
@@ -1218,7 +1218,7 @@ const Store = () => {
         style={{ padding: "0 24px 32px", position: "relative" }}
       >
         <div style={{
-          background: "#1A1A1C",
+          background: "#222226",
           border: "1px solid rgba(212,175,55,0.15)",
           borderTop: "1px solid rgba(255,255,255,0.08)",
           borderRadius: "8px",
@@ -1288,7 +1288,7 @@ const Store = () => {
       >
         {/* Closer atmospheric canopy — removed per brand system */}
         <div style={{
-          background: "#1A1A1C",
+          background: "#222226",
           border: "1px solid rgba(212,175,55,0.15)",
           borderTop: "1px solid rgba(255,255,255,0.08)",
           borderRadius: "8px",
