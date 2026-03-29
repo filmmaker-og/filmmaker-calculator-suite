@@ -21,7 +21,7 @@ Paid products solve the question the previous tier created. Each tier absorbs ev
 | **Snapshot+** | $19 | Tripwire | Everything in Free Snapshot + white-labeled (user's company replaces FILMMAKER.OG on every page) + 4 diagnostic metrics (Margin of Safety, Erosion Rate, Off-the-Top Total, Cost of Capital). First Stripe transaction. |
 | **Comp Report** | $595 / $995 | Evidence | Everything in Snapshot+ + 5 comparable acquisition deals (or 10 for $995) in user's genre/budget/cast tier. Defensible valuation range with methodology. |
 | **Producer's Package** | $1,797 | Turnkey | Everything in Comp Report + custom lookbook, pitch deck with speaker notes, enhanced financial presentation, 10 comps, investor return profiles, executive summary, deal terms summary. |
-| **+ Working Model** | +$79 | Add-on | Live formula-driven Excel workbook. Available ONLY as add-on at Producer's Package checkout. Not standalone. Not available with lower tiers. |
+| **+ Working Model** | +$79 | Add-on | Live formula-driven Excel workbook. Available ONLY as add-on at Producer's Package checkout. Not standalone. |
 | **Boutique** | $2,997+ | Bespoke | Everything in Producer's Package + custom scope per engagement. |
 
 ### Dead Products (Do Not Reintroduce)

@@ -1,6 +1,6 @@
 # FILMMAKER.OG — Session Brief for Claude Code
 
-**Date:** March 28, 2026
+**Date:** March 29, 2026
 **Purpose:** Comprehensive context handoff. Everything you need to work on this codebase.
 
 ---
@@ -30,8 +30,8 @@ The user is a "vibe coder" — gives creative direction, expects proactive compl
 
 ### Git
 - **Repo:** `filmmaker-og/filmmaker-calculator-suite` (private)
-- **Branch:** `main` is production. Always branch for changes, merge after build passes.
-- **Config:** `user.email="og@filmmakerog.com"`, `user.name="filmmaker-og"`
+- **Branch:** `main` is production. Push directly to main (no branch ceremony per user preference).
+- **Config:** `user.email="thefilmmaker.og@gmail.com"`, `user.name="filmmaker-og"`
 - **Safety tag:** `pre-refresh` on main saves the state before the major overhaul sessions began
 
 ### Lead Capture Flow
@@ -53,6 +53,7 @@ The user is a "vibe coder" — gives creative direction, expects proactive compl
 ### Supabase Edge Functions
 | Function | Purpose |
 |----------|--------|
+| `create-checkout` | Stripe checkout session creation — maps product IDs to prices |
 | `ask-the-og` | AI chatbot (Claude) — streaming SSE |
 | `sync-lead-to-loops` | Webhook receiver — pushes new leads to Loops |
 

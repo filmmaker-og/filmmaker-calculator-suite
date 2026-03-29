@@ -28,15 +28,16 @@ Free film budget calculator and recoupment waterfall simulator for independent p
 
 ## Design System
 
-The visual system is documented in [`BRAND_SYSTEM.md`](./BRAND_SYSTEM.md) (v3.1). Key principles:
+The visual system is documented in [`BRAND_SYSTEM.md`](./BRAND_SYSTEM.md) (v4.0). Key principles:
 
-- **Dark-first** — `#0C0C0E` page background, warm `#1A1A1C` containers, `#232326` surfaces
+- **Three-step depth** — `#0C0C0E` void → `#222226` slate wrappers → `#121214` dark inner wells
 - **Two-gold system** — Metallic `#D4AF37` for brand elements, `#F9E076` for CTAs only
 - **Warm-white text** — `rgba(250,248,244,...)` for body, cold-white for labels
-- **Responsive** — 780px max-width, `clamp()` padding (mobile-first, desktop breathes wider)
+- **Elevation** — rim lights on wrappers, inset shadows on wells, semantic color glows
+- **Responsive** — 1000px max-width, `clamp(14px, 4vw, 40px)` padding
 - **No purple** — fully eliminated, gold system throughout
 
-## Landing Page Structure (v18)
+## Landing Page Structure (v19)
 
 1. Hero — headline + CTA above fold, interactive calculator below
 2. Product Preview — 5 output preview cards (scrollable mobile, grid desktop)
@@ -80,7 +81,9 @@ No auth, no magic links, no OTP. Lead capture is best-effort — users get throu
 | Comp Report | $595 / $995 | 5 or 10 comparable acquisition deals |
 | Producer's Package | $1,797 | Turnkey — lookbook, pitch deck, financials, 10 comps |
 | Boutique | $2,997+ | Custom scope per engagement |
-| Working Model | +$79 | Add-on at Producer's Package checkout |
+| Working Model | +$79 | Add-on at Producer's Package checkout only |
+
+**Dead products:** The Full Analysis ($197) has been removed. All its features are now free in the Snapshot.
 
 ## Project Structure
 
@@ -94,7 +97,7 @@ src/
 ├── integrations/    # Supabase client + types
 └── lib/             # Design tokens (tokens.ts), utilities, store product data
 supabase/
-└── functions/       # Edge functions (ask-the-og, sync-lead-to-loops)
+└── functions/       # Edge functions (create-checkout, ask-the-og, sync-lead-to-loops)
 api/
 ├── generate-pdf.ts  # Vercel serverless — PDF generation
 └── _pdf-template.ts # PDF template (5-page branded document)
@@ -104,7 +107,7 @@ api/
 
 | File | Purpose |
 |---|---|
-| `BRAND_SYSTEM.md` | Design system documentation (v3.1) |
+| `BRAND_SYSTEM.md` | Design system documentation (v4.0) |
 | `CONVERSION_STRATEGY.md` | Full product ladder, pricing, funnel architecture |
 | `src/lib/tokens.ts` | Color token functions — single source of truth for all colors |
 | `src/lib/store-products.ts` | Product definitions, pricing, and upgrade paths |

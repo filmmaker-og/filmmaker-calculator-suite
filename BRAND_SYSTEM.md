@@ -1,7 +1,7 @@
 # FILMMAKER.OG — Brand System
 
-**Version:** 3.1
-**Last updated:** March 28, 2026
+**Version:** 4.0
+**Last updated:** March 29, 2026
 **Source of truth for:** Every page, component, and visual decision in the product.
 
 When building or reskinning any page, reference this file — not memory, not other pages. If a decision isn't in here, it hasn't been made yet.
@@ -13,29 +13,31 @@ When building or reskinning any page, reference this file — not memory, not ot
 ### The Rule
 Gold + black + warm white. That's it. Every other color is semantic (communicates data) or an earned exception. No purple anywhere.
 
-### Surface Hierarchy (6 layers)
+### Surface Hierarchy — Three-Step Depth System
 | Token | Value | Use |
 |---|---|---|
-| Page (Void) | `#0C0C0E` | `<body>` / outermost wrapper — near-black with a warm hint |
-| Container | `#1A1A1C` | Section containers — warm dark gray with `grain-surface` overlay |
-| Header Band | `linear-gradient(180deg, rgba(212,175,55,0.06), #232326)` | First child inside every container — visible gold warmth. Hero + closer run hotter at `0.10`. |
-| Inner Card | `linear-gradient(180deg, rgba(212,175,55,0.02), #232326)` | Content cards inside sections — subtle gold warmth |
-| Inner Surface | `#232326` | Calculator areas, data surfaces, WITH/WITHOUT grid cells |
-| Footer | `#161618` | Footer background |
+| Page (Void) | `#0C0C0E` | `<body>` background — near-black. Warm gradient overlay: `#0C0C0E → #111113 → #0E0E10` |
+| Section Wrapper | `#222226` | The "stage" — lighter slate that clearly lifts off the void. `border-radius: 8px` |
+| Inner Well | `#121214` | Near-black — content recessed into the wrapper like a shadow box |
+| Header Band | `linear-gradient(180deg, rgba(212,175,55,0.08), #121214)` | First child inside every wrapper — warm gold gradient fading to dark well. `inset 0 2px 6px` shadow. |
+| Inner Card | `linear-gradient(180deg, rgba(212,175,55,0.03), #121214)` | Content cards inside sections — subtle gold warmth |
 
-Each layer is progressively lighter. Container (`#1A1A1C`) lifts off the page (`#0C0C0E`). Header bands and inner cards add gold warmth via gradients. Never use `#000`, `#111`, `#121212`, `#1E1E22`, or `#242428` (these are deprecated values).
+The wrappers (#222226) are the brightest layer. Inner wells (#121214) are recessed below them. Gold, green, and red pop against the near-black wells. Section wrappers use white structural borders (`rgba(255,255,255,0.10-0.18)`), not gold.
+
+Deprecated values (do not use): `#000`, `#111`, `#1A1A1C` (old container), `#1E1E20`, `#232326` (old surface), `#242428`.
 
 ### Gold — The Brand Color
 | Token | Value | Use |
 |---|---|---|
 | `GOLD` | `#D4AF37` | Borders, icons, dividers, brand elements |
 | `CTA` / `#F9E076` | CTA Gold | **Exclusively** for clickable elements (buttons, links) |
-| `gold(0.15)` | Container borders (sides) |
-| `gold(0.25)` | Active/hover borders, OgBotFab border |
-| `gold(0.30)` | Waterfall tier number badge border |
-| `gold(0.12)` | Inner card borders, waterfall tier badge background |
-| `gold(0.08)` | Background tints, eyebrow pill bg |
-| `gold(0.03)` | Ghost/ambient fill |
+| `gold(0.08)` | Header band gradient top, background tints |
+| `gold(0.12)` | EyebrowPill background, waterfall subtitle highlight |
+| `gold(0.18)` | Badge backgrounds (wfBadge, stakes circles) |
+| `gold(0.22)` | Section dividers, feature badge borders |
+| `gold(0.30)` | EyebrowPill border |
+| `gold(0.40)` | Badge borders, testimonial left accent |
+| `gold(0.70)` | Waterfall connector lines |
 
 **The two-gold rule:** If it's not clickable, it's not `#F9E076`. Metallic gold (`#D4AF37`) is for brand elements. CTA gold is for buttons and links only.
 
@@ -57,12 +59,12 @@ Body text uses warm-white (`rgba(250,248,244,...)`) not cold-white (`rgba(255,25
 | Role | Value | Use |
 |---|---|---|
 | Headlines | `#fff` or `white(0.95)` | Section headlines, hero headline |
-| Body (primary) | `rgba(250,248,244,0.90)` | Testimonials, WITH column text |
-| Body (standard) | `rgba(250,248,244,0.88)` | All Inter body text, descriptions |
-| Body (secondary) | `rgba(250,248,244,0.78)` | Supporting text, WITHOUT column, stake card body |
-| Labels | `rgba(255,255,255,0.70)` | Slider labels, metadata (cold-white, Roboto Mono) |
-| Tertiary | `rgba(255,255,255,0.60)` | Minimum for readable text — floor |
-| Footer | `rgba(255,255,255,0.55)` | Footer text, disclaimers |
+| Body (primary) | `rgba(250,248,244,0.90-0.92)` | Testimonials, closer body, WITH column |
+| Body (standard) | `rgba(250,248,244,0.85)` | All Inter body text, stakes body, descriptions |
+| Labels (bright) | `rgba(250,248,244,0.80)` | Total Deductions label, important metadata |
+| Labels | `rgba(250,248,244,0.75)` | Slider labels, REMAINING, Estimated Net Profit (cold-white) |
+| Tertiary | `rgba(250,248,244,0.55-0.65)` | Swipe indicator, ready-to-model text |
+| Footer | `rgba(255,255,255,0.50-0.55)` | Footer text, disclaimers |
 | Easter egg | `rgba(255,255,255,0.35)` | "Best viewed in the dark." — decorative only |
 
 **Opacity floor:** No text intended to be read may go below `0.60`. Below that is decorative only.
@@ -113,29 +115,30 @@ All three loaded via Google Fonts in `index.css`.
 
 ## 3. COMPONENTS
 
-### Section Container
+### Section Wrapper
 ```css
-background: #1A1A1C;
-border: 1px solid rgba(212,175,55,0.15);
-border-top: 1px solid rgba(255,255,255,0.08);
+background: #222226;
+border: 1px solid rgba(255,255,255,0.10);
+border-top: 1px solid rgba(255,255,255,0.18);
 border-radius: 8px;
-padding: 32px clamp(16px, 4vw, 32px);
-box-shadow: 0 4px 16px rgba(0,0,0,0.30);
+padding: 36px clamp(24px, 5vw, 40px);
+box-shadow: 0 6px 28px rgba(0,0,0,0.50), 0 0 1px rgba(255,255,255,0.04), 0 0 1px rgba(212,175,55,0.06);
 ```
-Always add `className="grain-surface"` for SVG noise texture overlay (opacity: 0.035). First child is always a **Header Band**.
+Add `className="grain-surface"`. First child is always a **Header Band**. Borders are white structural — gold reserved for accents only.
 
-### Header Band
-First child inside every Section Container:
+### Header Band (Inner Well)
+First child inside every Section Wrapper:
 ```css
-background: linear-gradient(180deg, rgba(212,175,55,0.06), #232326);
-border: 1px solid rgba(255,255,255,0.04);
-border-bottom: 1px solid rgba(212,175,55,0.10);
+background: linear-gradient(180deg, rgba(212,175,55,0.08), #121214);
+border: 1px solid rgba(255,255,255,0.06);
+border-top: 1px solid rgba(255,255,255,0.10);
 border-radius: 6px;
-padding: 24px 20px;
-margin-bottom: 16px;
+padding: 28px 24px;
+margin-bottom: 20px;
 text-align: center;
+box-shadow: inset 0 2px 6px rgba(0,0,0,0.25);
 ```
-Hero and closer header bands use `rgba(212,175,55,0.10)` instead of `0.06` — hotter bookends.
+Closer header band uses `rgba(212,175,55,0.08)` with `border-top: 0.12` — slightly brighter for CTA emphasis.
 
 ### EyebrowPill
 ```css
