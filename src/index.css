@@ -964,6 +964,34 @@
     border: none;
   }
 
+  /* Color-coded slider thumbs — Budget: white, Acquisition: gold (default), Sales Fee: red */
+  .slider-budget::-webkit-slider-thumb {
+    background: #FFFFFF;
+    box-shadow: 0 0 8px rgba(255,255,255,0.35);
+  }
+  .slider-budget::-moz-range-thumb {
+    background: #FFFFFF;
+    box-shadow: 0 0 8px rgba(255,255,255,0.35);
+  }
+
+  .slider-acquisition::-webkit-slider-thumb {
+    background: #D4AF37;
+    box-shadow: 0 0 8px rgba(212,175,55,0.4);
+  }
+  .slider-acquisition::-moz-range-thumb {
+    background: #D4AF37;
+    box-shadow: 0 0 8px rgba(212,175,55,0.4);
+  }
+
+  .slider-salesfee::-webkit-slider-thumb {
+    background: #DC2626;
+    box-shadow: 0 0 8px rgba(220,38,38,0.45);
+  }
+  .slider-salesfee::-moz-range-thumb {
+    background: #DC2626;
+    box-shadow: 0 0 8px rgba(220,38,38,0.45);
+  }
+
   /* ═══════════════════════════════════════════════════════════════════
      PREMIUM OVERHAUL — CTA hover
      ═══════════════════════════════════════════════════════════════════ */

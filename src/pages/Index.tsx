@@ -442,14 +442,16 @@ const Index = () => {
                 <span style={{ position: "relative", zIndex: 1 }}>BUILD MY WATERFALL — FREE</span>
                 <div style={styles.ctaShimmer} />
               </button>
-              <p style={styles.ctaReassurance}>See your full waterfall in 60 seconds</p>
             </div>
           </div>
+
+          {/* ── Subtle divider between poster & calculator ── */}
+          <div style={{ height: "1px", background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.10), transparent)", margin: "0 8px" }} />
 
           {/* ── Mini Calculator — separate interactive beat ── */}
           <div style={{
             ...reveal(heroVisible, 1),
-            marginTop: "20px",
+            marginTop: "14px",
             background: "#232326",
             border: "1px solid rgba(212,175,55,0.15)",
             borderTop: "1px solid rgba(255,255,255,0.04)",
@@ -457,7 +459,7 @@ const Index = () => {
             padding: "20px 18px",
           }}>
             <div style={{ display: "flex", justifyContent: "center", marginBottom: "14px" }}>
-              <p style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "13px", color: "rgba(212,175,55,0.70)", letterSpacing: "0.10em", textTransform: "uppercase", textAlign: "center", display: "inline-block", background: "rgba(212,175,55,0.08)", border: "1px solid rgba(212,175,55,0.18)", padding: "4px 14px", borderRadius: "999px" }}>Drag to model your deal</p>
+              <p style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "13px", color: "rgba(212,175,55,0.70)", letterSpacing: "0.10em", textTransform: "uppercase", textAlign: "center", display: "inline-block", background: "rgba(212,175,55,0.08)", border: "1px solid rgba(212,175,55,0.18)", padding: "3px 10px", borderRadius: "999px" }}>Drag to model your deal</p>
             </div>
             {/* Slider: Budget */}
             <div style={{ marginBottom: "16px" }}>
@@ -472,7 +474,8 @@ const Index = () => {
                 step={100_000}
                 value={budgetValue}
                 onChange={(e) => setBudgetValue(Number(e.target.value))}
-                style={{ ...styles.slider, background: `linear-gradient(to right, rgba(212,175,55,0.35) 0%, rgba(212,175,55,0.35) ${((budgetValue - 500000) / (10000000 - 500000)) * 100}%, rgba(255,255,255,0.14) ${((budgetValue - 500000) / (10000000 - 500000)) * 100}%, rgba(255,255,255,0.14) 100%)` }}
+                className="slider-budget"
+                style={{ ...styles.slider, background: `linear-gradient(to right, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.35) ${((budgetValue - 500000) / (10000000 - 500000)) * 100}%, rgba(255,255,255,0.14) ${((budgetValue - 500000) / (10000000 - 500000)) * 100}%, rgba(255,255,255,0.14) 100%)` }}
               />
             </div>
 
@@ -489,6 +492,7 @@ const Index = () => {
                 step={100_000}
                 value={acquisitionValue}
                 onChange={(e) => setAcquisitionValue(Number(e.target.value))}
+                className="slider-acquisition"
                 style={{ ...styles.slider, background: `linear-gradient(to right, rgba(212,175,55,0.35) 0%, rgba(212,175,55,0.35) ${((acquisitionValue - 500000) / (15000000 - 500000)) * 100}%, rgba(255,255,255,0.14) ${((acquisitionValue - 500000) / (15000000 - 500000)) * 100}%, rgba(255,255,255,0.14) 100%)` }}
               />
             </div>
@@ -506,7 +510,8 @@ const Index = () => {
                 step={1}
                 value={salesFeePercent}
                 onChange={(e) => setSalesFeePercent(Number(e.target.value))}
-                style={{ ...styles.slider, background: `linear-gradient(to right, rgba(212,175,55,0.35) 0%, rgba(212,175,55,0.35) ${(salesFeePercent / 25) * 100}%, rgba(255,255,255,0.14) ${(salesFeePercent / 25) * 100}%, rgba(255,255,255,0.14) 100%)` }}
+                className="slider-salesfee"
+                style={{ ...styles.slider, background: `linear-gradient(to right, rgba(220,38,38,0.50) 0%, rgba(220,38,38,0.50) ${(salesFeePercent / 25) * 100}%, rgba(255,255,255,0.14) ${(salesFeePercent / 25) * 100}%, rgba(255,255,255,0.14) 100%)` }}
               />
             </div>
 
@@ -516,26 +521,27 @@ const Index = () => {
                 <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: "rgba(250,248,244,0.70)", letterSpacing: "0.06em", textTransform: "uppercase" }}>Total Deductions</span>
                 <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "11px", color: "rgba(220,38,38,0.85)" }}>{fmt(totalDeductions)}</span>
               </div>
-              <div style={{ height: "8px", background: "rgba(255,255,255,0.12)", borderRadius: "4px", overflow: "hidden" }}>
+              <div style={{ height: "10px", background: "rgba(255,255,255,0.12)", borderRadius: "5px", overflow: "hidden" }}>
                 <div style={{
                   height: "100%",
                   width: `${Math.min((totalDeductions / acquisitionValue) * 100, 100)}%`,
-                  background: "linear-gradient(90deg, rgba(220,38,38,0.70), rgba(240,168,48,0.70))",
-                  borderRadius: "4px",
+                  background: "linear-gradient(90deg, rgba(220,38,38,0.80), rgba(220,38,38,0.55))",
+                  borderRadius: "5px",
                   transition: "width 0.3s ease-out",
+                  boxShadow: "0 0 10px rgba(220,38,38,0.30), 0 0 20px rgba(220,38,38,0.12)",
                 }} />
               </div>
             </div>
 
-            {/* ── Gold divider ── */}
-            <div style={{ height: "1px", background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.15), transparent)", margin: "0 0 12px" }} />
+            {/* ── Subtle divider ── */}
+            <div style={{ height: "1px", background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent)", margin: "0 0 12px" }} />
 
             {/* ── Net Profit output ── */}
             <div style={{ textAlign: "center" }}>
               <p style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "12px", color: "rgba(250,248,244,0.70)", letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: "4px" }}>Estimated Net Profit</p>
               <p style={{
                 fontFamily: "'Bebas Neue', sans-serif",
-                fontSize: Math.abs(heroNetProfit) >= 500000 ? "3.8rem" : "3.2rem",
+                fontSize: heroNetProfit < 0 ? "clamp(2.4rem, 8vw, 3.2rem)" : Math.abs(heroNetProfit) >= 500000 ? "3.8rem" : "3.2rem",
                 lineHeight: 1,
                 color: heroNetProfit >= 0 ? "#3CB371" : "#DC2626",
                 textShadow: heroNetProfit >= 0
@@ -1164,8 +1170,7 @@ const Index = () => {
           <div style={{ ...reveal(socialVisible, 2), display: "flex", justifyContent: "center", gap: "16px", flexWrap: "wrap", margin: "0 0 24px" }}>
             {[
               { number: "500+", label: "Waterfalls Built" },
-              { number: "4", label: "Continents" },
-              { number: "60s", label: "Time to Model" },
+              { number: "90s", label: "Time to Model" },
             ].map((stat) => (
               <div key={stat.label} style={{ textAlign: "center", minWidth: "80px", padding: "12px 16px", background: "rgba(212,175,55,0.03)", border: "1px solid rgba(212,175,55,0.10)", borderRadius: "8px" }}>
                 <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "1.8rem", color: "#D4AF37", lineHeight: 1 }}>{stat.number}</div>
@@ -1234,12 +1239,11 @@ const Index = () => {
               <span style={{ position: "relative", zIndex: 1 }}>BUILD MY WATERFALL — FREE</span>
               <div style={styles.ctaShimmer} />
             </button>
-            <p style={styles.ctaReassurance}>See your full waterfall in 60 seconds</p>
           </div>
         </section>
 
         {/* ═══ FOOTER ═══ */}
-        <footer ref={footerRef} style={{ ...styles.footer, opacity: prefersReducedMotion || footerVisible ? 1 : 0, transition: prefersReducedMotion ? "none" : "opacity 0.8s ease-out", marginTop: "24px" }}>
+        <footer ref={footerRef} style={{ ...styles.footer, opacity: prefersReducedMotion || footerVisible ? 1 : 0, transition: prefersReducedMotion ? "none" : "opacity 0.8s ease-out", marginTop: "32px" }}>
           {/* Premium divider */}
           <div style={{ height: "1px", background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.15), transparent)", maxWidth: "200px", margin: "0 auto 28px" }} />
           <div style={styles.footerLinks}>
