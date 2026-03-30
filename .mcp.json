@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "loops": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["/home/user/filmmaker-calculator-suite/mcp-loops/dist/index.js"],
+      "env": {
+        "LOOPS_API_KEY": "${LOOPS_API_KEY}"
+      }
+    }
+  }
+}
