@@ -27,6 +27,7 @@ const Calculator = lazy(() => import("./pages/Calculator"));
 const Store = lazy(() => import("./pages/Store"));
 const StorePackage = lazy(() => import("./pages/StorePackage"));
 const BuildYourPlan = lazy(() => import("./pages/BuildYourPlan"));
+const Dashboard = lazy(() => import("./pages/Dashboard"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -75,6 +76,7 @@ const AppShell = () => {
           <Route path="/store" element={<Store />} />
           <Route path="/store/:slug" element={<StorePackage />} />
           <Route path="/build-your-plan" element={<BuildYourPlan />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
