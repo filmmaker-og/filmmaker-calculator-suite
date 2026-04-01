@@ -6,7 +6,7 @@ import {
 } from "recharts";
 
 /* ═══════════════════════════════════════
-   DESIGN TOKENS — v4.8 (math engine: BT normalization, qualified spend, waterfall order)
+   DESIGN TOKENS — v4.9 (guild fringes, buyout revenue, sidebar redesign)
    ═══════════════════════════════════════ */
 const T = {
   bg: "#000",
@@ -82,7 +82,7 @@ const BT = [
   {n:"Hair & Makeup",p:.015,c:"BTL"},{n:"Sound",p:.013,c:"BTL"},{n:"Locations",p:.030,c:"BTL"},
   {n:"Transport",p:.025,c:"BTL"},{n:"Catering",p:.020,c:"BTL"},{n:"Extras",p:.010,c:"BTL"},
   {n:"Stunts",p:.008,c:"BTL"},{n:"Production Office",p:.012,c:"BTL"},{n:"Travel & Living",p:.020,c:"BTL"},
-  {n:"Payroll Tax & Fringes",p:.074,c:"BTL"},
+  {n:"Payroll Taxes",p:.074,c:"BTL"},
   {n:"Editorial",p:.038,c:"Post"},{n:"Color/DI",p:.020,c:"Post"},{n:"Music",p:.023,c:"Post"},
   {n:"Sound Design",p:.018,c:"Post"},{n:"VFX/Titles",p:.020,c:"Post"},{n:"Deliverables",p:.012,c:"Post"},
   {n:"Stock/Media",p:.006,c:"Post"},{n:"Captions",p:.003,c:"Post"},
@@ -165,15 +165,27 @@ const EMPTY_DESCS = {
   risk:"14-factor risk matrix with probability-weighted scores.",
 };
 
+// Guild fringe rates (health, pension, welfare contributions — separate from payroll taxes)
+const GUILD_FRINGES = {sag:.19,dga:.22,iatse:.33};
+// BT indices that each guild applies to
+const SAG_LINES = ["Lead Cast","Supporting Cast"];
+const DGA_LINES = ["Director"];
+const IATSE_LINES = ["Production Staff","Camera","Grip & Electric","Art Dept","Set Construction","Wardrobe","Hair & Makeup","Sound","Locations","Transport","Extras","Stunts"];
+
 /* ═══════════════════════════════════════
-   DERIVE — v4 math engine (UNCHANGED)
+   DERIVE — v4.9 math engine (guild fringes, qualified spend, waterfall order)
    ═══════════════════════════════════════ */
-function derive(inp, budgetEdits, bondOn, bondPct, contPct) {
+function derive(inp, budgetEdits, bondOn, bondPct, contPct, guilds) {
   const tc = Math.round(inp.totalBudget * (inp.qualifiedSpendPct/100) * inp.taxCreditPct / 100);
   const sd = Math.round(tc * inp.taxCreditLoanPct / 100);
   const bondAmt = bondOn ? Math.round(inp.totalBudget * bondPct / 100) : 0;
   const bi = BT.map((t, i) => { const def = Math.round(inp.totalBudget * t.p); const ed = budgetEdits[i]; return { name: t.n, amount: ed !== undefined ? ed : def, category: t.c, isEdited: ed !== undefined }; });
   if (bondOn) bi.push({ name: "Completion Bond", amount: bondAmt, category: "G&A", isEdited: false, isBond: true });
+  // v4.9: Guild fringe rows — visible line items added to budget
+  let guildFringeTotal = 0;
+  if (guilds.sag) { const base = bi.filter(x=>SAG_LINES.includes(x.name)).reduce((s,x)=>s+x.amount,0); const fr = Math.round(base*GUILD_FRINGES.sag); guildFringeTotal+=fr; bi.push({name:"SAG Fringes",amount:fr,category:"ATL",isEdited:false,isFringe:true}); }
+  if (guilds.dga) { const base = bi.filter(x=>DGA_LINES.includes(x.name)).reduce((s,x)=>s+x.amount,0); const fr = Math.round(base*GUILD_FRINGES.dga); guildFringeTotal+=fr; bi.push({name:"DGA Fringes",amount:fr,category:"ATL",isEdited:false,isFringe:true}); }
+  if (guilds.iatse) { const base = bi.filter(x=>IATSE_LINES.includes(x.name)).reduce((s,x)=>s+x.amount,0); const fr = Math.round(base*GUILD_FRINGES.iatse); guildFringeTotal+=fr; bi.push({name:"IATSE Fringes",amount:fr,category:"BTL",isEdited:false,isFringe:true}); }
   const ct = {}; bi.forEach(x => { ct[x.category] = (ct[x.category] || 0) + x.amount; });
   const cont = Math.round(((ct.BTL || 0) + (ct.Post || 0)) * (contPct / 100));
   const actualBudget = bi.reduce((s, b) => s + b.amount, 0) + cont;
@@ -241,7 +253,7 @@ function derive(inp, budgetEdits, bondOn, bondPct, contPct) {
   const risks = RISKS_RAW.map(r=>({...r,score:(r.prob/100)*r.impact}));
   // v4.6: Total interest cost (display only, no math change)
   const totalInterest = Math.round((drAmt-sd)+(gpAmt-inp.gapMezz)+(psAmt-inp.preSaleLoan));
-  return {tc,sd,eq,estInv,bi,ct,cont,rw,rt,calcWF,cf,be,cs,sources,bd,risks,drAmt,gpAmt,psAmt,actualBudget,bondAmt,thFraction,intlFraction,totalInterest};
+  return {tc,sd,eq,estInv,bi,ct,cont,rw,rt,calcWF,cf,be,cs,sources,bd,risks,drAmt,gpAmt,psAmt,actualBudget,bondAmt,thFraction,intlFraction,totalInterest,guildFringeTotal};
 }
 
 /* ═══════════════════════════════════════
@@ -275,8 +287,8 @@ const FlowStep = ({num,label,amount,isLoss,isHighlight,explain}) => (<div style=
 const Toggle = ({label,value,onChange,explain}) => (<div style={{display:"flex",alignItems:"center",gap:"12px",marginBottom:"16px"}}><button onClick={()=>onChange(!value)} style={{width:"44px",height:"24px",borderRadius:"12px",background:value?T.goldPrimary:"rgba(255,255,255,0.08)",border:"none",cursor:"pointer",position:"relative",flexShrink:0,transition:"background 0.2s"}}><div style={{width:"18px",height:"18px",borderRadius:"50%",background:"#fff",position:"absolute",top:"3px",left:value?"23px":"3px",transition:"left 0.2s",boxShadow:"0 2px 4px rgba(0,0,0,0.3)"}}/></button><div><span style={{fontFamily:F.mono,fontSize:"12px",color:value?T.goldPrimary:T.cw70,fontWeight:700,textTransform:"uppercase",letterSpacing:"1px"}}>{label}</span>{explain&&<div style={{fontFamily:F.body,fontSize:"12px",color:T.w65,marginTop:"2px"}}>{explain}</div>}</div></div>);
 const SideSelect = ({label,value,onChange,children}) => (<div style={{marginBottom:"12px"}}><div style={{fontFamily:F.mono,fontSize:"10px",color:T.cw50,marginBottom:"4px",fontWeight:500,textTransform:"uppercase",letterSpacing:"1.5px"}}>{label}</div><div style={{position:"relative"}}><select value={value} onChange={onChange} style={{width:"100%",background:T.inputBg,border:`1px solid ${T.inputBorder}`,borderRadius:"8px",padding:"7px 28px 7px 8px",color:T.cw90,fontFamily:F.mono,fontSize:"11px",outline:"none",boxSizing:"border-box",appearance:"none",cursor:"pointer"}}>{children}</select><span style={{position:"absolute",right:"8px",top:"50%",transform:"translateY(-50%)",fontFamily:F.mono,fontSize:"11px",color:T.cw50,pointerEvents:"none"}}>▾</span></div></div>);
 const SideToggle = ({label,value,onChange}) => (<div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:"6px"}}><span style={{fontFamily:F.mono,fontSize:"10px",color:value?T.goldPrimary:T.cw50,fontWeight:700,textTransform:"uppercase",letterSpacing:"1px"}}>{label}</span><button onClick={()=>onChange(!value)} style={{width:"36px",height:"20px",borderRadius:"10px",background:value?T.goldPrimary:"rgba(255,255,255,0.08)",border:"none",cursor:"pointer",position:"relative",flexShrink:0,transition:"background 0.2s"}}><div style={{width:"14px",height:"14px",borderRadius:"50%",background:"#fff",position:"absolute",top:"3px",left:value?"19px":"3px",transition:"left 0.2s"}}/></button></div>);
-// v4.6: Mini sidebar slider
-const SideSlider = ({label,value,onChange,min,max,step=1,suffix="%"}) => (<div style={{marginBottom:"10px"}}><div style={{display:"flex",justifyContent:"space-between",marginBottom:"2px"}}><span style={{fontFamily:F.mono,fontSize:"10px",color:T.cw50,fontWeight:500,letterSpacing:"1px"}}>{label}</span><span style={{fontFamily:F.mono,fontSize:"10px",color:T.goldPrimary,fontWeight:700}}>{value}{suffix}</span></div><input type="range" min={min} max={max} step={step} value={value} onChange={e=>onChange(Number(e.target.value))} style={{width:"100%",accentColor:T.goldPrimary,height:"2px",cursor:"pointer"}}/></div>);
+// v4.9: SideSlider with editable input
+const SideSlider = ({label,value,onChange,min,max,step=1,suffix="%"}) => (<div style={{marginBottom:"12px"}}><div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"4px"}}><span style={{fontFamily:F.mono,fontSize:"10px",color:T.cw50,fontWeight:600,letterSpacing:"1px"}}>{label}</span><div style={{display:"flex",alignItems:"center",gap:"3px"}}><input type="number" value={value} min={min} max={max} step={step} onChange={e=>{const v=Number(e.target.value);if(!isNaN(v))onChange(Math.min(max,Math.max(min,v)));}} style={{width:"48px",background:T.inputBg,border:`1px solid ${T.inputBorder}`,borderRadius:"5px",padding:"3px 5px",color:T.goldPrimary,fontFamily:F.mono,fontSize:"11px",fontWeight:700,outline:"none",textAlign:"right",boxSizing:"border-box"}}/><span style={{fontFamily:F.mono,fontSize:"10px",color:T.cw50}}>{suffix}</span></div></div><input type="range" min={min} max={max} step={step} value={value} onChange={e=>onChange(Number(e.target.value))} style={{width:"100%",height:"3px",cursor:"pointer"}}/></div>);
 // v4.6: Live feedback panel
 const FeedbackPanel = ({children}) => (<div style={{background:"rgba(242,202,80,0.04)",border:`1px solid rgba(212,175,55,0.15)`,borderLeft:`3px solid ${T.goldPrimary}`,borderRadius:"12px",padding:"20px",marginTop:"24px",boxShadow:"0 8px 24px rgba(0,0,0,0.2)"}}>{children}</div>);
 
@@ -329,7 +341,7 @@ export default function Dashboard() {
   useEffect(()=>{const st=STATES.find(x=>x.id===inp.shootState);if(st&&st.rate>0&&(inp.taxCreditPct===0||inp.taxCreditPct===prevStateRate.current)){setInp(p=>({...p,taxCreditPct:st.rate}));}prevStateRate.current=st?.rate||0;},[inp.shootState]);
   const switchTab = i => {setTabAnim(false);setTimeout(()=>{setTab(i);setTabAnim(true);requestAnimationFrame(()=>{if(mainRef.current)mainRef.current.scrollTop=0;});},50);};
   const s = useCallback((k,v)=>setInp(p=>({...p,[k]:v})),[]);
-  const d = useMemo(()=>derive(inp,budgetEdits,bondOn,bondPct,contPct),[inp,budgetEdits,bondOn,bondPct,contPct]);
+  const d = useMemo(()=>derive(inp,budgetEdits,bondOn,bondPct,contPct,guilds),[inp,budgetEdits,bondOn,bondPct,contPct,guilds]);
   const activeScenario = scenario!==null?scenario:d.rt.base;
   const wf = useMemo(()=>d.calcWF(activeScenario),[d,activeScenario]);
   const wfBase = useMemo(()=>d.calcWF(d.rt.base),[d]);
@@ -363,33 +375,42 @@ export default function Dashboard() {
   /* ═══ MOBILE GATE ═══ */
   if(isMobile) return (<div style={{background:"#000",color:T.w92,fontFamily:F.body,minHeight:"100vh",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"40px 24px",textAlign:"center"}}><div style={{fontFamily:F.mono,fontSize:"10px",letterSpacing:"4px",color:T.goldPrimary,opacity:0.5,marginBottom:"16px",fontWeight:700}}>FILMMAKER.OG</div><div style={{fontFamily:F.display,fontSize:"28px",color:T.w92,marginBottom:"16px"}}>BUILT FOR DESKTOP</div><div style={{fontFamily:F.body,fontSize:"15px",color:T.w65,lineHeight:1.6,maxWidth:"320px"}}>The charts, models, and investor-ready exports need a full screen. Open on your laptop.</div></div>);
 
-  /* ═══ SIDEBAR ═══ */
+  /* ═══ SIDEBAR — v4.9: Quick Adjust up top, collapsible production, nav below ═══ */
+  const [prodOpen,setProdOpen] = useState(false);
   const sidebar = (
     <aside style={{width:"256px",minWidth:"256px",height:"100vh",position:"fixed",left:0,top:0,background:"#000",backdropFilter:"blur(32px)",WebkitBackdropFilter:"blur(32px)",borderRight:`1px solid ${T.border}`,padding:"28px 22px",display:"flex",flexDirection:"column",overflowY:"auto",zIndex:60,boxShadow:"5px 0 30px rgba(0,0,0,0.5)"}}>
       <div style={{display:"inline-flex",alignSelf:"flex-start",background:"rgba(212,175,55,0.10)",border:`1px solid rgba(212,175,55,0.25)`,borderRadius:"6px",padding:"6px 14px",marginBottom:"20px"}}><span style={{fontFamily:F.mono,fontSize:"12px",color:T.gold,letterSpacing:"3px",fontWeight:500}}>FILMMAKER.OG</span></div>
       <div style={{fontFamily:F.display,fontSize:"20px",color:T.w92,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{ht?inp.title.toUpperCase():fmt(inp.totalBudget)+" PRODUCTION"}</div>
-      <div style={{fontFamily:F.mono,fontSize:"11px",color:T.cw50,marginTop:"4px"}}>{inp.genre} · {stateData.name}</div>
+      <div style={{fontFamily:F.mono,fontSize:"11px",color:T.cw50,marginTop:"4px"}}>{inp.genre} · {stateData.name}{guildStr!=="Non-Union"?` · ${guildStr}`:""}</div>
       <Divider/>
       <div style={{display:"flex",gap:"16px"}}><div><div style={{fontFamily:F.mono,fontSize:"10px",color:T.cw50,letterSpacing:"2px",fontWeight:500}}>BUDGET</div><div style={{fontFamily:F.display,fontSize:"24px",color:T.gold,marginTop:"2px"}}><AV>{fmt(d.actualBudget)}</AV></div></div><div><div style={{fontFamily:F.mono,fontSize:"10px",color:T.cw50,letterSpacing:"2px",fontWeight:500}}>EQUITY</div><div style={{fontFamily:F.display,fontSize:"24px",color:T.equity,marginTop:"2px"}}><AV>{fF(d.eq)}</AV></div></div></div>
+      {d.guildFringeTotal>0&&<div style={{fontFamily:F.mono,fontSize:"10px",color:T.amber,marginTop:"6px"}}>Guild fringes add {fF(d.guildFringeTotal)}</div>}
       <Divider/>
-      <nav style={{flex:1}}>{NAV_SECTIONS.map(sec=>{const collapsed=sidebarCollapsed[sec.label];return(<div key={sec.label} style={{marginBottom:"8px"}}><div onClick={()=>toggleSection(sec.label)} style={{fontFamily:F.mono,fontSize:"10px",color:T.gold,letterSpacing:"3px",opacity:0.5,marginBottom:"6px",cursor:"pointer",display:"flex",justifyContent:"space-between",alignItems:"center",padding:"4px 0",fontWeight:500}}><span>{sec.label}</span><span style={{fontSize:"10px",color:T.cw50}}>{collapsed?"▸":"▾"}</span></div>{!collapsed&&TABS.filter(t=>sec.tiers.includes(t.tier)).map(t=>{const idx=TABS.indexOf(t);const active=tab===idx;const locked=!wizardDone&&t.tier>0&&t.id!=="glossary";return<div key={t.id} onClick={()=>locked?null:switchTab(idx)} style={{padding:"8px 12px",borderRadius:"8px",fontSize:"14px",fontFamily:F.body,color:locked?T.cw30:active?T.gold:T.cw70,background:active?"rgba(212,175,55,0.05)":"transparent",borderLeft:active?`2px solid ${T.gold}`:"2px solid transparent",cursor:locked?"default":"pointer",marginBottom:"2px",transition:"all 0.15s",fontWeight:active?500:400,opacity:locked?0.5:1}}>{t.label}{locked&&" 🔒"}</div>;})}</div>);})}</nav>
-      <Divider/>
-      <div style={{fontFamily:F.mono,fontSize:"10px",color:T.gold,letterSpacing:"3px",opacity:0.5,marginBottom:"8px",fontWeight:500}}>QUICK ADJUST</div>
+      {/* ═ QUICK ADJUST — moved up ═ */}
+      <div style={{fontFamily:F.mono,fontSize:"10px",color:T.gold,letterSpacing:"3px",opacity:0.5,marginBottom:"10px",fontWeight:500}}>QUICK ADJUST</div>
       <SideSelect label="State" value={inp.shootState} onChange={e=>s("shootState",e.target.value)}>{STATES.map(st=><option key={st.id} value={st.id} style={{background:"#111"}}>{st.name}</option>)}</SideSelect>
       <SideSelect label="Strategy" value={distPreset} onChange={e=>applyDist(e.target.value)}>{Object.keys(DIST_PRESETS).map(n=><option key={n} value={n} style={{background:"#111"}}>{n}</option>)}</SideSelect>
-      <div style={{fontFamily:F.mono,fontSize:"10px",color:T.cw50,marginBottom:"4px",fontWeight:500}}>Scenario</div>
-      <div style={{display:"flex",gap:"4px",marginBottom:"12px"}}>{[{l:SL_BEAR,v:d.rt.conservative,c:T.red},{l:SL_BASE,v:d.rt.base,c:T.gold},{l:SL_BULL,v:d.rt.upside,c:T.green}].map(x=><button key={x.l} onClick={()=>setScenario(x.v)} style={{flex:1,padding:"6px 4px",borderRadius:"6px",fontSize:"10px",fontFamily:F.mono,fontWeight:600,border:`1px solid ${activeScenario===x.v?x.c:T.border}`,background:activeScenario===x.v?"rgba(255,255,255,0.03)":"transparent",color:activeScenario===x.v?x.c:T.cw50,cursor:"pointer"}}>{x.l}</button>)}</div>
-      {/* v4.6: Expanded quick adjust */}
+      <div style={{fontFamily:F.mono,fontSize:"10px",color:T.cw50,marginBottom:"4px",fontWeight:500}}>SCENARIO</div>
+      <div style={{display:"flex",gap:"4px",marginBottom:"14px"}}>{[{l:SL_BEAR,v:d.rt.conservative,c:T.red},{l:SL_BASE,v:d.rt.base,c:T.gold},{l:SL_BULL,v:d.rt.upside,c:T.green}].map(x=><button key={x.l} onClick={()=>setScenario(x.v)} style={{flex:1,padding:"6px 4px",borderRadius:"6px",fontSize:"10px",fontFamily:F.mono,fontWeight:600,border:`1px solid ${activeScenario===x.v?x.c:T.border}`,background:activeScenario===x.v?"rgba(255,255,255,0.03)":"transparent",color:activeScenario===x.v?x.c:T.cw50,cursor:"pointer"}}>{x.l}</button>)}</div>
       <SideSlider label="Tax Credit" value={inp.taxCreditPct} onChange={v=>s("taxCreditPct",v)} min={0} max={45}/>
       <SideSlider label="Premium" value={inp.recoupPremium} onChange={v=>s("recoupPremium",v)} min={0} max={40}/>
       <SideSlider label="Inv Backend" value={inp.investorBackend} onChange={v=>s("investorBackend",v)} min={20} max={80}/>
       <Divider/>
-      <SideToggle label="Completion Bond" value={bondOn} onChange={setBondOn}/>
-      <div style={{fontFamily:F.mono,fontSize:"10px",color:T.cw50,marginTop:"8px",marginBottom:"4px",fontWeight:500}}>Guilds</div>
-      <SideToggle label="SAG-AFTRA" value={guilds.sag} onChange={v=>setGuilds(p=>({...p,sag:v}))}/>
-      <SideToggle label="DGA" value={guilds.dga} onChange={v=>setGuilds(p=>({...p,dga:v}))}/>
-      <SideToggle label="WGA" value={guilds.wga} onChange={v=>setGuilds(p=>({...p,wga:v}))}/>
-      <SideToggle label="IATSE" value={guilds.iatse} onChange={v=>setGuilds(p=>({...p,iatse:v}))}/>
+      {/* ═ PRODUCTION — collapsible ═ */}
+      <div onClick={()=>setProdOpen(!prodOpen)} style={{fontFamily:F.mono,fontSize:"10px",color:T.gold,letterSpacing:"3px",opacity:0.5,marginBottom:"8px",fontWeight:500,cursor:"pointer",display:"flex",justifyContent:"space-between"}}><span>PRODUCTION</span><span style={{color:T.cw50}}>{prodOpen?"▾":"▸"}</span></div>
+      {prodOpen&&<>
+        <SideToggle label="Completion Bond" value={bondOn} onChange={setBondOn}/>
+        {bondOn&&<SideSlider label="Bond %" value={bondPct} onChange={setBondPct} min={1.5} max={4} step={0.5}/>}
+        <div style={{fontFamily:F.mono,fontSize:"10px",color:T.cw50,marginTop:"8px",marginBottom:"4px",fontWeight:500}}>GUILDS</div>
+        <SideToggle label="SAG-AFTRA" value={guilds.sag} onChange={v=>setGuilds(p=>({...p,sag:v}))}/>
+        <SideToggle label="DGA" value={guilds.dga} onChange={v=>setGuilds(p=>({...p,dga:v}))}/>
+        <SideToggle label="WGA" value={guilds.wga} onChange={v=>setGuilds(p=>({...p,wga:v}))}/>
+        <SideToggle label="IATSE" value={guilds.iatse} onChange={v=>setGuilds(p=>({...p,iatse:v}))}/>
+      </>}
+      {!prodOpen&&<div style={{fontFamily:F.mono,fontSize:"10px",color:T.cw50,marginBottom:"8px"}}>{bondOn?"Bond on":"Bond off"} · {guildStr}</div>}
+      <Divider/>
+      {/* ═ NAV ═ */}
+      <nav style={{flex:1}}>{NAV_SECTIONS.map(sec=>{const collapsed=sidebarCollapsed[sec.label];return(<div key={sec.label} style={{marginBottom:"8px"}}><div onClick={()=>toggleSection(sec.label)} style={{fontFamily:F.mono,fontSize:"10px",color:T.gold,letterSpacing:"3px",opacity:0.5,marginBottom:"6px",cursor:"pointer",display:"flex",justifyContent:"space-between",alignItems:"center",padding:"4px 0",fontWeight:500}}><span>{sec.label}</span><span style={{fontSize:"10px",color:T.cw50}}>{collapsed?"▸":"▾"}</span></div>{!collapsed&&TABS.filter(t=>sec.tiers.includes(t.tier)).map(t=>{const idx=TABS.indexOf(t);const active=tab===idx;const locked=!wizardDone&&t.tier>0&&t.id!=="glossary";return<div key={t.id} onClick={()=>locked?null:switchTab(idx)} style={{padding:"8px 12px",borderRadius:"8px",fontSize:"14px",fontFamily:F.body,color:locked?T.cw30:active?T.gold:T.cw70,background:active?"rgba(212,175,55,0.05)":"transparent",borderLeft:active?`2px solid ${T.gold}`:"2px solid transparent",cursor:locked?"default":"pointer",marginBottom:"2px",transition:"all 0.15s",fontWeight:active?500:400,opacity:locked?0.5:1}}>{t.label}{locked&&" 🔒"}</div>;})}</div>);})}</nav>
       <div style={{marginTop:"auto",paddingTop:"16px"}}><button onClick={()=>confirmReset?resetProject():setConfirmReset(true)} onMouseLeave={()=>setConfirmReset(false)} style={{width:"100%",fontFamily:F.mono,fontSize:"11px",color:confirmReset?T.red:T.cw50,cursor:"pointer",padding:"8px 12px",background:confirmReset?T.redDim:"transparent",border:`1px solid ${confirmReset?T.red:T.border}`,borderRadius:"8px",transition:"all 0.15s",fontWeight:500}}>{confirmReset?"CLICK AGAIN TO CONFIRM":"Reset Project"}</button></div>
     </aside>
   );
@@ -587,12 +608,23 @@ export default function Dashboard() {
           <div style={{display:"flex",gap:"14px",flexWrap:"wrap"}}><KPI label="Investor Return" value={wf.moic!==null?fmt(wf.tr):"N/A"} color={wf.moic!==null?(wf.tr>=d.eq?T.green:T.red):T.cw50}/><KPI label="MOIC" value={moicDisplay(wf.moic)} color={moicColor(wf.moic)}/><KPI label="ROI" value={wf.roi!==null?pct(wf.roi):"N/A"} color={wf.roi!==null?(wf.roi>=0?T.green:T.red):T.cw50}/><KPI label="Producer Net" value={fmt(wf.pb)} color={T.purple}/></div>
         </div>}
 
-        {/* ═══ REVENUE ═══ */}
+        {/* ═══ REVENUE — v4.9: buyout-aware ═══ */}
         {tid==="revenue"&&wizardDone&&<div style={{display:"flex",flexDirection:"column",gap:"28px"}}>
-          {/* v4.6: Revenue honesty note */}
-          <div style={{fontFamily:F.body,fontSize:"13px",color:T.w65,fontStyle:"italic",maxWidth:"640px"}}>Revenue projections are genre-based benchmarks for the {fmt(inp.totalBudget)} range. Actual results depend on cast, festivals, market timing, and distribution execution.</div>
+          <div style={{fontFamily:F.body,fontSize:"13px",color:T.w65,fontStyle:"italic",maxWidth:"640px"}}>{isBuyout?"Buyout model: streamer pays a flat acquisition price. Your sales agent brokers the deal.":"Revenue projections are genre-based benchmarks for the "+fmt(inp.totalBudget)+" range. Actual results depend on cast, festivals, market timing, and distribution execution."}</div>
           <div style={{display:"flex",gap:"14px",flexWrap:"wrap"}}><KPI label={SL_BEAR} value={fmt(d.rt.conservative)} color={T.red}/><KPI label={SL_BASE} value={fmt(d.rt.base)} color={T.goldPrimary}/><KPI label={SL_BULL} value={fmt(d.rt.upside)} color={T.green}/></div>
-          <Glass><SL sub={`${inp.genre} benchmarks at ${fmt(inp.totalBudget)}.`}>Revenue by Window</SL><div style={{width:"100%",height:380,marginTop:"14px"}}><ResponsiveContainer><BarChart data={d.rw} margin={{left:10,right:10,top:10,bottom:55}}><CartesianGrid horizontal vertical={false} stroke="rgba(255,255,255,0.03)"/><XAxis dataKey="window" tick={{fill:T.cw70,fontSize:11,fontFamily:F.mono}} angle={-30} textAnchor="end" height={55}/><YAxis tick={{fill:T.cw70,fontSize:11,fontFamily:F.mono}} tickFormatter={fmt}/><Tooltip content={<CTT/>}/><Bar dataKey="conservative" name={SL_BEAR} fill={T.red} opacity={0.55} radius={[3,3,0,0]} barSize={14}/><Bar dataKey="base" name={SL_BASE} fill={T.goldPrimary} opacity={0.65} radius={[3,3,0,0]} barSize={14}/><Bar dataKey="upside" name={SL_BULL} fill={T.green} opacity={0.65} radius={[3,3,0,0]} barSize={14}/><Legend wrapperStyle={{fontFamily:F.mono,fontSize:"11px"}}/></BarChart></ResponsiveContainer></div></Glass>
+          {/* Buyout: simplified acquisition view */}
+          {isBuyout&&<Glass tier="primary" accent><SL sub="Flat acquisition price minus sales agent commission.">Acquisition Model</SL>
+            <div style={{display:"flex",gap:"16px",marginTop:"20px"}}>{[{l:SL_BEAR,v:d.rt.conservative,c:T.red},{l:SL_BASE,v:d.rt.base,c:T.goldPrimary},{l:SL_BULL,v:d.rt.upside,c:T.green}].map(x=>{const saComm=Math.round(x.v*(inp.saCommPct/100));const net=x.v-saComm;return<div key={x.l} style={{flex:1,background:"rgba(255,255,255,0.02)",borderRadius:"12px",padding:"20px",border:`1px solid ${T.border}`}}>
+              <div style={{fontFamily:F.mono,fontSize:"10px",color:T.cw50,letterSpacing:"2px",fontWeight:700,marginBottom:"12px"}}>{x.l.toUpperCase()}</div>
+              <div style={{fontFamily:F.display,fontSize:"32px",color:x.c,textShadow:"0 2px 10px rgba(0,0,0,0.5)"}}><AV>{fmt(x.v)}</AV></div>
+              <div style={{fontFamily:F.mono,fontSize:"11px",color:T.cw50,marginTop:"12px"}}>SA {inp.saCommPct}%: −{fmt(saComm)}</div>
+              <div style={{height:"1px",background:T.border,margin:"8px 0"}}/>
+              <div style={{fontFamily:F.mono,fontSize:"11px",color:T.cw70,fontWeight:700}}>NET: <span style={{color:T.goldPrimary}}>{fmt(net)}</span></div>
+            </div>;})}</div>
+            <div style={{fontFamily:F.body,fontSize:"13px",color:T.w65,marginTop:"16px",lineHeight:1.6}}>In a buyout, revenue is a single negotiated price. No exhibitor split, no P&A, no distribution fee. Your sales agent takes {inp.saCommPct}% commission on the deal.</div>
+          </Glass>}
+          {/* Standard: window bar chart */}
+          {!isBuyout&&<Glass><SL sub={`${inp.genre} benchmarks at ${fmt(inp.totalBudget)}.`}>Revenue by Window</SL><div style={{width:"100%",height:380,marginTop:"14px"}}><ResponsiveContainer><BarChart data={d.rw} margin={{left:10,right:10,top:10,bottom:55}}><CartesianGrid horizontal vertical={false} stroke="rgba(255,255,255,0.03)"/><XAxis dataKey="window" tick={{fill:T.cw70,fontSize:11,fontFamily:F.mono}} angle={-30} textAnchor="end" height={55}/><YAxis tick={{fill:T.cw70,fontSize:11,fontFamily:F.mono}} tickFormatter={fmt}/><Tooltip content={<CTT/>}/><Bar dataKey="conservative" name={SL_BEAR} fill={T.red} opacity={0.55} radius={[3,3,0,0]} barSize={14}/><Bar dataKey="base" name={SL_BASE} fill={T.goldPrimary} opacity={0.65} radius={[3,3,0,0]} barSize={14}/><Bar dataKey="upside" name={SL_BULL} fill={T.green} opacity={0.65} radius={[3,3,0,0]} barSize={14}/><Legend wrapperStyle={{fontFamily:F.mono,fontSize:"11px"}}/></BarChart></ResponsiveContainer></div></Glass>}
           <Glass><SL sub="Gold line = budget.">Breakeven by Strategy</SL><div style={{width:"100%",height:220,marginTop:"14px"}}><ResponsiveContainer><BarChart data={d.be} layout="vertical" margin={{left:120,right:30}}><XAxis type="number" tick={{fill:T.cw70,fontSize:11,fontFamily:F.mono}} tickFormatter={fmt}/><YAxis type="category" dataKey="strategy" tick={{fill:T.cw70,fontSize:12,fontFamily:F.mono}} width={115}/><Tooltip content={<CTT/>}/><ReferenceLine x={d.actualBudget} stroke={T.goldPrimary} strokeDasharray="5 5" strokeOpacity={0.5}/><Bar dataKey="breakeven" radius={[0,6,6,0]} barSize={20}>{d.be.map((b,i)=><Cell key={i} fill={b.breakeven<d.actualBudget*1.5?T.green:b.breakeven<d.actualBudget*4?T.amber:T.red} opacity={.6}/>)}</Bar></BarChart></ResponsiveContainer></div></Glass>
           <Glass accent style={{textAlign:"center"}}><div style={{fontFamily:F.mono,fontSize:"11px",color:T.purple,letterSpacing:"3px",marginBottom:"12px",fontWeight:700}}>CUSTOM COMP REPORTS</div><div style={{fontFamily:F.body,fontSize:"15px",color:T.w75,lineHeight:1.7,maxWidth:"480px",margin:"0 auto"}}>How did comparable films perform? Real market data for your genre, budget range, and distribution strategy.</div><button style={{marginTop:"18px",padding:"12px 32px",background:T.purpleDim,border:`1px solid rgba(157,122,237,0.25)`,borderRadius:"10px",fontFamily:F.mono,fontSize:"11px",letterSpacing:"2px",color:T.purple,cursor:"pointer",fontWeight:700,textTransform:"uppercase"}}>LEARN MORE →</button></Glass>
         </div>}
@@ -601,7 +633,7 @@ export default function Dashboard() {
         {tid==="budget"&&wizardDone&&<div style={{display:"flex",flexDirection:"column",gap:"28px"}}>
           <div style={{fontFamily:F.body,fontSize:"14px",color:T.w65}}>Click any amount to customize. Hover rows to edit.</div>
           <Glass accent><SL>Budget — <AV>{fmt(d.actualBudget)}</AV></SL><div style={{width:"100%",height:220}}><ResponsiveContainer><PieChart><Pie data={d.bd} dataKey="value" cx="50%" cy="50%" innerRadius={55} outerRadius={90} stroke={"#000"} strokeWidth={2}>{d.bd.map((e,i)=><Cell key={i} fill={e.color} opacity={0.85}/>)}</Pie><Tooltip content={<CTT/>}/></PieChart></ResponsiveContainer></div><div style={{display:"flex",gap:"12px",justifyContent:"center",flexWrap:"wrap"}}>{d.bd.map(e=><div key={e.name} style={{display:"flex",alignItems:"center",gap:"5px"}}><div style={{width:8,height:8,borderRadius:"2px",background:e.color,opacity:0.85}}/><span style={{fontFamily:F.mono,fontSize:"11px",color:T.cw70}}>{e.name} {fmt(e.value)}</span></div>)}</div></Glass>
-          {Object.keys(CC).map(cat=>{const items=d.bi.filter(b=>b.category===cat&&!b.isBond);const catTotal=items.reduce((s,b)=>s+b.amount,0)+(cat==="G&A"&&bondOn?d.bondAmt:0);const catPct=(catTotal/((d.actualBudget||1))*100).toFixed(1);const bench=CAT_BENCH[cat];const outOfRange=bench&&(parseFloat(catPct)<bench[0]||parseFloat(catPct)>bench[1]);return<Glass key={cat} tier="recessed"><div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"8px"}}><SL>{CL[cat]}</SL><span style={{fontFamily:F.mono,fontSize:"16px",color:CC[cat],fontWeight:700}}><AV>{fmt(catTotal)}</AV></span></div>{bench&&<div style={{fontFamily:F.mono,fontSize:"11px",color:outOfRange?T.amber:T.cw70,marginBottom:"14px",fontWeight:500}}>Currently {catPct}% — Typical {bench[0]}-{bench[1]}%</div>}{items.map(item=>{const gi=d.bi.indexOf(item);const itemPct=(item.amount/((d.actualBudget||1))*100).toFixed(1);return<div key={item.name} style={{display:"flex",alignItems:"center",gap:"10px",padding:"10px 0",borderBottom:`1px solid ${T.border}`}}><span style={{fontFamily:F.mono,fontSize:"13px",color:T.w75,flex:1}}>{item.name}</span><span style={{fontFamily:F.mono,fontSize:"11px",color:T.cw50,minWidth:"44px",textAlign:"right"}}>{itemPct}%</span><div style={{display:"flex",alignItems:"center",gap:"3px"}}><span style={{fontFamily:F.mono,fontSize:"13px",color:T.goldPrimary}}>$</span><input type="number" value={item.amount} onChange={e=>setBudgetEdits(p=>({...p,[gi]:Number(e.target.value)||0}))} style={{width:"110px",background:item.isEdited?"rgba(242,202,80,0.06)":T.inputBg,border:`1px solid ${item.isEdited?T.goldDim:T.inputBorder}`,borderRadius:"8px",padding:"8px 10px",color:item.isEdited?T.goldPrimary:T.cw90,fontFamily:F.mono,fontSize:"13px",outline:"none",textAlign:"right"}}/></div>{item.isEdited&&<button onClick={()=>setBudgetEdits(p=>{const n={...p};delete n[gi];return n;})} style={{background:"none",border:"none",color:T.cw50,cursor:"pointer",fontFamily:F.mono,fontSize:"11px"}}>reset</button>}</div>})}{cat==="G&A"&&bondOn&&<div style={{display:"flex",alignItems:"center",gap:"10px",padding:"10px 0"}}><span style={{fontFamily:F.mono,fontSize:"13px",color:T.w75,flex:1}}>Completion Bond</span><span style={{fontFamily:F.mono,fontSize:"13px",color:T.w75}}>{fF(d.bondAmt)}</span></div>}</Glass>;})}
+          {Object.keys(CC).map(cat=>{const items=d.bi.filter(b=>b.category===cat&&!b.isBond&&!b.isFringe);const fringeItems=d.bi.filter(b=>b.category===cat&&b.isFringe);const catTotal=items.reduce((s,b)=>s+b.amount,0)+fringeItems.reduce((s,b)=>s+b.amount,0)+(cat==="G&A"&&bondOn?d.bondAmt:0);const catPct=(catTotal/((d.actualBudget||1))*100).toFixed(1);const bench=CAT_BENCH[cat];const outOfRange=bench&&(parseFloat(catPct)<bench[0]||parseFloat(catPct)>bench[1]);return<Glass key={cat} tier="recessed"><div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"8px"}}><SL>{CL[cat]}</SL><span style={{fontFamily:F.mono,fontSize:"16px",color:CC[cat],fontWeight:700}}><AV>{fmt(catTotal)}</AV></span></div>{bench&&<div style={{fontFamily:F.mono,fontSize:"11px",color:outOfRange?T.amber:T.cw70,marginBottom:"14px",fontWeight:500}}>Currently {catPct}% — Typical {bench[0]}-{bench[1]}%</div>}{items.map(item=>{const gi=d.bi.indexOf(item);const itemPct=(item.amount/((d.actualBudget||1))*100).toFixed(1);return<div key={item.name} style={{display:"flex",alignItems:"center",gap:"10px",padding:"10px 0",borderBottom:`1px solid ${T.border}`}}><span style={{fontFamily:F.mono,fontSize:"13px",color:T.w75,flex:1}}>{item.name}</span><span style={{fontFamily:F.mono,fontSize:"11px",color:T.cw50,minWidth:"44px",textAlign:"right"}}>{itemPct}%</span><div style={{display:"flex",alignItems:"center",gap:"3px"}}><span style={{fontFamily:F.mono,fontSize:"13px",color:T.goldPrimary}}>$</span><input type="number" value={item.amount} onChange={e=>setBudgetEdits(p=>({...p,[gi]:Number(e.target.value)||0}))} style={{width:"110px",background:item.isEdited?"rgba(242,202,80,0.06)":T.inputBg,border:`1px solid ${item.isEdited?T.goldDim:T.inputBorder}`,borderRadius:"8px",padding:"8px 10px",color:item.isEdited?T.goldPrimary:T.cw90,fontFamily:F.mono,fontSize:"13px",outline:"none",textAlign:"right"}}/></div>{item.isEdited&&<button onClick={()=>setBudgetEdits(p=>{const n={...p};delete n[gi];return n;})} style={{background:"none",border:"none",color:T.cw50,cursor:"pointer",fontFamily:F.mono,fontSize:"11px"}}>reset</button>}</div>})}{fringeItems.map(item=><div key={item.name} style={{display:"flex",alignItems:"center",gap:"10px",padding:"10px 0",borderBottom:`1px solid ${T.border}`,background:"rgba(240,168,48,0.03)"}}><span style={{fontFamily:F.mono,fontSize:"13px",color:T.amber,flex:1}}>{item.name}</span><span style={{fontFamily:F.mono,fontSize:"11px",color:T.cw50,minWidth:"44px",textAlign:"right"}}>{(item.amount/((d.actualBudget||1))*100).toFixed(1)}%</span><span style={{fontFamily:F.mono,fontSize:"13px",color:T.amber}}>{fF(item.amount)}</span></div>)}{cat==="G&A"&&bondOn&&<div style={{display:"flex",alignItems:"center",gap:"10px",padding:"10px 0"}}><span style={{fontFamily:F.mono,fontSize:"13px",color:T.w75,flex:1}}>Completion Bond</span><span style={{fontFamily:F.mono,fontSize:"13px",color:T.w75}}>{fF(d.bondAmt)}</span></div>}</Glass>;})}
           <Glass style={{textAlign:"center"}} tier="recessed"><span style={{fontFamily:F.mono,fontSize:"11px",color:T.cw70,fontWeight:700,letterSpacing:"1.5px"}}>CONTINGENCY ({contPct}% of BTL+Post)</span><div style={{fontFamily:F.display,fontSize:"34px",color:T.amber,margin:"8px 0"}}><AV>{fmt(d.cont)}</AV></div><input type="range" min={0} max={20} step={1} value={contPct} onChange={e=>setContPct(Number(e.target.value))} style={{width:"200px",accentColor:T.amber,height:"3px",cursor:"pointer"}}/><div style={{fontFamily:F.mono,fontSize:"10px",color:T.cw50,marginTop:"4px"}}>Standard is 10%</div></Glass>
         </div>}
 
