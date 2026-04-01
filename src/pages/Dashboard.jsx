@@ -6,7 +6,7 @@ import {
 } from "recharts";
 
 /* ═══════════════════════════════════════
-   DESIGN TOKENS — v4.7 (polish merge)
+   DESIGN TOKENS — v4.8 (math engine: BT normalization, qualified spend, waterfall order)
    ═══════════════════════════════════════ */
 const T = {
   bg: "#000",
@@ -75,17 +75,21 @@ const GB = {
   Romance:{th:500,mg:50,ov:10,sv:140,tv:10,av:12,dt:40,it:20,an:8,mr:0},
 };
 const BT = [
-  {n:"Story & Rights",p:.020,c:"ATL"},{n:"Screenplay",p:.0125,c:"ATL"},{n:"Producer(s)",p:.030,c:"ATL"},
-  {n:"Director",p:.050,c:"ATL"},{n:"Lead Cast",p:.100,c:"ATL"},{n:"Supporting Cast",p:.025,c:"ATL"},
-  {n:"Production Staff",p:.0175,c:"BTL"},{n:"Camera",p:.040,c:"BTL"},{n:"Grip & Electric",p:.060,c:"BTL"},
-  {n:"Art Dept",p:.045,c:"BTL"},{n:"Wardrobe",p:.0175,c:"BTL"},{n:"Hair & Makeup",p:.014,c:"BTL"},
-  {n:"Sound",p:.011,c:"BTL"},{n:"Locations",p:.0325,c:"BTL"},{n:"Transport",p:.0275,c:"BTL"},
-  {n:"Catering",p:.020,c:"BTL"},{n:"Extras",p:.009,c:"BTL"},{n:"Stunts",p:.0075,c:"BTL"},
-  {n:"Editorial",p:.0375,c:"Post"},{n:"Color/DI",p:.020,c:"Post"},{n:"Music",p:.0175,c:"Post"},
-  {n:"Sound Design",p:.015,c:"Post"},{n:"VFX/Titles",p:.010,c:"Post"},{n:"Deliverables",p:.010,c:"Post"},
-  {n:"Captions",p:.0025,c:"Post"},
-  {n:"Insurance+E&O",p:.0185,c:"G&A"},{n:"Legal",p:.010,c:"G&A"},{n:"Accounting",p:.0075,c:"G&A"},
-  {n:"Festivals",p:.005,c:"G&A"},{n:"Marketing Seed",p:.010,c:"G&A"},
+  {n:"Story & Rights",p:.020,c:"ATL"},{n:"Screenplay",p:.015,c:"ATL"},{n:"Producer(s)",p:.035,c:"ATL"},
+  {n:"Director",p:.055,c:"ATL"},{n:"Lead Cast",p:.100,c:"ATL"},{n:"Supporting Cast",p:.030,c:"ATL"},
+  {n:"Production Staff",p:.025,c:"BTL"},{n:"Camera",p:.040,c:"BTL"},{n:"Grip & Electric",p:.050,c:"BTL"},
+  {n:"Art Dept",p:.035,c:"BTL"},{n:"Set Construction",p:.020,c:"BTL"},{n:"Wardrobe",p:.018,c:"BTL"},
+  {n:"Hair & Makeup",p:.015,c:"BTL"},{n:"Sound",p:.013,c:"BTL"},{n:"Locations",p:.030,c:"BTL"},
+  {n:"Transport",p:.025,c:"BTL"},{n:"Catering",p:.020,c:"BTL"},{n:"Extras",p:.010,c:"BTL"},
+  {n:"Stunts",p:.008,c:"BTL"},{n:"Production Office",p:.012,c:"BTL"},{n:"Travel & Living",p:.020,c:"BTL"},
+  {n:"Payroll Tax & Fringes",p:.074,c:"BTL"},
+  {n:"Editorial",p:.038,c:"Post"},{n:"Color/DI",p:.020,c:"Post"},{n:"Music",p:.023,c:"Post"},
+  {n:"Sound Design",p:.018,c:"Post"},{n:"VFX/Titles",p:.020,c:"Post"},{n:"Deliverables",p:.012,c:"Post"},
+  {n:"Stock/Media",p:.006,c:"Post"},{n:"Captions",p:.003,c:"Post"},
+  {n:"Insurance+E&O",p:.022,c:"G&A"},{n:"Legal",p:.015,c:"G&A"},{n:"Accounting",p:.010,c:"G&A"},
+  {n:"Publicity & PR",p:.010,c:"G&A"},{n:"Office Overhead",p:.008,c:"G&A"},
+  {n:"Festivals",p:.005,c:"G&A"},{n:"Marketing Seed",p:.012,c:"G&A"},
+  {n:"Finance & Banking",p:.005,c:"G&A"},{n:"Wrap Costs",p:.003,c:"G&A"},
 ];
 const RISKS_RAW = [
   {name:"Completion Risk",prob:25,impact:4,cat:"Production",mit:"Completion bond, 10% contingency, experienced line producer."},
@@ -141,7 +145,7 @@ const VEHICLES = ["Not Sure","Single-Purpose LLC","Limited Partnership","S-Corp"
 const EXEMPTIONS = ["Not Sure","Reg D 506(b)","Reg D 506(c)","Reg A+","Reg CF"];
 const CC = {ATL:T.gold,BTL:T.blue,Post:T.purple,"G&A":T.green};
 const CL = {ATL:"Above the Line",BTL:"Below the Line",Post:"Post-Production","G&A":"G&A"};
-const CAT_BENCH = {ATL:[20,30],BTL:[30,40],Post:[10,15],"G&A":[7,12]};
+const CAT_BENCH = {ATL:[20,30],BTL:[35,45],Post:[10,15],"G&A":[7,12]};
 const QUICK_PRESETS = [
   {label:"Micro · $500K",genre:"Horror",budget:500000,sag:false,dga:false,wga:false,iatse:false,state:"GA",minInv:25000},
   {label:"Mid-Range · $2.5M",genre:"Thriller",budget:2500000,sag:true,dga:true,wga:true,iatse:true,state:"GA",minInv:50000},
@@ -165,7 +169,7 @@ const EMPTY_DESCS = {
    DERIVE — v4 math engine (UNCHANGED)
    ═══════════════════════════════════════ */
 function derive(inp, budgetEdits, bondOn, bondPct, contPct) {
-  const tc = Math.round(inp.totalBudget * inp.taxCreditPct / 100);
+  const tc = Math.round(inp.totalBudget * (inp.qualifiedSpendPct/100) * inp.taxCreditPct / 100);
   const sd = Math.round(tc * inp.taxCreditLoanPct / 100);
   const bondAmt = bondOn ? Math.round(inp.totalBudget * bondPct / 100) : 0;
   const bi = BT.map((t, i) => { const def = Math.round(inp.totalBudget * t.p); const ed = budgetEdits[i]; return { name: t.n, amount: ed !== undefined ? ed : def, category: t.c, isEdited: ed !== undefined }; });
@@ -196,15 +200,15 @@ function derive(inp, budgetEdits, bondOn, bondPct, contPct) {
   const psAmt = inp.preSaleLoan*(1+inp.seniorDebtRate/100*inp.loanTerm/12);
   function calcWF(gr) {
     const hasTh=inp.paBudget>0; const et=hasTh?gr*thFraction*(inp.exhibitorPct/100):0;
-    const ap=gr-et-inp.paBudget; const df=Math.max(0,ap)*(inp.distFeePct/100); const ad=Math.max(0,ap-df);
-    const sc=gr*intlFraction*(inp.saCommPct/100); const npp=Math.max(0,ad-sc);
+    const dg=gr-et; const df=Math.max(0,dg)*(inp.distFeePct/100); const ap=Math.max(0,dg-df-inp.paBudget);
+    const sc=gr*intlFraction*(inp.saCommPct/100); const npp=Math.max(0,ap-sc);
     const afd=Math.max(0,npp-drAmt-gpAmt-psAmt); const ra=eq*(1+inp.recoupPremium/100);
     const ir=Math.min(ra,afd); const rem=Math.max(0,afd-ra);
     const ib=rem*(inp.investorBackend/100); const pb=rem*(1-inp.investorBackend/100); const tr=ir+ib;
     return {gr,et,pa:inp.paBudget,df,sc,npp,drAmt,gpAmt,psAmt,afd,ir,rem,ib,pb,tr,moic:eq>0?tr/eq:null,roi:eq>0?(tr-eq)/eq:null,eq,hasTh};
   }
   function findBEFor(ov) {
-    let lo=0,hi=2e7;for(let i=0;i<30;i++){const mid=(lo+hi)/2;const h2=(ov.pa||0)>0;const e2=h2?mid*thFraction*((ov.exhib||0)/100):0;const a2=mid-e2-(ov.pa||0);const d2=Math.max(0,a2)*((ov.df||25)/100);const ad2=Math.max(0,a2-d2);const s2=mid*intlFraction*((ov.sa||10)/100);const n2=Math.max(0,ad2-s2);const af2=Math.max(0,n2-drAmt-gpAmt-psAmt);const ra2=eq*(1+inp.recoupPremium/100);const ir2=Math.min(ra2,af2);const t2=ir2+Math.max(0,af2-ra2)*(inp.investorBackend/100);t2>=eq?hi=mid:lo=mid;}
+    let lo=0,hi=2e7;for(let i=0;i<30;i++){const mid=(lo+hi)/2;const h2=(ov.pa||0)>0;const e2=h2?mid*thFraction*((ov.exhib||0)/100):0;const dg2=mid-e2;const d2=Math.max(0,dg2)*((ov.df||25)/100);const a2=Math.max(0,dg2-d2-(ov.pa||0));const s2=mid*intlFraction*((ov.sa||10)/100);const n2=Math.max(0,a2-s2);const af2=Math.max(0,n2-drAmt-gpAmt-psAmt);const ra2=eq*(1+inp.recoupPremium/100);const ir2=Math.min(ra2,af2);const t2=ir2+Math.max(0,af2-ra2)*(inp.investorBackend/100);t2>=eq?hi=mid:lo=mid;}
     return Math.round((lo+hi)/2);
   }
   const be = [
@@ -292,7 +296,7 @@ const tabIdx = id => TABS.findIndex(t=>t.id===id);
    MAIN APP
    ═══════════════════════════════════════ */
 export default function Dashboard() {
-  const defaultInp = {title:"",genre:"Thriller",totalBudget:2000000,shootState:"GA",taxCreditPct:0,taxCreditLoanPct:90,gapMezz:0,preSaleLoan:0,minInvestment:50000,recoupPremium:20,investorBackend:50,seniorDebtRate:9,gapRate:16,loanTerm:18,exhibitorPct:50,paBudget:150000,distFeePct:30,saCommPct:12};
+  const defaultInp = {title:"",genre:"Thriller",totalBudget:2000000,shootState:"GA",qualifiedSpendPct:85,taxCreditPct:0,taxCreditLoanPct:90,gapMezz:0,preSaleLoan:0,minInvestment:50000,recoupPremium:20,investorBackend:50,seniorDebtRate:9,gapRate:16,loanTerm:18,exhibitorPct:50,paBudget:150000,distFeePct:30,saCommPct:12};
   const [inp,setInp] = useState(defaultInp);
   const [crew,setCrew] = useState({producer:"",director:"",writer:"",cast:""});
   const [guilds,setGuilds] = useState({sag:false,dga:false,wga:false,iatse:false});
@@ -331,7 +335,7 @@ export default function Dashboard() {
   const wfBase = useMemo(()=>d.calcWF(d.rt.base),[d]);
   const wfCon = useMemo(()=>d.calcWF(d.rt.conservative),[d]);
   const wfUp = useMemo(()=>d.calcWF(d.rt.upside),[d]);
-  const wb = useMemo(()=>{const items=[{n:"Gross Rev",v:wf.gr,f:T.goldPrimary,t:"total"},{n:"Exhibitor",v:wf.et,f:T.red,t:"loss"},{n:"P&A",v:wf.pa,f:T.red,t:"loss"},{n:"Dist Fee",v:wf.df,f:T.red,t:"loss"},{n:"SA Comm",v:wf.sc,f:T.red,t:"loss"},{n:"Debt",v:wf.drAmt+wf.gpAmt+wf.psAmt,f:T.red,t:"loss"},{n:"Recoup",v:wf.ir,f:T.goldDim,t:"loss"},{n:"Inv Back",v:wf.ib,f:T.green,t:"gain"},{n:"Prod Back",v:wf.pb,f:T.purple,t:"gain"}].filter(i=>i.v>0||i.t==="total");let r=0;return items.map(i=>{if(i.t==="total"){r=i.v;return{name:i.n,base:0,value:i.v,fill:i.f};}else if(i.t==="loss"){r-=i.v;return{name:i.n,base:Math.max(0,r),value:i.v,fill:i.f};}else{return{name:i.n,base:0,value:i.v,fill:i.f};}});},[wf]);
+  const wb = useMemo(()=>{const items=[{n:"Gross Rev",v:wf.gr,f:T.goldPrimary,t:"total"},{n:"Exhibitor",v:wf.et,f:T.red,t:"loss"},{n:"Dist Fee",v:wf.df,f:T.red,t:"loss"},{n:"P&A",v:wf.pa,f:T.red,t:"loss"},{n:"SA Comm",v:wf.sc,f:T.red,t:"loss"},{n:"Debt",v:wf.drAmt+wf.gpAmt+wf.psAmt,f:T.red,t:"loss"},{n:"Recoup",v:wf.ir,f:T.goldDim,t:"loss"},{n:"Inv Back",v:wf.ib,f:T.green,t:"gain"},{n:"Prod Back",v:wf.pb,f:T.purple,t:"gain"}].filter(i=>i.v>0||i.t==="total");let r=0;return items.map(i=>{if(i.t==="total"){r=i.v;return{name:i.n,base:0,value:i.v,fill:i.f};}else if(i.t==="loss"){r-=i.v;return{name:i.n,base:Math.max(0,r),value:i.v,fill:i.f};}else{return{name:i.n,base:0,value:i.v,fill:i.f};}});},[wf]);
   const sR = useMemo(()=>[0.5,1,1.5,2.5,3.5,5].map(x=>Math.round(d.actualBudget*x)),[d.actualBudget]);
   const sE = [Math.round(d.eq*.6),Math.round(d.eq*.8),d.eq,Math.round(d.eq*1.15),Math.round(d.eq*1.45)];
   const cSR = (rev,eqA)=>{const w=d.calcWF(rev);const r=d.eq>0?eqA/d.eq:0;return d.eq>0?((w.tr*r)-eqA)/eqA:-1;};
@@ -469,8 +473,9 @@ export default function Dashboard() {
               <div style={{fontFamily:F.mono,fontSize:"11px",color:T.goldPrimary,letterSpacing:"1px",fontWeight:700}}>{stateData.name.toUpperCase()} — {stateData.type.toUpperCase()}</div>
               <div style={{fontFamily:F.body,fontSize:"13px",color:T.w65,marginTop:"8px",lineHeight:1.6}}>{stateData.note}</div>
             </div>
-            <ComboInput label="Tax Credit Rate" value={inp.taxCreditPct} onChange={v=>s("taxCreditPct",v)} min={0} max={45} explain={`= ${fF(Math.round(inp.totalBudget*inp.taxCreditPct/100))}${stateData.rate>0?` · Auto-filled from ${stateData.name} base rate`:""}`} benchMin={stateData.id!=="OTHER"?Math.max(0,stateData.rate-5):undefined} benchMax={stateData.id!=="OTHER"?stateData.rate+10:undefined}/>
-            <ComboInput label="TC Loan Advance" value={inp.taxCreditLoanPct} onChange={v=>s("taxCreditLoanPct",v)} min={0} max={100} explain={`= ${fF(Math.round(inp.totalBudget*inp.taxCreditPct/100*inp.taxCreditLoanPct/100))} senior debt`} benchMin={85} benchMax={95}/>
+            <ComboInput label="Tax Credit Rate" value={inp.taxCreditPct} onChange={v=>s("taxCreditPct",v)} min={0} max={45} explain={`= ${fF(Math.round(inp.totalBudget*(inp.qualifiedSpendPct/100)*inp.taxCreditPct/100))} on ${fF(Math.round(inp.totalBudget*(inp.qualifiedSpendPct/100)))} qualified spend${stateData.rate>0?` · Auto-filled from ${stateData.name} base rate`:""}`} benchMin={stateData.id!=="OTHER"?Math.max(0,stateData.rate-5):undefined} benchMax={stateData.id!=="OTHER"?stateData.rate+10:undefined}/>
+            <ComboInput label="Qualified Spend" value={inp.qualifiedSpendPct} onChange={v=>s("qualifiedSpendPct",v)} min={50} max={100} explain={`= ${fF(Math.round(inp.totalBudget*inp.qualifiedSpendPct/100))} of ${fF(inp.totalBudget)} eligible for credit. 80-90% typical.`} benchMin={80} benchMax={90}/>
+            <ComboInput label="TC Loan Advance" value={inp.taxCreditLoanPct} onChange={v=>s("taxCreditLoanPct",v)} min={0} max={100} explain={`= ${fF(Math.round(inp.totalBudget*(inp.qualifiedSpendPct/100)*inp.taxCreditPct/100*inp.taxCreditLoanPct/100))} senior debt`} benchMin={85} benchMax={95}/>
             <ComboInput label="Senior Debt Rate" value={inp.seniorDebtRate} onChange={v=>s("seniorDebtRate",v)} min={5} max={18} step={.5} explain="TC bridge loan interest. 8-12% typical." benchMin={8} benchMax={12}/>
             <ComboInput label="Loan Term" value={inp.loanTerm} onChange={v=>s("loanTerm",v)} min={6} max={48} suffix=" mo" explain="Time from close to repayment." benchMin={12} benchMax={36}/>
             {/* Collapsible Advanced Financing */}
