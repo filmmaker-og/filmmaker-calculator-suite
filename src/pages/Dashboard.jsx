@@ -6,7 +6,7 @@ import {
 } from "recharts";
 
 /* ═══════════════════════════════════════
-   DESIGN TOKENS — v4.5
+   DESIGN TOKENS — v4.6 (unchanged from v4.5)
    ═══════════════════════════════════════ */
 const T = {
   bg: "#000",
@@ -31,18 +31,18 @@ const T = {
 };
 const F = { display: "'Bebas Neue',sans-serif", body: "'Inter',sans-serif", mono: "'Roboto Mono',monospace" };
 const grainSVG = `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E")`;
-// v4.5: Custom scrollbar + shimmer keyframes
 const GlobalStyles = () => <style>{`
   ::-webkit-scrollbar{width:8px;height:8px}
   ::-webkit-scrollbar-track{background:#000}
   ::-webkit-scrollbar-thumb{background:rgba(212,175,55,0.15);border-radius:4px}
   ::-webkit-scrollbar-thumb:hover{background:rgba(212,175,55,0.25)}
   @keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(200%)}}
-  @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.6}}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+  @keyframes chevBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
 `}</style>;
 
 /* ═══════════════════════════════════════
-   DATA CONSTANTS (unchanged)
+   DATA CONSTANTS
    ═══════════════════════════════════════ */
 const STATES = [
   { id:"GA", name:"Georgia", rate:20, type:"Transferable", note:"20% base. +10% GA logo (30%). Sold ~$0.94-0.97. No cap. No sunset. Min $500K.", months:"6-12" },
@@ -99,10 +99,10 @@ const RISKS_RAW = [
   {name:"Talent Controversy",prob:10,impact:4,cat:"Reputational",mit:"Morality clauses, crisis PR, insurance."},
   {name:"Data Loss",prob:10,impact:3,cat:"Operational",mit:"Daily backup, RAID + offsite."},
 ];
-// v4.5: Renamed presets
+// v4.6: SVOD Buyout distFee → 0 (no distributor in a buyout)
 const DIST_PRESETS = {
-  "SVOD Buyout":{exhib:0,pa:0,distFee:25,saComm:10,desc:"Straight to streaming. Lowest breakeven."},
-  "Theatrical":{exhib:50,pa:150000,distFee:30,saComm:12,desc:"Platform release + SVOD. Higher visibility."},
+  "SVOD Buyout":{exhib:0,pa:0,distFee:0,saComm:10,desc:"Streamer pays flat acquisition price. SA brokers the deal."},
+  "Theatrical":{exhib:50,pa:150000,distFee:30,saComm:12,desc:"Platform release + streaming windows. Higher visibility."},
   "Hybrid / Self":{exhib:10,pa:75000,distFee:15,saComm:5,desc:"Self-distributed. Max control, more effort."},
 };
 const GLOSSARY = [
@@ -133,20 +133,29 @@ const GLOSSARY = [
   {term:"WGA",def:"Writers Guild of America. Governs writer minimums, credits, and residuals."},
   {term:"IATSE",def:"International Alliance of Theatrical Stage Employees. Covers most BTL crew: grips, electric, camera, art dept."},
 ];
-// v4.5: Added "Not Sure" options
 const VEHICLES = ["Not Sure","Single-Purpose LLC","Limited Partnership","S-Corp","C-Corp"];
 const EXEMPTIONS = ["Not Sure","Reg D 506(b)","Reg D 506(c)","Reg A+","Reg CF"];
 const CC = {ATL:T.gold,BTL:T.blue,Post:T.purple,"G&A":T.green};
 const CL = {ATL:"Above the Line",BTL:"Below the Line",Post:"Post-Production","G&A":"G&A"};
 const CAT_BENCH = {ATL:[20,30],BTL:[30,40],Post:[10,15],"G&A":[7,12]};
-// v4.5: Quick-start presets
 const QUICK_PRESETS = [
   {label:"Micro · $500K",genre:"Horror",budget:500000,sag:false,dga:false,wga:false,iatse:false,state:"GA",minInv:25000},
   {label:"Mid-Range · $2.5M",genre:"Thriller",budget:2500000,sag:true,dga:true,wga:true,iatse:true,state:"GA",minInv:50000},
   {label:"Premium · $7M",genre:"Action",budget:7000000,sag:true,dga:true,wga:true,iatse:true,state:"CA",minInv:100000},
 ];
-// v4.5: SAG auto-tier
 const autoSagTier = b => b<300000?"Ultra Low Budget":b<700000?"Modified Low Budget":b<2650000?"Low Budget":"Standard";
+// v4.6: Per-tab empty state descriptions
+const EMPTY_DESCS = {
+  snapshot:"Your investor-ready deal summary with capital structure narrative.",
+  overview:"Executive dashboard with KPIs, capital stack, and revenue scenarios.",
+  waterfall:"Interactive waterfall showing how revenue flows to each participant.",
+  revenue:"Revenue projections by window with breakeven analysis.",
+  budget:"30-line editable budget with category benchmarks.",
+  capital:"Capital stack visualization and investor terms.",
+  cashflow:"18-month cash flow projection with break-even timing.",
+  sensitivity:"ROI heat map across revenue and equity scenarios.",
+  risk:"14-factor risk matrix with probability-weighted scores.",
+};
 
 /* ═══════════════════════════════════════
    DERIVE — v4 math engine (UNCHANGED)
@@ -194,9 +203,8 @@ function derive(inp, budgetEdits, bondOn, bondPct, contPct) {
     let lo=0,hi=2e7;for(let i=0;i<30;i++){const mid=(lo+hi)/2;const h2=(ov.pa||0)>0;const e2=h2?mid*thFraction*((ov.exhib||0)/100):0;const a2=mid-e2-(ov.pa||0);const d2=Math.max(0,a2)*((ov.df||25)/100);const ad2=Math.max(0,a2-d2);const s2=mid*intlFraction*((ov.sa||10)/100);const n2=Math.max(0,ad2-s2);const af2=Math.max(0,n2-drAmt-gpAmt-psAmt);const ra2=eq*(1+inp.recoupPremium/100);const ir2=Math.min(ra2,af2);const t2=ir2+Math.max(0,af2-ra2)*(inp.investorBackend/100);t2>=eq?hi=mid:lo=mid;}
     return Math.round((lo+hi)/2);
   }
-  // v4.5: Renamed strategies
   const be = [
-    {strategy:"SVOD Buyout",breakeven:findBEFor({exhib:0,pa:0,df:25,sa:10})},
+    {strategy:"SVOD Buyout",breakeven:findBEFor({exhib:0,pa:0,df:0,sa:10})},
     {strategy:"Theatrical",breakeven:findBEFor({exhib:inp.exhibitorPct,pa:inp.paBudget,df:inp.distFeePct,sa:inp.saCommPct})},
     {strategy:"Wide Release",breakeven:findBEFor({exhib:52,pa:Math.max(1e6,actualBudget*.5),df:35,sa:12})},
     {strategy:"Intl Pre-Sales",breakeven:findBEFor({exhib:0,pa:50000,df:20,sa:12})},
@@ -223,130 +231,46 @@ function derive(inp, budgetEdits, bondOn, bondPct, contPct) {
   const cs = [{name:"Tax Credit",amount:tc,color:T.green,pos:"Non-dilutive — post-wrap"},{name:"Senior Debt",amount:sd,color:T.blue,pos:"1st Position"},inp.gapMezz>0&&{name:"Gap/Mezz",amount:inp.gapMezz,color:T.amber,pos:"2nd Position"},inp.preSaleLoan>0&&{name:"Pre-Sale Loan",amount:inp.preSaleLoan,color:T.purple,pos:"1st Position"},{name:"Equity",amount:eq,color:T.equity,pos:"At-risk capital"}].filter(Boolean);
   const bd = [{name:"Above the Line",value:ct.ATL||0,color:T.gold},{name:"Below the Line",value:ct.BTL||0,color:T.blue},{name:"Post-Production",value:ct.Post||0,color:T.purple},{name:"G&A",value:ct["G&A"]||0,color:T.green},{name:"Contingency",value:cont,color:T.amber}];
   const risks = RISKS_RAW.map(r=>({...r,score:(r.prob/100)*r.impact}));
-  return {tc,sd,eq,estInv,bi,ct,cont,rw,rt,calcWF,cf,be,cs,sources,bd,risks,drAmt,gpAmt,psAmt,actualBudget,bondAmt,thFraction,intlFraction};
+  // v4.6: Total interest cost (display only, no math change)
+  const totalInterest = Math.round((drAmt-sd)+(gpAmt-inp.gapMezz)+(psAmt-inp.preSaleLoan));
+  return {tc,sd,eq,estInv,bi,ct,cont,rw,rt,calcWF,cf,be,cs,sources,bd,risks,drAmt,gpAmt,psAmt,actualBudget,bondAmt,thFraction,intlFraction,totalInterest};
 }
 
 /* ═══════════════════════════════════════
-   FORMAT HELPERS — v4.5: NaN guards added
+   FORMAT HELPERS
    ═══════════════════════════════════════ */
 const fmt = n => { if(n==null||!isFinite(n))return "$0";if(Math.abs(n)>=1e6)return "$"+(n/1e6).toFixed(1)+"M";if(Math.abs(n)>=1e3)return "$"+Math.round(n/1e3)+"K";return "$"+Math.round(n);};
 const fF = n => "$"+((n&&isFinite(n))?n:0).toLocaleString();
 const pct = n => ((!n||!isFinite(n))?0:(n*100)).toFixed(1)+"%";
 
 /* ═══════════════════════════════════════
-   UI COMPONENTS — v4.5
+   UI COMPONENTS (from v4.5 — hover lift, focus glow, etc.)
    ═══════════════════════════════════════ */
-// v4.5: Glass with hover lift + optional glow
 const Glass = ({children,style,tier="standard",accent=false,...p}) => {
   const [hov,setHov] = useState(false);
   const bg = tier==="primary"?T.glassBright:tier==="recessed"?T.glassRecessed:T.glass;
-  const glow = tier==="primary"?`0 0 24px ${T.goldGhost}`:"none";
-  return <div onMouseEnter={()=>setHov(true)} onMouseLeave={()=>setHov(false)} style={{background:bg,backdropFilter:"blur(20px)",WebkitBackdropFilter:"blur(20px)",border:`1px solid ${hov?T.borderBright:T.border}`,borderTop:accent?`1px solid ${T.goldLine}`:`1px solid ${hov?T.borderBright:T.border}`,borderRadius:T.radius,padding:"28px",position:"relative",overflow:"hidden",transform:hov?"translateY(-2px)":"translateY(0)",boxShadow:tier==="primary"?glow:"none",transition:"transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease",...style}} {...p}>
+  return <div onMouseEnter={()=>setHov(true)} onMouseLeave={()=>setHov(false)} style={{background:bg,backdropFilter:"blur(20px)",WebkitBackdropFilter:"blur(20px)",border:`1px solid ${hov?T.borderBright:T.border}`,borderTop:accent?`1px solid ${T.goldLine}`:`1px solid ${hov?T.borderBright:T.border}`,borderRadius:T.radius,padding:"28px",position:"relative",overflow:"hidden",transform:hov?"translateY(-2px)":"translateY(0)",boxShadow:tier==="primary"?`0 0 24px ${T.goldGhost}`:"none",transition:"transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease",...style}} {...p}>
     {accent&&<div style={{position:"absolute",top:0,left:0,width:"100%",height:"1px",background:`linear-gradient(90deg,transparent,${T.goldPrimary},transparent)`,opacity:0.5}}/>}
     {children}
   </div>;
 };
-const SL = ({children,sub}) => (
-  <div style={{marginBottom:sub?"16px":"10px"}}>
-    <div style={{fontFamily:F.mono,fontSize:"11px",letterSpacing:"3px",color:T.goldPrimary,textTransform:"uppercase",fontWeight:500}}>{children}</div>
-    {sub&&<div style={{fontFamily:F.body,fontSize:"14px",color:T.w75,marginTop:"8px",lineHeight:1.6,maxWidth:"640px"}}>{sub}</div>}
-  </div>
-);
-const AV = ({children}) => {
-  const ref=useRef(null);const prev=useRef(children);
-  useEffect(()=>{if(ref.current&&prev.current!==children){ref.current.style.transition='none';ref.current.style.opacity='0.4';ref.current.style.transform='translateY(3px)';requestAnimationFrame(()=>{if(ref.current){ref.current.style.transition='opacity 0.35s ease-out, transform 0.35s ease-out';ref.current.style.opacity='1';ref.current.style.transform='translateY(0)';}});prev.current=children;}},[children]);
-  return <span ref={ref} style={{display:"inline-block"}}>{children}</span>;
-};
-const KPI = ({label,value,sub,color,bars}) => (
-  <Glass style={{textAlign:"center",flex:1,minWidth:"155px",padding:"24px 18px"}} accent>
-    <div style={{fontFamily:F.mono,fontSize:"11px",color:T.cw50,letterSpacing:"2px",textTransform:"uppercase",marginBottom:"12px",fontWeight:700}}>{label}</div>
-    <div style={{fontFamily:F.display,fontSize:"38px",color:color||T.w92,lineHeight:1}}><AV>{value}</AV></div>
-    {bars&&<div style={{display:"flex",gap:"3px",justifyContent:"center",marginTop:"10px",height:"16px",alignItems:"flex-end"}}>{bars.map((b,i)=><div key={i} style={{width:"14px",background:b.c,borderRadius:"2px 2px 0 0",height:`${Math.max(4,b.h)}px`,opacity:0.7}}/>)}</div>}
-    {sub&&<div style={{fontFamily:F.mono,fontSize:"11px",color:T.cw50,marginTop:"8px"}}>{sub}</div>}
-  </Glass>
-);
+const SL = ({children,sub}) => (<div style={{marginBottom:sub?"16px":"10px"}}><div style={{fontFamily:F.mono,fontSize:"11px",letterSpacing:"3px",color:T.goldPrimary,textTransform:"uppercase",fontWeight:500}}>{children}</div>{sub&&<div style={{fontFamily:F.body,fontSize:"14px",color:T.w75,marginTop:"8px",lineHeight:1.6,maxWidth:"640px"}}>{sub}</div>}</div>);
+const AV = ({children}) => { const ref=useRef(null);const prev=useRef(children);useEffect(()=>{if(ref.current&&prev.current!==children){ref.current.style.transition='none';ref.current.style.opacity='0.4';ref.current.style.transform='translateY(3px)';requestAnimationFrame(()=>{if(ref.current){ref.current.style.transition='opacity 0.35s ease-out, transform 0.35s ease-out';ref.current.style.opacity='1';ref.current.style.transform='translateY(0)';}});prev.current=children;}},[children]);return <span ref={ref} style={{display:"inline-block"}}>{children}</span>;};
+const KPI = ({label,value,sub,color,bars}) => (<Glass style={{textAlign:"center",flex:1,minWidth:"155px",padding:"24px 18px"}} accent><div style={{fontFamily:F.mono,fontSize:"11px",color:T.cw50,letterSpacing:"2px",textTransform:"uppercase",marginBottom:"12px",fontWeight:700}}>{label}</div><div style={{fontFamily:F.display,fontSize:"38px",color:color||T.w92,lineHeight:1}}><AV>{value}</AV></div>{bars&&<div style={{display:"flex",gap:"3px",justifyContent:"center",marginTop:"10px",height:"16px",alignItems:"flex-end"}}>{bars.map((b,i)=><div key={i} style={{width:"14px",background:b.c,borderRadius:"2px 2px 0 0",height:`${Math.max(4,b.h)}px`,opacity:0.7}}/>)}</div>}{sub&&<div style={{fontFamily:F.mono,fontSize:"11px",color:T.cw50,marginTop:"8px"}}>{sub}</div>}</Glass>);
 const Divider = () => <div style={{height:"1px",background:`linear-gradient(90deg,transparent,${T.border},transparent)`,margin:"18px 0"}}/>;
-// v4.5: Focus glow on inputs
-const ComboInput = ({label,value,onChange,min=0,max=100,step=1,suffix="%",explain,fmt:fn,benchMin,benchMax}) => {
-  const [foc,setFoc] = useState(false);
-  const pctFill = max>min?((Math.min(max,Math.max(min,value))-min)/(max-min))*100:0;
-  return <div style={{marginBottom:"24px"}}>
-    <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:"8px"}}>
-      <span style={{fontFamily:F.mono,fontSize:"11px",color:T.cw70,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:700}}>{label}</span>
-      <div style={{display:"flex",alignItems:"center",gap:"4px"}}>
-        {suffix!=="%"&&<span style={{fontFamily:F.mono,fontSize:"14px",color:T.goldPrimary}}>$</span>}
-        <input type="number" value={value} onChange={e=>onChange(Number(e.target.value)||0)} min={min} max={max} step={step} onFocus={()=>setFoc(true)} onBlur={()=>setFoc(false)}
-          style={{width:suffix==="%"?"65px":"130px",background:T.inputBg,border:`1px solid ${T.inputBorder}`,borderRadius:"8px",padding:"8px 10px",color:T.goldPrimary,fontFamily:F.mono,fontSize:"15px",fontWeight:700,outline:"none",textAlign:"right",boxSizing:"border-box",boxShadow:foc?`0 0 0 2px rgba(212,175,55,0.15)`:"none",transition:"box-shadow 0.2s"}}/>
-        {suffix&&<span style={{fontFamily:F.mono,fontSize:"12px",color:T.cw50}}>{suffix}</span>}
-      </div>
-    </div>
-    <div style={{position:"relative"}}>
-      {benchMin!=null&&benchMax!=null&&<div style={{position:"absolute",top:0,height:"4px",left:`${((benchMin-min)/(max-min))*100}%`,width:`${((benchMax-benchMin)/(max-min))*100}%`,background:"rgba(242,202,80,0.12)",borderRadius:"2px",pointerEvents:"none"}}/>}
-      <input type="range" min={min} max={max} step={step} value={Math.min(max,Math.max(min,value))} onChange={e=>onChange(Number(e.target.value))} style={{width:"100%",accentColor:T.goldPrimary,height:"3px",cursor:"pointer",background:`linear-gradient(to right,${T.goldPrimary} ${pctFill}%,rgba(255,255,255,0.08) ${pctFill}%)`}}/>
-    </div>
-    <div style={{display:"flex",justifyContent:"space-between",fontFamily:F.mono,fontSize:"10px",color:T.cw30,marginTop:"3px"}}>
-      <span>{fn?fn(min):`${min}${suffix}`}</span>
-      {benchMin!=null&&<span style={{color:T.cw50}}>typical {fn?fn(benchMin):benchMin}–{fn?fn(benchMax):benchMax}{suffix===""?"":suffix}</span>}
-      <span>{fn?fn(max):`${max}${suffix}`}</span>
-    </div>
-    {explain&&<div style={{fontFamily:F.body,fontSize:"13px",color:T.w65,marginTop:"6px",lineHeight:1.5}}>{explain}</div>}
-  </div>;
-};
-const TextInput = ({label,value,onChange,explain,placeholder}) => {
-  const [foc,setFoc] = useState(false);
-  return <div style={{marginBottom:"24px"}}>
-    <div style={{fontFamily:F.mono,fontSize:"11px",color:T.cw70,letterSpacing:"1.5px",textTransform:"uppercase",marginBottom:"8px",fontWeight:700}}>{label}</div>
-    <input type="text" value={value} onChange={e=>onChange(e.target.value)} placeholder={placeholder||label} onFocus={()=>setFoc(true)} onBlur={()=>setFoc(false)}
-      style={{width:"100%",background:T.inputBg,border:`1px solid ${T.inputBorder}`,borderRadius:"10px",padding:"12px 14px",color:T.w92,fontFamily:F.body,fontSize:"15px",outline:"none",boxSizing:"border-box",boxShadow:foc?`0 0 0 2px rgba(212,175,55,0.15)`:"none",transition:"box-shadow 0.2s"}}/>
-    {explain&&<div style={{fontFamily:F.body,fontSize:"13px",color:T.w65,marginTop:"4px"}}>{explain}</div>}
-  </div>;
-};
-const SelectInput = ({label,value,onChange,options,explain}) => (
-  <div style={{marginBottom:"24px"}}>
-    <div style={{fontFamily:F.mono,fontSize:"11px",color:T.cw70,letterSpacing:"1.5px",textTransform:"uppercase",marginBottom:"8px",fontWeight:700}}>{label}</div>
-    <div style={{position:"relative"}}>
-      <select value={value} onChange={e=>onChange(e.target.value)} style={{width:"100%",background:T.inputBg,border:`1px solid ${T.inputBorder}`,borderRadius:"10px",padding:"12px 14px",paddingRight:"36px",color:T.w92,fontFamily:F.body,fontSize:"14px",outline:"none",appearance:"none",cursor:"pointer",boxSizing:"border-box"}}>
-        {options.map(o=><option key={typeof o==="string"?o:o.value} value={typeof o==="string"?o:o.value} style={{background:"#111",color:"#fff"}}>{typeof o==="string"?o:o.label}</option>)}
-      </select>
-      <span style={{position:"absolute",right:"14px",top:"50%",transform:"translateY(-50%)",fontFamily:F.mono,fontSize:"12px",color:T.cw50,pointerEvents:"none"}}>▾</span>
-    </div>
-    {explain&&<div style={{fontFamily:F.body,fontSize:"13px",color:T.w65,marginTop:"4px"}}>{explain}</div>}
-  </div>
-);
+const ComboInput = ({label,value,onChange,min=0,max=100,step=1,suffix="%",explain,fmt:fn,benchMin,benchMax}) => { const [foc,setFoc]=useState(false);const pctFill=max>min?((Math.min(max,Math.max(min,value))-min)/(max-min))*100:0;return<div style={{marginBottom:"24px"}}><div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:"8px"}}><span style={{fontFamily:F.mono,fontSize:"11px",color:T.cw70,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:700}}>{label}</span><div style={{display:"flex",alignItems:"center",gap:"4px"}}>{suffix!=="%"&&<span style={{fontFamily:F.mono,fontSize:"14px",color:T.goldPrimary}}>$</span>}<input type="number" value={value} onChange={e=>onChange(Number(e.target.value)||0)} min={min} max={max} step={step} onFocus={()=>setFoc(true)} onBlur={()=>setFoc(false)} style={{width:suffix==="%"?"65px":"130px",background:T.inputBg,border:`1px solid ${T.inputBorder}`,borderRadius:"8px",padding:"8px 10px",color:T.goldPrimary,fontFamily:F.mono,fontSize:"15px",fontWeight:700,outline:"none",textAlign:"right",boxSizing:"border-box",boxShadow:foc?`0 0 0 2px rgba(212,175,55,0.15)`:"none",transition:"box-shadow 0.2s"}}/>{suffix&&<span style={{fontFamily:F.mono,fontSize:"12px",color:T.cw50}}>{suffix}</span>}</div></div><div style={{position:"relative"}}>{benchMin!=null&&benchMax!=null&&<div style={{position:"absolute",top:0,height:"4px",left:`${((benchMin-min)/(max-min))*100}%`,width:`${((benchMax-benchMin)/(max-min))*100}%`,background:"rgba(242,202,80,0.12)",borderRadius:"2px",pointerEvents:"none"}}/>}<input type="range" min={min} max={max} step={step} value={Math.min(max,Math.max(min,value))} onChange={e=>onChange(Number(e.target.value))} style={{width:"100%",accentColor:T.goldPrimary,height:"3px",cursor:"pointer",background:`linear-gradient(to right,${T.goldPrimary} ${pctFill}%,rgba(255,255,255,0.08) ${pctFill}%)`}}/></div><div style={{display:"flex",justifyContent:"space-between",fontFamily:F.mono,fontSize:"10px",color:T.cw30,marginTop:"3px"}}><span>{fn?fn(min):`${min}${suffix}`}</span>{benchMin!=null&&<span style={{color:T.cw50}}>typical {fn?fn(benchMin):benchMin}–{fn?fn(benchMax):benchMax}{suffix===""?"":suffix}</span>}<span>{fn?fn(max):`${max}${suffix}`}</span></div>{explain&&<div style={{fontFamily:F.body,fontSize:"13px",color:T.w65,marginTop:"6px",lineHeight:1.5}}>{explain}</div>}</div>;};
+const TextInput = ({label,value,onChange,explain,placeholder}) => { const [foc,setFoc]=useState(false);return<div style={{marginBottom:"24px"}}><div style={{fontFamily:F.mono,fontSize:"11px",color:T.cw70,letterSpacing:"1.5px",textTransform:"uppercase",marginBottom:"8px",fontWeight:700}}>{label}</div><input type="text" value={value} onChange={e=>onChange(e.target.value)} placeholder={placeholder||label} onFocus={()=>setFoc(true)} onBlur={()=>setFoc(false)} style={{width:"100%",background:T.inputBg,border:`1px solid ${T.inputBorder}`,borderRadius:"10px",padding:"12px 14px",color:T.w92,fontFamily:F.body,fontSize:"15px",outline:"none",boxSizing:"border-box",boxShadow:foc?`0 0 0 2px rgba(212,175,55,0.15)`:"none",transition:"box-shadow 0.2s"}}/>{explain&&<div style={{fontFamily:F.body,fontSize:"13px",color:T.w65,marginTop:"4px"}}>{explain}</div>}</div>;};
+const SelectInput = ({label,value,onChange,options,explain}) => (<div style={{marginBottom:"24px"}}><div style={{fontFamily:F.mono,fontSize:"11px",color:T.cw70,letterSpacing:"1.5px",textTransform:"uppercase",marginBottom:"8px",fontWeight:700}}>{label}</div><div style={{position:"relative"}}><select value={value} onChange={e=>onChange(e.target.value)} style={{width:"100%",background:T.inputBg,border:`1px solid ${T.inputBorder}`,borderRadius:"10px",padding:"12px 14px",paddingRight:"36px",color:T.w92,fontFamily:F.body,fontSize:"14px",outline:"none",appearance:"none",cursor:"pointer",boxSizing:"border-box"}}>{options.map(o=><option key={typeof o==="string"?o:o.value} value={typeof o==="string"?o:o.value} style={{background:"#111",color:"#fff"}}>{typeof o==="string"?o:o.label}</option>)}</select><span style={{position:"absolute",right:"14px",top:"50%",transform:"translateY(-50%)",fontFamily:F.mono,fontSize:"12px",color:T.cw50,pointerEvents:"none"}}>▾</span></div>{explain&&<div style={{fontFamily:F.body,fontSize:"13px",color:T.w65,marginTop:"4px"}}>{explain}</div>}</div>);
 const SD = ({title}) => <div style={{display:"flex",alignItems:"center",gap:"16px",margin:"40px 0 24px"}}><div style={{height:"1px",flex:1,background:T.border}}/><span style={{fontFamily:F.mono,fontSize:"12px",letterSpacing:"4px",color:T.goldPrimary,opacity:0.6,fontWeight:500}}>{title}</span><div style={{height:"1px",flex:1,background:T.border}}/></div>;
 const CTT = ({active,payload,label}) => {if(!active||!payload?.length)return null;return<div style={{background:"#111",backdropFilter:"blur(12px)",border:`1px solid ${T.border}`,borderRadius:"10px",padding:"12px 16px",fontFamily:F.mono,fontSize:"12px",boxShadow:"0 8px 32px rgba(0,0,0,0.5)"}}><div style={{color:T.w85,marginBottom:"6px",fontWeight:600}}>{label}</div>{payload.map((p,i)=><div key={i} style={{color:p.color||T.cw90,marginBottom:"3px"}}>{p.name}: {typeof p.value==="number"?fF(Math.abs(p.value)):p.value}</div>)}</div>;};
-// v4.5: Redesigned FlowStep — clean rows, no indent
-const FlowStep = ({num,label,amount,isLoss,isHighlight,explain}) => (
-  <div style={{display:"flex",alignItems:"center",gap:"16px",padding:"14px 0",borderBottom:`1px solid ${T.border}`}}>
-    <div style={{width:"32px",height:"32px",borderRadius:"50%",background:isHighlight?"rgba(242,202,80,0.10)":isLoss?T.redDim:T.greenDim,display:"flex",alignItems:"center",justifyContent:"center",fontFamily:F.mono,fontSize:"12px",color:isHighlight?T.goldPrimary:isLoss?T.red:T.green,fontWeight:700,flexShrink:0}}>{num}</div>
-    <div style={{flex:1,minWidth:0}}>
-      <div style={{fontFamily:F.body,fontSize:"14px",color:T.w92,fontWeight:isHighlight?600:400}}>{label}</div>
-      {explain&&<div style={{fontFamily:F.body,fontSize:"12px",color:T.w65,marginTop:"3px"}}>{explain}</div>}
-    </div>
-    {amount!=null&&<div style={{fontFamily:F.mono,fontSize:"16px",color:isLoss?T.red:isHighlight?T.goldPrimary:T.green,fontWeight:700,whiteSpace:"nowrap",flexShrink:0}}><AV>{isLoss?"−":""}{fF(Math.abs(Math.round(amount)))}</AV></div>}
-  </div>
-);
-const Toggle = ({label,value,onChange,explain}) => (
-  <div style={{display:"flex",alignItems:"center",gap:"12px",marginBottom:"16px"}}>
-    <button onClick={()=>onChange(!value)} style={{width:"44px",height:"24px",borderRadius:"12px",background:value?T.goldPrimary:"rgba(255,255,255,0.08)",border:"none",cursor:"pointer",position:"relative",flexShrink:0,transition:"background 0.2s"}}><div style={{width:"18px",height:"18px",borderRadius:"50%",background:"#fff",position:"absolute",top:"3px",left:value?"23px":"3px",transition:"left 0.2s",boxShadow:"0 2px 4px rgba(0,0,0,0.3)"}}/></button>
-    <div><span style={{fontFamily:F.mono,fontSize:"12px",color:value?T.goldPrimary:T.cw70,fontWeight:700,textTransform:"uppercase",letterSpacing:"1px"}}>{label}</span>{explain&&<div style={{fontFamily:F.body,fontSize:"12px",color:T.w65,marginTop:"2px"}}>{explain}</div>}</div>
-  </div>
-);
-const SideSelect = ({label,value,onChange,children}) => (
-  <div style={{marginBottom:"12px"}}>
-    <div style={{fontFamily:F.mono,fontSize:"10px",color:T.cw50,marginBottom:"4px",fontWeight:500,textTransform:"uppercase",letterSpacing:"1.5px"}}>{label}</div>
-    <div style={{position:"relative"}}>
-      <select value={value} onChange={onChange} style={{width:"100%",background:T.inputBg,border:`1px solid ${T.inputBorder}`,borderRadius:"8px",padding:"7px 28px 7px 8px",color:T.cw90,fontFamily:F.mono,fontSize:"11px",outline:"none",boxSizing:"border-box",appearance:"none",cursor:"pointer"}}>{children}</select>
-      <span style={{position:"absolute",right:"8px",top:"50%",transform:"translateY(-50%)",fontFamily:F.mono,fontSize:"11px",color:T.cw50,pointerEvents:"none"}}>▾</span>
-    </div>
-  </div>
-);
-const SideToggle = ({label,value,onChange}) => (
-  <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:"6px"}}>
-    <span style={{fontFamily:F.mono,fontSize:"10px",color:value?T.goldPrimary:T.cw50,fontWeight:700,textTransform:"uppercase",letterSpacing:"1px"}}>{label}</span>
-    <button onClick={()=>onChange(!value)} style={{width:"36px",height:"20px",borderRadius:"10px",background:value?T.goldPrimary:"rgba(255,255,255,0.08)",border:"none",cursor:"pointer",position:"relative",flexShrink:0,transition:"background 0.2s"}}><div style={{width:"14px",height:"14px",borderRadius:"50%",background:"#fff",position:"absolute",top:"3px",left:value?"19px":"3px",transition:"left 0.2s"}}/></button>
-  </div>
-);
+const FlowStep = ({num,label,amount,isLoss,isHighlight,explain}) => (<div style={{display:"flex",alignItems:"center",gap:"16px",padding:"14px 0",borderBottom:`1px solid ${T.border}`}}><div style={{width:"32px",height:"32px",borderRadius:"50%",background:isHighlight?"rgba(242,202,80,0.10)":isLoss?T.redDim:T.greenDim,display:"flex",alignItems:"center",justifyContent:"center",fontFamily:F.mono,fontSize:"12px",color:isHighlight?T.goldPrimary:isLoss?T.red:T.green,fontWeight:700,flexShrink:0}}>{num}</div><div style={{flex:1,minWidth:0}}><div style={{fontFamily:F.body,fontSize:"14px",color:T.w92,fontWeight:isHighlight?600:400}}>{label}</div>{explain&&<div style={{fontFamily:F.body,fontSize:"12px",color:T.w65,marginTop:"3px"}}>{explain}</div>}</div>{amount!=null&&<div style={{fontFamily:F.mono,fontSize:"16px",color:isLoss?T.red:isHighlight?T.goldPrimary:T.green,fontWeight:700,whiteSpace:"nowrap",flexShrink:0}}><AV>{isLoss?"−":""}{fF(Math.abs(Math.round(amount)))}</AV></div>}</div>);
+const Toggle = ({label,value,onChange,explain}) => (<div style={{display:"flex",alignItems:"center",gap:"12px",marginBottom:"16px"}}><button onClick={()=>onChange(!value)} style={{width:"44px",height:"24px",borderRadius:"12px",background:value?T.goldPrimary:"rgba(255,255,255,0.08)",border:"none",cursor:"pointer",position:"relative",flexShrink:0,transition:"background 0.2s"}}><div style={{width:"18px",height:"18px",borderRadius:"50%",background:"#fff",position:"absolute",top:"3px",left:value?"23px":"3px",transition:"left 0.2s",boxShadow:"0 2px 4px rgba(0,0,0,0.3)"}}/></button><div><span style={{fontFamily:F.mono,fontSize:"12px",color:value?T.goldPrimary:T.cw70,fontWeight:700,textTransform:"uppercase",letterSpacing:"1px"}}>{label}</span>{explain&&<div style={{fontFamily:F.body,fontSize:"12px",color:T.w65,marginTop:"2px"}}>{explain}</div>}</div></div>);
+const SideSelect = ({label,value,onChange,children}) => (<div style={{marginBottom:"12px"}}><div style={{fontFamily:F.mono,fontSize:"10px",color:T.cw50,marginBottom:"4px",fontWeight:500,textTransform:"uppercase",letterSpacing:"1.5px"}}>{label}</div><div style={{position:"relative"}}><select value={value} onChange={onChange} style={{width:"100%",background:T.inputBg,border:`1px solid ${T.inputBorder}`,borderRadius:"8px",padding:"7px 28px 7px 8px",color:T.cw90,fontFamily:F.mono,fontSize:"11px",outline:"none",boxSizing:"border-box",appearance:"none",cursor:"pointer"}}>{children}</select><span style={{position:"absolute",right:"8px",top:"50%",transform:"translateY(-50%)",fontFamily:F.mono,fontSize:"11px",color:T.cw50,pointerEvents:"none"}}>▾</span></div></div>);
+const SideToggle = ({label,value,onChange}) => (<div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:"6px"}}><span style={{fontFamily:F.mono,fontSize:"10px",color:value?T.goldPrimary:T.cw50,fontWeight:700,textTransform:"uppercase",letterSpacing:"1px"}}>{label}</span><button onClick={()=>onChange(!value)} style={{width:"36px",height:"20px",borderRadius:"10px",background:value?T.goldPrimary:"rgba(255,255,255,0.08)",border:"none",cursor:"pointer",position:"relative",flexShrink:0,transition:"background 0.2s"}}><div style={{width:"14px",height:"14px",borderRadius:"50%",background:"#fff",position:"absolute",top:"3px",left:value?"19px":"3px",transition:"left 0.2s"}}/></button></div>);
+// v4.6: Mini sidebar slider
+const SideSlider = ({label,value,onChange,min,max,step=1,suffix="%"}) => (<div style={{marginBottom:"10px"}}><div style={{display:"flex",justifyContent:"space-between",marginBottom:"2px"}}><span style={{fontFamily:F.mono,fontSize:"10px",color:T.cw50,fontWeight:500,letterSpacing:"1px"}}>{label}</span><span style={{fontFamily:F.mono,fontSize:"10px",color:T.goldPrimary,fontWeight:700}}>{value}{suffix}</span></div><input type="range" min={min} max={max} step={step} value={value} onChange={e=>onChange(Number(e.target.value))} style={{width:"100%",accentColor:T.goldPrimary,height:"2px",cursor:"pointer"}}/></div>);
+// v4.6: Live feedback panel
+const FeedbackPanel = ({children}) => (<div style={{background:"rgba(242,202,80,0.03)",border:`1px solid ${T.border}`,borderTop:`1px solid ${T.goldLine}`,borderRadius:"10px",padding:"18px",marginTop:"20px"}}>{children}</div>);
 
 /* ═══════════════════════════════════════
    TABS + NAV
@@ -358,6 +282,7 @@ const TABS = [
   {id:"sensitivity",label:"Sensitivity",tier:2},{id:"risk",label:"Risk",tier:2},{id:"glossary",label:"Glossary",tier:2},
 ];
 const NAV_SECTIONS = [{label:"BUILD",tiers:[0]},{label:"YOUR DEAL",tiers:[1]},{label:"DEEP DIVE",tiers:[2]}];
+const tabIdx = id => TABS.findIndex(t=>t.id===id);
 
 /* ═══════════════════════════════════════
    MAIN APP
@@ -385,12 +310,15 @@ export default function Dashboard() {
   const [wizardDone,setWizardDone] = useState(false);
   const [confirmReset,setConfirmReset] = useState(false);
   const [showCrew,setShowCrew] = useState(false);
+  const [showProd,setShowProd] = useState(false);
+  const [showAdvanced,setShowAdvanced] = useState(false);
   const mainRef = useRef(null);
+  const prevStateRate = useRef(0);
 
   useEffect(()=>{const c=()=>setIsMobile(window.innerWidth<1024);c();window.addEventListener("resize",c);return()=>window.removeEventListener("resize",c);},[]);
-  // v4.5: SAG auto-tier when budget changes
   useEffect(()=>{if(guilds.sag)setSagTier(autoSagTier(inp.totalBudget));},[inp.totalBudget,guilds.sag]);
-  // v4.5: Fixed scroll-to-top
+  // v4.6: Auto-fill TC rate when state changes
+  useEffect(()=>{const st=STATES.find(x=>x.id===inp.shootState);if(st&&st.rate>0&&(inp.taxCreditPct===0||inp.taxCreditPct===prevStateRate.current)){setInp(p=>({...p,taxCreditPct:st.rate}));}prevStateRate.current=st?.rate||0;},[inp.shootState]);
   const switchTab = i => {setTabAnim(false);setTimeout(()=>{setTab(i);setTabAnim(true);requestAnimationFrame(()=>{if(mainRef.current)mainRef.current.scrollTop=0;});},50);};
   const s = useCallback((k,v)=>setInp(p=>({...p,[k]:v})),[]);
   const d = useMemo(()=>derive(inp,budgetEdits,bondOn,bondPct,contPct),[inp,budgetEdits,bondOn,bondPct,contPct]);
@@ -405,82 +333,56 @@ export default function Dashboard() {
   const cSR = (rev,eqA)=>{const w=d.calcWF(rev);const r=d.eq>0?eqA/d.eq:0;return d.eq>0?((w.tr*r)-eqA)/eqA:-1;};
   const ht = inp.title.trim().length>0;
   const tid = TABS[tab]?.id;
+  const isBuyout = distPreset==="SVOD Buyout";
   const findBE = useMemo(()=>{if(d.eq<=0)return 0;let lo=0,hi=2e7;for(let i=0;i<30;i++){const mid=(lo+hi)/2;d.calcWF(mid).tr>=d.eq?hi=mid:lo=mid;}return Math.round((lo+hi)/2);},[d]);
   const find2x = useMemo(()=>{if(d.eq<=0)return 0;let lo=0,hi=4e7;for(let i=0;i<30;i++){const mid=(lo+hi)/2;d.calcWF(mid).tr>=d.eq*2?hi=mid:lo=mid;}return Math.round((lo+hi)/2);},[d]);
   const stateData = STATES.find(st=>st.id===inp.shootState)||STATES[12];
   const warnings = useMemo(()=>{const w=[];if(d.eq<=0)w.push("Equity is $0 or negative — debt sources exceed budget.");if(d.eq>0&&d.eq>d.actualBudget*.6)w.push(`Equity is ${Math.round(d.eq/d.actualBudget*100)}% of budget.`);if(inp.paBudget>inp.totalBudget*.4)w.push("P&A exceeds 40% of budget.");if(inp.recoupPremium>30)w.push(`${inp.recoupPremium}% premium above standard.`);if(inp.taxCreditPct===0)w.push("No tax incentive entered.");const st=d.sources.reduce((s,c)=>s+c.amount,0),ut=d.bd.reduce((s,c)=>s+c.value,0);if(Math.abs(st-ut)>1000)w.push(`Sources/Uses gap: ${fF(Math.abs(st-ut))}`);return w;},[inp,d]);
-  const wizSteps = ["Your Film","Funding Sources","Investor Terms","Distribution"];
+  // v4.6: Wizard reordered: Film → Distribution → Capital → Deal Terms
+  const wizSteps = ["Your Film","Distribution","Capital","Deal Terms"];
   const applyDist = name => {const p=DIST_PRESETS[name];if(p){s("exhibitorPct",p.exhib);s("paBudget",p.pa);s("distFeePct",p.distFee);s("saCommPct",p.saComm);setDistPreset(name);}};
   const guildStr = [guilds.sag&&`SAG${sagTier?" ("+sagTier.replace("Budget","").trim()+")":""}`,guilds.dga&&"DGA",guilds.wga&&"WGA",guilds.iatse&&"IATSE"].filter(Boolean).join(", ")||"Non-Union";
-  const resetProject = ()=>{setInp(defaultInp);setCrew({producer:"",director:"",writer:"",cast:""});setGuilds({sag:false,dga:false,wga:false,iatse:false});setBondOn(false);setBondPct(2.5);setContPct(10);setBudgetEdits({});setDistPreset("Theatrical");setWizStep(0);setScenario(null);setVehicle("Not Sure");setExemption("Not Sure");setWizardDone(false);setConfirmReset(false);switchTab(0);};
+  const resetProject = ()=>{setInp(defaultInp);setCrew({producer:"",director:"",writer:"",cast:""});setGuilds({sag:false,dga:false,wga:false,iatse:false});setBondOn(false);setBondPct(2.5);setContPct(10);setBudgetEdits({});setDistPreset("Theatrical");setWizStep(0);setScenario(null);setVehicle("Not Sure");setExemption("Not Sure");setWizardDone(false);setConfirmReset(false);setShowCrew(false);setShowProd(false);setShowAdvanced(false);switchTab(0);};
   const applyPreset = p => {s("genre",p.genre);s("totalBudget",p.budget);s("shootState",p.state);s("minInvestment",p.minInv);setGuilds({sag:p.sag,dga:p.dga,wga:p.wga,iatse:p.iatse});if(p.sag)setSagTier(autoSagTier(p.budget));};
   const contentStyle = {opacity:tabAnim?1:0,transform:tabAnim?"translateY(0)":"translateY(8px)",transition:"opacity 0.3s ease, transform 0.3s ease"};
   const moicDisplay = v => v!==null&&isFinite(v)?v.toFixed(2)+"×":"N/A";
   const moicColor = v => v===null||!isFinite(v)?T.cw50:v>=1?T.green:T.red;
   const toggleSection = label => setSidebarCollapsed(p=>({...p,[label]:!p[label]}));
-  const finishWizard = () => {setWizardDone(true);switchTab(1);};
+  const finishWizard = () => {setWizardDone(true);switchTab(tabIdx("snapshot"));};
   const moicBars = (con,base,up)=>{const mx=Math.max(Math.abs(con||0),Math.abs(base||0),Math.abs(up||0),0.01);return[{c:T.red,h:(Math.abs(con||0)/mx)*14},{c:T.goldPrimary,h:(Math.abs(base||0)/mx)*14},{c:T.green,h:(Math.abs(up||0)/mx)*14}];};
-  // v4.5: Scenario labels
   const SL_BEAR="Bear",SL_BASE="Base",SL_BULL="Bull";
 
   /* ═══ MOBILE GATE ═══ */
-  if(isMobile) return (
-    <div style={{background:"#000",color:T.w92,fontFamily:F.body,minHeight:"100vh",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"40px 24px",textAlign:"center"}}>
-      <div style={{fontFamily:F.mono,fontSize:"10px",letterSpacing:"4px",color:T.goldPrimary,opacity:0.5,marginBottom:"16px",fontWeight:700}}>FILMMAKER.OG</div>
-      <div style={{fontFamily:F.display,fontSize:"28px",color:T.w92,marginBottom:"16px"}}>BUILT FOR DESKTOP</div>
-      <div style={{fontFamily:F.body,fontSize:"15px",color:T.w65,lineHeight:1.6,maxWidth:"320px"}}>The charts, models, and investor-ready exports need a full screen. Open on your laptop.</div>
-    </div>
-  );
+  if(isMobile) return (<div style={{background:"#000",color:T.w92,fontFamily:F.body,minHeight:"100vh",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"40px 24px",textAlign:"center"}}><div style={{fontFamily:F.mono,fontSize:"10px",letterSpacing:"4px",color:T.goldPrimary,opacity:0.5,marginBottom:"16px",fontWeight:700}}>FILMMAKER.OG</div><div style={{fontFamily:F.display,fontSize:"28px",color:T.w92,marginBottom:"16px"}}>BUILT FOR DESKTOP</div><div style={{fontFamily:F.body,fontSize:"15px",color:T.w65,lineHeight:1.6,maxWidth:"320px"}}>The charts, models, and investor-ready exports need a full screen. Open on your laptop.</div></div>);
 
   /* ═══ SIDEBAR ═══ */
   const sidebar = (
     <aside style={{width:"256px",minWidth:"256px",height:"100vh",position:"fixed",left:0,top:0,background:"#000",backdropFilter:"blur(24px)",WebkitBackdropFilter:"blur(24px)",borderRight:`1px solid ${T.border}`,padding:"24px 20px",display:"flex",flexDirection:"column",overflowY:"auto",zIndex:60}}>
-      <div style={{display:"inline-flex",alignSelf:"flex-start",background:"rgba(212,175,55,0.10)",border:`1px solid rgba(212,175,55,0.25)`,borderRadius:"6px",padding:"6px 14px",marginBottom:"20px"}}>
-        <span style={{fontFamily:F.mono,fontSize:"12px",color:T.gold,letterSpacing:"3px",fontWeight:500}}>FILMMAKER.OG</span>
-      </div>
+      <div style={{display:"inline-flex",alignSelf:"flex-start",background:"rgba(212,175,55,0.10)",border:`1px solid rgba(212,175,55,0.25)`,borderRadius:"6px",padding:"6px 14px",marginBottom:"20px"}}><span style={{fontFamily:F.mono,fontSize:"12px",color:T.gold,letterSpacing:"3px",fontWeight:500}}>FILMMAKER.OG</span></div>
       <div style={{fontFamily:F.display,fontSize:"20px",color:T.w92,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{ht?inp.title.toUpperCase():fmt(inp.totalBudget)+" PRODUCTION"}</div>
       <div style={{fontFamily:F.mono,fontSize:"11px",color:T.cw50,marginTop:"4px"}}>{inp.genre} · {stateData.name}</div>
       <Divider/>
-      <div style={{display:"flex",gap:"16px"}}>
-        <div><div style={{fontFamily:F.mono,fontSize:"10px",color:T.cw50,letterSpacing:"2px",fontWeight:500}}>BUDGET</div><div style={{fontFamily:F.display,fontSize:"24px",color:T.gold,marginTop:"2px"}}><AV>{fmt(d.actualBudget)}</AV></div></div>
-        <div><div style={{fontFamily:F.mono,fontSize:"10px",color:T.cw50,letterSpacing:"2px",fontWeight:500}}>EQUITY</div><div style={{fontFamily:F.display,fontSize:"24px",color:T.equity,marginTop:"2px"}}><AV>{fF(d.eq)}</AV></div></div>
-      </div>
+      <div style={{display:"flex",gap:"16px"}}><div><div style={{fontFamily:F.mono,fontSize:"10px",color:T.cw50,letterSpacing:"2px",fontWeight:500}}>BUDGET</div><div style={{fontFamily:F.display,fontSize:"24px",color:T.gold,marginTop:"2px"}}><AV>{fmt(d.actualBudget)}</AV></div></div><div><div style={{fontFamily:F.mono,fontSize:"10px",color:T.cw50,letterSpacing:"2px",fontWeight:500}}>EQUITY</div><div style={{fontFamily:F.display,fontSize:"24px",color:T.equity,marginTop:"2px"}}><AV>{fF(d.eq)}</AV></div></div></div>
       <Divider/>
-      <nav style={{flex:1}}>
-        {NAV_SECTIONS.map(sec=>{const collapsed=sidebarCollapsed[sec.label];return(
-          <div key={sec.label} style={{marginBottom:"8px"}}>
-            <div onClick={()=>toggleSection(sec.label)} style={{fontFamily:F.mono,fontSize:"10px",color:T.gold,letterSpacing:"3px",opacity:0.5,marginBottom:"6px",cursor:"pointer",display:"flex",justifyContent:"space-between",alignItems:"center",padding:"4px 0",fontWeight:500}}>
-              <span>{sec.label}</span><span style={{fontSize:"10px",color:T.cw50}}>{collapsed?"▸":"▾"}</span>
-            </div>
-            {!collapsed&&TABS.filter(t=>sec.tiers.includes(t.tier)).map(t=>{
-              const idx=TABS.indexOf(t);const active=tab===idx;
-              // v4.5: Gray out locked tabs
-              const locked=!wizardDone&&t.tier>0&&t.id!=="glossary";
-              return<div key={t.id} onClick={()=>locked?null:switchTab(idx)} style={{padding:"8px 12px",borderRadius:"8px",fontSize:"14px",fontFamily:F.body,color:locked?T.cw30:active?T.gold:T.cw70,background:active?"rgba(212,175,55,0.05)":"transparent",borderLeft:active?`2px solid ${T.gold}`:"2px solid transparent",cursor:locked?"default":"pointer",marginBottom:"2px",transition:"all 0.15s",fontWeight:active?500:400,opacity:locked?0.5:1}}>
-                {t.label}{locked&&" 🔒"}
-              </div>;
-            })}
-          </div>
-        );})}
-      </nav>
+      <nav style={{flex:1}}>{NAV_SECTIONS.map(sec=>{const collapsed=sidebarCollapsed[sec.label];return(<div key={sec.label} style={{marginBottom:"8px"}}><div onClick={()=>toggleSection(sec.label)} style={{fontFamily:F.mono,fontSize:"10px",color:T.gold,letterSpacing:"3px",opacity:0.5,marginBottom:"6px",cursor:"pointer",display:"flex",justifyContent:"space-between",alignItems:"center",padding:"4px 0",fontWeight:500}}><span>{sec.label}</span><span style={{fontSize:"10px",color:T.cw50}}>{collapsed?"▸":"▾"}</span></div>{!collapsed&&TABS.filter(t=>sec.tiers.includes(t.tier)).map(t=>{const idx=TABS.indexOf(t);const active=tab===idx;const locked=!wizardDone&&t.tier>0&&t.id!=="glossary";return<div key={t.id} onClick={()=>locked?null:switchTab(idx)} style={{padding:"8px 12px",borderRadius:"8px",fontSize:"14px",fontFamily:F.body,color:locked?T.cw30:active?T.gold:T.cw70,background:active?"rgba(212,175,55,0.05)":"transparent",borderLeft:active?`2px solid ${T.gold}`:"2px solid transparent",cursor:locked?"default":"pointer",marginBottom:"2px",transition:"all 0.15s",fontWeight:active?500:400,opacity:locked?0.5:1}}>{t.label}{locked&&" 🔒"}</div>;})}</div>);})}</nav>
       <Divider/>
       <div style={{fontFamily:F.mono,fontSize:"10px",color:T.gold,letterSpacing:"3px",opacity:0.5,marginBottom:"8px",fontWeight:500}}>QUICK ADJUST</div>
       <SideSelect label="State" value={inp.shootState} onChange={e=>s("shootState",e.target.value)}>{STATES.map(st=><option key={st.id} value={st.id} style={{background:"#111"}}>{st.name}</option>)}</SideSelect>
       <SideSelect label="Strategy" value={distPreset} onChange={e=>applyDist(e.target.value)}>{Object.keys(DIST_PRESETS).map(n=><option key={n} value={n} style={{background:"#111"}}>{n}</option>)}</SideSelect>
       <div style={{fontFamily:F.mono,fontSize:"10px",color:T.cw50,marginBottom:"4px",fontWeight:500}}>Scenario</div>
       <div style={{display:"flex",gap:"4px",marginBottom:"12px"}}>{[{l:SL_BEAR,v:d.rt.conservative,c:T.red},{l:SL_BASE,v:d.rt.base,c:T.gold},{l:SL_BULL,v:d.rt.upside,c:T.green}].map(x=><button key={x.l} onClick={()=>setScenario(x.v)} style={{flex:1,padding:"6px 4px",borderRadius:"6px",fontSize:"10px",fontFamily:F.mono,fontWeight:600,border:`1px solid ${activeScenario===x.v?x.c:T.border}`,background:activeScenario===x.v?"rgba(255,255,255,0.03)":"transparent",color:activeScenario===x.v?x.c:T.cw50,cursor:"pointer"}}>{x.l}</button>)}</div>
+      {/* v4.6: Expanded quick adjust */}
+      <SideSlider label="Tax Credit" value={inp.taxCreditPct} onChange={v=>s("taxCreditPct",v)} min={0} max={45}/>
+      <SideSlider label="Premium" value={inp.recoupPremium} onChange={v=>s("recoupPremium",v)} min={0} max={40}/>
+      <SideSlider label="Inv Backend" value={inp.investorBackend} onChange={v=>s("investorBackend",v)} min={20} max={80}/>
+      <Divider/>
       <SideToggle label="Completion Bond" value={bondOn} onChange={setBondOn}/>
       <div style={{fontFamily:F.mono,fontSize:"10px",color:T.cw50,marginTop:"8px",marginBottom:"4px",fontWeight:500}}>Guilds</div>
       <SideToggle label="SAG-AFTRA" value={guilds.sag} onChange={v=>setGuilds(p=>({...p,sag:v}))}/>
       <SideToggle label="DGA" value={guilds.dga} onChange={v=>setGuilds(p=>({...p,dga:v}))}/>
       <SideToggle label="WGA" value={guilds.wga} onChange={v=>setGuilds(p=>({...p,wga:v}))}/>
       <SideToggle label="IATSE" value={guilds.iatse} onChange={v=>setGuilds(p=>({...p,iatse:v}))}/>
-      <div style={{marginTop:"auto",paddingTop:"16px"}}>
-        <button onClick={()=>confirmReset?resetProject():setConfirmReset(true)} onMouseLeave={()=>setConfirmReset(false)}
-          style={{width:"100%",fontFamily:F.mono,fontSize:"11px",color:confirmReset?T.red:T.cw50,cursor:"pointer",padding:"8px 12px",background:confirmReset?T.redDim:"transparent",border:`1px solid ${confirmReset?T.red:T.border}`,borderRadius:"8px",transition:"all 0.15s",fontWeight:500}}>
-          {confirmReset?"CLICK AGAIN TO CONFIRM":"Reset Project"}
-        </button>
-      </div>
+      <div style={{marginTop:"auto",paddingTop:"16px"}}><button onClick={()=>confirmReset?resetProject():setConfirmReset(true)} onMouseLeave={()=>setConfirmReset(false)} style={{width:"100%",fontFamily:F.mono,fontSize:"11px",color:confirmReset?T.red:T.cw50,cursor:"pointer",padding:"8px 12px",background:confirmReset?T.redDim:"transparent",border:`1px solid ${confirmReset?T.red:T.border}`,borderRadius:"8px",transition:"all 0.15s",fontWeight:500}}>{confirmReset?"CLICK AGAIN TO CONFIRM":"Reset Project"}</button></div>
     </aside>
   );
 
@@ -492,130 +394,150 @@ export default function Dashboard() {
       <main ref={mainRef} style={{marginLeft:"256px",flex:1,padding:"36px 48px",overflowY:"auto",minHeight:"100vh"}}>
         <div style={{maxWidth:"1000px",margin:"0 auto",...contentStyle}}>
 
-        {/* ═══ SETUP WIZARD ═══ */}
-        {tid==="setup"&&<div style={{maxWidth:"580px",margin:"0 auto"}}><Glass tier="primary" accent>
+        {/* ═══ SETUP WIZARD — v4.6: Film → Distribution → Capital → Terms ═══ */}
+        {tid==="setup"&&<div style={{maxWidth:"640px",margin:"0 auto"}}><Glass tier="primary" accent>
           <div style={{textAlign:"center",marginBottom:"16px"}}>
-            <div style={{width:"40%",height:"1px",background:`linear-gradient(90deg,transparent,${T.goldPrimary},transparent)`,margin:"0 auto 20px",opacity:0.4}}/>
-            {/* v4.5: Bigger hero, subtitle */}
             <div style={{fontFamily:F.display,fontSize:"44px",color:T.w92,lineHeight:0.95}}>BUILD YOUR MODEL</div>
             <div style={{fontFamily:F.mono,fontSize:"12px",color:T.gold,letterSpacing:"3px",marginTop:"10px",opacity:0.6}}>INSTITUTIONAL-GRADE FILM FINANCE</div>
-            <div style={{fontFamily:F.body,fontSize:"14px",color:T.w65,marginTop:"12px"}}>Step {wizStep+1} of 4 — {wizSteps[wizStep]}</div>
-            {wizardDone&&<div onClick={()=>switchTab(1)} style={{fontFamily:F.mono,fontSize:"11px",color:T.goldPrimary,marginTop:"10px",cursor:"pointer",opacity:0.7,fontWeight:700,letterSpacing:"1px"}}>SKIP TO YOUR DEAL →</div>}
           </div>
-          {/* v4.5: Thicker progress bar with glow */}
-          <div style={{height:"5px",background:"rgba(255,255,255,0.05)",borderRadius:"3px",margin:"16px 0 28px",overflow:"hidden"}}><div style={{height:"100%",width:`${((wizStep+1)/4)*100}%`,background:`linear-gradient(90deg,${T.gold},${T.goldPrimary})`,borderRadius:"3px",transition:"width 0.3s",boxShadow:`0 0 12px ${T.goldGhost}`}}/></div>
+          {/* v4.6: Stepper navigation */}
+          <div style={{display:"flex",justifyContent:"center",gap:"8px",margin:"20px 0 24px"}}>
+            {wizSteps.map((st,i)=>{const done=i<wizStep;const active=i===wizStep;return<div key={i} onClick={()=>done?setWizStep(i):null} style={{display:"flex",alignItems:"center",gap:"6px",cursor:done?"pointer":"default",opacity:active?1:done?0.8:0.35}}>
+              <div style={{width:"24px",height:"24px",borderRadius:"50%",border:`2px solid ${active?T.goldPrimary:done?T.gold:T.border}`,background:active?T.goldPrimary:done?"rgba(212,175,55,0.10)":"transparent",display:"flex",alignItems:"center",justifyContent:"center",fontFamily:F.mono,fontSize:"10px",color:active?"#000":done?T.gold:T.cw50,fontWeight:700}}>{done?"✓":i+1}</div>
+              <span style={{fontFamily:F.mono,fontSize:"9px",letterSpacing:"1px",color:active?T.goldPrimary:done?T.gold:T.cw50,fontWeight:active?700:500,display:i<3?"inline":"inline"}}>{st.split(" ").pop()}</span>
+              {i<3&&<div style={{width:"20px",height:"1px",background:done?T.goldLine:T.border}}/>}
+            </div>;})}
+          </div>
+          <div style={{height:"5px",background:"rgba(255,255,255,0.05)",borderRadius:"3px",margin:"0 0 28px",overflow:"hidden"}}><div style={{height:"100%",width:`${((wizStep+1)/4)*100}%`,background:`linear-gradient(90deg,${T.gold},${T.goldPrimary})`,borderRadius:"3px",transition:"width 0.3s",boxShadow:`0 0 12px ${T.goldGhost}`}}/></div>
 
+          {/* ═══ STEP 0: YOUR FILM ═══ */}
           {wizStep===0&&<>
-            {/* v4.5: Quick-start presets */}
             <div style={{fontFamily:F.mono,fontSize:"10px",color:T.cw50,letterSpacing:"2px",marginBottom:"10px",textAlign:"center"}}>QUICK START</div>
-            <div style={{display:"flex",gap:"8px",marginBottom:"28px"}}>{QUICK_PRESETS.map(p=><button key={p.label} onClick={()=>applyPreset(p)} style={{flex:1,padding:"12px 8px",background:inp.totalBudget===p.budget?"rgba(212,175,55,0.04)":"transparent",border:`1px solid ${inp.totalBudget===p.budget?T.goldLine:T.border}`,borderRadius:"8px",cursor:"pointer",textAlign:"center",transition:"all 0.15s"}}>
-              <div style={{fontFamily:F.mono,fontSize:"11px",color:inp.totalBudget===p.budget?T.goldPrimary:T.cw70,fontWeight:700}}>{p.label}</div>
-              <div style={{fontFamily:F.body,fontSize:"11px",color:T.w65,marginTop:"4px"}}>{p.genre}{p.sag?" · Union":" · Non-Union"}</div>
-            </button>)}</div>
+            <div style={{display:"flex",gap:"8px",marginBottom:"28px"}}>{QUICK_PRESETS.map(p=><button key={p.label} onClick={()=>applyPreset(p)} style={{flex:1,padding:"12px 8px",background:inp.totalBudget===p.budget?"rgba(212,175,55,0.04)":"transparent",border:`1px solid ${inp.totalBudget===p.budget?T.goldLine:T.border}`,borderRadius:"8px",cursor:"pointer",textAlign:"center",transition:"all 0.15s"}}><div style={{fontFamily:F.mono,fontSize:"11px",color:inp.totalBudget===p.budget?T.goldPrimary:T.cw70,fontWeight:700}}>{p.label}</div><div style={{fontFamily:F.body,fontSize:"11px",color:T.w65,marginTop:"4px"}}>{p.genre}{p.sag?" · Union":" · Non-Union"}</div></button>)}</div>
             <TextInput label="Project Title" value={inp.title} onChange={v=>s("title",v)} explain="As it appears in legal documents"/>
             <SelectInput label="Genre" value={inp.genre} onChange={v=>s("genre",v)} options={GENRES} explain="Drives revenue benchmarks"/>
-            {/* v4.5: Collapsible crew */}
-            <div onClick={()=>setShowCrew(!showCrew)} style={{display:"flex",alignItems:"center",gap:"8px",margin:"28px 0 16px",cursor:"pointer"}}>
-              <div style={{height:"1px",flex:1,background:T.border}}/>
-              <span style={{fontFamily:F.mono,fontSize:"12px",letterSpacing:"4px",color:T.goldPrimary,opacity:0.6,fontWeight:500}}>CREATIVE TEAM {showCrew?"▾":"▸"}</span>
-              <div style={{height:"1px",flex:1,background:T.border}}/>
-            </div>
-            <div style={{fontFamily:F.body,fontSize:"12px",color:T.cw50,textAlign:"center",marginBottom:showCrew?"16px":"0",marginTop:"-8px"}}>{showCrew?"":"Optional — add your team or skip ahead"}</div>
-            {showCrew&&<>
-              <TextInput label="Producer(s)" value={crew.producer} onChange={v=>setCrew(p=>({...p,producer:v}))} placeholder="Lead producer"/>
-              <TextInput label="Director" value={crew.director} onChange={v=>setCrew(p=>({...p,director:v}))} placeholder="Director or TBD"/>
-              <TextInput label="Writer(s)" value={crew.writer} onChange={v=>setCrew(p=>({...p,writer:v}))} placeholder="Screenwriter(s)"/>
-              <TextInput label="Lead Cast" value={crew.cast} onChange={v=>setCrew(p=>({...p,cast:v}))} placeholder="Attached or TBD"/>
-            </>}
-            <SD title="PRODUCTION"/>
-            <SelectInput label="Shoot State" value={inp.shootState} onChange={v=>s("shootState",v)} options={STATES.map(st=>({value:st.id,label:st.name}))} explain="For tax credit guidance — does not auto-fill"/>
+            <SelectInput label="Shoot State" value={inp.shootState} onChange={v=>s("shootState",v)} options={STATES.map(st=>({value:st.id,label:st.name}))} explain={stateData.rate>0?`${stateData.name}: ${stateData.rate}% base rate — auto-fills in Capital step`:"Select for tax credit guidance"}/>
             <ComboInput label="Total Production Budget" value={inp.totalBudget} onChange={v=>s("totalBudget",v)} min={250000} max={10000000} step={50000} suffix="" fmt={fmt} explain="All-in: cast, crew, post, insurance, contingency" benchMin={1e6} benchMax={5e6}/>
-            {/* v4.5: Scroll indicator */}
-            {wizStep===0&&<div style={{textAlign:"center",marginTop:"8px",animation:"pulse 2s ease-in-out infinite"}}><div style={{fontFamily:F.mono,fontSize:"10px",color:T.cw30,letterSpacing:"2px"}}>SCROLL TO CONTINUE</div><div style={{color:T.cw30,fontSize:"16px",marginTop:"4px"}}>▾</div></div>}
+            {/* Collapsible Crew */}
+            <div onClick={()=>setShowCrew(!showCrew)} style={{display:"flex",alignItems:"center",gap:"8px",margin:"20px 0 12px",cursor:"pointer"}}><div style={{height:"1px",flex:1,background:T.border}}/><span style={{fontFamily:F.mono,fontSize:"11px",letterSpacing:"3px",color:T.goldPrimary,opacity:0.6,fontWeight:500}}>CREATIVE TEAM {showCrew?"▾":"▸"}</span><div style={{height:"1px",flex:1,background:T.border}}/></div>
+            {!showCrew&&<div style={{fontFamily:F.body,fontSize:"12px",color:T.cw50,textAlign:"center",marginBottom:"8px"}}>Optional — add your team or skip ahead</div>}
+            {showCrew&&<><TextInput label="Producer(s)" value={crew.producer} onChange={v=>setCrew(p=>({...p,producer:v}))} placeholder="Lead producer"/><TextInput label="Director" value={crew.director} onChange={v=>setCrew(p=>({...p,director:v}))} placeholder="Director or TBD"/><TextInput label="Writer(s)" value={crew.writer} onChange={v=>setCrew(p=>({...p,writer:v}))} placeholder="Screenwriter(s)"/><TextInput label="Lead Cast" value={crew.cast} onChange={v=>setCrew(p=>({...p,cast:v}))} placeholder="Attached or TBD"/></>}
+            {/* Collapsible Production Setup */}
+            <div onClick={()=>setShowProd(!showProd)} style={{display:"flex",alignItems:"center",gap:"8px",margin:"20px 0 12px",cursor:"pointer"}}><div style={{height:"1px",flex:1,background:T.border}}/><span style={{fontFamily:F.mono,fontSize:"11px",letterSpacing:"3px",color:T.goldPrimary,opacity:0.6,fontWeight:500}}>PRODUCTION SETUP {showProd?"▾":"▸"}</span><div style={{height:"1px",flex:1,background:T.border}}/></div>
+            {!showProd&&<div style={{fontFamily:F.body,fontSize:"12px",color:T.cw50,textAlign:"center",marginBottom:"8px"}}>Guilds, bond — also adjustable in sidebar</div>}
+            {showProd&&<>
+              <Toggle label="SAG-AFTRA" value={guilds.sag} onChange={v=>setGuilds(p=>({...p,sag:v}))} explain="Actors union."/>
+              {guilds.sag&&<SelectInput label="SAG Tier" value={sagTier} onChange={setSagTier} options={["Ultra Low Budget","Modified Low Budget","Low Budget","Standard"]} explain={`Auto-selected for ${fmt(inp.totalBudget)} budget.`}/>}
+              <Toggle label="DGA" value={guilds.dga} onChange={v=>setGuilds(p=>({...p,dga:v}))} explain="Directors Guild."/>
+              <Toggle label="WGA" value={guilds.wga} onChange={v=>setGuilds(p=>({...p,wga:v}))} explain="Writers Guild."/>
+              <Toggle label="IATSE" value={guilds.iatse} onChange={v=>setGuilds(p=>({...p,iatse:v}))} explain="BTL crew: grips, electric, camera, art dept."/>
+              <Toggle label={bondOn?"COMPLETION BOND — ON":"COMPLETION BOND — OFF"} value={bondOn} onChange={setBondOn} explain="Required by most lenders."/>
+              {bondOn&&<ComboInput label="Bond %" value={bondPct} onChange={setBondPct} min={1.5} max={4} step={.5} explain={`= ${fF(Math.round(inp.totalBudget*bondPct/100))}`} benchMin={2} benchMax={3}/>}
+            </>}
+            {/* Live feedback: budget bar */}
+            <FeedbackPanel>
+              <div style={{display:"flex",justifyContent:"space-between",marginBottom:"8px"}}><span style={{fontFamily:F.mono,fontSize:"10px",color:T.cw50,fontWeight:700}}>BUDGET BREAKDOWN</span><span style={{fontFamily:F.mono,fontSize:"10px",color:T.goldPrimary,fontWeight:700}}><AV>{fmt(d.actualBudget)}</AV></span></div>
+              <div style={{display:"flex",height:"8px",borderRadius:"4px",overflow:"hidden"}}>{d.bd.map(c=><div key={c.name} style={{flex:c.value,background:c.color,opacity:0.7}}/>)}</div>
+              <div style={{display:"flex",gap:"12px",marginTop:"6px",flexWrap:"wrap"}}>{d.bd.map(c=><span key={c.name} style={{fontFamily:F.mono,fontSize:"9px",color:T.cw50}}><span style={{color:c.color}}>●</span> {c.name} {Math.round(c.value/((d.actualBudget||1))*100)}%</span>)}</div>
+            </FeedbackPanel>
           </>}
+
+          {/* ═══ STEP 1: DISTRIBUTION ═══ */}
           {wizStep===1&&<>
+            <div style={{fontFamily:F.body,fontSize:"14px",color:T.w65,marginBottom:"18px"}}>How will you sell this film? This determines your breakeven and revenue model.</div>
+            <div style={{display:"flex",gap:"8px",marginBottom:"28px"}}>{Object.keys(DIST_PRESETS).map(n=><button key={n} onClick={()=>applyDist(n)} style={{flex:1,background:distPreset===n?"rgba(242,202,80,0.04)":"transparent",border:`1px solid ${distPreset===n?T.goldLine:T.border}`,borderRadius:"10px",padding:"14px",cursor:"pointer",textAlign:"left",transition:"all 0.15s"}}><div style={{fontFamily:F.mono,fontSize:"11px",color:distPreset===n?T.goldPrimary:T.cw70,fontWeight:700,textTransform:"uppercase",letterSpacing:"1px"}}>{n}</div><div style={{fontFamily:F.body,fontSize:"12px",color:T.w65,marginTop:"6px",lineHeight:1.5}}>{DIST_PRESETS[n].desc}</div></button>)}</div>
+            {isBuyout&&<div style={{background:"rgba(242,202,80,0.03)",border:`1px solid ${T.border}`,borderRadius:"8px",padding:"12px 16px",marginBottom:"20px"}}><span style={{fontFamily:F.body,fontSize:"13px",color:T.w65}}>In a buyout, the streamer pays a flat acquisition price. No exhibitor split, no P&A, no distribution fee. Your sales agent brokers the deal.</span></div>}
+            {!isBuyout&&<><ComboInput label="Exhibitor Split" value={inp.exhibitorPct} onChange={v=>s("exhibitorPct",v)} min={0} max={60} explain="Theater's cut. 0% for streaming." benchMin={45} benchMax={55}/>
+            <ComboInput label="P&A / Marketing" value={inp.paBudget} onChange={v=>s("paBudget",v)} min={0} max={Math.round(inp.totalBudget*.5)} step={10000} suffix="" fmt={fmt} explain="Distributor's marketing spend."/>
+            <ComboInput label="Distribution Fee" value={inp.distFeePct} onChange={v=>s("distFeePct",v)} min={10} max={40} explain="25-35% typical." benchMin={25} benchMax={35}/></>}
+            <ComboInput label="SA Commission" value={inp.saCommPct} onChange={v=>s("saCommPct",v)} min={5} max={20} explain={isBuyout?"The agent who brokers the deal. 10-15% of sale price.":"International territory sales. 10-15% typical."} benchMin={10} benchMax={15}/>
+            {warnings.length>0&&<div style={{background:T.amberDim,border:`1px solid rgba(240,168,48,0.20)`,borderRadius:"10px",padding:"14px 16px",margin:"16px 0"}}>{warnings.map((w,i)=><div key={i} style={{fontFamily:F.body,fontSize:"13px",color:T.amber,marginBottom:i<warnings.length-1?"8px":0,lineHeight:1.4}}>⚠ {w}</div>)}</div>}
+            {/* Live feedback: breakeven */}
+            <FeedbackPanel>
+              <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline"}}><span style={{fontFamily:F.mono,fontSize:"10px",color:T.cw50,fontWeight:700}}>BREAKEVEN REVENUE</span><span style={{fontFamily:F.display,fontSize:"28px",color:findBE>d.actualBudget*3?T.red:findBE>d.actualBudget*1.5?T.amber:T.green}}><AV>{fmt(findBE)}</AV></span></div>
+              <div style={{fontFamily:F.body,fontSize:"12px",color:T.w65,marginTop:"4px"}}>{findBE>0?`${Math.round(findBE/((d.rt.base||1))*100)}% of Base Case revenue needed to break even.`:"Set distribution terms to see breakeven."}</div>
+            </FeedbackPanel>
+          </>}
+
+          {/* ═══ STEP 2: CAPITAL ═══ */}
+          {wizStep===2&&<>
             <div style={{background:"rgba(242,202,80,0.04)",border:`1px solid ${T.border}`,borderTop:`1px solid ${T.goldLine}`,borderRadius:"10px",padding:"16px",marginBottom:"24px"}}>
               <div style={{fontFamily:F.mono,fontSize:"11px",color:T.goldPrimary,letterSpacing:"1px",fontWeight:700}}>{stateData.name.toUpperCase()} — {stateData.type.toUpperCase()}</div>
               <div style={{fontFamily:F.body,fontSize:"13px",color:T.w65,marginTop:"8px",lineHeight:1.6}}>{stateData.note}</div>
-              <div style={{fontFamily:F.body,fontSize:"12px",color:T.w65,marginTop:"6px",fontStyle:"italic"}}>Enter the rate you're modeling. Consult a production tax attorney.</div>
             </div>
-            <ComboInput label="Tax Credit Rate" value={inp.taxCreditPct} onChange={v=>s("taxCreditPct",v)} min={0} max={45} explain={`= ${fF(Math.round(inp.totalBudget*inp.taxCreditPct/100))}`} benchMin={stateData.id!=="OTHER"?Math.max(0,stateData.rate-5):undefined} benchMax={stateData.id!=="OTHER"?stateData.rate+10:undefined}/>
+            <ComboInput label="Tax Credit Rate" value={inp.taxCreditPct} onChange={v=>s("taxCreditPct",v)} min={0} max={45} explain={`= ${fF(Math.round(inp.totalBudget*inp.taxCreditPct/100))}${stateData.rate>0?` · Auto-filled from ${stateData.name} base rate`:""}`} benchMin={stateData.id!=="OTHER"?Math.max(0,stateData.rate-5):undefined} benchMax={stateData.id!=="OTHER"?stateData.rate+10:undefined}/>
             <ComboInput label="TC Loan Advance" value={inp.taxCreditLoanPct} onChange={v=>s("taxCreditLoanPct",v)} min={0} max={100} explain={`= ${fF(Math.round(inp.totalBudget*inp.taxCreditPct/100*inp.taxCreditLoanPct/100))} senior debt`} benchMin={85} benchMax={95}/>
-            <ComboInput label="Gap / Mezz" value={inp.gapMezz} onChange={v=>s("gapMezz",v)} min={0} max={Math.round(inp.totalBudget*.2)} step={10000} suffix="" fmt={fmt} explain="Leave at $0 if unsure."/>
-            <ComboInput label="Pre-Sale Loan" value={inp.preSaleLoan} onChange={v=>s("preSaleLoan",v)} min={0} max={Math.round(inp.totalBudget*.25)} step={10000} suffix="" fmt={fmt} explain="Leave at $0 if no signed pre-sales."/>
-            <div style={{background:"rgba(242,202,80,0.04)",border:`1px solid ${T.border}`,borderTop:`1px solid ${T.goldLine}`,borderRadius:"12px",padding:"24px",textAlign:"center",margin:"16px 0"}}>
-              <div style={{fontFamily:F.mono,fontSize:"11px",color:T.cw50,letterSpacing:"2px",fontWeight:700}}>EQUITY RAISE NEEDED</div>
-              <div style={{fontFamily:F.display,fontSize:"54px",color:T.equity,lineHeight:1.1,marginTop:"8px"}}><AV>{fF(d.eq)}</AV></div>
-              <div style={{fontFamily:F.body,fontSize:"13px",color:T.w65,marginTop:"10px"}}>~{d.estInv} investors at {fF(inp.minInvestment)} min</div>
-            </div>
+            <ComboInput label="Senior Debt Rate" value={inp.seniorDebtRate} onChange={v=>s("seniorDebtRate",v)} min={5} max={18} step={.5} explain="TC bridge loan interest. 8-12% typical." benchMin={8} benchMax={12}/>
+            <ComboInput label="Loan Term" value={inp.loanTerm} onChange={v=>s("loanTerm",v)} min={6} max={48} suffix=" mo" explain="Time from close to repayment." benchMin={12} benchMax={36}/>
+            {/* Collapsible Advanced Financing */}
+            <div onClick={()=>setShowAdvanced(!showAdvanced)} style={{display:"flex",alignItems:"center",gap:"8px",margin:"20px 0 12px",cursor:"pointer"}}><div style={{height:"1px",flex:1,background:T.border}}/><span style={{fontFamily:F.mono,fontSize:"11px",letterSpacing:"3px",color:T.goldPrimary,opacity:0.6,fontWeight:500}}>ADVANCED FINANCING {showAdvanced?"▾":"▸"}</span><div style={{height:"1px",flex:1,background:T.border}}/></div>
+            {!showAdvanced&&<div style={{fontFamily:F.body,fontSize:"12px",color:T.cw50,textAlign:"center",marginBottom:"8px"}}>Gap/mezz and pre-sale loans — most first projects skip these</div>}
+            {showAdvanced&&<>
+              <ComboInput label="Gap / Mezz" value={inp.gapMezz} onChange={v=>s("gapMezz",v)} min={0} max={Math.round(inp.totalBudget*.2)} step={10000} suffix="" fmt={fmt} explain="Loan against unsold distribution rights."/>
+              {inp.gapMezz>0&&<ComboInput label="Gap Loan Rate" value={inp.gapRate} onChange={v=>s("gapRate",v)} min={8} max={24} step={.5} explain="Higher risk = higher rate." benchMin={12} benchMax={20}/>}
+              <ComboInput label="Pre-Sale Loan" value={inp.preSaleLoan} onChange={v=>s("preSaleLoan",v)} min={0} max={Math.round(inp.totalBudget*.25)} step={10000} suffix="" fmt={fmt} explain="Only if you have signed pre-sale agreements."/>
+            </>}
+            {/* Live feedback: equity + interest */}
+            <FeedbackPanel>
+              <div style={{display:"flex",gap:"24px"}}>
+                <div style={{flex:1}}><div style={{fontFamily:F.mono,fontSize:"10px",color:T.cw50,fontWeight:700}}>EQUITY RAISE NEEDED</div><div style={{fontFamily:F.display,fontSize:"36px",color:T.equity,marginTop:"4px"}}><AV>{fF(d.eq)}</AV></div><div style={{fontFamily:F.body,fontSize:"12px",color:T.w65}}>~{d.estInv} investors at {fF(inp.minInvestment)} min</div></div>
+                <div style={{flex:1}}><div style={{fontFamily:F.mono,fontSize:"10px",color:T.cw50,fontWeight:700}}>TOTAL INTEREST COST</div><div style={{fontFamily:F.display,fontSize:"36px",color:d.totalInterest>d.actualBudget*.1?T.amber:T.cw70,marginTop:"4px"}}><AV>{fF(d.totalInterest)}</AV></div><div style={{fontFamily:F.body,fontSize:"12px",color:T.w65}}>{d.actualBudget>0?Math.round(d.totalInterest/d.actualBudget*100):0}% of budget</div></div>
+              </div>
+            </FeedbackPanel>
           </>}
-          {wizStep===2&&<>
-            <ComboInput label="Recoupment Premium" value={inp.recoupPremium} onChange={v=>s("recoupPremium",v)} min={0} max={40} explain={`Investors get ${100+inp.recoupPremium}% back before profit.`} benchMin={15} benchMax={25}/>
-            <ComboInput label="Investor Backend" value={inp.investorBackend} onChange={v=>s("investorBackend",v)} min={20} max={80} explain={`Profit: ${inp.investorBackend}% inv / ${100-inp.investorBackend}% you.`} benchMin={40} benchMax={50}/>
-            <ComboInput label="Min Investment" value={inp.minInvestment} onChange={v=>s("minInvestment",v)} min={10000} max={250000} step={5000} suffix="" fmt={fmt} explain="Smallest check you'll accept." benchMin={25000} benchMax={100000}/>
-            <ComboInput label="Senior Debt Rate" value={inp.seniorDebtRate} onChange={v=>s("seniorDebtRate",v)} min={5} max={18} step={.5} explain="TC bridge loan. 8-12% typical." benchMin={8} benchMax={12}/>
-            {inp.gapMezz>0&&<ComboInput label="Gap Loan Rate" value={inp.gapRate} onChange={v=>s("gapRate",v)} min={8} max={24} step={.5} explain="Higher risk = higher rate." benchMin={12} benchMax={20}/>}
-            <ComboInput label="Loan Term" value={inp.loanTerm} onChange={v=>s("loanTerm",v)} min={6} max={48} suffix=" mo" explain="Time to repay from distribution." benchMin={12} benchMax={36}/>
-            <SD title="PRODUCTION"/>
-            <Toggle label={bondOn?"COMPLETION BOND — ON":"COMPLETION BOND — OFF"} value={bondOn} onChange={setBondOn} explain="Required by most lenders."/>
-            {bondOn&&<ComboInput label="Bond %" value={bondPct} onChange={setBondPct} min={1.5} max={4} step={.5} explain={`= ${fF(Math.round(inp.totalBudget*bondPct/100))}`} benchMin={2} benchMax={3}/>}
-            <SD title="GUILDS"/>
-            <Toggle label="SAG-AFTRA" value={guilds.sag} onChange={v=>setGuilds(p=>({...p,sag:v}))} explain="Actors union."/>
-            {guilds.sag&&<SelectInput label="SAG Tier" value={sagTier} onChange={setSagTier} options={["Ultra Low Budget","Modified Low Budget","Low Budget","Standard"]} explain={`Auto-selected for ${fmt(inp.totalBudget)} budget. Override if needed.`}/>}
-            <Toggle label="DGA" value={guilds.dga} onChange={v=>setGuilds(p=>({...p,dga:v}))} explain="Directors Guild."/>
-            <Toggle label="WGA" value={guilds.wga} onChange={v=>setGuilds(p=>({...p,wga:v}))} explain="Writers Guild."/>
-            <Toggle label="IATSE" value={guilds.iatse} onChange={v=>setGuilds(p=>({...p,iatse:v}))} explain="BTL crew: grips, electric, camera, art dept."/>
-            {!guilds.sag&&!guilds.dga&&!guilds.wga&&!guilds.iatse&&<div style={{fontFamily:F.body,fontSize:"13px",color:T.w65,fontStyle:"italic"}}>Non-union project.</div>}
-          </>}
+
+          {/* ═══ STEP 3: DEAL TERMS ═══ */}
           {wizStep===3&&<>
-            <div style={{fontFamily:F.body,fontSize:"14px",color:T.w65,marginBottom:"18px"}}>Choose a strategy, then adjust.</div>
-            <div style={{display:"flex",gap:"8px",marginBottom:"28px"}}>{Object.keys(DIST_PRESETS).map(n=><button key={n} onClick={()=>applyDist(n)} style={{flex:1,background:distPreset===n?"rgba(242,202,80,0.04)":"transparent",border:`1px solid ${distPreset===n?T.goldLine:T.border}`,borderRadius:"10px",padding:"14px",cursor:"pointer",textAlign:"left",transition:"all 0.15s"}}><div style={{fontFamily:F.mono,fontSize:"11px",color:distPreset===n?T.goldPrimary:T.cw70,fontWeight:700,textTransform:"uppercase",letterSpacing:"1px"}}>{n}</div><div style={{fontFamily:F.body,fontSize:"12px",color:T.w65,marginTop:"6px",lineHeight:1.5}}>{DIST_PRESETS[n].desc}</div></button>)}</div>
-            <ComboInput label="Exhibitor Split" value={inp.exhibitorPct} onChange={v=>s("exhibitorPct",v)} min={0} max={60} explain="Theater's cut. 0% for streaming." benchMin={45} benchMax={55}/>
-            <ComboInput label="P&A / Marketing" value={inp.paBudget} onChange={v=>s("paBudget",v)} min={0} max={Math.round(inp.totalBudget*.5)} step={10000} suffix="" fmt={fmt} explain="Distributor's spend. $0 for streaming."/>
-            <ComboInput label="Distribution Fee" value={inp.distFeePct} onChange={v=>s("distFeePct",v)} min={10} max={40} explain="25-35% typical." benchMin={25} benchMax={35}/>
-            <ComboInput label="SA Commission" value={inp.saCommPct} onChange={v=>s("saCommPct",v)} min={5} max={20} explain="10-15% typical." benchMin={10} benchMax={15}/>
-            {warnings.length>0&&<div style={{background:T.amberDim,border:`1px solid rgba(240,168,48,0.20)`,borderRadius:"10px",padding:"14px 16px",margin:"16px 0"}}>{warnings.map((w,i)=><div key={i} style={{fontFamily:F.body,fontSize:"13px",color:T.amber,marginBottom:i<warnings.length-1?"8px":0,lineHeight:1.4}}>⚠ {w}</div>)}</div>}
+            <ComboInput label="Recoupment Premium" value={inp.recoupPremium} onChange={v=>s("recoupPremium",v)} min={0} max={40} explain={`Investors get ${100+inp.recoupPremium}% back before profit.`} benchMin={15} benchMax={25}/>
+            {/* v4.6: Recoupment guardrails */}
+            {inp.recoupPremium===0&&<div style={{fontFamily:F.body,fontSize:"12px",color:T.amber,marginTop:"-16px",marginBottom:"16px"}}>⚠ No premium. Investors receive only principal back. This is unusual.</div>}
+            {inp.recoupPremium>30&&<div style={{fontFamily:F.body,fontSize:"12px",color:T.amber,marginTop:"-16px",marginBottom:"16px"}}>⚠ Above 30% — reduces your profit participation significantly.</div>}
+            <ComboInput label="Investor Backend" value={inp.investorBackend} onChange={v=>s("investorBackend",v)} min={20} max={80} explain={`Profit split: ${inp.investorBackend}% investors / ${100-inp.investorBackend}% you.`} benchMin={40} benchMax={50}/>
+            <ComboInput label="Min Investment" value={inp.minInvestment} onChange={v=>s("minInvestment",v)} min={10000} max={250000} step={5000} suffix="" fmt={fmt} explain="Smallest check you'll accept." benchMin={25000} benchMax={100000}/>
+            {/* Live feedback: investor return preview */}
+            <FeedbackPanel>
+              <div style={{fontFamily:F.mono,fontSize:"10px",color:T.cw50,fontWeight:700,marginBottom:"10px"}}>INVESTOR RETURN PREVIEW (BASE CASE)</div>
+              <div style={{display:"flex",gap:"16px"}}>
+                <div style={{flex:1,textAlign:"center"}}><div style={{fontFamily:F.display,fontSize:"30px",color:moicColor(wfBase.moic)}}><AV>{moicDisplay(wfBase.moic)}</AV></div><div style={{fontFamily:F.mono,fontSize:"10px",color:T.cw50}}>MOIC</div></div>
+                <div style={{flex:1,textAlign:"center"}}><div style={{fontFamily:F.display,fontSize:"30px",color:T.w92}}><AV>{wfBase.moic!==null?fF(Math.round(wfBase.tr)):"N/A"}</AV></div><div style={{fontFamily:F.mono,fontSize:"10px",color:T.cw50}}>TOTAL RETURN</div></div>
+                <div style={{flex:1,textAlign:"center"}}><div style={{fontFamily:F.display,fontSize:"30px",color:T.purple}}><AV>{fmt(wfBase.pb)}</AV></div><div style={{fontFamily:F.mono,fontSize:"10px",color:T.cw50}}>PRODUCER NET</div></div>
+              </div>
+            </FeedbackPanel>
           </>}
-          {/* v4.5: Button hierarchy — BACK ghost, NEXT gold, final shimmer CTA */}
+
+          {/* Wizard nav buttons */}
           <div style={{display:"flex",gap:"12px",marginTop:"28px"}}>
             {wizStep>0&&<button onClick={()=>setWizStep(w=>w-1)} style={{flex:1,padding:"16px",background:"transparent",border:`1px solid ${T.border}`,borderRadius:"10px",fontFamily:F.display,fontSize:"16px",letterSpacing:"2px",color:T.cw70,cursor:"pointer"}}>← BACK</button>}
             {wizStep<3
-              ?<button disabled={inp.totalBudget<250000} onClick={()=>setWizStep(w=>w+1)} style={{flex:1,padding:"16px",background:`linear-gradient(135deg,${T.goldPrimary},${T.gold})`,border:"none",borderRadius:"10px",fontFamily:F.display,fontSize:"16px",letterSpacing:"2px",color:"#000",cursor:inp.totalBudget<250000?"not-allowed":"pointer",opacity:inp.totalBudget<250000?0.4:1,fontWeight:700}}>NEXT →</button>
+              ?<button disabled={wizStep===0&&inp.totalBudget<250000} onClick={()=>setWizStep(w=>w+1)} style={{flex:1,padding:"16px",background:`linear-gradient(135deg,${T.goldPrimary},${T.gold})`,border:"none",borderRadius:"10px",fontFamily:F.display,fontSize:"16px",letterSpacing:"2px",color:"#000",cursor:(wizStep===0&&inp.totalBudget<250000)?"not-allowed":"pointer",opacity:(wizStep===0&&inp.totalBudget<250000)?0.4:1,fontWeight:700}}>NEXT →</button>
               :<button onClick={finishWizard} style={{flex:1,padding:"16px",background:`linear-gradient(135deg,${T.goldPrimary},${T.gold})`,border:"none",borderRadius:"10px",fontFamily:F.display,fontSize:"18px",letterSpacing:"3px",color:"#000",cursor:"pointer",fontWeight:700,boxShadow:`0 4px 24px rgba(242,202,80,0.20)`,position:"relative",overflow:"hidden"}}><span style={{position:"relative",zIndex:1}}>VIEW YOUR DEAL →</span><div style={{position:"absolute",top:0,left:0,width:"55%",height:"100%",background:"linear-gradient(90deg,transparent,rgba(255,255,255,0.35),transparent)",animation:"shimmer 2.5s ease-in-out infinite"}}/></button>}
           </div>
+          {/* Scroll hint */}
+          {wizStep===0&&<div style={{textAlign:"center",marginTop:"12px",animation:"chevBounce 2s ease-in-out infinite"}}><div style={{color:T.cw30,fontSize:"18px"}}>▾</div></div>}
         </Glass></div>}
 
-        {/* ═══ EMPTY STATE — v4.5: Premium gate ═══ */}
+        {/* ═══ EMPTY STATE — v4.6: Per-tab descriptions ═══ */}
         {!wizardDone&&tid!=="setup"&&tid!=="glossary"&&<div style={{textAlign:"center",padding:"120px 24px"}}>
           <div style={{fontFamily:F.mono,fontSize:"12px",color:T.gold,letterSpacing:"4px",opacity:0.3,marginBottom:"20px"}}>FILMMAKER.OG</div>
           <div style={{width:"60px",height:"1px",background:T.goldLine,margin:"0 auto 24px"}}/>
           <div style={{fontFamily:F.display,fontSize:"26px",color:T.cw50,marginBottom:"14px"}}>BUILD YOUR MODEL TO UNLOCK</div>
-          <div style={{fontFamily:F.body,fontSize:"14px",color:T.w65,marginBottom:"28px",maxWidth:"360px",margin:"0 auto 28px"}}>Complete the 4-step setup wizard to generate your financial analysis.</div>
-          <button onClick={()=>switchTab(0)} style={{padding:"12px 28px",background:"rgba(212,175,55,0.04)",border:`1px solid ${T.goldLine}`,borderRadius:"10px",fontFamily:F.display,fontSize:"14px",letterSpacing:"2px",color:T.goldPrimary,cursor:"pointer"}}>GO TO SETUP →</button>
+          <div style={{fontFamily:F.body,fontSize:"14px",color:T.w65,marginBottom:"28px",maxWidth:"400px",margin:"0 auto 28px"}}>{EMPTY_DESCS[tid]||"Complete the 4-step setup wizard."}</div>
+          <button onClick={()=>switchTab(tabIdx("setup"))} style={{padding:"12px 28px",background:"rgba(212,175,55,0.04)",border:`1px solid ${T.goldLine}`,borderRadius:"10px",fontFamily:F.display,fontSize:"14px",letterSpacing:"2px",color:T.goldPrimary,cursor:"pointer"}}>GO TO SETUP →</button>
         </div>}
 
-        {/* ═══ SNAPSHOT ═══ */}
+        {/* ═══ SNAPSHOT (unchanged from v4.5) ═══ */}
         {tid==="snapshot"&&wizardDone&&<div style={{display:"flex",flexDirection:"column",gap:"28px",maxWidth:"720px",margin:"0 auto"}}>
-          {/* v4.5: Restyled disclaimer — institutional, not warning */}
           <div style={{background:"rgba(255,255,255,0.02)",borderRadius:"8px",padding:"10px 16px",textAlign:"center",border:`1px solid ${T.border}`}}><span style={{fontFamily:F.mono,fontSize:"10px",color:T.cw50,letterSpacing:"2px"}}>ILLUSTRATIVE MODEL · NOT AN OFFER OF SECURITIES · CONSULT PROFESSIONALS</span></div>
           <Glass tier="primary" accent><SL>The Project</SL>
             <div style={{fontFamily:F.body,fontSize:"16px",color:T.w85,lineHeight:1.8}}>You're making a <strong style={{color:T.goldPrimary,fontWeight:600}}>{inp.genre}</strong> film with a budget of <strong style={{color:T.goldPrimary,fontWeight:600}}>{fF(d.actualBudget)}</strong>. You need <strong style={{color:T.equity,fontWeight:600}}>{fF(d.eq)}</strong> from investors — roughly <strong style={{fontWeight:600}}>{d.estInv} investors</strong> at {fF(inp.minInvestment)} each.</div>
             {(crew.producer||crew.director||crew.writer||crew.cast)&&<div style={{marginTop:"16px",display:"flex",gap:"20px",flexWrap:"wrap"}}>{[{l:"Producer",v:crew.producer},{l:"Director",v:crew.director},{l:"Writer",v:crew.writer},{l:"Cast",v:crew.cast}].filter(x=>x.v).map(x=><div key={x.l}><div style={{fontFamily:F.mono,fontSize:"10px",color:T.cw50,letterSpacing:"1.5px",fontWeight:700}}>{x.l.toUpperCase()}</div><div style={{fontFamily:F.body,fontSize:"14px",color:T.w75,marginTop:"3px"}}>{x.v}</div></div>)}</div>}
           </Glass>
           <Glass><SL sub="Production cash sources = budget uses.">Sources & Uses</SL>
-            {(()=>{const st=d.sources.reduce((s,c)=>s+c.amount,0),ut=d.bd.reduce((s,c)=>s+c.value,0),bal=Math.abs(st-ut)<1000;return<>
-            <div style={{display:"flex",gap:"28px",marginTop:"14px"}}>
-              <div style={{flex:1}}><div style={{fontFamily:F.mono,fontSize:"10px",color:T.goldPrimary,letterSpacing:"2px",marginBottom:"12px",fontWeight:700}}>SOURCES</div>{d.sources.map(c=><div key={c.name} style={{display:"flex",justifyContent:"space-between",padding:"10px 0",borderBottom:`1px solid ${T.border}`}}><span style={{fontFamily:F.body,fontSize:"14px",color:T.w75}}>{c.name}</span><span style={{fontFamily:F.mono,fontSize:"14px",color:T.cw90,fontWeight:600}}><AV>{fF(c.amount)}</AV></span></div>)}<div style={{display:"flex",justifyContent:"space-between",padding:"14px 0",borderTop:`1px solid ${T.goldDim}`,marginTop:"4px"}}><strong style={{fontSize:"14px",fontWeight:700}}>Total</strong><strong style={{fontSize:"14px",fontWeight:700,color:bal?T.w92:T.amber}}><AV>{fF(st)}</AV></strong></div></div>
-              <div style={{width:"1px",background:T.border}}/>
-              <div style={{flex:1}}><div style={{fontFamily:F.mono,fontSize:"10px",color:T.goldPrimary,letterSpacing:"2px",marginBottom:"12px",fontWeight:700}}>USES</div>{d.bd.map(c=><div key={c.name} style={{display:"flex",justifyContent:"space-between",padding:"10px 0",borderBottom:`1px solid ${T.border}`}}><span style={{fontFamily:F.body,fontSize:"14px",color:T.w75}}>{c.name}</span><span style={{fontFamily:F.mono,fontSize:"14px",color:T.w75}}>{fF(c.value)}</span></div>)}<div style={{display:"flex",justifyContent:"space-between",padding:"14px 0",borderTop:`1px solid ${T.goldDim}`,marginTop:"4px"}}><strong style={{fontSize:"14px",fontWeight:700}}>Total</strong><strong style={{fontSize:"14px",fontWeight:700,color:bal?T.w92:T.amber}}>{fF(ut)}</strong></div></div>
-            </div>
-            {!bal&&<div style={{fontFamily:F.mono,fontSize:"11px",color:T.amber,textAlign:"center",marginTop:"8px",fontWeight:600}}>⚠ Gap: {fF(Math.abs(st-ut))}</div>}
-            </>;})()}
+            {(()=>{const st=d.sources.reduce((s,c)=>s+c.amount,0),ut=d.bd.reduce((s,c)=>s+c.value,0),bal=Math.abs(st-ut)<1000;return<><div style={{display:"flex",gap:"28px",marginTop:"14px"}}><div style={{flex:1}}><div style={{fontFamily:F.mono,fontSize:"10px",color:T.goldPrimary,letterSpacing:"2px",marginBottom:"12px",fontWeight:700}}>SOURCES</div>{d.sources.map(c=><div key={c.name} style={{display:"flex",justifyContent:"space-between",padding:"10px 0",borderBottom:`1px solid ${T.border}`}}><span style={{fontFamily:F.body,fontSize:"14px",color:T.w75}}>{c.name}</span><span style={{fontFamily:F.mono,fontSize:"14px",color:T.cw90,fontWeight:600}}><AV>{fF(c.amount)}</AV></span></div>)}<div style={{display:"flex",justifyContent:"space-between",padding:"14px 0",borderTop:`1px solid ${T.goldDim}`,marginTop:"4px"}}><strong style={{fontSize:"14px",fontWeight:700}}>Total</strong><strong style={{fontSize:"14px",fontWeight:700,color:bal?T.w92:T.amber}}><AV>{fF(st)}</AV></strong></div></div><div style={{width:"1px",background:T.border}}/><div style={{flex:1}}><div style={{fontFamily:F.mono,fontSize:"10px",color:T.goldPrimary,letterSpacing:"2px",marginBottom:"12px",fontWeight:700}}>USES</div>{d.bd.map(c=><div key={c.name} style={{display:"flex",justifyContent:"space-between",padding:"10px 0",borderBottom:`1px solid ${T.border}`}}><span style={{fontFamily:F.body,fontSize:"14px",color:T.w75}}>{c.name}</span><span style={{fontFamily:F.mono,fontSize:"14px",color:T.w75}}>{fF(c.value)}</span></div>)}<div style={{display:"flex",justifyContent:"space-between",padding:"14px 0",borderTop:`1px solid ${T.goldDim}`,marginTop:"4px"}}><strong style={{fontSize:"14px",fontWeight:700}}>Total</strong><strong style={{fontSize:"14px",fontWeight:700,color:bal?T.w92:T.amber}}>{fF(ut)}</strong></div></div></div>{!bal&&<div style={{fontFamily:F.mono,fontSize:"11px",color:T.amber,textAlign:"center",marginTop:"8px",fontWeight:600}}>⚠ Gap: {fF(Math.abs(st-ut))}</div>}</>;})()}
           </Glass>
-          {/* v4.5: Redesigned FlowStep — clean cascade, no indent */}
           <Glass><SL sub="Every dollar passes through deductions in this order.">How Investors Get Paid</SL>
             <FlowStep num="1" label="Gross Revenue" explain="All sources: streaming, theatrical, international, TV" amount={wfBase.gr}/>
-            <FlowStep num="2" label="Distribution Costs" explain={wfBase.hasTh?`Exhibitors ${inp.exhibitorPct}% · Distributor ${inp.distFeePct}% · P&A · Sales Agent ${inp.saCommPct}%`:`Distributor ${inp.distFeePct}% · Sales Agent ${inp.saCommPct}%`} amount={-(wfBase.et+wfBase.pa+wfBase.df+wfBase.sc)} isLoss/>
+            <FlowStep num="2" label="Distribution Costs" explain={isBuyout?`Sales Agent ${inp.saCommPct}%`:wfBase.hasTh?`Exhibitors ${inp.exhibitorPct}% · Distributor ${inp.distFeePct}% · P&A · SA ${inp.saCommPct}%`:`Distributor ${inp.distFeePct}% · SA ${inp.saCommPct}%`} amount={-(wfBase.et+wfBase.pa+wfBase.df+wfBase.sc)} isLoss/>
             <FlowStep num="3" label="Net Producer Proceeds" amount={wfBase.npp} isHighlight/>
             <FlowStep num="4" label="Debt Repayment" explain="Senior debt, gap/mezz, pre-sale loans" amount={-(wfBase.drAmt+wfBase.gpAmt+wfBase.psAmt)} isLoss/>
             <FlowStep num="5" label={`Investor Recoupment (${100+inp.recoupPremium}%)`} explain={`${fF(d.eq)} principal + ${inp.recoupPremium}% premium`} amount={-wfBase.ir} isLoss/>
@@ -629,27 +551,16 @@ export default function Dashboard() {
             {d.risks.filter(r=>r.score>=.8).sort((a,b)=>b.score-a.score).slice(0,3).map((r,i)=><div key={i} style={{padding:"12px 0",borderBottom:`1px solid ${T.border}`}}><div style={{display:"flex",alignItems:"center",gap:"12px"}}><span style={{fontFamily:F.mono,fontSize:"12px",color:T.red,fontWeight:700,minWidth:"34px"}}>{r.prob}%</span><span style={{fontFamily:F.body,fontSize:"14px",color:T.w92,fontWeight:600}}>{r.name}</span></div><div style={{fontFamily:F.body,fontSize:"12px",color:T.w65,marginTop:"4px",marginLeft:"46px",fontStyle:"italic"}}>{r.mit}</div></div>)}
             <div style={{fontFamily:F.body,fontSize:"14px",color:T.red,marginTop:"16px",fontWeight:600}}>It is possible to lose the entire investment.</div>
           </Glass>
-          <Glass tier="primary" accent>
-            <SL>The Opportunity</SL>
-            <div style={{display:"flex",gap:"16px",marginTop:"10px"}}>
-              {[{l:"BULL REVENUE",v:fmt(d.rt.upside),c:T.green},{l:"INVESTOR RETURN",v:wfUp.moic!==null?moicDisplay(wfUp.moic):"N/A",c:T.green},{l:"COST REDUCTION",v:Math.round((1-d.eq/d.actualBudget)*100)+"%",c:T.equity}].map(x=><div key={x.l} style={{flex:1,textAlign:"center",padding:"20px 12px",background:"rgba(255,255,255,0.03)",borderRadius:"10px"}}>
-                <div style={{fontFamily:F.mono,fontSize:"10px",color:T.cw50,letterSpacing:"1.5px",fontWeight:700}}>{x.l}</div>
-                <div style={{fontFamily:F.display,fontSize:"34px",color:x.c,marginTop:"8px"}}><AV>{x.v}</AV></div>
-              </div>)}
-            </div>
+          <Glass tier="primary" accent><SL>The Opportunity</SL>
+            <div style={{display:"flex",gap:"16px",marginTop:"10px"}}>{[{l:"BULL REVENUE",v:fmt(d.rt.upside),c:T.green},{l:"INVESTOR RETURN",v:wfUp.moic!==null?moicDisplay(wfUp.moic):"N/A",c:T.green},{l:"COST REDUCTION",v:Math.round((1-d.eq/d.actualBudget)*100)+"%",c:T.equity}].map(x=><div key={x.l} style={{flex:1,textAlign:"center",padding:"20px 12px",background:"rgba(255,255,255,0.03)",borderRadius:"10px"}}><div style={{fontFamily:F.mono,fontSize:"10px",color:T.cw50,letterSpacing:"1.5px",fontWeight:700}}>{x.l}</div><div style={{fontFamily:F.display,fontSize:"34px",color:x.c,marginTop:"8px"}}><AV>{x.v}</AV></div></div>)}</div>
             <div style={{fontFamily:F.body,fontSize:"14px",color:T.w75,lineHeight:1.8,marginTop:"18px"}}>Budget: {fF(d.actualBudget)} → Equity: <strong style={{color:T.equity,fontWeight:600}}>{fF(d.eq)}</strong>. Tax credits and debt reduce investor exposure by {Math.round((1-d.eq/d.actualBudget)*100)}%.</div>
           </Glass>
-          <div style={{textAlign:"center"}}><button onClick={()=>switchTab(3)} style={{background:"rgba(212,175,55,0.04)",border:`1px solid ${T.goldLine}`,borderRadius:"10px",padding:"14px 32px",fontFamily:F.display,fontSize:"14px",letterSpacing:"3px",color:T.goldPrimary,cursor:"pointer"}}>EXPLORE THE WATERFALL →</button></div>
+          <div style={{textAlign:"center"}}><button onClick={()=>switchTab(tabIdx("waterfall"))} style={{background:"rgba(212,175,55,0.04)",border:`1px solid ${T.goldLine}`,borderRadius:"10px",padding:"14px 32px",fontFamily:F.display,fontSize:"14px",letterSpacing:"3px",color:T.goldPrimary,cursor:"pointer"}}>EXPLORE THE WATERFALL →</button></div>
         </div>}
 
         {/* ═══ OVERVIEW ═══ */}
         {tid==="overview"&&wizardDone&&<div style={{display:"flex",flexDirection:"column",gap:"28px"}}>
-          <div style={{display:"flex",gap:"14px",flexWrap:"wrap"}}>
-            <KPI label="Equity Raise" value={fmt(d.eq)} color={T.equity} bars={moicBars(d.eq*.6,d.eq,d.eq*1.4)}/>
-            <KPI label="Base MOIC" value={moicDisplay(wfBase.moic)} color={moicColor(wfBase.moic)} bars={moicBars(wfCon.moic,wfBase.moic,wfUp.moic)}/>
-            <KPI label="Budget" value={fmt(d.actualBudget)}/>
-            <KPI label="Tax Credit" value={fmt(d.tc)} sub={`${stateData.name} @ ${inp.taxCreditPct}%`}/>
-          </div>
+          <div style={{display:"flex",gap:"14px",flexWrap:"wrap"}}><KPI label="Equity Raise" value={fmt(d.eq)} color={T.equity} bars={moicBars(d.eq*.6,d.eq,d.eq*1.4)}/><KPI label="Base MOIC" value={moicDisplay(wfBase.moic)} color={moicColor(wfBase.moic)} bars={moicBars(wfCon.moic,wfBase.moic,wfUp.moic)}/><KPI label="Budget" value={fmt(d.actualBudget)}/><KPI label="Tax Credit" value={fmt(d.tc)} sub={`${stateData.name} @ ${inp.taxCreditPct}%`}/></div>
           <Glass accent><SL>Capital Stack</SL><div style={{display:"flex",height:"36px",borderRadius:"10px",overflow:"hidden",marginTop:"14px"}}>{d.cs.map(c=><div key={c.name} style={{width:`${(c.amount/((d.actualBudget+d.tc)||1))*100}%`,background:c.color,display:"flex",alignItems:"center",justifyContent:"center",fontFamily:F.mono,fontSize:"11px",color:"#000",fontWeight:700}}>{c.amount>=d.actualBudget*.08?fmt(c.amount):""}</div>)}</div><div style={{display:"flex",gap:"18px",marginTop:"12px",flexWrap:"wrap"}}>{d.cs.map(c=><div key={c.name} style={{display:"flex",alignItems:"center",gap:"6px"}}><div style={{width:9,height:9,borderRadius:"50%",background:c.color}}/><span style={{fontFamily:F.mono,fontSize:"11px",color:T.cw70}}>{c.name}</span></div>)}</div></Glass>
           <div style={{display:"flex",gap:"14px"}}><Glass style={{flex:1}}><SL>Revenue</SL><div style={{display:"flex",gap:"14px",marginTop:"14px"}}>{[{l:SL_BEAR,v:d.rt.conservative,c:T.red},{l:SL_BASE,v:d.rt.base,c:T.goldPrimary},{l:SL_BULL,v:d.rt.upside,c:T.green}].map(x=><div key={x.l} style={{flex:1,textAlign:"center"}}><div style={{fontFamily:F.mono,fontSize:"10px",color:T.cw50,letterSpacing:"1px",fontWeight:700}}>{x.l}</div><div style={{fontFamily:F.display,fontSize:"30px",color:x.c,lineHeight:1.2,marginTop:"6px"}}><AV>{fmt(x.v)}</AV></div></div>)}</div></Glass>
           <Glass style={{flex:1}}><SL>Budget</SL><div style={{display:"flex",alignItems:"center",gap:"20px"}}><div style={{width:130,height:130,position:"relative"}}><ResponsiveContainer><PieChart><Pie data={d.bd} dataKey="value" cx="50%" cy="50%" innerRadius={35} outerRadius={58} stroke={"#000"} strokeWidth={2}>{d.bd.map((e,i)=><Cell key={i} fill={e.color} opacity={0.85}/>)}</Pie></PieChart></ResponsiveContainer><div style={{position:"absolute",top:"50%",left:"50%",transform:"translate(-50%,-50%)",textAlign:"center"}}><div style={{fontFamily:F.display,fontSize:"16px",color:T.w92}}>{fmt(d.actualBudget)}</div></div></div><div style={{display:"flex",flexDirection:"column",gap:"5px"}}>{d.bd.map(e=><div key={e.name} style={{display:"flex",alignItems:"center",gap:"6px"}}><div style={{width:8,height:8,borderRadius:"2px",background:e.color,opacity:0.85}}/><span style={{fontFamily:F.mono,fontSize:"11px",color:T.cw70}}>{e.name}</span><span style={{fontFamily:F.mono,fontSize:"11px",color:T.cw90}}>{fmt(e.value)}</span></div>)}</div></div></Glass></div>
@@ -660,27 +571,19 @@ export default function Dashboard() {
           <Glass tier="primary" accent><SL>Revenue Scenario</SL>
             <div style={{fontFamily:F.mono,fontSize:"13px",color:T.cw70,marginBottom:"10px"}}>Gross: <span style={{color:T.goldPrimary,fontSize:"28px",fontFamily:F.display}}><AV>{fF(activeScenario)}</AV></span></div>
             <input type="range" min={250000} max={Math.max(1e7,inp.totalBudget*5)} step={50000} value={activeScenario} onChange={e=>setScenario(Number(e.target.value))} style={{width:"100%",accentColor:T.goldPrimary,height:"3px",cursor:"pointer"}}/>
-            <div style={{display:"flex",gap:"8px",marginTop:"16px"}}>{[{l:SL_BEAR,v:d.rt.conservative,moic:wfCon.moic},{l:SL_BASE+" Case",v:d.rt.base,moic:wfBase.moic},{l:SL_BULL,v:d.rt.upside,moic:wfUp.moic}].map(x=><button key={x.l} onClick={()=>setScenario(x.v)} style={{flex:1,background:activeScenario===x.v?"rgba(242,202,80,0.04)":"transparent",border:`1px solid ${activeScenario===x.v?T.goldLine:T.border}`,borderRadius:"10px",padding:"16px",cursor:"pointer",textAlign:"left",transition:"all 0.15s"}}>
-              <div style={{fontFamily:F.mono,fontSize:"11px",color:activeScenario===x.v?T.goldPrimary:T.cw50,fontWeight:700,textTransform:"uppercase",letterSpacing:"1px"}}>{x.l}</div>
-              <div style={{fontFamily:F.display,fontSize:"28px",color:activeScenario===x.v?T.w92:T.cw70,marginTop:"4px"}}><AV>{fmt(x.v)}</AV></div>
-              <div style={{display:"inline-block",background:x.moic!==null?(x.moic>=1?T.greenDim:T.redDim):"rgba(255,255,255,0.03)",borderRadius:"6px",padding:"4px 12px",marginTop:"8px"}}><span style={{fontFamily:F.mono,fontSize:"17px",fontWeight:700,color:moicColor(x.moic)}}>{moicDisplay(x.moic)}</span></div>
-            </button>)}</div>
+            <div style={{display:"flex",gap:"8px",marginTop:"16px"}}>{[{l:SL_BEAR,v:d.rt.conservative,moic:wfCon.moic},{l:SL_BASE+" Case",v:d.rt.base,moic:wfBase.moic},{l:SL_BULL,v:d.rt.upside,moic:wfUp.moic}].map(x=><button key={x.l} onClick={()=>setScenario(x.v)} style={{flex:1,background:activeScenario===x.v?"rgba(242,202,80,0.04)":"transparent",border:`1px solid ${activeScenario===x.v?T.goldLine:T.border}`,borderRadius:"10px",padding:"16px",cursor:"pointer",textAlign:"left",transition:"all 0.15s"}}><div style={{fontFamily:F.mono,fontSize:"11px",color:activeScenario===x.v?T.goldPrimary:T.cw50,fontWeight:700,textTransform:"uppercase",letterSpacing:"1px"}}>{x.l}</div><div style={{fontFamily:F.display,fontSize:"28px",color:activeScenario===x.v?T.w92:T.cw70,marginTop:"4px"}}><AV>{fmt(x.v)}</AV></div><div style={{display:"inline-block",background:x.moic!==null?(x.moic>=1?T.greenDim:T.redDim):"rgba(255,255,255,0.03)",borderRadius:"6px",padding:"4px 12px",marginTop:"8px"}}><span style={{fontFamily:F.mono,fontSize:"17px",fontWeight:700,color:moicColor(x.moic)}}>{moicDisplay(x.moic)}</span></div></button>)}</div>
           </Glass>
           <Glass><SL>Waterfall Bridge</SL><div style={{width:"100%",height:360,marginTop:"10px"}}><ResponsiveContainer><BarChart data={wb} margin={{left:10,right:10,top:10,bottom:35}}><CartesianGrid horizontal vertical={false} stroke="rgba(255,255,255,0.03)"/><XAxis dataKey="name" tick={{fill:T.cw70,fontSize:11,fontFamily:F.mono}} angle={-30} textAnchor="end" height={55}/><YAxis tick={{fill:T.cw70,fontSize:11,fontFamily:F.mono}} tickFormatter={fmt}/><Tooltip content={<CTT/>}/><Bar dataKey="base" stackId="a" fill="transparent"/><Bar dataKey="value" stackId="a" radius={[6,6,0,0]}>{wb.map((d,i)=><Cell key={i} fill={d.fill} opacity={0.8}/>)}</Bar></BarChart></ResponsiveContainer></div></Glass>
-          <div style={{display:"flex",gap:"14px",flexWrap:"wrap"}}>
-            <KPI label="Investor Return" value={wf.moic!==null?fmt(wf.tr):"N/A"} color={wf.moic!==null?(wf.tr>=d.eq?T.green:T.red):T.cw50}/>
-            <KPI label="MOIC" value={moicDisplay(wf.moic)} color={moicColor(wf.moic)}/>
-            <KPI label="ROI" value={wf.roi!==null?pct(wf.roi):"N/A"} color={wf.roi!==null?(wf.roi>=0?T.green:T.red):T.cw50}/>
-            <KPI label="Producer Net" value={fmt(wf.pb)} color={T.purple}/>
-          </div>
+          <div style={{display:"flex",gap:"14px",flexWrap:"wrap"}}><KPI label="Investor Return" value={wf.moic!==null?fmt(wf.tr):"N/A"} color={wf.moic!==null?(wf.tr>=d.eq?T.green:T.red):T.cw50}/><KPI label="MOIC" value={moicDisplay(wf.moic)} color={moicColor(wf.moic)}/><KPI label="ROI" value={wf.roi!==null?pct(wf.roi):"N/A"} color={wf.roi!==null?(wf.roi>=0?T.green:T.red):T.cw50}/><KPI label="Producer Net" value={fmt(wf.pb)} color={T.purple}/></div>
         </div>}
 
         {/* ═══ REVENUE ═══ */}
         {tid==="revenue"&&wizardDone&&<div style={{display:"flex",flexDirection:"column",gap:"28px"}}>
+          {/* v4.6: Revenue honesty note */}
+          <div style={{fontFamily:F.body,fontSize:"13px",color:T.w65,fontStyle:"italic",maxWidth:"640px"}}>Revenue projections are genre-based benchmarks for the {fmt(inp.totalBudget)} range. Actual results depend on cast, festivals, market timing, and distribution execution.</div>
           <div style={{display:"flex",gap:"14px",flexWrap:"wrap"}}><KPI label={SL_BEAR} value={fmt(d.rt.conservative)} color={T.red}/><KPI label={SL_BASE} value={fmt(d.rt.base)} color={T.goldPrimary}/><KPI label={SL_BULL} value={fmt(d.rt.upside)} color={T.green}/></div>
           <Glass><SL sub={`${inp.genre} benchmarks at ${fmt(inp.totalBudget)}.`}>Revenue by Window</SL><div style={{width:"100%",height:380,marginTop:"14px"}}><ResponsiveContainer><BarChart data={d.rw} margin={{left:10,right:10,top:10,bottom:55}}><CartesianGrid horizontal vertical={false} stroke="rgba(255,255,255,0.03)"/><XAxis dataKey="window" tick={{fill:T.cw70,fontSize:11,fontFamily:F.mono}} angle={-30} textAnchor="end" height={55}/><YAxis tick={{fill:T.cw70,fontSize:11,fontFamily:F.mono}} tickFormatter={fmt}/><Tooltip content={<CTT/>}/><Bar dataKey="conservative" name={SL_BEAR} fill={T.red} opacity={0.55} radius={[3,3,0,0]} barSize={14}/><Bar dataKey="base" name={SL_BASE} fill={T.goldPrimary} opacity={0.65} radius={[3,3,0,0]} barSize={14}/><Bar dataKey="upside" name={SL_BULL} fill={T.green} opacity={0.65} radius={[3,3,0,0]} barSize={14}/><Legend wrapperStyle={{fontFamily:F.mono,fontSize:"11px"}}/></BarChart></ResponsiveContainer></div></Glass>
           <Glass><SL sub="Gold line = budget.">Breakeven by Strategy</SL><div style={{width:"100%",height:220,marginTop:"14px"}}><ResponsiveContainer><BarChart data={d.be} layout="vertical" margin={{left:120,right:30}}><XAxis type="number" tick={{fill:T.cw70,fontSize:11,fontFamily:F.mono}} tickFormatter={fmt}/><YAxis type="category" dataKey="strategy" tick={{fill:T.cw70,fontSize:12,fontFamily:F.mono}} width={115}/><Tooltip content={<CTT/>}/><ReferenceLine x={d.actualBudget} stroke={T.goldPrimary} strokeDasharray="5 5" strokeOpacity={0.5}/><Bar dataKey="breakeven" radius={[0,6,6,0]} barSize={20}>{d.be.map((b,i)=><Cell key={i} fill={b.breakeven<d.actualBudget*1.5?T.green:b.breakeven<d.actualBudget*4?T.amber:T.red} opacity={.6}/>)}</Bar></BarChart></ResponsiveContainer></div></Glass>
-          {/* v4.5: Comp Reports card upgraded */}
           <Glass accent style={{textAlign:"center"}}><div style={{fontFamily:F.mono,fontSize:"11px",color:T.purple,letterSpacing:"3px",marginBottom:"12px",fontWeight:700}}>CUSTOM COMP REPORTS</div><div style={{fontFamily:F.body,fontSize:"15px",color:T.w75,lineHeight:1.7,maxWidth:"480px",margin:"0 auto"}}>How did comparable films perform? Real market data for your genre, budget range, and distribution strategy.</div><button style={{marginTop:"18px",padding:"12px 32px",background:T.purpleDim,border:`1px solid rgba(157,122,237,0.25)`,borderRadius:"10px",fontFamily:F.mono,fontSize:"11px",letterSpacing:"2px",color:T.purple,cursor:"pointer",fontWeight:700,textTransform:"uppercase"}}>LEARN MORE →</button></Glass>
         </div>}
 
@@ -689,36 +592,27 @@ export default function Dashboard() {
           <div style={{fontFamily:F.body,fontSize:"14px",color:T.w65}}>Click any amount to customize. Hover rows to edit.</div>
           <Glass accent><SL>Budget — <AV>{fmt(d.actualBudget)}</AV></SL><div style={{width:"100%",height:220}}><ResponsiveContainer><PieChart><Pie data={d.bd} dataKey="value" cx="50%" cy="50%" innerRadius={55} outerRadius={90} stroke={"#000"} strokeWidth={2}>{d.bd.map((e,i)=><Cell key={i} fill={e.color} opacity={0.85}/>)}</Pie><Tooltip content={<CTT/>}/></PieChart></ResponsiveContainer></div><div style={{display:"flex",gap:"12px",justifyContent:"center",flexWrap:"wrap"}}>{d.bd.map(e=><div key={e.name} style={{display:"flex",alignItems:"center",gap:"5px"}}><div style={{width:8,height:8,borderRadius:"2px",background:e.color,opacity:0.85}}/><span style={{fontFamily:F.mono,fontSize:"11px",color:T.cw70}}>{e.name} {fmt(e.value)}</span></div>)}</div></Glass>
           {Object.keys(CC).map(cat=>{const items=d.bi.filter(b=>b.category===cat&&!b.isBond);const catTotal=items.reduce((s,b)=>s+b.amount,0)+(cat==="G&A"&&bondOn?d.bondAmt:0);const catPct=(catTotal/((d.actualBudget||1))*100).toFixed(1);const bench=CAT_BENCH[cat];const outOfRange=bench&&(parseFloat(catPct)<bench[0]||parseFloat(catPct)>bench[1]);return<Glass key={cat} tier="recessed"><div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"8px"}}><SL>{CL[cat]}</SL><span style={{fontFamily:F.mono,fontSize:"16px",color:CC[cat],fontWeight:700}}><AV>{fmt(catTotal)}</AV></span></div>{bench&&<div style={{fontFamily:F.mono,fontSize:"11px",color:outOfRange?T.amber:T.cw70,marginBottom:"14px",fontWeight:500}}>Currently {catPct}% — Typical {bench[0]}-{bench[1]}%</div>}{items.map(item=>{const gi=d.bi.indexOf(item);const itemPct=(item.amount/((d.actualBudget||1))*100).toFixed(1);return<div key={item.name} style={{display:"flex",alignItems:"center",gap:"10px",padding:"10px 0",borderBottom:`1px solid ${T.border}`}}><span style={{fontFamily:F.mono,fontSize:"13px",color:T.w75,flex:1}}>{item.name}</span><span style={{fontFamily:F.mono,fontSize:"11px",color:T.cw50,minWidth:"44px",textAlign:"right"}}>{itemPct}%</span><div style={{display:"flex",alignItems:"center",gap:"3px"}}><span style={{fontFamily:F.mono,fontSize:"13px",color:T.goldPrimary}}>$</span><input type="number" value={item.amount} onChange={e=>setBudgetEdits(p=>({...p,[gi]:Number(e.target.value)||0}))} style={{width:"110px",background:item.isEdited?"rgba(242,202,80,0.06)":T.inputBg,border:`1px solid ${item.isEdited?T.goldDim:T.inputBorder}`,borderRadius:"8px",padding:"8px 10px",color:item.isEdited?T.goldPrimary:T.cw90,fontFamily:F.mono,fontSize:"13px",outline:"none",textAlign:"right"}}/></div>{item.isEdited&&<button onClick={()=>setBudgetEdits(p=>{const n={...p};delete n[gi];return n;})} style={{background:"none",border:"none",color:T.cw50,cursor:"pointer",fontFamily:F.mono,fontSize:"11px"}}>reset</button>}</div>})}{cat==="G&A"&&bondOn&&<div style={{display:"flex",alignItems:"center",gap:"10px",padding:"10px 0"}}><span style={{fontFamily:F.mono,fontSize:"13px",color:T.w75,flex:1}}>Completion Bond</span><span style={{fontFamily:F.mono,fontSize:"13px",color:T.w75}}>{fF(d.bondAmt)}</span></div>}</Glass>;})}
-          <Glass style={{textAlign:"center"}} tier="recessed">
-            <span style={{fontFamily:F.mono,fontSize:"11px",color:T.cw70,fontWeight:700,letterSpacing:"1.5px"}}>CONTINGENCY ({contPct}% of BTL+Post)</span>
-            <div style={{fontFamily:F.display,fontSize:"34px",color:T.amber,margin:"8px 0"}}><AV>{fmt(d.cont)}</AV></div>
-            <input type="range" min={0} max={20} step={1} value={contPct} onChange={e=>setContPct(Number(e.target.value))} style={{width:"200px",accentColor:T.amber,height:"3px",cursor:"pointer"}}/>
-            <div style={{fontFamily:F.mono,fontSize:"10px",color:T.cw50,marginTop:"4px"}}>Standard is 10%</div>
-          </Glass>
+          <Glass style={{textAlign:"center"}} tier="recessed"><span style={{fontFamily:F.mono,fontSize:"11px",color:T.cw70,fontWeight:700,letterSpacing:"1.5px"}}>CONTINGENCY ({contPct}% of BTL+Post)</span><div style={{fontFamily:F.display,fontSize:"34px",color:T.amber,margin:"8px 0"}}><AV>{fmt(d.cont)}</AV></div><input type="range" min={0} max={20} step={1} value={contPct} onChange={e=>setContPct(Number(e.target.value))} style={{width:"200px",accentColor:T.amber,height:"3px",cursor:"pointer"}}/><div style={{fontFamily:F.mono,fontSize:"10px",color:T.cw50,marginTop:"4px"}}>Standard is 10%</div></Glass>
         </div>}
 
         {/* ═══ CAPITAL ═══ */}
         {tid==="capital"&&wizardDone&&<div style={{display:"flex",flexDirection:"column",gap:"28px"}}>
           <Glass accent><SL>Capital Stack</SL><div style={{marginTop:"18px"}}>{d.cs.map((l,i)=><div key={l.name} style={{display:"flex",alignItems:"stretch",borderBottom:i<d.cs.length-1?`1px solid ${T.border}`:"none"}}><div style={{width:"6px",background:l.color,opacity:0.85,borderRadius:"3px"}}/><div style={{flex:1,padding:"20px"}}><div style={{display:"flex",justifyContent:"space-between"}}><div><div style={{fontFamily:F.body,fontSize:"16px",color:T.w92,fontWeight:600}}>{l.name}</div><div style={{fontFamily:F.mono,fontSize:"11px",color:T.cw50}}>{l.pos}</div></div><div style={{fontFamily:F.mono,fontSize:"18px",color:T.cw90,fontWeight:700}}><AV>{fF(l.amount)}</AV></div></div></div></div>)}</div></Glass>
+          {/* v4.6: Cost of debt callout */}
+          {d.totalInterest>0&&<Glass tier="recessed" style={{textAlign:"center"}}><div style={{fontFamily:F.mono,fontSize:"10px",color:T.cw50,letterSpacing:"2px",fontWeight:700}}>TOTAL COST OF DEBT</div><div style={{fontFamily:F.display,fontSize:"34px",color:d.totalInterest>d.actualBudget*.1?T.amber:T.cw70,margin:"6px 0"}}><AV>{fF(d.totalInterest)}</AV></div><div style={{fontFamily:F.mono,fontSize:"11px",color:T.cw50}}>{d.actualBudget>0?Math.round(d.totalInterest/d.actualBudget*100):0}% of total budget</div></Glass>}
           <Glass><SL>Investor Terms</SL><div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:"20px",marginTop:"14px"}}>{[
             {l:"Vehicle",v:vehicle,isSelect:true,options:VEHICLES,onChange:setVehicle,e:vehicle==="Not Sure"?"Your attorney will advise.":undefined},
             {l:"Min Investment",v:fF(inp.minInvestment)},
             {l:"Exemption",v:exemption,isSelect:true,options:EXEMPTIONS,onChange:setExemption,e:exemption==="Not Sure"?"Your attorney will advise.":exemption==="Reg D 506(b)"?"No public advertising.":exemption==="Reg D 506(c)"?"Public advertising. Verified accredited.":"See attorney."},
             {l:"Premium",v:`${100+inp.recoupPremium}%`},{l:"Inv Backend",v:`${inp.investorBackend}%`},{l:"Prod Backend",v:`${100-inp.investorBackend}%`},
             {l:"Guilds",v:guildStr},{l:"Loan Term",v:`${inp.loanTerm} mo`},{l:"Bond",v:bondOn?`Yes (${bondPct}%)`:"No"},
-          ].map(x=><div key={x.l}>
-            <div style={{fontFamily:F.mono,fontSize:"9px",color:T.cw50,letterSpacing:"1.5px",fontWeight:700}}>{x.l.toUpperCase()}</div>
-            {x.isSelect?<div style={{position:"relative",marginTop:"4px"}}><select value={x.v} onChange={e=>x.onChange(e.target.value)} style={{width:"100%",background:T.inputBg,border:`1px solid ${T.inputBorder}`,borderRadius:"6px",padding:"4px 24px 4px 6px",color:T.cw90,fontFamily:F.body,fontSize:"13px",outline:"none",appearance:"none",cursor:"pointer"}}>{x.options.map(o=><option key={o} value={o} style={{background:"#111"}}>{o}</option>)}</select><span style={{position:"absolute",right:"6px",top:"50%",transform:"translateY(-50%)",fontFamily:F.mono,fontSize:"11px",color:T.cw50,pointerEvents:"none"}}>▾</span></div>
-            :<div style={{fontFamily:F.body,fontSize:"14px",color:T.cw90,marginTop:"4px",fontWeight:600}}>{x.v}</div>}
-            {x.e&&<div style={{fontFamily:F.body,fontSize:"11px",color:T.w65,fontStyle:"italic",marginTop:"3px"}}>{x.e}</div>}
-          </div>)}</div><div style={{fontFamily:F.body,fontSize:"12px",color:T.w65,marginTop:"18px",fontStyle:"italic"}}>Default structure. Your attorney will confirm.</div></Glass>
+          ].map(x=><div key={x.l}><div style={{fontFamily:F.mono,fontSize:"9px",color:T.cw50,letterSpacing:"1.5px",fontWeight:700}}>{x.l.toUpperCase()}</div>{x.isSelect?<div style={{position:"relative",marginTop:"4px"}}><select value={x.v} onChange={e=>x.onChange(e.target.value)} style={{width:"100%",background:T.inputBg,border:`1px solid ${T.inputBorder}`,borderRadius:"6px",padding:"4px 24px 4px 6px",color:T.cw90,fontFamily:F.body,fontSize:"13px",outline:"none",appearance:"none",cursor:"pointer"}}>{x.options.map(o=><option key={o} value={o} style={{background:"#111"}}>{o}</option>)}</select><span style={{position:"absolute",right:"6px",top:"50%",transform:"translateY(-50%)",fontFamily:F.mono,fontSize:"11px",color:T.cw50,pointerEvents:"none"}}>▾</span></div>:<div style={{fontFamily:F.body,fontSize:"14px",color:T.cw90,marginTop:"4px",fontWeight:600}}>{x.v}</div>}{x.e&&<div style={{fontFamily:F.body,fontSize:"11px",color:T.w65,fontStyle:"italic",marginTop:"3px"}}>{x.e}</div>}</div>)}</div><div style={{fontFamily:F.body,fontSize:"12px",color:T.w65,marginTop:"18px",fontStyle:"italic"}}>Default structure. Your attorney will confirm.</div></Glass>
         </div>}
 
         {/* ═══ CASH FLOW ═══ */}
         {tid==="cashflow"&&wizardDone&&<div style={{display:"flex",flexDirection:"column",gap:"28px"}}>
           <div style={{fontFamily:F.body,fontSize:"14px",color:T.w65}}>Cash deploys during production, returns through distribution.{stateData.months!=="—"?` TC est: ${stateData.months} mo.`:""}</div>
           <Glass><SL>Cash Flow</SL><div style={{width:"100%",height:360,marginTop:"14px"}}><ResponsiveContainer><ComposedChart data={d.cf} margin={{left:10,right:10,top:10,bottom:10}}><CartesianGrid horizontal vertical={false} stroke="rgba(255,255,255,0.03)"/><XAxis dataKey="month" tick={{fill:T.cw70,fontSize:11,fontFamily:F.mono}}/><YAxis yAxisId="b" tick={{fill:T.cw70,fontSize:11,fontFamily:F.mono}} tickFormatter={fmt}/><YAxis yAxisId="l" orientation="right" tick={{fill:T.cw70,fontSize:11,fontFamily:F.mono}} tickFormatter={fmt}/><Tooltip content={<CTT/>}/><Bar yAxisId="b" dataKey="inflows" name="In" fill={T.green} opacity={0.55} radius={[4,4,0,0]} barSize={16}/><Bar yAxisId="b" dataKey="outflows" name="Out" fill={T.red} opacity={0.45} radius={[0,0,4,4]} barSize={16}/><Line yAxisId="l" type="monotone" dataKey="cumulative" name="Cum" stroke={T.goldPrimary} strokeWidth={2} dot={{fill:T.goldPrimary,r:3}}/><ReferenceLine yAxisId="b" y={0} stroke={T.cw30}/><Legend wrapperStyle={{fontFamily:F.mono,fontSize:"11px"}}/></ComposedChart></ResponsiveContainer></div></Glass>
-          {/* v4.5: Taller timeline bar */}
           <Glass><SL>Timeline</SL><div style={{display:"flex",height:"44px",borderRadius:"8px",overflow:"hidden",marginTop:"14px"}}>{[{p:"Pre-Prod",m:2,c:T.gold},{p:"Production",m:3,c:T.goldPrimary},{p:"Post",m:3,c:T.purple},{p:"Delivery",m:2,c:T.amber},{p:"Distribution",m:4,c:T.green}].map(x=><div key={x.p} style={{flex:x.m,background:x.c,opacity:0.75,display:"flex",alignItems:"center",justifyContent:"center",fontFamily:F.mono,fontSize:"12px",color:"#000",fontWeight:700,borderRight:"1px solid #000"}}>{x.p}</div>)}</div></Glass>
         </div>}
 
@@ -730,20 +624,12 @@ export default function Dashboard() {
 
         {/* ═══ RISK ═══ */}
         {tid==="risk"&&wizardDone&&<div style={{display:"flex",flexDirection:"column",gap:"28px"}}>
-          <Glass><SL>Risk Matrix</SL><div style={{width:"100%",height:360,marginTop:"14px"}}><ResponsiveContainer><ScatterChart margin={{left:10,right:30,top:10,bottom:10}}><CartesianGrid horizontal vertical={false} stroke="rgba(255,255,255,0.03)"/><XAxis type="number" dataKey="prob" name="Probability" unit="%" domain={[0,55]} tick={{fill:T.cw70,fontSize:11,fontFamily:F.mono}} label={{value:"Probability →",position:"bottom",fill:T.cw50,fontSize:10}}/><YAxis type="number" dataKey="impact" name="Impact" domain={[1,5.5]} tick={{fill:T.cw70,fontSize:11,fontFamily:F.mono}} label={{value:"Impact →",angle:-90,position:"left",fill:T.cw50,fontSize:10}}/><Tooltip content={({active,payload})=>{if(!active||!payload?.length)return null;const r=payload[0].payload;return<div style={{background:"#111",backdropFilter:"blur(12px)",border:`1px solid ${T.border}`,borderRadius:"10px",padding:"10px 14px",fontFamily:F.mono,fontSize:"12px",boxShadow:"0 8px 32px rgba(0,0,0,0.5)"}}><div style={{color:T.w92,fontWeight:700}}>{r.name}</div><div style={{color:T.cw70}}>{r.prob}% · {r.impact}/5 · {r.score.toFixed(2)}</div></div>;}}/><Scatter data={d.risks} shape={({cx,cy,payload})=>{const c=payload.score>=.8?T.red:payload.score>=.4?T.amber:T.green;const idx=[...d.risks].sort((a,b)=>b.score-a.score).indexOf(payload)+1;return<g><circle cx={cx} cy={cy} r={Math.max(10,payload.score*9)} fill={c} opacity={0.3} stroke={c} strokeWidth={1}/><text x={cx} y={cy+4} textAnchor="middle" fill="#fff" fontSize="9" fontFamily={F.mono}>{idx}</text></g>;}}/>
-          </ScatterChart></ResponsiveContainer></div></Glass>
+          <Glass><SL>Risk Matrix</SL><div style={{width:"100%",height:360,marginTop:"14px"}}><ResponsiveContainer><ScatterChart margin={{left:10,right:30,top:10,bottom:10}}><CartesianGrid horizontal vertical={false} stroke="rgba(255,255,255,0.03)"/><XAxis type="number" dataKey="prob" name="Probability" unit="%" domain={[0,55]} tick={{fill:T.cw70,fontSize:11,fontFamily:F.mono}} label={{value:"Probability →",position:"bottom",fill:T.cw50,fontSize:10}}/><YAxis type="number" dataKey="impact" name="Impact" domain={[1,5.5]} tick={{fill:T.cw70,fontSize:11,fontFamily:F.mono}} label={{value:"Impact →",angle:-90,position:"left",fill:T.cw50,fontSize:10}}/><Tooltip content={({active,payload})=>{if(!active||!payload?.length)return null;const r=payload[0].payload;return<div style={{background:"#111",backdropFilter:"blur(12px)",border:`1px solid ${T.border}`,borderRadius:"10px",padding:"10px 14px",fontFamily:F.mono,fontSize:"12px",boxShadow:"0 8px 32px rgba(0,0,0,0.5)"}}><div style={{color:T.w92,fontWeight:700}}>{r.name}</div><div style={{color:T.cw70}}>{r.prob}% · {r.impact}/5 · {r.score.toFixed(2)}</div></div>;}}/><Scatter data={d.risks} shape={({cx,cy,payload})=>{const c=payload.score>=.8?T.red:payload.score>=.4?T.amber:T.green;const idx=[...d.risks].sort((a,b)=>b.score-a.score).indexOf(payload)+1;return<g><circle cx={cx} cy={cy} r={Math.max(10,payload.score*9)} fill={c} opacity={0.3} stroke={c} strokeWidth={1}/><text x={cx} y={cy+4} textAnchor="middle" fill="#fff" fontSize="9" fontFamily={F.mono}>{idx}</text></g>;}}/></ScatterChart></ResponsiveContainer></div></Glass>
           <Glass><SL>Risk Register</SL>{[...d.risks].sort((a,b)=>b.score-a.score).map((r,i)=>{const c=r.score>=.8?T.red:r.score>=.4?T.amber:T.green;const bg=r.score>=.8?T.redDim:r.score>=.4?T.amberDim:T.greenDim;const ex=expandedRisk===i;return<div key={i} onClick={()=>setExpandedRisk(ex?null:i)} style={{cursor:"pointer",padding:"12px 0",borderBottom:`1px solid ${T.border}`}}><div style={{display:"flex",alignItems:"center",gap:"12px"}}><div style={{width:"28px",height:"28px",borderRadius:"50%",background:bg,display:"flex",alignItems:"center",justifyContent:"center",fontFamily:F.mono,fontSize:"12px",color:c,fontWeight:700,flexShrink:0}}>{i+1}</div><div style={{flex:1}}><div style={{fontFamily:F.body,fontSize:"14px",color:T.w92,fontWeight:600}}>{r.name}</div><div style={{fontFamily:F.mono,fontSize:"11px",color:T.cw50}}>{r.cat} · {r.prob}% · {r.impact}/5</div></div><span style={{fontFamily:F.mono,fontSize:"12px",color:T.cw50}}>{ex?"▾":"▸"}</span></div>{ex&&<div style={{marginTop:"10px",marginLeft:"40px",fontFamily:F.body,fontSize:"13px",color:T.w65,lineHeight:1.6}}>{r.mit}</div>}</div>;})}</Glass>
         </div>}
 
         {/* ═══ GLOSSARY ═══ */}
-        {tid==="glossary"&&<div style={{display:"flex",flexDirection:"column",gap:"28px"}}>
-          <Glass><SL sub="Every financial term in this model.">Glossary</SL>
-            {GLOSSARY.map((g,i)=><div key={i} style={{padding:"16px 0",borderBottom:i<GLOSSARY.length-1?`1px solid ${T.border}`:"none"}}>
-              <div style={{fontFamily:F.mono,fontSize:"13px",color:T.goldPrimary,fontWeight:700}}>{g.term}</div>
-              <div style={{fontFamily:F.body,fontSize:"14px",color:T.w75,lineHeight:1.6,marginTop:"6px"}}>{g.def}</div>
-            </div>)}
-          </Glass>
-        </div>}
+        {tid==="glossary"&&<div style={{display:"flex",flexDirection:"column",gap:"28px"}}><Glass><SL sub="Every financial term in this model.">Glossary</SL>{GLOSSARY.map((g,i)=><div key={i} style={{padding:"16px 0",borderBottom:i<GLOSSARY.length-1?`1px solid ${T.border}`:"none"}}><div style={{fontFamily:F.mono,fontSize:"13px",color:T.goldPrimary,fontWeight:700}}>{g.term}</div><div style={{fontFamily:F.body,fontSize:"14px",color:T.w75,lineHeight:1.6,marginTop:"6px"}}>{g.def}</div></div>)}</Glass></div>}
 
         <div style={{marginTop:"48px",paddingTop:"18px",borderTop:`1px solid ${T.border}`,textAlign:"center",fontFamily:F.mono,fontSize:"11px",color:T.cw50}}>Illustrative model only. Not an offer of securities. Consult entertainment attorneys before raising capital.</div>
         </div>
