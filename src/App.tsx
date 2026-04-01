@@ -2,7 +2,7 @@ import { lazy, Suspense, useState, useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import ErrorBoundary from "./components/ErrorBoundary";
 import OgBotFab from "./components/OgBotFab";
 import OgBotSheet from "./components/OgBotSheet";
@@ -48,6 +48,8 @@ const queryClient = new QueryClient();
 const AppShell = () => {
   const [isBotOpen, setIsBotOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const location = useLocation();
+  const isDashboard = location.pathname.startsWith('/dashboard');
 
   // Listen for open-og-bot custom event (fired from Store closer CTA)
   useEffect(() => {
@@ -58,9 +60,7 @@ const AppShell = () => {
 
   return (
     <>
-      <AppHeader
-        onMoreOpen={() => setIsMenuOpen(true)}
-      />
+      {!isDashboard && <AppHeader onMoreOpen={() => setIsMenuOpen(true)} />}
 
       <Suspense fallback={<PageLoader />}>
         <Routes>
@@ -82,10 +82,12 @@ const AppShell = () => {
         </Routes>
       </Suspense>
 
-      {/* Global persistent UI — always mounted */}
-      <OgBotSheet isOpen={isBotOpen} onOpenChange={setIsBotOpen} />
-      <MobileMenu isOpen={isMenuOpen} onOpenChange={setIsMenuOpen} onOpenBot={() => { setIsMenuOpen(false); setTimeout(() => setIsBotOpen(true), 200); }} />
-      <OgBotFab onTap={() => setIsBotOpen(true)} />
+      {/* Global persistent UI — suppressed on /dashboard (has own chrome) */}
+      {!isDashboard && <>
+        <OgBotSheet isOpen={isBotOpen} onOpenChange={setIsBotOpen} />
+        <MobileMenu isOpen={isMenuOpen} onOpenChange={setIsMenuOpen} onOpenBot={() => { setIsMenuOpen(false); setTimeout(() => setIsBotOpen(true), 200); }} />
+        <OgBotFab onTap={() => setIsBotOpen(true)} />
+      </>}
     </>
   );
 };
