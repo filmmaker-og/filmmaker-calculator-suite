@@ -6,7 +6,7 @@ import {
 } from "recharts";
 
 /* ═══════════════════════════════════════
-   DESIGN TOKENS — v4.6 (unchanged from v4.5)
+   DESIGN TOKENS — v4.7 (polish merge)
    ═══════════════════════════════════════ */
 const T = {
   bg: "#000",
@@ -32,13 +32,17 @@ const T = {
 const F = { display: "'Bebas Neue',sans-serif", body: "'Inter',sans-serif", mono: "'Roboto Mono',monospace" };
 const grainSVG = `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E")`;
 const GlobalStyles = () => <style>{`
-  ::-webkit-scrollbar{width:8px;height:8px}
-  ::-webkit-scrollbar-track{background:#000}
-  ::-webkit-scrollbar-thumb{background:rgba(212,175,55,0.15);border-radius:4px}
-  ::-webkit-scrollbar-thumb:hover{background:rgba(212,175,55,0.25)}
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500;600;700&display=swap');
+  ::-webkit-scrollbar{width:6px;height:6px}
+  ::-webkit-scrollbar-track{background:transparent}
+  ::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:10px}
+  ::-webkit-scrollbar-thumb:hover{background:rgba(212,175,55,0.3)}
   @keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(200%)}}
   @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
   @keyframes chevBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
+  input[type=range]{-webkit-appearance:none;background:transparent}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;height:16px;width:16px;border-radius:50%;background:${T.goldPrimary};cursor:pointer;box-shadow:0 0 10px rgba(242,202,80,0.5);margin-top:-6px}
+  input[type=range]::-webkit-slider-runnable-track{width:100%;height:4px;cursor:pointer;background:rgba(255,255,255,0.1);border-radius:2px}
 `}</style>;
 
 /* ═══════════════════════════════════════
@@ -249,14 +253,14 @@ const pct = n => ((!n||!isFinite(n))?0:(n*100)).toFixed(1)+"%";
 const Glass = ({children,style,tier="standard",accent=false,...p}) => {
   const [hov,setHov] = useState(false);
   const bg = tier==="primary"?T.glassBright:tier==="recessed"?T.glassRecessed:T.glass;
-  return <div onMouseEnter={()=>setHov(true)} onMouseLeave={()=>setHov(false)} style={{background:bg,backdropFilter:"blur(20px)",WebkitBackdropFilter:"blur(20px)",border:`1px solid ${hov?T.borderBright:T.border}`,borderTop:accent?`1px solid ${T.goldLine}`:`1px solid ${hov?T.borderBright:T.border}`,borderRadius:T.radius,padding:"28px",position:"relative",overflow:"hidden",transform:hov?"translateY(-2px)":"translateY(0)",boxShadow:tier==="primary"?`0 0 24px ${T.goldGhost}`:"none",transition:"transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease",...style}} {...p}>
-    {accent&&<div style={{position:"absolute",top:0,left:0,width:"100%",height:"1px",background:`linear-gradient(90deg,transparent,${T.goldPrimary},transparent)`,opacity:0.5}}/>}
+  return <div onMouseEnter={()=>setHov(true)} onMouseLeave={()=>setHov(false)} style={{background:bg,backdropFilter:"blur(24px)",WebkitBackdropFilter:"blur(24px)",border:`1px solid ${hov?T.borderBright:T.border}`,borderTop:accent?`1px solid ${T.goldLine}`:`1px solid ${hov?T.borderBright:T.border}`,borderRadius:T.radius,padding:"32px",position:"relative",overflow:"hidden",transform:hov?"translateY(-2px)":"translateY(0)",boxShadow:tier==="primary"?`0 12px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06), 0 0 30px ${T.goldGhost}`:`0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.03)`,transition:"transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease",...style}} {...p}>
+    {accent&&<div style={{position:"absolute",top:0,left:0,width:"100%",height:"1px",background:`linear-gradient(90deg,transparent,${T.goldPrimary},transparent)`,opacity:0.6}}/>}
     {children}
   </div>;
 };
 const SL = ({children,sub}) => (<div style={{marginBottom:sub?"16px":"10px"}}><div style={{fontFamily:F.mono,fontSize:"11px",letterSpacing:"3px",color:T.goldPrimary,textTransform:"uppercase",fontWeight:500}}>{children}</div>{sub&&<div style={{fontFamily:F.body,fontSize:"14px",color:T.w75,marginTop:"8px",lineHeight:1.6,maxWidth:"640px"}}>{sub}</div>}</div>);
 const AV = ({children}) => { const ref=useRef(null);const prev=useRef(children);useEffect(()=>{if(ref.current&&prev.current!==children){ref.current.style.transition='none';ref.current.style.opacity='0.4';ref.current.style.transform='translateY(3px)';requestAnimationFrame(()=>{if(ref.current){ref.current.style.transition='opacity 0.35s ease-out, transform 0.35s ease-out';ref.current.style.opacity='1';ref.current.style.transform='translateY(0)';}});prev.current=children;}},[children]);return <span ref={ref} style={{display:"inline-block"}}>{children}</span>;};
-const KPI = ({label,value,sub,color,bars}) => (<Glass style={{textAlign:"center",flex:1,minWidth:"155px",padding:"24px 18px"}} accent><div style={{fontFamily:F.mono,fontSize:"11px",color:T.cw50,letterSpacing:"2px",textTransform:"uppercase",marginBottom:"12px",fontWeight:700}}>{label}</div><div style={{fontFamily:F.display,fontSize:"38px",color:color||T.w92,lineHeight:1}}><AV>{value}</AV></div>{bars&&<div style={{display:"flex",gap:"3px",justifyContent:"center",marginTop:"10px",height:"16px",alignItems:"flex-end"}}>{bars.map((b,i)=><div key={i} style={{width:"14px",background:b.c,borderRadius:"2px 2px 0 0",height:`${Math.max(4,b.h)}px`,opacity:0.7}}/>)}</div>}{sub&&<div style={{fontFamily:F.mono,fontSize:"11px",color:T.cw50,marginTop:"8px"}}>{sub}</div>}</Glass>);
+const KPI = ({label,value,sub,color,bars}) => (<Glass style={{textAlign:"center",flex:1,minWidth:"155px",padding:"28px 20px"}} accent><div style={{fontFamily:F.mono,fontSize:"11px",color:T.cw50,letterSpacing:"2px",textTransform:"uppercase",marginBottom:"14px",fontWeight:700}}>{label}</div><div style={{fontFamily:F.display,fontSize:"42px",color:color||T.w92,lineHeight:1,textShadow:"0 4px 12px rgba(0,0,0,0.5)"}}><AV>{value}</AV></div>{bars&&<div style={{display:"flex",gap:"4px",justifyContent:"center",marginTop:"12px",height:"18px",alignItems:"flex-end"}}>{bars.map((b,i)=><div key={i} style={{width:"16px",background:b.c,borderRadius:"3px 3px 0 0",height:`${Math.max(4,b.h)}px`,opacity:0.85}}/>)}</div>}{sub&&<div style={{fontFamily:F.mono,fontSize:"11px",color:T.cw50,marginTop:"10px"}}>{sub}</div>}</Glass>);
 const Divider = () => <div style={{height:"1px",background:`linear-gradient(90deg,transparent,${T.border},transparent)`,margin:"18px 0"}}/>;
 const ComboInput = ({label,value,onChange,min=0,max=100,step=1,suffix="%",explain,fmt:fn,benchMin,benchMax}) => { const [foc,setFoc]=useState(false);const pctFill=max>min?((Math.min(max,Math.max(min,value))-min)/(max-min))*100:0;return<div style={{marginBottom:"24px"}}><div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:"8px"}}><span style={{fontFamily:F.mono,fontSize:"11px",color:T.cw70,letterSpacing:"1.5px",textTransform:"uppercase",fontWeight:700}}>{label}</span><div style={{display:"flex",alignItems:"center",gap:"4px"}}>{suffix!=="%"&&<span style={{fontFamily:F.mono,fontSize:"14px",color:T.goldPrimary}}>$</span>}<input type="number" value={value} onChange={e=>onChange(Number(e.target.value)||0)} min={min} max={max} step={step} onFocus={()=>setFoc(true)} onBlur={()=>setFoc(false)} style={{width:suffix==="%"?"65px":"130px",background:T.inputBg,border:`1px solid ${T.inputBorder}`,borderRadius:"8px",padding:"8px 10px",color:T.goldPrimary,fontFamily:F.mono,fontSize:"15px",fontWeight:700,outline:"none",textAlign:"right",boxSizing:"border-box",boxShadow:foc?`0 0 0 2px rgba(212,175,55,0.15)`:"none",transition:"box-shadow 0.2s"}}/>{suffix&&<span style={{fontFamily:F.mono,fontSize:"12px",color:T.cw50}}>{suffix}</span>}</div></div><div style={{position:"relative"}}>{benchMin!=null&&benchMax!=null&&<div style={{position:"absolute",top:0,height:"4px",left:`${((benchMin-min)/(max-min))*100}%`,width:`${((benchMax-benchMin)/(max-min))*100}%`,background:"rgba(242,202,80,0.12)",borderRadius:"2px",pointerEvents:"none"}}/>}<input type="range" min={min} max={max} step={step} value={Math.min(max,Math.max(min,value))} onChange={e=>onChange(Number(e.target.value))} style={{width:"100%",accentColor:T.goldPrimary,height:"3px",cursor:"pointer",background:`linear-gradient(to right,${T.goldPrimary} ${pctFill}%,rgba(255,255,255,0.08) ${pctFill}%)`}}/></div><div style={{display:"flex",justifyContent:"space-between",fontFamily:F.mono,fontSize:"10px",color:T.cw30,marginTop:"3px"}}><span>{fn?fn(min):`${min}${suffix}`}</span>{benchMin!=null&&<span style={{color:T.cw50}}>typical {fn?fn(benchMin):benchMin}–{fn?fn(benchMax):benchMax}{suffix===""?"":suffix}</span>}<span>{fn?fn(max):`${max}${suffix}`}</span></div>{explain&&<div style={{fontFamily:F.body,fontSize:"13px",color:T.w65,marginTop:"6px",lineHeight:1.5}}>{explain}</div>}</div>;};
 const TextInput = ({label,value,onChange,explain,placeholder}) => { const [foc,setFoc]=useState(false);return<div style={{marginBottom:"24px"}}><div style={{fontFamily:F.mono,fontSize:"11px",color:T.cw70,letterSpacing:"1.5px",textTransform:"uppercase",marginBottom:"8px",fontWeight:700}}>{label}</div><input type="text" value={value} onChange={e=>onChange(e.target.value)} placeholder={placeholder||label} onFocus={()=>setFoc(true)} onBlur={()=>setFoc(false)} style={{width:"100%",background:T.inputBg,border:`1px solid ${T.inputBorder}`,borderRadius:"10px",padding:"12px 14px",color:T.w92,fontFamily:F.body,fontSize:"15px",outline:"none",boxSizing:"border-box",boxShadow:foc?`0 0 0 2px rgba(212,175,55,0.15)`:"none",transition:"box-shadow 0.2s"}}/>{explain&&<div style={{fontFamily:F.body,fontSize:"13px",color:T.w65,marginTop:"4px"}}>{explain}</div>}</div>;};
@@ -270,7 +274,7 @@ const SideToggle = ({label,value,onChange}) => (<div style={{display:"flex",alig
 // v4.6: Mini sidebar slider
 const SideSlider = ({label,value,onChange,min,max,step=1,suffix="%"}) => (<div style={{marginBottom:"10px"}}><div style={{display:"flex",justifyContent:"space-between",marginBottom:"2px"}}><span style={{fontFamily:F.mono,fontSize:"10px",color:T.cw50,fontWeight:500,letterSpacing:"1px"}}>{label}</span><span style={{fontFamily:F.mono,fontSize:"10px",color:T.goldPrimary,fontWeight:700}}>{value}{suffix}</span></div><input type="range" min={min} max={max} step={step} value={value} onChange={e=>onChange(Number(e.target.value))} style={{width:"100%",accentColor:T.goldPrimary,height:"2px",cursor:"pointer"}}/></div>);
 // v4.6: Live feedback panel
-const FeedbackPanel = ({children}) => (<div style={{background:"rgba(242,202,80,0.03)",border:`1px solid ${T.border}`,borderTop:`1px solid ${T.goldLine}`,borderRadius:"10px",padding:"18px",marginTop:"20px"}}>{children}</div>);
+const FeedbackPanel = ({children}) => (<div style={{background:"rgba(242,202,80,0.04)",border:`1px solid rgba(212,175,55,0.15)`,borderLeft:`3px solid ${T.goldPrimary}`,borderRadius:"12px",padding:"20px",marginTop:"24px",boxShadow:"0 8px 24px rgba(0,0,0,0.2)"}}>{children}</div>);
 
 /* ═══════════════════════════════════════
    TABS + NAV
@@ -357,7 +361,7 @@ export default function Dashboard() {
 
   /* ═══ SIDEBAR ═══ */
   const sidebar = (
-    <aside style={{width:"256px",minWidth:"256px",height:"100vh",position:"fixed",left:0,top:0,background:"#000",backdropFilter:"blur(24px)",WebkitBackdropFilter:"blur(24px)",borderRight:`1px solid ${T.border}`,padding:"24px 20px",display:"flex",flexDirection:"column",overflowY:"auto",zIndex:60}}>
+    <aside style={{width:"256px",minWidth:"256px",height:"100vh",position:"fixed",left:0,top:0,background:"#000",backdropFilter:"blur(32px)",WebkitBackdropFilter:"blur(32px)",borderRight:`1px solid ${T.border}`,padding:"28px 22px",display:"flex",flexDirection:"column",overflowY:"auto",zIndex:60,boxShadow:"5px 0 30px rgba(0,0,0,0.5)"}}>
       <div style={{display:"inline-flex",alignSelf:"flex-start",background:"rgba(212,175,55,0.10)",border:`1px solid rgba(212,175,55,0.25)`,borderRadius:"6px",padding:"6px 14px",marginBottom:"20px"}}><span style={{fontFamily:F.mono,fontSize:"12px",color:T.gold,letterSpacing:"3px",fontWeight:500}}>FILMMAKER.OG</span></div>
       <div style={{fontFamily:F.display,fontSize:"20px",color:T.w92,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{ht?inp.title.toUpperCase():fmt(inp.totalBudget)+" PRODUCTION"}</div>
       <div style={{fontFamily:F.mono,fontSize:"11px",color:T.cw50,marginTop:"4px"}}>{inp.genre} · {stateData.name}</div>
@@ -391,8 +395,8 @@ export default function Dashboard() {
     <div style={{display:"flex",minHeight:"100vh",background:"#000",backgroundImage:grainSVG,fontFamily:F.body,color:T.w92}}>
       <GlobalStyles/>
       {sidebar}
-      <main ref={mainRef} style={{marginLeft:"256px",flex:1,padding:"36px 48px",overflowY:"auto",minHeight:"100vh"}}>
-        <div style={{maxWidth:"1000px",margin:"0 auto",...contentStyle}}>
+      <main ref={mainRef} style={{marginLeft:"256px",flex:1,padding:"40px 56px",overflowY:"auto",minHeight:"100vh"}}>
+        <div style={{maxWidth:"1040px",margin:"0 auto",...contentStyle}}>
 
         {/* ═══ SETUP WIZARD — v4.6: Film → Distribution → Capital → Terms ═══ */}
         {tid==="setup"&&<div style={{maxWidth:"640px",margin:"0 auto"}}><Glass tier="primary" accent>
@@ -403,7 +407,7 @@ export default function Dashboard() {
           {/* v4.6: Stepper navigation */}
           <div style={{display:"flex",justifyContent:"center",gap:"8px",margin:"20px 0 24px"}}>
             {wizSteps.map((st,i)=>{const done=i<wizStep;const active=i===wizStep;return<div key={i} onClick={()=>done?setWizStep(i):null} style={{display:"flex",alignItems:"center",gap:"6px",cursor:done?"pointer":"default",opacity:active?1:done?0.8:0.35}}>
-              <div style={{width:"24px",height:"24px",borderRadius:"50%",border:`2px solid ${active?T.goldPrimary:done?T.gold:T.border}`,background:active?T.goldPrimary:done?"rgba(212,175,55,0.10)":"transparent",display:"flex",alignItems:"center",justifyContent:"center",fontFamily:F.mono,fontSize:"10px",color:active?"#000":done?T.gold:T.cw50,fontWeight:700}}>{done?"✓":i+1}</div>
+              <div style={{width:"24px",height:"24px",borderRadius:"50%",border:`2px solid ${active?T.goldPrimary:done?T.gold:T.border}`,background:active?T.goldPrimary:done?"rgba(212,175,55,0.10)":"transparent",display:"flex",alignItems:"center",justifyContent:"center",fontFamily:F.mono,fontSize:"10px",color:active?"#000":done?T.gold:T.cw50,fontWeight:700,boxShadow:active?`0 0 12px ${T.goldDim}`:"none"}}>{done?"✓":i+1}</div>
               <span style={{fontFamily:F.mono,fontSize:"9px",letterSpacing:"1px",color:active?T.goldPrimary:done?T.gold:T.cw50,fontWeight:active?700:500,display:i<3?"inline":"inline"}}>{st.split(" ").pop()}</span>
               {i<3&&<div style={{width:"20px",height:"1px",background:done?T.goldLine:T.border}}/>}
             </div>;})}
@@ -454,7 +458,7 @@ export default function Dashboard() {
             {warnings.length>0&&<div style={{background:T.amberDim,border:`1px solid rgba(240,168,48,0.20)`,borderRadius:"10px",padding:"14px 16px",margin:"16px 0"}}>{warnings.map((w,i)=><div key={i} style={{fontFamily:F.body,fontSize:"13px",color:T.amber,marginBottom:i<warnings.length-1?"8px":0,lineHeight:1.4}}>⚠ {w}</div>)}</div>}
             {/* Live feedback: breakeven */}
             <FeedbackPanel>
-              <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline"}}><span style={{fontFamily:F.mono,fontSize:"10px",color:T.cw50,fontWeight:700}}>BREAKEVEN REVENUE</span><span style={{fontFamily:F.display,fontSize:"28px",color:findBE>d.actualBudget*3?T.red:findBE>d.actualBudget*1.5?T.amber:T.green}}><AV>{fmt(findBE)}</AV></span></div>
+              <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline"}}><span style={{fontFamily:F.mono,fontSize:"10px",color:T.cw50,fontWeight:700}}>BREAKEVEN REVENUE</span><span style={{fontFamily:F.display,fontSize:"28px",color:findBE>d.actualBudget*3?T.red:findBE>d.actualBudget*1.5?T.amber:T.green,textShadow:"0 2px 10px rgba(0,0,0,0.5)"}}><AV>{fmt(findBE)}</AV></span></div>
               <div style={{fontFamily:F.body,fontSize:"12px",color:T.w65,marginTop:"4px"}}>{findBE>0?`${Math.round(findBE/((d.rt.base||1))*100)}% of Base Case revenue needed to break even.`:"Set distribution terms to see breakeven."}</div>
             </FeedbackPanel>
           </>}
@@ -480,8 +484,9 @@ export default function Dashboard() {
             {/* Live feedback: equity + interest */}
             <FeedbackPanel>
               <div style={{display:"flex",gap:"24px"}}>
-                <div style={{flex:1}}><div style={{fontFamily:F.mono,fontSize:"10px",color:T.cw50,fontWeight:700}}>EQUITY RAISE NEEDED</div><div style={{fontFamily:F.display,fontSize:"36px",color:T.equity,marginTop:"4px"}}><AV>{fF(d.eq)}</AV></div><div style={{fontFamily:F.body,fontSize:"12px",color:T.w65}}>~{d.estInv} investors at {fF(inp.minInvestment)} min</div></div>
-                <div style={{flex:1}}><div style={{fontFamily:F.mono,fontSize:"10px",color:T.cw50,fontWeight:700}}>TOTAL INTEREST COST</div><div style={{fontFamily:F.display,fontSize:"36px",color:d.totalInterest>d.actualBudget*.1?T.amber:T.cw70,marginTop:"4px"}}><AV>{fF(d.totalInterest)}</AV></div><div style={{fontFamily:F.body,fontSize:"12px",color:T.w65}}>{d.actualBudget>0?Math.round(d.totalInterest/d.actualBudget*100):0}% of budget</div></div>
+                <div style={{flex:1}}><div style={{fontFamily:F.mono,fontSize:"10px",color:T.cw50,fontWeight:700}}>EQUITY RAISE NEEDED</div><div style={{fontFamily:F.display,fontSize:"36px",color:T.equity,marginTop:"4px",textShadow:"0 2px 10px rgba(232,184,77,0.3)"}}><AV>{fF(d.eq)}</AV></div><div style={{fontFamily:F.body,fontSize:"12px",color:T.w65}}>~{d.estInv} investors at {fF(inp.minInvestment)} min</div></div>
+                <div style={{width:"1px",background:T.border,alignSelf:"stretch"}}/>
+                <div style={{flex:1}}><div style={{fontFamily:F.mono,fontSize:"10px",color:T.cw50,fontWeight:700}}>TOTAL INTEREST COST</div><div style={{fontFamily:F.display,fontSize:"36px",color:d.totalInterest>d.actualBudget*.1?T.amber:T.cw70,marginTop:"4px",textShadow:"0 2px 10px rgba(0,0,0,0.5)"}}><AV>{fF(d.totalInterest)}</AV></div><div style={{fontFamily:F.body,fontSize:"12px",color:T.w65}}>{d.actualBudget>0?Math.round(d.totalInterest/d.actualBudget*100):0}% of budget</div></div>
               </div>
             </FeedbackPanel>
           </>}
@@ -498,9 +503,9 @@ export default function Dashboard() {
             <FeedbackPanel>
               <div style={{fontFamily:F.mono,fontSize:"10px",color:T.cw50,fontWeight:700,marginBottom:"10px"}}>INVESTOR RETURN PREVIEW (BASE CASE)</div>
               <div style={{display:"flex",gap:"16px"}}>
-                <div style={{flex:1,textAlign:"center"}}><div style={{fontFamily:F.display,fontSize:"30px",color:moicColor(wfBase.moic)}}><AV>{moicDisplay(wfBase.moic)}</AV></div><div style={{fontFamily:F.mono,fontSize:"10px",color:T.cw50}}>MOIC</div></div>
-                <div style={{flex:1,textAlign:"center"}}><div style={{fontFamily:F.display,fontSize:"30px",color:T.w92}}><AV>{wfBase.moic!==null?fF(Math.round(wfBase.tr)):"N/A"}</AV></div><div style={{fontFamily:F.mono,fontSize:"10px",color:T.cw50}}>TOTAL RETURN</div></div>
-                <div style={{flex:1,textAlign:"center"}}><div style={{fontFamily:F.display,fontSize:"30px",color:T.purple}}><AV>{fmt(wfBase.pb)}</AV></div><div style={{fontFamily:F.mono,fontSize:"10px",color:T.cw50}}>PRODUCER NET</div></div>
+                <div style={{flex:1,textAlign:"center"}}><div style={{fontFamily:F.display,fontSize:"30px",color:moicColor(wfBase.moic),textShadow:"0 2px 10px rgba(0,0,0,0.5)"}}><AV>{moicDisplay(wfBase.moic)}</AV></div><div style={{fontFamily:F.mono,fontSize:"10px",color:T.cw50}}>MOIC</div></div>
+                <div style={{flex:1,textAlign:"center"}}><div style={{fontFamily:F.display,fontSize:"30px",color:T.w92,textShadow:"0 2px 10px rgba(0,0,0,0.5)"}}><AV>{wfBase.moic!==null?fF(Math.round(wfBase.tr)):"N/A"}</AV></div><div style={{fontFamily:F.mono,fontSize:"10px",color:T.cw50}}>TOTAL RETURN</div></div>
+                <div style={{flex:1,textAlign:"center"}}><div style={{fontFamily:F.display,fontSize:"30px",color:T.purple,textShadow:"0 2px 10px rgba(157,122,237,0.3)"}}><AV>{fmt(wfBase.pb)}</AV></div><div style={{fontFamily:F.mono,fontSize:"10px",color:T.cw50}}>PRODUCER NET</div></div>
               </div>
             </FeedbackPanel>
           </>}
@@ -509,8 +514,8 @@ export default function Dashboard() {
           <div style={{display:"flex",gap:"12px",marginTop:"28px"}}>
             {wizStep>0&&<button onClick={()=>setWizStep(w=>w-1)} style={{flex:1,padding:"16px",background:"transparent",border:`1px solid ${T.border}`,borderRadius:"10px",fontFamily:F.display,fontSize:"16px",letterSpacing:"2px",color:T.cw70,cursor:"pointer"}}>← BACK</button>}
             {wizStep<3
-              ?<button disabled={wizStep===0&&inp.totalBudget<250000} onClick={()=>setWizStep(w=>w+1)} style={{flex:1,padding:"16px",background:`linear-gradient(135deg,${T.goldPrimary},${T.gold})`,border:"none",borderRadius:"10px",fontFamily:F.display,fontSize:"16px",letterSpacing:"2px",color:"#000",cursor:(wizStep===0&&inp.totalBudget<250000)?"not-allowed":"pointer",opacity:(wizStep===0&&inp.totalBudget<250000)?0.4:1,fontWeight:700}}>NEXT →</button>
-              :<button onClick={finishWizard} style={{flex:1,padding:"16px",background:`linear-gradient(135deg,${T.goldPrimary},${T.gold})`,border:"none",borderRadius:"10px",fontFamily:F.display,fontSize:"18px",letterSpacing:"3px",color:"#000",cursor:"pointer",fontWeight:700,boxShadow:`0 4px 24px rgba(242,202,80,0.20)`,position:"relative",overflow:"hidden"}}><span style={{position:"relative",zIndex:1}}>VIEW YOUR DEAL →</span><div style={{position:"absolute",top:0,left:0,width:"55%",height:"100%",background:"linear-gradient(90deg,transparent,rgba(255,255,255,0.35),transparent)",animation:"shimmer 2.5s ease-in-out infinite"}}/></button>}
+              ?<button disabled={wizStep===0&&inp.totalBudget<250000} onClick={()=>setWizStep(w=>w+1)} style={{flex:1,padding:"16px",background:`linear-gradient(135deg,${T.goldPrimary},${T.gold})`,border:"none",borderRadius:"10px",fontFamily:F.display,fontSize:"16px",letterSpacing:"2px",color:"#000",cursor:(wizStep===0&&inp.totalBudget<250000)?"not-allowed":"pointer",opacity:(wizStep===0&&inp.totalBudget<250000)?0.4:1,fontWeight:700,boxShadow:"0 6px 20px rgba(242,202,80,0.25)"}}>NEXT →</button>
+              :<button onClick={finishWizard} style={{flex:1,padding:"16px",background:`linear-gradient(135deg,${T.goldPrimary},${T.gold})`,border:"none",borderRadius:"10px",fontFamily:F.display,fontSize:"18px",letterSpacing:"3px",color:"#000",cursor:"pointer",fontWeight:700,boxShadow:`0 8px 30px rgba(242,202,80,0.30)`,position:"relative",overflow:"hidden"}}><span style={{position:"relative",zIndex:1}}>VIEW YOUR DEAL →</span><div style={{position:"absolute",top:0,left:0,width:"55%",height:"100%",background:"linear-gradient(90deg,transparent,rgba(255,255,255,0.35),transparent)",animation:"shimmer 2.5s ease-in-out infinite"}}/></button>}
           </div>
           {/* Scroll hint */}
           {wizStep===0&&<div style={{textAlign:"center",marginTop:"12px",animation:"chevBounce 2s ease-in-out infinite"}}><div style={{color:T.cw30,fontSize:"18px"}}>▾</div></div>}
