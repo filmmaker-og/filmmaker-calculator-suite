@@ -9,7 +9,7 @@ Free film budget calculator and recoupment waterfall simulator for independent p
 - **Interactive Calculator** — 4-step input wizard (Project, Budget, Capital Stack, Deal Terms) with live calculations
 - **Cinematic Output** — Cold open reveal, revenue donut, margin ruler, per-dollar breakdown, animated waterfall cascade
 - **Free PDF Export** — 5-page branded financial analysis document, no paywall
-- **8-Tier Waterfall** — Visualize exactly who gets paid first, from distribution fees through producer profit
+- **10-Tier Waterfall** — Visualize exactly who gets paid first, from distribution fees through producer profit
 - **Capital Stack Modeling** — Structure debt, equity, and gap financing with real fee calculations
 - **Store** — Snapshot+ ($19), comp reports ($595+), turnkey producer packages ($1,797)
 - **Educational Resources** — Resource Vault with glossary, budget breakdowns, capital structure guides
@@ -41,7 +41,7 @@ The visual system is documented in [`BRAND_SYSTEM.md`](./BRAND_SYSTEM.md) (v4.0)
 
 1. Hero — headline + CTA above fold, interactive calculator below
 2. Product Preview — 5 output preview cards (scrollable mobile, grid desktop)
-3. Waterfall — 8-tier money flow with running balance counter
+3. Waterfall — 10-tier money flow with running balance counter
 4. What's At Stake — 4 reason cards (2x2 on desktop)
 5. Reality — typing reveal + WITH/WITHOUT comparison grid
 6. Social Proof — testimonial + feature badges

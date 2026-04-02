@@ -270,7 +270,7 @@ padding: 32px clamp(16px, 4vw, 32px);  /* container inner */
 ## 6. LANDING PAGE STRUCTURE (v18)
 1. **Hero** — Headline + CTA above fold, interactive 3-slider calculator below fold
 2. **Product Preview** — "What You'll Build" — 5 scrollable/wrapping preview cards
-3. **Waterfall** — Full 8-tier money flow with running balance counter
+3. **Waterfall** — Full 10-tier money flow with running balance counter
 4. **What's At Stake** — 4 reason cards (2x2 on desktop)
 5. **Reality** — Typing reveal blockquote + WITH/WITHOUT grid
 6. **Social Proof** — Testimonial (gold left border) + feature badges
