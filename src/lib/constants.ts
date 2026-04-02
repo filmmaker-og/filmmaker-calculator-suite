@@ -9,6 +9,6 @@ export const SHARE_TEXT =
   "Before you sign a deal, see exactly who gets paid and what's left for you. Institutional film finance for indie producers — no account required.";
 
 export const SHARE_TITLE =
-  "FILMMAKER.OG — See Where Every Dollar Goes";
+  "Institutional Film Finance Made Easy";
 
 export const EMAIL_CAPTURED_KEY = "filmmaker_og_email_captured";
