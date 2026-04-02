@@ -43,36 +43,49 @@ setInterval(() => {
 }, 5 * 60 * 1000);
 
 // Product configuration
-const PRODUCTS: Record<string, { name: string; price: number }> = {
+const PRODUCTS: Record<string, { name: string; price: number; stripePriceId: string }> = {
   // Current products
   "snapshot-plus": {
     name: "Snapshot+",
     price: 1900, // $19
+    stripePriceId: "price_1TGJ6fJEIERVYlyFXkKoNnwL",
   },
   "comp-report": {
     name: "Comp Report (5 Comps)",
     price: 59500, // $595
+    // TODO: Replace with real Stripe price ID once created
+    stripePriceId: "USE_REAL_PRICE_ID_595",
   },
   "comp-report-10": {
     name: "Comp Report (10 Comps)",
     price: 99500, // $995
+    // TODO: Replace with real Stripe price ID once created
+    stripePriceId: "USE_REAL_PRICE_ID_995",
   },
   "the-producers-package": {
     name: "The Producer's Package",
     price: 179700, // $1,797
+    // TODO: Replace with real Stripe price ID once created
+    stripePriceId: "USE_REAL_PRICE_ID_1797",
   },
   "the-working-model": {
     name: "The Working Model",
     price: 7900, // $79
+    // TODO: Replace with real Stripe price ID once created
+    stripePriceId: "USE_REAL_PRICE_ID_79",
   },
   // Legacy IDs (backward compat)
   "the-blueprint": {
     name: "The Full Analysis (Legacy)",
     price: 19700,
+    // TODO: Replace with real Stripe price ID once created
+    stripePriceId: "USE_REAL_PRICE_ID_LEGACY_BLUEPRINT",
   },
   "the-pitch-package": {
     name: "The Producer's Package (Legacy)",
     price: 179700,
+    // TODO: Replace with real Stripe price ID once created
+    stripePriceId: "USE_REAL_PRICE_ID_LEGACY_PITCH_PACKAGE",
   },
 };
 
@@ -141,14 +154,7 @@ serve(async (req) => {
         const product = PRODUCTS[itemId];
         if (!product) throw new Error(`Invalid product ID: ${itemId}`);
         return {
-          price_data: {
-            currency: "usd",
-            product_data: {
-              name: product.name,
-              description: `FILMMAKER.OG — ${product.name}`,
-            },
-            unit_amount: product.price,
-          },
+          price: product.stripePriceId,
           quantity: 1,
         };
       });
@@ -159,14 +165,7 @@ serve(async (req) => {
       const product = PRODUCTS[productId];
       lineItems = [
         {
-          price_data: {
-            currency: "usd",
-            product_data: {
-              name: product.name,
-              description: `FILMMAKER.OG — ${product.name}`,
-            },
-            unit_amount: product.price,
-          },
+          price: product.stripePriceId,
           quantity: 1,
         },
       ];
