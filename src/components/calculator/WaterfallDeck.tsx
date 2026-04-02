@@ -2778,8 +2778,17 @@ const WaterfallBrief = ({
       {/* ── GATE 0: Snapshot+ ── */}
       <div style={{ padding: "0 24px" }}>
         <RevealSection>
-          <LockedSnapshotPlusSection onUnlock={() => {
-            // TODO: Wire to Stripe checkout for snapshot-plus product
+          <LockedSnapshotPlusSection onUnlock={async () => {
+            try {
+              const { data, error } = await supabase.functions.invoke("create-checkout", {
+                body: { productId: "snapshot-plus" },
+              });
+              if (error) throw error;
+              if (data?.url) window.location.href = data.url;
+            } catch {
+              // Fallback to store page if checkout fails
+              window.location.href = "/store/snapshot-plus";
+            }
           }} />
         </RevealSection>
       </div>

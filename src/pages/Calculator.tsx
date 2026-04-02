@@ -293,7 +293,7 @@ const Calculator = () => {
     if (!emailCaptured) {
       setShowEmailGate(true);
     } else {
-      navigate('/store/the-full-analysis');
+      navigate('/store/snapshot-plus');
     }
   };
 
