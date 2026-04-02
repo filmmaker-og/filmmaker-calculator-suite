@@ -115,3 +115,4 @@ api/
 | `src/pages/Index.tsx` | Landing page (~1300 lines, reference implementation) |
 | `src/components/calculator/WaterfallDeck.tsx` | Waterfall output (~2890 lines) |
 | `api/_pdf-template.ts` | PDF export template (~660 lines) |
+test
