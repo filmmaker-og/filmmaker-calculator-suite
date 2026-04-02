@@ -54,25 +54,25 @@ const PRODUCTS: Record<string, { name: string; price: number; stripePriceId: str
     name: "Comp Report (5 Comps)",
     price: 59500, // $595
     // TODO: Replace with real Stripe price ID once created
-    stripePriceId: "USE_REAL_PRICE_ID_595",
+    stripePriceId: "price_1THcZrJEIERVYlyFFyTQNRTt",
   },
   "comp-report-10": {
     name: "Comp Report (10 Comps)",
     price: 99500, // $995
     // TODO: Replace with real Stripe price ID once created
-    stripePriceId: "USE_REAL_PRICE_ID_995",
+    stripePriceId: "price_1THcZsJEIERVYlyFjNRrZSrd",
   },
   "the-producers-package": {
     name: "The Producer's Package",
     price: 179700, // $1,797
     // TODO: Replace with real Stripe price ID once created
-    stripePriceId: "USE_REAL_PRICE_ID_1797",
+    stripePriceId: "price_1THcZsJEIERVYlyFoX1KDFvQ",
   },
   "the-working-model": {
     name: "The Working Model",
     price: 7900, // $79
     // TODO: Replace with real Stripe price ID once created
-    stripePriceId: "USE_REAL_PRICE_ID_79",
+    stripePriceId: "price_1THcZtJEIERVYlyFuLnYEsKQ",
   },
   // Legacy IDs (backward compat)
   "the-blueprint": {
