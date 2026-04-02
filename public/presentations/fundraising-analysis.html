@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FILMMAKER.OG — Fundraising Instrument Analysis</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #141416;
+      --bg2: #1c1c1f;
+      --bg3: #242428;
+      --gold: #D4AF37;
+      --gold-dim: #a8891f;
+      --text: #f0ece0;
+      --text-muted: #9d998a;
+      --border: #2e2e34;
+      --red: #e05555;
+      --code-bg: #1a1a1d;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    /* ── PASSWORD SCREEN ── */
+    #pw-screen {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 24px;
+    }
+
+    .pw-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 48px 40px;
+      width: 100%;
+      max-width: 440px;
+      text-align: center;
+    }
+
+    .pw-logo {
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .pw-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .pw-subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 32px;
+    }
+
+    .pw-lock {
+      font-size: 36px;
+      margin-bottom: 20px;
+      opacity: 0.6;
+    }
+
+    .pw-input-wrap {
+      position: relative;
+      margin-bottom: 16px;
+    }
+
+    #pw-input {
+      width: 100%;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      padding: 12px 16px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    #pw-input:focus {
+      border-color: var(--gold);
+    }
+
+    #pw-input.error {
+      border-color: var(--red);
+    }
+
+    #pw-error {
+      display: none;
+      color: var(--red);
+      font-size: 13px;
+      margin-bottom: 12px;
+      font-weight: 500;
+    }
+
+    #pw-btn {
+      width: 100%;
+      background: var(--gold);
+      color: #141416;
+      border: none;
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 13px;
+      cursor: pointer;
+      transition: background 0.2s, opacity 0.2s;
+    }
+
+    #pw-btn:hover { background: #e2c040; }
+    #pw-btn:active { opacity: 0.85; }
+
+    .pw-notice {
+      margin-top: 20px;
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* ── DOCUMENT ── */
+    #doc {
+      display: none;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 48px 32px 80px;
+    }
+
+    .doc-header {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 28px;
+      margin-bottom: 40px;
+    }
+
+    .doc-brand {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .doc-title {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.3;
+      margin-bottom: 8px;
+    }
+
+    .doc-meta {
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .doc-meta span { display: flex; align-items: center; gap: 6px; }
+
+    .badge-internal {
+      display: inline-block;
+      background: rgba(212,175,55,0.12);
+      color: var(--gold);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 4px;
+      border: 1px solid rgba(212,175,55,0.25);
+    }
+
+    /* ── CONTENT ELEMENTS ── */
+    h1 {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text);
+      margin: 48px 0 18px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    h2 {
+      font-size: 19px;
+      font-weight: 700;
+      color: var(--text);
+      margin: 36px 0 14px;
+    }
+
+    h3 {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--gold);
+      margin: 28px 0 12px;
+    }
+
+    h4 {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      margin: 20px 0 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    p {
+      margin-bottom: 14px;
+      color: var(--text);
+    }
+
+    strong { color: #fff; font-weight: 600; }
+
+    em { color: var(--text); font-style: italic; }
+
+    a { color: var(--gold); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    ul, ol {
+      margin: 10px 0 16px 20px;
+      color: var(--text);
+    }
+
+    li { margin-bottom: 6px; }
+
+    li > strong { color: #fff; }
+
+    blockquote {
+      border-left: 3px solid var(--gold);
+      background: rgba(212,175,55,0.05);
+      padding: 14px 20px;
+      margin: 20px 0;
+      border-radius: 0 6px 6px 0;
+      color: #d8d4c4;
+      font-size: 14.5px;
+    }
+
+    blockquote p { margin-bottom: 8px; color: #d8d4c4; }
+    blockquote p:last-child { margin-bottom: 0; }
+
+    code {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 2px 6px;
+      font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+      font-size: 13px;
+      color: var(--gold);
+    }
+
+    pre {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px 22px;
+      overflow-x: auto;
+      margin: 20px 0;
+    }
+
+    pre code {
+      background: none;
+      border: none;
+      padding: 0;
+      color: #c8c4b0;
+      font-size: 13px;
+      font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+      line-height: 1.6;
+    }
+
+    hr {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 36px 0;
+    }
+
+    .divider-ornament {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 18px;
+      margin: 32px 0;
+      letter-spacing: 6px;
+    }
+
+    /* ── TABLES ── */
+    .table-wrap {
+      overflow-x: auto;
+      margin: 20px 0;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13.5px;
+    }
+
+    thead tr {
+      background: var(--bg3);
+    }
+
+    th {
+      text-align: left;
+      padding: 11px 14px;
+      font-weight: 600;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--gold);
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+      vertical-align: top;
+      line-height: 1.55;
+    }
+
+    tr:last-child td { border-bottom: none; }
+
+    tbody tr:hover { background: rgba(255,255,255,0.025); }
+
+    /* Footnotes area */
+    .footnotes {
+      margin-top: 60px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+    }
+
+    .footnotes h4 {
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      text-transform: uppercase;
+    }
+
+    .fn-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .fn-list li {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+      padding-left: 2px;
+    }
+
+    .fn-list a { color: #7a7060; font-size: 11px; }
+    .fn-list a:hover { color: var(--gold); }
+
+    /* Pedigree callout box */
+    .callout {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--gold);
+      border-radius: 0 8px 8px 0;
+      padding: 18px 22px;
+      margin: 20px 0;
+    }
+
+    .callout-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 8px;
+    }
+
+    @media (max-width: 640px) {
+      #doc { padding: 28px 18px 60px; }
+      .pw-card { padding: 36px 24px; }
+      .doc-title { font-size: 22px; }
+      h1 { font-size: 20px; }
+      h2 { font-size: 17px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- PASSWORD SCREEN -->
+<div id="pw-screen">
+  <div class="pw-card">
+    <div class="pw-lock">🔒</div>
+    <div class="pw-logo">FILMMAKER.OG</div>
+    <div class="pw-title">Internal Document</div>
+    <div class="pw-subtitle">This document is password protected.<br>Enter your access code to continue.</div>
+    <div class="pw-input-wrap">
+      <input type="password" id="pw-input" placeholder="Enter password" autocomplete="off" />
+    </div>
+    <div id="pw-error">Incorrect password</div>
+    <button id="pw-btn" onclick="checkPassword()">Unlock Document</button>
+    <div class="pw-notice">This is a private, internal document. Unauthorized access or distribution is prohibited.</div>
+  </div>
+</div>
+
+<!-- DOCUMENT CONTENT -->
+<div id="doc">
+
+  <div class="doc-header">
+    <div class="doc-brand">FILMMAKER.OG &mdash; Internal Document</div>
+    <div class="doc-title">Fundraising Instrument Analysis<br><span style="font-size:18px;font-weight:400;color:var(--text-muted)">Friends &amp; Family Round — $40,000 Raise</span></div>
+    <div style="margin-top:14px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+      <span class="badge-internal">Confidential</span>
+      <span style="font-size:12px;color:var(--text-muted)">Multi-model AI consensus analysis &mdash; GPT-5.4 &bull; Claude Opus 4.6 &bull; Gemini 3.1 Pro</span>
+    </div>
+  </div>
+
+  <!-- SECTION 1: Where Models Agree -->
+  <h2>1. Where Models Agree</h2>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Finding</th>
+          <th>GPT-5.4 Thinking</th>
+          <th>Claude Opus 4.6 Thinking</th>
+          <th>Gemini 3.1 Pro Thinking</th>
+          <th>Evidence</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Raise structure should keep investor count low (≈4–8) with a meaningful minimum check</td>
+          <td>✓</td><td>✓</td><td>✓</td>
+          <td>All recommend ~4–8 investors to minimize admin/cap-table complexity and keep terms uniform.</td>
+        </tr>
+        <tr>
+          <td>SAFE / convertible-style instrument usually fits early SaaS better than priced equity for $40k</td>
+          <td>✓</td><td>✓</td><td>✓</td>
+          <td>All flag direct equity as costly/complex due to early valuation, higher legal overhead, and cap table issues.</td>
+        </tr>
+        <tr>
+          <td>Avoid heavy investor control rights (board seats, vetoes, anti-dilution) in a F&amp;F round</td>
+          <td>✓</td><td>✓</td><td>✓</td>
+          <td>All recommend keeping F&amp;F passive: basic updates only; avoid governance/control hooks inappropriate for small checks.</td>
+        </tr>
+        <tr>
+          <td>Securities compliance still applies (no "friends &amp; family exemption"); use a proper exemption and documentation</td>
+          <td>✓</td><td>✓</td><td>✓</td>
+          <td>Securities laws apply; 506(b) safe harbor limits and disclosure needs, plus Form D filing timing.</td>
+        </tr>
+        <tr>
+          <td>Use standardized docs/templates where possible (YC SAFE; standard note forms) to reduce friction</td>
+          <td>✓</td><td>✓</td><td>✓</td>
+          <td>YC SAFE templates are meant to be standard and low-negotiation; note templates also exist via reputable generators.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr />
+
+  <!-- SECTION 2: Where Models Disagree -->
+  <h2>2. Where Models Disagree</h2>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Topic</th>
+          <th>GPT-5.4 Thinking</th>
+          <th>Claude Opus 4.6 Thinking</th>
+          <th>Gemini 3.1 Pro Thinking</th>
+          <th>Why They Differ</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Primary recommended instrument</strong></td>
+          <td>YC post-money SAFE (cap-only)</td>
+          <td>Convertible note (SAFE secondary)</td>
+          <td>YC post-money SAFE (cap + discount)</td>
+          <td>GPT-5.4 prioritizes no maturity/interest pressure for a solo founder. Claude prioritizes investor comfort/protection via debt framing and a defined timeline. Gemini prioritizes SaaS founder-friendliness plus a standard discount to "reward" early risk.</td>
+        </tr>
+        <tr>
+          <td><strong>Valuation cap level for a $40k F&amp;F round</strong></td>
+          <td>~$0.75M–$1.25M</td>
+          <td>~$0.5M–$0.75M</td>
+          <td>~$2M–$3M</td>
+          <td>Different assumptions about (a) how early/pre-revenue you are, (b) how much upside F&amp;F should get, and (c) how much "anchor risk" a low cap creates for later rounds. Benchmarks cited by GPT (Carta under-$250k caps) are much higher but he adjusts downward for stage. Gemini keeps dilution low to avoid future friction.</td>
+        </tr>
+        <tr>
+          <td><strong>Minimum check size</strong></td>
+          <td>$2.5k</td>
+          <td>$2.5k</td>
+          <td>$5k–$10k</td>
+          <td>Gemini is most cap-table/admin conservative (fewer investors). GPT/Claude allow smaller checks to widen participation while still limiting count.</td>
+        </tr>
+        <tr>
+          <td><strong>Discount on SAFE</strong></td>
+          <td>No discount (cap-only)</td>
+          <td>Often 20% (esp. for SAFE or note)</td>
+          <td>20% discount</td>
+          <td>GPT emphasizes simplicity for non-tech F&amp;F (one variable: cap). Claude/Gemini treat discount as "market standard reward," aligning with common note terms.</td>
+        </tr>
+        <tr>
+          <td><strong>Revenue-share / profit participation viability</strong></td>
+          <td>"Secondary option only if demanded"</td>
+          <td>"Possible but often awkward; cap 1.5–2.0x"</td>
+          <td>"Do not use; fatal for SaaS"</td>
+          <td>Gemini weighs future VC/angel perception and cashflow reinvestment most heavily. GPT/Claude leave room for film-industry expectations but warn about drag and complexity.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr />
+
+  <!-- SECTION 3: Unique Discoveries -->
+  <h2>3. Unique Discoveries</h2>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Model</th>
+          <th>Unique Finding</th>
+          <th>Why It Matters</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>GPT-5.4 Thinking</strong></td>
+          <td>Ties loan interest-rate choice to IRS AFR (e.g., March 2026 short-term AFR 3.59%) and suggests using AFR to avoid imputed-interest/gift issues</td>
+          <td>If you use a simple loan with family, AFR can be a practical floor to reduce tax headaches and "was this a gift?" ambiguity.</td>
+        </tr>
+        <tr>
+          <td><strong>Claude Opus 4.6 Thinking</strong></td>
+          <td>Suggests an "MFN" concept for convertible terms (and optional maturity outcomes: extend/repay/convert)</td>
+          <td>Helps keep early investors from feeling disadvantaged if you later issue better terms, without granting heavy control rights.</td>
+        </tr>
+        <tr>
+          <td><strong>Gemini 3.1 Pro Thinking</strong></td>
+          <td>"Film vs tech culture clash" warning: film investors expect recoup/profit-participation norms; you must explicitly reframe this as a software company</td>
+          <td>This is a real relationship-risk reducer for your specific network—prevents mismatched expectations about payouts and timelines.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr />
+
+  <!-- SECTION 4: Comprehensive Analysis -->
+  <h1>4. Comprehensive Analysis</h1>
+
+  <h3>High-Confidence Findings</h3>
+  <p>All three models converge on the operational realities of a $40,000 friends-and-family raise for a single-founder SaaS + bespoke modeling business like FILMMAKER.OG: keep the round simple, keep the investor count low, and avoid governance complexity. The strongest shared guidance is to structure the raise so you can keep building—meaning identical terms for everyone, a small set of investors (roughly 4–8), and a minimum check size that doesn't create a "micro-investor swarm" you'll have to manage for years. For your product—software with some bespoke services—this cleanliness matters because future professional investors will scrutinize your cap table and early documents.</p>
+  <p>The models also agree that priced equity is usually the wrong tool at this size and stage. A priced equity round forces you to pick a valuation now (when you likely have limited SaaS traction), and it tends to cost more in legal/admin than it's worth for $40k. Similarly, they align on "rights hygiene": friends-and-family investors should not get board seats, veto rights, special anti-dilution, or other control provisions that create ongoing conflict or future financing friction. Instead, you can offer lightweight "trust rights": periodic updates and an annual high-level financial summary.</p>
+  <p>Compliance is another high-confidence area: there is no special securities-law carveout just because investors are friends and family. If you're offering a security (SAFE, convertible note, equity, revenue-share/profit participation), you generally need to rely on an exemption (often Reg D 506(b) in the US), avoid general solicitation, and document the offering properly. If you use Reg D, Form D is typically due within 15 days after the first sale (the first time an investor is irrevocably committed). This is exactly the sort of "small but fatal" operational detail that gets missed in informal F&amp;F raises.</p>
+
+  <h3>Areas of Divergence</h3>
+  <p>The main strategic disagreement is instrument choice: GPT-5.4 and Gemini prefer a SAFE as the primary instrument, while Claude prefers a convertible note. The difference is mostly about <em>relationship and timeline risk</em>. Claude emphasizes that family investors often understand a "loan that can turn into equity" more readily than a pure future-equity agreement, and that a maturity date can create a forcing function to resolve the instrument (convert, repay, or extend). GPT-5.4 argues the opposite: maturity dates are precisely what you do <em>not</em> want with family, because if the company isn't in a position to repay when maturity hits, you're forced into awkward renegotiations that can damage relationships. Gemini aligns more with GPT on eliminating repayment pressure and preserving cash for growth.</p>
+  <p>They also disagree on valuation cap magnitude. GPT-5.4 proposes roughly $0.75M–$1.25M, Claude is even lower (~$0.5M–$0.75M), while Gemini is much higher (~$2M–$3M). The practical way to reconcile this is to treat the cap less as "true valuation" and more as (a) your early-believer reward and (b) your future fundraising flexibility constraint. A <em>very low</em> cap can make F&amp;F happy but can "anchor" your next round or create unexpectedly high dilution when you raise real money; a <em>very high</em> cap may feel unfair to early believers (especially given your endorsements and domain credibility) but keeps your future cap table cleaner. This is a values decision as much as a market decision.</p>
+  <p>Discount is another divergence: GPT-5.4 prefers cap-only for simplicity, while Claude and Gemini typically include a 20% discount (common in convertible notes and sometimes SAFEs). The simplest rule for F&amp;F is: <strong>pick one lever</strong> (cap <em>or</em> discount) unless you have sophisticated investors. Using only a cap reduces confusion; using only a discount can backfire if your next financing is another convertible round (discount may not apply depending on document structure), which is why nonstandard "F&amp;F SAFE" variants exist.</p>
+  <p>Revenue-share/profit participation is contentious. Gemini says "don't," mainly because it taxes early revenue that should be reinvested and can spook future tech investors. GPT-5.4/Claude allow it only if a specific investor insists, and warn about the definitional/legal complexity ("what counts as revenue?") and the long-term drag. For your SaaS + bespoke hybrid, revenue-share is especially tricky because bespoke revenue may spike irregularly and could unintentionally accelerate payouts, while SaaS revenue is what you want to reinvest to scale.</p>
+
+  <h3>Unique Insights Worth Noting</h3>
+  <p>GPT-5.4's AFR point is particularly useful if you decide to do a simple loan with a family member: using at least the IRS Applicable Federal Rate can reduce imputed-interest/gift characterization risk. For March 2026, short-term AFR is cited as 3.59% annually. This is not a "business optimization" insight so much as a "family harmony + tax hygiene" insight.</p>
+  <p>Gemini's "film vs tech culture clash" is also specific to you. Your endorsements and background sit in the film-finance world, where investors are used to profit participation/recoup waterfalls. Your Codex feature should explicitly reframe: "This is a software company; returns come from equity value on a future financing or exit, not film-style recoup." That single paragraph will prevent many misunderstandings.</p>
+
+  <h3>Recommendations (actionable, tailored)</h3>
+  <p><strong>Recommendation for your Codex feature default:</strong> use a <strong>standard YC Post-Money SAFE</strong> as the primary instrument (lowest admin burden; no interest/maturity pressure), with <strong>one economic lever</strong> (a valuation cap), and offer an <strong>optional pro rata side letter</strong> only for larger checks. If you expect pushback from more conservative family members, provide a "fallback path" in the Codex flow: a <strong>simple promissory note</strong> (loan) at or above AFR with either deferred repayment or a revenue-triggered start—while clearly warning that debt creates relationship risk if the business can't repay.</p>
+  <p>Below is the copyable, Codex-ready guidance + sample language you requested.</p>
+
+  <hr />
+
+  <!-- CODEX-READY SECTION -->
+  <h1>Codex-Ready Guidance + Terms (Copyable)</h1>
+
+  <h2>0) Not Legal Advice (required snippet)</h2>
+  <blockquote>
+    <p><strong>Not legal or tax advice.</strong> This is general educational guidance. Startup fundraising involves securities laws and tax considerations even for friends and family. Consult a startup attorney (securities/Reg D) and a CPA before accepting funds.</p>
+  </blockquote>
+
+  <hr />
+
+  <h2>1) Suggested "ask" structures to raise $40,000</h2>
+
+  <h3>Option A (recommended default): "4–8 supporters"</h3>
+  <ul>
+    <li><strong>Target:</strong> $40,000 total</li>
+    <li><strong># investors:</strong> 4–8</li>
+    <li><strong>Min check:</strong> $2,500 (floor)</li>
+    <li><strong>Target check:</strong> $5,000–$10,000</li>
+    <li><strong>Max check:</strong> $10,000–$15,000 (cap concentration)</li>
+    <li><strong>Close window:</strong> rolling close, but aim to finish within ~60 days</li>
+  </ul>
+
+  <h3>Option B (cleanest admin): "Unit-based"</h3>
+  <ul>
+    <li>Offer <strong>4 units of $10,000</strong>.</li>
+    <li>Allow <strong>half units of $5,000</strong> if needed.</li>
+    <li>Avoid &lt;$2,500 checks unless it's truly necessary.</li>
+  </ul>
+  <p><strong>Implementation note for Codex:</strong> enforce (a) max investor count, (b) min check, (c) identical terms across investors.</p>
+
+  <hr />
+
+  <h2>2) Instrument comparison (family/friends round, this startup)</h2>
+
+  <h3>Simple loan (promissory note)</h3>
+  <p><strong>Pros:</strong> familiar, no dilution, straightforward.<br>
+  <strong>Cons:</strong> repayment pressure; if you can't repay, relationships get damaged; for family loans, consider AFR as a floor to reduce tax issues.</p>
+
+  <h3>Convertible note</h3>
+  <p><strong>Pros:</strong> familiar "loan that becomes equity"; discount/cap reward early risk; investor comfort from "debt."<br>
+  <strong>Cons:</strong> <strong>maturity clock</strong> and potential renegotiation; more moving parts than SAFE.</p>
+
+  <h3>SAFE (recommended default)</h3>
+  <p><strong>Pros:</strong> no interest, no maturity; standard YC templates; low negotiation surface; supports rolling closes.<br>
+  <strong>Cons:</strong> some F&amp;F don't understand "future equity" without education; no repayment right.</p>
+
+  <h3>Direct equity (priced round)</h3>
+  <p><strong>Pros:</strong> clarity of ownership.<br>
+  <strong>Cons:</strong> forces valuation now; more legal/admin cost; cap table complexity—usually not worth it for $40k.</p>
+
+  <h3>Revenue-share / profit participation</h3>
+  <p><strong>Pros:</strong> familiar to film investors; can return cash before exit.<br>
+  <strong>Cons:</strong> definitional complexity; ongoing drag; may deter later tech investors; still can be a security.</p>
+
+  <hr />
+
+  <h2>3) Recommended investor economics &amp; terms (defaults)</h2>
+
+  <h3>Primary recommendation: YC Post-Money SAFE (Valuation Cap, no discount)</h3>
+  <p>Use the standard YC template as your base.</p>
+  <p><strong>Suggested defaults (Codex settings):</strong></p>
+  <ul>
+    <li><strong>Valuation Cap:</strong> pick a single number your product can justify <em>without boxing you in</em> later. (Models disagreed; offer a selectable range in Codex.)
+      <ul>
+        <li>Conservative founder-friendly: <strong>$2.0M–$3.0M</strong> (lower dilution; easier future rounds)</li>
+        <li>Investor-rewarding: <strong>$0.75M–$1.25M</strong> (more upside for early believers)</li>
+      </ul>
+    </li>
+    <li><strong>Discount:</strong> <strong>None</strong> (simplicity)</li>
+    <li><strong>Interest / maturity:</strong> none (SAFE)</li>
+    <li><strong>Minimum check:</strong> $2,500 (or $5,000 if you want fewer investors)</li>
+    <li><strong>Maximum check:</strong> $10,000–$15,000</li>
+    <li><strong>Pro rata rights:</strong> optional side letter only; offer only for <strong>$5,000+ or $10,000+</strong> checks.</li>
+    <li><strong>Qualified financing trigger (for conversion definitions in your summary):</strong> e.g., <strong>$250,000+ priced equity financing</strong> (you can mirror the SAFE's definitions and simply explain it in plain language)</li>
+  </ul>
+
+  <h3>Secondary fallback: Simple loan (if an investor refuses SAFE)</h3>
+  <ul>
+    <li><strong>Term:</strong> 24–36 months</li>
+    <li><strong>Rate:</strong> at/above AFR floor; March 2026 short-term AFR is cited as <strong>3.59%</strong>.</li>
+    <li><strong>Repayment:</strong> ideally <strong>deferred</strong> (e.g., interest accrues; principal due at maturity) unless you already have reliable revenue.</li>
+  </ul>
+
+  <hr />
+
+  <h2>4) Repayment timeline &amp; expectations (copyable)</h2>
+
+  <h3>For SAFE (set expectations)</h3>
+  <ul>
+    <li><strong>Time horizon:</strong> "Likely 2–5+ years; may never return capital."</li>
+    <li><strong>Return mechanism:</strong> conversion in a future priced round or payout/convert on acquisition/dissolution (per SAFE mechanics).</li>
+  </ul>
+
+  <h3>For a loan (if used)</h3>
+  <ul>
+    <li><strong>Realistic commitment window:</strong> 24–36 months only if you have a credible revenue plan.</li>
+    <li>Prefer <strong>balloon maturity</strong> or <strong>revenue-triggered</strong> repayment start rather than fixed amortization in year one.</li>
+  </ul>
+
+  <hr />
+
+  <h2>5) Investor rights to offer / avoid (F&amp;F appropriate)</h2>
+
+  <p><strong>Offer (lightweight):</strong></p>
+  <ul>
+    <li>Quarterly email updates (short)</li>
+    <li>Annual unaudited summary (revenue, expenses, key milestones)</li>
+  </ul>
+
+  <p><strong>Avoid:</strong></p>
+  <ul>
+    <li>board seats/observers</li>
+    <li>voting/veto rights pre-conversion</li>
+    <li>anti-dilution beyond SAFE math</li>
+    <li>consent rights over operations/fundraising</li>
+  </ul>
+
+  <hr />
+
+  <h2>6) Sample plain-language pitch ask + one-paragraph term summary</h2>
+
+  <h3>Pitch ask (copy/paste)</h3>
+  <blockquote>
+    <p>I'm raising <strong>$40,000</strong> from a small group of friends and family to fund the next build-and-launch phase of <strong>FILMMAKER.OG</strong>, a film-finance tool that combines <strong>SaaS</strong> (subscription software) with <strong>bespoke/ad-hoc financial modeling</strong> for independent producers. I'm a second-generation filmmaker and producer's rep, hip-pocketed by CAA, and I've worked with Netflix. I've also received endorsements from <strong>Brian O'Shea (The Exchange / Voltage), Rufus Parker (P2 Films), and Brian Sampey (Ares Management)</strong>—which I'm using as credibility for the market need and my industry access (not as any guarantee of outcomes).</p>
+    <p>I'm taking <strong>$2,500–$10,000</strong> checks on the same terms using a <strong>YC SAFE (Simple Agreement for Future Equity)</strong>. This is <strong>not a loan</strong>—it's an early investment that converts into equity if I later raise a priced funding round or if the company is acquired. This is high-risk and you should only invest what you can afford to lose.</p>
+  </blockquote>
+
+  <h3>One-paragraph term summary (copy/paste)</h3>
+  <blockquote>
+    <p><strong>Friends &amp; Family SAFE Summary (not legal advice):</strong> Investor purchases a <strong>Post-Money SAFE (YC standard)</strong> with a <strong>valuation cap of $[CAP]</strong>, <strong>no discount</strong>, <strong>no interest</strong>, and <strong>no maturity date</strong>. The SAFE converts into equity upon a future priced equity financing (or is handled per the SAFE in a liquidity event/dissolution). Minimum check is <strong>$[MIN]</strong>; maximum check is <strong>$[MAX]</strong>. Investor receives no voting or board rights prior to conversion. Founder will provide <strong>quarterly email updates</strong> and an <strong>annual high-level financial summary</strong>. This is a private offering and securities laws apply.</p>
+  </blockquote>
+
+  <hr />
+
+  <h2>7) Sample concise term sheet / template language (SAFE)</h2>
+
+  <h3>SAFE "term summary" header (drop-in)</h3>
+  <pre><code>FILMMAKER.OG — FRIENDS & FAMILY SAFE (SUMMARY OF KEY TERMS)
+(Not legal advice; for discussion. Use the standard YC Post-Money SAFE as the definitive document.)
+
+Issuer: [Company legal name]
+Instrument: YC Post-Money SAFE (Valuation Cap, No Discount)
+Total raise: Up to $40,000
+Minimum check: $[2,500 or 5,000]
+Maximum check: $[10,000–15,000]
+
+Economics
+- Valuation Cap: $[CAP]
+- Discount: None
+- Interest / Maturity: None (SAFE is not debt)
+
+Investor Rights
+- Information: Quarterly email update + annual high-level summary
+- Pro rata: Optional side letter for checks ≥ $[5,000 or 10,000]
+- Governance: No board seat, no observer, no voting pre-conversion
+
+Risk
+- High risk; possible total loss; illiquid; long time horizon.</code></pre>
+
+  <hr />
+
+  <h2>8) Best practices for raising from family &amp; friends (Codex checklist)</h2>
+
+  <h4>Documentation &amp; process</h4>
+  <ul>
+    <li>Use one instrument and identical terms.</li>
+    <li>Use an investor questionnaire / suitability acknowledgment (especially if relying on Reg D).</li>
+    <li>Avoid public solicitation if relying on private placement concepts.</li>
+    <li>Track every investor + signed doc + payment date in a simple ledger.</li>
+  </ul>
+
+  <h4>Compliance basics (US-oriented)</h4>
+  <ul>
+    <li>Under Reg D Rule 506(b), you can sell to unlimited accredited investors and up to 35 non-accredited (who must be sophisticated), with added disclosure obligations for non-accredited investors.</li>
+    <li>Form D is generally due within <strong>15 days after first sale</strong>.</li>
+  </ul>
+
+  <h4>Expectation-setting</h4>
+  <ul>
+    <li>Put "can lose 100%" in writing.</li>
+    <li>Separate investor updates from family gatherings (process boundary).</li>
+  </ul>
+
+  <h4>Tax basics (flag for CPA)</h4>
+  <ul>
+    <li>If you do a <strong>family loan</strong>, consider using AFR as a floor to reduce imputed interest/gift risk.</li>
+    <li>If you issue equity later, ask counsel/CPA about QSBS eligibility (don't promise it).</li>
+  </ul>
+
+  <h4>Next steps</h4>
+  <ul>
+    <li>Have startup counsel review your plan before you take the first check.</li>
+    <li>Ensure IP is owned/assigned to the company entity before fundraising (diligence hygiene).</li>
+  </ul>
+
+  <hr />
+
+  <h2>9) Commonly missed items (tailored to SaaS + film-finance)</h2>
+  <ul>
+    <li><strong>Film vs SaaS expectations:</strong> explicitly state "this is not a film waterfall/profit participation investment; it's a software company equity-style risk." (Gemini insight)</li>
+    <li><strong>Too many tiny checks:</strong> creates long-term admin burden and scares later investors.</li>
+    <li><strong>Overstating endorsements:</strong> get permission to use names; never imply endorsers guarantee returns.</li>
+    <li><strong>Maturity-date traps (if using notes):</strong> don't set a maturity you can't handle; plan maturity outcomes up front.</li>
+  </ul>
+
+  <hr />
+
+  <p style="font-size:13.5px;color:var(--text-muted);font-style:italic;">If you tell me (a) your current legal entity type (LLC vs Delaware C-Corp), (b) whether most investors will be accredited, and (c) your current revenue/MRR (if any), I can "lock" a single recommended cap/min-check setting and produce a final one-page Codex template with fill-in fields only.</p>
+
+  <hr />
+
+  <!-- FOUNDER PROFILE SECTION -->
+  <h1>MILES HARDY — Complete Founder Profile</h1>
+
+  <h2>Heritage &amp; Pedigree</h2>
+  <div class="callout">
+    <div class="callout-label">Background</div>
+    <p>Miles is a second-generation Hollywood producer. His father is John Hardy — a legendary producer whose credits include <em>Sex, Lies, and Videotape</em> (Cannes Palme d'Or, the film that essentially launched the American indie movement), <em>Erin Brockovich</em>, <em>Ocean's Eleven</em>, and <em>Ocean's Twelve</em>. Miles didn't learn film finance from a textbook or a course. He grew up inside the machine — at dinner tables where deals were being structured, in rooms where the math on a $50M production was being worked out in real time. That's not a credential you can acquire. It's DNA.</p>
+  </div>
+
+  <h2>Industry Career</h2>
+
+  <h3>CAA — Hip-Pocketed</h3>
+  <p>Miles was hip-pocketed at Creative Artists Agency, the single most powerful talent agency in entertainment. Being hip-pocketed means a specific agent has taken you on informally — they're investing personal time and reputation before you're a full roster client. At CAA, that means someone at the top of the food chain believed in Miles enough to put their own credibility behind him. This isn't an application process. It's an invitation.</p>
+
+  <h3>King Cobra (2016) — Co-Producer</h3>
+  <p>Cast included James Franco and Christian Slater. World premiere at the Tribeca Film Festival. Acquired by IFC Films for domestic distribution. Distributed globally on Netflix. The film is now part of the Voltage Pictures library — Voltage being an Academy Award-winning production company (they produced <em>The Hurt Locker</em>). Miles negotiated this deal alongside CAA. He wasn't observing the process — he was in the negotiation.</p>
+
+  <h3>Linda Lichter &amp; Elsa Ramo</h3>
+  <p>Miles sat in live negotiations with two of the most powerful entertainment attorneys in Hollywood, actively working out recoupment waterfalls and film finance structures with real capital at stake. Linda Lichter has represented talent and producers on some of the most significant indie deals of the last three decades. Elsa Ramo is one of the foremost securities and entertainment finance attorneys in the country — she literally writes the PPMs and operating agreements that structure how investor money flows into films. Miles wasn't reading about waterfall mechanics — he was watching them get built in real time by the people who invented the modern frameworks.</p>
+
+  <h3>Producer's Rep Work</h3>
+  <p>After King Cobra, Miles did producer's representative work — helping other filmmakers structure their deals, navigate financing, interface with sales agents and distributors. This is where the origin story of filmmaker.og lives. In this work, Miles kept encountering the same problem over and over: filmmakers who didn't understand how the waterfall worked, who were confused about where their money went after a sale, who were spending thousands of dollars on attorneys and reps just to get basic financial transparency on their own projects. The tools didn't exist. The information was gatekept. And the people who had it charged a fortune to explain it.</p>
+
+  <h3>Commercial Production Background</h3>
+  <p>Before and alongside his film work, Miles produced commercial content for Nike, Adidas, Microsoft, and the NBA. This isn't a footnote — it means he's operated at the intersection of entertainment and brand capital, understands institutional production pipelines, and has delivered at scale for Fortune 500 clients. The production discipline required for a Nike campaign is the same rigor he's applying to the platform.</p>
+
+  <h3>Tribeca Film Festival Alumni</h3>
+  <p>Not just a screening — Miles premiered at one of the world's most prestigious film festivals. Tribeca acceptance signals curatorial validation at the highest level of independent cinema.</p>
+
+  <h2>The Origin Story — Why This Product</h2>
+  <p>This is the part that makes Miles the right founder and not just a qualified one.</p>
+  <p>During his producer's rep experience, Miles consistently saw the same structural failure: filmmakers at every level — first-timers, second features, even people with festival credits — didn't understand the financial architecture of their own projects. They didn't know how a recoupment waterfall worked. They didn't understand how off-the-tops eroded their returns before a single dollar reached profit participation. They were spending $400–$1,000/hour on entertainment attorneys just to get someone to explain the math, or $3,000–$10,000 on a producer's rep to structure something that should be transparent and accessible.</p>
+  <p>The gap wasn't knowledge — the information exists. The gap was tooling. There was no instrument that let a filmmaker model their own waterfall, stress-test scenarios, and generate investor-grade documentation without hiring a gatekeeper. The Excel spreadsheets floating around were dangerous — wrong formulas, missing tiers, no industry-standard structure. The attorneys and reps had no incentive to make this accessible because opacity was their business model.</p>
+  <p>Miles's insight was: <em>I need this tool myself. It should exist. And if I build it, I can open the gate for everyone else.</em> That's not a market thesis derived from research. It's a solution born from direct, repeated frustration at the point of impact.</p>
+
+  <h2>What He Built — Solo Founder, AI-Leveraged</h2>
+  <p>filmmaker.og is live. Built by Miles as a solo founder using AI-leveraged development (Claude + modern dev tooling). The tech stack is React/Vite/TypeScript, Supabase, Vercel, Stripe, with a Gemini-powered AI bot. What would have cost $100K+ and a team of 5 three years ago, Miles built and shipped himself. The platform includes:</p>
+  <ul>
+    <li>An 8-tier recoupment waterfall calculator (the core product — the thing that didn't exist)</li>
+    <li>A 5-page investor-ready PDF brief generator</li>
+    <li>An AI deal insight engine</li>
+    <li>Scenario stress testing</li>
+    <li>A digital store with tiered products ($49 to $2,997+)</li>
+    <li>An AI-powered bot for real-time film finance Q&amp;A</li>
+    <li>A resource vault / glossary system</li>
+    <li>JSON-LD structured data for AI search discoverability (first mover in the space)</li>
+  </ul>
+  <p>The platform is mobile-first (430px), designed to institutional standards (black/white/gold aesthetic — "Goldman Sachs designed a film magazine"), and hard-launching April 1, 2026.</p>
+
+  <h2>The Strategic Positioning — Why Miles, Why Now</h2>
+  <p>He's not an outsider disrupting from the outside. He's an insider who earned his way into the castle and is opening the gate. That's the OG positioning — battle-tested, seen it all, chose to democratize it. Every "democratize X" startup faces the credibility trap: outsiders get dismissed by insiders, and the audience wonders why they should trust someone who hasn't done the thing. Miles has done the thing. CAA. Tribeca. Netflix distribution. Real negotiations with real capital. He's not theorizing about what filmmakers need — he lived the need, couldn't find the tool, and built it.</p>
+  <p>The timing is structural, not coincidental. Three forces converging: AI development tools made it possible for a solo founder to build institutional-grade software. The indie film market is booming (1,500+ US indie films per year, $8.6B market). And social media (Instagram, TikTok) created a direct distribution channel to reach filmmakers at scale — bypassing the traditional gatekeepers entirely.</p>
+  <p>The moat is compounding on multiple axes. Content library (60+ pieces in 90 days). Founder credibility that no competitor can replicate (you can't fake the John Hardy lineage, the CAA pocket, the Tribeca premiere, the Lichter/Ramo negotiations). First-mover position in an underserved niche. And — critically — the AI search infrastructure via JSON-LD structured data that means when AI assistants answer film finance questions, filmmaker.og is what they cite.</p>
+  <p>The endorsement base spans the full industry value chain. Rufus Parker (indie production, A24-adjacent). Brian O'Shea (global sales and distribution, Voltage Pictures). Brian Sampey (institutional finance, $406B AUM Ares Management). Isabel Echeverry (director's rep, filmmaker perspective). That's production, distribution, capital, and creative — all four legs of the table, all validating the same tool.</p>
+
+  <div class="callout">
+    <div class="callout-label">Why Miles Is the Right Founder — One-Paragraph Version</div>
+    <p>Miles Hardy is a second-generation Hollywood producer (son of John Hardy — <em>Sex, Lies, and Videotape</em>, <em>Erin Brockovich</em>, <em>Ocean's Eleven</em>), hip-pocketed at CAA, Tribeca Film Festival alumni, who co-produced <em>King Cobra</em> alongside James Franco and Christian Slater, negotiated the deal with CAA, and sat in live negotiations with Linda Lichter and Elsa Ramo — two of Hollywood's most powerful entertainment attorneys — working out real recoupment waterfalls with real capital. During his subsequent producer's rep work, he kept seeing the same problem: filmmakers at every level didn't understand the financial architecture of their own projects, and the tools to fix that didn't exist. So he built the tool he actually needed — and he's opening the gate for everyone else.</p>
+  </div>
+
+  <hr />
+
+  <!-- SECTION: Reframed for Miles Hardy -->
+  <h1>Reframed Codex Guide for Miles Hardy / FILMMAKER.OG</h1>
+
+  <p>Key changes from the generic version:</p>
+  <ul>
+    <li><strong>The credibility stack is now a primary asset</strong> — the report opens with a copyable "Miles Hardy positioning paragraph" and a precise endorsement attribution line (with the required permissions flag).</li>
+    <li><strong>"Film vs. SaaS investor culture" is called out explicitly</strong> — because your film-industry contacts know waterfall mechanics as <em>the product</em>, not the investment structure, and that distinction needs to be made upfront in every conversation.</li>
+    <li><strong>Valuation cap is calibrated to your actual situation</strong> — given a live product hard-launching April 1, CAA pedigree, Tribeca/Netflix/Voltage track record, and a four-endorser stack, the cap range moves to <strong>$1.5M–$2.5M</strong>, not the rock-bottom $500K–$750K you'd set for a first-time founder with a pitch deck.</li>
+    <li><strong>The pitch ask uses your actual biography</strong> — every sentence is grounded in John Hardy, CAA, King Cobra, Tribeca, Lichter/Ramo — the real de-risking story.</li>
+    <li><strong>Single-founder risk disclosure</strong> is addressed directly — because your investors should know the platform IP and brand are owned by the entity, not you personally.</li>
+  </ul>
+  <p>The report includes all nine deliverables from the original brief plus the Codex implementation checklist, fully reattributed to Miles and FILMMAKER.OG.</p>
+
+  <hr />
+
+  <!-- SECTION: Easiest Raise Path -->
+  <h1>Easiest Raise Path &amp; Risk Profile</h1>
+
+  <h2>1. Easiest path to attracting investors: the Convertible Note</h2>
+  <p>Not the SAFE — even though the SAFE is better <em>structurally</em> for you as a solo founder. Here's why the note wins on the "easiest to attract" dimension:</p>
+  <p>Your specific F&amp;F audience is most likely people from the <strong>film industry</strong> — producers, reps, distributors, entertainment attorneys, finance people at firms like Ares. That world is built on <strong>debt instruments with defined repayment mechanics</strong>. They read waterfall structures. They know what a promissory note is. They understand interest. A convertible note maps directly onto how they already think about money: <em>"You're lending me capital, I'm paying you back plus a return, and if this takes off you get equity upside."</em> That framing closes faster in a film-adjacent network than "here's a SAFE that converts to equity at some undefined future point."</p>
+  <p>The SAFE is still the <em>better instrument for you operationally</em> — no maturity pressure, no cash-flow drain — but if the question is purely "which gets a yes fastest," the convertible note wins with this specific investor pool.</p>
+  <p><strong>The practical answer:</strong> Lead with the <strong>convertible note framing in conversation</strong> — "it's a loan that converts to equity" — but execute it as a SAFE if investors are comfortable once they understand the mechanics. Many sophisticated film-industry people, once the SAFE is explained plainly, will prefer it precisely because there's no repayment pressure on your business.</p>
+
+  <h2>2. Does your background change the "high risk" disclosure?</h2>
+  <p>No — but it meaningfully changes what the risk actually is.</p>
+  <p>The boilerplate "possible total loss, illiquid, long time horizon" language is legally required and stays in every document regardless of who the founder is. That's non-negotiable.</p>
+
+  <h3>What does change</h3>
+  <p>The <em>nature</em> of the risk profile shifts significantly with Miles Hardy's profile. Here's how to think about it honestly:</p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Risk Factor</th>
+          <th>Generic Solo SaaS Founder</th>
+          <th>Miles Hardy / FILMMAKER.OG</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Founder will-quit risk</strong></td>
+          <td>High — most solo founders abandon</td>
+          <td>Low — this is a decade of lived frustration becoming a product; not a trend bet</td>
+        </tr>
+        <tr>
+          <td><strong>Market knowledge / fit risk</strong></td>
+          <td>High — many founders build for a market they don't understand</td>
+          <td>Very Low — Miles is the customer; built it because <em>he</em> needed it</td>
+        </tr>
+        <tr>
+          <td><strong>Network/distribution risk</strong></td>
+          <td>High — how do you reach filmmakers?</td>
+          <td>Low — CAA, Tribeca, O'Shea, Parker, Sampey, Instagram/TikTok content engine already built</td>
+        </tr>
+        <tr>
+          <td><strong>Product validation risk</strong></td>
+          <td>High — does anyone want this?</td>
+          <td>Low — the product fills a gap Miles identified from direct professional experience</td>
+        </tr>
+        <tr>
+          <td><strong>Execution risk</strong></td>
+          <td>Moderate — can they build it?</td>
+          <td>Low — platform is <strong>live</strong>, launching April 1, 2026</td>
+        </tr>
+        <tr>
+          <td><strong>Financial model risk</strong></td>
+          <td>Moderate — will anyone pay?</td>
+          <td>Moderate — SaaS traction at real MRR is still unproven</td>
+        </tr>
+        <tr>
+          <td><strong>Competitive risk</strong></td>
+          <td>Moderate</td>
+          <td>Moderate — underserved niche, but no moat is guaranteed</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <blockquote>
+    <p><em>"This is still early-stage risk capital — you can lose it all, and that disclosure is real. But the founder risk profile here is materially different from a typical solo startup. The product exists, the market need was validated by direct professional experience, the network for distribution is institutional-grade, and this founder doesn't walk away — this tool is the culmination of a career. What you're actually betting on is SaaS revenue growth and timing, not whether Miles Hardy is the right person to build this."</em></p>
+  </blockquote>
+  <p>That's not softening the legal risk language — it's being more <em>precise</em> about what the residual risk actually is. The risk is commercial execution (converting a live product into recurring revenue), not founder fit, market fit, or build risk. That's a meaningfully smaller risk stack than average.</p>
+  <p>The disclosure still says "possible total loss." But the conversation around it is much stronger.</p>
+
+  <hr />
+
+  <!-- SECTION: Enhanced Terms for Investors -->
+  <h1>Proposal: Enhanced Terms for Investors — Fastest Close Path</h1>
+
+  <h2>Why this version closes faster</h2>
+  <p>The three sweeteners — <strong>7% interest, 25% discount, and the 1.25x floor</strong> — do specific psychological work with a film-industry audience:</p>
+  <ul>
+    <li><strong>7% interest</strong> removes the "I'm just giving Miles money and hoping" objection. Your money earns from the day you sign.</li>
+    <li><strong>25% discount</strong> (above the market standard of 20%) is the "early money gets the best price" principle — which everyone in film already knows from waterfall structures.</li>
+    <li><strong>1.25x floor</strong> is the closest thing to a film-style recoup protection you can offer in a startup note. It answers the question <em>"what if this never raises again?"</em> with something concrete rather than silence.</li>
+  </ul>
+
+  <h2>What the pro rata for all investors does</h2>
+  <p>Standard practice is to reserve pro rata rights for large checks only. Offering it to <strong>all</strong> Founders' Circle investors — regardless of check size — signals that you're treating early believers as genuine partners, not as a fundraising ATM. In a community where relationships are currency, that lands differently than a standard term sheet.</p>
+
+  <h2>One practical note</h2>
+  <p>Before presenting the 1.25x floor to any investor, confirm with your startup attorney that it's structured correctly — specifically whether it's a liquidation preference on the note, a separate covenant, or built into the change-of-control provision. The language matters legally even if the concept is simple.</p>
+
+  <hr />
+
+  <!-- FOOTNOTES / REFERENCES -->
+  <div class="footnotes">
+    <h4>References &amp; Sources</h4>
+    <ul class="fn-list">
+      <li>YC SAFE Documents — <a href="https://www.ycombinator.com/documents" target="_blank">ycombinator.com/documents</a></li>
+      <li>Securities Law &amp; Friends/Family — <a href="https://www.jacksonkelly.com/the-legal-brief/theres-no-such-thing-as-friends-and-family-under-the-securities-laws/" target="_blank">jacksonkelly.com</a></li>
+      <li>SEC Reg D Rule 506(b) — <a href="https://www.sec.gov/resources-small-businesses/exempt-offerings/private-placements-rule-506b" target="_blank">sec.gov</a></li>
+      <li>Form D Filing Requirements — <a href="https://www.sec.gov/resources-small-businesses/exempt-offerings/filing-form-d-notice" target="_blank">sec.gov</a></li>
+      <li>Cooley GO — Series Seed Notes — <a href="https://www.cooleygo.com/documents/series-seed-notes-financing-package/" target="_blank">cooleygo.com</a></li>
+      <li>Cooley GO — Convertible Debt — <a href="https://www.cooleygo.com/convertible-debt/" target="_blank">cooleygo.com</a></li>
+      <li>Carta — State of Pre-Seed Q2 2025 — <a href="https://carta.com/data/state-of-pre-seed-q2-2025/" target="_blank">carta.com</a></li>
+      <li>IRS AFR (March 2026) — <a href="https://www.eidebailly.com/insights/blogs/2026/2/202603-afr" target="_blank">eidebailly.com</a></li>
+      <li>Silicon Hills Lawyer — F&amp;F SAFE Template — <a href="https://siliconhillslawyer.com/2021/08/24/friends-family-ff-safe-template/" target="_blank">siliconhillslawyer.com</a></li>
+      <li>Cooley GO — Convertible Note FAQ — <a href="https://www.cooleygo.com/frequently-asked-questions-convertible-debt/" target="_blank">cooleygo.com</a></li>
+      <li>Carta — Pre-Seed 2025 — <a href="https://carta.com/data/state-of-pre-seed-2025/" target="_blank">carta.com</a></li>
+      <li>Cooley GO — Understanding Valuation Cap — <a href="https://www.cooleygo.com/understanding-the-valuation-cap/" target="_blank">cooleygo.com</a></li>
+      <li>Gesmer — SAFE vs Convertible Note — <a href="https://gesmer.com/publications/safe-vs-convertible-note/" target="_blank">gesmer.com</a></li>
+      <li>IRS Applicable Federal Rates — <a href="https://www.irs.gov/applicable-federal-rates" target="_blank">irs.gov</a></li>
+      <li>Certuity — Intrafamily Loans 2026 — <a href="https://certuity.com/insights/intrafamily-loans-in-2026/" target="_blank">certuity.com</a></li>
+    </ul>
+  </div>
+
+  <div class="divider-ornament">⁂</div>
+
+  <p style="text-align:center;font-size:12px;color:var(--text-muted);margin-top:16px;">
+    FILMMAKER.OG &mdash; Internal Document &mdash; Confidential &mdash; Not for Distribution
+  </p>
+
+</div>
+
+<script>
+  document.getElementById('pw-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') checkPassword();
+  });
+
+  function checkPassword() {
+    var val = document.getElementById('pw-input').value;
+    var err = document.getElementById('pw-error');
+    var inp = document.getElementById('pw-input');
+
+    if (val === 'geauxtigers247') {
+      document.getElementById('pw-screen').style.display = 'none';
+      document.getElementById('doc').style.display = 'block';
+      window.scrollTo(0, 0);
+    } else {
+      err.style.display = 'block';
+      inp.classList.add('error');
+      inp.value = '';
+      inp.focus();
+      setTimeout(function() {
+        inp.classList.remove('error');
+      }, 1200);
+    }
+  }
+</script>
+</body>
+</html>
