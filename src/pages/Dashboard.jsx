@@ -552,7 +552,7 @@ export default function Dashboard() {
           <div style={{fontFamily:F.mono,fontSize:"12px",color:T.gold,letterSpacing:"4px",opacity:0.3,marginBottom:"20px"}}>FILMMAKER.OG</div>
           <div style={{width:"60px",height:"1px",background:T.goldLine,margin:"0 auto 24px"}}/>
           <div style={{fontFamily:F.display,fontSize:"26px",color:T.cw50,marginBottom:"14px"}}>BUILD YOUR MODEL TO UNLOCK</div>
-          <div style={{fontFamily:F.body,fontSize:"14px",color:T.w65,marginBottom:"28px",maxWidth:"400px",margin:"0 auto 28px"}}>{EMPTY_DESCS[tid]||"Complete the 4-step setup wizard."}</div>
+          <div style={{fontFamily:F.body,fontSize:"14px",color:T.w65,marginBottom:"28px",maxWidth:"400px",margin:"0 auto 28px"}}>{EMPTY_DESCS[tid]||"Complete the 5-step setup wizard."}</div>
           <button onClick={()=>switchTab(tabIdx("setup"))} style={{padding:"12px 28px",background:"rgba(212,175,55,0.04)",border:`1px solid ${T.goldLine}`,borderRadius:"10px",fontFamily:F.display,fontSize:"14px",letterSpacing:"2px",color:T.goldPrimary,cursor:"pointer"}}>GO TO SETUP →</button>
         </div>}
 

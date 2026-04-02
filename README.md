@@ -6,7 +6,7 @@ Free film budget calculator and recoupment waterfall simulator for independent p
 
 ## What It Does
 
-- **Interactive Calculator** — 4-step input wizard (Project, Budget, Capital Stack, Deal Terms) with live calculations
+- **Interactive Calculator** — 5-step wizard (Project, Budget, Capital Stack, Deal Terms, Waterfall) with live calculations
 - **Cinematic Output** — Cold open reveal, revenue donut, margin ruler, per-dollar breakdown, animated waterfall cascade
 - **Free PDF Export** — 5-page branded financial analysis document, no paywall
 - **10-Tier Waterfall** — Visualize exactly who gets paid first, from distribution fees through producer profit
