@@ -1,7 +1,7 @@
 {
   "name": "FILMMAKER.OG",
   "short_name": "film.og",
-  "description": "Free film budget calculator and recoupment waterfall simulator. See where every dollar goes.",
+  "description": "Institutional film finance for indie producers. Model your capital stack, waterfall, and investor returns.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#000000",

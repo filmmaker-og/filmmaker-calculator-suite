@@ -6,7 +6,7 @@
 export const getShareUrl = () => window.location.origin;
 
 export const SHARE_TEXT =
-  "Before you sign a deal, see exactly who gets paid and what's left for you. Free film finance tool — no account required.";
+  "Before you sign a deal, see exactly who gets paid and what's left for you. Institutional film finance for indie producers — no account required.";
 
 export const SHARE_TITLE =
   "FILMMAKER.OG — See Where Every Dollar Goes";
