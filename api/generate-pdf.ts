@@ -19,6 +19,31 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
+    // AUTH CHECK: Require user authentication
+    const supabaseAuthUrl =
+      process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
+    const supabaseAuthKey =
+      process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_URL
+        ? process.env.VITE_SUPABASE_ANON_KEY
+        : "";
+
+    // Verify the requesting user is authenticated
+    const authHeader = req.headers.authorization || req.headers.Authorization;
+    if (!authHeader) {
+      return res.status(401).json({ error: "Authentication required" });
+    }
+
+    const { createClient: createAuthClient } = await import("@supabase/supabase-js");
+    const authClient = createAuthClient(supabaseAuthUrl, supabaseAuthKey);
+    const { data: { user } } = await authClient.auth.getUser(
+      authHeader.replace("Bearer ", "")
+    );
+
+    if (!user) {
+      return res.status(401).json({ error: "Invalid or expired session" });
+    }
+
+  try {
     const { createClient } = await import("@supabase/supabase-js");
     const { generatePdfHtml } = await import("./_pdf-template.js");
     const chromium = (await import("@sparticuz/chromium")).default;
@@ -42,6 +67,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       .from("waterfall_snapshots")
       .select("*")
       .eq("id", id)
+      // Verify the authenticated user owns this snapshot
+      .eq("user_email", user.email)
       .single();
 
     if (dbError || !snapshot) {

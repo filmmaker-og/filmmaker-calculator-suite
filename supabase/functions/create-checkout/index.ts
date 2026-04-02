@@ -2,10 +2,45 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@18.5.0";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.4";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
-};
+const ALLOWED_ORIGINS = ["https://filmmakerog.com", "https://www.filmmakerog.com"];
+
+function getCorsHeaders(req: Request) {
+  const origin = req.headers.get("origin") || "";
+  if (ALLOWED_ORIGINS.includes(origin)) {
+    return {
+      "Access-Control-Allow-Origin": origin,
+      "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+    };
+  }
+  return {
+    "Access-Control-Allow-Origin": ALLOWED_ORIGINS[0],
+    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  };
+}
+
+// Rate limiting
+const rateLimitMap = new Map<string, number[]>();
+const RATE_LIMIT_WINDOW_MS = 60_000;
+const RATE_LIMIT_MAX_REQUESTS = 5;
+
+function checkRateLimit(ip: string): boolean {
+  const now = Date.now();
+  const window = rateLimitMap.get(ip) || [];
+  const recent = window.filter(t => now - t < RATE_LIMIT_WINDOW_MS);
+  if (recent.length >= RATE_LIMIT_MAX_REQUESTS) return false;
+  recent.push(now);
+  rateLimitMap.set(ip, recent);
+  return true;
+}
+
+setInterval(() => {
+  const now = Date.now();
+  for (const [k, ts] of rateLimitMap.entries()) {
+    const recent = ts.filter(t => now - t < RATE_LIMIT_WINDOW_MS);
+    if (recent.length === 0) rateLimitMap.delete(k);
+    else rateLimitMap.set(k, recent);
+  }
+}, 5 * 60 * 1000);
 
 // Product configuration
 const PRODUCTS: Record<string, { name: string; price: number }> = {
@@ -43,7 +78,15 @@ const PRODUCTS: Record<string, { name: string; price: number }> = {
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
+    return new Response(null, { headers: getCorsHeaders(req) });
+  }
+
+  const clientIp = req.headers.get("cf-connecting-ip") || req.headers.get("x-forwarded-for") || "unknown";
+  if (!checkRateLimit(clientIp)) {
+    return new Response(
+      JSON.stringify({ error: "Rate limit exceeded" }),
+      { status: 429, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" } }
+    );
   }
 
   try {
@@ -156,13 +199,13 @@ serve(async (req) => {
     });
 
     return new Response(JSON.stringify({ url: session.url }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
       status: 200,
     });
   } catch (error) {
     console.error("Checkout error:", error);
-    return new Response(JSON.stringify({ error: (error as Error).message }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    return new Response(JSON.stringify({ error: "Checkout failed. Please try again." }), {
+      headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
       status: 500,
     });
   }

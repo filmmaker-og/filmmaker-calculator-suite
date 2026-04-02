@@ -92,7 +92,7 @@ Deno.serve(async (req: Request) => {
     });
   } catch (error) {
     console.error('Error syncing lead to Loops:', error);
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: 'Webhook processing failed' }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
