@@ -24,8 +24,9 @@ const FeesInfo = lazy(() => import("./pages/FeesInfo"));
 const Resources = lazy(() => import("./pages/Resources"));
 const Auth = lazy(() => import("./pages/Auth"));
 const Calculator = lazy(() => import("./pages/Calculator"));
-const Store = lazy(() => import("./pages/Store"));
-const StorePackage = lazy(() => import("./pages/StorePackage"));
+const Pricing = lazy(() => import("./pages/Pricing"));
+const Signup = lazy(() => import("./pages/Signup"));
+const Login = lazy(() => import("./pages/Login"));
 const BuildYourPlan = lazy(() => import("./pages/BuildYourPlan"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const NotFound = lazy(() => import("./pages/NotFound"));
@@ -73,8 +74,11 @@ const AppShell = () => {
           <Route path="/glossary" element={<Navigate to="/resources?tab=terms" replace />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/calculator" element={<Calculator />} />
-          <Route path="/store" element={<Store />} />
-          <Route path="/store/:slug" element={<StorePackage />} />
+          <Route path="/pricing" element={<Pricing />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/store" element={<Navigate to="/pricing" replace />} />
+          <Route path="/store/:slug" element={<Navigate to="/pricing" replace />} />
           <Route path="/build-your-plan" element={<BuildYourPlan />} />
           <Route path="/dashboard" element={<Dashboard />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
