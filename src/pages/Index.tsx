@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useHaptics } from "@/hooks/use-haptics";
 import { useInView } from "@/hooks/useInView";
-import LeadCaptureModal from "@/components/LeadCaptureModal";
 
 import { Instagram } from "lucide-react";
 /*
@@ -16,27 +15,16 @@ import { Instagram } from "lucide-react";
     § 7. CLOSER       — "YOUR NEXT PITCH / IS COMING."
     FOOTER
 
-  CTA: All go through gatedNavigate → auth check → LeadCaptureModal if no session.
+  CTA: All navigate directly to /signup.
 */
 
 const Index = () => {
   const navigate = useNavigate();
   const haptics = useHaptics();
 
-  const [showLeadCapture, setShowLeadCapture] = useState(false);
-
-  const gatedNavigate = useCallback(async (destination: string) => {
-    const hasLead = localStorage.getItem('og_lead_email');
-    if (hasLead) {
-      navigate(destination);
-      return;
-    }
-    setShowLeadCapture(true);
-  }, [navigate]);
-
-  const handleCTA = async () => {
+  const handleCTA = () => {
     haptics.medium();
-    await gatedNavigate("/calculator");
+    navigate("/signup");
   };
 
   const prefersReducedMotion =
@@ -356,11 +344,6 @@ const Index = () => {
 
   return (
     <>
-      <LeadCaptureModal
-        isOpen={showLeadCapture}
-        onClose={() => setShowLeadCapture(false)}
-      />
-
       {/* ── Keyframe injection ── */}
       <style>{`
         @keyframes lp-shimmer {
@@ -424,6 +407,7 @@ const Index = () => {
                 <span style={{ position: "relative", zIndex: 1 }}>BUILD MY WATERFALL — FREE</span>
                 <div style={styles.ctaShimmer} />
               </button>
+              <p onClick={() => navigate("/pricing")} style={{ fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "#F9E076", textAlign: "center", marginTop: "12px", cursor: "pointer", letterSpacing: "0.02em" }} onMouseEnter={(e) => { e.currentTarget.style.textDecoration = "underline"; }} onMouseLeave={(e) => { e.currentTarget.style.textDecoration = "none"; }}>See Pricing →</p>
             </div>
           </div>
 
@@ -953,6 +937,7 @@ const Index = () => {
               <span style={{ position: "relative", zIndex: 1 }}>BUILD MY WATERFALL</span>
               <div style={styles.ctaShimmer} />
             </button>
+            <p onClick={() => navigate("/pricing")} style={{ fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "#F9E076", textAlign: "center", marginTop: "12px", cursor: "pointer", letterSpacing: "0.02em" }} onMouseEnter={(e) => { e.currentTarget.style.textDecoration = "underline"; }} onMouseLeave={(e) => { e.currentTarget.style.textDecoration = "none"; }}>See Pricing →</p>
 
           </div>
           </div>
@@ -1240,6 +1225,7 @@ const Index = () => {
               <span style={{ position: "relative", zIndex: 1 }}>BUILD MY WATERFALL — FREE</span>
               <div style={styles.ctaShimmer} />
             </button>
+            <p onClick={() => navigate("/pricing")} style={{ fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "#F9E076", textAlign: "center", marginTop: "12px", cursor: "pointer", letterSpacing: "0.02em" }} onMouseEnter={(e) => { e.currentTarget.style.textDecoration = "underline"; }} onMouseLeave={(e) => { e.currentTarget.style.textDecoration = "none"; }}>See Pricing →</p>
           </div>
         </section>
 
@@ -1265,11 +1251,11 @@ const Index = () => {
             </a>
           </div>
           <div style={styles.footerNav}>
-            <span onClick={() => gatedNavigate("/calculator")} style={styles.footerNavLink} onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.60)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.50)"; }}>Calculator</span>
+            <span onClick={() => navigate("/calculator")} style={styles.footerNavLink} onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.60)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.50)"; }}>Calculator</span>
             <span style={{ color: "rgba(212,175,55,0.25)", fontSize: "14px" }}>·</span>
-            <span onClick={() => gatedNavigate("/store")} style={styles.footerNavLink} onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.60)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.50)"; }}>Shop</span>
+            <span onClick={() => navigate("/pricing")} style={styles.footerNavLink} onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.60)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.50)"; }}>Pricing</span>
             <span style={{ color: "rgba(212,175,55,0.25)", fontSize: "14px" }}>·</span>
-            <span onClick={() => gatedNavigate("/resources")} style={styles.footerNavLink} onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.60)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.50)"; }}>Resources</span>
+            <span onClick={() => navigate("/resources")} style={styles.footerNavLink} onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.60)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(212,175,55,0.50)"; }}>Resources</span>
           </div>
           <p style={styles.footerText}>
             For educational and informational purposes only. Not legal, tax, or investment advice. Consult a qualified entertainment attorney before making financing decisions.
