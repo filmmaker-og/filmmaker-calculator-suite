@@ -995,12 +995,12 @@
   }
 
   input[type="range"].slider-salesfee::-webkit-slider-thumb {
-    background: #DC2626 !important;
-    box-shadow: 0 0 8px rgba(220,38,38,0.45) !important;
+    background: #C84040 !important;
+    box-shadow: 0 0 8px rgba(200,64,64,0.45) !important;
   }
   input[type="range"].slider-salesfee::-moz-range-thumb {
-    background: #DC2626 !important;
-    box-shadow: 0 0 8px rgba(220,38,38,0.45) !important;
+    background: #C84040 !important;
+    box-shadow: 0 0 8px rgba(200,64,64,0.45) !important;
   }
 
   /* ═══════════════════════════════════════════════════════════════════
@@ -1011,7 +1011,7 @@
   }
   @media (hover: hover) {
     .cta-gold-btn:hover {
-      background: #FBE88A !important;
+      background: #F9E076 !important;
     }
   }
 

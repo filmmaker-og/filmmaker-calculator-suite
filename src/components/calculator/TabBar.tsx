@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { DollarSign, Layers, Handshake, ArrowDownUp, ClipboardList } from "lucide-react";
 import { useHaptics } from "@/hooks/use-haptics";
+import { GOLD, gold, white } from "@/lib/tokens";
 
 export type TabId = 'budget' | 'stack' | 'deal' | 'waterfall' | 'project';
 
@@ -62,7 +63,7 @@ const s: Record<string, React.CSSProperties> = {
     paddingBottom: "6px",
   },
   tabActive: {
-    color: "#D4AF37",
+    color: GOLD,
   },
   tabCompleted: {
     color: "rgba(255,255,255,0.65)",
@@ -86,7 +87,7 @@ const s: Record<string, React.CSSProperties> = {
     left: "20%",
     right: "20%",
     height: "2px",
-    background: "linear-gradient(90deg, rgba(212,175,55,0.50), #D4AF37, rgba(212,175,55,0.50))",
+    background: `linear-gradient(90deg, ${gold(0.50)}, ${GOLD}, ${gold(0.50)})`,
     borderRadius: "1px",
     transition: "all 0.3s",
   },

@@ -173,7 +173,7 @@ const WaterfallTab = ({ result: initialResult, inputs: initialInputs, project, g
             </p>
 
             <p style={{
-              fontSize: "11px",
+              fontSize: "13px",
               color: "rgba(255,255,255,0.35)",
               maxWidth: "280px",
               margin: "0 auto 24px",
@@ -369,7 +369,7 @@ const WaterfallTab = ({ result: initialResult, inputs: initialInputs, project, g
               display: "block",
               padding: "16px",
               textAlign: "center",
-              fontSize: "11px",
+              fontSize: "13px",
               letterSpacing: "0.08em",
               color: "rgba(255,255,255,0.55)",
             }}

@@ -1,5 +1,5 @@
 import React from "react";
-import { warmWhite } from "@/lib/tokens";
+import { warmWhite, GOLD, gold, BG } from "@/lib/tokens";
 import {
   Tooltip,
   TooltipContent,
@@ -60,7 +60,7 @@ export const GLOSSARY: Record<string, GlossaryTerm> = {
     title: "THE WATERFALL",
     description: "The strict priority order in which revenue flows from the box office to stakeholders.",
     details: (
-      <p>Money trickles down: Theaters → Distributor → Sales Agent → Lenders → Investors → Producers. <a href="/waterfall-info" style={{ color: "#D4AF37", textDecoration: "none" }}>See full breakdown</a>.</p>
+      <p>Money trickles down: Theaters → Distributor → Sales Agent → Lenders → Investors → Producers. <a href="/waterfall-info" style={{ color: GOLD, textDecoration: "none" }}>See full breakdown</a>.</p>
     ),
   },
   cam: {
@@ -139,11 +139,11 @@ const GlossaryTrigger = ({
         <TooltipContent
           side="top"
           className="max-w-[300px] p-4 shadow-xl z-50"
-          style={{ background: "#222226", border: "1px solid rgba(212,175,55,0.20)" }}
+          style={{ background: BG.elevated, border: `1px solid ${gold(0.20)}` }}
           sideOffset={5}
         >
           <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-            <h4 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "18px", letterSpacing: "0.05em", color: "#D4AF37" }}>
+            <h4 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "18px", letterSpacing: "0.05em", color: GOLD }}>
               {title}
             </h4>
             <p style={{ fontSize: "14px", color: "warmWhite(0.90)", lineHeight: "1.5", fontFamily: "'Inter', sans-serif" }}>
