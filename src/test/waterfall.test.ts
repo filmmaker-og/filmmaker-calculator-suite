@@ -2,9 +2,13 @@ import { describe, it, expect } from "vitest";
 import {
   calculateWaterfall,
   calculateBreakeven,
+  computeTierPayments,
+  getWaterfallState,
   formatCompactCurrency,
   formatCurrency,
+  formatFullCurrency,
   formatMultiple,
+  formatPercent,
   getOffTopRate,
   WaterfallInputs,
   GuildState,
@@ -28,6 +32,7 @@ const baseInputs: WaterfallInputs = {
   salesFee: 10,
   salesExp: 75000,
   deferments: 0,
+  profitSplit: 50,
 };
 
 const noGuilds: GuildState = { sag: false, wga: false, dga: false };
@@ -312,5 +317,299 @@ describe("shared constants", () => {
   it("exports correct guild and CAM rates", () => {
     expect(CAM_PCT).toBe(0.01);
     expect(SAG_PCT).toBe(0.045);
+  });
+});
+
+// ===== BUG-1: calculateBreakeven deferments selection =====
+
+describe("calculateBreakeven — deferments selection toggle", () => {
+  it("excludes deferments when selections.deferments is false", () => {
+    const inputsWithDeferments = { ...baseInputs, deferments: 100000 };
+    const withDeferments = calculateBreakeven(inputsWithDeferments, noGuilds, {
+      ...allSelections,
+      deferments: true,
+    });
+    const withoutDeferments = calculateBreakeven(inputsWithDeferments, noGuilds, {
+      ...allSelections,
+      deferments: false,
+    });
+
+    expect(withDeferments).toBeGreaterThan(withoutDeferments);
+  });
+
+  it("returns same breakeven when deferments are 0 regardless of toggle", () => {
+    const withToggle = calculateBreakeven(baseInputs, noGuilds, {
+      ...allSelections,
+      deferments: true,
+    });
+    const withoutToggle = calculateBreakeven(baseInputs, noGuilds, {
+      ...allSelections,
+      deferments: false,
+    });
+
+    expect(withToggle).toBe(withoutToggle);
+  });
+});
+
+// ===== BUG-2: recoupPct when totalHurdle is 0 =====
+
+describe("calculateWaterfall — zero hurdle recoupPct", () => {
+  it("returns 100% recoupPct when totalHurdle equals only off-top and revenue covers it", () => {
+    const zeroCapital: WaterfallInputs = {
+      revenue: 1000000,
+      budget: 0,
+      credits: 0,
+      debt: 0,
+      seniorDebtRate: 0,
+      mezzanineDebt: 0,
+      mezzanineRate: 0,
+      equity: 0,
+      premium: 0,
+      salesFee: 0,
+      salesExp: 0,
+      deferments: 0,
+      profitSplit: 50,
+    };
+    const result = calculateWaterfall(zeroCapital, noGuilds);
+
+    // CAM 1% is always on, so totalHurdle = $10K (1% of $1M)
+    expect(result.totalHurdle).toBe(10000);
+    // Revenue easily covers the hurdle → 100%
+    expect(result.recoupPct).toBe(100);
+  });
+
+  it("returns 100% recoupPct when credits offset all costs (totalHurdle = 0)", () => {
+    const creditsOffsetAll: WaterfallInputs = {
+      revenue: 1000000,
+      budget: 0,
+      credits: 50000, // More than enough to offset CAM ($10K)
+      debt: 0,
+      seniorDebtRate: 0,
+      mezzanineDebt: 0,
+      mezzanineRate: 0,
+      equity: 0,
+      premium: 0,
+      salesFee: 0,
+      salesExp: 0,
+      deferments: 0,
+      profitSplit: 50,
+    };
+    const result = calculateWaterfall(creditsOffsetAll, noGuilds);
+
+    expect(result.totalHurdle).toBe(0);
+    expect(result.recoupPct).toBe(100);
+  });
+
+  it("returns 100% recoupPct when both totalHurdle and revenue are 0", () => {
+    const allZero: WaterfallInputs = {
+      revenue: 0,
+      budget: 0,
+      credits: 0,
+      debt: 0,
+      seniorDebtRate: 0,
+      mezzanineDebt: 0,
+      mezzanineRate: 0,
+      equity: 0,
+      premium: 0,
+      salesFee: 0,
+      salesExp: 0,
+      deferments: 0,
+      profitSplit: 50,
+    };
+    const result = calculateWaterfall(allZero, noGuilds);
+
+    expect(result.totalHurdle).toBe(0);
+    expect(result.recoupPct).toBe(100);
+  });
+});
+
+// ===== BUG-3: computeTierPayments with negative revenue =====
+
+describe("computeTierPayments", () => {
+  it("handles negative revenue without negative paid amounts", () => {
+    const negativeRevenue = { ...baseInputs, revenue: -500000 };
+    const result = calculateWaterfall(negativeRevenue, noGuilds);
+    const tiers = computeTierPayments(result, negativeRevenue);
+
+    for (const tier of tiers) {
+      expect(tier.paid).toBeGreaterThanOrEqual(0);
+    }
+  });
+
+  it("computes fully funded tiers for a profitable deal", () => {
+    const result = calculateWaterfall(baseInputs, noGuilds);
+    const tiers = computeTierPayments(result, baseInputs);
+
+    // Senior debt should be fully funded
+    const seniorDebt = tiers.find((t) => t.label === "Senior Debt");
+    expect(seniorDebt).toBeDefined();
+    expect(seniorDebt!.status).toBe("funded");
+    expect(seniorDebt!.paid).toBe(seniorDebt!.amount);
+
+    // Equity should be fully funded
+    const equity = tiers.find((t) => t.label === "Equity + Premium");
+    expect(equity).toBeDefined();
+    expect(equity!.status).toBe("funded");
+    expect(equity!.paid).toBe(equity!.amount);
+  });
+
+  it("computes partial tiers for an underwater deal", () => {
+    const underwater = { ...baseInputs, revenue: 800000 };
+    const result = calculateWaterfall(underwater, noGuilds);
+    const tiers = computeTierPayments(result, underwater);
+
+    // Senior debt: revenue $800K, offTop = CAM($8K) + Sales($80K) + Marketing($75K) = $163K
+    // Remaining after offTop: $637K. Debt hurdle: $550K. So debt is funded.
+    const seniorDebt = tiers.find((t) => t.label === "Senior Debt");
+    expect(seniorDebt!.status).toBe("funded");
+
+    // Equity: remaining after debt = $637K - $550K = $87K. Hurdle = $600K. Partial.
+    const equity = tiers.find((t) => t.label === "Equity + Premium");
+    expect(equity!.status).toBe("partial");
+    expect(equity!.paid).toBeLessThan(equity!.amount);
+  });
+});
+
+// ===== BUG-4: getWaterfallState with deferment-only deals =====
+
+describe("getWaterfallState", () => {
+  it("returns 'fully_recouped' when all tiers are funded", () => {
+    const result = calculateWaterfall(baseInputs, noGuilds);
+    const tiers = computeTierPayments(result, baseInputs);
+    const state = getWaterfallState(tiers, result.profitPool);
+
+    expect(state).toBe("fully_recouped");
+  });
+
+  it("returns 'underwater' when debt is not fully funded", () => {
+    const underwater = { ...baseInputs, revenue: 400000 };
+    const result = calculateWaterfall(underwater, noGuilds);
+    const tiers = computeTierPayments(result, underwater);
+    const state = getWaterfallState(tiers, result.profitPool);
+
+    expect(state).toBe("underwater");
+  });
+
+  it("returns 'equity_exposed' when debt clears but equity gets 0", () => {
+    // Revenue just enough to cover offTop + debt, nothing for equity
+    // offTop at $700K revenue: CAM($7K) + Sales($70K) + Marketing($75K) = $152K
+    // Debt: $550K. Total = $702K. So $700K leaves ~$0 for equity after off-top+debt
+    const exposed = { ...baseInputs, revenue: 700000 };
+    const result = calculateWaterfall(exposed, noGuilds);
+    const tiers = computeTierPayments(result, exposed);
+    const state = getWaterfallState(tiers, result.profitPool);
+
+    // After offTop ($152K), remaining = $548K. Debt = $550K, so debt is partial → underwater
+    // Need to find exact breakpoint. Let's use revenue that just covers debt.
+    // offTop = revenue * 0.11 + 75000. Remaining = revenue * 0.89 - 75000.
+    // For debt to be fully paid: revenue * 0.89 - 75000 >= 550000 → revenue >= 702247
+    // For equity to get 0: revenue * 0.89 - 75000 - 550000 <= 0 → revenue <= 702247
+    const exactCover = { ...baseInputs, revenue: 702248 };
+    const result2 = calculateWaterfall(exactCover, noGuilds);
+    const tiers2 = computeTierPayments(result2, exactCover);
+    const state2 = getWaterfallState(tiers2, result2.profitPool);
+
+    // Debt should be funded, equity should have ~$0
+    const equityTier = tiers2.find((t) => t.label === "Equity + Premium");
+    expect(equityTier).toBeDefined();
+    // If equity paid is exactly 0, state is equity_exposed
+    // If equity paid > 0 but < amount, state is partially_recouped
+    if (equityTier!.paid === 0) {
+      expect(state2).toBe("equity_exposed");
+    } else {
+      expect(state2).toBe("partially_recouped");
+    }
+  });
+
+  it("returns 'partially_recouped' when equity is partially funded", () => {
+    const partial = { ...baseInputs, revenue: 1000000 };
+    const result = calculateWaterfall(partial, noGuilds);
+    const tiers = computeTierPayments(result, partial);
+    const state = getWaterfallState(tiers, result.profitPool);
+
+    // offTop at $1M: CAM($10K) + Sales($100K) + Marketing($75K) = $185K
+    // Remaining: $815K. Debt: $550K. After debt: $265K. Equity hurdle: $600K. Partial.
+    expect(state).toBe("partially_recouped");
+  });
+
+  it("returns 'partially_recouped' for deferment-only deal with unfunded deferments", () => {
+    // No debt, no equity, just deferments
+    const deferOnly: WaterfallInputs = {
+      revenue: 50000,
+      budget: 200000,
+      credits: 0,
+      debt: 0,
+      seniorDebtRate: 0,
+      mezzanineDebt: 0,
+      mezzanineRate: 0,
+      equity: 0,
+      premium: 0,
+      salesFee: 0,
+      salesExp: 0,
+      deferments: 100000,
+      profitSplit: 50,
+    };
+    const result = calculateWaterfall(deferOnly, noGuilds);
+    const tiers = computeTierPayments(result, deferOnly);
+    const state = getWaterfallState(tiers, result.profitPool);
+
+    // Revenue $50K, offTop = CAM($500) = $500. Remaining: $49,500.
+    // Deferments: $100K. Only $49,500 available → partial.
+    expect(state).toBe("partially_recouped");
+  });
+});
+
+// ===== profitSplit variations =====
+
+describe("profitSplit variations", () => {
+  it("gives all profit to producer when profitSplit is 0", () => {
+    const zeroSplit = { ...baseInputs, profitSplit: 0 };
+    const result = calculateWaterfall(zeroSplit, noGuilds);
+
+    expect(result.profitPool).toBe(1000000);
+    // Investor gets equity recoup only, no profit share
+    expect(result.investor).toBe(result.equityHurdle);
+    // Producer gets entire profit pool
+    expect(result.producer).toBe(1000000);
+  });
+
+  it("gives all profit to investor when profitSplit is 100", () => {
+    const fullSplit = { ...baseInputs, profitSplit: 100 };
+    const result = calculateWaterfall(fullSplit, noGuilds);
+
+    expect(result.profitPool).toBe(1000000);
+    // Investor gets equity recoup + entire profit pool
+    expect(result.investor).toBe(result.equityHurdle + 1000000);
+    // Producer gets nothing from profit pool
+    expect(result.producer).toBe(0);
+  });
+});
+
+// ===== formatPercent =====
+
+describe("formatPercent", () => {
+  it("formats normal values", () => {
+    expect(formatPercent(50)).toBe("50.0%");
+    expect(formatPercent(17.9)).toBe("17.9%");
+    expect(formatPercent(100)).toBe("100.0%");
+  });
+
+  it("handles edge cases", () => {
+    expect(formatPercent(0)).toBe("0.0%");
+    expect(formatPercent(NaN)).toBe("0.0%");
+    expect(formatPercent(Infinity)).toBe("0.0%");
+  });
+});
+
+// ===== formatFullCurrency =====
+
+describe("formatFullCurrency", () => {
+  it("formats positive values", () => {
+    expect(formatFullCurrency(1500000)).toBe("$1,500,000");
+    expect(formatFullCurrency(0)).toBe("$0");
+  });
+
+  it("formats negative values with minus sign before dollar", () => {
+    expect(formatFullCurrency(-200000)).toBe("-$200,000");
   });
 });

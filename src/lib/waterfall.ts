@@ -81,7 +81,7 @@ export function calculateBreakeven(inputs: WaterfallInputs, guilds: GuildState, 
 
   // Calculate fixed costs (not dependent on revenue)
   const marketingCap = Math.max(0, inputs.salesExp || 0);
-  const defermentsCost = Math.max(0, inputs.deferments || 0);
+  const defermentsCost = selections.deferments ? Math.max(0, inputs.deferments || 0) : 0;
   
   // Debt repayment
   const seniorDebtRepay = selections.seniorDebt 
@@ -162,7 +162,7 @@ export function calculateWaterfall(inputs: WaterfallInputs, guilds: GuildState):
   // 5. Distribution
   const profitPool = Math.max(0, revenue - totalHurdle);
   const recouped = Math.min(revenue, Math.max(0, totalHurdle));
-  const recoupPct = totalHurdle > 0 ? Math.min(100, (revenue / totalHurdle) * 100) : 0;
+  const recoupPct = totalHurdle > 0 ? Math.min(100, (revenue / totalHurdle) * 100) : (revenue >= 0 ? 100 : 0);
 
   const investorRecoup = Math.min(equityHurdle, Math.max(0, revenue - offTop - totalDebtHurdle));
   const splitPct = Math.max(0, Math.min(100, inputs.profitSplit ?? 50)) / 100;
@@ -213,7 +213,7 @@ import type { TierPayment, WaterfallState } from "./waterfall-types";
 
 export function computeTierPayments(result: WaterfallResult, inputs: WaterfallInputs): TierPayment[] {
   // Start with revenue after off-the-tops, then add back credits
-  let remaining = inputs.revenue - result.offTopTotal + result.creditsApplied;
+  let remaining = Math.max(0, inputs.revenue) - result.offTopTotal + result.creditsApplied;
   const tiers: TierPayment[] = [];
   let phase = 1;
 
@@ -282,6 +282,10 @@ export function getWaterfallState(tiers: TierPayment[], profitPool: number): Wat
 
   // PARTIALLY RECOUPED: debt clears, equity partial
   if (equityTier && equityTier.status === "partial") return "partially_recouped";
+
+  // PARTIALLY RECOUPED: deferments exist but not fully funded
+  const defermentTier = tiers.find((t) => t.label.includes("Deferment"));
+  if (defermentTier && defermentTier.status !== "funded") return "partially_recouped";
 
   // FULLY RECOUPED: all tiers funded
   return "fully_recouped";
