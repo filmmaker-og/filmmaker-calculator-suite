@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { X as CloseIcon, Home, Calculator, ShoppingBag, BarChart2, Mail, Instagram, Share2, Sparkles } from "lucide-react";
+import { X as CloseIcon, Home, Calculator, ShoppingBag, BarChart2, Mail, Share2, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { getShareUrl, SHARE_TEXT, SHARE_TITLE } from "@/lib/constants";
 import { useHaptics } from "@/hooks/use-haptics";
@@ -120,7 +120,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
           }
         `}</style>
 
-        {/* Purple atmospheric glow — pure purple, no gold contamination */}
+        {/* Atmospheric glow layer */}
         <div
           className="absolute top-0 left-0 right-0 pointer-events-none z-0"
           style={{
@@ -262,126 +262,6 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
             ))}
           </div>
 
-          {/* Follow — social links */}
-          <div>
-            <SectionLabel>Follow</SectionLabel>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "6px", marginBottom: "10px" }}>
-
-              {/* Instagram */}
-              <a
-                href="https://www.instagram.com/filmmaker.og"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Instagram"
-                onClick={() => haptics.light()}
-                onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.08)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.16) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 24px rgba(212,175,55,0.08), 0 0 12px rgba(212,175,55,0.08)"; }}
-                onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.08)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.12) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 20px rgba(212,175,55,0.08), 0 0 10px rgba(212,175,55,0.06)"; }}
-                onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.08)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.18) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 30px rgba(212,175,55,0.08), 0 0 14px rgba(212,175,55,0.10)"; }}
-                onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.08)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.12) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 20px rgba(212,175,55,0.08), 0 0 10px rgba(212,175,55,0.06)"; }}
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: "6px",
-                  padding: "10px 8px",
-                  background: "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.12) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)",
-                  border: "1px solid rgba(212,175,55,0.08)",
-                  borderRadius: "6px",
-                  boxShadow: "0 0 20px rgba(212,175,55,0.08), 0 0 10px rgba(212,175,55,0.06)",
-                  textDecoration: "none",
-                  cursor: "pointer",
-                  transition: "transform 0.15s ease, border-color 0.25s ease, background 0.25s ease",
-                }}
-              >
-                <Instagram size={18} style={{ color: "#D4AF37" }} />
-                <span style={{
-                  fontFamily: "'Bebas Neue', sans-serif",
-                  fontSize: "1.1rem",
-                  letterSpacing: "0.1em",
-                  color: "rgba(255,255,255,0.88)",
-                }}>Instagram</span>
-              </a>
-
-              {/* TikTok — custom SVG */}
-              <a
-                href="https://www.tiktok.com/@filmmaker.og"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="TikTok"
-                onClick={() => haptics.light()}
-                onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.08)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.16) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 24px rgba(212,175,55,0.08), 0 0 12px rgba(212,175,55,0.08)"; }}
-                onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.08)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.12) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 20px rgba(212,175,55,0.08), 0 0 10px rgba(212,175,55,0.06)"; }}
-                onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.08)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.18) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 30px rgba(212,175,55,0.08), 0 0 14px rgba(212,175,55,0.10)"; }}
-                onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.08)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.12) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 20px rgba(212,175,55,0.08), 0 0 10px rgba(212,175,55,0.06)"; }}
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: "6px",
-                  padding: "10px 8px",
-                  background: "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.12) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)",
-                  border: "1px solid rgba(212,175,55,0.08)",
-                  borderRadius: "6px",
-                  boxShadow: "0 0 20px rgba(212,175,55,0.08), 0 0 10px rgba(212,175,55,0.06)",
-                  textDecoration: "none",
-                  cursor: "pointer",
-                  transition: "transform 0.15s ease, border-color 0.25s ease, background 0.25s ease",
-                }}
-              >
-                <svg width={18} height={18} viewBox="0 0 24 24" fill="#D4AF37" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 0 0-.79-.05A6.34 6.34 0 0 0 3.15 15a6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V8.71a8.2 8.2 0 0 0 4.76 1.52v-3.4a4.85 4.85 0 0 1-1-.14z"/>
-                </svg>
-                <span style={{
-                  fontFamily: "'Bebas Neue', sans-serif",
-                  fontSize: "1.1rem",
-                  letterSpacing: "0.1em",
-                  color: "rgba(255,255,255,0.88)",
-                }}>TikTok</span>
-              </a>
-
-              {/* Facebook — custom SVG */}
-              <a
-                href="https://www.facebook.com/filmmaker.og"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Facebook"
-                onClick={() => haptics.light()}
-                onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.08)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.16) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 24px rgba(212,175,55,0.08), 0 0 12px rgba(212,175,55,0.08)"; }}
-                onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.08)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.12) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 20px rgba(212,175,55,0.08), 0 0 10px rgba(212,175,55,0.06)"; }}
-                onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.08)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.18) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 30px rgba(212,175,55,0.08), 0 0 14px rgba(212,175,55,0.10)"; }}
-                onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.08)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.12) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 20px rgba(212,175,55,0.08), 0 0 10px rgba(212,175,55,0.06)"; }}
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: "6px",
-                  padding: "10px 8px",
-                  background: "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.12) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)",
-                  border: "1px solid rgba(212,175,55,0.08)",
-                  borderRadius: "6px",
-                  boxShadow: "0 0 20px rgba(212,175,55,0.08), 0 0 10px rgba(212,175,55,0.06)",
-                  textDecoration: "none",
-                  cursor: "pointer",
-                  transition: "transform 0.15s ease, border-color 0.25s ease, background 0.25s ease",
-                }}
-              >
-                <svg width={18} height={18} viewBox="0 0 24 24" fill="#D4AF37" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
-                </svg>
-                <span style={{
-                  fontFamily: "'Bebas Neue', sans-serif",
-                  fontSize: "1.1rem",
-                  letterSpacing: "0.1em",
-                  color: "rgba(255,255,255,0.88)",
-                }}>Facebook</span>
-              </a>
-
-            </div>
-          </div>
-
           {/* Connect — home + email + share */}
           <div>
             <SectionLabel>Connect</SectionLabel>
@@ -498,7 +378,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
               fontSize: "11px",
               letterSpacing: "0.02em",
               lineHeight: 1.6,
-              color: "rgba(255,255,255,0.40)",
+              color: "rgba(255,255,255,0.55)",
               textAlign: "center",
             }}>
               For educational and informational purposes only. Not legal, tax, or investment advice.

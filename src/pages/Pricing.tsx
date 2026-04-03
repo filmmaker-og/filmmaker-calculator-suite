@@ -162,7 +162,7 @@ const Pricing = () => {
               letterSpacing: "0.06em",
               lineHeight: 1.05,
               margin: "0 0 24px",
-              textShadow: `0 0 30px ${gold(0.55)}, 0 0 80px ${gold(0.18)}`,
+              textShadow: `0 0 20px ${gold(0.25)}, 0 0 50px ${gold(0.10)}`,
             }}
           >
             LOCK IN $19/MO FOR LIFE

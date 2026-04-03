@@ -1130,7 +1130,7 @@ const Resources = () => {
         display: "flex",
         flexDirection: "column",
         gap: 16,
-        padding: "0 24px 120px",
+        padding: "0 24px 48px",
         maxWidth: 1000,
         margin: "0 auto",
       }}>
@@ -1182,16 +1182,16 @@ const Resources = () => {
           </a>
         </div>
         <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10, marginBottom: 16 }}>
-          <span onClick={() => window.location.href = "/"} style={{ fontFamily: "'Roboto Mono', monospace", fontSize: 12, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(212,175,55,0.35)", cursor: "pointer", transition: "color 0.2s ease" }}>Home</span>
+          <span onClick={() => window.location.href = "/"} style={{ fontFamily: "'Roboto Mono', monospace", fontSize: 12, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(212,175,55,0.50)", cursor: "pointer", transition: "color 0.2s ease" }}>Home</span>
           <span style={{ color: "rgba(212,175,55,0.20)", fontSize: 12 }}>&middot;</span>
-          <span onClick={() => window.location.href = "/store"} style={{ fontFamily: "'Roboto Mono', monospace", fontSize: 12, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(212,175,55,0.35)", cursor: "pointer", transition: "color 0.2s ease" }}>Shop</span>
+          <span onClick={() => window.location.href = "/store"} style={{ fontFamily: "'Roboto Mono', monospace", fontSize: 12, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(212,175,55,0.50)", cursor: "pointer", transition: "color 0.2s ease" }}>Shop</span>
           <span style={{ color: "rgba(212,175,55,0.20)", fontSize: 12 }}>&middot;</span>
-          <span onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} style={{ fontFamily: "'Roboto Mono', monospace", fontSize: 12, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(212,175,55,0.35)", cursor: "pointer", transition: "color 0.2s ease" }}>Resources</span>
+          <span onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} style={{ fontFamily: "'Roboto Mono', monospace", fontSize: 12, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(212,175,55,0.50)", cursor: "pointer", transition: "color 0.2s ease" }}>Resources</span>
         </div>
         <p style={{
           fontFamily: "'Inter', sans-serif",
           fontSize: 14,
-          color: "rgba(255,255,255,0.48)",
+          color: "rgba(255,255,255,0.55)",
           textAlign: "center",
           lineHeight: 1.6,
           margin: 0,

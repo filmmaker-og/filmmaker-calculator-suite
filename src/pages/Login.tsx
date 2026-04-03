@@ -123,7 +123,7 @@ const Login = () => {
           style={{
             fontFamily: "'Inter', sans-serif",
             fontSize: "14px",
-            color: white(0.48),
+            color: white(0.65),
           }}
         >
           Don't have an account?{" "}

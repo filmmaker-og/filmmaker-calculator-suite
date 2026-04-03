@@ -1278,7 +1278,7 @@ const styles: Record<string, React.CSSProperties> = {
     position: "relative", overflow: "hidden",
     fontFamily: "'Bebas Neue', sans-serif", fontWeight: 700,
     textTransform: "uppercase", color: "#000",
-    background: "#F9E076", padding: "18px 0",
+    background: "linear-gradient(180deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.05) 40%, rgba(0,0,0,0.1) 100%), #F9E076", padding: "18px 0",
     letterSpacing: "0.12em", fontSize: "20px",
     borderRadius: "8px", border: "none", borderTop: "1px solid rgba(255,255,255,0.15)", borderBottom: "2px solid rgba(180,145,30,0.30)", cursor: "pointer",
     display: "block", width: "100%", textAlign: "center",

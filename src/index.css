@@ -701,7 +701,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--gold-cta);
+    background: linear-gradient(180deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.05) 40%, rgba(0,0,0,0.1) 100%), var(--gold-cta);
     border: none;
     color: #000000;
     font-family: 'Bebas Neue', sans-serif;
