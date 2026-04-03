@@ -864,7 +864,7 @@ const Resources = () => {
           color: "rgba(255,255,255,0.95)",
           marginBottom: 20,
         }}>
-          Editor&apos;s Choice
+          Featured
         </div>
         <div style={{
           display: "flex",
@@ -967,7 +967,7 @@ const Resources = () => {
                 fontWeight: 600,
                 boxShadow: "none",
               }}>
-                Editor&apos;s Choice
+                Featured
               </span>
               <span style={{
                 color: pinnedPrimaryHover ? "#D4AF37" : "rgba(255,255,255,0.35)",

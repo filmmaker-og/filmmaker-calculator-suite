@@ -184,7 +184,8 @@ const s: Record<string, React.CSSProperties> = {
   heroHint: {
     textAlign: "center" as const,
     marginTop: "14px",
-    fontSize: "11px",
+    fontSize: "12px",
+    fontFamily: "'Roboto Mono', monospace",
     color: "rgba(255,255,255,0.48)",
     lineHeight: 1.5,
   },
@@ -390,7 +391,8 @@ const s: Record<string, React.CSSProperties> = {
     overflow: "hidden",
   },
   discText: {
-    fontSize: "11px",
+    fontFamily: "'Roboto Mono', monospace",
+    fontSize: "12px",
     color: "rgba(255,255,255,0.48)",
     lineHeight: 1.5,
     position: "relative" as const,

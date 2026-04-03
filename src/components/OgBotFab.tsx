@@ -36,16 +36,17 @@ const OgBotFab = ({ onTap }: OgBotFabProps) => {
   return (
     <button
       onClick={() => { haptics.medium(); onTap?.(); }}
-      className="fixed z-[140] flex items-center justify-center active:scale-90 transition-all duration-300"
+      className="fixed z-[140] flex items-center justify-center active:scale-[0.97] transition-all duration-300"
       style={{
         bottom: onCalculator ? "calc(90px + env(safe-area-inset-bottom))" : "calc(36px + env(safe-area-inset-bottom))",
         right: "24px",
         width: "52px",
         height: "52px",
         borderRadius: "10px",
-        background: "linear-gradient(135deg, rgba(212,175,55,0.25) 0%, rgba(212,175,55,0.15) 100%)",
-        border: "1px solid rgba(212,175,55,0.25)",
-        boxShadow: "0 4px 16px rgba(212,175,55,0.30), 0 0 40px rgba(212,175,55,0.12)",
+        background: "#F9E076",
+        border: "none",
+        boxShadow: "0 0 20px rgba(249,224,118,0.25), 0 4px 16px rgba(0,0,0,0.40)",
+        animation: "cta-glow-pulse 4s ease-in-out infinite",
         opacity: hidden ? 0 : 1,
         pointerEvents: hidden ? "none" : "auto",
       }}
@@ -55,8 +56,7 @@ const OgBotFab = ({ onTap }: OgBotFabProps) => {
         style={{
           width: "28px",
           height: "28px",
-          color: "#D4AF37",
-          filter: "drop-shadow(0 0 6px rgba(212,175,55,0.40))",
+          color: "#000",
         }}
       />
     </button>

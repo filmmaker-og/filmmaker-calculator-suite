@@ -25,7 +25,7 @@ const Signup = () => {
           width: "100%",
           background: BG.elevated,
           border: `1px solid ${gold(0.12)}`,
-          borderRadius: "12px",
+          borderRadius: "10px",
           padding: "40px 32px 36px",
           textAlign: "center",
         }}

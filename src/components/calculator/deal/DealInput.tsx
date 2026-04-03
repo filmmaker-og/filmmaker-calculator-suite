@@ -206,7 +206,8 @@ const s: Record<string, React.CSSProperties> = {
   heroHint: {
     textAlign: "center" as const,
     marginTop: "14px",
-    fontSize: "11px",
+    fontSize: "12px",
+    fontFamily: "'Roboto Mono', monospace",
     color: "rgba(255,255,255,0.48)",
     lineHeight: 1.5,
   },
@@ -458,14 +459,14 @@ const s: Record<string, React.CSSProperties> = {
     fontSize: "14px",
     fontWeight: 500,
     color: "#fff",
-    background: "#0A0A0A",
-    border: "1px solid rgba(255,255,255,0.06)",
-    borderRadius: "4px",
+    background: "#1A1A1C",
+    border: "1px solid rgba(212,175,55,0.20)",
+    borderRadius: "8px",
     padding: "10px 12px",
     textAlign: "right" as const,
     width: "120px",
     outline: "none",
-    transition: "border-color 0.2s",
+    transition: "border-color 0.2s, box-shadow 0.2s",
     minHeight: "44px",
   },
   levSub: {
@@ -808,8 +809,8 @@ const DealInput = ({ inputs, guilds, selections, onUpdateInput, onNext, genre }:
                 onChange={handleMktInputChange}
                 placeholder="75,000"
                 style={s.levInput}
-                onFocus={(e) => { e.target.style.borderColor = "rgba(212,175,55,0.45)"; e.target.style.boxShadow = "0 0 16px rgba(212,175,55,0.12)"; }}
-                onBlur={(e) => { e.target.style.borderColor = "rgba(255,255,255,0.06)"; e.target.style.boxShadow = "none"; }}
+                onFocus={(e) => { e.target.style.borderColor = "rgba(212,175,55,0.45)"; e.target.style.boxShadow = "0 0 12px rgba(212,175,55,0.30)"; }}
+                onBlur={(e) => { e.target.style.borderColor = "rgba(212,175,55,0.20)"; e.target.style.boxShadow = "none"; }}
               />
             </div>
           </div>

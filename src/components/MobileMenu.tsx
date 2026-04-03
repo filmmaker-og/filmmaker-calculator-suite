@@ -65,8 +65,8 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
     <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
       <div style={{ flex: 1, height: "1px", background: "rgba(212,175,55,0.25)" }} />
       <span style={{
-        fontFamily: "'Roboto Mono', monospace",
-        fontSize: "14px",
+        fontFamily: "'Bebas Neue', sans-serif",
+        fontSize: "16px",
         letterSpacing: "0.18em",
         textTransform: "uppercase" as const,
         color: "#D4AF37",
@@ -120,24 +120,6 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
           }
         `}</style>
 
-        {/* Purple atmospheric glow — pure purple, no gold contamination */}
-        <div
-          className="absolute top-0 left-0 right-0 pointer-events-none z-0"
-          style={{
-            height: "180px",
-            background: "transparent",
-            borderRadius: "12px 12px 0 0",
-          }}
-        />
-
-        {/* Purple atmospheric glow — bottom canopy */}
-        <div
-          className="absolute bottom-0 left-0 right-0 pointer-events-none z-0"
-          style={{
-            height: "200px",
-            background: "transparent",
-          }}
-        />
 
         {/* Drag handle */}
         <div className="flex justify-center pt-3 pb-2">
@@ -274,10 +256,10 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                 rel="noopener noreferrer"
                 aria-label="Instagram"
                 onClick={() => haptics.light()}
-                onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.08)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.16) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 24px rgba(212,175,55,0.08), 0 0 12px rgba(212,175,55,0.08)"; }}
-                onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.08)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.12) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 20px rgba(212,175,55,0.08), 0 0 10px rgba(212,175,55,0.06)"; }}
-                onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.08)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.18) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 30px rgba(212,175,55,0.08), 0 0 14px rgba(212,175,55,0.10)"; }}
-                onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.08)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.12) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 20px rgba(212,175,55,0.08), 0 0 10px rgba(212,175,55,0.06)"; }}
+                onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.16) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 24px rgba(212,175,55,0.08), 0 0 12px rgba(212,175,55,0.08)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.12) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 20px rgba(212,175,55,0.08), 0 0 10px rgba(212,175,55,0.06)"; }}
+                onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.18) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 30px rgba(212,175,55,0.08), 0 0 14px rgba(212,175,55,0.10)"; }}
+                onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.12) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 20px rgba(212,175,55,0.08), 0 0 10px rgba(212,175,55,0.06)"; }}
                 style={{
                   display: "flex",
                   flexDirection: "column",
@@ -286,8 +268,8 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   gap: "6px",
                   padding: "10px 8px",
                   background: "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.12) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)",
-                  border: "1px solid rgba(212,175,55,0.08)",
-                  borderRadius: "6px",
+                  border: "1px solid rgba(212,175,55,0.20)",
+                  borderRadius: "8px",
                   boxShadow: "0 0 20px rgba(212,175,55,0.08), 0 0 10px rgba(212,175,55,0.06)",
                   textDecoration: "none",
                   cursor: "pointer",
@@ -310,10 +292,10 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                 rel="noopener noreferrer"
                 aria-label="TikTok"
                 onClick={() => haptics.light()}
-                onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.08)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.16) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 24px rgba(212,175,55,0.08), 0 0 12px rgba(212,175,55,0.08)"; }}
-                onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.08)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.12) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 20px rgba(212,175,55,0.08), 0 0 10px rgba(212,175,55,0.06)"; }}
-                onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.08)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.18) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 30px rgba(212,175,55,0.08), 0 0 14px rgba(212,175,55,0.10)"; }}
-                onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.08)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.12) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 20px rgba(212,175,55,0.08), 0 0 10px rgba(212,175,55,0.06)"; }}
+                onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.16) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 24px rgba(212,175,55,0.08), 0 0 12px rgba(212,175,55,0.08)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.12) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 20px rgba(212,175,55,0.08), 0 0 10px rgba(212,175,55,0.06)"; }}
+                onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.18) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 30px rgba(212,175,55,0.08), 0 0 14px rgba(212,175,55,0.10)"; }}
+                onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.12) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 20px rgba(212,175,55,0.08), 0 0 10px rgba(212,175,55,0.06)"; }}
                 style={{
                   display: "flex",
                   flexDirection: "column",
@@ -322,8 +304,8 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   gap: "6px",
                   padding: "10px 8px",
                   background: "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.12) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)",
-                  border: "1px solid rgba(212,175,55,0.08)",
-                  borderRadius: "6px",
+                  border: "1px solid rgba(212,175,55,0.20)",
+                  borderRadius: "8px",
                   boxShadow: "0 0 20px rgba(212,175,55,0.08), 0 0 10px rgba(212,175,55,0.06)",
                   textDecoration: "none",
                   cursor: "pointer",
@@ -348,10 +330,10 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                 rel="noopener noreferrer"
                 aria-label="Facebook"
                 onClick={() => haptics.light()}
-                onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.08)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.16) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 24px rgba(212,175,55,0.08), 0 0 12px rgba(212,175,55,0.08)"; }}
-                onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.08)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.12) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 20px rgba(212,175,55,0.08), 0 0 10px rgba(212,175,55,0.06)"; }}
-                onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.08)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.18) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 30px rgba(212,175,55,0.08), 0 0 14px rgba(212,175,55,0.10)"; }}
-                onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.08)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.12) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 20px rgba(212,175,55,0.08), 0 0 10px rgba(212,175,55,0.06)"; }}
+                onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.16) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 24px rgba(212,175,55,0.08), 0 0 12px rgba(212,175,55,0.08)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.12) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 20px rgba(212,175,55,0.08), 0 0 10px rgba(212,175,55,0.06)"; }}
+                onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.18) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 30px rgba(212,175,55,0.08), 0 0 14px rgba(212,175,55,0.10)"; }}
+                onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.12) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 20px rgba(212,175,55,0.08), 0 0 10px rgba(212,175,55,0.06)"; }}
                 style={{
                   display: "flex",
                   flexDirection: "column",
@@ -360,8 +342,8 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   gap: "6px",
                   padding: "10px 8px",
                   background: "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.12) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)",
-                  border: "1px solid rgba(212,175,55,0.08)",
-                  borderRadius: "6px",
+                  border: "1px solid rgba(212,175,55,0.20)",
+                  borderRadius: "8px",
                   boxShadow: "0 0 20px rgba(212,175,55,0.08), 0 0 10px rgba(212,175,55,0.06)",
                   textDecoration: "none",
                   cursor: "pointer",
@@ -391,10 +373,10 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
               <button
                 aria-label="Home"
                 onClick={() => handleNavigate("/")}
-                onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.08)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.16) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 24px rgba(212,175,55,0.08), 0 0 12px rgba(212,175,55,0.08)"; }}
-                onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.08)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.12) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 20px rgba(212,175,55,0.08), 0 0 10px rgba(212,175,55,0.06)"; }}
-                onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.08)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.18) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 30px rgba(212,175,55,0.08), 0 0 14px rgba(212,175,55,0.10)"; }}
-                onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.08)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.12) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 20px rgba(212,175,55,0.08), 0 0 10px rgba(212,175,55,0.06)"; }}
+                onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.16) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 24px rgba(212,175,55,0.08), 0 0 12px rgba(212,175,55,0.08)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.12) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 20px rgba(212,175,55,0.08), 0 0 10px rgba(212,175,55,0.06)"; }}
+                onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.18) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 30px rgba(212,175,55,0.08), 0 0 14px rgba(212,175,55,0.10)"; }}
+                onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.12) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 20px rgba(212,175,55,0.08), 0 0 10px rgba(212,175,55,0.06)"; }}
                 style={{
                   display: "flex",
                   flexDirection: "column",
@@ -403,8 +385,8 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   gap: "6px",
                   padding: "10px 8px",
                   background: "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.12) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)",
-                  border: "1px solid rgba(212,175,55,0.08)",
-                  borderRadius: "6px",
+                  border: "1px solid rgba(212,175,55,0.20)",
+                  borderRadius: "8px",
                   boxShadow: "0 0 20px rgba(212,175,55,0.08), 0 0 10px rgba(212,175,55,0.06)",
                   cursor: "pointer",
                   transition: "transform 0.15s ease, border-color 0.25s ease, background 0.25s ease",
@@ -425,10 +407,10 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                 aria-label="Email"
                 href="mailto:og@filmmakerog.com"
                 onClick={() => haptics.light()}
-                onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.08)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.16) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 24px rgba(212,175,55,0.08), 0 0 12px rgba(212,175,55,0.08)"; }}
-                onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.08)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.12) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 20px rgba(212,175,55,0.08), 0 0 10px rgba(212,175,55,0.06)"; }}
-                onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.08)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.18) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 30px rgba(212,175,55,0.08), 0 0 14px rgba(212,175,55,0.10)"; }}
-                onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.08)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.12) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 20px rgba(212,175,55,0.08), 0 0 10px rgba(212,175,55,0.06)"; }}
+                onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.16) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 24px rgba(212,175,55,0.08), 0 0 12px rgba(212,175,55,0.08)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.12) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 20px rgba(212,175,55,0.08), 0 0 10px rgba(212,175,55,0.06)"; }}
+                onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.18) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 30px rgba(212,175,55,0.08), 0 0 14px rgba(212,175,55,0.10)"; }}
+                onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.12) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 20px rgba(212,175,55,0.08), 0 0 10px rgba(212,175,55,0.06)"; }}
                 style={{
                   display: "flex",
                   flexDirection: "column",
@@ -437,8 +419,8 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   gap: "6px",
                   padding: "10px 8px",
                   background: "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.12) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)",
-                  border: "1px solid rgba(212,175,55,0.08)",
-                  borderRadius: "6px",
+                  border: "1px solid rgba(212,175,55,0.20)",
+                  borderRadius: "8px",
                   boxShadow: "0 0 20px rgba(212,175,55,0.08), 0 0 10px rgba(212,175,55,0.06)",
                   textDecoration: "none",
                   cursor: "pointer",
@@ -459,10 +441,10 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
               <button
                 aria-label="Share"
                 onClick={handleShare}
-                onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.08)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.16) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 24px rgba(212,175,55,0.08), 0 0 12px rgba(212,175,55,0.08)"; }}
-                onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.08)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.12) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 20px rgba(212,175,55,0.08), 0 0 10px rgba(212,175,55,0.06)"; }}
-                onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.08)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.18) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 30px rgba(212,175,55,0.08), 0 0 14px rgba(212,175,55,0.10)"; }}
-                onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.08)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.12) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 20px rgba(212,175,55,0.08), 0 0 10px rgba(212,175,55,0.06)"; }}
+                onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.16) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 24px rgba(212,175,55,0.08), 0 0 12px rgba(212,175,55,0.08)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.12) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 20px rgba(212,175,55,0.08), 0 0 10px rgba(212,175,55,0.06)"; }}
+                onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.18) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 30px rgba(212,175,55,0.08), 0 0 14px rgba(212,175,55,0.10)"; }}
+                onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.12) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 20px rgba(212,175,55,0.08), 0 0 10px rgba(212,175,55,0.06)"; }}
                 style={{
                   display: "flex",
                   flexDirection: "column",
@@ -471,8 +453,8 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   gap: "6px",
                   padding: "10px 8px",
                   background: "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.12) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)",
-                  border: "1px solid rgba(212,175,55,0.08)",
-                  borderRadius: "6px",
+                  border: "1px solid rgba(212,175,55,0.20)",
+                  borderRadius: "8px",
                   boxShadow: "0 0 20px rgba(212,175,55,0.08), 0 0 10px rgba(212,175,55,0.06)",
                   cursor: "pointer",
                   transition: "transform 0.15s ease, border-color 0.25s ease, background 0.25s ease",
@@ -494,11 +476,11 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
           {/* Legal disclaimer */}
           <div className="pt-3" style={{ borderTop: "1px solid rgba(212,175,55,0.08)" }}>
             <p style={{
-              fontFamily: "'Inter', sans-serif",
-              fontSize: "11px",
+              fontFamily: "'Roboto Mono', monospace",
+              fontSize: "12px",
               letterSpacing: "0.02em",
               lineHeight: 1.6,
-              color: "rgba(255,255,255,0.40)",
+              color: "rgba(255,255,255,0.48)",
               textAlign: "center",
             }}>
               For educational and informational purposes only. Not legal, tax, or investment advice.
