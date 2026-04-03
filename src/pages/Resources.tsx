@@ -362,7 +362,7 @@ const VaultCard: React.FC<{
         <p style={{
           fontFamily: "'Inter', sans-serif",
           fontSize: isNeutral ? 16 : 17,
-          color: isNeutral ? "rgba(255,255,255,0.60)" : "warmWhite(0.88)",
+          color: isNeutral ? "rgba(255,255,255,0.60)" : warmWhite(0.88),
           lineHeight: 1.6,
           display: "-webkit-box",
           WebkitLineClamp: isNeutral ? 2 : 3,
