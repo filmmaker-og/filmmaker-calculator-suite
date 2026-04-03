@@ -186,7 +186,7 @@
     --destructive-foreground: 0 0% 100%;
     --border: 0 0% 15%;
     --input: 0 0% 10%;
-    --ring: 45 74% 41%;
+    --ring: 45 65% 52%;
     --radius: 6px;
   }
 
@@ -709,7 +709,7 @@
     font-weight: 400;
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius-lg);
     transition: all 200ms ease;
     box-shadow: none;
     position: relative;
@@ -739,7 +739,7 @@
     font-weight: 400;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius-lg);
     transition: all 180ms cubic-bezier(0.22, 1, 0.36, 1);
   }
   .btn-cta-secondary:hover {

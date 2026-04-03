@@ -83,7 +83,7 @@ const LeadCaptureModal = ({ isOpen, onClose, onEmailSubmitted, onSuccess }: Lead
         style={{
           background: "#0C0C0E",
           border: "1px solid rgba(212,175,55,0.15)",
-          borderRadius: "6px",
+          borderRadius: "8px",
         }}
       >
         <DialogTitle className="sr-only">Sign in to access the calculator</DialogTitle>
@@ -132,11 +132,11 @@ const LeadCaptureModal = ({ isOpen, onClose, onEmailSubmitted, onSuccess }: Lead
                   background: "rgba(255,255,255,0.95)",
                   color: "#000",
                   border: "1px solid rgba(0,0,0,0.12)",
-                  borderRadius: "4px",
+                  borderRadius: "8px",
                 }}
                 onFocus={e => {
                   e.currentTarget.style.borderColor = "#D4AF37";
-                  e.currentTarget.style.boxShadow = "0 0 0 3px rgba(212,175,55,0.08)";
+                  e.currentTarget.style.boxShadow = "0 0 0 3px rgba(212,175,55,0.15)";
                 }}
                 onBlur={e => {
                   e.currentTarget.style.borderColor = "rgba(0,0,0,0.12)";
@@ -165,7 +165,7 @@ const LeadCaptureModal = ({ isOpen, onClose, onEmailSubmitted, onSuccess }: Lead
                   background: "rgba(255,255,255,0.95)",
                   color: "#000",
                   border: "1px solid rgba(0,0,0,0.12)",
-                  borderRadius: "4px",
+                  borderRadius: "8px",
                 }}
                 onFocus={e => {
                   e.currentTarget.style.borderColor = "#D4AF37";
