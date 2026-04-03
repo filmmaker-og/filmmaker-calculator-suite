@@ -1,4 +1,5 @@
 import React from "react";
+import { warmWhite } from "@/lib/tokens";
 import {
   Tooltip,
   TooltipContent,
@@ -145,7 +146,7 @@ const GlossaryTrigger = ({
             <h4 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "18px", letterSpacing: "0.05em", color: "#D4AF37" }}>
               {title}
             </h4>
-            <p style={{ fontSize: "14px", color: "rgba(250,248,244,0.90)", lineHeight: "1.5", fontFamily: "'Inter', sans-serif" }}>
+            <p style={{ fontSize: "14px", color: "warmWhite(0.90)", lineHeight: "1.5", fontFamily: "'Inter', sans-serif" }}>
               {description}
             </p>
             {details && (

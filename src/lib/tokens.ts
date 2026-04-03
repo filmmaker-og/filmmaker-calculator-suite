@@ -31,6 +31,7 @@ const _RED = '200,64,64';
 const _GREEN = '77,175,120';
 const _AMBER = '240,168,48';
 const _CTA_GOLD = '249,224,118';
+const _WARM_WHITE = '250,248,244';
 const _GLASS = '6,6,6';
 
 // ─── Color Functions ────────────────────────────────────────────
@@ -40,6 +41,9 @@ export const gold = (opacity: number): string => `rgba(${_GOLD},${opacity})`;
 
 /** White at any opacity. */
 export const white = (opacity: number): string => `rgba(${_WHITE},${opacity})`;
+
+/** Warm-white at any opacity. Body text, testimonials, descriptions. */
+export const warmWhite = (opacity: number): string => `rgba(${_WARM_WHITE},${opacity})`;
 
 /** Black at any opacity. */
 export const black = (opacity: number): string => `rgba(${_BLACK},${opacity})`;
@@ -82,12 +86,12 @@ export const GOLD_DEEP = '#7A5C12';
 // ─── Backgrounds ────────────────────────────────────────────────
 
 export const BG = {
-  /** Near-black warm — page wrappers */
-  void: '#0C0C0E',
-  /** Elevated surface — cards, clearly visible on page bg */
-  elevated: '#1A1A1C',
-  /** Input surface — distinct interactive layer */
-  surface: '#232326',
+  /** Near-black warm — page background (lifted from #0C0C0E to fix OLED halation) */
+  void: '#141416',
+  /** Section wrapper — lighter slate that lifts off the void */
+  elevated: '#222226',
+  /** Inner well — recessed content areas (matches void) */
+  surface: '#141416',
 } as const;
 
 // ─── Standard Tier Presets ──────────────────────────────────────
@@ -101,9 +105,9 @@ export const GOLD_TIERS = {
 
 export const WHITE_TIERS = {
   primary: white(0.92),
-  secondary: white(0.78),
-  muted: white(0.72),
-  tertiary: white(0.48),
+  secondary: white(0.85),
+  muted: white(0.78),
+  tertiary: white(0.65),
   ghost: white(0.06),
 } as const;
 

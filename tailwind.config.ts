@@ -26,10 +26,10 @@ export default {
       colors: {
         /* ═══════════════════════════════════════════════════════
            DESIGN TOKEN SYSTEM — filmmaker.og
-           Source of truth: src/lib/design-system.ts
+           Source of truth: src/lib/tokens.ts
            Gold: 4-tier opacity (0.25 / 0.15 / 0.08 / 0.03)
            White: 4-tier opacity (0.70 / 0.40 / 0.15 / 0.06)
-           See DESIGN_SYSTEM.md for usage rules.
+           See BRAND_SYSTEM.md for usage rules.
            ═══════════════════════════════════════════════════════ */
         // ── GOLD: 4-tier opacity system + solids ──
         gold: {
@@ -62,9 +62,9 @@ export default {
         // ── INK: active text tier system (use these) ──
         ink: {
           DEFAULT:   "#FFFFFF",                          // headlines, key numbers — FULL
-          body:      "rgba(255, 255, 255, 0.78)",        // secondary / paragraph text
-          muted:     "rgba(255, 255, 255, 0.72)",        // readable subordinate text (OLED floor)
-          secondary: "rgba(255, 255, 255, 0.48)",        // tertiary, metadata (OLED floor)
+          body:      "rgba(255, 255, 255, 0.90)",        // primary body text (brand guide 0.85-0.92)
+          muted:     "rgba(255, 255, 255, 0.78)",        // readable subordinate text
+          secondary: "rgba(255, 255, 255, 0.65)",        // tertiary, metadata (OLED floor = 0.65)
           ghost:     "rgba(255, 255, 255, 0.06)",        // hover bg, surface tints
         },
 
@@ -83,9 +83,9 @@ export default {
         // ── BACKGROUNDS — #000, #111, #1A1A1A only ──
         bg: {
           void:      "#141416",
-          elevated:  "#1A1A1C",
-          surface:   "#1A1A1A",
-          card:      "#1A1A1C",                          // legacy alias
+          elevated:  "#222226",
+          surface:   "#141416",
+          card:      "#222226",                          // legacy alias → mapped to elevated
           "card-border": "rgba(255, 255, 255, 0.15)",   // legacy alias
           "card-rule":   "rgba(255, 255, 255, 0.06)",   // legacy alias
           overlay:   "rgba(0, 0, 0, 0.85)",

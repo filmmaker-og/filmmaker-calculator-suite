@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
+import { warmWhite } from "@/lib/tokens";
 import { useInView } from "@/hooks/useInView";
 import { useHaptics } from "@/hooks/use-haptics";
 import { getDailyGlossary, getAllGlossary, type GlossaryTerm } from "@/lib/glossary-rotation";
@@ -361,7 +362,7 @@ const VaultCard: React.FC<{
         <p style={{
           fontFamily: "'Inter', sans-serif",
           fontSize: isNeutral ? 16 : 17,
-          color: isNeutral ? "rgba(255,255,255,0.60)" : "rgba(250,248,244,0.88)",
+          color: isNeutral ? "rgba(255,255,255,0.60)" : "warmWhite(0.88)",
           lineHeight: 1.6,
           display: "-webkit-box",
           WebkitLineClamp: isNeutral ? 2 : 3,

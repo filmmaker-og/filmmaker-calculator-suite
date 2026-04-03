@@ -18,7 +18,7 @@ import LeadCaptureModal from "@/components/LeadCaptureModal";
 import { useHaptics } from "@/hooks/use-haptics";
 import { serializeSnapshot } from "@/lib/serialize-snapshot";
 import { useInView } from "@/hooks/useInView";
-import { gold, white, GOLD, CTA, BG } from "@/lib/tokens";
+import { gold, white, warmWhite, GOLD, CTA, BG } from "@/lib/tokens";
 
 
 // ─── Types ───────────────────────────────────────────────────────
@@ -321,7 +321,7 @@ const TransitionBridge = ({ text, height = 48 }: { text?: string; height?: numbe
         fontFamily: "'Inter', sans-serif",
         fontSize: "14px",
         fontStyle: "italic",
-        color: "rgba(250,248,244,0.65)",
+        color: "warmWhite(0.65)",
         letterSpacing: "0.02em",
       }}>
         {text}
@@ -516,7 +516,7 @@ const CoverSection = ({
             fontSize: "16px",
             fontFamily: "'Inter', sans-serif",
             fontWeight: 400,
-            color: "rgba(250,248,244,0.78)",
+            color: "warmWhite(0.78)",
             fontStyle: "italic",
             maxWidth: "360px",
             lineHeight: 1.5,
@@ -697,8 +697,8 @@ const CoverSection = ({
         }}>
           <CountUp value={multiple} format="multiple" trigger={coverInView} duration={1800} />
         </div>
-        <div style={{ fontSize: "16px", lineHeight: 1.5, color: "rgba(250,248,244,0.78)" }}>
-          <strong style={{ color: "rgba(250,248,244,0.90)", fontWeight: 600 }}>Cash-on-cash multiple.</strong>
+        <div style={{ fontSize: "16px", lineHeight: 1.5, color: "warmWhite(0.78)" }}>
+          <strong style={{ color: "warmWhite(0.90)", fontWeight: 600 }}>Cash-on-cash multiple.</strong>
           <br />
           {verdictContext}
         </div>
@@ -715,7 +715,7 @@ const CoverSection = ({
           fontFamily: "'Inter', sans-serif",
           fontSize: "17px",
           fontStyle: "italic",
-          color: "rgba(250,248,244,0.90)",
+          color: "warmWhite(0.90)",
           lineHeight: 1.6,
         }}>
           {dealInsight}
@@ -955,7 +955,7 @@ const DealSection = ({
 
       {/* Prose */}
       <RevealSection delay={200}>
-      <div style={{ ...FONT.body, color: "rgba(250,248,244,0.88)" }}>
+      <div style={{ ...FONT.body, color: "warmWhite(0.88)" }}>
         <p style={{ marginBottom: "20px" }}>{p1}</p>
         <p style={{ marginBottom: "20px" }}>{p2}</p>
         <p style={{ marginBottom: "20px" }}>{p3}</p>
@@ -983,7 +983,7 @@ const DealSection = ({
 
       {/* Verdict */}
       <RevealSection delay={400}>
-      <div style={{ ...FONT.body, color: "rgba(250,248,244,0.88)" }}>
+      <div style={{ ...FONT.body, color: "warmWhite(0.88)" }}>
         <p style={{ marginBottom: "0" }}>{p4}</p>
       </div>
       </RevealSection>
@@ -1137,7 +1137,7 @@ const RevenueDonut = ({
       <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
         {segments.filter(s => s.amount > 0).map((seg) => (
           <div key={seg.label} style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <span style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "13px", color: "rgba(250,248,244,0.70)" }}>
+            <span style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "13px", color: "warmWhite(0.70)" }}>
               <span style={{ width: "8px", height: "8px", borderRadius: "50%", flexShrink: 0, background: seg.color }} />
               {seg.label}
             </span>
@@ -1221,7 +1221,7 @@ const VisualCluster1 = ({
           }}>
             {/* Hero row */}
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "16px" }}>
-              <span style={{ fontSize: "16px", color: "rgba(250,248,244,0.78)" }}>Gone before recoupment</span>
+              <span style={{ fontSize: "16px", color: "warmWhite(0.78)" }}>Gone before recoupment</span>
               <span style={{ ...FONT.data, fontSize: "28px", color: SEM.red }}>
                 &minus;<CountUp value={erosionTotal} format="compact" trigger={vc1InView} />
               </span>
@@ -1273,7 +1273,7 @@ const VisualCluster1 = ({
         padding: "14px 20px", background: netBg, border: `1px solid ${netBorder}`,
         borderRadius: "12px", marginBottom: "28px",
       }}>
-        <span style={{ fontSize: "16px", color: "rgba(250,248,244,0.78)" }}>Net to Investors</span>
+        <span style={{ fontSize: "16px", color: "warmWhite(0.78)" }}>Net to Investors</span>
         <span style={{ ...FONT.data, fontSize: "26px", color: netColor }}>
           <CountUp value={netDistributable} format="compact" trigger={vc1InView} />
         </span>
@@ -1824,7 +1824,7 @@ const InterpretationSection = ({
       </RevealSection>
 
       <RevealSection delay={200}>
-      <div style={{ ...FONT.body, color: "rgba(250,248,244,0.88)" }}>
+      <div style={{ ...FONT.body, color: "warmWhite(0.88)" }}>
         {/* Paragraph 1: Erosion + net distributable interpretation */}
         <p style={{ marginBottom: "20px" }}>
           Off-the-top deductions consume <Num>{formatCompactCurrency(erosionTotal)}</Num>. That
@@ -2387,7 +2387,7 @@ const ConclusionSection = ({
       </RevealSection>
 
       <RevealSection delay={200}>
-      <div style={{ ...FONT.body, color: "rgba(250,248,244,0.88)" }}>
+      <div style={{ ...FONT.body, color: "warmWhite(0.88)" }}>
         {/* Paragraph 1: Consequence-first verdict */}
         <p style={{ marginBottom: "20px" }}>
           {allFunded && backendPool > 0 && (
@@ -2438,7 +2438,7 @@ const ConclusionSection = ({
 
       {/* Post-gate close */}
       <RevealSection delay={500}>
-      <div style={{ ...FONT.body, color: "rgba(250,248,244,0.88)", marginTop: "24px" }}>
+      <div style={{ ...FONT.body, color: "warmWhite(0.88)", marginTop: "24px" }}>
         <p>
           {multiple >= 1.0 ? (
             <>The model is the foundation. Without the presentation layer, you are asking investors to underwrite a spreadsheet, and that is not how deals close.</>
@@ -2625,7 +2625,7 @@ const CTASection = ({ result, inputs, project, guilds }: {
               <RevealSection key={item} delay={200 + i * 100}>
               <div style={{ display: "flex", gap: "10px", alignItems: "flex-start" }}>
                 <svg width="14" height="14" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginTop: "2px", flexShrink: 0, filter: "drop-shadow(0 0 6px rgba(77,175,120,0.25))" }}><path d="M3.5 9.5L7 13L14.5 5.5" stroke="#4DAF78" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                <span style={{ fontSize: "14px", color: "rgba(250,248,244,0.88)", lineHeight: 1.5, fontFamily: "'Inter', sans-serif" }}>{item}</span>
+                <span style={{ fontSize: "14px", color: "warmWhite(0.88)", lineHeight: 1.5, fontFamily: "'Inter', sans-serif" }}>{item}</span>
               </div>
               </RevealSection>
             ))}
