@@ -2,6 +2,8 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@18.5.0";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.4";
 
+// Stripe webhooks are called by Stripe's servers, not browsers.
+// Restrict to known origins; omit Origin check since Stripe calls are server-to-server.
 const ALLOWED_ORIGINS = ["https://filmmakerog.com", "https://www.filmmakerog.com"];
 
 function getCorsHeaders(req: Request) {
@@ -12,6 +14,7 @@ function getCorsHeaders(req: Request) {
       "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
     };
   }
+  // For Stripe's servers (no Origin header), use default
   return {
     "Access-Control-Allow-Origin": ALLOWED_ORIGINS[0],
     "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
