@@ -214,7 +214,7 @@ const Pricing = () => {
               style={{
                 background: BG.elevated,
                 border: `1px solid ${tier.highlight ? gold(0.30) : gold(0.10)}`,
-                borderRadius: "10px",
+                borderRadius: "8px",
                 padding: "28px 24px 24px",
                 display: "flex",
                 flexDirection: "column",
@@ -357,12 +357,6 @@ const Pricing = () => {
                   fontSize: "18px",
                   cursor: "pointer",
                 }}
-                onMouseDown={(e) => {
-                  e.currentTarget.style.transform = "scale(0.97)";
-                }}
-                onMouseUp={(e) => {
-                  e.currentTarget.style.transform = "scale(1)";
-                }}
               >
                 {tier.cta}
               </button>
@@ -375,7 +369,7 @@ const Pricing = () => {
           style={{
             background: BG.elevated,
             border: `1px solid ${gold(0.08)}`,
-            borderRadius: "10px",
+            borderRadius: "8px",
             padding: "24px",
             display: "flex",
             flexWrap: "wrap",
@@ -445,12 +439,6 @@ const Pricing = () => {
               fontSize: "18px",
               cursor: "pointer",
               flexShrink: 0,
-            }}
-            onMouseDown={(e) => {
-              e.currentTarget.style.transform = "scale(0.97)";
-            }}
-            onMouseUp={(e) => {
-              e.currentTarget.style.transform = "scale(1)";
             }}
           >
             Start Free
