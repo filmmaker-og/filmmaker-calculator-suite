@@ -20,8 +20,9 @@ const STATUSES = ["Development", "Pre-Prod", "Production", "Post"];
 
 const warmCard: React.CSSProperties = {
   position: "relative",
-  background: "#0A0A0A",
-  border: "1px solid rgba(212,175,55,0.35)",
+  background: "#222226",
+  border: "1px solid rgba(212,175,55,0.25)",
+  borderTop: "1px solid rgba(255,255,255,0.08)",
   borderRadius: 8,
   overflow: "hidden",
   marginBottom: 16,
@@ -50,8 +51,9 @@ const warmToplineShimmer: React.CSSProperties = {
 
 const dataCard: React.CSSProperties = {
   position: "relative",
-  background: "#0A0A0A",
-  border: "1px solid rgba(212,175,55,0.20)",
+  background: "#222226",
+  border: "1px solid rgba(212,175,55,0.15)",
+  borderTop: "1px solid rgba(255,255,255,0.08)",
   borderRadius: 8,
   overflow: "hidden",
   marginBottom: 16,
