@@ -1,5 +1,6 @@
 import { useEffect, useRef, useCallback, useState } from "react";
 import { createPortal } from "react-dom";
+import { GOLD, gold, ctaGold } from "@/lib/tokens";
 
 interface FilmLeaderCountdownProps {
   projectTitle: string;
@@ -223,7 +224,7 @@ const FilmLeaderCountdown = ({ projectTitle, onComplete }: FilmLeaderCountdownPr
         <div style={{
           position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)",
           width: "180px", height: "180px", borderRadius: "50%",
-          border: "1.5px solid #D4AF37",
+          border: `1.5px solid ${GOLD}`,
           boxShadow: "0 0 24px rgba(212,175,55,0.35), 0 0 60px rgba(249,224,118,0.10), inset 0 0 20px rgba(212,175,55,0.06)",
           display: "flex", alignItems: "center", justifyContent: "center",
         }}>

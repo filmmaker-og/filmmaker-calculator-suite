@@ -219,15 +219,16 @@ const Pricing = () => {
                 display: "flex",
                 flexDirection: "column",
                 position: "relative",
+                boxShadow: `0 8px 24px rgba(0,0,0,0.4)`,
                 transition: "border-color 0.2s ease, box-shadow 0.2s ease",
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.borderColor = gold(0.40);
-                e.currentTarget.style.boxShadow = `0 0 20px ${gold(0.08)}`;
+                e.currentTarget.style.boxShadow = `0 8px 24px rgba(0,0,0,0.4), 0 0 20px ${gold(0.08)}`;
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.borderColor = tier.highlight ? gold(0.30) : gold(0.10);
-                e.currentTarget.style.boxShadow = "none";
+                e.currentTarget.style.boxShadow = `0 8px 24px rgba(0,0,0,0.4)`;
               }}
             >
               {/* Badge */}

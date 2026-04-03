@@ -54,7 +54,7 @@ const s: Record<string, React.CSSProperties> = {
   },
   heroEyebrowLine: { flex: 1, height: 1, background: "rgba(212,175,55,0.35)" },
   heroEyebrowLabel: {
-    fontFamily: "'Roboto Mono', monospace", fontSize: 11,
+    fontFamily: "'Roboto Mono', monospace", fontSize: 13,
     letterSpacing: "0.15em", textTransform: "uppercase",
     color: "rgba(212,175,55,0.65)", whiteSpace: "nowrap",
   },
@@ -184,7 +184,7 @@ const s: Record<string, React.CSSProperties> = {
   heroHint: {
     textAlign: "center" as const,
     marginTop: "14px",
-    fontSize: "11px",
+    fontSize: "13px",
     color: "rgba(255,255,255,0.48)",
     lineHeight: 1.5,
   },
@@ -241,7 +241,7 @@ const s: Record<string, React.CSSProperties> = {
   },
   innerDivLabel: {
     fontFamily: "'Inter', sans-serif",
-    fontSize: "11px",
+    fontSize: "13px",
     fontWeight: 600,
     textTransform: "uppercase" as const,
     letterSpacing: "0.15em",
@@ -316,7 +316,7 @@ const s: Record<string, React.CSSProperties> = {
   },
   guildName: {
     fontFamily: "'Inter', sans-serif",
-    fontSize: "11px",
+    fontSize: "13px",
     fontWeight: 600,
     color: "rgba(255,255,255,0.65)",
     transition: "color 0.15s",
@@ -324,7 +324,7 @@ const s: Record<string, React.CSSProperties> = {
   },
   guildNameOn: {
     fontFamily: "'Inter', sans-serif",
-    fontSize: "11px",
+    fontSize: "13px",
     fontWeight: 600,
     color: "#D4AF37",
     transition: "color 0.15s",
@@ -332,12 +332,12 @@ const s: Record<string, React.CSSProperties> = {
   },
   guildDesc: {
     fontFamily: "'Inter', sans-serif",
-    fontSize: "11px",
+    fontSize: "12px",
     color: "rgba(255,255,255,0.48)",
   },
   guildHint: {
     textAlign: "center" as const,
-    fontSize: "11px",
+    fontSize: "12px",
     color: "rgba(255,255,255,0.48)",
     padding: "10px 24px 0",
   },
@@ -390,7 +390,7 @@ const s: Record<string, React.CSSProperties> = {
     overflow: "hidden",
   },
   discText: {
-    fontSize: "11px",
+    fontSize: "12px",
     color: "rgba(255,255,255,0.48)",
     lineHeight: 1.5,
     position: "relative" as const,

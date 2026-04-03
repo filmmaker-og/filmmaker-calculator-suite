@@ -362,7 +362,7 @@ const VaultCard: React.FC<{
         <p style={{
           fontFamily: "'Inter', sans-serif",
           fontSize: isNeutral ? 16 : 17,
-          color: isNeutral ? "rgba(255,255,255,0.60)" : "warmWhite(0.88)",
+          color: isNeutral ? "rgba(255,255,255,0.60)" : warmWhite(0.88),
           lineHeight: 1.6,
           display: "-webkit-box",
           WebkitLineClamp: isNeutral ? 2 : 3,
@@ -911,7 +911,7 @@ const Resources = () => {
               background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.6), transparent)",
               zIndex: 1,
             }} />
-            {/* Purple pin */}
+            {/* Gold pin */}
             <div style={{
               position: "absolute", top: 12, right: 14,
               display: "flex", alignItems: "center", gap: 6, zIndex: 2,
@@ -1015,7 +1015,7 @@ const Resources = () => {
               height: 1,
               background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.5), transparent)",
             }} />
-            {/* Purple pin */}
+            {/* Gold pin */}
             <div style={{
               position: "absolute", top: 12, right: 14,
               display: "flex", alignItems: "center", gap: 6, zIndex: 2,
@@ -1084,7 +1084,7 @@ const Resources = () => {
         </div>
       </section>
 
-      {/* Purple separator — pinned → grid */}
+      {/* Gold separator — pinned → grid */}
       <div style={{
         height: 1,
         background: "linear-gradient(90deg, transparent 10%, rgba(212,175,55,0.12) 50%, transparent 90%)",

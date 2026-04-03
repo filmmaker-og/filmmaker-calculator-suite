@@ -4,6 +4,7 @@ import { X as CloseIcon, Home, Calculator, ShoppingBag, BarChart2, Mail, Share2,
 import { cn } from "@/lib/utils";
 import { getShareUrl, SHARE_TEXT, SHARE_TITLE } from "@/lib/constants";
 import { useHaptics } from "@/hooks/use-haptics";
+import { GOLD, CTA, BG, gold } from "@/lib/tokens";
 
 interface MobileMenuProps {
   isOpen?: boolean;
@@ -69,7 +70,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
         fontSize: "14px",
         letterSpacing: "0.18em",
         textTransform: "uppercase" as const,
-        color: "#D4AF37",
+        color: GOLD,
         whiteSpace: "nowrap" as const,
       }}>{children}</span>
       <div style={{ flex: 1, height: "1px", background: "rgba(212,175,55,0.25)" }} />
@@ -130,7 +131,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
           }}
         />
 
-        {/* Purple atmospheric glow — bottom canopy */}
+        {/* Gold atmospheric glow — bottom canopy */}
         <div
           className="absolute bottom-0 left-0 right-0 pointer-events-none z-0"
           style={{
@@ -174,7 +175,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                 gap: "10px",
                 padding: "16px",
                 marginBottom: "10px",
-                background: "#F9E076",
+                background: CTA,
                 border: "none",
                 borderRadius: "8px",
                 cursor: "pointer",
@@ -194,13 +195,13 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                 position: "relative",
                 zIndex: 1,
               }}>
-                <Sparkles style={{ width: "22px", height: "22px", color: "#D4AF37", filter: "drop-shadow(0 0 6px rgba(212,175,55,0.40))" }} />
+                <Sparkles style={{ width: "22px", height: "22px", color: GOLD, filter: `drop-shadow(0 0 6px ${gold(0.40)})` }} />
               </div>
               <span style={{
                 fontFamily: "'Bebas Neue', sans-serif",
                 fontSize: "1.8rem",
                 letterSpacing: "0.10em",
-                color: "#000",
+                color: "#000000",
                 position: "relative",
                 zIndex: 1,
               }}>
@@ -223,9 +224,9 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
           <SectionLabel>Navigate</SectionLabel>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "6px", marginBottom: "10px" }}>
             {([
-              { path: "/calculator", label: "Calculator", icon: <Calculator size={18} color="#D4AF37" /> },
-              { path: "/store",      label: "Shop",       icon: <ShoppingBag size={18} color="#D4AF37" /> },
-              { path: "/resources",  label: "Resources",  icon: <BarChart2 size={18} color="#D4AF37" /> },
+              { path: "/calculator", label: "Calculator", icon: <Calculator size={18} color={GOLD} /> },
+              { path: "/store",      label: "Shop",       icon: <ShoppingBag size={18} color={GOLD} /> },
+              { path: "/resources",  label: "Resources",  icon: <BarChart2 size={18} color={GOLD} /> },
             ] as const).map((item) => (
               <button
                 key={item.path}
@@ -242,8 +243,8 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   justifyContent: "center",
                   gap: "6px",
                   padding: "10px 8px",
-                  background: "#222226",
-                  border: "1px solid rgba(212,175,55,0.15)",
+                  background: BG.elevated,
+                  border: `1px solid ${gold(0.15)}`,
                   borderRadius: "8px",
                   cursor: "pointer",
                   transition: "transform 0.15s ease, border-color 0.25s ease",
@@ -290,7 +291,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   transition: "transform 0.15s ease, border-color 0.25s ease, background 0.25s ease",
                 }}
               >
-                <Home size={18} color="#D4AF37" />
+                <Home size={18} color={GOLD} />
                 <span style={{
                   fontFamily: "'Bebas Neue', sans-serif",
                   fontSize: "1.1rem",
@@ -325,7 +326,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   transition: "transform 0.15s ease, border-color 0.25s ease, background 0.25s ease",
                 }}
               >
-                <Mail size={18} style={{ color: "#D4AF37" }} />
+                <Mail size={18} style={{ color: GOLD }} />
                 <span style={{
                   fontFamily: "'Bebas Neue', sans-serif",
                   fontSize: "1.1rem",
@@ -358,7 +359,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   transition: "transform 0.15s ease, border-color 0.25s ease, background 0.25s ease",
                 }}
               >
-                <Share2 size={18} style={{ color: "#D4AF37" }} />
+                <Share2 size={18} style={{ color: GOLD }} />
                 <span style={{
                   fontFamily: "'Bebas Neue', sans-serif",
                   fontSize: "1.1rem",

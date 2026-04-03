@@ -85,7 +85,7 @@ const s: Record<string, React.CSSProperties> = {
   },
   fl: {
     fontFamily: "'Inter', sans-serif",
-    fontSize: 11,
+    fontSize: 13,
     fontWeight: 600,
     textTransform: "uppercase",
     letterSpacing: "0.15em",
@@ -99,7 +99,7 @@ const s: Record<string, React.CSSProperties> = {
     textTransform: "none",
     color: "rgba(255,255,255,0.40)",
     marginLeft: 6,
-    fontSize: 11,
+    fontSize: 12,
   },
   fi: {
     width: "100%",
@@ -161,7 +161,7 @@ const s: Record<string, React.CSSProperties> = {
   },
   hint: {
     fontFamily: "'Inter', sans-serif",
-    fontSize: 11,
+    fontSize: 12,
     color: "rgba(255,255,255,0.40)",
     marginTop: 6,
     lineHeight: 1.4,
@@ -188,7 +188,7 @@ const s: Record<string, React.CSSProperties> = {
   },
   teamOptional: {
     fontFamily: "'Inter', sans-serif",
-    fontSize: 11,
+    fontSize: 12,
     color: "rgba(255,255,255,0.40)",
   },
   teamRight: {
@@ -198,7 +198,7 @@ const s: Record<string, React.CSSProperties> = {
   },
   teamFieldCount: {
     fontFamily: "'Inter', sans-serif",
-    fontSize: 11,
+    fontSize: 12,
     color: "rgba(255,255,255,0.35)",
   },
   teamBody: {
@@ -224,7 +224,7 @@ const s: Record<string, React.CSSProperties> = {
   },
   teamFl: {
     fontFamily: "'Inter', sans-serif",
-    fontSize: 11,
+    fontSize: 13,
     fontWeight: 600,
     textTransform: "uppercase",
     letterSpacing: "0.12em",
