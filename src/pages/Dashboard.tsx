@@ -27,7 +27,7 @@ const T = {
   cw90: "rgba(255,255,255,0.90)", cw70: "rgba(255,255,255,0.70)",
   cw50: "rgba(255,255,255,0.50)", cw30: "rgba(255,255,255,0.30)",
   border: "rgba(212,175,55,0.12)", borderBright: "rgba(212,175,55,0.25)",
-  radius: "12px",
+  radius: "8px",
   inputBg: "rgba(212,175,55,0.04)", inputBorder: "rgba(212,175,55,0.18)",
 };
 const F = { display: "'Bebas Neue',sans-serif", body: "'Inter',sans-serif", mono: "'Roboto Mono',monospace" };
@@ -36,7 +36,7 @@ const GlobalStyles = () => <style>{`
   @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500;600;700&display=swap');
   ::-webkit-scrollbar{width:6px;height:6px}
   ::-webkit-scrollbar-track{background:transparent}
-  ::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:10px}
+  ::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:8px}
   ::-webkit-scrollbar-thumb:hover{background:rgba(212,175,55,0.3)}
   @keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(200%)}}
   @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}

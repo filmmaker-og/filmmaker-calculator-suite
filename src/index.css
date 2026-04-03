@@ -809,11 +809,11 @@
   }
 
   /* ═══════════════════════════════════════════════════════════════════
-     FOCUS-VISIBLE — keyboard navigation
+     FOCUS-VISIBLE — keyboard navigation (accessibility)
      ═══════════════════════════════════════════════════════════════════ */
   button:focus-visible,
   a:focus-visible {
-    outline: 2px solid var(--border-active);
+    outline: 2px solid var(--gold);
     outline-offset: 2px;
   }
 

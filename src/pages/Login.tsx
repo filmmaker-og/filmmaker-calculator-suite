@@ -25,7 +25,7 @@ const Login = () => {
           width: "100%",
           background: BG.elevated,
           border: `1px solid ${gold(0.12)}`,
-          borderRadius: "12px",
+          borderRadius: "8px",
           padding: "40px 32px 36px",
           textAlign: "center",
         }}
@@ -88,12 +88,6 @@ const Login = () => {
             cursor: "pointer",
             marginBottom: "12px",
           }}
-          onMouseDown={(e) => {
-            e.currentTarget.style.transform = "scale(0.97)";
-          }}
-          onMouseUp={(e) => {
-            e.currentTarget.style.transform = "scale(1)";
-          }}
         >
           Continue with Google
         </button>
@@ -107,12 +101,6 @@ const Login = () => {
             fontSize: "17px",
             cursor: "pointer",
             marginBottom: "28px",
-          }}
-          onMouseDown={(e) => {
-            e.currentTarget.style.transform = "scale(0.97)";
-          }}
-          onMouseUp={(e) => {
-            e.currentTarget.style.transform = "scale(1)";
           }}
         >
           Continue with Email
@@ -134,6 +122,13 @@ const Login = () => {
               cursor: "pointer",
               textDecoration: "underline",
               textUnderlineOffset: "3px",
+              transition: "opacity 0.15s ease",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.opacity = "0.75";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.opacity = "1";
             }}
           >
             Sign up

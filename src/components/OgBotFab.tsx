@@ -42,7 +42,7 @@ const OgBotFab = ({ onTap }: OgBotFabProps) => {
         right: "24px",
         width: "52px",
         height: "52px",
-        borderRadius: "10px",
+        borderRadius: "8px",
         background: "linear-gradient(135deg, rgba(212,175,55,0.25) 0%, rgba(212,175,55,0.15) 100%)",
         border: "1px solid rgba(212,175,55,0.25)",
         boxShadow: "0 4px 16px rgba(212,175,55,0.30), 0 0 40px rgba(212,175,55,0.12)",
