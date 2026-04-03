@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from "react";
+import { warmWhite } from "@/lib/tokens";
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell, ComposedChart, Line,
@@ -21,8 +22,8 @@ const T = {
   blueDim: "rgba(91,141,239,0.10)",
   greenDim: "rgba(77,175,120,0.10)", redDim: "rgba(200,64,64,0.10)",
   amberDim: "rgba(240,168,48,0.10)",
-  w92: "rgba(250,248,244,0.92)", w85: "rgba(250,248,244,0.85)",
-  w75: "rgba(250,248,244,0.72)", w65: "rgba(250,248,244,0.65)",
+  w92: warmWhite(0.92), w85: warmWhite(0.85),
+  w75: warmWhite(0.72), w65: warmWhite(0.65),
   cw90: "rgba(255,255,255,0.90)", cw70: "rgba(255,255,255,0.70)",
   cw50: "rgba(255,255,255,0.50)", cw30: "rgba(255,255,255,0.30)",
   border: "rgba(212,175,55,0.12)", borderBright: "rgba(212,175,55,0.25)",

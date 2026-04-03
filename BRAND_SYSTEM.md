@@ -129,7 +129,7 @@ Add `className="grain-surface"`. First child is always a **Header Band**. Border
 ### Header Band (Inner Well)
 First child inside every Section Wrapper:
 ```css
-background: linear-gradient(180deg, rgba(212,175,55,0.08), #121214);
+background: linear-gradient(180deg, rgba(212,175,55,0.08), #141416);
 border: 1px solid rgba(255,255,255,0.06);
 border-top: 1px solid rgba(255,255,255,0.10);
 border-radius: 6px;
@@ -155,7 +155,7 @@ border-radius: 999px;
 
 ### Inner Card
 ```css
-background: linear-gradient(180deg, rgba(212,175,55,0.02), #232326);
+background: linear-gradient(180deg, rgba(212,175,55,0.02), #141416);
 border: 1px solid rgba(212,175,55,0.12);
 border-radius: 8px;
 padding: 16px 14px;
@@ -232,7 +232,7 @@ Staggered delays: `delay * 100ms`. Respects `prefers-reduced-motion`.
 ```css
 max-width: 780px;
 margin: 0 auto;
-background: #0C0C0E;
+background: #141416;
 ```
 Mobile stays tight via `clamp()` padding. Desktop breathes wider. This applies to ALL pages (landing, calculator, store, resources).
 
@@ -260,7 +260,7 @@ padding: 32px clamp(16px, 4vw, 32px);  /* container inner */
 ### Desktop Ambient Glow
 ```css
 @media (min-width: 768px) {
-  body::before { /* purple radial, top-left */ }
+  body::before { /* warm gold radial, top-left */ }
   body::after  { /* gold radial, bottom-right */ }
 }
 ```

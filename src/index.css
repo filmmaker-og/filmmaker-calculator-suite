@@ -96,11 +96,11 @@
        RED DANGER — "Without" card, warnings, risk indicators
        Same 4-tier opacity system as gold.
        ═══════════════════════════════════════════════════════════════════ */
-    --red-danger: #DC2626;
-    --red-strong: rgba(220, 38, 38, 0.25);
-    --red-medium: rgba(220, 38, 38, 0.15);
-    --red-subtle: rgba(220, 38, 38, 0.08);
-    --red-ghost: rgba(220, 38, 38, 0.03);
+    --red-danger: #C84040;
+    --red-strong: rgba(200, 64, 64, 0.25);
+    --red-medium: rgba(200, 64, 64, 0.15);
+    --red-subtle: rgba(200, 64, 64, 0.08);
+    --red-ghost: rgba(200, 64, 64, 0.03);
 
     /* Legacy aliases — map old tokens to new spec for non-landing pages */
     --bg-card: #1A1A1E;
@@ -123,7 +123,7 @@
     --text-primary: #FFFFFF;
     --text-secondary: rgba(255, 255, 255, 0.75);
     --text-muted: rgba(255, 255, 255, 0.72);
-    --text-tertiary: rgba(255, 255, 255, 0.48);
+    --text-tertiary: rgba(255, 255, 255, 0.65);
     /* --gold-text removed: not in 4-tier system, never consumed */
 
     /* BORDERS */
@@ -157,7 +157,7 @@
     --appbar-h: 54px;
     --tabbar-h: 62px;
     --bottom-bar-h: 0px;
-    --container-max: 460px;
+    --container-max: 780px;
 
     /* MOTION TOKENS */
     --timing-fast: 100ms;

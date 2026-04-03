@@ -8,8 +8,8 @@ set -euo pipefail
 BASELINE_FILE=".color-baseline"
 
 # Count raw rgba in component/page files (excluding token definitions)
-TOTAL=$(grep -roh "rgba(" src/ --include="*.tsx" --include="*.ts" | wc -l | tr -d ' ')
-DEFS=$(grep -oh "rgba(" src/lib/tokens.ts src/lib/design-system.ts 2>/dev/null | wc -l | tr -d ' ')
+TOTAL=$(grep -roh "rgba(" src/ --include="*.tsx" --include="*.ts" --binary-files=without-match 2>/dev/null | wc -l | tr -d ' ')
+DEFS=$(grep -oh "rgba(" src/lib/tokens.ts 2>/dev/null | wc -l | tr -d ' ')
 COUNT=$((TOTAL - DEFS))
 
 echo ""
