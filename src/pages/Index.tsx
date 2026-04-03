@@ -24,7 +24,7 @@ const Index = () => {
 
   const handleCTA = () => {
     haptics.medium();
-    navigate("/signup");
+    navigate("/calculator");
   };
 
   const prefersReducedMotion =
