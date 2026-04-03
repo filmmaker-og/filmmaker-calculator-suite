@@ -74,20 +74,11 @@ const PRODUCTS: Record<string, { name: string; price: number; stripePriceId: str
     // TODO: Replace with real Stripe price ID once created
     stripePriceId: "price_1THcZtJEIERVYlyFuLnYEsKQ",
   },
-  // Legacy IDs (backward compat)
-  "the-blueprint": {
-    name: "The Full Analysis (Legacy)",
-    price: 19700,
-    // TODO: Replace with real Stripe price ID once created
-    stripePriceId: "USE_REAL_PRICE_ID_LEGACY_BLUEPRINT",
-  },
-  "the-pitch-package": {
-    name: "The Producer's Package (Legacy)",
-    price: 179700,
-    // TODO: Replace with real Stripe price ID once created
-    stripePriceId: "USE_REAL_PRICE_ID_LEGACY_PITCH_PACKAGE",
-  },
 };
+
+// Legacy product IDs that have been retired — return a clear error instead of
+// letting them hit Stripe with an invalid price ID.
+const LEGACY_PRODUCT_IDS = new Set(["the-blueprint", "the-pitch-package"]);
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -141,6 +132,16 @@ serve(async (req) => {
       if (customers.data.length > 0) {
         customerId = customers.data[0].id;
       }
+    }
+
+    // Reject retired legacy products with a clear message
+    const requestedIds = items && Array.isArray(items) ? items : productId ? [productId] : [];
+    const legacyHit = requestedIds.find((id: string) => LEGACY_PRODUCT_IDS.has(id));
+    if (legacyHit) {
+      return new Response(
+        JSON.stringify({ error: "This product has been retired. Please visit /pricing for current offerings." }),
+        { status: 400, headers: { ...getCorsHeaders(req), "Content-Type": "application/json" } }
+      );
     }
 
     // Build line items — support both single productId and items array
