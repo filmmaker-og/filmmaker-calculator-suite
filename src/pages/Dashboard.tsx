@@ -15,10 +15,10 @@ const T = {
   gold: "#D4AF37", goldPrimary: "#F2CA50",
   goldDim: "rgba(212,175,55,0.20)", goldGhost: "rgba(212,175,55,0.06)",
   goldLine: "rgba(212,175,55,0.40)",
-  blue: "#5B8DEF", purple: "#9D7AED",
+  blue: "#5B8DEF",
   green: "#4DAF78", red: "#C84040", amber: "#F0A830",
   equity: "#E8B84D",
-  blueDim: "rgba(91,141,239,0.10)", purpleDim: "rgba(157,122,237,0.10)",
+  blueDim: "rgba(91,141,239,0.10)",
   greenDim: "rgba(77,175,120,0.10)", redDim: "rgba(200,64,64,0.10)",
   amberDim: "rgba(240,168,48,0.10)",
   w92: "rgba(250,248,244,0.92)", w85: "rgba(250,248,244,0.85)",
@@ -143,7 +143,7 @@ const GLOSSARY = [
 ];
 const VEHICLES = ["Not Sure","Single-Purpose LLC","Limited Partnership","S-Corp","C-Corp"];
 const EXEMPTIONS = ["Not Sure","Reg D 506(b)","Reg D 506(c)","Reg A+","Reg CF"];
-const CC = {ATL:T.gold,BTL:T.blue,Post:T.purple,"G&A":T.green};
+const CC = {ATL:T.gold,BTL:T.blue,Post:T.amber,"G&A":T.green};
 const CL = {ATL:"Above the Line",BTL:"Below the Line",Post:"Post-Production","G&A":"G&A"};
 const CAT_BENCH = {ATL:[20,30],BTL:[35,45],Post:[10,15],"G&A":[7,12]};
 const QUICK_PRESETS = [
@@ -247,9 +247,9 @@ function derive(inp, budgetEdits, bondOn, bondPct, contPct, guilds) {
     {month:"Mo 24+",inflows:Math.round(rt.base*.10),outflows:0,phase:"Distrib."},
   ];
   let cum=0;cf.forEach(x=>{cum+=x.inflows+x.outflows;x.cumulative=cum;x.net=x.inflows+x.outflows;});
-  const sources = [{name:"TC Bridge Loan",amount:sd,color:T.blue,pos:"1st — repaid from tax credit"},inp.gapMezz>0&&{name:"Gap/Mezz",amount:inp.gapMezz,color:T.amber,pos:"2nd Position"},inp.preSaleLoan>0&&{name:"Pre-Sale Loan",amount:inp.preSaleLoan,color:T.purple,pos:"1st Position"},{name:"Equity",amount:eq,color:T.equity,pos:"At-risk capital"}].filter(Boolean);
-  const cs = [{name:"Tax Credit",amount:tc,color:T.green,pos:"Non-dilutive — post-wrap"},{name:"Senior Debt",amount:sd,color:T.blue,pos:"1st Position"},inp.gapMezz>0&&{name:"Gap/Mezz",amount:inp.gapMezz,color:T.amber,pos:"2nd Position"},inp.preSaleLoan>0&&{name:"Pre-Sale Loan",amount:inp.preSaleLoan,color:T.purple,pos:"1st Position"},{name:"Equity",amount:eq,color:T.equity,pos:"At-risk capital"}].filter(Boolean);
-  const bd = [{name:"Above the Line",value:ct.ATL||0,color:T.gold},{name:"Below the Line",value:ct.BTL||0,color:T.blue},{name:"Post-Production",value:ct.Post||0,color:T.purple},{name:"G&A",value:ct["G&A"]||0,color:T.green},{name:"Contingency",value:cont,color:T.amber}];
+  const sources = [{name:"TC Bridge Loan",amount:sd,color:T.blue,pos:"1st — repaid from tax credit"},inp.gapMezz>0&&{name:"Gap/Mezz",amount:inp.gapMezz,color:T.amber,pos:"2nd Position"},inp.preSaleLoan>0&&{name:"Pre-Sale Loan",amount:inp.preSaleLoan,color:T.goldPrimary,pos:"1st Position"},{name:"Equity",amount:eq,color:T.equity,pos:"At-risk capital"}].filter(Boolean);
+  const cs = [{name:"Tax Credit",amount:tc,color:T.green,pos:"Non-dilutive — post-wrap"},{name:"Senior Debt",amount:sd,color:T.blue,pos:"1st Position"},inp.gapMezz>0&&{name:"Gap/Mezz",amount:inp.gapMezz,color:T.amber,pos:"2nd Position"},inp.preSaleLoan>0&&{name:"Pre-Sale Loan",amount:inp.preSaleLoan,color:T.goldPrimary,pos:"1st Position"},{name:"Equity",amount:eq,color:T.equity,pos:"At-risk capital"}].filter(Boolean);
+  const bd = [{name:"Above the Line",value:ct.ATL||0,color:T.gold},{name:"Below the Line",value:ct.BTL||0,color:T.blue},{name:"Post-Production",value:ct.Post||0,color:T.amber},{name:"G&A",value:ct["G&A"]||0,color:T.green},{name:"Contingency",value:cont,color:T.goldDim}];
   const risks = RISKS_RAW.map(r=>({...r,score:(r.prob/100)*r.impact}));
   // v4.6: Total interest cost (display only, no math change)
   const totalInterest = Math.round((drAmt-sd)+(gpAmt-inp.gapMezz)+(psAmt-inp.preSaleLoan));
@@ -347,7 +347,7 @@ export default function Dashboard() {
   const wfBase = useMemo(()=>d.calcWF(d.rt.base),[d]);
   const wfCon = useMemo(()=>d.calcWF(d.rt.conservative),[d]);
   const wfUp = useMemo(()=>d.calcWF(d.rt.upside),[d]);
-  const wb = useMemo(()=>{const items=[{n:"Gross Rev",v:wf.gr,f:T.goldPrimary,t:"total"},{n:"Exhibitor",v:wf.et,f:T.red,t:"loss"},{n:"Dist Fee",v:wf.df,f:T.red,t:"loss"},{n:"P&A",v:wf.pa,f:T.red,t:"loss"},{n:"SA Comm",v:wf.sc,f:T.red,t:"loss"},{n:"Debt",v:wf.drAmt+wf.gpAmt+wf.psAmt,f:T.red,t:"loss"},{n:"Recoup",v:wf.ir,f:T.goldDim,t:"loss"},{n:"Inv Back",v:wf.ib,f:T.green,t:"gain"},{n:"Prod Back",v:wf.pb,f:T.purple,t:"gain"}].filter(i=>i.v>0||i.t==="total");let r=0;return items.map(i=>{if(i.t==="total"){r=i.v;return{name:i.n,base:0,value:i.v,fill:i.f};}else if(i.t==="loss"){r-=i.v;return{name:i.n,base:Math.max(0,r),value:i.v,fill:i.f};}else{return{name:i.n,base:0,value:i.v,fill:i.f};}});},[wf]);
+  const wb = useMemo(()=>{const items=[{n:"Gross Rev",v:wf.gr,f:T.goldPrimary,t:"total"},{n:"Exhibitor",v:wf.et,f:T.red,t:"loss"},{n:"Dist Fee",v:wf.df,f:T.red,t:"loss"},{n:"P&A",v:wf.pa,f:T.red,t:"loss"},{n:"SA Comm",v:wf.sc,f:T.red,t:"loss"},{n:"Debt",v:wf.drAmt+wf.gpAmt+wf.psAmt,f:T.red,t:"loss"},{n:"Recoup",v:wf.ir,f:T.goldDim,t:"loss"},{n:"Inv Back",v:wf.ib,f:T.green,t:"gain"},{n:"Prod Back",v:wf.pb,f:T.goldPrimary,t:"gain"}].filter(i=>i.v>0||i.t==="total");let r=0;return items.map(i=>{if(i.t==="total"){r=i.v;return{name:i.n,base:0,value:i.v,fill:i.f};}else if(i.t==="loss"){r-=i.v;return{name:i.n,base:Math.max(0,r),value:i.v,fill:i.f};}else{return{name:i.n,base:0,value:i.v,fill:i.f};}});},[wf]);
   const sR = useMemo(()=>[0.5,1,1.5,2.5,3.5,5].map(x=>Math.round(d.actualBudget*x)),[d.actualBudget]);
   const sE = [Math.round(d.eq*.6),Math.round(d.eq*.8),d.eq,Math.round(d.eq*1.15),Math.round(d.eq*1.45)];
   const cSR = (rev,eqA)=>{const w=d.calcWF(rev);const r=d.eq>0?eqA/d.eq:0;return d.eq>0?((w.tr*r)-eqA)/eqA:-1;};
@@ -531,7 +531,7 @@ export default function Dashboard() {
               <div style={{display:"flex",gap:"16px"}}>
                 <div style={{flex:1,textAlign:"center"}}><div style={{fontFamily:F.display,fontSize:"30px",color:moicColor(wfBase.moic),textShadow:"0 2px 10px rgba(0,0,0,0.5)"}}><AV>{moicDisplay(wfBase.moic)}</AV></div><div style={{fontFamily:F.mono,fontSize:"10px",color:T.cw50}}>MOIC</div></div>
                 <div style={{flex:1,textAlign:"center"}}><div style={{fontFamily:F.display,fontSize:"30px",color:T.w92,textShadow:"0 2px 10px rgba(0,0,0,0.5)"}}><AV>{wfBase.moic!==null?fF(Math.round(wfBase.tr)):"N/A"}</AV></div><div style={{fontFamily:F.mono,fontSize:"10px",color:T.cw50}}>TOTAL RETURN</div></div>
-                <div style={{flex:1,textAlign:"center"}}><div style={{fontFamily:F.display,fontSize:"30px",color:T.purple,textShadow:"0 2px 10px rgba(157,122,237,0.3)"}}><AV>{fmt(wfBase.pb)}</AV></div><div style={{fontFamily:F.mono,fontSize:"10px",color:T.cw50}}>PRODUCER NET</div></div>
+                <div style={{flex:1,textAlign:"center"}}><div style={{fontFamily:F.display,fontSize:"30px",color:T.goldPrimary,textShadow:"0 2px 10px rgba(242,202,80,0.3)"}}><AV>{fmt(wfBase.pb)}</AV></div><div style={{fontFamily:F.mono,fontSize:"10px",color:T.cw50}}>PRODUCER NET</div></div>
               </div>
             </FeedbackPanel>
           </>}
@@ -605,7 +605,7 @@ export default function Dashboard() {
             <div style={{display:"flex",gap:"8px",marginTop:"16px"}}>{[{l:SL_BEAR,v:d.rt.conservative,moic:wfCon.moic},{l:SL_BASE+" Case",v:d.rt.base,moic:wfBase.moic},{l:SL_BULL,v:d.rt.upside,moic:wfUp.moic}].map(x=><button key={x.l} onClick={()=>setScenario(x.v)} style={{flex:1,background:activeScenario===x.v?"rgba(242,202,80,0.04)":"transparent",border:`1px solid ${activeScenario===x.v?T.goldLine:T.border}`,borderRadius:"10px",padding:"16px",cursor:"pointer",textAlign:"left",transition:"all 0.15s"}}><div style={{fontFamily:F.mono,fontSize:"11px",color:activeScenario===x.v?T.goldPrimary:T.cw50,fontWeight:700,textTransform:"uppercase",letterSpacing:"1px"}}>{x.l}</div><div style={{fontFamily:F.display,fontSize:"28px",color:activeScenario===x.v?T.w92:T.cw70,marginTop:"4px"}}><AV>{fmt(x.v)}</AV></div><div style={{display:"inline-block",background:x.moic!==null?(x.moic>=1?T.greenDim:T.redDim):"rgba(255,255,255,0.03)",borderRadius:"6px",padding:"4px 12px",marginTop:"8px"}}><span style={{fontFamily:F.mono,fontSize:"17px",fontWeight:700,color:moicColor(x.moic)}}>{moicDisplay(x.moic)}</span></div></button>)}</div>
           </Glass>
           <Glass><SL>Waterfall Bridge</SL><div style={{width:"100%",height:360,marginTop:"10px"}}><ResponsiveContainer><BarChart data={wb} margin={{left:10,right:10,top:10,bottom:35}}><CartesianGrid horizontal vertical={false} stroke="rgba(255,255,255,0.03)"/><XAxis dataKey="name" tick={{fill:T.cw70,fontSize:11,fontFamily:F.mono}} angle={-30} textAnchor="end" height={55}/><YAxis tick={{fill:T.cw70,fontSize:11,fontFamily:F.mono}} tickFormatter={fmt}/><Tooltip content={<CTT/>}/><Bar dataKey="base" stackId="a" fill="transparent"/><Bar dataKey="value" stackId="a" radius={[6,6,0,0]}>{wb.map((d,i)=><Cell key={i} fill={d.fill} opacity={0.8}/>)}</Bar></BarChart></ResponsiveContainer></div></Glass>
-          <div style={{display:"flex",gap:"14px",flexWrap:"wrap"}}><KPI label="Investor Return" value={wf.moic!==null?fmt(wf.tr):"N/A"} color={wf.moic!==null?(wf.tr>=d.eq?T.green:T.red):T.cw50}/><KPI label="MOIC" value={moicDisplay(wf.moic)} color={moicColor(wf.moic)}/><KPI label="ROI" value={wf.roi!==null?pct(wf.roi):"N/A"} color={wf.roi!==null?(wf.roi>=0?T.green:T.red):T.cw50}/><KPI label="Producer Net" value={fmt(wf.pb)} color={T.purple}/></div>
+          <div style={{display:"flex",gap:"14px",flexWrap:"wrap"}}><KPI label="Investor Return" value={wf.moic!==null?fmt(wf.tr):"N/A"} color={wf.moic!==null?(wf.tr>=d.eq?T.green:T.red):T.cw50}/><KPI label="MOIC" value={moicDisplay(wf.moic)} color={moicColor(wf.moic)}/><KPI label="ROI" value={wf.roi!==null?pct(wf.roi):"N/A"} color={wf.roi!==null?(wf.roi>=0?T.green:T.red):T.cw50}/><KPI label="Producer Net" value={fmt(wf.pb)} color={T.goldPrimary}/></div>
         </div>}
 
         {/* ═══ REVENUE — v4.9: buyout-aware ═══ */}
@@ -626,7 +626,7 @@ export default function Dashboard() {
           {/* Standard: window bar chart */}
           {!isBuyout&&<Glass><SL sub={`${inp.genre} benchmarks at ${fmt(inp.totalBudget)}.`}>Revenue by Window</SL><div style={{width:"100%",height:380,marginTop:"14px"}}><ResponsiveContainer><BarChart data={d.rw} margin={{left:10,right:10,top:10,bottom:55}}><CartesianGrid horizontal vertical={false} stroke="rgba(255,255,255,0.03)"/><XAxis dataKey="window" tick={{fill:T.cw70,fontSize:11,fontFamily:F.mono}} angle={-30} textAnchor="end" height={55}/><YAxis tick={{fill:T.cw70,fontSize:11,fontFamily:F.mono}} tickFormatter={fmt}/><Tooltip content={<CTT/>}/><Bar dataKey="conservative" name={SL_BEAR} fill={T.red} opacity={0.55} radius={[3,3,0,0]} barSize={14}/><Bar dataKey="base" name={SL_BASE} fill={T.goldPrimary} opacity={0.65} radius={[3,3,0,0]} barSize={14}/><Bar dataKey="upside" name={SL_BULL} fill={T.green} opacity={0.65} radius={[3,3,0,0]} barSize={14}/><Legend wrapperStyle={{fontFamily:F.mono,fontSize:"11px"}}/></BarChart></ResponsiveContainer></div></Glass>}
           <Glass><SL sub="Gold line = budget.">Breakeven by Strategy</SL><div style={{width:"100%",height:220,marginTop:"14px"}}><ResponsiveContainer><BarChart data={d.be} layout="vertical" margin={{left:120,right:30}}><XAxis type="number" tick={{fill:T.cw70,fontSize:11,fontFamily:F.mono}} tickFormatter={fmt}/><YAxis type="category" dataKey="strategy" tick={{fill:T.cw70,fontSize:12,fontFamily:F.mono}} width={115}/><Tooltip content={<CTT/>}/><ReferenceLine x={d.actualBudget} stroke={T.goldPrimary} strokeDasharray="5 5" strokeOpacity={0.5}/><Bar dataKey="breakeven" radius={[0,6,6,0]} barSize={20}>{d.be.map((b,i)=><Cell key={i} fill={b.breakeven<d.actualBudget*1.5?T.green:b.breakeven<d.actualBudget*4?T.amber:T.red} opacity={.6}/>)}</Bar></BarChart></ResponsiveContainer></div></Glass>
-          <Glass accent style={{textAlign:"center"}}><div style={{fontFamily:F.mono,fontSize:"11px",color:T.purple,letterSpacing:"3px",marginBottom:"12px",fontWeight:700}}>CUSTOM COMP REPORTS</div><div style={{fontFamily:F.body,fontSize:"15px",color:T.w75,lineHeight:1.7,maxWidth:"480px",margin:"0 auto"}}>How did comparable films perform? Real market data for your genre, budget range, and distribution strategy.</div><button style={{marginTop:"18px",padding:"12px 32px",background:T.purpleDim,border:`1px solid rgba(157,122,237,0.25)`,borderRadius:"10px",fontFamily:F.mono,fontSize:"11px",letterSpacing:"2px",color:T.purple,cursor:"pointer",fontWeight:700,textTransform:"uppercase"}}>LEARN MORE →</button></Glass>
+          <Glass accent style={{textAlign:"center"}}><div style={{fontFamily:F.mono,fontSize:"11px",color:T.goldPrimary,letterSpacing:"3px",marginBottom:"12px",fontWeight:700}}>CUSTOM COMP REPORTS</div><div style={{fontFamily:F.body,fontSize:"15px",color:T.w75,lineHeight:1.7,maxWidth:"480px",margin:"0 auto"}}>How did comparable films perform? Real market data for your genre, budget range, and distribution strategy.</div><button style={{marginTop:"18px",padding:"12px 32px",background:T.goldDim,border:`1px solid ${T.goldLine}`,borderRadius:"10px",fontFamily:F.mono,fontSize:"11px",letterSpacing:"2px",color:T.goldPrimary,cursor:"pointer",fontWeight:700,textTransform:"uppercase"}}>LEARN MORE →</button></Glass>
         </div>}
 
         {/* ═══ BUDGET ═══ */}
@@ -655,7 +655,7 @@ export default function Dashboard() {
         {tid==="cashflow"&&wizardDone&&<div style={{display:"flex",flexDirection:"column",gap:"28px"}}>
           <div style={{fontFamily:F.body,fontSize:"14px",color:T.w65}}>Cash deploys during production, returns through distribution.{stateData.months!=="—"?` TC est: ${stateData.months} mo.`:""}</div>
           <Glass><SL>Cash Flow</SL><div style={{width:"100%",height:360,marginTop:"14px"}}><ResponsiveContainer><ComposedChart data={d.cf} margin={{left:10,right:10,top:10,bottom:10}}><CartesianGrid horizontal vertical={false} stroke="rgba(255,255,255,0.03)"/><XAxis dataKey="month" tick={{fill:T.cw70,fontSize:11,fontFamily:F.mono}}/><YAxis yAxisId="b" tick={{fill:T.cw70,fontSize:11,fontFamily:F.mono}} tickFormatter={fmt}/><YAxis yAxisId="l" orientation="right" tick={{fill:T.cw70,fontSize:11,fontFamily:F.mono}} tickFormatter={fmt}/><Tooltip content={<CTT/>}/><Bar yAxisId="b" dataKey="inflows" name="In" fill={T.green} opacity={0.55} radius={[4,4,0,0]} barSize={16}/><Bar yAxisId="b" dataKey="outflows" name="Out" fill={T.red} opacity={0.45} radius={[0,0,4,4]} barSize={16}/><Line yAxisId="l" type="monotone" dataKey="cumulative" name="Cum" stroke={T.goldPrimary} strokeWidth={2} dot={{fill:T.goldPrimary,r:3}}/><ReferenceLine yAxisId="b" y={0} stroke={T.cw30}/><Legend wrapperStyle={{fontFamily:F.mono,fontSize:"11px"}}/></ComposedChart></ResponsiveContainer></div></Glass>
-          <Glass><SL>Timeline</SL><div style={{display:"flex",height:"44px",borderRadius:"8px",overflow:"hidden",marginTop:"14px"}}>{[{p:"Pre-Prod",m:2,c:T.gold},{p:"Production",m:3,c:T.goldPrimary},{p:"Post",m:3,c:T.purple},{p:"Delivery",m:2,c:T.amber},{p:"Distribution",m:4,c:T.green}].map(x=><div key={x.p} style={{flex:x.m,background:x.c,opacity:0.75,display:"flex",alignItems:"center",justifyContent:"center",fontFamily:F.mono,fontSize:"12px",color:"#000",fontWeight:700,borderRight:"1px solid #000"}}>{x.p}</div>)}</div></Glass>
+          <Glass><SL>Timeline</SL><div style={{display:"flex",height:"44px",borderRadius:"8px",overflow:"hidden",marginTop:"14px"}}>{[{p:"Pre-Prod",m:2,c:T.gold},{p:"Production",m:3,c:T.goldPrimary},{p:"Post",m:3,c:T.amber},{p:"Delivery",m:2,c:T.amber},{p:"Distribution",m:4,c:T.green}].map(x=><div key={x.p} style={{flex:x.m,background:x.c,opacity:0.75,display:"flex",alignItems:"center",justifyContent:"center",fontFamily:F.mono,fontSize:"12px",color:"#000",fontWeight:700,borderRight:"1px solid #000"}}>{x.p}</div>)}</div></Glass>
         </div>}
 
         {/* ═══ SENSITIVITY ═══ */}
