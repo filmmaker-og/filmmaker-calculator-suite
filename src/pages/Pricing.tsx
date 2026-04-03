@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Check, X } from "lucide-react";
-import { GOLD, CTA, BG, AMBER, gold, white, ctaGold } from "@/lib/tokens";
+import { GOLD, CTA, BG, AMBER, gold, white, ctaGold, amber } from "@/lib/tokens";
 
 /* ═══════════════════════════════════════════════════════════════════
    Pricing Page — 4-tier layout (Free, Founding Member, Standard, Power)
@@ -97,42 +97,108 @@ const adHocServices = [
 const Pricing = () => {
   const navigate = useNavigate();
   const daysLeft = getFoundingDaysLeft();
+  const endDate = new Date(LAUNCH_DATE.getTime() + FOUNDING_WINDOW_DAYS * 86400000);
+  const endDateStr = endDate.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
 
   return (
     <div
       style={{
         minHeight: "100vh",
         background: BG.void,
-        padding: "80px 20px 60px",
+        padding: "0 0 60px",
       }}
     >
-      <div style={{ maxWidth: 780, margin: "0 auto" }}>
-        {/* ── Page heading ── */}
-        <h1
+      {/* ── Cinematic Hero ── */}
+      <div
+        className="grain-surface"
+        style={{
+          position: "relative",
+          width: "100%",
+          overflow: "hidden",
+          paddingTop: "80px",
+          paddingBottom: "64px",
+          display: "flex",
+          flexDirection: "column" as const,
+          alignItems: "center",
+          justifyContent: "center",
+          textAlign: "center" as const,
+        }}
+      >
+        {/* Gold glow orb — top center */}
+        <div
           style={{
-            fontFamily: "'Bebas Neue', sans-serif",
-            fontSize: "clamp(36px, 6vw, 52px)",
-            color: white(0.92),
-            textAlign: "center",
-            letterSpacing: "0.08em",
-            marginBottom: "8px",
+            position: "absolute",
+            top: "-120px",
+            left: "50%",
+            transform: "translateX(-50%)",
+            width: "600px",
+            height: "600px",
+            borderRadius: "50%",
+            background: `radial-gradient(circle, ${gold(0.10)} 0%, ${gold(0.03)} 40%, transparent 70%)`,
+            pointerEvents: "none" as const,
           }}
-        >
-          PRICING
-        </h1>
-        <p
+        />
+        {/* Gold glow orb — bottom left */}
+        <div
           style={{
-            fontFamily: "'Inter', sans-serif",
-            fontSize: "16px",
-            color: white(0.65),
-            textAlign: "center",
-            lineHeight: 1.6,
-            marginBottom: "48px",
+            position: "absolute",
+            bottom: "-80px",
+            left: "-100px",
+            width: "400px",
+            height: "400px",
+            borderRadius: "50%",
+            background: `radial-gradient(circle, ${gold(0.06)} 0%, transparent 60%)`,
+            pointerEvents: "none" as const,
           }}
-        >
-          Model your recoupment waterfall. Pick the tier that fits.
-        </p>
+        />
 
+        {/* Text content */}
+        <div style={{ position: "relative", zIndex: 1, maxWidth: 680, padding: "0 20px" }}>
+          <h1
+            style={{
+              fontFamily: "'Bebas Neue', sans-serif",
+              fontSize: "clamp(40px, 8vw, 72px)",
+              color: white(0.95),
+              letterSpacing: "0.06em",
+              lineHeight: 1.05,
+              margin: "0 0 24px",
+              textShadow: `0 0 30px ${gold(0.55)}, 0 0 80px ${gold(0.18)}`,
+            }}
+          >
+            LOCK IN $19/MO FOR LIFE
+          </h1>
+
+          {daysLeft > 0 && (
+            <p
+              style={{
+                fontFamily: "'Roboto Mono', monospace",
+                fontSize: "clamp(28px, 5vw, 48px)",
+                fontWeight: 700,
+                color: AMBER,
+                letterSpacing: "0.08em",
+                margin: "0 0 20px",
+                textShadow: `0 0 24px ${amber(0.40)}, 0 0 60px ${amber(0.12)}`,
+              }}
+            >
+              {daysLeft} DAYS LEFT
+            </p>
+          )}
+
+          <p
+            style={{
+              fontFamily: "'Inter', sans-serif",
+              fontSize: "clamp(15px, 2vw, 18px)",
+              color: white(0.65),
+              lineHeight: 1.6,
+              margin: 0,
+            }}
+          >
+            Founding members get unlimited access. Offer ends {endDateStr}.
+          </p>
+        </div>
+      </div>
+
+      <div style={{ maxWidth: 780, margin: "0 auto", padding: "48px 20px 0" }}>
         {/* ── 3-column paid tiers ── */}
         <div
           style={{
