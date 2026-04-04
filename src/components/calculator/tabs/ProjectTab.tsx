@@ -20,9 +20,8 @@ const STATUSES = ["Development", "Pre-Prod", "Production", "Post"];
 
 const warmCard: React.CSSProperties = {
   position: "relative",
-  background: "#222226",
-  border: "1px solid rgba(212,175,55,0.25)",
-  borderTop: "1px solid rgba(255,255,255,0.08)",
+  background: "#0A0A0A",
+  border: "1px solid rgba(212,175,55,0.15)",
   borderRadius: 8,
   overflow: "hidden",
   marginBottom: 16,
@@ -51,9 +50,8 @@ const warmToplineShimmer: React.CSSProperties = {
 
 const dataCard: React.CSSProperties = {
   position: "relative",
-  background: "#222226",
+  background: "#0A0A0A",
   border: "1px solid rgba(212,175,55,0.15)",
-  borderTop: "1px solid rgba(255,255,255,0.08)",
   borderRadius: 8,
   overflow: "hidden",
   marginBottom: 16,
@@ -367,6 +365,44 @@ const ProjectTab = ({ project, onUpdateProject, onAdvance }: ProjectTabProps) =>
 
   return (
     <div style={s.wrapper}>
+      {/* ═══ Hero — sits directly on black (no wrapper card) ═══ */}
+      <div style={{ position: "relative", marginBottom: 20 }}>
+        <section style={{
+          position: "relative", textAlign: "center",
+          padding: "24px 20px 20px", borderRadius: 8, overflow: "hidden",
+          background: "#0A0A0A",
+          border: "1px solid rgba(212,175,55,0.15)",
+        }}>
+          <div style={{ position: "relative", zIndex: 1 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12, padding: "0 8px" }}>
+              <div style={{ flex: 1, height: 1, background: "rgba(212,175,55,0.35)" }} />
+              <span style={{
+                fontFamily: "'Roboto Mono', monospace", fontSize: 13,
+                letterSpacing: "0.15em", textTransform: "uppercase" as const,
+                color: "rgba(212,175,55,0.65)", whiteSpace: "nowrap" as const,
+              }}>Step 00 · Project</span>
+              <div style={{ flex: 1, height: 1, background: "rgba(212,175,55,0.35)" }} />
+            </div>
+            <h1 style={{
+              fontFamily: "'Bebas Neue', sans-serif", fontSize: "2.8rem",
+              letterSpacing: "0.02em", lineHeight: 0.90, color: "#fff", marginBottom: 8,
+              textShadow: "0 2px 20px rgba(0,0,0,0.95), 0 4px 40px rgba(0,0,0,0.5)",
+            }}>
+              What Are You<br />
+              <span style={{
+                color: "#D4AF37",
+                textShadow: "0 2px 20px rgba(0,0,0,0.8), 0 0 40px rgba(212,175,55,0.50), 0 0 80px rgba(212,175,55,0.25)",
+              }}>Building?</span>
+            </h1>
+            <p style={{
+              fontFamily: "'Inter', sans-serif", fontSize: 15,
+              color: "rgba(255,255,255,0.75)", lineHeight: 1.45,
+              textShadow: "0 2px 12px rgba(0,0,0,0.9)",
+            }}>Tell us about the project — or jump straight to the numbers.</p>
+          </div>
+        </section>
+      </div>
+
       {/* ═══ Warm Card — Title + Logline + Genre + Status ═══ */}
       <div style={warmCard}>
         <div style={warmGlow} />
