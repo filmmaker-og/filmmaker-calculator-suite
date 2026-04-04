@@ -252,24 +252,20 @@ const s: Record<string, React.CSSProperties> = {
   // CTA
   reveal: {
     opacity: 0,
-    maxHeight: 0,
-    overflow: "hidden" as const,
     transform: "translateY(12px)",
-    transition: "opacity 0.4s ease 0.15s, transform 0.4s ease 0.15s, max-height 0.35s ease",
+    transition: "opacity 0.4s ease 0.15s, transform 0.4s ease 0.15s",
     pointerEvents: "none" as const,
   },
   revealVis: {
     opacity: 1,
-    maxHeight: 120,
-    overflow: "hidden" as const,
     transform: "translateY(0)",
-    transition: "opacity 0.4s ease 0.15s, transform 0.4s ease 0.15s, max-height 0.35s ease",
+    transition: "opacity 0.4s ease 0.15s, transform 0.4s ease 0.15s",
     pointerEvents: "auto" as const,
   },
   cta: {
     width: "100%",
     padding: 16,
-    marginTop: 16,
+    marginTop: 20,
     background: "#F9E076",
     border: "none",
     borderRadius: 8,
@@ -302,15 +298,23 @@ const s: Record<string, React.CSSProperties> = {
     border: "none",
     width: "100%",
   },
-  autosave: {
-    textAlign: "center",
-    fontFamily: "'Roboto Mono', monospace",
-    fontSize: 9,
-    letterSpacing: "0.1em",
-    textTransform: "uppercase",
-    color: "rgba(255,255,255,0.30)",
-    marginTop: 12,
-    marginBottom: 80,
+  disc: {
+    display: "flex",
+    alignItems: "flex-start",
+    gap: "10px",
+    padding: "16px",
+    marginTop: "24px",
+    background: "#0A0A0A",
+    border: "1px solid rgba(212,175,55,0.12)",
+    borderRadius: "10px",
+    position: "relative" as const,
+    overflow: "hidden",
+  },
+  discText: {
+    fontSize: "12px",
+    color: "rgba(255,255,255,0.48)",
+    lineHeight: 1.5,
+    position: "relative" as const,
   },
 };
 
@@ -658,8 +662,20 @@ const ProjectTab = ({ project, onUpdateProject, onAdvance }: ProjectTabProps) =>
         </svg>
       </button>
 
-      {/* Autosave */}
-      <p style={s.autosave}>Session data — stays in your browser</p>
+      {/* Disclaimer */}
+      <div style={s.disc}>
+        <div style={{
+          position: "absolute", top: 0, left: 0, right: 0, height: 60,
+          background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.06) 0%, transparent 70%)",
+          pointerEvents: "none" as const,
+        }} />
+        <svg style={{ color: "rgba(212,175,55,0.35)", flexShrink: 0, marginTop: "1px", position: "relative" }} width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+          <line x1="12" y1="9" x2="12" y2="13" />
+          <line x1="12" y1="17" x2="12.01" y2="17" />
+        </svg>
+        <span style={s.discText}>Educational model only. Not financial, legal, or investment advice.</span>
+      </div>
     </div>
   );
 };
