@@ -93,12 +93,12 @@ const LeadCaptureModal = ({ isOpen, onClose, onEmailSubmitted, onSuccess }: Lead
           .lead-capture-input:-webkit-autofill,
           .lead-capture-input:-webkit-autofill:hover,
           .lead-capture-input:-webkit-autofill:focus {
-            -webkit-box-shadow: 0 0 0 1000px rgba(255,255,255,0.95) inset !important;
-            -webkit-text-fill-color: #000 !important;
-            caret-color: #000;
+            -webkit-box-shadow: 0 0 0 1000px rgba(20,20,22,1) inset !important;
+            -webkit-text-fill-color: rgba(255,255,255,0.87) !important;
+            caret-color: rgba(255,255,255,0.87);
           }
           .lead-capture-input::placeholder {
-            color: rgba(0,0,0,0.40);
+            color: rgba(255,255,255,0.38);
           }
         `}</style>
         {/* Gold accent */}
@@ -130,9 +130,9 @@ const LeadCaptureModal = ({ isOpen, onClose, onEmailSubmitted, onSuccess }: Lead
                 }}
                 className="lead-capture-input w-full h-12 px-4 text-[14px] focus:outline-none transition-all"
                 style={{
-                  background: "rgba(255,255,255,0.95)",
-                  color: "#000",
-                  border: "1px solid rgba(0,0,0,0.12)",
+                  background: "rgba(255,255,255,0.04)",
+                  color: "rgba(255,255,255,0.87)",
+                  border: "1px solid rgba(255,255,255,0.12)",
                   borderRadius: "8px",
                 }}
                 onFocus={e => {
@@ -140,7 +140,7 @@ const LeadCaptureModal = ({ isOpen, onClose, onEmailSubmitted, onSuccess }: Lead
                   e.currentTarget.style.boxShadow = `0 0 0 3px ${gold(0.15)}`;
                 }}
                 onBlur={e => {
-                  e.currentTarget.style.borderColor = "rgba(0,0,0,0.12)";
+                  e.currentTarget.style.borderColor = "rgba(255,255,255,0.12)";
                   e.currentTarget.style.boxShadow = "none";
                 }}
               />
@@ -163,9 +163,9 @@ const LeadCaptureModal = ({ isOpen, onClose, onEmailSubmitted, onSuccess }: Lead
                 }}
                 className="lead-capture-input w-full h-12 px-4 font-mono text-[14px] focus:outline-none transition-all"
                 style={{
-                  background: "rgba(255,255,255,0.95)",
-                  color: "#000",
-                  border: "1px solid rgba(0,0,0,0.12)",
+                  background: "rgba(255,255,255,0.04)",
+                  color: "rgba(255,255,255,0.87)",
+                  border: "1px solid rgba(255,255,255,0.12)",
                   borderRadius: "8px",
                 }}
                 onFocus={e => {
@@ -173,7 +173,7 @@ const LeadCaptureModal = ({ isOpen, onClose, onEmailSubmitted, onSuccess }: Lead
                   e.currentTarget.style.boxShadow = `0 0 0 3px ${gold(0.08)}`;
                 }}
                 onBlur={e => {
-                  e.currentTarget.style.borderColor = "rgba(0,0,0,0.12)";
+                  e.currentTarget.style.borderColor = "rgba(255,255,255,0.12)";
                   e.currentTarget.style.boxShadow = "none";
                 }}
               />

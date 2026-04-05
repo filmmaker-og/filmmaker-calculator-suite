@@ -60,11 +60,12 @@ export default {
         },
 
         // ── INK: active text tier system (use these) ──
+        // Widened hierarchy for dark-mode scannability (delta 0.45 vs old 0.27)
         ink: {
           DEFAULT:   "#FFFFFF",                          // headlines, key numbers — FULL
-          body:      "rgba(255, 255, 255, 0.90)",        // primary body text (brand guide 0.85-0.92)
-          muted:     "rgba(255, 255, 255, 0.78)",        // readable subordinate text
-          secondary: "rgba(255, 255, 255, 0.65)",        // tertiary, metadata (OLED floor = 0.65)
+          body:      "rgba(255, 255, 255, 0.87)",        // primary body text (87% high-emphasis)
+          muted:     "rgba(255, 255, 255, 0.65)",        // readable subordinate text
+          secondary: "rgba(255, 255, 255, 0.50)",        // tertiary, metadata, captions
           ghost:     "rgba(255, 255, 255, 0.06)",        // hover bg, surface tints
         },
 
@@ -80,11 +81,13 @@ export default {
           surface:   "rgba(255, 255, 255, 0.06)",
         },
 
-        // ── BACKGROUNDS — #000, #111, #1A1A1A only ──
+        // ── BACKGROUNDS — 4-level tonal elevation system ──
         bg: {
-          void:      "#141416",
-          elevated:  "#222226",
-          surface:   "#141416",
+          deep:      "#0F0F11",                          // overlay/scrim contexts, below void
+          void:      "#141416",                          // page background
+          nested:    "#1A1A1E",                          // nested cards, content wells (5% white)
+          elevated:  "#222226",                          // section wrappers
+          surface:   "#1A1A1E",                          // inner well — distinct from void
           card:      "#222226",                          // legacy alias → mapped to elevated
           "card-border": "rgba(255, 255, 255, 0.15)",   // legacy alias
           "card-rule":   "rgba(255, 255, 255, 0.06)",   // legacy alias

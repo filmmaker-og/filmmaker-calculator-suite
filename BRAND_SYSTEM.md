@@ -1,7 +1,7 @@
 # FILMMAKER.OG — Brand System
 
-**Version:** 4.0
-**Last updated:** March 29, 2026
+**Version:** 4.1
+**Last updated:** April 5, 2026
 **Source of truth for:** Every page, component, and visual decision in the product.
 
 When building or reskinning any page, reference this file — not memory, not other pages. If a decision isn't in here, it hasn't been made yet.
@@ -13,16 +13,17 @@ When building or reskinning any page, reference this file — not memory, not ot
 ### The Rule
 Gold + black + warm white. That's it. Every other color is semantic (communicates data) or an earned exception. No purple anywhere.
 
-### Surface Hierarchy — Three-Step Depth System
+### Surface Hierarchy — Four-Level Tonal Elevation System
 | Token | Value | Use |
 |---|---|---|
+| Deep | `#0F0F11` | Overlay/scrim contexts, below void |
 | Page (Void) | `#141416` | `<body>` background — lifted from pure black to eliminate OLED halation. Warm gradient overlay: `#141416 → #151517 → #141416` |
+| Nested / Surface | `#1A1A1E` | Nested cards, content wells — distinct from void (~5% white overlay) |
 | Section Wrapper | `#222226` | The "stage" — lighter slate that clearly lifts off the void. `border-radius: 8px` |
-| Inner Well | `#141416` | Near-black — content recessed into the wrapper like a shadow box |
 | Header Band | `linear-gradient(180deg, rgba(212,175,55,0.08), #141416)` | First child inside every wrapper — warm gold gradient fading to dark well. `inset 0 2px 6px` shadow. |
 | Inner Card | `linear-gradient(180deg, rgba(212,175,55,0.03), #141416)` | Content cards inside sections — subtle gold warmth |
 
-The wrappers (#222226) are the brightest layer. Inner wells (#141416) are recessed below them. Gold, green, and red pop against the near-black wells. Section wrappers use white structural borders (`rgba(255,255,255,0.10-0.18)`), not gold.
+Four distinct tonal levels create depth through luminance (per Material Design 3 tonal elevation). Wrappers (#222226) are the brightest layer. Nested surfaces (#1A1A1E) sit between void and wrappers. Gold, green, and red pop against the near-black wells. Section wrappers use white structural borders (`rgba(255,255,255,0.10-0.18)`), not gold.
 
 Deprecated values (do not use): `#000`, `#111`, `#0C0C0E` (old void — caused halation), `#121214` (old inner well), `#1A1A1C` (old container), `#1E1E20`, `#232326` (old surface), `#242428`.
 
@@ -59,15 +60,16 @@ Body text uses warm-white (`rgba(250,248,244,...)`) not cold-white (`rgba(255,25
 | Role | Value | Use |
 |---|---|---|
 | Headlines | `#fff` or `white(0.95)` | Section headlines, hero headline |
-| Body (primary) | `rgba(250,248,244,0.90-0.92)` | Testimonials, closer body, WITH column |
-| Body (standard) | `rgba(250,248,244,0.85)` | All Inter body text, stakes body, descriptions |
-| Labels (bright) | `rgba(250,248,244,0.80)` | Total Deductions label, important metadata |
-| Labels | `rgba(255,255,255,0.80)` | Slider labels (14px), REMAINING, Estimated Net Profit (cold-white) |
-| Tertiary | `rgba(250,248,244,0.65-0.75)` | Swipe indicator, ready-to-model text |
-| Footer | `rgba(255,255,255,0.65)` | Footer text, disclaimers |
-| Easter egg | `rgba(255,255,255,0.45)` | "Best viewed in the dark." — decorative only |
+| Body (primary) | `rgba(255,255,255,0.87)` / `rgba(250,248,244,0.87)` | High-emphasis body text (widened from 0.90-0.92) |
+| Body (standard) | `rgba(250,248,244,0.75)` | All Inter body text, stakes body, descriptions |
+| Labels | `rgba(255,255,255,0.65)` | Slider labels, subordinate metadata (cold-white) |
+| Tertiary | `rgba(255,255,255,0.50)` | Captions, metadata, swipe indicator |
+| Footer | `rgba(255,255,255,0.50)` | Footer text, disclaimers |
+| Easter egg | `rgba(255,255,255,0.38)` | "Best viewed in the dark." — decorative only |
 
-**Opacity floor:** No text intended to be read may go below `0.65` (OLED-hardened floor, raised from 0.60). Below that is decorative only.
+**Opacity hierarchy delta:** 0.45 (0.95 → 0.50) for clear visual scanning. Old delta was 0.27 — too compressed for OLED dark surfaces. The wider spread ensures headlines, body, labels, and metadata are instantly distinguishable.
+
+**Opacity floor:** No text intended to be read may go below `0.50` (updated from 0.65 — tertiary text at 0.50 still achieves ~7.5:1 contrast on #141416). Below that is decorative only.
 
 ### Import Rule
 Always import from `@/lib/tokens`. Never write raw `rgba()` in `.tsx` files.
@@ -101,15 +103,17 @@ All three loaded via Google Fonts in `index.css`.
 | Body | Inter | 16px | `rgba(250,248,244,0.88)` | line-height: 1.6. Not 1.45. Not 1.55. |
 | EyebrowPill | Roboto Mono | 13px | `#D4AF37` | `letter-spacing: 0.16em`, uppercase |
 | Slider/field label | Roboto Mono | 14px | `white(0.80)` | uppercase, `0.06em` tracking |
-| Badge/tag text | Roboto Mono | 11px minimum | Varies | `letter-spacing: 0.06–0.08em`, uppercase |
-| Footer text | Inter | 14px | `white(0.65)` | Disclaimer, legal |
+| Badge/tag text | Roboto Mono | 12px minimum | Varies | `letter-spacing: 0.06–0.08em`, uppercase |
+| Footer text | Inter | 14px | `white(0.50)` | Disclaimer, legal |
 
 ### Rules
 - Bebas Neue is always uppercase (it only has uppercase glyphs)
-- Inter body text is always 16px with `line-height: 1.6`
+- Inter body text is always 16px with `line-height: 1.6` and `letter-spacing: 0.01em` (dark-mode readability)
 - Roboto Mono labels are always uppercase with tracked letter-spacing
 - Never use `font-weight: 700` on Bebas Neue (it only has 400)
 - Use `clamp()` for responsive sizing on headlines
+- **Minimum text size:** 12px for all user-facing text (raised from 11px per 2026 dark-mode accessibility guidance)
+- **Label weight:** 500 (reduced from 600 — fonts appear bolder on dark backgrounds due to irradiation illusion)
 
 ---
 

@@ -76,24 +76,24 @@ const FONT = {
   } as React.CSSProperties,
   label: {
     fontSize: "12px",
-    fontWeight: 600,
+    fontWeight: 500,
     letterSpacing: "0.20em",
     textTransform: "uppercase" as const,
   } as React.CSSProperties,
   fine: {
-    fontSize: "11px",
-    fontWeight: 600,
+    fontSize: "12px",
+    fontWeight: 500,
     letterSpacing: "0.15em",
     textTransform: "uppercase" as const,
   } as React.CSSProperties,
 };
 
-// White opacity tiers
+// White opacity tiers (widened hierarchy for dark-mode scannability)
 const W = {
-  primary: "rgba(255,255,255,0.92)",
+  primary: "rgba(255,255,255,0.95)",
   secondary: "rgba(255,255,255,0.75)",
-  tertiary: "rgba(255,255,255,0.72)",
-  quaternary: "rgba(255,255,255,0.48)",
+  tertiary: "rgba(255,255,255,0.60)",
+  quaternary: "rgba(255,255,255,0.50)",
   ghost: "rgba(255,255,255,0.25)",
 };
 
