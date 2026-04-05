@@ -86,12 +86,16 @@ export const GOLD_DEEP = '#7A5C12';
 // ─── Backgrounds ────────────────────────────────────────────────
 
 export const BG = {
+  /** Deepest layer — overlay/scrim contexts, below void */
+  deep: '#0F0F11',
   /** Near-black warm — page background (lifted from #0C0C0E to fix OLED halation) */
   void: '#141416',
+  /** Nested cards, content wells — distinct from void (5% white overlay) */
+  nested: '#1A1A1E',
   /** Section wrapper — lighter slate that lifts off the void */
   elevated: '#222226',
-  /** Inner well — recessed content areas (matches void) */
-  surface: '#141416',
+  /** Inner well — recessed content areas, sits between void and elevated */
+  surface: '#1A1A1E',
 } as const;
 
 // ─── Standard Tier Presets ──────────────────────────────────────
@@ -104,10 +108,10 @@ export const GOLD_TIERS = {
 } as const;
 
 export const WHITE_TIERS = {
-  primary: white(0.92),
-  secondary: white(0.85),
-  muted: white(0.78),
-  tertiary: white(0.65),
+  primary: white(0.95),
+  secondary: white(0.75),
+  muted: white(0.60),
+  tertiary: white(0.50),
   ghost: white(0.06),
 } as const;
 

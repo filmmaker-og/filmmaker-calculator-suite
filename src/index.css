@@ -65,9 +65,11 @@
        ═══════════════════════════════════════════════════════════════════ */
     color-scheme: dark;
 
+    --bg-deep: #0F0F11;
     --bg-void: #141416;
+    --bg-nested: #1A1A1E;
     --bg-elevated: #222226;
-    --bg-surface: #141416;
+    --bg-surface: #1A1A1E;
 
     /* ═══════════════════════════════════════════════════════════════════
        TWO-GOLD SYSTEM
@@ -121,9 +123,9 @@
          Extended values permitted for gradients, animations, and premium treatments.
        ═══════════════════════════════════════════════════════════════════ */
     --text-primary: #FFFFFF;
-    --text-secondary: rgba(255, 255, 255, 0.75);
-    --text-muted: rgba(255, 255, 255, 0.72);
-    --text-tertiary: rgba(255, 255, 255, 0.65);
+    --text-secondary: rgba(255, 255, 255, 0.65);
+    --text-muted: rgba(255, 255, 255, 0.60);
+    --text-tertiary: rgba(255, 255, 255, 0.50);
     /* --gold-text removed: not in 4-tier system, never consumed */
 
     /* BORDERS */
@@ -197,6 +199,7 @@
     color: #FFFFFF;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     font-optical-sizing: auto;
+    letter-spacing: 0.01em;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     /* Suppress iOS pull-to-refresh and bounce scroll */
@@ -357,7 +360,7 @@
   }
 
   .chapter-card-body {
-    padding: var(--space-lg);
+    padding: 20px;
     background: var(--bg-void);
   }
 
@@ -446,7 +449,7 @@
   .store-compare-table td:first-child {
     text-align: left;
     color: var(--text-tertiary);
-    font-size: 11px;
+    font-size: 12px;
     min-width: 160px;
   }
 
@@ -501,8 +504,8 @@
     gap: var(--space-xs);
     padding: var(--space-sm) 0;
     font-family: 'Inter', sans-serif;
-    font-size: 11px;
-    font-weight: 600;
+    font-size: 12px;
+    font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     color: rgba(255, 255, 255, 0.55);
@@ -542,8 +545,8 @@
     border: 1px solid var(--gold-medium);
     border-radius: var(--radius-full);
     font-family: 'Inter', sans-serif;
-    font-size: 11px;
-    font-weight: 600;
+    font-size: 12px;
+    font-weight: 500;
     color: var(--text-secondary);
     background: var(--gold-ghost);
     cursor: pointer;
@@ -560,7 +563,7 @@
   .glossary-trigger-lg {
     width: 36px;
     height: 36px;
-    font-size: 11px;
+    font-size: 12px;
   }
 
   /* ═══════════════════════════════════════════════════════════════════
@@ -578,6 +581,13 @@
     color: var(--text-primary);
     width: 100%;
     transition: all var(--timing-fast) ease;
+  }
+
+  @media (hover: hover) {
+    .input-field:hover {
+      border-color: rgba(255, 255, 255, 0.20);
+      background: rgba(255, 255, 255, 0.06);
+    }
   }
 
   .input-field:focus {
@@ -600,8 +610,8 @@
     justify-content: space-between;
     margin-bottom: var(--space-sm);
     font-family: 'Inter', sans-serif;
-    font-size: 11px;
-    font-weight: 600;
+    font-size: 12px;
+    font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 1px;
     color: var(--text-tertiary);
@@ -813,7 +823,12 @@
      FOCUS-VISIBLE — keyboard navigation (accessibility)
      ═══════════════════════════════════════════════════════════════════ */
   button:focus-visible,
-  a:focus-visible {
+  a:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible,
+  [role="button"]:focus-visible,
+  [tabindex]:focus-visible {
     outline: 2px solid var(--gold);
     outline-offset: 2px;
   }

@@ -50,8 +50,8 @@ const s: Record<string, React.CSSProperties> = {
     justifyContent: "center",
     gap: "4px",
     fontFamily: "'Inter', sans-serif",
-    fontSize: "11px",
-    fontWeight: 600,
+    fontSize: "12px",
+    fontWeight: 500,
     textTransform: "uppercase" as const,
     letterSpacing: "0.05em",
     color: "rgba(255,255,255,0.48)",
@@ -64,6 +64,8 @@ const s: Record<string, React.CSSProperties> = {
   },
   tabActive: {
     color: GOLD,
+    background: "rgba(212,175,55,0.08)",
+    borderRadius: "6px",
   },
   tabCompleted: {
     color: "rgba(255,255,255,0.65)",
