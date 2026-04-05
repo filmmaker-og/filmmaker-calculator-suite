@@ -13,10 +13,10 @@
 
 | Severity | Count | Key Items |
 |---|---|---|
-| **CRITICAL** | 2 | Comp Report price mismatch ($90 vs $595); `deal-insight` edge function not in repo |
-| **HIGH** | 1 | AI bot links to `/store/*` URLs that redirect away from product context |
-| **MEDIUM** | 5 | Sitemap lists `/store` not `/pricing`; SaaS tables with no frontend; legacy tier names in investor deck; `saved_calculations` orphan table |
-| **LOW** | 5 | `exports` orphan table; `film-search` Lovable gateway; `filmmaker-logo.jpg` unused; `film_intel_*` tables; ops tables without migrations |
+| **CRITICAL** | 3 | Comp Report price mismatch ($90 vs $595); 5 edge functions not in repo (`deal-insight` + 4 `film-intel-*`); 8 migrated tables not deployed to production |
+| **HIGH** | 2 | AI bot & Calculator link to `/store/*` URLs that redirect away from product context; 3 Stripe subscription products exist with no checkout flow in code |
+| **MEDIUM** | 5 | Sitemap lists `/store` not `/pricing`; SaaS tables with no frontend code; legacy tier names in investor deck; `saved_calculations` orphan table; Boutique in Stripe but not in `create-checkout` |
+| **LOW** | 6 | `exports` orphan table; `film-search` in repo but not deployed; `filmmaker-logo.jpg` unused; 3 legacy Stripe products; 2 ops tables in prod not in repo; ops tables without migrations |
 
 ---
 
@@ -89,71 +89,111 @@ The Pricing page displays "starts at $90" for the Comp Report, while **every oth
 | **Custom Financial Model** | "starts at $2,500" | Not in checkout | N/A | Hardcoded | `src/pages/Pricing.tsx:93` |
 | **Lookbook** | "starts at $1,500" | Not in checkout | N/A | Hardcoded | `src/pages/Pricing.tsx:94` |
 
+### Stripe Products Audit (verified via Stripe MCP)
+
+**Stripe has 12 products. Repo `create-checkout` handles 5. 3 are new subscription products with no checkout code. 3 are legacy.**
+
+#### Active Stripe Products vs Repo
+
+| Stripe Product | Stripe ID | Price | Type | In `create-checkout`? | On `/pricing`? | Status |
+|---|---|---|---|---|---|---|
+| Snapshot+ | `prod_UEmfhPqL9VPQXt` | $19 one-time (`price_1TGJ6fJEIERVYlyFXkKoNnwL`) | One-time | Yes (`snapshot-plus`) | No | OK |
+| Comp Report (5 Comps) | `prod_UG8rcODgC3Y46E` | $595 (`price_1THcZrJEIERVYlyFFyTQNRTt`) | One-time | Yes | "starts at $90" | **CRITICAL mismatch** |
+| Comp Report (10 Comps) | `prod_UG8rTuZKGMgzKz` | $995 (`price_1THcZsJEIERVYlyFjNRrZSrd`) | One-time | Yes | Not listed | OK |
+| Producer's Package | `prod_UG8rqQgC4jDotd` | $1,797 (`price_1THcZsJEIERVYlyFoX1KDFvQ`) | One-time | Yes | Not listed | OK |
+| Working Model | `prod_UG8r1omjYQkH4Q` | $79 (`price_1THcZtJEIERVYlyFuLnYEsKQ`) | One-time | Yes (add-on) | Not listed | OK |
+| Boutique | `prod_UG8r6gJomU7OMM` | $2,997 (`price_1THcZtJEIERVYlyFFsbhFWUT`) | One-time | **No** | Not listed | **Medium** — Stripe product exists but not in `create-checkout` |
+| Snapshot+ Founding ($19/mo) | `prod_UGSHt8q44xSpxM` | $19/mo recurring (`price_1THvMxJEIERVYlyFj1cIqtGK`) | Subscription | **No** | $19/mo | **High** — Stripe subscription product exists, displayed on `/pricing`, but no checkout flow |
+| Standard Dashboard ($49/mo) | `prod_UGSH4a1Jid7qGo` | $49/mo recurring (`price_1THvMxJEIERVYlyFVkZuQH7Q`) | Subscription | **No** | $49/mo | **High** — same issue |
+| Power Tier ($97/mo) | `prod_UGSHv1tfnvcmjv` | $97/mo recurring (`price_1THvMyJEIERVYlyFwB9lDDmc`) | Subscription | **No** | $97/mo | **High** — same issue |
+
+#### Legacy Stripe Products (not referenced in repo)
+
+| Stripe Product | Stripe ID | Price | Status |
+|---|---|---|---|
+| filmmaker.og film finance pdf | `prod_TutWYcUOZrhutg` | N/A (no amount) | **Low** — legacy product, not in repo |
+| OG Digital Frameworks | `prod_TKwVuPrF1Ixjne` | N/A (2 prices, no amounts) | **Low** — legacy product, not in repo |
+| Blockchain 101 Basics | `prod_Qmj0kWNgP4EYt4` | $5 / $10 | **Low** — legacy product, not in repo |
+
 ### Pricing Observations
 
 1. **Snapshot+ ($19 one-time)** exists in Stripe checkout but is invisible on `/pricing`. Only surfaced via:
    - AI bot nudge (`ask-the-og/index.ts:128,140`)
    - WaterfallDeck CTA button (`src/components/calculator/WaterfallDeck.tsx:1637`: "UNLOCK SNAPSHOT+ — $19")
 
-2. **Subscription tiers have no checkout flow.** Founding Member/Standard/Power are displayed on `/pricing` with CTA buttons that navigate to `/signup` — not to a Stripe checkout. The `subscriptions` table (migration `20260403000000`) exists but no subscription-creation edge function is implemented.
+2. **Subscription tiers have Stripe products but no checkout flow.** Founding Member/Standard/Power are displayed on `/pricing` with CTA buttons that navigate to `/signup` — not to a Stripe checkout. The 3 recurring Stripe prices exist (`price_1THvMx...`, `price_1THvMx...`, `price_1THvMy...`) but `create-checkout` only handles one-time products. No subscription-creation edge function exists in the repo.
 
-3. **Producer's Package ($1,797) and Boutique ($2,997+)** are purchasable via Stripe (or via email for Boutique) but do not appear on `/pricing`. They are only referenced in the AI bot system prompt and `CONVERSION_STRATEGY.md`.
+3. **Boutique ($2,997)** has a Stripe product and price but is not handled by `create-checkout`. The AI bot directs users to `og@filmmakerog.com` for Boutique inquiries.
 
-4. **Ad hoc services on `/pricing`** ("Custom Financial Model" at $2,500, "Lookbook" at $1,500) have no corresponding Stripe products or checkout flows. These appear to be inquiry-based services with no self-serve purchase path.
+4. **Producer's Package ($1,797)** is purchasable via Stripe but does not appear on `/pricing`. Only referenced in the AI bot system prompt and `CONVERSION_STRATEGY.md`.
+
+5. **Ad hoc services on `/pricing`** ("Custom Financial Model" at $2,500, "Lookbook" at $1,500) have no corresponding Stripe products. These appear to be inquiry-based services with no self-serve purchase path.
+
+6. **3 legacy Stripe products** exist that are not referenced anywhere in the codebase: "filmmaker.og film finance pdf", "OG Digital Frameworks", "Blockchain 101 Basics". These should be archived in Stripe.
 
 ---
 
 ## 3. Database Schema / Edge Function Audit — Parity Report
 
-### Edge Functions: Repo vs Production
+### Edge Functions: Repo vs Production (verified via Supabase MCP)
 
-| Function | In Repo? | Called from Code? | Status | Detail |
-|---|---|---|---|---|
-| `ask-the-og` | Yes | Yes (`OgBotSheet`) | OK | Claude-powered AI assistant; 555 lines |
-| `create-checkout` | Yes | Yes (Stripe flow) | OK | Stripe session creation; 212 lines |
-| `stripe-webhook` | Yes | Yes (Stripe events) | OK | Handles `checkout.session.completed`; 108 lines |
-| `sync-lead-to-loops` | Yes | Yes (DB trigger) | OK | Syncs leads to Loops CRM; 100 lines |
-| `seed-ops` | Yes | No (ops tool) | OK | Dev/ops seed data; 86 lines |
-| `film-search` | Yes | Unknown | **Low** | Uses "Lovable AI Gateway" (Gemini). May be deprecated infrastructure. 127 lines |
-| **`deal-insight`** | **NO** | **Yes** (`WaterfallDeck.tsx:364`) | **CRITICAL** | Production function with no source in repo. Called via `${VITE_SUPABASE_URL}/functions/v1/deal-insight`. Source, prompt template, and behavior are unauditable. Documented in `docs/deal-insight-edge-function.md` with explicit TODO: "Add the edge function source to this repository." |
+**Production has 9 active edge functions. Repo has 6. Only 4 overlap.**
 
-### Database Tables: Code vs Migrations
+| Function | In Repo? | In Production? | Called from Code? | Status | Detail |
+|---|---|---|---|---|---|
+| `ask-the-og` | Yes | Yes (v51) | Yes (`OgBotSheet`) | OK | Claude-powered AI assistant; 555 lines |
+| `create-checkout` | Yes | Yes (v16) | Yes (Stripe flow) | OK | Stripe session creation; 212 lines |
+| `stripe-webhook` | Yes | Yes (v15) | Yes (Stripe events) | OK | Handles `checkout.session.completed`; 108 lines |
+| `sync-lead-to-loops` | Yes | Yes (v8) | Yes (DB trigger) | OK | Syncs leads to Loops CRM; 100 lines |
+| `seed-ops` | Yes | **No** | No (ops tool) | OK | Dev-only seed data; not deployed to production |
+| `film-search` | Yes | **No** | Unknown | **Low** | In repo but **not deployed** — confirmed deprecated. Uses "Lovable AI Gateway" (Gemini). 127 lines |
+| **`deal-insight`** | **NO** | **Yes (v13)** | **Yes** (`WaterfallDeck.tsx:364`) | **CRITICAL** | Production function with no source in repo. Called via `${VITE_SUPABASE_URL}/functions/v1/deal-insight`. Source, prompt, and behavior are unauditable. `docs/deal-insight-edge-function.md` has explicit TODO. |
+| **`film-intel-poll`** | **NO** | **Yes (v20)** | No | **CRITICAL** | Production function not version-controlled. Likely populates `film_intel_articles` (3,397 rows in prod). |
+| **`film-intel-auth`** | **NO** | **Yes (v9)** | No | **CRITICAL** | Production function not version-controlled. Authentication for film intel system. |
+| **`film-intel-interact`** | **NO** | **Yes (v14)** | No | **CRITICAL** | Production function not version-controlled. User interaction handler for film intel. |
+| **`film-intel-digest`** | **NO** | **Yes (v8)** | No | **CRITICAL** | Production function not version-controlled. Digest generation for film intel. |
 
-#### Tables with full migrations
+### Database Tables: Repo Migrations vs Live Production (verified via Supabase MCP)
 
-| Table | Migration | Referenced in Code? | Status |
-|---|---|---|---|
-| `profiles` | `20260131174838` | Implicit (auth trigger creates on signup) | OK |
-| `purchases` | `20260207051556` | Yes (`BuildYourPlan.tsx`, `stripe-webhook/index.ts:80`) | OK |
-| `exports` | `20260207051556` | No app code references | **Low** — orphan table, created but never queried |
-| `saved_calculations` | `20260118041606` | No app code references | **Medium** — legacy table replaced by `deals` |
-| `intake_submissions` | `20260214120000` | Yes (`BuildYourPlan.tsx`, `useIntakeAutoSave.ts`) | OK |
-| `subscriptions` | `20260403000000` | No app code references | **Medium** — schema exists, no frontend subscription management |
-| `deals` | `20260403000000` | No app code references | **Medium** — new SaaS table, no frontend implementation |
-| `shareable_links` | `20260403000000` | No app code references | **Medium** — new SaaS table, no frontend implementation |
-| `user_branding` | `20260403000000` | No app code references | **Medium** — new SaaS table, no frontend implementation |
+**Production has 15 tables. Repo migrations define 9 tables (+ RLS for 8 more). 8 migrated tables do NOT exist in production.**
 
-#### Tables with RLS policies only (no CREATE TABLE migration in repo)
+#### Tables in BOTH repo and production
 
-| Table | RLS Migration | Referenced in Code? | Status |
-|---|---|---|---|
-| `leads` | `20260401200000` | Yes (`LeadCaptureModal.tsx`) | OK |
-| `waterfall_snapshots` | `20260401200000` | Yes (`WaterfallDeck.tsx`) | OK |
-| `og_bot_leads` | `20260401200000` | Yes (`ask-the-og/index.ts:286,312,472,485`) | OK |
-| `og_bot_messages` | `20260401200000` | Implied by `ask-the-og` | OK |
-| `og_bot_sessions` | `20260401200000` | Implied by `ask-the-og` | OK |
-| `glossary_terms` | `20260401200000` | Yes (`src/lib/glossary-rotation.ts`) | OK |
-| `film_intel_articles` | `20260401200000` | No app code references | **Low** — content table, likely populated externally |
-| `film_intel_sources` | `20260401200000` | No app code references | **Low** — content table, likely populated externally |
+| Table | Migration | In Production? | Rows | Referenced in Code? | Status |
+|---|---|---|---|---|---|
+| `purchases` | `20260207051556` | Yes | 0 | Yes (`BuildYourPlan.tsx`, `stripe-webhook/index.ts:80`) | OK |
+| `glossary_terms` | RLS only (`20260401200000`) | Yes | 20 | Yes (`src/lib/glossary-rotation.ts`) | OK |
+| `waterfall_snapshots` | RLS only (`20260401200000`) | Yes | 16 | Yes (`WaterfallDeck.tsx`) | OK |
+| `leads` | RLS only (`20260401200000`) | Yes | 1 | Yes (`LeadCaptureModal.tsx`) | OK |
+| `og_bot_leads` | RLS only (`20260401200000`) | Yes | 1 | Yes (`ask-the-og/index.ts:286,312,472,485`) | OK |
+| `og_bot_messages` | RLS only (`20260401200000`) | Yes | 0 | Implied by `ask-the-og` | OK |
+| `og_bot_sessions` | RLS only (`20260401200000`) | Yes | 0 | Implied by `ask-the-og` | OK |
+| `film_intel_articles` | RLS only (`20260401200000`) | Yes | 3,397 | No app code — populated by `film-intel-poll` edge function | OK |
+| `film_intel_sources` | RLS only (`20260401200000`) | Yes | 16 | No app code — populated by `film-intel-poll` edge function | OK |
 
-#### Tables referenced by `seed-ops` with no migrations
+#### Tables in repo migrations but NOT in production (migrations never applied)
 
-| Table | Status |
-|---|---|
-| `ops_tasks` | **Low** — dev/ops only, seeded by `seed-ops/index.ts:26` |
-| `ops_passwords` | **Low** — dev/ops only, seeded by `seed-ops/index.ts:51` |
-| `ops_inbox` | **Low** — dev/ops only, seeded by `seed-ops/index.ts:67` |
-| `ops_workflows` | **Low** — dev/ops only, seeded by `seed-ops/index.ts:79` |
+| Table | Migration | Status |
+|---|---|---|
+| `profiles` | `20260131174838` | **CRITICAL** — migration not applied. Auth trigger to auto-create profiles does not exist in prod. |
+| `saved_calculations` | `20260118041606` | **Medium** — legacy table, replaced by `deals`. Migration not applied. |
+| `exports` | `20260207051556` | **Medium** — migration not applied. No code references anyway. |
+| `intake_submissions` | `20260214120000` | **CRITICAL** — migration not applied, but `BuildYourPlan.tsx` and `useIntakeAutoSave.ts` actively query it. Intake form will fail in production. |
+| `subscriptions` | `20260403000000` | **Medium** — migration not applied. No frontend code either. |
+| `deals` | `20260403000000` | **Medium** — migration not applied. No frontend code. |
+| `shareable_links` | `20260403000000` | **Medium** — migration not applied. No frontend code. |
+| `user_branding` | `20260403000000` | **Medium** — migration not applied. No frontend code. |
+
+#### Tables in production but NOT in repo (no migration, no code reference)
+
+| Table | Rows | Status |
+|---|---|---|
+| `ops_tasks` | 10 | **Low** — seeded by `seed-ops/index.ts:26` but no CREATE TABLE migration |
+| `ops_passwords` | 0 | **Low** — seeded by `seed-ops/index.ts:51` but no CREATE TABLE migration |
+| `ops_inbox` | 1 | **Low** — seeded by `seed-ops/index.ts:67` but no CREATE TABLE migration |
+| `ops_workflows` | 0 | **Low** — seeded by `seed-ops/index.ts:79` but no CREATE TABLE migration |
+| **`ops_briefing_log`** | 0 | **Low** — exists in production only. No repo code references it. |
+| **`ops_api_keys`** | 0 | **Low** — exists in production only. No repo code references it. |
 
 ### Duplicate Migration Note
 Migration `20260218113548` (`_437f7f61-...`) contains a duplicate/alternative schema definition for `intake_submissions` (already created in `20260214120000`). This may cause issues if migrations are re-run from scratch.
@@ -181,6 +221,9 @@ Migration `20260218113548` (`_437f7f61-...`) contains a duplicate/alternative sc
 | Old `/store/*` URLs in AI bot | `supabase/functions/ask-the-og/index.ts:206` | `https://filmmakerog.com/store/snapshot-plus` | Same redirect issue | **High** |
 | Old `/store/*` URLs in AI bot | `supabase/functions/ask-the-og/index.ts:207` | `https://filmmakerog.com/store/comp-report` | Same redirect issue | **High** |
 | Old `/store/*` URLs in AI bot | `supabase/functions/ask-the-og/index.ts:208` | `https://filmmakerog.com/store/the-producers-package` | Same redirect issue | **High** |
+| Export CTA navigates to `/store/snapshot-plus` | `src/pages/Calculator.tsx:229` | `navigate('/store/snapshot-plus')` | Redirects to generic `/pricing` — user loses Snapshot+ context | **High** |
+| BuildYourPlan navigates to `/store` | `src/pages/BuildYourPlan.tsx:196,305,313` | `navigate("/store")` | Redirects to `/pricing` — functional but semantically stale | **Low** |
+| Resources footer links to `/store` | `src/pages/Resources.tsx:1188` | `window.location.href = '/store'` | Redirects to `/pricing` — functional but stale label "Shop" | **Low** |
 | "Founding Member" label | `src/pages/Pricing.tsx:33` | `"Founding Member"` | Intentional — matches DB `tier` column | OK |
 | Legacy "$197" references | `CONVERSION_STRATEGY.md`, `supabase/functions/ask-the-og/index.ts:213` | Listed as "DEAD, never mention" | Properly deprecated | OK |
 | WaterfallDeck Snapshot+ CTA | `src/components/calculator/WaterfallDeck.tsx:1637` | `"UNLOCK SNAPSHOT+ — $19"` | Matches Stripe price ($19) | OK |
@@ -226,16 +269,28 @@ Migration `20260218113548` (`_437f7f61-...`) contains a duplicate/alternative sc
 | `src/pages/StorePackage.tsx` | Orphaned page component. Not routed. Imports non-existent module `@/lib/store-products`. Would cause build failure if imported. 257 lines of dead code. |
 | `src/components/NavLink.tsx` | Orphaned component. Custom NavLink wrapper with zero imports anywhere in codebase. 28 lines of dead code. |
 | `src/pages/Store.tsx` | Redundant one-line redirect. `App.tsx:80-81` already handles `/store` → `/pricing` redirect inline via `<Navigate>`. 6 lines, but imports add to bundle analysis noise. |
+| `supabase/functions/film-search/` | Deprecated edge function using "Lovable AI Gateway" (Gemini). Not deployed to production. No frontend caller. 127 lines. |
 
 ---
 
 ## 9. Orphan Edge Functions
 
+### Production functions NOT in repo (verified via Supabase MCP)
+
+| Function | Supabase Version | Status | Detail |
+|---|---|---|---|
+| `deal-insight` | v13 | **CRITICAL — Missing from repo** | Deployed and actively called from `WaterfallDeck.tsx:364`. Source, prompt, and behavior are unauditable. Must be added to `supabase/functions/deal-insight/`. |
+| `film-intel-poll` | v20 | **CRITICAL — Missing from repo** | Populates `film_intel_articles` (3,397 rows) and `film_intel_sources` (16 rows). Entire film intel pipeline is unversioned. |
+| `film-intel-auth` | v9 | **CRITICAL — Missing from repo** | Authentication for film intel system. Not version-controlled. |
+| `film-intel-interact` | v14 | **CRITICAL — Missing from repo** | User interaction handler for film intel. Not version-controlled. |
+| `film-intel-digest` | v8 | **CRITICAL — Missing from repo** | Digest generation for film intel. Not version-controlled. |
+
+### Repo functions NOT in production
+
 | Function | Status | Detail |
 |---|---|---|
-| `deal-insight` | **Missing from repo** | Deployed to Supabase but not version-controlled. Called from `WaterfallDeck.tsx:364`. Must be added to `supabase/functions/deal-insight/`. |
-| `film-search` | **Potentially deprecated** | Uses "Lovable AI Gateway" (`supabase/functions/film-search/index.ts`). No clear frontend caller identified. May be a development artifact from the Lovable platform. |
-| `seed-ops` | **Dev-only** | Seeds ops portal tables (`ops_tasks`, `ops_passwords`, `ops_inbox`, `ops_workflows`). These tables have no CREATE TABLE migration. Safe for dev use but should not run in production. |
+| `film-search` | **Not deployed** | In repo at `supabase/functions/film-search/index.ts` (127 lines) but not in production. Uses "Lovable AI Gateway" (Gemini) — confirmed deprecated. Candidate for purge. |
+| `seed-ops` | **Not deployed** | Dev-only seed data tool. Correctly excluded from production. |
 
 ---
 
