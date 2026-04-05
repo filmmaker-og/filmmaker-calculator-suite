@@ -2,6 +2,7 @@ import * as React from "react";
 import { ChevronRight } from "lucide-react";
 import { useHaptics } from "@/hooks/use-haptics";
 import { useMobileKeyboardScroll } from "@/hooks/use-mobile-keyboard";
+import { gold, GOLD } from "@/lib/tokens";
 
 interface PremiumInputProps extends React.ComponentProps<"input"> {
   isCompleted?: boolean;
@@ -53,7 +54,7 @@ const PremiumInput = React.forwardRef<HTMLInputElement, PremiumInputProps>(
               fontFamily: "'Roboto Mono', monospace",
               fontSize: "1.5rem",
               fontWeight: 500,
-              color: hasValue ? "#D4AF37" : "rgba(212,175,55,0.45)",
+              color: hasValue ? GOLD : gold(0.45),
               lineHeight: 1,
               marginRight: "8px",
               flexShrink: 0,
@@ -96,7 +97,7 @@ const PremiumInput = React.forwardRef<HTMLInputElement, PremiumInputProps>(
             alignItems: "center",
             gap: "8px",
             marginTop: "12px",
-            color: "#D4AF37",
+            color: GOLD,
           }}>
             <ChevronRight style={{ width: "16px", height: "16px" }} />
             <span style={{

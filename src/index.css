@@ -701,8 +701,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(180deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.05) 40%, rgba(0,0,0,0.1) 100%), var(--gold-cta);
+    background: linear-gradient(180deg, #FBE88A 0%, #F9E076 45%, #E8D06A 100%);
     border: none;
+    border-top: 1px solid rgba(255,255,255,0.15);
     color: #000000;
     font-family: 'Bebas Neue', sans-serif;
     font-size: 20px;
@@ -1011,7 +1012,7 @@
   }
   @media (hover: hover) {
     .cta-gold-btn:hover {
-      background: #F9E076 !important;
+      background: linear-gradient(180deg, #FBE88A 0%, #F9E076 45%, #E8D06A 100%) !important;
     }
   }
 

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { Sparkles } from "lucide-react";
 import { useHaptics } from "@/hooks/use-haptics";
+import { gold, GOLD } from "@/lib/tokens";
 
 /* ═══════════════════════════════════════════════════════════════════
    OgBotFab — floating action button for the OG bot
@@ -43,21 +44,18 @@ const OgBotFab = ({ onTap }: OgBotFabProps) => {
         width: "52px",
         height: "52px",
         borderRadius: "8px",
-        background: "linear-gradient(135deg, rgba(212,175,55,0.25) 0%, rgba(212,175,55,0.15) 100%)",
-        border: "1px solid rgba(212,175,55,0.25)",
-        boxShadow: "0 4px 16px rgba(212,175,55,0.30), 0 0 40px rgba(212,175,55,0.12)",
+        background: `linear-gradient(135deg, ${gold(0.25)} 0%, ${gold(0.15)} 100%)`,
+        border: `1px solid ${gold(0.25)}`,
+        boxShadow: `0 4px 16px ${gold(0.30)}, 0 0 40px ${gold(0.12)}`,
         opacity: hidden ? 0 : 1,
         pointerEvents: hidden ? "none" : "auto",
       }}
       aria-label="Open OG assistant"
     >
       <Sparkles
-        style={{
-          width: "28px",
-          height: "28px",
-          color: "#D4AF37",
-          filter: "drop-shadow(0 0 6px rgba(212,175,55,0.40))",
-        }}
+        size={28}
+        color={GOLD}
+        style={{ filter: `drop-shadow(0 0 6px ${gold(0.40)})` }}
       />
     </button>
   );

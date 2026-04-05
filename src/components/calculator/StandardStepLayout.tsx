@@ -2,6 +2,7 @@ import React, { ReactNode, useState } from "react";
 import ChapterCard, { CardVariant } from "./ChapterCard";
 import { ArrowRight } from "lucide-react";
 import { useHaptics } from "@/hooks/use-haptics";
+import { ctaGold, white } from "@/lib/tokens";
 
 interface StandardStepLayoutProps {
   chapter: string;
@@ -28,14 +29,15 @@ const s: Record<string, React.CSSProperties> = {
     lineHeight: "1.6",
     paddingBottom: "16px",
     marginBottom: "16px",
-    borderBottom: "1px solid rgba(255,255,255,0.08)",
+    borderBottom: `1px solid ${white(0.08)}`,
   },
   cta: {
     width: "100%",
     padding: "16px",
     marginTop: "20px",
-    background: "#F9E076",
+    background: "linear-gradient(180deg, #FBE88A 0%, #F9E076 45%, #E8D06A 100%)",
     border: "none",
+    borderTop: "1px solid rgba(255,255,255,0.15)",
     borderRadius: "8px",
     fontFamily: "'Bebas Neue', sans-serif",
     fontSize: "20px",
@@ -48,11 +50,11 @@ const s: Record<string, React.CSSProperties> = {
     justifyContent: "center",
     gap: "10px",
     transition: "transform 0.12s ease, opacity 0.15s",
-    boxShadow: "0 0 20px rgba(249,224,118,0.25), 0 0 60px rgba(249,224,118,0.15)",
+    boxShadow: `0 0 20px ${ctaGold(0.25)}, 0 0 60px ${ctaGold(0.15)}`,
     minHeight: "56px",
   },
   ctaHover: {
-    boxShadow: "0 0 30px rgba(249,224,118,0.35), 0 0 80px rgba(249,224,118,0.20)",
+    boxShadow: `0 0 30px ${ctaGold(0.35)}, 0 0 80px ${ctaGold(0.20)}`,
   },
   ctaPressed: {
     transform: "scale(0.98)",
@@ -110,7 +112,7 @@ const StandardStepLayout = ({
               }}
             >
               {nextLabel}
-              <ArrowRight style={{ width: "18px", height: "18px" }} />
+              <ArrowRight size={18} />
             </button>
           )}
         </div>

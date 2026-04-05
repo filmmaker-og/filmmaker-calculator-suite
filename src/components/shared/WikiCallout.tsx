@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import { gold } from "@/lib/tokens";
 
 interface WikiCalloutProps {
   label: string;
@@ -10,8 +11,8 @@ const WikiCallout = ({ label, children, icon }: WikiCalloutProps) => (
   <div
     className="p-4 rounded-xl"
     style={{
-      border: '1px solid rgba(212,175,55,0.15)',
-      background: 'rgba(212,175,55,0.03)',
+      border: `1px solid ${gold(0.15)}`,
+      background: gold(0.03),
     }}
   >
     <div className="flex gap-3">

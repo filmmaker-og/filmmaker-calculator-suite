@@ -1,4 +1,5 @@
 import React, { ReactNode } from "react";
+import { gold, white, red, GOLD, BG } from "@/lib/tokens";
 
 export type CardVariant = 'warm' | 'feature' | 'data' | 'neutral';
 
@@ -32,7 +33,7 @@ const eyebrowS: Record<string, React.CSSProperties> = {
   eyebrowLine: {
     flex: 1,
     height: "1px",
-    background: "rgba(212,175,55,0.40)",
+    background: gold(0.40),
   },
   eyebrowLabel: {
     fontFamily: "'Roboto Mono', monospace",
@@ -40,7 +41,7 @@ const eyebrowS: Record<string, React.CSSProperties> = {
     fontWeight: 500,
     letterSpacing: "0.2em",
     textTransform: "uppercase" as const,
-    color: "#D4AF37",
+    color: GOLD,
     whiteSpace: "nowrap" as const,
     display: "flex",
     alignItems: "center",
@@ -56,34 +57,34 @@ const eyebrowS: Record<string, React.CSSProperties> = {
 
 const cardStyles: Record<CardVariant, React.CSSProperties> = {
   warm: {
-    background: "#222226",
-    border: "1px solid rgba(212,175,55,0.25)",
-    borderTop: "1px solid rgba(255,255,255,0.08)",
+    background: BG.elevated,
+    border: `1px solid ${gold(0.25)}`,
+    borderTop: `1px solid ${white(0.08)}`,
     borderRadius: "8px",
     overflow: "hidden",
     position: "relative",
   },
   feature: {
-    background: "#222226",
-    border: "1px solid rgba(212,175,55,0.20)",
-    borderTop: "1px solid rgba(255,255,255,0.08)",
+    background: BG.elevated,
+    border: `1px solid ${gold(0.20)}`,
+    borderTop: `1px solid ${white(0.08)}`,
     borderRadius: "8px",
     overflow: "hidden",
     transition: "box-shadow 0.5s",
     position: "relative",
   },
   data: {
-    background: "#222226",
-    border: "1px solid rgba(212,175,55,0.15)",
-    borderTop: "1px solid rgba(255,255,255,0.08)",
+    background: BG.elevated,
+    border: `1px solid ${gold(0.15)}`,
+    borderTop: `1px solid ${white(0.08)}`,
     borderRadius: "8px",
     overflow: "hidden",
     position: "relative",
   },
   neutral: {
-    background: "#222226",
-    border: "1px solid rgba(212,175,55,0.15)",
-    borderTop: "1px solid rgba(255,255,255,0.08)",
+    background: BG.elevated,
+    border: `1px solid ${gold(0.15)}`,
+    borderTop: `1px solid ${white(0.08)}`,
     borderRadius: "8px",
     overflow: "hidden",
     position: "relative",
@@ -98,7 +99,7 @@ const neutralGlow: React.CSSProperties | null = null;
 
 const warmTopline: React.CSSProperties = {
   height: "2px",
-  background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.60), transparent)",
+  background: `linear-gradient(90deg, transparent, ${gold(0.60)}, transparent)`,
   position: "relative",
   overflow: "hidden",
 };
@@ -109,13 +110,13 @@ const warmToplineShimmer: React.CSSProperties = {
   left: "-100%",
   width: "60%",
   height: "100%",
-  background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.30), transparent)",
+  background: `linear-gradient(90deg, transparent, ${white(0.30)}, transparent)`,
   animation: "toplineShimmer 8s ease-in-out infinite",
 };
 
 const featureTopline: React.CSSProperties = {
   height: "1px",
-  background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.40), transparent)",
+  background: `linear-gradient(90deg, transparent, ${gold(0.40)}, transparent)`,
 };
 
 const cardPad: React.CSSProperties = {
@@ -125,7 +126,7 @@ const cardPad: React.CSSProperties = {
 const cardH: React.CSSProperties = {
   fontFamily: "'Bebas Neue', sans-serif",
   fontSize: "28px",
-  color: "#D4AF37",
+  color: GOLD,
   letterSpacing: "0.06em",
   lineHeight: 1,
   marginBottom: "6px",
@@ -133,7 +134,7 @@ const cardH: React.CSSProperties = {
 
 const cardHSub: React.CSSProperties = {
   fontSize: "13px",
-  color: "rgba(255,255,255,0.48)",
+  color: white(0.48),
   marginBottom: "24px",
 };
 
@@ -170,24 +171,24 @@ const ChapterCard = ({
     // Feature card state-dependent glow
     if (effectiveVariant === 'feature' && glowState) {
       if (glowState === 'positive') {
-        cardStyle.boxShadow = "0 16px 40px rgba(0,0,0,0.6), 0 0 40px rgba(212,175,55,0.15)";
+        cardStyle.boxShadow = `0 16px 40px rgba(0,0,0,0.6), 0 0 40px ${gold(0.15)}`;
       } else if (glowState === 'negative') {
-        cardStyle.boxShadow = "0 16px 40px rgba(0,0,0,0.6), 0 0 40px rgba(200,64,64,0.18)";
+        cardStyle.boxShadow = `0 16px 40px rgba(0,0,0,0.6), 0 0 40px ${red(0.18)}`;
       }
     }
   } else {
     // Legacy fallback for non-variant usage
     cardStyle = isActive
       ? {
-          background: "#222226",
-          border: "1px solid rgba(212,175,55,0.25)",
+          background: BG.elevated,
+          border: `1px solid ${gold(0.25)}`,
           borderRadius: "8px",
           overflow: "hidden",
           transition: "border-color 0.25s ease",
         }
       : {
-          background: "#222226",
-          border: "1px solid rgba(212,175,55,0.15)",
+          background: BG.elevated,
+          border: `1px solid ${gold(0.15)}`,
           borderRadius: "8px",
           overflow: "hidden",
           transition: "border-color 0.25s ease",
@@ -239,8 +240,8 @@ const ChapterCard = ({
           <div
             style={
               isActive
-                ? { height: "2px", background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.60), transparent)", pointerEvents: "none" as const }
-                : { height: "1px", background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.40), transparent)", pointerEvents: "none" as const }
+                ? { height: "2px", background: `linear-gradient(90deg, transparent, ${gold(0.60)}, transparent)`, pointerEvents: "none" as const }
+                : { height: "1px", background: `linear-gradient(90deg, transparent, ${gold(0.40)}, transparent)`, pointerEvents: "none" as const }
             }
           />
         )}

@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { MoreVertical } from "lucide-react";
 import { useHaptics } from "@/hooks/use-haptics";
+import { gold, black } from "@/lib/tokens";
 
 /* ═══════════════════════════════════════════════════════════════════
    AppHeader — floating bar (matches max-w-xl card column)
@@ -72,8 +73,8 @@ const AppHeader = ({ onMoreOpen }: AppHeaderProps) => {
             marginRight: "24px",
             borderRadius: "8px",
             background: "rgba(26,26,28,0.90)",
-            border: "1px solid rgba(212,175,55,0.25)",
-            boxShadow: "0 2px 24px rgba(0,0,0,0.8), 0 0 12px rgba(212,175,55,0.06)",
+            border: `1px solid ${gold(0.25)}`,
+            boxShadow: `0 2px 24px ${black(0.8)}, 0 0 12px ${gold(0.06)}`,
             backdropFilter: "blur(24px)",
             WebkitBackdropFilter: "blur(24px)",
             paddingLeft: "20px",
