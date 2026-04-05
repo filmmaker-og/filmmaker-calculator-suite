@@ -4,7 +4,7 @@ import { X as CloseIcon, Home, Calculator, ShoppingBag, BarChart2, Mail, Share2,
 import { cn } from "@/lib/utils";
 import { getShareUrl, SHARE_TEXT, SHARE_TITLE } from "@/lib/constants";
 import { useHaptics } from "@/hooks/use-haptics";
-import { GOLD, CTA, BG, gold } from "@/lib/tokens";
+import { GOLD, CTA, BG, gold, ctaGold, white, black } from "@/lib/tokens";
 
 interface MobileMenuProps {
   isOpen?: boolean;
@@ -64,16 +64,16 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
   /* ─── Section label ─────────────────────────────────────────── */
   const SectionLabel = ({ children }: { children: React.ReactNode }) => (
     <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
-      <div style={{ flex: 1, height: "1px", background: "rgba(212,175,55,0.25)" }} />
+      <div style={{ flex: 1, height: "1px", background: gold(0.25) }} />
       <span style={{
         fontFamily: "'Roboto Mono', monospace",
-        fontSize: "14px",
+        fontSize: "12px",
         letterSpacing: "0.18em",
         textTransform: "uppercase" as const,
         color: GOLD,
         whiteSpace: "nowrap" as const,
       }}>{children}</span>
-      <div style={{ flex: 1, height: "1px", background: "rgba(212,175,55,0.25)" }} />
+      <div style={{ flex: 1, height: "1px", background: gold(0.25) }} />
     </div>
   );
 
@@ -99,7 +99,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
           backdropFilter: "blur(40px)",
           WebkitBackdropFilter: "blur(40px)",
           borderRadius: "12px 12px 0 0",
-          boxShadow: "0 -16px 50px rgba(0,0,0,0.70), 0 -30px 70px rgba(0,0,0,0.90)",
+          boxShadow: `0 -16px 50px ${black(0.70)}, 0 -30px 70px ${black(0.90)}`,
         }}
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
@@ -108,7 +108,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
         <div
           className="absolute top-0 left-0 right-0 h-[3px] pointer-events-none z-10"
           style={{
-            background: "linear-gradient(to right, transparent 0%, rgba(212,175,55,0.20) 20%, rgba(212,175,55,0.40) 50%, rgba(212,175,55,0.20) 80%, transparent 100%)",
+            background: `linear-gradient(to right, transparent 0%, ${gold(0.20)} 20%, ${gold(0.40)} 50%, ${gold(0.20)} 80%, transparent 100%)`,
             borderRadius: "12px 12px 0 0",
           }}
         />
@@ -142,17 +142,17 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
 
         {/* Drag handle */}
         <div className="flex justify-center pt-3 pb-2">
-          <div className="w-10 h-[3px] rounded-full" style={{ background: "rgba(255,255,255,0.25)" }} />
+          <div className="w-10 h-[3px] rounded-full" style={{ background: white(0.25) }} />
         </div>
 
         {/* Close button — anchored to sheet, clear of ASK THE OG tap zone */}
         <button
           onClick={() => { haptics.light(); setIsOpen(false); }}
           className="absolute top-2 right-4 w-8 h-8 flex items-center justify-center transition-colors z-20"
-          style={{ color: "rgba(255,255,255,0.60)" }}
+          style={{ color: white(0.60) }}
           aria-label="Close menu"
-          onMouseEnter={e => (e.currentTarget.style.color = "rgba(255,255,255,0.80)")}
-          onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,0.60)")}
+          onMouseEnter={e => (e.currentTarget.style.color = white(0.80))}
+          onMouseLeave={e => (e.currentTarget.style.color = white(0.60))}
         >
           <CloseIcon className="w-5 h-5" />
         </button>
@@ -179,7 +179,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                 border: "none",
                 borderRadius: "8px",
                 cursor: "pointer",
-                boxShadow: "0 0 0 1px rgba(212,175,55,0.40), 0 8px 24px rgba(0,0,0,0.5), 0 0 30px rgba(249,224,118,0.20)",
+                boxShadow: `0 0 0 1px ${gold(0.40)}, 0 8px 24px ${black(0.5)}, 0 0 30px ${ctaGold(0.20)}`,
                 transition: "transform 0.15s ease, box-shadow 0.3s ease",
               }}
             >
@@ -187,7 +187,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                 width: "36px",
                 height: "36px",
                 borderRadius: "8px",
-                background: "rgba(212,175,55,0.18)",
+                background: gold(0.18),
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -195,7 +195,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                 position: "relative",
                 zIndex: 1,
               }}>
-                <Sparkles style={{ width: "22px", height: "22px", color: GOLD, filter: `drop-shadow(0 0 6px ${gold(0.40)})` }} />
+                <Sparkles size={22} color={GOLD} style={{ filter: `drop-shadow(0 0 6px ${gold(0.40)})` }} />
               </div>
               <span style={{
                 fontFamily: "'Bebas Neue', sans-serif",
@@ -209,14 +209,14 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
               </span>
               <div style={{
                 position: "absolute", top: 0, left: "-100%", width: "55%", height: "100%",
-                background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent)",
+                background: `linear-gradient(90deg, transparent, ${white(0.35)}, transparent)`,
                 transform: "skewX(-20deg)",
                 animation: "menu-shimmer 2.5s ease-in-out infinite",
               }} />
             </button>
 
             {/* Separator — premium CTA zone / utility navigation */}
-            <div style={{ height: "1px", background: "rgba(212,175,55,0.15)", marginTop: "10px", marginBottom: "10px", maxWidth: "120px", marginLeft: "auto", marginRight: "auto" }} />
+            <div style={{ height: "1px", background: gold(0.15), marginTop: "10px", marginBottom: "10px", maxWidth: "120px", marginLeft: "auto", marginRight: "auto" }} />
             </>
           )}
 
@@ -232,8 +232,8 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                 key={item.path}
                 aria-label={item.label}
                 onClick={() => handleNavigate(item.path)}
-                onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.25)"; }}
-                onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.15)"; }}
+                onMouseEnter={(e) => { e.currentTarget.style.borderColor = gold(0.25); }}
+                onMouseLeave={(e) => { e.currentTarget.style.borderColor = gold(0.15); }}
                 onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; }}
                 onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
                 style={{
@@ -243,7 +243,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   justifyContent: "center",
                   gap: "6px",
                   padding: "10px 8px",
-                  background: BG.elevated,
+                  background: "transparent",
                   border: `1px solid ${gold(0.15)}`,
                   borderRadius: "8px",
                   cursor: "pointer",
@@ -255,7 +255,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   fontFamily: "'Bebas Neue', sans-serif",
                   fontSize: "1.1rem",
                   letterSpacing: "0.1em",
-                  color: "rgba(255,255,255,0.88)",
+                  color: white(0.88),
                 }}>
                   {item.label}
                 </span>
@@ -272,10 +272,10 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
               <button
                 aria-label="Home"
                 onClick={() => handleNavigate("/")}
-                onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.08)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.16) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 24px rgba(212,175,55,0.08), 0 0 12px rgba(212,175,55,0.08)"; }}
-                onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.08)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.12) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 20px rgba(212,175,55,0.08), 0 0 10px rgba(212,175,55,0.06)"; }}
-                onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.08)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.18) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 30px rgba(212,175,55,0.08), 0 0 14px rgba(212,175,55,0.10)"; }}
-                onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.08)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.12) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 20px rgba(212,175,55,0.08), 0 0 10px rgba(212,175,55,0.06)"; }}
+                onMouseEnter={(e) => { e.currentTarget.style.borderColor = gold(0.18); e.currentTarget.style.background = gold(0.08); }}
+                onMouseLeave={(e) => { e.currentTarget.style.borderColor = gold(0.10); e.currentTarget.style.background = gold(0.04); }}
+                onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; }}
+                onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
                 style={{
                   display: "flex",
                   flexDirection: "column",
@@ -283,10 +283,9 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   justifyContent: "center",
                   gap: "6px",
                   padding: "10px 8px",
-                  background: "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.12) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)",
-                  border: "1px solid rgba(212,175,55,0.08)",
+                  background: gold(0.04),
+                  border: `1px solid ${gold(0.10)}`,
                   borderRadius: "6px",
-                  boxShadow: "0 0 20px rgba(212,175,55,0.08), 0 0 10px rgba(212,175,55,0.06)",
                   cursor: "pointer",
                   transition: "transform 0.15s ease, border-color 0.25s ease, background 0.25s ease",
                 }}
@@ -296,7 +295,7 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   fontFamily: "'Bebas Neue', sans-serif",
                   fontSize: "1.1rem",
                   letterSpacing: "0.1em",
-                  color: "rgba(255,255,255,0.88)",
+                  color: white(0.88),
                   lineHeight: 1,
                 }}>Home</span>
               </button>
@@ -306,10 +305,10 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                 aria-label="Email"
                 href="mailto:og@filmmakerog.com"
                 onClick={() => haptics.light()}
-                onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.08)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.16) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 24px rgba(212,175,55,0.08), 0 0 12px rgba(212,175,55,0.08)"; }}
-                onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.08)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.12) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 20px rgba(212,175,55,0.08), 0 0 10px rgba(212,175,55,0.06)"; }}
-                onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.08)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.18) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 30px rgba(212,175,55,0.08), 0 0 14px rgba(212,175,55,0.10)"; }}
-                onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.08)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.12) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 20px rgba(212,175,55,0.08), 0 0 10px rgba(212,175,55,0.06)"; }}
+                onMouseEnter={(e) => { e.currentTarget.style.borderColor = gold(0.18); e.currentTarget.style.background = gold(0.08); }}
+                onMouseLeave={(e) => { e.currentTarget.style.borderColor = gold(0.10); e.currentTarget.style.background = gold(0.04); }}
+                onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; }}
+                onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
                 style={{
                   display: "flex",
                   flexDirection: "column",
@@ -317,21 +316,20 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   justifyContent: "center",
                   gap: "6px",
                   padding: "10px 8px",
-                  background: "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.12) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)",
-                  border: "1px solid rgba(212,175,55,0.08)",
+                  background: gold(0.04),
+                  border: `1px solid ${gold(0.10)}`,
                   borderRadius: "6px",
-                  boxShadow: "0 0 20px rgba(212,175,55,0.08), 0 0 10px rgba(212,175,55,0.06)",
                   textDecoration: "none",
                   cursor: "pointer",
                   transition: "transform 0.15s ease, border-color 0.25s ease, background 0.25s ease",
                 }}
               >
-                <Mail size={18} style={{ color: GOLD }} />
+                <Mail size={18} color={GOLD} />
                 <span style={{
                   fontFamily: "'Bebas Neue', sans-serif",
                   fontSize: "1.1rem",
                   letterSpacing: "0.1em",
-                  color: "rgba(255,255,255,0.88)",
+                  color: white(0.88),
                   lineHeight: 1,
                 }}>Email</span>
               </a>
@@ -340,10 +338,10 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
               <button
                 aria-label="Share"
                 onClick={handleShare}
-                onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.08)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.16) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 24px rgba(212,175,55,0.08), 0 0 12px rgba(212,175,55,0.08)"; }}
-                onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.08)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.12) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 20px rgba(212,175,55,0.08), 0 0 10px rgba(212,175,55,0.06)"; }}
-                onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.08)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.18) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 30px rgba(212,175,55,0.08), 0 0 14px rgba(212,175,55,0.10)"; }}
-                onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.borderColor = "rgba(212,175,55,0.08)"; e.currentTarget.style.background = "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.12) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)"; e.currentTarget.style.boxShadow = "0 0 20px rgba(212,175,55,0.08), 0 0 10px rgba(212,175,55,0.06)"; }}
+                onMouseEnter={(e) => { e.currentTarget.style.borderColor = gold(0.18); e.currentTarget.style.background = gold(0.08); }}
+                onMouseLeave={(e) => { e.currentTarget.style.borderColor = gold(0.10); e.currentTarget.style.background = gold(0.04); }}
+                onMouseDown={(e) => { e.currentTarget.style.transform = "scale(0.97)"; }}
+                onMouseUp={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
                 style={{
                   display: "flex",
                   flexDirection: "column",
@@ -351,20 +349,19 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
                   justifyContent: "center",
                   gap: "6px",
                   padding: "10px 8px",
-                  background: "radial-gradient(ellipse 80% 60% at 50% 15%, rgba(212,175,55,0.12) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 50% 85%, rgba(212,175,55,0.08) 0%, transparent 65%)",
-                  border: "1px solid rgba(212,175,55,0.08)",
+                  background: gold(0.04),
+                  border: `1px solid ${gold(0.10)}`,
                   borderRadius: "6px",
-                  boxShadow: "0 0 20px rgba(212,175,55,0.08), 0 0 10px rgba(212,175,55,0.06)",
                   cursor: "pointer",
                   transition: "transform 0.15s ease, border-color 0.25s ease, background 0.25s ease",
                 }}
               >
-                <Share2 size={18} style={{ color: GOLD }} />
+                <Share2 size={18} color={GOLD} />
                 <span style={{
                   fontFamily: "'Bebas Neue', sans-serif",
                   fontSize: "1.1rem",
                   letterSpacing: "0.1em",
-                  color: "rgba(255,255,255,0.88)",
+                  color: white(0.88),
                   lineHeight: 1,
                 }}>Share</span>
               </button>
@@ -373,13 +370,13 @@ const MobileMenu = ({ isOpen: controlledOpen, onOpenChange, onOpenBot }: MobileM
           </div>
 
           {/* Legal disclaimer */}
-          <div className="pt-3" style={{ borderTop: "1px solid rgba(212,175,55,0.08)" }}>
+          <div className="pt-3" style={{ borderTop: `1px solid ${gold(0.08)}` }}>
             <p style={{
               fontFamily: "'Inter', sans-serif",
               fontSize: "11px",
               letterSpacing: "0.02em",
               lineHeight: 1.6,
-              color: "rgba(255,255,255,0.55)",
+              color: white(0.55),
               textAlign: "center",
             }}>
               For educational and informational purposes only. Not legal, tax, or investment advice.

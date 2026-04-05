@@ -1,5 +1,6 @@
 import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { gold, GOLD } from "@/lib/tokens";
 
 interface WikiSectionHeaderProps {
   number: string;
@@ -22,15 +23,15 @@ const WikiSectionHeader = ({
       isExpanded !== false && "border-b border-bg-card-rule",
       isClickable && "cursor-pointer hover:bg-bg-card transition-colors"
     )}
-    style={{ background: 'rgba(212,175,55,0.03)' }}
+    style={{ background: gold(0.03) }}
     onClick={onClick}
   >
     {/* Gold Left Bar */}
     <div
       className="w-1 flex-shrink-0"
       style={{
-        background: 'linear-gradient(to bottom, #D4AF37, rgba(212,175,55,0.40))',
-        boxShadow: '0 0 12px rgba(212,175,55,0.06)',
+        background: `linear-gradient(to bottom, ${GOLD}, ${gold(0.40)})`,
+        boxShadow: `0 0 12px ${gold(0.06)}`,
       }}
     />
 
@@ -39,7 +40,7 @@ const WikiSectionHeader = ({
       className="flex items-center justify-center px-4 py-4 min-w-[56px]"
       style={{
         borderRight: '1px solid rgba(255,255,255,0.06)',
-        background: 'rgba(212,175,55,0.04)',
+        background: gold(0.04),
       }}
     >
       <span className="font-bebas text-[16px] tracking-wide text-gold">

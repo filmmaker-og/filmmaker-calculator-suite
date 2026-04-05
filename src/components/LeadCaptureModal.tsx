@@ -4,6 +4,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useHaptics } from "@/hooks/use-haptics";
 import { ArrowRight, Loader2 } from "lucide-react";
 import { z } from "zod";
+import { gold, GOLD } from "@/lib/tokens";
 import {
   Dialog,
   DialogContent,
@@ -82,7 +83,7 @@ const LeadCaptureModal = ({ isOpen, onClose, onEmailSubmitted, onSuccess }: Lead
         className="w-[calc(100%-2rem)] max-w-sm mx-auto p-0 gap-0"
         style={{
           background: "#0C0C0E",
-          border: "1px solid rgba(212,175,55,0.15)",
+          border: `1px solid ${gold(0.15)}`,
           borderRadius: "8px",
         }}
       >
@@ -101,7 +102,7 @@ const LeadCaptureModal = ({ isOpen, onClose, onEmailSubmitted, onSuccess }: Lead
           }
         `}</style>
         {/* Gold accent */}
-        <div className="h-[1px] w-full" style={{ background: "linear-gradient(90deg, transparent, #D4AF37, transparent)" }} />
+        <div className="h-[1px] w-full" style={{ background: `linear-gradient(90deg, transparent, ${GOLD}, transparent)` }} />
 
         {
           <form onSubmit={handleSubmit} className="p-6">
@@ -135,8 +136,8 @@ const LeadCaptureModal = ({ isOpen, onClose, onEmailSubmitted, onSuccess }: Lead
                   borderRadius: "8px",
                 }}
                 onFocus={e => {
-                  e.currentTarget.style.borderColor = "#D4AF37";
-                  e.currentTarget.style.boxShadow = "0 0 0 3px rgba(212,175,55,0.15)";
+                  e.currentTarget.style.borderColor = GOLD;
+                  e.currentTarget.style.boxShadow = `0 0 0 3px ${gold(0.15)}`;
                 }}
                 onBlur={e => {
                   e.currentTarget.style.borderColor = "rgba(0,0,0,0.12)";
@@ -168,8 +169,8 @@ const LeadCaptureModal = ({ isOpen, onClose, onEmailSubmitted, onSuccess }: Lead
                   borderRadius: "8px",
                 }}
                 onFocus={e => {
-                  e.currentTarget.style.borderColor = "#D4AF37";
-                  e.currentTarget.style.boxShadow = "0 0 0 3px rgba(212,175,55,0.08)";
+                  e.currentTarget.style.borderColor = GOLD;
+                  e.currentTarget.style.boxShadow = `0 0 0 3px ${gold(0.08)}`;
                 }}
                 onBlur={e => {
                   e.currentTarget.style.borderColor = "rgba(0,0,0,0.12)";

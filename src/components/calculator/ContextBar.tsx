@@ -1,4 +1,5 @@
 import React from "react";
+import { gold, white, BG } from "@/lib/tokens";
 
 interface ContextBarProps {
   budget: number;
@@ -22,9 +23,9 @@ const s: Record<string, React.CSSProperties> = {
     gap: "8px",
     padding: "10px 16px",
     marginBottom: "16px",
-    background: "#222226",
-    border: "1px solid rgba(212,175,55,0.15)",
-    borderTop: "1px solid rgba(255,255,255,0.08)",
+    background: BG.elevated,
+    border: `1px solid ${gold(0.15)}`,
+    borderTop: `1px solid ${white(0.08)}`,
     borderRadius: "8px",
     flexWrap: "wrap",
   },
@@ -33,18 +34,18 @@ const s: Record<string, React.CSSProperties> = {
     fontSize: "13px",
     textTransform: "uppercase" as const,
     letterSpacing: "0.1em",
-    color: "rgba(212,175,55,0.65)",
+    color: gold(0.65),
   },
   val: {
     fontFamily: "'Roboto Mono', monospace",
     fontSize: "13px",
-    color: "rgba(255,255,255,0.75)",
+    color: white(0.75),
   },
   dot: {
     width: "3px",
     height: "3px",
     borderRadius: "50%",
-    background: "rgba(212,175,55,0.30)",
+    background: gold(0.30),
   },
 };
 
